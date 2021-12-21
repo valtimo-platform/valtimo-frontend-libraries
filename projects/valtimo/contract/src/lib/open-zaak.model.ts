@@ -96,6 +96,7 @@ export interface ZaakInstanceLink {
 }
 
 export interface ServiceTaskHandlerRequest {
+  processDefinitionKey: string;
   serviceTaskId: string;
   operation: Operation;
   parameter: string;
