@@ -70,6 +70,7 @@ export interface ZaakTypeLink {
   zaakTypeUrl: string;
   zaakInstanceLinks: ZaakInstanceLink[];
   serviceTaskHandlers: ServiceTaskHandlerRequest[];
+  createWithDossier: boolean;
 }
 
 export interface ZaakTypeRequest {
@@ -79,6 +80,7 @@ export interface ZaakTypeRequest {
 export interface CreateZaakTypeLinkRequest {
   documentDefinitionName: string;
   zaakTypeUrl: string;
+  createWithDossier: boolean;
 }
 
 export interface CreateInformatieObjectTypeLinkRequest {
@@ -94,7 +96,6 @@ export interface ZaakInstanceLink {
 }
 
 export interface ServiceTaskHandlerRequest {
-  processDefinitionKey: string;
   serviceTaskId: string;
   operation: Operation;
   parameter: string;
