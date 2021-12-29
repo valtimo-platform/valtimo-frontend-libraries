@@ -15,8 +15,7 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {Contactmoment} from './contactmoment.model';
-import {ContactmomentService} from './contactmoment.service';
+import {Contactmoment, ContactMomentService} from '@valtimo/contact-moment';
 import * as moment_ from 'moment';
 import {TimelineItem, TimelineItemImpl} from '@valtimo/contract';
 
@@ -24,33 +23,35 @@ const moment = moment_;
 moment.locale(localStorage.getItem('langKey') || '');
 
 @Component({
-  selector: 'app-contactmomenten-tab',
-  templateUrl: './contactmomenten-tab.component.html',
-  styleUrls: ['./contactmomenten-tab.component.scss']
+  selector: 'valtimo-dossier-detail-tab-contact-moments',
+  templateUrl: './contact-moments.component.html',
+  styleUrls: ['./contact-moments.component.scss']
 })
-export class ContactmomentenTabComponent implements OnInit {
-
-  contactmomenten: Array<TimelineItem> = [];
+export class DossierDetailTabContactMomentsComponent implements OnInit {
+  public contactMoments: Array<TimelineItem> = [];
 
   constructor(
-      private contactmomentService: ContactmomentService,
+      private readonly contactMomentService: ContactMomentService,
   ) {
   }
 
   ngOnInit() {
-    this.contactmomentService.getContactmomenten()
-    .subscribe(contactmomenten => this.handleContactmomentenResult(contactmomenten));
+    this.loadContactMoments();
   }
 
-  private handleContactmomentenResult(contactmomenten: Array<Contactmoment>): void {
-    this.contactmomenten = contactmomenten.map(contactmoment => {
-      const registratieDatum = moment(contactmoment.registratiedatum);
+  private loadContactMoments(): void {
+    this.contactMomentService.getContactMoments().subscribe(contactMoments => this.handleContactMomentsResult(contactMoments));
+  }
+
+  private handleContactMomentsResult(contactMoments: Array<Contactmoment>): void {
+    this.contactMoments = contactMoments.map(contactMoment => {
+      const registratieDatum = moment(contactMoment.registratiedatum);
       return new TimelineItemImpl(
           registratieDatum.format('DD MMM YYYY'),
           registratieDatum.format('HH:mm'),
-          contactmoment.medewerkerIdentificatie.achternaam,
-          contactmoment.kanaal,
-          contactmoment.tekst,
+          contactMoment.medewerkerIdentificatie.achternaam,
+          contactMoment.kanaal,
+          contactMoment.tekst,
           null
       );
     });

@@ -18,24 +18,20 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
-import {Contactmoment} from './contactmoment.model';
+import {Contactmoment} from './contact-moment.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ContactmomentService {
+export class ContactMomentService {
+  private valtimoEndpointUri: string;
 
-  private valtimoApiConfig: any;
-
-  constructor(
-      private configService: ConfigService,
-      private http: HttpClient
-  ) {
-    this.valtimoApiConfig = configService.config.valtimoApi;
+  constructor(private http: HttpClient, configService: ConfigService) {
+    this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
   }
 
-  getContactmomenten(): Observable<Contactmoment[]> {
-    return this.http.get<Contactmoment[]>(`${this.valtimoApiConfig.endpointUri}contactmoment`);
+  getContactMoments(): Observable<Contactmoment[]> {
+    return this.http.get<Contactmoment[]>(`${this.valtimoEndpointUri}contactmoment`);
   }
 
 }
