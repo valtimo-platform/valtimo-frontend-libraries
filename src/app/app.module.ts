@@ -31,6 +31,7 @@ import {
   FormIoUploaderComponent,
   MenuModule,
   registerFormioUploadComponent,
+  TimelineModule,
   UploaderModule,
   WidgetModule
 } from '@valtimo/components';
@@ -60,6 +61,7 @@ import {FormioComponent} from './form-io/form-io.component';
 import {FormModule} from '@valtimo/form';
 import {UploadShowcaseComponent} from './upload-showcase/upload-showcase.component';
 import {ManagementContextModule} from '@valtimo/management';
+import {ContactmomentenTabComponent} from './contactmomenten-tab/contactmomenten-tab.component';
 import {CustomDossierTabComponent} from './custom-dossier-tab/custom-dossier-tab.component';
 import {CustomMapsTabComponent} from './custom-maps-tab/custom-maps-tab.component';
 import {SwaggerModule} from '@valtimo/swagger';
@@ -84,6 +86,7 @@ export function tabsFactory() {
     [DefaultTabs.progress, DossierDetailTabProgressComponent],
     [DefaultTabs.audit, DossierDetailTabAuditComponent],
     [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
+    ['contactmomenten', ContactmomentenTabComponent],
     ['custom-maps', CustomMapsTabComponent],
     ['custom-dossier', CustomDossierTabComponent]
   ]);
@@ -96,6 +99,7 @@ export function tabsFactory() {
     StartProcessCustomFormComponent,
     FormioComponent,
     UploadShowcaseComponent,
+    ContactmomentenTabComponent,
     CustomDossierTabComponent,
     CustomMapsTabComponent
   ],
@@ -116,7 +120,7 @@ export function tabsFactory() {
     TaskModule,
     ChoicefieldModule,
     DossierModule.forRoot(
-      tabsFactory
+        tabsFactory
     ),
     ProcessModule,
     ViewConfiguratorModule,
@@ -147,6 +151,7 @@ export function tabsFactory() {
     DossierManagementModule,
     OpenZaakModule,
     HttpClientModule,
+    TimelineModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
