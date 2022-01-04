@@ -41,13 +41,13 @@ export const editProductAanvragenConnectorForm = {
           tableView: false
         },
         {
-          title: 'connectorForm.productaanvraag.step0.typeMapping.panelTitle',
-          collapsible: false,
-          key: 'connectorFormProductaanvraagStep0TypeMappingsPanelTitle',
-          type: 'panel',
-          label: 'Panel',
-          input: false,
-          tableView: false,
+          label: 'connectorForm.productaanvraag.step0.typeMapping.panelTitle',
+          key: 'productAanvraagTypes',
+          type: 'editgrid',
+          input: true,
+          validate: {
+            minLength: 1,
+          },
           components: [
             {
               label: 'connectorForm.productaanvraag.step0.typeMapping.productAanvraagType.label',
@@ -58,7 +58,7 @@ export const editProductAanvragenConnectorForm = {
               },
               key: 'productAanvraagType',
               type: 'textfield',
-              input: true
+              input: true,
             },
             {
               label: 'connectorForm.productaanvraag.step0.typeMapping.caseDefinitionKey.label',
@@ -73,19 +73,26 @@ export const editProductAanvragenConnectorForm = {
               input: true
             },
             {
-              label: 'connectorForm.productaanvraag.step0.typeMapping.processDefinitionKey.label',
-              widget: 'choicesjs',
-              placeholder: 'connectorForm.productaanvraag.step0.typeMapping.processDefinitionKey.placeholder',
-              tableView: true,
+              "label": "connectorForm.productaanvraag.step0.typeMapping.processDefinitionKey.label",
+              "widget": "choicesjs",
+              "tableView": true,
+              "dataSrc": "custom",
+              "data": {
+                "custom": "values = JSON.parse(sessionStorage.getItem('productRequestDefinitions'))[row.caseDefinitionKey]"
+              },
+              "dataType": "string",
+              "refreshOn": "data",
+              clearOnRefresh: true,
+              "key": "processDefinitionKey",
+              "properties": {
+                "test": "1"
+              },
+              "type": "select",
+              "input": true,
               validate: {
                 required: true
               },
-              key: 'processDefinitionKey',
-              type: 'select',
-              input: true,
-              refreshOn: 'caseDefinitionKey',
-              clearOnRefresh: true,
-              disabled: true
+              placeholder: 'connectorForm.productaanvraag.step0.typeMapping.processDefinitionKey.placeholder',
             }
           ]
         }
