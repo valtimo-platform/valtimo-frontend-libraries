@@ -41,13 +41,13 @@ export const editProductAanvragenConnectorForm = {
           tableView: false
         },
         {
-          label: 'connectorForm.productaanvraag.step0.typeMapping.panelTitle',
           key: 'productAanvraagTypes',
           type: 'editgrid',
           input: true,
           validate: {
             minLength: 1,
           },
+          customClass: "edit-grid-component",
           components: [
             {
               label: 'connectorForm.productaanvraag.step0.typeMapping.productAanvraagType.label',
@@ -73,22 +73,19 @@ export const editProductAanvragenConnectorForm = {
               input: true
             },
             {
-              "label": "connectorForm.productaanvraag.step0.typeMapping.processDefinitionKey.label",
-              "widget": "choicesjs",
-              "tableView": true,
-              "dataSrc": "custom",
-              "data": {
-                "custom": "values = JSON.parse(sessionStorage.getItem('productRequestDefinitions'))[row.caseDefinitionKey]"
+              label: "connectorForm.productaanvraag.step0.typeMapping.processDefinitionKey.label",
+              widget: "choicesjs",
+              tableView: true,
+              dataSrc: "custom",
+              data: {
+                "custom": "values = window['productRequestDefinitions'][row.caseDefinitionKey] || []"
               },
-              "dataType": "string",
-              "refreshOn": "data",
+              dataType: "string",
+              refreshOn: "data",
               clearOnRefresh: true,
-              "key": "processDefinitionKey",
-              "properties": {
-                "test": "1"
-              },
-              "type": "select",
-              "input": true,
+              key: "processDefinitionKey",
+              type: "select",
+              input: true,
               validate: {
                 required: true
               },

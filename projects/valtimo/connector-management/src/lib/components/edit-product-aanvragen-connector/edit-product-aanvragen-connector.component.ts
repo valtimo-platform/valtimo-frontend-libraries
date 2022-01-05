@@ -230,12 +230,11 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
         });
 
         documentDefinitions.forEach((documentDefinition, index) => {
-          this.procesDocumentDefinitionOptions[documentDefinition.id.name] = res[index].map((processDocumentDefinition) => processDocumentDefinition.id.processDefinitionKey);
+          this.procesDocumentDefinitionOptions[documentDefinition.id.name] = res[index].map((processDocumentDefinition) =>
+            processDocumentDefinition.id.processDefinitionKey);
         })
 
-        console.log('my options', this.procesDocumentDefinitionOptions);
-
-        sessionStorage.setItem('productRequestDefinitions', JSON.stringify(this.procesDocumentDefinitionOptions));
+        window['productRequestDefinitions'] = this.procesDocumentDefinitionOptions;
 
         const definitionWithCaseDefinitionKeyValues =
           this.formMappingService.mapComponents(this.formDefinition$.getValue(), this.mapCaseDefinitionKeyComponent);
