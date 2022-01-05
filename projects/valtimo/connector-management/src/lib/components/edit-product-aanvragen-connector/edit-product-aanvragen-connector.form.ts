@@ -81,7 +81,7 @@ export const editProductAanvragenConnectorForm = {
                 "custom": "values = window['productRequestDefinitions'][row.caseDefinitionKey] || []"
               },
               dataType: "string",
-              refreshOn: "row",
+              refreshOn: "row.caseDefinitionKey",
               clearOnRefresh: true,
               key: "processDefinitionKey",
               type: "select",

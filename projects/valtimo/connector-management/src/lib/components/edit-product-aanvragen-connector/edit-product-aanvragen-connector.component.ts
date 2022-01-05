@@ -27,9 +27,6 @@ import {cloneDeep} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 import {map, switchMap, tap} from 'rxjs/operators';
 
-type FormioDropdownOption = {label: string, value: string};
-type Definitions = Array<{caseDefinitionOption: FormioDropdownOption, processDefinitionOptions: Array<string>}>;
-
 @Component({
   selector: 'valtimo-edit-product-aanvragen-connector',
   templateUrl: './edit-product-aanvragen-connector.component.html',
@@ -48,9 +45,8 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
   translatedFormDefinition$ = this.formDefinition$.pipe(
     map((definition) => this.formTranslationService.translateForm(definition))
   );
-  documentDefinitions: DocumentDefinitions;
-  definitions!: Definitions;
-  procesDocumentDefinitionOptions: {[caseDefinitionId: string]: Array<string>} = {};
+  caseDefinitionOptions: Array<{label: string, value: string}> = [];
+  processDocumentDefinitionOptions: {[caseDefinitionId: string]: Array<string>} = {};
 
   readonly options: FormioOptions = {
     disableAlerts: true
@@ -68,6 +64,7 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
   }
 
   ngOnInit(): void {
+    window['productRequestDefinitions'] = {};
     this.openFormDefinitionSubscription();
     this.formDefinition$.next(editProductAanvragenConnectorForm);
     this.loadDefinitions();
@@ -99,13 +96,7 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
 
     properties.aanvragerRolTypeUrl = submission.applicantRoleTypeUrl;
 
-    properties.typeMapping = [
-      {
-        productAanvraagType: submission.productAanvraagType,
-        caseDefinitionKey: submission.caseDefinitionKey,
-        processDefinitionKey: submission.processDefinitionKey
-      }
-    ];
+    properties.typeMapping = submission.productAanvraagTypes;
 
     this.propertiesSave.emit({properties, name: submission.connectorName});
   }
@@ -143,9 +134,7 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
 
     submission.applicantRoleTypeUrl = properties.aanvragerRolTypeUrl;
 
-    submission.productAanvraagType = properties.typeMapping[0].productAanvraagType;
-    submission.caseDefinitionKey = properties.typeMapping[0].caseDefinitionKey;
-    submission.processDefinitionKey = properties.typeMapping[0].processDefinitionKey;
+    submission.productAanvraagTypes = properties.typeMapping;
 
     submission.connectorName = this.defaultName;
 
@@ -154,9 +143,7 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
 
   private mapCaseDefinitionKeyComponent = (component: ExtendedComponentSchema): ExtendedComponentSchema => {
     if (component.key === 'caseDefinitionKey') {
-      const definitionOptions = this.definitions.map((definitions) => definitions.caseDefinitionOption);
-
-      return {...component, disabled: false, data: {values: definitionOptions}};
+      return {...component, disabled: false, data: {values: this.caseDefinitionOptions}};
     }
 
     return component;
@@ -164,16 +151,6 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
 
   private refreshForm(refreshValue: FormioRefreshValue): void {
     this.formRefresh$.next(refreshValue);
-  }
-
-  private loadDocumentDefinitions(): void {
-    this.documentService.getAllDefinitions().subscribe((definitions) => {
-      this.documentDefinitions = definitions;
-      const definitionWithCaseDefinitionKeyValues =
-        this.formMappingService.mapComponents(this.formDefinition$.getValue(), this.mapCaseDefinitionKeyComponent);
-
-      this.formDefinition$.next(definitionWithCaseDefinitionKeyValues);
-    });
   }
 
   private loadDefinitions(): void {
@@ -186,26 +163,21 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
           this.documentService.findProcessDocumentDefinitions(definition.id.name)))
       ),
       tap((res) => {
-        this.definitions = documentDefinitions.map((documentDefinition, index) => {
-          const documentDefinitionOption: FormioDropdownOption = {label: documentDefinition.id.name, value: documentDefinition.id.name};
-          const processDocumentDefinitionOptions: Array<string> = res[index].map((processDocumentDefinition) => {
-            return processDocumentDefinition.id.processDefinitionKey
-          });
-
-          return {caseDefinitionOption: documentDefinitionOption, processDefinitionOptions: processDocumentDefinitionOptions};
+        this.caseDefinitionOptions = documentDefinitions.map((documentDefinition) => {
+          return {label: documentDefinition.id.name, value: documentDefinition.id.name};
         });
 
         documentDefinitions.forEach((documentDefinition, index) => {
-          this.procesDocumentDefinitionOptions[documentDefinition.id.name] = res[index].map((processDocumentDefinition) =>
+          this.processDocumentDefinitionOptions[documentDefinition.id.name] = res[index].map((processDocumentDefinition) =>
             processDocumentDefinition.id.processDefinitionKey);
-        })
+        });
 
-        window['productRequestDefinitions'] = this.procesDocumentDefinitionOptions;
+        window['productRequestDefinitions'] = this.processDocumentDefinitionOptions;
 
-        const definitionWithCaseDefinitionKeyValues =
+        const definitionWithCaseDefinitionOptions =
           this.formMappingService.mapComponents(this.formDefinition$.getValue(), this.mapCaseDefinitionKeyComponent);
 
-        this.formDefinition$.next(definitionWithCaseDefinitionKeyValues);
+        this.formDefinition$.next(definitionWithCaseDefinitionOptions);
 
         if (this.properties?.aanvragerRolTypeUrl) {
           this.prefillForm();
