@@ -48,9 +48,7 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
   translatedFormDefinition$ = this.formDefinition$.pipe(
     map((definition) => this.formTranslationService.translateForm(definition))
   );
-  caseDefinitionId$ = new BehaviorSubject<string>('');
   documentDefinitions: DocumentDefinitions;
-  processDocumentDefinitions: ProcessDocumentDefinition[];
   definitions!: Definitions;
   procesDocumentDefinitionOptions: {[caseDefinitionId: string]: Array<string>} = {};
 
@@ -78,24 +76,6 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
   ngOnDestroy(): void {
     this.formDefinitionSubscription?.unsubscribe();
     this.translateSubscription?.unsubscribe();
-  }
-
-  onChange(object: any): void {
-    console.log('change object', object);
-    const changeObjectValue = object?.changed?.value;
-    const changeObjectComponentKey = object?.changed?.component?.key;
-    const changeObjectComponentRowIndex = object?.changed?.instance?.rowIndex;
-    console.log(changeObjectComponentKey, changeObjectComponentRowIndex, changeObjectValue, this.formDefinition$.getValue());
-    // const productRequestTypes: Array<{caseDefinitionKey: string; processDefinitionKey: string; productAanvraagType: string}> =
-    //   object?.data?.productAanvraagTypes;
-    // const productRequestHasCaseDefinitionId = productRequestTypes.find((request) => request.caseDefinitionKey);
-
-    // if (productRequestHasCaseDefinitionId) {
-    //   const definitionWithProcessDefinitionKeyValues =
-    //     this.formMappingService.mapComponents(this.formDefinition$.getValue(), this.mapProcessDefinitionKeyComponent);
-    //
-    //   this.formDefinition$.next(definitionWithProcessDefinitionKeyValues);
-    // }
   }
 
   onSubmit(event: any): void {
@@ -177,20 +157,6 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
       const definitionOptions = this.definitions.map((definitions) => definitions.caseDefinitionOption);
 
       return {...component, disabled: false, data: {values: definitionOptions}};
-    }
-
-    return component;
-  }
-
-  private mapProcessDefinitionKeyComponent = (component: ExtendedComponentSchema): ExtendedComponentSchema => {
-    if (component.key === 'processDefinitionKey') {
-      const processOptions = this.definitions[0].processDefinitionOptions;
-
-      if (this.processDocumentDefinitions?.length > 0) {
-        return {...component, disabled: false, data: {values: processOptions}};
-      } else {
-        return {...component, disabled: true, data: {values: []}};
-      }
     }
 
     return component;
