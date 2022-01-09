@@ -19,6 +19,6 @@
  */
 
 export * from './lib/open-zaak.module';
-export * from './lib/open-zaak.extension.init';
+export * from './lib/extension/open-zaak.extension.init';
 export * from './lib/extension/open-zaak-type-link-extension.component';
 
