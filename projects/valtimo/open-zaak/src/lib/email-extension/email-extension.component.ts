@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of open-zaak
- */
+import {Component} from '@angular/core';
 
-export * from './lib/open-zaak.module';
-export * from './lib/extension/open-zaak.extension.init';
-export * from './lib/extension/open-zaak-type-link-extension.component';
-export * from './lib/email-extension/email.extension.init';
-export * from './lib/email-extension/email-extension.component';
+@Component({
+  selector: 'valtimo-email-extension',
+  templateUrl: './email-extension.component.html',
+  styleUrls: ['./email-extension.component.scss']
+})
+export class EmailExtensionComponent {
+  constructor(
+  ) {
+  }
+}
