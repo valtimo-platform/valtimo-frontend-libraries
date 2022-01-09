@@ -28,6 +28,9 @@
     "forms": {
       "globalSearchPlaceHolder": "Alles",
       "referenceNumberPlaceHolder": "Referentienummer"
+    },
+    "buttons": {
+      "sendEmail": "Verstuur e-mail"
     }
   },
   "document": {
