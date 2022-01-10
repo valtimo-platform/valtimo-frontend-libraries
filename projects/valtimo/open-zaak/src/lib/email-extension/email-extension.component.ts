@@ -16,6 +16,7 @@
 
 import {Component, ViewChild} from '@angular/core';
 import {ModalComponent} from '@valtimo/components';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'valtimo-email-extension',
@@ -25,8 +26,13 @@ import {ModalComponent} from '@valtimo/components';
 export class EmailExtensionComponent {
   @ViewChild('modal') modal: ModalComponent;
 
+  private readonly documentId: string;
+
   constructor(
+    private route: ActivatedRoute,
   ) {
+    const snapshot = this.route.snapshot.paramMap;
+    this.documentId = snapshot.get('documentId') || '';
   }
 
   buttonClick(): void {

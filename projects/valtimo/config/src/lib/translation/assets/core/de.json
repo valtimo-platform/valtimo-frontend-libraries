@@ -31,7 +31,10 @@
     },
     "sendEmailExtension": {
       "buttonText": "E-Mail senden",
-      "title": "Eine E-Mail senden"
+      "title": "Eine E-Mail senden",
+      "subject": "Betreffzeile",
+      "body": "Nachricht",
+      "sendButtonText": "Senden"
     }
   },
   "document": {

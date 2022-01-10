@@ -31,7 +31,10 @@
     },
     "sendEmailExtension": {
       "buttonText": "Verstuur e-mail",
-      "title": "Een e-mail versturen"
+      "title": "Een e-mail versturen",
+      "subject": "Onderwerp",
+      "body": "Inhoud",
+      "sendButtonText": "Versturen"
     }
   },
   "document": {
