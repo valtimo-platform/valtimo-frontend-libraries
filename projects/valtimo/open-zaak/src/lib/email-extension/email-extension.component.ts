@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ModalComponent} from '@valtimo/components';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
@@ -25,7 +25,7 @@ import {map} from 'rxjs/operators';
   templateUrl: './email-extension.component.html',
   styleUrls: ['./email-extension.component.scss']
 })
-export class EmailExtensionComponent {
+export class EmailExtensionComponent implements OnInit{
   @ViewChild('modal') modal: ModalComponent;
 
   readonly documentId$ = new BehaviorSubject<string>('');
@@ -37,7 +37,9 @@ export class EmailExtensionComponent {
 
   constructor(
     private route: ActivatedRoute,
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.documentId$.next(this.route.snapshot.paramMap.get('documentId') || '');
   }
 
