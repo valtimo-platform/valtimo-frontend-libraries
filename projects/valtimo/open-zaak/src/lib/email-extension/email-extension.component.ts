@@ -17,6 +17,8 @@
 import {Component, ViewChild} from '@angular/core';
 import {ModalComponent} from '@valtimo/components';
 import {ActivatedRoute} from '@angular/router';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-email-extension',
@@ -26,13 +28,25 @@ import {ActivatedRoute} from '@angular/router';
 export class EmailExtensionComponent {
   @ViewChild('modal') modal: ModalComponent;
 
-  private readonly documentId: string;
+  readonly documentId$ = new BehaviorSubject<string>('');
+  readonly subject$ = new BehaviorSubject<string>('');
+  readonly body$ = new BehaviorSubject<string>('');
+  readonly valid$: Observable<boolean> = combineLatest([this.documentId$, this.subject$, this.body$]).pipe(
+    map(([documentId, subject, body]) => !!(documentId && subject && body))
+  );
 
   constructor(
     private route: ActivatedRoute,
   ) {
-    const snapshot = this.route.snapshot.paramMap;
-    this.documentId = snapshot.get('documentId') || '';
+    this.documentId$.next(this.route.snapshot.paramMap.get('documentId') || '');
+  }
+
+  subjectChange(subject: string): void {
+    this.subject$.next(subject);
+  }
+
+  bodyChange(body: string): void {
+    this.body$.next(body);
   }
 
   buttonClick(): void {
