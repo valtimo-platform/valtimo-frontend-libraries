@@ -137,9 +137,7 @@ export class DocumentService {
 
   getAuditLog(documentId: string, page: number = 0): Observable<Page<AuditRecord>> {
     let params = new HttpParams();
-    if (page) {
-      params = params.set("page", page.toString());
-    }
+    params = params.set("page", page.toString());
     return this.http.get<Page<AuditRecord>>(`${this.valtimoEndpointUri}process-document/instance/document/${documentId}/audit`,
       {params}
     );
