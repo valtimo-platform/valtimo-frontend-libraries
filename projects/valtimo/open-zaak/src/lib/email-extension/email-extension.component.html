@@ -14,7 +14,13 @@
   ~ limitations under the License.
   -->
 
-<button class="btn btn-secondary btn-space">
+<button class="btn btn-secondary btn-space" (click)="buttonClick()">
   <i class="icon mdi mdi-email"></i>&nbsp;
   {{ 'dossier.buttons.sendEmail' | translate }}
 </button>
+
+<valtimo-modal #modal [title]="'connectorManagement.extension.buttonText'| translate">
+  <div class="mt-2" body>
+    body
+  </div>
+</valtimo-modal>

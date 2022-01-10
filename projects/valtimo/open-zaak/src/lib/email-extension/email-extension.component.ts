@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
+import {ModalComponent} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-email-extension',
@@ -22,7 +23,13 @@ import {Component} from '@angular/core';
   styleUrls: ['./email-extension.component.scss']
 })
 export class EmailExtensionComponent {
+  @ViewChild('modal') modal: ModalComponent;
+
   constructor(
   ) {
+  }
+
+  buttonClick(): void {
+    this.modal.show();
   }
 }
