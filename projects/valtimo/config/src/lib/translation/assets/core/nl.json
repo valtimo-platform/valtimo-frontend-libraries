@@ -29,8 +29,9 @@
       "globalSearchPlaceHolder": "Alles",
       "referenceNumberPlaceHolder": "Referentienummer"
     },
-    "buttons": {
-      "sendEmail": "Verstuur e-mail"
+    "sendEmailExtension": {
+      "buttonText": "Verstuur e-mail",
+      "title": "Een e-mail versturen"
     }
   },
   "document": {

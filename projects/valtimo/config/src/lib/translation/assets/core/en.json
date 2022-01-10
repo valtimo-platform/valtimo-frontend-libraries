@@ -29,8 +29,9 @@
       "globalSearchPlaceHolder": "Everything",
       "referenceNumberPlaceHolder": "Reference number"
     },
-    "buttons": {
-      "sendEmail": "Send e-mail"
+    "sendEmailExtension": {
+      "buttonText": "Send e-mail",
+      "title": "Send an e-mail"
     }
   },
   "document": {
