@@ -89,6 +89,4 @@ export class DossierDetailTabAuditComponent implements OnInit {
     this.currentAuditPage = page-1;
     this.loadAuditPage(this.currentAuditPage);
   }
-
-
 }
