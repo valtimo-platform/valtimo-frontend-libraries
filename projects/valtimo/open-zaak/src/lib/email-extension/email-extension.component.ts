@@ -63,14 +63,6 @@ export class EmailExtensionComponent implements OnInit {
     this.modal.show();
   }
 
-  disable(): void {
-    this.disabled$.next(true);
-  }
-
-  enable(): void {
-    this.disabled$.next(false);
-  }
-
   sendMessage(): void {
     this.disable();
 
@@ -79,6 +71,7 @@ export class EmailExtensionComponent implements OnInit {
         () => {
           this.alertService.success(this.translateService.instant('dossier.sendEmailExtension.sendSuccess'));
           this.enable();
+          this.clear();
           this.modal.hide();
         },
         () => {
@@ -86,5 +79,18 @@ export class EmailExtensionComponent implements OnInit {
         }
       );
     });
+  }
+
+  private disable(): void {
+    this.disabled$.next(true);
+  }
+
+  private enable(): void {
+    this.disabled$.next(false);
+  }
+
+  private clear(): void {
+    this.subject$.next('');
+    this.body$.next('');
   }
 }
