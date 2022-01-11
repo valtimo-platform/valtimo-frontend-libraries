@@ -30,9 +30,9 @@ export function emailExtensionInitializer(
   return (): Promise<any> => {
     return new Promise((resolve, reject) => {
       try {
-        logger.debug('openzaak extension initializer before init');
+        logger.debug('email extension initializer before init');
         const extension = new Extension(
-          'OpenZaakTypeLink',
+          'EmailExtension',
           new BasicExtensionPoint(
             'dossier',
             'dossier-detail',
@@ -41,10 +41,10 @@ export function emailExtensionInitializer(
           )
         );
         configService.addExtension(extension);
-        logger.debug('openzaak extension initializer after init');
+        logger.debug('email extension initializer after init');
         resolve();
       } catch (error) {
-        logger.debug('openzaak extension initializer error', error);
+        logger.debug('email extension initializer error', error);
         reject(error);
       }
     });
