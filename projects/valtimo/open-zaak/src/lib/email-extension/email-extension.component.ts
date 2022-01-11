@@ -28,7 +28,7 @@ import {TranslateService} from '@ngx-translate/core';
   templateUrl: './email-extension.component.html',
   styleUrls: ['./email-extension.component.scss']
 })
-export class EmailExtensionComponent implements OnInit{
+export class EmailExtensionComponent implements OnInit {
   @ViewChild('modal') modal: ModalComponent;
 
   readonly documentId$ = new BehaviorSubject<string>('');
@@ -85,6 +85,6 @@ export class EmailExtensionComponent implements OnInit{
           this.enable();
         }
       );
-    })
+    });
   }
 }
