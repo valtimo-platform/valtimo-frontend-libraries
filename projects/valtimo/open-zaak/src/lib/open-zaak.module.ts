@@ -19,8 +19,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {ModalModule, WidgetModule, SpinnerModule} from '@valtimo/components';
 import {CommonModule} from '@angular/common';
-import {OpenZaakTypeLinkExtensionComponent} from './extension/open-zaak-type-link-extension.component';
-import {OpenZaakServiceTaskConnectorModalExtensionComponent} from './extension/open-zaak-service-task-connector-modal-extension/open-zaak-service-task-connector-modal-extension.component';
+import {OpenZaakTypeLinkExtensionComponent} from './open-zaak-extension/open-zaak-type-link-extension.component';
+import {OpenZaakServiceTaskConnectorModalExtensionComponent} from './open-zaak-extension/open-zaak-service-task-connector-modal-extension/open-zaak-service-task-connector-modal-extension.component';
 import {EmailExtensionComponent} from './email-extension/email-extension.component';
 
 @NgModule({
