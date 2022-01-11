@@ -77,7 +77,7 @@ export class EmailExtensionComponent implements OnInit {
     this.requestData$.pipe(take(1)).subscribe(([documentId, subject, bodyText]) => {
       this.documentService.sendMessage(documentId, {subject, bodyText}).subscribe(
         () => {
-          this.alertService.success(this.translateService.instant('connectorManagement.messages.modifySuccess'));
+          this.alertService.success(this.translateService.instant('dossier.sendEmailExtension.sendSuccess'));
           this.enable();
           this.modal.hide();
         },
