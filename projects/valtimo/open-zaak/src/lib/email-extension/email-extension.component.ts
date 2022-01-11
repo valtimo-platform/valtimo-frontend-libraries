@@ -72,7 +72,7 @@ export class EmailExtensionComponent implements OnInit {
   }
 
   sendMessage(): void {
-    this.disabled$.next(true);
+    this.disable();
 
     this.requestData$.pipe(take(1)).subscribe(([documentId, subject, bodyText]) => {
       this.documentService.sendMessage(documentId, {subject, bodyText}).subscribe(
