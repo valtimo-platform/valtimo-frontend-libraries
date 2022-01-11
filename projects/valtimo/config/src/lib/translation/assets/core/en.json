@@ -34,7 +34,8 @@
       "title": "Send an e-mail",
       "subject": "Subject",
       "body": "Body",
-      "sendButtonText": "Send"
+      "sendButtonText": "Send",
+      "sendSuccess": "Your message has been sent successfully."
     }
   },
   "document": {
@@ -359,7 +360,10 @@
       "openZaakConfig.url": "OpenZaak URL",
       "openZaakConfig.clientId": "Client ID",
       "openZaakConfig.secret": "Secret",
-      "openZaakConfig.rsin": "Rsin"
+      "openZaakConfig.rsin": "Rsin",
+      "clientId": "Client ID",
+      "secret": "Secret",
+      "rsin": "RSIN"
     },
     "messages": {
       "addSuccess": "Connection has been added successfully.",

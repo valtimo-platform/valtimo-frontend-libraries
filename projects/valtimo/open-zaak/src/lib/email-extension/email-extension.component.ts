@@ -18,7 +18,10 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ModalComponent} from '@valtimo/components';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
+import {DocumentService} from '@valtimo/document';
+import {AlertService} from '@valtimo/components';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-email-extension',
@@ -31,12 +34,17 @@ export class EmailExtensionComponent implements OnInit{
   readonly documentId$ = new BehaviorSubject<string>('');
   readonly subject$ = new BehaviorSubject<string>('');
   readonly body$ = new BehaviorSubject<string>('');
-  readonly valid$: Observable<boolean> = combineLatest([this.documentId$, this.subject$, this.body$]).pipe(
+  readonly requestData$: Observable<Array<string>> = combineLatest([this.documentId$, this.subject$, this.body$]);
+  readonly valid$: Observable<boolean> = this.requestData$.pipe(
     map(([documentId, subject, body]) => !!(documentId && subject && body))
   );
+  readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private route: ActivatedRoute,
+    private readonly route: ActivatedRoute,
+    private readonly documentService: DocumentService,
+    private readonly alertService: AlertService,
+    private readonly translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -53,5 +61,30 @@ export class EmailExtensionComponent implements OnInit{
 
   buttonClick(): void {
     this.modal.show();
+  }
+
+  disable(): void {
+    this.disabled$.next(true);
+  }
+
+  enable(): void {
+    this.disabled$.next(false);
+  }
+
+  sendMessage(): void {
+    this.disabled$.next(true);
+
+    this.requestData$.pipe(take(1)).subscribe(([documentId, subject, bodyText]) => {
+      this.documentService.sendMessage(documentId, {subject, bodyText}).subscribe(
+        () => {
+          this.alertService.success(this.translateService.instant('connectorManagement.messages.modifySuccess'));
+          this.enable();
+          this.modal.hide();
+        },
+        () => {
+          this.enable();
+        }
+      );
+    })
   }
 }

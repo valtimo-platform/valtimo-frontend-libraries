@@ -54,7 +54,7 @@
     </form>
   </div>
   <div footer>
-    <button class="btn btn-primary" [disabled]="(valid$ | async) === false">
+    <button class="btn btn-primary" [disabled]="(valid$ | async) === false || (disabled$ | async)" (click)="sendMessage()">
       {{ 'dossier.sendEmailExtension.sendButtonText' | translate }}
     </button>
   </div>
