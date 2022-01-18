@@ -14,7 +14,15 @@
   ~ limitations under the License.
   -->
 
-<div *ngIf="contactMoments">
-  <valtimo-timeline [items]="contactMoments"></valtimo-timeline>
+<div class="contact-moments-container">
+  <div class="btn-group mt-m3px mb-3 button-container">
+    <button class="btn btn-primary btn-space">
+      <i class="icon mdi mdi-calendar-note"></i>
+      &nbsp;{{ "dossier.contactMoments.makeNoteButton" | translate }}
+    </button>
+  </div>
+  <div *ngIf="contactMoments">
+    <valtimo-timeline [items]="contactMoments"></valtimo-timeline>
+  </div>
 </div>
 

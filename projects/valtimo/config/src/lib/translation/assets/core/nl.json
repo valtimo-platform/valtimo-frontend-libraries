@@ -36,6 +36,9 @@
       "body": "Inhoud",
       "sendButtonText": "Versturen",
       "sendSuccess": "Uw bericht is succesvol verzonden."
+    },
+    "contactMoments": {
+      "makeNoteButton": "Aantekening maken"
     }
   },
   "document": {
