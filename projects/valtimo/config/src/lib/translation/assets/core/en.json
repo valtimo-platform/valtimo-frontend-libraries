@@ -10,7 +10,7 @@
     "DocumentRelatedFileAddedEvent": "Related file added",
     "DocumentRelatedFileRemovedEvent": "Related file removed"
   },
-  "dossierdossier": {
+  "dossier": {
     "title": {
       "single": "Case",
       "plural": "Cases"
