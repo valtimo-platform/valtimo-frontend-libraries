@@ -38,7 +38,11 @@
       "sendSuccess": "Uw bericht is succesvol verzonden."
     },
     "contactMoments": {
-      "makeNoteButton": "Aantekening maken"
+      "makeNoteButton": "Aantekening maken",
+      "popupTitle": "Een aantekening maken",
+      "noteText": "Aantekening",
+      "saveButtonText": "Aantekening opslaan",
+      "saveSuccess": "Uw aantekening is succesvol opgeslagen."
     }
   },
   "document": {
