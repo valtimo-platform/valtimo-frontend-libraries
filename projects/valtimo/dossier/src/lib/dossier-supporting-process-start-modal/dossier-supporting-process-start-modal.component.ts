@@ -90,11 +90,11 @@ export class DossierSupportingProcessStartModalComponent {
           case 'BpmnElementAngularStateUrlLink':
             this.route.params.pipe(take(1)).subscribe((params) => {
               const documentId = params?.documentId;
-              if (documentId) {
-                this.router.navigate([formDefinition.formAssociation.formLink.url], {state: {documentId}});
-              } else {
-                this.router.navigate([formDefinition.formAssociation.formLink.url]);
-              }
+
+              this.router.navigate(
+                [formDefinition.formAssociation.formLink.url],
+                {state: {...(documentId && { documentId })}}
+              );
             });
             break;
           default:

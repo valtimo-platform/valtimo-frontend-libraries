@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, Output, ViewChild, ViewEncapsulation} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormioComponent, ModalComponent} from '@valtimo/components';
 import {FormAssociation, FormioSubmission, FormSubmissionResult, Task} from '@valtimo/contract';
 import {FormLinkService} from '@valtimo/form-link';
@@ -24,6 +24,7 @@ import * as momentImported from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {ToastrService} from 'ngx-toastr';
 import {FormioOptionsImpl, ValtimoFormioOptions} from '@valtimo/contract';
+import {take} from 'rxjs/operators';
 
 const moment = momentImported;
 moment.locale(localStorage.getItem('langKey') || '');
@@ -47,10 +48,14 @@ export class TaskDetailModalComponent {
   private formAssociation: FormAssociation;
   public errorMessage: String = null;
 
-  constructor(private toastr: ToastrService,
-              private formLinkService: FormLinkService,
-              private router: Router,
-              private logger: NGXLogger) {
+  constructor(
+    private readonly toastr: ToastrService,
+    private readonly formLinkService: FormLinkService,
+    private readonly router: Router,
+    private readonly logger: NGXLogger,
+    private readonly route: ActivatedRoute,
+
+  ) {
     this.formioOptions = new FormioOptionsImpl();
     this.formioOptions.disableAlerts = true;
   }
@@ -89,12 +94,18 @@ export class TaskDetailModalComponent {
               window.open(url, '_blank');
               break;
             case 'BpmnElementAngularStateUrlLink':
-              const taskId = task?.id;
-              if (taskId) {
-                this.router.navigate([formDefinition.formAssociation.formLink.url], {state: {taskId}});
-              } else {
-                this.router.navigate([formDefinition.formAssociation.formLink.url]);
-              }
+              this.route.params.pipe(take(1)).subscribe((params) => {
+                const taskId = task?.id;
+                const documentId = params?.documentId;
+
+                this.router.navigate(
+                  [formDefinition.formAssociation.formLink.url],
+                  {state: {
+                    ...(taskId && { taskId }),
+                      ...(documentId && { documentId })
+                  }}
+                );
+              });
               break;
             default:
               this.logger.fatal('Unsupported class name');
