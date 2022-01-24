@@ -89,7 +89,12 @@ export class TaskDetailModalComponent {
               window.open(url, '_blank');
               break;
             case 'BpmnElementAngularStateUrlLink':
-              this.router.navigate([formDefinition.formAssociation.formLink.url]);
+              const taskId = task?.id;
+              if (taskId) {
+                this.router.navigate([formDefinition.formAssociation.formLink.url], {state: {taskId}});
+              } else {
+                this.router.navigate([formDefinition.formAssociation.formLink.url]);
+              }
               break;
             default:
               this.logger.fatal('Unsupported class name');
