@@ -54,7 +54,6 @@ export class TaskDetailModalComponent {
     private readonly router: Router,
     private readonly logger: NGXLogger,
     private readonly route: ActivatedRoute,
-
   ) {
     this.formioOptions = new FormioOptionsImpl();
     this.formioOptions.disableAlerts = true;
