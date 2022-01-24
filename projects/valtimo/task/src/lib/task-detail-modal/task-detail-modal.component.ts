@@ -101,7 +101,7 @@ export class TaskDetailModalComponent {
                   [formDefinition.formAssociation.formLink.url],
                   {state: {
                     ...(taskId && { taskId }),
-                      ...(documentId && { documentId })
+                    ...(documentId && { documentId })
                   }}
                 );
               });
