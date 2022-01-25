@@ -37,8 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private alertService: AlertService,
     public translate: TranslateService
-  ) // private userProviderService: UserProviderService
-  {}
+  ) {}
 
   ngOnInit() {
     this.reset();

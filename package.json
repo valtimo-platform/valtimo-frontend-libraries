@@ -287,7 +287,6 @@
     "@valtimo/view-configurator": "file:dist/valtimo/view-configurator",
     "ng-packagr": "^10.0.0",
     "prettier": "^2.5.1",
-    "prettier-airbnb-config": "^1.0.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "~3.9.5"
   }
