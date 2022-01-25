@@ -123,6 +123,7 @@
     "e2e": "ng e2e",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write .",
     "build-layout-clean-lib": "npx rimraf projects/valtimo/layout/src/beagle/src/assets/lib",
     "build-layout-dep-copy": "node node_modules/@foxythemes/depcopy-cli/lib/dep-copy-cli.js",
     "build-layout-build-lib": "ng build @valtimo/layout",
