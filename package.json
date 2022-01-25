@@ -283,6 +283,7 @@
     "@valtimo/user-management": "file:dist/valtimo/user-management",
     "@valtimo/view-configurator": "file:dist/valtimo/view-configurator",
     "ng-packagr": "^10.0.0",
+    "prettier": "^2.5.1",
     "typescript": "~3.9.5"
   }
 }
