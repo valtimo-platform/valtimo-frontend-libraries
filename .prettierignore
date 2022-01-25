@@ -1,0 +1,8 @@
+.git
+.gradle
+.idea
+dist
+e2e
+gradle
+node_modules
+valtimo-frontend-libraries-pipeline
