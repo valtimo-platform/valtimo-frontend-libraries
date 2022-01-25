@@ -48,6 +48,19 @@ To watch for changes of a specific module, run `ng build @valtimo/libraryName --
 
 To run TSLint on a specific library, run `npm run libs:lint:libraryName`.
 
+## Code formatting
+
+This project uses Prettier to format its code. run `prettier:check` to check for formatting errors,
+and `prettier:write` to automatically fix any errors.
+
+Please make sure your code conforms to the project's Prettier code formatting rules before
+committing your code.
+
+We advise to configure your IDE to automatically format files on save. For IntelliJ IDEA please
+refer to [this page](https://www.jetbrains.com/help/idea/prettier.html#ws_prettier_install). For VS
+Code you can refer to
+[this guide](https://scottsauber.com/2017/06/10/prettier-format-on-save-never-worry-about-formatting-javascript-again/).
+
 ## Running unit tests
 
 Run `npm run libs:test:libraryName` to execute unit tests.
