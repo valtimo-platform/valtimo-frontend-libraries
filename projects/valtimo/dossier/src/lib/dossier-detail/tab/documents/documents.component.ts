@@ -27,7 +27,7 @@ import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'valtimo-dossier-detail-tab-documents',
   templateUrl: './documents.component.html',
-  styleUrls: ['./documents.component.css']
+  styleUrls: ['./documents.component.css'],
 })
 export class DossierDetailTabDocumentsComponent implements OnInit {
   public readonly documentId: string;
@@ -51,19 +51,19 @@ export class DossierDetailTabDocumentsComponent implements OnInit {
     {key: 'fileName', label: 'File name'},
     {key: 'sizeInBytes', label: 'Size in bytes'},
     {key: 'createdOn', label: 'Created on', viewType: 'date'},
-    {key: 'createdBy', label: 'Created by'}
+    {key: 'createdBy', label: 'Created by'},
   ];
   public actions = [
     {
       columnName: '',
       iconClass: 'fas fa-external-link-alt',
-      callback: this.downloadDocument.bind(this)
+      callback: this.downloadDocument.bind(this),
     },
     {
       columnName: '',
       iconClass: 'fas fa-trash-alt',
-      callback: this.removeRelatedFile.bind(this)
-    }
+      callback: this.removeRelatedFile.bind(this),
+    },
   ];
 
   readonly uploading$ = new BehaviorSubject<boolean>(false);
@@ -91,7 +91,9 @@ export class DossierDetailTabDocumentsComponent implements OnInit {
     this.uploadProviderService
       .uploadFile(file, this.documentDefinitionName)
       .pipe(
-        switchMap(resourceFile => this.documentService.assignResource(this.documentId, resourceFile.data.resourceId))
+        switchMap(resourceFile =>
+          this.documentService.assignResource(this.documentId, resourceFile.data.resourceId)
+        )
       )
       .subscribe(
         () => {
@@ -107,9 +109,11 @@ export class DossierDetailTabDocumentsComponent implements OnInit {
   }
 
   downloadDocument(relatedFile: RelatedFile): void {
-    this.uploadProviderService.getResource(relatedFile.fileId).subscribe((resource: ResourceDto) => {
-      this.downloadService.downloadFile(resource.url, resource.resource.name);
-    });
+    this.uploadProviderService
+      .getResource(relatedFile.fileId)
+      .subscribe((resource: ResourceDto) => {
+        this.downloadService.downloadFile(resource.url, resource.resource.name);
+      });
   }
 
   removeRelatedFile(relatedFile: RelatedFile): void {
@@ -122,6 +126,7 @@ export class DossierDetailTabDocumentsComponent implements OnInit {
         this.toastrService.error('Failed to remove document from dossier');
       }
     );
+
   }
 
   private refetchDocuments(): void {
