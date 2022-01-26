@@ -34,18 +34,18 @@ export class DossierDetailTabDocumentsComponent implements OnInit {
   public readonly documentDefinitionName: string;
   private readonly refetch$ = new BehaviorSubject<null>(null);
   public relatedFiles$: Observable<Array<RelatedFile>> = this.refetch$.pipe(
-    switchMap(() => combineLatest(
-      [this.documentService.getDocument(this.documentId), this.translateService.stream('key')]
-    )),
+    switchMap(() =>
+      combineLatest([this.documentService.getDocument(this.documentId), this.translateService.stream('key')])
+    ),
     map(([document]) => {
       const relatedFiles = document?.relatedFiles || [];
-      const translatedFiles = relatedFiles.map((file) => {
-        return {...file, createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated')}
+      const translatedFiles = relatedFiles.map(file => {
+        return {...file, createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated')};
       });
 
       return translatedFiles || [];
-    }
-  ));
+    })
+  );
 
   public fields = [
     {key: 'fileName', label: 'File name'},
@@ -88,16 +88,22 @@ export class DossierDetailTabDocumentsComponent implements OnInit {
   fileSelected(file: File): void {
     this.uploading$.next(true);
 
-    this.uploadProviderService.uploadFile(file, this.documentDefinitionName).pipe(
-      switchMap((resourceFile) => this.documentService.assignResource(this.documentId, resourceFile.data.resourceId))
-    ).subscribe(() => {
-      this.toastrService.success('Successfully uploaded document to dossier');
-      this.refetchDocuments();
-      this.uploading$.next(false);
-    }, () => {
-      this.toastrService.error('Failed to upload document to dossier');
-      this.uploading$.next(false);
-    });
+    this.uploadProviderService
+      .uploadFile(file, this.documentDefinitionName)
+      .pipe(
+        switchMap(resourceFile => this.documentService.assignResource(this.documentId, resourceFile.data.resourceId))
+      )
+      .subscribe(
+        () => {
+          this.toastrService.success('Successfully uploaded document to dossier');
+          this.refetchDocuments();
+          this.uploading$.next(false);
+        },
+        () => {
+          this.toastrService.error('Failed to upload document to dossier');
+          this.uploading$.next(false);
+        }
+      );
   }
 
   downloadDocument(relatedFile: RelatedFile): void {
@@ -107,12 +113,15 @@ export class DossierDetailTabDocumentsComponent implements OnInit {
   }
 
   removeRelatedFile(relatedFile: RelatedFile): void {
-    this.documentService.removeResource(this.documentId, relatedFile.fileId).subscribe(() => {
-      this.toastrService.success('Successfully removed document from dossier');
-      this.refetchDocuments();
-    }, () => {
-      this.toastrService.error('Failed to remove document from dossier');
-    });
+    this.documentService.removeResource(this.documentId, relatedFile.fileId).subscribe(
+      () => {
+        this.toastrService.success('Successfully removed document from dossier');
+        this.refetchDocuments();
+      },
+      () => {
+        this.toastrService.error('Failed to remove document from dossier');
+      }
+    );
   }
 
   private refetchDocuments(): void {
