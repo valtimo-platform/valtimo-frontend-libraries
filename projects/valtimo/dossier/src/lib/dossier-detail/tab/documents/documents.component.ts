@@ -22,6 +22,7 @@ import {ToastrService} from 'ngx-toastr';
 import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {switchMap} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documents',
@@ -31,6 +32,7 @@ import {BehaviorSubject} from 'rxjs';
 export class DossierDetailTabDocumentsComponent implements OnInit {
   public readonly documentId: string;
   public readonly documentDefinitionName: string;
+  public readonly maxFileSize: number = this.configService?.config?.caseFileSizeUploadLimitMB || 5;
   public relatedFiles: RelatedFile[] = [];
   public fields = [
     {key: 'fileName', label: 'File name'},
@@ -58,7 +60,8 @@ export class DossierDetailTabDocumentsComponent implements OnInit {
     private readonly documentService: DocumentService,
     private readonly toastrService: ToastrService,
     private readonly uploadProviderService: UploadProviderService,
-    private readonly downloadService: DownloadService
+    private readonly downloadService: DownloadService,
+    private readonly configService: ConfigService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.documentId = snapshot.get('documentId') || '';
