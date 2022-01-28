@@ -16,4 +16,6 @@
  *
  */
 
+export * from './upload.model';
+export * from './uploader.model';
 export * from './open-zaak.model';

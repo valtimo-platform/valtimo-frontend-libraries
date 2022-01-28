@@ -23,5 +23,3 @@ export * from './menu.config';
 export * from './security.config';
 export * from './extension.model';
 export * from './http-loader';
-export * from './upload.model';
-export * from './uploader.model';
