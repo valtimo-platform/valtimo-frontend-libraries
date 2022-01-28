@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {DropdownButtonStyle, DropdownItem} from '@valtimo/contract';
+import {DropdownButtonStyle, DropdownItem} from '../../models';
 
 @Component({
   selector: 'valtimo-searchable-dropdown-select',

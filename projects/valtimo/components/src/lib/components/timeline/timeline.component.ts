@@ -15,7 +15,7 @@
  */
 
 import {Component, Input} from '@angular/core';
-import {TimelineItem} from '@valtimo/contract';
+import {TimelineItem} from '../../models';
 
 @Component({
   selector: 'valtimo-timeline',

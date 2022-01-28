@@ -16,5 +16,4 @@
  *
  */
 
-export * from './audit.model';
 export * from './tabs.model';

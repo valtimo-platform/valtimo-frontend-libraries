@@ -16,7 +16,7 @@
 
 import {AfterContentInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Alert, AlertType} from '@valtimo/contract';
+import {Alert, AlertType} from '../../models';
 import {AlertService} from './alert.service';
 
 declare var $;

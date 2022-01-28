@@ -16,7 +16,7 @@
 
 import {Component, ElementRef, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {Event, NavigationEnd, Router} from '@angular/router';
-import {MenuItem} from '@valtimo/contract';
+import {MenuItem} from '@valtimo/config';
 import {Subscription} from 'rxjs';
 import {MenuService} from './menu.service';
 

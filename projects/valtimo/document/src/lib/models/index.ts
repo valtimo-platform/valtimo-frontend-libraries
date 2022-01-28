@@ -17,3 +17,5 @@
  */
 
 export * from './document.model';
+export * from './list-sorting.model';
+export * from './audit.model';

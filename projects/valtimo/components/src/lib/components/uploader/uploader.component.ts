@@ -15,8 +15,7 @@
  */
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {S3Service} from '@valtimo/resource';
-import {S3Resource} from '@valtimo/contract';
+import {S3Service, S3Resource} from '@valtimo/resource';
 
 @Component({
   selector: 'valtimo-uploader',

@@ -29,7 +29,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {DropdownButtonStyle, DropdownItem} from '@valtimo/contract';
+import {DropdownButtonStyle, DropdownItem} from '../../models';
 import {BehaviorSubject, combineLatest, fromEvent, Subscription} from 'rxjs';
 import {debounceTime, take} from 'rxjs/operators';
 

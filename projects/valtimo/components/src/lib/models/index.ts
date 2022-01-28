@@ -18,7 +18,6 @@
 
 export * from './alert.model';
 export * from './form-io.model';
-export * from './list-sorting.model';
 export * from './pagination.model';
 export * from './searchable-dropdown.model';
 export * from './timeline.model';

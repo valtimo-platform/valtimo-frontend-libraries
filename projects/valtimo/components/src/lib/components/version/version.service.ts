@@ -17,7 +17,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ValtimoVersion} from '@valtimo/contract';
+import {ValtimoVersion} from '../../models';
 
 @Injectable({
   providedIn: 'root',

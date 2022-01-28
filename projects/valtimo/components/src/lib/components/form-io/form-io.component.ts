@@ -24,7 +24,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {FormioSubmission, ValtimoFormioOptions} from '@valtimo/contract';
+import {FormioSubmission, ValtimoFormioOptions} from '../../models';
 import {UserProviderService} from '@valtimo/security';
 import {Formio, FormioComponent as FormIoSourceComponent, FormioForm} from 'angular-formio';
 import {FormioRefreshValue} from 'angular-formio/formio.common';

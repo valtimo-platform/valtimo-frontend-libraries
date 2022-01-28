@@ -26,7 +26,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {SortState, Direction} from '@valtimo/contract';
+import {SortState, Direction} from '@valtimo/document';
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, fromEvent} from 'rxjs';
 import {debounceTime, take} from 'rxjs/operators';

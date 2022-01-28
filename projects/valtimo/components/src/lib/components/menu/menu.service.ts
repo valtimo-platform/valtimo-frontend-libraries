@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {MenuConfig, MenuItem} from '@valtimo/contract';
+import {MenuConfig, MenuItem} from '@valtimo/config';
 import {NGXLogger} from 'ngx-logger';
 import {ConfigService} from '@valtimo/config';
 import {BehaviorSubject, Observable} from 'rxjs';

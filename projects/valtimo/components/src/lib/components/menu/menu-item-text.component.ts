@@ -15,7 +15,7 @@
  */
 
 import {Component, Input} from '@angular/core';
-import {MenuItem} from '@valtimo/contract';
+import {MenuItem} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-menu-item-text',

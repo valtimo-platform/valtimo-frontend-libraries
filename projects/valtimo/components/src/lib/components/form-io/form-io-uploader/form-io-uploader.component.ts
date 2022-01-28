@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormioCustomComponent} from 'angular-formio';
 import {BehaviorSubject} from 'rxjs';
-import {ResourceDto, ResourceFile} from '@valtimo/contract';
+import {ResourceDto, ResourceFile} from '@valtimo/resource';
 import {FormIoStateService} from '../services/form-io-state.service';
 import {take} from 'rxjs/operators';
 import {FormIoDomService} from '../services/form-io-dom.service';
