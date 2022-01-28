@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {User} from './user-management.model';
+import {User} from '@valtimo/config';
 
 export interface Task {
   assignee: string;

@@ -24,3 +24,4 @@ export * from './security.config';
 export * from './extension.model';
 export * from './http-loader';
 export * from './roles';
+export * from './user-management.model';

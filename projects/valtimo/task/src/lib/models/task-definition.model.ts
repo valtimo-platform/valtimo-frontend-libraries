@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {FormDefinition} from './form-definition.model';
+import {FormDefinition} from '@valtimo/form-management';
 
 export interface TaskDefinition {
   id: string;

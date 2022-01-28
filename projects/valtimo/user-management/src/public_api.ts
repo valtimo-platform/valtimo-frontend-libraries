@@ -18,5 +18,4 @@
  * Public API Surface of user-management
  */
 
-export * from './lib/models';
 export * from './lib/user-management.module';
