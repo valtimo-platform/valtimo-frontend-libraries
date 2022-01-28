@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of context
- */
+export interface ChoiceField {
+  id: number;
+  keyName: string;
+  title: boolean;
+}
 
-export * from './lib/models';
-export * from './lib/context.service';
-export * from './lib/context.module';
+export interface ChoiceFieldValue {
+  id: number;
+  choiceField: ChoiceField;
+  deprecated: boolean;
+  name: string;
+  sortOrder: number;
+  value: string;
+  deprecatedDisplayString: string;
+}

@@ -18,5 +18,4 @@
  * Public API Surface of management
  */
 
-export * from './lib/models';
 export * from './lib/management-context/management-context.module';
