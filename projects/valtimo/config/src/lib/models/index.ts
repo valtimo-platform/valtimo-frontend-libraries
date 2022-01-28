@@ -23,3 +23,4 @@ export * from './menu.config';
 export * from './security.config';
 export * from './extension.model';
 export * from './http-loader';
+export * from './roles';

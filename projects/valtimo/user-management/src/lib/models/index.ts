@@ -16,5 +16,4 @@
  *
  */
 
-export * from './roles';
 export * from './user-management.model';
