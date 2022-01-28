@@ -17,7 +17,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
-import {BreadcrumbNavigationComponent} from '../breadcrumb-navigation/breadcrumb-navigation.component';
+import {BreadcrumbNavigationComponent} from './breadcrumb-navigation.component';
 import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
