@@ -18,5 +18,6 @@
  * Public API Surface of process-management
  */
 
+export * from './lib/models';
 export * from './lib/process-management.module';
 export * from './lib/process-management.component';

@@ -18,6 +18,8 @@
  * Public API Surface of components
  */
 
+export * from './lib/models';
+
 export * from './lib/components/camunda/form/camunda-form.components';
 export * from './lib/components/camunda/form/camunda-form.module';
 
