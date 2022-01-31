@@ -21,4 +21,4 @@
 export * from './lib/form-link.service';
 export * from './lib/form-link.component';
 export * from './lib/form-link.module';
-export * from './lib/models/form-link.model';
+export * from './lib/models';
