@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
+export interface ExternalConnector {
+  reference: string;
+  url: string;
+  httpMethod: string;
+  body: string;
+  headers: {[key: string]: string};
+  mappedVariablesResponse: {[key: string]: string};
+}
+
 export interface ChoicefieldValue {
   id: number;
   name: string;

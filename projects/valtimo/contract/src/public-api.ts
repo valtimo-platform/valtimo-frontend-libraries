@@ -50,7 +50,7 @@ export {ValtimoAuth0Options, Auth0User} from '@valtimo/auth0';
 
 export {Authority} from '@valtimo/authority';
 
-export {ChoiceField, ChoiceFieldValue} from '@valtimo/choice-field';
+export {ChoiceField, ChoiceFieldValue, ExternalConnector} from '@valtimo/choice-field';
 
 export {
   Alert,
