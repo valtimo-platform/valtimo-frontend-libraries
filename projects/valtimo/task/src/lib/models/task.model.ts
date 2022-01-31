@@ -46,7 +46,7 @@ export interface Task {
   valtimoAssignee: User;
 }
 
-interface ListItemField {
+export interface ListItemField {
   key: string;
   value: string;
   label: string;
