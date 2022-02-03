@@ -71,14 +71,12 @@ export class AuthorityDetailComponent implements OnInit, OnDestroy {
 
       // set form values
       this.form.controls.name.setValue(this.authority.name);
-      this.form.controls.hourlyRate.setValue(this.authority.hourlyRate.amount);
     }
   }
 
   private createFormGroup() {
     return this.formBuilder.group({
       name: new FormControl('', Validators.required),
-      hourlyRate: new FormControl('', Validators.required),
     });
   }
 

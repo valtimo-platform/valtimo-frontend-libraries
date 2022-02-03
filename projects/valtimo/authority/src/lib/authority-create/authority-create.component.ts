@@ -46,7 +46,6 @@ export class AuthorityCreateComponent implements OnInit {
   private createFormGroup() {
     return this.formBuilder.group({
       name: new FormControl('', Validators.required),
-      hourlyRate: new FormControl('', Validators.required),
     });
   }
 
