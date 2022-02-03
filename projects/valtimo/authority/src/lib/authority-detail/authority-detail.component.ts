@@ -50,6 +50,8 @@ export class AuthorityDetailComponent implements OnInit, OnDestroy {
     )
   );
 
+  readonly loading$ = new BehaviorSubject<boolean>(true);
+
   public form: FormGroup;
   private alertSub: Subscription = Subscription.EMPTY;
 
@@ -80,6 +82,7 @@ export class AuthorityDetailComponent implements OnInit, OnDestroy {
   private initData(name) {
     this.service.get(name).subscribe(result => {
       this.authority$.next(result);
+      this.loading$.next(false);
       this.setValues();
     });
   }
