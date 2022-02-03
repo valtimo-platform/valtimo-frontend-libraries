@@ -67,7 +67,6 @@ export class AuthorityDetailComponent implements OnInit, OnDestroy {
   private setValues() {
     if (this.authority) {
       // set authority values
-      this.authority.hourlyRateDisplayString = this.authority.hourlyRate.displayString;
       this.authority.systemAuthorityDisplayString = this.authority.systemAuthority ? 'Yes' : 'No';
 
       // set form values
