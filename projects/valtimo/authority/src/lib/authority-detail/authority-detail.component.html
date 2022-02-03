@@ -17,7 +17,7 @@
 <div class="main-content">
   <div class="container-fluid">
     <div class="col-12 px-0 mb-5">
-      <valtimo-widget *ngIf="authority">
+      <valtimo-widget *ngIf="translatedAuthority$ | async as authority">
         <div>
           <div class="card-body bg-light">
             <div class="row py-5">

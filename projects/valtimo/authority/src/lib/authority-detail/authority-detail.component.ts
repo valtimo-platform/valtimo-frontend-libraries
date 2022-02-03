@@ -20,8 +20,9 @@ import {AuthorityService} from '../authority.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from '@valtimo/components';
-import {Subscription} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
+import {first, map, take} from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-authority-detail',
@@ -30,16 +31,35 @@ import {first} from 'rxjs/operators';
 })
 export class AuthorityDetailComponent implements OnInit, OnDestroy {
   public name: string;
-  public authority: Authority;
+
+  private authority$ = new BehaviorSubject<Authority>(undefined);
+  public translatedAuthority$: Observable<Authority | undefined> = combineLatest([
+    this.authority$,
+    this.translateService.stream('entitlement.hasSystemAuthority'),
+    this.translateService.stream('entitlement.noSystemAuthority'),
+  ]).pipe(
+    map(([authority, hasAuthorityString, noAuthorityString]) =>
+      authority
+        ? {
+            ...authority,
+            systemAuthorityDisplayString: authority?.systemAuthority
+              ? hasAuthorityString
+              : noAuthorityString,
+          }
+        : undefined
+    )
+  );
+
   public form: FormGroup;
   private alertSub: Subscription = Subscription.EMPTY;
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
-    private service: AuthorityService,
-    private alertService: AlertService
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly formBuilder: FormBuilder,
+    private readonly service: AuthorityService,
+    private readonly alertService: AlertService,
+    private readonly translateService: TranslateService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.name = snapshot.get('name');
@@ -59,19 +79,17 @@ export class AuthorityDetailComponent implements OnInit, OnDestroy {
 
   private initData(name) {
     this.service.get(name).subscribe(result => {
-      this.authority = result;
+      this.authority$.next(result);
       this.setValues();
     });
   }
 
   private setValues() {
-    if (this.authority) {
-      // set authority values
-      this.authority.systemAuthorityDisplayString = this.authority.systemAuthority ? 'Yes' : 'No';
-
-      // set form values
-      this.form.controls.name.setValue(this.authority.name);
-    }
+    this.authority$.pipe(take(1)).subscribe(authority => {
+      if (authority) {
+        this.form.controls.name.setValue(authority.name);
+      }
+    });
   }
 
   private createFormGroup() {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Authority} from '../models';
 import {AuthorityService} from '../authority.service';
 import {Router} from '@angular/router';
@@ -27,7 +27,7 @@ import {map} from 'rxjs/operators';
   templateUrl: './authority-list.component.html',
   styleUrls: ['./authority-list.component.css'],
 })
-export class AuthorityListComponent {
+export class AuthorityListComponent implements OnInit {
   private authorities$ = new BehaviorSubject<Array<Authority>>([]);
   public translatedAuthorities$ = combineLatest([
     this.authorities$,
@@ -43,6 +43,8 @@ export class AuthorityListComponent {
       }))
     )
   );
+
+  readonly loading$ = new BehaviorSubject<boolean>(true);
 
   public pagination = {
     collectionSize: 0,
@@ -75,6 +77,10 @@ export class AuthorityListComponent {
     private readonly translateService: TranslateService
   ) {}
 
+  ngOnInit(): void {
+    this.initData();
+  }
+
   paginationSet() {
     this.initData();
   }
@@ -83,6 +89,7 @@ export class AuthorityListComponent {
     this.service.query({page: this.pageParam, size: this.pagination.size}).subscribe(results => {
       this.pagination.collectionSize = results.headers.get('x-total-count');
       this.authorities$.next(results?.body);
+      this.loading$.next(false);
     });
   }
 

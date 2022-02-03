@@ -29,10 +29,10 @@ export class AuthorityCreateComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private service: AuthorityService,
-    private alertService: AlertService
+    private readonly router: Router,
+    private readonly formBuilder: FormBuilder,
+    private readonly service: AuthorityService,
+    private readonly alertService: AlertService
   ) {}
 
   ngOnInit() {
