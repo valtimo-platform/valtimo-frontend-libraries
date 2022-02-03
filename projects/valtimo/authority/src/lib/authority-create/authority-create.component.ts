@@ -19,6 +19,7 @@ import {AuthorityService} from '../authority.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from '@valtimo/components';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-authority-create',
@@ -32,7 +33,8 @@ export class AuthorityCreateComponent implements OnInit {
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
     private readonly service: AuthorityService,
-    private readonly alertService: AlertService
+    private readonly alertService: AlertService,
+    private readonly translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class AuthorityCreateComponent implements OnInit {
   public onSubmit() {
     this.service.create(this.form.value).subscribe(result => {
       this.router.navigate([`/entitlements/entitlement/${encodeURI(result.name)}`]);
-      this.alertService.success('New Entitlement has been created');
+      this.alertService.success(this.translateService.instant('entitlement.entitlementCreated'));
     });
   }
 

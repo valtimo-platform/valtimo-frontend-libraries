@@ -111,15 +111,15 @@ export class AuthorityDetailComponent implements OnInit, OnDestroy {
       return;
     }
     // confirm action
-    const mssg = 'Delete Entitlement?';
+    const mssg = this.translateService.instant('entitlement.deleteEntitlement');
     const confirmations = [
       {
-        label: 'Cancel',
+        label: this.translateService.instant('entitlement.cancel'),
         class: 'btn btn-default',
         value: false,
       },
       {
-        label: 'Delete',
+        label: this.translateService.instant('entitlement.delete'),
         class: 'btn btn-primary',
         value: true,
       },
@@ -138,14 +138,14 @@ export class AuthorityDetailComponent implements OnInit, OnDestroy {
   private deleteConfirmed() {
     this.service.delete(this.name).subscribe(() => {
       this.router.navigate([`/entitlements`]);
-      this.alertService.success('Entitlement has been deleted');
+      this.alertService.success(this.translateService.instant('entitlement.entitlementDeleted'));
     });
   }
 
   public onSubmit() {
     this.service.update(this.form.value).subscribe(() => {
       this.reset();
-      this.alertService.success('Entitlement has been updated');
+      this.alertService.success(this.translateService.instant('entitlement.entitlementUpdated'));
     });
   }
 }
