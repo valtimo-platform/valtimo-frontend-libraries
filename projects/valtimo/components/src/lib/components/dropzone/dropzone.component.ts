@@ -142,10 +142,6 @@ export class DropzoneComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dropzone.on('error', (file, message) => {
       this.clearFile();
       this.error$.next(message.toString());
-
-      setTimeout(() => {
-        this.clearError();
-      }, 7500);
     });
   }
 
