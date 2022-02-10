@@ -364,8 +364,8 @@
       "clientId": "Client ID",
       "secret": "Secret",
       "rsin": "RSIN",
-      "username": "Username",
-      "password": "Password"
+      "username": "Gebruikersnaam",
+      "password": "Wachtwoord"
     },
     "messages": {
       "addSuccess": "Connectie is succesvol toegevoegd.",
