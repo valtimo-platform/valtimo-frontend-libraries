@@ -175,6 +175,12 @@
     "deploy": "Deploy",
     "readOnly": "Alleen-lezen"
   },
+  "dossierManagement": {
+    "readonly": "Alleen-lezen",
+    "connectedProcesses": "Gekoppelde processen",
+    "connectProcess": "Proces koppelen",
+    "selectProcessDef": "Procesdefinitie kiezen"
+  },
   "serviceTaskManagement": {
     "subtitle": "Link {{selectedElement}} naar Open Zaak",
     "context": "Kies een bestaande open zaak configuratie of maak een nieuwe aan.",

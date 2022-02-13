@@ -175,6 +175,12 @@
     "deploy": "Deploy",
     "readOnly": "Schreibgeschützt"
   },
+  "dossierManagement": {
+    "readonly": "Schreibgeschützt",
+    "connectedProcesses": "Verknüpfte Prozesse",
+    "connectProcess": "Prozess verknüpfen",
+    "selectProcessDef": "Prozessdefinition auswählen"
+  },
   "serviceTaskManagement": {
     "subtitle": "Verknüpfe {{selectedElement}} mit Open Zaak",
     "context": "Wähle bestehenden Open Zaak Anwender oder erstelle einen neuen.",

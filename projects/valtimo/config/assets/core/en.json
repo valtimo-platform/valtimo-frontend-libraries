@@ -175,6 +175,12 @@
     "deploy": "Deploy",
     "readOnly": "Read-only"
   },
+  "dossierManagement": {
+    "readonly": "Read-only",
+    "connectedProcesses": "Connected processes",
+    "connectProcess": "Connect process",
+    "selectProcessDef": "Select process definition"
+  },
   "serviceTaskManagement": {
     "subtitle": "Link {{selectedElement}} to Open Zaak",
     "context": "Choose one of the existing open zaak handler or create a new one",
