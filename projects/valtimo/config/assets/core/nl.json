@@ -381,6 +381,7 @@
     "addValue": "Waarde toevoegen",
     "removeValue": "Waarde verwijderen",
     "goBack": "Ga terug",
+    "autoSync": "Automatisch zaakdetails synchroniseren",
     "labels": {
       "name": "Naam",
       "typeName": "Connector"

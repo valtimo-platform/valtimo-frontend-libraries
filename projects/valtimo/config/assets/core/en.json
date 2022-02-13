@@ -381,6 +381,7 @@
     "addValue": "Add value",
     "removeValue": "Remove value",
     "goBack": "Go back",
+    "autoSync": "Automatically sync case details",
     "labels": {
       "name": "Name",
       "typeName": "Connector"

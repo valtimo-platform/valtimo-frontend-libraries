@@ -381,6 +381,7 @@
     "addValue": "Wert ergänzen",
     "removeValue": "Wert entfernen",
     "goBack": "Zurück",
+    "autoSync": "Casedetails automatisch synchronisieren",
     "labels": {
       "name": "Name",
       "typeName": "Connector"
