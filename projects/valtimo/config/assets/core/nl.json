@@ -165,7 +165,15 @@
   "formManagement": {
     "noFormDefinitionFoundAdmin": "Er is geen formulier gekoppeld aan de start event/user task. Om een formulier te koppelen ga naar Admin menu > Proceskoppelingen",
     "noFormDefinitionFoundUser": "Er is geen formulier gekoppeld aan de start event/user task. Vraag een admin gebruiker om hulp.",
-    "gotoFormLinksButton": "Configureer nu"
+    "gotoFormLinksButton": "Configureer nu",
+    "name": "Naam",
+    "nameIsRequired": "Naam is vereist",
+    "back": "Ga terug",
+    "reset": "Resetten",
+    "submit": "Indienen",
+    "delete": "Verwijderen",
+    "deploy": "Deploy",
+    "readOnly": "Alleen-lezen"
   },
   "serviceTaskManagement": {
     "subtitle": "Link {{selectedElement}} naar Open Zaak",

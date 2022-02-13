@@ -165,7 +165,15 @@
   "formManagement": {
     "noFormDefinitionFoundAdmin": "Es ist keine Formular verknüpft. Die Verknüpfung erfolgt im Admin Menü > Prozess-Verknüpfungen.",
     "noFormDefinitionFoundUser": "Es ist keine Formular verknüpft. Nur Admin-User können die Verknüpfung vornehmen.",
-    "gotoFormLinksButton": "Jetzt konfigurieren"
+    "gotoFormLinksButton": "Jetzt konfigurieren",
+    "name": "Name",
+    "nameIsRequired": "Name ist erforderlich",
+    "back": "Geh zurück",
+    "reset": "Zurücksetzen",
+    "submit": "Einreichen",
+    "delete": "Löschen",
+    "deploy": "Deploy",
+    "readOnly": "Schreibgeschützt"
   },
   "serviceTaskManagement": {
     "subtitle": "Verknüpfe {{selectedElement}} mit Open Zaak",

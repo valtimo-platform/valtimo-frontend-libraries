@@ -165,7 +165,15 @@
   "formManagement": {
     "noFormDefinitionFoundAdmin": "There is no form connected to the start event/user task. To link a form goto Admin menu > Process connections.",
     "noFormDefinitionFoundUser": "There is no form connected to the start event/user task. Ask an admin user for assistance.",
-    "gotoFormLinksButton": "Configure now"
+    "gotoFormLinksButton": "Configure now",
+    "name": "Name",
+    "nameIsRequired": "Name is required",
+    "back": "Back",
+    "reset": "Reset",
+    "submit": "Submit",
+    "delete": "Delete",
+    "deploy": "Deploy",
+    "readOnly": "Read-only"
   },
   "serviceTaskManagement": {
     "subtitle": "Link {{selectedElement}} to Open Zaak",
