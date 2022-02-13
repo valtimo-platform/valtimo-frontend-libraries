@@ -310,7 +310,13 @@
     "links": "Connected zaak type",
     "error": {
       "configNotFound": "OpenZaak configuration not found, go to Admin > Open Zaak"
-    }
+    },
+    "linkZaakType": "Link zaak type",
+    "autoCreateForCase": "Automatically create for each case",
+    "selectZaakTypeForCase": "Select zaak type for case",
+    "selectZaakType": "Select zaak type",
+    "selectInfoObjectType": "Select information object type",
+    "save": "Save"
   },
   "interface": {
     "mainMenu": "Main menu",

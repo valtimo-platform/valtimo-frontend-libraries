@@ -310,7 +310,13 @@
     "links": "OpenZaak Links",
     "error": {
       "configNotFound": "OpenZaak-Konfiguration nicht gefunden, gehe zu Admin > Open Zaak"
-    }
+    },
+    "linkZaakType": "Zaaktyp verknüpfen",
+    "autoCreateForCase": "Für jeden Case automatisch erstellen",
+    "selectZaakTypeForCase": "Wählen Sie den Zaaktyp für die Case",
+    "selectZaakType": "Zaaktyp wählen",
+    "selectInfoObjectType": "Wählen Sie den Typ des Informationsobjekts",
+    "save": "Speichern"
   },
   "interface": {
     "mainMenu": "Hauptmenü",

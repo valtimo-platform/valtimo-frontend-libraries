@@ -310,7 +310,13 @@
     "links": "Gekoppeld zaak type",
     "error": {
       "configNotFound": "OpenZaak configuratie niet gevonden, ga naar Admin > Open Zaak"
-    }
+    },
+    "linkZaakType": "Zaaktype koppelen",
+    "autoCreateForCase": "Automatisch aanmaken voor elk dossier",
+    "selectZaakTypeForCase": "Kies zaaktype voor dossier",
+    "selectZaakType": "Kies zaaktype",
+    "selectInfoObjectType": "Kies informatieobject-type",
+    "save": "Opslaan"
   },
   "interface": {
     "mainMenu": "Hoofdmenu",
