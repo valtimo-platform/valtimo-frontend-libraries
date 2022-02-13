@@ -281,6 +281,11 @@
   "Select process definition for document definition": "Selecteer een processdefinitie voor de documentdefinitie",
   "Select options for the selected process": "Kies opties voor het geselecteerde proces",
   "Save": "Opslaan",
+  "processManagement": {
+    "download": "Downloaden",
+    "clear": "Wissen",
+    "deploy": "Deploy"
+  },
   "processCaseConnection": {
     "processCreatesCase": "Proces maakt nieuw dossier aan",
     "processCreatesCaseTooltip": "Wanneer deze optie is geselecteerd wordt bij het starten van dit proces een nieuw dossier aangemaakt. Hiervoor moet er een startformulier gekoppeld zijn aan de eerste stap in het proces.",

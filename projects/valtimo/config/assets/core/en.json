@@ -281,6 +281,11 @@
   "Select process definition for document definition": "Select process definition for document definition",
   "Select options for the selected process": "Select options for the selected process",
   "Save": "Save",
+  "processManagement": {
+    "download": "Download",
+    "clear": "Clear",
+    "deploy": "Deploy"
+  },
   "processCaseConnection": {
     "processCreatesCase": "Process creates new case",
     "processCreatesCaseTooltip": "When this option is selected, a new case is created when this process is started. For this to be possible, a start form must be linked to the first step in the process.",

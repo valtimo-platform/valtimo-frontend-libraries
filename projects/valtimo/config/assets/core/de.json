@@ -281,6 +281,11 @@
   "Select process definition for document definition": "Prozess-Definition für Dokument-Definition auswählen",
   "Select options for the selected process": "Optionen für gewählten Prozess auswählen",
   "Save": "Speichern",
+  "processManagement": {
+    "download": "Herunterladen",
+    "clear": "Löschen",
+    "deploy": "Deploy"
+  },
   "processCaseConnection": {
     "processCreatesCase": "Prozess erstellt neuen Case",
     "processCreatesCaseTooltip": "Wenn diese Option ausgewählt ist, wird eine neue Case erstellt, wenn dieser Prozess gestartet wird. Dazu muss ein Startformular mit dem ersten Prozessschritt verknüpft werden.",
