@@ -1,0 +1,40 @@
+/*!
+ *
+ *  * Copyright 2015-2020 Ritense BV, the Netherlands.
+ *  *
+ *  * Licensed under EUPL, Version 1.2 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" basis,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *
+ */
+
+:root {
+  /* colors */
+  --v-color-white: #ffffff;
+  --v-color-accent-1: #ef6622;
+  --v-color-accent-1-lighter: #f07538;
+  --v-color-accent-1-darker: #e55710;
+  /* font */
+  --v-font-size-default: 1rem;
+  --v-font-weight-bold: 700;
+  /* spacing block */
+  --v-spacing-block-md: 0.65rem;
+  /* spacing inline */
+  --v-spacing-inline-3xl: 3.65rem;
+  /* border */
+  --v-border-radius-md: 5px;
+  /* transitions */
+  --v-bg-transition-fast: background-color 0.07s ease-in;
+  /* button */
+  --v-button-primary-bg-color: var(--v-color-accent-1);
+  --v-button-primary-hover-bg-color: var(--v-color-accent-1-lighter);
+  --v-button-primary-active-bg-color: var(--v-color-accent-1-darker);
+}

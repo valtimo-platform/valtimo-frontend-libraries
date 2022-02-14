@@ -13,3 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.v-button {
+  border: none;
+  background-color: var(--v-button-primary-bg-color);
+  color: var(--v-color-white);
+  font-weight: var(--v-font-weight-bold);
+  padding-inline-start: var(--v-spacing-inline-3xl);
+  padding-inline-end: var(--v-spacing-inline-3xl);
+  padding-block-start: var(--v-spacing-block-md);
+  padding-block-end: var(--v-spacing-block-md);
+  font-size: var(--v-font-size-default);
+  border-radius: var(--v-border-radius-md);
+  transition: var(--v-bg-transition-fast);
+
+  &:hover {
+    background-color: var(--v-button-primary-hover-bg-color);
+  }
+
+  &:active {
+    background-color: var(--v-button-primary-active-bg-color);
+  }
+}

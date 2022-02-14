@@ -18,4 +18,9 @@
  * Public API Surface of contact-moment
  */
 
-export * from './lib';
+// Typings
+export * from './lib/models';
+
+// Button component
+export * from './lib/components/button/button.module';
+export * from './lib/components/button/button.component';

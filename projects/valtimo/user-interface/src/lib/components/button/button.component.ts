@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, Output, EventEmitter, Input} from '@angular/core';
+import {ButtonType} from '../../models';
 
 @Component({
   selector: 'v-button',
@@ -22,5 +23,8 @@ import {Component} from '@angular/core';
   styleUrls: ['./button.component.scss'],
 })
 export class ButtonComponent {
+  @Input() type: ButtonType = 'primary';
+  @Output() click: EventEmitter<any> = new EventEmitter();
+
   constructor() {}
 }

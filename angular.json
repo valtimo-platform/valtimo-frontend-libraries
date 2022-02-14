@@ -62,7 +62,8 @@
               "node_modules/bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css",
               "node_modules/bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css",
               "dist/valtimo/layout/assets/css/app.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "dist/valtimo/user-interface/assets/design-tokens.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

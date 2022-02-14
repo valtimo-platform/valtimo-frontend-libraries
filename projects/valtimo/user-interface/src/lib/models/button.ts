@@ -16,4 +16,6 @@
  *
  */
 
-export * from './components';
+type ButtonType = 'primary' | 'secondary';
+
+export {ButtonType};
