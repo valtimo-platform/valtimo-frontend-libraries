@@ -16,7 +16,6 @@
 
 .v-button {
   border: none;
-  background-color: var(--v-button-primary-bg-color);
   color: var(--v-color-white);
   font-weight: var(--v-font-weight-bold);
   padding-inline-start: var(--v-spacing-inline-3xl);
@@ -26,6 +25,10 @@
   font-size: var(--v-font-size-default);
   border-radius: var(--v-border-radius-md);
   transition: var(--v-bg-transition-fast);
+}
+
+.v-button--primary {
+  background-color: var(--v-button-primary-bg-color);
 
   &:hover {
     background-color: var(--v-button-primary-hover-bg-color);
@@ -34,4 +37,24 @@
   &:active {
     background-color: var(--v-button-primary-active-bg-color);
   }
+}
+
+.v-button__icon-container {
+  position: absolute;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  right: var(--v-spacing-inline-md);
+  width: var(--v-button-icon-circle-width);
+  height: var(--v-button-icon-circle-width);
+  background-color: var(--v-color-white);
+  border-radius: 50%;
+}
+
+.v-button__icon {
+  font-size: var(--v-font-size-larger);
+}
+
+.v-button__icon--primary {
+  color: var(--v-button-primary-bg-color);
 }

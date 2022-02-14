@@ -23,12 +23,14 @@
   --v-color-accent-1-lighter: #f07538;
   --v-color-accent-1-darker: #e55710;
   /* font */
-  --v-font-size-default: 1rem;
+  --v-font-size-default: 14px;
+  --v-font-size-larger: 16px;
   --v-font-weight-bold: 700;
   /* spacing block */
-  --v-spacing-block-md: 0.65rem;
+  --v-spacing-block-md: 10px;
   /* spacing inline */
-  --v-spacing-inline-3xl: 3.65rem;
+  --v-spacing-inline-md: 10px;
+  --v-spacing-inline-3xl: 58px;
   /* border */
   --v-border-radius-md: 5px;
   /* transitions */
@@ -37,4 +39,5 @@
   --v-button-primary-bg-color: var(--v-color-accent-1);
   --v-button-primary-hover-bg-color: var(--v-color-accent-1-lighter);
   --v-button-primary-active-bg-color: var(--v-color-accent-1-darker);
+  --v-button-icon-circle-width: 20px;
 }

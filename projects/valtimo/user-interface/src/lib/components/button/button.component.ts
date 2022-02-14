@@ -24,7 +24,11 @@ import {ButtonType} from '../../models';
 })
 export class ButtonComponent {
   @Input() type: ButtonType = 'primary';
+  @Input() mdiIcon!: string;
   @Output() click: EventEmitter<any> = new EventEmitter();
+
+  isPrimary = this.type === 'primary';
+  isSecondary = this.type === 'secondary';
 
   constructor() {}
 }
