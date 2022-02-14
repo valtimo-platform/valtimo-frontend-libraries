@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Output, EventEmitter, Input} from '@angular/core';
+import {Component, Output, EventEmitter, Input, OnInit} from '@angular/core';
 import {ButtonType} from '../../models';
 
 @Component({
@@ -22,13 +22,19 @@ import {ButtonType} from '../../models';
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
 })
-export class ButtonComponent {
+export class ButtonComponent implements OnInit {
   @Input() type: ButtonType = 'primary';
   @Input() mdiIcon!: string;
   @Output() click: EventEmitter<any> = new EventEmitter();
 
-  isPrimary = this.type === 'primary';
-  isSecondary = this.type === 'secondary';
+  isPrimary!: boolean;
+  isSecondary!: boolean;
+  isSuccess!: boolean;
 
-  constructor() {}
+  ngOnInit(): void {
+    const type = this.type;
+    this.isPrimary = type === 'primary';
+    this.isSecondary = type === 'secondary';
+    this.isSuccess = type === 'success';
+  }
 }

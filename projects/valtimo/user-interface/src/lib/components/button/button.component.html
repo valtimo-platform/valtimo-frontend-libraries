@@ -19,7 +19,8 @@
   role="button"
   (click)="click.emit()"
   [ngClass]="{
-    'v-button--primary': isPrimary
+    'v-button--primary': isPrimary,
+    'v-button--success': isSuccess
   }"
 >
   <ng-content></ng-content>
@@ -27,7 +28,8 @@
     <i
       [class]="'v-button__icon mdi mdi-' + mdiIcon"
       [ngClass]="{
-        'v-button__icon--primary': isPrimary
+        'v-button__icon--primary': isPrimary,
+        'v-button__icon--success': isSuccess
       }"
     ></i>
   </span>

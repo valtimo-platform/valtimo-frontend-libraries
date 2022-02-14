@@ -24,7 +24,7 @@
   padding-block-end: var(--v-spacing-block-md);
   font-size: var(--v-font-size-default);
   border-radius: var(--v-border-radius-md);
-  transition: var(--v-bg-transition-fast);
+  transition: var(--v-transition-bg-fast);
 }
 
 .v-button--primary {
@@ -32,10 +32,38 @@
 
   &:hover {
     background-color: var(--v-button-primary-hover-bg-color);
+
+    .v-button__icon--primary {
+      color: var(--v-button-primary-hover-bg-color);
+    }
   }
 
   &:active {
     background-color: var(--v-button-primary-active-bg-color);
+
+    .v-button__icon--primary {
+      color: var(--v-button-primary-active-bg-color);
+    }
+  }
+}
+
+.v-button--success {
+  background-color: var(--v-button-success-bg-color);
+
+  &:hover {
+    background-color: var(--v-button-success-hover-bg-color);
+
+    .v-button__icon--success {
+      color: var(--v-button-success-hover-bg-color);
+    }
+  }
+
+  &:active {
+    background-color: var(--v-button-success-active-bg-color);
+
+    .v-button__icon--success {
+      color: var(--v-button-success-active-bg-color);
+    }
   }
 }
 
@@ -53,8 +81,13 @@
 
 .v-button__icon {
   font-size: var(--v-font-size-larger);
+  transition: var(--v-transition-color-fast);
 }
 
 .v-button__icon--primary {
   color: var(--v-button-primary-bg-color);
+}
+
+.v-button__icon--success {
+  color: var(--v-button-success-bg-color);
 }
