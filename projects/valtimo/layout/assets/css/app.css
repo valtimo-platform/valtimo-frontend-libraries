@@ -113,6 +113,7 @@ body {
   color: #404040;
   text-align: left;
   background-color: #eeeeee;
+  overflow-y: scroll;
 }
 
 [tabindex='-1']:focus:not(:focus-visible) {
@@ -12013,9 +12014,9 @@ a.text-grey:focus {
 }
 
 /* General styles for the modal */
-/* 
+/*
 Styles for the html/body for special modal where we want 3d effects
-Note that we need a container wrapping all content on the page for the 
+Note that we need a container wrapping all content on the page for the
 perspective effects (not including the modals and the overlay).
 */
 .modal-open {
@@ -14781,9 +14782,9 @@ canvas {
 }
 
 .be-left-sidebar .sidebar-elements li.parent > a:before {
-  content: '\f2f2';
+  content: '\F035D';
   float: right;
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   font-size: 1.615rem;
   color: #b0b0b0;
 }
@@ -14795,7 +14796,7 @@ canvas {
 }
 
 .be-left-sidebar .sidebar-elements li.parent.open > a:before {
-  content: '\f2f8';
+  content: '\F0360';
 }
 
 .be-left-sidebar .sidebar-elements li.open > ul {
