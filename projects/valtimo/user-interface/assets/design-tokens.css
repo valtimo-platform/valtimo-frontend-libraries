@@ -41,6 +41,7 @@
   /* transitions */
   --v-transition-bg-fast: background-color 0.1s ease-in;
   --v-transition-color-fast: color 0.1s ease-in;
+  --v-transition-font-size-fast: font-size 0.1s ease-in;
   /* cursors */
   --v-cursor-clickable: pointer;
   --v-cursor-disabled: not-allowed;

@@ -27,23 +27,17 @@
 >
   <ng-content></ng-content>
   <ng-container *ngTemplateOutlet="buttonIcon"></ng-container>
-  <ng-container *ngTemplateOutlet="disabledIcon"></ng-container>
 </button>
 
 <ng-template #buttonIcon>
-  <span *ngIf="!disabled && mdiIcon" class="v-button__icon-container">
+  <span *ngIf="disabled || mdiIcon" class="v-button__icon-container">
     <i
-      [class]="'v-button__icon mdi mdi-' + mdiIcon"
-      [ngClass]="{
-        'v-button__icon--primary': isPrimary,
-        'v-button__icon--success': isSuccess
-      }"
+      [ngClass]="[
+        !disabled && isPrimary ? 'v-button__icon--primary' : '',
+        !disabled && isSuccess ? 'v-button__icon--success' : '',
+        !disabled && mdiIcon ? 'v-button__icon mdi mdi-' + mdiIcon : '',
+        disabled ? 'mdi mdi-cancel v-button__icon--disabled' : ''
+      ]"
     ></i>
-  </span>
-</ng-template>
-
-<ng-template #disabledIcon>
-  <span *ngIf="disabled" class="v-button__icon-container">
-    <i class="mdi mdi-delete v-button__icon--disabled"></i>
   </span>
 </ng-template>

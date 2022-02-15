@@ -40,7 +40,7 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
-              "node_modules/@foxythemes/material-design-iconic-font/dist/css/material-design-iconic-font.css",
+              "node_modules/@mdi/font/css/materialdesignicons.css",
               "node_modules/@foxythemes/bootstrap-datetime-picker-bs4/css/bootstrap-datetimepicker.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/swagger-ui/dist/swagger-ui.css",

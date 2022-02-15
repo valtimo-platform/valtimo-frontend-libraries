@@ -24,7 +24,7 @@
   padding-block-end: var(--v-spacing-block-md);
   font-size: var(--v-font-size-default);
   border-radius: var(--v-border-radius-md);
-  transition: var(--v-transition-bg-fast);
+  transition: var(--v-transition-bg-fast), var(--v-transition-color-fast);
   cursor: var(--v-cursor-clickable);
 }
 
@@ -78,11 +78,13 @@
   height: var(--v-button-icon-circle-width);
   background-color: var(--v-button-icon-container-bg-color);
   border-radius: 50%;
+  transition: var(--v-transition-bg-fast);
 }
 
 .v-button__icon {
   font-size: var(--v-font-size-larger);
-  transition: var(--v-transition-color-fast);
+  line-height: var(--v-font-size-larger);
+  transition: var(--v-transition-color-fast), var(--v-transition-font-size-fast);
 }
 
 .v-button__icon--primary {
@@ -109,11 +111,12 @@
   }
 
   .v-button__icon-container {
-    background-color: unset;
+    background-color: transparent;
   }
 }
 
 .v-button__icon--disabled {
   color: var(--v-button-disabled-font-color);
   font-size: var(--v-button-icon-circle-width);
+  line-height: var(--v-button-icon-circle-width);
 }
