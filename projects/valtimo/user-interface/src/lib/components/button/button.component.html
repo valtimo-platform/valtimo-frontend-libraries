@@ -20,11 +20,18 @@
   (click)="click.emit()"
   [ngClass]="{
     'v-button--primary': isPrimary,
-    'v-button--success': isSuccess
+    'v-button--success': isSuccess,
+    'v-button--disabled': disabled
   }"
+  [disabled]="disabled"
 >
   <ng-content></ng-content>
-  <span *ngIf="mdiIcon" class="v-button__icon-container">
+  <ng-container *ngTemplateOutlet="buttonIcon"></ng-container>
+  <ng-container *ngTemplateOutlet="disabledIcon"></ng-container>
+</button>
+
+<ng-template #buttonIcon>
+  <span *ngIf="!disabled && mdiIcon" class="v-button__icon-container">
     <i
       [class]="'v-button__icon mdi mdi-' + mdiIcon"
       [ngClass]="{
@@ -33,4 +40,10 @@
       }"
     ></i>
   </span>
-</button>
+</ng-template>
+
+<ng-template #disabledIcon>
+  <span *ngIf="disabled" class="v-button__icon-container">
+    <i class="mdi mdi-delete v-button__icon--disabled"></i>
+  </span>
+</ng-template>

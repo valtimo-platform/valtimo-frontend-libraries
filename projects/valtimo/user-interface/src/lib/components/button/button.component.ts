@@ -25,6 +25,7 @@ import {ButtonType} from '../../models';
 export class ButtonComponent implements OnInit {
   @Input() type: ButtonType = 'primary';
   @Input() mdiIcon!: string;
+  @Input() disabled!: boolean;
   @Output() click: EventEmitter<any> = new EventEmitter();
 
   isPrimary!: boolean;

@@ -19,6 +19,8 @@
 :root {
   /* colors */
   --v-color-white: #ffffff;
+  --v-color-grey-1: #a0a0a0;
+  --v-color-grey-2: #dbdbdb;
   --v-color-accent-1: #ef6622;
   --v-color-accent-1-lighter: #f07538;
   --v-color-accent-1-darker: #e55710;
@@ -39,12 +41,19 @@
   /* transitions */
   --v-transition-bg-fast: background-color 0.1s ease-in;
   --v-transition-color-fast: color 0.1s ease-in;
+  /* cursors */
+  --v-cursor-clickable: pointer;
+  --v-cursor-disabled: not-allowed;
   /* button */
+  --v-button-font-color: var(--v-color-white);
+  --v-button-icon-container-bg-color: var(--v-color-white);
   --v-button-primary-bg-color: var(--v-color-accent-1);
   --v-button-primary-hover-bg-color: var(--v-color-accent-1-lighter);
   --v-button-primary-active-bg-color: var(--v-color-accent-1-darker);
   --v-button-success-bg-color: var(--v-color-accent-2);
   --v-button-success-hover-bg-color: var(--v-color-accent-2-lighter);
   --v-button-success-active-bg-color: var(--v-color-accent-2-darker);
+  --v-button-disabled-bg-color: var(--v-color-grey-2);
+  --v-button-disabled-font-color: var(--v-color-grey-1);
   --v-button-icon-circle-width: 20px;
 }

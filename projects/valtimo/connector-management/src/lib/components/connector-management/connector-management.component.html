@@ -55,7 +55,7 @@
     <!--      <i class="icon mdi mdi-plus mr-1"></i>-->
     <!--      {{ 'connectorManagement.add' | translate }}-->
     <!--    </button>-->
-    <v-button (click)="showAddModal()" type="primary" mdiIcon="plus">
+    <v-button (click)="showAddModal()" type="primary" mdiIcon="plus" [disabled]="true">
       {{ 'connectorManagement.add' | translate }}
     </v-button>
   </div>
