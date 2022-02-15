@@ -179,7 +179,11 @@
     "readonly": "Alleen-lezen",
     "connectedProcesses": "Gekoppelde processen",
     "connectProcess": "Proces koppelen",
-    "selectProcessDef": "Procesdefinitie kiezen"
+    "selectProcessDef": "Procesdefinitie kiezen",
+    "rolesTitle": "Rechten",
+    "rolesDescription": "Kies hier welke rollen toegang hebben tot dit dossier type. Wanneer een rol niet gekozen wordt zal een gebruiker met die rol dossiers van dit type niet zien onder het menu item 'Dossiers'.",
+    "selectRoles": "Toegestane rollen",
+    "rolesPlaceHolder": "Kies de rollen die toegang hebben tot dit dossier type"
   },
   "serviceTaskManagement": {
     "subtitle": "Link {{selectedElement}} naar Open Zaak",

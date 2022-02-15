@@ -179,7 +179,11 @@
     "readonly": "Read-only",
     "connectedProcesses": "Connected processes",
     "connectProcess": "Connect process",
-    "selectProcessDef": "Select process definition"
+    "selectProcessDef": "Select process definition",
+    "rolesTitle": "Entitlements",
+    "rolesDescription": "Select the roles below that should have access to this case. When a role is not selected a user that belongs to that role will not see this case in the menu 'Cases'",
+    "selectRoles": "Allowed roles",
+    "rolesPlaceHolder": "Choose the roles that have access to this dossier type"
   },
   "serviceTaskManagement": {
     "subtitle": "Link {{selectedElement}} to Open Zaak",

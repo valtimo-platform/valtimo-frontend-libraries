@@ -1,0 +1,7 @@
+<ng-multiselect-dropdown
+        [placeholder]="placeHolder"
+        [data]="items"
+        [(ngModel)]="selectedItems"
+        [settings]="dropdownSettings"
+        (onDropDownClose)="onItemsSelected($event)"
+></ng-multiselect-dropdown>

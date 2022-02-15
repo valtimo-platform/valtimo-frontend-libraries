@@ -18,7 +18,13 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {DropzoneModule, ListModule, ModalModule, WidgetModule} from '@valtimo/components';
+import {
+  DropzoneModule,
+  ListModule,
+  ModalModule,
+  MultiselectDropdownModule,
+  WidgetModule,
+} from '@valtimo/components';
 import {ConfigModule, ExtensionComponent} from '@valtimo/config';
 import {DossierManagementConnectModalComponent} from './dossier-management-connect-modal/dossier-management-connect-modal.component';
 import {DossierManagementDetailComponent} from './dossier-management-detail/dossier-management-detail.component';
@@ -27,6 +33,7 @@ import {DossierManagementRoutingModule} from './dossier-management-routing.modul
 import {DossierManagementUploadComponent} from './dossier-management-upload/dossier-management-upload.component';
 import {DossierManagementRemoveModalComponent} from './dossier-management-remove-modal/dossier-management-remove-modal.component';
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
+import {DossierManagementRolesModalComponent} from './dossier-management-roles-modal/dossier-management-roles-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +41,9 @@ import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
     DossierManagementDetailComponent,
     DossierManagementConnectModalComponent,
     DossierManagementRemoveModalComponent,
+    DossierManagementRolesModalComponent,
     DossierManagementUploadComponent,
+    DossierManagementRolesModalComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +56,7 @@ import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
     ModalModule,
     ConfigModule,
     NgbTooltipModule,
+    MultiselectDropdownModule,
   ],
   exports: [],
   entryComponents: [ExtensionComponent],
