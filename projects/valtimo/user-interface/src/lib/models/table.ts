@@ -23,3 +23,5 @@ interface TableColumn {
   viewType?: string;
   default?: boolean;
 }
+
+export {TableColumn};

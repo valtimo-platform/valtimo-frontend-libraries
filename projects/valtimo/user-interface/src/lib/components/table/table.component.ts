@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {BehaviorSubject, Subscription} from 'rxjs';
+import {TableColumn} from '../../models';
 
 @Component({
   selector: 'v-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit, OnDestroy {
+export class TableComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() items!: Array<Object>;
+  @Input() columns!: Array<TableColumn>;
+  @Input() loading: boolean = false;
   @Input() mobileBreakpointPx: number = 768;
 
   readonly isMobile$ = new BehaviorSubject<boolean>(false);
+  readonly loading$ = new BehaviorSubject<boolean>(true);
 
   private breakpointSubscription!: Subscription;
 
@@ -38,6 +43,14 @@ export class TableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.breakpointSubscription?.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const loadingChange = changes?.loading;
+
+    if (loadingChange) {
+      this.loading$.next(loadingChange.currentValue);
+    }
   }
 
   private openBreakpointSubscription(): void {
