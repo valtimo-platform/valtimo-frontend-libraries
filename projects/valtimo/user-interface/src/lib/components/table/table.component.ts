@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 Ritense BV, the Netherlands.
+ * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of contact-moment
- */
+import {Component} from '@angular/core';
 
-// Typings
-export * from './lib/models';
-// Button component
-export * from './lib/components/button/button.module';
-export * from './lib/components/button/button.component';
-// Table component
-export * from './lib/components/table/table.module';
-export * from './lib/components/table/table.component';
+@Component({
+  selector: 'v-table',
+  templateUrl: './table.component.html',
+  styleUrls: ['./table.component.scss'],
+})
+export class TableComponent {}

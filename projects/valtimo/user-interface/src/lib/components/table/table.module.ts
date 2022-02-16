@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 Ritense BV, the Netherlands.
+ * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of contact-moment
- */
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {TableComponent} from './table.component';
 
-// Typings
-export * from './lib/models';
-// Button component
-export * from './lib/components/button/button.module';
-export * from './lib/components/button/button.component';
-// Table component
-export * from './lib/components/table/table.module';
-export * from './lib/components/table/table.component';
+@NgModule({
+  declarations: [TableComponent],
+  imports: [CommonModule],
+  exports: [TableComponent],
+})
+export class TableModule {}
