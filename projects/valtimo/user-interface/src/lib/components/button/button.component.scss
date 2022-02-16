@@ -15,6 +15,7 @@
  */
 
 .v-button {
+  display: flex;
   border: none;
   color: var(--v-button-font-color);
   font-weight: var(--v-font-weight-bold);
@@ -74,6 +75,8 @@
   justify-content: center;
   align-items: center;
   right: var(--v-spacing-inline-md);
+  top: 50%;
+  transform: translateY(-50%);
   width: var(--v-button-icon-circle-width);
   height: var(--v-button-icon-circle-width);
   background-color: var(--v-button-icon-container-bg-color);
@@ -83,7 +86,7 @@
 
 .v-button__icon {
   font-size: var(--v-font-size-larger);
-  line-height: var(--v-font-size-larger);
+  line-height: var(--v-line-height-default);
   transition: var(--v-transition-color-fast), var(--v-transition-font-size-fast);
 }
 

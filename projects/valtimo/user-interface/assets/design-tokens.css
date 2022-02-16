@@ -27,10 +27,12 @@
   --v-color-accent-2: #316d3a;
   --v-color-accent-2-lighter: #3b8546;
   --v-color-accent-2-darker: #2c6234;
-  /* font */
+  /* font size */
   --v-font-size-default: 14px;
   --v-font-size-larger: 16px;
   --v-font-weight-bold: 700;
+  /* line height */
+  --v-line-height-default: 16px;
   /* spacing block */
   --v-spacing-block-md: 10px;
   /* spacing inline */
