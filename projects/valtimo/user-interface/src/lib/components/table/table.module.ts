@@ -17,10 +17,11 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TableComponent} from './table.component';
+import {LayoutModule} from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [TableComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, LayoutModule],
   exports: [TableComponent],
 })
 export class TableModule {}
