@@ -27,7 +27,9 @@
     <ng-container *ngIf="items">
       <tr *ngFor="let item of items" class="v-table__row">
         <td *ngFor="let column of columns" class="v-table__cell">
-          {{ item[column.dataKey] }}
+          <span class="v-table__cell-content">
+            {{ item[column.dataKey] }}
+          </span>
         </td>
         <td *ngIf="showEditButtons" class="v-table__cell v-table__cell--with-button">
           <span class="v-table__cell-button-container">

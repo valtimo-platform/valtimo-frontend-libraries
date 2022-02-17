@@ -84,6 +84,13 @@
   }
 }
 
+.v-table__cell-content {
+  display: flex;
+  color: var(--v-table-cell-font-color);
+  padding-block-start: var(--v-table-cell-content-padding-block);
+  padding-block-end: var(--v-table-cell-content-padding-block);
+}
+
 .v-table__cell--with-button {
   width: 0.1%;
   white-space: nowrap;

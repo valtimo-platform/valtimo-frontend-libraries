@@ -19,10 +19,11 @@
 :root {
   /* colors */
   --v-color-white: #ffffff;
-  --v-color-grey-1: #a0a0a0;
-  --v-color-grey-2: #b2b2b2;
-  --v-color-grey-3: #dbdbdb;
-  --v-color-grey-4: #ececec;
+  --v-color-grey-1: #6b6b6b;
+  --v-color-grey-2: #a0a0a0;
+  --v-color-grey-3: #b2b2b2;
+  --v-color-grey-4: #dbdbdb;
+  --v-color-grey-5: #ececec;
   --v-color-accent-1: #ef6622;
   --v-color-accent-1-lighter: #f07538;
   --v-color-accent-1-darker: #e55710;
@@ -44,7 +45,7 @@
   --v-spacing-block-l: 16px;
   --v-spacing-block-xl: 24px;
   /* spacing inline */
-  --v-spacing-inline-md: 10px;
+  --v-spacing-inline-md: 12px;
   --v-spacing-inline-2xl: 30px;
   --v-spacing-inline-3xl: 58px;
   /* border */
@@ -65,13 +66,13 @@
   --v-button-success-bg-color: var(--v-color-accent-2);
   --v-button-success-hover-bg-color: var(--v-color-accent-2-lighter);
   --v-button-success-active-bg-color: var(--v-color-accent-2-darker);
-  --v-button-disabled-bg-color: var(--v-color-grey-3);
-  --v-button-disabled-font-color: var(--v-color-grey-1);
+  --v-button-disabled-bg-color: var(--v-color-grey-4);
+  --v-button-disabled-font-color: var(--v-color-grey-2);
   --v-button-icon-circle-width: 20px;
   /* table */
   --v-table-layout: auto;
   --v-table-cell-width: 1000px;
-  --v-table-header-font-color: var(--v-color-grey-2);
+  --v-table-header-font-color: var(--v-color-grey-3);
   --v-table-header-text-transform: uppercase;
   --v-table-header-font-size: var(--v-font-size-default);
   --v-table-header-letter-spacing: 3px;
@@ -79,9 +80,11 @@
   --v-table-header-padding-block-end: var(--v-spacing-block-l);
   --v-table-border-spacing: 0px;
   --v-table-first-cell-padding-inline-start: var(--v-spacing-inline-2xl);
-  --v-table-cell-padding-block: var(--v-spacing-block-xl);
+  --v-table-cell-padding-block: var(--v-spacing-block-md);
   --v-table-cell-padding-inline: var(--v-spacing-inline-md);
-  --v-table-row-bottom-border: 1px solid var(--v-color-grey-4);
+  --v-table-cell-content-padding-block: var(--v-spacing-block-md);
+  --v-table-row-bottom-border: 1px solid var(--v-color-grey-5);
   --v-table-background-color: var(--v-color-white);
   --v-table-body-box-shadow: 0 3px 40px 0 rgba(0, 0, 0, 0.06);
+  --v-table-cell-font-color: var(--v-color-grey-1);
 }
