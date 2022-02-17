@@ -15,6 +15,7 @@
  */
 
 .v-button {
+  position: relative;
   display: flex;
   border: none;
   color: var(--v-button-font-color);
@@ -25,7 +26,8 @@
   padding-block-end: var(--v-spacing-block-md);
   font-size: var(--v-font-size-default);
   border-radius: var(--v-border-radius-md);
-  transition: var(--v-transition-bg-fast), var(--v-transition-color-fast);
+  transition: var(--v-transition-bg-fast), var(--v-transition-color-fast),
+    var(--v-transition-border-fast);
   cursor: var(--v-cursor-clickable);
 }
 
@@ -45,6 +47,40 @@
 
     .v-button__icon--primary {
       color: var(--v-button-primary-active-bg-color);
+    }
+  }
+}
+
+.v-button--secondary {
+  background-color: var(--v-button-secondary-bg-color);
+  color: var(--v-button-secondary-font-color);
+  border: var(--v-button-secondary-border);
+  margin: var(--v-button-secondary-margin);
+
+  &:hover {
+    background-color: var(--v-button-primary-bg-color);
+    color: var(--v-button-font-color);
+
+    .v-button__icon--secondary {
+      color: var(--v-button-primary-bg-color);
+    }
+
+    .v-button__icon-container--secondary {
+      background-color: var(--v-button-icon-container-bg-color);
+    }
+  }
+
+  &:active {
+    color: var(--v-button-font-color);
+    border: var(--v-button-secondary-active-border);
+    background-color: var(--v-button-primary-active-bg-color);
+
+    .v-button__icon--secondary {
+      color: var(--v-button-primary-active-bg-color);
+    }
+
+    .v-button__icon-container--secondary {
+      background-color: var(--v-button-icon-container-bg-color);
     }
   }
 }
@@ -84,6 +120,10 @@
   transition: var(--v-transition-bg-fast);
 }
 
+.v-button__icon-container--secondary {
+  background-color: var(--v-button-secondary-icon-container-bg-color);
+}
+
 .v-button__icon {
   font-size: var(--v-font-size-larger);
   line-height: var(--v-line-height-default);
@@ -92,6 +132,10 @@
 
 .v-button__icon--primary {
   color: var(--v-button-primary-bg-color);
+}
+
+.v-button__icon--secondary {
+  color: var(--v-button-secondary-icon-color);
 }
 
 .v-button__icon--success {
