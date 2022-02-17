@@ -20,6 +20,7 @@ import {Authority, AuthorityService} from '@valtimo/authority';
 import {DocumentService} from '@valtimo/document';
 import {AlertService} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
+import {isEqual} from 'lodash';
 
 @Component({
   selector: 'valtimo-dossier-management-roles-modal',
@@ -49,43 +50,70 @@ export class DossierManagementRolesModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // First load all the roles. Then load the roles already set for this dossier
     this.loadAllRoles();
-    this.loadDocumentRoles();
   }
 
   loadAllRoles() {
     this.authorityService.query().subscribe(result => {
       this.roles.next(result.body);
-      //this.loadDocumentRoles();
+      this.loadDocumentRoles();
     });
   }
 
   loadDocumentRoles() {
-    this.documentService.getDocumentRoles(this.documentDefinitionName).subscribe(
-      result => {
-        this.preSelectedItems.next(result);
+    if (this.documentDefinitionName) {
+      this.documentService.getDocumentRoles(this.documentDefinitionName).subscribe(
+        result => {
+          this.preSelectedItems.next(result);
+        },
+        err => {
+          this.alertService.warning(
+            this.translateService.instant(
+              'dossierManagement.roles.messages.unsuccessfullyRetrievedRoles'
+            )
+          );
+        }
+      );
+    }
+  }
+
+  onSelectedItems(data: any) {
+    var roles = this.returnArrayOfString(data);
+
+    if (isEqual(roles, this.preSelectedItems.value)) {
+      return;
+    }
+    this.documentService.modifyDocumentRoles(this.documentDefinitionName, roles).subscribe(
+      () => {
+        this.alertService.success(
+          this.translateService.instant('dossierManagement.roles.messages.successfullyStored')
+        );
+        this.preSelectedItems.next(roles);
       },
       err => {
-        this.alertService.warning('Failed to retrieve the current document roles');
+        this.alertService.error(
+          this.translateService.instant('dossierManagement.roles.messages.unsuccessfullyStored')
+        );
       }
     );
   }
 
-  onSelectedItems(data: any) {
-    console.log('Selected the following items:');
-    console.log(data);
-    this.documentService.modifyDocumentRoles(this.documentDefinitionName, data).subscribe(
-      () => {
-        this.alertService.success(
-          this.translateService.instant('documentDefinitionRoles.successfullyStored')
-        );
-      },
-      err => {
-        this.alertService.error(
-          this.translateService.instant('documentDefinitionRoles.unsuccessfullyStored')
-        );
+  /**
+   * The data could be either an array of string (i.e. ["ROLE_ADMIN", "ROLE_DEVELOPER"]
+   * or an array of object with name parameters (i.e. [{"name": "ROLE_ADMIN"},{"name":"ROLE_DEVELOPER}]
+   *
+   * This method will always make sure an array of strings is returned
+   *
+   * @param data
+   * @private
+   */
+  private returnArrayOfString(data): Array<String> {
+    return data.map(el => {
+      if (typeof el === 'string') {
+        return el;
       }
-    );
+
+      return el.name;
+    });
   }
 }

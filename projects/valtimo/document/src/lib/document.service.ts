@@ -58,7 +58,7 @@ export class DocumentService {
 
   queryDefinitions(params?: any): Observable<Page<DocumentDefinition>> {
     return this.http.get<Page<DocumentDefinition>>(
-      `${this.valtimoEndpointUri}document-definition`,
+      `${this.valtimoEndpointUri}document-definitions`,
       {params: params}
     );
   }
@@ -83,7 +83,7 @@ export class DocumentService {
     );
   }
 
-  public modifyDocumentRoles(documentDefinitionName: string, roles: Array<String>) {
+  public modifyDocumentRoles(documentDefinitionName: string, roles: any) {
     return this.http.put(
       `${this.valtimoEndpointUri}document-definition/${documentDefinitionName}/roles`,
       roles
