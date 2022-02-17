@@ -15,6 +15,11 @@
   -->
 
 <table class="v-table">
+  <ng-container *ngTemplateOutlet="tableHead"></ng-container>
+  <ng-container *ngTemplateOutlet="tableBody"></ng-container>
+</table>
+
+<ng-template #tableHead>
   <thead>
     <tr *ngIf="columns">
       <th class="v-table__header" *ngFor="let column of columns">
@@ -23,20 +28,31 @@
       <th *ngIf="showEditButtons" class="v-table__header"></th>
     </tr>
   </thead>
+</ng-template>
+
+<ng-template #tableBody>
   <tbody class="v-table__body">
     <ng-container *ngIf="items">
       <tr *ngFor="let item of items" class="v-table__row">
-        <td *ngFor="let column of columns" class="v-table__cell">
-          <span class="v-table__cell-content">
-            {{ item[column.dataKey] }}
-          </span>
-        </td>
-        <td *ngIf="showEditButtons" class="v-table__cell v-table__cell--with-button">
-          <span class="v-table__cell-button-container">
-            <v-button>test</v-button>
-          </span>
-        </td>
+        <ng-container *ngTemplateOutlet="tableCell; context: {item: item}"></ng-container>
+        <ng-container *ngTemplateOutlet="tableEditButtonCell; context: {item: item}"></ng-container>
       </tr>
     </ng-container>
   </tbody>
-</table>
+</ng-template>
+
+<ng-template #tableCell let-item="item">
+  <td *ngFor="let column of columns" class="v-table__cell">
+    <span class="v-table__cell-content">
+      {{ item[column.dataKey] }}
+    </span>
+  </td>
+</ng-template>
+
+<ng-template #tableEditButtonCell let-item="item">
+  <td *ngIf="showEditButtons" class="v-table__cell v-table__cell--with-button">
+    <span class="v-table__cell-button-container">
+      <v-button>test</v-button>
+    </span>
+  </td>
+</ng-template>
