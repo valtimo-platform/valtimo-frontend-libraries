@@ -13497,7 +13497,7 @@ canvas {
 .be-top-header .be-toggle-top-header-menu:before {
   content: '\f2f8';
   float: right;
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   font-size: 2.077rem;
   line-height: 22px;
   color: #c5c5c5;
@@ -14434,7 +14434,7 @@ canvas {
 .be-left-sidebar .left-sidebar-toggle:before {
   content: '\f2f2';
   float: right;
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   font-size: 2.077rem;
   line-height: 22px;
   color: #c5c5c5;
@@ -16415,7 +16415,7 @@ canvas {
 
 .be-scroll-top:before {
   content: '\f2fc';
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   font-size: 2.538rem;
   display: inline-block;
   vertical-align: middle;
@@ -16593,7 +16593,7 @@ canvas {
 .be-sub-navigation-collapse:before {
   content: '\f2f8';
   float: right;
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   font-size: 2.077rem;
   line-height: 22px;
   color: #c5c5c5;
@@ -16702,7 +16702,7 @@ canvas {
   .be-mega-menu-section.parent > .nav-link:after {
     position: absolute;
     content: '';
-    font-family: 'Material Icons';
+    font-family: 'Material Design Icons';
     font-size: 1.615rem;
     vertical-align: middle;
     top: 0;
@@ -16891,7 +16891,7 @@ canvas {
 .be-sub-header .navbar-toggler .mega-menu-toggle:before {
   content: '\f2f8';
   float: right;
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   font-size: 2.077rem;
   line-height: 22px;
   color: #c5c5c5;
@@ -16984,7 +16984,7 @@ canvas {
   .be-sub-header .navbar-nav > .nav-item.parent > .nav-link:after {
     position: absolute;
     content: '';
-    font-family: 'Material Icons';
+    font-family: 'Material Design Icons';
     font-size: 1.615rem;
     vertical-align: middle;
     right: 15px;
@@ -17120,7 +17120,7 @@ canvas {
 .be-nav-tabs-sub > .nav-item.parent > .nav-link:after {
   position: absolute;
   content: '';
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   font-size: 1.615rem;
   vertical-align: middle;
   margin-top: 1px;
@@ -23799,9 +23799,9 @@ fieldset[disabled] .btn-color.btn-evernote.active {
 }
 
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
-  content: '\f26b';
+  content: '\F012C';
   font-size: 1.5452rem;
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   margin: 0 0;
   font-weight: normal;
   text-align: center;
@@ -23822,7 +23822,7 @@ fieldset[disabled] .btn-color.btn-evernote.active {
   height: 1.77592rem;
   margin: 0 0;
   font-size: 1rem;
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   text-align: center;
   line-height: 1.8;
 }
@@ -28323,7 +28323,7 @@ fieldset[disabled] .full-calendar .fc-button.active {
 .gritter-item-wrapper .gritter-item .gritter-content.gritter-with-image .gritter-close:after,
 .gritter-item-wrapper .gritter-item .gritter-content.gritter-without-image .gritter-close:after {
   content: '\f136';
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   color: #ffffff;
   font-size: 1.538rem;
   text-shadow: none;
@@ -28579,7 +28579,7 @@ fieldset[disabled] .full-calendar .fc-button.active {
 
 .select2-container--default .select2-selection--single .select2-selection__arrow b:after {
   content: '\f2f9';
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   font-size: 1.923rem;
   font-weight: normal;
   line-height: 3.5382rem;
@@ -29101,7 +29101,7 @@ fieldset[disabled] .full-calendar .fc-button.active {
 
 .dd-list .dd-item > button,
 .dd-list .dd3-item > button {
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   display: block;
   position: relative;
   cursor: pointer;
@@ -30156,7 +30156,7 @@ fieldset[disabled] .full-calendar .fc-button.active {
 .widget-calendar .ui-datepicker .ui-datepicker-header .ui-datepicker-next span:after {
   cursor: pointer;
   content: '\f2fa';
-  font-family: 'Material Icons';
+  font-family: 'Material Design Icons';
   display: block;
   position: absolute;
   width: 16px;
