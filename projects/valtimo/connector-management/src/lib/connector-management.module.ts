@@ -31,6 +31,7 @@ import {MultiValueConnectorPropertyComponent} from './components/multi-value-con
 import {EditProductAanvragenConnectorComponent} from './components/edit-product-aanvragen-connector/edit-product-aanvragen-connector.component';
 import {FormIoModule} from '@valtimo/components';
 import {EditConnectorFormComponent} from './components/edit-connector-form/edit-connector-form.component';
+import {EditTaakConnectorComponent} from './components/edit-taak-connector/edit-taak-connector.component';
 import {ButtonModule, TableModule} from '@valtimo/user-interface';
 
 @NgModule({
@@ -46,6 +47,7 @@ import {ButtonModule, TableModule} from '@valtimo/user-interface';
     ConnectorLinkExtensionModalComponent,
     EditProductAanvragenConnectorComponent,
     EditConnectorFormComponent,
+    EditTaakConnectorComponent,
   ],
   imports: [
     CommonModule,
@@ -69,6 +71,7 @@ import {ButtonModule, TableModule} from '@valtimo/user-interface';
     ConnectorLinkExtensionComponent,
     ConnectorLinkExtensionModalComponent,
     EditProductAanvragenConnectorComponent,
+    EditTaakConnectorComponent,
   ],
   entryComponents: [ConnectorLinkExtensionComponent],
 })

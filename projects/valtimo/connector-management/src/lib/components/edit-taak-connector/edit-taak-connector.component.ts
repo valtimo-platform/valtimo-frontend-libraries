@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 Ritense BV, the Netherlands.
+ * Copyright 2015-2022 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,23 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {editProductAanvragenConnectorForm} from './edit-product-aanvragen-connector.form';
+import {editTaakConnectorForm} from './edit-taak-connector.form';
 import {FormMappingService, FormTranslationService} from '@valtimo/form';
-import {DocumentDefinition, DocumentService,} from '@valtimo/document';
-import {ExtendedComponentSchema} from 'formiojs';
 import {BehaviorSubject, combineLatest, Subject, Subscription} from 'rxjs';
 import {ConnectorProperties} from '../../models';
 import {FormioForm, FormioRefreshValue} from 'angular-formio';
 import {FormioOptions} from 'angular-formio/formio.common';
 import {cloneDeep} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
-import {map, switchMap, tap} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {ConnectorManagementService} from '../../services/connector-management/connector-management.service';
 
 @Component({
-  selector: 'valtimo-edit-product-aanvragen-connector',
-  templateUrl: './edit-product-aanvragen-connector.component.html',
-  styleUrls: ['./edit-product-aanvragen-connector.component.scss'],
+  selector: 'valtimo-edit-taak-connector',
+  templateUrl: './edit-taak-connector.component.html',
+  styleUrls: ['./edit-taak-connector.component.scss'],
 })
-export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy {
+export class EditTaakConnectorComponent implements OnInit, OnDestroy {
   @Input() properties: ConnectorProperties;
   @Input() defaultName!: string;
   @Input() showDeleteButton = false;
@@ -46,8 +44,6 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
   translatedFormDefinition$ = this.formDefinition$.pipe(
     map(definition => this.formTranslationService.translateForm(definition))
   );
-  caseDefinitionOptions: Array<{ label: string; value: string }> = [];
-  processDocumentDefinitionOptions: { [caseDefinitionId: string]: Array<string> } = {};
 
   readonly options: FormioOptions = {
     disableAlerts: true,
@@ -59,18 +55,15 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
   constructor(
     private readonly formTranslationService: FormTranslationService,
     private readonly formMappingService: FormMappingService,
-    private readonly documentService: DocumentService,
     private readonly translateService: TranslateService,
     private readonly connectorManagementService: ConnectorManagementService
   ) {
   }
 
   ngOnInit(): void {
-    window['productRequestDefinitions'] = {};
     this.openFormDefinitionSubscription();
-    this.formDefinition$.next(editProductAanvragenConnectorForm);
+    this.formDefinition$.next(editTaakConnectorForm);
     this.loadConnectorNames();
-    this.loadDefinitions();
   }
 
   ngOnDestroy(): void {
@@ -84,8 +77,6 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
 
     properties.objectsApiConnectionName = submission.objectsApiConnectionName;
     properties.openNotificatieConnectionName = submission.openNotificatieConnectionName;
-    properties.aanvragerRolTypeUrl = submission.applicantRoleTypeUrl;
-    properties.typeMapping = submission.productAanvraagTypes;
 
     this.propertiesSave.emit({properties, name: submission.connectorName});
   }
@@ -110,67 +101,13 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
 
     submission.objectsApiConnectionName = properties.objectsApiConnectionName;
     submission.openNotificatieConnectionName = properties.openNotificatieConnectionName;
-    submission.applicantRoleTypeUrl = properties.aanvragerRolTypeUrl;
-    submission.productAanvraagTypes = properties.typeMapping;
     submission.connectorName = this.defaultName;
 
     this.refreshForm({submission: {data: submission}});
   }
 
-  private mapCaseDefinitionKeyComponent = (
-    component: ExtendedComponentSchema
-  ): ExtendedComponentSchema => {
-    if (component.key === 'caseDefinitionKey') {
-      return {...component, disabled: false, data: {values: this.caseDefinitionOptions}};
-    }
-
-    return component;
-  };
-
   private refreshForm(refreshValue: FormioRefreshValue): void {
     this.formRefresh$.next(refreshValue);
-  }
-
-  private loadDefinitions(): void {
-    let documentDefinitions: Array<DocumentDefinition>;
-
-    this.documentService
-      .getAllDefinitions()
-      .pipe(
-        tap(resDocumentDefinitions => (documentDefinitions = resDocumentDefinitions.content)),
-        switchMap(resDocumentDefinitions =>
-          combineLatest(
-            resDocumentDefinitions.content.map(definition =>
-              this.documentService.findProcessDocumentDefinitions(definition.id.name)
-            )
-          )
-        ),
-        tap(res => {
-          this.caseDefinitionOptions = documentDefinitions.map(documentDefinition => {
-            return {label: documentDefinition.id.name, value: documentDefinition.id.name};
-          });
-
-          documentDefinitions.forEach((documentDefinition, index) => {
-            this.processDocumentDefinitionOptions[documentDefinition.id.name] = res[index].map(
-              processDocumentDefinition => processDocumentDefinition.id.processDefinitionKey
-            );
-          });
-
-          window['productRequestDefinitions'] = this.processDocumentDefinitionOptions;
-
-          const definitionWithCaseDefinitionOptions = this.formMappingService.mapComponents(
-            this.formDefinition$.getValue(),
-            this.mapCaseDefinitionKeyComponent
-          );
-
-          this.formDefinition$.next(definitionWithCaseDefinitionOptions);
-
-          if (this.properties?.aanvragerRolTypeUrl) {
-            this.prefillForm();
-          }
-        })
-      )
-      .subscribe();
   }
 
   private loadConnectorNames(): void {
@@ -183,6 +120,7 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
             } else if (connectorType.name === 'OpenNotificatie') {
               this.loadConnectorNamesByType('openNotificatieConnectorNames', connectorType.id);
             }
+            this.prefillForm();
           });
         })
       )
