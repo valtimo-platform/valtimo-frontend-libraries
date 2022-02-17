@@ -19,6 +19,7 @@
   *ngIf="{
     connectorInstances: connectorInstances$ | async,
     fields: fields$ | async,
+    columns: columns$ | async,
     pagination: pagination$ | async,
     loading: loading$ | async
   } as obs"
@@ -44,6 +45,12 @@
         </div>
       </valtimo-list>
     </valtimo-widget>
+    <v-table
+      [loading]="obs.loading"
+      [items]="obs.connectorInstances"
+      [columns]="obs.columns"
+      [showEditButtons]="true"
+    ></v-table>
   </div>
 </div>
 

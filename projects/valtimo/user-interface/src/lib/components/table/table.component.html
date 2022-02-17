@@ -14,4 +14,27 @@
   ~ limitations under the License.
   -->
 
-table works
+<table class="v-table">
+  <thead>
+    <tr *ngIf="columns">
+      <th class="v-table__header" *ngFor="let column of columns">
+        {{ column.labelTranslationKey | translate }}
+      </th>
+      <th *ngIf="showEditButtons" class="v-table__header"></th>
+    </tr>
+  </thead>
+  <tbody class="v-table__body">
+    <ng-container *ngIf="items">
+      <tr *ngFor="let item of items" class="v-table__row">
+        <td *ngFor="let column of columns" class="v-table__cell">
+          {{ item[column.dataKey] }}
+        </td>
+        <td *ngIf="showEditButtons" class="v-table__cell v-table__cell--with-button">
+          <span class="v-table__cell-button-container">
+            <v-button>test</v-button>
+          </span>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>

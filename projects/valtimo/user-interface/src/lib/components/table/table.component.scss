@@ -13,3 +13,82 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.v-table {
+  width: 100%;
+  border-spacing: var(--v-table-border-spacing);
+  table-layout: var(--v-table-layout);
+}
+
+.v-table__header {
+  color: var(--v-table-header-font-color);
+  text-transform: var(--v-table-header-text-transform);
+  font-size: var(--v-table-header-font-size);
+  font-weight: var(--v-table-header-font-weight);
+  letter-spacing: var(--v-table-header-letter-spacing);
+  padding-block-end: var(--v-table-header-padding-block-end);
+  padding-inline-start: var(--v-table-cell-padding-inline);
+  padding-inline-end: var(--v-table-cell-padding-inline);
+
+  &:first-child {
+    padding-inline-start: var(--v-table-first-cell-padding-inline-start);
+  }
+}
+
+.v-table__body {
+  box-shadow: var(--v-table-body-box-shadow);
+  border-radius: var(--v-border-radius-md);
+}
+
+.v-table__row {
+  border-bottom: var(--v-table-row-bottom-border);
+
+  &:first-child {
+    .v-table__cell {
+      &:first-child {
+        border-top-left-radius: var(--v-border-radius-md);
+      }
+      &:last-child {
+        border-top-right-radius: var(--v-border-radius-md);
+      }
+    }
+  }
+
+  &:last-child {
+    border-bottom: none;
+
+    .v-table__cell {
+      &:first-child {
+        border-bottom-left-radius: var(--v-border-radius-md);
+      }
+      &:last-child {
+        border-bottom-right-radius: var(--v-border-radius-md);
+      }
+    }
+  }
+}
+
+.v-table__cell {
+  padding-block-start: var(--v-table-cell-padding-block);
+  padding-block-end: var(--v-table-cell-padding-block);
+  padding-inline-start: var(--v-table-cell-padding-inline);
+  padding-inline-end: var(--v-table-cell-padding-inline);
+  background-color: var(--v-table-background-color);
+  font-size: var(--v-font-size-smaller);
+  font-weight: var(--v-font-weight-bold);
+  line-height: var(--v-line-height-smaller);
+  width: var(--v-table-cell-width);
+
+  &:first-child {
+    padding-inline-start: var(--v-table-first-cell-padding-inline-start);
+  }
+}
+
+.v-table__cell--with-button {
+  width: 0.1%;
+  white-space: nowrap;
+}
+
+.v-table__cell-button-container {
+  display: flex;
+}

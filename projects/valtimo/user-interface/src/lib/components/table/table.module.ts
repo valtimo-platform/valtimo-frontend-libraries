@@ -18,10 +18,12 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TableComponent} from './table.component';
 import {LayoutModule} from '@angular/cdk/layout';
+import {TranslateModule} from '@ngx-translate/core';
+import {ButtonModule} from '../button/button.module';
 
 @NgModule({
   declarations: [TableComponent],
-  imports: [CommonModule, LayoutModule],
+  imports: [CommonModule, LayoutModule, TranslateModule, ButtonModule],
   exports: [TableComponent],
 })
 export class TableModule {}
