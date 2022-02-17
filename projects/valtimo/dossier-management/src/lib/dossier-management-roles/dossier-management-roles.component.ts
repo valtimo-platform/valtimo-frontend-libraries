@@ -23,11 +23,11 @@ import {TranslateService} from '@ngx-translate/core';
 import {isEqual} from 'lodash';
 
 @Component({
-  selector: 'valtimo-dossier-management-roles-modal',
-  templateUrl: './dossier-management-roles-modal.component.html',
-  styleUrls: ['./dossier-management-roles-modal.component.scss'],
+  selector: 'valtimo-dossier-management-roles',
+  templateUrl: './dossier-management-roles.component.html',
+  styleUrls: ['./dossier-management-roles.component.scss'],
 })
-export class DossierManagementRolesModalComponent implements OnInit {
+export class DossierManagementRolesComponent implements OnInit {
   @Input() public documentDefinitionName: string;
   public dropdownSettings: IDropdownSettings = {
     singleSelection: false,

@@ -33,7 +33,7 @@ import {DossierManagementRoutingModule} from './dossier-management-routing.modul
 import {DossierManagementUploadComponent} from './dossier-management-upload/dossier-management-upload.component';
 import {DossierManagementRemoveModalComponent} from './dossier-management-remove-modal/dossier-management-remove-modal.component';
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
-import {DossierManagementRolesModalComponent} from './dossier-management-roles-modal/dossier-management-roles-modal.component';
+import {DossierManagementRolesComponent} from './dossier-management-roles/dossier-management-roles.component';
 
 @NgModule({
   declarations: [
@@ -41,9 +41,9 @@ import {DossierManagementRolesModalComponent} from './dossier-management-roles-m
     DossierManagementDetailComponent,
     DossierManagementConnectModalComponent,
     DossierManagementRemoveModalComponent,
-    DossierManagementRolesModalComponent,
+    DossierManagementRolesComponent,
     DossierManagementUploadComponent,
-    DossierManagementRolesModalComponent,
+    DossierManagementRolesComponent,
   ],
   imports: [
     CommonModule,
