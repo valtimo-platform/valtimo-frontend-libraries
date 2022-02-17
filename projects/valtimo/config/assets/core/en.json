@@ -323,7 +323,8 @@
     "toggleMenu": "Menu",
     "typeToSearch": "Type here to search",
     "noSearchResults": "No results",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "edit": "Edit"
   },
   "assignTask": {
     "assignedTo": "Assigned to ",

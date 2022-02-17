@@ -29,6 +29,7 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
   @Input() columns!: Array<TableColumn>;
   @Input() loading: boolean = false;
   @Input() showEditButtons: boolean = false;
+  @Input() editButtonTranslationKey!: string;
   @Input() mobileBreakpointPx: number = 768;
 
   readonly isMobile$ = new BehaviorSubject<boolean>(false);

@@ -323,7 +323,8 @@
     "toggleMenu": "Menü",
     "typeToSearch": "Hier tippen zum Suchen",
     "noSearchResults": "Keine Ergebnisse",
-    "loading": "Lädt..."
+    "loading": "Lädt...",
+    "edit": "Bearbeiten"
   },
   "assignTask": {
     "assignedTo": "User-Zuordnung: ",
