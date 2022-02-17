@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {IDropdownSettings} from 'ng-multiselect-dropdown';
 import {BehaviorSubject} from 'rxjs';
 import {Authority, AuthorityService} from '@valtimo/authority';
+import {DocumentService} from '@valtimo/document';
+import {AlertService} from '@valtimo/components';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-dossier-management-roles-modal',
@@ -24,6 +27,7 @@ import {Authority, AuthorityService} from '@valtimo/authority';
   styleUrls: ['./dossier-management-roles-modal.component.scss'],
 })
 export class DossierManagementRolesModalComponent implements OnInit {
+  @Input() public documentDefinitionName: string;
   public dropdownSettings: IDropdownSettings = {
     singleSelection: false,
     idField: 'name',
@@ -35,21 +39,53 @@ export class DossierManagementRolesModalComponent implements OnInit {
     allowSearchFilter: true,
   };
   public roles = new BehaviorSubject<Array<Authority>>(undefined);
+  public preSelectedItems = new BehaviorSubject<Array<String>>(undefined);
 
-  constructor(private readonly authorityService: AuthorityService) {}
+  constructor(
+    private readonly authorityService: AuthorityService,
+    private readonly documentService: DocumentService,
+    private readonly alertService: AlertService,
+    private readonly translateService: TranslateService
+  ) {}
 
   ngOnInit(): void {
-    this.loadRoles();
+    // First load all the roles. Then load the roles already set for this dossier
+    this.loadAllRoles();
+    this.loadDocumentRoles();
   }
 
-  loadRoles() {
+  loadAllRoles() {
     this.authorityService.query().subscribe(result => {
       this.roles.next(result.body);
+      //this.loadDocumentRoles();
     });
+  }
+
+  loadDocumentRoles() {
+    this.documentService.getDocumentRoles(this.documentDefinitionName).subscribe(
+      result => {
+        this.preSelectedItems.next(result);
+      },
+      err => {
+        this.alertService.warning('Failed to retrieve the current document roles');
+      }
+    );
   }
 
   onSelectedItems(data: any) {
     console.log('Selected the following items:');
     console.log(data);
+    this.documentService.modifyDocumentRoles(this.documentDefinitionName, data).subscribe(
+      () => {
+        this.alertService.success(
+          this.translateService.instant('documentDefinitionRoles.successfullyStored')
+        );
+      },
+      err => {
+        this.alertService.error(
+          this.translateService.instant('documentDefinitionRoles.unsuccessfullyStored')
+        );
+      }
+    );
   }
 }

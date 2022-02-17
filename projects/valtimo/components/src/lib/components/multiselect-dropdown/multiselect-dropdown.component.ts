@@ -22,7 +22,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
   styleUrls: ['./multiselect-dropdown.component.scss'],
 })
 export class MultiselectDropdownComponent implements OnInit {
-  public selectedItems: Array<any>;
+  @Input() selectedItems: Array<String>;
   @Input() items = [];
   @Input() placeHolder: String;
   @Input() dropdownSettings = {

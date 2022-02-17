@@ -20,6 +20,7 @@ import {ActivatedRoute} from '@angular/router';
 import {DossierManagementConnectModalComponent} from '../dossier-management-connect-modal/dossier-management-connect-modal.component';
 import {AlertService} from '@valtimo/components';
 import {DossierManagementRemoveModalComponent} from '../dossier-management-remove-modal/dossier-management-remove-modal.component';
+import {DossierManagementRolesModalComponent} from '../dossier-management-roles-modal/dossier-management-roles-modal.component';
 
 @Component({
   selector: 'valtimo-dossier-management-detail',
@@ -33,6 +34,7 @@ export class DossierManagementDetailComponent implements OnInit {
 
   @ViewChild('dossierConnectModal') dossierConnectModal: DossierManagementConnectModalComponent;
   @ViewChild('dossierRemoveModal') dossierRemoveModal: DossierManagementRemoveModalComponent;
+  @ViewChild('documentRoles') documentRoles: DossierManagementRolesModalComponent;
 
   constructor(
     private documentService: DocumentService,

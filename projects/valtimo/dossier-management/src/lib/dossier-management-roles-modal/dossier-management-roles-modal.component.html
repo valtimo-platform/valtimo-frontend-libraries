@@ -20,6 +20,7 @@
 
 <valtimo-multiselect-dropdown
         [items]="roles | async"
+        [selectedItems]="preSelectedItems | async"
         [dropdownSettings]="dropdownSettings"
         [placeHolder]="'dossierManagement.rolesPlaceHolder'|translate"
         (itemsSelected)="onSelectedItems($event)"

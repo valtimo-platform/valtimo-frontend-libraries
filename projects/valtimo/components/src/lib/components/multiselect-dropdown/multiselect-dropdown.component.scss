@@ -13,23 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-$base-color: green;
+.multiselect-labels .label {
 
-//@import 'ng-multiselect-dropdown/themes/ng-multiselect-dropdown.theme';
-
-//:host /deep/ {
-//  .multiselect-item-checkbox input[type='checkbox'] + div:before {
-//    box-sizing: content-box;
-//    content: '';
-//    color: green;
-//    position: absolute;
-//    top: 50%;
-//    left: 0;
-//    width: 14px;
-//    height: 14px;
-//    margin-top: -9px;
-//    border: 2px solid green;
-//    text-align: center;
-//    transition: all 0.4s ease;
-//  }
-//}
+}
