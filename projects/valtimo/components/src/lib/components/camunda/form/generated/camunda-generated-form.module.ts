@@ -29,28 +29,19 @@ import {CamundaChoicefieldFormfieldComponent} from './formfield/choicefield/camu
 import {CamundaFormfieldValidationComponent} from './formfield/validation/camunda-formfield-validation.component';
 
 @NgModule({
-  declarations: [
-    CamundaStringFormfieldComponent,
-    CamundaBooleanFormfieldComponent,
-    CamundaDateFormfieldComponent,
-    CamundaFormfieldGeneratorDirective,
-    CamundaLongFormfieldComponent,
-    CamundaEnumFormfieldComponent,
-    CamundaTextareaFormfieldComponent,
-    CamundaChoicefieldFormfieldComponent,
-    CamundaFormfieldValidationComponent,
-    CamundaGeneratedFormComponent,
-  ],
-  imports: [CommonModule, ReactiveFormsModule],
-  exports: [CamundaGeneratedFormComponent],
-  entryComponents: [
-    CamundaStringFormfieldComponent,
-    CamundaBooleanFormfieldComponent,
-    CamundaDateFormfieldComponent,
-    CamundaLongFormfieldComponent,
-    CamundaEnumFormfieldComponent,
-    CamundaTextareaFormfieldComponent,
-    CamundaChoicefieldFormfieldComponent,
-  ],
+    declarations: [
+        CamundaStringFormfieldComponent,
+        CamundaBooleanFormfieldComponent,
+        CamundaDateFormfieldComponent,
+        CamundaFormfieldGeneratorDirective,
+        CamundaLongFormfieldComponent,
+        CamundaEnumFormfieldComponent,
+        CamundaTextareaFormfieldComponent,
+        CamundaChoicefieldFormfieldComponent,
+        CamundaFormfieldValidationComponent,
+        CamundaGeneratedFormComponent,
+    ],
+    imports: [CommonModule, ReactiveFormsModule],
+    exports: [CamundaGeneratedFormComponent]
 })
 export class CamundaGeneratedFormModule {}

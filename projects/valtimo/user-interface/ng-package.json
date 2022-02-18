@@ -3,9 +3,6 @@
   "dest": "../../../dist/valtimo/user-interface",
   "assets": ["./assets"],
   "lib": {
-    "entryFile": "src/public_api.ts",
-    "umdModuleIds": {
-      "@valtimo/user-interface": "user-interface"
-    }
+    "entryFile": "src/public_api.ts"
   }
 }

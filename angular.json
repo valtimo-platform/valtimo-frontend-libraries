@@ -176,13 +176,6 @@
             "scripts": [],
             "assets": ["src/favicon.ico", "src/assets"]
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -201,13 +194,6 @@
             "production": {
               "devServerTarget": "valtimo-angular-console:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -237,16 +223,6 @@
             "tsConfig": "projects/valtimo/user-interface/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/user-interface/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/user-interface/tsconfig.lib.json",
-              "projects/valtimo/user-interface/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -274,16 +250,6 @@
             "main": "projects/valtimo/layout/src/test.ts",
             "tsConfig": "projects/valtimo/layout/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/layout/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/layout/tsconfig.lib.json",
-              "projects/valtimo/layout/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -313,16 +279,6 @@
             "tsConfig": "projects/valtimo/auth0/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/auth0/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/auth0/tsconfig.lib.json",
-              "projects/valtimo/auth0/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -350,16 +306,6 @@
             "main": "projects/valtimo/components/src/test.ts",
             "tsConfig": "projects/valtimo/components/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/components/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/components/tsconfig.lib.json",
-              "projects/valtimo/components/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -389,16 +335,6 @@
             "tsConfig": "projects/valtimo/task/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/task/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/task/tsconfig.lib.json",
-              "projects/valtimo/task/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -426,16 +362,6 @@
             "main": "projects/valtimo/security/src/test.ts",
             "tsConfig": "projects/valtimo/security/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/security/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/security/tsconfig.lib.json",
-              "projects/valtimo/security/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -465,16 +391,6 @@
             "tsConfig": "projects/valtimo/dossier/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/dossier/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/dossier/tsconfig.lib.json",
-              "projects/valtimo/dossier/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -502,16 +418,6 @@
             "main": "projects/valtimo/choicefield/src/test.ts",
             "tsConfig": "projects/valtimo/choicefield/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/choicefield/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/choicefield/tsconfig.lib.json",
-              "projects/valtimo/choicefield/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -541,16 +447,6 @@
             "tsConfig": "projects/valtimo/process/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/process/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/process/tsconfig.lib.json",
-              "projects/valtimo/process/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -578,16 +474,6 @@
             "main": "projects/valtimo/view-configurator/src/test.ts",
             "tsConfig": "projects/valtimo/view-configurator/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/view-configurator/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/view-configurator/tsconfig.lib.json",
-              "projects/valtimo/view-configurator/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -617,16 +503,6 @@
             "tsConfig": "projects/valtimo/context/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/context/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/context/tsconfig.lib.json",
-              "projects/valtimo/context/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -654,16 +530,6 @@
             "main": "projects/valtimo/dashboard/src/test.ts",
             "tsConfig": "projects/valtimo/dashboard/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/dashboard/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/dashboard/tsconfig.lib.json",
-              "projects/valtimo/dashboard/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -693,16 +559,6 @@
             "tsConfig": "projects/valtimo/document/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/document/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/document/tsconfig.lib.json",
-              "projects/valtimo/document/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -730,16 +586,6 @@
             "main": "projects/valtimo/contact-moment/src/test.ts",
             "tsConfig": "projects/valtimo/contact-moment/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/contact-moment/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/contact-moment/tsconfig.lib.json",
-              "projects/valtimo/contact-moment/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -769,16 +615,6 @@
             "tsConfig": "projects/valtimo/account/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/account/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/account/tsconfig.lib.json",
-              "projects/valtimo/account/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -806,16 +642,6 @@
             "main": "projects/valtimo/user-management/src/test.ts",
             "tsConfig": "projects/valtimo/user-management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/user-management/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/user-management/tsconfig.lib.json",
-              "projects/valtimo/user-management/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -845,16 +671,6 @@
             "tsConfig": "projects/valtimo/authority/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/authority/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/authority/tsconfig.lib.json",
-              "projects/valtimo/authority/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -882,16 +698,6 @@
             "main": "projects/valtimo/choice-field/src/test.ts",
             "tsConfig": "projects/valtimo/choice-field/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/choice-field/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/choice-field/tsconfig.lib.json",
-              "projects/valtimo/choice-field/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -921,16 +727,6 @@
             "tsConfig": "projects/valtimo/form/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/form/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/form/tsconfig.lib.json",
-              "projects/valtimo/form/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -958,16 +754,6 @@
             "main": "projects/valtimo/management/src/test.ts",
             "tsConfig": "projects/valtimo/management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/management/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/management/tsconfig.lib.json",
-              "projects/valtimo/management/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -997,16 +783,6 @@
             "tsConfig": "projects/valtimo/analyse/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/analyse/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/analyse/tsconfig.lib.json",
-              "projects/valtimo/analyse/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -1034,16 +810,6 @@
             "main": "projects/valtimo/swagger/src/test.ts",
             "tsConfig": "projects/valtimo/swagger/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/swagger/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/swagger/tsconfig.lib.json",
-              "projects/valtimo/swagger/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -1073,16 +839,6 @@
             "tsConfig": "projects/valtimo/connector-management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/connector-management/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/connector-management/tsconfig.lib.json",
-              "projects/valtimo/connector-management/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -1110,16 +866,6 @@
             "main": "projects/valtimo/process-management/src/test.ts",
             "tsConfig": "projects/valtimo/process-management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/process-management/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/process-management/tsconfig.lib.json",
-              "projects/valtimo/process-management/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -1149,16 +895,6 @@
             "tsConfig": "projects/valtimo/decision/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/decision/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/decision/tsconfig.lib.json",
-              "projects/valtimo/decision/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -1186,16 +922,6 @@
             "main": "projects/valtimo/milestone/src/test.ts",
             "tsConfig": "projects/valtimo/milestone/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/milestone/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/milestone/tsconfig.lib.json",
-              "projects/valtimo/milestone/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -1225,16 +951,6 @@
             "tsConfig": "projects/valtimo/form-management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/form-management/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/form-management/tsconfig.lib.json",
-              "projects/valtimo/form-management/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -1262,16 +978,6 @@
             "main": "projects/valtimo/form-link/src/test.ts",
             "tsConfig": "projects/valtimo/form-link/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/form-link/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/form-link/tsconfig.lib.json",
-              "projects/valtimo/form-link/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -1301,16 +1007,6 @@
             "tsConfig": "projects/valtimo/migration/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/migration/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/migration/tsconfig.lib.json",
-              "projects/valtimo/migration/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -1338,16 +1034,6 @@
             "main": "projects/valtimo/dossier-management/src/test.ts",
             "tsConfig": "projects/valtimo/dossier-management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/dossier-management/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/dossier-management/tsconfig.lib.json",
-              "projects/valtimo/dossier-management/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -1377,16 +1063,6 @@
             "tsConfig": "projects/valtimo/keycloak/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/keycloak/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/keycloak/tsconfig.lib.json",
-              "projects/valtimo/keycloak/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -1414,16 +1090,6 @@
             "main": "projects/valtimo/bootstrap/src/test.ts",
             "tsConfig": "projects/valtimo/bootstrap/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/bootstrap/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/bootstrap/tsconfig.lib.json",
-              "projects/valtimo/bootstrap/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -1453,16 +1119,6 @@
             "tsConfig": "projects/valtimo/contract/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/contract/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/contract/tsconfig.lib.json",
-              "projects/valtimo/contract/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -1490,16 +1146,6 @@
             "main": "projects/valtimo/config/src/test.ts",
             "tsConfig": "projects/valtimo/config/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/config/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/config/tsconfig.lib.json",
-              "projects/valtimo/config/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -1529,16 +1175,6 @@
             "tsConfig": "projects/valtimo/open-zaak/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/open-zaak/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/open-zaak/tsconfig.lib.json",
-              "projects/valtimo/open-zaak/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     },
@@ -1566,16 +1202,6 @@
             "main": "projects/valtimo/resource/src/test.ts",
             "tsConfig": "projects/valtimo/resource/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/resource/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/valtimo/resource/tsconfig.lib.json",
-              "projects/valtimo/resource/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }

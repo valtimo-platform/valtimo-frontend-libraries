@@ -29,26 +29,25 @@ import {DossierManagementRemoveModalComponent} from './dossier-management-remove
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  declarations: [
-    DossierManagementListComponent,
-    DossierManagementDetailComponent,
-    DossierManagementConnectModalComponent,
-    DossierManagementRemoveModalComponent,
-    DossierManagementUploadComponent,
-  ],
-  imports: [
-    CommonModule,
-    WidgetModule,
-    DropzoneModule,
-    ListModule,
-    DossierManagementRoutingModule,
-    FormsModule,
-    TranslateModule,
-    ModalModule,
-    ConfigModule,
-    NgbTooltipModule,
-  ],
-  exports: [],
-  entryComponents: [ExtensionComponent],
+    declarations: [
+        DossierManagementListComponent,
+        DossierManagementDetailComponent,
+        DossierManagementConnectModalComponent,
+        DossierManagementRemoveModalComponent,
+        DossierManagementUploadComponent,
+    ],
+    imports: [
+        CommonModule,
+        WidgetModule,
+        DropzoneModule,
+        ListModule,
+        DossierManagementRoutingModule,
+        FormsModule,
+        TranslateModule,
+        ModalModule,
+        ConfigModule,
+        NgbTooltipModule,
+    ],
+    exports: []
 })
 export class DossierManagementModule {}

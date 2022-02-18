@@ -24,25 +24,20 @@ import {OpenZaakServiceTaskConnectorModalExtensionComponent} from './open-zaak-e
 import {EmailExtensionComponent} from './email-extension/email-extension.component';
 
 @NgModule({
-  declarations: [
-    OpenZaakTypeLinkExtensionComponent,
-    OpenZaakServiceTaskConnectorModalExtensionComponent,
-    EmailExtensionComponent,
-  ],
-  imports: [
-    FormsModule,
-    TranslateModule,
-    ModalModule,
-    ReactiveFormsModule,
-    WidgetModule,
-    CommonModule,
-    SpinnerModule,
-  ],
-  exports: [],
-  entryComponents: [
-    OpenZaakTypeLinkExtensionComponent,
-    OpenZaakServiceTaskConnectorModalExtensionComponent,
-    EmailExtensionComponent,
-  ],
+    declarations: [
+        OpenZaakTypeLinkExtensionComponent,
+        OpenZaakServiceTaskConnectorModalExtensionComponent,
+        EmailExtensionComponent,
+    ],
+    imports: [
+        FormsModule,
+        TranslateModule,
+        ModalModule,
+        ReactiveFormsModule,
+        WidgetModule,
+        CommonModule,
+        SpinnerModule,
+    ],
+    exports: []
 })
 export class OpenZaakModule {}
