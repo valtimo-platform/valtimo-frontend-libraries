@@ -26,7 +26,7 @@ export function initialize(
   logger: NGXLogger
 ): () => Promise<any> {
   return (): Promise<any> => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise<void>(async (resolve, reject) => {
       logger.debug('Initializing application');
       try {
         logger.debug('Running', initializers.length);

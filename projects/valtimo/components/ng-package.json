@@ -4,5 +4,17 @@
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "whitelistedNonPeerDependencies": ["."]
+  "allowedNonPeerDependencies": [
+    "ngx-toastr",
+    "@foxythemes/bootstrap-datetime-picker-bs4",
+    "bpmn-js",
+    "jquery",
+    "moment",
+    "heatmap.js-fixed",
+    "@ngx-translate/core",
+    "@ngx-translate/http-loader",
+    "@ng-bootstrap/ng-bootstrap",
+    "angular-formio",
+    "ngx-spinner"
+  ]
 }

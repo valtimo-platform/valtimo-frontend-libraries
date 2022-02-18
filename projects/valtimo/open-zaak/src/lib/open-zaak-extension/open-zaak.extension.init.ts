@@ -25,7 +25,7 @@ export function openZaakExtensionInitializer(injector: Injector): () => Promise<
   const logger = injector.get<NGXLogger>(NGXLogger);
 
   return (): Promise<any> => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       try {
         logger.debug('openzaak extension initializer before init');
         const extension = new Extension(

@@ -4,5 +4,11 @@
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "whitelistedNonPeerDependencies": ["."]
+  "allowedNonPeerDependencies": [
+    "moment",
+    "d3",
+    "d3-shape",
+    "@ngx-translate/core",
+    "@ngx-translate/http-loader"
+  ]
 }

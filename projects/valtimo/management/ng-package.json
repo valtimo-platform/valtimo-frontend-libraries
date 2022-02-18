@@ -4,5 +4,10 @@
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "whitelistedNonPeerDependencies": ["."]
-}
+  "allowedNonPeerDependencies": [
+    "jquery",
+    "moment",
+    "@ngx-translate/core",
+    "@ngx-translate/http-loader",
+    "@ng-bootstrap/ng-bootstrap"
+  ]}

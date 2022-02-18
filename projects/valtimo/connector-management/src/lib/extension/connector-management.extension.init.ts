@@ -25,7 +25,7 @@ export function connectorLinkExtensionInitializer(injector: Injector): () => Pro
   const logger = injector.get<NGXLogger>(NGXLogger);
 
   return (): Promise<any> => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       try {
         logger.debug('connector link extension initializer before init');
         const extension = new Extension(

@@ -4,5 +4,8 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["bpmn-js-properties-panel", "camunda-bpmn-moddle"]
+  "allowedNonPeerDependencies": [
+    "bpmn-js-properties-panel",
+    "camunda-bpmn-moddle"
+  ]
 }
