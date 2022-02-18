@@ -17,14 +17,13 @@
 import {Component, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {TaskService} from '../task.service';
-import * as moment_ from 'moment';
+import * as moment from 'moment';
 import {Task, TaskList} from '../models';
 import {NGXLogger} from 'ngx-logger';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {TranslateService} from '@ngx-translate/core';
 import {combineLatest, Subscription} from 'rxjs';
 
-const moment = moment_;
 moment.locale(localStorage.getItem('langKey') || '');
 
 @Component({
