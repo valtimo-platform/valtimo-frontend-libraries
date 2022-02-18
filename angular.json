@@ -99,7 +99,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -127,7 +126,6 @@
               "optimization": false,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": true,
               "aot": false,
               "extractLicenses": true,
@@ -218,7 +216,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/user-interface/tsconfig.lib.json",
             "project": "projects/valtimo/user-interface/ng-package.json"
@@ -256,7 +254,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/layout/tsconfig.lib.json",
             "project": "projects/valtimo/layout/ng-package.json"
@@ -294,7 +292,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/auth0/tsconfig.lib.json",
             "project": "projects/valtimo/auth0/ng-package.json"
@@ -332,7 +330,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/components/tsconfig.lib.json",
             "project": "projects/valtimo/components/ng-package.json"
@@ -370,7 +368,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/task/tsconfig.lib.json",
             "project": "projects/valtimo/task/ng-package.json"
@@ -408,7 +406,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/security/tsconfig.lib.json",
             "project": "projects/valtimo/security/ng-package.json"
@@ -446,7 +444,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/dossier/tsconfig.lib.json",
             "project": "projects/valtimo/dossier/ng-package.json"
@@ -484,7 +482,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/choicefield/tsconfig.lib.json",
             "project": "projects/valtimo/choicefield/ng-package.json"
@@ -522,7 +520,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/process/tsconfig.lib.json",
             "project": "projects/valtimo/process/ng-package.json"
@@ -560,7 +558,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/view-configurator/tsconfig.lib.json",
             "project": "projects/valtimo/view-configurator/ng-package.json"
@@ -598,7 +596,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/context/tsconfig.lib.json",
             "project": "projects/valtimo/context/ng-package.json"
@@ -636,7 +634,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/dashboard/tsconfig.lib.json",
             "project": "projects/valtimo/dashboard/ng-package.json"
@@ -674,7 +672,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/document/tsconfig.lib.json",
             "project": "projects/valtimo/document/ng-package.json"
@@ -712,7 +710,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/contact-moment/tsconfig.lib.json",
             "project": "projects/valtimo/contact-moment/ng-package.json"
@@ -750,7 +748,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/account/tsconfig.lib.json",
             "project": "projects/valtimo/account/ng-package.json"
@@ -788,7 +786,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/user-management/tsconfig.lib.json",
             "project": "projects/valtimo/user-management/ng-package.json"
@@ -826,7 +824,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/authority/tsconfig.lib.json",
             "project": "projects/valtimo/authority/ng-package.json"
@@ -864,7 +862,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/choice-field/tsconfig.lib.json",
             "project": "projects/valtimo/choice-field/ng-package.json"
@@ -902,7 +900,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/form/tsconfig.lib.json",
             "project": "projects/valtimo/form/ng-package.json"
@@ -940,7 +938,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/management/tsconfig.lib.json",
             "project": "projects/valtimo/management/ng-package.json"
@@ -978,7 +976,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/analyse/tsconfig.lib.json",
             "project": "projects/valtimo/analyse/ng-package.json"
@@ -1016,7 +1014,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/swagger/tsconfig.lib.json",
             "project": "projects/valtimo/swagger/ng-package.json"
@@ -1054,7 +1052,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/connector-management/tsconfig.lib.json",
             "project": "projects/valtimo/connector-management/ng-package.json"
@@ -1092,7 +1090,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/process-management/tsconfig.lib.json",
             "project": "projects/valtimo/process-management/ng-package.json"
@@ -1130,7 +1128,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/decision/tsconfig.lib.json",
             "project": "projects/valtimo/decision/ng-package.json"
@@ -1168,7 +1166,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/milestone/tsconfig.lib.json",
             "project": "projects/valtimo/milestone/ng-package.json"
@@ -1206,7 +1204,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/form-management/tsconfig.lib.json",
             "project": "projects/valtimo/form-management/ng-package.json"
@@ -1244,7 +1242,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/form-link/tsconfig.lib.json",
             "project": "projects/valtimo/form-link/ng-package.json"
@@ -1282,7 +1280,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/migration/tsconfig.lib.json",
             "project": "projects/valtimo/migration/ng-package.json"
@@ -1320,7 +1318,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/dossier-management/tsconfig.lib.json",
             "project": "projects/valtimo/dossier-management/ng-package.json"
@@ -1358,7 +1356,7 @@
       "prefix": "valtimo",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/keycloak/tsconfig.lib.json",
             "project": "projects/valtimo/keycloak/ng-package.json"
@@ -1396,7 +1394,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/bootstrap/tsconfig.lib.json",
             "project": "projects/valtimo/bootstrap/ng-package.json"
@@ -1434,7 +1432,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/contract/tsconfig.lib.json",
             "project": "projects/valtimo/contract/ng-package.json"
@@ -1472,7 +1470,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/config/tsconfig.lib.json",
             "project": "projects/valtimo/config/ng-package.json"
@@ -1510,7 +1508,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/open-zaak/tsconfig.lib.json",
             "project": "projects/valtimo/open-zaak/ng-package.json"
@@ -1548,7 +1546,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/resource/tsconfig.lib.json",
             "project": "projects/valtimo/resource/ng-package.json"
