@@ -94,7 +94,7 @@ import 'core-js/es/set';
  *
  */
 
-import 'zone.js/dist/zone';
+import 'zone.js';
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
