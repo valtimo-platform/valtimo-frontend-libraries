@@ -31,6 +31,7 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
   @Input() showEditButtons: boolean = false;
   @Input() editButtonTranslationKey!: string;
   @Input() mobileBreakpointPx: number = 768;
+  @Input() amountOfLoadingRows: number = 3;
 
   readonly isMobile$ = new BehaviorSubject<boolean>(false);
   readonly loading$ = new BehaviorSubject<boolean>(true);
@@ -53,6 +54,10 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
     if (loadingChange) {
       this.loading$.next(loadingChange.currentValue);
     }
+  }
+
+  getArrayOfLength(length: number): Array<0> {
+    return new Array(length).fill(0);
   }
 
   private openBreakpointSubscription(): void {

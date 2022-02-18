@@ -57,6 +57,11 @@
   border: var(--v-button-secondary-border);
   margin: var(--v-button-secondary-margin);
 
+  &.v-button--disabled {
+    margin: 0;
+    border: none;
+  }
+
   &:hover {
     background-color: var(--v-button-primary-bg-color);
     color: var(--v-button-font-color);

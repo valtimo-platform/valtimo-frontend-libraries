@@ -17,11 +17,12 @@
 <table class="v-table">
   <ng-container *ngTemplateOutlet="tableHead"></ng-container>
   <ng-container *ngTemplateOutlet="tableBody"></ng-container>
+  <ng-container *ngTemplateOutlet="tableBodyLoading"></ng-container>
 </table>
 
 <ng-template #tableHead>
-  <thead>
-    <tr *ngIf="columns">
+  <thead *ngIf="columns">
+    <tr>
       <th class="v-table__header" *ngFor="let column of columns">
         {{ column.labelTranslationKey | translate }}
       </th>
@@ -31,13 +32,11 @@
 </ng-template>
 
 <ng-template #tableBody>
-  <tbody class="v-table__body">
-    <ng-container *ngIf="items">
-      <tr *ngFor="let item of items" class="v-table__row">
-        <ng-container *ngTemplateOutlet="tableCell; context: {item: item}"></ng-container>
-        <ng-container *ngTemplateOutlet="tableEditButtonCell; context: {item: item}"></ng-container>
-      </tr>
-    </ng-container>
+  <tbody class="v-table__body" *ngIf="!loading && items">
+    <tr *ngFor="let item of items" class="v-table__row">
+      <ng-container *ngTemplateOutlet="tableCell; context: {item: item}"></ng-container>
+      <ng-container *ngTemplateOutlet="tableEditButtonCell; context: {item: item}"></ng-container>
+    </tr>
   </tbody>
 </ng-template>
 
@@ -53,6 +52,31 @@
   <td *ngIf="showEditButtons" class="v-table__cell v-table__cell--with-button">
     <span class="v-table__cell-button-container">
       <v-button type="secondary">{{
+        editButtonTranslationKey || 'interface.edit' | translate
+      }}</v-button>
+    </span>
+  </td>
+</ng-template>
+
+<ng-template #tableBodyLoading>
+  <tbody class="v-table__body" *ngIf="loading">
+    <tr *ngFor="let item of getArrayOfLength(amountOfLoadingRows)" class="v-table__row">
+      <ng-container *ngTemplateOutlet="tableCellLoading"></ng-container>
+      <ng-container *ngTemplateOutlet="tableEditButtonCellLoading"></ng-container>
+    </tr>
+  </tbody>
+</ng-template>
+
+<ng-template #tableCellLoading>
+  <td *ngFor="let column of columns" class="v-table__cell">
+    <span class="v-table__cell-content"><ngx-skeleton-loader></ngx-skeleton-loader></span>
+  </td>
+</ng-template>
+
+<ng-template #tableEditButtonCellLoading>
+  <td *ngIf="showEditButtons" class="v-table__cell v-table__cell--with-button">
+    <span class="v-table__cell-button-container">
+      <v-button type="secondary" [disabled]="true">{{
         editButtonTranslationKey || 'interface.edit' | translate
       }}</v-button>
     </span>

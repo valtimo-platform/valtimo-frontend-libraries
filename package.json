@@ -255,6 +255,7 @@
     "ngx-color-picker": "^8.2.0",
     "ngx-csv": "^0.3.1",
     "ngx-logger": "^4.1.1",
+    "ngx-skeleton-loader": "^5.0.0",
     "ngx-spinner": "^10.0.1",
     "ngx-toastr": "^13.0.0",
     "ngx-translate-multi-http-loader": "^3.0.0",
