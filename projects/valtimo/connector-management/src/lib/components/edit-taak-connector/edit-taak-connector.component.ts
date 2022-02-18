@@ -98,7 +98,7 @@ export class EditTaakConnectorComponent implements OnInit, OnDestroy {
 
   private prefillForm(): void {
     timer(100).pipe(tap(() => {
-        if (this.defaultName != undefined) {
+        if (this.defaultName !== undefined) {
           const properties = cloneDeep(this.properties);
           const submission: { [key: string]: string } = {};
 
