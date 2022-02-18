@@ -58,7 +58,7 @@ export class DocumentService {
 
   queryDefinitions(params?: any): Observable<Page<DocumentDefinition>> {
     return this.http.get<Page<DocumentDefinition>>(
-      `${this.valtimoEndpointUri}document-definitions`,
+      `${this.valtimoEndpointUri}document-definition`,
       {params: params}
     );
   }
