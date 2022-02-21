@@ -78,7 +78,7 @@ export class DossierManagementRolesComponent implements OnInit {
   }
 
   onSelectedItems(data: any) {
-    var roles = this.returnArrayOfString(data);
+    const roles = this.returnArrayOfString(data);
 
     if (isEqual(roles, this.preSelectedItems.value)) {
       return;
