@@ -18,7 +18,7 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {FormField} from '../formfield.model';
 import {CamundaFormfieldService} from '../camunda-formfield.service';
-import * as moment from 'moment';
+import moment from 'moment';
 
 moment.locale(localStorage.getItem('langKey'));
 declare var $;

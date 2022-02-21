@@ -17,7 +17,7 @@
 import {Component, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {TaskService} from '../task.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import {Task, TaskList} from '../models';
 import {NGXLogger} from 'ngx-logger';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';

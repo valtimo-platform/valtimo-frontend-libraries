@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as moment from 'moment';
+import moment from 'moment';
 import {AbstractControl, ValidatorFn} from '@angular/forms';
 
 moment.locale(localStorage.getItem('langKey'));

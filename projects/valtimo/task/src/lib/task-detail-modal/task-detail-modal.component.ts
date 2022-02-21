@@ -21,7 +21,7 @@ import {Task} from '../models';
 import {FormioSubmission, ValtimoFormioOptions, FormioOptionsImpl} from '@valtimo/components';
 import {FormSubmissionResult, FormAssociation, FormLinkService} from '@valtimo/form-link';
 import {FormioForm} from 'angular-formio';
-import * as moment from 'moment';
+import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {ToastrService} from 'ngx-toastr';
 import {take} from 'rxjs/operators';

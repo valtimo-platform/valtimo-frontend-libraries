@@ -19,7 +19,7 @@ import {TaskService} from '@valtimo/task';
 import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {Location} from '@angular/common';
-import * as moment from 'moment';
+import moment from 'moment';
 import {DocumentService} from '@valtimo/document';
 import {DossierService} from '../dossier.service';
 

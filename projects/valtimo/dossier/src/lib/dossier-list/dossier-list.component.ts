@@ -25,7 +25,7 @@ import {
   SortState,
   ProcessDocumentDefinition,
 } from '@valtimo/document';
-import * as moment from 'moment';
+import moment from 'moment';
 import {combineLatest, Subscription} from 'rxjs';
 import {DefaultTabs} from '../dossier-detail-tab-enum';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';

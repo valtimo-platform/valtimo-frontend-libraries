@@ -15,7 +15,7 @@
  */
 
 import {TypeConverter} from './type-converters.model';
-import * as moment from 'moment';
+import moment from 'moment';
 
 moment.locale(localStorage.getItem('langKey'));
 

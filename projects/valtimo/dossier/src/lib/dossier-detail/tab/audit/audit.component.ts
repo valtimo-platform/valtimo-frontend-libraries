@@ -16,13 +16,13 @@
 
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {TimelineItem, TimelineItemImpl} from '@valtimo/components';
-import * as moment from 'moment';
+import moment from 'moment';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentService, AuditEvent} from '@valtimo/document';
 import {NgxSpinnerService} from 'ngx-spinner';
 
 moment.locale(localStorage.getItem('langKey') || '');
-// moment.defaultFormat = 'DD MMM YYYY HH:mm';
+moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-audit',

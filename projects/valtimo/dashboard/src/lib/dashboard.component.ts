@@ -19,14 +19,14 @@ import {TranslateService} from '@ngx-translate/core';
 import {ContextService} from '@valtimo/context';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskDetailModalComponent, TaskService} from '@valtimo/task';
-import * as moment from 'moment';
+import moment from 'moment';
 import {take} from 'rxjs/operators';
 import {Task} from '@valtimo/task';
 import {BehaviorSubject} from 'rxjs';
 import {NgxSpinnerService} from 'ngx-spinner';
 
 moment.locale(localStorage.getItem('langKey') || '');
-// moment.defaultFormat = 'DD MMM YYYY HH:mm';
+moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
   selector: 'valtimo-dashboard',

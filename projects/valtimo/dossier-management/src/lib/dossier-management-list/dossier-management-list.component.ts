@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 import {DocumentService, DocumentDefinition, Page} from '@valtimo/document';
 import {Router} from '@angular/router';
-import * as moment from 'moment';
+import moment from 'moment';
 import {BehaviorSubject} from 'rxjs';
 
 moment.locale(localStorage.getItem('langKey') || '');

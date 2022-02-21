@@ -17,7 +17,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from '@valtimo/components';
-import * as moment from 'moment';
+import moment from 'moment';
 
 moment.locale(localStorage.getItem('langKey'));
 

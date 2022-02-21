@@ -26,7 +26,7 @@ import {
 } from '@angular/forms';
 import {FormField} from '../formfield.model';
 import {maxDate, minDate} from './date.validators';
-import * as moment from 'moment';
+import moment from 'moment';
 
 moment.locale(localStorage.getItem('langKey'));
 

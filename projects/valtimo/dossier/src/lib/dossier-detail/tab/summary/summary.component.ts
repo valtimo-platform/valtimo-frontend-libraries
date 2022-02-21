@@ -28,13 +28,12 @@ import {DocumentService, Document, ProcessDocumentInstance} from '@valtimo/docum
 import {TaskDetailModalComponent, TaskService} from '@valtimo/task';
 import {FormService} from '@valtimo/form';
 import {FormioOptionsImpl, ValtimoFormioOptions} from '@valtimo/components';
-
-import * as moment from 'moment';
+import moment from 'moment';
 import {FormioForm} from 'angular-formio';
 import {UserProviderService} from '@valtimo/security';
 
 moment.locale(localStorage.getItem('langKey') || '');
-// moment.defaultFormat = 'DD MMM YYYY HH:mm';
+moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-summary',
