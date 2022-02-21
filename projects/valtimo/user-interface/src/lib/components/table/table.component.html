@@ -69,7 +69,17 @@
 
 <ng-template #tableCellLoading>
   <td *ngFor="let column of columns" class="v-table__cell">
-    <span class="v-table__cell-content"><ngx-skeleton-loader></ngx-skeleton-loader></span>
+    <span class="v-table__cell-content"
+      ><ngx-skeleton-loader
+        appearance="line"
+        [theme]="{
+          width: '150px',
+          height: 'var(--v-line-height-smaller)',
+          margin: '0',
+          'background-color': 'var(--v-color-grey-5)'
+        }"
+      ></ngx-skeleton-loader
+    ></span>
   </td>
 </ng-template>
 
