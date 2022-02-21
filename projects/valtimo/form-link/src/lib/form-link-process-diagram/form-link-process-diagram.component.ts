@@ -25,7 +25,7 @@ import {
 } from '@angular/core';
 import {ProcessService, ProcessDefinition} from '@valtimo/process';
 
-import * as BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
+import BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
 import {ActivatedRoute} from '@angular/router';
 import {combineLatest} from 'rxjs';
 import {map} from 'rxjs/operators';

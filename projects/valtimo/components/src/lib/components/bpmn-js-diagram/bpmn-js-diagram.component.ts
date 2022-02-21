@@ -25,8 +25,8 @@ import {
   EventEmitter,
   OnInit,
 } from '@angular/core';
-import * as BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
-import * as heatmap from 'heatmap.js-fixed/build/heatmap.js';
+import BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
+import heatmap from 'heatmap.js-fixed/build/heatmap.js';
 
 @Component({
   selector: 'valtimo-bpmn-js-diagram',

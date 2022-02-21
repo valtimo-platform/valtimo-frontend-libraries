@@ -25,8 +25,8 @@ import {
 } from '@angular/core';
 import {ProcessService, ProcessDefinition} from '@valtimo/process';
 import {Heatpoint} from '../models';
-import * as BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
-import * as heatmap from 'heatmap.js-fixed/build/heatmap.js';
+import BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
+import heatmap from 'heatmap.js-fixed/build/heatmap.js';
 
 @Component({
   selector: 'valtimo-analyse-process-diagram',
