@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {TableColumn} from '../../models';
+import {TableColumn, TablePagination} from '../../models';
 
 @Component({
   selector: 'v-table',
@@ -32,6 +41,9 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
   @Input() editButtonTranslationKey!: string;
   @Input() mobileBreakpointPx: number = 768;
   @Input() amountOfLoadingRows: number = 3;
+  @Input() pagination?: TablePagination;
+
+  @Output() editButtonClicked: EventEmitter<any> = new EventEmitter();
 
   readonly isMobile$ = new BehaviorSubject<boolean>(false);
   readonly loading$ = new BehaviorSubject<boolean>(true);
@@ -41,6 +53,7 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private readonly breakpointObserver: BreakpointObserver) {}
 
   ngOnInit() {
+    console.log(this.pagination);
     this.openBreakpointSubscription();
   }
 

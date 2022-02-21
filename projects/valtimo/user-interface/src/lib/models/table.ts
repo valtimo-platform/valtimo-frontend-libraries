@@ -24,4 +24,11 @@ interface TableColumn {
   default?: boolean;
 }
 
-export {TableColumn};
+interface TablePagination {
+  collectionSize: number;
+  maxPaginationItemSize: number;
+  page: number;
+  size: number;
+}
+
+export {TableColumn, TablePagination};

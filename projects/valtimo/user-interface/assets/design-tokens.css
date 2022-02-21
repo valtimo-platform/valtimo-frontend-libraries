@@ -96,4 +96,5 @@
   --v-table-background-color: var(--v-color-white);
   --v-table-body-box-shadow: 0 3px 40px 0 rgba(0, 0, 0, 0.06);
   --v-table-cell-font-color: var(--v-color-grey-1);
+  --v-table-loading-skeleton-width: 100px;
 }

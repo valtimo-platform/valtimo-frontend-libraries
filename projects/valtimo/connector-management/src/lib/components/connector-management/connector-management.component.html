@@ -31,6 +31,9 @@
       [items]="obs.connectorInstances"
       [columns]="obs.columns"
       [showEditButtons]="true"
+      [amountOfLoadingRows]="2"
+      [pagination]="obs.pagination"
+      (editButtonClicked)="rowClicked($event)"
     ></v-table>
     <valtimo-widget *ngIf="obs.loading === false; else loading">
       <valtimo-list

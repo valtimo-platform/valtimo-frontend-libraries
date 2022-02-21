@@ -51,7 +51,7 @@
 <ng-template #tableEditButtonCell let-item="item">
   <td *ngIf="showEditButtons" class="v-table__cell v-table__cell--with-button">
     <span class="v-table__cell-button-container">
-      <v-button type="secondary">{{
+      <v-button type="secondary" (click)="editButtonClicked.emit(item)">{{
         editButtonTranslationKey || 'interface.edit' | translate
       }}</v-button>
     </span>
@@ -73,7 +73,7 @@
       ><ngx-skeleton-loader
         appearance="line"
         [theme]="{
-          width: '150px',
+          width: 'var(--v-table-loading-skeleton-width)',
           height: 'var(--v-line-height-smaller)',
           margin: '0',
           'background-color': 'var(--v-color-grey-5)'
