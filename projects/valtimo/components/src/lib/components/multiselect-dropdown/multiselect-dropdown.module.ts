@@ -22,7 +22,7 @@ import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [MultiselectDropdownComponent],
-  imports: [CommonModule, ReactiveFormsModule, NgMultiSelectDropDownModule.forRoot(), FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgMultiSelectDropDownModule, FormsModule],
   exports: [MultiselectDropdownComponent],
 })
 export class MultiselectDropdownModule {}

@@ -19,9 +19,9 @@
 <p class="card-text">{{'dossierManagement.roles.rolesDescription' | translate}}</p>
 
 <valtimo-multiselect-dropdown
-        [items]="roles | async"
-        [selectedItems]="preSelectedItems | async"
-        [dropdownSettings]="dropdownSettings"
-        [placeHolder]="'dossierManagement.roles.rolesPlaceHolder'|translate"
-        (itemsSelected)="onSelectedItems($event)"
+  [items]="roles | async"
+  [selectedItems]="preSelectedItems | async"
+  [dropdownSettings]="dropdownSettings"
+  [placeHolder]="'dossierManagement.roles.rolesPlaceHolder'|translate"
+  (itemsSelected)="onSelectedItems($event)"
 ></valtimo-multiselect-dropdown>

@@ -53,14 +53,14 @@ export class DossierManagementRolesComponent implements OnInit {
     this.loadAllRoles();
   }
 
-  loadAllRoles() {
+  loadAllRoles(): void {
     this.authorityService.query().subscribe(result => {
       this.roles.next(result.body);
       this.loadDocumentRoles();
     });
   }
 
-  loadDocumentRoles() {
+  loadDocumentRoles(): void {
     if (this.documentDefinitionName) {
       this.documentService.getDocumentRoles(this.documentDefinitionName).subscribe(
         result => {
@@ -77,7 +77,7 @@ export class DossierManagementRolesComponent implements OnInit {
     }
   }
 
-  onSelectedItems(data: any) {
+  onSelectedItems(data: any): void {
     const roles = this.returnArrayOfString(data);
 
     if (isEqual(roles, this.preSelectedItems.value)) {
@@ -103,9 +103,6 @@ export class DossierManagementRolesComponent implements OnInit {
    * or an array of object with name parameters (i.e. [{"name": "ROLE_ADMIN"},{"name":"ROLE_DEVELOPER}]
    *
    * This method will always make sure an array of strings is returned
-   *
-   * @param data
-   * @private
    */
   private returnArrayOfString(data): Array<String> {
     return data.map(el => {
