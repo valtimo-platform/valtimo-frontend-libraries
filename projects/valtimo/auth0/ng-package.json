@@ -4,8 +4,5 @@
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "allowedNonPeerDependencies": [
-    "auth0-js",
-    "@auth0/angular-jwt"
-  ]
+  "allowedNonPeerDependencies": ["auth0-js", "@auth0/angular-jwt"]
 }

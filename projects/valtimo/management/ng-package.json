@@ -10,4 +10,5 @@
     "@ngx-translate/core",
     "@ngx-translate/http-loader",
     "@ng-bootstrap/ng-bootstrap"
-  ]}
+  ]
+}

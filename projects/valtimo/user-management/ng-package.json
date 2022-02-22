@@ -4,7 +4,5 @@
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "allowedNonPeerDependencies": [
-    "@ng-bootstrap/ng-bootstrap"
-  ]
+  "allowedNonPeerDependencies": ["@ng-bootstrap/ng-bootstrap"]
 }
