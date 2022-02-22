@@ -16,6 +16,12 @@
  *
  */
 
-export * from './button';
-export * from './table';
-export * from './select';
+type SelectItemId = string | number;
+
+interface SelectItem {
+  id: SelectItemId;
+  text?: string;
+  translationKey?: string;
+}
+
+export {SelectItem, SelectItemId};

@@ -14,11 +14,50 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {SelectItem, SelectItemId} from '../../models';
+import {BehaviorSubject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'v-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
 })
-export class SelectComponent {}
+export class SelectComponent implements OnInit, OnDestroy {
+  @Input() items: Array<SelectItem> = [];
+  @Input() defaultSelection!: SelectItem;
+  @Input() clearable: boolean = true;
+
+  @Output() selectedIdChange: EventEmitter<SelectItemId> = new EventEmitter();
+
+  selectedItemId$ = new BehaviorSubject<SelectItemId>('');
+
+  private selectedItemIdSubscription!: Subscription;
+
+  selectedItemChange(id: SelectItemId): void {
+    this.selectedItemId$.next(id);
+  }
+
+  ngOnInit() {
+    this.setDefaultSelection();
+    this.openSelectedItemIdSubscription();
+  }
+
+  ngOnDestroy() {
+    this.selectedItemIdSubscription?.unsubscribe();
+  }
+
+  private setDefaultSelection(): void {
+    if (this.defaultSelection) {
+      this.selectedItemId$.next(this.defaultSelection.id);
+    }
+  }
+
+  private openSelectedItemIdSubscription(): void {
+    this.selectedItemIdSubscription = this.selectedItemId$.subscribe(id => {
+      if (id) {
+        this.selectedIdChange.emit(id);
+      }
+    });
+  }
+}

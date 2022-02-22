@@ -26,7 +26,7 @@ import {
 } from '@angular/core';
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {TableColumn, TablePagination} from '../../models';
+import {SelectItem, TableColumn, TablePagination} from '../../models';
 
 @Component({
   selector: 'v-table',
@@ -47,6 +47,13 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
 
   readonly isMobile$ = new BehaviorSubject<boolean>(false);
   readonly loading$ = new BehaviorSubject<boolean>(true);
+
+  readonly paginationOptions: Array<SelectItem> = [
+    {id: '10', text: '10'},
+    {id: '25', text: '25'},
+    {id: '50', text: '50'},
+    {id: '100', text: '100'},
+  ];
 
   private breakpointSubscription!: Subscription;
 

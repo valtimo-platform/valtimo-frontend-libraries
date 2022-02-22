@@ -18,6 +18,7 @@
   <ng-container *ngTemplateOutlet="tableHead"></ng-container>
   <ng-container *ngTemplateOutlet="tableBody"></ng-container>
   <ng-container *ngTemplateOutlet="tableBodyLoading"></ng-container>
+  <ng-container *ngTemplateOutlet="paginationContainer"></ng-container>
 </table>
 
 <ng-template #tableHead>
@@ -91,4 +92,14 @@
       }}</v-button>
     </span>
   </td>
+</ng-template>
+
+<ng-template #paginationContainer>
+  <ng-container *ngIf="pagination">
+    <v-select
+      [items]="paginationOptions"
+      [clearable]="false"
+      [defaultSelection]="paginationOptions[0]"
+    ></v-select>
+  </ng-container>
 </ng-template>

@@ -21,10 +21,18 @@ import {LayoutModule} from '@angular/cdk/layout';
 import {TranslateModule} from '@ngx-translate/core';
 import {ButtonModule} from '../button/button.module';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
+import {SelectModule} from '../select/select.module';
 
 @NgModule({
   declarations: [TableComponent],
-  imports: [CommonModule, LayoutModule, TranslateModule, ButtonModule, NgxSkeletonLoaderModule],
+  imports: [
+    CommonModule,
+    LayoutModule,
+    TranslateModule,
+    ButtonModule,
+    NgxSkeletonLoaderModule,
+    SelectModule,
+  ],
   exports: [TableComponent],
 })
 export class TableModule {}
