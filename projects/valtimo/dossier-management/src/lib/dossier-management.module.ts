@@ -41,7 +41,6 @@ import {DossierManagementRolesComponent} from './dossier-management-roles/dossie
     DossierManagementDetailComponent,
     DossierManagementConnectModalComponent,
     DossierManagementRemoveModalComponent,
-    DossierManagementRolesComponent,
     DossierManagementUploadComponent,
     DossierManagementRolesComponent,
   ],

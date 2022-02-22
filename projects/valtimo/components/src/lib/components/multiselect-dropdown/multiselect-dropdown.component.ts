@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'valtimo-multiselect-dropdown',
   templateUrl: './multiselect-dropdown.component.html',
   styleUrls: ['./multiselect-dropdown.component.scss'],
 })
-export class MultiselectDropdownComponent implements OnInit {
+export class MultiselectDropdownComponent {
   @Input() selectedItems: Array<String>;
   @Input() items = [];
   @Input() placeHolder: String;
@@ -33,10 +33,6 @@ export class MultiselectDropdownComponent implements OnInit {
     allowSearchFilter: true,
   };
   @Output() itemsSelected = new EventEmitter();
-
-  constructor() {}
-
-  ngOnInit(): void {}
 
   onItemsSelected() {
     this.itemsSelected.emit(this.selectedItems);

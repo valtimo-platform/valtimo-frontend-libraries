@@ -83,8 +83,8 @@ export class DocumentService {
     );
   }
 
-  public modifyDocumentRoles(documentDefinitionName: string, roles: any) {
-    return this.http.put(
+  public modifyDocumentRoles(documentDefinitionName: string, roles: any): Observable<void> {
+    return this.http.put<void>(
       `${this.valtimoEndpointUri}document-definition/${documentDefinitionName}/roles`,
       roles
     );
