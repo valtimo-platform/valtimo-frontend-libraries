@@ -7,6 +7,7 @@
   },
   "allowedNonPeerDependencies": [
     "ngx-skeleton-loader",
-    "@ng-select/ng-select"
+    "@ng-select/ng-select",
+    "@angular/cdk"
   ]
 }
