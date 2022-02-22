@@ -4,5 +4,9 @@
   "assets": ["./assets"],
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "ngx-skeleton-loader",
+    "@ng-select/ng-select"
+  ]
 }
