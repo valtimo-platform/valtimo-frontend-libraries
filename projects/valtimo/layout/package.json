@@ -55,7 +55,6 @@
     "summernote": "^0.8.10",
     "sweetalert2": "^7.26.28",
     "tinycolor2": "^1.2.1",
-    "tslib": "^2.0.0",
-    "ng-multiselect-dropdown": "^0.3.8"
+    "tslib": "^2.0.0"
   }
 }
