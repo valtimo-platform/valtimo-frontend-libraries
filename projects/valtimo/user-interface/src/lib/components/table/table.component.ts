@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {SelectItem, TableColumn, TablePagination} from '../../models';
@@ -33,7 +24,7 @@ import {SelectItem, TableColumn, TablePagination} from '../../models';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit, OnDestroy, OnChanges {
+export class TableComponent implements OnInit, OnDestroy {
   @Input() items!: Array<Object>;
   @Input() columns!: Array<TableColumn>;
   @Input() loading: boolean = false;
@@ -46,7 +37,6 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
   @Output() editButtonClicked: EventEmitter<any> = new EventEmitter();
 
   readonly isMobile$ = new BehaviorSubject<boolean>(false);
-  readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly paginationOptions: Array<SelectItem> = [
     {id: '10', text: '10'},
@@ -66,14 +56,6 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnDestroy() {
     this.breakpointSubscription?.unsubscribe();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    const loadingChange = changes?.loading;
-
-    if (loadingChange) {
-      this.loading$.next(loadingChange.currentValue);
-    }
   }
 
   getArrayOfLength(length: number): Array<0> {
