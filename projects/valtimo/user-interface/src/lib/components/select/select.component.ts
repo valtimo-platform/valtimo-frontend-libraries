@@ -27,6 +27,7 @@ export class SelectComponent implements OnInit, OnDestroy {
   @Input() items: Array<SelectItem> = [];
   @Input() defaultSelection!: SelectItem;
   @Input() clearable: boolean = true;
+  @Input() disabled: boolean = false;
 
   @Output() selectedIdChange: EventEmitter<SelectItemId> = new EventEmitter();
 
@@ -48,8 +49,11 @@ export class SelectComponent implements OnInit, OnDestroy {
   }
 
   private setDefaultSelection(): void {
-    if (this.defaultSelection) {
-      this.selectedItemId$.next(this.defaultSelection.id);
+    const itemsIds = this.items.map(item => item.id);
+    const defaultSelectionId = this.defaultSelection?.id;
+
+    if (defaultSelectionId && itemsIds.includes(defaultSelectionId)) {
+      this.selectedItemId$.next(defaultSelectionId);
     }
   }
 

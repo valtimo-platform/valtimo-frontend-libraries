@@ -18,6 +18,7 @@
   [ngModel]="selectedItemId$ | async"
   (ngModelChange)="selectedItemChange($event)"
   [clearable]="clearable"
+  [disabled]="disabled"
 >
   <ng-option *ngFor="let item of items" [value]="item.id">{{
     item.translationKey ? (item.translationKey | translate) : item.text
