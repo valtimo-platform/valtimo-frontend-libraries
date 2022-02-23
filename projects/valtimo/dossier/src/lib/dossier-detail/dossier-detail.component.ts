@@ -30,6 +30,7 @@ import {TabService} from '../tab.service';
 import {ProcessService} from '@valtimo/process';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {ConfigService} from '@valtimo/config'
+import * as moment from 'moment';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -118,8 +119,14 @@ export class DossierDetailComponent implements OnInit {
           let label = customDossierHeaderItems[i]['label'] || '';
           let value = '';
           for (let val of customDossierHeaderItems[i]['propertyPaths'] || '') {
+            if (customDossierHeaderItems[i]['propertyPaths'].indexOf(val) > 0) {
+              value += ' ';
+            }
             value += val.split('.').reduce((o, i) => o[i], this.document.content) || customDossierHeaderItems[i]['noValueText'] || '';
-            value += ' ';
+          }
+          let regex = new RegExp('(T\\d\\d:\\d\\d:\\d\\d[\+\-])');
+          if (regex.test(value)) {
+            value = moment(value).format('DD-MM-YYYY');
           }
           let columnSize = customDossierHeaderItems[i]['columnSize'] || 3;
           let textSize = customDossierHeaderItems[i]['textSize'] || 'md';
