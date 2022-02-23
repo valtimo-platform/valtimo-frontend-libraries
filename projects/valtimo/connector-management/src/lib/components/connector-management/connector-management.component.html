@@ -34,6 +34,7 @@
       [amountOfLoadingRows]="2"
       [pagination]="obs.pagination"
       (editButtonClicked)="rowClicked($event)"
+      (paginationSizeSet)="paginationSet($event)"
     ></v-table>
     <valtimo-widget *ngIf="obs.loading === false; else loading">
       <valtimo-list

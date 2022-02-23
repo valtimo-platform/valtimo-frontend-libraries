@@ -99,8 +99,9 @@
     <v-select
       [items]="paginationOptions"
       [clearable]="false"
-      [defaultSelection]="paginationOptions[0]"
+      [defaultSelection]="defaultPaginationSize || paginationOptions[0]"
       [disabled]="loading"
+      (selectedChange)="paginationSizeSet.emit($event)"
     ></v-select>
   </ng-container>
 </ng-template>

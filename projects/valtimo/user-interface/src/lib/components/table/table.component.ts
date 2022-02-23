@@ -35,14 +35,17 @@ export class TableComponent implements OnInit, OnDestroy {
   @Input() pagination?: TablePagination;
 
   @Output() editButtonClicked: EventEmitter<any> = new EventEmitter();
+  @Output() paginationSizeSet: EventEmitter<number> = new EventEmitter();
+
+  defaultPaginationSize!: SelectItem;
 
   readonly isMobile$ = new BehaviorSubject<boolean>(false);
 
   readonly paginationOptions: Array<SelectItem> = [
-    {id: '10', text: '10'},
-    {id: '25', text: '25'},
-    {id: '50', text: '50'},
-    {id: '100', text: '100'},
+    {id: 10, text: '10'},
+    {id: 25, text: '25'},
+    {id: 50, text: '50'},
+    {id: 100, text: '100'},
   ];
 
   private breakpointSubscription!: Subscription;
@@ -50,7 +53,7 @@ export class TableComponent implements OnInit, OnDestroy {
   constructor(private readonly breakpointObserver: BreakpointObserver) {}
 
   ngOnInit() {
-    console.log(this.pagination);
+    this.setDefaultPaginationSize();
     this.openBreakpointSubscription();
   }
 
@@ -72,5 +75,15 @@ export class TableComponent implements OnInit, OnDestroy {
           this.isMobile$.next(true);
         }
       });
+  }
+
+  private setDefaultPaginationSize(): void {
+    const pagination = this.pagination;
+    const defaultPaginationOption =
+      pagination && this.paginationOptions.find(option => option.id === pagination.size);
+
+    if (defaultPaginationOption) {
+      this.defaultPaginationSize = defaultPaginationOption;
+    }
   }
 }
