@@ -112,7 +112,6 @@ export class DossierDetailComponent implements OnInit {
   private getCustomHeaderTitle() {
     let customDossierHeaderItems = this.configService.config['customDossierHeader'][this.documentDefinitionName.toLowerCase()] || [];
     if (customDossierHeaderItems.length > 0) {
-      console.log('$$$$$$$$$$$$$$$$$$$$$');
       this.documentService.getDocument(this.documentId).subscribe(document => {
         this.document = document;
         for (let i in customDossierHeaderItems) {
