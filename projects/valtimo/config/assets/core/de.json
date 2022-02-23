@@ -325,7 +325,8 @@
     "noSearchResults": "Keine Ergebnisse",
     "loading": "Lädt...",
     "edit": "Bearbeiten",
-    "noItemsFound": "Keine Elemente gefunden"
+    "noItemsFound": "Keine Elemente gefunden",
+    "clearAll": "Alles löschen"
   },
   "assignTask": {
     "assignedTo": "User-Zuordnung: ",

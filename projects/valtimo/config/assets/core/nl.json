@@ -325,7 +325,8 @@
     "noSearchResults": "Geen resultaten",
     "loading": "Aan het laden...",
     "edit": "Aanpassen",
-    "noItemsFound": "Geen items gevonden"
+    "noItemsFound": "Geen items gevonden",
+    "clearAll": "Alles wissen"
   },
   "assignTask": {
     "assignedTo": "Toegewezen aan ",

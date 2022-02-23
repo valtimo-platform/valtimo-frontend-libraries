@@ -30,6 +30,7 @@ export class SelectComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean = false;
   @Input() multiple: boolean = false;
   @Input() notFoundText!: string;
+  @Input() clearAllText!: string;
   @Output() selectedChange: EventEmitter<SelectedValue> = new EventEmitter();
 
   selected$ = new BehaviorSubject<SelectedValue>('');

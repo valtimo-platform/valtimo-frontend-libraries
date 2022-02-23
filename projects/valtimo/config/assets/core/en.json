@@ -325,7 +325,8 @@
     "noSearchResults": "No results",
     "loading": "Loading...",
     "edit": "Edit",
-    "noItemsFound": "No items found"
+    "noItemsFound": "No items found",
+    "clearAll": "Clear all"
   },
   "assignTask": {
     "assignedTo": "Assigned to ",

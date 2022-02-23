@@ -20,7 +20,8 @@
   [clearable]="clearable"
   [disabled]="disabled"
   [multiple]="multiple"
-  [notFoundText]="notFoundText ? notFoundText : ('interface.noItemsFound' | translate)"
+  [notFoundText]="notFoundText || ('interface.noItemsFound' | translate)"
+  [clearAllText]="clearAllText || ('interface.clearAll' | translate)"
 >
   <ng-option *ngFor="let item of items" [value]="item.id">{{
     item.translationKey ? (item.translationKey | translate) : item.text
