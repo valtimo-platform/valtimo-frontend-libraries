@@ -326,7 +326,9 @@
     "loading": "Aan het laden...",
     "edit": "Aanpassen",
     "noItemsFound": "Geen items gevonden",
-    "clearAll": "Alles wissen"
+    "clearAll": "Alles wissen",
+    "show": "Toon",
+    "items": "items"
   },
   "assignTask": {
     "assignedTo": "Toegewezen aan ",

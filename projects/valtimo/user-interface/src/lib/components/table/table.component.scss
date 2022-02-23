@@ -103,3 +103,24 @@
 ngx-skeleton-loader {
   display: flex;
 }
+
+.v-table__pagination-size-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-block-start: var(--v-table-pagination-margin-block);
+
+  span:not(:last-child) {
+    margin-inline-end: var(--v-table-pagination-size-spacing-inline);
+  }
+}
+
+.v-table__pagination-size-text {
+  color: var(--v-table-pagination-size-text-color);
+  font-size: var(--v-table-pagination-size-text-font-size);
+  font-weight: var(--v-table-pagination-size-text-font-weight);
+}
+
+.v-table__pagination-size-select {
+  display: flex;
+}

@@ -326,7 +326,9 @@
     "loading": "Lädt...",
     "edit": "Bearbeiten",
     "noItemsFound": "Keine Elemente gefunden",
-    "clearAll": "Alles löschen"
+    "clearAll": "Alles löschen",
+    "show": "Zeig",
+    "items": "Elemente"
   },
   "assignTask": {
     "assignedTo": "User-Zuordnung: ",

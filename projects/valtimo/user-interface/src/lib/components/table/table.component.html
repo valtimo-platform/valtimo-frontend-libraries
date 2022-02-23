@@ -96,12 +96,18 @@
 
 <ng-template #paginationContainer>
   <ng-container *ngIf="pagination">
-    <v-select
-      [items]="paginationOptions"
-      [clearable]="false"
-      [defaultSelection]="defaultPaginationSize || paginationOptions[0]"
-      [disabled]="loading"
-      (selectedChange)="paginationSizeSet.emit($event)"
-    ></v-select>
+    <div class="v-table__pagination-size-container">
+      <span class="v-table__pagination-size-text">{{ 'interface.show' | translate }}</span>
+      <span class="v-table__pagination-size-select">
+        <v-select
+          [items]="paginationOptions"
+          [clearable]="false"
+          [defaultSelection]="defaultPaginationSize || paginationOptions[0]"
+          [disabled]="loading"
+          (selectedChange)="paginationSizeSet.emit($event)"
+        ></v-select>
+      </span>
+      <span class="v-table__pagination-size-text">{{ 'interface.items' | translate }}</span>
+    </div>
   </ng-container>
 </ng-template>

@@ -326,7 +326,9 @@
     "loading": "Loading...",
     "edit": "Edit",
     "noItemsFound": "No items found",
-    "clearAll": "Clear all"
+    "clearAll": "Clear all",
+    "show": "Show",
+    "items": "items"
   },
   "assignTask": {
     "assignedTo": "Assigned to ",
