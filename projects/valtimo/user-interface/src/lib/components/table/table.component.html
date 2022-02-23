@@ -154,12 +154,15 @@
 </ng-template>
 
 <ng-template #paginationNavigation>
-  <div class="v-table__pagination-navigation-container">
+  <div
+    class="v-table__pagination-navigation-container"
+    *ngIf="pagination && pagination.collectionSize > pagination.size"
+  >
     <span>
-      <v-button type="text" [disabled]="true">{{ 'interface.previous' | translate }}</v-button>
+      <v-button type="text" [disabled]="loading">{{ 'interface.previous' | translate }}</v-button>
     </span>
     <span>
-      <v-button type="text" [disabled]="true">{{ 'interface.next' | translate }}</v-button>
+      <v-button type="text" [disabled]="loading">{{ 'interface.next' | translate }}</v-button>
     </span>
   </div>
 </ng-template>

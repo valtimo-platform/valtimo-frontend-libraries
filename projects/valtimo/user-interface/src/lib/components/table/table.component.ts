@@ -37,6 +37,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
   @Output() editButtonClicked: EventEmitter<any> = new EventEmitter();
   @Output() paginationSizeSet: EventEmitter<number> = new EventEmitter();
+  @Output() paginationPageSet: EventEmitter<number> = new EventEmitter();
 
   defaultPaginationSize!: SelectItem;
 
