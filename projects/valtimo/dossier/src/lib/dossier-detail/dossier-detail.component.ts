@@ -29,6 +29,7 @@ import {Location} from '@angular/common';
 import {TabService} from '../tab.service';
 import {ProcessService} from '@valtimo/process';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
+import {ConfigService} from '@valtimo/config'
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -48,6 +49,7 @@ export class DossierDetailComponent implements OnInit {
   public processDefinitionListFields: Array<any> = [];
   public processDocumentDefinitions: ProcessDocumentDefinition[] = [];
   private initialTabName: string;
+  public customDossierHeaderItems: Array<any> = [];
   @ViewChild('supportingProcessStartModal')
   supportingProcessStart: DossierSupportingProcessStartModalComponent;
 
@@ -59,7 +61,8 @@ export class DossierDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private tabService: TabService
+    private tabService: TabService,
+    private configService: ConfigService
   ) {
     this.snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = this.snapshot.get('documentDefinitionName') || '';
@@ -80,6 +83,7 @@ export class DossierDetailComponent implements OnInit {
       .subscribe(definition => {
         this.documentDefinitionNameTitle = definition.schema.title;
       });
+    this.getCustomHeaderTitle();
     this.initialTabName = this.snapshot.get('tab');
     this.tabLoader.initial(this.initialTabName);
     this.getAllAssociatedProcessDefinitions();
@@ -103,5 +107,33 @@ export class DossierDetailComponent implements OnInit {
 
   startProcess(processDocumentDefinition: ProcessDocumentDefinition) {
     this.supportingProcessStart.openModal(processDocumentDefinition, this.documentId);
+  }
+
+  private getCustomHeaderTitle() {
+    let customDossierHeaderItems = this.configService.config['customDossierHeader'][this.documentDefinitionName.toLowerCase()] || [];
+    if (customDossierHeaderItems.length > 0) {
+      console.log('$$$$$$$$$$$$$$$$$$$$$');
+      this.documentService.getDocument(this.documentId).subscribe(document => {
+        this.document = document;
+        for (let i in customDossierHeaderItems) {
+          let label = customDossierHeaderItems[i]['label'] || '';
+          let value = '';
+          for (let val of customDossierHeaderItems[i]['propertyPaths'] || '') {
+            value += val.split('.').reduce((o, i) => o[i], this.document.content) || customDossierHeaderItems[i]['noValueText'] || '';
+            value += ' ';
+          }
+          let columnSize = customDossierHeaderItems[i]['columnSize'] || 3;
+          let textSize = customDossierHeaderItems[i]['textSize'] || 'md';
+          let customClass = customDossierHeaderItems[i]['customClass'] || '';
+          this.customDossierHeaderItems.push({
+            'label': label,
+            'value': value,
+            'columnSize': columnSize,
+            'textSize': textSize,
+            'customClass': customClass,
+          });
+        }
+      })
+    }
   }
 }
