@@ -16,6 +16,6 @@
  *
  */
 
-type ButtonType = 'primary' | 'secondary' | 'success';
+type ButtonType = 'primary' | 'secondary' | 'success' | 'text';
 
 export {ButtonType};

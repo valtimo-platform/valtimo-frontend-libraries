@@ -330,7 +330,9 @@
     "show": "Zeig",
     "items": "Elemente",
     "of": "von",
-    "visible": "sichtbar"
+    "visible": "sichtbar",
+    "next": "Nächste >",
+    "previous": "< Vorherige"
   },
   "assignTask": {
     "assignedTo": "User-Zuordnung: ",

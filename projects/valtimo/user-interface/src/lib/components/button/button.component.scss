@@ -110,6 +110,36 @@
   }
 }
 
+.v-button--text {
+  padding: 0;
+  background-color: transparent;
+  color: var(--v-button-primary-bg-color);
+  font-size: var(--v-button-text-font-size);
+
+  &:hover {
+    background-color: transparent;
+    color: var(--v-button-primary-hover-bg-color);
+  }
+
+  &:active {
+    background-color: transparent;
+    color: var(--v-button-primary-active-bg-color);
+  }
+}
+
+.v-button--text-disabled {
+  cursor: var(--v-cursor-disabled);
+  color: var(--v-button-disabled-font-color);
+
+  &:hover {
+    color: var(--v-button-disabled-font-color);
+  }
+
+  &:active {
+    color: var(--v-button-disabled-font-color);
+  }
+}
+
 .v-button__icon-container {
   position: absolute;
   display: inline-flex;

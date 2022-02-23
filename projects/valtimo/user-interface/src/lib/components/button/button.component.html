@@ -22,7 +22,9 @@
     'v-button--primary': isPrimary,
     'v-button--secondary': isSecondary,
     'v-button--success': isSuccess,
-    'v-button--disabled': disabled
+    'v-button--disabled': !isText && disabled,
+    'v-button--text': isText,
+    'v-button--text-disabled': isText && disabled
   }"
   [disabled]="disabled"
 >
@@ -32,7 +34,7 @@
 
 <ng-template #buttonIcon>
   <span
-    *ngIf="disabled || mdiIcon"
+    *ngIf="!isText && (disabled || mdiIcon)"
     class="v-button__icon-container"
     [ngClass]="[!disabled && isSecondary ? 'v-button__icon-container--secondary' : '']"
   >

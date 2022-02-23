@@ -330,7 +330,9 @@
     "show": "Toon",
     "items": "items",
     "of": "van",
-    "visible": "zichtbaar"
+    "visible": "zichtbaar",
+    "next": "Volgende >",
+    "previous": "< Vorige"
   },
   "assignTask": {
     "assignedTo": "Toegewezen aan ",

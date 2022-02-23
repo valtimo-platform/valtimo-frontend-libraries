@@ -31,6 +31,7 @@ export class ButtonComponent implements OnInit {
   isPrimary!: boolean;
   isSecondary!: boolean;
   isSuccess!: boolean;
+  isText!: boolean;
 
   ngOnInit(): void {
     const type = this.type;
@@ -38,5 +39,6 @@ export class ButtonComponent implements OnInit {
     this.isPrimary = type === 'primary';
     this.isSecondary = type === 'secondary';
     this.isSuccess = type === 'success';
+    this.isText = type === 'text';
   }
 }

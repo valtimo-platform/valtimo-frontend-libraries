@@ -330,7 +330,9 @@
     "show": "Show",
     "items": "items",
     "of": "of",
-    "visible": "visible"
+    "visible": "visible",
+    "next": "Next >",
+    "previous": "< Previous"
   },
   "assignTask": {
     "assignedTo": "Assigned to ",

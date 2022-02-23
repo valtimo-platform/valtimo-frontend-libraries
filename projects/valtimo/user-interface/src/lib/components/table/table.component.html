@@ -14,12 +14,16 @@
   ~ limitations under the License.
   -->
 
-<table class="v-table">
-  <ng-container *ngTemplateOutlet="tableHead"></ng-container>
-  <ng-container *ngTemplateOutlet="tableBody"></ng-container>
-  <ng-container *ngTemplateOutlet="tableBodyLoading"></ng-container>
-  <ng-container *ngTemplateOutlet="paginationContainer"></ng-container>
-</table>
+<ng-container>
+  <div class="v-table-container">
+    <table class="v-table">
+      <ng-container *ngTemplateOutlet="tableHead"></ng-container>
+      <ng-container *ngTemplateOutlet="tableBody"></ng-container>
+      <ng-container *ngTemplateOutlet="tableBodyLoading"></ng-container>
+    </table>
+    <ng-container *ngTemplateOutlet="paginationContainer"></ng-container>
+  </div>
+</ng-container>
 
 <ng-template #tableHead>
   <thead *ngIf="columns">
@@ -95,12 +99,13 @@
 </ng-template>
 
 <ng-template #paginationContainer>
-  <ng-container *ngIf="pagination">
+  <div *ngIf="pagination" class="v-table__pagination-container">
     <div class="v-table__pagination-size-container">
       <ng-container *ngTemplateOutlet="paginationSizeSelect"></ng-container>
       <ng-container *ngTemplateOutlet="paginationSizeAmountText"></ng-container>
     </div>
-  </ng-container>
+    <ng-container *ngTemplateOutlet="paginationNavigation"></ng-container>
+  </div>
 </ng-template>
 
 <ng-template #paginationSizeSelect>
@@ -146,4 +151,15 @@
       }"
     ></ngx-skeleton-loader
   ></span>
+</ng-template>
+
+<ng-template #paginationNavigation>
+  <div class="v-table__pagination-navigation-container">
+    <span>
+      <v-button type="text" [disabled]="true">{{ 'interface.previous' | translate }}</v-button>
+    </span>
+    <span>
+      <v-button type="text" [disabled]="true">{{ 'interface.next' | translate }}</v-button>
+    </span>
+  </div>
 </ng-template>
