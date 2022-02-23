@@ -23,11 +23,11 @@
   }
   .ng-select.ng-select-opened > .ng-select-container .ng-arrow {
     top: -2px;
-    border-color: transparent transparent #999;
+    border-color: transparent transparent var(--v-select-arrow-color);
     border-width: 0 5px 5px;
   }
   .ng-select.ng-select-opened > .ng-select-container .ng-arrow:hover {
-    border-color: transparent transparent #333;
+    border-color: transparent transparent var(--v-select-arrow-color);
   }
   .ng-select.ng-select-opened.ng-select-top > .ng-select-container {
     border-top-right-radius: 0;
@@ -46,11 +46,11 @@
     border-bottom-left-radius: 0;
   }
   .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
-    border-color: #007eff;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(0, 126, 255, 0.1);
+    border-color: transparent;
+    box-shadow: none;
   }
   .ng-select.ng-select-disabled > .ng-select-container {
-    background-color: #f9f9f9;
+    color: var(--v-select-disabled-font-color);
   }
   .ng-select .ng-has-value .ng-placeholder {
     display: none;
@@ -59,11 +59,12 @@
     color: var(--v-select-font-color);
     background-color: var(--v-select-background-color);
     border-radius: var(--v-select-border-radius);
-    font-size: var(--v-select-font-size);
+    border: none;
+    min-height: 36px;
     align-items: center;
   }
   .ng-select .ng-select-container:hover {
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: none;
   }
   .ng-select .ng-select-container .ng-value-container {
     align-items: center;
@@ -75,7 +76,7 @@
     padding-left: 0;
   }
   .ng-select .ng-select-container .ng-value-container .ng-placeholder {
-    color: #999;
+    color: var(--v-select-placeholder-font-color);
   }
   .ng-select.ng-select-single .ng-select-container {
     height: 36px;
@@ -115,8 +116,8 @@
   .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
     font-size: 0.9em;
     margin-bottom: 5px;
-    color: #333;
-    background-color: #ebf5ff;
+    color: var(--v-select-font-color);
+    background-color: var(--v-select-multi-value-background-color);
     border-radius: 2px;
     margin-right: 5px;
   }

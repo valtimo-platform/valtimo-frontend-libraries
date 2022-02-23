@@ -99,9 +99,13 @@
   --v-table-loading-skeleton-width: 100px;
   /* select */
   --v-select-background-color: var(--v-color-grey-4);
+  --v-select-disabled-font-color: var(--v-color-grey-2);
+  --v-select-placeholder-font-color: var(--v-color-grey-2);
   --v-select-font-color: var(--v-color-grey-1);
+  --v-select-arrow-color: var(--v-color-grey-1);
   --v-select-border-radius: var(--v-border-radius-md);
   --v-select-min-height: 18px;
   --v-select-value-font-weight: var(--v-font-weight-bold);
   --v-select-font-size: var(--v-font-size-smaller);
+  --v-select-multi-value-background-color: var(--v-color-grey-3);
 }
