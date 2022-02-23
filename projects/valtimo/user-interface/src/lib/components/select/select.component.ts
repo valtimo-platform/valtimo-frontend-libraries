@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {SelectItem, SelectItemId} from '../../models';
+import {SelectedValue, SelectItem} from '../../models';
 import {BehaviorSubject, Subscription} from 'rxjs';
 
 @Component({
@@ -28,24 +28,25 @@ export class SelectComponent implements OnInit, OnDestroy {
   @Input() defaultSelection!: SelectItem;
   @Input() clearable: boolean = true;
   @Input() disabled: boolean = false;
+  @Input() multiple: boolean = false;
+  @Input() notFoundText!: string;
+  @Output() selectedChange: EventEmitter<SelectedValue> = new EventEmitter();
 
-  @Output() selectedIdChange: EventEmitter<SelectItemId> = new EventEmitter();
+  selected$ = new BehaviorSubject<SelectedValue>('');
 
-  selectedItemId$ = new BehaviorSubject<SelectItemId>('');
+  private selectedSubscription!: Subscription;
 
-  private selectedItemIdSubscription!: Subscription;
-
-  selectedItemChange(id: SelectItemId): void {
-    this.selectedItemId$.next(id);
+  setSelectedValue(selectedValue: SelectedValue): void {
+    this.selected$.next(selectedValue);
   }
 
   ngOnInit() {
     this.setDefaultSelection();
-    this.openSelectedItemIdSubscription();
+    this.openSelectedSubscription();
   }
 
   ngOnDestroy() {
-    this.selectedItemIdSubscription?.unsubscribe();
+    this.selectedSubscription?.unsubscribe();
   }
 
   private setDefaultSelection(): void {
@@ -53,14 +54,18 @@ export class SelectComponent implements OnInit, OnDestroy {
     const defaultSelectionId = this.defaultSelection?.id;
 
     if (defaultSelectionId && itemsIds.includes(defaultSelectionId)) {
-      this.selectedItemId$.next(defaultSelectionId);
+      if (this.multiple) {
+        this.selected$.next([defaultSelectionId]);
+      } else {
+        this.selected$.next(defaultSelectionId);
+      }
     }
   }
 
-  private openSelectedItemIdSubscription(): void {
-    this.selectedItemIdSubscription = this.selectedItemId$.subscribe(id => {
-      if (id) {
-        this.selectedIdChange.emit(id);
+  private openSelectedSubscription(): void {
+    this.selectedSubscription = this.selected$.subscribe(selectedValue => {
+      if (selectedValue) {
+        this.selectedChange.emit(selectedValue);
       }
     });
   }

@@ -324,7 +324,8 @@
     "typeToSearch": "Type here to search",
     "noSearchResults": "No results",
     "loading": "Loading...",
-    "edit": "Edit"
+    "edit": "Edit",
+    "noItemsFound": "No items found"
   },
   "assignTask": {
     "assignedTo": "Assigned to ",

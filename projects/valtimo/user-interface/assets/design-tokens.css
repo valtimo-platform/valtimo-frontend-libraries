@@ -108,4 +108,6 @@
   --v-select-value-font-weight: var(--v-font-weight-bold);
   --v-select-font-size: var(--v-font-size-smaller);
   --v-select-multi-value-background-color: var(--v-color-grey-3);
+  --v-select-multi-value-hover-background-color: var(--v-color-grey-2);
+  --v-select-multi-value-disabled-font-color: var(--v-color-grey-2);
 }

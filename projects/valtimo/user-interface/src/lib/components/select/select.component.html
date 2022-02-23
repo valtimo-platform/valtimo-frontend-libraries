@@ -15,10 +15,12 @@
   -->
 
 <ng-select
-  [ngModel]="selectedItemId$ | async"
-  (ngModelChange)="selectedItemChange($event)"
+  [ngModel]="selected$ | async"
+  (ngModelChange)="setSelectedValue($event)"
   [clearable]="clearable"
   [disabled]="disabled"
+  [multiple]="multiple"
+  [notFoundText]="notFoundText ? notFoundText : ('interface.noItemsFound' | translate)"
 >
   <ng-option *ngFor="let item of items" [value]="item.id">{{
     item.translationKey ? (item.translationKey | translate) : item.text

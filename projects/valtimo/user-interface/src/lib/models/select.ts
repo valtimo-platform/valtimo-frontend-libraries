@@ -17,6 +17,7 @@
  */
 
 type SelectItemId = string | number;
+type SelectedValue = SelectItemId | Array<SelectItemId>;
 
 interface SelectItem {
   id: SelectItemId;
@@ -24,4 +25,4 @@ interface SelectItem {
   translationKey?: string;
 }
 
-export {SelectItem, SelectItemId};
+export {SelectItem, SelectItemId, SelectedValue};
