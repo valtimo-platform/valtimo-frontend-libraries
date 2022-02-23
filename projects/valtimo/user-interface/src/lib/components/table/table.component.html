@@ -75,9 +75,9 @@
         appearance="line"
         [theme]="{
           width: 'var(--v-table-loading-skeleton-width)',
-          height: 'var(--v-line-height-smaller)',
+          height: 'var(--v-table-loading-skeleton-line-height)',
           margin: '0',
-          'background-color': 'var(--v-color-grey-5)'
+          'background-color': 'var(--v-table-loading-skeleton-bg-color)'
         }"
       ></ngx-skeleton-loader
     ></span>
@@ -97,17 +97,53 @@
 <ng-template #paginationContainer>
   <ng-container *ngIf="pagination">
     <div class="v-table__pagination-size-container">
-      <span class="v-table__pagination-size-text">{{ 'interface.show' | translate }}</span>
-      <span class="v-table__pagination-size-select">
-        <v-select
-          [items]="paginationOptions"
-          [clearable]="false"
-          [defaultSelection]="defaultPaginationSize || paginationOptions[0]"
-          [disabled]="loading"
-          (selectedChange)="paginationSizeSet.emit($event)"
-        ></v-select>
-      </span>
-      <span class="v-table__pagination-size-text">{{ 'interface.items' | translate }}</span>
+      <ng-container *ngTemplateOutlet="paginationSizeSelect"></ng-container>
+      <ng-container *ngTemplateOutlet="paginationSizeAmountText"></ng-container>
     </div>
   </ng-container>
+</ng-template>
+
+<ng-template #paginationSizeSelect>
+  <span class="v-table__pagination-size-text">{{ 'interface.show' | translate }}</span>
+  <span class="v-table__pagination-size-select">
+    <v-select
+      [items]="paginationOptions"
+      [clearable]="false"
+      [defaultSelection]="defaultPaginationSize || paginationOptions[0]"
+      [disabled]="loading"
+      (selectedChange)="paginationSizeSet.emit($event)"
+    ></v-select>
+  </span>
+  <span class="v-table__pagination-size-text">{{
+    itemsTranslationKey ? (itemsTranslationKey | translate) : ('interface.items' | translate)
+  }}</span>
+</ng-template>
+
+<ng-template #paginationSizeAmountText>
+  <ng-container *ngTemplateOutlet="paginationSizeAmountTextLoading"></ng-container>
+  <span class="v-table__pagination-amount-text" *ngIf="!loading && items && pagination">{{
+    items.length +
+      ' ' +
+      ('interface.of' | translate) +
+      ' ' +
+      pagination.collectionSize +
+      ' ' +
+      (itemsTranslationKey ? (itemsTranslationKey | translate) : ('interface.items' | translate)) +
+      ' ' +
+      ('interface.visible' | translate)
+  }}</span>
+</ng-template>
+
+<ng-template #paginationSizeAmountTextLoading>
+  <span class="v-table__pagination-amount-text" *ngIf="loading"
+    ><ngx-skeleton-loader
+      appearance="line"
+      [theme]="{
+        width: 'var(--v-table-loading-skeleton-width)',
+        height: 'var(--v-table-loading-skeleton-line-height)',
+        margin: '0',
+        'background-color': 'var(--v-table-loading-skeleton-pagination-size-bg-color)'
+      }"
+    ></ngx-skeleton-loader
+  ></span>
 </ng-template>

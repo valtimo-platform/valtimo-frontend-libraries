@@ -328,7 +328,9 @@
     "noItemsFound": "Geen items gevonden",
     "clearAll": "Alles wissen",
     "show": "Toon",
-    "items": "items"
+    "items": "items",
+    "of": "van",
+    "visible": "zichtbaar"
   },
   "assignTask": {
     "assignedTo": "Toegewezen aan ",
@@ -393,6 +395,7 @@
     "removeValue": "Waarde verwijderen",
     "goBack": "Ga terug",
     "autoSync": "Automatisch zaakdetails synchroniseren",
+    "tableItemsText": "connecties",
     "labels": {
       "name": "Naam",
       "typeName": "Connector"

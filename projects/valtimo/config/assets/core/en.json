@@ -328,7 +328,9 @@
     "noItemsFound": "No items found",
     "clearAll": "Clear all",
     "show": "Show",
-    "items": "items"
+    "items": "items",
+    "of": "of",
+    "visible": "visible"
   },
   "assignTask": {
     "assignedTo": "Assigned to ",
@@ -393,6 +395,7 @@
     "removeValue": "Remove value",
     "goBack": "Go back",
     "autoSync": "Automatically sync case details",
+    "tableItemsText": "connections",
     "labels": {
       "name": "Name",
       "typeName": "Connector"

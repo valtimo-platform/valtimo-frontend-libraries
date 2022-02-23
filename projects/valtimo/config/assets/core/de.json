@@ -328,7 +328,9 @@
     "noItemsFound": "Keine Elemente gefunden",
     "clearAll": "Alles löschen",
     "show": "Zeig",
-    "items": "Elemente"
+    "items": "Elemente",
+    "of": "von",
+    "visible": "sichtbar"
   },
   "assignTask": {
     "assignedTo": "User-Zuordnung: ",
@@ -393,6 +395,7 @@
     "removeValue": "Wert entfernen",
     "goBack": "Zurück",
     "autoSync": "Casedetails automatisch synchronisieren",
+    "tableItemsText": "Connectors",
     "labels": {
       "name": "Name",
       "typeName": "Connector"

@@ -124,3 +124,10 @@ ngx-skeleton-loader {
 .v-table__pagination-size-select {
   display: flex;
 }
+
+.v-table__pagination-amount-text {
+  margin-inline-start: var(--v-table-pagination-amount-text-margin-inline);
+  color: var(--v-table-pagination-size-text-color);
+  font-size: var(--v-table-pagination-size-text-font-size);
+  font-weight: var(--v-table-pagination-amount-text-font-weight);
+}

@@ -36,7 +36,8 @@
   --v-font-size-default: 14px;
   --v-font-size-larger: 16px;
   /* font weight */
-  --v-font-weight-light: 500;
+  --v-font-weight-light: 300;
+  --v-font-weight-regular: 500;
   --v-font-weight-bold: 700;
   /* line height */
   --v-line-height-smaller: 14px;
@@ -88,7 +89,7 @@
   --v-table-header-text-transform: uppercase;
   --v-table-header-font-size: var(--v-font-size-default);
   --v-table-header-letter-spacing: 3px;
-  --v-table-header-font-weight: var(--v-font-weight-light);
+  --v-table-header-font-weight: var(--v-font-weight-regular);
   --v-table-header-padding-block-end: var(--v-spacing-block-l);
   --v-table-border-spacing: 0px;
   --v-table-first-cell-padding-inline-start: var(--v-spacing-inline-2xl);
@@ -100,10 +101,15 @@
   --v-table-body-box-shadow: var(--v-box-shadow-medium);
   --v-table-cell-font-color: var(--v-color-grey-1);
   --v-table-loading-skeleton-width: 100px;
+  --v-table-loading-skeleton-line-height: var(--v-line-height-smaller);
+  --v-table-loading-skeleton-bg-color: var(--v-color-grey-5);
+  --v-table-loading-skeleton-pagination-size-bg-color: var(--v-color-grey-4);
   --v-table-pagination-margin-block: var(--v-spacing-block-xl);
   --v-table-pagination-size-text-color: var(--v-color-grey-1);
   --v-table-pagination-size-text-font-size: var(--v-font-size-smaller);
   --v-table-pagination-size-text-font-weight: var(--v-font-weight-bold);
+  --v-table-pagination-amount-text-font-weight: var(--v-font-weight-light);
+  --v-table-pagination-amount-text-margin-inline: var(--v-spacing-inline-2xl);
   --v-table-pagination-size-spacing-inline: var(--v-spacing-inline-sm);
   /* select */
   --v-select-background-color: var(--v-color-grey-4);

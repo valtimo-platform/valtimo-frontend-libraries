@@ -30,6 +30,7 @@ export class TableComponent implements OnInit, OnDestroy {
   @Input() loading: boolean = false;
   @Input() showEditButtons: boolean = false;
   @Input() editButtonTranslationKey!: string;
+  @Input() itemsTranslationKey!: string;
   @Input() mobileBreakpointPx: number = 768;
   @Input() amountOfLoadingRows: number = 3;
   @Input() pagination?: TablePagination;
@@ -53,6 +54,7 @@ export class TableComponent implements OnInit, OnDestroy {
   constructor(private readonly breakpointObserver: BreakpointObserver) {}
 
   ngOnInit() {
+    console.log(this.pagination);
     this.setDefaultPaginationSize();
     this.openBreakpointSubscription();
   }
