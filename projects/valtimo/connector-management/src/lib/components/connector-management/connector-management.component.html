@@ -63,7 +63,7 @@
 
 <ng-template #buttons let-loading="loading">
   <div class="btn-group mt-m3px mb-3 float-right">
-    <v-button (click)="showAddModal()" type="primary" mdiIcon="plus" [disabled]="loading">
+    <v-button (onClick)="showAddModal()" type="primary" mdiIcon="plus" [disabled]="loading">
       {{ 'connectorManagement.add' | translate }}
     </v-button>
   </div>

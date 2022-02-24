@@ -26,7 +26,7 @@ export class ButtonComponent implements OnInit {
   @Input() type: ButtonType = 'primary';
   @Input() mdiIcon!: string;
   @Input() disabled!: boolean;
-  @Output() click: EventEmitter<any> = new EventEmitter();
+  @Output() onClick: EventEmitter<any> = new EventEmitter();
 
   isPrimary!: boolean;
   isSecondary!: boolean;

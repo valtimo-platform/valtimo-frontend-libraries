@@ -99,24 +99,30 @@
 </ng-template>
 
 <ng-template #paginationContainer>
-  <div *ngIf="pagination" class="v-table__pagination-container">
+  <div *ngIf="pagination$ | async as paginationObject" class="v-table__pagination-container">
     <div class="v-table__pagination-size-container">
-      <ng-container *ngTemplateOutlet="paginationSizeSelect"></ng-container>
-      <ng-container *ngTemplateOutlet="paginationSizeAmountText"></ng-container>
+      <ng-container
+        *ngTemplateOutlet="paginationSizeSelect; context: {paginationObject: paginationObject}"
+      ></ng-container>
+      <ng-container
+        *ngTemplateOutlet="paginationSizeAmountText; context: {paginationObject: paginationObject}"
+      ></ng-container>
     </div>
-    <ng-container *ngTemplateOutlet="paginationNavigation"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="paginationNavigation; context: {paginationObject: paginationObject}"
+    ></ng-container>
   </div>
 </ng-template>
 
-<ng-template #paginationSizeSelect>
+<ng-template #paginationSizeSelect let-paginationObject="paginationObject">
   <span class="v-table__pagination-size-text">{{ 'interface.show' | translate }}</span>
   <span class="v-table__pagination-size-select">
     <v-select
       [items]="paginationOptions"
       [clearable]="false"
-      [defaultSelection]="defaultPaginationSize || paginationOptions[0]"
+      [defaultSelection]="(defaultPaginationSize$ | async) || paginationOptions[0]"
       [disabled]="loading"
-      (selectedChange)="paginationSizeSet.emit($event)"
+      (selectedChange)="setPaginationSize($event)"
     ></v-select>
   </span>
   <span class="v-table__pagination-size-text">{{
@@ -124,14 +130,14 @@
   }}</span>
 </ng-template>
 
-<ng-template #paginationSizeAmountText>
+<ng-template #paginationSizeAmountText let-paginationObject="paginationObject">
   <ng-container *ngTemplateOutlet="paginationSizeAmountTextLoading"></ng-container>
-  <span class="v-table__pagination-amount-text" *ngIf="!loading && items && pagination">{{
+  <span class="v-table__pagination-amount-text" *ngIf="!loading && items && paginationObject">{{
     items.length +
       ' ' +
       ('interface.of' | translate) +
       ' ' +
-      pagination.collectionSize +
+      paginationObject.collectionSize +
       ' ' +
       (itemsTranslationKey ? (itemsTranslationKey | translate) : ('interface.items' | translate)) +
       ' ' +
@@ -153,16 +159,20 @@
   ></span>
 </ng-template>
 
-<ng-template #paginationNavigation>
+<ng-template #paginationNavigation let-paginationObject="paginationObject">
   <div
     class="v-table__pagination-navigation-container"
-    *ngIf="pagination && pagination.collectionSize > pagination.size"
+    *ngIf="paginationObject && paginationObject.collectionSize > paginationObject.size"
   >
-    <span>
-      <v-button type="text" [disabled]="loading">{{ 'interface.previous' | translate }}</v-button>
+    <span *ngIf="paginationObject.page > 1">
+      <v-button (onClick)="setPage('previous')" type="text" [disabled]="loading">{{
+        'interface.previous' | translate
+      }}</v-button>
     </span>
-    <span>
-      <v-button type="text" [disabled]="loading">{{ 'interface.next' | translate }}</v-button>
+    <span *ngIf="paginationObject.page * paginationObject.size < paginationObject.collectionSize">
+      <v-button (onClick)="setPage('next')" type="text" [disabled]="loading">{{
+        'interface.next' | translate
+      }}</v-button>
     </span>
   </div>
 </ng-template>
