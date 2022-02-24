@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2022 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-.edit-taak {
-  ::ng-deep {
-    .list-inline {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-    }
-  }
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MultiselectDropdownComponent} from './multiselect-dropdown.component';
+import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 
-  .btn-danger {
-    position: absolute;
-    bottom: 35px;
-  }
-}
+@NgModule({
+  declarations: [MultiselectDropdownComponent],
+  imports: [CommonModule, ReactiveFormsModule, NgMultiSelectDropDownModule, FormsModule],
+  exports: [MultiselectDropdownComponent],
+})
+export class MultiselectDropdownModule {}

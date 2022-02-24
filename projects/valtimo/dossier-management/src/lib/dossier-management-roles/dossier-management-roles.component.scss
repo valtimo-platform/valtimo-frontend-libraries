@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2022 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,18 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-.edit-taak {
-  ::ng-deep {
-    .list-inline {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-    }
-  }
-
-  .btn-danger {
-    position: absolute;
-    bottom: 35px;
-  }
-}
