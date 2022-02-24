@@ -36,6 +36,7 @@
       [itemsTranslationKey]="'connectorManagement.tableItemsText'"
       (editButtonClicked)="rowClicked($event)"
       (paginationSizeSet)="paginationSet($event)"
+      (paginationPageSet)="paginationClicked($event)"
     ></v-table>
     <valtimo-widget *ngIf="obs.loading === false; else loading">
       <valtimo-list
