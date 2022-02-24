@@ -38,25 +38,6 @@
       (paginationSizeSet)="paginationSet($event)"
       (paginationPageSet)="paginationClicked($event)"
     ></v-table>
-    <valtimo-widget *ngIf="obs.loading === false; else loading">
-      <valtimo-list
-        [items]="obs.connectorInstances"
-        [fields]="obs.fields"
-        [header]="true"
-        [viewMode]="true"
-        [isSearchable]="false"
-        [pagination]="obs.pagination"
-        paginationIdentifier="connectorManagementList"
-        (paginationClicked)="paginationClicked($event)"
-        (paginationSet)="paginationSet($event)"
-        (rowClicked)="rowClicked($event)"
-      >
-        <div header>
-          <h3 class="list-header-title">{{ 'connectorManagement.title' | translate }}</h3>
-          <h5 class="list-header-description">{{ 'connectorManagement.subtitle' | translate }}</h5>
-        </div>
-      </valtimo-list>
-    </valtimo-widget>
   </div>
 </div>
 
@@ -69,8 +50,4 @@
     </v-button>
   </div>
   <div class="clearfix"></div>
-</ng-template>
-
-<ng-template #loading>
-  <valtimo-spinner></valtimo-spinner>
 </ng-template>
