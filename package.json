@@ -216,7 +216,6 @@
     "camunda-bpmn-moddle": "^4.3.0",
     "cli-progress": "^2.1.1",
     "code-prettify": "^0.1.0",
-    "codelyzer": "^6.0.0",
     "codemirror": "^5.54.0",
     "components-jqueryui": "^1.12.1",
     "copyfiles": "^2.3.0",
@@ -224,6 +223,7 @@
     "dmn-js": "^7.3.0",
     "dragula": "^3.7.2",
     "dropzone": "^4.3.0",
+    "eslint-config-prettier": "^8.4.0",
     "fuelux": "^3.15.11",
     "fullcalendar": "^3.10.2",
     "hammerjs": "^2.0.8",
@@ -274,7 +274,6 @@
     "swagger-ui": "^3.52.5",
     "ts-node": "~7.0.0",
     "tslib": "^2.0.0",
-    "tslint": "~6.1.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "4.5.5",
     "uuid": "^3.4.0",
@@ -282,6 +281,13 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
+    "@angular-eslint/builder": "13.1.0",
+    "@angular-eslint/eslint-plugin": "13.1.0",
+    "@angular-eslint/eslint-plugin-template": "13.1.0",
+    "@angular-eslint/schematics": "13.1.0",
+    "@angular-eslint/template-parser": "13.1.0",
+    "@typescript-eslint/eslint-plugin": "5.11.0",
+    "@typescript-eslint/parser": "5.11.0",
     "@valtimo/account": "file:dist/valtimo/account",
     "@valtimo/analyse": "file:dist/valtimo/analyse",
     "@valtimo/auth0": "file:dist/valtimo/auth0",
@@ -317,6 +323,11 @@
     "@valtimo/user-interface": "file:dist/valtimo/user-interface",
     "@valtimo/user-management": "file:dist/valtimo/user-management",
     "@valtimo/view-configurator": "file:dist/valtimo/view-configurator",
+    "eslint": "^8.2.0",
+    "eslint-plugin-import": "latest",
+    "eslint-plugin-jsdoc": "latest",
+    "eslint-plugin-prefer-arrow": "latest",
+    "eslint-plugin-react": "latest",
     "prettier": "^2.5.1"
   }
 }
