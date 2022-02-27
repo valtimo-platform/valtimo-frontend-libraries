@@ -8,6 +8,14 @@
         "prefix": "v",
         "style": "kebab-case"
       }
+    ],
+    "@angular-eslint/directive-selector": [
+      "error",
+      {
+        "type": "directive",
+        "prefix": "v",
+        "style": "camelCase"
+      }
     ]
   }
 }

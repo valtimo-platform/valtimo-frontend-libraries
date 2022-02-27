@@ -21,6 +21,7 @@ import {CamundaFormfieldService} from '../camunda-formfield.service';
 import moment from 'moment';
 
 moment.locale(localStorage.getItem('langKey'));
+// eslint-disable-next-line no-var
 declare var $;
 
 @Component({
