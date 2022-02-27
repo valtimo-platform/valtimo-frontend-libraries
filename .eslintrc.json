@@ -94,7 +94,13 @@
           "never"
         ],
         "@typescript-eslint/member-ordering": "off",
-        "prefer-arrow/prefer-arrow-functions": "off"
+        "prefer-arrow/prefer-arrow-functions": "off",
+        "@typescript-eslint/naming-convention": [
+          "off",
+          {
+            "selector": "objectLiteralProperty"
+          }
+        ]
       }
     },
     {

@@ -56,7 +56,7 @@
 <ng-template #tableEditButtonCell let-item="item">
   <td *ngIf="showEditButtons" class="v-table__cell v-table__cell--with-button">
     <span class="v-table__cell-button-container">
-      <v-button type="secondary" (click)="editButtonClicked.emit(item)">{{
+      <v-button type="secondary" (clickEvent)="editButtonClicked.emit(item)">{{
         editButtonTranslationKey || 'interface.edit' | translate
       }}</v-button>
     </span>
@@ -165,12 +165,12 @@
     *ngIf="paginationObject && paginationObject.collectionSize > paginationObject.size"
   >
     <span *ngIf="paginationObject.page > 1">
-      <v-button (onClick)="setPage('previous')" type="text" [disabled]="loading">{{
+      <v-button (clickEvent)="setPage('previous')" type="text" [disabled]="loading">{{
         'interface.previous' | translate
       }}</v-button>
     </span>
     <span *ngIf="paginationObject.page * paginationObject.size < paginationObject.collectionSize">
-      <v-button (onClick)="setPage('next')" type="text" [disabled]="loading">{{
+      <v-button (clickEvent)="setPage('next')" type="text" [disabled]="loading">{{
         'interface.next' | translate
       }}</v-button>
     </span>

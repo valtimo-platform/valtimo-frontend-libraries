@@ -238,6 +238,15 @@
             "tsConfig": "projects/valtimo/user-interface/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/user-interface/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/user-interface/src/**/*.ts",
+              "projects/valtimo/user-interface/src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -630,6 +639,15 @@
             "tsConfig": "projects/valtimo/account/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/account/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/account/src/**/*.ts",
+              "projects/valtimo/account/src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -797,6 +815,15 @@
             "main": "projects/valtimo/analyse/src/test.ts",
             "tsConfig": "projects/valtimo/analyse/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/analyse/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/analyse/src/**/*.ts",
+              "projects/valtimo/analyse/src/**/*.html"
+            ]
           }
         }
       }

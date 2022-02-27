@@ -26,9 +26,9 @@ import {BehaviorSubject, Subscription} from 'rxjs';
 export class SelectComponent implements OnInit, OnDestroy {
   @Input() items: Array<SelectItem> = [];
   @Input() defaultSelection!: SelectItem;
-  @Input() clearable: boolean = true;
-  @Input() disabled: boolean = false;
-  @Input() multiple: boolean = false;
+  @Input() clearable = true;
+  @Input() disabled = false;
+  @Input() multiple = false;
   @Input() notFoundText!: string;
   @Input() clearAllText!: string;
   @Output() selectedChange: EventEmitter<SelectedValue> = new EventEmitter();

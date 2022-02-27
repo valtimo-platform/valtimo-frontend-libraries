@@ -35,14 +35,14 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() items!: Array<Object>;
+  @Input() items!: Array<object>;
   @Input() columns!: Array<TableColumn>;
-  @Input() loading: boolean = false;
-  @Input() showEditButtons: boolean = false;
+  @Input() loading = false;
+  @Input() showEditButtons = false;
   @Input() editButtonTranslationKey!: string;
   @Input() itemsTranslationKey!: string;
-  @Input() mobileBreakpointPx: number = 768;
-  @Input() amountOfLoadingRows: number = 3;
+  @Input() mobileBreakpointPx = 768;
+  @Input() amountOfLoadingRows = 3;
   @Input() pagination?: TablePagination;
 
   @Output() editButtonClicked: EventEmitter<any> = new EventEmitter();
@@ -62,7 +62,7 @@ export class TableComponent implements OnInit, OnDestroy, OnChanges {
 
   private breakpointSubscription!: Subscription;
 
-  private collectionSizeSet: boolean = false;
+  private collectionSizeSet = false;
 
   constructor(private readonly breakpointObserver: BreakpointObserver) {}
 
