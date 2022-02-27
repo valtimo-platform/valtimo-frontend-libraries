@@ -1243,6 +1243,15 @@
             "tsConfig": "projects/valtimo/config/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/config/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/config/src/**/*.ts",
+              "projects/valtimo/config/src/**/*.html"
+            ]
+          }
         }
       }
     },
