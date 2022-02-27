@@ -84,9 +84,10 @@ export class ConnectorManagementComponent implements OnDestroy {
       });
     }),
     map(([instanceRes, typesRes]) =>
-      instanceRes.content.map(instance => {
-        return {...instance, typeName: typesRes.find(type => type.id === instance.type.id)?.name};
-      })
+      instanceRes.content.map(instance => ({
+        ...instance,
+        typeName: typesRes.find(type => type.id === instance.type.id)?.name,
+      }))
     ),
     tap(() => this.loading$.next(false))
   );

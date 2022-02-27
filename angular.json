@@ -926,6 +926,15 @@
             "tsConfig": "projects/valtimo/connector-management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/connector-management/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/connector-management/src/**/*.ts",
+              "projects/valtimo/connector-management/src/**/*.html"
+            ]
+          }
         }
       }
     },

@@ -145,9 +145,10 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnDestroy
           )
         ),
         tap(res => {
-          this.caseDefinitionOptions = documentDefinitions.map(documentDefinition => {
-            return {label: documentDefinition.id.name, value: documentDefinition.id.name};
-          });
+          this.caseDefinitionOptions = documentDefinitions.map(documentDefinition => ({
+            label: documentDefinition.id.name,
+            value: documentDefinition.id.name,
+          }));
 
           documentDefinitions.forEach((documentDefinition, index) => {
             this.processDocumentDefinitionOptions[documentDefinition.id.name] = res[index].map(
