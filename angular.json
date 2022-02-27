@@ -303,6 +303,15 @@
             "tsConfig": "projects/valtimo/auth0/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/auth0/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/auth0/src/**/*.ts",
+              "projects/valtimo/auth0/src/**/*.html"
+            ]
+          }
         }
       }
     },
