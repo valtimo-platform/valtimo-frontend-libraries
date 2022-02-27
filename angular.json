@@ -750,6 +750,15 @@
             "tsConfig": "projects/valtimo/choice-field/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/choice-field/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/choice-field/src/**/*.ts",
+              "projects/valtimo/choice-field/src/**/*.html"
+            ]
+          }
         }
       }
     },
