@@ -638,6 +638,15 @@
             "tsConfig": "projects/valtimo/contact-moment/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/contact-moment/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/contact-moment/src/**/*.ts",
+              "projects/valtimo/contact-moment/src/**/*.html"
+            ]
+          }
         }
       }
     },
