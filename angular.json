@@ -1018,6 +1018,15 @@
             "tsConfig": "projects/valtimo/decision/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/decision/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/decision/src/**/*.ts",
+              "projects/valtimo/decision/src/**/*.html"
+            ]
+          }
         }
       }
     },
