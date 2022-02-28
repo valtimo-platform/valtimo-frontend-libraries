@@ -127,7 +127,7 @@ export class TaskListComponent implements OnDestroy {
 
     this.taskService.queryTasks(params).subscribe((results: any) => {
       this.tasks[type].pagination.collectionSize = results.headers.get('x-total-count');
-      this.tasks[type].tasks = <Task[]>results.body;
+      this.tasks[type].tasks = results.body as Array<Task>;
       this.tasks[type].tasks.map((task: Task) => {
         task.created = moment(task.created).format('DD MMM YYYY HH:mm');
         if (task.due) {

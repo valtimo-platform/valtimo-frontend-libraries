@@ -45,7 +45,7 @@ export class TaskDetailModalComponent {
   @Output() formSubmit = new EventEmitter();
   @Output() assignmentOfTaskChanged = new EventEmitter();
   private formAssociation: FormAssociation;
-  public errorMessage: String = null;
+  public errorMessage: string = null;
 
   constructor(
     private readonly toastr: ToastrService,

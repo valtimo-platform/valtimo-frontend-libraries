@@ -74,8 +74,8 @@ export class ProcessDiagramComponent implements OnInit, OnDestroy, OnChanges {
     this.bpmnJS = new BpmnJS();
     this.bpmnJS.on('import.done', ({error}) => {
       if (!error) {
-        const canvas = this.bpmnJS.get('canvas'),
-          eventBus = this.bpmnJS.get('eventBus');
+        const canvas = this.bpmnJS.get('canvas');
+        const eventBus = this.bpmnJS.get('eventBus');
         if (this.processDiagram.historicActivityInstances) {
           this.processDiagram.historicActivityInstances.forEach(instance => {
             // exclude multiInstanceBody
@@ -167,10 +167,10 @@ export class ProcessDiagramComponent implements OnInit, OnDestroy, OnChanges {
       this.max = 0;
 
       Object.keys(this.inputData).forEach(key => {
-        const diagramContainer = this.el.nativeElement.querySelector('svg').getBoundingClientRect(),
-          diagramElm = this.el.nativeElement
-            .querySelector(`g[data-element-id=${key}]`)
-            .getBoundingClientRect();
+        const diagramContainer = this.el.nativeElement.querySelector('svg').getBoundingClientRect();
+        const diagramElm = this.el.nativeElement
+          .querySelector(`g[data-element-id=${key}]`)
+          .getBoundingClientRect();
         this.setMax(key);
         this.heatPoints.data.push({
           x: Math.round(diagramElm.x - diagramContainer.x + diagramElm.width / 2),
@@ -207,10 +207,10 @@ export class ProcessDiagramComponent implements OnInit, OnDestroy, OnChanges {
       this.max = 0;
 
       Object.keys(this.inputData).forEach(key => {
-        const diagramContainer = this.el.nativeElement.querySelector('svg').getBoundingClientRect(),
-          diagramElm = this.el.nativeElement
-            .querySelector(`g[data-element-id=${key}]`)
-            .getBoundingClientRect();
+        const diagramContainer = this.el.nativeElement.querySelector('svg').getBoundingClientRect();
+        const diagramElm = this.el.nativeElement
+          .querySelector(`g[data-element-id=${key}]`)
+          .getBoundingClientRect();
         this.setMax(key);
         this.heatPoints.data.push({
           x: Math.round(diagramElm.x - diagramContainer.x + diagramElm.width / 2),
