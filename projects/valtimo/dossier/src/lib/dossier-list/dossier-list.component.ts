@@ -31,6 +31,7 @@ import {DefaultTabs} from '../dossier-detail-tab-enum';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
 import {DossierService} from '../dossier.service';
 
+// eslint-disable-next-line no-var
 declare var $;
 
 moment.locale(localStorage.getItem('langKey') || '');
