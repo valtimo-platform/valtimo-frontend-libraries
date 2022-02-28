@@ -275,6 +275,15 @@
             "tsConfig": "projects/valtimo/layout/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/layout/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/layout/src/**/*.ts",
+              "projects/valtimo/layout/src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -887,6 +896,15 @@
             "tsConfig": "projects/valtimo/management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/management/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/management/src/**/*.ts",
+              "projects/valtimo/management/src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -1082,6 +1100,15 @@
             "tsConfig": "projects/valtimo/milestone/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/milestone/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/milestone/src/**/*.ts",
+              "projects/valtimo/milestone/src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -1184,6 +1211,15 @@
             "tsConfig": "projects/valtimo/migration/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/migration/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/migration/src/**/*.ts",
+              "projects/valtimo/migration/src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -1248,6 +1284,15 @@
             "main": "projects/valtimo/keycloak/src/test.ts",
             "tsConfig": "projects/valtimo/keycloak/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/keycloak/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/keycloak/src/**/*.ts",
+              "projects/valtimo/keycloak/src/**/*.html"
+            ]
           }
         }
       }
@@ -1387,6 +1432,15 @@
             "main": "projects/valtimo/open-zaak/src/test.ts",
             "tsConfig": "projects/valtimo/open-zaak/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/open-zaak/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/open-zaak/src/**/*.ts",
+              "projects/valtimo/open-zaak/src/**/*.html"
+            ]
           }
         }
       }
