@@ -850,6 +850,15 @@
             "tsConfig": "projects/valtimo/form/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/form/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/form/src/**/*.ts",
+              "projects/valtimo/form/src/**/*.html"
+            ]
+          }
         }
       }
     },
