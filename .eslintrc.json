@@ -1,18 +1,11 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "projects/**/*"
-  ],
+  "ignorePatterns": ["projects/**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "tsconfig.json",
-          "e2e/tsconfig.e2e.json"
-        ],
+        "project": ["tsconfig.json", "e2e/tsconfig.e2e.json"],
         "createDefaultProgram": true
       },
       "extends": [
@@ -21,9 +14,7 @@
         "plugin:@angular-eslint/template/process-inline-templates",
         "prettier"
       ],
-      "plugins": [
-        "eslint-plugin-react"
-      ],
+      "plugins": ["eslint-plugin-react"],
       "rules": {
         "@typescript-eslint/consistent-type-definitions": "error",
         "@typescript-eslint/dot-notation": "off",
@@ -53,19 +44,10 @@
             "allowTemplateLiterals": true
           }
         ],
-        "@typescript-eslint/semi": [
-          "off",
-          null
-        ],
+        "@typescript-eslint/semi": ["off", null],
         "@typescript-eslint/type-annotation-spacing": "off",
-        "arrow-parens": [
-          "off",
-          "always"
-        ],
-        "brace-style": [
-          "off",
-          "off"
-        ],
+        "arrow-parens": ["off", "always"],
+        "brace-style": ["off", "off"],
         "eol-last": "off",
         "id-blacklist": "off",
         "id-match": "off",
@@ -89,10 +71,7 @@
         ],
         "react/jsx-wrap-multilines": "off",
         "space-before-function-paren": "off",
-        "space-in-parens": [
-          "off",
-          "never"
-        ],
+        "space-in-parens": ["off", "never"],
         "@typescript-eslint/member-ordering": "off",
         "prefer-arrow/prefer-arrow-functions": "off",
         "@typescript-eslint/naming-convention": [
@@ -104,13 +83,8 @@
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
-      "extends": [
-        "plugin:@angular-eslint/template/recommended",
-        "prettier"
-      ],
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended", "prettier"],
       "rules": {}
     }
   ]
