@@ -1110,6 +1110,15 @@
             "tsConfig": "projects/valtimo/form-management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/form-management/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/form-management/src/**/*.ts",
+              "projects/valtimo/form-management/src/**/*.html"
+            ]
+          }
         }
       }
     },
