@@ -1185,6 +1185,15 @@
             "tsConfig": "projects/valtimo/dossier-management/tsconfig.spec.json",
             "karmaConfig": "projects/valtimo/dossier-management/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/dossier-management/src/**/*.ts",
+              "projects/valtimo/dossier-management/src/**/*.html"
+            ]
+          }
         }
       }
     },
