@@ -54,11 +54,7 @@ export class FormLinkProcessDiagramComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     combineLatest([this.route.queryParams, this.processService.getProcessDefinitions()])
-      .pipe(
-        map(([queryParams, processDefinitions]) => {
-          return {queryParams, processDefinitions};
-        })
-      )
+      .pipe(map(([queryParams, processDefinitions]) => ({queryParams, processDefinitions})))
       .subscribe(response => {
         this.processDefinitions = response.processDefinitions;
         if (response.queryParams.process) {
