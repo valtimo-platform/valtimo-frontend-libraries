@@ -29,7 +29,7 @@ import {Location} from '@angular/common';
 import {TabService} from '../tab.service';
 import {ProcessService} from '@valtimo/process';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
-import {ConfigService} from '@valtimo/config'
+import {ConfigService} from '@valtimo/config';
 import * as moment from 'moment';
 
 @Component({
@@ -84,7 +84,7 @@ export class DossierDetailComponent implements OnInit {
       .subscribe(definition => {
         this.documentDefinitionNameTitle = definition.schema.title;
       });
-    this.getCustomHeaderTitle();
+    this.getCustomDossierHeader();
     this.initialTabName = this.snapshot.get('tab');
     this.tabLoader.initial(this.initialTabName);
     this.getAllAssociatedProcessDefinitions();
@@ -110,36 +110,44 @@ export class DossierDetailComponent implements OnInit {
     this.supportingProcessStart.openModal(processDocumentDefinition, this.documentId);
   }
 
-  private getCustomHeaderTitle() {
-    let customDossierHeaderItems = this.configService.config['customDossierHeader'][this.documentDefinitionName.toLowerCase()] || [];
-    if (customDossierHeaderItems.length > 0) {
+  private getCustomDossierHeader() {
+    if (
+      this.configService.config.customDossierHeader?.hasOwnProperty(
+        this.documentDefinitionName.toLowerCase()
+      )
+    ) {
       this.documentService.getDocument(this.documentId).subscribe(document => {
         this.document = document;
-        for (let i in customDossierHeaderItems) {
-          let label = customDossierHeaderItems[i]['label'] || '';
-          let value = '';
-          for (let val of customDossierHeaderItems[i]['propertyPaths'] || '') {
-            if (customDossierHeaderItems[i]['propertyPaths'].indexOf(val) > 0) {
-              value += ' ';
-            }
-            value += val.split('.').reduce((o, i) => o[i], this.document.content) || customDossierHeaderItems[i]['noValueText'] || '';
-          }
-          let regex = new RegExp('(T\\d\\d:\\d\\d:\\d\\d[\+\-])');
-          if (regex.test(value)) {
-            value = moment(value).format('DD-MM-YYYY');
-          }
-          let columnSize = customDossierHeaderItems[i]['columnSize'] || 3;
-          let textSize = customDossierHeaderItems[i]['textSize'] || 'md';
-          let customClass = customDossierHeaderItems[i]['customClass'] || '';
-          this.customDossierHeaderItems.push({
-            'label': label,
-            'value': value,
-            'columnSize': columnSize,
-            'textSize': textSize,
-            'customClass': customClass,
-          });
-        }
-      })
+        this.configService.config.customDossierHeader[
+          this.documentDefinitionName.toLowerCase()
+        ]?.forEach(item => this.getCustomDossierHeaderItem(item));
+      });
     }
+  }
+
+  private getCustomDossierHeaderItem(item) {
+    this.customDossierHeaderItems.push({
+      label: item['labelTranslationKey'] || '',
+      columnSize: item['columnSize'] || 3,
+      textSize: item['textSize'] || 'md',
+      customClass: item['customClass'] || '',
+      value: item['propertyPaths']?.reduce(
+        (prev, curr) => prev + this.getStringFromDocumentPath(item, curr),
+        ''
+      ),
+    });
+  }
+
+  private getStringFromDocumentPath(item, path) {
+    let value =
+      (item['propertyPaths'].indexOf(path) > 0 ? ' ' : '') +
+        path.split('.').reduce((o, i) => o[i], this.document.content) ||
+      item['noValueText'] ||
+      '';
+    let regex = new RegExp('(T\\d\\d:\\d\\d:\\d\\d[+-])');
+    if (regex.test(value)) {
+      value = moment(value).format('DD-MM-YYYY');
+    }
+    return value;
   }
 }

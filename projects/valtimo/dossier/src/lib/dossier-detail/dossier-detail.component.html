@@ -27,8 +27,8 @@
                           'h3': item.textSize === 'md', 'h4': item.textSize === 'sm', 'h5': item.textSize === 'xs'}"
                       *ngFor="let item of customDossierHeaderItems"
                 >
-                  <span *ngIf="item.label != ''">{{ item.label }}</span>
-                  <span *ngIf="item.label != '' && item.value !=''">: </span>
+                  <span *ngIf="item.label != ''">{{ item.label | translate }}</span>
+                  <span *ngIf="item.label != '' && item.value !='' && item.value != null">: </span>
                   <strong>{{ item.value }}</strong>
                 </span>
               </div>

@@ -32,7 +32,7 @@ export interface DefinitionColumn {
 }
 
 export interface CustomDossierHeaderItem {
-  label?: string;
+  labelTranslationKey?: string;
   propertyPaths?: Array<string>;
   columnSize?: number;
   textSize?: string;
