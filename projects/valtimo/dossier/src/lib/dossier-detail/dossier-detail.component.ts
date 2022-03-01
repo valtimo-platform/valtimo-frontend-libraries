@@ -139,15 +139,11 @@ export class DossierDetailComponent implements OnInit {
   }
 
   private getStringFromDocumentPath(item, path) {
-    let value =
-      (item['propertyPaths'].indexOf(path) > 0 ? ' ' : '') +
-        path.split('.').reduce((o, i) => o[i], this.document.content) ||
-      item['noValueText'] ||
-      '';
-    let regex = new RegExp('(T\\d\\d:\\d\\d:\\d\\d[+-])');
-    if (regex.test(value)) {
-      value = moment(value).format('DD-MM-YYYY');
-    }
-    return value;
+    const prefix = item['propertyPaths'].indexOf(path) > 0 ? ' ' : '';
+    let string =
+      path.split('.').reduce((o, i) => o[i], this.document.content) || item['noValueText'] || '';
+    const regex = new RegExp('(T\\d\\d:\\d\\d:\\d\\d[+-])');
+    string = regex.test(string) ? moment(string).format('DD-MM-YYYY') : string;
+    return prefix + string;
   }
 }
