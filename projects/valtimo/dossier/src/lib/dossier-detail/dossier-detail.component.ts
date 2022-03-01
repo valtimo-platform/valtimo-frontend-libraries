@@ -140,10 +140,10 @@ export class DossierDetailComponent implements OnInit {
 
   private getStringFromDocumentPath(item, path) {
     const prefix = item['propertyPaths'].indexOf(path) > 0 ? ' ' : '';
-    let string =
+    const string =
       path.split('.').reduce((o, i) => o[i], this.document.content) || item['noValueText'] || '';
     const regex = new RegExp('(T\\d\\d:\\d\\d:\\d\\d[+-])');
-    string = regex.test(string) ? moment(string).format('DD-MM-YYYY') : string;
-    return prefix + string;
+    const formattedString = regex.test(string) ? moment(string).format('DD-MM-YYYY') : string;
+    return prefix + formattedString;
   }
 }
