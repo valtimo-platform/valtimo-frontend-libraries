@@ -16,7 +16,6 @@
 
 import {ComponentFactoryResolver, Inject, Injectable, ViewContainerRef} from '@angular/core';
 import {Extension, ExtensionLoader, ExtensionPoint, VALTIMO_CONFIG, ValtimoConfig} from './models';
-import {ITranslationResource} from 'ngx-translate-multi-http-loader';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +33,7 @@ export class ConfigService {
 
   get config(): ValtimoConfig {
     const config = this.valtimoConfig;
+    const translationResourcesConfig = config.translationResources;
 
     return {
       ...config,
@@ -52,10 +52,12 @@ export class ConfigService {
         ...config.valtimoApi,
         endpointUri: this.formatUrlTrailingSlash(config.valtimoApi.endpointUri, true),
       },
-      translationResources: config.translationResources?.map<ITranslationResource>(
-        resource =>
-          ({prefix: this.formatUrlTrailingSlash(resource.prefix, true), suffix: resource.suffix})
-      ),
+      ...(translationResourcesConfig && {
+        translationResources: translationResourcesConfig.map(resource => ({
+          prefix: this.formatUrlTrailingSlash(resource.prefix, true),
+          suffix: resource.suffix
+        }))
+      })
     };
   }
 
