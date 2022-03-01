@@ -200,7 +200,7 @@ export class OpenZaakServiceTaskConnectorModalExtensionComponent implements OnIn
         break;
       case Operation.CREATE_BESLUIT:
         this.openZaakService
-          .getBesluitTypes()
+          .getBesluittypen()
           .subscribe((besluitTypes: ZaakResultType[]) => {
             this.besluitTypes = besluitTypes;
             if (data.parameter != null) {
