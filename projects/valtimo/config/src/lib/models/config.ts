@@ -31,6 +31,15 @@ export interface DefinitionColumn {
   default?: boolean;
 }
 
+export interface CustomDossierHeaderItem {
+  labelTranslationKey?: string;
+  propertyPaths?: Array<string>;
+  columnSize?: number;
+  textSize?: string;
+  noValueText?: string;
+  customClass?: string;
+}
+
 export interface ValtimoConfig {
   initializers: ((injector: Injector) => Function)[];
   menu: MenuConfig;
@@ -56,6 +65,9 @@ export interface ValtimoConfig {
   defaultDefinitionTable: Array<DefinitionColumn>;
   customDefinitionTables: {
     [definitionNameId: string]: Array<DefinitionColumn>;
+  };
+  customDossierHeader?: {
+    [definitionNameId: string]: Array<CustomDossierHeaderItem>;
   };
   translationResources?: Array<ITranslationResource>;
 }
