@@ -199,16 +199,14 @@ export class OpenZaakServiceTaskConnectorModalExtensionComponent implements OnIn
           });
         break;
       case Operation.CREATE_BESLUIT:
-        this.openZaakService
-          .getBesluittypen()
-          .subscribe((besluitTypes: ZaakResultType[]) => {
-            this.besluitTypes = besluitTypes;
-            if (data.parameter != null) {
-              this.selectedBesluitType = this.besluitTypes.find(
-                (resultType: ZaakResultType) => resultType.url === data.parameter
-              );
-            }
-          });
+        this.openZaakService.getBesluittypen().subscribe((besluitTypes: ZaakResultType[]) => {
+          this.besluitTypes = besluitTypes;
+          if (data.parameter != null) {
+            this.selectedBesluitType = this.besluitTypes.find(
+              (resultType: ZaakResultType) => resultType.url === data.parameter
+            );
+          }
+        });
         break;
       default:
         return null;
