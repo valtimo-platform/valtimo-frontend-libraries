@@ -191,7 +191,6 @@
         "unsuccessfullyRetrievedRoles": "Beim Abrufen der aktuellen Dokumentrollen ist ein Fehler aufgetreten"
       }
     }
-
   },
   "serviceTaskManagement": {
     "subtitle": "Verknüpfe {{selectedElement}} mit Open Zaak",

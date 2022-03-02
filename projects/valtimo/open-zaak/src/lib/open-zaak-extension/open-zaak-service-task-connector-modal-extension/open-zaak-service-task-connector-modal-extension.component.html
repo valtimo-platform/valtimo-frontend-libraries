@@ -227,7 +227,9 @@
               {{ selectedZaakResult.omschrijving }}
             </span>
             <span
-                    *ngIf="serviceTaskHandler['operation'] === 'CREATE_BESLUIT' && selectedBesluitType != null"
+              *ngIf="
+                serviceTaskHandler['operation'] === 'CREATE_BESLUIT' && selectedBesluitType != null
+              "
             >
               <strong>{{ 'serviceTaskManagement.serviceTaskHandler.status' | translate }}</strong>
               {{ selectedBesluitType.omschrijving }}
