@@ -79,6 +79,7 @@ import {DossierManagementModule} from '@valtimo/dossier-management';
 import {OpenZaakModule} from '@valtimo/open-zaak';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {ConnectorManagementModule} from '@valtimo/connector-management';
+import {registerFormioFileSelectorComponent} from '../../projects/valtimo/components/src/lib/components/form-io/form-io-resource-selector/form-io-resource-selector.formio';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -163,5 +164,6 @@ export function tabsFactory() {
 export class AppModule {
   constructor(injector: Injector) {
     registerFormioUploadComponent(injector);
+    registerFormioFileSelectorComponent(injector);
   }
 }
