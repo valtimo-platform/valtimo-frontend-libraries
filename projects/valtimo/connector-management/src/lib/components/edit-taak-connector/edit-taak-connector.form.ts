@@ -16,7 +16,7 @@ export const editTaakConnectorForm = {
       tableView: false,
       dataSrc: 'custom',
       data: {
-        custom: "values = window['openNotificatieConnectorNames'] || []",
+        custom: 'values = window[\'openNotificatieConnectorNames\'] || []',
       },
       dataType: 'string',
       clearOnRefresh: true,
@@ -26,7 +26,8 @@ export const editTaakConnectorForm = {
       validate: {
         required: true,
       },
-      placeholder: 'connectorForm.taak.openNotificatieConnector.placeholder',
+      placeholder:
+        'connectorForm.taak.openNotificatieConnector.placeholder',
     },
     {
       label: 'connectorForm.taak.objectsApiConnector.label',
@@ -34,7 +35,7 @@ export const editTaakConnectorForm = {
       tableView: false,
       dataSrc: 'custom',
       data: {
-        custom: "values = window['objectApiConnectorNames'] || []",
+        custom: 'values = window[\'objectApiConnectorNames\'] || []',
       },
       dataType: 'string',
       clearOnRefresh: true,
@@ -44,7 +45,8 @@ export const editTaakConnectorForm = {
       validate: {
         required: true,
       },
-      placeholder: 'connectorForm.taak.objectsApiConnector.placeholder',
+      placeholder:
+        'connectorForm.taak.objectsApiConnector.placeholder',
     },
     {
       key: 'submit',
@@ -54,7 +56,7 @@ export const editTaakConnectorForm = {
       input: true,
       label: 'connectorManagement.save',
       tableView: false,
-      disableOnInvalid: true,
+      disableOnInvalid: true
     },
   ],
 };

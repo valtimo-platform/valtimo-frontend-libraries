@@ -21,7 +21,6 @@ import {ITranslationResource} from 'ngx-translate-multi-http-loader';
 
 export const VALTIMO_CONFIG = new InjectionToken<ValtimoConfig>('valtimoConfig');
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const INITIALIZERS = new InjectionToken<(() => Function)[]>('initializers');
 
 export interface DefinitionColumn {
@@ -32,17 +31,7 @@ export interface DefinitionColumn {
   default?: boolean;
 }
 
-export interface CustomDossierHeaderItem {
-  labelTranslationKey?: string;
-  propertyPaths?: Array<string>;
-  columnSize?: number;
-  textSize?: string;
-  noValueText?: string;
-  customClass?: string;
-}
-
 export interface ValtimoConfig {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   initializers: ((injector: Injector) => Function)[];
   menu: MenuConfig;
   authentication: Auth;
@@ -67,9 +56,6 @@ export interface ValtimoConfig {
   defaultDefinitionTable: Array<DefinitionColumn>;
   customDefinitionTables: {
     [definitionNameId: string]: Array<DefinitionColumn>;
-  };
-  customDossierHeader?: {
-    [definitionNameId: string]: Array<CustomDossierHeaderItem>;
   };
   translationResources?: Array<ITranslationResource>;
 }

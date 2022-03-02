@@ -141,8 +141,7 @@ export const editProductAanvragenConnectorForm = {
           tableView: false,
           components: [
             {
-              label:
-                'connectorForm.productaanvraag.step1.connectors.openNotificatieConnector.label',
+              label: 'connectorForm.productaanvraag.step1.connectors.openNotificatieConnector.label',
               widget: 'choicesjs',
               tableView: true,
               dataSrc: 'custom',

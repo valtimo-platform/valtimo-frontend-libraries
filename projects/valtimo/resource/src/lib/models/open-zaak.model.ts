@@ -113,11 +113,6 @@ export interface ZaakResultType {
   brondatumArchiefprocedure?: BrondatumArchiefprocedure;
 }
 
-export interface ZaakBesluitType {
-  url?: string;
-  omschrijving: string;
-}
-
 export interface BrondatumArchiefprocedure {
   afleidingswijze: Afleidingswijze;
   datumkenmerk?: string;
@@ -182,5 +177,4 @@ export enum Operation {
   CREATE_ZAAK = 'CREATE_ZAAK',
   SET_RESULTAAT = 'SET_RESULTAAT',
   SET_STATUS = 'SET_STATUS',
-  CREATE_BESLUIT = 'CREATE_BESLUIT',
 }

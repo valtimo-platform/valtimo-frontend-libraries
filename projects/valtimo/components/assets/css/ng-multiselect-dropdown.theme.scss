@@ -168,7 +168,9 @@ $disable-background-color: #eceeef;
   background-color: inherit;
 }
 
-.multiselect-item-checkbox input[type='checkbox']:disabled:checked + div:before {
+.multiselect-item-checkbox
+  input[type='checkbox']:disabled:checked
+  + div:before {
   background-color: #cccccc;
 }
 
