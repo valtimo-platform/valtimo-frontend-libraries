@@ -5,6 +5,7 @@ import {FormioComponent} from 'angular-formio';
 @Injectable()
 export class FormIoStateService {
   private _documentDefinitionName$ = new BehaviorSubject<string>(undefined);
+  private _documentId$ = new BehaviorSubject<string>(undefined);
 
   private _currentForm$ = new BehaviorSubject<FormioComponent>(undefined);
 
@@ -14,6 +15,14 @@ export class FormIoStateService {
 
   public setDocumentDefinitionName(documentDefinitionName: string) {
     this._documentDefinitionName$.next(documentDefinitionName);
+  }
+
+  public get documentId$(): Observable<string> {
+    return this._documentDefinitionName$.asObservable();
+  }
+
+  public setDocumentId(documentId: string) {
+    this._documentId$.next(documentId);
   }
 
   public get currentForm$(): Observable<FormioComponent> {

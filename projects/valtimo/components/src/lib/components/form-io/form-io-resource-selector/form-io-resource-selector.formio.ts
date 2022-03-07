@@ -1,41 +1,66 @@
 import {Injector} from '@angular/core';
 import {Components, Formio} from 'angular-formio';
-import {DocumentService, RelatedFile} from '@valtimo/document';
-import {map} from 'rxjs/operators';
+import {DocumentService} from '@valtimo/document';
+import {FormIoStateService} from '../services/form-io-state.service';
+import {take} from 'rxjs/operators';
 
 const SelectComponent = Components.components.select;
 
 export function registerFormioFileSelectorComponent(injector: Injector) {
 
   var documentService = injector.get(DocumentService)
+  var stateService = injector.get(FormIoStateService)
 
-  function getResources() {
-    return documentService.getDocument("7951f824-2fa5-429f-93f8-a60471a9c511")
-      .toPromise()
-      .then(document => document.relatedFiles
-        .map(relatedFile => {
-          return {
-            label: relatedFile.fileName,
-            value: relatedFile.fileId
-          };
-        })
-      )
+  const unavailableMessage: ResourceOption = {
+    label: 'could not retrieve documents',
+    value: null
   };
 
+  function getDocumentResources(documentId: string): Promise<ResourceOption[]> {
+    if (!documentId) {
+      return new Promise((resolve) => {resolve([unavailableMessage])})
+    }
+    return documentService.getDocument(documentId)
+        .toPromise()
+        .then(document => document.relatedFiles
+          .map(relatedFile => {
+            return {
+              label: relatedFile.fileName,
+              value: relatedFile.fileId
+            };
+          })
+        )
+        .catch(() => {
+          return new Promise((resolve) => {resolve([unavailableMessage])})
+        })
+  };
+
+  interface ResourceOption {
+    label: string;
+    value: string;
+  }
+
   class ResourceSelectorComponent extends SelectComponent {
+
     static schema(...extend) {
       return SelectComponent.schema({
         type: 'resource-selector',
         label: 'Resource selector',
         key: 'resource-selector',
         dataSrc: 'custom',
-        asyncValues: true,
+        asyncValues: false,
         data: {
-          custom: getResources()
+          custom: "values = instance.getResources()"
         },
         ...extend
       });
     }
+
+    getResources() {
+      stateService.documentId$.pipe(take(1)).subscribe(name => {
+        return getDocumentResources(name)
+      });
+    };
 
     static get builderInfo() {
       return {
