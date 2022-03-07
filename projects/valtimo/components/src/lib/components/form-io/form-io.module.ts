@@ -44,7 +44,6 @@ import {RouterModule} from '@angular/router';
   declarations: [FormioComponent, FormioBuilderComponent, FormIoUploaderComponent],
   exports: [FormioComponent, FormioBuilderComponent, FormIoUploaderComponent],
   providers: [
-    FormIoStateService,
     FormIoDomService,
     {provide: FormioAppConfig, useValue: AppConfig},
   ],
