@@ -3,6 +3,7 @@ import {Components, Formio} from 'angular-formio';
 import {DocumentService} from '@valtimo/document';
 import {FormIoStateService} from '../services/form-io-state.service';
 import {take} from 'rxjs/operators';
+import {ResourceOption} from '../../../models';
 
 const SelectComponent = Components.components.select;
 
@@ -39,11 +40,6 @@ export function registerFormioFileSelectorComponent(injector: Injector) {
       });
   }
 
-  interface ResourceOption {
-    label: string;
-    value: string;
-  }
-
   class ResourceSelectorComponent extends SelectComponent {
     static schema(...extend) {
       return SelectComponent.schema({
@@ -70,8 +66,8 @@ export function registerFormioFileSelectorComponent(injector: Injector) {
 
     static get builderInfo() {
       return {
-        title: 'Resource selector',
-        icon: 'terminal',
+        title: 'Document picker',
+        icon: 'th-list',
         group: 'basic',
         documentation: '/userguide/#textfield',
         weight: 0,
