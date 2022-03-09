@@ -8,8 +8,8 @@ import {ResourceOption} from '../../../models';
 const SelectComponent = Components.components.select;
 
 export function registerFormioFileSelectorComponent(injector: Injector) {
-  var documentService = injector.get(DocumentService);
-  var stateService = injector.get(FormIoStateService);
+  const documentService = injector.get(DocumentService);
+  const stateService = injector.get(FormIoStateService);
 
   const unavailableMessage: ResourceOption = {
     label: 'could not retrieve documents',
