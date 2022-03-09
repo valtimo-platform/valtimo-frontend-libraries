@@ -15,13 +15,23 @@
  */
 
 import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {AuthGuardService} from '@valtimo/security';
+import {ROLE_USER} from '@valtimo/config';
 import {CustomerListComponent} from './components/customer-list/customer-list.component';
-import {WidgetModule} from '@valtimo/components';
-import {CustomerRoutingModule} from './customer-routing.module';
+
+const routes: Routes = [
+  {
+    path: 'klanten',
+    component: CustomerListComponent,
+    canActivate: [AuthGuardService],
+    data: {title: 'Klanten', roles: [ROLE_USER]},
+  },
+];
 
 @NgModule({
-  imports: [WidgetModule, CustomerRoutingModule],
-  declarations: [CustomerListComponent],
-  exports: [CustomerListComponent],
+  imports: [CommonModule, RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class CustomerModule {}
+export class CustomerRoutingModule {}

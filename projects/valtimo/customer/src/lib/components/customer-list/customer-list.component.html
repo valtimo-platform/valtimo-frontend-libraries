@@ -1,0 +1,75 @@
+<!--
+  ~ Copyright 2015-2020 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--<ng-container *ngTemplateOutlet="sidebar"></ng-container>-->
+
+<div class="main-content pt-0">
+  <div class="container-fluid">
+    <div class="col-12 px-0 mb-5">
+      <valtimo-widget>
+        <!--        <valtimo-list-->
+        <!--          [items]="items"-->
+        <!--          [fields]="fields"-->
+        <!--          (rowClicked)="rowClick($event)"-->
+        <!--          [pagination]="pagination"-->
+        <!--          [viewMode]="true"-->
+        <!--          [header]="true"-->
+        <!--          paginationIdentifier="dossierList"-->
+        <!--          (paginationClicked)="paginationClicked($event)"-->
+        <!--          (paginationSet)="paginationSet()"-->
+        <!--          [initialSortState]="getInitialSortState()"-->
+        <!--          (sortChanged)="sortChanged($event)"-->
+        <!--        >-->
+        <!--          <div header>-->
+        <!--            <h3 class="list-header-title">-->
+        <!--              {{ schema?.title }}-->
+        <!--              <sup class="ml-1 badge badge-pill badge-primary">{{-->
+        <!--                documents?.content.length || 0-->
+        <!--              }}</sup>-->
+        <!--            </h3>-->
+        <!--          </div>-->
+        <!--        </valtimo-list>-->
+      </valtimo-widget>
+    </div>
+  </div>
+</div>
+
+<!--<ng-template #sidebar>-->
+<!--  <valtimo-filter-sidebar>-->
+<!--    <h4 class="title">Search</h4>-->
+<!--    <div class="mb-4">-->
+<!--      <input-->
+<!--        type="text"-->
+<!--        class="form-control"-->
+<!--        placeholder="{{ 'dossier.forms.globalSearchPlaceHolder' | translate }}"-->
+<!--        [(ngModel)]="globalSearchFilter"-->
+<!--        (blur)="doSearch()"-->
+<!--        (keyup.enter)="doSearch()"-->
+<!--      />-->
+<!--    </div>-->
+
+<!--    <div class="mb-4">-->
+<!--      <input-->
+<!--        type="number"-->
+<!--        class="form-control"-->
+<!--        placeholder="{{ 'dossier.forms.referenceNumberPlaceHolder' | translate }}"-->
+<!--        [(ngModel)]="sequence"-->
+<!--        (blur)="doSearch()"-->
+<!--        (keyup.enter)="doSearch()"-->
+<!--      />-->
+<!--    </div>-->
+<!--  </valtimo-filter-sidebar>-->
+<!--</ng-template>-->

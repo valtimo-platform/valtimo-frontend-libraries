@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 Ritense BV, the Netherlands.
+ * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of contact-moment
- */
+import {Component} from '@angular/core';
 
-export * from './lib/customer.module';
-export * from './lib/components/customer-list/customer-list.component';
+@Component({
+  selector: 'valtimo-customer-list',
+  templateUrl: './customer-list.component.html',
+  styleUrls: ['./customer-list.component.scss'],
+})
+export class CustomerListComponent {
+  constructor() {}
+}
