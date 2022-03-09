@@ -20,7 +20,7 @@ export class FormIoStateService {
   }
 
   public get documentId$(): Observable<string> {
-    return this._documentDefinitionName$.asObservable();
+    return this._documentId$.asObservable();
   }
 
   public setDocumentId(documentId: string) {

@@ -48,7 +48,9 @@ export function registerFormioFileSelectorComponent(injector: Injector) {
         label: 'Resource selector',
         key: 'resource-selector',
         dataSrc: 'custom',
-        asyncValues: false,
+        dataType: 'string',
+        valueProperty: 'value',
+        asyncValues: true,
         data: {
           custom: "values = instance.getResources()"
         },
@@ -57,9 +59,9 @@ export function registerFormioFileSelectorComponent(injector: Injector) {
     }
 
     getResources() {
-      stateService.documentId$.pipe(take(1)).subscribe(name => {
-        return getDocumentResources(name)
-      });
+      return stateService.documentId$.pipe(take(1))
+        .toPromise()
+        .then(documentId => getDocumentResources(documentId))
     };
 
     static get builderInfo() {
