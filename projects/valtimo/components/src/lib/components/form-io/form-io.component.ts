@@ -85,7 +85,6 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
       this.stateService.setDocumentId(documentId);
     }
 
-
     this.subscribeFormRefresh();
     this.openLanguageSubscription();
   }

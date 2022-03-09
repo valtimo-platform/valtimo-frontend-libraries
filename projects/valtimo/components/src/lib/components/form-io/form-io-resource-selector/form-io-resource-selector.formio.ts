@@ -7,33 +7,37 @@ import {take} from 'rxjs/operators';
 const SelectComponent = Components.components.select;
 
 export function registerFormioFileSelectorComponent(injector: Injector) {
-
-  var documentService = injector.get(DocumentService)
-  var stateService = injector.get(FormIoStateService)
+  var documentService = injector.get(DocumentService);
+  var stateService = injector.get(FormIoStateService);
 
   const unavailableMessage: ResourceOption = {
     label: 'could not retrieve documents',
-    value: null
+    value: null,
   };
 
   function getDocumentResources(documentId: string): Promise<ResourceOption[]> {
     if (!documentId) {
-      return new Promise((resolve) => {resolve([unavailableMessage])})
+      return new Promise(resolve => {
+        resolve([unavailableMessage]);
+      });
     }
-    return documentService.getDocument(documentId)
-        .toPromise()
-        .then(document => document.relatedFiles
-          .map(relatedFile => {
-            return {
-              label: relatedFile.fileName,
-              value: relatedFile.fileId
-            };
-          })
-        )
-        .catch(() => {
-          return new Promise((resolve) => {resolve([unavailableMessage])})
+    return documentService
+      .getDocument(documentId)
+      .toPromise()
+      .then(document =>
+        document.relatedFiles.map(relatedFile => {
+          return {
+            label: relatedFile.fileName,
+            value: relatedFile.fileId,
+          };
         })
-  };
+      )
+      .catch(() => {
+        return new Promise(resolve => {
+          resolve([unavailableMessage]);
+        });
+      });
+  }
 
   interface ResourceOption {
     label: string;
@@ -41,7 +45,6 @@ export function registerFormioFileSelectorComponent(injector: Injector) {
   }
 
   class ResourceSelectorComponent extends SelectComponent {
-
     static schema(...extend) {
       return SelectComponent.schema({
         type: 'resource-selector',
@@ -52,17 +55,18 @@ export function registerFormioFileSelectorComponent(injector: Injector) {
         valueProperty: 'value',
         asyncValues: true,
         data: {
-          custom: "values = instance.getResources()"
+          custom: 'values = instance.getResources()',
         },
-        ...extend
+        ...extend,
       });
     }
 
     getResources() {
-      return stateService.documentId$.pipe(take(1))
+      return stateService.documentId$
+        .pipe(take(1))
         .toPromise()
-        .then(documentId => getDocumentResources(documentId))
-    };
+        .then(documentId => getDocumentResources(documentId));
+    }
 
     static get builderInfo() {
       return {
@@ -71,14 +75,14 @@ export function registerFormioFileSelectorComponent(injector: Injector) {
         group: 'basic',
         documentation: '/userguide/#textfield',
         weight: 0,
-        schema: ResourceSelectorComponent.schema()
+        schema: ResourceSelectorComponent.schema(),
       };
     }
   }
 
   Formio.use({
     components: {
-      'resource-selector': ResourceSelectorComponent
-    }
-  })
+      'resource-selector': ResourceSelectorComponent,
+    },
+  });
 }

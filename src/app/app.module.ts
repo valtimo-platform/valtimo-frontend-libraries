@@ -159,10 +159,7 @@ export function tabsFactory() {
       },
     }),
   ],
-  providers: [
-    FormioComponent,
-    FormIoStateService,
-  ],
+  providers: [FormioComponent, FormIoStateService],
   entryComponents: [
     CustomFormExampleComponent,
     StartProcessCustomFormComponent,
