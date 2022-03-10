@@ -24,10 +24,7 @@ import {Observable} from 'rxjs';
   styleUrls: ['./customer-list.component.scss'],
 })
 export class CustomerListComponent {
-  customers$: Observable<Array<any>> = this.customerService.getCustomers({
-    geslachtsnaam: 'Vries',
-    geboortedatum: '1989-05-03',
-  });
+  customers$: Observable<Array<any>> = this.customerService.getCustomers({bsn: '999993847'});
 
   constructor(private readonly customerService: CustomerService) {}
 }

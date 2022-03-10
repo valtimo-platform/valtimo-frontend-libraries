@@ -16,10 +16,23 @@
  *
  */
 
-interface CustomerSearchRequest {
-  bsn?: string;
-  geslachtsnaam?: string;
-  geboortedatum?: string;
+interface Customer {
+  burgerservicenummer: string;
+  geboorteDatum: string;
+  geslachtsnaam: string;
+  voorletters: string;
+  voornamen: string;
 }
 
-export {CustomerSearchRequest};
+interface CustomerBsnSearchRequest {
+  bsn: string;
+}
+
+interface CustomerDataSearchRequest {
+  geslachtsnaam: string;
+  geboortedatum: string;
+}
+
+type CustomerSearchRequest = CustomerBsnSearchRequest | CustomerDataSearchRequest;
+
+export {CustomerBsnSearchRequest, CustomerDataSearchRequest, CustomerSearchRequest, Customer};

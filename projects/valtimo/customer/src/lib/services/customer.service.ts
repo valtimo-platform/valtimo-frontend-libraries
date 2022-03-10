@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
-import {CustomerSearchRequest} from '../models';
+import {Customer, CustomerSearchRequest} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +30,10 @@ export class CustomerService {
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
   }
 
-  getCustomers(request: CustomerSearchRequest): Observable<Array<any>> {
-    return this.http.post<Array<any>>(`${this.valtimoEndpointUri}haalcentraal/people`, request);
+  getCustomers(request: CustomerSearchRequest): Observable<Array<Customer>> {
+    return this.http.post<Array<Customer>>(
+      `${this.valtimoEndpointUri}haalcentraal/people`,
+      request
+    );
   }
 }
