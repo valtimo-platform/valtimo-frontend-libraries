@@ -15,6 +15,8 @@
  */
 
 import {Component} from '@angular/core';
+import {CustomerService} from '../../services/customer.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'valtimo-customer-list',
@@ -22,5 +24,10 @@ import {Component} from '@angular/core';
   styleUrls: ['./customer-list.component.scss'],
 })
 export class CustomerListComponent {
-  constructor() {}
+  customers$: Observable<Array<any>> = this.customerService.getCustomers({
+    geslachtsnaam: 'Vries',
+    geboortedatum: '1989-05-03',
+  });
+
+  constructor(private readonly customerService: CustomerService) {}
 }

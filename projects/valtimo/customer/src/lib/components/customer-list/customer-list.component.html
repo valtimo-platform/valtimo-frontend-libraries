@@ -16,7 +16,7 @@
 
 <!--<ng-container *ngTemplateOutlet="sidebar"></ng-container>-->
 
-<div class="main-content pt-0">
+<div class="main-content pt-0" *ngIf="customers$ | async">
   <div class="container-fluid">
     <div class="col-12 px-0 mb-5">
       <valtimo-widget>

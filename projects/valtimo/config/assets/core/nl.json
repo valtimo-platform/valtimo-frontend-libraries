@@ -436,7 +436,8 @@
       "username": "Gebruikersnaam",
       "password": "Wachtwoord",
       "baseUrl": "Base URL",
-      "callbackBaseUrl": "Callback base URL"
+      "callbackBaseUrl": "Callback base URL",
+      "apiKey": "API-sleutel"
     },
     "messages": {
       "addSuccess": "Connectie is succesvol toegevoegd.",

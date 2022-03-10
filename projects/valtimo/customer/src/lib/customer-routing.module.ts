@@ -26,7 +26,7 @@ const routes: Routes = [
     path: 'klanten',
     component: CustomerListComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Klanten', roles: [ROLE_USER]},
+    data: {title: 'Customers', roles: [ROLE_USER]},
   },
 ];
 

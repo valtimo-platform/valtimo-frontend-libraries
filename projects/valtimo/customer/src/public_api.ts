@@ -20,3 +20,5 @@
 
 export * from './lib/customer.module';
 export * from './lib/components/customer-list/customer-list.component';
+export * from './lib/services/customer.service';
+export * from './lib/models';

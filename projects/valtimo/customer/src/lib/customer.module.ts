@@ -18,9 +18,10 @@ import {NgModule} from '@angular/core';
 import {CustomerListComponent} from './components/customer-list/customer-list.component';
 import {WidgetModule} from '@valtimo/components';
 import {CustomerRoutingModule} from './customer-routing.module';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
-  imports: [WidgetModule, CustomerRoutingModule],
+  imports: [CommonModule, WidgetModule, CustomerRoutingModule],
   declarations: [CustomerListComponent],
   exports: [CustomerListComponent],
 })
