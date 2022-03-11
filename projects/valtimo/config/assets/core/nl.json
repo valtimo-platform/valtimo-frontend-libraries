@@ -389,7 +389,11 @@
   "customers": {
     "name": "Naam",
     "citizenServiceNumber": "Burgerservicenummer",
+    "citizenServiceNumberPlaceholder": "bv. 070003816",
     "dateOfBirth": "Geboortedatum",
+    "dateOfBirthPlaceholder": "bv. 01-01-1970",
+    "familyName": "Geslachtsnaam",
+    "familyNamePlaceholder": "bv. Jansen",
     "title": "Klanten",
     "subtitle": "Overzicht van alle klanten",
     "searchBasedOn": "Zoeken op",

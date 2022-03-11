@@ -58,7 +58,7 @@
             data-toggle="tab"
             role="tab"
             aria-selected="true"
-            >{{ 'customers.citizenServiceNumber' | translate }}</a
+            ><b>{{ 'customers.citizenServiceNumber' | translate }}</b></a
           >
         </li>
         <li class="nav-item">
@@ -68,51 +68,55 @@
             data-toggle="tab"
             role="tab"
             aria-selected="false"
-            >{{ 'customers.lastNameAndDateOfBirth' | translate }}</a
+            ><b>{{ 'customers.lastNameAndDateOfBirth' | translate }}</b></a
           >
         </li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="search_bsn" role="tabpanel">
-          <h4>Classic Top Tabs</h4>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam porta lacus ipsum,
-            tempus consequat turpis auctor sit amet. Pellentesque porta mollis nisi, pulvinar
-            convallis tellus tristique nec.
-          </p>
-          <p>
-            Nam aliquet consequat quam sit amet dignissim. Quisque vel massa est. Donec dictum nisl
-            dolor, ac malesuada tellus efficitur non. Pellentesque pellentesque odio neque, eget
-            imperdiet eros vehicula lacinia.
-          </p>
+          <ng-container *ngTemplateOutlet="bsnTab"></ng-container>
         </div>
         <div class="tab-pane" id="search_birth_data" role="tabpanel">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima praesentium laudantium
-            ipsa, enim maxime placeat, dolores quos sequi nisi iste velit perspiciatis rerum eveniet
-            voluptate laboriosam perferendis ipsum. Expedita, maiores.
-          </p>
-          <p>
-            Consectetur adipisicing elit. Minima praesentium laudantium ipsa, enim maxime placeat,
-            dolores quos sequi nisi iste velit perspiciatis rerum eveniet voluptate laboriosam
-            perferendis ipsum. Expedita, maiores.
-          </p>
-        </div>
-        <div class="tab-pane" id="classic_messages" role="tabpanel">
-          <p>
-            Consectetur adipisicing elit. Ipsam ut praesentium, voluptate quidem necessitatibus quam
-            nam officia soluta aperiam, recusandae.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos facilis laboriosam, vitae
-            ipsum tenetur atque vel repellendus culpa reiciendis velit quas, unde soluta quidem
-            voluptas ipsam, rerum fuga placeat rem error voluptate eligendi modi. Delectus, iure sit
-            impedit? Facere provident expedita itaque, magni, quas assumenda numquam eum! Sequi
-            deserunt, rerum.
-          </p>
-          <a href="#">Read more </a>
+          <ng-container *ngTemplateOutlet="birthDataTab"></ng-container>
         </div>
       </div>
     </div>
   </valtimo-filter-sidebar>
+</ng-template>
+
+<ng-template #bsnTab>
+  <form>
+    <div class="form-group pt-2">
+      <label for="inputBsn">{{ 'customers.citizenServiceNumber' | translate }}</label>
+      <input
+        class="form-control"
+        id="inputBsn"
+        type="text"
+        [placeholder]="'customers.citizenServiceNumberPlaceholder' | translate"
+      />
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #birthDataTab>
+  <form>
+    <div class="form-group pt-2">
+      <label for="inputDateOfBirth">{{ 'customers.dateOfBirth' | translate }}</label>
+      <input
+        class="form-control"
+        id="inputDateOfBirth"
+        type="text"
+        [placeholder]="'customers.dateOfBirthPlaceholder' | translate"
+      />
+    </div>
+    <div class="form-group">
+      <label for="inputFamilyName">{{ 'customers.familyName' | translate }}</label>
+      <input
+        class="form-control"
+        id="inputFamilyName"
+        type="text"
+        [placeholder]="'customers.familyNamePlaceholder' | translate"
+      />
+    </div>
+  </form>
 </ng-template>

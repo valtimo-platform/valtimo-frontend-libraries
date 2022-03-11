@@ -389,7 +389,11 @@
   "customers": {
     "name": "Name",
     "citizenServiceNumber": "Sozialversicherungsnummer",
+    "citizenServiceNumberPlaceholder": "z.B. 070003816",
     "dateOfBirth": "Geburtsdatum",
+    "dateOfBirthPlaceholder": "z.B. 01-01-1970",
+    "familyName": "Familienname",
+    "familyNamePlaceholder": "z.B. Jansen",
     "title": "Kunden",
     "subtitle": "Übersicht aller Kunden",
     "searchBasedOn": "Suchen nach",
