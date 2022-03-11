@@ -32,7 +32,7 @@ export class CustomerService {
 
   getCustomers(request: CustomerSearchRequest): Observable<Array<Customer>> {
     return this.http.post<Array<Customer>>(
-      `${this.valtimoEndpointUri}haalcentraal/people`,
+      `${this.valtimoEndpointUri}haalcentraal/personen`,
       request
     );
   }
