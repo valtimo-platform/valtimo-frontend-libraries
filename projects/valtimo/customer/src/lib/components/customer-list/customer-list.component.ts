@@ -55,8 +55,26 @@ export class CustomerListComponent {
     })
   );
 
-  private readonly searchParameters$ = new BehaviorSubject<CustomerSearchRequest | undefined>(
-    undefined
+  readonly bsn$ = new BehaviorSubject<string>('');
+  readonly dateOfBirth$ = new BehaviorSubject<string>('');
+  readonly familyName$ = new BehaviorSubject<string>('');
+
+  private readonly searchParameters$: Observable<CustomerSearchRequest | undefined> = combineLatest(
+    [this.bsn$, this.dateOfBirth$, this.familyName$]
+  ).pipe(
+    map(([bsn, dateOfBirth, familyName]) => {
+      if (bsn) {
+        return {
+          bsn,
+        };
+      } else if (dateOfBirth && familyName) {
+        return {
+          geslachtsnaam: familyName,
+          geboortedatum: dateOfBirth,
+        };
+      }
+      return undefined;
+    })
   );
 
   customers$: Observable<Array<MappedCustomer>> = this.searchParameters$.pipe(
@@ -89,4 +107,32 @@ export class CustomerListComponent {
     private readonly customerService: CustomerService,
     private readonly translateService: TranslateService
   ) {}
+
+  bsnChange(bsn: string): void {
+    this.clearDateOfBirth();
+    this.clearFamilyName();
+    this.bsn$.next(bsn);
+  }
+
+  dateOfBirthChange(dateOfBirth: string): void {
+    this.clearBsn();
+    this.dateOfBirth$.next(dateOfBirth);
+  }
+
+  familyNameChange(familyName: string): void {
+    this.clearBsn();
+    this.familyName$.next(familyName);
+  }
+
+  private clearBsn(): void {
+    this.bsn$.next('');
+  }
+
+  private clearDateOfBirth(): void {
+    this.dateOfBirth$.next('');
+  }
+
+  private clearFamilyName(): void {
+    this.familyName$.next('');
+  }
 }

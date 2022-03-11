@@ -92,7 +92,10 @@
         class="form-control"
         id="inputBsn"
         type="text"
+        name="bsn"
         [placeholder]="'customers.citizenServiceNumberPlaceholder' | translate"
+        [ngModel]="bsn$ | async"
+        (ngModelChange)="bsnChange($event)"
       />
     </div>
   </form>
@@ -106,7 +109,10 @@
         class="form-control"
         id="inputDateOfBirth"
         type="text"
+        name="dateOfBirth"
         [placeholder]="'customers.dateOfBirthPlaceholder' | translate"
+        [ngModel]="dateOfBirth$ | async"
+        (ngModelChange)="dateOfBirthChange($event)"
       />
     </div>
     <div class="form-group">
@@ -115,7 +121,10 @@
         class="form-control"
         id="inputFamilyName"
         type="text"
+        name="familyName"
         [placeholder]="'customers.familyNamePlaceholder' | translate"
+        [ngModel]="familyName$ | async"
+        (ngModelChange)="familyNameChange($event)"
       />
     </div>
   </form>

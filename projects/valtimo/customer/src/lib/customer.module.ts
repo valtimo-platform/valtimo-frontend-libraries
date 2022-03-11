@@ -20,6 +20,7 @@ import {WidgetModule, ListModule, SpinnerModule, FilterSidebarModule} from '@val
 import {CustomerRoutingModule} from './customer-routing.module';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import {TranslateModule} from '@ngx-translate/core';
     SpinnerModule,
     TranslateModule,
     FilterSidebarModule,
+    FormsModule,
   ],
   declarations: [CustomerListComponent],
   exports: [CustomerListComponent],
