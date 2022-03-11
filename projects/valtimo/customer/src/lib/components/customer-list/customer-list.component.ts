@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 import {CustomerService} from '../../services/customer.service';
 import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
-import {map, tap, switchMap} from 'rxjs/operators';
+import {map, tap, switchMap, debounceTime} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {
   CustomerBsnSearchRequest,
@@ -56,28 +56,44 @@ export class CustomerListComponent {
   );
 
   readonly bsn$ = new BehaviorSubject<string>('');
+  readonly bsnValid$: Observable<boolean> = this.bsn$.pipe(
+    map(bsn => {
+      const regex = new RegExp(/^[0-9]{9}$/gm);
+      return regex.test(bsn);
+    })
+  );
   readonly dateOfBirth$ = new BehaviorSubject<string>('');
+  readonly dateOfBirthValid$: Observable<boolean> = this.dateOfBirth$.pipe(
+    map(dateOfBirth => {
+      const regex = new RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/gm);
+      return regex.test(dateOfBirth);
+    })
+  );
   readonly familyName$ = new BehaviorSubject<string>('');
 
   private readonly searchParameters$: Observable<CustomerSearchRequest | undefined> = combineLatest(
-    [this.bsn$, this.dateOfBirth$, this.familyName$]
+    [this.bsn$, this.dateOfBirth$, this.familyName$, this.bsnValid$, this.dateOfBirthValid$]
   ).pipe(
-    map(([bsn, dateOfBirth, familyName]) => {
-      if (bsn) {
-        return {
-          bsn,
-        };
-      } else if (dateOfBirth && familyName) {
+    map(([bsn, dateOfBirth, familyName, bsnValid, dateOfBirthValid]) => {
+      if (bsn && bsnValid) {
+        this.loading$.next(true);
+
+        return {bsn};
+      } else if (dateOfBirth && familyName && dateOfBirthValid) {
+        this.loading$.next(true);
+
         return {
           geslachtsnaam: familyName,
           geboortedatum: dateOfBirth,
         };
       }
+
       return undefined;
     })
   );
 
   customers$: Observable<Array<MappedCustomer>> = this.searchParameters$.pipe(
+    debounceTime(500),
     switchMap(searchParameters => {
       if (
         (searchParameters as CustomerBsnSearchRequest)?.bsn ||
