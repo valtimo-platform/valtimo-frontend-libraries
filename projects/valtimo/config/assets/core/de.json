@@ -391,7 +391,9 @@
     "citizenServiceNumber": "Sozialversicherungsnummer",
     "dateOfBirth": "Geburtsdatum",
     "title": "Kunden",
-    "subtitle": "Übersicht aller Kunden"
+    "subtitle": "Übersicht aller Kunden",
+    "searchBasedOn": "Suchen nach",
+    "lastNameAndDateOfBirth": "Familienname und Geburtsdatum"
   },
   "Connectors": "Connectors",
   "connectorManagement": {

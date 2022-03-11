@@ -16,10 +16,15 @@
 
 import {Component} from '@angular/core';
 import {CustomerService} from '../../services/customer.service';
-import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
+import {map, tap, switchMap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
-import {MappedCustomer} from '../../models';
+import {
+  CustomerBsnSearchRequest,
+  CustomerDataSearchRequest,
+  CustomerSearchRequest,
+  MappedCustomer,
+} from '../../models';
 
 @Component({
   selector: 'valtimo-customer-list',
@@ -50,20 +55,33 @@ export class CustomerListComponent {
     })
   );
 
-  customers$: Observable<Array<MappedCustomer>> = this.customerService
-    .getCustomers({bsn: '999993847'})
-    .pipe(
-      map(customers =>
-        customers.map(customer => ({
-          citizenServiceNumber: customer.burgerservicenummer,
-          dateOfBirth: customer.geboorteDatum,
-          name: `${customer.geslachtsnaam}, ${customer.voornamen} ${customer.voorletters}`,
-        }))
-      ),
-      tap(() => {
-        this.loading$.next(false);
-      })
-    );
+  private readonly searchParameters$ = new BehaviorSubject<CustomerSearchRequest | undefined>(
+    undefined
+  );
+
+  customers$: Observable<Array<MappedCustomer>> = this.searchParameters$.pipe(
+    switchMap(searchParameters => {
+      if (
+        (searchParameters as CustomerBsnSearchRequest)?.bsn ||
+        ((searchParameters as CustomerDataSearchRequest)?.geslachtsnaam &&
+          (searchParameters as CustomerDataSearchRequest)?.geboortedatum)
+      ) {
+        return this.customerService.getCustomers(searchParameters as CustomerSearchRequest);
+      } else {
+        return of([]);
+      }
+    }),
+    map(customers =>
+      customers.map(customer => ({
+        citizenServiceNumber: customer.burgerservicenummer,
+        dateOfBirth: customer.geboorteDatum,
+        name: `${customer.geslachtsnaam}, ${customer.voornamen} ${customer.voorletters}`,
+      }))
+    ),
+    tap(() => {
+      this.loading$.next(false);
+    })
+  );
 
   readonly loading$ = new BehaviorSubject<boolean>(true);
 

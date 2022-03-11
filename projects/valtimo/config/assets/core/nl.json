@@ -391,7 +391,9 @@
     "citizenServiceNumber": "Burgerservicenummer",
     "dateOfBirth": "Geboortedatum",
     "title": "Klanten",
-    "subtitle": "Overzicht van alle klanten"
+    "subtitle": "Overzicht van alle klanten",
+    "searchBasedOn": "Zoeken op",
+    "lastNameAndDateOfBirth": "Geslachtsnaam en geboortedatum"
   },
   "Connectors": "Connecties",
   "connectorManagement": {
