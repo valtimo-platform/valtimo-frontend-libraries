@@ -386,6 +386,13 @@
     "save": "Speichern",
     "redo": "Wiederherstellen"
   },
+  "customers": {
+    "name": "Name",
+    "citizenServiceNumber": "Sozialversicherungsnummer",
+    "dateOfBirth": "Geburtsdatum",
+    "title": "Kunden",
+    "subtitle": "Übersicht aller Kunden"
+  },
   "Connectors": "Connectors",
   "connectorManagement": {
     "title": "Connectors",

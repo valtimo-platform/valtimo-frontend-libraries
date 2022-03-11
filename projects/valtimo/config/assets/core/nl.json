@@ -386,6 +386,13 @@
     "save": "Opslaan",
     "redo": "Opnieuw"
   },
+  "customers": {
+    "name": "Naam",
+    "citizenServiceNumber": "Burgerservicenummer",
+    "dateOfBirth": "Geboortedatum",
+    "title": "Klanten",
+    "subtitle": "Overzicht van alle klanten"
+  },
   "Connectors": "Connecties",
   "connectorManagement": {
     "title": "Connecties",

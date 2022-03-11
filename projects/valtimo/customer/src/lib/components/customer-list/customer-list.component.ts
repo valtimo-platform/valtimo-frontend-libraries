@@ -16,7 +16,10 @@
 
 import {Component} from '@angular/core';
 import {CustomerService} from '../../services/customer.service';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
+import {MappedCustomer} from '../../models';
 
 @Component({
   selector: 'valtimo-customer-list',
@@ -24,7 +27,48 @@ import {Observable} from 'rxjs';
   styleUrls: ['./customer-list.component.scss'],
 })
 export class CustomerListComponent {
-  customers$: Observable<Array<any>> = this.customerService.getCustomers({bsn: '999993847'});
+  fields$: Observable<Array<{key: string; label: string}>> = combineLatest([
+    this.translateService.stream('customers.name'),
+    this.translateService.stream('customers.citizenServiceNumber'),
+    this.translateService.stream('customers.dateOfBirth'),
+  ]).pipe(
+    map(([nameLabel, numberLabel, dateOfBirthLabel]) => {
+      return [
+        {
+          label: numberLabel,
+          key: 'citizenServiceNumber',
+        },
+        {
+          label: nameLabel,
+          key: 'name',
+        },
+        {
+          label: dateOfBirthLabel,
+          key: 'dateOfBirth',
+        },
+      ];
+    })
+  );
 
-  constructor(private readonly customerService: CustomerService) {}
+  customers$: Observable<Array<MappedCustomer>> = this.customerService
+    .getCustomers({bsn: '999993847'})
+    .pipe(
+      map(customers =>
+        customers.map(customer => ({
+          citizenServiceNumber: customer.burgerservicenummer,
+          dateOfBirth: customer.geboorteDatum,
+          name: `${customer.geslachtsnaam}, ${customer.voornamen} ${customer.voorletters}`,
+        }))
+      ),
+      tap(() => {
+        this.loading$.next(false);
+      })
+    );
+
+  readonly loading$ = new BehaviorSubject<boolean>(true);
+
+  constructor(
+    private readonly customerService: CustomerService,
+    private readonly translateService: TranslateService
+  ) {}
 }

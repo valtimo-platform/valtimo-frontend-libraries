@@ -16,36 +16,35 @@
 
 <!--<ng-container *ngTemplateOutlet="sidebar"></ng-container>-->
 
-<div class="main-content pt-0" *ngIf="customers$ | async">
+<div
+  class="main-content pt-0"
+  *ngIf="{customers: customers$ | async, fields: fields$ | async} as obs"
+>
   <div class="container-fluid">
     <div class="col-12 px-0 mb-5">
-      <valtimo-widget>
-        <!--        <valtimo-list-->
-        <!--          [items]="items"-->
-        <!--          [fields]="fields"-->
-        <!--          (rowClicked)="rowClick($event)"-->
-        <!--          [pagination]="pagination"-->
-        <!--          [viewMode]="true"-->
-        <!--          [header]="true"-->
-        <!--          paginationIdentifier="dossierList"-->
-        <!--          (paginationClicked)="paginationClicked($event)"-->
-        <!--          (paginationSet)="paginationSet()"-->
-        <!--          [initialSortState]="getInitialSortState()"-->
-        <!--          (sortChanged)="sortChanged($event)"-->
-        <!--        >-->
-        <!--          <div header>-->
-        <!--            <h3 class="list-header-title">-->
-        <!--              {{ schema?.title }}-->
-        <!--              <sup class="ml-1 badge badge-pill badge-primary">{{-->
-        <!--                documents?.content.length || 0-->
-        <!--              }}</sup>-->
-        <!--            </h3>-->
-        <!--          </div>-->
-        <!--        </valtimo-list>-->
-      </valtimo-widget>
+      <ng-container *ngIf="(loading$ | async) === false; else loading">
+        <ng-container
+          *ngTemplateOutlet="list; context: {customers: obs.customers, fields: obs.fields}"
+        ></ng-container>
+      </ng-container>
     </div>
   </div>
 </div>
+
+<ng-template #list let-customers="customers" let-fields="fields">
+  <valtimo-widget>
+    <valtimo-list [items]="customers" [fields]="fields" [header]="true">
+      <div header>
+        <h3 class="list-header-title">{{ 'customers.title' | translate }}</h3>
+        <h5 class="list-header-description">{{ 'customers.subtitle' | translate }}</h5>
+      </div>
+    </valtimo-list>
+  </valtimo-widget>
+</ng-template>
+
+<ng-template #loading>
+  <valtimo-spinner></valtimo-spinner>
+</ng-template>
 
 <!--<ng-template #sidebar>-->
 <!--  <valtimo-filter-sidebar>-->

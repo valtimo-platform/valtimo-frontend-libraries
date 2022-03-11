@@ -24,6 +24,12 @@ interface Customer {
   voornamen: string;
 }
 
+interface MappedCustomer {
+  citizenServiceNumber: string;
+  name: string;
+  dateOfBirth: string;
+}
+
 interface CustomerBsnSearchRequest {
   bsn: string;
 }
@@ -35,4 +41,10 @@ interface CustomerDataSearchRequest {
 
 type CustomerSearchRequest = CustomerBsnSearchRequest | CustomerDataSearchRequest;
 
-export {CustomerBsnSearchRequest, CustomerDataSearchRequest, CustomerSearchRequest, Customer};
+export {
+  CustomerBsnSearchRequest,
+  CustomerDataSearchRequest,
+  CustomerSearchRequest,
+  Customer,
+  MappedCustomer,
+};

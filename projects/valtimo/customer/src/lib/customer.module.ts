@@ -16,12 +16,20 @@
 
 import {NgModule} from '@angular/core';
 import {CustomerListComponent} from './components/customer-list/customer-list.component';
-import {WidgetModule} from '@valtimo/components';
+import {WidgetModule, ListModule, SpinnerModule} from '@valtimo/components';
 import {CustomerRoutingModule} from './customer-routing.module';
 import {CommonModule} from '@angular/common';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [CommonModule, WidgetModule, CustomerRoutingModule],
+  imports: [
+    CommonModule,
+    WidgetModule,
+    CustomerRoutingModule,
+    ListModule,
+    SpinnerModule,
+    TranslateModule,
+  ],
   declarations: [CustomerListComponent],
   exports: [CustomerListComponent],
 })

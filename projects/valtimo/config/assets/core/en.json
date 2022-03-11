@@ -386,6 +386,13 @@
     "save": "Save",
     "redo": "Redo"
   },
+  "customers": {
+    "name": "Name",
+    "citizenServiceNumber": "Citizen service number",
+    "dateOfBirth": "Date of birth",
+    "title": "Customers",
+    "subtitle": "Overview of all customers"
+  },
   "Connectors": "Connections",
   "connectorManagement": {
     "title": "Connections",
