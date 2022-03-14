@@ -25,6 +25,7 @@ import {
   UploadProvider,
   ValtimoConfig,
 } from '@valtimo/contract';
+import {IncludeFunction} from '@valtimo/config';
 import {authenticationKeycloak} from './auth/keycloak-config.dev';
 import {openZaakExtensionInitializer, emailExtensionInitializer} from '@valtimo/open-zaak';
 import {connectorLinkExtensionInitializer} from '@valtimo/connector-management';
@@ -85,6 +86,7 @@ export const environment: ValtimoConfig = {
         title: 'Customers',
         iconClass: 'icon mdi mdi-account',
         sequence: 2,
+        includeFunction: IncludeFunction.HaalcentraalConnectorConfigured,
       },
       {
         roles: [ROLE_USER],

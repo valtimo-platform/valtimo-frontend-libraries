@@ -15,7 +15,7 @@
  */
 
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import {ConfigService} from './config.service';
+import {ConfigService} from './services/config.service';
 import {VALTIMO_CONFIG, ValtimoConfig} from './models';
 import {ExtensionComponent} from './extension/extension.component';
 
