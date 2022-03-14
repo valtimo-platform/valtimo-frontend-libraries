@@ -33,6 +33,8 @@ import {
   registerFormioUploadComponent,
   UploaderModule,
   WidgetModule,
+  FormIoStateService,
+  registerFormioFileSelectorComponent,
 } from '@valtimo/components';
 import {ChoicefieldModule} from '@valtimo/choicefield';
 import {
@@ -159,7 +161,7 @@ export function tabsFactory() {
       },
     }),
   ],
-  providers: [FormioComponent],
+  providers: [FormioComponent, FormIoStateService],
   entryComponents: [
     CustomFormExampleComponent,
     StartProcessCustomFormComponent,
@@ -170,5 +172,6 @@ export function tabsFactory() {
 export class AppModule {
   constructor(injector: Injector) {
     registerFormioUploadComponent(injector);
+    registerFormioFileSelectorComponent(injector);
   }
 }
