@@ -32,3 +32,5 @@ export * from './lib/components/select/select.component';
 // Modal component
 export * from './lib/components/modal/modal.module';
 export * from './lib/components/modal/modal.component';
+// Modal service
+export * from './lib/services/modal.service';

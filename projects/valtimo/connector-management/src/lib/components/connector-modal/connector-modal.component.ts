@@ -16,6 +16,7 @@
 
 import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {ModalComponent} from '@valtimo/components';
+import {ModalComponent as vModalComponent, ModalService} from '@valtimo/user-interface';
 import {Subscription} from 'rxjs';
 import {ConnectorModal} from '@valtimo/config';
 import {ConnectorManagementStateService} from '../../services/connector-management-state/connector-management-state.service';
@@ -27,12 +28,16 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
 })
 export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   @ViewChild('modal') modal: ModalComponent;
+  @ViewChild('vModal') vModal: vModalComponent;
 
   @Input() modalType: ConnectorModal;
 
   showSubscription!: Subscription;
 
-  constructor(private readonly stateService: ConnectorManagementStateService) {}
+  constructor(
+    private readonly stateService: ConnectorManagementStateService,
+    private readonly modalService: ModalService
+  ) {}
 
   ngAfterViewInit(): void {
     this.showSubscription = this.stateService.showModal$.subscribe(show => {
@@ -49,10 +54,12 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   }
 
   private show(): void {
-    this.modal.show();
+    // this.modal.show();
+    this.modalService.setCurrentModalUuidAndOpen(this.vModal.uuid);
   }
 
   private hide(): void {
-    this.modal.hide();
+    // this.modal.hide();
+    this.modalService.closeCurrentModal();
   }
 }

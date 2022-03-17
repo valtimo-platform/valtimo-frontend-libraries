@@ -14,4 +14,21 @@
   ~ limitations under the License.
   -->
 
-modal works
+<ng-container
+  *ngIf="{
+    visible: visible$ | async,
+    appearing: appearing$ | async,
+    showBackdrop: showBackdrop$ | async
+  } as obs"
+>
+  <div
+    class="v-modal-backdrop"
+    [ngClass]="{
+      'v-modal-backdrop--visible': obs.visible || obs.disappearing,
+      'v-modal-backdrop--backdrop': obs.showBackdrop,
+      'v-modal-backdrop--hidden': !obs.visible,
+      'v-modal-backdrop--appearing': obs.appearing
+    }"
+    (click)="closeModal()"
+  ></div>
+</ng-container>

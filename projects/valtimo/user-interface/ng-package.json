@@ -9,6 +9,7 @@
     "ngx-skeleton-loader",
     "@ng-select/ng-select",
     "@angular/cdk",
-    "@mdi/font"
+    "@mdi/font",
+    "uuid"
   ]
 }

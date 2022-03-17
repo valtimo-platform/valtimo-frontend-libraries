@@ -13,3 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.v-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--v-modal-z-index);
+  background-color: var(--v-color-backdrop-transparant);
+  backdrop-filter: blur(0);
+  transition: var(--v-modal-backdrop-transition);
+  display: none;
+  cursor: var(--v-modal-backdrop-cursor);
+}
+
+.v-modal-backdrop--visible {
+  display: flex;
+}
+
+.v-modal-backdrop--backdrop {
+  background-color: var(--v-modal-backdrop-color);
+  backdrop-filter: var(--v-modal-backdrop-filter);
+}
+
+.v-modal-backdrop--hidden,
+.v-modal-backdrop--appearing {
+  cursor: var(--v-modal-backdrop-cursor-disappearing);
+}

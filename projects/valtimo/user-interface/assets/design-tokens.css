@@ -31,6 +31,8 @@
   --v-color-accent-2: #316d3a;
   --v-color-accent-2-lighter: #3b8546;
   --v-color-accent-2-darker: #2c6234;
+  --v-color-backdrop: rgba(0, 0, 0, 0.28);
+  --v-color-backdrop-transparant: rgba(0, 0, 0, 0);
   /* font size */
   --v-font-size-smaller: 12px;
   --v-font-size-default: 14px;
@@ -58,11 +60,16 @@
   --v-transition-color-fast: color 0.07s ease-in;
   --v-transition-font-size-fast: font-size 0.07s ease-in;
   --v-transition-border-fast: border 0.07s ease-in;
+  --v-transition-bg-medium: background-color 0.14s ease-in;
+  --v-transition-backdrop-medium: backdrop-filter 0.14s ease-in;
   /* cursors */
+  --v-cursor-default: default;
   --v-cursor-clickable: pointer;
   --v-cursor-disabled: not-allowed;
   /* box shadow */
   --v-box-shadow-medium: 0 3px 40px 0 rgba(0, 0, 0, 0.06);
+  /* backdrop filter */
+  --v-backdrop-filter-heavy-blur: blur(13px);
   /* button */
   --v-button-font-color: var(--v-color-white);
   --v-button-icon-container-bg-color: var(--v-color-white);
@@ -132,4 +139,11 @@
   --v-select-clear-icon-color: var(--v-color-grey-2);
   --v-select-clear-icon-hover-color: var(--v-color-grey-1);
   --v-select-dropdown-box-shadow: var(--v-box-shadow-medium);
+  /* modal */
+  --v-modal-z-index: 9999;
+  --v-modal-backdrop-color: var(--v-color-backdrop);
+  --v-modal-backdrop-filter: var(--v-backdrop-filter-heavy-blur);
+  --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-bg-medium);
+  --v-modal-backdrop-cursor: var(--v-cursor-clickable);
+  --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);
 }
