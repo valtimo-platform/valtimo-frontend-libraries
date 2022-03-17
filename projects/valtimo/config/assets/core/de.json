@@ -8,7 +8,8 @@
     "ProcessEndedEvent": "Prozess abgeschlossen",
     "DossierDocumentGeneratedEvent": "Case-Dokument erstellt",
     "DocumentRelatedFileAddedEvent": "Datei hinzugefügt",
-    "DocumentRelatedFileRemovedEvent": "Datei entfernt"
+    "DocumentRelatedFileRemovedEvent": "Datei entfernt",
+    "BesluitAddedEvent": "Entscheidung getroffen <i class=\"mdi mdi-arrow-right\"></i> {{identificatie}}"
   },
   "dossier": {
     "title": {
@@ -199,7 +200,8 @@
     "serviceTaskHandler": {
       "operation": "Tätigkeit:",
       "status": "Status:",
-      "result": "Ergebnis:"
+      "result": "Ergebnis:",
+      "type": "Art:"
     },
     "delete": "Löschen",
     "edit": "Editieren",
@@ -308,6 +310,7 @@
   "Select process definition for document definition": "Prozess-Definition für Dokument-Definition auswählen",
   "Select options for the selected process": "Optionen für gewählten Prozess auswählen",
   "Save": "Speichern",
+  "Customers": "Kunden",
   "processManagement": {
     "download": "Herunterladen",
     "clear": "Löschen",
@@ -392,6 +395,19 @@
     "save": "Speichern",
     "redo": "Wiederherstellen"
   },
+  "customers": {
+    "name": "Name",
+    "citizenServiceNumber": "Sozialversicherungsnummer",
+    "citizenServiceNumberPlaceholder": "z.B. 070003816",
+    "dateOfBirth": "Geburtsdatum",
+    "dateOfBirthPlaceholder": "z.B. 1970-03-17",
+    "familyName": "Familienname",
+    "familyNamePlaceholder": "z.B. Jansen",
+    "title": "Kunden",
+    "subtitle": "Übersicht aller Kunden",
+    "searchBasedOn": "Suchen nach",
+    "lastNameAndDateOfBirth": "Familienname und Geburtsdatum"
+  },
   "Connectors": "Connectors",
   "connectorManagement": {
     "title": "Connectors",
@@ -437,13 +453,15 @@
       "openZaakConfig.clientId": "Client ID",
       "openZaakConfig.secret": "Secret",
       "openZaakConfig.rsin": "Rsin",
+      "openZaakConfig.catalogiUrl": "Katalog URL",
       "clientId": "Client ID",
       "secret": "Secret",
       "rsin": "RSIN",
       "username": "Nutzername",
       "password": "Passwort",
       "baseUrl": "Base URL",
-      "callbackBaseUrl": "Callback base URL"
+      "callbackBaseUrl": "Callback base URL",
+      "apiKey": "API-Schlüssel"
     },
     "messages": {
       "addSuccess": "Connection erfolgreich hinzugefügt.",

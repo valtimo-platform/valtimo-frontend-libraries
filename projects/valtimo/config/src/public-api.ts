@@ -20,7 +20,10 @@
 
 export * from './lib/models';
 
-export * from './lib/config.service';
+export * from './lib/services/config.service';
+
+export * from './lib/services/menu-include.service';
+
 export * from './lib/config.module';
 
 export * from './lib/extension/extension.component';

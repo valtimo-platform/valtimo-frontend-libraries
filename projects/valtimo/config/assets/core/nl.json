@@ -8,7 +8,8 @@
     "ProcessEndedEvent": "Proces afgerond",
     "DossierDocumentGeneratedEvent": "Dossier document gegenereerd",
     "DocumentRelatedFileAddedEvent": "Gerelateerd bestand toegevoegd",
-    "DocumentRelatedFileRemovedEvent": "Gerelateerd bestand verwijderd"
+    "DocumentRelatedFileRemovedEvent": "Gerelateerd bestand verwijderd",
+    "BesluitAddedEvent": "Besluit toegevoegd <i class=\"mdi mdi-arrow-right\"></i> {{identificatie}}"
   },
   "dossier": {
     "title": {
@@ -200,7 +201,8 @@
     "serviceTaskHandler": {
       "operation": "Operatie:",
       "status": "Status:",
-      "result": "Resultaat:"
+      "result": "Resultaat:",
+      "type": "Type:"
     },
     "delete": "Verwijderen",
     "edit": "Wijzigen",
@@ -308,6 +310,7 @@
   "Select process definition for document definition": "Selecteer een processdefinitie voor de documentdefinitie",
   "Select options for the selected process": "Kies opties voor het geselecteerde proces",
   "Save": "Opslaan",
+  "Customers": "Klanten",
   "processManagement": {
     "download": "Downloaden",
     "clear": "Wissen",
@@ -392,6 +395,19 @@
     "save": "Opslaan",
     "redo": "Opnieuw"
   },
+  "customers": {
+    "name": "Naam",
+    "citizenServiceNumber": "Burgerservicenummer",
+    "citizenServiceNumberPlaceholder": "bv. 070003816",
+    "dateOfBirth": "Geboortedatum",
+    "dateOfBirthPlaceholder": "bv. 1970-03-17",
+    "familyName": "Geslachtsnaam",
+    "familyNamePlaceholder": "bv. Jansen",
+    "title": "Klanten",
+    "subtitle": "Overzicht van alle klanten",
+    "searchBasedOn": "Zoeken op",
+    "lastNameAndDateOfBirth": "Geslachtsnaam en geboortedatum"
+  },
   "Connectors": "Connecties",
   "connectorManagement": {
     "title": "Connecties",
@@ -437,13 +453,15 @@
       "openZaakConfig.clientId": "Client ID",
       "openZaakConfig.secret": "Secret",
       "openZaakConfig.rsin": "Rsin",
+      "openZaakConfig.catalogiUrl": "Catalogus URL",
       "clientId": "Client ID",
       "secret": "Secret",
       "rsin": "RSIN",
       "username": "Gebruikersnaam",
       "password": "Wachtwoord",
       "baseUrl": "Base URL",
-      "callbackBaseUrl": "Callback base URL"
+      "callbackBaseUrl": "Callback base URL",
+      "apiKey": "API-sleutel"
     },
     "messages": {
       "addSuccess": "Connectie is succesvol toegevoegd.",

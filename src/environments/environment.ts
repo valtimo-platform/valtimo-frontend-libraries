@@ -25,6 +25,7 @@ import {
   UploadProvider,
   ValtimoConfig,
 } from '@valtimo/contract';
+import {IncludeFunction} from '@valtimo/config';
 import {authenticationKeycloak} from './auth/keycloak-config.dev';
 import {openZaakExtensionInitializer, emailExtensionInitializer} from '@valtimo/open-zaak';
 import {connectorLinkExtensionInitializer} from '@valtimo/connector-management';
@@ -81,23 +82,31 @@ export const environment: ValtimoConfig = {
       },
       {
         roles: [ROLE_USER],
+        link: ['/klanten'],
+        title: 'Customers',
+        iconClass: 'icon mdi mdi-account',
+        sequence: 2,
+        includeFunction: IncludeFunction.HaalcentraalConnectorConfigured,
+      },
+      {
+        roles: [ROLE_USER],
         link: ['/tasks'],
         title: 'Tasks',
         iconClass: 'icon mdi mdi-check-all',
-        sequence: 2,
+        sequence: 3,
       },
       {
         roles: [ROLE_USER],
         link: ['/analysis'],
         title: 'Analysis',
-        iconClass: 'icon mdi mdi-chart-bar',
-        sequence: 3,
+        iconClass: 'icon mdi mdi-chart',
+        sequence: 4,
       },
       {
         roles: [ROLE_ADMIN],
         title: 'Admin',
         iconClass: 'icon mdi mdi-tune',
-        sequence: 4,
+        sequence: 5,
         children: [
           {title: 'Basics', textClass: 'text-dark font-weight-bold c-default', sequence: 1},
           {link: ['/processes'], title: 'Processes', sequence: 2},
@@ -169,4 +178,4 @@ export const environment: ValtimoConfig = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
