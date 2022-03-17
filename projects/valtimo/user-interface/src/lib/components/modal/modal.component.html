@@ -18,6 +18,7 @@
   *ngIf="{
     visible: visible$ | async,
     appearing: appearing$ | async,
+    disappearing: disappearing$ | async,
     showBackdrop: showBackdrop$ | async
   } as obs"
 >
@@ -27,7 +28,8 @@
       'v-modal-backdrop--visible': obs.visible || obs.disappearing,
       'v-modal-backdrop--backdrop': obs.showBackdrop,
       'v-modal-backdrop--hidden': !obs.visible,
-      'v-modal-backdrop--appearing': obs.appearing
+      'v-modal-backdrop--appearing': obs.appearing,
+      'v-modal-backdrop--disappearing': obs.disappearing
     }"
     (click)="closeModal()"
   ></div>

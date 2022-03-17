@@ -28,7 +28,8 @@
   cursor: var(--v-modal-backdrop-cursor);
 }
 
-.v-modal-backdrop--visible {
+.v-modal-backdrop--visible,
+.v-modal-backdrop--disappearing {
   display: flex;
 }
 

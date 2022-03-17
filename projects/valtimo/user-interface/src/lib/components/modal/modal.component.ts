@@ -49,11 +49,15 @@ export class ModalComponent {
 
   readonly appearing$ = new BehaviorSubject<boolean>(false);
 
+  readonly disappearing$ = new BehaviorSubject<boolean>(false);
+
   constructor(private readonly modalService: ModalService) {}
 
   closeModal(): void {
     this.appearing$.pipe(take(1)).subscribe(appearing => {
       if (!appearing) {
+        this.disappearing$.next(true);
+        this.setDisappearingTimeout();
         this.modalService.closeCurrentModal();
       }
     });
@@ -62,6 +66,12 @@ export class ModalComponent {
   private setAppearingTimeout(): void {
     setTimeout(() => {
       this.appearing$.next(false);
+    }, this.appearingDelayMs);
+  }
+
+  private setDisappearingTimeout(): void {
+    setTimeout(() => {
+      this.disappearing$.next(false);
     }, this.appearingDelayMs);
   }
 }
