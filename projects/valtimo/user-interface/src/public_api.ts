@@ -29,3 +29,6 @@ export * from './lib/components/table/table.component';
 // Select component
 export * from './lib/components/select/select.module';
 export * from './lib/components/select/select.component';
+// Modal component
+export * from './lib/components/modal/modal.module';
+export * from './lib/components/modal/modal.component';
