@@ -1540,11 +1540,11 @@
     "@valtimo/customer": {
       "projectType": "library",
       "root": "projects/valtimo/customer",
-      "sourceRoot": "projects/valtimo/customer/src",
+      "sourceRoot": "projects/customer/resource/src",
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/valtimo/customer/tsconfig.lib.json",
             "project": "projects/valtimo/customer/ng-package.json"
@@ -1564,13 +1564,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/valtimo/customer/tsconfig.lib.json",
-              "projects/valtimo/customer/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "projects/valtimo/customer/src/**/*.ts",
+              "projects/valtimo/customer/src/**/*.html"
+            ]
           }
         }
       }
