@@ -26,6 +26,10 @@
   transition: var(--v-modal-backdrop-transition);
   display: none;
   cursor: var(--v-modal-backdrop-cursor);
+  padding-inline-start: var(--v-modal-backdrop-padding-inline);
+  padding-inline-end: var(--v-modal-backdrop-padding-inline);
+  padding-block-start: var(--v-modal-backdrop-padding-block);
+  padding-block-end: var(--v-modal-backdrop-padding-block);
 }
 
 .v-modal-backdrop--visible,
@@ -46,6 +50,7 @@
   opacity: 0;
   transition: var(--v-modal-transition);
   cursor: var(--v-modal-cursor);
+  border-radius: var(--v-modal-border-radius);
 }
 
 .v-modal-backdrop--backdrop {

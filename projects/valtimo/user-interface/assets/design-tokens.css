@@ -57,6 +57,7 @@
   --v-spacing-inline-3xl: 58px;
   /* border */
   --v-border-radius-md: 5px;
+  --v-border-radius-lg: 9px;
   /* transitions */
   --v-transition-bg-fast: background-color 0.07s ease-in;
   --v-transition-color-fast: color 0.07s ease-in;
@@ -153,9 +154,12 @@
   --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-backdrop-medium);
   --v-modal-backdrop-cursor: var(--v-cursor-clickable);
   --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);
+  --v-modal-backdrop-padding-inline: var(--v-spacing-inline-md);
+  --v-modal-backdrop-padding-block: var(--v-spacing-block-md);
   --v-modal-max-width: 850px;
   --v-modal-min-height: 150px;
   --v-modal-background-color: var(--v-color-grey-6);
   --v-modal-transition: var(--v-transition-opacity-medium), var(--v-transition-transform-medium);
   --v-modal-cursor: var(--v-cursor-default);
+  --v-modal-border-radius: var(--v-border-radius-lg);
 }
