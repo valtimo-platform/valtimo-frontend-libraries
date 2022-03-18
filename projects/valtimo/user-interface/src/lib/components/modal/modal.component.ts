@@ -31,8 +31,8 @@ export class ModalComponent {
   public uuid: string = uuidv4();
 
   readonly visible$: Observable<boolean> = combineLatest([
-    this.modalService.currentModalVisible$,
-    this.modalService.currentModalUuid$,
+    this.modalService.modalVisible$,
+    this.modalService.modalUuid$,
   ]).pipe(
     map(([currentModalVisible, currentModalUuid]) => {
       return currentModalVisible && currentModalUuid === this.uuid;
@@ -54,7 +54,7 @@ export class ModalComponent {
   closeModal(): void {
     this.disappearing$.next(true);
     this.setDisappearingTimeout();
-    this.modalService.closeCurrentModal();
+    this.modalService.closeModal();
   }
 
   modalClick(event: MouseEvent): void {

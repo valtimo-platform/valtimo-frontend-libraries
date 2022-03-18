@@ -55,11 +55,11 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
 
   private show(): void {
     // this.modal.show();
-    this.modalService.setCurrentModalUuidAndOpen(this.vModal.uuid);
+    this.modalService.openModal(this.vModal);
   }
 
   private hide(): void {
     // this.modal.hide();
-    this.modalService.closeCurrentModal();
+    this.modalService.closeModal();
   }
 }

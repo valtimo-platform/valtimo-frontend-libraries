@@ -16,38 +16,43 @@
 
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
+import {take} from 'rxjs/operators';
+import {ModalComponent} from '../components/modal/modal.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ModalService {
-  private readonly _currentModalUuid$ = new BehaviorSubject<string>('');
-  private readonly _currentModalVisible$ = new BehaviorSubject<boolean>(false);
+  private readonly _modalUuid$ = new BehaviorSubject<string>('');
+  private readonly _modalVisible$ = new BehaviorSubject<boolean>(false);
 
   constructor() {}
 
-  get currentModalUuid$() {
-    return this._currentModalUuid$;
+  get modalUuid$() {
+    return this._modalUuid$;
   }
 
-  get currentModalVisible$() {
-    return this._currentModalVisible$;
+  get modalVisible$() {
+    return this._modalVisible$;
   }
 
-  setCurrentModalUuid(uuid: string): void {
-    this._currentModalUuid$.next(uuid);
+  setCurrentModal(modalComponent: ModalComponent): void {
+    this._modalUuid$.next(modalComponent.uuid);
   }
 
-  openCurrentModal(): void {
-    this._currentModalVisible$.next(true);
+  openModal(modalComponent?: ModalComponent): void {
+    this._modalVisible$.next(true);
+
+    if (modalComponent) {
+      this._modalUuid$.pipe(take(1)).subscribe(currentModalUuid => {
+        if (modalComponent.uuid !== currentModalUuid) {
+          this.setCurrentModal(modalComponent);
+        }
+      });
+    }
   }
 
-  closeCurrentModal(): void {
-    this._currentModalVisible$.next(false);
-  }
-
-  setCurrentModalUuidAndOpen(uuid: string): void {
-    this.setCurrentModalUuid(uuid);
-    this.openCurrentModal();
+  closeModal(): void {
+    this._modalVisible$.next(false);
   }
 }
