@@ -24,6 +24,7 @@
   --v-color-grey-3: #b2b2b2;
   --v-color-grey-4: #dbdbdb;
   --v-color-grey-5: #ececec;
+  --v-color-grey-6: #f2f3f3;
   --v-color-accent-1: #ef6622;
   --v-color-accent-1-lighter: #f07538;
   --v-color-accent-1-darker: #e55710;
@@ -62,6 +63,8 @@
   --v-transition-border-fast: border 0.07s ease-in;
   --v-transition-bg-medium: background-color 0.14s ease-in;
   --v-transition-backdrop-medium: backdrop-filter 0.14s ease-in;
+  --v-transition-opacity-medium: opacity 0.14s ease-in;
+  --v-transition-transform-medium: transform 0.14s ease-in;
   /* cursors */
   --v-cursor-default: default;
   --v-cursor-clickable: pointer;
@@ -148,4 +151,6 @@
   --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);
   --v-modal-max-width: 850px;
   --v-modal-min-height: 150px;
+  --v-modal-background-color: var(--v-color-grey-6);
+  --v-modal-transition: var(--v-transition-opacity-medium), var(--v-transition-transform-medium);
 }

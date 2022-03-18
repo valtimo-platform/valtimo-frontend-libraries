@@ -31,11 +31,30 @@
 .v-modal-backdrop--visible,
 .v-modal-backdrop--disappearing {
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.v-modal {
+  background-color: var(--v-modal-background-color);
+  height: max-content;
+  min-height: var(--v-modal-min-height);
+  max-height: 100%;
+  width: 100%;
+  max-width: var(--v-modal-max-width);
+  transform: translateY(-100vh);
+  opacity: 0;
+  transition: var(--v-modal-transition);
 }
 
 .v-modal-backdrop--backdrop {
   background-color: var(--v-modal-backdrop-color);
   backdrop-filter: var(--v-modal-backdrop-filter);
+
+  .v-modal {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .v-modal-backdrop--hidden,

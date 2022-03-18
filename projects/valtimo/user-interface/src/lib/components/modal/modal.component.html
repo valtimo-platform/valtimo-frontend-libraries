@@ -43,5 +43,11 @@
       'v-modal-backdrop--disappearing': disappearing
     }"
     (click)="!appearing && !disappearing && closeModal()"
-  ></div>
+  >
+    <ng-container *ngTemplateOutlet="modal"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #modal>
+  <div class="v-modal"></div>
 </ng-template>
