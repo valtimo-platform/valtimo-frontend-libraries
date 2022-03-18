@@ -31,6 +31,6 @@
       'v-modal-backdrop--appearing': obs.appearing,
       'v-modal-backdrop--disappearing': obs.disappearing
     }"
-    (click)="closeModal()"
+    (click)="!obs.appearing && !obs.disappearing && closeModal()"
   ></div>
 </ng-container>

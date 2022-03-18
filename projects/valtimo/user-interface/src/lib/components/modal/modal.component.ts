@@ -16,7 +16,7 @@
 
 import {Component, Input} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
-import {delay, map, take, tap} from 'rxjs/operators';
+import {delay, map, tap} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
 import {ModalService} from '../../services/modal.service';
 
@@ -45,7 +45,7 @@ export class ModalComponent {
     })
   );
 
-  readonly showBackdrop$: Observable<boolean> = this.visible$.pipe(delay(1));
+  readonly showBackdrop$: Observable<boolean> = this.visible$.pipe(delay(0));
 
   readonly appearing$ = new BehaviorSubject<boolean>(false);
 
@@ -54,13 +54,9 @@ export class ModalComponent {
   constructor(private readonly modalService: ModalService) {}
 
   closeModal(): void {
-    this.appearing$.pipe(take(1)).subscribe(appearing => {
-      if (!appearing) {
-        this.disappearing$.next(true);
-        this.setDisappearingTimeout();
-        this.modalService.closeCurrentModal();
-      }
-    });
+    this.disappearing$.next(true);
+    this.setDisappearingTimeout();
+    this.modalService.closeCurrentModal();
   }
 
   private setAppearingTimeout(): void {
