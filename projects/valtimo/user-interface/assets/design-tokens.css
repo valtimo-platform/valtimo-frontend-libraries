@@ -146,4 +146,6 @@
   --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-bg-medium);
   --v-modal-backdrop-cursor: var(--v-cursor-clickable);
   --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);
+  --v-modal-max-width: 850px;
+  --v-modal-min-height: 150px;
 }

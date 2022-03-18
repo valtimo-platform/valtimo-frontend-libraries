@@ -46,9 +46,7 @@ export class ModalComponent {
   );
 
   readonly showBackdrop$: Observable<boolean> = this.visible$.pipe(delay(0));
-
   readonly appearing$ = new BehaviorSubject<boolean>(false);
-
   readonly disappearing$ = new BehaviorSubject<boolean>(false);
 
   constructor(private readonly modalService: ModalService) {}
