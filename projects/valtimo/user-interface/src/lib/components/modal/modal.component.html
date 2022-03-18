@@ -15,39 +15,28 @@
   -->
 
 <ng-container
-  *ngTemplateOutlet="
-    modalBackdrop;
-    context: {
-      visible: visible$ | async,
-      appearing: appearing$ | async,
-      disappearing: disappearing$ | async,
-      showBackdrop: showBackdrop$ | async
-    }
-  "
-></ng-container>
-
-<ng-template
-  #modalBackdrop
-  let-visible="visible"
-  let-appearing="appearing"
-  let-disappearing="disappearing"
-  let-showBackdrop="showBackdrop"
+  *ngIf="{
+    visible: visible$ | async,
+    appearing: appearing$ | async,
+    disappearing: disappearing$ | async,
+    showBackdrop: showBackdrop$ | async
+  } as obs"
 >
   <div
     class="v-modal-backdrop"
     [ngClass]="{
-      'v-modal-backdrop--visible': visible || disappearing,
-      'v-modal-backdrop--backdrop': showBackdrop,
-      'v-modal-backdrop--hidden': !visible,
-      'v-modal-backdrop--appearing': appearing,
-      'v-modal-backdrop--disappearing': disappearing
+      'v-modal-backdrop--visible': obs.visible || obs.disappearing,
+      'v-modal-backdrop--backdrop': obs.showBackdrop,
+      'v-modal-backdrop--hidden': !obs.visible,
+      'v-modal-backdrop--appearing': obs.appearing,
+      'v-modal-backdrop--disappearing': obs.disappearing
     }"
-    (click)="!appearing && !disappearing && closeModal()"
+    (click)="!obs.appearing && !obs.disappearing && closeModal()"
   >
     <ng-container *ngTemplateOutlet="modal"></ng-container>
   </div>
-</ng-template>
+</ng-container>
 
 <ng-template #modal>
-  <div class="v-modal"></div>
+  <div class="v-modal" (click)="modalClick($event)"></div>
 </ng-template>

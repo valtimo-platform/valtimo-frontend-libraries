@@ -45,6 +45,7 @@
   transform: translateY(-100vh);
   opacity: 0;
   transition: var(--v-modal-transition);
+  cursor: var(--v-modal-cursor);
 }
 
 .v-modal-backdrop--backdrop {

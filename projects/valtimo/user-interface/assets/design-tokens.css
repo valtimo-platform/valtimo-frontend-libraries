@@ -153,4 +153,5 @@
   --v-modal-min-height: 150px;
   --v-modal-background-color: var(--v-color-grey-6);
   --v-modal-transition: var(--v-transition-opacity-medium), var(--v-transition-transform-medium);
+  --v-modal-cursor: var(--v-cursor-default);
 }

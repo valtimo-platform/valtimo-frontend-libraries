@@ -57,6 +57,10 @@ export class ModalComponent {
     this.modalService.closeCurrentModal();
   }
 
+  modalClick(event: MouseEvent): void {
+    event.stopPropagation();
+  }
+
   private setAppearingTimeout(): void {
     setTimeout(() => {
       this.appearing$.next(false);
