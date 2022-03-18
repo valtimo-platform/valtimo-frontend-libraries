@@ -150,7 +150,7 @@
   --v-modal-backdrop-color-hover: var(--v-color-backdrop-hover);
   --v-modal-backdrop-filter: var(--v-backdrop-filter-heavy-blur);
   --v-modal-backdrop-filter-hover: var(--v-backdrop-filter-heavy-blur-hover);
-  --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-bg-medium);
+  --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-backdrop-medium);
   --v-modal-backdrop-cursor: var(--v-cursor-clickable);
   --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);
   --v-modal-max-width: 850px;

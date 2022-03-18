@@ -56,18 +56,18 @@
     transform: translateY(0);
     opacity: 1;
   }
+
+  &.v-modal-backdrop--mouse-on-backdrop {
+    &:not(.v-modal-backdrop--disappearing),
+    &:not(.v-modal-backdrop--appearing),
+    &:hover {
+      background-color: var(--v-modal-backdrop-color-hover);
+      backdrop-filter: var(--v-modal-backdrop-filter-hover);
+    }
+  }
 }
 
 .v-modal-backdrop--hidden,
 .v-modal-backdrop--appearing {
   cursor: var(--v-modal-backdrop-cursor-disappearing);
-}
-
-.v-modal-backdrop--mouse-on-backdrop {
-  &:not(.v-modal-backdrop--disappearing),
-  &:not(.v-modal-backdrop--appearing),
-  &:hover {
-    background-color: var(--v-modal-backdrop-color-hover);
-    backdrop-filter: var(--v-modal-backdrop-filter-hover);
-  }
 }
