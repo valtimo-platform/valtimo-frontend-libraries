@@ -24,7 +24,9 @@
   --v-color-grey-3: #b2b2b2;
   --v-color-grey-4: #dbdbdb;
   --v-color-grey-5: #ececec;
-  --v-color-grey-6: #f2f3f3;
+  --v-color-grey-6: #cccccc;
+  --v-color-grey-7: #f2f3f3;
+  --v-color-grey-8: #f9f9f9;
   --v-color-accent-1: #ef6622;
   --v-color-accent-1-lighter: #f07538;
   --v-color-accent-1-darker: #e55710;
@@ -158,8 +160,15 @@
   --v-modal-backdrop-padding-block: var(--v-spacing-block-md);
   --v-modal-max-width: 850px;
   --v-modal-min-height: 150px;
-  --v-modal-background-color: var(--v-color-grey-6);
+  --v-modal-background-color: var(--v-color-grey-7);
   --v-modal-transition: var(--v-transition-opacity-medium), var(--v-transition-transform-medium);
   --v-modal-cursor: var(--v-cursor-default);
   --v-modal-border-radius: var(--v-border-radius-lg);
+  --v-modal-padding-inline: var(--v-spacing-inline-2xl);
+  --v-modal-header-bg-color: var(--v-color-grey-8);
+  --v-modal-header-padding-block: var(--v-spacing-block-xl);
+  --v-modal-header-border: 1px solid var(--v-color-grey-6);
+  --v-modal-footer-bg-color: var(--v-color-grey-8);
+  --v-modal-footer-padding-block: var(--v-spacing-block-xl);
+  --v-modal-footer-border: 1px solid var(--v-color-grey-6);
 }

@@ -51,6 +51,10 @@
   transition: var(--v-modal-transition);
   cursor: var(--v-modal-cursor);
   border-radius: var(--v-modal-border-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .v-modal-backdrop--backdrop {
@@ -75,4 +79,22 @@
 .v-modal-backdrop--hidden,
 .v-modal-backdrop--appearing {
   cursor: var(--v-modal-backdrop-cursor-disappearing);
+}
+
+.v-modal__header {
+  background-color: var(--v-modal-header-bg-color);
+  padding-block-start: var(--v-modal-header-padding-block);
+  padding-block-end: var(--v-modal-header-padding-block);
+  padding-inline-start: var(--v-modal-padding-inline);
+  padding-inline-end: var(--v-modal-padding-inline);
+  border-bottom: var(--v-modal-header-border);
+}
+
+.v-modal__footer {
+  background-color: var(--v-modal-footer-bg-color);
+  padding-block-start: var(--v-modal-footer-padding-block);
+  padding-block-end: var(--v-modal-footer-padding-block);
+  padding-inline-start: var(--v-modal-padding-inline);
+  padding-inline-end: var(--v-modal-padding-inline);
+  border-top: var(--v-modal-footer-border);
 }

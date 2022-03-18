@@ -45,5 +45,16 @@
     (click)="modalClick($event)"
     (mouseenter)="modalMouseEnter()"
     (mouseleave)="modalMouseLeave()"
-  ></div>
+  >
+    <ng-container *ngTemplateOutlet="modalHeader"></ng-container>
+    <ng-container *ngTemplateOutlet="modalFooter"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #modalHeader>
+  <div class="v-modal__header"></div>
+</ng-template>
+
+<ng-template #modalFooter>
+  <div class="v-modal__footer"></div>
 </ng-template>
