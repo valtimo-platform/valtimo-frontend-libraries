@@ -33,6 +33,7 @@
   --v-color-accent-2-lighter: #3b8546;
   --v-color-accent-2-darker: #2c6234;
   --v-color-backdrop: rgba(0, 0, 0, 0.28);
+  --v-color-backdrop-hover: rgba(0, 0, 0, 0.24);
   --v-color-backdrop-transparant: rgba(0, 0, 0, 0);
   /* font size */
   --v-font-size-smaller: 12px;
@@ -73,6 +74,7 @@
   --v-box-shadow-medium: 0 3px 40px 0 rgba(0, 0, 0, 0.06);
   /* backdrop filter */
   --v-backdrop-filter-heavy-blur: blur(13px);
+  --v-backdrop-filter-heavy-blur-hover: blur(11px);
   /* button */
   --v-button-font-color: var(--v-color-white);
   --v-button-icon-container-bg-color: var(--v-color-white);
@@ -145,7 +147,9 @@
   /* modal */
   --v-modal-z-index: 9999;
   --v-modal-backdrop-color: var(--v-color-backdrop);
+  --v-modal-backdrop-color-hover: var(--v-color-backdrop-hover);
   --v-modal-backdrop-filter: var(--v-backdrop-filter-heavy-blur);
+  --v-modal-backdrop-filter-hover: var(--v-backdrop-filter-heavy-blur-hover);
   --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-bg-medium);
   --v-modal-backdrop-cursor: var(--v-cursor-clickable);
   --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);

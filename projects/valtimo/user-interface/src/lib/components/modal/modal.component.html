@@ -19,7 +19,8 @@
     visible: visible$ | async,
     appearing: appearing$ | async,
     disappearing: disappearing$ | async,
-    showBackdrop: showBackdrop$ | async
+    showBackdrop: showBackdrop$ | async,
+    mouseInsideModal: mouseInsideModal$ | async
   } as obs"
 >
   <div
@@ -29,7 +30,8 @@
       'v-modal-backdrop--backdrop': obs.showBackdrop,
       'v-modal-backdrop--hidden': !obs.visible,
       'v-modal-backdrop--appearing': obs.appearing,
-      'v-modal-backdrop--disappearing': obs.disappearing
+      'v-modal-backdrop--disappearing': obs.disappearing,
+      'v-modal-backdrop--mouse-on-backdrop': !obs.mouseInsideModal
     }"
     (click)="!obs.appearing && !obs.disappearing && closeModal()"
   >
@@ -38,5 +40,10 @@
 </ng-container>
 
 <ng-template #modal>
-  <div class="v-modal" (click)="modalClick($event)"></div>
+  <div
+    class="v-modal"
+    (click)="modalClick($event)"
+    (mouseenter)="modalMouseEnter()"
+    (mouseleave)="modalMouseLeave()"
+  ></div>
 </ng-template>
