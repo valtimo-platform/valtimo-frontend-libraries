@@ -89,6 +89,7 @@
   --v-cursor-disabled: not-allowed;
   /* box shadow */
   --v-box-shadow-medium: 0 3px 40px 0 rgba(0, 0, 0, 0.06);
+  --v-box-shadow-popup: 0 4px 4px 0 rgba(0, 0, 0, 0.06);
   /* backdrop filter */
   --v-backdrop-filter-heavy-blur: blur(13px);
   --v-backdrop-filter-heavy-blur-hover: blur(11px);
@@ -182,6 +183,7 @@
   --v-modal-backdrop-padding-block: var(--v-spacing-block-md);
   --v-modal-max-width: 850px;
   --v-modal-min-height: 150px;
+  --v-modal-box-shadow: var(--v-box-shadow-popup);
   --v-modal-background-color: var(--v-color-grey-7);
   --v-modal-transition: var(--v-transition-opacity-medium), var(--v-transition-transform-medium);
   --v-modal-cursor: var(--v-cursor-default);
