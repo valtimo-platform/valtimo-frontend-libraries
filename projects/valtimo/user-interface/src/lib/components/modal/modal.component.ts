@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, TemplateRef} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {delay, map, tap} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
@@ -27,6 +27,9 @@ import {ModalService} from '../../services/modal.service';
 })
 export class ModalComponent {
   @Input() appearingDelayMs = 140;
+  @Input() headerTemplate!: TemplateRef<any>;
+  @Input() contentTemplate!: TemplateRef<any>;
+  @Input() footerTemplate!: TemplateRef<any>;
 
   public uuid: string = uuidv4();
 

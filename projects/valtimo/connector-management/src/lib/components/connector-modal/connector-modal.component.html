@@ -21,4 +21,6 @@
   </div>
 </valtimo-modal>
 
-<v-modal #vModal></v-modal>
+<v-modal #vModal [headerTemplate]="modalHeader"></v-modal>
+
+<ng-template #modalHeader><v-stepper-header></v-stepper-header></ng-template>

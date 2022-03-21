@@ -51,21 +51,35 @@
     <ng-container
       *ngTemplateOutlet="modalHeader; context: {appearing: appearing, disappearing: disappearing}"
     ></ng-container>
+    <ng-container *ngTemplateOutlet="modalContent"></ng-container>
     <ng-container *ngTemplateOutlet="modalFooter"></ng-container>
   </div>
 </ng-template>
 
 <ng-template #modalHeader let-appearing="appearing" let-disappearing="disappearing">
   <div class="v-modal__header">
-    <v-button
-      mdiIcon="close"
-      type="icon-danger"
-      [disabled]="appearing || disappearing"
-      (click)="closeModal()"
-    ></v-button>
+    <ng-container *ngIf="headerTemplate">
+      <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+    </ng-container>
+    <div class="v-modal__header-buttons">
+      <v-button
+        mdiIcon="close"
+        type="icon-danger"
+        [disabled]="appearing || disappearing"
+        (click)="closeModal()"
+      ></v-button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalContent>
+  <div class="v-modal__content" *ngIf="modalFooter">
+    <ng-container *ngTemplateOutlet="modalFooter"> </ng-container>
   </div>
 </ng-template>
 
 <ng-template #modalFooter>
-  <div class="v-modal__footer"></div>
+  <div class="v-modal__footer" *ngIf="footerTemplate">
+    <ng-container *ngTemplateOutlet="footerTemplate"></ng-container>
+  </div>
 </ng-template>

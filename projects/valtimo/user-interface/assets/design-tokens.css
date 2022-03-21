@@ -191,6 +191,7 @@
   --v-modal-header-bg-color: var(--v-color-grey-8);
   --v-modal-header-padding-block: var(--v-spacing-block-xl);
   --v-modal-header-border: 1px solid var(--v-color-grey-6);
+  --v-modal-header-min-height: var(--v-button-type-icon-height);
   --v-modal-footer-bg-color: var(--v-color-grey-8);
   --v-modal-footer-padding-block: var(--v-spacing-block-xl);
   --v-modal-footer-border: 1px solid var(--v-color-grey-6);

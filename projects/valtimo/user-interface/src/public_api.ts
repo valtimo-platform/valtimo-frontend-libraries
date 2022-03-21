@@ -40,3 +40,5 @@ export * from './lib/components/stepper/stepper-header/stepper-header.component'
 export * from './lib/components/stepper/stepper-footer/stepper-footer.component';
 export * from './lib/components/stepper/stepper-content/stepper-content.component';
 export * from './lib/components/stepper/stepper-container/stepper-container.component';
+// Stepper service
+export * from './lib/services/stepper.service';

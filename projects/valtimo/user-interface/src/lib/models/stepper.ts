@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-type SelectItemId = string | number;
-type SelectedValue = SelectItemId | Array<SelectItemId>;
-
-interface SelectItem {
-  id: SelectItemId;
-  text?: string;
-  translationKey?: string;
+interface Step {
+  index: number;
+  titleTranslationKey: string;
 }
 
-export {SelectItem, SelectItemId, SelectedValue};
+export {Step};
