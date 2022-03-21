@@ -35,24 +35,35 @@
     }"
     (click)="!obs.appearing && !obs.disappearing && closeModal()"
   >
-    <ng-container *ngTemplateOutlet="modal"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="modal; context: {appearing: obs.appearing, disappearing: obs.disappearing}"
+    ></ng-container>
   </div>
 </ng-container>
 
-<ng-template #modal>
+<ng-template #modal let-appearing="appearing" let-disappearing="disappearing">
   <div
     class="v-modal"
     (click)="modalClick($event)"
     (mouseenter)="modalMouseEnter()"
     (mouseleave)="modalMouseLeave()"
   >
-    <ng-container *ngTemplateOutlet="modalHeader"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="modalHeader; context: {appearing: appearing, disappearing: disappearing}"
+    ></ng-container>
     <ng-container *ngTemplateOutlet="modalFooter"></ng-container>
   </div>
 </ng-template>
 
-<ng-template #modalHeader>
-  <div class="v-modal__header"></div>
+<ng-template #modalHeader let-appearing="appearing" let-disappearing="disappearing">
+  <div class="v-modal__header">
+    <v-button
+      mdiIcon="close"
+      type="icon-danger"
+      [disabled]="appearing || disappearing"
+      (click)="closeModal()"
+    ></v-button>
+  </div>
 </ng-template>
 
 <ng-template #modalFooter>

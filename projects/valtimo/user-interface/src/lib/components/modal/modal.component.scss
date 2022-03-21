@@ -82,6 +82,9 @@
 }
 
 .v-modal__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
   background-color: var(--v-modal-header-bg-color);
   padding-block-start: var(--v-modal-header-padding-block);
   padding-block-end: var(--v-modal-header-padding-block);

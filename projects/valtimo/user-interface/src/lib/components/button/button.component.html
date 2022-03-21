@@ -24,11 +24,15 @@
     'v-button--success': isSuccess,
     'v-button--disabled': !isText && disabled,
     'v-button--text': isText,
-    'v-button--text-disabled': isText && disabled
+    'v-button--text-disabled': isText && disabled,
+    'v-button--icon': isIcon,
+    'v-button--icon-danger': isIconDanger
   }"
   [disabled]="disabled"
 >
-  <ng-content></ng-content>
+  <ng-container *ngIf="!isIcon">
+    <ng-content></ng-content>
+  </ng-container>
   <ng-container *ngTemplateOutlet="buttonIcon"></ng-container>
 </button>
 

@@ -28,12 +28,26 @@
   --v-color-grey-7: #f2f3f3;
   --v-color-grey-8: #f9f9f9;
   --v-color-accent-1: #ef6622;
+  /* lighten base with amount 10 on https://pinetools.com/lighten-color */
   --v-color-accent-1-lighter: #f07538;
+  /* darken base with amount 10 on https://pinetools.com/darken-color */
   --v-color-accent-1-darker: #e55710;
   --v-color-accent-1-light-background: #fef3ed;
   --v-color-accent-2: #316d3a;
+  /* lighten base with amount 10 on https://pinetools.com/lighten-color */
   --v-color-accent-2-lighter: #3b8546;
+  /* darken base with amount 10 on https://pinetools.com/darken-color */
   --v-color-accent-2-darker: #2c6234;
+  --v-color-accent-3: #ff2e00;
+  /* lighten base with amount 10 on https://pinetools.com/lighten-color */
+  --v-color-accent-3-lighter: #ff4219;
+  /* darken base with amount 10 on https://pinetools.com/darken-color */
+  --v-color-accent-3-darker: #e52900;
+  --v-color-accent-3-light-background: #f9e5e0;
+  /* lighten base with amount 10 on https://pinetools.com/lighten-color */
+  --v-color-accent-3-light-background-lighter: #f9e7e3;
+  /* darken base with amount 10 on https://pinetools.com/darken-color */
+  --v-color-accent-3-light-background-darker: #f1c3b8;
   --v-color-backdrop: rgba(0, 0, 0, 0.28);
   --v-color-backdrop-hover: rgba(0, 0, 0, 0.24);
   --v-color-backdrop-transparant: rgba(0, 0, 0, 0);
@@ -98,6 +112,14 @@
   --v-button-disabled-font-color: var(--v-color-grey-2);
   --v-button-icon-circle-width: 20px;
   --v-button-text-font-size: var(--v-font-size-smaller);
+  --v-button-type-icon-width: 35px;
+  --v-button-type-icon-height: 35px;
+  --v-button-type-icon-danger-bg-color: var(--v-color-accent-3-light-background);
+  --v-button-type-icon-danger-bg-color-hover: var(--v-color-accent-3-light-background-lighter);
+  --v-button-type-icon-danger-bg-color-active: var(--v-color-accent-3-light-background-darker);
+  --v-button-type-icon-danger-color: var(--v-color-accent-3);
+  --v-button-type-icon-danger-color-hover: var(--v-color-accent-3-lighter);
+  --v-button-type-icon-danger-color-active: var(--v-color-accent-3-darker);
   /* table */
   --v-table-layout: auto;
   --v-table-cell-width: 1000px;

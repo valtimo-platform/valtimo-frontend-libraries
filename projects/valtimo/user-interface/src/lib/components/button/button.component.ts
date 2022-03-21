@@ -32,13 +32,31 @@ export class ButtonComponent implements OnInit {
   isSecondary!: boolean;
   isSuccess!: boolean;
   isText!: boolean;
+  isIcon!: boolean;
+  isIconDanger!: boolean;
 
   ngOnInit(): void {
-    const type = this.type;
+    this.setIconTypes();
+  }
 
-    this.isPrimary = type === 'primary';
-    this.isSecondary = type === 'secondary';
-    this.isSuccess = type === 'success';
-    this.isText = type === 'text';
+  private setIconTypes(): void {
+    switch (this.type) {
+      case 'primary':
+        this.isPrimary = true;
+        break;
+      case 'secondary':
+        this.isSecondary = true;
+        break;
+      case 'success':
+        this.isSuccess = true;
+        break;
+      case 'text':
+        this.isText = true;
+        break;
+      case 'icon-danger':
+        this.isIcon = true;
+        this.isIconDanger = true;
+        break;
+    }
   }
 }

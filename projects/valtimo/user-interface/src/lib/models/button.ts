@@ -16,6 +16,6 @@
  *
  */
 
-type ButtonType = 'primary' | 'secondary' | 'success' | 'text';
+type ButtonType = 'primary' | 'secondary' | 'success' | 'text' | 'icon-danger';
 
 export {ButtonType};
