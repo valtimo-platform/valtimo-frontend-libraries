@@ -41,14 +41,14 @@ export class MenuIncludeService {
   }
 
   private isHaalCentraalConnectorConfigured(): Observable<boolean> {
-    return this.getHaalCentraalConnectores().pipe(
+    return this.getHaalCentraalConnectorInstances().pipe(
       map(haalcentraalConnectorInstances => {
         return haalcentraalConnectorInstances?.content?.length > 0;
       })
     );
   }
 
-  private getHaalCentraalConnectores(): Observable<Page<ConnectorInstance>> {
+  private getHaalCentraalConnectorInstances(): Observable<Page<ConnectorInstance>> {
     return this.http.get<Page<ConnectorInstance>>(
       `${this.valtimoConfig.valtimoApi.endpointUri}connector/instance?typeName=HaalCentraal`
     );
