@@ -34,3 +34,9 @@ export * from './lib/components/modal/modal.module';
 export * from './lib/components/modal/modal.component';
 // Modal service
 export * from './lib/services/modal.service';
+// Stepper components
+export * from './lib/components/stepper/stepper.module';
+export * from './lib/components/stepper/stepper-header/stepper-header.component';
+export * from './lib/components/stepper/stepper-footer/stepper-footer.component';
+export * from './lib/components/stepper/stepper-content/stepper-content.component';
+export * from './lib/components/stepper/stepper-container/stepper-container.component';
