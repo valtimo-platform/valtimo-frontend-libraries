@@ -29,11 +29,11 @@ export class ModalService {
   constructor() {}
 
   get modalUuid$() {
-    return this._modalUuid$;
+    return this._modalUuid$.asObservable();
   }
 
   get modalVisible$() {
-    return this._modalVisible$;
+    return this._modalVisible$.asObservable();
   }
 
   setCurrentModal(modalComponent: ModalComponent): void {

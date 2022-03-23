@@ -20,6 +20,7 @@ import {StepperContainerComponent} from './stepper-container/stepper-container.c
 import {StepperContentComponent} from './stepper-content/stepper-content.component';
 import {StepperFooterComponent} from './stepper-footer/stepper-footer.component';
 import {StepperHeaderComponent} from './stepper-header/stepper-header.component';
+import {StepperStepComponent} from './stepper-step/stepper-step.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {StepperHeaderComponent} from './stepper-header/stepper-header.component'
     StepperContentComponent,
     StepperFooterComponent,
     StepperHeaderComponent,
+    StepperStepComponent,
   ],
   imports: [CommonModule],
   exports: [
@@ -34,6 +36,7 @@ import {StepperHeaderComponent} from './stepper-header/stepper-header.component'
     StepperContentComponent,
     StepperFooterComponent,
     StepperHeaderComponent,
+    StepperStepComponent,
   ],
 })
 export class StepperModule {}

@@ -13,14 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {Component} from '@angular/core';
-import {StepperService} from '../../../services/stepper.service';
-
-@Component({
-  selector: 'v-stepper-container',
-  templateUrl: './stepper-container.component.html',
-  styleUrls: ['./stepper-container.component.scss'],
-  providers: [StepperService],
-})
-export class StepperContainerComponent {}

@@ -73,8 +73,8 @@
 </ng-template>
 
 <ng-template #modalContent>
-  <div class="v-modal__content" *ngIf="modalFooter">
-    <ng-container *ngTemplateOutlet="modalFooter"> </ng-container>
+  <div class="v-modal__content" *ngIf="contentTemplate">
+    <ng-container *ngTemplateOutlet="contentTemplate"> </ng-container>
   </div>
 </ng-template>
 

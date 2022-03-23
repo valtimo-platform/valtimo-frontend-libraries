@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {StepperService} from '../../../services/stepper.service';
+import {Component, Input} from '@angular/core';
 
 @Component({
-  selector: 'v-stepper-container',
-  templateUrl: './stepper-container.component.html',
-  styleUrls: ['./stepper-container.component.scss'],
-  providers: [StepperService],
+  selector: 'v-stepper-step',
+  templateUrl: './stepper-step.component.html',
+  styleUrls: ['./stepper-step.component.scss'],
 })
-export class StepperContainerComponent {}
+export class StepperStepComponent {
+  @Input() titleTranslationKey!: string;
+
+  constructor() {}
+}

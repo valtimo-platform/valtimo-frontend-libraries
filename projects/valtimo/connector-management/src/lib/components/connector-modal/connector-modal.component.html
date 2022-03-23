@@ -21,6 +21,15 @@
   </div>
 </valtimo-modal>
 
-<v-modal #vModal [headerTemplate]="modalHeader"></v-modal>
+<v-stepper-container>
+  <v-modal #vModal [headerTemplate]="modalHeader" [contentTemplate]="modalContent"></v-modal>
+</v-stepper-container>
 
 <ng-template #modalHeader><v-stepper-header></v-stepper-header></ng-template>
+
+<ng-template #modalContent>
+  <v-stepper-content>
+    <v-stepper-step titleTranslationKey="addConnectorStep0"></v-stepper-step>
+    <v-stepper-step titleTranslationKey="addConnectorStep1"></v-stepper-step>
+  </v-stepper-content>
+</ng-template>

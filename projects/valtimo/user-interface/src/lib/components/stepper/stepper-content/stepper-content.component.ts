@@ -14,13 +14,26 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {AfterContentInit, Component, ContentChildren, QueryList} from '@angular/core';
+import {StepperStepComponent} from '../stepper-step/stepper-step.component';
+import {StepperService} from '../../../services/stepper.service';
 
 @Component({
   selector: 'v-stepper-content',
   templateUrl: './stepper-content.component.html',
   styleUrls: ['./stepper-content.component.scss'],
 })
-export class StepperContentComponent {
-  constructor() {}
+export class StepperContentComponent implements AfterContentInit {
+  @ContentChildren(StepperStepComponent) contentChildren!: QueryList<StepperStepComponent>;
+
+  constructor(private readonly stepperService: StepperService) {}
+
+  ngAfterContentInit(): void {
+    this.setStepsInService();
+  }
+
+  private setStepsInService(): void {
+    console.log(this.contentChildren.toArray());
+    console.log(this.stepperService.steps$);
+  }
 }

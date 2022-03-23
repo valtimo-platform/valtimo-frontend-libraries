@@ -11,8 +11,20 @@
  */
 
 import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {Step} from '../models';
 
 @Injectable()
 export class StepperService {
+  private readonly _steps$ = new BehaviorSubject<Array<Step>>([]);
+
   constructor() {}
+
+  get steps$() {
+    return this._steps$.asObservable();
+  }
+
+  setSteps(steps: Array<Step>): void {
+    this._steps$.next(steps);
+  }
 }
