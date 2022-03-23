@@ -24,16 +24,26 @@ import {StepperService} from '../../../services/stepper.service';
   styleUrls: ['./stepper-content.component.scss'],
 })
 export class StepperContentComponent implements AfterContentInit {
-  @ContentChildren(StepperStepComponent) contentChildren!: QueryList<StepperStepComponent>;
+  @ContentChildren(StepperStepComponent) stepComponents!: QueryList<StepperStepComponent>;
 
   constructor(private readonly stepperService: StepperService) {}
 
   ngAfterContentInit(): void {
+    this.setStepNumbers();
     this.setStepsInService();
   }
 
+  private setStepNumbers(): void {
+    this.stepComponents.forEach((stepComponent, index) => {
+      stepComponent.stepIndex = index;
+    });
+  }
+
   private setStepsInService(): void {
-    console.log(this.contentChildren.toArray());
-    console.log(this.stepperService.steps$);
+    this.stepperService.setSteps(
+      this.stepComponents.map(stepComponent => ({
+        titleTranslationKey: stepComponent.titleTranslationKey,
+      }))
+    );
   }
 }

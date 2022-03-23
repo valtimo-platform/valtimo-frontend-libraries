@@ -15,6 +15,7 @@
  */
 
 import {Component, Input} from '@angular/core';
+import {StepperService} from '../../../services/stepper.service';
 
 @Component({
   selector: 'v-stepper-step',
@@ -24,5 +25,9 @@ import {Component, Input} from '@angular/core';
 export class StepperStepComponent {
   @Input() titleTranslationKey!: string;
 
-  constructor() {}
+  public stepIndex!: number;
+
+  currentStepIndex$ = this.stepperService.currentStepIndex$;
+
+  constructor(private readonly stepperService: StepperService) {}
 }

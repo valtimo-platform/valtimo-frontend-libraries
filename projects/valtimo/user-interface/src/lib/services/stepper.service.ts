@@ -17,14 +17,25 @@ import {Step} from '../models';
 @Injectable()
 export class StepperService {
   private readonly _steps$ = new BehaviorSubject<Array<Step>>([]);
+  private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
 
   constructor() {}
+
+  get currentStepIndex$() {
+    return this._currentStepIndex$.asObservable();
+  }
 
   get steps$() {
     return this._steps$.asObservable();
   }
 
   setSteps(steps: Array<Step>): void {
+    console.log(steps);
     this._steps$.next(steps);
+  }
+
+  setCurrentStepIndex(index: number): void {
+    console.log(index);
+    this._currentStepIndex$.next(index);
   }
 }

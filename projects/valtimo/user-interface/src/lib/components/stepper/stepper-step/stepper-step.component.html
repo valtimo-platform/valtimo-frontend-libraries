@@ -14,4 +14,6 @@
   ~ limitations under the License.
   -->
 
-stepper step works
+<ng-container *ngIf="(currentStepIndex$ | async) === stepIndex">
+  {{ stepIndex }}
+</ng-container>
