@@ -14,4 +14,13 @@
   ~ limitations under the License.
   -->
 
-stepper header works
+<div class="stepper-header">
+  <div
+    class="stepper-header__step"
+    [ngClass]="{'stepper-header__step--active': step.stepIndex === (currentStepIndex$ | async)}"
+    *ngFor="let step of steps$ | async"
+  >
+    <span class="stepper-header__step-number"> {{ step.stepIndex + 1 }} </span>
+    <span class="stepper-header__step-title"> {{ step.titleTranslationKey | translate }} </span>
+  </div>
+</div>

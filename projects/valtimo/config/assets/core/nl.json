@@ -572,5 +572,9 @@
         "name": "Naam van connectie"
       }
     }
+  },
+  "addConnectorSteps": {
+    "step0": "Kies je connector",
+    "step1": "Gegevens invullen"
   }
 }

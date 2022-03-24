@@ -572,5 +572,9 @@
         "name": "Connection name"
       }
     }
+  },
+  "addConnectorSteps": {
+    "step0": "Choose your connector",
+    "step1": "Enter data"
   }
 }

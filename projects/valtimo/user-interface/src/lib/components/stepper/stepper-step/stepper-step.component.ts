@@ -16,6 +16,7 @@
 
 import {Component, Input} from '@angular/core';
 import {StepperService} from '../../../services/stepper.service';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Component({
   selector: 'v-stepper-step',
@@ -25,9 +26,9 @@ import {StepperService} from '../../../services/stepper.service';
 export class StepperStepComponent {
   @Input() titleTranslationKey!: string;
 
-  public stepIndex!: number;
+  public stepIndex$ = new BehaviorSubject<number>(-1);
 
-  currentStepIndex$ = this.stepperService.currentStepIndex$;
+  currentStepIndex$: Observable<number> = this.stepperService.currentStepIndex$;
 
   constructor(private readonly stepperService: StepperService) {}
 }

@@ -30,19 +30,21 @@ export class StepperContentComponent implements AfterContentInit {
 
   ngAfterContentInit(): void {
     this.setStepNumbers();
-    this.setStepsInService();
   }
 
   private setStepNumbers(): void {
     this.stepComponents.forEach((stepComponent, index) => {
-      stepComponent.stepIndex = index;
+      stepComponent.stepIndex$.next(index);
     });
+
+    this.setStepsInService();
   }
 
   private setStepsInService(): void {
     this.stepperService.setSteps(
       this.stepComponents.map(stepComponent => ({
         titleTranslationKey: stepComponent.titleTranslationKey,
+        stepIndex: stepComponent.stepIndex$.getValue(),
       }))
     );
   }

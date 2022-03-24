@@ -13,3 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.stepper-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.stepper-header__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--v-stepper-header-number-circle-width);
+  height: var(--v-stepper-header-number-circle-height);
+  border-radius: 50%;
+  background-color: var(--v-stepper-header-bg-color);
+  color: var(--v-stepper-header-font-color);
+  font-size: var(--v-stepper-header-font-size);
+  font-weight: var(--v-stepper-header-font-weight);
+  line-height: var(--v-stepper-header-font-size);
+}

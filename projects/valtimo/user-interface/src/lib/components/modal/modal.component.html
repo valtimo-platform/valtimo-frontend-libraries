@@ -58,7 +58,11 @@
 
 <ng-template #modalHeader let-appearing="appearing" let-disappearing="disappearing">
   <div class="v-modal__header">
-    <ng-content select="[header]"></ng-content>
+    <ng-content select="div[role=header]"></ng-content>
+    <div class="v-modal__header-overflow">
+      <div class="v-modal__header-overflow-gradient"></div>
+      <div class="v-modal__header-overflow-bg"></div>
+    </div>
     <div class="v-modal__header-buttons">
       <v-button
         mdiIcon="close"
@@ -72,12 +76,12 @@
 
 <ng-template #modalContent>
   <div class="v-modal__content">
-    <ng-content select="[content]"></ng-content>
+    <ng-content select="div[role=content]"></ng-content>
   </div>
 </ng-template>
 
 <ng-template #modalFooter>
   <div class="v-modal__content">
-    <ng-content select="[footer]"></ng-content>
+    <ng-content select="div[role=footer]"></ng-content>
   </div>
 </ng-template>

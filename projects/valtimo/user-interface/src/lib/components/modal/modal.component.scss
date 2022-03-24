@@ -83,6 +83,7 @@
 }
 
 .v-modal__header {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -98,9 +99,30 @@
 }
 
 .v-modal__header-buttons {
-  position: fixed;
+  position: absolute;
   right: var(--v-modal-padding-inline);
   top: var(--v-modal-header-padding-block);
+}
+
+.v-modal__header-overflow {
+  position: absolute;
+  right: var(--v-modal-padding-inline);
+  top: var(--v-modal-header-padding-block);
+  height: calc(100% - var(--v-modal-header-padding-block) - var(--v-modal-header-padding-block));
+  display: flex;
+  flex-direction: row;
+}
+
+.v-modal__header-overflow-gradient {
+  width: var(--v-modal-header-overflow-gradient-width);
+  height: 100%;
+  background-image: var(--v-modal-header-overflow-gradient-bg-image);
+}
+
+.v-modal__header-overflow-bg {
+  width: var(--v-modal-header-overflow-width);
+  height: 100%;
+  background-color: var(--v-modal-header-bg-color);
 }
 
 .v-modal__footer {
@@ -110,4 +132,14 @@
   padding-inline-start: var(--v-modal-padding-inline);
   padding-inline-end: var(--v-modal-padding-inline);
   border-top: var(--v-modal-footer-border);
+}
+
+::ng-deep {
+  .v-modal {
+    div[role='header'],
+    div[role='content'],
+    div[role='footer'] {
+      width: 100%;
+    }
+  }
 }

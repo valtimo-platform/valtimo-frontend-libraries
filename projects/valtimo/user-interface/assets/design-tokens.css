@@ -27,6 +27,7 @@
   --v-color-grey-6: #cccccc;
   --v-color-grey-7: #f2f3f3;
   --v-color-grey-8: #f9f9f9;
+  --v-color-grey-8-transparant: rgba(249, 249, 249, 0);
   --v-color-accent-1: #ef6622;
   /* lighten base with amount 10 on https://pinetools.com/lighten-color */
   --v-color-accent-1-lighter: #f07538;
@@ -195,4 +196,18 @@
   --v-modal-footer-bg-color: var(--v-color-grey-8);
   --v-modal-footer-padding-block: var(--v-spacing-block-xl);
   --v-modal-footer-border: 1px solid var(--v-color-grey-6);
+  --v-modal-header-overflow-width: var(--v-button-type-icon-width);
+  --v-modal-header-overflow-gradient-width: var(--v-spacing-inline-2xl);
+  --v-modal-header-overflow-gradient-bg-image: linear-gradient(
+    to right,
+    var(--v-color-grey-8-transparant),
+    var(--v-color-grey-8)
+  );
+  /* stepper */
+  --v-stepper-header-number-circle-width: 24px;
+  --v-stepper-header-number-circle-height: 24px;
+  --v-stepper-header-bg-color: var(--v-color-grey-5);
+  --v-stepper-header-font-color: var(--v-color-grey-2);
+  --v-stepper-header-font-size: var(--v-font-size-smaller);
+  --v-stepper-header-font-weight: var(--v-font-weight-bold);
 }

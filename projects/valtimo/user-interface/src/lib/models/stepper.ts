@@ -12,6 +12,7 @@
 
 interface Step {
   titleTranslationKey: string;
+  stepIndex: number;
 }
 
 export {Step};

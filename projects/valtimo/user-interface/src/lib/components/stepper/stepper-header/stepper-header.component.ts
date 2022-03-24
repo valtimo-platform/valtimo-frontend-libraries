@@ -15,6 +15,9 @@
  */
 
 import {Component} from '@angular/core';
+import {StepperService} from '../../../services/stepper.service';
+import {Observable} from 'rxjs';
+import {Step} from '../../../models';
 
 @Component({
   selector: 'v-stepper-header',
@@ -22,5 +25,8 @@ import {Component} from '@angular/core';
   styleUrls: ['./stepper-header.component.scss'],
 })
 export class StepperHeaderComponent {
-  constructor() {}
+  steps$: Observable<Array<Step>> = this.stepperService.steps$;
+  currentStepIndex$: Observable<number> = this.stepperService.currentStepIndex$;
+
+  constructor(private readonly stepperService: StepperService) {}
 }

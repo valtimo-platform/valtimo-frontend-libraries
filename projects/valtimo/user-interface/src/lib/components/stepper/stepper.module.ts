@@ -21,6 +21,7 @@ import {StepperContentComponent} from './stepper-content/stepper-content.compone
 import {StepperFooterComponent} from './stepper-footer/stepper-footer.component';
 import {StepperHeaderComponent} from './stepper-header/stepper-header.component';
 import {StepperStepComponent} from './stepper-step/stepper-step.component';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import {StepperStepComponent} from './stepper-step/stepper-step.component';
     StepperHeaderComponent,
     StepperStepComponent,
   ],
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   exports: [
     StepperContainerComponent,
     StepperContentComponent,
