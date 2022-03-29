@@ -32,8 +32,10 @@ export class StepperContainerComponent implements OnInit, OnDestroy {
   constructor(private readonly stepperService: StepperService) {}
 
   ngOnInit(): void {
-    this.cancelSubscription = this.stepperService.cancel$.subscribe(() => {
-      this.cancel.emit();
+    this.cancelSubscription = this.stepperService.cancel$.subscribe(cancel => {
+      if (cancel) {
+        this.cancel.emit();
+      }
     });
   }
 

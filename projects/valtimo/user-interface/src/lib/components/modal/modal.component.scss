@@ -134,6 +134,13 @@
   border-top: var(--v-modal-footer-border);
 }
 
+.v-modal__content {
+  padding-block-start: var(--v-modal-content-padding-block-start);
+  padding-block-end: var(--v-modal-content-padding-block-end);
+  padding-inline-start: var(--v-modal-padding-inline);
+  padding-inline-end: var(--v-modal-padding-inline);
+}
+
 ::ng-deep {
   .v-modal {
     div[role='header'],

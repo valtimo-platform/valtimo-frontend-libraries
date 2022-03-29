@@ -11,7 +11,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {Step} from '../models';
 
@@ -19,7 +19,7 @@ import {Step} from '../models';
 export class StepperService {
   private readonly _steps$ = new BehaviorSubject<Array<Step>>([]);
   private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
-  private readonly _cancel$ = new Subject<null>();
+  private readonly _cancel$ = new BehaviorSubject<boolean>(false);
 
   get currentStepIndex$() {
     return this._currentStepIndex$.asObservable();
@@ -85,6 +85,6 @@ export class StepperService {
 
   cancel(): void {
     this.setCurrentStepIndex(0);
-    this._cancel$.next(null);
+    this._cancel$.next(true);
   }
 }

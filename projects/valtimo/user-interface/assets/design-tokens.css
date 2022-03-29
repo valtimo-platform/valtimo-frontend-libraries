@@ -71,6 +71,7 @@
   --v-spacing-block-md: 12px;
   --v-spacing-block-l: 16px;
   --v-spacing-block-xl: 24px;
+  --v-spacing-block-2xl: 34px;
   /* spacing inline */
   --v-spacing-inline-sm: 6px;
   --v-spacing-inline-md: 12px;
@@ -208,6 +209,9 @@
     var(--v-color-grey-8-transparant),
     var(--v-color-grey-8)
   );
+  --v-modal-content-padding-block-start: var(--v-spacing-block-2xl);
+  --v-modal-content-padding-block-end: var(--v-spacing-block-xl);
+
   /* stepper */
   --v-stepper-header-number-circle-width: 24px;
   --v-stepper-header-number-circle-height: 24px;

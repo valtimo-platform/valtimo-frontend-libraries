@@ -55,6 +55,11 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
 
   hide(): void {
     // this.modal.hide();
+    // this.modalService.closeModal();
+  }
+
+  hideModal(): void {
+    // this.modal.hide();
     this.modalService.closeModal();
   }
 
