@@ -49,6 +49,9 @@
   --v-color-accent-3-light-background-lighter: #f9e7e3;
   /* darken base with amount 10 on https://pinetools.com/darken-color */
   --v-color-accent-3-light-background-darker: #f1c3b8;
+  --v-color-accent-4: #19a84a;
+  /* darken base with amount 10 on https://pinetools.com/darken-color */
+  --v-color-accent-4-darker: #169742;
   --v-color-backdrop: rgba(0, 0, 0, 0.28);
   --v-color-backdrop-hover: rgba(0, 0, 0, 0.24);
   --v-color-backdrop-transparant: rgba(0, 0, 0, 0);
@@ -64,6 +67,7 @@
   --v-line-height-smaller: 14px;
   --v-line-height-default: 16px;
   /* spacing block */
+  --v-spacing-block-sm: 8px;
   --v-spacing-block-md: 12px;
   --v-spacing-block-l: 16px;
   --v-spacing-block-xl: 24px;
@@ -73,6 +77,7 @@
   --v-spacing-inline-2xl: 30px;
   --v-spacing-inline-3xl: 58px;
   /* border */
+  --v-border-radius-xsm: 2px;
   --v-border-radius-md: 5px;
   --v-border-radius-lg: 9px;
   /* transitions */
@@ -206,8 +211,25 @@
   /* stepper */
   --v-stepper-header-number-circle-width: 24px;
   --v-stepper-header-number-circle-height: 24px;
+  --v-stepper-header-number-spacing-block: var(--v-spacing-block-sm);
   --v-stepper-header-bg-color: var(--v-color-grey-5);
   --v-stepper-header-font-color: var(--v-color-grey-2);
   --v-stepper-header-font-size: var(--v-font-size-smaller);
+  --v-stepper-header-line-height: var(--v-line-height-smaller);
   --v-stepper-header-font-weight: var(--v-font-weight-bold);
+  --v-stepper-header-step-spacing-inline: 100px;
+  --v-stepper-header-step-title-font-color: var(--v-color-grey-6);
+  --v-stepper-header-progress-bar-height: 8px;
+  --v-stepper-header-progress-bar-spacing-top: var(--v-spacing-block-sm);
+  --v-stepper-header-progress-bar-bg-color: var(--v-stepper-header-bg-color);
+  --v-stepper-header-active-bg-color: var(--v-color-accent-4);
+  --v-stepper-header-active-bg-color-outline: var(--v-color-accent-4-darker);
+  --v-stepper-header-number-active-font-color: var(--v-color-white);
+  --v-stepper-header-number-active-border: 1px solid var(--v-stepper-header-active-bg-color-outline);
+  --v-stepper-header-number-circle-width-active: 22px;
+  --v-stepper-header-number-circle-height-active: 22px;
+  --v-stepper-header-number-spacing-block-active: calc(2px + var(--v-spacing-block-sm));
+  --v-stepper-header-active-bar-height: 6px;
+  --v-stepper-header-active-bar-bg-color: var(--v-stepper-header-active-bg-color);
+  --v-stepper-header-active-bar-border-radius: var(--v-border-radius-xsm);
 }

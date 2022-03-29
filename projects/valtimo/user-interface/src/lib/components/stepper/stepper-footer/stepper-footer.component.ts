@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {AfterContentInit, Component, ContentChildren, QueryList} from '@angular/core';
+import {StepperFooterStepComponent} from '../stepper-footer-step/stepper-footer-step.component';
 
 @Component({
   selector: 'v-stepper-footer',
   templateUrl: './stepper-footer.component.html',
   styleUrls: ['./stepper-footer.component.scss'],
 })
-export class StepperFooterComponent {
-  constructor() {}
+export class StepperFooterComponent implements AfterContentInit {
+  @ContentChildren(StepperFooterStepComponent)
+  footerStepComponents!: QueryList<StepperFooterStepComponent>;
+
+  ngAfterContentInit(): void {
+    this.setStepNumbers();
+  }
+
+  private setStepNumbers(): void {
+    this.footerStepComponents.forEach((footerStepComponent, index) => {
+      footerStepComponent.stepIndex$.next(index);
+    });
+  }
 }

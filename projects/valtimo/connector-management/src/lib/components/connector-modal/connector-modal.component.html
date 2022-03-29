@@ -21,7 +21,7 @@
   </div>
 </valtimo-modal>
 
-<v-stepper-container>
+<v-stepper-container (cancel)="hide()">
   <v-modal #vModal>
     <div role="header">
       <v-stepper-header></v-stepper-header>
@@ -30,7 +30,15 @@
       <v-stepper-content>
         <v-stepper-step titleTranslationKey="addConnectorSteps.step0"></v-stepper-step>
         <v-stepper-step titleTranslationKey="addConnectorSteps.step1"></v-stepper-step>
+        <v-stepper-step titleTranslationKey="addConnectorSteps.step2"></v-stepper-step>
       </v-stepper-content>
+    </div>
+    <div role="footer">
+      <v-stepper-footer>
+        <v-stepper-footer-step></v-stepper-footer-step>
+        <v-stepper-footer-step></v-stepper-footer-step>
+        <v-stepper-footer-step></v-stepper-footer-step>
+      </v-stepper-footer>
     </div>
   </v-modal>
 </v-stepper-container>

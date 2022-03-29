@@ -14,30 +14,27 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component} from '@angular/core';
 import {StepperService} from '../../../services/stepper.service';
-import {Subscription} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Component({
-  selector: 'v-stepper-container',
-  templateUrl: './stepper-container.component.html',
-  styleUrls: ['./stepper-container.component.scss'],
-  providers: [StepperService],
+  selector: 'v-stepper-footer-step',
+  templateUrl: './stepper-footer-step.component.html',
+  styleUrls: ['./stepper-footer-step.component.scss'],
 })
-export class StepperContainerComponent implements OnInit, OnDestroy {
-  @Output() cancel: EventEmitter<any> = new EventEmitter();
+export class StepperFooterStepComponent {
+  public stepIndex$ = new BehaviorSubject<number>(-1);
 
-  private cancelSubscription!: Subscription;
+  currentStepIndex$: Observable<number> = this.stepperService.currentStepIndex$;
 
   constructor(private readonly stepperService: StepperService) {}
 
-  ngOnInit(): void {
-    this.cancelSubscription = this.stepperService.cancel$.subscribe(() => {
-      this.cancel.emit();
-    });
+  goToNextStep(): void {
+    this.stepperService.goToNextStep();
   }
 
-  ngOnDestroy(): void {
-    this.cancelSubscription?.unsubscribe();
+  cancel(): void {
+    this.stepperService.cancel();
   }
 }

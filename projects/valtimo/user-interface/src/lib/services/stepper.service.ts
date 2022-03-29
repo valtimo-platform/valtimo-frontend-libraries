@@ -11,15 +11,15 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
+import {map, take} from 'rxjs/operators';
 import {Step} from '../models';
 
 @Injectable()
 export class StepperService {
   private readonly _steps$ = new BehaviorSubject<Array<Step>>([]);
   private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
-
-  constructor() {}
+  private readonly _cancel$ = new Subject<null>();
 
   get currentStepIndex$() {
     return this._currentStepIndex$.asObservable();
@@ -29,13 +29,62 @@ export class StepperService {
     return this._steps$.asObservable();
   }
 
+  get nextStepAvailable$() {
+    return combineLatest([this._steps$, this._currentStepIndex$]).pipe(
+      map(([steps, currentStepIndex]) => {
+        return currentStepIndex < steps.length - 1;
+      })
+    );
+  }
+
+  get previousStepAvailable$() {
+    return this._currentStepIndex$.pipe(
+      map(currentStepIndex => {
+        return currentStepIndex > 0;
+      })
+    );
+  }
+
+  get cancel$() {
+    return this._cancel$.asObservable();
+  }
+
   setSteps(steps: Array<Step>): void {
-    console.log(steps);
-    this._steps$.next(steps);
+    const mappedSteps = steps.map((step, index) => ({
+      ...step,
+      isFirst: index === 0,
+      isLast: index === steps.length - 1,
+    }));
+
+    this._steps$.next(mappedSteps);
   }
 
   setCurrentStepIndex(index: number): void {
-    console.log(index);
     this._currentStepIndex$.next(index);
+  }
+
+  goToNextStep(): void {
+    combineLatest([this.nextStepAvailable$, this._currentStepIndex$])
+      .pipe(take(1))
+      .subscribe(([nextStepAvailable, currentStepIndex]) => {
+        if (nextStepAvailable) {
+          this.setCurrentStepIndex(currentStepIndex + 1);
+        }
+      });
+  }
+
+  goToPreviousStep(): void {
+    combineLatest([this.previousStepAvailable$, this._currentStepIndex$])
+      .pipe(take(1))
+      .subscribe(([previousStepAvailable, currentStepIndex]) => {
+        if (previousStepAvailable) {
+          this.setCurrentStepIndex(currentStepIndex - 1);
+        }
+      });
+  }
+
+  cancel(): void {
+    this.setCurrentStepIndex(0);
+    this._cancel$.next(null);
   }
 }

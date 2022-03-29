@@ -64,12 +64,7 @@
       <div class="v-modal__header-overflow-bg"></div>
     </div>
     <div class="v-modal__header-buttons">
-      <v-button
-        mdiIcon="close"
-        type="icon-danger"
-        [disabled]="appearing || disappearing"
-        (click)="closeModal()"
-      ></v-button>
+      <v-button mdiIcon="close" type="icon-danger" (click)="closeModal()"></v-button>
     </div>
   </div>
 </ng-template>
@@ -81,7 +76,7 @@
 </ng-template>
 
 <ng-template #modalFooter>
-  <div class="v-modal__content">
+  <div class="v-modal__footer">
     <ng-content select="div[role=footer]"></ng-content>
   </div>
 </ng-template>

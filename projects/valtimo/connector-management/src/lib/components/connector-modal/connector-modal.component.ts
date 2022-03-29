@@ -53,13 +53,13 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
     this.showSubscription?.unsubscribe();
   }
 
+  hide(): void {
+    // this.modal.hide();
+    this.modalService.closeModal();
+  }
+
   private show(): void {
     // this.modal.show();
     this.modalService.openModal(this.vModal);
-  }
-
-  private hide(): void {
-    // this.modal.hide();
-    this.modalService.closeModal();
   }
 }

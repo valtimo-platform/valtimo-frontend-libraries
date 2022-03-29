@@ -14,4 +14,8 @@
   ~ limitations under the License.
   -->
 
-<ng-content></ng-content>
+<div class="stepper-footer-step" *ngIf="(currentStepIndex$ | async) === (stepIndex$ | async)">
+  <v-button (clickEvent)="cancel()" type="secondary">Cancel</v-button>
+
+  <v-button (clickEvent)="goToNextStep()">Next</v-button>
+</div>

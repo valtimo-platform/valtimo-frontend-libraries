@@ -13,6 +13,8 @@
 interface Step {
   titleTranslationKey: string;
   stepIndex: number;
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
 export {Step};

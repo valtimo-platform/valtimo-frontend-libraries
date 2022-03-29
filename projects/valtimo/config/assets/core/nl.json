@@ -575,6 +575,7 @@
   },
   "addConnectorSteps": {
     "step0": "Kies je connector",
-    "step1": "Gegevens invullen"
+    "step1": "Gegevens invullen",
+    "step2": "Testen en activeren"
   }
 }
