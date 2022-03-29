@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
-import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
-import {delay, map, tap} from 'rxjs/operators';
+import {Component, Input, OnInit} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {delay} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
 import {ModalService} from '../../services/modal.service';
 
@@ -25,36 +25,24 @@ import {ModalService} from '../../services/modal.service';
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
 })
-export class ModalComponent {
+export class ModalComponent implements OnInit {
   @Input() appearingDelayMs = 140;
 
   public uuid: string = uuidv4();
 
-  readonly visible$: Observable<boolean> = combineLatest([
-    this.modalService.modalVisible$,
-    this.modalService.modalUuid$,
-  ]).pipe(
-    map(([currentModalVisible, currentModalUuid]) => {
-      return currentModalVisible && currentModalUuid === this.uuid;
-    }),
-    tap(visible => {
-      if (visible) {
-        this.appearing$.next(true);
-        this.setAppearingTimeout();
-      }
-    })
-  );
-
+  readonly visible$: Observable<boolean> = this.modalService.getModalVisible(this.uuid);
   readonly showBackdrop$: Observable<boolean> = this.visible$.pipe(delay(0));
-  readonly appearing$ = new BehaviorSubject<boolean>(false);
-  readonly disappearing$ = new BehaviorSubject<boolean>(false);
+  readonly appearing$ = this.modalService.appearing$;
+  readonly disappearing$ = this.modalService.disappearing$;
   readonly mouseInsideModal$ = new BehaviorSubject<boolean>(false);
 
   constructor(private readonly modalService: ModalService) {}
 
+  ngOnInit(): void {
+    this.setAppearingDelayInService();
+  }
+
   closeModal(): void {
-    this.disappearing$.next(true);
-    this.setDisappearingTimeout();
     this.modalService.closeModal();
   }
 
@@ -70,15 +58,7 @@ export class ModalComponent {
     this.mouseInsideModal$.next(false);
   }
 
-  private setAppearingTimeout(): void {
-    setTimeout(() => {
-      this.appearing$.next(false);
-    }, this.appearingDelayMs);
-  }
-
-  private setDisappearingTimeout(): void {
-    setTimeout(() => {
-      this.disappearing$.next(false);
-    }, this.appearingDelayMs);
+  private setAppearingDelayInService(): void {
+    this.modalService.setAppearingDelay(this.appearingDelayMs);
   }
 }

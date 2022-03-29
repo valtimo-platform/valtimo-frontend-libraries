@@ -15,8 +15,8 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {map, take, tap} from 'rxjs/operators';
 import {ModalComponent} from '../components/modal/modal.component';
 
 @Injectable({
@@ -25,8 +25,9 @@ import {ModalComponent} from '../components/modal/modal.component';
 export class ModalService {
   private readonly _modalUuid$ = new BehaviorSubject<string>('');
   private readonly _modalVisible$ = new BehaviorSubject<boolean>(false);
-
-  constructor() {}
+  private readonly _appearing$ = new BehaviorSubject<boolean>(false);
+  private readonly _disappearing$ = new BehaviorSubject<boolean>(false);
+  private readonly _appearingDelayMs$ = new BehaviorSubject<number>(140);
 
   get modalUuid$() {
     return this._modalUuid$.asObservable();
@@ -34,6 +35,14 @@ export class ModalService {
 
   get modalVisible$() {
     return this._modalVisible$.asObservable();
+  }
+
+  get appearing$() {
+    return this._appearing$.asObservable();
+  }
+
+  get disappearing$() {
+    return this._disappearing$.asObservable();
   }
 
   setCurrentModal(modalComponent: ModalComponent): void {
@@ -53,6 +62,42 @@ export class ModalService {
   }
 
   closeModal(): void {
+    this._disappearing$.next(true);
+    this.setDisappearingTimeout();
     this._modalVisible$.next(false);
+  }
+
+  getModalVisible(modalUuid: string): Observable<boolean> {
+    return combineLatest([this._modalVisible$, this._modalUuid$]).pipe(
+      map(([currentModalVisible, currentModalUuid]) => {
+        return currentModalVisible && currentModalUuid === modalUuid;
+      }),
+      tap(visible => {
+        if (visible) {
+          this._appearing$.next(true);
+          this.setAppearingTimeout();
+        }
+      })
+    );
+  }
+
+  setAppearingDelay(appearingDelayMs: number): void {
+    this._appearingDelayMs$.next(appearingDelayMs);
+  }
+
+  private setAppearingTimeout(): void {
+    this._appearingDelayMs$.pipe(take(1)).subscribe(appearingDelayMs => {
+      setTimeout(() => {
+        this._appearing$.next(false);
+      }, appearingDelayMs);
+    });
+  }
+
+  private setDisappearingTimeout(): void {
+    this._appearingDelayMs$.pipe(take(1)).subscribe(appearingDelayMs => {
+      setTimeout(() => {
+        this._disappearing$.next(false);
+      }, appearingDelayMs);
+    });
   }
 }
