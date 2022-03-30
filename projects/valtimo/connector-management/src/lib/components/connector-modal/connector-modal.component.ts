@@ -64,7 +64,7 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   }
 
   nextStep(stepIndex: number): void {
-    console.log('went to next step', stepIndex);
+    console.log('went to next step from step', stepIndex);
   }
 
   complete(): void {

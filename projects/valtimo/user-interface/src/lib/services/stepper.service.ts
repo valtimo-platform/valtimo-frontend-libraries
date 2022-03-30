@@ -21,6 +21,7 @@ export class StepperService {
   private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
   private readonly _cancel$ = new Subject();
   private readonly _complete$ = new Subject();
+  private readonly _nextStep$ = new Subject<number>();
 
   get currentStepIndex$() {
     return this._currentStepIndex$.asObservable();
@@ -54,6 +55,10 @@ export class StepperService {
     return this._complete$.asObservable();
   }
 
+  get nextStep$() {
+    return this._nextStep$.asObservable();
+  }
+
   setSteps(steps: Array<Step>): void {
     const mappedSteps = steps.map((step, index) => ({
       ...step,
@@ -74,6 +79,7 @@ export class StepperService {
       .subscribe(([nextStepAvailable, currentStepIndex]) => {
         if (nextStepAvailable) {
           this.setCurrentStepIndex(currentStepIndex + 1);
+          this._nextStep$.next(currentStepIndex);
         }
       });
   }
@@ -89,12 +95,16 @@ export class StepperService {
   }
 
   cancel(): void {
-    this.setCurrentStepIndex(0);
+    this.returnToFirstStep();
     this._cancel$.next();
   }
 
   complete(): void {
-    this.setCurrentStepIndex(0);
+    this.returnToFirstStep();
     this._complete$.next();
+  }
+
+  private returnToFirstStep(): void {
+    this.setCurrentStepIndex(0);
   }
 }

@@ -21,7 +21,7 @@
   </div>
 </valtimo-modal>
 
-<v-stepper-container (cancel)="hideModal()" (complete)="complete()">
+<v-stepper-container (cancel)="hideModal()" (complete)="complete()" (nextStep)="nextStep($event)">
   <v-modal #vModal>
     <div role="header">
       <v-stepper-header></v-stepper-header>
@@ -38,12 +38,10 @@
         <v-stepper-footer-step
           nextButtonTranslationKey="addConnectorSteps.step1"
           [nextButtonEnabled]="true"
-          (nextStep)="nextStep($event)"
         ></v-stepper-footer-step>
         <v-stepper-footer-step
           nextButtonTranslationKey="addConnectorSteps.step2"
           [nextButtonEnabled]="true"
-          (nextStep)="nextStep($event)"
         ></v-stepper-footer-step>
         <v-stepper-footer-step
           completeButtonTranslationKey="addConnectorSteps.complete"
