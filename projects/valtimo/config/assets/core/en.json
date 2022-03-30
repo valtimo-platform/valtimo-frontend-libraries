@@ -408,6 +408,11 @@
     "searchBasedOn": "Search with",
     "lastNameAndDateOfBirth": "Family name and date of birth"
   },
+  "stepper": {
+    "cancelButtonText": "Cancel",
+    "nextButtonText": "Next step",
+    "completeButtonText": "Complete"
+  },
   "Connectors": "Connections",
   "connectorManagement": {
     "title": "Connections",
@@ -575,6 +580,8 @@
   },
   "addConnectorSteps": {
     "step0": "Choose your connector",
-    "step1": "Enter data"
+    "step1": "Enter data",
+    "step2": "Test and activate",
+    "complete": "Create connector"
   }
 }

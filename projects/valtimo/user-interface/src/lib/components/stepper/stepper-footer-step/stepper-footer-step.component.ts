@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {StepperService} from '../../../services/stepper.service';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'v-stepper-footer-step',
@@ -24,17 +25,34 @@ import {BehaviorSubject, Observable} from 'rxjs';
   styleUrls: ['./stepper-footer-step.component.scss'],
 })
 export class StepperFooterStepComponent {
+  @Input() nextButtonEnabled = false;
+  @Input() completeButtonEnabled = false;
+  @Input() nextButtonTranslationKey = '';
+  @Input() cancelButtonTranslationKey = '';
+  @Input() completeButtonTranslationKey = '';
+  @Input() completeButtonMdiIcon = '';
+
+  @Output() nextStep: EventEmitter<number> = new EventEmitter();
+
   public stepIndex$ = new BehaviorSubject<number>(-1);
+  public isLastStep$ = new BehaviorSubject<boolean>(false);
 
   currentStepIndex$: Observable<number> = this.stepperService.currentStepIndex$;
 
   constructor(private readonly stepperService: StepperService) {}
 
   goToNextStep(): void {
-    this.stepperService.goToNextStep();
+    this.stepIndex$.pipe(take(1)).subscribe(stepIndex => {
+      this.nextStep.emit(stepIndex);
+      this.stepperService.goToNextStep();
+    });
   }
 
   cancel(): void {
     this.stepperService.cancel();
+  }
+
+  complete(): void {
+    this.stepperService.complete();
   }
 }

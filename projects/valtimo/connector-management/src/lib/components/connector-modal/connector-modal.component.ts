@@ -63,6 +63,15 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
     this.modalService.closeModal();
   }
 
+  nextStep(stepIndex: number): void {
+    console.log('went to next step', stepIndex);
+  }
+
+  complete(): void {
+    console.log('complete');
+    this.modalService.closeModal();
+  }
+
   private show(): void {
     // this.modal.show();
     this.modalService.openModal(this.vModal);

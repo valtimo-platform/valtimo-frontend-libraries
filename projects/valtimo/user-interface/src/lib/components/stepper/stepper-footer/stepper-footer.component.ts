@@ -31,8 +31,11 @@ export class StepperFooterComponent implements AfterContentInit {
   }
 
   private setStepNumbers(): void {
-    this.footerStepComponents.forEach((footerStepComponent, index) => {
+    const footerStepComponents = this.footerStepComponents;
+
+    footerStepComponents.forEach((footerStepComponent, index) => {
       footerStepComponent.stepIndex$.next(index);
+      footerStepComponent.isLastStep$.next(index === footerStepComponents.length - 1);
     });
   }
 }

@@ -408,6 +408,11 @@
     "searchBasedOn": "Zoeken op",
     "lastNameAndDateOfBirth": "Geslachtsnaam en geboortedatum"
   },
+  "stepper": {
+    "cancelButtonText": "Annuleren",
+    "nextButtonText": "Volgende stap",
+    "completeButtonText": "Voltooien"
+  },
   "Connectors": "Connecties",
   "connectorManagement": {
     "title": "Connecties",
@@ -576,6 +581,7 @@
   "addConnectorSteps": {
     "step0": "Kies je connector",
     "step1": "Gegevens invullen",
-    "step2": "Testen en activeren"
+    "step2": "Testen en activeren",
+    "complete": "Connector aanmaken"
   }
 }

@@ -26,20 +26,32 @@ import {Subscription} from 'rxjs';
 })
 export class StepperContainerComponent implements OnInit, OnDestroy {
   @Output() cancel: EventEmitter<any> = new EventEmitter();
+  @Output() complete: EventEmitter<any> = new EventEmitter();
 
   private cancelSubscription!: Subscription;
+  private completeSubscription!: Subscription;
 
   constructor(private readonly stepperService: StepperService) {}
 
   ngOnInit(): void {
-    this.cancelSubscription = this.stepperService.cancel$.subscribe(cancel => {
-      if (cancel) {
-        this.cancel.emit();
-      }
-    });
+    this.openCancelSubscription();
+    this.openCompleteSubscription();
   }
 
   ngOnDestroy(): void {
     this.cancelSubscription?.unsubscribe();
+    this.completeSubscription?.unsubscribe();
+  }
+
+  private openCancelSubscription(): void {
+    this.cancelSubscription = this.stepperService.cancel$.subscribe(() => {
+      this.cancel.emit();
+    });
+  }
+
+  private openCompleteSubscription(): void {
+    this.completeSubscription = this.stepperService.complete$.subscribe(() => {
+      this.complete.emit();
+    });
   }
 }

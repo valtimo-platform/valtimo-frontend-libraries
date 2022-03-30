@@ -408,6 +408,11 @@
     "searchBasedOn": "Suchen nach",
     "lastNameAndDateOfBirth": "Familienname und Geburtsdatum"
   },
+  "stepper": {
+    "cancelButtonText": "Stornieren",
+    "nextButtonText": "Weiter",
+    "completeButtonText": "Abschließen"
+  },
   "Connectors": "Connectors",
   "connectorManagement": {
     "title": "Connectors",
@@ -574,7 +579,9 @@
     }
   },
   "addConnectorSteps": {
-    "step0": "Kies je connector",
-    "step1": "Gegevens invullen"
+    "step0": "Wählen Sie Ihren Connector",
+    "step1": "Daten eingeben",
+    "step2": "Testen und aktivieren",
+    "complete": "Connector erstellen"
   }
 }
