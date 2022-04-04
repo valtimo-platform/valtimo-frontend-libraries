@@ -54,3 +54,5 @@ Thumbs.db
 /projects/out-tsc
 
 /.gradle
+
+/.git
