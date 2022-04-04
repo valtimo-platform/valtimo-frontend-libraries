@@ -182,6 +182,7 @@
     "@angular-eslint/schematics": "^13.1.0",
     "@angular-eslint/template-parser": "^13.1.0",
     "@angular/animations": "^13.2.3",
+    "@angular/cdk": "^13.3.2",
     "@angular/cli": "^13.2.4",
     "@angular/common": "^13.2.3",
     "@angular/compiler": "^13.2.3",
