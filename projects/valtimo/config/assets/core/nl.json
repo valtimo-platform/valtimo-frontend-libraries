@@ -324,8 +324,16 @@
   },
   "openZaak": {
     "links": "Gekoppeld zaak type",
+    "success": {
+      "serviceTaskLinked": "Servicetaak gekoppeld",
+      "serviceTaskLinkUpdated": "Servicetaak-link bijgewerkt",
+      "serviceTaskUnlinked": "Servicetaak ontkoppeld"
+    },
     "error": {
-      "configNotFound": "OpenZaak configuratie niet gevonden, ga naar Admin > Open Zaak"
+      "configNotFound": "OpenZaak configuratie niet gevonden, ga naar Admin > Open Zaak",
+      "serviceTaskLinkFailed": "Kan servicetaak niet koppelen",
+      "serviceTaskLinkUpdateFailed": "Kan koppeling servicetaak niet updaten",
+      "serviceTaskUnlinkFailed": "Kan servicetaak niet ontkoppelen"
     },
     "linkZaakType": "Zaaktype koppelen",
     "autoCreateForCase": "Automatisch aanmaken voor elk dossier",
@@ -458,7 +466,7 @@
       "openZaakConfig.clientId": "Client ID",
       "openZaakConfig.secret": "Secret",
       "openZaakConfig.rsin": "Rsin",
-      "openZaakConfig.catalogiUrl": "Catalogus URL",
+      "openZaakConfig.catalogusUrl": "Catalogus URL",
       "clientId": "Client ID",
       "secret": "Secret",
       "rsin": "RSIN",

@@ -299,10 +299,10 @@ export class OpenZaakServiceTaskConnectorModalExtensionComponent implements OnIn
       )
       .subscribe(
         () => {
-          this.alertService.success('Service task linked');
+          this.alertService.success(this.translateService.instant('openZaak.success.serviceTaskLinked'));
         },
         () => {
-          this.alertService.error('Failed to link Service task');
+          this.alertService.error(this.translateService.instant('openZaak.error.serviceTaskLinkFailed'));
         }
       );
   }
@@ -324,10 +324,10 @@ export class OpenZaakServiceTaskConnectorModalExtensionComponent implements OnIn
       )
       .subscribe(
         () => {
-          this.alertService.success('Service task link updated');
+          this.alertService.success(this.translateService.instant('openZaak.success.serviceTaskLinkUpdated'));
         },
         () => {
-          this.alertService.error('Failed to update Service task link');
+          this.alertService.error(this.translateService.instant('openZaak.error.serviceTaskLinkUpdateFailed'));
         }
       );
   }
@@ -353,10 +353,10 @@ export class OpenZaakServiceTaskConnectorModalExtensionComponent implements OnIn
                 )
                 .subscribe(
                   () => {
-                    this.alertService.success('Service task unlinked');
+                    this.alertService.success(this.translateService.instant('openZaak.success.serviceTaskUnlinked'));
                   },
                   () => {
-                    this.alertService.error('Failed to unlink Service task');
+                    this.alertService.error(this.translateService.instant('openZaak.error.serviceTaskUnlinkFailed'));
                   }
                 );
             }
