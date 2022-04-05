@@ -88,6 +88,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
   background-color: var(--v-modal-header-bg-color);
   padding-block-start: var(--v-modal-header-padding-block);
   padding-block-end: var(--v-modal-header-padding-block);
@@ -126,6 +127,8 @@
 }
 
 .v-modal__footer {
+  display: flex;
+  flex-shrink: 0;
   background-color: var(--v-modal-footer-bg-color);
   padding-block-start: var(--v-modal-footer-padding-block);
   padding-block-end: var(--v-modal-footer-padding-block);
@@ -139,6 +142,7 @@
   padding-block-end: var(--v-modal-content-padding-block-end);
   padding-inline-start: var(--v-modal-padding-inline);
   padding-inline-end: var(--v-modal-padding-inline);
+  overflow: auto;
 }
 
 ::ng-deep {

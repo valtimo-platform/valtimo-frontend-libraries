@@ -22,7 +22,7 @@ import {ListModule, ModalModule, SpinnerModule, WidgetModule} from '@valtimo/com
 import {ConnectorManagementStateService} from './services/connector-management-state/connector-management-state.service';
 import {ConnectorManagementComponent} from './components/connector-management/connector-management.component';
 import {ConnectorLinkExtensionModalComponent} from './components/connector-link-extension-modal/connector-link-extension-modal.component';
-import {AddConnectorComponent} from './components/add-connector/add-connector.component';
+import {AddConnectorSelectComponent} from './components/add-connector-select/add-connector-select.component';
 import {ModifyConnectorComponent} from './components/modify-connector/modify-connector.component';
 import {ConnectorModalComponent} from './components/connector-modal/connector-modal.component';
 import {EditConnectorPropertiesComponent} from './components/edit-connector-properties/edit-connector-properties.component';
@@ -37,13 +37,14 @@ import {
   TableModule,
   ModalModule as VModalModule,
   StepperModule,
+  CardModule,
 } from '@valtimo/user-interface';
 
 @NgModule({
   providers: [ConnectorManagementStateService],
   declarations: [
     ConnectorManagementComponent,
-    AddConnectorComponent,
+    AddConnectorSelectComponent,
     ConnectorModalComponent,
     ModifyConnectorComponent,
     EditConnectorPropertiesComponent,
@@ -67,10 +68,11 @@ import {
     TableModule,
     VModalModule,
     StepperModule,
+    CardModule,
   ],
   exports: [
     ConnectorManagementComponent,
-    AddConnectorComponent,
+    AddConnectorSelectComponent,
     ConnectorModalComponent,
     ModifyConnectorComponent,
     EditConnectorPropertiesComponent,

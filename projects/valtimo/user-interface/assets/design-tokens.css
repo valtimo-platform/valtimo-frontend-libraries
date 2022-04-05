@@ -75,6 +75,7 @@
   /* spacing inline */
   --v-spacing-inline-sm: 6px;
   --v-spacing-inline-md: 12px;
+  --v-spacing-inline-l: 16px;
   --v-spacing-inline-2xl: 30px;
   --v-spacing-inline-3xl: 58px;
   /* border */
@@ -236,4 +237,11 @@
   --v-stepper-header-active-bar-height: 6px;
   --v-stepper-header-active-bar-bg-color: var(--v-stepper-header-active-bg-color);
   --v-stepper-header-active-bar-border-radius: var(--v-border-radius-xsm);
+  /* card */
+  --v-card-padding-inline: var(--v-spacing-inline-l);
+  --v-card-padding-block-start: var(--v-spacing-block-l);
+  --v-card-padding-block-end: var(--v-spacing-block-xl);
+  --v-card-border-radius: var(--v-border-radius-md);
+  --v-card-border: 1px solid var(--v-color-grey-4);
+  --v-card-bg-color: var(--v-color-white);
 }

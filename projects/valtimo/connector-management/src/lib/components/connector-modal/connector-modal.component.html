@@ -16,7 +16,6 @@
 
 <valtimo-modal #modal [title]="'connectorManagement.' + modalType | translate">
   <div class="mt-2" body>
-    <valtimo-add-connector *ngIf="modalType === 'add'"></valtimo-add-connector>
     <valtimo-modify-connector *ngIf="modalType === 'modify'"></valtimo-modify-connector>
   </div>
 </valtimo-modal>
@@ -28,7 +27,9 @@
     </div>
     <div role="content">
       <v-stepper-content>
-        <v-stepper-step titleTranslationKey="addConnectorSteps.step0"></v-stepper-step>
+        <v-stepper-step titleTranslationKey="addConnectorSteps.step0">
+          <valtimo-add-connector-select></valtimo-add-connector-select>
+        </v-stepper-step>
         <v-stepper-step titleTranslationKey="addConnectorSteps.step1"></v-stepper-step>
         <v-stepper-step titleTranslationKey="addConnectorSteps.step2"></v-stepper-step>
       </v-stepper-content>
@@ -37,7 +38,7 @@
       <v-stepper-footer>
         <v-stepper-footer-step
           nextButtonTranslationKey="addConnectorSteps.step1"
-          [nextButtonEnabled]="true"
+          [nextButtonEnabled]="connectorTypeSelected$ | async"
         ></v-stepper-footer-step>
         <v-stepper-footer-step
           nextButtonTranslationKey="addConnectorSteps.step2"

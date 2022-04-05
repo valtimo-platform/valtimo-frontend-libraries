@@ -29,12 +29,11 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
   styleUrls: ['./add-connector.component.scss'],
 })
 export class AddConnectorComponent implements OnInit, OnDestroy {
+  readonly selectedConnector$ = this.stateService.selectedConnector$;
+  readonly disabled$ = this.stateService.inputDisabled$;
+
   readonly connectorTypes$: Observable<Array<ConnectorType>> =
     this.connectorManagementService.getConnectorTypes();
-
-  readonly selectedConnector$ = new BehaviorSubject<ConnectorType>(undefined);
-
-  readonly disabled$!: Observable<boolean>;
 
   private refreshSubscription!: Subscription;
 
@@ -43,9 +42,7 @@ export class AddConnectorComponent implements OnInit, OnDestroy {
     private readonly stateService: ConnectorManagementStateService,
     private readonly alertService: AlertService,
     private readonly translateService: TranslateService
-  ) {
-    this.disabled$ = this.stateService.inputDisabled$;
-  }
+  ) {}
 
   ngOnInit(): void {
     this.refreshSubscription = combineLatest([
@@ -61,11 +58,11 @@ export class AddConnectorComponent implements OnInit, OnDestroy {
   }
 
   selectConnector(connectorType: ConnectorType): void {
-    this.selectedConnector$.next(connectorType);
+    this.stateService.setSelectedConnectorType(connectorType);
   }
 
   goBack(): void {
-    this.selectedConnector$.next(undefined);
+    this.stateService.clearSelectedConnector();
   }
 
   onSave(event: {properties: ConnectorProperties; name: string}): void {
@@ -84,6 +81,7 @@ export class AddConnectorComponent implements OnInit, OnDestroy {
             this.stateService.hideModal();
             this.stateService.enableInput();
             this.stateService.refresh();
+            this.stateService.clearSelectedConnector();
           },
           () => {
             this.stateService.enableInput();

@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {ConnectorInstance} from '@valtimo/config';
+import {ConnectorInstance, ConnectorType} from '@valtimo/config';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +28,7 @@ export class ConnectorManagementStateService {
   private readonly _refresh$ = new BehaviorSubject<'refresh'>('refresh');
   private readonly _selectedInstance$ = new BehaviorSubject<ConnectorInstance>(undefined);
   private readonly _lastConfigIdAdded$ = new BehaviorSubject<string>('');
+  private readonly _selectedConnector$ = new BehaviorSubject<ConnectorType>(undefined);
 
   get showModal$(): Observable<boolean> {
     return this._showModal$.asObservable();
@@ -51,6 +52,10 @@ export class ConnectorManagementStateService {
 
   get lastConfigIdAdded$(): Observable<string> {
     return this._lastConfigIdAdded$.asObservable();
+  }
+
+  get selectedConnector$(): Observable<ConnectorType> {
+    return this._selectedConnector$.asObservable();
   }
 
   showModal(): void {
@@ -91,5 +96,13 @@ export class ConnectorManagementStateService {
 
   clearLastConfigIdAdded(): void {
     this._lastConfigIdAdded$.next('');
+  }
+
+  setSelectedConnectorType(connectorType: ConnectorType): void {
+    this._selectedConnector$.next(connectorType);
+  }
+
+  clearSelectedConnector(): void {
+    this._selectedConnector$.next(undefined);
   }
 }

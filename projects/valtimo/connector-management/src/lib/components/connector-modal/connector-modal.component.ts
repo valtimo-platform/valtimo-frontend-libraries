@@ -34,6 +34,8 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
 
   showSubscription!: Subscription;
 
+  readonly connectorTypeSelected$ = this.stateService.selectedConnector$;
+
   constructor(
     private readonly stateService: ConnectorManagementStateService,
     private readonly modalService: ModalService

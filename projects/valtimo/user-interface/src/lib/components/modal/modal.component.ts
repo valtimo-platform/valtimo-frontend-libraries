@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {delay} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
@@ -27,6 +27,7 @@ import {ModalService} from '../../services/modal.service';
 })
 export class ModalComponent implements OnInit {
   @Input() appearingDelayMs = 140;
+  @Output() close: EventEmitter<any> = new EventEmitter();
 
   public uuid: string = uuidv4();
 
@@ -43,6 +44,7 @@ export class ModalComponent implements OnInit {
   }
 
   closeModal(): void {
+    this.close.emit();
     this.modalService.closeModal();
   }
 
