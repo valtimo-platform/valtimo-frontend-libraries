@@ -76,9 +76,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     this.formDefinition = formDefinition;
     this.errors = [];
 
-    if (this.formHasLegacyUpload(formDefinition)) {
-      this.setInitialToken();
-    }
+    this.setInitialToken();
 
     if (documentDefinitionName) {
       this.stateService.setDocumentDefinitionName(documentDefinitionName);
@@ -96,9 +94,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     this.formDefinition = currentForm;
     this.reloadForm();
 
-    if (this.formHasLegacyUpload(currentForm)) {
-      this.setInitialToken();
-    }
+    this.setInitialToken();
 
     if (changes.formDefinitionRefresh$) {
       this.unsubscribeFormRefresh();
@@ -161,9 +157,11 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   private setTimerForTokenRefresh(token: string): void {
     const tokenExp = (jwt_decode(token) as any).exp * 1000;
     const expiryTime = tokenExp - Date.now() - 1000;
-    this.tokenRefreshTimerSubscription = timer(expiryTime).subscribe(() => {
-      this.refreshToken();
-    });
+    if (!this.tokenRefreshTimerSubscription) {
+      this.tokenRefreshTimerSubscription = timer(expiryTime).subscribe(() => {
+        this.refreshToken();
+      });
+    };
 
     this.logger.debug(`Timer for form.io token refresh set for: ${expiryTime}ms.`);
   }
