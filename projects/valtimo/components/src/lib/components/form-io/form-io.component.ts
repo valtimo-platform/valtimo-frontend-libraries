@@ -92,7 +92,9 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     this.formDefinition = currentForm;
     this.reloadForm();
 
-    this.setInitialToken();
+    if (!this.tokenRefreshTimerSubscription) {
+      this.setInitialToken();
+    }
 
     if (changes.formDefinitionRefresh$) {
       this.unsubscribeFormRefresh();
