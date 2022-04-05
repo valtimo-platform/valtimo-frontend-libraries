@@ -74,9 +74,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     this.formDefinition = formDefinition;
     this.errors = [];
 
-    if (this.formHasLegacyUpload(formDefinition)) {
-      this.setInitialToken();
-    }
+    this.setInitialToken();
 
     if (documentDefinitionName) {
       this.stateService.setDocumentDefinitionName(documentDefinitionName);
@@ -94,9 +92,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     this.formDefinition = currentForm;
     this.reloadForm();
 
-    if (this.formHasLegacyUpload(currentForm)) {
-      this.setInitialToken();
-    }
+    this.setInitialToken();
 
     if (changes.formDefinitionRefresh$) {
       this.unsubscribeFormRefresh();
