@@ -39,6 +39,7 @@ import {
   StepperModule,
   CardModule,
 } from '@valtimo/user-interface';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   providers: [ConnectorManagementStateService],
@@ -69,6 +70,7 @@ import {
     VModalModule,
     StepperModule,
     CardModule,
+    FlexLayoutModule,
   ],
   exports: [
     ConnectorManagementComponent,

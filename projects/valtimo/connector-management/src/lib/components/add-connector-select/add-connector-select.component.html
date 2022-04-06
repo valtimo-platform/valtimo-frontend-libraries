@@ -15,17 +15,31 @@
   -->
 
 <ng-container *ngIf="connectorTypes$ | async as connectorTypes; else loading">
-  <v-card
-    *ngFor="let connectorType of connectorTypes"
-    [titleTranslationKey]="'connector.' + connectorType.name + '.title'"
-    [descriptionTranslationKey]="'connector.' + connectorType.name + '.description'"
-    [selectable]="true"
-    [selected]="(selectedConnector$ | async)?.name === connectorType.name"
-    (select)="selectConnector(connectorType)"
-    (deselect)="deselectConnector()"
-  ></v-card>
+  <div fxLayout="row wrap" fxLayoutGap="22px grid">
+    <div fxFlex="33.3%" *ngFor="let connectorType of connectorTypes">
+      <v-card
+        [titleTranslationKey]="'connector.' + connectorType.name + '.title'"
+        [descriptionTranslationKey]="'connector.' + connectorType.name + '.description'"
+        [selectable]="true"
+        [selected]="(selectedConnector$ | async)?.name === connectorType.name"
+        [fullHeight]="true"
+        (select)="selectConnector(connectorType)"
+        (deselect)="deselectConnector()"
+      ></v-card>
+    </div>
+  </div>
 </ng-container>
 
 <ng-template #loading>
-  <valtimo-spinner></valtimo-spinner>
+  <div fxLayout="row wrap" fxLayoutGap="22px grid">
+    <ng-container *ngTemplateOutlet="loadingCard"></ng-container>
+    <ng-container *ngTemplateOutlet="loadingCard"></ng-container>
+    <ng-container *ngTemplateOutlet="loadingCard"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #loadingCard>
+  <div fxFlex="33.3%">
+    <v-card [loading]="true" [loadingDescription]="true" [loadingTitle]="true"></v-card>
+  </div>
 </ng-template>

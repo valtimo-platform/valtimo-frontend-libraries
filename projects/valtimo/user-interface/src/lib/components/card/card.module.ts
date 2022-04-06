@@ -18,10 +18,11 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CardComponent} from './card.component';
 import {TranslateModule} from '@ngx-translate/core';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [CardComponent],
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, NgxSkeletonLoaderModule],
   exports: [CardComponent],
 })
 export class CardModule {}

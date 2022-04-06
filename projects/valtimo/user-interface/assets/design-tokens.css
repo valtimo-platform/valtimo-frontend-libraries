@@ -260,4 +260,6 @@
   --v-card-selected-border: 2px solid var(--v-color-accent-1);
   --v-card-transition: var(--v-transition-outline-fast), var(--v-transition-bg-fast);
   --v-card-selectable-hover-bg-color: var(--v-color-grey-8);
+  --v-card-title-loading-skeleton-width: 100px;
+  --v-card-loading-skeleton-bg-color: var(--v-color-grey-4);
 }

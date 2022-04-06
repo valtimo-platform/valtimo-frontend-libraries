@@ -39,6 +39,10 @@
   outline: var(--v-card-selected-border);
 }
 
+.v-card--full-height {
+  height: 100%;
+}
+
 .v-card__title {
   font-size: var(--v-card-title-font-size);
   line-height: var(--v-card-title-line-height);
@@ -46,6 +50,8 @@
   font-weight: var(--v-card-title-font-weight);
   margin: 0;
   margin-block-end: var(--v-card-title-spacing-block);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .v-card__description {
@@ -54,4 +60,6 @@
   color: var(--v-card-description-color);
   font-weight: var(--v-card-description-font-weight);
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

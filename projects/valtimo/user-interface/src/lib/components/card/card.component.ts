@@ -28,6 +28,10 @@ export class CardComponent {
   @Input() description = '';
   @Input() selectable = false;
   @Input() selected = false;
+  @Input() fullHeight = false;
+  @Input() loading = false;
+  @Input() loadingTitle = false;
+  @Input() loadingDescription = false;
 
   @Output() select: EventEmitter<any> = new EventEmitter();
   @Output() deselect: EventEmitter<any> = new EventEmitter();
