@@ -69,9 +69,10 @@ export class ModalService {
 
   getModalVisible(modalUuid: string): Observable<boolean> {
     return combineLatest([this._modalVisible$, this._modalUuid$]).pipe(
-      map(([currentModalVisible, currentModalUuid]) => {
-        return currentModalVisible && currentModalUuid === modalUuid;
-      }),
+      map(
+        ([currentModalVisible, currentModalUuid]) =>
+          currentModalVisible && currentModalUuid === modalUuid
+      ),
       tap(visible => {
         if (visible) {
           this._appearing$.next(true);

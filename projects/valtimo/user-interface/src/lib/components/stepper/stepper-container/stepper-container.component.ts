@@ -25,9 +25,9 @@ import {Subscription} from 'rxjs';
   providers: [StepperService],
 })
 export class StepperContainerComponent implements OnInit, OnDestroy {
-  @Output() cancel: EventEmitter<any> = new EventEmitter();
-  @Output() complete: EventEmitter<any> = new EventEmitter();
-  @Output() nextStep: EventEmitter<number> = new EventEmitter();
+  @Output() cancelEvent: EventEmitter<any> = new EventEmitter();
+  @Output() completeEvent: EventEmitter<any> = new EventEmitter();
+  @Output() nextStepEvent: EventEmitter<number> = new EventEmitter();
 
   private cancelSubscription!: Subscription;
   private completeSubscription!: Subscription;
@@ -49,19 +49,19 @@ export class StepperContainerComponent implements OnInit, OnDestroy {
 
   private openCancelSubscription(): void {
     this.cancelSubscription = this.stepperService.cancel$.subscribe(() => {
-      this.cancel.emit();
+      this.cancelEvent.emit();
     });
   }
 
   private openCompleteSubscription(): void {
     this.completeSubscription = this.stepperService.complete$.subscribe(() => {
-      this.complete.emit();
+      this.completeEvent.emit();
     });
   }
 
   private openNextStepSubscription(): void {
     this.nextStepSubscription = this.stepperService.nextStep$.subscribe(currentStepIndex => {
-      this.nextStep.emit(currentStepIndex);
+      this.nextStepEvent.emit(currentStepIndex);
     });
   }
 }

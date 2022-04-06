@@ -27,7 +27,7 @@ import {ModalService} from '../../services/modal.service';
 })
 export class ModalComponent implements OnInit {
   @Input() appearingDelayMs = 140;
-  @Output() close: EventEmitter<any> = new EventEmitter();
+  @Output() closeEvent: EventEmitter<any> = new EventEmitter();
 
   public uuid: string = uuidv4();
 
@@ -44,7 +44,7 @@ export class ModalComponent implements OnInit {
   }
 
   closeModal(): void {
-    this.close.emit();
+    this.closeEvent.emit();
     this.modalService.closeModal();
   }
 

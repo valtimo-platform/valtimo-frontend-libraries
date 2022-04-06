@@ -33,15 +33,15 @@ export class CardComponent {
   @Input() loadingTitle = false;
   @Input() loadingDescription = false;
 
-  @Output() select: EventEmitter<any> = new EventEmitter();
-  @Output() deselect: EventEmitter<any> = new EventEmitter();
+  @Output() selectEvent: EventEmitter<any> = new EventEmitter();
+  @Output() deselectEvent: EventEmitter<any> = new EventEmitter();
 
   click(): void {
     if (this.selectable) {
       if (this.selected) {
-        this.deselect.emit();
+        this.deselectEvent.emit();
       } else {
-        this.select.emit();
+        this.selectEvent.emit();
       }
     }
   }

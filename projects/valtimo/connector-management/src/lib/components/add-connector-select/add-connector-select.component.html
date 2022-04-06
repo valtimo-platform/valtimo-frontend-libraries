@@ -23,8 +23,8 @@
         [selectable]="true"
         [selected]="(selectedConnector$ | async)?.name === connectorType.name"
         [fullHeight]="true"
-        (select)="selectConnector(connectorType)"
-        (deselect)="deselectConnector()"
+        (selectEvent)="selectConnector(connectorType)"
+        (deselectEvent)="deselectConnector()"
       ></v-card>
     </div>
   </div>

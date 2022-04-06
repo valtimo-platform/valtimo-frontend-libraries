@@ -33,18 +33,12 @@ export class StepperService {
 
   get nextStepAvailable$() {
     return combineLatest([this._steps$, this._currentStepIndex$]).pipe(
-      map(([steps, currentStepIndex]) => {
-        return currentStepIndex < steps.length - 1;
-      })
+      map(([steps, currentStepIndex]) => currentStepIndex < steps.length - 1)
     );
   }
 
   get previousStepAvailable$() {
-    return this._currentStepIndex$.pipe(
-      map(currentStepIndex => {
-        return currentStepIndex > 0;
-      })
-    );
+    return this._currentStepIndex$.pipe(map(currentStepIndex => currentStepIndex > 0));
   }
 
   get cancel$() {

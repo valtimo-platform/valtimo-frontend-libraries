@@ -208,7 +208,7 @@
         class="dropdown-item p-2"
         *ngFor="let action of listItemField.value"
       >
-        <ng-container *ngIf="action.iconClass != null">
+        <ng-container *ngIf="action.iconClass !== null">
           <i [ngClass]="action.iconClass"></i>
         </ng-container>
         {{ action?.label || '-' }}
