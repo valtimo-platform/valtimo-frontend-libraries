@@ -27,11 +27,15 @@
 }
 
 .v-card--selectable {
+  user-select: none;
   cursor: var(--v-card-selectable-cursor);
+
+  &:hover {
+    background-color: var(--v-card-selectable-hover-bg-color);
+  }
 }
 
 .v-card--selected {
-  //margin: var(--v-card-selected-margin);
   outline: var(--v-card-selected-border);
 }
 

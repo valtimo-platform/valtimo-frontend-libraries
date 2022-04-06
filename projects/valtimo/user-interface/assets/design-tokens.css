@@ -258,6 +258,6 @@
   --v-card-description-font-size: var(--v-font-size-smaller);
   --v-card-selectable-cursor: var(--v-cursor-clickable);
   --v-card-selected-border: 2px solid var(--v-color-accent-1);
-  --v-card-selected-margin: -1px;
-  --v-card-transition: var(--v-transition-border-fast);
+  --v-card-transition: var(--v-transition-outline-fast), var(--v-transition-bg-fast);
+  --v-card-selectable-hover-bg-color: var(--v-color-grey-8);
 }
