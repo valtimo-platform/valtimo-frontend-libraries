@@ -14,4 +14,17 @@
   ~ limitations under the License.
   -->
 
-<div class="v-card"></div>
+<div
+  class="v-card"
+  [ngClass]="{'v-card--selectable': selectable, 'v-card--selected': selected}"
+  (click)="click()"
+>
+  <div class="v-card__body">
+    <h2 class="v-card__title" *ngIf="titleTranslationKey || title">
+      {{ titleTranslationKey ? (titleTranslationKey | translate) : title }}
+    </h2>
+    <p class="v-card__description" *ngIf="descriptionTranslationKey || description">
+      {{ descriptionTranslationKey ? (descriptionTranslationKey | translate) : description }}
+    </p>
+  </div>
+</div>

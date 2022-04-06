@@ -19,6 +19,7 @@
 :root {
   /* colors */
   --v-color-white: #ffffff;
+  --v-color-black: #222222;
   --v-color-grey-1: #6b6b6b;
   --v-color-grey-2: #a0a0a0;
   --v-color-grey-3: #b2b2b2;
@@ -66,6 +67,7 @@
   /* line height */
   --v-line-height-smaller: 14px;
   --v-line-height-default: 16px;
+  --v-line-height-larger: 20px;
   /* spacing block */
   --v-spacing-block-sm: 8px;
   --v-spacing-block-md: 12px;
@@ -87,6 +89,7 @@
   --v-transition-color-fast: color 0.07s ease-in;
   --v-transition-font-size-fast: font-size 0.07s ease-in;
   --v-transition-border-fast: border 0.07s ease-in;
+  --v-transition-outline-fast: outline 0.07s ease-in;
   --v-transition-bg-medium: background-color 0.14s ease-in;
   --v-transition-backdrop-medium: backdrop-filter 0.14s ease-in;
   --v-transition-opacity-medium: opacity 0.14s ease-in;
@@ -244,4 +247,17 @@
   --v-card-border-radius: var(--v-border-radius-md);
   --v-card-border: 1px solid var(--v-color-grey-4);
   --v-card-bg-color: var(--v-color-white);
+  --v-card-title-color: var(--v-color-black);
+  --v-card-title-font-weight: var(--v-font-weight-bold);
+  --v-card-title-font-size: var(--v-font-size-larger);
+  --v-card-title-line-height: var(--v-line-height-larger);
+  --v-card-title-spacing-block: var(--v-spacing-block-sm);
+  --v-card-description-color: var(--v-color-grey-1);
+  --v-card-description-font-weight: var(--v-font-weight-regular);
+  --v-card-description-line-height: var(--v-line-height-larger);
+  --v-card-description-font-size: var(--v-font-size-smaller);
+  --v-card-selectable-cursor: var(--v-cursor-clickable);
+  --v-card-selected-border: 2px solid var(--v-color-accent-1);
+  --v-card-selected-margin: -1px;
+  --v-card-transition: var(--v-transition-border-fast);
 }

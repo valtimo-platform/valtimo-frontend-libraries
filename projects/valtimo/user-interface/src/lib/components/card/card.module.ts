@@ -17,10 +17,11 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CardComponent} from './card.component';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [CardComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   exports: [CardComponent],
 })
 export class CardModule {}

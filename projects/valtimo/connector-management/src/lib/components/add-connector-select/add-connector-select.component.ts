@@ -61,6 +61,10 @@ export class AddConnectorSelectComponent implements OnInit, OnDestroy {
     this.stateService.setSelectedConnectorType(connectorType);
   }
 
+  deselectConnector(): void {
+    this.stateService.clearSelectedConnector();
+  }
+
   goBack(): void {
     this.stateService.clearSelectedConnector();
   }

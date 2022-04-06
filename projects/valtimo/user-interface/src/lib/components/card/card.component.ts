@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'v-card',
@@ -22,5 +22,23 @@ import {Component} from '@angular/core';
   styleUrls: ['./card.component.scss'],
 })
 export class CardComponent {
-  constructor() {}
+  @Input() titleTranslationKey = '';
+  @Input() title = '';
+  @Input() descriptionTranslationKey = '';
+  @Input() description = '';
+  @Input() selectable = false;
+  @Input() selected = false;
+
+  @Output() select: EventEmitter<any> = new EventEmitter();
+  @Output() deselect: EventEmitter<any> = new EventEmitter();
+
+  click(): void {
+    if (this.selectable) {
+      if (this.selected) {
+        this.deselect.emit();
+      } else {
+        this.select.emit();
+      }
+    }
+  }
 }

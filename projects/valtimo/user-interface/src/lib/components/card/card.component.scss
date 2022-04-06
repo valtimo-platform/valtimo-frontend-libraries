@@ -21,6 +21,33 @@
   padding-block-start: var(--v-card-padding-block-start);
   padding-block-end: var(--v-card-padding-block-end);
   border-radius: var(--v-card-border-radius);
-  border: var(--v-card-border);
+  outline: var(--v-card-border);
   background-color: var(--v-card-bg-color);
+  transition: var(--v-card-transition);
+}
+
+.v-card--selectable {
+  cursor: var(--v-card-selectable-cursor);
+}
+
+.v-card--selected {
+  //margin: var(--v-card-selected-margin);
+  outline: var(--v-card-selected-border);
+}
+
+.v-card__title {
+  font-size: var(--v-card-title-font-size);
+  line-height: var(--v-card-title-line-height);
+  color: var(--v-card-title-color);
+  font-weight: var(--v-card-title-font-weight);
+  margin: 0;
+  margin-block-end: var(--v-card-title-spacing-block);
+}
+
+.v-card__description {
+  font-size: var(--v-card-description-font-size);
+  line-height: var(--v-card-description-line-height);
+  color: var(--v-card-description-color);
+  font-weight: var(--v-card-description-font-weight);
+  margin: 0;
 }

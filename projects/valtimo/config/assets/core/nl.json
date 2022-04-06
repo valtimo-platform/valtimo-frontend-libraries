@@ -591,5 +591,39 @@
     "step1": "Gegevens invullen",
     "step2": "Testen en activeren",
     "complete": "Connector aanmaken"
+  },
+  "connector": {
+    "OpenNotificatie": {
+      "title": "Open Notificaties",
+      "description": "Open Notificaties is een modern en open source component voor het routeren van berichten tussen componenten, systemen en applicaties."
+    },
+    "Taak": {
+      "title": "Taak",
+      "description": "Sla taken op in de Objects API met behulp van Open Notificaties."
+    },
+    "ObjectsApi": {
+      "title": "Objects API",
+      "description": "De Objects API streeft ernaar om verschillende objecten op te slaan in een gestandardiseerd formaat."
+    },
+    "Besluiten": {
+      "title": "Besluiten API",
+      "description": "API voor opslag en ontsluiting van besluiten en daarbij behorende metadata."
+    },
+    "ProductAanvragen": {
+      "title": "Productaanvragen API",
+      "description": "API voor de registratie en ontsluiting van producten."
+    },
+    "HaalCentraal": {
+      "title": "Haal Centraal",
+      "description": "API’s waarmee uw gemeente basisgegevens rechtstreeks bij de landelijke registraties kan bevragen."
+    },
+    "ContactMoment": {
+      "title": "Contactmomenten API",
+      "description": "API voor opslag en ontsluiting van contactmomenten en daarbij behorende metadata."
+    },
+    "OpenZaak": {
+      "title": "OpenZaak",
+      "description": "OpenZaak is een productiewaardig API platform die de API-standaard voor zaakgericht werken implementeert (de ZGW-API’s)."
+    }
   }
 }

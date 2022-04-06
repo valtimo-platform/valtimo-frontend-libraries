@@ -15,23 +15,15 @@
   -->
 
 <ng-container *ngIf="connectorTypes$ | async as connectorTypes; else loading">
-  <p class="lead">
-    {{
-      'connectorManagement.' + (connectorTypes?.length > 0 ? 'addHeader' : 'noConnectorsAvailable')
-        | translate
-    }}
-  </p>
-  <div class="cards-container mt-3">
-    <div *ngFor="let connectorType of connectorTypes" class="card card-border text-center">
-      <div class="card-header">{{ connectorType.name }}</div>
-      <div class="card-body">
-        <button class="btn btn-primary" (click)="selectConnector(connectorType)">
-          {{ 'connectorManagement.configureButton' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-  <v-card *ngFor="let connectorType of connectorTypes"></v-card>
+  <v-card
+    *ngFor="let connectorType of connectorTypes"
+    [titleTranslationKey]="'connector.' + connectorType.name + '.title'"
+    [descriptionTranslationKey]="'connector.' + connectorType.name + '.description'"
+    [selectable]="true"
+    [selected]="(selectedConnector$ | async)?.name === connectorType.name"
+    (select)="selectConnector(connectorType)"
+    (deselect)="deselectConnector()"
+  ></v-card>
 </ng-container>
 
 <ng-template #loading>
