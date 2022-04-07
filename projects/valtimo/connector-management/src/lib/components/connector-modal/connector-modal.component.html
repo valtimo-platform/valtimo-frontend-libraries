@@ -34,8 +34,9 @@
         <v-stepper-step titleTranslationKey="addConnectorSteps.step0">
           <valtimo-add-connector-select></valtimo-add-connector-select>
         </v-stepper-step>
-        <v-stepper-step titleTranslationKey="addConnectorSteps.step1"></v-stepper-step>
-        <v-stepper-step titleTranslationKey="addConnectorSteps.step2"></v-stepper-step>
+        <v-stepper-step titleTranslationKey="addConnectorSteps.step1">
+          <valtimo-add-connector-configure></valtimo-add-connector-configure>
+        </v-stepper-step>
       </v-stepper-content>
     </div>
     <div role="footer">
@@ -43,10 +44,6 @@
         <v-stepper-footer-step
           nextButtonTranslationKey="addConnectorSteps.step1"
           [nextButtonEnabled]="connectorTypeSelected$ | async"
-        ></v-stepper-footer-step>
-        <v-stepper-footer-step
-          nextButtonTranslationKey="addConnectorSteps.step2"
-          [nextButtonEnabled]="true"
         ></v-stepper-footer-step>
         <v-stepper-footer-step
           completeButtonTranslationKey="addConnectorSteps.complete"

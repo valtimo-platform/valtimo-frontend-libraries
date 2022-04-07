@@ -31,26 +31,19 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
 export class AddConnectorSelectComponent implements OnInit, OnDestroy {
   readonly selectedConnector$ = this.stateService.selectedConnector$;
   readonly disabled$ = this.stateService.inputDisabled$;
-
-  readonly connectorTypes$: Observable<Array<ConnectorType>> =
-    this.connectorManagementService.getConnectorTypes();
+  readonly connectorTypes$ = this.stateService.connectorTypes$;
 
   private refreshSubscription!: Subscription;
 
   constructor(
     private readonly connectorManagementService: ConnectorManagementService,
     private readonly stateService: ConnectorManagementStateService,
-    private readonly alertService: AlertService,
     private readonly translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.refreshSubscription = combineLatest([
-      this.stateService.showModal$,
-      this.stateService.refresh$,
-    ]).subscribe(() => {
-      this.goBack();
-    });
+    this.openRefreshSubscription();
+    this.getConnectorTypes();
   }
 
   ngOnDestroy(): void {
@@ -65,32 +58,18 @@ export class AddConnectorSelectComponent implements OnInit, OnDestroy {
     this.stateService.clearSelectedConnector();
   }
 
-  goBack(): void {
-    this.stateService.clearSelectedConnector();
+  private getConnectorTypes(): void {
+    this.connectorManagementService.getConnectorTypes().subscribe(connectorTypes => {
+      this.stateService.setConnectorTypes(connectorTypes);
+    });
   }
 
-  onSave(event: {properties: ConnectorProperties; name: string}): void {
-    this.selectedConnector$.pipe(take(1)).subscribe(selectedConnectorType => {
-      this.connectorManagementService
-        .createConnectorInstance({
-          name: event.name,
-          typeId: selectedConnectorType.id,
-          connectorProperties: event.properties,
-        })
-        .subscribe(
-          () => {
-            this.alertService.success(
-              this.translateService.instant('connectorManagement.messages.addSuccess')
-            );
-            this.stateService.hideModal();
-            this.stateService.enableInput();
-            this.stateService.refresh();
-            this.stateService.clearSelectedConnector();
-          },
-          () => {
-            this.stateService.enableInput();
-          }
-        );
+  private openRefreshSubscription(): void {
+    this.refreshSubscription = combineLatest([
+      this.stateService.showModal$,
+      this.stateService.refresh$,
+    ]).subscribe(() => {
+      this.deselectConnector();
     });
   }
 }

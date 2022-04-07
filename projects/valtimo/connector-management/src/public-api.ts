@@ -34,3 +34,4 @@ export * from './lib/services/object-api-sync/object-api-sync.service';
 export * from './lib/services/connector-management-state/connector-management-state.service';
 export * from './lib/components/edit-taak-connector/edit-taak-connector.component';
 export * from './lib/components/edit-product-aanvragen-connector/edit-product-aanvragen-connector.component';
+export * from './lib/components/add-connector-configure/add-connector-configure.component';

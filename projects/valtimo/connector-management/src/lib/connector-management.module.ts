@@ -40,12 +40,14 @@ import {
   CardModule,
 } from '@valtimo/user-interface';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {AddConnectorConfigureComponent} from './components/add-connector-configure/add-connector-configure.component';
 
 @NgModule({
   providers: [ConnectorManagementStateService],
   declarations: [
     ConnectorManagementComponent,
     AddConnectorSelectComponent,
+    AddConnectorConfigureComponent,
     ConnectorModalComponent,
     ModifyConnectorComponent,
     EditConnectorPropertiesComponent,
@@ -75,6 +77,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
   exports: [
     ConnectorManagementComponent,
     AddConnectorSelectComponent,
+    AddConnectorConfigureComponent,
     ConnectorModalComponent,
     ModifyConnectorComponent,
     EditConnectorPropertiesComponent,

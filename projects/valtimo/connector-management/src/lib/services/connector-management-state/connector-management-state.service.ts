@@ -29,6 +29,7 @@ export class ConnectorManagementStateService {
   private readonly _selectedInstance$ = new BehaviorSubject<ConnectorInstance>(undefined);
   private readonly _lastConfigIdAdded$ = new BehaviorSubject<string>('');
   private readonly _selectedConnector$ = new BehaviorSubject<ConnectorType>(undefined);
+  private readonly _connectorTypes$ = new BehaviorSubject<Array<ConnectorType>>(undefined);
 
   get showModal$(): Observable<boolean> {
     return this._showModal$.asObservable();
@@ -56,6 +57,10 @@ export class ConnectorManagementStateService {
 
   get selectedConnector$(): Observable<ConnectorType> {
     return this._selectedConnector$.asObservable();
+  }
+
+  get connectorTypes$(): Observable<Array<ConnectorType>> {
+    return this._connectorTypes$.asObservable();
   }
 
   showModal(): void {
@@ -104,5 +109,9 @@ export class ConnectorManagementStateService {
 
   clearSelectedConnector(): void {
     this._selectedConnector$.next(undefined);
+  }
+
+  setConnectorTypes(connectorTypes: Array<ConnectorType>): void {
+    this._connectorTypes$.next(connectorTypes);
   }
 }

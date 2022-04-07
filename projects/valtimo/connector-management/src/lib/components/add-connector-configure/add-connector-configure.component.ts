@@ -24,16 +24,14 @@ import {ConnectorManagementService} from '../../services/connector-management/co
 import {ConnectorManagementStateService} from '../../services/connector-management-state/connector-management-state.service';
 
 @Component({
-  selector: 'valtimo-add-connector',
-  templateUrl: './add-connector.component.html',
-  styleUrls: ['./add-connector.component.scss'],
+  selector: 'valtimo-add-connector-configure',
+  templateUrl: './add-connector-configure.component.html',
+  styleUrls: ['./add-connector-configure.component.scss'],
 })
-export class AddConnectorComponent implements OnInit, OnDestroy {
+export class AddConnectorConfigureComponent implements OnInit, OnDestroy {
   readonly selectedConnector$ = this.stateService.selectedConnector$;
   readonly disabled$ = this.stateService.inputDisabled$;
-
-  readonly connectorTypes$: Observable<Array<ConnectorType>> =
-    this.connectorManagementService.getConnectorTypes();
+  readonly connectorTypes$ = this.stateService.connectorTypes$;
 
   private refreshSubscription!: Subscription;
 
