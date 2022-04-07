@@ -35,7 +35,9 @@
           <valtimo-add-connector-select></valtimo-add-connector-select>
         </v-stepper-step>
         <v-stepper-step titleTranslationKey="addConnectorSteps.step1">
-          <valtimo-add-connector-configure></valtimo-add-connector-configure>
+          <valtimo-add-connector-configure
+            [showSaveButton]="false"
+          ></valtimo-add-connector-configure>
         </v-stepper-step>
       </v-stepper-content>
     </div>
@@ -47,7 +49,7 @@
         ></v-stepper-footer-step>
         <v-stepper-footer-step
           completeButtonTranslationKey="addConnectorSteps.complete"
-          [completeButtonEnabled]="true"
+          [completeButtonEnabled]="(saveButtonDisabled$ | async) === false"
         ></v-stepper-footer-step>
       </v-stepper-footer>
     </div>

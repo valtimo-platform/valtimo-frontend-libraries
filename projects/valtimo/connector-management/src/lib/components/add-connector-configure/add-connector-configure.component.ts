@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {ConnectorProperties, ConnectorType} from '@valtimo/config';
 import {take} from 'rxjs/operators';
@@ -29,6 +29,8 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
   styleUrls: ['./add-connector-configure.component.scss'],
 })
 export class AddConnectorConfigureComponent implements OnInit, OnDestroy {
+  @Input() showSaveButton = true;
+
   readonly selectedConnector$ = this.stateService.selectedConnector$;
   readonly disabled$ = this.stateService.inputDisabled$;
   readonly connectorTypes$ = this.stateService.connectorTypes$;

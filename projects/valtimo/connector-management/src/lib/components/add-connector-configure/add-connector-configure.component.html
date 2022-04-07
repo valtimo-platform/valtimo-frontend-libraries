@@ -14,22 +14,11 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="selectedConnector$ | async as connector">
-  <button
-    class="btn btn-outline-secondary btn-sm btn-back"
-    (click)="goBack()"
-    [disabled]="disabled$ | async"
-  >
-    <i class="icon mdi mdi-arrow-left mr-1"></i>
-    {{ 'connectorManagement.goBack' | translate }}
-  </button>
-  <p class="lead text-center mb-3 pb-3 border-bottom">
-    {{ ('connectorManagement.configureWith' | translate) + ' ' + connector.name }}
-  </p>
-  <valtimo-edit-connector-form
-    [connectorName]="connector.name"
-    [properties]="(selectedConnector$ | async).properties"
-    (propertiesSave)="onSave($event)"
-  >
-  </valtimo-edit-connector-form>
-</ng-container>
+<valtimo-edit-connector-form
+  *ngIf="selectedConnector$ | async as connector"
+  [connectorName]="connector.name"
+  [properties]="(selectedConnector$ | async).properties"
+  (propertiesSave)="onSave($event)"
+  [showSaveButton]="showSaveButton"
+>
+</valtimo-edit-connector-form>

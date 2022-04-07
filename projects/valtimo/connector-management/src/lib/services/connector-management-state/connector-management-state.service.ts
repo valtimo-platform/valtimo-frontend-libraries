@@ -25,6 +25,7 @@ export class ConnectorManagementStateService {
   private readonly _showModal$ = new BehaviorSubject<boolean>(false);
   private readonly _showExtensionModal$ = new BehaviorSubject<boolean>(false);
   private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
+  private readonly _saveButtonDisabled$ = new BehaviorSubject<boolean>(true);
   private readonly _refresh$ = new BehaviorSubject<'refresh'>('refresh');
   private readonly _selectedInstance$ = new BehaviorSubject<ConnectorInstance>(undefined);
   private readonly _lastConfigIdAdded$ = new BehaviorSubject<string>('');
@@ -61,6 +62,10 @@ export class ConnectorManagementStateService {
 
   get connectorTypes$(): Observable<Array<ConnectorType>> {
     return this._connectorTypes$.asObservable();
+  }
+
+  get saveButtonDisabled$(): Observable<boolean> {
+    return this._saveButtonDisabled$.asObservable();
   }
 
   showModal(): void {
@@ -113,5 +118,13 @@ export class ConnectorManagementStateService {
 
   setConnectorTypes(connectorTypes: Array<ConnectorType>): void {
     this._connectorTypes$.next(connectorTypes);
+  }
+
+  enableSaveButton(): void {
+    this._saveButtonDisabled$.next(false);
+  }
+
+  disableSaveButton(): void {
+    this._saveButtonDisabled$.next(true);
   }
 }

@@ -85,9 +85,10 @@
 </ng-template>
 
 <ng-template #buttons let-disabled="disabled">
-  <div class="border-top mt-3 pt-6">
+  <div class="border-top mt-3 pt-6" *ngIf="showDeleteButton || showSaveButton">
     <div class="button-container">
       <button
+        *ngIf="showSaveButton"
         class="btn btn-primary"
         [disabled]="disabled || (saveButtonDisabled$ | async)"
         (click)="onSave()"
