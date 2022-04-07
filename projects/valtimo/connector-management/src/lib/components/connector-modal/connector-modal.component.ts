@@ -17,7 +17,7 @@
 import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {ModalComponent} from '@valtimo/components';
 import {ModalComponent as vModalComponent, ModalService} from '@valtimo/user-interface';
-import {Subscription} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import {ConnectorModal} from '@valtimo/config';
 import {ConnectorManagementStateService} from '../../services/connector-management-state/connector-management-state.service';
 
@@ -36,6 +36,8 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
 
   readonly connectorTypeSelected$ = this.stateService.selectedConnector$;
   readonly saveButtonDisabled$ = this.stateService.saveButtonDisabled$;
+
+  readonly cancelStepperSubject$ = new Subject();
 
   constructor(
     private readonly stateService: ConnectorManagementStateService,
@@ -73,6 +75,11 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   complete(): void {
     console.log('complete');
     this.modalService.closeModal();
+    this.stateService.save();
+  }
+
+  cancelStepper(): void {
+    this.cancelStepperSubject$.next();
   }
 
   private show(): void {

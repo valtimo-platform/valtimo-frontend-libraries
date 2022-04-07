@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {StepperService} from '../../../services/stepper.service';
-import {Subscription} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'v-stepper-container',
@@ -25,6 +25,8 @@ import {Subscription} from 'rxjs';
   providers: [StepperService],
 })
 export class StepperContainerComponent implements OnInit, OnDestroy {
+  @Input() cancelSubject$!: Subject<any>;
+
   @Output() cancelEvent: EventEmitter<any> = new EventEmitter();
   @Output() completeEvent: EventEmitter<any> = new EventEmitter();
   @Output() nextStepEvent: EventEmitter<number> = new EventEmitter();
@@ -32,6 +34,7 @@ export class StepperContainerComponent implements OnInit, OnDestroy {
   private cancelSubscription!: Subscription;
   private completeSubscription!: Subscription;
   private nextStepSubscription!: Subscription;
+  private cancelSubjectSubscription!: Subscription;
 
   constructor(private readonly stepperService: StepperService) {}
 
@@ -39,12 +42,14 @@ export class StepperContainerComponent implements OnInit, OnDestroy {
     this.openCancelSubscription();
     this.openCompleteSubscription();
     this.openNextStepSubscription();
+    this.openCancelSubjectSubscription();
   }
 
   ngOnDestroy(): void {
     this.cancelSubscription?.unsubscribe();
     this.completeSubscription?.unsubscribe();
     this.nextStepSubscription?.unsubscribe();
+    this.cancelSubjectSubscription?.unsubscribe();
   }
 
   private openCancelSubscription(): void {
@@ -63,5 +68,13 @@ export class StepperContainerComponent implements OnInit, OnDestroy {
     this.nextStepSubscription = this.stepperService.nextStep$.subscribe(currentStepIndex => {
       this.nextStepEvent.emit(currentStepIndex);
     });
+  }
+
+  private openCancelSubjectSubscription(): void {
+    if (this.cancelSubject$) {
+      this.cancelSubjectSubscription = this.cancelSubject$.subscribe(() => {
+        this.stepperService.cancel();
+      });
+    }
   }
 }

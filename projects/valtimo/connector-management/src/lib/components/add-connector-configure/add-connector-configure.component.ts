@@ -45,12 +45,7 @@ export class AddConnectorConfigureComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.refreshSubscription = combineLatest([
-      this.stateService.showModal$,
-      this.stateService.refresh$,
-    ]).subscribe(() => {
-      this.goBack();
-    });
+    this.openRefreshSubscription();
   }
 
   ngOnDestroy(): void {
@@ -87,6 +82,15 @@ export class AddConnectorConfigureComponent implements OnInit, OnDestroy {
             this.stateService.enableInput();
           }
         );
+    });
+  }
+
+  private openRefreshSubscription(): void {
+    this.refreshSubscription = combineLatest([
+      this.stateService.showModal$,
+      this.stateService.refresh$,
+    ]).subscribe(() => {
+      this.goBack();
     });
   }
 }

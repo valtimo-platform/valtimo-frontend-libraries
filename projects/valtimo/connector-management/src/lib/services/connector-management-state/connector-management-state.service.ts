@@ -16,6 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {take} from 'rxjs/operators';
 import {ConnectorInstance, ConnectorType} from '@valtimo/config';
 
 @Injectable({
@@ -26,7 +27,8 @@ export class ConnectorManagementStateService {
   private readonly _showExtensionModal$ = new BehaviorSubject<boolean>(false);
   private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
   private readonly _saveButtonDisabled$ = new BehaviorSubject<boolean>(true);
-  private readonly _refresh$ = new BehaviorSubject<'refresh'>('refresh');
+  private readonly _refresh$ = new BehaviorSubject<null>(null);
+  private readonly _save$ = new Subject();
   private readonly _selectedInstance$ = new BehaviorSubject<ConnectorInstance>(undefined);
   private readonly _lastConfigIdAdded$ = new BehaviorSubject<string>('');
   private readonly _selectedConnector$ = new BehaviorSubject<ConnectorType>(undefined);
@@ -68,6 +70,10 @@ export class ConnectorManagementStateService {
     return this._saveButtonDisabled$.asObservable();
   }
 
+  get save$(): Observable<any> {
+    return this._save$.asObservable();
+  }
+
   showModal(): void {
     this._showModal$.next(true);
   }
@@ -93,7 +99,7 @@ export class ConnectorManagementStateService {
   }
 
   refresh(): void {
-    this._refresh$.next('refresh');
+    this._refresh$.next(null);
   }
 
   setConnectorInstance(instance: ConnectorInstance): void {
@@ -126,5 +132,13 @@ export class ConnectorManagementStateService {
 
   disableSaveButton(): void {
     this._saveButtonDisabled$.next(true);
+  }
+
+  save(): void {
+    this._saveButtonDisabled$.pipe(take(1)).subscribe(saveButtonDisabled => {
+      if (!saveButtonDisabled) {
+        this._save$.next();
+      }
+    });
   }
 }

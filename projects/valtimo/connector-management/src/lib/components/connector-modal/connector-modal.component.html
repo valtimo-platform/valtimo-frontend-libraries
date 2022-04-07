@@ -24,8 +24,9 @@
   (cancelEvent)="hideModal()"
   (completeEvent)="complete()"
   (nextStepEvent)="nextStep($event)"
+  [cancelSubject$]="cancelStepperSubject$"
 >
-  <v-modal #vModal>
+  <v-modal #vModal (closeEvent)="cancelStepper()">
     <div role="header">
       <v-stepper-header></v-stepper-header>
     </div>
