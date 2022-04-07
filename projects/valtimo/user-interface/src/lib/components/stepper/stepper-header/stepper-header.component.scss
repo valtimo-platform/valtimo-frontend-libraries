@@ -36,7 +36,7 @@
 .stepper-header__step-progress-bar {
   position: absolute;
   background-color: var(--v-stepper-header-progress-bar-bg-color);
-  width: calc(100% + 2px);
+  width: calc(100%);
   height: var(--v-stepper-header-progress-bar-height);
   top: var(--v-stepper-header-progress-bar-spacing-top);
   display: flex;
@@ -44,12 +44,12 @@
 }
 
 .stepper-header__step-progress-bar--first {
-  width: 50%;
+  width: calc(50%);
   transform: translateX(50%);
 }
 
 .stepper-header__step-progress-bar--last {
-  width: 50%;
+  width: calc(50%);
   transform: translateX(-50%);
 }
 
@@ -61,6 +61,7 @@
 
 .stepper-header__step-active-bar--visible {
   width: calc(100% + 2px);
+  margin: 0 -1px;
 }
 
 .stepper-header__step-active-bar--last-visible {
