@@ -19,7 +19,7 @@ import {Step} from '../models';
 export class StepperService {
   private readonly _steps$ = new BehaviorSubject<Array<Step>>([]);
   private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
-  private readonly _cancel$ = new Subject();
+  private readonly _returnToFirstStep$ = new Subject();
   private readonly _cancelClick$ = new Subject();
   private readonly _complete$ = new Subject();
   private readonly _nextStep$ = new Subject<number>();
@@ -43,8 +43,8 @@ export class StepperService {
     return this._currentStepIndex$.pipe(map(currentStepIndex => currentStepIndex > 0));
   }
 
-  get cancel$() {
-    return this._cancel$.asObservable();
+  get returnToFirstStep$() {
+    return this._returnToFirstStep$.asObservable();
   }
 
   get cancelClick$() {
@@ -98,16 +98,11 @@ export class StepperService {
       });
   }
 
-  cancel(): void {
-    this.returnToFirstStep();
-  }
-
   cancelClick(): void {
     this._cancelClick$.next();
   }
 
   complete(): void {
-    this.returnToFirstStep();
     this._complete$.next();
   }
 
@@ -119,7 +114,7 @@ export class StepperService {
     this._disabled$.next(false);
   }
 
-  private returnToFirstStep(): void {
+  returnToFirstStep(): void {
     this.setCurrentStepIndex(0);
   }
 }

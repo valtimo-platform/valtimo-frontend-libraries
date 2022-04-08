@@ -36,7 +36,7 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   readonly connectorTypeSelected$ = this.stateService.selectedConnector$;
   readonly saveButtonDisabled$ = this.stateService.saveButtonDisabled$;
   readonly inputDisabled$ = this.stateService.inputDisabled$;
-  readonly cancelStepperSubject$ = new Subject<boolean>();
+  readonly returnToFirstStepSubject$ = new Subject<boolean>();
 
   constructor(
     private readonly stateService: ConnectorManagementStateService,
@@ -44,13 +44,7 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit(): void {
-    this.showSubscription = this.stateService.showModal$.subscribe(show => {
-      if (show) {
-        this.show();
-      } else {
-        this.hide();
-      }
-    });
+    this.openShowSubscription();
   }
 
   ngOnDestroy(): void {
@@ -63,8 +57,9 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
 
     this.modalService.appearingDelayMs$.pipe(take(1)).subscribe(appearingDelay => {
       setTimeout(() => {
-        this.cancelStepper();
+        this.returnToFirstStep();
         this.stateService.enableInput();
+        this.stateService.clearSelectedConnector();
       }, appearingDelay);
     });
   }
@@ -73,8 +68,18 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
     this.stateService.save();
   }
 
-  private cancelStepper(): void {
-    this.cancelStepperSubject$.next(true);
+  private openShowSubscription(): void {
+    this.showSubscription = this.stateService.showModal$.subscribe(show => {
+      if (show) {
+        this.show();
+      } else {
+        this.hide();
+      }
+    });
+  }
+
+  private returnToFirstStep(): void {
+    this.returnToFirstStepSubject$.next(true);
   }
 
   private show(): void {

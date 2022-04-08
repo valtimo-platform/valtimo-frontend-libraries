@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {ConnectorProperties, ConnectorType} from '@valtimo/config';
 import {take} from 'rxjs/operators';
@@ -28,14 +28,12 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
   templateUrl: './add-connector-configure.component.html',
   styleUrls: ['./add-connector-configure.component.scss'],
 })
-export class AddConnectorConfigureComponent implements OnInit, OnDestroy {
+export class AddConnectorConfigureComponent {
   @Input() showSaveButton = true;
 
   readonly selectedConnector$ = this.stateService.selectedConnector$;
   readonly disabled$ = this.stateService.inputDisabled$;
   readonly connectorTypes$ = this.stateService.connectorTypes$;
-
-  private refreshSubscription!: Subscription;
 
   constructor(
     private readonly connectorManagementService: ConnectorManagementService,
@@ -44,20 +42,8 @@ export class AddConnectorConfigureComponent implements OnInit, OnDestroy {
     private readonly translateService: TranslateService
   ) {}
 
-  ngOnInit(): void {
-    this.openRefreshSubscription();
-  }
-
-  ngOnDestroy(): void {
-    this.refreshSubscription?.unsubscribe();
-  }
-
   selectConnector(connectorType: ConnectorType): void {
     this.stateService.setSelectedConnectorType(connectorType);
-  }
-
-  goBack(): void {
-    this.stateService.clearSelectedConnector();
   }
 
   onSave(event: {properties: ConnectorProperties; name: string}): void {
@@ -76,21 +62,11 @@ export class AddConnectorConfigureComponent implements OnInit, OnDestroy {
             this.stateService.hideModal();
             this.stateService.enableInput();
             this.stateService.refresh();
-            this.stateService.clearSelectedConnector();
           },
           () => {
             this.stateService.enableInput();
           }
         );
-    });
-  }
-
-  private openRefreshSubscription(): void {
-    this.refreshSubscription = combineLatest([
-      this.stateService.showModal$,
-      this.stateService.refresh$,
-    ]).subscribe(() => {
-      this.goBack();
     });
   }
 }

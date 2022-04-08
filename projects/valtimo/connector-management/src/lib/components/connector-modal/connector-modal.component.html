@@ -24,7 +24,7 @@
   (completeEvent)="complete()"
   (cancelClickEvent)="hide()"
   [disabled]="inputDisabled$ | async"
-  [cancelSubject$]="cancelStepperSubject$"
+  [returnToFirstStepSubject$]="returnToFirstStepSubject$"
 >
   <v-modal #connectorCreateModal (closeEvent)="hide()">
     <div role="header">

@@ -25,8 +25,7 @@ import {Subject, Subscription} from 'rxjs';
   providers: [StepperService],
 })
 export class StepperContainerComponent implements OnInit, OnDestroy {
-  @Input() cancelSubject$!: Subject<boolean>;
-
+  @Input() returnToFirstStepSubject$!: Subject<boolean>;
   @Input()
   set disabled(disabled: boolean) {
     if (disabled) {
@@ -51,7 +50,7 @@ export class StepperContainerComponent implements OnInit, OnDestroy {
     this.openCancelClickSubscription();
     this.openCompleteSubscription();
     this.openNextStepSubscription();
-    this.openCancelSubjectSubscription();
+    this.openReturnToFirstStepSubscription();
   }
 
   ngOnDestroy(): void {
@@ -79,11 +78,11 @@ export class StepperContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  private openCancelSubjectSubscription(): void {
-    if (this.cancelSubject$) {
-      this.cancelSubjectSubscription = this.cancelSubject$.subscribe(cancel => {
+  private openReturnToFirstStepSubscription(): void {
+    if (this.returnToFirstStepSubject$) {
+      this.cancelSubjectSubscription = this.returnToFirstStepSubject$.subscribe(cancel => {
         if (cancel) {
-          this.stepperService.cancel();
+          this.stepperService.returnToFirstStep();
         }
       });
     }
