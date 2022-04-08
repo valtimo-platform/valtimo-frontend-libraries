@@ -17,7 +17,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
-import {ConnectorInstance, ConnectorType} from '@valtimo/config';
+import {ConnectorInstance, ConnectorModal, ConnectorType} from '@valtimo/config';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +33,7 @@ export class ConnectorManagementStateService {
   private readonly _lastConfigIdAdded$ = new BehaviorSubject<string>('');
   private readonly _selectedConnector$ = new BehaviorSubject<ConnectorType>(undefined);
   private readonly _connectorTypes$ = new BehaviorSubject<Array<ConnectorType>>(undefined);
+  private readonly _modalType$ = new BehaviorSubject<ConnectorModal>('add');
 
   get showModal$(): Observable<boolean> {
     return this._showModal$.asObservable();
@@ -72,6 +73,10 @@ export class ConnectorManagementStateService {
 
   get save$(): Observable<any> {
     return this._save$.asObservable();
+  }
+
+  get modalType$(): Observable<ConnectorModal> {
+    return this._modalType$.asObservable();
   }
 
   showModal(): void {
@@ -140,5 +145,9 @@ export class ConnectorManagementStateService {
         this._save$.next();
       }
     });
+  }
+
+  setModalType(type: ConnectorModal): void {
+    this._modalType$.next(type);
   }
 }

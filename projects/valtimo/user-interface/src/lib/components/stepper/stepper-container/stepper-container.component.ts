@@ -25,13 +25,22 @@ import {Subject, Subscription} from 'rxjs';
   providers: [StepperService],
 })
 export class StepperContainerComponent implements OnInit, OnDestroy {
-  @Input() cancelSubject$!: Subject<any>;
+  @Input() cancelSubject$!: Subject<boolean>;
 
-  @Output() cancelEvent: EventEmitter<any> = new EventEmitter();
+  @Input()
+  set disabled(disabled: boolean) {
+    if (disabled) {
+      this.stepperService.disable();
+    } else {
+      this.stepperService.enable();
+    }
+  }
+
+  @Output() cancelClickEvent: EventEmitter<any> = new EventEmitter();
   @Output() completeEvent: EventEmitter<any> = new EventEmitter();
   @Output() nextStepEvent: EventEmitter<number> = new EventEmitter();
 
-  private cancelSubscription!: Subscription;
+  private cancelClickSubscription!: Subscription;
   private completeSubscription!: Subscription;
   private nextStepSubscription!: Subscription;
   private cancelSubjectSubscription!: Subscription;
@@ -39,22 +48,22 @@ export class StepperContainerComponent implements OnInit, OnDestroy {
   constructor(private readonly stepperService: StepperService) {}
 
   ngOnInit(): void {
-    this.openCancelSubscription();
+    this.openCancelClickSubscription();
     this.openCompleteSubscription();
     this.openNextStepSubscription();
     this.openCancelSubjectSubscription();
   }
 
   ngOnDestroy(): void {
-    this.cancelSubscription?.unsubscribe();
+    this.cancelClickSubscription?.unsubscribe();
     this.completeSubscription?.unsubscribe();
     this.nextStepSubscription?.unsubscribe();
     this.cancelSubjectSubscription?.unsubscribe();
   }
 
-  private openCancelSubscription(): void {
-    this.cancelSubscription = this.stepperService.cancel$.subscribe(() => {
-      this.cancelEvent.emit();
+  private openCancelClickSubscription(): void {
+    this.cancelClickSubscription = this.stepperService.cancelClick$.subscribe(() => {
+      this.cancelClickEvent.emit();
     });
   }
 
@@ -72,8 +81,10 @@ export class StepperContainerComponent implements OnInit, OnDestroy {
 
   private openCancelSubjectSubscription(): void {
     if (this.cancelSubject$) {
-      this.cancelSubjectSubscription = this.cancelSubject$.subscribe(() => {
-        this.stepperService.cancel();
+      this.cancelSubjectSubscription = this.cancelSubject$.subscribe(cancel => {
+        if (cancel) {
+          this.stepperService.cancel();
+        }
       });
     }
   }

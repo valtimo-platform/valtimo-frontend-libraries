@@ -17,9 +17,10 @@
 import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {ModalComponent} from '@valtimo/components';
 import {ModalComponent as vModalComponent, ModalService} from '@valtimo/user-interface';
-import {Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, Subject, Subscription} from 'rxjs';
 import {ConnectorModal} from '@valtimo/config';
 import {ConnectorManagementStateService} from '../../services/connector-management-state/connector-management-state.service';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-connector-modal',
@@ -27,17 +28,15 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
   styleUrls: ['./connector-modal.component.scss'],
 })
 export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('modal') modal: ModalComponent;
-  @ViewChild('vModal') vModal: vModalComponent;
-
-  @Input() modalType: ConnectorModal;
+  @ViewChild('connectorCreateModal') connectorCreateModal: vModalComponent;
+  @ViewChild('connectorEditModal') connectorEditModal: vModalComponent;
 
   showSubscription!: Subscription;
 
   readonly connectorTypeSelected$ = this.stateService.selectedConnector$;
   readonly saveButtonDisabled$ = this.stateService.saveButtonDisabled$;
-
-  readonly cancelStepperSubject$ = new Subject();
+  readonly inputDisabled$ = this.stateService.inputDisabled$;
+  readonly cancelStepperSubject$ = new Subject<boolean>();
 
   constructor(
     private readonly stateService: ConnectorManagementStateService,
@@ -59,31 +58,32 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   }
 
   hide(): void {
-    // this.modal.hide();
-    // this.modalService.closeModal();
-  }
-
-  hideModal(): void {
-    // this.modal.hide();
+    this.stateService.disableInput();
     this.modalService.closeModal();
-  }
 
-  nextStep(stepIndex: number): void {
-    console.log('went to next step from step', stepIndex);
+    this.modalService.appearingDelayMs$.pipe(take(1)).subscribe(appearingDelay => {
+      setTimeout(() => {
+        this.cancelStepper();
+        this.stateService.enableInput();
+      }, appearingDelay);
+    });
   }
 
   complete(): void {
-    console.log('complete');
-    this.modalService.closeModal();
     this.stateService.save();
   }
 
-  cancelStepper(): void {
-    this.cancelStepperSubject$.next();
+  private cancelStepper(): void {
+    this.cancelStepperSubject$.next(true);
   }
 
   private show(): void {
-    // this.modal.show();
-    this.modalService.openModal(this.vModal);
+    this.stateService.modalType$.pipe(take(1)).subscribe(modalType => {
+      if (modalType === 'add') {
+        this.modalService.openModal(this.connectorCreateModal);
+      } else if (modalType === 'modify') {
+        this.modalService.openModal(this.connectorEditModal);
+      }
+    });
   }
 }

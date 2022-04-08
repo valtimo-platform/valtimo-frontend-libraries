@@ -20,8 +20,10 @@ export class StepperService {
   private readonly _steps$ = new BehaviorSubject<Array<Step>>([]);
   private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
   private readonly _cancel$ = new Subject();
+  private readonly _cancelClick$ = new Subject();
   private readonly _complete$ = new Subject();
   private readonly _nextStep$ = new Subject<number>();
+  private readonly _disabled$ = new BehaviorSubject<boolean>(false);
 
   get currentStepIndex$() {
     return this._currentStepIndex$.asObservable();
@@ -45,12 +47,20 @@ export class StepperService {
     return this._cancel$.asObservable();
   }
 
+  get cancelClick$() {
+    return this._cancelClick$.asObservable();
+  }
+
   get complete$() {
     return this._complete$.asObservable();
   }
 
   get nextStep$() {
     return this._nextStep$.asObservable();
+  }
+
+  get disabled$() {
+    return this._disabled$.asObservable();
   }
 
   setSteps(steps: Array<Step>): void {
@@ -90,12 +100,23 @@ export class StepperService {
 
   cancel(): void {
     this.returnToFirstStep();
-    this._cancel$.next();
+  }
+
+  cancelClick(): void {
+    this._cancelClick$.next();
   }
 
   complete(): void {
     this.returnToFirstStep();
     this._complete$.next();
+  }
+
+  disable(): void {
+    this._disabled$.next(true);
+  }
+
+  enable(): void {
+    this._disabled$.next(false);
   }
 
   private returnToFirstStep(): void {

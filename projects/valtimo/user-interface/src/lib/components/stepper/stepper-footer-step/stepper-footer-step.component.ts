@@ -35,6 +35,7 @@ export class StepperFooterStepComponent {
   public isLastStep$ = new BehaviorSubject<boolean>(false);
 
   currentStepIndex$: Observable<number> = this.stepperService.currentStepIndex$;
+  disabled$: Observable<boolean> = this.stepperService.disabled$;
 
   constructor(private readonly stepperService: StepperService) {}
 
@@ -43,7 +44,7 @@ export class StepperFooterStepComponent {
   }
 
   cancel(): void {
-    this.stepperService.cancel();
+    this.stepperService.cancelClick();
   }
 
   complete(): void {

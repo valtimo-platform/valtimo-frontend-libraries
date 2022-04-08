@@ -92,8 +92,6 @@ export class ConnectorManagementComponent implements OnDestroy {
     tap(() => this.loading$.next(false))
   );
 
-  readonly modalType$ = new BehaviorSubject<ConnectorModal>('add');
-
   constructor(
     private readonly connectorManagementService: ConnectorManagementService,
     private readonly translateService: TranslateService,
@@ -119,13 +117,13 @@ export class ConnectorManagementComponent implements OnDestroy {
   }
 
   rowClicked(instance: ConnectorInstance): void {
-    this.modalType$.next('modify');
+    this.stateService.setModalType('modify');
     this.stateService.setConnectorInstance(instance);
     this.stateService.showModal();
   }
 
   showAddModal(): void {
-    this.modalType$.next('add');
+    this.stateService.setModalType('add');
     this.stateService.showModal();
   }
 

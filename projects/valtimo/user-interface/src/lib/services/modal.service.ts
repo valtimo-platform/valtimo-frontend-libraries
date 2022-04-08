@@ -45,6 +45,10 @@ export class ModalService {
     return this._disappearing$.asObservable();
   }
 
+  get appearingDelayMs$() {
+    return this._appearingDelayMs$.asObservable();
+  }
+
   setCurrentModal(modalComponent: ModalComponent): void {
     this._modalUuid$.next(modalComponent.uuid);
   }

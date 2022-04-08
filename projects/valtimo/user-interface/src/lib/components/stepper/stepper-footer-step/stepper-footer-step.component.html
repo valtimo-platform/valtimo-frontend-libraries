@@ -15,31 +15,47 @@
   -->
 
 <div class="stepper-footer-step" *ngIf="(currentStepIndex$ | async) === (stepIndex$ | async)">
-  <ng-container *ngTemplateOutlet="cancelButton"></ng-container>
-  <ng-container *ngIf="(isLastStep$ | async) === false; else completeButton">
-    <ng-container *ngTemplateOutlet="nextButton"></ng-container>
+  <ng-container *ngIf="{disabled: disabled$ | async, isLastStep: isLastStep$ | async} as obs">
+    <ng-container
+      *ngTemplateOutlet="cancelButton; context: {disabled: obs.disabled}"
+    ></ng-container>
+    <ng-container *ngIf="obs.isLastStep === false">
+      <ng-container
+        *ngTemplateOutlet="nextButton; context: {disabled: obs.disabled}"
+      ></ng-container>
+    </ng-container>
+    <ng-container *ngIf="obs.isLastStep === true">
+      <ng-container
+        *ngTemplateOutlet="completeButton; context: {disabled: obs.disabled}"
+      ></ng-container>
+    </ng-container>
   </ng-container>
 </div>
 
-<ng-template #cancelButton>
-  <v-button (clickEvent)="cancel()" type="secondary">{{
+<ng-template #cancelButton let-disabled="disabled">
+  <v-button (clickEvent)="cancel()" type="secondary" [disabled]="disabled">{{
     cancelButtonTranslationKey
       ? (cancelButtonTranslationKey | translate)
       : ('stepper.cancelButtonText' | translate)
   }}</v-button>
 </ng-template>
 
-<ng-template #nextButton>
-  <v-button [disabled]="!nextButtonEnabled" (clickEvent)="goToNextStep()" mdiIcon="arrow-right">{{
-    nextButtonTranslationKey
-      ? (nextButtonTranslationKey | translate)
-      : ('stepper.nextButtonText' | translate)
-  }}</v-button>
+<ng-template #nextButton let-disabled="disabled">
+  <v-button
+    [disabled]="!nextButtonEnabled || disabled"
+    (clickEvent)="goToNextStep()"
+    mdiIcon="arrow-right"
+    >{{
+      nextButtonTranslationKey
+        ? (nextButtonTranslationKey | translate)
+        : ('stepper.nextButtonText' | translate)
+    }}</v-button
+  >
 </ng-template>
 
-<ng-template #completeButton>
+<ng-template #completeButton let-disabled="disabled">
   <v-button
-    [disabled]="!completeButtonEnabled"
+    [disabled]="!completeButtonEnabled || disabled"
     (clickEvent)="complete()"
     [mdiIcon]="completeButtonMdiIcon || 'check'"
     type="success"
