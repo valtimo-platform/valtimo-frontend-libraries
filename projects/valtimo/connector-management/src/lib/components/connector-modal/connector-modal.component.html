@@ -16,8 +16,21 @@
 
 <v-modal #connectorEditModal>
   <div role="header">test</div>
-  <div role="content">test</div>
-  <div role="footer">test</div>
+  <div role="content">
+    <valtimo-modify-connector
+      [showSaveButton]="false"
+      [showDeleteButton]="false"
+    ></valtimo-modify-connector>
+  </div>
+  <div role="footer">
+    <v-button
+      [disabled]="(saveButtonDisabled$ | async) || (inputDisabled$ | async)"
+      (clickEvent)="complete()"
+      [mdiIcon]="'check'"
+      type="success"
+      >{{ 'addConnectorSteps.complete' | translate }}</v-button
+    >
+  </div>
 </v-modal>
 
 <v-stepper-container
