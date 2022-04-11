@@ -15,7 +15,11 @@
   -->
 
 <v-modal #connectorEditModal>
-  <div role="header">test</div>
+  <div role="header">
+    <div class="edit-connector-title">
+      <v-title [margin]="false">{{ 'connectorManagement.modify' | translate }}</v-title>
+    </div>
+  </div>
   <div role="content">
     <valtimo-modify-connector
       [showSaveButton]="false"
@@ -23,20 +27,22 @@
     ></valtimo-modify-connector>
   </div>
   <div role="footer">
-    <v-button
-      [disabled]="inputDisabled$ | async"
-      (clickEvent)="delete()"
-      [mdiIcon]="'check'"
-      type="success"
-      >{{ 'addConnectorSteps.complete' | translate }}</v-button
-    >
-    <v-button
-      [disabled]="(saveButtonDisabled$ | async) || (inputDisabled$ | async)"
-      (clickEvent)="complete()"
-      [mdiIcon]="'check'"
-      type="success"
-      >{{ 'addConnectorSteps.complete' | translate }}</v-button
-    >
+    <div class="edit-connector-buttons">
+      <v-button
+        [disabled]="inputDisabled$ | async"
+        (clickEvent)="delete()"
+        [mdiIcon]="'delete'"
+        type="danger"
+        >{{ 'connectorManagement.remove' | translate }}</v-button
+      >
+      <v-button
+        [disabled]="(saveButtonDisabled$ | async) || (inputDisabled$ | async)"
+        (clickEvent)="complete()"
+        [mdiIcon]="'check'"
+        type="success"
+        >{{ 'connectorManagement.save' | translate }}</v-button
+      >
+    </div>
   </div>
 </v-modal>
 

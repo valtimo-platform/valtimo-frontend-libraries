@@ -14,6 +14,29 @@
  * limitations under the License.
  */
 
-type ButtonType = 'primary' | 'secondary' | 'success' | 'text' | 'icon-danger' | 'danger';
+import {Component, Input, OnInit} from '@angular/core';
+import {TitleType} from '../../models';
 
-export {ButtonType};
+@Component({
+  selector: 'v-title',
+  templateUrl: './title.component.html',
+  styleUrls: ['./title.component.scss'],
+})
+export class TitleComponent implements OnInit {
+  @Input() type: TitleType = 'h1';
+  @Input() margin = true;
+
+  isH1!: boolean;
+
+  ngOnInit(): void {
+    this.setTitleType();
+  }
+
+  private setTitleType(): void {
+    switch (this.type) {
+      case 'h1':
+        this.isH1 = true;
+        break;
+    }
+  }
+}

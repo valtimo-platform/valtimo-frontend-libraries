@@ -110,6 +110,26 @@
   }
 }
 
+.v-button--danger {
+  background-color: var(--v-button-danger-bg-color);
+
+  &:hover {
+    background-color: var(--v-button-danger-hover-bg-color);
+
+    .v-button__icon--danger {
+      color: var(--v-button-danger-hover-bg-color);
+    }
+  }
+
+  &:active {
+    background-color: var(--v-button-danger-active-bg-color);
+
+    .v-button__icon--danger {
+      color: var(--v-button-danger-active-bg-color);
+    }
+  }
+}
+
 .v-button--text {
   padding: 0;
   background-color: transparent;
@@ -175,6 +195,10 @@
 
 .v-button__icon--success {
   color: var(--v-button-success-bg-color);
+}
+
+.v-button__icon--danger {
+  color: var(--v-button-danger-bg-color);
 }
 
 .v-button--disabled {

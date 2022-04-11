@@ -47,3 +47,6 @@ export * from './lib/services/stepper.service';
 // Card component
 export * from './lib/components/card/card.component';
 export * from './lib/components/card/card.module';
+// Title component
+export * from './lib/components/title/title.component';
+export * from './lib/components/title/title.module';

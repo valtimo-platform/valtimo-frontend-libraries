@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-type ButtonType = 'primary' | 'secondary' | 'success' | 'text' | 'icon-danger' | 'danger';
+.v-title--no-margin {
+  margin: 0;
+}
 
-export {ButtonType};
+.v-title--h1 {
+  color: var(--v-title-h1-color);
+  font-size: var(--v-title-h1-font-size);
+  font-weight: var(--v-title-h1-font-weight);
+  line-height: var(--v-title-h1-line-height);
+}

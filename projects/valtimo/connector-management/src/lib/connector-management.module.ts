@@ -38,6 +38,7 @@ import {
   ModalModule as VModalModule,
   StepperModule,
   CardModule,
+  TitleModule,
 } from '@valtimo/user-interface';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {AddConnectorConfigureComponent} from './components/add-connector-configure/add-connector-configure.component';
@@ -73,6 +74,7 @@ import {AddConnectorConfigureComponent} from './components/add-connector-configu
     StepperModule,
     CardModule,
     FlexLayoutModule,
+    TitleModule,
   ],
   exports: [
     ConnectorManagementComponent,

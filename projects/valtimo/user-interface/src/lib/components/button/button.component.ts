@@ -34,6 +34,7 @@ export class ButtonComponent implements OnInit {
   isText!: boolean;
   isIcon!: boolean;
   isIconDanger!: boolean;
+  isDanger!: boolean;
 
   ngOnInit(): void {
     this.setIconTypes();
@@ -52,6 +53,9 @@ export class ButtonComponent implements OnInit {
         break;
       case 'text':
         this.isText = true;
+        break;
+      case 'danger':
+        this.isDanger = true;
         break;
       case 'icon-danger':
         this.isIcon = true;
