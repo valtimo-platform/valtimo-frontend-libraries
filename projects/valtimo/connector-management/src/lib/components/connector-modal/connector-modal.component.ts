@@ -68,6 +68,10 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
     this.stateService.save();
   }
 
+  delete(): void {
+    this.stateService.delete();
+  }
+
   private openShowSubscription(): void {
     this.showSubscription = this.stateService.showModal$.subscribe(show => {
       if (show) {

@@ -52,6 +52,7 @@ export class EditConnectorPropertiesComponent implements OnInit, OnChanges, OnDe
 
   private saveButtonDisabledSubscription!: Subscription;
   private saveSubscription!: Subscription;
+  private deleteSubscription!: Subscription;
 
   constructor(private readonly stateService: ConnectorManagementStateService) {
     this.disabled$ = this.stateService.inputDisabled$;
@@ -62,6 +63,7 @@ export class EditConnectorPropertiesComponent implements OnInit, OnChanges, OnDe
     this.setName();
     this.openSaveButtonDisabledSubscription();
     this.openSaveSubscription();
+    this.openDeleteSubscription();
   }
 
   ngOnChanges(): void {
@@ -72,6 +74,7 @@ export class EditConnectorPropertiesComponent implements OnInit, OnChanges, OnDe
   ngOnDestroy(): void {
     this.saveButtonDisabledSubscription?.unsubscribe();
     this.saveSubscription?.unsubscribe();
+    this.deleteSubscription?.unsubscribe();
   }
 
   multiFieldValuesSet(event: {editFieldKey: string; values: Array<string> | Array<number>}): void {
@@ -197,6 +200,12 @@ export class EditConnectorPropertiesComponent implements OnInit, OnChanges, OnDe
   private openSaveSubscription(): void {
     this.stateService.save$.subscribe(() => {
       this.onSave();
+    });
+  }
+
+  private openDeleteSubscription(): void {
+    this.stateService.delete$.subscribe(() => {
+      this.onDelete();
     });
   }
 }

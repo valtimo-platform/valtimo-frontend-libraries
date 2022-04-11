@@ -24,6 +24,13 @@
   </div>
   <div role="footer">
     <v-button
+      [disabled]="inputDisabled$ | async"
+      (clickEvent)="delete()"
+      [mdiIcon]="'check'"
+      type="success"
+      >{{ 'addConnectorSteps.complete' | translate }}</v-button
+    >
+    <v-button
       [disabled]="(saveButtonDisabled$ | async) || (inputDisabled$ | async)"
       (clickEvent)="complete()"
       [mdiIcon]="'check'"

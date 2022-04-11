@@ -34,6 +34,7 @@ export class ConnectorManagementStateService {
   private readonly _selectedConnector$ = new BehaviorSubject<ConnectorType>(undefined);
   private readonly _connectorTypes$ = new BehaviorSubject<Array<ConnectorType>>(undefined);
   private readonly _modalType$ = new BehaviorSubject<ConnectorModal>('add');
+  private readonly _delete$ = new Subject();
 
   get showModal$(): Observable<boolean> {
     return this._showModal$.asObservable();
@@ -77,6 +78,10 @@ export class ConnectorManagementStateService {
 
   get modalType$(): Observable<ConnectorModal> {
     return this._modalType$.asObservable();
+  }
+
+  get delete$(): Observable<any> {
+    return this._delete$.asObservable();
   }
 
   showModal(): void {
@@ -149,5 +154,9 @@ export class ConnectorManagementStateService {
 
   setModalType(type: ConnectorModal): void {
     this._modalType$.next(type);
+  }
+
+  delete(): void {
+    this._delete$.next();
   }
 }
