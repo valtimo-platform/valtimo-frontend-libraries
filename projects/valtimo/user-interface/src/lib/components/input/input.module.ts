@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {InputComponent} from './input.component';
 
-@Component({
-  selector: 'v-text-input',
-  templateUrl: './text-input.component.html',
-  styleUrls: ['./text-input.component.scss'],
+@NgModule({
+  declarations: [InputComponent],
+  imports: [CommonModule],
+  exports: [InputComponent],
 })
-export class TextInputComponent {}
+export class InputModule {}
