@@ -50,3 +50,6 @@ export * from './lib/components/card/card.module';
 // Title component
 export * from './lib/components/title/title.component';
 export * from './lib/components/title/title.module';
+// Text input
+export * from './lib/components/text-input/text-input.component';
+export * from './lib/components/text-input/text-input.module';
