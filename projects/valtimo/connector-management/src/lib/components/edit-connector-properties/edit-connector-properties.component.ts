@@ -85,6 +85,7 @@ export class EditConnectorPropertiesComponent implements OnInit, OnChanges, OnDe
   }
 
   onSingleValueChange(value: any, editField: ConnectorPropertyEditField): void {
+    console.log('single value change');
     this.modifiedProperties$.pipe(take(1)).subscribe(properties => {
       set(
         properties,

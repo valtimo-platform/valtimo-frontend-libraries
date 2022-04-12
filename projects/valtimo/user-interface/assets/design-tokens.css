@@ -77,6 +77,7 @@
   --v-spacing-block-l: 16px;
   --v-spacing-block-xl: 24px;
   --v-spacing-block-2xl: 34px;
+  --v-spacing-block-4xl: 50px;
   /* spacing inline */
   --v-spacing-inline-sm: 6px;
   --v-spacing-inline-md: 12px;
@@ -85,6 +86,7 @@
   --v-spacing-inline-3xl: 58px;
   /* border */
   --v-border-radius-xsm: 2px;
+  --v-border-radius-sm: 4px;
   --v-border-radius-md: 5px;
   --v-border-radius-lg: 9px;
   /* transitions */
@@ -103,6 +105,7 @@
   --v-cursor-disabled: not-allowed;
   /* box shadow */
   --v-box-shadow-medium: 0 3px 40px 0 rgba(0, 0, 0, 0.06);
+  --v-box-shadow-heavier: 0 4px 40px 0 rgba(0, 0, 0, 0.1);
   /* backdrop filter */
   --v-backdrop-filter-heavy-blur: blur(13px);
   --v-backdrop-filter-heavy-blur-hover: blur(11px);
@@ -277,7 +280,21 @@
   --v-input-font-size: var(--v-font-size-smaller);
   --v-input-line-height: var(--v-line-height-larger);
   --v-input-color: var(--v-color-grey-1);
+  --v-input-font-color-disabled: var(--v-color-grey-2);
   --v-input-font-weight: var(--v-font-weight-regular);
   --v-input-padding-block: var(--v-spacing-block-xsm);
   --v-input-padding-inline: var(--v-spacing-inline-md);
+  --v-input-bg-color: var(--v-color-white);
+  --v-input-border-radius: var(--v-border-radius-sm);
+  --v-input-box-shadow: var(--v-box-shadow-heavier);
+  --v-input-focus-border: 2px solid var(--v-color-accent-1);
+  --v-input-transition: var(--v-transition-outline-fast);
+  --v-input-title-font-size: var(--v-font-size-larger);
+  --v-input-title-font-color: var(--v-color-black);
+  --v-input-title-line-height: var(--v-line-height-larger);
+  --v-input-title-font-weight: var(--v-font-weight-bold);
+  --v-input-title-margin: var(--v-spacing-block-md);
+  --v-input-default-width: 200px;
+  --v-input-margin: var(--v-spacing-block-4xl);
+  --v-input-disabled-cursor: var(--v-cursor-disabled);
 }

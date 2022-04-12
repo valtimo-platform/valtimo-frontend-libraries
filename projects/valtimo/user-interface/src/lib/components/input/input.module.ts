@@ -16,11 +16,13 @@
 
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {InputComponent} from './input.component';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [InputComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule, FormsModule],
   exports: [InputComponent],
 })
 export class InputModule {}

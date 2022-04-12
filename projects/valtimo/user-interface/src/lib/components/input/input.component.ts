@@ -14,33 +14,71 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {InputType} from '../../models';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'v-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
 })
-export class InputComponent implements OnInit {
+export class InputComponent implements OnInit, OnChanges {
   @Input() type: InputType = 'text';
+  @Input() title = '';
+  @Input() titleTranslationKey = '';
+  @Input() defaultValue!: any;
+  @Input() widthPx!: number;
+  @Input() fullWidth = false;
+  @Input() margin = false;
+  @Input() disabled = false;
+  @Input() step!: number;
+  @Input() min!: number;
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 
+  inputValue$ = new BehaviorSubject<any>(undefined);
+
   isText!: boolean;
+  isNumber!: boolean;
 
   ngOnInit(): void {
     this.setInputType();
+    this.setDefaultValue();
   }
 
   onValueChange(value: any): void {
+    this.inputValue$.next(value);
     this.valueChange.emit(value);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes?.defaultValue?.currentValue) {
+      this.inputValue$.next(changes?.defaultValue?.currentValue);
+    }
+  }
+
+  private setDefaultValue(): void {
+    if (this.defaultValue) {
+      this.inputValue$.next(this.defaultValue);
+    }
   }
 
   private setInputType(): void {
     switch (this.type) {
       case 'text':
         this.isText = true;
+        break;
+      case 'number':
+        this.isNumber = true;
         break;
     }
   }
