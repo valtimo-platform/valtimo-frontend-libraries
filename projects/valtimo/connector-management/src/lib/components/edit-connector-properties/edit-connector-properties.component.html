@@ -61,6 +61,7 @@
       {{ 'connectorManagement.inputLabels.' + editField.key | translate }}
     </label>
     <div class="col-7">
+      <v-input></v-input>
       <input
         *ngIf="editField.editType === 'string'"
         class="form-control"

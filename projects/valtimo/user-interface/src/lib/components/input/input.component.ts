@@ -14,11 +14,34 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {InputType} from '../../models';
 
 @Component({
   selector: 'v-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
 })
-export class InputComponent {}
+export class InputComponent implements OnInit {
+  @Input() type: InputType = 'text';
+
+  @Output() valueChange: EventEmitter<any> = new EventEmitter();
+
+  isText!: boolean;
+
+  ngOnInit(): void {
+    this.setInputType();
+  }
+
+  onValueChange(value: any): void {
+    this.valueChange.emit(value);
+  }
+
+  private setInputType(): void {
+    switch (this.type) {
+      case 'text':
+        this.isText = true;
+        break;
+    }
+  }
+}

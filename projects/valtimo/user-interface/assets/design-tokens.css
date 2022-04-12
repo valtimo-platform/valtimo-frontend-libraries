@@ -71,6 +71,7 @@
   --v-line-height-larger: 20px;
   --v-line-height-xl: 32px;
   /* spacing block */
+  --v-spacing-block-xsm: 6px;
   --v-spacing-block-sm: 8px;
   --v-spacing-block-md: 12px;
   --v-spacing-block-l: 16px;
@@ -272,4 +273,11 @@
   --v-title-h1-font-weight: var(--v-font-weight-light);
   --v-title-h1-line-height: var(--v-line-height-xl);
   --v-title-h1-font-size: var(--v-font-size-xl);
+  /* input */
+  --v-input-font-size: var(--v-font-size-smaller);
+  --v-input-line-height: var(--v-line-height-larger);
+  --v-input-color: var(--v-color-grey-1);
+  --v-input-font-weight: var(--v-font-weight-regular);
+  --v-input-padding-block: var(--v-spacing-block-xsm);
+  --v-input-padding-inline: var(--v-spacing-inline-md);
 }

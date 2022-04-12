@@ -19,3 +19,4 @@ export * from './table';
 export * from './select';
 export * from './stepper';
 export * from './title';
+export * from './input';

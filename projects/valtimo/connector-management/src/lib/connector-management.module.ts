@@ -39,6 +39,7 @@ import {
   StepperModule,
   CardModule,
   TitleModule,
+  InputModule,
 } from '@valtimo/user-interface';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {AddConnectorConfigureComponent} from './components/add-connector-configure/add-connector-configure.component';
@@ -75,6 +76,7 @@ import {AddConnectorConfigureComponent} from './components/add-connector-configu
     CardModule,
     FlexLayoutModule,
     TitleModule,
+    InputModule,
   ],
   exports: [
     ConnectorManagementComponent,

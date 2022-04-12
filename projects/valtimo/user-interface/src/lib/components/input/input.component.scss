@@ -13,3 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.v-input {
+  font-size: var(--v-input-font-size);
+  line-height: var(--v-input-line-height);
+  color: var(--v-input-color);
+  font-weight: var(--v-input-font-weight);
+  padding-block-start: var(--v-input-padding-block);
+  padding-block-end: var(--v-input-padding-block);
+  padding-inline-start: var(--v-input-padding-inline);
+  padding-inline-end: var(--v-input-padding-inline);
+}
