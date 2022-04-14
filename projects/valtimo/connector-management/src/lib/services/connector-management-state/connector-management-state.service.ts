@@ -23,7 +23,8 @@ import {ConnectorInstance, ConnectorModal, ConnectorType} from '@valtimo/config'
   providedIn: 'root',
 })
 export class ConnectorManagementStateService {
-  private readonly _showModal$ = new BehaviorSubject<boolean>(false);
+  private readonly _showModal$ = new Subject();
+  private readonly _hideModal$ = new Subject();
   private readonly _showExtensionModal$ = new BehaviorSubject<boolean>(false);
   private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
   private readonly _saveButtonDisabled$ = new BehaviorSubject<boolean>(true);
@@ -37,8 +38,12 @@ export class ConnectorManagementStateService {
   private readonly _delete$ = new Subject();
   private readonly _hideModalSaveButton$ = new BehaviorSubject<boolean>(false);
 
-  get showModal$(): Observable<boolean> {
+  get showModal$(): Observable<any> {
     return this._showModal$.asObservable();
+  }
+
+  get hideModal$(): Observable<any> {
+    return this._hideModal$.asObservable();
   }
 
   get showExtensionModal$(): Observable<boolean> {
@@ -90,11 +95,11 @@ export class ConnectorManagementStateService {
   }
 
   showModal(): void {
-    this._showModal$.next(true);
+    this._showModal$.next();
   }
 
   hideModal(): void {
-    this._showModal$.next(false);
+    this._hideModal$.next();
   }
 
   showExtensionModal(): void {

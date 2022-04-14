@@ -32,6 +32,7 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   @ViewChild('connectorEditModal') connectorEditModal: vModalComponent;
 
   showSubscription!: Subscription;
+  hideSubscription!: Subscription;
 
   readonly connectorTypeSelected$ = this.stateService.selectedConnector$;
   readonly saveButtonDisabled$ = this.stateService.saveButtonDisabled$;
@@ -46,10 +47,12 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.openShowSubscription();
+    this.openHideSubscription();
   }
 
   ngOnDestroy(): void {
     this.showSubscription?.unsubscribe();
+    this.hideSubscription?.unsubscribe();
   }
 
   hide(): void {
@@ -74,12 +77,14 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   }
 
   private openShowSubscription(): void {
-    this.showSubscription = this.stateService.showModal$.subscribe(show => {
-      if (show) {
-        this.show();
-      } else {
-        this.hide();
-      }
+    this.showSubscription = this.stateService.showModal$.subscribe(() => {
+      this.show();
+    });
+  }
+
+  private openHideSubscription(): void {
+    this.hideSubscription = this.stateService.hideModal$.subscribe(() => {
+      this.hide();
     });
   }
 
