@@ -47,6 +47,8 @@ export class AddConnectorConfigureComponent {
   }
 
   onSave(event: {properties: ConnectorProperties; name: string}): void {
+    this.stateService.disableInput();
+
     this.selectedConnector$.pipe(take(1)).subscribe(selectedConnectorType => {
       this.connectorManagementService
         .createConnectorInstance({

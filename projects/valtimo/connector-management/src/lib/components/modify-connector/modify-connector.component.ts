@@ -44,6 +44,8 @@ export class ModifyConnectorComponent {
   }
 
   onSave(event: {properties: ConnectorProperties; name: string}): void {
+    this.stateService.disableInput();
+
     this.instance$.pipe(take(1)).subscribe(instance => {
       this.connectorManagementService
         .updateConnectorInstance({
@@ -69,6 +71,8 @@ export class ModifyConnectorComponent {
   }
 
   onDelete(): void {
+    this.stateService.disableInput();
+
     this.instance$.pipe(take(1)).subscribe(instance => {
       this.connectorManagementService.deleteConnectorInstance(instance.id).subscribe(
         () => {
