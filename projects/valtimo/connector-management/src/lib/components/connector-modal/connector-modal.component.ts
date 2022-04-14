@@ -36,6 +36,7 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   readonly connectorTypeSelected$ = this.stateService.selectedConnector$;
   readonly saveButtonDisabled$ = this.stateService.saveButtonDisabled$;
   readonly inputDisabled$ = this.stateService.inputDisabled$;
+  readonly hideModalSaveButton$ = this.stateService.hideModalSaveButton$;
   readonly returnToFirstStepSubject$ = new Subject<boolean>();
 
   constructor(

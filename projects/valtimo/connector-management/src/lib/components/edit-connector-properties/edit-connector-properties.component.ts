@@ -64,6 +64,7 @@ export class EditConnectorPropertiesComponent implements OnInit, OnChanges, OnDe
     this.openSaveButtonDisabledSubscription();
     this.openSaveSubscription();
     this.openDeleteSubscription();
+    this.stateService.showModalSaveButton();
   }
 
   ngOnChanges(): void {

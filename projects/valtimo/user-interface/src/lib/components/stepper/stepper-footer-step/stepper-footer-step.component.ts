@@ -30,6 +30,7 @@ export class StepperFooterStepComponent {
   @Input() cancelButtonTranslationKey = '';
   @Input() completeButtonTranslationKey = '';
   @Input() completeButtonMdiIcon = '';
+  @Input() showCompleteButton = true;
 
   public stepIndex$ = new BehaviorSubject<number>(-1);
   public isLastStep$ = new BehaviorSubject<boolean>(false);

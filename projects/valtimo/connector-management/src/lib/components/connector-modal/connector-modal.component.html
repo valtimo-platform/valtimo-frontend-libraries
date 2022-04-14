@@ -36,6 +36,7 @@
         >{{ 'connectorManagement.remove' | translate }}</v-button
       >
       <v-button
+        *ngIf="(hideModalSaveButton$ | async) === false"
         [disabled]="(saveButtonDisabled$ | async) || (inputDisabled$ | async)"
         (clickEvent)="complete()"
         [mdiIcon]="'check'"
@@ -77,6 +78,7 @@
         <v-stepper-footer-step
           completeButtonTranslationKey="addConnectorSteps.complete"
           [completeButtonEnabled]="(saveButtonDisabled$ | async) === false"
+          [showCompleteButton]="(hideModalSaveButton$ | async) === false"
         ></v-stepper-footer-step>
       </v-stepper-footer>
     </div>

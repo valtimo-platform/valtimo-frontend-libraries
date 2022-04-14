@@ -24,7 +24,7 @@
         *ngTemplateOutlet="nextButton; context: {disabled: obs.disabled}"
       ></ng-container>
     </ng-container>
-    <ng-container *ngIf="obs.isLastStep === true">
+    <ng-container *ngIf="obs.isLastStep === true && showCompleteButton">
       <ng-container
         *ngTemplateOutlet="completeButton; context: {disabled: obs.disabled}"
       ></ng-container>
