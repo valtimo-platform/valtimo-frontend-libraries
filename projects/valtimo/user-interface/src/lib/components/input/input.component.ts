@@ -19,23 +19,24 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
 import {InputType} from '../../models';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'v-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
 })
-export class InputComponent implements OnInit, OnChanges {
+export class InputComponent implements OnInit, OnChanges, OnDestroy {
   @Input() type: InputType = 'text';
   @Input() title = '';
   @Input() titleTranslationKey = '';
-  @Input() defaultValue!: any;
+  @Input() defaultValue = '';
   @Input() widthPx!: number;
   @Input() fullWidth = false;
   @Input() margin = false;
@@ -50,26 +51,32 @@ export class InputComponent implements OnInit, OnChanges {
   isText!: boolean;
   isNumber!: boolean;
 
+  private valueSubscription!: Subscription;
+
   ngOnInit(): void {
     this.setInputType();
-    this.setDefaultValue();
+    this.setDefaultValue(this.defaultValue);
+    this.openValueSubscription();
   }
 
   onValueChange(value: any): void {
     this.inputValue$.next(value);
-    this.valueChange.emit(value);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes?.defaultValue?.currentValue) {
-      this.inputValue$.next(changes?.defaultValue?.currentValue);
+    const currentDefaultValue = changes?.defaultValue?.currentValue;
+
+    if (currentDefaultValue) {
+      this.setDefaultValue(currentDefaultValue);
     }
   }
 
-  private setDefaultValue(): void {
-    if (this.defaultValue) {
-      this.inputValue$.next(this.defaultValue);
-    }
+  ngOnDestroy(): void {
+    this.valueSubscription?.unsubscribe();
+  }
+
+  private setDefaultValue(value: any): void {
+    this.inputValue$.next(value);
   }
 
   private setInputType(): void {
@@ -81,5 +88,11 @@ export class InputComponent implements OnInit, OnChanges {
         this.isNumber = true;
         break;
     }
+  }
+
+  private openValueSubscription(): void {
+    this.inputValue$.subscribe(value => {
+      this.valueChange.emit(value);
+    });
   }
 }

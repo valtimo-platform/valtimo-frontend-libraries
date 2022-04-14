@@ -85,7 +85,6 @@ export class EditConnectorPropertiesComponent implements OnInit, OnChanges, OnDe
   }
 
   onSingleValueChange(value: any, editField: ConnectorPropertyEditField): void {
-    console.log('single value change');
     this.modifiedProperties$.pipe(take(1)).subscribe(properties => {
       set(
         properties,
@@ -178,19 +177,18 @@ export class EditConnectorPropertiesComponent implements OnInit, OnChanges, OnDe
       this.editFields$,
       this.modifiedProperties$,
       this.connectorName$,
-      this.saveButtonDisabled$,
     ])
       .pipe(
-        map(([editFields, modifiedProperties, connectorName, saveButtonDisabled]) => {
+        map(([editFields, modifiedProperties, connectorName]) => {
           const values = editFields.map(field => get(modifiedProperties, field.key));
           const validValues = values.filter(value =>
             Array.isArray(value) ? value.length > 0 : value === 0 || value
           );
           const invalidProperties = editFields.length !== validValues.length || !connectorName;
 
-          if (!saveButtonDisabled && invalidProperties) {
+          if (invalidProperties) {
             this.stateService.disableSaveButton();
-          } else if (saveButtonDisabled && !invalidProperties) {
+          } else {
             this.stateService.enableSaveButton();
           }
         })
