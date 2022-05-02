@@ -21,4 +21,4 @@ import {Component} from '@angular/core';
   templateUrl: './page-container.component.html',
   styleUrls: ['./page-container.component.scss'],
 })
-export class PageContainer {}
+export class PageContainerComponent {}

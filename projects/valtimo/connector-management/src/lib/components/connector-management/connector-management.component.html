@@ -14,8 +14,7 @@
   ~ limitations under the License.
   -->
 
-<div
-  class="main-content pt-0"
+<v-page-container
   *ngIf="{
     connectorInstances: connectorInstances$ | async,
     fields: fields$ | async,
@@ -24,8 +23,7 @@
     loading: loading$ | async
   } as obs"
 >
-  <div class="container-fluid">
-    <ng-container *ngTemplateOutlet="buttons; context: {loading: obs.loading}"></ng-container>
+  <v-page-content>
     <v-table
       [loading]="obs.loading"
       [items]="obs.connectorInstances"
@@ -38,16 +36,43 @@
       (paginationSizeSet)="paginationSet($event)"
       (paginationPageSet)="paginationClicked($event)"
     ></v-table>
-  </div>
-</div>
+  </v-page-content>
+</v-page-container>
+
+<!--<div-->
+<!--  class="main-content pt-0"-->
+<!--  *ngIf="{-->
+<!--    connectorInstances: connectorInstances$ | async,-->
+<!--    fields: fields$ | async,-->
+<!--    columns: columns$ | async,-->
+<!--    pagination: pagination$ | async,-->
+<!--    loading: loading$ | async-->
+<!--  } as obs"-->
+<!--&gt;-->
+<!--  <div class="container-fluid">-->
+<!--    <ng-container *ngTemplateOutlet="buttons; context: {loading: obs.loading}"></ng-container>-->
+<!--    <v-table-->
+<!--      [loading]="obs.loading"-->
+<!--      [items]="obs.connectorInstances"-->
+<!--      [columns]="obs.columns"-->
+<!--      [showEditButtons]="true"-->
+<!--      [amountOfLoadingRows]="2"-->
+<!--      [pagination]="obs.pagination"-->
+<!--      [itemsTranslationKey]="'connectorManagement.tableItemsText'"-->
+<!--      (editButtonClicked)="rowClicked($event)"-->
+<!--      (paginationSizeSet)="paginationSet($event)"-->
+<!--      (paginationPageSet)="paginationClicked($event)"-->
+<!--    ></v-table>-->
+<!--  </div>-->
+<!--</div>-->
 
 <valtimo-connector-modal></valtimo-connector-modal>
 
-<ng-template #buttons let-loading="loading">
-  <div class="btn-group mt-m3px mb-3 float-right">
-    <v-button (clickEvent)="showAddModal()" type="primary" mdiIcon="plus" [disabled]="loading">
-      {{ 'connectorManagement.add' | translate }}
-    </v-button>
-  </div>
-  <div class="clearfix"></div>
-</ng-template>
+<!--<ng-template #buttons let-loading="loading">-->
+<!--  <div class="btn-group mt-m3px mb-3 float-right">-->
+<!--    <v-button (clickEvent)="showAddModal()" type="primary" mdiIcon="plus" [disabled]="loading">-->
+<!--      {{ 'connectorManagement.add' | translate }}-->
+<!--    </v-button>-->
+<!--  </div>-->
+<!--  <div class="clearfix"></div>-->
+<!--</ng-template>-->

@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-.v-page__container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding-inline-start: var(--v-page-padding-inline);
-  padding-inline-end: var(--v-page-padding-inline);
-}
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'v-page-content',
+  templateUrl: './page-content.component.html',
+  styleUrls: ['./page-content.component.scss'],
+})
+export class PageContentComponent {}

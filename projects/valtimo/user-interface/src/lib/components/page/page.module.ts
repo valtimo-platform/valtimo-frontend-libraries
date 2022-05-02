@@ -16,11 +16,12 @@
 
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {PageContainer} from './page-container/page-container.component';
+import {PageContainerComponent} from './page-container/page-container.component';
+import {PageContentComponent} from './page-content/page-content.component';
 
 @NgModule({
-  declarations: [PageContainer],
+  declarations: [PageContainerComponent, PageContentComponent],
   imports: [CommonModule],
-  exports: [PageContainer],
+  exports: [PageContainerComponent, PageContentComponent],
 })
 export class PageModule {}

@@ -53,3 +53,7 @@ export * from './lib/components/title/title.module';
 // Text input
 export * from './lib/components/input/input.component';
 export * from './lib/components/input/input.module';
+// Page components
+export * from './lib/components/page/page.module';
+export * from './lib/components/page/page-container/page-container.component';
+export * from './lib/components/page/page-content/page-content.component';

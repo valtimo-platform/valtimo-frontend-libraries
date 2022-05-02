@@ -84,6 +84,7 @@
   --v-spacing-inline-l: 16px;
   --v-spacing-inline-2xl: 30px;
   --v-spacing-inline-3xl: 58px;
+  --v-spacing-inline-5xl: 75px;
   /* border */
   --v-border-radius-xsm: 2px;
   --v-border-radius-sm: 4px;
@@ -297,4 +298,6 @@
   --v-input-default-width: 200px;
   --v-input-margin: var(--v-spacing-block-4xl);
   --v-input-disabled-cursor: var(--v-cursor-disabled);
+  /* page */
+  --v-page-padding-inline: var(--v-spacing-inline-3xl);
 }
