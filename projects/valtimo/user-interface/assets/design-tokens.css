@@ -78,6 +78,7 @@
   --v-spacing-block-xl: 24px;
   --v-spacing-block-2xl: 34px;
   --v-spacing-block-4xl: 50px;
+  --v-spacing-block-5xl: 64px;
   /* spacing inline */
   --v-spacing-inline-sm: 6px;
   --v-spacing-inline-md: 12px;
@@ -300,4 +301,5 @@
   --v-input-disabled-cursor: var(--v-cursor-disabled);
   /* page */
   --v-page-padding-inline: var(--v-spacing-inline-3xl);
+  --v-page-padding-block: var(--v-spacing-block-5xl);
 }
