@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {UserInterfaceService} from '../../../services/user-interface.service';
 
 @Component({
   selector: 'v-page-container',
   templateUrl: './page-container.component.html',
   styleUrls: ['./page-container.component.scss'],
 })
-export class PageContainerComponent {}
+export class PageContainerComponent implements OnInit, OnDestroy {
+  constructor(private readonly userInterfaceService: UserInterfaceService) {}
+
+  ngOnInit(): void {
+    this.userInterfaceService.hidePageHeader();
+  }
+
+  ngOnDestroy(): void {
+    this.userInterfaceService.showPageHeader();
+  }
+}
