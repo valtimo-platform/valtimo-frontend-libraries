@@ -20,7 +20,8 @@ import {FormManagementService, FormDefinition} from '@valtimo/form-management';
 import {
   BpmnElement,
   CreateFormAssociationRequest,
-  FormAssociation, FormFlowDefinition,
+  FormAssociation,
+  FormFlowDefinition,
   ModifyFormAssociationRequest,
 } from '../models';
 import {FormLinkService} from '../form-link.service';
@@ -115,7 +116,12 @@ export class FormLinkModalComponent implements OnInit {
     }
   }
 
-  private addCollapseListeners(collapseFormDefinition, collapseFormFlowDefinition, collapseAngularState, collapseCustomUrl) {
+  private addCollapseListeners(
+    collapseFormDefinition,
+    collapseFormFlowDefinition,
+    collapseAngularState,
+    collapseCustomUrl
+  ) {
     collapseFormDefinition.on('show.bs.collapse', () => {
       this.ngZone.run(() => {
         this.isFormDefinitionSelected = true;
@@ -275,7 +281,8 @@ export class FormLinkModalComponent implements OnInit {
         modifyFormAssociationRequest.formLinkRequest.formId = this.selectedFormDefinition.id;
         break;
       case 'form-flow':
-        modifyFormAssociationRequest.formLinkRequest.formFlowId = this.selectedFormFlowDefinition.id;
+        modifyFormAssociationRequest.formLinkRequest.formFlowId =
+          this.selectedFormFlowDefinition.id;
         break;
       case 'custom-url':
         modifyFormAssociationRequest.formLinkRequest.customUrl = this.enteredCustomUrl;
@@ -310,7 +317,8 @@ export class FormLinkModalComponent implements OnInit {
         createFormAssociationRequest.formLinkRequest.formId = this.selectedFormDefinition.id;
         break;
       case 'form-flow':
-        createFormAssociationRequest.formLinkRequest.formFlowId = this.selectedFormFlowDefinition.id;
+        createFormAssociationRequest.formLinkRequest.formFlowId =
+          this.selectedFormFlowDefinition.id;
         break;
       case 'custom-url':
         createFormAssociationRequest.formLinkRequest.customUrl = this.enteredCustomUrl;
@@ -367,7 +375,9 @@ export class FormLinkModalComponent implements OnInit {
     this.selectedFormDefinition = null;
   }
 
-  public mapFormFlowDefinitionsForDropdown(formFlowDefinitions: FormFlowDefinition[]): DropdownItem[] {
+  public mapFormFlowDefinitionsForDropdown(
+    formFlowDefinitions: FormFlowDefinition[]
+  ): DropdownItem[] {
     return (
       formFlowDefinitions &&
       formFlowDefinitions

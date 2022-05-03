@@ -17,7 +17,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {FormFlowDefinition,} from './models';
+import {FormFlowDefinition} from './models';
 import {ConfigService} from '@valtimo/config';
 
 @Injectable({
@@ -32,7 +32,7 @@ export class FormFlowService {
 
   getFormFlowDefinitions(): Observable<FormFlowDefinition[]> {
     return this.http.get<FormFlowDefinition[]>(
-  `${this.valtimoApiConfig.endpointUri}form-flow-definition`,
+      `${this.valtimoApiConfig.endpointUri}form-flow-definition`
     );
   }
 }
