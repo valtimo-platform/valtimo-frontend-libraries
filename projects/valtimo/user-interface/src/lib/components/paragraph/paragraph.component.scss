@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-.v-title--h1 {
-  color: var(--v-title-h1-color);
-  font-size: var(--v-title-h1-font-size);
-  font-weight: var(--v-title-h1-font-weight);
-  line-height: var(--v-title-h1-line-height);
+.v-paragraph {
   margin: 0;
-  margin-block-end: var(--v-title-h1-margin-block-end);
-}
-
-.v-title--no-margin {
-  margin: 0;
+  font-size: var(--v-paragraph-font-size);
+  line-height: var(--v-paragraph-line-height);
+  color: var(--v-paragraph-color);
+  font-weight: var(--v-paragraph-font-weight);
 }

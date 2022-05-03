@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-.v-title--h1 {
-  color: var(--v-title-h1-color);
-  font-size: var(--v-title-h1-font-size);
-  font-weight: var(--v-title-h1-font-weight);
-  line-height: var(--v-title-h1-line-height);
-  margin: 0;
-  margin-block-end: var(--v-title-h1-margin-block-end);
-}
-
-.v-title--no-margin {
-  margin: 0;
+.v-page__header-introduction {
+  padding-inline-end: var(--v-page-header-introduction-padding-inline);
 }

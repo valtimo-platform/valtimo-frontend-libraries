@@ -613,8 +613,8 @@
       "title": "Productaanvragen API",
       "description": "API zur Registrierung und Offenlegung von Produkten."
     },
-    "HaalCentraal": {
-      "title": "Haal Centraal",
+    "HaalCentraalBrp": {
+      "title": "Haal Centraal BRP",
       "description": "APIs, mit denen Ihre Gemeinde Basisdaten direkt von den nationalen Registrierungen anfordern kann."
     },
     "ContactMoment": {
@@ -624,6 +624,12 @@
     "OpenZaak": {
       "title": "OpenZaak",
       "description": "OpenZaak ist eine produktionstaugliche API-Plattform, die den API-Standard für fallorientiertes Arbeiten (die ZGW-APIs) implementiert."
+    }
+  },
+  "pages": {
+    "connectors": {
+      "title": "Connectors",
+      "description": "Auf dieser Seite können Sie Verbindungen zu externen Diensten erstellen, ändern oder löschen."
     }
   }
 }

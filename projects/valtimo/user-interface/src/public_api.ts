@@ -57,5 +57,11 @@ export * from './lib/components/input/input.module';
 export * from './lib/components/page/page.module';
 export * from './lib/components/page/page-container/page-container.component';
 export * from './lib/components/page/page-content/page-content.component';
+export * from './lib/components/page/page-header/page-header.component';
+export * from './lib/components/page/page-header-introduction/page-header-introduction.component';
+export * from './lib/components/page/page-header-actions/page-header-actions.component';
 // User interface service
 export * from './lib/services/user-interface.service';
+// Paragraph
+export * from './lib/components/paragraph/paragraph.module';
+export * from './lib/components/paragraph/paragraph.component';

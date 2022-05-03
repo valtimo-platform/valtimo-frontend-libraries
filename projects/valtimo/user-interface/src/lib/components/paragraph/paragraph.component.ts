@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-.v-title--h1 {
-  color: var(--v-title-h1-color);
-  font-size: var(--v-title-h1-font-size);
-  font-weight: var(--v-title-h1-font-weight);
-  line-height: var(--v-title-h1-line-height);
-  margin: 0;
-  margin-block-end: var(--v-title-h1-margin-block-end);
-}
+import {Component} from '@angular/core';
 
-.v-title--no-margin {
-  margin: 0;
-}
+@Component({
+  selector: 'v-paragraph',
+  templateUrl: './paragraph.component.html',
+  styleUrls: ['./paragraph.component.scss'],
+})
+export class ParagraphComponent {}

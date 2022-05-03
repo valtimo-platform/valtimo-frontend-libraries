@@ -18,10 +18,25 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PageContainerComponent} from './page-container/page-container.component';
 import {PageContentComponent} from './page-content/page-content.component';
+import {PageHeaderComponent} from './page-header/page-header.component';
+import {PageHeaderActionsComponent} from './page-header-actions/page-header-actions.component';
+import {PageHeaderIntroductionComponent} from './page-header-introduction/page-header-introduction.component';
 
 @NgModule({
-  declarations: [PageContainerComponent, PageContentComponent],
+  declarations: [
+    PageContainerComponent,
+    PageContentComponent,
+    PageHeaderComponent,
+    PageHeaderActionsComponent,
+    PageHeaderIntroductionComponent,
+  ],
   imports: [CommonModule],
-  exports: [PageContainerComponent, PageContentComponent],
+  exports: [
+    PageContainerComponent,
+    PageContentComponent,
+    PageHeaderComponent,
+    PageHeaderActionsComponent,
+    PageHeaderIntroductionComponent,
+  ],
 })
 export class PageModule {}

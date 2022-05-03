@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-.v-title--h1 {
-  color: var(--v-title-h1-color);
-  font-size: var(--v-title-h1-font-size);
-  font-weight: var(--v-title-h1-font-weight);
-  line-height: var(--v-title-h1-line-height);
-  margin: 0;
-  margin-block-end: var(--v-title-h1-margin-block-end);
-}
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ParagraphComponent} from './paragraph.component';
 
-.v-title--no-margin {
-  margin: 0;
-}
+@NgModule({
+  declarations: [ParagraphComponent],
+  imports: [CommonModule],
+  exports: [ParagraphComponent],
+})
+export class ParagraphModule {}

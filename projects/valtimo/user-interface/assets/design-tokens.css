@@ -63,12 +63,14 @@
   --v-font-size-xl: 28px;
   /* font weight */
   --v-font-weight-light: 300;
+  --v-font-weight-lighter: 400;
   --v-font-weight-regular: 500;
   --v-font-weight-bold: 700;
   /* line height */
   --v-line-height-smaller: 14px;
   --v-line-height-default: 16px;
   --v-line-height-larger: 20px;
+  --v-line-height-large: 24px;
   --v-line-height-xl: 32px;
   /* spacing block */
   --v-spacing-block-xsm: 6px;
@@ -77,6 +79,7 @@
   --v-spacing-block-l: 16px;
   --v-spacing-block-xl: 24px;
   --v-spacing-block-2xl: 34px;
+  --v-spacing-block-3xl: 40px;
   --v-spacing-block-4xl: 50px;
   --v-spacing-block-5xl: 64px;
   /* spacing inline */
@@ -86,6 +89,7 @@
   --v-spacing-inline-2xl: 30px;
   --v-spacing-inline-3xl: 58px;
   --v-spacing-inline-5xl: 75px;
+  --v-spacing-inline-8xl: 140px;
   /* border */
   --v-border-radius-xsm: 2px;
   --v-border-radius-sm: 4px;
@@ -278,6 +282,7 @@
   --v-title-h1-font-weight: var(--v-font-weight-light);
   --v-title-h1-line-height: var(--v-line-height-xl);
   --v-title-h1-font-size: var(--v-font-size-xl);
+  --v-title-h1-margin-block-end: var(--v-spacing-block-2xl);
   /* input */
   --v-input-font-size: var(--v-font-size-smaller);
   --v-input-line-height: var(--v-line-height-larger);
@@ -302,4 +307,11 @@
   /* page */
   --v-page-padding-inline: var(--v-spacing-inline-3xl);
   --v-page-padding-block: var(--v-spacing-block-5xl);
+  --v-page-header-introduction-padding-inline: var(--v-spacing-inline-8xl);
+  --v-page-header-margin-block: var(--v-spacing-block-3xl);
+  /* paragraph */
+  --v-paragraph-font-size: var(--v-font-size-default);
+  --v-paragraph-line-height: var(--v-line-height-large);
+  --v-paragraph-color: var(--v-color-grey-1);
+  --v-paragraph-font-weight: var(--v-font-weight-lighter);
 }

@@ -41,6 +41,7 @@ import {
   TitleModule,
   InputModule,
   PageModule,
+  ParagraphModule,
 } from '@valtimo/user-interface';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {AddConnectorConfigureComponent} from './components/add-connector-configure/add-connector-configure.component';
@@ -79,6 +80,7 @@ import {AddConnectorConfigureComponent} from './components/add-connector-configu
     TitleModule,
     InputModule,
     PageModule,
+    ParagraphModule,
   ],
   exports: [
     ConnectorManagementComponent,

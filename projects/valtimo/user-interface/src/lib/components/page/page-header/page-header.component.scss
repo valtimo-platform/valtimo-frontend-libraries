@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-.v-title--h1 {
-  color: var(--v-title-h1-color);
-  font-size: var(--v-title-h1-font-size);
-  font-weight: var(--v-title-h1-font-weight);
-  line-height: var(--v-title-h1-line-height);
-  margin: 0;
-  margin-block-end: var(--v-title-h1-margin-block-end);
-}
+.v-page__header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-block-end: var(--v-page-header-margin-block);
 
-.v-title--no-margin {
-  margin: 0;
+  ::ng-deep {
+    v-page-header-introduction {
+      flex-grow: 1;
+    }
+  }
 }

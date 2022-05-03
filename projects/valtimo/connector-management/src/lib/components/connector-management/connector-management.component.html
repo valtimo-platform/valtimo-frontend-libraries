@@ -23,6 +23,22 @@
     loading: loading$ | async
   } as obs"
 >
+  <v-page-header>
+    <v-page-header-introduction>
+      <v-title>{{ 'pages.connectors.title' | translate }}</v-title>
+      <v-paragraph>{{ 'pages.connectors.description' | translate }}</v-paragraph>
+    </v-page-header-introduction>
+    <v-page-header-actions>
+      <v-button
+        (clickEvent)="showAddModal()"
+        type="primary"
+        mdiIcon="plus"
+        [disabled]="obs.loading"
+      >
+        {{ 'connectorManagement.add' | translate }}
+      </v-button>
+    </v-page-header-actions>
+  </v-page-header>
   <v-page-content>
     <v-table
       [loading]="obs.loading"
