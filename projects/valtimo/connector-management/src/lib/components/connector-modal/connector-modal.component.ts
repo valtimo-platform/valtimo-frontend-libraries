@@ -17,8 +17,8 @@
 import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {ModalComponent} from '@valtimo/components';
 import {ModalComponent as vModalComponent, ModalService} from '@valtimo/user-interface';
-import {BehaviorSubject, Subject, Subscription} from 'rxjs';
-import {ConnectorModal} from '@valtimo/config';
+import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
+import {ConnectorModal, ConnectorType} from '@valtimo/config';
 import {ConnectorManagementStateService} from '../../services/connector-management-state/connector-management-state.service';
 import {take} from 'rxjs/operators';
 
@@ -34,10 +34,10 @@ export class ConnectorModalComponent implements AfterViewInit, OnDestroy {
   showSubscription!: Subscription;
   hideSubscription!: Subscription;
 
-  readonly connectorTypeSelected$ = this.stateService.selectedConnector$;
-  readonly saveButtonDisabled$ = this.stateService.saveButtonDisabled$;
-  readonly inputDisabled$ = this.stateService.inputDisabled$;
-  readonly hideModalSaveButton$ = this.stateService.hideModalSaveButton$;
+  readonly connectorTypeSelected$: Observable<ConnectorType> = this.stateService.selectedConnector$;
+  readonly saveButtonDisabled$: Observable<boolean> = this.stateService.saveButtonDisabled$;
+  readonly inputDisabled$: Observable<boolean> = this.stateService.inputDisabled$;
+  readonly hideModalSaveButton$: Observable<boolean> = this.stateService.hideModalSaveButton$;
   readonly returnToFirstStepSubject$ = new Subject<boolean>();
 
   constructor(
