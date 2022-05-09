@@ -19,7 +19,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormioComponent, ModalComponent} from '@valtimo/components';
 import {Task} from '../models';
 import {FormioSubmission, ValtimoFormioOptions, FormioOptionsImpl} from '@valtimo/components';
-import {FormSubmissionResult, FormAssociation, FormLinkService} from '@valtimo/form-link';
+import {
+  FormSubmissionResult,
+  FormAssociation,
+  FormLinkService,
+  FormFlowService,
+} from '@valtimo/form-link';
 import {FormioForm} from 'angular-formio';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
@@ -52,7 +57,8 @@ export class TaskDetailModalComponent {
     private readonly formLinkService: FormLinkService,
     private readonly router: Router,
     private readonly logger: NGXLogger,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly formFlowService: FormFlowService
   ) {
     this.formioOptions = new FormioOptionsImpl();
     this.formioOptions.disableAlerts = true;
@@ -63,8 +69,13 @@ export class TaskDetailModalComponent {
     this.formDefinition = null;
   }
 
+  getTaskFormLink(taskId: string): void {
+    this.formFlowService.getTaskProcessLink(taskId).subscribe();
+  }
+
   openTaskDetails(task: Task) {
     this.resetFormDefinition();
+    this.getTaskFormLink(task.id);
     this.task = task;
     this.page = {
       title: task.name,
