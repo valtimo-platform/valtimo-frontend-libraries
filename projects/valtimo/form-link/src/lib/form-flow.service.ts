@@ -17,7 +17,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {FormFlowDefinition} from './models';
+import {FormFlowDefinition, TaskProcessLinkResult} from './models';
 import {ConfigService} from '@valtimo/config';
 
 @Injectable({
@@ -36,7 +36,9 @@ export class FormFlowService {
     );
   }
 
-  getTaskProcessLink(taskId: string): Observable<any> {
-    return this.http.get(`${this.valtimoEndpointUri}process-link/task/${taskId}`);
+  getTaskProcessLink(taskId: string): Observable<TaskProcessLinkResult> {
+    return this.http.get<TaskProcessLinkResult>(
+      `${this.valtimoEndpointUri}process-link/task/${taskId}`
+    );
   }
 }

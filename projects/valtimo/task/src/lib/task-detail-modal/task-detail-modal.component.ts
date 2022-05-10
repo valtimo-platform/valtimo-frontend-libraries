@@ -64,18 +64,9 @@ export class TaskDetailModalComponent {
     this.formioOptions.disableAlerts = true;
   }
 
-  resetFormDefinition() {
-    // reset formDefinition in order to reload form-io component
-    this.formDefinition = null;
-  }
-
-  getTaskFormLink(taskId: string): void {
-    this.formFlowService.getTaskProcessLink(taskId).subscribe();
-  }
-
   openTaskDetails(task: Task) {
     this.resetFormDefinition();
-    this.getTaskFormLink(task.id);
+    this.getTaskProcessLink(task.id);
     this.task = task;
     this.page = {
       title: task.name,
@@ -155,5 +146,16 @@ export class TaskDetailModalComponent {
           this.form.showErrors(errors);
         }
       );
+  }
+
+  private resetFormDefinition() {
+    // reset formDefinition in order to reload form-io component
+    this.formDefinition = null;
+  }
+
+  private getTaskProcessLink(taskId: string): void {
+    this.formFlowService.getTaskProcessLink(taskId).subscribe(res => {
+      console.log('Task process link type:', res.type);
+    });
   }
 }

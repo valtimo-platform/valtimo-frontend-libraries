@@ -60,3 +60,10 @@ export interface FormFlowDefinition {
   id: string;
   name: string;
 }
+
+export interface TaskProcessLinkResult {
+  type: 'form' | 'form-flow';
+  properties: {
+    formLinkId?: string;
+  };
+}
