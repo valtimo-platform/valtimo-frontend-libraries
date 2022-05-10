@@ -19,17 +19,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormioComponent, ModalComponent} from '@valtimo/components';
 import {Task} from '../models';
 import {FormioSubmission, ValtimoFormioOptions, FormioOptionsImpl} from '@valtimo/components';
-import {
-  FormSubmissionResult,
-  FormAssociation,
-  FormLinkService,
-  FormFlowService,
-} from '@valtimo/form-link';
+import {FormSubmissionResult, FormAssociation, FormLinkService} from '@valtimo/form-link';
 import {FormioForm} from 'angular-formio';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {ToastrService} from 'ngx-toastr';
 import {take} from 'rxjs/operators';
+import {TaskService} from '../task.service';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -58,7 +54,7 @@ export class TaskDetailModalComponent {
     private readonly router: Router,
     private readonly logger: NGXLogger,
     private readonly route: ActivatedRoute,
-    private readonly formFlowService: FormFlowService
+    private readonly taskService: TaskService
   ) {
     this.formioOptions = new FormioOptionsImpl();
     this.formioOptions.disableAlerts = true;
@@ -154,7 +150,7 @@ export class TaskDetailModalComponent {
   }
 
   private getTaskProcessLink(taskId: string): void {
-    this.formFlowService.getTaskProcessLink(taskId).subscribe(res => {
+    this.taskService.getTaskProcessLink(taskId).subscribe(res => {
       console.log('Task process link type:', res.type);
     });
   }
