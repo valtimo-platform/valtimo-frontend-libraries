@@ -18,7 +18,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
 import {SelectItem, TableColumn, TablePagination} from '../../models';
-import {map, take} from 'rxjs/operators';
+import {map, take, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'v-table',
@@ -80,7 +80,19 @@ export class TableComponent implements OnInit, OnDestroy {
       maxPaginationItemSize,
       page,
       size,
-    }))
+    })),
+    tap(({collectionSize, maxPaginationItemSize, page, size}) => {
+      const amountOfPagesAvailable = Math.ceil(collectionSize / size);
+
+      if (
+        !this.skippingToPreviousPage &&
+        amountOfPagesAvailable > 0 &&
+        page > amountOfPagesAvailable
+      ) {
+        this.skippingToPreviousPage = true;
+        this.setPage(amountOfPagesAvailable);
+      }
+    })
   );
 
   readonly items$ = new BehaviorSubject<Array<object>>([]);
@@ -93,6 +105,8 @@ export class TableComponent implements OnInit, OnDestroy {
   ];
 
   private breakpointSubscription!: Subscription;
+
+  private skippingToPreviousPage = false;
 
   constructor(private readonly breakpointObserver: BreakpointObserver) {}
 
@@ -109,21 +123,24 @@ export class TableComponent implements OnInit, OnDestroy {
     return new Array(length).fill(0);
   }
 
-  setPage(setTo: 'previous' | 'next'): void {
+  setPage(setTo: 'previous' | 'next' | number): void {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
       const currentPage = pagination?.page;
 
       if (currentPage) {
-        let newPageNumber: number;
+        let newPageNumber: number = 0;
 
         if (setTo === 'previous') {
           newPageNumber = currentPage - 1;
-        } else {
+        } else if (setTo === 'next') {
           newPageNumber = currentPage + 1;
+        } else if (typeof setTo === 'number') {
+          newPageNumber = setTo;
         }
 
         this.paginationPageSet.emit(newPageNumber);
         this.page$.next(newPageNumber);
+        this.skippingToPreviousPage = false;
       }
     });
   }
