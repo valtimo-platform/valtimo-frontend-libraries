@@ -634,5 +634,11 @@
       "title": "Connectors",
       "description": "Auf dieser Seite können Sie Verbindungen zu externen Diensten erstellen, ändern oder löschen."
     }
+  },
+  "pluginSteps": {
+    "step0": "Wählen Sie Ihr Plugin aus",
+    "step1": "Wählen Sie Ihre Konfiguration",
+    "step2": "Wählen Sie Ihre Funktion",
+    "complete": "Plugin-Funktion verbinden"
   }
 }
