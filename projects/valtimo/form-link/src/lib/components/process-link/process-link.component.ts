@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {ModalParams} from '../../models';
+import {ModalComponent, ModalService} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-process-link',
@@ -24,10 +25,12 @@ import {ModalParams} from '../../models';
   styleUrls: ['./process-link.component.scss'],
 })
 export class ProcessLinkComponent {
+  @ViewChild('pluginModal') connectorCreateModal: ModalComponent;
+
   readonly returnToFirstStepSubject$ = new Subject<boolean>();
   readonly inputDisabled$ = new BehaviorSubject<boolean>(true);
 
-  constructor() {}
+  constructor(private readonly modalService: ModalService) {}
 
   complete(): void {
     console.log('complete');
@@ -38,6 +41,6 @@ export class ProcessLinkComponent {
   }
 
   openModal(params: ModalParams): void {
-    console.log(params);
+    this.modalService.openModal(this.connectorCreateModal);
   }
 }
