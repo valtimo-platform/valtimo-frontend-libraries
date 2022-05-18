@@ -18,26 +18,39 @@ import {Component, ViewChild} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {ModalParams} from '../../models';
 import {ModalComponent, ModalService} from '@valtimo/user-interface';
+import {ProcessLinkStateService} from '../../services/process-link-state.service';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-process-link',
   templateUrl: './process-link.component.html',
   styleUrls: ['./process-link.component.scss'],
+  providers: [ProcessLinkStateService],
 })
 export class ProcessLinkComponent {
   @ViewChild('pluginModal') connectorCreateModal: ModalComponent;
 
   readonly returnToFirstStepSubject$ = new Subject<boolean>();
-  readonly inputDisabled$ = new BehaviorSubject<boolean>(true);
+  readonly selectedPluginDefinition$ = this.processLinkStateService.selectedPluginDefinition$;
 
-  constructor(private readonly modalService: ModalService) {}
+  constructor(
+    private readonly modalService: ModalService,
+    private readonly processLinkStateService: ProcessLinkStateService
+  ) {}
 
   complete(): void {
     console.log('complete');
   }
 
   hide(): void {
-    console.log('hide');
+    this.processLinkStateService.clear();
+    this.modalService.closeModal();
+
+    this.modalService.appearingDelayMs$.pipe(take(1)).subscribe(appearingDelay => {
+      setTimeout(() => {
+        this.returnToFirstStepSubject$.next(true);
+      }, appearingDelay);
+    });
   }
 
   openModal(params: ModalParams): void {
