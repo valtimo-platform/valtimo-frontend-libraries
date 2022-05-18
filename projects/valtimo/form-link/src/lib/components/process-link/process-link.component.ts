@@ -7,19 +7,16 @@
  *
  * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-import {Component, ViewChild, ViewContainerRef} from '@angular/core';
-import {FormLinkModalComponent} from '../form-link-modal/form-link-modal.component';
-import {BpmnElement} from '../../models';
-import {ConfigService} from '@valtimo/config';
-import {ModalComponent} from '@valtimo/components';
-
-interface ModalParams {
-  element: BpmnElement;
-  processDefinitionKey: string;
-}
+import {Component} from '@angular/core';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {ModalParams} from '../../models';
 
 @Component({
   selector: 'valtimo-process-link',
@@ -27,44 +24,20 @@ interface ModalParams {
   styleUrls: ['./process-link.component.scss'],
 })
 export class ProcessLinkComponent {
-  @ViewChild('formLinkModal') public formLinkModal: FormLinkModalComponent;
-  @ViewChild('extension', {read: ViewContainerRef, static: true})
-  viewContainerRef: ViewContainerRef;
+  readonly returnToFirstStepSubject$ = new Subject<boolean>();
+  readonly inputDisabled$ = new BehaviorSubject<boolean>(true);
 
-  constructor(private configService: ConfigService) {}
+  constructor() {}
 
-  openModal(params: ModalParams) {
-    const element = params.element;
-    const selector = 'form-links';
-    const section = 'openzaak-service-task-connector-modal';
-
-    this.getModal(params, element, selector, section);
-    // The modal does not call its onInit properly
-    this.formLinkModal.ngOnInit();
+  complete(): void {
+    console.log('complete');
   }
 
-  private getModal(
-    params: ModalParams,
-    element: BpmnElement,
-    selector: string,
-    section: string
-  ): void {
-    if (element.type === 'bpmn:ServiceTask') {
-      const extension = this.configService.getSupportedExtensionPoint(selector, selector, section);
-      const componentRef = this.configService.loadAndReturnExtensionPoint(
-        this.viewContainerRef,
-        extension.extensionPoint
-      ) as unknown as ModalComponent;
-      const component = componentRef['instance'];
-      if (component) {
-        component.openModal(params);
-      }
-    } else {
-      this.openFormLinkModal(params);
-    }
+  hide(): void {
+    console.log('hide');
   }
 
-  private openFormLinkModal(params: ModalParams): void {
-    this.formLinkModal.openModal(params.element, params.processDefinitionKey);
+  openModal(params: ModalParams): void {
+    console.log(params);
   }
 }

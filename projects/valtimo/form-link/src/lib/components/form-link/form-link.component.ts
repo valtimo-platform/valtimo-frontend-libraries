@@ -12,14 +12,9 @@
 
 import {Component, ViewChild, ViewContainerRef} from '@angular/core';
 import {FormLinkModalComponent} from '../form-link-modal/form-link-modal.component';
-import {BpmnElement} from '../../models';
+import {BpmnElement, ModalParams} from '../../models';
 import {ConfigService} from '@valtimo/config';
 import {ModalComponent} from '@valtimo/components';
-
-interface ModalParams {
-  element: BpmnElement;
-  processDefinitionKey: string;
-}
 
 @Component({
   selector: 'valtimo-form-link',
