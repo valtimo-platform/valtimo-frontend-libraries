@@ -14,7 +14,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {FormFlowDefinition, FormFlowInstance} from '../models';
-import {ConfigService} from 'dist/valtimo/config';
+import {ConfigService} from '@valtimo/config';
 
 @Injectable({
   providedIn: 'root',

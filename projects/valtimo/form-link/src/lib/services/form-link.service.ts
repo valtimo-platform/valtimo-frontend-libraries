@@ -19,8 +19,8 @@ import {
   FormSubmissionResult,
   ModifyFormAssociationRequest,
 } from '../models';
-import {InterceptorSkipHeader} from 'dist/valtimo/security';
-import {ConfigService} from 'dist/valtimo/config';
+import {InterceptorSkipHeader} from '@valtimo/security';
+import {ConfigService} from '@valtimo/config';
 
 @Injectable({
   providedIn: 'root',

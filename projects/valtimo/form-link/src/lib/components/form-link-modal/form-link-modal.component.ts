@@ -16,7 +16,7 @@
 
 import {Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
-import {FormManagementService, FormDefinition} from 'dist/valtimo/form-management';
+import {FormManagementService, FormDefinition} from '@valtimo/form-management';
 import {
   BpmnElement,
   CreateFormAssociationRequest,
@@ -30,7 +30,7 @@ import {
   ModalComponent,
   SearchableDropdownComponent,
   DropdownItem,
-} from 'dist/valtimo/components';
+} from '@valtimo/components';
 import {NGXLogger} from 'ngx-logger';
 import {TranslateService} from '@ngx-translate/core';
 import {FormFlowService} from '../../services/form-flow.service';
