@@ -16,24 +16,24 @@
 
 import {Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
-import {FormManagementService, FormDefinition} from '@valtimo/form-management';
+import {FormManagementService, FormDefinition} from 'dist/valtimo/form-management';
 import {
   BpmnElement,
   CreateFormAssociationRequest,
   FormAssociation,
   FormFlowDefinition,
   ModifyFormAssociationRequest,
-} from '../models';
-import {FormLinkService} from '../form-link.service';
+} from '../../models';
+import {FormLinkService} from '../../services/form-link.service';
 import {
   AlertService,
   ModalComponent,
   SearchableDropdownComponent,
   DropdownItem,
-} from '@valtimo/components';
+} from 'dist/valtimo/components';
 import {NGXLogger} from 'ngx-logger';
 import {TranslateService} from '@ngx-translate/core';
-import {FormFlowService} from '../form-flow.service';
+import {FormFlowService} from '../../services/form-flow.service';
 
 // eslint-disable-next-line no-var
 declare var $;

@@ -23,7 +23,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import {ProcessService, ProcessDefinition} from '@valtimo/process';
+import {ProcessService, ProcessDefinition} from 'dist/valtimo/process';
 
 import BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
 import {ActivatedRoute} from '@angular/router';
