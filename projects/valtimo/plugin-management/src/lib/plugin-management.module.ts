@@ -16,11 +16,20 @@ import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PluginManagementComponent} from './components/plugin-management/plugin-management.component';
+import {PageModule, ParagraphModule, TitleModule} from '@valtimo/user-interface';
 
 @NgModule({
   providers: [],
   declarations: [PluginManagementComponent],
-  imports: [CommonModule, PluginManagementRoutingModule, TranslateModule, FlexLayoutModule],
+  imports: [
+    CommonModule,
+    PluginManagementRoutingModule,
+    TranslateModule,
+    FlexLayoutModule,
+    PageModule,
+    ParagraphModule,
+    TitleModule,
+  ],
   exports: [PluginManagementComponent],
 })
 export class PluginManagementModule {}

@@ -633,6 +633,10 @@
     "connectors": {
       "title": "Connecties",
       "description": "Op deze pagina kun je connecties met externe diensten aanmaken, aanpassen of verwijderen."
+    },
+    "plugins": {
+      "title": "Plug-ins",
+      "description": "Op deze pagina kun je configuraties aanmaken, wijzigen en verwijderen van plug-ins die zijn toegevoegd aan je applicatie."
     }
   },
   "pluginSteps": {

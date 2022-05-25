@@ -633,6 +633,10 @@
     "connectors": {
       "title": "Connectors",
       "description": "Auf dieser Seite können Sie Verbindungen zu externen Diensten erstellen, ändern oder löschen."
+    },
+    "plugins": {
+      "title": "Plugins",
+      "description": "Auf dieser Seite können Sie Konfigurationen von Plugins erstellen, ändern und löschen, die Ihrer Anwendung hinzugefügt wurden."
     }
   },
   "pluginSteps": {
