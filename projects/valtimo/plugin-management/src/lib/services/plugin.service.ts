@@ -17,20 +17,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {
-  FormFlowDefinition,
-  FormFlowInstance,
-  PluginConfiguration,
-  PluginDefinition,
-  PluginFunction,
-} from '../models';
+import {PluginConfiguration, PluginDefinition, PluginFunction} from '../models';
 import {ConfigService} from '@valtimo/config';
 import {delay} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProcessLinkService {
+export class PluginService {
   getPluginDefinitions(): Observable<Array<PluginDefinition>> {
     return of([{identifier: 'openzaak', name: 'Open Zaak'}]).pipe(delay(1500));
   }

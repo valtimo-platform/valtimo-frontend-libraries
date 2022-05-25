@@ -10,11 +10,4 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.See the License for the specific language governing permissions and limitations under the License.
  */
 
-/*
- * Public API Surface of process-management
- */
-
-export * from './lib/models';
-export * from './lib/services';
-export * from './lib/plugin-management.module';
-export * from './lib/components/plugin-management/plugin-management.component';
+export * from './plugin.model';
