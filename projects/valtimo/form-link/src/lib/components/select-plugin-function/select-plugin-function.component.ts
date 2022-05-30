@@ -35,10 +35,11 @@ export class SelectPluginFunctionComponent {
     this.processLinkStateService.selectedPluginDefinition$.pipe(
       switchMap(selectedDefinition =>
         selectedDefinition
-          ? this.pluginService.getPluginFunctions(selectedDefinition.identifier)
+          ? this.pluginService.getPluginFunctions(selectedDefinition.key)
           : of(undefined)
       )
     );
+  readonly selectedPluginDefinition$ = this.processLinkStateService.selectedPluginDefinition$;
   readonly selectedPluginFunction$ = this.processLinkStateService.selectedPluginFunction$;
 
   constructor(

@@ -30,7 +30,7 @@ export class SelectPluginConfigurationComponent {
     this.processLinkStateService.selectedPluginDefinition$.pipe(
       switchMap(selectedDefinition =>
         selectedDefinition
-          ? this.pluginService.getPluginConfigurations(selectedDefinition.identifier)
+          ? this.pluginService.getPluginConfigurations(selectedDefinition.key)
           : of(undefined)
       )
     );

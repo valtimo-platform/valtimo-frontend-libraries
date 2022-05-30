@@ -11,18 +11,17 @@
  */
 
 interface PluginDefinition {
-  identifier: string;
-  name: string;
+  key: string;
 }
 
 interface PluginConfiguration {
-  id: string;
-  name: string;
+  definitionKey: string;
+  key: string;
+  title: string;
 }
 
 interface PluginFunction {
-  identifier: string;
-  name: string;
+  key: string;
 }
 
 export {PluginConfiguration, PluginDefinition, PluginFunction};

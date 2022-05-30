@@ -15,6 +15,8 @@
  */
 
 import {Component} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {TableColumn} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-plugin-management',
@@ -22,5 +24,7 @@ import {Component} from '@angular/core';
   styleUrls: ['./plugin-management.component.scss'],
 })
 export class PluginManagementComponent {
+  readonly loading$ = new BehaviorSubject<boolean>(true);
+  readonly columns$ = new BehaviorSubject<Array<TableColumn>>([]);
   constructor() {}
 }

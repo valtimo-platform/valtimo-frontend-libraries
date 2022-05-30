@@ -648,7 +648,13 @@
   "plugin": {
     "openzaak": {
       "title": "OpenZaak",
-      "description": "OpenZaak is a production-worthy API platform that implements the API standard for case-oriented working (the ZGW APIs)."
+      "description": "OpenZaak is a production-worthy API platform that implements the API standard for case-oriented working (the ZGW APIs).",
+      "functions": {
+        "create-zaak": "Create zaak",
+        "set-status": "Set status",
+        "set-resultaat": "Set result",
+        "set-besluit": "Set besluit"
+      }
     }
   }
 }
