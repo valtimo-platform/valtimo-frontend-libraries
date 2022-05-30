@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
+// "pluginManagement": {
+//   "labels": {
+//     "pluginName": "Plug-in-naam",
+//       "identifier": "Identifier",
+//       "configurationName": "Configuratienaam"
+//   }
+// }
+
 import {Component} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, combineLatest} from 'rxjs';
 import {TableColumn} from '@valtimo/user-interface';
+import {PluginService} from '../../services';
+import {TranslateService} from '@ngx-translate/core';
+import {map, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-plugin-management',
@@ -25,6 +36,37 @@ import {TableColumn} from '@valtimo/user-interface';
 })
 export class PluginManagementComponent {
   readonly loading$ = new BehaviorSubject<boolean>(true);
-  readonly columns$ = new BehaviorSubject<Array<TableColumn>>([]);
-  constructor() {}
+  readonly columns$ = new BehaviorSubject<Array<TableColumn>>([
+    {
+      labelTranslationKey: 'pluginManagement.labels.pluginName',
+      dataKey: 'pluginName',
+    },
+    {
+      labelTranslationKey: 'pluginManagement.labels.identifier',
+      dataKey: 'definitionKey',
+    },
+    {
+      labelTranslationKey: 'pluginManagement.labels.configurationName',
+      dataKey: 'title',
+    },
+  ]);
+  readonly pluginConfigurations$ = combineLatest([
+    this.pluginService.getAllPluginConfigurations(),
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([pluginConfigurations]) =>
+      pluginConfigurations.map(configuration => ({
+        ...configuration,
+        pluginName: this.translateService.instant(`plugin.${configuration.definitionKey}.title`),
+      }))
+    ),
+    tap(() => {
+      this.loading$.next(false);
+    })
+  );
+
+  constructor(
+    private readonly pluginService: PluginService,
+    private readonly translateService: TranslateService
+  ) {}
 }

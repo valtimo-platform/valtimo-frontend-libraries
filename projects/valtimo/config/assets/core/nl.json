@@ -656,5 +656,13 @@
         "set-besluit": "Besluit instellen"
       }
     }
+  },
+  "pluginManagement": {
+    "tableItemsText": "plug-in-configuraties",
+    "labels": {
+      "pluginName": "Plug-in-naam",
+      "identifier": "Identifier",
+      "configurationName": "Configuratienaam"
+    }
   }
 }

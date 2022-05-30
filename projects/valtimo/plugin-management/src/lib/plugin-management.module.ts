@@ -16,7 +16,7 @@ import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PluginManagementComponent} from './components/plugin-management/plugin-management.component';
-import {PageModule, ParagraphModule, TitleModule} from '@valtimo/user-interface';
+import {PageModule, ParagraphModule, TitleModule, TableModule} from '@valtimo/user-interface';
 
 @NgModule({
   providers: [],
@@ -29,6 +29,7 @@ import {PageModule, ParagraphModule, TitleModule} from '@valtimo/user-interface'
     PageModule,
     ParagraphModule,
     TitleModule,
+    TableModule,
   ],
   exports: [PluginManagementComponent],
 })
