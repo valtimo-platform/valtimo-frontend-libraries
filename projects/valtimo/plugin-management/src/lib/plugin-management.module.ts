@@ -24,13 +24,15 @@ import {
   StepperModule,
   ModalModule,
   ButtonModule,
+  CardModule,
 } from '@valtimo/user-interface';
 import {PluginAddModalComponent} from './components/plugin-add-modal/plugin-add-modal.component';
 import {PluginManagementStateService} from './services';
+import {PluginAddSelectComponent} from './components/plugin-add-select/plugin-add-select.component';
 
 @NgModule({
   providers: [PluginManagementStateService],
-  declarations: [PluginManagementComponent, PluginAddModalComponent],
+  declarations: [PluginManagementComponent, PluginAddModalComponent, PluginAddSelectComponent],
   imports: [
     CommonModule,
     PluginManagementRoutingModule,
@@ -43,7 +45,8 @@ import {PluginManagementStateService} from './services';
     StepperModule,
     ModalModule,
     ButtonModule,
+    CardModule,
   ],
-  exports: [PluginManagementComponent, PluginAddModalComponent],
+  exports: [PluginManagementComponent, PluginAddModalComponent, PluginAddSelectComponent],
 })
 export class PluginManagementModule {}

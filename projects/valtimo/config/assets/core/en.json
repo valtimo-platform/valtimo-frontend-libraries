@@ -666,7 +666,7 @@
       "configurationName": "Configuration name"
     },
     "addSteps": {
-      "step0": "Kies je plug-in",
+      "step0": "Choose your plugin",
       "step1": "Enter data"
     }
   }

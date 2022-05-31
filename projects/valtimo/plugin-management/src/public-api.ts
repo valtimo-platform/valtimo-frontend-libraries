@@ -19,3 +19,4 @@ export * from './lib/services';
 export * from './lib/plugin-management.module';
 export * from './lib/components/plugin-management/plugin-management.component';
 export * from './lib/components/plugin-add-modal/plugin-add-modal.component';
+export * from './lib/components/plugin-add-select/plugin-add-select.component';

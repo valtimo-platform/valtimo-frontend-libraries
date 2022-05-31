@@ -102,6 +102,10 @@ export class PluginManagementStateService {
     this._selectedPluginDefinition$.next(definition);
   }
 
+  clearSelectedPluginDefinition(): void {
+    this._selectedPluginDefinition$.next(undefined);
+  }
+
   enableSaveButton(): void {
     this._saveButtonDisabled$.next(false);
   }
