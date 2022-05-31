@@ -11,10 +11,11 @@
  */
 
 /*
- * Public API Surface of process-management
+ * Public API Surface of plugin-management
  */
 
 export * from './lib/models';
 export * from './lib/services';
 export * from './lib/plugin-management.module';
 export * from './lib/components/plugin-management/plugin-management.component';
+export * from './lib/components/plugin-add-modal/plugin-add-modal.component';
