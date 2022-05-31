@@ -42,6 +42,7 @@ export class PluginAddModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.openShowSubscription();
+    this.openHideSubscription();
   }
 
   complete(): void {
