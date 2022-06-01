@@ -36,7 +36,7 @@
 .v-modal-backdrop--disappearing {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .v-modal {
@@ -46,7 +46,7 @@
   max-height: 100%;
   width: 100%;
   max-width: var(--v-modal-max-width);
-  transform: translateY(-100vh);
+  transform: translateX(100%);
   opacity: 0;
   transition: var(--v-modal-transition);
   cursor: var(--v-modal-cursor);

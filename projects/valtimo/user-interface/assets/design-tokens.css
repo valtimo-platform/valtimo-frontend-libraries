@@ -86,6 +86,7 @@
   --v-spacing-inline-sm: 6px;
   --v-spacing-inline-md: 12px;
   --v-spacing-inline-l: 16px;
+  --v-spacing-inline-xl: 24px;
   --v-spacing-inline-2xl: 30px;
   --v-spacing-inline-3xl: 58px;
   --v-spacing-inline-5xl: 75px;
@@ -204,7 +205,7 @@
   --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-backdrop-medium);
   --v-modal-backdrop-cursor: var(--v-cursor-clickable);
   --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);
-  --v-modal-backdrop-padding-inline: var(--v-spacing-inline-md);
+  --v-modal-backdrop-padding-inline: var(--v-spacing-inline-xl);
   --v-modal-backdrop-padding-block: var(--v-spacing-block-md);
   --v-modal-max-width: 850px;
   --v-modal-min-height: 150px;
