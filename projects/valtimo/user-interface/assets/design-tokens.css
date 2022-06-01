@@ -116,6 +116,8 @@
   /* backdrop filter */
   --v-backdrop-filter-heavy-blur: blur(13px);
   --v-backdrop-filter-heavy-blur-hover: blur(11px);
+  --v-backdrop-filter-medium-blur: blur(7px);
+  --v-backdrop-filter-medium-blur-hover: blur(5px);
   /* button */
   --v-button-font-color: var(--v-color-white);
   --v-button-icon-container-bg-color: var(--v-color-white);
@@ -200,8 +202,8 @@
   --v-modal-z-index: 9999;
   --v-modal-backdrop-color: var(--v-color-backdrop);
   --v-modal-backdrop-color-hover: var(--v-color-backdrop-hover);
-  --v-modal-backdrop-filter: var(--v-backdrop-filter-heavy-blur);
-  --v-modal-backdrop-filter-hover: var(--v-backdrop-filter-heavy-blur-hover);
+  --v-modal-backdrop-filter: var(--v-backdrop-filter-medium-blur);
+  --v-modal-backdrop-filter-hover: var(--v-backdrop-filter-medium-blur-hover);
   --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-backdrop-medium);
   --v-modal-backdrop-cursor: var(--v-cursor-clickable);
   --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);
