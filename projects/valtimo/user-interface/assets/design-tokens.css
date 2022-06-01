@@ -207,9 +207,9 @@
   --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-backdrop-medium);
   --v-modal-backdrop-cursor: var(--v-cursor-clickable);
   --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);
-  --v-modal-backdrop-padding-inline: var(--v-spacing-inline-xl);
+  --v-modal-backdrop-padding-inline: var(--v-spacing-inline-md);
   --v-modal-backdrop-padding-block: var(--v-spacing-block-md);
-  --v-modal-max-width: 850px;
+  --v-modal-max-width: 650px;
   --v-modal-min-height: 150px;
   --v-modal-box-shadow: var(--v-box-shadow-medium);
   --v-modal-background-color: var(--v-color-grey-7);
