@@ -84,6 +84,7 @@ import {ConnectorManagementModule} from '@valtimo/connector-management';
 import {CustomerModule} from '@valtimo/customer';
 import {ModalService, UserInterfaceService} from '@valtimo/user-interface';
 import {PluginManagementModule} from '@valtimo/plugin-management';
+import {PluginModule} from '@valtimo/plugin';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -155,6 +156,7 @@ export function tabsFactory() {
     OpenZaakModule,
     CustomerModule,
     PluginManagementModule,
+    PluginModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
