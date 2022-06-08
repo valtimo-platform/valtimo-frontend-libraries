@@ -24,7 +24,7 @@ import {delay} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class PluginService {
+export class PluginManagementService {
   private readonly OPEN_ZAAK_CONFIGURATIONS = [
     {
       definitionKey: 'openzaak',

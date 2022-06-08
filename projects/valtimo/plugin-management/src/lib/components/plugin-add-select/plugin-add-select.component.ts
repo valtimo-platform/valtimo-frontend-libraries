@@ -20,7 +20,7 @@ import {ConnectorProperties, ConnectorType} from '@valtimo/config';
 import {take} from 'rxjs/operators';
 import {AlertService} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
-import {PluginManagementStateService, PluginService} from '../../services';
+import {PluginManagementStateService, PluginManagementService} from '../../services';
 import {PluginDefinition} from '../../models';
 
 @Component({
@@ -36,7 +36,7 @@ export class PluginAddSelectComponent implements OnInit, OnDestroy {
   private refreshSubscription!: Subscription;
 
   constructor(
-    private readonly pluginService: PluginService,
+    private readonly pluginService: PluginManagementService,
     private readonly stateService: PluginManagementStateService,
     private readonly translateService: TranslateService
   ) {}

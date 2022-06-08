@@ -11,9 +11,10 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
+import {map, take} from 'rxjs/operators';
 import {PluginDefinition, PluginModal} from '../models';
+import {PluginService, PluginSpecification} from '@valtimo/plugin';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,18 @@ export class PluginManagementStateService {
   private readonly _selectedPluginDefinition$ = new BehaviorSubject<PluginDefinition | undefined>(
     undefined
   );
+  private readonly _selectedPluginSpecification$: Observable<PluginSpecification | null> =
+    combineLatest([this.pluginService.pluginSpecifications$, this.selectedPluginDefinition$]).pipe(
+      map(([pluginSpecifications, selectedPluginDefinition]) => {
+        const selectedPluginSpecification = pluginSpecifications?.find(
+          specification => specification.pluginId === selectedPluginDefinition?.key
+        );
+
+        return selectedPluginSpecification || null;
+      })
+    );
+
+  constructor(private readonly pluginService: PluginService) {}
 
   get showModal$(): Observable<PluginModal> {
     return this._showModal$.asObservable();
@@ -72,6 +85,10 @@ export class PluginManagementStateService {
 
   get hideModalSaveButton$(): Observable<boolean> {
     return this._hideModalSaveButton$.asObservable();
+  }
+
+  get selectedPluginSpecification$(): Observable<PluginSpecification | null> {
+    return this._selectedPluginSpecification$;
   }
 
   showModal(modalType: PluginModal): void {

@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 import {BehaviorSubject, combineLatest} from 'rxjs';
 import {TableColumn} from '@valtimo/user-interface';
-import {PluginManagementStateService, PluginService} from '../../services';
+import {PluginManagementStateService, PluginManagementService} from '../../services';
 import {TranslateService} from '@ngx-translate/core';
 import {map, tap} from 'rxjs/operators';
 
@@ -60,7 +60,7 @@ export class PluginManagementComponent {
   );
 
   constructor(
-    private readonly pluginService: PluginService,
+    private readonly pluginService: PluginManagementService,
     private readonly translateService: TranslateService,
     private readonly stateService: PluginManagementStateService
   ) {}

@@ -14,4 +14,9 @@
  * Public API Surface of plugin
  */
 
-export * from './lib/plugin.module';
+export * from './lib/services';
+export * from './lib/models';
+/* open-zaak plugin */
+export * from './lib/plugins/open-zaak/open-zaak-plugin.module';
+export * from './lib/plugins/open-zaak/components/open-zaak-configuration/open-zaak-configuration.component';
+export * from './lib/plugins/open-zaak/open-zaak-plugin.definition';
