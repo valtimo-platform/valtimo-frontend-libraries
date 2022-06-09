@@ -28,7 +28,7 @@ export class PluginConfigureComponent {
   @ViewChild('pluginConfigurationComponent', {static: true, read: ViewContainerRef})
   public dynamicContainer: ViewContainerRef;
 
-  readonly noPluginAvailable$ = new BehaviorSubject<boolean>(false);
+  readonly noConfigurationComponentAvailable$ = new BehaviorSubject<boolean>(false);
 
   selectedPluginSpecification$ = this.stateService.selectedPluginSpecification$.pipe(
     tap(selectedPluginSpecification => {
@@ -38,9 +38,9 @@ export class PluginConfigureComponent {
         const componentInstance = this.dynamicContainer.createComponent(
           selectedPluginSpecification.pluginConfigurationComponent
         );
-        this.noPluginAvailable$.next(false);
+        this.noConfigurationComponentAvailable$.next(false);
       } else {
-        this.noPluginAvailable$.next(true);
+        this.noConfigurationComponentAvailable$.next(true);
       }
     })
   );

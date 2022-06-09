@@ -16,7 +16,8 @@
 
 export * from './lib/services';
 export * from './lib/models';
+export * from './lib/pipes';
 /* open-zaak plugin */
 export * from './lib/plugins/open-zaak/open-zaak-plugin.module';
 export * from './lib/plugins/open-zaak/components/open-zaak-configuration/open-zaak-configuration.component';
-export * from './lib/plugins/open-zaak/open-zaak-plugin.definition';
+export * from './lib/plugins/open-zaak/open-zaak-plugin.specification';

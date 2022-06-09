@@ -30,6 +30,7 @@ import {PluginAddModalComponent} from './components/plugin-add-modal/plugin-add-
 import {PluginManagementStateService} from './services';
 import {PluginAddSelectComponent} from './components/plugin-add-select/plugin-add-select.component';
 import {PluginConfigureComponent} from './components/plugin-configure/plugin-configure.component';
+import {PluginTranslatePipeModule} from '@valtimo/plugin';
 
 @NgModule({
   providers: [PluginManagementStateService],
@@ -52,6 +53,7 @@ import {PluginConfigureComponent} from './components/plugin-configure/plugin-con
     ModalModule,
     ButtonModule,
     CardModule,
+    PluginTranslatePipeModule,
   ],
   exports: [
     PluginManagementComponent,

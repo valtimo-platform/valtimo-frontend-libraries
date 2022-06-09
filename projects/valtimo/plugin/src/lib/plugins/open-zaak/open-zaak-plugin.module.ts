@@ -17,10 +17,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {OpenZaakConfigurationComponent} from './components/open-zaak-configuration/open-zaak-configuration.component';
+import {TitleModule} from '@valtimo/user-interface';
+import {SpinnerModule} from '@valtimo/components';
 
 @NgModule({
   declarations: [OpenZaakConfigurationComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, TitleModule],
   exports: [OpenZaakConfigurationComponent],
 })
 export class OpenZaakPluginModule {}

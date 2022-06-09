@@ -156,6 +156,7 @@ export function tabsFactory() {
     OpenZaakModule,
     CustomerModule,
     PluginManagementModule,
+    OpenZaakPluginModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -165,14 +166,7 @@ export function tabsFactory() {
       },
     }),
   ],
-  providers: [
-    FormioComponent,
-    FormIoStateService,
-    ModalService,
-    UserInterfaceService,
-    PluginService,
-    {provide: 'plugins', useValue: [openZaakPluginSpecification]},
-  ],
+  providers: [FormioComponent, {provide: 'plugins', useValue: [openZaakPluginSpecification]}],
   entryComponents: [
     CustomFormExampleComponent,
     StartProcessCustomFormComponent,

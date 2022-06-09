@@ -17,12 +17,16 @@
 import {Inject, Injectable} from '@angular/core';
 import {PluginConfig, PluginSpecification} from '../models';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PluginService {
   private readonly _pluginSpecifications$ = new BehaviorSubject<Array<PluginSpecification>>([]);
+  private readonly _availablePluginIds$ = this._pluginSpecifications$.pipe(
+    map(pluginSpecifications => pluginSpecifications.map(specification => specification.pluginId))
+  );
 
   constructor(@Inject('plugins') private readonly pluginConfig: PluginConfig) {
     this._pluginSpecifications$.next(pluginConfig);
@@ -30,5 +34,9 @@ export class PluginService {
 
   get pluginSpecifications$(): Observable<Array<PluginSpecification>> {
     return this._pluginSpecifications$.asObservable();
+  }
+
+  get availablePluginIds$(): Observable<Array<string>> {
+    return this._availablePluginIds$;
   }
 }

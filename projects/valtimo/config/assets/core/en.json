@@ -646,16 +646,7 @@
     "complete": "Connect plugin function"
   },
   "plugin": {
-    "openzaak": {
-      "title": "OpenZaak",
-      "description": "OpenZaak is a production-worthy API platform that implements the API standard for case-oriented working (the ZGW APIs).",
-      "functions": {
-        "create-zaak": "Create zaak",
-        "set-status": "Set status",
-        "set-resultaat": "Set result",
-        "set-besluit": "Set besluit"
-      }
-    }
+    "noConfigurationComponent": "There is no configuration available for this plugin."
   },
   "pluginManagement": {
     "tableItemsText": "plugin configurations",
