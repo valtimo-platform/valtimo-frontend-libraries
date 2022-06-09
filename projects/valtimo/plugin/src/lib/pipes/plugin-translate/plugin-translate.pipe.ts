@@ -15,30 +15,19 @@ import {combineLatest, Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {PluginService} from '../../services';
+import {PluginSpecification} from '../../models';
+import {PluginTranslationService} from '../../services/plugin-translation.service';
 
 @Pipe({
   name: 'pluginTranslate',
 })
 export class PluginTranslatePipe implements PipeTransform {
   constructor(
-    private readonly translateService: TranslateService,
+    private readonly pluginTranslationService: PluginTranslationService,
     private readonly pluginService: PluginService
   ) {}
 
   transform(translateKey: string, pluginDefinitionKey: string): Observable<string> {
-    return combineLatest([
-      this.pluginService.pluginSpecifications$,
-      this.translateService.stream('key'),
-    ]).pipe(
-      map(([pluginSpecifications]) => {
-        const currentLang = this.translateService.currentLang;
-        const pluginSpecification = pluginSpecifications.find(
-          specification => specification.pluginId === pluginDefinitionKey
-        );
-        const translation = pluginSpecification?.pluginTranslations[currentLang][translateKey];
-
-        return translation || `${pluginDefinitionKey}.${translateKey}`;
-      })
-    );
+    return this.pluginTranslationService.translate(translateKey, pluginDefinitionKey);
   }
 }
