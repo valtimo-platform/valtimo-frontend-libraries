@@ -20,6 +20,7 @@ import {TableColumn} from '@valtimo/user-interface';
 import {PluginManagementStateService, PluginManagementService} from '../../services';
 import {TranslateService} from '@ngx-translate/core';
 import {map, tap} from 'rxjs/operators';
+import {PluginTranslationService} from '@valtimo/plugin';
 
 @Component({
   selector: 'valtimo-plugin-management',
@@ -51,7 +52,7 @@ export class PluginManagementComponent {
     map(([pluginConfigurations]) =>
       pluginConfigurations.map(configuration => ({
         ...configuration,
-        pluginName: this.translateService.instant(`plugin.${configuration.definitionKey}.title`),
+        pluginName: this.pluginTranslationService.instant('title', configuration.definitionKey),
       }))
     ),
     tap(() => {
@@ -62,7 +63,8 @@ export class PluginManagementComponent {
   constructor(
     private readonly pluginService: PluginManagementService,
     private readonly translateService: TranslateService,
-    private readonly stateService: PluginManagementStateService
+    private readonly stateService: PluginManagementStateService,
+    private readonly pluginTranslationService: PluginTranslationService
   ) {}
 
   showAddModal(): void {
