@@ -280,6 +280,12 @@
   --v-card-selectable-hover-bg-color: var(--v-color-grey-8);
   --v-card-title-loading-skeleton-width: 100px;
   --v-card-loading-skeleton-bg-color: var(--v-color-grey-4);
+  --v-card-header-bg-color: var(--v-color-grey-8);
+  --v-card-header-hover-bg-color: var(--v-color-grey-7);
+  --v-card-header-padding-block: var(--v-spacing-block-l);
+  --v-card-header-padding-inline: var(--v-spacing-inline-l);
+  --v-card-header-margin-block-end: var(--v-spacing-block-l);
+  --v-card-header-border: 1px solid var(--v-color-grey-5);
   /* title */
   --v-title-h1-color: var(--v-color-grey-1);
   --v-title-h1-font-weight: var(--v-font-weight-light);
