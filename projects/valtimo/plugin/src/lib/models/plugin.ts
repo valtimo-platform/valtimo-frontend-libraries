@@ -10,19 +10,28 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Input, Type} from '@angular/core';
+import {Observable} from 'rxjs';
+
+interface PluginConfigurationComponent {
+  save$: Observable<void>;
+  clear$: Observable<void>;
+  disabled: boolean;
+  error: boolean;
+  valid: EventEmitter<boolean>;
+  configuration: EventEmitter<object>;
+}
 
 interface PluginSpecification {
   pluginId: string;
   pluginLogoBase64: string;
-  pluginConfigurationComponent: any;
+  pluginConfigurationComponent: Type<PluginConfigurationComponent>;
   pluginTranslations: {
     [langKey: string]: {
       [translationKey: string]: string;
     };
   };
 }
-
 type PluginConfig = Array<PluginSpecification>;
 
-export {PluginSpecification, PluginConfig};
+export {PluginSpecification, PluginConfig, PluginConfigurationComponent};

@@ -10,11 +10,20 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {PluginConfigurationComponent} from '../../../../models';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'valtimo-open-zaak-configuration',
   templateUrl: './open-zaak-configuration.component.html',
   styleUrls: ['./open-zaak-configuration.component.scss'],
 })
-export class OpenZaakConfigurationComponent {}
+export class OpenZaakConfigurationComponent implements PluginConfigurationComponent {
+  @Input() clear$: Observable<void>;
+  @Input() save$: Observable<void>;
+  @Input() disabled: boolean;
+  @Input() error: boolean;
+  @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() configuration: EventEmitter<object> = new EventEmitter<object>();
+}
