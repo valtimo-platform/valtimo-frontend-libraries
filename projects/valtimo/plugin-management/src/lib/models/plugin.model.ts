@@ -14,6 +14,10 @@ interface PluginDefinition {
   key: string;
 }
 
+interface PluginDefinitionWithLogo extends PluginDefinition {
+  pluginLogoBase64?: string;
+}
+
 interface PluginConfiguration {
   definitionKey: string;
   key: string;
@@ -24,4 +28,4 @@ interface PluginFunction {
   key: string;
 }
 
-export {PluginConfiguration, PluginDefinition, PluginFunction};
+export {PluginConfiguration, PluginDefinition, PluginFunction, PluginDefinitionWithLogo};

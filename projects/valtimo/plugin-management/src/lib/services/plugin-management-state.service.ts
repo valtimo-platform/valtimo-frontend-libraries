@@ -13,7 +13,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {map, take} from 'rxjs/operators';
-import {PluginDefinition, PluginModal} from '../models';
+import {PluginDefinition, PluginDefinitionWithLogo, PluginModal} from '../models';
 import {PluginService, PluginSpecification} from '@valtimo/plugin';
 
 @Injectable({
@@ -30,6 +30,24 @@ export class PluginManagementStateService {
   private readonly _hideModalSaveButton$ = new BehaviorSubject<boolean>(false);
   private readonly _pluginDefinitions$ = new BehaviorSubject<Array<PluginDefinition> | undefined>(
     undefined
+  );
+  private readonly _pluginDefinitionsWithLogos$: Observable<
+    Array<PluginDefinitionWithLogo> | undefined
+  > = combineLatest([this._pluginDefinitions$, this.pluginService.pluginSpecifications$]).pipe(
+    map(([pluginDefinitions, pluginSpecifications]) => {
+      return pluginDefinitions?.map(pluginDefinition => {
+        const pluginSpecification = pluginSpecifications.find(
+          specification => specification.pluginId === pluginDefinition.key
+        );
+
+        return {
+          ...pluginDefinition,
+          ...(pluginSpecification?.pluginLogoBase64 && {
+            pluginLogoBase64: pluginSpecification?.pluginLogoBase64,
+          }),
+        };
+      });
+    })
   );
   private readonly _selectedPluginDefinition$ = new BehaviorSubject<PluginDefinition | undefined>(
     undefined
@@ -65,6 +83,10 @@ export class PluginManagementStateService {
 
   get pluginDefinitions$(): Observable<Array<PluginDefinition> | undefined> {
     return this._pluginDefinitions$.asObservable();
+  }
+
+  get pluginDefinitionsWithLogos$(): Observable<Array<PluginDefinitionWithLogo> | undefined> {
+    return this._pluginDefinitionsWithLogos$;
   }
 
   get selectedPluginDefinition$(): Observable<PluginDefinition | undefined> {

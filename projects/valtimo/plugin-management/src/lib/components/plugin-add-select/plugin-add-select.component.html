@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="pluginDefinitions$ | async as pluginDefinitions; else loading">
+<ng-container *ngIf="pluginDefinitionsWithLogos$ | async as pluginDefinitions; else loading">
   <div fxLayout="row wrap" fxLayoutGap="22px grid">
     <div fxFlex="33.3%" *ngFor="let pluginDefinition of pluginDefinitions">
       <v-card
@@ -26,7 +26,13 @@
         (selectEvent)="selectPluginDefinition(pluginDefinition)"
         (deselectEvent)="deselectPluginDefinition()"
       >
-        <div role="header">test</div>
+        <div *ngIf="pluginDefinition.pluginLogoBase64" role="header">
+          <img
+            class="plugin-definition-logo"
+            [title]="'title' | pluginTranslate: pluginDefinition.key | async"
+            [src]="pluginDefinition.pluginLogoBase64"
+          />
+        </div>
       </v-card>
     </div>
   </div>
