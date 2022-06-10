@@ -15,6 +15,7 @@ import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {PluginDefinition, PluginDefinitionWithLogo, PluginModal} from '../models';
 import {PluginService, PluginSpecification} from '@valtimo/plugin';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +44,9 @@ export class PluginManagementStateService {
         return {
           ...pluginDefinition,
           ...(pluginSpecification?.pluginLogoBase64 && {
-            pluginLogoBase64: pluginSpecification?.pluginLogoBase64,
+            pluginLogoBase64: this.sanitizer.bypassSecurityTrustResourceUrl(
+              pluginSpecification?.pluginLogoBase64
+            ),
           }),
         };
       });
@@ -63,7 +66,10 @@ export class PluginManagementStateService {
       })
     );
 
-  constructor(private readonly pluginService: PluginService) {}
+  constructor(
+    private readonly pluginService: PluginService,
+    private readonly sanitizer: DomSanitizer
+  ) {}
 
   get showModal$(): Observable<PluginModal> {
     return this._showModal$.asObservable();
