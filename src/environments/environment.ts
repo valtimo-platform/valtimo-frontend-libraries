@@ -171,7 +171,27 @@ export const environment: ValtimoConfig = {
       },
     ],
   },
-  tasks: []
+  customTaskList: {
+    fields: [
+      {
+        propertyName: 'due',
+        translationKey: 'due',
+      },
+      {
+        propertyName: 'created',
+        translationKey: 'created',
+        sortable: true
+      },
+      {
+        propertyName: 'name',
+        translationKey: 'name',
+      },
+      {
+        propertyName: 'assignee',
+        translationKey: 'valtimoAssignee.fullName',
+      },
+    ]
+  }
 };
 
 /*

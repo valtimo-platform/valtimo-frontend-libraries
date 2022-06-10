@@ -135,33 +135,50 @@ export class TaskListComponent implements OnDestroy {
           task.due = moment(task.due).format('DD MMM YYYY HH:mm');
         }
       });
-      this.translationSubscription = combineLatest([
-        this.translateService.stream(`task-list.fieldLabels.created`),
-        this.translateService.stream(`task-list.fieldLabels.name`),
-        this.translateService.stream(`task-list.fieldLabels.valtimoAssignee.fullName`),
-        this.translateService.stream(`task-list.fieldLabels.due`),
-      ]).subscribe(([created, name, assignee, due]) => {
-        this.tasks[type].fields = [
-          {
-            key: 'created',
-            label: created,
-          },
-          {
-            key: 'name',
-            label: name,
-          },
-          {
-            key: 'valtimoAssignee.fullName',
-            label: assignee,
-          },
-          {
-            key: 'due',
-            label: due,
-          },
-        ];
-      });
+      this.taskService.getConfigCustomTaskList() ? this.customTaskListFields(type) : this.defaultTaskListFields(type);
+    });
+  }
 
+  public defaultTaskListFields(type) {
+    this.translationSubscription = combineLatest([
+      this.translateService.stream(`task-list.fieldLabels.created`),
+      this.translateService.stream(`task-list.fieldLabels.name`),
+      this.translateService.stream(`task-list.fieldLabels.valtimoAssignee.fullName`),
+      this.translateService.stream(`task-list.fieldLabels.due`),
+    ]).subscribe(([created, name, assignee, due]) => {
+      this.tasks[type].fields = [
+        {
+          key: 'created',
+          label: created,
+        },
+        {
+          key: 'name',
+          label: name,
+        },
+        {
+          key: 'valtimoAssignee.fullName',
+          label: assignee,
+        },
+        {
+          key: 'due',
+          label: due,
+        },
+      ];
+    });
+  }
 
+  public customTaskListFields(type) {
+    const customTaskListFields = this.taskService.getConfigCustomTaskList().fields;
+
+    this.translationSubscription = combineLatest(
+      customTaskListFields.map(column => this.translateService.stream(`task-list.fieldLabels.${column.translationKey}`))
+    ).subscribe(labels => {
+      this.tasks[type].fields = customTaskListFields.map((column, index) => ({
+        key: column.propertyName,
+        label: labels[index],
+        sortable: column.sortable,
+        ...(column.viewType && {viewType: column.viewType}),
+      }));
     });
   }
 

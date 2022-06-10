@@ -41,6 +41,11 @@ export interface CustomDossierHeaderItem {
   customClass?: string;
 }
 
+export interface CustomTaskList {
+  fields: Array<DefinitionColumn>
+  defaultSortedColumn?: string
+}
+
 export interface ValtimoConfig {
   // eslint-disable-next-line @typescript-eslint/ban-types
   initializers: ((injector: Injector) => Function)[];
@@ -75,7 +80,7 @@ export interface ValtimoConfig {
   featureToggles?: {
     disableFormFlow?: boolean;
   };
-  tasks?: Array<DefinitionColumn>
+  customTaskList?: CustomTaskList
 }
 
 export enum UploadProvider {
