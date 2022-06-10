@@ -202,9 +202,9 @@
   --v-modal-z-index: 9999;
   --v-modal-backdrop-color: var(--v-color-backdrop);
   --v-modal-backdrop-color-hover: var(--v-color-backdrop-hover);
-  --v-modal-backdrop-filter: var(--v-backdrop-filter-medium-blur);
-  --v-modal-backdrop-filter-hover: var(--v-backdrop-filter-medium-blur-hover);
-  --v-modal-backdrop-transition: var(--v-transition-bg-medium), var(--v-transition-backdrop-medium);
+  --v-modal-backdrop-filter: none;
+  --v-modal-backdrop-filter-hover: none;
+  --v-modal-backdrop-transition: var(--v-transition-bg-medium);
   --v-modal-backdrop-cursor: var(--v-cursor-clickable);
   --v-modal-backdrop-cursor-disappearing: var(--v-cursor-default);
   --v-modal-backdrop-padding-inline: var(--v-spacing-inline-md);
