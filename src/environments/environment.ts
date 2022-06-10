@@ -171,6 +171,7 @@ export const environment: ValtimoConfig = {
       },
     ],
   },
+  tasks: []
 };
 
 /*

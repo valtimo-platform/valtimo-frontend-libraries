@@ -75,6 +75,7 @@ export interface ValtimoConfig {
   featureToggles?: {
     disableFormFlow?: boolean;
   };
+  tasks?: Array<DefinitionColumn>
 }
 
 export enum UploadProvider {

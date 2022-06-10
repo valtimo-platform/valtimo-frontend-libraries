@@ -135,24 +135,33 @@ export class TaskListComponent implements OnDestroy {
           task.due = moment(task.due).format('DD MMM YYYY HH:mm');
         }
       });
-      this.tasks[type].fields = [
-        {
-          key: 'created',
-          label: 'Created on',
-        },
-        {
-          key: 'name',
-          label: 'Name',
-        },
-        {
-          key: 'valtimoAssignee.fullName',
-          label: 'Assignee',
-        },
-        {
-          key: 'due',
-          label: 'Due date',
-        },
-      ];
+      this.translationSubscription = combineLatest([
+        this.translateService.stream(`task-list.fieldLabels.created`),
+        this.translateService.stream(`task-list.fieldLabels.name`),
+        this.translateService.stream(`task-list.fieldLabels.valtimoAssignee.fullName`),
+        this.translateService.stream(`task-list.fieldLabels.due`),
+      ]).subscribe(([created, name, assignee, due]) => {
+        this.tasks[type].fields = [
+          {
+            key: 'created',
+            label: created,
+          },
+          {
+            key: 'name',
+            label: name,
+          },
+          {
+            key: 'valtimoAssignee.fullName',
+            label: assignee,
+          },
+          {
+            key: 'due',
+            label: due,
+          },
+        ];
+      });
+
+
     });
   }
 
