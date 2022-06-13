@@ -24,6 +24,7 @@ import {
   PluginManagementService,
 } from '@valtimo/plugin-management';
 import {map} from 'rxjs/operators';
+import {PluginService, PluginSpecification} from '@valtimo/plugin';
 
 @Injectable({
   providedIn: 'root',
@@ -34,8 +35,24 @@ export class ProcessLinkStateService {
     undefined
   );
   private readonly _selectedPluginFunction$ = new BehaviorSubject<PluginFunction>(undefined);
+  private readonly _selectedPluginSpecification$: Observable<PluginSpecification | null> =
+    combineLatest([
+      this.pluginService.pluginSpecifications$,
+      this._selectedPluginConfiguration$,
+    ]).pipe(
+      map(([pluginSpecifications, selectedPluginConfiguration]) => {
+        const selectedPluginSpecification = pluginSpecifications?.find(
+          specification => specification.pluginId === selectedPluginConfiguration?.definitionKey
+        );
 
-  constructor(private readonly pluginManagementService: PluginManagementService) {}
+        return selectedPluginSpecification || null;
+      })
+    );
+
+  constructor(
+    private readonly pluginManagementService: PluginManagementService,
+    private readonly pluginService: PluginService
+  ) {}
 
   get selectedPluginDefinition$(): Observable<PluginDefinition> {
     return this._selectedPluginDefinition$.asObservable();
@@ -47,6 +64,10 @@ export class ProcessLinkStateService {
 
   get selectedPluginFunction$(): Observable<PluginFunction> {
     return this._selectedPluginFunction$.asObservable();
+  }
+
+  get selectedPluginSpecification$(): Observable<PluginSpecification | null> {
+    return this._selectedPluginSpecification$;
   }
 
   selectPluginDefinition(definition: PluginDefinition): void {
