@@ -35,11 +35,15 @@ export class PluginFunctionConfigurationComponent {
     this.stateService.selectedPluginFunction$,
   ]).pipe(
     tap(([selectedPluginSpecification, pluginFunction]) => {
+      const selectedPluginFunctionId = pluginFunction?.key;
+      const selectedPluginFunctionConfigurationComponent =
+        selectedPluginSpecification?.functionConfigurationComponents[selectedPluginFunctionId];
+
       this.dynamicContainer.clear();
 
-      if (selectedPluginSpecification) {
+      if (selectedPluginSpecification && selectedPluginFunctionConfigurationComponent) {
         const componentInstance = this.dynamicContainer.createComponent(
-          selectedPluginSpecification.pluginConfigurationComponent
+          selectedPluginFunctionConfigurationComponent
         );
         this.noConfigurationComponentAvailable$.next(false);
       } else {

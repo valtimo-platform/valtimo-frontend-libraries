@@ -18,6 +18,12 @@ const openZaakPluginSpecification: PluginSpecification = {
   pluginId: 'openzaak',
   pluginConfigurationComponent: OpenZaakConfigurationComponent,
   pluginLogoBase64: OPEN_ZAAK_PLUGIN_LOGO_BASE64,
+  functionConfigurationComponents: {
+    'create-zaak': OpenZaakConfigurationComponent,
+    'set-status': OpenZaakConfigurationComponent,
+    'set-resultaat': OpenZaakConfigurationComponent,
+    'set-besluit': OpenZaakConfigurationComponent,
+  },
   pluginTranslations: {
     nl: {
       title: 'OpenZaak',
