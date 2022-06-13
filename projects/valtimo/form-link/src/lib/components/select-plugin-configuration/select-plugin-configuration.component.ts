@@ -20,6 +20,7 @@ import {
   PluginDefinition,
   PluginConfiguration,
   PluginManagementService,
+  PluginConfigurationWithLogo,
 } from '@valtimo/plugin-management';
 import {ProcessLinkStateService} from '../../services/process-link-state.service';
 import {Observable, of} from 'rxjs';
@@ -30,8 +31,9 @@ import {Observable, of} from 'rxjs';
   styleUrls: ['./select-plugin-configuration.component.scss'],
 })
 export class SelectPluginConfigurationComponent {
-  readonly pluginConfigurations$: Observable<Array<PluginConfiguration>> =
-    this.pluginManagementService.getAllPluginConfigurations();
+  readonly pluginConfigurations$: Observable<Array<PluginConfigurationWithLogo>> =
+    this.pluginManagementService.getAllPluginConfigurationsWithLogos();
+
   readonly selectedPluginConfiguration$ = this.processLinkStateService.selectedPluginConfiguration$;
 
   constructor(

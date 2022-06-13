@@ -15,8 +15,15 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {PluginConfiguration, PluginDefinition, PluginFunction} from '@valtimo/plugin-management';
+import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
+import {
+  PluginConfiguration,
+  PluginDefinition,
+  PluginFunction,
+  PluginConfigurationWithLogo,
+  PluginManagementService,
+} from '@valtimo/plugin-management';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +34,8 @@ export class ProcessLinkStateService {
     undefined
   );
   private readonly _selectedPluginFunction$ = new BehaviorSubject<PluginFunction>(undefined);
+
+  constructor(private readonly pluginManagementService: PluginManagementService) {}
 
   get selectedPluginDefinition$(): Observable<PluginDefinition> {
     return this._selectedPluginDefinition$.asObservable();

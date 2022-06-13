@@ -26,8 +26,18 @@ interface PluginConfiguration {
   title: string;
 }
 
+interface PluginConfigurationWithLogo extends PluginConfiguration {
+  pluginLogoBase64?: SafeResourceUrl;
+}
+
 interface PluginFunction {
   key: string;
 }
 
-export {PluginConfiguration, PluginDefinition, PluginFunction, PluginDefinitionWithLogo};
+export {
+  PluginConfiguration,
+  PluginDefinition,
+  PluginFunction,
+  PluginDefinitionWithLogo,
+  PluginConfigurationWithLogo,
+};

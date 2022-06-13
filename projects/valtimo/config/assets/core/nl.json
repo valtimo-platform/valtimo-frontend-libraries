@@ -643,6 +643,7 @@
     "step0": "Kies je plugin",
     "step1": "Kies je configuratie",
     "step2": "Kies je functie",
+    "step3": "Functie configureren",
     "complete": "Pluginfunctie koppelen"
   },
   "plugin": {

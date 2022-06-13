@@ -643,6 +643,7 @@
     "step0": "Select your plugin",
     "step1": "Select your configuration",
     "step2": "Select your function",
+    "step3": "Configure function",
     "complete": "Connect plugin function"
   },
   "plugin": {
