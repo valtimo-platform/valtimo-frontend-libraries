@@ -26,12 +26,16 @@ interface PluginSpecification {
   pluginId: string;
   pluginLogoBase64: string;
   pluginConfigurationComponent: Type<PluginConfigurationComponent>;
+  functionConfigurationComponents?: {
+    [functionId: string]: Type<PluginConfigurationComponent>;
+  };
   pluginTranslations: {
     [langKey: string]: {
       [translationKey: string]: string;
     };
   };
 }
+
 type PluginConfig = Array<PluginSpecification>;
 
 export {PluginSpecification, PluginConfig, PluginConfigurationComponent};

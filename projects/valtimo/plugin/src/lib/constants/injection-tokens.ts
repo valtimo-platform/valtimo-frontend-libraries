@@ -10,15 +10,11 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.See the License for the specific language governing permissions and limitations under the License.
  */
 
-/*
- * Public API Surface of plugin
- */
+import {InjectionToken} from '@angular/core';
+import {PluginConfig} from '../models';
 
-export * from './lib/services';
-export * from './lib/models';
-export * from './lib/pipes';
-export * from './lib/constants';
-/* open-zaak plugin */
-export * from './lib/plugins/open-zaak/open-zaak-plugin.module';
-export * from './lib/plugins/open-zaak/components/open-zaak-configuration/open-zaak-configuration.component';
-export * from './lib/plugins/open-zaak/open-zaak-plugin.specification';
+const PLUGINS_TOKEN = new InjectionToken<PluginConfig>(
+  'Provide plugin config; an array of plugin specifications.'
+);
+
+export {PLUGINS_TOKEN};

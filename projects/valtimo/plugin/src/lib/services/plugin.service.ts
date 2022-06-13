@@ -18,6 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {PluginConfig, PluginSpecification} from '../models';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {PLUGINS_TOKEN} from '../constants';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,7 @@ export class PluginService {
     map(pluginSpecifications => pluginSpecifications.map(specification => specification.pluginId))
   );
 
-  constructor(@Inject('plugins') private readonly pluginConfig: PluginConfig) {
+  constructor(@Inject(PLUGINS_TOKEN) private readonly pluginConfig: PluginConfig) {
     this._pluginSpecifications$.next(pluginConfig);
   }
 

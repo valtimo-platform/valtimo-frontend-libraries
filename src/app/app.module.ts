@@ -84,7 +84,12 @@ import {ConnectorManagementModule} from '@valtimo/connector-management';
 import {CustomerModule} from '@valtimo/customer';
 import {ModalService, UserInterfaceService} from '@valtimo/user-interface';
 import {PluginManagementModule} from '@valtimo/plugin-management';
-import {PluginService, OpenZaakPluginModule, openZaakPluginSpecification} from '@valtimo/plugin';
+import {
+  PluginService,
+  OpenZaakPluginModule,
+  openZaakPluginSpecification,
+  PLUGINS_TOKEN,
+} from '@valtimo/plugin';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -166,7 +171,7 @@ export function tabsFactory() {
       },
     }),
   ],
-  providers: [FormioComponent, {provide: 'plugins', useValue: [openZaakPluginSpecification]}],
+  providers: [FormioComponent, {provide: PLUGINS_TOKEN, useValue: [openZaakPluginSpecification]}],
   entryComponents: [
     CustomFormExampleComponent,
     StartProcessCustomFormComponent,
