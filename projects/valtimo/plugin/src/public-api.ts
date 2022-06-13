@@ -22,3 +22,7 @@ export * from './lib/constants';
 export * from './lib/plugins/open-zaak/open-zaak-plugin.module';
 export * from './lib/plugins/open-zaak/components/open-zaak-configuration/open-zaak-configuration.component';
 export * from './lib/plugins/open-zaak/open-zaak-plugin.specification';
+export * from './lib/plugins/open-zaak/components/create-zaak-configuration/create-zaak-configuration.component';
+export * from './lib/plugins/open-zaak/components/set-besluit-configuration/set-besluit-configuration.component';
+export * from './lib/plugins/open-zaak/components/set-resultaat-configuration/set-resultaat-configuration.component';
+export * from './lib/plugins/open-zaak/components/set-status-configuration/set-status-configuration.component';

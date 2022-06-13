@@ -13,16 +13,20 @@
 import {PluginSpecification} from '../../models';
 import {OpenZaakConfigurationComponent} from './components/open-zaak-configuration/open-zaak-configuration.component';
 import {OPEN_ZAAK_PLUGIN_LOGO_BASE64} from './assets';
+import {CreateZaakConfigurationComponent} from './components/create-zaak-configuration/create-zaak-configuration.component';
+import {SetBesluitConfigurationComponent} from './components/set-besluit-configuration/set-besluit-configuration.component';
+import {SetResultaatConfigurationComponent} from './components/set-resultaat-configuration/set-resultaat-configuration.component';
+import {SetStatusConfigurationComponent} from './components/set-status-configuration/set-status-configuration.component';
 
 const openZaakPluginSpecification: PluginSpecification = {
   pluginId: 'openzaak',
   pluginConfigurationComponent: OpenZaakConfigurationComponent,
   pluginLogoBase64: OPEN_ZAAK_PLUGIN_LOGO_BASE64,
   functionConfigurationComponents: {
-    'create-zaak': OpenZaakConfigurationComponent,
-    'set-status': OpenZaakConfigurationComponent,
-    'set-resultaat': OpenZaakConfigurationComponent,
-    'set-besluit': OpenZaakConfigurationComponent,
+    'create-zaak': CreateZaakConfigurationComponent,
+    'set-status': SetStatusConfigurationComponent,
+    'set-resultaat': SetResultaatConfigurationComponent,
+    'set-besluit': SetBesluitConfigurationComponent,
   },
   pluginTranslations: {
     nl: {

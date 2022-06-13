@@ -19,10 +19,26 @@ import {CommonModule} from '@angular/common';
 import {OpenZaakConfigurationComponent} from './components/open-zaak-configuration/open-zaak-configuration.component';
 import {TitleModule} from '@valtimo/user-interface';
 import {SpinnerModule} from '@valtimo/components';
+import {CreateZaakConfigurationComponent} from './components/create-zaak-configuration/create-zaak-configuration.component';
+import {SetBesluitConfigurationComponent} from './components/set-besluit-configuration/set-besluit-configuration.component';
+import {SetResultaatConfigurationComponent} from './components/set-resultaat-configuration/set-resultaat-configuration.component';
+import {SetStatusConfigurationComponent} from './components/set-status-configuration/set-status-configuration.component';
 
 @NgModule({
-  declarations: [OpenZaakConfigurationComponent],
+  declarations: [
+    OpenZaakConfigurationComponent,
+    CreateZaakConfigurationComponent,
+    SetBesluitConfigurationComponent,
+    SetResultaatConfigurationComponent,
+    SetStatusConfigurationComponent,
+  ],
   imports: [CommonModule, TitleModule],
-  exports: [OpenZaakConfigurationComponent],
+  exports: [
+    OpenZaakConfigurationComponent,
+    CreateZaakConfigurationComponent,
+    SetBesluitConfigurationComponent,
+    SetResultaatConfigurationComponent,
+    SetStatusConfigurationComponent,
+  ],
 })
 export class OpenZaakPluginModule {}
