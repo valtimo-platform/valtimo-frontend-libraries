@@ -23,6 +23,7 @@ import {NGXLogger} from 'ngx-logger';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {TranslateService} from '@ngx-translate/core';
 import {combineLatest, Subscription} from 'rxjs';
+import {SortState} from '@valtimo/config';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -42,6 +43,7 @@ export class TaskListComponent implements OnDestroy {
   public currentTaskType = 'mine';
   public listTitle: string | null = null;
   public listDescription: string | null = null;
+  public sortState: SortState | null = null;
   private translationSubscription: Subscription;
 
   public paginationClicked(page: number, type: string) {
@@ -54,13 +56,15 @@ export class TaskListComponent implements OnDestroy {
     private router: Router,
     private logger: NGXLogger,
     private translateService: TranslateService
-  ) {}
+  ) {
+    this.setDefaultSorting();
+  }
 
   paginationSet() {
     this.tasks.mine.pagination.size =
       this.tasks.all.pagination.size =
-      this.tasks.open.pagination.size =
-        this.tasks[this.currentTaskType].pagination.size;
+        this.tasks.open.pagination.size =
+          this.tasks[this.currentTaskType].pagination.size;
     this.getTasks(this.currentTaskType);
   }
 
@@ -126,6 +130,10 @@ export class TaskListComponent implements OnDestroy {
         this.logger.fatal('Unreachable case');
     }
 
+    if (this.sortState) {
+      params.sort = this.getSortString(this.sortState);
+    }
+
     this.taskService.queryTasks(params).subscribe((results: any) => {
       this.tasks[type].pagination.collectionSize = results.headers.get('x-total-count');
       this.tasks[type].tasks = results.body as Array<Task>;
@@ -188,6 +196,19 @@ export class TaskListComponent implements OnDestroy {
     } else {
       return false;
     }
+  }
+
+  setDefaultSorting() {
+    this.sortState = this.taskService.getConfigCustomTaskList()?.defaultSortedColumn || null;
+  }
+
+  public sortChanged(sortState: SortState) {
+    this.sortState = sortState;
+    this.getTasks(this.currentTaskType)
+  }
+
+  getSortString(sort: SortState): string {
+    return `${sort.state.name},${sort.state.direction}`;
   }
 
   ngOnDestroy(): void {

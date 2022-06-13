@@ -190,7 +190,14 @@ export const environment: ValtimoConfig = {
         propertyName: 'assignee',
         translationKey: 'valtimoAssignee.fullName',
       },
-    ]
+    ],
+    defaultSortedColumn: {
+      isSorting: true,
+      state: {
+        name: 'created',
+        direction: 'ASC'
+      }
+    }
   }
 };
 
