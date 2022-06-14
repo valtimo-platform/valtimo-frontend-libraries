@@ -58,10 +58,6 @@ export class PluginConfigurationContainerComponent
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<object> = new EventEmitter<object>();
 
-  private readonly _componentType = new BehaviorSubject<ConfigurationComponentType | null>(null);
-  private readonly _pluginDefinitionKey = new BehaviorSubject<string>('');
-  private readonly _functionKey = new BehaviorSubject<string>('');
-
   readonly noConfigurationComponentAvailable$ = new BehaviorSubject<boolean>(false);
   readonly componentRef$ = new BehaviorSubject<
     ComponentRef<PluginConfigurationComponent> | undefined
@@ -71,6 +67,10 @@ export class PluginConfigurationContainerComponent
   private pluginSubscription!: Subscription;
   private validSubscription!: Subscription;
   private configurationSubscription!: Subscription;
+
+  private readonly _componentType = new BehaviorSubject<ConfigurationComponentType | null>(null);
+  private readonly _pluginDefinitionKey = new BehaviorSubject<string>('');
+  private readonly _functionKey = new BehaviorSubject<string>('');
 
   constructor(private readonly pluginService: PluginService) {}
 
