@@ -17,15 +17,17 @@
 import {
   Component,
   ComponentRef,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   Type,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import {PluginService} from '../../services';
-import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {map, take, tap} from 'rxjs/operators';
 import {ConfigurationComponentType, PluginConfigurationComponent} from '../../models';
 
@@ -34,7 +36,9 @@ import {ConfigurationComponentType, PluginConfigurationComponent} from '../../mo
   templateUrl: './plugin-configuration-container.component.html',
   styleUrls: ['./plugin-configuration-container.component.scss'],
 })
-export class PluginConfigurationContainerComponent implements OnInit, OnDestroy {
+export class PluginConfigurationContainerComponent
+  implements OnInit, OnDestroy, PluginConfigurationComponent
+{
   @ViewChild('pluginConfigurationComponent', {static: true, read: ViewContainerRef})
   public dynamicContainer: ViewContainerRef;
 
@@ -47,17 +51,26 @@ export class PluginConfigurationContainerComponent implements OnInit, OnDestroy 
   @Input() set functionKey(key: string) {
     this._functionKey.next(key);
   }
+  @Input() clear$: Observable<void>;
+  @Input() save$: Observable<void>;
+  @Input() disabled: boolean;
+  @Input() error: boolean;
+  @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() configuration: EventEmitter<object> = new EventEmitter<object>();
 
   private readonly _componentType = new BehaviorSubject<ConfigurationComponentType | null>(null);
   private readonly _pluginDefinitionKey = new BehaviorSubject<string>('');
   private readonly _functionKey = new BehaviorSubject<string>('');
 
   readonly noConfigurationComponentAvailable$ = new BehaviorSubject<boolean>(false);
-  readonly componentInstance$ = new BehaviorSubject<
+  readonly componentRef$ = new BehaviorSubject<
     ComponentRef<PluginConfigurationComponent> | undefined
   >(undefined);
-  private componentInstanceSubscription!: Subscription;
+
+  private componentRefSubscription!: Subscription;
   private pluginSubscription!: Subscription;
+  private validSubscription!: Subscription;
+  private configurationSubscription!: Subscription;
 
   constructor(private readonly pluginService: PluginService) {}
 
@@ -68,7 +81,7 @@ export class PluginConfigurationContainerComponent implements OnInit, OnDestroy 
 
   ngOnDestroy(): void {
     this.pluginSubscription?.unsubscribe();
-    this.componentInstanceSubscription?.unsubscribe();
+    this.componentRefSubscription?.unsubscribe();
   }
 
   private openPluginSubscription(): void {
@@ -97,8 +110,8 @@ export class PluginConfigurationContainerComponent implements OnInit, OnDestroy 
           }
 
           if (configurationComponent) {
-            const componentInstance = this.dynamicContainer.createComponent(configurationComponent);
-            this.componentInstance$.next(componentInstance);
+            const componentRef = this.dynamicContainer.createComponent(configurationComponent);
+            this.componentRef$.next(componentRef);
             this.noConfigurationComponentAvailable$.next(false);
           } else {
             this.noConfigurationComponentAvailable$.next(true);
@@ -109,8 +122,27 @@ export class PluginConfigurationContainerComponent implements OnInit, OnDestroy 
   }
 
   private openComponentInstanceSubscription(): void {
-    this.componentInstanceSubscription = this.componentInstance$.subscribe(instance => {
-      console.log('instance', instance);
+    this.componentRefSubscription = this.componentRef$.subscribe(ref => {
+      const instance = ref?.instance;
+
+      this.configurationSubscription?.unsubscribe();
+      this.validSubscription?.unsubscribe();
+
+      if (instance) {
+        instance.save$ = this.save$;
+        instance.clear$ = this.clear$;
+        instance.valid = this.valid;
+        instance.error = this.error;
+        instance.disabled = this.disabled;
+
+        this.validSubscription = instance.valid.subscribe(valid => {
+          this.valid.emit(valid);
+        });
+
+        this.configurationSubscription = instance.configuration.subscribe(configuration => {
+          this.configuration.emit(configuration);
+        });
+      }
     });
   }
 }
