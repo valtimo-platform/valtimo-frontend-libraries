@@ -29,7 +29,11 @@ import {
 import {PluginService} from '../../services';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {map, take, tap} from 'rxjs/operators';
-import {ConfigurationComponentType, PluginConfigurationComponent} from '../../models';
+import {
+  ConfigurationComponentType,
+  PluginConfigurationComponent,
+  PluginConfigurationData,
+} from '../../models';
 
 @Component({
   selector: 'valtimo-plugin-configuration-container',
@@ -56,7 +60,8 @@ export class PluginConfigurationContainerComponent
   @Input() disabled: boolean;
   @Input() error: boolean;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<object> = new EventEmitter<object>();
+  @Output() configuration: EventEmitter<PluginConfigurationData> =
+    new EventEmitter<PluginConfigurationData>();
 
   readonly noConfigurationComponentAvailable$ = new BehaviorSubject<boolean>(false);
   readonly componentRef$ = new BehaviorSubject<

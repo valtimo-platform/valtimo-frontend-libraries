@@ -11,7 +11,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {PluginConfigurationComponent} from '../../../../models';
+import {PluginConfigurationComponent, PluginConfigurationData} from '../../../../models';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -25,5 +25,6 @@ export class SetBesluitConfigurationComponent implements PluginConfigurationComp
   @Input() disabled: boolean;
   @Input() error: boolean;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<object> = new EventEmitter<object>();
+  @Output() configuration: EventEmitter<PluginConfigurationData> =
+    new EventEmitter<PluginConfigurationData>();
 }

@@ -13,13 +13,17 @@
 import {Component, EventEmitter, Input, Type} from '@angular/core';
 import {Observable} from 'rxjs';
 
+interface PluginConfigurationData {
+  [key: string]: any;
+}
+
 interface PluginConfigurationComponent {
   save$: Observable<void>;
   clear$: Observable<void>;
   disabled: boolean;
   error: boolean;
   valid: EventEmitter<boolean>;
-  configuration: EventEmitter<object>;
+  configuration: EventEmitter<PluginConfigurationData>;
 }
 
 interface PluginSpecification {
@@ -45,4 +49,5 @@ export {
   PluginConfig,
   PluginConfigurationComponent,
   ConfigurationComponentType,
+  PluginConfigurationData,
 };
