@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,20 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {Component} from '@angular/core';
-import {map} from 'rxjs/operators';
-import {PluginManagementStateService} from '../../services';
-
-@Component({
-  selector: 'valtimo-plugin-configure',
-  templateUrl: './plugin-configure.component.html',
-  styleUrls: ['./plugin-configure.component.scss'],
-})
-export class PluginConfigureComponent {
-  readonly pluginDefinitionKey$ = this.stateService.selectedPluginDefinition$.pipe(
-    map(definition => definition?.key)
-  );
-
-  constructor(private readonly stateService: PluginManagementStateService) {}
-}

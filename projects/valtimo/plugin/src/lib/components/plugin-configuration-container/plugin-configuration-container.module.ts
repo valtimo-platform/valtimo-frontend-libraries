@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {map} from 'rxjs/operators';
-import {PluginManagementStateService} from '../../services';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {PluginConfigurationContainerComponent} from './plugin-configuration-container.component';
+import {ParagraphModule, TitleModule} from '@valtimo/user-interface';
+import {SpinnerModule} from '@valtimo/components';
 
-@Component({
-  selector: 'valtimo-plugin-configure',
-  templateUrl: './plugin-configure.component.html',
-  styleUrls: ['./plugin-configure.component.scss'],
+@NgModule({
+  declarations: [PluginConfigurationContainerComponent],
+  imports: [CommonModule, ParagraphModule],
+  exports: [PluginConfigurationContainerComponent],
 })
-export class PluginConfigureComponent {
-  readonly pluginDefinitionKey$ = this.stateService.selectedPluginDefinition$.pipe(
-    map(definition => definition?.key)
-  );
-
-  constructor(private readonly stateService: PluginManagementStateService) {}
-}
+export class PluginConfigurationContainerModule {}

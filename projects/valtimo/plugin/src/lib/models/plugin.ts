@@ -38,4 +38,11 @@ interface PluginSpecification {
 
 type PluginConfig = Array<PluginSpecification>;
 
-export {PluginSpecification, PluginConfig, PluginConfigurationComponent};
+type ConfigurationComponentType = 'function' | 'configuration';
+
+export {
+  PluginSpecification,
+  PluginConfig,
+  PluginConfigurationComponent,
+  ConfigurationComponentType,
+};
