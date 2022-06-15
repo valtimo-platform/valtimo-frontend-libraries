@@ -668,6 +668,7 @@
     }
   },
   "customerCases": {
+    "tableItemsText": "zaken",
     "labels": {
       "zaakNummer": "Zaaknummer",
       "zaakStatus": "Status",
