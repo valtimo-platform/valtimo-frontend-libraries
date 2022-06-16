@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
-import {Customer, CustomerSearchRequest} from '../models';
+import {Customer, CustomerCase, CustomerSearchRequest} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -35,5 +35,9 @@ export class CustomerService {
       `${this.valtimoEndpointUri}haalcentraal/personen`,
       request
     );
+  }
+
+  getCustomerCases(bsn: string): Observable<Array<CustomerCase>> {
+    return this.http.get<Array<CustomerCase>>(`${this.valtimoEndpointUri}zaken/${bsn}`);
   }
 }
