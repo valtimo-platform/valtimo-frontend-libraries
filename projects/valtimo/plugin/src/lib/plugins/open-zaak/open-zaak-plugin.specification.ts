@@ -37,6 +37,7 @@ const openZaakPluginSpecification: PluginSpecification = {
       'set-status': 'Status instellen',
       'set-resultaat': 'Resultaat instellen',
       'set-besluit': 'Besluit instellen',
+      url: 'OpenZaak URL',
     },
     en: {
       title: 'OpenZaak',
@@ -46,6 +47,7 @@ const openZaakPluginSpecification: PluginSpecification = {
       'set-status': 'Set status',
       'set-resultaat': 'Set result',
       'set-besluit': 'Set besluit',
+      url: 'OpenZaak URL',
     },
     de: {
       title: 'OpenZaak',
@@ -55,6 +57,7 @@ const openZaakPluginSpecification: PluginSpecification = {
       'set-status': 'Status festlegen',
       'set-resultaat': 'Ergebnis einstellen',
       'set-besluit': 'Besluit setzen',
+      url: 'OpenZaak URL',
     },
   },
 };

@@ -22,6 +22,8 @@ interface PluginConfigurationComponent {
   clear$: Observable<void>;
   disabled: boolean;
   error: boolean;
+  pluginId: string;
+  prefillConfiguration?: PluginConfigurationData;
   valid: EventEmitter<boolean>;
   configuration: EventEmitter<PluginConfigurationData>;
 }

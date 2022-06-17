@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
+import {AfterContentInit, Component, ContentChildren, QueryList} from '@angular/core';
+import {InputComponent} from '../input/input.component';
 
 @Component({
-  selector: 'v-paragraph',
-  templateUrl: './paragraph.component.html',
-  styleUrls: ['./paragraph.component.scss'],
+  selector: 'v-form',
+  templateUrl: './form.component.html',
+  styleUrls: ['./form.component.scss'],
 })
-export class ParagraphComponent {
-  @Input() center = false;
+export class FormComponent implements AfterContentInit {
+  @ContentChildren(InputComponent) inputComponents!: QueryList<InputComponent>;
+
+  ngAfterContentInit(): void {
+    console.log(this.inputComponents);
+  }
 }

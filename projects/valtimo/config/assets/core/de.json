@@ -652,7 +652,7 @@
     "complete": "Plugin-Funktion verbinden"
   },
   "plugin": {
-    "noConfigurationComponent": "Für dieses Plugin ist keine Konfiguration verfügbar."
+    "noConfigurationComponent": "Es ist keine Konfigurationskomponente verfügbar."
   },
   "pluginManagement": {
     "tableItemsText": "Plugin-Konfigurationen",

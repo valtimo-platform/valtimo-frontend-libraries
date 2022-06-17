@@ -41,7 +41,7 @@ import {
   styleUrls: ['./plugin-configuration-container.component.scss'],
 })
 export class PluginConfigurationContainerComponent
-  implements OnInit, OnDestroy, PluginConfigurationComponent
+  implements OnInit, OnDestroy, Omit<PluginConfigurationComponent, 'pluginId'>
 {
   @ViewChild('pluginConfigurationComponent', {static: true, read: ViewContainerRef})
   public dynamicContainer: ViewContainerRef;
@@ -127,7 +127,10 @@ export class PluginConfigurationContainerComponent
   }
 
   private openComponentInstanceSubscription(): void {
-    this.componentRefSubscription = this.componentRef$.subscribe(ref => {
+    this.componentRefSubscription = combineLatest([
+      this.componentRef$,
+      this._pluginDefinitionKey,
+    ]).subscribe(([ref, pluginDefinitionKey]) => {
       const instance = ref?.instance;
 
       this.configurationSubscription?.unsubscribe();
@@ -139,6 +142,7 @@ export class PluginConfigurationContainerComponent
         instance.valid = this.valid;
         instance.error = this.error;
         instance.disabled = this.disabled;
+        instance.pluginId = pluginDefinitionKey;
 
         this.validSubscription = instance.valid.subscribe(valid => {
           this.valid.emit(valid);

@@ -13,6 +13,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PluginConfigurationComponent, PluginConfigurationData} from '../../../../models';
 import {Observable} from 'rxjs';
+import {openZaakPluginSpecification} from '../../open-zaak-plugin.specification';
 
 @Component({
   selector: 'valtimo-open-zaak-configuration',
@@ -24,6 +25,7 @@ export class OpenZaakConfigurationComponent implements PluginConfigurationCompon
   @Input() save$: Observable<void>;
   @Input() disabled: boolean;
   @Input() error: boolean;
+  @Input() pluginId: string;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<PluginConfigurationData> =
     new EventEmitter<PluginConfigurationData>();

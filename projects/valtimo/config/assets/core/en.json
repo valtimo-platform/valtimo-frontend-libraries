@@ -652,7 +652,7 @@
     "complete": "Connect plugin function"
   },
   "plugin": {
-    "noConfigurationComponent": "There is no configuration available for this plugin."
+    "noConfigurationComponent": "No configuration component is available."
   },
   "pluginManagement": {
     "tableItemsText": "plugin configurations",

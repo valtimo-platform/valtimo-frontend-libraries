@@ -16,5 +16,5 @@
 
 <ng-template #pluginConfigurationComponent></ng-template>
 <ng-container *ngIf="noConfigurationComponentAvailable$ | async">
-  <v-paragraph>{{ 'plugin.noConfigurationComponent' }}</v-paragraph>
+  <v-paragraph [center]="true">{{ 'plugin.noConfigurationComponent' | translate }}</v-paragraph>
 </ng-container>

@@ -19,10 +19,11 @@ import {CommonModule} from '@angular/common';
 import {PluginConfigurationContainerComponent} from './plugin-configuration-container.component';
 import {ParagraphModule, TitleModule} from '@valtimo/user-interface';
 import {SpinnerModule} from '@valtimo/components';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [PluginConfigurationContainerComponent],
-  imports: [CommonModule, ParagraphModule],
+  imports: [CommonModule, ParagraphModule, TranslateModule],
   exports: [PluginConfigurationContainerComponent],
 })
 export class PluginConfigurationContainerModule {}

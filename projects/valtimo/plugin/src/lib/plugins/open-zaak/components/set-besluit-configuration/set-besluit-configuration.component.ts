@@ -24,6 +24,7 @@ export class SetBesluitConfigurationComponent implements PluginConfigurationComp
   @Input() save$: Observable<void>;
   @Input() disabled: boolean;
   @Input() error: boolean;
+  @Input() pluginId: string;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<PluginConfigurationData> =
     new EventEmitter<PluginConfigurationData>();
