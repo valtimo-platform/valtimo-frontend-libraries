@@ -353,6 +353,7 @@
     "toggleMenu": "Menü",
     "typeToSearch": "Hier tippen zum Suchen",
     "noSearchResults": "Keine Ergebnisse",
+    "noResults": "Keine Ergebnisse",
     "loading": "Lädt...",
     "edit": "Bearbeiten",
     "noItemsFound": "Keine Elemente gefunden",
@@ -643,25 +644,21 @@
     "plugins": {
       "title": "Plugins",
       "description": "Auf dieser Seite können Sie Konfigurationen von Plugins erstellen, ändern und löschen, die Ihrer Anwendung hinzugefügt wurden."
+    },
+    "customercases": {
+      "title": "Cases",
+      "description": "Auf dieser Seite können Sie die Cases eines bestimmten Kunden einsehen."
     }
   },
   "pluginSteps": {
     "step0": "Wählen Sie Ihr Plugin aus",
     "step1": "Wählen Sie Ihre Konfiguration",
     "step2": "Wählen Sie Ihre Funktion",
+    "step3": "Funktion konfigurieren",
     "complete": "Plugin-Funktion verbinden"
   },
   "plugin": {
-    "openzaak": {
-      "title": "OpenZaak",
-      "description": "OpenZaak ist eine produktionstaugliche API-Plattform, die den API-Standard für fallorientiertes Arbeiten (die ZGW-APIs) implementiert.",
-      "functions": {
-        "create-zaak": "Zaak erstellen",
-        "set-status": "Status festlegen",
-        "set-resultaat": "Ergebnis einstellen",
-        "set-besluit": "Besluit setzen"
-      }
-    }
+    "noConfigurationComponent": "Für dieses Plugin ist keine Konfiguration verfügbar."
   },
   "pluginManagement": {
     "tableItemsText": "Plugin-Konfigurationen",
@@ -674,6 +671,14 @@
     "addSteps": {
       "step0": "Wählen Sie Ihren Plugin",
       "step1": "Daten eingeben"
+    }
+  },
+  "customerCases": {
+    "tableItemsText": "cases",
+    "labels": {
+      "zaakNummer": "Casenummer",
+      "zaakStatus": "Status",
+      "zaakType": "Typ"
     }
   }
 }

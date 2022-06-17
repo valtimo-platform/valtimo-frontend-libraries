@@ -198,7 +198,11 @@ export const environment: ValtimoConfig = {
         direction: 'ASC'
       }
     }
-  }
+  },
+  featureToggles: {
+    disableFormFlow: true,
+    enableHackathonCasesPage: true,
+  },
 };
 
 /*
