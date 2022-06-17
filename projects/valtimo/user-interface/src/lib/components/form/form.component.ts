@@ -14,18 +14,51 @@
  * limitations under the License.
  */
 
-import {AfterContentInit, Component, ContentChildren, QueryList} from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  OnDestroy,
+  Output,
+  QueryList,
+} from '@angular/core';
 import {InputComponent} from '../input/input.component';
+import {combineLatest, Subscription} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {FormOutput} from '../../models';
 
 @Component({
   selector: 'v-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements AfterContentInit {
+export class FormComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(InputComponent) inputComponents!: QueryList<InputComponent>;
 
+  @Output() valueChange: EventEmitter<FormOutput> = new EventEmitter();
+
+  private inputComponentsValueSubscription!: Subscription;
+
   ngAfterContentInit(): void {
-    console.log(this.inputComponents);
+    this.inputComponentsValueSubscription = combineLatest(
+      this.inputComponents.map(component => component.inputValue$.asObservable())
+    )
+      .pipe(
+        tap(inputValues => {
+          const valuesObject: FormOutput = {};
+
+          this.inputComponents.forEach((component, index) => {
+            valuesObject[component.name] = inputValues[index];
+          });
+
+          this.valueChange.emit(valuesObject);
+        })
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.inputComponentsValueSubscription?.unsubscribe();
   }
 }

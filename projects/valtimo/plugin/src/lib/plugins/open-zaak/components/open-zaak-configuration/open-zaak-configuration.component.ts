@@ -14,6 +14,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PluginConfigurationComponent, PluginConfigurationData} from '../../../../models';
 import {Observable} from 'rxjs';
 import {openZaakPluginSpecification} from '../../open-zaak-plugin.specification';
+import {OpenZaakConfig} from '../../models';
 
 @Component({
   selector: 'valtimo-open-zaak-configuration',
@@ -27,6 +28,9 @@ export class OpenZaakConfigurationComponent implements PluginConfigurationCompon
   @Input() error: boolean;
   @Input() pluginId: string;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<PluginConfigurationData> =
-    new EventEmitter<PluginConfigurationData>();
+  @Output() configuration: EventEmitter<OpenZaakConfig> = new EventEmitter<OpenZaakConfig>();
+
+  formValueChange(formValue: OpenZaakConfig): void {
+    console.log('form value', formValue);
+  }
 }
