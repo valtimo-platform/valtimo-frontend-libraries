@@ -176,6 +176,7 @@ export const environment: ValtimoConfig = {
       {
         propertyName: 'due',
         translationKey: 'due',
+        sortable: true
       },
       {
         propertyName: 'created',
@@ -185,6 +186,7 @@ export const environment: ValtimoConfig = {
       {
         propertyName: 'name',
         translationKey: 'name',
+        sortable: true
       },
       {
         propertyName: 'assignee',
