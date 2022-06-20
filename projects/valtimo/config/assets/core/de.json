@@ -670,7 +670,8 @@
     },
     "addSteps": {
       "step0": "Wählen Sie Ihren Plugin",
-      "step1": "Daten eingeben"
+      "step1": "Daten eingeben",
+      "complete": "Konfiguration speichern"
     }
   },
   "customerCases": {

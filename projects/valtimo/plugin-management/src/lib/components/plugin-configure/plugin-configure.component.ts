@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {map} from 'rxjs/operators';
 import {PluginManagementStateService} from '../../services';
 
@@ -24,9 +24,15 @@ import {PluginManagementStateService} from '../../services';
   styleUrls: ['./plugin-configure.component.scss'],
 })
 export class PluginConfigureComponent {
+  @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   readonly pluginDefinitionKey$ = this.stateService.selectedPluginDefinition$.pipe(
     map(definition => definition?.key)
   );
 
   constructor(private readonly stateService: PluginManagementStateService) {}
+
+  onValid(valid: boolean): void {
+    this.valid.emit(valid);
+  }
 }

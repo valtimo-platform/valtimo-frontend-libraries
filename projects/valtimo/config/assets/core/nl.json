@@ -670,7 +670,8 @@
     },
     "addSteps": {
       "step0": "Kies je plug-in",
-      "step1": "Gegevens invullen"
+      "step1": "Gegevens invullen",
+      "complete": "Configuratie opslaan"
     }
   },
   "customerCases": {

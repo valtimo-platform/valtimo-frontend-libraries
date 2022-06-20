@@ -16,5 +16,6 @@
 
 <valtimo-plugin-configuration-container
   [pluginDefinitionKey]="pluginDefinitionKey$ | async"
+  (valid)="onValid($event)"
   type="configuration"
 ></valtimo-plugin-configuration-container>
