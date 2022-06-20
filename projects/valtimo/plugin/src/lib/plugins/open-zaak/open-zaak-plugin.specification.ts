@@ -38,6 +38,10 @@ const openZaakPluginSpecification: PluginSpecification = {
       'set-resultaat': 'Resultaat instellen',
       'set-besluit': 'Besluit instellen',
       url: 'OpenZaak URL',
+      clientId: 'Client ID',
+      secret: 'Secret',
+      rsin: 'Rsin',
+      catalogusUrl: 'Catalogus URL',
     },
     en: {
       title: 'OpenZaak',
@@ -48,6 +52,10 @@ const openZaakPluginSpecification: PluginSpecification = {
       'set-resultaat': 'Set result',
       'set-besluit': 'Set besluit',
       url: 'OpenZaak URL',
+      clientId: 'Client ID',
+      secret: 'Secret',
+      rsin: 'Rsin',
+      catalogusUrl: 'Catalog URL',
     },
     de: {
       title: 'OpenZaak',
@@ -58,6 +66,10 @@ const openZaakPluginSpecification: PluginSpecification = {
       'set-resultaat': 'Ergebnis einstellen',
       'set-besluit': 'Besluit setzen',
       url: 'OpenZaak URL',
+      clientId: 'Client ID',
+      secret: 'Secret',
+      rsin: 'Rsin',
+      catalogusUrl: 'Katalog URL',
     },
   },
 };

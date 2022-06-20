@@ -31,6 +31,6 @@ export class OpenZaakConfigurationComponent implements PluginConfigurationCompon
   @Output() configuration: EventEmitter<OpenZaakConfig> = new EventEmitter<OpenZaakConfig>();
 
   formValueChange(formValue: OpenZaakConfig): void {
-    console.log('form value', formValue);
+    this.configuration.emit(formValue);
   }
 }
