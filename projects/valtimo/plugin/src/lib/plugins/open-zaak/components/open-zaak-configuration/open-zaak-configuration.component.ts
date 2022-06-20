@@ -32,5 +32,22 @@ export class OpenZaakConfigurationComponent implements PluginConfigurationCompon
 
   formValueChange(formValue: OpenZaakConfig): void {
     this.configuration.emit(formValue);
+    this.handleValid(formValue);
+  }
+
+  private handleValid(formValue: OpenZaakConfig): void {
+    const valid =
+      formValue.name &&
+      formValue.url &&
+      formValue.catalogusUrl &&
+      formValue.rsin &&
+      formValue.secret &&
+      formValue.clientId;
+
+    if (valid) {
+      this.valid.emit(true);
+    } else {
+      this.valid.emit(false);
+    }
   }
 }

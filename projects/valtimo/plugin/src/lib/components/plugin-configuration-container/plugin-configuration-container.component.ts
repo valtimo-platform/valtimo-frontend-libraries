@@ -139,7 +139,6 @@ export class PluginConfigurationContainerComponent
       if (instance) {
         instance.save$ = this.save$;
         instance.clear$ = this.clear$;
-        instance.valid = this.valid;
         instance.error = this.error;
         instance.disabled = this.disabled;
         instance.pluginId = pluginDefinitionKey;
