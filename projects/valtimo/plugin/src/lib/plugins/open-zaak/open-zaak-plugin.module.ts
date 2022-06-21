@@ -17,7 +17,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {OpenZaakConfigurationComponent} from './components/open-zaak-configuration/open-zaak-configuration.component';
-import {FormModule, InputModule, TitleModule} from '@valtimo/user-interface';
+import {FormModule, InputModule, TitleModule, SelectModule} from '@valtimo/user-interface';
 import {SpinnerModule} from '@valtimo/components';
 import {CreateZaakConfigurationComponent} from './components/create-zaak-configuration/create-zaak-configuration.component';
 import {SetBesluitConfigurationComponent} from './components/set-besluit-configuration/set-besluit-configuration.component';
@@ -33,7 +33,14 @@ import {PluginTranslatePipeModule} from '../../pipes';
     SetResultaatConfigurationComponent,
     SetStatusConfigurationComponent,
   ],
-  imports: [CommonModule, TitleModule, FormModule, InputModule, PluginTranslatePipeModule],
+  imports: [
+    CommonModule,
+    TitleModule,
+    FormModule,
+    InputModule,
+    PluginTranslatePipeModule,
+    SelectModule,
+  ],
   exports: [
     OpenZaakConfigurationComponent,
     CreateZaakConfigurationComponent,

@@ -32,6 +32,7 @@ export class SelectComponent implements OnInit, OnDestroy {
   @Input() notFoundText!: string;
   @Input() clearAllText!: string;
   @Output() selectedChange: EventEmitter<SelectedValue> = new EventEmitter();
+  @Output() clear: EventEmitter<any> = new EventEmitter();
 
   selected$ = new BehaviorSubject<SelectedValue>('');
 
@@ -51,10 +52,10 @@ export class SelectComponent implements OnInit, OnDestroy {
   }
 
   private setDefaultSelection(): void {
-    const itemsIds = this.items.map(item => item.id);
+    const itemsIds = this.items?.map(item => item.id);
     const defaultSelectionId = this.defaultSelection?.id;
 
-    if (defaultSelectionId && itemsIds.includes(defaultSelectionId)) {
+    if (defaultSelectionId && itemsIds?.includes(defaultSelectionId)) {
       if (this.multiple) {
         this.selected$.next([defaultSelectionId]);
       } else {
@@ -67,6 +68,8 @@ export class SelectComponent implements OnInit, OnDestroy {
     this.selectedSubscription = this.selected$.subscribe(selectedValue => {
       if (selectedValue) {
         this.selectedChange.emit(selectedValue);
+      } else {
+        this.clear.emit();
       }
     });
   }

@@ -14,4 +14,18 @@
   ~ limitations under the License.
   -->
 
-<v-title>create-zaak function config works</v-title>
+<ng-container
+  *ngIf="{
+    zaakTypeLinkSelectItems: zaakTypeLinkSelectItems$ | async,
+    selectedZaakType: selectedZaakType$ | async
+  } as obs"
+>
+  <v-select
+    (selectedChange)="selectZaakTypeLink($event)"
+    (clear)="clearZaakTypeLink()"
+    [items]="obs.zaakTypeLinkSelectItems"
+    [disabled]="!obs.zaakTypeLinkSelectItems"
+    [notFoundText]="'noZaakTypeLinksFound' | pluginTranslate: pluginId | async"
+  ></v-select>
+  <v-title *ngIf="obs.selectedZaakType">{{ obs.selectedZaakType }}</v-title>
+</ng-container>

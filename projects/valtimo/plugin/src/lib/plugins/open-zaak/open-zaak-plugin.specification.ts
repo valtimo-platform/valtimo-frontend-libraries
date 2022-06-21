@@ -43,6 +43,8 @@ const openZaakPluginSpecification: PluginSpecification = {
       secret: 'Secret',
       rsin: 'Rsin',
       catalogusUrl: 'Catalogus URL',
+      noZaakTypeLinksFound: "Geen gelinkte zaaktype's gevonden",
+      noProcessDefinition: 'Er is geen procesdefinitie geselecteerd',
     },
     en: {
       title: 'OpenZaak',
@@ -58,6 +60,8 @@ const openZaakPluginSpecification: PluginSpecification = {
       secret: 'Secret',
       rsin: 'Rsin',
       catalogusUrl: 'Catalog URL',
+      noZaakTypeLinksFound: 'No linked zaaktypes found',
+      noProcessDefinition: 'No process definition is selected',
     },
     de: {
       title: 'OpenZaak',
@@ -73,6 +77,8 @@ const openZaakPluginSpecification: PluginSpecification = {
       secret: 'Secret',
       rsin: 'Rsin',
       catalogusUrl: 'Katalog URL',
+      noZaakTypeLinksFound: 'Keine verknüpften Zaaktypen gefunden',
+      noProcessDefinition: 'Es ist keine Prozessdefinition ausgewählt',
     },
   },
 };

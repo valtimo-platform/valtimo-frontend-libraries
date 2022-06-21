@@ -56,6 +56,6 @@ export class ProcessLinkComponent {
   }
 
   openModal(params: ModalParams): void {
-    this.modalService.openModal(this.connectorCreateModal);
+    this.modalService.openModal(this.connectorCreateModal, params);
   }
 }
