@@ -14,4 +14,6 @@
   ~ limitations under the License.
   -->
 
-<valtimo-select-zaak-type [pluginId]="pluginId"></valtimo-select-zaak-type>
+<label *ngIf="title || titleTranslationKey" class="v-input__label" [for]="name">
+  {{ titleTranslationKey ? (titleTranslationKey | translate) : title }}
+</label>

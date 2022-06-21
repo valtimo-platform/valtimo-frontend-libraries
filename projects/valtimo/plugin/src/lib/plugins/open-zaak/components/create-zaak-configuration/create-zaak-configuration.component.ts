@@ -12,12 +12,8 @@
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PluginConfigurationComponent, PluginConfigurationData} from '../../../../models';
-import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
-import {ModalService, SelectItem, SelectItemId} from '@valtimo/user-interface';
-import {OpenZaakService, ZaakType, ZaakTypeLink} from '@valtimo/resource';
+import {Observable} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
-import {PluginTranslationService} from '../../../../services';
-import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'valtimo-create-zaak-configuration',
@@ -33,50 +29,4 @@ export class CreateZaakConfigurationComponent implements PluginConfigurationComp
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<PluginConfigurationData> =
     new EventEmitter<PluginConfigurationData>();
-
-  zaakTypeLinkSelectItems$: Observable<Array<SelectItem> | null> =
-    this.modalService.modalData$.pipe(
-      switchMap(modalData => {
-        if (modalData?.processDefinitionKey) {
-          return this.openZaakService
-            .getZaakTypeLinkListByProcess(modalData?.processDefinitionKey)
-            .pipe(
-              map(zaakTypeLinks =>
-                zaakTypeLinks.map(link => ({
-                  id: link.zaakTypeUrl,
-                  text: link.documentDefinitionName,
-                }))
-              )
-            );
-        } else {
-          return of(null);
-        }
-      })
-    );
-
-  private readonly selectedZaakTypeUrl$ = new BehaviorSubject<string>('');
-
-  readonly selectedZaakType$: Observable<ZaakType | null> = combineLatest([
-    this.selectedZaakTypeUrl$,
-    this.openZaakService.getZaakTypes(),
-  ]).pipe(
-    map(([selectedZaakTypeUrl, zaakTypes]) => {
-      return zaakTypes.find(zaakType => zaakType.url === selectedZaakTypeUrl);
-    })
-  );
-
-  constructor(
-    private readonly openZaakService: OpenZaakService,
-    private readonly modalService: ModalService,
-    private readonly pluginTranslationService: PluginTranslationService,
-    private readonly toastr: ToastrService
-  ) {}
-
-  selectZaakTypeLink(zaakTypeUrl: SelectItemId): void {
-    this.selectedZaakTypeUrl$.next(zaakTypeUrl as string);
-  }
-
-  clearZaakTypeLink(): void {
-    this.selectedZaakTypeUrl$.next('');
-  }
 }

@@ -29,8 +29,13 @@ export class SelectComponent implements OnInit, OnDestroy {
   @Input() clearable = true;
   @Input() disabled = false;
   @Input() multiple = false;
+  @Input() margin = false;
+  @Input() widthInPx!: number;
   @Input() notFoundText!: string;
   @Input() clearAllText!: string;
+  @Input() name = '';
+  @Input() title = '';
+  @Input() titleTranslationKey = '';
   @Output() selectedChange: EventEmitter<SelectedValue> = new EventEmitter();
   @Output() clear: EventEmitter<any> = new EventEmitter();
 
