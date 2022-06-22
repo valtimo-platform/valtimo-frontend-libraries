@@ -13,8 +13,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PluginConfigurationComponent, PluginConfigurationData} from '../../../../models';
 import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
-import {OpenZaakService, ZaakType} from '@valtimo/resource';
+import {map, switchMap, tap} from 'rxjs/operators';
+import {OpenZaakService, ZaakType, ZaakTypeLink} from '@valtimo/resource';
 import {PluginTranslationService} from '../../../../services';
 import {SelectItem, ModalService, SelectItemId} from '@valtimo/user-interface';
 
@@ -25,26 +25,27 @@ import {SelectItem, ModalService, SelectItemId} from '@valtimo/user-interface';
 })
 export class SelectZaakTypeComponent {
   @Input() pluginId: string;
+  @Input() disabled: boolean;
+  @Output() zaakTypeSelected = new EventEmitter<ZaakType | null>();
 
-  zaakTypeLinkSelectItems$: Observable<Array<SelectItem> | null> =
-    this.modalService.modalData$.pipe(
-      switchMap(modalData => {
-        if (modalData?.processDefinitionKey) {
-          return this.openZaakService
-            .getZaakTypeLinkListByProcess(modalData?.processDefinitionKey)
-            .pipe(
-              map(zaakTypeLinks =>
-                zaakTypeLinks.map(link => ({
-                  id: link.zaakTypeUrl,
-                  text: link.documentDefinitionName,
-                }))
-              )
-            );
-        } else {
-          return of(null);
-        }
-      })
-    );
+  zaakTypeLinks$: Observable<Array<ZaakTypeLink> | null> = this.modalService.modalData$.pipe(
+    switchMap(modalData => {
+      if (modalData?.processDefinitionKey) {
+        return this.openZaakService.getZaakTypeLinkListByProcess(modalData?.processDefinitionKey);
+      } else {
+        return of(null);
+      }
+    })
+  );
+
+  zaakTypeLinkSelectItems$: Observable<Array<SelectItem> | null> = this.zaakTypeLinks$.pipe(
+    map(zaakTypeLinks =>
+      zaakTypeLinks?.map(link => ({
+        id: link.zaakTypeUrl,
+        text: link.documentDefinitionName,
+      }))
+    )
+  );
 
   private readonly selectedZaakTypeUrl$ = new BehaviorSubject<string>('');
 
@@ -54,7 +55,8 @@ export class SelectZaakTypeComponent {
   ]).pipe(
     map(([selectedZaakTypeUrl, zaakTypes]) => {
       return zaakTypes.find(zaakType => zaakType.url === selectedZaakTypeUrl);
-    })
+    }),
+    tap(selectedZaakType => this.zaakTypeSelected.emit(selectedZaakType))
   );
 
   constructor(
@@ -65,9 +67,5 @@ export class SelectZaakTypeComponent {
 
   selectZaakTypeLink(zaakTypeUrl: SelectItemId): void {
     this.selectedZaakTypeUrl$.next(zaakTypeUrl as string);
-  }
-
-  clearZaakTypeLink(): void {
-    this.selectedZaakTypeUrl$.next('');
   }
 }

@@ -30,6 +30,7 @@
     [multiple]="multiple"
     [notFoundText]="notFoundText || ('interface.noItemsFound' | translate)"
     [clearAllText]="clearAllText || ('interface.clearAll' | translate)"
+    (clear)="clearSelection()"
   >
     <ng-option *ngFor="let item of items" [value]="item.id">{{
       item.translationKey ? (item.translationKey | translate) : item.text

@@ -12,7 +12,8 @@
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PluginConfigurationComponent, PluginConfigurationData} from '../../../../models';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {SelectItem} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-set-resultaat-configuration',
