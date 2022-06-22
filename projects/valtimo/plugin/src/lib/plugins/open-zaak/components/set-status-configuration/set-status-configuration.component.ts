@@ -39,15 +39,6 @@ export class SetStatusConfigurationComponent
   readonly selectedZaakType$ = new BehaviorSubject<ZaakType | null>(null);
 
   readonly STATUSES: Array<string> = [
-    // 'Ingetrokken',
-    // 'Ongegrond met financ',
-    // 'Gegrond met financië',
-    // 'Informeel afgehandel',
-    // 'Niet ontvankelijk ve',
-    // 'Gegrond met invloed',
-    // 'Ongegrond',
-    // 'Afgebroken',
-    // 'Gegrond',
     'Geregistreerd',
     'Geaccepteerd',
     'In behandeling genomen',
