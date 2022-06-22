@@ -220,6 +220,12 @@
     "noBesluitTypeConfigured": "Geen besluit types beschikbaar ga naar Open zaak om een besluit type te maken"
   },
   "task-list": {
+    "fieldLabels": {
+      "created": "Aanmaakdatum",
+      "name": "Naam",
+      "valtimoAssignee.fullName": "Eigenaar",
+      "due": "Opleveringsdatum"
+    },
     "mine": {
       "title": "Mijn taken",
       "description": "Overzicht van alle toegewezen taken"
@@ -347,6 +353,7 @@
     "toggleMenu": "Menu",
     "typeToSearch": "Typ hier om te zoeken",
     "noSearchResults": "Geen resultaten",
+    "noResults": "Geen resultaten",
     "loading": "Aan het laden...",
     "edit": "Aanpassen",
     "noItemsFound": "Geen items gevonden",
@@ -637,25 +644,21 @@
     "plugins": {
       "title": "Plug-ins",
       "description": "Op deze pagina kun je configuraties aanmaken, wijzigen en verwijderen van plug-ins die zijn toegevoegd aan je applicatie."
+    },
+    "customercases": {
+      "title": "Zaken",
+      "description": "Op deze pagina kun je de zaken van een specifieke klant inzien."
     }
   },
   "pluginSteps": {
     "step0": "Kies je plugin",
     "step1": "Kies je configuratie",
     "step2": "Kies je functie",
+    "step3": "Functie configureren",
     "complete": "Pluginfunctie koppelen"
   },
   "plugin": {
-    "openzaak": {
-      "title": "OpenZaak",
-      "description": "OpenZaak is een productiewaardig API platform die de API-standaard voor zaakgericht werken implementeert (de ZGW-API’s).",
-      "functions": {
-        "create-zaak": "Zaak aanmaken",
-        "set-status": "Status instellen",
-        "set-resultaat": "Resultaat instellen",
-        "set-besluit": "Besluit instellen"
-      }
-    }
+    "noConfigurationComponent": "Er is geen configuratie-component beschikbaar."
   },
   "pluginManagement": {
     "tableItemsText": "plug-in-configuraties",
@@ -667,7 +670,16 @@
     },
     "addSteps": {
       "step0": "Kies je plug-in",
-      "step1": "Gegevens invullen"
+      "step1": "Gegevens invullen",
+      "complete": "Configuratie opslaan"
+    }
+  },
+  "customerCases": {
+    "tableItemsText": "zaken",
+    "labels": {
+      "zaakNummer": "Zaaknummer",
+      "zaakStatus": "Status",
+      "zaakType": "Type"
     }
   }
 }

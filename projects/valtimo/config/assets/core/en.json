@@ -220,6 +220,12 @@
     "noBesluitTypeConfigured": "No besluit type available go to Open Zaak to create a besluit type"
   },
   "task-list": {
+    "fieldLabels": {
+      "created": "Created on",
+      "name": "Name",
+      "valtimoAssignee.fullName": "Assignee",
+      "due": "Due date"
+    },
     "mine": {
       "title": "My tasks",
       "description": "Overview of all tasks assigned to you"
@@ -347,6 +353,7 @@
     "toggleMenu": "Menu",
     "typeToSearch": "Type here to search",
     "noSearchResults": "No results",
+    "noResults": "No results",
     "loading": "Loading...",
     "edit": "Edit",
     "noItemsFound": "No items found",
@@ -637,25 +644,21 @@
     "plugins": {
       "title": "Plugins",
       "description": "On this page you can create, change and delete configurations of plugins that have been added to your application."
+    },
+    "customercases": {
+      "title": "Cases",
+      "description": "On this page you can view the cases of a specific customer."
     }
   },
   "pluginSteps": {
     "step0": "Select your plugin",
     "step1": "Select your configuration",
     "step2": "Select your function",
+    "step3": "Configure function",
     "complete": "Connect plugin function"
   },
   "plugin": {
-    "openzaak": {
-      "title": "OpenZaak",
-      "description": "OpenZaak is a production-worthy API platform that implements the API standard for case-oriented working (the ZGW APIs).",
-      "functions": {
-        "create-zaak": "Create zaak",
-        "set-status": "Set status",
-        "set-resultaat": "Set result",
-        "set-besluit": "Set besluit"
-      }
-    }
+    "noConfigurationComponent": "No configuration component is available."
   },
   "pluginManagement": {
     "tableItemsText": "plugin configurations",
@@ -667,7 +670,16 @@
     },
     "addSteps": {
       "step0": "Choose your plugin",
-      "step1": "Enter data"
+      "step1": "Enter data",
+      "complete": "Save configuration"
+    }
+  },
+  "customerCases": {
+    "tableItemsText": "cases",
+    "labels": {
+      "zaakNummer": "Case number",
+      "zaakStatus": "Status",
+      "zaakType": "Type"
     }
   }
 }

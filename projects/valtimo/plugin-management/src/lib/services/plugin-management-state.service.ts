@@ -11,9 +11,11 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {take} from 'rxjs/operators';
-import {PluginDefinition, PluginModal} from '../models';
+import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
+import {map, take} from 'rxjs/operators';
+import {PluginDefinition, PluginDefinitionWithLogo, PluginModal} from '../models';
+import {PluginService, PluginSpecification} from '@valtimo/plugin';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -30,9 +32,34 @@ export class PluginManagementStateService {
   private readonly _pluginDefinitions$ = new BehaviorSubject<Array<PluginDefinition> | undefined>(
     undefined
   );
+  private readonly _pluginDefinitionsWithLogos$: Observable<
+    Array<PluginDefinitionWithLogo> | undefined
+  > = combineLatest([this._pluginDefinitions$, this.pluginService.pluginSpecifications$]).pipe(
+    map(([pluginDefinitions, pluginSpecifications]) =>
+      pluginDefinitions?.map(pluginDefinition => {
+        const pluginSpecification = pluginSpecifications.find(
+          specification => specification.pluginId === pluginDefinition.key
+        );
+
+        return {
+          ...pluginDefinition,
+          ...(pluginSpecification?.pluginLogoBase64 && {
+            pluginLogoBase64: this.sanitizer.bypassSecurityTrustResourceUrl(
+              pluginSpecification?.pluginLogoBase64
+            ),
+          }),
+        };
+      })
+    )
+  );
   private readonly _selectedPluginDefinition$ = new BehaviorSubject<PluginDefinition | undefined>(
     undefined
   );
+
+  constructor(
+    private readonly pluginService: PluginService,
+    private readonly sanitizer: DomSanitizer
+  ) {}
 
   get showModal$(): Observable<PluginModal> {
     return this._showModal$.asObservable();
@@ -52,6 +79,10 @@ export class PluginManagementStateService {
 
   get pluginDefinitions$(): Observable<Array<PluginDefinition> | undefined> {
     return this._pluginDefinitions$.asObservable();
+  }
+
+  get pluginDefinitionsWithLogos$(): Observable<Array<PluginDefinitionWithLogo> | undefined> {
+    return this._pluginDefinitionsWithLogos$;
   }
 
   get selectedPluginDefinition$(): Observable<PluginDefinition | undefined> {
