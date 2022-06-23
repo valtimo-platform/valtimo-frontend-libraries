@@ -18,10 +18,12 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {SmartDocumentsConfigurationComponent} from './components/smart-documents-configuration/smart-documents-configuration.component';
 import {PluginTranslatePipeModule} from '../../pipes';
+import {FormModule, InputModule} from '@valtimo/user-interface';
+import {GenerateDocumentConfigurationComponent} from './components/generate-document-configuration/generate-document-configuration.component';
 
 @NgModule({
-  declarations: [SmartDocumentsConfigurationComponent],
-  imports: [CommonModule, PluginTranslatePipeModule],
-  exports: [SmartDocumentsConfigurationComponent],
+  declarations: [SmartDocumentsConfigurationComponent, GenerateDocumentConfigurationComponent],
+  imports: [CommonModule, PluginTranslatePipeModule, FormModule, InputModule],
+  exports: [SmartDocumentsConfigurationComponent, GenerateDocumentConfigurationComponent],
 })
 export class SmartDocumentsPluginModule {}

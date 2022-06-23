@@ -17,4 +17,15 @@ interface SmartDocumentsConfig {
   password: string;
 }
 
-export {SmartDocumentsConfig};
+type DocumentFormat = 'DOCX' | 'PDF' | 'XML' | 'HTML';
+
+interface GenerateDocumentConfig {
+  templateGroup: string;
+  templateName: string;
+  format: DocumentFormat;
+  templateData: {
+    [key: string]: string;
+  };
+}
+
+export {SmartDocumentsConfig, GenerateDocumentConfig};

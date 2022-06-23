@@ -34,3 +34,4 @@ export * from './lib/plugins/open-zaak/components/select-zaak-type/select-zaak-t
 export * from './lib/plugins/smart-documents/smart-documents-plugin.module';
 export * from './lib/plugins/smart-documents/smart-documents-plugin.specification';
 export * from './lib/plugins/smart-documents/components/smart-documents-configuration/smart-documents-configuration.component';
+export * from './lib/plugins/smart-documents/components/generate-document-configuration/generate-document-configuration.component';

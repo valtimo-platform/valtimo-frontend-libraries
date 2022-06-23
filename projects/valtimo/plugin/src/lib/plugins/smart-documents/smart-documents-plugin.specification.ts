@@ -13,24 +13,42 @@
 import {PluginSpecification} from '../../models';
 import {SmartDocumentsConfigurationComponent} from './components/smart-documents-configuration/smart-documents-configuration.component';
 import {SMART_DOCUMENTS_PLUGIN_LOGO_BASE64} from './assets';
+import {GenerateDocumentConfigurationComponent} from './components/generate-document-configuration/generate-document-configuration.component';
 
 const smartDocumentsPluginSpecification: PluginSpecification = {
   pluginId: 'smartdocuments',
   pluginConfigurationComponent: SmartDocumentsConfigurationComponent,
   pluginLogoBase64: SMART_DOCUMENTS_PLUGIN_LOGO_BASE64,
-  functionConfigurationComponents: {},
+  functionConfigurationComponents: {
+    'generate-document': GenerateDocumentConfigurationComponent,
+  },
   pluginTranslations: {
     nl: {
       title: 'SmartDocuments',
       description: 'Automatiseer documenten met slimme templates.',
+      name: 'Configuratienaam',
+      url: 'SmartDocuments URL',
+      username: 'Gebruikersnaam',
+      password: 'Wachtwoord',
+      'generate-document': 'Document genereren',
     },
     en: {
       title: 'SmartDocuments',
       description: 'Automate documents with smart templates.',
+      name: 'Configuration name',
+      url: 'SmartDocuments URL',
+      username: 'Username',
+      password: 'Password',
+      'generate-document': 'Generate document',
     },
     de: {
       title: 'SmartDocuments',
       description: 'Automatisieren Sie Dokumente mit intelligenten Templates.',
+      name: 'Konfigurationsname',
+      url: 'SmartDocuments URL',
+      username: 'Nutzername',
+      password: 'Passwort',
+      'generate-document': 'Dokument generieren',
     },
   },
 };

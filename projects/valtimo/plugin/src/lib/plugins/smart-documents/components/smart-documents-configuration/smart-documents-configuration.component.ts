@@ -11,7 +11,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {PluginConfigurationComponent, PluginConfigurationData} from '../../../../models';
+import {PluginConfigurationComponent} from '../../../../models';
 import {Observable} from 'rxjs';
 import {SmartDocumentsConfig} from '../../models';
 
@@ -29,4 +29,15 @@ export class SmartDocumentsConfigurationComponent implements PluginConfiguration
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<SmartDocumentsConfig> =
     new EventEmitter<SmartDocumentsConfig>();
+
+  formValueChange(formValue: SmartDocumentsConfig): void {
+    this.configuration.emit(formValue);
+    this.handleValid(formValue);
+  }
+
+  private handleValid(formValue: SmartDocumentsConfig): void {
+    const valid = formValue.name && formValue.url && formValue.password && formValue.username;
+
+    this.valid.emit(!!valid);
+  }
 }
