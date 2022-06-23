@@ -47,7 +47,7 @@ export class GenerateDocumentConfigurationComponent implements PluginConfigurati
       formValue.templateGroup &&
       formValue.templateName &&
       formValue.format &&
-      Object.keys(formValue.templateData)?.length > 0;
+      Object.keys(formValue?.templateData || {})?.length > 0;
 
     this.valid.emit(!!valid);
   }

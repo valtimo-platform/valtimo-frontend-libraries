@@ -24,9 +24,10 @@ import {
   QueryList,
 } from '@angular/core';
 import {InputComponent} from '../input/input.component';
-import {combineLatest, Subscription} from 'rxjs';
+import {combineLatest, of, Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {FormOutput} from '../../models';
+import {SelectComponent} from '../select/select.component';
 
 @Component({
   selector: 'v-form',
@@ -35,20 +36,37 @@ import {FormOutput} from '../../models';
 })
 export class FormComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(InputComponent) inputComponents!: QueryList<InputComponent>;
+  @ContentChildren(SelectComponent) selectComponents!: QueryList<SelectComponent>;
 
   @Output() valueChange: EventEmitter<FormOutput> = new EventEmitter();
 
-  private inputComponentsValueSubscription!: Subscription;
+  private componentValuesSubscription!: Subscription;
 
   ngAfterContentInit(): void {
-    this.inputComponentsValueSubscription = combineLatest(
-      this.inputComponents.map(component => component.inputValue$.asObservable())
+    const valueComponents = [
+      ...this.inputComponents?.toArray(),
+      ...this.selectComponents?.toArray(),
+    ];
+
+    this.componentValuesSubscription = combineLatest(
+      valueComponents.map(component => {
+        const inputComponent = component as InputComponent;
+        const selectComponent = component as SelectComponent;
+
+        if (inputComponent?.inputValue$) {
+          return inputComponent.inputValue$.asObservable();
+        } else if (selectComponent?.selected$) {
+          return selectComponent.selected$.asObservable();
+        } else {
+          return of(null);
+        }
+      })
     )
       .pipe(
         tap(inputValues => {
           const valuesObject: FormOutput = {};
 
-          this.inputComponents.forEach((component, index) => {
+          valueComponents.forEach((component, index) => {
             valuesObject[component.name] = inputValues[index];
           });
 
@@ -59,6 +77,6 @@ export class FormComponent implements AfterContentInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.inputComponentsValueSubscription?.unsubscribe();
+    this.componentValuesSubscription?.unsubscribe();
   }
 }
