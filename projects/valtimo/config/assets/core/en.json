@@ -663,6 +663,7 @@
   "pluginManagement": {
     "tableItemsText": "plugin configurations",
     "add": "Configure plugin",
+    "noDefinitions": "No plugin definitions found.",
     "labels": {
       "pluginName": "Plugin name",
       "identifier": "Identifier",
