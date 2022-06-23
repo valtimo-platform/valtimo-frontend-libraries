@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,33 +14,14 @@
  * limitations under the License.
  */
 
-.btn-back {
-  position: absolute;
-}
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {SmartDocumentsConfigurationComponent} from './components/smart-documents-configuration/smart-documents-configuration.component';
+import {PluginTranslatePipeModule} from '../../pipes';
 
-.cards-container {
-  display: flex;
-  flex-flow: row wrap;
-  width: 100%;
-}
-
-.card {
-  width: calc(33.3% - 20px);
-  margin-right: 30px;
-
-  &:nth-child(3n + 3) {
-    margin-right: 0;
-  }
-}
-
-.card-header {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.plugin-configuration-logo {
-  object-fit: contain;
-  height: 60px;
-  width: 100%;
-}
+@NgModule({
+  declarations: [SmartDocumentsConfigurationComponent],
+  imports: [CommonModule, PluginTranslatePipeModule],
+  exports: [SmartDocumentsConfigurationComponent],
+})
+export class SmartDocumentsPluginModule {}
