@@ -14,4 +14,28 @@
   ~ limitations under the License.
   -->
 
-generate document works
+<v-form (valueChange)="formValueChange($event)">
+  <v-input
+    name="templateGroup"
+    [title]="'templateGroup' | pluginTranslate: pluginId | async"
+    [fullWidth]="true"
+    [margin]="true"
+    [disabled]="disabled"
+  >
+  </v-input>
+  <v-input
+    name="templateName"
+    [title]="'templateName' | pluginTranslate: pluginId | async"
+    [fullWidth]="true"
+    [margin]="true"
+    [disabled]="disabled"
+  >
+  </v-input>
+  <v-select
+    [items]="FORMAT_SELECT_ITEMS"
+    [margin]="true"
+    [widthInPx]="150"
+    [title]="'format' | pluginTranslate: pluginId | async"
+    [disabled]="disabled"
+  ></v-select>
+</v-form>

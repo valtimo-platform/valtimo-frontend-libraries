@@ -31,6 +31,10 @@ const smartDocumentsPluginSpecification: PluginSpecification = {
       username: 'Gebruikersnaam',
       password: 'Wachtwoord',
       'generate-document': 'Document genereren',
+      templateGroup: 'Template-groep',
+      templateName: 'Template-naam',
+      format: 'Documentformaat',
+      templateData: 'Template-data',
     },
     en: {
       title: 'SmartDocuments',
@@ -40,6 +44,10 @@ const smartDocumentsPluginSpecification: PluginSpecification = {
       username: 'Username',
       password: 'Password',
       'generate-document': 'Generate document',
+      templateGroup: 'Template group',
+      templateName: 'Template name',
+      format: 'Document format',
+      templateData: 'Template data',
     },
     de: {
       title: 'SmartDocuments',
@@ -49,6 +57,10 @@ const smartDocumentsPluginSpecification: PluginSpecification = {
       username: 'Nutzername',
       password: 'Passwort',
       'generate-document': 'Dokument generieren',
+      templateGroup: 'Templategruppe',
+      templateName: 'Templatename',
+      format: 'Dokumentformat',
+      templateData: 'Templatedaten',
     },
   },
 };

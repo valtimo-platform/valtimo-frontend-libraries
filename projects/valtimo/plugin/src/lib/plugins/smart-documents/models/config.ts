@@ -28,4 +28,4 @@ interface GenerateDocumentConfig {
   };
 }
 
-export {SmartDocumentsConfig, GenerateDocumentConfig};
+export {SmartDocumentsConfig, GenerateDocumentConfig, DocumentFormat};

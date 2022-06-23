@@ -13,7 +13,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
 import {Observable} from 'rxjs';
-import {GenerateDocumentConfig} from '../../models';
+import {DocumentFormat, GenerateDocumentConfig} from '../../models';
 
 @Component({
   selector: 'valtimo-generate-document-configuration',
@@ -30,7 +30,14 @@ export class GenerateDocumentConfigurationComponent implements PluginConfigurati
   @Output() configuration: EventEmitter<GenerateDocumentConfig> =
     new EventEmitter<GenerateDocumentConfig>();
 
+  readonly FORMATS: Array<DocumentFormat> = ['DOCX', 'HTML', 'PDF', 'XML'];
+  readonly FORMAT_SELECT_ITEMS: Array<{id: string; text: string}> = this.FORMATS.map(format => ({
+    id: format,
+    text: format,
+  }));
+
   formValueChange(formValue: GenerateDocumentConfig): void {
+    console.log(formValue);
     this.configuration.emit(formValue);
     this.handleValid(formValue);
   }
