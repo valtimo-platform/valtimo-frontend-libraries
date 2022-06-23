@@ -528,7 +528,8 @@
     "alertLink": "Formulier gekoppeld",
     "alertLinkError": "Er ging iets mis bij het koppelen van het formulier",
     "alertUnlink": "Formulier ontkoppeld",
-    "alertUnlinkError": "Er ging iets mis bij het ontkoppelen van het formulier"
+    "alertUnlinkError": "Er ging iets mis bij het ontkoppelen van het formulier",
+    "noPluginConfigurations": "Geen pluginconfiguraties gevonden."
   },
   "connectorForm": {
     "taak": {
