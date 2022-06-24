@@ -14,7 +14,23 @@
   ~ limitations under the License.
   -->
 
-<div class="v-multi-input">
+<div
+  class="v-multi-input"
+  *ngIf="{
+    addRowText:
+      addRowText || addRowTranslationKey
+        ? addRowTranslationKey
+          ? (addRowTranslationKey | translate)
+          : addRowText
+        : ('interface.addRow' | translate),
+    deleteRowText:
+      deleteRowText || deleteRowTranslationKey
+        ? deleteRowTranslationKey
+          ? (deleteRowTranslationKey | translate)
+          : deleteRowText
+        : ('interface.deleteRow' | translate)
+  } as vars"
+>
   <v-input-label
     *ngIf="title || titleTranslationKey"
     [title]="title"
@@ -27,29 +43,25 @@
       class="v-multi-input__row"
       *ngFor="let input of inputsAmount$ | async as inputAmount; let index = index"
     >
-      <v-input></v-input>
+      <div class="v-multi-input__input">
+        <v-input></v-input>
+      </div>
       <v-button
         [disabled]="inputAmount?.length === 1"
-        mdiIcon="table-row-remove"
+        mdiIcon="close"
         type="icon-danger"
-        (click)="deleteRow(index)"
-        titleTranslationKey="interface.deleteRow"
+        (clickEvent)="deleteRow(index)"
+        [title]="vars.deleteRowText"
       ></v-button>
     </div>
     <div class="v-multi-input__add-button">
       <v-button
-        mdiIcon="table-row-plus-after"
+        mdiIcon="plus"
         type="success"
-        (click)="addRow()"
-        titleTranslationKey="interface.addRow"
+        (clickEvent)="addRow()"
+        [title]="vars.addRowText"
         [disabled]="(addRowEnabled$ | async) === false"
-        >{{
-          addRowText || addRowTranslationKey
-            ? addRowTranslationKey
-              ? (addRowTranslationKey | translate)
-              : addRowText
-            : ('interface.addRow' | translate)
-        }}</v-button
+        >{{ vars.addRowText }}</v-button
       >
     </div>
   </div>

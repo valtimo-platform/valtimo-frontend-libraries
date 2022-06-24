@@ -33,6 +33,8 @@ export class MultiInputComponent {
   @Input() maxRows: number = 20;
   @Input() addRowText = '';
   @Input() addRowTranslationKey = '';
+  @Input() deleteRowText = '';
+  @Input() deleteRowTranslationKey = '';
 
   @Output() valueChange: EventEmitter<MultiInputValueOutput | MultiInputKeyValueOutput> =
     new EventEmitter();
@@ -54,7 +56,7 @@ export class MultiInputComponent {
 
   deleteRow(index: number): void {
     this.inputsAmount$.pipe(take(1)).subscribe(inputsAmount => {
-      if (inputsAmount.length > 0) {
+      if (inputsAmount.length > 1) {
         this.inputsAmount$.next(inputsAmount.slice(0, -1));
       }
     });
