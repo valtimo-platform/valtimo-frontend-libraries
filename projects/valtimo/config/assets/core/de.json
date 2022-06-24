@@ -363,7 +363,9 @@
     "of": "von",
     "visible": "sichtbar",
     "next": "Nächste >",
-    "previous": "< Vorherige"
+    "previous": "< Vorherige",
+    "addRow": "Zeile hinzufügen",
+    "deleteRow": "Zeile löschen"
   },
   "assignTask": {
     "assignedTo": "User-Zuordnung: ",

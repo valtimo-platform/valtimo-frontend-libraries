@@ -16,12 +16,15 @@
 
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ButtonComponent} from './button.component';
+import {MultiInputComponent} from './multi-input.component';
+import {InputLabelModule} from '../input-label/input-label.module';
+import {InputModule} from '../input/input.module';
+import {ButtonModule} from '../button/button.module';
 import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  declarations: [ButtonComponent],
-  imports: [CommonModule, TranslateModule],
-  exports: [ButtonComponent],
+  declarations: [MultiInputComponent],
+  imports: [CommonModule, InputLabelModule, InputModule, ButtonModule, TranslateModule],
+  exports: [MultiInputComponent],
 })
-export class ButtonModule {}
+export class MultiInputModule {}

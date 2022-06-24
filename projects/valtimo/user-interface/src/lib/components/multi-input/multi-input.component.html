@@ -1,0 +1,56 @@
+<!--
+  ~ Copyright 2015-2020 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="v-multi-input">
+  <v-input-label
+    *ngIf="title || titleTranslationKey"
+    [title]="title"
+    [titleTranslationKey]="titleTranslationKey"
+    [name]="name"
+  >
+  </v-input-label>
+  <div class="v-multi-input__rows">
+    <div
+      class="v-multi-input__row"
+      *ngFor="let input of inputsAmount$ | async as inputAmount; let index = index"
+    >
+      <v-input></v-input>
+      <v-button
+        [disabled]="inputAmount?.length === 1"
+        mdiIcon="table-row-remove"
+        type="icon-danger"
+        (click)="deleteRow(index)"
+        titleTranslationKey="interface.deleteRow"
+      ></v-button>
+    </div>
+    <div class="v-multi-input__add-button">
+      <v-button
+        mdiIcon="table-row-plus-after"
+        type="success"
+        (click)="addRow()"
+        titleTranslationKey="interface.addRow"
+        [disabled]="(addRowEnabled$ | async) === false"
+        >{{
+          addRowText || addRowTranslationKey
+            ? addRowTranslationKey
+              ? (addRowTranslationKey | translate)
+              : addRowText
+            : ('interface.addRow' | translate)
+        }}</v-button
+      >
+    </div>
+  </div>
+</div>

@@ -363,7 +363,9 @@
     "of": "of",
     "visible": "visible",
     "next": "Next >",
-    "previous": "< Previous"
+    "previous": "< Previous",
+    "addRow": "Add row",
+    "deleteRow": "Delete row"
   },
   "assignTask": {
     "assignedTo": "Assigned to ",

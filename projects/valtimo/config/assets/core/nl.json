@@ -363,7 +363,9 @@
     "of": "van",
     "visible": "zichtbaar",
     "next": "Volgende >",
-    "previous": "< Vorige"
+    "previous": "< Vorige",
+    "addRow": "Rij toevoegen",
+    "deleteRow": "Rij verwijderen"
   },
   "assignTask": {
     "assignedTo": "Toegewezen aan ",
