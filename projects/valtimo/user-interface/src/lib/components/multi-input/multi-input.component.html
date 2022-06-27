@@ -41,16 +41,16 @@
   <div class="v-multi-input__rows">
     <div
       class="v-multi-input__row"
-      *ngFor="let input of inputsAmount$ | async as inputAmount; let index = index"
+      *ngFor="let value of values$ | async as values; trackBy: trackByFn"
     >
       <div class="v-multi-input__input">
         <v-input></v-input>
       </div>
       <v-button
-        [disabled]="inputAmount?.length === 1"
+        [disabled]="values?.length === 1"
         mdiIcon="close"
         type="icon-danger"
-        (clickEvent)="deleteRow(index)"
+        (clickEvent)="deleteRow(value.uuid)"
         [title]="vars.deleteRowText"
       ></v-button>
     </div>

@@ -12,8 +12,12 @@
 
 type MultiInputType = 'keyValue' | 'value';
 
-type MultiInputKeyValueOutput = Array<{key: string; value: string}>;
+interface MultiInputKeyValue {
+  uuid: string;
+  key: string;
+  value: string;
+}
 
-type MultiInputValueOutput = Array<string>;
+type MultiInputValues = Array<MultiInputKeyValue>;
 
-export {MultiInputType, MultiInputKeyValueOutput, MultiInputValueOutput};
+export {MultiInputType, MultiInputValues, MultiInputKeyValue};

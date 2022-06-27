@@ -15,9 +15,10 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {MultiInputKeyValueOutput, MultiInputType, MultiInputValueOutput} from '../../models';
+import {MultiInputKeyValue, MultiInputType, MultiInputValues} from '../../models';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {map, take} from 'rxjs/operators';
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   selector: 'v-multi-input',
@@ -36,33 +37,44 @@ export class MultiInputComponent {
   @Input() deleteRowText = '';
   @Input() deleteRowTranslationKey = '';
 
-  @Output() valueChange: EventEmitter<MultiInputValueOutput | MultiInputKeyValueOutput> =
-    new EventEmitter();
+  @Output() valueChange: EventEmitter<any> = new EventEmitter();
 
-  readonly inputsAmount$ = new BehaviorSubject<Array<null>>(this.getInputRows(this.initialRows));
-  readonly addRowEnabled$: Observable<boolean> = this.inputsAmount$.pipe(
-    map(inputsAmount => !!(inputsAmount.length < this.maxRows))
+  readonly values$ = new BehaviorSubject<MultiInputValues>(this.getInputRows(this.initialRows));
+  readonly addRowEnabled$: Observable<boolean> = this.values$.pipe(
+    map(values => !!(values.length < this.maxRows))
   );
 
   addRow(): void {
-    combineLatest([this.inputsAmount$, this.addRowEnabled$])
+    combineLatest([this.values$, this.addRowEnabled$])
       .pipe(take(1))
-      .subscribe(([inputsAmount, addRowEnabled]) => {
+      .subscribe(([values, addRowEnabled]) => {
         if (addRowEnabled) {
-          this.inputsAmount$.next([...inputsAmount, null]);
+          this.values$.next([...values, this.getEmptyValue() as any]);
         }
       });
   }
 
-  deleteRow(index: number): void {
-    this.inputsAmount$.pipe(take(1)).subscribe(inputsAmount => {
-      if (inputsAmount.length > 1) {
-        this.inputsAmount$.next(inputsAmount.slice(0, -1));
+  deleteRow(uuid: string): void {
+    this.values$.pipe(take(1)).subscribe(values => {
+      if (values.length > 1) {
+        this.values$.next(values.filter(value => value.uuid !== uuid));
       }
     });
   }
 
-  private getInputRows(amount: number): Array<null> {
-    return new Array(amount).fill(null);
+  trackByFn(index: number, value: MultiInputKeyValue): string {
+    return value.uuid;
+  }
+
+  private getInputRows(amount: number): MultiInputValues {
+    return new Array(amount).fill(this.getEmptyValue());
+  }
+
+  private getEmptyValue(): MultiInputKeyValue {
+    return {
+      key: '',
+      value: '',
+      uuid: uuidv4(),
+    };
   }
 }
