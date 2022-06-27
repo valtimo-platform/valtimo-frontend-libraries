@@ -13,11 +13,13 @@
 type MultiInputType = 'keyValue' | 'value';
 
 interface MultiInputKeyValue {
-  uuid: string;
+  uuid?: string;
   key: string;
   value: string;
 }
 
 type MultiInputValues = Array<MultiInputKeyValue>;
 
-export {MultiInputType, MultiInputValues, MultiInputKeyValue};
+type MultiInputOutput = MultiInputValues | Array<string>;
+
+export {MultiInputType, MultiInputValues, MultiInputKeyValue, MultiInputOutput};

@@ -43,11 +43,14 @@
       class="v-multi-input__row"
       *ngFor="let value of values$ | async as values; trackBy: trackByFn"
     >
-      <div class="v-multi-input__input">
-        <v-input></v-input>
-      </div>
+      <ng-container *ngIf="type === 'value'">
+        <ng-container *ngTemplateOutlet="singleValue; context: {value: value}"></ng-container>
+      </ng-container>
+      <ng-container *ngIf="type === 'keyValue'">
+        <ng-container *ngTemplateOutlet="keyValue; context: {value: value}"></ng-container>
+      </ng-container>
       <v-button
-        [disabled]="values?.length === 1"
+        [disabled]="values?.length <= this.minimumAmountOfRows"
         mdiIcon="close"
         type="icon-danger"
         (clickEvent)="deleteRow(value.uuid)"
@@ -66,3 +69,18 @@
     </div>
   </div>
 </div>
+
+<ng-template #singleValue let-value="value">
+  <div class="v-multi-input__input">
+    <v-input (valueChange)="onValueChange(value, $event, 'value')"></v-input>
+  </div>
+</ng-template>
+
+<ng-template #keyValue let-value="value">
+  <div class="v-multi-input__input">
+    <v-input (valueChange)="onValueChange(value, $event, 'key')"></v-input>
+  </div>
+  <div class="v-multi-input__input">
+    <v-input (valueChange)="onValueChange(value, $event, 'value')"></v-input>
+  </div>
+</ng-template>

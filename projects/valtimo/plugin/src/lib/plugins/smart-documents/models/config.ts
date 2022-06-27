@@ -23,9 +23,7 @@ interface GenerateDocumentConfig {
   templateGroup: string;
   templateName: string;
   format: DocumentFormat;
-  templateData: {
-    [key: string]: string;
-  };
+  templateData: Array<{key: string; value: string}>;
 }
 
 export {SmartDocumentsConfig, GenerateDocumentConfig, DocumentFormat};

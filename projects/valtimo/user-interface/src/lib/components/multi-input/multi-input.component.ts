@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {MultiInputKeyValue, MultiInputType, MultiInputValues} from '../../models';
-import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {MultiInputKeyValue, MultiInputOutput, MultiInputType, MultiInputValues} from '../../models';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
 
@@ -25,49 +25,97 @@ import {v4 as uuidv4} from 'uuid';
   templateUrl: './multi-input.component.html',
   styleUrls: ['./multi-input.component.scss'],
 })
-export class MultiInputComponent {
+export class MultiInputComponent implements OnInit, OnDestroy {
   @Input() name = '';
   @Input() title = '';
   @Input() titleTranslationKey = '';
   @Input() type: MultiInputType = 'value';
-  @Input() initialRows: number = 1;
+  @Input() initialAmountOfRows: number = 1;
+  @Input() minimumAmountOfRows: number = 1;
   @Input() maxRows: number = 20;
   @Input() addRowText = '';
   @Input() addRowTranslationKey = '';
   @Input() deleteRowText = '';
   @Input() deleteRowTranslationKey = '';
 
-  @Output() valueChange: EventEmitter<any> = new EventEmitter();
+  @Output() valueChange: EventEmitter<MultiInputOutput> = new EventEmitter();
 
-  readonly values$ = new BehaviorSubject<MultiInputValues>(this.getInputRows(this.initialRows));
+  readonly values$ = new BehaviorSubject<MultiInputValues>(this.getInitialRows());
+  readonly mappedValues$: Observable<MultiInputOutput> = this.values$.pipe(
+    map(
+      values =>
+        values
+          .map(value => this.getMappedValue(value))
+          .filter(value =>
+            this.type === 'value'
+              ? value
+              : (value as MultiInputKeyValue).value && (value as MultiInputKeyValue).key
+          ) as MultiInputOutput
+    )
+  );
   readonly addRowEnabled$: Observable<boolean> = this.values$.pipe(
     map(values => !!(values.length < this.maxRows))
   );
+
+  private valuesSubscription!: Subscription;
+
+  ngOnInit(): void {
+    this.openValuesSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.valuesSubscription?.unsubscribe();
+  }
 
   addRow(): void {
     combineLatest([this.values$, this.addRowEnabled$])
       .pipe(take(1))
       .subscribe(([values, addRowEnabled]) => {
         if (addRowEnabled) {
-          this.values$.next([...values, this.getEmptyValue() as any]);
+          this.values$.next([...values, this.getEmptyValue()]);
         }
       });
   }
 
   deleteRow(uuid: string): void {
     this.values$.pipe(take(1)).subscribe(values => {
-      if (values.length > 1) {
+      if (values.length > this.minimumAmountOfRows) {
         this.values$.next(values.filter(value => value.uuid !== uuid));
       }
     });
   }
 
   trackByFn(index: number, value: MultiInputKeyValue): string {
-    return value.uuid;
+    return value.uuid as string;
   }
 
-  private getInputRows(amount: number): MultiInputValues {
-    return new Array(amount).fill(this.getEmptyValue());
+  onValueChange(
+    templateValue: MultiInputKeyValue,
+    inputValue: string,
+    change: 'key' | 'value'
+  ): void {
+    this.values$.pipe(take(1)).subscribe(values => {
+      this.values$.next(
+        values.map(stateValue => {
+          if (stateValue.uuid === templateValue.uuid) {
+            if (change === 'value') {
+              return {...stateValue, value: inputValue};
+            } else if (change === 'key') {
+              return {...stateValue, key: inputValue};
+            }
+          }
+          return stateValue;
+        })
+      );
+    });
+  }
+
+  private getInitialRows(): MultiInputValues {
+    const minimumRows = this.minimumAmountOfRows;
+    const initialRows = this.initialAmountOfRows;
+    const amountOfInitalRows =
+      minimumRows > initialRows ? minimumRows : initialRows > 1 ? initialRows : 1;
+    return new Array(amountOfInitalRows).fill(this.getEmptyValue());
   }
 
   private getEmptyValue(): MultiInputKeyValue {
@@ -76,5 +124,19 @@ export class MultiInputComponent {
       value: '',
       uuid: uuidv4(),
     };
+  }
+
+  private getMappedValue(valueToMap: MultiInputKeyValue): MultiInputKeyValue | string {
+    if (this.type === 'keyValue') {
+      return {key: valueToMap.key, value: valueToMap.value};
+    } else {
+      return valueToMap.value;
+    }
+  }
+
+  private openValuesSubscription(): void {
+    this.valuesSubscription = this.mappedValues$.subscribe(values => {
+      this.valueChange.emit(values);
+    });
   }
 }

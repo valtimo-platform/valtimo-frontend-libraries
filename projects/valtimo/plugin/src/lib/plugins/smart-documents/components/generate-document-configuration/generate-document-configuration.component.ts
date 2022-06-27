@@ -37,7 +37,6 @@ export class GenerateDocumentConfigurationComponent implements PluginConfigurati
   }));
 
   formValueChange(formValue: GenerateDocumentConfig): void {
-    console.log(formValue);
     this.configuration.emit(formValue);
     this.handleValid(formValue);
   }
@@ -47,7 +46,7 @@ export class GenerateDocumentConfigurationComponent implements PluginConfigurati
       formValue.templateGroup &&
       formValue.templateName &&
       formValue.format &&
-      Object.keys(formValue?.templateData || {})?.length > 0;
+      formValue.templateData.length > 0;
 
     this.valid.emit(!!valid);
   }

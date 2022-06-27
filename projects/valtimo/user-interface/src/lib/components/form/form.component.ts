@@ -28,6 +28,7 @@ import {combineLatest, of, Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {FormOutput} from '../../models';
 import {SelectComponent} from '../select/select.component';
+import {MultiInputComponent} from '../multi-input/multi-input.component';
 
 @Component({
   selector: 'v-form',
@@ -37,6 +38,7 @@ import {SelectComponent} from '../select/select.component';
 export class FormComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(InputComponent) inputComponents!: QueryList<InputComponent>;
   @ContentChildren(SelectComponent) selectComponents!: QueryList<SelectComponent>;
+  @ContentChildren(MultiInputComponent) multiInputComponents!: QueryList<MultiInputComponent>;
 
   @Output() valueChange: EventEmitter<FormOutput> = new EventEmitter();
 
@@ -46,17 +48,21 @@ export class FormComponent implements AfterContentInit, OnDestroy {
     const valueComponents = [
       ...this.inputComponents?.toArray(),
       ...this.selectComponents?.toArray(),
+      ...this.multiInputComponents?.toArray(),
     ];
 
     this.componentValuesSubscription = combineLatest(
       valueComponents.map(component => {
         const inputComponent = component as InputComponent;
         const selectComponent = component as SelectComponent;
+        const multiInputComponent = component as MultiInputComponent;
 
         if (inputComponent?.inputValue$) {
           return inputComponent.inputValue$.asObservable();
         } else if (selectComponent?.selected$) {
           return selectComponent.selected$.asObservable();
+        } else if (multiInputComponent?.mappedValues$) {
+          return multiInputComponent.mappedValues$;
         } else {
           return of(null);
         }
