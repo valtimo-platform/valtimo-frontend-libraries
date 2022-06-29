@@ -44,10 +44,6 @@ export class OpenZaakConfigurationComponent implements PluginConfigurationCompon
       formValue.secret &&
       formValue.clientId;
 
-    if (valid) {
-      this.valid.emit(true);
-    } else {
-      this.valid.emit(false);
-    }
+    this.valid.emit(!!valid);
   }
 }

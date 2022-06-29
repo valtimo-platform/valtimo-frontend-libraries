@@ -11,7 +11,8 @@
  */
 
 interface OpenZaakConfig {
-  name: string;
+  name?: string;
+  id?: string;
   url: string;
   clientId: string;
   secret: string;

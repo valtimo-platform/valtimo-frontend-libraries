@@ -53,6 +53,9 @@ export * from './lib/components/title/title.module';
 // Text input
 export * from './lib/components/input/input.component';
 export * from './lib/components/input/input.module';
+// Input label
+export * from './lib/components/input-label/input-label.component';
+export * from './lib/components/input-label/input-label.module';
 // Page components
 export * from './lib/components/page/page.module';
 export * from './lib/components/page/page-container/page-container.component';
@@ -68,3 +71,6 @@ export * from './lib/components/paragraph/paragraph.component';
 // Form
 export * from './lib/components/form/form.module';
 export * from './lib/components/form/form.component';
+// Multi input
+export * from './lib/components/multi-input/multi-input.module';
+export * from './lib/components/multi-input/multi-input.component';
