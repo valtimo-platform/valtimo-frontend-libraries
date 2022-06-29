@@ -17,6 +17,7 @@
     "@ng-bootstrap/ng-bootstrap",
     "@formio/angular",
     "ngx-spinner",
-    "ng-multiselect-dropdown"
+    "ng-multiselect-dropdown",
+    "formiojs"
   ]
 }
