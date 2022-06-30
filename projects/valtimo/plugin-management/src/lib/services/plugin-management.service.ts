@@ -39,21 +39,25 @@ export class PluginManagementService {
       definitionKey: 'openzaak',
       key: '1ebdad87-3899-4ab7-b4ad-403237b17dbd',
       title: 'Den Haag Open Zaak 1',
+      properties: {},
     },
     {
       definitionKey: 'openzaak',
       key: '1ebdad87-3899-4ab7-b4ad-403237b17dbe',
       title: 'Den Haag Open Zaak 2',
+      properties: {},
     },
     {
       definitionKey: 'smartdocuments',
       key: '1ebdad87-3899-4ab7-b4ad-403237b17dbx',
       title: 'Den Haag SmartDocuments 1',
+      properties: {},
     },
     {
       definitionKey: 'smartdocuments',
       key: '1ebdad87-3899-4ab7-b4ad-403237b17dby',
       title: 'Den Haag SmartDocuments 2',
+      properties: {},
     },
   ];
 
@@ -104,7 +108,9 @@ export class PluginManagementService {
   }
 
   getAllPluginConfigurations(): Observable<Array<PluginConfiguration>> {
-    return of(this.CONFIGURATIONS).pipe(delay(1500));
+    return this.http.get<Array<PluginConfiguration>>(
+      `${this.VALTIMO_API_ENDPOINT_URI}plugin/configuration`
+    );
   }
 
   getAllPluginConfigurationsWithLogos(): Observable<Array<PluginConfiguration>> {

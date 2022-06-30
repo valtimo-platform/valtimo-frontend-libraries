@@ -72,6 +72,10 @@ export class PluginAddModalComponent implements OnInit {
     this.configurationValid$.next(valid);
   }
 
+  onConfiguration(configuration: object): void {
+    console.log(configuration);
+  }
+
   private openShowSubscription(): void {
     this.showSubscription = this.stateService.showModal$.subscribe(modalType => {
       if (modalType === 'add') {
