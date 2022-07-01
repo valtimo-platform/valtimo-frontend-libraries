@@ -151,7 +151,6 @@ export class PluginConfigurationContainerComponent
         });
 
         this.configurationSubscription = instance.configuration.subscribe(configuration => {
-          console.log('configuration', configuration);
           this.configuration.emit(configuration);
         });
       }

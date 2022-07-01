@@ -117,6 +117,14 @@ export class PluginManagementService {
     return this.returnPluginConfigurationsWithLogos(this.getAllPluginConfigurations());
   }
 
+  savePluginConfiguration(
+    pluginConfiguration: PluginConfiguration
+  ): Observable<PluginConfiguration> {
+    return this.http.post<PluginConfiguration>(
+      `${this.VALTIMO_API_ENDPOINT_URI}plugin/configuration`,
+      pluginConfiguration
+    );
+  }
   private returnPluginConfigurationsWithLogos(
     pluginConfigurations$: Observable<Array<PluginConfiguration>>
   ): Observable<Array<PluginConfigurationWithLogo>> {

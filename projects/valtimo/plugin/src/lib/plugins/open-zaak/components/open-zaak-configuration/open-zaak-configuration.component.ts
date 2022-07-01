@@ -37,7 +37,7 @@ export class OpenZaakConfigurationComponent implements PluginConfigurationCompon
 
   private handleValid(formValue: OpenZaakConfig): void {
     const valid =
-      formValue.name &&
+      formValue.configurationTitle &&
       formValue.url &&
       formValue.catalogusUrl &&
       formValue.rsin &&
