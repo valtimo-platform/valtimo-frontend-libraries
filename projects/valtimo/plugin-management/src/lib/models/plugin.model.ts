@@ -14,6 +14,8 @@ import {SafeResourceUrl} from '@angular/platform-browser';
 
 interface PluginDefinition {
   key: string;
+  description?: string;
+  title?: string;
 }
 
 interface PluginDefinitionWithLogo extends PluginDefinition {
@@ -21,9 +23,11 @@ interface PluginDefinitionWithLogo extends PluginDefinition {
 }
 
 interface PluginConfiguration {
-  definitionKey: string;
-  key: string;
+  definitionKey?: string;
+  pluginDefinition?: PluginDefinition;
+  key?: string;
   title: string;
+  properties: object;
 }
 
 interface PluginConfigurationWithLogo extends PluginConfiguration {
