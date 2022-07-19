@@ -16,7 +16,7 @@
 
 import {Component, ViewChild} from '@angular/core';
 import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
-import {ModalParams, ProcessLinkRequest} from '../../models';
+import {ModalParams, SaveProcessLinkRequest} from '../../models';
 import {ModalComponent, ModalService} from '@valtimo/user-interface';
 import {ProcessLinkStateService} from '../../services/process-link-state.service';
 import {take} from 'rxjs/operators';
@@ -30,7 +30,7 @@ import {NGXLogger} from 'ngx-logger';
   styleUrls: ['./process-link.component.scss'],
 })
 export class ProcessLinkComponent {
-  @ViewChild('pluginModal') connectorCreateModal: ModalComponent;
+  @ViewChild('createProcessLink') createProcessLinkModal: ModalComponent;
 
   readonly returnToFirstStepSubject$ = new Subject<boolean>();
   readonly selectedPluginDefinition$ = this.stateService.selectedPluginDefinition$;
@@ -51,18 +51,30 @@ export class ProcessLinkComponent {
   }
 
   hide(): void {
-    this.modalService.closeModal();
-
-    this.modalService.appearingDelayMs$.pipe(take(1)).subscribe(appearingDelay => {
-      setTimeout(() => {
-        this.returnToFirstStepSubject$.next(true);
-        this.stateService.clear();
-      }, appearingDelay);
+    this.modalService.closeModal(() => {
+      this.returnToFirstStepSubject$.next(true);
+      this.stateService.clear();
     });
   }
 
   openModal(params: ModalParams): void {
-    this.modalService.openModal(this.connectorCreateModal, params);
+    this.processLinkService
+      .getProcessLink({
+        processDefinitionId: params.processDefinitionKey,
+        activityId: params?.element?.id,
+      })
+      .subscribe(
+        processLinks => {
+          if (processLinks?.length > 0) {
+            console.log(processLinks);
+          } else {
+            this.openCreateModal(params);
+          }
+        },
+        () => {
+          this.openCreateModal(params);
+        }
+      );
   }
 
   onValid(valid: boolean): void {
@@ -79,7 +91,7 @@ export class ProcessLinkComponent {
     ])
       .pipe(take(1))
       .subscribe(([modalData, selectedConfiguration, selectedFunction]) => {
-        const processLinkRequest: ProcessLinkRequest = {
+        const processLinkRequest: SaveProcessLinkRequest = {
           actionProperties: configuration,
           activityId: modalData?.element?.id,
           pluginConfigurationId: selectedConfiguration.id,
@@ -94,10 +106,13 @@ export class ProcessLinkComponent {
           },
           () => {
             this.logger.error('Something went wrong with saving the process link.');
-            this.hide();
             this.stateService.enableInput();
           }
         );
       });
+  }
+
+  private openCreateModal(params: ModalParams): void {
+    this.modalService.openModal(this.createProcessLinkModal, params);
   }
 }

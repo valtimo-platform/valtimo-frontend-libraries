@@ -30,7 +30,7 @@
   [disabled]="inputDisabled$ | async"
   [returnToFirstStepSubject$]="returnToFirstStepSubject$"
 >
-  <v-modal #pluginModal (closeEvent)="hide()" [maxWidthPx]="750">
+  <v-modal #createProcessLink (closeEvent)="hide()" [maxWidthPx]="750">
     <div role="header">
       <v-stepper-header></v-stepper-header>
     </div>

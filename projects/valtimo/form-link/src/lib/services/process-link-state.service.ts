@@ -25,6 +25,7 @@ import {
 } from '@valtimo/plugin-management';
 import {map} from 'rxjs/operators';
 import {PluginService, PluginSpecification} from '@valtimo/plugin';
+import {ProcessLink} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +36,7 @@ export class ProcessLinkStateService {
     undefined
   );
   private readonly _selectedPluginFunction$ = new BehaviorSubject<PluginFunction>(undefined);
+  private readonly _selectedProcessLink$ = new BehaviorSubject<ProcessLink>(undefined);
   private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
   private readonly _save$ = new Subject<null>();
 
@@ -60,6 +62,10 @@ export class ProcessLinkStateService {
     return this._save$.asObservable();
   }
 
+  get selectedProcessLink$(): Observable<ProcessLink> {
+    return this._selectedProcessLink$.asObservable();
+  }
+
   selectPluginDefinition(definition: PluginDefinition): void {
     this._selectedPluginDefinition$.next(definition);
   }
@@ -72,6 +78,10 @@ export class ProcessLinkStateService {
     this._selectedPluginFunction$.next(pluginFunction);
   }
 
+  selectProcessLink(processLink: ProcessLink): void {
+    this._selectedProcessLink$.next(processLink);
+  }
+
   deselectPluginDefinition(): void {
     this._selectedPluginDefinition$.next(undefined);
   }
@@ -82,6 +92,10 @@ export class ProcessLinkStateService {
 
   deselectPluginFunction(): void {
     this._selectedPluginFunction$.next(undefined);
+  }
+
+  deselectProcessLink(): void {
+    this._selectedProcessLink$.next(undefined);
   }
 
   disableInput(): void {

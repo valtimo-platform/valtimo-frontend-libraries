@@ -13,8 +13,14 @@
 import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {Observable} from 'rxjs';
-import {FormFlowInstance, ProcessLinkRequest} from '../models';
-import {HttpClient} from '@angular/common/http';
+import {
+  FormFlowInstance,
+  GetProcessLinkRequest,
+  GetProcessLinkResponse,
+  SaveProcessLinkRequest,
+  UpdateProcessLinkRequest,
+} from '../models';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -26,10 +32,24 @@ export class ProcessLinkService {
     this.VALTIMO_ENDPOINT_URI = configService.config.valtimoApi.endpointUri;
   }
 
-  saveProcessLink(processLinkRequest: ProcessLinkRequest): Observable<ProcessLinkRequest> {
-    return this.http.post<ProcessLinkRequest>(
+  getProcessLink(getProcessLinkRequest: GetProcessLinkRequest): Observable<GetProcessLinkResponse> {
+    const params = new HttpParams()
+      .set('activityId', getProcessLinkRequest.activityId)
+      .set('processDefinitionId', getProcessLinkRequest.processDefinitionId);
+
+    return this.http.get<GetProcessLinkResponse>(`${this.VALTIMO_ENDPOINT_URI}process-link`, {
+      params,
+    });
+  }
+
+  updateProcessLink(updateProcessLinkRequest: UpdateProcessLinkRequest): Observable<null> {
+    return this.http.put<null>(
       `${this.VALTIMO_ENDPOINT_URI}process-link`,
-      processLinkRequest
+      updateProcessLinkRequest
     );
+  }
+
+  saveProcessLink(saveProcessLinkRequest: SaveProcessLinkRequest): Observable<null> {
+    return this.http.post<null>(`${this.VALTIMO_ENDPOINT_URI}process-link`, saveProcessLinkRequest);
   }
 }

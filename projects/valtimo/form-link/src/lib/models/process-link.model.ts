@@ -10,7 +10,7 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.See the License for the specific language governing permissions and limitations under the License.
  */
 
-interface ProcessLinkRequest {
+interface SaveProcessLinkRequest {
   processDefinitionId: string;
   activityId: string;
   pluginConfigurationId: string;
@@ -20,4 +20,30 @@ interface ProcessLinkRequest {
   };
 }
 
-export {ProcessLinkRequest};
+interface ProcessLink extends SaveProcessLinkRequest {
+  id: string;
+}
+
+type GetProcessLinkResponse = Array<ProcessLink>;
+
+interface GetProcessLinkRequest {
+  activityId: string;
+  processDefinitionId: string;
+}
+
+interface UpdateProcessLinkRequest {
+  id: string;
+  pluginConfigurationId: string;
+  pluginActionDefinitionKey: string;
+  actionProperties: {
+    [key: string]: any;
+  };
+}
+
+export {
+  SaveProcessLinkRequest,
+  GetProcessLinkRequest,
+  ProcessLink,
+  GetProcessLinkResponse,
+  UpdateProcessLinkRequest,
+};
