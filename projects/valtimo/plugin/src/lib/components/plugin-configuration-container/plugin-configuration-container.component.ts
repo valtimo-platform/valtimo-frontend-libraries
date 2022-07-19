@@ -58,7 +58,7 @@ export class PluginConfigurationContainerComponent
   }
   @Input() clear$: Observable<void>;
   @Input() save$: Observable<void>;
-  @Input() disabled: boolean;
+  @Input() disabled$: Observable<boolean>;
   @Input() error: boolean;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<PluginConfigurationData> =
@@ -143,7 +143,7 @@ export class PluginConfigurationContainerComponent
         instance.save$ = this.save$;
         instance.clear$ = this.clear$;
         instance.error = this.error;
-        instance.disabled = this.disabled;
+        instance.disabled$ = this.disabled$;
         instance.pluginId = pluginDefinitionKey;
 
         this.validSubscription = instance.valid.subscribe(valid => {

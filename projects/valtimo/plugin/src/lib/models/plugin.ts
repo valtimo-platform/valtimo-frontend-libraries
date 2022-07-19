@@ -25,7 +25,7 @@ interface FunctionConfigurationData {
 interface ConfigurationComponent {
   save$: Observable<void>;
   clear$: Observable<void>;
-  disabled: boolean;
+  disabled$: Observable<boolean>;
   error: boolean;
   pluginId: string;
   valid: EventEmitter<boolean>;

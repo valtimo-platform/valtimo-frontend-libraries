@@ -14,13 +14,13 @@
   ~ limitations under the License.
   -->
 
-<v-form (valueChange)="formValueChange($event)">
+<v-form (valueChange)="formValueChange($event)" *ngIf="{disabled: disabled$ | async} as obs">
   <v-input
     name="templateGroup"
     [title]="'templateGroup' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
     [margin]="true"
-    [disabled]="disabled"
+    [disabled]="obs.disabled"
   >
   </v-input>
   <v-input
@@ -28,7 +28,7 @@
     [title]="'templateName' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
     [margin]="true"
-    [disabled]="disabled"
+    [disabled]="obs.disabled"
   >
   </v-input>
   <v-select
@@ -37,11 +37,12 @@
     [widthInPx]="150"
     name="format"
     [title]="'format' | pluginTranslate: pluginId | async"
-    [disabled]="disabled"
+    [disabled]="obs.disabled"
   ></v-select>
   <v-multi-input
     name="templateData"
     [title]="'templateData' | pluginTranslate: pluginId | async"
     type="keyValue"
+    [disabled]="obs.disabled"
   ></v-multi-input>
 </v-form>

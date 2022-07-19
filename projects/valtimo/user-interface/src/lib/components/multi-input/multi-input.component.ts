@@ -37,6 +37,7 @@ export class MultiInputComponent implements OnInit, OnDestroy {
   @Input() addRowTranslationKey = '';
   @Input() deleteRowText = '';
   @Input() deleteRowTranslationKey = '';
+  @Input() disabled = false;
 
   @Output() valueChange: EventEmitter<MultiInputOutput> = new EventEmitter();
 
