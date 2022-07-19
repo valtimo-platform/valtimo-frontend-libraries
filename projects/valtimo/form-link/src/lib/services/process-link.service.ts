@@ -19,7 +19,7 @@ import {HttpClient} from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class ProcessService {
+export class ProcessLinkService {
   private readonly VALTIMO_ENDPOINT_URI!: string;
 
   constructor(private readonly configService: ConfigService, private readonly http: HttpClient) {

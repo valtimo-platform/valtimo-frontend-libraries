@@ -13,7 +13,7 @@
 interface ProcessLinkRequest {
   processDefinitionId: string;
   activityId: string;
-  pluginConfigurationKey: string;
+  pluginConfigurationId: string;
   pluginActionDefinitionKey: string;
   actionProperties: {
     [key: string]: any;

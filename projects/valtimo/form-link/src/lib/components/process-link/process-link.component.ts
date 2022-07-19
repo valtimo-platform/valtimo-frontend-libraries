@@ -15,12 +15,14 @@
  */
 
 import {Component, ViewChild} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {ModalParams} from '../../models';
+import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
+import {ModalParams, ProcessLinkRequest} from '../../models';
 import {ModalComponent, ModalService} from '@valtimo/user-interface';
 import {ProcessLinkStateService} from '../../services/process-link-state.service';
 import {take} from 'rxjs/operators';
 import {PluginConfigurationData} from '@valtimo/plugin';
+import {ProcessLinkService} from '../../services';
+import {NGXLogger} from 'ngx-logger';
 
 @Component({
   selector: 'valtimo-process-link',
@@ -39,7 +41,9 @@ export class ProcessLinkComponent {
 
   constructor(
     private readonly modalService: ModalService,
-    private readonly stateService: ProcessLinkStateService
+    private readonly stateService: ProcessLinkStateService,
+    private readonly processLinkService: ProcessLinkService,
+    private readonly logger: NGXLogger
   ) {}
 
   complete(): void {
@@ -66,30 +70,33 @@ export class ProcessLinkComponent {
   }
 
   onConfiguration(configuration: PluginConfigurationData): void {
-    const pluginConfiguration = {...configuration};
-    delete pluginConfiguration['configurationTitle'];
-
     this.stateService.disableInput();
 
-    console.log('function save', configuration);
+    combineLatest([
+      this.modalService.modalData$,
+      this.stateService.selectedPluginConfiguration$,
+      this.stateService.selectedPluginFunction$,
+    ])
+      .pipe(take(1))
+      .subscribe(([modalData, selectedConfiguration, selectedFunction]) => {
+        const processLinkRequest: ProcessLinkRequest = {
+          actionProperties: configuration,
+          activityId: modalData?.element?.id,
+          pluginConfigurationId: selectedConfiguration.id,
+          processDefinitionId: modalData?.processDefinitionKey,
+          pluginActionDefinitionKey: selectedFunction.key,
+        };
 
-    // this.stateService.selectedPluginDefinition$.pipe(take(1)).subscribe(selectedDefinition => {
-    //   this.pluginManagementService
-    //     .savePluginConfiguration({
-    //       definitionKey: selectedDefinition.key,
-    //       title: configuration.configurationTitle,
-    //       properties: pluginConfiguration,
-    //     })
-    //     .subscribe(
-    //       response => {
-    //         this.stateService.refresh();
-    //         this.hide();
-    //       },
-    //       () => {
-    //         this.logger.error('Something went wrong with saving the plugin configuration.');
-    //         this.hide();
-    //       }
-    //     );
-    // });
+        this.processLinkService.saveProcessLink(processLinkRequest).subscribe(
+          response => {
+            this.hide();
+            this.stateService.enableInput();
+          },
+          () => {
+            this.logger.error('Something went wrong with saving the process link.');
+            this.stateService.enableInput();
+          }
+        );
+      });
   }
 }
