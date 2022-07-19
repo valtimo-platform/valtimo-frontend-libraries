@@ -27,6 +27,7 @@
 <v-stepper-container
   (completeEvent)="complete()"
   (cancelClickEvent)="hide()"
+  [disabled]="inputDisabled$ | async"
   [returnToFirstStepSubject$]="returnToFirstStepSubject$"
 >
   <v-modal #pluginModal (closeEvent)="hide()" [maxWidthPx]="750">
@@ -44,6 +45,7 @@
         <v-stepper-step titleTranslationKey="pluginSteps.step3">
           <valtimo-plugin-function-configuration
             (valid)="onValid($event)"
+            (configuration)="onConfiguration($event)"
           ></valtimo-plugin-function-configuration>
         </v-stepper-step>
       </v-stepper-content>

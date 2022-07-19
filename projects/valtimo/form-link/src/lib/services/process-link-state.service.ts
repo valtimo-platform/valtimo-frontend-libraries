@@ -35,6 +35,8 @@ export class ProcessLinkStateService {
     undefined
   );
   private readonly _selectedPluginFunction$ = new BehaviorSubject<PluginFunction>(undefined);
+  private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
+  private readonly _save$ = new Subject<null>();
 
   constructor(private readonly pluginManagementService: PluginManagementService) {}
 
@@ -48,6 +50,14 @@ export class ProcessLinkStateService {
 
   get selectedPluginFunction$(): Observable<PluginFunction> {
     return this._selectedPluginFunction$.asObservable();
+  }
+
+  get inputDisabled$(): Observable<boolean> {
+    return this._inputDisabled$.asObservable();
+  }
+
+  get save$(): Observable<any> {
+    return this._save$.asObservable();
   }
 
   selectPluginDefinition(definition: PluginDefinition): void {
@@ -72,6 +82,18 @@ export class ProcessLinkStateService {
 
   deselectPluginFunction(): void {
     this._selectedPluginFunction$.next(undefined);
+  }
+
+  disableInput(): void {
+    this._inputDisabled$.next(true);
+  }
+
+  enableInput(): void {
+    this._inputDisabled$.next(false);
+  }
+
+  save(): void {
+    this._save$.next(null);
   }
 
   clear(): void {
