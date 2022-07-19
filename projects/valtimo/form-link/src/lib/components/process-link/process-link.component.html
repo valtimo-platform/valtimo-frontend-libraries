@@ -68,3 +68,30 @@
     </div>
   </v-modal>
 </v-stepper-container>
+
+<v-modal #editProcessLink>
+  <div role="header">
+    <div class="edit-function-title">
+      <v-title [margin]="false">{{ 'processLink.edit' | translate }}</v-title>
+    </div>
+  </div>
+  <div role="content">edit</div>
+  <div role="footer">
+    <div class="edit-function-buttons">
+      <v-button
+        [disabled]="(inputDisabled$ | async) || true"
+        (clickEvent)="unlink()"
+        [mdiIcon]="'link-variant-minus'"
+        type="danger"
+        >{{ 'processLink.unlink' | translate }}</v-button
+      >
+      <v-button
+        [disabled]="inputDisabled$ | async"
+        (clickEvent)="complete()"
+        [mdiIcon]="'check'"
+        type="success"
+        >{{ 'processLink.saveChanges' | translate }}</v-button
+      >
+    </div>
+  </div>
+</v-modal>

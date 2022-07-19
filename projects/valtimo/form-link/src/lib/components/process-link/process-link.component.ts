@@ -31,6 +31,7 @@ import {NGXLogger} from 'ngx-logger';
 })
 export class ProcessLinkComponent {
   @ViewChild('createProcessLink') createProcessLinkModal: ModalComponent;
+  @ViewChild('editProcessLink') editProcessLinkModal: ModalComponent;
 
   readonly returnToFirstStepSubject$ = new Subject<boolean>();
   readonly selectedPluginDefinition$ = this.stateService.selectedPluginDefinition$;
@@ -57,6 +58,10 @@ export class ProcessLinkComponent {
     });
   }
 
+  unlink(): void {
+    this.logger.error('Endpoint for removing process link has not been implemented.');
+  }
+
   openModal(params: ModalParams): void {
     this.processLinkService
       .getProcessLink({
@@ -66,7 +71,8 @@ export class ProcessLinkComponent {
       .subscribe(
         processLinks => {
           if (processLinks?.length > 0) {
-            console.log(processLinks);
+            this.stateService.selectProcessLink(processLinks[0]);
+            this.openEditModal(params);
           } else {
             this.openCreateModal(params);
           }
@@ -112,7 +118,15 @@ export class ProcessLinkComponent {
       });
   }
 
+  onModifyConfiguration(configuration: PluginConfigurationData): void {
+    console.log(configuration);
+  }
+
   private openCreateModal(params: ModalParams): void {
     this.modalService.openModal(this.createProcessLinkModal, params);
+  }
+
+  private openEditModal(params: ModalParams): void {
+    this.modalService.openModal(this.editProcessLinkModal, params);
   }
 }
