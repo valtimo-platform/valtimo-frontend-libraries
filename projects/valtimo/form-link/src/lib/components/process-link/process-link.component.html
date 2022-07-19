@@ -75,7 +75,12 @@
       <v-title [margin]="false">{{ 'processLink.edit' | translate }}</v-title>
     </div>
   </div>
-  <div role="content">edit</div>
+  <div role="content">
+    <valtimo-plugin-function-configuration
+      (valid)="onValid($event)"
+      (configuration)="onConfiguration($event)"
+    ></valtimo-plugin-function-configuration>
+  </div>
   <div role="footer">
     <div class="edit-function-buttons">
       <v-button

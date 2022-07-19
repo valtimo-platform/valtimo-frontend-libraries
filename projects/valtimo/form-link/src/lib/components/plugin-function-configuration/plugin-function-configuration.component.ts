@@ -30,15 +30,9 @@ export class PluginFunctionConfigurationComponent {
   @Output() configuration: EventEmitter<PluginConfigurationData> =
     new EventEmitter<PluginConfigurationData>();
 
-  readonly pluginDefinitionKey$ = this.stateService.selectedPluginConfiguration$.pipe(
-    map(configuration => configuration?.pluginDefinition.key)
-  );
-  readonly functionKey$ = this.stateService.selectedPluginFunction$.pipe(
-    map(pluginFunction => pluginFunction?.key)
-  );
-
+  readonly pluginDefinitionKey$ = this.stateService.pluginDefinitionKey$;
+  readonly functionKey$ = this.stateService.functionKey$;
   readonly save$ = this.stateService.save$;
-
   readonly disabled$ = this.stateService.inputDisabled$;
 
   constructor(private readonly stateService: ProcessLinkStateService) {}

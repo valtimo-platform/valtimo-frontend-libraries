@@ -40,10 +40,13 @@ interface UpdateProcessLinkRequest {
   };
 }
 
+type ProcessLinkModalType = 'edit' | 'create';
+
 export {
   SaveProcessLinkRequest,
   GetProcessLinkRequest,
   ProcessLink,
   GetProcessLinkResponse,
   UpdateProcessLinkRequest,
+  ProcessLinkModalType,
 };

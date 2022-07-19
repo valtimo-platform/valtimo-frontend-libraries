@@ -123,10 +123,12 @@ export class ProcessLinkComponent {
   }
 
   private openCreateModal(params: ModalParams): void {
+    this.stateService.setModalType('create');
     this.modalService.openModal(this.createProcessLinkModal, params);
   }
 
   private openEditModal(params: ModalParams): void {
+    this.stateService.setModalType('edit');
     this.modalService.openModal(this.editProcessLinkModal, params);
   }
 }

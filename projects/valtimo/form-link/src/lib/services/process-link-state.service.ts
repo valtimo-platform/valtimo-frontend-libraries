@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subject, switchMap} from 'rxjs';
 import {
   PluginConfiguration,
   PluginDefinition,
@@ -25,7 +25,7 @@ import {
 } from '@valtimo/plugin-management';
 import {map} from 'rxjs/operators';
 import {PluginService, PluginSpecification} from '@valtimo/plugin';
-import {ProcessLink} from '../models';
+import {ProcessLink, ProcessLinkModalType} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -39,8 +39,12 @@ export class ProcessLinkStateService {
   private readonly _selectedProcessLink$ = new BehaviorSubject<ProcessLink>(undefined);
   private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
   private readonly _save$ = new Subject<null>();
+  private readonly _modalType$ = new BehaviorSubject<ProcessLinkModalType>('create');
 
-  constructor(private readonly pluginManagementService: PluginManagementService) {}
+  constructor(
+    private readonly pluginManagementService: PluginManagementService,
+    private readonly pluginService: PluginService
+  ) {}
 
   get selectedPluginDefinition$(): Observable<PluginDefinition> {
     return this._selectedPluginDefinition$.asObservable();
@@ -64,6 +68,46 @@ export class ProcessLinkStateService {
 
   get selectedProcessLink$(): Observable<ProcessLink> {
     return this._selectedProcessLink$.asObservable();
+  }
+
+  get modalType$(): Observable<ProcessLinkModalType> {
+    return this._modalType$.asObservable();
+  }
+
+  get functionKey$(): Observable<string> {
+    return this._modalType$.pipe(
+      switchMap(modalType =>
+        modalType === 'create'
+          ? this._selectedPluginFunction$.pipe(map(pluginFunction => pluginFunction?.key))
+          : this._selectedProcessLink$.pipe(
+              map(processLink => processLink.pluginActionDefinitionKey)
+            )
+      )
+    );
+  }
+
+  get pluginDefinitionKey$(): Observable<string> {
+    return this._modalType$.pipe(
+      switchMap(modalType =>
+        modalType === 'create'
+          ? this._selectedPluginConfiguration$.pipe(
+              map(configuration => configuration?.pluginDefinition.key)
+            )
+          : combineLatest([
+              this._selectedProcessLink$,
+              this.pluginService.pluginSpecifications$,
+            ]).pipe(
+              map(([processLink, pluginSpecifications]) => {
+                const pluginSpecification = pluginSpecifications.find(specification => {
+                  const functionKeys = Object.keys(specification.functionConfigurationComponents);
+                  return functionKeys.includes(processLink.pluginActionDefinitionKey);
+                });
+
+                return pluginSpecification?.pluginId;
+              })
+            )
+      )
+    );
   }
 
   selectPluginDefinition(definition: PluginDefinition): void {
@@ -108,6 +152,10 @@ export class ProcessLinkStateService {
 
   save(): void {
     this._save$.next(null);
+  }
+
+  setModalType(type: ProcessLinkModalType): void {
+    this._modalType$.next(type);
   }
 
   clear(): void {
