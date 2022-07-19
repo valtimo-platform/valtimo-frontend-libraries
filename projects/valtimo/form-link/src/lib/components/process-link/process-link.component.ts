@@ -94,6 +94,7 @@ export class ProcessLinkComponent {
           },
           () => {
             this.logger.error('Something went wrong with saving the process link.');
+            this.hide();
             this.stateService.enableInput();
           }
         );
