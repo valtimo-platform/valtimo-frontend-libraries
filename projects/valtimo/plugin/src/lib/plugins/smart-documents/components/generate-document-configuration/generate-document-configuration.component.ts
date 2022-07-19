@@ -10,17 +10,19 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FunctionConfigurationComponent, PluginConfigurationComponent} from '../../../../models';
-import {Observable} from 'rxjs';
-import {DocumentFormat, GenerateDocumentConfig} from '../../models';
+import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
+import {DocumentFormat, GenerateDocumentConfig, SmartDocumentsConfig} from '../../models';
 
 @Component({
   selector: 'valtimo-generate-document-configuration',
   templateUrl: './generate-document-configuration.component.html',
   styleUrls: ['./generate-document-configuration.component.scss'],
 })
-export class GenerateDocumentConfigurationComponent implements FunctionConfigurationComponent {
+export class GenerateDocumentConfigurationComponent
+  implements FunctionConfigurationComponent, OnInit, OnDestroy
+{
   @Input() clear$: Observable<void>;
   @Input() save$: Observable<void>;
   @Input() disabled: boolean;
@@ -36,18 +38,45 @@ export class GenerateDocumentConfigurationComponent implements FunctionConfigura
     text: format,
   }));
 
+  private saveSubscription!: Subscription;
+
+  private readonly formValue$ = new BehaviorSubject<GenerateDocumentConfig | null>(null);
+  private readonly valid$ = new BehaviorSubject<boolean>(false);
+
+  ngOnInit(): void {
+    this.openSaveSubscription();
+  }
+
+  ngOnDestroy() {
+    this.saveSubscription?.unsubscribe();
+  }
+
   formValueChange(formValue: GenerateDocumentConfig): void {
-    this.configuration.emit(formValue);
+    this.formValue$.next(formValue);
     this.handleValid(formValue);
   }
 
   private handleValid(formValue: GenerateDocumentConfig): void {
-    const valid =
+    const valid = !!(
       formValue.templateGroup &&
       formValue.templateName &&
       formValue.format &&
-      formValue.templateData.length > 0;
+      formValue.templateData?.length > 0
+    );
 
-    this.valid.emit(!!valid);
+    this.valid$.next(valid);
+    this.valid.emit(valid);
+  }
+
+  private openSaveSubscription(): void {
+    this.saveSubscription = this.save$?.subscribe(save => {
+      combineLatest([this.formValue$, this.valid$])
+        .pipe(take(1))
+        .subscribe(([formValue, valid]) => {
+          if (valid) {
+            this.configuration.emit(formValue);
+          }
+        });
+    });
   }
 }
