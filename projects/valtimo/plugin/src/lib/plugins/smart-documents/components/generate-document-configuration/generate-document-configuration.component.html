@@ -43,6 +43,7 @@
     [margin]="true"
     [defaultValue]="obs.prefill?.resultingDocumentProcessVariableName"
     [disabled]="obs.disabled"
+    [tooltip]="'resultingDocumentProcessVariableNameTooltip' | pluginTranslate: pluginId | async"
   >
   </v-input>
   <v-select

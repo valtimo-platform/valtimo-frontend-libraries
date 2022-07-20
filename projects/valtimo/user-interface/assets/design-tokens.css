@@ -319,6 +319,9 @@
   --v-input-default-width: 200px;
   --v-input-margin: var(--v-spacing-block-4xl);
   --v-input-disabled-cursor: var(--v-cursor-disabled);
+  --v-input-tooltip-icon-size: var(--v-font-size-default);
+  --v-input-tooltip-icon-margin: var(--v-spacing-inline-sm);
+  --v-input-tooltip-icon-color: var(--v-color-black);
   /* page */
   --v-page-padding-inline: var(--v-spacing-inline-3xl);
   --v-page-padding-block: var(--v-spacing-block-5xl);

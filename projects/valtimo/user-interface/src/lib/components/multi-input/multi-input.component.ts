@@ -40,6 +40,7 @@ export class MultiInputComponent implements OnInit, OnDestroy {
   @Input() disabled = false;
   @Input() defaultValues!: MultiInputValues;
   @Input() margin = false;
+  @Input() tooltip = '';
 
   @Output() valueChange: EventEmitter<MultiInputOutput> = new EventEmitter();
 

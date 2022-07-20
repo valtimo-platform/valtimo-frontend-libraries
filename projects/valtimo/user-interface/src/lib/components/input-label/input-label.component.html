@@ -14,6 +14,9 @@
   ~ limitations under the License.
   -->
 
-<label *ngIf="title || titleTranslationKey" class="v-input__label" [for]="name">
-  {{ titleTranslationKey ? (titleTranslationKey | translate) : title }}
-</label>
+<div class="v-input-label-container">
+  <label *ngIf="title || titleTranslationKey" class="v-input-label" [for]="name">
+    {{ titleTranslationKey ? (titleTranslationKey | translate) : title }}
+  </label>
+  <i *ngIf="tooltip" class="v-input-label__tooltip mdi mdi-help-circle"></i>
+</div>
