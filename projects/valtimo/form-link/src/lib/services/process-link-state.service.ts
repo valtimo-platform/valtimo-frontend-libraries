@@ -179,7 +179,6 @@ export class ProcessLinkStateService {
     this.deselectPluginDefinition();
     this.deselectPluginConfiguration();
     this.deselectPluginFunction();
-    console.log('deselect process link');
     this.deselectProcessLink();
   }
 }

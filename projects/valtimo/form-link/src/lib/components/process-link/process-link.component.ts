@@ -16,7 +16,7 @@
 
 import {Component, ViewChild} from '@angular/core';
 import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
-import {ModalParams, SaveProcessLinkRequest} from '../../models';
+import {ModalParams, SaveProcessLinkRequest, UpdateProcessLinkRequest} from '../../models';
 import {ModalComponent, ModalService} from '@valtimo/user-interface';
 import {ProcessLinkStateService} from '../../services/process-link-state.service';
 import {take} from 'rxjs/operators';
@@ -62,6 +62,7 @@ export class ProcessLinkComponent {
     this.modalService.closeModal(() => {
       this.returnToFirstStepSubject$.next(true);
       this.stateService.clear();
+      this.stateService.enableInput();
     });
   }
 
@@ -115,7 +116,6 @@ export class ProcessLinkComponent {
         this.processLinkService.saveProcessLink(processLinkRequest).subscribe(
           response => {
             this.hide();
-            this.stateService.enableInput();
           },
           () => {
             this.logger.error('Something went wrong with saving the process link.');
@@ -126,8 +126,26 @@ export class ProcessLinkComponent {
   }
 
   onModifyConfiguration(configuration: PluginConfigurationData): void {
-    console.log('modify');
-    console.log(configuration);
+    this.stateService.disableInput();
+
+    this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
+      const updateProcessLinkRequest: UpdateProcessLinkRequest = {
+        id: selectedProcessLink.id,
+        pluginConfigurationId: selectedProcessLink.pluginConfigurationId,
+        pluginActionDefinitionKey: selectedProcessLink.pluginActionDefinitionKey,
+        actionProperties: configuration,
+      };
+
+      this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
+        response => {
+          this.hide();
+        },
+        () => {
+          this.logger.error('Something went wrong with updating the process link.');
+          this.stateService.enableInput();
+        }
+      );
+    });
   }
 
   private openCreateModal(params: ModalParams): void {
