@@ -22,6 +22,7 @@ import {ModalComponent, TimelineItem, TimelineItemImpl} from '@valtimo/component
 import {map, switchMap, take} from 'rxjs/operators';
 import {AlertService} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
+import {escape} from 'lodash';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -42,9 +43,9 @@ export class DossierDetailTabContactMomentsComponent {
         return new TimelineItemImpl(
           registratieDatum.format('DD MMM YYYY'),
           registratieDatum.format('HH:mm'),
-          contactMoment.medewerkerIdentificatie.achternaam,
-          contactMoment.kanaal,
-          contactMoment.tekst,
+          escape(contactMoment.medewerkerIdentificatie.achternaam),
+          escape(contactMoment.kanaal),
+          escape(contactMoment.tekst),
           null
         );
       })
