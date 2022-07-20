@@ -44,6 +44,7 @@
         </v-stepper-step>
         <v-stepper-step titleTranslationKey="pluginSteps.step3">
           <valtimo-plugin-function-configuration
+            *ngIf="isCreateModal$ | async"
             (valid)="onValid($event)"
             (configuration)="onConfiguration($event)"
           ></valtimo-plugin-function-configuration>
@@ -69,7 +70,7 @@
   </v-modal>
 </v-stepper-container>
 
-<v-modal #editProcessLink>
+<v-modal #editProcessLink (closeEvent)="hide()">
   <div role="header">
     <div class="edit-function-title">
       <v-title [margin]="false">{{ 'processLink.edit' | translate }}</v-title>
@@ -77,8 +78,9 @@
   </div>
   <div role="content">
     <valtimo-plugin-function-configuration
+      *ngIf="(selectedProcessLink$ | async) && (isEditModal$ | async)"
       (valid)="onValid($event)"
-      (configuration)="onConfiguration($event)"
+      (configuration)="onModifyConfiguration($event)"
     ></valtimo-plugin-function-configuration>
   </div>
   <div role="footer">
@@ -91,8 +93,8 @@
         >{{ 'processLink.unlink' | translate }}</v-button
       >
       <v-button
-        [disabled]="inputDisabled$ | async"
-        (clickEvent)="complete()"
+        [disabled]="(functionConfigurationValid$ | async) === false || (inputDisabled$ | async)"
+        (clickEvent)="completeModify()"
         [mdiIcon]="'check'"
         type="success"
         >{{ 'processLink.saveChanges' | translate }}</v-button

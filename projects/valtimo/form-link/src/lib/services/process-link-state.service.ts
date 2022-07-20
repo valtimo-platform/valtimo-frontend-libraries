@@ -39,6 +39,7 @@ export class ProcessLinkStateService {
   private readonly _selectedProcessLink$ = new BehaviorSubject<ProcessLink>(undefined);
   private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
   private readonly _save$ = new Subject<null>();
+  private readonly _saveModify$ = new Subject<null>();
   private readonly _modalType$ = new BehaviorSubject<ProcessLinkModalType>('create');
 
   constructor(
@@ -62,8 +63,20 @@ export class ProcessLinkStateService {
     return this._inputDisabled$.asObservable();
   }
 
+  get isCreateModal$(): Observable<boolean> {
+    return this._modalType$.pipe(map(modalType => modalType === 'create'));
+  }
+
+  get isEditModal$(): Observable<boolean> {
+    return this._modalType$.pipe(map(modalType => modalType === 'edit'));
+  }
+
   get save$(): Observable<any> {
-    return this._save$.asObservable();
+    return this.isCreateModal$.pipe(
+      switchMap(isCreateModal =>
+        isCreateModal ? this._save$.asObservable() : this._saveModify$.asObservable()
+      )
+    );
   }
 
   get selectedProcessLink$(): Observable<ProcessLink> {
@@ -75,21 +88,21 @@ export class ProcessLinkStateService {
   }
 
   get functionKey$(): Observable<string> {
-    return this._modalType$.pipe(
-      switchMap(modalType =>
-        modalType === 'create'
+    return this.isCreateModal$.pipe(
+      switchMap(isCreateModal =>
+        isCreateModal
           ? this._selectedPluginFunction$.pipe(map(pluginFunction => pluginFunction?.key))
           : this._selectedProcessLink$.pipe(
-              map(processLink => processLink.pluginActionDefinitionKey)
+              map(processLink => processLink?.pluginActionDefinitionKey)
             )
       )
     );
   }
 
   get pluginDefinitionKey$(): Observable<string> {
-    return this._modalType$.pipe(
-      switchMap(modalType =>
-        modalType === 'create'
+    return this.isCreateModal$.pipe(
+      switchMap(isCreateModal =>
+        isCreateModal
           ? this._selectedPluginConfiguration$.pipe(
               map(configuration => configuration?.pluginDefinition.key)
             )
@@ -100,7 +113,7 @@ export class ProcessLinkStateService {
               map(([processLink, pluginSpecifications]) => {
                 const pluginSpecification = pluginSpecifications.find(specification => {
                   const functionKeys = Object.keys(specification.functionConfigurationComponents);
-                  return functionKeys.includes(processLink.pluginActionDefinitionKey);
+                  return functionKeys.includes(processLink?.pluginActionDefinitionKey);
                 });
 
                 return pluginSpecification?.pluginId;
@@ -154,6 +167,10 @@ export class ProcessLinkStateService {
     this._save$.next(null);
   }
 
+  saveModify(): void {
+    this._saveModify$.next(null);
+  }
+
   setModalType(type: ProcessLinkModalType): void {
     this._modalType$.next(type);
   }
@@ -162,5 +179,7 @@ export class ProcessLinkStateService {
     this.deselectPluginDefinition();
     this.deselectPluginConfiguration();
     this.deselectPluginFunction();
+    console.log('deselect process link');
+    this.deselectProcessLink();
   }
 }

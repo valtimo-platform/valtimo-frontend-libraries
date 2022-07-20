@@ -38,6 +38,9 @@ export class ProcessLinkComponent {
   readonly selectedPluginConfiguration$ = this.stateService.selectedPluginConfiguration$;
   readonly selectedPluginFunction$ = this.stateService.selectedPluginFunction$;
   readonly inputDisabled$ = this.stateService.inputDisabled$;
+  readonly isCreateModal$ = this.stateService.isCreateModal$;
+  readonly isEditModal$ = this.stateService.isEditModal$;
+  readonly selectedProcessLink$ = this.stateService.selectedProcessLink$;
   readonly functionConfigurationValid$ = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -49,6 +52,10 @@ export class ProcessLinkComponent {
 
   complete(): void {
     this.stateService.save();
+  }
+
+  completeModify(): void {
+    this.stateService.saveModify();
   }
 
   hide(): void {
@@ -119,6 +126,7 @@ export class ProcessLinkComponent {
   }
 
   onModifyConfiguration(configuration: PluginConfigurationData): void {
+    console.log('modify');
     console.log(configuration);
   }
 

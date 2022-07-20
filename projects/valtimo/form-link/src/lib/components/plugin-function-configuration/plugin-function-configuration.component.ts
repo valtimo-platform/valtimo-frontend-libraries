@@ -38,7 +38,7 @@ export class PluginFunctionConfigurationComponent {
     switchMap(modalType =>
       modalType === 'edit'
         ? this.stateService.selectedProcessLink$.pipe(
-            map(processLink => processLink.actionProperties)
+            map(processLink => processLink?.actionProperties)
           )
         : of(undefined)
     )
