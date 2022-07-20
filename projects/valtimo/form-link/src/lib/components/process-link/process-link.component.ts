@@ -33,6 +33,8 @@ export class ProcessLinkComponent {
   @ViewChild('createProcessLink') createProcessLinkModal: ModalComponent;
   @ViewChild('editProcessLink') editProcessLinkModal: ModalComponent;
 
+  readonly pluginDefinitionKey$ = this.stateService.pluginDefinitionKey$;
+  readonly functionKey$ = this.stateService.functionKey$;
   readonly returnToFirstStepSubject$ = new Subject<boolean>();
   readonly selectedPluginDefinition$ = this.stateService.selectedPluginDefinition$;
   readonly selectedPluginConfiguration$ = this.stateService.selectedPluginConfiguration$;

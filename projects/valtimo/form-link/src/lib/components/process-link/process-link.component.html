@@ -72,8 +72,18 @@
 
 <v-modal #editProcessLink (closeEvent)="hide()">
   <div role="header">
-    <div class="edit-function-title">
-      <v-title [margin]="false" type="h2">{{ 'processLink.edit' | translate }}</v-title>
+    <div
+      class="edit-function-title"
+      *ngIf="{
+        pluginDefinitionKey: pluginDefinitionKey$ | async,
+        functionKey: functionKey$ | async
+      } as obs"
+    >
+      <v-title [margin]="false" type="h2">{{
+        ('title' | pluginTranslate: obs.pluginDefinitionKey | async) +
+          ' - ' +
+          (obs.functionKey | pluginTranslate: obs.pluginDefinitionKey | async)
+      }}</v-title>
     </div>
   </div>
   <div role="content">
