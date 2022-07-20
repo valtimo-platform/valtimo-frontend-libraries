@@ -32,6 +32,7 @@ import {map, take, tap} from 'rxjs/operators';
 import {
   ConfigurationComponentType,
   FunctionConfigurationComponent,
+  FunctionConfigurationData,
   PluginConfigurationComponent,
   PluginConfigurationData,
 } from '../../models';
@@ -60,6 +61,9 @@ export class PluginConfigurationContainerComponent
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
   @Input() error: boolean;
+  @Input() prefillConfiguration$:
+    | Observable<PluginConfigurationData>
+    | Observable<FunctionConfigurationData>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<PluginConfigurationData> =
     new EventEmitter<PluginConfigurationData>();
@@ -145,6 +149,10 @@ export class PluginConfigurationContainerComponent
         instance.error = this.error;
         instance.disabled$ = this.disabled$;
         instance.pluginId = pluginDefinitionKey;
+
+        if (this.prefillConfiguration$) {
+          instance.prefillConfiguration$ = this.prefillConfiguration$;
+        }
 
         this.validSubscription = instance.valid.subscribe(valid => {
           this.valid.emit(valid);

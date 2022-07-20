@@ -16,8 +16,8 @@
 
 import {Component, EventEmitter, Output} from '@angular/core';
 import {ProcessLinkStateService} from '../../services';
-import {combineLatest} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {combineLatest, of, switchMap} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
 import {PluginConfigurationData} from '@valtimo/plugin';
 
 @Component({
@@ -34,6 +34,15 @@ export class PluginFunctionConfigurationComponent {
   readonly functionKey$ = this.stateService.functionKey$;
   readonly save$ = this.stateService.save$;
   readonly disabled$ = this.stateService.inputDisabled$;
+  readonly prefillConfiguration$ = this.stateService.modalType$.pipe(
+    switchMap(modalType =>
+      modalType === 'edit'
+        ? this.stateService.selectedProcessLink$.pipe(
+            map(processLink => processLink.actionProperties)
+          )
+        : of(undefined)
+    )
+  );
 
   constructor(private readonly stateService: ProcessLinkStateService) {}
 

@@ -11,7 +11,12 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {FunctionConfigurationComponent, PluginConfigurationComponent} from '../../../../models';
+import {
+  FunctionConfigurationComponent,
+  FunctionConfigurationData,
+  PluginConfigurationComponent,
+  PluginConfigurationData,
+} from '../../../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
 import {DocumentFormat, GenerateDocumentConfig, SmartDocumentsConfig} from '../../models';
 
@@ -28,6 +33,7 @@ export class GenerateDocumentConfigurationComponent
   @Input() disabled$: Observable<boolean>;
   @Input() error: boolean;
   @Input() pluginId: string;
+  @Input() prefillConfiguration$: Observable<FunctionConfigurationData>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<GenerateDocumentConfig> =
     new EventEmitter<GenerateDocumentConfig>();
@@ -39,7 +45,6 @@ export class GenerateDocumentConfigurationComponent
   }));
 
   private saveSubscription!: Subscription;
-
   private readonly formValue$ = new BehaviorSubject<GenerateDocumentConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
 
@@ -47,7 +52,7 @@ export class GenerateDocumentConfigurationComponent
     this.openSaveSubscription();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.saveSubscription?.unsubscribe();
   }
 

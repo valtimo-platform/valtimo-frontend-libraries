@@ -72,15 +72,27 @@
 
 <ng-template #singleValue let-value="value">
   <div class="v-multi-input__input">
-    <v-input (valueChange)="onValueChange(value, $event, 'value')" [disabled]="disabled"></v-input>
+    <v-input
+      (valueChange)="onValueChange(value, $event, 'value')"
+      [disabled]="disabled"
+      [defaultValue]="value.value"
+    ></v-input>
   </div>
 </ng-template>
 
 <ng-template #keyValue let-value="value">
   <div class="v-multi-input__input">
-    <v-input (valueChange)="onValueChange(value, $event, 'key')" [disabled]="disabled"></v-input>
+    <v-input
+      (valueChange)="onValueChange(value, $event, 'key')"
+      [disabled]="disabled"
+      [defaultValue]="value.key"
+    ></v-input>
   </div>
   <div class="v-multi-input__input">
-    <v-input (valueChange)="onValueChange(value, $event, 'value')" [disabled]="disabled"></v-input>
+    <v-input
+      (valueChange)="onValueChange(value, $event, 'value')"
+      [disabled]="disabled"
+      [defaultValue]="value.value"
+    ></v-input>
   </div>
 </ng-template>

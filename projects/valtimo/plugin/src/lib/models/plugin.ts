@@ -14,7 +14,7 @@ import {Component, EventEmitter, Input, Type} from '@angular/core';
 import {Observable} from 'rxjs';
 
 interface PluginConfigurationData {
-  configurationTitle: string;
+  configurationTitle?: string;
   [key: string]: any;
 }
 
@@ -32,12 +32,12 @@ interface ConfigurationComponent {
 }
 
 interface PluginConfigurationComponent extends ConfigurationComponent {
-  prefillConfiguration?: PluginConfigurationData;
+  prefillConfiguration$?: Observable<PluginConfigurationData>;
   configuration: EventEmitter<PluginConfigurationData>;
 }
 
 interface FunctionConfigurationComponent extends ConfigurationComponent {
-  prefillConfiguration?: FunctionConfigurationData;
+  prefillConfiguration$?: Observable<FunctionConfigurationData>;
   configuration: EventEmitter<FunctionConfigurationData>;
 }
 

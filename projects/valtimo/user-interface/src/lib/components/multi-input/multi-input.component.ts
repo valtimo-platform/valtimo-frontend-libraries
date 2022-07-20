@@ -38,10 +38,11 @@ export class MultiInputComponent implements OnInit, OnDestroy {
   @Input() deleteRowText = '';
   @Input() deleteRowTranslationKey = '';
   @Input() disabled = false;
+  @Input() defaultValues!: MultiInputValues;
 
   @Output() valueChange: EventEmitter<MultiInputOutput> = new EventEmitter();
 
-  readonly values$ = new BehaviorSubject<MultiInputValues>(this.getInitialRows());
+  readonly values$ = new BehaviorSubject<MultiInputValues>([]);
   readonly mappedValues$: Observable<MultiInputOutput> = this.values$.pipe(
     map(
       values =>
@@ -61,6 +62,7 @@ export class MultiInputComponent implements OnInit, OnDestroy {
   private valuesSubscription!: Subscription;
 
   ngOnInit(): void {
+    this.values$.next(this.getInitialRows());
     this.openValuesSubscription();
   }
 
@@ -116,7 +118,12 @@ export class MultiInputComponent implements OnInit, OnDestroy {
     const initialRows = this.initialAmountOfRows;
     const amountOfInitalRows =
       minimumRows > initialRows ? minimumRows : initialRows > 1 ? initialRows : 1;
-    return new Array(amountOfInitalRows).fill(this.getEmptyValue());
+
+    if (!this.defaultValues) {
+      return new Array(amountOfInitalRows).fill(this.getEmptyValue());
+    } else {
+      return this.defaultValues.map(defaultValue => ({...defaultValue, uuid: uuidv4()}));
+    }
   }
 
   private getEmptyValue(): MultiInputKeyValue {
