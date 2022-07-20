@@ -23,6 +23,7 @@ type DocumentFormat = 'DOCX' | 'PDF' | 'XML' | 'HTML';
 interface GenerateDocumentConfig {
   templateGroup: string;
   templateName: string;
+  resultingDocumentProcessVariableName: string;
   format: DocumentFormat;
   templateData: Array<{key: string; value: string}>;
 }

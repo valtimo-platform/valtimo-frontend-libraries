@@ -66,6 +66,7 @@ export class GenerateDocumentConfigurationComponent
       formValue.templateGroup &&
       formValue.templateName &&
       formValue.format &&
+      formValue.resultingDocumentProcessVariableName &&
       formValue.templateData?.length > 0
     );
 

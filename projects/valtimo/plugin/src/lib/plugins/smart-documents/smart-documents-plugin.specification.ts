@@ -35,6 +35,7 @@ const smartDocumentsPluginSpecification: PluginSpecification = {
       templateName: 'Template-naam',
       format: 'Documentformaat',
       templateData: 'Template-data',
+      resultingDocumentProcessVariableName: 'Naam procesvariabele voor opslag document',
     },
     en: {
       title: 'SmartDocuments',
@@ -48,6 +49,7 @@ const smartDocumentsPluginSpecification: PluginSpecification = {
       templateName: 'Template name',
       format: 'Document format',
       templateData: 'Template data',
+      resultingDocumentProcessVariableName: 'Process variable name for storing document',
     },
     de: {
       title: 'SmartDocuments',
@@ -61,6 +63,7 @@ const smartDocumentsPluginSpecification: PluginSpecification = {
       templateName: 'Templatename',
       format: 'Dokumentformat',
       templateData: 'Templatedaten',
+      resultingDocumentProcessVariableName: 'Prozessvariablenname zum Speichern des Dokuments',
     },
   },
 };
