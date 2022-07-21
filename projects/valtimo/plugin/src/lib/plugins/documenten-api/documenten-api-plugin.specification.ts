@@ -20,11 +20,11 @@ import {DOCUMENTEN_API_PLUGIN_LOGO_BASE64} from './assets';
 import {DocumentenApiConfigurationComponent} from './components/documenten-api-configuration/documenten-api-configuration.component';
 
 const documentenApiPluginSpecification: PluginSpecification = {
-  pluginId: 'documentenapi',
+  pluginId: 'smartdocuments',
   pluginConfigurationComponent: DocumentenApiConfigurationComponent,
   pluginLogoBase64: DOCUMENTEN_API_PLUGIN_LOGO_BASE64,
   functionConfigurationComponents: {
-    'store-temp-document': StoreTempDocumentConfigurationComponent,
+    'generate-document': StoreTempDocumentConfigurationComponent,
   },
   pluginTranslations: {
     nl: {
@@ -32,18 +32,33 @@ const documentenApiPluginSpecification: PluginSpecification = {
       description: 'API voor opslag en ontsluiting van documenten en daarbij behorende metadata.',
       configurationTitle: 'Configuratienaam',
       url: 'Documenten API URL',
+      localDocumentLocation: 'Naam procesvariabele met document',
+      storedDocumentUrl: 'Naam procesvariabele voor opslag document-URL',
+      taal: 'Taal',
+      status: 'Status',
+      informatieobjecttype: 'informatieobjecttype',
     },
     en: {
       title: 'Documenten API',
       description: 'API for storing and accessing documents and associated metadata.',
       configurationTitle: 'Configuration name',
       url: 'Documenten API URL',
+      localDocumentLocation: 'Name of process variable with document',
+      storedDocumentUrl: 'Process variable name for storing document URL',
+      taal: 'Language',
+      status: 'Status',
+      informatieobjecttype: 'informatieobjecttype',
     },
     de: {
       title: 'Documenten API',
       description: 'API zum Speichern und Zugreifen auf Dokumente und zugehörige Metadaten.',
       configurationTitle: 'Konfigurationsname',
       url: 'Documenten API URL',
+      localDocumentLocation: 'Name Prozessvariable mit Dokument',
+      storedDocumentUrl: 'Name der Prozessvariablen zum Speichern der Dokument-URL',
+      taal: 'Sprache',
+      status: 'Status',
+      informatieobjecttype: 'informatieobjecttype',
     },
   },
 };
