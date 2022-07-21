@@ -21,15 +21,17 @@ import {
   PluginConfigurationComponent,
   PluginConfigurationData,
 } from '../../../../models';
-import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
-import {DocumentFormat, GenerateDocumentConfig, SmartDocumentsConfig} from '../../models';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} from 'rxjs';
+import {StoreTempDocumentConfig, DocumentLanguage, DocumentStatus} from '../../models';
+import {TranslateService} from '@ngx-translate/core';
+import {PluginTranslationService} from '../../../../services';
 
 @Component({
-  selector: 'valtimo-generate-document-configuration',
-  templateUrl: './generate-document-configuration.component.html',
-  styleUrls: ['./generate-document-configuration.component.scss'],
+  selector: 'valtimo-store-temp-document-configuration',
+  templateUrl: './store-temp-document-configuration.component.html',
+  styleUrls: ['./store-temp-document-configuration.component.scss'],
 })
-export class GenerateDocumentConfigurationComponent
+export class StoreTempDocumentConfigurationComponent
   implements FunctionConfigurationComponent, OnInit, OnDestroy
 {
   @Input() clear$: Observable<void>;
@@ -37,20 +39,30 @@ export class GenerateDocumentConfigurationComponent
   @Input() disabled$: Observable<boolean>;
   @Input() error: boolean;
   @Input() pluginId: string;
-  @Input() prefillConfiguration$: Observable<GenerateDocumentConfig>;
+  @Input() prefillConfiguration$: Observable<StoreTempDocumentConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<GenerateDocumentConfig> =
-    new EventEmitter<GenerateDocumentConfig>();
+  @Output() configuration: EventEmitter<StoreTempDocumentConfig> =
+    new EventEmitter<StoreTempDocumentConfig>();
 
-  readonly FORMATS: Array<DocumentFormat> = ['DOCX', 'HTML', 'PDF', 'XML'];
-  readonly FORMAT_SELECT_ITEMS: Array<{id: string; text: string}> = this.FORMATS.map(format => ({
-    id: format,
-    text: format,
-  }));
+  readonly LANGUAGE_ITEMS: Array<DocumentLanguage> = ['nld'];
+  readonly LANGUAGE_SELECT_ITEMS: Observable<Array<{id: DocumentLanguage; text: string}>> =
+    this.translateService.stream('key').pipe(
+      map(() =>
+        this.LANGUAGE_ITEMS.map(item => ({
+          id: item,
+          text: this.pluginTranslationService.instant(item, this.pluginId),
+        }))
+      )
+    );
 
   private saveSubscription!: Subscription;
-  private readonly formValue$ = new BehaviorSubject<GenerateDocumentConfig | null>(null);
+  private readonly formValue$ = new BehaviorSubject<StoreTempDocumentConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
+
+  constructor(
+    private readonly translateService: TranslateService,
+    private readonly pluginTranslationService: PluginTranslationService
+  ) {}
 
   ngOnInit(): void {
     this.openSaveSubscription();
@@ -60,19 +72,13 @@ export class GenerateDocumentConfigurationComponent
     this.saveSubscription?.unsubscribe();
   }
 
-  formValueChange(formValue: GenerateDocumentConfig): void {
+  formValueChange(formValue: StoreTempDocumentConfig): void {
     this.formValue$.next(formValue);
     this.handleValid(formValue);
   }
 
-  private handleValid(formValue: GenerateDocumentConfig): void {
-    const valid = !!(
-      formValue.templateGroup &&
-      formValue.templateName &&
-      formValue.format &&
-      formValue.resultingDocumentProcessVariableName &&
-      formValue.templateData?.length > 0
-    );
+  private handleValid(formValue: StoreTempDocumentConfig): void {
+    const valid = !!formValue.localDocumentLocation;
 
     this.valid$.next(valid);
     this.valid.emit(valid);
