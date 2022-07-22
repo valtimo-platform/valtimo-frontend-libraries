@@ -27,6 +27,7 @@
     [margin]="true"
     [defaultValue]="obs.prefill?.templateGroup"
     [disabled]="obs.disabled"
+    [required]="true"
   >
   </v-input>
   <v-input
@@ -35,6 +36,7 @@
     [margin]="true"
     [defaultValue]="obs.prefill?.templateName"
     [disabled]="obs.disabled"
+    [required]="true"
   >
   </v-input>
   <v-input
@@ -44,6 +46,7 @@
     [defaultValue]="obs.prefill?.resultingDocumentProcessVariableName"
     [disabled]="obs.disabled"
     [tooltip]="'resultingDocumentProcessVariableNameTooltip' | pluginTranslate: pluginId | async"
+    [required]="true"
   >
   </v-input>
   <v-select
@@ -54,6 +57,7 @@
     [title]="'format' | pluginTranslate: pluginId | async"
     [disabled]="obs.disabled"
     [defaultSelectionId]="obs.prefill?.format"
+    [required]="true"
   ></v-select>
   <v-multi-input
     name="templateData"
@@ -62,5 +66,6 @@
     [disabled]="obs.disabled"
     [defaultValues]="obs.prefill?.templateData"
     [margin]="true"
+    [required]="true"
   ></v-multi-input>
 </v-form>

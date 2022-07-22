@@ -15,7 +15,12 @@
   -->
 
 <div class="v-input-label-container">
-  <label *ngIf="title || titleTranslationKey" class="v-input-label" [for]="name">
+  <label
+    *ngIf="title || titleTranslationKey"
+    class="v-input-label"
+    [for]="name"
+    [ngClass]="{'v-input-label--required': required}"
+  >
     {{ titleTranslationKey ? (titleTranslationKey | translate) : title }}
   </label>
   <i

@@ -45,10 +45,25 @@ export class StoreTempDocumentConfigurationComponent
     new EventEmitter<StoreTempDocumentConfig>();
 
   readonly LANGUAGE_ITEMS: Array<DocumentLanguage> = ['nld'];
-  readonly LANGUAGE_SELECT_ITEMS: Observable<Array<{id: DocumentLanguage; text: string}>> =
+  readonly languageSelectItems$: Observable<Array<{id: DocumentLanguage; text: string}>> =
     this.translateService.stream('key').pipe(
       map(() =>
         this.LANGUAGE_ITEMS.map(item => ({
+          id: item,
+          text: this.pluginTranslationService.instant(item, this.pluginId),
+        }))
+      )
+    );
+  readonly STATUS_ITEMS: Array<DocumentStatus> = [
+    'in_bewerking',
+    'ter_vaststelling',
+    'definitief',
+    'gearchiveerd',
+  ];
+  readonly statusSelectItems$: Observable<Array<{id: DocumentStatus; text: string}>> =
+    this.translateService.stream('key').pipe(
+      map(() =>
+        this.STATUS_ITEMS.map(item => ({
           id: item,
           text: this.pluginTranslationService.instant(item, this.pluginId),
         }))
@@ -78,7 +93,12 @@ export class StoreTempDocumentConfigurationComponent
   }
 
   private handleValid(formValue: StoreTempDocumentConfig): void {
-    const valid = !!formValue.localDocumentLocation;
+    const valid = !!(
+      formValue.localDocumentLocation &&
+      formValue.taal &&
+      formValue.status &&
+      formValue.informatieobjecttype
+    );
 
     this.valid$.next(valid);
     this.valid.emit(valid);
