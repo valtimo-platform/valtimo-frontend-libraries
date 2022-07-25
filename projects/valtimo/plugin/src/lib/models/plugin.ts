@@ -52,6 +52,8 @@ interface PluginSpecification {
   };
   pluginTranslations: {
     [langKey: string]: {
+      title: string;
+      description: string;
       [translationKey: string]: string;
     };
   };
