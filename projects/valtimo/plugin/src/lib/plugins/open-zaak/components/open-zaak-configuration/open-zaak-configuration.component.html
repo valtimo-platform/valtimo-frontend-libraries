@@ -18,50 +18,29 @@
   <v-input
     name="configurationTitle"
     [title]="'configurationTitle' | pluginTranslate: pluginId | async"
-    [fullWidth]="true"
     [margin]="true"
     [disabled]="obs.disabled"
-  >
-  </v-input>
-  <v-input
-    name="url"
-    [title]="'url' | pluginTranslate: pluginId | async"
-    [fullWidth]="true"
-    [margin]="true"
-    [disabled]="obs.disabled"
+    [widthPx]="350"
+    [required]="true"
   >
   </v-input>
   <v-input
     name="clientId"
     [title]="'clientId' | pluginTranslate: pluginId | async"
-    [fullWidth]="true"
     [margin]="true"
     [disabled]="obs.disabled"
+    [widthPx]="350"
+    [required]="true"
   >
   </v-input>
   <v-input
-    name="secret"
+    name="clientSecret"
     type="password"
-    [title]="'secret' | pluginTranslate: pluginId | async"
-    [fullWidth]="true"
+    [title]="'clientSecret' | pluginTranslate: pluginId | async"
     [margin]="true"
     [disabled]="obs.disabled"
-  >
-  </v-input>
-  <v-input
-    name="rsin"
-    [title]="'rsin' | pluginTranslate: pluginId | async"
-    [fullWidth]="true"
-    [margin]="true"
-    [disabled]="obs.disabled"
-  >
-  </v-input>
-  <v-input
-    name="catalogusUrl"
-    [title]="'catalogusUrl' | pluginTranslate: pluginId | async"
-    [fullWidth]="true"
-    [margin]="true"
-    [disabled]="obs.disabled"
+    [widthPx]="350"
+    [required]="true"
   >
   </v-input>
 </v-form>
