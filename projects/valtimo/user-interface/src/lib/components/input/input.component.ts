@@ -47,6 +47,7 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
   @Input() maxLength = 250;
   @Input() tooltip = '';
   @Input() required = false;
+  @Input() hideNumberSpinBox = false;
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 

@@ -53,7 +53,7 @@ export class DocumentenApiConfigurationComponent
   }
 
   private handleValid(formValue: DocumentenApiConfig): void {
-    const valid = !!(formValue.configurationTitle && formValue.url);
+    const valid = !!(formValue.configurationTitle && formValue.url && formValue.bronorganisatie);
 
     this.valid$.next(valid);
     this.valid.emit(valid);

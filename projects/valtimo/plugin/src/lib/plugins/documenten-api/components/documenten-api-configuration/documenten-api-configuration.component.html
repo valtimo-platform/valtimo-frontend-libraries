@@ -33,4 +33,17 @@
     [required]="true"
   >
   </v-input>
+  <v-input
+    name="bronorganisatie"
+    type="number"
+    [hideNumberSpinBox]="true"
+    [min]="0"
+    [step]="1"
+    [title]="'bronorganisatie' | pluginTranslate: pluginId | async"
+    [fullWidth]="true"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [required]="true"
+  >
+  </v-input>
 </v-form>
