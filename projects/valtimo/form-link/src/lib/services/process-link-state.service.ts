@@ -112,8 +112,10 @@ export class ProcessLinkStateService {
             ]).pipe(
               map(([processLink, pluginSpecifications]) => {
                 const pluginSpecification = pluginSpecifications.find(specification => {
-                  const functionKeys = Object.keys(specification.functionConfigurationComponents);
-                  return functionKeys.includes(processLink?.pluginActionDefinitionKey);
+                  const functionKeys =
+                    specification?.functionConfigurationComponents &&
+                    Object.keys(specification.functionConfigurationComponents);
+                  return functionKeys?.includes(processLink?.pluginActionDefinitionKey);
                 });
 
                 return pluginSpecification?.pluginId;
