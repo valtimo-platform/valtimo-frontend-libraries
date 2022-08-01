@@ -74,3 +74,7 @@ export * from './lib/components/form/form.component';
 // Multi input
 export * from './lib/components/multi-input/multi-input.module';
 export * from './lib/components/multi-input/multi-input.component';
+// Skeleton loader
+export * from './lib/components/skeleton-loader/ngx-skeleton-loader.component';
+export * from './lib/components/skeleton-loader/ngx-skeleton-loader.module';
+export * from './lib/components/skeleton-loader/ngx-skeleton-loader-config.types';

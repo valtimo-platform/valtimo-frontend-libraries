@@ -98,7 +98,7 @@
 <ng-template #tableCellLoading>
   <td *ngFor="let column of columns" class="v-table__cell">
     <span class="v-table__cell-content"
-      ><ngx-skeleton-loader
+      ><v-skeleton-loader
         appearance="line"
         [theme]="{
           width: 'var(--v-table-loading-skeleton-width)',
@@ -106,7 +106,7 @@
           margin: '0',
           'background-color': 'var(--v-table-loading-skeleton-bg-color)'
         }"
-      ></ngx-skeleton-loader
+      ></v-skeleton-loader
     ></span>
   </td>
 </ng-template>
@@ -183,7 +183,7 @@
 
 <ng-template #paginationSizeAmountTextLoading>
   <span class="v-table__pagination-amount-text" *ngIf="loading"
-    ><ngx-skeleton-loader
+    ><v-skeleton-loader
       appearance="line"
       [theme]="{
         width: 'var(--v-table-loading-skeleton-width)',
@@ -191,7 +191,7 @@
         margin: '0',
         'background-color': 'var(--v-table-loading-skeleton-pagination-size-bg-color)'
       }"
-    ></ngx-skeleton-loader
+    ></v-skeleton-loader
   ></span>
 </ng-template>
 

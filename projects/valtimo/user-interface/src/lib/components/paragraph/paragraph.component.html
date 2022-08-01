@@ -24,7 +24,7 @@
   }"
 >
   <ng-container *ngIf="loading">
-    <ngx-skeleton-loader
+    <v-skeleton-loader
       appearance="line"
       [theme]="{
         width: 'var(--v-paragraph-skeleton-loading-width)',
@@ -32,7 +32,7 @@
         margin: '0',
         'background-color': 'var(--v-paragraph-loading-skeleton-bg-color)'
       }"
-    ></ngx-skeleton-loader>
+    ></v-skeleton-loader>
   </ng-container>
   <ng-container *ngIf="!loading">
     <ng-content></ng-content>

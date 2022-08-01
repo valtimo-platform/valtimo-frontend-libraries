@@ -20,7 +20,7 @@ import {TableComponent} from './table.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {TranslateModule} from '@ngx-translate/core';
 import {ButtonModule} from '../button/button.module';
-import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
+import {NgxSkeletonLoaderModule} from '../skeleton-loader/ngx-skeleton-loader.module';
 import {SelectModule} from '../select/select.module';
 
 @NgModule({
