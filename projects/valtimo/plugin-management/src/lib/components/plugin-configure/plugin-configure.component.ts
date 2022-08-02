@@ -41,6 +41,14 @@ export class PluginConfigureComponent {
     )
   );
 
+  readonly prefillConfiguration$ = this.stateService.selectedPluginConfiguration$.pipe(
+    map(configuration =>
+      configuration
+        ? {...configuration.properties, configurationTitle: configuration.title}
+        : undefined
+    )
+  );
+
   readonly disabled$ = this.stateService.inputDisabled$;
 
   constructor(private readonly stateService: PluginManagementStateService) {}

@@ -16,6 +16,7 @@
 
 <valtimo-plugin-configuration-container
   [pluginDefinitionKey]="pluginDefinitionKey$ | async"
+  [prefillConfiguration$]="prefillConfiguration$"
   [save$]="save$"
   [disabled$]="disabled$"
   (valid)="onValid($event)"
