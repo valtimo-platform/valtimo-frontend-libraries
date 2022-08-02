@@ -41,14 +41,14 @@
         (clickEvent)="delete()"
         [mdiIcon]="'delete'"
         type="danger"
-        >{{ 'connectorManagement.remove' | translate }}</v-button
+        >{{ 'pluginManagement.remove' | translate }}</v-button
       >
       <v-button
         [disabled]="(configurationValid$ | async) === false || (inputDisabled$ | async)"
         (clickEvent)="save()"
         [mdiIcon]="'check'"
         type="success"
-        >{{ 'connectorManagement.save' | translate }}</v-button
+        >{{ 'pluginManagement.save' | translate }}</v-button
       >
     </div>
   </div>

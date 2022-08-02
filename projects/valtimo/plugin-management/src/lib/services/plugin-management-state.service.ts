@@ -117,7 +117,7 @@ export class PluginManagementStateService {
   }
 
   get saveEdit$(): Observable<any> {
-    return this._save$.asObservable();
+    return this._saveEdit$.asObservable();
   }
 
   get delete$(): Observable<any> {

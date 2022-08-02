@@ -56,11 +56,27 @@ export class PluginEditModalComponent implements OnInit {
   }
 
   delete(): void {
-    console.log('delete');
+    this.stateService.disableInput();
+
+    this.stateService.selectedPluginConfiguration$
+      .pipe(take(1))
+      .subscribe(selectedPluginConfiguration => {
+        this.pluginManagementService
+          .deletePluginConfiguration(selectedPluginConfiguration.id)
+          .subscribe(
+            () => {
+              this.stateService.refresh();
+              this.hide();
+            },
+            () => {
+              this.logger.error('Something went wrong with deleting the plugin configuration.');
+              this.stateService.enableInput();
+            }
+          );
+      });
   }
 
   hide(): void {
-    this.stateService.disableInput();
     this.modalService.closeModal(() => {
       this.stateService.enableInput();
       this.stateService.clear();
@@ -72,7 +88,32 @@ export class PluginEditModalComponent implements OnInit {
   }
 
   onPluginConfiguration(configuration: PluginConfigurationData): void {
-    console.log('on config', configuration);
+    this.stateService.disableInput();
+
+    this.stateService.selectedPluginConfiguration$
+      .pipe(take(1))
+      .subscribe(selectedPluginConfiguration => {
+        const configurationTitle = configuration.configurationTitle;
+        const configurationData = {...configuration};
+        delete configurationData['configurationTitle'];
+
+        this.pluginManagementService
+          .updatePluginConfiguration(
+            selectedPluginConfiguration.id,
+            configurationTitle,
+            configurationData
+          )
+          .subscribe(
+            () => {
+              this.stateService.refresh();
+              this.hide();
+            },
+            () => {
+              this.logger.error('Something went wrong with updating the plugin configuration.');
+              this.stateService.enableInput();
+            }
+          );
+      });
   }
 
   private openShowSubscription(): void {
