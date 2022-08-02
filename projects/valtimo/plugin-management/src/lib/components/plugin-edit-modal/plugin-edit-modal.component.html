@@ -29,10 +29,27 @@
     </div>
   </div>
   <div role="content">
-    <valtimo-plugin-configure
-      (valid)="onValid($event)"
-      (configuration)="onConfiguration($event)"
-    ></valtimo-plugin-configure>
+    <valtimo-plugin-edit
+      (valid)="onPluginValid($event)"
+      (configuration)="onPluginConfiguration($event)"
+    ></valtimo-plugin-edit>
   </div>
-  <div role="footer">footer</div>
+  <div role="footer">
+    <div class="edit-plugin-buttons">
+      <v-button
+        [disabled]="inputDisabled$ | async"
+        (clickEvent)="delete()"
+        [mdiIcon]="'delete'"
+        type="danger"
+        >{{ 'connectorManagement.remove' | translate }}</v-button
+      >
+      <v-button
+        [disabled]="(configurationValid$ | async) === false || (inputDisabled$ | async)"
+        (clickEvent)="save()"
+        [mdiIcon]="'check'"
+        type="success"
+        >{{ 'connectorManagement.save' | translate }}</v-button
+      >
+    </div>
+  </div>
 </v-modal>

@@ -35,6 +35,7 @@ export class PluginManagementStateService {
   private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
   private readonly _refresh$ = new BehaviorSubject<null>(null);
   private readonly _save$ = new Subject<null>();
+  private readonly _saveEdit$ = new Subject<null>();
   private readonly _delete$ = new Subject<null>();
   private readonly _hideModalSaveButton$ = new BehaviorSubject<boolean>(false);
   private readonly _pluginDefinitions$ = new BehaviorSubject<Array<PluginDefinition> | undefined>(
@@ -115,6 +116,10 @@ export class PluginManagementStateService {
     return this._save$.asObservable();
   }
 
+  get saveEdit$(): Observable<any> {
+    return this._save$.asObservable();
+  }
+
   get delete$(): Observable<any> {
     return this._delete$.asObservable();
   }
@@ -165,6 +170,10 @@ export class PluginManagementStateService {
 
   save(): void {
     this._save$.next(null);
+  }
+
+  saveEdit(): void {
+    this._saveEdit$.next(null);
   }
 
   delete(): void {

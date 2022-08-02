@@ -51,12 +51,12 @@ export class PluginEditModalComponent implements OnInit {
     this.openHideSubscription();
   }
 
-  complete(): void {
-    this.stateService.save();
+  save(): void {
+    this.stateService.saveEdit();
   }
 
   delete(): void {
-    this.stateService.delete();
+    console.log('delete');
   }
 
   hide(): void {
@@ -67,34 +67,12 @@ export class PluginEditModalComponent implements OnInit {
     });
   }
 
-  onValid(valid: boolean): void {
+  onPluginValid(valid: boolean): void {
     this.configurationValid$.next(valid);
   }
 
-  onConfiguration(configuration: PluginConfigurationData): void {
-    const pluginConfiguration = {...configuration};
-    delete pluginConfiguration['configurationTitle'];
-
-    this.stateService.disableInput();
-
-    this.stateService.selectedPluginDefinition$.pipe(take(1)).subscribe(selectedDefinition => {
-      this.pluginManagementService
-        .savePluginConfiguration({
-          definitionKey: selectedDefinition.key,
-          title: configuration.configurationTitle,
-          properties: pluginConfiguration,
-        })
-        .subscribe(
-          response => {
-            this.stateService.refresh();
-            this.hide();
-          },
-          () => {
-            this.logger.error('Something went wrong with saving the plugin configuration.');
-            this.hide();
-          }
-        );
-    });
+  onPluginConfiguration(configuration: PluginConfigurationData): void {
+    console.log('on config', configuration);
   }
 
   private openShowSubscription(): void {

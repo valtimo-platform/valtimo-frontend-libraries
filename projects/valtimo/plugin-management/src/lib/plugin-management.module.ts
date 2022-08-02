@@ -36,6 +36,7 @@ import {PluginAddSelectComponent} from './components/plugin-add-select/plugin-ad
 import {PluginConfigureComponent} from './components/plugin-configure/plugin-configure.component';
 import {PluginTranslatePipeModule, PluginConfigurationContainerModule} from '@valtimo/plugin';
 import {PluginEditModalComponent} from './components/plugin-edit-modal/plugin-edit-modal.component';
+import {PluginEditComponent} from './components/plugin-edit/plugin-edit.component';
 
 @NgModule({
   providers: [PluginManagementStateService],
@@ -45,6 +46,7 @@ import {PluginEditModalComponent} from './components/plugin-edit-modal/plugin-ed
     PluginAddSelectComponent,
     PluginConfigureComponent,
     PluginEditModalComponent,
+    PluginEditComponent,
   ],
   imports: [
     CommonModule,
@@ -68,6 +70,7 @@ import {PluginEditModalComponent} from './components/plugin-edit-modal/plugin-ed
     PluginAddSelectComponent,
     PluginConfigureComponent,
     PluginEditModalComponent,
+    PluginEditComponent,
   ],
 })
 export class PluginManagementModule {}
