@@ -40,7 +40,7 @@
 
 <ng-template #cardTitleLoading>
   <h2 class="v-card__title" *ngIf="loading && loadingTitle">
-    <ngx-skeleton-loader
+    <v-skeleton-loader
       appearance="line"
       [theme]="{
         width: 'var(--v-card-title-loading-skeleton-width)',
@@ -48,7 +48,7 @@
         margin: '0',
         'background-color': 'var(--v-card-loading-skeleton-bg-color)'
       }"
-    ></ngx-skeleton-loader>
+    ></v-skeleton-loader>
   </h2>
 </ng-template>
 
@@ -60,7 +60,7 @@
 
 <ng-template #cardDescriptionLoading>
   <p class="v-card__description" *ngIf="loading && loadingDescription">
-    <ngx-skeleton-loader
+    <v-skeleton-loader
       appearance="line"
       count="3"
       [theme]="{
@@ -69,6 +69,6 @@
         margin: '0',
         'background-color': 'var(--v-card-loading-skeleton-bg-color)'
       }"
-    ></ngx-skeleton-loader>
+    ></v-skeleton-loader>
   </p>
 </ng-template>

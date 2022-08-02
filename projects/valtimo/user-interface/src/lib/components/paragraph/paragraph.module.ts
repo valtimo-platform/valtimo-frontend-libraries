@@ -17,7 +17,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ParagraphComponent} from './paragraph.component';
-import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
+import {NgxSkeletonLoaderModule} from '../skeleton-loader/ngx-skeleton-loader.module';
 
 @NgModule({
   declarations: [ParagraphComponent],
