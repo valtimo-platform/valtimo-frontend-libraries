@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, Output} from '@angular/core';
-import {map} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {PluginManagementStateService} from '../../services';
 import {PluginConfigurationData} from '@valtimo/plugin';
 
@@ -31,8 +31,14 @@ export class PluginConfigureComponent {
 
   readonly save$ = this.stateService.save$;
 
-  readonly pluginDefinitionKey$ = this.stateService.selectedPluginDefinition$.pipe(
-    map(definition => definition?.key)
+  readonly pluginDefinitionKey$ = this.stateService.showModal$.pipe(
+    switchMap(modalType =>
+      modalType === 'add'
+        ? this.stateService.selectedPluginDefinition$.pipe(map(definition => definition?.key))
+        : this.stateService.selectedPluginConfiguration$.pipe(
+            map(configuration => configuration?.pluginDefinition?.key)
+          )
+    )
   );
 
   readonly disabled$ = this.stateService.inputDisabled$;

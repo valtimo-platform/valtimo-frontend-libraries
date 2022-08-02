@@ -18,22 +18,23 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {PluginManagementService, PluginManagementStateService} from '../../services';
 import {take} from 'rxjs/operators';
 import {ModalComponent, ModalService} from '@valtimo/user-interface';
-import {BehaviorSubject, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
 import {PluginConfigurationData} from '@valtimo/plugin';
 import {NGXLogger} from 'ngx-logger';
+import {PluginConfiguration} from '../../models';
 
 @Component({
-  selector: 'valtimo-plugin-add-modal',
-  templateUrl: './plugin-add-modal.component.html',
-  styleUrls: ['./plugin-add-modal.component.scss'],
+  selector: 'valtimo-plugin-edit-modal',
+  templateUrl: './plugin-edit-modal.component.html',
+  styleUrls: ['./plugin-edit-modal.component.scss'],
 })
-export class PluginAddModalComponent implements OnInit {
-  @ViewChild('pluginAddModal') pluginAddModal: ModalComponent;
+export class PluginEditModalComponent implements OnInit {
+  @ViewChild('pluginEditModal') pluginEditModal: ModalComponent;
 
   readonly inputDisabled$ = this.stateService.inputDisabled$;
-  readonly selectedPluginDefinition$ = this.stateService.selectedPluginDefinition$;
+  readonly selectedPluginConfiguration$: Observable<PluginConfiguration> =
+    this.stateService.selectedPluginConfiguration$;
   readonly configurationValid$ = new BehaviorSubject<boolean>(false);
-  readonly returnToFirstStepSubject$ = new Subject<boolean>();
 
   private showSubscription!: Subscription;
   private hideSubscription!: Subscription;
@@ -61,7 +62,6 @@ export class PluginAddModalComponent implements OnInit {
   hide(): void {
     this.stateService.disableInput();
     this.modalService.closeModal(() => {
-      this.returnToFirstStep();
       this.stateService.enableInput();
       this.stateService.clear();
     });
@@ -99,7 +99,7 @@ export class PluginAddModalComponent implements OnInit {
 
   private openShowSubscription(): void {
     this.showSubscription = this.stateService.showModal$.subscribe(modalType => {
-      if (modalType === 'add') {
+      if (modalType === 'edit') {
         this.show();
       }
     });
@@ -111,11 +111,7 @@ export class PluginAddModalComponent implements OnInit {
     });
   }
 
-  private returnToFirstStep(): void {
-    this.returnToFirstStepSubject$.next(true);
-  }
-
   private show(): void {
-    this.modalService.openModal(this.pluginAddModal);
+    this.modalService.openModal(this.pluginEditModal);
   }
 }

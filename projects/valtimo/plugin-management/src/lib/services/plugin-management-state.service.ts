@@ -17,7 +17,12 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {map, take} from 'rxjs/operators';
-import {PluginDefinition, PluginDefinitionWithLogo, PluginModal} from '../models';
+import {
+  PluginConfiguration,
+  PluginDefinition,
+  PluginDefinitionWithLogo,
+  PluginModal,
+} from '../models';
 import {PluginService, PluginSpecification} from '@valtimo/plugin';
 import {DomSanitizer} from '@angular/platform-browser';
 
@@ -65,6 +70,10 @@ export class PluginManagementStateService {
     undefined
   );
 
+  private readonly _selectedPluginConfiguration$ = new BehaviorSubject<
+    PluginConfiguration | undefined
+  >(undefined);
+
   constructor(
     private readonly pluginService: PluginService,
     private readonly sanitizer: DomSanitizer
@@ -96,6 +105,10 @@ export class PluginManagementStateService {
 
   get selectedPluginDefinition$(): Observable<PluginDefinition | undefined> {
     return this._selectedPluginDefinition$.asObservable();
+  }
+
+  get selectedPluginConfiguration$(): Observable<PluginConfiguration | undefined> {
+    return this._selectedPluginConfiguration$.asObservable();
   }
 
   get save$(): Observable<any> {
@@ -138,8 +151,16 @@ export class PluginManagementStateService {
     this._selectedPluginDefinition$.next(definition);
   }
 
+  selectPluginConfiguration(configuration: PluginConfiguration): void {
+    this._selectedPluginConfiguration$.next(configuration);
+  }
+
   clearSelectedPluginDefinition(): void {
     this._selectedPluginDefinition$.next(undefined);
+  }
+
+  clearSelectedPluginConfiguration(): void {
+    this._selectedPluginConfiguration$.next(undefined);
   }
 
   save(): void {
@@ -159,6 +180,7 @@ export class PluginManagementStateService {
   }
 
   clear(): void {
-    this._selectedPluginDefinition$.next(undefined);
+    this.clearSelectedPluginDefinition();
+    this.clearSelectedPluginConfiguration();
   }
 }
