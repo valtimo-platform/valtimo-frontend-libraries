@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-.user-icon {
-  font-size: 30px;
+.edit-plugin-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }
 
-.be-toggle-right-sidebar {
+.edit-configuration-title {
   display: flex;
-}
-
-.user-full-name {
-  display: flex;
-  height: 100%;
-  align-items: center;
+  width: 100%;
   justify-content: center;
-  margin-inline-end: var(--v-top-bar-user-name-spacing);
 }
