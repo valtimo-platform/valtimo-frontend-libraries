@@ -18,6 +18,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {PluginConfigurationComponent} from '../../../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription, take, tap} from 'rxjs';
 import {DocumentenApiConfig} from '../../models';
+import {PluginManagementService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-documenten-api-configuration',
@@ -40,8 +41,14 @@ export class DocumentenApiConfigurationComponent
   private readonly formValue$ = new BehaviorSubject<DocumentenApiConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
 
+  constructor(private readonly pluginManagementService: PluginManagementService) {}
+
   ngOnInit(): void {
     this.openSaveSubscription();
+
+    this.pluginManagementService
+      .getPluginConfigurationsByCategory('documenten-api-authentication')
+      .subscribe();
   }
 
   ngOnDestroy() {

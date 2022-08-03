@@ -16,15 +16,16 @@
 
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subject, switchMap} from 'rxjs';
+import {map} from 'rxjs/operators';
 import {
+  PluginService,
+  PluginSpecification,
   PluginConfiguration,
   PluginDefinition,
   PluginFunction,
   PluginConfigurationWithLogo,
   PluginManagementService,
-} from '@valtimo/plugin-management';
-import {map} from 'rxjs/operators';
-import {PluginService, PluginSpecification} from '@valtimo/plugin';
+} from '@valtimo/plugin';
 import {ProcessLink, ProcessLinkModalType} from '../models';
 
 @Injectable({
