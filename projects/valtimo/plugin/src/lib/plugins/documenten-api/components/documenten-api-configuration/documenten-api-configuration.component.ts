@@ -16,9 +16,19 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
-import {BehaviorSubject, combineLatest, Observable, Subscription, take, tap} from 'rxjs';
-import {DocumentenApiConfig} from '../../models';
-import {PluginManagementService} from '../../../../services';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  Subscription,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
+import {DocumentenApiConfig, DocumentStatus} from '../../models';
+import {PluginManagementService, PluginTranslationService} from '../../../../services';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-documenten-api-configuration',
@@ -41,14 +51,32 @@ export class DocumentenApiConfigurationComponent
   private readonly formValue$ = new BehaviorSubject<DocumentenApiConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private readonly pluginManagementService: PluginManagementService) {}
+  readonly authenticationPluginSelectItems$: Observable<Array<{id: string; text: string}>> =
+    combineLatest([
+      this.pluginManagementService.getPluginConfigurationsByCategory(
+        'documenten-api-authentication'
+      ),
+      this.translateService.stream('key'),
+    ]).pipe(
+      map(([configurations]) =>
+        configurations.map(configuration => ({
+          id: configuration.id,
+          text: `${configuration.title} - ${this.pluginTranslationService.instant(
+            'title',
+            configuration.pluginDefinition.key
+          )}`,
+        }))
+      )
+    );
+
+  constructor(
+    private readonly pluginManagementService: PluginManagementService,
+    private readonly translateService: TranslateService,
+    private readonly pluginTranslationService: PluginTranslationService
+  ) {}
 
   ngOnInit(): void {
     this.openSaveSubscription();
-
-    this.pluginManagementService
-      .getPluginConfigurationsByCategory('documenten-api-authentication')
-      .subscribe();
   }
 
   ngOnDestroy() {
@@ -61,7 +89,12 @@ export class DocumentenApiConfigurationComponent
   }
 
   private handleValid(formValue: DocumentenApiConfig): void {
-    const valid = !!(formValue.configurationTitle && formValue.url && formValue.bronorganisatie);
+    const valid = !!(
+      formValue.configurationTitle &&
+      formValue.url &&
+      formValue.bronorganisatie &&
+      formValue.authenticationPluginConfiguration
+    );
 
     this.valid$.next(valid);
     this.valid.emit(valid);

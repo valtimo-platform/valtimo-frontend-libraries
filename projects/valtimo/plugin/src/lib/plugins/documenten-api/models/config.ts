@@ -19,6 +19,7 @@ import {PluginConfigurationData} from '../../../models';
 interface DocumentenApiConfig extends PluginConfigurationData {
   url: string;
   bronorganisatie: string;
+  authenticationPluginConfiguration: string;
 }
 
 type DocumentLanguage = 'nld';
