@@ -110,7 +110,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
     this.documentDefinitionName = documentDefinitionName;
     this.initialSortState = this.dossierService.getInitialSortState(columns);
-
+    this.setCachedInitialSortState();
     this.openTranslationSubscription(columns);
   }
 
@@ -271,11 +271,14 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.doSearch();
   }
 
-  public getInitialSortState(): SortState {
+  private setCachedInitialSortState(): void {
     if (this.hasCachedSearchRequest()) {
       const cachedRequest = JSON.parse(this.getCachedDocumentSearchRequest());
-      return cachedRequest.sort ? cachedRequest.sort : this.initialSortState;
+      const cachedSort = cachedRequest?.sort;
+
+      if (cachedSort) {
+        this.initialSortState = cachedSort;
+      }
     }
-    return this.initialSortState;
   }
 }
