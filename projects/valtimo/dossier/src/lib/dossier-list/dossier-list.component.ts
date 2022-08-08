@@ -175,10 +175,16 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   public getCachedSearch(): DocumentSearchRequest {
     const json = JSON.parse(this.getCachedDocumentSearchRequest());
+    const page = json.page || 0;
+    const size = json.size || 10;
+
+    this.pagination.page = page + 1;
+    this.pagination.size = size;
+
     return new DocumentSearchRequestImpl(
       json.definitionName,
-      this.pagination.page - 1,
-      this.pagination.size,
+      page,
+      size,
       json.sequence,
       json.createdBy,
       json.globalSearchFilter,
