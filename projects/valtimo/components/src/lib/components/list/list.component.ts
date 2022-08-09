@@ -82,8 +82,8 @@ export class ListComponent implements OnChanges, OnInit, AfterViewInit {
       this.logger.debug(
         'Pagination does NOT exist in local storage for this list. Will use default. Change it to create an entry.'
       );
+      this.paginationSet.emit();
     }
-    this.paginationSet.emit();
   }
 
   setPaginationSize(numberOfEntries: string) {

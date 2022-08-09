@@ -24,12 +24,14 @@ import {
   DocumentService,
   SortState,
   ProcessDocumentDefinition,
+  Documents,
 } from '@valtimo/document';
 import moment from 'moment';
 import {combineLatest, Subscription} from 'rxjs';
 import {DefaultTabs} from '../dossier-detail-tab-enum';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
 import {DossierService} from '../dossier.service';
+import {NGXLogger} from 'ngx-logger';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -46,7 +48,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public implementationDefinitions: any;
   public showCreateDocument = false;
   public schema: any;
-  public documents: any;
+  public documents: Documents;
   public items: Array<any> = [];
   public fields: Array<any> = [];
   public processDefinitionListFields: Array<any> = [];
@@ -76,7 +78,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private router: Router,
     private documentService: DocumentService,
     private readonly translateService: TranslateService,
-    private readonly dossierService: DossierService
+    private readonly dossierService: DossierService,
+    private readonly logger: NGXLogger
   ) {}
 
   ngOnInit(): void {
@@ -91,12 +94,14 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   paginationSet() {
+    this.logger.log('paginationSet()');
     this.getData();
   }
 
   private routeEvent(router: Router) {
     this.routerSubscription = router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
+        this.logger.log('route event: NavigationEnd');
         this.doInit();
         this.getData();
       }
@@ -128,15 +133,18 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   public getData() {
+    this.logger.log('getData()');
     this.findDocumentDefinition(this.documentDefinitionName);
 
     if (this.hasCachedSearchRequest()) {
+      this.logger.log('getData(): has cached request, find documents');
       const documentSearchRequest = this.getCachedSearch();
       this.globalSearchFilter = documentSearchRequest.globalSearchFilter;
       this.sequence = documentSearchRequest.sequence;
       this.createdBy = documentSearchRequest.createdBy;
       this.findDocuments(documentSearchRequest);
     } else {
+      this.logger.log('getData(): no cached request, doSearch()');
       this.doSearch();
     }
 
@@ -144,15 +152,24 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   public doSearch() {
+    this.logger.log('doSearch()');
     const documentSearchRequest = this.buildDocumentSearchRequest();
     this.findDocuments(documentSearchRequest);
   }
 
   private findDocuments(documentSearchRequest: DocumentSearchRequest) {
-    return this.documentService.getDocuments(documentSearchRequest).subscribe(documents => {
+    this.logger.log(`findDocuments(): ${JSON.stringify(documentSearchRequest)}`);
+    this.documentService.getDocuments(documentSearchRequest).subscribe(documents => {
+      const paginationPageNumber = documents.number + 1;
+
       this.documents = documents;
       this.transformDocuments(this.documents.content);
       this.pagination.collectionSize = this.documents.totalElements;
+      this.pagination.page = paginationPageNumber;
+      this.pagination.size = this.documents.size;
+      this.logger.log(
+        `findDocuments(): set pagination; page: ${paginationPageNumber}, size: ${this.documents.size}`
+      );
       this.storeSearch(documentSearchRequest);
     });
   }
@@ -178,10 +195,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     const page = json.page || 0;
     const size = json.size || 10;
 
-    this.pagination.page = page + 1;
-    this.pagination.size = size;
-
-    return new DocumentSearchRequestImpl(
+    const documentSearchRequest = new DocumentSearchRequestImpl(
       json.definitionName,
       page,
       size,
@@ -190,6 +204,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
       json.globalSearchFilter,
       json.sort
     );
+
+    this.logger.log(`getCachedSearch(): ${JSON.stringify(documentSearchRequest)}`);
+
+    return documentSearchRequest;
   }
 
   private buildDocumentSearchRequest(): DocumentSearchRequest {
@@ -268,11 +286,13 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   public paginationClicked(page: number) {
+    this.logger.log(`paginationClicked(): ${page}`);
     this.pagination.page = page;
     this.doSearch();
   }
 
   public sortChanged(sortState: SortState) {
+    this.logger.log(`sortChanged(): ${JSON.stringify(sortState)}`);
     this.pagination.sort = sortState;
     this.doSearch();
   }
