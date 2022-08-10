@@ -238,6 +238,16 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.translationSubscription.unsubscribe();
   }
 
+  globalSearchFilterChange(filter: string): void {
+    this.globalSearchFilter$.next(filter);
+    this.pageChange(1);
+  }
+
+  sequenceChange(sequence: string): void {
+    this.sequence$.next(Number(sequence));
+    this.pageChange(1);
+  }
+
   private resetPagination(documentDefinitionName): void {
     this.settingPaginationForDocName$.pipe(take(1)).subscribe(settingPaginationForDocName => {
       if (documentDefinitionName !== settingPaginationForDocName) {

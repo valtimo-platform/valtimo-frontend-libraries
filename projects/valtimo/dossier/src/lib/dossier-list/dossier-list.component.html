@@ -116,9 +116,8 @@
         type="text"
         class="form-control"
         placeholder="{{ 'dossier.forms.globalSearchPlaceHolder' | translate }}"
-        [(ngModel)]="globalSearchFilter"
-        (blur)="doSearch()"
-        (keyup.enter)="doSearch()"
+        [ngModel]="globalSearchFilter$ | async"
+        (ngModelChange)="globalSearchFilterChange($event)"
       />
     </div>
 
@@ -127,9 +126,8 @@
         type="number"
         class="form-control"
         placeholder="{{ 'dossier.forms.referenceNumberPlaceHolder' | translate }}"
-        [(ngModel)]="sequence"
-        (blur)="doSearch()"
-        (keyup.enter)="doSearch()"
+        [ngModel]="sequence$ | async"
+        (ngModelChange)="sequenceChange($event)"
       />
     </div>
   </valtimo-filter-sidebar>
