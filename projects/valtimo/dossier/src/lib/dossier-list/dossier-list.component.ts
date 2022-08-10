@@ -440,10 +440,15 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   public rowClick(document: any) {
-    console.log('row click');
-    this.router.navigate([
-      `/dossiers/${this.documentDefinitionName}/document/${document.id}/${DefaultTabs.summary}`,
-    ]);
+    this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+      console.log(
+        'url',
+        `/dossiers/${documentDefinitionName}/document/${document.id}/${DefaultTabs.summary}`
+      );
+      this.router.navigate([
+        `/dossiers/${documentDefinitionName}/document/${document.id}/${DefaultTabs.summary}`,
+      ]);
+    });
   }
 
   public startDossier() {
