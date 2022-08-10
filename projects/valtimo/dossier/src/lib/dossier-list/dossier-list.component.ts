@@ -48,6 +48,7 @@ import {DefaultTabs} from '../dossier-detail-tab-enum';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
 import {DossierService} from '../dossier.service';
 import {Pagination, ListField} from '@valtimo/components';
+import {NGXLogger} from 'ngx-logger';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -149,8 +150,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
     )
   );
 
-  readonly initialSortState$ = new BehaviorSubject<SortState | undefined>(undefined);
-
   private readonly DEFAULT_PAGINATION = {
     collectionSize: 0,
     page: 1,
@@ -197,10 +196,9 @@ export class DossierListComponent implements OnInit, OnDestroy {
     distinctUntilChanged((prev, curr) => {
       return JSON.stringify(prev) === JSON.stringify(curr);
     }),
-    tap(request => console.log('request', request)),
     tap(request => {
       this.storedSearchRequestKey$.pipe(take(1)).subscribe(storedSearchRequestKey => {
-        console.log('store search request');
+        this.logger.log(`store request in local storage: ${JSON.stringify(request)}`);
         localStorage.setItem(storedSearchRequestKey, JSON.stringify(request));
       });
     }),
@@ -226,7 +224,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private router: Router,
     private documentService: DocumentService,
     private readonly translateService: TranslateService,
-    private readonly dossierService: DossierService
+    private readonly dossierService: DossierService,
+    private readonly logger: NGXLogger
   ) {}
 
   ngOnInit(): void {
@@ -243,6 +242,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.settingPaginationForDocName$.pipe(take(1)).subscribe(settingPaginationForDocName => {
       if (documentDefinitionName !== settingPaginationForDocName) {
         this.pagination$.next(undefined);
+        this.logger.log('clear pagination');
         this.settingPaginationForDocName$.next(documentDefinitionName);
         this.setPagination(documentDefinitionName);
       }
@@ -282,7 +282,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   pageChange(newPage: number) {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.page !== newPage) {
-        console.log('page change', newPage);
+        this.logger.log(`Page change: ${newPage}`);
         this.pagination$.next({...pagination, page: newPage});
       }
     });
@@ -291,8 +291,11 @@ export class DossierListComponent implements OnInit, OnDestroy {
   pageSizeChange(newPageSize: number) {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.size !== newPageSize) {
-        console.log('page size change', newPageSize);
-        this.pagination$.next({...pagination, size: newPageSize});
+        const amountOfAvailablePages = Math.ceil(pagination.collectionSize / newPageSize);
+        const newPage =
+          amountOfAvailablePages < pagination.page ? amountOfAvailablePages : pagination.page;
+        this.logger.log(`Page size change. New Page: ${newPage} New page size: ${newPageSize}`);
+        this.pagination$.next({...pagination, size: newPageSize, page: newPage});
       }
     });
   }
@@ -300,7 +303,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   sortChanged(newSortState: SortState) {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && JSON.stringify(pagination.sort) !== JSON.stringify(newSortState)) {
-        console.log('sort change');
+        this.logger.log(`Sort state change: ${JSON.stringify(newSortState)}`);
         this.pagination$.next({...pagination, sort: newSortState});
       }
     });

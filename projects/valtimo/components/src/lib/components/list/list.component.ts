@@ -111,6 +111,10 @@ export class ListComponent implements OnChanges, OnInit, AfterViewInit {
     if (changes.items && changes.items.currentValue) {
       this.transformListItemsMatchFields();
     }
+
+    if (changes?.initialSortState?.currentValue) {
+      this.sort$.next(changes?.initialSortState?.currentValue);
+    }
   }
 
   ngAfterViewInit() {
