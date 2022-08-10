@@ -127,7 +127,7 @@ export class DossierListComponent implements OnInit {
     )
   );
 
-  private readonly DEFAULT_PAGINATION = {
+  private readonly DEFAULT_PAGINATION: Pagination = {
     collectionSize: 0,
     page: 1,
     size: 10,
@@ -287,23 +287,41 @@ export class DossierListComponent implements OnInit {
     combineLatest([this.hasStoredSearchRequest$, this.storedSearchRequestKey$, this.columns$])
       .pipe(take(1))
       .subscribe(([hasStoredSearchRequest, storedSearchRequestKey, columns]) => {
-        const defaultSortState = this.dossierService.getInitialSortState(columns);
-        const defaultPagination: Pagination = {
-          ...this.DEFAULT_PAGINATION,
-          sort: defaultSortState,
-        };
-        const storedSearchRequest =
-          hasStoredSearchRequest && JSON.parse(localStorage.getItem(storedSearchRequestKey));
-        const storedPagination: Pagination | undefined = storedSearchRequest && {
-          ...this.DEFAULT_PAGINATION,
-          sort: storedSearchRequest.sort,
-          page: storedSearchRequest.page + 1,
-          size: storedSearchRequest.size,
-        };
+        const defaultPagination: Pagination = this.getDefaultPagination(columns);
+        const storedPagination: Pagination = this.getStoredPagination(
+          hasStoredSearchRequest,
+          storedSearchRequestKey
+        );
 
         this.logger.log(`Set pagination: ${JSON.stringify(storedPagination || defaultPagination)}`);
         this.pagination$.next(storedPagination || defaultPagination);
       });
+  }
+
+  private getDefaultPagination(columns: Array<DefinitionColumn>): Pagination {
+    const defaultSortState = this.dossierService.getInitialSortState(columns);
+
+    return {
+      ...this.DEFAULT_PAGINATION,
+      sort: defaultSortState,
+    };
+  }
+
+  private getStoredPagination(
+    hasStoredSearchRequest: boolean,
+    storedSearchRequestKey: string
+  ): Pagination | undefined {
+    const storedSearchRequest =
+      hasStoredSearchRequest && JSON.parse(localStorage.getItem(storedSearchRequestKey));
+
+    return (
+      storedSearchRequest && {
+        ...this.DEFAULT_PAGINATION,
+        sort: storedSearchRequest.sort,
+        page: storedSearchRequest.page + 1,
+        size: storedSearchRequest.size,
+      }
+    );
   }
 
   private setCollectionSize(documents: Documents): void {
