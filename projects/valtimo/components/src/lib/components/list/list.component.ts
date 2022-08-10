@@ -49,6 +49,7 @@ export class ListComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() actions: any[] = [];
   @Input() paginationIdentifier?: string;
   @Input() initialSortState: SortState;
+
   @Output() rowClicked: EventEmitter<any> = new EventEmitter();
   @Output() paginationClicked: EventEmitter<any> = new EventEmitter();
   @Output() paginationSet: EventEmitter<any> = new EventEmitter();
@@ -82,7 +83,7 @@ export class ListComponent implements OnChanges, OnInit, AfterViewInit {
       this.logger.debug(
         'Pagination does NOT exist in local storage for this list. Will use default. Change it to create an entry.'
       );
-      this.paginationSet.emit();
+      this.paginationSet.emit(10);
     }
   }
 
