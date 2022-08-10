@@ -88,27 +88,29 @@
 
 <ng-template #list>
   <ng-container *ngIf="paginationCopy$ | async as pagination">
-    <valtimo-list
-      *ngIf="documentItems$ | async as documentItems"
-      [items]="documentItems"
-      [fields]="fields$ | async"
-      (rowClicked)="rowClick($event)"
-      [pagination]="pagination"
-      [viewMode]="true"
-      [header]="true"
-      paginationIdentifier="dossierList"
-      (paginationClicked)="pageChange($event)"
-      (paginationSet)="pageSizeChange($event)"
-      [initialSortState]="pagination.sort"
-      (sortChanged)="sortChanged($event)"
-    >
-      <div header>
-        <h3 class="list-header-title">
-          {{ (schema$ | async)?.title }}
-          <sup class="ml-1 badge badge-pill badge-primary">{{ documentItems?.length || 0 }}</sup>
-        </h3>
-      </div>
-    </valtimo-list>
+    <ng-container *ngIf="fields$ | async as fields">
+      <valtimo-list
+        *ngIf="documentItems$ | async as documentItems"
+        [items]="documentItems"
+        [fields]="fields"
+        (rowClicked)="rowClick($event)"
+        [pagination]="pagination"
+        [viewMode]="true"
+        [header]="true"
+        paginationIdentifier="dossierList"
+        (paginationClicked)="pageChange($event)"
+        (paginationSet)="pageSizeChange($event)"
+        [initialSortState]="pagination.sort"
+        (sortChanged)="sortChanged($event)"
+      >
+        <div header>
+          <h3 class="list-header-title">
+            {{ (schema$ | async)?.title }}
+            <sup class="ml-1 badge badge-pill badge-primary">{{ documentItems?.length || 0 }}</sup>
+          </h3>
+        </div>
+      </valtimo-list>
+    </ng-container>
   </ng-container>
 </ng-template>
 
