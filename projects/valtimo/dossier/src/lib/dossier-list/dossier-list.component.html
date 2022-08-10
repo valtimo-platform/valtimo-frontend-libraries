@@ -19,15 +19,19 @@
 <div class="main-content pt-0">
   <div class="container-fluid">
     <div class="col-12 px-0 mb-5">
-      <div *ngIf="associatedProcessDefinitions$ | async as associatedProcessDefinitions">
+      <div
+        *ngIf="
+          associatedProcessDocumentDefinitions$ | async as associatedProcessDocumentDefinitions
+        "
+      >
         <div class="text-right mt-m3px mb-3">
           <button
             type="button"
             class="btn btn-space btn-primary mr-0"
             (click)="startDossier()"
-            [ngbTooltip]="associatedProcessDefinitions.length === 0 ? 'No action' : null"
+            [ngbTooltip]="associatedProcessDocumentDefinitions.length === 0 ? 'No action' : null"
             placement="bottom"
-            [disabled]="associatedProcessDefinitions.length === 0"
+            [disabled]="associatedProcessDocumentDefinitions.length === 0"
           >
             <i class="icon mdi mdi-plus mr-1"></i>
             {{ 'Start Dossier' | translate }}
@@ -56,7 +60,7 @@
                 <div class="table-responsive">
                   <table class="table m-0">
                     <tr
-                      *ngFor="let processDocumentDefinition of associatedProcessDefinitions"
+                      *ngFor="let processDocumentDefinition of associatedProcessDocumentDefinitions"
                       (click)="selectProcess(processDocumentDefinition)"
                       style="cursor: pointer"
                     >

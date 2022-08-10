@@ -99,16 +99,17 @@ export class DossierListComponent implements OnInit, OnDestroy {
     })
   );
 
-  readonly associatedProcessDefinitions$ = this.documentDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
-      documentDefinitionName
-        ? this.documentService.findProcessDocumentDefinitions(documentDefinitionName)
-        : of([])
-    ),
-    map(processDocumentDefinitions =>
-      processDocumentDefinitions.filter(definition => definition.canInitializeDocument)
-    )
-  );
+  readonly associatedProcessDocumentDefinitions$: Observable<Array<ProcessDocumentDefinition>> =
+    this.documentDefinitionName$.pipe(
+      switchMap(documentDefinitionName =>
+        documentDefinitionName
+          ? this.documentService.findProcessDocumentDefinitions(documentDefinitionName)
+          : of([])
+      ),
+      map(processDocumentDefinitions =>
+        processDocumentDefinitions.filter(definition => definition.canInitializeDocument)
+      )
+    );
 
   readonly processDefinitionListFields$ = new BehaviorSubject<Array<{key: string; label: string}>>([
     {
@@ -277,6 +278,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
           size: storedSearchRequest.size,
         };
 
+        this.logger.log(`Set pagination: ${JSON.stringify(storedPagination || defaultPagination)}`);
         this.pagination$.next(storedPagination || defaultPagination);
       });
   }
@@ -445,12 +447,16 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   public startDossier() {
-    if (this.processDocumentDefinitions.length > 1) {
-      $('#startProcess').modal('show');
-    } else {
-      this.selectedProcessDocumentDefinition = this.processDocumentDefinitions[0];
-      this.showStartProcessModal();
-    }
+    this.associatedProcessDocumentDefinitions$
+      .pipe(take(1))
+      .subscribe(associatedProcessDocumentDefinitions => {
+        if (associatedProcessDocumentDefinitions.length > 1) {
+          $('#startProcess').modal('show');
+        } else {
+          this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
+          this.showStartProcessModal();
+        }
+      });
   }
 
   private showStartProcessModal() {
