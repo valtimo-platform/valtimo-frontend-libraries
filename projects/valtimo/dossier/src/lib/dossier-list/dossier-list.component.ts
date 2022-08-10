@@ -66,9 +66,11 @@ export class DossierListComponent implements OnInit {
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
 
-  readonly settingPaginationForDocName$ = new BehaviorSubject<string | undefined>(undefined);
+  private readonly settingPaginationForDocName$ = new BehaviorSubject<string | undefined>(
+    undefined
+  );
 
-  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
+  private readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.documentDefinitionName || ''),
     tap(documentDefinitionName => {
       this.resetPagination(documentDefinitionName);
@@ -87,13 +89,6 @@ export class DossierListComponent implements OnInit {
       )
     );
 
-  readonly processDefinitionListFields$ = new BehaviorSubject<Array<{key: string; label: string}>>([
-    {
-      key: 'processName',
-      label: 'Proces',
-    },
-  ]);
-
   readonly schema$ = this.documentDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinition(documentDefinitionName)
@@ -101,17 +96,20 @@ export class DossierListComponent implements OnInit {
     map(documentDefinition => documentDefinition?.schema)
   );
 
-  readonly storedSearchRequestKey$: Observable<string> = this.documentDefinitionName$.pipe(
+  private readonly storedSearchRequestKey$: Observable<string> = this.documentDefinitionName$.pipe(
     map(documentDefinitionName => `list-search-${documentDefinitionName}`)
   );
 
-  readonly hasStoredSearchRequest$: Observable<boolean> = this.storedSearchRequestKey$.pipe(
+  private readonly hasStoredSearchRequest$: Observable<boolean> = this.storedSearchRequestKey$.pipe(
     map(storedSearchRequestKey => localStorage.getItem(storedSearchRequestKey) !== null)
   );
 
-  readonly columns$: Observable<Array<DefinitionColumn>> = this.documentDefinitionName$.pipe(
-    map(documentDefinitionName => this.dossierService.getDefinitionColumns(documentDefinitionName))
-  );
+  private readonly columns$: Observable<Array<DefinitionColumn>> =
+    this.documentDefinitionName$.pipe(
+      map(documentDefinitionName =>
+        this.dossierService.getDefinitionColumns(documentDefinitionName)
+      )
+    );
 
   readonly fields$: Observable<Array<ListField>> = combineLatest([
     this.columns$,
@@ -143,11 +141,11 @@ export class DossierListComponent implements OnInit {
 
   readonly sequence$ = new BehaviorSubject<number | undefined>(undefined);
 
-  readonly createdBy$ = new BehaviorSubject<string | undefined>(undefined);
-
   readonly globalSearchFilter$ = new BehaviorSubject<string | undefined>(undefined);
 
-  readonly documentSearchRequest$: Observable<DocumentSearchRequest> = combineLatest([
+  private readonly createdBy$ = new BehaviorSubject<string | undefined>(undefined);
+
+  private readonly documentSearchRequest$: Observable<DocumentSearchRequest> = combineLatest([
     this.pagination$,
     this.documentDefinitionName$,
     this.sequence$,
@@ -169,7 +167,7 @@ export class DossierListComponent implements OnInit {
     )
   );
 
-  readonly documentsRequest$: Observable<Documents> = this.documentSearchRequest$.pipe(
+  private readonly documentsRequest$: Observable<Documents> = this.documentSearchRequest$.pipe(
     distinctUntilChanged((prev, curr) => {
       return JSON.stringify(prev) === JSON.stringify(curr);
     }),
@@ -195,9 +193,9 @@ export class DossierListComponent implements OnInit {
   );
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly documentService: DocumentService,
     private readonly translateService: TranslateService,
     private readonly dossierService: DossierService,
     private readonly logger: NGXLogger
@@ -232,6 +230,7 @@ export class DossierListComponent implements OnInit {
         const amountOfAvailablePages = Math.ceil(pagination.collectionSize / newPageSize);
         const newPage =
           amountOfAvailablePages < pagination.page ? amountOfAvailablePages : pagination.page;
+
         this.logger.log(`Page size change. New Page: ${newPage} New page size: ${newPageSize}`);
         this.pagination$.next({...pagination, size: newPageSize, page: newPage});
       }
@@ -249,10 +248,6 @@ export class DossierListComponent implements OnInit {
 
   rowClick(document: any) {
     this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
-      console.log(
-        'url',
-        `/dossiers/${documentDefinitionName}/document/${document.id}/${DefaultTabs.summary}`
-      );
       this.router.navigate([
         `/dossiers/${documentDefinitionName}/document/${document.id}/${DefaultTabs.summary}`,
       ]);
