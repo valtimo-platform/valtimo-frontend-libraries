@@ -17,13 +17,13 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PluginTranslatePipeModule} from '../../pipes';
-import {FormModule, InputModule, SelectModule} from '@valtimo/user-interface';
+import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/user-interface';
 import {ZakenApiConfigurationComponent} from './components/zaken-api-configuration/zaken-api-configuration.component';
 import {LinkDocumentToZaakConfigurationComponent} from './components/link-document-to-zaak/link-document-to-zaak-configuration.component';
 
 @NgModule({
   declarations: [ZakenApiConfigurationComponent, LinkDocumentToZaakConfigurationComponent],
-  imports: [CommonModule, PluginTranslatePipeModule, FormModule, InputModule, SelectModule],
+  imports: [CommonModule, PluginTranslatePipeModule, FormModule, InputModule, SelectModule, ParagraphModule],
   exports: [ZakenApiConfigurationComponent, LinkDocumentToZaakConfigurationComponent],
 })
 

@@ -41,6 +41,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       titel: 'Titel van het document',
       beschrijving: 'Beschrijving van het document',
       authenticationPluginConfiguration: 'Configuratie authenticatie-plug-in',
+      linkDocumentInformation: 'Hiermee kunt u een document dat reeds geupload is naar de Documenten API koppelen aan de Zaak die hoort bij het dossier.',
     },
     en: {
       title: 'Zaken API',
@@ -52,6 +53,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       titel: 'Title of the  document',
       beschrijving: 'Description of the document',
       authenticationPluginConfiguration: 'Authentication plugin configuration',
+      linkDocumentInformation: 'This allows you to link a document that has already been uploaded to the Documents API to the Case associated with the case.',
     },
     de: {
       title: 'Geschäfts-API',
@@ -63,6 +65,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       titel: 'Titel des Dokuments',
       beschrijving: 'Beschreibung des Dokuments',
       authenticationPluginConfiguration: 'Authentifizierungs-Plugin-Konfiguration',
+      linkDocumentInformation: 'Auf diese Weise können Sie ein Dokument, das bereits in die Dokumenten-API hochgeladen wurde, mit dem Fall verknüpfen, der dem Fall zugeordnet ist.',
     },
   },
 };
