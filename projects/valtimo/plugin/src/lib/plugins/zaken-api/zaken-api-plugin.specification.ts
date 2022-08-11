@@ -43,7 +43,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       beschrijving: 'Documentbeschrijving',
       authenticationPluginConfiguration: 'Configuratie authenticatie-plug-in',
       linkDocumentInformation:
-        'Hiermee kunt u een document dat reeds geupload is naar de Documenten API koppelen aan de Zaak die hoort bij het dossier.',
+        'Deze actie koppelt een document uit de Documenten API aan de zaak die bij het dossier hoort.',
       documentUrlTooltip:
         'Dit veld ondersteunt URLs en proces variabelen. Gebruik pv:variable om een proces variabele uit te lezen',
     },
@@ -52,23 +52,23 @@ const zakenApiPluginSpecification: PluginSpecification = {
       url: 'URL',
       description:
         'The API supports the storage and disclosure of data on all municipal matters to other applications, of all types.',
-      'link-document-to-zaak': 'Link existing document',
-      configurationTitle: 'Configurationname',
+      'link-document-to-zaak': 'Link document to zaak',
+      configurationTitle: 'Configuration name',
       documentUrl: 'URL to the document',
       titel: 'Document title',
       beschrijving: 'Document description',
       authenticationPluginConfiguration: 'Authentication plugin configuration',
       linkDocumentInformation:
-        'This allows you to link a document that has already been uploaded to the Documents API to the Case associated with the case.',
+        'This action links a document from the Documents API to the zaak associated with the case.',
       documentUrlTooltip:
         'This field supports URLs and process variables. Use pv:variable to read a process variable',
     },
     de: {
-      title: 'Geschäfts-API',
+      title: 'Zaken API',
       url: 'URL',
       description:
         'Die API unterstützt die Speicherung und Weitergabe von Daten zu allen kommunalen Belangen an andere Anwendungen.',
-      'link-document-to-zaak': 'Vorhandenes Dokument verknüpfen',
+      'link-document-to-zaak': 'Dokument mit Zaak verknüpfen',
       configurationTitle: 'Konfigurationsname',
       documentUrl: 'URL zum Dokument',
       titel: 'Dokumenttitel',
