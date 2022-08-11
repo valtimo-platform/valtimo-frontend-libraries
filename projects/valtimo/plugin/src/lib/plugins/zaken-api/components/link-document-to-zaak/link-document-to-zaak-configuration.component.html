@@ -31,6 +31,7 @@
     [defaultValue]="obs.prefill?.documentUrl"
     [disabled]="obs.disabled"
     [required]="true"
+    [tooltip]="'documentUrlTooltip' | pluginTranslate: pluginId | async"
   >
   </v-input>
   <v-input

@@ -35,41 +35,49 @@ const zakenApiPluginSpecification: PluginSpecification = {
       title: 'Zaken API',
       url: 'URL',
       description:
-        'API voor het koppel van een bestaand document in de Documenten API met een Zaak',
-      'link-document-to-zaak': 'Koppel bestaand document',
+        'De API ondersteunt het opslaan en het naar andere applicaties ontsluiten van gegevens over alle gemeentelijke zaken, van elk type.',
+      'link-document-to-zaak': 'Koppel document aan zaak',
       configurationTitle: 'Configuratienaam',
-      documentUrl: 'URL naar openzaak API',
-      titel: 'Titel van het document',
-      beschrijving: 'Beschrijving van het document',
+      documentUrl: 'URL naar het document',
+      titel: 'Documenttitel',
+      beschrijving: 'Documentbeschrijving',
       authenticationPluginConfiguration: 'Configuratie authenticatie-plug-in',
       linkDocumentInformation:
         'Hiermee kunt u een document dat reeds geupload is naar de Documenten API koppelen aan de Zaak die hoort bij het dossier.',
+      documentUrlTooltip:
+        'Dit veld ondersteunt URLs en proces variabelen. Gebruik pv:variable om een proces variabele uit te lezen',
     },
     en: {
       title: 'Zaken API',
       url: 'URL',
-      description: 'API for linking existing Documents to a Zaak',
+      description:
+        'The API supports the storage and disclosure of data on all municipal matters to other applications, of all types.',
       'link-document-to-zaak': 'Link existing document',
-      configurationTitle: 'Configuratienaam',
-      documentUrl: 'URL to openzaak API',
-      titel: 'Title of the  document',
-      beschrijving: 'Description of the document',
+      configurationTitle: 'Configurationname',
+      documentUrl: 'URL to the document',
+      titel: 'Document title',
+      beschrijving: 'Document description',
       authenticationPluginConfiguration: 'Authentication plugin configuration',
       linkDocumentInformation:
         'This allows you to link a document that has already been uploaded to the Documents API to the Case associated with the case.',
+      documentUrlTooltip:
+        'This field supports URLs and process variables. Use pv:variable to read a process variable',
     },
     de: {
       title: 'Geschäfts-API',
       url: 'URL',
-      description: 'API zum Verknüpfen eines Dokuments mit einem Fall.',
+      description:
+        'Die API unterstützt die Speicherung und Weitergabe von Daten zu allen kommunalen Belangen an andere Anwendungen.',
       'link-document-to-zaak': 'Vorhandenes Dokument verknüpfen',
-      configurationTitle: 'Configuratienaam',
-      documentUrl: 'URL zur openzaak-API',
-      titel: 'Titel des Dokuments',
-      beschrijving: 'Beschreibung des Dokuments',
+      configurationTitle: 'Konfigurationsname',
+      documentUrl: 'URL zum Dokument',
+      titel: 'Dokumenttitel',
+      beschrijving: 'Dokumentbeschreibung',
       authenticationPluginConfiguration: 'Authentifizierungs-Plugin-Konfiguration',
       linkDocumentInformation:
-        'Auf diese Weise können Sie ein Dokument, das bereits in die Dokumenten-API hochgeladen wurde, mit dem Fall verknüpfen, der dem Fall zugeordnet ist.',
+        'Diese Aktion verknüpft ein Dokument aus der Dokumenten-API mit dem mit dem Fall verknüpften Zaak.',
+      documentUrlTooltip:
+        'Dieses Feld unterstützt URLs und Prozessvariablen. Verwenden Sie pv:Variablen, um eine Prozessvariable zu lesen',
     },
   },
 };
