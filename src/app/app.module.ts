@@ -185,7 +185,7 @@ export function tabsFactory() {
         openZaakPluginSpecification,
         documentenApiPluginSpecification,
         smartDocumentsPluginSpecification,
-        zakenApiPluginSpecification
+        zakenApiPluginSpecification,
       ],
     },
   ],

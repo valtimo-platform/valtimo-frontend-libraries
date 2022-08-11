@@ -23,8 +23,14 @@ import {LinkDocumentToZaakConfigurationComponent} from './components/link-docume
 
 @NgModule({
   declarations: [ZakenApiConfigurationComponent, LinkDocumentToZaakConfigurationComponent],
-  imports: [CommonModule, PluginTranslatePipeModule, FormModule, InputModule, SelectModule, ParagraphModule],
+  imports: [
+    CommonModule,
+    PluginTranslatePipeModule,
+    FormModule,
+    InputModule,
+    SelectModule,
+    ParagraphModule,
+  ],
   exports: [ZakenApiConfigurationComponent, LinkDocumentToZaakConfigurationComponent],
 })
-
 export class ZakenApiPluginModule {}

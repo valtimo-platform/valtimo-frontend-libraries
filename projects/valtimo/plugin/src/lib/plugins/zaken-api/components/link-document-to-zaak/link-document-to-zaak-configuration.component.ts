@@ -16,7 +16,7 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FunctionConfigurationComponent} from '../../../../models';
-import {BehaviorSubject, combineLatest, map, Observable, Subscription, take,} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} from 'rxjs';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
 import {LinkDocumentToZaakConfig} from '../../models';
@@ -44,9 +44,7 @@ export class LinkDocumentToZaakConfigurationComponent
 
   readonly authenticationPluginSelectItems$: Observable<Array<{id: string; text: string}>> =
     combineLatest([
-      this.pluginManagementService.getPluginConfigurationsByCategory(
-        'link-document-to-zaak'
-      ),
+      this.pluginManagementService.getPluginConfigurationsByCategory('link-document-to-zaak'),
       this.translateService.stream('key'),
     ]).pipe(
       map(([configurations]) =>
@@ -80,9 +78,7 @@ export class LinkDocumentToZaakConfigurationComponent
   }
 
   private handleValid(formValue: LinkDocumentToZaakConfig): void {
-    const valid = !!(
-      formValue.documentUrl
-    );
+    const valid = !!formValue.documentUrl;
 
     this.valid$.next(valid);
     this.valid.emit(valid);

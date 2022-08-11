@@ -16,7 +16,7 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
-import {BehaviorSubject, combineLatest, map, Observable, Subscription, take,} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} from 'rxjs';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
 import {ZakenApiConfig} from '../../models';
@@ -34,8 +34,7 @@ export class ZakenApiConfigurationComponent
   @Input() pluginId: string;
   @Input() prefillConfiguration$: Observable<ZakenApiConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<ZakenApiConfig> =
-    new EventEmitter<ZakenApiConfig>();
+  @Output() configuration: EventEmitter<ZakenApiConfig> = new EventEmitter<ZakenApiConfig>();
 
   private saveSubscription!: Subscription;
 
@@ -44,9 +43,7 @@ export class ZakenApiConfigurationComponent
 
   readonly authenticationPluginSelectItems$: Observable<Array<{id: string; text: string}>> =
     combineLatest([
-      this.pluginManagementService.getPluginConfigurationsByCategory(
-        'zaken-api-authentication'
-      ),
+      this.pluginManagementService.getPluginConfigurationsByCategory('zaken-api-authentication'),
       this.translateService.stream('key'),
     ]).pipe(
       map(([configurations]) =>
