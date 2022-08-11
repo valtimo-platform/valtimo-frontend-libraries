@@ -215,7 +215,7 @@ export class DossierListComponent implements OnInit {
     this.pageChange(1);
   }
 
-  pageChange(newPage: number) {
+  pageChange(newPage: number): void {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.page !== newPage) {
         this.logger.log(`Page change: ${newPage}`);
@@ -224,7 +224,7 @@ export class DossierListComponent implements OnInit {
     });
   }
 
-  pageSizeChange(newPageSize: number) {
+  pageSizeChange(newPageSize: number): void {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.size !== newPageSize) {
         const amountOfAvailablePages = Math.ceil(pagination.collectionSize / newPageSize);
@@ -237,7 +237,7 @@ export class DossierListComponent implements OnInit {
     });
   }
 
-  sortChanged(newSortState: SortState) {
+  sortChanged(newSortState: SortState): void {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && JSON.stringify(pagination.sort) !== JSON.stringify(newSortState)) {
         this.logger.log(`Sort state change: ${JSON.stringify(newSortState)}`);
@@ -246,7 +246,7 @@ export class DossierListComponent implements OnInit {
     });
   }
 
-  rowClick(document: any) {
+  rowClick(document: any): void {
     this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
       this.router.navigate([
         `/dossiers/${documentDefinitionName}/document/${document.id}/${DefaultTabs.summary}`,
@@ -254,7 +254,7 @@ export class DossierListComponent implements OnInit {
     });
   }
 
-  startDossier() {
+  startDossier(): void {
     this.associatedProcessDocumentDefinitions$
       .pipe(take(1))
       .subscribe(associatedProcessDocumentDefinitions => {
@@ -265,6 +265,16 @@ export class DossierListComponent implements OnInit {
           this.showStartProcessModal();
         }
       });
+  }
+
+  selectProcess(processDocumentDefinition: ProcessDocumentDefinition): void {
+    const modal = $('#startProcess');
+    if (!this.modalListenerAdded) {
+      modal.on('hidden.bs.modal', this.showStartProcessModal.bind(this));
+      this.modalListenerAdded = true;
+    }
+    this.selectedProcessDocumentDefinition = processDocumentDefinition;
+    modal.modal('hide');
   }
 
   private resetPagination(documentDefinitionName): void {
@@ -327,20 +337,10 @@ export class DossierListComponent implements OnInit {
     });
   }
 
-  private showStartProcessModal() {
+  private showStartProcessModal(): void {
     if (this.selectedProcessDocumentDefinition !== null) {
       this.processStart.openModal(this.selectedProcessDocumentDefinition);
       this.selectedProcessDocumentDefinition = null;
     }
-  }
-
-  public selectProcess(processDocumentDefinition: ProcessDocumentDefinition) {
-    const modal = $('#startProcess');
-    if (!this.modalListenerAdded) {
-      modal.on('hidden.bs.modal', this.showStartProcessModal.bind(this));
-      this.modalListenerAdded = true;
-    }
-    this.selectedProcessDocumentDefinition = processDocumentDefinition;
-    modal.modal('hide');
   }
 }

@@ -71,7 +71,7 @@ export class ListComponent implements OnChanges, OnInit, AfterViewInit {
     this.viewListAs = localStorage.getItem('viewListAs') || 'table';
   }
 
-  loadPaginationSize() {
+  loadPaginationSize(): void {
     const entries = localStorage.getItem(
       `${this.paginationIdentifier}${ListComponent.PAGINATION_SIZE}`
     );
