@@ -51,6 +51,10 @@
   }
   .ng-select.ng-select-disabled > .ng-select-container {
     color: var(--v-select-disabled-font-color);
+    background: var(--v-select-disabled-bg-color);
+  }
+  .ng-select.ng-select-disabled .ng-arrow-wrapper {
+    pointer-events: none;
   }
   .ng-select .ng-has-value .ng-placeholder {
     display: none;
@@ -333,7 +337,7 @@
   }
   .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
   .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
-    color: var(--v-select-font-color);
+    color: var(--v-select-darker-font-color);
     background-color: var(--v-select-selected-background-color);
   }
   .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected .ng-option-label,
