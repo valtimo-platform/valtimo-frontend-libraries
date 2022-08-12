@@ -188,7 +188,7 @@
   --v-table-pagination-size-spacing-inline: var(--v-spacing-inline-sm);
   --v-table-pagination-button-spacing-inline: var(--v-spacing-inline-2xl);
   /* select */
-  --v-select-background-color: var(--v-color-grey-4);
+  --v-select-background-color: var(--v-color-white);
   --v-select-selected-background-color: var(--v-color-grey-3);
   --v-select-highlighted-background-color: var(--v-color-grey-4);
   --v-select-disabled-font-color: var(--v-color-grey-2);
