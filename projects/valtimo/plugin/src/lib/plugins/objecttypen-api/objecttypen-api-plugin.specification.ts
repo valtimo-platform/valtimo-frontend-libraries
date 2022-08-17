@@ -29,7 +29,7 @@ const objecttypenApiPluginSpecification: PluginSpecification = {
       url: 'Objecttypen API URL',
       urlTooltip: 'In dit veld moet de verwijzing komen naar de REST API van Objecttypen',
       description:
-        'Met de Overige Objecten Registratie API-specificaties (Objecttypen) kunnen gemeenten eenduidig objecten (zoals prullenbakken, laadpalen etc.) registreren, opslaan en ontsluiten.',
+        'Met de Overige Objecten Registratie API-specificaties (Objecttypen) kunnen gemeenten eenduidig objecten registreren, opslaan en ontsluiten.',
       configurationTitle: 'Configuratienaam',
       configurationTitleTooltip:
         'Onder deze naam zal de plugin te herkennen zijn in de rest van de applicatie',
@@ -40,7 +40,7 @@ const objecttypenApiPluginSpecification: PluginSpecification = {
       url: 'Objecttypen API URL',
       urlTooltip: 'This field must contain the URL to the REST API of Objecttypen',
       description:
-        'With the Other Objects Registration API specifications (Object types), municipalities can unambiguously register, store and access objects (such as trash cans, charging stations, etc.).',
+        'With the Other Objects Registration API specifications (Object types), municipalities can unambiguously register, store and access objects.',
       configurationTitle: 'Configuration name',
       configurationTitleTooltip:
         'With this name the plugin will be recognizable in the rest of the application',
@@ -51,7 +51,7 @@ const objecttypenApiPluginSpecification: PluginSpecification = {
       url: 'Objecttypen API URL',
       urlTooltip: 'Dieses Feld muss die URL zur REST API von Objecttypen enthalten',
       description:
-        'Mit den Spezifikationen der Other Objects Registration API (Objekttypen) können Kommunen Objekte (wie Mülltonnen, Ladestationen etc.) eindeutig registrieren, speichern und darauf zugreifen.',
+        'Mit den Spezifikationen der Other Objects Registration API (Objekttypen) können Kommunen Objekte eindeutig registrieren, speichern und darauf zugreifen.',
       configurationTitle: 'Konfigurationsname',
       configurationTitleTooltip:
         'An diesem Namen wird das Plugin im Rest der Anwendung erkennbar sein',
