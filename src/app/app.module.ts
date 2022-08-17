@@ -85,6 +85,8 @@ import {PluginManagementModule} from '@valtimo/plugin-management';
 import {
   DocumentenApiPluginModule,
   documentenApiPluginSpecification,
+  ObjectTokenAuthenticationPluginModule,
+  objectTokenAuthenticationPluginSpecification,
   OpenZaakPluginModule,
   openZaakPluginSpecification,
   PLUGINS_TOKEN,
@@ -164,6 +166,7 @@ export function tabsFactory() {
     OpenZaakModule,
     CustomerModule,
     PluginManagementModule,
+    ObjectTokenAuthenticationPluginModule,
     OpenZaakPluginModule,
     SmartDocumentsPluginModule,
     DocumentenApiPluginModule,
@@ -184,6 +187,7 @@ export function tabsFactory() {
       useValue: [
         openZaakPluginSpecification,
         documentenApiPluginSpecification,
+        objectTokenAuthenticationPluginSpecification,
         smartDocumentsPluginSpecification,
         zakenApiPluginSpecification,
       ],
