@@ -5,7 +5,7 @@ import {Observable, Subject} from 'rxjs';
   providedIn: 'root',
 })
 export class ValtimoModalService {
-  private readonly _scrollToTop$ = new Subject();
+  private readonly _scrollToTop$ = new Subject<null>();
 
   constructor() {}
 
