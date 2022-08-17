@@ -27,7 +27,7 @@ const objecttypenApiPluginSpecification: PluginSpecification = {
     nl: {
       title: 'Objecttypen API',
       url: 'Objecttypen API URL',
-      urlTooltip: 'In dit veld moet de verwijzing komen naar de REST api van Objecttypen',
+      urlTooltip: 'In dit veld moet de verwijzing komen naar de REST API van Objecttypen',
       description:
         'Met de Overige Objecten Registratie API-specificaties (Objecttypen) kunnen gemeenten eenduidig objecten (zoals prullenbakken, laadpalen etc.) registreren, opslaan en ontsluiten.',
       configurationTitle: 'Configuratienaam',
@@ -38,7 +38,7 @@ const objecttypenApiPluginSpecification: PluginSpecification = {
     en: {
       title: 'Objecttypen API',
       url: 'Objecttypen API URL',
-      urlTooltip: 'This field must contain the URL to the rest API of Objecttypen',
+      urlTooltip: 'This field must contain the URL to the REST API of Objecttypen',
       description:
         'With the Other Objects Registration API specifications (Object types), municipalities can unambiguously register, store and access objects (such as trash cans, charging stations, etc.).',
       configurationTitle: 'Configuration name',
@@ -49,7 +49,7 @@ const objecttypenApiPluginSpecification: PluginSpecification = {
     de: {
       title: 'Objecttypen API',
       url: 'Objecttypen API URL',
-      urlTooltip: 'Dieses Feld muss die URL zur rest API von Objecttypen enthalten',
+      urlTooltip: 'Dieses Feld muss die URL zur REST API von Objecttypen enthalten',
       description:
         'Mit den Spezifikationen der Other Objects Registration API (Objekttypen) können Kommunen Objekte (wie Mülltonnen, Ladestationen etc.) eindeutig registrieren, speichern und darauf zugreifen.',
       configurationTitle: 'Konfigurationsname',
