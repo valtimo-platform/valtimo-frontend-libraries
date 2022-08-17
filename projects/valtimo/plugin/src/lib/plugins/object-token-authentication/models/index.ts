@@ -14,6 +14,4 @@
  * limitations under the License.
  */
 
-type InputType = 'text' | 'number' | 'password' | 'digitOnly';
-
-export {InputType};
+export * from './config';

@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
-type InputType = 'text' | 'number' | 'password' | 'digitOnly';
+import {PluginConfigurationData} from '../../../models';
 
-export {InputType};
+interface ObjectTokenAuthenticationConfig extends PluginConfigurationData {
+  token: string;
+}
+
+export {ObjectTokenAuthenticationConfig};
