@@ -15,58 +15,58 @@
   -->
 
 <v-form
-        (valueChange)="formValueChange($event)"
-        *ngIf="{
+  (valueChange)="formValueChange($event)"
+  *ngIf="{
     disabled: disabled$ | async,
     prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
   } as obs"
 >
   <v-input
-          name="configurationTitle"
-          [title]="'configurationTitle' | pluginTranslate: pluginId | async"
-          [fullWidth]="true"
-          [margin]="true"
-          [disabled]="obs.disabled"
-          [defaultValue]="obs.prefill?.configurationTitle"
-          [required]="true"
-          [tooltip]="'configurationTitleTooltip' | pluginTranslate: pluginId | async"
+    name="configurationTitle"
+    [title]="'configurationTitle' | pluginTranslate: pluginId | async"
+    [fullWidth]="true"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [defaultValue]="obs.prefill?.configurationTitle"
+    [required]="true"
+    [tooltip]="'configurationTitleTooltip' | pluginTranslate: pluginId | async"
   >
   </v-input>
   <v-input
-          name="url"
-          [title]="'url' | pluginTranslate: pluginId | async"
-          [fullWidth]="true"
-          [margin]="true"
-          [disabled]="obs.disabled"
-          [defaultValue]="obs.prefill?.url"
-          [required]="true"
-          [tooltip]="'urlTooltip' | pluginTranslate: pluginId | async"
+    name="url"
+    [title]="'url' | pluginTranslate: pluginId | async"
+    [fullWidth]="true"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [defaultValue]="obs.prefill?.url"
+    [required]="true"
+    [tooltip]="'urlTooltip' | pluginTranslate: pluginId | async"
   >
   </v-input>
   <v-select
-          *ngIf="
+    *ngIf="
       authenticationPluginSelectItems$ | async as authenticationPluginSelectItems;
       else authenticationPluginConfigurationLoading
     "
-          [items]="authenticationPluginSelectItems"
-          [margin]="true"
-          [widthInPx]="350"
-          name="authenticationPluginConfiguration"
-          [title]="'authenticationPluginConfiguration' | pluginTranslate: pluginId | async"
-          [disabled]="obs.disabled"
-          [defaultSelectionId]="obs.prefill?.authenticationPluginConfiguration"
-          [required]="true"
+    [items]="authenticationPluginSelectItems"
+    [margin]="true"
+    [widthInPx]="350"
+    name="authenticationPluginConfiguration"
+    [title]="'authenticationPluginConfiguration' | pluginTranslate: pluginId | async"
+    [disabled]="obs.disabled"
+    [defaultSelectionId]="obs.prefill?.authenticationPluginConfiguration"
+    [required]="true"
   ></v-select>
 </v-form>
 
 <ng-template #authenticationPluginConfigurationLoading>
   <v-select
-          [items]="[]"
-          [margin]="true"
-          [widthInPx]="350"
-          name="authenticationPluginConfiguration"
-          [title]="'authenticationPluginConfiguration' | pluginTranslate: pluginId | async"
-          [disabled]="true"
-          [required]="true"
+    [items]="[]"
+    [margin]="true"
+    [widthInPx]="350"
+    name="authenticationPluginConfiguration"
+    [title]="'authenticationPluginConfiguration' | pluginTranslate: pluginId | async"
+    [disabled]="true"
+    [required]="true"
   ></v-select>
 </ng-template>
