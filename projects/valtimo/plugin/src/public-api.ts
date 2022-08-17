@@ -29,6 +29,10 @@ export * from './lib/components/plugin-configuration-container/plugin-configurat
 export * from './lib/plugins/open-zaak/open-zaak-plugin.module';
 export * from './lib/plugins/open-zaak/components/open-zaak-configuration/open-zaak-configuration.component';
 export * from './lib/plugins/open-zaak/open-zaak-plugin.specification';
+/* object token authentication plugin */
+export * from './lib/plugins/object-token-authentication/object-token-authentication-plugin.module';
+export * from './lib/plugins/object-token-authentication/object-token-authentication-plugin.specification';
+export * from './lib/plugins/object-token-authentication/components/object-token-authentication-configuration/object-token-authencation-configuration.component';
 /* smart-documents plugin */
 export * from './lib/plugins/smart-documents/smart-documents-plugin.module';
 export * from './lib/plugins/smart-documents/smart-documents-plugin.specification';
@@ -39,6 +43,10 @@ export * from './lib/plugins/documenten-api/documenten-api-plugin.module';
 export * from './lib/plugins/documenten-api/documenten-api-plugin.specification';
 export * from './lib/plugins/documenten-api/components/store-temp-document/store-temp-document-configuration.component';
 export * from './lib/plugins/documenten-api/components/documenten-api-configuration/documenten-api-configuration.component';
+/* objecttypen api plugin */
+export * from './lib/plugins/objecttypen-api/objecttypen-api-plugin-module';
+export * from './lib/plugins/objecttypen-api/objecttypen-api-plugin.specification';
+export * from './lib/plugins/objecttypen-api/components/objecttypen-api-configuration/objecttypen-api-configuration.component';
 /* zaken api plugin */
 export * from './lib/plugins/zaken-api/zaken-api-plugin.module';
 export * from './lib/plugins/zaken-api/zaken-api-plugin.specification';
