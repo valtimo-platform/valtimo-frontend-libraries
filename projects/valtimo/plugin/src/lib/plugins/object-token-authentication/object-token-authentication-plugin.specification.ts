@@ -42,7 +42,7 @@ const objectTokenAuthenticationPluginSpecification: PluginSpecification = {
         'The token is a key that grants permissions to access specific object types and objects',
     },
     de: {
-      title: 'Objekt-Token-Authentifizierung',
+      title: 'Object Token-Authentifizierung',
       description:
         'Authentifizierung mit Token zur Verwendung durch die Objects-API und die Object Types-API.',
       configurationTitle: 'Konfigurationsname',

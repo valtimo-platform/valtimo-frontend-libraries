@@ -15,32 +15,32 @@
   -->
 
 <v-form
-        (valueChange)="formValueChange($event)"
-        *ngIf="{
+  (valueChange)="formValueChange($event)"
+  *ngIf="{
     disabled: disabled$ | async,
     prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
   } as obs"
 >
   <v-input
-          name="configurationTitle"
-          [title]="'configurationTitle' | pluginTranslate: pluginId | async"
-          [margin]="true"
-          [disabled]="obs.disabled"
-          [defaultValue]="obs.prefill?.configurationTitle"
-          [widthPx]="350"
-          [required]="true"
+    name="configurationTitle"
+    [title]="'configurationTitle' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [defaultValue]="obs.prefill?.configurationTitle"
+    [widthPx]="350"
+    [required]="true"
   >
   </v-input>
   <v-input
-          name="token"
-          type="password"
-          [title]="'token' | pluginTranslate: pluginId | async"
-          [margin]="true"
-          [disabled]="obs.disabled"
-          [defaultValue]="obs.prefill?.clientId"
-          [widthPx]="350"
-          [required]="true"
-          [tooltip]="'tokenTooltip' | pluginTranslate: pluginId | async"
+    name="token"
+    type="password"
+    [title]="'token' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [defaultValue]="obs.prefill?.clientId"
+    [widthPx]="350"
+    [required]="true"
+    [tooltip]="'tokenTooltip' | pluginTranslate: pluginId | async"
   >
   </v-input>
 </v-form>
