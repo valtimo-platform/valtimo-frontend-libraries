@@ -34,7 +34,7 @@ const objectTokenAuthenticationPluginSpecification: PluginSpecification = {
         'Het token is een sleutel waarmee toestemmingen verleend zijn om specifieke objecttypen en objecten te mogen ophalen',
     },
     en: {
-      title: 'Object token authenticatie',
+      title: 'Object token authentication',
       description: 'Authentication using tokens for use by the Objects API and Object Types API.',
       configurationTitle: 'Configuration name',
       token: 'Token',
