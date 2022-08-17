@@ -24,12 +24,12 @@
   <v-input
     name="configurationTitle"
     [title]="'configurationTitle' | pluginTranslate: pluginId | async"
-    [fullWidth]="true"
     [margin]="true"
     [disabled]="obs.disabled"
     [defaultValue]="obs.prefill?.configurationTitle"
     [required]="true"
     [tooltip]="'configurationTitleTooltip' | pluginTranslate: pluginId | async"
+    [widthPx]="350"
   >
   </v-input>
   <v-input
