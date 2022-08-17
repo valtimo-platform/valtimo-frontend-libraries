@@ -92,6 +92,8 @@ import {
   smartDocumentsPluginSpecification,
   ZakenApiPluginModule,
   zakenApiPluginSpecification,
+  ObjectenApiPluginModule,
+  objectenApiPluginSpecification,
 } from '@valtimo/plugin';
 
 export function tabsFactory() {
@@ -168,6 +170,7 @@ export function tabsFactory() {
     SmartDocumentsPluginModule,
     DocumentenApiPluginModule,
     ZakenApiPluginModule,
+    ObjectenApiPluginModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -186,6 +189,7 @@ export function tabsFactory() {
         documentenApiPluginSpecification,
         smartDocumentsPluginSpecification,
         zakenApiPluginSpecification,
+        objectenApiPluginSpecification,
       ],
     },
   ],
