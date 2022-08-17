@@ -85,6 +85,8 @@ import {PluginManagementModule} from '@valtimo/plugin-management';
 import {
   DocumentenApiPluginModule,
   documentenApiPluginSpecification,
+  ObjecttypenApiPluginModule,
+  objecttypenApiPluginSpecification,
   ObjectTokenAuthenticationPluginModule,
   objectTokenAuthenticationPluginSpecification,
   OpenZaakPluginModule,
@@ -170,6 +172,7 @@ export function tabsFactory() {
     OpenZaakPluginModule,
     SmartDocumentsPluginModule,
     DocumentenApiPluginModule,
+    ObjecttypenApiPluginModule,
     ZakenApiPluginModule,
     HttpClientModule,
     TranslateModule.forRoot({
@@ -189,6 +192,7 @@ export function tabsFactory() {
         documentenApiPluginSpecification,
         objectTokenAuthenticationPluginSpecification,
         smartDocumentsPluginSpecification,
+        objecttypenApiPluginSpecification,
         zakenApiPluginSpecification,
       ],
     },

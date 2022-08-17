@@ -43,6 +43,10 @@ export * from './lib/plugins/documenten-api/documenten-api-plugin.module';
 export * from './lib/plugins/documenten-api/documenten-api-plugin.specification';
 export * from './lib/plugins/documenten-api/components/store-temp-document/store-temp-document-configuration.component';
 export * from './lib/plugins/documenten-api/components/documenten-api-configuration/documenten-api-configuration.component';
+/* objecttypen api plugin */
+export * from './lib/plugins/objecttypen-api/objecttypen-api-plugin-module';
+export * from './lib/plugins/objecttypen-api/objecttypen-api-plugin.specification';
+export * from './lib/plugins/objecttypen-api/components/objecttypen-api-configuration/objecttypen-api-configuration.component';
 /* zaken api plugin */
 export * from './lib/plugins/zaken-api/zaken-api-plugin.module';
 export * from './lib/plugins/zaken-api/zaken-api-plugin.specification';
