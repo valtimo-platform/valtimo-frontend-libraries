@@ -206,6 +206,7 @@ export const environment: ValtimoConfig = {
     enableHackathonCasesPage: true,
     showUserNameInTopBar: true,
   },
+  exclusiveCaseTabs: [{tabName: 'custom-dossier', caseDefinitionIds: ['leningen', 'bezwaar']}],
 };
 
 /*

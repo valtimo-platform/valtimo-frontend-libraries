@@ -56,6 +56,8 @@ export interface SortState {
   isSorting: boolean;
 }
 
+export type ExclusiveCaseTabs = Array<{caseDefinitionIds: Array<string>; tabName: string}>;
+
 export interface ValtimoConfig {
   // eslint-disable-next-line @typescript-eslint/ban-types
   initializers: ((injector: Injector) => Function)[];
@@ -93,6 +95,7 @@ export interface ValtimoConfig {
     showUserNameInTopBar?: boolean;
   };
   customTaskList?: CustomTaskList;
+  exclusiveCaseTabs?: ExclusiveCaseTabs;
 }
 
 export enum UploadProvider {

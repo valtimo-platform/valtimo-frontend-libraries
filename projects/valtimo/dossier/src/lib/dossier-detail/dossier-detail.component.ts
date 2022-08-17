@@ -23,7 +23,7 @@ import {
 } from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {DocumentService, Document, ProcessDocumentDefinition} from '@valtimo/document';
-import {TabLoaderImpl} from '../models';
+import {TabImpl, TabLoaderImpl} from '../models';
 import {TranslateService} from '@ngx-translate/core';
 import {Location} from '@angular/common';
 import {TabService} from '../tab.service';
@@ -72,7 +72,7 @@ export class DossierDetailComponent implements OnInit {
 
   ngOnInit() {
     this.tabLoader = new TabLoaderImpl(
-      this.tabService.getTabs(),
+      this.getTabs(this.documentDefinitionName, this.tabService.getTabs()),
       this.componentFactoryResolver,
       this.viewContainerRef,
       this.translateService,
@@ -145,5 +145,22 @@ export class DossierDetailComponent implements OnInit {
     const regex = new RegExp('(T\\d\\d:\\d\\d:\\d\\d[+-])');
     const formattedString = regex.test(string) ? moment(string).format('DD-MM-YYYY') : string;
     return prefix + formattedString;
+  }
+
+  private getTabs(documentDefinitionName: string, tabs: Array<TabImpl>): Array<TabImpl> {
+    const exclusiveCaseTabs = this.configService?.config?.exclusiveCaseTabs || [];
+
+    return tabs.filter(tab => {
+      const tabName = tab.name;
+      const exclusiveTab = exclusiveCaseTabs.find(
+        exclusiveCase => exclusiveCase.tabName === tabName
+      );
+
+      if (exclusiveTab) {
+        return exclusiveTab.caseDefinitionIds.includes(documentDefinitionName);
+      } else {
+        return true;
+      }
+    });
   }
 }
