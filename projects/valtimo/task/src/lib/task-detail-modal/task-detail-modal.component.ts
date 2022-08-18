@@ -220,7 +220,6 @@ export class TaskDetailModalComponent {
       this.formFlowStepInstanceId = null;
       this.completeTask();
     } else {
-      console.log('to do here');
       this.modalService.scrollToTop();
       this.formFlowStepType$.next(formFlowInstance.step.type);
       this.formFlowInstanceId = formFlowInstance.id;
