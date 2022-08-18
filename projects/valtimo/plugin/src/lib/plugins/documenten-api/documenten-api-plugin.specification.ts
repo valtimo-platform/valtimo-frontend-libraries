@@ -39,7 +39,7 @@ const documentenApiPluginSpecification: PluginSpecification = {
         'In dit veld moet de verwijzing komen naar de REST API van Documenten. Deze url moet dus eindigen op /documenten/api/v1/',
       bronorganisatie: 'Bronorganisatie RSIN',
       bronorganisatieTooltip:
-        'Vul hier het RSIN van de organisatie in dat verantwoordelijk is voor de documenten',
+        'Vul hier het RSIN van de organisatie in die verantwoordelijk is voor de documenten',
       localDocumentLocation: 'Naam procesvariabele met document',
       localDocumentLocationTooltip:
         'Hier moet de procesvariabele ingevuld worden die wijst naar de locatie waar het document lokaal staat opgeslagen',
@@ -58,7 +58,7 @@ const documentenApiPluginSpecification: PluginSpecification = {
       gearchiveerd: 'Gearchiveerd',
       authenticationPluginConfiguration: 'Configuratie authenticatie-plug-in',
       authenticationPluginConfigurationTooltip:
-        'Selecteer de plugin die de authenticatie kan afhandelen. Wanneer de selectie box leeg blijft zal de authenticatie plugin (bv OpenZaak) eerst aangemaakt moeten worden',
+        'Selecteer de plugin die de authenticatie kan afhandelen. Wanneer de selectiebox leeg blijft zal de authenticatie plugin (bv. OpenZaak) eerst aangemaakt moeten worden',
     },
     en: {
       title: 'Documenten API',
@@ -91,7 +91,7 @@ const documentenApiPluginSpecification: PluginSpecification = {
       gearchiveerd: 'Archived',
       authenticationPluginConfiguration: 'Authentication plugin configuration',
       authenticationPluginConfigurationTooltip:
-        'Select the plugin that can handle the authentication. If the selection box remains empty, the authentication plugin (eg OpenZaak) will have to be created first',
+        'Select the plugin that can handle the authentication. If the selection box remains empty, the authentication plugin (e.g. OpenZaak) will have to be created first',
     },
     de: {
       title: 'Documenten API',

@@ -40,7 +40,7 @@ const smartDocumentsPluginSpecification: PluginSpecification = {
       templateGroup: 'Template-groep',
       templateName: 'Template-naam',
       templateDataTooltip:
-        'De rechter value kolom ondersteund ook het gebruik van proces variabelen zoals pv: en doc:',
+        'De rechter value-kolom ondersteunt ook het gebruik van procesvariabelen zoals pv: en doc:',
       format: 'Documentformaat',
       templateData: 'Template-data',
       resultingDocumentProcessVariableName: 'Naam procesvariabele voor opslag document',
@@ -64,7 +64,7 @@ const smartDocumentsPluginSpecification: PluginSpecification = {
       format: 'Document format',
       templateData: 'Template data',
       templateDataTooltip:
-        'The right value column also supports the use of process variables such as pv: and doc:',
+        'The right value-column also supports the use of process variables such as pv: and doc:',
       resultingDocumentProcessVariableName: 'Process variable name for storing document',
       resultingDocumentProcessVariableNameTooltip:
         'The location of the generated document is stored in a process variable. This process variable can be used to access the document in another BPMN task.',
