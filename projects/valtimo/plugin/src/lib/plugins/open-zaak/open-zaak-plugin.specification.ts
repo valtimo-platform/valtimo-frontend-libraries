@@ -28,24 +28,39 @@ const openZaakPluginSpecification: PluginSpecification = {
       description:
         'OpenZaak is een productiewaardig API platform die de API-standaard voor zaakgericht werken implementeert (de ZGW-API’s).',
       configurationTitle: 'Configuratienaam',
+      configurationTitleTooltip:
+        'Onder deze naam zal de plugin te herkennen zijn in de rest van de applicatie',
       clientId: 'Client ID',
+      clientIdTooltip:
+        'Vul hier het clientId in, dat geconfigureerd staat onder OpenZaak beheer onder API authorisaties > Applicaties, dat de juiste authorisaties heeft voor de benodigde functionaliteit',
       clientSecret: 'Secret',
+      clientSecretTooltip: 'Vul de secret in die hoort bij de clientId hierboven',
     },
     en: {
       title: 'OpenZaak',
       description:
         'OpenZaak is a production-worthy API platform that implements the API standard for case-oriented working (the ZGW APIs).',
       configurationTitle: 'Configuration name',
+      configurationTitleTooltip:
+        'Under this name, the plugin will be recognizable in the rest of the application',
       clientId: 'Client ID',
+      clientIdTooltip:
+        'Enter the clientId here, which is configured under OpenZaak management under API authorizations > Applications, which has the correct authorizations for the required functionality',
       clientSecret: 'Secret',
+      clientSecretTooltip: 'Enter the secret associated with the clientId above',
     },
     de: {
       title: 'OpenZaak',
       description:
         'OpenZaak ist eine produktionstaugliche API-Plattform, die den API-Standard für fallorientiertes Arbeiten (die ZGW-APIs) implementiert.',
       configurationTitle: 'Konfigurationsname',
+      configurationTitleTooltip:
+        'Unter diesem Namen wird das Plugin im Rest der Anwendung erkennbar sein',
       clientId: 'Client ID',
+      clientIdTooltip:
+        'Geben Sie hier die clientId ein, die unter OpenZaak-Verwaltung unter API-Berechtigungen > Anwendungen konfiguriert ist und die die richtigen Berechtigungen für die erforderliche Funktionalität hat',
       clientSecret: 'Secret',
+      clientSecretTooltip: 'Geben Sie das mit der obigen clientId verknüpfte Geheimnis ein',
     },
   },
 };
