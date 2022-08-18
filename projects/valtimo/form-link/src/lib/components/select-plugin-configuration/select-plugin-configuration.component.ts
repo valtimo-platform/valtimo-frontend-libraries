@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {map, switchMap, take, tap} from 'rxjs/operators';
+import {Component} from '@angular/core';
+import {map} from 'rxjs/operators';
 import {ProcessLinkStateService} from '../../services/process-link-state.service';
-import {combineLatest, Observable, of} from 'rxjs';
+import {combineLatest, Observable} from 'rxjs';
 import {
-  PluginDefinition,
   PluginConfiguration,
-  PluginManagementService,
   PluginConfigurationWithLogo,
+  PluginManagementService,
   PluginService,
 } from '@valtimo/plugin';
 
@@ -33,7 +32,7 @@ import {
 })
 export class SelectPluginConfigurationComponent {
   readonly pluginConfigurations$: Observable<Array<PluginConfigurationWithLogo>> = combineLatest([
-    this.pluginManagementService.getAllPluginConfigurationsWithLogos(),
+    this.pluginManagementService.getAllPluginConfigurationsWithLogos(true),
     this.pluginService.availablePluginIds$,
   ]).pipe(
     map(([pluginConfigurations, availablePluginIds]) =>

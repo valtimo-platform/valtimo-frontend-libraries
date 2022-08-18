@@ -71,8 +71,12 @@ export class PluginManagementService {
     );
   }
 
-  getAllPluginConfigurationsWithLogos(): Observable<Array<PluginConfigurationWithLogo>> {
-    return this.returnPluginConfigurationsWithLogos(this.getPluginConfigurationsWithActions());
+  getAllPluginConfigurationsWithLogos(
+    withActions?: boolean
+  ): Observable<Array<PluginConfigurationWithLogo>> {
+    return withActions
+      ? this.returnPluginConfigurationsWithLogos(this.getPluginConfigurationsWithActions())
+      : this.returnPluginConfigurationsWithLogos(this.getAllPluginConfigurations());
   }
 
   savePluginConfiguration(
