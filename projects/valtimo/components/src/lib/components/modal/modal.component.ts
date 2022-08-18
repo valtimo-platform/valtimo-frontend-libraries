@@ -42,9 +42,9 @@ export class ModalComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() templateBelowSubtitle: TemplateRef<any>;
   @Input() showFooter = false;
 
-  @ViewChild('scrollModal') scrollModal: ElementRef<any>;
+  @ViewChild('scrollModal') scrollModal: ElementRef<HTMLDivElement>;
 
-  private scrollSubscription: Subscription;
+  private scrollSubscription!: Subscription;
 
   constructor(private readonly modalService: ValtimoModalService) {}
 
