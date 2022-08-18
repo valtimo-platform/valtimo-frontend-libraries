@@ -56,6 +56,7 @@
     [disabled]="obs.disabled"
     [defaultSelectionId]="obs.prefill?.authenticationPluginConfiguration"
     [required]="true"
+    [tooltip]="'authenticationPluginConfigurationTooltip' | pluginTranslate: pluginId | async"
   ></v-select>
 </v-form>
 
@@ -68,5 +69,6 @@
     [title]="'authenticationPluginConfiguration' | pluginTranslate: pluginId | async"
     [disabled]="true"
     [required]="true"
+    [tooltip]="'authenticationPluginConfigurationTooltip' | pluginTranslate: pluginId | async"
   ></v-select>
 </ng-template>

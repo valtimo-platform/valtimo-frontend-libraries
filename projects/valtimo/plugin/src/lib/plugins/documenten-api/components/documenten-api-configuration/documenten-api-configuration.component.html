@@ -52,6 +52,7 @@
     [defaultValue]="obs.prefill?.bronorganisatie"
     [required]="true"
     [widthPx]="150"
+    [tooltip]="'bronorganisatieTooltip' | pluginTranslate: pluginId | async"
   >
   </v-input>
   <v-select
@@ -67,6 +68,7 @@
     [disabled]="obs.disabled"
     [defaultSelectionId]="obs.prefill?.authenticationPluginConfiguration"
     [required]="true"
+    [tooltip]="'authenticationPluginConfigurationTooltip' | pluginTranslate: pluginId | async"
   ></v-select>
 </v-form>
 
@@ -79,5 +81,6 @@
     [title]="'authenticationPluginConfiguration' | pluginTranslate: pluginId | async"
     [disabled]="true"
     [required]="true"
+    [tooltip]="'authenticationPluginConfigurationTooltip' | pluginTranslate: pluginId | async"
   ></v-select>
 </ng-template>
