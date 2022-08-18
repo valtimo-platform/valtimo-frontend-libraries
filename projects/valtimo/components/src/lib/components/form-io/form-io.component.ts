@@ -58,7 +58,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   private tokenRefreshTimerSubscription: Subscription;
   private formRefreshSubscription: Subscription;
 
-  readonly currentLanguage$ = new BehaviorSubject<string | null>(this.translateService.currentLang);
+  readonly currentLanguage$ = new BehaviorSubject<string>(this.translateService.currentLang);
   private languageSubscription!: Subscription;
 
   constructor(
