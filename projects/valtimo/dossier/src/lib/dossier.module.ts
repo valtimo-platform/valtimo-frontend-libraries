@@ -54,6 +54,7 @@ import {TaskModule} from '@valtimo/task';
 import {DossierSupportingProcessStartModalComponent} from './dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {NgbPaginationModule} from '@ng-bootstrap/ng-bootstrap';
 import {ConfigModule} from '@valtimo/config';
+import {DossierDetailTabZaakobjectenComponent} from './dossier-detail/tab/zaakobjecten/zaakobjecten.component';
 
 export type TabsFactory = () => Map<string, object>;
 
@@ -66,6 +67,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierDetailTabAuditComponent,
     DossierDetailTabDocumentsComponent,
     DossierDetailTabContactMomentsComponent,
+    DossierDetailTabZaakobjectenComponent,
     DossierUpdateComponent,
     DossierProcessStartModalComponent,
     DossierSupportingProcessStartModalComponent,

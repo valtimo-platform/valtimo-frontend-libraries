@@ -24,7 +24,8 @@
       "documents": "Dokumente",
       "contact-moments": "Kontaktmomente",
       "custom-dossier": "Kunden-Dossier",
-      "custom-maps": "Kunden-Karten"
+      "custom-maps": "Kunden-Karten",
+      "zaakobjecten": "Zaakobjecten"
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",

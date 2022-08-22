@@ -14,5 +14,16 @@
  * limitations under the License.
  */
 
-export * from './tabs.model';
-export * from './zaakobjecten.model';
+interface ZaakObjectType {
+  name: string;
+  url: string;
+}
+
+interface ZaakObject {
+  index: number;
+  registrationAt: string;
+  title: string | null;
+  url: string;
+}
+
+export {ZaakObjectType, ZaakObject};
