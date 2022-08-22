@@ -59,6 +59,7 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   private defaultMenuWidth!: number;
   private maxMenuWidth!: number;
   private minMenuWidth!: number;
+  private resizedWidth!: number;
 
   private readonly mouseX$ = fromEvent(document.body, 'mousemove').pipe(
     map((e: MouseEvent) => e.pageX)
@@ -149,11 +150,12 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.bodyStyle.cursor = 'auto';
     this.bodyStyle.userSelect = 'auto';
     this.isResizing$.next(false);
+    localStorage.setItem('menuWidth', this.resizedWidth.toString());
   }
 
   private setMenuWidth(width: number): void {
     this.menuWidth$.next(width);
     this.menuWidthChanged.emit(width);
-    localStorage.setItem('menuWidth', width.toString());
+    this.resizeWidth = width;
   }
 }
