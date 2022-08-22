@@ -33,7 +33,8 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ZaakobjectenService} from '../../../services/zaakobjecten.service';
-import {of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, map, Observable, of, switchMap, tap} from 'rxjs';
+import {ZaakObjectType} from '../../../models';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-zaakobjecten',
@@ -41,8 +42,12 @@ import {of, switchMap, tap} from 'rxjs';
   styleUrls: ['./zaakobjecten.component.scss'],
 })
 export class DossierDetailTabZaakobjectenComponent {
-  objecttypes$ = this.route.params.pipe(
-    switchMap(params => this.zaakobjectenService.getDocumentObjectTypes(params.documentId))
+  private readonly documentId$ = this.route.params.pipe(map(params => params.documentId));
+
+  private readonly selectedObjecttypeUrl$ = new BehaviorSubject<string | null>(null);
+
+  objecttypes$: Observable<Array<ZaakObjectType>> = this.documentId$.pipe(
+    switchMap(documentId => this.zaakobjectenService.getDocumentObjectTypes(documentId))
   );
 
   objects$ = this.zaakobjectenService.getDocumentObjectsOfType(
