@@ -45,6 +45,15 @@
       "noteText": "Note",
       "saveButtonText": "Save note",
       "saveSuccess": "Your note has been saved successfully."
+    },
+    "zaakobjecten": {
+      "objecttype": "Object type",
+      "objecttypePlaceholder": "Select an object type",
+      "objecten": "Objects",
+      "objectenPlaceholder": "Select an object type to load a list of objects of this type.",
+      "index": "Index",
+      "registrationAt": "Registration at",
+      "title": "Title"
     }
   },
   "document": {

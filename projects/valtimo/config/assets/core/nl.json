@@ -45,6 +45,15 @@
       "noteText": "Aantekening",
       "saveButtonText": "Aantekening opslaan",
       "saveSuccess": "Uw aantekening is succesvol opgeslagen."
+    },
+    "zaakobjecten": {
+      "objecttype": "Objecttype",
+      "objecttypePlaceholder": "Selecteer een objecttype",
+      "objecten": "Objecten",
+      "objectenPlaceholder": "Selecteer een objecttype om een lijst van objecten van dit type te laden.",
+      "index": "Index",
+      "registrationAt": "Geregistreerd op",
+      "title": "Titel"
     }
   },
   "document": {

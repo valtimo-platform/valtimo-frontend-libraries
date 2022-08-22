@@ -33,8 +33,9 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ZaakobjectenService} from '../../../services/zaakobjecten.service';
-import {BehaviorSubject, map, Observable, of, switchMap, tap} from 'rxjs';
-import {ZaakObjectType} from '../../../models';
+import {combineLatest, BehaviorSubject, map, Observable, of, switchMap, tap} from 'rxjs';
+import {ZaakObject, ZaakObjectType} from '../../../models';
+import {SelectItem, TableColumn} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-zaakobjecten',
@@ -44,19 +45,50 @@ import {ZaakObjectType} from '../../../models';
 export class DossierDetailTabZaakobjectenComponent {
   private readonly documentId$ = this.route.params.pipe(map(params => params.documentId));
 
-  private readonly selectedObjecttypeUrl$ = new BehaviorSubject<string | null>(null);
-
-  objecttypes$: Observable<Array<ZaakObjectType>> = this.documentId$.pipe(
+  private readonly objecttypes$: Observable<Array<ZaakObjectType>> = this.documentId$.pipe(
     switchMap(documentId => this.zaakobjectenService.getDocumentObjectTypes(documentId))
   );
 
-  objects$ = this.zaakobjectenService.getDocumentObjectsOfType(
-    'c7036c9a-fc1d-4fe9-b8ee-05a1e4faf9d1',
-    'http://host.docker.internal:8011/api/v1/objecttypes/3a82fb7f-fc9b-4104-9804-993f639d6d0d'
+  readonly objecttypeSelectItems$: Observable<Array<SelectItem>> = this.objecttypes$.pipe(
+    map(objecttypes => objecttypes.map(type => ({id: type.url, text: type.name || '-'})))
   );
+
+  readonly selectedObjecttypeUrl$ = new BehaviorSubject<string | null>(null);
+
+  readonly objects$: Observable<Array<ZaakObject> | null> = combineLatest([
+    this.documentId$,
+    this.selectedObjecttypeUrl$,
+  ]).pipe(
+    switchMap(([documentId, selectedObjecttypeUrl]) =>
+      documentId && selectedObjecttypeUrl
+        ? this.zaakobjectenService
+            .getDocumentObjectsOfType(documentId, selectedObjecttypeUrl)
+            .pipe(map(objects => objects.map(object => ({...object, title: object.title || '-'}))))
+        : of(null)
+    )
+  );
+
+  readonly columns$ = new BehaviorSubject<Array<TableColumn>>([
+    {
+      labelTranslationKey: 'dossier.zaakobjecten.index',
+      dataKey: 'index',
+    },
+    {
+      labelTranslationKey: 'dossier.zaakobjecten.registrationAt',
+      dataKey: 'registrationAt',
+    },
+    {
+      labelTranslationKey: 'dossier.zaakobjecten.title',
+      dataKey: 'title',
+    },
+  ]);
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly zaakobjectenService: ZaakobjectenService
   ) {}
+
+  selectObjectType(objectTypeUrl: string): void {
+    this.selectedObjecttypeUrl$.next(objectTypeUrl);
+  }
 }
