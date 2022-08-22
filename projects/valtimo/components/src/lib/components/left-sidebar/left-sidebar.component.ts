@@ -69,15 +69,13 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly elementRef: ElementRef,
     private readonly configService: ConfigService
   ) {
-    const customLeftSidebar = this.configService.config.customLeftSidebar;
-
-    this.setInitialWidth(customLeftSidebar);
-
     this.bodyStyle = elementRef.nativeElement.ownerDocument.body.style;
   }
 
   ngOnInit(): void {
-    this.setMenuWidth(this.defaultMenuWidth);
+    const customLeftSidebar = this.configService.config.customLeftSidebar;
+
+    this.setInitialWidth(customLeftSidebar);
   }
 
   ngAfterViewInit(): void {
@@ -136,6 +134,7 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.defaultMenuWidth = localMenuWidthNumber || customLeftSidebar?.defaultMenuWidth || 230;
     this.maxMenuWidth = customLeftSidebar?.maxMenuWidth | 330;
     this.minMenuWidth = customLeftSidebar?.minMenuWidth | 120;
+    this.setMenuWidth(this.defaultMenuWidth);
   }
 
   private snapMenu(snapTo: number): void {
