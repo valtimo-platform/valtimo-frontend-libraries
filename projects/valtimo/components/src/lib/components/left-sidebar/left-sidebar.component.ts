@@ -28,6 +28,7 @@ import {
 import {TranslateService} from '@ngx-translate/core';
 import {BehaviorSubject, combineLatest, fromEvent, Subscription} from 'rxjs';
 import {debounceTime, map, take} from 'rxjs/operators';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-left-sidebar',
@@ -63,12 +64,18 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     map((e: MouseEvent) => e.pageX)
   );
 
-  constructor(private translateService: TranslateService, private readonly elementRef: ElementRef) {
+  constructor(
+    private translateService: TranslateService,
+    private readonly elementRef: ElementRef,
+    private readonly configService: ConfigService
+  ) {
     this.bodyStyle = elementRef.nativeElement.ownerDocument.body.style;
   }
 
   ngOnInit(): void {
-    this.setMenuWidth(this.defaultMenuWidth);
+    const localMenuWidth = localStorage.getItem('menuWidth');
+
+    this.setMenuWidth(Number(localMenuWidth));
   }
 
   ngAfterViewInit(): void {
@@ -137,5 +144,6 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   private setMenuWidth(width: number): void {
     this.menuWidth$.next(width);
     this.menuWidthChanged.emit(width);
+    localStorage.setItem('menuWidth', width.toString());
   }
 }
