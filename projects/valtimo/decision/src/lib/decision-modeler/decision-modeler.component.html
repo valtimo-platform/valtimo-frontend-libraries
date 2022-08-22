@@ -14,18 +14,12 @@
   ~ limitations under the License.
   -->
 
-<div class="main-content pt-0">
-  <div class="container-fluid">
-    <div class="text-right">
-      <div class="btn-group mt-m3px mb-3">
-        <button (click)="download()" class="btn btn-primary btn-space mr-0">
-          <i class="fa fa-save"></i> &nbsp;
-          <span>{{ 'Download' | translate }}</span>
-        </button>
-      </div>
-    </div>
-    <div id="canvas" class="canvas-dmn"></div>
+<div class="test-container">
+  <div class="editor-parent">
+    <div class="editor-container" #editorContainer></div>
+    <div class="editor-tabs" #editorTabs></div>
   </div>
 </div>
 
-<valtimo-decision-modeler></valtimo-decision-modeler>
+<button id="save-button">print to console</button>
+
