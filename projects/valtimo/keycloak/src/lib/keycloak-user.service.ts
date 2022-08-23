@@ -14,24 +14,38 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ReplaySubject} from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
+import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
 import {NGXLogger} from 'ngx-logger';
-import {KeycloakService} from 'keycloak-angular';
+import {KeycloakEventType, KeycloakService} from 'keycloak-angular';
 import {UserIdentity, UserService, ValtimoUserIdentity} from '@valtimo/config';
 import {KeycloakOptionsService} from './keycloak-options.service';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
-export class KeycloakUserService implements UserService {
+export class KeycloakUserService implements UserService, OnDestroy {
   private userIdentity: ReplaySubject<UserIdentity>;
+
+  private tokenRefreshSubscription!: Subscription;
+  private refreshTokenSubscription!: Subscription;
+
+  private readonly _refreshToken$ = new Subject<string>();
 
   constructor(
     private keycloakService: KeycloakService,
     private keycloakOptionsService: KeycloakOptionsService,
     private logger: NGXLogger
-  ) {}
+  ) {
+    this.openTokenRefreshSubscription();
+    this.openRefreshTokenSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.tokenRefreshSubscription?.unsubscribe();
+    this.refreshTokenSubscription?.unsubscribe();
+  }
 
   init(): void {
     this.userIdentity = new ReplaySubject();
@@ -69,5 +83,23 @@ export class KeycloakUserService implements UserService {
   async updateToken(minValidity: number): Promise<boolean> {
     this.logger.debug('KeycloakUserService: updateToken');
     return this.keycloakService.updateToken(minValidity);
+  }
+
+  private openTokenRefreshSubscription(): void {
+    this.tokenRefreshSubscription = this.keycloakService.keycloakEvents$.subscribe(
+      keycloakEvent => {
+        if (keycloakEvent.type === KeycloakEventType.OnAuthRefreshSuccess) {
+          const refreshToken = this.keycloakService.getKeycloakInstance()?.refreshToken;
+
+          if (refreshToken) this._refreshToken$.next(refreshToken);
+        }
+      }
+    );
+  }
+
+  private openRefreshTokenSubscription(): void {
+    this.refreshTokenSubscription = this._refreshToken$.subscribe(refreshToken => {
+      console.log(refreshToken);
+    });
   }
 }
