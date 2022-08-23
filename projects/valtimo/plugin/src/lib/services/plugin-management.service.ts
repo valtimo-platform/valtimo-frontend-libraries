@@ -66,10 +66,10 @@ export class PluginManagementService {
   }
 
   getPluginConfigurationsWithActionsForActivityType(
-    actitytype: string
+    activityType: string
   ): Observable<Array<PluginConfiguration>> {
     return this.http.get<Array<PluginConfiguration>>(
-      `${this.VALTIMO_API_ENDPOINT_URI}plugin/configuration?activityType=${actitytype}`
+      `${this.VALTIMO_API_ENDPOINT_URI}plugin/configuration?activityType=${activityType}`
     );
   }
 
