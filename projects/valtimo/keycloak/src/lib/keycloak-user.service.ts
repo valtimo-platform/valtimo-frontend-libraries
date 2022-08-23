@@ -15,12 +15,13 @@
  */
 
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, ReplaySubject, Subject, Subscription, timer} from 'rxjs';
 import {NGXLogger} from 'ngx-logger';
 import {KeycloakEventType, KeycloakService} from 'keycloak-angular';
 import {UserIdentity, UserService, ValtimoUserIdentity} from '@valtimo/config';
 import {KeycloakOptionsService} from './keycloak-options.service';
 import jwt_decode from 'jwt-decode';
+import {PromptService} from '@valtimo/user-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -30,13 +31,19 @@ export class KeycloakUserService implements UserService, OnDestroy {
 
   private tokenRefreshSubscription!: Subscription;
   private refreshTokenSubscription!: Subscription;
+  private expiryTimerSubscription!: Subscription;
 
   private readonly _refreshToken$ = new Subject<string>();
 
+  private _expiryTimeMs!: number;
+
+  private readonly FIVE_MINUTES_MS = 300000;
+
   constructor(
-    private keycloakService: KeycloakService,
-    private keycloakOptionsService: KeycloakOptionsService,
-    private logger: NGXLogger
+    private readonly keycloakService: KeycloakService,
+    private readonly keycloakOptionsService: KeycloakOptionsService,
+    private readonly logger: NGXLogger,
+    private readonly promptService: PromptService
   ) {
     this.openTokenRefreshSubscription();
     this.openRefreshTokenSubscription();
@@ -45,6 +52,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
   ngOnDestroy(): void {
     this.tokenRefreshSubscription?.unsubscribe();
     this.refreshTokenSubscription?.unsubscribe();
+    this.closeExpiryTimerSubscription();
   }
 
   init(): void {
@@ -63,6 +71,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
       this.logger.debug('KeycloakUserService: loaded user identity', valtimoUserIdentity);
       this.userIdentity.next(valtimoUserIdentity);
     });
+    this.setRefreshToken();
   }
 
   getUserSubject(): ReplaySubject<UserIdentity> {
@@ -89,9 +98,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
     this.tokenRefreshSubscription = this.keycloakService.keycloakEvents$.subscribe(
       keycloakEvent => {
         if (keycloakEvent.type === KeycloakEventType.OnAuthRefreshSuccess) {
-          const refreshToken = this.keycloakService.getKeycloakInstance()?.refreshToken;
-
-          if (refreshToken) this._refreshToken$.next(refreshToken);
+          this.setRefreshToken();
         }
       }
     );
@@ -99,8 +106,34 @@ export class KeycloakUserService implements UserService, OnDestroy {
 
   private openRefreshTokenSubscription(): void {
     this.refreshTokenSubscription = this._refreshToken$.subscribe(refreshToken => {
-      const decodedRefreshToken = jwt_decode(refreshToken);
-      console.log(decodedRefreshToken);
+      const decodedRefreshToken: any = jwt_decode(refreshToken);
+      const tokenExp = decodedRefreshToken.exp * 1000;
+      const expiryTimeMs = tokenExp - Date.now() - 1000;
+
+      this._expiryTimeMs = expiryTimeMs;
+      this.closeExpiryTimerSubscription();
+      this.openExpiryTimerSubscription();
     });
+  }
+
+  private setRefreshToken(): void {
+    const refreshToken = this.keycloakService.getKeycloakInstance()?.refreshToken;
+    if (refreshToken) this._refreshToken$.next(refreshToken);
+  }
+
+  private openExpiryTimerSubscription(): void {
+    this.expiryTimerSubscription = timer(0, 1000).subscribe(() => {
+      this._expiryTimeMs = this._expiryTimeMs - 1000;
+
+      this.promptService.openPrompt();
+
+      if (this._expiryTimeMs < 2000) {
+        this.logout();
+      }
+    });
+  }
+
+  private closeExpiryTimerSubscription(): void {
+    this.expiryTimerSubscription?.unsubscribe();
   }
 }
