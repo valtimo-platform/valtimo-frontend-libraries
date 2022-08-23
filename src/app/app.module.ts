@@ -43,6 +43,7 @@ import {
   DossierDetailTabDocumentsComponent,
   DossierDetailTabProgressComponent,
   DossierDetailTabSummaryComponent,
+  DossierDetailTabZaakobjectenComponent,
   DossierModule,
 } from '@valtimo/dossier';
 import {ProcessModule} from '@valtimo/process';
@@ -107,6 +108,7 @@ export function tabsFactory() {
     [DefaultTabs.audit, DossierDetailTabAuditComponent],
     [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
     [DefaultTabs.contactMoments, DossierDetailTabContactMomentsComponent],
+    [DefaultTabs.zaakobjecten, DossierDetailTabZaakobjectenComponent],
     ['custom-maps', CustomMapsTabComponent],
     ['custom-dossier', CustomDossierTabComponent],
   ]);
