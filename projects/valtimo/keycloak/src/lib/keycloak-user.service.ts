@@ -99,7 +99,8 @@ export class KeycloakUserService implements UserService, OnDestroy {
 
   private openRefreshTokenSubscription(): void {
     this.refreshTokenSubscription = this._refreshToken$.subscribe(refreshToken => {
-      console.log(refreshToken);
+      const decodedRefreshToken = jwt_decode(refreshToken);
+      console.log(decodedRefreshToken);
     });
   }
 }
