@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
-
-@Component({
-  selector: 'v-input-label',
-  templateUrl: './input-label.component.html',
-  styleUrls: ['./input-label.component.scss'],
-})
-export class InputLabelComponent {
-  @Input() name = '';
-  @Input() title = '';
-  @Input() titleTranslationKey = '';
-  @Input() tooltip = '';
-  @Input() required = false;
-  @Input() largeMargin = false;
+interface ZaakObjectType {
+  name: string;
+  url: string;
 }
+
+interface ZaakObject {
+  index: number;
+  registrationAt: string;
+  title: string | null;
+  url: string;
+}
+
+export {ZaakObjectType, ZaakObject};

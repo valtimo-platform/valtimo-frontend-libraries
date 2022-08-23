@@ -201,8 +201,13 @@ export const environment: ValtimoConfig = {
       },
     },
   },
+  customLeftSidebar: {
+    defaultMenuWidth: 230,
+    maxMenuWidth: 330,
+    minMenuWidth: 120,
+  },
   featureToggles: {
-    disableFormFlow: true,
+    disableFormFlow: false,
     enableHackathonCasesPage: true,
     showUserNameInTopBar: true,
   },
