@@ -65,17 +65,21 @@ export class PluginManagementService {
     );
   }
 
-  getPluginConfigurationsWithActions(): Observable<Array<PluginConfiguration>> {
+  getPluginConfigurationsWithActionsForActivityType(
+    actitytype: string
+  ): Observable<Array<PluginConfiguration>> {
     return this.http.get<Array<PluginConfiguration>>(
-      `${this.VALTIMO_API_ENDPOINT_URI}plugin/configuration?includeActionless=false`
+      `${this.VALTIMO_API_ENDPOINT_URI}plugin/configuration?activityType=${actitytype}`
     );
   }
 
   getAllPluginConfigurationsWithLogos(
-    withActions?: boolean
+    activityType?: string
   ): Observable<Array<PluginConfigurationWithLogo>> {
-    return withActions
-      ? this.returnPluginConfigurationsWithLogos(this.getPluginConfigurationsWithActions())
+    return activityType && activityType.length > 0
+      ? this.returnPluginConfigurationsWithLogos(
+          this.getPluginConfigurationsWithActionsForActivityType(activityType)
+        )
       : this.returnPluginConfigurationsWithLogos(this.getAllPluginConfigurations());
   }
 

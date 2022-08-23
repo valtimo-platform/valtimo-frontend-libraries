@@ -15,15 +15,16 @@
  */
 
 import {Component} from '@angular/core';
-import {map} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {ProcessLinkStateService} from '../../services/process-link-state.service';
-import {combineLatest, Observable} from 'rxjs';
+import {combineLatest, Observable, of} from 'rxjs';
 import {
   PluginConfiguration,
   PluginConfigurationWithLogo,
   PluginManagementService,
   PluginService,
 } from '@valtimo/plugin';
+import {ModalService} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-select-plugin-configuration',
@@ -31,23 +32,33 @@ import {
   styleUrls: ['./select-plugin-configuration.component.scss'],
 })
 export class SelectPluginConfigurationComponent {
-  readonly pluginConfigurations$: Observable<Array<PluginConfigurationWithLogo>> = combineLatest([
-    this.pluginManagementService.getAllPluginConfigurationsWithLogos(true),
-    this.pluginService.availablePluginIds$,
-  ]).pipe(
-    map(([pluginConfigurations, availablePluginIds]) =>
-      pluginConfigurations.filter(configuration =>
-        availablePluginIds.includes(configuration.pluginDefinition.key)
+  readonly pluginConfigurations$: Observable<Array<PluginConfigurationWithLogo>> =
+    this.modalService.modalData$.pipe(
+      switchMap(modalData =>
+        combineLatest([
+          modalData?.element?.type
+            ? this.pluginManagementService.getAllPluginConfigurationsWithLogos(
+                modalData?.element?.type
+              )
+            : of(undefined),
+          this.pluginService.availablePluginIds$,
+        ]).pipe(
+          map(([pluginConfigurations, availablePluginIds]) =>
+            pluginConfigurations?.filter(configuration =>
+              availablePluginIds.includes(configuration.pluginDefinition.key)
+            )
+          )
+        )
       )
-    )
-  );
+    );
 
   readonly selectedPluginConfiguration$ = this.processLinkStateService.selectedPluginConfiguration$;
 
   constructor(
     private readonly pluginManagementService: PluginManagementService,
     private readonly processLinkStateService: ProcessLinkStateService,
-    private readonly pluginService: PluginService
+    private readonly pluginService: PluginService,
+    private readonly modalService: ModalService
   ) {}
 
   selectConfiguration(configuration: PluginConfiguration): void {
