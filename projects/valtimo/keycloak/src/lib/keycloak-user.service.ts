@@ -15,13 +15,25 @@
  */
 
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, ReplaySubject, Subject, Subscription, timer} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  ReplaySubject,
+  Subject,
+  Subscription,
+  switchMap,
+  tap,
+  timer,
+} from 'rxjs';
 import {NGXLogger} from 'ngx-logger';
 import {KeycloakEventType, KeycloakService} from 'keycloak-angular';
 import {UserIdentity, UserService, ValtimoUserIdentity} from '@valtimo/config';
 import {KeycloakOptionsService} from './keycloak-options.service';
 import jwt_decode from 'jwt-decode';
 import {PromptService} from '@valtimo/user-interface';
+import {TranslateService} from '@ngx-translate/core';
+import {DatePipe} from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +55,9 @@ export class KeycloakUserService implements UserService, OnDestroy {
     private readonly keycloakService: KeycloakService,
     private readonly keycloakOptionsService: KeycloakOptionsService,
     private readonly logger: NGXLogger,
-    private readonly promptService: PromptService
+    private readonly promptService: PromptService,
+    private readonly translateService: TranslateService,
+    private readonly datePipe: DatePipe
   ) {
     this.openTokenRefreshSubscription();
     this.openRefreshTokenSubscription();
@@ -122,15 +136,40 @@ export class KeycloakUserService implements UserService, OnDestroy {
   }
 
   private openExpiryTimerSubscription(): void {
-    this.expiryTimerSubscription = timer(0, 1000).subscribe(() => {
-      this._expiryTimeMs = this._expiryTimeMs - 1000;
+    this.expiryTimerSubscription = timer(0, 1000)
+      .pipe(
+        map(() => {
+          this._expiryTimeMs = this._expiryTimeMs - 1000;
+          return this._expiryTimeMs;
+        }),
+        switchMap(expiryTimeMs => {
+          const counter = new Date(0, 0, 0, 0, 0, 0);
+          counter.setSeconds(expiryTimeMs / 1000);
 
-      this.promptService.openPrompt();
+          return combineLatest([
+            this.promptService.promptVisible$,
+            this.translateService.stream('keycloak.expiryPromptTitle'),
+            this.translateService.stream('keycloak.expiryPromptDescription', {
+              expiryTime: this.datePipe.transform(counter, 'HH:mm:ss'),
+            }),
+            this.translateService.stream('keycloak.expiryPromptCancel'),
+            this.translateService.stream('keycloak.expiryPromptConfirm'),
+          ]);
+        })
+      )
+      .subscribe(([promptVisible, title, description, cancel, confirm]) => {
+        if (!promptVisible) {
+          this.promptService.openPrompt(title, description, cancel, confirm, 'logout', 'check');
+        }
 
-      if (this._expiryTimeMs < 2000) {
-        this.logout();
-      }
-    });
+        console.log(this._expiryTimeMs);
+
+        this.promptService.setBodyText(description);
+
+        if (this._expiryTimeMs < 2000) {
+          this.logout();
+        }
+      });
   }
 
   private closeExpiryTimerSubscription(): void {

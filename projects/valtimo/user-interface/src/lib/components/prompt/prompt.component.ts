@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {delay} from 'rxjs/operators';
 import {PromptService} from '../../services/prompt.service';
 
@@ -34,7 +34,13 @@ export class PromptComponent implements OnInit {
   readonly showBackdrop$: Observable<boolean> = this.visible$.pipe(delay(0));
   readonly appearing$ = this.promptService.appearing$;
   readonly disappearing$ = this.promptService.disappearing$;
-  readonly mouseInsideModal$ = new BehaviorSubject<boolean>(false);
+
+  readonly headerText$ = this.promptService.headerText$;
+  readonly bodyText$ = this.promptService.bodyText$;
+  readonly cancelText$ = this.promptService.cancelText$;
+  readonly confirmText$ = this.promptService.confirmText$;
+  readonly cancelMdiIcon$ = this.promptService.cancelMdiIcon$;
+  readonly confirmMdiIcon$ = this.promptService.confirmMdiIcon$;
 
   constructor(private readonly promptService: PromptService) {}
 
@@ -47,12 +53,12 @@ export class PromptComponent implements OnInit {
     this.promptService.closePrompt();
   }
 
-  modalMouseEnter(): void {
-    this.mouseInsideModal$.next(true);
+  cancel(): void {
+    console.log('cancel');
   }
 
-  modalMouseLeave(): void {
-    this.mouseInsideModal$.next(false);
+  confirm(): void {
+    console.log('confirm');
   }
 
   private setAppearingDelayInService(): void {

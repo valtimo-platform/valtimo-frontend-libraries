@@ -15,8 +15,8 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {take, tap} from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -26,16 +26,15 @@ export class PromptService {
   private readonly _appearing$ = new BehaviorSubject<boolean>(false);
   private readonly _disappearing$ = new BehaviorSubject<boolean>(false);
   private readonly _appearingDelayMs$ = new BehaviorSubject<number>(140);
+  private readonly _headerText$ = new BehaviorSubject<string>('');
+  private readonly _bodyText$ = new BehaviorSubject<string>('');
+  private readonly _cancelText$ = new BehaviorSubject<string>('');
+  private readonly _confirmText$ = new BehaviorSubject<string>('');
+  private readonly _cancelMdiIcon$ = new BehaviorSubject<string>('');
+  private readonly _confirmMdiIcon$ = new BehaviorSubject<string>('');
 
   get promptVisible$() {
-    return this._promptVisible$.pipe(
-      tap(visible => {
-        if (visible) {
-          this._appearing$.next(true);
-          this.setAppearingTimeout();
-        }
-      })
-    );
+    return this._promptVisible$.asObservable();
   }
 
   get appearing$() {
@@ -54,8 +53,48 @@ export class PromptService {
     return this._appearingDelayMs$.getValue();
   }
 
-  openPrompt(): void {
+  get headerText$(): Observable<string> {
+    return this._headerText$.asObservable();
+  }
+
+  get bodyText$(): Observable<string> {
+    return this._bodyText$.asObservable();
+  }
+
+  get cancelText$(): Observable<string> {
+    return this._cancelText$.asObservable();
+  }
+
+  get confirmText$(): Observable<string> {
+    return this._confirmText$.asObservable();
+  }
+
+  get cancelMdiIcon$(): Observable<string> {
+    return this._cancelMdiIcon$.asObservable();
+  }
+
+  get confirmMdiIcon$(): Observable<string> {
+    return this._confirmMdiIcon$.asObservable();
+  }
+
+  openPrompt(
+    headerText: string,
+    bodyText: string,
+    cancelButtonText: string,
+    confirmButtonText: string,
+    cancelMdiIcon?: string,
+    confirmMdiIcon?: string
+  ): void {
+    this._headerText$.next(headerText);
+    this._bodyText$.next(bodyText);
+    this._cancelText$.next(cancelButtonText);
+    this._confirmText$.next(confirmButtonText);
+    if (cancelMdiIcon) this._cancelMdiIcon$.next(cancelMdiIcon);
+    if (confirmMdiIcon) this._confirmMdiIcon$.next(confirmMdiIcon);
+
     this._promptVisible$.next(true);
+    this._appearing$.next(true);
+    this.setAppearingTimeout();
   }
 
   closePrompt(callBackFunction?: () => void): void {
@@ -74,6 +113,10 @@ export class PromptService {
     this._appearingDelayMs$.next(appearingDelayMs);
   }
 
+  setBodyText(bodyText: string): void {
+    this._bodyText$.next(bodyText);
+  }
+
   private setAppearingTimeout(): void {
     this._appearingDelayMs$.pipe(take(1)).subscribe(appearingDelayMs => {
       setTimeout(() => {
@@ -86,7 +129,17 @@ export class PromptService {
     this._appearingDelayMs$.pipe(take(1)).subscribe(appearingDelayMs => {
       setTimeout(() => {
         this._disappearing$.next(false);
+        this.clear();
       }, appearingDelayMs);
     });
+  }
+
+  private clear(): void {
+    this._headerText$.next('');
+    this._bodyText$.next('');
+    this._cancelText$.next('');
+    this._confirmText$.next('');
+    this._cancelMdiIcon$.next('');
+    this._confirmMdiIcon$.next('');
   }
 }

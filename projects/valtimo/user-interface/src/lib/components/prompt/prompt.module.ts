@@ -18,10 +18,12 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PromptComponent} from './prompt.component';
 import {ButtonModule} from '../button/button.module';
+import {TitleModule} from '../title/title.module';
+import {ParagraphModule} from '../paragraph/paragraph.module';
 
 @NgModule({
   declarations: [PromptComponent],
-  imports: [CommonModule, ButtonModule],
+  imports: [CommonModule, ButtonModule, TitleModule, ParagraphModule],
   exports: [PromptComponent],
 })
 export class PromptModule {}
