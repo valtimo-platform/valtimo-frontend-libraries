@@ -33,12 +33,16 @@ const documentenApiPluginSpecification: PluginSpecification = {
       'store-temp-document': 'Document opslaan',
       configurationTitle: 'Configuratienaam',
       configurationTitleTooltip:
-        'Hier kunt u een eigen naam verzinnen. Onder deze naam zal de plugin te herkennen zijn in de rest van de applicatie',
+        'Hier kunt je een eigen naam verzinnen. Onder deze naam zal de plugin te herkennen zijn in de rest van de applicatie',
       url: 'Documenten API URL',
       urlTooltip:
         'In dit veld moet de verwijzing komen naar de REST API van Documenten. Deze url moet dus eindigen op /documenten/api/v1/',
       bronorganisatie: 'Bronorganisatie RSIN',
+      bronorganisatieTooltip:
+        'Vul hier het RSIN van de organisatie in die verantwoordelijk is voor de documenten',
       localDocumentLocation: 'Naam procesvariabele met document',
+      localDocumentLocationTooltip:
+        'Hier moet de procesvariabele ingevuld worden die wijst naar de locatie waar het document lokaal staat opgeslagen',
       storedDocumentUrl: 'Naam procesvariabele voor opslag document-URL',
       storeDocumentUrlTooltip:
         'Nadat het document geupload is naar de Documenten API zal de applicatie in deze procesvariabele de URL naar het document opslaan.',
@@ -53,6 +57,8 @@ const documentenApiPluginSpecification: PluginSpecification = {
       definitief: 'Definitief',
       gearchiveerd: 'Gearchiveerd',
       authenticationPluginConfiguration: 'Configuratie authenticatie-plug-in',
+      authenticationPluginConfigurationTooltip:
+        'Selecteer de plugin die de authenticatie kan afhandelen. Wanneer de selectiebox leeg blijft zal de authenticatie plugin (bv. OpenZaak) eerst aangemaakt moeten worden',
     },
     en: {
       title: 'Documenten API',
@@ -63,9 +69,13 @@ const documentenApiPluginSpecification: PluginSpecification = {
         'Here you can enter a name for the plugin. This name will be used to recognize the plugin throughout the rest of the application',
       url: 'Documenten API URL',
       urlTooltip:
-        'This field must contain the URL to the rest API of Documenten, therefore this URL should end with /documenten/api/v1/',
+        'This field must contain the URL to the REST API of Documenten, therefore this URL should end with /documenten/api/v1/',
       bronorganisatie: 'Organisation RSIN',
+      bronorganisatieTooltip:
+        'Enter here the RSIN of the organization responsible for the documents. The RSIN is a dutch identification number for legal entities and partnerships ',
       localDocumentLocation: 'Name of process variable with document',
+      localDocumentLocationTooltip:
+        'Enter the process variable that points to the location where the document is stored locally',
       storedDocumentUrl: 'Process variable name for storing document URL',
       storeDocumentUrlTooltip:
         'After the document has been uploaded to the Documenten API, the application will store the URL to the document in this process variable.',
@@ -80,6 +90,8 @@ const documentenApiPluginSpecification: PluginSpecification = {
       definitief: 'Final',
       gearchiveerd: 'Archived',
       authenticationPluginConfiguration: 'Authentication plugin configuration',
+      authenticationPluginConfigurationTooltip:
+        'Select the plugin that can handle the authentication. If the selection box remains empty, the authentication plugin (e.g. OpenZaak) will have to be created first',
     },
     de: {
       title: 'Documenten API',
@@ -90,9 +102,13 @@ const documentenApiPluginSpecification: PluginSpecification = {
         'Hier können Sie einen Namen für das Plugin eingeben. Dieser Name wird verwendet, um das Plugin im Rest der Anwendung zu erkennen',
       url: 'Documenten API URL',
       urlTooltip:
-        'Dieses Feld muss die URL zur rest API von Documenten enthalten, daher sollte diese URL mit enden /documenten/api/v1/',
+        'Dieses Feld muss die URL zur REST API von Documenten enthalten, daher sollte diese URL mit enden /documenten/api/v1/',
       bronorganisatie: 'Organisation RSIN',
+      bronorganisatieTooltip:
+        'Geben Sie hier den RAIN der für die Dokumente verantwortlichen Organisation ein. Der RAIN ist eine niederländische Identifikationsnummer für juristische Personen und Personengesellschaften',
       localDocumentLocation: 'Name Prozessvariable mit Dokument',
+      localDocumentLocationTooltip:
+        'Geben Sie die Prozessvariable ein, die auf den Ort zeigt, an dem das Dokument lokal gespeichert ist',
       storedDocumentUrl: 'Name der Prozessvariablen zum Speichern der Dokument-URL',
       storeDocumentUrlTooltip:
         'Nachdem das Dokument in die Dokumenten-API hochgeladen wurde, speichert die Anwendung die URL zum Dokument in dieser Prozessvariablen.',
@@ -107,6 +123,8 @@ const documentenApiPluginSpecification: PluginSpecification = {
       definitief: 'Endgültig',
       gearchiveerd: 'Archiviert',
       authenticationPluginConfiguration: 'Authentifizierungs-Plugin-Konfiguration',
+      authenticationPluginConfigurationTooltip:
+        'Wählen Sie das Plugin aus, das die Authentifizierung verarbeiten kann. Bleibt das Auswahlfeld leer, muss zunächst das Authentifizierungs-Plugin (z. B. OpenZaak) erstellt werden',
     },
   },
 };
