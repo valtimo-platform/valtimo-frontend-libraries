@@ -157,14 +157,30 @@ export class KeycloakUserService implements UserService, OnDestroy {
           ]);
         })
       )
-      .subscribe(([promptVisible, title, description, cancel, confirm]) => {
+      .subscribe(([promptVisible, headerText, bodyText, cancelButtonText, confirmButtonText]) => {
         if (!promptVisible) {
-          this.promptService.openPrompt(title, description, cancel, confirm, 'logout', 'check');
+          this.promptService.openPrompt({
+            headerText,
+            bodyText,
+            cancelButtonText,
+            confirmButtonText,
+            cancelMdiIcon: 'logout',
+            confirmMdiIcon: 'check',
+            closeOnConfirm: true,
+            closeOnCancel: false,
+            cancelCallbackFunction: () => {
+              this.keycloakService.logout();
+            },
+            confirmCallBackFunction: () => {
+              this.closeExpiryTimerSubscription();
+              this.updateToken(20);
+            },
+          });
         }
 
         console.log(this._expiryTimeMs);
 
-        this.promptService.setBodyText(description);
+        this.promptService.setBodyText(bodyText);
 
         if (this._expiryTimeMs < 2000) {
           this.logout();

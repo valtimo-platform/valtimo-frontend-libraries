@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, combineLatest} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 @Injectable({
@@ -32,6 +32,14 @@ export class PromptService {
   private readonly _confirmText$ = new BehaviorSubject<string>('');
   private readonly _cancelMdiIcon$ = new BehaviorSubject<string>('');
   private readonly _confirmMdiIcon$ = new BehaviorSubject<string>('');
+  private readonly _closeOnConfirm$ = new BehaviorSubject<boolean>(false);
+  private readonly _closeOnCancel$ = new BehaviorSubject<boolean>(false);
+  private readonly _cancelCallbackFunction$ = new BehaviorSubject<() => void>(() => {
+    return;
+  });
+  private readonly _confirmCallbackFunction$ = new BehaviorSubject<() => void>(() => {
+    return;
+  });
 
   get promptVisible$() {
     return this._promptVisible$.asObservable();
@@ -77,27 +85,71 @@ export class PromptService {
     return this._confirmMdiIcon$.asObservable();
   }
 
-  openPrompt(
-    headerText: string,
-    bodyText: string,
-    cancelButtonText: string,
-    confirmButtonText: string,
-    cancelMdiIcon?: string,
-    confirmMdiIcon?: string
-  ): void {
-    this._headerText$.next(headerText);
-    this._bodyText$.next(bodyText);
-    this._cancelText$.next(cancelButtonText);
-    this._confirmText$.next(confirmButtonText);
-    if (cancelMdiIcon) this._cancelMdiIcon$.next(cancelMdiIcon);
-    if (confirmMdiIcon) this._confirmMdiIcon$.next(confirmMdiIcon);
+  openPrompt(promptParameters: {
+    headerText: string;
+    bodyText: string;
+    cancelButtonText: string;
+    confirmButtonText: string;
+    cancelMdiIcon?: string;
+    confirmMdiIcon?: string;
+    closeOnConfirm?: boolean;
+    closeOnCancel?: boolean;
+    cancelCallbackFunction?: () => void;
+    confirmCallBackFunction?: () => void;
+  }): void {
+    this._headerText$.next(promptParameters.headerText);
+    this._bodyText$.next(promptParameters.bodyText);
+    this._cancelText$.next(promptParameters.cancelButtonText);
+    this._confirmText$.next(promptParameters.confirmButtonText);
+    if (promptParameters.cancelMdiIcon) this._cancelMdiIcon$.next(promptParameters.cancelMdiIcon);
+    if (promptParameters.confirmMdiIcon)
+      this._confirmMdiIcon$.next(promptParameters.confirmMdiIcon);
+    if (promptParameters.closeOnConfirm)
+      this._closeOnConfirm$.next(promptParameters.closeOnConfirm);
+    if (promptParameters.closeOnCancel) this._closeOnCancel$.next(promptParameters.closeOnCancel);
+    if (promptParameters.cancelCallbackFunction)
+      this._cancelCallbackFunction$.next(promptParameters.cancelCallbackFunction);
+    if (promptParameters.confirmCallBackFunction)
+      this._confirmCallbackFunction$.next(promptParameters.confirmCallBackFunction);
 
     this._promptVisible$.next(true);
     this._appearing$.next(true);
     this.setAppearingTimeout();
   }
 
-  closePrompt(callBackFunction?: () => void): void {
+  setAppearingDelay(appearingDelayMs: number): void {
+    this._appearingDelayMs$.next(appearingDelayMs);
+  }
+
+  setBodyText(bodyText: string): void {
+    this._bodyText$.next(bodyText);
+  }
+
+  confirm(): void {
+    combineLatest([this._closeOnConfirm$, this._confirmCallbackFunction$])
+      .pipe(take(1))
+      .subscribe(([closeOnConfirm, confirmCallback]) => {
+        if (closeOnConfirm) {
+          this.closePrompt(confirmCallback);
+        } else if (confirmCallback) {
+          confirmCallback();
+        }
+      });
+  }
+
+  cancel(): void {
+    combineLatest([this._closeOnCancel$, this._cancelCallbackFunction$])
+      .pipe(take(1))
+      .subscribe(([closeOnCancel, cancelCallback]) => {
+        if (closeOnCancel) {
+          this.closePrompt(cancelCallback);
+        } else if (cancelCallback) {
+          cancelCallback();
+        }
+      });
+  }
+
+  private closePrompt(callBackFunction?: () => void): void {
     this._disappearing$.next(true);
     this.setDisappearingTimeout();
     this._promptVisible$.next(false);
@@ -107,14 +159,6 @@ export class PromptService {
         callBackFunction();
       }, this.appearingDelayMs);
     }
-  }
-
-  setAppearingDelay(appearingDelayMs: number): void {
-    this._appearingDelayMs$.next(appearingDelayMs);
-  }
-
-  setBodyText(bodyText: string): void {
-    this._bodyText$.next(bodyText);
   }
 
   private setAppearingTimeout(): void {
@@ -141,5 +185,13 @@ export class PromptService {
     this._confirmText$.next('');
     this._cancelMdiIcon$.next('');
     this._confirmMdiIcon$.next('');
+    this._closeOnCancel$.next(false);
+    this._closeOnConfirm$.next(false);
+    this._cancelCallbackFunction$.next(() => {
+      return;
+    });
+    this._confirmCallbackFunction$.next(() => {
+      return;
+    });
   }
 }

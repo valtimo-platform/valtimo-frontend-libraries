@@ -48,17 +48,12 @@ export class PromptComponent implements OnInit {
     this.setAppearingDelayInService();
   }
 
-  closeModal(): void {
-    this.closeEvent.emit();
-    this.promptService.closePrompt();
-  }
-
   cancel(): void {
-    console.log('cancel');
+    this.promptService.cancel();
   }
 
   confirm(): void {
-    console.log('confirm');
+    this.promptService.confirm();
   }
 
   private setAppearingDelayInService(): void {
