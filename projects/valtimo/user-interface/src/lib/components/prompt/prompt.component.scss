@@ -45,7 +45,7 @@
   max-height: 100%;
   width: 100%;
   max-width: var(--v-prompt-max-width);
-  transform: translateX(100%);
+  transform: translateY(-100%);
   opacity: 0;
   transition: var(--v-prompt-transition);
   cursor: var(--v-prompt-cursor);
