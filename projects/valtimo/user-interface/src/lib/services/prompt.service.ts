@@ -34,12 +34,8 @@ export class PromptService {
   private readonly _confirmMdiIcon$ = new BehaviorSubject<string>('');
   private readonly _closeOnConfirm$ = new BehaviorSubject<boolean>(false);
   private readonly _closeOnCancel$ = new BehaviorSubject<boolean>(false);
-  private readonly _cancelCallbackFunction$ = new BehaviorSubject<() => void>(() => {
-    return;
-  });
-  private readonly _confirmCallbackFunction$ = new BehaviorSubject<() => void>(() => {
-    return;
-  });
+  private readonly _cancelCallbackFunction$ = new BehaviorSubject<() => void>(() => {});
+  private readonly _confirmCallbackFunction$ = new BehaviorSubject<() => void>(() => {});
 
   get promptVisible$() {
     return this._promptVisible$.asObservable();
@@ -184,11 +180,7 @@ export class PromptService {
     this._confirmMdiIcon$.next('');
     this._closeOnCancel$.next(false);
     this._closeOnConfirm$.next(false);
-    this._cancelCallbackFunction$.next(() => {
-      return;
-    });
-    this._confirmCallbackFunction$.next(() => {
-      return;
-    });
+    this._cancelCallbackFunction$.next(() => {});
+    this._confirmCallbackFunction$.next(() => {});
   }
 }

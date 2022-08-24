@@ -15,17 +15,7 @@
  */
 
 import {Injectable, OnDestroy} from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  map,
-  ReplaySubject,
-  Subject,
-  Subscription,
-  switchMap,
-  tap,
-  timer,
-} from 'rxjs';
+import {combineLatest, map, ReplaySubject, Subject, Subscription, switchMap, timer} from 'rxjs';
 import {NGXLogger} from 'ngx-logger';
 import {KeycloakEventType, KeycloakService} from 'keycloak-angular';
 import {UserIdentity, UserService, ValtimoUserIdentity} from '@valtimo/config';
