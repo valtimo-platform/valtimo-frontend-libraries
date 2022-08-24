@@ -317,6 +317,7 @@
   --v-input-padding-inline: var(--v-spacing-inline-md);
   --v-input-bg-color: var(--v-color-white);
   --v-input-border-radius: var(--v-border-radius-sm);
+  --v-input-border-color: var(--v-color-grey-3);
   --v-input-box-shadow: var(--v-box-shadow-heavier);
   --v-input-focus-border: 2px solid var(--v-color-accent-1);
   --v-input-transition: var(--v-transition-outline-fast);
