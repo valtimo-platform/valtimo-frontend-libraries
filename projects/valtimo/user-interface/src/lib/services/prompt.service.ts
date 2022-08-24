@@ -150,15 +150,12 @@ export class PromptService {
   }
 
   private closePrompt(callBackFunction?: () => void): void {
+    if (callBackFunction) {
+      callBackFunction();
+    }
     this._disappearing$.next(true);
     this.setDisappearingTimeout();
     this._promptVisible$.next(false);
-
-    if (callBackFunction) {
-      setTimeout(() => {
-        callBackFunction();
-      }, this.appearingDelayMs);
-    }
   }
 
   private setAppearingTimeout(): void {

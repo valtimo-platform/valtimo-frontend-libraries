@@ -51,6 +51,8 @@ export class KeycloakUserService implements UserService, OnDestroy {
 
   private readonly FIVE_MINUTES_MS = 300000;
 
+  private _counter!: Date;
+
   constructor(
     private readonly keycloakService: KeycloakService,
     private readonly keycloakOptionsService: KeycloakOptionsService,
@@ -143,14 +145,16 @@ export class KeycloakUserService implements UserService, OnDestroy {
           return this._expiryTimeMs;
         }),
         switchMap(expiryTimeMs => {
-          const counter = new Date(0, 0, 0, 0, 0, 0);
-          counter.setSeconds(expiryTimeMs / 1000);
+          if (expiryTimeMs <= this.FIVE_MINUTES_MS) {
+            this._counter = new Date(0, 0, 0, 0, 0, 0);
+            this._counter.setSeconds(expiryTimeMs / 1000);
+          }
 
           return combineLatest([
             this.promptService.promptVisible$,
             this.translateService.stream('keycloak.expiryPromptTitle'),
             this.translateService.stream('keycloak.expiryPromptDescription', {
-              expiryTime: this.datePipe.transform(counter, 'HH:mm:ss'),
+              expiryTime: this.datePipe.transform(this._counter, 'mm:ss'),
             }),
             this.translateService.stream('keycloak.expiryPromptCancel'),
             this.translateService.stream('keycloak.expiryPromptConfirm'),
@@ -158,7 +162,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
         })
       )
       .subscribe(([promptVisible, headerText, bodyText, cancelButtonText, confirmButtonText]) => {
-        if (!promptVisible) {
+        if (!promptVisible && this._expiryTimeMs <= this.FIVE_MINUTES_MS) {
           this.promptService.openPrompt({
             headerText,
             bodyText,
@@ -180,7 +184,9 @@ export class KeycloakUserService implements UserService, OnDestroy {
 
         console.log(this._expiryTimeMs);
 
-        this.promptService.setBodyText(bodyText);
+        if (promptVisible) {
+          this.promptService.setBodyText(bodyText);
+        }
 
         if (this._expiryTimeMs < 2000) {
           this.logout();
