@@ -182,8 +182,6 @@ export class KeycloakUserService implements UserService, OnDestroy {
           });
         }
 
-        console.log(this._expiryTimeMs);
-
         if (promptVisible) {
           this.promptService.setBodyText(bodyText);
         }
