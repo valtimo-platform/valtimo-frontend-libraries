@@ -42,7 +42,7 @@
 }
 
 .v-table__body {
-  border: 1px solid var(--v-table-body-box-border);
+  border: var(--v-table-body-box-border);
 }
 
 .v-table__row {
