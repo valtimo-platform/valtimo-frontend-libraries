@@ -296,7 +296,9 @@ export class DossierListComponent implements OnInit {
           storedSearchRequestKey
         );
 
-        this.logger.debug(`Set pagination: ${JSON.stringify(storedPagination || defaultPagination)}`);
+        this.logger.debug(
+          `Set pagination: ${JSON.stringify(storedPagination || defaultPagination)}`
+        );
         this.pagination$.next(storedPagination || defaultPagination);
       });
   }
