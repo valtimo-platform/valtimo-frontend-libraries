@@ -63,7 +63,7 @@
     color: var(--v-select-font-color);
     background-color: var(--v-select-background-color);
     border-radius: var(--v-select-border-radius);
-    border: 1px solid var(--v-input-border-color);
+    border: var(--v-input-border);
     min-height: 36px;
     align-items: center;
   }
