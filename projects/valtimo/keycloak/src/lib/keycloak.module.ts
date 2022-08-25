@@ -18,10 +18,13 @@ import {NgModule} from '@angular/core';
 import {KeycloakAngularModule} from 'keycloak-angular';
 import {CallbackComponent} from './callback.component';
 import {KeycloakRoutingModule} from './keycloak-routing.module';
+import {TranslateModule} from '@ngx-translate/core';
+import {DatePipe} from '@angular/common';
 
 @NgModule({
   declarations: [CallbackComponent],
-  imports: [KeycloakRoutingModule, KeycloakAngularModule],
+  imports: [KeycloakRoutingModule, KeycloakAngularModule, TranslateModule],
   exports: [CallbackComponent],
+  providers: [DatePipe],
 })
 export class KeycloakModule {}
