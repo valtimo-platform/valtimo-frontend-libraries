@@ -42,7 +42,7 @@
 }
 
 .v-table__body {
-  box-shadow: 0 0 0 1px var(--v-color-grey-3);
+  outline: var(--v-table-body-border);
   border-radius: var(--v-border-radius-md);
 }
 
