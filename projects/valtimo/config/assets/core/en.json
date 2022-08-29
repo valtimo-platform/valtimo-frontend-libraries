@@ -47,7 +47,7 @@
       "saveSuccess": "Your note has been saved successfully."
     },
     "zaakobjecten": {
-      "objecttype": "Object type",
+      "objecttype": "Select the type of object you would like to see",
       "objecttypePlaceholder": "Select an object type",
       "objecten": "Objects",
       "objectenPlaceholder": "Select an object type to load a list of objects of this type.",
@@ -707,7 +707,7 @@
   },
   "keycloak": {
     "expiryPromptTitle": "The session is about to expire",
-    "expiryPromptDescription": "You wil be logged out in {{expiryTime}}.",
+    "expiryPromptDescription": "You will be logged out in {{expiryTime}}.",
     "expiryPromptCancel": "Logout",
     "expiryPromptConfirm": "Continue session"
   }
