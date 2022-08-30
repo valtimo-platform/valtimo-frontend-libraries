@@ -40,8 +40,7 @@
   padding-inline-end: var(--v-input-padding-inline);
   background-color: var(--v-input-bg-color);
   border-radius: var(--v-input-border-radius);
-  border: var(--v-input-border);
-  outline: 0 solid transparent;
+  outline: var(--v-input-border);
   transition: var(--v-input-transition);
   width: var(--v-input-default-width);
   box-sizing: border-box;
