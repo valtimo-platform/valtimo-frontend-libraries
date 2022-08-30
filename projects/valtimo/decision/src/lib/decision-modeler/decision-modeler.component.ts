@@ -31,9 +31,7 @@ declare var $: any;
   styleUrls: ['./decision-modeler.component.scss'],
 })
 export class DecisionModelerComponent implements AfterViewInit {
-
-
-  private diagramUrl = 'https://cdn.staticaly.com/gh/bpmn-io/dmn-js-examples/a71e16/starter/diagram.dmn';
+  decisionTitle!: string;
   private CLASS_NAMES = {
     drd: 'dmn-icon-lasso-tool',
     decisionTable: 'dmn-icon-decision-table',
@@ -59,6 +57,7 @@ export class DecisionModelerComponent implements AfterViewInit {
     this.setModelerEvents();
     this.setDecisionId();
     this.loadDecisionXml();
+    this.loadDecisionTitle();
     $('#save-button').click(this.exportDiagram);
   }
 
@@ -172,6 +171,13 @@ export class DecisionModelerComponent implements AfterViewInit {
       });
       this.decisionXml = decision.dmnXml;
     });
+  }
+
+  private loadDecisionTitle(): void {
+    this.decisionService.getDecision(this.decisionId).subscribe((decision) => {
+      const decisionTitle = decision.key;
+      if (decisionTitle) this.decisionTitle = decisionTitle;
+    })
   }
 
   private async migrateAndLoadDecisionXml(decision: DecisionXml) {

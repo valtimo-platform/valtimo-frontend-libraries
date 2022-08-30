@@ -25,13 +25,13 @@
 
 <ng-template #diagramHeader>
   <div class="row pt-4 pb-3 bg-light diagram-header justify-content-between">
-    <div class="col-md-2">
+    <div class="col-md-7">
       <h2 class="decision-title">
-        {{ 'title' }}
+        {{ decisionTitle }}
       </h2>
     </div>
-      <div
-              class="col-md-2 d-flex fullscreen-toggle align-items-start justify-content-end">
+    <div
+            class="col-md-2 d-flex fullscreen-toggle align-items-start justify-content-end">
       <i
               (click)="layoutService.toggleFullscreen()"
               [ngClass]="{
@@ -40,7 +40,8 @@
             }"
               class="mdi"
       ></i>
-      </div>
+
+    </div>
   </div>
 </ng-template>
 
