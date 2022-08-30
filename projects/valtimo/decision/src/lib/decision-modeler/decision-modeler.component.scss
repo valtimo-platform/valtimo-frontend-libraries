@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+$border: 1px solid #dee2e6;
+
 #save-button {
   position: absolute;
   bottom: 10px;
@@ -33,5 +35,26 @@
 .dmn-modeler {
   display: flex;
   flex-direction: column;
-  height: 70vh;
+  width: 100%;
+  padding: 1rem;
+}
+
+.diagram {
+  border: $border;
+}
+
+.diagram-header {
+  border: $border;
+}
+
+.decision-title {
+  color: #6b6b6b;
+  font-size: 1.5rem;
+}
+
+.fullscreen-toggle {
+  font-size: 2rem;
+  > i {
+    cursor: pointer;
+  }
 }

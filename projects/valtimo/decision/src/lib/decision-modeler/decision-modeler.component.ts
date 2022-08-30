@@ -21,6 +21,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {DecisionXml} from '../models';
 import {migrateDiagram} from '@bpmn-io/dmn-migrate';
+import {LayoutService} from '@valtimo/layout';
 
 declare var $: any;
 
@@ -30,6 +31,7 @@ declare var $: any;
   styleUrls: ['./decision-modeler.component.scss'],
 })
 export class DecisionModelerComponent implements AfterViewInit {
+
 
   private diagramUrl = 'https://cdn.staticaly.com/gh/bpmn-io/dmn-js-examples/a71e16/starter/diagram.dmn';
   private CLASS_NAMES = {
@@ -46,8 +48,10 @@ export class DecisionModelerComponent implements AfterViewInit {
   constructor(
     private readonly decisionService: DecisionService,
     private readonly route: ActivatedRoute,
-    private readonly toasterService: ToastrService
-  ) {}
+    private readonly toasterService: ToastrService,
+    public layoutService: LayoutService
+  ) {
+  }
 
   ngAfterViewInit(): void {
     this.setProperties();
@@ -55,10 +59,6 @@ export class DecisionModelerComponent implements AfterViewInit {
     this.setModelerEvents();
     this.setDecisionId();
     this.loadDecisionXml();
-
-    // $.get(this.diagramUrl, this.openDiagram, 'text');
-
-    // wire save button
     $('#save-button').click(this.exportDiagram);
   }
 
@@ -72,7 +72,7 @@ export class DecisionModelerComponent implements AfterViewInit {
     } catch (err) {
       console.error('could not save DMN 1.3 diagram', err);
     }
-  }
+  };
 
   async openDiagram(dmnXML) {
     // import diagram
@@ -128,7 +128,7 @@ export class DecisionModelerComponent implements AfterViewInit {
         console.error('error opening tab', err);
       }
     });
-  }
+  };
 
   private setModelerEvents = () => {
     const $tabs = this.$tabs;
@@ -155,7 +155,7 @@ export class DecisionModelerComponent implements AfterViewInit {
         $tabs.append(tab);
       });
     });
-  }
+  };
 
   private setDecisionId(): void {
     this.decisionId = this.route.snapshot.paramMap.get('id');
@@ -173,6 +173,7 @@ export class DecisionModelerComponent implements AfterViewInit {
       this.decisionXml = decision.dmnXml;
     });
   }
+
   private async migrateAndLoadDecisionXml(decision: DecisionXml) {
     const decisionXml = await migrateDiagram(decision.dmnXml);
 

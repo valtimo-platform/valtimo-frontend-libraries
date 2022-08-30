@@ -14,15 +14,46 @@
   ~ limitations under the License.
   -->
 
-<div class="dmn-modeler">
-  <div class="test-container">
-    <div class="editor-parent">
-      <div class="editor-container"></div>
-      <div class="editor-tabs"></div>
+<div [ngClass]="{'main-content pt-0': !layoutService.isFullscreen}" class="mb-5">
+  <div [ngClass]="{'container-fluid': !layoutService.isFullscreen}">
+    <div [ngClass]="{'mt-4': !layoutService.isFullscreen}" class="modeler pl-3 pr-3 mb-3">
+      <ng-container *ngTemplateOutlet="diagramHeader"></ng-container>
+      <ng-container *ngTemplateOutlet="diagram"></ng-container>
     </div>
   </div>
-
-  <button id="save-button">print to console</button>
 </div>
 
+<ng-template #diagramHeader>
+  <div class="row pt-4 pb-3 bg-light diagram-header justify-content-between">
+    <div class="col-md-2">
+      <h2 class="decision-title">
+        {{ 'title' }}
+      </h2>
+    </div>
+      <div
+              class="col-md-2 d-flex fullscreen-toggle align-items-start justify-content-end">
+      <i
+              (click)="layoutService.toggleFullscreen()"
+              [ngClass]="{
+              'mdi-fullscreen': !layoutService.isFullscreen,
+              'mdi-fullscreen-exit': layoutService.isFullscreen
+            }"
+              class="mdi"
+      ></i>
+      </div>
+  </div>
+</ng-template>
 
+<ng-template #diagram>
+  <div class="row bg-white diagram mb-3">
+    <div class="dmn-modeler">
+      <div class="test-container">
+        <div class="editor-parent">
+          <div class="editor-container"></div>
+          <div class="editor-tabs"></div>
+        </div>
+      </div>
+      <button id="save-button">print to console</button>
+    </div>
+  </div>
+</ng-template>
