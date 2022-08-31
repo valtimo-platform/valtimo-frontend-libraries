@@ -47,7 +47,7 @@
 
   &:focus {
     outline: var(--v-input-focus-border);
-    outline-offset: -2px;
+    outline-offset: var(--v-outline-offset);
   }
 
   &:disabled {
