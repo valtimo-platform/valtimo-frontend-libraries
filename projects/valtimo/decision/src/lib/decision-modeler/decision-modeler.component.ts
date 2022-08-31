@@ -41,6 +41,7 @@ export class DecisionModelerComponent implements AfterViewInit {
   private $tabs!: any;
   private dmnModeler!: DmnJS;
   private decisionId!: string;
+
   private decisionXml!: string;
 
   constructor(
@@ -48,12 +49,12 @@ export class DecisionModelerComponent implements AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly toasterService: ToastrService,
     public layoutService: LayoutService
-  ) {
-  }
+  ) {}
 
   ngAfterViewInit(): void {
     this.setProperties();
     this.setTabEvents();
+
     this.setModelerEvents();
     this.setDecisionId();
     this.loadDecisionXml();
@@ -145,8 +146,8 @@ export class DecisionModelerComponent implements AfterViewInit {
         const className = CLASS_NAMES[v.type];
 
         const tab = $(`
-            <div class='tab ${v === activeView ? 'active' : ''}' data-id='${idx}'>
-              <span class='${className}'></span>
+            <div class="tab ${v === activeView ? 'active' : ''}" data-id="${idx}">
+              <span class="${className}"></span>
               ${v.element.name || v.element.id}
             </div>
           `);
@@ -174,10 +175,12 @@ export class DecisionModelerComponent implements AfterViewInit {
   }
 
   private loadDecisionTitle(): void {
-    this.decisionService.getDecision(this.decisionId).subscribe((decision) => {
+    this.decisionService.getDecision(this.decisionId).subscribe(decision => {
       const decisionTitle = decision.key;
-      if (decisionTitle) this.decisionTitle = decisionTitle;
-    })
+      if (decisionTitle) {
+        this.decisionTitle = decisionTitle;
+      }
+    });
   }
 
   private async migrateAndLoadDecisionXml(decision: DecisionXml) {
@@ -211,5 +214,4 @@ export class DecisionModelerComponent implements AfterViewInit {
       canvas.zoom('fit-viewport');
     }
   }
-
 }

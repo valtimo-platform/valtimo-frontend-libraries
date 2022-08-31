@@ -30,17 +30,16 @@
         {{ decisionTitle }}
       </h2>
     </div>
-    <div
-            class="col-md-2 d-flex fullscreen-toggle align-items-start justify-content-end">
-      <i
-              (click)="layoutService.toggleFullscreen()"
-              [ngClass]="{
-              'mdi-fullscreen': !layoutService.isFullscreen,
-              'mdi-fullscreen-exit': layoutService.isFullscreen
-            }"
-              class="mdi"
-      ></i>
 
+    <div class="col-md-2 d-flex fullscreen-toggle align-items-start justify-content-end">
+      <i
+        (click)="layoutService.toggleFullscreen()"
+        [ngClass]="{
+          'mdi-fullscreen': !layoutService.isFullscreen,
+          'mdi-fullscreen-exit': layoutService.isFullscreen
+        }"
+        class="mdi"
+      ></i>
     </div>
   </div>
 </ng-template>
