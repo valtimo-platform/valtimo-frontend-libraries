@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<valtimo-widget>
+<valtimo-widget *ngIf="decisionsLatestVersions$ | async as decisions">
   <valtimo-list
     [items]="decisions"
     [fields]="fields"

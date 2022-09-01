@@ -175,7 +175,7 @@ export class DecisionModelerComponent implements AfterViewInit {
   }
 
   private loadDecisionTitle(): void {
-    this.decisionService.getDecision(this.decisionId).subscribe(decision => {
+    this.decisionService.getDecisionById(this.decisionId).subscribe(decision => {
       const decisionTitle = decision.key;
       if (decisionTitle) {
         this.decisionTitle = decisionTitle;

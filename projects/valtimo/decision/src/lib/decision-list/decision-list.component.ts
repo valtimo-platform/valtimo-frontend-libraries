@@ -14,35 +14,42 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Decision} from '../models';
 import {DecisionService} from '../decision.service';
 import {Router} from '@angular/router';
+import {map} from 'rxjs';
 
 @Component({
   selector: 'valtimo-decision-list',
   templateUrl: './decision-list.component.html',
   styleUrls: ['./decision-list.component.scss'],
 })
-export class DecisionListComponent implements OnInit {
-  public decisions: Decision[];
+export class DecisionListComponent {
   public fields = [
     {key: 'key', label: 'Key'},
     {key: 'name', label: 'Name'},
     {key: 'version', label: 'Version'},
   ];
 
+  readonly decisionsLatestVersions$ = this.decisionService.getDecisions().pipe(
+    map(decisions =>
+      decisions.reduce((acc, curr) => {
+        const findInAcc = acc.find(decision => decision.key === curr.key);
+
+        if (findInAcc && findInAcc.version > curr.version) {
+          return acc;
+        } else if (findInAcc && findInAcc.version < curr.version) {
+          const newAcc = acc.filter(decision => decision.key !== curr.key);
+          return [...newAcc, curr];
+        }
+
+        return [...acc, curr];
+      }, [])
+    )
+  );
+
   constructor(private decisionService: DecisionService, private router: Router) {}
-
-  ngOnInit() {
-    this.loadDecisions();
-  }
-
-  loadDecisions() {
-    this.decisionService.getDecisions().subscribe((decisions: Decision[]) => {
-      this.decisions = decisions;
-    });
-  }
 
   viewDecisionTable(decision: Decision) {
     this.router.navigate(['/decision-tables', decision.id]);

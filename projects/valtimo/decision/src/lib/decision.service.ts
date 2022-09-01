@@ -47,12 +47,17 @@ export class DecisionService {
     );
   }
 
-  getDecision(decisionId: string): Observable<Decision> {
+  getDecisionById(decisionId: string): Observable<Decision> {
     return this.http.get<Decision>(
       `${this.valtimoApiConfig.endpointUri}camunda-rest/engine/default/decision-definition/${decisionId}`
     );
   }
 
+  getLatestDecisionByKey(decisionKey: string): Observable<Decision> {
+    return this.http.get<Decision>(
+      `${this.valtimoApiConfig.endpointUri}camunda-rest/engine/default/decision-definition/key/${decisionKey}`
+    );
+  }
 
   getDecisionXml(decisionId: string): Observable<DecisionXml> {
     return this.http.get<DecisionXml>(
