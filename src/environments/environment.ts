@@ -206,6 +206,9 @@ export const environment: ValtimoConfig = {
     maxMenuWidth: 330,
     minMenuWidth: 120,
   },
+  caseObjectTypes: {
+    leningen: ['Boom', 'Straatverlichting'],
+  },
   featureToggles: {
     disableFormFlow: false,
     enableHackathonCasesPage: true,
