@@ -20,17 +20,41 @@
     columns: columns$ | async
   } as obs"
 >
-  <v-input-label
-    titleTranslationKey="dossier.zaakobjecten.objecten"
-    [largeMargin]="true"
-  ></v-input-label>
   <v-table
     [loading]="!obs.objects"
     [items]="obs.objects"
     [columns]="obs.columns"
-    [showEditButtons]="false"
+    [showEditButtons]="true"
+    editButtonTranslationKey="dossier.objectType.viewObject"
     [amountOfLoadingRows]="2"
     [itemsTranslationKey]="'pluginManagement.tableItemsText'"
     [showPagination]="false"
+    (editButtonClicked)="rowClicked($event)"
   ></v-table>
 </ng-container>
+
+<v-modal #viewObjectModal (closeEvent)="hide()">
+  <div role="header">
+    <v-title [margin]="false" type="h2" [fullWidth]="true" [center]="true">{{
+      objectName$ | async
+    }}</v-title>
+  </div>
+  <div role="content">test content</div>
+  <div role="footer">
+    <div class="edit-plugin-buttons">
+      <!--      <v-button-->
+      <!--              [disabled]="inputDisabled$ | async"-->
+      <!--              (clickEvent)="delete()"-->
+      <!--              [mdiIcon]="'delete'"-->
+      <!--              type="danger"-->
+      <!--      >{{ 'pluginManagement.remove' | translate }}</v-button-->
+      <!--      >-->
+      <!--      <v-button-->
+      <!--              [disabled]="(configurationValid$ | async) === false || (inputDisabled$ | async)"-->
+      <!--              (clickEvent)="save()"-->
+      <!--              [mdiIcon]="'check'"-->
+      <!--              type="success"-->
+      <!--      >{{ 'pluginManagement.save' | translate }}</v-button-->
+    </div>
+  </div>
+</v-modal>

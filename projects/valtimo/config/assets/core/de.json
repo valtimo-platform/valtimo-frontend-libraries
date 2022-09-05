@@ -54,6 +54,9 @@
       "index": "Index",
       "registrationAt": "Registriert auf",
       "title": "Titel"
+    },
+    "objectType": {
+      "viewObject": "Objekt ansehen"
     }
   },
   "document": {

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {FormioForm} from '@formio/angular/formio.common';
+
 interface ZaakObjectType {
   name: string;
   url: string;
@@ -26,4 +28,18 @@ interface ZaakObject {
   url: string;
 }
 
-export {ZaakObjectType, ZaakObject};
+interface ZaakobjectFormResponse {
+  documentMappedFields: Array<{
+    defaultValue: string;
+    input: boolean;
+    key: string;
+    label: string;
+    type: string;
+  }>;
+  formDefinition: FormioForm;
+  id: string;
+  name: string;
+  readOnly: boolean;
+}
+
+export {ZaakObjectType, ZaakObject, ZaakobjectFormResponse};

@@ -18,8 +18,7 @@ import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ZaakObject, ZaakObjectType} from '../models';
-import {FormioForm} from '@formio/angular';
+import {ZaakObject, ZaakobjectFormResponse, ZaakObjectType} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -41,9 +40,9 @@ export class ZaakobjectenService {
     );
   }
 
-  getObjectTypeForm(documentId: string, objectUrl: string): Observable<FormioForm> {
-    return this.http.get<FormioForm>(
-      `${this.VALTIMO_API_ENDPOINT_URI}document/${documentId}/zaak/object?/form?objectUrl=${objectUrl}`
+  getObjectTypeForm(documentId: string, objectUrl: string): Observable<ZaakobjectFormResponse> {
+    return this.http.get<ZaakobjectFormResponse>(
+      `${this.VALTIMO_API_ENDPOINT_URI}document/${documentId}/zaak/object/form?objectUrl=${objectUrl}`
     );
   }
 }

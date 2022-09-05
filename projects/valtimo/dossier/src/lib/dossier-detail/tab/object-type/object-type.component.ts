@@ -14,26 +14,29 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ZaakobjectenService} from '../../../services/zaakobjecten.service';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
 import {ZaakObject, ZaakObjectType} from '../../../models';
-import {TableColumn} from '@valtimo/user-interface';
+import {ModalComponent, ModalService, TableColumn} from '@valtimo/user-interface';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-object-type',
   templateUrl: './object-type.component.html',
-  styleUrls: ['./object-type.component.css'],
+  styleUrls: ['./object-type.component.scss'],
 })
 export class DossierDetailTabObjectTypeComponent {
+  @ViewChild('viewObjectModal') viewObjectModal: ModalComponent;
+
   private readonly documentId$ = this.route.params.pipe(map(params => params.documentId));
 
   private readonly objecttypes$: Observable<Array<ZaakObjectType>> = this.documentId$.pipe(
     switchMap(documentId => this.zaakobjectenService.getDocumentObjectTypes(documentId))
   );
 
-  private readonly objectName$ = this.route.params.pipe(
+  readonly objectName$ = this.route.params.pipe(
     map(() => {
       const currentUrl = window.location.href;
       const splitUrl = currentUrl.split('/');
@@ -91,6 +94,24 @@ export class DossierDetailTabObjectTypeComponent {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly zaakobjectenService: ZaakobjectenService
+    private readonly zaakobjectenService: ZaakobjectenService,
+    private readonly modalService: ModalService
   ) {}
+
+  rowClicked(object: ZaakObject): void {
+    this.documentId$.pipe(take(1)).subscribe(documentId => {
+      this.zaakobjectenService.getObjectTypeForm(documentId, object.url).subscribe(res => {
+        console.log('res', res);
+        this.show();
+      });
+    });
+  }
+
+  hide(): void {
+    this.modalService.closeModal();
+  }
+
+  private show(): void {
+    this.modalService.openModal(this.viewObjectModal);
+  }
 }
