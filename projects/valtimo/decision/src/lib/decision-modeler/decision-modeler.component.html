@@ -22,12 +22,37 @@
   } as obs"
 >
   <div [ngClass]="{'container-fluid': !layoutService.isFullscreen}">
+    <ng-container *ngTemplateOutlet="buttons"></ng-container>
     <div [ngClass]="{'mt-4': !layoutService.isFullscreen}" class="modeler pl-3 pr-3 mb-3">
       <ng-container *ngTemplateOutlet="diagramHeader"></ng-container>
       <ng-container *ngTemplateOutlet="diagram"></ng-container>
     </div>
   </div>
 </div>
+
+<ng-template #buttons>
+  <div class="text-right" *ngIf="{selectionId: selectionId$ | async} as obs">
+    <div class="btn-group mt-m3px mb-3" *ngIf="obs.selectionId && !layoutService.isFullscreen">
+      <!--      <button class="btn btn-primary btn-space" (click)="download()">-->
+      <!--        <i class="icon mdi mdi-download mr-1"></i>{{ 'processManagement.download' | translate }}-->
+      <!--      </button>-->
+      <button
+        class="btn btn-success btn-space"
+        (click)="exportDiagram()"
+        [ngClass]="{'mr-0': obs.selectionId !== null}"
+      >
+        <i class="icon mdi mdi-upload mr-1"></i>{{ 'processManagement.deploy' | translate }}
+      </button>
+      <!--      <button-->
+      <!--        *ngIf="selectedVersion === null"-->
+      <!--        class="btn btn-danger btn-space mr-0"-->
+      <!--        (click)="reset()"-->
+      <!--      >-->
+      <!--        <i class="icon mdi mdi-delete mr-1"></i>{{ 'processManagement.clear' | translate }}-->
+      <!--      </button>-->
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #diagramHeader>
   <div class="row pt-4 pb-3 bg-light diagram-header justify-content-between">
@@ -41,7 +66,7 @@
       <ng-container
         *ngIf="{
           versionSelectItems: decisionVersionSelectItems$ | async,
-          defaultSelectionId: defaultSelectionId$ | async,
+          defaultSelectionId: selectionId$ | async,
           disabled: versionSelectionDisabled$ | async
         } as obs"
       >

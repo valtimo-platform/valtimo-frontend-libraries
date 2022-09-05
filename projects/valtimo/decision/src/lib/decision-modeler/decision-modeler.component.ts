@@ -49,13 +49,14 @@ export class DecisionModelerComponent implements AfterViewInit {
     tap(() => this.versionSelectionDisabled$.next(true))
   );
 
-  readonly defaultSelectionId$ = new BehaviorSubject<string>('');
+  readonly selectionId$ = new BehaviorSubject<string>('');
 
   private readonly decision$: Observable<Decision> = this.decisionId$.pipe(
     switchMap(decisionId => this.decisionService.getDecisionById(decisionId)),
     tap(decision => {
-      if (decision) {
-        this.defaultSelectionId$.next(decision.id);
+      const selectionId = this.selectionId$.getValue();
+      if (decision && !selectionId) {
+        this.selectionId$.next(decision.id);
       }
     })
   );
@@ -114,10 +115,16 @@ export class DecisionModelerComponent implements AfterViewInit {
   exportDiagram = async () => {
     try {
       const {xml} = await this.dmnModeler.saveXML({format: true});
+      const file = new File([xml], 'diagram.dmn', {
+        type: 'text/plain',
+      });
 
-      alert('Diagram exported. Check the developer tools!');
-
-      console.log('DIAGRAM', xml);
+      this.decisionService.deployDmn(file).subscribe(res => {
+        const deployedId = Object.keys(res.deployedDecisionDefinitions)[0];
+        if (deployedId) {
+          this.switchVersion(deployedId);
+        }
+      });
     } catch (err) {
       console.error('could not save DMN 1.3 diagram', err);
     }
