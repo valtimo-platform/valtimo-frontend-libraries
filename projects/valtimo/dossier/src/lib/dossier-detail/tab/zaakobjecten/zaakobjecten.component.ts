@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ZaakobjectenService} from '../../../services/zaakobjecten.service';
-import {combineLatest, BehaviorSubject, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
 import {ZaakObject, ZaakObjectType} from '../../../models';
-import {SelectItem, TableColumn} from '@valtimo/user-interface';
+import {ModalComponent, ModalService, SelectItem, TableColumn} from '@valtimo/user-interface';
+import {take} from 'rxjs/operators';
+import {FormioForm} from '@formio/angular';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-zaakobjecten',
@@ -27,6 +29,8 @@ import {SelectItem, TableColumn} from '@valtimo/user-interface';
   styleUrls: ['./zaakobjecten.component.scss'],
 })
 export class DossierDetailTabZaakobjectenComponent {
+  @ViewChild('viewZaakobjectModal') viewZaakobjectModal: ModalComponent;
+
   private readonly documentId$ = this.route.params.pipe(map(params => params.documentId));
 
   private readonly objecttypes$: Observable<Array<ZaakObjectType>> = this.documentId$.pipe(
@@ -67,12 +71,49 @@ export class DossierDetailTabZaakobjectenComponent {
     },
   ]);
 
+  readonly objectForm$ = new BehaviorSubject<FormioForm | null>(null);
+
+  readonly objectName$ = new BehaviorSubject<string>('');
+
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly zaakobjectenService: ZaakobjectenService
+    private readonly zaakobjectenService: ZaakobjectenService,
+    private readonly modalService: ModalService
   ) {}
 
   selectObjectType(objectTypeUrl: string): void {
     this.selectedObjecttypeUrl$.next(objectTypeUrl);
+  }
+
+  rowClicked(object: ZaakObject, objectTypeSelectItems: Array<SelectItem>): void {
+    this.documentId$.pipe(take(1)).subscribe(documentId => {
+      this.zaakobjectenService.getObjectTypeForm(documentId, object.url).subscribe(res => {
+        const selectedObjectTypeUrl = this.selectedObjecttypeUrl$.getValue();
+        const definition = res.formDefinition;
+        const currentTypeSelectItem = objectTypeSelectItems.find(
+          selectItem => selectItem.id === selectedObjectTypeUrl
+        );
+
+        definition.components = definition.components.map(component => ({
+          ...component,
+          disabled: true,
+        }));
+
+        this.objectName$.next(currentTypeSelectItem.text);
+        this.objectForm$.next(definition);
+        this.show();
+      });
+    });
+  }
+
+  hide(): void {
+    this.modalService.closeModal(() => {
+      this.objectName$.next('');
+      this.objectForm$.next(null);
+    });
+  }
+
+  private show(): void {
+    this.modalService.openModal(this.viewZaakobjectModal);
   }
 }

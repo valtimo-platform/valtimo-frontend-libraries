@@ -44,9 +44,22 @@
     [loading]="!obs.objects"
     [items]="obs.objects"
     [columns]="obs.columns"
-    [showEditButtons]="false"
+    [showEditButtons]="true"
     [amountOfLoadingRows]="2"
     [itemsTranslationKey]="'pluginManagement.tableItemsText'"
     [showPagination]="false"
+    editButtonTranslationKey="dossier.objectType.viewObject"
+    (editButtonClicked)="rowClicked($event, obs.objecttypeSelectItems)"
   ></v-table>
 </ng-container>
+
+<v-modal #viewZaakobjectModal (closeEvent)="hide()" [hideFooter]="true">
+  <div role="header">
+    <v-title [margin]="false" type="h2" [fullWidth]="true" [center]="true">{{
+      objectName$ | async
+    }}</v-title>
+  </div>
+  <div role="content">
+    <valtimo-form-io [form]="objectForm$ | async"></valtimo-form-io>
+  </div>
+</v-modal>
