@@ -61,6 +61,7 @@ import {
   ParagraphModule,
   TableModule,
 } from '@valtimo/user-interface';
+import {DossierDetailTabObjectTypeComponent} from './dossier-detail/tab/object-type/object-type.component';
 
 export type TabsFactory = () => Map<string, object>;
 
@@ -77,6 +78,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierUpdateComponent,
     DossierProcessStartModalComponent,
     DossierSupportingProcessStartModalComponent,
+    DossierDetailTabObjectTypeComponent,
   ],
   imports: [
     CommonModule,

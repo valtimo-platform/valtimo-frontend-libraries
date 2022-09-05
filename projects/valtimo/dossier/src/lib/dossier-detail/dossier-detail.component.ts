@@ -67,7 +67,9 @@ export class DossierDetailComponent implements OnInit {
   ) {
     this.snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = this.snapshot.get('documentDefinitionName') || '';
+    console.log('documentDefinitionName', this.documentDefinitionName);
     this.documentId = this.snapshot.get('documentId') || '';
+    this.tabService.getConfigurableTabs(this.documentDefinitionName);
   }
 
   ngOnInit() {

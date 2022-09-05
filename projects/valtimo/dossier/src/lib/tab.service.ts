@@ -19,8 +19,9 @@ import {TabImpl} from './models';
 import {DEFAULT_TABS, TAB_MAP} from './dossier.config';
 import {ConfigService} from '@valtimo/config';
 import {ActivatedRoute, Router, Event as NavigationEvent, NavigationEnd} from '@angular/router';
-import {Subscription} from 'rxjs';
 import {DossierDetailTabZaakobjectenComponent} from './dossier-detail/tab/zaakobjecten/zaakobjecten.component';
+import {TranslateService} from '@ngx-translate/core';
+import {DossierDetailTabObjectTypeComponent} from './dossier-detail/tab/object-type/object-type.component';
 
 @Injectable({
   providedIn: 'root',
@@ -28,14 +29,15 @@ import {DossierDetailTabZaakobjectenComponent} from './dossier-detail/tab/zaakob
 export class TabService {
   private readonly tabMap: Map<string, object>;
   private tabs: TabImpl[] = [];
-  private documentDefinitionName!: Subscription;
   private allTabs!: Map<string, object>;
+  private extraTabs;
 
   constructor(
     @Inject(TAB_MAP) tabMap: Map<string, object> = DEFAULT_TABS,
     private readonly configService: ConfigService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private readonly translateService: TranslateService
   ) {
     this.tabMap = tabMap;
     this.setTabs();
@@ -61,17 +63,23 @@ export class TabService {
     });
   }
 
-  private getConfigurableTabs() {
-    const documentDefinitionName = this.route.snapshot.paramMap.get('documentDefinitionName');
-    const name = this.configService.config.caseObjectTypes['leningen'][0].split('.');
+  getConfigurableTabs(documentDefinitionName: string) {
+    const name = this.configService.config.caseObjectTypes[documentDefinitionName][0].split('.');
+    const allNamesObjects = this.configService.config.caseObjectTypes[documentDefinitionName];
+    let map = new Map();
 
-    return new Map([[name.toString(), DossierDetailTabZaakobjectenComponent]]);
+    allNamesObjects.forEach(name => {
+      map.set(name, DossierDetailTabObjectTypeComponent);
+      console.log(name);
+    });
+
+    this.extraTabs = map;
   }
 
   private openRouterSubscription(): void {
     this.router.events.subscribe((event: NavigationEvent) => {
       if (event instanceof NavigationEnd) {
-        this.setTabs(this.getConfigurableTabs());
+        this.setTabs(this.extraTabs);
       }
     });
   }
