@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ZaakobjectenService} from '../../../services/zaakobjecten.service';
-import {combineLatest, BehaviorSubject, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {ZaakObject, ZaakObjectType} from '../../../models';
-import {SelectItem, TableColumn} from '@valtimo/user-interface';
-import {ConfigService} from '@valtimo/config';
+import {TableColumn} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-object-type',
@@ -28,18 +27,40 @@ import {ConfigService} from '@valtimo/config';
   styleUrls: ['./object-type.component.css'],
 })
 export class DossierDetailTabObjectTypeComponent {
-  @Input() typeObject;
   private readonly documentId$ = this.route.params.pipe(map(params => params.documentId));
 
   private readonly objecttypes$: Observable<Array<ZaakObjectType>> = this.documentId$.pipe(
+    tap(documentId => console.log('doc id', documentId)),
     switchMap(documentId => this.zaakobjectenService.getDocumentObjectTypes(documentId))
   );
 
-  readonly objecttypeSelectItems$: Observable<Array<SelectItem>> = this.objecttypes$.pipe(
-    map(objecttypes => objecttypes.map(type => ({id: type.url, text: type.name || '-'})))
+  private readonly objectName$ = this.route.params.pipe(
+    map(() => {
+      const currentUrl = window.location.href;
+      const splitUrl = currentUrl.split('/');
+      const lastUrlPart = splitUrl[splitUrl.length - 1];
+
+      return lastUrlPart;
+    })
   );
 
-  readonly selectedObjecttypeUrl$ = new BehaviorSubject<string | null>(null);
+  readonly selectedObjecttypeUrl$: Observable<string> = combineLatest([
+    this.objecttypes$,
+    this.objectName$,
+  ]).pipe(
+    map(([objectTypes, objectName]) => {
+      const currentType = objectTypes?.find(
+        type => type?.name.toLowerCase() === objectName?.toLowerCase()
+      );
+      const currentTypeUrl = currentType?.url;
+
+      if (objectTypes && objectName && currentTypeUrl) {
+        return currentTypeUrl;
+      }
+
+      return '';
+    })
+  );
 
   readonly objects$: Observable<Array<ZaakObject> | null> = combineLatest([
     this.documentId$,
@@ -71,15 +92,6 @@ export class DossierDetailTabObjectTypeComponent {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly zaakobjectenService: ZaakobjectenService,
-    private readonly configService: ConfigService
-  ) {
-    this.selectObjectType();
-  }
-
-  selectObjectType(): void {
-    this.selectedObjecttypeUrl$.next(
-      'http://host.docker.internal:8011/api/v1/objecttypes/feeaa795-d212-4fa2-bb38-2c34996e5702'
-    );
-  }
+    private readonly zaakobjectenService: ZaakobjectenService
+  ) {}
 }
