@@ -14,7 +14,11 @@
   ~ limitations under the License.
   -->
 
-<div [ngClass]="{'main-content pt-0': !layoutService.isFullscreen}" class="mb-5">
+<div
+  [ngClass]="{'main-content pt-0': !layoutService.isFullscreen}"
+  class="mb-5"
+  *ngIf="{decisionXml: decisionXml$ | async} as obs"
+>
   <div [ngClass]="{'container-fluid': !layoutService.isFullscreen}">
     <div [ngClass]="{'mt-4': !layoutService.isFullscreen}" class="modeler pl-3 pr-3 mb-3">
       <ng-container *ngTemplateOutlet="diagramHeader"></ng-container>
@@ -27,7 +31,7 @@
   <div class="row pt-4 pb-3 bg-light diagram-header justify-content-between">
     <div class="col-md-7">
       <h2 class="decision-title">
-        {{ decisionTitle }}
+        {{ decisionTitle$ | async }}
       </h2>
     </div>
 

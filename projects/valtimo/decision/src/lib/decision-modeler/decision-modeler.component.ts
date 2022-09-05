@@ -17,11 +17,11 @@
 import {DecisionService} from '../decision.service';
 import {AfterViewInit, Component} from '@angular/core';
 import DmnJS from 'dmn-js/dist/dmn-modeler.development.js';
-import {ActivatedRoute} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DecisionXml} from '../models';
 import {migrateDiagram} from '@bpmn-io/dmn-migrate';
 import {LayoutService} from '@valtimo/layout';
+import {map, Observable, switchMap, tap} from 'rxjs';
 
 declare var $: any;
 
@@ -40,14 +40,29 @@ export class DecisionModelerComponent implements AfterViewInit {
   private $container!: any;
   private $tabs!: any;
   private dmnModeler!: DmnJS;
-  private decisionId!: string;
 
-  private decisionXml!: string;
+  private readonly decisionId$: Observable<string | null> = this.route.params.pipe(
+    map(params => params?.id)
+  );
+
+  readonly decisionTitle$: Observable<string> = this.decisionId$.pipe(
+    switchMap(decisionId => this.decisionService.getDecisionById(decisionId)),
+    map(decision => decision?.key || '')
+  );
+
+  readonly decisionXml$ = this.decisionId$.pipe(
+    switchMap(decisionId => this.decisionService.getDecisionXml(decisionId)),
+    tap(decisionXml => {
+      if (decisionXml) {
+        this.loadDecisionXml(decisionXml);
+      }
+    })
+  );
 
   constructor(
     private readonly decisionService: DecisionService,
     private readonly route: ActivatedRoute,
-    private readonly toasterService: ToastrService,
+    private readonly router: Router,
     public layoutService: LayoutService
   ) {}
 
@@ -56,9 +71,6 @@ export class DecisionModelerComponent implements AfterViewInit {
     this.setTabEvents();
 
     this.setModelerEvents();
-    this.setDecisionId();
-    this.loadDecisionXml();
-    this.loadDecisionTitle();
     $('#save-button').click(this.exportDiagram);
   }
 
@@ -157,28 +169,12 @@ export class DecisionModelerComponent implements AfterViewInit {
     });
   };
 
-  private setDecisionId(): void {
-    this.decisionId = this.route.snapshot.paramMap.get('id');
-  }
-
-  private loadDecisionXml(): void {
-    this.decisionService.getDecisionXml(this.decisionId).subscribe((decision: DecisionXml) => {
-      this.dmnModeler.importXML(decision.dmnXml, error => {
-        if (error) {
-          this.migrateAndLoadDecisionXml(decision);
-        } else {
-          this.setEditor();
-        }
-      });
-      this.decisionXml = decision.dmnXml;
-    });
-  }
-
-  private loadDecisionTitle(): void {
-    this.decisionService.getDecisionById(this.decisionId).subscribe(decision => {
-      const decisionTitle = decision.key;
-      if (decisionTitle) {
-        this.decisionTitle = decisionTitle;
+  private loadDecisionXml(decision: DecisionXml): void {
+    this.dmnModeler.importXML(decision.dmnXml, error => {
+      if (error) {
+        this.migrateAndLoadDecisionXml(decision);
+      } else {
+        this.setEditor();
       }
     });
   }
@@ -194,7 +190,6 @@ export class DecisionModelerComponent implements AfterViewInit {
           this.setEditor();
         }
       });
-      this.decisionXml = decisionXml;
     }
   }
 
