@@ -18,10 +18,11 @@ import {DecisionService} from '../decision.service';
 import {AfterViewInit, Component} from '@angular/core';
 import DmnJS from 'dmn-js/dist/dmn-modeler.development.js';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DecisionXml} from '../models';
+import {Decision, DecisionXml} from '../models';
 import {migrateDiagram} from '@bpmn-io/dmn-migrate';
 import {LayoutService} from '@valtimo/layout';
-import {map, Observable, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
+import {SelectItem} from '@valtimo/user-interface';
 
 declare var $: any;
 
@@ -41,13 +42,43 @@ export class DecisionModelerComponent implements AfterViewInit {
   private $tabs!: any;
   private dmnModeler!: DmnJS;
 
+  readonly versionSelectionDisabled$ = new BehaviorSubject<boolean>(true);
+
   private readonly decisionId$: Observable<string | null> = this.route.params.pipe(
-    map(params => params?.id)
+    map(params => params?.id),
+    tap(() => this.versionSelectionDisabled$.next(true))
   );
 
-  readonly decisionTitle$: Observable<string> = this.decisionId$.pipe(
+  readonly defaultSelectionId$ = new BehaviorSubject<string>('');
+
+  private readonly decision$: Observable<Decision> = this.decisionId$.pipe(
     switchMap(decisionId => this.decisionService.getDecisionById(decisionId)),
+    tap(decision => {
+      if (decision) {
+        this.defaultSelectionId$.next(decision.id);
+      }
+    })
+  );
+
+  readonly decisionTitle$: Observable<string> = this.decision$.pipe(
     map(decision => decision?.key || '')
+  );
+
+  readonly decisionVersionSelectItems$: Observable<Array<SelectItem>> = combineLatest([
+    this.decision$,
+    this.decisionService.getDecisions(),
+  ]).pipe(
+    map(([currentDecision, decisions]) => {
+      const decisionsWithKey = decisions.filter(decision => decision.key === currentDecision.key);
+
+      return decisionsWithKey
+        .sort((a, b) => b.version - a.version)
+        .map(decision => ({
+          id: decision.id,
+          text: decision.version.toString(),
+        }));
+    }),
+    tap(() => this.versionSelectionDisabled$.next(false))
   );
 
   readonly decisionXml$ = this.decisionId$.pipe(
@@ -72,6 +103,12 @@ export class DecisionModelerComponent implements AfterViewInit {
 
     this.setModelerEvents();
     $('#save-button').click(this.exportDiagram);
+  }
+
+  switchVersion(decisionId: string): void {
+    if (decisionId) {
+      this.router.navigate(['/decision-tables', decisionId]);
+    }
   }
 
   exportDiagram = async () => {

@@ -22,7 +22,7 @@ $border: 1px solid #dee2e6;
   left: 10px;
   background: white;
   padding: 5px;
-  border: solid 1px #CCC;
+  border: solid 1px #ccc;
   border-radius: 2px;
   padding: 8px;
   font-family: 'Arial', sans-serif;
@@ -50,10 +50,12 @@ $border: 1px solid #dee2e6;
 .decision-title {
   color: #6b6b6b;
   font-size: 1.5rem;
+  margin: 0;
 }
 
 .fullscreen-toggle {
   font-size: 2rem;
+
   > i {
     cursor: pointer;
   }
