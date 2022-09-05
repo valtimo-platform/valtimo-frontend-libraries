@@ -19,7 +19,6 @@ import {TabImpl} from './models';
 import {DEFAULT_TABS, TAB_MAP} from './dossier.config';
 import {ConfigService} from '@valtimo/config';
 import {ActivatedRoute, Event as NavigationEvent, NavigationEnd, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
 import {DossierDetailTabObjectTypeComponent} from './dossier-detail/tab/object-type/object-type.component';
 
 @Injectable({
@@ -35,8 +34,7 @@ export class TabService {
     @Inject(TAB_MAP) tabMap: Map<string, object> = DEFAULT_TABS,
     private readonly configService: ConfigService,
     private route: ActivatedRoute,
-    private router: Router,
-    private readonly translateService: TranslateService
+    private router: Router
   ) {
     this.tabMap = tabMap;
     this.setTabs();

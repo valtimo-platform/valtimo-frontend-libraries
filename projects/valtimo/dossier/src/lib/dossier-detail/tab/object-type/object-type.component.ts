@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ZaakobjectenService} from '../../../services/zaakobjecten.service';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
 import {ZaakObject, ZaakObjectType} from '../../../models';
 import {TableColumn} from '@valtimo/user-interface';
 
@@ -30,7 +30,6 @@ export class DossierDetailTabObjectTypeComponent {
   private readonly documentId$ = this.route.params.pipe(map(params => params.documentId));
 
   private readonly objecttypes$: Observable<Array<ZaakObjectType>> = this.documentId$.pipe(
-    tap(documentId => console.log('doc id', documentId)),
     switchMap(documentId => this.zaakobjectenService.getDocumentObjectTypes(documentId))
   );
 

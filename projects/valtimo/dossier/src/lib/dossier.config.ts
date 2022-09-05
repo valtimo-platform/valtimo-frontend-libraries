@@ -20,14 +20,11 @@ import {DossierDetailTabProgressComponent} from './dossier-detail/tab/progress/p
 import {DossierDetailTabAuditComponent} from './dossier-detail/tab/audit/audit.component';
 import {DossierDetailTabDocumentsComponent} from './dossier-detail/tab/documents/documents.component';
 import {DefaultTabs} from './dossier-detail-tab-enum';
-import {DossierDetailTabObjectTypeComponent} from './dossier-detail/tab/object-type/object-type.component';
 
 export const TAB_MAP = new InjectionToken<Map<string, object>>('TabMap');
-// export const CUSTOM_TAP_MAP = new InjectionToken<Map<string, object>>('CustomTabMap');
 export const DEFAULT_TABS = new Map<string, object>([
   [DefaultTabs.summary, DossierDetailTabSummaryComponent],
   [DefaultTabs.progress, DossierDetailTabProgressComponent],
   [DefaultTabs.audit, DossierDetailTabAuditComponent],
   [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
-  // [DefaultTabs.objectsType, DossierDetailTabObjectTypeComponent],
 ]);
