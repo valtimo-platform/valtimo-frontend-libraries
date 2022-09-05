@@ -33,28 +33,13 @@
   ></v-table>
 </ng-container>
 
-<v-modal #viewObjectModal (closeEvent)="hide()">
+<v-modal #viewObjectModal (closeEvent)="hide()" [hideFooter]="true">
   <div role="header">
     <v-title [margin]="false" type="h2" [fullWidth]="true" [center]="true">{{
       objectName$ | async
     }}</v-title>
   </div>
-  <div role="content">test content</div>
-  <div role="footer">
-    <div class="edit-plugin-buttons">
-      <!--      <v-button-->
-      <!--              [disabled]="inputDisabled$ | async"-->
-      <!--              (clickEvent)="delete()"-->
-      <!--              [mdiIcon]="'delete'"-->
-      <!--              type="danger"-->
-      <!--      >{{ 'pluginManagement.remove' | translate }}</v-button-->
-      <!--      >-->
-      <!--      <v-button-->
-      <!--              [disabled]="(configurationValid$ | async) === false || (inputDisabled$ | async)"-->
-      <!--              (clickEvent)="save()"-->
-      <!--              [mdiIcon]="'check'"-->
-      <!--              type="success"-->
-      <!--      >{{ 'pluginManagement.save' | translate }}</v-button-->
-    </div>
+  <div role="content">
+    <valtimo-form-io [form]="objectForm$ | async"></valtimo-form-io>
   </div>
 </v-modal>

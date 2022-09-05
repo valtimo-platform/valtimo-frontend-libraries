@@ -28,6 +28,7 @@ import {ModalService} from '../../services/modal.service';
 export class ModalComponent implements OnInit {
   @Input() appearingDelayMs = 140;
   @Input() maxWidthPx!: number;
+  @Input() hideFooter = false;
 
   @Output() closeEvent: EventEmitter<any> = new EventEmitter();
 
@@ -39,7 +40,8 @@ export class ModalComponent implements OnInit {
   readonly disappearing$ = this.modalService.disappearing$;
   readonly mouseInsideModal$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private readonly modalService: ModalService) {}
+  constructor(private readonly modalService: ModalService) {
+  }
 
   ngOnInit(): void {
     this.setAppearingDelayInService();

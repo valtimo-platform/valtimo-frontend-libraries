@@ -21,6 +21,7 @@ import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rx
 import {ZaakObject, ZaakObjectType} from '../../../models';
 import {ModalComponent, ModalService, TableColumn} from '@valtimo/user-interface';
 import {take} from 'rxjs/operators';
+import {FormioForm} from '@formio/angular';
 
 @Component({
   selector: 'valtimo-object-type',
@@ -92,6 +93,8 @@ export class DossierDetailTabObjectTypeComponent {
     },
   ]);
 
+  readonly objectForm$ = new BehaviorSubject<FormioForm | null>(null);
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly zaakobjectenService: ZaakobjectenService,
@@ -101,14 +104,21 @@ export class DossierDetailTabObjectTypeComponent {
   rowClicked(object: ZaakObject): void {
     this.documentId$.pipe(take(1)).subscribe(documentId => {
       this.zaakobjectenService.getObjectTypeForm(documentId, object.url).subscribe(res => {
-        console.log('res', res);
+        const definition = res.formDefinition;
+        definition.components = definition.components.map(component => ({
+          ...component,
+          disabled: true,
+        }));
+        this.objectForm$.next(definition);
         this.show();
       });
     });
   }
 
   hide(): void {
-    this.modalService.closeModal();
+    this.modalService.closeModal(() => {
+      this.objectForm$.next(null);
+    });
   }
 
   private show(): void {
