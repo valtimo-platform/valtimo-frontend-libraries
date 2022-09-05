@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  ComponentFactoryResolver,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef,} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {DocumentService, Document, ProcessDocumentDefinition} from '@valtimo/document';
+import {Document, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {TabLoaderImpl} from '../models';
 import {TranslateService} from '@ngx-translate/core';
 import {Location} from '@angular/common';
@@ -67,7 +61,6 @@ export class DossierDetailComponent implements OnInit {
   ) {
     this.snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = this.snapshot.get('documentDefinitionName') || '';
-    console.log('documentDefinitionName', this.documentDefinitionName);
     this.documentId = this.snapshot.get('documentId') || '';
     this.tabService.getConfigurableTabs(this.documentDefinitionName);
   }
