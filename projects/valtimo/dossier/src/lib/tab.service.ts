@@ -18,8 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {TabImpl} from './models';
 import {DEFAULT_TABS, TAB_MAP} from './dossier.config';
 import {ConfigService} from '@valtimo/config';
-import {ActivatedRoute, Router, Event as NavigationEvent, NavigationEnd} from '@angular/router';
-import {DossierDetailTabZaakobjectenComponent} from './dossier-detail/tab/zaakobjecten/zaakobjecten.component';
+import {ActivatedRoute, Event as NavigationEvent, NavigationEnd, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {DossierDetailTabObjectTypeComponent} from './dossier-detail/tab/object-type/object-type.component';
 
@@ -30,7 +29,7 @@ export class TabService {
   private readonly tabMap: Map<string, object>;
   private tabs: TabImpl[] = [];
   private allTabs!: Map<string, object>;
-  private extraTabs;
+  private extraTabs!: Map<string, object>;
 
   constructor(
     @Inject(TAB_MAP) tabMap: Map<string, object> = DEFAULT_TABS,
@@ -64,13 +63,11 @@ export class TabService {
   }
 
   getConfigurableTabs(documentDefinitionName: string) {
-    const name = this.configService.config.caseObjectTypes[documentDefinitionName][0].split('.');
     const allNamesObjects = this.configService.config.caseObjectTypes[documentDefinitionName];
     let map = new Map();
 
-    allNamesObjects.forEach(name => {
+    allNamesObjects?.forEach(name => {
       map.set(name, DossierDetailTabObjectTypeComponent);
-      console.log(name);
     });
 
     this.extraTabs = map;
