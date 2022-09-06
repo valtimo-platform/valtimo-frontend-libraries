@@ -62,7 +62,7 @@ export class TabService {
 
   getConfigurableTabs(documentDefinitionName: string) {
     const allNamesObjects = this.configService.config.caseObjectTypes[documentDefinitionName];
-    let map = new Map();
+    const map = new Map();
 
     allNamesObjects?.forEach(name => {
       map.set(name, DossierDetailTabObjectTypeComponent);

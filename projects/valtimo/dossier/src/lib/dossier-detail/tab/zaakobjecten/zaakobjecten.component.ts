@@ -75,6 +75,8 @@ export class DossierDetailTabZaakobjectenComponent {
 
   readonly objectName$ = new BehaviorSubject<string>('');
 
+  readonly noFormDefinitionComponent$ = new BehaviorSubject<boolean>(false);
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly zaakobjectenService: ZaakobjectenService,
@@ -87,22 +89,21 @@ export class DossierDetailTabZaakobjectenComponent {
 
   rowClicked(object: ZaakObject, objectTypeSelectItems: Array<SelectItem>): void {
     this.documentId$.pipe(take(1)).subscribe(documentId => {
-      this.zaakobjectenService.getObjectTypeForm(documentId, object.url).subscribe(res => {
-        const selectedObjectTypeUrl = this.selectedObjecttypeUrl$.getValue();
-        const definition = res.formDefinition;
-        const currentTypeSelectItem = objectTypeSelectItems.find(
-          selectItem => selectItem.id === selectedObjectTypeUrl
-        );
+      this.zaakobjectenService.getObjectTypeForm(documentId, object.url).subscribe(
+        res => {
+          const definition = res.formDefinition;
 
-        definition.components = definition.components.map(component => ({
-          ...component,
-          disabled: true,
-        }));
+          definition.components = definition.components.map(component => ({
+            ...component,
+            disabled: true,
+          }));
 
-        this.objectName$.next(currentTypeSelectItem.text);
-        this.objectForm$.next(definition);
-        this.show();
-      });
+          this.setModalData(objectTypeSelectItems, definition);
+        },
+        () => {
+          this.setModalData(objectTypeSelectItems);
+        }
+      );
     });
   }
 
@@ -115,5 +116,26 @@ export class DossierDetailTabZaakobjectenComponent {
 
   private show(): void {
     this.modalService.openModal(this.viewZaakobjectModal);
+  }
+
+  private getObjectTypeName(objectTypeSelectItems: Array<SelectItem>): string {
+    const selectedObjectTypeUrl = this.selectedObjecttypeUrl$.getValue();
+    const currentTypeSelectItem = objectTypeSelectItems.find(
+      selectItem => selectItem.id === selectedObjectTypeUrl
+    );
+
+    return currentTypeSelectItem.text;
+  }
+
+  private setModalData(objectTypeSelectItems: Array<SelectItem>, definition?: FormioForm): void {
+    if (definition) {
+      this.objectForm$.next(definition);
+      this.noFormDefinitionComponent$.next(false);
+    } else {
+      this.noFormDefinitionComponent$.next(true);
+    }
+
+    this.objectName$.next(this.getObjectTypeName(objectTypeSelectItems));
+    this.show();
   }
 }

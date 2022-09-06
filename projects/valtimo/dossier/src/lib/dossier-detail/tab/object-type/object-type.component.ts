@@ -55,11 +55,10 @@ export class DossierDetailTabObjectTypeComponent {
       const currentType = objectTypes?.find(
         type => type?.name.toLowerCase() === objectName?.toLowerCase()
       );
+
       const currentTypeUrl = currentType?.url;
 
-      if (objectTypes && objectName && currentTypeUrl) {
-        return currentTypeUrl;
-      }
+      if (objectTypes && objectName && currentTypeUrl) return currentTypeUrl;
 
       return '';
     })
@@ -95,6 +94,8 @@ export class DossierDetailTabObjectTypeComponent {
 
   readonly objectForm$ = new BehaviorSubject<FormioForm | null>(null);
 
+  readonly noFormDefinitionComponent$ = new BehaviorSubject<boolean>(false);
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly zaakobjectenService: ZaakobjectenService,
@@ -103,15 +104,19 @@ export class DossierDetailTabObjectTypeComponent {
 
   rowClicked(object: ZaakObject): void {
     this.documentId$.pipe(take(1)).subscribe(documentId => {
-      this.zaakobjectenService.getObjectTypeForm(documentId, object.url).subscribe(res => {
-        const definition = res.formDefinition;
-        definition.components = definition.components.map(component => ({
-          ...component,
-          disabled: true,
-        }));
-        this.objectForm$.next(definition);
-        this.show();
-      });
+      this.zaakobjectenService.getObjectTypeForm(documentId, object.url).subscribe(
+        res => {
+          const definition = res.formDefinition;
+          definition.components = definition.components.map(component => ({
+            ...component,
+            disabled: true,
+          }));
+          this.setModalData(definition);
+        },
+        () => {
+          this.setModalData();
+        }
+      );
     });
   }
 
@@ -123,5 +128,16 @@ export class DossierDetailTabObjectTypeComponent {
 
   private show(): void {
     this.modalService.openModal(this.viewObjectModal);
+  }
+
+  private setModalData(definition?: FormioForm): void {
+    if (definition) {
+      this.objectForm$.next(definition);
+      this.noFormDefinitionComponent$.next(false);
+    } else {
+      this.noFormDefinitionComponent$.next(true);
+    }
+
+    this.show();
   }
 }
