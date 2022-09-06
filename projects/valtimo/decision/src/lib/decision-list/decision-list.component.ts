@@ -18,7 +18,7 @@ import {Component} from '@angular/core';
 import {Decision} from '../models';
 import {DecisionService} from '../decision.service';
 import {Router} from '@angular/router';
-import {map} from 'rxjs';
+import {BehaviorSubject, map, tap} from 'rxjs';
 
 @Component({
   selector: 'valtimo-decision-list',
@@ -31,6 +31,8 @@ export class DecisionListComponent {
     {key: 'name', label: 'Name'},
     {key: 'version', label: 'Version'},
   ];
+
+  readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly decisionsLatestVersions$ = this.decisionService.getDecisions().pipe(
     map(decisions =>
@@ -46,7 +48,8 @@ export class DecisionListComponent {
 
         return [...acc, curr];
       }, [])
-    )
+    ),
+    tap(() => this.loading$.next(false))
   );
 
   constructor(private decisionService: DecisionService, private router: Router) {}
