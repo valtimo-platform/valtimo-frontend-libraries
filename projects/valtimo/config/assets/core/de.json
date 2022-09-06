@@ -54,7 +54,8 @@
       "index": "Index",
       "registrationAt": "Registriert auf",
       "title": "Titel"
-    }
+    },
+    "startSubProcess": "Stárten"
   },
   "document": {
     "title": {

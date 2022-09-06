@@ -54,7 +54,8 @@
       "index": "Index",
       "registrationAt": "Registration at",
       "title": "Title"
-    }
+    },
+    "startSubProcess": "Start"
   },
   "document": {
     "title": {

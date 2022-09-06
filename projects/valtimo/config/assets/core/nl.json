@@ -54,7 +54,8 @@
       "index": "Index",
       "registrationAt": "Geregistreerd op",
       "title": "Titel"
-    }
+    },
+    "startSubProcess": "Start"
   },
   "document": {
     "title": {
