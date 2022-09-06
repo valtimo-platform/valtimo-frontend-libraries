@@ -21,9 +21,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Decision, DecisionXml} from '../models';
 import {migrateDiagram} from '@bpmn-io/dmn-migrate';
 import {LayoutService} from '@valtimo/layout';
-import {BehaviorSubject, combineLatest, from, map, Observable, switchMap, take, tap} from 'rxjs';
+import {BehaviorSubject, catchError, combineLatest, from, map, Observable, of, switchMap, take, tap,} from 'rxjs';
 import {SelectedValue, SelectItem} from '@valtimo/user-interface';
 import {AlertService} from '@valtimo/components';
+import {TranslateService} from '@ngx-translate/core';
 
 declare var $: any;
 
@@ -100,6 +101,7 @@ export class DecisionModelerComponent implements AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly alertService: AlertService,
+    private readonly translateService: TranslateService,
     public layoutService: LayoutService
   ) {}
 
@@ -148,35 +150,19 @@ export class DecisionModelerComponent implements AfterViewInit {
               if (deployedId) {
                 setTimeout(() => {
                   this.switchVersion(deployedId);
+                  this.alertService.success(
+                    this.translateService.instant('decisions.deploySuccess')
+                  );
                 });
               }
             });
+        }),
+        catchError(() => {
+          this.alertService.error(this.translateService.instant('decisions.deployFailure'));
+          return of(null);
         })
       )
       .subscribe();
-  }
-
-  async openDiagram(dmnXML) {
-    // import diagram
-    try {
-      const {warnings} = await this.dmnModeler.importXML(dmnXML);
-
-      if (warnings.length) {
-        console.log('import with warnings', warnings);
-      } else {
-        console.log('import successful');
-      }
-
-      // access active editor components
-      const activeEditor = this.dmnModeler.getActiveViewer();
-
-      const canvas = activeEditor.get('canvas');
-
-      // zoom to fit full viewport
-      canvas.zoom('fit-viewport');
-    } catch (err) {
-      console.error('could not import DMN 1.3 diagram', err);
-    }
   }
 
   private setProperties(): void {
@@ -192,7 +178,7 @@ export class DecisionModelerComponent implements AfterViewInit {
     });
   }
 
-  private setTabEvents = () => {
+  private setTabEvents = (): void => {
     const $tabs = this.$tabs;
     const dmnModeler = this.dmnModeler;
 
@@ -212,7 +198,7 @@ export class DecisionModelerComponent implements AfterViewInit {
     });
   };
 
-  private setModelerEvents = () => {
+  private setModelerEvents = (): void => {
     const $tabs = this.$tabs;
     const CLASS_NAMES = this.CLASS_NAMES;
 
@@ -240,27 +226,32 @@ export class DecisionModelerComponent implements AfterViewInit {
   };
 
   private loadDecisionXml(decision: DecisionXml): void {
-    this.dmnModeler.importXML(decision.dmnXml, error => {
-      if (error) {
-        this.migrateAndLoadDecisionXml(decision);
-      } else {
-        this.setEditor();
-      }
-    });
+    from(this.dmnModeler.importXML(decision.dmnXml))
+      .pipe(
+        tap(() => {
+          this.setEditor();
+        }),
+        catchError(() => {
+          this.migrateAndLoadDecisionXml(decision);
+          return of(null);
+        })
+      )
+      .subscribe();
   }
 
-  private async migrateAndLoadDecisionXml(decision: DecisionXml) {
-    const decisionXml = await migrateDiagram(decision.dmnXml);
-
-    if (decisionXml) {
-      this.dmnModeler.importXML(decisionXml, error => {
-        if (error) {
-          console.log('error');
-        } else {
+  private migrateAndLoadDecisionXml(decision: DecisionXml): void {
+    from(migrateDiagram(decision.dmnXml))
+      .pipe(
+        switchMap(decisionXml => this.dmnModeler.importXML(decisionXml)),
+        tap(() => {
           this.setEditor();
-        }
-      });
-    }
+        }),
+        catchError(() => {
+          this.alertService.error(this.translateService.instant('decisions.loadFailure'));
+          return of(null);
+        })
+      )
+      .subscribe();
   }
 
   private setEditor(): void {
