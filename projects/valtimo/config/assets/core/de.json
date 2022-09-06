@@ -53,12 +53,12 @@
       "objectenPlaceholder": "Wählen Sie einen Objekttyp aus, um eine Liste mit Objekten dieses Typs zu laden.",
       "index": "Index",
       "registrationAt": "Registriert auf",
-      "title": "Titel"
-    },
-    "objectType": {
-      "viewObject": "Objekt ansehen"
-    },
-    "noFormDefinitionComponent": "Für dieses Objekt konnte keine Formulardefinition gefunden werden"
+      "title": "Titel",
+      "noFormDefinitionComponent": "Für dieses Objekt konnte keine Formulardefinition gefunden werden",
+      "objectType": {
+        "viewObject": "Objekt ansehen"
+      }
+    }
   },
   "document": {
     "title": {

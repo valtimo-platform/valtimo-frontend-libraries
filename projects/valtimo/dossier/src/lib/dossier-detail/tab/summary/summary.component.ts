@@ -84,7 +84,6 @@ export class DossierDetailTabSummaryComponent implements OnInit {
     this.formService
       .getFormDefinitionByNamePreFilled(`${this.documentDefinitionName}.summary`, this.documentId)
       .subscribe(formDefinition => {
-        console.log('formDefinition', formDefinition);
         this.formDefinition = formDefinition;
       });
     this.userProviderService.getUserSubject().subscribe(user => {

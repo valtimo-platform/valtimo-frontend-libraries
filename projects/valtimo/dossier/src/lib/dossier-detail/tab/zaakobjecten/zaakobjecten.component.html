@@ -48,7 +48,7 @@
     [amountOfLoadingRows]="2"
     [itemsTranslationKey]="'pluginManagement.tableItemsText'"
     [showPagination]="false"
-    editButtonTranslationKey="dossier.objectType.viewObject"
+    editButtonTranslationKey="dossier.zaakobjecten.objectType.viewObject"
     (editButtonClicked)="rowClicked($event, obs.objecttypeSelectItems)"
   ></v-table>
 </ng-container>
@@ -62,7 +62,7 @@
 
   <div role="content">
     <valtimo-form-io *ngIf="(noFormDefinitionComponent$ | async)  === false" [form]="objectForm$ | async"></valtimo-form-io>
-    <v-paragraph *ngIf="noFormDefinitionComponent$ | async" [center]="true">{{ 'dossier.noFormDefinitionComponent' | translate }}</v-paragraph>
+    <v-paragraph *ngIf="noFormDefinitionComponent$ | async" [center]="true">{{ 'dossier.zaakobjecten.noFormDefinitionComponent' | translate }}</v-paragraph>
   </div>
 </v-modal>
 

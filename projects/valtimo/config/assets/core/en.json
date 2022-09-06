@@ -53,12 +53,12 @@
       "objectenPlaceholder": "Select an object type to load a list of objects of this type.",
       "index": "Index",
       "registrationAt": "Registration at",
-      "title": "Title"
-    },
-    "objectType": {
-      "viewObject": "View object"
-    },
-    "noFormDefinitionComponent": "No form definition for this object could be found."
+      "title": "Title",
+      "noFormDefinitionComponent": "No form definition for this object could be found.",
+      "objectType": {
+        "viewObject": "View object"
+      }
+    }
   },
   "document": {
     "title": {
