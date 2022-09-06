@@ -21,8 +21,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Decision, DecisionXml} from '../models';
 import {migrateDiagram} from '@bpmn-io/dmn-migrate';
 import {LayoutService} from '@valtimo/layout';
-import {BehaviorSubject, combineLatest, map, Observable, switchMap, take, tap} from 'rxjs';
-import {SelectItem} from '@valtimo/user-interface';
+import {BehaviorSubject, combineLatest, from, map, Observable, switchMap, take, tap} from 'rxjs';
+import {SelectedValue, SelectItem} from '@valtimo/user-interface';
 
 declare var $: any;
 
@@ -104,53 +104,55 @@ export class DecisionModelerComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.setProperties();
     this.setTabEvents();
-
     this.setModelerEvents();
-    $('#save-button').click(this.exportDiagram);
   }
 
-  switchVersion(decisionId: string): void {
+  switchVersion(decisionId: string | SelectedValue): void {
     if (decisionId) {
       this.router.navigate(['/decision-tables', decisionId]);
     }
   }
 
-  exportDiagram = async () => {
-    try {
-      const {xml} = await this.dmnModeler.saveXML({format: true});
-      const file = new File([xml], 'diagram.dmn', {
-        type: 'text/plain',
-      });
+  exportDiagram(): void {
+    from(this.dmnModeler.saveXML({format: true}))
+      .pipe(
+        map(result => (result as any).xml),
+        map(
+          xml =>
+            new File([xml], 'diagram.dmn', {
+              type: 'text/plain',
+            })
+        ),
+        switchMap(file => this.decisionService.deployDmn(file)),
+        tap(res => {
+          const deployedDefinitions = res.deployedDecisionDefinitions;
+          const deployedDecisionDefinition =
+            deployedDefinitions[Object.keys(deployedDefinitions)[0]];
+          const deployedId = deployedDecisionDefinition.id;
 
-      this.decisionService.deployDmn(file).subscribe(res => {
-        const deployedDefinitions = res.deployedDecisionDefinitions;
-        const deployedDecisionDefinition = deployedDefinitions[Object.keys(deployedDefinitions)[0]];
-        const deployedId = deployedDecisionDefinition.id;
+          this.createdDecisionVersionSelectItems$
+            .pipe(take(1))
+            .subscribe(createdDecisionVersionSelectItems => {
+              if (deployedDecisionDefinition) {
+                this.createdDecisionVersionSelectItems$.next([
+                  ...createdDecisionVersionSelectItems,
+                  {
+                    id: deployedId,
+                    text: deployedDecisionDefinition.version.toString(),
+                  },
+                ]);
+              }
 
-        this.createdDecisionVersionSelectItems$
-          .pipe(take(1))
-          .subscribe(createdDecisionVersionSelectItems => {
-            if (deployedDecisionDefinition) {
-              this.createdDecisionVersionSelectItems$.next([
-                ...createdDecisionVersionSelectItems,
-                {
-                  id: deployedId,
-                  text: deployedDecisionDefinition.version.toString(),
-                },
-              ]);
-            }
-
-            if (deployedId) {
-              setTimeout(() => {
-                this.switchVersion(deployedId);
-              });
-            }
-          });
-      });
-    } catch (err) {
-      console.error('could not save DMN 1.3 diagram', err);
-    }
-  };
+              if (deployedId) {
+                setTimeout(() => {
+                  this.switchVersion(deployedId);
+                });
+              }
+            });
+        })
+      )
+      .subscribe();
+  }
 
   async openDiagram(dmnXML) {
     // import diagram
