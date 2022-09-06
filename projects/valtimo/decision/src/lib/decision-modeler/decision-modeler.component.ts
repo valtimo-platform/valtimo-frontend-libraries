@@ -21,7 +21,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Decision, DecisionXml} from '../models';
 import {migrateDiagram} from '@bpmn-io/dmn-migrate';
 import {LayoutService} from '@valtimo/layout';
-import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, take, tap} from 'rxjs';
 import {SelectItem} from '@valtimo/user-interface';
 
 declare var $: any;
@@ -54,8 +54,7 @@ export class DecisionModelerComponent implements AfterViewInit {
   private readonly decision$: Observable<Decision> = this.decisionId$.pipe(
     switchMap(decisionId => this.decisionService.getDecisionById(decisionId)),
     tap(decision => {
-      const selectionId = this.selectionId$.getValue();
-      if (decision && !selectionId) {
+      if (decision) {
         this.selectionId$.next(decision.id);
       }
     })
@@ -65,19 +64,23 @@ export class DecisionModelerComponent implements AfterViewInit {
     map(decision => decision?.key || '')
   );
 
+  readonly createdDecisionVersionSelectItems$ = new BehaviorSubject<Array<SelectItem>>([]);
+
   readonly decisionVersionSelectItems$: Observable<Array<SelectItem>> = combineLatest([
     this.decision$,
     this.decisionService.getDecisions(),
+    this.createdDecisionVersionSelectItems$,
   ]).pipe(
-    map(([currentDecision, decisions]) => {
+    map(([currentDecision, decisions, createdDecisionVersionSelectItems]) => {
       const decisionsWithKey = decisions.filter(decision => decision.key === currentDecision.key);
 
-      return decisionsWithKey
-        .sort((a, b) => b.version - a.version)
-        .map(decision => ({
+      return [
+        ...decisionsWithKey.map(decision => ({
           id: decision.id,
           text: decision.version.toString(),
-        }));
+        })),
+        ...createdDecisionVersionSelectItems,
+      ].sort((a, b) => Number(b.text) - Number(a.text));
     }),
     tap(() => this.versionSelectionDisabled$.next(false))
   );
@@ -120,10 +123,29 @@ export class DecisionModelerComponent implements AfterViewInit {
       });
 
       this.decisionService.deployDmn(file).subscribe(res => {
-        const deployedId = Object.keys(res.deployedDecisionDefinitions)[0];
-        if (deployedId) {
-          this.switchVersion(deployedId);
-        }
+        const deployedDefinitions = res.deployedDecisionDefinitions;
+        const deployedDecisionDefinition = deployedDefinitions[Object.keys(deployedDefinitions)[0]];
+        const deployedId = deployedDecisionDefinition.id;
+
+        this.createdDecisionVersionSelectItems$
+          .pipe(take(1))
+          .subscribe(createdDecisionVersionSelectItems => {
+            if (deployedDecisionDefinition) {
+              this.createdDecisionVersionSelectItems$.next([
+                ...createdDecisionVersionSelectItems,
+                {
+                  id: deployedId,
+                  text: deployedDecisionDefinition.version.toString(),
+                },
+              ]);
+            }
+
+            if (deployedId) {
+              setTimeout(() => {
+                this.switchVersion(deployedId);
+              });
+            }
+          });
       });
     } catch (err) {
       console.error('could not save DMN 1.3 diagram', err);
