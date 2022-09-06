@@ -23,6 +23,7 @@ import {migrateDiagram} from '@bpmn-io/dmn-migrate';
 import {LayoutService} from '@valtimo/layout';
 import {BehaviorSubject, combineLatest, from, map, Observable, switchMap, take, tap} from 'rxjs';
 import {SelectedValue, SelectItem} from '@valtimo/user-interface';
+import {AlertService} from '@valtimo/components';
 
 declare var $: any;
 
@@ -98,6 +99,7 @@ export class DecisionModelerComponent implements AfterViewInit {
     private readonly decisionService: DecisionService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly alertService: AlertService,
     public layoutService: LayoutService
   ) {}
 
