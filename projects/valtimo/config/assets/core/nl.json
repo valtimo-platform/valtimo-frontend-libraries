@@ -57,7 +57,8 @@
     },
     "objectType": {
       "viewObject": "Object bekijken"
-    }
+    },
+    "noFormDefinitionComponent": "Geen formulierdefinitie voor dit object gevonden."
   },
   "document": {
     "title": {

@@ -57,7 +57,8 @@
     },
     "objectType": {
       "viewObject": "Objekt ansehen"
-    }
+    },
+    "noFormDefinitionComponent": "Für dieses Objekt konnte keine Formulardefinition gefunden werden"
   },
   "document": {
     "title": {

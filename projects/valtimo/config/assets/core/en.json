@@ -57,7 +57,8 @@
     },
     "objectType": {
       "viewObject": "View object"
-    }
+    },
+    "noFormDefinitionComponent": "No form definition for this object could be found."
   },
   "document": {
     "title": {
