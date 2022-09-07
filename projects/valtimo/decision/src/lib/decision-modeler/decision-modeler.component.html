@@ -56,44 +56,56 @@
 
 <ng-template #diagramHeader>
   <div class="row pt-4 pb-3 bg-light diagram-header justify-content-between">
-    <div class="col-md-5 d-flex align-items-center">
-      <h2 class="decision-title">
-        {{ decisionTitle$ | async }}
-      </h2>
-    </div>
+    <ng-container *ngTemplateOutlet="decisionTitle"></ng-container>
+    <ng-container *ngTemplateOutlet="versionSelection"></ng-container>
+    <ng-container *ngTemplateOutlet="fullScreenToggle"></ng-container>
+  </div>
+</ng-template>
 
-    <div class="col-md-2 d-flex justify-content-center align-items-center">
-      <ng-container
-        *ngIf="{
+<ng-template #decisionTitle>
+  <div class="col-md-5 d-flex align-items-center">
+    <h2 class="decision-title">
+      {{ decisionTitle$ | async }}
+    </h2>
+  </div>
+</ng-template>
+
+<ng-template #versionSelection>
+  <div class="col-md-2 d-flex justify-content-center align-items-center">
+    <ng-container
+      *ngIf="
+        (isCreating$ | async) === false && {
           versionSelectItems: decisionVersionSelectItems$ | async,
           defaultSelectionId: selectionId$ | async,
           disabled: versionSelectionDisabled$ | async
-        } as obs"
-      >
-        <v-select
-          name="version"
-          [title]="'decisions.version' | translate"
-          [disabled]="obs.disabled"
-          [clearable]="false"
-          [loading]="!obs.versionSelectItems"
-          [items]="obs.versionSelectItems"
-          [defaultSelectionId]="obs.defaultSelectionId"
-          [widthInPx]="100"
-          (selectedChange)="switchVersion($event)"
-        ></v-select>
-      </ng-container>
-    </div>
+        } as obs
+      "
+    >
+      <v-select
+        name="version"
+        [title]="'decisions.version' | translate"
+        [disabled]="obs.disabled"
+        [clearable]="false"
+        [loading]="!obs.versionSelectItems"
+        [items]="obs.versionSelectItems"
+        [defaultSelectionId]="obs.defaultSelectionId"
+        [widthInPx]="100"
+        (selectedChange)="switchVersion($event)"
+      ></v-select>
+    </ng-container>
+  </div>
+</ng-template>
 
-    <div class="col-md-2 d-flex fullscreen-toggle align-items-start justify-content-end">
-      <i
-        (click)="layoutService.toggleFullscreen()"
-        [ngClass]="{
-          'mdi-fullscreen': !layoutService.isFullscreen,
-          'mdi-fullscreen-exit': layoutService.isFullscreen
-        }"
-        class="mdi"
-      ></i>
-    </div>
+<ng-template #fullScreenToggle>
+  <div class="col-md-2 d-flex fullscreen-toggle align-items-start justify-content-end">
+    <i
+      (click)="layoutService.toggleFullscreen()"
+      [ngClass]="{
+        'mdi-fullscreen': !layoutService.isFullscreen,
+        'mdi-fullscreen-exit': layoutService.isFullscreen
+      }"
+      class="mdi"
+    ></i>
   </div>
 </ng-template>
 

@@ -19,6 +19,7 @@ import {Decision} from '../models';
 import {DecisionService} from '../decision.service';
 import {Router} from '@angular/router';
 import {BehaviorSubject, map, tap} from 'rxjs';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-decision-list',
@@ -33,6 +34,8 @@ export class DecisionListComponent {
   ];
 
   readonly loading$ = new BehaviorSubject<boolean>(true);
+
+  readonly experimentalEditing!: boolean;
 
   readonly decisionsLatestVersions$ = this.decisionService.getDecisions().pipe(
     map(decisions =>
@@ -52,9 +55,15 @@ export class DecisionListComponent {
     tap(() => this.loading$.next(false))
   );
 
-  constructor(private decisionService: DecisionService, private router: Router) {}
+  constructor(private decisionService: DecisionService, private router: Router, private readonly configService: ConfigService) {
+    this.experimentalEditing = this.configService.config.featureToggles.experimentalDmnEditing;
+  }
 
   viewDecisionTable(decision: Decision) {
-    this.router.navigate(['/decision-tables', decision.id]);
+    if (this.experimentalEditing) {
+      this.router.navigate(['/decision-tables/edit', decision.id]);
+    } else {
+      this.router.navigate(['/decision-tables', decision.id]);
+    }
   }
 }
