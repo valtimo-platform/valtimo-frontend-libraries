@@ -27,7 +27,7 @@ import {AlertService} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {EMPTY_DECISION} from './empty-decision';
 
-declare var $: any;
+declare const $: any;
 
 @Component({
   selector: 'valtimo-decision-modeler',
