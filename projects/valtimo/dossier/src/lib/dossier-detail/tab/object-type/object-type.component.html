@@ -33,7 +33,7 @@
   ></v-table>
 </ng-container>
 
-<v-modal #viewObjectModal (closeEvent)="hide()" [hideFooter]="true">
+<v-modal #viewObjectModal (closeEvent)="hide()" [hideFooter]="true" [maxWidthPx]="750">
   <div role="header">
     <v-title [margin]="false" type="h2" [fullWidth]="true" [center]="true">{{
       objectName$ | async

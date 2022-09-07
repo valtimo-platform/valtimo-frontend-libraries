@@ -53,7 +53,7 @@
   ></v-table>
 </ng-container>
 
-<v-modal #viewZaakobjectModal (closeEvent)="hide()" [hideFooter]="true">
+<v-modal #viewZaakobjectModal (closeEvent)="hide()" [hideFooter]="true" [maxWidthPx]="750">
   <div role="header">
     <v-title [margin]="false" type="h2" [fullWidth]="true" [center]="true">{{
       objectName$ | async
