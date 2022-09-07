@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,32 +14,49 @@
  * limitations under the License.
  */
 
-import {FormioForm} from '@formio/angular/formio.common';
+$border: 1px solid #dee2e6;
 
-interface ZaakObjectType {
-  name: string;
-  url: string;
+#save-button {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: white;
+  padding: 5px;
+  border: solid 1px #ccc;
+  border-radius: 2px;
+  padding: 8px;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  cursor: default;
+  font-size: 14px;
+  color: #444;
 }
 
-interface ZaakObject {
-  index: number;
-  registrationAt: string;
-  title: string | null;
-  url: string;
+.dmn-modeler {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem;
 }
 
-interface ZaakobjectFormResponse {
-  documentMappedFields: Array<{
-    defaultValue: string;
-    input: boolean;
-    key: string;
-    label: string;
-    type: string;
-  }>;
-  formDefinition: FormioForm;
-  id: string;
-  name: string;
-  readOnly: boolean;
+.diagram {
+  border: $border;
 }
 
-export {ZaakObjectType, ZaakObject, ZaakobjectFormResponse};
+.diagram-header {
+  border: $border;
+}
+
+.decision-title {
+  color: #6b6b6b;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.fullscreen-toggle {
+  font-size: 2rem;
+
+  > i {
+    cursor: pointer;
+  }
+}

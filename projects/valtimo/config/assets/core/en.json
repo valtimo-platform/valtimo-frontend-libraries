@@ -53,7 +53,12 @@
       "objectenPlaceholder": "Select an object type to load a list of objects of this type.",
       "index": "Index",
       "registrationAt": "Registration at",
-      "title": "Title"
+      "title": "Title",
+      "noFormDefinitionComponent": "No form definition for this object could be found.",
+      "noObjectType": "No objects found for this object type.",
+      "objectType": {
+        "viewObject": "View object"
+      }
     },
     "startSubProcess": "Start"
   },
@@ -168,7 +173,12 @@
   "decisions": {
     "upload": {
       "description": "Select a .dmn file to upload"
-    }
+    },
+    "version": "Version",
+    "deploy": "Deploy",
+    "loadFailure": "Something went wrong with loading your decision table.",
+    "deploySuccess": "Decision table has been deployed successfully.",
+    "deployFailure": "Something went wrong with deploying your decision table."
   },
   "message": {
     "empty": "No result found"
@@ -296,6 +306,8 @@
   "Create new Process": "Create new Process",
   "Process details": "Process details",
   "Decision tables": "Decision tables",
+  "Edit decision table": "Edit decision table",
+  "Create decision table": "Create decision table",
   "Overview of all Decision tables": "Overview of all decision tables",
   "Create new Milestone": "Create new Milestone",
   "Create new Milestone Set": "Create new Milestone Set",
