@@ -21,10 +21,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Decision, DecisionXml} from '../models';
 import {migrateDiagram} from '@bpmn-io/dmn-migrate';
 import {LayoutService} from '@valtimo/layout';
-import {BehaviorSubject, catchError, combineLatest, from, map, Observable, of, switchMap, take, tap,} from 'rxjs';
+import {BehaviorSubject, catchError, combineLatest, filter, from, map, Observable, of, switchMap, take, tap,} from 'rxjs';
 import {SelectedValue, SelectItem} from '@valtimo/user-interface';
 import {AlertService} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
+import {EMPTY_DECISION} from './empty-decision';
 
 declare var $: any;
 
@@ -34,7 +35,6 @@ declare var $: any;
   styleUrls: ['./decision-modeler.component.scss'],
 })
 export class DecisionModelerComponent implements AfterViewInit {
-  decisionTitle!: string;
   private CLASS_NAMES = {
     drd: 'dmn-icon-lasso-tool',
     decisionTable: 'dmn-icon-decision-table',
@@ -46,8 +46,12 @@ export class DecisionModelerComponent implements AfterViewInit {
 
   readonly versionSelectionDisabled$ = new BehaviorSubject<boolean>(true);
 
+  readonly isCreating$ = new BehaviorSubject<boolean>(false);
+
   private readonly decisionId$: Observable<string | null> = this.route.params.pipe(
     map(params => params?.id),
+    tap(decisionId => this.isCreating$.next(decisionId === 'create')),
+    filter(decisionId => !!decisionId && decisionId !== 'create'),
     tap(() => this.versionSelectionDisabled$.next(true))
   );
 
@@ -113,7 +117,7 @@ export class DecisionModelerComponent implements AfterViewInit {
 
   switchVersion(decisionId: string | SelectedValue): void {
     if (decisionId) {
-      this.router.navigate(['/decision-tables', decisionId]);
+      this.router.navigate(['/decision-tables/edit', decisionId]);
     }
   }
 
@@ -188,6 +192,8 @@ export class DecisionModelerComponent implements AfterViewInit {
   }
 
   private setProperties(): void {
+    const isCreating = this.isCreating$.getValue();
+
     this.$container = $('.editor-container');
     this.$tabs = $('.editor-tabs');
     this.dmnModeler = new DmnJS({
@@ -198,6 +204,14 @@ export class DecisionModelerComponent implements AfterViewInit {
         bindTo: window,
       },
     });
+
+    if (isCreating) {
+      this.loadEmptyDecisionTable();
+    }
+  }
+
+  private loadEmptyDecisionTable(): void {
+    this.loadDecisionXml(EMPTY_DECISION);
   }
 
   private setTabEvents = (): void => {

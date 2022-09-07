@@ -19,9 +19,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
 import {DecisionComponent} from './decision.component';
-import {DecisionDisplayComponent} from './decision-display/decision-display.component';
 import {ROLE_ADMIN} from '@valtimo/config';
 import {DecisionModelerComponent} from './decision-modeler/decision-modeler.component';
+import {DecisionDisplayComponent} from './decision-display/decision-display.component';
 
 const routes: Routes = [
   {
@@ -32,9 +32,21 @@ const routes: Routes = [
   },
   {
     path: 'decision-tables/:id',
-    component: DecisionModelerComponent,
+    component: DecisionDisplayComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Decision tables', roles: [ROLE_ADMIN]},
+  },
+  {
+    path: 'decision-tables/edit/:id',
+    component: DecisionModelerComponent,
+    canActivate: [AuthGuardService],
+    data: {title: 'Edit decision table', roles: [ROLE_ADMIN]},
+  },
+  {
+    path: 'decision-tables/create',
+    component: DecisionModelerComponent,
+    canActivate: [AuthGuardService],
+    data: {title: 'Create decision table', roles: [ROLE_ADMIN]},
   },
 ];
 
