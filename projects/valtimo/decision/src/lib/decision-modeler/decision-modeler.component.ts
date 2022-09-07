@@ -102,7 +102,7 @@ export class DecisionModelerComponent implements AfterViewInit {
     private readonly router: Router,
     private readonly alertService: AlertService,
     private readonly translateService: TranslateService,
-    public layoutService: LayoutService
+    public readonly layoutService: LayoutService
   ) {}
 
   ngAfterViewInit(): void {
@@ -117,14 +117,14 @@ export class DecisionModelerComponent implements AfterViewInit {
     }
   }
 
-  exportDiagram(): void {
+  deploy(): void {
     from(this.dmnModeler.saveXML({format: true}))
       .pipe(
         map(result => (result as any).xml),
         map(
           xml =>
-            new File([xml], 'diagram.dmn', {
-              type: 'text/plain',
+            new File([xml], 'decision.dmn', {
+              type: 'text/xml',
             })
         ),
         switchMap(file => this.decisionService.deployDmn(file)),
@@ -160,6 +160,28 @@ export class DecisionModelerComponent implements AfterViewInit {
         catchError(() => {
           this.alertService.error(this.translateService.instant('decisions.deployFailure'));
           return of(null);
+        })
+      )
+      .subscribe();
+  }
+
+  download(): void {
+    from(this.dmnModeler.saveXML({format: true}))
+      .pipe(
+        map(result => (result as any).xml),
+        map(
+          xml =>
+            new File([xml], 'decision.dmn', {
+              type: 'text/xml',
+            })
+        ),
+        tap(file => {
+          const link = document.createElement('a');
+          link.download = 'diagram.dmn';
+          link.href = window.URL.createObjectURL(file);
+          link.click();
+          window.URL.revokeObjectURL(link.href);
+          link.remove();
         })
       )
       .subscribe();

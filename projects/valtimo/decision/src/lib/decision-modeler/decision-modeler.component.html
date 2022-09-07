@@ -33,12 +33,12 @@
 <ng-template #buttons>
   <div class="text-right" *ngIf="{selectionId: selectionId$ | async} as obs">
     <div class="btn-group mt-m3px mb-3" *ngIf="obs.selectionId && !layoutService.isFullscreen">
-      <!--      <button class="btn btn-primary btn-space" (click)="download()">-->
-      <!--        <i class="icon mdi mdi-download mr-1"></i>{{ 'processManagement.download' | translate }}-->
-      <!--      </button>-->
+      <button class="btn btn-primary btn-space" (click)="download()">
+        <i class="icon mdi mdi-download mr-1"></i>{{ 'processManagement.download' | translate }}
+      </button>
       <button
         class="btn btn-success btn-space"
-        (click)="exportDiagram()"
+        (click)="deploy()"
         [ngClass]="{'mr-0': obs.selectionId !== null}"
       >
         <i class="icon mdi mdi-upload mr-1"></i>{{ 'decisions.deploy' | translate }}
