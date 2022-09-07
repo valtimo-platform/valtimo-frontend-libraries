@@ -55,6 +55,7 @@
       "registrationAt": "Geregistreerd op",
       "title": "Titel",
       "noFormDefinitionComponent": "Geen formulierdefinitie voor dit object gevonden.",
+      "noObjectType": "Geen objecten gevonden voor dit objecttype.",
       "objectType": {
         "viewObject": "Object bekijken"
       }

@@ -55,6 +55,7 @@
       "registrationAt": "Registration at",
       "title": "Title",
       "noFormDefinitionComponent": "No form definition for this object could be found.",
+      "noObjectType": "No objects found for this object type.",
       "objectType": {
         "viewObject": "View object"
       }

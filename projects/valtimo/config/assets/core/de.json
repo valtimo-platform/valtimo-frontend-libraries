@@ -55,6 +55,7 @@
       "registrationAt": "Registriert auf",
       "title": "Titel",
       "noFormDefinitionComponent": "Für dieses Objekt konnte keine Formulardefinition gefunden werden",
+      "noObjectType": "Keine Objekte für diesen Objekttyp gefunden.",
       "objectType": {
         "viewObject": "Objekt ansehen"
       }
