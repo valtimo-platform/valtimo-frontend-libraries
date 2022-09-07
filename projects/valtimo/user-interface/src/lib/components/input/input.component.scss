@@ -40,14 +40,14 @@
   padding-inline-end: var(--v-input-padding-inline);
   background-color: var(--v-input-bg-color);
   border-radius: var(--v-input-border-radius);
-  box-shadow: var(--v-input-box-shadow);
-  outline: 0 solid transparent;
+  border: var(--v-input-border);
   transition: var(--v-input-transition);
   width: var(--v-input-default-width);
   box-sizing: border-box;
 
   &:focus {
     outline: var(--v-input-focus-border);
+    outline-offset: var(--v-outline-offset);
   }
 
   &:disabled {

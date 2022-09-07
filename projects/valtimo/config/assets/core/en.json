@@ -24,7 +24,8 @@
       "documents": "Documents",
       "contact-moments": "Contact moments",
       "custom-dossier": "Custom dossier",
-      "custom-maps": "Custom maps"
+      "custom-maps": "Custom maps",
+      "zaakobjecten": "Zaak objects"
     },
     "forms": {
       "globalSearchPlaceHolder": "Everything",
@@ -44,6 +45,20 @@
       "noteText": "Note",
       "saveButtonText": "Save note",
       "saveSuccess": "Your note has been saved successfully."
+    },
+    "zaakobjecten": {
+      "objecttype": "Select the type of object you would like to see",
+      "objecttypePlaceholder": "Select an object type",
+      "objecten": "Objects",
+      "objectenPlaceholder": "Select an object type to load a list of objects of this type.",
+      "index": "Index",
+      "registrationAt": "Registration at",
+      "title": "Title",
+      "noFormDefinitionComponent": "No form definition for this object could be found.",
+      "noObjectType": "No objects found for this object type.",
+      "objectType": {
+        "viewObject": "View object"
+      }
     }
   },
   "document": {
@@ -59,6 +74,9 @@
   "summary": {
     "userTasksDoneState": "All done!",
     "taskLocked": "You don't have access to this task"
+  },
+  "progress": {
+    "noProcessDocumentInstances": "There is no process started yet"
   },
   "dashboard": {
     "openTasks": {
@@ -290,6 +308,7 @@
   "Create new Form": "Create new Form",
   "Form Builder": "Form Builder",
   "Form links": "Process links",
+  "Form links Plugin": "Process links v2 (beta)",
   "uploadFormDefinition": "Upload form definition",
   "Process migration": "Process migration",
   "Process migration warning": "<b>Warning:</b> When migrating a process, the candidate groups of running instances will not be updated. This can be done in the database if necessary. (For example if a specific user task is open for ROLE_USER and the candidate group for the user task is updated in the process to ROLE_ADMIN, this user task is still accessible for ROLE_USER. Only newly started processes will use the updated candidate group)",
@@ -693,5 +712,11 @@
     "saveChanges": "Save changes",
     "unlink": "Unlink",
     "noPluginFunctions": "This plugin does not support any plugin actions."
+  },
+  "keycloak": {
+    "expiryPromptTitle": "The session is about to expire",
+    "expiryPromptDescription": "You will be logged out in {{expiryTime}}.",
+    "expiryPromptCancel": "Logout",
+    "expiryPromptConfirm": "Continue session"
   }
 }

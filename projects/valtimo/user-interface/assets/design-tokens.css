@@ -96,6 +96,9 @@
   --v-border-radius-sm: 4px;
   --v-border-radius-md: 5px;
   --v-border-radius-lg: 9px;
+  --v-border-medium: 1px solid var(--v-color-grey-4);
+  /* outline */
+  --v-outline-offset: -2px;
   /* transitions */
   --v-transition-bg-fast: background-color 0.07s ease-in;
   --v-transition-color-fast: color 0.07s ease-in;
@@ -174,6 +177,7 @@
   --v-table-row-bottom-border: 1px solid var(--v-color-grey-5);
   --v-table-background-color: var(--v-color-white);
   --v-table-body-box-shadow: var(--v-box-shadow-medium);
+  --v-table-body-border: var(--v-border-medium);
   --v-table-cell-font-color: var(--v-color-grey-1);
   --v-table-loading-skeleton-width: 100px;
   --v-table-loading-skeleton-line-height: var(--v-line-height-smaller);
@@ -188,12 +192,14 @@
   --v-table-pagination-size-spacing-inline: var(--v-spacing-inline-sm);
   --v-table-pagination-button-spacing-inline: var(--v-spacing-inline-2xl);
   /* select */
-  --v-select-background-color: var(--v-color-grey-4);
+  --v-select-background-color: var(--v-color-white);
   --v-select-selected-background-color: var(--v-color-grey-3);
   --v-select-highlighted-background-color: var(--v-color-grey-4);
   --v-select-disabled-font-color: var(--v-color-grey-2);
+  --v-select-disabled-bg-color: var(--v-color-grey-4);
   --v-select-placeholder-font-color: var(--v-color-grey-2);
   --v-select-font-color: var(--v-color-grey-1);
+  --v-select-darker-font-color: var(--v-color-grey-0);
   --v-select-arrow-color: var(--v-color-grey-2);
   --v-select-arrow-hover-color: var(--v-color-grey-1);
   --v-select-border-radius: var(--v-border-radius-md);
@@ -241,7 +247,6 @@
   );
   --v-modal-content-padding-block-start: var(--v-spacing-block-2xl);
   --v-modal-content-padding-block-end: var(--v-spacing-block-xl);
-
   /* stepper */
   --v-stepper-header-number-circle-width: 24px;
   --v-stepper-header-number-circle-height: 24px;
@@ -315,6 +320,7 @@
   --v-input-padding-inline: var(--v-spacing-inline-md);
   --v-input-bg-color: var(--v-color-white);
   --v-input-border-radius: var(--v-border-radius-sm);
+  --v-input-border: var(--v-border-medium);
   --v-input-box-shadow: var(--v-box-shadow-heavier);
   --v-input-focus-border: 2px solid var(--v-color-accent-1);
   --v-input-transition: var(--v-transition-outline-fast);
@@ -323,6 +329,7 @@
   --v-input-title-line-height: var(--v-line-height-larger);
   --v-input-title-font-weight: var(--v-font-weight-bold);
   --v-input-title-margin: var(--v-spacing-block-md);
+  --v-input-title-margin-large: var(--v-spacing-block-2xl);
   --v-input-default-width: 200px;
   --v-input-margin: var(--v-spacing-block-4xl);
   --v-input-disabled-cursor: var(--v-cursor-disabled);
@@ -349,4 +356,42 @@
   --v-multi-input-input-spacing-inline: var(--v-spacing-inline-md);
   /* top-bar */
   --v-top-bar-user-name-spacing: var(--v-spacing-inline-md);
+  /* tooltip */
+  --v-tooltip-bg-color: var(--v-color-black);
+  --v-tooltip-font-color: var(--v-color-white);
+  --v-tooltip-font-size: var(--v-font-size-default);
+  --v-tooltip-font-weight: var(--v-font-weight-lighter);
+  --v-tooltip-line-height: var(--v-line-height-default);
+  --v-tooltip-border-radius: var(--v-border-radius-sm);
+  --v-tooltip-spacing-inline: var(--v-spacing-inline-sm);
+  --v-tooltip-spacing-block: var(--v-spacing-block-xsm);
+  --v-tooltip-max-width: 600px;
+  /* prompt */
+  --v-prompt-z-index: 99999;
+  --v-prompt-backdrop-color: var(--v-color-backdrop);
+  --v-prompt-backdrop-color-hover: var(--v-color-backdrop-hover);
+  --v-prompt-backdrop-filter: none;
+  --v-prompt-backdrop-filter-hover: none;
+  --v-prompt-backdrop-transition: var(--v-transition-bg-medium);
+  --v-prompt-backdrop-cursor: var(--v-cursor-default);
+  --v-prompt-backdrop-cursor-disappearing: var(--v-cursor-default);
+  --v-prompt-backdrop-padding-inline: var(--v-spacing-inline-md);
+  --v-prompt-backdrop-padding-block: var(--v-spacing-block-md);
+  --v-prompt-max-width: 550px;
+  --v-prompt-min-height: 150px;
+  --v-prompt-box-shadow: var(--v-box-shadow-medium);
+  --v-prompt-background-color: var(--v-color-grey-7);
+  --v-prompt-transition: var(--v-transition-opacity-medium), var(--v-transition-transform-medium);
+  --v-prompt-cursor: var(--v-cursor-default);
+  --v-prompt-border-radius: var(--v-border-radius-lg);
+  --v-prompt-padding-inline: var(--v-spacing-inline-2xl);
+  --v-prompt-header-bg-color: var(--v-color-grey-8);
+  --v-prompt-header-padding-block: var(--v-spacing-block-xl);
+  --v-prompt-header-border: 1px solid var(--v-color-grey-6);
+  --v-prompt-header-min-height: var(--v-button-type-icon-height);
+  --v-prompt-footer-bg-color: var(--v-color-grey-8);
+  --v-prompt-footer-padding-block: var(--v-spacing-block-xl);
+  --v-prompt-footer-border: 1px solid var(--v-color-grey-6);
+  --v-prompt-content-padding-block-start: var(--v-spacing-block-2xl);
+  --v-prompt-content-padding-block-end: var(--v-spacing-block-xl);
 }

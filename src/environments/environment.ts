@@ -19,15 +19,15 @@
 // The list of file replacements can be found in `angular.json`.
 import {NgxLoggerLevel} from 'ngx-logger';
 import {
+  IncludeFunction,
   ROLE_ADMIN,
   ROLE_DEVELOPER,
   ROLE_USER,
   UploadProvider,
   ValtimoConfig,
-  IncludeFunction,
 } from '@valtimo/config';
 import {authenticationKeycloak} from './auth/keycloak-config.dev';
-import {openZaakExtensionInitializer, emailExtensionInitializer} from '@valtimo/open-zaak';
+import {emailExtensionInitializer, openZaakExtensionInitializer} from '@valtimo/open-zaak';
 import {connectorLinkExtensionInitializer} from '@valtimo/connector-management';
 
 const defaultDefinitionColumns = [
@@ -116,7 +116,7 @@ export const environment: ValtimoConfig = {
           {link: ['/connectors'], title: 'Connectors', sequence: 6},
           {link: ['/plugins'], title: 'Plugins', sequence: 7},
           {link: ['/form-links'], title: 'Form links', sequence: 8},
-          {link: ['/process-links'], title: 'Form links', sequence: 9},
+          {link: ['/process-links'], title: 'Form links Plugin', sequence: 9},
           {title: 'A&E', textClass: 'text-dark font-weight-bold c-default', sequence: 10},
           {link: ['/contexts'], title: 'Contexts', sequence: 12},
           {link: ['/users'], title: 'Users', sequence: 12},
@@ -201,8 +201,16 @@ export const environment: ValtimoConfig = {
       },
     },
   },
+  customLeftSidebar: {
+    defaultMenuWidth: 230,
+    maxMenuWidth: 330,
+    minMenuWidth: 120,
+  },
+  caseObjectTypes: {
+    leningen: ['Boom', 'Straatverlichting'],
+  },
   featureToggles: {
-    disableFormFlow: true,
+    disableFormFlow: false,
     enableHackathonCasesPage: true,
     showUserNameInTopBar: true,
   },

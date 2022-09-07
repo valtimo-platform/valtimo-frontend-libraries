@@ -14,7 +14,10 @@
   ~ limitations under the License.
   -->
 
-<div class="v-input-label-container">
+<div
+  class="v-input-label-container"
+  [ngClass]="{'v-input-label-container--large-margin': largeMargin}"
+>
   <label
     *ngIf="title || titleTranslationKey"
     class="v-input-label"
@@ -27,6 +30,6 @@
     *ngIf="tooltip"
     class="v-input-label__tooltip mdi mdi-help-circle"
     placement="right"
-    ngbTooltip="{{ tooltip }}"
+    vTooltip="{{ tooltip }}"
   ></i>
 </div>

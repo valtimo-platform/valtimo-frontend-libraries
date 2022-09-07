@@ -43,6 +43,7 @@ import {
   DossierDetailTabDocumentsComponent,
   DossierDetailTabProgressComponent,
   DossierDetailTabSummaryComponent,
+  DossierDetailTabZaakobjectenComponent,
   DossierModule,
 } from '@valtimo/dossier';
 import {ProcessModule} from '@valtimo/process';
@@ -85,6 +86,12 @@ import {PluginManagementModule} from '@valtimo/plugin-management';
 import {
   DocumentenApiPluginModule,
   documentenApiPluginSpecification,
+  ObjectenApiPluginModule,
+  objectenApiPluginSpecification,
+  ObjectTokenAuthenticationPluginModule,
+  objectTokenAuthenticationPluginSpecification,
+  ObjecttypenApiPluginModule,
+  objecttypenApiPluginSpecification,
   OpenZaakPluginModule,
   openZaakPluginSpecification,
   PLUGINS_TOKEN,
@@ -101,6 +108,7 @@ export function tabsFactory() {
     [DefaultTabs.audit, DossierDetailTabAuditComponent],
     [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
     [DefaultTabs.contactMoments, DossierDetailTabContactMomentsComponent],
+    [DefaultTabs.zaakobjecten, DossierDetailTabZaakobjectenComponent],
     ['custom-maps', CustomMapsTabComponent],
     ['custom-dossier', CustomDossierTabComponent],
   ]);
@@ -164,10 +172,13 @@ export function tabsFactory() {
     OpenZaakModule,
     CustomerModule,
     PluginManagementModule,
+    ObjectTokenAuthenticationPluginModule,
     OpenZaakPluginModule,
     SmartDocumentsPluginModule,
     DocumentenApiPluginModule,
+    ObjecttypenApiPluginModule,
     ZakenApiPluginModule,
+    ObjectenApiPluginModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -184,8 +195,11 @@ export function tabsFactory() {
       useValue: [
         openZaakPluginSpecification,
         documentenApiPluginSpecification,
+        objectTokenAuthenticationPluginSpecification,
         smartDocumentsPluginSpecification,
+        objecttypenApiPluginSpecification,
         zakenApiPluginSpecification,
+        objectenApiPluginSpecification,
       ],
     },
   ],

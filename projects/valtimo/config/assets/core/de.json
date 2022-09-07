@@ -24,7 +24,8 @@
       "documents": "Dokumente",
       "contact-moments": "Kontaktmomente",
       "custom-dossier": "Kunden-Dossier",
-      "custom-maps": "Kunden-Karten"
+      "custom-maps": "Kunden-Karten",
+      "zaakobjecten": "Zaak-Objecte"
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
@@ -44,6 +45,20 @@
       "noteText": "Notiz",
       "saveButtonText": "Notiz speichern",
       "saveSuccess": "Ihre Notiz wurde erfolgreich gespeichert."
+    },
+    "zaakobjecten": {
+      "objecttype": "Wählen Sie den Objekttyp aus, den Sie sehen möchten",
+      "objecttypePlaceholder": "Wählen Sie einen Objekttyp aus",
+      "objecten": "Objekte",
+      "objectenPlaceholder": "Wählen Sie einen Objekttyp aus, um eine Liste mit Objekten dieses Typs zu laden.",
+      "index": "Index",
+      "registrationAt": "Registriert auf",
+      "title": "Titel",
+      "noFormDefinitionComponent": "Für dieses Objekt konnte keine Formulardefinition gefunden werden",
+      "noObjectType": "Keine Objekte für diesen Objekttyp gefunden.",
+      "objectType": {
+        "viewObject": "Objekt ansehen"
+      }
     }
   },
   "document": {
@@ -59,6 +74,9 @@
   "summary": {
     "userTasksDoneState": "Alles erledigt!",
     "taskLocked": "Kein Zugriff zu dieser Aufgabe!"
+  },
+  "progress": {
+    "noProcessDocumentInstances": "Es wurde noch kein Prozess gestartet"
   },
   "dashboard": {
     "openTasks": {
@@ -290,6 +308,7 @@
   "Create new Form": "Neues Formular erstellen",
   "Form Builder": "Formular-Builder",
   "Form links": "Prozess-Verknüpfungen",
+  "Form links Plugin": "Prozess-Verknüpfungen v2 (bèta)",
   "uploadFormDefinition": "Formular-Definition hochladen",
   "Process migration": "Prozess-Migration",
   "Process migration warning": "<b>Warnung:</b> Wenn ein Prozess migriert wird, werden die User-Gruppen der laufenden Instanzen nicht geupdatet. Dies kann bei Bedarf in der Datenbank erfolgen. (Zum Beispiel, wenn eine spezifische User-Aufgabe für ROLE_USER offen ist und die User-Gruppe für die User-Aufgabe wird im Prozess auf ROLE_ADMIN angepasst, wird diese Aufgabe nachwievor für ROLE_USER verfügbar sein. Nur neu gestartete Prozesse werden die neue User-Gruppe berücksichtigen.)",
@@ -693,5 +712,11 @@
     "saveChanges": "Änderungen speichern",
     "unlink": "Verknüpfung aufheben",
     "noPluginFunctions": "Dieses Plugin unterstützt keine Plugin-Aktionen."
+  },
+  "keycloak": {
+    "expiryPromptTitle": "Die Sitzung neigt sich dem Ende zu",
+    "expiryPromptDescription": "Sie werden in {{expiryTime}} abgemeldet.",
+    "expiryPromptCancel": "Ausloggen",
+    "expiryPromptConfirm": "Sitzung fortsetzen"
   }
 }

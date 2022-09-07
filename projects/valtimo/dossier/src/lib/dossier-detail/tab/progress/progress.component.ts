@@ -40,7 +40,9 @@ export class DossierDetailTabProgressComponent implements OnInit {
       .subscribe(processDocumentInstances => {
         this.processDocumentInstances = processDocumentInstances
           .sort((a,b) => (a.isActive === b.isActive)? 0 : a.isActive ? -1: 1);
-        this.selectedProcessInstanceId = processDocumentInstances[0].id.processInstanceId;
+        if (processDocumentInstances.length > 0) {
+          this.selectedProcessInstanceId = processDocumentInstances[0].id.processInstanceId;
+        }
       });
   }
 
