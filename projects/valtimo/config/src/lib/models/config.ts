@@ -57,6 +57,7 @@ export interface Sort {
   name: string;
   direction: Direction;
 }
+
 export interface SortState {
   state: Sort;
   isSorting: boolean;
@@ -97,9 +98,13 @@ export interface ValtimoConfig {
     disableFormFlow?: boolean;
     enableHackathonCasesPage?: boolean;
     showUserNameInTopBar?: boolean;
+    experimentalDmnEditing?: boolean;
   };
   customTaskList?: CustomTaskList;
   customLeftSidebar?: CustomLeftSidebar;
+  caseObjectTypes?: {
+    [definitionNameId: string]: Array<string>;
+  };
 }
 
 export enum UploadProvider {

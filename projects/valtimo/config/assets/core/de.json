@@ -53,8 +53,14 @@
       "objectenPlaceholder": "Wählen Sie einen Objekttyp aus, um eine Liste mit Objekten dieses Typs zu laden.",
       "index": "Index",
       "registrationAt": "Registriert auf",
-      "title": "Titel"
-    }
+      "title": "Titel",
+      "noFormDefinitionComponent": "Für dieses Objekt konnte keine Formulardefinition gefunden werden",
+      "noObjectType": "Keine Objekte für diesen Objekttyp gefunden.",
+      "objectType": {
+        "viewObject": "Objekt ansehen"
+      }
+    },
+    "startSubProcess": "Starten"
   },
   "document": {
     "title": {
@@ -167,7 +173,12 @@
   "decisions": {
     "upload": {
       "description": "Wähle eine .dmn Datei für den Upload"
-    }
+    },
+    "version": "Version",
+    "deploy": "Deploy",
+    "loadFailure": "Beim Laden Ihrer Entscheidungstabelle ist etwas schief gelaufen.",
+    "deploySuccess": "Die Entscheidungstabelle wurde erfolgreich bereitgestellt.",
+    "deployFailure": "Beim Bereitstellen Ihrer Entscheidungstabelle ist ein Fehler aufgetreten."
   },
   "message": {
     "empty": "Kein Ergebnis gefunden"
@@ -295,6 +306,8 @@
   "Create new Process": "Neuen Prozess erstellen",
   "Process details": "Prozess-Details",
   "Decision tables": "Entscheidungs-Tabelle",
+  "Edit decision table": "Entscheidungs-Tabelle bearbeiten",
+  "Create decision table": "Entscheidungs-Tabelle erstellen",
   "Overview of all Decision tables": "Überblick alle Entscheidungs-Tabellen",
   "Create new Milestone": "Neuen Meilenstein erstellen",
   "Create new Milestone Set": "Neues Meilenstein-Set erstellen",
