@@ -43,7 +43,7 @@ const routes: Routes = [
     data: {title: 'Edit decision table', roles: [ROLE_ADMIN]},
   },
   {
-    path: 'decision-tables/create',
+    path: 'decision-tables/edit/create',
     component: DecisionModelerComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Create decision table', roles: [ROLE_ADMIN]},

@@ -18,8 +18,9 @@ import {Component} from '@angular/core';
 import {Decision} from '../models';
 import {DecisionService} from '../decision.service';
 import {Router} from '@angular/router';
-import {BehaviorSubject, map, tap} from 'rxjs';
+import {BehaviorSubject, map, switchMap, tap} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
+import {DecisionStateService} from '../services';
 
 @Component({
   selector: 'valtimo-decision-list',
@@ -37,7 +38,8 @@ export class DecisionListComponent {
 
   readonly experimentalEditing!: boolean;
 
-  readonly decisionsLatestVersions$ = this.decisionService.getDecisions().pipe(
+  readonly decisionsLatestVersions$ = this.stateService.refreshDecisions$.pipe(
+    switchMap(() => this.decisionService.getDecisions()),
     map(decisions =>
       decisions.reduce((acc, curr) => {
         const findInAcc = acc.find(decision => decision.key === curr.key);
@@ -55,7 +57,12 @@ export class DecisionListComponent {
     tap(() => this.loading$.next(false))
   );
 
-  constructor(private decisionService: DecisionService, private router: Router, private readonly configService: ConfigService) {
+  constructor(
+    private decisionService: DecisionService,
+    private router: Router,
+    private readonly configService: ConfigService,
+    private readonly stateService: DecisionStateService
+  ) {
     this.experimentalEditing = this.configService.config.featureToggles.experimentalDmnEditing;
   }
 
