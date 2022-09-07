@@ -23,6 +23,7 @@
 >
   <div [ngClass]="{'container-fluid': !layoutService.isFullscreen}">
     <ng-container *ngTemplateOutlet="buttons"></ng-container>
+    <ng-container *ngTemplateOutlet="createButtons"></ng-container>
     <div [ngClass]="{'mt-4': !layoutService.isFullscreen}" class="modeler pl-3 pr-3 mb-3">
       <ng-container *ngTemplateOutlet="diagramHeader"></ng-container>
       <ng-container *ngTemplateOutlet="diagram"></ng-container>
@@ -31,7 +32,10 @@
 </div>
 
 <ng-template #buttons>
-  <div class="text-right" *ngIf="{selectionId: selectionId$ | async} as obs">
+  <div
+    class="text-right"
+    *ngIf="(isCreating$ | async) === false && {selectionId: selectionId$ | async} as obs"
+  >
     <div class="btn-group mt-m3px mb-3" *ngIf="obs.selectionId && !layoutService.isFullscreen">
       <button class="btn btn-primary btn-space" (click)="download()">
         <i class="icon mdi mdi-download mr-1"></i>{{ 'processManagement.download' | translate }}
@@ -41,6 +45,16 @@
         (click)="deploy()"
         [ngClass]="{'mr-0': obs.selectionId !== null}"
       >
+        <i class="icon mdi mdi-upload mr-1"></i>{{ 'decisions.deploy' | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #createButtons>
+  <div class="text-right" *ngIf="isCreating$ | async">
+    <div class="btn-group mt-m3px mb-3" *ngIf="!layoutService.isFullscreen">
+      <button class="btn btn-success btn-space" (click)="deploy()">
         <i class="icon mdi mdi-upload mr-1"></i>{{ 'decisions.deploy' | translate }}
       </button>
       <!--      <button-->
