@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-import {Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef,} from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Document, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {TabLoaderImpl} from '../models';

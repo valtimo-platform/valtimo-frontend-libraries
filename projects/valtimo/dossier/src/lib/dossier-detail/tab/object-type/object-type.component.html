@@ -22,22 +22,22 @@
     hasData: hasData$ | async
   } as obs"
 >
+  <v-table
+    *ngIf="obs.hasData || obs.loading"
+    [loading]="obs.loading"
+    [items]="obs.objects"
+    [columns]="obs.columns"
+    [showEditButtons]="true"
+    editButtonTranslationKey="dossier.zaakobjecten.objectType.viewObject"
+    [amountOfLoadingRows]="2"
+    [itemsTranslationKey]="'pluginManagement.tableItemsText'"
+    [showPagination]="false"
+    (editButtonClicked)="rowClicked($event)"
+  ></v-table>
 
-    <v-table
-            *ngIf="obs.hasData || obs.loading"
-            [loading]="obs.loading"
-            [items]="obs.objects"
-            [columns]="obs.columns"
-            [showEditButtons]="true"
-            editButtonTranslationKey="dossier.zaakobjecten.objectType.viewObject"
-            [amountOfLoadingRows]="2"
-            [itemsTranslationKey]="'pluginManagement.tableItemsText'"
-            [showPagination]="false"
-            (editButtonClicked)="rowClicked($event)"
-    ></v-table>
-
-    <v-paragraph *ngIf="!obs.hasData && !obs.loading" [center]="true">{{ 'dossier.zaakobjecten.noObjectType' | translate }}</v-paragraph>
-
+  <v-paragraph *ngIf="!obs.hasData && !obs.loading" [center]="true">{{
+    'dossier.zaakobjecten.noObjectType' | translate
+  }}</v-paragraph>
 </ng-container>
 
 <v-modal #viewObjectModal (closeEvent)="hide()" [hideFooter]="true" [maxWidthPx]="750">
@@ -48,7 +48,12 @@
   </div>
 
   <div role="content">
-    <valtimo-form-io *ngIf="(noFormDefinitionComponent$ | async) === false" [form]="objectForm$ | async"></valtimo-form-io>
-    <v-paragraph *ngIf="noFormDefinitionComponent$ | async" [center]="true">{{ 'dossier.zaakobjecten.noFormDefinitionComponent' | translate }}</v-paragraph>
+    <valtimo-form-io
+      *ngIf="(noFormDefinitionComponent$ | async) === false"
+      [form]="objectForm$ | async"
+    ></valtimo-form-io>
+    <v-paragraph *ngIf="noFormDefinitionComponent$ | async" [center]="true">{{
+      'dossier.zaakobjecten.noFormDefinitionComponent' | translate
+    }}</v-paragraph>
   </div>
 </v-modal>

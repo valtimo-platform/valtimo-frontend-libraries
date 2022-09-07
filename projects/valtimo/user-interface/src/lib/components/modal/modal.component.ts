@@ -40,8 +40,7 @@ export class ModalComponent implements OnInit {
   readonly disappearing$ = this.modalService.disappearing$;
   readonly mouseInsideModal$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private readonly modalService: ModalService) {
-  }
+  constructor(private readonly modalService: ModalService) {}
 
   ngOnInit(): void {
     this.setAppearingDelayInService();

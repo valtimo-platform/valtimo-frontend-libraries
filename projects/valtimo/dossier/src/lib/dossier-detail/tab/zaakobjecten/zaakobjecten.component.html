@@ -57,12 +57,16 @@
   <div role="header">
     <v-title [margin]="false" type="h2" [fullWidth]="true" [center]="true">{{
       objectName$ | async
-      }}</v-title>
+    }}</v-title>
   </div>
 
   <div role="content">
-    <valtimo-form-io *ngIf="(noFormDefinitionComponent$ | async)  === false" [form]="objectForm$ | async"></valtimo-form-io>
-    <v-paragraph *ngIf="noFormDefinitionComponent$ | async" [center]="true">{{ 'dossier.zaakobjecten.noFormDefinitionComponent' | translate }}</v-paragraph>
+    <valtimo-form-io
+      *ngIf="(noFormDefinitionComponent$ | async) === false"
+      [form]="objectForm$ | async"
+    ></valtimo-form-io>
+    <v-paragraph *ngIf="noFormDefinitionComponent$ | async" [center]="true">{{
+      'dossier.zaakobjecten.noFormDefinitionComponent' | translate
+    }}</v-paragraph>
   </div>
 </v-modal>
-
