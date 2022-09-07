@@ -17,7 +17,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ZaakobjectenService} from '../../../services/zaakobjecten.service';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {ZaakObject, ZaakObjectType} from '../../../models';
 import {ModalComponent, ModalService, TableColumn} from '@valtimo/user-interface';
 import {take} from 'rxjs/operators';
@@ -64,16 +64,29 @@ export class DossierDetailTabObjectTypeComponent {
     })
   );
 
+  readonly loading$ = new BehaviorSubject<boolean>(true);
+
+  readonly hasData$ = new BehaviorSubject<boolean>(false);
+
   readonly objects$: Observable<Array<ZaakObject> | null> = combineLatest([
     this.documentId$,
     this.selectedObjecttypeUrl$,
   ]).pipe(
     switchMap(([documentId, selectedObjecttypeUrl]) =>
       documentId && selectedObjecttypeUrl
-        ? this.zaakobjectenService
-            .getDocumentObjectsOfType(documentId, selectedObjecttypeUrl)
-            .pipe(map(objects => objects.map(object => ({...object, title: object.title || '-'}))))
-        : of(null)
+        ? this.zaakobjectenService.getDocumentObjectsOfType(documentId, selectedObjecttypeUrl).pipe(
+            map(objects => objects.map(object => ({...object, title: object.title || '-'}))),
+            tap(() => {
+              this.loading$.next(false);
+              this.hasData$.next(true);
+            })
+          )
+        : of(null).pipe(
+            tap(() => {
+              this.loading$.next(false);
+              this.hasData$.next(false);
+            })
+          )
     )
   );
 
@@ -95,6 +108,8 @@ export class DossierDetailTabObjectTypeComponent {
   readonly objectForm$ = new BehaviorSubject<FormioForm | null>(null);
 
   readonly noFormDefinitionComponent$ = new BehaviorSubject<boolean>(false);
+
+  hasData: boolean;
 
   constructor(
     private readonly route: ActivatedRoute,

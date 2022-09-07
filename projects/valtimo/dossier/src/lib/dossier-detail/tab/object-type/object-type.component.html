@@ -17,20 +17,27 @@
 <ng-container
   *ngIf="{
     objects: objects$ | async,
-    columns: columns$ | async
+    columns: columns$ | async,
+    loading: loading$ | async,
+    hasData: hasData$ | async
   } as obs"
 >
-  <v-table
-    [loading]="!obs.objects"
-    [items]="obs.objects"
-    [columns]="obs.columns"
-    [showEditButtons]="true"
-    editButtonTranslationKey="dossier.zaakobjecten.objectType.viewObject"
-    [amountOfLoadingRows]="2"
-    [itemsTranslationKey]="'pluginManagement.tableItemsText'"
-    [showPagination]="false"
-    (editButtonClicked)="rowClicked($event)"
-  ></v-table>
+
+    <v-table
+            *ngIf="obs.hasData || obs.loading"
+            [loading]="obs.loading"
+            [items]="obs.objects"
+            [columns]="obs.columns"
+            [showEditButtons]="true"
+            editButtonTranslationKey="dossier.zaakobjecten.objectType.viewObject"
+            [amountOfLoadingRows]="2"
+            [itemsTranslationKey]="'pluginManagement.tableItemsText'"
+            [showPagination]="false"
+            (editButtonClicked)="rowClicked($event)"
+    ></v-table>
+
+    <v-paragraph *ngIf="!obs.hasData && !obs.loading" [center]="true">{{ 'dossier.zaakobjecten.noObjectType' | translate }}</v-paragraph>
+
 </ng-container>
 
 <v-modal #viewObjectModal (closeEvent)="hide()" [hideFooter]="true" [maxWidthPx]="750">
