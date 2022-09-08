@@ -22,11 +22,25 @@ interface DocumentenApiConfig extends PluginConfigurationData {
   authenticationPluginConfiguration: string;
 }
 
+type ConfidentialityNotice =
+  'openbaar'
+  | 'beperkt_openbaar'
+  | 'intern'
+  | 'zaakvertrouwelijk'
+  | 'vertrouwelijk'
+  | 'confidentieel'
+  | 'geheim'
+  | 'zeer_geheim';
+
 type DocumentLanguage = 'nld';
 
 type DocumentStatus = 'in_bewerking' | 'ter_vaststelling' | 'definitief' | 'gearchiveerd';
 
 interface StoreTempDocumentConfig {
+  fileName: string;
+  confidentialityNotice: ConfidentialityNotice;
+  title: string;
+  description: string;
   localDocumentLocation: string;
   storedDocumentUrl: string;
   taal: DocumentLanguage;
@@ -34,4 +48,4 @@ interface StoreTempDocumentConfig {
   informatieobjecttype: string;
 }
 
-export {DocumentenApiConfig, StoreTempDocumentConfig, DocumentLanguage, DocumentStatus};
+export {DocumentenApiConfig, StoreTempDocumentConfig, ConfidentialityNotice, DocumentLanguage, DocumentStatus};
