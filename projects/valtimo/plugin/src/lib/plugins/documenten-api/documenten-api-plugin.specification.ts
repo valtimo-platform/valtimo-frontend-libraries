@@ -41,9 +41,11 @@ const documentenApiPluginSpecification: PluginSpecification = {
       bronorganisatieTooltip:
         'Vul hier het RSIN van de organisatie in die verantwoordelijk is voor de documenten',
       fileName: 'Bestandsnaam',
-      fileNameTooltip: 'De naam van het fysieke bestand waarin de inhoud van het document is vastgelegd, inclusief extensie',
+      fileNameTooltip:
+        'De naam van het fysieke bestand waarin de inhoud van het document is vastgelegd, inclusief extensie',
       confidentialityNotice: 'Vertrouwelijkheids aanduiding',
-      confidentialityNoticeTooltip: 'Aanduiding van de mate waarin het document voor de openbaarheid bestemd is',
+      confidentialityNoticeTooltip:
+        'Aanduiding van de mate waarin het document voor de openbaarheid bestemd is',
       inputTitle: 'Titel',
       inputTitleTooltip: 'De naam waaronder het document formeel bekend is',
       inputDescription: 'Beschrijving',
@@ -90,9 +92,11 @@ const documentenApiPluginSpecification: PluginSpecification = {
       bronorganisatieTooltip:
         'Enter here the RSIN of the organization responsible for the documents. The RSIN is a dutch identification number for legal entities and partnerships ',
       fileName: 'File name',
-      fileNameTooltip: 'The name of the physical file in which the content of the document is captured, including extension',
+      fileNameTooltip:
+        'The name of the physical file in which the content of the document is captured, including extension',
       confidentialityNotice: 'Confidentiality Notice',
-      confidentialityNoticeTooltip: 'Indication of the extent to which the document is intended for public access',
+      confidentialityNoticeTooltip:
+        'Indication of the extent to which the document is intended for public access',
       inputTitle: 'Titel',
       inputTitleTooltip: 'The name by which the document is formally known',
       inputDescription: 'Description',
@@ -139,9 +143,11 @@ const documentenApiPluginSpecification: PluginSpecification = {
       bronorganisatieTooltip:
         'Geben Sie hier den RAIN der für die Dokumente verantwortlichen Organisation ein. Der RAIN ist eine niederländische Identifikationsnummer für juristische Personen und Personengesellschaften',
       fileName: 'Dateiname',
-      fileNameTooltip: 'Der Name der physischen Datei, in der der Inhalt des Dokuments erfasst wird, einschließlich Erweiterung',
+      fileNameTooltip:
+        'Der Name der physischen Datei, in der der Inhalt des Dokuments erfasst wird, einschließlich Erweiterung',
       confidentialityNotice: 'Vertraulichkeitshinweis',
-      confidentialityNoticeTooltip: 'Angabe, inwieweit das Dokument für die Öffentlichkeit bestimmt ist',
+      confidentialityNoticeTooltip:
+        'Angabe, inwieweit das Dokument für die Öffentlichkeit bestimmt ist',
       inputTitle: 'Titel',
       inputTitleTooltip: 'Der Name, unter dem das Dokument offiziell bekannt ist',
       inputDescription: 'Beschreibung',

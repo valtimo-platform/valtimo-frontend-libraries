@@ -43,8 +43,17 @@ export class StoreTempDocumentConfigurationComponent
   @Output() configuration: EventEmitter<StoreTempDocumentConfig> =
     new EventEmitter<StoreTempDocumentConfig>();
 
-  readonly CONFIDENTIALITY_NOTICES: Array<ConfidentialityNotice> = ['openbaar', 'beperkt_openbaar', 'intern', 'zaakvertrouwelijk', 'vertrouwelijk', 'confidentieel', 'geheim', 'zeer_geheim'];
-  readonly confidentialityNoticeItems$: Observable<Array<{ id: string; text: string }>> =
+  readonly CONFIDENTIALITY_NOTICES: Array<ConfidentialityNotice> = [
+    'openbaar',
+    'beperkt_openbaar',
+    'intern',
+    'zaakvertrouwelijk',
+    'vertrouwelijk',
+    'confidentieel',
+    'geheim',
+    'zeer_geheim',
+  ];
+  readonly confidentialityNoticeItems$: Observable<Array<{id: string; text: string}>> =
     this.translateService.stream('key').pipe(
       map(() =>
         this.CONFIDENTIALITY_NOTICES.map(confidentialityNotice => ({

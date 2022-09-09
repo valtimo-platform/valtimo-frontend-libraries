@@ -23,7 +23,7 @@ interface DocumentenApiConfig extends PluginConfigurationData {
 }
 
 type ConfidentialityNotice =
-  'openbaar'
+  | 'openbaar'
   | 'beperkt_openbaar'
   | 'intern'
   | 'zaakvertrouwelijk'
@@ -48,4 +48,10 @@ interface StoreTempDocumentConfig {
   informatieobjecttype: string;
 }
 
-export {DocumentenApiConfig, StoreTempDocumentConfig, ConfidentialityNotice, DocumentLanguage, DocumentStatus};
+export {
+  DocumentenApiConfig,
+  StoreTempDocumentConfig,
+  ConfidentialityNotice,
+  DocumentLanguage,
+  DocumentStatus,
+};
