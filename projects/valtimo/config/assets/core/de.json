@@ -71,7 +71,10 @@
     "createdBy": "Erstellt von",
     "createdOn": "Erstellt am",
     "sequence": "Abfolge",
-    "fillInMetadata": "Metadaten ausfüllen"
+    "fillInMetadata": "Metadaten ausfüllen",
+    "cancel": "Abbrechen",
+    "upload": "Upload",
+    "filename": "Dateiname"
   },
   "summary": {
     "userTasksDoneState": "Alles erledigt!",

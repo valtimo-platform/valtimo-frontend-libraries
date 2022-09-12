@@ -44,4 +44,9 @@
   </valtimo-list>
 </valtimo-widget>
 
-<valtimo-documenten-api-metadata-modal></valtimo-documenten-api-metadata-modal>
+<valtimo-documenten-api-metadata-modal
+  [disabled$]="modalDisabled$"
+  [file$]="fileToBeUploaded$"
+  [hide$]="hideModal$"
+  [show$]="showModal$"
+></valtimo-documenten-api-metadata-modal>

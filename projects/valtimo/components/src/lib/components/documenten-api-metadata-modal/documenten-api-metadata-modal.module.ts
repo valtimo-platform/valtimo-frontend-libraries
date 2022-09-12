@@ -18,10 +18,28 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DocumentenApiMetadataModalComponent} from './documenten-api-metadata-modal.component';
 import {TranslateModule} from '@ngx-translate/core';
+import {
+  ButtonModule,
+  FormModule,
+  InputModule,
+  ModalModule,
+  SelectModule,
+  TitleModule,
+} from '@valtimo/user-interface';
 
 @NgModule({
   declarations: [DocumentenApiMetadataModalComponent],
   exports: [DocumentenApiMetadataModalComponent],
-  imports: [CommonModule, TranslateModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ModalModule,
+    TitleModule,
+    ButtonModule,
+    TranslateModule,
+    FormModule,
+    InputModule,
+    SelectModule,
+  ],
 })
 export class DocumentenApiMetadataModalModule {}

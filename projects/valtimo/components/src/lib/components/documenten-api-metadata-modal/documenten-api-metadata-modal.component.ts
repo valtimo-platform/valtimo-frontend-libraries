@@ -14,11 +14,65 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ModalComponent, ModalService} from '@valtimo/user-interface';
+import {Observable, Subscription} from 'rxjs';
+import {DocumentenApiMetadata} from '../../models';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
   templateUrl: './documenten-api-metadata-modal.component.html',
   styleUrls: ['./documenten-api-metadata-modal.component.scss'],
 })
-export class DocumentenApiMetadataModalComponent {}
+export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
+  @ViewChild('documentenApiMetadataModal') documentenApiMetadataModal: ModalComponent;
+
+  @Input() disabled = false;
+  @Input() show$!: Observable<null>;
+  @Input() hide$!: Observable<null>;
+  @Input() disabled$!: Observable<boolean>;
+  @Input() file$!: Observable<File>;
+
+  private showSubscription!: Subscription;
+  private hideSubscription!: Subscription;
+
+  constructor(private readonly modalService: ModalService) {}
+
+  ngOnInit(): void {
+    this.openShowSubscription();
+    this.openHideSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.showSubscription?.unsubscribe();
+    this.hideSubscription?.unsubscribe();
+  }
+
+  hide(): void {
+    this.modalService.closeModal();
+  }
+
+  cancel(): void {
+    console.log('cancel');
+  }
+
+  save(): void {
+    console.log('save');
+  }
+
+  formValueChange(data: DocumentenApiMetadata): void {
+    console.log('data', data);
+  }
+
+  private openShowSubscription(): void {
+    this.showSubscription = this.show$.subscribe(() => {
+      this.modalService.openModal(this.documentenApiMetadataModal);
+    });
+  }
+
+  private openHideSubscription(): void {
+    this.hideSubscription = this.hide$.subscribe(() => {
+      this.hide();
+    });
+  }
+}

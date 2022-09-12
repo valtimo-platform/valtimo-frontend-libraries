@@ -14,4 +14,40 @@
   ~ limitations under the License.
   -->
 
-metadata modal works
+<v-modal #documentenApiMetadataModal (closeEvent)="hide()">
+  <div role="header">
+    <div class="edit-configuration-title">
+      <v-title [center]="true" [fullWidth]="true" [margin]="false" type="h2">{{
+        'document.fillInMetadata' | translate
+      }}</v-title>
+    </div>
+  </div>
+  <div role="content">
+    <ng-container *ngTemplateOutlet="metadataForm"></ng-container>
+  </div>
+  <div role="footer">
+    <div class="buttons">
+      <v-button (clickEvent)="cancel()" [disabled]="disabled" type="secondary">{{
+        'document.cancel' | translate
+      }}</v-button>
+      <v-button (clickEvent)="save()" [disabled]="disabled" mdiIcon="upload" type="success">{{
+        'document.upload' | translate
+      }}</v-button>
+    </div>
+  </div>
+</v-modal>
+
+<ng-template #metadataForm>
+  <v-form (valueChange)="formValueChange($event)" *ngIf="{file: file$ | async} as obs">
+    <v-input
+      [defaultValue]="obs.file?.name"
+      [disabled]="true"
+      [fullWidth]="true"
+      [margin]="true"
+      [required]="true"
+      [title]="'document.filename' | translate"
+      name="filename"
+    >
+    </v-input>
+  </v-form>
+</ng-template>

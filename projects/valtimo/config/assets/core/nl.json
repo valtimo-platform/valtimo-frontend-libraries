@@ -71,7 +71,10 @@
     "createdBy": "Aangemaakt door",
     "createdOn": "Aangemaakt op",
     "sequence": "Volgnummer",
-    "fillInMetadata": "Metadata invullen"
+    "fillInMetadata": "Metadata invullen",
+    "cancel": "Annuleren",
+    "upload": "Uploaden",
+    "filename": "Bestandsnaam"
   },
   "summary": {
     "userTasksDoneState": "Helemaal bij!",

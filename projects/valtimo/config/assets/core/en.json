@@ -71,7 +71,10 @@
     "createdBy": "Created by",
     "createdOn": "Created on",
     "sequence": "Sequence",
-    "fillInMetadata": "Fill in metadata"
+    "fillInMetadata": "Fill in metadata",
+    "cancel": "Cancel",
+    "upload": "Upload",
+    "filename": "Filename"
   },
   "summary": {
     "userTasksDoneState": "All done!",
