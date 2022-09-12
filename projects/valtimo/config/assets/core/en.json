@@ -70,7 +70,8 @@
     "id": "Reference ID",
     "createdBy": "Created by",
     "createdOn": "Created on",
-    "sequence": "Sequence"
+    "sequence": "Sequence",
+    "fillInMetadata": "Fill in metadata"
   },
   "summary": {
     "userTasksDoneState": "All done!",

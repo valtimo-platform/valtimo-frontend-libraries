@@ -70,7 +70,8 @@
     "id": "Referentie ID",
     "createdBy": "Aangemaakt door",
     "createdOn": "Aangemaakt op",
-    "sequence": "Volgnummer"
+    "sequence": "Volgnummer",
+    "fillInMetadata": "Metadata invullen"
   },
   "summary": {
     "userTasksDoneState": "Helemaal bij!",

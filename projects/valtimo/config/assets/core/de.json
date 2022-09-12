@@ -70,7 +70,8 @@
     "id": "Referenz-ID",
     "createdBy": "Erstellt von",
     "createdOn": "Erstellt am",
-    "sequence": "Abfolge"
+    "sequence": "Abfolge",
+    "fillInMetadata": "Metadaten ausfüllen"
   },
   "summary": {
     "userTasksDoneState": "Alles erledigt!",
