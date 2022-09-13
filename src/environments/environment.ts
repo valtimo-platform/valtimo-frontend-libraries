@@ -19,6 +19,7 @@
 // The list of file replacements can be found in `angular.json`.
 import {NgxLoggerLevel} from 'ngx-logger';
 import {
+  DefinitionColumn,
   IncludeFunction,
   ROLE_ADMIN,
   ROLE_DEVELOPER,
@@ -30,7 +31,7 @@ import {authenticationKeycloak} from './auth/keycloak-config.dev';
 import {emailExtensionInitializer, openZaakExtensionInitializer} from '@valtimo/open-zaak';
 import {connectorLinkExtensionInitializer} from '@valtimo/connector-management';
 
-const defaultDefinitionColumns = [
+const defaultDefinitionColumns: Array<DefinitionColumn> = [
   {
     propertyName: 'sequence',
     translationKey: 'referenceNumber',
