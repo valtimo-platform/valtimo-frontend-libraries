@@ -99,6 +99,7 @@ export interface ValtimoConfig {
     enableHackathonCasesPage?: boolean;
     showUserNameInTopBar?: boolean;
     experimentalDmnEditing?: boolean;
+    enableDocumentenApiDocumentTab?: boolean;
   };
   customTaskList?: CustomTaskList;
   customLeftSidebar?: CustomLeftSidebar;
