@@ -15,9 +15,10 @@
  */
 
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ModalComponent, ModalService} from '@valtimo/user-interface';
-import {Observable, Subscription} from 'rxjs';
-import {DocumentenApiMetadata} from '../../models';
+import {ModalComponent, ModalService, SelectItem} from '@valtimo/user-interface';
+import {map, Observable, Subscription} from 'rxjs';
+import {ConfidentialityNotice, DocumentenApiMetadata, DocumentStatus} from '../../models';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -33,10 +34,48 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() disabled$!: Observable<boolean>;
   @Input() file$!: Observable<File>;
 
+  readonly CONFIDENTIALITY_NOTICES: Array<ConfidentialityNotice> = [
+    'openbaar',
+    'beperkt_openbaar',
+    'intern',
+    'zaakvertrouwelijk',
+    'vertrouwelijk',
+    'confidentieel',
+    'geheim',
+    'zeer_geheim',
+  ];
+  readonly confidentialityNoticeItems$: Observable<Array<SelectItem>> = this.translateService
+    .stream('key')
+    .pipe(
+      map(() =>
+        this.CONFIDENTIALITY_NOTICES.map(confidentialityNotice => ({
+          id: confidentialityNotice,
+          text: this.translateService.instant(`document.${confidentialityNotice}`),
+        }))
+      )
+    );
+  readonly STATUSES: Array<DocumentStatus> = [
+    'in_bewerking',
+    'ter_vaststelling',
+    'definitief',
+    'gearchiveerd',
+  ];
+  readonly statusItems$: Observable<Array<SelectItem>> = this.translateService.stream('key').pipe(
+    map(() =>
+      this.STATUSES.map(status => ({
+        id: status,
+        text: this.translateService.instant(`document.${status}`),
+      }))
+    )
+  );
+
   private showSubscription!: Subscription;
   private hideSubscription!: Subscription;
 
-  constructor(private readonly modalService: ModalService) {}
+  constructor(
+    private readonly modalService: ModalService,
+    private readonly translateService: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.openShowSubscription();

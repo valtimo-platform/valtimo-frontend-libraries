@@ -14,8 +14,25 @@
  * limitations under the License.
  */
 
+type ConfidentialityNotice =
+  | 'openbaar'
+  | 'beperkt_openbaar'
+  | 'intern'
+  | 'zaakvertrouwelijk'
+  | 'vertrouwelijk'
+  | 'confidentieel'
+  | 'geheim'
+  | 'zeer_geheim';
+
+type DocumentStatus = 'in_bewerking' | 'ter_vaststelling' | 'definitief' | 'gearchiveerd';
+
 interface DocumentenApiMetadata {
+  title: string;
+  description: string;
   filename: string;
+  confidentialityNotice: ConfidentialityNotice;
+  author: string;
+  status: DocumentStatus;
 }
 
-export {DocumentenApiMetadata};
+export {DocumentenApiMetadata, ConfidentialityNotice, DocumentStatus};
