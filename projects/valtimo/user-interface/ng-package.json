@@ -5,11 +5,5 @@
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "allowedNonPeerDependencies": [
-    "ngx-skeleton-loader",
-    "@ng-select/ng-select",
-    "@mdi/font",
-    "uuid",
-    "ng2-date-picker"
-  ]
+  "allowedNonPeerDependencies": ["ngx-skeleton-loader", "@ng-select/ng-select", "@mdi/font", "uuid"]
 }
