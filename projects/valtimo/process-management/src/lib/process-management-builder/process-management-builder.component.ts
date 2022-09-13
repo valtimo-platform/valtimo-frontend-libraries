@@ -19,7 +19,7 @@ import {HttpClient} from '@angular/common/http';
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
 import {AlertService} from '@valtimo/components';
 import {ActivatedRoute, Router} from '@angular/router';
-import {forkJoin, Observable, of} from 'rxjs';
+import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
 import {LayoutService} from '@valtimo/layout';
 import Modeler from 'bpmn-js/lib/Modeler';
 import BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
@@ -40,8 +40,8 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
   public processDefinitionVersions: ProcessDefinition[] | null = null;
   public selectedVersion: ProcessDefinition | null = null;
   public processKey: string | null = null;
-  public isReadOnlyProcess$: Observable<boolean> = of(false);
-  public isSystemProcess$: Observable<boolean> = of(false);
+  public isReadOnlyProcess$ = new BehaviorSubject<boolean>(false);
+  public isSystemProcess$ = new BehaviorSubject<boolean>(false);
   private elementTemplateFiles: string[] = ['mailSendTask'];
 
   constructor(
@@ -175,8 +175,8 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
     this.processService.getProcessDefinitionXml(this.selectedVersion.id).subscribe(result => {
       this.bpmnModeler.importXML(result['bpmn20Xml']);
       this.bpmnViewer.importXML(result['bpmn20Xml']);
-      this.isReadOnlyProcess$ = of(result.readOnly);
-      this.isSystemProcess$ = of(result.systemProcess);
+      this.isReadOnlyProcess$.next(result.readOnly);
+      this.isSystemProcess$.next(result.systemProcess);
     });
   }
 

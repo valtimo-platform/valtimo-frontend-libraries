@@ -27,7 +27,7 @@
         <button
           class="btn btn-success btn-space"
           (click)="deploy()"
-          [hidden]="isReadOnlyProcess$ | async"
+          *ngIf="(isReadOnlyProcess$ | async) === false"
           [ngClass]="{'mr-0': selectedVersion !== null}"
         >
           <i class="icon mdi mdi-upload mr-1"></i>{{ 'processManagement.deploy' | translate }}
@@ -54,13 +54,13 @@
           </h2>
           <span
             class="badge badge-pill badge-info mr-1"
-            [hidden]="(isReadOnlyProcess$ | async) === false"
+            *ngIf="isReadOnlyProcess$ | async"
           >
             {{ 'processManagement.readOnly' | translate }}
           </span>
           <span
             class="badge badge-pill badge-warning mr-1"
-            [hidden]="(isSystemProcess$ | async) === false"
+            *ngIf="isSystemProcess$ | async"
           >
             {{ 'processManagement.systemProcess' | translate }}
           </span>
@@ -115,13 +115,11 @@
           ></i>
         </div>
       </div>
-      <div
-        [hidden]="(isSystemProcess$ | async) === false || (isReadOnlyProcess$ | async) === false"
+      <div *ngIf="(isSystemProcess$ | async) && (isReadOnlyProcess$ | async)"
         class="row bg-warning text-black mb-0 p-3 text-center"
         [translate]="'processManagement.readOnlySystemProcessWarningMessage'"
       ></div>
-      <div
-        [hidden]="(isSystemProcess$ | async) === false || (isReadOnlyProcess$ | async)"
+      <div *ngIf="(isSystemProcess$ | async) && (isReadOnlyProcess$ | async) === false"
         class="row bg-warning text-black mb-0 p-3 text-center"
         [translate]="'processManagement.systemProcessWarningMessage'"
       ></div>
