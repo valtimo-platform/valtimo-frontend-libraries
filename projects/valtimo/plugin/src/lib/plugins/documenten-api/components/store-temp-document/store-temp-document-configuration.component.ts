@@ -25,7 +25,7 @@ import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} fro
 import {StoreTempDocumentConfig, DocumentLanguage, DocumentStatus} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
 import {PluginTranslationService} from '../../../../services';
-import {ConfidentialityNotice} from '../../../documenten-api/models';
+import {ConfidentialityLevel} from '../../../documenten-api/models';
 
 @Component({
   selector: 'valtimo-store-temp-document-configuration',
@@ -43,7 +43,7 @@ export class StoreTempDocumentConfigurationComponent
   @Output() configuration: EventEmitter<StoreTempDocumentConfig> =
     new EventEmitter<StoreTempDocumentConfig>();
 
-  readonly CONFIDENTIALITY_NOTICES: Array<ConfidentialityNotice> = [
+  readonly CONFIDENTIALITY_LEVEL_ITEMS: Array<ConfidentialityLevel> = [
     'openbaar',
     'beperkt_openbaar',
     'intern',
@@ -53,12 +53,12 @@ export class StoreTempDocumentConfigurationComponent
     'geheim',
     'zeer_geheim',
   ];
-  readonly confidentialityNoticeItems$: Observable<Array<{id: string; text: string}>> =
+  readonly confidentialityLevelItems$: Observable<Array<{id: string; text: string}>> =
     this.translateService.stream('key').pipe(
       map(() =>
-        this.CONFIDENTIALITY_NOTICES.map(confidentialityNotice => ({
-          id: confidentialityNotice,
-          text: this.pluginTranslationService.instant(confidentialityNotice, this.pluginId),
+        this.CONFIDENTIALITY_LEVEL_ITEMS.map(confidentialityLevel => ({
+          id: confidentialityLevel,
+          text: this.pluginTranslationService.instant(confidentialityLevel, this.pluginId),
         }))
       )
     );
@@ -113,7 +113,7 @@ export class StoreTempDocumentConfigurationComponent
 
   private handleValid(formValue: StoreTempDocumentConfig): void {
     const valid = !!(
-      formValue.confidentialityNotice &&
+      formValue.confidentialityLevel &&
       formValue.title &&
       formValue.description &&
       formValue.localDocumentLocation &&

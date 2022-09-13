@@ -22,7 +22,7 @@ interface DocumentenApiConfig extends PluginConfigurationData {
   authenticationPluginConfiguration: string;
 }
 
-type ConfidentialityNotice =
+type ConfidentialityLevel =
   | 'openbaar'
   | 'beperkt_openbaar'
   | 'intern'
@@ -38,7 +38,7 @@ type DocumentStatus = 'in_bewerking' | 'ter_vaststelling' | 'definitief' | 'gear
 
 interface StoreTempDocumentConfig {
   fileName: string;
-  confidentialityNotice: ConfidentialityNotice;
+  confidentialityLevel: ConfidentialityLevel;
   title: string;
   description: string;
   localDocumentLocation: string;
@@ -51,7 +51,7 @@ interface StoreTempDocumentConfig {
 export {
   DocumentenApiConfig,
   StoreTempDocumentConfig,
-  ConfidentialityNotice,
+  ConfidentialityLevel,
   DocumentLanguage,
   DocumentStatus,
 };

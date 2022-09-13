@@ -43,8 +43,8 @@ const documentenApiPluginSpecification: PluginSpecification = {
       fileName: 'Bestandsnaam',
       fileNameTooltip:
         'De naam van het fysieke bestand waarin de inhoud van het document is vastgelegd, inclusief extensie',
-      confidentialityNotice: 'Vertrouwelijkheids aanduiding',
-      confidentialityNoticeTooltip:
+      confidentialityLevel: 'Vertrouwelijkheidsaanduiding',
+      confidentialityLevelTooltip:
         'Aanduiding van de mate waarin het document voor de openbaarheid bestemd is',
       inputTitle: 'Titel',
       inputTitleTooltip: 'De naam waaronder het document formeel bekend is',
@@ -94,17 +94,17 @@ const documentenApiPluginSpecification: PluginSpecification = {
       fileName: 'File name',
       fileNameTooltip:
         'The name of the physical file in which the content of the document is captured, including extension',
-      confidentialityNotice: 'Confidentiality Notice',
-      confidentialityNoticeTooltip:
+      confidentialityLevel: 'Confidentiality level',
+      confidentialityLevelTooltip:
         'Indication of the extent to which the document is intended for public access',
-      inputTitle: 'Titel',
+      inputTitle: 'Title',
       inputTitleTooltip: 'The name by which the document is formally known',
       inputDescription: 'Description',
       inputDescriptionTooltip: 'A generic description of the content of the document',
       openbaar: 'Public',
       beperkt_openbaar: 'Restricted public',
       intern: 'Internal',
-      zaakvertrouwelijk: 'Business confidential',
+      zaakvertrouwelijk: 'Case confidential',
       vertrouwelijk: 'Private',
       confidentieel: 'Confidential',
       geheim: 'Secret',
@@ -145,8 +145,8 @@ const documentenApiPluginSpecification: PluginSpecification = {
       fileName: 'Dateiname',
       fileNameTooltip:
         'Der Name der physischen Datei, in der der Inhalt des Dokuments erfasst wird, einschließlich Erweiterung',
-      confidentialityNotice: 'Vertraulichkeitshinweis',
-      confidentialityNoticeTooltip:
+      confidentialityLevel: 'Vertraulichkeitshinweis',
+      confidentialityLevelTooltip:
         'Angabe, inwieweit das Dokument für die Öffentlichkeit bestimmt ist',
       inputTitle: 'Titel',
       inputTitleTooltip: 'Der Name, unter dem das Dokument offiziell bekannt ist',

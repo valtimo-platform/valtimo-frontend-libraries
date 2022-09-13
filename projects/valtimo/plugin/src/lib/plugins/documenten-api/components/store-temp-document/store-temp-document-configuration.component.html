@@ -31,15 +31,15 @@
     [tooltip]="'fileNameTooltip' | pluginTranslate: pluginId | async"
   ></v-input>
   <v-select
-    [items]="confidentialityNoticeItems$ | async"
+    [items]="confidentialityLevelItems$ | async"
     [margin]="true"
     [widthInPx]="200"
-    name="confidentialityNotice"
-    [title]="'confidentialityNotice' | pluginTranslate: pluginId | async"
+    name="confidentialityLevel"
+    [title]="'confidentialityLevel' | pluginTranslate: pluginId | async"
     [disabled]="obs.disabled"
-    [defaultSelectionId]="obs.prefill?.confidentialityNotice"
+    [defaultSelectionId]="obs.prefill?.confidentialityLevel || CONFIDENTIALITY_LEVEL_ITEMS[3]"
     [required]="true"
-    [tooltip]="'confidentialityNoticeTooltip' | pluginTranslate: pluginId | async"
+    [tooltip]="'confidentialityLevelTooltip' | pluginTranslate: pluginId | async"
   ></v-select>
   <v-input
     name="title"
