@@ -175,8 +175,8 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
     this.processService.getProcessDefinitionXml(this.selectedVersion.id).subscribe(result => {
       this.bpmnModeler.importXML(result['bpmn20Xml']);
       this.bpmnViewer.importXML(result['bpmn20Xml']);
-      this.isReadOnlyProcess$ = result.isReadOnly;
-      this.isSystemProcess$ = result.isSystemProcess;
+      this.isReadOnlyProcess$ = of(result.readOnly);
+      this.isSystemProcess$ = of(result.systemProcess);
     });
   }
 

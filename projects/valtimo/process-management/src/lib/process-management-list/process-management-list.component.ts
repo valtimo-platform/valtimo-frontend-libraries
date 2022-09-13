@@ -28,7 +28,7 @@ export class ProcessManagementListComponent implements OnInit {
   public fields = [
     {key: 'key', label: 'Key'},
     {key: 'name', label: 'Name'},
-    {key: 'isSystemProcess', label: 'System Process'},
+    {key: 'readOnly', label: 'Read-only'},
   ];
 
   constructor(private processService: ProcessService, private router: Router) {}
