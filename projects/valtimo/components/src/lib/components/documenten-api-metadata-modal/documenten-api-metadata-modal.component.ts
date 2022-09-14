@@ -16,7 +16,7 @@
 
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ModalComponent, ModalService, SelectItem} from '@valtimo/user-interface';
-import {map, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, map, Observable, Subscription} from 'rxjs';
 import {ConfidentialityLevel, DocumentenApiMetadata, DocumentStatus} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -28,7 +28,6 @@ import {TranslateService} from '@ngx-translate/core';
 export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @ViewChild('documentenApiMetadataModal') documentenApiMetadataModal: ModalComponent;
 
-  @Input() disabled = false;
   @Input() show$!: Observable<null>;
   @Input() hide$!: Observable<null>;
   @Input() disabled$!: Observable<boolean>;
@@ -69,6 +68,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     )
   );
   readonly showForm$: Observable<boolean> = this.modalService.modalVisible$;
+  readonly valid$ = new BehaviorSubject<boolean>(false);
   private showSubscription!: Subscription;
   private hideSubscription!: Subscription;
 
@@ -100,7 +100,11 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   }
 
   formValueChange(data: DocumentenApiMetadata): void {
-    console.log('data', data);
+    this.setValid(data);
+  }
+
+  private setValid(data: DocumentenApiMetadata): void {
+    this.valid$.next(!!(data.filename && data.title && data.author && data.creationDate));
   }
 
   private openShowSubscription(): void {

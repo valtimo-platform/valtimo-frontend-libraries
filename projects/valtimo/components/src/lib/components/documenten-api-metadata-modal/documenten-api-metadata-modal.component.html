@@ -14,7 +14,11 @@
   ~ limitations under the License.
   -->
 
-<v-modal #documentenApiMetadataModal (closeEvent)="hide()">
+<v-modal
+  #documentenApiMetadataModal
+  (closeEvent)="hide()"
+  *ngIf="{file: file$ | async, disabled: disabled$ | async, valid: valid$ | async} as obs"
+>
   <div role="header">
     <div class="edit-configuration-title">
       <v-title [center]="true" [fullWidth]="true" [margin]="false" type="h2">{{
@@ -23,26 +27,27 @@
     </div>
   </div>
   <div role="content">
-    <ng-container *ngTemplateOutlet="metadataForm"></ng-container>
+    <ng-container *ngTemplateOutlet="metadataForm; context: {obs: obs}"></ng-container>
   </div>
   <div role="footer">
     <div class="buttons">
-      <v-button (clickEvent)="cancel()" [disabled]="disabled" type="secondary">{{
+      <v-button (clickEvent)="cancel()" [disabled]="obs.disabled" type="secondary">{{
         'document.cancel' | translate
       }}</v-button>
-      <v-button (clickEvent)="save()" [disabled]="disabled" mdiIcon="upload" type="success">{{
-        'document.upload' | translate
-      }}</v-button>
+      <v-button
+        (clickEvent)="save()"
+        [disabled]="obs.disabled || !obs.valid"
+        mdiIcon="upload"
+        type="success"
+        >{{ 'document.upload' | translate }}</v-button
+      >
     </div>
   </div>
 </v-modal>
 
-<ng-template #metadataForm>
+<ng-template #metadataForm let-obs="obs">
   <ng-container *ngIf="showForm$ | async">
-    <v-form
-      (valueChange)="formValueChange($event)"
-      *ngIf="{file: file$ | async, disabled: disabled$ | async} as obs"
-    >
+    <v-form (valueChange)="formValueChange($event)">
       <v-input
         [defaultValue]="obs.file?.name"
         [disabled]="obs.disabled"
