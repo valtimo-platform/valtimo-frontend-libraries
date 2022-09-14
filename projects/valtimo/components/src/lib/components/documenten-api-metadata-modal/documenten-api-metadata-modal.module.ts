@@ -20,6 +20,7 @@ import {DocumentenApiMetadataModalComponent} from './documenten-api-metadata-mod
 import {TranslateModule} from '@ngx-translate/core';
 import {
   ButtonModule,
+  DatePickerModule,
   FormModule,
   InputModule,
   ModalModule,
@@ -40,6 +41,7 @@ import {
     FormModule,
     InputModule,
     SelectModule,
+    DatePickerModule,
   ],
 })
 export class DocumentenApiMetadataModalModule {}

@@ -13,3 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.v-date-picker-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.v-date-picker {
+  all: unset;
+  font-size: var(--v-input-font-size);
+  line-height: var(--v-input-line-height);
+  color: var(--v-input-color);
+  font-weight: var(--v-input-font-weight);
+  padding-block-start: var(--v-input-padding-block);
+  padding-block-end: var(--v-input-padding-block);
+  padding-inline-start: var(--v-input-padding-inline);
+  padding-inline-end: var(--v-input-padding-inline);
+  background-color: var(--v-input-bg-color);
+  border-radius: var(--v-input-border-radius);
+  border: var(--v-input-border);
+  transition: var(--v-input-transition);
+  width: var(--v-input-default-width);
+  box-sizing: border-box;
+
+  &:focus {
+    outline: var(--v-input-focus-border);
+    outline-offset: var(--v-outline-offset);
+  }
+
+  &:disabled {
+    color: var(--v-input-font-color-disabled);
+    cursor: var(--v-input-disabled-cursor);
+  }
+}
+
+.v-date-picker--full-width {
+  width: 100%;
+}
+
+.v-date-picker--margin {
+  margin-block-end: var(--v-input-margin);
+}

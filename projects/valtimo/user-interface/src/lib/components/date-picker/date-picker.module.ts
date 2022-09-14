@@ -17,10 +17,13 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DatePickerComponent} from './date-picker.component';
+import {FormsModule} from '@angular/forms';
+import {InputLabelModule} from '../input-label/input-label.module';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [DatePickerComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, InputLabelModule, FormsModule, TranslateModule],
   exports: [DatePickerComponent],
 })
 export class DatePickerModule {}

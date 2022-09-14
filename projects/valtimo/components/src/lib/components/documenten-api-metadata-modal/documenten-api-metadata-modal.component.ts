@@ -17,7 +17,7 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ModalComponent, ModalService, SelectItem} from '@valtimo/user-interface';
 import {map, Observable, Subscription} from 'rxjs';
-import {ConfidentialityNotice, DocumentenApiMetadata, DocumentStatus} from '../../models';
+import {ConfidentialityLevel, DocumentenApiMetadata, DocumentStatus} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
@@ -34,7 +34,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() disabled$!: Observable<boolean>;
   @Input() file$!: Observable<File>;
 
-  readonly CONFIDENTIALITY_NOTICES: Array<ConfidentialityNotice> = [
+  readonly CONFIDENTIALITY_LEVELS: Array<ConfidentialityLevel> = [
     'openbaar',
     'beperkt_openbaar',
     'intern',
@@ -44,13 +44,13 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     'geheim',
     'zeer_geheim',
   ];
-  readonly confidentialityNoticeItems$: Observable<Array<SelectItem>> = this.translateService
+  readonly confidentialityLevelItems$: Observable<Array<SelectItem>> = this.translateService
     .stream('key')
     .pipe(
       map(() =>
-        this.CONFIDENTIALITY_NOTICES.map(confidentialityNotice => ({
-          id: confidentialityNotice,
-          text: this.translateService.instant(`document.${confidentialityNotice}`),
+        this.CONFIDENTIALITY_LEVELS.map(confidentialityLevel => ({
+          id: confidentialityLevel,
+          text: this.translateService.instant(`document.${confidentialityLevel}`),
         }))
       )
     );
@@ -68,7 +68,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       }))
     )
   );
-
+  readonly todayDate!: string;
   private showSubscription!: Subscription;
   private hideSubscription!: Subscription;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-type ConfidentialityNotice =
+type ConfidentialityLevel =
   | 'openbaar'
   | 'beperkt_openbaar'
   | 'intern'
@@ -30,9 +30,12 @@ interface DocumentenApiMetadata {
   title: string;
   description: string;
   filename: string;
-  confidentialityNotice: ConfidentialityNotice;
+  confidentialityLevel: ConfidentialityLevel;
   author: string;
   status: DocumentStatus;
+  creationDate: string;
+  receiptDate: string;
+  sendDate: string;
 }
 
-export {DocumentenApiMetadata, ConfidentialityNotice, DocumentStatus};
+export {DocumentenApiMetadata, ConfidentialityLevel, DocumentStatus};

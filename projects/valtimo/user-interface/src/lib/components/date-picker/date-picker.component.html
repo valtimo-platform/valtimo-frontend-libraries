@@ -14,4 +14,33 @@
   ~ limitations under the License.
   -->
 
-date picker works
+<div class="v-date-picker-container">
+  <ng-container *ngTemplateOutlet="inputTitle"></ng-container>
+  <ng-container *ngTemplateOutlet="dateInput"></ng-container>
+</div>
+
+<ng-template #inputTitle>
+  <v-input-label
+    *ngIf="title || titleTranslationKey"
+    [name]="name"
+    [required]="required"
+    [titleTranslationKey]="titleTranslationKey"
+    [title]="title"
+    [tooltip]="tooltip"
+  >
+  </v-input-label>
+</ng-template>
+
+<ng-template #dateInput>
+  <input
+    #datePickerElement
+    [disabled]="disabled"
+    [ngClass]="{
+      'v-date-picker--full-width': fullWidth,
+      'v-date-picker--margin': margin
+    }"
+    [style.width.px]="widthPx"
+    class="v-date-picker"
+    type="text"
+  />
+</ng-template>

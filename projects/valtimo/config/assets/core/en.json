@@ -76,8 +76,8 @@
     "upload": "Upload",
     "filename": "Filename",
     "filenameTooltip": "The name of the physical file in which the content of the document is captured, including extension",
-    "confidentialityNotice": "Confidentiality level",
-    "confidentialityNoticeTooltip": "Indication of the extent to which the document is intended for public access",
+    "confidentialityLevel": "Confidentiality level",
+    "confidentialityLevelTooltip": "Indication of the extent to which the document is intended for public access",
     "inputTitle": "Title",
     "inputTitleTooltip": "The name by which the document is formally known",
     "inputDescription": "Description",
@@ -97,7 +97,13 @@
     "in_bewerking": "In editing",
     "ter_vaststelling": "To be confirmed",
     "definitief": "Definitive",
-    "gearchiveerd": "Archived"
+    "gearchiveerd": "Archived",
+    "creationDate": "Creation date",
+    "creationDateTooltip": "The date the document was created",
+    "receiptDate": "Receipt date",
+    "receiptDateTooltip": "The date the document was received",
+    "sendDate": "Send date",
+    "sendDateTooltip": "The date the document was sent"
   },
   "summary": {
     "userTasksDoneState": "All done!",

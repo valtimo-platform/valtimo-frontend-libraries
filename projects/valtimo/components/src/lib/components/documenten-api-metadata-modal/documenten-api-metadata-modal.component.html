@@ -42,6 +42,16 @@
     (valueChange)="formValueChange($event)"
     *ngIf="{file: file$ | async, disabled: disabled$ | async} as obs"
   >
+    <v-date-picker
+      [defaultDateIsToday]="true"
+      [disabled]="obs.disabled"
+      [margin]="true"
+      [required]="true"
+      [title]="'document.creationDate' | translate"
+      [tooltip]="'document.creationDateTooltip' | translate"
+      [widthPx]="100"
+      name="creationDate"
+    ></v-date-picker>
     <v-input
       [defaultValue]="obs.file?.name"
       [disabled]="true"
@@ -73,6 +83,24 @@
       name="author"
     >
     </v-input>
+    <v-date-picker
+      [defaultDateIsToday]="true"
+      [disabled]="obs.disabled"
+      [margin]="true"
+      [title]="'document.receiptDate' | translate"
+      [tooltip]="'document.receiptDateTooltip' | translate"
+      [widthPx]="100"
+      name="receiptDate"
+    ></v-date-picker>
+    <v-date-picker
+      [defaultDateIsToday]="true"
+      [disabled]="obs.disabled"
+      [margin]="true"
+      [title]="'document.sendDate' | translate"
+      [tooltip]="'document.sendDateTooltip' | translate"
+      [widthPx]="100"
+      name="sendDate"
+    ></v-date-picker>
     <v-input
       [disabled]="obs.disabled"
       [fullWidth]="true"
@@ -84,12 +112,12 @@
     </v-input>
     <v-select
       [disabled]="obs.disabled"
-      [items]="confidentialityNoticeItems$ | async"
+      [items]="confidentialityLevelItems$ | async"
       [margin]="true"
-      [title]="'document.confidentialityNotice' | translate"
-      [tooltip]="'document.confidentialityNoticeTooltip' | translate"
+      [title]="'document.confidentialityLevel' | translate"
+      [tooltip]="'document.confidentialityLevelTooltip' | translate"
       [widthInPx]="200"
-      name="confidentialityNotice"
+      name="confidentialityLevel"
     ></v-select>
     <v-select
       [disabled]="obs.disabled"
