@@ -38,95 +38,97 @@
 </v-modal>
 
 <ng-template #metadataForm>
-  <v-form
-    (valueChange)="formValueChange($event)"
-    *ngIf="{file: file$ | async, disabled: disabled$ | async} as obs"
-  >
-    <v-date-picker
-      [defaultDateIsToday]="true"
-      [disabled]="obs.disabled"
-      [margin]="true"
-      [required]="true"
-      [title]="'document.creationDate' | translate"
-      [tooltip]="'document.creationDateTooltip' | translate"
-      [widthPx]="100"
-      name="creationDate"
-    ></v-date-picker>
-    <v-input
-      [defaultValue]="obs.file?.name"
-      [disabled]="true"
-      [fullWidth]="true"
-      [margin]="true"
-      [required]="true"
-      [title]="'document.filename' | translate"
-      [tooltip]="'document.filenameTooltip' | translate"
-      name="filename"
+  <ng-container *ngIf="showForm$ | async">
+    <v-form
+      (valueChange)="formValueChange($event)"
+      *ngIf="{file: file$ | async, disabled: disabled$ | async} as obs"
     >
-    </v-input>
-    <v-input
-      [disabled]="obs.disabled"
-      [margin]="true"
-      [required]="true"
-      [title]="'document.inputTitle' | translate"
-      [tooltip]="'document.inputTitleTooltip' | translate"
-      [widthPx]="400"
-      name="title"
-    >
-    </v-input>
-    <v-input
-      [disabled]="obs.disabled"
-      [margin]="true"
-      [required]="true"
-      [title]="'document.author' | translate"
-      [tooltip]="'document.authorTooltip' | translate"
-      [widthPx]="300"
-      name="author"
-    >
-    </v-input>
-    <v-date-picker
-      [defaultDateIsToday]="true"
-      [disabled]="obs.disabled"
-      [margin]="true"
-      [title]="'document.receiptDate' | translate"
-      [tooltip]="'document.receiptDateTooltip' | translate"
-      [widthPx]="100"
-      name="receiptDate"
-    ></v-date-picker>
-    <v-date-picker
-      [defaultDateIsToday]="true"
-      [disabled]="obs.disabled"
-      [margin]="true"
-      [title]="'document.sendDate' | translate"
-      [tooltip]="'document.sendDateTooltip' | translate"
-      [widthPx]="100"
-      name="sendDate"
-    ></v-date-picker>
-    <v-input
-      [disabled]="obs.disabled"
-      [fullWidth]="true"
-      [margin]="true"
-      [title]="'document.inputDescription' | translate"
-      [tooltip]="'document.inputDescriptionTooltip' | translate"
-      name="description"
-    >
-    </v-input>
-    <v-select
-      [disabled]="obs.disabled"
-      [items]="confidentialityLevelItems$ | async"
-      [margin]="true"
-      [title]="'document.confidentialityLevel' | translate"
-      [tooltip]="'document.confidentialityLevelTooltip' | translate"
-      [widthInPx]="200"
-      name="confidentialityLevel"
-    ></v-select>
-    <v-select
-      [disabled]="obs.disabled"
-      [items]="statusItems$ | async"
-      [margin]="true"
-      [title]="'document.status' | translate"
-      [tooltip]="'document.statusTooltip' | translate"
-      [widthInPx]="200"
-      name="status"
-    ></v-select>
-  </v-form>
+      <v-input
+        [defaultValue]="obs.file?.name"
+        [disabled]="obs.disabled"
+        [fullWidth]="true"
+        [margin]="true"
+        [required]="true"
+        [title]="'document.filename' | translate"
+        [tooltip]="'document.filenameTooltip' | translate"
+        name="filename"
+      >
+      </v-input>
+      <v-input
+        [disabled]="obs.disabled"
+        [margin]="true"
+        [required]="true"
+        [title]="'document.inputTitle' | translate"
+        [tooltip]="'document.inputTitleTooltip' | translate"
+        [widthPx]="400"
+        name="title"
+      >
+      </v-input>
+      <v-input
+        [disabled]="obs.disabled"
+        [margin]="true"
+        [required]="true"
+        [title]="'document.author' | translate"
+        [tooltip]="'document.authorTooltip' | translate"
+        [widthPx]="300"
+        name="author"
+      >
+      </v-input>
+      <v-date-picker
+        [defaultDateIsToday]="true"
+        [disabled]="obs.disabled"
+        [margin]="true"
+        [required]="true"
+        [title]="'document.creationDate' | translate"
+        [tooltip]="'document.creationDateTooltip' | translate"
+        [widthPx]="100"
+        name="creationDate"
+      ></v-date-picker>
+      <v-date-picker
+        [defaultDateIsToday]="true"
+        [disabled]="obs.disabled"
+        [margin]="true"
+        [title]="'document.receiptDate' | translate"
+        [tooltip]="'document.receiptDateTooltip' | translate"
+        [widthPx]="100"
+        name="receiptDate"
+      ></v-date-picker>
+      <v-date-picker
+        [defaultDateIsToday]="true"
+        [disabled]="obs.disabled"
+        [margin]="true"
+        [title]="'document.sendDate' | translate"
+        [tooltip]="'document.sendDateTooltip' | translate"
+        [widthPx]="100"
+        name="sendDate"
+      ></v-date-picker>
+      <v-input
+        [disabled]="obs.disabled"
+        [fullWidth]="true"
+        [margin]="true"
+        [title]="'document.inputDescription' | translate"
+        [tooltip]="'document.inputDescriptionTooltip' | translate"
+        name="description"
+      >
+      </v-input>
+      <v-select
+        [disabled]="obs.disabled"
+        [items]="confidentialityLevelItems$ | async"
+        [margin]="true"
+        [title]="'document.confidentialityLevel' | translate"
+        [tooltip]="'document.confidentialityLevelTooltip' | translate"
+        [widthInPx]="200"
+        name="confidentialityLevel"
+      ></v-select>
+      <v-select
+        [disabled]="obs.disabled"
+        [items]="statusItems$ | async"
+        [margin]="true"
+        [title]="'document.status' | translate"
+        [tooltip]="'document.statusTooltip' | translate"
+        [widthInPx]="200"
+        name="status"
+      ></v-select>
+    </v-form>
+  </ng-container>
 </ng-template>

@@ -68,7 +68,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       }))
     )
   );
-  readonly todayDate!: string;
+  readonly showForm$: Observable<boolean> = this.modalService.modalVisible$;
   private showSubscription!: Subscription;
   private hideSubscription!: Subscription;
 
