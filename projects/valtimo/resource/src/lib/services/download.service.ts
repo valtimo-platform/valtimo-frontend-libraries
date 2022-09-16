@@ -51,11 +51,11 @@ export class DownloadService {
   private openBlobInNewTab(url: string, name: string) {
     const newWindow = window.open('/');
 
-    // newWindow file be null if the browsers blocks opening a new tab
+    // newWindow will be null if the browser blocks the opening of a new tab.
     if (newWindow != null) {
       newWindow.location = url;
     } else {
-      // In case the tab is blocked it will just download the file
+      // In case the tab is blocked it will just download the file.
       this.openDownloadLink(url, name)
     }
   }
