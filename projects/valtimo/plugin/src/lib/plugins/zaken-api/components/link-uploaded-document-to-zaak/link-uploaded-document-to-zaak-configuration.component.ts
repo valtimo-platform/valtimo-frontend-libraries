@@ -17,8 +17,6 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FunctionConfigurationComponent} from '../../../../models';
 import {Observable, Subscription} from 'rxjs';
-import {TranslateService} from '@ngx-translate/core';
-import {PluginTranslationService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-link-uploaded-document-to-zaak-configuration',
@@ -36,11 +34,6 @@ export class LinkUploadedDocumentToZaakConfigurationComponent
   @Output() configuration: EventEmitter<{}> = new EventEmitter<{}>();
 
   private saveSubscription!: Subscription;
-
-  constructor(
-    private readonly translateService: TranslateService,
-    private readonly pluginTranslationService: PluginTranslationService
-  ) {}
 
   ngOnInit(): void {
     this.openSaveSubscription();
