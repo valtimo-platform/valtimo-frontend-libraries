@@ -16,12 +16,24 @@
 
 <ng-container *ngIf="documentenApiUploadProvider">
   <h2 class="mb-4 mt-6">{{ 'dossierManagement.linkProcess.title' | translate }}</h2>
-  <v-paragraph class="mb-2">{{ 'dossierManagement.linkProcess.description' | translate }}</v-paragraph>
-
-  <v-select *ngIf="{processItems: processItems$ | async} as obs"
-          [items]="obs.processItems"
-          [margin]="true"
-          [required]="false"
-          name="informatieobjecttype"
-  ></v-select>
+  <v-paragraph [margin]="true">{{
+    'dossierManagement.linkProcess.description' | translate
+  }}</v-paragraph>
+  <ng-container
+    *ngIf="{
+      processItems: processItems$ | async,
+      disabled: disabled$ | async,
+      defaultSelectionId: selectionId$ | async
+    } as obs"
+  >
+    <v-select
+      (selectedChange)="selectProcess($event)"
+      [defaultSelectionId]="obs.defaultSelectionId"
+      [disabled]="obs.disabled"
+      [items]="obs.processItems"
+      [loading]="!obs.processItems"
+      [margin]="true"
+      [required]="false"
+    ></v-select>
+  </ng-container>
 </ng-container>

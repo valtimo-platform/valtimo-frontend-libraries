@@ -13,25 +13,73 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ConfigService, UploadProvider, ValtimoConfig} from '@valtimo/config';
-import {map, Observable} from 'rxjs';
+import {BehaviorSubject, map, Observable} from 'rxjs';
 import {SelectItem} from '@valtimo/user-interface';
+import {ProcessService} from '@valtimo/process';
+import {ActivatedRoute} from '@angular/router';
+import {DocumentService} from '@valtimo/document';
 
 @Component({
   selector: 'valtimo-dossier-management-link-process',
   templateUrl: './dossier-management-link-process.component.html',
   styleUrls: ['./dossier-management-link-process.component.scss'],
 })
-export class DossierManagementLinkProcessComponent {
+export class DossierManagementLinkProcessComponent implements OnInit {
   documentenApiUploadProvider!: boolean;
-  readonly processItems$: Observable<any>;
+  documentDefinitionName: string | null = null;
 
-  constructor(private readonly configService: ConfigService) {
+  readonly selectionId$ = new BehaviorSubject<string>('');
+  readonly processItems$: Observable<Array<SelectItem>> = this.processService
+    .getProcessDefinitions()
+    .pipe(map(processes => processes.map(process => ({text: process.name, id: process.key}))));
+
+  readonly disabled$ = new BehaviorSubject<boolean>(false);
+
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly processService: ProcessService,
+    private readonly route: ActivatedRoute,
+    private readonly documentService: DocumentService
+  ) {
     this.setDocumentenApiUploaderProvider(configService.config);
+    this.documentDefinitionName = this.route.snapshot.paramMap.get('name');
+  }
+
+  ngOnInit(): void {
+    this.getDefaultSelection();
+  }
+
+  selectProcess(processDefinitionKey: string): void {
+    this.disabled$.next(true);
+    const currentSelectionId = this.selectionId$.getValue();
+    if (processDefinitionKey && processDefinitionKey !== currentSelectionId) {
+      this.disabled$.next(true);
+      this.documentService
+        .updateLinkedUploadProcess(this.documentDefinitionName, processDefinitionKey)
+        .subscribe(processLink => {
+          this.selectionId$.next(processLink.processDefinitionKey);
+          this.disabled$.next(false);
+        });
+    } else if (!processDefinitionKey) {
+      this.documentService.deleteLinkedUploadProcess(this.documentDefinitionName).subscribe(() => {
+        this.disabled$.next(false);
+      });
+    }
   }
 
   private setDocumentenApiUploaderProvider(config: ValtimoConfig): void {
     this.documentenApiUploadProvider = config.uploadProvider === UploadProvider.DOCUMENTEN_API;
+  }
+
+  private getDefaultSelection(): void {
+    this.documentService
+      .getLinkedUploadProcess(this.documentDefinitionName)
+      .subscribe(linkedUploadProcess => {
+        if (linkedUploadProcess) {
+          this.selectionId$.next(linkedUploadProcess.processDefinitionKey);
+        }
+      });
   }
 }
