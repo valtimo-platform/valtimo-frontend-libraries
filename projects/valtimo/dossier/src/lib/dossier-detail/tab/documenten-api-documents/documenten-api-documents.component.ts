@@ -168,6 +168,5 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         this.isAdmin = false;
       }
     );
-    console.log('this.isAdmin', this.isAdmin);
   }
 }
