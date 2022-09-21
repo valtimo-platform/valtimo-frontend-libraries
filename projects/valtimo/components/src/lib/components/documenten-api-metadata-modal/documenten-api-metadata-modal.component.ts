@@ -113,6 +113,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   }
 
   hide(): void {
+    this.formData$.next(null);
+    this.valid$.next(false);
     this.modalService.closeModal();
   }
 
