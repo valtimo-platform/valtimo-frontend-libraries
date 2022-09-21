@@ -153,7 +153,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
           this.uploadProviderService
             .uploadFileWithMetadata(file, this.documentId, metadata)
             .subscribe(res => {
-              console.log('res', res);
               this.uploading$.next(false);
               this.fileToBeUploaded$.next(null);
             });
