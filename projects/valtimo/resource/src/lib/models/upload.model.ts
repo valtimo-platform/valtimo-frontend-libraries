@@ -42,5 +42,9 @@ export interface ResourceFile {
 export interface UploadService {
   uploadFile(file: File, documentDefinitionName?: string): Observable<ResourceFile>;
   getResource(resourceId: string): Observable<ResourceDto>;
-  uploadFileWithMetadata?(file: File, metadata: {[key: string]: any}): Observable<void>;
+  uploadFileWithMetadata?(
+    file: File,
+    documentId: string,
+    metadata: {[key: string]: any}
+  ): Observable<void>;
 }

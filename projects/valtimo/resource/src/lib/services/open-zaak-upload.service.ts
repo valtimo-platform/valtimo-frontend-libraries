@@ -40,9 +40,14 @@ export class OpenZaakUploadService implements UploadService {
       .pipe(map(result => this.getResourceFile(result)));
   }
 
-  uploadFileWithMetadata(file: File, metadata: {[key: string]: any}): Observable<void> {
+  uploadFileWithMetadata(
+    file: File,
+    documentId: string,
+    metadata: {[key: string]: any}
+  ): Observable<void> {
     return this.openZaakService.uploadWithMetadata(
       new File([file], file.name, {type: file.type}),
+      documentId,
       metadata
     );
   }

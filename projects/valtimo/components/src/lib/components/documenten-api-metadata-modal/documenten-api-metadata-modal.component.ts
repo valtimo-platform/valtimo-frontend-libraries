@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {ModalComponent, ModalService, SelectItem} from '@valtimo/user-interface';
-import {BehaviorSubject, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, take} from 'rxjs';
 import {
   ConfidentialityLevel,
   DocumentenApiMetadata,
@@ -39,6 +39,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() hide$!: Observable<null>;
   @Input() disabled$!: Observable<boolean>;
   @Input() file$!: Observable<File>;
+
+  @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
 
   readonly CONFIDENTIALITY_LEVELS: Array<ConfidentialityLevel> = [
     'openbaar',
@@ -84,12 +86,12 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     )
   );
   readonly documentTypeItems$: Observable<Array<SelectItem>> = this.route.params.pipe(
-    tap(routeParams => console.log(routeParams)),
     switchMap(params => this.documentService.getDocumentTypes(params.documentDefinitionName)),
     map(documentTypes => documentTypes.map(type => ({id: type.url, text: type.name})))
   );
   readonly showForm$: Observable<boolean> = this.modalService.modalVisible$;
   readonly valid$ = new BehaviorSubject<boolean>(false);
+  readonly formData$ = new BehaviorSubject<DocumentenApiMetadata>(null);
   private showSubscription!: Subscription;
   private hideSubscription!: Subscription;
 
@@ -115,14 +117,21 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   }
 
   cancel(): void {
-    console.log('cancel');
+    this.hide();
   }
 
   save(): void {
-    console.log('save');
+    combineLatest([this.valid$, this.formData$])
+      .pipe(take(1))
+      .subscribe(([valid, formData]) => {
+        if (valid) {
+          this.metadata.emit(formData);
+        }
+      });
   }
 
   formValueChange(data: DocumentenApiMetadata): void {
+    this.formData$.next(data);
     this.setValid(data);
   }
 

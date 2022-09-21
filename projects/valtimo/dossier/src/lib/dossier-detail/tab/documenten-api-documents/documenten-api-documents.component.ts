@@ -19,10 +19,11 @@ import {ActivatedRoute} from '@angular/router';
 import {DocumentService, RelatedFile} from '@valtimo/document';
 import {DownloadService, ResourceDto, UploadProviderService} from '@valtimo/resource';
 import {ToastrService} from 'ngx-toastr';
-import {map, switchMap} from 'rxjs/operators';
+import {map, switchMap, take, tap} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfigService} from '@valtimo/config';
+import {DocumentenApiMetadata} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -139,6 +140,26 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         this.toastrService.error('Failed to remove document from dossier');
       }
     );
+  }
+
+  metadataSet(metadata: DocumentenApiMetadata): void {
+    this.uploading$.next(true);
+    this.hideModal$.next(null);
+
+    this.fileToBeUploaded$
+      .pipe(take(1))
+      .pipe(
+        tap(file => {
+          this.uploadProviderService
+            .uploadFileWithMetadata(file, this.documentId, metadata)
+            .subscribe(res => {
+              console.log('res', res);
+              this.uploading$.next(false);
+              this.fileToBeUploaded$.next(null);
+            });
+        })
+      )
+      .subscribe();
   }
 
   private refetchDocuments(): void {
