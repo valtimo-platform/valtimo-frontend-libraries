@@ -15,6 +15,8 @@
  */
 import {Component} from '@angular/core';
 import {ConfigService, UploadProvider, ValtimoConfig} from '@valtimo/config';
+import {map, Observable} from 'rxjs';
+import {SelectItem} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-dossier-management-link-process',
@@ -23,6 +25,7 @@ import {ConfigService, UploadProvider, ValtimoConfig} from '@valtimo/config';
 })
 export class DossierManagementLinkProcessComponent {
   documentenApiUploadProvider!: boolean;
+  readonly processItems$: Observable<any>;
 
   constructor(private readonly configService: ConfigService) {
     this.setDocumentenApiUploaderProvider(configService.config);

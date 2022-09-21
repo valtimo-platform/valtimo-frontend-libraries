@@ -16,5 +16,12 @@
 
 <ng-container *ngIf="documentenApiUploadProvider">
   <h2 class="mb-4 mt-6">{{ 'dossierManagement.linkProcess.title' | translate }}</h2>
-  <v-paragraph>{{ 'dossierManagement.linkProcess.description' | translate }}</v-paragraph>
+  <v-paragraph class="mb-2">{{ 'dossierManagement.linkProcess.description' | translate }}</v-paragraph>
+
+  <v-select *ngIf="{processItems: processItems$ | async} as obs"
+          [items]="obs.processItems"
+          [margin]="true"
+          [required]="false"
+          name="informatieobjecttype"
+  ></v-select>
 </ng-container>

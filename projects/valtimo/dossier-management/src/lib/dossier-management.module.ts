@@ -35,7 +35,7 @@ import {DossierManagementRemoveModalComponent} from './dossier-management-remove
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {DossierManagementRolesComponent} from './dossier-management-roles/dossier-management-roles.component';
 import {DossierManagementLinkProcessComponent} from './dossier-management-link-process/dossier-management-link-process.component';
-import {ParagraphModule} from '@valtimo/user-interface';
+import {ParagraphModule, SelectModule} from '@valtimo/user-interface';
 
 @NgModule({
   declarations: [
@@ -60,6 +60,7 @@ import {ParagraphModule} from '@valtimo/user-interface';
     NgbTooltipModule,
     MultiselectDropdownModule,
     ParagraphModule,
+    SelectModule,
   ],
   exports: [],
 })
