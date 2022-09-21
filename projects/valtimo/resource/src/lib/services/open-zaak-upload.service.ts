@@ -56,6 +56,14 @@ export class OpenZaakUploadService implements UploadService {
     return this.openZaakService.getResource(resourceId);
   }
 
+  checkUploadProcessLink(caseDefinitionKey: string): Observable<boolean> {
+    return this.http
+      .get<{processCaseLinkExists: boolean}>(
+        `${this.valtimoApiConfig.endpointUri}uploadprocess/case/${caseDefinitionKey}/check-link`
+      )
+      .pipe(map(res => res.processCaseLinkExists));
+  }
+
   private getResourceFile(result: OpenZaakResource): ResourceFile {
     return {
       customUpload: true,

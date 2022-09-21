@@ -24,6 +24,7 @@ import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfigService} from '@valtimo/config';
 import {DocumentenApiMetadata} from '@valtimo/components';
+import {UserProviderService} from '@valtimo/security';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -54,6 +55,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       callback: this.removeRelatedFile.bind(this),
     },
   ];
+  public isAdmin: boolean;
+  public uploadProcessLinked = false;
   readonly uploading$ = new BehaviorSubject<boolean>(false);
   readonly showModal$ = new Subject<null>();
   readonly hideModal$ = new Subject<null>();
@@ -85,7 +88,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     private readonly uploadProviderService: UploadProviderService,
     private readonly downloadService: DownloadService,
     private readonly translateService: TranslateService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly userProviderService: UserProviderService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.documentId = snapshot.get('documentId') || '';
@@ -94,6 +98,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.refetchDocuments();
+    this.setUploadProcessLinked();
+    this.isUserAdmin();
   }
 
   fileSelected(file: File): void {
@@ -161,7 +167,26 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       .subscribe();
   }
 
+  public isUserAdmin() {
+    this.userProviderService.getUserSubject().subscribe(
+      userIdentity => {
+        this.isAdmin = userIdentity.roles.includes('ROLE_ADMIN');
+      },
+      error => {
+        this.isAdmin = false;
+      }
+    );
+  }
+
   private refetchDocuments(): void {
     this.refetch$.next(null);
+  }
+
+  private setUploadProcessLinked(): void {
+    this.uploadProviderService
+      .checkUploadProcessLink(this.documentDefinitionName)
+      .subscribe(linked => {
+        this.uploadProcessLinked = linked;
+      });
   }
 }

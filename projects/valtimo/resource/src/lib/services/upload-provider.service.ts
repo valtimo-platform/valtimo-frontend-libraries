@@ -59,6 +59,14 @@ export class UploadProviderService implements UploadService {
     return this.uploadService.getResource(resourceId);
   }
 
+  checkUploadProcessLink(caseDefinitionKey: string): Observable<boolean> {
+    if (this.uploadService.checkUploadProcessLink) {
+      return this.uploadService.checkUploadProcessLink(caseDefinitionKey);
+    } else {
+      return of(false);
+    }
+  }
+
   uploadFileWithMetadata(
     file: File,
     documentId: string,
