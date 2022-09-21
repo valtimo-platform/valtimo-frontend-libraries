@@ -48,7 +48,9 @@ export class DossierManagementLinkProcessComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getDefaultSelection();
+    if (this.documentenApiUploadProvider) {
+      this.getDefaultSelection();
+    }
   }
 
   selectProcess(processDefinitionKey: string): void {
