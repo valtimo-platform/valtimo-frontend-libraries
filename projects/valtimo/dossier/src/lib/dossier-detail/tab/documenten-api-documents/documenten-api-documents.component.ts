@@ -53,6 +53,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       callback: this.removeRelatedFile.bind(this),
     },
   ];
+  uploadProcessLinked = false;
   readonly uploading$ = new BehaviorSubject<boolean>(false);
   readonly showModal$ = new Subject<null>();
   readonly hideModal$ = new Subject<null>();
@@ -93,6 +94,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.refetchDocuments();
+    this.setUploadProcessLinked();
   }
 
   fileSelected(file: File): void {
@@ -143,5 +145,13 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
   private refetchDocuments(): void {
     this.refetch$.next(null);
+  }
+
+  private setUploadProcessLinked(): void {
+    this.uploadProviderService
+      .checkUploadProcessLink(this.documentDefinitionName)
+      .subscribe(linked => {
+        this.uploadProcessLinked = linked;
+      });
   }
 }
