@@ -16,7 +16,7 @@
 
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ModalComponent, ModalService, SelectItem} from '@valtimo/user-interface';
-import {BehaviorSubject, map, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {
   ConfidentialityLevel,
   DocumentenApiMetadata,
@@ -24,6 +24,8 @@ import {
   DocumentStatus,
 } from '../../models';
 import {TranslateService} from '@ngx-translate/core';
+import {ActivatedRoute} from '@angular/router';
+import {DocumentService} from '@valtimo/document';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -81,6 +83,11 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       }))
     )
   );
+  readonly documentTypeItems$: Observable<Array<SelectItem>> = this.route.params.pipe(
+    tap(routeParams => console.log(routeParams)),
+    switchMap(params => this.documentService.getDocumentTypes(params.documentDefinitionName)),
+    map(documentTypes => documentTypes.map(type => ({id: type.url, text: type.name})))
+  );
   readonly showForm$: Observable<boolean> = this.modalService.modalVisible$;
   readonly valid$ = new BehaviorSubject<boolean>(false);
   private showSubscription!: Subscription;
@@ -88,7 +95,9 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly modalService: ModalService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly route: ActivatedRoute,
+    private readonly documentService: DocumentService
   ) {}
 
   ngOnInit(): void {
@@ -125,7 +134,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         data.author &&
         data.creationDate &&
         data.status &&
-        data.language
+        data.language &&
+        data.informatieobjecttype
       )
     );
   }
