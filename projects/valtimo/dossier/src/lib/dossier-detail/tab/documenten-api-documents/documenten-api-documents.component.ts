@@ -161,7 +161,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
           }
         );
       }
-    })
+    });
   }
 
   metadataSet(metadata: DocumentenApiMetadata): void {

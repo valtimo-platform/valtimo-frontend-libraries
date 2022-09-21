@@ -146,7 +146,7 @@ export class DossierDetailTabS3DocumentsComponent implements OnInit {
           }
         );
       }
-    })
+    });
   }
 
   private refetchDocuments(): void {
