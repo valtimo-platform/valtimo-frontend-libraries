@@ -21,6 +21,7 @@ import {DownloadService, ResourceDto, ResourceFile, UploadProviderService} from 
 import {FormIoStateService} from '../services/form-io-state.service';
 import {FormIoDomService} from '../services/form-io-dom.service';
 import {DocumentenApiMetadata} from '../../../models';
+import {take, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-documenten-api-formio-uploader',
@@ -85,6 +86,16 @@ export class DocumentenApiUploaderComponent implements FormioCustomComponent<Arr
   }
 
   metadataSet(metadata: DocumentenApiMetadata): void {
-    console.log('metadata set', metadata);
+    this.uploading$.next(true);
+    this.hideModal$.next(null);
+
+    this.fileToBeUploaded$
+      .pipe(
+        take(1),
+        tap(file => {
+          console.log('upload', file, metadata);
+        })
+      )
+      .subscribe();
   }
 }
