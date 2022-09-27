@@ -36,6 +36,24 @@ export class DocumentenApiUploaderComponent implements FormioCustomComponent<Arr
   @Input() maxFileSize: number;
   @Input() hideMaxFileSize: boolean;
   @Input() camera: boolean;
+
+  @Input() documentTitle: string;
+  @Input() disableDocumentTitle: boolean;
+  @Input() filename: string;
+  @Input() disableFilename: boolean;
+  @Input() author: string;
+  @Input() disableAuthor: boolean;
+  @Input() status: string;
+  @Input() disableStatus: boolean;
+  @Input() language: string;
+  @Input() disableLanguage: boolean;
+  @Input() documentType: string;
+  @Input() disableDocumentType: boolean;
+  @Input() description: string;
+  @Input() disableDescription: boolean;
+  @Input() confidentialityLevel: string;
+  @Input() disableConfidentialityLevel: boolean;
+
   @Output() valueChange = new EventEmitter<Array<ResourceFile>>();
 
   readonly uploading$ = new BehaviorSubject<boolean>(false);

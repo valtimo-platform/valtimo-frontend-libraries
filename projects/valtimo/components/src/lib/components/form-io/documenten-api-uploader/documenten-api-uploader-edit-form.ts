@@ -101,5 +101,196 @@ export const documentenApiUploaderEditForm = () => ({
         required: false,
       },
     },
+    {
+      type: 'textfield',
+      input: true,
+      key: 'customOptions.documentTitle',
+      label: 'Default document title',
+      tooltip: 'Leave empty to let the user input their own title',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'checkbox',
+      input: true,
+      inputType: 'checkbox',
+      key: 'customOptions.disableDocumentTitle',
+      label: 'Disable document title input',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'textfield',
+      input: true,
+      key: 'customOptions.filename',
+      label: 'Default filename',
+      tooltip: 'Leave empty to let the user input their own filename',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'checkbox',
+      input: true,
+      inputType: 'checkbox',
+      key: 'customOptions.disableFilename',
+      label: 'Disable filename input',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'textfield',
+      input: true,
+      key: 'customOptions.author',
+      label: 'Default author',
+      tooltip: 'Leave empty to let the user input their own author',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'checkbox',
+      input: true,
+      inputType: 'checkbox',
+      key: 'customOptions.disableAuthor',
+      label: 'Disable author input',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'select',
+      label: 'Default status',
+      key: 'customOptions.status',
+      placeholder: 'Select a default status',
+      data: {
+        values: [
+          {value: 'in_bewerking', label: 'In editing'},
+          {value: 'ter_vaststelling', label: 'To be confirmed'},
+          {value: 'definitief', label: 'Definitive'},
+          {value: 'gearchiveerd', label: 'Archived'},
+        ],
+      },
+      dataSrc: 'values',
+      input: true,
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'checkbox',
+      input: true,
+      inputType: 'checkbox',
+      key: 'customOptions.disableStatus',
+      label: 'Disable status input',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'select',
+      label: 'Default language',
+      key: 'customOptions.language',
+      placeholder: 'Select a default language',
+      data: {
+        values: [
+          {value: 'nld', label: 'Dutch'},
+          {value: 'eng', label: 'English'},
+          {value: 'deu', label: 'German'},
+        ],
+      },
+      dataSrc: 'values',
+      input: true,
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'checkbox',
+      input: true,
+      inputType: 'checkbox',
+      key: 'customOptions.disableLanguage',
+      label: 'Disable language input',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'textfield',
+      input: true,
+      key: 'customOptions.documentType',
+      label: 'Default document type url',
+      tooltip:
+        'Must match the document type url exactly. Leave empty to let the user input their own document type',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'checkbox',
+      input: true,
+      inputType: 'checkbox',
+      key: 'customOptions.disableDocumentType',
+      label: 'Disable document type input',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'textfield',
+      input: true,
+      key: 'customOptions.description',
+      label: 'Default description',
+      tooltip: 'Leave empty to let the user input their own description',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'checkbox',
+      input: true,
+      inputType: 'checkbox',
+      key: 'customOptions.disableDescription',
+      label: 'Disable description input',
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'select',
+      label: 'Default confidentiality level',
+      key: 'customOptions.confidentialityLevel',
+      placeholder: 'Select a default confidentiality level',
+      data: {
+        values: [
+          {value: 'openbaar', label: 'Public'},
+          {value: 'beperkt_openbaar', label: 'Restricted public'},
+          {value: 'intern', label: 'Internal'},
+          {value: 'zaakvertrouwelijk', label: 'Case confidential'},
+          {value: 'vertrouwelijk', label: 'Private'},
+          {value: 'confidentieel', label: 'Confidential'},
+          {value: 'geheim', label: 'Secret'},
+          {value: 'zeer_geheim', label: 'Very secret'},
+        ],
+      },
+      dataSrc: 'values',
+      input: true,
+      validate: {
+        required: false,
+      },
+    },
+    {
+      type: 'checkbox',
+      input: true,
+      inputType: 'checkbox',
+      key: 'customOptions.disableConfidentialityLevel',
+      label: 'Disable confidentiality level input',
+      validate: {
+        required: false,
+      },
+    },
   ],
 });

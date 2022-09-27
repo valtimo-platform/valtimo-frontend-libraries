@@ -50,6 +50,23 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() disabled$!: Observable<boolean>;
   @Input() file$!: Observable<File>;
 
+  @Input() documentTitle = '';
+  @Input() disableDocumentTitle: boolean;
+  @Input() filename: string;
+  @Input() disableFilename: boolean;
+  @Input() author: string;
+  @Input() disableAuthor: boolean;
+  @Input() status: string;
+  @Input() disableStatus: boolean;
+  @Input() language: string;
+  @Input() disableLanguage: boolean;
+  @Input() documentType: string;
+  @Input() disableDocumentType: boolean;
+  @Input() description: string;
+  @Input() disableDescription: boolean;
+  @Input() confidentialityLevel: string;
+  @Input() disableConfidentialityLevel: boolean;
+
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
 
   readonly CONFIDENTIALITY_LEVELS: Array<ConfidentialityLevel> = [
