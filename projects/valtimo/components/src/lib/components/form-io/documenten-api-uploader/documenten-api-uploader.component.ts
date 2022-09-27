@@ -82,7 +82,7 @@ export class DocumentenApiUploaderComponent implements FormioCustomComponent<Arr
     }
   }
 
-  downloadFile(resourceFile: ResourceFile) {
+  downloadFile(resourceFile: ResourceFile): void {
     this.uploadProviderService
       .getResource(resourceFile.data.resourceId)
       .subscribe((resource: ResourceDto) => {
@@ -90,7 +90,7 @@ export class DocumentenApiUploaderComponent implements FormioCustomComponent<Arr
       });
   }
 
-  fileSelected(file: File) {
+  fileSelected(file: File): void {
     this.fileToBeUploaded$.next(file);
     this.showModal$.next(null);
   }
