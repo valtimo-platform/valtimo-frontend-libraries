@@ -16,8 +16,8 @@
 
 <ng-container *ngTemplateOutlet="sidebar"></ng-container>
 
-<div class="main-content pt-0">
-  <div class="container-fluid">
+<div class="main-content pt-0" *ngIf="{loading: loading$ | async} as obs">
+  <div class="container-fluid" *ngIf="obs.loading === false; else loading">
     <div class="col-12 px-0 mb-5">
       <div
         *ngIf="
@@ -137,4 +137,8 @@
       />
     </div>
   </valtimo-filter-sidebar>
+</ng-template>
+
+<ng-template #loading>
+  <valtimo-spinner></valtimo-spinner>
 </ng-template>

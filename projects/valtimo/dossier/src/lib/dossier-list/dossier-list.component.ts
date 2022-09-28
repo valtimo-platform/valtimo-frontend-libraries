@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {DefinitionColumn} from '@valtimo/config';
 import {
@@ -25,21 +25,16 @@ import {
   SortState,
   ProcessDocumentDefinition,
   Documents,
-  DocumentDefinition,
 } from '@valtimo/document';
 import moment from 'moment';
 import {
   BehaviorSubject,
   combineLatest,
-  debounceTime,
   distinctUntilChanged,
   filter,
-  fromEvent,
   map,
   Observable,
   of,
-  startWith,
-  Subscription,
   switchMap,
   take,
   tap,
@@ -62,6 +57,8 @@ moment.locale(localStorage.getItem('langKey') || '');
 })
 export class DossierListComponent implements OnInit {
   @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
+
+  loading$ = new BehaviorSubject<boolean>(true);
 
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
@@ -201,6 +198,7 @@ export class DossierListComponent implements OnInit {
 
   ngOnInit(): void {
     this.modalListenerAdded = false;
+    this.hasDocumentsToLoad();
   }
 
   globalSearchFilterChange(searchFilter: string): void {
@@ -342,5 +340,11 @@ export class DossierListComponent implements OnInit {
       this.processStart.openModal(this.selectedProcessDocumentDefinition);
       this.selectedProcessDocumentDefinition = null;
     }
+  }
+
+  private hasDocumentsToLoad(): void {
+    this.documentItems$.subscribe(() => {
+      this.loading$.next(false);
+    });
   }
 }
