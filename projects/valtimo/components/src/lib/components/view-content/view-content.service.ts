@@ -39,10 +39,10 @@ export class ViewContentService {
 
     if (definition.viewType.includes(separator)) {
       // Get the substring of the string after the separator (:) and assign it to a new key
-      definition.format = definition.viewType.slice(this.getIndexSeparator(definition, separator) + 1);
+      definition.format = definition.viewType.slice(this.getSeparatorIndex(definition, separator) + 1);
 
       // Remove the substring after the separator and the separator from the string and assign it back to the viewType
-      definition.viewType = definition.viewType.slice(0, this.getIndexSeparator(definition, separator));
+      definition.viewType = definition.viewType.slice(0, this.getSeparatorIndex(definition, separator));
     }
 
     if (typeof this.converters[definition.viewType] !== 'undefined') {
@@ -60,7 +60,7 @@ export class ViewContentService {
     this.converters[converter.getTypeString()] = converter;
   }
 
-  getIndexSeparator(definition, separator) {
+  getSeparatorIndex(definition, separator) {
     return definition.viewType.indexOf(separator);
   }
 }
