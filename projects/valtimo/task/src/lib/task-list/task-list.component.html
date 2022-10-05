@@ -35,7 +35,7 @@
           <h5 class="list-header-description">{{ listDescription }}</h5>
         </div>
         <div tabs>
-          <ul *ngIf="visibleTabs == null; else configuredTabs" ngbNav [destroyOnHide]="false" (navChange)="tabChange($event)" class="nav-tabs">
+          <ul *ngIf="visibleTabs === null; else configuredTabs" ngbNav [destroyOnHide]="false" (navChange)="tabChange($event)" class="nav-tabs">
               <li ngbNavItem="mine" [title]="'task-list.mine.title' | translate">
                 <a ngbNavLink>{{ 'task-list.mine.title' | translate }}</a>
               </li>

@@ -23,7 +23,7 @@ import {NGXLogger} from 'ngx-logger';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {TranslateService} from '@ngx-translate/core';
 import {combineLatest, Subscription} from 'rxjs';
-import {ConfigService, DefaultTab, SortState} from '@valtimo/config';
+import {ConfigService, SortState, TaskListTab} from '@valtimo/config';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -40,7 +40,7 @@ export class TaskListComponent implements OnDestroy {
     open: new TaskList(),
     all: new TaskList(),
   };
-  public visibleTabs: Array<DefaultTab> | null = null;
+  public visibleTabs: Array<TaskListTab> | null = null;
   public currentTaskType = 'mine';
   public listTitle: string | null = null;
   public listDescription: string | null = null;
