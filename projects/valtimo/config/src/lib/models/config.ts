@@ -42,12 +42,6 @@ export interface CustomDossierHeaderItem {
   customClass?: string;
 }
 
-export enum DefaultTab {
-  MINE = 'mine',
-  OPEN = 'open',
-  ALL = 'all'
-}
-
 export interface CustomTaskList {
   fields: Array<DefinitionColumn>;
   defaultSortedColumn?: SortState;
@@ -120,4 +114,10 @@ export enum UploadProvider {
   S3,
   OPEN_ZAAK,
   DOCUMENTEN_API,
+}
+
+export enum DefaultTab {
+  MINE = 'mine',
+  OPEN = 'open',
+  ALL = 'all'
 }
