@@ -42,6 +42,12 @@ export interface CustomDossierHeaderItem {
   customClass?: string;
 }
 
+export enum DefaultTab {
+  MINE = 'mine',
+  OPEN = 'open',
+  ALL = 'all'
+}
+
 export interface CustomTaskList {
   fields: Array<DefinitionColumn>;
   defaultSortedColumn?: SortState;
@@ -102,6 +108,7 @@ export interface ValtimoConfig {
     showUserNameInTopBar?: boolean;
     experimentalDmnEditing?: boolean;
   };
+  visibleTaskListTabs?: Array<DefaultTab>;
   customTaskList?: CustomTaskList;
   customLeftSidebar?: CustomLeftSidebar;
   caseObjectTypes?: {
