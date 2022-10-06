@@ -52,6 +52,8 @@ const defaultDefinitionColumns = [
 ];
 
 export const environment: ValtimoConfig = {
+  applicationTitle: 'Valtimo',
+  applicationBrand: 'Ritense',
   production: true,
   initializers: [openZaakExtensionInitializer],
   authentication: authenticationAuth0,

@@ -14,25 +14,33 @@
   ~ limitations under the License.
   -->
 
-<nav class="navbar navbar-expand fixed-top be-top-header">
-  <div class="container-fluid">
-    <div class="be-navbar-header">
-      <a class="navbar-brand" [routerLink]="['/']"></a>
-    </div>
-    <div class="be-right-navbar">
-      <!-- important empty div: in order to made float-right element works on mobile  -->
-      <div></div>
-      <ul class="nav navbar-nav be-user-nav float-right be-icons-nav">
-        <ng-container *ngTemplateOutlet="userFullName"></ng-container>
-        <li class="nav-item dropdown special">
-          <a class="nav-link be-toggle-right-sidebar" href="#" role="button" aria-expanded="false">
-            <i class="mdi mdi-account-circle user-icon"></i>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<ibm-header [name]="applicationTitle" [brand]="applicationBrand" [route]="'/'" [useRouter]="true">
+  <ibm-header-global>
+    <ibm-header-action title="action">
+      <svg ibmIcon="user" size="20"></svg>
+    </ibm-header-action>
+  </ibm-header-global>
+</ibm-header>
+
+<!--<nav class="navbar navbar-expand fixed-top be-top-header">-->
+<!--  <div class="container-fluid">-->
+<!--    <div class="be-navbar-header">-->
+<!--      <a class="navbar-brand" [routerLink]="['/']"></a>-->
+<!--    </div>-->
+<!--    <div class="be-right-navbar">-->
+<!--      &lt;!&ndash; important empty div: in order to made float-right element works on mobile  &ndash;&gt;-->
+<!--      <div></div>-->
+<!--      <ul class="nav navbar-nav be-user-nav float-right be-icons-nav">-->
+<!--        <ng-container *ngTemplateOutlet="userFullName"></ng-container>-->
+<!--        <li class="nav-item dropdown special">-->
+<!--          <a class="nav-link be-toggle-right-sidebar" href="#" role="button" aria-expanded="false">-->
+<!--            <i class="mdi mdi-account-circle user-icon"></i>-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</nav>-->
 
 <ng-template #userFullName>
   <li class="nav-item" *ngIf="showUserNameInTopBar">

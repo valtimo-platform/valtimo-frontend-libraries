@@ -23,6 +23,7 @@ import {Extension, ExtensionLoader, ExtensionPoint, VALTIMO_CONFIG, ValtimoConfi
 export class ConfigService {
   private readonly extensionLoader: ExtensionLoader;
   private readonly extensions: Array<Extension> = [];
+  private readonly DEFAULT_APPLICATION_TITLE = 'Valtimo';
 
   constructor(
     @Inject(VALTIMO_CONFIG) private valtimoConfig: ValtimoConfig,
@@ -58,6 +59,7 @@ export class ConfigService {
           suffix: resource.suffix,
         })),
       }),
+      applicationTitle: config.applicationTitle || this.DEFAULT_APPLICATION_TITLE,
     };
   }
 

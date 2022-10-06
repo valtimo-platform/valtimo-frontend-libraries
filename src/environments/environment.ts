@@ -59,6 +59,8 @@ const defaultDefinitionColumns: Array<DefinitionColumn> = [
 ];
 
 export const environment: ValtimoConfig = {
+  applicationTitle: 'Valtimo',
+  applicationBrand: '',
   production: false,
   initializers: [
     openZaakExtensionInitializer,

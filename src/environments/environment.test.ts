@@ -18,10 +18,10 @@ import {NgxLoggerLevel} from 'ngx-logger';
 import {authenticationAuth0} from './auth/auth0-config.test';
 import {openZaakExtensionInitializer} from '@valtimo/open-zaak';
 import {
-  UploadProvider,
   ROLE_ADMIN,
   ROLE_DEVELOPER,
   ROLE_USER,
+  UploadProvider,
   ValtimoConfig,
 } from '@valtimo/config';
 
@@ -52,6 +52,8 @@ const defaultDefinitionColumns = [
 ];
 
 export const environment: ValtimoConfig = {
+  applicationTitle: 'Valtimo',
+  applicationBrand: 'Ritense',
   production: false,
   initializers: [openZaakExtensionInitializer],
   authentication: authenticationAuth0,

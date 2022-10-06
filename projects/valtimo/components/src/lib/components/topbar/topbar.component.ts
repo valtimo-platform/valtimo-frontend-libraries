@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, HostBinding, OnInit} from '@angular/core';
 import {KeycloakService} from 'keycloak-angular';
-import {from, switchMap, map} from 'rxjs';
+import {from, map, switchMap} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
+import {IconService} from 'carbon-components-angular';
+import User20 from '@carbon/icons/es/user/20';
 
 @Component({
   selector: 'valtimo-topbar',
@@ -25,6 +27,8 @@ import {ConfigService} from '@valtimo/config';
   styleUrls: ['./topbar.component.scss'],
 })
 export class TopbarComponent implements OnInit {
+  @HostBinding('class.bx--header') headerClass = true;
+
   showUserNameInTopBar!: boolean;
 
   readonly userFullName$ = from(this.keyCloakService.isLoggedIn()).pipe(
@@ -32,12 +36,17 @@ export class TopbarComponent implements OnInit {
     map(profile => `${profile.firstName} ${profile.lastName}`)
   );
 
+  readonly applicationTitle = this.configService.config.applicationTitle;
+  readonly applicationBrand = this.configService.config.applicationBrand;
+
   constructor(
     private readonly keyCloakService: KeycloakService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly iconService: IconService
   ) {}
 
   ngOnInit(): void {
+    this.iconService.registerAll([User20]);
     this.showUserNameInTopBar = this.configService.config.featureToggles?.showUserNameInTopBar;
   }
 }

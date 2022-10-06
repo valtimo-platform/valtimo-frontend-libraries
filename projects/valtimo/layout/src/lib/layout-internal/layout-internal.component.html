@@ -14,8 +14,8 @@
   ~ limitations under the License.
   -->
 
-<div class="be-wrapper be-fixed-sidebar be-collapsible-sidebar" #wrapper>
-  <valtimo-topbar></valtimo-topbar>
+<valtimo-topbar></valtimo-topbar>
+<main class="bx--content">
   <valtimo-left-sidebar
     [hidden]="layoutService.isFullscreen"
     [menuIsOpen]="menuOpen$ | async"
@@ -33,4 +33,4 @@
   </div>
   <valtimo-right-sidebar></valtimo-right-sidebar>
   <v-prompt></v-prompt>
-</div>
+</main>

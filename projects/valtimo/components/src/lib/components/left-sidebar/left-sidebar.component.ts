@@ -26,9 +26,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {BehaviorSubject, combineLatest, fromEvent, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, fromEvent, Observable, Subscription} from 'rxjs';
 import {debounceTime, map, take} from 'rxjs/operators';
-import {ConfigService, CustomLeftSidebar} from '@valtimo/config';
+import {ConfigService, CustomLeftSidebar, MenuItem} from '@valtimo/config';
+import {MenuService} from '../menu/menu.service';
 
 @Component({
   selector: 'valtimo-left-sidebar',
@@ -64,10 +65,13 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     map((e: MouseEvent) => e.pageX)
   );
 
+  readonly menuItems$: Observable<Array<MenuItem>> = this.menuService.menuItems$;
+
   constructor(
     private translateService: TranslateService,
     private readonly elementRef: ElementRef,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly menuService: MenuService
   ) {
     this.bodyStyle = elementRef.nativeElement.ownerDocument.body.style;
   }

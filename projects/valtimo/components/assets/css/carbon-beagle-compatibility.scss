@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,16 +14,44 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {LeftSidebarComponent} from './left-sidebar.component';
-import {PageTitleModule} from '../page-title/page-title.module';
-import {MenuModule} from '../menu/menu.module';
-import {IconModule, UIShellModule} from 'carbon-components-angular';
+.list-header-title {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
 
-@NgModule({
-  declarations: [LeftSidebarComponent],
-  imports: [CommonModule, MenuModule, PageTitleModule, IconModule, UIShellModule],
-  exports: [LeftSidebarComponent],
-})
-export class LeftSidebarModule {}
+.list-header-description {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+}
+
+.btn {
+  font-size: 0.8rem;
+}
+
+.badge {
+  font-size: 0.7rem;
+}
+
+.dossier-title,
+.process-title,
+.formbuilder-title {
+  font-size: 1.3rem;
+}
+
+form.dropzone .icon span {
+  font-size: 3rem;
+  height: 100% !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  z-index: 10050;
+}
+
+.modal-backdrop {
+  z-index: 10040;
+}

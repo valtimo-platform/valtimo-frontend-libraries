@@ -65,6 +65,8 @@ export interface SortState {
 
 export interface ValtimoConfig {
   // eslint-disable-next-line @typescript-eslint/ban-types
+  applicationTitle?: string;
+  applicationBrand?: string;
   initializers: ((injector: Injector) => Function)[];
   menu: MenuConfig;
   authentication: Auth;
@@ -119,5 +121,5 @@ export enum UploadProvider {
 export enum TaskListTab {
   MINE = 'mine',
   OPEN = 'open',
-  ALL = 'all'
+  ALL = 'all',
 }
