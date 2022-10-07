@@ -17,8 +17,7 @@
 <ibm-sidenav [allowExpansion]="true">
   <ng-container *ngFor="let menuItem of menuItems$ | async">
     <ibm-sidenav-item [route]="menuItem.link" *ngIf="!menuItem.children">
-      <svg ibmIcon="fade" size="16"></svg>
-      {{ menuItem.title }}
+      <valtimo-menu-item-text [menuItem]="menuItem"></valtimo-menu-item-text>
     </ibm-sidenav-item>
     <ibm-sidenav-menu [title]="menuItem.title" *ngIf="menuItem.children">
       <ibm-sidenav-item

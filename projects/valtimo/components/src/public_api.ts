@@ -32,6 +32,8 @@ export * from './lib/components/menu/menu-routing.module';
 export * from './lib/components/menu/menu.module';
 export * from './lib/components/menu/menu.init';
 export * from './lib/components/menu/menu.component';
+export * from './lib/components/menu/menu-item-text.component';
+export * from './lib/components/menu/submenu-item-text.component'
 
 export * from './lib/components/right-sidebar/right-sidebar.component';
 export * from './lib/components/right-sidebar/right-sidebar.module';
