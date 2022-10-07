@@ -6,6 +6,7 @@
     "entryFile": "src/public_api.ts"
   },
   "allowedNonPeerDependencies": [
+    "@foxythemes/bootstrap-datetime-picker-bs4",
     "beagle-resources",
     "bootstrap",
     "@popperjs/core",

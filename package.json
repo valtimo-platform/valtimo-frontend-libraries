@@ -207,6 +207,7 @@
     "@auth0/angular-jwt": "^5.0.1",
     "@bpmn-io/dmn-migrate": "^0.4.3",
     "@formio/angular": "^5.2.2",
+    "@foxythemes/bootstrap-datetime-picker-bs4": "^2.3.5",
     "@mdi/font": "^6.5.95",
     "@ng-bootstrap/ng-bootstrap": "^11.0.0",
     "@ng-select/ng-select": "^8.1.1",
