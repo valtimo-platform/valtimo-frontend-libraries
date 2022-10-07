@@ -15,7 +15,11 @@
   -->
 
 <ibm-header [name]="applicationTitle" [brand]="applicationBrand" [route]="'/'" [useRouter]="true">
-  <ibm-hamburger [active]="hamburgerActive$ | async" (selected)="toggleHamburger()"></ibm-hamburger>
+  <ibm-hamburger
+    *ngIf="(largeScreen$ | async) === false"
+    [active]="sideBarExpanded$ | async"
+    (selected)="toggleSideBar()"
+  ></ibm-hamburger>
   <ibm-header-global>
     <ibm-header-action title="action">
       <svg ibmIcon="user" size="20"></svg>

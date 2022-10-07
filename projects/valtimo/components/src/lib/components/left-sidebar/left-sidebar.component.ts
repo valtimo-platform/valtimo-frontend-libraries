@@ -31,6 +31,7 @@ import {debounceTime, map, take} from 'rxjs/operators';
 import {ConfigService, CustomLeftSidebar, MenuItem} from '@valtimo/config';
 import {MenuService} from '../menu/menu.service';
 import {ShellService} from '../../services/shell.service';
+import {BreakpointObserver} from '@angular/cdk/layout';
 
 @Component({
   selector: 'valtimo-left-sidebar',
@@ -57,6 +58,7 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private mouseXSubscription: Subscription;
   private mouseUpSubscription: Subscription;
+  private breakpointSubscription!: Subscription;
 
   private defaultMenuWidth!: number;
   private maxMenuWidth!: number;
@@ -68,14 +70,19 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly menuItems$: Observable<Array<MenuItem>> = this.menuService.menuItems$;
 
-  readonly hamburgerActive$ = this.shellService.hamburgerActive$;
+  readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
+
+  private breakpointsInitialized = false;
+  private lastSmallScreen!: boolean;
+  private lastLargeScreen!: boolean;
 
   constructor(
     private readonly translateService: TranslateService,
     private readonly elementRef: ElementRef,
     private readonly configService: ConfigService,
     private readonly menuService: MenuService,
-    private readonly shellService: ShellService
+    private readonly shellService: ShellService,
+    private readonly breakpointObserver: BreakpointObserver
   ) {
     this.bodyStyle = elementRef.nativeElement.ownerDocument.body.style;
   }
@@ -87,6 +94,8 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.openBreakpointSubscription();
+
     this.mouseXSubscription = combineLatest([this.mouseX$, this.isResizing$])
       .pipe(debounceTime(3))
       .subscribe(([x, isResizing]) => {
@@ -115,6 +124,7 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.mouseXSubscription.unsubscribe();
     this.mouseUpSubscription.unsubscribe();
+    this.breakpointSubscription?.unsubscribe();
   }
 
   enterBorder(): void {
@@ -167,5 +177,36 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   private setMenuWidth(width: number): void {
     this.menuWidth$.next(width);
     this.menuWidthChanged.emit(width);
+  }
+
+  private openBreakpointSubscription(): void {
+    this.breakpointObserver
+      .observe(['(max-width: 1055px)', '(min-width: 1056px)'])
+      .subscribe(state => {
+        this.shellService.sideBarExpanded$.pipe(take(1)).subscribe(sideBarExpanded => {
+          const breakpoints = state.breakpoints;
+          const breakpointKeys = Object.keys(breakpoints);
+          const smallScreen = breakpoints[breakpointKeys[0]];
+          const largeScreen = breakpoints[breakpointKeys[1]];
+
+          if (!this.breakpointsInitialized) {
+            if (smallScreen) {
+              this.shellService.toggleSideBar();
+            }
+            this.breakpointsInitialized = true;
+          }
+
+          if (
+            (this.lastSmallScreen && largeScreen && !sideBarExpanded) ||
+            (this.lastLargeScreen && smallScreen && sideBarExpanded)
+          ) {
+            this.shellService.toggleSideBar();
+          }
+
+          this.lastSmallScreen = smallScreen;
+          this.lastLargeScreen = largeScreen;
+          this.shellService.setLargeScreen(largeScreen);
+        });
+      });
   }
 }

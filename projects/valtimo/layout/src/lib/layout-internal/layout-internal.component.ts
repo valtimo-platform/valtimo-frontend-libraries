@@ -33,7 +33,7 @@ export class LayoutInternalComponent implements AfterViewInit {
   readonly menuWidth$ = new BehaviorSubject<number>(undefined);
 
   readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
-  readonly hamburgerActive$ = this.shellService.hamburgerActive$;
+  readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
 
   constructor(
     public layoutService: LayoutService,

@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<ibm-sidenav [allowExpansion]="false" [expanded]="hamburgerActive$ | async" (toggle)="toggled()">
+<ibm-sidenav [allowExpansion]="false" [expanded]="sideBarExpanded$ | async" (toggle)="toggled()">
   <ng-container *ngFor="let menuItem of menuItems$ | async">
     <ng-container *ngIf="!menuItem.children">
       <ng-container *ngTemplateOutlet="topMenuItem; context: {menuItem: menuItem}"></ng-container>

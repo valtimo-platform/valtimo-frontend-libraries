@@ -39,7 +39,8 @@ export class TopbarComponent implements OnInit {
 
   readonly applicationTitle = this.configService.config.applicationTitle;
   readonly applicationBrand = this.configService.config.applicationBrand;
-  readonly hamburgerActive$ = this.shellService.hamburgerActive$;
+  readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
+  readonly largeScreen$ = this.shellService.largeScreen$;
 
   constructor(
     private readonly keyCloakService: KeycloakService,
@@ -53,7 +54,7 @@ export class TopbarComponent implements OnInit {
     this.showUserNameInTopBar = this.configService.config.featureToggles?.showUserNameInTopBar;
   }
 
-  toggleHamburger(): void {
-    this.shellService.toggleHamburger();
+  toggleSideBar(): void {
+    this.shellService.toggleSideBar();
   }
 }
