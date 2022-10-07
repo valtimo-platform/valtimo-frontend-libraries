@@ -18,6 +18,7 @@ import {AfterViewInit, Component, Renderer2} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {LayoutService} from '../layout.service';
 import {UserInterfaceService} from '@valtimo/user-interface';
+import {ShellService} from '@valtimo/components';
 
 // eslint-disable-next-line no-var
 declare var App;
@@ -32,11 +33,13 @@ export class LayoutInternalComponent implements AfterViewInit {
   readonly menuWidth$ = new BehaviorSubject<number>(undefined);
 
   readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
+  readonly hamburgerActive$ = this.shellService.hamburgerActive$;
 
   constructor(
     public layoutService: LayoutService,
     private renderer: Renderer2,
-    private readonly userInterfaceService: UserInterfaceService
+    private readonly userInterfaceService: UserInterfaceService,
+    private readonly shellService: ShellService
   ) {
     this.renderer.addClass(document.body, 'be-animate');
   }

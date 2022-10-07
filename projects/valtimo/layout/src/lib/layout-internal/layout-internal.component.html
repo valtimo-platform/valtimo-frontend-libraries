@@ -15,22 +15,15 @@
   -->
 
 <valtimo-topbar></valtimo-topbar>
-<main class="bx--content">
+<main class="bx--content" [ngClass]="{'bx--content--hamburger-showing': hamburgerActive$ | async}">
   <valtimo-left-sidebar
     [hidden]="layoutService.isFullscreen"
     [menuIsOpen]="menuOpen$ | async"
     (menuWidthChanged)="menuWidthChanged($event)"
   ></valtimo-left-sidebar>
-  <div
-    [ngClass]="{'be-content': !layoutService.isFullscreen}"
-    [style.marginLeft.px]="
-      (menuOpen$ | async) && !layoutService.isFullscreen ? (menuWidth$ | async) : null
-    "
-  >
-    <valtimo-alert></valtimo-alert>
-    <valtimo-page-header [hidden]="layoutService.isFullscreen"></valtimo-page-header>
-    <router-outlet></router-outlet>
-  </div>
+  <valtimo-alert></valtimo-alert>
+  <valtimo-page-header [hidden]="layoutService.isFullscreen"></valtimo-page-header>
+  <router-outlet></router-outlet>
   <valtimo-right-sidebar></valtimo-right-sidebar>
   <v-prompt></v-prompt>
 </main>

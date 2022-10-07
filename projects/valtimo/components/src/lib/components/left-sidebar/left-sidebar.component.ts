@@ -30,11 +30,12 @@ import {BehaviorSubject, combineLatest, fromEvent, Observable, Subscription} fro
 import {debounceTime, map, take} from 'rxjs/operators';
 import {ConfigService, CustomLeftSidebar, MenuItem} from '@valtimo/config';
 import {MenuService} from '../menu/menu.service';
+import {ShellService} from '../../services/shell.service';
 
 @Component({
   selector: 'valtimo-left-sidebar',
   templateUrl: './left-sidebar.component.html',
-  styleUrls: ['./left-sidebar.component.css'],
+  styleUrls: ['./left-sidebar.component.scss'],
 })
 export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('toggleButton') toggleButtonRef: ElementRef;
@@ -67,11 +68,14 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly menuItems$: Observable<Array<MenuItem>> = this.menuService.menuItems$;
 
+  readonly hamburgerActive$ = this.shellService.hamburgerActive$;
+
   constructor(
-    private translateService: TranslateService,
+    private readonly translateService: TranslateService,
     private readonly elementRef: ElementRef,
     private readonly configService: ConfigService,
-    private readonly menuService: MenuService
+    private readonly menuService: MenuService,
+    private readonly shellService: ShellService
   ) {
     this.bodyStyle = elementRef.nativeElement.ownerDocument.body.style;
   }
@@ -129,6 +133,10 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
       this.bodyStyle.cursor = 'col-resize';
       this.isResizing$.next(true);
     });
+  }
+
+  toggled(): void {
+    console.log('toggled');
   }
 
   private setInitialWidth(customLeftSidebar: CustomLeftSidebar | undefined): void {

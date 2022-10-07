@@ -20,6 +20,7 @@
 
 export * from './lib/models';
 export * from './lib/services/valtimo-modal.service';
+export * from './lib/services/shell.service';
 
 export * from './lib/components/camunda/form/camunda-form.components';
 export * from './lib/components/camunda/form/camunda-form.module';
@@ -33,7 +34,7 @@ export * from './lib/components/menu/menu.module';
 export * from './lib/components/menu/menu.init';
 export * from './lib/components/menu/menu.component';
 export * from './lib/components/menu/menu-item-text.component';
-export * from './lib/components/menu/submenu-item-text.component'
+export * from './lib/components/menu/submenu-item-text.component';
 
 export * from './lib/components/right-sidebar/right-sidebar.component';
 export * from './lib/components/right-sidebar/right-sidebar.module';

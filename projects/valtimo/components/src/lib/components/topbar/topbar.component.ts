@@ -20,6 +20,7 @@ import {from, map, switchMap} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
 import {IconService} from 'carbon-components-angular';
 import User20 from '@carbon/icons/es/user/20';
+import {ShellService} from '../../services/shell.service';
 
 @Component({
   selector: 'valtimo-topbar',
@@ -38,15 +39,21 @@ export class TopbarComponent implements OnInit {
 
   readonly applicationTitle = this.configService.config.applicationTitle;
   readonly applicationBrand = this.configService.config.applicationBrand;
+  readonly hamburgerActive$ = this.shellService.hamburgerActive$;
 
   constructor(
     private readonly keyCloakService: KeycloakService,
     private readonly configService: ConfigService,
-    private readonly iconService: IconService
+    private readonly iconService: IconService,
+    private readonly shellService: ShellService
   ) {}
 
   ngOnInit(): void {
     this.iconService.registerAll([User20]);
     this.showUserNameInTopBar = this.configService.config.featureToggles?.showUserNameInTopBar;
+  }
+
+  toggleHamburger(): void {
+    this.shellService.toggleHamburger();
   }
 }

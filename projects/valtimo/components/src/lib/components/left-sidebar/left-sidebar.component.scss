@@ -110,3 +110,11 @@
 ::ng-deep .bx--side-nav__navigation {
   border-right: 1px solid #e0e0e0;
 }
+
+::ng-deep .bx--side-nav--ux {
+  width: 0;
+}
+
+::ng-deep .bx--side-nav--expanded {
+  width: 16rem;
+}

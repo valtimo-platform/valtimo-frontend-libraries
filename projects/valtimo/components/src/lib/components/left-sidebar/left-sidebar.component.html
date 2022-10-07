@@ -14,21 +14,30 @@
   ~ limitations under the License.
   -->
 
-<ibm-sidenav [allowExpansion]="true">
+<ibm-sidenav [allowExpansion]="false" [expanded]="hamburgerActive$ | async" (toggle)="toggled()">
   <ng-container *ngFor="let menuItem of menuItems$ | async">
-    <ibm-sidenav-item [route]="menuItem.link" *ngIf="!menuItem.children">
-      <valtimo-menu-item-text [menuItem]="menuItem"></valtimo-menu-item-text>
-    </ibm-sidenav-item>
-    <ibm-sidenav-menu [title]="menuItem.title" *ngIf="menuItem.children">
-      <ibm-sidenav-item
-        *ngFor="let childMenuItem of menuItem.children"
-        [route]="childMenuItem.link"
-      >
-        {{ childMenuItem.title }}
-      </ibm-sidenav-item>
-    </ibm-sidenav-menu>
+    <ng-container *ngIf="!menuItem.children">
+      <ng-container *ngTemplateOutlet="topMenuItem; context: {menuItem: menuItem}"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="menuItem.children">
+      <ng-container *ngTemplateOutlet="topMenuItem; context: {menuItem: menuItem}"></ng-container>
+      <ibm-sidenav-menu [title]="menuItem.title">
+        <ibm-sidenav-item
+          *ngFor="let childMenuItem of menuItem.children"
+          [route]="childMenuItem.link"
+        >
+          <valtimo-menu-item-text [menuItem]="childMenuItem"></valtimo-menu-item-text>
+        </ibm-sidenav-item>
+      </ibm-sidenav-menu>
+    </ng-container>
   </ng-container>
 </ibm-sidenav>
+
+<ng-template #topMenuItem let-menuItem="menuItem">
+  <ibm-sidenav-item [route]="menuItem.link" *ngIf="!menuItem.children">
+    <valtimo-menu-item-text [menuItem]="menuItem"></valtimo-menu-item-text>
+  </ibm-sidenav-item>
+</ng-template>
 
 <!--<ng-container *ngIf="{isResizing: isResizing$ | async} as obs">-->
 <!--  <div-->
