@@ -41,6 +41,7 @@ export class TopbarComponent implements OnInit {
   readonly applicationBrand = this.configService.config.applicationBrand;
   readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
   readonly largeScreen$ = this.shellService.largeScreen$;
+  readonly panelExpanded$ = this.shellService.panelExpanded$;
 
   constructor(
     private readonly keyCloakService: KeycloakService,
@@ -56,5 +57,17 @@ export class TopbarComponent implements OnInit {
 
   toggleSideBar(): void {
     this.shellService.toggleSideBar();
+  }
+
+  setPanelExpanded(expanded: boolean): void {
+    this.shellService.setPanelExpanded(expanded);
+  }
+
+  mouseEnter(): void {
+    this.shellService.setMouseOnTopBar(true);
+  }
+
+  mouseLeave(): void {
+    this.shellService.setMouseOnTopBar(false);
   }
 }

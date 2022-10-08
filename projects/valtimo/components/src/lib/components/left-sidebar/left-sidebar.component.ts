@@ -19,6 +19,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -75,6 +76,24 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   private breakpointsInitialized = false;
   private lastSmallScreen!: boolean;
   private lastLargeScreen!: boolean;
+
+  @HostListener('document:click', ['$event.target'])
+  public onPageClick(targetElement) {
+    combineLatest([
+      this.shellService.sideBarExpanded$,
+      this.shellService.mouseOnTopBar$,
+      this.shellService.largeScreen$,
+    ])
+      .pipe(take(1))
+      .subscribe(([sideBarExpanded, mouseOnTopBar, largeScreen]) => {
+        const clickedInside =
+          this.elementRef.nativeElement.contains(targetElement) || mouseOnTopBar;
+
+        if (!clickedInside && !largeScreen && sideBarExpanded) {
+          this.shellService.setSideBarExpanded(false);
+        }
+      });
+  }
 
   constructor(
     private readonly translateService: TranslateService,

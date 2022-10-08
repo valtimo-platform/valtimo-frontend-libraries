@@ -14,14 +14,25 @@
   ~ limitations under the License.
   -->
 
-<ibm-header [name]="applicationTitle" [brand]="applicationBrand" [route]="'/'" [useRouter]="true">
+<ibm-header
+  [name]="applicationTitle"
+  [brand]="applicationBrand"
+  [route]="'/'"
+  [useRouter]="true"
+  (mouseenter)="mouseEnter()"
+  (mouseleave)="mouseLeave()"
+>
   <ibm-hamburger
     *ngIf="(largeScreen$ | async) === false"
     [active]="sideBarExpanded$ | async"
     (selected)="toggleSideBar()"
   ></ibm-hamburger>
   <ibm-header-global>
-    <ibm-header-action title="action">
+    <ibm-header-action
+      title="action"
+      [active]="panelExpanded$ | async"
+      (activeChange)="setPanelExpanded($event)"
+    >
       <svg ibmIcon="user" size="20"></svg>
     </ibm-header-action>
   </ibm-header-global>

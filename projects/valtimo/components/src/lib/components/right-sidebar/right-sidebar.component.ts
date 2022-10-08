@@ -15,7 +15,7 @@
  */
 
 import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {ContextService} from '@valtimo/context';
@@ -23,8 +23,9 @@ import {ValtimoVersion} from '../../models';
 import {UserIdentity} from '@valtimo/config';
 import {UserProviderService} from '@valtimo/security';
 import {NGXLogger} from 'ngx-logger';
-import {combineLatest} from 'rxjs';
+import {combineLatest, take} from 'rxjs';
 import {VersionService} from '../version/version.service';
+import {ShellService} from '../../services/shell.service';
 
 @Component({
   selector: 'valtimo-right-sidebar',
@@ -39,14 +40,32 @@ export class RightSidebarComponent implements OnInit {
   public userContexts: Array<any>;
   public userContextActive: any;
 
+  readonly panelExpanded$ = this.shellService.panelExpanded$;
+
+  @HostListener('document:click', ['$event.target'])
+  public onPageClick(targetElement) {
+    combineLatest([this.shellService.panelExpanded$, this.shellService.mouseOnTopBar$])
+      .pipe(take(1))
+      .subscribe(([panelExpanded, mouseOnTopBar]) => {
+        const clickedInside =
+          this.elementRef.nativeElement.contains(targetElement) || mouseOnTopBar;
+
+        if (!clickedInside && panelExpanded) {
+          this.shellService.setPanelExpanded(false);
+        }
+      });
+  }
+
   constructor(
-    private userProviderService: UserProviderService,
-    private formBuilder: FormBuilder,
-    private versionService: VersionService,
     public translate: TranslateService,
-    private contextService: ContextService,
-    private http: HttpClient,
-    private logger: NGXLogger
+    private readonly userProviderService: UserProviderService,
+    private readonly formBuilder: FormBuilder,
+    private readonly versionService: VersionService,
+    private readonly contextService: ContextService,
+    private readonly http: HttpClient,
+    private readonly logger: NGXLogger,
+    private readonly shellService: ShellService,
+    private readonly elementRef: ElementRef
   ) {}
 
   ngOnInit() {
