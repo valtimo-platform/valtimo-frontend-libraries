@@ -16,7 +16,18 @@
 
 /* You can add global styles to this file, and also import other style files */
 
+$feature-flags: (
+  grid-columns-16: true,
+);
+
+$font-path: '~carbon-components/src/globals/fonts';
+
 @import '~carbon-components/scss/globals/scss/styles';
+@import '~carbon-components/scss/globals/scss/theme';
+
+$carbon--theme: map-merge($carbon--theme--g100, ());
+
+@include carbon--theme();
 
 body,
 html {

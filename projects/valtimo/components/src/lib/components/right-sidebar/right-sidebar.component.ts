@@ -30,7 +30,7 @@ import {ShellService} from '../../services/shell.service';
 @Component({
   selector: 'valtimo-right-sidebar',
   templateUrl: './right-sidebar.component.html',
-  styleUrls: ['./right-sidebar.component.css'],
+  styleUrls: ['./right-sidebar.component.scss'],
 })
 export class RightSidebarComponent implements OnInit {
   public userIdentity: UserIdentity;

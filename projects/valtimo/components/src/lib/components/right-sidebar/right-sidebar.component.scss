@@ -28,3 +28,26 @@
   padding-right: 70px;
   margin-bottom: 15px;
 }
+
+::ng-deep .bx--panel--overlay {
+  padding-top: 0;
+}
+
+::ng-deep .bx--panel--expanded {
+  width: 24rem;
+}
+
+.grid--no-padding {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+::ng-deep .menu-tabs {
+  .bx--tabs--scrollable__nav-item {
+    width: 12rem;
+
+    button {
+      width: 100%;
+    }
+  }
+}
