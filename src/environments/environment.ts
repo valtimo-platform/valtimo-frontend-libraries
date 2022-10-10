@@ -56,6 +56,12 @@ const defaultDefinitionColumns: Array<DefinitionColumn> = [
     sortable: true,
     viewType: 'date',
   },
+  {
+    propertyName: 'assignee',
+    translationKey: 'valtimoAssignee.fullName',
+    sortable: true,
+    viewType: 'string',
+  }
 ];
 
 export const environment: ValtimoConfig = {
