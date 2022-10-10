@@ -491,7 +491,8 @@
     "createdOn": "Aangemaakt op",
     "lastModified": "Laatst gewijzigd op",
     "files": "Bestanden",
-    "firstName": "Voornaam"
+    "firstName": "Voornaam",
+    "valtimoAssignee.fullName": "Eigenaar"
   },
   "list": {
     "currentPage": "Pagina {{current}} van {{total}}",
