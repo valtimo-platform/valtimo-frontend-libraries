@@ -492,7 +492,7 @@
     "lastModified": "Laatst gewijzigd op",
     "files": "Bestanden",
     "firstName": "Voornaam",
-    "valtimoAssignee.fullName": "Eigenaar"
+    "assigneeFullName": "Eigenaar"
   },
   "list": {
     "currentPage": "Pagina {{current}} van {{total}}",

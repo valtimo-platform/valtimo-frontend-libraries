@@ -58,9 +58,8 @@ const defaultDefinitionColumns: Array<DefinitionColumn> = [
   },
   {
     propertyName: 'assignee',
-    translationKey: 'valtimoAssignee.fullName',
+    translationKey: 'assigneeFullName',
     sortable: true,
-    viewType: 'string',
   }
 ];
 

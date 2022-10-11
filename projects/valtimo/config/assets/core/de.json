@@ -492,7 +492,7 @@
     "lastModified": "Letzte Änderung",
     "files": "Dateien",
     "firstName": "Vorname",
-    "valtimoAssignee.fullName": "Eigentümer"
+    "assigneeFullName": "Eigentümer"
   },
   "list": {
     "currentPage": "Seite {{current}} von {{total}}",

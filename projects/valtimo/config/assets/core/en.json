@@ -492,7 +492,7 @@
     "lastModified": "Last modified",
     "files": "Files",
     "firstName": "First name",
-    "valtimoAssignee.fullName": "Assignee"
+    "assigneeFullName": "Assignee"
   },
   "list": {
     "currentPage": "Page {{current}} of {{total}}",
