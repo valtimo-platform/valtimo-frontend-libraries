@@ -24,6 +24,7 @@ import {
   ROLE_ADMIN,
   ROLE_DEVELOPER,
   ROLE_USER,
+  TaskListTab,
   UploadProvider,
   ValtimoConfig,
 } from '@valtimo/config';
@@ -55,6 +56,11 @@ const defaultDefinitionColumns: Array<DefinitionColumn> = [
     sortable: true,
     viewType: 'date',
   },
+  {
+    propertyName: 'assigneeFullName',
+    translationKey: 'assigneeFullName',
+    sortable: true,
+  }
 ];
 
 export const environment: ValtimoConfig = {
@@ -173,6 +179,7 @@ export const environment: ValtimoConfig = {
       },
     ],
   },
+  visibleTaskListTabs: [TaskListTab.MINE, TaskListTab.OPEN, TaskListTab.ALL],
   customTaskList: {
     fields: [
       {

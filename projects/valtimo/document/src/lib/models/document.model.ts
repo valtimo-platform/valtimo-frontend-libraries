@@ -98,6 +98,7 @@ export interface Document {
   definitionName: string;
   relations: string[];
   relatedFiles: RelatedFile[];
+  assigneeFullName: string;
 }
 
 export interface ProcessDocumentDefinitionId {
