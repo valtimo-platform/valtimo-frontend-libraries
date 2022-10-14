@@ -1,0 +1,40 @@
+<v-form
+        (valueChange)="formValueChange($event)"
+        *ngIf="{
+        disabled: disabled$ | async,
+        prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
+    } as obs"
+>
+  <v-input
+          name="configurationTitle"
+          [title]="'configurationTitle' | pluginTranslate: pluginId | async"
+          [margin]="true"
+          [disabled]="obs.disabled"
+          [defaultValue]="obs.prefill?.configurationTitle"
+          [required]="true"
+          [tooltip]="'configurationTitleTooltip' | pluginTranslate: pluginId | async"
+          [widthPx]="350"
+  >
+  </v-input>
+  <v-input
+          name="clientId"
+          [title]="'clientId' | pluginTranslate: pluginId | async"
+          [margin]="true"
+          [defaultValue]="obs.prefill?.clientId"
+          [disabled]="obs.disabled"
+          [required]="true"
+  ></v-input>
+  <v-input
+          name="clientSecret"
+          [title]="'clientSecret' | pluginTranslate: pluginId | async"
+          [margin]="true"
+          [defaultValue]="obs.prefill?.clientSecret"
+          [disabled]="obs.disabled"
+          [required]="true"
+  >
+  </v-input>
+
+  <v-button [mdiIcon]="'check'"
+            type="secondary"
+            (click)="openAuthenticationWindow()">Give authorization</v-button>
+</v-form>

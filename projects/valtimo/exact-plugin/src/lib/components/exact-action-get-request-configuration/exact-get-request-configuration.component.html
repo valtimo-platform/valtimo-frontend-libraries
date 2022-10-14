@@ -1,0 +1,29 @@
+<v-form
+        (valueChange)="formValueChange($event)"
+        *ngIf="{
+        disabled: disabled$ | async,
+        prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
+    } as obs"
+>
+    <v-input
+            name="uri"
+            type="text"
+            [title]="'uri' | pluginTranslate: pluginId | async"
+            [margin]="true"
+            [disabled]="obs.disabled"
+            [defaultValue]="obs.prefill?.properties?.uri"
+            [required]="false"
+            [widthPx]="350"
+    ></v-input>
+
+    <v-input
+            name="bean"
+            type="text"
+            [title]="'bean' | pluginTranslate: pluginId | async"
+            [margin]="true"
+            [disabled]="obs.disabled"
+            [defaultValue]="obs.prefill?.properties?.bean"
+            [required]="false"
+            [widthPx]="350"
+    ></v-input>
+</v-form>
