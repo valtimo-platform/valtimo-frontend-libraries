@@ -55,10 +55,12 @@ export class UserListComponent {
   private searchTerm = '';
   public userManagementDisabled = true;
 
-  constructor(private router: Router,
-              private service: UserManagementService,
-              private configService: ConfigService) {
-    this.userManagementDisabled = configService.config.authentication.module === KeycloakModule
+  constructor(
+    private router: Router,
+    private service: UserManagementService,
+    private configService: ConfigService
+  ) {
+    this.userManagementDisabled = configService.config.authentication.module === KeycloakModule;
   }
 
   paginationSet() {
