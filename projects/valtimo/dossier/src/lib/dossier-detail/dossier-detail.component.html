@@ -29,25 +29,7 @@
                 page="dossier-detail"
                 section="card-header"
               ></valtimo-extension>
-
-              <div>
-                <div class="user-full-name" *ngIf="{userId: userId$ | async} as obs">
-                  <button
-                          class="btn btn-space btn-primary mr-1"
-                          type="button"
-                          id=""
-                          placement="bottom"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                          (click)="claimAssignee()"
-                          [disabled]="assignedToUser"
-                  >
-                    <span>{{ 'dossier.claimAssigneeCase' | translate }}</span>
-                  </button>
-                </div>
-              </div>
-
-
+              <ng-container *ngTemplateOutlet="claimButton"></ng-container>
               <div class="dropdown">
                 <button
                   class="btn btn-primary dropdown-toggle"
@@ -134,7 +116,26 @@
 </ng-template>
 
 <ng-template #caseDetailAssignee>
-  <div class="row ml-0 mr-0 mt-1 mb-1" *ngIf="document?.assigneeFullName as assignee">
+  <div class="row ml-0 mr-0 mt-1 mb-1" *ngIf="(document$ | async)?.assigneeFullName as assignee">
     <h5>{{ ('assignTask.assignedTo' | translate) + assignee }}</h5>
+  </div>
+</ng-template>
+
+<ng-template #claimButton>
+  <div>
+    <div class="user-full-name" *ngIf="{userId: userId$ | async} as obs">
+      <button
+        class="btn btn-space btn-primary mr-1"
+        type="button"
+        id=""
+        placement="bottom"
+        aria-haspopup="true"
+        aria-expanded="false"
+        (click)="claimAssignee()"
+        [disabled]="(isAssigning$ | async) || (isAssignedToCurrentUser$ | async)"
+      >
+        <span>{{ 'dossier.claimAssigneeCase' | translate }}</span>
+      </button>
+    </div>
   </div>
 </ng-template>
