@@ -67,6 +67,7 @@
       }
     },
     "startSubProcess": "Starten",
+    "claimAssigneeCase": "Claim",
     "deleteConfirmation": {
       "title": "Datei löschen",
       "description": "Möchten Sie diese Datei wirklich löschen?",

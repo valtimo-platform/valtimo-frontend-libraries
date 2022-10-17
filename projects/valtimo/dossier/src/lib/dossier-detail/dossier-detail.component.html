@@ -29,6 +29,25 @@
                 page="dossier-detail"
                 section="card-header"
               ></valtimo-extension>
+
+              <div>
+                <div class="user-full-name" *ngIf="{userId: userId$ | async} as obs">
+                  <button
+                          class="btn btn-space btn-primary mr-1"
+                          type="button"
+                          id=""
+                          placement="bottom"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                          (click)="claimAssignee()"
+                          [disabled]="assignedToUser"
+                  >
+                    <span>{{ 'dossier.claimAssigneeCase' | translate }}</span>
+                  </button>
+                </div>
+              </div>
+
+
               <div class="dropdown">
                 <button
                   class="btn btn-primary dropdown-toggle"

@@ -31,6 +31,8 @@ import {ProcessService} from '@valtimo/process';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {ConfigService} from '@valtimo/config';
 import * as moment from 'moment';
+import {from, map, switchMap} from 'rxjs';
+import {KeycloakService} from 'keycloak-angular';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -50,9 +52,17 @@ export class DossierDetailComponent implements OnInit {
   public processDefinitionListFields: Array<any> = [];
   public processDocumentDefinitions: ProcessDocumentDefinition[] = [];
   private initialTabName: string;
+  private assigneeId: string;
+  public userId: string;
+  public assignedToUser = false;
   public customDossierHeaderItems: Array<any> = [];
   @ViewChild('supportingProcessStartModal')
   supportingProcessStart: DossierSupportingProcessStartModalComponent;
+
+  readonly userId$ = from(this.keyCloakService.isLoggedIn()).pipe(
+    switchMap(() => this.keyCloakService.loadUserProfile()),
+    map(profile => this.userId = profile.id)
+  );
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -63,7 +73,8 @@ export class DossierDetailComponent implements OnInit {
     private router: Router,
     private location: Location,
     private tabService: TabService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private readonly keyCloakService: KeycloakService
   ) {
     this.snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = this.snapshot.get('documentDefinitionName') || '';
@@ -111,9 +122,18 @@ export class DossierDetailComponent implements OnInit {
     this.supportingProcessStart.openModal(processDocumentDefinition, this.documentId);
   }
 
+  claimAssignee() {
+    this.documentService.assignHandlerToDocument(this.documentId, this.userId).subscribe(document => {
+      this.isAssignedToUser();
+    })
+  }
+
   private getDocument(): void {
     this.documentService.getDocument(this.documentId).subscribe(document => {
       this.document = document;
+      this.assigneeId = this.document.assigneeId;
+
+      this.isAssignedToUser();
 
       if (
         this.configService.config.customDossierHeader?.hasOwnProperty(
@@ -147,5 +167,13 @@ export class DossierDetailComponent implements OnInit {
     const regex = new RegExp('(T\\d\\d:\\d\\d:\\d\\d[+-])');
     const formattedString = regex.test(string) ? moment(string).format('DD-MM-YYYY') : string;
     return prefix + formattedString;
+  }
+
+  private isAssignedToUser() {
+    if(this.assigneeId != undefined && this.assigneeId === this.userId) {
+      this.assignedToUser = true;
+    } else {
+      this.assignedToUser = false;
+    }
   }
 }

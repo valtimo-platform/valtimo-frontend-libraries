@@ -258,4 +258,11 @@ export class DocumentService {
       `${this.valtimoEndpointUri}process-document/definition/processinstance/${processInstanceId}`
     );
   }
+
+  assignHandlerToDocument(documentId: string, assigneeId: string): Observable<void> {
+    return this.http.post<void>(
+      `${this.valtimoEndpointUri}document/${documentId}/assign`,
+      {assigneeId}
+    );
+  }
 }
