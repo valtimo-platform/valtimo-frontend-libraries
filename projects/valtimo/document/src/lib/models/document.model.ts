@@ -125,6 +125,10 @@ export interface ProcessDocumentInstance {
   isActive: boolean;
 }
 
+export interface AssignHandlerToDocumentResult {
+  assigneeId: string;
+}
+
 export interface NewDocumentAndStartProcessResult {
   document: Document;
   processInstanceId: string;
