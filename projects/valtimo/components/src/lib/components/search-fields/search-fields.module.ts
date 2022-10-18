@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-export * from './config';
-export * from './email-notification-settings.model';
-export * from './menu-item.model';
-export * from './menu.config';
-export * from './security.config';
-export * from './extension.model';
-export * from './http-loader';
-export * from './roles';
-export * from './user-management.model';
-export * from './page';
-export * from './connector.model';
-export * from './search.model';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {SearchFieldsComponent} from './search-fields.component';
+import {SpinnerModule} from '../spinner/spinner.module';
+import {WidgetModule} from '../widget/widget.module';
+
+@NgModule({
+  declarations: [SearchFieldsComponent],
+  imports: [CommonModule, SpinnerModule, WidgetModule],
+  exports: [SearchFieldsComponent],
+})
+export class SearchFieldsModule {}

@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {delay, Observable, of} from 'rxjs';
 import {
   AuditRecord,
   Document,
@@ -41,7 +41,7 @@ import {
   UploadProcessLink,
 } from './models';
 import {DocumentSearchRequest} from './document-search-request';
-import {ConfigService} from '@valtimo/config';
+import {ConfigService, SearchField} from '@valtimo/config';
 
 @Injectable({
   providedIn: 'root',
@@ -257,5 +257,40 @@ export class DocumentService {
     return this.http.get<ProcessDocumentDefinition>(
       `${this.valtimoEndpointUri}process-document/definition/processinstance/${processInstanceId}`
     );
+  }
+
+  getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
+    return of([
+      {
+        key: 'test1',
+        datatype: 'text',
+        fieldtype: 'single',
+        matchtype: 'exact',
+      },
+      {
+        key: 'test2',
+        datatype: 'number',
+        fieldtype: 'single',
+        matchtype: 'exact',
+      },
+      {
+        key: 'test3',
+        datatype: 'date',
+        fieldtype: 'single',
+        matchtype: 'exact',
+      },
+      {
+        key: 'test4',
+        datatype: 'date',
+        fieldtype: 'range',
+        matchtype: 'exact',
+      },
+      {
+        key: 'test5',
+        datatype: 'datetime',
+        fieldtype: 'range',
+        matchtype: 'exact',
+      },
+    ] as Array<SearchField>).pipe(delay(1000));
   }
 }

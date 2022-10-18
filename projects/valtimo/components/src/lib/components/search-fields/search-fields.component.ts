@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-export * from './config';
-export * from './email-notification-settings.model';
-export * from './menu-item.model';
-export * from './menu.config';
-export * from './security.config';
-export * from './extension.model';
-export * from './http-loader';
-export * from './roles';
-export * from './user-management.model';
-export * from './page';
-export * from './connector.model';
-export * from './search.model';
+import {Component, Input} from '@angular/core';
+import {SearchField} from '@valtimo/config';
+import {BehaviorSubject} from 'rxjs';
+
+@Component({
+  selector: 'valtimo-search-fields',
+  templateUrl: './search-fields.component.html',
+  styleUrls: ['./search-fields.component.scss'],
+})
+export class SearchFieldsComponent {
+  readonly searchFields$ = new BehaviorSubject<Array<SearchField>>([]);
+
+  @Input() loading: boolean;
+  @Input() set searchFields(fields: Array<SearchField>) {
+    this.searchFields$.next(fields);
+  }
+}
