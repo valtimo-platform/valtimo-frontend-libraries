@@ -15,7 +15,7 @@
   -->
 
 <ng-container
-        *ngIf="{
+  *ngIf="{
     candidateUsers: candidateUsersForDocument$ | async,
     idOnServer: assignedIdOnServer$ | async
   } as obs"
@@ -25,18 +25,18 @@
       <div class="col-12 pl-0 d-flex flex-row align-items-center">
         <ng-container *ngIf="obs.candidateUsers; else loading">
           <valtimo-searchable-dropdown-select
-                  [style]="'underlinedText'"
-                  [items]="mapUsersForDropdown(obs.candidateUsers)"
-                  [buttonText]="'assignTask.header' | translate"
-                  [searchText]="'interface.typeToSearch' | translate"
-                  [noResultsText]="'interface.noSearchResults' | translate"
-                  [selectedText]="'assignTask.assignedTo' | translate"
-                  [selectedTextValue]="assignedUserFullName$ | async"
-                  [clearSelectionButtonTitle]="'assignTask.remove' | translate"
-                  [hasSelection]="userIdToAssign === obs.idOnServer && obs.idOnServer !== null"
-                  [width]="250"
-                  (itemSelected)="assignDocument($event)"
-                  (clearSelection)="unassignDocument()"
+            [style]="'underlinedText'"
+            [items]="mapUsersForDropdown(obs.candidateUsers)"
+            [buttonText]="'assignTask.header' | translate"
+            [searchText]="'interface.typeToSearch' | translate"
+            [noResultsText]="'interface.noSearchResults' | translate"
+            [selectedText]="'assignTask.assignedTo' | translate"
+            [selectedTextValue]="assignedUserFullName$ | async"
+            [clearSelectionButtonTitle]="'assignTask.remove' | translate"
+            [hasSelection]="userIdToAssign === obs.idOnServer && obs.idOnServer !== null"
+            [width]="250"
+            (itemSelected)="assignDocument($event)"
+            (clearSelection)="unassignDocument()"
           >
           </valtimo-searchable-dropdown-select>
         </ng-container>

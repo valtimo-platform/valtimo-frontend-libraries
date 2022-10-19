@@ -25,35 +25,35 @@
             </div>
             <div class="btn-group mt-m3px mb-3 col-auto">
               <valtimo-extension
-                      module="dossier"
-                      page="dossier-detail"
-                      section="card-header"
+                module="dossier"
+                page="dossier-detail"
+                section="card-header"
               ></valtimo-extension>
               <ng-container *ngTemplateOutlet="claimButton"></ng-container>
               <div class="dropdown">
                 <button
-                        class="btn btn-primary dropdown-toggle"
-                        type="button"
-                        id="startProcessDropdown"
-                        placement="bottom"
-                        [ngbTooltip]="processDocumentDefinitions.length === 0 ? 'No action' : null"
-                        [disabled]="processDocumentDefinitions.length === 0"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
+                  class="btn btn-primary dropdown-toggle"
+                  type="button"
+                  id="startProcessDropdown"
+                  placement="bottom"
+                  [ngbTooltip]="processDocumentDefinitions.length === 0 ? 'No action' : null"
+                  [disabled]="processDocumentDefinitions.length === 0"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
                 >
                   <span>{{ 'dossier.startSubProcess' | translate }}</span>
                   <i class="ml-1 mdi mdi-chevron-down"></i>
                 </button>
                 <div
-                        class="dropdown-menu dropdown-menu-right"
-                        aria-labelledby="startProcessDropdown"
+                  class="dropdown-menu dropdown-menu-right"
+                  aria-labelledby="startProcessDropdown"
                 >
                   <button
-                          *ngFor="let processDocumentDefinition of processDocumentDefinitions"
-                          class="dropdown-item p"
-                          href="#"
-                          (click)="startProcess(processDocumentDefinition)"
+                    *ngFor="let processDocumentDefinition of processDocumentDefinitions"
+                    class="dropdown-item p"
+                    href="#"
+                    (click)="startProcess(processDocumentDefinition)"
                   >
                     {{ processDocumentDefinition.processName }}
                   </button>
@@ -65,11 +65,11 @@
         <ul class="nav nav-tabs">
           <li class="nav-item" *ngFor="let tab of tabLoader.tabs">
             <a
-                    id="{{ tab.name }}-tab"
-                    class="nav-link clickable"
-                    [ngClass]="{active: tab.isActive()}"
-                    data-toggle="tab"
-                    (click)="tabLoader.load(tab)"
+              id="{{ tab.name }}-tab"
+              class="nav-link clickable"
+              [ngClass]="{active: tab.isActive()}"
+              data-toggle="tab"
+              (click)="tabLoader.load(tab)"
             >
               {{ tabLoader.translateTabName(tab) }}
             </a>
@@ -82,8 +82,8 @@
       </valtimo-widget>
     </div>
     <valtimo-dossier-supporting-process-start-modal
-            (formSubmit)="tabLoader.refreshView()"
-            #supportingProcessStartModal
+      (formSubmit)="tabLoader.refreshView()"
+      #supportingProcessStartModal
     ></valtimo-dossier-supporting-process-start-modal>
   </div>
 </div>
@@ -91,17 +91,17 @@
 <ng-template #caseDetailHeader>
   <div class="row" *ngIf="customDossierHeaderItems.length > 0; else defaultTitle">
     <span
-            class="mb-0 mt-0 pb-2 align-self-end col-xl-{{ item.columnSize }} col-lg-{{
+      class="mb-0 mt-0 pb-2 align-self-end col-xl-{{ item.columnSize }} col-lg-{{
         item.columnSize * 2
       }} {{ item.customClass }}"
-            [ngClass]="{
+      [ngClass]="{
         h1: item.textSize === 'xl',
         h2: item.textSize === 'lg',
         h3: item.textSize === 'md',
         h4: item.textSize === 'sm',
         h5: item.textSize === 'xs'
       }"
-            *ngFor="let item of customDossierHeaderItems"
+      *ngFor="let item of customDossierHeaderItems"
     >
       <span *ngIf="item.label">{{ item.label | translate }}</span>
       <span *ngIf="item.label && item.value">: </span>
@@ -118,11 +118,11 @@
 <ng-template #caseDetailAssignee>
   <div class="row ml-0 mr-0 mt-1 mb-1" *ngIf="(document$ | async)?.assigneeFullName as assignee">
     <valtimo-dossier-assign-user
-            *ngIf="document && assignmentOfTaskChanged"
-            [documentId]="document.id"
-            [assigneeId]="document.assigneeId"
-            [assigneeFullName]="assignee"
-            (assignmentOfDocumentChanged)="assignmentOfTaskChanged.emit()"
+      *ngIf="document && assignmentOfTaskChanged"
+      [documentId]="document.id"
+      [assigneeId]="document.assigneeId"
+      [assigneeFullName]="assignee"
+      (assignmentOfDocumentChanged)="assignmentOfTaskChanged.emit()"
     ></valtimo-dossier-assign-user>
   </div>
 </ng-template>
@@ -130,14 +130,14 @@
 <ng-template #claimButton>
   <div class="user-full-name">
     <button
-            class="btn btn-space btn-primary mr-1"
-            type="button"
-            id=""
-            placement="bottom"
-            aria-haspopup="true"
-            aria-expanded="false"
-            (click)="claimAssignee()"
-            [disabled]="(isAssigning$ | async) || (isAssignedToCurrentUser$ | async)"
+      class="btn btn-space btn-primary mr-1"
+      type="button"
+      id=""
+      placement="bottom"
+      aria-haspopup="true"
+      aria-expanded="false"
+      (click)="claimAssignee()"
+      [disabled]="(isAssigning$ | async) || (isAssignedToCurrentUser$ | async)"
     >
       <span>{{ 'dossier.claimAssigneeCase' | translate }}</span>
     </button>

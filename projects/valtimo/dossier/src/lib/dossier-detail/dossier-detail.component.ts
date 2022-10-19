@@ -16,8 +16,10 @@
 
 import {
   Component,
-  ComponentFactoryResolver, EventEmitter,
-  OnInit, Output,
+  ComponentFactoryResolver,
+  EventEmitter,
+  OnInit,
+  Output,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -93,7 +95,7 @@ export class DossierDetailComponent implements OnInit {
         ) {
           this.configService.config.customDossierHeader[
             this.documentDefinitionName.toLowerCase()
-            ]?.forEach(item => this.getCustomDossierHeaderItem(item));
+          ]?.forEach(item => this.getCustomDossierHeaderItem(item));
         }
       }
     })
@@ -210,12 +212,7 @@ export class DossierDetailComponent implements OnInit {
     const prefix = item['propertyPaths'].indexOf(path) > 0 ? ' ' : '';
     let string =
       path.split('.').reduce((o, i) => o[i], this.document.content) || item['noValueText'] || '';
-    const dateFormats = [
-      moment.ISO_8601,
-      'MM-DD-YYYY',
-      'DD-MM-YYYY',
-      'YYYY-MM-DD'
-    ];
+    const dateFormats = [moment.ISO_8601, 'MM-DD-YYYY', 'DD-MM-YYYY', 'YYYY-MM-DD'];
     switch (item['modifier']) {
       case 'age': {
         if (moment(string, dateFormats, true).isValid()) {
@@ -232,6 +229,5 @@ export class DossierDetailComponent implements OnInit {
     return prefix + string;
   }
 
-  changeUser(userId: string): void {
-  }
+  changeUser(userId: string): void {}
 }

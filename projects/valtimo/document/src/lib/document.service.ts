@@ -260,7 +260,10 @@ export class DocumentService {
     );
   }
 
-  assignHandlerToDocument(documentId: string, assigneeId: string): Observable<AssignHandlerToDocumentResult> {
+  assignHandlerToDocument(
+    documentId: string,
+    assigneeId: string
+  ): Observable<AssignHandlerToDocumentResult> {
     return this.http.post<AssignHandlerToDocumentResult>(
       `${this.valtimoEndpointUri}document/${documentId}/assign`,
       {assigneeId}
@@ -276,6 +279,7 @@ export class DocumentService {
 
   getCandidateUsers(documentId: string): Observable<Array<User>> {
     return this.http.get<Array<User>>(
-      `${this.valtimoEndpointUri}/document/${documentId}/candidate-user`);
+      `${this.valtimoEndpointUri}/document/${documentId}/candidate-user`
+    );
   }
 }
