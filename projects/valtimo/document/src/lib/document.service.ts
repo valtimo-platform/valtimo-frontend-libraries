@@ -18,6 +18,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {delay, Observable, of} from 'rxjs';
 import {
+  AssignHandlerToDocumentResult,
   AuditRecord,
   Document,
   DocumentDefinition,
@@ -256,6 +257,16 @@ export class DocumentService {
   ): Observable<ProcessDocumentDefinition> {
     return this.http.get<ProcessDocumentDefinition>(
       `${this.valtimoEndpointUri}process-document/definition/processinstance/${processInstanceId}`
+    );
+  }
+
+  assignHandlerToDocument(
+    documentId: string,
+    assigneeId: string
+  ): Observable<AssignHandlerToDocumentResult> {
+    return this.http.post<AssignHandlerToDocumentResult>(
+      `${this.valtimoEndpointUri}document/${documentId}/assign`,
+      {assigneeId}
     );
   }
 

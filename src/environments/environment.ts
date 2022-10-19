@@ -225,6 +225,15 @@ export const environment: ValtimoConfig = {
     experimentalDmnEditing: true,
     caseSearchFields: true,
   },
+  customDossierHeader: {
+    leningen: [
+      {
+        propertyPaths: ['voornaam'],
+        columnSize: 3,
+        textSize: 'sm',
+      },
+    ],
+  },
 };
 
 /*
