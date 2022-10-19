@@ -11,7 +11,7 @@
     "DocumentRelatedFileRemovedEvent": "Gerelateerd bestand verwijderd",
     "BesluitAddedEvent": "Besluit toegevoegd > {{identificatie}}",
     "DocumentAssigneeChangedEvent": "De eigenaar is gewijzigd naar {{assigneeName}}",
-    "DocumentUnassignedEvent": "De eigenaar is van dossier afgehaald"
+    "DocumentUnassignedEvent": "De eigenaar is van het dossier afgehaald"
   },
   "dossier": {
     "title": {
