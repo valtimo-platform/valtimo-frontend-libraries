@@ -262,31 +262,49 @@ export class DocumentService {
   getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
     return of([
       {
-        key: 'test1',
+        key: 'text',
         datatype: 'text',
         fieldtype: 'single',
         matchtype: 'exact',
       },
       {
-        key: 'test2',
+        key: 'number',
         datatype: 'number',
         fieldtype: 'single',
         matchtype: 'exact',
       },
       {
-        key: 'test3',
+        key: 'date',
         datatype: 'date',
         fieldtype: 'single',
         matchtype: 'exact',
       },
       {
-        key: 'test4',
+        key: 'datetime',
+        datatype: 'datetime',
+        fieldtype: 'single',
+        matchtype: 'exact',
+      },
+      {
+        key: 'boolean',
+        datatype: 'boolean',
+        fieldtype: 'single',
+        matchtype: 'exact',
+      },
+      {
+        key: 'numberRange',
+        datatype: 'number',
+        fieldtype: 'range',
+        matchtype: 'exact',
+      },
+      {
+        key: 'dateRange',
         datatype: 'date',
         fieldtype: 'range',
         matchtype: 'exact',
       },
       {
-        key: 'test5',
+        key: 'datetimeRange',
         datatype: 'datetime',
         fieldtype: 'range',
         matchtype: 'exact',

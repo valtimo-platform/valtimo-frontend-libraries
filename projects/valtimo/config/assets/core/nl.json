@@ -801,5 +801,16 @@
   },
   "userManagement": {
     "notSupported": "Wanneer Keycloak wordt gebruikt is gebruikersbeheer in Valtimo niet beschikbaar. Gebruik in plaats daarvan het gebruikersbeheer in Keycloak."
+  },
+  "searchFields": {
+    "to": "tot",
+    "text": "Tekst",
+    "number": "Nummer",
+    "date": "Datum",
+    "datetime": "Datum en tijd",
+    "boolean": "Ja / nee",
+    "numberRange": "Nummerreeks",
+    "dateRange": "Datumreeks",
+    "datetimeRange": "Datum en tijd-reeks"
   }
 }

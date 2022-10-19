@@ -13,3 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.w-100 {
+  height: 15px;
+
+  &:last-child {
+    display: none;
+  }
+}
+
+::ng-deep .multiple-search-fields {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+}
+
+.to-text {
+  margin-inline-start: 8px;
+  margin-inline-end: 8px;
+}

@@ -52,6 +52,12 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     });
   }
 
+  multipleValueChange(searchFieldKey: string, value: any): void {
+    this.values$.pipe(take(1)).subscribe(values => {
+      this.values$.next({...values, [searchFieldKey]: {start: value.start, end: value.end}});
+    });
+  }
+
   private openValuesSubscription(): void {
     this.valuesSubscription = combineLatest([this.searchFields$, this.values$]).subscribe(
       ([searchFields, values]) => {

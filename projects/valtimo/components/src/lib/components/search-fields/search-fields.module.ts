@@ -20,7 +20,13 @@ import {SearchFieldsComponent} from './search-fields.component';
 import {SpinnerModule} from '../spinner/spinner.module';
 import {WidgetModule} from '../widget/widget.module';
 import {TranslateModule} from '@ngx-translate/core';
-import {DatePickerModule, FormModule, InputModule} from '@valtimo/user-interface';
+import {
+  DatePickerModule,
+  FormModule,
+  InputLabelModule,
+  InputModule,
+  ParagraphModule,
+} from '@valtimo/user-interface';
 
 @NgModule({
   declarations: [SearchFieldsComponent],
@@ -32,6 +38,8 @@ import {DatePickerModule, FormModule, InputModule} from '@valtimo/user-interface
     InputModule,
     FormModule,
     DatePickerModule,
+    InputLabelModule,
+    ParagraphModule,
   ],
   exports: [SearchFieldsComponent],
 })
