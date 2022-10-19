@@ -280,18 +280,6 @@ export class DocumentService {
         matchtype: 'exact',
       },
       {
-        key: 'datetime',
-        datatype: 'datetime',
-        fieldtype: 'single',
-        matchtype: 'exact',
-      },
-      {
-        key: 'boolean',
-        datatype: 'boolean',
-        fieldtype: 'single',
-        matchtype: 'exact',
-      },
-      {
         key: 'numberRange',
         datatype: 'number',
         fieldtype: 'range',
@@ -301,6 +289,18 @@ export class DocumentService {
         key: 'dateRange',
         datatype: 'date',
         fieldtype: 'range',
+        matchtype: 'exact',
+      },
+      {
+        key: 'datetime',
+        datatype: 'datetime',
+        fieldtype: 'single',
+        matchtype: 'exact',
+      },
+      {
+        key: 'boolean',
+        datatype: 'boolean',
+        fieldtype: 'single',
         matchtype: 'exact',
       },
       {

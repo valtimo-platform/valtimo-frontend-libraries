@@ -35,8 +35,11 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   @Output() valueChange: EventEmitter<Array<SearchFieldWithValue>> = new EventEmitter<
     Array<SearchFieldWithValue>
   >();
+  @Output() doSearch: EventEmitter<any> = new EventEmitter<any>();
 
-  valuesSubscription!: Subscription;
+  readonly expanded$ = new BehaviorSubject<boolean>(false);
+
+  private valuesSubscription!: Subscription;
 
   ngOnInit() {
     this.openValuesSubscription();
@@ -56,6 +59,16 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     this.values$.pipe(take(1)).subscribe(values => {
       this.values$.next({...values, [searchFieldKey]: {start: value.start, end: value.end}});
     });
+  }
+
+  toggleExpanded(): void {
+    this.expanded$.pipe(take(1)).subscribe(expanded => {
+      this.expanded$.next(!expanded);
+    });
+  }
+
+  search(): void {
+    this.doSearch.emit();
   }
 
   private openValuesSubscription(): void {

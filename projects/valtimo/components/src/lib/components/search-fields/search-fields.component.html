@@ -29,7 +29,7 @@
 
 <ng-template #searchFieldsTemplate>
   <valtimo-widget>
-    <div class="row p-3">
+    <div class="row p-3" [ngClass]="{'row--hidden': (expanded$ | async) === false}">
       <ng-container *ngFor="let searchField of searchFields$ | async; let i = index">
         <div class="col-4">
           <ng-container
@@ -38,6 +38,11 @@
         </div>
         <div class="w-100" *ngIf="(i + 1) % 3 === 0"></div>
       </ng-container>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <ng-container *ngTemplateOutlet="buttonsTemplate"></ng-container>
+      </div>
     </div>
   </valtimo-widget>
 </ng-template>
@@ -186,5 +191,39 @@
 <ng-template #toText>
   <div class="to-text">
     <v-paragraph>{{ 'searchFields.to' | translate }}</v-paragraph>
+  </div>
+</ng-template>
+
+<ng-template #buttonsTemplate>
+  <div class="buttons-container p-3" *ngIf="{expanded: expanded$ | async} as obs">
+    <v-button
+      (clickEvent)="toggleExpanded()"
+      [disabled]="loading"
+      type="secondary"
+      [mdiIcon]="obs.expanded ? 'chevron-up' : 'chevron-down'"
+      >{{
+        obs.expanded
+          ? ('searchFields.collapseButtonText' | translate)
+          : ('searchFields.expandButtonText' | translate)
+      }}</v-button
+    >
+    <div class="right-buttons">
+      <v-button
+        (clickEvent)="search()"
+        [disabled]="loading"
+        type="danger"
+        *ngIf="obs.expanded"
+        mdiIcon="close"
+        >{{ 'searchFields.clearButtonText' | translate }}</v-button
+      >
+      <v-button
+        (clickEvent)="search()"
+        [disabled]="loading"
+        type="primary"
+        *ngIf="obs.expanded"
+        mdiIcon="magnify"
+        >{{ 'searchFields.searchButtonText' | translate }}</v-button
+      >
+    </div>
   </div>
 </ng-template>

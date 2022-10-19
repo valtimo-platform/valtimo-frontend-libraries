@@ -21,6 +21,7 @@ import {SpinnerModule} from '../spinner/spinner.module';
 import {WidgetModule} from '../widget/widget.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {
+  ButtonModule,
   DatePickerModule,
   FormModule,
   InputLabelModule,
@@ -40,6 +41,7 @@ import {
     DatePickerModule,
     InputLabelModule,
     ParagraphModule,
+    ButtonModule,
   ],
   exports: [SearchFieldsComponent],
 })
