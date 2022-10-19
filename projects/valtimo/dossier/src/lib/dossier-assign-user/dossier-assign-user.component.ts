@@ -33,7 +33,7 @@ import {DocumentService} from '@valtimo/document';
 @Component({
   selector: 'valtimo-dossier-assign-user',
   templateUrl: './dossier-assign-user.component.html',
-  styleUrls: ['./dossier-assign-user.component.css']
+  styleUrls: ['./dossier-assign-user.component.css'],
 })
 export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy {
   @Input() documentId: string;
@@ -48,8 +48,7 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
   assignedUserFullName$ = new BehaviorSubject<string>(null);
   private _subscriptions = new Subscription();
 
-  constructor(private readonly documentService: DocumentService) {
-  }
+  constructor(private readonly documentService: DocumentService) {}
 
   ngOnInit(): void {
     console.log('ngoninit signee', this.assigneeId);
@@ -59,8 +58,7 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
         if (this.assigneeId) {
           this.assignedIdOnServer$.next(this.assigneeId);
           this.userIdToAssign = this.assigneeId;
-          this.assignedUserFullName$.next(this.assigneeFullName
-          );
+          this.assignedUserFullName$.next(this.assigneeFullName);
         }
         this.enable();
       })
@@ -75,7 +73,6 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
         this.assignedIdOnServer$.next(currentUserEmail || null);
         this.userIdToAssign = currentUserEmail || null;
         this.assignedUserFullName$.next(this.assigneeFullName);
-
       });
     } else {
       this.clear();
@@ -129,10 +126,9 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
     return (
       users &&
       users
-        .filter((user, index, users) =>
-          index === users.findIndex((findUser) =>
-            findUser.id === user.id
-          ))
+        .filter(
+          (user, index, users) => index === users.findIndex(findUser => findUser.id === user.id)
+        )
         .map(user => ({text: `${user.firstName} ${user.lastName}`, id: user.id}))
     );
   }
