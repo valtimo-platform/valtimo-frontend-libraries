@@ -16,8 +16,8 @@
 
 import {
   Component,
-  ComponentFactoryResolver,
-  OnInit,
+  ComponentFactoryResolver, EventEmitter,
+  OnInit, Output,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -52,6 +52,8 @@ import {NGXLogger} from 'ngx-logger';
   styleUrls: ['./dossier-detail.component.css'],
 })
 export class DossierDetailComponent implements OnInit {
+  @Output() assignmentOfTaskChanged = new EventEmitter();
+
   @ViewChild('tabContainer', {read: ViewContainerRef, static: true})
   viewContainerRef: ViewContainerRef;
 
@@ -91,7 +93,7 @@ export class DossierDetailComponent implements OnInit {
         ) {
           this.configService.config.customDossierHeader[
             this.documentDefinitionName.toLowerCase()
-          ]?.forEach(item => this.getCustomDossierHeaderItem(item));
+            ]?.forEach(item => this.getCustomDossierHeaderItem(item));
         }
       }
     })
@@ -210,9 +212,9 @@ export class DossierDetailComponent implements OnInit {
       path.split('.').reduce((o, i) => o[i], this.document.content) || item['noValueText'] || '';
     const dateFormats = [
       moment.ISO_8601,
-      "MM-DD-YYYY",
-      "DD-MM-YYYY",
-      "YYYY-MM-DD"
+      'MM-DD-YYYY',
+      'DD-MM-YYYY',
+      'YYYY-MM-DD'
     ];
     switch (item['modifier']) {
       case 'age': {
@@ -228,5 +230,8 @@ export class DossierDetailComponent implements OnInit {
       }
     }
     return prefix + string;
+  }
+
+  changeUser(userId: string): void {
   }
 }

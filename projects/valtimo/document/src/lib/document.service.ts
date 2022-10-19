@@ -42,7 +42,7 @@ import {
   UploadProcessLink,
 } from './models';
 import {DocumentSearchRequest} from './document-search-request';
-import {ConfigService} from '@valtimo/config';
+import {ConfigService, User} from '@valtimo/config';
 
 @Injectable({
   providedIn: 'root',
@@ -265,5 +265,10 @@ export class DocumentService {
       `${this.valtimoEndpointUri}document/${documentId}/assign`,
       {assigneeId}
     );
+  }
+
+  getCandidateUsers(documentId: string): Observable<Array<User>> {
+    return this.http.get<Array<User>>(
+      `${this.valtimoEndpointUri}/document/${documentId}/candidate-user`);
   }
 }
