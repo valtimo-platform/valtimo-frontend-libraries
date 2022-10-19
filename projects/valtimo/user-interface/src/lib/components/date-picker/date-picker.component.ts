@@ -53,6 +53,7 @@ export class DatePickerComponent implements AfterViewInit, OnDestroy {
   @Input() required = false;
   @Input() defaultDate!: string;
   @Input() defaultDateIsToday!: boolean;
+  @Input() smallLabel = false;
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 
