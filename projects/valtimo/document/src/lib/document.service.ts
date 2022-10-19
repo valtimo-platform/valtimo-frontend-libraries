@@ -267,6 +267,13 @@ export class DocumentService {
     );
   }
 
+  unassignHandlerFromDocument(documentId: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.valtimoEndpointUri}document/${documentId}/unassign`,
+      {}
+    );
+  }
+
   getCandidateUsers(documentId: string): Observable<Array<User>> {
     return this.http.get<Array<User>>(
       `${this.valtimoEndpointUri}/document/${documentId}/candidate-user`);
