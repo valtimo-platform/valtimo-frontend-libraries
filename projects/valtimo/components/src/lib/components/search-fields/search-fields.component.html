@@ -43,5 +43,80 @@
 </ng-template>
 
 <ng-template #searchFieldTemplate let-searchField="searchField">
-  {{ searchField.key }}
+  <ng-container
+    *ngIf="{
+      tooltipKey: 'searchFieldsTooltips.' + searchField.key,
+      tooltip: 'searchFieldsTooltips.' + searchField.key | translate
+    } as vars"
+  >
+    <ng-container
+      *ngTemplateOutlet="
+        searchFieldTemplateText;
+        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip}
+      "
+    ></ng-container>
+    <ng-container
+      *ngTemplateOutlet="
+        searchFieldTemplateNumber;
+        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip}
+      "
+    ></ng-container>
+    <ng-container
+      *ngTemplateOutlet="
+        searchFieldTemplateDate;
+        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip}
+      "
+    ></ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template
+  #searchFieldTemplateText
+  let-searchField="searchField"
+  let-tooltip="tooltip"
+  let-tooltipKey="tooltipKey"
+>
+  <v-input
+    *ngIf="searchField.datatype === 'text' && searchField.fieldtype === 'single'"
+    [name]="searchField.key"
+    [title]="'searchFields.' + searchField.key | translate"
+    [fullWidth]="true"
+    [tooltip]="tooltip !== tooltipKey && tooltip"
+    (valueChange)="singleValueChange(searchField.key, $event)"
+  >
+  </v-input>
+</ng-template>
+
+<ng-template
+  #searchFieldTemplateNumber
+  let-searchField="searchField"
+  let-tooltip="tooltip"
+  let-tooltipKey="tooltipKey"
+>
+  <v-input
+    *ngIf="searchField.datatype === 'number' && searchField.fieldtype === 'single'"
+    [name]="searchField.key"
+    [title]="'searchFields.' + searchField.key | translate"
+    [fullWidth]="true"
+    (valueChange)="singleValueChange(searchField.key, $event)"
+    type="number"
+    [hideNumberSpinBox]="true"
+    [tooltip]="tooltip !== tooltipKey && tooltip"
+  >
+  </v-input>
+</ng-template>
+
+<ng-template
+  #searchFieldTemplateDate
+  let-searchField="searchField"
+  let-tooltip="tooltip"
+  let-tooltipKey="tooltipKey"
+>
+  <v-date-picker
+    *ngIf="searchField.datatype === 'date' && searchField.fieldtype === 'single'"
+    [title]="'searchFields.' + searchField.key | translate"
+    [tooltip]="tooltip !== tooltipKey && tooltip"
+    [name]="searchField.key"
+    fullWidth="true"
+  ></v-date-picker>
 </ng-template>

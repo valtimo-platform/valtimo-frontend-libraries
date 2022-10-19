@@ -14,20 +14,64 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
-import {SearchField} from '@valtimo/config';
-import {BehaviorSubject} from 'rxjs';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {SearchField, SearchFieldValue, SearchFieldWithValue} from '@valtimo/config';
+import {BehaviorSubject, combineLatest, Subscription, take} from 'rxjs';
 
 @Component({
   selector: 'valtimo-search-fields',
   templateUrl: './search-fields.component.html',
   styleUrls: ['./search-fields.component.scss'],
 })
-export class SearchFieldsComponent {
+export class SearchFieldsComponent implements OnInit, OnDestroy {
   readonly searchFields$ = new BehaviorSubject<Array<SearchField>>([]);
+
+  readonly values$ = new BehaviorSubject<{[key: string]: SearchFieldValue}>({});
 
   @Input() loading: boolean;
   @Input() set searchFields(fields: Array<SearchField>) {
     this.searchFields$.next(fields);
+  }
+  @Output() valueChange: EventEmitter<Array<SearchFieldWithValue>> = new EventEmitter<
+    Array<SearchFieldWithValue>
+  >();
+
+  valuesSubscription!: Subscription;
+
+  ngOnInit() {
+    this.openValuesSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.valuesSubscription?.unsubscribe();
+  }
+
+  singleValueChange(searchFieldKey: string, value: any): void {
+    this.values$.pipe(take(1)).subscribe(values => {
+      this.values$.next({...values, [searchFieldKey]: value});
+    });
+  }
+
+  private openValuesSubscription(): void {
+    this.valuesSubscription = combineLatest([this.searchFields$, this.values$]).subscribe(
+      ([searchFields, values]) => {
+        const valuesKeys = Object.keys(values);
+        const searchFieldsCopy = [...(searchFields || [])] as Array<SearchFieldWithValue>;
+
+        valuesKeys.forEach(valueKey => {
+          const correspondingSearchFieldIndex = searchFieldsCopy.findIndex(
+            searchField => searchField.key === valueKey
+          );
+
+          if (correspondingSearchFieldIndex !== -1) {
+            searchFieldsCopy[correspondingSearchFieldIndex].value = values[valueKey];
+          }
+        });
+
+        console.log(searchFieldsCopy);
+
+        this.valueChange.emit(searchFieldsCopy);
+      }
+    );
   }
 }

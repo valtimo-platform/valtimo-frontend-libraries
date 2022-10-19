@@ -19,10 +19,20 @@ import {CommonModule} from '@angular/common';
 import {SearchFieldsComponent} from './search-fields.component';
 import {SpinnerModule} from '../spinner/spinner.module';
 import {WidgetModule} from '../widget/widget.module';
+import {TranslateModule} from '@ngx-translate/core';
+import {DatePickerModule, FormModule, InputModule} from '@valtimo/user-interface';
 
 @NgModule({
   declarations: [SearchFieldsComponent],
-  imports: [CommonModule, SpinnerModule, WidgetModule],
+  imports: [
+    CommonModule,
+    SpinnerModule,
+    WidgetModule,
+    TranslateModule,
+    InputModule,
+    FormModule,
+    DatePickerModule,
+  ],
   exports: [SearchFieldsComponent],
 })
 export class SearchFieldsModule {}
