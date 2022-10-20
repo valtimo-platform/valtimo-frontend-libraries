@@ -30,12 +30,12 @@
             [disabled]="obs.disabled"
             [style]="'underlinedText'"
             [items]="mapUsersForDropdown(obs.candidateUsers)"
-            [buttonText]="'assignTask.header' | translate"
+            [buttonText]="'assignDocument.header' | translate"
             [searchText]="'interface.typeToSearch' | translate"
             [noResultsText]="'interface.noSearchResults' | translate"
-            [selectedText]="'assignTask.assignedTo' | translate"
+            [selectedText]="'assignDocument.assignedTo' | translate"
             [selectedTextValue]="assignedUserFullName$ | async"
-            [clearSelectionButtonTitle]="'assignTask.remove' | translate"
+            [clearSelectionButtonTitle]="'assignDocument.remove' | translate"
             [hasSelection]="
               userIdToAssign === obs.idOnServer && obs.idOnServer !== null && obs.fullName
             "
@@ -52,6 +52,6 @@
 
 <ng-template #loading>
   <h5>
-    <b>{{ 'assignTask.fetchingUsers' | translate }}</b>
+    <b>{{ 'assignDocument.fetchingUsers' | translate }}</b>
   </h5>
 </ng-template>

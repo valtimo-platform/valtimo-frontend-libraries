@@ -18,6 +18,10 @@
   color: #959595;
 }
 
-i {
+valtimo-searchable-dropdown-select {
   font-size: 13px;
+}
+
+/deep/ .card-header h5{
+  margin-block: 0;
 }
