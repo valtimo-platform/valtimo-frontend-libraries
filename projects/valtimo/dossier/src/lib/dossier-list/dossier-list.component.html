@@ -79,11 +79,21 @@
         </div>
       </div>
       <valtimo-spinner *ngIf="obs.loading"></valtimo-spinner>
+      <ng-container *ngTemplateOutlet="searchFields"></ng-container>
       <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
     </div>
   </div>
   <valtimo-dossier-process-start-modal #processStartModal></valtimo-dossier-process-start-modal>
 </div>
+
+<ng-template #searchFields>
+  <div class="mb-3" *ngIf="enableCaseSearchFields">
+    <valtimo-search-fields
+      [loading]="loadingDocumentSearchFields$ | async"
+      [searchFields]="documentSearchFields$ | async"
+    ></valtimo-search-fields>
+  </div>
+</ng-template>
 
 <ng-template #list let-obs="obs">
   <ng-container *ngIf="paginationCopy$ | async as pagination">
@@ -119,7 +129,7 @@
 </ng-template>
 
 <ng-template #sidebar>
-  <valtimo-filter-sidebar>
+  <valtimo-filter-sidebar *ngIf="!enableCaseSearchFields">
     <h4 class="title">Search</h4>
     <div class="mb-4">
       <input

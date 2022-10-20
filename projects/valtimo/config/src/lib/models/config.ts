@@ -102,6 +102,7 @@ export interface ValtimoConfig {
     enableHackathonCasesPage?: boolean;
     showUserNameInTopBar?: boolean;
     experimentalDmnEditing?: boolean;
+    caseSearchFields?: boolean;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
   customTaskList?: CustomTaskList;

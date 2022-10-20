@@ -32,6 +32,7 @@ import {
   ListModule,
   ModalModule,
   SearchableDropdownSelectModule,
+  SearchFieldsModule,
   SpinnerModule,
   TimelineModule,
   UploaderModule,
@@ -129,6 +130,7 @@ export type TabsFactory = () => Map<string, object>;
     ButtonModule,
     DocumentenApiMetadataModalModule,
     SearchableDropdownSelectModule,
+    SearchFieldsModule,
   ],
   exports: [DossierListComponent, DossierDetailComponent],
 })
