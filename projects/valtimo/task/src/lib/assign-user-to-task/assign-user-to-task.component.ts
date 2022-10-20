@@ -96,8 +96,7 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
           this.userEmailToAssign = userEmail;
           this.assignedEmailOnServer$.next(userEmail);
           this.assignedUserFullName$.next(this.getAssignedUserName(candidateUsers, userEmail));
-          // this.emitChange();
-          console.log('assigned');
+          this.emitChange();
           this.enable();
         })
       )
@@ -127,6 +126,7 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   mapUsersForDropdown(users: User[]): DropdownItem[] {
+    console.log(users);
     return (
       users &&
       users

@@ -129,9 +129,7 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
     return (
       users &&
       users
-        .filter(
-          (user, index, users) => index === users.findIndex(findUser => findUser.id === user.id)
-        )
+        .sort((a, b) => a.lastName.localeCompare(b.lastName))
         .map(user => ({text: `${user.firstName} ${user.lastName}`, id: user.id}))
     );
   }
