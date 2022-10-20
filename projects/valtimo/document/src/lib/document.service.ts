@@ -281,6 +281,7 @@ export class DocumentService {
     return this.http.get<Array<User>>(
       `${this.valtimoEndpointUri}/document/${documentId}/candidate-user`
     );
+  }
 
   getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
     return of([

@@ -26,7 +26,7 @@ import {
 } from '@angular/core';
 import {DropdownItem} from '@valtimo/components';
 import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
-import {map, take, tap} from 'rxjs/operators';
+import {take, tap} from 'rxjs/operators';
 import {User} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 
@@ -48,10 +48,10 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
   assignedUserFullName$ = new BehaviorSubject<string>(null);
   private _subscriptions = new Subscription();
 
-  constructor(private readonly documentService: DocumentService) {}
+  constructor(private readonly documentService: DocumentService) {
+  }
 
   ngOnInit(): void {
-    console.log('ngoninit signee', this.assigneeId);
     this._subscriptions.add(
       this.documentService.getCandidateUsers(this.documentId).subscribe(candidateUsers => {
         this.candidateUsersForDocument$.next(candidateUsers);
@@ -104,18 +104,21 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
 
   unassignDocument(): void {
     this.disable();
-    this.clear();
-    this.emitChange();
-    this.enable();
+    this.documentService
+      .unassignHandlerFromDocument(this.documentId)
+      .pipe(
+        tap(() => {
+          this.clear();
+          this.emitChange();
+          this.enable();
+        })
+      )
+      .subscribe();
   }
 
   getAssignedUserName(users: User[], userId: string): string {
-    console.log('users', users);
-    console.log('finduserIdUser', userId);
-
     if (users && userId) {
       const findUser = users.find(user => user.id === userId);
-      console.log('findUser', findUser);
 
       return findUser ? findUser.fullName : '';
     }

@@ -47,7 +47,8 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
   assignedUserFullName$ = new BehaviorSubject<string>(null);
   private _subscriptions = new Subscription();
 
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService) {
+  }
 
   ngOnInit(): void {
     this._subscriptions.add(
@@ -110,7 +111,7 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         tap(() => {
           this.clear();
-          // this.emitChange();
+          this.emitChange();
           this.enable();
         })
       )
