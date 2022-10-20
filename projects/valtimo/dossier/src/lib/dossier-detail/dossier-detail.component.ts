@@ -17,9 +17,7 @@
 import {
   Component,
   ComponentFactoryResolver,
-  EventEmitter,
   OnInit,
-  Output,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -54,8 +52,6 @@ import {NGXLogger} from 'ngx-logger';
   styleUrls: ['./dossier-detail.component.css'],
 })
 export class DossierDetailComponent implements OnInit {
-  @Output() assignmentOfTaskChanged = new EventEmitter();
-
   @ViewChild('tabContainer', {read: ViewContainerRef, static: true})
   viewContainerRef: ViewContainerRef;
 
@@ -192,6 +188,10 @@ export class DossierDetailComponent implements OnInit {
           this.logger.debug('Something went wrong while assigning user to case');
         }
       );
+  }
+
+  assignmentOfDocumentChanged(): void {
+    this.refreshDocument$.next(null);
   }
 
   private getCustomDossierHeaderItem(item): void {

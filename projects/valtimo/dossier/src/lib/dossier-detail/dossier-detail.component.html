@@ -118,11 +118,10 @@
 <ng-template #caseDetailAssignee>
   <div class="row ml-0 mr-0 mt-1 mb-1" *ngIf="document$ | async as document">
     <valtimo-dossier-assign-user
-      *ngIf="document && assignmentOfTaskChanged"
       [documentId]="document.id"
       [assigneeId]="document.assigneeId"
       [assigneeFullName]="document?.assigneeFullName"
-      (assignmentOfDocumentChanged)="assignmentOfTaskChanged.emit()"
+      (assignmentOfDocumentChanged)="assignmentOfDocumentChanged()"
     ></valtimo-dossier-assign-user>
   </div>
 </ng-template>

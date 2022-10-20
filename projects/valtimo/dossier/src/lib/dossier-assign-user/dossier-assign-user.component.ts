@@ -25,8 +25,8 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {DropdownItem} from '@valtimo/components';
-import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
-import {take, tap} from 'rxjs/operators';
+import {BehaviorSubject, Subscription} from 'rxjs';
+import {tap} from 'rxjs/operators';
 import {User} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 
@@ -39,17 +39,19 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
   @Input() documentId: string;
   @Input() assigneeId: string;
   @Input() assigneeFullName: string;
+
   @Output() assignmentOfDocumentChanged = new EventEmitter();
 
-  candidateUsersForDocument$ = new BehaviorSubject<User[]>(undefined);
-  disabled$ = new BehaviorSubject<boolean>(true);
-  assignedIdOnServer$ = new BehaviorSubject<string>(null);
-  userIdToAssign: string = null;
-  assignedUserFullName$ = new BehaviorSubject<string>(null);
+  userIdToAssign: string | null = null;
+
+  readonly candidateUsersForDocument$ = new BehaviorSubject<User[]>(undefined);
+  readonly disabled$ = new BehaviorSubject<boolean>(true);
+  readonly assignedIdOnServer$ = new BehaviorSubject<string>(null);
+  readonly assignedUserFullName$ = new BehaviorSubject<string>(null);
+
   private _subscriptions = new Subscription();
 
-  constructor(private readonly documentService: DocumentService) {
-  }
+  constructor(private readonly documentService: DocumentService) {}
 
   ngOnInit(): void {
     this._subscriptions.add(
@@ -65,33 +67,30 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
     );
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    const assigneeId = changes.assigneeId;
-    if (assigneeId) {
-      this.candidateUsersForDocument$.pipe(take(1)).subscribe(candidateUsers => {
-        const currentUserEmail = assigneeId.currentValue;
-        this.assignedIdOnServer$.next(currentUserEmail || null);
-        this.userIdToAssign = currentUserEmail || null;
-        this.assignedUserFullName$.next(this.assigneeFullName);
-      });
+  ngOnChanges(changes: SimpleChanges): void {
+    const assigneeId = changes?.assigneeId?.currentValue;
+    const assigneeFullName = changes?.assigneeFullName?.currentValue;
+
+    if (assigneeId && assigneeFullName) {
+      this.assignedIdOnServer$.next(assigneeId || null);
+      this.userIdToAssign = assigneeId || null;
+      this.assignedUserFullName$.next(assigneeFullName);
     } else {
       this.clear();
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
   assignDocument(userId: string): void {
     this.disable();
-    combineLatest([
-      this.candidateUsersForDocument$,
-      this.documentService.assignHandlerToDocument(this.documentId, userId),
-    ])
+
+    this.documentService
+      .assignHandlerToDocument(this.documentId, userId)
       .pipe(
-        take(1),
-        tap(([candidateUsers]) => {
+        tap(() => {
           this.userIdToAssign = userId;
           this.assignedIdOnServer$.next(userId);
           this.assignedUserFullName$.next(this.assigneeFullName);
@@ -114,15 +113,6 @@ export class DossierAssignUserComponent implements OnInit, OnChanges, OnDestroy 
         })
       )
       .subscribe();
-  }
-
-  getAssignedUserName(users: User[], userId: string): string {
-    if (users && userId) {
-      const findUser = users.find(user => user.id === userId);
-
-      return findUser ? findUser.fullName : '';
-    }
-    return '';
   }
 
   mapUsersForDropdown(users: User[]): DropdownItem[] {

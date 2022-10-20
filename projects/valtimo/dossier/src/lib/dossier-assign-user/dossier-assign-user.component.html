@@ -17,7 +17,9 @@
 <ng-container
   *ngIf="{
     candidateUsers: candidateUsersForDocument$ | async,
-    idOnServer: assignedIdOnServer$ | async
+    idOnServer: assignedIdOnServer$ | async,
+    fullName: assignedUserFullName$ | async,
+    disabled: disabled$ | async
   } as obs"
 >
   <div class="container-fluid">
@@ -25,6 +27,7 @@
       <div class="col-12 pl-0 d-flex flex-row align-items-center">
         <ng-container *ngIf="obs.candidateUsers; else loading">
           <valtimo-searchable-dropdown-select
+            [disabled]="obs.disabled"
             [style]="'underlinedText'"
             [items]="mapUsersForDropdown(obs.candidateUsers)"
             [buttonText]="'assignTask.header' | translate"
@@ -33,7 +36,9 @@
             [selectedText]="'assignTask.assignedTo' | translate"
             [selectedTextValue]="assignedUserFullName$ | async"
             [clearSelectionButtonTitle]="'assignTask.remove' | translate"
-            [hasSelection]="userIdToAssign === obs.idOnServer && obs.idOnServer !== null"
+            [hasSelection]="
+              userIdToAssign === obs.idOnServer && obs.idOnServer !== null && obs.fullName
+            "
             [width]="250"
             (itemSelected)="assignDocument($event)"
             (clearSelection)="unassignDocument()"
