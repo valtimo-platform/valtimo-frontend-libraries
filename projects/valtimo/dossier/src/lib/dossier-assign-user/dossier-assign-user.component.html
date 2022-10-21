@@ -28,6 +28,7 @@
         <ng-container *ngIf="obs.candidateUsers; else loading">
           <valtimo-searchable-dropdown-select
             [disabled]="obs.disabled"
+            id="dossier-candidates-dropdown"
             [style]="'underlinedText'"
             [items]="mapUsersForDropdown(obs.candidateUsers)"
             [buttonText]="'assignDocument.header' | translate"
