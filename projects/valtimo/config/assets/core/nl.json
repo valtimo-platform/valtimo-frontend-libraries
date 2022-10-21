@@ -477,7 +477,7 @@
   },
   "assignDocument": {
     "assignedTo": "Toegewezen aan ",
-    "header": "Gebruiker toewijzen aan deze case",
+    "header": "Gebruiker toewijzen aan dit dossier",
     "remove": "Toewijzing ongedaan maken",
     "fetchingUsers": "Gebruikers ophalen..."
   },

@@ -270,8 +270,8 @@ export class DocumentService {
     );
   }
 
-  unassignHandlerFromDocument(documentId: string): Observable<any> {
-    return this.http.post<any>(
+  unassignHandlerFromDocument(documentId: string): Observable<void> {
+    return this.http.post<void>(
       `${this.valtimoEndpointUri}document/${documentId}/unassign`,
       {}
     );

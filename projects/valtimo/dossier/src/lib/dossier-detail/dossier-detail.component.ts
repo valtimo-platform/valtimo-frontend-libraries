@@ -14,13 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  ComponentFactoryResolver,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef,} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Document, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {TabLoaderImpl} from '../models';
@@ -31,18 +25,7 @@ import {ProcessService} from '@valtimo/process';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {ConfigService} from '@valtimo/config';
 import moment from 'moment';
-import {
-  BehaviorSubject,
-  combineLatest,
-  from,
-  map,
-  Observable,
-  of,
-  startWith,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, from, map, Observable, of, startWith, switchMap, take, tap,} from 'rxjs';
 import {KeycloakService} from 'keycloak-angular';
 import {NGXLogger} from 'ngx-logger';
 
@@ -228,6 +211,4 @@ export class DossierDetailComponent implements OnInit {
     }
     return prefix + string;
   }
-
-  changeUser(userId: string): void {}
 }
