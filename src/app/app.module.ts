@@ -28,7 +28,6 @@ import {
   BpmnJsDiagramModule,
   CardModule,
   FormIoModule,
-  FormIoUploaderComponent,
   MenuModule,
   registerDocumentenApiFormioUploadComponent,
   registerFormioFileSelectorComponent,
