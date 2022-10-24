@@ -230,7 +230,6 @@
     "code-prettify": "^0.1.0",
     "codemirror": "^6.0.0",
     "components-jqueryui": "^1.12.1",
-    "copyfiles": "^2.3.0",
     "core-js": "^3.23.3",
     "dmn-js": "^12.1.0",
     "dragula": "^3.7.2",
