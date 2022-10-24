@@ -30,7 +30,6 @@
     "moment": "^2.29.4",
     "multiselect": "^0.9.12",
     "perfect-scrollbar": "^1.4.0",
-    "roboto-fontface": "~0.10.0",
     "select2": "^4.1.0-rc.0",
     "tslib": "^2.0.0"
   }

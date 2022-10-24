@@ -284,7 +284,6 @@
     "prettier": "^2.7.1",
     "protractor": "~7.0.0",
     "rimraf": "^3.0.2",
-    "roboto-fontface": "~0.10.0",
     "rxjs": "~7.5.5",
     "select2": "^4.1.0-rc.0",
     "stylus": "^0.58.1",
