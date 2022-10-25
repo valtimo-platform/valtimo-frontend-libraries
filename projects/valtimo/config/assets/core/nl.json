@@ -27,7 +27,9 @@
       "contact-moments": "Contactmomenten",
       "custom-dossier": "Custom dossier",
       "custom-maps": "Custom maps",
-      "zaakobjecten": "Zaakobjecten"
+      "zaakobjecten": "Zaakobjecten",
+      "caseDetails": "caseDetails",
+      "searchFields": "searchFields"
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
@@ -280,6 +282,10 @@
     "linkProcess": {
       "title": "Uploadproces koppelen aan dossier",
       "description": "Kies welk proces het uploaden van bestanden moet afhandelen."
+    },
+    "tabs": {
+      "cases": "Cases",
+      "searchFields": "Search Fields"
     }
   },
   "serviceTaskManagement": {

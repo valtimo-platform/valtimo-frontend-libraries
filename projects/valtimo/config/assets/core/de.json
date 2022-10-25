@@ -27,7 +27,9 @@
       "contact-moments": "Kontaktmomente",
       "custom-dossier": "Kunden-Dossier",
       "custom-maps": "Kunden-Karten",
-      "zaakobjecten": "Zaak-Objecte"
+      "zaakobjecten": "Zaak-Objecte",
+      "caseDetails": "caseDetails",
+      "searchFields": "searchFields"
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
@@ -280,6 +282,10 @@
     "linkProcess": {
       "title": "Verknüpfen Sie den Upload-Prozess mit dem Fall",
       "description": "Wählen Sie einen Prozess, der das Hochladen von Dateien handhaben soll."
+    },
+    "tabs": {
+      "cases": "Cases",
+      "searchFields": "Search Fields"
     }
   },
   "serviceTaskManagement": {

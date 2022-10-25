@@ -27,7 +27,9 @@
       "contact-moments": "Contact moments",
       "custom-dossier": "Custom dossier",
       "custom-maps": "Custom maps",
-      "zaakobjecten": "Zaak objects"
+      "zaakobjecten": "Zaak objects",
+      "caseDetails": "caseDetails",
+      "searchFields": "searchFields"
     },
     "forms": {
       "globalSearchPlaceHolder": "Everything",
@@ -280,6 +282,10 @@
     "linkProcess": {
       "title": "Link upload process to case",
       "description": "Choose which process should handle file uploads."
+    },
+    "tabs": {
+      "cases": "Cases",
+      "searchFields": "Search Fields"
     }
   },
   "serviceTaskManagement": {

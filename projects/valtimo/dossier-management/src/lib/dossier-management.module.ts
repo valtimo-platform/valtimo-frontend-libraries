@@ -18,13 +18,7 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {
-  DropzoneModule,
-  ListModule,
-  ModalModule,
-  MultiselectDropdownModule,
-  WidgetModule,
-} from '@valtimo/components';
+import {DropzoneModule, ListModule, ModalModule, MultiselectDropdownModule, WidgetModule,} from '@valtimo/components';
 import {ConfigModule} from '@valtimo/config';
 import {DossierManagementConnectModalComponent} from './dossier-management-connect-modal/dossier-management-connect-modal.component';
 import {DossierManagementDetailComponent} from './dossier-management-detail/dossier-management-detail.component';
@@ -36,6 +30,7 @@ import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {DossierManagementRolesComponent} from './dossier-management-roles/dossier-management-roles.component';
 import {DossierManagementLinkProcessComponent} from './dossier-management-link-process/dossier-management-link-process.component';
 import {ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {DossierManagementSearchFieldsComponent} from './dossier-management-detail/tabs/dossier-management-search-fields/dossier-management-search-fields.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +41,7 @@ import {ParagraphModule, SelectModule} from '@valtimo/user-interface';
     DossierManagementUploadComponent,
     DossierManagementRolesComponent,
     DossierManagementLinkProcessComponent,
+    DossierManagementSearchFieldsComponent,
   ],
   imports: [
     CommonModule,

@@ -43,6 +43,21 @@
           </div>
         </h3>
       </div>
+
+      <ul class="nav nav-tabs">
+        <li class="nav-item" *ngFor="let tab of tabLoader.tabs">
+          <a
+                  id="{{ tab.name }}-tab"
+                  class="nav-link clickable"
+                  [ngClass]="{active: tab.isActive()}"
+                  data-toggle="tab"
+                  (click)="tabLoader.load(tab)"
+          >
+            {{ tabLoader.translateTabName(tab) }}
+          </a>
+        </li>
+      </ul>
+
       <div class="row bg-white mt-5 mb-2 pl-2 pr-2">
         <div class="col-5">
           <h2>{{ 'document definition' | translate }}</h2>
