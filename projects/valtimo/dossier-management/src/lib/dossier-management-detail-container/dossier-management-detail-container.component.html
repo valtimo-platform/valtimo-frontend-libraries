@@ -1,0 +1,28 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="col-12 px-0 mb-5">
+      <valtimo-widget>
+        <!-- ----------------------------------------------------- TABS-->
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a id="test-tab" class="nav-link clickable" data-toggle="tab">
+              {{ 'dossierManagement.tabs.cases' | translate }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a id="test-tab-1" class="nav-link clickable" data-toggle="tab">
+              {{ 'dossierManagement.tabs.searchFields' | translate }}
+            </a>
+          </li>
+        </ul>
+        <!-- ----------------------------------------------------- CARD BODY-->
+        <div class="card-body bg-white p-5 position-relative tab-container">
+          <ng-template #tabContainer>Loading...</ng-template>
+          <valtimo-dossier-management-detail></valtimo-dossier-management-detail>
+          <div class="clearfix"></div>
+        </div>
+
+      </valtimo-widget>
+    </div>
+  </div>
+</div>
