@@ -17,11 +17,11 @@
 
         <div class="card-body bg-white p-5 position-relative tab-container">
 
-           <div *ngIf="tab === 'case'">
+           <div *ngIf="isCase">
             <valtimo-dossier-management-tab-details></valtimo-dossier-management-tab-details>
           </div>
 
-          <div *ngIf="tab === 'search'">
+          <div *ngIf="!isCase">
             <p>search fields</p>
           </div>
         </div>

@@ -282,7 +282,7 @@
       "description": "Kies welk proces het uploaden van bestanden moet afhandelen."
     },
     "tabs": {
-      "cases": "Zaken",
+      "cases": "Zaak Details",
       "searchFields": "Zoekvelden"
     }
   },

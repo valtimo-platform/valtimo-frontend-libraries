@@ -23,9 +23,10 @@ import {Component} from '@angular/core';
 })
 export class DossierManagementDetailContainerComponent {
 
-  public tab = 'cases';
+  public isCase= true;
+  public isSearchFields: boolean;
 
   displayBodyComponent(tab: string): void {
-    this.tab = tab;
+    tab === 'case' ? this.isCase = true : this.isCase = false
   }
 }

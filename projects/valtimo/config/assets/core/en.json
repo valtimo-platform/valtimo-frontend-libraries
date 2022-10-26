@@ -282,7 +282,7 @@
       "description": "Choose which process should handle file uploads."
     },
     "tabs": {
-      "cases": "Cases",
+      "cases": "Case Details",
       "searchFields": "Search Fields"
     }
   },

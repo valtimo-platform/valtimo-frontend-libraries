@@ -282,7 +282,7 @@
       "description": "Wählen Sie einen Prozess, der das Hochladen von Dateien handhaben soll."
     },
     "tabs": {
-      "cases": "Cases",
+      "cases": "Falldetails",
       "searchFields": "Suchfelder"
     }
   },
