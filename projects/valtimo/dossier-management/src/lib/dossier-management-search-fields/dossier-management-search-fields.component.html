@@ -14,4 +14,15 @@
   ~ limitations under the License.
   -->
 
-dossier management search fields works
+<ng-container
+  *ngIf="{searchFields: translatedSearchFields$ | async, fields: fields$ | async} as obs"
+>
+  <valtimo-list
+    [items]="obs.searchFields"
+    [fields]="obs.fields"
+    [viewMode]="false"
+    [header]="false"
+  >
+    <div header>header</div>
+  </valtimo-list>
+</ng-container>

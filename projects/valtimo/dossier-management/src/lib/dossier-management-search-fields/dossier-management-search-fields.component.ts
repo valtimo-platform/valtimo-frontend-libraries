@@ -14,10 +14,85 @@
  * limitations under the License.
  */
 import {Component} from '@angular/core';
+import {DocumentService} from '@valtimo/document';
+import {combineLatest, map, Observable, switchMap} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {ListField} from '@valtimo/components';
+import {TranslateService} from '@ngx-translate/core';
+import {DefinitionColumn, SearchField} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-management-search-fields',
   templateUrl: './dossier-management-search-fields.component.html',
   styleUrls: ['./dossier-management-search-fields.component.scss'],
 })
-export class DossierManagementSearchFieldsComponent {}
+export class DossierManagementSearchFieldsComponent {
+  private readonly COLUMNS: Array<DefinitionColumn> = [
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'key',
+      translationKey: 'key',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'datatype',
+      translationKey: 'datatype',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'fieldtype',
+      translationKey: 'fieldtype',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'matchtype',
+      translationKey: 'matchtype',
+    },
+  ];
+
+  readonly fields$: Observable<Array<ListField>> = this.translateService.stream('key').pipe(
+    map(() =>
+      this.COLUMNS.map(column => ({
+        key: column.propertyName,
+        label: this.translateService.instant(`searchFieldsOverview.${column.translationKey}`),
+        sortable: column.sortable,
+        ...(column.viewType && {viewType: column.viewType}),
+      }))
+    )
+  );
+
+  private readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
+    map(params => params.documentDefinitionName || '')
+  );
+
+  private readonly searchFields$: Observable<Array<SearchField>> =
+    this.documentDefinitionName$.pipe(
+      switchMap(documentDefinitionName =>
+        this.documentService.getDocumentSearchFields(documentDefinitionName)
+      )
+    );
+
+  readonly translatedSearchFields$: Observable<Array<SearchField>> = combineLatest([
+    this.searchFields$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([searchFields]) =>
+      searchFields.map(searchField => ({
+        ...searchField,
+        datatype: this.translateService.instant(`searchFields.${searchField.datatype}`),
+        matchtype: this.translateService.instant(`searchFieldsOverview.${searchField.matchtype}`),
+        fieldtype: this.translateService.instant(`searchFieldsOverview.${searchField.fieldtype}`),
+      }))
+    )
+  );
+
+  constructor(
+    private readonly documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly translateService: TranslateService
+  ) {}
+}
