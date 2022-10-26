@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 
 @Component({
-  selector: 'lib-dossier-management-detail-container',
+  selector: 'valtimo-dossier-management-detail-container',
   templateUrl: './dossier-management-detail-container.component.html',
   styleUrls: ['./dossier-management-detail-container.component.css']
 })
