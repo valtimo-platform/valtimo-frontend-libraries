@@ -23,12 +23,9 @@ import {Component} from '@angular/core';
 })
 export class DossierManagementDetailContainerComponent {
 
+  public tab = 'cases';
 
-  tab: string;
-
-  displayBodyComponent(tab: string) {
+  displayBodyComponent(tab: string): void {
     this.tab = tab;
-    console.log(this.tab);
   }
-
 }

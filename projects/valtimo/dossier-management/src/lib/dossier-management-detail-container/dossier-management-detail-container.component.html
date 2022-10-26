@@ -2,10 +2,9 @@
   <div class="container-fluid">
     <div class="col-12 px-0 mb-5">
       <valtimo-widget>
-        <!-- ----------------------------------------------------- TABS-->
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a id="test-tab" class="nav-link clickable" data-toggle="tab" (click)="displayBodyComponent('case')">
+            <a id="test-tab" class="nav-link clickable active" data-toggle="tab" (click)="displayBodyComponent('case')">
               {{ 'dossierManagement.tabs.cases' | translate }}
             </a>
           </li>
@@ -15,16 +14,16 @@
             </a>
           </li>
         </ul>
-        <!-- ----------------------------------------------------- CARD BODY-->
+
         <div class="card-body bg-white p-5 position-relative tab-container">
-          <div *ngIf="tab === 'case'">
+
+           <div *ngIf="tab === 'case'">
             <valtimo-dossier-management-tab-details></valtimo-dossier-management-tab-details>
           </div>
 
           <div *ngIf="tab === 'search'">
-            <valtimo-dossier-management-tab-search-fields></valtimo-dossier-management-tab-search-fields>
+            <p>search fields</p>
           </div>
-          <div class="clearfix"></div>
         </div>
 
       </valtimo-widget>
