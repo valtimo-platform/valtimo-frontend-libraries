@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-import {Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'lib-dossier-management-detail-container',
   templateUrl: './dossier-management-detail-container.component.html',
   styleUrls: ['./dossier-management-detail-container.component.css']
 })
-export class DossierManagementDetailContainerComponent implements OnInit {
-  @ViewChild('tabContainer', {read: ViewContainerRef, static: true})
-  viewContainerRef: ViewContainerRef;
+export class DossierManagementDetailContainerComponent {
 
-  constructor(private readonly componentFactoryResolver: ComponentFactoryResolver) {
 
-  }
+  tab: string;
 
-  ngOnInit(): void {
-  }
-
-  showCaseDetails() {
+  displayBodyComponent(tab: string) {
+    this.tab = tab;
+    console.log(this.tab);
   }
 
 }

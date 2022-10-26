@@ -5,20 +5,25 @@
         <!-- ----------------------------------------------------- TABS-->
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a id="test-tab" class="nav-link clickable" data-toggle="tab">
+            <a id="test-tab" class="nav-link clickable" data-toggle="tab" (click)="displayBodyComponent('case')">
               {{ 'dossierManagement.tabs.cases' | translate }}
             </a>
           </li>
           <li class="nav-item">
-            <a id="test-tab-1" class="nav-link clickable" data-toggle="tab">
+            <a id="test-tab-1" class="nav-link clickable" data-toggle="tab" (click)="displayBodyComponent('search')">
               {{ 'dossierManagement.tabs.searchFields' | translate }}
             </a>
           </li>
         </ul>
         <!-- ----------------------------------------------------- CARD BODY-->
         <div class="card-body bg-white p-5 position-relative tab-container">
-          <ng-template #tabContainer>Loading...</ng-template>
-          <valtimo-dossier-management-detail></valtimo-dossier-management-detail>
+          <div *ngIf="tab === 'case'">
+            <valtimo-dossier-management-tab-details></valtimo-dossier-management-tab-details>
+          </div>
+
+          <div *ngIf="tab === 'search'">
+            <valtimo-dossier-management-tab-search-fields></valtimo-dossier-management-tab-search-fields>
+          </div>
           <div class="clearfix"></div>
         </div>
 
