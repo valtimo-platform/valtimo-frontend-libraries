@@ -15,7 +15,7 @@
  */
 import {Component} from '@angular/core';
 import {DocumentService} from '@valtimo/document';
-import {combineLatest, map, Observable, switchMap} from 'rxjs';
+import {combineLatest, filter, map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {ListField} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
@@ -31,8 +31,8 @@ export class DossierManagementSearchFieldsComponent {
     {
       viewType: 'string',
       sortable: false,
-      propertyName: 'key',
-      translationKey: 'key',
+      propertyName: 'path',
+      translationKey: 'path',
     },
     {
       viewType: 'string',
@@ -66,7 +66,8 @@ export class DossierManagementSearchFieldsComponent {
   );
 
   private readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.documentDefinitionName || '')
+    map(params => params.name || ''),
+    filter(docDefName => !!docDefName)
   );
 
   private readonly searchFields$: Observable<Array<SearchField>> =

@@ -837,7 +837,7 @@
     "datetimeRange": "Een datum en tijd-reeks-veld"
   },
   "searchFieldsOverview": {
-    "key": "Pad",
+    "path": "Pad",
     "datatype": "Datatype",
     "fieldtype": "Veldtype",
     "matchtype": "Overeenkomst",

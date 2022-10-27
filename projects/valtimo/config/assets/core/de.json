@@ -837,7 +837,7 @@
     "datetimeRange": "Ein Datums- und Zeitreihenfeld"
   },
   "searchFieldsOverview": {
-    "key": "Pfad",
+    "path": "Pfad",
     "datatype": "Datentyp",
     "fieldtype": "Feldtyp",
     "matchtype": "Übereinstimmen",
