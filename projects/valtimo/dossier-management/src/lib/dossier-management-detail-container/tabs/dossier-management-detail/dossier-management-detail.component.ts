@@ -17,10 +17,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {DocumentDefinition, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
-import {DossierManagementConnectModalComponent} from '../dossier-management-connect-modal/dossier-management-connect-modal.component';
+import {DossierManagementConnectModalComponent} from '../../../dossier-management-connect-modal/dossier-management-connect-modal.component';
 import {AlertService} from '@valtimo/components';
-import {DossierManagementRemoveModalComponent} from '../dossier-management-remove-modal/dossier-management-remove-modal.component';
-import {DossierManagementRolesComponent} from '../dossier-management-roles/dossier-management-roles.component';
+import {DossierManagementRemoveModalComponent} from '../../../dossier-management-remove-modal/dossier-management-remove-modal.component';
+import {DossierManagementRolesComponent} from '../../../dossier-management-roles/dossier-management-roles.component';
 import {ConfigService} from '@valtimo/config';
 
 @Component({
