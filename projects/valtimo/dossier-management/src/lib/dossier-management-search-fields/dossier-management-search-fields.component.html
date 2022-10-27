@@ -22,6 +22,17 @@
     [fields]="obs.fields"
     [viewMode]="false"
     [header]="false"
+    (rowClicked)="searchFieldClicked($event)"
   >
   </valtimo-list>
 </ng-container>
+
+<valtimo-modal
+  #editSearchFieldModal
+  elementId="editSearchFieldModal"
+  [title]="'searchFieldsOverview.edit' | translate"
+  [showFooter]="true"
+>
+  <div body>body</div>
+  <div footer>footer</div>
+</valtimo-modal>

@@ -837,6 +837,7 @@
     "datetimeRange": "A date and time range field"
   },
   "searchFieldsOverview": {
+    "edit": "Edit search field",
     "path": "Path",
     "datatype": "Data type",
     "fieldtype": "Field type",

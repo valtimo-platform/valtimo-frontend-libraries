@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DocumentService} from '@valtimo/document';
-import {combineLatest, filter, map, Observable, switchMap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subscription,
+  switchMap,
+} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {ListField} from '@valtimo/components';
+import {ListField, ModalComponent} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {DefinitionColumn, SearchField} from '@valtimo/config';
 
@@ -26,7 +34,9 @@ import {DefinitionColumn, SearchField} from '@valtimo/config';
   templateUrl: './dossier-management-search-fields.component.html',
   styleUrls: ['./dossier-management-search-fields.component.scss'],
 })
-export class DossierManagementSearchFieldsComponent {
+export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy {
+  @ViewChild('editSearchFieldModal') modal: ModalComponent;
+
   private readonly COLUMNS: Array<DefinitionColumn> = [
     {
       viewType: 'string',
@@ -91,9 +101,31 @@ export class DossierManagementSearchFieldsComponent {
     )
   );
 
+  readonly selectedSearchField$ = new BehaviorSubject<SearchField | null>(null);
+
+  private selectedSearchFieldSubscription!: Subscription;
+
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService
   ) {}
+
+  ngOnInit(): void {
+    this.openSelectedSearchFieldSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.selectedSearchFieldSubscription?.unsubscribe();
+  }
+
+  searchFieldClicked(searchField: SearchField): void {
+    this.selectedSearchField$.next(searchField);
+  }
+
+  private openSelectedSearchFieldSubscription(): void {
+    this.selectedSearchFieldSubscription = this.selectedSearchField$.subscribe(searchField => {
+      this.modal.show();
+    });
+  }
 }
