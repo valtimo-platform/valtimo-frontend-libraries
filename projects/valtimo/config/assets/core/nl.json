@@ -312,7 +312,7 @@
     "fieldLabels": {
       "created": "Aanmaakdatum",
       "name": "Naam",
-      "valtimoAssignee.fullName": "Behandelaar",
+      "valtimoAssignee.fullName": "Eigenaar",
       "due": "Opleveringsdatum"
     },
     "mine": {
