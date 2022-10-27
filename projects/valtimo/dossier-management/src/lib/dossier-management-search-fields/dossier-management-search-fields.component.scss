@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2022 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {Component} from '@angular/core';
-
-@Component({
-  selector: 'valtimo-dossier-management-detail-container',
-  templateUrl: './dossier-management-detail-container.component.html',
-  styleUrls: ['./dossier-management-detail-container.component.css']
-})
-export class DossierManagementDetailContainerComponent {
-
-  public isCase= true;
-  public isSearchFields: boolean;
-
-  displayBodyComponent(tab: string): void {
-    (tab === 'case') ? this.isCase = true : this.isCase = false
-  }
-}

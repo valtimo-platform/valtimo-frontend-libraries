@@ -18,7 +18,13 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {DropzoneModule, ListModule, ModalModule, MultiselectDropdownModule, WidgetModule,} from '@valtimo/components';
+import {
+  DropzoneModule,
+  ListModule,
+  ModalModule,
+  MultiselectDropdownModule,
+  WidgetModule,
+} from '@valtimo/components';
 import {ConfigModule} from '@valtimo/config';
 import {DossierManagementConnectModalComponent} from './dossier-management-connect-modal/dossier-management-connect-modal.component';
 import {DossierManagementDetailComponent} from './dossier-management-detail/dossier-management-detail.component';
@@ -30,6 +36,7 @@ import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {DossierManagementRolesComponent} from './dossier-management-roles/dossier-management-roles.component';
 import {DossierManagementLinkProcessComponent} from './dossier-management-link-process/dossier-management-link-process.component';
 import {ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {DossierManagementSearchFieldsComponent} from './dossier-management-search-fields/dossier-management-search-fields.component';
 import {DossierManagementDetailContainerComponent} from './dossier-management-detail-container/dossier-management-detail-container.component';
 import {DossierManagementTabSearchFieldsComponent} from './dossier-management-detail-container/tabs/search-fields/search-fields.component';
 import {DossierManagementTabDetailsComponent} from './dossier-management-detail-container/tabs/details/details.component';
@@ -44,6 +51,7 @@ import {DossierManagementTabDetailsComponent} from './dossier-management-detail-
     DossierManagementUploadComponent,
     DossierManagementRolesComponent,
     DossierManagementLinkProcessComponent,
+    DossierManagementSearchFieldsComponent,
     DossierManagementDetailContainerComponent,
     DossierManagementTabSearchFieldsComponent,
     DossierManagementTabDetailsComponent,
