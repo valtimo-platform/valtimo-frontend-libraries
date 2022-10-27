@@ -22,11 +22,11 @@ import {Component} from '@angular/core';
   styleUrls: ['./dossier-management-detail-container.component.css']
 })
 export class DossierManagementDetailContainerComponent {
-
-  public isCase= true;
-  public isSearchFields: boolean;
+  public isCase = true;
 
   displayBodyComponent(tab: string): void {
-    (tab === 'case') ? this.isCase = true : this.isCase = false
+    (this.isCase = tab === 'case')
+      ? (this.isCase = true)
+      : (this.isCase = false);
   }
 }
