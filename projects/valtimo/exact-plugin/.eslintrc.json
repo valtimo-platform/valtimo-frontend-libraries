@@ -1,5 +1,5 @@
 {
-  "extends": "../../.eslintrc.json",
+  "extends": "../../../.eslintrc.json",
   "ignorePatterns": [
     "!**/*"
   ],
@@ -20,7 +20,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "lib",
+            "prefix": "valtimo",
             "style": "camelCase"
           }
         ],
@@ -28,7 +28,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "lib",
+            "prefix": "valtimo",
             "style": "kebab-case"
           }
         ]

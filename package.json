@@ -180,7 +180,7 @@
     "libs:lint:open-zaak": "ng lint @valtimo/open-zaak",
     "libs:lint:resource": "ng lint @valtimo/resource",
     "libs:lint:customer": "ng lint @valtimo/customer",
-    "libs:lint:exact-plugin": "ng lint @valtimo/customer"
+    "libs:lint:exact-plugin": "ng lint @valtimo/exact-plugin"
   },
   "private": true,
   "dependencies": {

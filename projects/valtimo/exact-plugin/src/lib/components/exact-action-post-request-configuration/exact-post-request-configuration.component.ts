@@ -1,11 +1,26 @@
+/*
+ * Copyright 2015-2020 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
 import {FunctionConfigurationComponent} from '@valtimo/plugin';
 import ExactPostRequestConfiguration from './exact-post-request-configuration';
-import ExactGetRequestConfiguration from '../exact-action-get-request-configuration/exact-get-request-configuration';
 
 @Component({
-  selector: 'app-exact-post-request-configuration',
+  selector: 'valtimo-exact-post-request-configuration',
   templateUrl: './exact-post-request-configuration.component.html'
 })
 export class ExactPostRequestConfigurationComponent
@@ -35,7 +50,7 @@ export class ExactPostRequestConfigurationComponent
   }
 
   formValueChange(input: any): void {
-    let formValue: ExactPostRequestConfiguration = {
+    const formValue: ExactPostRequestConfiguration = {
       properties: {
         uri: input.uri,
         content: input.content,

@@ -1,13 +1,28 @@
+/*
+ * Copyright 2015-2020 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '@valtimo/plugin';
-import {BehaviorSubject, combineLatest, interval, Observable, Subject, Subscription, take, tap, timer} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
 import {ExactPluginService} from '../../exact-plugin.service';
 import {ExactPluginConfig} from '../../exact-plugin';
 
 @Component({
-  selector: 'app-exact-plugin-configuration',
+  selector: 'valtimo-exact-plugin-configuration',
   templateUrl: './exact-plugin-configuration.component.html',
-  //styleUrls: ['./sample-plugin-configuration.component.scss'],
 })
 export class ExactPluginConfigurationComponent
   // The component explicitly implements the PluginConfigurationComponent interface
@@ -23,7 +38,7 @@ export class ExactPluginConfigurationComponent
   private saveSubscription!: Subscription;
   private readonly formValue$ = new BehaviorSubject<ExactPluginConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
-  private storageCallbackFun!: any;
+  private storageCallbackFun!: (any) => void
 
   constructor(private exactPluginService: ExactPluginService) { }
 
@@ -33,7 +48,7 @@ export class ExactPluginConfigurationComponent
     window.addEventListener('storage', this.storageCallbackFun);
   }
 
-  onReceiveToken(event) {
+  onReceiveToken(event): void {
     if (event.key === 'exactAuthorizationCode') {
       this.formValue$.pipe(take(1)).subscribe((formValue) => {
         this.exchangeAuthorizationCode(formValue, localStorage.getItem('exactAuthorizationCode'));
@@ -46,7 +61,7 @@ export class ExactPluginConfigurationComponent
     window.removeEventListener('storage', this.storageCallbackFun);
   }
 
-  exchangeAuthorizationCode(formValue, code) {
+  exchangeAuthorizationCode(formValue, code): void {
     this.exactPluginService
       .exchangeAuthorizationCode(formValue.clientId, formValue.clientSecret, code)
       .subscribe((response) => {
