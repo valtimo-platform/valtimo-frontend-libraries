@@ -21,7 +21,6 @@ import {DossierManagementConnectModalComponent} from '../../../dossier-managemen
 import {AlertService} from '@valtimo/components';
 import {DossierManagementRemoveModalComponent} from '../../../dossier-management-remove-modal/dossier-management-remove-modal.component';
 import {DossierManagementRolesComponent} from '../../../dossier-management-roles/dossier-management-roles.component';
-import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-management-detail',
@@ -37,15 +36,11 @@ export class DossierManagementDetailComponent implements OnInit {
   @ViewChild('dossierRemoveModal') dossierRemoveModal: DossierManagementRemoveModalComponent;
   @ViewChild('documentRoles') documentRoles: DossierManagementRolesComponent;
 
-  readonly showCaseSearchFields!: boolean;
-
   constructor(
     private documentService: DocumentService,
     private route: ActivatedRoute,
     private alertService: AlertService,
-    private readonly configService: ConfigService
   ) {
-    this.showCaseSearchFields = configService.config.featureToggles.caseSearchFields;
     this.documentDefinitionName = this.route.snapshot.paramMap.get('name');
   }
 
