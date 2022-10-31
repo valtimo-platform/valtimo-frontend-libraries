@@ -31,8 +31,6 @@ export class DossierManagementDetailContainerComponent {
   }
 
   displayBodyComponent(tab: string): void {
-    (this.isCase = tab === 'case')
-      ? (this.isCase = true)
-      : (this.isCase = false);
+    this.isCase = (tab  === 'case');
   }
 }

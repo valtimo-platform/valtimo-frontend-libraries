@@ -39,7 +39,7 @@ export class DossierManagementDetailComponent implements OnInit {
   constructor(
     private documentService: DocumentService,
     private route: ActivatedRoute,
-    private alertService: AlertService,
+    private alertService: AlertService
   ) {
     this.documentDefinitionName = this.route.snapshot.paramMap.get('name');
   }

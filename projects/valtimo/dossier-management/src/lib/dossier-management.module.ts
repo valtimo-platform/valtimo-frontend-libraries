@@ -43,7 +43,7 @@ import {DossierManagementDetailContainerComponent} from './dossier-management-de
     DossierManagementRolesComponent,
     DossierManagementLinkProcessComponent,
     DossierManagementSearchFieldsComponent,
-    DossierManagementDetailContainerComponent,
+    DossierManagementDetailContainerComponent
   ],
   imports: [
     CommonModule,
