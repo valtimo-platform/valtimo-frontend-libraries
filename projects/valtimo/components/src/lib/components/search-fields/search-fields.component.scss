@@ -53,18 +53,20 @@
   display: none;
 }
 
-.accordion__button {
+.accordion-button {
   display: block;
   width: 100%;
   padding: 15px;
   border: none;
   outline: none;
   cursor: pointer;
-  background: #FFFFFF;
+  background: #F8F9F9;
   text-align: left;
   transition: background 0.2s;
+  font-size: 1.2rem;
+  color: #404040;
 }
 
-.accordion__button--active {
-  background: #F5F5F5;
+.accordion-button--active {
+  background: #F1F1F1;
 }

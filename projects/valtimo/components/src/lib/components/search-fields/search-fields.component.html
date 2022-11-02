@@ -200,19 +200,21 @@
 <ng-template #buttonsTemplate>
   <div class="buttons-container" *ngIf="{expanded: expanded$ | async} as obs">
     <div class="right-buttons">
-      <v-button
-        (clickEvent)="search()"
+      <button
+        (click)="search()"
         [disabled]="loading"
-        type="secondary"
+        type="button"
+        class="btn btn-space btn-secondary"
         *ngIf="obs.expanded"
-        >{{ 'searchFields.clearButtonText' | translate }}</v-button
+        >{{ 'searchFields.clearButtonText' | translate }}</button
       >
-      <v-button
-        (clickEvent)="search()"
+      <button
+        (click)="search()"
         [disabled]="loading"
-        type="primary"
+        type="button"
+        class="btn btn-space btn-primary"
         *ngIf="obs.expanded"
-        >{{ 'searchFields.searchButtonText' | translate }}</v-button
+        >{{ 'searchFields.searchButtonText' | translate }}</button
       >
     </div>
   </div>
@@ -223,11 +225,11 @@
     <button
             [disabled]="loading"
             type="button"
-            class="accordion__button"
+            class="accordion-button"
             (click)="toggleExpanded()"
             [ngClass]="
         obs.expanded
-          ? 'mdi mdi-chevron-right accordion__button--active'
+          ? 'mdi mdi-chevron-right accordion-button--active'
           : 'mdi mdi-chevron-down'
       "
     >
