@@ -16,29 +16,23 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
-import {DossierManagementListComponent} from './dossier-management-list/dossier-management-list.component';
 import {ROLE_ADMIN} from '@valtimo/config';
-import {DossierManagementDetailContainerComponent} from './dossier-management-detail-container/dossier-management-detail-container.component';
+import {ExactRedirectComponent} from './components/exact-redirect/exact-redirect.component';
 
 const routes: Routes = [
   {
-    path: 'dossier-management',
-    component: DossierManagementListComponent,
+    path: 'plugins/exact/redirect',
+    component: ExactRedirectComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Dossiers', roles: [ROLE_ADMIN]},
-  },
-  {
-    path: 'dossier-management/dossier/:name',
-    component: DossierManagementDetailContainerComponent,
-    canActivate: [AuthGuardService],
-    data: {title: 'Dossier details', roles: [ROLE_ADMIN]},
+    data: {title: 'Exact Redirect', roles: [ROLE_ADMIN]},
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
   declarations: [],
+  imports: [CommonModule, RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class DossierManagementRoutingModule {}
+export class ExactPluginRoutingModule {}
