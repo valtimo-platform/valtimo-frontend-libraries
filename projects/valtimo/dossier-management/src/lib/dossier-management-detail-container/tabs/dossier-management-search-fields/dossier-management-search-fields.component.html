@@ -18,6 +18,7 @@
   *ngIf="{searchFields: translatedSearchFields$ | async, fields: fields$ | async} as obs"
 >
   <valtimo-list
+    *ngIf="obs.searchFields; else loading"
     [items]="obs.searchFields"
     [fields]="obs.fields"
     [viewMode]="false"
@@ -25,3 +26,7 @@
   >
   </valtimo-list>
 </ng-container>
+
+<ng-template #loading>
+  <valtimo-spinner></valtimo-spinner>
+</ng-template>

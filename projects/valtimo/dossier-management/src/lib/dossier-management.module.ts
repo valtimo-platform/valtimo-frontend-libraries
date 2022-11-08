@@ -23,6 +23,7 @@ import {
   ListModule,
   ModalModule,
   MultiselectDropdownModule,
+  SpinnerModule,
   WidgetModule,
 } from '@valtimo/components';
 import {ConfigModule} from '@valtimo/config';
@@ -65,6 +66,7 @@ import {DossierManagementDetailContainerComponent} from './dossier-management-de
     MultiselectDropdownModule,
     ParagraphModule,
     SelectModule,
+    SpinnerModule,
   ],
   exports: [],
 })
