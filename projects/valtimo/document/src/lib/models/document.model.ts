@@ -287,3 +287,11 @@ export interface UploadProcessLink {
 export interface UpdateUploadProcessLinkRequest {
   processDefinitionKey: string;
 }
+
+export interface DocumentSearch {
+  key: string;
+  path: string;
+  datatype: string;
+  fieldtype: string;
+  matchtype: string;
+}

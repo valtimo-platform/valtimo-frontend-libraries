@@ -14,25 +14,97 @@
   ~ limitations under the License.
   -->
 
-<ng-container
-  *ngIf="{searchFields: translatedSearchFields$ | async, fields: fields$ | async} as obs"
->
+<ng-container *ngIf="{ searchFields: translatedSearchFields$ | async, fields: fields$ | async, documentDefinitionName: documentDefinitionName$ | async} as obs">
+  <div class="btn-group mt-m3px mb-3 pr-2 float-right">
+    <p>{{obs.documentDefinitionName}}</p>
+    <button
+       (click)="searchFieldClicked()"
+        class="btn btn-primary btn-space"
+    >
+      <i class="icon mdi mdi-plus mr-1"></i>
+      {{ "searchFieldsOverview.addRow" | translate }}
+    </button>
+  </div>
+
   <valtimo-list
-    [items]="obs.searchFields"
-    [fields]="obs.fields"
-    [viewMode]="false"
-    [header]="false"
-    (rowClicked)="searchFieldClicked($event)"
+          [items]="obs.searchFields"
+          [fields]="obs.fields"
+          [viewMode]="false"
+          [header]="false"
+          (rowClicked)="searchFieldClicked($event)"
   >
   </valtimo-list>
 </ng-container>
 
 <valtimo-modal
-  #editSearchFieldModal
-  elementId="editSearchFieldModal"
-  [title]="'searchFieldsOverview.edit' | translate"
-  [showFooter]="true"
+        #editSearchFieldModal
+        elementId="editSearchFieldModal"
+        [title]="'searchFieldsOverview.edit' | translate"
+        [showFooter]="true"
 >
-  <div body>body</div>
-  <div footer>footer</div>
+  <div body class="">
+    <v-form *ngIf="{ disabled: disabled$ | async } as obs">
+      <v-input
+              name="path"
+              [title]="'searchFieldsOverview.path' | translate"
+              [margin]="true"
+              [defaultValue]=""
+              [disabled]="obs.disabled"
+              [required]="true"
+              [fullWidth]="true"
+      >
+      </v-input>
+
+      <v-select
+              [title]="'searchFieldsOverview.datatype' | translate"
+              (selectedChange)="selectedTypeSearch($event)"
+              [disabled]="obs.disabled"
+              [margin]="true"
+              [required]="true"
+      ></v-select>
+
+      <v-select
+              [title]="'searchFieldsOverview.fieldtype' | translate"
+              (selectedChange)="selectedTypeSearch($event)"
+              [disabled]="obs.disabled"
+              [margin]="true"
+              [required]="true"
+      ></v-select>
+
+      <v-select
+              [title]="'searchFieldsOverview.matchtype' | translate"
+              (selectedChange)="selectedTypeSearch($event)"
+              [disabled]="obs.disabled"
+              [margin]="true"
+              [required]="true"
+      ></v-select>
+    </v-form>
+  </div>
+
+  <div footer>
+    <div class="col-12">
+      <ng-container *ngTemplateOutlet="buttonsTemplate"></ng-container>
+    </div>
+  </div>
 </valtimo-modal>
+
+<ng-template #buttonsTemplate>
+  <div class="buttons-container">
+    <div class="right-buttons">
+      <button
+              (click)="onDelete()"
+              type="button"
+              class="btn btn-space btn-secondary"
+      >
+        {{ "searchFieldsOverview.delete" | translate }}
+      </button>
+      <button
+              (click)="onSubmit('bezwaar')"
+              type="button"
+              class="btn btn-space btn-primary"
+      >
+        {{ "searchFieldsOverview.submit" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

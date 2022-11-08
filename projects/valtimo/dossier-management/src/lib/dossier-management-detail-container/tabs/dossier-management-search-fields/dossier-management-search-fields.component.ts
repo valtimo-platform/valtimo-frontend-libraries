@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {DocumentService} from '@valtimo/document';
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { DocumentService } from "@valtimo/document";
 import {
   BehaviorSubject,
   combineLatest,
@@ -23,87 +23,124 @@ import {
   Observable,
   Subscription,
   switchMap,
-} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
-import {ListField, ModalComponent} from '@valtimo/components';
-import {TranslateService} from '@ngx-translate/core';
-import {DefinitionColumn, SearchField} from '@valtimo/config';
+} from "rxjs";
+import { ActivatedRoute } from "@angular/router";
+import { ListField, ModalComponent } from "@valtimo/components";
+import { TranslateService } from "@ngx-translate/core";
+import { DefinitionColumn, SearchField } from "@valtimo/config";
+import { SelectedValue } from "@valtimo/user-interface";
 
 @Component({
-  selector: 'valtimo-dossier-management-search-fields',
-  templateUrl: './dossier-management-search-fields.component.html',
-  styleUrls: ['./dossier-management-search-fields.component.scss'],
+  selector: "valtimo-dossier-management-search-fields",
+  templateUrl: "./dossier-management-search-fields.component.html",
+  styleUrls: ["./dossier-management-search-fields.component.scss"],
 })
-export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy {
-  @ViewChild('editSearchFieldModal') modal: ModalComponent;
+export class DossierManagementSearchFieldsComponent
+  implements OnInit, OnDestroy
+{
+  @ViewChild("editSearchFieldModal") modal: ModalComponent;
 
   private readonly COLUMNS: Array<DefinitionColumn> = [
     {
-      viewType: 'string',
+      viewType: "string",
       sortable: false,
-      propertyName: 'path',
-      translationKey: 'path',
+      propertyName: "path",
+      translationKey: "path",
     },
     {
-      viewType: 'string',
+      viewType: "string",
       sortable: false,
-      propertyName: 'datatype',
-      translationKey: 'datatype',
+      propertyName: "datatype",
+      translationKey: "datatype",
     },
     {
-      viewType: 'string',
+      viewType: "string",
       sortable: false,
-      propertyName: 'fieldtype',
-      translationKey: 'fieldtype',
+      propertyName: "fieldtype",
+      translationKey: "fieldtype",
     },
     {
-      viewType: 'string',
+      viewType: "string",
       sortable: false,
-      propertyName: 'matchtype',
-      translationKey: 'matchtype',
+      propertyName: "matchtype",
+      translationKey: "matchtype",
     },
   ];
 
-  readonly fields$: Observable<Array<ListField>> = this.translateService.stream('key').pipe(
-    map(() =>
-      this.COLUMNS.map(column => ({
-        key: column.propertyName,
-        label: this.translateService.instant(`searchFieldsOverview.${column.translationKey}`),
-        sortable: column.sortable,
-        ...(column.viewType && {viewType: column.viewType}),
-      }))
-    )
-  );
+  private readonly TYPE_SEARCH: Array<any> = [
+    {
+      propertyName: "exact",
+      translationKey: "exact",
+    },
+    {
+      propertyName: "like",
+      translationKey: "like",
+    },
+    {
+      propertyName: "range",
+      translationKey: "range",
+    },
+    {
+      propertyName: "both",
+      translationKey: "both",
+    },
+  ];
 
-  private readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.name || ''),
-    filter(docDefName => !!docDefName)
-  );
+  readonly disabled$ = new BehaviorSubject<boolean>(false);
+
+  readonly fields$: Observable<Array<ListField>> = this.translateService
+    .stream("key")
+    .pipe(
+      map(() =>
+        this.COLUMNS.map((column) => ({
+          key: column.propertyName,
+          label: this.translateService.instant(
+            `searchFieldsOverview.${column.translationKey}`
+          ),
+          sortable: column.sortable,
+          ...(column.viewType && { viewType: column.viewType }),
+        }))
+      )
+    );
+
+   readonly documentDefinitionName$: Observable<string> =
+    this.route.params.pipe(
+      map((params) => params.name || ""),
+      filter((docDefName) => !!docDefName)
+    );
 
   private readonly searchFields$: Observable<Array<SearchField>> =
     this.documentDefinitionName$.pipe(
-      switchMap(documentDefinitionName =>
+      switchMap((documentDefinitionName) =>
         this.documentService.getDocumentSearchFields(documentDefinitionName)
       )
     );
 
-  readonly translatedSearchFields$: Observable<Array<SearchField>> = combineLatest([
-    this.searchFields$,
-    this.translateService.stream('key'),
-  ]).pipe(
-    map(([searchFields]) =>
-      searchFields.map(searchField => ({
-        ...searchField,
-        datatype: this.translateService.instant(`searchFields.${searchField.datatype}`),
-        matchtype: this.translateService.instant(`searchFieldsOverview.${searchField.matchtype}`),
-        fieldtype: this.translateService.instant(`searchFieldsOverview.${searchField.fieldtype}`),
-      }))
-    )
-  );
+  readonly translatedSearchFields$: Observable<Array<SearchField>> =
+    combineLatest([
+      this.searchFields$,
+      this.translateService.stream("key"),
+    ]).pipe(
+      map(([searchFields]) =>
+        searchFields.map((searchField) => ({
+          ...searchField,
+          datatype: this.translateService.instant(
+            `searchFields.${searchField.datatype}`
+          ),
+          matchtype: this.translateService.instant(
+            `searchFieldsOverview.${searchField.matchtype}`
+          ),
+          fieldtype: this.translateService.instant(
+            `searchFieldsOverview.${searchField.fieldtype}`
+          ),
+        }))
+      )
+    );
 
   readonly selectedSearchField$ = new BehaviorSubject<SearchField | null>(null);
 
   private selectedSearchFieldSubscription!: Subscription;
+  documentDefinition: true;
 
   constructor(
     private readonly documentService: DocumentService,
@@ -119,13 +156,45 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     this.selectedSearchFieldSubscription?.unsubscribe();
   }
 
-  searchFieldClicked(searchField: SearchField): void {
-    this.selectedSearchField$.next(searchField);
+  searchFieldClicked(searchField?: SearchField): void {
+    // this.selectedSearchField$.next(searchField);
   }
 
   private openSelectedSearchFieldSubscription(): void {
-    this.selectedSearchFieldSubscription = this.selectedSearchField$.subscribe(searchField => {
-      this.modal.show();
-    });
+    this.selectedSearchFieldSubscription = this.selectedSearchField$.subscribe(
+      (searchField) => {
+        this.modal.show();
+      }
+    );
+  }
+
+  formValueChange($event: any) {}
+
+  selectedTypeSearch($event: SelectedValue) {}
+
+  onSubmit(documentDefinitionName: string) {
+    const request = {
+      key: "some key",
+      path: "/some/path",
+      datatype: "date",
+      fieldtype: "range",
+      matchtype: "exact",
+    };
+
+    console.log('clicked', this.documentService.getDocumentSearch(documentDefinitionName));
+    this.documentService.getDocumentSearch(documentDefinitionName)
+
+  }
+
+  onDelete() {
+    const request = {
+      key: "some key",
+      path: "/some/path",
+      datatype: "date",
+      fieldtype: "range",
+      matchtype: "exact",
+    };
+
+    this.documentService.deleteDocumentSearch("", request, "");
   }
 }

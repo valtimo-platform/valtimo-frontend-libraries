@@ -850,6 +850,9 @@
     "like": "Contains",
     "single": "Single",
     "multiple": "Multiple",
-    "range": "Range"
+    "range": "Range",
+    "submit": "Submit",
+    "delete": "Delete",
+    "addRow": "Add row"
   }
 }

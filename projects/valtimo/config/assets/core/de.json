@@ -850,6 +850,9 @@
     "like": "Enthält",
     "single": "Nur",
     "multiple": "Mehrere",
-    "range": "Serie"
+    "range": "Serie",
+    "submit": "Einreichen",
+    "delete": "Löschen",
+    "addRow": "Add row"
   }
 }

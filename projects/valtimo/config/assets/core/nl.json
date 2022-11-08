@@ -850,6 +850,9 @@
     "like": "Bevat",
     "single": "Enkel",
     "multiple": "Meerdere",
-    "range": "Reeks"
+    "range": "Reeks",
+    "submit": "Indienen",
+    "delete": "Verwijderen",
+    "addRow": "Add row"
   }
 }
