@@ -23,7 +23,7 @@ import {
   ListModule,
   ModalModule,
   MultiselectDropdownModule,
-  WidgetModule,
+ SpinnerModule, WidgetModule,
 } from "@valtimo/components";
 import { ConfigModule } from "@valtimo/config";
 import { DossierManagementConnectModalComponent } from "./dossier-management-connect-modal/dossier-management-connect-modal.component";
@@ -70,6 +70,7 @@ import { DossierManagementDetailContainerComponent } from "./dossier-management-
     MultiselectDropdownModule,
     ParagraphModule,
     SelectModule,
+    SpinnerModule,
     InputModule,
     FormModule,
   ],

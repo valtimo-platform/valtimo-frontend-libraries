@@ -23,12 +23,15 @@ import {
   Observable,
   Subscription,
   switchMap,
-} from "rxjs";
+  take,
+  tap
+} from 'rxjs';
 import { ActivatedRoute } from "@angular/router";
 import { ListField, ModalComponent } from "@valtimo/components";
 import { TranslateService } from "@ngx-translate/core";
 import { DefinitionColumn, SearchField } from "@valtimo/config";
 import { SelectedValue } from "@valtimo/user-interface";
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: "valtimo-dossier-management-search-fields",
@@ -103,7 +106,7 @@ export class DossierManagementSearchFieldsComponent
       )
     );
 
-   readonly documentDefinitionName$: Observable<string> =
+  readonly documentDefinitionName$: Observable<string> =
     this.route.params.pipe(
       map((params) => params.name || ""),
       filter((docDefName) => !!docDefName)
@@ -111,9 +114,14 @@ export class DossierManagementSearchFieldsComponent
 
   private readonly searchFields$: Observable<Array<SearchField>> =
     this.documentDefinitionName$.pipe(
-      switchMap((documentDefinitionName) =>
+      switchMap(documentDefinitionName =>
         this.documentService.getDocumentSearchFields(documentDefinitionName)
-      )
+      ),
+      tap(searchFields => {
+        this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+          this.setDownload(documentDefinitionName, searchFields);
+        });
+      })
     );
 
   readonly translatedSearchFields$: Observable<Array<SearchField>> =
@@ -142,10 +150,14 @@ export class DossierManagementSearchFieldsComponent
   private selectedSearchFieldSubscription!: Subscription;
   documentDefinition: true;
 
+  readonly downloadName$ = new BehaviorSubject<string>('');
+  readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
+
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -157,7 +169,7 @@ export class DossierManagementSearchFieldsComponent
   }
 
   searchFieldClicked(searchField?: SearchField): void {
-    // this.selectedSearchField$.next(searchField);
+    this.selectedSearchField$.next(searchField);
   }
 
   private openSelectedSearchFieldSubscription(): void {
@@ -196,5 +208,15 @@ export class DossierManagementSearchFieldsComponent
     };
 
     this.documentService.deleteDocumentSearch("", request, "");
+  }
+
+  private setDownload(documentDefinitionName: string, searchFields: Array<SearchField>): void {
+    this.downloadName$.next(`${documentDefinitionName}.json`);
+    this.downloadUrl$.next(
+      this.sanitizer.bypassSecurityTrustUrl(
+        'data:text/json;charset=UTF-8,' +
+        encodeURIComponent(JSON.stringify({searchFields}, null, 2))
+      )
+    );
   }
 }
