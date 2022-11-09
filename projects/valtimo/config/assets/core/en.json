@@ -854,6 +854,12 @@
     "range": "Range",
     "submit": "Submit",
     "delete": "Delete",
-    "addRow": "Add row"
+    "addRow": "Add row",
+    "deleteConfirmation": {
+      "title": "Search Field deletion",
+      "description": "Are you sure you want to delete this item?",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    }
   }
 }

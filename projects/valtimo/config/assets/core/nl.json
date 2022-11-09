@@ -854,6 +854,12 @@
     "range": "Reeks",
     "submit": "Indienen",
     "delete": "Verwijderen",
-    "addRow": "Add row"
+    "addRow": "Add row",
+    "deleteConfirmation": {
+      "title": "Bestand verwijderen",
+      "description": "Weet u zeker dat u dit bestand wilt verwijderen?",
+      "cancel": "Annuleren",
+      "delete": "Verwijderen"
+    }
   }
 }

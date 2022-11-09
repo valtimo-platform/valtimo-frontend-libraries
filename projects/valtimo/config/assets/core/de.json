@@ -854,6 +854,12 @@
     "range": "Serie",
     "submit": "Einreichen",
     "delete": "Löschen",
-    "addRow": "Add row"
+    "addRow": "Add row",
+    "deleteConfirmation": {
+      "title": "Datei löschen",
+      "description": "Möchten Sie diese Datei wirklich löschen?",
+      "cancel": "Absagen",
+      "delete": "Löschen"
+    }
   }
 }

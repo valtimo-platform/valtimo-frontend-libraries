@@ -25,7 +25,7 @@ import {
   DocumentDefinitionCreateRequest,
   DocumentDefinitions,
   DocumentResult,
-  Documents, DocumentSearch,
+  Documents,
   DocumentSendMessageRequest,
   DocumentType,
   ModifyDocumentAndCompleteTaskRequestImpl,
@@ -80,31 +80,36 @@ export class DocumentService {
     );
   }
 
-  getDocumentSearch(documentDefinitionName: string): Observable<Array<DocumentSearch>> {
-    console.log(`${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`);
-    return this.http.get<Array<DocumentSearch>>(
-      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`
-    );
-  }
+  // getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
+  //   return this.http.get<Array<SearchField>>(
+  //     `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`
+  //   );
+  // }
 
-  putDocumentSearch(documentDefinitionName: string, request: DocumentSearch): Observable<void> {
+  putDocumentSearch(documentDefinitionName: string, request: SearchField): Observable<void> {
     return this.http.put<void>(
-      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`, {request}
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
+      {request}
     );
   }
 
-  postDocumentSearch(documentDefinitionName: string, request: DocumentSearch): Observable<void> {
-    return this.http.post<void>(`${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`, {request});
+  postDocumentSearch(documentDefinitionName: string, request: SearchField): Observable<void> {
+    return this.http.post<void>(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
+      {request}
+    );
   }
 
-  deleteDocumentSearch(documentDefinitionName: string, request: DocumentSearch, key: string): Observable<any> {
+  deleteDocumentSearch(documentDefinitionName: string, key: string): Observable<any> {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
-      body: request,
     };
-    return this.http.delete(`${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields?key=${key}`, options);
+    return this.http.delete(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields?key=${key}`,
+      options
+    );
   }
 
   public getDocumentRoles(documentDefinitionName: string): Observable<Array<string>> {
@@ -307,7 +312,7 @@ export class DocumentService {
     );
   }
 
-  getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
+  getDocumentSearchFields(): Observable<Array<SearchField>> {
     return of([
       {
         key: 'text',

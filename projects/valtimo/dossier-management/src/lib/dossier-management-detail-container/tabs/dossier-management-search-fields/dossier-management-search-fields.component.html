@@ -15,92 +15,86 @@
   -->
 
 <ng-container
-        *ngIf="{
+    *ngIf="{
     searchFields: translatedSearchFields$ | async,
     fields: fields$ | async,
     downloadUrl: downloadUrl$ | async,
-    downloadName: downloadName$ | async
+    downloadName: downloadName$ | async,
+    documentDefinitionName: documentDefinitionName$ | async,
+    valid: valid$ | async
   } as obs"
 >
-  <div class="btn-group mt-m3px mb-3 pr-2 float-right">
-    <button
-            (click)="searchFieldClicked($event)"
-            class="btn btn-primary btn-space"
-    >
-      <i class="icon mdi mdi-plus mr-1"></i>
-      {{ "searchFieldsOverview.addRow" | translate }}
-    </button>
-  </div>
   <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
   <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+  <ng-container *ngTemplateOutlet="modal; context: {obs: obs}"></ng-container>
 </ng-container>
 
-<valtimo-modal
-        #editSearchFieldModal
-        elementId="editSearchFieldModal"
-        [title]="'searchFieldsOverview.edit' | translate"
-        [showFooter]="true"
->
-  <div body class="">
-    <v-form *ngIf="{ disabled: disabled$ | async } as obs">
-      <v-input
-              name="path"
-              [title]="'searchFieldsOverview.path' | translate"
-              [margin]="true"
-              [defaultValue]=""
-              [disabled]="obs.disabled"
-              [required]="true"
-              [fullWidth]="true"
-      >
-      </v-input>
+<!--modal-->
+<ng-template #modal let-obs="obs">
+  <valtimo-modal
+    #editSearchFieldModal
+    elementId="editSearchFieldModal"
+    [title]="'searchFieldsOverview.edit' | translate"
+    [showFooter]="true"
+  >
+    <div body>
+      <v-form *ngIf="{ disabled: disabled$ | async } as obs">
+        <v-input
+          name="path"
+          [title]="'searchFieldsOverview.path' | translate"
+          [margin]="true"
+          [defaultValue]=""
+          [disabled]="obs.disabled"
+          [required]="true"
+          [fullWidth]="true"
+        >
+        </v-input>
 
-      <v-select
-              [title]="'searchFieldsOverview.datatype' | translate"
-              (selectedChange)="selectedTypeSearch($event)"
-              [disabled]="obs.disabled"
-              [margin]="true"
-              [required]="true"
-      ></v-select>
+        <v-select
+          [title]="'searchFieldsOverview.datatype' | translate"
+          (selectedChange)="selectedTypeSearch($event)"
+          [disabled]="obs.disabled"
+          [margin]="true"
+          [required]="true"
+        ></v-select>
 
-      <v-select
-              [title]="'searchFieldsOverview.fieldtype' | translate"
-              (selectedChange)="selectedTypeSearch($event)"
-              [disabled]="obs.disabled"
-              [margin]="true"
-              [required]="true"
-      ></v-select>
+        <v-select
+          [title]="'searchFieldsOverview.fieldtype' | translate"
+          (selectedChange)="selectedTypeSearch($event)"
+          [disabled]="obs.disabled"
+          [margin]="true"
+          [required]="true"
+        ></v-select>
 
-      <v-select
-              [title]="'searchFieldsOverview.matchtype' | translate"
-              (selectedChange)="selectedTypeSearch($event)"
-              [disabled]="obs.disabled"
-              [margin]="true"
-              [required]="true"
-      ></v-select>
-    </v-form>
-  </div>
-
-  <div footer>
-    <div class="col-12">
-      <ng-container *ngTemplateOutlet="buttonsTemplate"></ng-container>
+        <v-select
+          [title]="'searchFieldsOverview.matchtype' | translate"
+          (selectedChange)="selectedTypeSearch($event)"
+          [disabled]="obs.disabled"
+          [margin]="true"
+          [required]="true"
+        ></v-select>
+      </v-form>
     </div>
-  </div>
-</valtimo-modal>
 
-<ng-template #buttonsTemplate>
+    <div footer>
+      <div class="col-12">
+        <ng-container *ngTemplateOutlet="buttonsFooterModal; context: {obs: obs}"></ng-container>
+      </div>
+    </div>
+  </valtimo-modal>
+</ng-template>
+
+<!--buttonsFooterModal-->
+<ng-template #buttonsFooterModal let-obs="obs">
   <div class="buttons-container">
     <div class="right-buttons">
+        <button class="btn btn-space btn-secondary" (click)="open(content)">{{ "searchFieldsOverview.delete" | translate }}</button>
+
       <button
-              (click)="onDelete()"
-              type="button"
-              class="btn btn-space btn-secondary"
-      >
-        {{ "searchFieldsOverview.delete" | translate }}
-      </button>
-      <button
-              (click)="onSubmit('bezwaar')"
-              type="button"
-              class="btn btn-space btn-primary"
+        (click)="onSubmit(obs.documentDefinitionName)"
+        type="button"
+        class="btn btn-space btn-primary"
+        [disabled]="obs.disabled || !obs.valid"
       >
         {{ "searchFieldsOverview.submit" | translate }}
       </button>
@@ -108,32 +102,64 @@
   </div>
 </ng-template>
 
+<!--list-->
 <ng-template #list let-obs="obs">
   <valtimo-list
-          [items]="obs.searchFields"
-          [fields]="obs.fields"
-          [viewMode]="false"
-          [header]="false"
-          (rowClicked)="searchFieldClicked($event)"
-          *ngIf="obs.searchFields; else loading"
+     [items]="obs.searchFields"
+     [fields]="obs.fields"
+     [viewMode]="false"
+     [header]="false"
+     (rowClicked)="searchFieldClicked($event)"
+     *ngIf="obs.searchFields; else loading"
+     [actions]="actions"
   >
   </valtimo-list>
 </ng-template>
 
-<ng-template #loading>
-  <valtimo-spinner></valtimo-spinner>
-</ng-template>
-
+<!--buttons-->
 <ng-template #buttons let-obs="obs">
-  <div class="btn-group mt-m3px mb-3 float-right pr-2">
+  <div class="btn-group mt-m3px mb-3 pr-2 float-right">
     <a
-            class="btn btn-primary btn-space"
-            [href]="obs.downloadUrl"
-            [download]="obs.downloadName"
-            [ngClass]="{disabled: !obs.downloadUrl || !obs.downloadName}"
+      class="btn btn-primary btn-space"
+      [href]="obs.downloadUrl"
+      [download]="obs.downloadName"
+      [ngClass]="{disabled: !obs.downloadUrl || !obs.downloadName || obs.searchFields.length <= 0}"
     >
       <i class="icon mdi mdi-download mr-1"></i>
       {{ 'searchFields.downloadButtonText' | translate }}
     </a>
+
+    <button (click)="searchFieldClicked($event)" class="btn btn-primary btn-space"
+    >
+      <i class="icon mdi mdi-plus mr-1"></i>
+      {{ "searchFieldsOverview.addRow" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!--loading-->
+<ng-template #loading>
+  <valtimo-spinner></valtimo-spinner>
+</ng-template>
+
+<!--modalConfirmationDelete-->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">{{ "searchFieldsOverview.deleteConfirmation.title" | translate}}</h4>
+    <button
+            aria-label="Close"
+            type="button"
+            class="ng-clear"
+            aria-describedby="modal-title"
+            (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body border-top">
+    <h4>{{ "searchFieldsOverview.deleteConfirmation.description" | translate}}</h4>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('cancel click')">{{ "searchFieldsOverview.deleteConfirmation.cancel" | translate}}</button>
+    <button type="button" class="btn btn-primary" (click)="modal.close('delete click')">{{ "earchFieldsOverview.deleteConfirmation.delete" | translate}}</button>
   </div>
 </ng-template>
