@@ -103,7 +103,7 @@
                 class="action-icon"
                 style="cursor: pointer"
                 [ngClass]="action.iconClass"
-                (click)="action.callback(item)"
+                (click)="action.callback(item, $event)"
               ></i>
             </td>
           </tr>
