@@ -24,6 +24,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import {Direction, SortState} from '@valtimo/document';
@@ -50,6 +51,7 @@ export class ListComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() paginationIdentifier?: string;
   @Input() initialSortState: SortState;
   @Input() dragAndDrop?: boolean;
+  @Input() lastColumnTemplate?: TemplateRef<any>;
 
   @Output() rowClicked: EventEmitter<any> = new EventEmitter();
   @Output() paginationClicked: EventEmitter<any> = new EventEmitter();

@@ -84,7 +84,7 @@
         <tbody>
           <tr
             [ngClass]="{'click-able': this.rowClicked.observers.length > 0}"
-            *ngFor="let item of items | listFilter: searchModel"
+            *ngFor="let item of items | listFilter: searchModel; let i = index"
             (click)="onClickRow(item)"
           >
             <td class="align-top" *ngFor="let listItemField of item.listItemFields">
@@ -105,6 +105,9 @@
                 [ngClass]="action.iconClass"
                 (click)="action.callback(item, $event)"
               ></i>
+            </td>
+            <td *ngIf="lastColumnTemplate">
+              <ng-container *ngTemplateOutlet="lastColumnTemplate;context:{index:i, length: items.length}"></ng-container>
             </td>
           </tr>
           <tr>

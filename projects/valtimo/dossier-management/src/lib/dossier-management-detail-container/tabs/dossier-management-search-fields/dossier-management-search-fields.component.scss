@@ -29,3 +29,16 @@ valtimo-list::ng-deep table {
   color: #ff5800 !important;
   padding-inline: 10px !important;
 }
+
+::ng-deep .disabled-move-row-button {
+  cursor: default !important;
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+::ng-deep .move-row-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-right: 13px;
+}
