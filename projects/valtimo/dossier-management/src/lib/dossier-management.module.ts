@@ -33,10 +33,10 @@ import {DossierManagementListComponent} from './dossier-management-list/dossier-
 import {DossierManagementRoutingModule} from './dossier-management-routing.module';
 import {DossierManagementUploadComponent} from './dossier-management-upload/dossier-management-upload.component';
 import {DossierManagementRemoveModalComponent} from './dossier-management-remove-modal/dossier-management-remove-modal.component';
-import {NgbModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {DossierManagementRolesComponent} from './dossier-management-roles/dossier-management-roles.component';
 import {DossierManagementLinkProcessComponent} from './dossier-management-link-process/dossier-management-link-process.component';
-import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {ParagraphModule, SelectModule} from '@valtimo/user-interface';
 import {DossierManagementSearchFieldsComponent} from './dossier-management-detail-container/tabs/dossier-management-search-fields/dossier-management-search-fields.component';
 import {DossierManagementDetailContainerComponent} from './dossier-management-detail-container/dossier-management-detail-container.component';
 
@@ -67,9 +67,6 @@ import {DossierManagementDetailContainerComponent} from './dossier-management-de
     ParagraphModule,
     SelectModule,
     SpinnerModule,
-    InputModule,
-    FormModule,
-    NgbModule,
   ],
   exports: [],
 })
