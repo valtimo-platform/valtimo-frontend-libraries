@@ -855,6 +855,12 @@
     "submit": "Indienen",
     "delete": "Verwijderen",
     "addRow": "Add row",
+    "text": "Text",
+    "number": "Number",
+    "date": "Date",
+    "datetime": "Datetime",
+    "boolean": "Boolean",
+    "searchFieldPlaceholder": "Select a type...",
     "deleteConfirmation": {
       "title": "Bestand verwijderen",
       "description": "Weet u zeker dat u dit bestand wilt verwijderen?",

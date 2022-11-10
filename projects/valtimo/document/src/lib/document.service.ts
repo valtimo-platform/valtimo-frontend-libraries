@@ -312,54 +312,54 @@ export class DocumentService {
     );
   }
 
-  getDocumentSearchFields(): Observable<Array<SearchField>> {
+  getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
     return of([
       {
-        key: 'text',
+        key: '1',
         datatype: 'text',
         fieldtype: 'single',
         matchtype: 'exact',
         path: '/profile/name',
       },
       {
-        key: 'number',
+        key: '111',
         datatype: 'number',
         fieldtype: 'single',
         matchtype: 'exact',
       },
       {
-        key: 'date',
+        key: '213312',
         datatype: 'date',
         fieldtype: 'single',
         matchtype: 'exact',
         path: '/profile/dateOfBirth',
       },
       {
-        key: 'numberRange',
+        key: '12233',
         datatype: 'number',
         fieldtype: 'range',
         matchtype: 'exact',
       },
       {
-        key: 'dateRange',
+        key: '324',
         datatype: 'date',
         fieldtype: 'range',
         matchtype: 'exact',
       },
       {
-        key: 'datetime',
+        key: '4323',
         datatype: 'datetime',
         fieldtype: 'single',
         matchtype: 'exact',
       },
       {
-        key: 'boolean',
+        key: '3212',
         datatype: 'boolean',
         fieldtype: 'single',
         matchtype: 'exact',
       },
       {
-        key: 'datetimeRange',
+        key: '123',
         datatype: 'datetime',
         fieldtype: 'range',
         matchtype: 'exact',

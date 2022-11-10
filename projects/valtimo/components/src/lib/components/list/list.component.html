@@ -103,7 +103,7 @@
                 class="action-icon"
                 style="cursor: pointer"
                 [ngClass]="action.iconClass"
-                (click)="action.callback(item)"
+                (click)="action.callback(item, $event)"
               ></i>
             </td>
           </tr>
@@ -204,7 +204,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="dropdownMenu">
       <a
-        (click)="action.callback(item)"
+        (click)="action.callback(item, $event)"
         class="dropdown-item p-2"
         *ngFor="let action of listItemField.value"
       >
