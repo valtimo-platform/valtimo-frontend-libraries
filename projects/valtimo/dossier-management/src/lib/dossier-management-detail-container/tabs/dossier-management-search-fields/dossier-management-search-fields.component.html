@@ -38,7 +38,7 @@
     [showFooter]="true"
   >
     <div body>
-      <v-form *ngIf="{disabled: disabled$ | async} as obs">
+      <v-form (valueChange)="formValueChange($event)" *ngIf="{disabled: disabled$ | async} as obs">
         <v-input
           name="path"
           [title]="'searchFieldsOverview.path' | translate"
