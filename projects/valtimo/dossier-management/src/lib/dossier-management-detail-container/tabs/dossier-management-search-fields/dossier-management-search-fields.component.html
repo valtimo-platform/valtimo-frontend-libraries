@@ -143,7 +143,11 @@
       {{ 'searchFields.downloadButtonText' | translate }}
     </a>
 
-    <button (click)="searchFieldClicked($event)" class="btn btn-primary btn-space">
+    <button
+      (click)="searchFieldClicked($event)"
+      class="btn btn-primary btn-space"
+      [ngClass]="{disabled: !obs.downloadUrl || !obs.downloadName || obs.searchFields.length <= 0}"
+    >
       <i class="icon mdi mdi-plus mr-1"></i>
       {{ 'searchFieldsOverview.addRow' | translate }}
     </button>
