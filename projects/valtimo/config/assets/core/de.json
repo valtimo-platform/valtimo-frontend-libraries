@@ -842,6 +842,7 @@
     "datetimeRange": "Ein Datums- und Zeitreihenfeld"
   },
   "searchFieldsOverview": {
+    "key": "Schlüssel",
     "edit": "Suchfeld bearbeiten",
     "path": "Pfad",
     "dataType": "Datentyp",

@@ -22,8 +22,7 @@
     downloadName: downloadName$ | async,
     documentDefinitionName: documentDefinitionName$ | async,
     valid: valid$ | async,
-    disableInput: disableInput$ | async,
-    selectedSearchField: selectedSearchField$ | async
+    disableInput: disableInput$ | async
   } as obs"
 >
   <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
@@ -37,7 +36,10 @@
       class="btn btn-secondary btn-space"
       [href]="obs.downloadUrl"
       [download]="obs.downloadName"
-      [ngClass]="{disabled: !obs.downloadUrl || !obs.downloadName || obs.searchFields.length <= 0}"
+      [ngClass]="{
+        disabled:
+          !obs.downloadUrl || !obs.downloadName || obs.searchFields.length <= 0 || obs.disableInput
+      }"
     >
       <i class="icon mdi mdi-download mr-1"></i>
       {{ 'searchFields.downloadButtonText' | translate }}
@@ -45,7 +47,7 @@
     <button
       (click)="searchFieldClicked($event, true)"
       class="btn btn-primary btn-space"
-      [ngClass]="{disabled: loadingSearchFields}"
+      [ngClass]="{disabled: loadingSearchFields || obs.disableInput}"
     >
       <i class="icon mdi mdi-plus mr-1"></i>
       {{ 'searchFieldsOverview.addRow' | translate }}
@@ -67,15 +69,21 @@
 </ng-template>
 
 <ng-template #moveRowButtons let-index="index" let-length="length">
-  <div class="move-row-buttons" *ngIf="{disableInput: disableInput$ | async} as obs">
+  <div
+    class="move-row-buttons"
+    *ngIf="{
+      disableInput: disableInput$ | async,
+      documentDefinitionName: documentDefinitionName$ | async
+    } as obs"
+  >
     <i
       class="mdi mdi-arrow-up-bold btn btn-outline-primary mr-1"
-      (click)="moveRow(index, true, $event)"
+      (click)="moveRow(index, true, $event, obs.documentDefinitionName)"
       [ngClass]="{'disabled disabled-move-row-button': index === 0 || obs.disableInput}"
     ></i>
     <i
       class="mdi mdi-arrow-down-bold btn btn-outline-secondary"
-      (click)="moveRow(index, false, $event)"
+      (click)="moveRow(index, false, $event, obs.documentDefinitionName)"
       [ngClass]="{'disabled disabled-move-row-button': index === length - 1 || obs.disableInput}"
     ></i>
   </div>
@@ -93,12 +101,25 @@
     [showFooter]="true"
   >
     <div body class="mt-2">
-      <v-form (valueChange)="formValueChange($event)" *ngIf="showSearchFieldsForm">
+      <v-form
+        (valueChange)="formValueChange($event)"
+        *ngIf="showSearchFieldsForm && {searchField: selectedSearchField$ | async} as searchObs"
+      >
+        <v-input
+          name="key"
+          [title]="'searchFieldsOverview.key' | translate"
+          [margin]="true"
+          [defaultValue]="searchObs.searchField?.key"
+          [disabled]="obs.disableInput || !searchFieldActionTypeIsAdd"
+          [required]="true"
+          [fullWidth]="true"
+        >
+        </v-input>
         <v-input
           name="path"
           [title]="'searchFieldsOverview.path' | translate"
           [margin]="true"
-          [defaultValue]="obs.searchField?.path"
+          [defaultValue]="searchObs.searchField?.path"
           [disabled]="obs.disableInput"
           [required]="true"
           [fullWidth]="true"
@@ -113,7 +134,7 @@
           [margin]="true"
           [required]="true"
           name="dataType"
-          [defaultSelectionId]="obs.searchField?.dataType"
+          [defaultSelectionId]="searchObs.searchField?.dataType"
           [widthInPx]="200"
         ></v-select>
         <v-select
@@ -125,7 +146,7 @@
           [margin]="true"
           [required]="true"
           name="fieldType"
-          [defaultSelectionId]="obs.searchField?.fieldType"
+          [defaultSelectionId]="searchObs.searchField?.fieldType"
           [widthInPx]="200"
         ></v-select>
         <v-select
@@ -137,7 +158,7 @@
           [margin]="true"
           [required]="true"
           name="matchType"
-          [defaultSelectionId]="obs.searchField?.matchType"
+          [defaultSelectionId]="searchObs.searchField?.matchType"
           [widthInPx]="200"
         ></v-select>
       </v-form>
@@ -151,18 +172,18 @@
 </ng-template>
 
 <ng-template #buttonsFooterModal let-obs="obs">
-  <div class="buttons-container">
+  <div class="buttons-container" *ngIf="{searchField: selectedSearchField$ | async} as searchObs">
     <div class="right-buttons">
       <button
         class="btn btn-space btn-secondary"
         *ngIf="!searchFieldActionTypeIsAdd"
         [disabled]="obs.disableInput"
-        (click)="deleteSelectedSearchField(obs.documentDefinitionName, obs.selectedSearchField)"
+        (click)="deleteSelectedSearchField(obs.documentDefinitionName, searchObs.searchField)"
       >
         {{ 'searchFieldsOverview.delete' | translate }}
       </button>
       <button
-        (click)="onSubmit(obs.documentDefinitionName)"
+        (click)="saveSearchField(obs.documentDefinitionName)"
         type="button"
         class="btn btn-primary btn-space mr-0"
         [disabled]="obs.disableInput || !obs.valid"

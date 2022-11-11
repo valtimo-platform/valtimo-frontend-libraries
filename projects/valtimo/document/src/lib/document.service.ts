@@ -86,17 +86,17 @@ export class DocumentService {
     );
   }
 
-  putDocumentSearch(documentDefinitionName: string, request: SearchField): Observable<void> {
+  putDocumentSearch(documentDefinitionName: string, request: Array<SearchField>): Observable<void> {
     return this.http.put<void>(
       `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
-      {request}
+      [...request]
     );
   }
 
   postDocumentSearch(documentDefinitionName: string, request: SearchField): Observable<void> {
     return this.http.post<void>(
       `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
-      {request}
+      {...request}
     );
   }
 

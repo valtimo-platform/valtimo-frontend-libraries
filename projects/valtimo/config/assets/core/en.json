@@ -842,6 +842,7 @@
     "datetimeRange": "A date and time range field"
   },
   "searchFieldsOverview": {
+    "key": "Key",
     "edit": "Edit search field",
     "path": "Path",
     "dataType": "Data type",

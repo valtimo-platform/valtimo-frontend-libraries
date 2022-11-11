@@ -46,7 +46,6 @@ import {
   SearchFieldMatchType,
 } from '@valtimo/config';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SelectItem} from '@valtimo/user-interface';
 
 @Component({
@@ -66,12 +65,18 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   readonly onDeleteSearchField$ = new BehaviorSubject<string | null>(null);
   readonly disableInput$ = new BehaviorSubject<boolean>(false);
   readonly selectedSearchField$ = new BehaviorSubject<SearchField | null>(null);
-  readonly valid$ = new BehaviorSubject<boolean>(false);
   readonly formData$ = new BehaviorSubject<SearchField>(null);
+  readonly valid$ = new BehaviorSubject<boolean>(false);
 
   private subscriptions = new Subscription();
 
   private readonly COLUMNS: Array<DefinitionColumn> = [
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'key',
+      translationKey: 'key',
+    },
     {
       viewType: 'string',
       sortable: false,
@@ -200,8 +205,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly sanitizer: DomSanitizer,
-    private readonly modalService: NgbModal
+    private readonly sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -226,33 +230,19 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   }
 
   formValueChange(data: SearchField): void {
+    console.log(data);
     this.formData$.next(data);
+    this.valid$.next(
+      !!(data.key && data.dataType && data.fieldType && data.matchType && data.path)
+    );
   }
 
-  onSubmit(documentDefinitionName: string, searchFields?: SearchField): void {
-    combineLatest([this.valid$, this.formData$])
-      .pipe(take(1))
-      .subscribe(([valid, formData]) => {
-        if (valid) {
-          this.searchField.emit(formData);
-        }
-      });
-    this.documentService.postDocumentSearch(documentDefinitionName, searchFields).subscribe();
-  }
-
-  onDelete(searchField: any): void {
-    this.onDeleteSearchField$.next(searchField);
-  }
-
-  onEdit(documentDefinitionName: string, searchFields?: SearchField): void {
-    this.documentService.putDocumentSearch(documentDefinitionName, searchFields).subscribe();
-  }
-
-  onCreate(documentDefinitionName: string, searchFields?: SearchField): void {
-    this.documentService.postDocumentSearch(documentDefinitionName, searchFields).subscribe();
-  }
-
-  moveRow(searchFieldRowIndex: number, moveUp: boolean, clickEvent: MouseEvent): void {
+  moveRow(
+    searchFieldRowIndex: number,
+    moveUp: boolean,
+    clickEvent: MouseEvent,
+    documentDefinitionName: string
+  ): void {
     const searchFields = [...this.cachedSearchFields];
     const searchFieldRow = searchFields[searchFieldRowIndex];
 
@@ -272,12 +262,14 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
         field => field.key === searchFieldBeforeKey
       );
       filteredSearchFields.splice(searchFieldBeforeIndex, 0, foundSearchField);
+      this.updateSearchFields(documentDefinitionName, filteredSearchFields);
     } else if (multipleSearchFields && !moveUp && searchFieldIndex < searchFields.length) {
       const searchFieldAfterKey = `${searchFields[searchFieldIndex + 1].key}`;
       const searchFieldAfterIndex = filteredSearchFields.findIndex(
         field => field.key === searchFieldAfterKey
       );
       filteredSearchFields.splice(searchFieldAfterIndex + 1, 0, foundSearchField);
+      this.updateSearchFields(documentDefinitionName, filteredSearchFields);
     }
 
     console.log('move result', filteredSearchFields);
@@ -303,9 +295,50 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       );
   }
 
+  saveSearchField(documentDefinitionName: string): void {
+    this.disableInput();
+
+    this.formData$.pipe(take(1)).subscribe(formData => {
+      if (this.searchFieldActionTypeIsAdd) {
+        this.documentService.postDocumentSearch(documentDefinitionName, formData).subscribe(
+          () => {
+            this.enableInput();
+            this.hideModal();
+            this.refreshSearchFields();
+          },
+          () => {
+            this.enableInput();
+          }
+        );
+      } else {
+        const newFields = [...this.cachedSearchFields];
+        const indexToReplace = newFields.findIndex(field => field.key === formData.key);
+        const filteredFields = newFields.filter(field => field.key !== formData.key);
+
+        filteredFields.splice(indexToReplace, 0, formData);
+        this.updateSearchFields(documentDefinitionName, filteredFields);
+      }
+    });
+  }
+
+  updateSearchFields(documentDefinitionName: string, newSearchFields: Array<SearchField>): void {
+    this.disableInput();
+
+    this.documentService.putDocumentSearch(documentDefinitionName, newSearchFields).subscribe(
+      () => {
+        this.enableInput();
+        this.hideModal();
+        this.refreshSearchFields();
+      },
+      () => {
+        this.enableInput();
+      }
+    );
+  }
+
   private openSelectedSearchFieldSubscription(): void {
     this.subscriptions.add(
-      this.selectedSearchField$.subscribe(searchField => {
+      this.selectedSearchField$.subscribe(() => {
         this.showModal();
       })
     );

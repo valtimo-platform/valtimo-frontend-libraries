@@ -842,6 +842,7 @@
     "datetimeRange": "Een datum en tijd-reeks-veld"
   },
   "searchFieldsOverview": {
+    "key": "Sleutel",
     "edit": "Zoekveld bewerken",
     "path": "Pad",
     "dataType": "Datatype",
