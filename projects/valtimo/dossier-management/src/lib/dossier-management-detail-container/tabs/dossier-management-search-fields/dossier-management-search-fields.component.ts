@@ -155,19 +155,24 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   private cachedSearchFields!: Array<SearchField>;
 
+  loadingSearchFields = true;
+
   private readonly searchFields$: Observable<Array<SearchField>> =
     this.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
         this.documentService.getDocumentSearchFields(documentDefinitionName)
       ),
-      map(fields => fields.sort()),
       tap(searchFields => {
         this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
-          this.setDownload(documentDefinitionName, searchFields);
+          if (searchFields && Array.isArray(searchFields) && searchFields.length > 0) {
+            this.setDownload(documentDefinitionName, searchFields);
+          }
         });
       }),
       tap(searchFields => {
+        console.log('finished', searchFields);
         this.cachedSearchFields = searchFields;
+        this.loadingSearchFields = false;
       })
     );
 

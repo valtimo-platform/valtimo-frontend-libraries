@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {delay, Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {
   AssignHandlerToDocumentResult,
   AuditRecord,
@@ -80,11 +80,11 @@ export class DocumentService {
     );
   }
 
-  // getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
-  //   return this.http.get<Array<SearchField>>(
-  //     `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`
-  //   );
-  // }
+  getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
+    return this.http.get<Array<SearchField>>(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`
+    );
+  }
 
   putDocumentSearch(documentDefinitionName: string, request: SearchField): Observable<void> {
     return this.http.put<void>(
@@ -310,60 +310,5 @@ export class DocumentService {
     return this.http.get<Array<User>>(
       `${this.valtimoEndpointUri}document/${documentId}/candidate-user`
     );
-  }
-
-  getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
-    return of([
-      {
-        key: '1',
-        datatype: 'text',
-        fieldtype: 'single',
-        matchtype: 'exact',
-        path: '/profile/name',
-      },
-      {
-        key: '111',
-        datatype: 'number',
-        fieldtype: 'single',
-        matchtype: 'exact',
-      },
-      {
-        key: '213312',
-        datatype: 'date',
-        fieldtype: 'single',
-        matchtype: 'exact',
-        path: '/profile/dateOfBirth',
-      },
-      {
-        key: '12233',
-        datatype: 'number',
-        fieldtype: 'range',
-        matchtype: 'exact',
-      },
-      {
-        key: '324',
-        datatype: 'date',
-        fieldtype: 'range',
-        matchtype: 'exact',
-      },
-      {
-        key: '4323',
-        datatype: 'datetime',
-        fieldtype: 'single',
-        matchtype: 'exact',
-      },
-      {
-        key: '3212',
-        datatype: 'boolean',
-        fieldtype: 'single',
-        matchtype: 'exact',
-      },
-      {
-        key: '123',
-        datatype: 'datetime',
-        fieldtype: 'range',
-        matchtype: 'exact',
-      },
-    ] as Array<SearchField>).pipe(delay(1000));
   }
 }

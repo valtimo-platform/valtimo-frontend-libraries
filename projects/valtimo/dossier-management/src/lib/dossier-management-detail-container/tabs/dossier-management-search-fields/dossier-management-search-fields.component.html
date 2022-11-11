@@ -134,7 +134,7 @@
 <ng-template #buttons let-obs="obs">
   <div class="btn-group mt-m3px mb-3 pr-2 float-right">
     <a
-      class="btn btn-primary btn-space"
+      class="btn btn-secondary btn-space"
       [href]="obs.downloadUrl"
       [download]="obs.downloadName"
       [ngClass]="{disabled: !obs.downloadUrl || !obs.downloadName || obs.searchFields.length <= 0}"
@@ -142,11 +142,10 @@
       <i class="icon mdi mdi-download mr-1"></i>
       {{ 'searchFields.downloadButtonText' | translate }}
     </a>
-
     <button
       (click)="searchFieldClicked($event)"
       class="btn btn-primary btn-space"
-      [ngClass]="{disabled: !obs.downloadUrl || !obs.downloadName || obs.searchFields.length <= 0}"
+      [ngClass]="{disabled: loadingSearchFields}"
     >
       <i class="icon mdi mdi-plus mr-1"></i>
       {{ 'searchFieldsOverview.addRow' | translate }}
