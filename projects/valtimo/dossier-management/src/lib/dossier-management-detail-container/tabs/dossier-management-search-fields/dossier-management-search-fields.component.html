@@ -41,7 +41,7 @@
       {{ 'searchFields.downloadButtonText' | translate }}
     </a>
     <button
-      (click)="searchFieldClicked($event)"
+      (click)="searchFieldClicked($event, true)"
       class="btn btn-primary btn-space"
       [ngClass]="{disabled: loadingSearchFields}"
     >
@@ -57,7 +57,7 @@
     [fields]="obs.fields"
     [viewMode]="false"
     [header]="false"
-    (rowClicked)="searchFieldClicked($event)"
+    (rowClicked)="searchFieldClicked($event, false)"
     *ngIf="obs.searchFields; else loading"
     [lastColumnTemplate]="moveRowButtonsTemplateRef"
   >
@@ -83,7 +83,11 @@
   <valtimo-modal
     #editSearchFieldModal
     elementId="editSearchFieldModal"
-    [title]="'searchFieldsOverview.edit' | translate"
+    [title]="
+      searchFieldActionTypeIsAdd
+        ? ('searchFieldsOverview.addRow' | translate)
+        : ('searchFieldsOverview.edit' | translate)
+    "
     [showFooter]="true"
   >
     <div body class="mt-2">
@@ -144,7 +148,7 @@
 <ng-template #buttonsFooterModal let-obs="obs">
   <div class="buttons-container">
     <div class="right-buttons">
-      <button class="btn btn-space btn-secondary">
+      <button class="btn btn-space btn-secondary" *ngIf="!searchFieldActionTypeIsAdd">
         {{ 'searchFieldsOverview.delete' | translate }}
       </button>
       <button

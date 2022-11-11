@@ -155,6 +155,8 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   private cachedSearchFields!: Array<SearchField>;
 
+  searchFieldActionTypeIsAdd: boolean;
+
   loadingSearchFields = true;
 
   private readonly searchFields$: Observable<Array<SearchField>> =
@@ -206,7 +208,8 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     this.selectedSearchFieldSubscription?.unsubscribe();
   }
 
-  searchFieldClicked(searchField: any): void {
+  searchFieldClicked(searchField: SearchField, searchFieldActionTypeIsAdd: boolean): void {
+    this.searchFieldActionTypeIsAdd = searchFieldActionTypeIsAdd;
     this.selectedSearchField$.next(searchField);
   }
 
