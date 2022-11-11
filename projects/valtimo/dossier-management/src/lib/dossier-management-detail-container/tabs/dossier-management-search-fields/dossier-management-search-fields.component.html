@@ -91,12 +91,20 @@
     [showFooter]="true"
   >
     <div body class="mt-2">
-      <v-form (valueChange)="formValueChange($event)" *ngIf="{disabled: disabled$ | async} as obs">
+      <v-form
+        (valueChange)="formValueChange($event)"
+        *ngIf="
+          showSearchFieldsForm && {
+            disabled: disabled$ | async,
+            searchField: selectedSearchField$ | async
+          } as obs
+        "
+      >
         <v-input
           name="path"
           [title]="'searchFieldsOverview.path' | translate"
           [margin]="true"
-          [defaultValue]=""
+          [defaultValue]="obs.searchField?.path"
           [disabled]="obs.disabled"
           [required]="true"
           [fullWidth]="true"
@@ -107,33 +115,33 @@
           [items]="dataTypeItems"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
           [title]="'searchFieldsOverview.dataType' | translate"
-          (selectedChange)="selectedTypeSearch($event)"
           [disabled]="obs.disabled"
           [margin]="true"
           [required]="true"
           name="dataType"
+          [defaultSelectionId]="obs.searchField?.dataType"
         ></v-select>
         <v-select
           *ngIf="fieldTypeItems$ | async as fieldTypeItems"
           [items]="fieldTypeItems"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
           [title]="'searchFieldsOverview.fieldType' | translate"
-          (selectedChange)="selectedTypeSearch($event)"
           [disabled]="obs.disabled"
           [margin]="true"
           [required]="true"
           name="fieldType"
+          [defaultSelectionId]="obs.searchField?.fieldType"
         ></v-select>
         <v-select
           *ngIf="matchTypeItems$ | async as matchTypeItems"
           [items]="matchTypeItems"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
           [title]="'searchFieldsOverview.matchType' | translate"
-          (selectedChange)="selectedTypeSearch($event)"
           [disabled]="obs.disabled"
           [margin]="true"
           [required]="true"
           name="matchType"
+          [defaultSelectionId]="obs.searchField?.matchType"
         ></v-select>
       </v-form>
     </div>

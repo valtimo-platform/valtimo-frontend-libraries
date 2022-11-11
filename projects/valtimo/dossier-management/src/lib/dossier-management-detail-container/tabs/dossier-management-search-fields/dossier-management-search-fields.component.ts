@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   OnDestroy,
@@ -53,7 +54,7 @@ import {SelectItem} from '@valtimo/user-interface';
   templateUrl: './dossier-management-search-fields.component.html',
   styleUrls: ['./dossier-management-search-fields.component.scss'],
 })
-export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy {
+export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('moveRowButtons') public moveRowButtonsTemplateRef: TemplateRef<any>;
   @ViewChild('editSearchFieldModal') modal: ModalComponent;
 
@@ -68,7 +69,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   readonly valid$ = new BehaviorSubject<boolean>(false);
   readonly formData$ = new BehaviorSubject<SearchField>(null);
 
-  private selectedSearchFieldSubscription!: Subscription;
+  private subscriptions = new Subscription();
 
   private readonly COLUMNS: Array<DefinitionColumn> = [
     {
@@ -154,10 +155,9 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   );
 
   private cachedSearchFields!: Array<SearchField>;
-
   searchFieldActionTypeIsAdd: boolean;
-
   loadingSearchFields = true;
+  showSearchFieldsForm = false;
 
   private readonly searchFields$: Observable<Array<SearchField>> =
     this.documentDefinitionName$.pipe(
@@ -204,23 +204,21 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     this.openSelectedSearchFieldSubscription();
   }
 
+  ngAfterViewInit(): void {
+    this.openModalShowingSubscription();
+  }
+
   ngOnDestroy(): void {
-    this.selectedSearchFieldSubscription?.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   searchFieldClicked(searchField: SearchField, searchFieldActionTypeIsAdd: boolean): void {
     this.searchFieldActionTypeIsAdd = searchFieldActionTypeIsAdd;
-    this.selectedSearchField$.next(searchField);
-  }
-
-  private openSelectedSearchFieldSubscription(): void {
-    this.selectedSearchFieldSubscription = this.selectedSearchField$.subscribe(searchField => {
-      this.modal.show();
-    });
-  }
-
-  selectedTypeSearch(searchField: any): void {
-    this.selectedSearchFields$.next(searchField);
+    const searchFieldToSelect = this.cachedSearchFields.find(
+      field => field.key === searchField.key
+    );
+    console.log('select search field', searchFieldToSelect);
+    this.selectedSearchField$.next(searchFieldToSelect);
   }
 
   formValueChange(data: SearchField): void {
@@ -248,20 +246,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   onCreate(documentDefinitionName: string, searchFields?: SearchField): void {
     this.documentService.postDocumentSearch(documentDefinitionName, searchFields).subscribe();
-  }
-
-  private delete(documentDefinitionName: string, key: any): void {
-    this.documentService.deleteDocumentSearch(documentDefinitionName, key).subscribe();
-  }
-
-  private setDownload(documentDefinitionName: string, searchFields: Array<SearchField>): void {
-    this.downloadName$.next(`${documentDefinitionName}.json`);
-    this.downloadUrl$.next(
-      this.sanitizer.bypassSecurityTrustUrl(
-        'data:text/json;charset=UTF-8,' +
-          encodeURIComponent(JSON.stringify({searchFields}, null, 2))
-      )
-    );
   }
 
   moveRow(searchFieldRowIndex: number, moveUp: boolean, clickEvent: MouseEvent): void {
@@ -293,5 +277,39 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     }
 
     console.log('move result', filteredSearchFields);
+  }
+
+  private openSelectedSearchFieldSubscription(): void {
+    this.subscriptions.add(
+      this.selectedSearchField$.subscribe(searchField => {
+        this.modal?.show();
+      })
+    );
+  }
+
+  private openModalShowingSubscription(): void {
+    this.modal.modalShowing$.subscribe(modalShowing => {
+      if (modalShowing) {
+        this.showSearchFieldsForm = true;
+      } else {
+        setTimeout(() => {
+          this.showSearchFieldsForm = false;
+        }, 150);
+      }
+    });
+  }
+
+  private delete(documentDefinitionName: string, key: any): void {
+    this.documentService.deleteDocumentSearch(documentDefinitionName, key).subscribe();
+  }
+
+  private setDownload(documentDefinitionName: string, searchFields: Array<SearchField>): void {
+    this.downloadName$.next(`${documentDefinitionName}.json`);
+    this.downloadUrl$.next(
+      this.sanitizer.bypassSecurityTrustUrl(
+        'data:text/json;charset=UTF-8,' +
+          encodeURIComponent(JSON.stringify({searchFields}, null, 2))
+      )
+    );
   }
 }
