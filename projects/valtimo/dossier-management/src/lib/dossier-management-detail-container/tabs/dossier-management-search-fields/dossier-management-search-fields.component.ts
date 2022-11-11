@@ -64,7 +64,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
   readonly selectedSearchFields$ = new BehaviorSubject<string | null>(null);
   readonly onDeleteSearchField$ = new BehaviorSubject<string | null>(null);
-  readonly disabled$ = new BehaviorSubject<boolean>(false);
+  readonly disableInput$ = new BehaviorSubject<boolean>(false);
   readonly selectedSearchField$ = new BehaviorSubject<SearchField | null>(null);
   readonly valid$ = new BehaviorSubject<boolean>(false);
   readonly formData$ = new BehaviorSubject<SearchField>(null);
@@ -159,24 +159,28 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   loadingSearchFields = true;
   showSearchFieldsForm = false;
 
-  private readonly searchFields$: Observable<Array<SearchField>> =
-    this.documentDefinitionName$.pipe(
-      switchMap(documentDefinitionName =>
-        this.documentService.getDocumentSearchFields(documentDefinitionName)
-      ),
-      tap(searchFields => {
-        this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
-          if (searchFields && Array.isArray(searchFields) && searchFields.length > 0) {
-            this.setDownload(documentDefinitionName, searchFields);
-          }
-        });
-      }),
-      tap(searchFields => {
-        console.log('finished', searchFields);
-        this.cachedSearchFields = searchFields;
-        this.loadingSearchFields = false;
-      })
-    );
+  private readonly refreshSearchFields$ = new BehaviorSubject<null>(null);
+
+  private readonly searchFields$: Observable<Array<SearchField>> = combineLatest([
+    this.documentDefinitionName$,
+    this.refreshSearchFields$,
+  ]).pipe(
+    switchMap(([documentDefinitionName]) =>
+      this.documentService.getDocumentSearchFields(documentDefinitionName)
+    ),
+    tap(searchFields => {
+      this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+        if (searchFields && Array.isArray(searchFields) && searchFields.length > 0) {
+          this.setDownload(documentDefinitionName, searchFields);
+        }
+      });
+    }),
+    tap(searchFields => {
+      console.log('finished', searchFields);
+      this.cachedSearchFields = searchFields;
+      this.loadingSearchFields = false;
+    })
+  );
 
   readonly translatedSearchFields$: Observable<Array<SearchField>> = combineLatest([
     this.searchFields$,
@@ -259,16 +263,16 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     const searchFieldIndex = searchFields.findIndex(field => field.key === searchFieldRow.key);
     const foundSearchField = {...searchFields[searchFieldIndex]};
     const filteredSearchFields = searchFields.filter(field => field.key !== searchFieldRow.key);
-
+    const multipleSearchFields = searchFields.length > 1;
     console.log('before search fields', searchFields);
 
-    if (moveUp && searchFieldIndex > 0) {
+    if (multipleSearchFields && moveUp && searchFieldIndex > 0) {
       const searchFieldBeforeKey = `${searchFields[searchFieldIndex - 1].key}`;
       const searchFieldBeforeIndex = filteredSearchFields.findIndex(
         field => field.key === searchFieldBeforeKey
       );
       filteredSearchFields.splice(searchFieldBeforeIndex, 0, foundSearchField);
-    } else if (!moveUp && searchFieldIndex < searchFields.length) {
+    } else if (multipleSearchFields && !moveUp && searchFieldIndex < searchFields.length) {
       const searchFieldAfterKey = `${searchFields[searchFieldIndex + 1].key}`;
       const searchFieldAfterIndex = filteredSearchFields.findIndex(
         field => field.key === searchFieldAfterKey
@@ -279,28 +283,46 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     console.log('move result', filteredSearchFields);
   }
 
+  deleteSelectedSearchField(
+    documentDefinitionName: string,
+    selectedSearchField: SearchField
+  ): void {
+    this.disableInput();
+
+    this.documentService
+      .deleteDocumentSearch(documentDefinitionName, selectedSearchField.key)
+      .subscribe(
+        () => {
+          this.enableInput();
+          this.hideModal();
+          this.refreshSearchFields();
+        },
+        () => {
+          this.enableInput();
+        }
+      );
+  }
+
   private openSelectedSearchFieldSubscription(): void {
     this.subscriptions.add(
       this.selectedSearchField$.subscribe(searchField => {
-        this.modal?.show();
+        this.showModal();
       })
     );
   }
 
   private openModalShowingSubscription(): void {
-    this.modal.modalShowing$.subscribe(modalShowing => {
-      if (modalShowing) {
-        this.showSearchFieldsForm = true;
-      } else {
-        setTimeout(() => {
-          this.showSearchFieldsForm = false;
-        }, 150);
-      }
-    });
-  }
-
-  private delete(documentDefinitionName: string, key: any): void {
-    this.documentService.deleteDocumentSearch(documentDefinitionName, key).subscribe();
+    this.subscriptions.add(
+      this.modal.modalShowing$.subscribe(modalShowing => {
+        if (modalShowing) {
+          this.showSearchFieldsForm = true;
+        } else {
+          setTimeout(() => {
+            this.showSearchFieldsForm = false;
+          }, 150);
+        }
+      })
+    );
   }
 
   private setDownload(documentDefinitionName: string, searchFields: Array<SearchField>): void {
@@ -311,5 +333,25 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
           encodeURIComponent(JSON.stringify({searchFields}, null, 2))
       )
     );
+  }
+
+  private disableInput(): void {
+    this.disableInput$.next(true);
+  }
+
+  private enableInput(): void {
+    this.disableInput$.next(false);
+  }
+
+  private showModal(): void {
+    this.modal?.show();
+  }
+
+  private hideModal(): void {
+    this.modal?.hide();
+  }
+
+  private refreshSearchFields(): void {
+    this.refreshSearchFields$.next(null);
   }
 }

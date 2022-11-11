@@ -21,7 +21,9 @@
     downloadUrl: downloadUrl$ | async,
     downloadName: downloadName$ | async,
     documentDefinitionName: documentDefinitionName$ | async,
-    valid: valid$ | async
+    valid: valid$ | async,
+    disableInput: disableInput$ | async,
+    selectedSearchField: selectedSearchField$ | async
   } as obs"
 >
   <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
@@ -65,16 +67,16 @@
 </ng-template>
 
 <ng-template #moveRowButtons let-index="index" let-length="length">
-  <div class="move-row-buttons">
+  <div class="move-row-buttons" *ngIf="{disableInput: disableInput$ | async} as obs">
     <i
       class="mdi mdi-arrow-up-bold btn btn-outline-primary mr-1"
       (click)="moveRow(index, true, $event)"
-      [ngClass]="{'disabled disabled-move-row-button': index === 0}"
+      [ngClass]="{'disabled disabled-move-row-button': index === 0 || obs.disableInput}"
     ></i>
     <i
       class="mdi mdi-arrow-down-bold btn btn-outline-secondary"
       (click)="moveRow(index, false, $event)"
-      [ngClass]="{'disabled disabled-move-row-button': index === length - 1}"
+      [ngClass]="{'disabled disabled-move-row-button': index === length - 1 || obs.disableInput}"
     ></i>
   </div>
 </ng-template>
@@ -91,21 +93,13 @@
     [showFooter]="true"
   >
     <div body class="mt-2">
-      <v-form
-        (valueChange)="formValueChange($event)"
-        *ngIf="
-          showSearchFieldsForm && {
-            disabled: disabled$ | async,
-            searchField: selectedSearchField$ | async
-          } as obs
-        "
-      >
+      <v-form (valueChange)="formValueChange($event)" *ngIf="showSearchFieldsForm">
         <v-input
           name="path"
           [title]="'searchFieldsOverview.path' | translate"
           [margin]="true"
           [defaultValue]="obs.searchField?.path"
-          [disabled]="obs.disabled"
+          [disabled]="obs.disableInput"
           [required]="true"
           [fullWidth]="true"
         >
@@ -115,33 +109,36 @@
           [items]="dataTypeItems"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
           [title]="'searchFieldsOverview.dataType' | translate"
-          [disabled]="obs.disabled"
+          [disabled]="obs.disableInput"
           [margin]="true"
           [required]="true"
           name="dataType"
           [defaultSelectionId]="obs.searchField?.dataType"
+          [widthInPx]="200"
         ></v-select>
         <v-select
           *ngIf="fieldTypeItems$ | async as fieldTypeItems"
           [items]="fieldTypeItems"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
           [title]="'searchFieldsOverview.fieldType' | translate"
-          [disabled]="obs.disabled"
+          [disabled]="obs.disableInput"
           [margin]="true"
           [required]="true"
           name="fieldType"
           [defaultSelectionId]="obs.searchField?.fieldType"
+          [widthInPx]="200"
         ></v-select>
         <v-select
           *ngIf="matchTypeItems$ | async as matchTypeItems"
           [items]="matchTypeItems"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
           [title]="'searchFieldsOverview.matchType' | translate"
-          [disabled]="obs.disabled"
+          [disabled]="obs.disableInput"
           [margin]="true"
           [required]="true"
           name="matchType"
           [defaultSelectionId]="obs.searchField?.matchType"
+          [widthInPx]="200"
         ></v-select>
       </v-form>
     </div>
@@ -156,14 +153,19 @@
 <ng-template #buttonsFooterModal let-obs="obs">
   <div class="buttons-container">
     <div class="right-buttons">
-      <button class="btn btn-space btn-secondary" *ngIf="!searchFieldActionTypeIsAdd">
+      <button
+        class="btn btn-space btn-secondary"
+        *ngIf="!searchFieldActionTypeIsAdd"
+        [disabled]="obs.disableInput"
+        (click)="deleteSelectedSearchField(obs.documentDefinitionName, obs.selectedSearchField)"
+      >
         {{ 'searchFieldsOverview.delete' | translate }}
       </button>
       <button
         (click)="onSubmit(obs.documentDefinitionName)"
         type="button"
         class="btn btn-primary btn-space mr-0"
-        [disabled]="obs.disabled || !obs.valid"
+        [disabled]="obs.disableInput || !obs.valid"
       >
         {{ 'searchFieldsOverview.submit' | translate }}
       </button>
