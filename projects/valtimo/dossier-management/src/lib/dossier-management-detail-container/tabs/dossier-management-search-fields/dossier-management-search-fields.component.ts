@@ -221,20 +221,32 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   }
 
   searchFieldClicked(searchField: SearchField, searchFieldActionTypeIsAdd: boolean): void {
-    this.searchFieldActionTypeIsAdd = searchFieldActionTypeIsAdd;
-    const searchFieldToSelect = this.cachedSearchFields.find(
-      field => field.key === searchField.key
-    );
-    console.log('select search field', searchFieldToSelect);
-    this.selectedSearchField$.next(searchFieldToSelect);
+    this.disableInput$.pipe(take(1)).subscribe(inputDisabled => {
+      if (!inputDisabled) {
+        this.searchFieldActionTypeIsAdd = searchFieldActionTypeIsAdd;
+        const searchFieldToSelect = this.cachedSearchFields.find(
+          field => field.key === searchField.key
+        );
+        this.selectedSearchField$.next(searchFieldToSelect);
+      }
+    });
   }
 
   formValueChange(data: SearchField): void {
     console.log(data);
-    this.formData$.next(data);
-    this.valid$.next(
-      !!(data.key && data.dataType && data.fieldType && data.matchType && data.path)
+    const containsAllValues = !!(
+      data.key &&
+      data.dataType &&
+      data.fieldType &&
+      data.matchType &&
+      data.path
     );
+    const keyIsUnique =
+      !this.searchFieldActionTypeIsAdd ||
+      this.cachedSearchFields.findIndex(field => field.key === data.key) === -1;
+
+    this.formData$.next(data);
+    this.valid$.next(containsAllValues && keyIsUnique);
   }
 
   moveRow(
