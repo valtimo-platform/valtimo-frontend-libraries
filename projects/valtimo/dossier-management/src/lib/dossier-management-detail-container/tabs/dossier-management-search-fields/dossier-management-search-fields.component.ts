@@ -119,7 +119,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     )
   );
 
-  private readonly FIELD_TYPES: Array<SearchFieldFieldType> = ['single', 'multiple', 'range'];
+  private readonly FIELD_TYPES: Array<SearchFieldFieldType> = ['single', 'range'];
   readonly fieldTypeItems$: Observable<Array<SelectItem>> = this.translateService
     .stream('key')
     .pipe(
@@ -181,7 +181,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       });
     }),
     tap(searchFields => {
-      console.log('finished', searchFields);
       this.cachedSearchFields = searchFields;
       this.loadingSearchFields = false;
     })
@@ -233,7 +232,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   }
 
   formValueChange(data: SearchField): void {
-    console.log(data);
     const containsAllValues = !!(
       data.key &&
       data.dataType &&
@@ -260,13 +258,10 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
     clickEvent.stopPropagation();
 
-    console.log('request', searchFieldRow, moveUp);
-
     const searchFieldIndex = searchFields.findIndex(field => field.key === searchFieldRow.key);
     const foundSearchField = {...searchFields[searchFieldIndex]};
     const filteredSearchFields = searchFields.filter(field => field.key !== searchFieldRow.key);
     const multipleSearchFields = searchFields.length > 1;
-    console.log('before search fields', searchFields);
 
     if (multipleSearchFields && moveUp && searchFieldIndex > 0) {
       const searchFieldBeforeKey = `${searchFields[searchFieldIndex - 1].key}`;
@@ -283,8 +278,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       filteredSearchFields.splice(searchFieldAfterIndex + 1, 0, foundSearchField);
       this.updateSearchFields(documentDefinitionName, filteredSearchFields);
     }
-
-    console.log('move result', filteredSearchFields);
   }
 
   deleteSelectedSearchField(
