@@ -844,9 +844,9 @@
   "searchFieldsOverview": {
     "edit": "Suchfeld bearbeiten",
     "path": "Pfad",
-    "datatype": "Datentyp",
-    "fieldtype": "Feldtyp",
-    "matchtype": "Übereinstimmen",
+    "dataType": "Datentyp",
+    "fieldType": "Feldtyp",
+    "matchType": "Übereinstimmen",
     "exact": "Genau",
     "like": "Enthält",
     "single": "Nur",
@@ -855,17 +855,6 @@
     "submit": "Einreichen",
     "delete": "Löschen",
     "addRow": "Suchfeld hinzufügen",
-    "text": "Text",
-    "number": "Number",
-    "date": "Date",
-    "datetime": "Datetime",
-    "boolean": "Boolean",
-    "searchFieldPlaceholder": "Select a type...",
-    "deleteConfirmation": {
-      "title": "Datei löschen",
-      "description": "Möchten Sie diese Datei wirklich löschen?",
-      "cancel": "Absagen",
-      "delete": "Löschen"
-    }
+    "searchFieldPlaceholder": "Wählen Sie einen Typ..."
   }
 }

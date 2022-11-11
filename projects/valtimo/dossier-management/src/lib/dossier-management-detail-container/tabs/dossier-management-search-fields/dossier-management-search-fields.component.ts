@@ -45,7 +45,7 @@ import {
   SearchFieldMatchType,
 } from '@valtimo/config';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SelectItem} from '@valtimo/user-interface';
 
 @Component({
@@ -56,10 +56,8 @@ import {SelectItem} from '@valtimo/user-interface';
 export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy {
   @ViewChild('moveRowButtons') public moveRowButtonsTemplateRef: TemplateRef<any>;
   @ViewChild('editSearchFieldModal') modal: ModalComponent;
-  @Output() searchField: EventEmitter<SearchField> = new EventEmitter();
 
-  private closeResult = '';
-  private selectedSearchFieldSubscription!: Subscription;
+  @Output() searchField: EventEmitter<SearchField> = new EventEmitter();
 
   readonly downloadName$ = new BehaviorSubject<string>('');
   readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
@@ -69,6 +67,8 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   readonly selectedSearchField$ = new BehaviorSubject<SearchField | null>(null);
   readonly valid$ = new BehaviorSubject<boolean>(false);
   readonly formData$ = new BehaviorSubject<SearchField>(null);
+
+  private selectedSearchFieldSubscription!: Subscription;
 
   private readonly COLUMNS: Array<DefinitionColumn> = [
     {
@@ -80,24 +80,24 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     {
       viewType: 'string',
       sortable: false,
-      propertyName: 'datatype',
-      translationKey: 'datatype',
+      propertyName: 'dataType',
+      translationKey: 'dataType',
     },
     {
       viewType: 'string',
       sortable: false,
-      propertyName: 'fieldtype',
-      translationKey: 'fieldtype',
+      propertyName: 'fieldType',
+      translationKey: 'fieldType',
     },
     {
       viewType: 'string',
       sortable: false,
-      propertyName: 'matchtype',
-      translationKey: 'matchtype',
+      propertyName: 'matchType',
+      translationKey: 'matchType',
     },
   ];
 
-  private readonly DATA_TYPE: Array<SearchFieldDataType> = [
+  private readonly DATA_TYPES: Array<SearchFieldDataType> = [
     'text',
     'number',
     'date',
@@ -106,33 +106,33 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   ];
   readonly dataTypeItems$: Observable<Array<SelectItem>> = this.translateService.stream('key').pipe(
     map(() =>
-      this.DATA_TYPE.map(searchFields => ({
-        id: searchFields,
-        text: this.translateService.instant(`searchFieldsOverview.${searchFields}`),
+      this.DATA_TYPES.map(dataType => ({
+        id: dataType,
+        text: this.translateService.instant(`searchFields.${dataType}`),
       }))
     )
   );
 
-  private readonly FIELD_TYPE: Array<SearchFieldFieldType> = ['single', 'multiple', 'range'];
+  private readonly FIELD_TYPES: Array<SearchFieldFieldType> = ['single', 'multiple', 'range'];
   readonly fieldTypeItems$: Observable<Array<SelectItem>> = this.translateService
     .stream('key')
     .pipe(
       map(() =>
-        this.FIELD_TYPE.map(searchFields => ({
-          id: searchFields,
-          text: this.translateService.instant(`searchFieldsOverview.${searchFields}`),
+        this.FIELD_TYPES.map(fieldType => ({
+          id: fieldType,
+          text: this.translateService.instant(`searchFieldsOverview.${fieldType}`),
         }))
       )
     );
 
-  private readonly MATCH_TYPE: Array<SearchFieldMatchType> = ['exact', 'like'];
+  private readonly MATCH_TYPES: Array<SearchFieldMatchType> = ['exact', 'like'];
   readonly matchTypeItems$: Observable<Array<SelectItem>> = this.translateService
     .stream('key')
     .pipe(
       map(() =>
-        this.MATCH_TYPE.map(searchFields => ({
-          id: searchFields,
-          text: this.translateService.instant(`searchFieldsOverview.${searchFields}`),
+        this.MATCH_TYPES.map(matchType => ({
+          id: matchType,
+          text: this.translateService.instant(`searchFieldsOverview.${matchType}`),
         }))
       )
     );
@@ -176,15 +176,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       })
     );
 
-  public index$ = new BehaviorSubject(0);
-
-  // find index
-  public elementAtIndex$ = combineLatest(
-    this.index$,
-    this.searchFields$,
-    (index, arr) => arr[index]
-  );
-
   readonly translatedSearchFields$: Observable<Array<SearchField>> = combineLatest([
     this.searchFields$,
     this.translateService.stream('key'),
@@ -192,9 +183,9 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     map(([searchFields]) =>
       searchFields.map(searchField => ({
         ...searchField,
-        datatype: this.translateService.instant(`searchFields.${searchField.datatype}`),
-        matchtype: this.translateService.instant(`searchFieldsOverview.${searchField.matchtype}`),
-        fieldtype: this.translateService.instant(`searchFieldsOverview.${searchField.fieldtype}`),
+        dataType: this.translateService.instant(`searchFields.${searchField.dataType}`),
+        matchType: this.translateService.instant(`searchFieldsOverview.${searchField.matchType}`),
+        fieldType: this.translateService.instant(`searchFieldsOverview.${searchField.fieldType}`),
       }))
     )
   );
@@ -231,7 +222,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   formValueChange(data: SearchField): void {
     this.formData$.next(data);
-    this.setValid(data);
   }
 
   onSubmit(documentDefinitionName: string, searchFields?: SearchField): void {
@@ -243,10 +233,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
         }
       });
     this.documentService.postDocumentSearch(documentDefinitionName, searchFields).subscribe();
-  }
-
-  private setValid(data: SearchField): void {
-    this.valid$.next(!!(data.path && data.datatype && data.fieldtype && data.matchtype));
   }
 
   onDelete(searchField: any): void {
@@ -273,28 +259,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
           encodeURIComponent(JSON.stringify({searchFields}, null, 2))
       )
     );
-  }
-
-  open(content): void {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(
-      result => {
-        //this.delete()
-        this.closeResult = `Closed with: ${result}`;
-      },
-      reason => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   moveRow(searchFieldRowIndex: number, moveUp: boolean, clickEvent: MouseEvent): void {

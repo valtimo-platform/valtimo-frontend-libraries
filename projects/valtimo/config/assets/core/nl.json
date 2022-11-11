@@ -844,9 +844,9 @@
   "searchFieldsOverview": {
     "edit": "Zoekveld bewerken",
     "path": "Pad",
-    "datatype": "Datatype",
-    "fieldtype": "Veldtype",
-    "matchtype": "Overeenkomst",
+    "dataType": "Datatype",
+    "fieldType": "Veldtype",
+    "matchType": "Overeenkomst",
     "exact": "Precies",
     "like": "Bevat",
     "single": "Enkel",
@@ -855,17 +855,6 @@
     "submit": "Indienen",
     "delete": "Verwijderen",
     "addRow": "Zoekveld toevoegen",
-    "text": "Text",
-    "number": "Number",
-    "date": "Date",
-    "datetime": "Datetime",
-    "boolean": "Boolean",
-    "searchFieldPlaceholder": "Select a type...",
-    "deleteConfirmation": {
-      "title": "Bestand verwijderen",
-      "description": "Weet u zeker dat u dit bestand wilt verwijderen?",
-      "cancel": "Annuleren",
-      "delete": "Verwijderen"
-    }
+    "searchFieldPlaceholder": "Kies een type..."
   }
 }
