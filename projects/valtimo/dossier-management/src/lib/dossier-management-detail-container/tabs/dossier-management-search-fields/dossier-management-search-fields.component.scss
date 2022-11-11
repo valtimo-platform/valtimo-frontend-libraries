@@ -42,3 +42,7 @@ valtimo-list::ng-deep table {
   justify-content: flex-end;
   padding-right: 13px;
 }
+
+::ng-deep .tab-container {
+  min-height: unset !important;
+}
