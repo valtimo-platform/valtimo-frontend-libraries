@@ -113,6 +113,7 @@
           [disabled]="obs.disableInput || !searchFieldActionTypeIsAdd"
           [required]="true"
           [widthPx]="200"
+          [tooltip]="'searchFieldsOverviewTooltips.key' | translate"
         >
         </v-input>
         <v-input
@@ -123,6 +124,7 @@
           [disabled]="obs.disableInput"
           [required]="true"
           [fullWidth]="true"
+          [tooltip]="'searchFieldsOverviewTooltips.path' | translate"
         >
         </v-input>
         <v-select
@@ -136,6 +138,7 @@
           name="dataType"
           [defaultSelectionId]="searchObs.searchField?.dataType"
           [widthInPx]="200"
+          [tooltip]="'searchFieldsOverviewTooltips.dataType' | translate"
         ></v-select>
         <v-select
           *ngIf="fieldTypeItems$ | async as fieldTypeItems"
@@ -148,6 +151,7 @@
           name="fieldType"
           [defaultSelectionId]="searchObs.searchField?.fieldType"
           [widthInPx]="200"
+          [tooltip]="'searchFieldsOverviewTooltips.fieldType' | translate"
         ></v-select>
         <v-select
           *ngIf="matchTypeItems$ | async as matchTypeItems"
@@ -160,6 +164,7 @@
           name="matchType"
           [defaultSelectionId]="searchObs.searchField?.matchType"
           [widthInPx]="200"
+          [tooltip]="'searchFieldsOverviewTooltips.matchType' | translate"
         ></v-select>
       </v-form>
     </div>
