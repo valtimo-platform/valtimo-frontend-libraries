@@ -17,6 +17,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {SearchField, SearchFieldValue, SearchFieldWithValue} from '@valtimo/config';
 import {BehaviorSubject, combineLatest, Subscription, take} from 'rxjs';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-search-fields',
@@ -24,6 +25,8 @@ import {BehaviorSubject, combineLatest, Subscription, take} from 'rxjs';
   styleUrls: ['./search-fields.component.scss'],
 })
 export class SearchFieldsComponent implements OnInit, OnDestroy {
+  constructor(private readonly translateService: TranslateService) {}
+
   readonly searchFields$ = new BehaviorSubject<Array<SearchField>>([]);
 
   readonly values$ = new BehaviorSubject<{[key: string]: SearchFieldValue}>({});
@@ -90,5 +93,19 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
         this.valueChange.emit(searchFieldsCopy);
       }
     );
+  }
+
+  getTitle(searchField: SearchField): string {
+    const titleTranslation = this.translateService.instant(`searchFields.${searchField.key}`);
+    const title =
+      searchField.title ||
+      (searchField.key !== titleTranslation ? titleTranslation.split('.').at(-1) : searchField.key);
+
+    console.log('searchField.title', searchField.title);
+    console.log('searchField.key', searchField.key);
+    console.log("titleTranslation.split('.').at(-1)", titleTranslation.split('.').at(-1));
+    console.log('titleTranslation', titleTranslation);
+
+    return title;
   }
 }

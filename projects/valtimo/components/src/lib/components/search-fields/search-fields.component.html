@@ -105,7 +105,7 @@
   <v-input
     *ngIf="searchField.dataType === 'text' && searchField.fieldType === 'single'"
     [name]="searchField.key"
-    [title]="'searchFields.' + searchField.key | translate"
+    [title]="getTitle(searchField)"
     [fullWidth]="true"
     [tooltip]="tooltip !== tooltipKey && tooltip"
     (valueChange)="singleValueChange(searchField.key, $event)"
@@ -123,7 +123,7 @@
   <v-input
     *ngIf="searchField.dataType === 'number' && searchField.fieldType === 'single'"
     [name]="searchField.key"
-    [title]="'searchFields.' + searchField.key | translate"
+    [title]="getTitle(searchField)"
     [fullWidth]="true"
     (valueChange)="singleValueChange(searchField.key, $event)"
     type="number"
@@ -142,7 +142,7 @@
 >
   <v-date-picker
     *ngIf="searchField.dataType === 'date' && searchField.fieldType === 'single'"
-    [title]="'searchFields.' + searchField.key | translate"
+    [title]="getTitle(searchField)"
     [tooltip]="tooltip !== tooltipKey && tooltip"
     [name]="searchField.key"
     fullWidth="true"
@@ -159,7 +159,7 @@
 >
   <ng-container *ngIf="searchField.dataType === 'text' && searchField.fieldType === 'range'">
     <v-input-label
-      [title]="'searchFields.' + searchField.key | translate"
+      [title]="getTitle(searchField)"
       [tooltip]="tooltip !== tooltipKey && tooltip"
       [small]="true"
     ></v-input-label>
@@ -182,7 +182,7 @@
 >
   <ng-container *ngIf="searchField.dataType === 'number' && searchField.fieldType === 'range'">
     <v-input-label
-      [title]="'searchFields.' + searchField.key | translate"
+      [title]="getTitle(searchField)"
       [tooltip]="tooltip !== tooltipKey && tooltip"
       [small]="true"
     ></v-input-label>
@@ -205,7 +205,7 @@
 >
   <ng-container *ngIf="searchField.dataType === 'date' && searchField.fieldType === 'range'">
     <v-input-label
-      [title]="'searchFields.' + searchField.key | translate"
+      [title]="getTitle(searchField)"
       [tooltip]="tooltip !== tooltipKey && tooltip"
       [small]="true"
     ></v-input-label>
