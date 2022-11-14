@@ -55,7 +55,7 @@ import {SelectItem} from '@valtimo/user-interface';
 })
 export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('moveRowButtons') public moveRowButtonsTemplateRef: TemplateRef<any>;
-  @ViewChild('editSearchFieldModal') modal: ModalComponent;
+  @ViewChild('searchFieldModal') modal: ModalComponent;
 
   @Output() searchField: EventEmitter<SearchField> = new EventEmitter();
 
