@@ -61,8 +61,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   readonly downloadName$ = new BehaviorSubject<string>('');
   readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
-  readonly selectedSearchFields$ = new BehaviorSubject<string | null>(null);
-  readonly onDeleteSearchField$ = new BehaviorSubject<string | null>(null);
   readonly disableInput$ = new BehaviorSubject<boolean>(false);
   readonly selectedSearchField$ = new BehaviorSubject<SearchField | null>(null);
   readonly formData$ = new BehaviorSubject<SearchField>(null);
@@ -150,7 +148,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
         label: this.translateService.instant(`searchFieldsOverview.${column.translationKey}`),
         sortable: column.sortable,
         ...(column.viewType && {viewType: column.viewType}),
-        ...(column.enum && {enum: column.enum})
+        ...(column.enum && {enum: column.enum}),
       }))
     )
   );
