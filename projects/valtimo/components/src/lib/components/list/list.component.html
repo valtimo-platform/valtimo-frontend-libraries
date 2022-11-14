@@ -107,7 +107,9 @@
               ></i>
             </td>
             <td *ngIf="lastColumnTemplate">
-              <ng-container *ngTemplateOutlet="lastColumnTemplate;context:{index:i, length: items.length}"></ng-container>
+              <ng-container
+                *ngTemplateOutlet="lastColumnTemplate; context: {index: i, length: items.length}"
+              ></ng-container>
             </td>
           </tr>
           <tr>
