@@ -50,7 +50,6 @@ export class ListComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() actions: any[] = [];
   @Input() paginationIdentifier?: string;
   @Input() initialSortState: SortState;
-  @Input() dragAndDrop?: boolean;
   @Input() lastColumnTemplate?: TemplateRef<any>;
 
   @Output() rowClicked: EventEmitter<any> = new EventEmitter();
