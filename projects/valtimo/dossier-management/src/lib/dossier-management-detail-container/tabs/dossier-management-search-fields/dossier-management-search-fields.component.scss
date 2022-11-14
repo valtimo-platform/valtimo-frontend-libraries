@@ -22,14 +22,6 @@ valtimo-list::ng-deep table {
   background-color: #f3f4f7;
 }
 
-.moveDown {
-}
-
-.move-up {
-  color: #ff5800 !important;
-  padding-inline: 10px !important;
-}
-
 ::ng-deep .disabled-move-row-button {
   cursor: default !important;
   filter: grayscale(1);
