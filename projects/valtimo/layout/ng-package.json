@@ -7,9 +7,8 @@
   },
   "allowedNonPeerDependencies": [
     "@foxythemes/bootstrap-datetime-picker-bs4",
-    "beagle-resources",
     "bootstrap",
-    "@popperjs/core",
+    "popper.js",
     "bootstrap-slider",
     "bs4-breakpoint-check",
     "chart.js",
@@ -42,7 +41,6 @@
     "pdfmake",
     "perfect-scrollbar",
     "raphael",
-    "roboto-fontface",
     "select2",
     "sweetalert2",
     "tinycolor2",

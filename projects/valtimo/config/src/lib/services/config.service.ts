@@ -54,10 +54,9 @@ export class ConfigService {
         endpointUri: this.formatUrlTrailingSlash(config.valtimoApi.endpointUri, true),
       },
       ...(translationResourcesConfig && {
-        translationResources: translationResourcesConfig.map(resource => ({
-          prefix: this.formatUrlTrailingSlash(resource.prefix, true),
-          suffix: resource.suffix,
-        })),
+        translationResources: translationResourcesConfig.map(resource =>
+          this.formatUrlTrailingSlash(resource, true)
+        ),
       }),
       applicationTitle: config.applicationTitle || this.DEFAULT_APPLICATION_TITLE,
     };
