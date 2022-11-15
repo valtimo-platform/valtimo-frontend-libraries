@@ -55,8 +55,8 @@
     *ngIf="{
       tooltipKey: 'searchFieldsTooltips.' + searchField.key,
       tooltip: 'searchFieldsTooltips.' + searchField.key | translate, searchField,
-      title: searchField.title || (searchField.key !== ('searchFields.' + searchField.key | translate) ? ('searchFields.' + searchField.key | translate).split('.').at(-1) : searchField.key)
-    } as vars"
+      title: searchField.title || (('searchFields.' + searchField.key) !== ('searchFields.' + searchField.key | translate) ? ('searchFields.' + searchField.key | translate) : searchField.key)
+     } as vars"
   >
     <ng-container
       *ngTemplateOutlet="

@@ -72,6 +72,12 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     {
       viewType: 'string',
       sortable: false,
+      propertyName: 'title',
+      translationKey: 'title',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
       propertyName: 'key',
       translationKey: 'key',
     },
@@ -192,6 +198,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     map(([searchFields]) =>
       searchFields.map(searchField => ({
         ...searchField,
+        title: this.getTitle(searchField),
         dataType: this.translateService.instant(`searchFields.${searchField.dataType}`),
         matchType: this.translateService.instant(`searchFieldsOverview.${searchField.matchType}`),
         fieldType: this.translateService.instant(`searchFieldsOverview.${searchField.fieldType}`),
@@ -390,5 +397,14 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   private refreshSearchFields(): void {
     this.refreshSearchFields$.next(null);
+  }
+
+  private getTitle(searchField: SearchField): string {
+    const titleTranslation = this.translateService.instant(`searchFields.${searchField.key}`);
+
+    return (
+      searchField.title ||
+      (`searchFields.${searchField.key}` !== titleTranslation ? titleTranslation : searchField.key)
+    );
   }
 }
