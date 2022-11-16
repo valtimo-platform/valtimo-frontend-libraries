@@ -831,9 +831,8 @@
     "numberRange": "Number range",
     "dateRange": "Date range",
     "datetimeRange": "Date and time range",
-    "yes": "Yes",
-    "no": "No",
-    "either": "Either"
+    "booleanPositive": "Yes",
+    "booleanNegative": "No"
   },
   "searchFieldsTooltips": {
     "text": "A text field",

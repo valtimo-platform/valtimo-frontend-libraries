@@ -4,7 +4,7 @@ type SearchFieldFieldType = 'single' | 'multiple' | 'range';
 
 type SearchFieldMatchType = 'exact' | 'like';
 
-type SearchFieldBoolean = 'yes' | 'no' | 'either';
+type SearchFieldBoolean = 'booleanPositive' | 'booleanNegative';
 
 type BooleanValueSingle = boolean;
 

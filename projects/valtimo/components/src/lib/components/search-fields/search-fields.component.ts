@@ -63,7 +63,10 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
 
   private documentDefinitionNameSubscription!: Subscription;
 
-  readonly BOOLEANTYPES: Array<SearchFieldBoolean> = ['yes', 'no', 'either'];
+  private readonly BOOLEAN_POSITIVE: SearchFieldBoolean = 'booleanPositive';
+  private readonly BOOLEAN_NEGATIVE: SearchFieldBoolean = 'booleanNegative';
+
+  readonly BOOLEANTYPES: Array<SearchFieldBoolean> = [this.BOOLEAN_POSITIVE, this.BOOLEAN_NEGATIVE];
   readonly booleanItems$: Observable<Array<SelectItem>> = this.translateService.stream('key').pipe(
     map(() =>
       this.BOOLEANTYPES.map(type => ({
@@ -83,11 +86,11 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     this.documentDefinitionNameSubscription?.unsubscribe();
   }
 
-  singleValueChange(searchFieldKey: string, value: any): void {
+  singleValueChange(searchFieldKey: string, value: any, isDateTime?: boolean): void {
     this.values$.pipe(take(1)).subscribe(values => {
       if (value) {
-        this.values$.next({...values, [searchFieldKey]: value});
-      } else if (values[searchFieldKey]) {
+        this.values$.next({...values, [searchFieldKey]: this.getSingleValue(value, isDateTime)});
+      } else if (Object.keys(values).includes(searchFieldKey)) {
         const valuesCopy = {...values};
         delete valuesCopy[searchFieldKey];
         this.values$.next(valuesCopy);
@@ -95,10 +98,16 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     });
   }
 
-  multipleValueChange(searchFieldKey: string, value: any): void {
+  multipleValueChange(searchFieldKey: string, value: any, isDateTime?: boolean): void {
     this.values$.pipe(take(1)).subscribe(values => {
       if (value.start && value.end) {
-        this.values$.next({...values, [searchFieldKey]: {start: value.start, end: value.end}});
+        this.values$.next({
+          ...values,
+          [searchFieldKey]: {
+            start: this.getSingleValue(value.start, isDateTime),
+            end: this.getSingleValue(value.end, isDateTime),
+          },
+        });
       } else if (values[searchFieldKey]) {
         const valuesCopy = {...values};
         delete valuesCopy[searchFieldKey];
@@ -122,6 +131,20 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   clear(): void {
     this.clear$.next(null);
     this.doSearch.emit({});
+  }
+
+  private getSingleValue(value: any, isDateTime?: boolean): any {
+    if (isDateTime) {
+      return new Date(value).toISOString();
+    }
+    if (value === this.BOOLEAN_POSITIVE) {
+      return true;
+    }
+    if (value === this.BOOLEAN_NEGATIVE) {
+      return false;
+    }
+
+    return value;
   }
 
   private openDocumentDefinitionNameSubscription(): void {

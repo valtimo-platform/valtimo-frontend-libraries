@@ -334,20 +334,17 @@
       [tooltip]="tooltip !== tooltipKey && tooltip"
       [small]="true"
     ></v-input-label>
-    <v-form
-      (valueChange)="singleValueChange(searchField.key, $event)"
-      className="multiple-search-fields"
-    >
-      <v-select
-        *ngIf="booleanItems$ | async as booleanItems"
-        [defaultSelectionId]="booleanItems[0]"
-        [items]="booleanItems"
-        [margin]="true"
-        [required]="false"
-        [widthInPx]="200"
-        name="booleanType"
-      ></v-select>
-    </v-form>
+    <v-select
+      *ngIf="booleanItems$ | async as booleanItems"
+      [defaultSelectionId]="booleanItems[0]"
+      [items]="booleanItems"
+      [margin]="false"
+      [required]="false"
+      [widthInPx]="200"
+      name="booleanType"
+      [clearSelectionSubject$]="clear$"
+      (selectedChange)="singleValueChange(searchField.key, $event)"
+    ></v-select>
   </ng-container>
 </ng-template>
 
@@ -364,9 +361,10 @@
     [tooltip]="tooltip !== tooltipKey && tooltip"
     [name]="searchField.key"
     fullWidth="true"
-    (valueChange)="singleValueChange(searchField.key, $event)"
+    (valueChange)="singleValueChange(searchField.key, $event, true)"
     [smallLabel]="true"
     [enableTime]="true"
+    [clear$]="clear$"
   ></v-date-picker>
 </ng-template>
 
@@ -384,12 +382,22 @@
       [small]="true"
     ></v-input-label>
     <v-form
-      (valueChange)="multipleValueChange(searchField.key, $event)"
+      (valueChange)="multipleValueChange(searchField.key, $event, true)"
       className="multiple-search-fields"
     >
-      <v-date-picker name="start" fullWidth="true" [enableTime]="true"></v-date-picker>
+      <v-date-picker
+        name="start"
+        fullWidth="true"
+        [enableTime]="true"
+        [clear$]="clear$"
+      ></v-date-picker>
       <ng-container *ngTemplateOutlet="toText"></ng-container>
-      <v-date-picker name="end" fullWidth="true" [enableTime]="true"></v-date-picker>
+      <v-date-picker
+        name="end"
+        fullWidth="true"
+        [enableTime]="true"
+        [clear$]="clear$"
+      ></v-date-picker>
     </v-form>
   </ng-container>
 </ng-template>
