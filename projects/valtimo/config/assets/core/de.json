@@ -505,7 +505,8 @@
     "lastModified": "Letzte Änderung",
     "files": "Dateien",
     "firstName": "Vorname",
-    "assigneeFullName": "Eigentümer"
+    "assigneeFullName": "Eigentümer",
+    "accepted": "Akzeptiert"
   },
   "list": {
     "currentPage": "Seite {{current}} von {{total}}",

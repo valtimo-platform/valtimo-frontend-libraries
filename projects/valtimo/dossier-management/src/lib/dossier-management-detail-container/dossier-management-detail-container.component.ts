@@ -15,6 +15,9 @@
  */
 
 import {Component} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {DocumentService} from '@valtimo/document';
+import {filter, map, Observable, switchMap} from 'rxjs';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
@@ -23,6 +26,19 @@ import {Component} from '@angular/core';
 })
 export class DossierManagementDetailContainerComponent {
   public isCase = true;
+
+  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
+    map(params => params.name || ''),
+    filter(docDefName => !!docDefName)
+  );
+
+  readonly documentDefinition$ = this.documentDefinitionName$.pipe(
+    switchMap(documentDefinitionName =>
+      this.documentService.getDocumentDefinition(documentDefinitionName)
+    )
+  );
+
+  constructor(private documentService: DocumentService, private route: ActivatedRoute) {}
 
   displayBodyComponent(tab: string): void {
     this.isCase = tab === 'case';

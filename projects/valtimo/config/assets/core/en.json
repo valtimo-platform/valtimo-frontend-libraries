@@ -505,7 +505,8 @@
     "lastModified": "Last modified",
     "files": "Files",
     "firstName": "First name",
-    "assigneeFullName": "Assignee"
+    "assigneeFullName": "Assignee",
+    "accepted": "Accepted"
   },
   "list": {
     "currentPage": "Page {{current}} of {{total}}",

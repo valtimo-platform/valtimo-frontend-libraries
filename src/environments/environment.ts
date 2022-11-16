@@ -179,6 +179,12 @@ export const environment: ValtimoConfig = {
         sortable: true,
         viewType: 'relatedFiles',
       },
+      {
+        propertyName: '$.lening-akkoord',
+        translationKey: 'accepted',
+        sortable: false,
+        viewType: 'boolean',
+      },
     ],
   },
   visibleTaskListTabs: [TaskListTab.MINE, TaskListTab.OPEN, TaskListTab.ALL],
