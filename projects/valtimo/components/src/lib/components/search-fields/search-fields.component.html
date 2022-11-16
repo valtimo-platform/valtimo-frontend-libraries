@@ -78,6 +78,18 @@
     ></ng-container>
     <ng-container
       *ngTemplateOutlet="
+        searchFieldTemplateBoolean;
+        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
+      "
+    ></ng-container>
+    <ng-container
+      *ngTemplateOutlet="
+        searchFieldTemplateDateTime;
+        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
+      "
+    ></ng-container>
+    <ng-container
+      *ngTemplateOutlet="
         searchFieldTemplateNumberRange;
         context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
       "
@@ -96,7 +108,7 @@
     ></ng-container>
     <ng-container
       *ngTemplateOutlet="
-        searchFieldTemplateBoolean;
+        searchFieldTemplateDateTimeRange;
         context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
       "
     ></ng-container>
@@ -259,6 +271,49 @@
         [widthInPx]="200"
         name="booleanType"
       ></v-select>
+    </v-form>
+  </ng-container>
+</ng-template>
+
+<ng-template
+        #searchFieldTemplateDateTime
+        let-searchField="searchField"
+        let-tooltip="tooltip"
+        let-tooltipKey="tooltipKey"
+        let-title="title"
+>
+  <v-date-picker
+          *ngIf="searchField.dataType === 'datetime' && searchField.fieldType === 'single'"
+          [title]="title"
+          [tooltip]="tooltip !== tooltipKey && tooltip"
+          [name]="searchField.key"
+          fullWidth="true"
+          (valueChange)="singleValueChange(searchField.key, $event)"
+          [smallLabel]="true"
+          [enableTime]="true"
+  ></v-date-picker>
+</ng-template>
+
+<ng-template
+        #searchFieldTemplateDateTimeRange
+        let-searchField="searchField"
+        let-tooltip="tooltip"
+        let-tooltipKey="tooltipKey"
+        let-title="title"
+>
+  <ng-container *ngIf="searchField.dataType === 'datetime' && searchField.fieldType === 'range'">
+    <v-input-label
+            [title]="title"
+            [tooltip]="tooltip !== tooltipKey && tooltip"
+            [small]="true"
+    ></v-input-label>
+    <v-form
+            (valueChange)="multipleValueChange(searchField.key, $event)"
+            className="multiple-search-fields"
+    >
+      <v-date-picker name="start" fullWidth="true" [enableTime]="true"></v-date-picker>
+      <ng-container *ngTemplateOutlet="toText"></ng-container>
+      <v-date-picker name="end" fullWidth="true" [enableTime]="true"></v-date-picker>
     </v-form>
   </ng-container>
 </ng-template>
