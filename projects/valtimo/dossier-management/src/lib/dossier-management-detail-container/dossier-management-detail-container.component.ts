@@ -15,7 +15,6 @@
  */
 
 import {Component} from '@angular/core';
-import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
@@ -24,11 +23,6 @@ import {ConfigService} from '@valtimo/config';
 })
 export class DossierManagementDetailContainerComponent {
   public isCase = true;
-  readonly showCaseSearchFields!: boolean;
-
-  constructor(private readonly configService: ConfigService) {
-    this.showCaseSearchFields = configService.config.featureToggles.caseSearchFields;
-  }
 
   displayBodyComponent(tab: string): void {
     this.isCase = tab === 'case';

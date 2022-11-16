@@ -18,7 +18,6 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {
-  ConfigService,
   DefinitionColumn,
   SearchField,
   SearchFieldValues,
@@ -215,19 +214,14 @@ export class DossierListComponent implements OnInit {
     tap(() => this.loading$.next(false))
   );
 
-  enableCaseSearchFields!: boolean;
-
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly documentService: DocumentService,
     private readonly translateService: TranslateService,
     private readonly dossierService: DossierService,
-    private readonly logger: NGXLogger,
-    private readonly configService: ConfigService
-  ) {
-    this.enableCaseSearchFields = configService.config.featureToggles.caseSearchFields;
-  }
+    private readonly logger: NGXLogger
+  ) {}
 
   ngOnInit(): void {
     this.modalListenerAdded = false;

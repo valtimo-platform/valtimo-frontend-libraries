@@ -85,7 +85,7 @@
 </div>
 
 <ng-template #searchFields>
-  <div class="mb-3" *ngIf="enableCaseSearchFields">
+  <div class="mb-3">
     <valtimo-search-fields
       [loading]="loadingDocumentSearchFields$ | async"
       [searchFields]="documentSearchFields$ | async"

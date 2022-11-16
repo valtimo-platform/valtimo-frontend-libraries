@@ -32,13 +32,15 @@ interface SearchFieldWithValue extends SearchField {
   value: SearchFieldValue;
 }
 
-type SearchFieldValues = {[searchFieldKey: string]: SearchFieldValue};
+interface SearchFieldValues {
+  [searchFieldKey: string]: SearchFieldValue;
+}
 
 type SearchOperator = 'AND' | 'OR';
 
 interface SearchFilter {
   key: string;
-  values: Array<String>;
+  values: Array<string>;
 }
 
 interface SearchFilterRange {
