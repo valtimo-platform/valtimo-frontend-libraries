@@ -234,32 +234,31 @@
 </ng-template>
 
 <ng-template
-        #searchFieldTemplateBoolean
-        let-searchField="searchField"
-        let-tooltip="tooltip"
-        let-tooltipKey="tooltipKey"
-        let-title="title"
+  #searchFieldTemplateBoolean
+  let-searchField="searchField"
+  let-tooltip="tooltip"
+  let-tooltipKey="tooltipKey"
+  let-title="title"
 >
   <ng-container *ngIf="searchField.dataType === 'boolean'">
     <v-input-label
-            [title]="title"
-            [tooltip]="tooltip !== tooltipKey && tooltip"
-            [small]="true"
+      [title]="title"
+      [tooltip]="tooltip !== tooltipKey && tooltip"
+      [small]="true"
     ></v-input-label>
     <v-form
-            (valueChange)="multipleValueChange(searchField.key, $event)"
-            className="multiple-search-fields"
+      (valueChange)="singleValueChange(searchField.key, $event)"
+      className="multiple-search-fields"
     >
       <v-select
-              *ngIf="booleanItems$ | async as booleanItems"
-              [defaultSelectionId]="booleanItems[0]"
-              [items]="booleanItems"
-              [margin]="true"
-              [required]="false"
-              [widthInPx]="200"
-              name="booleanType"
+        *ngIf="booleanItems$ | async as booleanItems"
+        [defaultSelectionId]="booleanItems[0]"
+        [items]="booleanItems"
+        [margin]="true"
+        [required]="false"
+        [widthInPx]="200"
+        name="booleanType"
       ></v-select>
-
     </v-form>
   </ng-container>
 </ng-template>
