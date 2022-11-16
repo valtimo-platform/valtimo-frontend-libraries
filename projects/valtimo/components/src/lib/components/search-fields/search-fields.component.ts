@@ -15,8 +15,8 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {SearchField, SearchFieldValues, SearchFieldWithValue} from '@valtimo/config';
-import {BehaviorSubject, combineLatest, map, Observable, Subject, Subscription, take} from 'rxjs';
+import {SearchField, SearchFieldValues} from '@valtimo/config';
+import {BehaviorSubject, map, Observable, Subject, Subscription, take} from 'rxjs';
 
 @Component({
   selector: 'valtimo-search-fields',
@@ -28,11 +28,16 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   @Input() set searchFields(fields: Array<SearchField>) {
     this.searchFields$.next(fields);
   }
-  @Output() valueChange: EventEmitter<Array<SearchFieldWithValue>> = new EventEmitter<
-    Array<SearchFieldWithValue>
-  >();
+  @Input() set documentDefinitionName(documentDefinitionName: string) {
+    this.documentDefinitionName$.pipe(take(1)).subscribe(currentDocumentDefinitionName => {
+      if (currentDocumentDefinitionName !== documentDefinitionName) {
+        this.documentDefinitionName$.next(documentDefinitionName);
+      }
+    });
+  }
   @Output() doSearch: EventEmitter<SearchFieldValues> = new EventEmitter<SearchFieldValues>();
-  @Input() clearFields$!: Observable<null>;
+
+  readonly documentDefinitionName$ = new BehaviorSubject<string>('');
 
   readonly searchFields$ = new BehaviorSubject<Array<SearchField>>([]);
 
@@ -52,20 +57,16 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   );
 
   readonly expanded$ = new BehaviorSubject<boolean>(false);
-
   readonly clear$ = new Subject<null>();
 
-  private valuesSubscription!: Subscription;
-  private clearSubscription!: Subscription;
+  private documentDefinitionNameSubscription!: Subscription;
 
   ngOnInit() {
-    this.openValuesSubscription();
-    this.openClearSubscription();
+    this.openDocumentDefinitionNameSubscription();
   }
 
   ngOnDestroy(): void {
-    this.valuesSubscription?.unsubscribe();
-    this.clearSubscription?.unsubscribe();
+    this.documentDefinitionNameSubscription?.unsubscribe();
   }
 
   singleValueChange(searchFieldKey: string, value: any): void {
@@ -109,32 +110,14 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     this.doSearch.emit({});
   }
 
-  private openValuesSubscription(): void {
-    this.valuesSubscription = combineLatest([this.searchFields$, this.values$]).subscribe(
-      ([searchFields, values]) => {
-        const valuesKeys = Object.keys(values);
-        const searchFieldsCopy = [...(searchFields || [])] as Array<SearchFieldWithValue>;
-
-        valuesKeys.forEach(valueKey => {
-          const correspondingSearchFieldIndex = searchFieldsCopy.findIndex(
-            searchField => searchField.key === valueKey
-          );
-
-          if (correspondingSearchFieldIndex !== -1) {
-            searchFieldsCopy[correspondingSearchFieldIndex].value = values[valueKey];
-          }
-        });
-
-        this.valueChange.emit(searchFieldsCopy);
-      }
-    );
+  private openDocumentDefinitionNameSubscription(): void {
+    this.documentDefinitionNameSubscription = this.documentDefinitionName$.subscribe(() => {
+      this.collapse();
+      this.clear();
+    });
   }
 
-  private openClearSubscription(): void {
-    if (this.clearFields$) {
-      this.clearSubscription = this.clearFields$.subscribe(() => {
-        this.clear();
-      });
-    }
+  private collapse(): void {
+    this.expanded$.next(false);
   }
 }

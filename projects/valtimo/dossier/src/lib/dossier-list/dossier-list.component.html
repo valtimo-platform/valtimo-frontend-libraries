@@ -90,7 +90,7 @@
       [loading]="loadingDocumentSearchFields$ | async"
       [searchFields]="documentSearchFields$ | async"
       (doSearch)="search($event)"
-      [clearFields$]="clearSearchFields$"
+      [documentDefinitionName]="documentDefinitionName$ | async"
     ></valtimo-search-fields>
   </div>
 </ng-template>

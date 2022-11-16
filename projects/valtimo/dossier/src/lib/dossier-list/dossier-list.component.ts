@@ -76,7 +76,7 @@ export class DossierListComponent implements OnInit {
 
   readonly loadingDocumentSearchFields$ = new BehaviorSubject<boolean>(true);
 
-  private readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
+  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.documentDefinitionName || ''),
     tap(documentDefinitionName => {
       this.resetPagination(documentDefinitionName);

@@ -30,7 +30,7 @@ interface SearchFieldWithValue extends SearchField {
   value: SearchFieldValue;
 }
 
-type SearchFieldValues = {[key: string]: SearchFieldValue};
+type SearchFieldValues = {[searchFieldKey: string]: SearchFieldValue};
 
 type SearchOperator = 'AND' | 'OR';
 
