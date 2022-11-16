@@ -42,7 +42,6 @@ import {
   map,
   Observable,
   of,
-  Subject,
   switchMap,
   take,
   tap,
@@ -170,8 +169,6 @@ export class DossierListComponent implements OnInit {
       )
     );
 
-  readonly clearSearchFields$ = new Subject<null>();
-
   private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
 
   private readonly documentsRequest$: Observable<Documents> = combineLatest([
@@ -204,6 +201,7 @@ export class DossierListComponent implements OnInit {
     }),
     tap(documents => {
       this.setCollectionSize(documents);
+      this.checkPage(documents);
     })
   );
 
@@ -301,10 +299,6 @@ export class DossierListComponent implements OnInit {
     this.searchFieldValues$.next(searchFieldValues || {});
   }
 
-  private clearSearchFields(): void {
-    this.clearSearchFields$.next(null);
-  }
-
   private mapSearchValuesToFilters(
     values: SearchFieldValues
   ): Array<SearchFilter | SearchFilterRange> {
@@ -389,5 +383,17 @@ export class DossierListComponent implements OnInit {
       this.processStart.openModal(this.selectedProcessDocumentDefinition);
       this.selectedProcessDocumentDefinition = null;
     }
+  }
+
+  private checkPage(documents: Documents): void {
+    this.pagination$.pipe(take(1)).subscribe(pagination => {
+      const amountOfItems = documents.totalElements;
+      const amountOfPages = Math.ceil(amountOfItems / pagination.size);
+      const currentPage = pagination.page;
+
+      if (currentPage > amountOfPages) {
+        this.pagination$.next({...pagination, page: amountOfPages});
+      }
+    });
   }
 }
