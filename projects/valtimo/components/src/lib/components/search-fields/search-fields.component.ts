@@ -15,8 +15,10 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {SearchField, SearchFieldValues} from '@valtimo/config';
+import {SearchField, SearchFieldBoolean, SearchFieldValues} from '@valtimo/config';
 import {BehaviorSubject, map, Observable, Subject, Subscription, take} from 'rxjs';
+import {SelectItem} from '@valtimo/user-interface';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-search-fields',
@@ -60,6 +62,18 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   readonly clear$ = new Subject<null>();
 
   private documentDefinitionNameSubscription!: Subscription;
+
+  readonly BOOLEANTYPES: Array<SearchFieldBoolean> = ['yes', 'no', 'either'];
+  readonly booleanItems$: Observable<Array<SelectItem>> = this.translateService.stream('key').pipe(
+    map(() =>
+      this.BOOLEANTYPES.map(type => ({
+        id: type,
+        text: this.translateService.instant(`searchFields.${type}`),
+      }))
+    )
+  );
+
+  constructor(private readonly translateService: TranslateService) {}
 
   ngOnInit() {
     this.openDocumentDefinitionNameSubscription();
