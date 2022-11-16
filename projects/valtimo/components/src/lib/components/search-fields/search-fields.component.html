@@ -336,12 +336,11 @@
     ></v-input-label>
     <v-select
       *ngIf="booleanItems$ | async as booleanItems"
-      [defaultSelectionId]="booleanItems[0]"
       [items]="booleanItems"
       [margin]="false"
       [required]="false"
       [widthInPx]="200"
-      name="booleanType"
+      [name]="searchField.key"
       [clearSelectionSubject$]="clear$"
       (selectedChange)="singleValueChange(searchField.key, $event)"
     ></v-select>
