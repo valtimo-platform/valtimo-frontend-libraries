@@ -129,7 +129,7 @@ export class DossierListComponent implements OnInit {
         label: this.translateService.instant(`fieldLabels.${column.translationKey}`),
         sortable: column.sortable,
         ...(column.viewType && {viewType: column.viewType}),
-        ...(column.enum && {enum: column.enum})
+        ...(column.enum && {enum: column.enum}),
       }))
     )
   );
@@ -178,14 +178,15 @@ export class DossierListComponent implements OnInit {
 
   private readonly documentsRequest$: Observable<Documents> = this.documentSearchRequest$.pipe(
     distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
-    tap(() => this.loading$.next(true)),
     tap(request => {
       this.storedSearchRequestKey$.pipe(take(1)).subscribe(storedSearchRequestKey => {
         this.logger.debug(`store request in local storage: ${JSON.stringify(request)}`);
         localStorage.setItem(storedSearchRequestKey, JSON.stringify(request));
       });
     }),
-    switchMap(documentSearchRequest => this.documentService.getDocuments(documentSearchRequest)),
+    switchMap(documentSearchRequest =>
+      this.documentService.getDocumentsSearch(documentSearchRequest)
+    ),
     tap(documents => {
       this.setCollectionSize(documents);
     })

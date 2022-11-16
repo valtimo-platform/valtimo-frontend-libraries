@@ -80,6 +80,14 @@ export class DocumentService {
     );
   }
 
+  getDocumentsSearch(documentSearchRequest: DocumentSearchRequest): Observable<Documents> {
+    return this.http.post<Documents>(
+      `${this.valtimoEndpointUri}v1/document-definition/${documentSearchRequest.definitionName}/search`,
+      documentSearchRequest.asHttpBody(),
+      {params: documentSearchRequest.asHttpParams()}
+    );
+  }
+
   getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
     return this.http.get<Array<SearchField>>(
       `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`

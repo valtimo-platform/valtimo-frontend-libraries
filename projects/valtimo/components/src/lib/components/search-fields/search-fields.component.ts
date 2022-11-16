@@ -15,8 +15,8 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {SearchField, SearchFieldValue, SearchFieldWithValue} from '@valtimo/config';
-import {BehaviorSubject, combineLatest, Subscription, take} from 'rxjs';
+import {SearchField, SearchFieldValues, SearchFieldWithValue} from '@valtimo/config';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, take, tap} from 'rxjs';
 
 @Component({
   selector: 'valtimo-search-fields',
@@ -26,7 +26,12 @@ import {BehaviorSubject, combineLatest, Subscription, take} from 'rxjs';
 export class SearchFieldsComponent implements OnInit, OnDestroy {
   readonly searchFields$ = new BehaviorSubject<Array<SearchField>>([]);
 
-  readonly values$ = new BehaviorSubject<{[key: string]: SearchFieldValue}>({});
+  readonly values$ = new BehaviorSubject<SearchFieldValues>({});
+
+  readonly hasValues$: Observable<boolean> = this.values$.pipe(
+    tap(values => console.log('values', values)),
+    map(values => (Object.keys(values) || []).length > 0)
+  );
 
   @Input() loading: boolean;
   @Input() set searchFields(fields: Array<SearchField>) {
@@ -35,7 +40,7 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   @Output() valueChange: EventEmitter<Array<SearchFieldWithValue>> = new EventEmitter<
     Array<SearchFieldWithValue>
   >();
-  @Output() doSearch: EventEmitter<any> = new EventEmitter<any>();
+  @Output() doSearch: EventEmitter<SearchFieldValues> = new EventEmitter<SearchFieldValues>();
 
   readonly expanded$ = new BehaviorSubject<boolean>(false);
 
@@ -51,13 +56,25 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
 
   singleValueChange(searchFieldKey: string, value: any): void {
     this.values$.pipe(take(1)).subscribe(values => {
-      this.values$.next({...values, [searchFieldKey]: value});
+      if (value) {
+        this.values$.next({...values, [searchFieldKey]: value});
+      } else if (values[searchFieldKey]) {
+        const valuesCopy = {...values};
+        delete valuesCopy[searchFieldKey];
+        this.values$.next(valuesCopy);
+      }
     });
   }
 
   multipleValueChange(searchFieldKey: string, value: any): void {
     this.values$.pipe(take(1)).subscribe(values => {
-      this.values$.next({...values, [searchFieldKey]: {start: value.start, end: value.end}});
+      if (value.start && value.end) {
+        this.values$.next({...values, [searchFieldKey]: {start: value.start, end: value.end}});
+      } else if (values[searchFieldKey]) {
+        const valuesCopy = {...values};
+        delete valuesCopy[searchFieldKey];
+        this.values$.next(valuesCopy);
+      }
     });
   }
 
@@ -68,7 +85,9 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   }
 
   search(): void {
-    this.doSearch.emit();
+    this.values$.pipe(take(1)).subscribe(values => {
+      this.doSearch.emit(values);
+    });
   }
 
   private openValuesSubscription(): void {

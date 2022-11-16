@@ -30,6 +30,8 @@ interface SearchFieldWithValue extends SearchField {
   value: SearchFieldValue;
 }
 
+type SearchFieldValues = {[key: string]: SearchFieldValue};
+
 export {
   SearchFieldDataType,
   SearchFieldFieldType,
@@ -37,4 +39,5 @@ export {
   SearchField,
   SearchFieldValue,
   SearchFieldWithValue,
+  SearchFieldValues,
 };

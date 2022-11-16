@@ -34,8 +34,12 @@
         <ng-container *ngTemplateOutlet="buttonAccordion"></ng-container>
       </div>
     </div>
-    <div class="row p-3" [ngClass]="{'row--hidden': (expanded$ | async) === false}">
-      <ng-container *ngFor="let searchField of searchFields$ | async; let i = index">
+    <div
+      class="row p-3"
+      [ngClass]="{'row--hidden': (expanded$ | async) === false}"
+      *ngIf="searchFields$ | async as searchFields"
+    >
+      <ng-container *ngFor="let searchField of searchFields; let i = index">
         <div class="col-4">
           <ng-container
             *ngTemplateOutlet="searchFieldTemplate; context: {searchField: searchField}"
@@ -44,7 +48,12 @@
         <div class="w-100" *ngIf="(i + 1) % 3 === 0"></div>
       </ng-container>
       <div class="col-12">
-        <ng-container *ngTemplateOutlet="buttonsTemplate"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="
+            buttonsTemplate;
+            context: {noSearchFields: !searchFields || searchFields.length === 0}
+          "
+        ></ng-container>
       </div>
     </div>
   </valtimo-widget>
@@ -54,44 +63,79 @@
   <ng-container
     *ngIf="{
       tooltipKey: 'searchFieldsTooltips.' + searchField.key,
-      tooltip: 'searchFieldsTooltips.' + searchField.key | translate, searchField,
-      title: searchField.title || (('searchFields.' + searchField.key) !== ('searchFields.' + searchField.key | translate) ? ('searchFields.' + searchField.key | translate) : searchField.key)
-     } as vars"
+      tooltip: 'searchFieldsTooltips.' + searchField.key | translate,
+      searchField,
+      title:
+        searchField.title ||
+        ('searchFields.' + searchField.key !== ('searchFields.' + searchField.key | translate)
+          ? ('searchFields.' + searchField.key | translate)
+          : searchField.key)
+    } as vars"
   >
     <ng-container
       *ngTemplateOutlet="
         searchFieldTemplateText;
-        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
+        context: {
+          searchField: searchField,
+          tooltipKey: vars.tooltipKey,
+          tooltip: vars.tooltip,
+          title: vars.title
+        }
       "
     ></ng-container>
     <ng-container
       *ngTemplateOutlet="
         searchFieldTemplateNumber;
-        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
+        context: {
+          searchField: searchField,
+          tooltipKey: vars.tooltipKey,
+          tooltip: vars.tooltip,
+          title: vars.title
+        }
       "
     ></ng-container>
     <ng-container
       *ngTemplateOutlet="
         searchFieldTemplateDate;
-        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
+        context: {
+          searchField: searchField,
+          tooltipKey: vars.tooltipKey,
+          tooltip: vars.tooltip,
+          title: vars.title
+        }
       "
     ></ng-container>
     <ng-container
       *ngTemplateOutlet="
         searchFieldTemplateNumberRange;
-        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
+        context: {
+          searchField: searchField,
+          tooltipKey: vars.tooltipKey,
+          tooltip: vars.tooltip,
+          title: vars.title
+        }
       "
     ></ng-container>
     <ng-container
       *ngTemplateOutlet="
         searchFieldTemplateTextRange;
-        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
+        context: {
+          searchField: searchField,
+          tooltipKey: vars.tooltipKey,
+          tooltip: vars.tooltip,
+          title: vars.title
+        }
       "
     ></ng-container>
     <ng-container
       *ngTemplateOutlet="
         searchFieldTemplateDateRange;
-        context: {searchField: searchField, tooltipKey: vars.tooltipKey, tooltip: vars.tooltip, title: vars.title}
+        context: {
+          searchField: searchField,
+          tooltipKey: vars.tooltipKey,
+          tooltip: vars.tooltip,
+          title: vars.title
+        }
       "
     ></ng-container>
   </ng-container>
@@ -233,12 +277,15 @@
   </div>
 </ng-template>
 
-<ng-template #buttonsTemplate>
+<ng-template #buttonsTemplate let-noSearchFields="noSearchFields">
+  <ng-container
+    *ngTemplateOutlet="noSearchFieldsTemplate; context: {noSearchFields: noSearchFields}"
+  ></ng-container>
   <div class="buttons-container" *ngIf="{expanded: expanded$ | async} as obs">
     <div class="right-buttons">
       <button
         (click)="search()"
-        [disabled]="loading"
+        [disabled]="loading || noSearchFields"
         type="button"
         class="btn btn-space btn-secondary"
         *ngIf="obs.expanded"
@@ -247,7 +294,7 @@
       </button>
       <button
         (click)="search()"
-        [disabled]="loading"
+        [disabled]="loading || noSearchFields || (hasValues$ | async) === false"
         type="button"
         class="btn btn-space btn-primary"
         *ngIf="obs.expanded"
@@ -255,6 +302,14 @@
         {{ 'searchFields.searchButtonText' | translate }}
       </button>
     </div>
+  </div>
+</ng-template>
+
+<ng-template #noSearchFieldsTemplate let-noSearchFields="noSearchFields">
+  <div class="w-100 mb-3" *ngIf="noSearchFields">
+    <v-paragraph [fullWidth]="true" [center]="true">{{
+      'searchFields.noneConfigured' | translate
+    }}</v-paragraph>
   </div>
 </ng-template>
 
