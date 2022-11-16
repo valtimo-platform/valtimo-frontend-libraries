@@ -17,11 +17,18 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {ConfigService, DefinitionColumn, SearchField} from '@valtimo/config';
 import {
+  ConfigService,
+  DefinitionColumn,
+  SearchField,
+  SearchFieldValues,
+  SearchFilter,
+  SearchFilterRange,
+} from '@valtimo/config';
+import {
+  AdvancedDocumentSearchRequest,
+  AdvancedDocumentSearchRequestImpl,
   Documents,
-  DocumentSearchRequest,
-  DocumentSearchRequestImpl,
   DocumentService,
   ProcessDocumentDefinition,
   SortState,
@@ -35,6 +42,7 @@ import {
   map,
   Observable,
   of,
+  Subject,
   switchMap,
   take,
   tap,
@@ -148,45 +156,52 @@ export class DossierListComponent implements OnInit {
     map(pagination => pagination && JSON.parse(JSON.stringify(pagination)))
   );
 
-  readonly sequence$ = new BehaviorSubject<number | undefined>(undefined);
+  private readonly documentSearchRequest$: Observable<AdvancedDocumentSearchRequest> =
+    combineLatest([this.pagination$, this.documentDefinitionName$]).pipe(
+      filter(([pagination]) => !!pagination),
+      map(
+        ([pagination, documentDefinitionName]) =>
+          new AdvancedDocumentSearchRequestImpl(
+            documentDefinitionName,
+            pagination.page - 1,
+            pagination.size,
+            pagination.sort
+          )
+      )
+    );
 
-  readonly globalSearchFilter$ = new BehaviorSubject<string | undefined>(undefined);
+  readonly clearSearchFields$ = new Subject<null>();
 
-  private readonly createdBy$ = new BehaviorSubject<string | undefined>(undefined);
+  private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
 
-  private readonly documentSearchRequest$: Observable<DocumentSearchRequest> = combineLatest([
-    this.pagination$,
-    this.documentDefinitionName$,
-    this.sequence$,
-    this.createdBy$,
-    this.globalSearchFilter$,
+  private readonly documentsRequest$: Observable<Documents> = combineLatest([
+    this.documentSearchRequest$,
+    this.searchFieldValues$,
   ]).pipe(
-    filter(([pagination]) => !!pagination),
-    map(
-      ([pagination, documentDefinitionName, sequence, createdBy, globalSearchFilter]) =>
-        new DocumentSearchRequestImpl(
-          documentDefinitionName,
-          pagination.page - 1,
-          pagination.size,
-          sequence,
-          createdBy,
-          globalSearchFilter,
-          pagination.sort
-        )
-    )
-  );
-
-  private readonly documentsRequest$: Observable<Documents> = this.documentSearchRequest$.pipe(
-    distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
-    tap(request => {
+    distinctUntilChanged(
+      ([prevSearchRequest, prevSearchValues], [currSearchRequest, currSearchValues]) =>
+        JSON.stringify({...prevSearchRequest, ...prevSearchValues}) ===
+        JSON.stringify({...currSearchRequest, ...currSearchValues})
+    ),
+    tap(([documentSearchRequest]) => {
       this.storedSearchRequestKey$.pipe(take(1)).subscribe(storedSearchRequestKey => {
-        this.logger.debug(`store request in local storage: ${JSON.stringify(request)}`);
-        localStorage.setItem(storedSearchRequestKey, JSON.stringify(request));
+        this.logger.debug(
+          `store request in local storage: ${JSON.stringify(documentSearchRequest)}`
+        );
+        localStorage.setItem(storedSearchRequestKey, JSON.stringify(documentSearchRequest));
       });
     }),
-    switchMap(documentSearchRequest =>
-      this.documentService.getDocumentsSearch(documentSearchRequest)
-    ),
+    switchMap(([documentSearchRequest, searchValues]) => {
+      if ((Object.keys(searchValues) || []).length > 0) {
+        return this.documentService.getDocumentsSearch(
+          documentSearchRequest,
+          'AND',
+          this.mapSearchValuesToFilters(searchValues)
+        );
+      } else {
+        return this.documentService.getDocumentsSearch(documentSearchRequest);
+      }
+    }),
     tap(documents => {
       this.setCollectionSize(documents);
     })
@@ -218,16 +233,6 @@ export class DossierListComponent implements OnInit {
 
   ngOnInit(): void {
     this.modalListenerAdded = false;
-  }
-
-  globalSearchFilterChange(searchFilter: string): void {
-    this.globalSearchFilter$.next(searchFilter);
-    this.pageChange(1);
-  }
-
-  sequenceChange(sequence: string): void {
-    this.sequence$.next(Number(sequence));
-    this.pageChange(1);
   }
 
   pageChange(newPage: number): void {
@@ -290,6 +295,31 @@ export class DossierListComponent implements OnInit {
     }
     this.selectedProcessDocumentDefinition = processDocumentDefinition;
     modal.modal('hide');
+  }
+
+  search(searchFieldValues: SearchFieldValues): void {
+    this.searchFieldValues$.next(searchFieldValues || {});
+  }
+
+  private clearSearchFields(): void {
+    this.clearSearchFields$.next(null);
+  }
+
+  private mapSearchValuesToFilters(
+    values: SearchFieldValues
+  ): Array<SearchFilter | SearchFilterRange> {
+    const filters: Array<SearchFilter | SearchFilterRange> = [];
+
+    Object.keys(values).forEach(valueKey => {
+      const searchValue = values[valueKey] as any;
+      if (searchValue.start) {
+        filters.push({key: valueKey, rangeFrom: searchValue.start, rangeTo: searchValue.end});
+      } else {
+        filters.push({key: valueKey, values: [searchValue]});
+      }
+    });
+
+    return filters;
   }
 
   private resetPagination(documentDefinitionName): void {

@@ -16,7 +16,7 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {SearchField, SearchFieldValues, SearchFieldWithValue} from '@valtimo/config';
-import {BehaviorSubject, combineLatest, map, Observable, Subscription, take, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subject, Subscription, take} from 'rxjs';
 
 @Component({
   selector: 'valtimo-search-fields',
@@ -24,15 +24,6 @@ import {BehaviorSubject, combineLatest, map, Observable, Subscription, take, tap
   styleUrls: ['./search-fields.component.scss'],
 })
 export class SearchFieldsComponent implements OnInit, OnDestroy {
-  readonly searchFields$ = new BehaviorSubject<Array<SearchField>>([]);
-
-  readonly values$ = new BehaviorSubject<SearchFieldValues>({});
-
-  readonly hasValues$: Observable<boolean> = this.values$.pipe(
-    tap(values => console.log('values', values)),
-    map(values => (Object.keys(values) || []).length > 0)
-  );
-
   @Input() loading: boolean;
   @Input() set searchFields(fields: Array<SearchField>) {
     this.searchFields$.next(fields);
@@ -41,17 +32,40 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     Array<SearchFieldWithValue>
   >();
   @Output() doSearch: EventEmitter<SearchFieldValues> = new EventEmitter<SearchFieldValues>();
+  @Input() clearFields$!: Observable<null>;
+
+  readonly searchFields$ = new BehaviorSubject<Array<SearchField>>([]);
+
+  readonly values$ = new BehaviorSubject<SearchFieldValues>({});
+
+  readonly hasValidValues$: Observable<boolean> = this.values$.pipe(
+    map(values => {
+      const hasValues = (Object.keys(values) || []).length > 0;
+      const rangeValues =
+        (hasValues && Object.values(values)?.filter(value => (value as any).start)) || [];
+      const validRangeValues = rangeValues?.filter(
+        value => (value as any).start < (value as any).end
+      );
+
+      return !!(hasValues && rangeValues.length === validRangeValues.length);
+    })
+  );
 
   readonly expanded$ = new BehaviorSubject<boolean>(false);
 
+  readonly clear$ = new Subject<null>();
+
   private valuesSubscription!: Subscription;
+  private clearSubscription!: Subscription;
 
   ngOnInit() {
     this.openValuesSubscription();
+    this.openClearSubscription();
   }
 
   ngOnDestroy(): void {
     this.valuesSubscription?.unsubscribe();
+    this.clearSubscription?.unsubscribe();
   }
 
   singleValueChange(searchFieldKey: string, value: any): void {
@@ -90,6 +104,11 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     });
   }
 
+  clear(): void {
+    this.clear$.next(null);
+    this.doSearch.emit({});
+  }
+
   private openValuesSubscription(): void {
     this.valuesSubscription = combineLatest([this.searchFields$, this.values$]).subscribe(
       ([searchFields, values]) => {
@@ -109,5 +128,13 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
         this.valueChange.emit(searchFieldsCopy);
       }
     );
+  }
+
+  private openClearSubscription(): void {
+    if (this.clearFields$) {
+      this.clearSubscription = this.clearFields$.subscribe(() => {
+        this.clear();
+      });
+    }
   }
 }

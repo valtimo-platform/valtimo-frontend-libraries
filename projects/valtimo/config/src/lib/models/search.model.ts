@@ -32,6 +32,19 @@ interface SearchFieldWithValue extends SearchField {
 
 type SearchFieldValues = {[key: string]: SearchFieldValue};
 
+type SearchOperator = 'AND' | 'OR';
+
+interface SearchFilter {
+  key: string;
+  values: Array<String>;
+}
+
+interface SearchFilterRange {
+  key: string;
+  rangeFrom: string;
+  rangeTo: string;
+}
+
 export {
   SearchFieldDataType,
   SearchFieldFieldType,
@@ -40,4 +53,7 @@ export {
   SearchFieldValue,
   SearchFieldWithValue,
   SearchFieldValues,
+  SearchOperator,
+  SearchFilter,
+  SearchFilterRange,
 };

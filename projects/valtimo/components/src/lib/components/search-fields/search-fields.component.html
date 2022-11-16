@@ -156,6 +156,7 @@
     [tooltip]="tooltip !== tooltipKey && tooltip"
     (valueChange)="singleValueChange(searchField.key, $event)"
     [smallLabel]="true"
+    [clear$]="clear$"
   >
   </v-input>
 </ng-template>
@@ -177,6 +178,7 @@
     [hideNumberSpinBox]="true"
     [tooltip]="tooltip !== tooltipKey && tooltip"
     [smallLabel]="true"
+    [clear$]="clear$"
   >
   </v-input>
 </ng-template>
@@ -216,9 +218,9 @@
       (valueChange)="multipleValueChange(searchField.key, $event)"
       className="multiple-search-fields"
     >
-      <v-input name="start" [fullWidth]="true"> </v-input>
+      <v-input name="start" [fullWidth]="true" [clear$]="clear$"> </v-input>
       <ng-container *ngTemplateOutlet="toText"></ng-container>
-      <v-input name="end" [fullWidth]="true"> </v-input>
+      <v-input name="end" [fullWidth]="true" [clear$]="clear$"> </v-input>
     </v-form>
   </ng-container>
 </ng-template>
@@ -284,7 +286,7 @@
   <div class="buttons-container" *ngIf="{expanded: expanded$ | async} as obs">
     <div class="right-buttons">
       <button
-        (click)="search()"
+        (click)="clear()"
         [disabled]="loading || noSearchFields"
         type="button"
         class="btn btn-space btn-secondary"
@@ -294,7 +296,7 @@
       </button>
       <button
         (click)="search()"
-        [disabled]="loading || noSearchFields || (hasValues$ | async) === false"
+        [disabled]="loading || noSearchFields || (hasValidValues$ | async) === false"
         type="button"
         class="btn btn-space btn-primary"
         *ngIf="obs.expanded"
