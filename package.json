@@ -310,6 +310,7 @@
     "@valtimo/user-interface": "file:dist/valtimo/user-interface",
     "@valtimo/user-management": "file:dist/valtimo/user-management",
     "@valtimo/view-configurator": "file:dist/valtimo/view-configurator",
-    "cypress": "latest"
+    "cypress": "latest",
+    "deepmerge-ts": "^4.2.2"
   }
 }
