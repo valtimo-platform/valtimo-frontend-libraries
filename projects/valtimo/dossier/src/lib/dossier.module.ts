@@ -69,6 +69,7 @@ import {DossierDetailTabObjectTypeComponent} from './dossier-detail/tab/object-t
 import {DossierDetailTabDocumentenApiDocumentsComponent} from './dossier-detail/tab/documenten-api-documents/documenten-api-documents.component';
 import {DossierDetailTabS3DocumentsComponent} from './dossier-detail/tab/s3-documents/s3-documents.component';
 import {DossierAssignUserComponent} from './dossier-assign-user/dossier-assign-user.component';
+import {DossierListStatusComponent} from './dossier-case-status/dossier-list-status.component';
 
 export type TabsFactory = () => Map<string, object>;
 
@@ -89,6 +90,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierDetailTabDocumentenApiDocumentsComponent,
     DossierDetailTabS3DocumentsComponent,
     DossierAssignUserComponent,
+    DossierListStatusComponent
   ],
   imports: [
     CommonModule,

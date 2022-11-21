@@ -45,6 +45,7 @@ import {
 } from 'rxjs';
 import {KeycloakService} from 'keycloak-angular';
 import {NGXLogger} from 'ngx-logger';
+import {DossierListTab} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -65,6 +66,13 @@ export class DossierDetailComponent implements OnInit {
   public processDocumentDefinitions: ProcessDocumentDefinition[] = [];
   private initialTabName: string;
   public customDossierHeaderItems: Array<any> = [];
+  public dossierStatusTabs: Array<DossierListTab> | null = null;
+  // public dossier = {
+  //   mine: new DossierList(),
+  //   open: new DossierList(),
+  //   all: new DossierList(),
+  // };
+
   @ViewChild('supportingProcessStartModal')
   supportingProcessStart: DossierSupportingProcessStartModalComponent;
 

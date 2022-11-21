@@ -27,7 +27,10 @@
       "contact-moments": "Contact moments",
       "custom-dossier": "Custom dossier",
       "custom-maps": "Custom maps",
-      "zaakobjecten": "Zaak objects"
+      "zaakobjecten": "Zaak objects",
+      "mine": "My cases",
+      "open":  "Unassigned cases",
+      "all":  "All cases"
     },
     "forms": {
       "globalSearchPlaceHolder": "Everything",

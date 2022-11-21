@@ -26,8 +26,9 @@ import {
   ROLE_DEVELOPER,
   ROLE_USER,
   TaskListTab,
+  DossierListTab,
   UploadProvider,
-  ValtimoConfig,
+  ValtimoConfig
 } from '@valtimo/config';
 import {authenticationKeycloak} from './auth/keycloak-config.dev';
 import {emailExtensionInitializer, openZaakExtensionInitializer} from '@valtimo/open-zaak';
@@ -188,6 +189,7 @@ export const environment: ValtimoConfig = {
     ],
   },
   visibleTaskListTabs: [TaskListTab.MINE, TaskListTab.OPEN, TaskListTab.ALL],
+  visibleDossierListTabs: [DossierListTab.MINE, DossierListTab.OPEN, DossierListTab.ALL],
   customTaskList: {
     fields: [
       {
