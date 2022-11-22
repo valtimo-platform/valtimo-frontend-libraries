@@ -244,6 +244,9 @@ export class DossierListComponent implements OnInit {
     private configService: ConfigService
   ) {
     this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
+    if (this.dossierVisibleTabs != null) {
+      this.currentCaseType = this.dossierVisibleTabs[0];
+    }
   }
 
   ngOnInit(): void {
@@ -335,7 +338,6 @@ export class DossierListComponent implements OnInit {
 
   private resetPagination(documentDefinitionName): void {
     this.settingPaginationForDocName$.pipe(take(1)).subscribe(settingPaginationForDocName => {
-      console.log(documentDefinitionName, settingPaginationForDocName);
       if (documentDefinitionName !== settingPaginationForDocName) {
         this.pagination$.next(undefined);
         this.logger.debug('clear pagination');
