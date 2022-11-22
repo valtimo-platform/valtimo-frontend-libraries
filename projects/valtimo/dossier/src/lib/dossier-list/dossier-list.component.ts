@@ -18,8 +18,10 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {
-  AssigneeFilter, ConfigService,
-  DefinitionColumn, DossierListTab,
+  AssigneeFilter,
+  ConfigService,
+  DefinitionColumn,
+  DossierListTab,
   SearchField,
   SearchFieldValues,
   SearchFilter,
@@ -42,7 +44,6 @@ import {
   map,
   Observable,
   of,
-  Subscription,
   switchMap,
   take,
   tap,
@@ -70,21 +71,15 @@ export class DossierListComponent implements OnInit {
 
   public dossierVisibleTabs: Array<DossierListTab> | null = null;
   public currentCaseType = 'mine';
-  public cases = {
-    mine: new DossierList(),
-    open: new DossierList(),
-    all: new DossierList(),
-  };
-  private translationSubscription: Subscription;
   public listTitle: string | null = null;
 
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
-  readonly loading$ = new BehaviorSubject<boolean>(true);
-
   private readonly settingPaginationForDocName$ = new BehaviorSubject<string | undefined>(
     undefined
   );
+
+  readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly loadingDocumentSearchFields$ = new BehaviorSubject<boolean>(true);
 
@@ -249,7 +244,6 @@ export class DossierListComponent implements OnInit {
     private configService: ConfigService
   ) {
     this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
-
   }
 
   ngOnInit(): void {
@@ -341,6 +335,7 @@ export class DossierListComponent implements OnInit {
 
   private resetPagination(documentDefinitionName): void {
     this.settingPaginationForDocName$.pipe(take(1)).subscribe(settingPaginationForDocName => {
+      console.log(documentDefinitionName, settingPaginationForDocName);
       if (documentDefinitionName !== settingPaginationForDocName) {
         this.pagination$.next(undefined);
         this.logger.debug('clear pagination');
@@ -420,12 +415,7 @@ export class DossierListComponent implements OnInit {
     });
   }
 
-  private clearPagination(type: string): void {
-    this.cases[type].page = 0;
-  }
-
   tabChange(tab: NgbNavChangeEvent<any>): void {
-    this.clearPagination(this.currentCaseType);
     this.assigneeFilter$.next(tab.nextId);
   }
 }
