@@ -18,8 +18,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {
-  AssigneeFilter,
-  DefinitionColumn,
+  AssigneeFilter, ConfigService,
+  DefinitionColumn, DossierListTab,
   SearchField,
   SearchFieldValues,
   SearchFilter,
@@ -68,7 +68,7 @@ moment.locale(localStorage.getItem('langKey') || '');
 export class DossierListComponent implements OnInit {
   @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
 
-  public dossierVisibleTabs: Array<DossierListComponent> | null = null;
+  public dossierVisibleTabs: Array<DossierListTab> | null = null;
   public currentCaseType = 'mine';
   public cases = {
     mine: new DossierList(),
@@ -245,8 +245,12 @@ export class DossierListComponent implements OnInit {
     private readonly documentService: DocumentService,
     private readonly translateService: TranslateService,
     private readonly dossierService: DossierService,
-    private readonly logger: NGXLogger
-  ) {}
+    private readonly logger: NGXLogger,
+    private configService: ConfigService
+  ) {
+    this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
+
+  }
 
   ngOnInit(): void {
     this.modalListenerAdded = false;
