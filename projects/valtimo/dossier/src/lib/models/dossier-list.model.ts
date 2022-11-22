@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
-
-import moment from 'moment';
-
-moment.locale(localStorage.getItem('langKey') || '');
-
-@Component({
-  selector: 'valtimo-dossier-list-status',
-  templateUrl: './dossier-list-status.component.html',
-  styleUrls: ['./dossier-list-status.component.css'],
-})
-export class DossierListStatusComponent {
-
-  @Input() status = '';
-
-  public title = "list of dossier - status"
-
-
+export class DossierList {
+  public dossiers = [];
+  fields = [];
+  pagination = {
+    collectionSize: 0,
+    page: 1,
+    size: 10,
+    maxPaginationItemSize: 5,
+  };
+  page = 0;
 }

@@ -28,7 +28,7 @@ import {
   TaskListTab,
   DossierListTab,
   UploadProvider,
-  ValtimoConfig
+  ValtimoConfig,
 } from '@valtimo/config';
 import {authenticationKeycloak} from './auth/keycloak-config.dev';
 import {emailExtensionInitializer, openZaakExtensionInitializer} from '@valtimo/open-zaak';

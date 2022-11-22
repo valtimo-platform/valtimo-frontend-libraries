@@ -46,7 +46,12 @@ import {ProcessModule} from '@valtimo/process';
 import {DossierDetailTabAuditComponent} from './dossier-detail/tab/audit/audit.component';
 import {DossierDetailTabContactMomentsComponent} from './dossier-detail/tab/contact-moments/contact-moments.component';
 import {DossierDetailTabDocumentsComponent} from './dossier-detail/tab/documents/documents.component';
-import {NgbButtonsModule, NgbPaginationModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbButtonsModule,
+  NgbModule,
+  NgbPaginationModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import {DossierProcessStartModalComponent} from './dossier-process-start-modal/dossier-process-start-modal.component';
 import {FormModule} from '@valtimo/form';
 import {FormsModule} from '@angular/forms';
@@ -69,7 +74,6 @@ import {DossierDetailTabObjectTypeComponent} from './dossier-detail/tab/object-t
 import {DossierDetailTabDocumentenApiDocumentsComponent} from './dossier-detail/tab/documenten-api-documents/documenten-api-documents.component';
 import {DossierDetailTabS3DocumentsComponent} from './dossier-detail/tab/s3-documents/s3-documents.component';
 import {DossierAssignUserComponent} from './dossier-assign-user/dossier-assign-user.component';
-import {DossierListStatusComponent} from './dossier-case-status/dossier-list-status.component';
 
 export type TabsFactory = () => Map<string, object>;
 
@@ -90,7 +94,6 @@ export type TabsFactory = () => Map<string, object>;
     DossierDetailTabDocumentenApiDocumentsComponent,
     DossierDetailTabS3DocumentsComponent,
     DossierAssignUserComponent,
-    DossierListStatusComponent
   ],
   imports: [
     CommonModule,
@@ -133,6 +136,7 @@ export type TabsFactory = () => Map<string, object>;
     DocumentenApiMetadataModalModule,
     SearchableDropdownSelectModule,
     SearchFieldsModule,
+    NgbModule,
   ],
   exports: [DossierListComponent, DossierDetailComponent],
 })

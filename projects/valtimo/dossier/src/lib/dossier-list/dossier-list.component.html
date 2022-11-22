@@ -121,9 +121,41 @@
                 }}</sup>
               </h3>
             </div>
+
+            <div tabs>
+              <ul
+                *ngIf="dossierVisibleTabs === null; else configuredTabs"
+                ngbNav
+                [destroyOnHide]="false"
+                (navChange)="tabChange($event)"
+                class="nav-tabs"
+              >
+                <li ngbNavItem="mine" [title]="'dossier.tabs.mine' | translate">
+                  <a ngbNavLink>{{ 'dossier.tabs.mine' | translate }}</a>
+                </li>
+                <li ngbNavItem="open" [title]="'dossier.tabs.open' | translate">
+                  <a ngbNavLink>{{ 'dossier.tabs.open' | translate }}</a>
+                </li>
+                <li ngbNavItem="all" [title]="'dossier.tabs.all' | translate">
+                  <a ngbNavLink>{{ 'dossier.tabs.all' | translate }}</a>
+                </li>
+              </ul>
+            </div>
           </valtimo-list>
         </valtimo-widget>
       </ng-container>
     </ng-container>
   </ng-container>
+</ng-template>
+
+<ng-template #configuredTabs>
+  <ul ngbNav [destroyOnHide]="false" (navChange)="tabChange($event)" class="nav-tabs">
+    <li
+      *ngFor="let tab of dossierVisibleTabs"
+      [ngbNavItem]="tab"
+      [title]="'dossier.tabs.' + tab | translate"
+    >
+      <a ngbNavLink>{{ 'dossier.tabs.' + tab | translate }}</a>
+    </li>
+  </ul>
 </ng-template>

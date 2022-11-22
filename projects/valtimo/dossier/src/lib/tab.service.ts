@@ -20,7 +20,6 @@ import {DEFAULT_TABS, TAB_MAP} from './dossier.config';
 import {ConfigService} from '@valtimo/config';
 import {ActivatedRoute, Event as NavigationEvent, NavigationEnd, Router} from '@angular/router';
 import {DossierDetailTabObjectTypeComponent} from './dossier-detail/tab/object-type/object-type.component';
-import {DossierListStatusComponent} from './dossier-case-status/dossier-list-status.component';
 
 @Injectable({
   providedIn: 'root',
@@ -62,16 +61,12 @@ export class TabService {
   }
 
   getConfigurableTabs(documentDefinitionName: string) {
-    if (this.configService?.config?.caseObjectTypes || this.configService?.config?.visibleDossierListTabs) {
+    if (this.configService?.config?.caseObjectTypes) {
       const allNamesObjects = this.configService?.config?.caseObjectTypes[documentDefinitionName];
       const map = new Map();
 
       allNamesObjects?.forEach(name => {
         map.set(name, DossierDetailTabObjectTypeComponent);
-      });
-
-      this.configService?.config?.visibleDossierListTabs?.forEach(name => {
-        map.set(name, DossierListStatusComponent);
       });
 
       this.extraTabs = map;

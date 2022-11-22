@@ -41,6 +41,7 @@ import {
   map,
   Observable,
   of,
+  Subscription,
   switchMap,
   take,
   tap,
@@ -50,6 +51,8 @@ import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/
 import {DossierService} from '../dossier.service';
 import {ListField, Pagination} from '@valtimo/components';
 import {NGXLogger} from 'ngx-logger';
+import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
+import {DossierList} from '../models/dossier-list.model';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -63,6 +66,16 @@ moment.locale(localStorage.getItem('langKey') || '');
 })
 export class DossierListComponent implements OnInit {
   @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
+
+  public dossierVisibleTabs: Array<DossierListComponent> | null = null;
+  public currentTaskType = 'mine';
+  public tasks = {
+    mine: new DossierList(),
+    open: new DossierList(),
+    all: new DossierList(),
+  };
+  private translationSubscription: Subscription;
+  public listTitle: string | null = null;
 
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
@@ -389,5 +402,73 @@ export class DossierListComponent implements OnInit {
         this.pagination$.next({...pagination, page: amountOfPages});
       }
     });
+  }
+
+  private clearPagination(type: string) {
+    this.tasks[type].page = 0;
+  }
+
+  getCases(type: string): void {
+    let params: any;
+
+    this.translationSubscription = combineLatest([
+      this.translateService.stream(`dossier.tabs.${type}.title`),
+    ]).subscribe(([title]) => {
+      this.listTitle = title;
+    });
+
+    switch (type) {
+      case 'mine':
+        params = {
+          page: this.tasks.mine.page,
+          size: this.tasks.mine.pagination.size,
+          filter: 'mine',
+        };
+        this.currentTaskType = 'mine';
+        break;
+      case 'open':
+        params = {
+          page: this.tasks.open.page,
+          size: this.tasks.open.pagination.size,
+          filter: 'open',
+        };
+        this.currentTaskType = 'open';
+        break;
+      case 'all':
+        params = {page: this.tasks.all.page, size: this.tasks.open.pagination.size, filter: 'all'};
+        this.currentTaskType = 'all';
+        break;
+      default:
+        this.logger.fatal('Unreachable case');
+    }
+
+    // if (this.sortState) {
+    //   params.sort = this.getSortString(this.sortState);
+    // }
+    //
+    // this.taskService.queryTasks(params).subscribe((results: any) => {
+    //   this.tasks[type].pagination.collectionSize = results.headers.get('x-total-count');
+    //   this.tasks[type].tasks = results.body as Array<Task>;
+    //   this.tasks[type].tasks.map((task: Task) => {
+    //     task.created = moment(task.created).format('DD MMM YYYY HH:mm');
+    //     if (task.due) {
+    //       task.due = moment(task.due).format('DD MMM YYYY HH:mm');
+    //     }
+    //   });
+    //   if (this.taskService.getConfigCustomTaskList()) {
+    //     this.customTaskListFields(type);
+    //   } else {
+    //     this.defaultTaskListFields(type);
+    //   }
+    // });
+  }
+
+  tabChange(tab: NgbNavChangeEvent<any>): void {
+    this.clearPagination(this.currentTaskType);
+    this.getCases(tab.nextId);
+  }
+
+  ngOnDestroy(): void {
+    this.translationSubscription.unsubscribe();
   }
 }

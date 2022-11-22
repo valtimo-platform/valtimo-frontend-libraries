@@ -29,8 +29,8 @@
       "custom-maps": "Custom maps",
       "zaakobjecten": "Zaakobjecten",
       "mine": "Mijn dossier",
-      "open":  "Niet toegewezen dossier",
-      "all":  "Alle dossier"
+      "open": "Niet toegewezen dossier",
+      "all": "Alle dossier"
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
