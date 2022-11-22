@@ -15,7 +15,7 @@
  */
 
 import {NgxLoggerLevel} from 'ngx-logger';
-import {authenticationAuth0} from './auth/auth0-config.test';
+import {authenticationKeycloak} from './auth/keycloak-config.test';
 import {openZaakExtensionInitializer} from '@valtimo/open-zaak';
 import {
   ROLE_ADMIN,
@@ -56,7 +56,7 @@ export const environment: ValtimoConfig = {
   applicationBrand: 'Ritense',
   production: false,
   initializers: [openZaakExtensionInitializer],
-  authentication: authenticationAuth0,
+  authentication: authenticationKeycloak,
   menu: {
     menuItems: [
       {
@@ -123,7 +123,7 @@ export const environment: ValtimoConfig = {
   },
   whitelistedDomains: ['localhost:4200'],
   swagger: {
-    endpointUri: 'http://localhost:4200/v2/api-docs',
+    endpointUri: 'http://localhost:4200/v3/api-docs',
   },
   mockApi: {
     endpointUri: 'http://localhost:4200/mock-api/',

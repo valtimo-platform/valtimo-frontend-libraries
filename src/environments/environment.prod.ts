@@ -22,7 +22,7 @@ import {
   UploadProvider,
   ValtimoConfig,
 } from '@valtimo/config';
-import {authenticationAuth0} from './auth/auth0-config.prod';
+import {authenticationKeycloak} from './auth/keycloak-config.prod';
 import {openZaakExtensionInitializer} from '@valtimo/open-zaak';
 
 const defaultDefinitionColumns = [
@@ -56,7 +56,7 @@ export const environment: ValtimoConfig = {
   applicationBrand: 'Ritense',
   production: true,
   initializers: [openZaakExtensionInitializer],
-  authentication: authenticationAuth0,
+  authentication: authenticationKeycloak,
   menu: {
     menuItems: [
       {
@@ -122,7 +122,7 @@ export const environment: ValtimoConfig = {
   },
   whitelistedDomains: [],
   swagger: {
-    endpointUri: '/v2/api-docs',
+    endpointUri: '/v3/api-docs',
   },
   mockApi: {
     endpointUri: '/mock-api/',
