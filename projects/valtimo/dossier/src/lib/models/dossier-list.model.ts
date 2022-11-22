@@ -15,7 +15,7 @@
  */
 
 export class DossierList {
-  public dossiers = [];
+  public cases = [];
   fields = [];
   pagination = {
     collectionSize: 0,

@@ -18,6 +18,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {
+  AssigneeFilter,
   DefinitionColumn,
   SearchField,
   SearchFieldValues,
@@ -68,8 +69,8 @@ export class DossierListComponent implements OnInit {
   @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
 
   public dossierVisibleTabs: Array<DossierListComponent> | null = null;
-  public currentTaskType = 'mine';
-  public tasks = {
+  public currentCaseType = 'mine';
+  public cases = {
     mine: new DossierList(),
     open: new DossierList(),
     all: new DossierList(),
@@ -183,14 +184,20 @@ export class DossierListComponent implements OnInit {
 
   private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
 
+  private readonly assigneeFilter$ = new BehaviorSubject<AssigneeFilter>('mine');
+
   private readonly documentsRequest$: Observable<Documents> = combineLatest([
     this.documentSearchRequest$,
     this.searchFieldValues$,
+    this.assigneeFilter$,
   ]).pipe(
     distinctUntilChanged(
-      ([prevSearchRequest, prevSearchValues], [currSearchRequest, currSearchValues]) =>
-        JSON.stringify({...prevSearchRequest, ...prevSearchValues}) ===
-        JSON.stringify({...currSearchRequest, ...currSearchValues})
+      (
+        [prevSearchRequest, prevSearchValues, prevAssigneeFilter],
+        [currSearchRequest, currSearchValues, currAssigneeFilter]
+      ) =>
+        JSON.stringify({...prevSearchRequest, ...prevSearchValues}) + prevAssigneeFilter ===
+        JSON.stringify({...currSearchRequest, ...currSearchValues}) + currAssigneeFilter
     ),
     tap(([documentSearchRequest]) => {
       this.storedSearchRequestKey$.pipe(take(1)).subscribe(storedSearchRequestKey => {
@@ -200,15 +207,20 @@ export class DossierListComponent implements OnInit {
         localStorage.setItem(storedSearchRequestKey, JSON.stringify(documentSearchRequest));
       });
     }),
-    switchMap(([documentSearchRequest, searchValues]) => {
+    switchMap(([documentSearchRequest, searchValues, assigneeFilter]) => {
       if ((Object.keys(searchValues) || []).length > 0) {
         return this.documentService.getDocumentsSearch(
           documentSearchRequest,
           'AND',
+          assigneeFilter,
           this.mapSearchValuesToFilters(searchValues)
         );
       } else {
-        return this.documentService.getDocumentsSearch(documentSearchRequest);
+        return this.documentService.getDocumentsSearch(
+          documentSearchRequest,
+          'AND',
+          assigneeFilter
+        );
       }
     }),
     tap(documents => {
@@ -404,71 +416,12 @@ export class DossierListComponent implements OnInit {
     });
   }
 
-  private clearPagination(type: string) {
-    this.tasks[type].page = 0;
-  }
-
-  getCases(type: string): void {
-    let params: any;
-
-    this.translationSubscription = combineLatest([
-      this.translateService.stream(`dossier.tabs.${type}.title`),
-    ]).subscribe(([title]) => {
-      this.listTitle = title;
-    });
-
-    switch (type) {
-      case 'mine':
-        params = {
-          page: this.tasks.mine.page,
-          size: this.tasks.mine.pagination.size,
-          filter: 'mine',
-        };
-        this.currentTaskType = 'mine';
-        break;
-      case 'open':
-        params = {
-          page: this.tasks.open.page,
-          size: this.tasks.open.pagination.size,
-          filter: 'open',
-        };
-        this.currentTaskType = 'open';
-        break;
-      case 'all':
-        params = {page: this.tasks.all.page, size: this.tasks.open.pagination.size, filter: 'all'};
-        this.currentTaskType = 'all';
-        break;
-      default:
-        this.logger.fatal('Unreachable case');
-    }
-
-    // if (this.sortState) {
-    //   params.sort = this.getSortString(this.sortState);
-    // }
-    //
-    // this.taskService.queryTasks(params).subscribe((results: any) => {
-    //   this.tasks[type].pagination.collectionSize = results.headers.get('x-total-count');
-    //   this.tasks[type].tasks = results.body as Array<Task>;
-    //   this.tasks[type].tasks.map((task: Task) => {
-    //     task.created = moment(task.created).format('DD MMM YYYY HH:mm');
-    //     if (task.due) {
-    //       task.due = moment(task.due).format('DD MMM YYYY HH:mm');
-    //     }
-    //   });
-    //   if (this.taskService.getConfigCustomTaskList()) {
-    //     this.customTaskListFields(type);
-    //   } else {
-    //     this.defaultTaskListFields(type);
-    //   }
-    // });
+  private clearPagination(type: string): void {
+    this.cases[type].page = 0;
   }
 
   tabChange(tab: NgbNavChangeEvent<any>): void {
-    this.clearPagination(this.currentTaskType);
-    this.getCases(tab.nextId);
-  }
-
-  ngOnDestroy(): void {
-    this.translationSubscription.unsubscribe();
+    this.clearPagination(this.currentCaseType);
+    this.assigneeFilter$.next(tab.nextId);
   }
 }
