@@ -418,7 +418,7 @@ export class DossierListComponent implements OnInit {
 
   tabChange(tab: NgbNavChangeEvent<any>): void {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
-      this.pagination$.next({...pagination, page: 0});
+      this.pagination$.next({...pagination, page: 1});
     });
     this.assigneeFilter$.next(tab.nextId);
   }
