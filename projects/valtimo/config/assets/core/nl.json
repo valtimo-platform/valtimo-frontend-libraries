@@ -281,6 +281,7 @@
       "title": "Uploadproces koppelen aan dossier",
       "description": "Kies welk proces het uploaden van bestanden moet afhandelen."
     },
+    "handleAssignee": "Behandelde toegewezen zaaktype",
     "tabs": {
       "cases": "Zaak Details",
       "searchFields": "Zoekvelden"
