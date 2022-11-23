@@ -54,7 +54,6 @@ import {DossierService} from '../dossier.service';
 import {ListField, Pagination} from '@valtimo/components';
 import {NGXLogger} from 'ngx-logger';
 import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
-import {DossierList} from '../models/dossier-list.model';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -70,7 +69,7 @@ export class DossierListComponent implements OnInit {
   @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
 
   public dossierVisibleTabs: Array<DossierListTab> | null = null;
-  public currentCaseType = 'mine';
+  public currentCaseType = 'MINE';
   public listTitle: string | null = null;
 
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
@@ -179,7 +178,7 @@ export class DossierListComponent implements OnInit {
 
   private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
 
-  private readonly assigneeFilter$ = new BehaviorSubject<AssigneeFilter>('mine');
+  private readonly assigneeFilter$ = new BehaviorSubject<AssigneeFilter>('MINE');
 
   private readonly documentsRequest$: Observable<Documents> = combineLatest([
     this.documentSearchRequest$,

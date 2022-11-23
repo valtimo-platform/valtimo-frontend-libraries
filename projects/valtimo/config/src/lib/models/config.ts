@@ -128,9 +128,9 @@ export enum TaskListTab {
 }
 
 export enum DossierListTab {
-  MINE = 'mine',
-  OPEN = 'open',
-  ALL = 'all',
+  MINE = 'MINE',
+  OPEN = 'OPEN',
+  ALL = 'ALL',
 }
 
 export enum Language {
