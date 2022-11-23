@@ -343,4 +343,17 @@ export class DocumentService {
       `${this.valtimoEndpointUri}document/${documentId}/candidate-user`
     );
   }
+
+  putConfigureStateCaseType(documentDefinitionName: string, request: Array<any>): Observable<void> {
+    return this.http.put<void>(
+      `${this.valtimoEndpointUri}<to-be-defined>/${documentDefinitionName}/<to-be-defined>`,
+      [...request]
+    );
+  }
+
+  getConfigureStateCaseType(documentDefinitionName: string): Observable<Array<any>> {
+    return this.http.get<Array<any>>(
+      `${this.valtimoEndpointUri}<to-be-defined>/${documentDefinitionName}/<to-be-defined>`
+    );
+  }
 }
