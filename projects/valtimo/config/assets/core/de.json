@@ -28,9 +28,9 @@
       "custom-dossier": "Kunden-Dossier",
       "custom-maps": "Kunden-Karten",
       "zaakobjecten": "Zaak-Objecte",
-      "mine": "Meine Cases",
-      "open": "Nicht zugeordnete Cases",
-      "all": "Alle Cases"
+      "MINE": "Meine Cases",
+      "OPEN": "Nicht zugeordnete Cases",
+      "ALL": "Alle Cases"
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
