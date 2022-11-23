@@ -75,7 +75,8 @@
               "dist/valtimo/layout/assets/js/app.js",
               "src/assets/bpmn/ValtimoBPMNModeler.js",
               "node_modules/@webcomponents/custom-elements/src/native-shim.js",
-              "node_modules/dmn-js/dist/dmn-modeler.development.js"
+              "node_modules/dmn-js/dist/dmn-modeler.development.js",
+              "node_modules/sockjs/lib/sockjs.js"
             ],
             "allowedCommonJsDependencies": [
               "swagger-ui",
@@ -1645,6 +1646,43 @@
             "lintFilePatterns": [
               "projects/valtimo/exact-plugin/**/*.ts",
               "projects/valtimo/exact-plugin/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "@valtimo/websocket": {
+      "projectType": "library",
+      "root": "projects/valtimo/websocket",
+      "sourceRoot": "projects/valtimo/websocket/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/valtimo/websocket/tsconfig.lib.json",
+            "project": "projects/valtimo/websocket/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/valtimo/websocket/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/valtimo/websocket/src/test.ts",
+            "tsConfig": "projects/valtimo/websocket/tsconfig.spec.json",
+            "karmaConfig": "projects/valtimo/websocket/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/websocket/src/**/*.ts",
+              "projects/valtimo/websocket/src/**/*.html"
             ]
           }
         }

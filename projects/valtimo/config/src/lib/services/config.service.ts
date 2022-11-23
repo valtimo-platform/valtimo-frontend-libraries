@@ -51,6 +51,7 @@ export class ConfigService {
       valtimoApi: {
         ...config.valtimoApi,
         endpointUri: this.formatUrlTrailingSlash(config.valtimoApi.endpointUri, true),
+        socketUri: this.formatUrlTrailingSlash(config.valtimoApi.socketUri, true),
       },
       ...(translationResourcesConfig && {
         translationResources: translationResourcesConfig.map(resource => ({

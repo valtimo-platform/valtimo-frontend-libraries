@@ -75,6 +75,7 @@ export interface ValtimoConfig {
   langKey?: Language;
   valtimoApi: {
     endpointUri: string;
+    socketUri: string;
   };
   swagger: {
     endpointUri: string;

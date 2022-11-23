@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/valtimo/websocket",
+  "lib": {
+    "entryFile": "src/public_api.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "@stomp/stompjs",
+    "@types/sockjs-client",
+    "@types/stompjs",
+    "sockjs-client"
+  ]
+}

@@ -21,13 +21,13 @@ import {NgxLoggerLevel} from 'ngx-logger';
 import {
   DefinitionColumn,
   IncludeFunction,
+  Language,
   ROLE_ADMIN,
   ROLE_DEVELOPER,
   ROLE_USER,
   TaskListTab,
   UploadProvider,
   ValtimoConfig,
-  Language,
 } from '@valtimo/config';
 import {authenticationKeycloak} from './auth/keycloak-config.dev';
 import {emailExtensionInitializer, openZaakExtensionInitializer} from '@valtimo/open-zaak';
@@ -152,6 +152,7 @@ export const environment: ValtimoConfig = {
   },
   valtimoApi: {
     endpointUri: '/api/',
+    socketUri: 'ws://localhost/socket/'
   },
   swagger: {
     endpointUri: '/v2/api-docs',

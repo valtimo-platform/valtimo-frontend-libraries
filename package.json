@@ -35,6 +35,7 @@
     "libs:watch:contact-moment": "ng build @valtimo/contact-moment --watch",
     "libs:watch:document": "ng build @valtimo/document --watch",
     "libs:watch:components": "ng build @valtimo/components --watch",
+    "libs:watch:websocket": "ng build @valtimo/websocket --watch",
     "libs:watch:auth0": "ng build @valtimo/auth0 --watch",
     "libs:watch:keycloak": "ng build @valtimo/keycloak --watch",
     "libs:watch:form-management": "ng build @valtimo/form-management --watch",
@@ -74,6 +75,7 @@
     "libs:build:contact-moment": "ng build @valtimo/contact-moment",
     "libs:build:document": "ng build @valtimo/document",
     "libs:build:components": "ng build @valtimo/components",
+    "libs:build:websocket": "ng build @valtimo/websocket",
     "libs:build:auth0": "ng build @valtimo/auth0",
     "libs:build:keycloak": "ng build @valtimo/keycloak",
     "libs:build:form-management": "ng build @valtimo/form-management",
@@ -113,6 +115,7 @@
     "libs:test:contact-moment": "ng test @valtimo/contact-moment",
     "libs:test:document": "ng test @valtimo/document",
     "libs:test:components": "ng test @valtimo/components",
+    "libs:test:websocket": "ng test @valtimo/websocket",
     "libs:test:task": "ng test @valtimo/task",
     "libs:test:process": "ng test @valtimo/process",
     "libs:test:form": "ng test @valtimo/form",
@@ -152,6 +155,7 @@
     "libs:lint:contact-moment": "ng lint @valtimo/contact-moment",
     "libs:lint:document": "ng lint @valtimo/document",
     "libs:lint:components": "ng lint @valtimo/components",
+    "libs:lint:websocket": "ng lint @valtimo/websocket",
     "libs:lint:task": "ng lint @valtimo/task",
     "libs:lint:process": "ng lint @valtimo/process",
     "libs:lint:dossier": "ng lint @valtimo/dossier",
@@ -309,7 +313,11 @@
     "typescript": "4.5.5",
     "uuid": "^8.3.2",
     "webpack-bundle-analyzer": "^4.5.0",
-    "zone.js": "~0.11.6"
+    "zone.js": "~0.11.6",
+    "@stomp/stompjs": "^6.1.2",
+    "@types/sockjs-client": "^1.5.1",
+    "@types/stompjs": "^2.3.5",
+    "sockjs-client": "^1.6.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~13.3.9",
@@ -351,6 +359,7 @@
     "@valtimo/user-interface": "file:dist/valtimo/user-interface",
     "@valtimo/user-management": "file:dist/valtimo/user-management",
     "@valtimo/view-configurator": "file:dist/valtimo/view-configurator",
+    "@valtimo/websocket": "file:dist/valtimo/websocket",
     "ng-packagr": "^13.0.0",
     "typescript": "~4.6.2"
   }

@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ViewEncapsulation,} from '@angular/core';
 import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Document, DocumentService, ProcessDocumentInstance} from '@valtimo/document';
 import {TaskDetailModalComponent, TaskService} from '@valtimo/task';
 import {FormService} from '@valtimo/form';
 import {FormioOptionsImpl, ValtimoFormioOptions} from '@valtimo/components';
+import {WebSocketService} from '@valtimo/websocket';
 import moment from 'moment';
 import {FormioForm} from '@formio/angular';
 import {UserProviderService} from '@valtimo/security';
@@ -66,7 +59,8 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     private route: ActivatedRoute,
     private formService: FormService,
-    private userProviderService: UserProviderService
+    private userProviderService: UserProviderService,
+    private webSocketService: WebSocketService
   ) {
     this.snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = this.snapshot.get('documentDefinitionName') || '';
@@ -106,6 +100,14 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
         this.loadProcessDocumentInstances(this.documentId);
       })
     );
+
+    this.webSocketService.listenForUserTaskChanges().subscribe(message => {
+      console.log("Received web socket message: " + message);
+      if (message.documentId === this.documentId) {
+        console.log('Received message is for the current document, reloading tasks');
+        this.loadProcessDocumentInstances(this.documentId);
+      }
+    });
   }
 
   public loadProcessDocumentInstances(documentId: string) {
