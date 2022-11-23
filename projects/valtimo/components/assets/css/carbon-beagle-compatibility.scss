@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
+html {
+  overflow-y: scroll !important;
+}
+
+body {
+  height: unset !important;
+  min-height: unset !important;
+}
+
 .list-header-title {
   margin-top: 20px;
   margin-bottom: 10px;
