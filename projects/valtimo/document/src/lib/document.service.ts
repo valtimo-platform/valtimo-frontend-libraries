@@ -51,6 +51,9 @@ import {
   User,
 } from '@valtimo/config';
 import {AdvancedDocumentSearchRequest} from './advanced-document-search-request';
+import {Stomp} from '@stomp/stompjs';
+import {SockJS} from '@types/sockjs-client';
+import {messageCallbackType} from '@stomp/stompjs/src/types';
 
 @Injectable({
   providedIn: 'root',
@@ -342,5 +345,13 @@ export class DocumentService {
     return this.http.get<Array<User>>(
       `${this.valtimoEndpointUri}document/${documentId}/candidate-user`
     );
+  }
+
+  subscribeToDocumentOpenCountWebSocket(callback: messageCallbackType) {
+    let sock = new SockJS(`${this.valtimoEndpointUri}document/stomp`);
+    let client = Stomp.over(sock);
+    client.connect({}, frame => {
+      client.subscribe("/topic/messages", callback);
+    });
   }
 }

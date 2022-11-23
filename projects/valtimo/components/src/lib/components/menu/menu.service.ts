@@ -79,6 +79,13 @@ export class MenuService {
   private appendDossierSubMenuItems(menuItems: MenuItem[]): Observable<MenuItem[]> {
     return new Observable(subscriber => {
       this.logger.debug('appendDossierSubMenuItems');
+
+      this.documentService.subscribeToDocumentOpenCountWebSocket(payload => {
+        console.log(payload);
+        console.log(payload.body);
+        console.log(JSON.parse(payload.body));
+      });
+
       this.documentService.getAllDefinitions().subscribe(definitions => {
         const dossierMenuItems: MenuItem[] = definitions.content.map(
           (definition, index) =>
