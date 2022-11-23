@@ -184,6 +184,7 @@ export class DossierListComponent implements OnInit {
     this.documentSearchRequest$,
     this.searchFieldValues$,
     this.assigneeFilter$,
+    this.documentDefinitionName$,
   ]).pipe(
     distinctUntilChanged(
       (
@@ -201,7 +202,7 @@ export class DossierListComponent implements OnInit {
         localStorage.setItem(storedSearchRequestKey, JSON.stringify(documentSearchRequest));
       });
     }),
-    switchMap(([documentSearchRequest, searchValues, assigneeFilter]) => {
+    switchMap(([documentSearchRequest, searchValues, assigneeFilter, definitionName]) => {
       if ((Object.keys(searchValues) || []).length > 0) {
         return this.documentService.getDocumentsSearch(
           documentSearchRequest,
@@ -216,6 +217,7 @@ export class DossierListComponent implements OnInit {
           assigneeFilter
         );
       }
+      this.resetPagination(definitionName);
     }),
     tap(documents => {
       this.setCollectionSize(documents);
@@ -417,6 +419,9 @@ export class DossierListComponent implements OnInit {
   }
 
   tabChange(tab: NgbNavChangeEvent<any>): void {
+    this.pagination$.pipe(take(1)).subscribe(pagination => {
+       this.pagination$.next({...pagination, page: 0});
+    });
     this.assigneeFilter$.next(tab.nextId);
   }
 }
