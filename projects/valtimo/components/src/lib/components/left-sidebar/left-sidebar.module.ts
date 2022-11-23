@@ -20,10 +20,10 @@ import {LeftSidebarComponent} from './left-sidebar.component';
 import {PageTitleModule} from '../page-title/page-title.module';
 import {MenuModule} from '../menu/menu.module';
 import {IconModule, UIShellModule} from 'carbon-components-angular';
-import {ArrayToStringPipe} from '../../pipes';
+import {ArrayToStringPipe, UrlPartPipe} from '../../pipes';
 
 @NgModule({
-  declarations: [LeftSidebarComponent, ArrayToStringPipe],
+  declarations: [LeftSidebarComponent, ArrayToStringPipe, UrlPartPipe],
   imports: [CommonModule, MenuModule, PageTitleModule, IconModule, UIShellModule],
   exports: [LeftSidebarComponent],
 })

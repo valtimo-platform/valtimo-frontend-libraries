@@ -35,7 +35,7 @@
         <ibm-sidenav-item
           *ngFor="let childMenuItem of menuItem.children"
           [route]="childMenuItem.link"
-          [active]="(childMenuItem.link | arrayToString) === obs.currentRoute"
+          [active]="(childMenuItem.link | arrayToString) === (obs.currentRoute | urlPart: 2)"
         >
           <valtimo-menu-item-text [menuItem]="childMenuItem"></valtimo-menu-item-text>
         </ibm-sidenav-item>
@@ -48,7 +48,7 @@
   <ibm-sidenav-item
     [route]="menuItem.link"
     *ngIf="!menuItem.children"
-    [active]="currentRoute === (menuItem.link | arrayToString)"
+    [active]="(currentRoute | urlPart: 1) === (menuItem.link | arrayToString)"
   >
     <valtimo-menu-item-text [menuItem]="menuItem"></valtimo-menu-item-text>
   </ibm-sidenav-item>
