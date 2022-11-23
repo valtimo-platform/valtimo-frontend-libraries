@@ -28,6 +28,7 @@ interface MenuItem {
   roles?: string[];
   show?: boolean;
   includeFunction?: IncludeFunction;
+  stringLink?: string;
 }
 
 export {MenuItem, IncludeFunction};

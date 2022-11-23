@@ -29,11 +29,11 @@
   margin-bottom: 15px;
 }
 
-::ng-deep .bx--panel--overlay {
+::ng-deep .cds--panel--overlay {
   padding-top: 0;
 }
 
-::ng-deep .bx--panel--expanded {
+::ng-deep .cds--panel--expanded {
   width: 24rem;
 }
 
@@ -43,7 +43,7 @@
 }
 
 ::ng-deep .menu-tabs {
-  .bx--tabs--scrollable__nav-item {
+  .cds--tabs--scrollable__nav-item {
     width: 12rem;
 
     button {

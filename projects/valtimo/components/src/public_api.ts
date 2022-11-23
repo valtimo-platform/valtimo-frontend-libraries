@@ -19,6 +19,7 @@
  */
 
 export * from './lib/models';
+export * from './lib/pipes';
 export * from './lib/services/valtimo-modal.service';
 export * from './lib/services/shell.service';
 

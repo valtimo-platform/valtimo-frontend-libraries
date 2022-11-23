@@ -28,11 +28,12 @@ import {
 } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {BehaviorSubject, combineLatest, fromEvent, Observable, Subscription} from 'rxjs';
-import {debounceTime, map, take} from 'rxjs/operators';
+import {debounceTime, filter, map, take} from 'rxjs/operators';
 import {ConfigService, CustomLeftSidebar, MenuItem} from '@valtimo/config';
 import {MenuService} from '../menu/menu.service';
 import {ShellService} from '../../services/shell.service';
 import {BreakpointObserver} from '@angular/cdk/layout';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'valtimo-left-sidebar',
@@ -95,13 +96,19 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  readonly currentRoute$ = this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    map(event => (event as NavigationEnd)?.url)
+  );
+
   constructor(
     private readonly translateService: TranslateService,
     private readonly elementRef: ElementRef,
     private readonly configService: ConfigService,
     private readonly menuService: MenuService,
     private readonly shellService: ShellService,
-    private readonly breakpointObserver: BreakpointObserver
+    private readonly breakpointObserver: BreakpointObserver,
+    private readonly router: Router
   ) {
     this.bodyStyle = elementRef.nativeElement.ownerDocument.body.style;
   }
