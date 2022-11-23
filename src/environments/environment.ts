@@ -21,6 +21,7 @@ import {NgxLoggerLevel} from 'ngx-logger';
 import {
   DefinitionColumn,
   IncludeFunction,
+  Language,
   ROLE_ADMIN,
   ROLE_DEVELOPER,
   ROLE_USER,
@@ -55,6 +56,11 @@ const defaultDefinitionColumns: Array<DefinitionColumn> = [
     translationKey: 'lastModified',
     sortable: true,
     viewType: 'date',
+  },
+  {
+    propertyName: 'assigneeFullName',
+    translationKey: 'assigneeFullName',
+    sortable: true,
   },
 ];
 
@@ -142,6 +148,7 @@ export const environment: ValtimoConfig = {
     ],
   },
   whitelistedDomains: ['localhost:4200'],
+  langKey: Language.NL,
   mockApi: {
     endpointUri: '/mock-api/',
   },
@@ -173,6 +180,12 @@ export const environment: ValtimoConfig = {
         translationKey: 'files',
         sortable: true,
         viewType: 'relatedFiles',
+      },
+      {
+        propertyName: '$.lening-akkoord',
+        translationKey: 'accepted',
+        sortable: false,
+        viewType: 'boolean',
       },
     ],
   },
@@ -220,6 +233,15 @@ export const environment: ValtimoConfig = {
     enableHackathonCasesPage: true,
     showUserNameInTopBar: true,
     experimentalDmnEditing: true,
+  },
+  customDossierHeader: {
+    leningen: [
+      {
+        propertyPaths: ['voornaam'],
+        columnSize: 3,
+        textSize: 'sm',
+      },
+    ],
   },
 };
 

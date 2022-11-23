@@ -21,6 +21,7 @@ import {
   ROLE_USER,
   UploadProvider,
   ValtimoConfig,
+  Language,
 } from '@valtimo/config';
 import {authenticationKeycloak} from './auth/keycloak-config.prod';
 import {openZaakExtensionInitializer} from '@valtimo/open-zaak';
@@ -121,6 +122,7 @@ export const environment: ValtimoConfig = {
     ],
   },
   whitelistedDomains: [],
+  langKey: Language.NL,
   swagger: {
     endpointUri: '/v3/api-docs',
   },

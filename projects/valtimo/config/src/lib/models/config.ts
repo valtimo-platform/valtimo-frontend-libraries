@@ -30,6 +30,7 @@ export interface DefinitionColumn {
   sortable?: boolean;
   viewType?: string;
   default?: boolean | string;
+  enum?: Array<string>;
 }
 
 export interface CustomDossierHeaderItem {
@@ -39,6 +40,7 @@ export interface CustomDossierHeaderItem {
   textSize?: string;
   noValueText?: string;
   customClass?: string;
+  modifier?: string;
 }
 
 export interface CustomTaskList {
@@ -71,6 +73,7 @@ export interface ValtimoConfig {
   authentication: Auth;
   production: boolean;
   whitelistedDomains: string[];
+  langKey?: Language;
   valtimoApi: {
     endpointUri: string;
   };
@@ -102,6 +105,7 @@ export interface ValtimoConfig {
     enableHackathonCasesPage?: boolean;
     showUserNameInTopBar?: boolean;
     experimentalDmnEditing?: boolean;
+    caseSearchFields?: boolean;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
   customTaskList?: CustomTaskList;
@@ -115,6 +119,12 @@ export enum UploadProvider {
   S3,
   OPEN_ZAAK,
   DOCUMENTEN_API,
+}
+
+export enum Language {
+  NL = 'nl',
+  EN = 'en',
+  DE = 'de',
 }
 
 export enum TaskListTab {
