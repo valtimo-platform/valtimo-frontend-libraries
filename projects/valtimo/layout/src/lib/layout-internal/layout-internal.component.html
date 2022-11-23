@@ -15,7 +15,7 @@
   -->
 
 <valtimo-topbar></valtimo-topbar>
-<main class="bx--content" [ngClass]="{'bx--content--sidebar': sideBarExpanded$ | async}">
+<main class="cds--content" [ngClass]="{'cds--content--sidebar': sideBarExpanded$ | async}">
   <valtimo-left-sidebar
     [hidden]="layoutService.isFullscreen"
     [menuIsOpen]="menuOpen$ | async"

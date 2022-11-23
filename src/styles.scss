@@ -16,19 +16,6 @@
 
 /* You can add global styles to this file, and also import other style files */
 
-@import '~carbon-components/scss/globals/scss/theme';
-
-$feature-flags: (
-  grid-columns-16: true,
-);
-
-$font-path: '~carbon-components/src/globals/fonts';
-
-$carbon--theme: $carbon--theme--white;
-@include carbon--theme();
-
-@import '~carbon-components/scss/globals/scss/styles';
-
 body,
 html {
   height: 100%;

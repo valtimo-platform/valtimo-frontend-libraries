@@ -28,7 +28,7 @@ import {ShellService} from '../../services/shell.service';
   styleUrls: ['./topbar.component.scss'],
 })
 export class TopbarComponent implements OnInit {
-  @HostBinding('class.bx--header') headerClass = true;
+  @HostBinding('class.cds--header') headerClass = true;
 
   showUserNameInTopBar!: boolean;
 
