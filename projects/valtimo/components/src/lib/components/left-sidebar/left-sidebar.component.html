@@ -32,13 +32,15 @@
     <ng-container *ngIf="menuItem.children">
       <ng-container *ngTemplateOutlet="topMenuItem; context: {menuItem: menuItem}"></ng-container>
       <ibm-sidenav-menu [title]="menuItem.title">
-        <ibm-sidenav-item
-          *ngFor="let childMenuItem of menuItem.children"
-          [route]="childMenuItem.link"
-          [active]="(childMenuItem.link | arrayToString) === (obs.currentRoute | urlPart: 2)"
-        >
-          <valtimo-menu-item-text [menuItem]="childMenuItem"></valtimo-menu-item-text>
-        </ibm-sidenav-item>
+        <ng-container *ngFor="let childMenuItem of menuItem.children">
+          <ibm-sidenav-item
+            *ngIf="childMenuItem.link"
+            [route]="childMenuItem.link"
+            [active]="(childMenuItem.link | arrayToString) === (obs.currentRoute | urlPart: 2)"
+          >
+            <valtimo-menu-item-text [menuItem]="childMenuItem"></valtimo-menu-item-text>
+          </ibm-sidenav-item>
+        </ng-container>
       </ibm-sidenav-menu>
     </ng-container>
   </ng-container>
