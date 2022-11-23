@@ -67,11 +67,6 @@ export class DossierDetailComponent implements OnInit {
   private initialTabName: string;
   public customDossierHeaderItems: Array<any> = [];
   public dossierStatusTabs: Array<DossierListTab> | null = null;
-  // public dossier = {
-  //   mine: new DossierList(),
-  //   open: new DossierList(),
-  //   all: new DossierList(),
-  // };
 
   @ViewChild('supportingProcessStartModal')
   supportingProcessStart: DossierSupportingProcessStartModalComponent;

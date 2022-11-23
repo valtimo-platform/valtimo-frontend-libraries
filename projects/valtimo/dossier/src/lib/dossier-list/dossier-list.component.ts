@@ -217,7 +217,6 @@ export class DossierListComponent implements OnInit {
           assigneeFilter
         );
       }
-      this.resetPagination(definitionName);
     }),
     tap(documents => {
       this.setCollectionSize(documents);
@@ -420,7 +419,7 @@ export class DossierListComponent implements OnInit {
 
   tabChange(tab: NgbNavChangeEvent<any>): void {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
-       this.pagination$.next({...pagination, page: 0});
+      this.pagination$.next({...pagination, page: 0});
     });
     this.assigneeFilter$.next(tab.nextId);
   }
