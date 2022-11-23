@@ -281,7 +281,11 @@
       "title": "Link upload process to case",
       "description": "Choose which process should handle file uploads."
     },
-    "handleAssignee": "Case type handle assignee",
+    "handleAssignee": {
+      "title": "Case type handle assignee",
+      "checkboxDescription": "This case can have an assignee",
+      "tooltip": "When this option is selected, a setting can be configured to state a case type can have an assignee."
+    },
     "tabs": {
       "cases": "Case Details",
       "searchFields": "Search Fields"

@@ -281,7 +281,11 @@
       "title": "Uploadproces koppelen aan dossier",
       "description": "Kies welk proces het uploaden van bestanden moet afhandelen."
     },
-    "handleAssignee": "Behandelde toegewezen zaaktype",
+    "handleAssignee": {
+      "title": "Behandelde toegewezen zaaktype",
+      "checkboxDescription": "Deze zaak kan een rechtverkrijgende hebben",
+      "tooltip": "Wanneer deze optie is geselecteerd, kan een instelling worden geconfigureerd om aan te geven dat een zaaktype een toegewezen persoon kan hebben."
+    },
     "tabs": {
       "cases": "Zaak Details",
       "searchFields": "Zoekvelden"

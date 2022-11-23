@@ -281,7 +281,11 @@
       "title": "Verknüpfen Sie den Upload-Prozess mit dem Fall",
       "description": "Wählen Sie einen Prozess, der das Hochladen von Dateien handhaben soll."
     },
-    "handleAssignee": "Falltyp-Handle-Zugewiesener",
+    "handleAssignee": {
+      "title": "Falltyp-Handle-Zugewiesener",
+      "checkboxDescription": "Dieser Fall kann einen Bevollmächtigten haben",
+      "tooltip": "Wenn diese Option ausgewählt ist, kann eine Einstellung konfiguriert werden, um anzugeben, dass ein Falltyp einen Verantwortlichen haben kann."
+    },
     "tabs": {
       "cases": "Falldetails",
       "searchFields": "Suchfelder"
