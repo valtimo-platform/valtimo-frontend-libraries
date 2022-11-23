@@ -8,6 +8,7 @@ $ritense-blue-20: #cfd8e1;
 $ritense-blue-10: #f1f4f6;
 
 @use '@carbon/styles/scss/themes';
+@use '@carbon/colors';
 
 @use '@carbon/styles/scss/theme' with (
   $theme:
@@ -47,13 +48,16 @@ $ritense-blue-10: #f1f4f6;
         inverse-link: $ritense-blue-40,
         link-inverse: $ritense-blue-40,
         // Blue 20
-        highlight: $ritense-blue-20,
-        layer-02: green
+        highlight: $ritense-blue-20
       )
     )
 );
 
 @use '@carbon/styles';
+
+body {
+  background-color: colors.$gray-10;
+}
 
 /*
 - Appendix

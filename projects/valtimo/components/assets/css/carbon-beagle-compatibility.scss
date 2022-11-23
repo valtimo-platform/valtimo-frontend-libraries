@@ -23,6 +23,23 @@ body {
   min-height: unset !important;
 }
 
+.page-head {
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.main-content {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.main-content > .container-fluid {
+  margin-left: -15px !important;
+  margin-right: -15px !important;
+  width: calc(100% + 30px) !important;
+}
+
 .list-header-title {
   margin-top: 20px;
   margin-bottom: 10px;
