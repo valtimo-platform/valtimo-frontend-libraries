@@ -69,8 +69,6 @@ export class DossierListComponent implements OnInit {
   @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
 
   public dossierVisibleTabs: Array<DossierListTab> | null = null;
-  public currentCaseType = 'MINE';
-  public listTitle: string | null = null;
 
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
@@ -178,7 +176,7 @@ export class DossierListComponent implements OnInit {
 
   private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
 
-  private readonly assigneeFilter$ = new BehaviorSubject<AssigneeFilter>('MINE');
+  private readonly assigneeFilter$ = new BehaviorSubject<AssigneeFilter>('ALL');
 
   private readonly documentsRequest$: Observable<Documents> = combineLatest([
     this.documentSearchRequest$,
@@ -202,6 +200,8 @@ export class DossierListComponent implements OnInit {
       });
     }),
     switchMap(([documentSearchRequest, searchValues, assigneeFilter]) => {
+      console.log('-', assigneeFilter);
+
       if ((Object.keys(searchValues) || []).length > 0) {
         return this.documentService.getDocumentsSearch(
           documentSearchRequest,
@@ -243,9 +243,6 @@ export class DossierListComponent implements OnInit {
     private configService: ConfigService
   ) {
     this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
-    if (this.dossierVisibleTabs != null) {
-      this.currentCaseType = this.dossierVisibleTabs[0];
-    }
   }
 
   ngOnInit(): void {
@@ -420,6 +417,6 @@ export class DossierListComponent implements OnInit {
     this.pagination$.pipe(take(1)).subscribe(pagination => {
       this.pagination$.next({...pagination, page: 1});
     });
-    this.assigneeFilter$.next(tab.nextId);
+    this.assigneeFilter$.next(tab.nextId.toUpperCase());
   }
 }
