@@ -32,6 +32,7 @@ import {
 import {authenticationKeycloak} from './auth/keycloak-config.dev';
 import {emailExtensionInitializer, openZaakExtensionInitializer} from '@valtimo/open-zaak';
 import {connectorLinkExtensionInitializer} from '@valtimo/connector-management';
+import {LOGO_BASE_64} from './logo';
 
 const defaultDefinitionColumns: Array<DefinitionColumn> = [
   {
@@ -65,8 +66,8 @@ const defaultDefinitionColumns: Array<DefinitionColumn> = [
 ];
 
 export const environment: ValtimoConfig = {
+  logoSvgBase64: LOGO_BASE_64,
   applicationTitle: 'Valtimo',
-  applicationBrand: '',
   production: false,
   initializers: [
     openZaakExtensionInitializer,

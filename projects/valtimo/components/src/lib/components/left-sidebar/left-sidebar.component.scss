@@ -119,3 +119,7 @@
 ::ng-deep .cds--side-nav--expanded {
   width: 16rem;
 }
+
+::ng-deep .cds--side-nav__header-divider {
+  display: none !important;
+}

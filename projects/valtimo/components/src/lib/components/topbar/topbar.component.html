@@ -14,14 +14,10 @@
   ~ limitations under the License.
   -->
 
-<ibm-header
-  [name]="applicationTitle"
-  [brand]="applicationBrand"
-  [route]="'/'"
-  [useRouter]="true"
-  (mouseenter)="mouseEnter()"
-  (mouseleave)="mouseLeave()"
->
+<ibm-header [useRouter]="false" (mouseenter)="mouseEnter()" (mouseleave)="mouseLeave()">
+  <a *ngIf="logoBase64" class="logo-link" [routerLink]="['/']" [title]="applicationTitle">
+    <img [src]="logoBase64" class="logo-image" />
+  </a>
   <ibm-hamburger
     *ngIf="(largeScreen$ | async) === false"
     [active]="sideBarExpanded$ | async"

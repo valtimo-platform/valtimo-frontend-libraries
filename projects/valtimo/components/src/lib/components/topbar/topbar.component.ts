@@ -21,6 +21,7 @@ import {ConfigService} from '@valtimo/config';
 import {IconService} from 'carbon-components-angular';
 import User20 from '@carbon/icons/es/user/20';
 import {ShellService} from '../../services/shell.service';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'valtimo-topbar',
@@ -32,13 +33,14 @@ export class TopbarComponent implements OnInit {
 
   showUserNameInTopBar!: boolean;
 
+  logoBase64!: SafeResourceUrl;
+
   readonly userFullName$ = from(this.keyCloakService.isLoggedIn()).pipe(
     switchMap(() => this.keyCloakService.loadUserProfile()),
     map(profile => `${profile.firstName} ${profile.lastName}`)
   );
 
   readonly applicationTitle = this.configService.config.applicationTitle;
-  readonly applicationBrand = this.configService.config.applicationBrand;
   readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
   readonly largeScreen$ = this.shellService.largeScreen$;
   readonly panelExpanded$ = this.shellService.panelExpanded$;
@@ -47,12 +49,14 @@ export class TopbarComponent implements OnInit {
     private readonly keyCloakService: KeycloakService,
     private readonly configService: ConfigService,
     private readonly iconService: IconService,
-    private readonly shellService: ShellService
+    private readonly shellService: ShellService,
+    private readonly sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
     this.iconService.registerAll([User20]);
     this.showUserNameInTopBar = this.configService.config.featureToggles?.showUserNameInTopBar;
+    this.setLogo();
   }
 
   toggleSideBar(): void {
@@ -69,5 +73,19 @@ export class TopbarComponent implements OnInit {
 
   mouseLeave(): void {
     this.shellService.setMouseOnTopBar(false);
+  }
+
+  private setLogo(): void {
+    const config = this.configService.config;
+
+    if (config.logoSvgBase64) {
+      this.logoBase64 = this.sanitizer.bypassSecurityTrustResourceUrl(
+        `data:image/svg+xml;base64, ${config.logoSvgBase64}`
+      );
+    } else if (config.logoPngBase64) {
+      this.logoBase64 = this.sanitizer.bypassSecurityTrustResourceUrl(
+        `data:image/png;base64, ${config.logoPngBase64}`
+      );
+    }
   }
 }

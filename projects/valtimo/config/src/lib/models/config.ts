@@ -66,8 +66,9 @@ export interface SortState {
 
 export interface ValtimoConfig {
   // eslint-disable-next-line @typescript-eslint/ban-types
+  logoSvgBase64?: string;
+  logoPngBase64?: string;
   applicationTitle?: string;
-  applicationBrand?: string;
   initializers: ((injector: Injector) => Function)[];
   menu: MenuConfig;
   authentication: Auth;
