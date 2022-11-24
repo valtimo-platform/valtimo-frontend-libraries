@@ -287,3 +287,7 @@ export interface UploadProcessLink {
 export interface UpdateUploadProcessLinkRequest {
   processDefinitionKey: string;
 }
+
+export interface CaseSettings {
+  canHaveAssignee: boolean;
+}

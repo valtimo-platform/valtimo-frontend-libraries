@@ -20,6 +20,7 @@ import {Observable} from 'rxjs';
 import {
   AssignHandlerToDocumentResult,
   AuditRecord,
+  CaseSettings,
   Document,
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
@@ -344,16 +345,19 @@ export class DocumentService {
     );
   }
 
-  putConfigureStateCaseType(documentDefinitionName: string, request: Array<any>): Observable<void> {
-    return this.http.put<void>(
-      `${this.valtimoEndpointUri}<to-be-defined>/${documentDefinitionName}/<to-be-defined>`,
-      [...request]
+  patchCaseSettings(
+    documentDefinitionName: string,
+    request: CaseSettings
+  ): Observable<void> {
+    return this.http.patch<void>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`,
+      {...request}
     );
   }
 
-  getConfigureStateCaseType(documentDefinitionName: string): Observable<Array<any>> {
-    return this.http.get<Array<any>>(
-      `${this.valtimoEndpointUri}<to-be-defined>/${documentDefinitionName}/<to-be-defined>`
+  getCaseSettings(documentDefinitionName: string): Observable<CaseSettings> {
+    return this.http.get<CaseSettings>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`
     );
   }
 }
