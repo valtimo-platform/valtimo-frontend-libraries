@@ -4,6 +4,8 @@ type SearchFieldFieldType = 'single' | 'multiple' | 'range';
 
 type SearchFieldMatchType = 'exact' | 'like';
 
+type SearchFieldBoolean = 'booleanPositive' | 'booleanNegative';
+
 type BooleanValueSingle = boolean;
 
 type TextValueSingle = string;
@@ -18,22 +20,45 @@ interface NumberValueRange {
 type SearchFieldValue = BooleanValueSingle | TextValueSingle | NumberValueSingle | NumberValueRange;
 
 interface SearchField {
+  title?: string;
   key: string;
   path?: string;
-  datatype: SearchFieldDataType;
-  fieldtype: SearchFieldFieldType;
-  matchtype: SearchFieldMatchType;
+  dataType: SearchFieldDataType;
+  fieldType: SearchFieldFieldType;
+  matchType: SearchFieldMatchType;
 }
 
 interface SearchFieldWithValue extends SearchField {
   value: SearchFieldValue;
 }
 
+interface SearchFieldValues {
+  [searchFieldKey: string]: SearchFieldValue;
+}
+
+type SearchOperator = 'AND' | 'OR';
+
+interface SearchFilter {
+  key: string;
+  values: Array<string>;
+}
+
+interface SearchFilterRange {
+  key: string;
+  rangeFrom: string;
+  rangeTo: string;
+}
+
 export {
   SearchFieldDataType,
   SearchFieldFieldType,
   SearchFieldMatchType,
+  SearchFieldBoolean,
   SearchField,
   SearchFieldValue,
   SearchFieldWithValue,
+  SearchFieldValues,
+  SearchOperator,
+  SearchFilter,
+  SearchFilterRange,
 };

@@ -180,6 +180,12 @@ export const environment: ValtimoConfig = {
         sortable: true,
         viewType: 'relatedFiles',
       },
+      {
+        propertyName: '$.lening-akkoord',
+        translationKey: 'accepted',
+        sortable: false,
+        viewType: 'boolean',
+      },
     ],
   },
   visibleTaskListTabs: [TaskListTab.MINE, TaskListTab.OPEN, TaskListTab.ALL],
@@ -226,7 +232,6 @@ export const environment: ValtimoConfig = {
     enableHackathonCasesPage: true,
     showUserNameInTopBar: true,
     experimentalDmnEditing: true,
-    caseSearchFields: true,
   },
   customDossierHeader: {
     leningen: [
