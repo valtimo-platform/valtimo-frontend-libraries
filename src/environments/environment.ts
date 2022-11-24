@@ -20,6 +20,7 @@
 import {NgxLoggerLevel} from 'ngx-logger';
 import {
   DefinitionColumn,
+  DossierListTab,
   IncludeFunction,
   Language,
   ROLE_ADMIN,
@@ -188,6 +189,7 @@ export const environment: ValtimoConfig = {
     ],
   },
   visibleTaskListTabs: [TaskListTab.MINE, TaskListTab.OPEN, TaskListTab.ALL],
+  visibleDossierListTabs: [DossierListTab.ALL, DossierListTab.MINE, DossierListTab.OPEN],
   customTaskList: {
     fields: [
       {
