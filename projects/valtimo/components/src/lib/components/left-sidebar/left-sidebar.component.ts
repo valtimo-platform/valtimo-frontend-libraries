@@ -101,6 +101,46 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     map(event => (event as NavigationEnd)?.url)
   );
 
+  readonly closestSequence$: Observable<string> = combineLatest([
+    this.currentRoute$,
+    this.menuItems$,
+  ]).pipe(
+    map(([currentRoute, menuItems]) => {
+      let closestSequence = '0';
+      let highestDifference = 0;
+
+      const checkItemMatch = (stringUrl: string, sequence: string): void => {
+        const currentRouteUrlLength = currentRoute.length;
+        const currentRouteSubstractLength = currentRoute.replace(stringUrl, '').length;
+        const difference = currentRouteUrlLength - currentRouteSubstractLength;
+
+        if (difference > highestDifference) {
+          highestDifference = difference;
+          closestSequence = sequence;
+        }
+      };
+
+      menuItems.forEach(item => {
+        checkItemMatch(item.link?.join('') || '', `${item.sequence}`);
+
+        if (item.children) {
+          item.children.forEach(childItem => {
+            if (Array.isArray(childItem.link)) {
+              checkItemMatch(
+                Array.isArray(item.link)
+                  ? [...item.link, ...childItem.link].join('')
+                  : childItem.link.join(''),
+                `${item.sequence}${childItem.sequence}`
+              );
+            }
+          });
+        }
+      });
+
+      return closestSequence;
+    })
+  );
+
   constructor(
     private readonly translateService: TranslateService,
     private readonly elementRef: ElementRef,
@@ -173,6 +213,10 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggled(): void {
     console.log('toggled');
+  }
+
+  checkSequence(sequence: string): void {
+    console.log('sequence', sequence);
   }
 
   private setInitialWidth(customLeftSidebar: CustomLeftSidebar | undefined): void {

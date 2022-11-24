@@ -15,7 +15,10 @@
   -->
 
 <ibm-sidenav
-  *ngIf="{currentRoute: currentRoute$ | async, sideBarExpanded: sideBarExpanded$ | async} as obs"
+  *ngIf="{
+    sideBarExpanded: sideBarExpanded$ | async,
+    closestSequence: closestSequence$ | async
+  } as obs"
   [allowExpansion]="false"
   [expanded]="obs.sideBarExpanded"
   (toggle)="toggled()"
@@ -25,18 +28,23 @@
       <ng-container
         *ngTemplateOutlet="
           topMenuItem;
-          context: {menuItem: menuItem, currentRoute: obs.currentRoute}
+          context: {menuItem: menuItem, closestSequence: obs.closestSequence}
         "
       ></ng-container>
     </ng-container>
     <ng-container *ngIf="menuItem.children">
-      <ng-container *ngTemplateOutlet="topMenuItem; context: {menuItem: menuItem}"></ng-container>
+      <ng-container
+        *ngTemplateOutlet="
+          topMenuItem;
+          context: {menuItem: menuItem, closestSequence: obs.closestSequence}
+        "
+      ></ng-container>
       <ibm-sidenav-menu [title]="menuItem.title">
         <ng-container *ngFor="let childMenuItem of menuItem.children">
           <ibm-sidenav-item
             *ngIf="childMenuItem.link"
             [route]="childMenuItem.link"
-            [active]="(childMenuItem.link | arrayToString) === (obs.currentRoute | urlPart: 2)"
+            [active]="'' + menuItem.sequence + childMenuItem.sequence === obs.closestSequence"
           >
             <valtimo-menu-item-text [menuItem]="childMenuItem"></valtimo-menu-item-text>
           </ibm-sidenav-item>
@@ -46,11 +54,11 @@
   </ng-container>
 </ibm-sidenav>
 
-<ng-template #topMenuItem let-menuItem="menuItem" let-currentRoute="currentRoute">
+<ng-template #topMenuItem let-menuItem="menuItem" let-closestSequence="closestSequence">
   <ibm-sidenav-item
     [route]="menuItem.link"
     *ngIf="!menuItem.children"
-    [active]="(currentRoute | urlPart: 1) === (menuItem.link | arrayToString)"
+    [active]="'' + menuItem.sequence === closestSequence"
   >
     <valtimo-menu-item-text [menuItem]="menuItem"></valtimo-menu-item-text>
   </ibm-sidenav-item>
