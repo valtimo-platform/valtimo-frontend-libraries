@@ -285,7 +285,7 @@
       "description": "Kies welk proces het uploaden van bestanden moet afhandelen."
     },
     "handleAssignee": {
-      "title": "Behandelde toegewezen zaaktype",
+      "title": "Zaak toegewezen",
       "checkboxDescription": "Deze zaak kan een rechtverkrijgende hebben",
       "tooltip": "Wanneer deze optie is geselecteerd, kan een instelling worden geconfigureerd om aan te geven dat een zaaktype een toegewezen persoon kan hebben."
     },
