@@ -351,10 +351,7 @@ export class DocumentService {
     );
   }
 
-  patchCaseSettings(
-    documentDefinitionName: string,
-    request: CaseSettings
-  ): Observable<void> {
+  patchCaseSettings(documentDefinitionName: string, request: CaseSettings): Observable<void> {
     return this.http.patch<void>(
       `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`,
       {...request}

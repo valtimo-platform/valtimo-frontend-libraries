@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
-import {DocumentService} from '@valtimo/document';
-import {filter, map, Observable, switchMap} from 'rxjs';
+import {DocumentService, CaseSettings} from '@valtimo/document';
+import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-dossier-management-assignee',
@@ -9,24 +10,27 @@ import {ActivatedRoute} from '@angular/router';
   styleUrls: ['./dossier-management-assignee.component.css'],
 })
 export class DossierManagementAssigneeComponent {
-  canHaveAssignee = false;
+  readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.name || ''),
-    filter(docDefName => !!docDefName)
+    map(params => params.name || '')
   );
 
-  readonly caseSettingsAssignee$ = this.documentDefinitionName$.pipe(
+  readonly currentValue$: Observable<CaseSettings> = this.documentDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
-      this.documentService.patchCaseSettings(documentDefinitionName, {
-        canHaveAssignee: this.canHaveAssignee,
-      })
-    )
+      this.documentService.getCaseSettings(documentDefinitionName)
+    ),
+    map(currentValue => currentValue),
+    tap(() => this.loading$.next(false))
   );
 
   constructor(private readonly documentService: DocumentService, private route: ActivatedRoute) {}
 
-  toggleAssignee(): void {
-    this.canHaveAssignee = !this.canHaveAssignee;
+  toggleAssignee(currentValue: boolean, documentDefinitionName: string): void {
+    this.documentService
+      .patchCaseSettings(documentDefinitionName, {
+        canHaveAssignee: !currentValue,
+      })
+      .subscribe();
   }
 }

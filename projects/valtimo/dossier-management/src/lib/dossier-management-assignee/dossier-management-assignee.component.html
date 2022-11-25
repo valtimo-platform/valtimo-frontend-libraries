@@ -1,16 +1,21 @@
-<div *ngIf="caseSettingsAssignee$ | async as caseSettingsAssignee">
+<div
+  *ngIf="{
+    documentDefinitionName: documentDefinitionName$ | async,
+    loading: loading$ | async
+  } as obs"
+>
   <h2 class="mb-4 mt-6">{{ 'dossierManagement.handleAssignee.title' | translate }}</h2>
-
   <label
     class="custom-control custom-checkbox custom-control-inline pl-6 mr-5"
     ngbTooltip="{{ 'dossierManagement.handleAssignee.tooltip' | translate }}"
     placement="bottom"
   >
     <input
-      [checked]="canHaveAssignee"
+      *ngIf="currentValue$ | async as currentValue"
+      [checked]="currentValue.canHaveAssignee"
       class="custom-control-input"
       type="checkbox"
-      (click)="toggleAssignee()"
+      (click)="toggleAssignee(currentValue.canHaveAssignee, obs.documentDefinitionName)"
     /><span class="custom-control-label custom-control-color">{{
       'dossierManagement.handleAssignee.checkboxDescription' | translate
     }}</span>
