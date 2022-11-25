@@ -15,7 +15,7 @@
  */
 
 import {HttpClient} from '@angular/common/http';
-import {Component, ElementRef, HostListener, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {ContextService} from '@valtimo/context';
@@ -23,7 +23,7 @@ import {ValtimoVersion} from '../../models';
 import {UserIdentity} from '@valtimo/config';
 import {UserProviderService} from '@valtimo/security';
 import {NGXLogger} from 'ngx-logger';
-import {combineLatest, take} from 'rxjs';
+import {BehaviorSubject, combineLatest, take} from 'rxjs';
 import {VersionService} from '../version/version.service';
 import {ShellService} from '../../services/shell.service';
 
@@ -31,17 +31,9 @@ import {ShellService} from '../../services/shell.service';
   selector: 'valtimo-right-sidebar',
   templateUrl: './right-sidebar.component.html',
   styleUrls: ['./right-sidebar.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class RightSidebarComponent implements OnInit {
-  public userIdentity: UserIdentity;
-  public frequencies: Array<any>;
-  public settingsForm: FormGroup;
-  public build: ValtimoVersion;
-  public userContexts: Array<any>;
-  public userContextActive: any;
-
-  readonly panelExpanded$ = this.shellService.panelExpanded$;
-
   @HostListener('document:click', ['$event.target'])
   public onPageClick(targetElement) {
     combineLatest([this.shellService.panelExpanded$, this.shellService.mouseOnTopBar$])
@@ -55,6 +47,19 @@ export class RightSidebarComponent implements OnInit {
         }
       });
   }
+
+  public userIdentity: UserIdentity;
+  public frequencies: Array<any>;
+  public settingsForm: FormGroup;
+  public build: ValtimoVersion;
+  public userContexts: Array<any>;
+  public userContextActive: any;
+
+  readonly panelExpanded$ = this.shellService.panelExpanded$;
+
+  readonly selectedLanguage$ = new BehaviorSubject<string>('');
+  readonly languageOptions$ = new BehaviorSubject<Array<string>>([]);
+  readonly updatingSettings$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     public translate: TranslateService,
@@ -90,6 +95,12 @@ export class RightSidebarComponent implements OnInit {
       emailNotificationOnSunday: new FormControl(false),
     });
     this.getUserSettings();
+    this.setLanguage();
+  }
+
+  private setLanguage(): void {
+    this.selectedLanguage$.next(this.translate.currentLang);
+    this.languageOptions$.next(this.translate.langs);
   }
 
   private loadContextSwitch() {
@@ -155,16 +166,26 @@ export class RightSidebarComponent implements OnInit {
     });
   }
 
-  onSettingsSubmit() {
-    if (!this.settingsForm.pristine) {
-      this.userProviderService.updateEmailNotificationSettings(this.settingsForm.value).subscribe();
-    }
+  onSettingsSubmit(): void {
+    this.updatingSettings$.next(true);
+
+    this.userProviderService.updateEmailNotificationSettings(this.settingsForm.value).subscribe(
+      () => {
+        this.updatingSettings$.next(false);
+      },
+      () => {
+        this.updatingSettings$.next(false);
+      }
+    );
   }
 
-  updateUserLanguage(langKey: string) {
-    this.translate.use(langKey).subscribe(() => {
-      localStorage.setItem('langKey', langKey);
-    });
+  updateUserLanguage(langKey: string): void {
+    this.translate
+      .use(langKey)
+      .pipe(take(1))
+      .subscribe(() => {
+        localStorage.setItem('langKey', langKey);
+      });
   }
 
   logout() {

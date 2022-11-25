@@ -465,7 +465,9 @@
     "next": "Nächste >",
     "previous": "< Vorherige",
     "addRow": "Zeile hinzufügen",
-    "deleteRow": "Zeile löschen"
+    "deleteRow": "Zeile löschen",
+    "on": "Aan",
+    "off": "Uit"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",

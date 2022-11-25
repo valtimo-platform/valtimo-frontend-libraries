@@ -465,7 +465,9 @@
     "next": "Next >",
     "previous": "< Previous",
     "addRow": "Add row",
-    "deleteRow": "Delete row"
+    "deleteRow": "Delete row",
+    "on": "Ein",
+    "off": "Aus"
   },
   "taskDetail": {
     "taskCreated": "Created",

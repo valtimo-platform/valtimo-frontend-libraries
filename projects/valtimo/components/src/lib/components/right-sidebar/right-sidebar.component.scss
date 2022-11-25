@@ -28,26 +28,49 @@
   padding-right: 70px;
   margin-bottom: 15px;
 }
+.right-sidebar-menu {
+  .cds--tab--list {
+    width: 100%;
+  }
 
-::ng-deep .cds--panel--overlay {
-  padding-top: 0;
-}
+  .menu-tabs {
+    .cds--tabs--scrollable__nav-item {
+      width: 12rem;
 
-::ng-deep .cds--panel--expanded {
-  width: 24rem;
-}
+      button {
+        width: 100%;
+      }
+    }
 
-.grid--no-padding {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
+    .cds--tab--overflow-nav-button {
+      display: none;
+    }
+  }
 
-::ng-deep .menu-tabs {
-  .cds--tabs--scrollable__nav-item {
-    width: 12rem;
+  .cds--panel--expanded {
+    width: 24rem;
+  }
 
-    button {
-      width: 100%;
+  .cds--panel--overlay {
+    padding-top: 0;
+  }
+
+  .cds--tab-content {
+    padding: 0;
+    outline: 0;
+  }
+
+  .cds--structured-list-td {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .toggle-group {
+    display: flex;
+    flex-direction: column;
+
+    .description {
+      margin-top: 1rem;
     }
   }
 }

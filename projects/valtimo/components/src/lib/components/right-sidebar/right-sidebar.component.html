@@ -14,212 +14,374 @@
   ~ limitations under the License.
   -->
 
-<ibm-panel [expanded]="panelExpanded$ | async">
-  <div ibmGrid [condensed]="true" class="grid--no-padding">
-    <div ibmRow>
-      <div ibmCol [columnNumbers]="{lg: 16}" class="menu-tabs">
-        <ibm-tabs>
-          <ibm-tab [heading]="'account.title' | translate"></ibm-tab>
-          <ibm-tab [heading]="'settings.title' | translate"></ibm-tab>
-        </ibm-tabs>
+<div class="right-sidebar-menu">
+  <ibm-panel [expanded]="panelExpanded$ | async">
+    <div ibmGrid [condensed]="true">
+      <div ibmRow>
+        <div ibmCol [columnNumbers]="{lg: 16}" class="menu-tabs">
+          <ibm-tabs class="cds--tab--list--full-width">
+            <ibm-tab [heading]="'account.title' | translate">
+              <ng-container *ngTemplateOutlet="accountTabTemplate"></ng-container>
+            </ibm-tab>
+            <ibm-tab [heading]="'settings.title' | translate">
+              <ng-container *ngTemplateOutlet="settingsTabTemplate"></ng-container>
+            </ibm-tab>
+          </ibm-tabs>
+        </div>
       </div>
     </div>
-  </div>
-  <!--  <div class="sb-content">-->
-  <!--    <div class="tab-navigation">-->
-  <!--      <ul class="nav nav-tabs nav-justified" role="tablist">-->
-  <!--        <li class="nav-item" role="presentation">-->
-  <!--          <a-->
-  <!--            class="nav-link active"-->
-  <!--            href="#account"-->
-  <!--            aria-controls="account"-->
-  <!--            role="tab"-->
-  <!--            data-toggle="tab"-->
-  <!--            translate="account.title"-->
-  <!--          ></a>-->
-  <!--        </li>-->
-  <!--        <li class="nav-item" role="presentation">-->
-  <!--          <a-->
-  <!--            class="nav-link"-->
-  <!--            (click)="loadUserSettingsTab()"-->
-  <!--            href="#settings"-->
-  <!--            aria-controls="settings"-->
-  <!--            role="tab"-->
-  <!--            data-toggle="tab"-->
-  <!--            translate="settings.title"-->
-  <!--          ></a>-->
-  <!--        </li>-->
-  <!--      </ul>-->
-  <!--    </div>-->
-  <!--    <div class="tab-panel">-->
-  <!--      <div class="tab-content">-->
-  <!--        &lt;!&ndash; account &ndash;&gt;-->
-  <!--        <div class="tab-pane tab-account active" id="account" role="tabpanel">-->
-  <!--          <div class="p-3 be-scroller-settings" *ngIf="userIdentity">-->
-  <!--            <div class="content">-->
-  <!--              <div class="category-title border-0 m-0">-->
-  <!--                <div class="p-0 text-muted">-->
-  <!--                  <dl class="row mb-0">-->
-  <!--                    <dt class="col-sm-3">Email</dt>-->
-  <!--                    <dd class="col-sm-9 mb-0 text-bold">{{ userIdentity.email }}</dd>-->
-  <!--                    <ng-container *ngIf="userIdentity.username">-->
-  <!--                      <dt class="col-sm-3">Username</dt>-->
-  <!--                      <dd class="col-sm-9 mb-0 text-bold">{{ userIdentity.username }}</dd>-->
-  <!--                    </ng-container>-->
-  <!--                    <dt class="col-sm-3">Name</dt>-->
-  <!--                    <dd class="col-sm-9 mb-0 text-bold">-->
-  <!--                      {{ userIdentity.firstName + ' ' + userIdentity.lastName }}-->
-  <!--                    </dd>-->
-  <!--                  </dl>-->
-  <!--                </div>-->
-  <!--              </div>-->
-  <!--              &lt;!&ndash; context switch &ndash;&gt;-->
-  <!--              <ul class="settings-list" *ngIf="userContexts?.length > 1">-->
-  <!--                <li ngbTooltip="{{ 'settings.context.title' | translate }}">-->
-  <!--                  <select-->
-  <!--                    class="form-control"-->
-  <!--                    #contextSelect-->
-  <!--                    (change)="setUserContext(+contextSelect.value)"-->
-  <!--                  >-->
-  <!--                    <option-->
-  <!--                      *ngFor="let context of userContexts"-->
-  <!--                      [value]="context.id"-->
-  <!--                      [selected]="context.id === userContextActive.id"-->
-  <!--                    >-->
-  <!--                      {{ context.name }}-->
-  <!--                    </option>-->
-  <!--                  </select>-->
-  <!--                </li>-->
-  <!--              </ul>-->
-  <!--              <ul class="list-group list-group-flush m-0">-->
-  <!--                <li class="bg-transparent list-group-item px-0">-->
-  <!--                  <a-->
-  <!--                    href="https://docs.valtimo.nl"-->
-  <!--                    target="_blank"-->
-  <!--                    class="d-block"-->
-  <!--                    translate="account.links.help"-->
-  <!--                  ></a>-->
-  <!--                </li>-->
-  <!--                <li class="bg-transparent list-group-item px-0">-->
-  <!--                  <a-->
-  <!--                    href="https://www.valtimo.nl/feedback/"-->
-  <!--                    target="_blank"-->
-  <!--                    class="d-block"-->
-  <!--                    translate="account.links.feedback"-->
-  <!--                  ></a>-->
-  <!--                </li>-->
-  <!--                <li class="bg-transparent list-group-item px-0">-->
-  <!--                  <a-->
-  <!--                    href="https://forum.valtimo.nl"-->
-  <!--                    target="_blank"-->
-  <!--                    class="d-block"-->
-  <!--                    translate="account.links.forum"-->
-  <!--                  ></a>-->
-  <!--                </li>-->
-  <!--                <li class="bg-transparent list-group-item px-0">-->
-  <!--                  <a-->
-  <!--                    href="javascript:void(0)"-->
-  <!--                    class="d-block"-->
-  <!--                    (click)="logout()"-->
-  <!--                    translate="account.links.signOut"-->
-  <!--                  ></a>-->
-  <!--                </li>-->
-  <!--              </ul>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
+  </ibm-panel>
+</div>
 
-  <!--        &lt;!&ndash; settings &ndash;&gt;-->
-  <!--        <div class="tab-pane tab-settings" id="settings" role="tabpanel">-->
-  <!--          <div class="p-3 be-scroller-settings">-->
-  <!--            <div class="content">-->
-  <!--              <span class="category-title" translate="settings.language.title"></span>-->
-  <!--              <ul class="settings-list">-->
-  <!--                <li>-->
-  <!--                  <select-->
-  <!--                    class="form-control"-->
-  <!--                    #langSelect-->
-  <!--                    (change)="updateUserLanguage(langSelect.value)"-->
-  <!--                  >-->
-  <!--                    <option-->
-  <!--                      *ngFor="let lang of translate.getLangs()"-->
-  <!--                      [value]="lang"-->
-  <!--                      [selected]="lang === translate.currentLang"-->
-  <!--                    >-->
-  <!--                      {{ 'settings.language.options.' + lang | translate }}-->
-  <!--                    </option>-->
-  <!--                  </select>-->
-  <!--                </li>-->
-  <!--              </ul>-->
+<ng-template #accountTabTemplate> account </ng-template>
 
-  <!--              <form [formGroup]="settingsForm">-->
-  <!--                <span class="category-title" translate="settings.notification.title"></span>-->
-  <!--                <ul class="settings-list m-0">-->
-  <!--                  <li>-->
-  <!--                    <div class="switch-button switch-button-sm switch-button-success">-->
-  <!--                      <input-->
-  <!--                        type="checkbox"-->
-  <!--                        formControlName="taskNotifications"-->
-  <!--                        id="taskNotifications"-->
-  <!--                        (ngModelChange)="onSettingsSubmit()"-->
-  <!--                      /><span> <label for="taskNotifications"></label></span>-->
-  <!--                    </div>-->
-  <!--                    <span class="name" translate="settings.notification.taskNotifications"></span>-->
-  <!--                    <div-->
-  <!--                      class="text-muted info-text"-->
-  <!--                      translate="settings.notification.taskNotificationsIntro"-->
-  <!--                    ></div>-->
-  <!--                  </li>-->
+<ng-template #settingsTabTemplate>
+  <ng-container *ngTemplateOutlet="languageSettingsTemplate"></ng-container>
+  <ng-container *ngTemplateOutlet="notificationSettingsTemplate"></ng-container>
+</ng-template>
 
-  <!--                  <li>-->
-  <!--                    <div class="switch-button switch-button-sm switch-button-success">-->
-  <!--                      <input-->
-  <!--                        type="checkbox"-->
-  <!--                        formControlName="emailNotifications"-->
-  <!--                        id="emailNotifications"-->
-  <!--                        (ngModelChange)="onSettingsSubmit()"-->
-  <!--                      /><span> <label for="emailNotifications"></label></span>-->
-  <!--                    </div>-->
-  <!--                    <span class="name" translate="settings.notification.emailNotifications"></span>-->
-  <!--                    <div-->
-  <!--                      class="text-muted info-text"-->
-  <!--                      translate="settings.notification.emailNotificationsIntro"-->
-  <!--                    ></div>-->
-  <!--                  </li>-->
-  <!--                </ul>-->
+<ng-template #languageSettingsTemplate>
+  <ibm-structured-list>
+    <ibm-list-header>
+      <ibm-list-column>{{ 'settings.language.title' | translate }}</ibm-list-column>
+    </ibm-list-header>
+    <ibm-list-row>
+      <ibm-list-column>
+        <ibm-select
+          [ngModel]="selectedLanguage$ | async"
+          (ngModelChange)="updateUserLanguage($event)"
+        >
+          <option *ngFor="let lang of languageOptions$ | async" [value]="lang">
+            {{ 'settings.language.options.' + lang | translate }}
+          </option>
+        </ibm-select>
+      </ibm-list-column>
+    </ibm-list-row>
+  </ibm-structured-list>
+</ng-template>
 
-  <!--                <div *ngIf="settingsForm.value.emailNotifications">-->
-  <!--                  <ul class="settings-list">-->
-  <!--                    <li *ngFor="let frequency of frequencies">-->
-  <!--                      <div class="switch-button switch-button-sm switch-button-success">-->
-  <!--                        <input-->
-  <!--                          type="checkbox"-->
-  <!--                          formControlName="{{ frequency }}"-->
-  <!--                          id="{{ frequency }}"-->
-  <!--                          (ngModelChange)="onSettingsSubmit()"-->
-  <!--                        /><span> <label for="{{ frequency }}"></label></span>-->
-  <!--                      </div>-->
-  <!--                      <span class="name">{{-->
-  <!--                        'settings.notification.' + frequency | translate-->
-  <!--                      }}</span>-->
-  <!--                    </li>-->
-  <!--                  </ul>-->
-  <!--                </div>-->
-  <!--              </form>-->
+<ng-template #notificationSettingsTemplate>
+  <ibm-structured-list>
+    <ibm-list-header>
+      <ibm-list-column>{{ 'settings.notification.title' | translate }}</ibm-list-column>
+    </ibm-list-header>
+    <ibm-list-row>
+      <ibm-list-column>
+        <form [formGroup]="settingsForm" class="toggle-group">
+          <ibm-toggle
+            [label]="'settings.notification.taskNotifications' | translate"
+            [onText]="'interface.on' | translate"
+            [offText]="'interface.off' | translate"
+            formControlName="taskNotifications"
+            (ngModelChange)="onSettingsSubmit()"
+            [disabled]="updatingSettings$ | async"
+          >
+          </ibm-toggle>
+          <span class="description">{{
+            'settings.notification.emailNotificationsIntro' | translate
+          }}</span>
+        </form>
+      </ibm-list-column>
+    </ibm-list-row>
+    <ibm-list-row>
+      <ibm-list-column>
+        <form [formGroup]="settingsForm" class="toggle-group">
+          <ibm-toggle
+            [label]="'settings.notification.emailNotifications' | translate"
+            [onText]="'interface.on' | translate"
+            [offText]="'interface.off' | translate"
+            formControlName="emailNotifications"
+            (ngModelChange)="onSettingsSubmit()"
+            [disabled]="updatingSettings$ | async"
+          >
+          </ibm-toggle>
+          <span class="description">{{
+            'settings.notification.emailNotificationsIntro' | translate
+          }}</span>
+        </form>
+      </ibm-list-column>
+    </ibm-list-row>
+  </ibm-structured-list>
+</ng-template>
 
-  <!--              <div class="version-holder">-->
-  <!--                <span class="category-title" translate="settings.version.title"></span>-->
-  <!--                <ul class="settings-list">-->
-  <!--                  <li *ngIf="build">-->
-  <!--                    <div class="name">{{ build.title }}</div>-->
-  <!--                    <div class="text-muted">{{ build.version }}</div>-->
-  <!--                  </li>-->
-  <!--                </ul>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </div>-->
-</ibm-panel>
+<!--<li>&ndash;&gt;-->
+<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
+<!--                      <input-->
+<!--                        type="checkbox"-->
+<!--                        formControlName="emailNotifications"-->
+<!--                        id="emailNotifications"-->
+<!--                        (ngModelChange)="onSettingsSubmit()"-->
+<!--                      /><span> <label for="emailNotifications"></label></span>-->
+<!--                    </div>-->
+<!--                    <span class="name" translate="settings.notification.emailNotifications"></span>-->
+<!--                    <div-->
+<!--                      class="text-muted info-text"-->
+<!--                      translate="settings.notification.emailNotificationsIntro"-->
+<!--                    ></div>-->
+<!--                  </li>-->
+
+<!--<form [formGroup]="settingsForm">&ndash;&gt;-->
+<!--                <span class="category-title" translate="settings.notification.title"></span>-->
+<!--                <ul class="settings-list m-0">-->
+<!--                  <li>-->
+<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
+<!--                      <input-->
+<!--                        type="checkbox"-->
+<!--                        formControlName="taskNotifications"-->
+<!--                        id="taskNotifications"-->
+<!--                        (ngModelChange)="onSettingsSubmit()"-->
+<!--                      /><span> <label for="taskNotifications"></label></span>-->
+<!--                    </div>-->
+<!--                    <span class="name" translate="settings.notification.taskNotifications"></span>-->
+<!--                    <div-->
+<!--                      class="text-muted info-text"-->
+<!--                      translate="settings.notification.taskNotificationsIntro"-->
+<!--                    ></div>-->
+<!--                  </li>-->
+
+<!--                  <li>-->
+<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
+<!--                      <input-->
+<!--                        type="checkbox"-->
+<!--                        formControlName="emailNotifications"-->
+<!--                        id="emailNotifications"-->
+<!--                        (ngModelChange)="onSettingsSubmit()"-->
+<!--                      /><span> <label for="emailNotifications"></label></span>-->
+<!--                    </div>-->
+<!--                    <span class="name" translate="settings.notification.emailNotifications"></span>-->
+<!--                    <div-->
+<!--                      class="text-muted info-text"-->
+<!--                      translate="settings.notification.emailNotificationsIntro"-->
+<!--                    ></div>-->
+<!--                  </li>-->
+<!--                </ul>-->
+
+<!--                <div *ngIf="settingsForm.value.emailNotifications">-->
+<!--                  <ul class="settings-list">-->
+<!--                    <li *ngFor="let frequency of frequencies">-->
+<!--                      <div class="switch-button switch-button-sm switch-button-success">-->
+<!--                        <input-->
+<!--                          type="checkbox"-->
+<!--                          formControlName="{{ frequency }}"-->
+<!--                          id="{{ frequency }}"-->
+<!--                          (ngModelChange)="onSettingsSubmit()"-->
+<!--                        /><span> <label for="{{ frequency }}"></label></span>-->
+<!--                      </div>-->
+<!--                      <span class="name">{{-->
+<!--                        'settings.notification.' + frequency | translate-->
+<!--                      }}</span>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--              </form>-->
+
+<!--                    class="form-control"-->
+<!--                    #langSelect-->
+<!--                    (change)="updateUserLanguage(langSelect.value)"-->
+<!--                  >-->
+<!--                    <option-->
+<!--                      *ngFor="let lang of translate.getLangs()"-->
+<!--                      [value]="lang"-->
+<!--                      [selected]="lang === translate.currentLang"-->
+<!--                    >-->
+<!--                      {{ 'settings.language.options.' + lang | translate }}-->
+<!--                    </option>-->
+<!--                  </select>-->
+
+<!--  <div class="sb-content">-->
+<!--    <div class="tab-navigation">-->
+<!--      <ul class="nav nav-tabs nav-justified" role="tablist">-->
+<!--        <li class="nav-item" role="presentation">-->
+<!--          <a-->
+<!--            class="nav-link active"-->
+<!--            href="#account"-->
+<!--            aria-controls="account"-->
+<!--            role="tab"-->
+<!--            data-toggle="tab"-->
+<!--            translate="account.title"-->
+<!--          ></a>-->
+<!--        </li>-->
+<!--        <li class="nav-item" role="presentation">-->
+<!--          <a-->
+<!--            class="nav-link"-->
+<!--            (click)="loadUserSettingsTab()"-->
+<!--            href="#settings"-->
+<!--            aria-controls="settings"-->
+<!--            role="tab"-->
+<!--            data-toggle="tab"-->
+<!--            translate="settings.title"-->
+<!--          ></a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--    <div class="tab-panel">-->
+<!--      <div class="tab-content">-->
+<!--        &lt;!&ndash; account &ndash;&gt;-->
+<!--        <div class="tab-pane tab-account active" id="account" role="tabpanel">-->
+<!--          <div class="p-3 be-scroller-settings" *ngIf="userIdentity">-->
+<!--            <div class="content">-->
+<!--              <div class="category-title border-0 m-0">-->
+<!--                <div class="p-0 text-muted">-->
+<!--                  <dl class="row mb-0">-->
+<!--                    <dt class="col-sm-3">Email</dt>-->
+<!--                    <dd class="col-sm-9 mb-0 text-bold">{{ userIdentity.email }}</dd>-->
+<!--                    <ng-container *ngIf="userIdentity.username">-->
+<!--                      <dt class="col-sm-3">Username</dt>-->
+<!--                      <dd class="col-sm-9 mb-0 text-bold">{{ userIdentity.username }}</dd>-->
+<!--                    </ng-container>-->
+<!--                    <dt class="col-sm-3">Name</dt>-->
+<!--                    <dd class="col-sm-9 mb-0 text-bold">-->
+<!--                      {{ userIdentity.firstName + ' ' + userIdentity.lastName }}-->
+<!--                    </dd>-->
+<!--                  </dl>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              &lt;!&ndash; context switch &ndash;&gt;-->
+<!--              <ul class="settings-list" *ngIf="userContexts?.length > 1">-->
+<!--                <li ngbTooltip="{{ 'settings.context.title' | translate }}">-->
+<!--                  <select-->
+<!--                    class="form-control"-->
+<!--                    #contextSelect-->
+<!--                    (change)="setUserContext(+contextSelect.value)"-->
+<!--                  >-->
+<!--                    <option-->
+<!--                      *ngFor="let context of userContexts"-->
+<!--                      [value]="context.id"-->
+<!--                      [selected]="context.id === userContextActive.id"-->
+<!--                    >-->
+<!--                      {{ context.name }}-->
+<!--                    </option>-->
+<!--                  </select>-->
+<!--                </li>-->
+<!--              </ul>-->
+<!--              <ul class="list-group list-group-flush m-0">-->
+<!--                <li class="bg-transparent list-group-item px-0">-->
+<!--                  <a-->
+<!--                    href="https://docs.valtimo.nl"-->
+<!--                    target="_blank"-->
+<!--                    class="d-block"-->
+<!--                    translate="account.links.help"-->
+<!--                  ></a>-->
+<!--                </li>-->
+<!--                <li class="bg-transparent list-group-item px-0">-->
+<!--                  <a-->
+<!--                    href="https://www.valtimo.nl/feedback/"-->
+<!--                    target="_blank"-->
+<!--                    class="d-block"-->
+<!--                    translate="account.links.feedback"-->
+<!--                  ></a>-->
+<!--                </li>-->
+<!--                <li class="bg-transparent list-group-item px-0">-->
+<!--                  <a-->
+<!--                    href="https://forum.valtimo.nl"-->
+<!--                    target="_blank"-->
+<!--                    class="d-block"-->
+<!--                    translate="account.links.forum"-->
+<!--                  ></a>-->
+<!--                </li>-->
+<!--                <li class="bg-transparent list-group-item px-0">-->
+<!--                  <a-->
+<!--                    href="javascript:void(0)"-->
+<!--                    class="d-block"-->
+<!--                    (click)="logout()"-->
+<!--                    translate="account.links.signOut"-->
+<!--                  ></a>-->
+<!--                </li>-->
+<!--              </ul>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; settings &ndash;&gt;-->
+<!--        <div class="tab-pane tab-settings" id="settings" role="tabpanel">-->
+<!--          <div class="p-3 be-scroller-settings">-->
+<!--            <div class="content">-->
+<!--              <span class="category-title" translate="settings.language.title"></span>-->
+<!--              <ul class="settings-list">-->
+<!--                <li>-->
+<!--                  <select-->
+<!--                    class="form-control"-->
+<!--                    #langSelect-->
+<!--                    (change)="updateUserLanguage(langSelect.value)"-->
+<!--                  >-->
+<!--                    <option-->
+<!--                      *ngFor="let lang of translate.getLangs()"-->
+<!--                      [value]="lang"-->
+<!--                      [selected]="lang === translate.currentLang"-->
+<!--                    >-->
+<!--                      {{ 'settings.language.options.' + lang | translate }}-->
+<!--                    </option>-->
+<!--                  </select>-->
+<!--                </li>-->
+<!--              </ul>-->
+
+<!--              <form [formGroup]="settingsForm">-->
+<!--                <span class="category-title" translate="settings.notification.title"></span>-->
+<!--                <ul class="settings-list m-0">-->
+<!--                  <li>-->
+<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
+<!--                      <input-->
+<!--                        type="checkbox"-->
+<!--                        formControlName="taskNotifications"-->
+<!--                        id="taskNotifications"-->
+<!--                        (ngModelChange)="onSettingsSubmit()"-->
+<!--                      /><span> <label for="taskNotifications"></label></span>-->
+<!--                    </div>-->
+<!--                    <span class="name" translate="settings.notification.taskNotifications"></span>-->
+<!--                    <div-->
+<!--                      class="text-muted info-text"-->
+<!--                      translate="settings.notification.taskNotificationsIntro"-->
+<!--                    ></div>-->
+<!--                  </li>-->
+
+<!--                  <li>-->
+<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
+<!--                      <input-->
+<!--                        type="checkbox"-->
+<!--                        formControlName="emailNotifications"-->
+<!--                        id="emailNotifications"-->
+<!--                        (ngModelChange)="onSettingsSubmit()"-->
+<!--                      /><span> <label for="emailNotifications"></label></span>-->
+<!--                    </div>-->
+<!--                    <span class="name" translate="settings.notification.emailNotifications"></span>-->
+<!--                    <div-->
+<!--                      class="text-muted info-text"-->
+<!--                      translate="settings.notification.emailNotificationsIntro"-->
+<!--                    ></div>-->
+<!--                  </li>-->
+<!--                </ul>-->
+
+<!--                <div *ngIf="settingsForm.value.emailNotifications">-->
+<!--                  <ul class="settings-list">-->
+<!--                    <li *ngFor="let frequency of frequencies">-->
+<!--                      <div class="switch-button switch-button-sm switch-button-success">-->
+<!--                        <input-->
+<!--                          type="checkbox"-->
+<!--                          formControlName="{{ frequency }}"-->
+<!--                          id="{{ frequency }}"-->
+<!--                          (ngModelChange)="onSettingsSubmit()"-->
+<!--                        /><span> <label for="{{ frequency }}"></label></span>-->
+<!--                      </div>-->
+<!--                      <span class="name">{{-->
+<!--                        'settings.notification.' + frequency | translate-->
+<!--                      }}</span>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--              </form>-->
+
+<!--              <div class="version-holder">-->
+<!--                <span class="category-title" translate="settings.version.title"></span>-->
+<!--                <ul class="settings-list">-->
+<!--                  <li *ngIf="build">-->
+<!--                    <div class="name">{{ build.title }}</div>-->
+<!--                    <div class="text-muted">{{ build.version }}</div>-->
+<!--                  </li>-->
+<!--                </ul>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
