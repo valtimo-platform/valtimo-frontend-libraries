@@ -15,7 +15,6 @@
  */
 
 import {AfterViewInit, Component, Renderer2} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
 import {LayoutService} from '../layout.service';
 import {UserInterfaceService} from '@valtimo/user-interface';
 import {ShellService} from '@valtimo/components';
@@ -29,9 +28,6 @@ declare var App;
   styleUrls: ['./layout-internal.component.scss'],
 })
 export class LayoutInternalComponent implements AfterViewInit {
-  readonly menuOpen$ = new BehaviorSubject<boolean>(true);
-  readonly menuWidth$ = new BehaviorSubject<number>(undefined);
-
   readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
   readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
 
@@ -46,9 +42,5 @@ export class LayoutInternalComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     App.init();
-  }
-
-  menuWidthChanged(width: number): void {
-    this.menuWidth$.next(width);
   }
 }
