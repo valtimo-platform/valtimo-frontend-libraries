@@ -15,12 +15,13 @@
  */
 
 import {Injectable} from '@angular/core';
-import {MenuConfig, MenuItem, MenuIncludeService, IncludeFunction} from '@valtimo/config';
+import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/config';
 import {NGXLogger} from 'ngx-logger';
-import {ConfigService} from '@valtimo/config';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {DocumentService} from '@valtimo/document';
 import {UserProviderService} from '@valtimo/security';
+import {filter, map} from 'rxjs/operators';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +37,8 @@ export class MenuService {
     private readonly documentService: DocumentService,
     private readonly userProviderService: UserProviderService,
     private readonly logger: NGXLogger,
-    private readonly menuIncludeService: MenuIncludeService
+    private readonly menuIncludeService: MenuIncludeService,
+    private readonly router: Router
   ) {
     this.menuConfig = configService.config.menu;
   }
@@ -44,6 +46,50 @@ export class MenuService {
   init(): void {
     this.reload();
     this.logger.debug('Menu initialized');
+  }
+
+  private readonly currentRoute$ = this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    map(event => (event as NavigationEnd)?.url)
+  );
+
+  public get closestSequence$(): Observable<string> {
+    return combineLatest([this.currentRoute$, this.menuItems$]).pipe(
+      map(([currentRoute, menuItems]) => {
+        let closestSequence = '0';
+        let highestDifference = 0;
+
+        const checkItemMatch = (stringUrl: string, sequence: string): void => {
+          const currentRouteUrlLength = currentRoute.length;
+          const currentRouteSubstractLength = currentRoute.replace(stringUrl, '').length;
+          const difference = currentRouteUrlLength - currentRouteSubstractLength;
+
+          if (difference > highestDifference) {
+            highestDifference = difference;
+            closestSequence = sequence;
+          }
+        };
+
+        menuItems.forEach(item => {
+          checkItemMatch(item.link?.join('') || '', `${item.sequence}`);
+
+          if (item.children) {
+            item.children.forEach(childItem => {
+              if (Array.isArray(childItem.link)) {
+                checkItemMatch(
+                  Array.isArray(item.link)
+                    ? [...item.link, ...childItem.link].join('')
+                    : childItem.link.join(''),
+                  `${item.sequence}${childItem.sequence}`
+                );
+              }
+            });
+          }
+        });
+
+        return closestSequence;
+      })
+    );
   }
 
   public get menuItems$(): Observable<MenuItem[]> {

@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import {Event, NavigationEnd, Router} from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MenuItem} from '@valtimo/config';
 import {Observable, Subscription} from 'rxjs';
 import {MenuService} from './menu.service';
@@ -28,46 +27,19 @@ import {MenuService} from './menu.service';
 export class MenuComponent implements OnInit, OnDestroy {
   public menuItems: MenuItem[];
   public includeFunctionObservables: {[key: string]: Observable<boolean>} = {};
-  private routerSubscription: Subscription;
   private menuItemSubscription: Subscription;
 
-  constructor(
-    private menuService: MenuService,
-    private elRef: ElementRef,
-    private renderer: Renderer2,
-    private router: Router
-  ) {
+  constructor(private menuService: MenuService) {
     this.includeFunctionObservables = this.menuService.includeFunctionObservables;
   }
 
   ngOnInit(): void {
-    this.openRouterSubscription();
     this.menuItemSubscription = this.menuService.menuItems$.subscribe(
       value => (this.menuItems = value)
     );
   }
 
   ngOnDestroy(): void {
-    this.routerSubscription.unsubscribe();
     this.menuItemSubscription.unsubscribe();
-  }
-
-  private openRouterSubscription(): void {
-    this.routerSubscription = this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationEnd) {
-        this.closeSubMenu();
-      }
-    });
-  }
-
-  public closeSubMenu() {
-    const visibleSubMenuElm = this.elRef.nativeElement.querySelector('.sub-menu.visible');
-    if (visibleSubMenuElm) {
-      this.renderer.removeClass(visibleSubMenuElm, 'visible');
-      const topLevelMenuItem = this.elRef.nativeElement.querySelector('li.parent.open');
-      if (topLevelMenuItem) {
-        this.renderer.removeClass(topLevelMenuItem, 'open');
-      }
-    }
   }
 }

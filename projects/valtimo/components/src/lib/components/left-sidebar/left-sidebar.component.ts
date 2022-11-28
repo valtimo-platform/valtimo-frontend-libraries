@@ -24,12 +24,12 @@ import {
 } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {combineLatest, Observable, Subscription} from 'rxjs';
-import {filter, map, take} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 import {ConfigService, MenuItem} from '@valtimo/config';
 import {MenuService} from '../menu/menu.service';
 import {ShellService} from '../../services/shell.service';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {NavigationEnd, Router} from '@angular/router';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'valtimo-left-sidebar',
@@ -38,16 +38,6 @@ import {NavigationEnd, Router} from '@angular/router';
 })
 export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
   @ViewChild('toggleButton') toggleButtonRef: ElementRef;
-
-  private breakpointSubscription!: Subscription;
-
-  readonly menuItems$: Observable<Array<MenuItem>> = this.menuService.menuItems$;
-
-  readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
-
-  private breakpointsInitialized = false;
-  private lastSmallScreen!: boolean;
-  private lastLargeScreen!: boolean;
 
   @HostListener('document:click', ['$event.target'])
   public onPageClick(targetElement) {
@@ -67,50 +57,19 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
       });
   }
 
-  readonly currentRoute$ = this.router.events.pipe(
-    filter(event => event instanceof NavigationEnd),
-    map(event => (event as NavigationEnd)?.url)
-  );
+  private breakpointSubscription!: Subscription;
 
-  readonly closestSequence$: Observable<string> = combineLatest([
-    this.currentRoute$,
-    this.menuItems$,
-  ]).pipe(
-    map(([currentRoute, menuItems]) => {
-      let closestSequence = '0';
-      let highestDifference = 0;
+  readonly menuItems$: Observable<Array<MenuItem>> = this.menuService.menuItems$;
 
-      const checkItemMatch = (stringUrl: string, sequence: string): void => {
-        const currentRouteUrlLength = currentRoute.length;
-        const currentRouteSubstractLength = currentRoute.replace(stringUrl, '').length;
-        const difference = currentRouteUrlLength - currentRouteSubstractLength;
+  readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
 
-        if (difference > highestDifference) {
-          highestDifference = difference;
-          closestSequence = sequence;
-        }
-      };
+  private breakpointsInitialized = false;
+  private lastSmallScreen!: boolean;
+  private lastLargeScreen!: boolean;
 
-      menuItems.forEach(item => {
-        checkItemMatch(item.link?.join('') || '', `${item.sequence}`);
+  readonly closestSequence$: Observable<string> = this.menuService.closestSequence$;
 
-        if (item.children) {
-          item.children.forEach(childItem => {
-            if (Array.isArray(childItem.link)) {
-              checkItemMatch(
-                Array.isArray(item.link)
-                  ? [...item.link, ...childItem.link].join('')
-                  : childItem.link.join(''),
-                `${item.sequence}${childItem.sequence}`
-              );
-            }
-          });
-        }
-      });
-
-      return closestSequence;
-    })
-  );
+  public includeFunctionObservables: {[key: string]: Observable<boolean>} = {};
 
   constructor(
     private readonly translateService: TranslateService,
