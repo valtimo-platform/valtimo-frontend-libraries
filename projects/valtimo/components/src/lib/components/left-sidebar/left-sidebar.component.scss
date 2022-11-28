@@ -125,10 +125,10 @@
 }
 
 .menu-item-icon-container {
-  position: absolute;
-  margin-left: 1.5rem;
-  margin-top: 8px;
-  transform: translate(-50%);
+  position: relative;
+  top: 8px;
+  left: 17px;
+  height: 0;
 
   i {
     width: 16px;

@@ -26,6 +26,7 @@ import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, combineLatest, take} from 'rxjs';
 import {VersionService} from '../version/version.service';
 import {ShellService} from '../../services/shell.service';
+import packageInfo from '@valtimo/config/package.json';
 
 @Component({
   selector: 'valtimo-right-sidebar',
@@ -61,6 +62,8 @@ export class RightSidebarComponent implements OnInit {
   readonly languageOptions$ = new BehaviorSubject<Array<string>>([]);
   readonly updatingSettings$ = new BehaviorSubject<boolean>(false);
 
+  readonly frontendVersion!: string;
+
   constructor(
     public translate: TranslateService,
     private readonly userProviderService: UserProviderService,
@@ -71,7 +74,9 @@ export class RightSidebarComponent implements OnInit {
     private readonly logger: NGXLogger,
     private readonly shellService: ShellService,
     private readonly elementRef: ElementRef
-  ) {}
+  ) {
+    this.frontendVersion = packageInfo?.version;
+  }
 
   ngOnInit() {
     this.frequencies = [

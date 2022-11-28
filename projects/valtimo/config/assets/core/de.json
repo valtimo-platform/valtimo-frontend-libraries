@@ -471,7 +471,8 @@
     "on": "Ein",
     "off": "Aus",
     "builds": {
-      "valtimo-backend-libraries": "Valtimo"
+      "valtimo-backend-libraries": "Valtimo back-end",
+      "valtimo-frontend-libraries": "Valtimo front-end"
     }
   },
   "taskDetail": {

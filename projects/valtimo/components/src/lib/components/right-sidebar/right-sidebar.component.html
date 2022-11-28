@@ -209,15 +209,21 @@
 </ng-template>
 
 <ng-template #versionTemplate>
-  <ibm-structured-list>
+  <ibm-structured-list *ngIf="build || frontendVersion">
     <ibm-list-header>
       <ibm-list-column>{{ 'settings.version.title' | translate }}</ibm-list-column>
     </ibm-list-header>
     <ibm-list-row>
-      <ibm-list-column *ngIf="build">
-        <div class="build-information">
+      <ibm-list-column>
+        <div class="build-information" *ngIf="build">
           <span class="build-title">{{ 'interface.builds.' + build.title | translate }}</span>
           <ibm-tag type="blue">{{ build.version }}</ibm-tag>
+        </div>
+        <div class="build-information" *ngIf="frontendVersion">
+          <span class="build-title">{{
+            'interface.builds.valtimo-frontend-libraries' | translate
+          }}</span>
+          <ibm-tag type="blue">{{ frontendVersion }}</ibm-tag>
         </div>
       </ibm-list-column>
     </ibm-list-row>
