@@ -188,6 +188,7 @@
   },
   "account": {
     "title": "Account",
+    "informationTitle": "Account information",
     "links": {
       "profile": "Profile",
       "password": "Password",

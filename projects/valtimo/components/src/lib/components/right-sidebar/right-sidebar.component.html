@@ -33,12 +33,48 @@
   </ibm-panel>
 </div>
 
-<ng-template #accountTabTemplate> account </ng-template>
+<ng-template #accountTabTemplate>
+  <ng-container *ngTemplateOutlet="accountInformationTemplate"></ng-container>
+</ng-template>
 
 <ng-template #settingsTabTemplate>
   <ng-container *ngTemplateOutlet="languageSettingsTemplate"></ng-container>
   <ng-container *ngTemplateOutlet="notificationSettingsTemplate"></ng-container>
   <ng-container *ngTemplateOutlet="versionTemplate"></ng-container>
+</ng-template>
+
+<ng-template #accountInformationTemplate>
+  <ibm-structured-list>
+    <ibm-list-header>
+      <ibm-list-column>{{ 'account.informationTitle' | translate }}</ibm-list-column>
+    </ibm-list-header>
+    <ibm-list-row>
+      <ibm-list-column>
+        <ng-container *ngTemplateOutlet="accountInformationTableTemplate"></ng-container>
+      </ibm-list-column>
+    </ibm-list-row>
+  </ibm-structured-list>
+</ng-template>
+
+<ng-template #accountInformationTableTemplate>
+  <div class="account-information-table">
+    <ibm-structured-list *ngIf="userIdentity">
+      <ibm-list-row>
+        <ibm-list-column>Email</ibm-list-column>
+        <ibm-list-column>{{ userIdentity.email }}</ibm-list-column>
+      </ibm-list-row>
+      <ibm-list-row>
+        <ibm-list-column>Username</ibm-list-column>
+        <ibm-list-column>{{ userIdentity.username }}</ibm-list-column>
+      </ibm-list-row>
+      <ibm-list-row>
+        <ibm-list-column>Name</ibm-list-column>
+        <ibm-list-column>
+          {{ userIdentity.firstName + ' ' + userIdentity.lastName }}</ibm-list-column
+        >
+      </ibm-list-row>
+    </ibm-structured-list>
+  </div>
 </ng-template>
 
 <ng-template #languageSettingsTemplate>
@@ -121,7 +157,103 @@
   </ibm-structured-list>
 </ng-template>
 
-<!--                    class="form-control"-->
+<!--<dl class="row mb-0">&ndash;&gt;-->
+<!--                    <dt class="col-sm-3">Email</dt>-->
+<!--                    <dd class="col-sm-9 mb-0 text-bold">{{ userIdentity.email }}</dd>-->
+<!--                    <ng-container *ngIf="userIdentity.username">-->
+<!--                      <dt class="col-sm-3">Username</dt>-->
+<!--                      <dd class="col-sm-9 mb-0 text-bold">{{ userIdentity.username }}</dd>-->
+<!--                    </ng-container>-->
+<!--                    <dt class="col-sm-3">Name</dt>-->
+<!--                    <dd class="col-sm-9 mb-0 text-bold">-->
+<!--                      {{ userIdentity.firstName + ' ' + userIdentity.lastName }}-->
+<!--                    </dd>-->
+<!--                  </dl>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              &lt;!&ndash; context s
+
+  <ng-template #languageSettingsTemplate>
+    <ibm-structured-list>
+      <ibm-list-header>
+        <ibm-list-column>{{ 'settings.language.title' | translate }}</ibm-list-column>
+      </ibm-list-header>
+      <ibm-list-row>
+        <ibm-list-column>
+          <ibm-select
+            [ngModel]="selectedLanguage$ | async"
+            (ngModelChange)="updateUserLanguage($event)"
+          >
+            <option *ngFor="let lang of languageOptions$ | async" [value]="lang">
+              {{ 'settings.language.options.' + lang | translate }}
+            </option>
+          </ibm-select>
+        </ibm-list-column>
+      </ibm-list-row>
+    </ibm-structured-list>
+  </ng-template>
+
+  <ng-template #notificationSettingsTemplate>
+    <ibm-structured-list>
+      <ibm-list-header>
+        <ibm-list-column>{{ 'settings.notification.title' | translate }}</ibm-list-column>
+      </ibm-list-header>
+      <ibm-list-row>
+        <ibm-list-column>
+          <form [formGroup]="settingsForm" class="toggle-group">
+            <ibm-toggle
+              [label]="'settings.notification.taskNotifications' | translate"
+              [onText]="'interface.on' | translate"
+              [offText]="'interface.off' | translate"
+              formControlName="taskNotifications"
+              (ngModelChange)="onSettingsSubmit()"
+              [disabled]="updatingSettings$ | async"
+            >
+            </ibm-toggle>
+            <span class="description">{{
+              'settings.notification.emailNotificationsIntro' | translate
+            }}</span>
+          </form>
+        </ibm-list-column>
+      </ibm-list-row>
+      <ibm-list-row>
+        <ibm-list-column>
+          <form [formGroup]="settingsForm" class="toggle-group">
+            <ibm-toggle
+              [label]="'settings.notification.emailNotifications' | translate"
+              [onText]="'interface.on' | translate"
+              [offText]="'interface.off' | translate"
+              formControlName="emailNotifications"
+              (ngModelChange)="onSettingsSubmit()"
+              [disabled]="updatingSettings$ | async"
+            >
+            </ibm-toggle>
+            <span class="description">{{
+              'settings.notification.taskNotificationsIntro' | translate
+            }}</span>
+          </form>
+        </ibm-list-column>
+      </ibm-list-row>
+    </ibm-structured-list>
+  </ng-template>
+
+  <ng-template #versionTemplate>
+    <ibm-structured-list>
+      <ibm-list-header>
+        <ibm-list-column>{{ 'settings.version.title' | translate }}</ibm-list-column>
+      </ibm-list-header>
+      <ibm-list-row>
+        <ibm-list-column *ngIf="build">
+          <div class="build-information">
+            <span class="build-title">{{ 'interface.builds.' + build.title | translate }}</span>
+            <ibm-tag type="blue">{{ build.version }}</ibm-tag>
+          </div>
+        </ibm-list-column>
+      </ibm-list-row>
+    </ibm-structured-list>
+  </ng-template>
+
+  <!--                    class="form-control"-->
 <!--                    #langSelect-->
 <!--                    (change)="updateUserLanguage(langSelect.value)"-->
 <!--                  >-->
