@@ -123,3 +123,15 @@
 ::ng-deep .cds--side-nav__header-divider {
   display: none !important;
 }
+
+.menu-item-icon-container {
+  position: absolute;
+  margin-left: 1.5rem;
+  margin-top: 8px;
+  transform: translate(-50%);
+
+  i {
+    width: 16px;
+    height: 16px;
+  }
+}
