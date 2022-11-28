@@ -219,6 +219,18 @@ export class LeftSidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('sequence', sequence);
   }
 
+  navigateToRoute(route: Array<string>): void {
+    this.router.navigate(route);
+
+    combineLatest([this.shellService.sideBarExpanded$, this.shellService.largeScreen$])
+      .pipe(take(1))
+      .subscribe(([sideBarExpanded, largeScreen]) => {
+        if (!largeScreen && sideBarExpanded) {
+          this.shellService.setSideBarExpanded(false);
+        }
+      });
+  }
+
   private setInitialWidth(customLeftSidebar: CustomLeftSidebar | undefined): void {
     const localMenuWidth = localStorage.getItem('menuWidth');
     const localMenuWidthNumber = localMenuWidth ? Number(localMenuWidth) : undefined;

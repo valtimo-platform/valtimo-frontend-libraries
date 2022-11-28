@@ -44,7 +44,7 @@
         <ng-container *ngFor="let childMenuItem of menuItem.children">
           <ibm-sidenav-item
             *ngIf="childMenuItem.link"
-            [route]="childMenuItem.link"
+            (click)="navigateToRoute(childMenuItem.link)"
             [active]="'' + menuItem.sequence + childMenuItem.sequence === obs.closestSequence"
           >
             <valtimo-menu-item-text [menuItem]="childMenuItem"></valtimo-menu-item-text>
@@ -61,7 +61,7 @@
 
 <ng-template #topMenuItem let-menuItem="menuItem" let-closestSequence="closestSequence">
   <ibm-sidenav-item
-    [route]="menuItem.link"
+    (click)="navigateToRoute(menuItem.link)"
     *ngIf="!menuItem.children"
     [active]="'' + menuItem.sequence === closestSequence"
   >
