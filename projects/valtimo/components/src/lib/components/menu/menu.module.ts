@@ -22,10 +22,11 @@ import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {MenuItemTextComponent} from './menu-item-text.component';
 import {SubmenuItemTextComponent} from './submenu-item-text.component';
+import {ComponentsPipesModule} from '../../pipes';
 
 @NgModule({
   declarations: [MenuComponent, MenuItemTextComponent, SubmenuItemTextComponent],
-  imports: [CommonModule, RouterModule, NgbTooltipModule, TranslateModule],
+  imports: [CommonModule, RouterModule, NgbTooltipModule, TranslateModule, ComponentsPipesModule],
   exports: [MenuComponent, MenuItemTextComponent, SubmenuItemTextComponent],
   providers: [],
 })

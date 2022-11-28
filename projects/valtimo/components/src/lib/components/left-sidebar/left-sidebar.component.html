@@ -39,7 +39,7 @@
           context: {menuItem: menuItem, closestSequence: obs.closestSequence}
         "
       ></ng-container>
-      <ibm-sidenav-menu [title]="menuItem.title">
+      <ibm-sidenav-menu [title]="menuItem | menuItemTranslate | async">
         <ng-container *ngFor="let childMenuItem of menuItem.children">
           <ibm-sidenav-item
             *ngIf="childMenuItem.link"

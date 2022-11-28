@@ -20,11 +20,18 @@ import {LeftSidebarComponent} from './left-sidebar.component';
 import {PageTitleModule} from '../page-title/page-title.module';
 import {MenuModule} from '../menu/menu.module';
 import {IconModule, UIShellModule} from 'carbon-components-angular';
-import {ArrayToStringPipe, UrlPartPipe} from '../../pipes';
+import {ComponentsPipesModule} from '../../pipes';
 
 @NgModule({
-  declarations: [LeftSidebarComponent, ArrayToStringPipe, UrlPartPipe],
-  imports: [CommonModule, MenuModule, PageTitleModule, IconModule, UIShellModule],
+  declarations: [LeftSidebarComponent],
+  imports: [
+    CommonModule,
+    MenuModule,
+    PageTitleModule,
+    IconModule,
+    UIShellModule,
+    ComponentsPipesModule,
+  ],
   exports: [LeftSidebarComponent],
 })
 export class LeftSidebarModule {}

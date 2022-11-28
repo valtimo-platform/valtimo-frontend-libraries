@@ -1,2 +1,2 @@
-export * from './array-to-string.pipe';
-export * from './url-part.pipe';
+export * from './menu-item-translation.pipe';
+export * from './components-pipes.module';
