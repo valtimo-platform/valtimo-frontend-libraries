@@ -466,8 +466,11 @@
     "previous": "< Previous",
     "addRow": "Add row",
     "deleteRow": "Delete row",
-    "on": "Ein",
-    "off": "Aus"
+    "on": "On",
+    "off": "Off",
+    "builds": {
+      "valtimo-backend-libraries": "Valtimo"
+    }
   },
   "taskDetail": {
     "taskCreated": "Created",

@@ -96,6 +96,7 @@ export class RightSidebarComponent implements OnInit {
     });
     this.getUserSettings();
     this.setLanguage();
+    this.loadUserSettingsTab();
   }
 
   private setLanguage(): void {
@@ -165,7 +166,6 @@ export class RightSidebarComponent implements OnInit {
       this.build = build;
     });
   }
-
   onSettingsSubmit(): void {
     this.updatingSettings$.next(true);
 

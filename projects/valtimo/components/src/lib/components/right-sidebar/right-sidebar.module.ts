@@ -29,6 +29,7 @@ import {
   SelectModule,
   StructuredListModule,
   TabsModule,
+  TagModule,
   ToggleModule,
   UIShellModule,
 } from 'carbon-components-angular';
@@ -55,6 +56,7 @@ import {
     StructuredListModule,
     SelectModule,
     ToggleModule,
+    TagModule,
   ],
   exports: [RightSidebarComponent],
 })

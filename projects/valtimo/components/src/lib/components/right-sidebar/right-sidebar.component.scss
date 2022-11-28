@@ -47,8 +47,15 @@
     }
   }
 
-  .cds--panel--expanded {
-    width: 24rem;
+  .cds--header-panel {
+    width: 16rem;
+    height: calc(100% - 3rem);
+    transition: transform 110ms cubic-bezier(0.2, 0, 1, 0.9);
+    transform: translateX(100%);
+  }
+
+  .cds--header-panel--expanded {
+    transform: translateX(0);
   }
 
   .cds--panel--overlay {
@@ -72,5 +79,32 @@
     .description {
       margin-top: 1rem;
     }
+  }
+
+  ibm-structured-list:last-child {
+    .cds--structured-list-row:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .cds--grid,
+  .cds--row,
+  .menu-tabs {
+    height: 100%;
+  }
+
+  .cds--tab--list--full-width {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  ibm-tab {
+    overflow: auto;
+  }
+
+  .build-information {
+    display: inline-flex;
+    flex-direction: column;
   }
 }

@@ -38,6 +38,7 @@
 <ng-template #settingsTabTemplate>
   <ng-container *ngTemplateOutlet="languageSettingsTemplate"></ng-container>
   <ng-container *ngTemplateOutlet="notificationSettingsTemplate"></ng-container>
+  <ng-container *ngTemplateOutlet="versionTemplate"></ng-container>
 </ng-template>
 
 <ng-template #languageSettingsTemplate>
@@ -96,7 +97,7 @@
           >
           </ibm-toggle>
           <span class="description">{{
-            'settings.notification.emailNotificationsIntro' | translate
+            'settings.notification.taskNotificationsIntro' | translate
           }}</span>
         </form>
       </ibm-list-column>
@@ -104,76 +105,21 @@
   </ibm-structured-list>
 </ng-template>
 
-<!--<li>&ndash;&gt;-->
-<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
-<!--                      <input-->
-<!--                        type="checkbox"-->
-<!--                        formControlName="emailNotifications"-->
-<!--                        id="emailNotifications"-->
-<!--                        (ngModelChange)="onSettingsSubmit()"-->
-<!--                      /><span> <label for="emailNotifications"></label></span>-->
-<!--                    </div>-->
-<!--                    <span class="name" translate="settings.notification.emailNotifications"></span>-->
-<!--                    <div-->
-<!--                      class="text-muted info-text"-->
-<!--                      translate="settings.notification.emailNotificationsIntro"-->
-<!--                    ></div>-->
-<!--                  </li>-->
-
-<!--<form [formGroup]="settingsForm">&ndash;&gt;-->
-<!--                <span class="category-title" translate="settings.notification.title"></span>-->
-<!--                <ul class="settings-list m-0">-->
-<!--                  <li>-->
-<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
-<!--                      <input-->
-<!--                        type="checkbox"-->
-<!--                        formControlName="taskNotifications"-->
-<!--                        id="taskNotifications"-->
-<!--                        (ngModelChange)="onSettingsSubmit()"-->
-<!--                      /><span> <label for="taskNotifications"></label></span>-->
-<!--                    </div>-->
-<!--                    <span class="name" translate="settings.notification.taskNotifications"></span>-->
-<!--                    <div-->
-<!--                      class="text-muted info-text"-->
-<!--                      translate="settings.notification.taskNotificationsIntro"-->
-<!--                    ></div>-->
-<!--                  </li>-->
-
-<!--                  <li>-->
-<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
-<!--                      <input-->
-<!--                        type="checkbox"-->
-<!--                        formControlName="emailNotifications"-->
-<!--                        id="emailNotifications"-->
-<!--                        (ngModelChange)="onSettingsSubmit()"-->
-<!--                      /><span> <label for="emailNotifications"></label></span>-->
-<!--                    </div>-->
-<!--                    <span class="name" translate="settings.notification.emailNotifications"></span>-->
-<!--                    <div-->
-<!--                      class="text-muted info-text"-->
-<!--                      translate="settings.notification.emailNotificationsIntro"-->
-<!--                    ></div>-->
-<!--                  </li>-->
-<!--                </ul>-->
-
-<!--                <div *ngIf="settingsForm.value.emailNotifications">-->
-<!--                  <ul class="settings-list">-->
-<!--                    <li *ngFor="let frequency of frequencies">-->
-<!--                      <div class="switch-button switch-button-sm switch-button-success">-->
-<!--                        <input-->
-<!--                          type="checkbox"-->
-<!--                          formControlName="{{ frequency }}"-->
-<!--                          id="{{ frequency }}"-->
-<!--                          (ngModelChange)="onSettingsSubmit()"-->
-<!--                        /><span> <label for="{{ frequency }}"></label></span>-->
-<!--                      </div>-->
-<!--                      <span class="name">{{-->
-<!--                        'settings.notification.' + frequency | translate-->
-<!--                      }}</span>-->
-<!--                    </li>-->
-<!--                  </ul>-->
-<!--                </div>-->
-<!--              </form>-->
+<ng-template #versionTemplate>
+  <ibm-structured-list>
+    <ibm-list-header>
+      <ibm-list-column>{{ 'settings.version.title' | translate }}</ibm-list-column>
+    </ibm-list-header>
+    <ibm-list-row>
+      <ibm-list-column *ngIf="build">
+        <div class="build-information">
+          <span class="build-title">{{ 'interface.builds.' + build.title | translate }}</span>
+          <ibm-tag type="blue">{{ build.version }}</ibm-tag>
+        </div>
+      </ibm-list-column>
+    </ibm-list-row>
+  </ibm-structured-list>
+</ng-template>
 
 <!--                    class="form-control"-->
 <!--                    #langSelect-->
@@ -291,97 +237,3 @@
 <!--            </div>-->
 <!--          </div>-->
 <!--        </div>-->
-
-<!--        &lt;!&ndash; settings &ndash;&gt;-->
-<!--        <div class="tab-pane tab-settings" id="settings" role="tabpanel">-->
-<!--          <div class="p-3 be-scroller-settings">-->
-<!--            <div class="content">-->
-<!--              <span class="category-title" translate="settings.language.title"></span>-->
-<!--              <ul class="settings-list">-->
-<!--                <li>-->
-<!--                  <select-->
-<!--                    class="form-control"-->
-<!--                    #langSelect-->
-<!--                    (change)="updateUserLanguage(langSelect.value)"-->
-<!--                  >-->
-<!--                    <option-->
-<!--                      *ngFor="let lang of translate.getLangs()"-->
-<!--                      [value]="lang"-->
-<!--                      [selected]="lang === translate.currentLang"-->
-<!--                    >-->
-<!--                      {{ 'settings.language.options.' + lang | translate }}-->
-<!--                    </option>-->
-<!--                  </select>-->
-<!--                </li>-->
-<!--              </ul>-->
-
-<!--              <form [formGroup]="settingsForm">-->
-<!--                <span class="category-title" translate="settings.notification.title"></span>-->
-<!--                <ul class="settings-list m-0">-->
-<!--                  <li>-->
-<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
-<!--                      <input-->
-<!--                        type="checkbox"-->
-<!--                        formControlName="taskNotifications"-->
-<!--                        id="taskNotifications"-->
-<!--                        (ngModelChange)="onSettingsSubmit()"-->
-<!--                      /><span> <label for="taskNotifications"></label></span>-->
-<!--                    </div>-->
-<!--                    <span class="name" translate="settings.notification.taskNotifications"></span>-->
-<!--                    <div-->
-<!--                      class="text-muted info-text"-->
-<!--                      translate="settings.notification.taskNotificationsIntro"-->
-<!--                    ></div>-->
-<!--                  </li>-->
-
-<!--                  <li>-->
-<!--                    <div class="switch-button switch-button-sm switch-button-success">-->
-<!--                      <input-->
-<!--                        type="checkbox"-->
-<!--                        formControlName="emailNotifications"-->
-<!--                        id="emailNotifications"-->
-<!--                        (ngModelChange)="onSettingsSubmit()"-->
-<!--                      /><span> <label for="emailNotifications"></label></span>-->
-<!--                    </div>-->
-<!--                    <span class="name" translate="settings.notification.emailNotifications"></span>-->
-<!--                    <div-->
-<!--                      class="text-muted info-text"-->
-<!--                      translate="settings.notification.emailNotificationsIntro"-->
-<!--                    ></div>-->
-<!--                  </li>-->
-<!--                </ul>-->
-
-<!--                <div *ngIf="settingsForm.value.emailNotifications">-->
-<!--                  <ul class="settings-list">-->
-<!--                    <li *ngFor="let frequency of frequencies">-->
-<!--                      <div class="switch-button switch-button-sm switch-button-success">-->
-<!--                        <input-->
-<!--                          type="checkbox"-->
-<!--                          formControlName="{{ frequency }}"-->
-<!--                          id="{{ frequency }}"-->
-<!--                          (ngModelChange)="onSettingsSubmit()"-->
-<!--                        /><span> <label for="{{ frequency }}"></label></span>-->
-<!--                      </div>-->
-<!--                      <span class="name">{{-->
-<!--                        'settings.notification.' + frequency | translate-->
-<!--                      }}</span>-->
-<!--                    </li>-->
-<!--                  </ul>-->
-<!--                </div>-->
-<!--              </form>-->
-
-<!--              <div class="version-holder">-->
-<!--                <span class="category-title" translate="settings.version.title"></span>-->
-<!--                <ul class="settings-list">-->
-<!--                  <li *ngIf="build">-->
-<!--                    <div class="name">{{ build.title }}</div>-->
-<!--                    <div class="text-muted">{{ build.version }}</div>-->
-<!--                  </li>-->
-<!--                </ul>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->

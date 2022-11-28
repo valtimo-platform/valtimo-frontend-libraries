@@ -217,7 +217,7 @@
       },
       "taskNotifications": "Taakmeldingen",
       "taskNotificationsIntro": "Ontvang een e-mail wanneer een taak aan jou is toegewezen",
-      "emailNotifications": "Dagelijks taak overzicht",
+      "emailNotifications": "Dagelijks taakoverzicht",
       "emailNotificationsIntro": "Persoonlijke overzicht van je open taken",
       "emailNotificationOnMonday": "Maandag",
       "emailNotificationOnTuesday": "Dinsdag",
@@ -228,7 +228,7 @@
       "emailNotificationOnSunday": "Zondag"
     },
     "version": {
-      "title": "Versie informatie"
+      "title": "Versie-informatie"
     }
   },
   "decisions": {
@@ -467,7 +467,10 @@
     "addRow": "Rij toevoegen",
     "deleteRow": "Rij verwijderen",
     "on": "Aan",
-    "off": "Uit"
+    "off": "Uit",
+    "builds": {
+      "valtimo-backend-libraries": "Valtimo"
+    }
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",

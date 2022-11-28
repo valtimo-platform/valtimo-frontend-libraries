@@ -466,8 +466,11 @@
     "previous": "< Vorherige",
     "addRow": "Zeile hinzufügen",
     "deleteRow": "Zeile löschen",
-    "on": "Aan",
-    "off": "Uit"
+    "on": "Ein",
+    "off": "Aus",
+    "builds": {
+      "valtimo-backend-libraries": "Valtimo"
+    }
   },
   "taskDetail": {
     "taskCreated": "Erstellt",
