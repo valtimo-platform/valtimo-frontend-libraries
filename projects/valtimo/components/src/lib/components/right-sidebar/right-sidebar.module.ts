@@ -26,6 +26,7 @@ import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {
   GridModule,
   IconModule,
+  LinkModule,
   SelectModule,
   StructuredListModule,
   TabsModule,
@@ -57,6 +58,7 @@ import {
     SelectModule,
     ToggleModule,
     TagModule,
+    LinkModule,
   ],
   exports: [RightSidebarComponent],
 })

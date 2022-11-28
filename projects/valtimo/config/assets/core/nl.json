@@ -188,7 +188,8 @@
   },
   "account": {
     "title": "Account",
-    "informationTitle": "Accountgegevens",
+    "informationTitle": "Gegevens",
+    "quickLinks": "Snelkoppelingen",
     "links": {
       "profile": "Profiel",
       "password": "Wachtwoord",
