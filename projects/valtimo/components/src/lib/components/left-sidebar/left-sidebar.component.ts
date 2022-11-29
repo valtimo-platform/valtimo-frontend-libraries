@@ -91,7 +91,9 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
     this.breakpointSubscription?.unsubscribe();
   }
 
-  navigateToRoute(route: Array<string>): void {
+  navigateToRoute(route: Array<string>, event: MouseEvent) {
+    event.preventDefault();
+
     this.router.navigate(route);
 
     combineLatest([this.shellService.sideBarExpanded$, this.shellService.largeScreen$])
