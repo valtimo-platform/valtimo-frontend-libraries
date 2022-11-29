@@ -49,12 +49,14 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
   @Input() required = false;
   @Input() hideNumberSpinBox = false;
   @Input() smallLabel = false;
+  @Input() rows!: number;
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 
   inputValue$ = new BehaviorSubject<any>(undefined);
 
   isText!: boolean;
+  isTextarea!: boolean;
   isNumber!: boolean;
   isPassword!: boolean;
   isDigitOnly!: boolean;
@@ -99,6 +101,9 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
     switch (this.type) {
       case 'text':
         this.isText = true;
+        break;
+      case 'textarea':
+        this.isTextarea = true;
         break;
       case 'number':
         this.isNumber = true;
