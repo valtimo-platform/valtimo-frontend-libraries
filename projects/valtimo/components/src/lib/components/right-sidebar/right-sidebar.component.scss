@@ -112,7 +112,7 @@
     }
   }
 
-  .account-information-table {
+  .information-table {
     ibm-list-row:first-child {
       ibm-list-column {
         border-top: 0;
@@ -133,6 +133,10 @@
 
       ibm-list-column:last-child {
         padding-right: 0 !important;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }
