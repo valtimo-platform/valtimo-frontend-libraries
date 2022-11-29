@@ -63,6 +63,12 @@
     (click)="navigateToRoute(menuItem.link)"
     *ngIf="!menuItem.children"
     [active]="'' + menuItem.sequence === closestSequence"
+    [ngClass]="{
+      'menu-item--hidden': menuItem.includeFunction !== undefined,
+      'menu-item--visible':
+        menuItem.includeFunction !== undefined &&
+        (includeFunctionObservables[menuItem.title] | async)
+    }"
   >
     <valtimo-menu-item-text [menuItem]="menuItem"></valtimo-menu-item-text>
   </ibm-sidenav-item>

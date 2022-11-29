@@ -57,6 +57,8 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
       });
   }
 
+  public includeFunctionObservables: {[key: string]: Observable<boolean>} = {};
+
   private breakpointSubscription!: Subscription;
 
   readonly menuItems$: Observable<Array<MenuItem>> = this.menuService.menuItems$;
@@ -69,8 +71,6 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
 
   readonly closestSequence$: Observable<string> = this.menuService.closestSequence$;
 
-  public includeFunctionObservables: {[key: string]: Observable<boolean>} = {};
-
   constructor(
     private readonly translateService: TranslateService,
     private readonly elementRef: ElementRef,
@@ -79,7 +79,10 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
     private readonly shellService: ShellService,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly router: Router
-  ) {}
+  ) {
+    this.includeFunctionObservables = this.menuService.includeFunctionObservables;
+  }
+
   ngAfterViewInit(): void {
     this.openBreakpointSubscription();
   }
