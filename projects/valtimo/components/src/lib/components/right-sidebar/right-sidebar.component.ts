@@ -168,12 +168,11 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
               this.updatingSettings$.next(true);
               this.userProviderService.updateEmailNotificationSettings(formValue).subscribe(
                 results => {
-                  this.settingsForm.setValue(results);
                   this.emailNotificationSettings$.next(results);
                   this.updatingSettings$.next(false);
                 },
                 () => {
-                  this.settingsForm.setValue(settings);
+                  this.emailNotificationSettings$.next(settings);
                   this.updatingSettings$.next(false);
                 }
               );
