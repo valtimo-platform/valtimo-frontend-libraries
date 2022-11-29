@@ -45,6 +45,7 @@ import {
   DossierDetailTabProgressComponent,
   DossierDetailTabSummaryComponent,
   DossierDetailTabZaakobjectenComponent,
+  DossierDetailTabNotesComponent,
   DossierModule,
 } from '@valtimo/dossier';
 import {ProcessModule} from '@valtimo/process';
@@ -112,6 +113,7 @@ export function tabsFactory() {
     [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
     [DefaultTabs.contactMoments, DossierDetailTabContactMomentsComponent],
     [DefaultTabs.zaakobjecten, DossierDetailTabZaakobjectenComponent],
+    [DefaultTabs.notes, DossierDetailTabNotesComponent],
     ['custom-maps', CustomMapsTabComponent],
     ['custom-dossier', CustomDossierTabComponent],
   ]);
@@ -125,7 +127,7 @@ export function tabsFactory() {
     FormioComponent,
     UploadShowcaseComponent,
     CustomDossierTabComponent,
-    CustomMapsTabComponent,
+    CustomMapsTabComponent
   ],
   imports: [
     HttpClientModule,
@@ -190,7 +192,7 @@ export function tabsFactory() {
         useFactory: MultiTranslateHttpLoaderFactory,
         deps: [HttpClient, ConfigService],
       },
-    }),
+    })
   ],
   providers: [
     FormioComponent,

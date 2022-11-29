@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+.notes {
+  position: relative;
+}
 
-export enum DefaultTabs {
-  summary = 'summary',
-  progress = 'progress',
-  audit = 'audit',
-  documents = 'documents',
-  contactMoments = 'contact-moments',
-  zaakobjecten = 'zaakobjecten',
-  notes = 'notes'
+.add-note {
+  position: absolute;
+  right: 0;
 }

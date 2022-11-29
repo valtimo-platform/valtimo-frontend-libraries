@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-export enum DefaultTabs {
-  summary = 'summary',
-  progress = 'progress',
-  audit = 'audit',
-  documents = 'documents',
-  contactMoments = 'contact-moments',
-  zaakobjecten = 'zaakobjecten',
-  notes = 'notes'
+interface Note {
+  id: string;
+  createdByUserId: string;
+  createdByUserFullName: string;
+  createdDate: string;
+  content: string;
+  documentId: string;
 }
+
+interface NoteCreateRequest {
+  content: string
+}
+
+export {Note, NoteCreateRequest};

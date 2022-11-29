@@ -27,7 +27,8 @@
       "contact-moments": "Contactmomenten",
       "custom-dossier": "Custom dossier",
       "custom-maps": "Custom maps",
-      "zaakobjecten": "Zaakobjecten"
+      "zaakobjecten": "Zaakobjecten",
+      "notes": "Notities"
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
@@ -60,6 +61,13 @@
       "noObjectType": "Geen objecten gevonden voor dit objecttype.",
       "objectType": {
         "viewObject": "Object bekijken"
+      }
+    },
+    "notes": {
+      "addNote": "Notitie toevoegen",
+      "tableItemsText": "Notities",
+      "input": {
+        "content": "Notitie"
       }
     },
     "documenten": {
