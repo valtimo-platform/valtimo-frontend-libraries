@@ -34,6 +34,7 @@ import {
   ModifyDocumentAndStartProcessResult,
   NewDocumentAndStartProcessRequestImpl,
   NewDocumentAndStartProcessResult,
+  OpenDocumentCount,
   Page,
   ProcessDocumentDefinition,
   ProcessDocumentDefinitionRequest,
@@ -52,9 +53,6 @@ import {
   User,
 } from '@valtimo/config';
 import {AdvancedDocumentSearchRequest} from './advanced-document-search-request';
-import {Stomp} from '@stomp/stompjs';
-import {SockJS} from '@types/sockjs-client';
-import {messageCallbackType} from '@stomp/stompjs/src/types';
 
 @Injectable({
   providedIn: 'root',
@@ -353,11 +351,9 @@ export class DocumentService {
     );
   }
 
-  subscribeToDocumentOpenCountWebSocket(callback: messageCallbackType) {
-    let sock = new SockJS(`${this.valtimoEndpointUri}document/stomp`);
-    let client = Stomp.over(sock);
-    client.connect({}, frame => {
-      client.subscribe("/topic/messages", callback);
-    });
+  getOpenDocumentCount(): Observable<Array<OpenDocumentCount>> {
+    return this.http.get<Array<OpenDocumentCount>>(
+      `${this.valtimoEndpointUri}document-definition/open/count`
+    );
   }
 }
