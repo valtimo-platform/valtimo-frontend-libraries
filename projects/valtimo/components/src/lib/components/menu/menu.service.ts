@@ -53,23 +53,30 @@ export class MenuService {
     map(event => (event as NavigationEnd)?.url)
   );
 
+  // Find out which menu item sequence number matches the current url the closest
   public get closestSequence$(): Observable<string> {
     return combineLatest([this.currentRoute$, this.menuItems$]).pipe(
       map(([currentRoute, menuItems]) => {
         let closestSequence = '0';
         let highestDifference = 0;
 
+        // recursive function to check how closely each item matches to the current url
         const checkItemMatch = (stringUrl: string, sequence: string): void => {
+          // length of the current full url
           const currentRouteUrlLength = currentRoute.length;
+          // length of the current full url with the item's url substracted
           const currentRouteSubstractLength = currentRoute.replace(stringUrl, '').length;
+          // the amount of characters that could be substracted
           const difference = currentRouteUrlLength - currentRouteSubstractLength;
 
+          // the larger the amount of characters that could be substracted, the more closely the menu item url matches the current url
           if (difference > highestDifference) {
             highestDifference = difference;
             closestSequence = sequence;
           }
         };
 
+        // check how closely each menu item (and child menu item) matches the current url using a recursive function
         menuItems.forEach(item => {
           checkItemMatch(item.link?.join('') || '', `${item.sequence}`);
 
@@ -87,6 +94,7 @@ export class MenuService {
           }
         });
 
+        // returns the closest sequence number (each menu item has a sequence number)
         return closestSequence;
       })
     );
