@@ -60,20 +60,18 @@
 
 <ng-template #accountInformationTableTemplate>
   <div class="information-table">
-    <ibm-structured-list *ngIf="userIdentity">
+    <ibm-structured-list *ngIf="userSubject$ | async as userSubject">
       <ibm-list-row>
-        <ibm-list-column>Email</ibm-list-column>
-        <ibm-list-column>{{ userIdentity.email }}</ibm-list-column>
+        <ibm-list-column>{{ 'interface.email' | translate }}</ibm-list-column>
+        <ibm-list-column>{{ userSubject.email }}</ibm-list-column>
       </ibm-list-row>
       <ibm-list-row>
-        <ibm-list-column>Username</ibm-list-column>
-        <ibm-list-column>{{ userIdentity.username }}</ibm-list-column>
+        <ibm-list-column>{{ 'interface.username' | translate }}</ibm-list-column>
+        <ibm-list-column>{{ userSubject.username }}</ibm-list-column>
       </ibm-list-row>
       <ibm-list-row>
-        <ibm-list-column>Name</ibm-list-column>
-        <ibm-list-column>
-          {{ userIdentity.firstName + ' ' + userIdentity.lastName }}</ibm-list-column
-        >
+        <ibm-list-column>{{ 'interface.name' | translate }}</ibm-list-column>
+        <ibm-list-column>{{ userSubject.firstName + ' ' + userSubject.lastName }}</ibm-list-column>
       </ibm-list-row>
     </ibm-structured-list>
   </div>
@@ -165,7 +163,7 @@
 </ng-template>
 
 <ng-template #notificationSettingsTemplate>
-  <ibm-structured-list>
+  <ibm-structured-list *ngIf="emailNotificationSettingsWithSideEffects$ | async">
     <ibm-list-header>
       <ibm-list-column>{{ 'settings.notification.title' | translate }}</ibm-list-column>
     </ibm-list-header>
@@ -177,7 +175,6 @@
             [onText]="'interface.on' | translate"
             [offText]="'interface.off' | translate"
             formControlName="taskNotifications"
-            (ngModelChange)="onSettingsSubmit()"
             [disabled]="updatingSettings$ | async"
           >
           </ibm-toggle>
@@ -195,7 +192,6 @@
             [onText]="'interface.on' | translate"
             [offText]="'interface.off' | translate"
             formControlName="emailNotifications"
-            (ngModelChange)="onSettingsSubmit()"
             [disabled]="updatingSettings$ | async"
           >
           </ibm-toggle>
@@ -209,23 +205,27 @@
 </ng-template>
 
 <ng-template #versionTemplate>
-  <ibm-structured-list *ngIf="build || frontendVersion">
-    <ibm-list-header>
-      <ibm-list-column>{{ 'settings.version.title' | translate }}</ibm-list-column>
-    </ibm-list-header>
-    <ibm-list-row>
-      <ibm-list-column>
-        <div class="build-information" *ngIf="build">
-          <span class="build-title">{{ 'interface.builds.' + build.title | translate }}</span>
-          <ibm-tag type="blue">{{ build.version }}</ibm-tag>
-        </div>
-        <div class="build-information" *ngIf="frontendVersion">
-          <span class="build-title">{{
-            'interface.builds.valtimo-frontend-libraries' | translate
-          }}</span>
-          <ibm-tag type="blue">{{ frontendVersion }}</ibm-tag>
-        </div>
-      </ibm-list-column>
-    </ibm-list-row>
-  </ibm-structured-list>
+  <ng-container *ngIf="{backendVersion: backendVersion$ | async} as obs">
+    <ibm-structured-list *ngIf="frontendVersion || obs.backendVersion">
+      <ibm-list-header>
+        <ibm-list-column>{{ 'settings.version.title' | translate }}</ibm-list-column>
+      </ibm-list-header>
+      <ibm-list-row>
+        <ibm-list-column>
+          <div class="build-information" *ngIf="obs.backendVersion">
+            <span class="build-title">{{
+              'interface.builds.' + obs.backendVersion.title | translate
+            }}</span>
+            <ibm-tag type="blue">{{ obs.backendVersion.version }}</ibm-tag>
+          </div>
+          <div class="build-information" *ngIf="frontendVersion">
+            <span class="build-title">{{
+              'interface.builds.valtimo-frontend-libraries' | translate
+            }}</span>
+            <ibm-tag type="blue">{{ frontendVersion }}</ibm-tag>
+          </div>
+        </ibm-list-column>
+      </ibm-list-row>
+    </ibm-structured-list>
+  </ng-container>
 </ng-template>

@@ -48,7 +48,7 @@
   }
 
   .cds--header-panel {
-    width: 18rem;
+    width: 20rem;
     height: calc(100% - 3rem);
     transition: transform 110ms cubic-bezier(0.2, 0, 1, 0.9);
     transform: translateX(100%);
@@ -133,6 +133,7 @@
 
       ibm-list-column:last-child {
         padding-right: 0 !important;
+        padding-left: 0.5rem !important;
         max-width: 150px;
         white-space: nowrap;
         overflow: hidden;

@@ -473,7 +473,10 @@
     "builds": {
       "valtimo-backend-libraries": "Valtimo back-end",
       "valtimo-frontend-libraries": "Valtimo front-end"
-    }
+    },
+    "email": "E-mail",
+    "username": "Gebruikersnaam",
+    "name": "Naam"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",
