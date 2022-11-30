@@ -91,7 +91,7 @@ export class MenuService {
               iconClass: 'icon mdi mdi-dot-circle',
               sequence: index,
               show: true,
-              badgeCount$: openDocumentCountMap.get(definition.id.name),
+              count$: openDocumentCountMap.get(definition.id.name),
             } as MenuItem)
         );
         this.logger.debug('found dossierMenuItems', dossierMenuItems);
