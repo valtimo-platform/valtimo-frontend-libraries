@@ -69,7 +69,7 @@ export interface ValtimoConfig {
   logoSvgBase64?: string;
   logoPngBase64?: string;
   applicationTitle?: string;
-  initializers: ((injector: Injector) => Function)[];
+  initializers: ((injector: Injector) => () => void)[];
   menu: MenuConfig;
   authentication: Auth;
   production: boolean;
