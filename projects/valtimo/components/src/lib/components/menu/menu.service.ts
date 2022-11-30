@@ -53,10 +53,13 @@ export class MenuService {
     map(event => (event as NavigationEnd)?.url)
   );
 
+  private readonly dossierItemsAppended$ = new BehaviorSubject<boolean>(false);
+
   // Find out which menu item sequence number matches the current url the closest
   public get closestSequence$(): Observable<string> {
-    return combineLatest([this.currentRoute$, this.menuItems$]).pipe(
-      map(([currentRoute, menuItems]) => {
+    return combineLatest([this.dossierItemsAppended$, this.currentRoute$, this.menuItems$]).pipe(
+      filter(([dossierItemsAppended]) => dossierItemsAppended),
+      map(([dossierItemsAppended, currentRoute, menuItems]) => {
         let closestSequence = '0';
         let highestDifference = 0;
 
@@ -95,6 +98,7 @@ export class MenuService {
         });
 
         // returns the closest sequence number (each menu item has a sequence number)
+
         return closestSequence;
       })
     );
@@ -153,6 +157,7 @@ export class MenuService {
           menuItems[menuItemIndex] = dossierMenu;
         }
         subscriber.next(menuItems);
+        this.dossierItemsAppended$.next(true);
         this.logger.debug('appendDossierSubMenuItems finished');
       });
     });
