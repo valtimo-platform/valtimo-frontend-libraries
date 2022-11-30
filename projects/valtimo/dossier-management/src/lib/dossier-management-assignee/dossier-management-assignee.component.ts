@@ -11,7 +11,6 @@ import {tap} from 'rxjs/operators';
 })
 export class DossierManagementAssigneeComponent {
   readonly loading$ = new BehaviorSubject<boolean>(true);
-
   readonly disabled$!: Observable<boolean>;
 
   private readonly _refresh$ = new BehaviorSubject<null>(null);
@@ -21,7 +20,8 @@ export class DossierManagementAssigneeComponent {
     map(params => params.name || '')
   );
 
-  readonly currentValue$: Observable<CaseSettings> = this.documentDefinitionName$.pipe(
+  readonly currentValue$: Observable<CaseSettings> = this._refresh$.pipe(
+    switchMap(() => this.documentDefinitionName$),
     switchMap(documentDefinitionName =>
       this.documentService.getCaseSettings(documentDefinitionName)
     ),
@@ -38,9 +38,12 @@ export class DossierManagementAssigneeComponent {
 
     this.documentService
       .patchCaseSettings(documentDefinitionName, {
-        canHaveAssignee: !currentValue,
+        canHaveAssignee: currentValue,
       })
-      .subscribe(() => this.enableInput());
+      .subscribe(() => {
+        this.enableInput();
+        this.refreshAssignee();
+      });
   }
 
   disableInput(): void {
@@ -51,7 +54,7 @@ export class DossierManagementAssigneeComponent {
     this._inputDisabled$.next(false);
   }
 
-  refresh(): void {
+  refreshAssignee(): void {
     this._refresh$.next(null);
   }
 
