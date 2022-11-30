@@ -27,7 +27,7 @@ import {ConfigService} from '@valtimo/config';
 })
 export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
   public breadcrumbs: Array<any> = [];
-  public appTitle = this.configService.config.applicationTitle;
+  public appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
   private routerSub = Subscription.EMPTY;
 
   constructor(

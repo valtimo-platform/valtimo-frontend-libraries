@@ -67,7 +67,7 @@ const defaultDefinitionColumns: Array<DefinitionColumn> = [
 
 export const environment: ValtimoConfig = {
   logoSvgBase64: LOGO_BASE_64,
-  applicationTitle: 'Valtimo',
+  applicationTitle: '',
   production: false,
   initializers: [
     openZaakExtensionInitializer,
