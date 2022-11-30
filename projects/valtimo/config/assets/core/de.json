@@ -285,9 +285,8 @@
       "description": "Wählen Sie einen Prozess, der das Hochladen von Dateien handhaben soll."
     },
     "handleAssignee": {
-      "title": "Fallzuständiger",
-      "checkboxDescription": "Dieser Fall kann einen Bevollmächtigten haben",
-      "tooltip": "Wenn diese Option ausgewählt ist, kann eine Einstellung konfiguriert werden, um anzugeben, dass ein Falltyp einen Verantwortlichen haben kann."
+      "title": "Casehandler",
+      "checkboxDescription": "Dieser Casetyp kann einen Handler haben"
     },
     "tabs": {
       "cases": "Falldetails",
