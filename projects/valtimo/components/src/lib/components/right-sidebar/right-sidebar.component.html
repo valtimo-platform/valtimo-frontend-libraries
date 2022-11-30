@@ -78,20 +78,24 @@
 </ng-template>
 
 <ng-template #contextTemplate>
-  <ibm-structured-list *ngIf="userContexts?.length > 1">
-    <ibm-list-header>
-      <ibm-list-column>{{ 'settings.context.title' | translate }}</ibm-list-column>
-    </ibm-list-header>
-    <ibm-list-row>
-      <ibm-list-column>
-        <ibm-select [ngModel]="userContextActive?.id" (ngModelChange)="setUserContext($event)">
-          <option *ngFor="let context of userContexts" [value]="context.id">
-            {{ context.name }}
-          </option>
-        </ibm-select>
-      </ibm-list-column>
-    </ibm-list-row>
-  </ibm-structured-list>
+  <ng-container
+    *ngIf="{userContexts: userContexts$ | async, activeContext: activeContext$ | async} as obs"
+  >
+    <ibm-structured-list *ngIf="obs.userContexts?.length > 1 && obs.activeContext?.id">
+      <ibm-list-header>
+        <ibm-list-column>{{ 'settings.context.title' | translate }}</ibm-list-column>
+      </ibm-list-header>
+      <ibm-list-row>
+        <ibm-list-column>
+          <ibm-select [ngModel]="obs.activeContext?.id" (ngModelChange)="setUserContext($event)">
+            <option *ngFor="let context of obs.userContexts" [value]="context.id">
+              {{ context.name }}
+            </option>
+          </ibm-select>
+        </ibm-list-column>
+      </ibm-list-row>
+    </ibm-structured-list>
+  </ng-container>
 </ng-template>
 
 <ng-template #linksTemplate>

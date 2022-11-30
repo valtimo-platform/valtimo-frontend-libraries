@@ -57,7 +57,6 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
       });
   }
 
-  public userIdentity: UserIdentity;
   public frequencies: Array<any> = [
     'emailNotificationOnMonday',
     'emailNotificationOnTuesday',
@@ -78,10 +77,6 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     emailNotificationOnSaturday: new FormControl(false),
     emailNotificationOnSunday: new FormControl(false),
   });
-  public build: ValtimoVersion;
-  public userContexts: Array<any>;
-  public userContextActive: any;
-
   readonly panelExpanded$ = this.shellService.panelExpanded$;
 
   readonly selectedLanguage$ = new BehaviorSubject<string>('');
@@ -97,14 +92,18 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     undefined
   );
 
-  readonly emailNotificationSettingsWithSideEffects$ = this.emailNotificationSettings$.pipe(
-    tap(results => {
-      if (results) {
-        this.settingsForm.setValue(results);
-        this.updatingSettings$.next(false);
-      }
-    })
-  );
+  readonly emailNotificationSettingsWithSideEffects$: Observable<EmailNotificationSettings> =
+    this.emailNotificationSettings$.pipe(
+      tap(results => {
+        if (results) {
+          this.settingsForm.setValue(results);
+          this.updatingSettings$.next(false);
+        }
+      })
+    );
+
+  readonly userContexts$ = this.contextService.getUserContexts();
+  readonly activeContext$ = this.contextService.getUserContextActive();
 
   readonly frontendVersion!: string;
 
@@ -134,7 +133,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     this.formSubscription?.unsubscribe();
   }
 
-  public setUserContext(contextId: number) {
+  setUserContext(contextId: number): void {
     this.contextService.setUserContext(contextId).subscribe();
     location.href = '/';
   }
@@ -194,16 +193,6 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
   private setLanguage(): void {
     this.selectedLanguage$.next(this.translate.currentLang);
     this.languageOptions$.next(this.translate.langs);
-  }
-
-  private loadContextSwitch() {
-    combineLatest([
-      this.contextService.getUserContexts(),
-      this.contextService.getUserContextActive(),
-    ]).subscribe(([userContexts, userContextActive]) => {
-      this.userContextActive = userContextActive;
-      this.userContexts = userContexts;
-    });
   }
 
   private sortObjectAlphabetically(jsObject: object): object {
