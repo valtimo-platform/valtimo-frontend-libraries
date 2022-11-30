@@ -35,6 +35,7 @@ import {
   ModifyDocumentAndStartProcessResult,
   NewDocumentAndStartProcessRequestImpl,
   NewDocumentAndStartProcessResult,
+  OpenDocumentCount,
   Page,
   ProcessDocumentDefinition,
   ProcessDocumentDefinitionRequest,
@@ -348,6 +349,12 @@ export class DocumentService {
   getCandidateUsers(documentId: string): Observable<Array<User>> {
     return this.http.get<Array<User>>(
       `${this.valtimoEndpointUri}document/${documentId}/candidate-user`
+    );
+  }
+
+  getOpenDocumentCount(): Observable<Array<OpenDocumentCount>> {
+    return this.http.get<Array<OpenDocumentCount>>(
+      `${this.valtimoEndpointUri}document-definition/open/count`
     );
   }
 
