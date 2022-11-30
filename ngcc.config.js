@@ -1,10 +1,7 @@
 module.exports = {
   packages: {
     'carbon-components-angular': {
-      ignorableDeepImportMatchers: [
-        /carbon\//,
-        /flatpickr\//,
-      ]
+      ignorableDeepImportMatchers: [/carbon\//, /flatpickr\//],
     },
   },
 };
