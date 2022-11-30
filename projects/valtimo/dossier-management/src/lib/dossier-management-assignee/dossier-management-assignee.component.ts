@@ -10,11 +10,11 @@ import {tap} from 'rxjs/operators';
   styleUrls: ['./dossier-management-assignee.component.css'],
 })
 export class DossierManagementAssigneeComponent {
-  readonly loading$ = new BehaviorSubject<boolean>(true);
-  readonly disabled$!: Observable<boolean>;
+  public disabled$!: Observable<boolean>;
 
   private readonly _refresh$ = new BehaviorSubject<null>(null);
-  private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
+
+  readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || '')
@@ -25,12 +25,11 @@ export class DossierManagementAssigneeComponent {
     switchMap(documentDefinitionName =>
       this.documentService.getCaseSettings(documentDefinitionName)
     ),
-    map(currentValue => currentValue),
     tap(() => this.loading$.next(false))
   );
 
   constructor(private readonly documentService: DocumentService, private route: ActivatedRoute) {
-    this.disabled$ = this.inputDisabled$;
+    this.disabled$ = new BehaviorSubject<boolean>(false);
   }
 
   toggleAssignee(currentValue: boolean, documentDefinitionName: string): void {
@@ -40,29 +39,26 @@ export class DossierManagementAssigneeComponent {
       .patchCaseSettings(documentDefinitionName, {
         canHaveAssignee: currentValue,
       })
-      .subscribe(() => {
-        this.enableInput();
-        this.refreshAssignee();
-      });
+      .subscribe(
+        () => {
+          this.enableInput();
+          this.refreshAssignee();
+        },
+        () => {
+          this.enableInput();
+        }
+      );
   }
 
   disableInput(): void {
-    this._inputDisabled$.next(true);
+    this.disabled$ = new BehaviorSubject<boolean>(true);
   }
 
   enableInput(): void {
-    this._inputDisabled$.next(false);
+    this.disabled$ = new BehaviorSubject<boolean>(false);
   }
 
-  refreshAssignee(): void {
+  private refreshAssignee(): void {
     this._refresh$.next(null);
-  }
-
-  get refresh$(): Observable<any> {
-    return this._refresh$.asObservable();
-  }
-
-  get inputDisabled$(): Observable<boolean> {
-    return this._inputDisabled$.asObservable();
   }
 }
