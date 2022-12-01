@@ -51,11 +51,11 @@ export class DossierManagementAssigneeComponent {
   }
 
   disableInput(): void {
-    this.disabled$ = new BehaviorSubject<boolean>(true);
+    this.disabled$.next(true);
   }
 
   enableInput(): void {
-    this.disabled$ = new BehaviorSubject<boolean>(false);
+    this.disabled$.next(false);
   }
 
   private refreshAssignee(): void {
