@@ -18,6 +18,7 @@ import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentService} from '@valtimo/document';
 import {filter, map, Observable, switchMap} from 'rxjs';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
@@ -25,7 +26,12 @@ import {filter, map, Observable, switchMap} from 'rxjs';
   styleUrls: ['./dossier-management-detail-container.component.css'],
 })
 export class DossierManagementDetailContainerComponent {
+  caseListColumn!: boolean;
+  caseSearchFields: boolean;
+
   public isCase = true;
+  public isSearch = false;
+  public isList = false;
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || ''),
@@ -38,9 +44,14 @@ export class DossierManagementDetailContainerComponent {
     )
   );
 
-  constructor(private documentService: DocumentService, private route: ActivatedRoute) {}
+  constructor(private documentService: DocumentService, private route: ActivatedRoute, private readonly configService: ConfigService) {
+    this.caseListColumn = this.configService.config.featureToggles.caseListColumn;
+    this.caseSearchFields = this.configService.config.featureToggles.caseSearchFields;
+  }
 
   displayBodyComponent(tab: string): void {
     this.isCase = tab === 'case';
+    this.isList = tab === 'list';
+    this.isSearch = tab === 'search';
   }
 }
