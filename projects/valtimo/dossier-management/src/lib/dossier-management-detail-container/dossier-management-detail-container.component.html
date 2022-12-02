@@ -61,6 +61,16 @@
         {{ 'dossierManagement.tabs.searchFields' | translate }}
       </a>
     </li>
+    <li class="nav-item">
+      <a
+              id="test-tab-2"
+              class="nav-link clickable"
+              data-toggle="tab"
+              (click)="displayBodyComponent('list')"
+      >
+        {{ 'dossierManagement.tabs.listColumns' | translate }}
+      </a>
+    </li>
   </ul>
 </ng-template>
 
