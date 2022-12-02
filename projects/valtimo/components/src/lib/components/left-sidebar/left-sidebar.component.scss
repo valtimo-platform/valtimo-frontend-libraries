@@ -143,3 +143,11 @@
 .menu-item--visible {
   display: block;
 }
+
+::ng-deep .cds--side-nav__item--empty {
+  pointer-events: none;
+
+  .menu-item-icon-container {
+    display: none;
+  }
+}

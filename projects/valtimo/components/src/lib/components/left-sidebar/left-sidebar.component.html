@@ -42,12 +42,17 @@
       <ibm-sidenav-menu [title]="menuItem | menuItemTranslate | async">
         <ng-container *ngFor="let childMenuItem of menuItem.children">
           <ibm-sidenav-item
+            [ngClass]="{
+              'cds--side-nav__item--empty': !childMenuItem.link
+            }"
             href="javascript:void(0)"
-            *ngIf="childMenuItem.link"
             (click)="navigateToRoute(childMenuItem.link, $event)"
             [active]="'' + menuItem.sequence + childMenuItem.sequence === obs.closestSequence"
           >
-            <valtimo-menu-item-text [menuItem]="childMenuItem"></valtimo-menu-item-text>
+            <valtimo-menu-item-text
+              [menuItem]="childMenuItem"
+              [accent]="!childMenuItem.link"
+            ></valtimo-menu-item-text>
           </ibm-sidenav-item>
         </ng-container>
       </ibm-sidenav-menu>
