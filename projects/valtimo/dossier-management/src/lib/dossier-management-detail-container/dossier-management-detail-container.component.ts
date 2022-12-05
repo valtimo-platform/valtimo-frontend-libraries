@@ -17,8 +17,10 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentService} from '@valtimo/document';
-import {filter, map, Observable, switchMap} from 'rxjs';
+import {filter, map, Observable, Subscription, switchMap} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
+import {TabService} from '../tab.service';
+import {TabEnum} from '../tab.enum';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
@@ -26,11 +28,12 @@ import {ConfigService} from '@valtimo/config';
   styleUrls: ['./dossier-management-detail-container.component.css'],
 })
 export class DossierManagementDetailContainerComponent {
-  caseListColumn!: boolean;
+  public currentTab: TabEnum;
+  public caseListColumn!: boolean;
 
-  public isCase = true;
-  public isSearch = false;
-  public isList = false;
+  private tabSubscription: Subscription;
+
+  readonly TabEnum = TabEnum;
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || ''),
@@ -46,14 +49,27 @@ export class DossierManagementDetailContainerComponent {
   constructor(
     private documentService: DocumentService,
     private route: ActivatedRoute,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly tabService: TabService
   ) {
     this.caseListColumn = this.configService.config.featureToggles.caseListColumn;
   }
 
-  displayBodyComponent(tab: string): void {
-    this.isCase = tab === 'case';
-    this.isSearch = tab === 'search';
-    this.isList = tab === 'list';
+  ngOnInit(): void {
+    this.getCurrentTab();
+  }
+
+  displayBodyComponent(tab: TabEnum): void {
+    this.tabService.currentTab = tab;
+  }
+
+  getCurrentTab() {
+    this.tabSubscription = this.tabService.currentTab$.subscribe(
+      value => (this.currentTab = value)
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.tabSubscription.unsubscribe();
   }
 }
