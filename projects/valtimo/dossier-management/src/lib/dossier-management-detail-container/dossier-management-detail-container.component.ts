@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentService} from '@valtimo/document';
 import {filter, map, Observable, Subscription, switchMap} from 'rxjs';
@@ -27,7 +27,7 @@ import {TabEnum} from '../tab.enum';
   templateUrl: './dossier-management-detail-container.component.html',
   styleUrls: ['./dossier-management-detail-container.component.css'],
 })
-export class DossierManagementDetailContainerComponent {
+export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
   public currentTab: TabEnum;
   public caseListColumn!: boolean;
 
