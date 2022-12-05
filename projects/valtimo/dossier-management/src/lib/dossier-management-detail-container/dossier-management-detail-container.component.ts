@@ -70,6 +70,6 @@ export class DossierManagementDetailContainerComponent {
   }
 
   ngOnDestroy(): void {
-    this.tabSubscription?.unsubscribe()
+    this.tabSubscription?.unsubscribe();
   }
 }
