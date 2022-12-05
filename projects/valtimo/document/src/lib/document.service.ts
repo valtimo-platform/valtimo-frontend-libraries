@@ -139,7 +139,7 @@ export class DocumentService {
       }),
     };
     return this.http.delete(
-      `${this.valtimoEndpointUri}v1/v1/document-search/${documentDefinitionName}/fields?key=${key}`,
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields?key=${key}`,
       options
     );
   }
