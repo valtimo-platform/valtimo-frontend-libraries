@@ -47,8 +47,8 @@ export class DossierManagementDetailContainerComponent {
   );
 
   constructor(
-    private documentService: DocumentService,
-    private route: ActivatedRoute,
+    private readonly documentService: DocumentService,
+    private readonly route: ActivatedRoute,
     private readonly configService: ConfigService,
     private readonly tabService: TabService
   ) {
@@ -56,20 +56,20 @@ export class DossierManagementDetailContainerComponent {
   }
 
   ngOnInit(): void {
-    this.getCurrentTab();
+    this.openCurrentTabSubscription();
   }
 
   displayBodyComponent(tab: TabEnum): void {
     this.tabService.currentTab = tab;
   }
 
-  getCurrentTab() {
+  openCurrentTabSubscription(): void {
     this.tabSubscription = this.tabService.currentTab$.subscribe(
       value => (this.currentTab = value)
     );
   }
 
   ngOnDestroy(): void {
-    this.tabSubscription.unsubscribe();
+    this.tabSubscription?.unsubscribe()
   }
 }
