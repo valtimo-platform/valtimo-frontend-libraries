@@ -44,7 +44,15 @@ import {
   UploadProcessLink,
 } from './models';
 import {DocumentSearchRequest} from './document-search-request';
-import {AssigneeFilter, ConfigService, SearchField, SearchFilter, SearchFilterRange, SearchOperator, User,} from '@valtimo/config';
+import {
+  AssigneeFilter,
+  ConfigService,
+  SearchField,
+  SearchFilter,
+  SearchFilterRange,
+  SearchOperator,
+  User,
+} from '@valtimo/config';
 import {AdvancedDocumentSearchRequest} from './advanced-document-search-request';
 
 @Injectable({
@@ -139,7 +147,7 @@ export class DocumentService {
       }),
     };
     return this.http.delete(
-      `${this.valtimoEndpointUri}v1/v1/document-search/${documentDefinitionName}/fields?key=${key}`,
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields?key=${key}`,
       options
     );
   }
