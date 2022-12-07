@@ -39,8 +39,9 @@ export class MenuService {
     private readonly logger: NGXLogger,
     private readonly menuIncludeService: MenuIncludeService
   ) {
-    this.menuConfig = configService.config.menu;
-    this.disableCaseCount = configService.config.featureToggles.disableCaseCount;
+    const config = configService?.config;
+    this.menuConfig = config?.menu;
+    this.disableCaseCount = config?.featureToggles?.disableCaseCount;
   }
 
   init(): void {
