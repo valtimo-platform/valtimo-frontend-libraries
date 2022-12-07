@@ -75,14 +75,14 @@
 </ng-template>
 
 <ng-template #tabContent>
-  <div class="pt-3 bg-white position-relative tab-container">
-    <div *ngIf="currentTab && currentTab === TabEnum.CASE">
+  <div class="bg-white position-relative tab-container">
+    <div *ngIf="currentTab && currentTab === TabEnum.CASE" class="pt-3">
       <valtimo-dossier-management-detail></valtimo-dossier-management-detail>
     </div>
-    <div *ngIf="currentTab && currentTab === TabEnum.SEARCH">
+    <div *ngIf="currentTab && currentTab === TabEnum.SEARCH" class="pt-3">
       <valtimo-dossier-management-search-fields></valtimo-dossier-management-search-fields>
     </div>
-    <div *ngIf="currentTab && currentTab === TabEnum.LIST">
+    <div *ngIf="currentTab && currentTab === TabEnum.LIST" class="pt-0">
       <valtimo-dossier-management-list-columns></valtimo-dossier-management-list-columns>
     </div>
   </div>
