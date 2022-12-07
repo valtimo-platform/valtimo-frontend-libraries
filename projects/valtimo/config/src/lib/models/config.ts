@@ -31,6 +31,7 @@ export interface DefinitionColumn {
   sortable?: boolean;
   viewType?: string;
   default?: boolean | string;
+  enum?: Array<string>;
 }
 
 export interface CustomDossierHeaderItem {
@@ -104,8 +105,10 @@ export interface ValtimoConfig {
     showUserNameInTopBar?: boolean;
     experimentalDmnEditing?: boolean;
     caseSearchFields?: boolean;
+    caseListColumn?: boolean;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
+  visibleDossierListTabs?: Array<DossierListTab>;
   customTaskList?: CustomTaskList;
   customLeftSidebar?: CustomLeftSidebar;
   caseObjectTypes?: {
@@ -123,6 +126,12 @@ export enum TaskListTab {
   MINE = 'mine',
   OPEN = 'open',
   ALL = 'all',
+}
+
+export enum DossierListTab {
+  MINE = 'MINE',
+  OPEN = 'OPEN',
+  ALL = 'ALL',
 }
 
 export enum Language {

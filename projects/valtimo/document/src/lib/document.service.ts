@@ -16,10 +16,11 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {delay, Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {
   AssignHandlerToDocumentResult,
   AuditRecord,
+  CaseSettings,
   Document,
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
@@ -34,6 +35,7 @@ import {
   ModifyDocumentAndStartProcessResult,
   NewDocumentAndStartProcessRequestImpl,
   NewDocumentAndStartProcessResult,
+  OpenDocumentCount,
   Page,
   ProcessDocumentDefinition,
   ProcessDocumentDefinitionRequest,
@@ -42,7 +44,16 @@ import {
   UploadProcessLink,
 } from './models';
 import {DocumentSearchRequest} from './document-search-request';
-import {ConfigService, SearchField, User} from '@valtimo/config';
+import {
+  AssigneeFilter,
+  ConfigService,
+  SearchField,
+  SearchFilter,
+  SearchFilterRange,
+  SearchOperator,
+  User,
+} from '@valtimo/config';
+import {AdvancedDocumentSearchRequest} from './advanced-document-search-request';
 
 @Injectable({
   providedIn: 'root',
@@ -76,7 +87,68 @@ export class DocumentService {
     return this.http.post<Documents>(
       `${this.valtimoEndpointUri}document-search`,
       documentSearchRequest.asHttpBody(),
+      {
+        params: documentSearchRequest.asHttpParams(),
+      }
+    );
+  }
+
+  getDocumentsSearch(
+    documentSearchRequest: AdvancedDocumentSearchRequest,
+    searchOperator?: SearchOperator,
+    assigneeFilter?: AssigneeFilter,
+    otherFilters?: Array<SearchFilter | SearchFilterRange>
+  ): Observable<Documents> {
+    const body = documentSearchRequest.asHttpBody();
+
+    if (searchOperator) {
+      body.searchOperator = searchOperator;
+    }
+
+    if (assigneeFilter) {
+      body.assigneeFilter = assigneeFilter;
+    }
+
+    if (otherFilters) {
+      body.otherFilters = otherFilters;
+    }
+
+    return this.http.post<Documents>(
+      `${this.valtimoEndpointUri}v1/document-definition/${documentSearchRequest.definitionName}/search`,
+      body,
       {params: documentSearchRequest.asHttpParams()}
+    );
+  }
+
+  getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
+    return this.http.get<Array<SearchField>>(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`
+    );
+  }
+
+  putDocumentSearch(documentDefinitionName: string, request: Array<SearchField>): Observable<void> {
+    return this.http.put<void>(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
+      [...request]
+    );
+  }
+
+  postDocumentSearch(documentDefinitionName: string, request: SearchField): Observable<void> {
+    return this.http.post<void>(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
+      {...request}
+    );
+  }
+
+  deleteDocumentSearch(documentDefinitionName: string, key: string): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+    return this.http.delete(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields?key=${key}`,
+      options
     );
   }
 
@@ -280,58 +352,25 @@ export class DocumentService {
     );
   }
 
-  getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
-    return of([
-      {
-        key: 'text',
-        datatype: 'text',
-        fieldtype: 'single',
-        matchtype: 'exact',
-        path: '/profile/name',
-      },
-      {
-        key: 'number',
-        datatype: 'number',
-        fieldtype: 'single',
-        matchtype: 'exact',
-      },
-      {
-        key: 'date',
-        datatype: 'date',
-        fieldtype: 'single',
-        matchtype: 'exact',
-        path: '/profile/dateOfBirth',
-      },
-      {
-        key: 'numberRange',
-        datatype: 'number',
-        fieldtype: 'range',
-        matchtype: 'exact',
-      },
-      {
-        key: 'dateRange',
-        datatype: 'date',
-        fieldtype: 'range',
-        matchtype: 'exact',
-      },
-      {
-        key: 'datetime',
-        datatype: 'datetime',
-        fieldtype: 'single',
-        matchtype: 'exact',
-      },
-      {
-        key: 'boolean',
-        datatype: 'boolean',
-        fieldtype: 'single',
-        matchtype: 'exact',
-      },
-      {
-        key: 'datetimeRange',
-        datatype: 'datetime',
-        fieldtype: 'range',
-        matchtype: 'exact',
-      },
-    ] as Array<SearchField>).pipe(delay(1000));
+  getOpenDocumentCount(): Observable<Array<OpenDocumentCount>> {
+    return this.http.get<Array<OpenDocumentCount>>(
+      `${this.valtimoEndpointUri}document-definition/open/count`
+    );
+  }
+
+  patchCaseSettings(
+    documentDefinitionName: string,
+    request: CaseSettings
+  ): Observable<CaseSettings> {
+    return this.http.patch<CaseSettings>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`,
+      {...request}
+    );
+  }
+
+  getCaseSettings(documentDefinitionName: string): Observable<CaseSettings> {
+    return this.http.get<CaseSettings>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`
+    );
   }
 }
