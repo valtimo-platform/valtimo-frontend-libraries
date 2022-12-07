@@ -32,6 +32,8 @@ export class MenuService {
   private _menuItems$ = new BehaviorSubject<MenuItem[]>(undefined);
   private menuConfig: MenuConfig;
 
+  private readonly disableCaseCount!: boolean;
+
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
@@ -40,7 +42,9 @@ export class MenuService {
     private readonly menuIncludeService: MenuIncludeService,
     private readonly router: Router
   ) {
-    this.menuConfig = configService.config.menu;
+    const config = configService?.config;
+    this.menuConfig = config?.menu;
+    this.disableCaseCount = config?.featureToggles?.disableCaseCount;
   }
 
   init(): void {
@@ -138,7 +142,8 @@ export class MenuService {
     return new Observable(subscriber => {
       this.logger.debug('appendDossierSubMenuItems');
       this.documentService.getAllDefinitions().subscribe(definitions => {
-        const openDocumentCountMap = this.getOpenDocumentCountMap(definitions);
+        const openDocumentCountMap =
+          !this.disableCaseCount && this.getOpenDocumentCountMap(definitions);
 
         const dossierMenuItems: MenuItem[] = definitions.content.map(
           (definition, index) =>
@@ -148,7 +153,7 @@ export class MenuService {
               iconClass: 'icon mdi mdi-dot-circle',
               sequence: index,
               show: true,
-              count$: openDocumentCountMap.get(definition.id.name),
+              ...(!this.disableCaseCount && {count$: openDocumentCountMap.get(definition.id.name)}),
             } as MenuItem)
         );
         this.logger.debug('found dossierMenuItems', dossierMenuItems);
