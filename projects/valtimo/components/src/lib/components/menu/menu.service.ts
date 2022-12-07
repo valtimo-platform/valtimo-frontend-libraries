@@ -15,13 +15,11 @@
  */
 
 import {Injectable} from '@angular/core';
-import {MenuConfig, MenuItem, MenuIncludeService} from '@valtimo/config';
+import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/config';
 import {NGXLogger} from 'ngx-logger';
-import {ConfigService} from '@valtimo/config';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, timer} from 'rxjs';
 import {DocumentDefinitions, DocumentService} from '@valtimo/document';
 import {UserProviderService} from '@valtimo/security';
-import {Subject, timer} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +30,8 @@ export class MenuService {
   private _menuItems$ = new BehaviorSubject<MenuItem[]>(undefined);
   private menuConfig: MenuConfig;
 
+  private readonly disableCaseCount!: boolean;
+
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
@@ -40,6 +40,7 @@ export class MenuService {
     private readonly menuIncludeService: MenuIncludeService
   ) {
     this.menuConfig = configService.config.menu;
+    this.disableCaseCount = configService.config.featureToggles.disableCaseCount;
   }
 
   init(): void {
@@ -81,7 +82,8 @@ export class MenuService {
     return new Observable(subscriber => {
       this.logger.debug('appendDossierSubMenuItems');
       this.documentService.getAllDefinitions().subscribe(definitions => {
-        const openDocumentCountMap = this.getOpenDocumentCountMap(definitions);
+        const openDocumentCountMap =
+          !this.disableCaseCount && this.getOpenDocumentCountMap(definitions);
 
         const dossierMenuItems: MenuItem[] = definitions.content.map(
           (definition, index) =>
@@ -91,7 +93,7 @@ export class MenuService {
               iconClass: 'icon mdi mdi-dot-circle',
               sequence: index,
               show: true,
-              count$: openDocumentCountMap.get(definition.id.name),
+              ...(!this.disableCaseCount && {count$: openDocumentCountMap.get(definition.id.name)}),
             } as MenuItem)
         );
         this.logger.debug('found dossierMenuItems', dossierMenuItems);
