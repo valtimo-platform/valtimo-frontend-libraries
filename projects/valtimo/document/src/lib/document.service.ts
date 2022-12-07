@@ -20,6 +20,7 @@ import {Observable} from 'rxjs';
 import {
   AssignHandlerToDocumentResult,
   AuditRecord,
+  CaseListColumn,
   CaseSettings,
   Document,
   DocumentDefinition,
@@ -371,6 +372,35 @@ export class DocumentService {
   getCaseSettings(documentDefinitionName: string): Observable<CaseSettings> {
     return this.http.get<CaseSettings>(
       `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`
+    );
+  }
+
+  getCaseList(documentDefinitionName: string): Observable<CaseListColumn> {
+    return this.http.get<CaseListColumn>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`
+    );
+  }
+
+  postCaseList(
+    documentDefinitionName: string,
+    request: CaseListColumn
+  ): Observable<CaseListColumn> {
+    return this.http.post<CaseListColumn>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`,
+      {...request}
+    );
+  }
+
+  putCaseList(documentDefinitionName: string, request: CaseListColumn): Observable<CaseListColumn> {
+    return this.http.put<CaseListColumn>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`,
+      {...request}
+    );
+  }
+
+  deleteCaseList(documentDefinitionName: string, columnKey: string): Observable<CaseListColumn> {
+    return this.http.delete<CaseListColumn>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column/${columnKey}`
     );
   }
 }
