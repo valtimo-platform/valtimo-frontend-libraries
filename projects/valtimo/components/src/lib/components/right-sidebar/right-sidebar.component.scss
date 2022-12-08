@@ -130,15 +130,6 @@
       ibm-list-column:first-child {
         padding-left: 0 !important;
       }
-
-      ibm-list-column:last-child {
-        padding-right: 0 !important;
-        padding-left: 0.5rem !important;
-        max-width: 150px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
     }
   }
 }
@@ -149,7 +140,6 @@
     flex-direction: column;
     border: none;
     min-width: 100%;
-    padding-right: 0.5rem !important;
 
     .cds--tag {
       margin: 0;
