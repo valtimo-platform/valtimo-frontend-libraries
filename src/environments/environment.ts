@@ -247,15 +247,6 @@ export const environment: ValtimoConfig = {
       },
     ],
   },
-  customDossierHeader: {
-    leningen: [
-      {
-        propertyPaths: ['voornaam'],
-        columnSize: 3,
-        textSize: 'sm',
-      },
-    ],
-  },
 };
 
 /*

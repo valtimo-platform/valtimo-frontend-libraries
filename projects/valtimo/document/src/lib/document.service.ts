@@ -337,24 +337,24 @@ export class DocumentService {
     assigneeId: string
   ): Observable<AssignHandlerToDocumentResult> {
     return this.http.post<AssignHandlerToDocumentResult>(
-      `${this.valtimoEndpointUri}document/${documentId}/assign`,
+      `${this.valtimoEndpointUri}v1/document/${documentId}/assign`,
       {assigneeId}
     );
   }
 
   unassignHandlerFromDocument(documentId: string): Observable<void> {
-    return this.http.post<void>(`${this.valtimoEndpointUri}document/${documentId}/unassign`, {});
+    return this.http.post<void>(`${this.valtimoEndpointUri}v1/document/${documentId}/unassign`, {});
   }
 
   getCandidateUsers(documentId: string): Observable<Array<User>> {
     return this.http.get<Array<User>>(
-      `${this.valtimoEndpointUri}document/${documentId}/candidate-user`
+      `${this.valtimoEndpointUri}v1/document/${documentId}/candidate-user`
     );
   }
 
   getOpenDocumentCount(): Observable<Array<OpenDocumentCount>> {
     return this.http.get<Array<OpenDocumentCount>>(
-      `${this.valtimoEndpointUri}document-definition/open/count`
+      `${this.valtimoEndpointUri}v1/document-definition/open/count`
     );
   }
 
