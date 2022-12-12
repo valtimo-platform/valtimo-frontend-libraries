@@ -121,8 +121,7 @@
                 }}</sup>
               </h3>
             </div>
-
-            <div tabs>
+            <div tabs *ngIf="canHaveAssignee$ | async">
               <ng-container *ngTemplateOutlet="tabs"></ng-container>
             </div>
           </valtimo-list>
@@ -130,6 +129,7 @@
       </ng-container>
     </ng-container>
   </ng-container>
+
 </ng-template>
 
 <ng-template #configuredTabs>

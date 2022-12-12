@@ -17,10 +17,10 @@
 import {Injectable} from '@angular/core';
 import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/config';
 import {NGXLogger} from 'ngx-logger';
-import {BehaviorSubject, combineLatest, Observable, Subject, timer} from 'rxjs';
-import {DocumentDefinitions, DocumentService} from '@valtimo/document';
 import {UserProviderService} from '@valtimo/security';
 import {NavigationEnd, Router} from '@angular/router';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {DocumentService} from '@valtimo/document';
 import {filter, map} from 'rxjs/operators';
 
 @Injectable({
@@ -208,12 +208,6 @@ export class MenuService {
   }
 
   private determineRoleAccess(menuItem: MenuItem, roles: string[]): boolean {
-    if (!menuItem.roles) {
-      return true;
-    } else if (menuItem.roles.some(role => roles.includes(role))) {
-      return true;
-    } else {
-      return false;
-    }
+    return !menuItem.roles || menuItem.roles.some(role => roles.includes(role));
   }
 }
