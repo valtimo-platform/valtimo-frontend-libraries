@@ -292,7 +292,8 @@
     },
     "tabs": {
       "cases": "Zaak Details",
-      "searchFields": "Zoekvelden"
+      "searchFields": "Zoekvelden",
+      "listColumns": "Lijst"
     }
   },
   "serviceTaskManagement": {

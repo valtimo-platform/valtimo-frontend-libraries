@@ -72,6 +72,7 @@
       }
     },
     "startSubProcess": "Start",
+    "claimAssigneeCase": "Claim",
     "deleteConfirmation": {
       "title": "Delete file",
       "description": "Are you sure you want to delete this file?",
@@ -291,7 +292,8 @@
     },
     "tabs": {
       "cases": "Case Details",
-      "searchFields": "Search Fields"
+      "searchFields": "Search Fields",
+      "listColumns": "List"
     }
   },
   "serviceTaskManagement": {
@@ -473,16 +475,7 @@
     "next": "Next >",
     "previous": "< Previous",
     "addRow": "Add row",
-    "deleteRow": "Delete row",
-    "on": "On",
-    "off": "Off",
-    "builds": {
-      "valtimo-backend-libraries": "Valtimo back-end",
-      "valtimo-frontend-libraries": "Valtimo front-end"
-    },
-    "email": "Email",
-    "username": "User name",
-    "name": "Name"
+    "deleteRow": "Delete row"
   },
   "taskDetail": {
     "taskCreated": "Created",

@@ -59,7 +59,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               errorMessage = `Error Code: ${error?.status} </br>Message: ${error?.message}`;
             }
           }
-          this.toastr.warning(`${errorMessage}`, `An unexpected error occurred`, {enableHtml: true, tapToDismiss: false});
+          this.toastr.warning(`${errorMessage}`, `An unexpected error occurred`, {
+            enableHtml: true,
+            tapToDismiss: false,
+          });
           return throwError(errorMessage);
         })
       );
