@@ -337,48 +337,6 @@ export class DocumentService {
     assigneeId: string
   ): Observable<AssignHandlerToDocumentResult> {
     return this.http.post<AssignHandlerToDocumentResult>(
-      `${this.valtimoEndpointUri}v1/document/${documentId}/assign`,
-      {assigneeId}
-    );
-  }
-
-  unassignHandlerFromDocument(documentId: string): Observable<void> {
-    return this.http.post<void>(`${this.valtimoEndpointUri}v1/document/${documentId}/unassign`, {});
-  }
-
-  getCandidateUsers(documentId: string): Observable<Array<User>> {
-    return this.http.get<Array<User>>(
-      `${this.valtimoEndpointUri}v1/document/${documentId}/candidate-user`
-    );
-  }
-
-  getOpenDocumentCount(): Observable<Array<OpenDocumentCount>> {
-    return this.http.get<Array<OpenDocumentCount>>(
-      `${this.valtimoEndpointUri}v1/document-definition/open/count`
-    );
-  }
-
-  patchCaseSettings(
-    documentDefinitionName: string,
-    request: CaseSettings
-  ): Observable<CaseSettings> {
-    return this.http.patch<CaseSettings>(
-      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`,
-      {...request}
-    );
-  }
-
-  getCaseSettings(documentDefinitionName: string): Observable<CaseSettings> {
-    return this.http.get<CaseSettings>(
-      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`
-    );
-  }
-
-  assignHandlerToDocument(
-    documentId: string,
-    assigneeId: string
-  ): Observable<AssignHandlerToDocumentResult> {
-    return this.http.post<AssignHandlerToDocumentResult>(
       `${this.valtimoEndpointUri}document/${documentId}/assign`,
       {assigneeId}
     );
