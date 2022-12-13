@@ -62,9 +62,9 @@ export class DossierDetailTabNotesComponent implements OnInit {
     this.notesService.refresh$
   ]).pipe(
     tap(() => this.timelineItems = []),
-    switchMap(([documentId, currentPage]) => {
-      return this.notesService.getDocumentNotes(documentId, {page: currentPage.page, size: currentPage.size})
-    }),
+    switchMap(([documentId, currentPage]) =>
+      this.notesService.getDocumentNotes(documentId, {page: currentPage.page, size: currentPage.size})
+    ),
     tap((res: Page<Note>) => {
       this.timelineItems = [];
       this.pageSizes$.pipe(take(1)).subscribe(sizes => {
