@@ -14,15 +14,131 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
+import {ListField} from '@valtimo/components';
+import {DefinitionColumn} from '@valtimo/config';
+import {combineLatest, filter, map, Observable, switchMap} from 'rxjs';
+import {CaseListColumn, DocumentService} from '@valtimo/document';
+import {ActivatedRoute} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-dossier-management-list-columns',
   templateUrl: './dossier-management-list-columns.component.html',
   styleUrls: ['./dossier-management-list-columns.component.css'],
 })
-export class DossierManagementListColumnsComponent implements OnInit {
-  constructor() {}
+export class DossierManagementListColumnsComponent {
+  private readonly COLUMNS: Array<DefinitionColumn> = [
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'title',
+      translationKey: 'title',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'key',
+      translationKey: 'key',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'path',
+      translationKey: 'path',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'displayType',
+      translationKey: 'displayType',
+    },
+    {
+      viewType: 'boolean',
+      sortable: false,
+      propertyName: 'sortable',
+      translationKey: 'sortable',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'defaultSort',
+      translationKey: 'defaultSort',
+    },
+  ];
 
-  ngOnInit(): void {}
+  readonly fields$: Observable<Array<ListField>> = this.translateService.stream('key').pipe(
+    map(() =>
+      this.COLUMNS.map(column => ({
+        key: column.propertyName,
+        label: this.translateService.instant(`listColumn.${column.translationKey}`),
+        sortable: column.sortable,
+        ...(column.viewType && {viewType: column.viewType}),
+        ...(column.enum && {enum: column.enum}),
+      }))
+    )
+  );
+
+  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
+    map(params => params.name || ''),
+    filter(docDefName => !!docDefName)
+  );
+
+  private readonly caseListColumns$: Observable<Array<CaseListColumn>> =
+    this.documentDefinitionName$.pipe(
+      switchMap(documentDefinitionName => this.documentService.getCaseList(documentDefinitionName))
+    );
+
+  readonly translatedCaseListColumn$: Observable<Array<CaseListColumn>> = combineLatest([
+    this.caseListColumns$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([caseListColumns]) =>
+      caseListColumns.map(caseListColumn => ({
+        ...caseListColumn,
+        title: this.getHeader(caseListColumn, caseListColumn.key, 'listColumn'),
+        displayType: this.setCase(caseListColumn.displayType.type),
+      }))
+    )
+  );
+
+  constructor(
+    private readonly documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly translateService: TranslateService
+  ) {}
+
+  private getHeader(
+    listColumn: CaseListColumn,
+    listColumnKey: string,
+    translation: string
+  ): string {
+    if (listColumn.title) {
+      return listColumn.title;
+    } else if (
+      `${translation}.${listColumnKey}` !==
+      this.translateService.instant(`${translation}.${listColumnKey}`)
+    ) {
+      return this.translateService.instant(`${translation}.${listColumnKey}`);
+    } else {
+      return listColumnKey;
+    }
+  }
+
+  private setCase(caseType) {
+    switch (caseType) {
+      case 'arrayCount': {
+        return 'relatedFiles';
+        break;
+      }
+      case 'underscoresToSpaces': {
+        return 'stringReplaceUnderscore';
+        break;
+      }
+      default: {
+        return caseType;
+        break;
+      }
+    }
+  }
 }

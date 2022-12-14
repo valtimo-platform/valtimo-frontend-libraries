@@ -20,6 +20,7 @@ import {Observable} from 'rxjs';
 import {
   AssignHandlerToDocumentResult,
   AuditRecord,
+  CaseListColumn,
   CaseSettings,
   Document,
   DocumentDefinition,
@@ -44,15 +45,7 @@ import {
   UploadProcessLink,
 } from './models';
 import {DocumentSearchRequest} from './document-search-request';
-import {
-  AssigneeFilter,
-  ConfigService,
-  SearchField,
-  SearchFilter,
-  SearchFilterRange,
-  SearchOperator,
-  User,
-} from '@valtimo/config';
+import {AssigneeFilter, ConfigService, SearchField, SearchFilter, SearchFilterRange, SearchOperator, User,} from '@valtimo/config';
 import {AdvancedDocumentSearchRequest} from './advanced-document-search-request';
 
 @Injectable({
@@ -371,6 +364,35 @@ export class DocumentService {
   getCaseSettings(documentDefinitionName: string): Observable<CaseSettings> {
     return this.http.get<CaseSettings>(
       `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`
+    );
+  }
+
+  getCaseList(documentDefinitionName: string): Observable<Array<CaseListColumn>> {
+    return this.http.get<Array<CaseListColumn>>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`
+    );
+  }
+
+  postCaseList(
+    documentDefinitionName: string,
+    request: CaseListColumn
+  ): Observable<CaseListColumn> {
+    return this.http.post<CaseListColumn>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`,
+      {...request}
+    );
+  }
+
+  putCaseList(documentDefinitionName: string, request: CaseListColumn): Observable<CaseListColumn> {
+    return this.http.put<CaseListColumn>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`,
+      {...request}
+    );
+  }
+
+  deleteCaseList(documentDefinitionName: string, columnKey: string): Observable<CaseListColumn> {
+    return this.http.delete<CaseListColumn>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column/${columnKey}`
     );
   }
 }

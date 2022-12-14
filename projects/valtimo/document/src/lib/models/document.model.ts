@@ -289,11 +289,33 @@ export interface UpdateUploadProcessLinkRequest {
 }
 
 export interface CaseSettings {
-  name?: string;
   canHaveAssignee: boolean;
 }
 
 export interface OpenDocumentCount {
   documentDefinitionName: string;
   openDocumentCount: number;
+}
+
+export interface CaseListColumn {
+  title: string;
+  key: string;
+  path: string;
+  displayType: DisplayType;
+  sortable: boolean;
+  defaultSort: string;
+}
+
+export interface DisplayType {
+  type: string;
+  displayTypeParameters: DisplayTypeParameters;
+}
+
+export interface DisplayTypeParameters {
+  enum: Enum;
+  dateFormat: string;
+}
+
+export interface Enum {
+  key: string;
 }
