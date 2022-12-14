@@ -375,8 +375,8 @@ export class DocumentService {
     );
   }
 
-  getCaseList(documentDefinitionName: string): Observable<CaseListColumn> {
-    return this.http.get<CaseListColumn>(
+  getCaseList(documentDefinitionName: string): Observable<Array<CaseListColumn>> {
+    return this.http.get<Array<CaseListColumn>>(
       `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`
     );
   }
