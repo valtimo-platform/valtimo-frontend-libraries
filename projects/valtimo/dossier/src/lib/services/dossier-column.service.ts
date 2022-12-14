@@ -20,7 +20,7 @@ export class DossierColumnService {
     return this.documentService.getCaseList(documentDefinitionName).pipe(
       map(caseListColumns => {
         const apiCaseListColumns =
-          config.featureToggles.caseListColumn &&
+          config?.featureToggles?.caseListColumn &&
           caseListColumns &&
           Array.isArray(caseListColumns) &&
           caseListColumns.length > 0 &&
