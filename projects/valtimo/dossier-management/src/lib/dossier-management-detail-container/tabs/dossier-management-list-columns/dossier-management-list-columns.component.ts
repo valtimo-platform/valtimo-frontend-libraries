@@ -17,8 +17,8 @@
 import {Component} from '@angular/core';
 import {ListField} from '@valtimo/components';
 import {DefinitionColumn} from '@valtimo/config';
-import {combineLatest, filter, map, Observable, switchMap} from 'rxjs';
-import {CaseListColumn, DocumentService} from '@valtimo/document';
+import {filter, map, Observable, switchMap} from 'rxjs';
+import {CaseListColumnView, DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -54,6 +54,12 @@ export class DossierManagementListColumnsComponent {
       translationKey: 'displayType',
     },
     {
+      viewType: 'string',
+      sortable: false,
+      propertyName: 'displayTypeParameters',
+      translationKey: 'displayTypeParameters',
+    },
+    {
       viewType: 'boolean',
       sortable: false,
       propertyName: 'sortable',
@@ -84,61 +90,26 @@ export class DossierManagementListColumnsComponent {
     filter(docDefName => !!docDefName)
   );
 
-  private readonly caseListColumns$: Observable<Array<CaseListColumn>> =
+  readonly caseListColumns$: Observable<Array<CaseListColumnView>> =
     this.documentDefinitionName$.pipe(
-      switchMap(documentDefinitionName => this.documentService.getCaseList(documentDefinitionName))
+      switchMap(documentDefinitionName => this.documentService.getCaseList(documentDefinitionName)),
+      map(columns =>
+        columns.map(column => ({
+          ...column,
+          title: column.title || '-',
+          displayType: column.displayType.type,
+          displayTypeParameters:
+            column.displayType.displayTypeParameters &&
+            Object.keys(column.displayType.displayTypeParameters).length > 0
+              ? JSON.stringify(column.displayType.displayTypeParameters)
+              : '-',
+        }))
+      )
     );
-
-  readonly translatedCaseListColumn$: Observable<Array<CaseListColumn>> = combineLatest([
-    this.caseListColumns$,
-    this.translateService.stream('key'),
-  ]).pipe(
-    map(([caseListColumns]) =>
-      caseListColumns.map(caseListColumn => ({
-        ...caseListColumn,
-        title: this.getHeader(caseListColumn, caseListColumn.key, 'listColumn'),
-        displayType: this.setCase(caseListColumn.displayType.type),
-      }))
-    )
-  );
 
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService
   ) {}
-
-  private getHeader(
-    listColumn: CaseListColumn,
-    listColumnKey: string,
-    translation: string
-  ): string {
-    if (listColumn.title) {
-      return listColumn.title;
-    } else if (
-      `${translation}.${listColumnKey}` !==
-      this.translateService.instant(`${translation}.${listColumnKey}`)
-    ) {
-      return this.translateService.instant(`${translation}.${listColumnKey}`);
-    } else {
-      return listColumnKey;
-    }
-  }
-
-  private setCase(caseType) {
-    switch (caseType) {
-      case 'arrayCount': {
-        return 'relatedFiles';
-        break;
-      }
-      case 'underscoresToSpaces': {
-        return 'stringReplaceUnderscore';
-        break;
-      }
-      default: {
-        return caseType;
-        break;
-      }
-    }
-  }
 }

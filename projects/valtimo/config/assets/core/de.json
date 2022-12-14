@@ -896,6 +896,7 @@
     "key": "Schlüssel",
     "path": "Pfad",
     "displayType": "Anzeigetyp",
+    "displayTypeParameters": "Parameters",
     "sortable": "Sortierbar",
     "defaultSort": "Standardsortierung"
   }

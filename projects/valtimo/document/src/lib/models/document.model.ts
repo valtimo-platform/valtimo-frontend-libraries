@@ -289,6 +289,7 @@ export interface UpdateUploadProcessLinkRequest {
 }
 
 export interface CaseSettings {
+  name?: string;
   canHaveAssignee: boolean;
 }
 
@@ -306,16 +307,24 @@ export interface CaseListColumn {
   defaultSort: string;
 }
 
+export interface CaseListColumnView {
+  title: string;
+  key: string;
+  path: string;
+  displayType: string;
+  displayTypeParameters: string;
+  sortable: boolean;
+  defaultSort: string;
+}
+
 export interface DisplayType {
   type: string;
   displayTypeParameters: DisplayTypeParameters;
 }
 
 export interface DisplayTypeParameters {
-  enum: Enum;
-  dateFormat: string;
-}
-
-export interface Enum {
-  key: string;
+  enum?: {
+    [key: string]: string;
+  };
+  dateFormat?: string;
 }

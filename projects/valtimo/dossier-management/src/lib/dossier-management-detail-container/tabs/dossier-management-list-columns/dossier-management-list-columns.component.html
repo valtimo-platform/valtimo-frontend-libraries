@@ -16,7 +16,7 @@
 
 <ng-container
   *ngIf="{
-    caseListColumn: translatedCaseListColumn$ | async,
+    caseListColumn: caseListColumns$ | async,
     fields: fields$ | async,
     documentDefinitionName: documentDefinitionName$ | async
   } as obs"

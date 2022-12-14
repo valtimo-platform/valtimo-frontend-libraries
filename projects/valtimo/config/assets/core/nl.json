@@ -896,6 +896,7 @@
     "key": "Sleutel",
     "path": "Pad",
     "displayType": "Weergavetype",
+    "displayTypeParameters": "Parameters",
     "sortable": "Sorteerbaar",
     "defaultSort": "Standaard sorteren"
   }
