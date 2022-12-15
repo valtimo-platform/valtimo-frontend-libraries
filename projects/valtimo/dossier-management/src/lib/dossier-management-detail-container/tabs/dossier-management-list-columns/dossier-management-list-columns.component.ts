@@ -18,7 +18,7 @@ import {Component} from '@angular/core';
 import {ListField} from '@valtimo/components';
 import {DefinitionColumn} from '@valtimo/config';
 import {filter, map, Observable, switchMap} from 'rxjs';
-import {CaseListColumnView, DocumentService} from '@valtimo/document';
+import {CaseListColumnView, DisplayTypeParameters, DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -60,7 +60,7 @@ export class DossierManagementListColumnsComponent {
       translationKey: 'displayTypeParameters',
     },
     {
-      viewType: 'boolean',
+      viewType: 'string',
       sortable: false,
       propertyName: 'sortable',
       translationKey: 'sortable',
@@ -90,19 +90,30 @@ export class DossierManagementListColumnsComponent {
     filter(docDefName => !!docDefName)
   );
 
-  readonly caseListColumns$: Observable<Array<CaseListColumnView>> =
-    this.documentDefinitionName$.pipe(
+  readonly caseListColumns$: Observable<Array<CaseListColumnView>> = this.translateService
+    .stream('key')
+    .pipe(
+      switchMap(() => this.documentDefinitionName$),
       switchMap(documentDefinitionName => this.documentService.getCaseList(documentDefinitionName)),
       map(columns =>
         columns.map(column => ({
           ...column,
           title: column.title || '-',
-          displayType: column.displayType.type,
-          displayTypeParameters:
-            column.displayType.displayTypeParameters &&
-            Object.keys(column.displayType.displayTypeParameters).length > 0
-              ? JSON.stringify(column.displayType.displayTypeParameters)
-              : '-',
+          sortable: column.sortable
+            ? this.translateService.instant('listColumn.sortableYes')
+            : this.translateService.instant('listColumn.sortableNo'),
+          defaultSort:
+            (column.defaultSort === 'ASC' &&
+              this.translateService.instant('listColumn.sortableAsc')) ||
+            (column.defaultSort === 'DESC' &&
+              this.translateService.instant('listColumn.sortableDesc')) ||
+            '-',
+          displayType: this.translateService.instant(
+            `listColumnDisplayType.${column?.displayType?.type}`
+          ),
+          displayTypeParameters: this.getDisplayTypeParametersView(
+            column.displayType.displayTypeParameters
+          ),
         }))
       )
     );
@@ -112,4 +123,21 @@ export class DossierManagementListColumnsComponent {
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService
   ) {}
+
+  private getDisplayTypeParametersView(displayTypeParameters: DisplayTypeParameters): string {
+    if (displayTypeParameters?.dateFormat) {
+      return displayTypeParameters.dateFormat;
+    } else if (displayTypeParameters?.enum) {
+      return Object.keys(displayTypeParameters.enum).reduce((acc, curr) => {
+        const keyValuePairString = `${curr}: ${displayTypeParameters.enum[curr]}`;
+        if (!acc) {
+          return `${keyValuePairString}`;
+        } else {
+          return `${acc}, ${keyValuePairString}`;
+        }
+      }, '');
+    } else {
+      return '-';
+    }
+  }
 }

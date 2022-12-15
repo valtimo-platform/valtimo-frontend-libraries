@@ -32,6 +32,7 @@ export interface DefinitionColumn {
   default?: boolean | string;
   enum?: Array<string> | {[key: string]: string};
   title?: string;
+  format?: string;
 }
 
 export interface CustomDossierHeaderItem {

@@ -889,6 +889,18 @@
     "displayType": "Display Type",
     "displayTypeParameters": "Parameters",
     "sortable": "Sortable",
-    "defaultSort": "Default Sort"
+    "defaultSort": "Default Sort",
+    "sortableYes": "Yes",
+    "sortableNo": "No",
+    "sortableAsc": "Ascending",
+    "sortableDesc": "Descending"
+  },
+  "listColumnDisplayType": {
+    "string": "Text",
+    "date": "Date",
+    "boolean": "Yes/no",
+    "enum": "Enumeration",
+    "arrayCount": "Count",
+    "underscoresToSpaces": "Underscores to spaces"
   }
 }

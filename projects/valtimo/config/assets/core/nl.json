@@ -898,6 +898,18 @@
     "displayType": "Weergavetype",
     "displayTypeParameters": "Parameters",
     "sortable": "Sorteerbaar",
-    "defaultSort": "Standaard sorteren"
+    "defaultSort": "Standaard sorteren",
+    "sortableYes": "Ja",
+    "sortableNo": "Nee",
+    "sortableAsc": "Oplopend",
+    "sortableDesc": "Aflopend"
+  },
+  "listColumnDisplayType": {
+    "string": "Tekst",
+    "date": "Datum",
+    "boolean": "Ja/nee",
+    "enum": "Opsomming",
+    "arrayCount": "Hoeveelheid",
+    "underscoresToSpaces": "Lage streepjes naar spaties"
   }
 }

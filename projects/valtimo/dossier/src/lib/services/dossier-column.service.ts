@@ -44,6 +44,9 @@ export class DossierColumnService {
       ...(caseListColumn?.displayType?.displayTypeParameters?.enum && {
         enum: caseListColumn.displayType.displayTypeParameters.enum as any,
       }),
+      ...(caseListColumn.displayType?.displayTypeParameters?.dateFormat && {
+        format: caseListColumn.displayType?.displayTypeParameters?.dateFormat,
+      }),
     }));
   }
 

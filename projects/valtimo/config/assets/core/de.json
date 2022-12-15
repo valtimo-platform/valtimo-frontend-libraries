@@ -898,6 +898,18 @@
     "displayType": "Anzeigetyp",
     "displayTypeParameters": "Parameters",
     "sortable": "Sortierbar",
-    "defaultSort": "Standardsortierung"
+    "defaultSort": "Standardsortierung",
+    "sortableYes": "Ja",
+    "sortableNo": "Nein",
+    "sortableAsc": "Aufsteigend",
+    "sortableDesc": "Absteigend"
+  },
+  "listColumnDisplayType": {
+    "string": "Text",
+    "date": "Datum",
+    "boolean": "Ja/nein",
+    "enum": "Zusammenfassung",
+    "arrayCount": "Quantität",
+    "underscoresToSpaces": "Unterstriche zu Leerzeichen"
   }
 }
