@@ -30,7 +30,9 @@ export interface DefinitionColumn {
   sortable?: boolean;
   viewType?: string;
   default?: boolean | string;
-  enum?: Array<string>;
+  enum?: Array<string> | {[key: string]: string};
+  title?: string;
+  format?: string;
 }
 
 export interface CustomDossierHeaderItem {
