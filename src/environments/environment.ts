@@ -174,7 +174,7 @@ export const environment: ValtimoConfig = {
   supportedDocumentFileTypesToViewInBrowser: ['pdf', 'jpg', 'png', 'svg'],
   defaultDefinitionTable: defaultDefinitionColumns,
   customDefinitionTables: {
-    leningen2: [
+    leningen: [
       ...defaultDefinitionColumns,
       {propertyName: '$.voornaam', translationKey: 'firstName', sortable: false},
       {
