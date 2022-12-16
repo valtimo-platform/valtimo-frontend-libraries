@@ -17,3 +17,7 @@
 ::ng-deep .tab-container {
   min-height: unset !important;
 }
+
+::ng-deep .cds--inline-notification {
+  max-width: 100%;
+}

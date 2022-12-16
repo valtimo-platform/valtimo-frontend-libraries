@@ -18,10 +18,13 @@
   *ngIf="{
     caseListColumn: caseListColumns$ | async,
     fields: fields$ | async,
-    documentDefinitionName: documentDefinitionName$ | async
+    documentDefinitionName: documentDefinitionName$ | async,
+    hasEnvironmentConfig: hasEnvironmentConfig$ | async
   } as obs"
 >
-  <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+  <ng-container *ngIf="!obs.hasEnvironmentConfig; else environmentConfigWarning">
+    <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+  </ng-container>
 </ng-container>
 
 <ng-template #list let-obs="obs">
@@ -39,4 +42,19 @@
   <div class="mb-3">
     <valtimo-spinner></valtimo-spinner>
   </div>
+</ng-template>
+
+<ng-template #environmentConfigWarning>
+  <div class="pl-2 pr-2 pb-2">
+    <ibm-notification
+            [notificationObj]="{
+      type: 'warning',
+      title: 'listColumn.hasEnvConfigWarningTitle' | translate,
+      message: 'listColumn.hasEnvConfigWarning' | translate,
+      showClose: false
+    }"
+    >
+    </ibm-notification>
+  </div>
+
 </ng-template>

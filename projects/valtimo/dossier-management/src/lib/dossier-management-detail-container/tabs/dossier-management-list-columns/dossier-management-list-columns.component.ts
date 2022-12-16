@@ -16,7 +16,7 @@
 
 import {Component} from '@angular/core';
 import {ListField} from '@valtimo/components';
-import {DefinitionColumn} from '@valtimo/config';
+import {ConfigService, DefinitionColumn} from '@valtimo/config';
 import {filter, map, Observable, switchMap} from 'rxjs';
 import {CaseListColumnView, DisplayTypeParameters, DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
@@ -25,7 +25,7 @@ import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'valtimo-dossier-management-list-columns',
   templateUrl: './dossier-management-list-columns.component.html',
-  styleUrls: ['./dossier-management-list-columns.component.css'],
+  styleUrls: ['./dossier-management-list-columns.component.scss'],
 })
 export class DossierManagementListColumnsComponent {
   private readonly COLUMNS: Array<DefinitionColumn> = [
@@ -90,6 +90,13 @@ export class DossierManagementListColumnsComponent {
     filter(docDefName => !!docDefName)
   );
 
+  readonly hasEnvironmentConfig$: Observable<boolean> = this.documentDefinitionName$.pipe(
+    map(
+      documentDefinitionName =>
+        !!this.configService?.config?.customDefinitionTables[documentDefinitionName]
+    )
+  );
+
   readonly caseListColumns$: Observable<Array<CaseListColumnView>> = this.translateService
     .stream('key')
     .pipe(
@@ -121,7 +128,8 @@ export class DossierManagementListColumnsComponent {
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly configService: ConfigService
   ) {}
 
   private getDisplayTypeParametersView(displayTypeParameters: DisplayTypeParameters): string {
