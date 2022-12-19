@@ -28,9 +28,9 @@
       "custom-dossier": "Custom dossier",
       "custom-maps": "Custom maps",
       "zaakobjecten": "Zaakobjecten",
-      "MINE": "Mijn dossier",
-      "OPEN": "Niet toegewezen dossier",
-      "ALL": "Alle dossier"
+      "MINE": "Mijn dossiers",
+      "OPEN": "Niet-toegewezen dossiers",
+      "ALL": "Alle dossiers"
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
@@ -191,6 +191,8 @@
   },
   "account": {
     "title": "Account",
+    "informationTitle": "Gegevens",
+    "quickLinks": "Snelkoppelingen",
     "links": {
       "profile": "Profiel",
       "password": "Wachtwoord",
@@ -220,7 +222,7 @@
       },
       "taskNotifications": "Taakmeldingen",
       "taskNotificationsIntro": "Ontvang een e-mail wanneer een taak aan jou is toegewezen",
-      "emailNotifications": "Dagelijks taak overzicht",
+      "emailNotifications": "Dagelijks taakoverzicht",
       "emailNotificationsIntro": "Persoonlijke overzicht van je open taken",
       "emailNotificationOnMonday": "Maandag",
       "emailNotificationOnTuesday": "Dinsdag",
@@ -231,7 +233,7 @@
       "emailNotificationOnSunday": "Zondag"
     },
     "version": {
-      "title": "Versie informatie"
+      "title": "Versie-informatie"
     }
   },
   "decisions": {
@@ -473,7 +475,16 @@
     "next": "Volgende >",
     "previous": "< Vorige",
     "addRow": "Rij toevoegen",
-    "deleteRow": "Rij verwijderen"
+    "deleteRow": "Rij verwijderen",
+    "on": "Aan",
+    "off": "Uit",
+    "builds": {
+      "valtimo-backend-libraries": "Valtimo back-end",
+      "valtimo-frontend-libraries": "Valtimo front-end"
+    },
+    "email": "E-mail",
+    "username": "Gebruikersnaam",
+    "name": "Naam"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",

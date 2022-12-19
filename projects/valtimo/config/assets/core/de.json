@@ -191,6 +191,8 @@
   },
   "account": {
     "title": "Account",
+    "informationTitle": "Informationen",
+    "quickLinks": "Verknüpfungen",
     "links": {
       "profile": "Profile",
       "password": "Passwort",
@@ -473,7 +475,16 @@
     "next": "Nächste >",
     "previous": "< Vorherige",
     "addRow": "Zeile hinzufügen",
-    "deleteRow": "Zeile löschen"
+    "deleteRow": "Zeile löschen",
+    "on": "Ein",
+    "off": "Aus",
+    "builds": {
+      "valtimo-backend-libraries": "Valtimo back-end",
+      "valtimo-frontend-libraries": "Valtimo front-end"
+    },
+    "email": "Email",
+    "username": "Nutzername",
+    "name": "Name"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",
