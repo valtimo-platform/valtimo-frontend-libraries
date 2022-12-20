@@ -30,7 +30,9 @@ export interface DefinitionColumn {
   sortable?: boolean;
   viewType?: string;
   default?: boolean | string;
-  enum?: Array<string>;
+  enum?: Array<string> | {[key: string]: string};
+  title?: string;
+  format?: string;
 }
 
 export interface CustomDossierHeaderItem {
@@ -106,9 +108,9 @@ export interface ValtimoConfig {
     enableHackathonCasesPage?: boolean;
     showUserNameInTopBar?: boolean;
     experimentalDmnEditing?: boolean;
+    disableCaseCount?: boolean;
     caseSearchFields?: boolean;
     caseListColumn?: boolean;
-    disableCaseCount?: boolean;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
   visibleDossierListTabs?: Array<DossierListTab>;

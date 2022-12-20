@@ -17,11 +17,11 @@
 import {Injectable} from '@angular/core';
 import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/config';
 import {NGXLogger} from 'ngx-logger';
-import {BehaviorSubject, combineLatest, Observable, Subject, take, timer} from 'rxjs';
-import {DocumentDefinitions, DocumentService} from '@valtimo/document';
 import {UserProviderService} from '@valtimo/security';
 import {NavigationEnd, Router} from '@angular/router';
-import {filter, map} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable, Subject, timer} from 'rxjs';
+import {DocumentDefinitions, DocumentService} from '@valtimo/document';
+import {filter, map, take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
