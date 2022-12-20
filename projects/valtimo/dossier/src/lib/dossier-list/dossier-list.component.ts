@@ -141,8 +141,6 @@ export class DossierListComponent implements OnInit {
 
   private readonly ASSIGNEE_KEY = 'assigneeFullName';
 
-  private readonly ASSIGNEE_KEY = 'assigneeFullName';
-
   readonly fields$: Observable<Array<ListField>> = combineLatest([
     this.columns$,
     this.canHaveAssignee$,
