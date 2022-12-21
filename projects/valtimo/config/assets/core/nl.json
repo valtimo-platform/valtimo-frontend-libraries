@@ -488,7 +488,15 @@
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",
-    "taskCompleted": "is succesvol afgerond"
+    "taskCompleted": "is succesvol afgerond",
+    "formFlow": {
+      "backConfirmation": {
+        "title": "Opslaan",
+        "description": "Wilt u de ingevulde velden opslaan?",
+        "yes": "Ja",
+        "no": "Nee"
+      }
+    }
   },
   "assignTask": {
     "assignedTo": "Toegewezen aan ",

@@ -488,7 +488,15 @@
   },
   "taskDetail": {
     "taskCreated": "Erstellt",
-    "taskCompleted": "erfolgreich abgeschlossen"
+    "taskCompleted": "erfolgreich abgeschlossen",
+    "formFlow": {
+      "backConfirmation": {
+        "title": "Speichern",
+        "description": "Möchten Sie die ausgefüllten Felder speichern?",
+        "yes": "Jah",
+        "no": "Nein"
+      }
+    }
   },
   "assignTask": {
     "assignedTo": "User-Zuordnung: ",

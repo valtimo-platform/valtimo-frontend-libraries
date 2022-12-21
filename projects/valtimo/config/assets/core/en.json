@@ -479,7 +479,15 @@
   },
   "taskDetail": {
     "taskCreated": "Created",
-    "taskCompleted": "has successfully been completed"
+    "taskCompleted": "has successfully been completed",
+    "formFlow": {
+      "backConfirmation": {
+        "title": "Save",
+        "description": "Do you want to save the filled in fields?",
+        "yes": "Yes",
+        "no": "No"
+      }
+    }
   },
   "assignTask": {
     "assignedTo": "Assigned to ",
