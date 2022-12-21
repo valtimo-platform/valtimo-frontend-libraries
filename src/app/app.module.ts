@@ -17,7 +17,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {Injector, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HttpBackend, HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LayoutModule} from '@valtimo/layout';
@@ -28,7 +28,6 @@ import {
   BpmnJsDiagramModule,
   CardModule,
   FormIoModule,
-  FormIoUploaderComponent,
   MenuModule,
   registerDocumentenApiFormioUploadComponent,
   registerFormioFileSelectorComponent,
@@ -89,7 +88,7 @@ import {
   CatalogiApiPluginModule,
   catalogiApiPluginSpecification,
   DocumentenApiPluginModule,
-  documentenApiPluginSpecification,
+  documentenApiPluginSpecification, NotificatiesApiPluginModule, notificatiesApiPluginSpecification,
   ObjectenApiPluginModule,
   objectenApiPluginSpecification,
   ObjectTokenAuthenticationPluginModule,
@@ -177,6 +176,7 @@ export function tabsFactory() {
     OpenZaakModule,
     CustomerModule,
     PluginManagementModule,
+    NotificatiesApiPluginModule,
     ObjectTokenAuthenticationPluginModule,
     OpenZaakPluginModule,
     SmartDocumentsPluginModule,
@@ -190,7 +190,7 @@ export function tabsFactory() {
       loader: {
         provide: TranslateLoader,
         useFactory: MultiTranslateHttpLoaderFactory,
-        deps: [HttpClient, ConfigService],
+        deps: [HttpBackend, ConfigService],
       },
     })
   ],
@@ -199,21 +199,17 @@ export function tabsFactory() {
     {
       provide: PLUGINS_TOKEN,
       useValue: [
-        openZaakPluginSpecification,
-        documentenApiPluginSpecification,
-        objectTokenAuthenticationPluginSpecification,
-        smartDocumentsPluginSpecification,
-        objecttypenApiPluginSpecification,
-        zakenApiPluginSpecification,
-        objectenApiPluginSpecification,
         catalogiApiPluginSpecification,
+        documentenApiPluginSpecification,
+        notificatiesApiPluginSpecification,
+        objectenApiPluginSpecification,
+        objectTokenAuthenticationPluginSpecification,
+        objecttypenApiPluginSpecification,
+        openZaakPluginSpecification,
+        smartDocumentsPluginSpecification,
+        zakenApiPluginSpecification,
       ],
     },
-  ],
-  entryComponents: [
-    CustomFormExampleComponent,
-    StartProcessCustomFormComponent,
-    FormIoUploaderComponent,
   ],
   bootstrap: [AppComponent],
 })
