@@ -491,7 +491,7 @@
     "taskCompleted": "is succesvol afgerond",
     "formFlow": {
       "backConfirmation": {
-        "title": "Opslaan",
+        "title": "Niet-opgeslagen wijzigingen",
         "description": "U probeert weg te navigeren van het formulier. Wilt u uw wijzigingen opslaan?",
         "yes": "Ja",
         "no": "Nee"
