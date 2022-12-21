@@ -178,6 +178,7 @@ export class MenuService {
               menuItems[menuItemIndex] = dossierMenu;
             }
             subscriber.next(menuItems);
+            this.dossierItemsAppended$.next(true);
             this.logger.debug('appendDossierSubMenuItems finished');
           });
       });
