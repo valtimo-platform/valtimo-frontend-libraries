@@ -492,7 +492,7 @@
     "formFlow": {
       "backConfirmation": {
         "title": "Opslaan",
-        "description": "Wilt u de ingevulde velden opslaan?",
+        "description": "U probeert weg te navigeren van het formulier. Wilt u uw wijzigingen opslaan?",
         "yes": "Ja",
         "no": "Nee"
       }

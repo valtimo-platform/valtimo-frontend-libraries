@@ -492,7 +492,7 @@
     "formFlow": {
       "backConfirmation": {
         "title": "Speichern",
-        "description": "Möchten Sie die ausgefüllten Felder speichern?",
+        "description": "Sie versuchen, das Formular zu verlassen. Möchtest du deine Änderungen speichern?",
         "yes": "Jah",
         "no": "Nein"
       }

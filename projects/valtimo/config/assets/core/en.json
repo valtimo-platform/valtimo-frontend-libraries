@@ -483,7 +483,7 @@
     "formFlow": {
       "backConfirmation": {
         "title": "Save",
-        "description": "Do you want to save the filled in fields?",
+        "description": "You are trying to navigate away from the form. Do you want to save your changes?",
         "yes": "Yes",
         "no": "No"
       }
