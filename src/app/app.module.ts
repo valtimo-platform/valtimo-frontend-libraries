@@ -32,6 +32,7 @@ import {
   registerDocumentenApiFormioUploadComponent,
   registerFormioFileSelectorComponent,
   registerFormioUploadComponent,
+  registerFormioCurrentUserComponent,
   UploaderModule,
   WidgetModule,
 } from '@valtimo/components';
@@ -213,6 +214,7 @@ export function tabsFactory() {
 })
 export class AppModule {
   constructor(injector: Injector) {
+    registerFormioCurrentUserComponent(injector);
     registerFormioUploadComponent(injector);
     registerFormioFileSelectorComponent(injector);
     registerDocumentenApiFormioUploadComponent(injector);
