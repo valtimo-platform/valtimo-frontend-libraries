@@ -35,14 +35,14 @@ export class NotesService {
 
   getDocumentNotes(documentId: string, params?: any): Observable<Page<Note>> {
     return this.http.get<Page<Note>>(
-      `${this.VALTIMO_API_ENDPOINT_URI}document/${documentId}/note`,
+      `${this.VALTIMO_API_ENDPOINT_URI}v1/document/${documentId}/note`,
       {params}
     );
   }
 
   createDocumentNote(documentId: string, request: NoteCreateRequest): Observable<Note> {
     return this.http.post<Note>(
-      `${this.VALTIMO_API_ENDPOINT_URI}document/${documentId}/note`,
+      `${this.VALTIMO_API_ENDPOINT_URI}v1/document/${documentId}/note`,
       request
     );
   }
