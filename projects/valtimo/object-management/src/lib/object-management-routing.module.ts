@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {AuthGuardService} from '@valtimo/security';
+import {ROLE_USER} from '@valtimo/config';
 
-@Component({
-  selector: 'valtimo-object-management',
-  template: `
-    <p>
-      object-management works!
-    </p>
-  `,
-  styles: [
-  ]
-})
-export class ObjectManagementComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
+const routes: Routes = [
+  {
+    path: 'objects/:objectName',
+    canActivate: [AuthGuardService],
+    data: {title: 'Objects', roles: [ROLE_USER]},
   }
+];
 
-}
+@NgModule({
+  imports: [CommonModule, RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class ObjectManagementRoutingModule {}

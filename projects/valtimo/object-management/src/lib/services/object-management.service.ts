@@ -15,11 +15,23 @@
  */
 
 import { Injectable } from '@angular/core';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {ConfigService} from '@valtimo/config';
+import {ObjectManagement} from '../models/object-management.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ObjectManagementService {
 
-  constructor() { }
+  private valtimoEndpointUri: string;
+
+  constructor(private http: HttpClient, configService: ConfigService) {
+    this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
+  }
+
+  public getAllObjects(): Observable<ObjectManagement[]> {
+    return this.http.get<ObjectManagement[]>(`${this.valtimoEndpointUri}v1/object/management/configuration`);
+  }
 }

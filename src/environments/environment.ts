@@ -93,11 +93,18 @@ export const environment: ValtimoConfig = {
         children: [],
       },
       {
+        roles: [ROLE_USER],
+        title: 'Objects',
+        iconClass: 'icon mdi mdi-map-marker',
+        sequence: 2,
+        children: [],
+      },
+      {
         roles: [ROLE_ADMIN],
         link: ['/klanten'],
         title: 'Customers',
         iconClass: 'icon mdi mdi-account',
-        sequence: 2,
+        sequence: 3,
         includeFunction: IncludeFunction.HaalcentraalConnectorConfigured,
       },
       {
@@ -105,20 +112,20 @@ export const environment: ValtimoConfig = {
         link: ['/tasks'],
         title: 'Tasks',
         iconClass: 'icon mdi mdi-check-all',
-        sequence: 3,
+        sequence: 4,
       },
       {
         roles: [ROLE_USER],
         link: ['/analysis'],
         title: 'Analysis',
         iconClass: 'icon mdi mdi-chart-bar',
-        sequence: 4,
+        sequence: 5,
       },
       {
         roles: [ROLE_ADMIN],
         title: 'Admin',
         iconClass: 'icon mdi mdi-tune',
-        sequence: 5,
+        sequence: 6,
         children: [
           {title: 'Basics', textClass: 'text-dark font-weight-bold c-default', sequence: 1},
           {link: ['/processes'], title: 'Processes', sequence: 2},
@@ -142,7 +149,7 @@ export const environment: ValtimoConfig = {
         roles: [ROLE_DEVELOPER],
         title: 'Development',
         iconClass: 'icon mdi mdi-xml',
-        sequence: 6,
+        sequence: 7,
         children: [
           {link: ['/swagger'], title: 'Swagger', iconClass: 'icon mdi mdi-dot-circle', sequence: 1},
         ],
@@ -237,6 +244,7 @@ export const environment: ValtimoConfig = {
     showUserNameInTopBar: true,
     experimentalDmnEditing: true,
     caseListColumn: true,
+    disableCaseCount: true
   },
   customDossierHeader: {
     leningen: [

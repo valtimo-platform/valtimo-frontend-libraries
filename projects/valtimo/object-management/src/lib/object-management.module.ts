@@ -15,18 +15,13 @@
  */
 
 import { NgModule } from '@angular/core';
-import { ObjectManagementComponent } from './object-management.component';
-
-
+import {ObjectManagementRoutingModule} from './object-management-routing.module';
 
 @NgModule({
-  declarations: [
-    ObjectManagementComponent
-  ],
+  declarations: [],
   imports: [
+    ObjectManagementRoutingModule
   ],
-  exports: [
-    ObjectManagementComponent
-  ]
+  exports: []
 })
 export class ObjectManagementModule { }

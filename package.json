@@ -322,6 +322,7 @@
     "@valtimo/user-interface": "file:dist/valtimo/user-interface",
     "@valtimo/user-management": "file:dist/valtimo/user-management",
     "@valtimo/view-configurator": "file:dist/valtimo/view-configurator",
+    "@valtimo/object-management": "file:dist/valtimo/object-management",
     "cypress": "latest",
     "deepmerge-ts": "^4.2.2",
     "sass": "^1.56.1"
