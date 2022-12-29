@@ -18,18 +18,26 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
-import {ROLE_USER} from '@valtimo/config';
+import {ROLE_ADMIN, ROLE_USER} from '@valtimo/config';
+import {ObjecttypesManagementComponent} from './components/objecttypes-management/objecttypes-management.component';
 
 const routes: Routes = [
+  // {
+  //   path: 'data:objectName',
+  //   canActivate: [AuthGuardService],
+  //   data: {title: 'Data', roles: [ROLE_USER]},
+  // },
   {
-    path: 'objects/:objectName',
+    path: 'object-management',
     canActivate: [AuthGuardService],
-    data: {title: 'Objects', roles: [ROLE_USER]},
+    component: ObjecttypesManagementComponent,
+    data: {title: 'Objects', roles: [ROLE_ADMIN]},
   }
 ];
 
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
+  declarations: [],
 })
 export class ObjectManagementRoutingModule {}

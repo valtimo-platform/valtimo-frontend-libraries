@@ -16,10 +16,20 @@
 
 import { NgModule } from '@angular/core';
 import {ObjectManagementRoutingModule} from './object-management-routing.module';
+import {ObjecttypesManagementComponent} from './components/objecttypes-management/objecttypes-management.component';
+import {CommonModule} from '@angular/common';
+import {TranslateModule} from '@ngx-translate/core';
+import {WidgetModule, ListModule} from '@valtimo/components'
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ObjecttypesManagementComponent
+  ],
   imports: [
+    CommonModule,
+    WidgetModule,
+    ListModule,
+    TranslateModule,
     ObjectManagementRoutingModule
   ],
   exports: []

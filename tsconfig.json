@@ -73,9 +73,8 @@
       "@valtimo/form-management/*": [
         "dist/valtimo/form-management/*"
       ],
-      "@valtimo/object-management": [
-        "dist/valtimo/object-management"
-      ],
+      "@valtimo/object-management": ["dist/valtimo/object-management"],
+      "@valtimo/object-management/*": ["dist/valtimo/object-management/*"],
       "@valtimo/form-link": ["dist/valtimo/form-link"],
       "@valtimo/form-link/*": ["dist/valtimo/form-link/*"],
       "@valtimo/migration": ["dist/valtimo/migration"],

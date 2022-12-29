@@ -920,5 +920,12 @@
     "enum": "Enumeration",
     "arrayCount": "Count",
     "underscoresToSpaces": "Underscores to spaces"
+  },
+  "objectManagement": {
+    "title": "Objecttypes",
+    "createObjecttype": "Create new objecttype",
+    "labels": {
+      "title": "Title"
+    }
   }
 }

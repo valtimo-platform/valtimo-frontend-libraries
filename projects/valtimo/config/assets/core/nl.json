@@ -929,5 +929,12 @@
     "enum": "Opsomming",
     "arrayCount": "Hoeveelheid",
     "underscoresToSpaces": "Lage streepjes naar spaties"
+  },
+  "objectManagement": {
+    "title": "Objecttypes",
+    "createObjecttype": "Maak nieuwe objecttype",
+    "labels": {
+      "title": "Titel"
+    }
   }
 }

@@ -929,5 +929,12 @@
     "enum": "Zusammenfassung",
     "arrayCount": "Quantität",
     "underscoresToSpaces": "Unterstriche zu Leerzeichen"
+  },
+  "objectManagement": {
+    "title": "Objekttypen",
+    "createObjecttype": "neue Objekttypen erstellen",
+    "labels": {
+      "title": "Titel"
+    }
   }
 }
