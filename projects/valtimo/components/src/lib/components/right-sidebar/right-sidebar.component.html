@@ -121,32 +121,46 @@
   <div class="information-table">
     <ibm-structured-list>
       <ibm-list-row>
-        <ibm-list-column
-          ><a href="https://docs.valtimo.nl" target="_blank" ibmLink>{{
+        <ibm-list-column>
+          <a href="https://docs.valtimo.nl" target="_blank" ibmLink>{{
             'account.links.help' | translate
-          }}</a></ibm-list-column
-        >
+          }}</a>
+        </ibm-list-column>
       </ibm-list-row>
       <ibm-list-row>
-        <ibm-list-column
-          ><a href="https://www.valtimo.nl/feedback" target="_blank" ibmLink>{{
+        <ibm-list-column>
+          <a href="https://www.valtimo.nl/feedback" target="_blank" ibmLink>{{
             'account.links.feedback' | translate
-          }}</a></ibm-list-column
-        >
+          }}</a>
+        </ibm-list-column>
       </ibm-list-row>
       <ibm-list-row>
-        <ibm-list-column
-          ><a href="https://forum.valtimo.nl" target="_blank" ibmLink>{{
+        <ibm-list-column>
+          <a href="https://forum.valtimo.nl" target="_blank" ibmLink>{{
             'account.links.forum' | translate
-          }}</a></ibm-list-column
-        >
+          }}</a>
+        </ibm-list-column>
       </ibm-list-row>
       <ibm-list-row>
-        <ibm-list-column
-          ><a href="javascript:void(0)" ibmLink (click)="logout()">{{
-            'account.links.signOut' | translate
-          }}</a></ibm-list-column
-        >
+        <ibm-list-column>
+          <a href="javascript:void(0)" ibmLink (click)="logout()">{{
+            'account.plantATreeMailBody' | translate
+          }}</a>
+        </ibm-list-column>
+      </ibm-list-row>
+      <ibm-list-row *ngIf="showPlantATreeButton">
+        <ibm-list-column>
+          <a
+            class="text-success"
+            href="mailto:valtimo@ritense.com?{{ 'account.plantATreeMailBody' | translate }}"
+            target="_blank"
+            ibmLink
+          >
+            {{
+              'account.links.plantATree' | translate
+            }}
+          </a>
+        </ibm-list-column>
       </ibm-list-row>
     </ibm-structured-list>
   </div>
