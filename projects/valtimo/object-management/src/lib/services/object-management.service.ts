@@ -34,4 +34,8 @@ export class ObjectManagementService {
   public getAllObjects(): Observable<ObjectManagement[]> {
     return this.http.get<ObjectManagement[]>(`${this.valtimoEndpointUri}v1/object/management/configuration`);
   }
+
+  public createObject(payload: ObjectManagement): Observable<ObjectManagement> {
+    return this.http.post<ObjectManagement>(`${this.valtimoEndpointUri}v1/object/management/configuration`, payload);
+  }
 }

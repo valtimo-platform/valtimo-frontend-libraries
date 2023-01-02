@@ -15,11 +15,12 @@
  */
 
 import {Component} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {switchMap, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ObjectManagementService} from '../../services/object-management.service';
 import {ObjectManagement} from '../../models/object-management.model';
+import {ObjectManagementStateService} from '../../services/object-management-state.service';
 
 @Component({
   selector: 'valtimo-objecttypes-management',
@@ -31,7 +32,10 @@ export class ObjecttypesManagementComponent {
 
   readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
 
-  readonly objecttypesInstances$: Observable<Array<ObjectManagement>> = this.translateService.stream('key').pipe(
+  readonly objecttypesInstances$: Observable<Array<ObjectManagement>> = combineLatest([
+    this.translateService.stream('key'),
+    this.objectManagementState.refresh$
+  ]).pipe(
     tap(() => this.setFields()),
     switchMap(() =>
       this.objectManagementService.getAllObjects()
@@ -41,9 +45,14 @@ export class ObjecttypesManagementComponent {
 
   constructor(
     private readonly objectManagementService: ObjectManagementService,
-    private readonly translateService: TranslateService,
+    private readonly objectManagementState: ObjectManagementStateService,
+    private readonly translateService: TranslateService
   ) {}
 
+  showAddModal(): void {
+    this.objectManagementState.setModalType('add');
+    this.objectManagementState.showModal();
+  }
 
   private setFields(): void {
     const keys: Array<string> = ['title'];

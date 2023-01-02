@@ -20,17 +20,26 @@ import {ObjecttypesManagementComponent} from './components/objecttypes-managemen
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {WidgetModule, ListModule} from '@valtimo/components'
+import {ObjecttypeAddModalComponent} from './components/objecttype-add-modal/objecttype-add-modal.component';
+import {ButtonModule, FormModule, InputModule, ModalModule, SelectModule, TitleModule} from '@valtimo/user-interface';
 
 @NgModule({
   declarations: [
-    ObjecttypesManagementComponent
+    ObjecttypesManagementComponent,
+    ObjecttypeAddModalComponent
   ],
   imports: [
     CommonModule,
     WidgetModule,
     ListModule,
     TranslateModule,
-    ObjectManagementRoutingModule
+    ObjectManagementRoutingModule,
+    ModalModule,
+    TitleModule,
+    ButtonModule,
+    FormModule,
+    InputModule,
+    SelectModule
   ],
   exports: []
 })

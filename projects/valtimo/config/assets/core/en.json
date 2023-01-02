@@ -925,7 +925,22 @@
     "title": "Objecttypes",
     "createObjecttype": "Create new objecttype",
     "labels": {
-      "title": "Title"
-    }
+      "title": "Title",
+      "objects": "Objects API plugin configuration",
+      "objecttypes": "Objecttypen API plugin configuration",
+      "objecttypeUrl": "Objecttype URL",
+      "formDefinitionView": "View form definition",
+      "formDefinitionEdit": "Edit form definition"
+    },
+    "tooltips": {
+      "title": "Title",
+      "objects": "Objects API plugin configuration",
+      "objecttypes": "Objecttypen API plugin configuration",
+      "objecttypeUrl": "Objecttype URL",
+      "formDefinitionView": "View form definition",
+      "formDefinitionEdit": "Edit form definition"
+    },
+    "cancel": "Cancel",
+    "add": "Add object"
   }
 }

@@ -934,7 +934,22 @@
     "title": "Objekttypen",
     "createObjecttype": "neue Objekttypen erstellen",
     "labels": {
-      "title": "Titel"
-    }
+      "title": "Titel",
+      "objects": "Objects-API-Plugin-Konfiguration",
+      "objecttypes": "Objecttypen-API-Plugin-Konfiguration",
+      "objecttypeUrl": "Objekttyp-URL",
+      "formDefinitionView": "Formulardefinition anzeigen",
+      "formDefinitionEdit": "Formulardefinition bearbeiten"
+    },
+    "tooltips": {
+      "title": "Titel",
+      "objects": "Objects-API-Plugin-Konfiguration",
+      "objecttypes": "Objecttypen-API-Plugin-Konfiguration",
+      "objecttypeUrl": "Objekttyp-URL",
+      "formDefinitionView": "Formulardefinition anzeigen",
+      "formDefinitionEdit": "Formulardefinition bearbeiten"
+    },
+    "cancel": "Stornieren",
+    "add": "Objekt hinzufügen"
   }
 }
