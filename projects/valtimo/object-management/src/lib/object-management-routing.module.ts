@@ -19,8 +19,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
 import {ROLE_ADMIN, ROLE_USER} from '@valtimo/config';
-import {ObjecttypesManagementComponent} from './components/objecttypes-management/objecttypes-management.component';
 import {ObjectManagementDetailContainerComponent} from './components/object-management-detail-container/object-management-detail-container.component';
+import {ObjectManagementListComponent} from './components/object-management-list/object-management-list.component';
 
 const routes: Routes = [
   // {
@@ -31,7 +31,7 @@ const routes: Routes = [
   {
     path: 'object-management',
     canActivate: [AuthGuardService],
-    component: ObjecttypesManagementComponent,
+    component: ObjectManagementListComponent,
     data: {title: 'Objects', roles: [ROLE_ADMIN]},
   },
   {

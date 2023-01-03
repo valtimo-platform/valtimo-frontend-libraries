@@ -24,11 +24,11 @@ import {ObjectManagementStateService} from '../../services/object-management-sta
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'valtimo-objecttypes-management',
-  templateUrl: './objecttypes-management.component.html',
-  styleUrls: ['./objecttypes-management.component.scss'],
+  selector: 'valtimo-object-management-list',
+  templateUrl: './object-management-list.component.html',
+  styleUrls: ['./object-management-list.component.scss'],
 })
-export class ObjecttypesManagementComponent {
+export class ObjectManagementListComponent {
   readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
