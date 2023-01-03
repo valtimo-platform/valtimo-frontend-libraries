@@ -22,11 +22,15 @@ import {TranslateModule} from '@ngx-translate/core';
 import {WidgetModule, ListModule} from '@valtimo/components'
 import {ObjecttypeAddModalComponent} from './components/objecttype-add-modal/objecttype-add-modal.component';
 import {ButtonModule, FormModule, InputModule, ModalModule, SelectModule, TitleModule} from '@valtimo/user-interface';
+import {ObjectManagementDetailContainerComponent} from './components/object-management-detail-container/object-management-detail-container.component';
+import {ObjectManagementDetailComponent} from './components/object-management-detail-container/tabs/object-management-detail/object-management-detail.component';
 
 @NgModule({
   declarations: [
     ObjecttypesManagementComponent,
-    ObjecttypeAddModalComponent
+    ObjecttypeAddModalComponent,
+    ObjectManagementDetailContainerComponent,
+    ObjectManagementDetailComponent
   ],
   imports: [
     CommonModule,

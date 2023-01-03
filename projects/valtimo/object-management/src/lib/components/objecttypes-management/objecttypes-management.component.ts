@@ -21,6 +21,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ObjectManagementService} from '../../services/object-management.service';
 import {ObjectManagement} from '../../models/object-management.model';
 import {ObjectManagementStateService} from '../../services/object-management-state.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'valtimo-objecttypes-management',
@@ -46,12 +47,17 @@ export class ObjecttypesManagementComponent {
   constructor(
     private readonly objectManagementService: ObjectManagementService,
     private readonly objectManagementState: ObjectManagementStateService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private router: Router
   ) {}
 
   showAddModal(): void {
     this.objectManagementState.setModalType('add');
     this.objectManagementState.showModal();
+  }
+
+  redirectToDetails(objectManagement: ObjectManagement) {
+    this.router.navigate(['/object-management/object', objectManagement.id]);
   }
 
   private setFields(): void {
