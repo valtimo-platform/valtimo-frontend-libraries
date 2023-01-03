@@ -25,5 +25,4 @@ import {PluginTranslatePipeModule} from '../../pipes';
   imports: [CommonModule, FormModule, InputModule, PluginTranslatePipeModule],
   exports: [OpenNotificatiesConfigurationComponent],
 })
-export class OpenNotificatiesPluginModule {
-}
+export class OpenNotificatiesPluginModule {}

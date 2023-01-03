@@ -25,13 +25,15 @@ import {OpenNotificatiesConfig} from '../../models';
   styleUrls: ['./open-notificaties-configuration.component.scss'],
 })
 export class OpenNotificatiesConfigurationComponent
-  implements PluginConfigurationComponent, OnInit, OnDestroy {
+  implements PluginConfigurationComponent, OnInit, OnDestroy
+{
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
   @Input() pluginId: string;
   @Input() prefillConfiguration$: Observable<OpenNotificatiesConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<OpenNotificatiesConfig> = new EventEmitter<OpenNotificatiesConfig>();
+  @Output() configuration: EventEmitter<OpenNotificatiesConfig> =
+    new EventEmitter<OpenNotificatiesConfig>();
 
   private saveSubscription!: Subscription;
 
