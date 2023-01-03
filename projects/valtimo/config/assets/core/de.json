@@ -950,6 +950,11 @@
       "formDefinitionEdit": "Formulardefinition bearbeiten"
     },
     "cancel": "Stornieren",
-    "add": "Objekt hinzufügen"
+    "add": "Objekt hinzufügen",
+    "download": "Download",
+    "visibleInMenu": "Im Menü sichtbar",
+    "tabs": {
+      "general": "Allgemein"
+    }
   }
 }

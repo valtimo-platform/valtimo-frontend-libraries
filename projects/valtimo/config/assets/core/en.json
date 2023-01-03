@@ -941,6 +941,11 @@
       "formDefinitionEdit": "Edit form definition"
     },
     "cancel": "Cancel",
-    "add": "Add object"
+    "add": "Add object",
+    "download": "Download",
+    "visibleInMenu": "Visible in menu",
+    "tabs": {
+      "general": "General"
+    }
   }
 }

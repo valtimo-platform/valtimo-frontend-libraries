@@ -27,12 +27,12 @@
 </div>
 
 <ng-template #title>
-  <div class="bg-light dossier-header" *ngIf="documentDefinition$ | async as documentDefinition">
+  <div class="bg-light dossier-header" *ngIf="object$ | async as obs">
     <h3 class="dossier-title">
-      {{ documentDefinition.schema.title }}
-      <div *ngIf="documentDefinition.readOnly" class="pull-right">
+      {{ obs.title }}
+      <div *ngIf="obs.showInDataMenu" class="pull-right">
         <span class="badge badge-pill badge-info increase-size">{{
-          'dossierManagement.readonly' | translate
+          'objectManagement.visibleInMenu' | translate
         }}</span>
       </div>
     </h3>
@@ -57,7 +57,7 @@
 <ng-template #tabContent>
   <div class="pt-3 bg-white position-relative tab-container">
     <div *ngIf="currentTab && currentTab === TabEnum.GENERAL">
-      <valtimo-object-management-detail></valtimo-object-management-detail>
+      <valtimo-object-management-detail [object]="object$ | async"></valtimo-object-management-detail>
     </div>
   </div>
 </ng-template>

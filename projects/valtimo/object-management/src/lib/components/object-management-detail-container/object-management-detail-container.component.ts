@@ -16,11 +16,11 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {DocumentService} from '@valtimo/document';
 import {filter, map, Observable, Subscription, switchMap} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
 import {TabService} from '../../services/tab.service';
 import {TabEnum} from '../../services/tab.enum';
+import {ObjectManagementService} from '../../services/object-management.service';
 
 @Component({
   selector: 'valtimo-object-management-detail-container',
@@ -35,19 +35,19 @@ export class ObjectManagementDetailContainerComponent implements OnInit, OnDestr
 
   readonly TabEnum = TabEnum;
 
-  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.name || ''),
-    filter(docDefName => !!docDefName)
+  readonly objectId$: Observable<string> = this.route.params.pipe(
+    map(params => params.id || ''),
+    filter(id => !!id)
   );
 
-  readonly documentDefinition$ = this.documentDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
-      this.documentService.getDocumentDefinition(documentDefinitionName)
+  readonly object$ = this.objectId$.pipe(
+    switchMap(object =>
+      this.objectManagementService.getObjectById(object)
     )
   );
 
   constructor(
-    private readonly documentService: DocumentService,
+    private readonly objectManagementService: ObjectManagementService,
     private readonly route: ActivatedRoute,
     private readonly configService: ConfigService,
     private readonly tabService: TabService

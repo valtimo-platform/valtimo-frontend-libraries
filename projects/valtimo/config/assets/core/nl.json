@@ -950,6 +950,11 @@
       "formDefinitionEdit": "Wijzig formulier definitie"
     },
     "cancel": "Annuleren",
-    "add": "Object toevoegen"
+    "add": "Object toevoegen",
+    "download": "Download",
+    "visibleInMenu": "Zichtbaar in het menu",
+    "tabs": {
+      "general": "Algemeen"
+    }
   }
 }

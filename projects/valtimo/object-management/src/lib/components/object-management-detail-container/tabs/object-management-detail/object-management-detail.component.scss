@@ -13,3 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.row {
+  margin: 0;
+}
+
+.object-schema {
+  resize: none;
+}
+
+valtimo-widget::ng-deep .card-border.card-full-default {
+  border: none;
+}
+

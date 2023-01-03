@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {ObjectManagement} from '../../../../models/object-management.model';
 
 @Component({
   selector: 'valtimo-object-management-detail',
@@ -22,6 +23,21 @@ import {Component} from '@angular/core';
   styleUrls: ['./object-management-detail.component.scss'],
 })
 export class ObjectManagementDetailComponent {
+  @Input() object: ObjectManagement
 
+  constructor() {}
 
+  downloadDefinition(): void {
+    const dataString =
+      'data:text/json;charset=utf-8,' +
+      encodeURIComponent(JSON.stringify(this.object, null, 2));
+    console.log(dataString)
+    const downloadAnchorElement = document.getElementById('downloadAnchorElement');
+    downloadAnchorElement.setAttribute('href', dataString);
+    downloadAnchorElement.setAttribute(
+      'download',
+      `${this.object.id}.json`
+    );
+    downloadAnchorElement.click();
+  }
 }

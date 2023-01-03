@@ -35,6 +35,10 @@ export class ObjectManagementService {
     return this.http.get<ObjectManagement[]>(`${this.valtimoEndpointUri}v1/object/management/configuration`);
   }
 
+  public getObjectById(id: string): Observable<ObjectManagement> {
+    return this.http.get<ObjectManagement>(`${this.valtimoEndpointUri}v1/object/management/configuration/${id}`);
+  }
+
   public createObject(payload: ObjectManagement): Observable<ObjectManagement> {
     return this.http.post<ObjectManagement>(`${this.valtimoEndpointUri}v1/object/management/configuration`, payload);
   }
