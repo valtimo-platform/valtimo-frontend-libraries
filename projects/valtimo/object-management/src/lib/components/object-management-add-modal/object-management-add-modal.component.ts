@@ -24,12 +24,12 @@ import {PluginConfiguration, PluginManagementService} from '@valtimo/plugin';
 import {ObjectManagementService} from '../../services/object-management.service';
 
 @Component({
-  selector: 'valtimo-objecttype-add-modal',
-  templateUrl: './objecttype-add-modal.component.html',
-  styleUrls: ['./objecttype-add-modal.component.scss'],
+  selector: 'valtimo-object-management-add-modal',
+  templateUrl: './object-management-add-modal.component.html',
+  styleUrls: ['./object-management-add-modal.component.scss'],
 })
-export class ObjecttypeAddModalComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('objecttypeAddModal') objecttypeAddModal: vModalComponent;
+export class ObjectManagementAddModalComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('objectManagementAddModal') objectManagementAddModal: vModalComponent;
   @Output() createNoteEvent: EventEmitter<any> = new EventEmitter();
 
   readonly disabled$!: Observable<boolean>;
@@ -149,7 +149,7 @@ export class ObjecttypeAddModalComponent implements AfterViewInit, OnDestroy {
   private show(): void {
     this.objectManagementState.modalType$.pipe(take(1)).subscribe(modalType => {
       if (modalType === 'add') {
-        this.modalService.openModal(this.objecttypeAddModal);
+        this.modalService.openModal(this.objectManagementAddModal);
       }
     });
   }

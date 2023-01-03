@@ -19,18 +19,18 @@ import {ObjectManagementRoutingModule} from './object-management-routing.module'
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {WidgetModule, ListModule} from '@valtimo/components'
-import {ObjecttypeAddModalComponent} from './components/objecttype-add-modal/objecttype-add-modal.component';
 import {ButtonModule, FormModule, InputModule, ModalModule, SelectModule, TitleModule} from '@valtimo/user-interface';
 import {ObjectManagementDetailContainerComponent} from './components/object-management-detail-container/object-management-detail-container.component';
 import {ObjectManagementDetailComponent} from './components/object-management-detail-container/tabs/object-management-detail/object-management-detail.component';
 import {ObjectManagementListComponent} from './components/object-management-list/object-management-list.component';
+import {ObjectManagementAddModalComponent} from './components/object-management-add-modal/object-management-add-modal.component';
 
 @NgModule({
   declarations: [
     ObjectManagementListComponent,
-    ObjecttypeAddModalComponent,
     ObjectManagementDetailContainerComponent,
-    ObjectManagementDetailComponent
+    ObjectManagementDetailComponent,
+    ObjectManagementAddModalComponent
   ],
   imports: [
     CommonModule,
