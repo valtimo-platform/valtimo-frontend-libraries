@@ -245,8 +245,7 @@ export const environment: ValtimoConfig = {
     showUserNameInTopBar: true,
     experimentalDmnEditing: true,
     caseListColumn: true,
-    disableCaseCount: true,
-    enableObjectManagement: true
+    disableCaseCount: true
   },
   customDossierHeader: {
     leningen: [

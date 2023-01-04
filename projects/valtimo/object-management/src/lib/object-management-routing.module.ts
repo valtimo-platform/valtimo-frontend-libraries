@@ -18,16 +18,11 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
-import {ROLE_ADMIN, ROLE_USER} from '@valtimo/config';
+import {ROLE_ADMIN} from '@valtimo/config';
 import {ObjectManagementDetailContainerComponent} from './components/object-management-detail-container/object-management-detail-container.component';
 import {ObjectManagementListComponent} from './components/object-management-list/object-management-list.component';
 
 const routes: Routes = [
-  // {
-  //   path: 'data:objectName',
-  //   canActivate: [AuthGuardService],
-  //   data: {title: 'Data', roles: [ROLE_USER]},
-  // },
   {
     path: 'object-management',
     canActivate: [AuthGuardService],
@@ -38,7 +33,7 @@ const routes: Routes = [
     path: 'object-management/object/:id',
     canActivate: [AuthGuardService],
     component: ObjectManagementDetailContainerComponent,
-    data: {title: 'Objects', roles: [ROLE_ADMIN]},
+    data: {title: 'Object', roles: [ROLE_ADMIN]},
   }
 ];
 

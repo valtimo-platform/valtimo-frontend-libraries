@@ -22,7 +22,6 @@ import {NavigationEnd, Router} from '@angular/router';
 import {BehaviorSubject, combineLatest, Observable, Subject, timer} from 'rxjs';
 import {DocumentDefinitions, DocumentService} from '@valtimo/document';
 import {filter, map, take} from 'rxjs/operators';
-// import {ObjectManagementService} from '@valtimo/object-management';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +38,6 @@ export class MenuService {
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
-    // private readonly objectManagementService: ObjectManagementService,
     private readonly userProviderService: UserProviderService,
     private readonly logger: NGXLogger,
     private readonly menuIncludeService: MenuIncludeService,
@@ -62,13 +60,12 @@ export class MenuService {
   );
 
   private readonly dossierItemsAppended$ = new BehaviorSubject<boolean>(false);
-  private readonly objectItemsAppended$ = new BehaviorSubject<boolean>(false);
 
   // Find out which menu item sequence number matches the current url the closest
   public get closestSequence$(): Observable<string> {
-    return combineLatest([this.dossierItemsAppended$, this.objectItemsAppended$, this.currentRoute$, this.menuItems$]).pipe(
+    return combineLatest([this.dossierItemsAppended$, this.currentRoute$, this.menuItems$]).pipe(
       filter(([dossierItemsAppended]) => dossierItemsAppended),
-      map(([dossierItemsAppended, objectItemsAppended, currentRoute, menuItems]) => {
+      map(([dossierItemsAppended, currentRoute, menuItems]) => {
         let closestSequence = '0';
         let highestDifference = 0;
 
@@ -124,6 +121,7 @@ export class MenuService {
   private loadMenuItems(): MenuItem[] {
     let menuItems: MenuItem[] = [];
     this.menuConfig.menuItems.forEach((menuItem: MenuItem) => {
+
       if (menuItem.includeFunction !== undefined) {
         this.includeFunctionObservables[menuItem.title] =
           this.menuIncludeService.getIncludeFunction(menuItem.includeFunction);
@@ -136,11 +134,6 @@ export class MenuService {
     this.appendDossierSubMenuItems(menuItems).subscribe(
       value => (menuItems = this.applyMenuRoleSecurity(value))
     );
-    // if (this.enableObjectManagement) {
-    //   this.appendObjectSubMenuItems(menuItems).subscribe(
-    //     value => (menuItems = this.applyMenuRoleSecurity(value))
-    //   )
-    // }
     return menuItems;
   }
 
@@ -194,34 +187,6 @@ export class MenuService {
       });
     });
   }
-
-  // private appendObjectSubMenuItems(menuItems: MenuItem[]): Observable<MenuItem[]> {
-  //   return new Observable(subscriber => {
-  //     this.logger.debug('appendObjectSubMenuItems');
-  //     this.objectManagementService.getAllObjects().subscribe(objects => {
-  //       const objectMenuItems: MenuItem[] = objects.map((object, index) => {
-  //         return {
-  //           link: ['/objects/' + object.title],
-  //           title: object.title,
-  //           iconClass: 'icon mdi mdi-dot-circle',
-  //           sequence: index,
-  //           show: true
-  //         } as MenuItem;
-  //       });
-  //       this.logger.debug('found objectMenuItems', objectMenuItems);
-  //       const menuItemIndex = menuItems.findIndex(({title}) => title === 'Objects');
-  //       if (menuItemIndex > 0) {
-  //         const objectMenu = menuItems[menuItemIndex];
-  //         this.logger.debug('updating objectMenu', objectMenu);
-  //         objectMenu.children = objectMenuItems;
-  //         menuItems[menuItemIndex] = objectMenu;
-  //       }
-  //       subscriber.next(menuItems);
-  //       this.objectItemsAppended$.next(true);
-  //       this.logger.debug('appendObjectSubMenuItems finished');
-  //     });
-  //   });
-  // }
 
   private getOpenDocumentCountMap(definitions: DocumentDefinitions): Map<string, Subject<number>> {
     const countMap = new Map<string, Subject<number>>();
