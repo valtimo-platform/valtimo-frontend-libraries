@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, EventEmitter, OnDestroy, Output, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  Output,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   FormioComponent,
@@ -97,20 +105,24 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this._subscriptions.add(this.modal.modalShowing$.pipe(
-      distinctUntilChanged(),
-      tap((modalShowing) => {
-        const formIoFormData = this.formIoFormData$.getValue();
-        if (!modalShowing && formIoFormData) {
-          if (this.taskProcessLinkType$.getValue() === 'form-flow') {
-            this.formFlowService.save(this.formFlowInstanceId, formIoFormData).subscribe(
-              () => null,
-              errors => this.form.showErrors(errors)
-            );
-          }
-        }
-      })
-    ).subscribe());
+    this._subscriptions.add(
+      this.modal.modalShowing$
+        .pipe(
+          distinctUntilChanged(),
+          tap(modalShowing => {
+            const formIoFormData = this.formIoFormData$.getValue();
+            if (!modalShowing && formIoFormData) {
+              if (this.taskProcessLinkType$.getValue() === 'form-flow') {
+                this.formFlowService.save(this.formFlowInstanceId, formIoFormData).subscribe(
+                  () => null,
+                  errors => this.form.showErrors(errors)
+                );
+              }
+            }
+          })
+        )
+        .subscribe()
+    );
   }
 
   ngOnDestroy() {
@@ -214,7 +226,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
             errors => this.form.showErrors(errors)
           );
       } else if (submission.data['back']) {
-        this.openPromptSaveData(submission)
+        this.openPromptSaveData(submission);
       }
     }
   }
