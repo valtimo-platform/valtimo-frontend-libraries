@@ -22,10 +22,23 @@
     hasEnvironmentConfig: hasEnvironmentConfig$ | async
   } as obs"
 >
+  <ng-container *ngTemplateOutlet="addButton"></ng-container>
   <ng-container *ngIf="!obs.hasEnvironmentConfig; else environmentConfigWarning">
-    <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+    <ng-container *ngIf="obs.caseListColumn?.length > 0; else noConfigWarning">
+      <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+    </ng-container>
   </ng-container>
+  <ng-container *ngTemplateOutlet="createEditModal"></ng-container>
 </ng-container>
+
+<ng-template #addButton>
+  <div class="btn-group mt-m3px mb-3 pr-2 float-right">
+    <button (click)="openModal('create')" ibmButton="primary" size="md">
+      {{ 'listColumn.addButtonText' | translate }}
+      <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
+    </button>
+  </div>
+</ng-template>
 
 <ng-template #moveRowButtons let-index="index" let-length="length">
   <div
@@ -77,5 +90,48 @@
       }"
     >
     </ibm-notification>
+  </div>
+</ng-template>
+
+<ng-template #noConfigWarning>
+  <div class="pl-2 pr-2 pb-2">
+    <ibm-notification
+      [notificationObj]="{
+        type: 'info',
+        title: 'listColumn.noConfigWarningTitle' | translate,
+        message: 'listColumn.noConfigWarning' | translate,
+        showClose: false
+      }"
+    >
+    </ibm-notification>
+  </div>
+</ng-template>
+
+<ng-template #createEditModal>
+  <ibm-modal
+    *ngIf="{type: currentModalType$ | async, show: showModal$ | async} as modalObs"
+    [open]="modalObs.show"
+  >
+    <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+      <h3 ibmModalHeaderHeading>
+        {{
+          modalObs.type === 'create'
+            ? ('listColumn.addButtonText' | translate)
+            : ('listColumn.editColumnTitle' | translate)
+        }}
+      </h3>
+    </ibm-modal-header>
+    <section ibmModalContent>
+      <ng-container *ngTemplateOutlet="modalContent"></ng-container>
+    </section>
+  </ibm-modal>
+</ng-template>
+
+<ng-template #modalContent>
+  <div class="bx--text-input__field-wrapper">
+    <ibm-label helperText="Helper text">
+      {{ 'test' }}
+      <input ibmText placeholder="Placeholder" [autocomplete]="false" />
+    </ibm-label>
   </div>
 </ng-template>

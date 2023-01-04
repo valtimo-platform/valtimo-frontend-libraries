@@ -18,14 +18,7 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {
-  DropzoneModule,
-  ListModule,
-  ModalModule,
-  MultiselectDropdownModule,
-  SpinnerModule,
-  WidgetModule,
-} from '@valtimo/components';
+import {DropzoneModule, ListModule, ModalModule, MultiselectDropdownModule, SpinnerModule, WidgetModule,} from '@valtimo/components';
 import {ConfigModule} from '@valtimo/config';
 import {DossierManagementConnectModalComponent} from './dossier-management-connect-modal/dossier-management-connect-modal.component';
 import {DossierManagementDetailComponent} from './dossier-management-detail-container/tabs/dossier-management-detail/dossier-management-detail.component';
@@ -41,7 +34,13 @@ import {DossierManagementSearchFieldsComponent} from './dossier-management-detai
 import {DossierManagementDetailContainerComponent} from './dossier-management-detail-container/dossier-management-detail-container.component';
 import {DossierManagementAssigneeComponent} from './dossier-management-assignee/dossier-management-assignee.component';
 import {DossierManagementListColumnsComponent} from './dossier-management-detail-container/tabs/dossier-management-list-columns/dossier-management-list-columns.component';
-import {NotificationModule} from 'carbon-components-angular';
+import {
+  ButtonModule,
+  IconModule,
+  InputModule as CarbonInputModule,
+  ModalModule as CarbonModalModule,
+  NotificationModule
+} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [
@@ -76,6 +75,10 @@ import {NotificationModule} from 'carbon-components-angular';
     SelectModule,
     FormModule,
     NotificationModule,
+    ButtonModule,
+    IconModule,
+    CarbonModalModule,
+    CarbonInputModule
   ],
   exports: [],
 })

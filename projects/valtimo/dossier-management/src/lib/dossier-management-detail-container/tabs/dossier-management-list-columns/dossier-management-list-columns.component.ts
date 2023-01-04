@@ -26,6 +26,8 @@ import {
 } from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import {ListColumnModal} from '../../../models';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'valtimo-dossier-management-list-columns',
@@ -153,12 +155,30 @@ export class DossierManagementListColumnsComponent {
     )
   );
 
+  readonly currentModalType$ = new BehaviorSubject<ListColumnModal>('create');
+
+  readonly showModal$ = new BehaviorSubject<boolean>(false);
+
+  readonly formGroup = new FormGroup({
+    email: new FormControl(''),
+    password: new FormControl(''),
+  });
+
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService
   ) {}
+
+  openModal(modalType: ListColumnModal): void {
+    this.showModal$.next(true);
+    this.currentModalType$.next(modalType);
+  }
+
+  closeModal(): void {
+    this.showModal$.next(false);
+  }
 
   moveRow(
     caseListColumnRowIndex: number,
@@ -206,7 +226,7 @@ export class DossierManagementListColumnsComponent {
     this.documentService.putCaseList(documentDefinitionName, newCaseListColumns).subscribe(
       () => {
         this.refreshCaseListColumns();
-        localStorage.setItem(`list-search-${documentDefinitionName}`, null)
+        localStorage.setItem(`list-search-${documentDefinitionName}`, null);
       },
       () => {
         this.enableInput();
