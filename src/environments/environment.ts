@@ -109,23 +109,16 @@ export const environment: ValtimoConfig = {
       },
       {
         roles: [ROLE_USER],
-        title: 'Data',
-        iconClass: 'icon mdi mdi-database',
-        sequence: 4,
-        children: [],
-      },
-      {
-        roles: [ROLE_USER],
         link: ['/analysis'],
         title: 'Analysis',
         iconClass: 'icon mdi mdi-chart-bar',
-        sequence: 5,
+        sequence: 4,
       },
       {
         roles: [ROLE_ADMIN],
         title: 'Admin',
         iconClass: 'icon mdi mdi-tune',
-        sequence: 6,
+        sequence: 5,
         children: [
           {title: 'Basics', textClass: 'text-dark font-weight-bold c-default', sequence: 1},
           {link: ['/processes'], title: 'Processes', sequence: 2},
@@ -150,7 +143,7 @@ export const environment: ValtimoConfig = {
         roles: [ROLE_DEVELOPER],
         title: 'Development',
         iconClass: 'icon mdi mdi-xml',
-        sequence: 7,
+        sequence: 6,
         children: [
           {link: ['/swagger'], title: 'Swagger', iconClass: 'icon mdi mdi-dot-circle', sequence: 1},
         ],
@@ -244,8 +237,7 @@ export const environment: ValtimoConfig = {
     enableHackathonCasesPage: true,
     showUserNameInTopBar: true,
     experimentalDmnEditing: true,
-    caseListColumn: true,
-    disableCaseCount: true
+    caseListColumn: true
   },
   customDossierHeader: {
     leningen: [
