@@ -109,7 +109,11 @@
 
 <ng-template #createEditModal>
   <ibm-modal
-    *ngIf="{type: currentModalType$ | async, show: showModal$ | async} as modalObs"
+    *ngIf="{
+      type: currentModalType$ | async,
+      show: showModal$ | async,
+      valid: valid$ | async
+    } as modalObs"
     [open]="modalObs.show"
   >
     <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
@@ -124,14 +128,94 @@
     <section ibmModalContent>
       <ng-container *ngTemplateOutlet="modalContent"></ng-container>
     </section>
+    <ng-container *ngTemplateOutlet="modalFooter; context: {modalObs: modalObs}"></ng-container>
   </ibm-modal>
 </ng-template>
 
 <ng-template #modalContent>
-  <div class="bx--text-input__field-wrapper">
-    <ibm-label helperText="Helper text">
-      {{ 'test' }}
-      <input ibmText placeholder="Placeholder" [autocomplete]="false" />
-    </ibm-label>
-  </div>
+  <form [formGroup]="formGroup" class="list-column-form">
+    <div class="cds--text-input__field-wrapper">
+      <ibm-label>
+        <span class="label-with-tooltip">
+          {{ 'listColumn.titleTitle' | translate }}
+          <v-tooltip-icon [tooltip]="'listColumn.titleTooltip' | translate"></v-tooltip-icon>
+        </span>
+        <input ibmText formControlName="title" />
+      </ibm-label>
+    </div>
+    <div class="cds--text-input__field-wrapper">
+      <ibm-label>
+        <span class="label-with-tooltip">
+          {{ 'listColumn.key' | translate }}
+          <v-tooltip-icon [tooltip]="'listColumn.keyTooltip' | translate"></v-tooltip-icon>
+        </span>
+        <input ibmText formControlName="key" />
+      </ibm-label>
+    </div>
+    <div class="cds--text-input__field-wrapper">
+      <ibm-label>
+        <span class="label-with-tooltip">
+          {{ 'listColumn.path' | translate }}
+          <v-tooltip-icon [tooltip]="'listColumn.pathTooltip' | translate"></v-tooltip-icon>
+        </span>
+        <input ibmText formControlName="path" />
+      </ibm-label>
+    </div>
+    <div class="cds--text-input__field-wrapper">
+      <div class="display-type-dropdown">
+        <ibm-dropdown [label]="'listColumn.displayType' | translate" formControlName="displayType">
+          <ibm-dropdown-list [items]="viewTypeItems$ | async"></ibm-dropdown-list>
+        </ibm-dropdown>
+      </div>
+    </div>
+    <div class="cds--text-input__field-wrapper" *ngIf="showDateFormat$ | async">
+      <ibm-label>
+        <span class="label-with-tooltip">
+          {{ 'listColumn.dateFormat' | translate }}
+          <v-tooltip-icon [tooltip]="'listColumn.dateFormatTooltip' | translate"></v-tooltip-icon>
+        </span>
+        <input ibmText formControlName="dateFormat" />
+      </ibm-label>
+    </div>
+    <div class="cds--text-input__field-wrapper">
+      <ibm-checkbox formControlName="sortable"
+        >{{ 'listColumn.sortable' | translate }}
+      </ibm-checkbox>
+    </div>
+    <div class="cds--text-input__field-wrapper">
+      <div class="display-type-dropdown">
+        <ibm-dropdown
+          [label]="'listColumn.defaultSortTitle' | translate"
+          formControlName="defaultSort"
+        >
+          <ibm-dropdown-list [items]="sortItems$ | async"></ibm-dropdown-list>
+        </ibm-dropdown>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<!--<ng-template #pathTooltip>-->
+<!--  <p>{{ 'searchFieldsOverviewTooltips.path' | translate }}</p>-->
+<!--  <div class="cds&#45;&#45;tooltip__footer">-->
+<!--    <a href="/" class="bx&#45;&#45;link">Learn More</a>-->
+<!--    <button class="bx&#45;&#45;btn bx&#45;&#45;btn&#45;&#45;primary" (click)="tooltip.doClose()">Close</button>-->
+<!--  </div>-->
+<!--</ng-template>-->
+
+<ng-template #modalFooter let-modalObs="modalObs">
+  <ibm-modal-footer>
+    <ng-container>
+      <button ibmButton="secondary" [attr.modal-primary-focus]="true" (click)="closeModal()">
+        {{ 'listColumn.close' | translate }}
+      </button>
+      <button
+        ibmButton="primary"
+        [attr.modal-primary-focus]="true"
+        [disabled]="modalObs.valid === false"
+      >
+        {{ 'listColumn.save' | translate }}
+      </button>
+    </ng-container>
+  </ibm-modal-footer>
 </ng-template>

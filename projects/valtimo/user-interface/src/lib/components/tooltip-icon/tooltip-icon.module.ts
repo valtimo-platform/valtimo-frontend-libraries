@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 Ritense BV, the Netherlands.
+ * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,16 @@
  * limitations under the License.
  */
 
-::ng-deep .tab-container {
-  min-height: unset !important;
-}
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {TooltipIconComponent} from './tooltip-icon.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {TooltipModule} from '../../directives';
 
-::ng-deep .cds--inline-notification {
-  max-width: 100%;
-}
-
-.label-with-tooltip {
-  display: flex;
-  align-items: center;
-}
-
-.cds--text-input__field-wrapper:not(:last-child) {
-  margin-bottom: 1rem;
-}
-
-.display-type-dropdown {
-  width: 300px;
-}
-
-.list-column-form {
-  margin-bottom: 3rem;
-}
+@NgModule({
+  declarations: [TooltipIconComponent],
+  imports: [CommonModule, TranslateModule, FormsModule, TooltipModule],
+  exports: [TooltipIconComponent],
+})
+export class TooltipIconModule {}

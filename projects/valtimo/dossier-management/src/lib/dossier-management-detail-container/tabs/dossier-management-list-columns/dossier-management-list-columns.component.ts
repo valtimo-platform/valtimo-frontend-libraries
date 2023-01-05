@@ -17,7 +17,16 @@
 import {Component, TemplateRef, ViewChild} from '@angular/core';
 import {ListField} from '@valtimo/components';
 import {ConfigService, DefinitionColumn} from '@valtimo/config';
-import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {
   CaseListColumn,
   CaseListColumnView,
@@ -28,6 +37,7 @@ import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {ListColumnModal} from '../../../models';
 import {FormControl, FormGroup} from '@angular/forms';
+import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 
 @Component({
   selector: 'valtimo-dossier-management-list-columns',
@@ -159,10 +169,88 @@ export class DossierManagementListColumnsComponent {
 
   readonly showModal$ = new BehaviorSubject<boolean>(false);
 
+  readonly INVALID_KEY = 'invalid';
+
   readonly formGroup = new FormGroup({
-    email: new FormControl(''),
-    password: new FormControl(''),
+    title: new FormControl(''),
+    key: new FormControl(''),
+    path: new FormControl(''),
+    dateFormat: new FormControl(''),
+    displayType: new FormControl({
+      key: this.INVALID_KEY,
+    }),
+    sortable: new FormControl(false),
+    defaultSort: new FormControl({
+      key: this.INVALID_KEY,
+    }),
   });
+
+  readonly valid$ = this.formGroup.valueChanges.pipe(
+    map(formValues => {
+      return !!(
+        formValues.displayType.key !== this.INVALID_KEY &&
+        formValues.path &&
+        formValues.key
+      );
+    }),
+    startWith(false)
+  );
+
+  readonly DISPLAY_TYPES: Array<string> = [
+    'string',
+    'date',
+    'boolean',
+    'enum',
+    'arrayCount',
+    'underscoresToSpaces',
+  ];
+
+  readonly showDateFormat$ = this.formGroup.valueChanges.pipe(
+    map(formValues => {
+      return !!(formValues.displayType.key === this.DISPLAY_TYPES[1]);
+    }),
+    tap(showDateFormat => {
+      if (showDateFormat === false && !!this.formGroup.value.dateFormat) {
+        this.formGroup.patchValue({dateFormat: ''});
+      }
+    }),
+    startWith(false)
+  );
+
+  readonly viewTypeItems$: Observable<Array<ListItem>> = this.translateService.stream('key').pipe(
+    map(() => [
+      {
+        content: this.translateService.instant(`listColumnDisplayType.select`),
+        key: this.INVALID_KEY,
+        selected: true,
+      },
+      ...this.DISPLAY_TYPES.map(type => ({
+        content: this.translateService.instant(`listColumnDisplayType.${type}`),
+        key: type,
+        selected: false,
+      })),
+    ])
+  );
+
+  readonly sortItems$: Observable<Array<ListItem>> = this.translateService.stream('key').pipe(
+    map(() => [
+      {
+        content: this.translateService.instant(`listColumn.selectDefaultSort`),
+        key: this.INVALID_KEY,
+        selected: true,
+      },
+      {
+        content: this.translateService.instant(`listColumn.sortableAsc`),
+        key: 'ASC',
+        selected: false,
+      },
+      {
+        content: this.translateService.instant(`listColumn.sortableDesc`),
+        key: 'DESC',
+        selected: false,
+      },
+    ])
+  );
 
   constructor(
     private readonly documentService: DocumentService,
@@ -170,7 +258,6 @@ export class DossierManagementListColumnsComponent {
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService
   ) {}
-
   openModal(modalType: ListColumnModal): void {
     this.showModal$.next(true);
     this.currentModalType$.next(modalType);
