@@ -38,6 +38,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ListColumnModal} from '../../../models';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-dossier-management-list-columns',
@@ -188,7 +189,7 @@ export class DossierManagementListColumnsComponent {
   readonly valid$ = this.formGroup.valueChanges.pipe(
     map(formValues => {
       return !!(
-        formValues.displayType.key !== this.INVALID_KEY &&
+        formValues.displayType?.key !== this.INVALID_KEY &&
         formValues.path &&
         formValues.key
       );
@@ -207,7 +208,7 @@ export class DossierManagementListColumnsComponent {
 
   readonly showDateFormat$ = this.formGroup.valueChanges.pipe(
     map(formValues => {
-      return !!(formValues.displayType.key === this.DISPLAY_TYPES[1]);
+      return !!(formValues.displayType?.key === this.DISPLAY_TYPES[1]);
     }),
     tap(showDateFormat => {
       if (showDateFormat === false && !!this.formGroup.value.dateFormat) {
@@ -261,6 +262,10 @@ export class DossierManagementListColumnsComponent {
   openModal(modalType: ListColumnModal): void {
     this.showModal$.next(true);
     this.currentModalType$.next(modalType);
+
+    if (modalType === 'create') {
+      this.formGroup.reset();
+    }
   }
 
   closeModal(): void {
@@ -304,6 +309,35 @@ export class DossierManagementListColumnsComponent {
     }
   }
 
+  saveCasListColumns(): void {
+    const formValue = this.formGroup.value;
+
+    this.disableInput();
+
+    this.documentDefinitionName$.pipe(take(1)).subscribe(docDefName => {
+      this.documentService
+        .postCaseList(docDefName, {
+          key: formValue.key,
+          sortable: formValue.sortable,
+          ...(formValue.defaultSort?.key !== this.INVALID_KEY && {
+            defaultSort: formValue.defaultSort?.key,
+          }),
+          title: formValue.title || '',
+          path: formValue.path,
+          displayType: {type: formValue.displayType?.key, displayTypeParameters: {}},
+        })
+        .subscribe(
+          () => {
+            this.closeModal();
+            this.refreshCaseListColumns();
+          },
+          () => {
+            this.enableInput();
+          }
+        );
+    });
+  }
+
   private updateCaseListColumns(
     documentDefinitionName: string,
     newCaseListColumns: Array<CaseListColumn>
@@ -340,10 +374,12 @@ export class DossierManagementListColumnsComponent {
 
   private disableInput(): void {
     this.disableInput$.next(true);
+    this.formGroup.disable();
   }
 
   private enableInput(): void {
     this.disableInput$.next(false);
+    this.formGroup.enable();
   }
 
   private refreshCaseListColumns(): void {

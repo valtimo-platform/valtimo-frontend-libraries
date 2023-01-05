@@ -24,3 +24,8 @@
   color: var(--v-input-tooltip-icon-color);
   margin-inline-start: var(--v-input-tooltip-icon-margin);
 }
+
+.v-input-label__tooltip--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

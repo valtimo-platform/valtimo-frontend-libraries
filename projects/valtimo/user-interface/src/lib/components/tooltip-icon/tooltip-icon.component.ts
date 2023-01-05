@@ -23,4 +23,5 @@ import {Component, Input} from '@angular/core';
 })
 export class TooltipIconComponent {
   @Input() tooltip = '';
+  @Input() disabled = false;
 }

@@ -112,7 +112,8 @@
     *ngIf="{
       type: currentModalType$ | async,
       show: showModal$ | async,
-      valid: valid$ | async
+      valid: valid$ | async,
+      disableInput: disableInput$ | async
     } as modalObs"
     [open]="modalObs.show"
   >
@@ -126,59 +127,75 @@
       </h3>
     </ibm-modal-header>
     <section ibmModalContent>
-      <ng-container *ngTemplateOutlet="modalContent"></ng-container>
+      <ng-container *ngTemplateOutlet="modalContent; context: {modalObs: modalObs}"></ng-container>
     </section>
     <ng-container *ngTemplateOutlet="modalFooter; context: {modalObs: modalObs}"></ng-container>
   </ibm-modal>
 </ng-template>
 
-<ng-template #modalContent>
+<ng-template #modalContent let-modalObs="modalObs">
   <form [formGroup]="formGroup" class="list-column-form">
     <div class="cds--text-input__field-wrapper">
-      <ibm-label>
+      <ibm-label [disabled]="modalObs.disableInput">
         <span class="label-with-tooltip">
           {{ 'listColumn.titleTitle' | translate }}
-          <v-tooltip-icon [tooltip]="'listColumn.titleTooltip' | translate"></v-tooltip-icon>
+          <v-tooltip-icon
+            [tooltip]="'listColumn.titleTooltip' | translate"
+            [disabled]="modalObs.disableInput"
+          ></v-tooltip-icon>
         </span>
         <input ibmText formControlName="title" />
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">
-      <ibm-label>
+      <ibm-label [disabled]="modalObs.disableInput">
         <span class="label-with-tooltip">
           {{ 'listColumn.key' | translate }}
-          <v-tooltip-icon [tooltip]="'listColumn.keyTooltip' | translate"></v-tooltip-icon>
+          <v-tooltip-icon
+            [tooltip]="'listColumn.keyTooltip' | translate"
+            [disabled]="modalObs.disableInput"
+          ></v-tooltip-icon>
         </span>
         <input ibmText formControlName="key" />
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">
-      <ibm-label>
+      <ibm-label [disabled]="modalObs.disableInput">
         <span class="label-with-tooltip">
           {{ 'listColumn.path' | translate }}
-          <v-tooltip-icon [tooltip]="'listColumn.pathTooltip' | translate"></v-tooltip-icon>
+          <v-tooltip-icon
+            [tooltip]="'listColumn.pathTooltip' | translate"
+            [disabled]="modalObs.disableInput"
+          ></v-tooltip-icon>
         </span>
         <input ibmText formControlName="path" />
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">
       <div class="display-type-dropdown">
-        <ibm-dropdown [label]="'listColumn.displayType' | translate" formControlName="displayType">
+        <ibm-dropdown
+          [label]="'listColumn.displayType' | translate"
+          formControlName="displayType"
+          [disabled]="modalObs.disableInput"
+        >
           <ibm-dropdown-list [items]="viewTypeItems$ | async"></ibm-dropdown-list>
         </ibm-dropdown>
       </div>
     </div>
     <div class="cds--text-input__field-wrapper" *ngIf="showDateFormat$ | async">
-      <ibm-label>
+      <ibm-label [disabled]="modalObs.disableInput">
         <span class="label-with-tooltip">
           {{ 'listColumn.dateFormat' | translate }}
-          <v-tooltip-icon [tooltip]="'listColumn.dateFormatTooltip' | translate"></v-tooltip-icon>
+          <v-tooltip-icon
+            [tooltip]="'listColumn.dateFormatTooltip' | translate"
+            [disabled]="modalObs.disableInput"
+          ></v-tooltip-icon>
         </span>
         <input ibmText formControlName="dateFormat" />
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">
-      <ibm-checkbox formControlName="sortable"
+      <ibm-checkbox formControlName="sortable" [disabled]="modalObs.disableInput"
         >{{ 'listColumn.sortable' | translate }}
       </ibm-checkbox>
     </div>
@@ -187,6 +204,7 @@
         <ibm-dropdown
           [label]="'listColumn.defaultSortTitle' | translate"
           formControlName="defaultSort"
+          [disabled]="modalObs.disableInput"
         >
           <ibm-dropdown-list [items]="sortItems$ | async"></ibm-dropdown-list>
         </ibm-dropdown>
@@ -195,24 +213,23 @@
   </form>
 </ng-template>
 
-<!--<ng-template #pathTooltip>-->
-<!--  <p>{{ 'searchFieldsOverviewTooltips.path' | translate }}</p>-->
-<!--  <div class="cds&#45;&#45;tooltip__footer">-->
-<!--    <a href="/" class="bx&#45;&#45;link">Learn More</a>-->
-<!--    <button class="bx&#45;&#45;btn bx&#45;&#45;btn&#45;&#45;primary" (click)="tooltip.doClose()">Close</button>-->
-<!--  </div>-->
-<!--</ng-template>-->
-
 <ng-template #modalFooter let-modalObs="modalObs">
   <ibm-modal-footer>
     <ng-container>
-      <button ibmButton="secondary" [attr.modal-primary-focus]="true" (click)="closeModal()">
+      <button
+        ibmButton="secondary"
+        [attr.modal-primary-focus]="true"
+        (click)="closeModal()"
+        [disabled]="modalObs.disableInput"
+      >
         {{ 'listColumn.close' | translate }}
       </button>
       <button
         ibmButton="primary"
         [attr.modal-primary-focus]="true"
         [disabled]="modalObs.valid === false"
+        (click)="saveCasListColumns()"
+        [disabled]="modalObs.disableInput || modalObs.valid === false"
       >
         {{ 'listColumn.save' | translate }}
       </button>

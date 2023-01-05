@@ -16,6 +16,7 @@
 
 <i
   class="v-input-label__tooltip mdi mdi-help-circle"
+  [ngClass]="{'v-input-label__tooltip--disabled': disabled}"
   placement="right"
   vTooltip="{{ tooltip }}"
 ></i>
