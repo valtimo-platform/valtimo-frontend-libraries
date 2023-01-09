@@ -54,6 +54,7 @@ import {
   DropdownModule,
   IconModule,
   InputModule as CarbonInputModule,
+  LoadingModule,
   ModalModule as CarbonModalModule,
   NotificationModule,
 } from 'carbon-components-angular';
@@ -100,6 +101,7 @@ import {
     CheckboxModule,
     TooltipIconModule,
     CarbonMultiInputModule,
+    LoadingModule,
   ],
   exports: [],
 })

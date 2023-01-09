@@ -364,7 +364,18 @@ export class DossierManagementListColumnsComponent {
           }),
           title: formValue.title || '',
           path: formValue.path,
-          displayType: {type: formValue.displayType?.key, displayTypeParameters: {}},
+          displayType: {
+            type: formValue.displayType?.key,
+            displayTypeParameters: {
+              ...(formValue.dateFormat && {dateFormat: formValue.dateFormat}),
+              ...(Array.isArray(formValue.enum) &&
+                formValue.enum.length > 0 && {
+                  enum: formValue.enum.reduce((acc, curr) => {
+                    return {...acc, [curr.key]: curr.value};
+                  }, {}),
+                }),
+            },
+          },
         })
         .subscribe(
           () => {
@@ -379,7 +390,6 @@ export class DossierManagementListColumnsComponent {
   }
 
   enumValueChange(value: Array<{[key: string]: string}>): void {
-    console.log('value', value);
     this.formGroup.patchValue({enum: value});
   }
 
