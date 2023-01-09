@@ -60,7 +60,6 @@
                 [widthInPx]="350"
                 name="objectenApiPluginConfigurationId"
                 [title]="'objectManagement.labels.objects' | translate"
-                [tooltip]="'objectManagement.tooltips.objects' | translate"
                 [required]="true"
         ></v-select>
 
@@ -70,7 +69,6 @@
                 [widthInPx]="350"
                 name="objecttypenApiPluginConfigurationId"
                 [title]="'objectManagement.labels.objecttypes' | translate"
-                [tooltip]="'objectManagement.tooltips.objecttypes' | translate"
                 [required]="true"
                 (selectedChange)="selectObjectType($event)"
         ></v-select>
@@ -109,6 +107,14 @@
                 [tooltip]="'objectManagement.tooltips.formDefinitionEdit' | translate"
         ></v-select>
       </ng-container>
+
+      <v-input
+              [margin]="true"
+              type="checkbox"
+              [title]="'objectManagement.labels.showInDataMenu' | translate"
+              [tooltip]="'objectManagement.tooltips.showInDataMenu' | translate"
+              name="showInDataMenu"
+      ></v-input>
     </v-form>
   </ng-container>
 </ng-template>

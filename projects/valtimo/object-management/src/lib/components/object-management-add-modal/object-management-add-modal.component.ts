@@ -126,7 +126,7 @@ export class ObjectManagementAddModalComponent implements AfterViewInit, OnDestr
       .pipe(take(1))
       .subscribe(([valid, formData]) => {
         if (valid) {
-          this.objectManagementService.createObject({...formData, ...{showInDataMenu: true}}).subscribe(() => {
+          this.objectManagementService.createObject({...formData}).subscribe(() => {
             this.objectManagementState.refresh();
             this.objectManagementState.hideModal();
           })
@@ -155,6 +155,9 @@ export class ObjectManagementAddModalComponent implements AfterViewInit, OnDestr
   }
 
   formValueChange(data: any): void {
+    if (data.showInDataMenu === '') {
+      data.showInDataMenu = false;
+    }
     this.formData$.next(data);
     this.setValid(data);
   }
