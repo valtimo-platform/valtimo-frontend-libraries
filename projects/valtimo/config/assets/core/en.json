@@ -902,7 +902,7 @@
   },
   "listColumn": {
     "title": "Title",
-    "title": "Title (optional)",
+    "titleTitle": "Title (optional)",
     "titleTooltip": "If this field is filled in, this title will display as the column header, overriding any available translations.",
     "key": "Key",
     "keyTooltip": "A unique key by which the column is identified. If the key is not unique, you will not be able to save the column.",
