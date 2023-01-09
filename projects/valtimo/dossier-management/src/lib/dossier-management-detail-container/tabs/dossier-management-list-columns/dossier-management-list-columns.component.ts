@@ -184,27 +184,8 @@ export class DossierManagementListColumnsComponent {
     defaultSort: new FormControl({
       key: this.INVALID_KEY,
     }),
-    enum: new FormControl(null),
+    enum: new FormControl([]),
   });
-
-  readonly valid$ = this.formGroup.valueChanges.pipe(
-    map(formValues => {
-      return !!(
-        formValues.displayType?.key !== this.INVALID_KEY &&
-        formValues.path &&
-        formValues.key
-      );
-    }),
-    startWith(false)
-  );
-
-  readonly validKey$ = this.formGroup.valueChanges.pipe(
-    map(formValues => {
-      const existingKeys = this.cachedCaseListColumns.map(column => column.key);
-      return !existingKeys.includes(formValues.key);
-    }),
-    startWith(false)
-  );
 
   readonly hasDefaultSort$ = this.formGroup.valueChanges.pipe(
     map(() => {
@@ -236,14 +217,24 @@ export class DossierManagementListColumnsComponent {
 
   readonly showEnum$ = this.formGroup.valueChanges.pipe(
     map(formValues => {
-      return !!(formValues.displayType?.key === this.DISPLAY_TYPES[3]);
+      return !!(
+        formValues.displayType?.key === this.DISPLAY_TYPES[3] ||
+        formValues.displayType?.key === this.DISPLAY_TYPES[2]
+      );
     }),
     tap(showEnum => {
-      if (showEnum === false && !!this.formGroup.value.enum) {
-        this.formGroup.patchValue({enum: null});
+      const enumValue = this.formGroup.value.enum;
+      if (showEnum === false && Array.isArray(enumValue) && enumValue.length > 0) {
+        this.formGroup.patchValue({enum: []});
       }
     }),
     startWith(false)
+  );
+
+  readonly isYesNo$ = this.formGroup.valueChanges.pipe(
+    map(formValues => {
+      return !!(formValues.displayType?.key === this.DISPLAY_TYPES[2]);
+    })
   );
 
   readonly viewTypeItems$: Observable<Array<ListItem>> = this.translateService.stream('key').pipe(
@@ -279,6 +270,27 @@ export class DossierManagementListColumnsComponent {
         selected: false,
       },
     ])
+  );
+
+  readonly validKey$ = this.formGroup.valueChanges.pipe(
+    map(formValues => {
+      const existingKeys = this.cachedCaseListColumns.map(column => column.key);
+      return !existingKeys.includes(formValues.key);
+    }),
+    startWith(false)
+  );
+
+  readonly valid$ = combineLatest([this.formGroup.valueChanges, this.validKey$]).pipe(
+    map(([formValues, validKey]) => {
+      console.log('form values', formValues);
+      return !!(
+        formValues.displayType?.key !== this.INVALID_KEY &&
+        formValues.path &&
+        validKey &&
+        (formValues.displayType.key === 'enum' ? formValues.enum?.length > 0 : true)
+      );
+    }),
+    startWith(false)
   );
 
   constructor(
@@ -366,8 +378,9 @@ export class DossierManagementListColumnsComponent {
     });
   }
 
-  enumValueChange(value: any): void {
+  enumValueChange(value: Array<{[key: string]: string}>): void {
     console.log('value', value);
+    this.formGroup.patchValue({enum: value});
   }
 
   private updateCaseListColumns(

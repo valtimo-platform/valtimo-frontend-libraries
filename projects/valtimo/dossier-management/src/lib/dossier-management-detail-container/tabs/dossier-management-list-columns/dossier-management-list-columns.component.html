@@ -117,7 +117,9 @@
       valid: valid$ | async,
       disableInput: disableInput$ | async,
       validKey: validKey$ | async,
-      hasDefaultSort: hasDefaultSort$ | async
+      hasDefaultSort: hasDefaultSort$ | async,
+      showEnum: showEnum$ | async,
+      isYesNo: isYesNo$ | async
     } as modalObs"
     [open]="modalObs.show"
   >
@@ -198,10 +200,14 @@
         <input ibmText formControlName="dateFormat" />
       </ibm-label>
     </div>
-    <div class="cds--text-input__field-wrapper" *ngIf="showEnum$ | async">
+    <div class="cds--text-input__field-wrapper" *ngIf="modalObs.showEnum || modalObs.isYesNo">
       <ibm-label [disabled]="modalObs.disableInput">
         <span class="label-with-tooltip select-label">
-          {{ 'listColumn.enumTitle' | translate }}
+          {{
+            modalObs.isYesNo
+              ? ('listColumn.enumTitleOptional' | translate)
+              : ('listColumn.enumTitle' | translate)
+          }}
           <v-tooltip-icon
             [tooltip]="'listColumn.enumTooltip' | translate"
             [disabled]="modalObs.disableInput"

@@ -940,6 +940,7 @@
     "dateFormatTooltip": "Ein Datumsformat, das von Moment.js (https://momentjs.com/docs/) unterstützt wird.",
     "uniqueKeyWarning": "Der Schlüssel für diese Spalte muss eindeutig sein.",
     "enumTitle": "Aufzählungswerte",
+    "enumTitleOptional": "Aufzählungswerte (optional)",
     "enumTooltip": "Die Schlüssel und Werte, die verwendet werden, um Anzeigedaten in die Tabelle umzuwandeln."
   },
   "listColumnDisplayType": {

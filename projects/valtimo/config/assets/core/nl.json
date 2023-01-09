@@ -940,6 +940,7 @@
     "dateFormatTooltip": "Een datumnotatie die ondersteund wordt door Moment.js (https://momentjs.com/docs/).",
     "uniqueKeyWarning": "De sleutel voor deze kolom moet uniek zijn.",
     "enumTitle": "Opsommingswaarden",
+    "enumTitleOptional": "Opsommingswaarden (optioneel)",
     "enumTooltip": "De sleutels en waarden die gebruikt worden om weergavedata om te zetten in de tabel."
   },
   "listColumnDisplayType": {
