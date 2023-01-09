@@ -54,6 +54,7 @@ import {
   DropdownModule,
   IconModule,
   InputModule as CarbonInputModule,
+  LinkModule,
   LoadingModule,
   ModalModule as CarbonModalModule,
   NotificationModule,
@@ -102,6 +103,7 @@ import {
     TooltipIconModule,
     CarbonMultiInputModule,
     LoadingModule,
+    LinkModule,
   ],
   exports: [],
 })

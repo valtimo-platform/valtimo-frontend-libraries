@@ -39,6 +39,7 @@ import {ListColumnModal} from '../../../models';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {take} from 'rxjs/operators';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'valtimo-dossier-management-list-columns',
@@ -47,6 +48,8 @@ import {take} from 'rxjs/operators';
 })
 export class DossierManagementListColumnsComponent {
   @ViewChild('moveRowButtons') public moveRowButtonsTemplateRef: TemplateRef<any>;
+  readonly downloadName$ = new BehaviorSubject<string>('');
+  readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
 
   private readonly COLUMNS: Array<DefinitionColumn> = [
     {
@@ -132,6 +135,13 @@ export class DossierManagementListColumnsComponent {
     switchMap(([documentDefinitionName]) =>
       this.documentService.getCaseList(documentDefinitionName)
     ),
+    tap(caseListColumns => {
+      this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+        if (caseListColumns && Array.isArray(caseListColumns) && caseListColumns.length > 0) {
+          this.setDownload(documentDefinitionName, caseListColumns);
+        }
+      });
+    }),
     tap(caseListColumns => {
       this.cachedCaseListColumns = caseListColumns;
       this.loadingCaseListColumns = false;
@@ -276,15 +286,15 @@ export class DossierManagementListColumnsComponent {
   );
 
   readonly valid$ = combineLatest([this.formGroup.valueChanges, this.validKey$]).pipe(
-    map(([formValues, validKey]) => {
-      console.log('form values', formValues);
-      return !!(
-        formValues.displayType?.key !== this.INVALID_KEY &&
-        formValues.path &&
-        validKey &&
-        (formValues.displayType.key === 'enum' ? formValues.enum?.length > 0 : true)
-      );
-    }),
+    map(
+      ([formValues, validKey]) =>
+        !!(
+          formValues.displayType?.key !== this.INVALID_KEY &&
+          formValues.path &&
+          validKey &&
+          (formValues.displayType.key === 'enum' ? formValues.enum?.length > 0 : true)
+        )
+    ),
     startWith(false)
   );
 
@@ -292,7 +302,8 @@ export class DossierManagementListColumnsComponent {
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly sanitizer: DomSanitizer
   ) {}
   openModal(modalType: ListColumnModal): void {
     this.showModal$.next(true);
@@ -421,6 +432,19 @@ export class DossierManagementListColumnsComponent {
     } else {
       return '-';
     }
+  }
+
+  private setDownload(
+    documentDefinitionName: string,
+    caseListColumns: Array<CaseListColumn>
+  ): void {
+    this.downloadName$.next(`${documentDefinitionName}.json`);
+    this.downloadUrl$.next(
+      this.sanitizer.bypassSecurityTrustUrl(
+        'data:text/json;charset=UTF-8,' +
+          encodeURIComponent(JSON.stringify(caseListColumns, null, 2))
+      )
+    );
   }
 
   private disableInput(): void {

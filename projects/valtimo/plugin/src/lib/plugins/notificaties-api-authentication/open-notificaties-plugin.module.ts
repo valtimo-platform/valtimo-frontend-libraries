@@ -14,34 +14,15 @@
  * limitations under the License.
  */
 
-.user-icon {
-  font-size: 30px;
-}
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {OpenNotificatiesConfigurationComponent} from './components/open-notificaties-configuration/open-notificaties-configuration.component';
+import {FormModule, InputModule} from '@valtimo/user-interface';
+import {PluginTranslatePipeModule} from '../../pipes';
 
-.be-toggle-right-sidebar {
-  display: flex;
-}
-
-.user-full-name {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  margin-inline-end: var(--v-top-bar-user-name-spacing);
-}
-
-::ng-deep .cds--header__name {
-  display: none !important;
-}
-
-.logo-link {
-  height: 100%;
-  padding-left: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-
-.logo-image {
-  height: 100%;
-  object-fit: contain;
-}
+@NgModule({
+  declarations: [OpenNotificatiesConfigurationComponent],
+  imports: [CommonModule, FormModule, InputModule, PluginTranslatePipeModule],
+  exports: [OpenNotificatiesConfigurationComponent],
+})
+export class OpenNotificatiesPluginModule {}

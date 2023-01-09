@@ -941,7 +941,8 @@
     "uniqueKeyWarning": "Der Schlüssel für diese Spalte muss eindeutig sein.",
     "enumTitle": "Aufzählungswerte",
     "enumTitleOptional": "Aufzählungswerte (optional)",
-    "enumTooltip": "Die Schlüssel und Werte, die verwendet werden, um Anzeigedaten in die Tabelle umzuwandeln."
+    "enumTooltip": "Die Schlüssel und Werte, die verwendet werden, um Anzeigedaten in die Tabelle umzuwandeln.",
+    "downloadButtonText": "Konfiguration herunterladen"
   },
   "listColumnDisplayType": {
     "string": "Text",

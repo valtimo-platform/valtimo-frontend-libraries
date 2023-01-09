@@ -19,13 +19,15 @@
     caseListColumn: translatedCaseListColumns$ | async,
     fields: fields$ | async,
     documentDefinitionName: documentDefinitionName$ | async,
-    hasEnvironmentConfig: hasEnvironmentConfig$ | async
+    hasEnvironmentConfig: hasEnvironmentConfig$ | async,
+    downloadUrl: downloadUrl$ | async,
+    downloadName: downloadName$ | async
   } as obs"
 >
   <div class="container-fluid pr-0 pl-0">
     <div class="text-right">
       <div class="btn-group mt-m3px mb-3 mr-2">
-        <ng-container *ngTemplateOutlet="addButton"></ng-container>
+        <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
       </div>
     </div>
     <ng-container *ngIf="!obs.hasEnvironmentConfig; else environmentConfigWarning">
@@ -39,12 +41,28 @@
   <ng-container *ngTemplateOutlet="createEditModal"></ng-container>
 </ng-container>
 
-<ng-template #addButton>
+<ng-template #buttons let-obs="obs">
+  <a
+    ibmLink
+    class="center-link"
+    [href]="obs.downloadUrl"
+    [download]="obs.downloadName"
+    [disabled]="
+      !obs.downloadUrl ||
+      !obs.downloadName ||
+      obs.caseListColumns?.length === 0 ||
+      obs.disableInput ||
+      loadingCaseListColumns
+    "
+  >
+    {{ 'listColumn.downloadButtonText' | translate }}
+  </a>
   <button
     (click)="openModal('create')"
     ibmButton="primary"
     size="md"
     [disabled]="loadingCaseListColumns"
+    class="ml-2"
   >
     {{ 'listColumn.addButtonText' | translate }}
     <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>

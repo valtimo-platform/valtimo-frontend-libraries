@@ -941,7 +941,8 @@
     "uniqueKeyWarning": "De sleutel voor deze kolom moet uniek zijn.",
     "enumTitle": "Opsommingswaarden",
     "enumTitleOptional": "Opsommingswaarden (optioneel)",
-    "enumTooltip": "De sleutels en waarden die gebruikt worden om weergavedata om te zetten in de tabel."
+    "enumTooltip": "De sleutels en waarden die gebruikt worden om weergavedata om te zetten in de tabel.",
+    "downloadButtonText": "Download configuratie"
   },
   "listColumnDisplayType": {
     "string": "Tekst",
