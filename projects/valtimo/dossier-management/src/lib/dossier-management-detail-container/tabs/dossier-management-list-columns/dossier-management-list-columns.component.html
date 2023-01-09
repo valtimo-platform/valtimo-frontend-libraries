@@ -165,7 +165,7 @@
     <div class="cds--text-input__field-wrapper">
       <ibm-label
         [disabled]="modalObs.disableInput"
-        [invalid]="modalObs.validKey == false"
+        [invalid]="modalObs.validKey === false"
         [invalidText]="'listColumn.uniqueKeyWarning' | translate"
       >
         <span class="label-with-tooltip">
@@ -175,7 +175,7 @@
             [disabled]="modalObs.disableInput"
           ></v-tooltip-icon>
         </span>
-        <input ibmText formControlName="key" [invalid]="modalObs.validKey == false" />
+        <input ibmText formControlName="key" [invalid]="modalObs.validKey === false" />
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">
@@ -222,10 +222,10 @@
             [disabled]="modalObs.disableInput"
           ></v-tooltip-icon>
         </span>
-        <carbon-multi-input
+        <valtimo-carbon-multi-input
           type="keyValue"
           (valueChange)="enumValueChange($event)"
-        ></carbon-multi-input>
+        ></valtimo-carbon-multi-input>
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">

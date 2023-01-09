@@ -188,9 +188,7 @@ export class DossierManagementListColumnsComponent {
   });
 
   readonly hasDefaultSort$ = this.formGroup.valueChanges.pipe(
-    map(() => {
-      return this.cachedCaseListColumns.find(column => !!column.defaultSort);
-    }),
+    map(() => this.cachedCaseListColumns.find(column => !!column.defaultSort)),
     startWith(false)
   );
 
@@ -204,9 +202,7 @@ export class DossierManagementListColumnsComponent {
   ];
 
   readonly showDateFormat$ = this.formGroup.valueChanges.pipe(
-    map(formValues => {
-      return !!(formValues.displayType?.key === this.DISPLAY_TYPES[1]);
-    }),
+    map(formValues => !!(formValues.displayType?.key === this.DISPLAY_TYPES[1])),
     tap(showDateFormat => {
       if (showDateFormat === false && !!this.formGroup.value.dateFormat) {
         this.formGroup.patchValue({dateFormat: ''});
@@ -216,12 +212,13 @@ export class DossierManagementListColumnsComponent {
   );
 
   readonly showEnum$ = this.formGroup.valueChanges.pipe(
-    map(formValues => {
-      return !!(
-        formValues.displayType?.key === this.DISPLAY_TYPES[3] ||
-        formValues.displayType?.key === this.DISPLAY_TYPES[2]
-      );
-    }),
+    map(
+      formValues =>
+        !!(
+          formValues.displayType?.key === this.DISPLAY_TYPES[3] ||
+          formValues.displayType?.key === this.DISPLAY_TYPES[2]
+        )
+    ),
     tap(showEnum => {
       const enumValue = this.formGroup.value.enum;
       if (showEnum === false && Array.isArray(enumValue) && enumValue.length > 0) {
@@ -232,9 +229,7 @@ export class DossierManagementListColumnsComponent {
   );
 
   readonly isYesNo$ = this.formGroup.valueChanges.pipe(
-    map(formValues => {
-      return !!(formValues.displayType?.key === this.DISPLAY_TYPES[2]);
-    })
+    map(formValues => !!(formValues.displayType?.key === this.DISPLAY_TYPES[2]))
   );
 
   readonly viewTypeItems$: Observable<Array<ListItem>> = this.translateService.stream('key').pipe(
@@ -370,9 +365,10 @@ export class DossierManagementListColumnsComponent {
               ...(formValue.dateFormat && {dateFormat: formValue.dateFormat}),
               ...(Array.isArray(formValue.enum) &&
                 formValue.enum.length > 0 && {
-                  enum: formValue.enum.reduce((acc, curr) => {
-                    return {...acc, [curr.key]: curr.value};
-                  }, {}),
+                  enum: formValue.enum.reduce(
+                    (acc, curr) => ({...acc, [curr.key]: curr.value}),
+                    {}
+                  ),
                 }),
             },
           },

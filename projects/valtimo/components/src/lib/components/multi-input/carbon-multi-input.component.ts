@@ -26,7 +26,7 @@ import {map, take} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
 
 @Component({
-  selector: 'carbon-multi-input',
+  selector: 'valtimo-carbon-multi-input',
   templateUrl: './carbon-multi-input.component.html',
   styleUrls: ['./carbon-multi-input.component.scss'],
 })
