@@ -36,7 +36,7 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {ListColumnModal} from '../../../models';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {take} from 'rxjs/operators';
 
@@ -174,8 +174,8 @@ export class DossierManagementListColumnsComponent {
 
   readonly formGroup = new FormGroup({
     title: new FormControl(''),
-    key: new FormControl(''),
-    path: new FormControl(''),
+    key: new FormControl('', Validators.required),
+    path: new FormControl('', Validators.required),
     dateFormat: new FormControl(''),
     displayType: new FormControl({
       key: this.INVALID_KEY,
@@ -193,6 +193,21 @@ export class DossierManagementListColumnsComponent {
         formValues.path &&
         formValues.key
       );
+    }),
+    startWith(false)
+  );
+
+  readonly validKey$ = this.formGroup.valueChanges.pipe(
+    map(formValues => {
+      const existingKeys = this.cachedCaseListColumns.map(column => column.key);
+      return !existingKeys.includes(formValues.key);
+    }),
+    startWith(false)
+  );
+
+  readonly hasDefaultSort$ = this.formGroup.valueChanges.pipe(
+    map(() => {
+      return this.cachedCaseListColumns.find(column => !!column.defaultSort);
     }),
     startWith(false)
   );
@@ -264,12 +279,16 @@ export class DossierManagementListColumnsComponent {
     this.currentModalType$.next(modalType);
 
     if (modalType === 'create') {
-      this.formGroup.reset();
+      this.resetFormGroup();
     }
   }
 
   closeModal(): void {
     this.showModal$.next(false);
+  }
+
+  submitForm(): void {
+    this.formGroup.updateValueAndValidity();
   }
 
   moveRow(
@@ -384,5 +403,17 @@ export class DossierManagementListColumnsComponent {
 
   private refreshCaseListColumns(): void {
     this.refreshCaseListcolumns$.next(null);
+  }
+
+  private resetFormGroup(): void {
+    this.formGroup.reset();
+    combineLatest([this.sortItems$, this.viewTypeItems$])
+      .pipe(take(1))
+      .subscribe(([sortItems, viewTypeItems]) => {
+        // @ts-ignore
+        this.formGroup.patchValue({displayType: viewTypeItems[0]});
+        // @ts-ignore
+        this.formGroup.patchValue({defaultSort: sortItems[0]});
+      });
   }
 }

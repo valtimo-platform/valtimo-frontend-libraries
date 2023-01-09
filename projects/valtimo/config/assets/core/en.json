@@ -913,6 +913,7 @@
     "sortable": "Sortable",
     "defaultSort": "Default Sort",
     "defaultSortTitle": "Default Sort (optional)",
+    "defaultSortTooltip": "If this field has a value, the table will be sorted by default on this property, in the direction specified. Only one column at a time can have this property. If another column already has a default sort specified, this input field will be disabled.",
     "selectDefaultSort": "Select a default sort",
     "sortableYes": "Yes",
     "sortableNo": "No",
@@ -927,7 +928,8 @@
     "close": "Close",
     "save": "Save column",
     "dateFormat": "Date format (optional)",
-    "dateFormatTooltip": "A date format supported by Moment.js (https://momentjs.com/docs/)."
+    "dateFormatTooltip": "A date format supported by Moment.js (https://momentjs.com/docs/).",
+    "uniqueKeyWarning": "The key for this column must be unique."
   },
   "listColumnDisplayType": {
     "select": "Select a display type",

@@ -22,22 +22,28 @@
     hasEnvironmentConfig: hasEnvironmentConfig$ | async
   } as obs"
 >
-  <ng-container *ngTemplateOutlet="addButton"></ng-container>
-  <ng-container *ngIf="!obs.hasEnvironmentConfig; else environmentConfigWarning">
-    <ng-container *ngIf="obs.caseListColumn?.length > 0; else noConfigWarning">
-      <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
-    </ng-container>
-  </ng-container>
+  <div class="cds--grid cds--grid--condensed">
+    <div class="cds--row">
+      <div class="cds--col cds--offset-15">
+        <ng-container *ngTemplateOutlet="addButton"></ng-container>
+      </div>
+    </div>
+    <div class="cds--row">
+      <ng-container *ngIf="!obs.hasEnvironmentConfig; else environmentConfigWarning">
+        <ng-container *ngIf="obs.caseListColumn?.length > 0; else noConfigWarning">
+          <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
   <ng-container *ngTemplateOutlet="createEditModal"></ng-container>
 </ng-container>
 
 <ng-template #addButton>
-  <div class="btn-group mt-m3px mb-3 pr-2 float-right">
-    <button (click)="openModal('create')" ibmButton="primary" size="md">
-      {{ 'listColumn.addButtonText' | translate }}
-      <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
-    </button>
-  </div>
+  <button (click)="openModal('create')" ibmButton="primary" size="md">
+    {{ 'listColumn.addButtonText' | translate }}
+    <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
+  </button>
 </ng-template>
 
 <ng-template #moveRowButtons let-index="index" let-length="length">
@@ -80,31 +86,27 @@
 </ng-template>
 
 <ng-template #environmentConfigWarning>
-  <div class="pl-2 pr-2 pb-2">
-    <ibm-notification
-      [notificationObj]="{
-        type: 'warning',
-        title: 'listColumn.hasEnvConfigWarningTitle' | translate,
-        message: 'listColumn.hasEnvConfigWarning' | translate,
-        showClose: false
-      }"
-    >
-    </ibm-notification>
-  </div>
+  <ibm-notification
+    [notificationObj]="{
+      type: 'warning',
+      title: 'listColumn.hasEnvConfigWarningTitle' | translate,
+      message: 'listColumn.hasEnvConfigWarning' | translate,
+      showClose: false
+    }"
+  >
+  </ibm-notification>
 </ng-template>
 
 <ng-template #noConfigWarning>
-  <div class="pl-2 pr-2 pb-2">
-    <ibm-notification
-      [notificationObj]="{
-        type: 'info',
-        title: 'listColumn.noConfigWarningTitle' | translate,
-        message: 'listColumn.noConfigWarning' | translate,
-        showClose: false
-      }"
-    >
-    </ibm-notification>
-  </div>
+  <ibm-notification
+    [notificationObj]="{
+      type: 'info',
+      title: 'listColumn.noConfigWarningTitle' | translate,
+      message: 'listColumn.noConfigWarning' | translate,
+      showClose: false
+    }"
+  >
+  </ibm-notification>
 </ng-template>
 
 <ng-template #createEditModal>
@@ -113,7 +115,9 @@
       type: currentModalType$ | async,
       show: showModal$ | async,
       valid: valid$ | async,
-      disableInput: disableInput$ | async
+      disableInput: disableInput$ | async,
+      validKey: validKey$ | async,
+      hasDefaultSort: hasDefaultSort$ | async
     } as modalObs"
     [open]="modalObs.show"
   >
@@ -148,7 +152,11 @@
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">
-      <ibm-label [disabled]="modalObs.disableInput">
+      <ibm-label
+        [disabled]="modalObs.disableInput"
+        [invalid]="modalObs.validKey == false"
+        [invalidText]="'listColumn.uniqueKeyWarning' | translate"
+      >
         <span class="label-with-tooltip">
           {{ 'listColumn.key' | translate }}
           <v-tooltip-icon
@@ -156,7 +164,7 @@
             [disabled]="modalObs.disableInput"
           ></v-tooltip-icon>
         </span>
-        <input ibmText formControlName="key" />
+        <input ibmText formControlName="key" [invalid]="modalObs.validKey == false" />
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">
@@ -173,11 +181,7 @@
     </div>
     <div class="cds--text-input__field-wrapper">
       <div class="display-type-dropdown">
-        <ibm-dropdown
-          [label]="'listColumn.displayType' | translate"
-          formControlName="displayType"
-          [disabled]="modalObs.disableInput"
-        >
+        <ibm-dropdown [label]="'listColumn.displayType' | translate" formControlName="displayType">
           <ibm-dropdown-list [items]="viewTypeItems$ | async"></ibm-dropdown-list>
         </ibm-dropdown>
       </div>
@@ -195,20 +199,26 @@
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">
-      <ibm-checkbox formControlName="sortable" [disabled]="modalObs.disableInput"
+      <ibm-checkbox formControlName="sortable"
         >{{ 'listColumn.sortable' | translate }}
       </ibm-checkbox>
     </div>
     <div class="cds--text-input__field-wrapper">
-      <div class="display-type-dropdown">
+      <ibm-label [disabled]="modalObs.disableInput || modalObs.hasDefaultSort">
+        <span class="label-with-tooltip select-label">
+          {{ 'listColumn.defaultSortTitle' | translate }}
+          <v-tooltip-icon
+            [tooltip]="'listColumn.defaultSortTooltip' | translate"
+            [disabled]="modalObs.disableInput"
+          ></v-tooltip-icon>
+        </span>
         <ibm-dropdown
-          [label]="'listColumn.defaultSortTitle' | translate"
           formControlName="defaultSort"
-          [disabled]="modalObs.disableInput"
+          [disabled]="modalObs.disableInput || modalObs.hasDefaultSort"
         >
           <ibm-dropdown-list [items]="sortItems$ | async"></ibm-dropdown-list>
         </ibm-dropdown>
-      </div>
+      </ibm-label>
     </div>
   </form>
 </ng-template>
@@ -219,7 +229,7 @@
       <button
         ibmButton="secondary"
         [attr.modal-primary-focus]="true"
-        (click)="closeModal()"
+        (click)="submitForm()"
         [disabled]="modalObs.disableInput"
       >
         {{ 'listColumn.close' | translate }}
@@ -229,7 +239,9 @@
         [attr.modal-primary-focus]="true"
         [disabled]="modalObs.valid === false"
         (click)="saveCasListColumns()"
-        [disabled]="modalObs.disableInput || modalObs.valid === false"
+        [disabled]="
+          modalObs.disableInput || modalObs.valid === false || modalObs.validKey === false
+        "
       >
         {{ 'listColumn.save' | translate }}
       </button>

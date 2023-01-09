@@ -922,6 +922,7 @@
     "sortable": "Sorteerbaar",
     "defaultSort": "Standaard sorteren",
     "defaultSortTitle": "Standaard sortering (optioneel)",
+    "defaultSortTooltip": "Als dit veld een waarde heeft, wordt de tabel standaard gesorteerd op deze eigenschap, in de opgegeven richting. Slechts één kolom tegelijk kan deze eigenschap hebben. Als voor een andere kolom al een standaardsortering is opgegeven, is dit invoerveld uitgeschakeld.",
     "selectDefaultSort": "Selecteer een standaard sortering",
     "sortableYes": "Ja",
     "sortableNo": "Nee",
@@ -936,7 +937,8 @@
     "close": "Sluiten",
     "save": "Kolom opslaan",
     "dateFormat": "Datumnotatie (optioneel)",
-    "dateFormatTooltip": "Een datumnotatie die ondersteund wordt door Moment.js (https://momentjs.com/docs/)."
+    "dateFormatTooltip": "Een datumnotatie die ondersteund wordt door Moment.js (https://momentjs.com/docs/).",
+    "uniqueKeyWarning": "De sleutel voor deze kolom moet uniek zijn."
   },
   "listColumnDisplayType": {
     "string": "Tekst",

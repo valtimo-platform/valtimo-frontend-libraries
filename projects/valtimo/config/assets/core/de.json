@@ -922,6 +922,7 @@
     "sortable": "Sortierbar",
     "defaultSort": "Standardsortierung",
     "defaultSortTitle": "Standardsortierung (optional)",
+    "defaultSortTooltip": "Wenn dieses Feld einen Wert hat, wird die Tabelle standardmäßig nach dieser Eigenschaft in der angegebenen Richtung sortiert. Diese Eigenschaft kann nur jeweils eine Spalte haben. Wenn für eine andere Spalte bereits eine Standardsortierung festgelegt wurde, ist dieses Eingabefeld deaktiviert.",
     "selectDefaultSort": "Wählen Sie eine Standardsortierung aus",
     "sortableYes": "Ja",
     "sortableNo": "Nein",
@@ -936,7 +937,8 @@
     "close": "Nahe",
     "save": "Spalte speichern",
     "dateFormat": "Datumsformat (optional)",
-    "dateFormatTooltip": "Ein Datumsformat, das von Moment.js (https://momentjs.com/docs/) unterstützt wird."
+    "dateFormatTooltip": "Ein Datumsformat, das von Moment.js (https://momentjs.com/docs/) unterstützt wird.",
+    "uniqueKeyWarning": "Der Schlüssel für diese Spalte muss eindeutig sein."
   },
   "listColumnDisplayType": {
     "string": "Text",
