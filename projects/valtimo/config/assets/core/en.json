@@ -929,7 +929,9 @@
     "save": "Save column",
     "dateFormat": "Date format (optional)",
     "dateFormatTooltip": "A date format supported by Moment.js (https://momentjs.com/docs/).",
-    "uniqueKeyWarning": "The key for this column must be unique."
+    "uniqueKeyWarning": "The key for this column must be unique.",
+    "enumTitle": "Enumeration values",
+    "enumTooltip": "The keys and values used to transform display data in the table."
   },
   "listColumnDisplayType": {
     "select": "Select a display type",

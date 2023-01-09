@@ -938,7 +938,9 @@
     "save": "Kolom opslaan",
     "dateFormat": "Datumnotatie (optioneel)",
     "dateFormatTooltip": "Een datumnotatie die ondersteund wordt door Moment.js (https://momentjs.com/docs/).",
-    "uniqueKeyWarning": "De sleutel voor deze kolom moet uniek zijn."
+    "uniqueKeyWarning": "De sleutel voor deze kolom moet uniek zijn.",
+    "enumTitle": "Opsommingswaarden",
+    "enumTooltip": "De sleutels en waarden die gebruikt worden om weergavedata om te zetten in de tabel."
   },
   "listColumnDisplayType": {
     "string": "Tekst",

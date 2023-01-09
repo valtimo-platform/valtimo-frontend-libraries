@@ -938,13 +938,15 @@
     "save": "Spalte speichern",
     "dateFormat": "Datumsformat (optional)",
     "dateFormatTooltip": "Ein Datumsformat, das von Moment.js (https://momentjs.com/docs/) unterstützt wird.",
-    "uniqueKeyWarning": "Der Schlüssel für diese Spalte muss eindeutig sein."
+    "uniqueKeyWarning": "Der Schlüssel für diese Spalte muss eindeutig sein.",
+    "enumTitle": "Aufzählungswerte",
+    "enumTooltip": "Die Schlüssel und Werte, die verwendet werden, um Anzeigedaten in die Tabelle umzuwandeln."
   },
   "listColumnDisplayType": {
     "string": "Text",
     "date": "Datum",
     "boolean": "Ja/nein",
-    "enum": "Zusammenfassung",
+    "enum": "Aufzählung",
     "arrayCount": "Quantität",
     "underscoresToSpaces": "Unterstriche zu Leerzeichen",
     "select": "Wählen Sie einen Anzeigetyp aus"

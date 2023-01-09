@@ -198,6 +198,21 @@
         <input ibmText formControlName="dateFormat" />
       </ibm-label>
     </div>
+    <div class="cds--text-input__field-wrapper" *ngIf="showEnum$ | async">
+      <ibm-label [disabled]="modalObs.disableInput">
+        <span class="label-with-tooltip select-label">
+          {{ 'listColumn.enumTitle' | translate }}
+          <v-tooltip-icon
+            [tooltip]="'listColumn.enumTooltip' | translate"
+            [disabled]="modalObs.disableInput"
+          ></v-tooltip-icon>
+        </span>
+        <carbon-multi-input
+          type="keyValue"
+          (valueChange)="enumValueChange($event)"
+        ></carbon-multi-input>
+      </ibm-label>
+    </div>
     <div class="cds--text-input__field-wrapper">
       <ibm-checkbox formControlName="sortable"
         >{{ 'listColumn.sortable' | translate }}
@@ -229,7 +244,7 @@
       <button
         ibmButton="secondary"
         [attr.modal-primary-focus]="true"
-        (click)="submitForm()"
+        (click)="closeModal()"
         [disabled]="modalObs.disableInput"
       >
         {{ 'listColumn.close' | translate }}

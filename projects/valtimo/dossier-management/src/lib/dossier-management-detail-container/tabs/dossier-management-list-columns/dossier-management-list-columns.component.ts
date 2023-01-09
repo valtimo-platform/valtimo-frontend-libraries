@@ -184,6 +184,7 @@ export class DossierManagementListColumnsComponent {
     defaultSort: new FormControl({
       key: this.INVALID_KEY,
     }),
+    enum: new FormControl(null),
   });
 
   readonly valid$ = this.formGroup.valueChanges.pipe(
@@ -228,6 +229,18 @@ export class DossierManagementListColumnsComponent {
     tap(showDateFormat => {
       if (showDateFormat === false && !!this.formGroup.value.dateFormat) {
         this.formGroup.patchValue({dateFormat: ''});
+      }
+    }),
+    startWith(false)
+  );
+
+  readonly showEnum$ = this.formGroup.valueChanges.pipe(
+    map(formValues => {
+      return !!(formValues.displayType?.key === this.DISPLAY_TYPES[3]);
+    }),
+    tap(showEnum => {
+      if (showEnum === false && !!this.formGroup.value.enum) {
+        this.formGroup.patchValue({enum: null});
       }
     }),
     startWith(false)
@@ -285,10 +298,6 @@ export class DossierManagementListColumnsComponent {
 
   closeModal(): void {
     this.showModal$.next(false);
-  }
-
-  submitForm(): void {
-    this.formGroup.updateValueAndValidity();
   }
 
   moveRow(
@@ -355,6 +364,10 @@ export class DossierManagementListColumnsComponent {
           }
         );
     });
+  }
+
+  enumValueChange(value: any): void {
+    console.log('value', value);
   }
 
   private updateCaseListColumns(
