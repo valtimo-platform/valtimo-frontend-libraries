@@ -236,6 +236,7 @@ export const environment: ValtimoConfig = {
     disableFormFlow: false,
     enableHackathonCasesPage: true,
     showUserNameInTopBar: true,
+    showPlantATreeButton: true,
     experimentalDmnEditing: true,
     caseListColumn: true
   },
