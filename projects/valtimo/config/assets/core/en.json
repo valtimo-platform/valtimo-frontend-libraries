@@ -936,7 +936,9 @@
     "enumTitle": "Enumeration values",
     "enumTitle": "Enumeration values (optional)",
     "enumTooltip": "The keys and values used to transform display data in the table.",
-    "downloadButtonText": "Download configuration"
+    "downloadButtonText": "Download configuration",
+    "deleteColumn": "Delete column",
+    "deleteColumnConfirmation": "Are you sure you want to delete this column?"
   },
   "listColumnDisplayType": {
     "select": "Select a display type",

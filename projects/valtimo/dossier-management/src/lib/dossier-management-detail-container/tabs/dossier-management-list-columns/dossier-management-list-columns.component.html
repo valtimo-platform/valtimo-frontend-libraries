@@ -313,5 +313,8 @@
     [showModalSubject$]="showDeleteModal$"
     [outputOnConfirm]="deleteRowIndex$ | async"
     (confirmEvent)="deleteRowConfirmation($event)"
+    confirmButtonTextTranslationKey="listColumn.deleteColumn"
+    titleTranslationKey="listColumn.deleteColumn"
+    contentTranslationKey="listColumn.deleteColumnConfirmation"
   ></valtimo-confirmation-modal>
 </ng-template>
