@@ -14,34 +14,14 @@
  * limitations under the License.
  */
 
-.user-icon {
-  font-size: 30px;
-}
+import {Component, Input} from '@angular/core';
 
-.be-toggle-right-sidebar {
-  display: flex;
-}
-
-.user-full-name {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  margin-inline-end: var(--v-top-bar-user-name-spacing);
-}
-
-::ng-deep .cds--header__name {
-  display: none !important;
-}
-
-.logo-link {
-  height: 100%;
-  padding-left: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-
-.logo-image {
-  height: 100%;
-  object-fit: contain;
+@Component({
+  selector: 'v-tooltip-icon',
+  templateUrl: './tooltip-icon.component.html',
+  styleUrls: ['./tooltip-icon.component.scss'],
+})
+export class TooltipIconComponent {
+  @Input() tooltip = '';
+  @Input() disabled = false;
 }

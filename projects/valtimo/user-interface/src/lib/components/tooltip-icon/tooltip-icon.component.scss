@@ -14,34 +14,18 @@
  * limitations under the License.
  */
 
-.user-icon {
-  font-size: 30px;
-}
-
-.be-toggle-right-sidebar {
+.v-input-label__tooltip {
   display: flex;
-}
-
-.user-full-name {
-  display: flex;
-  height: 100%;
-  align-items: center;
   justify-content: center;
-  margin-inline-end: var(--v-top-bar-user-name-spacing);
+  align-items: center;
+  font-size: var(--v-input-tooltip-icon-size);
+  width: var(--v-input-tooltip-icon-size);
+  height: var(--v-input-tooltip-icon-size);
+  color: var(--v-input-tooltip-icon-color);
+  margin-inline-start: var(--v-input-tooltip-icon-margin);
 }
 
-::ng-deep .cds--header__name {
-  display: none !important;
-}
-
-.logo-link {
-  height: 100%;
-  padding-left: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-
-.logo-image {
-  height: 100%;
-  object-fit: contain;
+.v-input-label__tooltip--disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }

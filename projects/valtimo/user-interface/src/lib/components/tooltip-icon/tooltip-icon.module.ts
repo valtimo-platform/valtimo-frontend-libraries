@@ -14,34 +14,16 @@
  * limitations under the License.
  */
 
-.user-icon {
-  font-size: 30px;
-}
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {TooltipIconComponent} from './tooltip-icon.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {TooltipModule} from '../../directives';
 
-.be-toggle-right-sidebar {
-  display: flex;
-}
-
-.user-full-name {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  margin-inline-end: var(--v-top-bar-user-name-spacing);
-}
-
-::ng-deep .cds--header__name {
-  display: none !important;
-}
-
-.logo-link {
-  height: 100%;
-  padding-left: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-
-.logo-image {
-  height: 100%;
-  object-fit: contain;
-}
+@NgModule({
+  declarations: [TooltipIconComponent],
+  imports: [CommonModule, TranslateModule, FormsModule, TooltipModule],
+  exports: [TooltipIconComponent],
+})
+export class TooltipIconModule {}
