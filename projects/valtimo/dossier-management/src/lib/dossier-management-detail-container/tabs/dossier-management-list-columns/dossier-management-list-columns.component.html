@@ -48,6 +48,7 @@
     [href]="obs.downloadUrl"
     [download]="obs.downloadName"
     [disabled]="
+      obs.hasEnvironmentConfig ||
       !obs.downloadUrl ||
       !obs.downloadName ||
       obs.caseListColumns?.length === 0 ||
@@ -61,7 +62,7 @@
     (click)="openModal('create')"
     ibmButton="primary"
     size="md"
-    [disabled]="loadingCaseListColumns"
+    [disabled]="obs.hasEnvironmentConfig || loadingCaseListColumns"
     class="ml-2"
   >
     {{ 'listColumn.addButtonText' | translate }}
