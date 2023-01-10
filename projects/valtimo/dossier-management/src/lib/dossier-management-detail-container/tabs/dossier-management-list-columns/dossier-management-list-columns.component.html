@@ -39,6 +39,7 @@
     </ng-container>
   </div>
   <ng-container *ngTemplateOutlet="createEditModal"></ng-container>
+  <ng-container *ngTemplateOutlet="deleteModal"></ng-container>
 </ng-container>
 
 <ng-template #buttons let-obs="obs">
@@ -63,7 +64,7 @@
     ibmButton="primary"
     size="md"
     [disabled]="obs.hasEnvironmentConfig || loadingCaseListColumns"
-    class="ml-2"
+    class="ml-3"
   >
     {{ 'listColumn.addButtonText' | translate }}
     <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
@@ -78,6 +79,11 @@
       documentDefinitionName: documentDefinitionName$ | async
     } as obs"
   >
+    <i
+      class="mdi mdi-delete btn btn-outline-danger mr-1"
+      (click)="deleteRow(index)"
+      [ngClass]="{'disabled disabled-move-row-button': obs.disableInput}"
+    ></i>
     <i
       class="mdi mdi-arrow-up-bold btn btn-outline-primary mr-1"
       (click)="moveRow(index, true, $event, obs.documentDefinitionName)"
@@ -300,4 +306,12 @@
 
 <ng-template #loading>
   <div class="loading-icon"><<ibm-loading></ibm-loading></div>
+</ng-template>
+
+<ng-template #deleteModal>
+  <valtimo-confirmation-modal
+    [showModalSubject$]="showDeleteModal$"
+    [outputOnConfirm]="deleteRowIndex$ | async"
+    (confirmEvent)="deleteRowConfirmation($event)"
+  ></valtimo-confirmation-modal>
 </ng-template>

@@ -17,10 +17,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ConfirmationModalComponent} from './confirmation-modal.component';
+import {ButtonModule, ModalModule} from 'carbon-components-angular';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [ConfirmationModalComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, ModalModule, TranslateModule, ButtonModule],
   exports: [ConfirmationModalComponent],
 })
 export class ConfirmationModalModule {}

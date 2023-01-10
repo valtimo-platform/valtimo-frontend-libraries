@@ -24,6 +24,7 @@ import {
   map,
   Observable,
   startWith,
+  Subject,
   switchMap,
   tap,
 } from 'rxjs';
@@ -298,6 +299,10 @@ export class DossierManagementListColumnsComponent {
     startWith(false)
   );
 
+  readonly showDeleteModal$ = new Subject<boolean>();
+
+  readonly deleteRowIndex$ = new BehaviorSubject<number>(0);
+
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
@@ -316,6 +321,15 @@ export class DossierManagementListColumnsComponent {
 
   closeModal(): void {
     this.showModal$.next(false);
+  }
+
+  deleteRow(caseListColumnRowIndex: number): void {
+    this.showDeleteModal$.next(true);
+    this.deleteRowIndex$.next(caseListColumnRowIndex);
+  }
+
+  deleteRowConfirmation(caseListColumnRowIndex: number): void {
+    console.log('confirmation', caseListColumnRowIndex);
   }
 
   moveRow(

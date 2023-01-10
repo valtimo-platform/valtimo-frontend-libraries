@@ -485,7 +485,10 @@
     "next": "Next >",
     "previous": "< Previous",
     "addRow": "Add row",
-    "deleteRow": "Delete row"
+    "deleteRow": "Delete row",
+    "delete": "Delete",
+    "deleteConfirmation": "Are you sure you want to delete?",
+    "cancel": "Cancel"
   },
   "taskDetail": {
     "taskCreated": "Created",

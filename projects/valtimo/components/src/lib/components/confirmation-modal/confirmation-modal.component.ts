@@ -14,11 +14,50 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'valtimo-confirmation-modal',
   templateUrl: './confirmation-modal.component.html',
   styleUrls: ['./confirmation-modal.component.scss'],
 })
-export class ConfirmationModalComponent {}
+export class ConfirmationModalComponent implements OnInit, OnDestroy {
+  @Input() titleTranslationKey = '';
+  @Input() title = '';
+  @Input() content = '';
+  @Input() contentTranslationKey = '';
+  @Input() confirmButtonText = '';
+  @Input() confirmButtonTextTranslationKey = '';
+  @Input() cancelButtonText = '';
+  @Input() cancelButtonTextTranslationKey = '';
+  @Input() showModalSubject$: Observable<boolean>;
+  @Input() outputOnConfirm: any = {};
+
+  @Output() confirmEvent: EventEmitter<any> = new EventEmitter();
+
+  readonly modalOpen$ = new BehaviorSubject<boolean>(false);
+
+  private showModalSubscription!: Subscription;
+
+  closeModal(): void {
+    this.modalOpen$.next(false);
+  }
+
+  confirm(): void {
+    this.modalOpen$.next(false);
+    this.confirmEvent.emit(this.outputOnConfirm);
+  }
+
+  ngOnInit(): void {
+    if (this.showModalSubject$) {
+      this.showModalSubscription = this.showModalSubject$.subscribe(showModal => {
+        this.modalOpen$.next(showModal);
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.showModalSubscription?.unsubscribe();
+  }
+}

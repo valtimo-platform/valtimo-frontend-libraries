@@ -494,7 +494,10 @@
     },
     "email": "E-mail",
     "username": "Gebruikersnaam",
-    "name": "Naam"
+    "name": "Naam",
+    "delete": "Verwijderen",
+    "deleteConfirmation": "Weet u zeker dat u wilt verwijderen?",
+    "cancel": "Annuleren"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",
