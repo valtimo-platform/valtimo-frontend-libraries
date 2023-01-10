@@ -249,8 +249,10 @@
           ></v-tooltip-icon>
         </span>
         <valtimo-carbon-multi-input
+          *ngIf="showModal$ | async"
           type="keyValue"
           (valueChange)="enumValueChange($event)"
+          [defaultValues]="defaultEnumValues$ | async"
         ></valtimo-carbon-multi-input>
       </ibm-label>
     </div>

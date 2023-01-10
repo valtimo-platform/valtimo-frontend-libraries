@@ -41,6 +41,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {take} from 'rxjs/operators';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {MultiInputValues} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-dossier-management-list-columns',
@@ -318,6 +319,8 @@ export class DossierManagementListColumnsComponent {
 
   readonly deleteRowIndex$ = new BehaviorSubject<number>(0);
 
+  readonly defaultEnumValues$ = new BehaviorSubject<MultiInputValues>(undefined);
+
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
@@ -447,6 +450,8 @@ export class DossierManagementListColumnsComponent {
   }
 
   columnRowClicked(row: {key: string}): void {
+    this.resetFormGroup();
+
     combineLatest([this.viewTypeItems$, this.sortItems$])
       .pipe(take(1))
       .subscribe(([viewTypeItems, sortItems]) => {
@@ -457,11 +462,21 @@ export class DossierManagementListColumnsComponent {
         );
         const sortItem = sortItems.find(item => item.key === column.defaultSort);
         const sortItemIndex = sortItems.findIndex(item => item.key === column.defaultSort);
-
+        const enumValues = column?.displayType?.displayTypeParameters?.enum;
+        const mappedEnumValues: MultiInputValues = [];
         this.selectedViewTypeItemIndex$.next(viewTypeItemIndex);
 
         if (sortItem) {
           this.selectedSortItemIndex$.next(sortItemIndex);
+        }
+
+        if (enumValues) {
+          Object.keys(enumValues).forEach(key => {
+            mappedEnumValues.push({key, value: enumValues[key]});
+          });
+          this.defaultEnumValues$.next(mappedEnumValues);
+        } else {
+          this.defaultEnumValues$.next([]);
         }
 
         this.formGroup.patchValue({
@@ -545,6 +560,7 @@ export class DossierManagementListColumnsComponent {
     combineLatest([this.sortItems$, this.viewTypeItems$])
       .pipe(take(1))
       .subscribe(([sortItems, viewTypeItems]) => {
+        this.defaultEnumValues$.next([]);
         this.selectedViewTypeItemIndex$.next(0);
         // @ts-ignore
         this.formGroup.patchValue({displayType: viewTypeItems[0]});
