@@ -243,45 +243,60 @@ export class DossierManagementListColumnsComponent {
     map(formValues => !!(formValues.displayType?.key === this.DISPLAY_TYPES[2]))
   );
 
-  readonly viewTypeItems$: Observable<Array<ListItem>> = this.translateService.stream('key').pipe(
-    map(() => [
-      {
-        content: this.translateService.instant(`listColumnDisplayType.select`),
-        key: this.INVALID_KEY,
-        selected: true,
-      },
-      ...this.DISPLAY_TYPES.map(type => ({
-        content: this.translateService.instant(`listColumnDisplayType.${type}`),
-        key: type,
-        selected: false,
-      })),
-    ])
+  readonly selectedViewTypeItemIndex$ = new BehaviorSubject<number>(0);
+
+  readonly viewTypeItems$: Observable<Array<ListItem>> = combineLatest([
+    this.selectedViewTypeItemIndex$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([selectedViewTypeItemIndex]) =>
+      [
+        {
+          content: this.translateService.instant(`listColumnDisplayType.select`),
+          key: this.INVALID_KEY,
+        },
+        ...this.DISPLAY_TYPES.map(type => ({
+          content: this.translateService.instant(`listColumnDisplayType.${type}`),
+          key: type,
+        })),
+      ].map((item, index) => ({
+        ...item,
+        selected: index === selectedViewTypeItemIndex,
+      }))
+    )
   );
 
-  readonly sortItems$: Observable<Array<ListItem>> = this.translateService.stream('key').pipe(
-    map(() => [
-      {
-        content: this.translateService.instant(`listColumn.selectDefaultSort`),
-        key: this.INVALID_KEY,
-        selected: true,
-      },
-      {
-        content: this.translateService.instant(`listColumn.sortableAsc`),
-        key: 'ASC',
-        selected: false,
-      },
-      {
-        content: this.translateService.instant(`listColumn.sortableDesc`),
-        key: 'DESC',
-        selected: false,
-      },
-    ])
+  readonly selectedSortItemIndex$ = new BehaviorSubject<number>(0);
+
+  readonly sortItems$: Observable<Array<ListItem>> = combineLatest([
+    this.selectedSortItemIndex$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([selectedSortItemIndex]) =>
+      [
+        {
+          content: this.translateService.instant(`listColumn.selectDefaultSort`),
+          key: this.INVALID_KEY,
+        },
+        {
+          content: this.translateService.instant(`listColumn.sortableAsc`),
+          key: 'ASC',
+        },
+        {
+          content: this.translateService.instant(`listColumn.sortableDesc`),
+          key: 'DESC',
+        },
+      ].map((item, index) => ({
+        ...item,
+        selected: index === selectedSortItemIndex,
+      }))
+    )
   );
 
-  readonly validKey$ = this.formGroup.valueChanges.pipe(
-    map(formValues => {
+  readonly validKey$ = combineLatest([this.formGroup.valueChanges, this.currentModalType$]).pipe(
+    map(([formValues, currentModalType]) => {
       const existingKeys = this.cachedCaseListColumns.map(column => column.key);
-      return !existingKeys.includes(formValues.key);
+      return currentModalType === 'create' ? !existingKeys.includes(formValues.key) : true;
     }),
     startWith(false)
   );
@@ -323,7 +338,9 @@ export class DossierManagementListColumnsComponent {
     this.showModal$.next(false);
   }
 
-  deleteRow(caseListColumnRowIndex: number): void {
+  deleteRow(caseListColumnRowIndex: number, clickEvent: MouseEvent): void {
+    clickEvent.stopPropagation();
+
     this.showDeleteModal$.next(true);
     this.deleteRowIndex$.next(caseListColumnRowIndex);
   }
@@ -429,6 +446,39 @@ export class DossierManagementListColumnsComponent {
     this.formGroup.patchValue({enum: value});
   }
 
+  columnRowClicked(row: {key: string}): void {
+    combineLatest([this.viewTypeItems$, this.sortItems$])
+      .pipe(take(1))
+      .subscribe(([viewTypeItems, sortItems]) => {
+        const column = this.cachedCaseListColumns.find(column => column.key === row.key);
+        const viewTypeItem = viewTypeItems.find(item => item.key === column.displayType.type);
+        const viewTypeItemIndex = viewTypeItems.findIndex(
+          item => item.key === column.displayType.type
+        );
+        const sortItem = sortItems.find(item => item.key === column.defaultSort);
+        const sortItemIndex = sortItems.findIndex(item => item.key === column.defaultSort);
+
+        this.selectedViewTypeItemIndex$.next(viewTypeItemIndex);
+
+        if (sortItem) {
+          this.selectedSortItemIndex$.next(sortItemIndex);
+        }
+
+        this.formGroup.patchValue({
+          key: column.key,
+          title: column.title,
+          path: column.path,
+          sortable: column.sortable,
+          // @ts-ignore
+          displayType: {...viewTypeItem},
+          // @ts-ignore
+          defaultSort: sortItem ? {...sortItem} : {...sortItems[0]},
+        });
+
+        this.openModal('edit');
+      });
+  }
+
   private updateCaseListColumns(
     documentDefinitionName: string,
     newCaseListColumns: Array<CaseListColumn>
@@ -495,8 +545,10 @@ export class DossierManagementListColumnsComponent {
     combineLatest([this.sortItems$, this.viewTypeItems$])
       .pipe(take(1))
       .subscribe(([sortItems, viewTypeItems]) => {
+        this.selectedViewTypeItemIndex$.next(0);
         // @ts-ignore
         this.formGroup.patchValue({displayType: viewTypeItems[0]});
+        this.selectedSortItemIndex$.next(0);
         // @ts-ignore
         this.formGroup.patchValue({defaultSort: sortItems[0]});
       });
