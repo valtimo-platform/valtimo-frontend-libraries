@@ -20,6 +20,7 @@ import {ConfigService, DefinitionColumn} from '@valtimo/config';
 import {
   BehaviorSubject,
   combineLatest,
+  delay,
   filter,
   map,
   Observable,
@@ -181,6 +182,8 @@ export class DossierManagementListColumnsComponent {
   readonly currentModalType$ = new BehaviorSubject<ListColumnModal>('create');
 
   readonly showModal$ = new BehaviorSubject<boolean>(false);
+
+  readonly modalShowing$ = this.showModal$.pipe(delay(250));
 
   readonly INVALID_KEY = 'invalid';
 
@@ -464,6 +467,8 @@ export class DossierManagementListColumnsComponent {
         const sortItemIndex = sortItems.findIndex(item => item.key === column.defaultSort);
         const enumValues = column?.displayType?.displayTypeParameters?.enum;
         const mappedEnumValues: MultiInputValues = [];
+        const columnDateFormat = column?.displayType?.displayTypeParameters?.dateFormat;
+
         this.selectedViewTypeItemIndex$.next(viewTypeItemIndex);
 
         if (sortItem) {
@@ -476,7 +481,7 @@ export class DossierManagementListColumnsComponent {
           });
           this.defaultEnumValues$.next(mappedEnumValues);
         } else {
-          this.defaultEnumValues$.next([]);
+          this.defaultEnumValues$.next([{key: '', value: ''}]);
         }
 
         this.formGroup.patchValue({
@@ -488,6 +493,9 @@ export class DossierManagementListColumnsComponent {
           displayType: {...viewTypeItem},
           // @ts-ignore
           defaultSort: sortItem ? {...sortItem} : {...sortItems[0]},
+          ...(columnDateFormat && {
+            dateFormat: columnDateFormat,
+          }),
         });
 
         this.openModal('edit');
@@ -560,7 +568,7 @@ export class DossierManagementListColumnsComponent {
     combineLatest([this.sortItems$, this.viewTypeItems$])
       .pipe(take(1))
       .subscribe(([sortItems, viewTypeItems]) => {
-        this.defaultEnumValues$.next([]);
+        this.defaultEnumValues$.next([{key: '', value: ''}]);
         this.selectedViewTypeItemIndex$.next(0);
         // @ts-ignore
         this.formGroup.patchValue({displayType: viewTypeItems[0]});
