@@ -329,7 +329,22 @@ export class DossierManagementListColumnsComponent {
   }
 
   deleteRowConfirmation(caseListColumnRowIndex: number): void {
-    console.log('confirmation', caseListColumnRowIndex);
+    const columnKey = this.cachedCaseListColumns[caseListColumnRowIndex]?.key;
+
+    if (columnKey) {
+      this.disableInput();
+
+      this.documentDefinitionName$.pipe(take(1)).subscribe(docDefName => {
+        this.documentService.deleteCaseList(docDefName, columnKey).subscribe(
+          () => {
+            this.refreshCaseListColumns();
+          },
+          () => {
+            this.enableInput();
+          }
+        );
+      });
+    }
   }
 
   moveRow(
