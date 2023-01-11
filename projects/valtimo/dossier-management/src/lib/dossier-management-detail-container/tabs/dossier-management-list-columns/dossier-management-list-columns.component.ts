@@ -439,7 +439,9 @@ export class DossierManagementListColumnsComponent {
     combineLatest([this.viewTypeItems$, this.sortItems$])
       .pipe(take(1))
       .subscribe(([viewTypeItems, sortItems]) => {
-        const column = this.cachedCaseListColumns.find(column => column.key === row.key);
+        const column = this.cachedCaseListColumns.find(
+          cachedColumn => cachedColumn.key === row.key
+        );
         const viewTypeItem = viewTypeItems.find(item => item.key === column.displayType.type);
         const viewTypeItemIndex = viewTypeItems.findIndex(
           item => item.key === column.displayType.type
