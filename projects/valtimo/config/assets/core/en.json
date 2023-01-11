@@ -916,6 +916,7 @@
     "path": "Path",
     "pathTooltip": "A path which leads to the property you want to show. For the document's JSON schema, follow this example: 'doc:customer.firstName'. For document properties, follow these examples: 'case:createdBy', or 'case:sequence', or 'case:assigneeFullName'. Note: When there are special characters in a property, the property must be enclosed in quotes. For example: case:\"loan-accepted\".",
     "displayType": "Display Type",
+    "displayTypeTooltip": "This option decides how the data is eventually displayed in the table.",
     "displayTypeParameters": "Parameters",
     "sortable": "Sortable",
     "defaultSort": "Default Sort",

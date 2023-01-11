@@ -217,11 +217,18 @@
       </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper">
-      <div class="display-type-dropdown">
-        <ibm-dropdown [label]="'listColumn.displayType' | translate" formControlName="displayType">
+      <ibm-label [disabled]="modalObs.disableInput">
+        <span class="label-with-tooltip select-label">
+          {{ 'listColumn.displayType' | translate }}
+          <v-tooltip-icon
+            [tooltip]="'listColumn.displayTypeTooltip' | translate"
+            [disabled]="modalObs.disableInput"
+          ></v-tooltip-icon>
+        </span>
+        <ibm-dropdown formControlName="displayType" [disabled]="modalObs.disableInput">
           <ibm-dropdown-list [items]="viewTypeItems$ | async"></ibm-dropdown-list>
         </ibm-dropdown>
-      </div>
+      </ibm-label>
     </div>
     <div class="cds--text-input__field-wrapper" *ngIf="showDateFormat$ | async">
       <ibm-label [disabled]="modalObs.disableInput">

@@ -921,6 +921,7 @@
     "path": "Pad",
     "pathTooltip": "Een pad dat leidt naar de eigenschap die u wilt weergeven. Volg dit voorbeeld voor het JSON-schema van het document: 'doc:customer.firstName'. Volg deze voorbeelden voor documenteigenschappen: 'case:createdBy', of 'case:sequence', of 'case:assigneeFullName'. Let op: wanneer er speciale tekens in een eigenschap zitten, moet de eigenschap binnen aanhalingstekens staan. Bijvoorbeeld: case:\"loan-accepted\".",
     "displayType": "Weergavetype",
+    "displayTypeTooltip": "Deze optie bepaalt hoe de gegevens uiteindelijk in de tabel worden weergegeven.",
     "displayTypeParameters": "Parameters",
     "sortable": "Sorteerbaar",
     "defaultSort": "Standaard sorteren",
