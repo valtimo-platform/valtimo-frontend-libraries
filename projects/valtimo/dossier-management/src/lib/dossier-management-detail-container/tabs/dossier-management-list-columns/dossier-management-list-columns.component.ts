@@ -202,8 +202,15 @@ export class DossierManagementListColumnsComponent {
     enum: new FormControl([]),
   });
 
-  readonly hasDefaultSort$ = this.formGroup.valueChanges.pipe(
-    map(() => this.cachedCaseListColumns.find(column => !!column.defaultSort)),
+  readonly disableDefaultSort$ = combineLatest([
+    this.currentModalType$,
+    this.formGroup.valueChanges,
+  ]).pipe(
+    map(
+      ([currentModalType]) =>
+        currentModalType === 'create' &&
+        this.cachedCaseListColumns.find(column => !!column.defaultSort)
+    ),
     startWith(false)
   );
 
@@ -336,7 +343,10 @@ export class DossierManagementListColumnsComponent {
     this.currentModalType$.next(modalType);
 
     if (modalType === 'create') {
+      this.formGroup.controls['key'].enable();
       this.resetFormGroup();
+    } else if (modalType === 'edit') {
+      this.formGroup.controls['key'].disable();
     }
   }
 
@@ -408,43 +418,14 @@ export class DossierManagementListColumnsComponent {
   }
 
   saveCasListColumns(): void {
-    const formValue = this.formGroup.value;
-
     this.disableInput();
 
-    this.documentDefinitionName$.pipe(take(1)).subscribe(docDefName => {
-      this.documentService
-        .postCaseList(docDefName, {
-          key: formValue.key,
-          sortable: formValue.sortable,
-          ...(formValue.defaultSort?.key !== this.INVALID_KEY && {
-            defaultSort: formValue.defaultSort?.key,
-          }),
-          title: formValue.title || '',
-          path: formValue.path,
-          displayType: {
-            type: formValue.displayType?.key,
-            displayTypeParameters: {
-              ...(formValue.dateFormat && {dateFormat: formValue.dateFormat}),
-              ...(Array.isArray(formValue.enum) &&
-                formValue.enum.length > 0 && {
-                  enum: formValue.enum.reduce(
-                    (acc, curr) => ({...acc, [curr.key]: curr.value}),
-                    {}
-                  ),
-                }),
-            },
-          },
-        })
-        .subscribe(
-          () => {
-            this.closeModal();
-            this.refreshCaseListColumns();
-          },
-          () => {
-            this.enableInput();
-          }
-        );
+    this.currentModalType$.pipe(take(1)).subscribe(currentModalType => {
+      if (currentModalType === 'create') {
+        this.addColumn();
+      } else {
+        this.updateColumn();
+      }
     });
   }
 
@@ -519,6 +500,24 @@ export class DossierManagementListColumnsComponent {
     );
   }
 
+  private addColumn(): void {
+    const formValue = this.formGroup.value;
+
+    this.documentDefinitionName$.pipe(take(1)).subscribe(docDefName => {
+      this.documentService
+        .postCaseList(docDefName, this.mapFormValuesToColumn(formValue))
+        .subscribe(
+          () => {
+            this.closeModal();
+            this.refreshCaseListColumns();
+          },
+          () => {
+            this.enableInput();
+          }
+        );
+    });
+  }
+
   private getDisplayTypeParametersView(displayTypeParameters: DisplayTypeParameters): string {
     if (displayTypeParameters?.dateFormat) {
       return displayTypeParameters.dateFormat;
@@ -534,6 +533,38 @@ export class DossierManagementListColumnsComponent {
     } else {
       return '-';
     }
+  }
+
+  private updateColumn(): void {
+    const updatedColumnFormValue = this.formGroup.value;
+    const mappedUpdatedColumn = this.mapFormValuesToColumn(updatedColumnFormValue);
+    const currentColumns = this.cachedCaseListColumns;
+    const mappedCurrentColumns = currentColumns.map(column => {
+      const columnCopy = {...column};
+      if (columnCopy.key === updatedColumnFormValue.key) {
+        const changedColumn = {...columnCopy, ...mappedUpdatedColumn};
+        if (!mappedUpdatedColumn.defaultSort) {
+          delete changedColumn.defaultSort;
+        }
+        return changedColumn;
+      }
+      if (mappedUpdatedColumn.defaultSort) {
+        delete columnCopy.defaultSort;
+      }
+      return columnCopy;
+    });
+
+    this.documentDefinitionName$.pipe(take(1)).subscribe(docDefName => {
+      this.documentService.putCaseList(docDefName, mappedCurrentColumns).subscribe(
+        () => {
+          this.closeModal();
+          this.refreshCaseListColumns();
+        },
+        () => {
+          this.enableInput();
+        }
+      );
+    });
   }
 
   private setDownload(
@@ -576,5 +607,27 @@ export class DossierManagementListColumnsComponent {
         // @ts-ignore
         this.formGroup.patchValue({defaultSort: sortItems[0]});
       });
+  }
+
+  private mapFormValuesToColumn(formValue: any): CaseListColumn {
+    return {
+      key: formValue.key,
+      sortable: formValue.sortable,
+      ...(formValue.defaultSort?.key !== this.INVALID_KEY && {
+        defaultSort: formValue.defaultSort?.key,
+      }),
+      title: formValue.title || '',
+      path: formValue.path,
+      displayType: {
+        type: formValue.displayType?.key,
+        displayTypeParameters: {
+          ...(formValue.dateFormat && {dateFormat: formValue.dateFormat}),
+          ...(Array.isArray(formValue.enum) &&
+            formValue.enum.length > 0 && {
+              enum: formValue.enum.reduce((acc, curr) => ({...acc, [curr.key]: curr.value}), {}),
+            }),
+        },
+      },
+    };
   }
 }

@@ -925,7 +925,7 @@
     "sortable": "Sortierbar",
     "defaultSort": "Standardsortierung",
     "defaultSortTitle": "Standardsortierung (optional)",
-    "defaultSortTooltip": "Wenn dieses Feld einen Wert hat, wird die Tabelle standardmäßig nach dieser Eigenschaft in der angegebenen Richtung sortiert. Diese Eigenschaft kann nur jeweils eine Spalte haben. Wenn für eine andere Spalte bereits eine Standardsortierung festgelegt wurde, ist dieses Eingabefeld deaktiviert.",
+    "defaultSortTooltip": "Wenn dieses Feld einen Wert hat, wird die Tabelle standardmäßig nach dieser Eigenschaft in der angegebenen Richtung sortiert. Diese Eigenschaft kann nur jeweils eine Spalte haben. Wenn beim Anlegen einer neuen Spalte bereits für eine andere Spalte eine Standardsortierung festgelegt wurde, ist dieses Eingabefeld deaktiviert.",
     "selectDefaultSort": "Wählen Sie eine Standardsortierung aus",
     "sortableYes": "Ja",
     "sortableNo": "Nein",
