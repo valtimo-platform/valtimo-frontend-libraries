@@ -44,96 +44,89 @@
   <ng-container *ngIf="showForm$ | async">
     <v-form (valueChange)="formValueChange($event)">
       <v-input *ngIf="modalType === 'edit'"
-              hidden
-              [disabled]="true"
-              [defaultValue]="prefillObject?.id"
-              name="id"
+        hidden
+        [disabled]="true"
+        [defaultValue]="prefillObject?.id"
+        name="id"
       ></v-input>
 
+      <v-input
+        [margin]="true"
+        [required]="true"
+        [title]="'objectManagement.labels.title' | translate"
+        [tooltip]="'objectManagement.tooltips.title' | translate"
+        [widthPx]="350"
+        [defaultValue]="prefillObject?.title"
+        name="title"
+      ></v-input>
+
+      <ng-container *ngIf="{
+        connectionInstances: configurationInstances$ | async,
+        objectsApiConfigurations: objectsApiConfigurations$ | async,
+        objecttypesApiConfigurations: objecttypesApiConfigurations$ | async
+        } as objectObs"
+      >
+        <v-select
+          [items]="objectObs.objectsApiConfigurations"
+          [margin]="true"
+          [widthInPx]="350"
+          name="objectenApiPluginConfigurationId"
+          [title]="'objectManagement.labels.objects' | translate"
+          [defaultSelectionId]="prefillObject?.objectenApiPluginConfigurationId"
+          [required]="true"
+        ></v-select>
+
+        <v-select
+          [items]="objectObs.objecttypesApiConfigurations"
+          [margin]="true"
+          [widthInPx]="350"
+          name="objecttypenApiPluginConfigurationId"
+          [title]="'objectManagement.labels.objecttypes' | translate"
+          [defaultSelectionId]="prefillObject?.objecttypenApiPluginConfigurationId"
+          [required]="true"
+          (selectedChange)="selectObjectType($event)"
+        ></v-select>
+      </ng-container>
+
         <v-input
-                [margin]="true"
-                [required]="true"
-                [title]="'objectManagement.labels.title' | translate"
-                [tooltip]="'objectManagement.tooltips.title' | translate"
-                [widthPx]="350"
-                [defaultValue]="prefillObject?.title"
-                name="title"
+          [margin]="true"
+          [required]="true"
+          [title]="'objectManagement.labels.objecttypeId' | translate"
+          [tooltip]="'objectManagement.tooltips.objecttypeId' | translate"
+          [widthPx]="350"
+          [defaultValue]="prefillObject?.objecttypeId"
+          name="objecttypeId"
         ></v-input>
 
-      <ng-container
-              *ngIf="{
-              connectionInstances: configurationInstances$ | async,
-              objectsApiConfigurations: objectsApiConfigurations$ | async,
-              objecttypesApiConfigurations: objecttypesApiConfigurations$ | async
-              } as objectObs"
-      >
-
+      <ng-container *ngIf="{formDefinitions: formDefinitions$ | async} as formObs">
         <v-select
-                [items]="objectObs.objectsApiConfigurations"
-                [margin]="true"
-                [widthInPx]="350"
-                name="objectenApiPluginConfigurationId"
-                [title]="'objectManagement.labels.objects' | translate"
-                [defaultSelectionId]="prefillObject?.objectenApiPluginConfigurationId"
-                [required]="true"
+          [items]="formObs.formDefinitions"
+          [margin]="true"
+          [widthInPx]="350"
+          name="formDefinitionView"
+          [title]="'objectManagement.labels.formDefinitionView' | translate"
+          [tooltip]="'objectManagement.tooltips.formDefinitionView' | translate"
+          [defaultSelectionId]="prefillObject?.formDefinitionView"
         ></v-select>
 
         <v-select
-                [items]="objectObs.objecttypesApiConfigurations"
-                [margin]="true"
-                [widthInPx]="350"
-                name="objecttypenApiPluginConfigurationId"
-                [title]="'objectManagement.labels.objecttypes' | translate"
-                [defaultSelectionId]="prefillObject?.objecttypenApiPluginConfigurationId"
-                [required]="true"
-                (selectedChange)="selectObjectType($event)"
-        ></v-select>
-      </ng-container>
-
-      <ng-container *ngIf="{objecttypesApiUrls: objecttypesApiUrls$ | async} as obs">
-        <v-select
-                  [items]="obs.objecttypesApiUrls"
-                  [margin]="true"
-                  [widthInPx]="350"
-                  name="objecttypeId"
-                  [title]="'objectManagement.labels.objecttypeUrl' | translate"
-                  [tooltip]="'objectManagement.tooltips.objecttypeUrl' | translate"
-                  [defaultSelectionId]="prefillObject?.objecttypeId"
-                  [required]="true"
-        ></v-select>
-      </ng-container>
-
-      <ng-container
-              *ngIf="{formDefinitions: formDefinitions$ | async} as formObs"
-      >
-        <v-select
-                [items]="formObs.formDefinitions"
-                [margin]="true"
-                [widthInPx]="350"
-                name="formDefinitionView"
-                [title]="'objectManagement.labels.formDefinitionView' | translate"
-                [tooltip]="'objectManagement.tooltips.formDefinitionView' | translate"
-                [defaultSelectionId]="prefillObject?.formDefinitionView"
-        ></v-select>
-
-        <v-select
-                [items]="formObs.formDefinitions"
-                [margin]="true"
-                [widthInPx]="350"
-                name="formDefinitionEdit"
-                [title]="'objectManagement.labels.formDefinitionEdit' | translate"
-                [tooltip]="'objectManagement.tooltips.formDefinitionEdit' | translate"
-                [defaultSelectionId]="prefillObject?.formDefinitionEdit"
+          [items]="formObs.formDefinitions"
+          [margin]="true"
+          [widthInPx]="350"
+          name="formDefinitionEdit"
+          [title]="'objectManagement.labels.formDefinitionEdit' | translate"
+          [tooltip]="'objectManagement.tooltips.formDefinitionEdit' | translate"
+          [defaultSelectionId]="prefillObject?.formDefinitionEdit"
         ></v-select>
       </ng-container>
 
       <v-input
-              [margin]="true"
-              type="checkbox"
-              [title]="'objectManagement.labels.showInDataMenu' | translate"
-              [tooltip]="'objectManagement.tooltips.showInDataMenu' | translate"
-              name="showInDataMenu"
-              [defaultValue]="prefillObject?.showInDataMenu"
+        [margin]="true"
+        type="checkbox"
+        [title]="'objectManagement.labels.showInDataMenu' | translate"
+        [tooltip]="'objectManagement.tooltips.showInDataMenu' | translate"
+        name="showInDataMenu"
+        [defaultValue]="prefillObject?.showInDataMenu"
       ></v-input>
     </v-form>
   </ng-container>

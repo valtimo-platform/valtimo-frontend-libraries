@@ -83,18 +83,6 @@ export class ObjectManagementModalComponent implements AfterViewInit, OnDestroy 
     )
   )
 
-  readonly objecttypesApiUrls$: Observable<any> = combineLatest([
-    this.objecttypesApiConfigurations$,
-    this.selectedObjecttype$
-  ]).pipe(
-    map(([objecttypesApi, selectedObjecttype]) =>
-        objecttypesApi.map(objecttypes => ({
-          id: objecttypes.id,
-          text: objecttypes.properties.url
-        }))
-    )
-  )
-
   constructor(
     private readonly objectManagementState: ObjectManagementStateService,
     private readonly objectManagementService: ObjectManagementService,
