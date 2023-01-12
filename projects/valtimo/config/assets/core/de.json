@@ -979,7 +979,8 @@
     "download": "Download",
     "visibleInMenu": "Im Menü sichtbar",
     "tabs": {
-      "general": "Allgemein"
+      "general": "Allgemein",
+      "list": "Aufführen"
     },
     "underscoresToSpaces": "Unterstriche zu Leerzeichen",
     "select": "Wählen Sie einen Anzeigetyp aus"

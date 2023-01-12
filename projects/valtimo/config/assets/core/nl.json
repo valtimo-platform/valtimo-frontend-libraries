@@ -979,7 +979,8 @@
     "download": "Download",
     "visibleInMenu": "Zichtbaar in het menu",
     "tabs": {
-      "general": "Algemeen"
+      "general": "Algemeen",
+      "list": "Lijst"
     },
     "underscoresToSpaces": "Lage streepjes naar spaties",
     "select": "Selecteer een weergavetype"

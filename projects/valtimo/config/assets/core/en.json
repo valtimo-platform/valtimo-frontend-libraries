@@ -976,7 +976,8 @@
     "download": "Download",
     "visibleInMenu": "Visible in menu",
     "tabs": {
-      "general": "General"
+      "general": "General",
+      "list": "List"
     }
   }
 }
