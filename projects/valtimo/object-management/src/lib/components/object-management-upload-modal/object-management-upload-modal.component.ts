@@ -171,7 +171,7 @@ export class ObjectManagementUploadModalComponent implements AfterViewInit, OnDe
     const jsonObjecttype = JSON.parse(string);
     const isValid = this.validateObject(
       jsonObjecttype,
-      ['id', 'title', 'objecttypenApiPluginConfigurationId', 'objecttypeId', 'objectenApiPluginConfigurationId', 'showInDataMenu']
+      ['title', 'objecttypenApiPluginConfigurationId', 'objecttypeId', 'objectenApiPluginConfigurationId', 'showInDataMenu']
     );
     const isObjecttypeTitleUnique = !this.objecttypes?.find(objecttype => objecttype.title === jsonObjecttype.title);
     if (isValid && isObjecttypeTitleUnique) {
