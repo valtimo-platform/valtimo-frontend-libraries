@@ -25,17 +25,18 @@ import {ObjectManagementService} from '../../services/object-management.service'
 import {Objecttype} from '../../models/object-management.model';
 
 @Component({
-  selector: 'valtimo-object-management-edit-modal',
-  templateUrl: './object-management-edit-modal.component.html',
-  styleUrls: ['./object-management-edit-modal.component.scss'],
+  selector: 'valtimo-object-management-modal',
+  templateUrl: './object-management-modal.component.html',
+  styleUrls: ['./object-management-modal.component.scss'],
 })
-export class ObjectManagementEditModalComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('objectManagementEditModal') objectManagementEditModal: vModalComponent;
-  @Input() prefillObject$: Observable<Objecttype>;
+export class ObjectManagementModalComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('objectManagementModal') objectManagementModal: vModalComponent;
+  @Input() prefillObject$!: Observable<Objecttype>;
 
   readonly disabled$!: Observable<boolean>;
   readonly valid$ = new BehaviorSubject<boolean>(false);
   readonly showForm$: Observable<boolean> = this.modalService.modalVisible$;
+  readonly modalType$: Observable<any> = this.objectManagementState.modalType$;
   readonly formData$ = new BehaviorSubject<any>(null);
 
   showSubscription!: Subscription;
@@ -125,14 +126,21 @@ export class ObjectManagementEditModalComponent implements AfterViewInit, OnDest
   }
 
   save(): void {
-    combineLatest([this.valid$, this.formData$])
+    combineLatest([this.valid$, this.formData$, this.modalType$])
       .pipe(take(1))
-      .subscribe(([valid, formData]) => {
+      .subscribe(([valid, formData, modalType]) => {
         if (valid) {
-          this.objectManagementService.editObject({...formData}).subscribe(() => {
-            this.objectManagementState.refresh();
-            this.objectManagementState.hideModal();
-          })
+          if (modalType === 'add') {
+            this.objectManagementService.createObject({...formData}).subscribe(() => {
+              this.objectManagementState.refresh();
+              this.objectManagementState.hideModal();
+            })
+          } else if (modalType === 'edit') {
+            this.objectManagementService.editObject({...formData}).subscribe(() => {
+              this.objectManagementState.refresh();
+              this.objectManagementState.hideModal();
+            })
+          }
         }
       });
   }
@@ -151,10 +159,8 @@ export class ObjectManagementEditModalComponent implements AfterViewInit, OnDest
 
   private show(): void {
     this.objectManagementState.modalType$.pipe(take(1)).subscribe(modalType => {
-      if (modalType === 'edit') {
-
-        console.log(this.formData$.getValue())
-        this.modalService.openModal(this.objectManagementEditModal);
+      if (modalType === 'edit' || modalType === 'add') {
+        this.modalService.openModal(this.objectManagementModal);
       }
     });
   }
