@@ -57,7 +57,7 @@
 <ng-template #tabContent>
   <div class="pt-3 bg-white position-relative tab-container">
     <div *ngIf="currentTab && currentTab === TabEnum.GENERAL">
-      <valtimo-object-management-detail [object]="object$ | async"></valtimo-object-management-detail>
+      <valtimo-object-management-detail [object$]="object$"></valtimo-object-management-detail>
     </div>
   </div>
 </ng-template>

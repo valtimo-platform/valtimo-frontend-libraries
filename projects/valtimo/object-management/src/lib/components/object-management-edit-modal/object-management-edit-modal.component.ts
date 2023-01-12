@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, EventEmitter, OnDestroy, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@angular/core';
 import {ModalComponent as vModalComponent, ModalService} from '@valtimo/user-interface';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
@@ -22,14 +22,16 @@ import {ObjectManagementStateService} from '../../services/object-management-sta
 import {FormManagementService} from '@valtimo/form-management';
 import {PluginConfiguration, PluginManagementService} from '@valtimo/plugin';
 import {ObjectManagementService} from '../../services/object-management.service';
+import {Objecttype} from '../../models/object-management.model';
 
 @Component({
-  selector: 'valtimo-object-management-add-modal',
-  templateUrl: './object-management-add-modal.component.html',
-  styleUrls: ['./object-management-add-modal.component.scss'],
+  selector: 'valtimo-object-management-edit-modal',
+  templateUrl: './object-management-edit-modal.component.html',
+  styleUrls: ['./object-management-edit-modal.component.scss'],
 })
-export class ObjectManagementAddModalComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('objectManagementAddModal') objectManagementAddModal: vModalComponent;
+export class ObjectManagementEditModalComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('objectManagementEditModal') objectManagementEditModal: vModalComponent;
+  @Input() prefillObject$: Observable<Objecttype>;
 
   readonly disabled$!: Observable<boolean>;
   readonly valid$ = new BehaviorSubject<boolean>(false);
@@ -98,7 +100,9 @@ export class ObjectManagementAddModalComponent implements AfterViewInit, OnDestr
     private readonly formManagementService: FormManagementService,
     private readonly pluginManagementService: PluginManagementService,
     private readonly modalService: ModalService
-  ) {}
+  ) {
+
+  }
 
   ngAfterViewInit(): void {
     this.openShowSubscription();
@@ -125,7 +129,7 @@ export class ObjectManagementAddModalComponent implements AfterViewInit, OnDestr
       .pipe(take(1))
       .subscribe(([valid, formData]) => {
         if (valid) {
-          this.objectManagementService.createObject({...formData}).subscribe(() => {
+          this.objectManagementService.editObject({...formData}).subscribe(() => {
             this.objectManagementState.refresh();
             this.objectManagementState.hideModal();
           })
@@ -147,8 +151,10 @@ export class ObjectManagementAddModalComponent implements AfterViewInit, OnDestr
 
   private show(): void {
     this.objectManagementState.modalType$.pipe(take(1)).subscribe(modalType => {
-      if (modalType === 'add') {
-        this.modalService.openModal(this.objectManagementAddModal);
+      if (modalType === 'edit') {
+
+        console.log(this.formData$.getValue())
+        this.modalService.openModal(this.objectManagementEditModal);
       }
     });
   }

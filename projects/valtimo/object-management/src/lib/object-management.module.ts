@@ -25,6 +25,7 @@ import {ObjectManagementDetailComponent} from './components/object-management-de
 import {ObjectManagementListComponent} from './components/object-management-list/object-management-list.component';
 import {ObjectManagementAddModalComponent} from './components/object-management-add-modal/object-management-add-modal.component';
 import {ObjectManagementUploadModalComponent} from './components/object-management-upload-modal/object-management-upload-modal.component';
+import {ObjectManagementEditModalComponent} from './components/object-management-edit-modal/object-management-edit-modal.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import {ObjectManagementUploadModalComponent} from './components/object-manageme
     ObjectManagementDetailContainerComponent,
     ObjectManagementDetailComponent,
     ObjectManagementAddModalComponent,
+    ObjectManagementEditModalComponent,
     ObjectManagementUploadModalComponent
   ],
   imports: [

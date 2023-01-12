@@ -955,6 +955,7 @@
   "objectManagement": {
     "title": "Objecttypes",
     "createObjecttype": "Maak objecttype",
+    "editObjecttype": "Wijzig objecttype",
     "uploadObjecttype": "Upload objecttype",
     "labels": {
       "title": "Titel",
@@ -974,6 +975,7 @@
     },
     "cancel": "Annuleren",
     "add": "Object toevoegen",
+    "edit": "Object wijzigen",
     "download": "Download",
     "visibleInMenu": "Zichtbaar in het menu",
     "tabs": {

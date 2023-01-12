@@ -952,6 +952,7 @@
   "objectManagement": {
     "title": "Objecttypes",
     "createObjecttype": "Create objecttype",
+    "editObjecttype": "Edit objecttype",
     "uploadObjecttype": "Upload objecttype",
     "labels": {
       "title": "Title",
@@ -971,6 +972,7 @@
     },
     "cancel": "Cancel",
     "add": "Add object",
+    "edit": "Change object",
     "download": "Download",
     "visibleInMenu": "Visible in menu",
     "tabs": {

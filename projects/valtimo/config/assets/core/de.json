@@ -955,6 +955,7 @@
   "objectManagement": {
     "title": "Objekttypen",
     "createObjecttype": "Objekttypen erstellen",
+    "editObjecttype": "Objekttypen bearbeiten",
     "uploadObjecttype": "Upload Objekttypen",
     "labels": {
       "title": "Titel",
@@ -973,6 +974,7 @@
       "showInDataMenu": "Gibt an, ob der Objekttyp im Menü sichtbar ist"
     },
     "cancel": "Stornieren",
+    "edit": "Objekt ändern",
     "add": "Objekt hinzufügen",
     "download": "Download",
     "visibleInMenu": "Im Menü sichtbar",
