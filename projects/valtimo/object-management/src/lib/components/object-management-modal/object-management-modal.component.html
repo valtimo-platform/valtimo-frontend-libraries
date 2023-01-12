@@ -26,7 +26,7 @@
     </div>
   </div>
   <div role="content">
-    <ng-container *ngTemplateOutlet="editForm; context: {prefillObject: obs.prefillObject, modalType: obs.modalType}"></ng-container>
+    <ng-container *ngTemplateOutlet="form; context: {prefillObject: obs.prefillObject, modalType: obs.modalType}"></ng-container>
   </div>
   <div role="footer">
     <div class="buttons">
@@ -40,7 +40,7 @@
   </div>
 </v-modal>
 
-<ng-template #editForm let-prefillObject="prefillObject" let-modalType="modalType">
+<ng-template #form let-prefillObject="prefillObject" let-modalType="modalType">
   <ng-container *ngIf="showForm$ | async">
     <v-form (valueChange)="formValueChange($event)">
       <v-input *ngIf="modalType === 'edit'"
