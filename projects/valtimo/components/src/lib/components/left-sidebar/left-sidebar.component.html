@@ -17,11 +17,23 @@
 <ibm-sidenav
   *ngIf="{
     sideBarExpanded: sideBarExpanded$ | async,
-    closestSequence: closestSequence$ | async
+    closestSequence: closestSequence$ | async,
+    isResizing: isResizing$ | async
   } as obs"
-  [allowExpansion]="false"
+  [allowExpansion]="true"
   [expanded]="obs.sideBarExpanded"
+  class="be-left-sidebar"
+  [style.width.px]="obs.sideBarExpanded ? (menuWidth$ | async) : null"
+  [ngClass]="{'no-transition': obs.isResizing}"
 >
+  <div
+    class="resize-border w-10"
+    (mouseenter)="enterBorder()"
+    (mouseleave)="leaveBorder()"
+    (mousedown)="resizeBorderClick($event)"
+    [ngClass]="{'resize-hover': (mouseIsOnResizeBorder$ | async) || obs.isResizing}"
+  >
+  </div>
   <ng-container *ngFor="let menuItem of menuItems$ | async">
     <ng-container *ngIf="!menuItem.children">
       <ng-container

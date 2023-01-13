@@ -17,14 +17,14 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   HostListener,
-  OnDestroy,
+  OnDestroy, Output,
   ViewChild,
 } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {combineLatest, Observable, Subscription} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, fromEvent, Observable, Subscription} from 'rxjs';
+import {debounceTime, map, take} from 'rxjs/operators';
 import {ConfigService, MenuItem} from '@valtimo/config';
 import {MenuService} from '../menu/menu.service';
 import {ShellService} from '../../services/shell.service';
@@ -38,6 +38,7 @@ import {Router} from '@angular/router';
 })
 export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
   @ViewChild('toggleButton') toggleButtonRef: ElementRef;
+  private bodyStyle: any;
 
   @HostListener('document:click', ['$event.target'])
   public onPageClick(targetElement) {
@@ -71,6 +72,24 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
 
   readonly closestSequence$: Observable<string> = this.menuService.closestSequence$;
 
+  private mouseXSubscription: Subscription;
+  private mouseUpSubscription: Subscription;
+  private readonly mouseX$ = fromEvent(document.body, 'mousemove').pipe(
+    map((e: MouseEvent) => e.pageX)
+  );
+  readonly isResizing$ = new BehaviorSubject<boolean>(false);
+  private xOnClick: number;
+  private menuWidthOnClick: number
+  private defaultMenuWidth!: number;
+  private maxMenuWidth!: number;
+  private minMenuWidth!: number;
+  readonly menuWidth$ = new BehaviorSubject<number>(undefined);
+  readonly mouseIsOnResizeBorder$ = new BehaviorSubject<boolean>(false);
+
+  @Output() menuWidthChanged: EventEmitter<number> = new EventEmitter();
+
+
+
   constructor(
     private readonly translateService: TranslateService,
     private readonly elementRef: ElementRef,
@@ -85,10 +104,52 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.openBreakpointSubscription();
+
+    this.mouseXSubscription = combineLatest([this.mouseX$, this.isResizing$])
+      .pipe(debounceTime(3))
+      .subscribe(([x, isResizing]) => {
+        const menuOpen = this.sideBarExpanded$;
+
+        if (isResizing) {
+          const offSetWidth = this.xOnClick - x;
+          const newMenuWidth = this.menuWidthOnClick - offSetWidth;
+          const snapMargin = 35;
+          const snapInside = newMenuWidth < this.minMenuWidth - snapMargin;
+          const snapOutside = !menuOpen && offSetWidth < -snapMargin;
+
+          if (menuOpen && newMenuWidth <= this.maxMenuWidth && newMenuWidth >= this.minMenuWidth) {
+            this.setMenuWidth(newMenuWidth);
+          } else if (snapInside || snapOutside) {
+            this.snapMenu(snapInside ? this.menuWidthOnClick : this.defaultMenuWidth);
+          }
+        }
+      });
+
+    this.mouseUpSubscription = fromEvent(document, 'mouseup').subscribe(() => {
+      this.stopResizing();
+    });
   }
 
   ngOnDestroy(): void {
     this.breakpointSubscription?.unsubscribe();
+  }
+
+  enterBorder(): void {
+    this.mouseIsOnResizeBorder$.next(true);
+  }
+
+  leaveBorder(): void {
+    this.mouseIsOnResizeBorder$.next(false);
+  }
+
+  resizeBorderClick(e: MouseEvent): void {
+    this.menuWidth$.pipe(take(1)).subscribe(menuWidth => {
+      this.menuWidthOnClick = menuWidth;
+      this.xOnClick = e.pageX;
+      this.bodyStyle.userSelect = 'none';
+      this.bodyStyle.cursor = 'col-resize';
+      this.isResizing$.next(true);
+    });
   }
 
   navigateToRoute(route: Array<string>, event: MouseEvent) {
@@ -134,5 +195,25 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
           this.shellService.setLargeScreen(largeScreen);
         });
       });
+  }
+
+  private snapMenu(snapTo: number): void {
+    this.stopResizing();
+    this.setMenuWidth(snapTo);
+    setTimeout(() => {
+      this.toggleButtonRef.nativeElement.click();
+    });
+  }
+
+  private stopResizing(): void {
+    this.bodyStyle.cursor = 'auto';
+    this.bodyStyle.userSelect = 'auto';
+    this.isResizing$.next(false);
+    localStorage.setItem('menuWidth', this.menuWidth$.getValue().toString());
+  }
+
+  private setMenuWidth(width: number): void {
+    this.menuWidth$.next(width);
+    this.menuWidthChanged.emit(width);
   }
 }
