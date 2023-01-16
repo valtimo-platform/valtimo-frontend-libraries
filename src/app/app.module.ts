@@ -17,7 +17,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {Injector, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HttpBackend, HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LayoutModule} from '@valtimo/layout';
@@ -28,9 +28,9 @@ import {
   BpmnJsDiagramModule,
   CardModule,
   FormIoModule,
-  FormIoUploaderComponent,
   MenuModule,
   registerDocumentenApiFormioUploadComponent,
+  registerFormioCurrentUserComponent,
   registerFormioFileSelectorComponent,
   registerFormioUploadComponent,
   UploaderModule,
@@ -42,6 +42,7 @@ import {
   DossierDetailTabAuditComponent,
   DossierDetailTabContactMomentsComponent,
   DossierDetailTabDocumentsComponent,
+  DossierDetailTabNotesComponent,
   DossierDetailTabProgressComponent,
   DossierDetailTabSummaryComponent,
   DossierDetailTabZaakobjectenComponent,
@@ -89,6 +90,10 @@ import {
   catalogiApiPluginSpecification,
   DocumentenApiPluginModule,
   documentenApiPluginSpecification,
+  NotificatiesApiPluginModule,
+  notificatiesApiPluginSpecification,
+  OpenNotificatiesPluginModule,
+  openNotificatiesPluginSpecification,
   ObjectenApiPluginModule,
   objectenApiPluginSpecification,
   ObjectTokenAuthenticationPluginModule,
@@ -103,6 +108,7 @@ import {
   ZakenApiPluginModule,
   zakenApiPluginSpecification,
 } from '@valtimo/plugin';
+import {ObjectManagementModule} from '../../projects/valtimo/object-management/src/lib/object-management.module';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -112,6 +118,7 @@ export function tabsFactory() {
     [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
     [DefaultTabs.contactMoments, DossierDetailTabContactMomentsComponent],
     [DefaultTabs.zaakobjecten, DossierDetailTabZaakobjectenComponent],
+    [DefaultTabs.notes, DossierDetailTabNotesComponent],
     ['custom-maps', CustomMapsTabComponent],
     ['custom-dossier', CustomDossierTabComponent],
   ]);
@@ -125,7 +132,7 @@ export function tabsFactory() {
     FormioComponent,
     UploadShowcaseComponent,
     CustomDossierTabComponent,
-    CustomMapsTabComponent,
+    CustomMapsTabComponent
   ],
   imports: [
     HttpClientModule,
@@ -175,7 +182,9 @@ export function tabsFactory() {
     OpenZaakModule,
     CustomerModule,
     PluginManagementModule,
+    NotificatiesApiPluginModule,
     ObjectTokenAuthenticationPluginModule,
+    OpenNotificatiesPluginModule,
     OpenZaakPluginModule,
     SmartDocumentsPluginModule,
     DocumentenApiPluginModule,
@@ -188,35 +197,34 @@ export function tabsFactory() {
       loader: {
         provide: TranslateLoader,
         useFactory: MultiTranslateHttpLoaderFactory,
-        deps: [HttpClient, ConfigService],
+        deps: [HttpBackend, ConfigService],
       },
     }),
+    ObjectManagementModule
   ],
   providers: [
     FormioComponent,
     {
       provide: PLUGINS_TOKEN,
       useValue: [
-        openZaakPluginSpecification,
-        documentenApiPluginSpecification,
-        objectTokenAuthenticationPluginSpecification,
-        smartDocumentsPluginSpecification,
-        objecttypenApiPluginSpecification,
-        zakenApiPluginSpecification,
-        objectenApiPluginSpecification,
         catalogiApiPluginSpecification,
+        documentenApiPluginSpecification,
+        notificatiesApiPluginSpecification,
+        objectenApiPluginSpecification,
+        objectTokenAuthenticationPluginSpecification,
+        objecttypenApiPluginSpecification,
+        openNotificatiesPluginSpecification,
+        openZaakPluginSpecification,
+        smartDocumentsPluginSpecification,
+        zakenApiPluginSpecification,
       ],
     },
-  ],
-  entryComponents: [
-    CustomFormExampleComponent,
-    StartProcessCustomFormComponent,
-    FormIoUploaderComponent,
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {
   constructor(injector: Injector) {
+    registerFormioCurrentUserComponent(injector);
     registerFormioUploadComponent(injector);
     registerFormioFileSelectorComponent(injector);
     registerDocumentenApiFormioUploadComponent(injector);

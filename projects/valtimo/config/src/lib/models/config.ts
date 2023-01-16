@@ -17,7 +17,6 @@
 import {InjectionToken, Injector} from '@angular/core';
 import {Auth} from './security.config';
 import {MenuConfig} from './menu.config';
-import {ITranslationResource} from 'ngx-translate-multi-http-loader';
 
 export const VALTIMO_CONFIG = new InjectionToken<ValtimoConfig>('valtimoConfig');
 
@@ -31,6 +30,10 @@ export interface DefinitionColumn {
   sortable?: boolean;
   viewType?: string;
   default?: boolean | string;
+  enum?: Array<string> | {[key: string]: string};
+  title?: string;
+  format?: string;
+  key?: string;
 }
 
 export interface CustomDossierHeaderItem {
@@ -40,6 +43,7 @@ export interface CustomDossierHeaderItem {
   textSize?: string;
   noValueText?: string;
   customClass?: string;
+  modifier?: string;
 }
 
 export interface CustomTaskList {
@@ -65,11 +69,15 @@ export interface SortState {
 
 export interface ValtimoConfig {
   // eslint-disable-next-line @typescript-eslint/ban-types
-  initializers: ((injector: Injector) => Function)[];
+  logoSvgBase64?: string;
+  logoPngBase64?: string;
+  applicationTitle?: string;
+  initializers: ((injector: Injector) => () => void)[];
   menu: MenuConfig;
   authentication: Auth;
   production: boolean;
   whitelistedDomains: string[];
+  langKey?: Language;
   valtimoApi: {
     endpointUri: string;
   };
@@ -95,14 +103,21 @@ export interface ValtimoConfig {
   customDossierHeader?: {
     [definitionNameId: string]: Array<CustomDossierHeaderItem>;
   };
-  translationResources?: Array<ITranslationResource>;
+  translationResources?: Array<string>;
   featureToggles?: {
     disableFormFlow?: boolean;
     enableHackathonCasesPage?: boolean;
     showUserNameInTopBar?: boolean;
+    showPlantATreeButton?: boolean;
     experimentalDmnEditing?: boolean;
+    disableCaseCount?: boolean;
+    caseSearchFields?: boolean;
+    caseListColumn?: boolean;
+    enableObjectManagement?: boolean;
+    largeLogoMargin?: boolean;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
+  visibleDossierListTabs?: Array<DossierListTab>;
   customTaskList?: CustomTaskList;
   customLeftSidebar?: CustomLeftSidebar;
   caseObjectTypes?: {
@@ -119,5 +134,17 @@ export enum UploadProvider {
 export enum TaskListTab {
   MINE = 'mine',
   OPEN = 'open',
-  ALL = 'all'
+  ALL = 'all',
+}
+
+export enum DossierListTab {
+  MINE = 'MINE',
+  OPEN = 'OPEN',
+  ALL = 'ALL',
+}
+
+export enum Language {
+  NL = 'nl',
+  EN = 'en',
+  DE = 'de',
 }

@@ -18,7 +18,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
+  AssignHandlerToDocumentResult,
   AuditRecord,
+  CaseListColumn,
+  CaseSettings,
   Document,
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
@@ -33,15 +36,26 @@ import {
   ModifyDocumentAndStartProcessResult,
   NewDocumentAndStartProcessRequestImpl,
   NewDocumentAndStartProcessResult,
+  OpenDocumentCount,
   Page,
   ProcessDocumentDefinition,
   ProcessDocumentDefinitionRequest,
   ProcessDocumentInstance,
+  SpecifiedDocuments,
   UndeployDocumentDefinitionResult,
   UploadProcessLink,
 } from './models';
 import {DocumentSearchRequest} from './document-search-request';
-import {ConfigService} from '@valtimo/config';
+import {
+  AssigneeFilter,
+  ConfigService,
+  SearchField,
+  SearchFilter,
+  SearchFilterRange,
+  SearchOperator,
+  User,
+} from '@valtimo/config';
+import {AdvancedDocumentSearchRequest} from './advanced-document-search-request';
 
 @Injectable({
   providedIn: 'root',
@@ -55,55 +69,143 @@ export class DocumentService {
 
   // Document-calls
   public getAllDefinitions(): Observable<DocumentDefinitions> {
-    return this.http.get<DocumentDefinitions>(`${this.valtimoEndpointUri}document-definition`);
+    return this.http.get<DocumentDefinitions>(`${this.valtimoEndpointUri}v1/document-definition`);
   }
 
   queryDefinitions(params?: any): Observable<Page<DocumentDefinition>> {
     return this.http.get<Page<DocumentDefinition>>(
-      `${this.valtimoEndpointUri}document-definition`,
+      `${this.valtimoEndpointUri}v1/document-definition`,
       {params}
     );
   }
 
   getDocumentDefinition(documentDefinitionName: string): Observable<DocumentDefinition> {
     return this.http.get<DocumentDefinition>(
-      `${this.valtimoEndpointUri}document-definition/${documentDefinitionName}`
+      `${this.valtimoEndpointUri}v1/document-definition/${documentDefinitionName}`
     );
   }
 
   getDocuments(documentSearchRequest: DocumentSearchRequest): Observable<Documents> {
     return this.http.post<Documents>(
-      `${this.valtimoEndpointUri}document-search`,
+      `${this.valtimoEndpointUri}v1/document-search`,
       documentSearchRequest.asHttpBody(),
+      {
+        params: documentSearchRequest.asHttpParams(),
+      }
+    );
+  }
+
+  getDocumentsSearch(
+    documentSearchRequest: AdvancedDocumentSearchRequest,
+    searchOperator?: SearchOperator,
+    assigneeFilter?: AssigneeFilter,
+    otherFilters?: Array<SearchFilter | SearchFilterRange>
+  ): Observable<Documents> {
+    const body = documentSearchRequest.asHttpBody();
+
+    if (searchOperator) {
+      body.searchOperator = searchOperator;
+    }
+
+    if (assigneeFilter) {
+      body.assigneeFilter = assigneeFilter;
+    }
+
+    if (otherFilters) {
+      body.otherFilters = otherFilters;
+    }
+
+    return this.http.post<Documents>(
+      `${this.valtimoEndpointUri}v1/document-definition/${documentSearchRequest.definitionName}/search`,
+      body,
       {params: documentSearchRequest.asHttpParams()}
+    );
+  }
+
+  getSpecifiedDocumentsSearch(
+    documentSearchRequest: AdvancedDocumentSearchRequest,
+    searchOperator?: SearchOperator,
+    assigneeFilter?: AssigneeFilter,
+    otherFilters?: Array<SearchFilter | SearchFilterRange>
+  ): Observable<SpecifiedDocuments> {
+    const body = documentSearchRequest.asHttpBody();
+
+    if (searchOperator) {
+      body.searchOperator = searchOperator;
+    }
+
+    if (assigneeFilter) {
+      body.assigneeFilter = assigneeFilter;
+    }
+
+    if (otherFilters) {
+      body.otherFilters = otherFilters;
+    }
+
+    return this.http.post<SpecifiedDocuments>(
+      `${this.valtimoEndpointUri}v1/case/${documentSearchRequest.definitionName}/search`,
+      body,
+      {params: documentSearchRequest.asHttpParams()}
+    );
+  }
+
+  getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
+    return this.http.get<Array<SearchField>>(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`
+    );
+  }
+
+  putDocumentSearch(documentDefinitionName: string, request: Array<SearchField>): Observable<void> {
+    return this.http.put<void>(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
+      [...request]
+    );
+  }
+
+  postDocumentSearch(documentDefinitionName: string, request: SearchField): Observable<void> {
+    return this.http.post<void>(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
+      {...request}
+    );
+  }
+
+  deleteDocumentSearch(documentDefinitionName: string, key: string): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+    return this.http.delete(
+      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields?key=${key}`,
+      options
     );
   }
 
   public getDocumentRoles(documentDefinitionName: string): Observable<Array<string>> {
     return this.http.get<Array<string>>(
-      `${this.valtimoEndpointUri}document-definition/${documentDefinitionName}/roles`
+      `${this.valtimoEndpointUri}v1/document-definition/${documentDefinitionName}/roles`
     );
   }
 
   public modifyDocumentRoles(documentDefinitionName: string, roles: any): Observable<void> {
     return this.http.put<void>(
-      `${this.valtimoEndpointUri}document-definition/${documentDefinitionName}/roles`,
+      `${this.valtimoEndpointUri}v1/document-definition/${documentDefinitionName}/roles`,
       roles
     );
   }
 
   getDocument(documentId: string): Observable<Document> {
-    return this.http.get<Document>(`${this.valtimoEndpointUri}document/${documentId}`);
+    return this.http.get<Document>(`${this.valtimoEndpointUri}v1/document/${documentId}`);
   }
 
   modifyDocument(document: any): Observable<DocumentResult> {
-    return this.http.put<DocumentResult>(`${this.valtimoEndpointUri}document`, document);
+    return this.http.put<DocumentResult>(`${this.valtimoEndpointUri}v1/document`, document);
   }
 
   // ProcessDocument-calls
   getProcessDocumentDefinitions(): Observable<ProcessDocumentDefinition> {
     return this.http.get<ProcessDocumentDefinition>(
-      `${this.valtimoEndpointUri}process-document/definition`
+      `${this.valtimoEndpointUri}v1/process-document/definition`
     );
   }
 
@@ -111,13 +213,13 @@ export class DocumentService {
     documentDefinitionName: string
   ): Observable<ProcessDocumentDefinition[]> {
     return this.http.get<ProcessDocumentDefinition[]>(
-      `${this.valtimoEndpointUri}process-document/definition/document/${documentDefinitionName}`
+      `${this.valtimoEndpointUri}v1/process-document/definition/document/${documentDefinitionName}`
     );
   }
 
   findProcessDocumentInstances(documentId: string): Observable<ProcessDocumentInstance[]> {
     return this.http.get<ProcessDocumentInstance[]>(
-      `${this.valtimoEndpointUri}process-document/instance/document/${documentId}`
+      `${this.valtimoEndpointUri}v1/process-document/instance/document/${documentId}`
     );
   }
 
@@ -125,7 +227,7 @@ export class DocumentService {
     request: NewDocumentAndStartProcessRequestImpl
   ): Observable<NewDocumentAndStartProcessResult> {
     return this.http.post<NewDocumentAndStartProcessResult>(
-      `${this.valtimoEndpointUri}process-document/operation/new-document-and-start-process`,
+      `${this.valtimoEndpointUri}v1/process-document/operation/new-document-and-start-process`,
       request
     );
   }
@@ -134,7 +236,7 @@ export class DocumentService {
     request: ModifyDocumentAndCompleteTaskRequestImpl
   ): Observable<ModifyDocumentAndCompleteTaskResult> {
     return this.http.post<ModifyDocumentAndCompleteTaskResult>(
-      `${this.valtimoEndpointUri}process-document/operation/modify-document-and-complete-task`,
+      `${this.valtimoEndpointUri}v1/process-document/operation/modify-document-and-complete-task`,
       request
     );
   }
@@ -143,7 +245,7 @@ export class DocumentService {
     request: ModifyDocumentAndStartProcessRequestImpl
   ): Observable<ModifyDocumentAndStartProcessResult> {
     return this.http.post<ModifyDocumentAndStartProcessResult>(
-      `${this.valtimoEndpointUri}process-document/operation/modify-document-and-start-process`,
+      `${this.valtimoEndpointUri}v1/process-document/operation/modify-document-and-start-process`,
       request
     );
   }
@@ -152,7 +254,7 @@ export class DocumentService {
     request: ProcessDocumentDefinitionRequest
   ): Observable<ProcessDocumentDefinition> {
     return this.http.post<ProcessDocumentDefinition>(
-      `${this.valtimoEndpointUri}process-document/definition`,
+      `${this.valtimoEndpointUri}v1/process-document/definition`,
       request
     );
   }
@@ -166,7 +268,7 @@ export class DocumentService {
       }),
     };
     return this.http.post<void>(
-      `${this.valtimoEndpointUri}document-definition`,
+      `${this.valtimoEndpointUri}v1/document-definition`,
       documentDefinitionCreateRequest,
       options
     );
@@ -179,21 +281,21 @@ export class DocumentService {
       }),
       body: request,
     };
-    return this.http.delete(`${this.valtimoEndpointUri}process-document/definition`, options);
+    return this.http.delete(`${this.valtimoEndpointUri}v1/process-document/definition`, options);
   }
 
   getAuditLog(documentId: string, page: number = 0): Observable<Page<AuditRecord>> {
     let params = new HttpParams();
     params = params.set('page', page.toString());
     return this.http.get<Page<AuditRecord>>(
-      `${this.valtimoEndpointUri}process-document/instance/document/${documentId}/audit`,
+      `${this.valtimoEndpointUri}v1/process-document/instance/document/${documentId}/audit`,
       {params}
     );
   }
 
   assignResource(documentId: string, resourceId: string): Observable<void> {
     return this.http.post<void>(
-      `${this.valtimoEndpointUri}document/${documentId}/resource/${resourceId}`,
+      `${this.valtimoEndpointUri}v1/document/${documentId}/resource/${resourceId}`,
       {}
     );
   }
@@ -205,30 +307,30 @@ export class DocumentService {
       }),
     };
     return this.http.delete<void>(
-      `${this.valtimoEndpointUri}document/${documentId}/resource/${resourceId}`,
+      `${this.valtimoEndpointUri}v1/document/${documentId}/resource/${resourceId}`,
       options
     );
   }
 
   removeDocumentDefinition(name: string): Observable<UndeployDocumentDefinitionResult> {
     return this.http.delete<UndeployDocumentDefinitionResult>(
-      `${this.valtimoEndpointUri}document-definition/${name}`
+      `${this.valtimoEndpointUri}v1/document-definition/${name}`
     );
   }
 
   sendMessage(documentId: string, request: DocumentSendMessageRequest): Observable<any> {
-    return this.http.post(`${this.valtimoEndpointUri}document/${documentId}/message`, request);
+    return this.http.post(`${this.valtimoEndpointUri}v1/document/${documentId}/message`, request);
   }
 
   getDocumentTypes(documentDefinitionName: string): Observable<Array<DocumentType>> {
     return this.http.get<Array<DocumentType>>(
-      `${this.valtimoEndpointUri}documentdefinition/${documentDefinitionName}/zaaktype/documenttype`
+      `${this.valtimoEndpointUri}v1/documentdefinition/${documentDefinitionName}/zaaktype/documenttype`
     );
   }
 
   getLinkedUploadProcess(documentDefinitionName: string): Observable<UploadProcessLink> {
     return this.http.get<UploadProcessLink>(
-      `${this.valtimoEndpointUri}process-document/demo/${documentDefinitionName}/process`
+      `${this.valtimoEndpointUri}v1/process-document/demo/${documentDefinitionName}/process`
     );
   }
 
@@ -237,7 +339,7 @@ export class DocumentService {
     processDefinitionKey: string
   ): Observable<UploadProcessLink> {
     return this.http.put<UploadProcessLink>(
-      `${this.valtimoEndpointUri}process-document/demo/${documentDefinitionName}/process`,
+      `${this.valtimoEndpointUri}v1/process-document/demo/${documentDefinitionName}/process`,
       {
         processDefinitionKey,
         linkType: 'DOCUMENT_UPLOAD',
@@ -247,7 +349,7 @@ export class DocumentService {
 
   deleteLinkedUploadProcess(documentDefinitionName: string): Observable<void> {
     return this.http.delete<void>(
-      `${this.valtimoEndpointUri}process-document/demo/${documentDefinitionName}/process`
+      `${this.valtimoEndpointUri}v1/process-document/demo/${documentDefinitionName}/process`
     );
   }
 
@@ -255,7 +357,81 @@ export class DocumentService {
     processInstanceId: string
   ): Observable<ProcessDocumentDefinition> {
     return this.http.get<ProcessDocumentDefinition>(
-      `${this.valtimoEndpointUri}process-document/definition/processinstance/${processInstanceId}`
+      `${this.valtimoEndpointUri}v1/process-document/definition/processinstance/${processInstanceId}`
+    );
+  }
+
+  assignHandlerToDocument(
+    documentId: string,
+    assigneeId: string
+  ): Observable<AssignHandlerToDocumentResult> {
+    return this.http.post<AssignHandlerToDocumentResult>(
+      `${this.valtimoEndpointUri}v1/document/${documentId}/assign`,
+      {assigneeId}
+    );
+  }
+
+  unassignHandlerFromDocument(documentId: string): Observable<void> {
+    return this.http.post<void>(`${this.valtimoEndpointUri}v1/document/${documentId}/unassign`, {});
+  }
+
+  getCandidateUsers(documentId: string): Observable<Array<User>> {
+    return this.http.get<Array<User>>(
+      `${this.valtimoEndpointUri}v1/document/${documentId}/candidate-user`
+    );
+  }
+
+  getOpenDocumentCount(): Observable<Array<OpenDocumentCount>> {
+    return this.http.get<Array<OpenDocumentCount>>(
+      `${this.valtimoEndpointUri}v1/document-definition/open/count`
+    );
+  }
+
+  patchCaseSettings(
+    documentDefinitionName: string,
+    request: CaseSettings
+  ): Observable<CaseSettings> {
+    return this.http.patch<CaseSettings>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`,
+      {...request}
+    );
+  }
+
+  getCaseSettings(documentDefinitionName: string): Observable<CaseSettings> {
+    return this.http.get<CaseSettings>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`
+    );
+  }
+
+  getCaseList(documentDefinitionName: string): Observable<Array<CaseListColumn>> {
+    return this.http.get<Array<CaseListColumn>>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`
+    );
+  }
+
+  postCaseList(
+    documentDefinitionName: string,
+    request: CaseListColumn
+  ): Observable<CaseListColumn> {
+    return this.http.post<CaseListColumn>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`,
+      {...request}
+    );
+  }
+
+  putCaseList(
+    documentDefinitionName: string,
+    request: Array<CaseListColumn>
+  ): Observable<Array<CaseListColumn>> {
+    return this.http.put<Array<CaseListColumn>>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column`,
+      [...request]
+    );
+  }
+
+  deleteCaseList(documentDefinitionName: string, columnKey: string): Observable<CaseListColumn> {
+    return this.http.delete<CaseListColumn>(
+      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column/${columnKey}`
     );
   }
 }

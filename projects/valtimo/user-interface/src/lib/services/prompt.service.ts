@@ -38,8 +38,10 @@ export class PromptService {
   private readonly _confirmButtonType$ = new BehaviorSubject<ButtonType>('primary');
   private readonly _closeOnConfirm$ = new BehaviorSubject<boolean>(false);
   private readonly _closeOnCancel$ = new BehaviorSubject<boolean>(false);
+  private readonly _closeButtonVisible$ = new BehaviorSubject<boolean>(false);
   private readonly _cancelCallbackFunction$ = new BehaviorSubject<() => void>(() => {});
   private readonly _confirmCallbackFunction$ = new BehaviorSubject<() => void>(() => {});
+  private readonly _closeCallbackFunction$ = new BehaviorSubject<() => void>(() => {});
 
   get promptVisible$() {
     return this._promptVisible$.asObservable();
@@ -97,6 +99,10 @@ export class PromptService {
     return this._confirmButtonType$.asObservable();
   }
 
+  get closeButtonVisible$(): Observable<boolean> {
+    return this._closeButtonVisible$.asObservable();
+  }
+
   openPrompt(promptParameters: {
     identifier?: string;
     headerText: string;
@@ -109,11 +115,12 @@ export class PromptService {
     confirmButtonType?: ButtonType;
     closeOnConfirm?: boolean;
     closeOnCancel?: boolean;
+    closeButtonVisible?: boolean;
     cancelCallbackFunction?: () => void;
     confirmCallBackFunction?: () => void;
+    closeCallBackFunction?: () => void;
   }): void {
-    if (promptParameters.identifier)
-      this._identifier$.next(promptParameters.identifier);
+    if (promptParameters.identifier) this._identifier$.next(promptParameters.identifier);
     this._headerText$.next(promptParameters.headerText);
     this._bodyText$.next(promptParameters.bodyText);
     this._cancelText$.next(promptParameters.cancelButtonText);
@@ -128,10 +135,14 @@ export class PromptService {
     if (promptParameters.closeOnConfirm)
       this._closeOnConfirm$.next(promptParameters.closeOnConfirm);
     if (promptParameters.closeOnCancel) this._closeOnCancel$.next(promptParameters.closeOnCancel);
+    if (promptParameters.closeButtonVisible)
+      this._closeButtonVisible$.next(promptParameters.closeButtonVisible);
     if (promptParameters.cancelCallbackFunction)
       this._cancelCallbackFunction$.next(promptParameters.cancelCallbackFunction);
     if (promptParameters.confirmCallBackFunction)
       this._confirmCallbackFunction$.next(promptParameters.confirmCallBackFunction);
+    if (promptParameters.closeCallBackFunction)
+      this._closeCallbackFunction$.next(promptParameters.closeCallBackFunction);
 
     this._promptVisible$.next(true);
     this._appearing$.next(true);
@@ -166,6 +177,16 @@ export class PromptService {
           this.closePrompt(cancelCallback);
         } else if (cancelCallback) {
           cancelCallback();
+        }
+      });
+  }
+
+  close(): void {
+    combineLatest([this._closeButtonVisible$, this._closeCallbackFunction$])
+      .pipe(take(1))
+      .subscribe(([closeButtonVisible, cancelCallback]) => {
+        if (closeButtonVisible) {
+          this.closePrompt(cancelCallback);
         }
       });
   }
@@ -210,5 +231,6 @@ export class PromptService {
     this._closeOnConfirm$.next(false);
     this._cancelCallbackFunction$.next(() => {});
     this._confirmCallbackFunction$.next(() => {});
+    this._closeCallbackFunction$.next(() => {});
   }
 }

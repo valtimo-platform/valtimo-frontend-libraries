@@ -26,6 +26,11 @@ If not present, add a .bash_profile file
 ```
 source ~/.bashrc
 ```
+## Getting started
+* Install all packages with `npm install --legacy-peer-deps`
+* Then build all libraries with `npm run libs-build-all`
+* And at last start the development server with `npm start`
+* Remember that it is required to run the back-end libraries as well to use Valtimo
 
 ## Development server
 
@@ -64,7 +69,3 @@ Code you can refer to
 ## Running unit tests
 
 Run `npm run libs:test:libraryName` to execute unit tests.
-
-## Running the mock API
-
-We use json-server to mock APIs. To use it run `npm run mock`.

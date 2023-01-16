@@ -4,12 +4,14 @@
     "TaskAssignedEvent": "Aufgabe zugeordnet > {{taskName}}",
     "JsonSchemaDocumentCreatedEvent": "Case erstellt",
     "JsonSchemaDocumentModifiedEvent": "Case angepasst",
-    "ProcessStartedEvent": "Prozess gestartet",
-    "ProcessEndedEvent": "Prozess abgeschlossen",
+    "ProcessStartedEvent": "Prozess gestartet: {{processDefinitionKey}}",
+    "ProcessEndedEvent": "Prozess abgeschlossen: {{processDefinitionKey}}",
     "DossierDocumentGeneratedEvent": "Case-Dokument erstellt",
     "DocumentRelatedFileAddedEvent": "Datei hinzugefügt",
     "DocumentRelatedFileRemovedEvent": "Datei entfernt",
-    "BesluitAddedEvent": "Entscheidung getroffen > {{identificatie}}"
+    "BesluitAddedEvent": "Entscheidung getroffen > {{identificatie}}",
+    "DocumentAssigneeChangedEvent": "Der Beauftragte wurde geändert in {{assigneeName}}",
+    "DocumentUnassignedEvent": "Die Zuweisung des Bevollmächtigten wurde aufgehoben"
   },
   "dossier": {
     "title": {
@@ -25,7 +27,11 @@
       "contact-moments": "Kontaktmomente",
       "custom-dossier": "Kunden-Dossier",
       "custom-maps": "Kunden-Karten",
-      "zaakobjecten": "Zaak-Objecte"
+      "zaakobjecten": "Zaak-Objecte",
+      "notes": "Notizen",
+      "MINE": "Meine Cases",
+      "OPEN": "Nicht zugeordnete Cases",
+      "ALL": "Alle Cases"
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
@@ -60,6 +66,13 @@
         "viewObject": "Objekt ansehen"
       }
     },
+    "notes": {
+      "addNote": "Notiz hinzufügen",
+      "tableItemsText": "Notizen",
+      "input": {
+        "content": "Notiz"
+      }
+    },
     "documenten": {
       "noProcessLinked": {
         "regularUser": "Der Dokumenten-Upload steht für diesen Fall nicht zur Verfügung. Bitte wenden Sie sich an einen Administrator",
@@ -67,6 +80,7 @@
       }
     },
     "startSubProcess": "Starten",
+    "claimAssigneeCase": "Anmaßen",
     "deleteConfirmation": {
       "title": "Datei löschen",
       "description": "Möchten Sie diese Datei wirklich löschen?",
@@ -185,14 +199,18 @@
   },
   "account": {
     "title": "Account",
+    "informationTitle": "Informationen",
+    "quickLinks": "Verknüpfungen",
     "links": {
       "profile": "Profile",
       "password": "Passwort",
       "help": "Hilfe",
       "forum": "Forum",
       "feedback": "Feedback",
-      "signOut": "Abmeldung"
-    }
+      "signOut": "Abmeldung",
+      "plantATree": "Einen Baum pflanzen"
+    },
+    "plantATreeMailBody": "subject=Pflanze einen Baum für Valtimo&body=Hallo Valtimo-Benutzer,%0D%0DBindem wir diese E-Mail senden, werden wir sofort damit beginnen, einen Baum zu pflanzen. Diese%0D kompensiert daher teilweise die CO2-Emissionen Ihrer Valtimo-Nutzung.%0D%0DMit grünem Gruß,%0D%0DDas Valtimo-Team%0D%0D*Diese Baumpflanzaktion kann von jedem registrierten Valtimo-Benutzer 1 Mal verwendet werden.%0D %0D** Ritense pflanzt auch jährlich Bäume für alle verwendeten Valtimo-Installationen."
   },
   "settings": {
     "title": "Einstellungen",
@@ -277,6 +295,15 @@
     "linkProcess": {
       "title": "Verknüpfen Sie den Upload-Prozess mit dem Fall",
       "description": "Wählen Sie einen Prozess, der das Hochladen von Dateien handhaben soll."
+    },
+    "handleAssignee": {
+      "title": "Casehandler",
+      "checkboxDescription": "Dieser Casetyp kann einen Handler haben"
+    },
+    "tabs": {
+      "cases": "Falldetails",
+      "searchFields": "Suchfelder",
+      "listColumns": "Aufführen"
     }
   },
   "serviceTaskManagement": {
@@ -458,7 +485,19 @@
     "next": "Nächste >",
     "previous": "< Vorherige",
     "addRow": "Zeile hinzufügen",
-    "deleteRow": "Zeile löschen"
+    "deleteRow": "Zeile löschen",
+    "on": "Ein",
+    "off": "Aus",
+    "builds": {
+      "valtimo-backend-libraries": "Valtimo back-end",
+      "valtimo-frontend-libraries": "Valtimo front-end"
+    },
+    "email": "Email",
+    "username": "Nutzername",
+    "name": "Name",
+    "delete": "Löschen",
+    "deleteConfirmation": "Sind Sie sicher, dass Sie löschen möchten?",
+    "cancel": "Absagen"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",
@@ -472,17 +511,27 @@
     "save": "Speichern",
     "fetchingUsers": "User abrufen..."
   },
+  "assignDocument": {
+    "assignedTo": "User-Zuordnung: ",
+    "header": "Fall einem User zuordnen",
+    "remove": "Entfernen",
+    "fetchingUsers": "User abrufen..."
+  },
   "dropzone": {
     "drop": "Datei auswählen oder hier über drag-and-drop ablegen",
     "maxFileSize": "Maximale Datei-Größe: ",
     "jsonDocDef": "Die Case-Definition muss im JSON-Format sein",
     "formJsonDocDef": "Die Formular-Definition muss im JSON-Format sein",
+    "objecttypeDef": "Die Objekttypdefinition muss im JSON-Format sein",
     "error": {
-      "tooBig": "Die Detai ist zu groß",
+      "tooBig": "Die Datei ist zu groß",
       "wrongType": "Der Dokumenten-Typ wird nicht unterstützt",
       "generic": "Etwas ist schief gelaufen. Bitte erneut versuchen.",
       "invalidDocDef": "Die Case-Definition konnte nicht hochgeladen werden. Bitte erneut versuchen.",
-      "invalidFormDef": "Die Formular-Definition ist ungültig. Bitte erneut versuchen."
+      "invalidFormDef": "Die Formular-Definition ist ungültig. Bitte erneut versuchen.",
+      "invalidJson": "Es gibt ein Fehler in der Datei. Bitte überprüfen ob es einen gültigen JSON-Wert enthält.",
+      "invalidObjecttypeDef": "Die Objekttypdefinition ist ungültig. Bitte versuche es erneut.",
+      "objecttypeAlreadyExists": "Die JSON-Datei enthält einen bereits vorhandenen Objekttyp."
     }
   },
   "fieldLabels": {
@@ -492,7 +541,8 @@
     "lastModified": "Letzte Änderung",
     "files": "Dateien",
     "firstName": "Vorname",
-    "assigneeFullName": "Eigentümer"
+    "assigneeFullName": "Eigentümer",
+    "accepted": "Akzeptiert"
   },
   "list": {
     "currentPage": "Seite {{current}} von {{total}}",
@@ -798,5 +848,143 @@
     "expiryPromptDescription": "Sie werden in {{expiryTime}} abgemeldet.",
     "expiryPromptCancel": "Ausloggen",
     "expiryPromptConfirm": "Sitzung fortsetzen"
+  },
+  "userManagement": {
+    "notSupported": "Wenn Keycloak verwendet wird, ist die Benutzerverwaltung in Valtimo nicht verfügbar. Verwenden Sie stattdessen die Benutzerverwaltung in Keycloak."
+  },
+  "searchFields": {
+    "noneConfigured": "Für diesen Dokumenttyp wurden keine Suchfelder konfiguriert.",
+    "expandButtonText": "Suchfelder anzeigen",
+    "collapseButtonText": "Ausblenden",
+    "searchButtonText": "Suche",
+    "clearButtonText": "Löschen",
+    "downloadButtonText": "Suchfeldkonfiguration herunterladen",
+    "to": "bis",
+    "text": "Text",
+    "number": "Nummer",
+    "date": "Datum",
+    "datetime": "Datum und zeit",
+    "boolean": "Ja / Nein",
+    "numberRange": "Zahlenfolge",
+    "dateRange": "Datumsbereich",
+    "datetimeRange": "Datums- und Zeit-bereich",
+    "booleanPositive": "Ja",
+    "booleanNegative": "Nein"
+  },
+  "searchFieldsTooltips": {
+    "text": "Ein Textfeld",
+    "number": "Ein Zahlenfeld",
+    "date": "Ein Datumsfeld",
+    "datetime": "Ein Datums- und Zeitfeld",
+    "boolean": "Ein boolesches Feld",
+    "numberRange": "Ein Zahlenfolgefeld",
+    "dateRange": "Ein Datumsbereichsfeld",
+    "datetimeRange": "Ein Datums- und Zeitreihenfeld"
+  },
+  "searchFieldsOverview": {
+    "title": "Titel",
+    "key": "Schlüssel",
+    "edit": "Suchfeld bearbeiten",
+    "path": "Pfad",
+    "dataType": "Datentyp",
+    "fieldType": "Feldtyp",
+    "matchType": "Übereinstimmen",
+    "exact": "Genau",
+    "like": "Enthält",
+    "single": "Nur",
+    "multiple": "Mehrere",
+    "range": "Serie",
+    "submit": "Einreichen",
+    "delete": "Löschen",
+    "addRow": "Suchfeld hinzufügen",
+    "searchFieldPlaceholder": "Wählen Sie einen Typ..."
+  },
+  "searchFieldsOverviewTooltips": {
+    "title": "Der Titel ist ein optionales Feld, das als Bezeichnung für das aktuelle Suchfeld erscheint. Wenn der Titel nicht festgelegt ist, ist der Standardwert die Übersetzung des Suchfeldschlüssels (wenn keine Übersetzung verfügbar ist, wird der ursprüngliche Schlüsselwert angezeigt).",
+    "key": "Ein eindeutiger Schlüssel, der das Suchfeld identifiziert. Wenn der Schlüssel nicht eindeutig ist, kann das Suchfeld nicht gespeichert werden.",
+    "path": "Ein Pfad, der zu der Eigenschaft führt, die Sie durchsuchen möchten. Um im JSON-Schema des Dokuments zu suchen, folgen Sie diesem Beispiel: 'doc:customer.firstName'. Folgen Sie für die Suche in den Dokumenteigenschaften diesen Beispielen: 'case:createdBy', oder 'case:sequence', oder 'case:assigneeFullName'. Hinweis: Wenn eine Eigenschaft Sonderzeichen enthält, muss die Eigenschaft in Anführungszeichen gesetzt werden. Zum Beispiel: case:\"loan-accepted\".",
+    "dataType": "Der Datentyp bestimmt, welche Eingaben dem Benutzer angezeigt werden. Beispielsweise wird für den Datentyp 'Datum' eine Datumsauswahl angezeigt.",
+    "fieldType": "Der Feldtyp bestimmt die Werte, die der Benutzer eingeben kann. Die Option 'Nur' ermöglicht dem Benutzer, nur einen Wert einzugeben. Die Option 'Serie' ermöglicht dem Benutzer die Eingabe von zwei Werten. Nach diesen Werten und allen Werten dazwischen wird dann gesucht.",
+    "matchType": "Die Übereinstimmen legt fest, wie Werte in der Datenbank mit den Suchwerten verknüpft werden. Beim Übereinstimmungstyp 'Genau' würde der Wert '1' nur mit dem Wert '1' übereinstimmen. Für den Übereinstimmungstyp 'Enthält' würde der Wert '1' mit dem Wert '1', '123' und allen anderen Werten übereinstimmen, die '1' enthalten."
+  },
+  "listColumn": {
+    "title": "Titel",
+    "titleTitle": "Titel (optional)",
+    "titleTooltip": "Wenn dieses Feld ausgefüllt ist, wird dieser Titel als Spaltenüberschrift angezeigt, mit Vorrang vor allen verfügbaren Übersetzungen.",
+    "key": "Schlüssel",
+    "keyTooltip": "Ein eindeutiger Schlüssel, der die Spalte identifiziert. Wenn der Schlüssel nicht eindeutig ist, kann die Spalte nicht gespeichert werden.",
+    "path": "Pfad",
+    "pathTooltip": "Ein Pfad, der zu der Eigenschaft führt, die Sie zeigen möchten. Folgen Sie für das JSON-Schema des Dokuments diesem Beispiel: 'doc:customer.firstName'. Befolgen Sie für Dokumenteigenschaften die folgenden Beispiele: 'case:createdBy', oder 'case:sequence', oder 'case:assigneeFullName'. Hinweis: Wenn eine Eigenschaft Sonderzeichen enthält, muss die Eigenschaft in Anführungszeichen gesetzt werden. Zum Beispiel: case:\"loan-accepted\".",
+    "displayType": "Anzeigetyp",
+    "displayTypeTooltip": "Diese Option bestimmt, wie die Daten letztendlich in der Tabelle angezeigt werden.",
+    "displayTypeParameters": "Parameters",
+    "sortable": "Sortierbar",
+    "defaultSort": "Standardsortierung",
+    "defaultSortTitle": "Standardsortierung (optional)",
+    "defaultSortTooltip": "Wenn dieses Feld einen Wert hat, wird die Tabelle standardmäßig nach dieser Eigenschaft in der angegebenen Richtung sortiert. Diese Eigenschaft kann nur jeweils eine Spalte haben. Wenn beim Anlegen einer neuen Spalte bereits für eine andere Spalte eine Standardsortierung festgelegt wurde, ist dieses Eingabefeld deaktiviert.",
+    "selectDefaultSort": "Wählen Sie eine Standardsortierung aus",
+    "sortableYes": "Ja",
+    "sortableNo": "Nein",
+    "sortableAsc": "Aufsteigend",
+    "sortableDesc": "Absteigend",
+    "hasEnvConfigWarningTitle": "Dieser Dossiertyp hat bereits eine Spaltenkonfiguration",
+    "hasEnvConfigWarning": "Für diesen Dossiertyp ist bereits eine Spaltenkonfiguration in der Umgebungskonfiguration der Anwendung verfügbar. Um die Konfiguration der Spalten für diesen Dossiertyp über die Benutzeroberfläche zu ermöglichen, muss diese Umgebungskonfiguration entfernt werden.",
+    "noConfigWarningTitle": "Keine Spalten konfiguriert",
+    "noConfigWarning": "Für diesen Dateityp sind keine Spalten konfiguriert. Klicken Sie auf die Schaltfläche oben, um eine Spalte hinzuzufügen.",
+    "addButtonText": "Spalte hinzufügen",
+    "editColumnTitle": "Spalte bearbeiten",
+    "close": "Nahe",
+    "save": "Spalte speichern",
+    "dateFormat": "Datumsformat (optional)",
+    "dateFormatTooltip": "Ein Datumsformat, das von Moment.js (https://momentjs.com/docs/) unterstützt wird.",
+    "uniqueKeyWarning": "Der Schlüssel für diese Spalte muss eindeutig sein.",
+    "enumTitle": "Aufzählungswerte",
+    "enumTitleOptional": "Aufzählungswerte (optional)",
+    "enumTooltip": "Die Schlüssel und Werte, die verwendet werden, um Anzeigedaten in die Tabelle umzuwandeln.",
+    "downloadButtonText": "Konfiguration herunterladen",
+    "deleteColumn": "Spalte löschen",
+    "deleteColumnConfirmation": "Möchten Sie diese Spalte wirklich löschen?"
+  },
+  "listColumnDisplayType": {
+    "select": "Wählen Sie einen Anzeigetyp aus",
+    "string": "Text",
+    "date": "Datum",
+    "boolean": "Ja/nein",
+    "enum": "Aufzählung",
+    "arrayCount": "Quantität",
+    "underscoresToSpaces": "Unterstriche zu Leerzeichen"
+  },
+  "objectManagement": {
+    "title": "Objekttypen",
+    "createObjecttype": "Objekttypen erstellen",
+    "editObjecttype": "Objekttypen bearbeiten",
+    "uploadObjecttype": "Upload Objekttypen",
+    "labels": {
+      "title": "Titel",
+      "objects": "Objects-API-Plugin-Konfiguration",
+      "objecttypes": "Objecttypen-API-Plugin-Konfiguration",
+      "objecttypeUrl": "Objekttyp-ID",
+      "formDefinitionView": "Formulardefinition anzeigen",
+      "formDefinitionEdit": "Formulardefinition bearbeiten",
+      "showInDataMenu": "Im Menü anzeigen"
+    },
+    "tooltips": {
+      "title": "Der Name dieser Konfiguration. Unter diesem Namen ist diese Konfiguration im Rest der Anwendung zu finden.\n",
+      "objecttypeId": "Die ID des Objekttyps",
+      "formDefinitionView": "Der Name der formio IO-Definition, die zur Darstellung des Objekts verwendet wird.",
+      "formDefinitionEdit": "Der Name der formio IO-Definition, die zum Bearbeiten des Objekts verwendet wird.\n",
+      "showInDataMenu": "Gibt an, ob der Objekttyp im Menü sichtbar ist"
+    },
+    "cancel": "Stornieren",
+    "edit": "Objekt ändern",
+    "add": "Objekt hinzufügen",
+    "download": "Download",
+    "visibleInMenu": "Im Menü sichtbar",
+    "tabs": {
+      "general": "Allgemein",
+      "list": "Aufführen"
+    },
+    "underscoresToSpaces": "Unterstriche zu Leerzeichen",
+    "select": "Wählen Sie einen Anzeigetyp aus"
   }
 }

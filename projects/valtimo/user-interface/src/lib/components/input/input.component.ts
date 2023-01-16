@@ -25,7 +25,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {InputType} from '../../models';
-import {BehaviorSubject, Subscription, take} from 'rxjs';
+import {BehaviorSubject, Observable, Subscription, take} from 'rxjs';
 
 @Component({
   selector: 'v-input',
@@ -48,24 +48,31 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
   @Input() tooltip = '';
   @Input() required = false;
   @Input() hideNumberSpinBox = false;
+  @Input() smallLabel = false;
+  @Input() rows!: number;
+  @Input() clear$!: Observable<null>;
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 
   inputValue$ = new BehaviorSubject<any>(undefined);
 
   isText!: boolean;
+  isTextarea!: boolean;
   isNumber!: boolean;
   isPassword!: boolean;
   isDigitOnly!: boolean;
+  isCheckbox! : boolean;
 
   readonly showPassword$ = new BehaviorSubject<boolean>(false);
 
   private valueSubscription!: Subscription;
+  private clearSubscription!: Subscription;
 
   ngOnInit(): void {
     this.setInputType();
     this.setDefaultValue(this.defaultValue);
     this.openValueSubscription();
+    this.openClearSubscription();
   }
 
   onValueChange(value: any): void {
@@ -82,6 +89,7 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.valueSubscription?.unsubscribe();
+    this.clearSubscription?.unsubscribe();
   }
 
   toggleShowPassword(): void {
@@ -99,6 +107,9 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
       case 'text':
         this.isText = true;
         break;
+      case 'textarea':
+        this.isTextarea = true;
+        break;
       case 'number':
         this.isNumber = true;
         break;
@@ -107,6 +118,10 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
         break;
       case 'digitOnly':
         this.isDigitOnly = true;
+        break;
+      case 'checkbox':
+        this.isCheckbox = true;
+        break;
     }
   }
 
@@ -114,5 +129,13 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
     this.inputValue$.subscribe(value => {
       this.valueChange.emit(value);
     });
+  }
+
+  private openClearSubscription(): void {
+    if (this.clear$) {
+      this.clearSubscription = this.clear$.subscribe(() => {
+        this.onValueChange('');
+      });
+    }
   }
 }

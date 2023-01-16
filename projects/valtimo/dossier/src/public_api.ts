@@ -19,6 +19,7 @@
  */
 
 export * from './lib/models';
+export * from './lib/services';
 export * from './lib/dossier-list/dossier-list.component';
 export * from './lib/dossier-detail/dossier-detail.component';
 export * from './lib/dossier-detail/tab/summary/summary.component';
@@ -27,6 +28,7 @@ export * from './lib/dossier-detail/tab/audit/audit.component';
 export * from './lib/dossier-detail/tab/documents/documents.component';
 export * from './lib/dossier-detail/tab/contact-moments/contact-moments.component';
 export * from './lib/dossier-detail/tab/zaakobjecten/zaakobjecten.component';
+export * from './lib/dossier-detail/tab/notes/notes.component';
 export * from './lib/dossier.config';
 export * from './lib/dossier.service';
 export * from './lib/dossier.module';

@@ -19,9 +19,14 @@
     <div class="col-12 px-0 mb-5">
       <valtimo-widget>
         <div class="card-header bg-light card-header-divider pb-2">
-          <div class="row">
+          <div class="row" *ngIf="{canHaveAssignee: canHaveAssignee$ | async, document: document$ | async} as obs">
             <div class="col">
-              <ng-container *ngTemplateOutlet="caseDetailHeader"></ng-container>
+              <ng-container
+                *ngTemplateOutlet="
+                  caseDetailHeader;
+                  context: {canHaveAssignee: obs.canHaveAssignee, document: obs.document}
+                "
+              ></ng-container>
             </div>
             <div class="btn-group mt-m3px mb-3 col-auto">
               <valtimo-extension
@@ -29,6 +34,9 @@
                 page="dossier-detail"
                 section="card-header"
               ></valtimo-extension>
+              <ng-container
+                *ngTemplateOutlet="claimButton; context: {canHaveAssignee: obs.canHaveAssignee}"
+              ></ng-container>
               <div class="dropdown">
                 <button
                   class="btn btn-primary dropdown-toggle"
@@ -54,7 +62,9 @@
                     href="#"
                     (click)="startProcess(processDocumentDefinition)"
                   >
-                    {{ processDocumentDefinition.processName }}
+                    {{ (processDocumentDefinition?.id?.processDefinitionKey | translate) !== processDocumentDefinition?.id?.processDefinitionKey
+                    ? (processDocumentDefinition.id.processDefinitionKey | translate)
+                    : processDocumentDefinition.processName }}
                   </button>
                 </div>
               </div>
@@ -87,7 +97,7 @@
   </div>
 </div>
 
-<ng-template #caseDetailHeader>
+<ng-template #caseDetailHeader let-canHaveAssignee="canHaveAssignee" let-document="document">
   <div class="row" *ngIf="customDossierHeaderItems.length > 0; else defaultTitle">
     <span
       class="mb-0 mt-0 pb-2 align-self-end col-xl-{{ item.columnSize }} col-lg-{{
@@ -102,20 +112,44 @@
       }"
       *ngFor="let item of customDossierHeaderItems"
     >
-      <span *ngIf="item.label !== ''">{{ item.label | translate }}</span>
-      <span *ngIf="item.label !== '' && item.value !== '' && item.value !== null">: </span>
+      <span *ngIf="item.label">{{ item.label | translate }}</span>
+      <span *ngIf="item.label && item.value">: </span>
       <strong>{{ item.value }}</strong>
     </span>
   </div>
-  <ng-container *ngTemplateOutlet="caseDetailAssignee"></ng-container>
+  <ng-container
+    *ngTemplateOutlet="caseDetailAssignee; context: {canHaveAssignee: canHaveAssignee, document: document}"
+  ></ng-container>
 </ng-template>
 
 <ng-template #defaultTitle>
   <div class="row ml-0 mr-0">{{ documentDefinitionNameTitle?.trim() }}</div>
 </ng-template>
 
-<ng-template #caseDetailAssignee>
-  <div class="row ml-0 mr-0 mt-1 mb-1" *ngIf="document?.assigneeFullName as assignee">
-    <h5>{{ ('assignTask.assignedTo' | translate) + assignee }}</h5>
+<ng-template #caseDetailAssignee let-canHaveAssignee="canHaveAssignee" let-document="document">
+  <div class="row ml-0 mr-0 mt-1 mb-1" *ngIf="canHaveAssignee && document">
+    <valtimo-dossier-assign-user
+      [documentId]="document.id"
+      [assigneeId]="document.assigneeId"
+      [assigneeFullName]="document?.assigneeFullName"
+      (assignmentOfDocumentChanged)="assignmentOfDocumentChanged()"
+    ></valtimo-dossier-assign-user>
+  </div>
+</ng-template>
+
+<ng-template #claimButton let-canHaveAssignee="canHaveAssignee">
+  <div class="user-full-name" *ngIf="canHaveAssignee">
+    <button
+      class="btn btn-space btn-primary mr-1"
+      type="button"
+      id=""
+      placement="bottom"
+      aria-haspopup="true"
+      aria-expanded="false"
+      (click)="claimAssignee()"
+      [disabled]="(isAssigning$ | async) || (isAssignedToCurrentUser$ | async)"
+    >
+      <span>{{ 'dossier.claimAssigneeCase' | translate }}</span>
+    </button>
   </div>
 </ng-template>

@@ -20,7 +20,9 @@
 import {NgxLoggerLevel} from 'ngx-logger';
 import {
   DefinitionColumn,
+  DossierListTab,
   IncludeFunction,
+  Language,
   ROLE_ADMIN,
   ROLE_DEVELOPER,
   ROLE_USER,
@@ -31,6 +33,7 @@ import {
 import {authenticationKeycloak} from './auth/keycloak-config.dev';
 import {emailExtensionInitializer, openZaakExtensionInitializer} from '@valtimo/open-zaak';
 import {connectorLinkExtensionInitializer} from '@valtimo/connector-management';
+import {LOGO_BASE_64} from './logo';
 
 const defaultDefinitionColumns: Array<DefinitionColumn> = [
   {
@@ -60,10 +63,12 @@ const defaultDefinitionColumns: Array<DefinitionColumn> = [
     propertyName: 'assigneeFullName',
     translationKey: 'assigneeFullName',
     sortable: true,
-  }
+  },
 ];
 
 export const environment: ValtimoConfig = {
+  logoSvgBase64: LOGO_BASE_64,
+  applicationTitle: '',
   production: false,
   initializers: [
     openZaakExtensionInitializer,
@@ -120,17 +125,18 @@ export const environment: ValtimoConfig = {
           {link: ['/form-management'], title: 'Forms', sequence: 3},
           {link: ['/decision-tables'], title: 'Decision tables', sequence: 4},
           {link: ['/dossier-management'], title: 'Dossiers', sequence: 5},
-          {link: ['/connectors'], title: 'Connectors', sequence: 6},
-          {link: ['/plugins'], title: 'Plugins', sequence: 7},
-          {link: ['/form-links'], title: 'Form links', sequence: 8},
-          {link: ['/process-links'], title: 'Form links Plugin', sequence: 9},
-          {title: 'A&E', textClass: 'text-dark font-weight-bold c-default', sequence: 10},
+          {link: ['/object-management'], title: 'Objects', sequence: 6},
+          {link: ['/connectors'], title: 'Connectors', sequence: 7},
+          {link: ['/plugins'], title: 'Plugins', sequence: 8},
+          {link: ['/form-links'], title: 'Form links', sequence: 9},
+          {link: ['/process-links'], title: 'Form links Plugin', sequence: 10},
+          {title: 'A&E', textClass: 'text-dark font-weight-bold c-default', sequence: 11},
           {link: ['/contexts'], title: 'Contexts', sequence: 12},
-          {link: ['/users'], title: 'Users', sequence: 12},
-          {link: ['/entitlements'], title: 'Entitlements', sequence: 13},
-          {title: 'Other', textClass: 'text-dark font-weight-bold c-default', sequence: 14},
-          {link: ['/process-migration'], title: 'Process migration', sequence: 15},
-          {link: ['/choice-fields'], title: 'Choice fields', sequence: 16},
+          {link: ['/users'], title: 'Users', sequence: 13},
+          {link: ['/entitlements'], title: 'Entitlements', sequence: 14},
+          {title: 'Other', textClass: 'text-dark font-weight-bold c-default', sequence: 15},
+          {link: ['/process-migration'], title: 'Process migration', sequence: 16},
+          {link: ['/choice-fields'], title: 'Choice fields', sequence: 17},
         ],
       },
       {
@@ -145,6 +151,7 @@ export const environment: ValtimoConfig = {
     ],
   },
   whitelistedDomains: ['localhost:4200'],
+  langKey: Language.NL,
   mockApi: {
     endpointUri: '/mock-api/',
   },
@@ -152,7 +159,7 @@ export const environment: ValtimoConfig = {
     endpointUri: '/api/',
   },
   swagger: {
-    endpointUri: '/v2/api-docs',
+    endpointUri: '/v3/api-docs',
   },
   logger: {
     level: NgxLoggerLevel.TRACE,
@@ -177,9 +184,16 @@ export const environment: ValtimoConfig = {
         sortable: true,
         viewType: 'relatedFiles',
       },
+      {
+        propertyName: '$.lening-akkoord',
+        translationKey: 'accepted',
+        sortable: false,
+        viewType: 'boolean',
+      },
     ],
   },
   visibleTaskListTabs: [TaskListTab.MINE, TaskListTab.OPEN, TaskListTab.ALL],
+  visibleDossierListTabs: [DossierListTab.ALL, DossierListTab.MINE, DossierListTab.OPEN],
   customTaskList: {
     fields: [
       {
@@ -222,7 +236,19 @@ export const environment: ValtimoConfig = {
     disableFormFlow: false,
     enableHackathonCasesPage: true,
     showUserNameInTopBar: true,
+    showPlantATreeButton: true,
     experimentalDmnEditing: true,
+    caseListColumn: true,
+    largeLogoMargin: true,
+  },
+  customDossierHeader: {
+    leningen: [
+      {
+        propertyPaths: ['voornaam'],
+        columnSize: 3,
+        textSize: 'sm',
+      },
+    ],
   },
 };
 

@@ -79,6 +79,10 @@ export interface Documents {
   totalPages: number;
 }
 
+export type SpecifiedDocuments = Omit<Documents, 'content'> & {
+  content: Array<{id: string; items: Array<{key: string; value: string}>}>;
+};
+
 export interface RelatedFile {
   fileId: string;
   fileName: string;
@@ -99,6 +103,7 @@ export interface Document {
   relations: string[];
   relatedFiles: RelatedFile[];
   assigneeFullName: string;
+  assigneeId: string;
 }
 
 export interface ProcessDocumentDefinitionId {
@@ -122,6 +127,10 @@ export interface ProcessDocumentInstance {
   id: ProcessDocumentInstanceId;
   processName: string;
   isActive: boolean;
+}
+
+export interface AssignHandlerToDocumentResult {
+  assigneeId: string;
 }
 
 export interface NewDocumentAndStartProcessResult {
@@ -281,4 +290,45 @@ export interface UploadProcessLink {
 
 export interface UpdateUploadProcessLinkRequest {
   processDefinitionKey: string;
+}
+
+export interface CaseSettings {
+  name?: string;
+  canHaveAssignee: boolean;
+}
+
+export interface OpenDocumentCount {
+  documentDefinitionName: string;
+  openDocumentCount: number;
+}
+
+export interface CaseListColumn {
+  title: string;
+  key: string;
+  path: string;
+  displayType: DisplayType;
+  sortable: boolean;
+  defaultSort: string;
+}
+
+export interface CaseListColumnView {
+  title: string;
+  key: string;
+  path: string;
+  displayType: string;
+  displayTypeParameters: string;
+  sortable: boolean;
+  defaultSort: string;
+}
+
+export interface DisplayType {
+  type: string;
+  displayTypeParameters: DisplayTypeParameters;
+}
+
+export interface DisplayTypeParameters {
+  enum?: {
+    [key: string]: string;
+  };
+  dateFormat?: string;
 }

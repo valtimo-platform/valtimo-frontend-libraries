@@ -1,6 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -9,7 +11,7 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es5",
+    "target": "es2020",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "allowSyntheticDefaultImports": true,
@@ -17,8 +19,6 @@
       "@angular/*": ["./node_modules/@angular/*"],
       "@valtimo/layout": ["dist/valtimo/layout"],
       "@valtimo/layout/*": ["dist/valtimo/layout/*"],
-      "@valtimo/auth0": ["dist/valtimo/auth0"],
-      "@valtimo/auth0/*": ["dist/valtimo/auth0/*"],
       "@valtimo/components": ["dist/valtimo/components"],
       "@valtimo/components/*": ["dist/valtimo/components/*"],
       "@valtimo/task": ["dist/valtimo/task"],
@@ -49,6 +49,10 @@
       "@valtimo/choice-field/*": ["dist/valtimo/choice-field/*"],
       "@valtimo/contact-moment": ["dist/valtimo/contact-moment"],
       "@valtimo/contact-moment/*": ["dist/valtimo/contact-moment/*"],
+      "@valtimo/exact-plugin": [
+        "dist/valtimo/exact-plugin/valtimo-exact-plugin",
+        "dist/valtimo/exact-plugin"
+      ],
       "@valtimo/form": ["dist/valtimo/form"],
       "@valtimo/form/*": ["dist/valtimo/form/*"],
       "@valtimo/management": ["dist/valtimo/management"],
@@ -66,7 +70,11 @@
       "@valtimo/milestone": ["dist/valtimo/milestone"],
       "@valtimo/milestone/*": ["dist/valtimo/milestone/*"],
       "@valtimo/form-management": ["dist/valtimo/form-management"],
-      "@valtimo/form-management/*": ["dist/valtimo/form-management/*"],
+      "@valtimo/form-management/*": [
+        "dist/valtimo/form-management/*"
+      ],
+      "@valtimo/object-management": ["dist/valtimo/object-management"],
+      "@valtimo/object-management/*": ["dist/valtimo/object-management/*"],
       "@valtimo/form-link": ["dist/valtimo/form-link"],
       "@valtimo/form-link/*": ["dist/valtimo/form-link/*"],
       "@valtimo/migration": ["dist/valtimo/migration"],
@@ -87,7 +95,9 @@
       "@valtimo/plugin-management": ["dist/valtimo/plugin-management"],
       "@valtimo/plugin-management/*": ["dist/valtimo/plugin-management/*"],
       "@valtimo/plugin": ["dist/valtimo/plugin"],
-      "@valtimo/plugin/*": ["dist/valtimo/plugin/*"]
+      "@valtimo/plugin/*": ["dist/valtimo/plugin/*"],
+      "@valtimo/exact-plugin": ["dist/valtimo/exact-plugin"],
+      "@valtimo/exact-plugin/*": ["dist/valtimo/exact-plugin/*"]
     }
   },
   "files": [],
@@ -106,12 +116,6 @@
     },
     {
       "path": "./projects/valtimo/layout/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/valtimo/auth0/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/valtimo/auth0/tsconfig.spec.json"
     },
     {
       "path": "./projects/valtimo/components/tsconfig.lib.json"
@@ -322,6 +326,18 @@
     },
     {
       "path": "./projects/valtimo/plugin/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/valtimo/exact-plugin/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/valtimo/exact-plugin/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/valtimo/object-management/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/valtimo/object-management/tsconfig.spec.json"
     }
   ]
 }

@@ -15,15 +15,17 @@
  */
 
 import {NgxLoggerLevel} from 'ngx-logger';
-import {authenticationAuth0} from './auth/auth0-config.test';
+import {authenticationKeycloak} from './auth/keycloak-config.test';
 import {openZaakExtensionInitializer} from '@valtimo/open-zaak';
 import {
-  UploadProvider,
+  Language,
   ROLE_ADMIN,
   ROLE_DEVELOPER,
   ROLE_USER,
+  UploadProvider,
   ValtimoConfig,
 } from '@valtimo/config';
+import {LOGO_BASE_64} from './logo';
 
 const defaultDefinitionColumns = [
   {
@@ -52,9 +54,11 @@ const defaultDefinitionColumns = [
 ];
 
 export const environment: ValtimoConfig = {
+  logoSvgBase64: LOGO_BASE_64,
+  applicationTitle: 'Valtimo',
   production: false,
   initializers: [openZaakExtensionInitializer],
-  authentication: authenticationAuth0,
+  authentication: authenticationKeycloak,
   menu: {
     menuItems: [
       {
@@ -120,8 +124,9 @@ export const environment: ValtimoConfig = {
     ],
   },
   whitelistedDomains: ['localhost:4200'],
+  langKey: Language.NL,
   swagger: {
-    endpointUri: 'http://localhost:4200/v2/api-docs',
+    endpointUri: 'http://localhost:4200/v3/api-docs',
   },
   mockApi: {
     endpointUri: 'http://localhost:4200/mock-api/',
@@ -144,5 +149,6 @@ export const environment: ValtimoConfig = {
   customDefinitionTables: {},
   featureToggles: {
     showUserNameInTopBar: true,
+    largeLogoMargin: true,
   },
 };
