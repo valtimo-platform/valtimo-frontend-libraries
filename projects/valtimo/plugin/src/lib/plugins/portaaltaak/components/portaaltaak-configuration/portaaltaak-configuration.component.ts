@@ -22,7 +22,7 @@ import {PluginManagementService, PluginTranslationService} from '../../../../ser
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'valtimo-notificaties-api-configuration',
+  selector: 'valtimo-portaaltaak-configuration',
   templateUrl: './portaaltaak-configuration.component.html',
   styleUrls: ['./portaaltaak-configuration.component.scss'],
 })
@@ -34,13 +34,10 @@ export class PortaaltaakConfigurationComponent
   @Input() pluginId: string;
   @Input() prefillConfiguration$: Observable<PortaaltaakConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<PortaaltaakConfig> =
-    new EventEmitter<PortaaltaakConfig>();
-  readonly authenticationPluginSelectItems$: Observable<Array<{id: string; text: string}>> =
+  @Output() configuration: EventEmitter<PortaaltaakConfig> = new EventEmitter<PortaaltaakConfig>();
+  readonly notificatiesApiPluginSelectItems$: Observable<Array<{id: string; text: string}>> =
     combineLatest([
-      this.pluginManagementService.getPluginConfigurationsByCategory(
-        'notificaties-api-authentication'
-      ),
+      this.pluginManagementService.getPluginConfigurationsByCategory('notificaties-api-plugin'),
       this.translateService.stream('key'),
     ]).pipe(
       map(([configurations]) =>
@@ -77,7 +74,7 @@ export class PortaaltaakConfigurationComponent
   }
 
   private handleValid(formValue: PortaaltaakConfig): void {
-    const valid = !!(formValue.configurationTitle && formValue.url);
+    const valid = !!(formValue.configurationTitle && formValue.notificatiesApiPluginConfiguration);
 
     this.valid$.next(valid);
     this.valid.emit(valid);

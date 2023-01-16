@@ -17,7 +17,7 @@
 import {PluginConfigurationData} from '../../../models';
 
 interface PortaaltaakConfig extends PluginConfigurationData {
-  openNotificatiesPluginConfigurationUuid: string;
+  notificatiesApiPluginConfiguration: string;
 }
 
 export {PortaaltaakConfig};

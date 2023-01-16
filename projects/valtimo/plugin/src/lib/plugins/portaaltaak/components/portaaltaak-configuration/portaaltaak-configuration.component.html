@@ -32,30 +32,19 @@
     [widthPx]="350"
   >
   </v-input>
-  <v-input
-    name="url"
-    [title]="'url' | pluginTranslate : pluginId | async"
-    [fullWidth]="true"
-    [margin]="true"
-    [disabled]="obs.disabled"
-    [defaultValue]="obs.prefill?.url"
-    [required]="true"
-    [tooltip]="'urlTooltip' | pluginTranslate : pluginId | async"
-  >
-  </v-input>
   <ng-container
-    *ngIf="{authenticationPluginSelectItems: authenticationPluginSelectItems$ | async} as authObs"
+    *ngIf="{notificatiesApiPluginSelectItems: notificatiesApiPluginSelectItems$ | async} as authObs"
   >
     <v-select
-      [items]="authObs.authenticationPluginSelectItems"
+      [items]="authObs.notificatiesApiPluginSelectItems"
       [margin]="true"
       [widthInPx]="350"
-      name="authenticationPluginConfiguration"
-      [title]="'authenticationPluginConfiguration' | pluginTranslate : pluginId | async"
+      name="notificatiesApiPluginConfiguration"
+      [title]="'notificatiesApiPluginConfiguration' | pluginTranslate : pluginId | async"
       [disabled]="obs.disabled"
-      [defaultSelectionId]="obs.prefill?.authenticationPluginConfiguration"
+      [defaultSelectionId]="obs.prefill?.notificatiesApiPluginConfiguration"
       [required]="true"
-      [loading]="!authObs.authenticationPluginSelectItems"
+      [loading]="!authObs.notificatiesApiPluginSelectItems"
     ></v-select>
   </ng-container>
 </v-form>
