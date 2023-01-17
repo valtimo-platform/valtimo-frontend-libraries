@@ -79,6 +79,10 @@ export interface Documents {
   totalPages: number;
 }
 
+export type SpecifiedDocuments = Omit<Documents, 'content'> & {
+  content: Array<{id: string; items: Array<{key: string; value: string}>}>;
+};
+
 export interface RelatedFile {
   fileId: string;
   fileName: string;

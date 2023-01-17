@@ -33,6 +33,7 @@ export interface DefinitionColumn {
   enum?: Array<string> | {[key: string]: string};
   title?: string;
   format?: string;
+  key?: string;
 }
 
 export interface CustomDossierHeaderItem {
@@ -112,6 +113,8 @@ export interface ValtimoConfig {
     disableCaseCount?: boolean;
     caseSearchFields?: boolean;
     caseListColumn?: boolean;
+    enableObjectManagement?: boolean;
+    largeLogoMargin?: boolean;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
   visibleDossierListTabs?: Array<DossierListTab>;
