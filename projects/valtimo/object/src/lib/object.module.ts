@@ -4,10 +4,14 @@ import {ObjectListComponent} from './components/object-list/object-list.componen
 import {TranslateModule} from '@ngx-translate/core';
 import {AsyncPipe, CommonModule} from '@angular/common';
 import {ListModule, WidgetModule} from '@valtimo/components';
+import {ObjectDetailContainerComponent} from './components/object-detail-container/object-detail-container.component';
+import {ObjectDetailComponent} from './components/object-detail-container/tabs/object-detail/object-detail.component';
 
 @NgModule({
   declarations: [
-    ObjectListComponent
+    ObjectListComponent,
+    ObjectDetailContainerComponent,
+    ObjectDetailComponent
   ],
   imports: [
     CommonModule,
