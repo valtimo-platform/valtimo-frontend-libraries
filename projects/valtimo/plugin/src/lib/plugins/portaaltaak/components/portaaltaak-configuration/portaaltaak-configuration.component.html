@@ -45,6 +45,7 @@
       [defaultSelectionId]="obs.prefill?.notificatiesApiPluginConfiguration"
       [required]="true"
       [loading]="!authObs.notificatiesApiPluginSelectItems"
+      [tooltip]="'notificatiesApiPluginConfigurationTooltip' | pluginTranslate : pluginId | async"
     ></v-select>
   </ng-container>
 </v-form>

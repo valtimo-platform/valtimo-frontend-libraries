@@ -19,39 +19,40 @@ import {PortaaltaakConfigurationComponent} from './components/portaaltaak-config
 import {PORTAALTAAK_PLUGIN_LOGO_BASE64} from './assets/portaaltaak-plugin-logo';
 
 const portaaltaakPluginSpecification: PluginSpecification = {
-  pluginId: 'portaaltaakplugin',
+  pluginId: 'portaaltaak',
   pluginConfigurationComponent: PortaaltaakConfigurationComponent,
   pluginLogoBase64: PORTAALTAAK_PLUGIN_LOGO_BASE64,
   pluginTranslations: {
     nl: {
       title: 'Portaaltaak',
-      url: 'Portaaltaak URL',
-      urlTooltip: 'Een URL naar de REST API van Portaaltaak',
-      description: 'Een API om een portaaltaakrouteringscomponent te benaderen.',
+      description: 'Een component om een portaaltaakrouteringscomponent te benaderen.',
       configurationTitle: 'Configuratienaam',
       configurationTitleTooltip:
         'De naam van de huidige plugin-configuratie. Onder deze naam kan de configuratie in de rest van de applicatie teruggevonden worden.',
-      authenticationPluginConfiguration: 'Configuratie authenticatie-plug-in',
+      notificatiesApiPluginConfiguration: 'Notificaties API plugin',
+      notificatiesApiPluginConfigurationTooltip:
+        'Selecteer de Notificaties API plugin. Wanneer de selectiebox leeg blijft zal de notificatie API plugin eerst aangemaakt moeten worden',
     },
     en: {
       title: 'Portal task',
-      url: 'Portal task URL',
-      urlTooltip: 'A URL to the REST API of Portal task',
-      description: 'An API to access a portal task routing component.',
+      description: 'A component to access a portal task routing component.',
       configurationTitle: 'Configuration name',
       configurationTitleTooltip:
         'The name of the current plugin configuration. Under this name, the configuration can be found in the rest of the application.',
-      authenticationPluginConfiguration: 'Authentication plugin configuration',
+      notificatiesApiPluginConfiguration: 'Notification API plugin',
+      notificatiesApiPluginConfigurationTooltip:
+        'Select the Notifications API plugin. If the selection box remains empty, the Notifications API plugin will first have to be created',
     },
     de: {
       title: 'Portalaufgabe',
-      url: 'Portalaufgabe-URL',
-      urlTooltip: 'Die URL zur REST API von Portalaufgabe',
-      description: 'Eine API für den Zugriff auf eine Portal-Aufgabenweiterleitungskomponente.',
+      description:
+        'Eine Komponente für den Zugriff auf eine Portal-Aufgabenweiterleitungskomponente.',
       configurationTitle: 'Konfigurationsname',
       configurationTitleTooltip:
         'Der Name der aktuellen Plugin-Konfiguration. Unter diesem Namen ist die Konfiguration im Rest der Anwendung zu finden.',
-      authenticationPluginConfiguration: 'Authentifizierungs-Plugin-Konfiguration',
+      notificatiesApiPluginConfiguration: 'Benachrichtigungs-API plugin',
+      notificatiesApiPluginConfigurationTooltip:
+        'Wählen Sie das Benachrichtigungs-API-Plugin aus. Bleibt das Auswahlfeld leer, muss das Benachrichtigungs-API-Plugin erst erstellt werden',
     },
   },
 };
