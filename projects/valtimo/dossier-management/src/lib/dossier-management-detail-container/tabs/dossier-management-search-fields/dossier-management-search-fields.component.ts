@@ -206,6 +206,8 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     )
   );
 
+  readonly dataTypeIsText$ = new BehaviorSubject<boolean>(false);
+
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
@@ -242,13 +244,14 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       data.key &&
       data.dataType &&
       data.fieldType &&
-      data.matchType &&
+      (data.dataType === 'text' ? data.matchType : true) &&
       data.path
     );
     const keyIsUnique =
       !this.searchFieldActionTypeIsAdd ||
       this.cachedSearchFields.findIndex(field => field.key === data.key) === -1;
 
+    this.dataTypeIsText$.next(data.dataType === 'text');
     this.formData$.next(data);
     this.valid$.next(containsAllValues && keyIsUnique);
   }
@@ -310,8 +313,13 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     this.disableInput();
 
     this.formData$.pipe(take(1)).subscribe(formData => {
+      const mappedFormData: SearchField = {
+        ...formData,
+        matchType: formData.dataType === 'text' ? formData.matchType : 'exact',
+      };
+
       if (this.searchFieldActionTypeIsAdd) {
-        this.documentService.postDocumentSearch(documentDefinitionName, formData).subscribe(
+        this.documentService.postDocumentSearch(documentDefinitionName, mappedFormData).subscribe(
           () => {
             this.enableInput();
             this.hideModal();
@@ -323,10 +331,10 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
         );
       } else {
         const newFields = [...this.cachedSearchFields];
-        const indexToReplace = newFields.findIndex(field => field.key === formData.key);
-        const filteredFields = newFields.filter(field => field.key !== formData.key);
+        const indexToReplace = newFields.findIndex(field => field.key === mappedFormData.key);
+        const filteredFields = newFields.filter(field => field.key !== mappedFormData.key);
 
-        filteredFields.splice(indexToReplace, 0, formData);
+        filteredFields.splice(indexToReplace, 0, mappedFormData);
         this.updateSearchFields(documentDefinitionName, filteredFields);
       }
     });

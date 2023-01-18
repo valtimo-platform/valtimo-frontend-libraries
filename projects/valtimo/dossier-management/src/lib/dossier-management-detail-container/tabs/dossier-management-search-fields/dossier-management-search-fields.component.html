@@ -152,6 +152,19 @@
           [tooltip]="'searchFieldsOverviewTooltips.dataType' | translate"
         ></v-select>
         <v-select
+          *ngIf="(dataTypeIsText$ | async) && (matchTypeItems$ | async) as matchTypeItems"
+          [items]="matchTypeItems"
+          [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
+          [title]="'searchFieldsOverview.matchType' | translate"
+          [disabled]="obs.disableInput"
+          [margin]="true"
+          [required]="true"
+          name="matchType"
+          [defaultSelectionId]="searchObs.searchField?.matchType"
+          [widthInPx]="200"
+          [tooltip]="'searchFieldsOverviewTooltips.matchType' | translate"
+        ></v-select>
+        <v-select
           *ngIf="fieldTypeItems$ | async as fieldTypeItems"
           [items]="fieldTypeItems"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
@@ -163,19 +176,6 @@
           [defaultSelectionId]="searchObs.searchField?.fieldType"
           [widthInPx]="200"
           [tooltip]="'searchFieldsOverviewTooltips.fieldType' | translate"
-        ></v-select>
-        <v-select
-          *ngIf="matchTypeItems$ | async as matchTypeItems"
-          [items]="matchTypeItems"
-          [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
-          [title]="'searchFieldsOverview.matchType' | translate"
-          [disabled]="obs.disableInput"
-          [margin]="true"
-          [required]="true"
-          name="matchType"
-          [defaultSelectionId]="searchObs.searchField?.matchType"
-          [widthInPx]="200"
-          [tooltip]="'searchFieldsOverviewTooltips.matchType' | translate"
         ></v-select>
       </v-form>
     </div>
