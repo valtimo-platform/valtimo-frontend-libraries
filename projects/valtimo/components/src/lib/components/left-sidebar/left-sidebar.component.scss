@@ -50,21 +50,24 @@
   fill: dimgray;
 }
 
-.resize-border {
+::ng-deep .resize-border {
   position: absolute;
   width: 3px;
   height: 100%;
   top: 0;
   right: 0;
-  margin-right: -3px;
   cursor: col-resize;
-  background-color: #ff5800;
+  background-color: var(--cds-border-strong);
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.11s cubic-bezier(0.2, 0, 1, 0.9);
 }
 
-.resize-hover {
-  opacity: 0.7;
+::ng-deep .resize-hover {
+  opacity: 1;
+}
+
+::ng-deep .resize-border--invisible {
+  display: none;
 }
 
 .no-transition {
