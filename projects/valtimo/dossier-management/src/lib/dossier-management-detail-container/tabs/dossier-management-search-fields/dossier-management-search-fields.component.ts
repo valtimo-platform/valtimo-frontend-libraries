@@ -207,6 +207,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   );
 
   readonly dataTypeIsText$ = new BehaviorSubject<boolean>(false);
+  readonly dataTypeIsNotBoolean$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly documentService: DocumentService,
@@ -243,7 +244,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     const containsAllValues = !!(
       data.key &&
       data.dataType &&
-      data.fieldType &&
+      (data.dataType !== 'boolean' ? data.fieldType : true) &&
       (data.dataType === 'text' ? data.matchType : true) &&
       data.path
     );
@@ -252,6 +253,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       this.cachedSearchFields.findIndex(field => field.key === data.key) === -1;
 
     this.dataTypeIsText$.next(data.dataType === 'text');
+    this.dataTypeIsNotBoolean$.next(data.dataType !== 'boolean');
     this.formData$.next(data);
     this.valid$.next(containsAllValues && keyIsUnique);
   }
@@ -316,6 +318,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       const mappedFormData: SearchField = {
         ...formData,
         matchType: formData.dataType === 'text' ? formData.matchType : 'exact',
+        fieldType: formData.dataType !== 'boolean' ? formData.fieldType : 'single',
       };
 
       if (this.searchFieldActionTypeIsAdd) {
