@@ -1,16 +1,16 @@
-import {Injectable, Renderer2, RendererFactory2} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Injectable, OnDestroy, Renderer2, RendererFactory2} from '@angular/core';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ShellService {
+export class ShellService implements OnDestroy {
   private renderer!: Renderer2;
   private readonly _sideBarExpanded$ = new BehaviorSubject<boolean>(true);
   private readonly _panelExpanded$ = new BehaviorSubject<boolean>(false);
   private readonly _largeScreen$ = new BehaviorSubject<boolean>(true);
   private readonly _mouseOnTopBar$ = new BehaviorSubject<boolean>(false);
-  private readonly _sidenavWidth$ = new BehaviorSubject<number>(150);
+  private readonly _sidenavWidth$ = new BehaviorSubject<number>(500);
   private readonly _sidenavElement$ = new BehaviorSubject<HTMLElement>(undefined);
   private readonly _contentElement$ = new BehaviorSubject<HTMLElement>(undefined);
 
@@ -31,8 +31,15 @@ export class ShellService {
     return this._sidenavWidth$.asObservable();
   }
 
+  private sidenavSizeSubscription!: Subscription;
+
   constructor(private readonly rendererFactory2: RendererFactory2) {
     this.renderer = rendererFactory2.createRenderer(null, null);
+    this.openSidenavSizeSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.sidenavSizeSubscription.unsubscribe();
   }
 
   toggleSideBar(): void {
@@ -63,19 +70,32 @@ export class ShellService {
 
   setSidenavElement(element: HTMLElement): void {
     this._sidenavElement$.next(element);
-    this.renderer.setStyle(
-      this._sidenavElement$.getValue(),
-      'width',
-      `${this._sidenavWidth$.getValue()}px`
-    );
   }
 
   setContentElement(element: HTMLElement): void {
     this._contentElement$.next(element);
-    this.renderer.setStyle(
-      this._contentElement$.getValue(),
-      'padding-left',
-      `calc(2rem + ${this._sidenavWidth$.getValue()}px)`
-    );
+  }
+
+  private openSidenavSizeSubscription(): void {
+    this.sidenavSizeSubscription = combineLatest([
+      this._largeScreen$,
+      this._sidenavWidth$,
+      this._sidenavElement$,
+      this._contentElement$,
+    ]).subscribe(([largeScreen, sidenavWidth, sidenavElement, contentElement]) => {
+      if (!largeScreen && sidenavElement && contentElement) {
+        this.renderer.removeStyle(sidenavElement, 'min-width');
+        this.renderer.removeStyle(contentElement, 'padding-left');
+      } else if (
+        largeScreen &&
+        sidenavElement &&
+        contentElement &&
+        typeof sidenavWidth === 'number'
+      ) {
+        const pixelWidth = `${sidenavWidth}px`;
+        this.renderer.setStyle(sidenavElement, 'min-width', `${pixelWidth}`);
+        this.renderer.setStyle(contentElement, 'padding-left', `calc(2rem + ${pixelWidth})`);
+      }
+    });
   }
 }
