@@ -135,6 +135,18 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       )
     );
 
+  private readonly OTHER_FIELD_TYPES: Array<SearchFieldFieldType> = ['single'];
+  readonly otherFieldTypeItems$: Observable<Array<SelectItem>> = this.translateService
+    .stream('key')
+    .pipe(
+      map(() =>
+        this.OTHER_FIELD_TYPES.map(fieldType => ({
+          id: fieldType,
+          text: this.translateService.instant(`searchFieldsOverview.${fieldType}`),
+        }))
+      )
+    );
+
   private readonly MATCH_TYPES: Array<SearchFieldMatchType> = ['exact', 'like'];
   readonly matchTypeItems$: Observable<Array<SelectItem>> = this.translateService
     .stream('key')
