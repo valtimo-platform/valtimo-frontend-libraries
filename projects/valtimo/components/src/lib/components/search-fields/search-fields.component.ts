@@ -48,6 +48,7 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   readonly hasValidValues$: Observable<boolean> = this.values$.pipe(
     map(values => {
       const hasValues = (Object.keys(values) || []).length > 0;
+      console.log(Object.keys(values));
       const rangeValues =
         (hasValues && Object.values(values)?.filter(value => (value as any).start)) || [];
       const validRangeValues = rangeValues?.filter(
@@ -87,8 +88,9 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   }
 
   singleValueChange(searchFieldKey: string, value: any, isDateTime?: boolean): void {
+    console.log(searchFieldKey, value);
     this.values$.pipe(take(1)).subscribe(values => {
-      if (value) {
+      if (value || Number.isInteger(value)) {
         this.values$.next({...values, [searchFieldKey]: this.getSingleValue(value, isDateTime)});
       } else if (Object.keys(values).includes(searchFieldKey)) {
         const valuesCopy = {...values};
