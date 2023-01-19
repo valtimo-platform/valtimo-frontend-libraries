@@ -164,36 +164,19 @@
           [widthInPx]="200"
           [tooltip]="'searchFieldsOverviewTooltips.matchType' | translate"
         ></v-select>
-        <ng-container *ngIf="dataTypeIsNotBoolean$ | async; else otherSelect;">
-          <v-select
-            *ngIf="(fieldTypeItems$ | async) as fieldTypeItems"
-            [items]="fieldTypeItems"
-            [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
-            [title]="'searchFieldsOverview.fieldType' | translate"
-            [disabled]="obs.disableInput"
-            [margin]="true"
-            [required]="true"
-            name="fieldType"
-            [defaultSelectionId]="searchObs.searchField?.fieldType"
-            [widthInPx]="200"
-            [tooltip]="'searchFieldsOverviewTooltips.fieldType' | translate"
-          ></v-select>
-        </ng-container>
-        <ng-template #otherSelect>
-          <v-select
-            *ngIf="otherFieldTypeItems$ | async as otherFieldTypeItems"
-            [items]="otherFieldTypeItems"
-            [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
-            [title]="'searchFieldsOverview.fieldType' | translate"
-            [disabled]="obs.disableInput"
-            [margin]="true"
-            [required]="true"
-            name="fieldType"
-            [defaultSelectionId]="searchObs.searchField?.fieldType"
-            [widthInPx]="200"
-            [tooltip]="'searchFieldsOverviewTooltips.fieldType' | translate"
-          ></v-select>
-        </ng-template>
+        <v-select
+          *ngIf="(fieldTypeItems$ | async) as fieldTypeItems"
+          [items]="fieldTypeItems"
+          [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
+          [title]="'searchFieldsOverview.fieldType' | translate"
+          [disabled]="obs.disableInput"
+          [margin]="true"
+          [required]="true"
+          name="fieldType"
+          [defaultSelectionId]="searchObs.searchField?.fieldType"
+          [widthInPx]="200"
+          [tooltip]="'searchFieldsOverviewTooltips.fieldType' | translate"
+        ></v-select>
       </v-form>
     </div>
     <div footer>

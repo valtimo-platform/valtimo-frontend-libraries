@@ -123,29 +123,25 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     )
   );
 
+  readonly dataTypeIsBoolean$ = new BehaviorSubject<boolean>(false);
   private readonly FIELD_TYPES: Array<SearchFieldFieldType> = ['single', 'range'];
-  readonly fieldTypeItems$: Observable<Array<SelectItem>> = this.translateService
-    .stream('key')
-    .pipe(
-      map(() =>
-        this.FIELD_TYPES.map(fieldType => ({
-          id: fieldType,
-          text: this.translateService.instant(`searchFieldsOverview.${fieldType}`),
-        }))
-      )
-    );
-
   private readonly OTHER_FIELD_TYPES: Array<SearchFieldFieldType> = ['single'];
-  readonly otherFieldTypeItems$: Observable<Array<SelectItem>> = this.translateService
-    .stream('key')
-    .pipe(
-      map(() =>
-        this.OTHER_FIELD_TYPES.map(fieldType => ({
+  readonly fieldTypeItems$: Observable<Array<SelectItem>> = combineLatest([
+    this.dataTypeIsBoolean$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([dataTypeIsBoolean]) =>
+      dataTypeIsBoolean
+        ? this.OTHER_FIELD_TYPES.map(fieldType => ({
           id: fieldType,
           text: this.translateService.instant(`searchFieldsOverview.${fieldType}`),
         }))
-      )
-    );
+        : this.FIELD_TYPES.map(fieldType => ({
+          id: fieldType,
+          text: this.translateService.instant(`searchFieldsOverview.${fieldType}`),
+        }))
+    )
+  );
 
   private readonly MATCH_TYPES: Array<SearchFieldMatchType> = ['exact', 'like'];
   readonly matchTypeItems$: Observable<Array<SelectItem>> = this.translateService
@@ -219,7 +215,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   );
 
   readonly dataTypeIsText$ = new BehaviorSubject<boolean>(false);
-  readonly dataTypeIsNotBoolean$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly documentService: DocumentService,
@@ -265,7 +260,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       this.cachedSearchFields.findIndex(field => field.key === data.key) === -1;
 
     this.dataTypeIsText$.next(data.dataType === 'text');
-    this.dataTypeIsNotBoolean$.next(data.dataType !== 'boolean');
+    this.dataTypeIsBoolean$.next(data.dataType === 'boolean');
     this.formData$.next(data);
     this.valid$.next(containsAllValues && keyIsUnique);
   }
