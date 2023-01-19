@@ -22,7 +22,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {first, take} from 'rxjs/operators';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {FormioForm} from '@formio/angular';
-import {FormManagementDuplicateModal} from '../form-management-duplicate/form-management-duplicate.component';
+import {FormManagementDuplicateComponent} from '../form-management-duplicate/form-management-duplicate.component';
 import {ModalService} from 'carbon-components-angular';
 
 @Component({
@@ -152,10 +152,10 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
 
   showDuplicateModal() {
     this.modalService.create({
-      component: FormManagementDuplicateModal,
+      component: FormManagementDuplicateComponent,
       inputs: {
-        formToDuplicate: this.formDefinition
-      }
+        formToDuplicate: this.formDefinition,
+      },
     });
   }
 

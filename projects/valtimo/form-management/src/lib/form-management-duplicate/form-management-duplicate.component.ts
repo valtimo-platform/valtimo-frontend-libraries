@@ -27,31 +27,33 @@ import {AlertService} from '@valtimo/components';
 import {noDuplicateFormValidator} from '../validators/no-duplicate-form.validator';
 
 @Component({
-  selector: "form-management-duplicate-modal",
-  templateUrl:  './form-management-duplicate.component.html',
+  selector: 'valtimo-form-management-duplicate-modal',
+  templateUrl: './form-management-duplicate.component.html',
   styleUrls: ['./form-management-duplicate.component.scss'],
 })
-export class FormManagementDuplicateModal extends BaseModal {
-
+export class FormManagementDuplicateComponent extends BaseModal {
   duplicateForm = new FormGroup({
-    'duplicateFormName': new FormControl(this.getDefaultName(), Validators.compose([
-      Validators.required
-    ]), [noDuplicateFormValidator(this.formManagementService)])
+    duplicateFormName: new FormControl(
+      this.getDefaultName(),
+      Validators.compose([Validators.required]),
+      [noDuplicateFormValidator(this.formManagementService)]
+    ),
   });
 
   constructor(
-    @Inject("formToDuplicate") public formToDuplicate,
+    @Inject('formToDuplicate') public formToDuplicate,
     protected modalService: ModalService,
     protected formManagementService: FormManagementService,
     private alertService: AlertService,
     protected route: ActivatedRoute,
-    private router: Router) {
+    private router: Router
+  ) {
     super();
     this.duplicateForm.markAllAsTouched();
   }
 
   public duplicate() {
-    var control = this.duplicateFormName;
+    const control = this.duplicateFormName;
 
     const request: CreateFormDefinitionRequest = {
       name: control.value.toString(),
@@ -65,15 +67,17 @@ export class FormManagementDuplicateModal extends BaseModal {
       .subscribe(
         ([formDefinition, params]) => {
           this.alertService.success('Created new Form');
-          this.router.navigateByUrl(`/form-management/edit/${formDefinition.id}`).then(function (result) {
-            window.location.reload();
-          });
+          this.router
+            .navigateByUrl(`/form-management/edit/${formDefinition.id}`)
+            .then(function (result) {
+              window.location.reload();
+            });
         },
         err => {
-          if(err.toString().includes("Duplicate name")) {
-            control.setErrors({'duplicate': true});
+          if (err.toString().includes('Duplicate name')) {
+            control.setErrors({duplicate: true});
           } else {
-            control.setErrors({'incorrect': true});
+            control.setErrors({incorrect: true});
           }
         }
       );
@@ -83,7 +87,7 @@ export class FormManagementDuplicateModal extends BaseModal {
     return this.duplicateForm.controls['duplicateFormName'];
   }
 
-  public getDefaultName(): String {
-    return this.formToDuplicate.name+'-duplicate';
+  public getDefaultName(): string {
+    return this.formToDuplicate.name + '-duplicate';
   }
 }

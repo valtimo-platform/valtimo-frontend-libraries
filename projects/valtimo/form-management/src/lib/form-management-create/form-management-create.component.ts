@@ -46,7 +46,9 @@ export class FormManagementCreateComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      name: new FormControl('', Validators.required, [noDuplicateFormValidator(this.formManagementService)]),
+      name: new FormControl('', Validators.required, [
+        noDuplicateFormValidator(this.formManagementService),
+      ]),
     });
   }
 

@@ -132,7 +132,7 @@ export function tabsFactory() {
     FormioComponent,
     UploadShowcaseComponent,
     CustomDossierTabComponent,
-    CustomMapsTabComponent
+    CustomMapsTabComponent,
   ],
   imports: [
     HttpClientModule,
@@ -200,7 +200,7 @@ export function tabsFactory() {
         deps: [HttpBackend, ConfigService],
       },
     }),
-    ObjectManagementModule
+    ObjectManagementModule,
   ],
   providers: [
     FormioComponent,
