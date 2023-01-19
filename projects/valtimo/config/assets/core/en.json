@@ -4,8 +4,8 @@
     "TaskAssignedEvent": "Task assigned > {{taskName}}",
     "JsonSchemaDocumentCreatedEvent": "Case created",
     "JsonSchemaDocumentModifiedEvent": "Case modified",
-    "ProcessStartedEvent": "Process started",
-    "ProcessEndedEvent": "Process finished",
+    "ProcessStartedEvent": "Process started: {{processDefinitionKey}}",
+    "ProcessEndedEvent": "Process finished: {{processDefinitionKey}}",
     "DossierDocumentGeneratedEvent": "Case document generated",
     "DocumentRelatedFileAddedEvent": "Related file added",
     "DocumentRelatedFileRemovedEvent": "Related file removed",
@@ -207,6 +207,7 @@
       "help": "Help",
       "forum": "Forum",
       "feedback": "Feedback",
+      "resetPassword": "Reset password",
       "signOut": "Sign out",
       "plantATree": "Plant a tree"
     },

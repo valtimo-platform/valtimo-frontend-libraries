@@ -158,6 +158,9 @@ export const environment: ValtimoConfig = {
   valtimoApi: {
     endpointUri: '/api/',
   },
+  changePasswordUrl: {
+    endpointUri: '/placeholder',
+  },
   swagger: {
     endpointUri: '/v3/api-docs',
   },
@@ -225,9 +228,9 @@ export const environment: ValtimoConfig = {
     },
   },
   customLeftSidebar: {
-    defaultMenuWidth: 230,
-    maxMenuWidth: 330,
-    minMenuWidth: 120,
+    defaultMenuWidth: 256,
+    maxMenuWidth: 550,
+    minMenuWidth: 150,
   },
   caseObjectTypes: {
     leningen: ['Boom', 'Straatverlichting'],

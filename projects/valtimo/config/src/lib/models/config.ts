@@ -33,6 +33,7 @@ export interface DefinitionColumn {
   enum?: Array<string> | {[key: string]: string};
   title?: string;
   format?: string;
+  key?: string;
 }
 
 export interface CustomDossierHeaderItem {
@@ -80,6 +81,9 @@ export interface ValtimoConfig {
   valtimoApi: {
     endpointUri: string;
   };
+  changePasswordUrl: {
+    endpointUri: string,
+  },
   swagger: {
     endpointUri: string;
   };

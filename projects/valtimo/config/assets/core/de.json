@@ -4,8 +4,8 @@
     "TaskAssignedEvent": "Aufgabe zugeordnet > {{taskName}}",
     "JsonSchemaDocumentCreatedEvent": "Case erstellt",
     "JsonSchemaDocumentModifiedEvent": "Case angepasst",
-    "ProcessStartedEvent": "Prozess gestartet",
-    "ProcessEndedEvent": "Prozess abgeschlossen",
+    "ProcessStartedEvent": "Prozess gestartet: {{processDefinitionKey}}",
+    "ProcessEndedEvent": "Prozess abgeschlossen: {{processDefinitionKey}}",
     "DossierDocumentGeneratedEvent": "Case-Dokument erstellt",
     "DocumentRelatedFileAddedEvent": "Datei hinzugefügt",
     "DocumentRelatedFileRemovedEvent": "Datei entfernt",
@@ -207,6 +207,7 @@
       "help": "Hilfe",
       "forum": "Forum",
       "feedback": "Feedback",
+      "resetPassword": "Passwort zurücksetzen",
       "signOut": "Abmeldung",
       "plantATree": "Einen Baum pflanzen"
     },
