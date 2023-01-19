@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of object-management
- */
+import {PluginConfigurationData} from '../../../models';
 
-export * from './lib/models/object-management.model';
-export * from './lib/services/object-management.service';
-export * from './lib/object-management.module';
+interface PortaaltaakConfig extends PluginConfigurationData {
+  notificatiesApiPluginConfiguration: string;
+}
+
+export {PortaaltaakConfig};

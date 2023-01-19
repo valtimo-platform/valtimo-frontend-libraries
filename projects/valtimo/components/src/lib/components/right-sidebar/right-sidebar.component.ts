@@ -118,7 +118,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
     private readonly elementRef: ElementRef,
 
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
 
   showPlantATreeButton: boolean;
