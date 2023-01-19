@@ -274,6 +274,7 @@
     "submit": "Indienen",
     "delete": "Verwijderen",
     "deploy": "Deploy",
+    "duplicate": "Dupliceren",
     "readOnly": "Alleen-lezen"
   },
   "dossierManagement": {

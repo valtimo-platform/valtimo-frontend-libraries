@@ -274,6 +274,7 @@
     "submit": "Einreichen",
     "delete": "Löschen",
     "deploy": "Deploy",
+    "duplicate": "Duplizieren",
     "readOnly": "Schreibgeschützt"
   },
   "dossierManagement": {
