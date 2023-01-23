@@ -118,6 +118,7 @@ export interface ValtimoConfig {
     caseListColumn?: boolean;
     enableObjectManagement?: boolean;
     largeLogoMargin?: boolean;
+    overrideFeedbackMenuItemToMailTo?: FeedbackMailTo;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
   visibleDossierListTabs?: Array<DossierListTab>;
@@ -126,6 +127,12 @@ export interface ValtimoConfig {
   caseObjectTypes?: {
     [definitionNameId: string]: Array<string>;
   };
+}
+
+export interface FeedbackMailTo {
+  email?: string,
+  subjectTranslationKey: string,
+  bodyTranslationKey: string
 }
 
 export enum UploadProvider {
