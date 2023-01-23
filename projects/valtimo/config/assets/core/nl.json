@@ -983,6 +983,7 @@
     "visibleInMenu": "Zichtbaar in het menu",
     "tabs": {
       "general": "Algemeen",
+      "searchFields": "Zoekvelden",
       "list": "Lijst"
     },
     "underscoresToSpaces": "Lage streepjes naar spaties",

@@ -983,6 +983,7 @@
     "visibleInMenu": "Im Menü sichtbar",
     "tabs": {
       "general": "Allgemein",
+      "searchFields": "Suchfelder",
       "list": "Aufführen"
     },
     "underscoresToSpaces": "Unterstriche zu Leerzeichen",

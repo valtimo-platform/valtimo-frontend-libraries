@@ -983,7 +983,8 @@
     "visibleInMenu": "Visible in menu",
     "tabs": {
       "general": "General",
-      "list": "List"
+      "list": "List",
+      "searchFields": "Search Fields"
     }
   }
 }

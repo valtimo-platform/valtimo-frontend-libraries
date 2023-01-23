@@ -18,8 +18,15 @@ import {NgModule} from '@angular/core';
 import {ObjectManagementRoutingModule} from './object-management-routing.module';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {CarbonMultiInputModule, DropzoneModule, WidgetModule, ListModule, ConfirmationModalModule} from '@valtimo/components';
-import {ButtonModule, FormModule, InputModule as InputModule, ModalModule as ModalModule, SelectModule, TitleModule, TooltipIconModule} from '@valtimo/user-interface';
+import {
+  CarbonMultiInputModule,
+  DropzoneModule,
+  WidgetModule,
+  ListModule,
+  ConfirmationModalModule,
+  SpinnerModule, ModalModule
+} from '@valtimo/components';
+import {ButtonModule, FormModule, InputModule as InputModule, ModalModule as VModalModule, SelectModule, TitleModule, TooltipIconModule} from '@valtimo/user-interface';
 import {ObjectManagementDetailContainerComponent} from './components/object-management-detail-container/object-management-detail-container.component';
 import {ObjectManagementDetailComponent} from './components/object-management-detail-container/tabs/object-management-detail/object-management-detail.component';
 import {ObjectManagementListComponent} from './components/object-management-list/object-management-list.component';
@@ -38,6 +45,7 @@ import {
   NotificationModule,
 } from 'carbon-components-angular';
 import {ReactiveFormsModule} from '@angular/forms';
+import {ObjectManagementSearchFieldsComponent} from './components/object-management-detail-container/tabs/object-management-search-fields/object-management-search-fields.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +55,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     ObjectManagementListColumnsComponent,
     ObjectManagementModalComponent,
     ObjectManagementUploadModalComponent,
+    ObjectManagementSearchFieldsComponent,
   ],
   imports: [
     CommonModule,
@@ -55,7 +64,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     ListModule,
     TranslateModule,
     ObjectManagementRoutingModule,
-    ModalModule,
+    VModalModule,
     TitleModule,
     ButtonModule,
     FormModule,
@@ -73,7 +82,9 @@ import {ReactiveFormsModule} from '@angular/forms';
     LinkModule,
     IconModule,
     ReactiveFormsModule,
-    ConfirmationModalModule
+    ConfirmationModalModule,
+    SpinnerModule,
+    ModalModule
   ],
   exports: [],
 })
