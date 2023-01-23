@@ -118,7 +118,6 @@ export interface ValtimoConfig {
     caseListColumn?: boolean;
     enableObjectManagement?: boolean;
     largeLogoMargin?: boolean;
-    overrideFeedbackMenuItemToMailTo?: FeedbackMailTo;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
   visibleDossierListTabs?: Array<DossierListTab>;
@@ -127,6 +126,7 @@ export interface ValtimoConfig {
   caseObjectTypes?: {
     [definitionNameId: string]: Array<string>;
   };
+  overrideFeedbackMenuItemToMailTo?: FeedbackMailTo;
 }
 
 export interface FeedbackMailTo {

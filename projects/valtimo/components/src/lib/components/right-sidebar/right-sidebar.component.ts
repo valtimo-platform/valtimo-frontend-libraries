@@ -104,6 +104,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   readonly userContexts$ = this.contextService.getUserContexts();
   readonly activeContext$ = this.contextService.getUserContextActive();
+
   private formSubscription!: Subscription;
 
   constructor(
@@ -128,7 +129,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     this.openFormSubscription();
     this.showPlantATreeButton = this.configService.config.featureToggles?.showPlantATreeButton;
     this.resetUrl = this.configService.config.changePasswordUrl?.endpointUri;
-    this.overrideFeedbackMenuItemToMailTo = this.configService.config.featureToggles?.overrideFeedbackMenuItemToMailTo;
+    this.overrideFeedbackMenuItemToMailTo = this.configService.config?.overrideFeedbackMenuItemToMailTo;
   }
 
   ngOnDestroy(): void {
