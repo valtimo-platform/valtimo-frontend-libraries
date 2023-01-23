@@ -158,9 +158,6 @@ export const environment: ValtimoConfig = {
   valtimoApi: {
     endpointUri: '/api/',
   },
-  changePasswordUrl: {
-    endpointUri: '/placeholder',
-  },
   swagger: {
     endpointUri: '/v3/api-docs',
   },
