@@ -259,9 +259,9 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   ]).pipe(
     distinctUntilChanged(
       ([prevDocumentDefinitionName, prevFormData], [currDocumentDefinitionName, currFormData]) =>
-        prevDocumentDefinitionName == currDocumentDefinitionName &&
-        prevFormData?.dropdownDataProvider == currFormData?.dropdownDataProvider &&
-        prevFormData?.key == currFormData?.key
+        prevDocumentDefinitionName === currDocumentDefinitionName &&
+        prevFormData?.dropdownDataProvider === currFormData?.dropdownDataProvider &&
+        prevFormData?.key === currFormData?.key
     ),
     switchMap(([documentDefinitionName, formData]) => {
       if (!formData || !formData.dropdownDataProvider) {
