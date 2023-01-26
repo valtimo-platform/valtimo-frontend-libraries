@@ -55,7 +55,7 @@ import {DossierService} from '../dossier.service';
 import {ListField, Pagination} from '@valtimo/components';
 import {NGXLogger} from 'ngx-logger';
 import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
-import {DossierColumnService} from '../services';
+import {DossierColumnService, DossierParameterService} from '../services';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -207,7 +207,8 @@ export class DossierListComponent implements OnInit {
   private readonly pagination$ = new BehaviorSubject<Pagination | undefined>(undefined);
 
   readonly paginationCopy$ = this.pagination$.pipe(
-    map(pagination => pagination && JSON.parse(JSON.stringify(pagination)))
+    map(pagination => pagination && JSON.parse(JSON.stringify(pagination))),
+    tap(pagination => this.dossierParameterService.setPaginationParameters(pagination))
   );
 
   private readonly documentSearchRequest$: Observable<AdvancedDocumentSearchRequest> =
@@ -324,13 +325,20 @@ export class DossierListComponent implements OnInit {
     private readonly dossierService: DossierService,
     private readonly logger: NGXLogger,
     private readonly configService: ConfigService,
-    private readonly dossierColumnService: DossierColumnService
+    private readonly dossierColumnService: DossierColumnService,
+    private readonly dossierParameterService: DossierParameterService
   ) {
     this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
   }
 
   ngOnInit(): void {
     this.modalListenerAdded = false;
+    this.dossierParameterService.querySearchParams$.subscribe(params =>
+      console.log('search params', params)
+    );
+    this.dossierParameterService.queryPaginationParams$.subscribe(params =>
+      console.log('pag params', params)
+    );
   }
 
   pageChange(newPage: number): void {
@@ -397,6 +405,14 @@ export class DossierListComponent implements OnInit {
 
   search(searchFieldValues: SearchFieldValues): void {
     this.searchFieldValues$.next(searchFieldValues || {});
+    this.dossierParameterService.setSearchParameters(searchFieldValues);
+  }
+
+  tabChange(tab: NgbNavChangeEvent<any>): void {
+    this.pagination$.pipe(take(1)).subscribe(pagination => {
+      this.pagination$.next({...pagination, page: 1});
+    });
+    this.assigneeFilter$.next(tab.nextId.toUpperCase());
   }
 
   private mapSearchValuesToFilters(
@@ -495,12 +511,5 @@ export class DossierListComponent implements OnInit {
         this.pagination$.next({...pagination, page: amountOfPages});
       }
     });
-  }
-
-  tabChange(tab: NgbNavChangeEvent<any>): void {
-    this.pagination$.pipe(take(1)).subscribe(pagination => {
-      this.pagination$.next({...pagination, page: 1});
-    });
-    this.assigneeFilter$.next(tab.nextId.toUpperCase());
   }
 }
