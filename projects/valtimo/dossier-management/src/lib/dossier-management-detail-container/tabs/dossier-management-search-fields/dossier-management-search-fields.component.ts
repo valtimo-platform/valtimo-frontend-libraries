@@ -430,14 +430,17 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     this.formData$.pipe(take(1)).subscribe(formData => {
       const mappedFormData: SearchField = {
         ...formData,
-        matchType: formData.dataType === 'text' ? formData.matchType : 'exact',
+        matchType:
+          !this.isFieldTypeDropdown(formData.fieldType) && formData.dataType === 'text'
+            ? formData.matchType
+            : 'exact',
         fieldType: formData.dataType !== 'boolean' ? formData.fieldType : 'single',
       };
 
       const prevFormData = this.selectedSearchField$.value;
       if (
         this.dropdownDataProviderSupportsUpdates(prevFormData?.dropdownDataProvider) &&
-        prevFormData.dropdownDataProvider !== formData?.dropdownDataProvider
+        prevFormData.dropdownDataProvider !== mappedFormData?.dropdownDataProvider
       ) {
         this.documentService
           .deleteDropdownData(
@@ -447,7 +450,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
           )
           .subscribe();
       }
-      if (this.dropdownDataProviderSupportsUpdates(formData.dropdownDataProvider)) {
+      if (this.dropdownDataProviderSupportsUpdates(mappedFormData.dropdownDataProvider)) {
         this.modifiedDropdownValues$.pipe(take(1)).subscribe(dropdownValues => {
           const request = dropdownValues.reduce(
             (acc, keyValue) => ({...acc, [keyValue.key]: keyValue.value}),
@@ -455,7 +458,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
           );
           this.documentService
             .postDropdownData(
-              formData.dropdownDataProvider,
+              mappedFormData.dropdownDataProvider,
               documentDefinitionName,
               mappedFormData.key,
               request
