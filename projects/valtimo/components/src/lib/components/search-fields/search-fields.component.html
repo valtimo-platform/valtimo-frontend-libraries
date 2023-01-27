@@ -188,7 +188,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -199,7 +200,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -492,6 +494,7 @@
   let-tooltip="tooltip"
   let-tooltipKey="tooltipKey"
   let-title="title"
+  let-values="values"
 >
   <ng-container
     *ngIf="searchField.dataType === 'text' && searchField.fieldType === 'single-select-dropdown'"
@@ -511,6 +514,7 @@
       [clearSelectionSubject$]="clear$"
       (selectedChange)="singleValueChange(searchField.key, $event)"
       (keyup.enter)="search()"
+      [defaultSelectionId]="values[searchField.key]"
     ></v-select>
   </ng-container>
 </ng-template>
@@ -521,6 +525,7 @@
   let-tooltip="tooltip"
   let-tooltipKey="tooltipKey"
   let-title="title"
+  let-values="values"
 >
   <ng-container
     *ngIf="searchField.dataType === 'text' && searchField.fieldType === 'multi-select-dropdown'"
@@ -541,6 +546,7 @@
       [clearSelectionSubject$]="clear$"
       (selectedChange)="multipleValueChange(searchField.key, $event)"
       (keyup.enter)="search()"
+      [defaultSelectionIds]="values[searchField.key]"
     ></v-select>
   </ng-container>
 </ng-template>
