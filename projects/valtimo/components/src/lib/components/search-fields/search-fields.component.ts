@@ -138,6 +138,17 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     this.doSearch.emit({});
   }
 
+  getDefaultBooleanSelectionId(values: SearchFieldValues, searchFieldKey: string): string | null {
+    const searchFieldValue = values[searchFieldKey];
+
+    if (searchFieldValue === true) {
+      return this.BOOLEAN_POSITIVE;
+    } else if (searchFieldValue === false) {
+      return this.BOOLEAN_NEGATIVE;
+    }
+    return null;
+  }
+
   private getSingleValue(value: any, isDateTime?: boolean): any {
     if (isDateTime) {
       return new Date(value).toISOString();

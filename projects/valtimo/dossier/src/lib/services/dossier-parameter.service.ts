@@ -104,9 +104,11 @@ export class DossierParameterService implements OnDestroy {
           collectionSize: `${pagination.collectionSize}`,
           page: `${pagination.page}`,
           maxPaginationItemSize: `${pagination.maxPaginationItemSize}`,
-          sortStateName: `${pagination.sort?.state.name}`,
-          sortStateDirection: `${pagination.sort?.state.direction}`,
           isSorting: pagination.sort?.isSorting ? 'true' : 'false',
+          ...(pagination.sort?.state?.name && {sortStateName: `${pagination.sort?.state.name}`}),
+          ...(pagination.sort?.state?.direction && {
+            sortStateDirection: `${pagination.sort?.state.direction}`,
+          }),
         });
       });
     }
