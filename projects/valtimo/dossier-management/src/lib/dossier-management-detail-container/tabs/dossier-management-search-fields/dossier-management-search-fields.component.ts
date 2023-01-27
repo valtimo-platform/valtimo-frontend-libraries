@@ -133,13 +133,13 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     map(([dataTypeIsBoolean]) =>
       dataTypeIsBoolean
         ? this.OTHER_FIELD_TYPES.map(fieldType => ({
-          id: fieldType,
-          text: this.translateService.instant(`searchFieldsOverview.${fieldType}`),
-        }))
+            id: fieldType,
+            text: this.translateService.instant(`searchFieldsOverview.${fieldType}`),
+          }))
         : this.FIELD_TYPES.map(fieldType => ({
-          id: fieldType,
-          text: this.translateService.instant(`searchFieldsOverview.${fieldType}`),
-        }))
+            id: fieldType,
+            text: this.translateService.instant(`searchFieldsOverview.${fieldType}`),
+          }))
     )
   );
 

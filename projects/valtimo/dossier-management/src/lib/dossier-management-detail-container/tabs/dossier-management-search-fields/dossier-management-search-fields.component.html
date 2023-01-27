@@ -165,7 +165,7 @@
           [tooltip]="'searchFieldsOverviewTooltips.matchType' | translate"
         ></v-select>
         <v-select
-          *ngIf="(fieldTypeItems$ | async) as fieldTypeItems"
+          *ngIf="fieldTypeItems$ | async as fieldTypeItems"
           [items]="fieldTypeItems"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
           [title]="'searchFieldsOverview.fieldType' | translate"
