@@ -335,14 +335,7 @@ export class DossierListComponent implements OnInit {
 
   ngOnInit(): void {
     this.modalListenerAdded = false;
-    this.dossierParameterService.querySearchParams$.pipe(take(1)).subscribe(values => {
-      console.log('set params', values);
-      if (Object.keys(values || {}).length > 0) {
-        setTimeout(() => {
-          this.setSearchFieldValuesSubject$.next(values);
-        });
-      }
-    });
+    this.setSearchFieldParametersInComponent();
   }
 
   pageChange(newPage: number): void {
@@ -464,8 +457,6 @@ export class DossierListComponent implements OnInit {
           );
           const paginationToUse = queryPaginationParams || storedPagination || defaultPagination;
 
-          console.log(paginationToUse, queryPaginationParams);
-
           this.logger.debug(`Set pagination: ${JSON.stringify(paginationToUse)}`);
           this.pagination$.next(paginationToUse);
         }
@@ -521,6 +512,16 @@ export class DossierListComponent implements OnInit {
 
       if (currentPage > amountOfPages) {
         this.pagination$.next({...pagination, page: amountOfPages});
+      }
+    });
+  }
+
+  private setSearchFieldParametersInComponent(): void {
+    this.dossierParameterService.querySearchParams$.pipe(take(1)).subscribe(values => {
+      if (Object.keys(values || {}).length > 0) {
+        setTimeout(() => {
+          this.setSearchFieldValuesSubject$.next(values);
+        });
       }
     });
   }
