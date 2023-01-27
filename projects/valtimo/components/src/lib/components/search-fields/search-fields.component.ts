@@ -173,10 +173,11 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   private openValuesSubjectSubscription(): void {
     if (this.setValuesSubject$) {
       this.valuesSubjectSubscription = this.setValuesSubject$.subscribe(values => {
-        console.log('set values in comp', values);
-        this.values$.next(values);
-        this.search();
-        this.expand();
+        if (Object.keys(values || {}).length > 0) {
+          this.values$.next(values);
+          this.search();
+          this.expand();
+        }
       });
     }
   }
