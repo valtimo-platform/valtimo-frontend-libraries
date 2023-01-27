@@ -72,6 +72,6 @@ export class ProcessLinkService {
   }
 
   deleteProcessLink(id: string): Observable<null> {
-    return this.http.delete<null>(`${this.VALTIMO_ENDPOINT_URI}v1/process-link/${id}`);
+    return this.http.delete<null>(`${this.VALTIMO_ENDPOINT_URI}process-link/${id}`);
   }
 }
