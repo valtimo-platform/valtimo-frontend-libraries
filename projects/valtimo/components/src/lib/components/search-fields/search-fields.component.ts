@@ -48,7 +48,6 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
 
   readonly hasValidValues$: Observable<boolean> = this.values$.pipe(
     map(values => {
-      console.log('values in comp', values);
       const hasValues = (Object.keys(values) || []).length > 0;
       const rangeValues =
         (hasValues && Object.values(values)?.filter(value => (value as any).start)) || [];
