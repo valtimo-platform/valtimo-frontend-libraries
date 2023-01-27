@@ -37,6 +37,7 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
       }
     });
   }
+  @Input() setValuesSubject$: Observable<SearchFieldValues>;
   @Output() doSearch: EventEmitter<SearchFieldValues> = new EventEmitter<SearchFieldValues>();
 
   readonly documentDefinitionName$ = new BehaviorSubject<string>('');
@@ -47,6 +48,7 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
 
   readonly hasValidValues$: Observable<boolean> = this.values$.pipe(
     map(values => {
+      console.log('values in comp', values);
       const hasValues = (Object.keys(values) || []).length > 0;
       const rangeValues =
         (hasValues && Object.values(values)?.filter(value => (value as any).start)) || [];
@@ -62,6 +64,7 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   readonly clear$ = new Subject<null>();
 
   private documentDefinitionNameSubscription!: Subscription;
+  private valuesSubjectSubscription!: Subscription;
 
   private readonly BOOLEAN_POSITIVE: SearchFieldBoolean = 'booleanPositive';
   private readonly BOOLEAN_NEGATIVE: SearchFieldBoolean = 'booleanNegative';
@@ -80,10 +83,12 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.openDocumentDefinitionNameSubscription();
+    this.openValuesSubjectSubscription();
   }
 
   ngOnDestroy(): void {
     this.documentDefinitionNameSubscription?.unsubscribe();
+    this.valuesSubjectSubscription?.unsubscribe();
   }
 
   singleValueChange(searchFieldKey: string, value: any, isDateTime?: boolean): void {
@@ -154,7 +159,22 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     });
   }
 
+  private openValuesSubjectSubscription(): void {
+    if (this.setValuesSubject$) {
+      this.valuesSubjectSubscription = this.setValuesSubject$.subscribe(values => {
+        console.log('set values in comp', values);
+        this.values$.next(values);
+        this.search();
+        this.expand();
+      });
+    }
+  }
+
   private collapse(): void {
     this.expanded$.next(false);
+  }
+
+  private expand(): void {
+    this.expanded$.next(true);
   }
 }

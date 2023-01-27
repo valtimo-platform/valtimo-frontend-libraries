@@ -45,6 +45,7 @@ import {
   map,
   Observable,
   of,
+  Subject,
   switchMap,
   take,
   tap,
@@ -226,7 +227,6 @@ export class DossierListComponent implements OnInit {
     );
 
   private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
-
   private readonly assigneeFilter$ = new BehaviorSubject<AssigneeFilter>('ALL');
 
   private readonly documentsRequest$: Observable<Documents | SpecifiedDocuments> = combineLatest([
@@ -317,6 +317,8 @@ export class DossierListComponent implements OnInit {
     tap(() => this.loading$.next(false))
   );
 
+  readonly setSearchFieldValuesSubject$ = new Subject<SearchFieldValues>();
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -333,12 +335,14 @@ export class DossierListComponent implements OnInit {
 
   ngOnInit(): void {
     this.modalListenerAdded = false;
-    this.dossierParameterService.querySearchParams$.subscribe(params =>
-      console.log('search params', params)
-    );
-    this.dossierParameterService.queryPaginationParams$.subscribe(params =>
-      console.log('pag params', params)
-    );
+    this.dossierParameterService.querySearchParams$.pipe(take(1)).subscribe(values => {
+      console.log('set params', values);
+      if (Object.keys(values || {}).length > 0) {
+        setTimeout(() => {
+          this.setSearchFieldValuesSubject$.next(values);
+        });
+      }
+    });
   }
 
   pageChange(newPage: number): void {
@@ -444,20 +448,28 @@ export class DossierListComponent implements OnInit {
   }
 
   private setPagination(documentDefinitionName: string): void {
-    combineLatest([this.hasStoredSearchRequest$, this.storedSearchRequestKey$, this.columns$])
+    combineLatest([
+      this.hasStoredSearchRequest$,
+      this.storedSearchRequestKey$,
+      this.columns$,
+      this.dossierParameterService.queryPaginationParams$,
+    ])
       .pipe(take(1))
-      .subscribe(([hasStoredSearchRequest, storedSearchRequestKey, columns]) => {
-        const defaultPagination: Pagination = this.getDefaultPagination(columns);
-        const storedPagination: Pagination = this.getStoredPagination(
-          hasStoredSearchRequest,
-          storedSearchRequestKey
-        );
+      .subscribe(
+        ([hasStoredSearchRequest, storedSearchRequestKey, columns, queryPaginationParams]) => {
+          const defaultPagination: Pagination = this.getDefaultPagination(columns);
+          const storedPagination: Pagination = this.getStoredPagination(
+            hasStoredSearchRequest,
+            storedSearchRequestKey
+          );
+          const paginationToUse = queryPaginationParams || storedPagination || defaultPagination;
 
-        this.logger.debug(
-          `Set pagination: ${JSON.stringify(storedPagination || defaultPagination)}`
-        );
-        this.pagination$.next(storedPagination || defaultPagination);
-      });
+          console.log(paginationToUse, queryPaginationParams);
+
+          this.logger.debug(`Set pagination: ${JSON.stringify(paginationToUse)}`);
+          this.pagination$.next(paginationToUse);
+        }
+      );
   }
 
   private getDefaultPagination(columns: Array<DefinitionColumn>): Pagination {

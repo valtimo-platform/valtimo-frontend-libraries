@@ -6,6 +6,7 @@ import {
   filter,
   map,
   Observable,
+  startWith,
   Subscription,
   take,
 } from 'rxjs';
@@ -37,7 +38,7 @@ export class DossierParameterService implements OnDestroy {
     );
   }
 
-  get queryPaginationParams$(): Observable<Pagination> {
+  get queryPaginationParams$(): Observable<Pagination | null> {
     return this.route.queryParams.pipe(
       filter(params => params.collectionSize),
       map(params => {
@@ -63,7 +64,8 @@ export class DossierParameterService implements OnDestroy {
       }),
       distinctUntilChanged(
         (prevParams, currParams) => JSON.stringify(prevParams) === JSON.stringify(currParams)
-      )
+      ),
+      startWith(null)
     );
   }
 
@@ -85,7 +87,9 @@ export class DossierParameterService implements OnDestroy {
           search: this.objectToBase64(searchParameters),
         });
       } else {
-        delete dossierParameters.search;
+        if (dossierParameters?.search) {
+          delete dossierParameters.search;
+        }
         this._dossierParameters$.next(dossierParameters);
       }
     });
@@ -102,7 +106,7 @@ export class DossierParameterService implements OnDestroy {
           maxPaginationItemSize: `${pagination.maxPaginationItemSize}`,
           sortStateName: `${pagination.sort?.state.name}`,
           sortStateDirection: `${pagination.sort?.state.direction}`,
-          isSorting: pagination.sort.isSorting ? 'true' : 'false',
+          isSorting: pagination.sort?.isSorting ? 'true' : 'false',
         });
       });
     }

@@ -62,6 +62,7 @@
 <ng-template #searchFieldTemplate let-searchField="searchField">
   <ng-container
     *ngIf="{
+      values: values$ | async,
       tooltipKey: 'searchFieldsTooltips.' + searchField.key,
       tooltip: 'searchFieldsTooltips.' + searchField.key | translate,
       searchField,
@@ -79,7 +80,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -90,7 +92,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -101,7 +104,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -112,7 +116,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -123,7 +128,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -134,7 +140,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -145,7 +152,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -156,7 +164,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -167,7 +176,8 @@
           searchField: searchField,
           tooltipKey: vars.tooltipKey,
           tooltip: vars.tooltip,
-          title: vars.title
+          title: vars.title,
+          values: vars.values
         }
       "
     ></ng-container>
@@ -180,6 +190,7 @@
   let-tooltip="tooltip"
   let-tooltipKey="tooltipKey"
   let-title="title"
+  let-values="values"
 >
   <v-input
     *ngIf="searchField.dataType === 'text' && searchField.fieldType === 'single'"
@@ -191,6 +202,7 @@
     [smallLabel]="true"
     [clear$]="clear$"
     (keyup.enter)="search()"
+    [defaultValue]="values[searchField.key]"
   >
   </v-input>
 </ng-template>
@@ -201,6 +213,7 @@
   let-tooltip="tooltip"
   let-tooltipKey="tooltipKey"
   let-title="title"
+  let-values="values"
 >
   <v-input
     *ngIf="searchField.dataType === 'number' && searchField.fieldType === 'single'"
@@ -214,6 +227,7 @@
     [smallLabel]="true"
     [clear$]="clear$"
     (keyup.enter)="search()"
+    [defaultValue]="values[searchField.key]"
   >
   </v-input>
 </ng-template>
@@ -224,6 +238,7 @@
   let-tooltip="tooltip"
   let-tooltipKey="tooltipKey"
   let-title="title"
+  let-values="values"
 >
   <v-date-picker
     *ngIf="searchField.dataType === 'date' && searchField.fieldType === 'single'"
@@ -235,6 +250,7 @@
     [smallLabel]="true"
     [clear$]="clear$"
     (keyup.enter)="search()"
+    [defaultDate]="values[searchField.key]"
   ></v-date-picker>
 </ng-template>
 
@@ -244,6 +260,7 @@
   let-tooltip="tooltip"
   let-tooltipKey="tooltipKey"
   let-title="title"
+  let-values="values"
 >
   <ng-container *ngIf="searchField.dataType === 'text' && searchField.fieldType === 'range'">
     <v-input-label
@@ -255,10 +272,23 @@
       (valueChange)="multipleValueChange(searchField.key, $event)"
       className="multiple-search-fields"
     >
-      <v-input name="start" [fullWidth]="true" [clear$]="clear$" (keyup.enter)="search()">
+      <v-input
+        name="start"
+        [fullWidth]="true"
+        [clear$]="clear$"
+        (keyup.enter)="search()"
+        [defaultValue]="values[searchField.key]?.start"
+      >
       </v-input>
       <ng-container *ngTemplateOutlet="toText"></ng-container>
-      <v-input name="end" [fullWidth]="true" [clear$]="clear$" (keyup.enter)="search()"> </v-input>
+      <v-input
+        name="end"
+        [fullWidth]="true"
+        [clear$]="clear$"
+        (keyup.enter)="search()"
+        [defaultValue]="values[searchField.key]?.end"
+      >
+      </v-input>
     </v-form>
   </ng-container>
 </ng-template>
@@ -269,6 +299,7 @@
   let-tooltip="tooltip"
   let-tooltipKey="tooltipKey"
   let-title="title"
+  let-values="values"
 >
   <ng-container *ngIf="searchField.dataType === 'number' && searchField.fieldType === 'range'">
     <v-input-label
@@ -287,6 +318,7 @@
         [hideNumberSpinBox]="true"
         [clear$]="clear$"
         (keyup.enter)="search()"
+        [defaultValue]="values[searchField.key]?.start"
       >
       </v-input>
       <ng-container *ngTemplateOutlet="toText"></ng-container>
@@ -297,6 +329,7 @@
         [hideNumberSpinBox]="true"
         [clear$]="clear$"
         (keyup.enter)="search()"
+        [defaultValue]="values[searchField.key]?.end"
       >
       </v-input>
     </v-form>
@@ -309,6 +342,7 @@
   let-tooltip="tooltip"
   let-tooltipKey="tooltipKey"
   let-title="title"
+  let-values="values"
 >
   <ng-container *ngIf="searchField.dataType === 'date' && searchField.fieldType === 'range'">
     <v-input-label
@@ -325,6 +359,7 @@
         fullWidth="true"
         [clear$]="clear$"
         (keyup.enter)="search()"
+        [defaultDate]="values[searchField.key]?.start"
       ></v-date-picker>
       <ng-container *ngTemplateOutlet="toText"></ng-container>
       <v-date-picker
@@ -332,6 +367,7 @@
         fullWidth="true"
         [clear$]="clear$"
         (keyup.enter)="search()"
+        [defaultDate]="values[searchField.key]?.end"
       ></v-date-picker>
     </v-form>
   </ng-container>

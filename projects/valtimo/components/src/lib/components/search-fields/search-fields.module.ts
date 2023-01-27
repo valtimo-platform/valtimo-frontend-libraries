@@ -29,6 +29,7 @@ import {
   ParagraphModule,
   SelectModule,
 } from '@valtimo/user-interface';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [SearchFieldsComponent],
@@ -44,6 +45,7 @@ import {
     ParagraphModule,
     ButtonModule,
     SelectModule,
+    FormsModule,
   ],
   exports: [SearchFieldsComponent],
 })
