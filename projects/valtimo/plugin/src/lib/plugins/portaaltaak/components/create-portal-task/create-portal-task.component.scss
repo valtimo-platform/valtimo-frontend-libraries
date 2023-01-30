@@ -13,19 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {PluginConfigurationData} from '../../../models';
-
-interface PortaaltaakConfig extends PluginConfigurationData {
-  notificatiesApiPluginConfiguration: string;
-}
-
-type FormType = 'definition' | 'url';
-
-interface CreatePortalTaskConfig {
-  formType: FormType;
-  formTypeId?: string;
-  formTypeUrl?: string;
-}
-
-export {PortaaltaakConfig};

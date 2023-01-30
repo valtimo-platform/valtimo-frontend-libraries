@@ -19,9 +19,10 @@ import {PortaaltaakConfigurationComponent} from './components/portaaltaak-config
 import {PluginTranslatePipeModule} from '../../pipes';
 import {CommonModule} from '@angular/common';
 import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {CreatePortalTaskComponent} from './components/create-portal-task/create-portal-task.component';
 
 @NgModule({
-  declarations: [PortaaltaakConfigurationComponent],
+  declarations: [PortaaltaakConfigurationComponent, CreatePortalTaskComponent],
   imports: [
     CommonModule,
     PluginTranslatePipeModule,
@@ -30,6 +31,6 @@ import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/u
     SelectModule,
     ParagraphModule,
   ],
-  exports: [PortaaltaakConfigurationComponent],
+  exports: [PortaaltaakConfigurationComponent, CreatePortalTaskComponent],
 })
 export class PortaaltaakPluginModule {}
