@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {Observable, Subscription} from 'rxjs';
-import {BaseSseEvent, EstablishedConnectionSseEvent, SseEventListener, SseEventType} from '../models/sse-events.model';
+import {BaseSseEvent, EstablishedConnectionSseEvent, SseEventListener} from '../models/sse-events.model';
 import {ConfigService} from '@valtimo/config';
 import {SseErrorBucket, SseEventSubscriptionBucket, SseSubscriptionBucket} from '../models/sse-bucket.model';
 
@@ -79,7 +79,7 @@ export class SseService {
     return this;
   }
 
-  public onEvent<T extends BaseSseEvent>(event: SseEventType, listener: SseEventListener<T>) {
+  public onEvent<T extends BaseSseEvent>(event: string, listener: SseEventListener<T>) {
     this.ensureConnection(); // ensure connection
     let found = false;
     this.eventSubscribersBuckets.forEach(bucket => {
@@ -100,7 +100,7 @@ export class SseService {
     this.anySubscribersBucket.off(listener);
   }
 
-  public offEvent(event: SseEventType, listener: SseEventListener<any>) {
+  public offEvent(event: string, listener: SseEventListener<any>) {
     this.eventSubscribersBuckets.forEach(bucket => {
       if (bucket.event === event) {
         bucket.off(listener);
@@ -108,7 +108,7 @@ export class SseService {
     });
   }
 
-  public offEvents(type?: SseEventType) {
+  public offEvents(type?: string) {
     this.eventSubscribersBuckets.forEach(bucket => {
       if (type === null || type === bucket.event) {
         bucket.offAll();
@@ -126,7 +126,11 @@ export class SseService {
   }
 
   public disconnect(keepSubscriptionId: boolean = false) {
-    this.state = SseService.NOT_CONNECTED;
+    this.disconnectWith(SseService.NOT_CONNECTED, keepSubscriptionId)
+  }
+
+  private disconnectWith(state: number, keepSubscriptionId: boolean = false) {
+    this.state = state;
     if (this.establishedConnection?.readyState !== EventSource.CLOSED) {
       this.establishedConnection?.close();
     }
@@ -182,7 +186,7 @@ export class SseService {
           this.sequentialConnectionAttemptFailCount++;
           console.log('retry failed', this.sequentialConnectionAttemptFailCount);
           if (this.sequentialConnectionAttemptFailCount > 3) {
-            this.disconnect(false);
+            this.disconnectWith(SseService.CONNECTION_RETRIES_EXCEEDED, false)
             this.err(`Failed to connect to SSE after ${this.sequentialConnectionAttemptFailCount} retries`);
             return;
           }

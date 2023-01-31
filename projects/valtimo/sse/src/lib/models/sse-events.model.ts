@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-// enumeration mapping for:
-// com.ritense.valtimo.implementation.camunda.web.event.SseEventType
-export type SseEventType = 'TASK_UPDATE' | 'ESTABLISHED_CONNECTION';
-
 export type SseEventListener<T> = (event: T) => void;
 
 
 // base event containing the event type
 export interface BaseSseEvent {
-  _t: SseEventType;
+  _t: string;
 }
 
 // event implementations for json mapping objects in:

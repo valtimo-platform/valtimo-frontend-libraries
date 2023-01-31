@@ -15,7 +15,7 @@
  */
 
 // generic bucket for listeners of any type
-import {BaseSseEvent, SseError, SseEventListener, SseEventType} from './sse-events.model';
+import {BaseSseEvent, SseError, SseEventListener} from './sse-events.model';
 
 export class SseSubscriptionBucket<T> {
   readonly listeners: SseEventListener<T>[] = [];
@@ -47,9 +47,9 @@ export class SseErrorBucket extends SseSubscriptionBucket<SseError> {}
 
 // implicit type bucket with event for filtering
 export class SseEventSubscriptionBucket<T extends BaseSseEvent> extends SseSubscriptionBucket<T> {
-  readonly event: SseEventType;
+  readonly event: string;
 
-  constructor(event: SseEventType) {
+  constructor(event: string) {
     super();
     this.event = event;
   }
