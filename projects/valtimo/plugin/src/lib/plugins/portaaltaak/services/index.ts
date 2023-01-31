@@ -14,11 +14,4 @@
  * limitations under the License.
  */
 
-import {PluginConfigurationData} from '../../../models';
-
-interface NotificatiesApiConfig extends PluginConfigurationData {
-  url: string;
-  callbackUrl: string;
-}
-
-export {NotificatiesApiConfig};
+export * from './object.service';

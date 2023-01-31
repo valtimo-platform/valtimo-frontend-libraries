@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-import {PluginConfigurationData} from '../../../models';
-
-interface NotificatiesApiConfig extends PluginConfigurationData {
-  url: string;
-  callbackUrl: string;
+interface Objecttype {
+  id: string;
+  title: string;
+  objecttypenApiPluginConfigurationId: string;
+  objecttypeId: string;
+  objectenApiPluginConfigurationId: string;
+  showInDataMenu: boolean;
+  formDefinitionView?: string;
+  formDefinitionEdit?: string;
 }
 
-export {NotificatiesApiConfig};
+type ObjecttypeKeys = keyof Objecttype;
+
+export {Objecttype, ObjecttypeKeys};
