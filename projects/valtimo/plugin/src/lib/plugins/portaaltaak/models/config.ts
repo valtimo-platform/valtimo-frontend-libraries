@@ -28,4 +28,4 @@ interface CreatePortalTaskConfig {
   formTypeUrl?: string;
 }
 
-export {PortaaltaakConfig};
+export {PortaaltaakConfig, CreatePortalTaskConfig, FormType};

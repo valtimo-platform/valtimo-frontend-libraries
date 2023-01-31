@@ -21,88 +21,14 @@
     prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
   } as obs"
 >
-  <v-input
-    name="fileName"
-    [title]="'fileName' | pluginTranslate : pluginId | async"
-    [margin]="true"
-    [defaultValue]="obs.prefill?.fileName"
-    [disabled]="obs.disabled"
-    [tooltip]="'fileNameTooltip' | pluginTranslate : pluginId | async"
-  ></v-input>
   <v-select
-    [items]="confidentialityLevelItems$ | async"
+    [items]="formTypeSelectItems$ | async"
     [margin]="true"
     [widthInPx]="200"
-    name="confidentialityLevel"
-    [title]="'confidentialityLevel' | pluginTranslate : pluginId | async"
+    name="formType"
+    [title]="'formType' | pluginTranslate : pluginId | async"
     [disabled]="obs.disabled"
-    [defaultSelectionId]="obs.prefill?.confidentialityLevel || CONFIDENTIALITY_LEVEL_ITEMS[3]"
-    [tooltip]="'confidentialityLevelTooltip' | pluginTranslate : pluginId | async"
+    [defaultSelectionId]="obs.prefill?.formType || FORM_TYPE_ITEMS[0]"
+    [tooltip]="'formTypeTooltip' | pluginTranslate : pluginId | async"
   ></v-select>
-  <v-input
-    name="title"
-    [title]="'inputTitle' | pluginTranslate : pluginId | async"
-    [margin]="true"
-    [defaultValue]="obs.prefill?.title"
-    [disabled]="obs.disabled"
-    [tooltip]="'inputTitleTooltip' | pluginTranslate : pluginId | async"
-  ></v-input>
-  <v-input
-    name="description"
-    [title]="'inputDescription' | pluginTranslate : pluginId | async"
-    [margin]="true"
-    [defaultValue]="obs.prefill?.description"
-    [disabled]="obs.disabled"
-    [tooltip]="'inputDescriptionTooltip' | pluginTranslate : pluginId | async"
-  ></v-input>
-  <v-input
-    name="localDocumentLocation"
-    [title]="'localDocumentLocation' | pluginTranslate : pluginId | async"
-    [margin]="true"
-    [defaultValue]="obs.prefill?.localDocumentLocation"
-    [disabled]="obs.disabled"
-    [required]="true"
-    [tooltip]="'localDocumentLocationTooltip' | pluginTranslate : pluginId | async"
-  >
-  </v-input>
-  <v-input
-    name="storedDocumentUrl"
-    [title]="'storedDocumentUrl' | pluginTranslate : pluginId | async"
-    [margin]="true"
-    [defaultValue]="obs.prefill?.storedDocumentUrl"
-    [disabled]="obs.disabled"
-    [tooltip]="'storeDocumentUrlTooltip' | pluginTranslate : pluginId | async"
-  >
-  </v-input>
-  <v-select
-    [items]="languageSelectItems$ | async"
-    [margin]="true"
-    [widthInPx]="200"
-    name="taal"
-    [title]="'taal' | pluginTranslate : pluginId | async"
-    [disabled]="obs.disabled"
-    [defaultSelectionId]="obs.prefill?.taal || LANGUAGE_ITEMS[0]"
-    [required]="true"
-  ></v-select>
-  <v-select
-    [items]="statusSelectItems$ | async"
-    [margin]="true"
-    [widthInPx]="200"
-    name="status"
-    [title]="'status' | pluginTranslate : pluginId | async"
-    [disabled]="obs.disabled"
-    [defaultSelectionId]="obs.prefill?.status || STATUS_ITEMS[2]"
-    [required]="true"
-  ></v-select>
-  <v-input
-    name="informatieobjecttype"
-    [title]="'informatieobjecttype' | pluginTranslate : pluginId | async"
-    [margin]="true"
-    [defaultValue]="obs.prefill?.informatieobjecttype"
-    [disabled]="obs.disabled"
-    [required]="true"
-    [tooltip]="'informatieobjecttypeTooltip' | pluginTranslate : pluginId | async"
-    [fullWidth]="true"
-  >
-  </v-input>
 </v-form>

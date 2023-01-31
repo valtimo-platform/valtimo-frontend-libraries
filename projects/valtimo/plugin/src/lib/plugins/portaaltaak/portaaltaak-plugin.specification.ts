@@ -17,14 +17,14 @@
 import {PluginSpecification} from '../../models';
 import {PortaaltaakConfigurationComponent} from './components/portaaltaak-configuration/portaaltaak-configuration.component';
 import {PORTAALTAAK_PLUGIN_LOGO_BASE64} from './assets/portaaltaak-plugin-logo';
-import {CreatePortaaltaakComponent} from './components/create-portal-task/create-portal-task.component';
+import {CreatePortalTaskComponent} from './components/create-portal-task/create-portal-task.component';
 
 const portaaltaakPluginSpecification: PluginSpecification = {
   pluginId: 'portaaltaak',
   pluginConfigurationComponent: PortaaltaakConfigurationComponent,
   pluginLogoBase64: PORTAALTAAK_PLUGIN_LOGO_BASE64,
   functionConfigurationComponents: {
-    'create-portal-task': CreatePortaaltaakComponent,
+    'create-portal-task': CreatePortalTaskComponent,
   },
   pluginTranslations: {
     nl: {

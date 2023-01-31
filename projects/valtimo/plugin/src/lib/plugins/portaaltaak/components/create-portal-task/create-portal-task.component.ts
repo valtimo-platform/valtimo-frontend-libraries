@@ -17,13 +17,12 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FunctionConfigurationComponent} from '../../../../models';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} from 'rxjs';
-import {DocumentLanguage, DocumentStatus, StoreTempDocumentConfig} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
 import {PluginTranslationService} from '../../../../services';
-import {ConfidentialityLevel} from '../../../documenten-api/models';
+import {CreatePortalTaskConfig, FormType} from '../../models';
 
 @Component({
-  selector: 'valtimo-store-temp-document-configuration',
+  selector: 'valtimo-create-portal-task',
   templateUrl: './create-portal-task.component.html',
   styleUrls: ['./create-portal-task.component.scss'],
 })
@@ -33,51 +32,15 @@ export class CreatePortalTaskComponent
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
   @Input() pluginId: string;
-  @Input() prefillConfiguration$: Observable<StoreTempDocumentConfig>;
+  @Input() prefillConfiguration$: Observable<CreatePortalTaskConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<StoreTempDocumentConfig> =
-    new EventEmitter<StoreTempDocumentConfig>();
-
-  readonly CONFIDENTIALITY_LEVEL_ITEMS: Array<ConfidentialityLevel> = [
-    'openbaar',
-    'beperkt_openbaar',
-    'intern',
-    'zaakvertrouwelijk',
-    'vertrouwelijk',
-    'confidentieel',
-    'geheim',
-    'zeer_geheim',
-  ];
-  readonly confidentialityLevelItems$: Observable<Array<{id: string; text: string}>> =
+  @Output() configuration: EventEmitter<CreatePortalTaskConfig> =
+    new EventEmitter<CreatePortalTaskConfig>();
+  readonly FORM_TYPE_ITEMS: Array<FormType> = ['definition', 'url'];
+  readonly formTypeSelectItems$: Observable<Array<{id: FormType; text: string}>> =
     this.translateService.stream('key').pipe(
       map(() =>
-        this.CONFIDENTIALITY_LEVEL_ITEMS.map(confidentialityLevel => ({
-          id: confidentialityLevel,
-          text: this.pluginTranslationService.instant(confidentialityLevel, this.pluginId),
-        }))
-      )
-    );
-
-  readonly LANGUAGE_ITEMS: Array<DocumentLanguage> = ['nld'];
-  readonly languageSelectItems$: Observable<Array<{id: DocumentLanguage; text: string}>> =
-    this.translateService.stream('key').pipe(
-      map(() =>
-        this.LANGUAGE_ITEMS.map(item => ({
-          id: item,
-          text: this.pluginTranslationService.instant(item, this.pluginId),
-        }))
-      )
-    );
-  readonly STATUS_ITEMS: Array<DocumentStatus> = [
-    'in_bewerking',
-    'ter_vaststelling',
-    'definitief',
-    'gearchiveerd',
-  ];
-  readonly statusSelectItems$: Observable<Array<{id: DocumentStatus; text: string}>> =
-    this.translateService.stream('key').pipe(
-      map(() =>
-        this.STATUS_ITEMS.map(item => ({
+        this.FORM_TYPE_ITEMS.map(item => ({
           id: item,
           text: this.pluginTranslationService.instant(item, this.pluginId),
         }))
@@ -85,7 +48,7 @@ export class CreatePortalTaskComponent
     );
 
   private saveSubscription!: Subscription;
-  private readonly formValue$ = new BehaviorSubject<StoreTempDocumentConfig | null>(null);
+  private readonly formValue$ = new BehaviorSubject<CreatePortalTaskConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -101,18 +64,13 @@ export class CreatePortalTaskComponent
     this.saveSubscription?.unsubscribe();
   }
 
-  formValueChange(formValue: StoreTempDocumentConfig): void {
+  formValueChange(formValue: CreatePortalTaskConfig): void {
     this.formValue$.next(formValue);
     this.handleValid(formValue);
   }
 
-  private handleValid(formValue: StoreTempDocumentConfig): void {
-    const valid = !!(
-      formValue.localDocumentLocation &&
-      formValue.taal &&
-      formValue.status &&
-      formValue.informatieobjecttype
-    );
+  private handleValid(formValue: CreatePortalTaskConfig): void {
+    const valid = !!formValue.formType;
 
     this.valid$.next(valid);
     this.valid.emit(valid);
