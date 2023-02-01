@@ -19,7 +19,8 @@ import {FunctionConfigurationComponent} from '../../../../models';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {PluginTranslationService} from '../../../../services';
-import {CreatePortalTaskConfig, FormType} from '../../models';
+import {CreatePortalTaskConfig, FormType, OtherReceiver, Receiver} from '../../models';
+import {SelectItem} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-create-portal-task',
@@ -37,18 +38,25 @@ export class CreatePortalTaskComponent
   @Output() configuration: EventEmitter<CreatePortalTaskConfig> =
     new EventEmitter<CreatePortalTaskConfig>();
   readonly FORM_TYPE_ITEMS: Array<FormType> = ['definition', 'url'];
-  readonly formTypeSelectItems$: Observable<Array<{id: FormType; text: string}>> =
-    this.translateService.stream('key').pipe(
-      map(() =>
-        this.FORM_TYPE_ITEMS.map(item => ({
-          id: item,
-          text: this.pluginTranslationService.instant(item, this.pluginId),
-        }))
-      )
-    );
+  readonly formTypeSelectItems$ = this.selectItemsToTranslatedItems(this.FORM_TYPE_ITEMS);
+
+  readonly RECEIVER_ITEMS: Array<Receiver> = ['zaakInitiator', 'other'];
+  readonly receiverSelectItems$ = this.selectItemsToTranslatedItems(this.RECEIVER_ITEMS);
+
+  readonly OTHER_RECEIVER_ITEMS: Array<OtherReceiver> = ['kvk', 'bsn'];
+  readonly otherReceiverSelectItems$ = this.selectItemsToTranslatedItems(this.OTHER_RECEIVER_ITEMS);
 
   private saveSubscription!: Subscription;
   private readonly formValue$ = new BehaviorSubject<CreatePortalTaskConfig | null>(null);
+  readonly formTypeIsUrl$: Observable<boolean> = this.formValue$.pipe(
+    map(value => !!(value?.formType === 'url'))
+  );
+  readonly receiverIsOther$: Observable<boolean> = this.formValue$.pipe(
+    map(value => !!(value?.receiver === 'other'))
+  );
+  readonly otherReceiverIsBsn$: Observable<boolean> = this.formValue$.pipe(
+    map(value => !!(value?.otherReceiver === 'bsn'))
+  );
   private readonly valid$ = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -70,7 +78,17 @@ export class CreatePortalTaskComponent
   }
 
   private handleValid(formValue: CreatePortalTaskConfig): void {
-    const valid = !!formValue.formType;
+    const valid =
+      !!formValue.formType &&
+      (!!(formValue.formType === 'url' && formValue.formTypeUrl) ||
+        !!(formValue.formType === 'definition' && formValue.formTypeId)) &&
+      !!(formValue.sendData?.length > 0) &&
+      !!(formValue.receiveData?.length > 0) &&
+      !!formValue?.receiver &&
+      (formValue.receiver === 'other'
+        ? !!(formValue.otherReceiver === 'kvk' && formValue.kvk) ||
+          !!(formValue.otherReceiver === 'bsn' && formValue.bsn)
+        : true);
 
     this.valid$.next(valid);
     this.valid.emit(valid);
@@ -86,5 +104,16 @@ export class CreatePortalTaskComponent
           }
         });
     });
+  }
+
+  private selectItemsToTranslatedItems(selectItems: Array<string>): Observable<Array<SelectItem>> {
+    return this.translateService.stream('key').pipe(
+      map(() =>
+        selectItems.map(item => ({
+          id: item,
+          text: this.pluginTranslationService.instant(item, this.pluginId),
+        }))
+      )
+    );
   }
 }
