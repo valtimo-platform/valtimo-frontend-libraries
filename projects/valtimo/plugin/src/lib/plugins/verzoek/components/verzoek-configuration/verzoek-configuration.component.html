@@ -32,41 +32,47 @@
     [widthPx]="350"
   >
   </v-input>
-  <v-input
-    name="url"
-    [title]="'url' | pluginTranslate : pluginId | async"
-    [fullWidth]="true"
-    [margin]="true"
-    [disabled]="obs.disabled"
-    [defaultValue]="obs.prefill?.url"
-    [required]="true"
-    [tooltip]="'urlTooltip' | pluginTranslate : pluginId | async"
-  >
-  </v-input>
-  <v-input
-    name="callbackUrl"
-    [title]="'callbackUrl' | pluginTranslate : pluginId | async"
-    [fullWidth]="true"
-    [margin]="true"
-    [disabled]="obs.disabled"
-    [defaultValue]="obs.prefill?.callbackUrl"
-    [required]="true"
-    [tooltip]="'callbackUrlTooltip' | pluginTranslate : pluginId | async"
-  >
-  </v-input>
   <ng-container
-    *ngIf="{authenticationPluginSelectItems: authenticationPluginSelectItems$ | async} as authObs"
+    *ngIf="{notificatiePluginSelectItems: notificatiePluginSelectItems$ | async} as vars"
   >
     <v-select
-      [items]="authObs.authenticationPluginSelectItems"
+      [items]="vars.notificatiePluginSelectItems"
       [margin]="true"
       [widthInPx]="350"
-      name="authenticationPluginConfiguration"
-      [title]="'authenticationPluginConfiguration' | pluginTranslate : pluginId | async"
+      name="notificatiesApiPluginConfiguration"
+      [title]="'notificatiesApiPluginConfiguration' | pluginTranslate : pluginId | async"
       [disabled]="obs.disabled"
-      [defaultSelectionId]="obs.prefill?.authenticationPluginConfiguration"
+      [defaultSelectionId]="obs.prefill?.notificatiesApiPluginConfiguration"
       [required]="true"
-      [loading]="!authObs.authenticationPluginSelectItems"
+      [loading]="!vars.notificatiePluginSelectItems"
+      [tooltip]="'notificatiesApiPluginConfigurationTooltip' | pluginTranslate : pluginId | async"
     ></v-select>
   </ng-container>
+  <ng-container
+    *ngIf="{objectenApiPluginSelectItems: objectenApiPluginSelectItems$ | async} as vars"
+  >
+    <v-select
+      [items]="vars.objectenApiPluginSelectItems"
+      [margin]="true"
+      [widthInPx]="350"
+      name="objectManagementId"
+      [title]="'objectManagementId' | pluginTranslate : pluginId | async"
+      [disabled]="obs.disabled"
+      [defaultSelectionId]="obs.prefill?.objectManagementId"
+      [required]="true"
+      [loading]="!vars.objectenApiPluginSelectItems"
+      [tooltip]="'objectManagementIdTooltip' | pluginTranslate : pluginId | async"
+    ></v-select>
+  </ng-container>
+  <v-input
+    name="rsin"
+    [title]="'rsin' | pluginTranslate : pluginId | async"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [defaultValue]="obs.prefill?.rsin"
+    [required]="true"
+    [tooltip]="'rsinTooltip' | pluginTranslate : pluginId | async"
+    [widthPx]="350"
+  >
+  </v-input>
 </v-form>

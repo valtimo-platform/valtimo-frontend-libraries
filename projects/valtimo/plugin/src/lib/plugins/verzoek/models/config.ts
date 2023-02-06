@@ -16,6 +16,11 @@
 
 import {PluginConfigurationData} from '../../../models';
 
-interface VerzoekConfig extends PluginConfigurationData {}
+interface VerzoekConfig extends PluginConfigurationData {
+  notificatiesApiPluginConfiguration: string;
+  objectManagementId: string;
+  systemProcessDefinitionKey: string;
+  rsin: string;
+}
 
 export {VerzoekConfig};

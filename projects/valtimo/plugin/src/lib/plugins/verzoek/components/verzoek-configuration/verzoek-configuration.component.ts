@@ -20,6 +20,7 @@ import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} fro
 import {VerzoekConfig} from '../../models';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
+import {SelectItem} from '@valtimo/user-interface';
 
 @Component({
   selector: 'valtimo-verzoek-configuration',
@@ -35,23 +36,36 @@ export class VerzoekConfigurationComponent
   @Input() prefillConfiguration$: Observable<VerzoekConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<VerzoekConfig> = new EventEmitter<VerzoekConfig>();
-  readonly authenticationPluginSelectItems$: Observable<Array<{id: string; text: string}>> =
-    combineLatest([
-      this.pluginManagementService.getPluginConfigurationsByCategory(
-        'notificaties-api-authentication'
-      ),
-      this.translateService.stream('key'),
-    ]).pipe(
-      map(([configurations]) =>
-        configurations.map(configuration => ({
-          id: configuration.id,
-          text: `${configuration.title} - ${this.pluginTranslationService.instant(
-            'title',
-            configuration.pluginDefinition.key
-          )}`,
-        }))
-      )
-    );
+  readonly notificatiePluginSelectItems$: Observable<Array<SelectItem>> = combineLatest([
+    this.pluginManagementService.getPluginConfigurationsByPluginDefinitionKey('notificatiesapi'),
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([configurations]) =>
+      configurations.map(configuration => ({
+        id: configuration.id,
+        text: `${configuration.title} - ${this.pluginTranslationService.instant(
+          'title',
+          configuration.pluginDefinition.key
+        )}`,
+      }))
+    )
+  );
+
+  readonly objectenApiPluginSelectItems$: Observable<Array<SelectItem>> = combineLatest([
+    this.pluginManagementService.getPluginConfigurationsByPluginDefinitionKey('objectenapi'),
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([configurations]) =>
+      configurations.map(configuration => ({
+        id: configuration.id,
+        text: `${configuration.title} - ${this.pluginTranslationService.instant(
+          'title',
+          configuration.pluginDefinition.key
+        )}`,
+      }))
+    )
+  );
+
   private saveSubscription!: Subscription;
   private readonly formValue$ = new BehaviorSubject<VerzoekConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
@@ -71,6 +85,7 @@ export class VerzoekConfigurationComponent
   }
 
   formValueChange(formValue: VerzoekConfig): void {
+    console.log('value change', formValue);
     this.formValue$.next(formValue);
     this.handleValid(formValue);
   }
