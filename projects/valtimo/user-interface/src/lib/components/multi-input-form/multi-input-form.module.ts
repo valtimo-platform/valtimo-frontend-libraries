@@ -14,5 +14,17 @@
  * limitations under the License.
  */
 
-export * from './config';
-export * from './verzoek';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MultiInputFormComponent} from './multi-input-form.component';
+import {InputLabelModule} from '../input-label/input-label.module';
+import {InputModule} from '../input/input.module';
+import {ButtonModule} from '../button/button.module';
+import {TranslateModule} from '@ngx-translate/core';
+
+@NgModule({
+  declarations: [MultiInputFormComponent],
+  imports: [CommonModule, InputLabelModule, InputModule, ButtonModule, TranslateModule],
+  exports: [MultiInputFormComponent],
+})
+export class MultiInputFormModule {}

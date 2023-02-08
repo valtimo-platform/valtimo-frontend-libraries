@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 
-export * from './config';
-export * from './verzoek';
+export * from './verzoek-plugin.service';

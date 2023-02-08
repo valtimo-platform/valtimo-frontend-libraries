@@ -21,6 +21,8 @@ import {VerzoekConfig} from '../../models';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
 import {SelectItem} from '@valtimo/user-interface';
+import {VerzoekPluginService} from '../../services';
+import {ProcessService} from '@valtimo/process';
 
 @Component({
   selector: 'valtimo-verzoek-configuration',
@@ -36,6 +38,7 @@ export class VerzoekConfigurationComponent
   @Input() prefillConfiguration$: Observable<VerzoekConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<VerzoekConfig> = new EventEmitter<VerzoekConfig>();
+
   readonly notificatiePluginSelectItems$: Observable<Array<SelectItem>> = combineLatest([
     this.pluginManagementService.getPluginConfigurationsByPluginDefinitionKey('notificatiesapi'),
     this.translateService.stream('key'),
@@ -51,20 +54,27 @@ export class VerzoekConfigurationComponent
     )
   );
 
-  readonly objectenApiPluginSelectItems$: Observable<Array<SelectItem>> = combineLatest([
-    this.pluginManagementService.getPluginConfigurationsByPluginDefinitionKey('objectenapi'),
-    this.translateService.stream('key'),
-  ]).pipe(
-    map(([configurations]) =>
-      configurations.map(configuration => ({
-        id: configuration.id,
-        text: `${configuration.title} - ${this.pluginTranslationService.instant(
-          'title',
-          configuration.pluginDefinition.key
-        )}`,
-      }))
-    )
-  );
+  readonly objectManagementSelectItems$: Observable<Array<SelectItem>> = this.verzoekPluginService
+    .getAllObjects()
+    .pipe(
+      map(objects =>
+        objects.map(object => ({
+          id: object.id,
+          text: object.title,
+        }))
+      )
+    );
+
+  readonly processSelectItems$: Observable<Array<SelectItem>> = this.processService
+    .getProcessDefinitions()
+    .pipe(
+      map(processDefinitions =>
+        processDefinitions.map(processDefinition => ({
+          id: processDefinition.key,
+          text: processDefinition.name,
+        }))
+      )
+    );
 
   private saveSubscription!: Subscription;
   private readonly formValue$ = new BehaviorSubject<VerzoekConfig | null>(null);
@@ -73,7 +83,9 @@ export class VerzoekConfigurationComponent
   constructor(
     private readonly pluginManagementService: PluginManagementService,
     private readonly translateService: TranslateService,
-    private readonly pluginTranslationService: PluginTranslationService
+    private readonly pluginTranslationService: PluginTranslationService,
+    private readonly verzoekPluginService: VerzoekPluginService,
+    private readonly processService: ProcessService
   ) {}
 
   ngOnInit(): void {

@@ -18,7 +18,13 @@ import {NgModule} from '@angular/core';
 import {VerzoekConfigurationComponent} from './components/verzoek-configuration/verzoek-configuration.component';
 import {PluginTranslatePipeModule} from '../../pipes';
 import {CommonModule} from '@angular/common';
-import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {
+  FormModule,
+  InputModule,
+  MultiInputFormModule,
+  ParagraphModule,
+  SelectModule,
+} from '@valtimo/user-interface';
 
 @NgModule({
   declarations: [VerzoekConfigurationComponent],
@@ -29,6 +35,7 @@ import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/u
     InputModule,
     SelectModule,
     ParagraphModule,
+    MultiInputFormModule,
   ],
   exports: [VerzoekConfigurationComponent],
 })

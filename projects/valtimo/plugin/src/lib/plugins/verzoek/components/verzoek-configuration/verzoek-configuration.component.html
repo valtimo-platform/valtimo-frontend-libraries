@@ -48,11 +48,9 @@
       [tooltip]="'notificatiesApiPluginConfigurationTooltip' | pluginTranslate : pluginId | async"
     ></v-select>
   </ng-container>
-  <ng-container
-    *ngIf="{objectenApiPluginSelectItems: objectenApiPluginSelectItems$ | async} as vars"
-  >
+  <ng-container *ngIf="{objectManagementSelectItems: objectManagementSelectItems$ | async} as vars">
     <v-select
-      [items]="vars.objectenApiPluginSelectItems"
+      [items]="vars.objectManagementSelectItems"
       [margin]="true"
       [widthInPx]="350"
       name="objectManagementId"
@@ -60,8 +58,22 @@
       [disabled]="obs.disabled"
       [defaultSelectionId]="obs.prefill?.objectManagementId"
       [required]="true"
-      [loading]="!vars.objectenApiPluginSelectItems"
+      [loading]="!vars.objectManagementSelectItems"
       [tooltip]="'objectManagementIdTooltip' | pluginTranslate : pluginId | async"
+    ></v-select>
+  </ng-container>
+  <ng-container *ngIf="{processSelectItems: processSelectItems$ | async} as vars">
+    <v-select
+      [items]="vars.processSelectItems"
+      [margin]="true"
+      [widthInPx]="350"
+      name="systemProcessDefinitionKey"
+      [title]="'systemProcessDefinitionKey' | pluginTranslate : pluginId | async"
+      [disabled]="obs.disabled"
+      [defaultSelectionId]="obs.prefill?.systemProcessDefinitionKey"
+      [required]="true"
+      [loading]="!vars.processSelectItems"
+      [tooltip]="'systemProcessDefinitionKeyTooltip' | pluginTranslate : pluginId | async"
     ></v-select>
   </ng-container>
   <v-input
@@ -75,4 +87,45 @@
     [widthPx]="350"
   >
   </v-input>
+  <v-multi-input-form
+    name="verzoekTypen"
+    [title]="'verzoekTypen' | pluginTranslate : pluginId | async"
+    [formTemplate]="mappingForm"
+    [addRowText]="'addVerzoekType' | pluginTranslate : pluginId | async"
+  >
+  </v-multi-input-form>
 </v-form>
+
+<ng-template #mappingForm let-index="index" let-changeFunction="changeFunction">
+  <v-form
+    (valueChange)="changeFunction($event, index)"
+    *ngIf="{
+      disabled: disabled$ | async,
+      prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
+    } as obs"
+  >
+    <v-input
+      name="type"
+      [title]="'type' | pluginTranslate : pluginId | async"
+      [margin]="false"
+      [disabled]="obs.disabled"
+      [defaultValue]="obs.prefill?.type"
+      [required]="true"
+      [tooltip]="'typeTooltip' | pluginTranslate : pluginId | async"
+      [widthPx]="350"
+      [smallMargin]="true"
+    >
+    </v-input>
+    <v-input
+      name="test2"
+      [title]="'test2' | pluginTranslate : pluginId | async"
+      [margin]="false"
+      [disabled]="obs.disabled"
+      [defaultValue]="obs.prefill?.test2"
+      [required]="true"
+      [tooltip]="'test2' | pluginTranslate : pluginId | async"
+      [widthPx]="350"
+    >
+    </v-input>
+  </v-form>
+</ng-template>
