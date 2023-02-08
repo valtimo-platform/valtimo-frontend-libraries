@@ -15,18 +15,19 @@
  */
 
 import {Component, TemplateRef, ViewChild} from '@angular/core';
-import {BehaviorSubject, combineLatest, delay, filter, map, Observable, startWith, Subject, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, delay, filter, map, Observable, of, startWith, Subject, switchMap, tap} from 'rxjs';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ConfigService, DefinitionColumn} from '@valtimo/config';
 import {ListField} from '@valtimo/components';
-import {CaseListColumn, CaseListColumnView, DisplayTypeParameters, DocumentService} from '@valtimo/document';
-import {take} from 'rxjs/operators';
+import {catchError, take} from 'rxjs/operators';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {MultiInputValues} from '@valtimo/user-interface';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {ListColumnModal} from '@valtimo/dossier-management';
+import {ObjectManagementService} from '../../../../services/object-management.service';
+import {DisplayTypeParameters, SearchListColumn, SearchListColumnView} from '../../../../models/object-management.model';
 
 @Component({
   selector: 'valtimo-object-management-list-columns',
@@ -114,7 +115,7 @@ export class ObjectManagementListColumnsComponent {
       translationKey: 'defaultSort',
     },
   ];
-  private cachedObjectManagementListColumns: Array<CaseListColumn> = [];
+  private cachedObjectManagementListColumns: Array<SearchListColumn> = [];
   private readonly refreshObjectManagementListColumns$ = new BehaviorSubject<null>(null);
 
   readonly objectManagementFields$: Observable<Array<ListField>> = this.translateService.stream('key').pipe(
@@ -134,29 +135,29 @@ export class ObjectManagementListColumnsComponent {
     filter(objectId => !!objectId)
   );
 
-  private readonly objectManagementListColumns$: Observable<Array<CaseListColumn>> = combineLatest([
+  private readonly ObjectManagementListColumns$: Observable<Array<any>> = combineLatest([
     this.objectId$,
     this.refreshObjectManagementListColumns$,
   ]).pipe(
     switchMap(([objectId]) =>
-      this.documentService.getCaseList('bezwaar')
+      this.objectManagementService.getSearchList(objectId)
     ),
-    tap(objectManagementListColumns => {
+    tap(ObjectManagementListColumns => {
       this.objectId$.pipe(take(1)).subscribe(objectId => {
-        if (objectManagementListColumns && Array.isArray(objectManagementListColumns) && objectManagementListColumns.length > 0) {
-          this.setDownload(objectId, objectManagementListColumns);
+        if (ObjectManagementListColumns && Array.isArray(ObjectManagementListColumns) && ObjectManagementListColumns.length > 0) {
+          this.setDownload(objectId, ObjectManagementListColumns);
         }
       });
     }),
-    tap(objectManagementListColumns => {
-      this.cachedObjectManagementListColumns = objectManagementListColumns;
+    tap(ObjectManagementListColumns => {
+      this.cachedObjectManagementListColumns = ObjectManagementListColumns;
       this.loading$.next(false);
       this.enableInput();
     })
   );
 
-  readonly translatedObjectManagementListColumns$: Observable<Array<CaseListColumnView>> = combineLatest([
-    this.objectManagementListColumns$,
+  readonly translatedObjectManagementListColumns$: Observable<Array<SearchListColumnView>> = combineLatest([
+    this.ObjectManagementListColumns$,
     this.translateService.stream('key'),
   ]).pipe(
     map(([columns]) =>
@@ -297,7 +298,7 @@ export class ObjectManagementListColumnsComponent {
   );
 
   constructor(
-    private readonly documentService: DocumentService,
+    private readonly objectManagementService: ObjectManagementService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
@@ -320,66 +321,69 @@ export class ObjectManagementListColumnsComponent {
     this.showModal$.next(false);
   }
 
-  deleteRow(caseListColumnRowIndex: number, clickEvent: MouseEvent): void {
+  deleteRow(searchListColumnRowIndex: number, clickEvent: MouseEvent): void {
     clickEvent.stopPropagation();
 
     this.showDeleteModal$.next(true);
-    this.deleteRowIndex$.next(caseListColumnRowIndex);
+    this.deleteRowIndex$.next(searchListColumnRowIndex);
   }
 
-  deleteRowConfirmation(caseListColumnRowIndex: number): void {
-    const columnKey = this.cachedObjectManagementListColumns[caseListColumnRowIndex]?.key;
+  deleteRowConfirmation(searchListColumnRowIndex: number): void {
+    const columnKey = this.getColumnKey(searchListColumnRowIndex);
 
     if (columnKey) {
       this.disableInput();
 
-      this.objectId$.pipe(take(1)).subscribe(objectId => {
-        this.documentService.deleteCaseList('bezwaar', columnKey).subscribe(
-          () => {
-            this.refreshObjectManagementListColumns();
-          },
-          () => {
-            this.enableInput();
-          }
-        );
-      });
+      this.objectId$.pipe(
+        take(1),
+        switchMap(objectId => this.objectManagementService.deleteSearchList(objectId, columnKey)),
+        tap(() => this.refreshObjectManagementListColumns()),
+        catchError(() => {
+          this.enableInput();
+          return of(null);
+        })
+      ).subscribe();
     }
   }
 
+  getColumnKey(searchListColumnRowIndex: number) {
+    return this.cachedObjectManagementListColumns[searchListColumnRowIndex]?.key;
+  }
+
   moveRow(
-    caseListColumnRowIndex: number,
+    searchListColumnRowIndex: number,
     moveUp: boolean,
     clickEvent: MouseEvent,
     objectId: string
   ): void {
-    const objectManagementListColumns = [...this.cachedObjectManagementListColumns];
-    const caseListColumnRow = objectManagementListColumns[caseListColumnRowIndex];
+    const ObjectManagementListColumns = [...this.cachedObjectManagementListColumns];
+    const searchListColumnRow = ObjectManagementListColumns[searchListColumnRowIndex];
 
     clickEvent.stopPropagation();
 
-    const caseListColumnIndex = objectManagementListColumns.findIndex(
-      field => field.key === caseListColumnRow.key
+    const searchListColumnIndex = ObjectManagementListColumns.findIndex(
+      field => field.key === searchListColumnRow.key
     );
-    const foundCaseListColumn = {...objectManagementListColumns[caseListColumnIndex]};
-    const filteredObjectManagementListColumns = objectManagementListColumns.filter(
-      field => field.key !== caseListColumnRow.key
+    const foundSearchListColumn = {...ObjectManagementListColumns[searchListColumnIndex]};
+    const filteredObjectManagementListColumns = ObjectManagementListColumns.filter(
+      field => field.key !== searchListColumnRow.key
     );
-    const multipleObjectManagementListColumns = objectManagementListColumns.length > 1;
+    const multipleObjectManagementListColumns = ObjectManagementListColumns.length > 1;
 
-    if (multipleObjectManagementListColumns && moveUp && caseListColumnIndex > 0) {
-      const caseListColumnBeforeKey = `${objectManagementListColumns[caseListColumnIndex - 1].key}`;
-      const caseListColumnBeforeIndex = filteredObjectManagementListColumns.findIndex(
-        field => field.key === caseListColumnBeforeKey
+    if (multipleObjectManagementListColumns && moveUp && searchListColumnIndex > 0) {
+      const searchListColumnBeforeKey = `${ObjectManagementListColumns[searchListColumnIndex - 1].key}`;
+      const searchListColumnBeforeIndex = filteredObjectManagementListColumns.findIndex(
+        field => field.key === searchListColumnBeforeKey
       );
-      filteredObjectManagementListColumns.splice(caseListColumnBeforeIndex, 0, foundCaseListColumn);
-      this.updateObjectManagementListColumns(objectId, filteredObjectManagementListColumns);
-    } else if (multipleObjectManagementListColumns && !moveUp && caseListColumnIndex < objectManagementListColumns.length) {
-      const caseListColumnAfterKey = `${objectManagementListColumns[caseListColumnIndex + 1].key}`;
-      const caseListColumnAfterIndex = filteredObjectManagementListColumns.findIndex(
-        field => field.key === caseListColumnAfterKey
+      filteredObjectManagementListColumns.splice(searchListColumnBeforeIndex, 0, foundSearchListColumn);
+      this.updateObjectManagementListColumn(objectId, filteredObjectManagementListColumns[0]);
+    } else if (multipleObjectManagementListColumns && !moveUp && searchListColumnIndex < ObjectManagementListColumns.length) {
+      const searchListColumnAfterKey = `${ObjectManagementListColumns[searchListColumnIndex + 1].key}`;
+      const searchListColumnAfterIndex = filteredObjectManagementListColumns.findIndex(
+        field => field.key === searchListColumnAfterKey
       );
-      filteredObjectManagementListColumns.splice(caseListColumnAfterIndex + 1, 0, foundCaseListColumn);
-      this.updateObjectManagementListColumns(objectId, filteredObjectManagementListColumns);
+      filteredObjectManagementListColumns.splice(searchListColumnAfterIndex + 1, 0, foundSearchListColumn);
+      this.updateObjectManagementListColumn(objectId, filteredObjectManagementListColumns[0]);
     }
   }
 
@@ -451,39 +455,39 @@ export class ObjectManagementListColumnsComponent {
       });
   }
 
-  private updateObjectManagementListColumns(
+  private updateObjectManagementListColumn(
     objectId: string,
-    newObjectManagementListColumns: Array<CaseListColumn>
+    listColumn: SearchListColumn
   ): void {
-    this.disableInput();
 
-    this.documentService.putCaseList('bezwaar', newObjectManagementListColumns).subscribe(
-      () => {
+    this.disableInput();
+    this.objectManagementService.putSearchList(objectId, this.formGroup.value.key, listColumn).pipe(
+      tap(() => {
         this.refreshObjectManagementListColumns();
         localStorage.setItem(`list-search-${objectId}`, null);
-      },
-      () => {
+      }),
+      catchError(() => {
         this.enableInput();
-      }
-    );
+        return of(null);
+      })
+    ).subscribe();
   }
 
   private addColumn(): void {
     const formValue = this.formGroup.value;
 
-    this.objectId$.pipe(take(1)).subscribe(objectId => {
-      this.documentService
-        .postCaseList('bezwaar', this.mapFormValuesToColumn(formValue))
-        .subscribe(
-          () => {
-            this.closeModal();
-            this.refreshObjectManagementListColumns();
-          },
-          () => {
-            this.enableInput();
-          }
-        );
-    });
+    this.objectId$.pipe(
+      take(1),
+      switchMap(objectId => this.objectManagementService.postSearchList(objectId, this.mapFormValuesToColumn(formValue))),
+      tap(() => {
+        this.closeModal();
+        this.refreshObjectManagementListColumns();
+      }),
+      catchError(() => {
+        this.enableInput();
+        return of(null);
+      })
+    ).subscribe();
   }
 
   private getDisplayTypeParametersView(displayTypeParameters: DisplayTypeParameters): string {
@@ -504,46 +508,29 @@ export class ObjectManagementListColumnsComponent {
   }
 
   private updateColumn(): void {
-    const updatedColumnFormValue = this.formGroup.value;
-    const mappedUpdatedColumn = this.mapFormValuesToColumn(updatedColumnFormValue);
-    const currentColumns = this.cachedObjectManagementListColumns;
-    const mappedCurrentColumns = currentColumns.map(column => {
-      const columnCopy = {...column};
-      if (columnCopy.key === updatedColumnFormValue.key) {
-        const changedColumn = {...columnCopy, ...mappedUpdatedColumn};
-        if (!mappedUpdatedColumn.defaultSort) {
-          delete changedColumn.defaultSort;
-        }
-        return changedColumn;
-      }
-      if (mappedUpdatedColumn.defaultSort) {
-        delete columnCopy.defaultSort;
-      }
-      return columnCopy;
-    });
-
-    this.objectId$.pipe(take(1)).subscribe(objectId => {
-      this.documentService.putCaseList('bezwaar', mappedCurrentColumns).subscribe(
-        () => {
-          this.closeModal();
-          this.refreshObjectManagementListColumns();
-        },
-        () => {
-          this.enableInput();
-        }
-      );
-    });
+    this.objectId$.pipe(
+      take(1),
+      switchMap(objectId => this.objectManagementService.putSearchList(objectId, this.formGroup.value.key, this.mapFormValuesToColumn(this.formGroup.value))),
+      tap(() => {
+        this.closeModal();
+        this.refreshObjectManagementListColumns();
+      }),
+      catchError(() => {
+        this.enableInput();
+        return of(null);
+      })
+    ).subscribe();
   }
 
   private setDownload(
     objectId: string,
-    objectManagementListColumns: Array<CaseListColumn>
+    ObjectManagementListColumns: Array<SearchListColumn>
   ): void {
     this.downloadName$.next(`${objectId}.json`);
     this.downloadUrl$.next(
       this.sanitizer.bypassSecurityTrustUrl(
         'data:text/json;charset=UTF-8,' +
-        encodeURIComponent(JSON.stringify(objectManagementListColumns, null, 2))
+        encodeURIComponent(JSON.stringify(ObjectManagementListColumns, null, 2))
       )
     );
   }
@@ -577,7 +564,7 @@ export class ObjectManagementListColumnsComponent {
       });
   }
 
-  private mapFormValuesToColumn(formValue: any): CaseListColumn {
+  private mapFormValuesToColumn(formValue: any): SearchListColumn {
     return {
       key: formValue.key,
       sortable: formValue.sortable,

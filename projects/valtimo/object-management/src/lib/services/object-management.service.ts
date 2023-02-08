@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '@valtimo/config';
-import {Objecttype} from '../models/object-management.model';
+import {Objecttype, SearchListColumn} from '../models/object-management.model';
 
 @Injectable({
   providedIn: 'root',
@@ -55,4 +55,38 @@ export class ObjectManagementService {
       payload
     );
   }
+
+  getSearchList(ownerId: string): Observable<Array<SearchListColumn>> {
+    return this.http.get<Array<SearchListColumn>>(
+      `${this.valtimoEndpointUri}v1/search/list-column/${ownerId}`
+    );
+  }
+
+  postSearchList(
+    ownerId: string,
+    request: SearchListColumn
+  ): Observable<SearchListColumn> {
+    return this.http.post<SearchListColumn>(
+      `${this.valtimoEndpointUri}v1/search/list-column/${ownerId}`,
+      {...request, ownerId}
+    );
+  }
+
+  putSearchList(
+    ownerId: string,
+    columnKey: string,
+    request: SearchListColumn
+  ): Observable<Array<SearchListColumn>> {
+    return this.http.put<Array<SearchListColumn>>(
+      `${this.valtimoEndpointUri}v1/search/list-column/${ownerId}/${columnKey}`,
+      {...request, ownerId}
+    );
+  }
+
+  deleteSearchList(ownerId: string, columnKey: string): Observable<SearchListColumn> {
+    return this.http.delete<SearchListColumn>(
+      `${this.valtimoEndpointUri}v1/search/list-column/${ownerId}/${columnKey}`
+    );
+  }
+
 }
