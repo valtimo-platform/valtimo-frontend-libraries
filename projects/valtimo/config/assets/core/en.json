@@ -207,6 +207,7 @@
       "help": "Help",
       "forum": "Forum",
       "feedback": "Feedback",
+      "resetPassword": "Reset password",
       "signOut": "Sign out",
       "plantATree": "Plant a tree"
     },
@@ -269,11 +270,13 @@
     "gotoFormLinksButton": "Configure now",
     "name": "Name",
     "nameIsRequired": "Name is required",
+    "nameIsInUse": "Name is already in use",
     "back": "Back",
     "reset": "Reset",
     "submit": "Submit",
     "delete": "Delete",
     "deploy": "Deploy",
+    "duplicate": "Duplicate",
     "readOnly": "Read-only"
   },
   "dossierManagement": {
@@ -893,11 +896,20 @@
     "like": "Contains",
     "single": "Single",
     "multiple": "Multiple",
+    "single-select-dropdown": "Single select dropdown",
+    "multi-select-dropdown": "Multi select dropdown",
     "range": "Range",
     "submit": "Submit",
     "delete": "Delete",
     "addRow": "Add search field",
-    "searchFieldPlaceholder": "Select a type..."
+    "searchFieldPlaceholder": "Select a type...",
+    "dropdownDataProvider": "Dropdown data source",
+    "dropdownDatabaseDataProvider": "Fixed value",
+    "dropdownJsonFileDataProvider": "Config file",
+    "configFile": "Config file",
+    "dropdownListValues": "Dropdown list values",
+    "id": "ID",
+    "text": "Text"
   },
   "searchFieldsOverviewTooltips": {
     "title": "The title is an optional field that appears as a label for the current search field. When the title is not set, the default value will be the search field key translation (if there is no translation available, the original key value will be displayed).",
@@ -905,7 +917,10 @@
     "path": "A path which leads to the property you want to search on. For searching in the document's JSON schema, follow this example: 'doc:customer.firstName'. For searching in the document properties, follow these examples: 'case:createdBy', or 'case:sequence', or 'case:assigneeFullName'. Note: When there are special characters in a property, the property must be enclosed in quotes. For example: case:\"loan-accepted\".",
     "dataType": "The data type decides what input is shown to the user. For example, for the data type 'Date', a date picker is shown.",
     "fieldType": "The field type decides the values the user can input. For the option 'Single', the user can only input a single value. For the option 'Range', the user may input two values, and these values, and all the values in between, are searched for.",
-    "matchType": "The match type decides how values in the database are matched to the search values. For the match type 'Exact', the value '1' would only be matched to the value '1'. For the match type 'Contains', the value '1' would be matched to the value '1', '123', and all other values containing '1'."
+    "matchType": "The match type decides how values in the database are matched to the search values. For the match type 'Exact', the value '1' would only be matched to the value '1'. For the match type 'Contains', the value '1' would be matched to the value '1', '123', and all other values containing '1'.",
+    "dropdownDataProvider": "The dropdown data source determines where the data for the dropdown comes from.",
+    "configFile": "Use a config file with dropdown values. The config value must be present on the server",
+    "dropdownListValues": "Set custom values for the dropdown list. The value shown in the dropdown list should be entered in the right text-field. The left text-field should contain the id of that value."
   },
   "listColumn": {
     "title": "Title",
@@ -964,6 +979,7 @@
       "objects": "Objects API plugin configuration",
       "objecttypes": "Objecttypen API plugin configuration",
       "objecttypeId": "Objecttype ID",
+      "objecttypeVersion": "Objecttype version",
       "formDefinitionView": "View form definition",
       "formDefinitionEdit": "Edit form definition",
       "showInDataMenu": "Show in menu"
@@ -971,6 +987,7 @@
     "tooltips": {
       "title": "The name of this configuration. Under this name, this configuration can be found in the rest of the application.",
       "objecttypeId": "The ID of the object type",
+      "objecttypeVersion": "The version of the object type",
       "formDefinitionView": "The name of the form IO definition that will be used to display the object.",
       "formDefinitionEdit": "The name of the form IO definition that will be used to edit the object.",
       "showInDataMenu": "Indicates whether the object type is visible in the menu"

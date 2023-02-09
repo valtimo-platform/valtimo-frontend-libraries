@@ -17,3 +17,4 @@
 export * from './tabs.model';
 export * from './zaakobjecten.model';
 export * from './search.model';
+export * from './dossier-parameters.model';

@@ -107,6 +107,8 @@ import {
   smartDocumentsPluginSpecification,
   ZakenApiPluginModule,
   zakenApiPluginSpecification,
+  PortaaltaakPluginModule,
+  portaaltaakPluginSpecification,
 } from '@valtimo/plugin';
 import {ObjectManagementModule} from '@valtimo/object-management';
 import {ObjectModule} from '@valtimo/object';
@@ -133,7 +135,7 @@ export function tabsFactory() {
     FormioComponent,
     UploadShowcaseComponent,
     CustomDossierTabComponent,
-    CustomMapsTabComponent
+    CustomMapsTabComponent,
   ],
   imports: [
     HttpClientModule,
@@ -186,6 +188,7 @@ export function tabsFactory() {
     NotificatiesApiPluginModule,
     ObjectTokenAuthenticationPluginModule,
     OpenNotificatiesPluginModule,
+    PortaaltaakPluginModule,
     OpenZaakPluginModule,
     SmartDocumentsPluginModule,
     DocumentenApiPluginModule,
@@ -217,6 +220,7 @@ export function tabsFactory() {
         objecttypenApiPluginSpecification,
         openNotificatiesPluginSpecification,
         openZaakPluginSpecification,
+        portaaltaakPluginSpecification,
         smartDocumentsPluginSpecification,
         zakenApiPluginSpecification,
       ],

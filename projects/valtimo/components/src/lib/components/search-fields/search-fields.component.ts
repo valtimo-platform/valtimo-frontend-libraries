@@ -16,9 +16,10 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {SearchField, SearchFieldBoolean, SearchFieldValues} from '@valtimo/config';
-import {BehaviorSubject, map, Observable, Subject, Subscription, take} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subject, Subscription, take} from 'rxjs';
 import {SelectItem} from '@valtimo/user-interface';
 import {TranslateService} from '@ngx-translate/core';
+import {DocumentService} from '@valtimo/document';
 
 @Component({
   selector: 'valtimo-search-fields',
@@ -37,6 +38,7 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
       }
     });
   }
+  @Input() setValuesSubject$: Observable<SearchFieldValues>;
   @Output() doSearch: EventEmitter<SearchFieldValues> = new EventEmitter<SearchFieldValues>();
 
   readonly documentDefinitionName$ = new BehaviorSubject<string>('');
@@ -62,6 +64,8 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   readonly clear$ = new Subject<null>();
 
   private documentDefinitionNameSubscription!: Subscription;
+  private dropdownSubscription!: Subscription;
+  private valuesSubjectSubscription!: Subscription;
 
   private readonly BOOLEAN_POSITIVE: SearchFieldBoolean = 'booleanPositive';
   private readonly BOOLEAN_NEGATIVE: SearchFieldBoolean = 'booleanNegative';
@@ -76,19 +80,28 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     )
   );
 
-  constructor(private readonly translateService: TranslateService) {}
+  readonly dropdownSelectItemsMap: Map<string, Array<SelectItem>> = new Map();
+
+  constructor(
+    private readonly documentService: DocumentService,
+    private readonly translateService: TranslateService
+  ) {}
 
   ngOnInit() {
     this.openDocumentDefinitionNameSubscription();
+    this.openValuesSubjectSubscription();
+    this.openDropdownSubscription();
   }
 
   ngOnDestroy(): void {
     this.documentDefinitionNameSubscription?.unsubscribe();
+    this.valuesSubjectSubscription?.unsubscribe();
+    this.dropdownSubscription?.unsubscribe();
   }
 
   singleValueChange(searchFieldKey: string, value: any, isDateTime?: boolean): void {
     this.values$.pipe(take(1)).subscribe(values => {
-      if (value) {
+      if (value || Number.isInteger(value)) {
         this.values$.next({...values, [searchFieldKey]: this.getSingleValue(value, isDateTime)});
       } else if (Object.keys(values).includes(searchFieldKey)) {
         const valuesCopy = {...values};
@@ -107,6 +120,11 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
             start: this.getSingleValue(value.start, isDateTime),
             end: this.getSingleValue(value.end, isDateTime),
           },
+        });
+      } else if (Array.isArray(value) && value.length > 0) {
+        this.values$.next({
+          ...values,
+          [searchFieldKey]: value.map(v => this.getSingleValue(v, isDateTime)),
         });
       } else if (values[searchFieldKey]) {
         const valuesCopy = {...values};
@@ -133,6 +151,17 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     this.doSearch.emit({});
   }
 
+  getDefaultBooleanSelectionId(values: SearchFieldValues, searchFieldKey: string): string | null {
+    const searchFieldValue = values[searchFieldKey];
+
+    if (searchFieldValue === true) {
+      return this.BOOLEAN_POSITIVE;
+    } else if (searchFieldValue === false) {
+      return this.BOOLEAN_NEGATIVE;
+    }
+    return null;
+  }
+
   private getSingleValue(value: any, isDateTime?: boolean): any {
     if (isDateTime) {
       return new Date(value).toISOString();
@@ -154,7 +183,54 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     });
   }
 
+  private openValuesSubjectSubscription(): void {
+    if (this.setValuesSubject$) {
+      this.valuesSubjectSubscription = this.setValuesSubject$.subscribe(values => {
+        if (Object.keys(values || {}).length > 0) {
+          this.values$.next(values);
+          this.search();
+          this.expand();
+        }
+      });
+    }
+  }
+
+  private openDropdownSubscription(): void {
+    this.dropdownSubscription = combineLatest([this.documentDefinitionName$, this.searchFields$])
+      .pipe(
+        map(([documentDefinitionName, searchFields]) =>
+          searchFields
+            ?.filter(searchField => searchField.dropdownDataProvider)
+            .map(searchField =>
+              this.documentService
+                .getDropdownData(
+                  searchField.dropdownDataProvider,
+                  documentDefinitionName,
+                  searchField.key
+                )
+                .subscribe(dropdownData => {
+                  if (dropdownData) {
+                    this.dropdownSelectItemsMap[searchField.key] = Object.keys(dropdownData).map(
+                      dropdownFieldKey => ({
+                        id: dropdownFieldKey,
+                        text: dropdownData[dropdownFieldKey],
+                      })
+                    );
+                  } else {
+                    this.dropdownSelectItemsMap[searchField.key] = [];
+                  }
+                })
+            )
+        )
+      )
+      .subscribe();
+  }
+
   private collapse(): void {
     this.expanded$.next(false);
+  }
+
+  private expand(): void {
+    this.expanded$.next(true);
   }
 }

@@ -3,6 +3,7 @@ interface Objecttype {
   title: string;
   objecttypenApiPluginConfigurationId: string;
   objecttypeId: string;
+  objecttypeVersion: number;
   objectenApiPluginConfigurationId: string;
   showInDataMenu: boolean;
   formDefinitionView?: string;
@@ -11,4 +12,4 @@ interface Objecttype {
 
 type ObjecttypeKeys = keyof Objecttype;
 
-export  {Objecttype, ObjecttypeKeys}
+export {Objecttype, ObjecttypeKeys};

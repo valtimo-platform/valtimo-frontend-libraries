@@ -152,6 +152,19 @@
           [tooltip]="'searchFieldsOverviewTooltips.dataType' | translate"
         ></v-select>
         <v-select
+          *ngIf="(showMatchTypes$ | async) && (matchTypeItems$ | async) as matchTypeItems"
+          [items]="matchTypeItems"
+          [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
+          [title]="'searchFieldsOverview.matchType' | translate"
+          [disabled]="obs.disableInput"
+          [margin]="true"
+          [required]="true"
+          name="matchType"
+          [defaultSelectionId]="searchObs.searchField?.matchType"
+          [widthInPx]="200"
+          [tooltip]="'searchFieldsOverviewTooltips.matchType' | translate"
+        ></v-select>
+        <v-select
           *ngIf="fieldTypeItems$ | async as fieldTypeItems"
           [items]="fieldTypeItems"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
@@ -165,18 +178,49 @@
           [tooltip]="'searchFieldsOverviewTooltips.fieldType' | translate"
         ></v-select>
         <v-select
-          *ngIf="matchTypeItems$ | async as matchTypeItems"
-          [items]="matchTypeItems"
+          *ngIf="
+            (fieldTypeIsDropdown$ | async) &&
+            (dropdownDataProviderNames$ | async) as dropdownDataProviderNames
+          "
+          [items]="dropdownDataProviderNames"
           [placeholder]="'searchFieldsOverview.searchFieldPlaceholder' | translate"
-          [title]="'searchFieldsOverview.matchType' | translate"
+          [title]="'searchFieldsOverview.dropdownDataProvider' | translate"
           [disabled]="obs.disableInput"
           [margin]="true"
-          [required]="true"
-          name="matchType"
-          [defaultSelectionId]="searchObs.searchField?.matchType"
+          [required]="false"
+          name="dropdownDataProvider"
+          [defaultSelectionId]="searchObs.searchField?.dropdownDataProvider"
           [widthInPx]="200"
-          [tooltip]="'searchFieldsOverviewTooltips.matchType' | translate"
+          [tooltip]="'searchFieldsOverviewTooltips.dropdownDataProvider' | translate"
         ></v-select>
+        <v-multi-input
+          *ngIf="
+            (showInputDropdownTable$ | async) &&
+            (initialDropdownValues$ | async) as initialDropdownValues
+          "
+          name="dropdownValues"
+          [title]="'searchFieldsOverview.dropdownListValues' | translate"
+          type="keyValue"
+          [disabled]="obs.disableInput"
+          [defaultValues]="initialDropdownValues"
+          [margin]="true"
+          [required]="false"
+          [tooltip]="'searchFieldsOverviewTooltips.dropdownListValues' | translate"
+          (valueChange)="dropdownDatalistChange($event)"
+        >
+        </v-multi-input>
+        <v-table
+          *ngIf="
+            (showReadonlyDropdownTable$ | async) &&
+            (initialDropdownValues$ | async) as initialDropdownValues
+          "
+          [items]="initialDropdownValues"
+          [columns]="dropdownColumns$ | async"
+          [showEditButtons]="false"
+          [itemsTranslationKey]="'searchFieldsOverview'"
+          [showPagination]="false"
+          [mobileBreakpointPx]="200"
+        ></v-table>
       </v-form>
     </div>
     <div footer>
