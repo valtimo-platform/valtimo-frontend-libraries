@@ -27,7 +27,12 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {ContextService} from '@valtimo/context';
 import {ValtimoVersion} from '../../models';
-import {EmailNotificationSettings, UserIdentity, ConfigService} from '@valtimo/config';
+import {
+  EmailNotificationSettings,
+  UserIdentity,
+  ConfigService,
+  FeedbackMailTo,
+} from '@valtimo/config';
 import {UserProviderService} from '@valtimo/security';
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
@@ -76,6 +81,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     emailNotificationOnSaturday: new FormControl(false),
     emailNotificationOnSunday: new FormControl(false),
   });
+  public overrideFeedbackMenuItemToMailTo: FeedbackMailTo;
   readonly panelExpanded$ = this.shellService.panelExpanded$;
 
   readonly selectedLanguage$ = new BehaviorSubject<string>('');
@@ -115,14 +121,12 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     private readonly http: HttpClient,
     private readonly logger: NGXLogger,
     private readonly shellService: ShellService,
-
     private readonly elementRef: ElementRef,
-
     private readonly configService: ConfigService
   ) {}
 
   showPlantATreeButton: boolean;
-  resetUrl: string
+  resetUrl: string;
 
   ngOnInit(): void {
     this.setLanguage();
@@ -130,6 +134,8 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     this.openFormSubscription();
     this.showPlantATreeButton = this.configService.config.featureToggles?.showPlantATreeButton;
     this.resetUrl = this.configService.config.changePasswordUrl?.endpointUri;
+    this.overrideFeedbackMenuItemToMailTo =
+      this.configService.config?.overrideFeedbackMenuItemToMailTo;
   }
 
   ngOnDestroy(): void {

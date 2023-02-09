@@ -270,11 +270,13 @@
     "gotoFormLinksButton": "Configureer nu",
     "name": "Naam",
     "nameIsRequired": "Naam is vereist",
+    "nameIsInUse": "Naam is al in gebruik",
     "back": "Ga terug",
     "reset": "Resetten",
     "submit": "Indienen",
     "delete": "Verwijderen",
     "deploy": "Deploy",
+    "duplicate": "Dupliceren",
     "readOnly": "Alleen-lezen"
   },
   "dossierManagement": {
@@ -895,6 +897,8 @@
     "like": "Bevat",
     "single": "Enkel",
     "multiple": "Meerdere",
+    "single-select-dropdown": "Single select dropdown",
+    "multi-select-dropdown": "Multi select dropdown",
     "range": "Reeks",
     "submit": "Indienen",
     "delete": "Verwijderen",
@@ -905,7 +909,14 @@
     "searchFieldPlaceholder": "Kies een type...",
     "noSearchFieldsConfiguredWarningTitle": "Geen zoekvelden geconfigureerd",
     "deleteSearchField": "Zoekveld verwijderen",
-    "deleteSearchFieldConfirmation": "Weet u zeker dat u deze zoekveld wilt verwijderen?"
+    "deleteSearchFieldConfirmation": "Weet u zeker dat u deze zoekveld wilt verwijderen?",
+    "dropdownDataProvider": "Dropdown-databron",
+    "dropdownDatabaseDataProvider": "Zet waarde",
+    "dropdownJsonFileDataProvider": "Configuratiebestand",
+    "configFile": "Configuratiebestand",
+    "dropdownListValues": "Dropdown lijst waarden",
+    "id": "ID",
+    "text": "Text"
   },
   "searchFieldsOverviewTooltips": {
     "title": "De titel is een optioneel veld dat wordt weergegeven als een label voor het huidige zoekveld. Als de titel niet is ingesteld, is de standaardwaarde de sleutelvertaling van het zoekveld (als er geen vertaling beschikbaar is, wordt de oorspronkelijke sleutelwaarde weergegeven).",
@@ -913,7 +924,10 @@
     "path": "Een pad dat leidt naar de eigenschap waarop u wilt zoeken. Volg dit voorbeeld om te zoeken in het JSON-schema van het document: 'doc:customer.firstName'. Volg deze voorbeelden om te zoeken in de documenteigenschappen: 'case:createdBy', of 'case:sequence', of 'case:assigneeFullName'. Let op: wanneer er speciale tekens in een eigenschap zitten, moet de eigenschap binnen aanhalingstekens staan. Bijvoorbeeld: case:\"loan-accepted\".",
     "dataType": "Het datatype bepaalt welke invoer aan de gebruiker wordt getoond. Voor het datatype 'Datum' wordt bijvoorbeeld een datumkiezer getoond.",
     "fieldType": "Het veldtype bepaalt de waarden die de gebruiker kan invoeren. Voor de optie 'Enkel' kan de gebruiker slechts één waarde invoeren. Bij de optie 'Reeks' kan de gebruiker twee waarden invoeren. Naar deze waarden, en alle waarden daartussen, wordt vervolgens gezocht.",
-    "matchType": "De overeenkomst bepaalt hoe waarden in de database worden gekoppeld aan de zoekwaarden. Voor het zoektype 'Exact' zou de waarde '1' alleen overeenkomen met de waarde '1'. Voor het zoektype 'Bevat' zou de waarde '1' overeenkomen met de waarde '1', '123' en alle andere waarden die '1' bevatten."
+    "matchType": "De overeenkomst bepaalt hoe waarden in de database worden gekoppeld aan de zoekwaarden. Voor het zoektype 'Exact' zou de waarde '1' alleen overeenkomen met de waarde '1'. Voor het zoektype 'Bevat' zou de waarde '1' overeenkomen met de waarde '1', '123' en alle andere waarden die '1' bevatten.",
+    "dropdownDataProvider": "De dropdown-databron bepaalt waar de data voor de dropdown lijst vandaan komt.",
+    "configFile": "Gebruik een configuratiebestand met dropdown-waarden",
+    "dropdownListValues": "Stel aangepaste waarden in voor de dropdown lijst. De waarde die in de dropdown lijst wordt weergegeven, moet in het rechter tekstveld worden ingevoerd. Het linker tekstveld moet de id van die waarde bevatten."
   },
   "searchFieldDataType": {
     "select": "Selecteer een datatype"
@@ -977,7 +991,8 @@
       "title": "Titel",
       "objects": "Objecten API plugin configuratie",
       "objecttypes": "Objecttypen API plugin configuratie",
-      "objecttypeUrl": "Objecttype ID",
+      "objecttypeId": "Objecttype ID",
+      "objecttypeVersion": "Objecttype versie",
       "formDefinitionView": "View formulier definitie",
       "formDefinitionEdit": "Wijzig formulier definitie",
       "showInDataMenu": "Toon in menu"
@@ -985,6 +1000,7 @@
     "tooltips": {
       "title": "De naam van deze configuratie. Onder deze naam is deze configuratie terug te vinden in de rest van de applicatie.",
       "objecttypeId": "Het id van van het objecttype",
+      "objecttypeVersion": "De versie van het objecttype",
       "formDefinitionView": "De naam van de formio IO definitie die wordt gebruikt om het object weer te geven.",
       "formDefinitionEdit": "De naam van de formio IO definitie die wordt gebruikt om het object te bewerken.",
       "showInDataMenu": "Geeft aan of het objecttype in het menu zichtbaar is"

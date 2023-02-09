@@ -18,6 +18,25 @@ import {PluginConfigurationData} from '../../../models';
 
 interface PortaaltaakConfig extends PluginConfigurationData {
   notificatiesApiPluginConfiguration: string;
+  objectManagementConfigurationId: string;
 }
 
-export {PortaaltaakConfig};
+type FormType = 'id' | 'url';
+
+type Receiver = 'zaakInitiator' | 'other';
+
+type OtherReceiver = 'kvk' | 'bsn';
+
+interface CreatePortalTaskConfig {
+  formType: FormType;
+  formTypeId?: string;
+  formTypeUrl?: string;
+  sendData: Array<{key: string; value: string}>;
+  receiveData: Array<{key: string; value: string}>;
+  receiver: Receiver;
+  otherReceiver?: OtherReceiver;
+  kvk?: string;
+  bsn?: string;
+}
+
+export {PortaaltaakConfig, CreatePortalTaskConfig, FormType, Receiver, OtherReceiver};

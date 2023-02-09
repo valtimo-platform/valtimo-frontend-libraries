@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {catchError, Observable, of} from 'rxjs';
 import {
   AssignHandlerToDocumentResult,
   AuditRecord,
@@ -62,6 +62,19 @@ import {AdvancedDocumentSearchRequest} from './advanced-document-search-request'
 })
 export class DocumentService {
   private valtimoEndpointUri: string;
+
+  private readonly EMPTY_DOCUMENTS_RESPONSE: Documents | SpecifiedDocuments = {
+    content: [],
+    empty: true,
+    first: false,
+    last: false,
+    number: 0,
+    numberOfElements: 0,
+    size: 0,
+    sort: false,
+    totalElements: 0,
+    totalPages: 0,
+  };
 
   constructor(private http: HttpClient, configService: ConfigService) {
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
@@ -115,11 +128,13 @@ export class DocumentService {
       body.otherFilters = otherFilters;
     }
 
-    return this.http.post<Documents>(
-      `${this.valtimoEndpointUri}v1/document-definition/${documentSearchRequest.definitionName}/search`,
-      body,
-      {params: documentSearchRequest.asHttpParams()}
-    );
+    return this.http
+      .post<Documents>(
+        `${this.valtimoEndpointUri}v1/document-definition/${documentSearchRequest.definitionName}/search`,
+        body,
+        {params: documentSearchRequest.asHttpParams()}
+      )
+      .pipe(catchError(() => of(this.EMPTY_DOCUMENTS_RESPONSE as Documents)));
   }
 
   getSpecifiedDocumentsSearch(
@@ -142,11 +157,13 @@ export class DocumentService {
       body.otherFilters = otherFilters;
     }
 
-    return this.http.post<SpecifiedDocuments>(
-      `${this.valtimoEndpointUri}v1/case/${documentSearchRequest.definitionName}/search`,
-      body,
-      {params: documentSearchRequest.asHttpParams()}
-    );
+    return this.http
+      .post<SpecifiedDocuments>(
+        `${this.valtimoEndpointUri}v1/case/${documentSearchRequest.definitionName}/search`,
+        body,
+        {params: documentSearchRequest.asHttpParams()}
+      )
+      .pipe(catchError(() => of(this.EMPTY_DOCUMENTS_RESPONSE as SpecifiedDocuments)));
   }
 
   getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
@@ -178,6 +195,45 @@ export class DocumentService {
     return this.http.delete(
       `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields?key=${key}`,
       options
+    );
+  }
+
+  getDropdownDataProviders(): Observable<Array<string>> {
+    return this.http.get<Array<string>>(`${this.valtimoEndpointUri}v1/data/dropdown-list/provider`);
+  }
+
+  getDropdownData(
+    provider: string,
+    documentDefinitionName: string,
+    fieldKey: string
+  ): Observable<object> {
+    const dropdownListKey = encodeURI(documentDefinitionName + '_' + fieldKey);
+    return this.http.get<object>(
+      `${this.valtimoEndpointUri}v1/data/dropdown-list?provider=${provider}&key=${dropdownListKey}`
+    );
+  }
+
+  postDropdownData(
+    provider: string,
+    documentDefinitionName: string,
+    fieldKey: string,
+    dropdownData: object
+  ): Observable<object> {
+    const dropdownListKey = encodeURI(documentDefinitionName + '_' + fieldKey);
+    return this.http.post<object>(
+      `${this.valtimoEndpointUri}v1/data/dropdown-list?provider=${provider}&key=${dropdownListKey}`,
+      dropdownData
+    );
+  }
+
+  deleteDropdownData(
+    provider: string,
+    documentDefinitionName: string,
+    fieldKey: string
+  ): Observable<object> {
+    const dropdownListKey = encodeURI(documentDefinitionName + '_' + fieldKey);
+    return this.http.delete<object>(
+      `${this.valtimoEndpointUri}v1/data/dropdown-list?provider=${provider}&key=${dropdownListKey}`
     );
   }
 
