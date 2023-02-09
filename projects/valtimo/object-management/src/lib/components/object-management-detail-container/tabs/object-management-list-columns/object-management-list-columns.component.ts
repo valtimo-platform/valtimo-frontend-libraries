@@ -38,7 +38,7 @@ export class ObjectManagementListColumnsComponent {
   @ViewChild('moveRowButtons') public moveRowButtonsTemplateRef: TemplateRef<any>;
   readonly downloadName$ = new BehaviorSubject<string>('');
   readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
-  readonly loading$ = new BehaviorSubject<Boolean>(true);
+  readonly loading$ = new BehaviorSubject<boolean>(true);
   readonly currentModalType$ = new BehaviorSubject<ListColumnModal>('create');
   readonly showModal$ = new BehaviorSubject<boolean>(false);
   readonly modalShowing$ = this.showModal$.pipe(delay(250));

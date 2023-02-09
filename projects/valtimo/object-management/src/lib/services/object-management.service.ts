@@ -17,7 +17,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {ConfigService} from '@valtimo/config';
+import {ConfigService, SearchField} from '@valtimo/config';
 import {Objecttype, SearchListColumn} from '../models/object-management.model';
 
 @Injectable({
@@ -86,6 +86,39 @@ export class ObjectManagementService {
   deleteSearchList(ownerId: string, columnKey: string): Observable<SearchListColumn> {
     return this.http.delete<SearchListColumn>(
       `${this.valtimoEndpointUri}v1/search/list-column/${ownerId}/${columnKey}`
+    );
+  }
+
+  getSearchField(ownerId: string): Observable<Array<SearchField>> {
+    return this.http.get<Array<SearchField>>(
+      `${this.valtimoEndpointUri}v1/search/field/${ownerId}`
+    );
+  }
+
+  postSearchField(
+    ownerId: string,
+    request: SearchField
+  ): Observable<SearchField> {
+    return this.http.post<SearchField>(
+      `${this.valtimoEndpointUri}v1/search/field/${ownerId}`,
+      {...request, ownerId}
+    );
+  }
+
+  putSearchField(
+    ownerId: string,
+    key: string,
+    request: SearchField
+  ): Observable<Array<SearchField>> {
+    return this.http.put<Array<SearchField>>(
+      `${this.valtimoEndpointUri}v1/search/field/${ownerId}/${key}`,
+      {...request, ownerId}
+    );
+  }
+
+  deleteSearchField(ownerId: string, key: string): Observable<SearchField> {
+    return this.http.delete<SearchField>(
+      `${this.valtimoEndpointUri}v1/search/field/${ownerId}/${key}`
     );
   }
 

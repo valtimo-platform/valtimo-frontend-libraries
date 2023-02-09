@@ -45,7 +45,9 @@ import {
   NotificationModule,
 } from 'carbon-components-angular';
 import {ReactiveFormsModule} from '@angular/forms';
-import {ObjectManagementSearchFieldsComponent} from './components/object-management-detail-container/tabs/object-management-search-fields/object-management-search-fields.component';
+import {
+  ObjectManagementListSearchFieldsComponent
+} from './components/object-management-detail-container/tabs/object-management-list-search-fields/object-management-list-search-fields.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,7 @@ import {ObjectManagementSearchFieldsComponent} from './components/object-managem
     ObjectManagementListColumnsComponent,
     ObjectManagementModalComponent,
     ObjectManagementUploadModalComponent,
-    ObjectManagementSearchFieldsComponent,
+    ObjectManagementListSearchFieldsComponent,
   ],
   imports: [
     CommonModule,

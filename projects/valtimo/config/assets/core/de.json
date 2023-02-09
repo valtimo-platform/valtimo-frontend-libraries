@@ -885,6 +885,7 @@
   "searchFieldsOverview": {
     "title": "Titel",
     "key": "Schlüssel",
+    "add": "Suchfeld hinzufügen",
     "edit": "Suchfeld bearbeiten",
     "path": "Pfad",
     "dataType": "Datentyp",
@@ -896,9 +897,15 @@
     "multiple": "Mehrere",
     "range": "Serie",
     "submit": "Einreichen",
+    "close": "schließen",
+    "save": "speichern",
     "delete": "Löschen",
+    "download": "Download ",
     "addRow": "Suchfeld hinzufügen",
-    "searchFieldPlaceholder": "Wählen Sie einen Typ..."
+    "searchFieldPlaceholder": "Wählen Sie einen Typ...",
+    "noSearchFieldsConfiguredWarningTitle": "Keine Suchfelder konfiguriert",
+    "deleteSearchField": "Suchfeld löschen",
+    "deleteSearchFieldConfirmation": "Möchten Sie dieses Suchfeld wirklich löschen?"
   },
   "searchFieldsOverviewTooltips": {
     "title": "Der Titel ist ein optionales Feld, das als Bezeichnung für das aktuelle Suchfeld erscheint. Wenn der Titel nicht festgelegt ist, ist der Standardwert die Übersetzung des Suchfeldschlüssels (wenn keine Übersetzung verfügbar ist, wird der ursprüngliche Schlüsselwert angezeigt).",
@@ -907,6 +914,12 @@
     "dataType": "Der Datentyp bestimmt, welche Eingaben dem Benutzer angezeigt werden. Beispielsweise wird für den Datentyp 'Datum' eine Datumsauswahl angezeigt.",
     "fieldType": "Der Feldtyp bestimmt die Werte, die der Benutzer eingeben kann. Die Option 'Nur' ermöglicht dem Benutzer, nur einen Wert einzugeben. Die Option 'Serie' ermöglicht dem Benutzer die Eingabe von zwei Werten. Nach diesen Werten und allen Werten dazwischen wird dann gesucht.",
     "matchType": "Die Übereinstimmen legt fest, wie Werte in der Datenbank mit den Suchwerten verknüpft werden. Beim Übereinstimmungstyp 'Genau' würde der Wert '1' nur mit dem Wert '1' übereinstimmen. Für den Übereinstimmungstyp 'Enthält' würde der Wert '1' mit dem Wert '1', '123' und allen anderen Werten übereinstimmen, die '1' enthalten."
+  },
+  "searchFieldDataType": {
+    "select": "Wählen Sie einen Datentyp aus"
+  },
+  "searchFieldFieldType": {
+    "select": "Wählen Sie einen Feldtyp aus"
   },
   "listColumn": {
     "title": "Titel",
