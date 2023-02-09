@@ -16,13 +16,23 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
-import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} from 'rxjs';
-import {VerzoekConfig} from '../../models';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  of,
+  Subscription,
+  switchMap,
+  take,
+} from 'rxjs';
+import {Roltype, VerzoekConfig} from '../../models';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
 import {SelectItem} from '@valtimo/user-interface';
 import {VerzoekPluginService} from '../../services';
 import {ProcessService} from '@valtimo/process';
+import {DocumentService} from '@valtimo/document';
 
 @Component({
   selector: 'valtimo-verzoek-configuration',
@@ -76,6 +86,48 @@ export class VerzoekConfigurationComponent
       )
     );
 
+  readonly documentSelectItems$: Observable<Array<SelectItem>> = this.documentService
+    .getAllDefinitions()
+    .pipe(
+      map(documentDefinitions =>
+        documentDefinitions.content.map(documentDefinition => ({
+          id: documentDefinition.id.name,
+          text: documentDefinition.id.name,
+        }))
+      )
+    );
+
+  readonly selectedCaseDefinitions$ = new BehaviorSubject<{[uuid: string]: string}>({});
+
+  readonly roltypeNameSelectItems$: Observable<{[key: number]: Array<SelectItem>}> =
+    this.selectedCaseDefinitions$.pipe(
+      switchMap(selectedCaseDefinitions => {
+        const obsToReturn: Array<Observable<Array<Roltype>>> = [];
+
+        Object.keys(selectedCaseDefinitions).forEach(indexNumber => {
+          const documentDefinitionName = selectedCaseDefinitions[indexNumber];
+
+          if (documentDefinitionName) {
+            obsToReturn.push(
+              this.verzoekPluginService.getRoltypesByDocumentDefinitionName(documentDefinitionName)
+            );
+          } else {
+            obsToReturn.push(of([]));
+          }
+        });
+
+        return combineLatest(obsToReturn);
+      }),
+      map(rolTypes => {
+        return rolTypes.reduce((acc, curr, index) => {
+          return {
+            ...acc,
+            [index]: curr?.map(rolType => ({id: rolType.url, text: rolType.name})) || [],
+          };
+        }, {});
+      })
+    );
+
   private saveSubscription!: Subscription;
   private readonly formValue$ = new BehaviorSubject<VerzoekConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
@@ -85,7 +137,8 @@ export class VerzoekConfigurationComponent
     private readonly translateService: TranslateService,
     private readonly pluginTranslationService: PluginTranslationService,
     private readonly verzoekPluginService: VerzoekPluginService,
-    private readonly processService: ProcessService
+    private readonly processService: ProcessService,
+    private readonly documentService: DocumentService
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +153,23 @@ export class VerzoekConfigurationComponent
     console.log('value change', formValue);
     this.formValue$.next(formValue);
     this.handleValid(formValue);
+  }
+
+  verzoekTypeFormChange(formValue: any, uuid: string): void {
+    this.selectedCaseDefinitions$.pipe(take(1)).subscribe(selectedCaseDefinitions => {
+      this.selectedCaseDefinitions$.next({
+        ...selectedCaseDefinitions,
+        [uuid]: formValue?.caseDefinitionName,
+      });
+    });
+  }
+
+  deleteRow(uuid: string) {
+    this.selectedCaseDefinitions$.pipe(take(1)).subscribe(selectedCaseDefinitions => {
+      const selectedCaseDefinitionsCopy = {...selectedCaseDefinitions};
+      delete selectedCaseDefinitionsCopy[uuid];
+      this.selectedCaseDefinitions$.next(selectedCaseDefinitionsCopy);
+    });
   }
 
   private handleValid(formValue: VerzoekConfig): void {

@@ -92,16 +92,20 @@
     [title]="'verzoekTypen' | pluginTranslate : pluginId | async"
     [formTemplate]="mappingForm"
     [addRowText]="'addVerzoekType' | pluginTranslate : pluginId | async"
+    [required]="true"
+    [tooltip]="'verzoekTypenTooltip' | pluginTranslate : pluginId | async"
+    (onDeleteRow)="deleteRow($event)"
   >
   </v-multi-input-form>
 </v-form>
 
-<ng-template #mappingForm let-index="index" let-changeFunction="changeFunction">
+<ng-template #mappingForm let-index="index" let-uuid="uuid" let-changeFunction="changeFunction">
   <v-form
-    (valueChange)="changeFunction($event, index)"
+    (valueChange)="changeFunction($event, index); verzoekTypeFormChange($event, index)"
     *ngIf="{
       disabled: disabled$ | async,
-      prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
+      prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null,
+      rolTypeSelectItems: roltypeNameSelectItems$ | async
     } as obs"
   >
     <v-input
@@ -116,15 +120,67 @@
       [smallMargin]="true"
     >
     </v-input>
+    <ng-container *ngIf="{documentSelectItems: documentSelectItems$ | async} as vars">
+      <v-select
+        [items]="vars.documentSelectItems"
+        [margin]="true"
+        [widthInPx]="350"
+        name="caseDefinitionName"
+        [title]="'caseDefinitionName' | pluginTranslate : pluginId | async"
+        [disabled]="obs.disabled"
+        [defaultSelectionId]="obs.prefill?.caseDefinitionName"
+        [required]="true"
+        [loading]="!vars.documentSelectItems"
+        [tooltip]="'caseDefinitionNameTooltip' | pluginTranslate : pluginId | async"
+      ></v-select>
+      <v-select
+        [items]="obs.rolTypeSelectItems && obs.rolTypeSelectItems[index]"
+        [margin]="true"
+        [widthInPx]="350"
+        name="roltypeName"
+        [title]="'roltypeName' | pluginTranslate : pluginId | async"
+        [disabled]="
+          obs.disabled ||
+          !obs.rolTypeSelectItems ||
+          !obs?.rolTypeSelectItems[index] ||
+          obs?.rolTypeSelectItems[index].length === 0
+        "
+        [defaultSelectionId]="obs.prefill?.roltypeName"
+        [required]="true"
+        [loading]="!obs.rolTypeSelectItems || !obs.rolTypeSelectItems[index]"
+        [tooltip]="'roltypeNameTooltip' | pluginTranslate : pluginId | async"
+        [defaultSelectionId]="
+          !obs.rolTypeSelectItems &&
+          !obs?.rolTypeSelectItems[uuid] &&
+          obs?.rolTypeSelectItems[uuid].length === 0 &&
+          ''
+        "
+      ></v-select>
+    </ng-container>
+    <ng-container *ngIf="{processSelectItems: processSelectItems$ | async} as vars">
+      <v-select
+        [items]="vars.processSelectItems"
+        [margin]="true"
+        [widthInPx]="350"
+        name="processDefinitionKey"
+        [title]="'processDefinitionKey' | pluginTranslate : pluginId | async"
+        [disabled]="obs.disabled"
+        [defaultSelectionId]="obs.prefill?.processDefinitionKey"
+        [required]="true"
+        [loading]="!vars.processSelectItems"
+        [tooltip]="'processDefinitionKeyTooltip' | pluginTranslate : pluginId | async"
+      ></v-select>
+    </ng-container>
     <v-input
-      name="test2"
-      [title]="'test2' | pluginTranslate : pluginId | async"
+      name="rolDescription"
+      [title]="'rolDescription' | pluginTranslate : pluginId | async"
       [margin]="false"
       [disabled]="obs.disabled"
-      [defaultValue]="obs.prefill?.test2"
+      [defaultValue]="obs.prefill?.rolDescription || 'Initiator'"
       [required]="true"
-      [tooltip]="'test2' | pluginTranslate : pluginId | async"
+      [tooltip]="'rolDescriptionTooltip' | pluginTranslate : pluginId | async"
       [widthPx]="350"
+      [smallMargin]="true"
     >
     </v-input>
   </v-form>

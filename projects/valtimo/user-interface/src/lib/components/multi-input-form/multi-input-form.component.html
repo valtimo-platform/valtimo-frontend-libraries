@@ -47,7 +47,10 @@
       *ngFor="let value of values$ | async as values; trackBy: trackByFn; let i = index"
     >
       <ng-container
-        *ngTemplateOutlet="formTemplate; context: {index: i, changeFunction: formValueChange}"
+        *ngTemplateOutlet="
+          formTemplate;
+          context: {index: i, changeFunction: formValueChange, uuid: value.uuid}
+        "
       ></ng-container>
       <div class="v-multi-input__delete-button">
         <v-button

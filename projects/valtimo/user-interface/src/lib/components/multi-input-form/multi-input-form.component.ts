@@ -59,6 +59,7 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
   @Input() required = false;
   @Input() formTemplate!: TemplateRef<any>;
   @Output() valueChange: EventEmitter<Array<FormOutput>> = new EventEmitter();
+  @Output() onDeleteRow: EventEmitter<string> = new EventEmitter();
 
   readonly values$ = new BehaviorSubject<MultiInputFormsValues>([]);
 
@@ -94,6 +95,8 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
   deleteRow(uuid: string): void {
     this.values$.pipe(take(1)).subscribe(values => {
       if (values.length > this.minimumAmountOfRows) {
+        this.onDeleteRow.emit(uuid);
+
         this.values$.next(values.filter(value => value.uuid !== uuid));
       }
     });

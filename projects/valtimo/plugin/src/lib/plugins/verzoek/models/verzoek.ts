@@ -27,4 +27,9 @@ interface Objecttype {
 
 type ObjecttypeKeys = keyof Objecttype;
 
-export {Objecttype, ObjecttypeKeys};
+interface Roltype {
+  name: string;
+  url: string;
+}
+
+export {Objecttype, ObjecttypeKeys, Roltype};

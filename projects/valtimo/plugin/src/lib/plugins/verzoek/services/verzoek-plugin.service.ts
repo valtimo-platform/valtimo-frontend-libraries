@@ -15,10 +15,10 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {catchError, Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '@valtimo/config';
-import {Objecttype} from '../models';
+import {Objecttype, Roltype} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +34,13 @@ export class VerzoekPluginService {
     return this.http.get<Objecttype[]>(
       `${this.valtimoEndpointUri}v1/object/management/configuration`
     );
+  }
+
+  getRoltypesByDocumentDefinitionName(documentDefinitionName: string): Observable<Array<Roltype>> {
+    return this.http
+      .get<Array<Roltype>>(
+        `${this.valtimoEndpointUri}v1/case-definition/${documentDefinitionName}/zaaktype/roltype`
+      )
+      .pipe(catchError(() => of([])));
   }
 }
