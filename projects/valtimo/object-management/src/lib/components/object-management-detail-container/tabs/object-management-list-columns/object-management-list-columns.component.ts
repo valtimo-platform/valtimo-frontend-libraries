@@ -135,29 +135,29 @@ export class ObjectManagementListColumnsComponent {
     filter(objectId => !!objectId)
   );
 
-  private readonly ObjectManagementListColumns$: Observable<Array<any>> = combineLatest([
+  private readonly objectManagementListColumns$: Observable<Array<any>> = combineLatest([
     this.objectId$,
     this.refreshObjectManagementListColumns$,
   ]).pipe(
     switchMap(([objectId]) =>
       this.objectManagementService.getSearchList(objectId)
     ),
-    tap(ObjectManagementListColumns => {
+    tap(objectManagementListColumns => {
       this.objectId$.pipe(take(1)).subscribe(objectId => {
-        if (ObjectManagementListColumns && Array.isArray(ObjectManagementListColumns) && ObjectManagementListColumns.length > 0) {
-          this.setDownload(objectId, ObjectManagementListColumns);
+        if (objectManagementListColumns && Array.isArray(objectManagementListColumns) && objectManagementListColumns.length > 0) {
+          this.setDownload(objectId, objectManagementListColumns);
         }
       });
     }),
-    tap(ObjectManagementListColumns => {
-      this.cachedObjectManagementListColumns = ObjectManagementListColumns;
+    tap(objectManagementListColumns => {
+      this.cachedObjectManagementListColumns = objectManagementListColumns;
       this.loading$.next(false);
       this.enableInput();
     })
   );
 
   readonly translatedObjectManagementListColumns$: Observable<Array<SearchListColumnView>> = combineLatest([
-    this.ObjectManagementListColumns$,
+    this.objectManagementListColumns$,
     this.translateService.stream('key'),
   ]).pipe(
     map(([columns]) =>
@@ -356,35 +356,12 @@ export class ObjectManagementListColumnsComponent {
     clickEvent: MouseEvent,
     objectId: string
   ): void {
-    const ObjectManagementListColumns = [...this.cachedObjectManagementListColumns];
-    const searchListColumnRow = ObjectManagementListColumns[searchListColumnRowIndex];
+    const objectManagementListColumns = [...this.cachedObjectManagementListColumns];
+    const searchListColumnRow = objectManagementListColumns[searchListColumnRowIndex];
 
     clickEvent.stopPropagation();
 
-    const searchListColumnIndex = ObjectManagementListColumns.findIndex(
-      field => field.key === searchListColumnRow.key
-    );
-    const foundSearchListColumn = {...ObjectManagementListColumns[searchListColumnIndex]};
-    const filteredObjectManagementListColumns = ObjectManagementListColumns.filter(
-      field => field.key !== searchListColumnRow.key
-    );
-    const multipleObjectManagementListColumns = ObjectManagementListColumns.length > 1;
-
-    if (multipleObjectManagementListColumns && moveUp && searchListColumnIndex > 0) {
-      const searchListColumnBeforeKey = `${ObjectManagementListColumns[searchListColumnIndex - 1].key}`;
-      const searchListColumnBeforeIndex = filteredObjectManagementListColumns.findIndex(
-        field => field.key === searchListColumnBeforeKey
-      );
-      filteredObjectManagementListColumns.splice(searchListColumnBeforeIndex, 0, foundSearchListColumn);
-      this.updateObjectManagementListColumn(objectId, filteredObjectManagementListColumns[0]);
-    } else if (multipleObjectManagementListColumns && !moveUp && searchListColumnIndex < ObjectManagementListColumns.length) {
-      const searchListColumnAfterKey = `${ObjectManagementListColumns[searchListColumnIndex + 1].key}`;
-      const searchListColumnAfterIndex = filteredObjectManagementListColumns.findIndex(
-        field => field.key === searchListColumnAfterKey
-      );
-      filteredObjectManagementListColumns.splice(searchListColumnAfterIndex + 1, 0, foundSearchListColumn);
-      this.updateObjectManagementListColumn(objectId, filteredObjectManagementListColumns[0]);
-    }
+    // TODO:
   }
 
   saveCasListColumns(): void {
