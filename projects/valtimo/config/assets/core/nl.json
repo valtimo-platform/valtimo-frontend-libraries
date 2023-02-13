@@ -969,6 +969,14 @@
     "arrayCount": "Hoeveelheid",
     "underscoresToSpaces": "Lage strepen naar spaties"
   },
+  "object": {
+    "title": "Object",
+    "createObject": "Nieuw object",
+    "labels": {
+      "recordIndex": "Record index",
+      "objectUrl": "Object URL"
+    }
+  },
   "objectManagement": {
     "title": "Objecttypes",
     "createObjecttype": "Maak objecttype",

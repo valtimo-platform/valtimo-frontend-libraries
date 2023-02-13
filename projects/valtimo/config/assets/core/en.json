@@ -969,6 +969,14 @@
     "arrayCount": "Count",
     "underscoresToSpaces": "Underscores to spaces"
   },
+  "object": {
+    "title": "Object",
+    "createObject": "New object",
+    "labels": {
+      "recordIndex": "Record index",
+      "objectUrl": "Object URL"
+    }
+  },
   "objectManagement": {
     "title": "Objecttypes",
     "createObjecttype": "Create objecttype",

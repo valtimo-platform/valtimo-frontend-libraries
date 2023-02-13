@@ -15,13 +15,13 @@
   -->
 
 
-<div class="main-content pt-0" *ngIf="{loading: loading$ | async} as obs">
+<div class="main-content pt-0" *ngIf="{loading: loading$ | async, pagination: pagination$ | async} as obs">
   <div class="container-fluid">
     <div class="col-12 px-0 mb-5">
       <div class="text-right mt-m3px mb-3">
         <button type="button" class="btn btn-space btn-primary mr-0">
           <i class="icon mdi mdi-plus mr-1"></i>
-          Button
+          {{ 'object.createObject' | translate }}
         </button>
       </div>
       <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
@@ -30,29 +30,32 @@
 </div>
 
 <ng-template #list let-obs="obs">
-    <ng-container *ngIf="fields$ | async as fields">
-      <ng-container *ngIf="objectConfiguration$ | async as objectConfiguration">
-        <valtimo-widget *ngIf="obs.loading === false">
-          <valtimo-list
-                  [items]="objectConfiguration"
-                  [fields]="fields"
-                  [viewMode]="true"
-                  [header]="true"
-                  paginationIdentifier="objectConfigurationList"
-                  (rowClicked)="redirectToDetails($event)"
-          >
-            <div header>
-              <h3 class="list-header-title">
-                {{ 'object.title' | translate }}
-                <sup class="ml-1 badge badge-pill badge-primary">{{
-                  objectConfiguration?.length || 0
-                  }}</sup>
-              </h3>
-            </div>
-          </valtimo-list>
-        </valtimo-widget>
-      </ng-container>
+  <ng-container *ngIf="fields$ | async as fields">
+    <ng-container *ngIf="objectConfiguration$ | async as objectConfiguration">
+      <valtimo-widget *ngIf="obs.loading === false">
+        <valtimo-list
+                [items]="objectConfiguration"
+                [fields]="fields"
+                [viewMode]="true"
+                [header]="true"
+                [pagination]="obs.pagination"
+                paginationIdentifier="objectConfigurationList"
+                (paginationClicked)="paginationClicked($event)"
+                (paginationSet)="paginationSet($event)"
+                (rowClicked)="redirectToDetails($event)"
+        >
+          <div header>
+            <h3 class="list-header-title">
+              {{ 'object.title' | translate }}
+              <sup class="ml-1 badge badge-pill badge-primary">{{
+                objectConfiguration?.length || 0
+                }}</sup>
+            </h3>
+          </div>
+        </valtimo-list>
+      </valtimo-widget>
     </ng-container>
+  </ng-container>
 </ng-template>
 
 

@@ -969,6 +969,14 @@
     "arrayCount": "Quantität",
     "underscoresToSpaces": "Unterstriche zu Leerzeichen"
   },
+  "object": {
+    "title": "Objekt",
+    "createObject": "Objekt erstellen",
+    "labels": {
+      "recordIndex": "Rekordindex",
+      "objectUrl": "Objekt-URL"
+    }
+  },
   "objectManagement": {
     "title": "Objekttypen",
     "createObjecttype": "Objekttypen erstellen",

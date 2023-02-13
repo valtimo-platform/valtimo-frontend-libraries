@@ -16,12 +16,13 @@
 
 import {Component} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
-import {switchMap, tap} from 'rxjs/operators';
+import {switchMap, take, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ObjectService} from '../../services/object.service';
 import {ObjectStateService} from '../../services/object-state.service';
-import {ObjectConfiguration} from '../../models/object.model';
+import {ObjectConfiguration, ObjectConfigurationItem} from '../../models/object.model';
+import {Pagination} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-object-list',
@@ -33,17 +34,64 @@ export class ObjectListComponent {
 
   readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
 
-  readonly configurationId$: Observable<string> = this.route.params.pipe(map(params => params.documentId));
+  readonly configurationId$: Observable<string> = this.route.params.pipe(map(params => params.configurationId));
 
-  readonly objectConfiguration$: Observable<Array<ObjectConfiguration>> = combineLatest([
+  readonly currentPageAndSize$ = new BehaviorSubject<Partial<Pagination>>({
+    page: 0,
+    size: 10,
+  });
+
+  readonly pageSizes$ = new BehaviorSubject<Partial<Pagination>>({
+    collectionSize: 0,
+    maxPaginationItemSize: 5,
+  });
+
+  readonly pagination$: Observable<Pagination> = combineLatest([
+    this.currentPageAndSize$,
+    this.pageSizes$,
+  ]).pipe(
+    map(
+      ([currentPage, sizes]) =>
+        ({...currentPage, ...sizes, page: currentPage.page + 1} as Pagination)
+    )
+  );
+
+  paginationClicked(newPageNumber): void {
+    this.currentPageAndSize$.pipe(take(1)).subscribe(currentPage => {
+      this.currentPageAndSize$.next({...currentPage, page: newPageNumber - 1});
+    });
+  }
+
+  paginationSet(newPageSize): void {
+    if (newPageSize) {
+      this.currentPageAndSize$.pipe(take(1)).subscribe(currentPage => {
+        this.currentPageAndSize$.next({...currentPage, size: newPageSize});
+      });
+    }
+  }
+
+  readonly objectConfiguration$: Observable<Array<any>> = combineLatest([
     this.configurationId$,
+    this.currentPageAndSize$,
     this.translateService.stream('key'),
     this.objectState.refresh$
   ]).pipe(
     tap(() => this.setFields()),
-    switchMap(([configurationId]) =>
-      this.objectService.getObjectsByConfigurationId(configurationId)
+    switchMap(([configurationId, currentPage]) =>
+      this.objectService.getObjectsByConfigurationId(configurationId, {page: currentPage.page, size: currentPage.size})
     ),
+    tap(instanceRes => {
+      this.pageSizes$.pipe(take(1)).subscribe(sizes => {
+        // @ts-ignore
+        this.pageSizes$.next({...sizes, collectionSize: instanceRes.totalElements});
+      });
+    }),
+    map(res => {
+      return res.content.map(record => ({
+        objectUrl: record.items[0].value,
+        recordIndex: record.items[1].value
+      }));
+    }),
     tap(() => this.loading$.next(false))
   );
 
@@ -55,12 +103,16 @@ export class ObjectListComponent {
     private route: ActivatedRoute,
   ) {}
 
-  redirectToDetails(object) {
-    this.router.navigate([`/object/${object.id}/`]);
+  redirectToDetails(record) {
+    const objectId = record.objectUrl.split("/").pop();
+    this.configurationId$.pipe(take(1)).subscribe(configurationId => {
+      this.router.navigate([`/object/${configurationId}/${objectId}`]);
+    })
+    //
   }
 
   private setFields(): void {
-    const keys: Array<string> = ['title'];
+    const keys: Array<string> = ['recordIndex', 'objectUrl'];
     this.fields$.next(keys.map(key => ({label: `${this.translateService.instant(`object.labels.${key}`)}`, key})));
   }
 }

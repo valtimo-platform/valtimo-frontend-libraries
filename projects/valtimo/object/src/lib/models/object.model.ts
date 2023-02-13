@@ -3,7 +3,7 @@ interface ObjectConfiguration {
 }
 
 interface ObjectConfigurationItem {
-  url: string;
+  id: string;
   items: Object[];
 }
 
