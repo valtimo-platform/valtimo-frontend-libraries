@@ -21,10 +21,13 @@
 
 <ng-template #buttons let-object="object">
   <div class="btn-group mt-m3px mb-3 pr-2 float-right">
-    <a id="downloadAnchorElement" class="d-none"></a>
-    <button class="btn btn-secondary btn-space">
-      <i class="icon mdi mdi-pencil mr-1"></i>
-      Edit
+    <button
+            ibmButton="primary"
+            size="md"
+            class="ml-3"
+    >
+      {{ 'object.editObject' | translate }}
+      <svg class="cds--btn__icon" ibmIcon="edit" size="16"></svg>
     </button>
   </div>
 </ng-template>

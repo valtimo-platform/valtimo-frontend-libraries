@@ -972,9 +972,13 @@
   "object": {
     "title": "Object",
     "createObject": "New object",
+    "editObject": "Edit object",
     "labels": {
       "recordIndex": "Record index",
       "objectUrl": "Object URL"
+    },
+    "tabs": {
+      "general": "General"
     }
   },
   "objectManagement": {

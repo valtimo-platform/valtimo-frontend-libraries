@@ -972,9 +972,13 @@
   "object": {
     "title": "Object",
     "createObject": "Nieuw object",
+    "editObject": "Wijzig object",
     "labels": {
       "recordIndex": "Record index",
       "objectUrl": "Object URL"
+    },
+    "tabs": {
+      "general": "Algemeen"
     }
   },
   "objectManagement": {

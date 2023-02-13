@@ -972,9 +972,13 @@
   "object": {
     "title": "Objekt",
     "createObject": "Objekt erstellen",
+    "editObject": "Objekt bearbeiten",
     "labels": {
       "recordIndex": "Rekordindex",
       "objectUrl": "Objekt-URL"
+    },
+    "tabs": {
+     "general": "Allgemein"
     }
   },
   "objectManagement": {

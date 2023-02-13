@@ -6,6 +6,7 @@ import {AsyncPipe, CommonModule} from '@angular/common';
 import {ListModule, WidgetModule} from '@valtimo/components';
 import {ObjectDetailContainerComponent} from './components/object-detail-container/object-detail-container.component';
 import {ObjectDetailComponent} from './components/object-detail-container/tabs/object-detail/object-detail.component';
+import {ButtonModule, IconModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,9 @@ import {ObjectDetailComponent} from './components/object-detail-container/tabs/o
     TranslateModule,
     AsyncPipe,
     WidgetModule,
-    ListModule
+    ListModule,
+    ButtonModule,
+    IconModule
   ],
   exports: [
   ]
