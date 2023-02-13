@@ -13,29 +13,114 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div id="object-datail-content" class="pt-0">
-  <ng-container *ngTemplateOutlet="buttons;"></ng-container>
-  <div class="clearfix"></div>
-  <ng-container *ngTemplateOutlet="widget;"></ng-container>
-</div>
+<ng-container *ngIf="{
+    prefilledObjectFromObjectUrl: prefilledObjectFromObjectUrl$ | async
+  } as obs"
+>
+  <div class="container-fluid pr-0 pl-0">
+    <div class="text-right">
+      <div class="btn-group mt-m3px mb-3 mr-2">
+        <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
+      </div>
+    </div>
 
-<ng-template #buttons let-object="object">
-  <div class="btn-group mt-m3px mb-3 pr-2 float-right">
-    <button
-            ibmButton="primary"
-            size="md"
-            class="ml-3"
-    >
-      {{ 'object.editObject' | translate }}
-      <svg class="cds--btn__icon" ibmIcon="edit" size="16"></svg>
-    </button>
+    <ng-container *ngTemplateOutlet="widget; context: {obs: obs}"></ng-container>
   </div>
+  <ng-container *ngTemplateOutlet="createEditModal"></ng-container>
+  <ng-container *ngTemplateOutlet="deleteModal"></ng-container>
+</ng-container>
+
+<ng-template #buttons let-obs="obs">
+  <button
+          (click)="openModal()"
+          ibmButton="primary"
+          size="md"
+          class="ml-3"
+  >
+    {{ 'object.editObject' | translate }}
+    <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
+  </button>
+
+  <button
+          (click)="deleteObject()"
+          ibmButton="danger"
+          size="md"
+          class="ml-3"
+  >
+    {{ 'object.deleteObject' | translate }}
+    <svg class="cds--btn__icon" ibmIcon="trash-can" size="16"></svg>
+  </button>
 </ng-template>
 
-<ng-template #widget let-object="object">
-  <valtimo-widget>
-    <div class="row bg-white mt-5 mb-2 pl-2 pr-2">
+<ng-template #widget let-obs="obs">
+
+</ng-template>
+
+<ng-template #createEditModal>
+  <ibm-modal *ngIf="{
+      show: showModal$ | async,
+      valid: valid$ | async,
+      disableInput: disableInput$ | async
+    } as modalObs"
+          [open]="modalObs.show"
+  >
+    <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+      <h3 ibmModalHeaderHeading>
+        {{ 'object.editObject' | translate }}
+      </h3>
+    </ibm-modal-header>
+    <section ibmModalContent>
+      <ng-container *ngTemplateOutlet="modalContent; context: {modalObs: modalObs}"></ng-container>
+    </section>
+    <ng-container *ngTemplateOutlet="modalFooter; context: {modalObs: modalObs}"></ng-container>
+  </ibm-modal>
+</ng-template>
+
+<ng-template #modalContent let-modalObs="modalObs">
+  <form [formGroup]="formGroup" class="list-column-form">
+    <div class="cds--text-input__field-wrapper">
 
     </div>
-  </valtimo-widget>
+  </form>
 </ng-template>
+
+<ng-template #modalFooter let-modalObs="modalObs">
+  <ibm-modal-footer>
+    <ng-container>
+      <button
+              ibmButton="secondary"
+              [attr.modal-primary-focus]="true"
+              (click)="closeModal()"
+              [disabled]="modalObs.disableInput"
+      >
+        {{ 'object.close' | translate }}
+      </button>
+      <button
+              ibmButton="primary"
+              [attr.modal-primary-focus]="true"
+              [disabled]="modalObs.valid === false"
+              (click)="saveObject()"
+              [disabled]="modalObs.disableInput || modalObs.valid === false"
+      >
+        {{ 'object.save' | translate }}
+      </button>
+    </ng-container>
+  </ibm-modal-footer>
+</ng-template>
+
+<ng-template #loading>
+  <div class="loading-icon"><ibm-loading></ibm-loading></div>
+</ng-template>
+
+<ng-template #deleteModal>
+  <valtimo-confirmation-modal
+          [showModalSubject$]="showDeleteModal$"
+          [outputOnConfirm]="deleteObjectUrl$ | async"
+          (confirmEvent)="deleteObjectConfirmation()"
+          confirmButtonTextTranslationKey="object.deleteObject"
+          titleTranslationKey="object.deleteObject"
+          contentTranslationKey="object.deleteObjectConfirmation"
+  ></valtimo-confirmation-modal>
+</ng-template>
+
+

@@ -21,7 +21,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ObjectService} from '../../services/object.service';
 import {ObjectStateService} from '../../services/object-state.service';
-import {ObjectConfiguration, ObjectConfigurationItem} from '../../models/object.model';
 import {Pagination} from '@valtimo/components';
 
 @Component({

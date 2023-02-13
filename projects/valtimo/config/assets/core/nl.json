@@ -973,13 +973,18 @@
     "title": "Object",
     "createObject": "Nieuw object",
     "editObject": "Wijzig object",
+    "deleteObject": "Verwijder object",
     "labels": {
       "recordIndex": "Record index",
       "objectUrl": "Object URL"
     },
     "tabs": {
       "general": "Algemeen"
-    }
+    },
+    "close": "Sluiten",
+    "save": "Object opslaan",
+    "delete": "Object verwijderen",
+    "deleteObjectConfirmation": "Weet u zeker dat u dit object wilt verwijderen?"
   },
   "objectManagement": {
     "title": "Objecttypes",

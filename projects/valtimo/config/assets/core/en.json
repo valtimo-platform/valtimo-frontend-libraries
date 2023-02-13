@@ -973,13 +973,18 @@
     "title": "Object",
     "createObject": "New object",
     "editObject": "Edit object",
+    "deleteObject": "Delete object",
     "labels": {
       "recordIndex": "Record index",
       "objectUrl": "Object URL"
     },
     "tabs": {
       "general": "General"
-    }
+    },
+    "close": "Close",
+    "save": "Save object",
+    "delete": "Delete object",
+    "deleteObjectConfirmation": "Are you sure you want to delete this object"
   },
   "objectManagement": {
     "title": "Objecttypes",

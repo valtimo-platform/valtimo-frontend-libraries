@@ -973,13 +973,18 @@
     "title": "Objekt",
     "createObject": "Objekt erstellen",
     "editObject": "Objekt bearbeiten",
+    "deleteObject": "Objekt Löschen",
     "labels": {
       "recordIndex": "Rekordindex",
       "objectUrl": "Objekt-URL"
     },
     "tabs": {
      "general": "Allgemein"
-    }
+    },
+    "close": "Nahe",
+    "save": "Objekt speichern",
+    "delete": "Objekt löschen",
+    "deleteObjectConfirmation": "Möchten Sie dieses Objekt wirklich löschen?"
   },
   "objectManagement": {
     "title": "Objekttypen",
