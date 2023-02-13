@@ -95,6 +95,8 @@
     [required]="true"
     [tooltip]="'verzoekTypenTooltip' | pluginTranslate : pluginId | async"
     (onDeleteRow)="deleteRow($event)"
+    [initialAmountOfRows]="0"
+    [minimumAmountOfRows]="0"
   >
   </v-multi-input-form>
 </v-form>
@@ -149,12 +151,6 @@
         [required]="true"
         [loading]="!obs.rolTypeSelectItems || !obs.rolTypeSelectItems[index]"
         [tooltip]="'roltypeNameTooltip' | pluginTranslate : pluginId | async"
-        [defaultSelectionId]="
-          !obs.rolTypeSelectItems &&
-          !obs?.rolTypeSelectItems[uuid] &&
-          obs?.rolTypeSelectItems[uuid].length === 0 &&
-          ''
-        "
       ></v-select>
     </ng-container>
     <ng-container *ngIf="{processSelectItems: processSelectItems$ | async} as vars">

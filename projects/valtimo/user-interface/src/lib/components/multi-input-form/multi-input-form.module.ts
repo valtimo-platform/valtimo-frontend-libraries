@@ -21,10 +21,18 @@ import {InputLabelModule} from '../input-label/input-label.module';
 import {InputModule} from '../input/input.module';
 import {ButtonModule} from '../button/button.module';
 import {TranslateModule} from '@ngx-translate/core';
+import {ParagraphModule} from '../paragraph/paragraph.module';
 
 @NgModule({
   declarations: [MultiInputFormComponent],
-  imports: [CommonModule, InputLabelModule, InputModule, ButtonModule, TranslateModule],
+  imports: [
+    CommonModule,
+    InputLabelModule,
+    InputModule,
+    ButtonModule,
+    TranslateModule,
+    ParagraphModule,
+  ],
   exports: [MultiInputFormComponent],
 })
 export class MultiInputFormModule {}

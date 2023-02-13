@@ -26,6 +26,18 @@ const verzoekPluginSpecification: PluginSpecification = {
     nl: {
       title: 'Verzoek',
       description: 'Verzoek plug-in',
+      configurationTitle: 'Configuratienaam',
+      notificatiesApiPluginConfiguration: 'Notificaties API-configuratie',
+      objectManagementId: 'Object management-configuratie',
+      systemProcessDefinitionKey: 'Systeemproces',
+      rsin: 'RSIN',
+      verzoekTypen: 'Verzoektypen',
+      type: 'Type',
+      caseDefinitionName: 'Dossierdefinitie',
+      roltypeName: 'Roltype',
+      processDefinitionKey: 'Procesdefinitie',
+      rolDescription: 'Rolbeschrijving',
+      addVerzoekType: 'Verzoektype toevoegen',
     },
     en: {
       title: 'Verzoek',

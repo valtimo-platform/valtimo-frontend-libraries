@@ -27,7 +27,6 @@ import {
   FormOutput,
   MultiInputFormsValues,
   MultiInputFormValue,
-  MultiInputKeyValue,
   MultiInputType,
   MultiInputValues,
 } from '../../models';
@@ -87,7 +86,11 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(([values, addRowEnabled]) => {
         if (addRowEnabled) {
-          this.values$.next([...values, this.getEmptyValue()]);
+          const newValues = [
+            ...values?.map(value => ({...value, expanded: false})),
+            this.getEmptyValue(),
+          ];
+          this.values$.next(newValues);
         }
       });
   }
@@ -102,8 +105,26 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  trackByFn(index: number, value: MultiInputKeyValue): string {
-    return value.uuid as string;
+  expandRow(uuid: string): void {
+    this.values$.pipe(take(1)).subscribe(values => {
+      this.values$.next(
+        values.map(value =>
+          value.uuid === uuid ? {...value, expanded: true} : {...value, expanded: false}
+        )
+      );
+    });
+  }
+
+  collapseRow(uuid: string): void {
+    this.values$.pipe(take(1)).subscribe(values => {
+      this.values$.next(
+        values.map(value => (value.uuid === uuid ? {...value, expanded: false} : value))
+      );
+    });
+  }
+
+  trackByFn(index: number, value: MultiInputFormValue): string {
+    return `${value.uuid}`;
   }
 
   formValueChange = (newValue: FormOutput, rowIndex: number): void => {
@@ -121,14 +142,26 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
     this.values$.next(newValues);
   };
 
-  private getInitialRows(): MultiInputValues {
+  getFirstValue(rowValue: MultiInputFormValue): string {
+    const formValue = rowValue.value as any;
+    const firstKey = Object.keys(formValue)[0];
+    const firstValue: string = formValue[firstKey];
+    return firstValue ? `${firstValue}` : '-';
+  }
+
+  private getInitialRows(): MultiInputFormsValues {
     const minimumRows = this.minimumAmountOfRows;
     const initialRows = this.initialAmountOfRows;
     const amountOfInitalRows =
-      minimumRows > initialRows ? minimumRows : initialRows > 1 ? initialRows : 1;
+      minimumRows > initialRows ? minimumRows : initialRows > 1 ? initialRows : 0;
 
     if (!this.defaultValues) {
-      return new Array(amountOfInitalRows).fill(this.getEmptyValue());
+      const fillArray = new Array(amountOfInitalRows);
+      return fillArray
+        .fill(this.getEmptyValue())
+        .map((row, index) =>
+          index + 1 === fillArray.length ? {...row, expanded: true} : {...row, expanded: false}
+        );
     } else {
       return this.defaultValues.map(defaultValue => ({...defaultValue, uuid: uuidv4()}));
     }
@@ -136,6 +169,7 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
 
   private getEmptyValue(): MultiInputFormValue {
     return {
+      expanded: true,
       value: {},
       uuid: uuidv4(),
     };

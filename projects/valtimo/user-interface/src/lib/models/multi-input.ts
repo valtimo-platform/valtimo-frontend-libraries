@@ -27,6 +27,7 @@ interface MultiInputKeyValue {
 interface MultiInputFormValue {
   uuid?: string;
   value: FormOutput | {};
+  expanded?: boolean;
 }
 
 type MultiInputValues = Array<MultiInputKeyValue>;

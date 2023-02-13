@@ -402,4 +402,5 @@
   /* multi input form */
   --v-multi-input-form-border: var(--v-border-medium);
   --v-multi-input-padding: var(--v-spacing-inline-l);
+  --v-multi-input-button-spacing: var(--v-spacing-inline-sm);
 }

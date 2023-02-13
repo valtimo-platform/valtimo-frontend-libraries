@@ -38,3 +38,18 @@
 .v-multi-input__input {
   margin-inline-end: var(--v-multi-input-input-spacing-inline);
 }
+
+.v-multi-input__row-form--invisible {
+  display: none;
+}
+
+.v-multi-input__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+}
+
+.v-multi-input__toggle-button {
+  margin-inline-end: var(--v-multi-input-button-spacing);
+}
