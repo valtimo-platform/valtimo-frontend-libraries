@@ -105,6 +105,14 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  toggleRow(uuid: string, expanded: boolean): void {
+    if (expanded) {
+      this.collapseRow(uuid);
+    } else {
+      this.expandRow(uuid);
+    }
+  }
+
   expandRow(uuid: string): void {
     this.values$.pipe(take(1)).subscribe(values => {
       this.values$.next(
@@ -127,13 +135,13 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
     return `${value.uuid}`;
   }
 
-  formValueChange = (newValue: FormOutput, rowIndex: number): void => {
+  formValueChange = (newValue: FormOutput, rowUuid: string): void => {
     const currentValues = this.values$.getValue();
     const newValues: MultiInputFormsValues = [];
 
-    currentValues.forEach((value, index) => {
-      if (index === rowIndex) {
-        newValues.push({uuid: value.uuid, value: newValue});
+    currentValues.forEach(value => {
+      if (value.uuid === rowUuid) {
+        newValues.push({uuid: value.uuid, value: newValue, expanded: value.expanded});
       } else {
         newValues.push(value);
       }

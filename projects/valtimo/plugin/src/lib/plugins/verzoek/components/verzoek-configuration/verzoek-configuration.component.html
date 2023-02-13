@@ -103,7 +103,7 @@
 
 <ng-template #mappingForm let-index="index" let-uuid="uuid" let-changeFunction="changeFunction">
   <v-form
-    (valueChange)="changeFunction($event, index); verzoekTypeFormChange($event, index)"
+    (valueChange)="changeFunction($event, uuid); verzoekTypeFormChange($event, uuid)"
     *ngIf="{
       disabled: disabled$ | async,
       prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null,

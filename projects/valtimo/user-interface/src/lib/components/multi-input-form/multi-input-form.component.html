@@ -62,7 +62,7 @@
           <v-button
             [mdiIcon]="value.expanded === true ? 'chevron-up' : 'chevron-down'"
             type="icon-grey"
-            (clickEvent)="value.expanded ? collapseRow(value.uuid) : expandRow(value.uuid)"
+            (clickEvent)="toggleRow(value.uuid, value.expanded)"
             [title]="vars.deleteRowText"
           ></v-button>
         </div>
