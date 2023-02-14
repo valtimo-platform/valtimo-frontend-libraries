@@ -26,7 +26,7 @@ interface MultiInputKeyValue {
 
 interface MultiInputFormValue {
   uuid?: string;
-  value: FormOutput | {};
+  value: FormOutput | object;
   expanded?: boolean;
 }
 

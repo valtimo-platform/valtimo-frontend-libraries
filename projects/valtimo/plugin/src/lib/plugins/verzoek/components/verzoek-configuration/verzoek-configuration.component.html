@@ -94,7 +94,7 @@
     [addRowText]="'addVerzoekType' | pluginTranslate : pluginId | async"
     [required]="false"
     [tooltip]="'verzoekPropertiesTooltip' | pluginTranslate : pluginId | async"
-    (onDeleteRow)="deleteRow($event)"
+    (deleteRowEvent)="deleteRow($event)"
     [initialAmountOfRows]="0"
     [minimumAmountOfRows]="0"
     [defaultValues]="obs.prefill?.verzoekProperties"
