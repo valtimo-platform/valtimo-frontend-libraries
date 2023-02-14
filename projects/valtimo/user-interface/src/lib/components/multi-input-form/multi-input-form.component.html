@@ -54,7 +54,7 @@
               index: i,
               changeFunction: formValueChange,
               uuid: value.uuid,
-              prefill: defaultValues[i]
+              prefill: defaultValues && defaultValues[i]
             }
           "
         ></ng-container>
@@ -68,7 +68,9 @@
             [mdiIcon]="value.expanded === true ? 'chevron-up' : 'chevron-down'"
             type="icon-grey"
             (clickEvent)="toggleRow(value.uuid, value.expanded)"
-            [title]="vars.deleteRowText"
+            [title]="
+              value.expanded ? ('interface.collapse' | translate) : ('interface.expand' | translate)
+            "
           ></v-button>
         </div>
         <div class="v-multi-input__delete-button">

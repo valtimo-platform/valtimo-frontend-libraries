@@ -16,17 +16,8 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
-import {
-  BehaviorSubject,
-  combineLatest,
-  map,
-  Observable,
-  of,
-  Subscription,
-  switchMap,
-  take,
-} from 'rxjs';
-import {Roltype, VerzoekConfig} from '../../models';
+import {BehaviorSubject, combineLatest, map, Observable, of, Subscription, take} from 'rxjs';
+import {VerzoekConfig, VerzoekType} from '../../models';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
 import {SelectItem} from '@valtimo/user-interface';
@@ -97,47 +88,9 @@ export class VerzoekConfigurationComponent
       )
     );
 
-  readonly selectedCaseDefinitions$ = new BehaviorSubject<{[uuid: string]: string}>({});
-
-  readonly roltypeNameSelectItems$: Observable<{[uuid: string]: Array<SelectItem>}> =
-    this.selectedCaseDefinitions$.pipe(
-      switchMap(selectedCaseDefinitions => {
-        const obsToReturn: Array<Observable<Array<Roltype>> | Observable<string>> = [];
-
-        Object.keys(selectedCaseDefinitions).forEach(uuid => {
-          const documentDefinitionName = selectedCaseDefinitions[uuid];
-
-          obsToReturn.push(of(uuid));
-
-          if (documentDefinitionName) {
-            obsToReturn.push(
-              this.verzoekPluginService.getRoltypesByDocumentDefinitionName(documentDefinitionName)
-            );
-          } else {
-            obsToReturn.push(of([]));
-          }
-        });
-
-        return combineLatest(obsToReturn);
-      }),
-      map(rolTypes =>
-        rolTypes.reduce((acc, curr) => {
-          if (typeof curr === 'string') {
-            return {...acc, [curr]: []};
-          } else {
-            const accKeys = Object.keys(acc);
-            const accKeysLength = accKeys.length;
-            return {
-              ...acc,
-              [accKeys[accKeysLength - 1]]: curr.map(rolType => ({
-                text: rolType.name,
-                id: rolType.url,
-              })),
-            };
-          }
-        }, {})
-      )
-    );
+  rolTypeSelectItemsObservables: {
+    [uuid: string]: {caseDefinitionName: string; items: Observable<Array<SelectItem>>};
+  } = {};
 
   private saveSubscription!: Subscription;
 
@@ -166,21 +119,34 @@ export class VerzoekConfigurationComponent
     this.handleValid(formValue);
   }
 
-  verzoekTypeFormChange(formValue: any, uuid: string): void {
-    this.selectedCaseDefinitions$.pipe(take(1)).subscribe(selectedCaseDefinitions => {
-      this.selectedCaseDefinitions$.next({
-        ...selectedCaseDefinitions,
-        [uuid]: formValue?.caseDefinitionName,
-      });
-    });
+  verzoekTypeFormChange(formValue: VerzoekType, uuid: string): void {
+    const caseDefinitionName = formValue?.caseDefinitionName;
+    const rolTypeSelectItemsObservables = this.rolTypeSelectItemsObservables;
+
+    if (caseDefinitionName) {
+      if (
+        !rolTypeSelectItemsObservables[uuid] ||
+        rolTypeSelectItemsObservables[uuid].caseDefinitionName !== caseDefinitionName
+      ) {
+        rolTypeSelectItemsObservables[uuid] = {
+          caseDefinitionName,
+          items: this.verzoekPluginService
+            .getRoltypesByDocumentDefinitionName(caseDefinitionName)
+            .pipe(
+              map(rolTypes => rolTypes.map(rolType => ({text: rolType.name, id: rolType.url})))
+            ),
+        };
+      }
+    } else {
+      rolTypeSelectItemsObservables[uuid] = {
+        caseDefinitionName,
+        items: of([]),
+      };
+    }
   }
 
   deleteRow(uuid: string) {
-    this.selectedCaseDefinitions$.pipe(take(1)).subscribe(selectedCaseDefinitions => {
-      const selectedCaseDefinitionsCopy = {...selectedCaseDefinitions};
-      delete selectedCaseDefinitionsCopy[uuid];
-      this.selectedCaseDefinitions$.next(selectedCaseDefinitionsCopy);
-    });
+    delete this.rolTypeSelectItemsObservables[uuid];
   }
 
   private handleValid(formValue: VerzoekConfig): void {

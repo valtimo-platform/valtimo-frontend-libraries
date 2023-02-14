@@ -92,7 +92,7 @@
     [title]="'verzoekProperties' | pluginTranslate : pluginId | async"
     [formTemplate]="mappingForm"
     [addRowText]="'addVerzoekType' | pluginTranslate : pluginId | async"
-    [required]="true"
+    [required]="false"
     [tooltip]="'verzoekPropertiesTooltip' | pluginTranslate : pluginId | async"
     (onDeleteRow)="deleteRow($event)"
     [initialAmountOfRows]="0"
@@ -112,8 +112,7 @@
   <v-form
     (valueChange)="changeFunction($event, uuid); verzoekTypeFormChange($event, uuid)"
     *ngIf="{
-      disabled: disabled$ | async,
-      rolTypeSelectItems: roltypeNameSelectItems$ | async
+      disabled: disabled$ | async
     } as obs"
   >
     <v-input
@@ -141,24 +140,33 @@
         [loading]="!vars.documentSelectItems"
         [tooltip]="'caseDefinitionNameTooltip' | pluginTranslate : pluginId | async"
       ></v-select>
-      <v-select
-        [items]="obs.rolTypeSelectItems && obs.rolTypeSelectItems[uuid]"
-        [margin]="true"
-        [widthInPx]="350"
-        name="initiatorRoltypeUrl"
-        [title]="'initiatorRoltypeUrl' | pluginTranslate : pluginId | async"
-        [disabled]="
-          obs.disabled ||
-          !obs.rolTypeSelectItems ||
-          !obs?.rolTypeSelectItems[uuid] ||
-          obs?.rolTypeSelectItems[uuid].length === 0
-        "
-        [defaultSelectionId]="prefill?.initiatorRoltypeUrl"
-        [required]="true"
-        [loading]="!obs.rolTypeSelectItems || !obs.rolTypeSelectItems[uuid]"
-        [tooltip]="'initiatorRoltypeUrlTooltip' | pluginTranslate : pluginId | async"
-      ></v-select>
     </ng-container>
+    <v-select
+      [items]="
+        rolTypeSelectItemsObservables[uuid]?.caseDefinitionName &&
+        (rolTypeSelectItemsObservables[uuid].items | async)
+      "
+      [margin]="true"
+      [widthInPx]="350"
+      name="initiatorRoltypeUrl"
+      [title]="'initiatorRoltypeUrl' | pluginTranslate : pluginId | async"
+      [disabled]="obs.disabled || !rolTypeSelectItemsObservables[uuid]?.caseDefinitionName"
+      [defaultSelectionId]="prefill?.initiatorRoltypeUrl"
+      [required]="true"
+      [tooltip]="'initiatorRoltypeUrlTooltip' | pluginTranslate : pluginId | async"
+    ></v-select>
+    <v-input
+      name="initiatorRolDescription"
+      [title]="'initiatorRolDescription' | pluginTranslate : pluginId | async"
+      [margin]="false"
+      [disabled]="obs.disabled"
+      [defaultValue]="prefill?.initiatorRolDescription || 'Initiator'"
+      [required]="true"
+      [tooltip]="'initiatorRolDescriptionTooltip' | pluginTranslate : pluginId | async"
+      [widthPx]="350"
+      [smallMargin]="true"
+    >
+    </v-input>
     <ng-container *ngIf="{processSelectItems: processSelectItems$ | async} as vars">
       <v-select
         [items]="vars.processSelectItems"
@@ -173,17 +181,5 @@
         [tooltip]="'processDefinitionKeyTooltip' | pluginTranslate : pluginId | async"
       ></v-select>
     </ng-container>
-    <v-input
-      name="initiatorRolDescription"
-      [title]="'initiatorRolDescription' | pluginTranslate : pluginId | async"
-      [margin]="false"
-      [disabled]="obs.disabled"
-      [defaultValue]="prefill?.initiatorRolDescription || 'Initiator'"
-      [required]="true"
-      [tooltip]="'initiatorRolDescriptionTooltip' | pluginTranslate : pluginId | async"
-      [widthPx]="350"
-      [smallMargin]="true"
-    >
-    </v-input>
   </v-form>
 </ng-template>
