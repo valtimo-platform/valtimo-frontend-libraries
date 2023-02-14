@@ -50,7 +50,12 @@
         <ng-container
           *ngTemplateOutlet="
             formTemplate;
-            context: {index: i, changeFunction: formValueChange, uuid: value.uuid}
+            context: {
+              index: i,
+              changeFunction: formValueChange,
+              uuid: value.uuid,
+              prefill: defaultValues[i]
+            }
           "
         ></ng-container>
       </div>

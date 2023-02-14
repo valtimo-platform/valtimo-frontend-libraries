@@ -173,8 +173,25 @@ export class VerzoekConfigurationComponent
   }
 
   private handleValid(formValue: VerzoekConfig): void {
-    const valid = !!(formValue.configurationTitle && formValue.url && formValue.callbackUrl);
-
+    const validForm = !!(
+      formValue.configurationTitle &&
+      formValue.notificatiesApiPluginConfiguration &&
+      formValue.rsin &&
+      formValue.objectManagementId &&
+      formValue.processToStart
+    );
+    const verzoekTypen = formValue.verzoekProperties || [];
+    const validVerzoekTypen = verzoekTypen.filter(
+      type =>
+        !!(
+          type.type &&
+          type.caseDefinitionName &&
+          type.initiatorRoltypeUrl &&
+          type.processDefinitionKey &&
+          type.initiatorRolDescription
+        )
+    );
+    const valid = validForm && verzoekTypen.length === validVerzoekTypen.length;
     this.valid$.next(valid);
     this.valid.emit(valid);
   }

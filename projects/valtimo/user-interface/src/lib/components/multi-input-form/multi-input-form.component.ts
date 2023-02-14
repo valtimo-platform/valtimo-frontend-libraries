@@ -23,13 +23,7 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import {
-  FormOutput,
-  MultiInputFormsValues,
-  MultiInputFormValue,
-  MultiInputType,
-  MultiInputValues,
-} from '../../models';
+import {FormOutput, MultiInputFormsValues, MultiInputFormValue, MultiInputType} from '../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
@@ -52,7 +46,7 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
   @Input() deleteRowText = '';
   @Input() deleteRowTranslationKey = '';
   @Input() disabled = false;
-  @Input() defaultValues!: MultiInputValues;
+  @Input() defaultValues!: Array<FormOutput>;
   @Input() margin = false;
   @Input() tooltip = '';
   @Input() required = false;
@@ -171,7 +165,11 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
           index + 1 === fillArray.length ? {...row, expanded: true} : {...row, expanded: false}
         );
     } else {
-      return this.defaultValues.map(defaultValue => ({...defaultValue, uuid: uuidv4()}));
+      return this.defaultValues.map(defaultValue => ({
+        value: defaultValue,
+        uuid: uuidv4(),
+        expanded: false,
+      }));
     }
   }
 
@@ -185,6 +183,7 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
 
   private openValuesSubscription(): void {
     this.valuesSubscription = this.values$.subscribe(values => {
+      console.log('multi from values', JSON.stringify(values));
       this.valueChange.emit(values);
     });
   }

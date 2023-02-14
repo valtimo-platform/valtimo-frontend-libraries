@@ -16,11 +16,20 @@
 
 import {PluginConfigurationData} from '../../../models';
 
+interface VerzoekType {
+  caseDefinitionName: string;
+  processDefinitionKey: string;
+  initiatorRolDescription: string;
+  initiatorRoltypeUrl: string;
+  type: string;
+}
+
 interface VerzoekConfig extends PluginConfigurationData {
   notificatiesApiPluginConfiguration: string;
   objectManagementId: string;
-  systemProcessDefinitionKey: string;
+  processToStart: string;
   rsin: string;
+  verzoekProperties: Array<VerzoekType>;
 }
 
-export {VerzoekConfig};
+export {VerzoekConfig, VerzoekType};
