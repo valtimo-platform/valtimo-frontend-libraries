@@ -183,7 +183,6 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
 
   private openValuesSubscription(): void {
     this.valuesSubscription = this.values$.subscribe(values => {
-      console.log('multi from values', JSON.stringify(values));
       this.valueChange.emit(values);
     });
   }

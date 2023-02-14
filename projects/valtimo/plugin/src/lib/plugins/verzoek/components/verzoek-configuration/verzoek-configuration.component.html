@@ -142,7 +142,7 @@
         [tooltip]="'caseDefinitionNameTooltip' | pluginTranslate : pluginId | async"
       ></v-select>
       <v-select
-        [items]="obs.rolTypeSelectItems && obs.rolTypeSelectItems[index]"
+        [items]="obs.rolTypeSelectItems && obs.rolTypeSelectItems[uuid]"
         [margin]="true"
         [widthInPx]="350"
         name="initiatorRoltypeUrl"
@@ -150,12 +150,12 @@
         [disabled]="
           obs.disabled ||
           !obs.rolTypeSelectItems ||
-          !obs?.rolTypeSelectItems[index] ||
-          obs?.rolTypeSelectItems[index].length === 0
+          !obs?.rolTypeSelectItems[uuid] ||
+          obs?.rolTypeSelectItems[uuid].length === 0
         "
         [defaultSelectionId]="prefill?.initiatorRoltypeUrl"
         [required]="true"
-        [loading]="!obs.rolTypeSelectItems || !obs.rolTypeSelectItems[index]"
+        [loading]="!obs.rolTypeSelectItems || !obs.rolTypeSelectItems[uuid]"
         [tooltip]="'initiatorRoltypeUrlTooltip' | pluginTranslate : pluginId | async"
       ></v-select>
     </ng-container>

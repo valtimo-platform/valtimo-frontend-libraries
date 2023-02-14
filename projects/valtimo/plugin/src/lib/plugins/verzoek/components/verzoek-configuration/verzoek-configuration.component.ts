@@ -99,13 +99,15 @@ export class VerzoekConfigurationComponent
 
   readonly selectedCaseDefinitions$ = new BehaviorSubject<{[uuid: string]: string}>({});
 
-  readonly roltypeNameSelectItems$: Observable<{[key: number]: Array<SelectItem>}> =
+  readonly roltypeNameSelectItems$: Observable<{[uuid: string]: Array<SelectItem>}> =
     this.selectedCaseDefinitions$.pipe(
       switchMap(selectedCaseDefinitions => {
-        const obsToReturn: Array<Observable<Array<Roltype>>> = [];
+        const obsToReturn: Array<Observable<Array<Roltype>> | Observable<string>> = [];
 
-        Object.keys(selectedCaseDefinitions).forEach(indexNumber => {
-          const documentDefinitionName = selectedCaseDefinitions[indexNumber];
+        Object.keys(selectedCaseDefinitions).forEach(uuid => {
+          const documentDefinitionName = selectedCaseDefinitions[uuid];
+
+          obsToReturn.push(of(uuid));
 
           if (documentDefinitionName) {
             obsToReturn.push(
@@ -118,17 +120,27 @@ export class VerzoekConfigurationComponent
 
         return combineLatest(obsToReturn);
       }),
-      map(rolTypes => {
-        return rolTypes.reduce((acc, curr, index) => {
-          return {
-            ...acc,
-            [index]: curr?.map(rolType => ({id: rolType.url, text: rolType.name})) || [],
-          };
-        }, {});
-      })
+      map(rolTypes =>
+        rolTypes.reduce((acc, curr) => {
+          if (typeof curr === 'string') {
+            return {...acc, [curr]: []};
+          } else {
+            const accKeys = Object.keys(acc);
+            const accKeysLength = accKeys.length;
+            return {
+              ...acc,
+              [accKeys[accKeysLength - 1]]: curr.map(rolType => ({
+                text: rolType.name,
+                id: rolType.url,
+              })),
+            };
+          }
+        }, {})
+      )
     );
 
   private saveSubscription!: Subscription;
+
   private readonly formValue$ = new BehaviorSubject<VerzoekConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
 
@@ -150,7 +162,6 @@ export class VerzoekConfigurationComponent
   }
 
   formValueChange(formValue: VerzoekConfig): void {
-    console.log('value change', formValue);
     this.formValue$.next(formValue);
     this.handleValid(formValue);
   }
