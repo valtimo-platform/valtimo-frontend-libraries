@@ -207,6 +207,7 @@
       "help": "Hilfe",
       "forum": "Forum",
       "feedback": "Feedback",
+      "resetPassword": "Passwort zurücksetzen",
       "signOut": "Abmeldung",
       "plantATree": "Einen Baum pflanzen"
     },
@@ -269,11 +270,13 @@
     "gotoFormLinksButton": "Jetzt konfigurieren",
     "name": "Name",
     "nameIsRequired": "Name ist erforderlich",
+    "nameIsInUse": "Name wird bereits verwendet",
     "back": "Geh zurück",
     "reset": "Zurücksetzen",
     "submit": "Einreichen",
     "delete": "Löschen",
     "deploy": "Deploy",
+    "duplicate": "Duplizieren",
     "readOnly": "Schreibgeschützt"
   },
   "dossierManagement": {
@@ -893,11 +896,20 @@
     "like": "Enthält",
     "single": "Nur",
     "multiple": "Mehrere",
+    "single-select-dropdown": "Single select dropdown",
+    "multi-select-dropdown": "Multi select dropdown",
     "range": "Serie",
     "submit": "Einreichen",
     "delete": "Löschen",
     "addRow": "Suchfeld hinzufügen",
-    "searchFieldPlaceholder": "Wählen Sie einen Typ..."
+    "searchFieldPlaceholder": "Wählen Sie einen Typ...",
+    "dropdownDataProvider": "Dropdown-Datenquelle",
+    "dropdownDatabaseDataProvider": "Werte festlegen",
+    "dropdownJsonFileDataProvider": "Konfigurationsdatei",
+    "configFile": "Konfigurationsdatei",
+    "dropdownListValues": "Dropdown-Listenwerte",
+    "id": "ID",
+    "text": "Text"
   },
   "searchFieldsOverviewTooltips": {
     "title": "Der Titel ist ein optionales Feld, das als Bezeichnung für das aktuelle Suchfeld erscheint. Wenn der Titel nicht festgelegt ist, ist der Standardwert die Übersetzung des Suchfeldschlüssels (wenn keine Übersetzung verfügbar ist, wird der ursprüngliche Schlüsselwert angezeigt).",
@@ -905,7 +917,10 @@
     "path": "Ein Pfad, der zu der Eigenschaft führt, die Sie durchsuchen möchten. Um im JSON-Schema des Dokuments zu suchen, folgen Sie diesem Beispiel: 'doc:customer.firstName'. Folgen Sie für die Suche in den Dokumenteigenschaften diesen Beispielen: 'case:createdBy', oder 'case:sequence', oder 'case:assigneeFullName'. Hinweis: Wenn eine Eigenschaft Sonderzeichen enthält, muss die Eigenschaft in Anführungszeichen gesetzt werden. Zum Beispiel: case:\"loan-accepted\".",
     "dataType": "Der Datentyp bestimmt, welche Eingaben dem Benutzer angezeigt werden. Beispielsweise wird für den Datentyp 'Datum' eine Datumsauswahl angezeigt.",
     "fieldType": "Der Feldtyp bestimmt die Werte, die der Benutzer eingeben kann. Die Option 'Nur' ermöglicht dem Benutzer, nur einen Wert einzugeben. Die Option 'Serie' ermöglicht dem Benutzer die Eingabe von zwei Werten. Nach diesen Werten und allen Werten dazwischen wird dann gesucht.",
-    "matchType": "Die Übereinstimmen legt fest, wie Werte in der Datenbank mit den Suchwerten verknüpft werden. Beim Übereinstimmungstyp 'Genau' würde der Wert '1' nur mit dem Wert '1' übereinstimmen. Für den Übereinstimmungstyp 'Enthält' würde der Wert '1' mit dem Wert '1', '123' und allen anderen Werten übereinstimmen, die '1' enthalten."
+    "matchType": "Die Übereinstimmen legt fest, wie Werte in der Datenbank mit den Suchwerten verknüpft werden. Beim Übereinstimmungstyp 'Genau' würde der Wert '1' nur mit dem Wert '1' übereinstimmen. Für den Übereinstimmungstyp 'Enthält' würde der Wert '1' mit dem Wert '1', '123' und allen anderen Werten übereinstimmen, die '1' enthalten.",
+    "dropdownDataProvider": "Die Dropdown-Datenquelle bestimmt, woher die Daten für die Dropdown-Liste stammen.",
+    "configFile": "Eine Konfigurationsdatei mit Dropdown-Werten verwenden.",
+    "dropdownListValues": "Legen Sie benutzerdefinierte Werte für die Dropdown-Liste fest. Der in der Dropdown-Liste angezeigte Wert sollte in das rechte Textfeld eingegeben werden. Das linke Textfeld sollte die ID dieses Werts enthalten."
   },
   "listColumn": {
     "title": "Titel",
@@ -963,7 +978,8 @@
       "title": "Titel",
       "objects": "Objects-API-Plugin-Konfiguration",
       "objecttypes": "Objecttypen-API-Plugin-Konfiguration",
-      "objecttypeUrl": "Objekttyp-ID",
+      "objecttypeId": "Objekttyp-ID",
+      "objecttypeVersion": "Objekttyp-Version",
       "formDefinitionView": "Formulardefinition anzeigen",
       "formDefinitionEdit": "Formulardefinition bearbeiten",
       "showInDataMenu": "Im Menü anzeigen"
@@ -971,6 +987,7 @@
     "tooltips": {
       "title": "Der Name dieser Konfiguration. Unter diesem Namen ist diese Konfiguration im Rest der Anwendung zu finden.\n",
       "objecttypeId": "Die ID des Objekttyps",
+      "objecttypeVersion": "Die Version des Objekttyps",
       "formDefinitionView": "Der Name der formio IO-Definition, die zur Darstellung des Objekts verwendet wird.",
       "formDefinitionEdit": "Der Name der formio IO-Definition, die zum Bearbeiten des Objekts verwendet wird.\n",
       "showInDataMenu": "Gibt an, ob der Objekttyp im Menü sichtbar ist"

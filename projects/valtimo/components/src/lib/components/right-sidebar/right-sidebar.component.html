@@ -128,7 +128,7 @@
         </ibm-list-column>
       </ibm-list-row>
       <ibm-list-row>
-        <ibm-list-column>
+        <ibm-list-column *ngIf="!overrideFeedbackMenuItemToMailTo; else feedbackMailTo">
           <a href="https://www.valtimo.nl/feedback" target="_blank" ibmLink>{{
             'account.links.feedback' | translate
           }}</a>
@@ -139,6 +139,11 @@
           <a href="https://forum.valtimo.nl" target="_blank" ibmLink>{{
             'account.links.forum' | translate
           }}</a>
+        </ibm-list-column>
+      </ibm-list-row>
+      <ibm-list-row *ngIf="resetUrl">
+        <ibm-list-column>
+          <a [href]="resetUrl" ibmLink>{{ 'account.links.resetPassword' | translate }}</a>
         </ibm-list-column>
       </ibm-list-row>
       <ibm-list-row>
@@ -244,4 +249,23 @@
       </ibm-list-row>
     </ibm-structured-list>
   </ng-container>
+</ng-template>
+
+<ng-template #feedbackMailTo>
+  <ibm-list-column>
+    <a
+      [href]="
+        'mailto:' +
+        overrideFeedbackMenuItemToMailTo.email +
+        '?subject=' +
+        (overrideFeedbackMenuItemToMailTo.subjectTranslationKey | translate) +
+        '&body=' +
+        (overrideFeedbackMenuItemToMailTo.bodyTranslationKey | translate)
+      "
+      target="_blank"
+      ibmLink
+    >
+      {{ 'account.links.feedback' | translate }}
+    </a>
+  </ibm-list-column>
 </ng-template>

@@ -81,6 +81,9 @@ export interface ValtimoConfig {
   valtimoApi: {
     endpointUri: string;
   };
+  changePasswordUrl?: {
+    endpointUri: string;
+  };
   swagger: {
     endpointUri: string;
   };
@@ -123,6 +126,13 @@ export interface ValtimoConfig {
   caseObjectTypes?: {
     [definitionNameId: string]: Array<string>;
   };
+  overrideFeedbackMenuItemToMailTo?: FeedbackMailTo;
+}
+
+export interface FeedbackMailTo {
+  email?: string;
+  subjectTranslationKey: string;
+  bodyTranslationKey: string;
 }
 
 export enum UploadProvider {
