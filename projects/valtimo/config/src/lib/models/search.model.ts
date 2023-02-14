@@ -40,7 +40,7 @@ interface SearchField {
   order?: number;
   dataType: SearchFieldDataType;
   fieldType: SearchFieldFieldType;
-  matchType: SearchFieldMatchType;
+  matchType?: SearchFieldMatchType;
   dropdownDataProvider?: string;
 }
 
