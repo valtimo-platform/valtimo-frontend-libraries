@@ -77,6 +77,7 @@
   <ibm-modal *ngIf="{
       show: showModal$ | async,
       valid: valid$ | async,
+      formDefinition: formDefinition$ | async,
       disableInput: disableInput$ | async
     } as modalObs"
              [open]="modalObs.show"
@@ -94,11 +95,7 @@
 </ng-template>
 
 <ng-template #modalContent let-modalObs="modalObs">
-  <form [formGroup]="formGroup" class="list-column-form">
-    <div class="cds--text-input__field-wrapper">
-
-    </div>
-  </form>
+  <valtimo-form-io [form]="modalObs.formDefinition"></valtimo-form-io>
 </ng-template>
 
 <ng-template #modalFooter let-modalObs="modalObs">

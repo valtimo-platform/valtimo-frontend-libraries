@@ -23,6 +23,7 @@ import {ObjectService} from '../../services/object.service';
 import {ObjectStateService} from '../../services/object-state.service';
 import {Pagination} from '@valtimo/components';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormType} from '../../models/object.model';
 
 @Component({
   selector: 'valtimo-object-list',
@@ -105,6 +106,18 @@ export class ObjectListComponent {
         recordIndex: record.items[1].value
       }));
     }),
+    tap(() => this.loading$.next(false))
+  );
+
+  readonly formDefinition$: Observable<any> = combineLatest([
+    this.objectManagementId$,
+    this.objectManagementId$,
+    this.objectState.refresh$
+  ]).pipe(
+    switchMap(([objectManagementId]) =>
+      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, formType: FormType.EDITFORM})
+    ),
+    map(res => res.formDefinition),
     tap(() => this.loading$.next(false))
   );
 
