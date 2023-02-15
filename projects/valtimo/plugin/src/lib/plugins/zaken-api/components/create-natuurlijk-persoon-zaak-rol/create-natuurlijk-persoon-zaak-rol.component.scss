@@ -13,26 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {PluginConfigurationData} from '../../../models';
-
-interface ZakenApiConfig extends PluginConfigurationData {
-  url: string;
-  authenticationPluginConfiguration: string;
-}
-
-interface LinkDocumentToZaakConfig {
-  documentUrl: string;
-  titel: string;
-  beschrijving: string;
-}
-
-interface CreateNatuurlijkePersoonZaakRolConfig {
-  roltypeUrl: string;
-  rolToelichting: string;
-  inpBsn: string;
-  anpIdentificatie: string;
-  inpA_nummer: string;
-}
-
-export {ZakenApiConfig, LinkDocumentToZaakConfig, CreateNatuurlijkePersoonZaakRolConfig};

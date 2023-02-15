@@ -21,12 +21,14 @@ import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/u
 import {ZakenApiConfigurationComponent} from './components/zaken-api-configuration/zaken-api-configuration.component';
 import {LinkDocumentToZaakConfigurationComponent} from './components/link-document-to-zaak/link-document-to-zaak-configuration.component';
 import {LinkUploadedDocumentToZaakConfigurationComponent} from './components/link-uploaded-document-to-zaak/link-uploaded-document-to-zaak-configuration.component';
+import {CreateNatuurlijkPersoonZaakRolComponent} from './components/create-natuurlijk-persoon-zaak-rol/create-natuurlijk-persoon-zaak-rol.component';
 
 @NgModule({
   declarations: [
     ZakenApiConfigurationComponent,
     LinkDocumentToZaakConfigurationComponent,
     LinkUploadedDocumentToZaakConfigurationComponent,
+    CreateNatuurlijkPersoonZaakRolComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +42,7 @@ import {LinkUploadedDocumentToZaakConfigurationComponent} from './components/lin
     ZakenApiConfigurationComponent,
     LinkDocumentToZaakConfigurationComponent,
     LinkUploadedDocumentToZaakConfigurationComponent,
+    CreateNatuurlijkPersoonZaakRolComponent,
   ],
 })
 export class ZakenApiPluginModule {}
