@@ -29,7 +29,7 @@
 <ng-template #title>
   <div class="bg-light dossier-header">
     <h3 class="dossier-title">
-      Title
+      {{ objectManagementId$ | async }}
     </h3>
   </div>
 </ng-template>
@@ -50,7 +50,7 @@
 </ng-template>
 
 <ng-template #tabContent>
-  <div class="pt-3 bg-white position-relative tab-container">
+  <div class="pl-1 pr-1 pt-3 bg-white position-relative tab-container">
     <div *ngIf="currentTab && currentTab === TabEnum.GENERAL">
       <valtimo-object-detail></valtimo-object-detail>
     </div>

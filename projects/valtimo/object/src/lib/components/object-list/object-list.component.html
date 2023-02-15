@@ -13,21 +13,36 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-
-<div class="main-content pt-0" *ngIf="{loading: loading$ | async, pagination: pagination$ | async} as obs">
-  <div class="container-fluid">
-    <div class="col-12 px-0 mb-5">
-      <div class="text-right mt-m3px mb-3">
-        <button type="button" class="btn btn-space btn-primary mr-0">
-          <i class="icon mdi mdi-plus mr-1"></i>
-          {{ 'object.createObject' | translate }}
-        </button>
+<ng-container *ngIf="{
+    loading: loading$ | async,
+    pagination: pagination$ | async
+  } as obs"
+>
+  <div class="main-content pt-0">
+    <div class="container-fluid pr-0 pl-0">
+    <div class="text-right">
+      <div class="btn-group mt-m3px mb-3 mr-0">
+        <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
       </div>
-      <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
     </div>
+
+    <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
   </div>
-</div>
+  </div>
+  <ng-container *ngTemplateOutlet="createNewModal"></ng-container>
+</ng-container>
+
+<ng-template #buttons let-obs="obs">
+  <button
+          (click)="openModal()"
+          ibmButton="primary"
+          size="md"
+          class="ml-3"
+  >
+    {{ 'object.createObject' | translate }}
+    <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
+  </button>
+</ng-template>
 
 <ng-template #list let-obs="obs">
   <ng-container *ngIf="fields$ | async as fields">
@@ -57,6 +72,63 @@
     </ng-container>
   </ng-container>
 </ng-template>
+
+<ng-template #createNewModal>
+  <ibm-modal *ngIf="{
+      show: showModal$ | async,
+      valid: valid$ | async,
+      disableInput: disableInput$ | async
+    } as modalObs"
+             [open]="modalObs.show"
+  >
+    <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+      <h3 ibmModalHeaderHeading>
+        {{ 'object.createObject' | translate }}
+      </h3>
+    </ibm-modal-header>
+    <section ibmModalContent>
+      <ng-container *ngTemplateOutlet="modalContent; context: {modalObs: modalObs}"></ng-container>
+    </section>
+    <ng-container *ngTemplateOutlet="modalFooter; context: {modalObs: modalObs}"></ng-container>
+  </ibm-modal>
+</ng-template>
+
+<ng-template #modalContent let-modalObs="modalObs">
+  <form [formGroup]="formGroup" class="list-column-form">
+    <div class="cds--text-input__field-wrapper">
+
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #modalFooter let-modalObs="modalObs">
+  <ibm-modal-footer>
+    <ng-container>
+      <button
+              ibmButton="secondary"
+              [attr.modal-primary-focus]="true"
+              (click)="closeModal()"
+              [disabled]="modalObs.disableInput"
+      >
+        {{ 'object.close' | translate }}
+      </button>
+      <button
+              ibmButton="primary"
+              [attr.modal-primary-focus]="true"
+              [disabled]="modalObs.valid === false"
+              (click)="addObject()"
+              [disabled]="modalObs.disableInput || modalObs.valid === false"
+      >
+        {{ 'object.save' | translate }}
+      </button>
+    </ng-container>
+  </ibm-modal-footer>
+</ng-template>
+
+<ng-template #loading>
+  <div class="loading-icon"><ibm-loading></ibm-loading></div>
+</ng-template>
+
 
 
 

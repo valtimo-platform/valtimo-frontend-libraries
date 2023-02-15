@@ -14,17 +14,22 @@
   ~ limitations under the License.
   -->
 <ng-container *ngIf="{
-    prefilledObjectFromObjectUrl: prefilledObjectFromObjectUrl$ | async
+    formioForm: formioForm$ | async
   } as obs"
 >
   <div class="container-fluid pr-0 pl-0">
-    <div class="text-right">
-      <div class="btn-group mt-m3px mb-3 mr-2">
-        <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
+    <div class="row">
+      <div class="col-6">
+        <ng-container *ngTemplateOutlet="widget; context: {obs: obs}"></ng-container>
+      </div>
+      <div class="col-4 offset-2">
+        <div class="text-right">
+          <div class="btn-group">
+            <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
+          </div>
+        </div>
       </div>
     </div>
-
-    <ng-container *ngTemplateOutlet="widget; context: {obs: obs}"></ng-container>
   </div>
   <ng-container *ngTemplateOutlet="createEditModal"></ng-container>
   <ng-container *ngTemplateOutlet="deleteModal"></ng-container>
@@ -53,16 +58,17 @@
 </ng-template>
 
 <ng-template #widget let-obs="obs">
-
+  <valtimo-form-io [form]="obs.formioForm" [readOnly]="true"></valtimo-form-io>
 </ng-template>
 
 <ng-template #createEditModal>
   <ibm-modal *ngIf="{
       show: showModal$ | async,
-      valid: valid$ | async,
-      disableInput: disableInput$ | async
+      formValid: formValid$ | async,
+      disableInput: disableInput$ | async,
+      formioForm: formioForm$ | async
     } as modalObs"
-          [open]="modalObs.show"
+             [open]="modalObs.show"
   >
     <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
       <h3 ibmModalHeaderHeading>
@@ -77,11 +83,7 @@
 </ng-template>
 
 <ng-template #modalContent let-modalObs="modalObs">
-  <form [formGroup]="formGroup" class="list-column-form">
-    <div class="cds--text-input__field-wrapper">
-
-    </div>
-  </form>
+  <valtimo-form-io [form]="modalObs.formioForm" (change)="onFormioChange($event)"></valtimo-form-io>
 </ng-template>
 
 <ng-template #modalFooter let-modalObs="modalObs">
@@ -98,9 +100,8 @@
       <button
               ibmButton="primary"
               [attr.modal-primary-focus]="true"
-              [disabled]="modalObs.valid === false"
               (click)="saveObject()"
-              [disabled]="modalObs.disableInput || modalObs.valid === false"
+              [disabled]="modalObs.disableInput || modalObs.formValid === false"
       >
         {{ 'object.save' | translate }}
       </button>

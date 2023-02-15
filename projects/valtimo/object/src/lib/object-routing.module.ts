@@ -18,22 +18,22 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
-import {ROLE_ADMIN} from '@valtimo/config';
+import {ROLE_USER} from '@valtimo/config';
 import {ObjectListComponent} from './components/object-list/object-list.component';
 import {ObjectDetailContainerComponent} from './components/object-detail-container/object-detail-container.component';
 
 const routes: Routes = [
   {
-    path: 'object/:configurationId',
+    path: 'object/:objectManagementId',
     canActivate: [AuthGuardService],
     component: ObjectListComponent,
-    data: {title: 'Object', roles: [ROLE_ADMIN]},
+    data: {title: 'Object list', roles: [ROLE_USER]},
   },
   {
-    path: 'object/:configurationId/:objectId',
+    path: 'object/:objectManagementId/:objectId',
     canActivate: [AuthGuardService],
     component: ObjectDetailContainerComponent,
-    data: {title: 'Object', roles: [ROLE_ADMIN]},
+    data: {title: 'Object details', roles: [ROLE_USER]},
   }
 ];
 

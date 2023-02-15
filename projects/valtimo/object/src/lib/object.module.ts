@@ -9,6 +9,7 @@ import {ObjectDetailComponent} from './components/object-detail-container/tabs/o
 import {ButtonModule, IconModule, InputModule, LoadingModule, ModalModule} from 'carbon-components-angular';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TooltipIconModule} from '@valtimo/user-interface';
+import {FormIoModule} from '@valtimo/components';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {TooltipIconModule} from '@valtimo/user-interface';
     IconModule,
     SpinnerModule,
     LoadingModule,
+    FormIoModule,
     ModalModule,
     ReactiveFormsModule,
     InputModule,

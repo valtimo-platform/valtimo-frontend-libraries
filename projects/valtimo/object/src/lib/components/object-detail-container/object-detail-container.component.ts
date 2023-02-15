@@ -16,7 +16,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs';
+import {map, Observable, Subscription} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
 import {ObjectStateService} from '../../services/object-state.service';
 import {ObjectService} from '../../services/object.service';
@@ -35,6 +35,8 @@ export class ObjectDetailContainerComponent implements OnInit, OnDestroy {
   private tabSubscription: Subscription;
 
   readonly TabEnum = TabEnum;
+
+  readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
 
   constructor(
     private readonly objectState: ObjectStateService,

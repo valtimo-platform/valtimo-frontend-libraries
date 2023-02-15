@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {BehaviorSubject, combineLatest, delay, map, Observable, startWith, Subject} from 'rxjs';
+import {Component, TemplateRef, ViewChild} from '@angular/core';
+import {BehaviorSubject, combineLatest, map, Observable, startWith, Subject} from 'rxjs';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {ObjectService} from '../../../../services/object.service';
 import {ObjectStateService} from '../../../../services/object-state.service';
 import {ActivatedRoute} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormType} from '../../../../models/object.model';
 
 @Component({
   selector: 'valtimo-object-detail',
@@ -29,6 +30,9 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class ObjectDetailComponent {
   readonly loading$ = new BehaviorSubject<boolean>(true);
+  readonly currentFormType$ = new BehaviorSubject<FormType>(FormType.SUMMARY);
+  readonly submission$ = new BehaviorSubject<any>({});
+  readonly formValid$ = new BehaviorSubject<boolean>(false);
   readonly showModal$ = new BehaviorSubject<boolean>(false);
   readonly disableInput$ = new BehaviorSubject<boolean>(false);
   readonly showDeleteModal$ = new Subject<boolean>();
@@ -36,31 +40,19 @@ export class ObjectDetailComponent {
 
   private readonly refreshObject$ = new BehaviorSubject<null>(null);
 
-  readonly formGroup = new FormGroup({
-    key: new FormControl('', Validators.required),
-  });
+  readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
+  readonly objectId$: Observable<string> = this.route.params.pipe(map(params => params.objectId));
 
-  readonly objectUrl$: Observable<string> = this.route.params.pipe(map(params => {
-    console.log(params)
-    return params.objectUrl
-  }));
-
-  readonly valid$ = this.formGroup.valueChanges.pipe(
-    map(formValues => formValues.key !== undefined),
-    startWith(false)
-  );
-
-  readonly prefilledObjectFromObjectUrl$: Observable<Array<any>> = combineLatest([
-    this.objectUrl$,
+  readonly formioForm$: Observable<any> = combineLatest([
+    this.objectManagementId$,
+    this.objectId$,
+    this.currentFormType$,
     this.refreshObject$,
   ]).pipe(
-    switchMap(([objectUrl]) =>
-      this.objectService.getPrefilledObjectFromObjectUrl({objectUrl: 'http://localhost:8010/api/v2/objects/1017c4c4-24c1-47b4-8f61-3b45a56f3054'})
+    switchMap(([objectManagementId, objectId, formType]) =>
+      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType})
     ),
-    map(res => {
-      console.log(res);
-      return null;
-    }),
+    map(res => res.formDefinition),
     tap(() => this.loading$.next(false))
   );
 
@@ -78,9 +70,6 @@ export class ObjectDetailComponent {
 
   deleteObject(): void {
     this.showDeleteModal$.next(true);
-    this.objectUrl$.pipe(take(1)).subscribe(objectUrl => {
-      this.deleteObjectUrl$.next(objectUrl);
-    })
   }
 
   deleteObjectConfirmation(): void {
@@ -89,13 +78,32 @@ export class ObjectDetailComponent {
 
   openModal(): void {
     this.showModal$.next(true);
+    this.currentFormType$.next(FormType.EDITFORM);
+    this.enableInput();
+  }
+
+  onFormioChange(formio) {
+    if (formio.data != null) {
+      this.submission$.next(formio.data)
+    }
+
+    this.formValid$.next(formio.isValid);
   }
 
   closeModal(): void {
     this.showModal$.next(false);
+    this.currentFormType$.next(FormType.SUMMARY);
   }
 
   private updateObject(): void {
+    combineLatest([this.submission$, this.formValid$])
+      .pipe(take(1))
+      .subscribe(([submission, formValid]) => {
+        console.log(submission)
+        console.log(formValid)
+        this.closeModal();
+        this.refreshObject();
+      });
   }
 
   private refreshObject(): void {
@@ -104,11 +112,9 @@ export class ObjectDetailComponent {
 
   private disableInput(): void {
     this.disableInput$.next(true);
-    this.formGroup.disable();
   }
 
   private enableInput(): void {
     this.disableInput$.next(false);
-    this.formGroup.enable();
   }
 }

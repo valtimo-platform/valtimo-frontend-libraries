@@ -12,4 +12,9 @@ interface Object {
   value: string;
 }
 
-export  {ObjectConfiguration, ObjectConfigurationItem, Object}
+enum FormType {
+  SUMMARY= 'SUMMARY',
+  EDITFORM = 'EDITFORM'
+}
+
+export  {ObjectConfiguration, ObjectConfigurationItem, Object, FormType}

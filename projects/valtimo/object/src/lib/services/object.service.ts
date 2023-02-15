@@ -16,8 +16,12 @@ export class ObjectService {
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
   }
 
-  public getObjectsByConfigurationId(configurationId: string, params?: any): Observable<ObjectConfiguration> {
-    return this.http.get<ObjectConfiguration>(`${this.valtimoEndpointUri}v1/object/management/configuration/${configurationId}/object`, {params});
+  public getObjectsByObjectManagementId(objectManagementId: string, params?: any): Observable<ObjectConfiguration> {
+    return this.http.get<ObjectConfiguration>(`${this.valtimoEndpointUri}v1/object/management/configuration/${objectManagementId}/object`, {params});
+  }
+
+  public createObject(params: any): Observable<any> {
+    return this.http.post<any>(`${this.valtimoEndpointUri}v1/object`, {params});
   }
 
   public getPrefilledObjectFromObjectUrl(params: any): Observable<FormDefinition> {

@@ -15,13 +15,14 @@
  */
 
 import {Component} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, startWith, Subject} from 'rxjs';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ObjectService} from '../../services/object.service';
 import {ObjectStateService} from '../../services/object-state.service';
 import {Pagination} from '@valtimo/components';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'valtimo-object-list',
@@ -33,7 +34,15 @@ export class ObjectListComponent {
 
   readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
 
-  readonly configurationId$: Observable<string> = this.route.params.pipe(map(params => params.configurationId));
+  readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
+
+  readonly showModal$ = new BehaviorSubject<boolean>(false);
+  readonly disableInput$ = new BehaviorSubject<boolean>(false);
+  private readonly refreshObjectList$ = new BehaviorSubject<null>(null);
+
+  readonly formGroup = new FormGroup({
+    key: new FormControl('', Validators.required),
+  });
 
   readonly currentPageAndSize$ = new BehaviorSubject<Partial<Pagination>>({
     page: 0,
@@ -69,15 +78,20 @@ export class ObjectListComponent {
     }
   }
 
+  readonly valid$ = this.formGroup.valueChanges.pipe(
+    map(formValues => formValues.key !== undefined),
+    startWith(false)
+  );
+
   readonly objectConfiguration$: Observable<Array<any>> = combineLatest([
-    this.configurationId$,
+    this.objectManagementId$,
     this.currentPageAndSize$,
     this.translateService.stream('key'),
     this.objectState.refresh$
   ]).pipe(
     tap(() => this.setFields()),
-    switchMap(([configurationId, currentPage]) =>
-      this.objectService.getObjectsByConfigurationId(configurationId, {page: currentPage.page, size: currentPage.size})
+    switchMap(([objectManagementId, currentPage]) =>
+      this.objectService.getObjectsByObjectManagementId(objectManagementId, {page: currentPage.page, size: currentPage.size})
     ),
     tap(instanceRes => {
       this.pageSizes$.pipe(take(1)).subscribe(sizes => {
@@ -94,6 +108,12 @@ export class ObjectListComponent {
     tap(() => this.loading$.next(false))
   );
 
+  readonly createObject$: Observable<any> = combineLatest([
+    this.objectManagementId$
+  ]).pipe(
+    switchMap(([objectManagementId]) => this.objectService.createObject({objectManagementId}))
+  )
+
   constructor(
     private readonly objectService: ObjectService,
     private readonly objectState: ObjectStateService,
@@ -102,13 +122,40 @@ export class ObjectListComponent {
     private route: ActivatedRoute,
   ) {}
 
+  openModal(): void {
+    this.showModal$.next(true);
+  }
+
+  closeModal(): void {
+    this.showModal$.next(false);
+  }
+
+  addObject(): void {
+    this.disableInput();
+  }
+
+
   redirectToDetails(record) {
     const objectId = record.objectUrl.split("/").pop();
-    this.configurationId$.pipe(take(1)).subscribe(configurationId => {
+    this.objectManagementId$.pipe(take(1)).subscribe(configurationId => {
       this.router.navigate([`/object/${configurationId}/${objectId}`]);
     })
-    //
   }
+
+  private refreshObjectList(): void {
+    this.refreshObjectList$.next(null);
+  }
+
+  private disableInput(): void {
+    this.disableInput$.next(true);
+    this.formGroup.disable();
+  }
+
+  private enableInput(): void {
+    this.disableInput$.next(false);
+    this.formGroup.enable();
+  }
+
 
   private setFields(): void {
     const keys: Array<string> = ['recordIndex', 'objectUrl'];
