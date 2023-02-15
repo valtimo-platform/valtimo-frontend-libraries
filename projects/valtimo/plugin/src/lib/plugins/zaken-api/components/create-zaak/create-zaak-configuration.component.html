@@ -37,47 +37,46 @@
   </v-input>
   <div [ngClass]="'v-toggle--margin'">
     <v-input-label
-      [title]="'manualZaakTypeUrlToggle' | pluginTranslate : pluginId | async"
-      [name]="'manualZaakTypeUrl'"
-      [tooltip]="'manualZaakUrlTooltip' | pluginTranslate : pluginId | async"
+      [title]="'inputTypeZaakTypeToggle' | pluginTranslate : pluginId | async"
+      [name]="'inputTypeZaakTypeToggle'"
       [required]="false"
     >
     </v-input-label>
     <ibm-toggle
-      [onText]="'on' | pluginTranslate : pluginId | async"
-      [offText]="'off' | pluginTranslate : pluginId | async"
+      [onText]="'text' | pluginTranslate : pluginId | async"
+      [offText]="'selection' | pluginTranslate : pluginId | async"
       [disabled]="obs.disabled"
       [checked]="false"
-      (checkedChange)="toggleShowManualZaakTypeUrl()"
+      (checkedChange)="toggleInputTypeZaakType()"
     >
     </ibm-toggle>
   </div>
   <v-input
-    *ngIf="showManualZaakTypeUrl"
+    *ngIf="inputTypeTextZaakType"
     name="zaaktypeUrl"
-    [title]="'zaaktypeUrl' | pluginTranslate : pluginId | async"
+    [title]="'zaakType' | pluginTranslate : pluginId | async"
     [margin]="true"
     [defaultValue]="obs.prefill?.zaaktypeUrl"
-    [disabled]="obs.disabled || !showManualZaakTypeUrl"
+    [disabled]="obs.disabled || !inputTypeTextZaakType"
     [required]="true"
-    [tooltip]="'zaaktypeUrlTooltip' | pluginTranslate : pluginId | async"
+    [tooltip]="'zaakTypeTooltip' | pluginTranslate : pluginId | async"
     [fullWidth]="true"
   >
   </v-input>
   <ng-container
-    *ngIf="!showManualZaakTypeUrl && {zaakTypeSelectItems: zaakTypeSelectItems$ | async} as vars"
+    *ngIf="!inputTypeTextZaakType && {zaakTypeSelectItems: zaakTypeSelectItems$ | async} as vars"
   >
     <v-select
       [items]="vars.zaakTypeSelectItems"
       [margin]="true"
       [widthInPx]="350"
       name="zaaktypeUrl"
-      [title]="'zaaktypeUrl' | pluginTranslate : pluginId | async"
-      [disabled]="obs.disabled || showManualZaakTypeUrl"
+      [title]="'zaakType' | pluginTranslate : pluginId | async"
+      [disabled]="obs.disabled || inputTypeTextZaakType"
       [defaultSelectionId]="obs.prefill?.zaaktypeUrl"
       [required]="true"
       [loading]="!vars.zaakTypeSelectItems"
-      [tooltip]="'zaaktypeUrlTooltip' | pluginTranslate : pluginId | async"
+      [tooltip]="'zaakTypeTooltip' | pluginTranslate : pluginId | async"
     ></v-select>
   </ng-container>
 </v-form>

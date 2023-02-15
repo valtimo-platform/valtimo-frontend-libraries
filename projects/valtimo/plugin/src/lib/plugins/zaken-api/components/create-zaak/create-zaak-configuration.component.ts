@@ -45,7 +45,7 @@ export class CreateZaakConfigurationComponent
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<CreateZaakConfig> = new EventEmitter<CreateZaakConfig>();
 
-  public showManualZaakTypeUrl: boolean;
+  public inputTypeTextZaakType: boolean;
   private saveSubscription!: Subscription;
 
   private readonly formValue$ = new BehaviorSubject<CreateZaakConfig | null>(null);
@@ -96,8 +96,8 @@ export class CreateZaakConfigurationComponent
     this.handleValid(formValue);
   }
 
-  toggleShowManualZaakTypeUrl() {
-    this.showManualZaakTypeUrl = !this.showManualZaakTypeUrl;
+  toggleInputTypeZaakType() {
+    this.inputTypeTextZaakType = !this.inputTypeTextZaakType;
   }
 
   private handleValid(formValue: CreateZaakConfig): void {
