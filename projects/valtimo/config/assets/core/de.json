@@ -997,7 +997,11 @@
     "close": "Nahe",
     "save": "Objekt speichern",
     "delete": "Objekt löschen",
-    "deleteObjectConfirmation": "Möchten Sie dieses Objekt wirklich löschen?"
+    "deleteObjectConfirmation": "Möchten Sie dieses Objekt wirklich löschen?",
+    "messages":  {
+      "objectCreated": "Objekt erfolgreich erstellt",
+      "objectCreationFailed": "Beim Erstellen des Objekts ist ein Fehler aufgetreten"
+    }
   },
   "objectManagement": {
     "title": "Objekttypen",

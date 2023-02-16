@@ -997,7 +997,11 @@
     "close": "Sluiten",
     "save": "Object opslaan",
     "delete": "Object verwijderen",
-    "deleteObjectConfirmation": "Weet u zeker dat u dit object wilt verwijderen?"
+    "deleteObjectConfirmation": "Weet u zeker dat u dit object wilt verwijderen?",
+    "messages":  {
+      "objectCreated": "Object succesvol aangemaakt",
+      "objectCreationError": "Er is een fout opgetreden tijdens het maken van het object"
+    }
   },
   "objectManagement": {
     "title": "Objecttypes",

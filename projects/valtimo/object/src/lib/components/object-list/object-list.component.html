@@ -76,7 +76,7 @@
 <ng-template #createNewModal>
   <ibm-modal *ngIf="{
       show: showModal$ | async,
-      valid: valid$ | async,
+      formValid: formValid$ | async,
       formDefinition: formDefinition$ | async,
       disableInput: disableInput$ | async
     } as modalObs"
@@ -95,7 +95,7 @@
 </ng-template>
 
 <ng-template #modalContent let-modalObs="modalObs">
-  <valtimo-form-io [form]="modalObs.formDefinition"></valtimo-form-io>
+  <valtimo-form-io [form]="modalObs.formDefinition" (change)="onFormioChange($event)"></valtimo-form-io>
 </ng-template>
 
 <ng-template #modalFooter let-modalObs="modalObs">
@@ -112,9 +112,8 @@
       <button
               ibmButton="primary"
               [attr.modal-primary-focus]="true"
-              [disabled]="modalObs.valid === false"
               (click)="addObject()"
-              [disabled]="modalObs.disableInput || modalObs.valid === false"
+              [disabled]="modalObs.disableInput || modalObs.formValid === false"
       >
         {{ 'object.save' | translate }}
       </button>

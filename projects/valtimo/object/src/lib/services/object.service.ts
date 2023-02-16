@@ -20,8 +20,8 @@ export class ObjectService {
     return this.http.get<ObjectConfiguration>(`${this.valtimoEndpointUri}v1/object/management/configuration/${objectManagementId}/object`, {params});
   }
 
-  public createObject(params: any): Observable<any> {
-    return this.http.post<any>(`${this.valtimoEndpointUri}v1/object`, {params});
+  public createObject(params: any, payload: any): Observable<any> {
+    return this.http.post<any>(`${this.valtimoEndpointUri}v1/object`, payload, {params});
   }
 
   public getPrefilledObjectFromObjectUrl(params: any): Observable<FormDefinition> {

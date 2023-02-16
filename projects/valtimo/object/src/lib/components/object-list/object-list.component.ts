@@ -15,15 +15,15 @@
  */
 
 import {Component} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, startWith, Subject} from 'rxjs';
-import {switchMap, take, tap} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, map, Observable, throwError} from 'rxjs';
+import {catchError, finalize, switchMap, take, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ObjectService} from '../../services/object.service';
 import {ObjectStateService} from '../../services/object-state.service';
 import {Pagination} from '@valtimo/components';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {FormType} from '../../models/object.model';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'valtimo-object-list',
@@ -32,18 +32,15 @@ import {FormType} from '../../models/object.model';
 })
 export class ObjectListComponent {
   readonly loading$ = new BehaviorSubject<boolean>(true);
-
-  readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
-
-  readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
-
+  readonly submission$ = new BehaviorSubject<any>({});
+  readonly formValid$ = new BehaviorSubject<boolean>(false);
   readonly showModal$ = new BehaviorSubject<boolean>(false);
   readonly disableInput$ = new BehaviorSubject<boolean>(false);
-  private readonly refreshObjectList$ = new BehaviorSubject<null>(null);
 
-  readonly formGroup = new FormGroup({
-    key: new FormControl('', Validators.required),
-  });
+  readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
+  readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
+
+  private readonly refreshObjectList$ = new BehaviorSubject<null>(null);
 
   readonly currentPageAndSize$ = new BehaviorSubject<Partial<Pagination>>({
     page: 0,
@@ -78,11 +75,6 @@ export class ObjectListComponent {
       });
     }
   }
-
-  readonly valid$ = this.formGroup.valueChanges.pipe(
-    map(formValues => formValues.key !== undefined),
-    startWith(false)
-  );
 
   readonly objectConfiguration$: Observable<Array<any>> = combineLatest([
     this.objectManagementId$,
@@ -121,18 +113,14 @@ export class ObjectListComponent {
     tap(() => this.loading$.next(false))
   );
 
-  readonly createObject$: Observable<any> = combineLatest([
-    this.objectManagementId$
-  ]).pipe(
-    switchMap(([objectManagementId]) => this.objectService.createObject({objectManagementId}))
-  )
-
   constructor(
     private readonly objectService: ObjectService,
     private readonly objectState: ObjectStateService,
     private readonly translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
+    private toastr: ToastrService,
+    private translate: TranslateService
   ) {}
 
   openModal(): void {
@@ -143,16 +131,52 @@ export class ObjectListComponent {
     this.showModal$.next(false);
   }
 
-  addObject(): void {
-    this.disableInput();
+  onFormioChange(formio) {
+    if (formio.data != null) {
+      this.submission$.next(formio.data)
+    }
+
+    this.formValid$.next(formio.isValid);
   }
 
+  addObject(): void {
+    this.disableInput();
+    combineLatest([this.objectManagementId$, this.submission$, this.formValid$])
+      .pipe(take(1))
+      .subscribe(([objectManagementId, submission, formValid]) => {
+        if (formValid) {
+          this.objectService.createObject({objectManagementId}, submission)
+            .pipe(
+              take(1),
+              catchError((error: any) => this.handleCreateObjectError(error)),
+              finalize(() => {
+                this.enableInput();
+              })
+            )
+            .subscribe(() => {
+              this.closeModal();
+              this.refreshObjectList();
+              this.toastr.success(this.translate.instant('object.messages.objectCreated'));
+            });
+        }
+      });
+  }
 
   redirectToDetails(record) {
-    const objectId = record.objectUrl.split("/").pop();
-    this.objectManagementId$.pipe(take(1)).subscribe(configurationId => {
+    record.objectUrl.pipe(
+      take(1),
+      switchMap((url: string) => {
+        const objectId = url.split("/").pop();
+        return this.objectManagementId$.pipe(
+          take(1),
+          map((configurationId: string) => {
+            return { configurationId, objectId };
+          })
+        );
+      })
+    ).subscribe(({ configurationId, objectId }) => {
       this.router.navigate([`/object/${configurationId}/${objectId}`]);
-    })
+    });
   }
 
   private refreshObjectList(): void {
@@ -161,14 +185,18 @@ export class ObjectListComponent {
 
   private disableInput(): void {
     this.disableInput$.next(true);
-    this.formGroup.disable();
   }
 
   private enableInput(): void {
     this.disableInput$.next(false);
-    this.formGroup.enable();
   }
 
+  private handleCreateObjectError(error: any) {
+    console.error('An error occurred while creating the object', error);
+    this.closeModal();
+    this.toastr.error(this.translate.instant('object.messages.objectCreationError'));
+    return throwError(error);
+  }
 
   private setFields(): void {
     const keys: Array<string> = ['recordIndex', 'objectUrl'];
