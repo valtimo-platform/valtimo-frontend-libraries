@@ -15,7 +15,7 @@
  */
 
 import {Component} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, throwError} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, startWith, throwError} from 'rxjs';
 import {catchError, finalize, switchMap, take, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -103,14 +103,25 @@ export class ObjectListComponent {
 
   readonly formDefinition$: Observable<any> = combineLatest([
     this.objectManagementId$,
-    this.objectManagementId$,
     this.objectState.refresh$
   ]).pipe(
     switchMap(([objectManagementId]) =>
-      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, formType: FormType.EDITFORM})
+      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, formType: FormType.EDITFORM}).pipe(
+        catchError((error) => {
+          this.handleFormMissingError(error);
+          this.disableInput();
+          return of(null).pipe(startWith(null));
+        })
+      )
     ),
-    map(res => res.formDefinition),
-    tap(() => this.loading$.next(false))
+    map(res => {
+      if (res != null) {
+        this.enableInput();
+      }
+      return res?.formDefinition
+    }),
+    startWith(null),
+    finalize(() => this.loading$.next(false))
   );
 
   constructor(
@@ -181,8 +192,12 @@ export class ObjectListComponent {
     this.disableInput$.next(false);
   }
 
+  private handleFormMissingError(error: any) {
+    this.toastr.error(this.translate.instant('object.messages.objectEditFormMissing'));
+    return throwError(error);
+  }
+
   private handleCreateObjectError(error: any) {
-    console.error('An error occurred while creating the object', error);
     this.closeModal();
     this.toastr.error(this.translate.instant('object.messages.objectCreationError'));
     return throwError(error);

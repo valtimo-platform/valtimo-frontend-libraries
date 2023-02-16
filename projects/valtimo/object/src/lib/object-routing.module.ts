@@ -27,7 +27,7 @@ const routes: Routes = [
     path: 'object/:objectManagementId',
     canActivate: [AuthGuardService],
     component: ObjectListComponent,
-    data: {title: 'Object list', roles: [ROLE_USER]},
+    data: {title: 'Object', roles: [ROLE_USER]},
   },
   {
     path: 'object/:objectManagementId/:objectId',

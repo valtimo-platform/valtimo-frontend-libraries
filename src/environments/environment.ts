@@ -101,6 +101,12 @@ export const environment: ValtimoConfig = {
         includeFunction: IncludeFunction.HaalcentraalConnectorConfigured,
       },
       {
+        roles: [ROLE_ADMIN],
+        title: 'Object',
+        iconClass: 'icon mdi mdi-account',
+        sequence: 3
+      },
+      {
         roles: [ROLE_USER],
         link: ['/tasks'],
         title: 'Tasks',
@@ -242,7 +248,7 @@ export const environment: ValtimoConfig = {
     showPlantATreeButton: true,
     experimentalDmnEditing: true,
     caseListColumn: true,
-    largeLogoMargin: true,
+    largeLogoMargin: true
   },
   customDossierHeader: {
     leningen: [

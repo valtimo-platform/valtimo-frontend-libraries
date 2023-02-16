@@ -23,6 +23,7 @@ import {BehaviorSubject, combineLatest, Observable, Subject, timer} from 'rxjs';
 import {DocumentDefinitions, DocumentService} from '@valtimo/document';
 import {filter, map, take} from 'rxjs/operators';
 import {KeycloakService} from 'keycloak-angular';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +44,8 @@ export class MenuService {
     private readonly logger: NGXLogger,
     private readonly menuIncludeService: MenuIncludeService,
     private readonly router: Router,
-    private readonly keycloakService: KeycloakService
+    private readonly keycloakService: KeycloakService,
+    private http: HttpClient
   ) {
     const config = configService?.config;
     this.menuConfig = config?.menu;
@@ -62,6 +64,7 @@ export class MenuService {
   );
 
   private readonly dossierItemsAppended$ = new BehaviorSubject<boolean>(false);
+  private readonly objectItemsAppended$ = new BehaviorSubject<boolean>(false);
 
   // Find out which menu item sequence number matches the current url the closest
   public get closestSequence$(): Observable<string> {
@@ -139,6 +142,9 @@ export class MenuService {
     this.appendDossierSubMenuItems(menuItems).subscribe(
       value => (menuItems = this.applyMenuRoleSecurity(value))
     );
+    this.appendObjectsSubMenuItems(menuItems).subscribe(
+      value => (menuItems = this.applyMenuRoleSecurity(value))
+    );
     return menuItems;
   }
 
@@ -189,6 +195,44 @@ export class MenuService {
             this.dossierItemsAppended$.next(true);
             this.logger.debug('appendDossierSubMenuItems finished');
           });
+      });
+    });
+  }
+
+  public getAllObjects(): Observable<any> {
+    const valtimoEndpointUri = this.configService.config.valtimoApi.endpointUri;
+    return this.http.get<any[]>(
+      `${valtimoEndpointUri}v1/object/management/configuration`
+    );
+  }
+
+  private appendObjectsSubMenuItems(menuItems: MenuItem[]): Observable<MenuItem[]> {
+    return new Observable(subscriber => {
+      this.logger.debug('appendObjectManagementSubMenuItems');
+      this.getAllObjects().subscribe(objects => {
+
+        const objectMenuItems: MenuItem[] = objects.map((object, index) => {
+          return {
+            link: ['/object/' + object.id],
+            title: object.title,
+            iconClass: 'icon mdi mdi-dot-circle',
+            sequence: index,
+            show: true
+          } as MenuItem;
+        });
+
+        this.logger.debug('found objectMenuItems', objectMenuItems);
+        const menuItemIndex = menuItems.findIndex(({title}) => title === 'Object');
+        if (menuItemIndex > 0) {
+          const objectsMenu = menuItems[menuItemIndex];
+          this.logger.debug('updating objectsMenu', objectsMenu);
+          objectsMenu.children = objectMenuItems;
+          menuItems[menuItemIndex] = objectsMenu
+        }
+        subscriber.next(menuItems);
+        this.objectItemsAppended$.next(true);
+        this.logger.debug('appendObjectsSubMenuItems finished');
+
       });
     });
   }

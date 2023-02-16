@@ -15,7 +15,8 @@
   -->
 <ng-container *ngIf="{
     loading: loading$ | async,
-    pagination: pagination$ | async
+    pagination: pagination$ | async,
+    disableInput: disableInput$ | async
   } as obs"
 >
   <div class="main-content pt-0">
@@ -38,6 +39,7 @@
           ibmButton="primary"
           size="md"
           class="ml-3"
+          [disabled]="obs.disableInput"
   >
     {{ 'object.createObject' | translate }}
     <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
