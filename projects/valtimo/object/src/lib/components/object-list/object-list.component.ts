@@ -163,18 +163,8 @@ export class ObjectListComponent {
   }
 
   redirectToDetails(record) {
-    record.objectUrl.pipe(
-      take(1),
-      switchMap((url: string) => {
-        const objectId = url.split("/").pop();
-        return this.objectManagementId$.pipe(
-          take(1),
-          map((configurationId: string) => {
-            return { configurationId, objectId };
-          })
-        );
-      })
-    ).subscribe(({ configurationId, objectId }) => {
+    const objectId = record.objectUrl.split("/").pop();
+    this.objectManagementId$.pipe(take(1)).subscribe(configurationId => {
       this.router.navigate([`/object/${configurationId}/${objectId}`]);
     });
   }
