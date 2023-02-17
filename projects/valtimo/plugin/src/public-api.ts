@@ -55,6 +55,7 @@ export * from './lib/plugins/zaken-api/components/zaken-api-configuration/zaken-
 export * from './lib/plugins/zaken-api/components/link-document-to-zaak/link-document-to-zaak-configuration.component';
 export * from './lib/plugins/zaken-api/components/link-uploaded-document-to-zaak/link-uploaded-document-to-zaak-configuration.component';
 export * from './lib/plugins/zaken-api/components/create-natuurlijk-persoon-zaak-rol/create-natuurlijk-persoon-zaak-rol.component';
+export * from './lib/plugins/zaken-api/components/create-zaak/create-zaak-configuration.component';
 /* objecten api plugin */
 export * from './lib/plugins/objecten-api/objecten-api-plugin-module';
 export * from './lib/plugins/objecten-api/objecten-api-plugin.specification';
@@ -76,3 +77,8 @@ export * from './lib/plugins/portaaltaak/portaaltaak-plugin.module';
 export * from './lib/plugins/portaaltaak/portaaltaak-plugin.specification';
 export * from './lib/plugins/portaaltaak/components/portaaltaak-configuration/portaaltaak-configuration.component';
 export * from './lib/plugins/portaaltaak/components/create-portal-task/create-portal-task.component';
+export * from './lib/plugins/portaaltaak/components/complete-portal-task/complete-portal-task.component';
+/* verzoek plugin */
+export * from './lib/plugins/verzoek/verzoek-plugin.module';
+export * from './lib/plugins/verzoek/verzoek-plugin.specification';
+export * from './lib/plugins/verzoek/components/verzoek-configuration/verzoek-configuration.component';

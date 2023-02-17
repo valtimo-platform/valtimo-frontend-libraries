@@ -17,11 +17,19 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PluginTranslatePipeModule} from '../../pipes';
-import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {
+  FormModule,
+  InputLabelModule,
+  InputModule,
+  ParagraphModule,
+  SelectModule,
+} from '@valtimo/user-interface';
 import {ZakenApiConfigurationComponent} from './components/zaken-api-configuration/zaken-api-configuration.component';
 import {LinkDocumentToZaakConfigurationComponent} from './components/link-document-to-zaak/link-document-to-zaak-configuration.component';
 import {LinkUploadedDocumentToZaakConfigurationComponent} from './components/link-uploaded-document-to-zaak/link-uploaded-document-to-zaak-configuration.component';
 import {CreateNatuurlijkPersoonZaakRolComponent} from './components/create-natuurlijk-persoon-zaak-rol/create-natuurlijk-persoon-zaak-rol.component';
+import {CreateZaakConfigurationComponent} from './components/create-zaak/create-zaak-configuration.component';
+import {ToggleModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [
@@ -29,6 +37,7 @@ import {CreateNatuurlijkPersoonZaakRolComponent} from './components/create-natuu
     LinkDocumentToZaakConfigurationComponent,
     LinkUploadedDocumentToZaakConfigurationComponent,
     CreateNatuurlijkPersoonZaakRolComponent,
+    CreateZaakConfigurationComponent,
   ],
   imports: [
     CommonModule,
@@ -37,11 +46,14 @@ import {CreateNatuurlijkPersoonZaakRolComponent} from './components/create-natuu
     InputModule,
     SelectModule,
     ParagraphModule,
+    ToggleModule,
+    InputLabelModule,
   ],
   exports: [
     ZakenApiConfigurationComponent,
     LinkDocumentToZaakConfigurationComponent,
     LinkUploadedDocumentToZaakConfigurationComponent,
+    CreateZaakConfigurationComponent,
     CreateNatuurlijkPersoonZaakRolComponent,
   ],
 })

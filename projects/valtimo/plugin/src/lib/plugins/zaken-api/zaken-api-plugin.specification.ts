@@ -20,6 +20,7 @@ import {LinkDocumentToZaakConfigurationComponent} from './components/link-docume
 import {ZakenApiConfigurationComponent} from './components/zaken-api-configuration/zaken-api-configuration.component';
 import {LinkUploadedDocumentToZaakConfigurationComponent} from './components/link-uploaded-document-to-zaak/link-uploaded-document-to-zaak-configuration.component';
 import {CreateNatuurlijkPersoonZaakRolComponent} from './components/create-natuurlijk-persoon-zaak-rol/create-natuurlijk-persoon-zaak-rol.component';
+import {CreateZaakConfigurationComponent} from './components/create-zaak/create-zaak-configuration.component';
 
 const zakenApiPluginSpecification: PluginSpecification = {
   pluginId: 'zakenapi',
@@ -28,6 +29,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
   functionConfigurationComponents: {
     'link-document-to-zaak': LinkDocumentToZaakConfigurationComponent,
     'link-uploaded-document-to-zaak': LinkUploadedDocumentToZaakConfigurationComponent,
+    'create-zaak': CreateZaakConfigurationComponent,
     'create-natuurlijk-persoon-zaak-rol': CreateNatuurlijkPersoonZaakRolComponent,
   },
   pluginTranslations: {
@@ -59,6 +61,16 @@ const zakenApiPluginSpecification: PluginSpecification = {
         'Selecteer de plugin die de authenticatie kan afhandelen. Wanneer de selectiebox leeg blijft zal de authenticatie plugin (bv. OpenZaak) eerst aangemaakt moeten worden',
       linkDocumentInformation:
         'Deze actie koppelt een document uit de Documenten API aan de zaak die bij het dossier hoort.',
+      'create-zaak': 'Zaak aanmaken',
+      createZaakInformation:
+        'Deze actie creëert een zaak in de Zaken API en koppeld de nieuwe zaak aan het dossier.',
+      rsin: 'RSIN',
+      rsinTooltip: 'Rechtspersonen en Samenwerkingsverbanden Informatienummer',
+      zaakType: 'Zaaktype',
+      zaakTypeTooltip: 'In dit veld moet de verwijzing komen naar de type zaak.',
+      inputTypeZaakTypeToggle: 'Invoertype Zaaktype-URL',
+      text: 'Tekst',
+      selection: 'Selectie',
       'create-natuurlijk-persoon-zaak-rol': 'Zaakrol aanmaken - natuurlijk persoon',
       roltypeUrl: 'Roltype URL',
       rolToelichting: 'Roltoelichting',
@@ -100,6 +112,16 @@ const zakenApiPluginSpecification: PluginSpecification = {
         'Select the plugin that can handle the authentication. If the selection box remains empty, the authentication plugin (e.g. OpenZaak) will have to be created first',
       linkDocumentInformation:
         'This action links a document from the Documents API to the zaak associated with the case.',
+      'create-zaak': 'Create zaak',
+      createZaakInformation:
+        'This action creates a zaak in the Zaken API and links the new zaak with the case.',
+      rsin: 'RSIN',
+      rsinTooltip: 'Legal Entities and Partnerships Information Number',
+      zaakType: 'Zaaktype',
+      zaakTypeTooltip: 'In this field the reference must be made to the type of the zaak.',
+      inputTypeZaakTypeToggle: 'Input type Zaaktype-URL',
+      text: 'Text',
+      selection: 'Selection',
       'create-natuurlijk-persoon-zaak-rol': 'Create Zaakrol - natural person',
       roltypeUrl: 'Role type URL',
       rolToelichting: 'Role explanation',
@@ -141,6 +163,16 @@ const zakenApiPluginSpecification: PluginSpecification = {
         'Wählen Sie das Plugin aus, das die Authentifizierung verarbeiten kann. Bleibt das Auswahlfeld leer, muss zunächst das Authentifizierungs-Plugin (z. B. OpenZaak) erstellt werden',
       linkDocumentInformation:
         'Diese Aktion verknüpft ein Dokument aus der Dokumenten-API mit dem mit dem Fall verknüpften Zaak.',
+      'create-zaak': 'Zaak erschaffen',
+      createZaakInformation:
+        'Diese Aktion hat einen zaak in der Zaken-API definiert und den neuen zaak mit dem Fall verknüpft.',
+      rsin: 'RSIN',
+      rsinTooltip: 'Informationsnummer für juristische Personen und Partnerschaften.',
+      zaakType: 'Zaaktype',
+      zaakTypeTooltip: 'In diesem Feld muss auf die zaaktype verwiesen werden.',
+      inputTypeZaakTypeToggle: 'Eingabetyp Zaaktype-URL',
+      text: 'Text',
+      selection: 'Auswahl',
       'create-natuurlijk-persoon-zaak-rol': 'Zaakrol erstellen – natürliche Person',
       roltypeUrl: 'Rollentyp-URL',
       rolToelichting: 'Rollenerklärung',

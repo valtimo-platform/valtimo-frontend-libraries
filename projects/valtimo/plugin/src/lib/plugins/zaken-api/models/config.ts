@@ -35,4 +35,10 @@ interface CreateNatuurlijkePersoonZaakRolConfig {
   inpA_nummer: string;
 }
 
-export {ZakenApiConfig, LinkDocumentToZaakConfig, CreateNatuurlijkePersoonZaakRolConfig};
+interface CreateZaakConfig {
+  rsin: string;
+  manualZaakTypeUrl: boolean;
+  zaaktypeUrl: string;
+}
+
+export {ZakenApiConfig, LinkDocumentToZaakConfig, CreateZaakConfig, CreateNatuurlijkePersoonZaakRolConfig};
