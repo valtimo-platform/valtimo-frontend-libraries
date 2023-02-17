@@ -41,7 +41,7 @@ import {
   BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
-  filter, finalize,
+  filter,
   map,
   Observable,
   of,
