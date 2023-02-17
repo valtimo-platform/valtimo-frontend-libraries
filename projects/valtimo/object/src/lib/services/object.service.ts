@@ -24,6 +24,14 @@ export class ObjectService {
     return this.http.post<any>(`${this.valtimoEndpointUri}v1/object`, payload, {params});
   }
 
+  public updateObject(params: any, payload: any): Observable<any> {
+    return this.http.patch<any>(`${this.valtimoEndpointUri}v1/object`, payload, {params});
+  }
+
+  public deleteObject(params: any): Observable<any> {
+    return this.http.delete<any>(`${this.valtimoEndpointUri}v1/object`, {params});
+  }
+
   public getPrefilledObjectFromObjectUrl(params: any): Observable<FormDefinition> {
     return this.http.get<FormDefinition>(`${this.valtimoEndpointUri}v1/object/form`, {params});
   }

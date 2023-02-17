@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import {Component, TemplateRef, ViewChild} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, startWith, Subject} from 'rxjs';
-import {switchMap, take, tap} from 'rxjs/operators';
+import {Component} from '@angular/core';
+import {BehaviorSubject, combineLatest, map, Observable, of, Subject, throwError} from 'rxjs';
+import {catchError, finalize, switchMap, take, tap} from 'rxjs/operators';
 import {ObjectService} from '../../../../services/object.service';
 import {ObjectStateService} from '../../../../services/object-state.service';
-import {ActivatedRoute} from '@angular/router';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormType} from '../../../../models/object.model';
+import {ToastrService} from 'ngx-toastr';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-object-detail',
@@ -50,9 +51,15 @@ export class ObjectDetailComponent {
     this.refreshObject$,
   ]).pipe(
     switchMap(([objectManagementId, objectId, formType]) =>
-      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType})
+      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType}).pipe(
+        catchError(error => {
+          this.toastr.error(`Error getting form definition: ${error}`);
+          this.loading$.next(false);
+          return of(null); // Return a null value to the map operator
+        })
+      )
     ),
-    map(res => res.formDefinition),
+    map(res => res?.formDefinition),
     tap(() => this.loading$.next(false))
   );
 
@@ -60,6 +67,9 @@ export class ObjectDetailComponent {
     private readonly objectService: ObjectService,
     private readonly objectState: ObjectStateService,
     private route: ActivatedRoute,
+    private router: Router,
+    private translate: TranslateService,
+    private toastr: ToastrService
   ) {}
 
   saveObject(): void {
@@ -74,6 +84,25 @@ export class ObjectDetailComponent {
 
   deleteObjectConfirmation(): void {
     this.disableInput();
+    combineLatest([this.objectManagementId$, this.objectId$])
+      .pipe(take(1))
+      .subscribe(([objectManagementId, objectId]) => {
+        console.log(objectManagementId)
+        console.log(objectId)
+        this.objectService.deleteObject({objectManagementId, objectId})
+          .pipe(
+            take(1),
+            catchError((error: any) => this.handleUpdateObjectError(error)),
+            finalize(() => {
+              this.enableInput();
+            })
+          )
+          .subscribe(() => {
+            this.closeModal();
+            this.toastr.success(this.translate.instant('object.messages.objectDeleted'));
+            this.router.navigate([`/object/${objectManagementId}`]);
+          });
+      });
   }
 
   openModal(): void {
@@ -96,13 +125,26 @@ export class ObjectDetailComponent {
   }
 
   private updateObject(): void {
-    combineLatest([this.submission$, this.formValid$])
+    this.disableInput();
+    combineLatest([this.objectManagementId$, this.objectId$, this.submission$, this.formValid$])
       .pipe(take(1))
-      .subscribe(([submission, formValid]) => {
-        console.log(submission)
+      .subscribe(([objectManagementId, objectId, submission, formValid]) => {
         console.log(formValid)
-        this.closeModal();
-        this.refreshObject();
+        if (formValid) {
+          this.objectService.createObject({objectManagementId, objectId}, {jsonNode: submission})
+            .pipe(
+              take(1),
+              catchError((error: any) => this.handleUpdateObjectError(error)),
+              finalize(() => {
+                this.enableInput();
+              })
+            )
+            .subscribe(() => {
+              this.closeModal();
+              this.refreshObject();
+              this.toastr.success(this.translate.instant('object.messages.objectUpdated'));
+            });
+        }
       });
   }
 
@@ -116,5 +158,11 @@ export class ObjectDetailComponent {
 
   private enableInput(): void {
     this.disableInput$.next(false);
+  }
+
+  private handleUpdateObjectError(error: any) {
+    this.closeModal();
+    this.toastr.error(this.translate.instant('object.messages.objectUpdateError'));
+    return throwError(error);
   }
 }

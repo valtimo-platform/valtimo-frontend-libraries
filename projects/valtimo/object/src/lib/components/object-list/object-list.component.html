@@ -39,7 +39,7 @@
           ibmButton="primary"
           size="md"
           class="ml-3"
-          [disabled]="obs.disableInput"
+          [disabled]="obs.disableInput || obs.loading"
   >
     {{ 'object.createObject' | translate }}
     <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
@@ -49,7 +49,7 @@
 <ng-template #list let-obs="obs">
   <ng-container *ngIf="fields$ | async as fields">
     <ng-container *ngIf="objectConfiguration$ | async as objectConfiguration">
-      <valtimo-widget *ngIf="obs.loading === false">
+      <valtimo-widget *ngIf="obs.loading === false; else loading">
         <valtimo-list
                 [items]="objectConfiguration"
                 [fields]="fields"

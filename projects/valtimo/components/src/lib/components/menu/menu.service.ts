@@ -68,9 +68,9 @@ export class MenuService {
 
   // Find out which menu item sequence number matches the current url the closest
   public get closestSequence$(): Observable<string> {
-    return combineLatest([this.dossierItemsAppended$, this.currentRoute$, this.menuItems$]).pipe(
-      filter(([dossierItemsAppended]) => dossierItemsAppended),
-      map(([dossierItemsAppended, currentRoute, menuItems]) => {
+    return combineLatest([this.dossierItemsAppended$, this.objectItemsAppended$, this.currentRoute$, this.menuItems$]).pipe(
+      filter(([dossierItemsAppended, objectItemsAppended]) => dossierItemsAppended || objectItemsAppended),
+      map(([dossierItemsAppended, objectItemsAppended, currentRoute, menuItems]) => {
         let closestSequence = '0';
         let highestDifference = 0;
 
@@ -142,9 +142,12 @@ export class MenuService {
     this.appendDossierSubMenuItems(menuItems).subscribe(
       value => (menuItems = this.applyMenuRoleSecurity(value))
     );
-    this.appendObjectsSubMenuItems(menuItems).subscribe(
-      value => (menuItems = this.applyMenuRoleSecurity(value))
-    );
+
+    if (this.enableObjectManagement) {
+      this.appendObjectsSubMenuItems(menuItems).subscribe(
+        value => (menuItems = this.applyMenuRoleSecurity(value))
+      );
+    }
     return menuItems;
   }
 
@@ -199,13 +202,6 @@ export class MenuService {
     });
   }
 
-  public getAllObjects(): Observable<any> {
-    const valtimoEndpointUri = this.configService.config.valtimoApi.endpointUri;
-    return this.http.get<any[]>(
-      `${valtimoEndpointUri}v1/object/management/configuration`
-    );
-  }
-
   private appendObjectsSubMenuItems(menuItems: MenuItem[]): Observable<MenuItem[]> {
     return new Observable(subscriber => {
       this.logger.debug('appendObjectManagementSubMenuItems');
@@ -232,7 +228,6 @@ export class MenuService {
         subscriber.next(menuItems);
         this.objectItemsAppended$.next(true);
         this.logger.debug('appendObjectsSubMenuItems finished');
-
       });
     });
   }
@@ -275,5 +270,11 @@ export class MenuService {
 
   private determineRoleAccess(menuItem: MenuItem, roles: string[]): boolean {
     return !menuItem.roles || menuItem.roles.some(role => roles.includes(role));
+  }
+
+  private getAllObjects(): Observable<any> {
+    return this.http.get<any[]>(
+      `${this.configService.config.valtimoApi.endpointUri}v1/object/management/configuration`
+    );
   }
 }

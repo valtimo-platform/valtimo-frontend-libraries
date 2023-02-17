@@ -20,7 +20,6 @@ import {catchError, finalize, switchMap, take, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ObjectService} from '../../services/object.service';
-import {ObjectStateService} from '../../services/object-state.service';
 import {Pagination} from '@valtimo/components';
 import {FormType} from '../../models/object.model';
 import {ToastrService} from 'ngx-toastr';
@@ -80,9 +79,11 @@ export class ObjectListComponent {
     this.objectManagementId$,
     this.currentPageAndSize$,
     this.translateService.stream('key'),
-    this.objectState.refresh$
+    this.refreshObjectList$
   ]).pipe(
-    tap(() => this.setFields()),
+    tap(() => {
+      this.setFields();
+    }),
     switchMap(([objectManagementId, currentPage]) =>
       this.objectService.getObjectsByObjectManagementId(objectManagementId, {page: currentPage.page, size: currentPage.size})
     ),
@@ -102,8 +103,7 @@ export class ObjectListComponent {
   );
 
   readonly formDefinition$: Observable<any> = combineLatest([
-    this.objectManagementId$,
-    this.objectState.refresh$
+    this.objectManagementId$
   ]).pipe(
     switchMap(([objectManagementId]) =>
       this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, formType: FormType.EDITFORM}).pipe(
@@ -126,7 +126,6 @@ export class ObjectListComponent {
 
   constructor(
     private readonly objectService: ObjectService,
-    private readonly objectState: ObjectStateService,
     private readonly translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
@@ -143,11 +142,11 @@ export class ObjectListComponent {
   }
 
   onFormioChange(formio) {
+    console.log(formio)
     if (formio.data != null) {
       this.submission$.next(formio.data)
+      this.formValid$.next(formio.isValid);
     }
-
-    this.formValid$.next(formio.isValid);
   }
 
   addObject(): void {
@@ -156,7 +155,7 @@ export class ObjectListComponent {
       .pipe(take(1))
       .subscribe(([objectManagementId, submission, formValid]) => {
         if (formValid) {
-          this.objectService.createObject({objectManagementId}, submission)
+          this.objectService.createObject({objectManagementId}, {submission})
             .pipe(
               take(1),
               catchError((error: any) => this.handleCreateObjectError(error)),
