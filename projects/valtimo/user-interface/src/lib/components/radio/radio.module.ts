@@ -15,30 +15,24 @@
  */
 
 import {NgModule} from '@angular/core';
-import {VerzoekConfigurationComponent} from './components/verzoek-configuration/verzoek-configuration.component';
-import {PluginTranslatePipeModule} from '../../pipes';
 import {CommonModule} from '@angular/common';
-import {
-  FormModule,
-  InputModule,
-  MultiInputFormModule,
-  ParagraphModule,
-  RadioModule,
-  SelectModule,
-} from '@valtimo/user-interface';
+import {FormsModule} from '@angular/forms';
+import {RadioComponent} from './radio.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {InputLabelModule} from '../input-label/input-label.module';
+import {ButtonModule} from '../button/button.module';
+import {RadioModule as CarbonRadioModule} from 'carbon-components-angular';
 
 @NgModule({
-  declarations: [VerzoekConfigurationComponent],
+  declarations: [RadioComponent],
   imports: [
     CommonModule,
-    PluginTranslatePipeModule,
-    FormModule,
-    InputModule,
-    SelectModule,
-    ParagraphModule,
-    MultiInputFormModule,
-    RadioModule,
+    TranslateModule,
+    FormsModule,
+    InputLabelModule,
+    ButtonModule,
+    CarbonRadioModule,
   ],
-  exports: [VerzoekConfigurationComponent],
+  exports: [RadioComponent],
 })
-export class VerzoekPluginModule {}
+export class RadioModule {}

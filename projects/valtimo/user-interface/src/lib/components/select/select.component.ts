@@ -53,6 +53,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
   @Input() loading = false;
   @Input() loadingText = '';
   @Input() placeholder = '';
+  @Input() smallMargin = false;
 
   @Output() selectedChange: EventEmitter<SelectedValue> = new EventEmitter();
   @Output() clear: EventEmitter<any> = new EventEmitter();

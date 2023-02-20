@@ -16,12 +16,15 @@
 
 import {PluginConfigurationData} from '../../../models';
 
+type CopyStrategy = 'full' | 'specified';
+
 interface VerzoekType {
   caseDefinitionName: string;
   processDefinitionKey: string;
   initiatorRolDescription: string;
   initiatorRoltypeUrl: string;
   type: string;
+  copyStrategy: CopyStrategy;
 }
 
 interface VerzoekConfig extends PluginConfigurationData {
@@ -32,4 +35,4 @@ interface VerzoekConfig extends PluginConfigurationData {
   verzoekProperties: Array<VerzoekType>;
 }
 
-export {VerzoekConfig, VerzoekType};
+export {VerzoekConfig, VerzoekType, CopyStrategy};

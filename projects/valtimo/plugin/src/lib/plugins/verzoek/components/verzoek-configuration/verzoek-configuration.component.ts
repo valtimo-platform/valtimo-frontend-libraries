@@ -17,10 +17,10 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
 import {BehaviorSubject, combineLatest, map, Observable, of, Subscription, take} from 'rxjs';
-import {VerzoekConfig, VerzoekType} from '../../models';
+import {CopyStrategy, VerzoekConfig, VerzoekType} from '../../models';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
-import {SelectItem} from '@valtimo/user-interface';
+import {RadioValue, SelectItem} from '@valtimo/user-interface';
 import {VerzoekPluginService} from '../../services';
 import {ProcessService} from '@valtimo/process';
 import {DocumentService} from '@valtimo/document';
@@ -88,6 +88,16 @@ export class VerzoekConfigurationComponent
       )
     );
 
+  readonly RADIO_ITEMS: Array<CopyStrategy> = ['full', 'specified'];
+  readonly radioItems$: Observable<Array<RadioValue>> = this.translateService.stream('key').pipe(
+    map(() =>
+      this.RADIO_ITEMS.map(radioItem => ({
+        value: radioItem,
+        title: this.pluginTranslationService.instant(radioItem, this.pluginId),
+      }))
+    )
+  );
+
   rolTypeSelectItemsObservables: {
     [uuid: string]: {caseDefinitionName: string; items: Observable<Array<SelectItem>>};
   } = {};
@@ -120,6 +130,7 @@ export class VerzoekConfigurationComponent
   }
 
   verzoekTypeFormChange(formValue: VerzoekType, uuid: string): void {
+    console.log('value', formValue);
     const caseDefinitionName = formValue?.caseDefinitionName;
     const rolTypeSelectItemsObservables = this.rolTypeSelectItemsObservables;
 

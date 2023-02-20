@@ -14,7 +14,18 @@
   ~ limitations under the License.
   -->
 
-<div [ngClass]="{'ng-select--margin': margin, 'ng-select--small-margin': smallMargin}">
+<div
+  class="v-input-container"
+  [ngClass]="{
+    'v-input--margin': margin,
+    'v-input--small-margin': smallMargin
+  }"
+>
+  <ng-container *ngTemplateOutlet="inputTitle"></ng-container>
+  <ng-container *ngTemplateOutlet="radioInput"></ng-container>
+</div>
+
+<ng-template #inputTitle>
   <v-input-label
     *ngIf="title || titleTranslationKey"
     [title]="title"
@@ -22,24 +33,20 @@
     [name]="name"
     [tooltip]="tooltip"
     [required]="required"
+    [small]="smallLabel"
   >
   </v-input-label>
-  <ng-select
-    [style.width.px]="widthInPx"
-    [ngModel]="selected$ | async"
-    (ngModelChange)="setSelectedValue($event)"
-    [clearable]="clearable"
+</ng-template>
+
+<ng-template #radioInput>
+  <ibm-radio-group
+    [name]="name"
     [disabled]="disabled"
-    [multiple]="multiple"
-    [notFoundText]="notFoundText || ('interface.noItemsFound' | translate)"
-    [clearAllText]="clearAllText || ('interface.clearAll' | translate)"
-    (clear)="clearSelection()"
-    [loading]="loading"
-    [loadingText]="loadingText || ('interface.loading' | translate)"
-    [placeholder]="placeholder"
+    [ngModel]="radioValue$ | async"
+    (ngModelChange)="onValueChange($event)"
   >
-    <ng-option *ngFor="let item of items" [value]="item.id">{{
-      item.translationKey ? (item.translationKey | translate) : item.text
-    }}</ng-option>
-  </ng-select>
-</div>
+    <ibm-radio *ngFor="let radio of radioValues" [value]="radio.value" [disabled]="radio.disabled">
+      {{ radio.titleTranslationKey ? (radio.titleTranslationKey | translate) : radio.title }}
+    </ibm-radio>
+  </ibm-radio-group>
+</ng-template>

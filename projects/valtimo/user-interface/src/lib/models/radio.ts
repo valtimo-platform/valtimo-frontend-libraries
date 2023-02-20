@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-export * from './button';
-export * from './table';
-export * from './select';
-export * from './stepper';
-export * from './title';
-export * from './input';
-export * from './form';
-export * from './modal';
-export * from './multi-input';
-export * from './radio';
+interface RadioValue {
+  value: any;
+  disabled?: boolean;
+  title: string;
+  titleTranslationKey?: string;
+}
+
+export {RadioValue};

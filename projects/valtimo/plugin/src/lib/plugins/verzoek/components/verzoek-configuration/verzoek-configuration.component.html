@@ -130,7 +130,7 @@
     <ng-container *ngIf="{documentSelectItems: documentSelectItems$ | async} as vars">
       <v-select
         [items]="vars.documentSelectItems"
-        [margin]="true"
+        [smallMargin]="true"
         [widthInPx]="350"
         name="caseDefinitionName"
         [title]="'caseDefinitionName' | pluginTranslate : pluginId | async"
@@ -146,7 +146,7 @@
         rolTypeSelectItemsObservables[uuid]?.caseDefinitionName &&
         (rolTypeSelectItemsObservables[uuid].items | async)
       "
-      [margin]="true"
+      [smallMargin]="true"
       [widthInPx]="350"
       name="initiatorRoltypeUrl"
       [title]="'initiatorRoltypeUrl' | pluginTranslate : pluginId | async"
@@ -170,7 +170,7 @@
     <ng-container *ngIf="{processSelectItems: processSelectItems$ | async} as vars">
       <v-select
         [items]="vars.processSelectItems"
-        [margin]="true"
+        [smallMargin]="true"
         [widthInPx]="350"
         name="processDefinitionKey"
         [title]="'processDefinitionKey' | pluginTranslate : pluginId | async"
@@ -181,5 +181,14 @@
         [tooltip]="'processDefinitionKeyTooltip' | pluginTranslate : pluginId | async"
       ></v-select>
     </ng-container>
+    <v-radio
+      name="copyStrategy"
+      [disabled]="obs.disabled"
+      [title]="'copyStrategy' | pluginTranslate : pluginId | async"
+      [tooltip]="'copyStrategyTooltip' | pluginTranslate : pluginId | async"
+      [radioValues]="radioItems$ | async"
+      [smallMargin]="true"
+    >
+    </v-radio>
   </v-form>
 </ng-template>

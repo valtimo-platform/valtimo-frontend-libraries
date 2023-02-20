@@ -90,3 +90,6 @@ export * from './lib/components/tooltip-icon/tooltip-icon.component';
 // Multi input form
 export * from './lib/components/multi-input-form/multi-input-form.component';
 export * from './lib/components/multi-input-form/multi-input-form.module';
+// Radio
+export * from './lib/components/radio/radio.component';
+export * from './lib/components/radio/radio.module';
