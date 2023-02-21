@@ -35,6 +35,7 @@ export class ObjectListComponent {
   readonly formValid$ = new BehaviorSubject<boolean>(false);
   readonly showModal$ = new BehaviorSubject<boolean>(false);
   readonly disableInput$ = new BehaviorSubject<boolean>(false);
+  readonly clearForm$ = new BehaviorSubject<boolean>(false);
 
   readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
   readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
@@ -103,7 +104,8 @@ export class ObjectListComponent {
   );
 
   readonly formDefinition$: Observable<any> = combineLatest([
-    this.objectManagementId$
+    this.objectManagementId$,
+    this.clearForm$
   ]).pipe(
     switchMap(([objectManagementId]) =>
       this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, formType: FormType.EDITFORM}).pipe(
@@ -118,6 +120,7 @@ export class ObjectListComponent {
       if (res != null) {
         this.enableInput();
       }
+
       return res?.formDefinition
     }),
     startWith(null),
@@ -142,7 +145,6 @@ export class ObjectListComponent {
   }
 
   onFormioChange(formio) {
-    console.log(formio)
     if (formio.data != null) {
       this.submission$.next(formio.data)
       this.formValid$.next(formio.isValid);
@@ -155,7 +157,8 @@ export class ObjectListComponent {
       .pipe(take(1))
       .subscribe(([objectManagementId, submission, formValid]) => {
         if (formValid) {
-          this.objectService.createObject({objectManagementId}, {submission})
+          submission = this.removeEmptyStringValuesFromSubmission(submission);
+          this.objectService.createObject({objectManagementId}, {...submission})
             .pipe(
               take(1),
               catchError((error: any) => this.handleCreateObjectError(error)),
@@ -166,6 +169,7 @@ export class ObjectListComponent {
             .subscribe(() => {
               this.closeModal();
               this.refreshObjectList();
+              this.clearForm$.next(true)
               this.toastr.success(this.translate.instant('object.messages.objectCreated'));
             });
         }
@@ -201,6 +205,12 @@ export class ObjectListComponent {
     this.toastr.error(this.translate.instant('object.messages.objectCreationError'));
     return throwError(error);
   }
+
+  private removeEmptyStringValuesFromSubmission(submission) {
+    return Object.fromEntries(
+      Object.entries(submission).filter(([_, value]) => value !== '')
+    );
+  };
 
   private setFields(): void {
     const keys: Array<string> = ['recordIndex', 'objectUrl'];
