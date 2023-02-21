@@ -18,9 +18,10 @@ import {PluginConfigurationData} from '../../../models';
 
 type CopyStrategy = 'full' | 'specified';
 
-type Mapping = {source: string; target: string};
+type Mapping = {key: string; value: string};
 
 interface VerzoekType {
+  uuid?: string;
   caseDefinitionName: string;
   processDefinitionKey: string;
   initiatorRolDescription: string;
