@@ -142,6 +142,7 @@ export class ObjectListComponent {
 
   closeModal(): void {
     this.showModal$.next(false);
+    this.clearForm$.next(true);
   }
 
   onFormioChange(formio) {
