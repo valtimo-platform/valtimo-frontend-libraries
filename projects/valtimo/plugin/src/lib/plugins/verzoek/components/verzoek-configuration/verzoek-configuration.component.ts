@@ -98,9 +98,13 @@ export class VerzoekConfigurationComponent
     )
   );
 
-  rolTypeSelectItemsObservables: {
+  readonly rolTypeSelectItemsObservables: {
     [uuid: string]: {caseDefinitionName: string; items: Observable<Array<SelectItem>>};
   } = {};
+
+  readonly showMappingButtons: {[uuid: string]: boolean} = {};
+
+  readonly showMappingModals: {[uuid: string]: boolean} = {};
 
   private saveSubscription!: Subscription;
 
@@ -134,6 +138,8 @@ export class VerzoekConfigurationComponent
     const caseDefinitionName = formValue?.caseDefinitionName;
     const rolTypeSelectItemsObservables = this.rolTypeSelectItemsObservables;
 
+    this.showMappingButtons[uuid] = formValue.copyStrategy === 'specified';
+
     if (caseDefinitionName) {
       if (
         !rolTypeSelectItemsObservables[uuid] ||
@@ -156,8 +162,16 @@ export class VerzoekConfigurationComponent
     }
   }
 
-  deleteRow(uuid: string) {
+  deleteRow(uuid: string): void {
     delete this.rolTypeSelectItemsObservables[uuid];
+  }
+
+  openMappingModal(uuid: string): void {
+    this.showMappingModals[uuid] = true;
+  }
+
+  closeMappingModal(uuid: string): void {
+    this.showMappingModals[uuid] = false;
   }
 
   private handleValid(formValue: VerzoekConfig): void {

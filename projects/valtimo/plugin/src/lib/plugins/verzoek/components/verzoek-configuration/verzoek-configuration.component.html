@@ -188,7 +188,25 @@
       [tooltip]="'copyStrategyTooltip' | pluginTranslate : pluginId | async"
       [radioValues]="radioItems$ | async"
       [smallMargin]="true"
+      [defaultValue]="prefill?.copyStrategy || 'full'"
     >
     </v-radio>
+    <ng-container *ngIf="showMappingButtons[uuid]">
+      <v-input-label
+        [title]="'mapping' | pluginTranslate : pluginId | async"
+        [tooltip]="'mappingTooltip' | pluginTranslate : pluginId | async"
+      >
+      </v-input-label>
+      <v-button (clickEvent)="openMappingModal(uuid)" mdiIcon="table"
+        >{{ 'setMapping' | pluginTranslate : pluginId | async }}
+      </v-button>
+    </ng-container>
   </v-form>
+  <ibm-modal [open]="showMappingModals[uuid]">
+    <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeMappingModal(uuid)">
+      <h3 ibmModalHeaderHeading>test</h3>
+    </ibm-modal-header>
+    <section ibmModalContent>content</section>
+    <ibm-modal-footer> footer </ibm-modal-footer>
+  </ibm-modal>
 </ng-template>

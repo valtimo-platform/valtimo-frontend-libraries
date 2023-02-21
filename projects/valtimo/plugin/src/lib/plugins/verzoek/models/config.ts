@@ -18,6 +18,8 @@ import {PluginConfigurationData} from '../../../models';
 
 type CopyStrategy = 'full' | 'specified';
 
+type Mapping = {source: string; target: string};
+
 interface VerzoekType {
   caseDefinitionName: string;
   processDefinitionKey: string;
@@ -25,6 +27,7 @@ interface VerzoekType {
   initiatorRoltypeUrl: string;
   type: string;
   copyStrategy: CopyStrategy;
+  mapping?: Array<Mapping>;
 }
 
 interface VerzoekConfig extends PluginConfigurationData {
