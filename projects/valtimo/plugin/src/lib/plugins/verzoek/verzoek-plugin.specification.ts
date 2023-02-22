@@ -67,7 +67,7 @@ const verzoekPluginSpecification: PluginSpecification = {
       mapping: 'Mapping',
       setMapping: 'Mapping instellen',
       mappingTooltip:
-        'Stel hier de velden in die gekopieerd moeten worden van het Verzoek-object naar het document.',
+        "Stel hier de velden in die gekopieerd moeten worden van het Verzoek-object naar het document. Bijvoorbeeld: 'doc:/voorletters-machtiginggever' -> '/voorletters'.",
       close: 'Sluiten',
       save: 'Opslaan',
     },
@@ -112,7 +112,8 @@ const verzoekPluginSpecification: PluginSpecification = {
       specified: 'Specified fields',
       mapping: 'Mapping',
       setMapping: 'Set mapping',
-      mappingTooltip: 'Set the fields to be copied from the Verzoek object to the document.',
+      mappingTooltip:
+        "Set the fields to be copied from the Verzoek object to the document. For example: 'doc:/voorletters-machtiginggever' -> '/voorletters'.",
       close: 'Close',
       save: 'Save',
     },
@@ -161,7 +162,7 @@ const verzoekPluginSpecification: PluginSpecification = {
       mapping: 'Mapping',
       setMapping: 'Mapping festlegen',
       mappingTooltip:
-        'Legen Sie hier die Felder fest, die vom Request-Objekt in das Dokument kopiert werden sollen.',
+        "Legen Sie hier die Felder fest, die vom Request-Objekt in das Dokument kopiert werden sollen. Zum Beispiel: 'doc:/voorletters-machtiginggever' -> '/voorletters'.",
       close: 'Schließen',
       save: 'Speichern',
     },
