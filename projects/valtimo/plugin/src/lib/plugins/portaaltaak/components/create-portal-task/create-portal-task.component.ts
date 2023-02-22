@@ -54,9 +54,6 @@ export class CreatePortalTaskComponent
   readonly receiverIsOther$: Observable<boolean> = this.formValue$.pipe(
     map(value => !!(value?.receiver === 'other'))
   );
-  readonly otherReceiverIsBsn$: Observable<boolean> = this.formValue$.pipe(
-    map(value => !!(value?.otherReceiver === 'bsn'))
-  );
   private readonly valid$ = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -82,12 +79,9 @@ export class CreatePortalTaskComponent
       !!formValue.formType &&
       (!!(formValue.formType === 'url' && formValue.formTypeUrl) ||
         !!(formValue.formType === 'id' && formValue.formTypeId)) &&
-      !!(formValue.sendData?.length > 0) &&
-      !!(formValue.receiveData?.length > 0) &&
       !!formValue?.receiver &&
       (formValue.receiver === 'other'
-        ? !!(formValue.otherReceiver === 'kvk' && formValue.kvk) ||
-          !!(formValue.otherReceiver === 'bsn' && formValue.bsn)
+        ? !!(formValue.identificationValue && formValue.identificationKey)
         : true);
 
     this.valid$.next(valid);
