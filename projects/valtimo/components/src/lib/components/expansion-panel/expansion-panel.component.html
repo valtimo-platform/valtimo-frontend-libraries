@@ -1,6 +1,8 @@
 <ibm-expandable-tile>
-  <div [hidden]="(open$ | async) === true && hideAboveFoldWhenExpanded"
-       class="cds--tile-content__above-the-fold above-fold">
+  <div
+    [hidden]="hideAboveFoldWhenExpanded && (open$ | async) === true"
+    class="cds--tile-content__above-the-fold above-fold"
+  >
     <ng-content select="[collapsed]"></ng-content>
   </div>
   <div class="cds--tile-content__below-the-fold below-fold">
