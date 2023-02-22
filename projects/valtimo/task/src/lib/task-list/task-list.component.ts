@@ -48,9 +48,6 @@ export class TaskListComponent implements OnDestroy {
   public listDescription: string | null = null;
   public sortState: SortState | null = null;
   private translationSubscription: Subscription;
-  private actionsTranslationSubscription: Subscription;
-
-  public actions = [];
 
   constructor(
     private taskService: TaskService,
