@@ -355,7 +355,8 @@
     "all": {
       "title": "Alle Aufgaben",
       "description": "Überblick alle Aufgaben"
-    }
+    },
+    "goToCase": "Gehen Sie zum Fall"
   },
   "Task": "Aufgabe",
   "Tasks": "Aufgaben",

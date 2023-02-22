@@ -62,17 +62,6 @@ export class TaskListComponent implements OnDestroy {
       this.currentTaskType = this.visibleTabs[0];
     }
     this.setDefaultSorting();
-    this.actionsTranslationSubscription =
-      this.translateService.stream(`task-list.fieldLabels.case`).subscribe(caseLabel => {
-        this.actions = [
-          {
-            columnName: caseLabel,
-            iconClass: 'mdi mdi-open-in-app',
-            callback: this.openRelatedCase.bind(this),
-            label: 'Go to case'
-          },
-        ];
-    });
   }
 
   public paginationClicked(page: number, type: string) {
@@ -158,9 +147,12 @@ export class TaskListComponent implements OnDestroy {
     });
   }
 
-  openRelatedCase(task: Task, event: MouseEvent): void {
-    event.stopPropagation()
-    this.router.navigate([`/dossiers/leningen/document/${task.businessKey}/summary`])
+  openRelatedCase(event: MouseEvent, index: number): void {
+    event.stopPropagation();
+
+    const tasks = this.tasks[this.currentTaskType].tasks;
+    const currentTask = tasks && tasks[index];
+    this.router.navigate([`/dossiers/leningen/document/${currentTask.businessKey}/summary`]);
   }
 
   public defaultTaskListFields(type) {
@@ -191,7 +183,7 @@ export class TaskListComponent implements OnDestroy {
         {
           key: 'context',
           label: context,
-        }
+        },
       ];
     });
   }
@@ -237,6 +229,5 @@ export class TaskListComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.translationSubscription.unsubscribe();
-    this.actionsTranslationSubscription.unsubscribe();
   }
 }
