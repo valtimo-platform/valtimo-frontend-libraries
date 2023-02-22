@@ -31,7 +31,6 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class ObjectDetailComponent {
   readonly loading$ = new BehaviorSubject<boolean>(true);
-  readonly currentFormType$ = new BehaviorSubject<FormType>(FormType.SUMMARY);
   readonly submission$ = new BehaviorSubject<any>({});
   readonly formValid$ = new BehaviorSubject<boolean>(false);
   readonly showModal$ = new BehaviorSubject<boolean>(false);
@@ -44,14 +43,31 @@ export class ObjectDetailComponent {
   readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
   readonly objectId$: Observable<string> = this.route.params.pipe(map(params => params.objectId));
 
-  readonly formioForm$: Observable<any> = combineLatest([
+  readonly formioFormSummary$: Observable<any> = combineLatest([
     this.objectManagementId$,
     this.objectId$,
-    this.currentFormType$,
     this.refreshObject$,
   ]).pipe(
-    switchMap(([objectManagementId, objectId, formType]) =>
-      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType}).pipe(
+    switchMap(([objectManagementId, objectId]) =>
+      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType: FormType.SUMMARY}).pipe(
+        catchError(error => {
+          this.toastr.error(`Error getting form definition: ${error}`);
+          this.loading$.next(false);
+          return of(null); // Return a null value to the map operator
+        })
+      )
+    ),
+    map(res => res?.formDefinition),
+    tap(() => this.loading$.next(false))
+  );
+
+  readonly formioFormEdit$: Observable<any> = combineLatest([
+    this.objectManagementId$,
+    this.objectId$,
+    this.refreshObject$,
+  ]).pipe(
+    switchMap(([objectManagementId, objectId]) =>
+      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType: FormType.EDITFORM}).pipe(
         catchError(error => {
           this.toastr.error(`Error getting form definition: ${error}`);
           this.loading$.next(false);
@@ -107,21 +123,18 @@ export class ObjectDetailComponent {
 
   openModal(): void {
     this.showModal$.next(true);
-    this.currentFormType$.next(FormType.EDITFORM);
     this.enableInput();
   }
 
   onFormioChange(formio) {
     if (formio.data != null) {
       this.submission$.next(formio.data)
+      this.formValid$.next(formio.isValid);
     }
-
-    this.formValid$.next(formio.isValid);
   }
 
   closeModal(): void {
     this.showModal$.next(false);
-    this.currentFormType$.next(FormType.SUMMARY);
   }
 
   private updateObject(): void {
@@ -131,7 +144,8 @@ export class ObjectDetailComponent {
       .subscribe(([objectManagementId, objectId, submission, formValid]) => {
         console.log(formValid)
         if (formValid) {
-          this.objectService.createObject({objectManagementId, objectId}, {jsonNode: submission})
+          submission = this.objectService.removeEmptyStringValuesFromSubmission(submission);
+          this.objectService.updateObject({objectManagementId, objectId}, {...submission})
             .pipe(
               take(1),
               catchError((error: any) => this.handleUpdateObjectError(error)),

@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 <ng-container *ngIf="{
-    formioForm: formioForm$ | async
+    formioFormSummary: formioFormSummary$ | async
   } as obs"
 >
   <div class="container-fluid pr-0 pl-0">
@@ -58,7 +58,7 @@
 </ng-template>
 
 <ng-template #widget let-obs="obs">
-  <valtimo-form-io [form]="obs.formioForm" [readOnly]="true"></valtimo-form-io>
+  <valtimo-form-io [form]="obs.formioFormSummary" [readOnly]="true"></valtimo-form-io>
 </ng-template>
 
 <ng-template #createEditModal>
@@ -66,7 +66,7 @@
       show: showModal$ | async,
       formValid: formValid$ | async,
       disableInput: disableInput$ | async,
-      formioForm: formioForm$ | async
+      formioFormEdit: formioFormEdit$ | async
     } as modalObs"
              [open]="modalObs.show"
   >
@@ -83,7 +83,7 @@
 </ng-template>
 
 <ng-template #modalContent let-modalObs="modalObs">
-  <valtimo-form-io [form]="modalObs.formioForm" (change)="onFormioChange($event)"></valtimo-form-io>
+  <valtimo-form-io [form]="modalObs.formioFormEdit" (change)="onFormioChange($event)"></valtimo-form-io>
 </ng-template>
 
 <ng-template #modalFooter let-modalObs="modalObs">

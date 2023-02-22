@@ -158,7 +158,7 @@ export class ObjectListComponent {
       .pipe(take(1))
       .subscribe(([objectManagementId, submission, formValid]) => {
         if (formValid) {
-          submission = this.removeEmptyStringValuesFromSubmission(submission);
+          submission = this.objectService.removeEmptyStringValuesFromSubmission(submission);
           this.objectService.createObject({objectManagementId}, {...submission})
             .pipe(
               take(1),
@@ -206,12 +206,6 @@ export class ObjectListComponent {
     this.toastr.error(this.translate.instant('object.messages.objectCreationError'));
     return throwError(error);
   }
-
-  private removeEmptyStringValuesFromSubmission(submission) {
-    return Object.fromEntries(
-      Object.entries(submission).filter(([_, value]) => value !== '')
-    );
-  };
 
   private setFields(): void {
     const keys: Array<string> = ['recordIndex', 'objectUrl'];

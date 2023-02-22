@@ -35,4 +35,10 @@ export class ObjectService {
   public getPrefilledObjectFromObjectUrl(params: any): Observable<FormDefinition> {
     return this.http.get<FormDefinition>(`${this.valtimoEndpointUri}v1/object/form`, {params});
   }
+
+  public removeEmptyStringValuesFromSubmission(submission) {
+    return Object.fromEntries(
+      Object.entries(submission).filter(([_, value]) => value !== '')
+    );
+  };
 }
