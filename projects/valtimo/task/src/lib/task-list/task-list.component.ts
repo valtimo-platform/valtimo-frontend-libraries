@@ -46,6 +46,9 @@ export class TaskListComponent implements OnDestroy {
   public listDescription: string | null = null;
   public sortState: SortState | null = null;
   private translationSubscription: Subscription;
+  private actionsTranslationSubscription: Subscription;
+
+  public actions = [];
 
   constructor(
     private taskService: TaskService,
@@ -59,6 +62,17 @@ export class TaskListComponent implements OnDestroy {
       this.currentTaskType = this.visibleTabs[0];
     }
     this.setDefaultSorting();
+    this.actionsTranslationSubscription =
+      this.translateService.stream(`task-list.fieldLabels.case`).subscribe(caseLabel => {
+        this.actions = [
+          {
+            columnName: caseLabel,
+            iconClass: 'mdi mdi-open-in-app',
+            callback: this.openRelatedCase.bind(this),
+            label: 'Go to case'
+          },
+        ];
+    });
   }
 
   public paginationClicked(page: number, type: string) {
@@ -144,13 +158,19 @@ export class TaskListComponent implements OnDestroy {
     });
   }
 
+  openRelatedCase(task: Task, event: MouseEvent): void {
+    event.stopPropagation()
+    this.router.navigate([`/dossiers/leningen/document/${task.businessKey}/summary`])
+  }
+
   public defaultTaskListFields(type) {
     this.translationSubscription = combineLatest([
       this.translateService.stream(`task-list.fieldLabels.created`),
       this.translateService.stream(`task-list.fieldLabels.name`),
       this.translateService.stream(`task-list.fieldLabels.valtimoAssignee.fullName`),
       this.translateService.stream(`task-list.fieldLabels.due`),
-    ]).subscribe(([created, name, assignee, due]) => {
+      this.translateService.stream(`task-list.fieldLabels.context`),
+    ]).subscribe(([created, name, assignee, due, context]) => {
       this.tasks[type].fields = [
         {
           key: 'created',
@@ -168,6 +188,10 @@ export class TaskListComponent implements OnDestroy {
           key: 'due',
           label: due,
         },
+        {
+          key: 'context',
+          label: context,
+        }
       ];
     });
   }
@@ -213,5 +237,6 @@ export class TaskListComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.translationSubscription.unsubscribe();
+    this.actionsTranslationSubscription.unsubscribe();
   }
 }

@@ -340,7 +340,9 @@
       "created": "Created on",
       "name": "Name",
       "valtimoAssignee.fullName": "Assignee",
-      "due": "Due date"
+      "due": "Due date",
+      "context": "Context",
+      "case": "Case"
     },
     "mine": {
       "title": "My tasks",
