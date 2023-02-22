@@ -101,8 +101,6 @@ export class ObjectDetailComponent {
     combineLatest([this.objectManagementId$, this.objectId$])
       .pipe(take(1))
       .subscribe(([objectManagementId, objectId]) => {
-        console.log(objectManagementId);
-        console.log(objectId);
         this.objectService
           .deleteObject({objectManagementId, objectId})
           .pipe(
@@ -141,7 +139,6 @@ export class ObjectDetailComponent {
     combineLatest([this.objectManagementId$, this.objectId$, this.submission$, this.formValid$])
       .pipe(take(1))
       .subscribe(([objectManagementId, objectId, submission, formValid]) => {
-        console.log(formValid);
         if (formValid) {
           submission = this.objectService.removeEmptyStringValuesFromSubmission(submission);
           this.objectService

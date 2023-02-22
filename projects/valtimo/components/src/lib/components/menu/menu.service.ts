@@ -157,7 +157,6 @@ export class MenuService {
       value => (menuItems = this.applyMenuRoleSecurity(value))
     );
 
-    console.log(this.enableObjectManagement);
     if (this.enableObjectManagement) {
       this.appendObjectsSubMenuItems(menuItems).subscribe(
         value => (menuItems = this.applyMenuRoleSecurity(value))
