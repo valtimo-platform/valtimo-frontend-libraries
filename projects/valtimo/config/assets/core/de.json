@@ -994,6 +994,7 @@
       "recordIndex": "Rekordindex",
       "objectUrl": "Objekt-URL"
     },
+    "header": "Objektdetails",
     "tabs": {
       "general": "Allgemein"
     },

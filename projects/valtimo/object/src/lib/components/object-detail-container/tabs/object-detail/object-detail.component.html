@@ -18,17 +18,18 @@
     formioFormSummary: formioFormSummary$ | async
   } as obs"
 >
+
   <div class="container-fluid pr-0 pl-0">
     <div class="row">
-      <div class="col-6">
-        <ng-container *ngTemplateOutlet="widget; context: {obs: obs}"></ng-container>
-      </div>
-      <div class="col-4 offset-2">
+      <div class="col-12">
         <div class="text-right">
-          <div class="btn-group">
+          <div class="btn-group mb-1">
             <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
           </div>
         </div>
+      </div>
+      <div class="col-12">
+        <ng-container *ngTemplateOutlet="widget; context: {obs: obs}"></ng-container>
       </div>
     </div>
   </div>
@@ -37,7 +38,7 @@
 </ng-container>
 
 <ng-template #buttons let-obs="obs">
-  <button (click)="openModal()" ibmButton="primary" size="md" class="ml-3">
+  <button (click)="openModal()" ibmButton="primary" size="md">
     {{ 'object.editObject' | translate }}
     <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
   </button>
