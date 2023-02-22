@@ -73,9 +73,7 @@ export class DossierDetailTabS3DocumentsComponent implements OnInit {
 
       return translatedFiles || [];
     }),
-    map(relatedFiles => {
-      return this.fileSortService.sortRelatedFilesByDateDescending(relatedFiles);
-    })
+    map(relatedFiles => this.fileSortService.sortRelatedFilesByDateDescending(relatedFiles))
   );
 
   constructor(
