@@ -4,10 +4,10 @@ interface ObjectConfiguration {
 
 interface ObjectConfigurationItem {
   id: string;
-  items: Object[];
+  items: Item[];
 }
 
-interface Object {
+interface Item {
   key: string;
   value: string;
 }
@@ -17,4 +17,4 @@ enum FormType {
   EDITFORM = 'EDITFORM',
 }
 
-export {ObjectConfiguration, ObjectConfigurationItem, Object, FormType};
+export {ObjectConfiguration, ObjectConfigurationItem, Item, FormType};

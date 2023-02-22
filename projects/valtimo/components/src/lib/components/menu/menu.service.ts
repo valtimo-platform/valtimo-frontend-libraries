@@ -157,6 +157,7 @@ export class MenuService {
       value => (menuItems = this.applyMenuRoleSecurity(value))
     );
 
+    console.log(this.enableObjectManagement);
     if (this.enableObjectManagement) {
       this.appendObjectsSubMenuItems(menuItems).subscribe(
         value => (menuItems = this.applyMenuRoleSecurity(value))
@@ -220,15 +221,13 @@ export class MenuService {
     return new Observable(subscriber => {
       this.logger.debug('appendObjectManagementSubMenuItems');
       this.getAllObjects().subscribe(objects => {
-        const objectsMenuItems: MenuItem[] = objects.map((object, index) => {
-          return {
+        const objectsMenuItems: MenuItem[] = objects.map((object, index) => ({
             link: ['/objects/' + object.id],
             title: object.title,
             iconClass: 'icon mdi mdi-dot-circle',
             sequence: index,
             show: true,
-          } as MenuItem;
-        });
+          } as MenuItem));
 
         this.logger.debug('found objectsMenuItems', objectsMenuItems);
         const menuItemIndex = menuItems.findIndex(({title}) => title === 'Objects');
@@ -286,7 +285,7 @@ export class MenuService {
   }
 
   private getAllObjects(): Observable<any> {
-    return this.http.get<any[]>(
+    return this.http.get(
       `${this.configService.config.valtimoApi.endpointUri}v1/object/management/configuration`
     );
   }

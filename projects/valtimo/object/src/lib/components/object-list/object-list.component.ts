@@ -99,12 +99,10 @@ export class ObjectListComponent {
         this.pageSizes$.next({...sizes, collectionSize: instanceRes.totalElements});
       });
     }),
-    map(res => {
-      return res.content.map(record => ({
+    map(res => res.content.map(record => ({
         objectUrl: record.items[0].value,
         recordIndex: record.items[1].value,
-      }));
-    }),
+      }))),
     tap(() => this.loading$.next(false))
   );
 
