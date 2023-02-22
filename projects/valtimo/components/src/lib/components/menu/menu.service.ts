@@ -74,8 +74,16 @@ export class MenuService {
 
   // Find out which menu item sequence number matches the current url the closest
   public get closestSequence$(): Observable<string> {
-    return combineLatest([this.dossierItemsAppended$, this.objectsItemsAppended$, this.currentRoute$, this.menuItems$]).pipe(
-      filter(([dossierItemsAppended, objectsItemsAppended]) => dossierItemsAppended || objectsItemsAppended),
+    return combineLatest([
+      this.dossierItemsAppended$,
+      this.objectsItemsAppended$,
+      this.currentRoute$,
+      this.menuItems$,
+    ]).pipe(
+      filter(
+        ([dossierItemsAppended, objectsItemsAppended]) =>
+          dossierItemsAppended || objectsItemsAppended
+      ),
       map(([dossierItemsAppended, objectsItemsAppended, currentRoute, menuItems]) => {
         let closestSequence = '0';
         let highestDifference = 0;
@@ -212,14 +220,13 @@ export class MenuService {
     return new Observable(subscriber => {
       this.logger.debug('appendObjectManagementSubMenuItems');
       this.getAllObjects().subscribe(objects => {
-
         const objectsMenuItems: MenuItem[] = objects.map((object, index) => {
           return {
             link: ['/objects/' + object.id],
             title: object.title,
             iconClass: 'icon mdi mdi-dot-circle',
             sequence: index,
-            show: true
+            show: true,
           } as MenuItem;
         });
 
@@ -229,7 +236,7 @@ export class MenuService {
           const objectsMenu = menuItems[menuItemIndex];
           this.logger.debug('updating objectsMenu', objectsMenu);
           objectsMenu.children = objectsMenuItems;
-          menuItems[menuItemIndex] = objectsMenu
+          menuItems[menuItemIndex] = objectsMenu;
         }
         subscriber.next(menuItems);
         this.objectsItemsAppended$.next(true);

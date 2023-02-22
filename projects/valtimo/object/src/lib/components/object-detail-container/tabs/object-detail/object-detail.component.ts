@@ -40,7 +40,9 @@ export class ObjectDetailComponent {
 
   private readonly refreshObject$ = new BehaviorSubject<null>(null);
 
-  readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
+  readonly objectManagementId$: Observable<string> = this.route.params.pipe(
+    map(params => params.objectManagementId)
+  );
   readonly objectId$: Observable<string> = this.route.params.pipe(map(params => params.objectId));
 
   readonly formioFormSummary$: Observable<any> = combineLatest([
@@ -49,9 +51,9 @@ export class ObjectDetailComponent {
     this.refreshObject$,
   ]).pipe(
     switchMap(([objectManagementId, objectId]) =>
-      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType: FormType.SUMMARY}).pipe(
-        catchError(() => this.handleRetrievingFormError())
-      )
+      this.objectService
+        .getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType: FormType.SUMMARY})
+        .pipe(catchError(() => this.handleRetrievingFormError()))
     ),
     map(res => res?.formDefinition),
     tap(() => this.loading$.next(false))
@@ -63,9 +65,13 @@ export class ObjectDetailComponent {
     this.refreshObject$,
   ]).pipe(
     switchMap(([objectManagementId, objectId]) =>
-      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType: FormType.EDITFORM}).pipe(
-        catchError(() => this.handleRetrievingFormError())
-      )
+      this.objectService
+        .getPrefilledObjectFromObjectUrl({
+          objectManagementId,
+          objectId,
+          formType: FormType.EDITFORM,
+        })
+        .pipe(catchError(() => this.handleRetrievingFormError()))
     ),
     map(res => res?.formDefinition),
     tap(() => this.loading$.next(false))
@@ -95,9 +101,10 @@ export class ObjectDetailComponent {
     combineLatest([this.objectManagementId$, this.objectId$])
       .pipe(take(1))
       .subscribe(([objectManagementId, objectId]) => {
-        console.log(objectManagementId)
-        console.log(objectId)
-        this.objectService.deleteObject({objectManagementId, objectId})
+        console.log(objectManagementId);
+        console.log(objectId);
+        this.objectService
+          .deleteObject({objectManagementId, objectId})
           .pipe(
             take(1),
             catchError((error: any) => this.handleDeleteObjectError(error)),
@@ -120,7 +127,7 @@ export class ObjectDetailComponent {
 
   onFormioChange(formio): void {
     if (formio.data != null) {
-      this.submission$.next(formio.data)
+      this.submission$.next(formio.data);
       this.formValid$.next(formio.isValid);
     }
   }
@@ -134,10 +141,11 @@ export class ObjectDetailComponent {
     combineLatest([this.objectManagementId$, this.objectId$, this.submission$, this.formValid$])
       .pipe(take(1))
       .subscribe(([objectManagementId, objectId, submission, formValid]) => {
-        console.log(formValid)
+        console.log(formValid);
         if (formValid) {
           submission = this.objectService.removeEmptyStringValuesFromSubmission(submission);
-          this.objectService.updateObject({objectManagementId, objectId}, {...submission})
+          this.objectService
+            .updateObject({objectManagementId, objectId}, {...submission})
             .pipe(
               take(1),
               catchError((error: any) => this.handleUpdateObjectError(error)),

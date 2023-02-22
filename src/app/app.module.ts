@@ -208,7 +208,7 @@ export function tabsFactory() {
       },
     }),
     ObjectModule,
-    ObjectManagementModule
+    ObjectManagementModule,
   ],
   providers: [
     FormioComponent,

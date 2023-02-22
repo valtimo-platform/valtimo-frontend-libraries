@@ -38,7 +38,9 @@ export class ObjectListComponent {
   readonly clearForm$ = new BehaviorSubject<boolean>(false);
 
   readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
-  readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
+  readonly objectManagementId$: Observable<string> = this.route.params.pipe(
+    map(params => params.objectManagementId)
+  );
 
   private readonly refreshObjectList$ = new BehaviorSubject<null>(null);
 
@@ -80,13 +82,16 @@ export class ObjectListComponent {
     this.objectManagementId$,
     this.currentPageAndSize$,
     this.translateService.stream('key'),
-    this.refreshObjectList$
+    this.refreshObjectList$,
   ]).pipe(
     tap(() => {
       this.setFields();
     }),
     switchMap(([objectManagementId, currentPage]) =>
-      this.objectService.getObjectsByObjectManagementId(objectManagementId, {page: currentPage.page, size: currentPage.size})
+      this.objectService.getObjectsByObjectManagementId(objectManagementId, {
+        page: currentPage.page,
+        size: currentPage.size,
+      })
     ),
     tap(instanceRes => {
       this.pageSizes$.pipe(take(1)).subscribe(sizes => {
@@ -97,7 +102,7 @@ export class ObjectListComponent {
     map(res => {
       return res.content.map(record => ({
         objectUrl: record.items[0].value,
-        recordIndex: record.items[1].value
+        recordIndex: record.items[1].value,
       }));
     }),
     tap(() => this.loading$.next(false))
@@ -105,23 +110,25 @@ export class ObjectListComponent {
 
   readonly formDefinition$: Observable<any> = combineLatest([
     this.objectManagementId$,
-    this.clearForm$
+    this.clearForm$,
   ]).pipe(
     switchMap(([objectManagementId]) =>
-      this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, formType: FormType.EDITFORM}).pipe(
-        catchError((error) => {
-          this.handleRetrievingFormError(error);
-          this.disableInput();
-          return of(null).pipe(startWith(null));
-        })
-      )
+      this.objectService
+        .getPrefilledObjectFromObjectUrl({objectManagementId, formType: FormType.EDITFORM})
+        .pipe(
+          catchError(error => {
+            this.handleRetrievingFormError(error);
+            this.disableInput();
+            return of(null).pipe(startWith(null));
+          })
+        )
     ),
     map(res => {
       if (res != null) {
         this.enableInput();
       }
 
-      return res?.formDefinition
+      return res?.formDefinition;
     }),
     startWith(null),
     finalize(() => this.loading$.next(false))
@@ -147,7 +154,7 @@ export class ObjectListComponent {
 
   onFormioChange(formio): void {
     if (formio.data != null) {
-      this.submission$.next(formio.data)
+      this.submission$.next(formio.data);
       this.formValid$.next(formio.isValid);
     }
   }
@@ -159,7 +166,8 @@ export class ObjectListComponent {
       .subscribe(([objectManagementId, submission, formValid]) => {
         if (formValid) {
           submission = this.objectService.removeEmptyStringValuesFromSubmission(submission);
-          this.objectService.createObject({objectManagementId}, {...submission})
+          this.objectService
+            .createObject({objectManagementId}, {...submission})
             .pipe(
               take(1),
               catchError((error: any) => this.handleCreateObjectError(error)),
@@ -170,7 +178,7 @@ export class ObjectListComponent {
             .subscribe(() => {
               this.closeModal();
               this.refreshObjectList();
-              this.clearForm$.next(true)
+              this.clearForm$.next(true);
               this.toastr.success(this.translate.instant('object.messages.objectCreated'));
             });
         }
@@ -178,7 +186,7 @@ export class ObjectListComponent {
   }
 
   redirectToDetails(record): void {
-    const objectId = record.objectUrl.split("/").pop();
+    const objectId = record.objectUrl.split('/').pop();
     this.objectManagementId$.pipe(take(1)).subscribe(configurationId => {
       this.router.navigate([`/objects/${configurationId}/${objectId}`]);
     });
@@ -198,7 +206,9 @@ export class ObjectListComponent {
 
   private setFields(): void {
     const keys: Array<string> = ['recordIndex', 'objectUrl'];
-    this.fields$.next(keys.map(key => ({label: `${this.translateService.instant(`object.labels.${key}`)}`, key})));
+    this.fields$.next(
+      keys.map(key => ({label: `${this.translateService.instant(`object.labels.${key}`)}`, key}))
+    );
   }
 
   private handleRetrievingFormError(error: any) {

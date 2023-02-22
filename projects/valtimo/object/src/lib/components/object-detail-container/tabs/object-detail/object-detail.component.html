@@ -13,7 +13,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<ng-container *ngIf="{
+<ng-container
+  *ngIf="{
     formioFormSummary: formioFormSummary$ | async
   } as obs"
 >
@@ -36,22 +37,12 @@
 </ng-container>
 
 <ng-template #buttons let-obs="obs">
-  <button
-          (click)="openModal()"
-          ibmButton="primary"
-          size="md"
-          class="ml-3"
-  >
+  <button (click)="openModal()" ibmButton="primary" size="md" class="ml-3">
     {{ 'object.editObject' | translate }}
     <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
   </button>
 
-  <button
-          (click)="deleteObject()"
-          ibmButton="danger"
-          size="md"
-          class="ml-3"
-  >
+  <button (click)="deleteObject()" ibmButton="danger" size="md" class="ml-3">
     {{ 'object.deleteObject' | translate }}
     <svg class="cds--btn__icon" ibmIcon="trash-can" size="16"></svg>
   </button>
@@ -62,13 +53,14 @@
 </ng-template>
 
 <ng-template #createEditModal>
-  <ibm-modal *ngIf="{
+  <ibm-modal
+    *ngIf="{
       show: showModal$ | async,
       formValid: formValid$ | async,
       disableInput: disableInput$ | async,
       formioFormEdit: formioFormEdit$ | async
     } as modalObs"
-             [open]="modalObs.show"
+    [open]="modalObs.show"
   >
     <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
       <h3 ibmModalHeaderHeading>
@@ -83,25 +75,28 @@
 </ng-template>
 
 <ng-template #modalContent let-modalObs="modalObs">
-  <valtimo-form-io [form]="modalObs.formioFormEdit" (change)="onFormioChange($event)"></valtimo-form-io>
+  <valtimo-form-io
+    [form]="modalObs.formioFormEdit"
+    (change)="onFormioChange($event)"
+  ></valtimo-form-io>
 </ng-template>
 
 <ng-template #modalFooter let-modalObs="modalObs">
   <ibm-modal-footer>
     <ng-container>
       <button
-              ibmButton="secondary"
-              [attr.modal-primary-focus]="true"
-              (click)="closeModal()"
-              [disabled]="modalObs.disableInput"
+        ibmButton="secondary"
+        [attr.modal-primary-focus]="true"
+        (click)="closeModal()"
+        [disabled]="modalObs.disableInput"
       >
         {{ 'object.close' | translate }}
       </button>
       <button
-              ibmButton="primary"
-              [attr.modal-primary-focus]="true"
-              (click)="saveObject()"
-              [disabled]="modalObs.disableInput || modalObs.formValid === false"
+        ibmButton="primary"
+        [attr.modal-primary-focus]="true"
+        (click)="saveObject()"
+        [disabled]="modalObs.disableInput || modalObs.formValid === false"
       >
         {{ 'object.save' | translate }}
       </button>
@@ -115,13 +110,11 @@
 
 <ng-template #deleteModal>
   <valtimo-confirmation-modal
-          [showModalSubject$]="showDeleteModal$"
-          [outputOnConfirm]="deleteObjectUrl$ | async"
-          (confirmEvent)="deleteObjectConfirmation()"
-          confirmButtonTextTranslationKey="object.deleteObject"
-          titleTranslationKey="object.deleteObject"
-          contentTranslationKey="object.deleteObjectConfirmation"
+    [showModalSubject$]="showDeleteModal$"
+    [outputOnConfirm]="deleteObjectUrl$ | async"
+    (confirmEvent)="deleteObjectConfirmation()"
+    confirmButtonTextTranslationKey="object.deleteObject"
+    titleTranslationKey="object.deleteObject"
+    contentTranslationKey="object.deleteObjectConfirmation"
   ></valtimo-confirmation-modal>
 </ng-template>
-
-

@@ -13,8 +13,8 @@ interface Object {
 }
 
 enum FormType {
-  SUMMARY= 'SUMMARY',
-  EDITFORM = 'EDITFORM'
+  SUMMARY = 'SUMMARY',
+  EDITFORM = 'EDITFORM',
 }
 
-export  {ObjectConfiguration, ObjectConfigurationItem, Object, FormType}
+export {ObjectConfiguration, ObjectConfigurationItem, Object, FormType};

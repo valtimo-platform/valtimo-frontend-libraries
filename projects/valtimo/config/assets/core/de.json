@@ -995,13 +995,13 @@
       "objectUrl": "Objekt-URL"
     },
     "tabs": {
-     "general": "Allgemein"
+      "general": "Allgemein"
     },
     "close": "Nahe",
     "save": "Objekt speichern",
     "delete": "Objekt löschen",
     "deleteObjectConfirmation": "Möchten Sie dieses Objekt wirklich löschen?",
-    "messages":  {
+    "messages": {
       "objectCreated": "Objekt erfolgreich erstellt",
       "objectCreationError": "Beim Erstellen des Objekts ist ein Fehler aufgetreten",
       "objectUpdated": "Objekt erfolgreich aktualisiert",

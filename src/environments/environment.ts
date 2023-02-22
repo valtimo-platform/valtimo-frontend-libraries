@@ -251,7 +251,7 @@ export const environment: ValtimoConfig = {
     caseListColumn: true,
     largeLogoMargin: true,
     disableCaseCount: true,
-    enableObjectManagement: true
+    enableObjectManagement: true,
   },
   customDossierHeader: {
     leningen: [

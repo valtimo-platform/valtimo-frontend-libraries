@@ -18,7 +18,7 @@ import {Subject} from 'rxjs';
 
 enum IncludeFunction {
   HaalcentraalConnectorConfigured,
-  ObjectManagementEnabled
+  ObjectManagementEnabled,
 }
 
 interface MenuItem {

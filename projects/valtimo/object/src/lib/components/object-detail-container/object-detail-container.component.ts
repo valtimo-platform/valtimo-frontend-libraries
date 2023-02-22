@@ -20,7 +20,7 @@ import {map, Observable, Subscription} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
 import {ObjectStateService} from '../../services/object-state.service';
 import {ObjectService} from '../../services/object.service';
-import {TabEnum} from '../../services/tab.enum'
+import {TabEnum} from '../../services/tab.enum';
 import {TabService} from '../../services/tab.service';
 
 @Component({
@@ -36,7 +36,9 @@ export class ObjectDetailContainerComponent implements OnInit, OnDestroy {
 
   readonly TabEnum = TabEnum;
 
-  readonly objectManagementId$: Observable<string> = this.route.params.pipe(map(params => params.objectManagementId));
+  readonly objectManagementId$: Observable<string> = this.route.params.pipe(
+    map(params => params.objectManagementId)
+  );
 
   constructor(
     private readonly objectState: ObjectStateService,
