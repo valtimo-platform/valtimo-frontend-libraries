@@ -16,7 +16,9 @@
 <ng-container *ngIf="{
     loading: loading$ | async,
     pagination: pagination$ | async,
-    disableInput: disableInput$ | async
+    disableInput: disableInput$ | async,
+    fields: fields$ | async,
+    objectConfiguration: objectConfiguration$ | async
   } as obs"
 >
   <div class="main-content pt-0">
@@ -26,8 +28,9 @@
         <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
       </div>
     </div>
-
-    <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+      <ng-container *ngIf="obs.loading === false; else loading">
+        <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+      </ng-container>
   </div>
   </div>
   <ng-container *ngTemplateOutlet="createNewModal"></ng-container>
@@ -47,32 +50,26 @@
 </ng-template>
 
 <ng-template #list let-obs="obs">
-  <ng-container *ngIf="fields$ | async as fields">
-    <ng-container *ngIf="objectConfiguration$ | async as objectConfiguration">
-      <valtimo-widget *ngIf="obs.loading === false; else loading">
-        <valtimo-list
-                [items]="objectConfiguration"
-                [fields]="fields"
-                [viewMode]="true"
-                [header]="true"
-                [pagination]="obs.pagination"
-                paginationIdentifier="objectConfigurationList"
-                (paginationClicked)="paginationClicked($event)"
-                (paginationSet)="paginationSet($event)"
-                (rowClicked)="redirectToDetails($event)"
-        >
-          <div header>
-            <h3 class="list-header-title">
-              {{ 'object.title' | translate }}
-              <sup class="ml-1 badge badge-pill badge-primary">{{
-                objectConfiguration?.length || 0
-                }}</sup>
-            </h3>
-          </div>
-        </valtimo-list>
-      </valtimo-widget>
-    </ng-container>
-  </ng-container>
+  <valtimo-widget>
+    <valtimo-list
+            [items]="obs.objectConfiguration"
+            [fields]="obs.fields"
+            [viewMode]="true"
+            [header]="true"
+            [pagination]="obs.pagination"
+            paginationIdentifier="objectConfigurationList"
+            (paginationClicked)="paginationClicked($event)"
+            (paginationSet)="paginationSet($event)"
+            (rowClicked)="redirectToDetails($event)"
+    >
+      <div header>
+        <h3 class="list-header-title">
+          {{ 'object.title' | translate }}
+          <sup class="ml-1 badge badge-pill badge-primary">{{ obs.objectConfiguration?.length || 0 }}</sup>
+        </h3>
+      </div>
+    </valtimo-list>
+  </valtimo-widget>
 </ng-template>
 
 <ng-template #createNewModal>
