@@ -250,6 +250,7 @@ export const environment: ValtimoConfig = {
     experimentalDmnEditing: true,
     caseListColumn: true,
     largeLogoMargin: true,
+    sortFilesByDate: true,
     disableCaseCount: true,
     enableObjectManagement: true,
   },
