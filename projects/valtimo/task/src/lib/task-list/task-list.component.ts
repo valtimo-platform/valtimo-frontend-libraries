@@ -24,6 +24,8 @@ import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.c
 import {TranslateService} from '@ngx-translate/core';
 import {combineLatest, Subscription} from 'rxjs';
 import {ConfigService, SortState, TaskListTab} from '@valtimo/config';
+import {DocumentService} from '@valtimo/document';
+import {take} from 'rxjs/operators';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -55,7 +57,8 @@ export class TaskListComponent implements OnDestroy {
     private router: Router,
     private logger: NGXLogger,
     private translateService: TranslateService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private documentService: DocumentService
   ) {
     this.visibleTabs = this.configService.config?.visibleTaskListTabs || null;
     if (this.visibleTabs != null) {
@@ -154,7 +157,9 @@ export class TaskListComponent implements OnDestroy {
     const currentTask = tasks && tasks[index];
 
     if (currentTask) {
-      this.router.navigate([`/dossiers/leningen/document/${currentTask.businessKey}/summary`]);
+      this.documentService.getDocument(currentTask.businessKey).pipe(take(1)).subscribe((document) => {
+        this.router.navigate([`/dossiers/${document.definitionId.name}/document/${currentTask.businessKey}/summary`]);
+      });
     }
   }
 
