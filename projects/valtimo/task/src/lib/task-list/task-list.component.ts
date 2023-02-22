@@ -152,7 +152,10 @@ export class TaskListComponent implements OnDestroy {
 
     const tasks = this.tasks[this.currentTaskType].tasks;
     const currentTask = tasks && tasks[index];
-    this.router.navigate([`/dossiers/leningen/document/${currentTask.businessKey}/summary`]);
+
+    if (currentTask) {
+      this.router.navigate([`/dossiers/leningen/document/${currentTask.businessKey}/summary`]);
+    }
   }
 
   public defaultTaskListFields(type) {
