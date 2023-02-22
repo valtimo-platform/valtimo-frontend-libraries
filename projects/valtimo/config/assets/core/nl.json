@@ -436,6 +436,7 @@
   "Select options for the selected process": "Kies opties voor het geselecteerde proces",
   "Save": "Opslaan",
   "Customers": "Klanten",
+  "Objects": "Objecten",
   "processManagement": {
     "download": "Downloaden",
     "clear": "Wissen",
@@ -1001,7 +1002,11 @@
     "messages":  {
       "objectCreated": "Object succesvol aangemaakt",
       "objectCreationError": "Er is een fout opgetreden tijdens het maken van het object",
-      "objectEditFormMissing": "Het object mist een bewerkingsformulier"
+      "objectUpdated": "Object succesvol geupdate",
+      "objectUpdateError": "Er is een fout opgetreden tijdens het update van het object",
+      "objectDeleted": "Object succesvol verwijderd",
+      "objectDeleteError": "Er is een fout opgetreden tijdens het delete van het object",
+      "objectRetrievingFormError": "Er is een fout opgetreden bij het ophalen van de formulierdefinitie"
     }
   },
   "objectManagement": {

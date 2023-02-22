@@ -102,7 +102,7 @@ export const environment: ValtimoConfig = {
       },
       {
         roles: [ROLE_ADMIN],
-        title: 'Object',
+        title: 'Objects',
         iconClass: 'icon mdi mdi-archive',
         sequence: 3,
         includeFunction: IncludeFunction.ObjectManagementEnabled,

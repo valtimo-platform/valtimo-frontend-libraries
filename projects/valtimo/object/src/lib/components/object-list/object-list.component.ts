@@ -110,7 +110,7 @@ export class ObjectListComponent {
     switchMap(([objectManagementId]) =>
       this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, formType: FormType.EDITFORM}).pipe(
         catchError((error) => {
-          this.handleFormMissingError(error);
+          this.handleRetrievingFormError(error);
           this.disableInput();
           return of(null).pipe(startWith(null));
         })
@@ -145,7 +145,7 @@ export class ObjectListComponent {
     this.clearForm$.next(true);
   }
 
-  onFormioChange(formio) {
+  onFormioChange(formio): void {
     if (formio.data != null) {
       this.submission$.next(formio.data)
       this.formValid$.next(formio.isValid);
@@ -177,10 +177,10 @@ export class ObjectListComponent {
       });
   }
 
-  redirectToDetails(record) {
+  redirectToDetails(record): void {
     const objectId = record.objectUrl.split("/").pop();
     this.objectManagementId$.pipe(take(1)).subscribe(configurationId => {
-      this.router.navigate([`/object/${configurationId}/${objectId}`]);
+      this.router.navigate([`/objects/${configurationId}/${objectId}`]);
     });
   }
 
@@ -196,8 +196,13 @@ export class ObjectListComponent {
     this.disableInput$.next(false);
   }
 
-  private handleFormMissingError(error: any) {
-    this.toastr.error(this.translate.instant('object.messages.objectEditFormMissing'));
+  private setFields(): void {
+    const keys: Array<string> = ['recordIndex', 'objectUrl'];
+    this.fields$.next(keys.map(key => ({label: `${this.translateService.instant(`object.labels.${key}`)}`, key})));
+  }
+
+  private handleRetrievingFormError(error: any) {
+    this.toastr.error(this.translate.instant('object.messages.objectRetrievingFormError'));
     return throwError(error);
   }
 
@@ -205,10 +210,5 @@ export class ObjectListComponent {
     this.closeModal();
     this.toastr.error(this.translate.instant('object.messages.objectCreationError'));
     return throwError(error);
-  }
-
-  private setFields(): void {
-    const keys: Array<string> = ['recordIndex', 'objectUrl'];
-    this.fields$.next(keys.map(key => ({label: `${this.translateService.instant(`object.labels.${key}`)}`, key})));
   }
 }

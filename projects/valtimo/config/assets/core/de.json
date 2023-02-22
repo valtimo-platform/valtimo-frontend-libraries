@@ -436,6 +436,7 @@
   "Select options for the selected process": "Optionen für gewählten Prozess auswählen",
   "Save": "Speichern",
   "Customers": "Kunden",
+  "Objects": "Objekte",
   "processManagement": {
     "download": "Herunterladen",
     "clear": "Löschen",
@@ -1001,7 +1002,11 @@
     "messages":  {
       "objectCreated": "Objekt erfolgreich erstellt",
       "objectCreationError": "Beim Erstellen des Objekts ist ein Fehler aufgetreten",
-      "objectEditFormMissing": "Dem Objekt fehlt ein Bearbeitungsformular"
+      "objectUpdated": "Objekt erfolgreich aktualisiert",
+      "objectUpdateError": "Beim Aktualisieren des Objekts ist ein Fehler aufgetreten",
+      "objectDeleted": "Objekt erfolgreich gelöscht",
+      "objectDeleteError": "Beim Löschen des Objekts ist ein Fehler aufgetreten",
+      "objectRetrievingFormError": "Beim Abrufen der Formulardefinition ist ein Fehler aufgetreten"
     }
   },
   "objectManagement": {

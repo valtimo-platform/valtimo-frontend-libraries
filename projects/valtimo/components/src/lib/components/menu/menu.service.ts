@@ -64,13 +64,13 @@ export class MenuService {
   );
 
   private readonly dossierItemsAppended$ = new BehaviorSubject<boolean>(false);
-  private readonly objectItemsAppended$ = new BehaviorSubject<boolean>(false);
+  private readonly objectsItemsAppended$ = new BehaviorSubject<boolean>(false);
 
   // Find out which menu item sequence number matches the current url the closest
   public get closestSequence$(): Observable<string> {
-    return combineLatest([this.dossierItemsAppended$, this.objectItemsAppended$, this.currentRoute$, this.menuItems$]).pipe(
-      filter(([dossierItemsAppended, objectItemsAppended]) => dossierItemsAppended || objectItemsAppended),
-      map(([dossierItemsAppended, objectItemsAppended, currentRoute, menuItems]) => {
+    return combineLatest([this.dossierItemsAppended$, this.objectsItemsAppended$, this.currentRoute$, this.menuItems$]).pipe(
+      filter(([dossierItemsAppended, objectsItemsAppended]) => dossierItemsAppended || objectsItemsAppended),
+      map(([dossierItemsAppended, objectsItemsAppended, currentRoute, menuItems]) => {
         let closestSequence = '0';
         let highestDifference = 0;
 
@@ -207,9 +207,9 @@ export class MenuService {
       this.logger.debug('appendObjectManagementSubMenuItems');
       this.getAllObjects().subscribe(objects => {
 
-        const objectMenuItems: MenuItem[] = objects.map((object, index) => {
+        const objectsMenuItems: MenuItem[] = objects.map((object, index) => {
           return {
-            link: ['/object/' + object.id],
+            link: ['/objects/' + object.id],
             title: object.title,
             iconClass: 'icon mdi mdi-dot-circle',
             sequence: index,
@@ -217,16 +217,16 @@ export class MenuService {
           } as MenuItem;
         });
 
-        this.logger.debug('found objectMenuItems', objectMenuItems);
-        const menuItemIndex = menuItems.findIndex(({title}) => title === 'Object');
+        this.logger.debug('found objectsMenuItems', objectsMenuItems);
+        const menuItemIndex = menuItems.findIndex(({title}) => title === 'Objects');
         if (menuItemIndex > 0) {
           const objectsMenu = menuItems[menuItemIndex];
           this.logger.debug('updating objectsMenu', objectsMenu);
-          objectsMenu.children = objectMenuItems;
+          objectsMenu.children = objectsMenuItems;
           menuItems[menuItemIndex] = objectsMenu
         }
         subscriber.next(menuItems);
-        this.objectItemsAppended$.next(true);
+        this.objectsItemsAppended$.next(true);
         this.logger.debug('appendObjectsSubMenuItems finished');
       });
     });

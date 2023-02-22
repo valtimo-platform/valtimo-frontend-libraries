@@ -20,15 +20,15 @@ export class ObjectService {
     return this.http.get<ObjectConfiguration>(`${this.valtimoEndpointUri}v1/object/management/configuration/${objectManagementId}/object`, {params});
   }
 
-  public createObject(params: any, payload: any): Observable<any> {
+  public createObject(params: {objectManagementId: string}, payload: object): Observable<any> {
     return this.http.post<any>(`${this.valtimoEndpointUri}v1/object`, payload, {params});
   }
 
-  public updateObject(params: any, payload: any): Observable<any> {
+  public updateObject(params: {objectManagementId: string, objectId: string}, payload: object): Observable<any> {
     return this.http.patch<any>(`${this.valtimoEndpointUri}v1/object`, payload, {params});
   }
 
-  public deleteObject(params: any): Observable<any> {
+  public deleteObject(params: {objectManagementId: string, objectId: string}): Observable<any> {
     return this.http.delete<any>(`${this.valtimoEndpointUri}v1/object`, {params});
   }
 

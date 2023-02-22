@@ -24,13 +24,13 @@ import {ObjectDetailContainerComponent} from './components/object-detail-contain
 
 const routes: Routes = [
   {
-    path: 'object/:objectManagementId',
+    path: 'objects/:objectManagementId',
     canActivate: [AuthGuardService],
     component: ObjectListComponent,
-    data: {title: 'Object', roles: [ROLE_USER]},
+    data: {title: 'Objects', roles: [ROLE_USER]},
   },
   {
-    path: 'object/:objectManagementId/:objectId',
+    path: 'objects/:objectManagementId/:objectId',
     canActivate: [AuthGuardService],
     component: ObjectDetailContainerComponent,
     data: {title: 'Object details', roles: [ROLE_USER]},

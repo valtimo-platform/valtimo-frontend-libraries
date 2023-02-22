@@ -50,11 +50,7 @@ export class ObjectDetailComponent {
   ]).pipe(
     switchMap(([objectManagementId, objectId]) =>
       this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType: FormType.SUMMARY}).pipe(
-        catchError(error => {
-          this.toastr.error(`Error getting form definition: ${error}`);
-          this.loading$.next(false);
-          return of(null); // Return a null value to the map operator
-        })
+        catchError(() => this.handleRetrievingFormError())
       )
     ),
     map(res => res?.formDefinition),
@@ -68,11 +64,7 @@ export class ObjectDetailComponent {
   ]).pipe(
     switchMap(([objectManagementId, objectId]) =>
       this.objectService.getPrefilledObjectFromObjectUrl({objectManagementId, objectId, formType: FormType.EDITFORM}).pipe(
-        catchError(error => {
-          this.toastr.error(`Error getting form definition: ${error}`);
-          this.loading$.next(false);
-          return of(null); // Return a null value to the map operator
-        })
+        catchError(() => this.handleRetrievingFormError())
       )
     ),
     map(res => res?.formDefinition),
@@ -108,7 +100,7 @@ export class ObjectDetailComponent {
         this.objectService.deleteObject({objectManagementId, objectId})
           .pipe(
             take(1),
-            catchError((error: any) => this.handleUpdateObjectError(error)),
+            catchError((error: any) => this.handleDeleteObjectError(error)),
             finalize(() => {
               this.enableInput();
             })
@@ -116,7 +108,7 @@ export class ObjectDetailComponent {
           .subscribe(() => {
             this.closeModal();
             this.toastr.success(this.translate.instant('object.messages.objectDeleted'));
-            this.router.navigate([`/object/${objectManagementId}`]);
+            this.router.navigate([`/objects/${objectManagementId}`]);
           });
       });
   }
@@ -126,7 +118,7 @@ export class ObjectDetailComponent {
     this.enableInput();
   }
 
-  onFormioChange(formio) {
+  onFormioChange(formio): void {
     if (formio.data != null) {
       this.submission$.next(formio.data)
       this.formValid$.next(formio.isValid);
@@ -174,9 +166,21 @@ export class ObjectDetailComponent {
     this.disableInput$.next(false);
   }
 
+  private handleRetrievingFormError() {
+    this.toastr.error(this.translate.instant('object.messages.objectRetrievingFormError'));
+    this.loading$.next(false);
+    return of(null);
+  }
+
   private handleUpdateObjectError(error: any) {
     this.closeModal();
     this.toastr.error(this.translate.instant('object.messages.objectUpdateError'));
+    return throwError(error);
+  }
+
+  private handleDeleteObjectError(error: any) {
+    this.closeModal();
+    this.toastr.error(this.translate.instant('object.messages.objectDeleteError'));
     return throwError(error);
   }
 }

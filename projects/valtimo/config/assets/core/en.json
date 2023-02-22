@@ -436,6 +436,7 @@
   "Select options for the selected process": "Select options for the selected process",
   "Save": "Save",
   "Customers": "Customers",
+  "Objects": "Objects",
   "processManagement": {
     "download": "Download",
     "clear": "Clear",
@@ -1001,7 +1002,11 @@
     "messages":  {
       "objectCreated": "Object created successfully",
       "objectCreationError": "An error occurred while creating the object",
-      "objectEditFormMissing": "The object is missing a editform"
+      "objectUpdated": "Object updated successfully",
+      "objectUpdateError": "An error occurred while updating the object",
+      "objectDeleted": "Object deleted successfully",
+      "objectDeleteError": "An error occurred while deleting the object",
+      "objectRetrievingFormError": "An error occurred while retrieving the form definition"
     }
   },
   "objectManagement": {
