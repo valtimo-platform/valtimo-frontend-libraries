@@ -220,25 +220,27 @@ export class MenuService {
     return new Observable(subscriber => {
       this.logger.debug('appendObjectManagementSubMenuItems');
       this.getAllObjects().subscribe(objects => {
-        const objectsMenuItems: MenuItem[] = objects.map((object, index) => ({
+        const visibleObjects = objects.filter(object => object?.showInDataMenu !== false)
+        if (visibleObjects?.length > 0) {
+          const objectsMenuItems: MenuItem[] = visibleObjects.map((object, index) => ({
             link: ['/objects/' + object.id],
             title: object.title,
             iconClass: 'icon mdi mdi-dot-circle',
             sequence: index,
             show: true,
           } as MenuItem));
-
-        this.logger.debug('found objectsMenuItems', objectsMenuItems);
-        const menuItemIndex = menuItems.findIndex(({title}) => title === 'Objects');
-        if (menuItemIndex > 0) {
-          const objectsMenu = menuItems[menuItemIndex];
-          this.logger.debug('updating objectsMenu', objectsMenu);
-          objectsMenu.children = objectsMenuItems;
-          menuItems[menuItemIndex] = objectsMenu;
+          this.logger.debug('found objectsMenuItems', objectsMenuItems);
+          const menuItemIndex = menuItems.findIndex(({title}) => title === 'Objects');
+          if (menuItemIndex > 0) {
+            const objectsMenu = menuItems[menuItemIndex];
+            this.logger.debug('updating objectsMenu', objectsMenu);
+            objectsMenu.children = objectsMenuItems;
+            menuItems[menuItemIndex] = objectsMenu;
+          }
+          subscriber.next(menuItems);
+          this.objectsItemsAppended$.next(true);
+          this.logger.debug('appendObjectsSubMenuItems finished');
         }
-        subscriber.next(menuItems);
-        this.objectsItemsAppended$.next(true);
-        this.logger.debug('appendObjectsSubMenuItems finished');
       });
     });
   }
