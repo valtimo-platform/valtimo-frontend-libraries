@@ -20,9 +20,11 @@ import {catchError, finalize, switchMap, take, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ObjectService} from '../../services/object.service';
-import {Pagination} from '@valtimo/components';
-import {FormType} from '../../models/object.model';
+import {ListField, Pagination} from '@valtimo/components';
+import {ColumnType, FormType} from '../../models/object.model';
 import {ToastrService} from 'ngx-toastr';
+import {ObjectColumnService} from '../../services/object-column.service';
+import {SearchColumn} from '@valtimo/object-management';
 
 @Component({
   selector: 'valtimo-object-list',
@@ -36,8 +38,8 @@ export class ObjectListComponent {
   readonly showModal$ = new BehaviorSubject<boolean>(false);
   readonly disableInput$ = new BehaviorSubject<boolean>(false);
   readonly clearForm$ = new BehaviorSubject<boolean>(false);
+  readonly columnType$ = new BehaviorSubject<ColumnType>(ColumnType.DEFAULT)
 
-  readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
   readonly objectManagementId$: Observable<string> = this.route.params.pipe(
     map(params => params.objectManagementId)
   );
@@ -81,17 +83,30 @@ export class ObjectListComponent {
   readonly objectConfiguration$: Observable<Array<any>> = combineLatest([
     this.objectManagementId$,
     this.currentPageAndSize$,
+    this.columnType$,
     this.translateService.stream('key'),
     this.refreshObjectList$,
   ]).pipe(
-    tap(() => {
-      this.setFields();
-    }),
-    switchMap(([objectManagementId, currentPage]) =>
-      this.objectService.getObjectsByObjectManagementId(objectManagementId, {
-        page: currentPage.page,
-        size: currentPage.size,
-      })
+    switchMap(([objectManagementId, currentPage, columnType]) => {
+        if (columnType === ColumnType.CUSTOM) {
+          return this.objectService.postObjectsByObjectManagementId(
+            objectManagementId,
+            {
+              page: currentPage.page,
+              size: currentPage.size,
+            },
+            {}
+          )
+        } else {
+          return this.objectService.getObjectsByObjectManagementId(
+            objectManagementId,
+            {
+              page: currentPage.page,
+              size: currentPage.size,
+            }
+          )
+        }
+      }
     ),
     tap(instanceRes => {
       this.pageSizes$.pipe(take(1)).subscribe(sizes => {
@@ -99,10 +114,9 @@ export class ObjectListComponent {
         this.pageSizes$.next({...sizes, collectionSize: instanceRes.totalElements});
       });
     }),
-    map(res => res.content.map(record => ({
-        objectUrl: record.items[0].value,
-        recordIndex: record.items[1].value,
-      }))),
+    map(res => res.content.map(record => record?.items?.reduce(
+      (obj, item) => Object.assign(obj, { [item.key]: item.value }), {})
+    )),
     tap(() => this.loading$.next(false))
   );
 
@@ -132,9 +146,49 @@ export class ObjectListComponent {
     finalize(() => this.loading$.next(false))
   );
 
+  private readonly columns$: Observable<Array<SearchColumn>> =
+    this.objectManagementId$.pipe(
+      switchMap(objectManagementId =>
+        this.objectColumnService.getObjectColumns(objectManagementId)
+      ),
+      map(res => res)
+    );
+
+  readonly fields$: Observable<Array<ListField>> = combineLatest([
+    this.columns$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([columns]) => {
+      if (columns?.length > 0) {
+        this.columnType$.next(ColumnType.CUSTOM);
+        return [
+          ...columns
+            .map(column => {
+              console.log(column)
+              const translationKey = `fieldLabels.${column.translationKey}`;
+              const translation = this.translateService.instant(translationKey);
+              const validTranslation = translation !== translationKey && translation;
+              return {
+                key: column.translationKey,
+                label: column.title || validTranslation || column.translationKey,
+                sortable: column.sortable,
+                ...(column.viewType && {viewType: column.viewType}),
+                ...(column.enum && {enum: column.enum}),
+              };
+            })
+        ]
+      } else {
+        this.columnType$.next(ColumnType.DEFAULT);
+        return this.setDefaultFields();
+      }
+
+    })
+  );
+
   constructor(
     private readonly objectService: ObjectService,
-    private readonly translateService: TranslateService,
+    private readonly objectColumnService: ObjectColumnService,
+  private readonly translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
@@ -202,11 +256,16 @@ export class ObjectListComponent {
     this.disableInput$.next(false);
   }
 
-  private setFields(): void {
+  private setDefaultFields() {
     const keys: Array<string> = ['recordIndex', 'objectUrl'];
-    this.fields$.next(
-      keys.map(key => ({label: `${this.translateService.instant(`object.labels.${key}`)}`, key}))
-    );
+    return keys.map(key => (
+      {
+        label: `${this.translateService.instant(`object.labels.${key}`)}`,
+        key,
+        sortable: true,
+        viewType: 'string'
+      }
+      ))
   }
 
   private handleRetrievingFormError(error: any) {
