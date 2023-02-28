@@ -88,16 +88,14 @@ export class ObjectListComponent {
       switchMap(objectManagementId =>
         this.objectManagementService.getSearchField(objectManagementId)
       ),
-      map(searchFields => {
-        return searchFields.map(searchField => {
-          // @ts-ignore
-          searchField.dataType = searchField.dataType.toLowerCase();
-          // @ts-ignore
-          searchField.fieldType = searchField.fieldType.toLowerCase();
-          return searchField
-        })
+      map(searchFields => searchFields.map(searchField => {
+        // @ts-ignore
+        searchField.dataType = searchField.dataType.toLowerCase();
+        // @ts-ignore
+        searchField.fieldType = searchField.fieldType.toLowerCase();
+        return searchField
       })
-    );
+    ));
 
   readonly objectConfiguration$: Observable<Array<any>> = combineLatest([
     this.objectManagementId$,
