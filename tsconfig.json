@@ -340,6 +340,12 @@
       "path": "./projects/valtimo/exact-plugin/tsconfig.spec.json"
     },
     {
+      "path": "./projects/valtimo/object/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/valtimo/object/tsconfig.spec.json"
+    },
+    {
       "path": "./projects/valtimo/object-management/tsconfig.lib.json"
     },
     {

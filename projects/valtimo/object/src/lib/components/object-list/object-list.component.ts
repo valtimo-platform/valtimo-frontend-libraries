@@ -15,7 +15,7 @@
  */
 
 import {Component} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, of, startWith, throwError} from 'rxjs';
+import {BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, throwError} from 'rxjs';
 import {catchError, finalize, switchMap, take, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -24,7 +24,8 @@ import {ListField, Pagination} from '@valtimo/components';
 import {ColumnType, FormType} from '../../models/object.model';
 import {ToastrService} from 'ngx-toastr';
 import {ObjectColumnService} from '../../services/object-column.service';
-import {SearchColumn} from '@valtimo/object-management';
+import {ObjectManagementService, SearchColumn} from '@valtimo/object-management';
+import {SearchField, SearchFieldValues, SearchFilter, SearchFilterRange} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-object-list',
@@ -80,14 +81,33 @@ export class ObjectListComponent {
     }
   }
 
+  private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
+  readonly objectSearchFields$: Observable<Array<SearchField> | null> =
+    this.objectManagementId$.pipe(
+      distinctUntilChanged(),
+      switchMap(objectManagementId =>
+        this.objectManagementService.getSearchField(objectManagementId)
+      ),
+      map(searchFields => {
+        return searchFields.map(searchField => {
+          // @ts-ignore
+          searchField.dataType = searchField.dataType.toLowerCase();
+          // @ts-ignore
+          searchField.fieldType = searchField.fieldType.toLowerCase();
+          return searchField
+        })
+      })
+    );
+
   readonly objectConfiguration$: Observable<Array<any>> = combineLatest([
     this.objectManagementId$,
     this.currentPageAndSize$,
     this.columnType$,
+    this.searchFieldValues$,
     this.translateService.stream('key'),
     this.refreshObjectList$,
   ]).pipe(
-    switchMap(([objectManagementId, currentPage, columnType]) => {
+    switchMap(([objectManagementId, currentPage, columnType, searchFieldValues]) => {
         if (columnType === ColumnType.CUSTOM) {
           return this.objectService.postObjectsByObjectManagementId(
             objectManagementId,
@@ -95,7 +115,7 @@ export class ObjectListComponent {
               page: currentPage.page,
               size: currentPage.size,
             },
-            {}
+            Object.keys(searchFieldValues).length > 0 ? {otherFilters: this.mapSearchValuesToFilters(searchFieldValues)} : {}
           )
         } else {
           return this.objectService.getObjectsByObjectManagementId(
@@ -164,7 +184,6 @@ export class ObjectListComponent {
         return [
           ...columns
             .map(column => {
-              console.log(column)
               const translationKey = `fieldLabels.${column.translationKey}`;
               const translation = this.translateService.instant(translationKey);
               const validTranslation = translation !== translationKey && translation;
@@ -188,7 +207,8 @@ export class ObjectListComponent {
   constructor(
     private readonly objectService: ObjectService,
     private readonly objectColumnService: ObjectColumnService,
-  private readonly translateService: TranslateService,
+    private readonly objectManagementService: ObjectManagementService,
+    private readonly translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
@@ -244,6 +264,10 @@ export class ObjectListComponent {
     });
   }
 
+  search(searchFieldValues: SearchFieldValues): void {
+    this.searchFieldValues$.next(searchFieldValues || {});
+  }
+
   private refreshObjectList(): void {
     this.refreshObjectList$.next(null);
   }
@@ -277,5 +301,25 @@ export class ObjectListComponent {
     this.closeModal();
     this.toastr.error(this.translate.instant('object.messages.objectCreationError'));
     return throwError(error);
+  }
+
+  private mapSearchValuesToFilters(
+    values: SearchFieldValues
+  ): Array<SearchFilter | SearchFilterRange> {
+    const filters: Array<SearchFilter | SearchFilterRange> = [];
+
+    Object.keys(values).forEach(valueKey => {
+      const searchValue = values[valueKey] as any;
+      if (searchValue.start) {
+        filters.push({key: valueKey, rangeFrom: searchValue.start, rangeTo: searchValue.end});
+      } else if (Array.isArray(searchValue)) {
+        filters.push({key: valueKey, values: searchValue});
+      } else {
+        // @ts-ignore
+        filters.push({key: valueKey, values: [{value: searchValue}]});
+      }
+    });
+
+    return filters;
   }
 }
