@@ -262,6 +262,7 @@ export const environment: ValtimoConfig = {
     sortFilesByDate: true,
     disableCaseCount: true,
     enableObjectManagement: true,
+    returnToLastUrlAfterTokenExpiration: true,
   },
   customDossierHeader: {
     leningen: [

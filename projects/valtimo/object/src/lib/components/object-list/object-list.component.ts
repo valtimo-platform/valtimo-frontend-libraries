@@ -141,11 +141,9 @@ export class ObjectListComponent {
         this.pageSizes$.next({...sizes, collectionSize: instanceRes.totalElements});
       });
     }),
-    map(res =>
-      res.content.map(record =>
-        record?.items?.reduce((obj, item) => Object.assign(obj, {[item.key]: item.value}), {})
-      )
-    ),
+    map(res => res.content.map(record => record?.items?.reduce(
+      (obj, item) => Object.assign(obj, {objectId: record.id}, {[item.key]: item.value }), {})
+    )),
     tap(() => this.loading$.next(false))
   );
 
@@ -187,6 +185,7 @@ export class ObjectListComponent {
     map(([columns]) => {
       if (columns?.length > 0) {
         this.columnType$.next(ColumnType.CUSTOM);
+
         return [
           ...columns.map(column => {
             const translationKey = `fieldLabels.${column.translationKey}`;
@@ -262,7 +261,7 @@ export class ObjectListComponent {
   }
 
   redirectToDetails(record): void {
-    const objectId = record.objectUrl.split('/').pop();
+    const objectId = record.objectUrl ? record.objectUrl.split('/').pop() : record.objectId;
     this.objectManagementId$.pipe(take(1)).subscribe(configurationId => {
       this.router.navigate([`/objects/${configurationId}/${objectId}`]);
     });
