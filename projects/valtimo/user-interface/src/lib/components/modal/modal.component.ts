@@ -51,8 +51,11 @@ export class ModalComponent implements OnInit {
     this.modalService.closeModal();
   }
 
-  stopPropagation(event: Event): void {
-    event.stopPropagation();
+  stopPropagationBasedOnClickedTarget(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'checkbox') {
+      event.stopPropagation();
+    }
   }
 
   modalMouseEnter(): void {
