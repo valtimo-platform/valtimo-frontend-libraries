@@ -91,7 +91,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     }),
     tap(() => this.loading$.next(false)),
     catchError(() => {
-      console.log('set warning');
       this.showZaakLinkWarning = true;
       return of([]);
     })
