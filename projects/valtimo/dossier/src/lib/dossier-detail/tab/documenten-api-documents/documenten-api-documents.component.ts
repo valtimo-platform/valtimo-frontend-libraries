@@ -53,7 +53,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       callback: this.downloadDocument.bind(this),
     },
   ];
-  public showWarning: boolean;
+  public showZaakLinkWarning: boolean;
   public isAdmin: boolean;
   public uploadProcessLinkedSet = false;
   public uploadProcessLinked!: boolean;
@@ -62,9 +62,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   readonly hideModal$ = new Subject<null>();
   readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
   readonly fileToBeUploaded$ = new BehaviorSubject<File | null>(null);
+  readonly loading$ = new BehaviorSubject<boolean>(true);
   private readonly refetch$ = new BehaviorSubject<null>(null);
-
-  private readonly loading$ = new BehaviorSubject<boolean>(true);
 
   public relatedFiles$: Observable<Array<RelatedFileListItem>> = this.refetch$.pipe(
     switchMap(() =>
@@ -92,8 +91,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     }),
     tap(() => this.loading$.next(false)),
     catchError(() => {
-      this.showWarning = true;
-      return of(null);
+      console.log('set warning');
+      this.showZaakLinkWarning = true;
+      return of([]);
     })
   );
 
