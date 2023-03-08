@@ -64,17 +64,19 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     .pipe(map(() => this.translateService.currentLang));
 
   readonly formioOptions$: Observable<ValtimoFormioOptions> = this.currentLanguage$.pipe(
-    map(language =>  {
+    map(language => {
       const formioTranslations = this.translateService.instant('formioTranslations');
-      return typeof formioTranslations === 'object' ? {
-        ...this.options,
-        language,
-        i18n: {
-          [language]: formioTranslations
-        }
-      } : this.options;
+      return typeof formioTranslations === 'object'
+        ? {
+            ...this.options,
+            language,
+            i18n: {
+              [language]: formioTranslations,
+            },
+          }
+        : this.options;
     })
-  )
+  );
 
   constructor(
     private userProviderService: UserProviderService,
