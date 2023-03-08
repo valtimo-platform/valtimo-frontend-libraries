@@ -31,7 +31,7 @@ import {Formio, FormioComponent as FormIoSourceComponent, FormioForm} from '@for
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import jwt_decode from 'jwt-decode';
 import {NGXLogger} from 'ngx-logger';
-import {from, Subject, Subscription, timer} from 'rxjs';
+import {from, Observable, Subject, Subscription, timer} from 'rxjs';
 import {map, switchMap, take} from 'rxjs/operators';
 import {FormIoStateService} from './services/form-io-state.service';
 import {ActivatedRoute} from '@angular/router';
@@ -62,6 +62,19 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   readonly currentLanguage$ = this.translateService
     .stream('key')
     .pipe(map(() => this.translateService.currentLang));
+
+  readonly formioOptions$: Observable<ValtimoFormioOptions> = this.currentLanguage$.pipe(
+    map(language =>  {
+      const formioTranslations = this.translateService.instant('formioTranslations');
+      return typeof formioTranslations === 'object' ? {
+        ...this.options,
+        language,
+        i18n: {
+          [language]: formioTranslations
+        }
+      } : this.options;
+    })
+  )
 
   constructor(
     private userProviderService: UserProviderService,

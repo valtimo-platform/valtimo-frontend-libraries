@@ -16,6 +16,9 @@
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Components} from '@formio/angular';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-form-io-builder',
@@ -27,7 +30,23 @@ export class FormioBuilderComponent implements OnInit {
   // eslint-disable-next-line @angular-eslint/no-output-native
   @Output() change: EventEmitter<any> = new EventEmitter();
 
-  constructor() {}
+  readonly currentLanguage$ = this.translateService
+    .stream('key')
+    .pipe(map(() => this.translateService.currentLang));
+
+  readonly formioOptions$: Observable<{language: string, i18n: any }> = this.currentLanguage$.pipe(
+    map(language =>  {
+      const formioTranslations = this.translateService.instant('formioTranslations');
+      return typeof formioTranslations === 'object' ? {
+        language,
+        i18n: {
+          [language]: formioTranslations
+        }
+      } : null;
+    })
+  )
+
+  constructor(private translateService: TranslateService) {}
 
   ngOnInit() {
     const originalEditForm = Components.baseEditForm;
