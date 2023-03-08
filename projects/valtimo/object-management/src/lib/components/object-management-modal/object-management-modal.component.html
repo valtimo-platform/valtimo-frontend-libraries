@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015-2020 Ritense BV, the Netherlands.
+  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
   ~
   ~ Licensed under EUPL, Version 1.2 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -118,6 +118,18 @@
         [widthPx]="350"
         [defaultValue]="prefillObject?.objecttypeId"
         name="objecttypeId"
+      ></v-input>
+
+      <v-input
+        [margin]="true"
+        [required]="true"
+        [title]="'objectManagement.labels.objecttypeVersion' | translate"
+        [tooltip]="'objectManagement.tooltips.objecttypeVersion' | translate"
+        [widthPx]="350"
+        [defaultValue]="prefillObject?.objecttypeVersion"
+        [min]="1"
+        type="number"
+        name="objecttypeVersion"
       ></v-input>
 
       <ng-container *ngIf="{formDefinitions: formDefinitions$ | async} as formObs">

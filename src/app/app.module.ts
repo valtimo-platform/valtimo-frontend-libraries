@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,25 +92,28 @@ import {
   documentenApiPluginSpecification,
   NotificatiesApiPluginModule,
   notificatiesApiPluginSpecification,
-  OpenNotificatiesPluginModule,
-  openNotificatiesPluginSpecification,
   ObjectenApiPluginModule,
   objectenApiPluginSpecification,
   ObjectTokenAuthenticationPluginModule,
   objectTokenAuthenticationPluginSpecification,
   ObjecttypenApiPluginModule,
   objecttypenApiPluginSpecification,
+  OpenNotificatiesPluginModule,
+  openNotificatiesPluginSpecification,
   OpenZaakPluginModule,
   openZaakPluginSpecification,
   PLUGINS_TOKEN,
-  SmartDocumentsPluginModule,
-  smartDocumentsPluginSpecification,
-  ZakenApiPluginModule,
-  zakenApiPluginSpecification,
   PortaaltaakPluginModule,
   portaaltaakPluginSpecification,
+  SmartDocumentsPluginModule,
+  smartDocumentsPluginSpecification,
+  VerzoekPluginModule,
+  verzoekPluginSpecification,
+  ZakenApiPluginModule,
+  zakenApiPluginSpecification,
 } from '@valtimo/plugin';
-import {ObjectManagementModule} from '../../projects/valtimo/object-management/src/lib/object-management.module';
+import {ObjectManagementModule} from '@valtimo/object-management';
+import {ObjectModule} from '@valtimo/object';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -195,6 +198,7 @@ export function tabsFactory() {
     ZakenApiPluginModule,
     ObjectenApiPluginModule,
     CatalogiApiPluginModule,
+    VerzoekPluginModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -203,6 +207,7 @@ export function tabsFactory() {
         deps: [HttpBackend, ConfigService],
       },
     }),
+    ObjectModule,
     ObjectManagementModule,
   ],
   providers: [
@@ -221,6 +226,7 @@ export function tabsFactory() {
         portaaltaakPluginSpecification,
         smartDocumentsPluginSpecification,
         zakenApiPluginSpecification,
+        verzoekPluginSpecification,
       ],
     },
   ],

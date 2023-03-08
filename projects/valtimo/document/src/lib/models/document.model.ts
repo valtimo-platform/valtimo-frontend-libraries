@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,7 +89,10 @@ export interface RelatedFile {
   sizeInBytes: number;
   createdOn: Date;
   createdBy: string;
+  pluginConfigurationId?: string;
 }
+
+export type RelatedFileListItem = Omit<RelatedFile, 'createdOn'> & {createdOn: string};
 
 export interface Document {
   id: string;
@@ -100,10 +103,16 @@ export interface Document {
   createdBy: string;
   sequence: number;
   definitionName: string;
+  definitionId: DocumentDefinitionId | null;
   relations: string[];
   relatedFiles: RelatedFile[];
   assigneeFullName: string;
   assigneeId: string;
+}
+
+export interface DocumentDefinitionId {
+  name: string;
+  version: number;
 }
 
 export interface ProcessDocumentDefinitionId {

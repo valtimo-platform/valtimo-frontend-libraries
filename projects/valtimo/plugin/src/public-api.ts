@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ export * from './lib/plugins/documenten-api/documenten-api-plugin.specification'
 export * from './lib/plugins/documenten-api/components/store-temp-document/store-temp-document-configuration.component';
 export * from './lib/plugins/documenten-api/components/documenten-api-configuration/documenten-api-configuration.component';
 export * from './lib/plugins/documenten-api/components/store-uploaded-document/store-uploaded-document-configuration.component';
+export * from './lib/plugins/documenten-api/components/download-document/download-document-configuration.component';
 /* objecttypen api plugin */
 export * from './lib/plugins/objecttypen-api/objecttypen-api-plugin-module';
 export * from './lib/plugins/objecttypen-api/objecttypen-api-plugin.specification';
@@ -54,10 +55,13 @@ export * from './lib/plugins/zaken-api/zaken-api-plugin.specification';
 export * from './lib/plugins/zaken-api/components/zaken-api-configuration/zaken-api-configuration.component';
 export * from './lib/plugins/zaken-api/components/link-document-to-zaak/link-document-to-zaak-configuration.component';
 export * from './lib/plugins/zaken-api/components/link-uploaded-document-to-zaak/link-uploaded-document-to-zaak-configuration.component';
+export * from './lib/plugins/zaken-api/components/create-natuurlijk-persoon-zaak-rol/create-natuurlijk-persoon-zaak-rol.component';
+export * from './lib/plugins/zaken-api/components/create-zaak/create-zaak-configuration.component';
 /* objecten api plugin */
 export * from './lib/plugins/objecten-api/objecten-api-plugin-module';
 export * from './lib/plugins/objecten-api/objecten-api-plugin.specification';
 export * from './lib/plugins/objecten-api/components/objecten-api-configuration/objecten-api-configuration.component';
+export * from './lib/plugins/objecten-api/components/delete-object/delete-object.component';
 /* catalogi api plugin */
 export * from './lib/plugins/catalogi-api/catalogi-api-plugin-module';
 export * from './lib/plugins/catalogi-api/catalogi-api-plugin.specification';
@@ -74,3 +78,9 @@ export * from './lib/plugins/notificaties-api-authentication/components/open-not
 export * from './lib/plugins/portaaltaak/portaaltaak-plugin.module';
 export * from './lib/plugins/portaaltaak/portaaltaak-plugin.specification';
 export * from './lib/plugins/portaaltaak/components/portaaltaak-configuration/portaaltaak-configuration.component';
+export * from './lib/plugins/portaaltaak/components/create-portal-task/create-portal-task.component';
+export * from './lib/plugins/portaaltaak/components/complete-portal-task/complete-portal-task.component';
+/* verzoek plugin */
+export * from './lib/plugins/verzoek/verzoek-plugin.module';
+export * from './lib/plugins/verzoek/verzoek-plugin.specification';
+export * from './lib/plugins/verzoek/components/verzoek-configuration/verzoek-configuration.component';

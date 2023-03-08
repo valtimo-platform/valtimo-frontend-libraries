@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {FormOutput} from './form';
+
 type MultiInputType = 'keyValue' | 'value';
 
 interface MultiInputKeyValue {
@@ -22,8 +24,23 @@ interface MultiInputKeyValue {
   value: string;
 }
 
+interface MultiInputFormValue {
+  uuid?: string;
+  value: FormOutput | object;
+  expanded?: boolean;
+}
+
 type MultiInputValues = Array<MultiInputKeyValue>;
+
+type MultiInputFormsValues = Array<MultiInputFormValue>;
 
 type MultiInputOutput = MultiInputValues | Array<string>;
 
-export {MultiInputType, MultiInputValues, MultiInputKeyValue, MultiInputOutput};
+export {
+  MultiInputType,
+  MultiInputValues,
+  MultiInputKeyValue,
+  MultiInputOutput,
+  MultiInputFormValue,
+  MultiInputFormsValues,
+};

@@ -64,6 +64,7 @@
     "libs:watch:exact-plugin": "ng build @valtimo/exact-plugin --watch",
     "libs:watch:object-management": "ng build @valtimo/object-management --watch",
     "libs:watch:sse": "ng build @valtimo/sse --watch",
+    "libs:watch:object": "ng build @valtimo/object --watch",
     "libs:build:config": "ng build @valtimo/config",
     "libs:build:user-interface": "ng build @valtimo/user-interface",
     "libs:build:resource": "ng build @valtimo/resource",
@@ -104,6 +105,7 @@
     "libs:build:exact-plugin": "ng build @valtimo/exact-plugin",
     "libs:build:object-management": "ng build @valtimo/object-management",
     "libs:build:sse": "ng build @valtimo/sse",
+    "libs:build:object": "ng build @valtimo/object",
     "libs:test:user-interface": "ng test @valtimo/user-interface",
     "libs:test:config": "ng test @valtimo/config",
     "libs:test:view-configurator": "ng test @valtimo/view-configurator",
@@ -142,6 +144,7 @@
     "libs:test:resource": "ng test @valtimo/resource",
     "libs:test:customer": "ng test @valtimo/customer",
     "libs:test:exact-plugin": "ng test @valtimo/exact-plugin",
+    "libs:test:object": "ng test @valtimo/object",
     "libs:test:object-management": "ng test @valtimo/object-management",
     "libs:test:sse": "ng test @valtimo/sse",
     "libs:lint:user-interface": "ng lint @valtimo/user-interface",
@@ -184,8 +187,10 @@
     "libs:lint:exact-plugin": "ng lint @valtimo/exact-plugin",
     "libs:lint:object-management": "ng lint @valtimo/object-management",
     "libs:lint:sse": "ng lint @valtimo/sse",
+    "libs:lint:object": "ng lint @valtimo/object",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "copy-frontend-version": "node scripts/copy-frontend-version.js"
   },
   "private": true,
   "dependencies": {
@@ -281,7 +286,7 @@
     "rxjs": "~7.5.5",
     "select2": "^4.1.0-rc.0",
     "stylus": "^0.58.1",
-    "swagger-ui": "^4.15.0",
+    "swagger-ui": "^4.16.1",
     "tslib": "^2.0.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "4.8.4",
@@ -290,8 +295,6 @@
     "zone.js": "^0.11.8"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.2.10",
-    "@angular/compiler-cli": "^14.2.0",
     "@cypress/schematic": "^2.2.0",
     "@valtimo/account": "file:dist/valtimo/account",
     "@valtimo/analyse": "file:dist/valtimo/analyse",
@@ -317,7 +320,6 @@
     "@valtimo/management": "file:dist/valtimo/management",
     "@valtimo/migration": "file:dist/valtimo/migration",
     "@valtimo/milestone": "file:dist/valtimo/milestone",
-    "@valtimo/object-management": "file:dist/valtimo/object-management",
     "@valtimo/open-zaak": "file:dist/valtimo/open-zaak",
     "@valtimo/plugin": "file:dist/valtimo/plugin",
     "@valtimo/plugin-management": "file:dist/valtimo/plugin-management",
@@ -330,10 +332,10 @@
     "@valtimo/user-interface": "file:dist/valtimo/user-interface",
     "@valtimo/user-management": "file:dist/valtimo/user-management",
     "@valtimo/view-configurator": "file:dist/valtimo/view-configurator",
+    "@valtimo/object-management": "file:dist/valtimo/object-management",
+    "@valtimo/object": "file:dist/valtimo/object",
     "cypress": "latest",
     "deepmerge-ts": "^4.2.2",
-    "ng-packagr": "^14.2.0",
-    "sass": "^1.56.1",
-    "typescript": "~4.7.2"
+    "sass": "^1.56.1"
   }
 }

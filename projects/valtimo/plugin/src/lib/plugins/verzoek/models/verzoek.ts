@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
-import {Objecttype} from '../../../../models/object-management.model';
-import {Observable} from 'rxjs';
-
-@Component({
-  selector: 'valtimo-object-management-list-tab',
-  templateUrl: './object-management-list-tab.component.html',
-  styleUrls: ['./object-management-list-tab.component.scss'],
-})
-export class ObjectManagementListTabComponent {
-  @Input() object$: Observable<Objecttype>;
-
-  constructor() {}
+interface Objecttype {
+  id: string;
+  title: string;
+  objecttypenApiPluginConfigurationId: string;
+  objecttypeId: string;
+  objectenApiPluginConfigurationId: string;
+  showInDataMenu: boolean;
+  formDefinitionView?: string;
+  formDefinitionEdit?: string;
 }
+
+type ObjecttypeKeys = keyof Objecttype;
+
+interface Roltype {
+  name: string;
+  url: string;
+}
+
+export {Objecttype, ObjecttypeKeys, Roltype};

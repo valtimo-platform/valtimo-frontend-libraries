@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Direction, SearchFieldValues} from '@valtimo/config';
 import {Pagination} from '@valtimo/components';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class DossierParameterService implements OnDestroy {
   private readonly _dossierParameters$ = new BehaviorSubject<DossierParameters>(undefined);
 

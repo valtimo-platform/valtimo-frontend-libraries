@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
   @Input() widthPx!: number;
   @Input() fullWidth = false;
   @Input() margin = false;
+  @Input() smallMargin = false;
   @Input() disabled = false;
   @Input() step!: number;
   @Input() min!: number;
@@ -96,6 +97,10 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
     this.showPassword$.pipe(take(1)).subscribe(showPassword => {
       this.showPassword$.next(!showPassword);
     });
+  }
+
+  stopCheckboxEventPropagation(event: MouseEvent): void {
+    event.stopPropagation();
   }
 
   private setDefaultValue(value: any): void {

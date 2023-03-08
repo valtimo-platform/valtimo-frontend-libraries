@@ -77,7 +77,8 @@
       "noProcessLinked": {
         "regularUser": "The document upload is not available for this case. Please contact an administrator",
         "adminRole": "The process for uploading documents has not been configured. Please configure this process on the case management page"
-      }
+      },
+      "noZaakFound": "No files could be retrieved because no Zaak was for found for this case."
     },
     "startSubProcess": "Start",
     "claimAssigneeCase": "Claim",
@@ -340,7 +341,9 @@
       "created": "Created on",
       "name": "Name",
       "valtimoAssignee.fullName": "Assignee",
-      "due": "Due date"
+      "due": "Due date",
+      "context": "Context",
+      "case": "Case"
     },
     "mine": {
       "title": "My tasks",
@@ -353,7 +356,8 @@
     "all": {
       "title": "All tasks",
       "description": "Overview of all tasks"
-    }
+    },
+    "goToCase": "Go to case"
   },
   "Task": "Task",
   "Tasks": "Tasks",
@@ -436,6 +440,7 @@
   "Select options for the selected process": "Select options for the selected process",
   "Save": "Save",
   "Customers": "Customers",
+  "Objects": "Objects",
   "processManagement": {
     "download": "Download",
     "clear": "Clear",
@@ -500,7 +505,9 @@
     "name": "Name",
     "delete": "Delete",
     "deleteConfirmation": "Are you sure you want to delete?",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "collapse": "Collapse",
+    "expand": "Expand"
   },
   "taskDetail": {
     "taskCreated": "Created",
@@ -887,6 +894,7 @@
   "searchFieldsOverview": {
     "title": "Title",
     "key": "Key",
+    "add": "Add search field",
     "edit": "Edit search field",
     "path": "Path",
     "dataType": "Data type",
@@ -900,14 +908,20 @@
     "multi-select-dropdown": "Multi select dropdown",
     "range": "Range",
     "submit": "Submit",
+    "close": "Close",
+    "save": "save",
     "delete": "Delete",
+    "download": "Download",
     "addRow": "Add search field",
     "searchFieldPlaceholder": "Select a type...",
+    "noSearchFieldsConfiguredWarningTitle": "No search fields configured",
+    "deleteSearchField": "Delete search field",
+    "deleteSearchFieldConfirmation": "Are you sure you want to delete this search field?",
     "dropdownDataProvider": "Dropdown data source",
     "dropdownDatabaseDataProvider": "Fixed value",
     "dropdownJsonFileDataProvider": "Config file",
     "configFile": "Config file",
-    "setValue": "Set value",
+    "dropdownListValues": "Dropdown list values",
     "id": "ID",
     "text": "Text"
   },
@@ -919,8 +933,14 @@
     "fieldType": "The field type decides the values the user can input. For the option 'Single', the user can only input a single value. For the option 'Range', the user may input two values, and these values, and all the values in between, are searched for.",
     "matchType": "The match type decides how values in the database are matched to the search values. For the match type 'Exact', the value '1' would only be matched to the value '1'. For the match type 'Contains', the value '1' would be matched to the value '1', '123', and all other values containing '1'.",
     "dropdownDataProvider": "The dropdown data source determines where the data for the dropdown comes from.",
-    "configFile": "Use a config file with dropdown values.",
-    "setValue": "Set custom values for the dropdown."
+    "configFile": "Use a config file with dropdown values. The config value must be present on the server",
+    "dropdownListValues": "Set custom values for the dropdown list. The value shown in the dropdown list should be entered in the right text-field. The left text-field should contain the id of that value."
+  },
+  "searchFieldDataType": {
+    "select": "Select a data type"
+  },
+  "searchFieldFieldType": {
+    "select": "Select a field type"
   },
   "listColumn": {
     "title": "Title",
@@ -969,6 +989,33 @@
     "arrayCount": "Count",
     "underscoresToSpaces": "Underscores to spaces"
   },
+  "object": {
+    "title": "Objects",
+    "createObject": "New object",
+    "editObject": "Edit object",
+    "deleteObject": "Delete object",
+    "labels": {
+      "recordIndex": "Record index",
+      "objectUrl": "Object URL"
+    },
+    "header": "Object details",
+    "tabs": {
+      "general": "General"
+    },
+    "close": "Close",
+    "save": "Save object",
+    "delete": "Delete object",
+    "deleteObjectConfirmation": "Are you sure you want to delete this object",
+    "messages": {
+      "objectCreated": "Object created successfully",
+      "objectCreationError": "An error occurred while creating the object",
+      "objectUpdated": "Object updated successfully",
+      "objectUpdateError": "An error occurred while updating the object",
+      "objectDeleted": "Object deleted successfully",
+      "objectDeleteError": "An error occurred while deleting the object",
+      "objectRetrievingFormError": "An error occurred while retrieving the form definition"
+    }
+  },
   "objectManagement": {
     "title": "Objecttypes",
     "createObjecttype": "Create objecttype",
@@ -979,6 +1026,7 @@
       "objects": "Objects API plugin configuration",
       "objecttypes": "Objecttypen API plugin configuration",
       "objecttypeId": "Objecttype ID",
+      "objecttypeVersion": "Objecttype version",
       "formDefinitionView": "View form definition",
       "formDefinitionEdit": "Edit form definition",
       "showInDataMenu": "Show in menu"
@@ -986,6 +1034,7 @@
     "tooltips": {
       "title": "The name of this configuration. Under this name, this configuration can be found in the rest of the application.",
       "objecttypeId": "The ID of the object type",
+      "objecttypeVersion": "The version of the object type",
       "formDefinitionView": "The name of the form IO definition that will be used to display the object.",
       "formDefinitionEdit": "The name of the form IO definition that will be used to edit the object.",
       "showInDataMenu": "Indicates whether the object type is visible in the menu"
@@ -997,7 +1046,8 @@
     "visibleInMenu": "Visible in menu",
     "tabs": {
       "general": "General",
-      "list": "List"
+      "list": "List",
+      "searchFields": "Search Fields"
     }
   }
 }

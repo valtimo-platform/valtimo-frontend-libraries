@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,4 +21,21 @@ interface PortaaltaakConfig extends PluginConfigurationData {
   objectManagementConfigurationId: string;
 }
 
-export {PortaaltaakConfig};
+type FormType = 'id' | 'url';
+
+type Receiver = 'zaakInitiator' | 'other';
+
+type OtherReceiver = 'kvk' | 'bsn';
+
+interface CreatePortalTaskConfig {
+  formType: FormType;
+  formTypeId?: string;
+  formTypeUrl?: string;
+  sendData: Array<{key: string; value: string}>;
+  receiveData: Array<{key: string; value: string}>;
+  receiver: Receiver;
+  identificationKey?: string;
+  identificationValue?: string;
+}
+
+export {PortaaltaakConfig, CreatePortalTaskConfig, FormType, Receiver, OtherReceiver};

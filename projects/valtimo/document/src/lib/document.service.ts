@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import {
   ProcessDocumentDefinition,
   ProcessDocumentDefinitionRequest,
   ProcessDocumentInstance,
+  RelatedFile,
   SpecifiedDocuments,
   UndeployDocumentDefinitionResult,
   UploadProcessLink,
@@ -488,6 +489,12 @@ export class DocumentService {
   deleteCaseList(documentDefinitionName: string, columnKey: string): Observable<CaseListColumn> {
     return this.http.delete<CaseListColumn>(
       `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/list-column/${columnKey}`
+    );
+  }
+
+  getZakenApiDocuments(documentId: string): Observable<Array<RelatedFile>> {
+    return this.http.get<Array<RelatedFile>>(
+      `${this.valtimoEndpointUri}v1/zaken-api/document/${documentId}/files`
     );
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,22 @@ import {NgModule} from '@angular/core';
 import {PortaaltaakConfigurationComponent} from './components/portaaltaak-configuration/portaaltaak-configuration.component';
 import {PluginTranslatePipeModule} from '../../pipes';
 import {CommonModule} from '@angular/common';
-import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {
+  FormModule,
+  InputModule,
+  MultiInputModule,
+  ParagraphModule,
+  SelectModule,
+} from '@valtimo/user-interface';
+import {CreatePortalTaskComponent} from './components/create-portal-task/create-portal-task.component';
+import {CompletePortalTaskComponent} from './components/complete-portal-task/complete-portal-task.component';
 
 @NgModule({
-  declarations: [PortaaltaakConfigurationComponent],
+  declarations: [
+    PortaaltaakConfigurationComponent,
+    CreatePortalTaskComponent,
+    CompletePortalTaskComponent,
+  ],
   imports: [
     CommonModule,
     PluginTranslatePipeModule,
@@ -29,7 +41,12 @@ import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/u
     InputModule,
     SelectModule,
     ParagraphModule,
+    MultiInputModule,
   ],
-  exports: [PortaaltaakConfigurationComponent],
+  exports: [
+    PortaaltaakConfigurationComponent,
+    CreatePortalTaskComponent,
+    CompletePortalTaskComponent,
+  ],
 })
 export class PortaaltaakPluginModule {}

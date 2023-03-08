@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015-2020 Ritense BV, the Netherlands.
+  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
   ~
   ~ Licensed under EUPL, Version 1.2 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -45,12 +45,16 @@
             *ngIf="{count: childMenuItem?.count$ && (childMenuItem?.count$ | async)} as vars"
           >
             <ibm-sidenav-item
-              [ngClass]="{
-                'cds--side-nav__item--empty': !childMenuItem.link
-              }"
               [href]="vars?.count ? 'javascript:return false;' : 'javascript:void(0);'"
               (click)="navigateToRoute(childMenuItem.link, $event)"
               [active]="'' + menuItem.sequence + childMenuItem.sequence === obs.closestSequence"
+              [ngClass]="{
+                'cds--side-nav__item--empty': !childMenuItem.link,
+                'menu-item--hidden': childMenuItem.includeFunction !== undefined,
+                'menu-item--visible':
+                  childMenuItem.includeFunction !== undefined &&
+                  (includeFunctionObservables[childMenuItem.title] | async)
+              }"
             >
               <valtimo-menu-item-text
                 [menuItem]="childMenuItem"

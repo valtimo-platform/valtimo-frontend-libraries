@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,27 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PluginTranslatePipeModule} from '../../pipes';
-import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {
+  FormModule,
+  InputLabelModule,
+  InputModule,
+  ParagraphModule,
+  SelectModule,
+} from '@valtimo/user-interface';
 import {ZakenApiConfigurationComponent} from './components/zaken-api-configuration/zaken-api-configuration.component';
 import {LinkDocumentToZaakConfigurationComponent} from './components/link-document-to-zaak/link-document-to-zaak-configuration.component';
 import {LinkUploadedDocumentToZaakConfigurationComponent} from './components/link-uploaded-document-to-zaak/link-uploaded-document-to-zaak-configuration.component';
+import {CreateNatuurlijkPersoonZaakRolComponent} from './components/create-natuurlijk-persoon-zaak-rol/create-natuurlijk-persoon-zaak-rol.component';
+import {CreateZaakConfigurationComponent} from './components/create-zaak/create-zaak-configuration.component';
+import {ToggleModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [
     ZakenApiConfigurationComponent,
     LinkDocumentToZaakConfigurationComponent,
     LinkUploadedDocumentToZaakConfigurationComponent,
+    CreateNatuurlijkPersoonZaakRolComponent,
+    CreateZaakConfigurationComponent,
   ],
   imports: [
     CommonModule,
@@ -35,11 +46,15 @@ import {LinkUploadedDocumentToZaakConfigurationComponent} from './components/lin
     InputModule,
     SelectModule,
     ParagraphModule,
+    ToggleModule,
+    InputLabelModule,
   ],
   exports: [
     ZakenApiConfigurationComponent,
     LinkDocumentToZaakConfigurationComponent,
     LinkUploadedDocumentToZaakConfigurationComponent,
+    CreateZaakConfigurationComponent,
+    CreateNatuurlijkPersoonZaakRolComponent,
   ],
 })
 export class ZakenApiPluginModule {}

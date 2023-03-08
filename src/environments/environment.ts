@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,31 +101,43 @@ export const environment: ValtimoConfig = {
         includeFunction: IncludeFunction.HaalcentraalConnectorConfigured,
       },
       {
+        roles: [ROLE_ADMIN],
+        title: 'Objects',
+        iconClass: 'icon mdi mdi-archive',
+        sequence: 3,
+        includeFunction: IncludeFunction.ObjectManagementEnabled,
+      },
+      {
         roles: [ROLE_USER],
         link: ['/tasks'],
         title: 'Tasks',
         iconClass: 'icon mdi mdi-check-all',
-        sequence: 3,
+        sequence: 4,
       },
       {
         roles: [ROLE_USER],
         link: ['/analysis'],
         title: 'Analysis',
         iconClass: 'icon mdi mdi-chart-bar',
-        sequence: 4,
+        sequence: 5,
       },
       {
         roles: [ROLE_ADMIN],
         title: 'Admin',
         iconClass: 'icon mdi mdi-tune',
-        sequence: 5,
+        sequence: 6,
         children: [
           {title: 'Basics', textClass: 'text-dark font-weight-bold c-default', sequence: 1},
           {link: ['/processes'], title: 'Processes', sequence: 2},
           {link: ['/form-management'], title: 'Forms', sequence: 3},
           {link: ['/decision-tables'], title: 'Decision tables', sequence: 4},
           {link: ['/dossier-management'], title: 'Dossiers', sequence: 5},
-          {link: ['/object-management'], title: 'Objects', sequence: 6},
+          {
+            link: ['/object-management'],
+            title: 'Objects',
+            sequence: 6,
+            includeFunction: IncludeFunction.ObjectManagementEnabled,
+          },
           {link: ['/connectors'], title: 'Connectors', sequence: 7},
           {link: ['/plugins'], title: 'Plugins', sequence: 8},
           {link: ['/form-links'], title: 'Form links', sequence: 9},
@@ -143,7 +155,7 @@ export const environment: ValtimoConfig = {
         roles: [ROLE_DEVELOPER],
         title: 'Development',
         iconClass: 'icon mdi mdi-xml',
-        sequence: 6,
+        sequence: 7,
         children: [
           {link: ['/swagger'], title: 'Swagger', iconClass: 'icon mdi mdi-dot-circle', sequence: 1},
         ],
@@ -218,6 +230,10 @@ export const environment: ValtimoConfig = {
         propertyName: 'assignee',
         translationKey: 'valtimoAssignee.fullName',
       },
+      {
+        propertyName: 'context',
+        translationKey: 'context',
+      },
     ],
     defaultSortedColumn: {
       isSorting: true,
@@ -243,6 +259,10 @@ export const environment: ValtimoConfig = {
     experimentalDmnEditing: true,
     caseListColumn: true,
     largeLogoMargin: true,
+    sortFilesByDate: true,
+    disableCaseCount: true,
+    enableObjectManagement: true,
+    returnToLastUrlAfterTokenExpiration: true,
   },
   customDossierHeader: {
     leningen: [

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,8 @@ const notificatiesApiPluginSpecification: PluginSpecification = {
       url: 'Notificaties API URL',
       urlTooltip: 'Die URL zur REST API von Notificaties',
       callbackUrl: 'Callback URL',
-      callbackUrlTooltip: 'Der GZAC-API-endpoint, an den Benachrichtigungen gesendet werden sollen.',
+      callbackUrlTooltip:
+        'Der GZAC-API-endpoint, an den Benachrichtigungen gesendet werden sollen.',
       description: 'Eine API für den Zugriff auf eine Komponente für das Benachrichtigungsrouting.',
       configurationTitle: 'Konfigurationsname',
       configurationTitleTooltip:

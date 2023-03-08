@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-import {ValtimoKeycloakOptions} from './models';
-import {Injectable} from '@angular/core';
-import {ConfigService} from '@valtimo/config';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class KeycloakOptionsService {
-  private readonly valtimoKeycloakOptions: ValtimoKeycloakOptions;
-
-  constructor(private configService: ConfigService) {
-    this.valtimoKeycloakOptions = configService.config.authentication.options;
-  }
-
-  get keycloakOptions() {
-    return this.valtimoKeycloakOptions.keycloakOptions;
-  }
-
-  get logoutRedirectUri() {
-    return this.valtimoKeycloakOptions.logoutRedirectUri;
-  }
+interface ObjectConfiguration {
+  content: ObjectConfigurationItem[];
 }
+
+interface ObjectConfigurationItem {
+  id: string;
+  items: Item[];
+}
+
+interface Item {
+  key: string;
+  value: string;
+}
+
+enum FormType {
+  SUMMARY = 'SUMMARY',
+  EDITFORM = 'EDITFORM',
+}
+
+enum ColumnType {
+  DEFAULT = 'DEFAULT',
+  CUSTOM = 'CUSTOM',
+}
+
+export {ObjectConfiguration, ObjectConfigurationItem, Item, FormType, ColumnType};

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,9 +119,16 @@ export class ProcessLinkComponent {
     ])
       .pipe(take(1))
       .subscribe(([modalData, selectedConfiguration, selectedFunction]) => {
+        let activityType = modalData?.element?.type;
+        if (activityType === 'bpmn:UserTask') {
+          activityType += ':create';
+        } else {
+          activityType += ':start';
+        }
         const processLinkRequest: SaveProcessLinkRequest = {
           actionProperties: configuration,
           activityId: modalData?.element?.id,
+          activityType,
           pluginConfigurationId: selectedConfiguration.id,
           processDefinitionId: modalData?.processDefinitionId,
           pluginActionDefinitionKey: selectedFunction.key,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ import {ObjectenApiConfigurationComponent} from './components/objecten-api-confi
 import {CommonModule} from '@angular/common';
 import {PluginTranslatePipeModule} from '../../pipes';
 import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {DeleteObjectComponent} from './components/delete-object/delete-object.component';
 
 @NgModule({
-  declarations: [ObjectenApiConfigurationComponent],
+  declarations: [ObjectenApiConfigurationComponent, DeleteObjectComponent],
   imports: [
     CommonModule,
     PluginTranslatePipeModule,
@@ -30,6 +31,6 @@ import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/u
     SelectModule,
     ParagraphModule,
   ],
-  exports: [ObjectenApiConfigurationComponent],
+  exports: [ObjectenApiConfigurationComponent, DeleteObjectComponent],
 })
 export class ObjectenApiPluginModule {}
