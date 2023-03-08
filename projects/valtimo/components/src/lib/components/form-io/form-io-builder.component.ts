@@ -30,6 +30,7 @@ export class FormioBuilderComponent implements OnInit {
   @Input() form: any;
   // eslint-disable-next-line @angular-eslint/no-output-native
   @Output() change: EventEmitter<any> = new EventEmitter();
+  public triggerRebuild: EventEmitter<FormioOptions> = new EventEmitter()
 
   readonly currentLanguage$ = this.translateService
     .stream('key')
@@ -38,12 +39,15 @@ export class FormioBuilderComponent implements OnInit {
   readonly formioOptions$: Observable<FormioOptions> = this.currentLanguage$.pipe(
     map(language =>  {
       const formioTranslations = this.translateService.instant('formioTranslations');
-      return typeof formioTranslations === 'object' ? {
+      const options = typeof formioTranslations === 'object' ? {
         language,
         i18n: {
           [language]: formioTranslations
         }
       } : null;
+
+      this.triggerRebuild.emit(options);
+      return options;
     })
   )
 
