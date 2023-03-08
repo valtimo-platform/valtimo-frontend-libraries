@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/config';
 import {NGXLogger} from 'ngx-logger';
 import {UserProviderService} from '@valtimo/security';
 import {NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
-import {BehaviorSubject, combineLatest, Observable, Subject, timer} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subject, Subscription, timer} from 'rxjs';
 import {DocumentDefinitions, DocumentService} from '@valtimo/document';
 import {filter, map, take} from 'rxjs/operators';
 import {KeycloakService} from 'keycloak-angular';
 import {HttpClient} from '@angular/common/http';
+import {SseService} from '@valtimo/sse';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MenuService {
+export class MenuService implements OnDestroy {
   public includeFunctionObservables: {[key: string]: Observable<boolean>} = {};
 
   private _menuItems$ = new BehaviorSubject<MenuItem[]>(undefined);
   private menuConfig: MenuConfig;
+
+  private sseSubscription!: Subscription;
 
   private readonly disableCaseCount!: boolean;
   private readonly enableObjectManagement!: boolean;
@@ -45,17 +48,14 @@ export class MenuService {
     private readonly menuIncludeService: MenuIncludeService,
     private readonly router: Router,
     private readonly keycloakService: KeycloakService,
+    private readonly sseService: SseService,
     private http: HttpClient
   ) {
     const config = configService?.config;
     this.menuConfig = config?.menu;
     this.disableCaseCount = config?.featureToggles?.disableCaseCount;
     this.enableObjectManagement = config?.featureToggles?.enableObjectManagement;
-  }
-
-  init(): void {
-    this.reload();
-    this.logger.debug('Menu initialized');
+    this.openSseSubscription();
   }
 
   private readonly currentRoute$ = this.router.events.pipe(
@@ -131,6 +131,15 @@ export class MenuService {
 
   public get menuItems$(): Observable<MenuItem[]> {
     return this._menuItems$.asObservable();
+  }
+
+  init(): void {
+    this.reload();
+    this.logger.debug('Menu initialized');
+  }
+
+  ngOnDestroy() {
+    this.sseSubscription?.unsubscribe();
   }
 
   public reload(): void {
@@ -292,5 +301,9 @@ export class MenuService {
     return this.http.get(
       `${this.configService.config.valtimoApi.endpointUri}v1/object/management/configuration`
     );
+  }
+
+  private openSseSubscription(): void {
+    this.sseService.connect();
   }
 }
