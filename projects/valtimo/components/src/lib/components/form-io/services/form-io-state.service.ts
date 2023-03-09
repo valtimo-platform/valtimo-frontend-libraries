@@ -51,14 +51,25 @@ export class FormIoStateService {
     this._currentForm$.next(form);
   }
 
-  flattenTranslationsObject(translations, flattened = {}, prefix = '') {
-    for (const key in translations) {
-      if (typeof translations[key] === 'object' && translations[key] !== null) {
-        this.flattenTranslationsObject(translations[key], flattened, prefix + key + '.');
-      } else {
-        flattened[prefix + key] = translations[key];
+  flattenTranslationsObject(translations) {
+    const stack = [{ prefix: '', value: translations }];
+    const flattened = {};
+
+    while (stack.length > 0) {
+      const { prefix, value } = stack.pop();
+
+      for (const key in value) {
+        const currentValue = value[key];
+        const currentPrefix = prefix + key + '.';
+
+        if (typeof currentValue === 'object' && currentValue !== null) {
+          stack.push({ prefix: currentPrefix, value: currentValue });
+        } else {
+          flattened[currentPrefix.slice(0, -1)] = currentValue;
+        }
       }
     }
+
     return flattened;
   }
 }
