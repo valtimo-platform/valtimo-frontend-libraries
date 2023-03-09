@@ -58,8 +58,7 @@ export class FormIoStateService {
     while (stack.length > 0) {
       const { prefix, value } = stack.pop();
 
-      for (const key in value) {
-        const currentValue = value[key];
+      Object.entries(value).forEach(([key, currentValue]) => {
         const currentPrefix = prefix + key + '.';
 
         if (typeof currentValue === 'object' && currentValue !== null) {
@@ -67,9 +66,9 @@ export class FormIoStateService {
         } else {
           flattened[currentPrefix.slice(0, -1)] = currentValue;
         }
-      }
+      });
     }
 
     return flattened;
-  }
+  };
 }
