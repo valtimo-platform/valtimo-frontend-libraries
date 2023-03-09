@@ -50,4 +50,15 @@ export class FormIoStateService {
   public set currentForm(form: FormioComponent) {
     this._currentForm$.next(form);
   }
+
+  flattenTranslationsObject(translations, flattened = {}, prefix = '') {
+    for (const key in translations) {
+      if (typeof translations[key] === 'object' && translations[key] !== null) {
+        this.flattenTranslationsObject(translations[key], flattened, prefix + key + '.');
+      } else {
+        flattened[prefix + key] = translations[key];
+      }
+    }
+    return flattened;
+  }
 }

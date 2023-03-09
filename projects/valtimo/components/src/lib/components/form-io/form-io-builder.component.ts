@@ -16,10 +16,11 @@
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Components} from '@formio/angular';
-import {map} from 'rxjs/operators';
+import {distinctUntilChanged, map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {FormioOptions} from '@formio/angular/formio.common';
+import {FormIoStateService} from './services/form-io-state.service';
 
 @Component({
   selector: 'valtimo-form-io-builder',
@@ -32,9 +33,10 @@ export class FormioBuilderComponent implements OnInit {
   @Output() change: EventEmitter<any> = new EventEmitter();
   public triggerRebuild: EventEmitter<FormioOptions> = new EventEmitter();
 
-  readonly currentLanguage$ = this.translateService
-    .stream('key')
-    .pipe(map(() => this.translateService.currentLang));
+  readonly currentLanguage$ = this.translateService.stream('key').pipe(
+    map(() => this.translateService.currentLang),
+    distinctUntilChanged()
+  );
 
   readonly formioOptions$: Observable<FormioOptions> = this.currentLanguage$.pipe(
     map(language => {
@@ -44,7 +46,7 @@ export class FormioBuilderComponent implements OnInit {
           ? {
               language,
               i18n: {
-                [language]: formioTranslations,
+                [language]: this.stateService.flattenTranslationsObject(formioTranslations),
               },
             }
           : null;
@@ -54,7 +56,10 @@ export class FormioBuilderComponent implements OnInit {
     })
   );
 
-  constructor(private translateService: TranslateService) {}
+  constructor(
+    private translateService: TranslateService,
+    private stateService: FormIoStateService
+  ) {}
 
   ngOnInit() {
     const originalEditForm = Components.baseEditForm;
