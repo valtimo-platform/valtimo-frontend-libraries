@@ -19,13 +19,13 @@ type SseEventType =
   | 'TASK_UPDATE'
   | 'PROCESS_END'
   | 'CASE_ASSIGNED'
-  | 'CASE_UNASSIGNED';
+  | 'CASE_UNASSIGNED'
+  | 'ESTABLISHED_CONNECTION';
 
 type SseEventListener<T> = (event: T) => void;
 
 // base event containing the event type
 interface BaseSseEvent {
-  _t: string;
   eventType?: SseEventType;
   processInstanceId?: string;
 }

@@ -247,7 +247,7 @@ export class SseService {
       this.anySubscribersBucket.sendEvent(event.data);
       // notify the specific event listener bucket
       this.eventSubscribersBuckets.forEach(bucket => {
-        if (bucket.event === event.data._t) {
+        if (bucket.event === event?.data?.eventType) {
           bucket.sendEvent(event.data);
         }
       });
@@ -255,7 +255,7 @@ export class SseService {
   }
 
   private internalListenerEstablishConnection(event: MessageEvent<BaseSseEvent>) {
-    if (event.data._t !== 'ESTABLISHED_CONNECTION') {
+    if (event?.data?.eventType !== 'ESTABLISHED_CONNECTION') {
       return;
     }
     this.logger.debug(`established connection: ${event}`);
