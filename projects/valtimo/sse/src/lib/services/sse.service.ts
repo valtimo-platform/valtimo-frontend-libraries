@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, filter, Observable, Subscription, take} from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
+import {BehaviorSubject, filter, Observable, Subject, Subscription, take} from 'rxjs';
 import {
   BaseSseEvent,
   EstablishedConnectionSseEvent,
@@ -49,7 +49,7 @@ import {NGXLogger} from 'ngx-logger';
 @Injectable({
   providedIn: 'root',
 })
-export class SseService {
+export class SseService implements OnDestroy {
   public static readonly CONNECTION_RETRIES_EXCEEDED = -1;
   public static readonly NOT_CONNECTED = 0;
   public static readonly CONNECTING = 1;
@@ -72,33 +72,42 @@ export class SseService {
 
   private state: number = SseService.NOT_CONNECTED;
 
-  get establishedConnectionObservable$(): Observable<null | Observable<
-    MessageEvent<BaseSseEvent>
-  >> {
-    return this._establishedConnectionObservable$
-      .asObservable()
-      .pipe(filter(observable => !!observable));
+  private _sseMessages$ = new Subject<MessageEvent<BaseSseEvent>>();
+
+  private sseObservableSubscription!: Subscription;
+
+  private sseSubscription!: Subscription;
+
+  get sseMessages$(): Observable<MessageEvent<BaseSseEvent>> {
+    return this._sseMessages$.asObservable().pipe(filter(message => !!message));
   }
 
   constructor(private readonly configService: ConfigService, private readonly logger: NGXLogger) {
     this.VALTIMO_ENDPOINT_URL = configService.config.valtimoApi.endpointUri;
+    this.connect();
+    this.openSseObservableSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.sseObservableSubscription?.unsubscribe();
+    this.sseSubscription?.unsubscribe();
   }
 
   /**
    * Start receiving SSE events
    */
-  public connect() {
+  private connect() {
     this.ensureConnection();
     return this;
   }
 
-  public onMessage(listener: SseEventListener<BaseSseEvent>) {
+  private onMessage(listener: SseEventListener<BaseSseEvent>) {
     this.ensureConnection(); // ensure connection
     this.anySubscribersBucket.on(listener);
     return this;
   }
 
-  public onEvent<T extends BaseSseEvent>(event: string, listener: SseEventListener<T>) {
+  private onEvent<T extends BaseSseEvent>(event: string, listener: SseEventListener<T>) {
     this.ensureConnection(); // ensure connection
     let found = false;
     this.eventSubscribersBuckets.forEach(bucket => {
@@ -115,11 +124,11 @@ export class SseService {
     return this;
   }
 
-  public offMessage(listener: SseEventListener<BaseSseEvent>) {
+  private offMessage(listener: SseEventListener<BaseSseEvent>) {
     this.anySubscribersBucket.off(listener);
   }
 
-  public offEvent(event: string, listener: SseEventListener<any>) {
+  private offEvent(event: string, listener: SseEventListener<any>) {
     this.eventSubscribersBuckets.forEach(bucket => {
       if (bucket.event === event) {
         bucket.off(listener);
@@ -127,7 +136,7 @@ export class SseService {
     });
   }
 
-  public offEvents(type?: string) {
+  private offEvents(type?: string) {
     this.eventSubscribersBuckets.forEach(bucket => {
       if (type === null || type === bucket.event) {
         bucket.offAll();
@@ -135,16 +144,16 @@ export class SseService {
     });
   }
 
-  public offMessages() {
+  private offMessages() {
     this.anySubscribersBucket.offAll();
   }
 
-  public offAll() {
+  private offAll() {
     this.offEvents();
     this.offMessages();
   }
 
-  public disconnect(keepSubscriptionId: boolean = false) {
+  private disconnect(keepSubscriptionId: boolean = false) {
     this.disconnectWith(SseService.NOT_CONNECTED, keepSubscriptionId);
   }
 
@@ -262,6 +271,24 @@ export class SseService {
       state: this.state,
       message,
       data,
+    });
+  }
+
+  private openSseObservableSubscription(): void {
+    this.sseObservableSubscription = this._establishedConnectionObservable$.subscribe(
+      observable => {
+        this.openSseSubscription(observable);
+      }
+    );
+  }
+
+  private openSseSubscription(observable: Observable<MessageEvent<BaseSseEvent>>): void {
+    this.sseSubscription?.unsubscribe();
+
+    this.sseSubscription = observable.subscribe(message => {
+      if (message) {
+        this._sseMessages$.next(message);
+      }
     });
   }
 }

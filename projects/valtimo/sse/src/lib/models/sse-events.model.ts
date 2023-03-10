@@ -14,25 +14,42 @@
  * limitations under the License.
  */
 
-export type SseEventListener<T> = (event: T) => void;
+type SseEventType =
+  | 'CASE_CREATED'
+  | 'TASK_UPDATE'
+  | 'PROCESS_END'
+  | 'CASE_ASSIGNED'
+  | 'CASE_UNASSIGNED';
 
+type SseEventListener<T> = (event: T) => void;
 
 // base event containing the event type
-export interface BaseSseEvent {
+interface BaseSseEvent {
   _t: string;
+  eventType?: SseEventType;
+  processInstanceId?: string;
 }
 
 // event implementations for json mapping objects in:
-export interface TaskUpdateSseEvent extends BaseSseEvent {
+interface TaskUpdateSseEvent extends BaseSseEvent {
   processInstanceId: string;
 }
 
-export interface EstablishedConnectionSseEvent extends BaseSseEvent {
+interface EstablishedConnectionSseEvent extends BaseSseEvent {
   subscriptionId: string;
 }
 
-export interface SseError {
+interface SseError {
   state: number;
   message: string;
   data?: any;
 }
+
+export {
+  SseError,
+  EstablishedConnectionSseEvent,
+  TaskUpdateSseEvent,
+  BaseSseEvent,
+  SseEventListener,
+  SseEventType,
+};

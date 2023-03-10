@@ -19,7 +19,7 @@ import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/
 import {NGXLogger} from 'ngx-logger';
 import {UserProviderService} from '@valtimo/security';
 import {NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
-import {BehaviorSubject, combineLatest, Observable, Subject, Subscription, timer} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subject, Subscription} from 'rxjs';
 import {DocumentDefinitions, DocumentService} from '@valtimo/document';
 import {filter, map, take} from 'rxjs/operators';
 import {KeycloakService} from 'keycloak-angular';
@@ -35,10 +35,12 @@ export class MenuService implements OnDestroy {
   private _menuItems$ = new BehaviorSubject<MenuItem[]>(undefined);
   private menuConfig: MenuConfig;
 
-  private sseSubscription!: Subscription;
-
   private readonly disableCaseCount!: boolean;
   private readonly enableObjectManagement!: boolean;
+
+  private sseMessagesSubscription!: Subscription;
+
+  private readonly refreshCount$ = new BehaviorSubject<null>(null);
 
   constructor(
     private readonly configService: ConfigService,
@@ -55,7 +57,7 @@ export class MenuService implements OnDestroy {
     this.menuConfig = config?.menu;
     this.disableCaseCount = config?.featureToggles?.disableCaseCount;
     this.enableObjectManagement = config?.featureToggles?.enableObjectManagement;
-    this.openSseSubscription();
+    this.openSseMessagesSubscription();
   }
 
   private readonly currentRoute$ = this.router.events.pipe(
@@ -139,7 +141,7 @@ export class MenuService implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sseSubscription?.unsubscribe();
+    this.sseMessagesSubscription?.unsubscribe();
   }
 
   public reload(): void {
@@ -263,7 +265,7 @@ export class MenuService implements OnDestroy {
       countMap.set(definition.id.name, new Subject<number>())
     );
 
-    timer(0, 5000).subscribe(() => {
+    this.refreshCount$.subscribe(() => {
       this.documentService.getOpenDocumentCount().subscribe(openDocumentCountList => {
         openDocumentCountList.forEach(openDocumentCount =>
           countMap
@@ -303,7 +305,17 @@ export class MenuService implements OnDestroy {
     );
   }
 
-  private openSseSubscription(): void {
-    this.sseService.connect();
+  private openSseMessagesSubscription(): void {
+    this.sseService.sseMessages$.subscribe(message => {
+      const messageEventType = message?.data?.eventType;
+
+      if (
+        messageEventType === 'CASE_UNASSIGNED' ||
+        messageEventType === 'CASE_ASSIGNED' ||
+        messageEventType === 'CASE_CREATED'
+      ) {
+        this.refreshCount$.next(null);
+      }
+    });
   }
 }
