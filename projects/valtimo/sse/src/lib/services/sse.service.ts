@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, filter, Observable, Subject, Subscription, take} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {filter, Observable, Subject, Subscription} from 'rxjs';
 import {
   BaseSseEvent,
   EstablishedConnectionSseEvent,
@@ -49,7 +49,7 @@ import {NGXLogger} from 'ngx-logger';
 @Injectable({
   providedIn: 'root',
 })
-export class SseService implements OnDestroy {
+export class SseService {
   private static readonly CONNECTION_RETRIES_EXCEEDED = -1;
   private static readonly NOT_CONNECTED = 0;
   private static readonly CONNECTING = 1;
@@ -60,9 +60,7 @@ export class SseService implements OnDestroy {
   private connectionCount = 0; // amount of times we have connected sequentially, no concurrent connections
   private establishedDataHandler?: Subscription = null;
   private establishedConnection?: EventSource = null;
-  private _establishedConnectionObservable$ = new BehaviorSubject<null | Observable<
-    MessageEvent<BaseSseEvent>
-  >>(null);
+  private establishedConnectionObservable: Observable<MessageEvent<BaseSseEvent>> = null;
   private subscriptionId?: string = null;
   private sequentialConnectionAttemptFailCount = 0;
 
@@ -74,10 +72,6 @@ export class SseService implements OnDestroy {
 
   private _sseMessages$ = new Subject<MessageEvent<BaseSseEvent>>();
 
-  private sseObservableSubscription!: Subscription;
-
-  private sseSubscription!: Subscription;
-
   get sseMessages$(): Observable<MessageEvent<BaseSseEvent>> {
     return this._sseMessages$.asObservable().pipe(filter(message => !!message));
   }
@@ -85,12 +79,6 @@ export class SseService implements OnDestroy {
   constructor(private readonly configService: ConfigService, private readonly logger: NGXLogger) {
     this.VALTIMO_ENDPOINT_URL = configService.config.valtimoApi.endpointUri;
     this.connect();
-    this.openSseObservableSubscription();
-  }
-
-  ngOnDestroy(): void {
-    this.sseObservableSubscription?.unsubscribe();
-    this.sseSubscription?.unsubscribe();
   }
 
   /**
@@ -164,7 +152,7 @@ export class SseService implements OnDestroy {
     }
     this.establishedDataHandler.unsubscribe();
     this.establishedConnection = null;
-    this._establishedConnectionObservable$.next(null);
+    this.establishedConnectionObservable = null;
     this.establishedDataHandler = null;
     if (!keepSubscriptionId) {
       this.subscriptionId = null;
@@ -172,21 +160,18 @@ export class SseService implements OnDestroy {
   }
 
   private ensureConnection(retry: boolean = false) {
-    this._establishedConnectionObservable$
-      .pipe(take(1))
-      .subscribe(establishedConnectionObservable => {
-        if (this.establishedConnection !== null && establishedConnectionObservable !== null) {
-          if (this.establishedConnection.readyState !== EventSource.CLOSED) {
-            return; // found
-          }
-        }
-        if (this.state === SseService.CONNECTING || this.state === SseService.RECONNECTING) {
-          return; // already connecting
-        }
-        this.establishedConnection = null;
-        this._establishedConnectionObservable$.next(null);
-        this.constructNewSse(retry); // create new
-      });
+    if (this.establishedConnection !== null && this.establishedConnectionObservable !== null) {
+      if (this.establishedConnection.readyState !== EventSource.CLOSED) {
+        return; // found
+      }
+    }
+    if (this.state === SseService.CONNECTING || this.state === SseService.RECONNECTING) {
+      return; // already connecting
+    }
+    this.establishedConnection = null;
+    this.establishedConnectionObservable = null;
+
+    this.constructNewSse(retry); // create new
   }
 
   private constructNewSse(retry: boolean) {
@@ -230,7 +215,7 @@ export class SseService implements OnDestroy {
       };
       return () => eventSource.close();
     });
-    this._establishedConnectionObservable$.next(observable);
+    this.establishedConnectionObservable = observable;
     this.registerSseEventHandling(observable);
     return observable;
   }
@@ -246,6 +231,7 @@ export class SseService implements OnDestroy {
 
   private registerSseEventHandling(observable: Observable<MessageEvent<BaseSseEvent>>) {
     this.establishedDataHandler = observable.subscribe(event => {
+      this._sseMessages$.next(event);
       this.internalListenerEstablishConnection(event);
       // notify all generic listeners
       this.anySubscribersBucket.sendEvent(event.data);
@@ -272,25 +258,5 @@ export class SseService implements OnDestroy {
       message,
       data,
     });
-  }
-
-  private openSseObservableSubscription(): void {
-    this.sseObservableSubscription = this._establishedConnectionObservable$.subscribe(
-      observable => {
-        this.openSseSubscription(observable);
-      }
-    );
-  }
-
-  private openSseSubscription(observable: Observable<MessageEvent<BaseSseEvent>>): void {
-    this.sseSubscription?.unsubscribe();
-
-    if (observable) {
-      this.sseSubscription = observable.subscribe(message => {
-        if (message) {
-          this._sseMessages$.next(message);
-        }
-      });
-    }
   }
 }
