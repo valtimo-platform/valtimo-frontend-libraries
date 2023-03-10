@@ -50,11 +50,11 @@ import {NGXLogger} from 'ngx-logger';
   providedIn: 'root',
 })
 export class SseService implements OnDestroy {
-  public static readonly CONNECTION_RETRIES_EXCEEDED = -1;
-  public static readonly NOT_CONNECTED = 0;
-  public static readonly CONNECTING = 1;
-  public static readonly RECONNECTING = 2;
-  public static readonly CONNECTED = 10;
+  private static readonly CONNECTION_RETRIES_EXCEEDED = -1;
+  private static readonly NOT_CONNECTED = 0;
+  private static readonly CONNECTING = 1;
+  private static readonly RECONNECTING = 2;
+  private static readonly CONNECTED = 10;
 
   private readonly VALTIMO_ENDPOINT_URL: string;
   private connectionCount = 0; // amount of times we have connected sequentially, no concurrent connections
