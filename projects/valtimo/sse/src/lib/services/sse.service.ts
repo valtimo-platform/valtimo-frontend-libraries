@@ -285,10 +285,12 @@ export class SseService implements OnDestroy {
   private openSseSubscription(observable: Observable<MessageEvent<BaseSseEvent>>): void {
     this.sseSubscription?.unsubscribe();
 
-    this.sseSubscription = observable.subscribe(message => {
-      if (message) {
-        this._sseMessages$.next(message);
-      }
-    });
+    if (observable) {
+      this.sseSubscription = observable.subscribe(message => {
+        if (message) {
+          this._sseMessages$.next(message);
+        }
+      });
+    }
   }
 }
