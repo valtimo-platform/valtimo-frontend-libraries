@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
 @NgModule({
   declarations: [],
   imports: [],
-  exports: []
+  exports: [],
 })
-export class SseModule { }
+export class SseModule {}

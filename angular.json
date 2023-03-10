@@ -2960,10 +2960,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/valtimo/sse/**/*.ts",
-              "projects/valtimo/sse/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/valtimo/sse/**/*.ts", "projects/valtimo/sse/**/*.html"]
           }
         }
       }
