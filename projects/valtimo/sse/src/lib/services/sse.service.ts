@@ -20,6 +20,7 @@ import {
   BaseSseEvent,
   EstablishedConnectionSseEvent,
   SseEventListener,
+  SseEventType,
 } from '../models/sse-events.model';
 import {ConfigService} from '@valtimo/config';
 import {
@@ -79,6 +80,15 @@ export class SseService {
   constructor(private readonly configService: ConfigService, private readonly logger: NGXLogger) {
     this.VALTIMO_ENDPOINT_URL = configService.config.valtimoApi.endpointUri;
     this.connect();
+  }
+
+  getSseMessagesObservableByEventType(
+    eventTypes: Array<SseEventType>
+  ): Observable<MessageEvent<BaseSseEvent>> {
+    return this._sseMessages$.asObservable().pipe(
+      filter(message => !!message),
+      filter(message => eventTypes.includes(message?.data?.eventType))
+    );
   }
 
   /**

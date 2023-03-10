@@ -306,16 +306,10 @@ export class MenuService implements OnDestroy {
   }
 
   private openSseMessagesSubscription(): void {
-    this.sseService.sseMessages$.subscribe(message => {
-      const messageEventType = message?.data?.eventType;
-
-      if (
-        messageEventType === 'CASE_UNASSIGNED' ||
-        messageEventType === 'CASE_ASSIGNED' ||
-        messageEventType === 'CASE_CREATED'
-      ) {
+    this.sseService
+      .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
+      .subscribe(() => {
         this.refreshCount$.next(null);
-      }
-    });
+      });
   }
 }
