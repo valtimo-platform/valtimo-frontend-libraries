@@ -15,10 +15,19 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Observable, Subscription} from 'rxjs';
-import {BaseSseEvent, EstablishedConnectionSseEvent, SseEventListener} from '../models/sse-events.model';
+import {BehaviorSubject, filter, Observable, Subscription, take} from 'rxjs';
+import {
+  BaseSseEvent,
+  EstablishedConnectionSseEvent,
+  SseEventListener,
+} from '../models/sse-events.model';
 import {ConfigService} from '@valtimo/config';
-import {SseErrorBucket, SseEventSubscriptionBucket, SseSubscriptionBucket} from '../models/sse-bucket.model';
+import {
+  SseErrorBucket,
+  SseEventSubscriptionBucket,
+  SseSubscriptionBucket,
+} from '../models/sse-bucket.model';
+import {NGXLogger} from 'ngx-logger';
 
 /**
  * Server-side events service, for connecting and reconnecting to SSE,
@@ -38,7 +47,7 @@ import {SseErrorBucket, SseEventSubscriptionBucket, SseSubscriptionBucket} from 
  * At this time no state data is kept, so reconnection without a subscriptionId does not give a different result
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SseService {
   public static readonly CONNECTION_RETRIES_EXCEEDED = -1;
@@ -51,7 +60,9 @@ export class SseService {
   private connectionCount = 0; // amount of times we have connected sequentially, no concurrent connections
   private establishedDataHandler?: Subscription = null;
   private establishedConnection?: EventSource = null;
-  private establishedConnectionObservable?: Observable<MessageEvent<BaseSseEvent>> = null;
+  private _establishedConnectionObservable$ = new BehaviorSubject<null | Observable<
+    MessageEvent<BaseSseEvent>
+  >>(null);
   private subscriptionId?: string = null;
   private sequentialConnectionAttemptFailCount = 0;
 
@@ -61,7 +72,15 @@ export class SseService {
 
   private state: number = SseService.NOT_CONNECTED;
 
-  constructor(private configService: ConfigService) {
+  get establishedConnectionObservable$(): Observable<null | Observable<
+    MessageEvent<BaseSseEvent>
+  >> {
+    return this._establishedConnectionObservable$
+      .asObservable()
+      .pipe(filter(observable => !!observable));
+  }
+
+  constructor(private readonly configService: ConfigService, private readonly logger: NGXLogger) {
     this.VALTIMO_ENDPOINT_URL = configService.config.valtimoApi.endpointUri;
   }
 
@@ -126,7 +145,7 @@ export class SseService {
   }
 
   public disconnect(keepSubscriptionId: boolean = false) {
-    this.disconnectWith(SseService.NOT_CONNECTED, keepSubscriptionId)
+    this.disconnectWith(SseService.NOT_CONNECTED, keepSubscriptionId);
   }
 
   private disconnectWith(state: number, keepSubscriptionId: boolean = false) {
@@ -136,7 +155,7 @@ export class SseService {
     }
     this.establishedDataHandler.unsubscribe();
     this.establishedConnection = null;
-    this.establishedConnectionObservable = null;
+    this._establishedConnectionObservable$.next(null);
     this.establishedDataHandler = null;
     if (!keepSubscriptionId) {
       this.subscriptionId = null;
@@ -144,21 +163,25 @@ export class SseService {
   }
 
   private ensureConnection(retry: boolean = false) {
-    if (this.establishedConnection !== null && this.establishedConnectionObservable !== null) {
-      if (this.establishedConnection.readyState !== EventSource.CLOSED) {
-        return; // found
-      }
-    }
-    if (this.state === SseService.CONNECTING || this.state === SseService.RECONNECTING) {
-      return; // already connecting
-    }
-    this.establishedConnection = null;
-    this.establishedConnectionObservable = null;
-    this.constructNewSse(retry); // create new
+    this._establishedConnectionObservable$
+      .pipe(take(1))
+      .subscribe(establishedConnectionObservable => {
+        if (this.establishedConnection !== null && establishedConnectionObservable !== null) {
+          if (this.establishedConnection.readyState !== EventSource.CLOSED) {
+            return; // found
+          }
+        }
+        if (this.state === SseService.CONNECTING || this.state === SseService.RECONNECTING) {
+          return; // already connecting
+        }
+        this.establishedConnection = null;
+        this._establishedConnectionObservable$.next(null);
+        this.constructNewSse(retry); // create new
+      });
   }
 
   private constructNewSse(retry: boolean) {
-    console.log('subscribing to sse events');
+    this.logger.debug('subscribing to sse events');
     if (this.connectionCount > 0) {
       this.state = SseService.RECONNECTING;
     } else {
@@ -168,7 +191,7 @@ export class SseService {
       const eventSource = this.getEventSource();
       eventSource.onopen = () => {
         this.establishedConnection = eventSource;
-        console.log('connected to sse');
+        this.logger.debug('connected to sse');
         this.connectionCount++;
         this.sequentialConnectionAttemptFailCount = 0; // reset retry count
         this.state = SseService.CONNECTED;
@@ -176,7 +199,7 @@ export class SseService {
       eventSource.onmessage = event => {
         observer.next({
           ...event, // forward event object but replace data field
-          data: JSON.parse(event.data) // parse JSON string to JSON object
+          data: JSON.parse(event.data), // parse JSON string to JSON object
         });
       };
       eventSource.onerror = () => {
@@ -184,10 +207,12 @@ export class SseService {
         observer.complete();
         if (retry) {
           this.sequentialConnectionAttemptFailCount++;
-          console.log('retry failed', this.sequentialConnectionAttemptFailCount);
+          this.logger.debug(`retry failed: ${this.sequentialConnectionAttemptFailCount}`);
           if (this.sequentialConnectionAttemptFailCount > 3) {
-            this.disconnectWith(SseService.CONNECTION_RETRIES_EXCEEDED, false)
-            this.err(`Failed to connect to SSE after ${this.sequentialConnectionAttemptFailCount} retries`);
+            this.disconnectWith(SseService.CONNECTION_RETRIES_EXCEEDED, false);
+            this.err(
+              `Failed to connect to SSE after ${this.sequentialConnectionAttemptFailCount} retries`
+            );
             return;
           }
         }
@@ -196,7 +221,7 @@ export class SseService {
       };
       return () => eventSource.close();
     });
-    this.establishedConnectionObservable = observable;
+    this._establishedConnectionObservable$.next(observable);
     this.registerSseEventHandling(observable);
     return observable;
   }
@@ -207,12 +232,11 @@ export class SseService {
       suffix = '/' + this.subscriptionId;
     }
     // subscribe to /sse or /sse/<subscriptionId>
-    return new EventSource(this.VALTIMO_ENDPOINT_URL + `sse` + suffix);
+    return new EventSource(this.VALTIMO_ENDPOINT_URL + 'v1/sse' + suffix);
   }
 
   private registerSseEventHandling(observable: Observable<MessageEvent<BaseSseEvent>>) {
     this.establishedDataHandler = observable.subscribe(event => {
-      // console.log('received sse message: ', event);
       this.internalListenerEstablishConnection(event);
       // notify all generic listeners
       this.anySubscribersBucket.sendEvent(event.data);
@@ -229,7 +253,7 @@ export class SseService {
     if (event.data._t !== 'ESTABLISHED_CONNECTION') {
       return;
     }
-    console.log('established connection', event);
+    this.logger.debug(`established connection: ${event}`);
     this.subscriptionId = (event.data as EstablishedConnectionSseEvent).subscriptionId;
   }
 
@@ -237,8 +261,7 @@ export class SseService {
     this.errorBucket.sendEvent({
       state: this.state,
       message,
-      data
+      data,
     });
   }
 }
-
