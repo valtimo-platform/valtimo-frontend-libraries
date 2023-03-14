@@ -120,7 +120,6 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
   );
 
   readonly sse = this.sseService.connect().onEvent<TaskUpdateSseEvent>('TASK_UPDATE', event => {
-    console.log('received process instance update: ', event);
     this._subscriptions.add(
       this.processDocumentInstances$.subscribe(v => {
         if (v.map(s => s.id.processInstanceId).indexOf(event.processInstanceId) > -1) {
