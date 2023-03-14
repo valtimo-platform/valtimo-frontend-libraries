@@ -14,13 +14,19 @@
   ~ limitations under the License.
   -->
 
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="{
+    formDefinition: formDefinition$ | async,
+    document: document$ | async,
+    documentDefinitionName: documentDefinitionName$ | async,
+    tasks: tasks$ | async,
+    roles: roles$ | async
+  } as obs">
   <div class="row py-4">
     <div class="col-sm-12 col-md-8 col-xl-9">
-      <div *ngIf="document">
-        <div *ngIf="formDefinition" class="summaryForm">
+      <div *ngIf="obs.document">
+        <div *ngIf="obs.formDefinition" class="summaryForm">
           <div class="mb-4">
-            <valtimo-form-io [form]="formDefinition" [options]="options"></valtimo-form-io>
+            <valtimo-form-io [form]="obs.formDefinition" [options]="options"></valtimo-form-io>
           </div>
         </div>
       </div>
@@ -29,7 +35,7 @@
     <!--Current user tasks right side-->
     <div class="col-sm-12 col-md-4 col-xl-3">
       <h4 class="user-tasks-title">{{ 'summary.userTasks' | translate }}</h4>
-      <ng-container *ngIf="!tasks.length">
+      <ng-container *ngIf="!obs.tasks?.length">
         <valtimo-widget>
           <div class="p-3">
             <img class="float-left" src="assets/audit-2.png" height="25" />
@@ -38,12 +44,12 @@
           </div>
         </valtimo-widget>
       </ng-container>
-      <ng-container *ngFor="let task of tasks">
+      <ng-container *ngFor="let task of obs.tasks">
         <valtimo-widget>
           <div
             class="p-3 clickable hoverable"
             (click)="rowTaskClick(task)"
-            *ngIf="!task.isLocked()"
+            *ngIf="!task.isLocked(obs.roles)"
           >
             <span class="float-right badge badge-pill badge-primary">{{
               'summary.taskOpen' | translate
@@ -51,7 +57,7 @@
             <strong>{{ task.name }}</strong>
             <div class="mt-1">{{ 'summary.taskCreated' | translate }} {{ task.created }}</div>
           </div>
-          <div class="p-3 hoverable" *ngIf="task.isLocked()">
+          <div class="p-3 hoverable" *ngIf="task.isLocked(obs.roles)">
             <span
               class="float-right badge badge-pill badge-secondary bg-grey"
               ngbTooltip="{{ 'summary.taskLocked' | translate }}"
@@ -65,8 +71,8 @@
       </ng-container>
       <valtimo-task-detail-modal
         #taskDetail
-        (formSubmit)="init()"
-        (assignmentOfTaskChanged)="init()"
+        (formSubmit)="refreshTasks()"
+        (assignmentOfTaskChanged)="refreshTasks()"
       ></valtimo-task-detail-modal>
     </div>
   </div>

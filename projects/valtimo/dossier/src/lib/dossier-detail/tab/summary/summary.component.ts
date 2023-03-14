@@ -24,15 +24,17 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Document, DocumentService, ProcessDocumentInstance} from '@valtimo/document';
 import {TaskDetailModalComponent, TaskService} from '@valtimo/task';
 import {FormService} from '@valtimo/form';
 import {FormioOptionsImpl, ValtimoFormioOptions} from '@valtimo/components';
 import moment from 'moment';
 import {FormioForm} from '@formio/angular';
+import {BehaviorSubject, combineLatest, defaultIfEmpty, forkJoin, map, Observable, of, Subscription, switchMap} from 'rxjs';
+import {SseService, TaskUpdateSseEvent} from '@valtimo/sse';
+import {UserIdentity} from '@valtimo/config';
 import {UserProviderService} from '@valtimo/security';
-import {Subscription} from 'rxjs';
 
 moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
@@ -44,18 +46,89 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   encapsulation: ViewEncapsulation.None,
 })
 export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
-  public readonly documentDefinitionName: string;
-  public document: Document;
-  public documentId: string;
-  public processDocumentInstances: ProcessDocumentInstance[] = [];
-  private snapshot: ParamMap;
-  public tasks: ProcessInstanceTask[] = [];
   public moment;
-  public formDefinition: FormioForm = null;
   public options: ValtimoFormioOptions;
-  public roles: string[] = [];
+
   private _subscriptions = new Subscription();
+
   @ViewChild('taskDetail') taskDetail: TaskDetailModalComponent;
+
+  readonly refreshTasks$ = new BehaviorSubject<null>(null);
+
+  readonly documentId$: Observable<string> = this.route.params.pipe(
+    map(params => params.documentId)
+  );
+
+  readonly documentDefinitionName$ = this.route.params.pipe(
+    map(params => params.documentDefinitionName)
+  );
+
+  readonly formDefinition$: Observable<FormioForm> = combineLatest([this.documentId$, this.documentDefinitionName$]).pipe(
+    switchMap(([documentId, documentDefinitionName]) =>
+      this.formService.getFormDefinitionByNamePreFilled(`${documentDefinitionName}.summary`, documentId))
+  )
+
+  readonly document$: Observable<Document> = combineLatest([this.documentId$, this.refreshTasks$]).pipe(
+    switchMap(([documentId]) => this.documentService.getDocument(documentId))
+  );
+
+  readonly roles$: Observable<string[]> = this.userProviderService.getUserSubject().pipe(
+    map((userIdentity: UserIdentity) => userIdentity.roles)
+  );
+
+  readonly processDocumentInstances$: Observable<Array<ProcessDocumentInstance>> = this.documentId$.pipe(
+    switchMap(documentId => this.documentService.findProcessDocumentInstances(documentId))
+  );
+
+  readonly tasks$: Observable<Array<ProcessInstanceTask>> = combineLatest([this.processDocumentInstances$, this.refreshTasks$]).pipe(
+    switchMap(([processDocumentInstances]) => {
+      if (processDocumentInstances.length === 0) {
+        return of([]);
+      }
+      return forkJoin(
+        processDocumentInstances.map(processDocumentInstance =>
+          this.processService.getProcessInstanceTasks(processDocumentInstance.id.processInstanceId)
+        )
+      );
+    }),
+    map(response => response.filter(value => value != null)),
+    map(response => {
+      return response
+        .reduce((acc, val) => {
+          return acc.concat(val);
+        }, [])
+        .map((task: ProcessInstanceTask) => {
+          task.createdUnix = this.moment(task.created).unix();
+          task.created = this.moment(task.created).format('DD MMM YYYY HH:mm');
+          task.isLocked = roles => {
+            let locked = false;
+            for (const link of task.identityLinks) {
+              if (link.type === 'candidate' && link.groupId) {
+                if (roles.includes(link.groupId)) {
+                  locked = false;
+                  break;
+                }
+              }
+            }
+            return locked;
+          };
+          return task;
+        })
+        .sort((t1, t2) => t2.createdUnix - t1.createdUnix);
+    }),
+    defaultIfEmpty([])
+  );
+
+  readonly sse = this.sseService.connect().onEvent<TaskUpdateSseEvent>('TASK_UPDATE', event => {
+    console.log('received process instance update: ', event);
+    this._subscriptions.add(
+      this.processDocumentInstances$.subscribe(v => {
+        if (v.map(s => s.id.processInstanceId).indexOf(event.processInstanceId) > -1) {
+          this.refreshTasks();
+        }
+      })
+    );
+  });
 
   constructor(
     private router: Router,
@@ -66,89 +139,28 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     private route: ActivatedRoute,
     private formService: FormService,
-    private userProviderService: UserProviderService
+    private userProviderService: UserProviderService,
+    private readonly sseService: SseService,
   ) {
-    this.snapshot = this.route.snapshot.paramMap;
-    this.documentDefinitionName = this.snapshot.get('documentDefinitionName') || '';
-    this.documentId = this.snapshot.get('documentId') || '';
     this.options = new FormioOptionsImpl();
     this.options.disableAlerts = true;
   }
 
   ngOnInit() {
     this.moment = moment;
-    this.init();
   }
 
   ngOnDestroy() {
     this._subscriptions.unsubscribe();
+    this.sse.disconnect();
+    this.sse.offEvents('TASK_UPDATE');
   }
 
-  init() {
-    this._subscriptions.add(
-      this.documentService.getDocument(this.documentId).subscribe(document => {
-        this.document = document;
-      })
-    );
-
-    this._subscriptions.add(
-      this.formService
-        .getFormDefinitionByNamePreFilled(`${this.documentDefinitionName}.summary`, this.documentId)
-        .subscribe(formDefinition => {
-          this.formDefinition = formDefinition;
-        })
-    );
-
-    this._subscriptions.add(
-      this.userProviderService.getUserSubject().subscribe(user => {
-        this.roles = user.roles;
-        this.tasks = [];
-        this.loadProcessDocumentInstances(this.documentId);
-      })
-    );
-  }
-
-  public loadProcessDocumentInstances(documentId: string) {
-    this._subscriptions.add(
-      this.documentService
-        .findProcessDocumentInstances(documentId)
-        .subscribe(processDocumentInstances => {
-          this.processDocumentInstances = processDocumentInstances;
-          this.processDocumentInstances.forEach(instance => {
-            this.loadProcessInstanceTasks(instance.id.processInstanceId);
-          });
-        })
-    );
-  }
-
-  private loadProcessInstanceTasks(processInstanceId: string) {
-    this._subscriptions.add(
-      this.processService.getProcessInstanceTasks(processInstanceId).subscribe(tasks => {
-        if (tasks != null) {
-          tasks.forEach(task => {
-            task.createdUnix = this.moment(task.created).unix();
-            task.created = this.moment(task.created).format('DD MMM YYYY HH:mm');
-            task.isLocked = () => {
-              let locked = true;
-              for (const link of task.identityLinks) {
-                if (link.type === 'candidate' && link.groupId) {
-                  if (this.roles.includes(link.groupId)) {
-                    locked = false;
-                    break;
-                  }
-                }
-              }
-              return locked;
-            };
-          });
-          this.tasks = this.tasks.concat(tasks);
-          this.tasks.sort((t1, t2) => t2.createdUnix - t1.createdUnix);
-        }
-      })
-    );
-  }
-
-  public rowTaskClick(task: any) {
+  public rowTaskClick(task: any): void {
     this.taskDetail.openTaskDetails(task);
+  }
+
+  public refreshTasks(): void {
+    this.refreshTasks$.next(null);
   }
 }

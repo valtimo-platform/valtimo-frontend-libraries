@@ -91,21 +91,16 @@ export class SseService {
     );
   }
 
-  /**
-   * Start receiving SSE events
-   */
-  private connect() {
+  public connect() {
     this.ensureConnection();
     return this;
   }
 
-  private onMessage(listener: SseEventListener<BaseSseEvent>) {
-    this.ensureConnection(); // ensure connection
-    this.anySubscribersBucket.on(listener);
-    return this;
+  public disconnect(keepSubscriptionId: boolean = false) {
+    this.disconnectWith(SseService.NOT_CONNECTED, keepSubscriptionId);
   }
 
-  private onEvent<T extends BaseSseEvent>(event: string, listener: SseEventListener<T>) {
+  public onEvent<T extends BaseSseEvent>(event: string, listener: SseEventListener<T>) {
     this.ensureConnection(); // ensure connection
     let found = false;
     this.eventSubscribersBuckets.forEach(bucket => {
@@ -122,6 +117,24 @@ export class SseService {
     return this;
   }
 
+  public offEvents(type?: string) {
+    this.eventSubscribersBuckets.forEach(bucket => {
+      if (type === null || type === bucket.event) {
+        bucket.offAll();
+      }
+    });
+  }
+
+  /**
+   * Start receiving SSE events
+   */
+
+  private onMessage(listener: SseEventListener<BaseSseEvent>) {
+    this.ensureConnection(); // ensure connection
+    this.anySubscribersBucket.on(listener);
+    return this;
+  }
+
   private offMessage(listener: SseEventListener<BaseSseEvent>) {
     this.anySubscribersBucket.off(listener);
   }
@@ -134,14 +147,6 @@ export class SseService {
     });
   }
 
-  private offEvents(type?: string) {
-    this.eventSubscribersBuckets.forEach(bucket => {
-      if (type === null || type === bucket.event) {
-        bucket.offAll();
-      }
-    });
-  }
-
   private offMessages() {
     this.anySubscribersBucket.offAll();
   }
@@ -149,10 +154,6 @@ export class SseService {
   private offAll() {
     this.offEvents();
     this.offMessages();
-  }
-
-  private disconnect(keepSubscriptionId: boolean = false) {
-    this.disconnectWith(SseService.NOT_CONNECTED, keepSubscriptionId);
   }
 
   private disconnectWith(state: number, keepSubscriptionId: boolean = false) {

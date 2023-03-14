@@ -106,7 +106,7 @@ export interface ProcessInstanceTask {
   tenantId: string;
   identityLinks: IdentityLink[];
 
-  isLocked(): boolean;
+  isLocked(roles?: string[]): boolean;
 }
 
 export interface IdentityLink {
