@@ -132,6 +132,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   showPlantATreeButton: boolean;
   resetUrl: string;
+  testEnvironment: boolean;
 
   ngOnInit(): void {
     this.setLanguage();
@@ -141,6 +142,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     this.resetUrl = this.configService.config.changePasswordUrl?.endpointUri;
     this.overrideFeedbackMenuItemToMailTo =
       this.configService.config?.overrideFeedbackMenuItemToMailTo;
+    this.testEnvironment = !this.configService.config?.production;
   }
 
   ngOnDestroy(): void {

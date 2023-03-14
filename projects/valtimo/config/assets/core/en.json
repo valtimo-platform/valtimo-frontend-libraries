@@ -245,7 +245,8 @@
       "emailNotificationOnSunday": "Sunday"
     },
     "version": {
-      "title": "Version information"
+      "title": "Version information",
+      "testEnvironment": "This is a test environment."
     }
   },
   "decisions": {

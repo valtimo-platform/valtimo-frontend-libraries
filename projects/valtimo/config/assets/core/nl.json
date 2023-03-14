@@ -245,7 +245,8 @@
       "emailNotificationOnSunday": "Zondag"
     },
     "version": {
-      "title": "Versie-informatie"
+      "title": "Versie-informatie",
+      "testEnvironment": "Dit is een testomgeving."
     }
   },
   "decisions": {

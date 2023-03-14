@@ -237,6 +237,13 @@
       <ibm-list-header>
         <ibm-list-column>{{ 'settings.version.title' | translate }}</ibm-list-column>
       </ibm-list-header>
+      <ibm-list-row *ngIf="testEnvironment">
+        <ibm-list-column>
+          <div class="build-information">
+            <span class="build-title">{{ 'settings.version.testEnvironment' | translate }}</span>
+          </div>
+        </ibm-list-column>
+      </ibm-list-row>
       <ibm-list-row *ngIf="obs.backendVersion">
         <ibm-list-column>
           <div class="build-information">
