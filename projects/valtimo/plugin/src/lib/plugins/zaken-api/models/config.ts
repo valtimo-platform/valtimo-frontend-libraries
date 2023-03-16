@@ -27,12 +27,29 @@ interface LinkDocumentToZaakConfig {
   beschrijving: string;
 }
 
+interface SetZaakStatusConfig {
+  statustypeUrl: string;
+  statustoelichting: string;
+}
+
+interface CreateZaakResultaatConfig {
+  resultaattypeUrl: string;
+  toelichting: string;
+}
+
 interface CreateNatuurlijkePersoonZaakRolConfig {
   roltypeUrl: string;
   rolToelichting: string;
   inpBsn: string;
   anpIdentificatie: string;
   inpA_nummer: string;
+}
+
+interface CreateNietNatuurlijkePersoonZaakRolConfig {
+  roltypeUrl: string;
+  rolToelichting: string;
+  innNnpId: string;
+  annIdentificatie: string;
 }
 
 interface CreateZaakConfig {
@@ -44,6 +61,9 @@ interface CreateZaakConfig {
 export {
   ZakenApiConfig,
   LinkDocumentToZaakConfig,
+  SetZaakStatusConfig,
+  CreateZaakResultaatConfig,
   CreateZaakConfig,
   CreateNatuurlijkePersoonZaakRolConfig,
+  CreateNietNatuurlijkePersoonZaakRolConfig,
 };
