@@ -28,6 +28,7 @@ import {ZakenApiConfigurationComponent} from './components/zaken-api-configurati
 import {LinkDocumentToZaakConfigurationComponent} from './components/link-document-to-zaak/link-document-to-zaak-configuration.component';
 import {LinkUploadedDocumentToZaakConfigurationComponent} from './components/link-uploaded-document-to-zaak/link-uploaded-document-to-zaak-configuration.component';
 import {SetZaakStatusConfigurationComponent} from './components/set-zaak-status/set-zaak-status-configuration.component';
+import {CreateZaakResultaatConfigurationComponent} from './components/create-zaak-resultaat/create-zaak-resultaat-configuration.component';
 import {CreateNatuurlijkPersoonZaakRolComponent} from './components/create-natuurlijk-persoon-zaak-rol/create-natuurlijk-persoon-zaak-rol.component';
 import {CreateZaakConfigurationComponent} from './components/create-zaak/create-zaak-configuration.component';
 import {ToggleModule} from 'carbon-components-angular';
@@ -38,6 +39,7 @@ import {ToggleModule} from 'carbon-components-angular';
     LinkDocumentToZaakConfigurationComponent,
     LinkUploadedDocumentToZaakConfigurationComponent,
     SetZaakStatusConfigurationComponent,
+    CreateZaakResultaatConfigurationComponent,
     CreateNatuurlijkPersoonZaakRolComponent,
     CreateZaakConfigurationComponent,
   ],
@@ -56,6 +58,7 @@ import {ToggleModule} from 'carbon-components-angular';
     LinkDocumentToZaakConfigurationComponent,
     LinkUploadedDocumentToZaakConfigurationComponent,
     SetZaakStatusConfigurationComponent,
+    CreateZaakResultaatConfigurationComponent,
     CreateZaakConfigurationComponent,
     CreateNatuurlijkPersoonZaakRolComponent,
   ],
