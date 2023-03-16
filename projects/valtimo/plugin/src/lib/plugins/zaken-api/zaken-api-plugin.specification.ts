@@ -19,6 +19,7 @@ import {ZAKEN_API_PLUGIN_LOGO_BASE64} from './assets';
 import {LinkDocumentToZaakConfigurationComponent} from './components/link-document-to-zaak/link-document-to-zaak-configuration.component';
 import {ZakenApiConfigurationComponent} from './components/zaken-api-configuration/zaken-api-configuration.component';
 import {LinkUploadedDocumentToZaakConfigurationComponent} from './components/link-uploaded-document-to-zaak/link-uploaded-document-to-zaak-configuration.component';
+import {SetZaakStatusConfigurationComponent} from './components/set-zaak-status/set-zaak-status-configuration.component';
 import {CreateNatuurlijkPersoonZaakRolComponent} from './components/create-natuurlijk-persoon-zaak-rol/create-natuurlijk-persoon-zaak-rol.component';
 import {CreateZaakConfigurationComponent} from './components/create-zaak/create-zaak-configuration.component';
 
@@ -29,6 +30,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
   functionConfigurationComponents: {
     'link-document-to-zaak': LinkDocumentToZaakConfigurationComponent,
     'link-uploaded-document-to-zaak': LinkUploadedDocumentToZaakConfigurationComponent,
+    'set-zaakstatus': SetZaakStatusConfigurationComponent,
     'create-zaak': CreateZaakConfigurationComponent,
     'create-natuurlijk-persoon-zaak-rol': CreateNatuurlijkPersoonZaakRolComponent,
   },
@@ -83,6 +85,12 @@ const zakenApiPluginSpecification: PluginSpecification = {
       anpIdentificatieTooltip:
         'Het door de gemeente uitgegeven unieke nummer voor een ander natuurlijk persoon',
       inpA_nummerTooltip: 'Het administratienummer van de persoon, bedoeld in de Wet BRP',
+      'set-zaakstatus': 'Zaakstatus aanmaken',
+      statustypeUrl: 'Zaakstatus type URL',
+      statustypeUrlTooltip: 'URL-referentie naar het statustype.',
+      statustoelichting: 'Zaakstatus toelichting',
+      statustoelichtingTooltip:
+        'Een, voor de initiator van de zaak relevante, toelichting op de status van een zaak.',
     },
     en: {
       title: 'Zaken API',
@@ -134,6 +142,12 @@ const zakenApiPluginSpecification: PluginSpecification = {
       anpIdentificatieTooltip:
         'The unique number issued by the municipality for another natural person',
       inpA_nummerTooltip: 'The administration number of the person, as referred to in the Wet BRP',
+      'set-zaakstatus': 'Create case status',
+      statustypeUrl: 'Case status type URL',
+      statustypeUrlTooltip: 'URL reference to the status type.',
+      statustoelichting: 'Case status explanation',
+      statustoelichtingTooltip:
+        'An explanation of the status of a case that is relevant to the initiator of the case.',
     },
     de: {
       title: 'Zaken API',
@@ -185,6 +199,12 @@ const zakenApiPluginSpecification: PluginSpecification = {
       anpIdentificatieTooltip:
         'Die eindeutige Nummer, die von der Gemeinde für eine andere natürliche Person vergeben wird',
       inpA_nummerTooltip: 'Die Verwaltungsnummer der Person im Sinne des Wet BRP',
+      'set-zaakstatus': 'Fallstatus erstellen',
+      statustypeUrl: 'URL des Fallstatustyps',
+      statustypeUrlTooltip: 'URL-Referenz zum Statustyp.',
+      statustoelichting: 'Erklärung des Fallstatus',
+      statustoelichtingTooltip:
+        'Eine Erklärung des Status eines Falls, die für den Initiator des Falls relevant ist.',
     },
   },
 };

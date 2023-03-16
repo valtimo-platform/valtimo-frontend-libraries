@@ -27,6 +27,11 @@ interface LinkDocumentToZaakConfig {
   beschrijving: string;
 }
 
+interface SetZaakStatusConfig {
+  statustypeUrl: string;
+  statustoelichting: string;
+}
+
 interface CreateNatuurlijkePersoonZaakRolConfig {
   roltypeUrl: string;
   rolToelichting: string;
@@ -44,6 +49,7 @@ interface CreateZaakConfig {
 export {
   ZakenApiConfig,
   LinkDocumentToZaakConfig,
+  SetZaakStatusConfig,
   CreateZaakConfig,
   CreateNatuurlijkePersoonZaakRolConfig,
 };
