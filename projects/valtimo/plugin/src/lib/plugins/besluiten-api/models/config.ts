@@ -35,5 +35,9 @@ interface CreateZaakBesluitConfig {
   uiterlijkeReactieDatum: string;
   createdBesluitUrl: string;
 }
+interface LinkDocumentToBesluitConfig {
+  besluitUrl: string;
+  documentUrl: string;
+}
 
-export {BesluitenApiConfig, CreateZaakBesluitConfig, Vervalredenen};
+export {BesluitenApiConfig, CreateZaakBesluitConfig, Vervalredenen, LinkDocumentToBesluitConfig};

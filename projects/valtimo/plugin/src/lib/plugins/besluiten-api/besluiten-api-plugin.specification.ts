@@ -18,6 +18,7 @@ import {PluginSpecification} from '../../models';
 import {BesluitenApiConfigurationComponent} from './components/besluiten-api-configuration/besluiten-api-configuration.component';
 import {BESLUITEN_API_PLUGIN_LOGO_BASE64} from './assets';
 import {CreateZaakBesluitConfigurationComponent} from './components/create-zaak-besluit/create-zaak-besluit-configuration.component';
+import {LinkDocumentToBesluitConfigurationComponent} from './components/link-document-to-besluit/link-document-to-besluit-configuration.component';
 
 const besluitenApiPluginSpecification: PluginSpecification = {
   pluginId: 'besluitenapi',
@@ -25,6 +26,7 @@ const besluitenApiPluginSpecification: PluginSpecification = {
   pluginLogoBase64: BESLUITEN_API_PLUGIN_LOGO_BASE64,
   functionConfigurationComponents: {
     'create-besluit': CreateZaakBesluitConfigurationComponent,
+    'link-document-to-besluit': LinkDocumentToBesluitConfigurationComponent,
   },
   pluginTranslations: {
     nl: {
@@ -63,6 +65,13 @@ const besluitenApiPluginSpecification: PluginSpecification = {
       besluitUrlProcessVariable: 'Naam procesvariabele met besluit URL',
       besluitUrlProcessVariableTooltip:
         'Hier moet de naam van de procesvariabele ingevuld worden waarin de besluit URL lokaal staat opgeslagen',
+      'link-document-to-besluit': 'Link Document aan Besluit',
+      linkDocumentToBesluitInformation:
+        'Deze actie linkt een document aan een zaakbesluit in de Zaken API.',
+      besluitUrl: 'Besluit URL',
+      besluitUrlTooltip: 'URL-referentie naar het besluit',
+      documentUrl: 'Document URL',
+      documentUrlTooltip: 'URL-referentie naar het document',
     },
     en: {
       title: 'Besluiten API',
@@ -101,6 +110,13 @@ const besluitenApiPluginSpecification: PluginSpecification = {
       besluitUrlProcessVariable: 'Process variable name with besluit URL',
       besluitUrlProcessVariableTooltip:
         'Here must be entered the name of the process variable in which the besluit URL is stored locally',
+      'link-document-to-besluit': 'Link Document to Besluit',
+      linkDocumentToBesluitInformation:
+        'This action links a document to a zaakbesluit in the Zaken API.',
+      besluitUrl: 'Besluit URL',
+      besluitUrlTooltip: 'URL reference to the besluit',
+      documentUrl: 'Document URL',
+      documentUrlTooltip: 'URL reference to the document',
     },
     de: {
       title: 'Besluiten API',
@@ -140,6 +156,13 @@ const besluitenApiPluginSpecification: PluginSpecification = {
       besluitUrlProcessVariable: 'Prozessvariablenname mit Entscheidungs-URL',
       besluitUrlProcessVariableTooltip:
         'Hier muss der Name der Prozessvariable eingetragen werden, in der die Entscheidungs-URL lokal gespeichert wird',
+      'link-document-to-besluit': 'Verknüpf Document zum Besluit',
+      linkDocumentToBesluitInformation:
+        'Diese Aktion verknüpft ein Dokument mit einer Fallentscheidung in der Zaken API.',
+      besluitUrl: 'Besluit URL',
+      besluitUrlTooltip: 'URL-Referenz zum besluit',
+      documentUrl: 'Document URL',
+      documentUrlTooltip: 'URL-Referenz zum document',
     },
   },
 };
