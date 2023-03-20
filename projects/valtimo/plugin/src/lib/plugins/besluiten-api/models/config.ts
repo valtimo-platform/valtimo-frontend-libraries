@@ -27,6 +27,7 @@ type Vervalredenen = 'tijdelijk' | 'ingetrokken_overheid' | 'ingetrokken_belangh
 interface CreateZaakBesluitConfig {
   besluittypeUrl: string;
   toelichting: string;
+  bestuursorgaan: string;
   ingangsdatum: string;
   vervaldatum: string;
   vervalreden: Vervalredenen;
