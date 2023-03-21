@@ -34,6 +34,7 @@ import {FormioForm} from '@formio/angular';
 import {UserProviderService} from '@valtimo/security';
 import {Subscription} from 'rxjs';
 import {ExtendedComponentSchema} from 'formiojs';
+import {decode} from 'html-entities';
 
 moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
@@ -161,18 +162,9 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
     component: ExtendedComponentSchema
   ): ExtendedComponentSchema => {
     if (component.defaultValue) {
-      return {...component, defaultValue: this.unescape(component.defaultValue)};
+      return {...component, defaultValue: decode(component.defaultValue)};
     }
 
     return component;
   };
-
-  private unescape(htmlStr: string): string {
-    return htmlStr
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .replace(/&amp;/g, '&');
-  }
 }
