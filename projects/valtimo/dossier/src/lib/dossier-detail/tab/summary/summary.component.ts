@@ -27,12 +27,13 @@ import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Document, DocumentService, ProcessDocumentInstance} from '@valtimo/document';
 import {TaskDetailModalComponent, TaskService} from '@valtimo/task';
-import {FormService} from '@valtimo/form';
+import {FormMappingService, FormService} from '@valtimo/form';
 import {FormioOptionsImpl, ValtimoFormioOptions} from '@valtimo/components';
 import moment from 'moment';
 import {FormioForm} from '@formio/angular';
 import {UserProviderService} from '@valtimo/security';
 import {Subscription} from 'rxjs';
+import {ExtendedComponentSchema} from 'formiojs';
 
 moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
@@ -58,15 +59,16 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
   @ViewChild('taskDetail') taskDetail: TaskDetailModalComponent;
 
   constructor(
-    private router: Router,
-    private documentService: DocumentService,
-    private taskService: TaskService,
-    private processService: ProcessService,
-    private el: ElementRef,
-    private renderer: Renderer2,
-    private route: ActivatedRoute,
-    private formService: FormService,
-    private userProviderService: UserProviderService
+    private readonly router: Router,
+    private readonly documentService: DocumentService,
+    private readonly taskService: TaskService,
+    private readonly processService: ProcessService,
+    private readonly el: ElementRef,
+    private readonly renderer: Renderer2,
+    private readonly route: ActivatedRoute,
+    private readonly formService: FormService,
+    private readonly userProviderService: UserProviderService,
+    private readonly formMappingService: FormMappingService
   ) {
     this.snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = this.snapshot.get('documentDefinitionName') || '';
@@ -95,7 +97,10 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
       this.formService
         .getFormDefinitionByNamePreFilled(`${this.documentDefinitionName}.summary`, this.documentId)
         .subscribe(formDefinition => {
-          this.formDefinition = formDefinition;
+          this.formDefinition = this.formMappingService.mapComponents(
+            formDefinition,
+            this.unescapeComponentDefaultValue
+          );
         })
     );
 
@@ -150,5 +155,24 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
 
   public rowTaskClick(task: any) {
     this.taskDetail.openTaskDetails(task);
+  }
+
+  private unescapeComponentDefaultValue = (
+    component: ExtendedComponentSchema
+  ): ExtendedComponentSchema => {
+    if (component.defaultValue) {
+      return {...component, defaultValue: this.unescape(component.defaultValue)};
+    }
+
+    return component;
+  };
+
+  private unescape(htmlStr: string): string {
+    return htmlStr
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, '&');
   }
 }
