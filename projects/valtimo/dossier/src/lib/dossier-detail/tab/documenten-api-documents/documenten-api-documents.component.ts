@@ -122,9 +122,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
   downloadDocument(relatedFile: RelatedFile, index: number): void {
     this.downloadingFileIndexes$.pipe(take(1)).subscribe(indexes => {
-      const newIndexes = [...indexes, index];
-
-      this.downloadingFileIndexes$.next(newIndexes);
+      this.downloadingFileIndexes$.next([...indexes, index]);
 
       const finished$: Observable<null> = this.downloadService.downloadFile(
         `/api/v1/documenten-api/${relatedFile.pluginConfigurationId}/files/${relatedFile.fileId}/download`,
@@ -133,7 +131,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
       finished$.pipe(take(1)).subscribe(() => {
         this.downloadingFileIndexes$.next(
-          newIndexes.filter(downloadIndex => downloadIndex !== index)
+          this.downloadingFileIndexes$.getValue().filter(downloadIndex => downloadIndex !== index)
         );
       });
     });
