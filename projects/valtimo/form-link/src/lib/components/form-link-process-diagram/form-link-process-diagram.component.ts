@@ -101,7 +101,7 @@ export class FormLinkProcessDiagramComponent implements OnInit, OnDestroy {
                 element: {
                   id: e.element.businessObject.id,
                   type: e.element.businessObject.$type,
-                  activityListenerType: activityListenerType,
+                  activityListenerType,
                 },
                 processDefinitionKey: this.processDefinitionKey,
                 processDefinitionId: this.processDefinitionId,

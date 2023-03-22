@@ -119,7 +119,6 @@ export class ProcessLinkComponent {
     ])
       .pipe(take(1))
       .subscribe(([modalData, selectedConfiguration, selectedFunction]) => {
-        let activityType = modalData?.element?.type;
         const processLinkRequest: SaveProcessLinkRequest = {
           actionProperties: configuration,
           activityId: modalData?.element?.id,
