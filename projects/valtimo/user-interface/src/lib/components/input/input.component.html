@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015-2020 Ritense BV, the Netherlands.
+  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
   ~
   ~ Licensed under EUPL, Version 1.2 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -44,7 +44,8 @@
     class="v-input"
     [ngClass]="{
       'v-input--full-width': fullWidth,
-      'v-input--margin': margin
+      'v-input--margin': margin,
+      'v-input--small-margin': smallMargin
     }"
     [style.width.px]="widthPx"
     [disabled]="disabled"
@@ -63,7 +64,8 @@
     class="v-input"
     [ngClass]="{
       'v-input--full-width': fullWidth,
-      'v-input--margin': margin
+      'v-input--margin': margin,
+      'v-input--small-margin': smallMargin
     }"
     [style.width.px]="widthPx"
     [disabled]="disabled"
@@ -81,7 +83,8 @@
       *ngIf="{showPassword: showPassword$ | async} as obs"
       [ngClass]="{
         'v-input--full-width': fullWidth,
-        'v-input--margin': margin
+        'v-input--margin': margin,
+        'v-input--small-margin': smallMargin
       }"
     >
       <input
@@ -118,6 +121,7 @@
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
+      'v-input--small-margin': smallMargin,
       'v-input--hide-spinbox': hideNumberSpinBox
     }"
     [style.width.px]="widthPx"
@@ -138,7 +142,8 @@
     class="v-input"
     [ngClass]="{
       'v-input--full-width': fullWidth,
-      'v-input--margin': margin
+      'v-input--margin': margin,
+      'v-input--small-margin': smallMargin
     }"
     [style.width.px]="widthPx"
     [disabled]="disabled"
@@ -153,12 +158,13 @@
 </ng-template>
 
 <ng-template #checkboxInput>
-  <input
-    *ngIf="isCheckbox"
-    class="v-input--checkbox"
-    type="checkbox"
-    [ngModel]="inputValue$ | async"
-    (ngModelChange)="onValueChange($event)"
-    [name]="name"
-  />
+  <div *ngIf="isCheckbox" (click)="stopCheckboxEventPropagation($event)">
+    <ibm-checkbox
+      [disabled]="disabled"
+      [ngModel]="inputValue$ | async"
+      (ngModelChange)="onValueChange($event)"
+      [name]="name"
+    >
+    </ibm-checkbox>
+  </div>
 </ng-template>

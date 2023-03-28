@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,17 @@ import {CatalogiApiConfigurationComponent} from './components/catalogi-api-confi
 import {CommonModule} from '@angular/common';
 import {PluginTranslatePipeModule} from '../../pipes';
 import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/user-interface';
+import {GetStatustypeConfigurationComponent} from './components/get-statustype/get-statustype-configuration.component';
+import {GetBesluittypeConfigurationComponent} from './components/get-besluittype/get-besluittype-configuration.component';
+import {GetResultaattypeConfigurationComponent} from './components/get-resultaattype/get-resultaattype-configuration.component';
 
 @NgModule({
-  declarations: [CatalogiApiConfigurationComponent],
+  declarations: [
+    CatalogiApiConfigurationComponent,
+    GetBesluittypeConfigurationComponent,
+    GetResultaattypeConfigurationComponent,
+    GetStatustypeConfigurationComponent,
+  ],
   imports: [
     CommonModule,
     PluginTranslatePipeModule,
@@ -30,6 +38,11 @@ import {FormModule, InputModule, ParagraphModule, SelectModule} from '@valtimo/u
     SelectModule,
     ParagraphModule,
   ],
-  exports: [CatalogiApiConfigurationComponent],
+  exports: [
+    CatalogiApiConfigurationComponent,
+    GetBesluittypeConfigurationComponent,
+    GetResultaattypeConfigurationComponent,
+    GetStatustypeConfigurationComponent,
+  ],
 })
 export class CatalogiApiPluginModule {}

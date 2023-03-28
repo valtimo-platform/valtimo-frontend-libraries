@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,53 @@ import {NgModule} from '@angular/core';
 import {ObjectManagementRoutingModule} from './object-management-routing.module';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {DropzoneModule, WidgetModule, ListModule} from '@valtimo/components';
+import {
+  CarbonMultiInputModule,
+  DropzoneModule,
+  WidgetModule,
+  ListModule,
+  ConfirmationModalModule,
+  SpinnerModule,
+  ModalModule,
+} from '@valtimo/components';
 import {
   ButtonModule,
   FormModule,
-  InputModule,
-  ModalModule,
+  InputModule as InputModule,
+  ModalModule as VModalModule,
   SelectModule,
   TitleModule,
+  TooltipIconModule,
 } from '@valtimo/user-interface';
 import {ObjectManagementDetailContainerComponent} from './components/object-management-detail-container/object-management-detail-container.component';
 import {ObjectManagementDetailComponent} from './components/object-management-detail-container/tabs/object-management-detail/object-management-detail.component';
 import {ObjectManagementListComponent} from './components/object-management-list/object-management-list.component';
 import {ObjectManagementUploadModalComponent} from './components/object-management-upload-modal/object-management-upload-modal.component';
 import {ObjectManagementModalComponent} from './components/object-management-modal/object-management-modal.component';
-import {ObjectManagementListTabComponent} from './components/object-management-detail-container/tabs/object-management-list-tab/object-management-list-tab.component';
+import {ObjectManagementListColumnsComponent} from './components/object-management-detail-container/tabs/object-management-list-columns/object-management-list-columns.component';
+import {
+  ButtonModule as CarbonButtonModule,
+  CheckboxModule,
+  DropdownModule,
+  IconModule,
+  InputModule as CarbonInputModule,
+  LinkModule,
+  LoadingModule,
+  ModalModule as CarbonModalModule,
+  NotificationModule,
+} from 'carbon-components-angular';
+import {ReactiveFormsModule} from '@angular/forms';
+import {ObjectManagementListSearchFieldsComponent} from './components/object-management-detail-container/tabs/object-management-list-search-fields/object-management-list-search-fields.component';
 
 @NgModule({
   declarations: [
     ObjectManagementListComponent,
     ObjectManagementDetailContainerComponent,
     ObjectManagementDetailComponent,
-    ObjectManagementListTabComponent,
+    ObjectManagementListColumnsComponent,
     ObjectManagementModalComponent,
     ObjectManagementUploadModalComponent,
+    ObjectManagementListSearchFieldsComponent,
   ],
   imports: [
     CommonModule,
@@ -50,12 +73,27 @@ import {ObjectManagementListTabComponent} from './components/object-management-d
     ListModule,
     TranslateModule,
     ObjectManagementRoutingModule,
-    ModalModule,
+    VModalModule,
     TitleModule,
     ButtonModule,
     FormModule,
     InputModule,
     SelectModule,
+    CarbonInputModule,
+    CarbonButtonModule,
+    TooltipIconModule,
+    CarbonMultiInputModule,
+    CarbonModalModule,
+    NotificationModule,
+    LoadingModule,
+    DropdownModule,
+    CheckboxModule,
+    LinkModule,
+    IconModule,
+    ReactiveFormsModule,
+    ConfirmationModalModule,
+    SpinnerModule,
+    ModalModule,
   ],
   exports: [],
 })

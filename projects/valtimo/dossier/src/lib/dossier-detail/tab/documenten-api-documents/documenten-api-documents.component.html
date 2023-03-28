@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015-2020 Ritense BV, the Netherlands.
+  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
   ~
   ~ Licensed under EUPL, Version 1.2 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,49 +13,63 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div *ngIf="uploadProcessLinkedSet && !uploadProcessLinked">
-  <div
-    *ngIf="isAdmin"
-    [translate]="'dossier.documenten.noProcessLinked.adminRole'"
-    class="bg-warning text-black mb-2 p-3 text-center"
-  ></div>
-  <div
-    *ngIf="!isAdmin"
-    [translate]="'dossier.documenten.noProcessLinked.regularUser'"
-    class="bg-warning text-black mb-2 p-3 text-center"
-  ></div>
-</div>
 
-<valtimo-dropzone
-  (fileSelected)="fileSelected($event)"
-  [acceptedFiles]="acceptedFiles"
-  [camera]="false"
-  [disabled]="!uploadProcessLinkedSet || !uploadProcessLinked"
-  [hideFilePreview]="true"
-  [hideTitle]="true"
-  [maxFileSize]="maxFileSize"
-  [maxFiles]="1"
-  [showMaxFileSize]="true"
-  [uploading]="uploading$ | async"
-></valtimo-dropzone>
+<ng-container *ngIf="{loading: loading$ | async} as obs">
+  <div *ngIf="uploadProcessLinkedSet && !uploadProcessLinked">
+    <div
+      *ngIf="isAdmin"
+      [translate]="'dossier.documenten.noProcessLinked.adminRole'"
+      class="bg-warning text-black mb-2 p-3 text-center"
+    ></div>
+    <div
+      *ngIf="!isAdmin"
+      [translate]="'dossier.documenten.noProcessLinked.regularUser'"
+      class="bg-warning text-black mb-2 p-3 text-center"
+    ></div>
+  </div>
+  <div *ngIf="showZaakLinkWarning">
+    <div
+      [translate]="'dossier.documenten.noZaakFound'"
+      class="bg-warning text-black mb-2 p-3 text-center"
+    ></div>
+  </div>
 
-<valtimo-widget>
-  <valtimo-list
-    [actions]="actions"
-    [fields]="fields"
-    [header]="true"
-    [isSearchable]="true"
-    [items]="relatedFiles$ | async"
-    [viewMode]="true"
-  >
-    <div header>
-      <h3 class="list-header-title">{{ 'Related documents' | translate }}</h3>
-      <h5 class="list-header-description">
-        {{ 'Overview of all documents in this dossier' | translate }}
-      </h5>
-    </div>
-  </valtimo-list>
-</valtimo-widget>
+  <valtimo-dropzone
+    *ngIf="!obs.loading"
+    (fileSelected)="fileSelected($event)"
+    [acceptedFiles]="acceptedFiles"
+    [camera]="false"
+    [disabled]="
+      !uploadProcessLinkedSet || !uploadProcessLinked || obs.loading || showZaakLinkWarning
+    "
+    [hideFilePreview]="true"
+    [hideTitle]="true"
+    [maxFileSize]="maxFileSize"
+    [maxFiles]="1"
+    [showMaxFileSize]="true"
+    [uploading]="uploading$ | async"
+  ></valtimo-dropzone>
+
+  <valtimo-widget>
+    <valtimo-list
+      [ngClass]="{hidden: obs.loading}"
+      [fields]="fields"
+      [header]="true"
+      [isSearchable]="true"
+      [items]="relatedFiles$ | async"
+      [viewMode]="true"
+      [lastColumnTemplate]="downloadButton"
+    >
+      <div header>
+        <h3 class="list-header-title">{{ 'Related documents' | translate }}</h3>
+        <h5 class="list-header-description">
+          {{ 'Overview of all documents in this dossier' | translate }}
+        </h5>
+      </div>
+    </valtimo-list>
+    <ng-container *ngTemplateOutlet="loading; context: {loading: obs.loading}"></ng-container>
+  </valtimo-widget>
+</ng-container>
 
 <valtimo-documenten-api-metadata-modal
   (metadata)="metadataSet($event)"
@@ -64,3 +78,27 @@
   [hide$]="hideModal$"
   [show$]="showModal$"
 ></valtimo-documenten-api-metadata-modal>
+
+<ng-template #loading let-loading="loading">
+  <div *ngIf="loading" class="loading-container">
+    <ibm-loading></ibm-loading>
+  </div>
+</ng-template>
+
+<ng-template #downloadButton let-item="item" let-index="index">
+  <div
+    class="download-button-container"
+    *ngIf="{isDownloading: indexesIncludeIndex(downloadingFileIndexes$ | async, index)} as vars"
+  >
+    <button
+      *ngIf="!vars.isDownloading"
+      ibmButton="primary"
+      size="sm"
+      (click)="downloadDocument(item, index)"
+    >
+      {{ 'interface.download' | translate
+      }}<svg class="cds--btn__icon" ibmIcon="download" size="16"></svg>
+    </button>
+    <ibm-loading size="sm" *ngIf="vars.isDownloading"></ibm-loading>
+  </div>
+</ng-template>

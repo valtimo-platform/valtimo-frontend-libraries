@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.c
 import {TranslateService} from '@ngx-translate/core';
 import {combineLatest, Subscription} from 'rxjs';
 import {ConfigService, SortState, TaskListTab} from '@valtimo/config';
+import {DocumentService} from '@valtimo/document';
+import {take} from 'rxjs/operators';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -52,7 +54,8 @@ export class TaskListComponent implements OnDestroy {
     private router: Router,
     private logger: NGXLogger,
     private translateService: TranslateService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private documentService: DocumentService
   ) {
     this.visibleTabs = this.configService.config?.visibleTaskListTabs || null;
     if (this.visibleTabs != null) {
@@ -144,13 +147,32 @@ export class TaskListComponent implements OnDestroy {
     });
   }
 
+  openRelatedCase(event: MouseEvent, index: number): void {
+    event.stopPropagation();
+
+    const tasks = this.tasks[this.currentTaskType].tasks;
+    const currentTask = tasks && tasks[index];
+
+    if (currentTask) {
+      this.documentService
+        .getDocument(currentTask.businessKey)
+        .pipe(take(1))
+        .subscribe(document => {
+          this.router.navigate([
+            `/dossiers/${document.definitionId.name}/document/${currentTask.businessKey}/summary`,
+          ]);
+        });
+    }
+  }
+
   public defaultTaskListFields(type) {
     this.translationSubscription = combineLatest([
       this.translateService.stream(`task-list.fieldLabels.created`),
       this.translateService.stream(`task-list.fieldLabels.name`),
       this.translateService.stream(`task-list.fieldLabels.valtimoAssignee.fullName`),
       this.translateService.stream(`task-list.fieldLabels.due`),
-    ]).subscribe(([created, name, assignee, due]) => {
+      this.translateService.stream(`task-list.fieldLabels.context`),
+    ]).subscribe(([created, name, assignee, due, context]) => {
       this.tasks[type].fields = [
         {
           key: 'created',
@@ -167,6 +189,10 @@ export class TaskListComponent implements OnDestroy {
         {
           key: 'due',
           label: due,
+        },
+        {
+          key: 'context',
+          label: context,
         },
       ];
     });

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -120,7 +120,7 @@ export class MultiInputComponent implements OnInit, OnDestroy {
     const minimumRows = this.minimumAmountOfRows;
     const initialRows = this.initialAmountOfRows;
     const amountOfInitalRows =
-      minimumRows > initialRows ? minimumRows : initialRows > 1 ? initialRows : 1;
+      minimumRows > initialRows ? minimumRows : initialRows > 1 ? initialRows : 0;
 
     if (!this.defaultValues) {
       return new Array(amountOfInitalRows).fill(this.getEmptyValue());

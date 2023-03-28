@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {ConfigService} from '@valtimo/config';
-import {Objecttype} from '../models/object-management.model';
+import {ConfigService, SearchField} from '@valtimo/config';
+import {Objecttype, SearchListColumn} from '../models/object-management.model';
 
 @Injectable({
   providedIn: 'root',
@@ -53,6 +53,66 @@ export class ObjectManagementService {
     return this.http.put<Objecttype>(
       `${this.valtimoEndpointUri}v1/object/management/configuration`,
       payload
+    );
+  }
+
+  getSearchList(ownerId: string): Observable<Array<SearchListColumn>> {
+    return this.http.get<Array<SearchListColumn>>(
+      `${this.valtimoEndpointUri}v1/search/list-column/${ownerId}`
+    );
+  }
+
+  postSearchList(ownerId: string, request: SearchListColumn): Observable<SearchListColumn> {
+    return this.http.post<SearchListColumn>(
+      `${this.valtimoEndpointUri}v1/search/list-column/${ownerId}`,
+      {...request, ownerId}
+    );
+  }
+
+  putSearchList(
+    ownerId: string,
+    columnKey: string,
+    request: SearchListColumn
+  ): Observable<Array<SearchListColumn>> {
+    return this.http.put<Array<SearchListColumn>>(
+      `${this.valtimoEndpointUri}v1/search/list-column/${ownerId}/${columnKey}`,
+      {...request, ownerId}
+    );
+  }
+
+  deleteSearchList(ownerId: string, columnKey: string): Observable<SearchListColumn> {
+    return this.http.delete<SearchListColumn>(
+      `${this.valtimoEndpointUri}v1/search/list-column/${ownerId}/${columnKey}`
+    );
+  }
+
+  getSearchField(ownerId: string): Observable<Array<SearchField>> {
+    return this.http.get<Array<SearchField>>(
+      `${this.valtimoEndpointUri}v1/search/field/${ownerId}`
+    );
+  }
+
+  postSearchField(ownerId: string, request: SearchField): Observable<SearchField> {
+    return this.http.post<SearchField>(`${this.valtimoEndpointUri}v1/search/field/${ownerId}`, {
+      ...request,
+      ownerId,
+    });
+  }
+
+  putSearchField(
+    ownerId: string,
+    key: string,
+    request: SearchField
+  ): Observable<Array<SearchField>> {
+    return this.http.put<Array<SearchField>>(
+      `${this.valtimoEndpointUri}v1/search/field/${ownerId}/${key}`,
+      {...request, ownerId}
+    );
+  }
+
+  deleteSearchField(ownerId: string, key: string): Observable<SearchField> {
+    return this.http.delete<SearchField>(
+      `${this.valtimoEndpointUri}v1/search/field/${ownerId}/${key}`
     );
   }
 }

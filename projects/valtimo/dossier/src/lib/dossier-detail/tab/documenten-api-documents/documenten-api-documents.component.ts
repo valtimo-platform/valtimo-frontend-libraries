@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,18 @@
 
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {DocumentService, RelatedFile} from '@valtimo/document';
-import {DownloadService, ResourceDto, UploadProviderService} from '@valtimo/resource';
+import {DocumentService, RelatedFile, RelatedFileListItem} from '@valtimo/document';
+import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {ToastrService} from 'ngx-toastr';
-import {map, switchMap, take, tap} from 'rxjs/operators';
-import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
+import {catchError, map, switchMap, take, tap} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfigService} from '@valtimo/config';
 import {DocumentenApiMetadata} from '@valtimo/components';
 import {UserProviderService} from '@valtimo/security';
 import {PromptService} from '@valtimo/user-interface';
+import {FileSortService} from '../../../services';
+import moment from 'moment';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -41,21 +43,11 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public fields = [
     {key: 'fileName', label: 'File name'},
     {key: 'sizeInBytes', label: 'Size in bytes'},
-    {key: 'createdOn', label: 'Created on', viewType: 'date'},
+    {key: 'createdOn', label: 'Created on'},
     {key: 'createdBy', label: 'Created by'},
   ];
-  public actions = [
-    {
-      columnName: '',
-      iconClass: 'mdi mdi-open-in-new',
-      callback: this.downloadDocument.bind(this),
-    },
-    {
-      columnName: '',
-      iconClass: 'mdi mdi-delete',
-      callback: this.removeRelatedFile.bind(this),
-    },
-  ];
+
+  public showZaakLinkWarning: boolean;
   public isAdmin: boolean;
   public uploadProcessLinkedSet = false;
   public uploadProcessLinked!: boolean;
@@ -64,24 +56,41 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   readonly hideModal$ = new Subject<null>();
   readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
   readonly fileToBeUploaded$ = new BehaviorSubject<File | null>(null);
+  readonly loading$ = new BehaviorSubject<boolean>(true);
   private readonly refetch$ = new BehaviorSubject<null>(null);
-  public relatedFiles$: Observable<Array<RelatedFile>> = this.refetch$.pipe(
+
+  public relatedFiles$: Observable<Array<RelatedFileListItem>> = this.refetch$.pipe(
     switchMap(() =>
       combineLatest([
-        this.documentService.getDocument(this.documentId),
+        this.documentService.getZakenApiDocuments(this.documentId),
         this.translateService.stream('key'),
       ])
     ),
-    map(([document]) => {
-      const relatedFiles = document?.relatedFiles || [];
-      const translatedFiles = relatedFiles.map(file => ({
+    map(([relatedFiles]) => {
+      const translatedFiles = relatedFiles?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
       }));
 
       return translatedFiles || [];
+    }),
+    map(relatedFiles => this.fileSortService.sortRelatedFilesByDateDescending(relatedFiles)),
+    map(relatedFiles => {
+      moment.locale(this.translateService.currentLang);
+
+      return relatedFiles.map(file => ({
+        ...file,
+        createdOn: moment(new Date(file.createdOn)).format('L'),
+      }));
+    }),
+    tap(() => this.loading$.next(false)),
+    catchError(() => {
+      this.showZaakLinkWarning = true;
+      return of([]);
     })
   );
+
+  readonly downloadingFileIndexes$ = new BehaviorSubject<Array<number>>([]);
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -92,7 +101,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     private readonly promptService: PromptService,
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
-    private readonly userProviderService: UserProviderService
+    private readonly userProviderService: UserProviderService,
+    private readonly fileSortService: FileSortService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.documentId = snapshot.get('documentId') || '';
@@ -110,37 +120,20 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.showModal$.next(null);
   }
 
-  downloadDocument(relatedFile: RelatedFile): void {
-    this.uploadProviderService
-      .getResource(relatedFile.fileId)
-      .subscribe((resource: ResourceDto) => {
-        this.downloadService.downloadFile(resource.url, resource.resource.name);
-      });
-  }
+  downloadDocument(relatedFile: RelatedFile, index: number): void {
+    this.downloadingFileIndexes$.pipe(take(1)).subscribe(indexes => {
+      this.downloadingFileIndexes$.next([...indexes, index]);
 
-  removeRelatedFile(relatedFile: RelatedFile) {
-    this.promptService.openPrompt({
-      headerText: this.translateService.instant('dossier.deleteConfirmation.title'),
-      bodyText: this.translateService.instant('dossier.deleteConfirmation.description'),
-      cancelButtonText: this.translateService.instant('dossier.deleteConfirmation.cancel'),
-      confirmButtonText: this.translateService.instant('dossier.deleteConfirmation.delete'),
-      cancelMdiIcon: 'cancel',
-      confirmMdiIcon: 'delete',
-      cancelButtonType: 'secondary',
-      confirmButtonType: 'primary',
-      closeOnConfirm: true,
-      closeOnCancel: true,
-      confirmCallBackFunction: () => {
-        this.documentService.removeResource(this.documentId, relatedFile.fileId).subscribe(
-          () => {
-            this.toastrService.success('Successfully removed document from dossier');
-            this.refetchDocuments();
-          },
-          () => {
-            this.toastrService.error('Failed to remove document from dossier');
-          }
+      const finished$: Observable<null> = this.downloadService.downloadFile(
+        `/api/v1/documenten-api/${relatedFile.pluginConfigurationId}/files/${relatedFile.fileId}/download`,
+        relatedFile.fileName
+      );
+
+      finished$.pipe(take(1)).subscribe(() => {
+        this.downloadingFileIndexes$.next(
+          this.downloadingFileIndexes$.getValue().filter(downloadIndex => downloadIndex !== index)
         );
-      },
+      });
     });
   }
 
@@ -162,6 +155,10 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  indexesIncludeIndex(indexes: Array<number>, index: number): boolean {
+    return indexes.includes(index);
   }
 
   public isUserAdmin() {

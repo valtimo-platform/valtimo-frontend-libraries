@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import {PluginSpecification} from '../../models';
 import {PortaaltaakConfigurationComponent} from './components/portaaltaak-configuration/portaaltaak-configuration.component';
 import {PORTAALTAAK_PLUGIN_LOGO_BASE64} from './assets/portaaltaak-plugin-logo';
 import {CreatePortalTaskComponent} from './components/create-portal-task/create-portal-task.component';
+import {CompletePortalTaskComponent} from './components/complete-portal-task/complete-portal-task.component';
 
 const portaaltaakPluginSpecification: PluginSpecification = {
   pluginId: 'portaaltaak',
@@ -25,6 +26,7 @@ const portaaltaakPluginSpecification: PluginSpecification = {
   pluginLogoBase64: PORTAALTAAK_PLUGIN_LOGO_BASE64,
   functionConfigurationComponents: {
     'create-portaaltaak': CreatePortalTaskComponent,
+    'complete-portaaltaak': CompletePortalTaskComponent,
   },
   pluginTranslations: {
     nl: {
@@ -40,6 +42,7 @@ const portaaltaakPluginSpecification: PluginSpecification = {
       objectManagementConfigurationTooltip:
         'Selecteer de gewenste object management configuratie. Wanneer de selectiebox leeg is, zal de object management configuratie eerst aangemaakt moeten worden.',
       'create-portaaltaak': 'Portaaltaak aanmaken',
+      'complete-portaaltaak': 'Portaaltaak afronden',
       formType: 'Formuliertype',
       formTypeTooltip:
         'Kies hier of het te tonen formulier afomstig moet zijn van een ingestelde definitie, of van een externe URL.',
@@ -49,10 +52,10 @@ const portaaltaakPluginSpecification: PluginSpecification = {
       formTypeIdTooltip: 'Het ID van het formulier dat getoond moet worden',
       formTypeUrl: 'Formulier URL',
       formTypeUrlTooltip: 'Een URL die wijst naar het formulier dat getoond moet worden',
-      sendData: 'Data versturen naar Objecten API',
+      sendData: 'Taakgegevens voor de ontvanger',
       sendDataTooltip:
         "Voor hier sleutels en waarden in voor data die verstuurd moet worden naar de Objecten API. De sleutel is hier de sleutel van het Form.IO-veld dat gevuld moet worden (bijvoorbeeld 'firstName'). De waarde wijst naar de data waarmee dit veld gevuld moet worden (bijvoorbeeld 'doc:/customer/firstName').",
-      receiveData: 'Data ontvangen van de Objecten API',
+      receiveData: 'Ingevulde gegevens door de ontvanger',
       receiveDataTooltip:
         "Voor hier sleutels en waarden in voor data die ontvangen moet worden van de Objecten API. De sleutel is hier de locatie waar de data opgeslagen moet worden (bijvoorbeeld 'doc:/customer/signedAgreement'). De waarde wijst naar de sleutel van het Form.IO-veld waar de data vandaan moet komen (bijvoorbeeld '/signedAgreement').",
       receiver: 'Ontvanger',
@@ -66,6 +69,15 @@ const portaaltaakPluginSpecification: PluginSpecification = {
       bsn: 'Burgerservicenummer (BSN)',
       kvkTooltip: 'Het KVK-nummer van de gewenste ontvanger.',
       bsnTooltip: 'Het Burgerservicenummer (BSN) van de gewenste ontvanger.',
+      completeTaakProcess: 'Geüploade documentverwerkingsproces',
+      completeTaakProcessTooltip:
+        'Het proces dat de geüploade documenten in de portal moet afhandelen.',
+      identificationKey: 'Identificatiesleutel',
+      identificationKeyTooltip:
+        "De ingevoerde sleutel bepaalt hoe de ontvanger wordt geïdentificeerd. Geldige voorbeelden zijn 'bsn' of 'kvk'.",
+      identificationValue: 'Identificatiewaarde',
+      identificationValueTooltip:
+        "De waarde waarmee de ontvanger wordt geïdentificeerd. Wanneer er bijvoorbeeld in het veld 'Identificatiesleutel' de waarde 'bsn' is ingevoerd, kan er in dit veld een burgerservicenummer worden ingevoerd (bijvoorbeeld 558099476).",
     },
     en: {
       title: 'Portal task',
@@ -73,13 +85,14 @@ const portaaltaakPluginSpecification: PluginSpecification = {
       configurationTitle: 'Configuration name',
       configurationTitleTooltip:
         'The name of the current plugin configuration. Under this name, the configuration can be found in the rest of the application.',
-      notificatiesApiPluginConfiguration: 'Notification API plugin',
+      notificatiesApiPluginConfiguration: 'Notificaties API plugin',
       notificatiesApiPluginConfigurationTooltip:
-        'Select the Notifications API plugin. If the selection box remains empty, the Notifications API plugin will first have to be created.',
+        'Select the Notificaties API plugin. If the selection box remains empty, the Notificaties API plugin will first have to be created.',
       objectManagementConfiguration: 'Object management configuration',
       objectManagementConfigurationTooltip:
         'Select the object management configuration. If the selection box remains empty, the object management configuration will first have to be created.',
       'create-portaaltaak': 'Create portal task',
+      'complete-portaaltaak': 'Complete portal task',
       formType: 'Form type',
       formTypeTooltip:
         'Choose here whether the form to be displayed should come from a set definition or from an external URL.',
@@ -89,10 +102,10 @@ const portaaltaakPluginSpecification: PluginSpecification = {
       formTypeIdTooltip: 'Het ID van het formulier dat getoond moet worden',
       formTypeUrl: 'Formulier URL',
       formTypeUrlTooltip: 'Een URL die wijst naar het formulier dat getoond moet worden',
-      sendData: 'Send data to Objecten API',
+      sendData: 'Task data for the recipient',
       sendDataTooltip:
         "Enter keys and values here for data to be sent to the Objecten API. The key here is the key of the Form.IO field to be populated (e.g. 'firstName'). The value points to the data with which this field must be filled (e.g. 'doc:/customer/firstName').",
-      receiveData: 'Receive data from the Objecten API',
+      receiveData: 'Information entered by the recipient',
       receiveDataTooltip:
         "Enter keys and values here for data to be received from the Objecten API. The key here is the location where the data should be stored (e.g. 'doc:/customer/signedAgreement'). The value points to the key of the Form.IO field where the data should come from (e.g. '/signedAgreement').",
       receiver: 'Receiver',
@@ -106,6 +119,15 @@ const portaaltaakPluginSpecification: PluginSpecification = {
       bsn: 'Citizen service number (BSN)',
       kvkTooltip: 'The KVK number of the desired receiver.',
       bsnTooltip: 'The Citizen service number (BSN) of the desired receiver',
+      completeTaakProcess: 'Process to complete Portaaltaak',
+      completeTaakProcessTooltip:
+        'The process that should handle the uploaded documents in the portal.',
+      identificationKey: 'Identification key',
+      identificationKeyTooltip:
+        "The key entered determines how the recipient is identified. Valid examples are 'bsn' or 'kvk'.",
+      identificationValue: 'Identification value',
+      identificationValueTooltip:
+        "The value that identifies the recipient. For example, if the value 'bsn' is entered in the 'Identification key' field, a citizen service number can be entered in this field (for example 558099476).",
     },
     de: {
       title: 'Portalaufgabe',
@@ -121,15 +143,16 @@ const portaaltaakPluginSpecification: PluginSpecification = {
       objectManagementConfigurationTooltip:
         'Wählen Sie die Objektverwaltungskonfiguration aus. Bleibt das Auswahlfeld leer, muss zunächst die Objektverwaltungskonfiguration erstellt werden.',
       'create-portaaltaak': 'Portalaufgabe erstellen',
+      'complete-portaaltaak': 'Portaaltaak komplett',
       formType: 'Formulartyp',
       formTypeTooltip:
         'Wählen Sie hier aus, ob das anzuzeigende Formular aus einer Set-Definition oder von einer externen URL stammen soll.',
       id: 'Formulardefinition',
       url: 'URL',
-      sendData: 'Senden von Daten an die Objecten API',
+      sendData: 'Auftragsdaten für den Empfänger',
       sendDataTooltip:
         "Geben Sie hier Schlüssel und Werte für Daten ein, die an die Objecten API gesendet werden sollen. Der Schlüssel hier ist der Schlüssel des Form.IO-Felds, das gefüllt werden soll (z. B. 'firstName‘). Der Wert zeigt auf die Daten, mit denen dieses Feld gefüllt wird muss ausgefüllt werden (z.B. 'doc:/customer/firstName').",
-      receiveData: 'Daten von der Objecten API empfangen',
+      receiveData: 'Vom Empfänger eingegebene Informationen',
       receiveDataTooltip:
         "Geben Sie hier Schlüssel und Werte für Daten ein, die von der Objecten API empfangen werden sollen. Der Schlüssel hier ist der Ort, an dem die Daten gespeichert werden sollen (z. B. 'doc:/customer/signedAgreement'). Der Wert zeigt auf den Schlüssel des Form.IO-Feld, aus dem die Daten stammen sollen (z. B. '/signedAgreement').",
       receiver: 'Empfänger',
@@ -144,6 +167,15 @@ const portaaltaakPluginSpecification: PluginSpecification = {
       bsn: 'Bürgerservicenummer (BSN)',
       kvkTooltip: 'Die KVK-Nummer des gewünschten Empfängers.',
       bsnTooltip: 'Die Bürgerservicenummer (BSN) des gewünschten Empfängers.',
+      completeTaakProcess: 'Handhabungsprozess für hochgeladene Dokumente',
+      completeTaakProcessTooltip:
+        'Der Prozess, der die hochgeladenen Dokumente im Portal handhaben soll.',
+      identificationKey: 'Identifikationsschlüssel',
+      identificationKeyTooltip:
+        "Der eingegebene Schlüssel bestimmt, wie der Empfänger identifiziert wird. Gültige Beispiele sind 'bsn' oder 'kvk'.",
+      identificationValue: 'Identifikationswert',
+      identificationValueTooltip:
+        "Der Wert, der den Empfänger identifiziert. Wird beispielsweise im Feld 'Identifikationsschlüssel' der Wert 'bsn' eingetragen, kann in diesem Feld eine Sozialversicherungsnummer eingetragen werden (z. B. 558099476).",
     },
   },
 };

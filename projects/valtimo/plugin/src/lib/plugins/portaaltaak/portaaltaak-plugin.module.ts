@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,14 @@ import {
   SelectModule,
 } from '@valtimo/user-interface';
 import {CreatePortalTaskComponent} from './components/create-portal-task/create-portal-task.component';
+import {CompletePortalTaskComponent} from './components/complete-portal-task/complete-portal-task.component';
 
 @NgModule({
-  declarations: [PortaaltaakConfigurationComponent, CreatePortalTaskComponent],
+  declarations: [
+    PortaaltaakConfigurationComponent,
+    CreatePortalTaskComponent,
+    CompletePortalTaskComponent,
+  ],
   imports: [
     CommonModule,
     PluginTranslatePipeModule,
@@ -38,6 +43,10 @@ import {CreatePortalTaskComponent} from './components/create-portal-task/create-
     ParagraphModule,
     MultiInputModule,
   ],
-  exports: [PortaaltaakConfigurationComponent, CreatePortalTaskComponent],
+  exports: [
+    PortaaltaakConfigurationComponent,
+    CreatePortalTaskComponent,
+    CompletePortalTaskComponent,
+  ],
 })
 export class PortaaltaakPluginModule {}

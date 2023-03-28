@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,6 +109,7 @@
   --v-transition-backdrop-medium: backdrop-filter 0.14s ease-in;
   --v-transition-opacity-medium: opacity 0.14s ease-in;
   --v-transition-transform-medium: transform 0.14s ease-in;
+  --v-transition-right-medium: right 0.14s ease-in;
   /* cursors */
   --v-cursor-default: default;
   --v-cursor-clickable: pointer;
@@ -227,7 +228,7 @@
   --v-modal-min-height: 150px;
   --v-modal-box-shadow: var(--v-box-shadow-medium);
   --v-modal-background-color: var(--v-color-grey-7);
-  --v-modal-transition: var(--v-transition-opacity-medium), var(--v-transition-transform-medium);
+  --v-modal-transition: var(--v-transition-opacity-medium), var(--v-transition-right-medium);
   --v-modal-cursor: var(--v-cursor-default);
   --v-modal-border-radius: var(--v-border-radius-lg);
   --v-modal-padding-inline: var(--v-spacing-inline-2xl);
@@ -335,7 +336,8 @@
   --v-input-title-margin: var(--v-spacing-block-md);
   --v-input-title-margin-large: var(--v-spacing-block-2xl);
   --v-input-default-width: 200px;
-  --v-input-margin: var(--v-spacing-block-4xl);
+  --v-input-margin: var(--v-spacing-block-2xl);
+  --v-input-small-margin: var(--v-spacing-block-l);
   --v-input-disabled-cursor: var(--v-cursor-disabled);
   --v-input-tooltip-icon-size: var(--v-font-size-default);
   --v-input-tooltip-icon-margin: var(--v-spacing-inline-sm);
@@ -398,4 +400,9 @@
   --v-prompt-footer-border: 1px solid var(--v-color-grey-6);
   --v-prompt-content-padding-block-start: var(--v-spacing-block-2xl);
   --v-prompt-content-padding-block-end: var(--v-spacing-block-xl);
+  /* multi input form */
+  --v-multi-input-form-border: var(--v-border-medium);
+  --v-multi-input-padding: var(--v-spacing-inline-l);
+  --v-multi-input-button-spacing: var(--v-spacing-inline-sm);
+  --v-multi-input-form-bg-color: var(--v-color-white);
 }

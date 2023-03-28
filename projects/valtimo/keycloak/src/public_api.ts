@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,9 @@
 
 export * from './lib/models';
 export * from './lib/keycloak.module';
-export * from './lib/keycloak-auth-guard.service';
-export * from './lib/keycloak-user.service';
+export * from './lib/services/keycloak-auth-guard.service';
+export * from './lib/services/keycloak-user.service';
 export * from './lib/keycloak.init';
-export * from './lib/keycloak-options.service';
+export * from './lib/services/keycloak-options.service';
 export * from './lib/callback.component';
+export * from './lib/constants';

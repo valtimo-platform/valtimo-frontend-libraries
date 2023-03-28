@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {HttpClient} from '@angular/common/http';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -24,10 +25,13 @@ import {HttpClient} from '@angular/common/http';
 export class DownloadService {
   constructor(private http: HttpClient, private configService: ConfigService) {}
 
-  downloadFile(url: string, name: string) {
+  downloadFile(url: string, name: string): Observable<null> {
+    const finishedSubject$ = new Subject<null>();
+
     if (
       url.startsWith(this.configService.config.valtimoApi.endpointUri) ||
-      url.startsWith(window.location.origin)
+      url.startsWith(window.location.origin) ||
+      url.startsWith('/api/')
     ) {
       // if download url is on backend use angular to get the content so access token is used
       this.http.get(url, {responseType: 'blob'}).subscribe(content => {
@@ -37,11 +41,15 @@ export class DownloadService {
         } else {
           this.openDownloadLink(downloadUrl, name);
         }
+        finishedSubject$.next(null);
       });
     } else {
       // download links to external services (like amazon s3) open in a new window
       this.openDownloadLink(url, name);
+      finishedSubject$.next(null);
     }
+
+    return finishedSubject$;
   }
 
   /**

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015-2022 Ritense BV, the Netherlands.
+  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
   ~
   ~ Licensed under EUPL, Version 1.2 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -51,6 +51,16 @@
         {{ 'objectManagement.tabs.general' | translate }}
       </a>
     </li>
+    <li class="nav-item">
+      <a
+        id="search-tab"
+        class="nav-link clickable"
+        data-toggle="tab"
+        (click)="displayBodyComponent(TabEnum.SEARCH)"
+      >
+        {{ 'objectManagement.tabs.searchFields' | translate }}
+      </a>
+    </li>
     <li class="nav-item" *ngIf="caseListColumn">
       <a
         id="list-tab"
@@ -69,8 +79,11 @@
     <div *ngIf="currentTab && currentTab === TabEnum.GENERAL">
       <valtimo-object-management-detail [object$]="object$"></valtimo-object-management-detail>
     </div>
+    <div *ngIf="currentTab && currentTab === TabEnum.SEARCH">
+      <valtimo-object-management-list-search-fields></valtimo-object-management-list-search-fields>
+    </div>
     <div *ngIf="currentTab && currentTab === TabEnum.LIST">
-      <valtimo-object-management-list-tab></valtimo-object-management-list-tab>
+      <valtimo-object-management-list-columns></valtimo-object-management-list-columns>
     </div>
   </div>
 </ng-template>

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015-2020 Ritense BV, the Netherlands.
+  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
   ~
   ~ Licensed under EUPL, Version 1.2 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -23,13 +23,16 @@
     </ol>
   </div>
   <formio
-    *ngIf="currentLanguage$ | async as currentLanguage"
+    *ngIf="{
+      currentLanguage: currentLanguage$ | async,
+      formioOptions: formioOptions$ | async
+    } as obs"
     [submission]="submission"
     [form]="formDefinition"
     [refresh]="refreshForm"
-    [options]="options"
+    [options]="obs.formioOptions || options"
     [readOnly]="readOnly"
-    [language]="currentLanguage"
+    [language]="obs.currentLanguage"
     (submit)="onSubmit($event)"
     (ready)="formReady($event)"
     (change)="onChange($event)"

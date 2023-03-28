@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,4 +21,19 @@ interface CatalogiApiConfig extends PluginConfigurationData {
   authenticationPluginConfiguration: string;
 }
 
-export {CatalogiApiConfig};
+interface GetBesluittypeConfig {
+  besluittype: string;
+  processVariable: string;
+}
+
+interface GetResultaattypeConfig {
+  resultaattype: string;
+  processVariable: string;
+}
+
+interface GetStatustypeConfig {
+  statustype: string;
+  processVariable: string;
+}
+
+export {CatalogiApiConfig, GetBesluittypeConfig, GetResultaattypeConfig, GetStatustypeConfig};

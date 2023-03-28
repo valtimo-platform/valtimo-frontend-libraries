@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,12 +87,21 @@ export class FormLinkProcessDiagramComponent implements OnInit, OnDestroy {
             if (
               e.element.businessObject.$type === 'bpmn:UserTask' ||
               e.element.businessObject.$type === 'bpmn:StartEvent' ||
-              e.element.businessObject.$type === 'bpmn:ServiceTask'
+              e.element.businessObject.$type === 'bpmn:ServiceTask' ||
+              e.element.businessObject.$type === 'bpmn:CallActivity'
             ) {
+              let activityListenerType = e.element.businessObject.$type;
+              if (activityListenerType === 'bpmn:UserTask') {
+                activityListenerType += ':create';
+              } else {
+                activityListenerType += ':start';
+              }
+
               this.bpmnElementModalOpen.emit({
                 element: {
                   id: e.element.businessObject.id,
                   type: e.element.businessObject.$type,
+                  activityListenerType,
                 },
                 processDefinitionKey: this.processDefinitionKey,
                 processDefinitionId: this.processDefinitionId,

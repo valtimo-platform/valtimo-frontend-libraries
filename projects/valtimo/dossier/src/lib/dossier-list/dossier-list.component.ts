@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import {
   BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
-  filter,
+  filter, first,
   map,
   Observable,
   of,
@@ -67,12 +67,14 @@ moment.locale(localStorage.getItem('langKey') || '');
   selector: 'valtimo-dossier-list',
   templateUrl: './dossier-list.component.html',
   styleUrls: ['./dossier-list.component.css'],
+  providers: [DossierParameterService],
 })
 export class DossierListComponent implements OnInit {
   @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
 
   public dossierVisibleTabs: Array<DossierListTab> | null = null;
 
+  private readonly defaultAssigneeFilter = 'ALL';
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
   private readonly settingPaginationForDocName$ = new BehaviorSubject<string | undefined>(
@@ -130,7 +132,10 @@ export class DossierListComponent implements OnInit {
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinition(documentDefinitionName)
     ),
-    map(documentDefinition => documentDefinition?.schema)
+    map(documentDefinition => documentDefinition?.schema),
+    tap(() => {
+      this.assigneeFilter$.next(this.defaultAssigneeFilter);
+    })
   );
 
   private readonly storedSearchRequestKey$: Observable<string> = this.documentDefinitionName$.pipe(
@@ -174,6 +179,7 @@ export class DossierListComponent implements OnInit {
             sortable: column.sortable,
             ...(column.viewType && {viewType: column.viewType}),
             ...(column.enum && {enum: column.enum}),
+            ...(column.format && {format: column.format}),
           };
         })
         // Filter out assignee column if the case type can not have an assignee
@@ -227,7 +233,10 @@ export class DossierListComponent implements OnInit {
     );
 
   private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
-  private readonly assigneeFilter$ = new BehaviorSubject<AssigneeFilter>('ALL');
+  private readonly assigneeFilter$ = new BehaviorSubject<AssigneeFilter>(
+    this.defaultAssigneeFilter
+  );
+  private readonly searchSwitch$ = new BehaviorSubject<boolean>(false);
 
   private readonly documentsRequest$: Observable<Documents | SpecifiedDocuments> = combineLatest([
     this.documentSearchRequest$,
@@ -235,14 +244,15 @@ export class DossierListComponent implements OnInit {
     this.assigneeFilter$,
     this.hasEnvColumnConfig$,
     this.hasApiColumnConfig$,
+    this.searchSwitch$
   ]).pipe(
     distinctUntilChanged(
       (
-        [prevSearchRequest, prevSearchValues, prevAssigneeFilter],
-        [currSearchRequest, currSearchValues, currAssigneeFilter]
+        [prevSearchRequest, prevSearchValues, prevAssigneeFilter, prevHasEnvColumnConfig, prevHasApiColumnConfig, prevSearchSwitch],
+        [currSearchRequest, currSearchValues, currAssigneeFilter, currHasEnvColumnConfig, currHasApiColumnConfig, currSearchSwitch]
       ) =>
-        JSON.stringify({...prevSearchRequest, ...prevSearchValues}) + prevAssigneeFilter ===
-        JSON.stringify({...currSearchRequest, ...currSearchValues}) + currAssigneeFilter
+        JSON.stringify({...prevSearchRequest, ...prevSearchValues}) + prevAssigneeFilter + prevSearchSwitch ===
+        JSON.stringify({...currSearchRequest, ...currSearchValues}) + currAssigneeFilter + currSearchSwitch
     ),
     tap(([documentSearchRequest]) => {
       this.storedSearchRequestKey$.pipe(take(1)).subscribe(storedSearchRequestKey => {
@@ -403,6 +413,10 @@ export class DossierListComponent implements OnInit {
   search(searchFieldValues: SearchFieldValues): void {
     this.searchFieldValues$.next(searchFieldValues || {});
     this.dossierParameterService.setSearchParameters(searchFieldValues);
+    this.searchSwitch$.pipe(
+      first(),
+      tap(switchValue => this.searchSwitch$.next(!switchValue))
+    ).subscribe();
   }
 
   tabChange(tab: NgbNavChangeEvent<any>): void {

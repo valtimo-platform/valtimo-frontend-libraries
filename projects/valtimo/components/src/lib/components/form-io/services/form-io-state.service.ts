@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,5 +49,26 @@ export class FormIoStateService {
 
   public set currentForm(form: FormioComponent) {
     this._currentForm$.next(form);
+  }
+
+  flattenTranslationsObject(translations) {
+    const stack = [{prefix: '', value: translations}];
+    const flattened = {};
+
+    while (stack.length > 0) {
+      const {prefix, value} = stack.pop();
+
+      Object.entries(value).forEach(([key, currentValue]) => {
+        const currentPrefix = prefix + key + '.';
+
+        if (typeof currentValue === 'object' && currentValue !== null) {
+          stack.push({prefix: currentPrefix, value: currentValue});
+        } else {
+          flattened[currentPrefix.slice(0, -1)] = currentValue;
+        }
+      });
+    }
+
+    return flattened;
   }
 }

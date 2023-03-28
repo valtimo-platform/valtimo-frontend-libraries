@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,15 +58,15 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
   @ViewChild('taskDetail') taskDetail: TaskDetailModalComponent;
 
   constructor(
-    private router: Router,
-    private documentService: DocumentService,
-    private taskService: TaskService,
-    private processService: ProcessService,
-    private el: ElementRef,
-    private renderer: Renderer2,
-    private route: ActivatedRoute,
-    private formService: FormService,
-    private userProviderService: UserProviderService
+    private readonly router: Router,
+    private readonly documentService: DocumentService,
+    private readonly taskService: TaskService,
+    private readonly processService: ProcessService,
+    private readonly el: ElementRef,
+    private readonly renderer: Renderer2,
+    private readonly route: ActivatedRoute,
+    private readonly formService: FormService,
+    private readonly userProviderService: UserProviderService
   ) {
     this.snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = this.snapshot.get('documentDefinitionName') || '';

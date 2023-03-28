@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015-2020 Ritense BV, the Netherlands.
+  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
   ~
   ~ Licensed under EUPL, Version 1.2 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -62,6 +62,20 @@
       [required]="true"
       [loading]="!objectManagementConfigurationItems"
       [tooltip]="'objectManagementConfigurationTooltip' | pluginTranslate : pluginId | async"
+    ></v-select>
+  </ng-container>
+  <ng-container *ngIf="{processSelectItems: processSelectItems$ | async} as vars">
+    <v-select
+      [items]="vars.processSelectItems"
+      [margin]="true"
+      [widthInPx]="350"
+      name="completeTaakProcess"
+      [title]="'completeTaakProcess' | pluginTranslate : pluginId | async"
+      [disabled]="obs.disabled"
+      [defaultSelectionId]="obs.prefill?.completeTaakProcess"
+      [required]="true"
+      [loading]="!vars.processSelectItems"
+      [tooltip]="'completeTaakProcessTooltip' | pluginTranslate : pluginId | async"
     ></v-select>
   </ng-container>
 </v-form>

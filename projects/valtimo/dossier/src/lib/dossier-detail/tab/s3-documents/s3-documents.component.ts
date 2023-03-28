@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfigService} from '@valtimo/config';
 import {PromptService} from '@valtimo/user-interface';
+import {FileSortService} from '../../../services';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-s3-documents',
@@ -71,7 +72,8 @@ export class DossierDetailTabS3DocumentsComponent implements OnInit {
       }));
 
       return translatedFiles || [];
-    })
+    }),
+    map(relatedFiles => this.fileSortService.sortRelatedFilesByDateDescending(relatedFiles))
   );
 
   constructor(
@@ -82,7 +84,8 @@ export class DossierDetailTabS3DocumentsComponent implements OnInit {
     private readonly downloadService: DownloadService,
     private readonly promptService: PromptService,
     private readonly translateService: TranslateService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly fileSortService: FileSortService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.documentId = snapshot.get('documentId') || '';

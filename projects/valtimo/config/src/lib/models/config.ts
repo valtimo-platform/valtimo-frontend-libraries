@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,6 +118,8 @@ export interface ValtimoConfig {
     caseListColumn?: boolean;
     enableObjectManagement?: boolean;
     largeLogoMargin?: boolean;
+    sortFilesByDate?: boolean;
+    returnToLastUrlAfterTokenExpiration?: boolean;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
   visibleDossierListTabs?: Array<DossierListTab>;

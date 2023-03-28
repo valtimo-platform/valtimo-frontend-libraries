@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,10 +49,6 @@ export class ModalComponent implements OnInit {
   closeModal(): void {
     this.closeEvent.emit();
     this.modalService.closeModal();
-  }
-
-  stopPropagation(event: Event): void {
-    event.stopPropagation();
   }
 
   modalMouseEnter(): void {

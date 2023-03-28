@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,4 +27,43 @@ interface LinkDocumentToZaakConfig {
   beschrijving: string;
 }
 
-export {ZakenApiConfig, LinkDocumentToZaakConfig};
+interface SetZaakStatusConfig {
+  statustypeUrl: string;
+  statustoelichting: string;
+}
+
+interface CreateZaakResultaatConfig {
+  resultaattypeUrl: string;
+  toelichting: string;
+}
+
+interface CreateNatuurlijkePersoonZaakRolConfig {
+  roltypeUrl: string;
+  rolToelichting: string;
+  inpBsn: string;
+  anpIdentificatie: string;
+  inpA_nummer: string;
+}
+
+interface CreateNietNatuurlijkePersoonZaakRolConfig {
+  roltypeUrl: string;
+  rolToelichting: string;
+  innNnpId: string;
+  annIdentificatie: string;
+}
+
+interface CreateZaakConfig {
+  rsin: string;
+  manualZaakTypeUrl: boolean;
+  zaaktypeUrl: string;
+}
+
+export {
+  ZakenApiConfig,
+  LinkDocumentToZaakConfig,
+  SetZaakStatusConfig,
+  CreateZaakResultaatConfig,
+  CreateZaakConfig,
+  CreateNatuurlijkePersoonZaakRolConfig,
+  CreateNietNatuurlijkePersoonZaakRolConfig,
+};

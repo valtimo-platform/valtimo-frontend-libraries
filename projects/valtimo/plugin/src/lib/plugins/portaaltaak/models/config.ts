@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,9 +34,8 @@ interface CreatePortalTaskConfig {
   sendData: Array<{key: string; value: string}>;
   receiveData: Array<{key: string; value: string}>;
   receiver: Receiver;
-  otherReceiver?: OtherReceiver;
-  kvk?: string;
-  bsn?: string;
+  identificationKey?: string;
+  identificationValue?: string;
 }
 
 export {PortaaltaakConfig, CreatePortalTaskConfig, FormType, Receiver, OtherReceiver};

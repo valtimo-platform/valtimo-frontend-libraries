@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ import {Formio, FormioComponent as FormIoSourceComponent, FormioForm} from '@for
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import jwt_decode from 'jwt-decode';
 import {NGXLogger} from 'ngx-logger';
-import {from, Subject, Subscription, timer} from 'rxjs';
-import {map, switchMap, take} from 'rxjs/operators';
+import {from, Observable, Subject, Subscription, timer} from 'rxjs';
+import {distinctUntilChanged, map, switchMap, take} from 'rxjs/operators';
 import {FormIoStateService} from './services/form-io-state.service';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
@@ -59,9 +59,25 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   private tokenRefreshTimerSubscription: Subscription;
   private formRefreshSubscription: Subscription;
 
-  readonly currentLanguage$ = this.translateService
-    .stream('key')
-    .pipe(map(() => this.translateService.currentLang));
+  readonly currentLanguage$ = this.translateService.stream('key').pipe(
+    map(() => this.translateService.currentLang),
+    distinctUntilChanged()
+  );
+
+  readonly formioOptions$: Observable<ValtimoFormioOptions> = this.currentLanguage$.pipe(
+    map(language => {
+      const formioTranslations = this.translateService.instant('formioTranslations');
+      return typeof formioTranslations === 'object'
+        ? {
+            ...this.options,
+            language,
+            i18n: {
+              [language]: this.stateService.flattenTranslationsObject(formioTranslations),
+            },
+          }
+        : this.options;
+    })
+  );
 
   constructor(
     private userProviderService: UserProviderService,

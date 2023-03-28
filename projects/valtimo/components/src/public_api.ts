@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -145,3 +145,6 @@ export * from './lib/components/multi-input/carbon-multi-input.component';
 
 export * from './lib/components/confirmation-modal/confirmation-modal.module';
 export * from './lib/components/confirmation-modal/confirmation-modal.component';
+
+export * from './lib/components/expansion-panel/expansion-panel.module';
+export * from './lib/components/expansion-panel/expansion-panel.component';

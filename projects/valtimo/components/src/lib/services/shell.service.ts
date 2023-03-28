@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {Injectable, OnDestroy, Renderer2, RendererFactory2} from '@angular/core';
 import {BehaviorSubject, combineLatest, fromEvent, map, Observable, Subscription} from 'rxjs';
 import {debounceTime, take} from 'rxjs/operators';
@@ -181,15 +197,21 @@ export class ShellService implements OnDestroy {
   }
 
   private stopResizing(): void {
+    const mainContent = document.querySelector('.main-content');
+    const sideNav = document.querySelector('.cds--side-nav__navigation');
+
     this.renderer.removeStyle(document.body, 'user-select');
     this.renderer.removeStyle(document.body, 'cursor');
     this._isResizing$.next(false);
     this.renderer.removeClass(this._resizeBorderElement$.getValue(), 'resize-hover');
-    this.renderer.removeStyle(
-      document.querySelector('.cds--side-nav__navigation'),
-      'pointer-events'
-    );
-    this.renderer.removeStyle(document.querySelector('.main-content'), 'pointer-events');
+
+    if (sideNav) {
+      this.renderer.removeStyle(sideNav, 'pointer-events');
+    }
+
+    if (mainContent) {
+      this.renderer.removeStyle(mainContent, 'pointer-events');
+    }
     localStorage.setItem('sidenavWidth', this._sidenavWidth$.getValue().toString());
   }
 

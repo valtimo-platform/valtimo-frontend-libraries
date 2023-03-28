@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -243,7 +243,9 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         data.creationDate &&
         data.status &&
         data.language &&
-        data.informatieobjecttype
+        data.informatieobjecttype &&
+        data.description &&
+        data.confidentialityLevel
       )
     );
   }
