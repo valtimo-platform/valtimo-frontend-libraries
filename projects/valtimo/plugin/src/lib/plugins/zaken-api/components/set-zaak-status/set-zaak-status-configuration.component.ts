@@ -63,12 +63,16 @@ export class SetZaakStatusConfigurationComponent
         )
       ),
       tap(processDocumentDefinitions => {
-        this.caseDefinitionSelectItems$.next(
-          processDocumentDefinitions.map(processDocDef => ({
-            text: processDocDef.id.documentDefinitionId.name,
-            id: processDocDef.id.documentDefinitionId.name,
-          }))
-        );
+        const caseDefSelectItems = processDocumentDefinitions.map(processDocDef => ({
+          text: processDocDef.id.documentDefinitionId.name,
+          id: processDocDef.id.documentDefinitionId.name,
+        }));
+
+        this.caseDefinitionSelectItems$.next(caseDefSelectItems);
+
+        if (this.oneSelectItem(caseDefSelectItems)) {
+          this.selectedCaseDefinitionId$.next(caseDefSelectItems[0].id);
+        }
       }),
       switchMap(processDocumentDefinitions =>
         combineLatest([
@@ -148,6 +152,14 @@ export class SetZaakStatusConfigurationComponent
   selectCaseDefinition(caseDefinitionId: string): void {
     this.selectedCaseDefinitionId$.next(caseDefinitionId);
     this.clearStatusSelection$.next();
+  }
+
+  oneSelectItem(selectItems: Array<SelectItem>): boolean {
+    if (Array.isArray(selectItems)) {
+      return selectItems.length === 1;
+    }
+
+    return false;
   }
 
   private handleValid(formValue: SetZaakStatusConfig): void {

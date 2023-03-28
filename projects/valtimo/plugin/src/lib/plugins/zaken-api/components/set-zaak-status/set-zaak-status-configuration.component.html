@@ -75,7 +75,12 @@
       [widthInPx]="350"
       name="caseDefinition"
       [title]="'caseDefinition' | pluginTranslate : pluginId | async"
-      [disabled]="obs.disabled || inputTypeZaakStatusToggle || !vars.caseDefinitionItems"
+      [disabled]="
+        obs.disabled ||
+        inputTypeZaakStatusToggle ||
+        !vars.caseDefinitionItems ||
+        oneSelectItem(vars.caseDefinitionItems)
+      "
       [required]="true"
       [loading]="!vars.caseDefinitionItems"
       [tooltip]="'caseDefinitionTooltip' | pluginTranslate : pluginId | async"

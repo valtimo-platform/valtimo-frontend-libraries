@@ -112,7 +112,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       resultaattoelichtingTooltip: 'Een toelichting op wat het resultaat van de zaak inhoudt.',
       caseDefinition: 'Dossierdefinitie',
       caseDefinitionTooltip:
-        'Selecteer de dossierdefinitie waarvan u een Zaakstatus-type wilt selecteren.',
+        'Selecteer de dossierdefinitie waarvan u een Zaakstatus-type wilt selecteren. Als er slechts één statustype beschikbaar is, wordt deze standaard geselecteerd.',
       statustypeUrlSelect: 'Zaakstatus',
       statustypeUrlSelectTooltip: 'Selecteer het statustype.',
       inputTypeZaakStatusToggle: 'Invoertype Zaakstatus-URL',
@@ -190,7 +190,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       resultaattoelichtingTooltip: 'An explanation of what the result of the zaak means.',
       caseDefinition: 'Case definition',
       caseDefinitionTooltip:
-        'Select the case definition from which you want to select a Zaakstatus type.',
+        'Select the case definition from which you want to select a Zaakstatus type. If only one status type is available, it will be selected by default.',
       statustypeUrlSelect: 'Zaakstatus',
       statustypeUrlSelectTooltip: 'Select the status type.',
       inputTypeZaakStatusToggle: 'Input type Zaakstatus-URL',
@@ -268,7 +268,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       resultaattoelichtingTooltip: 'Eine Erklärung, was das Ergebnis des Zaak beinhaltet.',
       caseDefinition: 'Falltyp',
       caseDefinitionTooltip:
-        'Wählen Sie die Falltyp aus, aus der Sie einen Zaakstatus-typ auswählen möchten.',
+        'Wählen Sie die Falltyp aus, aus der Sie einen Zaakstatus-typ auswählen möchten. Wenn nur ein Statustyp verfügbar ist, wird dieser standardmäßig ausgewählt.',
       statustypeUrlSelect: 'Zaakstatus',
       statustypeUrlSelectTooltip: 'Wählen Sie den Statustyp aus.',
       inputTypeZaakStatusToggle: 'Eingabetyp Zaakstatus-URL',
