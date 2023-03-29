@@ -117,6 +117,11 @@ export class ObjectListComponent {
     this.refreshObjectList$,
   ]).pipe(
     switchMap(([objectManagementId, currentPage, columnType, searchFieldValues]) => {
+      const handleError = () => {
+        this.disableInput();
+        return of(null);
+      };
+
       if (columnType === ColumnType.CUSTOM) {
         return this.objectService.postObjectsByObjectManagementId(
           objectManagementId,
@@ -127,22 +132,28 @@ export class ObjectListComponent {
           Object.keys(searchFieldValues).length > 0
             ? {otherFilters: this.mapSearchValuesToFilters(searchFieldValues)}
             : {}
+        ).pipe(
+          catchError(() => handleError())
         );
       } else {
         return this.objectService.getObjectsByObjectManagementId(objectManagementId, {
           page: currentPage.page,
           size: currentPage.size,
-        });
+        }).pipe(
+          catchError(() => handleError())
+        );
       }
     }),
     tap(instanceRes => {
-      this.pageSizes$.pipe(take(1)).subscribe(sizes => {
-        // @ts-ignore
-        this.pageSizes$.next({...sizes, collectionSize: instanceRes.totalElements});
-      });
+      if (instanceRes != null) {
+        this.pageSizes$.pipe(take(1)).subscribe(sizes => {
+          // @ts-ignore
+          this.pageSizes$.next({...sizes, collectionSize: instanceRes.totalElements});
+        });
+      }
     }),
     map(res =>
-      res.content.map(record =>
+      res?.content?.map(record =>
         record?.items?.reduce(
           (obj, item) => Object.assign(obj, {objectId: record.id}, {[item.key]: item.value}),
           {}
