@@ -15,7 +15,8 @@
   -->
 <ng-container
   *ngIf="{
-    formioFormSummary: formioFormSummary$ | async
+    formioFormSummary: formioFormSummary$ | async,
+    disableInput: disableInput$ | async
   } as obs"
 >
   <div class="container-fluid pr-0 pl-0">
@@ -28,7 +29,6 @@
         </div>
       </div>
       <div class="col-12">
-        {{ obs.formioFormSummary }}
         <ng-container *ngTemplateOutlet="widget; context: {obs: obs}"></ng-container>
       </div>
     </div>
@@ -38,7 +38,7 @@
 </ng-container>
 
 <ng-template #buttons let-obs="obs">
-  <button (click)="openModal()" ibmButton="primary" size="md">
+  <button [disabled]="obs.disableInput" (click)="openModal()" ibmButton="primary" size="md">
     {{ 'object.editObject' | translate }}
     <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
   </button>
