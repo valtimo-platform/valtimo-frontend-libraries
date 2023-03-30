@@ -72,7 +72,6 @@ export interface ValtimoConfig {
   logoSvgBase64?: string;
   logoPngBase64?: string;
   applicationTitle?: string;
-  applicationTitlePosition?: ApplicationTitlePosition;
   initializers: ((injector: Injector) => () => void)[];
   menu: MenuConfig;
   authentication: Auth;
@@ -109,6 +108,7 @@ export interface ValtimoConfig {
   };
   translationResources?: Array<string>;
   featureToggles?: {
+    applicationTitleAsSuffix?: boolean;
     disableFormFlow?: boolean;
     enableHackathonCasesPage?: boolean;
     showUserNameInTopBar?: boolean;
@@ -160,9 +160,4 @@ export enum Language {
   NL = 'nl',
   EN = 'en',
   DE = 'de',
-}
-
-export enum ApplicationTitlePosition {
-  PREFIX = 'prefix',
-  SUFFIX = 'suffix',
 }
