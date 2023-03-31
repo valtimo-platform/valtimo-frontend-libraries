@@ -37,6 +37,7 @@ interface SetZaakStatusConfig {
 interface CreateZaakResultaatConfig {
   resultaattypeUrl: string;
   toelichting: string;
+  inputTypeZaakResultaatToggle?: InputOption;
 }
 
 interface CreateNatuurlijkePersoonZaakRolConfig {

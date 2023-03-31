@@ -175,7 +175,11 @@ export class CreateZaakConfigurationComponent
         .pipe(take(1))
         .subscribe(([formValue, valid]) => {
           if (valid) {
-            this.configuration.emit(formValue);
+            this.configuration.emit({
+              rsin: formValue.rsin,
+              zaaktypeUrl: formValue.zaaktypeUrl,
+              manualZaakTypeUrl: formValue.manualZaakTypeUrl,
+            });
           }
         });
     });
