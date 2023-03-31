@@ -15,6 +15,7 @@
  */
 
 import {PluginConfigurationData} from '../../../models';
+import {InputOption} from './input';
 
 interface ZakenApiConfig extends PluginConfigurationData {
   url: string;
@@ -30,6 +31,7 @@ interface LinkDocumentToZaakConfig {
 interface SetZaakStatusConfig {
   statustypeUrl: string;
   statustoelichting: string;
+  inputTypeZaakStatusToggle?: InputOption;
 }
 
 interface CreateZaakResultaatConfig {
@@ -56,6 +58,7 @@ interface CreateZaakConfig {
   rsin: string;
   manualZaakTypeUrl: boolean;
   zaaktypeUrl: string;
+  inputTypeZaakTypeToggle?: InputOption;
 }
 
 export {

@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-export * from './config';
-export * from './status';
-export * from './input';
+type InputOption = 'text' | 'selection';
+
+export {InputOption};
