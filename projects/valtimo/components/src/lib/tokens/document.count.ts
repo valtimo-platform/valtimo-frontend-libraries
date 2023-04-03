@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,5 +14,9 @@
  * limitations under the License.
  */
 
-export * from './sse.service';
-export * from './document-count-sse.service';
+import {InjectionToken} from '@angular/core';
+import {DocumentCountService} from '../models';
+
+export const DOCUMENT_COUNT_TOKEN = new InjectionToken<DocumentCountService>(
+  'DOCUMENT_COUNT_TOKEN '
+);

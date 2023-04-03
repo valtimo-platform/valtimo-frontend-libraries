@@ -148,3 +148,5 @@ export * from './lib/components/confirmation-modal/confirmation-modal.component'
 
 export * from './lib/components/expansion-panel/expansion-panel.module';
 export * from './lib/components/expansion-panel/expansion-panel.component';
+
+export * from './lib/tokens';

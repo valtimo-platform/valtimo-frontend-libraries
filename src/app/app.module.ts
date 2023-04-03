@@ -27,6 +27,7 @@ import {SecurityModule} from '@valtimo/security';
 import {
   BpmnJsDiagramModule,
   CardModule,
+  DOCUMENT_COUNT_TOKEN,
   FormIoModule,
   MenuModule,
   registerDocumentenApiFormioUploadComponent,
@@ -116,6 +117,7 @@ import {
 } from '@valtimo/plugin';
 import {ObjectManagementModule} from '@valtimo/object-management';
 import {ObjectModule} from '@valtimo/object';
+import {DocumentCountSseService} from '@valtimo/sse';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -232,6 +234,10 @@ export function tabsFactory() {
         zakenApiPluginSpecification,
         verzoekPluginSpecification,
       ],
+    },
+    {
+      provide: DOCUMENT_COUNT_TOKEN,
+      useValue: DocumentCountSseService,
     },
   ],
   bootstrap: [AppComponent],

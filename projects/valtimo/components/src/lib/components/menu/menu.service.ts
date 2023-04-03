@@ -19,11 +19,13 @@ import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/
 import {NGXLogger} from 'ngx-logger';
 import {UserProviderService} from '@valtimo/security';
 import {NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
-import {BehaviorSubject, combineLatest, Observable, Subject, timer} from 'rxjs';
-import {DocumentDefinitions, DocumentService} from '@valtimo/document';
+import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
+import {DocumentService} from '@valtimo/document';
 import {filter, map, take} from 'rxjs/operators';
 import {KeycloakService} from 'keycloak-angular';
 import {HttpClient} from '@angular/common/http';
+import {DocumentCounts} from '../../models';
+import {DocumentCountProviderService} from '../../services';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +47,8 @@ export class MenuService {
     private readonly menuIncludeService: MenuIncludeService,
     private readonly router: Router,
     private readonly keycloakService: KeycloakService,
-    private http: HttpClient
+    private readonly http: HttpClient,
+    private readonly documentCountService: DocumentCountProviderService
   ) {
     const config = configService?.config;
     this.menuConfig = config?.menu;
@@ -180,8 +183,11 @@ export class MenuService {
         ])
           .pipe(take(1))
           .subscribe(allCaseSettings => {
-            const openDocumentCountMap =
-              !this.disableCaseCount && this.getOpenDocumentCountMap(definitions);
+            const documentCounts: DocumentCounts =
+              !this.disableCaseCount &&
+              this.documentCountService.getDocumentCounts(
+                definitions.content.map(definition => definition.id.name)
+              );
 
             const dossierMenuItems: MenuItem[] = definitions.content.map((definition, index) => {
               const caseSettings = allCaseSettings?.find(
@@ -196,7 +202,7 @@ export class MenuService {
                 show: true,
                 ...(!this.disableCaseCount &&
                   caseSettings?.canHaveAssignee && {
-                    count$: openDocumentCountMap.get(definition.id.name),
+                    count$: documentCounts[definition.id.name] || of(0),
                   }),
               } as MenuItem;
             });
@@ -246,24 +252,6 @@ export class MenuService {
         }
       });
     });
-  }
-
-  private getOpenDocumentCountMap(definitions: DocumentDefinitions): Map<string, Subject<number>> {
-    const countMap = new Map<string, Subject<number>>();
-    definitions.content.forEach(definition =>
-      countMap.set(definition.id.name, new Subject<number>())
-    );
-
-    timer(0, 5000).subscribe(() => {
-      this.documentService.getOpenDocumentCount().subscribe(openDocumentCountList => {
-        openDocumentCountList.forEach(openDocumentCount =>
-          countMap
-            .get(openDocumentCount.documentDefinitionName)
-            .next(openDocumentCount.openDocumentCount)
-        );
-      });
-    });
-    return countMap;
   }
 
   private applyMenuRoleSecurity(menuItems: MenuItem[]): MenuItem[] {

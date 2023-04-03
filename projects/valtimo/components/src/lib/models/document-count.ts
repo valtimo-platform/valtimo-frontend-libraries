@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,5 +14,14 @@
  * limitations under the License.
  */
 
-export * from './sse.service';
-export * from './document-count-sse.service';
+import {Observable} from 'rxjs';
+
+interface DocumentCounts {
+  [documentDefinitionName: string]: Observable<number>;
+}
+
+interface DocumentCountService {
+  getDocumentCounts(documentDefinitionNames: Array<string>): DocumentCounts;
+}
+
+export {DocumentCounts, DocumentCountService};
