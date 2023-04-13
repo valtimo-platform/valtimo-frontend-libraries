@@ -19,6 +19,7 @@ import {
   BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
+  filter,
   map,
   Observable,
   of,
@@ -117,32 +118,43 @@ export class ObjectListComponent {
     this.refreshObjectList$,
   ]).pipe(
     switchMap(([objectManagementId, currentPage, columnType, searchFieldValues]) => {
+      const handleError = () => {
+        this.disableInput();
+        return of(null);
+      };
+
       if (columnType === ColumnType.CUSTOM) {
-        return this.objectService.postObjectsByObjectManagementId(
-          objectManagementId,
-          {
+        return this.objectService
+          .postObjectsByObjectManagementId(
+            objectManagementId,
+            {
+              page: currentPage.page,
+              size: currentPage.size,
+            },
+            Object.keys(searchFieldValues).length > 0
+              ? {otherFilters: this.mapSearchValuesToFilters(searchFieldValues)}
+              : {}
+          )
+          .pipe(catchError(() => handleError()));
+      } else {
+        return this.objectService
+          .getObjectsByObjectManagementId(objectManagementId, {
             page: currentPage.page,
             size: currentPage.size,
-          },
-          Object.keys(searchFieldValues).length > 0
-            ? {otherFilters: this.mapSearchValuesToFilters(searchFieldValues)}
-            : {}
-        );
-      } else {
-        return this.objectService.getObjectsByObjectManagementId(objectManagementId, {
-          page: currentPage.page,
-          size: currentPage.size,
-        });
+          })
+          .pipe(catchError(() => handleError()));
       }
     }),
     tap(instanceRes => {
-      this.pageSizes$.pipe(take(1)).subscribe(sizes => {
-        // @ts-ignore
-        this.pageSizes$.next({...sizes, collectionSize: instanceRes.totalElements});
-      });
+      if (instanceRes != null) {
+        this.pageSizes$.pipe(take(1)).subscribe(sizes => {
+          // @ts-ignore
+          this.pageSizes$.next({...sizes, collectionSize: instanceRes.totalElements});
+        });
+      }
     }),
     map(res =>
-      res.content.map(record =>
+      res?.content?.map(record =>
         record?.items?.reduce(
           (obj, item) => Object.assign(obj, {objectId: record.id}, {[item.key]: item.value}),
           {}
@@ -239,29 +251,37 @@ export class ObjectListComponent {
     }
   }
 
-  addObject(): void {
+  public addObject(): void {
     this.disableInput();
     combineLatest([this.objectManagementId$, this.submission$, this.formValid$])
-      .pipe(take(1))
-      .subscribe(([objectManagementId, submission, formValid]) => {
-        if (formValid) {
-          submission = this.objectService.removeEmptyStringValuesFromSubmission(submission);
+      .pipe(
+        take(1),
+        filter(([objectManagementId, submission, formValid]) => formValid),
+        switchMap(([objectManagementId, submission]) =>
           this.objectService
-            .createObject({objectManagementId}, {...submission})
+            .createObject(
+              {objectManagementId},
+              {...this.objectService.removeEmptyStringValuesFromSubmission(submission)}
+            )
             .pipe(
               take(1),
-              catchError((error: any) => this.handleCreateObjectError(error)),
-              finalize(() => {
-                this.enableInput();
+              catchError((error: any) => {
+                this.handleCreateObjectError(error);
+                return throwError(error);
               })
             )
-            .subscribe(() => {
-              this.closeModal();
-              this.refreshObjectList();
-              this.clearForm$.next(true);
-              this.toastr.success(this.translate.instant('object.messages.objectCreated'));
-            });
-        }
+        ),
+        finalize(() => {
+          this.enableInput();
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.closeModal();
+          this.refreshObjectList();
+          this.clearForm$.next(true);
+          this.toastr.success(this.translate.instant('object.messages.objectCreated'));
+        },
       });
   }
 
@@ -304,7 +324,6 @@ export class ObjectListComponent {
   }
 
   private handleCreateObjectError(error: any) {
-    this.closeModal();
     this.toastr.error(this.translate.instant('object.messages.objectCreationError'));
     return throwError(error);
   }
