@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {
@@ -32,7 +32,6 @@ import {
   AdvancedDocumentSearchRequestImpl,
   Documents,
   DocumentService,
-  ProcessDocumentDefinition,
   SortState,
   SpecifiedDocuments,
 } from '@valtimo/document';
@@ -41,22 +40,21 @@ import {
   BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
-  filter, first,
+  filter,
+  first,
   map,
   Observable,
-  of,
   Subject,
   switchMap,
   take,
   tap,
 } from 'rxjs';
 import {DefaultTabs} from '../dossier-detail-tab-enum';
-import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
 import {DossierService} from '../dossier.service';
 import {ListField, Pagination} from '@valtimo/components';
 import {NGXLogger} from 'ngx-logger';
 import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
-import {DossierColumnService, DossierParameterService} from '../services';
+import {DossierColumnService, DossierListService, DossierParameterService} from '../services';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -67,16 +65,12 @@ moment.locale(localStorage.getItem('langKey') || '');
   selector: 'valtimo-dossier-list',
   templateUrl: './dossier-list.component.html',
   styleUrls: ['./dossier-list.component.css'],
-  providers: [DossierParameterService],
+  providers: [DossierParameterService, DossierListService],
 })
 export class DossierListComponent implements OnInit {
-  @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
-
   public dossierVisibleTabs: Array<DossierListTab> | null = null;
 
   private readonly defaultAssigneeFilter = 'ALL';
-  private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
-  private modalListenerAdded = false;
   private readonly settingPaginationForDocName$ = new BehaviorSubject<string | undefined>(
     undefined
   );
@@ -85,26 +79,16 @@ export class DossierListComponent implements OnInit {
 
   readonly loadingDocumentSearchFields$ = new BehaviorSubject<boolean>(true);
 
-  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.documentDefinitionName || ''),
-    tap(documentDefinitionName => {
-      this.resetPagination(documentDefinitionName);
-    })
-  );
+  readonly documentDefinitionName$: Observable<string> =
+    this.dossierListService.documentDefinitionName$.pipe(
+      tap(documentDefinitionName => {
+        // reset pagination when the user switches to a list of instances of a different document definition
+        this.resetPagination(documentDefinitionName);
+      })
+    );
 
-  readonly hasEnvColumnConfig$: Observable<boolean> = this.route.params.pipe(
-    map(params => params.documentDefinitionName || ''),
-    map(documentDefinitionName =>
-      this.dossierColumnService.hasEnvironmentConfig(documentDefinitionName)
-    )
-  );
-
-  readonly canHaveAssignee$: Observable<boolean> = this.documentDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
-      this.documentService.getCaseSettings(documentDefinitionName)
-    ),
-    map(caseSettings => caseSettings?.canHaveAssignee)
-  );
+  readonly hasEnvColumnConfig$: Observable<boolean> = this.dossierListService.hasEnvColumnConfig$;
+  readonly canHaveAssignee$: Observable<boolean> = this.dossierListService.canHaveAssignee$;
 
   readonly documentSearchFields$: Observable<Array<SearchField> | null> =
     this.documentDefinitionName$.pipe(
@@ -114,18 +98,6 @@ export class DossierListComponent implements OnInit {
         this.documentService.getDocumentSearchFields(documentDefinitionName)
       ),
       tap(() => this.loadingDocumentSearchFields$.next(false))
-    );
-
-  readonly associatedProcessDocumentDefinitions$: Observable<Array<ProcessDocumentDefinition>> =
-    this.documentDefinitionName$.pipe(
-      switchMap(documentDefinitionName =>
-        documentDefinitionName
-          ? this.documentService.findProcessDocumentDefinitions(documentDefinitionName)
-          : of([])
-      ),
-      map(processDocumentDefinitions =>
-        processDocumentDefinitions.filter(definition => definition.canInitializeDocument)
-      )
     );
 
   readonly schema$ = this.documentDefinitionName$.pipe(
@@ -244,15 +216,33 @@ export class DossierListComponent implements OnInit {
     this.assigneeFilter$,
     this.hasEnvColumnConfig$,
     this.hasApiColumnConfig$,
-    this.searchSwitch$
+    this.searchSwitch$,
   ]).pipe(
     distinctUntilChanged(
       (
-        [prevSearchRequest, prevSearchValues, prevAssigneeFilter, prevHasEnvColumnConfig, prevHasApiColumnConfig, prevSearchSwitch],
-        [currSearchRequest, currSearchValues, currAssigneeFilter, currHasEnvColumnConfig, currHasApiColumnConfig, currSearchSwitch]
+        [
+          prevSearchRequest,
+          prevSearchValues,
+          prevAssigneeFilter,
+          prevHasEnvColumnConfig,
+          prevHasApiColumnConfig,
+          prevSearchSwitch,
+        ],
+        [
+          currSearchRequest,
+          currSearchValues,
+          currAssigneeFilter,
+          currHasEnvColumnConfig,
+          currHasApiColumnConfig,
+          currSearchSwitch,
+        ]
       ) =>
-        JSON.stringify({...prevSearchRequest, ...prevSearchValues}) + prevAssigneeFilter + prevSearchSwitch ===
-        JSON.stringify({...currSearchRequest, ...currSearchValues}) + currAssigneeFilter + currSearchSwitch
+        JSON.stringify({...prevSearchRequest, ...prevSearchValues}) +
+          prevAssigneeFilter +
+          prevSearchSwitch ===
+        JSON.stringify({...currSearchRequest, ...currSearchValues}) +
+          currAssigneeFilter +
+          currSearchSwitch
     ),
     tap(([documentSearchRequest]) => {
       this.storedSearchRequestKey$.pipe(take(1)).subscribe(storedSearchRequestKey => {
@@ -338,13 +328,13 @@ export class DossierListComponent implements OnInit {
     private readonly logger: NGXLogger,
     private readonly configService: ConfigService,
     private readonly dossierColumnService: DossierColumnService,
-    private readonly dossierParameterService: DossierParameterService
+    private readonly dossierParameterService: DossierParameterService,
+    private readonly dossierListService: DossierListService
   ) {
     this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
   }
 
   ngOnInit(): void {
-    this.modalListenerAdded = false;
     this.setSearchFieldParametersInComponent();
   }
 
@@ -387,36 +377,15 @@ export class DossierListComponent implements OnInit {
     });
   }
 
-  startDossier(): void {
-    this.associatedProcessDocumentDefinitions$
-      .pipe(take(1))
-      .subscribe(associatedProcessDocumentDefinitions => {
-        if (associatedProcessDocumentDefinitions.length > 1) {
-          $('#startProcess').modal('show');
-        } else {
-          this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
-          this.showStartProcessModal();
-        }
-      });
-  }
-
-  selectProcess(processDocumentDefinition: ProcessDocumentDefinition): void {
-    const modal = $('#startProcess');
-    if (!this.modalListenerAdded) {
-      modal.on('hidden.bs.modal', this.showStartProcessModal.bind(this));
-      this.modalListenerAdded = true;
-    }
-    this.selectedProcessDocumentDefinition = processDocumentDefinition;
-    modal.modal('hide');
-  }
-
   search(searchFieldValues: SearchFieldValues): void {
     this.searchFieldValues$.next(searchFieldValues || {});
     this.dossierParameterService.setSearchParameters(searchFieldValues);
-    this.searchSwitch$.pipe(
-      first(),
-      tap(switchValue => this.searchSwitch$.next(!switchValue))
-    ).subscribe();
+    this.searchSwitch$
+      .pipe(
+        first(),
+        tap(switchValue => this.searchSwitch$.next(!switchValue))
+      )
+      .subscribe();
   }
 
   tabChange(tab: NgbNavChangeEvent<any>): void {
@@ -511,13 +480,6 @@ export class DossierListComponent implements OnInit {
         this.pagination$.next({...pagination, collectionSize: documents.totalElements});
       }
     });
-  }
-
-  private showStartProcessModal(): void {
-    if (this.selectedProcessDocumentDefinition !== null) {
-      this.processStart.openModal(this.selectedProcessDocumentDefinition);
-      this.selectedProcessDocumentDefinition = null;
-    }
   }
 
   private checkPage(documents: Documents | SpecifiedDocuments): void {

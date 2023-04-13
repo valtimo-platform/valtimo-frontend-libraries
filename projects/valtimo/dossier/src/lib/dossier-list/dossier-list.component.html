@@ -17,71 +17,12 @@
 <div class="main-content pt-0" *ngIf="{loading: loading$ | async} as obs">
   <div class="container-fluid">
     <div class="col-12 px-0 mb-5">
-      <div
-        *ngIf="
-          associatedProcessDocumentDefinitions$ | async as associatedProcessDocumentDefinitions
-        "
-      >
-        <div class="text-right mt-m3px mb-3">
-          <button
-            type="button"
-            class="btn btn-space btn-primary mr-0"
-            (click)="startDossier()"
-            [ngbTooltip]="associatedProcessDocumentDefinitions.length === 0 ? 'No action' : null"
-            placement="bottom"
-            [disabled]="associatedProcessDocumentDefinitions.length === 0 || obs.loading"
-          >
-            <i class="icon mdi mdi-plus mr-1"></i>
-            {{ 'Start Dossier' | translate }}
-          </button>
-        </div>
-
-        <div
-          class="modal fade"
-          id="startProcess"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="startProcessLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 class="modal-title" id="startProcessLabel">
-                  {{ 'dashboard.startProcess.title' | translate }}
-                </h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="table-responsive">
-                  <table class="table m-0">
-                    <tr
-                      *ngFor="let processDocumentDefinition of associatedProcessDocumentDefinitions"
-                      (click)="selectProcess(processDocumentDefinition)"
-                      style="cursor: pointer"
-                    >
-                      <td>{{ processDocumentDefinition.processName }}</td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                  {{ 'cta.close' | translate }}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <valtimo-dossier-list-actions [loading]="obs.loading"></valtimo-dossier-list-actions>
       <valtimo-spinner *ngIf="obs.loading"></valtimo-spinner>
       <ng-container *ngTemplateOutlet="searchFields"></ng-container>
       <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
     </div>
   </div>
-  <valtimo-dossier-process-start-modal #processStartModal></valtimo-dossier-process-start-modal>
 </div>
 
 <ng-template #searchFields>
