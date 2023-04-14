@@ -19,9 +19,7 @@ import {ConfigService, DefinitionColumn} from '@valtimo/config';
 import {map, Observable} from 'rxjs';
 import {CaseListColumn, DocumentService} from '@valtimo/document';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class DossierColumnService {
   constructor(
     private readonly configService: ConfigService,

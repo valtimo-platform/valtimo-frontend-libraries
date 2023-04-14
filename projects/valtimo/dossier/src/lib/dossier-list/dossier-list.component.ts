@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {
@@ -44,17 +44,20 @@ import {
   first,
   map,
   Observable,
+  of,
   Subject,
+  Subscription,
   switchMap,
   take,
   tap,
 } from 'rxjs';
 import {DefaultTabs} from '../dossier-detail-tab-enum';
 import {DossierService} from '../dossier.service';
-import {ListField, Pagination} from '@valtimo/components';
+import {ListField} from '@valtimo/components';
 import {NGXLogger} from 'ngx-logger';
 import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
 import {DossierColumnService, DossierListService, DossierParameterService} from '../services';
+import {DossierListPaginationService} from '../services/dossier-list-pagination.service';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -65,34 +68,29 @@ moment.locale(localStorage.getItem('langKey') || '');
   selector: 'valtimo-dossier-list',
   templateUrl: './dossier-list.component.html',
   styleUrls: ['./dossier-list.component.css'],
-  providers: [DossierParameterService, DossierListService],
+  providers: [
+    DossierListService,
+    DossierColumnService,
+    DossierListPaginationService,
+    DossierParameterService,
+  ],
 })
-export class DossierListComponent implements OnInit {
+export class DossierListComponent implements OnInit, OnDestroy {
   public dossierVisibleTabs: Array<DossierListTab> | null = null;
 
   private readonly defaultAssigneeFilter = 'ALL';
-  private readonly settingPaginationForDocName$ = new BehaviorSubject<string | undefined>(
-    undefined
-  );
 
   readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly loadingDocumentSearchFields$ = new BehaviorSubject<boolean>(true);
 
-  readonly documentDefinitionName$: Observable<string> =
-    this.dossierListService.documentDefinitionName$.pipe(
-      tap(documentDefinitionName => {
-        // reset pagination when the user switches to a list of instances of a different document definition
-        this.resetPagination(documentDefinitionName);
-      })
-    );
-
   readonly hasEnvColumnConfig$: Observable<boolean> = this.dossierListService.hasEnvColumnConfig$;
   readonly canHaveAssignee$: Observable<boolean> = this.dossierListService.canHaveAssignee$;
 
+  readonly documentDefinitionName$ = this.dossierListService.documentDefinitionName$;
+
   readonly documentSearchFields$: Observable<Array<SearchField> | null> =
-    this.documentDefinitionName$.pipe(
-      distinctUntilChanged(),
+    this.dossierListService.documentDefinitionName$.pipe(
       tap(() => this.loadingDocumentSearchFields$.next(true)),
       switchMap(documentDefinitionName =>
         this.documentService.getDocumentSearchFields(documentDefinitionName)
@@ -100,7 +98,7 @@ export class DossierListComponent implements OnInit {
       tap(() => this.loadingDocumentSearchFields$.next(false))
     );
 
-  readonly schema$ = this.documentDefinitionName$.pipe(
+  readonly schema$ = this.dossierListService.documentDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinition(documentDefinitionName)
     ),
@@ -110,9 +108,12 @@ export class DossierListComponent implements OnInit {
     })
   );
 
-  private readonly storedSearchRequestKey$: Observable<string> = this.documentDefinitionName$.pipe(
-    map(documentDefinitionName => `list-search-${documentDefinitionName}`)
-  );
+  readonly pagination$ = this.dossierListPaginationService.pagination$;
+
+  private readonly storedSearchRequestKey$: Observable<string> =
+    this.dossierListService.documentDefinitionName$.pipe(
+      map(documentDefinitionName => `list-search-${documentDefinitionName}`)
+    );
 
   private readonly hasStoredSearchRequest$: Observable<boolean> = this.storedSearchRequestKey$.pipe(
     map(storedSearchRequestKey => localStorage.getItem(storedSearchRequestKey) !== null)
@@ -121,14 +122,15 @@ export class DossierListComponent implements OnInit {
   private readonly hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
 
   private readonly columns$: Observable<Array<DefinitionColumn>> =
-    this.documentDefinitionName$.pipe(
+    this.dossierListService.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
         this.dossierColumnService.getDefinitionColumns(documentDefinitionName)
       ),
       map(res => {
         this.hasApiColumnConfig$.next(res.hasApiConfig);
         return res.columns;
-      })
+      }),
+      tap(columns => console.log('columns', columns))
     );
 
   private readonly ASSIGNEE_KEY = 'assigneeFullName';
@@ -175,23 +177,8 @@ export class DossierListComponent implements OnInit {
     ])
   );
 
-  private readonly DEFAULT_PAGINATION: Pagination = {
-    collectionSize: 0,
-    page: 1,
-    size: 10,
-    maxPaginationItemSize: 5,
-    sort: undefined,
-  };
-
-  private readonly pagination$ = new BehaviorSubject<Pagination | undefined>(undefined);
-
-  readonly paginationCopy$ = this.pagination$.pipe(
-    map(pagination => pagination && JSON.parse(JSON.stringify(pagination))),
-    tap(pagination => this.dossierParameterService.setPaginationParameters(pagination))
-  );
-
   private readonly documentSearchRequest$: Observable<AdvancedDocumentSearchRequest> =
-    combineLatest([this.pagination$, this.documentDefinitionName$]).pipe(
+    combineLatest([this.pagination$, this.dossierListService.documentDefinitionName$]).pipe(
       filter(([pagination]) => !!pagination),
       map(
         ([pagination, documentDefinitionName]) =>
@@ -286,8 +273,8 @@ export class DossierListComponent implements OnInit {
       }
     ),
     tap(documents => {
-      this.setCollectionSize(documents);
-      this.checkPage(documents);
+      this.dossierListPaginationService.setCollectionSize(documents);
+      this.dossierListPaginationService.checkPage(documents);
     })
   );
 
@@ -319,6 +306,8 @@ export class DossierListComponent implements OnInit {
 
   readonly setSearchFieldValuesSubject$ = new Subject<SearchFieldValues>();
 
+  private docDefSubscription!: Subscription;
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -329,52 +318,41 @@ export class DossierListComponent implements OnInit {
     private readonly configService: ConfigService,
     private readonly dossierColumnService: DossierColumnService,
     private readonly dossierParameterService: DossierParameterService,
-    private readonly dossierListService: DossierListService
+    private readonly dossierListService: DossierListService,
+    private readonly dossierListPaginationService: DossierListPaginationService
   ) {
     this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
   }
 
   ngOnInit(): void {
     this.setSearchFieldParametersInComponent();
+    this.openDocDefSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.docDefSubscription?.unsubscribe();
   }
 
   pageChange(newPage: number): void {
-    this.pagination$.pipe(take(1)).subscribe(pagination => {
-      if (pagination && pagination.page !== newPage) {
-        this.logger.debug(`Page change: ${newPage}`);
-        this.pagination$.next({...pagination, page: newPage});
-      }
-    });
+    this.dossierListPaginationService.pageChange(newPage);
   }
 
   pageSizeChange(newPageSize: number): void {
-    this.pagination$.pipe(take(1)).subscribe(pagination => {
-      if (pagination && pagination.size !== newPageSize) {
-        const amountOfAvailablePages = Math.ceil(pagination.collectionSize / newPageSize);
-        const newPage =
-          amountOfAvailablePages < pagination.page ? amountOfAvailablePages : pagination.page;
-
-        this.logger.debug(`Page size change. New Page: ${newPage} New page size: ${newPageSize}`);
-        this.pagination$.next({...pagination, size: newPageSize, page: newPage});
-      }
-    });
+    this.dossierListPaginationService.pageSizeChange(newPageSize);
   }
 
   sortChanged(newSortState: SortState): void {
-    this.pagination$.pipe(take(1)).subscribe(pagination => {
-      if (pagination && JSON.stringify(pagination.sort) !== JSON.stringify(newSortState)) {
-        this.logger.debug(`Sort state change: ${JSON.stringify(newSortState)}`);
-        this.pagination$.next({...pagination, sort: newSortState});
-      }
-    });
+    this.dossierListPaginationService.sortChanged(newSortState);
   }
 
   rowClick(document: any): void {
-    this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
-      this.router.navigate([
-        `/dossiers/${documentDefinitionName}/document/${document.id}/${DefaultTabs.summary}`,
-      ]);
-    });
+    this.dossierListService.documentDefinitionName$
+      .pipe(take(1))
+      .subscribe(documentDefinitionName => {
+        this.router.navigate([
+          `/dossiers/${documentDefinitionName}/document/${document.id}/${DefaultTabs.summary}`,
+        ]);
+      });
   }
 
   search(searchFieldValues: SearchFieldValues): void {
@@ -389,9 +367,7 @@ export class DossierListComponent implements OnInit {
   }
 
   tabChange(tab: NgbNavChangeEvent<any>): void {
-    this.pagination$.pipe(take(1)).subscribe(pagination => {
-      this.pagination$.next({...pagination, page: 1});
-    });
+    this.dossierListPaginationService.setPage(1);
     this.assigneeFilter$.next(tab.nextId.toUpperCase());
   }
 
@@ -414,86 +390,6 @@ export class DossierListComponent implements OnInit {
     return filters;
   }
 
-  private resetPagination(documentDefinitionName): void {
-    this.settingPaginationForDocName$.pipe(take(1)).subscribe(settingPaginationForDocName => {
-      if (documentDefinitionName !== settingPaginationForDocName) {
-        this.pagination$.next(undefined);
-        this.logger.debug('clear pagination');
-        this.settingPaginationForDocName$.next(documentDefinitionName);
-        this.setPagination(documentDefinitionName);
-      }
-    });
-  }
-
-  private setPagination(documentDefinitionName: string): void {
-    combineLatest([
-      this.hasStoredSearchRequest$,
-      this.storedSearchRequestKey$,
-      this.columns$,
-      this.dossierParameterService.queryPaginationParams$,
-    ])
-      .pipe(take(1))
-      .subscribe(
-        ([hasStoredSearchRequest, storedSearchRequestKey, columns, queryPaginationParams]) => {
-          const defaultPagination: Pagination = this.getDefaultPagination(columns);
-          const storedPagination: Pagination = this.getStoredPagination(
-            hasStoredSearchRequest,
-            storedSearchRequestKey
-          );
-          const paginationToUse = queryPaginationParams || storedPagination || defaultPagination;
-
-          this.logger.debug(`Set pagination: ${JSON.stringify(paginationToUse)}`);
-          this.pagination$.next(paginationToUse);
-        }
-      );
-  }
-
-  private getDefaultPagination(columns: Array<DefinitionColumn>): Pagination {
-    const defaultSortState = this.dossierService.getInitialSortState(columns);
-
-    return {
-      ...this.DEFAULT_PAGINATION,
-      sort: defaultSortState,
-    };
-  }
-
-  private getStoredPagination(
-    hasStoredSearchRequest: boolean,
-    storedSearchRequestKey: string
-  ): Pagination | undefined {
-    const storedSearchRequest =
-      hasStoredSearchRequest && JSON.parse(localStorage.getItem(storedSearchRequestKey));
-
-    return (
-      storedSearchRequest && {
-        ...this.DEFAULT_PAGINATION,
-        sort: storedSearchRequest.sort,
-        page: storedSearchRequest.page + 1,
-        size: storedSearchRequest.size,
-      }
-    );
-  }
-
-  private setCollectionSize(documents: Documents | SpecifiedDocuments): void {
-    this.pagination$.pipe(take(1)).subscribe(pagination => {
-      if (pagination.collectionSize !== documents.totalElements) {
-        this.pagination$.next({...pagination, collectionSize: documents.totalElements});
-      }
-    });
-  }
-
-  private checkPage(documents: Documents | SpecifiedDocuments): void {
-    this.pagination$.pipe(take(1)).subscribe(pagination => {
-      const amountOfItems = documents.totalElements;
-      const amountOfPages = Math.ceil(amountOfItems / pagination.size);
-      const currentPage = pagination.page;
-
-      if (currentPage > amountOfPages) {
-        this.pagination$.next({...pagination, page: amountOfPages});
-      }
-    });
-  }
-
   private setSearchFieldParametersInComponent(): void {
     this.dossierParameterService.querySearchParams$.pipe(take(1)).subscribe(values => {
       if (Object.keys(values || {}).length > 0) {
@@ -502,5 +398,30 @@ export class DossierListComponent implements OnInit {
         });
       }
     });
+  }
+
+  private openDocDefSubscription(): void {
+    this.docDefSubscription = this.dossierListService.documentDefinitionName$
+      .pipe(
+        tap(docDef => console.log('doc def change', docDef)),
+        switchMap(docDefName =>
+          combineLatest([
+            this.columns$,
+            this.hasStoredSearchRequest$,
+            this.storedSearchRequestKey$,
+            of(docDefName),
+          ])
+        ),
+        tap(([columns, hasStoredSearchRequest, storedSearchRequestKey, docDefName]) => {
+          console.log('reset page');
+          this.dossierListPaginationService.resetPagination(
+            docDefName,
+            columns,
+            hasStoredSearchRequest,
+            storedSearchRequestKey
+          );
+        })
+      )
+      .subscribe();
   }
 }

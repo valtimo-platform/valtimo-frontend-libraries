@@ -15,16 +15,24 @@
  */
 
 import {Injectable} from '@angular/core';
-import {map, Observable, switchMap} from 'rxjs';
+import {distinctUntilChanged, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {DossierColumnService} from '../services';
 import {DocumentService} from '@valtimo/document';
 
 @Injectable()
 export class DossierListService {
-  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.documentDefinitionName || '')
+  private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
+    map(params => params?.documentDefinitionName),
+    filter(docDefName => !!docDefName)
   );
+
+  get documentDefinitionName$(): Observable<string> {
+    return this._documentDefinitionName$.pipe(
+      distinctUntilChanged(),
+      tap(docDefName => console.log('new doc def name', docDefName))
+    );
+  }
 
   readonly hasEnvColumnConfig$: Observable<boolean> = this.documentDefinitionName$.pipe(
     map(documentDefinitionName =>
