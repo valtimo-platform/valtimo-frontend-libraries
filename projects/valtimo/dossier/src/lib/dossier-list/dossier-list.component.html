@@ -74,34 +74,45 @@
 </ng-template>
 
 <ng-template #configuredTabs>
-  <ul ngbNav [destroyOnHide]="false" (navChange)="tabChange($event)" class="nav-tabs">
-    <li
-      *ngFor="let tab of visibleDossierTabs"
-      [ngbNavItem]="tab"
-      [title]="'dossier.tabs.' + tab | translate"
+  <ng-container *ngIf="assigneeFilter$ | async as assigneeFilter">
+    <ul
+      ngbNav
+      [destroyOnHide]="false"
+      (navChange)="tabChange($event)"
+      class="nav-tabs"
+      [activeId]="assigneeFilter"
     >
-      <a ngbNavLink>{{ 'dossier.tabs.' + tab | translate }}</a>
-    </li>
-  </ul>
+      <li
+        *ngFor="let tab of visibleDossierTabs"
+        [ngbNavItem]="tab"
+        [title]="'dossier.tabs.' + tab | translate"
+      >
+        <a ngbNavLink>{{ 'dossier.tabs.' + tab | translate }}</a>
+      </li>
+    </ul>
+  </ng-container>
 </ng-template>
 
 <ng-template #tabs>
-  <ul
-    *ngIf="visibleDossierTabs === null; else configuredTabs"
-    ngbNav
-    [destroyOnHide]="false"
-    (navChange)="tabChange($event)"
-    class="nav-tabs"
-    [(activeId]="assigneeFilterLowerCase$ | async"
-  >
-    <li ngbNavItem="all" [title]="'dossier.tabs.ALL' | translate" domId="ALL">
-      <a ngbNavLink>{{ 'dossier.tabs.ALL' | translate }}</a>
-    </li>
-    <li ngbNavItem="mine" [title]="'dossier.tabs.MINE' | translate" domId="MINE">
-      <a ngbNavLink>{{ 'dossier.tabs.MINE' | translate }}</a>
-    </li>
-    <li ngbNavItem="open" [title]="'dossier.tabs.OPEN' | translate" domId="OPEN">
-      <a ngbNavLink>{{ 'dossier.tabs.OPEN' | translate }}</a>
-    </li>
-  </ul>
+  <ng-container *ngIf="assigneeFilter$ | async as assigneeFilter">
+    <ul
+      *ngIf="visibleDossierTabs === null; else configuredTabs"
+      ngbNav
+      [destroyOnHide]="false"
+      (navChange)="tabChange($event)"
+      class="nav-tabs"
+      [activeId]="assigneeFilter"
+    >
+      test
+      <li ngbNavItem="ALL" [title]="'dossier.tabs.ALL' | translate">
+        <a ngbNavLink>{{ 'dossier.tabs.ALL' | translate }}</a>
+      </li>
+      <li ngbNavItem="MINE" [title]="'dossier.tabs.MINE' | translate">
+        <a ngbNavLink>{{ 'dossier.tabs.MINE' | translate }}</a>
+      </li>
+      <li ngbNavItem="OPEN" [title]="'dossier.tabs.OPEN' | translate">
+        <a ngbNavLink>{{ 'dossier.tabs.OPEN' | translate }}</a>
+      </li>
+    </ul>
+  </ng-container>
 </ng-template>

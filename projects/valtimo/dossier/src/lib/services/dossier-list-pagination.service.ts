@@ -36,6 +36,7 @@ export class DossierListPaginationService {
   private readonly _pagination$ = new BehaviorSubject<Pagination | undefined>(undefined);
 
   private readonly _paginationCopy$ = this._pagination$.pipe(
+    filter(pagination => !!pagination),
     map(pagination => pagination && JSON.parse(JSON.stringify(pagination))),
     tap(pagination => this.dossierParameterService.setPaginationParameters(pagination)),
     tap(paginationCopy => console.log('pag copy', paginationCopy))
@@ -51,7 +52,7 @@ export class DossierListPaginationService {
 
   get pagination$(): Observable<Pagination> {
     console.log('get pagination');
-    return this._paginationCopy$.pipe(filter(pagination => pagination?.page >= 0));
+    return this._paginationCopy$;
   }
 
   constructor(

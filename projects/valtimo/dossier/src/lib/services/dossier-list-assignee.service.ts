@@ -25,7 +25,6 @@ import {ListField} from '@valtimo/components';
 @Injectable()
 export class DossierListAssigneeService {
   private readonly ASSIGNEE_KEY = 'assigneeFullName';
-
   private readonly defaultAssigneeFilter: AssigneeFilter = 'ALL';
 
   readonly canHaveAssignee$: Observable<boolean> =
@@ -55,6 +54,7 @@ export class DossierListAssigneeService {
   }
 
   setAssigneeFilter(assigneeFilter: AssigneeFilter): void {
+    console.log('set filter', assigneeFilter);
     this._assigneeFilter$.next(assigneeFilter);
   }
 

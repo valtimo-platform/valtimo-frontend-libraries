@@ -142,11 +142,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   readonly assigneeFilter$ = this.dossierListAssigneeService.assigneeFilter$;
 
-  readonly assigneeFilterLowerCase$: Observable<string> = this.assigneeFilter$.pipe(
-    map(filter => filter.toLowerCase()),
-    tap(filter => console.log('filter change', filter))
-  );
-
   private readonly documentSearchRequest$: Observable<AdvancedDocumentSearchRequest> =
     combineLatest([this.pagination$, this.dossierListService.documentDefinitionName$]).pipe(
       filter(([pagination]) => !!pagination),
