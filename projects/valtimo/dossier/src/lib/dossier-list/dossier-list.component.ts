@@ -42,7 +42,6 @@ import {
   filter,
   map,
   Observable,
-  of,
   Subscription,
   switchMap,
   take,
@@ -61,7 +60,6 @@ import {
 } from '../services';
 import {DossierListPaginationService} from '../services/dossier-list-pagination.service';
 import {DossierListSearchService} from '../services/dossier-list-search.service';
-import {DossierListLocalStorageService} from '../services/dossier-list-local-storage.service';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -79,7 +77,6 @@ moment.locale(localStorage.getItem('langKey') || '');
     DossierParameterService,
     DossierListAssigneeService,
     DossierListSearchService,
-    DossierListLocalStorageService,
   ],
 })
 export class DossierListComponent implements OnInit, OnDestroy {
@@ -96,13 +93,13 @@ export class DossierListComponent implements OnInit, OnDestroy {
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinition(documentDefinitionName)
     ),
-    map(documentDefinition => documentDefinition?.schema),
-    tap(() => {
-      this.dossierListAssigneeService.resetAssigneeFilter();
-    })
+    map(documentDefinition => documentDefinition?.schema)
   );
   readonly pagination$ = this.dossierListPaginationService.pagination$;
   private readonly hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
+
+  private readonly _cachedColumns$ = new BehaviorSubject<Array<DefinitionColumn>>(undefined);
+
   private readonly columns$: Observable<Array<DefinitionColumn>> =
     this.dossierListService.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
@@ -111,16 +108,18 @@ export class DossierListComponent implements OnInit, OnDestroy {
       map(res => {
         this.hasApiColumnConfig$.next(res.hasApiConfig);
         return res.columns;
-      })
+      }),
+      tap(columns => this._cachedColumns$.next(columns))
     );
 
   readonly fields$: Observable<Array<ListField>> = combineLatest([
-    this.columns$,
+    this._cachedColumns$,
     this.canHaveAssignee$,
     this.hasEnvColumnConfig$,
     this.translateService.stream('key'),
   ]).pipe(
     map(([columns, canHaveAssignee, hasEnvConfig]) => {
+      console.log('get fields', columns);
       const filteredAssigneeColumns = this.dossierListAssigneeService.filterAssigneeColumns(
         columns,
         canHaveAssignee
@@ -193,9 +192,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
           currAssigneeFilter +
           currSearchSwitch
     ),
-    tap(([documentSearchRequest]) => {
-      this.dossierListLocalStorageService.storeSearchRequestInLocalStorage(documentSearchRequest);
-    }),
     switchMap(
       ([
         documentSearchRequest,
@@ -268,8 +264,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly dossierListService: DossierListService,
     private readonly dossierListPaginationService: DossierListPaginationService,
     private readonly dossierListAssigneeService: DossierListAssigneeService,
-    private readonly dossierListSearchService: DossierListSearchService,
-    private readonly dossierListLocalStorageService: DossierListLocalStorageService
+    private readonly dossierListSearchService: DossierListSearchService
   ) {
     this.visibleDossierTabs = this.configService.config?.visibleDossierListTabs || null;
   }
@@ -334,29 +329,13 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   private openDocDefSubscription(): void {
-    this.docDefSubscription = this.dossierListService.documentDefinitionName$
-      .pipe(
-        tap(docDef => console.log('doc def change', docDef)),
-        switchMap(docDefName =>
-          combineLatest([
-            this.columns$,
-            this.dossierListLocalStorageService.hasStoredSearchRequest$,
-            this.dossierListLocalStorageService.storedSearchRequestKey$,
-            of(docDefName),
-          ])
-        ),
-        tap(([columns, hasStoredSearchRequest, storedSearchRequestKey, docDefName]) => {
-          console.log('reset page');
-          this.dossierListPaginationService.resetPagination(
-            docDefName,
-            columns,
-            hasStoredSearchRequest,
-            storedSearchRequestKey
-          );
-          console.log('reset assignee filter');
-          this.dossierListAssigneeService.resetAssigneeFilter();
-        })
-      )
-      .subscribe();
+    this.docDefSubscription = combineLatest(
+      this.dossierListService.documentDefinitionName$,
+      this.columns$
+    ).subscribe(([documentDefinitionName, columns]) => {
+      console.log('columns', columns);
+      this.dossierListAssigneeService.resetAssigneeFilter();
+      this.dossierListPaginationService.resetPagination(documentDefinitionName, columns);
+    });
   }
 }

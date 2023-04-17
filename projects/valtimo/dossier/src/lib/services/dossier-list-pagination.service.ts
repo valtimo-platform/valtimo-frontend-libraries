@@ -131,12 +131,7 @@ export class DossierListPaginationService {
     });
   }
 
-  resetPagination(
-    documentDefinitionName: string,
-    columns: Array<DefinitionColumn>,
-    hasStoredSearchRequest: boolean,
-    storedSearchRequestKey: string
-  ): void {
+  resetPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {
     console.log('reset changed');
 
     this._settingPaginationForDocName$.pipe(take(1)).subscribe(settingPaginationForDocName => {
@@ -144,33 +139,19 @@ export class DossierListPaginationService {
         this._pagination$.next(undefined);
         this.logger.debug('clear pagination');
         this._settingPaginationForDocName$.next(documentDefinitionName);
-        this.setPagination(
-          documentDefinitionName,
-          columns,
-          hasStoredSearchRequest,
-          storedSearchRequestKey
-        );
+        this.setPagination(documentDefinitionName, columns);
       }
     });
   }
 
-  private setPagination(
-    documentDefinitionName: string,
-    columns: Array<DefinitionColumn>,
-    hasStoredSearchRequest: boolean,
-    storedSearchRequestKey: string
-  ): void {
+  private setPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {
     console.log('set  pig');
 
     this.dossierParameterService.queryPaginationParams$
       .pipe(take(1))
       .subscribe(queryPaginationParams => {
         const defaultPagination: Pagination = this.getDefaultPagination(columns);
-        const storedPagination: Pagination = this.getStoredPagination(
-          hasStoredSearchRequest,
-          storedSearchRequestKey
-        );
-        const paginationToUse = queryPaginationParams || storedPagination || defaultPagination;
+        const paginationToUse = queryPaginationParams || defaultPagination;
 
         this.logger.debug(`Set pagination: ${JSON.stringify(paginationToUse)}`);
         this._pagination$.next(paginationToUse);
@@ -178,7 +159,7 @@ export class DossierListPaginationService {
   }
 
   private getDefaultPagination(columns: Array<DefinitionColumn>): Pagination {
-    console.log('get default pagin');
+    console.log('get default pagin', columns);
 
     const defaultSortState = this.dossierService.getInitialSortState(columns);
 
