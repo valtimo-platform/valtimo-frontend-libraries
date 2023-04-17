@@ -76,7 +76,7 @@
 <ng-template #configuredTabs>
   <ul ngbNav [destroyOnHide]="false" (navChange)="tabChange($event)" class="nav-tabs">
     <li
-      *ngFor="let tab of dossierVisibleTabs"
+      *ngFor="let tab of visibleDossierTabs"
       [ngbNavItem]="tab"
       [title]="'dossier.tabs.' + tab | translate"
     >
@@ -87,19 +87,20 @@
 
 <ng-template #tabs>
   <ul
-    *ngIf="dossierVisibleTabs === null; else configuredTabs"
+    *ngIf="visibleDossierTabs === null; else configuredTabs"
     ngbNav
     [destroyOnHide]="false"
     (navChange)="tabChange($event)"
     class="nav-tabs"
+    [(activeId]="assigneeFilterLowerCase$ | async"
   >
-    <li ngbNavItem="all" [title]="'dossier.tabs.ALL' | translate">
+    <li ngbNavItem="all" [title]="'dossier.tabs.ALL' | translate" domId="ALL">
       <a ngbNavLink>{{ 'dossier.tabs.ALL' | translate }}</a>
     </li>
-    <li ngbNavItem="mine" [title]="'dossier.tabs.MINE' | translate">
+    <li ngbNavItem="mine" [title]="'dossier.tabs.MINE' | translate" domId="MINE">
       <a ngbNavLink>{{ 'dossier.tabs.MINE' | translate }}</a>
     </li>
-    <li ngbNavItem="open" [title]="'dossier.tabs.OPEN' | translate">
+    <li ngbNavItem="open" [title]="'dossier.tabs.OPEN' | translate" domId="OPEN">
       <a ngbNavLink>{{ 'dossier.tabs.OPEN' | translate }}</a>
     </li>
   </ul>

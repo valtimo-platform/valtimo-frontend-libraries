@@ -14,35 +14,83 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {distinctUntilChanged, filter, map, Observable, tap} from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
+import {
+  BehaviorSubject,
+  distinctUntilChanged,
+  filter,
+  map,
+  Observable,
+  Subscription,
+  tap,
+} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {DossierColumnService} from '../services';
-import {DocumentService} from '@valtimo/document';
+import {Documents, SpecifiedDocuments} from '@valtimo/document';
 
 @Injectable()
-export class DossierListService {
-  private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params?.documentDefinitionName),
-    filter(docDefName => !!docDefName)
-  );
+export class DossierListService implements OnDestroy {
+  private readonly _documentDefinitionName$ = new BehaviorSubject<string>('');
 
-  get documentDefinitionName$(): Observable<string> {
-    return this._documentDefinitionName$.pipe(
-      distinctUntilChanged(),
-      tap(docDefName => console.log('new doc def name', docDefName))
-    );
-  }
-
-  readonly hasEnvColumnConfig$: Observable<boolean> = this.documentDefinitionName$.pipe(
+  private readonly _hasEnvColumnConfig$: Observable<boolean> = this.documentDefinitionName$.pipe(
     map(documentDefinitionName =>
       this.dossierColumnService.hasEnvironmentConfig(documentDefinitionName)
     )
   );
 
+  get documentDefinitionName$(): Observable<string> {
+    return this._documentDefinitionName$.pipe(distinctUntilChanged());
+  }
+
+  get hasEnvColumnConfig$(): Observable<boolean> {
+    return this._hasEnvColumnConfig$;
+  }
+
+  private routeSubscription!: Subscription;
+
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly dossierColumnService: DossierColumnService,
-    private readonly documentService: DocumentService
-  ) {}
+    private readonly dossierColumnService: DossierColumnService
+  ) {
+    this.openRouteSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.routeSubscription?.unsubscribe();
+  }
+
+  mapDocuments(
+    documents: Documents | SpecifiedDocuments,
+    hasEnvColumnConfig: boolean,
+    hasApiColumnConfig: boolean
+  ) {
+    if (hasEnvColumnConfig || !hasApiColumnConfig) {
+      const docsToMap = documents as Documents;
+      return docsToMap.content.map(document => {
+        const {content, ...others} = document;
+        return {...content, ...others};
+      });
+    } else {
+      const docsToMap = documents as SpecifiedDocuments;
+      return docsToMap.content.reduce((acc, curr) => {
+        const propsObject = {id: curr.id};
+        curr.items.forEach(item => {
+          propsObject[item.key] = item.value;
+        });
+        return [...acc, propsObject];
+      }, []);
+    }
+  }
+
+  private openRouteSubscription(): void {
+    this.routeSubscription = this.route.params
+      .pipe(
+        map(params => params?.documentDefinitionName),
+        filter(docDefName => !!docDefName),
+        tap(documentDefinitionName => {
+          this._documentDefinitionName$.next(documentDefinitionName);
+        })
+      )
+      .subscribe();
+  }
 }

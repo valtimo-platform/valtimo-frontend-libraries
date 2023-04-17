@@ -83,7 +83,7 @@ moment.locale(localStorage.getItem('langKey') || '');
   ],
 })
 export class DossierListComponent implements OnInit, OnDestroy {
-  public dossierVisibleTabs: Array<DossierListTab> | null = null;
+  public visibleDossierTabs: Array<DossierListTab> | null = null;
   readonly loading$ = new BehaviorSubject<boolean>(true);
   readonly loadingDocumentSearchFields$ =
     this.dossierListSearchService.loadingDocumentSearchFields$;
@@ -101,28 +101,21 @@ export class DossierListComponent implements OnInit, OnDestroy {
       this.dossierListAssigneeService.resetAssigneeFilter();
     })
   );
-
   readonly pagination$ = this.dossierListPaginationService.pagination$;
-
   private readonly hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
-
-  private readonly cachedColumns$ = new BehaviorSubject<Array<DefinitionColumn>>(undefined);
-
   private readonly columns$: Observable<Array<DefinitionColumn>> =
     this.dossierListService.documentDefinitionName$.pipe(
-      distinctUntilChanged(),
       switchMap(documentDefinitionName =>
         this.dossierColumnService.getDefinitionColumns(documentDefinitionName)
       ),
       map(res => {
         this.hasApiColumnConfig$.next(res.hasApiConfig);
         return res.columns;
-      }),
-      tap(columns => this.cachedColumns$.next(columns))
+      })
     );
 
   readonly fields$: Observable<Array<ListField>> = combineLatest([
-    this.cachedColumns$,
+    this.columns$,
     this.canHaveAssignee$,
     this.hasEnvColumnConfig$,
     this.translateService.stream('key'),
@@ -147,6 +140,13 @@ export class DossierListComponent implements OnInit, OnDestroy {
     })
   );
 
+  readonly assigneeFilter$ = this.dossierListAssigneeService.assigneeFilter$;
+
+  readonly assigneeFilterLowerCase$: Observable<string> = this.assigneeFilter$.pipe(
+    map(filter => filter.toLowerCase()),
+    tap(filter => console.log('filter change', filter))
+  );
+
   private readonly documentSearchRequest$: Observable<AdvancedDocumentSearchRequest> =
     combineLatest([this.pagination$, this.dossierListService.documentDefinitionName$]).pipe(
       filter(([pagination]) => !!pagination),
@@ -167,7 +167,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   private readonly documentsRequest$: Observable<Documents | SpecifiedDocuments> = combineLatest([
     this.documentSearchRequest$,
     this.searchFieldValues$,
-    this.dossierListAssigneeService.assigneeFilter$,
+    this.assigneeFilter$,
     this.hasEnvColumnConfig$,
     this.hasApiColumnConfig$,
     this.searchSwitch$,
@@ -246,22 +246,11 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.hasApiColumnConfig$,
   ]).pipe(
     map(([documents, hasEnvColumnConfig, hasApiColumnConfig]) => {
-      if (hasEnvColumnConfig || !hasApiColumnConfig) {
-        const docsToMap = documents as Documents;
-        return documents.content.map(document => {
-          const {content, ...others} = document;
-          return {...content, ...others};
-        });
-      } else {
-        const docsToMap = documents as SpecifiedDocuments;
-        return docsToMap.content.reduce((acc, curr) => {
-          const propsObject = {id: curr.id};
-          curr.items.forEach(item => {
-            propsObject[item.key] = item.value;
-          });
-          return [...acc, propsObject];
-        }, []);
-      }
+      return this.dossierListService.mapDocuments(
+        documents,
+        hasEnvColumnConfig,
+        hasApiColumnConfig
+      );
     }),
     tap(() => this.loading$.next(false))
   );
@@ -287,7 +276,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly dossierListSearchService: DossierListSearchService,
     private readonly dossierListLocalStorageService: DossierListLocalStorageService
   ) {
-    this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
+    this.visibleDossierTabs = this.configService.config?.visibleDossierListTabs || null;
   }
 
   ngOnInit(): void {
