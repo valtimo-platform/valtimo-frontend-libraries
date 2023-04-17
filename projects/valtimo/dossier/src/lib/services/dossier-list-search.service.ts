@@ -1,0 +1,80 @@
+/*
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, Subject, switchMap, take, tap} from 'rxjs';
+import {SearchField, SearchFieldValues} from '@valtimo/config';
+import {DossierListService} from './dossier-list.service';
+import {DocumentService} from '@valtimo/document';
+import {DossierParameterService} from './dossier-parameter.service';
+
+@Injectable()
+export class DossierListSearchService {
+  private readonly _loadingDocumentSearchFields$ = new BehaviorSubject<boolean>(true);
+  private readonly _searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
+  private readonly _searchSwitch$ = new BehaviorSubject<boolean>(false);
+  private readonly _documentSearchFields$: Observable<Array<SearchField> | null> =
+    this.dossierListService.documentDefinitionName$.pipe(
+      tap(() => this._loadingDocumentSearchFields$.next(true)),
+      switchMap(documentDefinitionName =>
+        this.documentService.getDocumentSearchFields(documentDefinitionName)
+      ),
+      tap(() => this._loadingDocumentSearchFields$.next(false))
+    );
+  private readonly _setSearchFieldValuesSubject$ = new Subject<SearchFieldValues>();
+
+  get loadingDocumentSearchFields$(): Observable<boolean> {
+    return this._loadingDocumentSearchFields$.asObservable();
+  }
+
+  get searchFieldValues$(): Observable<SearchFieldValues> {
+    return this._searchFieldValues$.asObservable();
+  }
+
+  get searchSwitch$(): Observable<boolean> {
+    return this._searchSwitch$.asObservable();
+  }
+
+  get documentSearchFields$(): Observable<Array<SearchField> | null> {
+    return this._documentSearchFields$;
+  }
+
+  get setSearchFieldValuesSubject$(): Observable<SearchFieldValues> {
+    return this._setSearchFieldValuesSubject$.asObservable();
+  }
+
+  constructor(
+    private readonly dossierListService: DossierListService,
+    private readonly documentService: DocumentService,
+    private readonly dossierParameterService: DossierParameterService
+  ) {}
+
+  search(searchFieldValues: SearchFieldValues): void {
+    this._searchFieldValues$.next(searchFieldValues || {});
+    this.dossierParameterService.setSearchParameters(searchFieldValues);
+    this._searchSwitch$.next(!this._searchSwitch$.getValue());
+  }
+
+  setSearchFieldParameters(): void {
+    this.dossierParameterService.querySearchParams$.pipe(take(1)).subscribe(values => {
+      if (Object.keys(values || {}).length > 0) {
+        setTimeout(() => {
+          this._setSearchFieldValuesSubject$.next(values);
+        });
+      }
+    });
+  }
+}

@@ -40,11 +40,9 @@ import {
   combineLatest,
   distinctUntilChanged,
   filter,
-  first,
   map,
   Observable,
   of,
-  Subject,
   Subscription,
   switchMap,
   take,
@@ -62,6 +60,7 @@ import {
   DossierParameterService,
 } from '../services';
 import {DossierListPaginationService} from '../services/dossier-list-pagination.service';
+import {DossierListSearchService} from '../services/dossier-list-search.service';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -78,29 +77,19 @@ moment.locale(localStorage.getItem('langKey') || '');
     DossierListPaginationService,
     DossierParameterService,
     DossierListAssigneeService,
+    DossierListSearchService,
   ],
 })
 export class DossierListComponent implements OnInit, OnDestroy {
   public dossierVisibleTabs: Array<DossierListTab> | null = null;
-
   readonly loading$ = new BehaviorSubject<boolean>(true);
-
-  readonly loadingDocumentSearchFields$ = new BehaviorSubject<boolean>(true);
-
+  readonly loadingDocumentSearchFields$ =
+    this.dossierListSearchService.loadingDocumentSearchFields$;
   readonly hasEnvColumnConfig$: Observable<boolean> = this.dossierListService.hasEnvColumnConfig$;
   readonly canHaveAssignee$: Observable<boolean> = this.dossierListAssigneeService.canHaveAssignee$;
-
   readonly documentDefinitionName$ = this.dossierListService.documentDefinitionName$;
-
   readonly documentSearchFields$: Observable<Array<SearchField> | null> =
-    this.dossierListService.documentDefinitionName$.pipe(
-      tap(() => this.loadingDocumentSearchFields$.next(true)),
-      switchMap(documentDefinitionName =>
-        this.documentService.getDocumentSearchFields(documentDefinitionName)
-      ),
-      tap(() => this.loadingDocumentSearchFields$.next(false))
-    );
-
+    this.dossierListSearchService.documentSearchFields$;
   readonly schema$ = this.dossierListService.documentDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinition(documentDefinitionName)
@@ -179,8 +168,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
       )
     );
 
-  private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
-  private readonly searchSwitch$ = new BehaviorSubject<boolean>(false);
+  private readonly searchFieldValues$ = this.dossierListSearchService.searchFieldValues$;
+  private readonly searchSwitch$ = this.dossierListSearchService.searchSwitch$;
 
   private readonly documentsRequest$: Observable<Documents | SpecifiedDocuments> = combineLatest([
     this.documentSearchRequest$,
@@ -289,7 +278,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     tap(() => this.loading$.next(false))
   );
 
-  readonly setSearchFieldValuesSubject$ = new Subject<SearchFieldValues>();
+  readonly setSearchFieldValuesSubject$ =
+    this.dossierListSearchService.setSearchFieldValuesSubject$;
 
   private docDefSubscription!: Subscription;
 
@@ -305,13 +295,14 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly dossierParameterService: DossierParameterService,
     private readonly dossierListService: DossierListService,
     private readonly dossierListPaginationService: DossierListPaginationService,
-    private readonly dossierListAssigneeService: DossierListAssigneeService
+    private readonly dossierListAssigneeService: DossierListAssigneeService,
+    private readonly dossierListSearchService: DossierListSearchService
   ) {
     this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
   }
 
   ngOnInit(): void {
-    this.setSearchFieldParametersInComponent();
+    this.dossierListSearchService.setSearchFieldParameters();
     this.openDocDefSubscription();
   }
 
@@ -342,14 +333,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   search(searchFieldValues: SearchFieldValues): void {
-    this.searchFieldValues$.next(searchFieldValues || {});
-    this.dossierParameterService.setSearchParameters(searchFieldValues);
-    this.searchSwitch$
-      .pipe(
-        first(),
-        tap(switchValue => this.searchSwitch$.next(!switchValue))
-      )
-      .subscribe();
+    this.dossierListSearchService.search(searchFieldValues);
   }
 
   tabChange(tab: NgbNavChangeEvent<any>): void {
@@ -376,16 +360,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
     return filters;
   }
 
-  private setSearchFieldParametersInComponent(): void {
-    this.dossierParameterService.querySearchParams$.pipe(take(1)).subscribe(values => {
-      if (Object.keys(values || {}).length > 0) {
-        setTimeout(() => {
-          this.setSearchFieldValuesSubject$.next(values);
-        });
-      }
-    });
-  }
-
   private openDocDefSubscription(): void {
     this.docDefSubscription = this.dossierListService.documentDefinitionName$
       .pipe(
@@ -406,6 +380,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
             hasStoredSearchRequest,
             storedSearchRequestKey
           );
+          console.log('reset assignee filter');
+          this.dossierListAssigneeService.resetAssigneeFilter();
         })
       )
       .subscribe();
