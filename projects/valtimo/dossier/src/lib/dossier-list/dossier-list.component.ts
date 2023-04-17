@@ -61,6 +61,7 @@ import {
 } from '../services';
 import {DossierListPaginationService} from '../services/dossier-list-pagination.service';
 import {DossierListSearchService} from '../services/dossier-list-search.service';
+import {DossierListLocalStorageService} from '../services/dossier-list-local-storage.service';
 
 // eslint-disable-next-line no-var
 declare var $;
@@ -78,6 +79,7 @@ moment.locale(localStorage.getItem('langKey') || '');
     DossierParameterService,
     DossierListAssigneeService,
     DossierListSearchService,
+    DossierListLocalStorageService,
   ],
 })
 export class DossierListComponent implements OnInit, OnDestroy {
@@ -101,15 +103,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
   );
 
   readonly pagination$ = this.dossierListPaginationService.pagination$;
-
-  private readonly storedSearchRequestKey$: Observable<string> =
-    this.dossierListService.documentDefinitionName$.pipe(
-      map(documentDefinitionName => `list-search-${documentDefinitionName}`)
-    );
-
-  private readonly hasStoredSearchRequest$: Observable<boolean> = this.storedSearchRequestKey$.pipe(
-    map(storedSearchRequestKey => localStorage.getItem(storedSearchRequestKey) !== null)
-  );
 
   private readonly hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
 
@@ -206,12 +199,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
           currSearchSwitch
     ),
     tap(([documentSearchRequest]) => {
-      this.storedSearchRequestKey$.pipe(take(1)).subscribe(storedSearchRequestKey => {
-        this.logger.debug(
-          `store request in local storage: ${JSON.stringify(documentSearchRequest)}`
-        );
-        localStorage.setItem(storedSearchRequestKey, JSON.stringify(documentSearchRequest));
-      });
+      this.dossierListLocalStorageService.storeSearchRequestInLocalStorage(documentSearchRequest);
     }),
     switchMap(
       ([
@@ -296,7 +284,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly dossierListService: DossierListService,
     private readonly dossierListPaginationService: DossierListPaginationService,
     private readonly dossierListAssigneeService: DossierListAssigneeService,
-    private readonly dossierListSearchService: DossierListSearchService
+    private readonly dossierListSearchService: DossierListSearchService,
+    private readonly dossierListLocalStorageService: DossierListLocalStorageService
   ) {
     this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
   }
@@ -367,8 +356,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
         switchMap(docDefName =>
           combineLatest([
             this.columns$,
-            this.hasStoredSearchRequest$,
-            this.storedSearchRequestKey$,
+            this.dossierListLocalStorageService.hasStoredSearchRequest$,
+            this.dossierListLocalStorageService.storedSearchRequestKey$,
             of(docDefName),
           ])
         ),
