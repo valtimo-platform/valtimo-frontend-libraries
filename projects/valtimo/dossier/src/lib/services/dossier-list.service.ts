@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {distinctUntilChanged, filter, map, Observable, switchMap, tap} from 'rxjs';
+import {distinctUntilChanged, filter, map, Observable, tap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {DossierColumnService} from '../services';
 import {DocumentService} from '@valtimo/document';
@@ -38,13 +38,6 @@ export class DossierListService {
     map(documentDefinitionName =>
       this.dossierColumnService.hasEnvironmentConfig(documentDefinitionName)
     )
-  );
-
-  readonly canHaveAssignee$: Observable<boolean> = this.documentDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
-      this.documentService.getCaseSettings(documentDefinitionName)
-    ),
-    map(caseSettings => caseSettings?.canHaveAssignee)
   );
 
   constructor(

@@ -37,7 +37,8 @@ export class DossierListPaginationService {
 
   private readonly _paginationCopy$ = this._pagination$.pipe(
     map(pagination => pagination && JSON.parse(JSON.stringify(pagination))),
-    tap(pagination => this.dossierParameterService.setPaginationParameters(pagination))
+    tap(pagination => this.dossierParameterService.setPaginationParameters(pagination)),
+    tap(paginationCopy => console.log('pag copy', paginationCopy))
   );
 
   private readonly _settingPaginationForDocName$ = new BehaviorSubject<string | undefined>(

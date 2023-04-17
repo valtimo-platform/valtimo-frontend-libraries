@@ -18,7 +18,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {
-  AssigneeFilter,
   ConfigService,
   DefinitionColumn,
   DossierListTab,
@@ -56,7 +55,12 @@ import {DossierService} from '../dossier.service';
 import {ListField} from '@valtimo/components';
 import {NGXLogger} from 'ngx-logger';
 import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
-import {DossierColumnService, DossierListService, DossierParameterService} from '../services';
+import {
+  DossierColumnService,
+  DossierListAssigneeService,
+  DossierListService,
+  DossierParameterService,
+} from '../services';
 import {DossierListPaginationService} from '../services/dossier-list-pagination.service';
 
 // eslint-disable-next-line no-var
@@ -73,19 +77,18 @@ moment.locale(localStorage.getItem('langKey') || '');
     DossierColumnService,
     DossierListPaginationService,
     DossierParameterService,
+    DossierListAssigneeService,
   ],
 })
 export class DossierListComponent implements OnInit, OnDestroy {
   public dossierVisibleTabs: Array<DossierListTab> | null = null;
-
-  private readonly defaultAssigneeFilter = 'ALL';
 
   readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly loadingDocumentSearchFields$ = new BehaviorSubject<boolean>(true);
 
   readonly hasEnvColumnConfig$: Observable<boolean> = this.dossierListService.hasEnvColumnConfig$;
-  readonly canHaveAssignee$: Observable<boolean> = this.dossierListService.canHaveAssignee$;
+  readonly canHaveAssignee$: Observable<boolean> = this.dossierListAssigneeService.canHaveAssignee$;
 
   readonly documentDefinitionName$ = this.dossierListService.documentDefinitionName$;
 
@@ -104,7 +107,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     ),
     map(documentDefinition => documentDefinition?.schema),
     tap(() => {
-      this.assigneeFilter$.next(this.defaultAssigneeFilter);
+      this.dossierListAssigneeService.resetAssigneeFilter();
     })
   );
 
@@ -121,8 +124,11 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   private readonly hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
 
+  private readonly cachedColumns$ = new BehaviorSubject<Array<DefinitionColumn>>(undefined);
+
   private readonly columns$: Observable<Array<DefinitionColumn>> =
     this.dossierListService.documentDefinitionName$.pipe(
+      distinctUntilChanged(),
       switchMap(documentDefinitionName =>
         this.dossierColumnService.getDefinitionColumns(documentDefinitionName)
       ),
@@ -130,51 +136,33 @@ export class DossierListComponent implements OnInit, OnDestroy {
         this.hasApiColumnConfig$.next(res.hasApiConfig);
         return res.columns;
       }),
-      tap(columns => console.log('columns', columns))
+      tap(columns => this.cachedColumns$.next(columns))
     );
 
-  private readonly ASSIGNEE_KEY = 'assigneeFullName';
-
   readonly fields$: Observable<Array<ListField>> = combineLatest([
-    this.columns$,
+    this.cachedColumns$,
     this.canHaveAssignee$,
     this.hasEnvColumnConfig$,
     this.translateService.stream('key'),
   ]).pipe(
-    map(([columns, canHaveAssignee, hasEnvConfig]) => [
-      ...columns
-        .map(column => {
-          const translationKey = `fieldLabels.${column.translationKey}`;
-          const translation = this.translateService.instant(translationKey);
-          const validTranslation = translation !== translationKey && translation;
-          return {
-            key: hasEnvConfig ? column.propertyName : column.translationKey,
-            label: column.title || validTranslation || column.translationKey,
-            sortable: column.sortable,
-            ...(column.viewType && {viewType: column.viewType}),
-            ...(column.enum && {enum: column.enum}),
-            ...(column.format && {format: column.format}),
-          };
-        })
-        // Filter out assignee column if the case type can not have an assignee
-        .filter(column => {
-          if (column?.key === this.ASSIGNEE_KEY && !canHaveAssignee) {
-            return false;
-          }
-          return true;
-        }),
-      // If the case type can have an assignee, and the assignee column is not present in the case column definition, add an assignee column at the end
-      ...(canHaveAssignee && !columns.find(column => column.propertyName === this.ASSIGNEE_KEY)
-        ? [
-            {
-              key: this.ASSIGNEE_KEY,
-              label: this.translateService.instant(`fieldLabels.${this.ASSIGNEE_KEY}`),
-              sortable: true,
-              viewType: 'string',
-            },
-          ]
-        : []),
-    ])
+    map(([columns, canHaveAssignee, hasEnvConfig]) => {
+      const filteredAssigneeColumns = this.dossierListAssigneeService.filterAssigneeColumns(
+        columns,
+        canHaveAssignee
+      );
+      const listFields = this.dossierColumnService.mapDefinitionColumnsToListFields(
+        filteredAssigneeColumns,
+        hasEnvConfig
+      );
+      return this.dossierListAssigneeService.addAssigneeListField(
+        columns,
+        listFields,
+        canHaveAssignee
+      );
+    }),
+    tap(() => {
+      console.log('fire');
+    })
   );
 
   private readonly documentSearchRequest$: Observable<AdvancedDocumentSearchRequest> =
@@ -192,15 +180,12 @@ export class DossierListComponent implements OnInit, OnDestroy {
     );
 
   private readonly searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
-  private readonly assigneeFilter$ = new BehaviorSubject<AssigneeFilter>(
-    this.defaultAssigneeFilter
-  );
   private readonly searchSwitch$ = new BehaviorSubject<boolean>(false);
 
   private readonly documentsRequest$: Observable<Documents | SpecifiedDocuments> = combineLatest([
     this.documentSearchRequest$,
     this.searchFieldValues$,
-    this.assigneeFilter$,
+    this.dossierListAssigneeService.assigneeFilter$,
     this.hasEnvColumnConfig$,
     this.hasApiColumnConfig$,
     this.searchSwitch$,
@@ -319,7 +304,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly dossierColumnService: DossierColumnService,
     private readonly dossierParameterService: DossierParameterService,
     private readonly dossierListService: DossierListService,
-    private readonly dossierListPaginationService: DossierListPaginationService
+    private readonly dossierListPaginationService: DossierListPaginationService,
+    private readonly dossierListAssigneeService: DossierListAssigneeService
   ) {
     this.dossierVisibleTabs = this.configService.config?.visibleDossierListTabs || null;
   }
@@ -368,7 +354,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   tabChange(tab: NgbNavChangeEvent<any>): void {
     this.dossierListPaginationService.setPage(1);
-    this.assigneeFilter$.next(tab.nextId.toUpperCase());
+    this.dossierListAssigneeService.setAssigneeFilter(tab.nextId.toUpperCase());
   }
 
   private mapSearchValuesToFilters(
