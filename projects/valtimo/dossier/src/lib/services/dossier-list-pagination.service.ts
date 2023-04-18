@@ -121,6 +121,10 @@ export class DossierListPaginationService {
     });
   }
 
+  clearPagination(): void {
+    this._pagination$.next(undefined);
+  }
+
   resetPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {
     console.log('reset changed');
 
@@ -132,7 +136,7 @@ export class DossierListPaginationService {
     }
   }
 
-  private setPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {
+  setPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {
     console.log('set  pig');
 
     this.dossierParameterService.queryPaginationParams$

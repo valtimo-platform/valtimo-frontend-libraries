@@ -20,3 +20,5 @@ export * from './dossier-parameter.service';
 export * from './file-sort.service';
 export * from './dossier-list.service';
 export * from './dossier-list-assignee.service';
+export * from './dossier-list-pagination.service';
+export * from './dossier-list-search.service';

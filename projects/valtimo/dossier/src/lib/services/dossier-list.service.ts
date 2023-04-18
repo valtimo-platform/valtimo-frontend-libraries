@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-import {Injectable, OnDestroy} from '@angular/core';
-import {
-  BehaviorSubject,
-  distinctUntilChanged,
-  filter,
-  map,
-  Observable,
-  Subscription,
-  tap,
-} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, map, Observable} from 'rxjs';
 import {DossierColumnService} from '../services';
 import {Documents, SpecifiedDocuments} from '@valtimo/document';
 
 @Injectable()
-export class DossierListService implements OnDestroy {
+export class DossierListService {
   private readonly _documentDefinitionName$ = new BehaviorSubject<string>('');
 
   private readonly _hasEnvColumnConfig$: Observable<boolean> = this.documentDefinitionName$.pipe(
@@ -39,24 +30,17 @@ export class DossierListService implements OnDestroy {
   );
 
   get documentDefinitionName$(): Observable<string> {
-    return this._documentDefinitionName$.pipe(distinctUntilChanged());
+    return this._documentDefinitionName$.asObservable();
   }
 
   get hasEnvColumnConfig$(): Observable<boolean> {
     return this._hasEnvColumnConfig$;
   }
 
-  private routeSubscription!: Subscription;
+  constructor(private readonly dossierColumnService: DossierColumnService) {}
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly dossierColumnService: DossierColumnService
-  ) {
-    this.openRouteSubscription();
-  }
-
-  ngOnDestroy(): void {
-    this.routeSubscription?.unsubscribe();
+  setDocumentDefinitionName(documentDefinitionName: string): void {
+    this._documentDefinitionName$.next(documentDefinitionName);
   }
 
   mapDocuments(
@@ -80,17 +64,5 @@ export class DossierListService implements OnDestroy {
         return [...acc, propsObject];
       }, []);
     }
-  }
-
-  private openRouteSubscription(): void {
-    this.routeSubscription = this.route.params
-      .pipe(
-        map(params => params?.documentDefinitionName),
-        filter(docDefName => !!docDefName),
-        tap(documentDefinitionName => {
-          this._documentDefinitionName$.next(documentDefinitionName);
-        })
-      )
-      .subscribe();
   }
 }

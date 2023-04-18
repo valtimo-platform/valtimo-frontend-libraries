@@ -69,10 +69,12 @@ export class DossierParameterService implements OnDestroy {
               size: Number(paramsCopy.size),
               maxPaginationItemSize: Number(paramsCopy.maxPaginationItemSize),
               ...(paramsCopy.isSorting === 'true' && {
-                isSorting: !!(paramsCopy.isSorting === 'true'),
-                state: {
-                  name: paramsCopy.sortStateName,
-                  direction: paramsCopy.sortStateDirection as Direction,
+                sort: {
+                  isSorting: !!(paramsCopy.isSorting === 'true'),
+                  state: {
+                    name: paramsCopy.sortStateName,
+                    direction: paramsCopy.sortStateDirection as Direction,
+                  },
                 },
               }),
             }
@@ -99,9 +101,8 @@ export class DossierParameterService implements OnDestroy {
   dossierParametersSubscription!: Subscription;
 
   constructor(private readonly router: Router, private readonly route: ActivatedRoute) {
-    this.openDossierParametersSubscription();
-
-    this.route.queryParams.subscribe(queryparams => console.log('query params ivo', queryparams));
+    this.setDossierParameters();
+    // this.openDossierParametersSubscription();
   }
 
   ngOnDestroy(): void {
@@ -156,22 +157,8 @@ export class DossierParameterService implements OnDestroy {
   }
 
   private openDossierParametersSubscription(): void {
-    this.dossierParametersSubscription = combineLatest([
-      this.dossierParameters$,
-      this.route.queryParams,
-    ]).subscribe(([dossierParams, queryParams]) => {
-      let paramsToUse = {};
-
-      if (
-        Object.keys(queryParams || {}).length > 0 &&
-        Object.keys(dossierParams || {}).length === 0
-      ) {
-        paramsToUse = queryParams;
-      } else {
-        paramsToUse = dossierParams;
-      }
-
-      this.router.navigate([this.getUrlWithoutParams()], {queryParams: paramsToUse});
+    this.dossierParametersSubscription = this.dossierParameters$.subscribe(dossierParams => {
+      this.router.navigate([this.getUrlWithoutParams()], {queryParams: dossierParams});
     });
   }
 
@@ -184,5 +171,23 @@ export class DossierParameterService implements OnDestroy {
     urlTree.queryParams = {};
     urlTree.fragment = null;
     return urlTree.toString();
+  }
+
+  private setDossierParameters(): void {
+    combineLatest([this.queryPaginationParams$, this.querySearchParams$, this.queryAssigneeParam$])
+      .pipe(take(1))
+      .subscribe(([paginationParams, searchParams, assigneeParams]) => {
+        if (paginationParams) {
+          this.setPaginationParameters(paginationParams);
+        }
+        if (searchParams) {
+          this.setSearchParameters(searchParams);
+        }
+        if (assigneeParams) {
+          this.setAssigneeParameter(assigneeParams);
+        }
+
+        this.openDossierParametersSubscription();
+      });
   }
 }

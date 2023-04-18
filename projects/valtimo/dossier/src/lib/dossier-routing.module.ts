@@ -21,12 +21,12 @@ import {AuthGuardService} from '@valtimo/security';
 import {DossierDetailComponent} from './dossier-detail/dossier-detail.component';
 import {DossierUpdateComponent} from './dossier-update/dossier-update.component';
 import {ROLE_USER} from '@valtimo/config';
-import {DossierList2Component} from './dossier-list-2/dossier-list-2.component';
+import {DossierListComponent} from './dossier-list/dossier-list.component';
 
 const routes: Routes = [
   {
     path: 'dossiers/:documentDefinitionName',
-    component: DossierList2Component,
+    component: DossierListComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Dossiers', roles: [ROLE_USER]},
   },

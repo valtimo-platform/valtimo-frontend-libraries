@@ -91,8 +91,8 @@ export type TabsFactory = () => Map<string, object>;
 
 @NgModule({
   declarations: [
-    DossierList2Component,
     DossierListComponent,
+    DossierList2Component,
     DossierListActionsComponent,
     DossierDetailComponent,
     DossierDetailTabSummaryComponent,
