@@ -42,13 +42,7 @@ export class DossierListPaginationService {
     tap(paginationCopy => console.log('pag copy', paginationCopy))
   );
 
-  private readonly _settingPaginationForDocName$ = new BehaviorSubject<string | undefined>(
-    undefined
-  );
-
-  get settingPaginationForDocName$(): Observable<string | undefined> {
-    return this._settingPaginationForDocName$.asObservable();
-  }
+  private _settingPaginationForDocName!: string;
 
   get pagination$(): Observable<Pagination> {
     console.log('get pagination');
@@ -60,10 +54,6 @@ export class DossierListPaginationService {
     private readonly dossierParameterService: DossierParameterService,
     private readonly dossierService: DossierService
   ) {}
-
-  setPaginationForDocName(documentDefinitionName: string): void {
-    this._settingPaginationForDocName$.next(documentDefinitionName);
-  }
 
   pageChange(newPage: number): void {
     console.log('page changed');
@@ -134,14 +124,12 @@ export class DossierListPaginationService {
   resetPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {
     console.log('reset changed');
 
-    this._settingPaginationForDocName$.pipe(take(1)).subscribe(settingPaginationForDocName => {
-      if (documentDefinitionName !== settingPaginationForDocName) {
-        this._pagination$.next(undefined);
-        this.logger.debug('clear pagination');
-        this._settingPaginationForDocName$.next(documentDefinitionName);
-        this.setPagination(documentDefinitionName, columns);
-      }
-    });
+    if (documentDefinitionName !== this._settingPaginationForDocName) {
+      this._pagination$.next(undefined);
+      this.logger.debug('clear pagination');
+      this._settingPaginationForDocName = documentDefinitionName;
+      this.setPagination(documentDefinitionName, columns);
+    }
   }
 
   private setPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {

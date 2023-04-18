@@ -16,15 +16,7 @@
 
 import {Injectable, OnDestroy} from '@angular/core';
 import {DossierParameters} from '../models';
-import {
-  BehaviorSubject,
-  combineLatest,
-  distinctUntilChanged,
-  map,
-  Observable,
-  Subscription,
-  take,
-} from 'rxjs';
+import {BehaviorSubject, distinctUntilChanged, map, Observable, Subscription, take} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AssigneeFilter, Direction, SearchFieldValues} from '@valtimo/config';
 import {Pagination} from '@valtimo/components';
@@ -100,6 +92,8 @@ export class DossierParameterService implements OnDestroy {
 
   constructor(private readonly router: Router, private readonly route: ActivatedRoute) {
     this.openDossierParametersSubscription();
+
+    this.route.queryParams.subscribe(queryparams => console.log('query params ivo', queryparams));
   }
 
   ngOnDestroy(): void {
@@ -107,6 +101,7 @@ export class DossierParameterService implements OnDestroy {
   }
 
   setSearchParameters(searchParameters: SearchFieldValues): void {
+    console.log('set param: search', searchParameters);
     this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
       if (Object.keys(searchParameters || {}).length > 0) {
         this._dossierParameters$.next({
@@ -123,6 +118,7 @@ export class DossierParameterService implements OnDestroy {
   }
 
   setPaginationParameters(pagination: Pagination): void {
+    console.log('set param: pagination', pagination);
     if (pagination) {
       this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
         this._dossierParameters$.next({
@@ -142,6 +138,7 @@ export class DossierParameterService implements OnDestroy {
   }
 
   setAssigneeParameter(assigneeFilter: AssigneeFilter): void {
+    console.log('set param: assignee', assigneeFilter);
     this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
       this._dossierParameters$.next({
         ...dossierParameters,
