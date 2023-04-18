@@ -16,7 +16,15 @@
 
 import {Injectable, OnDestroy} from '@angular/core';
 import {DossierParameters} from '../models';
-import {BehaviorSubject, distinctUntilChanged, map, Observable, Subscription, take} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  map,
+  Observable,
+  Subscription,
+  take,
+} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AssigneeFilter, Direction, SearchFieldValues} from '@valtimo/config';
 import {Pagination} from '@valtimo/components';
