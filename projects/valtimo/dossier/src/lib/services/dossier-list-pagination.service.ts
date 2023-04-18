@@ -150,10 +150,13 @@ export class DossierListPaginationService {
     this.dossierParameterService.queryPaginationParams$
       .pipe(take(1))
       .subscribe(queryPaginationParams => {
+        console.log('query', queryPaginationParams);
         const defaultPagination: Pagination = this.getDefaultPagination(columns);
         const paginationToUse = queryPaginationParams || defaultPagination;
 
         this.logger.debug(`Set pagination: ${JSON.stringify(paginationToUse)}`);
+
+        console.log('set pagination', paginationToUse);
         this._pagination$.next(paginationToUse);
       });
   }
@@ -167,24 +170,5 @@ export class DossierListPaginationService {
       ...this.DEFAULT_PAGINATION,
       sort: defaultSortState,
     };
-  }
-
-  private getStoredPagination(
-    hasStoredSearchRequest: boolean,
-    storedSearchRequestKey: string
-  ): Pagination | undefined {
-    console.log('get stored pagi');
-
-    const storedSearchRequest =
-      hasStoredSearchRequest && JSON.parse(localStorage.getItem(storedSearchRequestKey));
-
-    return (
-      storedSearchRequest && {
-        ...this.DEFAULT_PAGINATION,
-        sort: storedSearchRequest.sort,
-        page: storedSearchRequest.page + 1,
-        size: storedSearchRequest.size,
-      }
-    );
   }
 }

@@ -23,8 +23,6 @@ import {
   DossierListTab,
   SearchField,
   SearchFieldValues,
-  SearchFilter,
-  SearchFilterRange,
 } from '@valtimo/config';
 import {
   AdvancedDocumentSearchRequest,
@@ -206,13 +204,13 @@ export class DossierListComponent implements OnInit, OnDestroy {
                 documentSearchRequest,
                 'AND',
                 assigneeFilter,
-                this.mapSearchValuesToFilters(searchValues)
+                this.dossierListSearchService.mapSearchValuesToFilters(searchValues)
               )
             : this.documentService.getSpecifiedDocumentsSearch(
                 documentSearchRequest,
                 'AND',
                 assigneeFilter,
-                this.mapSearchValuesToFilters(searchValues)
+                this.dossierListSearchService.mapSearchValuesToFilters(searchValues)
               );
         } else {
           return hasEnvColumnConfig || !hasApiColumnConfig
@@ -287,6 +285,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   sortChanged(newSortState: SortState): void {
+    console.log('sort changed', newSortState);
     this.dossierListPaginationService.sortChanged(newSortState);
   }
 
@@ -307,25 +306,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
   tabChange(tab: NgbNavChangeEvent<any>): void {
     this.dossierListPaginationService.setPage(1);
     this.dossierListAssigneeService.setAssigneeFilter(tab.nextId.toUpperCase());
-  }
-
-  private mapSearchValuesToFilters(
-    values: SearchFieldValues
-  ): Array<SearchFilter | SearchFilterRange> {
-    const filters: Array<SearchFilter | SearchFilterRange> = [];
-
-    Object.keys(values).forEach(valueKey => {
-      const searchValue = values[valueKey] as any;
-      if (searchValue.start) {
-        filters.push({key: valueKey, rangeFrom: searchValue.start, rangeTo: searchValue.end});
-      } else if (Array.isArray(searchValue)) {
-        filters.push({key: valueKey, values: searchValue});
-      } else {
-        filters.push({key: valueKey, values: [searchValue]});
-      }
-    });
-
-    return filters;
   }
 
   private openDocDefSubscription(): void {

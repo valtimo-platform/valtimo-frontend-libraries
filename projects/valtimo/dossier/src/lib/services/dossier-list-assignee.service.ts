@@ -15,12 +15,13 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
+import {BehaviorSubject, map, Observable, switchMap, take} from 'rxjs';
 import {DossierListService} from './dossier-list.service';
 import {DocumentService} from '@valtimo/document';
 import {AssigneeFilter, DefinitionColumn} from '@valtimo/config';
 import {TranslateService} from '@ngx-translate/core';
 import {ListField} from '@valtimo/components';
+import {DossierParameterService} from './dossier-parameter.service';
 
 @Injectable()
 export class DossierListAssigneeService {
@@ -46,16 +47,26 @@ export class DossierListAssigneeService {
   constructor(
     private readonly dossierListService: DossierListService,
     private readonly documentService: DocumentService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly dossierParameterService: DossierParameterService
   ) {}
 
   resetAssigneeFilter(): void {
-    this._assigneeFilter$.next(this.defaultAssigneeFilter);
+    console.log('reset filter');
+    this.dossierParameterService.queryAssigneeParam$.pipe(take(1)).subscribe(assigneeParam => {
+      if (assigneeParam) {
+        this._assigneeFilter$.next(assigneeParam);
+        this.dossierParameterService.setAssigneeParameter(assigneeParam);
+      } else {
+        this._assigneeFilter$.next(this.defaultAssigneeFilter);
+        this.dossierParameterService.setAssigneeParameter(this.defaultAssigneeFilter);
+      }
+    });
   }
 
   setAssigneeFilter(assigneeFilter: AssigneeFilter): void {
-    console.log('set filter', assigneeFilter);
     this._assigneeFilter$.next(assigneeFilter);
+    this.dossierParameterService.setAssigneeParameter(assigneeFilter);
   }
 
   filterAssigneeColumns(

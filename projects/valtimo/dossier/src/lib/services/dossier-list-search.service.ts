@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, switchMap, take, tap} from 'rxjs';
-import {SearchField, SearchFieldValues} from '@valtimo/config';
+import {SearchField, SearchFieldValues, SearchFilter, SearchFilterRange} from '@valtimo/config';
 import {DossierListService} from './dossier-list.service';
 import {DocumentService} from '@valtimo/document';
 import {DossierParameterService} from './dossier-parameter.service';
@@ -76,5 +76,22 @@ export class DossierListSearchService {
         });
       }
     });
+  }
+
+  mapSearchValuesToFilters(values: SearchFieldValues): Array<SearchFilter | SearchFilterRange> {
+    const filters: Array<SearchFilter | SearchFilterRange> = [];
+
+    Object.keys(values).forEach(valueKey => {
+      const searchValue = values[valueKey] as any;
+      if (searchValue.start) {
+        filters.push({key: valueKey, rangeFrom: searchValue.start, rangeTo: searchValue.end});
+      } else if (Array.isArray(searchValue)) {
+        filters.push({key: valueKey, values: searchValue});
+      } else {
+        filters.push({key: valueKey, values: [searchValue]});
+      }
+    });
+
+    return filters;
   }
 }

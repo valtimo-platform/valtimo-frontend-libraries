@@ -20,15 +20,13 @@ import {
   BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
-  filter,
   map,
   Observable,
-  startWith,
   Subscription,
   take,
 } from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Direction, SearchFieldValues} from '@valtimo/config';
+import {AssigneeFilter, Direction, SearchFieldValues} from '@valtimo/config';
 import {Pagination} from '@valtimo/components';
 
 @Injectable()
@@ -55,7 +53,6 @@ export class DossierParameterService implements OnDestroy {
 
   get queryPaginationParams$(): Observable<Pagination | null> {
     return this.route.queryParams.pipe(
-      filter(params => params.collectionSize),
       map(params => {
         const paramsCopy = {...params} as any as DossierParameters;
 
@@ -63,24 +60,39 @@ export class DossierParameterService implements OnDestroy {
           delete paramsCopy.search;
         }
 
-        return {
-          collectionSize: Number(paramsCopy.collectionSize),
-          page: Number(paramsCopy.page),
-          size: Number(paramsCopy.size),
-          maxPaginationItemSize: Number(paramsCopy.maxPaginationItemSize),
-          ...(paramsCopy.isSorting === 'true' && {
-            isSorting: !!(paramsCopy.isSorting === 'true'),
-            state: {
-              name: paramsCopy.sortStateName,
-              direction: paramsCopy.sortStateDirection as Direction,
-            },
-          }),
-        };
+        console.log('params copy', paramsCopy);
+
+        return paramsCopy.collectionSize
+          ? {
+              collectionSize: Number(paramsCopy.collectionSize),
+              page: Number(paramsCopy.page),
+              size: Number(paramsCopy.size),
+              maxPaginationItemSize: Number(paramsCopy.maxPaginationItemSize),
+              ...(paramsCopy.isSorting === 'true' && {
+                isSorting: !!(paramsCopy.isSorting === 'true'),
+                state: {
+                  name: paramsCopy.sortStateName,
+                  direction: paramsCopy.sortStateDirection as Direction,
+                },
+              }),
+            }
+          : null;
       }),
       distinctUntilChanged(
         (prevParams, currParams) => JSON.stringify(prevParams) === JSON.stringify(currParams)
-      ),
-      startWith(null)
+      )
+    );
+  }
+
+  get queryAssigneeParam$(): Observable<AssigneeFilter> {
+    return this.route.queryParams.pipe(
+      map(params => {
+        if (params?.assignee) {
+          return params?.assignee?.toUpperCase();
+        }
+        return '';
+      }),
+      distinctUntilChanged((prevParams, currParams) => prevParams === currParams)
     );
   }
 
@@ -127,6 +139,15 @@ export class DossierParameterService implements OnDestroy {
         });
       });
     }
+  }
+
+  setAssigneeParameter(assigneeFilter: AssigneeFilter): void {
+    this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
+      this._dossierParameters$.next({
+        ...dossierParameters,
+        assignee: assigneeFilter.toLowerCase(),
+      });
+    });
   }
 
   private openDossierParametersSubscription(): void {
