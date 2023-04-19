@@ -88,8 +88,21 @@
             (click)="onClickRow(item)"
           >
             <td class="align-top" *ngFor="let listItemField of item.listItemFields">
-              <ng-container *ngIf="listItemField.type === ''">
-                {{ listItemField.value || '-' }}
+              <ng-container
+                *ngIf="
+                  listItemField.type === '' && {
+                    valueTranslationKey: 'viewTypeConverter.' + listItemField.value,
+                    valueTranslation: 'viewTypeConverter.' + listItemField.value | translate
+                  } as vars
+                "
+              >
+                {{
+                  listItemField.value
+                    ? vars.valueTranslation !== vars.valueTranslationKey
+                      ? vars.valueTranslation
+                      : listItemField.value
+                    : '-'
+                }}
               </ng-container>
 
               <ng-container

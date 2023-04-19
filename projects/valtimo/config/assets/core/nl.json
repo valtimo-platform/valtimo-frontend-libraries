@@ -1061,5 +1061,9 @@
     "Remove": "Verwijderen",
     "Next": "Volgende",
     "Previous": "Vorige"
+  },
+  "viewTypeConverter": {
+    "Yes": "Ja",
+    "No": "Nee"
   }
 }

@@ -1060,5 +1060,9 @@
     "Remove": "Entfernen",
     "Next": "Nächste",
     "Previous": "Vorherige"
+  },
+  "viewTypeConverter": {
+    "Yes": "Ja",
+    "No": "Nein"
   }
 }

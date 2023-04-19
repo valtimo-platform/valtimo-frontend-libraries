@@ -1058,5 +1058,9 @@
     "Remove": "Remove",
     "Next": "Next",
     "Previous": "Previous"
+  },
+  "viewTypeConverter": {
+    "Yes": "Yes",
+    "No": "No"
   }
 }
