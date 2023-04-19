@@ -153,6 +153,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     tap(listFields => {
       const defaultListField = listFields.find(field => field.default);
 
+      // set default sort state if no pagination query parameters for sorting are available
       this.parameterService.queryPaginationParams$
         .pipe(take(1))
         .subscribe(queryPaginationParams => {
