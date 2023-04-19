@@ -36,12 +36,25 @@
       <div class="container-fluid">
         <div class="col-12 px-0 mb-5">
           <valtimo-dossier-list-actions></valtimo-dossier-list-actions>
+          <ng-container *ngTemplateOutlet="searchFields; context: {obs: obs}"></ng-container>
           <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
         </div>
       </div>
     </div>
   </ng-container>
 </ng-container>
+
+<ng-template #searchFields let-obs="obs">
+  <div class="mb-3">
+    <valtimo-search-fields
+      [searchFields]="obs.searchFields"
+      (doSearch)="search($event)"
+      [documentDefinitionName]="documentDefinitionName$ | async"
+      [setValuesSubject$]="setSearchFieldValuesSubject$"
+      [defaultValues]="searchFieldValues$ | async"
+    ></valtimo-search-fields>
+  </div>
+</ng-template>
 
 <ng-template #list let-obs="obs">
   <valtimo-widget>

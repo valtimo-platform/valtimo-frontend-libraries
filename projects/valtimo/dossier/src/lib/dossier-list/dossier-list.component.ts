@@ -41,6 +41,7 @@ import {
   DefinitionColumn,
   DossierListTab,
   SearchField,
+  SearchFieldValues,
   SortState,
 } from '@valtimo/config';
 import {ListField, Pagination} from '@valtimo/components';
@@ -88,12 +89,18 @@ export class DossierListComponent implements OnInit, OnDestroy {
       })
     );
 
+  public readonly documentDefinitionName$ = this.listService.documentDefinitionName$;
+
   public readonly schema$ = this.listService.documentDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinition(documentDefinitionName)
     ),
     map(documentDefinition => documentDefinition?.schema)
   );
+
+  public readonly setSearchFieldValuesSubject$ = this.searchService.setSearchFieldValuesSubject$;
+
+  public readonly searchFieldValues$ = this.parameterService.searchFieldValues$;
 
   private _pagination$ = this.paginationService.pagination$.pipe(
     tap(pagination => {
@@ -103,7 +110,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
     })
   );
   readonly assigneeFilter$ = this.assigneeService.assigneeFilter$;
-  private readonly _searchFieldValues$ = this.searchService.searchFieldValues$;
   private readonly _hasEnvColumnConfig$: Observable<boolean> = this.listService.hasEnvColumnConfig$;
   private _documentDefinitionNameSubscription!: Subscription;
   private readonly _hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
@@ -167,7 +173,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   private readonly _documentsRequest$: Observable<Documents | SpecifiedDocuments> = combineLatest([
     this._documentSearchRequest$,
-    this._searchFieldValues$,
+    this.searchFieldValues$,
     this.assigneeFilter$,
     this._hasEnvColumnConfig$,
     this._hasApiColumnConfig$,
@@ -273,6 +279,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._documentDefinitionNameSubscription?.unsubscribe();
+  }
+
+  search(searchFieldValues: SearchFieldValues): void {
+    this.searchService.search(searchFieldValues);
   }
 
   rowClick(document: any): void {

@@ -32,9 +32,14 @@ import {Pagination} from '@valtimo/components';
 @Injectable()
 export class DossierParameterService implements OnDestroy {
   private readonly _dossierParameters$ = new BehaviorSubject<DossierParameters>(undefined);
+  private readonly _searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
 
   get dossierParameters$(): Observable<DossierParameters> {
     return this._dossierParameters$.asObservable();
+  }
+
+  get searchFieldValues$(): Observable<SearchFieldValues> {
+    return this._searchFieldValues$.asObservable();
   }
 
   get querySearchParams$(): Observable<SearchFieldValues> {
@@ -109,6 +114,10 @@ export class DossierParameterService implements OnDestroy {
     this.dossierParametersSubscription?.unsubscribe();
   }
 
+  setSearchFieldValues(searchFieldValues: SearchFieldValues): void {
+    this._searchFieldValues$.next(searchFieldValues);
+  }
+
   setSearchParameters(searchParameters: SearchFieldValues): void {
     console.log('set param: search', searchParameters);
     this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
@@ -181,7 +190,9 @@ export class DossierParameterService implements OnDestroy {
           this.setPaginationParameters(paginationParams);
         }
         if (searchParams) {
+          console.log('first set search params', searchParams);
           this.setSearchParameters(searchParams);
+          this.setSearchFieldValues(searchParams);
         }
         if (assigneeParams) {
           this.setAssigneeParameter(assigneeParams);
