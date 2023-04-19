@@ -15,10 +15,11 @@
  */
 
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {map, Observable, of, switchMap, take} from 'rxjs';
+import {map, Observable, of, switchMap, tap} from 'rxjs';
 import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
-import {DossierListService} from '../services';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
+import {ActivatedRoute} from '@angular/router';
+import {DossierListService} from '../services';
 
 declare var $;
 
@@ -26,7 +27,6 @@ declare var $;
   selector: 'valtimo-dossier-list-actions',
   templateUrl: './dossier-list-actions.component.html',
   styleUrls: ['./dossier-list-actions.component.scss'],
-  providers: [DossierListService],
 })
 export class DossierListActionsComponent implements OnInit {
   @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
@@ -37,8 +37,10 @@ export class DossierListActionsComponent implements OnInit {
 
   private modalListenerAdded = false;
 
+  private _cachedAssociatedProcessDocumentDefinitions: Array<ProcessDocumentDefinition> = [];
+
   readonly associatedProcessDocumentDefinitions$: Observable<Array<ProcessDocumentDefinition>> =
-    this.dossierListService.documentDefinitionName$.pipe(
+    this.listService.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
         documentDefinitionName
           ? this.documentService.findProcessDocumentDefinitions(documentDefinitionName)
@@ -46,12 +48,16 @@ export class DossierListActionsComponent implements OnInit {
       ),
       map(processDocumentDefinitions =>
         processDocumentDefinitions.filter(definition => definition.canInitializeDocument)
-      )
+      ),
+      tap(processDocumentDefinitions => {
+        this._cachedAssociatedProcessDocumentDefinitions = processDocumentDefinitions;
+      })
     );
 
   constructor(
-    private readonly dossierListService: DossierListService,
-    private readonly documentService: DocumentService
+    private readonly documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly listService: DossierListService
   ) {}
 
   ngOnInit(): void {
@@ -59,16 +65,14 @@ export class DossierListActionsComponent implements OnInit {
   }
 
   startDossier(): void {
-    this.associatedProcessDocumentDefinitions$
-      .pipe(take(1))
-      .subscribe(associatedProcessDocumentDefinitions => {
-        if (associatedProcessDocumentDefinitions.length > 1) {
-          $('#startProcess').modal('show');
-        } else {
-          this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
-          this.showStartProcessModal();
-        }
-      });
+    const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
+
+    if (associatedProcessDocumentDefinitions.length > 1) {
+      $('#startProcess').modal('show');
+    } else {
+      this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
+      this.showStartProcessModal();
+    }
   }
 
   selectProcess(processDocumentDefinition: ProcessDocumentDefinition): void {
