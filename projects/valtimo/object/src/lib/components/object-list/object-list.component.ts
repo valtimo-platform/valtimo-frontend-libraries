@@ -18,7 +18,8 @@ import {Component} from '@angular/core';
 import {
   BehaviorSubject,
   combineLatest,
-  distinctUntilChanged, filter,
+  distinctUntilChanged,
+  filter,
   map,
   Observable,
   of,
@@ -123,25 +124,25 @@ export class ObjectListComponent {
       };
 
       if (columnType === ColumnType.CUSTOM) {
-        return this.objectService.postObjectsByObjectManagementId(
-          objectManagementId,
-          {
+        return this.objectService
+          .postObjectsByObjectManagementId(
+            objectManagementId,
+            {
+              page: currentPage.page,
+              size: currentPage.size,
+            },
+            Object.keys(searchFieldValues).length > 0
+              ? {otherFilters: this.mapSearchValuesToFilters(searchFieldValues)}
+              : {}
+          )
+          .pipe(catchError(() => handleError()));
+      } else {
+        return this.objectService
+          .getObjectsByObjectManagementId(objectManagementId, {
             page: currentPage.page,
             size: currentPage.size,
-          },
-          Object.keys(searchFieldValues).length > 0
-            ? {otherFilters: this.mapSearchValuesToFilters(searchFieldValues)}
-            : {}
-        ).pipe(
-          catchError(() => handleError())
-        );
-      } else {
-        return this.objectService.getObjectsByObjectManagementId(objectManagementId, {
-          page: currentPage.page,
-          size: currentPage.size,
-        }).pipe(
-          catchError(() => handleError())
-        );
+          })
+          .pipe(catchError(() => handleError()));
       }
     }),
     tap(instanceRes => {
@@ -213,6 +214,7 @@ export class ObjectListComponent {
               sortable: column.sortable,
               ...(column.viewType && {viewType: column.viewType}),
               ...(column.enum && {enum: column.enum}),
+              ...(column.format && {format: column.format}),
             };
           }),
         ];
@@ -257,7 +259,11 @@ export class ObjectListComponent {
         take(1),
         filter(([objectManagementId, submission, formValid]) => formValid),
         switchMap(([objectManagementId, submission]) =>
-          this.objectService.createObject({ objectManagementId }, { ...this.objectService.removeEmptyStringValuesFromSubmission(submission) })
+          this.objectService
+            .createObject(
+              {objectManagementId},
+              {...this.objectService.removeEmptyStringValuesFromSubmission(submission)}
+            )
             .pipe(
               take(1),
               catchError((error: any) => {
@@ -276,7 +282,7 @@ export class ObjectListComponent {
           this.refreshObjectList();
           this.clearForm$.next(true);
           this.toastr.success(this.translate.instant('object.messages.objectCreated'));
-        }
+        },
       });
   }
 

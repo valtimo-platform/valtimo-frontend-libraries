@@ -318,8 +318,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
         this._previousDocumentDefinitionName = documentDefinitonName;
         this.setLoading();
         this.paginationService.clearPagination();
-        this.listService.setDocumentDefinitionName(documentDefinitonName);
         this.assigneeService.resetAssigneeFilter();
+        this.listService.setDocumentDefinitionName(documentDefinitonName);
       });
   }
 
