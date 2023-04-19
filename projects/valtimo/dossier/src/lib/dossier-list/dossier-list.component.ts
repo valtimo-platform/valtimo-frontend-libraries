@@ -75,9 +75,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public loadingSearchFields = true;
   public loadingAssigneeFilter = true;
   public loadingDocumentItems = true;
-
   public pagination!: Pagination;
-
   public canHaveAssignee!: boolean;
   public visibleDossierTabs: Array<DossierListTab> | null = null;
 
@@ -98,16 +96,14 @@ export class DossierListComponent implements OnInit, OnDestroy {
   );
 
   public readonly searchFieldValues$ = this.parameterService.searchFieldValues$;
-
-  private _pagination$ = this.paginationService.pagination$.pipe(
+  public readonly assigneeFilter$ = this.assigneeService.assigneeFilter$;
+  private readonly _pagination$ = this.paginationService.pagination$.pipe(
     tap(pagination => {
       this.pagination = pagination;
       this.loadingPagination = false;
     })
   );
-  readonly assigneeFilter$ = this.assigneeService.assigneeFilter$;
   private readonly _hasEnvColumnConfig$: Observable<boolean> = this.listService.hasEnvColumnConfig$;
-  private _documentDefinitionNameSubscription!: Subscription;
   private readonly _hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
   private readonly _canHaveAssignee$: Observable<boolean> = this.assigneeService.canHaveAssignee$;
   private readonly _searchSwitch$ = this.searchService.searchSwitch$;
@@ -147,7 +143,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
       );
       return this.assigneeService.addAssigneeListField(columns, listFields, canHaveAssignee);
     }),
-    tap(fields => {
+    tap(() => {
       this.loadingFields = false;
     })
   );
@@ -254,6 +250,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   );
 
   private _previousDocumentDefinitionName!: string;
+  private _documentDefinitionNameSubscription!: Subscription;
 
   constructor(
     private readonly route: ActivatedRoute,

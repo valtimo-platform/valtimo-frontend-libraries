@@ -237,7 +237,6 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   }
 
   private setDefaultValues(): void {
-    console.log('set default values searhc com', this.defaultValues);
     if (
       this.defaultValues &&
       typeof this.defaultValues === 'object' &&
