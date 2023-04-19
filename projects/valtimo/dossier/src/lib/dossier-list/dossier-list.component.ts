@@ -153,14 +153,18 @@ export class DossierListComponent implements OnInit, OnDestroy {
     tap(listFields => {
       const defaultListField = listFields.find(field => field.default);
 
-      if (defaultListField) {
-        const sortDirection =
-          typeof defaultListField.default === 'string' ? defaultListField.default : 'DESC';
-        this.paginationService.sortChanged({
-          isSorting: true,
-          state: {name: defaultListField.key, direction: sortDirection as Direction},
+      this.parameterService.queryPaginationParams$
+        .pipe(take(1))
+        .subscribe(queryPaginationParams => {
+          if (defaultListField && !queryPaginationParams?.sort.isSorting) {
+            const sortDirection =
+              typeof defaultListField.default === 'string' ? defaultListField.default : 'DESC';
+            this.paginationService.sortChanged({
+              isSorting: true,
+              state: {name: defaultListField.key, direction: sortDirection as Direction},
+            });
+          }
         });
-      }
     }),
     tap(() => {
       this.loadingFields = false;
