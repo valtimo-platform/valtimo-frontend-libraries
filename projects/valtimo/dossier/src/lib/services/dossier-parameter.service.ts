@@ -159,9 +159,12 @@ export class DossierParameterService implements OnDestroy {
     });
   }
 
+  clearSearchFieldValues(): void {
+    this._searchFieldValues$.next({});
+  }
+
   clearParameters(): void {
     this._dossierParameters$.next(undefined);
-    this._searchFieldValues$.next({});
     this.router.navigate([this.getUrlWithoutParams()]);
   }
 

@@ -72,6 +72,7 @@ export class DossierColumnService {
         ...(column.viewType && {viewType: column.viewType}),
         ...(column.enum && {enum: column.enum}),
         ...(column.format && {format: column.format}),
+        ...(column.default && {default: column.default}),
       };
     });
   }

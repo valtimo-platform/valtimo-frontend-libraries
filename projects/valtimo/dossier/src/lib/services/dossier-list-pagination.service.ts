@@ -90,7 +90,7 @@ export class DossierListPaginationService {
 
   setCollectionSize(documents: Documents | SpecifiedDocuments): void {
     this._pagination$.pipe(take(1)).subscribe(pagination => {
-      if (pagination.collectionSize !== documents.totalElements) {
+      if (pagination && pagination.collectionSize !== documents.totalElements) {
         this._pagination$.next({...pagination, collectionSize: documents.totalElements});
       }
     });
@@ -98,12 +98,14 @@ export class DossierListPaginationService {
 
   checkPage(documents: Documents | SpecifiedDocuments): void {
     this._pagination$.pipe(take(1)).subscribe(pagination => {
-      const amountOfItems = documents.totalElements;
-      const amountOfPages = Math.ceil(amountOfItems / pagination.size);
-      const currentPage = pagination.page;
+      if (pagination) {
+        const amountOfItems = documents.totalElements;
+        const amountOfPages = Math.ceil(amountOfItems / pagination.size);
+        const currentPage = pagination.page;
 
-      if (currentPage > amountOfPages) {
-        this._pagination$.next({...pagination, page: amountOfPages});
+        if (currentPage > amountOfPages) {
+          this._pagination$.next({...pagination, page: amountOfPages});
+        }
       }
     });
   }

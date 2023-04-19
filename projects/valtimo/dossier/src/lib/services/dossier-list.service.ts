@@ -58,7 +58,7 @@ export class DossierListService {
       const docsToMap = documents as SpecifiedDocuments;
       return docsToMap.content.reduce((acc, curr) => {
         const propsObject = {id: curr.id};
-        curr.items.forEach(item => {
+        curr.items?.forEach(item => {
           propsObject[item.key] = item.value;
         });
         return [...acc, propsObject];

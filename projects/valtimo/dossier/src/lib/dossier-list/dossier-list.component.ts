@@ -39,6 +39,7 @@ import {
 import {
   ConfigService,
   DefinitionColumn,
+  Direction,
   DossierListTab,
   SearchField,
   SearchFieldValues,
@@ -141,7 +142,25 @@ export class DossierListComponent implements OnInit, OnDestroy {
         filteredAssigneeColumns,
         hasEnvConfig
       );
-      return this.assigneeService.addAssigneeListField(columns, listFields, canHaveAssignee);
+      const fieldsToReturn = this.assigneeService.addAssigneeListField(
+        columns,
+        listFields,
+        canHaveAssignee
+      );
+
+      return fieldsToReturn;
+    }),
+    tap(listFields => {
+      const defaultListField = listFields.find(field => field.default);
+
+      if (defaultListField) {
+        const sortDirection =
+          typeof defaultListField.default === 'string' ? defaultListField.default : 'DESC';
+        this.paginationService.sortChanged({
+          isSorting: true,
+          state: {name: defaultListField.key, direction: sortDirection as Direction},
+        });
+      }
     }),
     tap(() => {
       this.loadingFields = false;
@@ -314,6 +333,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
       .subscribe(documentDefinitonName => {
         if (this._previousDocumentDefinitionName) {
           this.parameterService.clearParameters();
+          this.parameterService.clearSearchFieldValues();
         }
         this._previousDocumentDefinitionName = documentDefinitonName;
         this.setLoading();
