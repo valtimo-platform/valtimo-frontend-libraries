@@ -85,7 +85,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.searchService.documentSearchFields$.pipe(
       tap(searchFields => {
         this.loadingSearchFields = false;
-        console.log('search fields', searchFields);
       })
     );
 
@@ -98,13 +97,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
     map(documentDefinition => documentDefinition?.schema)
   );
 
-  public readonly setSearchFieldValuesSubject$ = this.searchService.setSearchFieldValuesSubject$;
-
   public readonly searchFieldValues$ = this.parameterService.searchFieldValues$;
 
   private _pagination$ = this.paginationService.pagination$.pipe(
     tap(pagination => {
-      console.log('pagination loaded', pagination);
       this.pagination = pagination;
       this.loadingPagination = false;
     })
@@ -153,7 +149,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
     }),
     tap(fields => {
       this.loadingFields = false;
-      console.log('got fields', fields);
     })
   );
 
@@ -304,7 +299,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   sortChanged(newSortState: SortState): void {
-    console.log('sort changed', newSortState);
     this.paginationService.sortChanged(newSortState);
   }
 

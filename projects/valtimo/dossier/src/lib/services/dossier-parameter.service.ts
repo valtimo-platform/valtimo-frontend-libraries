@@ -65,8 +65,6 @@ export class DossierParameterService implements OnDestroy {
           delete paramsCopy.search;
         }
 
-        console.log('params copy', paramsCopy);
-
         return paramsCopy.collectionSize
           ? {
               collectionSize: Number(paramsCopy.collectionSize),
@@ -107,7 +105,6 @@ export class DossierParameterService implements OnDestroy {
 
   constructor(private readonly router: Router, private readonly route: ActivatedRoute) {
     this.setDossierParameters();
-    // this.openDossierParametersSubscription();
   }
 
   ngOnDestroy(): void {
@@ -119,7 +116,6 @@ export class DossierParameterService implements OnDestroy {
   }
 
   setSearchParameters(searchParameters: SearchFieldValues): void {
-    console.log('set param: search', searchParameters);
     this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
       if (Object.keys(searchParameters || {}).length > 0) {
         this._dossierParameters$.next({
@@ -136,7 +132,6 @@ export class DossierParameterService implements OnDestroy {
   }
 
   setPaginationParameters(pagination: Pagination): void {
-    console.log('set param: pagination', pagination);
     if (pagination) {
       this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
         this._dossierParameters$.next({
@@ -156,7 +151,6 @@ export class DossierParameterService implements OnDestroy {
   }
 
   setAssigneeParameter(assigneeFilter: AssigneeFilter): void {
-    console.log('set param: assignee', assigneeFilter);
     this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
       this._dossierParameters$.next({
         ...dossierParameters,
@@ -196,15 +190,12 @@ export class DossierParameterService implements OnDestroy {
           this.setPaginationParameters(paginationParams);
         }
         if (searchParams) {
-          console.log('first set search params', searchParams);
           this.setSearchParameters(searchParams);
           this.setSearchFieldValues(searchParams);
         }
         if (assigneeParams) {
           this.setAssigneeParameter(assigneeParams);
         }
-
-        console.log('set params');
 
         this.openDossierParametersSubscription();
       });

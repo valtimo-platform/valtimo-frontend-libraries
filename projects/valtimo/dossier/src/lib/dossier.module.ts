@@ -85,14 +85,12 @@ import {
   LoadingModule,
 } from 'carbon-components-angular';
 import {DossierListActionsComponent} from './dossier-list-actions/dossier-list-actions.component';
-import {DossierList2Component} from './dossier-list-2/dossier-list-2.component';
 
 export type TabsFactory = () => Map<string, object>;
 
 @NgModule({
   declarations: [
     DossierListComponent,
-    DossierList2Component,
     DossierListActionsComponent,
     DossierDetailComponent,
     DossierDetailTabSummaryComponent,

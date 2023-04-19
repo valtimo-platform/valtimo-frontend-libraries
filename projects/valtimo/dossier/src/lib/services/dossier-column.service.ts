@@ -45,8 +45,6 @@ export class DossierColumnService {
           caseListColumns.length > 0 &&
           this.mapCaseListColumnsToDefinitionColumns(caseListColumns);
 
-        console.log('columns', caseListColumns);
-
         return {
           columns: customDefinitionTable || apiCaseListColumns || defaultDefinitionTable,
           hasApiConfig: !!apiCaseListColumns,

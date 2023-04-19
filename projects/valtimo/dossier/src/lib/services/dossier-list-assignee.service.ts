@@ -52,7 +52,6 @@ export class DossierListAssigneeService {
   ) {}
 
   resetAssigneeFilter(): void {
-    console.log('reset filter');
     this.dossierParameterService.queryAssigneeParam$.pipe(take(1)).subscribe(assigneeParam => {
       if (assigneeParam) {
         this._assigneeFilter$.next(assigneeParam);

@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, switchMap, take} from 'rxjs';
+import {BehaviorSubject, Observable, switchMap} from 'rxjs';
 import {SearchField, SearchFieldValues, SearchFilter, SearchFilterRange} from '@valtimo/config';
 import {DossierListService} from './dossier-list.service';
 import {DocumentService} from '@valtimo/document';
@@ -30,7 +30,6 @@ export class DossierListSearchService {
         this.documentService.getDocumentSearchFields(documentDefinitionName)
       )
     );
-  private readonly _setSearchFieldValuesSubject$ = new BehaviorSubject<SearchFieldValues>({});
 
   get searchSwitch$(): Observable<boolean> {
     return this._searchSwitch$.asObservable();
@@ -40,10 +39,6 @@ export class DossierListSearchService {
     return this._documentSearchFields$;
   }
 
-  get setSearchFieldValuesSubject$(): Observable<SearchFieldValues> {
-    return this._setSearchFieldValuesSubject$.asObservable();
-  }
-
   constructor(
     private readonly dossierListService: DossierListService,
     private readonly documentService: DocumentService,
@@ -51,20 +46,9 @@ export class DossierListSearchService {
   ) {}
 
   search(searchFieldValues: SearchFieldValues): void {
-    console.log('perform search', searchFieldValues);
     this.dossierParameterService.setSearchFieldValues(searchFieldValues || {});
     this.dossierParameterService.setSearchParameters(searchFieldValues);
     this._searchSwitch$.next(!this._searchSwitch$.getValue());
-  }
-
-  setSearchFieldParameters(): void {
-    this.dossierParameterService.querySearchParams$.pipe(take(1)).subscribe(values => {
-      if (Object.keys(values || {}).length > 0) {
-        setTimeout(() => {
-          this._setSearchFieldValuesSubject$.next(values);
-        });
-      }
-    });
   }
 
   mapSearchValuesToFilters(values: SearchFieldValues): Array<SearchFilter | SearchFilterRange> {

@@ -47,7 +47,6 @@
       [searchFields]="obs.searchFields"
       (doSearch)="search($event)"
       [documentDefinitionName]="documentDefinitionName$ | async"
-      [setValuesSubject$]="setSearchFieldValuesSubject$"
       [defaultValues]="searchFieldValues$ | async"
     ></valtimo-search-fields>
   </div>

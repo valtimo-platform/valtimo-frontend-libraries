@@ -34,4 +34,3 @@ export * from './lib/dossier.service';
 export * from './lib/dossier.module';
 export * from './lib/dossier-detail-tab-enum';
 export * from './lib/tab.service';
-export * from './lib/dossier-list-2/dossier-list-2.component';

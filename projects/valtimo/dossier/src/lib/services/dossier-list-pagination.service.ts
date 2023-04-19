@@ -38,14 +38,10 @@ export class DossierListPaginationService {
   private readonly _paginationCopy$ = this._pagination$.pipe(
     filter(pagination => !!pagination),
     map(pagination => pagination && JSON.parse(JSON.stringify(pagination))),
-    tap(pagination => this.dossierParameterService.setPaginationParameters(pagination)),
-    tap(paginationCopy => console.log('pag copy', paginationCopy))
+    tap(pagination => this.dossierParameterService.setPaginationParameters(pagination))
   );
 
-  private _settingPaginationForDocName!: string;
-
   get pagination$(): Observable<Pagination> {
-    console.log('get pagination');
     return this._paginationCopy$;
   }
 
@@ -56,8 +52,6 @@ export class DossierListPaginationService {
   ) {}
 
   pageChange(newPage: number): void {
-    console.log('page changed');
-
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.page !== newPage) {
         this.logger.debug(`Page change: ${newPage}`);
@@ -67,8 +61,6 @@ export class DossierListPaginationService {
   }
 
   pageSizeChange(newPageSize: number): void {
-    console.log('size changed');
-
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.size !== newPageSize) {
         const amountOfAvailablePages = Math.ceil(pagination.collectionSize / newPageSize);
@@ -82,7 +74,6 @@ export class DossierListPaginationService {
   }
 
   sortChanged(newSortState: SortState): void {
-    console.log('sort changed');
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && JSON.stringify(pagination.sort) !== JSON.stringify(newSortState)) {
         this.logger.debug(`Sort state change: ${JSON.stringify(newSortState)}`);
@@ -92,16 +83,12 @@ export class DossierListPaginationService {
   }
 
   setPage(newPageNumber: number): void {
-    console.log('set page');
-
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       this._pagination$.next({...pagination, page: newPageNumber});
     });
   }
 
   setCollectionSize(documents: Documents | SpecifiedDocuments): void {
-    console.log('set col size');
-
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination.collectionSize !== documents.totalElements) {
         this._pagination$.next({...pagination, collectionSize: documents.totalElements});
@@ -125,37 +112,20 @@ export class DossierListPaginationService {
     this._pagination$.next(undefined);
   }
 
-  resetPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {
-    console.log('reset changed');
-
-    if (documentDefinitionName !== this._settingPaginationForDocName) {
-      this._pagination$.next(undefined);
-      this.logger.debug('clear pagination');
-      this._settingPaginationForDocName = documentDefinitionName;
-      this.setPagination(documentDefinitionName, columns);
-    }
-  }
-
   setPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {
-    console.log('set  pig');
-
     this.dossierParameterService.queryPaginationParams$
       .pipe(take(1))
       .subscribe(queryPaginationParams => {
-        console.log('query', queryPaginationParams);
         const defaultPagination: Pagination = this.getDefaultPagination(columns);
         const paginationToUse = queryPaginationParams || defaultPagination;
 
         this.logger.debug(`Set pagination: ${JSON.stringify(paginationToUse)}`);
 
-        console.log('set pagination', paginationToUse);
         this._pagination$.next(paginationToUse);
       });
   }
 
   private getDefaultPagination(columns: Array<DefinitionColumn>): Pagination {
-    console.log('get default pagin', columns);
-
     const defaultSortState = this.dossierService.getInitialSortState(columns);
 
     return {
