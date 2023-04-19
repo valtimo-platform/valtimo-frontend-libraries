@@ -165,6 +165,12 @@ export class DossierParameterService implements OnDestroy {
     });
   }
 
+  clearParameters(): void {
+    this._dossierParameters$.next(undefined);
+    this._searchFieldValues$.next({});
+    this.router.navigate([this.getUrlWithoutParams()]);
+  }
+
   private openDossierParametersSubscription(): void {
     this.dossierParametersSubscription = this.dossierParameters$.subscribe(dossierParams => {
       this.router.navigate([this.getUrlWithoutParams()], {queryParams: dossierParams});
@@ -197,6 +203,8 @@ export class DossierParameterService implements OnDestroy {
         if (assigneeParams) {
           this.setAssigneeParameter(assigneeParams);
         }
+
+        console.log('set params');
 
         this.openDossierParametersSubscription();
       });

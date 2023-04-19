@@ -258,6 +258,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     })
   );
 
+  private _previousDocumentDefinitionName!: string;
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
@@ -319,6 +321,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
         distinctUntilChanged()
       )
       .subscribe(documentDefinitonName => {
+        if (this._previousDocumentDefinitionName) {
+          this.parameterService.clearParameters();
+        }
+        this._previousDocumentDefinitionName = documentDefinitonName;
         this.setLoading();
         this.paginationService.clearPagination();
         this.listService.setDocumentDefinitionName(documentDefinitonName);

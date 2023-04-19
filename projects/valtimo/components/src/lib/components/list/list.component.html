@@ -151,7 +151,9 @@
   >
     <div class="float-left page-count col-4">
       <strong>{{
-        'list.currentPage' | translate : {current: pagination.page, total: getTotalPageCount()}
+        'list.currentPage'
+          | translate
+            : {current: pagination.page > 0 ? pagination.page : 1, total: getTotalPageCount()}
       }}</strong>
       {{
         pagination.collectionSize === 1
