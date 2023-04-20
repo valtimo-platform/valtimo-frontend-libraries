@@ -18,29 +18,20 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '@valtimo/config';
-import {ResultaatType, StatusType} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ZakenApiService {
+export class BesluitenApiService {
   private valtimoEndpointUri: string;
 
   constructor(private http: HttpClient, configService: ConfigService) {
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
   }
 
-  public getStatusTypesByCaseDefinition(caseDefinitionId: string): Observable<Array<StatusType>> {
-    return this.http.get<Array<StatusType>>(
-      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionId}/zaaktype/statustype`
-    );
-  }
-
-  public getResultaatTypesByCaseDefinition(
-    caseDefinitionId: string
-  ): Observable<Array<ResultaatType>> {
-    return this.http.get<Array<ResultaatType>>(
-      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionId}/zaaktype/resultaattype`
+  public getBesluitTypesByCaseDefinition(caseDefinitionId: string): Observable<Array<any>> {
+    return this.http.get<Array<any>>(
+      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionId}/zaaktype/besluittype`
     );
   }
 }

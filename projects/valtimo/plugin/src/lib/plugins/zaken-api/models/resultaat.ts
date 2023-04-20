@@ -14,5 +14,9 @@
  * limitations under the License.
  */
 
-export * from './config';
-export * from './input';
+interface ResultaatType {
+  name: string;
+  url: string;
+}
+
+export {ResultaatType};
