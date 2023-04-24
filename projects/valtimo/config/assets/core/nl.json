@@ -977,7 +977,7 @@
     "enumTitle": "Opsommingswaarden",
     "enumTitleOptional": "Waarden (optioneel)",
     "enumTooltip": "De sleutels en waarden die gebruikt worden om weergavedata om te zetten in de tabel.",
-    "enumTooltip": "De waarden die gebruikt worden om weergavedata om te zetten in de tabel.",
+    "enumTooltipOptional": "De waarden die gebruikt worden om weergavedata om te zetten in de tabel.",
     "downloadButtonText": "Download configuratie",
     "deleteColumn": "Kolom verwijderen",
     "deleteColumnConfirmation": "Weet u zeker dat u deze kolom wilt verwijderen?"
