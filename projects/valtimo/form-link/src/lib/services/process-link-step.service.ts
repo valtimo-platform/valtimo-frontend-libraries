@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-export * from './form-flow.service';
-export * from './process-link-state.service';
-export * from './form-link.service';
-export * from './process-link.service';
-export * from './process-link-state-2.service';
-export * from './process-link-step.service';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {ProcessLinkConfigurationStep, ProcessLinkType} from '../models';
+
+@Injectable()
+export class ProcessLinkStepService {
+  private readonly _steps$ = new BehaviorSubject<Array<ProcessLinkConfigurationStep>>([]);
+
+  setInitialSteps(availableProcessLinkTypes: Array<ProcessLinkType>): void {
+    if (availableProcessLinkTypes.length > 1) {
+      this.setChoiceSteps(availableProcessLinkTypes);
+    }
+  }
+
+  private setChoiceSteps(availableProcessLinkTypes: Array<ProcessLinkType>): void {}
+}

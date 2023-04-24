@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {ProcessLinkType} from '../models';
+import {ProcessLinkStepService} from './process-link-step.service';
 
 @Injectable()
-export class ProcessLinkState2Service {
+export class ProcessLinkState2Service implements OnDestroy {
   private readonly _showModal$ = new BehaviorSubject<boolean>(false);
   private readonly _availableProcessLinkTypes$ = new BehaviorSubject<Array<ProcessLinkType>>([]);
   private readonly _elementName$ = new BehaviorSubject<string>('');
+
+  private _availableProcessLinkTypesSubscription!: Subscription;
+
+  constructor(private readonly processLinkStepService: ProcessLinkStepService) {
+    this.openAvailableProcessLinkTypesSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this._availableProcessLinkTypesSubscription?.unsubscribe();
+  }
 
   get showModal$(): Observable<boolean> {
     return this._showModal$.asObservable();
@@ -46,5 +57,13 @@ export class ProcessLinkState2Service {
 
   closeModal(): void {
     this._showModal$.next(false);
+  }
+
+  private openAvailableProcessLinkTypesSubscription(): void {
+    this._availableProcessLinkTypesSubscription = this._availableProcessLinkTypes$.subscribe(
+      availableProcessLinkTypes => {
+        this.processLinkStepService.setInitialSteps(availableProcessLinkTypes);
+      }
+    );
   }
 }
