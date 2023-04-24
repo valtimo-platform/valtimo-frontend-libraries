@@ -264,9 +264,9 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this._hasEnvColumnConfig$,
     this._hasApiColumnConfig$,
   ]).pipe(
-    map(([documents, hasEnvColumnConfig, hasApiColumnConfig]) => {
-      return this.listService.mapDocuments(documents, hasEnvColumnConfig, hasApiColumnConfig);
-    }),
+    map(([documents, hasEnvColumnConfig, hasApiColumnConfig]) =>
+      this.listService.mapDocuments(documents, hasEnvColumnConfig, hasApiColumnConfig)
+    ),
     tap(() => {
       this.loadingAssigneeFilter = false;
       this.loadingDocumentItems = false;

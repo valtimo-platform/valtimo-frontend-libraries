@@ -21,7 +21,7 @@ import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/
 import {ActivatedRoute} from '@angular/router';
 import {DossierListService} from '../services';
 
-declare var $;
+declare const $;
 
 @Component({
   selector: 'valtimo-dossier-list-actions',
