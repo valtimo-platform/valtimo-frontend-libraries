@@ -1058,5 +1058,9 @@
     "Remove": "Remove",
     "Next": "Next",
     "Previous": "Previous"
+  },
+  "processLinkConfiguration": {
+    "configureStep": "Configure process step",
+    "modalTitle": "Process step: {{processStepName}}"
   }
 }

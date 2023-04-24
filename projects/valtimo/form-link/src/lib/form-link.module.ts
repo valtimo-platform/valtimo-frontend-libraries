@@ -39,6 +39,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {PluginConfigurationContainerModule, PluginTranslatePipeModule} from '@valtimo/plugin';
 import {PluginFunctionConfigurationComponent} from './components/plugin-function-configuration/plugin-function-configuration.component';
 import {ProcessLink2Component} from './components/process-link-2/process-link-2.component';
+import {ProcessLinkModalComponent} from './components/process-link-modal/process-link-modal.component';
+import {ModalModule as CarbonModalModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,7 @@ import {ProcessLink2Component} from './components/process-link-2/process-link-2.
     SelectPluginConfigurationComponent,
     SelectPluginFunctionComponent,
     PluginFunctionConfigurationComponent,
+    ProcessLinkModalComponent,
   ],
   imports: [
     CommonModule,
@@ -68,6 +71,7 @@ import {ProcessLink2Component} from './components/process-link-2/process-link-2.
     PluginConfigurationContainerModule,
     ButtonModule,
     TitleModule,
+    CarbonModalModule,
   ],
   exports: [
     FormLinkComponent,
@@ -77,6 +81,7 @@ import {ProcessLink2Component} from './components/process-link-2/process-link-2.
     SelectPluginConfigurationComponent,
     SelectPluginFunctionComponent,
     PluginFunctionConfigurationComponent,
+    ProcessLinkModalComponent,
   ],
 })
 export class FormLinkModule {}

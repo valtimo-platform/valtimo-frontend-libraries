@@ -16,20 +16,29 @@
 
 import {Component} from '@angular/core';
 import {ModalParams} from '../../models';
-import {ProcessLinkService} from '../../services';
+import {ProcessLinkService, ProcessLinkState2Service} from '../../services';
 
 @Component({
   selector: 'valtimo-process-link-2',
   templateUrl: './process-link-2.component.html',
   styleUrls: ['./process-link-2.component.scss'],
+  providers: [ProcessLinkState2Service],
 })
 export class ProcessLink2Component {
-  constructor(private readonly processLinkService: ProcessLinkService) {}
+  constructor(
+    private readonly processLinkService: ProcessLinkService,
+    private readonly processLinkState2Service: ProcessLinkState2Service
+  ) {}
+
   openModal(params: ModalParams): void {
-    const activityType = params.element.activityListenerType;
+    const activityType = params?.element?.activityListenerType;
 
-    console.log(params);
-
-    this.processLinkService.getProcessLinkCandidates(activityType).subscribe();
+    if (activityType) {
+      this.processLinkService.getProcessLinkCandidates(activityType).subscribe(processLinkTypes => {
+        this.processLinkState2Service.setAvailableProcessLinkTypes(processLinkTypes);
+        this.processLinkState2Service.setElementName(params?.element?.name);
+        this.processLinkState2Service.showModal();
+      });
+    }
   }
 }

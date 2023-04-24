@@ -1061,5 +1061,9 @@
     "Remove": "Verwijderen",
     "Next": "Volgende",
     "Previous": "Vorige"
+  },
+  "processLinkConfiguration": {
+    "configureStep": "Processtap configureren",
+    "modalTitle": "Processtap: {{processStepName}}"
   }
 }

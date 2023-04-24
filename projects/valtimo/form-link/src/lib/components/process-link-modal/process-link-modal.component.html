@@ -14,12 +14,17 @@
   ~ limitations under the License.
   -->
 
-<div class="main-content">
-  <div class="container-fluid">
-    <valtimo-form-link-process-diagram
-      (bpmnElementModalOpen)="openModal($event)"
-    ></valtimo-form-link-process-diagram>
-  </div>
-</div>
-
-<valtimo-process-link-modal></valtimo-process-link-modal>
+<ng-container
+  *ngIf="{showModal: showModal$ | async, processStepName: processStepName$ | async} as obs"
+>
+  <ibm-modal [open]="obs.showModal">
+    <ibm-modal-header (closeSelect)="closeModal()">
+      <h2 ibmModalHeaderLabel>{{ 'processLinkConfiguration.configureStep' | translate }}</h2>
+      <h3 ibmModalHeaderHeading>
+        {{
+          'processLinkConfiguration.modalTitle' | translate : {processStepName: obs.processStepName}
+        }}
+      </h3>
+    </ibm-modal-header>
+  </ibm-modal>
+</ng-container>
