@@ -52,6 +52,14 @@ interface ProcessLinkType {
   processLinkType: string;
 }
 
+type ProcessLinkConfigurationStep =
+  | 'chooseProcessLinkType'
+  | 'choosePluginConfiguration'
+  | 'choosePluginAction'
+  | 'configurePluginAction'
+  | 'selectForm'
+  | 'selectFormFlow';
+
 export {
   SaveProcessLinkRequest,
   GetProcessLinkRequest,
@@ -60,4 +68,5 @@ export {
   UpdateProcessLinkRequest,
   ProcessLinkModalType,
   ProcessLinkType,
+  ProcessLinkConfigurationStep,
 };
