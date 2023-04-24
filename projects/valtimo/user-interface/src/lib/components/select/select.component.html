@@ -25,6 +25,7 @@
   >
   </v-input-label>
   <ng-select
+    #select
     [style.width.px]="widthInPx"
     [ngModel]="selected$ | async"
     (ngModelChange)="setSelectedValue($event)"
@@ -34,9 +35,11 @@
     [notFoundText]="notFoundText || ('interface.noItemsFound' | translate)"
     [clearAllText]="clearAllText || ('interface.clearAll' | translate)"
     (clear)="clearSelection()"
+    (scrollToEnd)="scrollToEnd.emit(select.searchTerm)"
     [loading]="loading"
     [loadingText]="loadingText || ('interface.loading' | translate)"
     [placeholder]="placeholder"
+    [typeahead]="typeahead"
   >
     <ng-option *ngFor="let item of items" [value]="item.id">{{
       item.translationKey ? (item.translationKey | translate) : item.text

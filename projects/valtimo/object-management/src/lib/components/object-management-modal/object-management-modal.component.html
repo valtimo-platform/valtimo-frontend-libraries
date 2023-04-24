@@ -132,27 +132,29 @@
         name="objecttypeVersion"
       ></v-input>
 
-      <ng-container *ngIf="{formDefinitions: formDefinitions$ | async} as formObs">
-        <v-select
-          [items]="formObs.formDefinitions"
-          [margin]="true"
-          [widthInPx]="350"
-          name="formDefinitionView"
-          [title]="'objectManagement.labels.formDefinitionView' | translate"
-          [tooltip]="'objectManagement.tooltips.formDefinitionView' | translate"
-          [defaultSelectionId]="prefillObject?.formDefinitionView"
-        ></v-select>
+      <v-select
+        [items]="formDefinitions"
+        [margin]="true"
+        [widthInPx]="350"
+        [typeahead]="searchInput$"
+        name="formDefinitionView"
+        [title]="'objectManagement.labels.formDefinitionView' | translate"
+        [tooltip]="'objectManagement.tooltips.formDefinitionView' | translate"
+        [defaultSelectionId]="prefillObject?.formDefinitionView"
+        (scrollToEnd)="fetchMoreForms($event)"
+      ></v-select>
 
-        <v-select
-          [items]="formObs.formDefinitions"
-          [margin]="true"
-          [widthInPx]="350"
-          name="formDefinitionEdit"
-          [title]="'objectManagement.labels.formDefinitionEdit' | translate"
-          [tooltip]="'objectManagement.tooltips.formDefinitionEdit' | translate"
-          [defaultSelectionId]="prefillObject?.formDefinitionEdit"
-        ></v-select>
-      </ng-container>
+      <v-select
+        [items]="formDefinitions"
+        [margin]="true"
+        [widthInPx]="350"
+        [typeahead]="searchInput$"
+        name="formDefinitionEdit"
+        [title]="'objectManagement.labels.formDefinitionEdit' | translate"
+        [tooltip]="'objectManagement.tooltips.formDefinitionEdit' | translate"
+        [defaultSelectionId]="prefillObject?.formDefinitionEdit"
+        (scrollToEnd)="fetchMoreForms($event)"
+      ></v-select>
 
       <v-input
         [margin]="true"

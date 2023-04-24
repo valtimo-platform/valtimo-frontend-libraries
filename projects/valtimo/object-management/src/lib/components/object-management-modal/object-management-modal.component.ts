@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {ModalComponent as vModalComponent, ModalService} from '@valtimo/user-interface';
-import {BehaviorSubject, combineLatest, map, Observable, Subscription} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  Subject,
+  Subscription,
+  switchMap,
+} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {ObjectManagementStateService} from '../../services/object-management-state.service';
 import {FormManagementService} from '@valtimo/form-management';
@@ -52,15 +54,9 @@ export class ObjectManagementModalComponent implements AfterViewInit, OnDestroy 
 
   readonly selectedObjecttype$ = new BehaviorSubject<string | null>(null);
 
-  readonly formDefinitions$: Observable<Array<{id: string; text: string}>> =
-    this.formManagementService.queryFormDefinitions().pipe(
-      map(results =>
-        results?.body?.content.map(configuration => ({
-          id: configuration.name,
-          text: configuration.name,
-        }))
-      )
-    );
+  readonly searchInput$ = new Subject<string>();
+  formDefinitions: Array<{id: string; text: string}> = [];
+  page: number = 0;
 
   readonly configurationInstances$: Observable<Array<PluginConfiguration>> =
     this.pluginManagementService
@@ -110,6 +106,10 @@ export class ObjectManagementModalComponent implements AfterViewInit, OnDestroy 
     this.hideSubscription?.unsubscribe();
   }
 
+  ngOnInit(): void {
+    this.initSearch();
+  }
+
   hide(): void {
     this.formData$.next(null);
     this.valid$.next(false);
@@ -140,6 +140,61 @@ export class ObjectManagementModalComponent implements AfterViewInit, OnDestroy 
       });
   }
 
+  formValueChange(data: any): void {
+    if (data.showInDataMenu === '') {
+      data.showInDataMenu = false;
+    }
+    this.formData$.next(data);
+    this.setValid(data);
+  }
+
+  fetchMoreForms(term) {
+    this.page++;
+    this.searchFormDefinitions(term)
+      .pipe(take(1))
+      .subscribe(loadedFormDefinitions => {
+        this.formDefinitions = this.formDefinitions.concat(loadedFormDefinitions);
+      });
+  }
+
+  selectObjectType(objecttype): void {
+    this.selectedObjecttype$.next(objecttype);
+  }
+
+  private initSearch(): void {
+    this.searchInput$
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap(term => {
+          this.page = 0;
+          return this.searchFormDefinitions(term);
+        })
+      )
+      .pipe(take(1))
+      .subscribe(loadedFormDefinitions => (this.formDefinitions = loadedFormDefinitions));
+    this.searchInput$.next(null);
+  }
+
+  private searchFormDefinitions(searchTerm: string): Observable<{id: string; text: string}[]> {
+    const params = {
+      size: 25,
+      sort: 'name,asc',
+      page: this.page,
+    };
+    if (searchTerm) {
+      params['searchTerm'] = searchTerm;
+    }
+    return this.formManagementService.queryFormDefinitions(params).pipe(
+      map(results =>
+        results?.body?.content.map(configuration => ({
+          id: configuration.name,
+          text: configuration.name,
+        }))
+      )
+    );
+  }
+
   private openShowSubscription(): void {
     this.showSubscription = this.objectManagementState.showModal$.subscribe(() => {
       this.show();
@@ -160,14 +215,6 @@ export class ObjectManagementModalComponent implements AfterViewInit, OnDestroy 
     });
   }
 
-  formValueChange(data: any): void {
-    if (data.showInDataMenu === '') {
-      data.showInDataMenu = false;
-    }
-    this.formData$.next(data);
-    this.setValid(data);
-  }
-
   private setValid(data: any): void {
     this.valid$.next(
       !!(
@@ -178,9 +225,5 @@ export class ObjectManagementModalComponent implements AfterViewInit, OnDestroy 
         data.objecttypeVersion
       )
     );
-  }
-
-  selectObjectType(objecttype): void {
-    this.selectedObjecttype$.next(objecttype);
   }
 }

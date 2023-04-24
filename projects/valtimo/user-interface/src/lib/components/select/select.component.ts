@@ -25,7 +25,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {SelectedValue, SelectItem} from '../../models';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'v-select',
@@ -54,9 +54,11 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
   @Input() loadingText = '';
   @Input() placeholder = '';
   @Input() smallMargin = false;
+  @Input() typeahead: Subject<string> = new Subject<string>();
 
   @Output() selectedChange: EventEmitter<SelectedValue> = new EventEmitter();
   @Output() clear: EventEmitter<any> = new EventEmitter();
+  @Output() scrollToEnd: EventEmitter<any> = new EventEmitter();
 
   selected$ = new BehaviorSubject<SelectedValue>('');
 
