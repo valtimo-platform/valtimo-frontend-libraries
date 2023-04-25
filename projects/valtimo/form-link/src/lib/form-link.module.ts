@@ -41,6 +41,7 @@ import {PluginFunctionConfigurationComponent} from './components/plugin-function
 import {ProcessLink2Component} from './components/process-link-2/process-link-2.component';
 import {ProcessLinkModalComponent} from './components/process-link-modal/process-link-modal.component';
 import {
+  ButtonModule as CarbonButtonModule,
   GridModule,
   ModalModule as CarbonModalModule,
   ProgressIndicatorModule,
@@ -78,6 +79,7 @@ import {
     CarbonModalModule,
     ProgressIndicatorModule,
     GridModule,
+    CarbonButtonModule,
   ],
   exports: [
     FormLinkComponent,

@@ -20,7 +20,8 @@
     processStepName: processStepName$ | async,
     steps: steps$ | async,
     currentStepIndex: currentStepIndex$ | async,
-    currentStep: currentStep$ | async
+    currentStepId: currentStepId$ | async,
+    availableProcessLinkTypes: availableProcessLinkTypes$ | async
   } as obs"
 >
   <ibm-modal [open]="obs.showModal">
@@ -34,6 +35,7 @@
     </ibm-modal-header>
     <section ibmModalContent>
       <ng-container *ngTemplateOutlet="progressIndicator; context: {obs: obs}"></ng-container>
+      <ng-container *ngTemplateOutlet="stepContent; context: {obs: obs}"></ng-container>
     </section>
   </ibm-modal>
 </ng-container>
@@ -44,4 +46,14 @@
     [current]="obs.currentStepIndex"
     spacing="equal"
   ></ibm-progress-indicator>
+</ng-template>
+
+<ng-template #stepContent let-obs="obs">
+  <ng-container *ngIf="obs.currentStepId === 'chooseProcessLinkType'">
+    <ng-container *ngTemplateOutlet="chooseProcessLinkType; context: {obs: obs}"></ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #chooseProcessLinkType let-obs="obs">
+  choose process link type {{ obs.currentStepId }}
 </ng-template>

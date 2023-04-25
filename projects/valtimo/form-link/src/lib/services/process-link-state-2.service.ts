@@ -27,20 +27,24 @@ export class ProcessLinkState2Service implements OnDestroy {
 
   private _availableProcessLinkTypesSubscription!: Subscription;
 
-  constructor(private readonly processLinkStepService: ProcessLinkStepService) {
-    this.openAvailableProcessLinkTypesSubscription();
-  }
-
-  ngOnDestroy(): void {
-    this._availableProcessLinkTypesSubscription?.unsubscribe();
-  }
-
   get showModal$(): Observable<boolean> {
     return this._showModal$.asObservable();
   }
 
   get elementName$(): Observable<string> {
     return this._elementName$.asObservable();
+  }
+
+  get availableProcessLinkTypes$(): Observable<Array<ProcessLinkType>> {
+    return this._availableProcessLinkTypes$.asObservable();
+  }
+
+  constructor(private readonly processLinkStepService: ProcessLinkStepService) {
+    this.openAvailableProcessLinkTypesSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this._availableProcessLinkTypesSubscription?.unsubscribe();
   }
 
   setAvailableProcessLinkTypes(processLinkTypes: Array<ProcessLinkType>): void {

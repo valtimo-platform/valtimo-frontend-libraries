@@ -1069,5 +1069,10 @@
   "processLinkConfiguration": {
     "configureStep": "Prozessschritt konfigurieren",
     "modalTitle": "Prozessschritt: {{processStepName}}"
+  },
+  "processLinkType": {
+    "plugin": "Plugin",
+    "form": "Formular",
+    "form-flow": "FormFlow"
   }
 }

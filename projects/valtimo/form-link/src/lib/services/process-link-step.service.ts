@@ -16,23 +16,28 @@
 
 import {Injectable} from '@angular/core';
 import {Step} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
 import {ProcessLinkType} from '../models';
 import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class ProcessLinkStepService {
-  private readonly _steps$ = new BehaviorSubject<Array<Step>>([]);
+  private readonly _steps$ = new BehaviorSubject<Array<Step>>(undefined);
 
   private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
 
   get steps$(): Observable<Array<Step>> {
     return combineLatest([this._steps$, this.translateService.stream('key')]).pipe(
+      filter(([steps]) => !!steps),
       map(([steps]) =>
         steps.map(step => ({
           ...step,
           label: this.translateService.instant(`processLinkSteps.${step.label}`),
-          secondaryLabel: this.translateService.instant(`processLinkSteps.${step.secondaryLabel}`),
+          ...(step.secondaryLabel && {
+            secondaryLabel: this.translateService.instant(
+              `processLinkSteps.${step.secondaryLabel}`
+            ),
+          }),
         }))
       )
     );
@@ -42,9 +47,10 @@ export class ProcessLinkStepService {
     return this._currentStepIndex$.asObservable();
   }
 
-  get currentStep$(): Observable<Step> {
-    return combineLatest([this.steps$, this.currentStepIndex$]).pipe(
-      map(([steps, currentStepIndex]) => steps[currentStepIndex])
+  get currentStepId$(): Observable<string> {
+    return combineLatest([this._steps$, this.currentStepIndex$]).pipe(
+      filter(([steps]) => !!steps),
+      map(([steps, currentStepIndex]) => steps[currentStepIndex].label)
     );
   }
 

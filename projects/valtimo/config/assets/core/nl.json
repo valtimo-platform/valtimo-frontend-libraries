@@ -1070,5 +1070,10 @@
   "processLinkConfiguration": {
     "configureStep": "Processtap configureren",
     "modalTitle": "Processtap: {{processStepName}}"
+  },
+  "processLinkType": {
+    "plugin": "Plugin",
+    "form": "Formulier",
+    "form-flow": "FormFlow"
   }
 }
