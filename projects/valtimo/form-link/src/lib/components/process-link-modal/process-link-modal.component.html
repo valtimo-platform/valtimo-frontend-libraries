@@ -19,7 +19,8 @@
     showModal: showModal$ | async,
     processStepName: processStepName$ | async,
     steps: steps$ | async,
-    currentStepIndex: currentStepIndex$ | async
+    currentStepIndex: currentStepIndex$ | async,
+    currentStep: currentStep$ | async
   } as obs"
 >
   <ibm-modal [open]="obs.showModal">
@@ -32,11 +33,15 @@
       </h3>
     </ibm-modal-header>
     <section ibmModalContent>
-      <ibm-progress-indicator
-        [steps]="obs.steps"
-        [current]="obs.currentStepIndex"
-        spacing="equal"
-      ></ibm-progress-indicator>
+      <ng-container *ngTemplateOutlet="progressIndicator; context: {obs: obs}"></ng-container>
     </section>
   </ibm-modal>
 </ng-container>
+
+<ng-template #progressIndicator let-obs="obs">
+  <ibm-progress-indicator
+    [steps]="obs.steps"
+    [current]="obs.currentStepIndex"
+    spacing="equal"
+  ></ibm-progress-indicator>
+</ng-template>

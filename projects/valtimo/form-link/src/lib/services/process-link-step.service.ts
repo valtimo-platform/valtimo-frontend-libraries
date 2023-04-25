@@ -42,6 +42,12 @@ export class ProcessLinkStepService {
     return this._currentStepIndex$.asObservable();
   }
 
+  get currentStep$(): Observable<Step> {
+    return combineLatest([this.steps$, this.currentStepIndex$]).pipe(
+      map(([steps, currentStepIndex]) => steps[currentStepIndex])
+    );
+  }
+
   constructor(private readonly translateService: TranslateService) {}
 
   setInitialSteps(availableProcessLinkTypes: Array<ProcessLinkType>): void {
