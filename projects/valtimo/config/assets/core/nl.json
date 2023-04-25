@@ -1069,11 +1069,16 @@
   },
   "processLinkConfiguration": {
     "configureStep": "Processtap configureren",
-    "modalTitle": "Processtap: {{processStepName}}"
+    "modalTitle": "Processtap: {{processStepName}}",
+    "chooseProcessLinkTypeDescription": "Een processtap kan verschillende acties uitvoeren. Kies hieronder aan welk type actie je deze stap wilt koppelen."
   },
   "processLinkType": {
     "plugin": "Plugin",
     "form": "Formulier",
     "form-flow": "FormFlow"
+  },
+  "processLinkSteps": {
+    "chooseProcessLinkType": "Kies soort koppeling",
+    "empty": "........"
   }
 }

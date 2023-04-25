@@ -56,8 +56,14 @@ export class ProcessLinkStepService {
 
   constructor(private readonly translateService: TranslateService) {}
 
+  reset(): void {
+    this._currentStepIndex$.next(0);
+    this._steps$.next(undefined);
+  }
+
   setInitialSteps(availableProcessLinkTypes: Array<ProcessLinkType>): void {
     if (availableProcessLinkTypes.length > 1) {
+      console.log(availableProcessLinkTypes);
       this.setChoiceSteps();
     }
   }

@@ -14,7 +14,8 @@
   ~ limitations under the License.
   -->
 
-<ng-container
+<div
+  class="process-link-modal-container"
   *ngIf="{
     showModal: showModal$ | async,
     processStepName: processStepName$ | async,
@@ -24,7 +25,7 @@
     availableProcessLinkTypes: availableProcessLinkTypes$ | async
   } as obs"
 >
-  <ibm-modal [open]="obs.showModal">
+  <ibm-modal [open]="obs.showModal" size="lg">
     <ibm-modal-header (closeSelect)="closeModal()">
       <h2 ibmModalHeaderLabel>{{ 'processLinkConfiguration.configureStep' | translate }}</h2>
       <h3 ibmModalHeaderHeading>
@@ -37,11 +38,13 @@
       <ng-container *ngTemplateOutlet="progressIndicator; context: {obs: obs}"></ng-container>
       <ng-container *ngTemplateOutlet="stepContent; context: {obs: obs}"></ng-container>
     </section>
+    <ng-template *ngTemplateOutlet="footer"></ng-template>
   </ibm-modal>
-</ng-container>
+</div>
 
 <ng-template #progressIndicator let-obs="obs">
   <ibm-progress-indicator
+    *ngIf="obs.steps"
     [steps]="obs.steps"
     [current]="obs.currentStepIndex"
     spacing="equal"
@@ -55,5 +58,49 @@
 </ng-template>
 
 <ng-template #chooseProcessLinkType let-obs="obs">
-  choose process link type {{ obs.currentStepId }}
+  <p class="choose-process-link-type-description">
+    {{ 'processLinkConfiguration.chooseProcessLinkTypeDescription' | translate }}
+  </p>
+  <div class="process-link-grid">
+    <div
+      class="process-link-item"
+      *ngFor="let availableProcessLinkType of obs.availableProcessLinkTypes"
+    >
+      <ng-container *ngIf="availableProcessLinkType.processLinkType as processLinkTypeId">
+        <button
+          ibmButton="secondary"
+          class="process-link-type-button"
+          [disabled]="!availableProcessLinkType.enabled"
+        >
+          {{ 'processLinkType.' + processLinkTypeId | translate }}
+          <svg
+            *ngIf="processLinkTypeId === 'plugin'"
+            class="cds--btn__icon"
+            ibmIconLink
+            size="16"
+          ></svg>
+          <svg
+            *ngIf="processLinkTypeId === 'form'"
+            class="cds--btn__icon"
+            ibmIconReceipt
+            size="16"
+          ></svg>
+          <svg
+            *ngIf="processLinkTypeId === 'form-flow'"
+            class="cds--btn__icon"
+            ibmIconFlowData
+            size="16"
+          ></svg>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #footer>
+  <ibm-modal-footer>
+    <button ibmButton="ghost" (click)="closeModal()">
+      {{ 'object.close' | translate }}
+    </button>
+  </ibm-modal-footer>
 </ng-template>

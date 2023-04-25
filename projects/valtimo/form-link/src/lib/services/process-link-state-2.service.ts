@@ -61,6 +61,10 @@ export class ProcessLinkState2Service implements OnDestroy {
 
   closeModal(): void {
     this._showModal$.next(false);
+
+    setTimeout(() => {
+      this.reset();
+    }, 240);
   }
 
   private openAvailableProcessLinkTypesSubscription(): void {
@@ -69,5 +73,10 @@ export class ProcessLinkState2Service implements OnDestroy {
         this.processLinkStepService.setInitialSteps(availableProcessLinkTypes);
       }
     );
+  }
+
+  private reset(): void {
+    this.setAvailableProcessLinkTypes([]);
+    this.processLinkStepService.reset();
   }
 }

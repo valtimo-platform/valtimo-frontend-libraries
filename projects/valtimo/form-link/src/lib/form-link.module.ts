@@ -42,10 +42,11 @@ import {ProcessLink2Component} from './components/process-link-2/process-link-2.
 import {ProcessLinkModalComponent} from './components/process-link-modal/process-link-modal.component';
 import {
   ButtonModule as CarbonButtonModule,
-  GridModule,
+  IconModule,
   ModalModule as CarbonModalModule,
   ProgressIndicatorModule,
 } from 'carbon-components-angular';
+import {FlowDataModule, LinkModule, ReceiptModule} from '@carbon/icons-angular';
 
 @NgModule({
   declarations: [
@@ -78,8 +79,11 @@ import {
     TitleModule,
     CarbonModalModule,
     ProgressIndicatorModule,
-    GridModule,
     CarbonButtonModule,
+    IconModule,
+    LinkModule,
+    ReceiptModule,
+    FlowDataModule,
   ],
   exports: [
     FormLinkComponent,

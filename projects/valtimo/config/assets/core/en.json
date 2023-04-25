@@ -1066,11 +1066,16 @@
   },
   "processLinkConfiguration": {
     "configureStep": "Configure process step",
-    "modalTitle": "Process step: {{processStepName}}"
+    "modalTitle": "Process step: {{processStepName}}",
+    "chooseProcessLinkTypeDescription": "A proces step can perform a variety of actions. Choose below to what type of action you would like to link this step."
   },
   "processLinkType": {
     "plugin": "Plugin",
     "form": "Form",
     "form-flow": "FormFlow"
+  },
+  "processLinkSteps": {
+    "chooseProcessLinkType": "Choose link type",
+    "empty": "........"
   }
 }

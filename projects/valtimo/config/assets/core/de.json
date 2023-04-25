@@ -1068,11 +1068,16 @@
   },
   "processLinkConfiguration": {
     "configureStep": "Prozessschritt konfigurieren",
-    "modalTitle": "Prozessschritt: {{processStepName}}"
+    "modalTitle": "Prozessschritt: {{processStepName}}",
+    "chooseProcessLinkTypeDescription": "Ein Prozessschritt kann mehrere Aktionen ausführen. Wählen Sie unten aus, mit welcher Art von Aktion Sie diesen Schritt verknüpfen möchten."
   },
   "processLinkType": {
     "plugin": "Plugin",
     "form": "Formular",
     "form-flow": "FormFlow"
+  },
+  "processLinkSteps": {
+    "chooseProcessLinkType": "Linktyp wählen",
+    "empty": "........"
   }
 }
