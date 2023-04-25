@@ -15,7 +15,7 @@
  */
 
 import {Component} from '@angular/core';
-import {ProcessLinkState2Service} from '../../services';
+import {ProcessLinkState2Service, ProcessLinkStepService} from '../../services';
 
 @Component({
   selector: 'valtimo-process-link-modal',
@@ -25,8 +25,14 @@ import {ProcessLinkState2Service} from '../../services';
 export class ProcessLinkModalComponent {
   public readonly showModal$ = this.processLinkState2Service.showModal$;
   public readonly processStepName$ = this.processLinkState2Service.elementName$;
+  public readonly steps$ = this.processLinkStepService.steps$;
 
-  constructor(private readonly processLinkState2Service: ProcessLinkState2Service) {}
+  public readonly currentStepIndex$ = this.processLinkStepService.currentStepIndex$;
+
+  constructor(
+    private readonly processLinkState2Service: ProcessLinkState2Service,
+    private readonly processLinkStepService: ProcessLinkStepService
+  ) {}
 
   closeModal(): void {
     this.processLinkState2Service.closeModal();

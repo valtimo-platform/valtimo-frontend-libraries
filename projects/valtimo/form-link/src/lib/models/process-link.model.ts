@@ -58,7 +58,8 @@ type ProcessLinkConfigurationStep =
   | 'choosePluginAction'
   | 'configurePluginAction'
   | 'selectForm'
-  | 'selectFormFlow';
+  | 'selectFormFlow'
+  | 'empty';
 
 export {
   SaveProcessLinkRequest,

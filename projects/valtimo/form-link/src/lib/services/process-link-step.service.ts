@@ -15,18 +15,47 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {ProcessLinkConfigurationStep, ProcessLinkType} from '../models';
+import {Step} from 'carbon-components-angular';
+import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {ProcessLinkType} from '../models';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class ProcessLinkStepService {
-  private readonly _steps$ = new BehaviorSubject<Array<ProcessLinkConfigurationStep>>([]);
+  private readonly _steps$ = new BehaviorSubject<Array<Step>>([]);
+
+  private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
+
+  get steps$(): Observable<Array<Step>> {
+    return combineLatest([this._steps$, this.translateService.stream('key')]).pipe(
+      map(([steps]) =>
+        steps.map(step => ({
+          ...step,
+          label: this.translateService.instant(`processLinkSteps.${step.label}`),
+          secondaryLabel: this.translateService.instant(`processLinkSteps.${step.secondaryLabel}`),
+        }))
+      )
+    );
+  }
+
+  get currentStepIndex$(): Observable<number> {
+    return this._currentStepIndex$.asObservable();
+  }
+
+  constructor(private readonly translateService: TranslateService) {}
 
   setInitialSteps(availableProcessLinkTypes: Array<ProcessLinkType>): void {
     if (availableProcessLinkTypes.length > 1) {
-      this.setChoiceSteps(availableProcessLinkTypes);
+      this.setChoiceSteps();
     }
   }
 
-  private setChoiceSteps(availableProcessLinkTypes: Array<ProcessLinkType>): void {}
+  private setChoiceSteps(): void {
+    this._currentStepIndex$.next(0);
+    this._steps$.next([
+      {label: 'chooseProcessLinkType'},
+      {label: 'empty', disabled: true},
+      {label: 'empty', disabled: true},
+    ]);
+  }
 }

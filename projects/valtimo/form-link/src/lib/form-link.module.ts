@@ -40,7 +40,7 @@ import {PluginConfigurationContainerModule, PluginTranslatePipeModule} from '@va
 import {PluginFunctionConfigurationComponent} from './components/plugin-function-configuration/plugin-function-configuration.component';
 import {ProcessLink2Component} from './components/process-link-2/process-link-2.component';
 import {ProcessLinkModalComponent} from './components/process-link-modal/process-link-modal.component';
-import {ModalModule as CarbonModalModule} from 'carbon-components-angular';
+import {ModalModule as CarbonModalModule, ProgressIndicatorModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [
@@ -72,6 +72,7 @@ import {ModalModule as CarbonModalModule} from 'carbon-components-angular';
     ButtonModule,
     TitleModule,
     CarbonModalModule,
+    ProgressIndicatorModule,
   ],
   exports: [
     FormLinkComponent,

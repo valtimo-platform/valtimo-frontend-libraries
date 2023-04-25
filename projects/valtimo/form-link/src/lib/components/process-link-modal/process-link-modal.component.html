@@ -15,7 +15,12 @@
   -->
 
 <ng-container
-  *ngIf="{showModal: showModal$ | async, processStepName: processStepName$ | async} as obs"
+  *ngIf="{
+    showModal: showModal$ | async,
+    processStepName: processStepName$ | async,
+    steps: steps$ | async,
+    currentStepIndex: currentStepIndex$ | async
+  } as obs"
 >
   <ibm-modal [open]="obs.showModal">
     <ibm-modal-header (closeSelect)="closeModal()">
@@ -26,5 +31,12 @@
         }}
       </h3>
     </ibm-modal-header>
+    <section ibmModalContent>
+      <ibm-progress-indicator
+        [steps]="obs.steps"
+        [current]="obs.currentStepIndex"
+        spacing="equal"
+      ></ibm-progress-indicator>
+    </section>
   </ibm-modal>
 </ng-container>
