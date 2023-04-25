@@ -58,12 +58,11 @@ export class ProcessLinkStepService {
 
   reset(): void {
     this._currentStepIndex$.next(0);
-    this._steps$.next(undefined);
+    this._steps$.next([]);
   }
 
   setInitialSteps(availableProcessLinkTypes: Array<ProcessLinkType>): void {
     if (availableProcessLinkTypes.length > 1) {
-      console.log(availableProcessLinkTypes);
       this.setChoiceSteps();
     }
   }
