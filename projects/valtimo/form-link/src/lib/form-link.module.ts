@@ -31,6 +31,7 @@ import {
   ParagraphModule,
   StepperModule,
   TitleModule,
+  TooltipModule,
 } from '@valtimo/user-interface';
 import {SelectPluginComponent} from './components/select-plugin/select-plugin.component';
 import {SelectPluginConfigurationComponent} from './components/select-plugin-configuration/select-plugin-configuration.component';
@@ -84,6 +85,7 @@ import {FlowDataModule, LinkModule, ReceiptModule} from '@carbon/icons-angular';
     LinkModule,
     ReceiptModule,
     FlowDataModule,
+    TooltipModule,
   ],
   exports: [
     FormLinkComponent,

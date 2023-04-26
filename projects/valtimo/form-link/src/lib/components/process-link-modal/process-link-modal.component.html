@@ -71,6 +71,9 @@
           ibmButton="secondary"
           class="process-link-type-button"
           [disabled]="!availableProcessLinkType.enabled"
+          [vTooltip]="'processLinkTypeDisabledTooltip.' + processLinkTypeId | translate"
+          [onBottom]="true"
+          [disabled]="availableProcessLinkType.enabled"
         >
           {{ 'processLinkType.' + processLinkTypeId | translate }}
           <svg

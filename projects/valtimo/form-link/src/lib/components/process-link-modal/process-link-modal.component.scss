@@ -21,12 +21,14 @@
 .process-link-grid {
   margin-top: 24px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .process-link-item {
-  width: calc(33.3% - (16px / 3));
+  flex-basis: calc(33.3% - (16px / 3));
 }
 
 .choose-process-link-type-description {

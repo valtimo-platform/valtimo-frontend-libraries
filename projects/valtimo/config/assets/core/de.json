@@ -1079,5 +1079,10 @@
   "processLinkSteps": {
     "chooseProcessLinkType": "Linktyp wählen",
     "empty": "........"
+  },
+  "processLinkTypeDisabledTooltip": {
+    "plugin": "Es sind keine Plugin-Konfigurationen verfügbar. Erstellen Sie eine Plugin-Konfiguration, um sie mit einem Prozessschritt verknüpfen zu können.",
+    "form": "Es sind keine Formulare vorhanden. Erstellen Sie ein Formular, um es mit einem Prozessschritt verknüpfen zu können.",
+    "form-flow": "Es sind keine FormFlows verfügbar. Erstellen Sie einen FormFlow, um ihn mit einem Prozessschritt verknüpfen zu können."
   }
 }
