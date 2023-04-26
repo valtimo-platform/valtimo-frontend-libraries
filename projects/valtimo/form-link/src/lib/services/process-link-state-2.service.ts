@@ -24,6 +24,7 @@ export class ProcessLinkState2Service implements OnDestroy {
   private readonly _showModal$ = new BehaviorSubject<boolean>(false);
   private readonly _availableProcessLinkTypes$ = new BehaviorSubject<Array<ProcessLinkType>>([]);
   private readonly _elementName$ = new BehaviorSubject<string>('');
+  private readonly _selectedProcessLinkTypeId$ = new BehaviorSubject<string>('');
 
   private _availableProcessLinkTypesSubscription!: Subscription;
 
@@ -37,6 +38,10 @@ export class ProcessLinkState2Service implements OnDestroy {
 
   get availableProcessLinkTypes$(): Observable<Array<ProcessLinkType>> {
     return this._availableProcessLinkTypes$.asObservable();
+  }
+
+  get selectedProcessLinkTypeId$(): Observable<string> {
+    return this._selectedProcessLinkTypeId$.asObservable();
   }
 
   constructor(private readonly processLinkStepService: ProcessLinkStepService) {
@@ -67,6 +72,11 @@ export class ProcessLinkState2Service implements OnDestroy {
     }, 240);
   }
 
+  selectProcessLinkType(processLinkTypeId: string): void {
+    this._selectedProcessLinkTypeId$.next(processLinkTypeId);
+    this.setProcessLinkTypeSteps(processLinkTypeId);
+  }
+
   private openAvailableProcessLinkTypesSubscription(): void {
     this._availableProcessLinkTypesSubscription = this._availableProcessLinkTypes$.subscribe(
       availableProcessLinkTypes => {
@@ -78,5 +88,13 @@ export class ProcessLinkState2Service implements OnDestroy {
   private reset(): void {
     this.setAvailableProcessLinkTypes([]);
     this.processLinkStepService.reset();
+  }
+
+  private setProcessLinkTypeSteps(processLinkTypeId: string): void {
+    switch (processLinkTypeId) {
+      case 'form':
+        this.processLinkStepService.setFormSteps();
+        break;
+    }
   }
 }

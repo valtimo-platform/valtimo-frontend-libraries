@@ -36,6 +36,10 @@ export class ProcessLinkModalComponent {
     private readonly processLinkStepService: ProcessLinkStepService
   ) {}
 
+  selectProcessLinkType(processLinkTypeId: string): void {
+    this.processLinkState2Service.selectProcessLinkType(processLinkTypeId);
+  }
+
   closeModal(): void {
     this.processLinkState2Service.closeModal();
   }

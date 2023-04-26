@@ -34,9 +34,7 @@ export class ProcessLinkStepService {
           ...step,
           label: this.translateService.instant(`processLinkSteps.${step.label}`),
           ...(step.secondaryLabel && {
-            secondaryLabel: this.translateService.instant(
-              `processLinkSteps.${step.secondaryLabel}`
-            ),
+            secondaryLabel: this.translateService.instant(step.secondaryLabel),
           }),
         }))
       )
@@ -67,12 +65,20 @@ export class ProcessLinkStepService {
     }
   }
 
+  setFormSteps(): void {
+    this._steps$.next([
+      {label: 'chooseProcessLinkType', secondaryLabel: 'processLinkType.form'},
+      {label: 'selectForm'},
+    ]);
+    this._currentStepIndex$.next(1);
+  }
+
   private setChoiceSteps(): void {
-    this._currentStepIndex$.next(0);
     this._steps$.next([
       {label: 'chooseProcessLinkType'},
       {label: 'empty', disabled: true},
       {label: 'empty', disabled: true},
     ]);
+    this._currentStepIndex$.next(0);
   }
 }

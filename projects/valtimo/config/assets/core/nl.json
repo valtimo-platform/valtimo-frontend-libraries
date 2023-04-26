@@ -1079,7 +1079,8 @@
   },
   "processLinkSteps": {
     "chooseProcessLinkType": "Kies soort koppeling",
-    "empty": "........"
+    "empty": "........",
+    "selectForm": "Selecteer je formulier"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "Er zijn geen plugin-configuraties beschikbaar. Maak een pluginconfiguratie aan om deze te kunnen koppelen aan een processtap.",

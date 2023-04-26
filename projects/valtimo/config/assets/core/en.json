@@ -1076,7 +1076,8 @@
   },
   "processLinkSteps": {
     "chooseProcessLinkType": "Choose link type",
-    "empty": "........"
+    "empty": "........",
+    "selectForm": "Select your form"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "No plugin configurations are available. Create a plugin configuration to be able to link it to a process step.",

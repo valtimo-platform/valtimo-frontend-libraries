@@ -55,6 +55,9 @@
   <ng-container *ngIf="obs.currentStepId === 'chooseProcessLinkType'">
     <ng-container *ngTemplateOutlet="chooseProcessLinkType; context: {obs: obs}"></ng-container>
   </ng-container>
+  <ng-container *ngIf="obs.currentStepId === 'selectForm'">
+    <ng-container *ngTemplateOutlet="selectForm; context: {obs: obs}"></ng-container>
+  </ng-container>
 </ng-template>
 
 <ng-template #chooseProcessLinkType let-obs="obs">
@@ -68,6 +71,7 @@
     >
       <ng-container *ngIf="availableProcessLinkType.processLinkType as processLinkTypeId">
         <button
+          (click)="selectProcessLinkType(processLinkTypeId)"
           ibmButton="secondary"
           class="process-link-type-button"
           [disabled]="!availableProcessLinkType.enabled"
@@ -99,6 +103,8 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template #selectForm let-obs="obs"> select form </ng-template>
 
 <ng-template #footer>
   <ibm-modal-footer>
