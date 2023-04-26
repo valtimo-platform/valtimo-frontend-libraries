@@ -34,7 +34,7 @@ import {
   SearchField,
   SearchFieldColumnView,
   SearchFieldDataType,
-  SearchFieldV2FieldType,
+  SearchFieldFieldType,
 } from '@valtimo/config';
 import {ListField} from '@valtimo/components';
 import {catchError, take} from 'rxjs/operators';
@@ -111,7 +111,7 @@ export class ObjectManagementListSearchFieldsComponent {
     'datetime',
     'boolean',
   ];
-  private readonly FIELD_TYPES: Array<SearchFieldV2FieldType> = ['SINGLE', 'RANGE'];
+  private readonly FIELD_TYPES: Array<SearchFieldFieldType> = ['single', 'range'];
   private cachedObjectManagementListSearchFields: Array<SearchField> = [];
   private readonly refreshObjectManagementListSearchFields$ = new BehaviorSubject<null>(null);
 
@@ -211,7 +211,7 @@ export class ObjectManagementListSearchFieldsComponent {
         },
         ...this.FIELD_TYPES.map(type => ({
           content: this.translateService.instant(`searchFieldsOverview.${type}`),
-          key: type,
+          key: type.toUpperCase(),
         })),
       ].map((item, index) => ({
         ...item,
