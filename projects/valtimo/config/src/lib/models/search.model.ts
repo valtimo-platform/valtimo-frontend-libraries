@@ -23,6 +23,12 @@ type SearchFieldFieldType =
   | 'single-select-dropdown'
   | 'multi-select-dropdown';
 
+type SearchFieldV2FieldType =
+  | 'SINGLE'
+  | 'RANGE'
+  | 'SINGLE_SELECT_DROPDOWN'
+  | 'MULTI_SELECT_DROPDOWN';
+
 type SearchFieldMatchType = 'exact' | 'like';
 
 type SearchFieldBoolean = 'booleanPositive' | 'booleanNegative';
