@@ -49,6 +49,7 @@ import {
 } from 'carbon-components-angular';
 import {FlowDataModule, LinkModule, ReceiptModule} from '@carbon/icons-angular';
 import {ChooseProcessLinkTypeComponent} from './components/choose-process-link-type';
+import {SelectFormComponent} from './components/select-form';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import {ChooseProcessLinkTypeComponent} from './components/choose-process-link-t
     PluginFunctionConfigurationComponent,
     ProcessLinkModalComponent,
     ChooseProcessLinkTypeComponent,
+    SelectFormComponent,
   ],
   imports: [
     CommonModule,
