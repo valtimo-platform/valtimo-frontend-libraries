@@ -28,8 +28,6 @@ export class ProcessLinkModalComponent {
   public readonly steps$ = this.processLinkStepService.steps$;
   public readonly currentStepIndex$ = this.processLinkStepService.currentStepIndex$;
   public readonly currentStepId$ = this.processLinkStepService.currentStepId$;
-  public readonly availableProcessLinkTypes$ =
-    this.processLinkState2Service.availableProcessLinkTypes$;
 
   constructor(
     private readonly processLinkState2Service: ProcessLinkState2Service,

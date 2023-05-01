@@ -48,6 +48,7 @@ import {
   ProgressIndicatorModule,
 } from 'carbon-components-angular';
 import {FlowDataModule, LinkModule, ReceiptModule} from '@carbon/icons-angular';
+import {ChooseProcessLinkTypeComponent} from './components/choose-process-link-type';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import {FlowDataModule, LinkModule, ReceiptModule} from '@carbon/icons-angular';
     SelectPluginFunctionComponent,
     PluginFunctionConfigurationComponent,
     ProcessLinkModalComponent,
+    ChooseProcessLinkTypeComponent,
   ],
   imports: [
     CommonModule,

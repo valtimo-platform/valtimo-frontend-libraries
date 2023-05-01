@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,14 +14,4 @@
  * limitations under the License.
  */
 
-.step-description {
-  margin-top: 40px;
-}
-
-::ng-deep .process-link-modal-container .cds--modal-container {
-  max-width: 960px;
-}
-
-::ng-deep .process-link-modal-container .cds--modal-footer {
-  justify-content: flex-start;
-}
+export * from './choose-process-link-type.component';

@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
+.process-link-type-button {
+  width: 100%;
+}
+
+.process-link-grid {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.process-link-item {
+  flex-basis: calc(33.3% - (16px / 3));
+}
+
 .step-description {
   margin-top: 40px;
-}
-
-::ng-deep .process-link-modal-container .cds--modal-container {
-  max-width: 960px;
-}
-
-::ng-deep .process-link-modal-container .cds--modal-footer {
-  justify-content: flex-start;
 }
