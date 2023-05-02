@@ -25,23 +25,28 @@ export class ProcessLinkState2Service implements OnDestroy {
   private readonly _availableProcessLinkTypes$ = new BehaviorSubject<Array<ProcessLinkType>>([]);
   private readonly _elementName$ = new BehaviorSubject<string>('');
   private readonly _selectedProcessLinkTypeId$ = new BehaviorSubject<string>('');
+  private readonly _showSaveButton$ = new BehaviorSubject<boolean>(false);
+  private readonly _enableSaveButton$ = new BehaviorSubject<boolean>(false);
 
   private _availableProcessLinkTypesSubscription!: Subscription;
 
   get showModal$(): Observable<boolean> {
     return this._showModal$.asObservable();
   }
-
   get elementName$(): Observable<string> {
     return this._elementName$.asObservable();
   }
-
   get availableProcessLinkTypes$(): Observable<Array<ProcessLinkType>> {
     return this._availableProcessLinkTypes$.asObservable();
   }
-
   get selectedProcessLinkTypeId$(): Observable<string> {
     return this._selectedProcessLinkTypeId$.asObservable();
+  }
+  get showSaveButton$(): Observable<boolean> {
+    return this._showSaveButton$.asObservable();
+  }
+  get enableSaveButton$(): Observable<boolean> {
+    return this._enableSaveButton$.asObservable();
   }
 
   constructor(private readonly processLinkStepService: ProcessLinkStepService) {
@@ -77,6 +82,22 @@ export class ProcessLinkState2Service implements OnDestroy {
     this.setProcessLinkTypeSteps(processLinkTypeId);
   }
 
+  showSaveButton(): void {
+    this._showSaveButton$.next(true);
+  }
+
+  hideSaveButton(): void {
+    this._showSaveButton$.next(false);
+  }
+
+  enableSaveButton(): void {
+    this._enableSaveButton$.next(true);
+  }
+
+  disableSaveButton(): void {
+    this._enableSaveButton$.next(false);
+  }
+
   private openAvailableProcessLinkTypesSubscription(): void {
     this._availableProcessLinkTypesSubscription = this._availableProcessLinkTypes$.subscribe(
       availableProcessLinkTypes => {
@@ -93,6 +114,7 @@ export class ProcessLinkState2Service implements OnDestroy {
   private setProcessLinkTypeSteps(processLinkTypeId: string): void {
     switch (processLinkTypeId) {
       case 'form':
+        this.showSaveButton();
         this.processLinkStepService.setFormSteps();
         break;
     }

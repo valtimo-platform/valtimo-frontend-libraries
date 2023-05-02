@@ -508,7 +508,8 @@
     "cancel": "Annuleren",
     "collapse": "Inklappen",
     "expand": "Uitklappen",
-    "download": "Download"
+    "download": "Download",
+    "typeToSearch": "Typ om te zoeken..."
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",
@@ -1071,7 +1072,8 @@
     "configureStep": "Processtap configureren",
     "modalTitle": "Processtap: {{processStepName}}",
     "chooseProcessLinkTypeDescription": "Een processtap kan verschillende acties uitvoeren. Kies hieronder aan welk type actie je deze stap wilt koppelen.",
-    "chooseFormDescription": "Kies hier het formulier dat je aan de processtap wilt koppelen."
+    "chooseFormDescription": "Kies hier het formulier dat je aan de processtap wilt koppelen.",
+    "chooseForm": "Selecteer formulier"
   },
   "processLinkType": {
     "plugin": "Plugin",

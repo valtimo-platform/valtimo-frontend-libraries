@@ -20,6 +20,7 @@ import {Observable} from 'rxjs';
 import {FormioForm} from '@formio/angular';
 import {ConfigService} from '@valtimo/config';
 import {InterceptorSkipHeader} from '@valtimo/security';
+import {FormDefinitionOption} from './models';
 
 @Injectable({
   providedIn: 'root',
@@ -48,4 +49,11 @@ export class FormService {
       }
     );
   }
+
+  getAllFormDefinitions(): Observable<Array<FormDefinitionOption>> {
+    return this.http.get<Array<FormDefinitionOption>>(
+      `${this.valtimoApiConfig.endpointUri}v1/form-definition`
+    );
+  }
 }
+1;

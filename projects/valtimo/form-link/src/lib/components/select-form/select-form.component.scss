@@ -17,3 +17,15 @@
 .step-description {
   margin-top: 40px;
 }
+
+.label-with-tooltip {
+  display: flex;
+  align-items: center;
+}
+
+.select-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 24px;
+}

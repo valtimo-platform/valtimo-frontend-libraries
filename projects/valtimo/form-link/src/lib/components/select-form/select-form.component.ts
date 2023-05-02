@@ -15,6 +15,9 @@
  */
 
 import {Component} from '@angular/core';
+import {FormService} from '@valtimo/form';
+import {ListItem} from 'carbon-components-angular';
+import {map, Observable} from 'rxjs';
 
 @Component({
   selector: 'valtimo-select-form',
@@ -22,5 +25,20 @@ import {Component} from '@angular/core';
   styleUrls: ['./select-form.component.scss'],
 })
 export class SelectFormComponent {
-  constructor() {}
+  private readonly formDefinitions$ = this.formService.getAllFormDefinitions();
+  public readonly formDefinitionListItems$: Observable<Array<ListItem>> =
+    this.formDefinitions$.pipe(
+      map(formDefinitions =>
+        formDefinitions.map(definition => ({
+          content: definition.name,
+          id: definition.id,
+          selected: false,
+        }))
+      )
+    );
+  constructor(private readonly formService: FormService) {}
+
+  selectFormDefinition(formDefinition: ListItem): void {
+    console.log(formDefinition);
+  }
 }

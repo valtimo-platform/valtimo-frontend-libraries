@@ -14,8 +14,18 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="{} as obs">
+<ng-container *ngIf="{formDefinitions: formDefinitionListItems$ | async} as obs">
   <p class="step-description">
     {{ 'processLinkConfiguration.chooseFormDescription' | translate }}
   </p>
+  <div class="select-form">
+    <ibm-combo-box
+      [disabled]="!obs.formDefinitions"
+      [items]="obs.formDefinitions || []"
+      [placeholder]="'interface.typeToSearch' | translate"
+      (selected)="selectFormDefinition($event)"
+      [label]="'processLinkSteps.selectForm' | translate"
+      ><ibm-dropdown-list></ibm-dropdown-list
+    ></ibm-combo-box>
+  </div>
 </ng-container>

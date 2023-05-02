@@ -28,6 +28,8 @@ export class ProcessLinkModalComponent {
   public readonly steps$ = this.processLinkStepService.steps$;
   public readonly currentStepIndex$ = this.processLinkStepService.currentStepIndex$;
   public readonly currentStepId$ = this.processLinkStepService.currentStepId$;
+  public readonly showSaveButton$ = this.processLinkState2Service.showSaveButton$;
+  public readonly enableSaveButton$ = this.processLinkState2Service.enableSaveButton$;
 
   constructor(
     private readonly processLinkState2Service: ProcessLinkState2Service,
