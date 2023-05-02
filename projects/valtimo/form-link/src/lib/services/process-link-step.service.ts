@@ -23,7 +23,6 @@ import {TranslateService} from '@ngx-translate/core';
 @Injectable()
 export class ProcessLinkStepService {
   private readonly _steps$ = new BehaviorSubject<Array<Step>>(undefined);
-
   private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
 
   get steps$(): Observable<Array<Step>> {

@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormService} from '@valtimo/form';
 import {ListItem} from 'carbon-components-angular';
-import {map, Observable} from 'rxjs';
+import {map, Observable, Subscription} from 'rxjs';
+import {ProcessLinkState2Service} from '../../services';
 
 @Component({
   selector: 'valtimo-select-form',
   templateUrl: './select-form.component.html',
   styleUrls: ['./select-form.component.scss'],
 })
-export class SelectFormComponent {
+export class SelectFormComponent implements OnInit, OnDestroy {
   private readonly formDefinitions$ = this.formService.getAllFormDefinitions();
   public readonly formDefinitionListItems$: Observable<Array<ListItem>> =
     this.formDefinitions$.pipe(
@@ -36,9 +37,38 @@ export class SelectFormComponent {
         }))
       )
     );
-  constructor(private readonly formService: FormService) {}
+
+  private _selectedFormDefinition!: ListItem;
+  private _subscriptions = new Subscription();
+
+  constructor(
+    private readonly formService: FormService,
+    private readonly stateService: ProcessLinkState2Service
+  ) {}
+
+  ngOnInit(): void {
+    this.openBackButtonSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   selectFormDefinition(formDefinition: ListItem): void {
-    console.log(formDefinition);
+    if (typeof formDefinition === 'object' && formDefinition.id) {
+      this._selectedFormDefinition = formDefinition;
+      this.stateService.enableSaveButton();
+    } else {
+      this._selectedFormDefinition = null;
+      this.stateService.disableSaveButton();
+    }
+  }
+
+  private openBackButtonSubscription(): void {
+    this._subscriptions.add(
+      this.stateService.backButtonClick$.subscribe(() => {
+        this.stateService.setInitial();
+      })
+    );
   }
 }

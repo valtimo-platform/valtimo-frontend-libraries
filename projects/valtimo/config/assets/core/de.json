@@ -1072,7 +1072,10 @@
     "modalTitle": "Prozessschritt: {{processStepName}}",
     "chooseProcessLinkTypeDescription": "Ein Prozessschritt kann mehrere Aktionen ausführen. Wählen Sie unten aus, mit welcher Art von Aktion Sie diesen Schritt verknüpfen möchten.",
     "chooseFormDescription": "Wählen Sie hier das Formular aus, das Sie mit dem Prozessschritt verknüpfen möchten.",
-    "chooseForm": "Form wählen"
+    "chooseForm": "Form wählen",
+    "cancel": "Stornieren",
+    "complete": "Vervollständigen",
+    "back": "Zurück"
   },
   "processLinkType": {
     "plugin": "Plugin",

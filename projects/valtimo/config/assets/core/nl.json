@@ -1073,7 +1073,10 @@
     "modalTitle": "Processtap: {{processStepName}}",
     "chooseProcessLinkTypeDescription": "Een processtap kan verschillende acties uitvoeren. Kies hieronder aan welk type actie je deze stap wilt koppelen.",
     "chooseFormDescription": "Kies hier het formulier dat je aan de processtap wilt koppelen.",
-    "chooseForm": "Selecteer formulier"
+    "chooseForm": "Selecteer formulier",
+    "cancel": "Annuleren",
+    "complete": "Voltooien",
+    "back": "Terug"
   },
   "processLinkType": {
     "plugin": "Plugin",

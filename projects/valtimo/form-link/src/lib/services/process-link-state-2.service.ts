@@ -15,7 +15,7 @@
  */
 
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
 import {ProcessLinkType} from '../models';
 import {ProcessLinkStepService} from './process-link-step.service';
 
@@ -27,6 +27,10 @@ export class ProcessLinkState2Service implements OnDestroy {
   private readonly _selectedProcessLinkTypeId$ = new BehaviorSubject<string>('');
   private readonly _showSaveButton$ = new BehaviorSubject<boolean>(false);
   private readonly _enableSaveButton$ = new BehaviorSubject<boolean>(false);
+  private readonly _showBackButton$ = new BehaviorSubject<boolean>(false);
+  private readonly _backButtonClick$ = new Subject<null>();
+  private readonly _saveButtonClick$ = new Subject<null>();
+  private readonly _hasOneOption$ = new BehaviorSubject<boolean>(false);
 
   private _availableProcessLinkTypesSubscription!: Subscription;
 
@@ -48,6 +52,19 @@ export class ProcessLinkState2Service implements OnDestroy {
   get enableSaveButton$(): Observable<boolean> {
     return this._enableSaveButton$.asObservable();
   }
+  get showBackButton$(): Observable<boolean> {
+    return this._showBackButton$.asObservable();
+  }
+  get backButtonClick$(): Observable<null> {
+    return this._backButtonClick$.asObservable();
+  }
+  get saveButtonClick$(): Observable<null> {
+    return this._saveButtonClick$.asObservable();
+  }
+
+  get hasOneOption$(): Observable<boolean> {
+    return this._hasOneOption$.asObservable();
+  }
 
   constructor(private readonly processLinkStepService: ProcessLinkStepService) {
     this.openAvailableProcessLinkTypesSubscription();
@@ -58,7 +75,13 @@ export class ProcessLinkState2Service implements OnDestroy {
   }
 
   setAvailableProcessLinkTypes(processLinkTypes: Array<ProcessLinkType>): void {
+    const hasOneOption = processLinkTypes.length === 1;
     this._availableProcessLinkTypes$.next(processLinkTypes);
+    this._hasOneOption$.next(hasOneOption);
+
+    if (hasOneOption) {
+      this.selectProcessLinkType(processLinkTypes[0].processLinkType);
+    }
   }
 
   setElementName(name: string): void {
@@ -98,23 +121,50 @@ export class ProcessLinkState2Service implements OnDestroy {
     this._enableSaveButton$.next(false);
   }
 
-  private openAvailableProcessLinkTypesSubscription(): void {
-    this._availableProcessLinkTypesSubscription = this._availableProcessLinkTypes$.subscribe(
-      availableProcessLinkTypes => {
-        this.processLinkStepService.setInitialSteps(availableProcessLinkTypes);
-      }
-    );
+  showBackButton(): void {
+    this._showBackButton$.next(true);
   }
 
+  hideBackButton(): void {
+    this._showBackButton$.next(false);
+  }
+
+  clickBackButton(): void {
+    this._backButtonClick$.next(null);
+  }
+
+  clickSaveButton(): void {
+    this._saveButtonClick$.next(null);
+  }
+
+  setInitial(): void {
+    const availableTypes = this._availableProcessLinkTypes$.getValue();
+    this.resetButtons();
+    this.processLinkStepService.setInitialSteps(availableTypes);
+  }
+
+  private openAvailableProcessLinkTypesSubscription(): void {
+    this._availableProcessLinkTypesSubscription = this._availableProcessLinkTypes$.subscribe(() => {
+      this.setInitial();
+    });
+  }
   private reset(): void {
     this.setAvailableProcessLinkTypes([]);
     this.processLinkStepService.reset();
+    this.resetButtons();
+  }
+
+  private resetButtons(): void {
+    this.disableSaveButton();
+    this.hideBackButton();
+    this.hideSaveButton();
   }
 
   private setProcessLinkTypeSteps(processLinkTypeId: string): void {
     switch (processLinkTypeId) {
       case 'form':
         this.showSaveButton();
+        this.showBackButton();
         this.processLinkStepService.setFormSteps();
         break;
     }

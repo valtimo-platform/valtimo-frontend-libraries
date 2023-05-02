@@ -30,6 +30,8 @@ export class ProcessLinkModalComponent {
   public readonly currentStepId$ = this.processLinkStepService.currentStepId$;
   public readonly showSaveButton$ = this.processLinkState2Service.showSaveButton$;
   public readonly enableSaveButton$ = this.processLinkState2Service.enableSaveButton$;
+  public readonly showBackButton$ = this.processLinkState2Service.showBackButton$;
+  public readonly hasOneOption$ = this.processLinkState2Service.hasOneOption$;
 
   constructor(
     private readonly processLinkState2Service: ProcessLinkState2Service,
@@ -42,5 +44,13 @@ export class ProcessLinkModalComponent {
 
   closeModal(): void {
     this.processLinkState2Service.closeModal();
+  }
+
+  backButtonClick(): void {
+    this.processLinkState2Service.clickBackButton();
+  }
+
+  saveButtonClick(): void {
+    this.processLinkState2Service.clickSaveButton();
   }
 }

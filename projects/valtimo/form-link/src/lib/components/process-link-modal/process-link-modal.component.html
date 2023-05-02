@@ -23,7 +23,9 @@
     currentStepIndex: currentStepIndex$ | async,
     currentStepId: currentStepId$ | async,
     showSaveButton: showSaveButton$ | async,
-    enableSaveButton: enableSaveButton$ | async
+    enableSaveButton: enableSaveButton$ | async,
+    showBackButton: showBackButton$ | async,
+    hasOneOption: hasOneOption$ | async
   } as obs"
 >
   <ibm-modal [open]="obs.showModal" size="lg">
@@ -45,7 +47,7 @@
 
 <ng-template #progressIndicator let-obs="obs">
   <ibm-progress-indicator
-    *ngIf="obs.steps"
+    *ngIf="obs.steps && !obs.hasOneOption"
     [steps]="obs.steps"
     [current]="obs.currentStepIndex"
     spacing="equal"
@@ -64,14 +66,18 @@
 <ng-template #footer let-obs="obs">
   <ibm-modal-footer>
     <button ibmButton="ghost" (click)="closeModal()">
-      {{ 'object.close' | translate }}
+      {{ 'processLinkConfiguration.cancel' | translate }}
+    </button>
+    <button ibmButton="secondary" *ngIf="obs.showBackButton" (click)="backButtonClick()">
+      {{ 'processLinkConfiguration.back' | translate }}
     </button>
     <button
       ibmButton="primary"
       *ngIf="obs.showSaveButton"
       [disabled]="obs.enableSaveButton === false"
+      (click)="saveButtonClick()"
     >
-      {{ 'object.close' | translate }}
+      {{ 'processLinkConfiguration.complete' | translate }}
     </button>
   </ibm-modal-footer>
 </ng-template>
