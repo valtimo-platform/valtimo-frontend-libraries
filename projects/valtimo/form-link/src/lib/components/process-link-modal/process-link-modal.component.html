@@ -25,7 +25,8 @@
     showSaveButton: showSaveButton$ | async,
     enableSaveButton: enableSaveButton$ | async,
     showBackButton: showBackButton$ | async,
-    hasOneOption: hasOneOption$ | async
+    hasOneOption: hasOneOption$ | async,
+    disabled: disableInput$ | async
   } as obs"
 >
   <ibm-modal [open]="obs.showModal" size="lg">
@@ -65,16 +66,21 @@
 
 <ng-template #footer let-obs="obs">
   <ibm-modal-footer>
-    <button ibmButton="ghost" (click)="closeModal()">
+    <button ibmButton="ghost" (click)="closeModal()" [disabled]="obs.disabled">
       {{ 'processLinkConfiguration.cancel' | translate }}
     </button>
-    <button ibmButton="secondary" *ngIf="obs.showBackButton" (click)="backButtonClick()">
+    <button
+      ibmButton="secondary"
+      *ngIf="obs.showBackButton"
+      (click)="backButtonClick()"
+      [disabled]="obs.disabled"
+    >
       {{ 'processLinkConfiguration.back' | translate }}
     </button>
     <button
       ibmButton="primary"
       *ngIf="obs.showSaveButton"
-      [disabled]="obs.enableSaveButton === false"
+      [disabled]="obs.enableSaveButton === false || obs.disabled"
       (click)="saveButtonClick()"
     >
       {{ 'processLinkConfiguration.complete' | translate }}

@@ -31,6 +31,7 @@ export class ProcessLinkState2Service implements OnDestroy {
   private readonly _backButtonClick$ = new Subject<null>();
   private readonly _saveButtonClick$ = new Subject<null>();
   private readonly _hasOneOption$ = new BehaviorSubject<boolean>(false);
+  private readonly _disableInput$ = new BehaviorSubject<boolean>(false);
 
   private _availableProcessLinkTypesSubscription!: Subscription;
 
@@ -61,9 +62,11 @@ export class ProcessLinkState2Service implements OnDestroy {
   get saveButtonClick$(): Observable<null> {
     return this._saveButtonClick$.asObservable();
   }
-
   get hasOneOption$(): Observable<boolean> {
     return this._hasOneOption$.asObservable();
+  }
+  get disableInput$(): Observable<boolean> {
+    return this._disableInput$.asObservable();
   }
 
   constructor(private readonly processLinkStepService: ProcessLinkStepService) {
@@ -135,6 +138,14 @@ export class ProcessLinkState2Service implements OnDestroy {
 
   clickSaveButton(): void {
     this._saveButtonClick$.next(null);
+  }
+
+  disableInput(): void {
+    this._disableInput$.next(true);
+  }
+
+  enableInput(): void {
+    this._disableInput$.next(false);
   }
 
   setInitial(): void {
