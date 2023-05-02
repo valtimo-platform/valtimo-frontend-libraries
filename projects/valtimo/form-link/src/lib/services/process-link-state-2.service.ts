@@ -142,10 +142,12 @@ export class ProcessLinkState2Service implements OnDestroy {
 
   disableInput(): void {
     this._disableInput$.next(true);
+    this.processLinkStepService.disableSteps();
   }
 
   enableInput(): void {
     this._disableInput$.next(false);
+    this.processLinkStepService.enableSteps();
   }
 
   setInitial(): void {
@@ -162,6 +164,7 @@ export class ProcessLinkState2Service implements OnDestroy {
   private reset(): void {
     this.setAvailableProcessLinkTypes([]);
     this.processLinkStepService.reset();
+    this.enableInput();
     this.resetButtons();
   }
 
