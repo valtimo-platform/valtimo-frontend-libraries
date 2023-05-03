@@ -18,18 +18,22 @@ import {Component, EventEmitter, Output, ViewChild, ViewEncapsulation} from '@an
 import {FormioBeforeSubmit, FormioForm} from '@formio/angular';
 import {
   FormioComponent,
-  ModalComponent,
   FormioOptionsImpl,
   FormioSubmission,
+  ModalComponent,
   ValtimoFormioOptions,
 } from '@valtimo/components';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ProcessService, StartProcessLinkType} from '@valtimo/process';
+import {ProcessService} from '@valtimo/process';
 import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
-import {FormFlowService, FormLinkService} from '@valtimo/form-link';
+import {
+  FormAssociation,
+  FormFlowService,
+  FormLinkService,
+  FormSubmissionResult,
+} from '@valtimo/form-link';
 import {NGXLogger} from 'ngx-logger';
-import {FormAssociation, FormSubmissionResult} from '@valtimo/form-link';
-import {BehaviorSubject, noop, Observable} from 'rxjs';
+import {noop, Observable} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {UserProviderService} from '@valtimo/security';
 
@@ -75,29 +79,37 @@ export class DossierSupportingProcessStartModalComponent {
   private loadProcessLink() {
     this.formDefinition = null;
     this.formFlowInstanceId = null;
-    this.processService.getProcessDefinitionStartProcessLink(this.processDefinitionKey)
+    this.processService
+      .getProcessDefinitionStartProcessLink(this.processDefinitionId)
       .pipe(take(1))
       .subscribe(startProcessResult => {
         if (startProcessResult) {
           switch (startProcessResult.type) {
             case 'form':
-              this.formDefinition = startProcessResult.properties.prefilledForm
+              this.formDefinition = startProcessResult.properties.prefilledForm;
               break;
             case 'form-flow':
-              this.formFlowInstanceId = startProcessResult.properties.formFlowInstanceId
+              this.formFlowInstanceId = startProcessResult.properties.formFlowInstanceId;
               break;
           }
           this.modal.show();
         } else {
           // backwards compatibility for form associations
-          this.formLinkService.getStartEventFormDefinitionByProcessDefinitionKey(this.processDefinitionKey, this.documentId)
+          this.formLinkService
+            .getStartEventFormDefinitionByProcessDefinitionKey(
+              this.processDefinitionKey,
+              this.documentId
+            )
             .pipe(take(1))
             .subscribe({
-              next: formDefinitionWithFormAssociation => this.openFormAssociation(formDefinitionWithFormAssociation),
-              error: error => {this.modal.show()}
+              next: formDefinitionWithFormAssociation =>
+                this.openFormAssociation(formDefinitionWithFormAssociation),
+              error: error => {
+                this.modal.show();
+              },
             });
         }
-      })
+      });
   }
 
   private openFormAssociation(formDefinitionWithFormAssociation: any) {
@@ -118,8 +130,9 @@ export class DossierSupportingProcessStartModalComponent {
         this.modal.show();
         break;
       case 'BpmnElementFormFlowIdLink':
-        this.formFlowService.createInstanceForNewProcess(this.processDefinitionKey, {documentId: this.documentId})
-          .subscribe(result => this.formFlowInstanceId = result.formFlowInstanceId)
+        this.formFlowService
+          .createInstanceForNewProcess(this.processDefinitionKey, {documentId: this.documentId})
+          .subscribe(result => (this.formFlowInstanceId = result.formFlowInstanceId));
         this.modal.show();
         break;
       case 'BpmnElementUrlLink':
@@ -143,7 +156,7 @@ export class DossierSupportingProcessStartModalComponent {
   }
 
   openModal(processDocumentDefinition: ProcessDocumentDefinition, documentId: string) {
-    console.log('processDocumentDefinition', processDocumentDefinition)
+    console.log('processDocumentDefinition', processDocumentDefinition);
     this.documentId = documentId;
     this.documentDefinitionName = processDocumentDefinition.id.documentDefinitionId.name;
     this.processDefinitionKey = processDocumentDefinition.id.processDefinitionKey;
@@ -155,7 +168,7 @@ export class DossierSupportingProcessStartModalComponent {
       callback(null, submission);
     };
     this.options.setHooks(formioBeforeSubmit);
-    this.loadProcessLink()
+    this.loadProcessLink();
   }
 
   public onSubmit(submission: FormioSubmission) {
@@ -169,7 +182,7 @@ export class DossierSupportingProcessStartModalComponent {
       )
       .subscribe(
         (formSubmissionResult: FormSubmissionResult) => {
-          this.formSubmitted()
+          this.formSubmitted();
         },
         errors => {
           this.form.showErrors(errors);

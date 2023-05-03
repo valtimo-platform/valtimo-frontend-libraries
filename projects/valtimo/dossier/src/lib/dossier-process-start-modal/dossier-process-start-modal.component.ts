@@ -16,10 +16,21 @@
 
 import {Component, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
 import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
-import {FormAssociation, FormFlowService, FormLinkService, FormSubmissionResult} from '@valtimo/form-link';
+import {
+  FormAssociation,
+  FormFlowService,
+  FormLinkService,
+  FormSubmissionResult,
+} from '@valtimo/form-link';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProcessService} from '@valtimo/process';
-import {FormioComponent, FormioOptionsImpl, FormioSubmission, ModalComponent, ValtimoFormioOptions,} from '@valtimo/components';
+import {
+  FormioComponent,
+  FormioOptionsImpl,
+  FormioSubmission,
+  ModalComponent,
+  ValtimoFormioOptions,
+} from '@valtimo/components';
 import {FormioBeforeSubmit} from '@formio/angular/formio.common';
 import {FormioForm} from '@formio/angular';
 import {NGXLogger} from 'ngx-logger';
@@ -34,6 +45,7 @@ import {take} from 'rxjs/operators';
 })
 export class DossierProcessStartModalComponent implements OnInit {
   public processDefinitionKey: string;
+  public processDefinitionId: string;
   public documentDefinitionName: string;
   public processName: string;
   public formDefinition: FormioForm;
@@ -64,29 +76,34 @@ export class DossierProcessStartModalComponent implements OnInit {
   private loadProcessLink() {
     this.formDefinition = null;
     this.formFlowInstanceId = null;
-    this.processService.getProcessDefinitionStartProcessLink(this.processDefinitionKey)
+    this.processService
+      .getProcessDefinitionStartProcessLink(this.processDefinitionId)
       .pipe(take(1))
       .subscribe(startProcessResult => {
         if (startProcessResult) {
           switch (startProcessResult.type) {
             case 'form':
-              this.formDefinition = startProcessResult.properties.prefilledForm
+              this.formDefinition = startProcessResult.properties.prefilledForm;
               break;
             case 'form-flow':
-              this.formFlowInstanceId = startProcessResult.properties.formFlowInstanceId
+              this.formFlowInstanceId = startProcessResult.properties.formFlowInstanceId;
               break;
           }
           this.modal.show();
         } else {
           // backwards compatibility for form associations
-          this.formLinkService.getStartEventFormDefinitionByProcessDefinitionKey(this.processDefinitionKey, null)
+          this.formLinkService
+            .getStartEventFormDefinitionByProcessDefinitionKey(this.processDefinitionKey, null)
             .pipe(take(1))
             .subscribe({
-              next: formDefinitionWithFormAssociation => this.openFormAssociation(formDefinitionWithFormAssociation),
-              error: error => {this.modal.show()}
+              next: formDefinitionWithFormAssociation =>
+                this.openFormAssociation(formDefinitionWithFormAssociation),
+              error: error => {
+                this.modal.show();
+              },
             });
         }
-      })
+      });
   }
 
   private openFormAssociation(formDefinitionWithFormAssociation: any) {
@@ -99,8 +116,9 @@ export class DossierProcessStartModalComponent implements OnInit {
         this.modal.show();
         break;
       case 'BpmnElementFormFlowIdLink':
-        this.formFlowService.createInstanceForNewProcess(this.processDefinitionKey, {documentId: null})
-          .subscribe(result => this.formFlowInstanceId = result.formFlowInstanceId)
+        this.formFlowService
+          .createInstanceForNewProcess(this.processDefinitionKey, {documentId: null})
+          .subscribe(result => (this.formFlowInstanceId = result.formFlowInstanceId));
         this.modal.show();
         break;
       case 'BpmnElementUrlLink':
@@ -134,6 +152,7 @@ export class DossierProcessStartModalComponent implements OnInit {
 
   openModal(processDocumentDefinition: ProcessDocumentDefinition) {
     this.processDefinitionKey = processDocumentDefinition.id.processDefinitionKey;
+    this.processDefinitionId = processDocumentDefinition.latestVersionId;
     this.documentDefinitionName = processDocumentDefinition.id.documentDefinitionId.name;
     this.processName = processDocumentDefinition.processName;
     this.options = new FormioOptionsImpl();

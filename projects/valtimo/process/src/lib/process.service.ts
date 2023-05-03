@@ -62,10 +62,10 @@ export class ProcessService {
   }
 
   getProcessDefinitionStartProcessLink(
-    processDefinitionKey: string
+    processDefinitionId: string
   ): Observable<ProcessDefinitionStartProcessLink> {
     return this.http.get<ProcessDefinitionStartProcessLink>(
-      `${this.valtimoEndpointUri}v1/process-definition/${processDefinitionKey}/start-form`
+      `${this.valtimoEndpointUri}v1/process-definition/${processDefinitionId}/start-form`
     );
   }
 
