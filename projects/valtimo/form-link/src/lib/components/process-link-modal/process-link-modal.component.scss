@@ -26,3 +26,18 @@
 ::ng-deep .process-link-modal-container .cds--modal-footer {
   justify-content: flex-start;
 }
+
+.ibm-loading-container {
+  position: absolute;
+  top: 50px;
+  padding-bottom: 50px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 50px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--cds-layer);
+  z-index: 99;
+  box-sizing: border-box;
+}

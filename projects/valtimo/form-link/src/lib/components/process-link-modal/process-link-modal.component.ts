@@ -32,7 +32,7 @@ export class ProcessLinkModalComponent {
   public readonly enableSaveButton$ = this.processLinkState2Service.enableSaveButton$;
   public readonly showBackButton$ = this.processLinkState2Service.showBackButton$;
   public readonly hasOneOption$ = this.processLinkState2Service.hasOneOption$;
-  public readonly disableInput$ = this.processLinkState2Service.disableInput$;
+  public readonly saving$ = this.processLinkState2Service.saving$;
 
   constructor(
     private readonly processLinkState2Service: ProcessLinkState2Service,

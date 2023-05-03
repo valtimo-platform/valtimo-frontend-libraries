@@ -47,6 +47,7 @@ import {
   ComboBoxModule,
   IconModule,
   InputModule,
+  LoadingModule,
   ModalModule as CarbonModalModule,
   ProgressIndicatorModule,
 } from 'carbon-components-angular';
@@ -96,6 +97,7 @@ import {SelectFormComponent} from './components/select-form';
     ComboBoxModule,
     InputModule,
     TooltipIconModule,
+    LoadingModule,
   ],
   exports: [
     FormLinkComponent,

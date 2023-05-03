@@ -26,7 +26,7 @@ import {ProcessLinkState2Service} from '../../services';
   styleUrls: ['./select-form.component.scss'],
 })
 export class SelectFormComponent implements OnInit, OnDestroy {
-  public readonly disableInput$ = this.stateService.disableInput$;
+  public readonly saving$ = this.stateService.saving$;
   private readonly formDefinitions$ = this.formService.getAllFormDefinitions();
   public readonly formDefinitionListItems$: Observable<Array<ListItem>> =
     this.formDefinitions$.pipe(
@@ -77,7 +77,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   private openSaveButtonSubscription(): void {
     this._subscriptions.add(
       this.stateService.saveButtonClick$.subscribe(() => {
-        this.stateService.disableInput();
+        this.stateService.startSaving();
       })
     );
   }

@@ -17,7 +17,7 @@
 <ng-container
   *ngIf="{
     formDefinitions: formDefinitionListItems$ | async,
-    disabled: disableInput$ | async
+    saving: saving$ | async
   } as obs"
 >
   <p class="step-description">
@@ -25,7 +25,7 @@
   </p>
   <div class="select-form">
     <ibm-combo-box
-      [disabled]="!obs.formDefinitions || obs.disabled"
+      [disabled]="!obs.formDefinitions || obs.saving"
       [items]="obs.formDefinitions || []"
       [placeholder]="'interface.typeToSearch' | translate"
       (selected)="selectFormDefinition($event)"
