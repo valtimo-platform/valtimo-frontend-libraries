@@ -112,6 +112,10 @@ export class ProcessLinkState2Service implements OnDestroy {
     this.setProcessLinkTypeSteps(processLinkTypeId, hasOneOption);
   }
 
+  clearSelectedProcessLinkType(): void {
+    this._selectedProcessLinkTypeId$.next('');
+  }
+
   showSaveButton(): void {
     this._showSaveButton$.next(true);
   }
@@ -178,6 +182,7 @@ export class ProcessLinkState2Service implements OnDestroy {
     this.processLinkStepService.reset();
     this.stopSaving();
     this.resetButtons();
+    this.clearSelectedProcessLinkType();
   }
 
   private resetButtons(): void {
