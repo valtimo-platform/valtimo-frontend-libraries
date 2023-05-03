@@ -81,6 +81,11 @@ export class ProcessLinkStepService {
     this._currentStepIndex$.next(1);
   }
 
+  setSingleFormStep(): void {
+    this._steps$.next([{label: 'selectForm'}]);
+    this._currentStepIndex$.next(0);
+  }
+
   disableSteps(): void {
     this._disableSteps$.next(true);
   }

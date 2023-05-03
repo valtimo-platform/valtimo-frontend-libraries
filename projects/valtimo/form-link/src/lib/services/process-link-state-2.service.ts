@@ -87,7 +87,7 @@ export class ProcessLinkState2Service implements OnDestroy {
     this._hasOneOption$.next(hasOneOption);
 
     if (hasOneOption) {
-      this.selectProcessLinkType(processLinkTypes[0].processLinkType);
+      this.selectProcessLinkType(processLinkTypes[0].processLinkType, hasOneOption);
     }
   }
 
@@ -107,9 +107,9 @@ export class ProcessLinkState2Service implements OnDestroy {
     }, 240);
   }
 
-  selectProcessLinkType(processLinkTypeId: string): void {
+  selectProcessLinkType(processLinkTypeId: string, hasOneOption?: boolean): void {
     this._selectedProcessLinkTypeId$.next(processLinkTypeId);
-    this.setProcessLinkTypeSteps(processLinkTypeId);
+    this.setProcessLinkTypeSteps(processLinkTypeId, hasOneOption);
   }
 
   showSaveButton(): void {
@@ -165,9 +165,13 @@ export class ProcessLinkState2Service implements OnDestroy {
   }
 
   private openAvailableProcessLinkTypesSubscription(): void {
-    this._availableProcessLinkTypesSubscription = this._availableProcessLinkTypes$.subscribe(() => {
-      this.setInitial();
-    });
+    this._availableProcessLinkTypesSubscription = this._availableProcessLinkTypes$.subscribe(
+      availableProcessLinkTypes => {
+        if (availableProcessLinkTypes.length > 1) {
+          this.setInitial();
+        }
+      }
+    );
   }
   private reset(): void {
     this.setAvailableProcessLinkTypes([]);
@@ -182,12 +186,18 @@ export class ProcessLinkState2Service implements OnDestroy {
     this.hideSaveButton();
   }
 
-  private setProcessLinkTypeSteps(processLinkTypeId: string): void {
+  private setProcessLinkTypeSteps(processLinkTypeId: string, hasOneOption?: boolean): void {
     switch (processLinkTypeId) {
       case 'form':
-        this.showSaveButton();
-        this.showBackButton();
-        this.processLinkStepService.setFormSteps();
+        if (hasOneOption) {
+          this.processLinkStepService.setSingleFormStep();
+          this.hideSaveButton();
+          this.hideBackButton();
+        } else {
+          this.processLinkStepService.setFormSteps();
+          this.showSaveButton();
+          this.showBackButton();
+        }
         break;
     }
   }
