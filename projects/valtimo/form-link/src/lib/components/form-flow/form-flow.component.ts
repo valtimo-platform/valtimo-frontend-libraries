@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output, ViewChild,} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild,} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {FormioForm} from '@formio/angular';
 import {FormioComponent, FormioOptionsImpl, FormioSubmission, ValtimoFormioOptions, ValtimoModalService} from '@valtimo/components';
@@ -26,7 +26,7 @@ import {FormFlowInstance, FormFlowStepType} from '../../models';
   templateUrl: './form-flow.component.html',
   styleUrls: ['./form-flow.component.css'],
 })
-export class FormFlowComponent {
+export class FormFlowComponent implements OnInit {
   @ViewChild('form') form: FormioComponent;
   @Input() formIoFormData: BehaviorSubject<any> | null = new BehaviorSubject<any>(null);
   @Input() formFlowInstanceId: string;
