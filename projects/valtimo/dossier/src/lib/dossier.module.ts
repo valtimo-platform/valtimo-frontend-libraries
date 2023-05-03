@@ -46,7 +46,12 @@ import {ProcessModule} from '@valtimo/process';
 import {DossierDetailTabAuditComponent} from './dossier-detail/tab/audit/audit.component';
 import {DossierDetailTabContactMomentsComponent} from './dossier-detail/tab/contact-moments/contact-moments.component';
 import {DossierDetailTabDocumentsComponent} from './dossier-detail/tab/documents/documents.component';
-import {NgbButtonsModule, NgbModule, NgbPaginationModule, NgbTooltipModule,} from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbButtonsModule,
+  NgbModule,
+  NgbPaginationModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import {DossierProcessStartModalComponent} from './dossier-process-start-modal/dossier-process-start-modal.component';
 import {FormFlowModule, FormModule} from '@valtimo/form';
 import {FormsModule} from '@angular/forms';
@@ -74,7 +79,11 @@ import {DossierDetailTabS3DocumentsComponent} from './dossier-detail/tab/s3-docu
 import {DossierAssignUserComponent} from './dossier-assign-user/dossier-assign-user.component';
 import {DossierDetailTabNotesComponent} from './dossier-detail/tab/notes/notes.component';
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
-import {ButtonModule as CarbonButtonModule, IconModule, LoadingModule,} from 'carbon-components-angular';
+import {
+  ButtonModule as CarbonButtonModule,
+  IconModule,
+  LoadingModule,
+} from 'carbon-components-angular';
 import {DossierListActionsComponent} from './dossier-list-actions/dossier-list-actions.component';
 
 export type TabsFactory = () => Map<string, object>;

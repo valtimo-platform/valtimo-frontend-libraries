@@ -88,7 +88,7 @@ export class DossierListActionsComponent implements OnInit {
   }
 
   onFormFlowComplete() {
-    this.formFlowComplete.emit(null)
+    this.formFlowComplete.emit(null);
   }
 
   private showStartProcessModal(): void {

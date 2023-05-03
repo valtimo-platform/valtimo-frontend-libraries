@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, EventEmitter, OnDestroy, Output, ViewChild, ViewEncapsulation,} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  Output,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   FormioComponent,
@@ -25,7 +33,12 @@ import {
   ValtimoModalService,
 } from '@valtimo/components';
 import {Task, TaskProcessLinkType} from '../models';
-import {FormAssociation, FormFlowService, FormLinkService, FormSubmissionResult,} from '@valtimo/form-link';
+import {
+  FormAssociation,
+  FormFlowService,
+  FormLinkService,
+  FormSubmissionResult,
+} from '@valtimo/form-link';
 import {FormFlowComponent} from '@valtimo/form';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
