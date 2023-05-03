@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,9 +14,30 @@
  * limitations under the License.
  */
 
-export * from './form-flow.service';
-export * from './process-link-state.service';
-export * from './form-link.service';
-export * from './process-link.service';
-export * from './process-link-state-2.service';
-export * from './process-link-step.service';
+.step-description {
+  margin-top: 40px;
+}
+
+::ng-deep .process-link-modal-container .cds--modal-container {
+  max-width: 960px;
+  min-height: 70%;
+}
+
+::ng-deep .process-link-modal-container .cds--modal-footer {
+  justify-content: flex-start;
+}
+
+.ibm-loading-container {
+  position: absolute;
+  top: 50px;
+  padding-bottom: 50px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 50px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--cds-layer);
+  z-index: 99;
+  box-sizing: border-box;
+}

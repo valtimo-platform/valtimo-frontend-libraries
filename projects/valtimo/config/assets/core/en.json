@@ -508,7 +508,8 @@
     "cancel": "Cancel",
     "collapse": "Collapse",
     "expand": "Expand",
-    "download": "Download"
+    "download": "Download",
+    "typeToSearch": "Type to search..."
   },
   "taskDetail": {
     "taskCreated": "Created",
@@ -1063,5 +1064,30 @@
   "viewTypeConverter": {
     "Yes": "Yes",
     "No": "No"
+  },
+  "processLinkConfiguration": {
+    "configureStep": "Configure process step",
+    "modalTitle": "Process step: {{processStepName}}",
+    "chooseProcessLinkTypeDescription": "A process step can perform a variety of actions. Choose below to what type of action you would like to link this step.",
+    "chooseFormDescription": "Choose the form that you want to link to the process step.",
+    "chooseForm": "Choose form",
+    "cancel": "Cancel",
+    "complete": "Complete",
+    "back": "Go back"
+  },
+  "processLinkType": {
+    "plugin": "Plugin",
+    "form": "Form",
+    "form-flow": "FormFlow"
+  },
+  "processLinkSteps": {
+    "chooseProcessLinkType": "Choose link type",
+    "empty": "........",
+    "selectForm": "Select your form"
+  },
+  "processLinkTypeDisabledTooltip": {
+    "plugin": "No plugin configurations are available. Create a plugin configuration to be able to link it to a process step.",
+    "form": "There are no forms available. Create a form to be able to link it to a process step.",
+    "form-flow": "There are no FormFlows available. Create a FormFlow to be able to link it to a process step."
   }
 }

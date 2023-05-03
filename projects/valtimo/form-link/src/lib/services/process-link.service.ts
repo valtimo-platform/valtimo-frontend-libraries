@@ -18,9 +18,10 @@ import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {Observable} from 'rxjs';
 import {
+  FormProcessLinkCreateRequestDto,
   GetProcessLinkRequest,
   GetProcessLinkResponse,
-  SaveProcessLinkRequest,
+  ProcessLinkType,
   UpdateProcessLinkRequest,
 } from '../models';
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -58,13 +59,7 @@ export class ProcessLinkService {
     );
   }
 
-  saveProcessLink(saveProcessLinkRequest: SaveProcessLinkRequest): Observable<null> {
-    Object.keys(saveProcessLinkRequest.actionProperties).forEach(key => {
-      if (saveProcessLinkRequest.actionProperties[key] === '') {
-        saveProcessLinkRequest.actionProperties[key] = null;
-      }
-    });
-
+  saveProcessLink(saveProcessLinkRequest: FormProcessLinkCreateRequestDto): Observable<null> {
     return this.http.post<null>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link`,
       saveProcessLinkRequest
@@ -73,5 +68,11 @@ export class ProcessLinkService {
 
   deleteProcessLink(id: string): Observable<null> {
     return this.http.delete<null>(`${this.VALTIMO_ENDPOINT_URI}v1/process-link/${id}`);
+  }
+
+  getProcessLinkCandidates(activityType: string): Observable<Array<ProcessLinkType>> {
+    return this.http.get<Array<ProcessLinkType>>(
+      `${this.VALTIMO_ENDPOINT_URI}v1/process-link/types?activityType=${activityType}`
+    );
   }
 }

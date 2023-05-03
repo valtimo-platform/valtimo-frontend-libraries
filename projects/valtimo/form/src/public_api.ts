@@ -24,3 +24,4 @@ export * from './lib/services/form-mapping/form-mapping.service';
 export * from './lib/services/form-translation/form-translation.service';
 export * from './lib/components/form-flow/form-flow.module';
 export * from './lib/components/form-flow/form-flow.component';
+export * from './lib/models';
