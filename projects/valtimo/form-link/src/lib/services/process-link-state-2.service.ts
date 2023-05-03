@@ -16,7 +16,7 @@
 
 import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
-import {ProcessLinkType} from '../models';
+import {ModalParams, ProcessLinkType} from '../models';
 import {ProcessLinkStepService} from './process-link-step.service';
 
 @Injectable()
@@ -32,6 +32,7 @@ export class ProcessLinkState2Service implements OnDestroy {
   private readonly _saveButtonClick$ = new Subject<null>();
   private readonly _hasOneOption$ = new BehaviorSubject<boolean>(false);
   private readonly _saving$ = new BehaviorSubject<boolean>(false);
+  private readonly _modalParams$ = new BehaviorSubject<ModalParams>(undefined);
 
   private _availableProcessLinkTypesSubscription!: Subscription;
 
@@ -67,6 +68,9 @@ export class ProcessLinkState2Service implements OnDestroy {
   }
   get saving$(): Observable<boolean> {
     return this._saving$.asObservable();
+  }
+  get modalParams$(): Observable<ModalParams> {
+    return this._modalParams$.asObservable();
   }
 
   constructor(private readonly processLinkStepService: ProcessLinkStepService) {
@@ -154,6 +158,10 @@ export class ProcessLinkState2Service implements OnDestroy {
     const availableTypes = this._availableProcessLinkTypes$.getValue();
     this.resetButtons();
     this.processLinkStepService.setInitialSteps(availableTypes);
+  }
+
+  setModalParams(params: ModalParams): void {
+    this._modalParams$.next(params);
   }
 
   private openAvailableProcessLinkTypesSubscription(): void {

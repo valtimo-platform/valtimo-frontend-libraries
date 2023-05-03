@@ -16,9 +16,10 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormService} from '@valtimo/form';
-import {ListItem} from 'carbon-components-angular';
-import {map, Observable, Subscription} from 'rxjs';
-import {ProcessLinkState2Service} from '../../services';
+import {combineLatest, map, Observable, Subscription, switchMap} from 'rxjs';
+import {ProcessLinkService, ProcessLinkState2Service} from '../../services';
+import {FormDefinitionListItem} from '../../models';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-select-form',
@@ -28,7 +29,7 @@ import {ProcessLinkState2Service} from '../../services';
 export class SelectFormComponent implements OnInit, OnDestroy {
   public readonly saving$ = this.stateService.saving$;
   private readonly formDefinitions$ = this.formService.getAllFormDefinitions();
-  public readonly formDefinitionListItems$: Observable<Array<ListItem>> =
+  public readonly formDefinitionListItems$: Observable<Array<FormDefinitionListItem>> =
     this.formDefinitions$.pipe(
       map(formDefinitions =>
         formDefinitions.map(definition => ({
@@ -39,12 +40,13 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       )
     );
 
-  private _selectedFormDefinition!: ListItem;
+  private _selectedFormDefinition!: FormDefinitionListItem;
   private _subscriptions = new Subscription();
 
   constructor(
     private readonly formService: FormService,
-    private readonly stateService: ProcessLinkState2Service
+    private readonly stateService: ProcessLinkState2Service,
+    private readonly processLinkService: ProcessLinkService
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +58,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
-  selectFormDefinition(formDefinition: ListItem): void {
+  selectFormDefinition(formDefinition: FormDefinitionListItem): void {
     if (typeof formDefinition === 'object' && formDefinition.id) {
       this._selectedFormDefinition = formDefinition;
       this.stateService.enableSaveButton();
@@ -78,7 +80,32 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     this._subscriptions.add(
       this.stateService.saveButtonClick$.subscribe(() => {
         this.stateService.startSaving();
+        this.saveFormLink();
       })
     );
+  }
+
+  private saveFormLink(): void {
+    combineLatest([this.stateService.modalParams$, this.stateService.selectedProcessLinkTypeId$])
+      .pipe(
+        take(1),
+        switchMap(([modalParams, processLinkTypeId]) =>
+          this.processLinkService.saveProcessLink({
+            formDefinitionId: this._selectedFormDefinition.id,
+            activityType: modalParams.element.activityListenerType,
+            processDefinitionId: modalParams.processDefinitionId,
+            processLinkType: processLinkTypeId,
+            activityId: modalParams.element.id,
+          })
+        )
+      )
+      .subscribe(
+        () => {
+          this.stateService.closeModal();
+        },
+        () => {
+          this.stateService.stopSaving();
+        }
+      );
   }
 }
