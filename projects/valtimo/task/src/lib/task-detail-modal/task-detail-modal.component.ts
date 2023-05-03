@@ -38,8 +38,8 @@ import {
   FormFlowService,
   FormLinkService,
   FormSubmissionResult,
+  FormFlowComponent
 } from '@valtimo/form-link';
-import {FormFlowComponent} from '@valtimo/form';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';

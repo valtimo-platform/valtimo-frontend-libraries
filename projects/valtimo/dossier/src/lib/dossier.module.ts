@@ -53,7 +53,7 @@ import {
   NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import {DossierProcessStartModalComponent} from './dossier-process-start-modal/dossier-process-start-modal.component';
-import {FormFlowModule, FormModule} from '@valtimo/form';
+import {FormModule} from '@valtimo/form';
 import {FormsModule} from '@angular/forms';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpClient} from '@angular/common/http';
@@ -152,7 +152,6 @@ export type TabsFactory = () => Map<string, object>;
     SearchFieldsModule,
     PageModule,
     FormModule,
-    FormFlowModule,
     InputModule,
     VFormModule,
     NgbModule,

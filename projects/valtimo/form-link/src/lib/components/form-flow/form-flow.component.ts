@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild,} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {FormioForm} from '@formio/angular';
-import {
-  FormioComponent,
-  FormioOptionsImpl,
-  FormioSubmission,
-  ValtimoFormioOptions,
-  ValtimoModalService,
-} from '@valtimo/components';
-import {
-  FormFlowInstance,
-  FormFlowService,
-  FormFlowStepType,
-  FormLinkService,
-} from '@valtimo/form-link';
+import {FormioComponent, FormioOptionsImpl, FormioSubmission, ValtimoFormioOptions, ValtimoModalService} from '@valtimo/components';
+import {FormFlowService, FormLinkService} from '../../services';
+import {FormFlowInstance, FormFlowStepType} from '../../models';
 
 @Component({
   selector: 'valtimo-form-flow',
@@ -51,14 +41,14 @@ export class FormFlowComponent {
   constructor(
     private readonly formLinkService: FormLinkService,
     private readonly formFlowService: FormFlowService,
-    private readonly modalService: ValtimoModalService
+    private readonly modalService: ValtimoModalService,
   ) {
     this.formioOptions = new FormioOptionsImpl();
     this.formioOptions.disableAlerts = true;
   }
 
   ngOnInit() {
-    this.getFormFlowStep();
+    this.getFormFlowStep()
   }
 
   onChange(event: any): void {
@@ -109,7 +99,7 @@ export class FormFlowComponent {
       this.formFlowStepType$.next(null);
       this.formFlowInstanceId = null;
       this.formFlowStepInstanceId = null;
-      this.formFlowComplete.emit(null);
+      this.formFlowComplete.emit(null)
     } else {
       this.modalService.scrollToTop();
       this.formFlowStepType$.next(formFlowInstance.step.type);
