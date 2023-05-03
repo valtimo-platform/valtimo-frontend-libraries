@@ -51,6 +51,13 @@ export class DossierListPaginationService {
     private readonly dossierService: DossierService
   ) {}
 
+  refresh(): void {
+    this._pagination$.pipe(take(1)).subscribe(pagination => {
+      this._pagination$.next({...pagination});
+    });
+  }
+
+
   pageChange(newPage: number): void {
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.page !== newPage) {

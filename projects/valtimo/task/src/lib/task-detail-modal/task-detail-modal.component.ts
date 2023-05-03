@@ -14,15 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  OnDestroy,
-  Output,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnDestroy, Output, ViewChild, ViewEncapsulation,} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   FormioComponent,
@@ -33,14 +25,8 @@ import {
   ValtimoModalService,
 } from '@valtimo/components';
 import {Task, TaskProcessLinkType} from '../models';
-import {
-  FormAssociation,
-  FormFlowInstance,
-  FormFlowService,
-  FormFlowStepType,
-  FormLinkService,
-  FormSubmissionResult,
-} from '@valtimo/form-link';
+import {FormAssociation, FormFlowService, FormLinkService, FormSubmissionResult,} from '@valtimo/form-link';
+import {FormFlowComponent} from '@valtimo/form';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
@@ -62,6 +48,7 @@ moment.locale(localStorage.getItem('langKey') || '');
 })
 export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   @ViewChild('form') form: FormioComponent;
+  @ViewChild('formFlow') formFlow: FormFlowComponent;
   @ViewChild('taskDetailModal') modal: ModalComponent;
   @Output() formSubmit = new EventEmitter();
   @Output() assignmentOfTaskChanged = new EventEmitter();
@@ -69,7 +56,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   public task: Task | null = null;
   public formDefinition: FormioForm;
   public formFlowInstanceId: string;
-  public formFlowStepInstanceId?: string;
   public page: any = null;
   public formioOptions: ValtimoFormioOptions;
   public errorMessage: string = null;
@@ -80,9 +66,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   private taskProcessLinkType$ = new BehaviorSubject<TaskProcessLinkType | null>(null);
   processLinkIsForm$ = this.taskProcessLinkType$.pipe(map(type => type === 'form'));
   processLinkIsFormFlow$ = this.taskProcessLinkType$.pipe(map(type => type === 'form-flow'));
-  private formFlowStepType$ = new BehaviorSubject<FormFlowStepType | null>(null);
-  formFlowStepTypeIsForm$ = this.formFlowStepType$.pipe(map(type => type === 'form'));
-  private formIoFormData$ = new BehaviorSubject<any>(null);
+  formIoFormData$ = new BehaviorSubject<any>(null);
   private _subscriptions = new Subscription();
 
   constructor(
@@ -108,13 +92,9 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
         .pipe(
           distinctUntilChanged(),
           tap(modalShowing => {
-            const formIoFormData = this.formIoFormData$.getValue();
-            if (!modalShowing && formIoFormData && this.formFlowInstanceId) {
-              if (this.taskProcessLinkType$.getValue() === 'form-flow') {
-                this.formFlowService.save(this.formFlowInstanceId, formIoFormData).subscribe(
-                  () => null,
-                  errors => this.form.showErrors(errors)
-                );
+            if (!modalShowing) {
+              if (this.formFlow) {
+                this.formFlow.saveData();
               }
             }
           })
@@ -160,6 +140,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
             case 'BpmnElementFormFlowIdLink':
               // We can't use the formDefinition here because the form definition is provided per form flow step
               // I'm still leaving this in here in case we want to add form flow specific code.
+              this.modal.show();
               break;
             case 'BpmnElementUrlLink':
               this.openUrlLink(formDefinition);
@@ -214,22 +195,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
           }
         );
     }
-
-    if (this.taskProcessLinkType$.getValue() === 'form-flow') {
-      if (submission.data.submit) {
-        this.formFlowService
-          .submitStep(this.formFlowInstanceId, this.formFlowStepInstanceId, submission.data)
-          .subscribe(
-            (result: FormFlowInstance) => this.handleFormFlowStep(result),
-            errors => this.form.showErrors(errors)
-          );
-      } else if (submission.data['back']) {
-        this.formFlowService.back(this.formFlowInstanceId, submission.data).subscribe(
-          (result: FormFlowInstance) => this.handleFormFlowStep(result),
-          errors => this.form.showErrors(errors)
-        );
-      }
-    }
   }
 
   private resetFormDefinition(): void {
@@ -246,7 +211,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
             break;
           case 'form-flow':
             this.taskProcessLinkType$.next('form-flow');
-            this.getFormFlowStep(res?.properties.formFlowInstanceId);
+            this.formFlowInstanceId = res.properties.formFlowInstanceId;
             break;
         }
       } else {
@@ -257,7 +222,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
               break;
             case 'form-flow':
               this.taskProcessLinkType$.next('form-flow');
-              this.getFormFlowStep(resV1?.properties.formFlowInstanceId);
+              this.formFlowInstanceId = resV1.properties.formFlowInstanceId;
               break;
           }
         });
@@ -265,30 +230,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private getFormFlowStep(formFlowInstanceId: string): void {
-    this.formFlowService
-      .getFormFlowStep(formFlowInstanceId)
-      .subscribe((result: FormFlowInstance) => {
-        this.handleFormFlowStep(result);
-      });
-  }
-
-  private handleFormFlowStep(formFlowInstance: FormFlowInstance) {
-    if (formFlowInstance.step === null) {
-      this.formFlowStepType$.next(null);
-      this.formFlowInstanceId = null;
-      this.formFlowStepInstanceId = null;
-      this.completeTask();
-    } else {
-      this.modalService.scrollToTop();
-      this.formFlowStepType$.next(formFlowInstance.step.type);
-      this.formFlowInstanceId = formFlowInstance.id;
-      this.formFlowStepInstanceId = formFlowInstance.step.id;
-      this.setFormDefinitionAndOpenModal(formFlowInstance.step.typeProperties.definition);
-    }
-  }
-
-  private completeTask() {
+  completeTask() {
     this.toastr.success(
       `${this.task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`
     );

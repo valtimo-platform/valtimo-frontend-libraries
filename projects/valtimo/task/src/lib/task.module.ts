@@ -38,6 +38,7 @@ import {TaskListComponent} from './task-list/task-list.component';
 import {TaskRoutingModule} from './task-routing.module';
 import {AssignUserToTaskComponent} from './assign-user-to-task/assign-user-to-task.component';
 import {LinkModule} from 'carbon-components-angular';
+import {FormFlowModule} from '@valtimo/form';
 
 @NgModule({
   declarations: [TaskListComponent, TaskDetailModalComponent, AssignUserToTaskComponent],
@@ -65,6 +66,7 @@ import {LinkModule} from 'carbon-components-angular';
     }),
     NgbModule,
     FormIoModule,
+    FormFlowModule,
     ModalModule,
     LinkModule,
   ],

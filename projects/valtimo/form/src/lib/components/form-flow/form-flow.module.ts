@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of form
- */
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormFlowComponent} from './form-flow.component';
+import {FormIoModule} from '@valtimo/components';
 
-export * from './lib/form.service';
-export * from './lib/form.module';
-export * from './lib/services/form-mapping/form-mapping.service';
-export * from './lib/services/form-translation/form-translation.service';
-export * from './lib/components/form-flow/form-flow.module';
-export * from './lib/components/form-flow/form-flow.component';
+@NgModule({
+  declarations: [FormFlowComponent],
+  imports: [CommonModule, FormIoModule],
+  exports: [FormFlowComponent],
+})
+export class FormFlowModule {}
