@@ -264,7 +264,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public documentItems$ = combineLatest([
     this._documentsRequest$,
     this._hasEnvColumnConfig$,
-    this._hasApiColumnConfig$,
+    this._hasApiColumnConfig$
   ]).pipe(
     map(([documents, hasEnvColumnConfig, hasApiColumnConfig]) =>
       this.listService.mapDocuments(documents, hasEnvColumnConfig, hasApiColumnConfig)
@@ -331,7 +331,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   refresh(): void {
-    this.paginationService.refresh();
+    this.searchService.refresh();
   }
 
   private openDocumentDefinitionNameSubscription(): void {

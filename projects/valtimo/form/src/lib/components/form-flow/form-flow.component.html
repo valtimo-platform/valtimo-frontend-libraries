@@ -15,11 +15,7 @@
   -->
 
 <div>
-  <!--
-        body
-        *ngIf="formDefinition && ((processLinkIsForm$ | async) || (formFlowStepTypeIsForm$ | async))"
--->
-  <div body *ngIf="formDefinition && (formFlowStepType$ | async)">
+  <div body *ngIf="formDefinition && (formFlowStepType$ | async) === 'form'">
     <valtimo-form-io
       #form
       [form]="formDefinition"
