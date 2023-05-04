@@ -1,0 +1,95 @@
+<!--
+  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div
+  class="process-link-modal-container"
+  *ngIf="{
+    showModal: showModal$ | async,
+    processStepName: processStepName$ | async,
+    steps: steps$ | async,
+    currentStepIndex: currentStepIndex$ | async,
+    currentStepId: currentStepId$ | async,
+    showSaveButton: showSaveButton$ | async,
+    enableSaveButton: enableSaveButton$ | async,
+    showBackButton: showBackButton$ | async,
+    hasOneOption: hasOneOption$ | async,
+    saving: saving$ | async
+  } as obs"
+>
+  <ibm-modal [open]="obs.showModal" size="lg">
+    <ibm-modal-header (closeSelect)="closeModal()">
+      <h2 ibmModalHeaderLabel>{{ 'processLinkConfiguration.configureStep' | translate }}</h2>
+      <h3 ibmModalHeaderHeading>
+        {{
+          'processLinkConfiguration.modalTitle'
+            | translate : {processStepName: obs.processStepName || '-'}
+        }}
+      </h3>
+    </ibm-modal-header>
+    <section ibmModalContent>
+      <ng-container *ngTemplateOutlet="progressIndicator; context: {obs: obs}"></ng-container>
+      <ng-container *ngTemplateOutlet="stepContent; context: {obs: obs}"></ng-container>
+    </section>
+    <ng-template *ngTemplateOutlet="footer; context: {obs: obs}"></ng-template>
+  </ibm-modal>
+</div>
+
+<ng-template #progressIndicator let-obs="obs">
+  <ibm-progress-indicator
+    *ngIf="obs.steps && !obs.hasOneOption"
+    [steps]="obs.steps"
+    [current]="obs.currentStepIndex"
+    spacing="equal"
+  ></ibm-progress-indicator>
+</ng-template>
+
+<ng-template #stepContent let-obs="obs">
+  <div class="ibm-loading-container" *ngIf="obs.saving">
+    <ibm-loading></ibm-loading>
+  </div>
+  <ng-container *ngIf="obs.currentStepId === 'chooseProcessLinkType'">
+    <valtimo-choose-process-link-type></valtimo-choose-process-link-type>
+  </ng-container>
+  <ng-container *ngIf="obs.currentStepId === 'selectForm'">
+    <valtimo-select-form></valtimo-select-form>
+  </ng-container>
+  <ng-container *ngIf="obs.currentStepId === 'selectFormFlow'">
+    <valtimo-select-form-flow></valtimo-select-form-flow>
+  </ng-container>
+</ng-template>
+
+<ng-template #footer let-obs="obs">
+  <ibm-modal-footer *ngIf="!obs.saving">
+    <button ibmButton="ghost" (click)="closeModal()" [disabled]="obs.disabled">
+      {{ 'processLinkConfiguration.cancel' | translate }}
+    </button>
+    <button
+      *ngIf="obs.showBackButton && !obs.saving"
+      ibmButton="secondary"
+      (click)="backButtonClick()"
+    >
+      {{ 'processLinkConfiguration.back' | translate }}
+    </button>
+    <button
+      ibmButton="primary"
+      *ngIf="obs.showSaveButton && !obs.saving"
+      [disabled]="obs.enableSaveButton === false"
+      (click)="saveButtonClick()"
+    >
+      {{ 'processLinkConfiguration.complete' | translate }}
+    </button>
+  </ibm-modal-footer>
+</ng-template>

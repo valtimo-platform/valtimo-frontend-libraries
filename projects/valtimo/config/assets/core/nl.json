@@ -508,7 +508,8 @@
     "cancel": "Annuleren",
     "collapse": "Inklappen",
     "expand": "Uitklappen",
-    "download": "Download"
+    "download": "Download",
+    "typeToSearch": "Typ om te zoeken..."
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",
@@ -1066,5 +1067,32 @@
   "viewTypeConverter": {
     "Yes": "Ja",
     "No": "Nee"
+  },
+  "processLinkConfiguration": {
+    "configureStep": "Processtap configureren",
+    "modalTitle": "Processtap: {{processStepName}}",
+    "chooseProcessLinkTypeDescription": "Een processtap kan verschillende acties uitvoeren. Kies hieronder aan welk type actie je deze stap wilt koppelen.",
+    "chooseFormDescription": "Kies hier het formulier dat je aan de processtap wilt koppelen.",
+    "chooseFormFlowDescription": "Kies hier de FormFlow die je aan de processtap wilt koppelen.",
+    "chooseForm": "Selecteer formulier",
+    "cancel": "Annuleren",
+    "complete": "Voltooien",
+    "back": "Terug"
+  },
+  "processLinkType": {
+    "plugin": "Plugin",
+    "form": "Formulier",
+    "form-flow": "FormFlow"
+  },
+  "processLinkSteps": {
+    "chooseProcessLinkType": "Kies soort koppeling",
+    "empty": "........",
+    "selectForm": "Selecteer je formulier",
+    "selectFormFlow": "Selecteer je FormFlow"
+  },
+  "processLinkTypeDisabledTooltip": {
+    "plugin": "Er zijn geen plugin-configuraties beschikbaar. Maak een pluginconfiguratie aan om deze te kunnen koppelen aan een processtap.",
+    "form": "Er zijn geen formulieren beschikbaar. Maak een formulier aan om deze te kunnen koppelen aan een processtap.",
+    "form-flow": "Er zijn geen FormFlows beschikbaar. Maak een FormFlow aan om deze te kunnen koppelen aan een processtap."
   }
 }
