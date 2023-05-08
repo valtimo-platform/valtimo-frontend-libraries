@@ -1074,7 +1074,8 @@
     "chooseForm": "Choose form",
     "cancel": "Cancel",
     "complete": "Complete",
-    "back": "Go back"
+    "back": "Go back",
+    "next": "Next"
   },
   "processLinkType": {
     "plugin": "Plugin",

@@ -15,23 +15,36 @@
  */
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {take, tap} from 'rxjs/operators';
 import {PluginDefinition, PluginManagementService} from '@valtimo/plugin';
 import {ProcessLinkStateService} from '../../services/process-link-state.service';
+import {Subscription} from 'rxjs';
+import {ProcessLinkButtonService, ProcessLinkState2Service} from '../../services';
 
 @Component({
   selector: 'valtimo-select-plugin',
   templateUrl: './select-plugin.component.html',
   styleUrls: ['./select-plugin.component.scss'],
 })
-export class SelectPluginComponent {
+export class SelectPluginComponent implements OnInit, OnDestroy {
   readonly pluginDefinitions$ = this.pluginManagementService.getPluginDefinitions();
   readonly selectedPluginDefinition$ = this.processLinkStateService.selectedPluginDefinition$;
 
+  private _subscriptions = new Subscription();
+
   constructor(
     private readonly pluginManagementService: PluginManagementService,
-    private readonly processLinkStateService: ProcessLinkStateService
+    private readonly processLinkStateService: ProcessLinkStateService,
+    private readonly buttonService: ProcessLinkButtonService,
+    private readonly stateService: ProcessLinkState2Service
   ) {}
+
+  ngOnInit(): void {
+    this.openBackButtonSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   selectPlugin(pluginDefinition: PluginDefinition): void {
     this.processLinkStateService.selectPluginDefinition(pluginDefinition);
@@ -39,5 +52,13 @@ export class SelectPluginComponent {
 
   deselectPlugin(): void {
     this.processLinkStateService.deselectPluginDefinition();
+  }
+
+  private openBackButtonSubscription(): void {
+    this._subscriptions.add(
+      this.buttonService.backButtonClick$.subscribe(() => {
+        this.stateService.setInitial();
+      })
+    );
   }
 }

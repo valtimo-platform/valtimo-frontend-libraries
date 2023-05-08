@@ -25,6 +25,8 @@
     showSaveButton: showSaveButton$ | async,
     enableSaveButton: enableSaveButton$ | async,
     showBackButton: showBackButton$ | async,
+    showNextButton: showNextButton$ | async,
+    enableNextButton: enableNextButton$ | async,
     hasOneOption: hasOneOption$ | async,
     saving: saving$ | async
   } as obs"
@@ -88,6 +90,14 @@
         (click)="backButtonClick()"
       >
         {{ 'processLinkConfiguration.back' | translate }}
+      </button>
+      <button
+        ibmButton="primary"
+        *ngIf="obs.showNextButton && !obs.saving"
+        [disabled]="obs.enableNextButton === false"
+        (click)="nextButtonClick()"
+      >
+        {{ 'processLinkConfiguration.next' | translate }}
       </button>
       <button
         ibmButton="primary"

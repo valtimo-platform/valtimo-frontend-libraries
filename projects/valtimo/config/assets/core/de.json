@@ -1076,7 +1076,8 @@
     "chooseForm": "Form wählen",
     "cancel": "Stornieren",
     "complete": "Vervollständigen",
-    "back": "Zurück"
+    "back": "Zurück",
+    "next": "Nächste"
   },
   "processLinkType": {
     "plugin": "Plugin",

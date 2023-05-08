@@ -35,6 +35,9 @@ export class ProcessLinkModalComponent {
   public readonly showSaveButton$ = this.buttonService.showSaveButton$;
   public readonly enableSaveButton$ = this.buttonService.enableSaveButton$;
   public readonly showBackButton$ = this.buttonService.showBackButton$;
+  public readonly showNextButton$ = this.buttonService.showNextButton$;
+  public readonly enableNextButton$ = this.buttonService.enableNextButton$;
+
   public readonly hasOneOption$ = this.processLinkState2Service.hasOneOption$;
   public readonly saving$ = this.processLinkState2Service.saving$;
 
@@ -58,5 +61,9 @@ export class ProcessLinkModalComponent {
 
   saveButtonClick(): void {
     this.buttonService.clickSaveButton();
+  }
+
+  nextButtonClick(): void {
+    this.buttonService.clickNextButton();
   }
 }

@@ -1077,7 +1077,8 @@
     "chooseForm": "Selecteer formulier",
     "cancel": "Annuleren",
     "complete": "Voltooien",
-    "back": "Terug"
+    "back": "Terug",
+    "next": "Volgende"
   },
   "processLinkType": {
     "plugin": "Plugin",

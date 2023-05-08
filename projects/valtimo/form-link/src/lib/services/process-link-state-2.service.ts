@@ -141,6 +141,8 @@ export class ProcessLinkState2Service implements OnDestroy {
     this.buttonService.disableSaveButton();
     this.buttonService.hideBackButton();
     this.buttonService.hideSaveButton();
+    this.buttonService.hideNextButton();
+    this.buttonService.disableNextButton();
   }
 
   private setProcessLinkTypeSteps(processLinkTypeId: string, hasOneOption?: boolean): void {
@@ -170,11 +172,12 @@ export class ProcessLinkState2Service implements OnDestroy {
       case 'plugin':
         if (hasOneOption) {
           this.processLinkStepService.setSingleChoosePluginConfigurationSteps();
-          this.buttonService.hideSaveButton();
           this.buttonService.hideBackButton();
+          this.buttonService.showNextButton();
         } else {
           this.processLinkStepService.setChoosePluginConfigurationSteps();
           this.buttonService.showBackButton();
+          this.buttonService.showNextButton();
         }
         break;
     }
