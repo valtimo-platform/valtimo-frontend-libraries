@@ -20,3 +20,4 @@ export * from './form-link.service';
 export * from './process-link.service';
 export * from './process-link-state-2.service';
 export * from './process-link-step.service';
+export * from './process-link-button.service';

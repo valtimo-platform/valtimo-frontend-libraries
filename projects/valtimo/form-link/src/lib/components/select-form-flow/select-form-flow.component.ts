@@ -16,7 +16,12 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, map, Observable, Subscription, switchMap} from 'rxjs';
-import {FormFlowService, ProcessLinkService, ProcessLinkState2Service} from '../../services';
+import {
+  FormFlowService,
+  ProcessLinkButtonService,
+  ProcessLinkService,
+  ProcessLinkState2Service,
+} from '../../services';
 import {FormDefinitionListItem} from '../../models';
 import {take} from 'rxjs/operators';
 
@@ -45,7 +50,8 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   constructor(
     private readonly formFlowService: FormFlowService,
     private readonly stateService: ProcessLinkState2Service,
-    private readonly processLinkService: ProcessLinkService
+    private readonly processLinkService: ProcessLinkService,
+    private readonly buttonService: ProcessLinkButtonService
   ) {}
 
   ngOnInit(): void {
@@ -60,16 +66,16 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   selectFormFlowDefinition(formFlowDefinition: FormDefinitionListItem): void {
     if (typeof formFlowDefinition === 'object' && formFlowDefinition.id) {
       this._selectedFormFlowDefinition = formFlowDefinition;
-      this.stateService.enableSaveButton();
+      this.buttonService.enableSaveButton();
     } else {
       this._selectedFormFlowDefinition = null;
-      this.stateService.disableSaveButton();
+      this.buttonService.disableSaveButton();
     }
   }
 
   private openBackButtonSubscription(): void {
     this._subscriptions.add(
-      this.stateService.backButtonClick$.subscribe(() => {
+      this.buttonService.backButtonClick$.subscribe(() => {
         this.stateService.setInitial();
       })
     );
@@ -77,7 +83,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
 
   private openSaveButtonSubscription(): void {
     this._subscriptions.add(
-      this.stateService.saveButtonClick$.subscribe(() => {
+      this.buttonService.saveButtonClick$.subscribe(() => {
         this.stateService.startSaving();
         this.saveFormFlowLink();
       })

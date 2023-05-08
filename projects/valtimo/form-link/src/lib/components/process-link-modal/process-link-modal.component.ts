@@ -15,7 +15,11 @@
  */
 
 import {Component} from '@angular/core';
-import {ProcessLinkState2Service, ProcessLinkStepService} from '../../services';
+import {
+  ProcessLinkButtonService,
+  ProcessLinkState2Service,
+  ProcessLinkStepService,
+} from '../../services';
 
 @Component({
   selector: 'valtimo-process-link-modal',
@@ -28,15 +32,16 @@ export class ProcessLinkModalComponent {
   public readonly steps$ = this.processLinkStepService.steps$;
   public readonly currentStepIndex$ = this.processLinkStepService.currentStepIndex$;
   public readonly currentStepId$ = this.processLinkStepService.currentStepId$;
-  public readonly showSaveButton$ = this.processLinkState2Service.showSaveButton$;
-  public readonly enableSaveButton$ = this.processLinkState2Service.enableSaveButton$;
-  public readonly showBackButton$ = this.processLinkState2Service.showBackButton$;
+  public readonly showSaveButton$ = this.buttonService.showSaveButton$;
+  public readonly enableSaveButton$ = this.buttonService.enableSaveButton$;
+  public readonly showBackButton$ = this.buttonService.showBackButton$;
   public readonly hasOneOption$ = this.processLinkState2Service.hasOneOption$;
   public readonly saving$ = this.processLinkState2Service.saving$;
 
   constructor(
     private readonly processLinkState2Service: ProcessLinkState2Service,
-    private readonly processLinkStepService: ProcessLinkStepService
+    private readonly processLinkStepService: ProcessLinkStepService,
+    private readonly buttonService: ProcessLinkButtonService
   ) {}
 
   selectProcessLinkType(processLinkTypeId: string): void {
@@ -48,10 +53,10 @@ export class ProcessLinkModalComponent {
   }
 
   backButtonClick(): void {
-    this.processLinkState2Service.clickBackButton();
+    this.buttonService.clickBackButton();
   }
 
   saveButtonClick(): void {
-    this.processLinkState2Service.clickSaveButton();
+    this.buttonService.clickSaveButton();
   }
 }

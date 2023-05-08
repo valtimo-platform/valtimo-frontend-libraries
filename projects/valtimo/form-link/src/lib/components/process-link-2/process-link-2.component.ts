@@ -16,13 +16,18 @@
 
 import {Component} from '@angular/core';
 import {ModalParams} from '../../models';
-import {ProcessLinkService, ProcessLinkState2Service, ProcessLinkStepService} from '../../services';
+import {
+  ProcessLinkButtonService,
+  ProcessLinkService,
+  ProcessLinkState2Service,
+  ProcessLinkStepService,
+} from '../../services';
 
 @Component({
   selector: 'valtimo-process-link-2',
   templateUrl: './process-link-2.component.html',
   styleUrls: ['./process-link-2.component.scss'],
-  providers: [ProcessLinkState2Service, ProcessLinkStepService],
+  providers: [ProcessLinkState2Service, ProcessLinkStepService, ProcessLinkButtonService],
 })
 export class ProcessLink2Component {
   constructor(

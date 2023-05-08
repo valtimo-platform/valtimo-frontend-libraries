@@ -17,7 +17,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormService} from '@valtimo/form';
 import {combineLatest, map, Observable, Subscription, switchMap} from 'rxjs';
-import {ProcessLinkService, ProcessLinkState2Service} from '../../services';
+import {
+  ProcessLinkButtonService,
+  ProcessLinkService,
+  ProcessLinkState2Service,
+} from '../../services';
 import {FormDefinitionListItem} from '../../models';
 import {take} from 'rxjs/operators';
 
@@ -46,7 +50,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   constructor(
     private readonly formService: FormService,
     private readonly stateService: ProcessLinkState2Service,
-    private readonly processLinkService: ProcessLinkService
+    private readonly processLinkService: ProcessLinkService,
+    private readonly buttonService: ProcessLinkButtonService
   ) {}
 
   ngOnInit(): void {
@@ -61,16 +66,16 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   selectFormDefinition(formDefinition: FormDefinitionListItem): void {
     if (typeof formDefinition === 'object' && formDefinition.id) {
       this._selectedFormDefinition = formDefinition;
-      this.stateService.enableSaveButton();
+      this.buttonService.enableSaveButton();
     } else {
       this._selectedFormDefinition = null;
-      this.stateService.disableSaveButton();
+      this.buttonService.disableSaveButton();
     }
   }
 
   private openBackButtonSubscription(): void {
     this._subscriptions.add(
-      this.stateService.backButtonClick$.subscribe(() => {
+      this.buttonService.backButtonClick$.subscribe(() => {
         this.stateService.setInitial();
       })
     );
@@ -78,7 +83,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
 
   private openSaveButtonSubscription(): void {
     this._subscriptions.add(
-      this.stateService.saveButtonClick$.subscribe(() => {
+      this.buttonService.saveButtonClick$.subscribe(() => {
         this.stateService.startSaving();
         this.saveFormLink();
       })
