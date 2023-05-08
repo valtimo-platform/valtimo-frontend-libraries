@@ -77,7 +77,7 @@ export class DossierProcessStartModalComponent implements OnInit {
     this.formDefinition = null;
     this.formFlowInstanceId = null;
     this.processService
-      .getProcessDefinitionStartProcessLink(this.processDefinitionId)
+      .getProcessDefinitionStartProcessLink(this.processDefinitionId, null, this.documentDefinitionName)
       .pipe(take(1))
       .subscribe(startProcessResult => {
         if (startProcessResult) {
@@ -117,7 +117,7 @@ export class DossierProcessStartModalComponent implements OnInit {
         break;
       case 'BpmnElementFormFlowIdLink':
         this.formFlowService
-          .createInstanceForNewProcess(this.processDefinitionKey, {documentId: null})
+          .createInstanceForNewProcess(this.processDefinitionKey, {documentId: null, documentDefinitionName: this.documentDefinitionName})
           .subscribe(result => (this.formFlowInstanceId = result.formFlowInstanceId));
         this.modal.show();
         break;
