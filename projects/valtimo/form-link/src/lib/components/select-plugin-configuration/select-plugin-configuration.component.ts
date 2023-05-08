@@ -17,14 +17,14 @@
 import {Component} from '@angular/core';
 import {map, switchMap} from 'rxjs/operators';
 import {ProcessLinkStateService} from '../../services/process-link-state.service';
-import {combineLatest, Observable, of} from 'rxjs';
+import {combineLatest, Observable, of, Subscription} from 'rxjs';
 import {
   PluginConfiguration,
   PluginConfigurationWithLogo,
   PluginManagementService,
   PluginService,
 } from '@valtimo/plugin';
-import {ModalService} from '@valtimo/user-interface';
+import {ProcessLinkButtonService, ProcessLinkState2Service} from '../../services';
 
 @Component({
   selector: 'valtimo-select-plugin-configuration',
@@ -33,7 +33,7 @@ import {ModalService} from '@valtimo/user-interface';
 })
 export class SelectPluginConfigurationComponent {
   readonly pluginConfigurations$: Observable<Array<PluginConfigurationWithLogo>> =
-    this.modalService.modalData$.pipe(
+    this.stateService.modalParams$.pipe(
       switchMap(modalData =>
         combineLatest([
           modalData?.element?.type
@@ -54,11 +54,14 @@ export class SelectPluginConfigurationComponent {
 
   readonly selectedPluginConfiguration$ = this.processLinkStateService.selectedPluginConfiguration$;
 
+  private _subscriptions = new Subscription();
+
   constructor(
     private readonly pluginManagementService: PluginManagementService,
     private readonly processLinkStateService: ProcessLinkStateService,
     private readonly pluginService: PluginService,
-    private readonly modalService: ModalService
+    private readonly stateService: ProcessLinkState2Service,
+    private readonly buttonService: ProcessLinkButtonService
   ) {}
 
   selectConfiguration(configuration: PluginConfiguration): void {
@@ -69,5 +72,21 @@ export class SelectPluginConfigurationComponent {
   deselectConfiguration(): void {
     this.processLinkStateService.deselectPluginDefinition();
     this.processLinkStateService.deselectPluginConfiguration();
+  }
+
+  ngOnInit(): void {
+    this.openBackButtonSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
+  private openBackButtonSubscription(): void {
+    this._subscriptions.add(
+      this.buttonService.backButtonClick$.subscribe(() => {
+        this.stateService.setInitial();
+      })
+    );
   }
 }
