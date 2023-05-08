@@ -99,6 +99,25 @@ export class ProcessLinkStepService {
     this._currentStepIndex$.next(0);
   }
 
+  setChoosePluginConfigurationSteps(): void {
+    this._steps$.next([
+      {label: 'chooseProcessLinkType', secondaryLabel: 'processLinkType.plugin'},
+      {label: 'choosePluginConfiguration'},
+      {label: 'choosePluginAction', disabled: true},
+      {label: 'configurePluginAction', disabled: true},
+    ]);
+    this._currentStepIndex$.next(1);
+  }
+
+  setSingleChoosePluginConfigurationSteps(): void {
+    this._steps$.next([
+      {label: 'choosePluginConfiguration'},
+      {label: 'choosePluginAction', disabled: true},
+      {label: 'configurePluginAction', disabled: true},
+    ]);
+    this._currentStepIndex$.next(0);
+  }
+
   disableSteps(): void {
     this._disableSteps$.next(true);
   }

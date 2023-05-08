@@ -215,6 +215,16 @@ export class ProcessLinkState2Service implements OnDestroy {
           this.showBackButton();
         }
         break;
+      case 'plugin':
+        if (hasOneOption) {
+          this.processLinkStepService.setSingleChoosePluginConfigurationSteps();
+          this.hideSaveButton();
+          this.hideBackButton();
+        } else {
+          this.processLinkStepService.setChoosePluginConfigurationSteps();
+          this.showBackButton();
+        }
+        break;
     }
   }
 }
