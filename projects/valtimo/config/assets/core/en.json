@@ -1071,6 +1071,7 @@
     "chooseProcessLinkTypeDescription": "A process step can perform a variety of actions. Choose below to what type of action you would like to link this step.",
     "chooseFormDescription": "Choose the form that you want to link to the process step.",
     "chooseFormFlowDescription": "Choose the FormFlow that you want to link to the process step.",
+    "choosePluginConfigurationDescription": "Choose the plugin configuration you want to link to the process step.",
     "chooseForm": "Choose form",
     "cancel": "Cancel",
     "complete": "Complete",
@@ -1086,7 +1087,8 @@
     "chooseProcessLinkType": "Choose link type",
     "empty": "........",
     "selectForm": "Select your form",
-    "selectFormFlow": "Select your FormFlow"
+    "selectFormFlow": "Select your FormFlow",
+    "choosePluginConfiguration": "Select plugin configuration"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "No plugin configurations are available. Create a plugin configuration to be able to link it to a process step.",

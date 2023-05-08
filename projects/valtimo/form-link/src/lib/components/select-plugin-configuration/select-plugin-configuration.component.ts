@@ -82,6 +82,11 @@ export class SelectPluginConfigurationComponent {
     this._subscriptions.unsubscribe();
   }
 
+  selected(event: {value: PluginConfiguration}): void {
+    this.selectConfiguration(event.value);
+    this.buttonService.enableNextButton();
+  }
+
   private openBackButtonSubscription(): void {
     this._subscriptions.add(
       this.buttonService.backButtonClick$.subscribe(() => {
