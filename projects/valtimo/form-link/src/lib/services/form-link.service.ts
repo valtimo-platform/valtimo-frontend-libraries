@@ -53,7 +53,7 @@ export class FormLinkService {
 
   getStartEventFormDefinitionByProcessDefinitionKey(
     processDefinitionKey: string,
-    documentId: string,
+    documentId: string
   ): Observable<any> {
     const params = {
       processDefinitionKey,

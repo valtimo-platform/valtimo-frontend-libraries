@@ -131,7 +131,10 @@ export class DossierSupportingProcessStartModalComponent {
         break;
       case 'BpmnElementFormFlowIdLink':
         this.formFlowService
-          .createInstanceForNewProcess(this.processDefinitionKey, {documentId: this.documentId, documentDefinitionName: null})
+          .createInstanceForNewProcess(this.processDefinitionKey, {
+            documentId: this.documentId,
+            documentDefinitionName: null,
+          })
           .subscribe(result => (this.formFlowInstanceId = result.formFlowInstanceId));
         this.modal.show();
         break;

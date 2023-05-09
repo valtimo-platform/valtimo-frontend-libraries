@@ -70,7 +70,7 @@ import {FormFlowComponent} from './components/form-flow/form-flow.component';
     ProcessLinkModalComponent,
     ChooseProcessLinkTypeComponent,
     SelectFormComponent,
-    FormFlowComponent
+    FormFlowComponent,
   ],
   imports: [
     CommonModule,

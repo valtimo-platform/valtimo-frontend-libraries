@@ -77,7 +77,7 @@ export class ProcessService {
     return this.http.get<ProcessDefinitionStartProcessLink>(
       `${this.valtimoEndpointUri}v1/process-definition/${processDefinitionId}/start-form`,
       {
-        params: params
+        params: params,
       }
     );
   }
