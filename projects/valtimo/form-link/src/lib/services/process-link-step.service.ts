@@ -19,6 +19,7 @@ import {Step} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
 import {ProcessLinkType} from '../models';
 import {TranslateService} from '@ngx-translate/core';
+import {ProcessLinkButtonService} from './process-link-button.service';
 
 @Injectable()
 export class ProcessLinkStepService {
@@ -65,7 +66,10 @@ export class ProcessLinkStepService {
     return this._hasOneProcessLinkType$.asObservable();
   }
 
-  constructor(private readonly translateService: TranslateService) {}
+  constructor(
+    private readonly translateService: TranslateService,
+    private readonly buttonService: ProcessLinkButtonService
+  ) {}
 
   reset(): void {
     this._currentStepIndex$.next(0);
@@ -133,6 +137,44 @@ export class ProcessLinkStepService {
 
   setHasOneProcessLinkType(hasOne: boolean): void {
     this._hasOneProcessLinkType$.next(hasOne);
+  }
+
+  setProcessLinkTypeSteps(processLinkTypeId: string, hasOneOption?: boolean): void {
+    switch (processLinkTypeId) {
+      case 'form':
+        if (hasOneOption) {
+          this.setSingleFormStep();
+          this.buttonService.hideSaveButton();
+          this.buttonService.hideBackButton();
+        } else {
+          this.setFormSteps();
+          this.buttonService.showSaveButton();
+          this.buttonService.showBackButton();
+        }
+        break;
+      case 'form-flow':
+        if (hasOneOption) {
+          this.setSingleFormFlowStep();
+          this.buttonService.hideSaveButton();
+          this.buttonService.hideBackButton();
+        } else {
+          this.setFormFlowSteps();
+          this.buttonService.showSaveButton();
+          this.buttonService.showBackButton();
+        }
+        break;
+      case 'plugin':
+        if (hasOneOption) {
+          this.setSingleChoosePluginConfigurationSteps();
+          this.buttonService.hideBackButton();
+          this.buttonService.showNextButton();
+        } else {
+          this.setChoosePluginConfigurationSteps();
+          this.buttonService.showBackButton();
+          this.buttonService.showNextButton();
+        }
+        break;
+    }
   }
 
   private setChoiceSteps(): void {

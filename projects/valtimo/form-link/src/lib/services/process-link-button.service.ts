@@ -104,4 +104,12 @@ export class ProcessLinkButtonService {
   clickNextButton(): void {
     this._nextButtonClick$.next(null);
   }
+
+  resetButtons(): void {
+    this.disableSaveButton();
+    this.hideBackButton();
+    this.hideSaveButton();
+    this.hideNextButton();
+    this.disableNextButton();
+  }
 }

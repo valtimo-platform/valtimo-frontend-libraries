@@ -89,7 +89,7 @@ export class ProcessLinkStateService implements OnDestroy {
 
   selectProcessLinkType(processLinkTypeId: string, hasOneOption?: boolean): void {
     this._selectedProcessLinkTypeId$.next(processLinkTypeId);
-    this.setProcessLinkTypeSteps(processLinkTypeId, hasOneOption);
+    this.processLinkStepService.setProcessLinkTypeSteps(processLinkTypeId, hasOneOption);
   }
 
   clearSelectedProcessLinkType(): void {
@@ -108,7 +108,7 @@ export class ProcessLinkStateService implements OnDestroy {
 
   setInitial(): void {
     const availableTypes = this._availableProcessLinkTypes$.getValue();
-    this.resetButtons();
+    this.buttonService.resetButtons();
     this.processLinkStepService.setInitialSteps(availableTypes);
   }
 
@@ -129,53 +129,7 @@ export class ProcessLinkStateService implements OnDestroy {
     this.setAvailableProcessLinkTypes([]);
     this.processLinkStepService.reset();
     this.stopSaving();
-    this.resetButtons();
+    this.buttonService.resetButtons();
     this.clearSelectedProcessLinkType();
-  }
-
-  private resetButtons(): void {
-    this.buttonService.disableSaveButton();
-    this.buttonService.hideBackButton();
-    this.buttonService.hideSaveButton();
-    this.buttonService.hideNextButton();
-    this.buttonService.disableNextButton();
-  }
-
-  private setProcessLinkTypeSteps(processLinkTypeId: string, hasOneOption?: boolean): void {
-    switch (processLinkTypeId) {
-      case 'form':
-        if (hasOneOption) {
-          this.processLinkStepService.setSingleFormStep();
-          this.buttonService.hideSaveButton();
-          this.buttonService.hideBackButton();
-        } else {
-          this.processLinkStepService.setFormSteps();
-          this.buttonService.showSaveButton();
-          this.buttonService.showBackButton();
-        }
-        break;
-      case 'form-flow':
-        if (hasOneOption) {
-          this.processLinkStepService.setSingleFormFlowStep();
-          this.buttonService.hideSaveButton();
-          this.buttonService.hideBackButton();
-        } else {
-          this.processLinkStepService.setFormFlowSteps();
-          this.buttonService.showSaveButton();
-          this.buttonService.showBackButton();
-        }
-        break;
-      case 'plugin':
-        if (hasOneOption) {
-          this.processLinkStepService.setSingleChoosePluginConfigurationSteps();
-          this.buttonService.hideBackButton();
-          this.buttonService.showNextButton();
-        } else {
-          this.processLinkStepService.setChoosePluginConfigurationSteps();
-          this.buttonService.showBackButton();
-          this.buttonService.showNextButton();
-        }
-        break;
-    }
   }
 }
