@@ -20,6 +20,8 @@ import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
 import {ProcessLinkType} from '../models';
 import {TranslateService} from '@ngx-translate/core';
 import {ProcessLinkButtonService} from './process-link-button.service';
+import {take} from 'rxjs/operators';
+import {PluginStateService} from './plugin-state.service';
 
 @Injectable()
 export class ProcessLinkStepService {
@@ -68,7 +70,8 @@ export class ProcessLinkStepService {
 
   constructor(
     private readonly translateService: TranslateService,
-    private readonly buttonService: ProcessLinkButtonService
+    private readonly buttonService: ProcessLinkButtonService,
+    private readonly pluginStateService: PluginStateService
   ) {}
 
   reset(): void {
@@ -125,6 +128,34 @@ export class ProcessLinkStepService {
       {label: 'configurePluginAction', disabled: true},
     ]);
     this._currentStepIndex$.next(0);
+  }
+
+  setChoosePluginActionSteps(): void {
+    combineLatest([
+      this._hasOneProcessLinkType$,
+      this.pluginStateService.selectedPluginConfiguration$,
+    ])
+      .pipe(take(1))
+      .subscribe(([hasOneType, selectedConfiguration]) => {
+        if (hasOneType) {
+          this._steps$.next([
+            {label: 'choosePluginConfiguration', secondaryLabel: selectedConfiguration.title},
+            {label: 'choosePluginAction'},
+            {label: 'configurePluginAction', disabled: true},
+          ]);
+          this._currentStepIndex$.next(1);
+          this.buttonService.disableNextButton();
+        } else {
+          this._steps$.next([
+            {label: 'chooseProcessLinkType', secondaryLabel: 'processLinkType.plugin'},
+            {label: 'choosePluginConfiguration', secondaryLabel: selectedConfiguration.title},
+            {label: 'choosePluginAction'},
+            {label: 'configurePluginAction', disabled: true},
+          ]);
+          this._currentStepIndex$.next(2);
+          this.buttonService.disableNextButton();
+        }
+      });
   }
 
   disableSteps(): void {

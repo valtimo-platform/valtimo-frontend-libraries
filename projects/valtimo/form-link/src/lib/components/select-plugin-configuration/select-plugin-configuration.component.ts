@@ -24,7 +24,11 @@ import {
   PluginManagementService,
   PluginService,
 } from '@valtimo/plugin';
-import {ProcessLinkButtonService, ProcessLinkStateService} from '../../services';
+import {
+  ProcessLinkButtonService,
+  ProcessLinkStateService,
+  ProcessLinkStepService,
+} from '../../services';
 
 @Component({
   selector: 'valtimo-select-plugin-configuration',
@@ -61,11 +65,13 @@ export class SelectPluginConfigurationComponent {
     private readonly pluginStateService: PluginStateService,
     private readonly pluginService: PluginService,
     private readonly stateService: ProcessLinkStateService,
-    private readonly buttonService: ProcessLinkButtonService
+    private readonly buttonService: ProcessLinkButtonService,
+    private readonly stepService: ProcessLinkStepService
   ) {}
 
   ngOnInit(): void {
     this.openBackButtonSubscription();
+    this.openNextButtonSubscription();
   }
 
   ngOnDestroy(): void {
@@ -86,6 +92,14 @@ export class SelectPluginConfigurationComponent {
     this._subscriptions.add(
       this.buttonService.backButtonClick$.subscribe(() => {
         this.stateService.setInitial();
+      })
+    );
+  }
+
+  private openNextButtonSubscription(): void {
+    this._subscriptions.add(
+      this.buttonService.nextButtonClick$.subscribe(() => {
+        this.stepService.setChoosePluginActionSteps();
       })
     );
   }

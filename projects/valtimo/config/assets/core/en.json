@@ -1088,7 +1088,8 @@
     "empty": "........",
     "selectForm": "Select your form",
     "selectFormFlow": "Select your FormFlow",
-    "choosePluginConfiguration": "Select plugin configuration"
+    "choosePluginConfiguration": "Select plugin configuration",
+    "choosePluginAction": "Choose your action"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "No plugin configurations are available. Create a plugin configuration to be able to link it to a process step.",
