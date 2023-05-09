@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {map, switchMap} from 'rxjs/operators';
 import {PluginStateService} from '../../services/plugin-state.service';
 import {combineLatest, Observable, of, Subscription} from 'rxjs';
@@ -35,7 +35,7 @@ import {
   templateUrl: './select-plugin-configuration.component.html',
   styleUrls: ['./select-plugin-configuration.component.scss'],
 })
-export class SelectPluginConfigurationComponent {
+export class SelectPluginConfigurationComponent implements OnInit, OnDestroy {
   readonly pluginConfigurations$: Observable<Array<PluginConfigurationWithLogo>> =
     this.stateService.modalParams$.pipe(
       switchMap(modalData =>

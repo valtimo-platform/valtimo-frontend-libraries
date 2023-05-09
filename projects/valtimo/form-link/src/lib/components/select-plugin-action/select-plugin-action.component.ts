@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {switchMap} from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {switchMap, take} from 'rxjs/operators';
 import {PluginFunction, PluginManagementService} from '@valtimo/plugin';
 import {PluginStateService} from '../../services/plugin-state.service';
-import {Observable, of} from 'rxjs';
+import {Observable, of, Subscription} from 'rxjs';
+import {ProcessLinkButtonService, ProcessLinkStepService} from '../../services';
 
 @Component({
   selector: 'valtimo-select-plugin-action',
   templateUrl: './select-plugin-action.component.html',
   styleUrls: ['./select-plugin-action.component.scss'],
 })
-export class SelectPluginActionComponent {
+export class SelectPluginActionComponent implements OnInit, OnDestroy {
   readonly pluginFunctions$: Observable<Array<PluginFunction> | undefined> =
     this.stateService.selectedPluginDefinition$.pipe(
       switchMap(selectedDefinition =>
@@ -37,10 +38,22 @@ export class SelectPluginActionComponent {
   readonly selectedPluginDefinition$ = this.stateService.selectedPluginDefinition$;
   readonly selectedPluginFunction$ = this.stateService.selectedPluginFunction$;
 
+  private _subscriptions = new Subscription();
+
   constructor(
     private readonly pluginManagementService: PluginManagementService,
-    private readonly stateService: PluginStateService
+    private readonly stateService: PluginStateService,
+    private readonly buttonService: ProcessLinkButtonService,
+    private readonly stepService: ProcessLinkStepService
   ) {}
+
+  ngOnInit(): void {
+    this.openBackButtonSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   selectFunction(pluginFunction: PluginFunction): void {
     this.stateService.selectPluginFunction(pluginFunction);
@@ -48,5 +61,15 @@ export class SelectPluginActionComponent {
 
   deselectFunction(): void {
     this.stateService.deselectPluginFunction();
+  }
+
+  private openBackButtonSubscription(): void {
+    this._subscriptions.add(
+      this.buttonService.backButtonClick$.subscribe(() => {
+        this.stepService.hasOneProcessLinkType$.pipe(take(1)).subscribe(hasOneOption => {
+          this.stepService.setProcessLinkTypeSteps('plugin', hasOneOption);
+        });
+      })
+    );
   }
 }
