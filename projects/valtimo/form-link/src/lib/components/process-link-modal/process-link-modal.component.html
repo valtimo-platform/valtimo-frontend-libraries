@@ -78,6 +78,9 @@
     <ng-container *ngIf="stepId === 'choosePluginAction'">
       <valtimo-select-plugin-action></valtimo-select-plugin-action>
     </ng-container>
+    <ng-container *ngIf="stepId === 'configurePluginAction'">
+      <valtimo-plugin-action-configuration></valtimo-plugin-action-configuration>
+    </ng-container>
   </ng-container>
 </ng-template>
 

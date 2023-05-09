@@ -43,7 +43,7 @@ import {SelectPluginConfigurationComponent} from './components/select-plugin-con
 import {SelectPluginActionComponent} from './components/select-plugin-action/select-plugin-action.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PluginConfigurationContainerModule, PluginTranslatePipeModule} from '@valtimo/plugin';
-import {PluginFunctionConfigurationComponent} from './components/plugin-function-configuration/plugin-function-configuration.component';
+import {PluginActionConfigurationComponent} from './components/plugin-action-configuration/plugin-action-configuration.component';
 import {ProcessLink2Component} from './components/process-link-2/process-link-2.component';
 import {ProcessLinkModalComponent} from './components/process-link-modal/process-link-modal.component';
 import {
@@ -72,7 +72,7 @@ import {SelectFormFlowComponent} from './components/select-form-flow';
     FormLinkModalComponent,
     SelectPluginConfigurationComponent,
     SelectPluginActionComponent,
-    PluginFunctionConfigurationComponent,
+    PluginActionConfigurationComponent,
     ProcessLinkModalComponent,
     ChooseProcessLinkTypeComponent,
     SelectFormComponent,
@@ -118,7 +118,7 @@ import {SelectFormFlowComponent} from './components/select-form-flow';
     ProcessLink2Component,
     SelectPluginConfigurationComponent,
     SelectPluginActionComponent,
-    PluginFunctionConfigurationComponent,
+    PluginActionConfigurationComponent,
     ProcessLinkModalComponent,
     FormFlowComponent,
   ],

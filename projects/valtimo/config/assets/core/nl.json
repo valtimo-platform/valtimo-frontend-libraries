@@ -1093,7 +1093,8 @@
     "selectForm": "Selecteer je formulier",
     "selectFormFlow": "Selecteer je FormFlow",
     "choosePluginConfiguration": "Kies pluginconfiguratie",
-    "choosePluginAction": "Kies je actie"
+    "choosePluginAction": "Kies je actie",
+    "configurePluginAction": "Configureer je actie"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "Er zijn geen plugin-configuraties beschikbaar. Maak een pluginconfiguratie aan om deze te kunnen koppelen aan een processtap.",

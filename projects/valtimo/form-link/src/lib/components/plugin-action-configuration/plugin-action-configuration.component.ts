@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Output} from '@angular/core';
-import {PluginStateService} from '../../services';
-import {of, switchMap} from 'rxjs';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {PluginStateService, ProcessLinkButtonService, ProcessLinkStepService} from '../../services';
+import {of, Subscription, switchMap} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {PluginConfigurationData} from '@valtimo/plugin';
 
 @Component({
-  selector: 'valtimo-plugin-function-configuration',
-  templateUrl: './plugin-function-configuration.component.html',
-  styleUrls: ['./plugin-function-configuration.component.scss'],
+  selector: 'valtimo-plugin-action-configuration',
+  templateUrl: './plugin-action-configuration.component.html',
+  styleUrls: ['./plugin-action-configuration.component.scss'],
 })
-export class PluginFunctionConfigurationComponent {
+export class PluginActionConfigurationComponent implements OnInit, OnDestroy {
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<PluginConfigurationData> =
     new EventEmitter<PluginConfigurationData>();
@@ -44,7 +44,21 @@ export class PluginFunctionConfigurationComponent {
     )
   );
 
-  constructor(private readonly stateService: PluginStateService) {}
+  private _subscriptions = new Subscription();
+
+  constructor(
+    private readonly stateService: PluginStateService,
+    private readonly buttonService: ProcessLinkButtonService,
+    private readonly stepService: ProcessLinkStepService
+  ) {}
+
+  ngOnInit(): void {
+    this.openBackButtonSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   onValid(valid: boolean): void {
     this.valid.emit(valid);
@@ -52,5 +66,13 @@ export class PluginFunctionConfigurationComponent {
 
   onConfiguration(configuration: PluginConfigurationData) {
     this.configuration.emit(configuration);
+  }
+
+  private openBackButtonSubscription(): void {
+    this._subscriptions.add(
+      this.buttonService.backButtonClick$.subscribe(() => {
+        this.stepService.setChoosePluginActionSteps();
+      })
+    );
   }
 }

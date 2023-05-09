@@ -43,11 +43,11 @@
           <valtimo-select-plugin-action></valtimo-select-plugin-action>
         </v-stepper-step>
         <v-stepper-step titleTranslationKey="pluginSteps.step3">
-          <valtimo-plugin-function-configuration
+          <valtimo-plugin-action-configuration
             *ngIf="isCreateModal$ | async"
             (valid)="onValid($event)"
             (configuration)="onConfiguration($event)"
-          ></valtimo-plugin-function-configuration>
+          ></valtimo-plugin-action-configuration>
         </v-stepper-step>
       </v-stepper-content>
     </div>
@@ -87,11 +87,11 @@
     </div>
   </div>
   <div role="content">
-    <valtimo-plugin-function-configuration
+    <valtimo-plugin-action-configuration
       *ngIf="(selectedProcessLink$ | async) && (isEditModal$ | async)"
       (valid)="onValid($event)"
       (configuration)="onModifyConfiguration($event)"
-    ></valtimo-plugin-function-configuration>
+    ></valtimo-plugin-action-configuration>
   </div>
   <div role="footer">
     <div class="edit-function-buttons">

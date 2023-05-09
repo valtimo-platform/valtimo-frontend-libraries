@@ -146,6 +146,8 @@ export class ProcessLinkStepService {
             {label: 'configurePluginAction', disabled: true},
           ]);
           this._currentStepIndex$.next(1);
+          this.buttonService.showNextButton();
+          this.buttonService.hideSaveButton();
           this.buttonService.disableNextButton();
         } else {
           this._steps$.next([
@@ -155,6 +157,8 @@ export class ProcessLinkStepService {
             {label: 'configurePluginAction', disabled: true},
           ]);
           this._currentStepIndex$.next(2);
+          this.buttonService.showNextButton();
+          this.buttonService.hideSaveButton();
           this.buttonService.disableNextButton();
         }
       });
@@ -180,7 +184,8 @@ export class ProcessLinkStepService {
             {label: 'configurePluginAction'},
           ]);
           this._currentStepIndex$.next(2);
-          this.buttonService.disableNextButton();
+          this.buttonService.hideNextButton();
+          this.buttonService.showSaveButton();
         } else {
           this._steps$.next([
             {label: 'chooseProcessLinkType', secondaryLabel: 'processLinkType.plugin'},
@@ -189,7 +194,8 @@ export class ProcessLinkStepService {
             {label: 'configurePluginAction'},
           ]);
           this._currentStepIndex$.next(3);
-          this.buttonService.disableNextButton();
+          this.buttonService.hideNextButton();
+          this.buttonService.showSaveButton();
         }
       });
   }
