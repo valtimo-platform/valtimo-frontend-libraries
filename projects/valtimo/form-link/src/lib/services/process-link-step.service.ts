@@ -22,6 +22,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ProcessLinkButtonService} from './process-link-button.service';
 import {take} from 'rxjs/operators';
 import {PluginStateService} from './plugin-state.service';
+import {PluginTranslationService} from '@valtimo/plugin';
 
 @Injectable()
 export class ProcessLinkStepService {
@@ -71,7 +72,8 @@ export class ProcessLinkStepService {
   constructor(
     private readonly translateService: TranslateService,
     private readonly buttonService: ProcessLinkButtonService,
-    private readonly pluginStateService: PluginStateService
+    private readonly pluginStateService: PluginStateService,
+    private readonly pluginTranslateService: PluginTranslationService
   ) {}
 
   reset(): void {
@@ -153,6 +155,40 @@ export class ProcessLinkStepService {
             {label: 'configurePluginAction', disabled: true},
           ]);
           this._currentStepIndex$.next(2);
+          this.buttonService.disableNextButton();
+        }
+      });
+  }
+
+  setConfigurePluginActionSteps(): void {
+    combineLatest([
+      this._hasOneProcessLinkType$,
+      this.pluginStateService.selectedPluginConfiguration$,
+      this.pluginStateService.selectedPluginFunction$,
+    ])
+      .pipe(take(1))
+      .subscribe(([hasOneType, selectedConfiguration, selectedFunction]) => {
+        const selectedFunctionTranslation = this.pluginTranslateService.instant(
+          selectedFunction.key,
+          selectedConfiguration.pluginDefinition.key
+        );
+
+        if (hasOneType) {
+          this._steps$.next([
+            {label: 'choosePluginConfiguration', secondaryLabel: selectedConfiguration.title},
+            {label: 'choosePluginAction', secondaryLabel: selectedFunctionTranslation},
+            {label: 'configurePluginAction'},
+          ]);
+          this._currentStepIndex$.next(2);
+          this.buttonService.disableNextButton();
+        } else {
+          this._steps$.next([
+            {label: 'chooseProcessLinkType', secondaryLabel: 'processLinkType.plugin'},
+            {label: 'choosePluginConfiguration', secondaryLabel: selectedConfiguration.title},
+            {label: 'choosePluginAction', secondaryLabel: selectedFunctionTranslation},
+            {label: 'configurePluginAction'},
+          ]);
+          this._currentStepIndex$.next(3);
           this.buttonService.disableNextButton();
         }
       });

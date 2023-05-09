@@ -49,6 +49,7 @@ export class SelectPluginActionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.openBackButtonSubscription();
+    this.openNextButtonSubscription();
   }
 
   ngOnDestroy(): void {
@@ -57,10 +58,6 @@ export class SelectPluginActionComponent implements OnInit, OnDestroy {
 
   selectFunction(pluginFunction: PluginFunction): void {
     this.stateService.selectPluginFunction(pluginFunction);
-  }
-
-  deselectFunction(): void {
-    this.stateService.deselectPluginFunction();
   }
 
   selected(event: {value: string}): void {
@@ -78,6 +75,14 @@ export class SelectPluginActionComponent implements OnInit, OnDestroy {
         this.stepService.hasOneProcessLinkType$.pipe(take(1)).subscribe(hasOneOption => {
           this.stepService.setProcessLinkTypeSteps('plugin', hasOneOption);
         });
+      })
+    );
+  }
+
+  private openNextButtonSubscription(): void {
+    this._subscriptions.add(
+      this.buttonService.nextButtonClick$.subscribe(() => {
+        this.stepService.setConfigurePluginActionSteps();
       })
     );
   }
