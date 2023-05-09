@@ -16,36 +16,34 @@
 
 <ng-container *ngIf="pluginFunctions$ | async as pluginFunctions; else loading">
   <div
-    fxLayout="row wrap"
-    fxLayoutGap="22px grid"
-    *ngIf="{selectedPluginDefinition: selectedPluginDefinition$ | async} as obs"
+    class="choose-plugin-action"
+    *ngIf="
+      pluginFunctions?.length > 0;
+      else noPluginFunctionsTemplate;
+      context: {pluginFunctions: pluginFunctions}
+    "
   >
-    <ng-container
-      *ngTemplateOutlet="
-        pluginFunctionsTemplate;
-        context: {pluginFunctions: pluginFunctions, obs: obs}
-      "
-    ></ng-container>
-    <ng-container
-      *ngTemplateOutlet="noPluginFunctionsTemplate; context: {pluginFunctions: pluginFunctions}"
-    ></ng-container>
+    <p class="step-description">
+      {{ 'processLinkConfiguration.choosePluginActionDescription' | translate }}
+    </p>
+    <div class="action-tiles">
+      <ibm-tile-group
+        [multiple]="false"
+        *ngIf="{selectedPluginDefinition: selectedPluginDefinition$ | async} as obs"
+      >
+        <ibm-selection-tile
+          *ngFor="let pluginFunction of pluginFunctions"
+          [value]="pluginFunction.key"
+          [selected]="false"
+          theme="dark"
+          >{{
+            pluginFunction.key | pluginTranslate : obs.selectedPluginDefinition.key | async
+          }}</ibm-selection-tile
+        >
+      </ibm-tile-group>
+    </div>
   </div>
 </ng-container>
-
-<ng-template #pluginFunctionsTemplate let-pluginFunctions="pluginFunctions" let-obs="obs">
-  <ng-container *ngIf="pluginFunctions?.length > 0">
-    <div fxFlex="33.3%" *ngFor="let pluginFunction of pluginFunctions">
-      <v-card
-        [title]="pluginFunction.key | pluginTranslate : obs.selectedPluginDefinition.key | async"
-        [selectable]="true"
-        [selected]="(selectedPluginFunction$ | async)?.key === pluginFunction.key"
-        [fullHeight]="true"
-        (selectEvent)="selectFunction(pluginFunction)"
-        (deselectEvent)="deselectFunction()"
-      ></v-card>
-    </div>
-  </ng-container>
-</ng-template>
 
 <ng-template #noPluginFunctionsTemplate let-pluginFunctions="pluginFunctions">
   <div fxFlex="100%" *ngIf="pluginFunctions?.length === 0">
@@ -56,15 +54,7 @@
 </ng-template>
 
 <ng-template #loading>
-  <div fxLayout="row wrap" fxLayoutGap="22px grid">
-    <ng-container *ngTemplateOutlet="loadingCard"></ng-container>
-    <ng-container *ngTemplateOutlet="loadingCard"></ng-container>
-    <ng-container *ngTemplateOutlet="loadingCard"></ng-container>
-  </div>
-</ng-template>
-
-<ng-template #loadingCard>
-  <div fxFlex="33.3%">
-    <v-card [loading]="true" [loadingDescription]="false" [loadingTitle]="true"></v-card>
+  <div class="loading-container">
+    <ibm-loading></ibm-loading>
   </div>
 </ng-template>

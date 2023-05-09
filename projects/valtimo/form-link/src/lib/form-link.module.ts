@@ -55,6 +55,7 @@ import {
   ModalModule as CarbonModalModule,
   ProgressIndicatorModule,
   StructuredListModule,
+  TilesModule,
 } from 'carbon-components-angular';
 import {FlowDataModule, LinkModule, ReceiptModule} from '@carbon/icons-angular';
 import {ChooseProcessLinkTypeComponent} from './components/choose-process-link-type';
@@ -109,6 +110,7 @@ import {SelectFormFlowComponent} from './components/select-form-flow';
     FormIoModule,
     ValtimoIbmModalDirectiveModule,
     StructuredListModule,
+    TilesModule,
   ],
   exports: [
     FormLinkComponent,
