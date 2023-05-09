@@ -63,6 +63,15 @@ export class SelectPluginActionComponent implements OnInit, OnDestroy {
     this.stateService.deselectPluginFunction();
   }
 
+  selected(event: {value: string}): void {
+    this.selectFunction(JSON.parse(event.value));
+    this.buttonService.enableNextButton();
+  }
+
+  stringify(object: object): string {
+    return JSON.stringify(object);
+  }
+
   private openBackButtonSubscription(): void {
     this._subscriptions.add(
       this.buttonService.backButtonClick$.subscribe(() => {

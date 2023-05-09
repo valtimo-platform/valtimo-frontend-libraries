@@ -30,12 +30,12 @@
       <ibm-tile-group
         [multiple]="false"
         *ngIf="{selectedPluginDefinition: selectedPluginDefinition$ | async} as obs"
+        (selected)="selected($event)"
       >
         <ibm-selection-tile
           *ngFor="let pluginFunction of pluginFunctions"
-          [value]="pluginFunction.key"
+          [value]="stringify(pluginFunction)"
           [selected]="false"
-          theme="dark"
           >{{
             pluginFunction.key | pluginTranslate : obs.selectedPluginDefinition.key | async
           }}</ibm-selection-tile
@@ -46,11 +46,9 @@
 </ng-container>
 
 <ng-template #noPluginFunctionsTemplate let-pluginFunctions="pluginFunctions">
-  <div fxFlex="100%" *ngIf="pluginFunctions?.length === 0">
-    <v-paragraph [center]="true" [fullWidth]="true">{{
-      'processLink.noPluginFunctions' | translate
-    }}</v-paragraph>
-  </div>
+  <p class="step-description">
+    {{ 'processLink.noPluginFunctions' | translate }}
+  </p>
 </ng-template>
 
 <ng-template #loading>
