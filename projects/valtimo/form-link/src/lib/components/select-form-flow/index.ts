@@ -14,22 +14,4 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ConfirmationModalComponent} from './confirmation-modal.component';
-import {ButtonModule, ModalModule} from 'carbon-components-angular';
-import {TranslateModule} from '@ngx-translate/core';
-import {ValtimoIbmModalDirectiveModule} from '../../directives';
-
-@NgModule({
-  declarations: [ConfirmationModalComponent],
-  imports: [
-    CommonModule,
-    ModalModule,
-    TranslateModule,
-    ButtonModule,
-    ValtimoIbmModalDirectiveModule,
-  ],
-  exports: [ConfirmationModalComponent],
-})
-export class ConfirmationModalModule {}
+export * from './select-form-flow.component';

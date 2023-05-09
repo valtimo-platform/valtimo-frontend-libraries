@@ -18,46 +18,14 @@
   margin-top: 40px;
 }
 
-::ng-deep .process-link-modal-container .cds--modal-container {
-  max-width: 960px;
-  min-height: 70%;
-}
-
-::ng-deep .process-link-modal-container .cds--modal-footer {
-  justify-content: space-between;
-}
-
-.ibm-loading-container {
-  position: absolute;
-  top: 50px;
-  padding-bottom: 50px;
-  left: 0;
-  width: 100%;
-  height: calc(100% - 50px);
+.label-with-tooltip {
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: var(--cds-layer);
-  z-index: 99;
-  box-sizing: border-box;
 }
 
-.navigation-buttons,
-.cancel-button {
-  max-width: 50%;
+.select-form-flow {
   display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-
-  button {
-    min-width: 50%;
-  }
-}
-
-.cancel-button {
-  max-width: 25%;
-
-  button {
-    min-width: 100%;
-  }
+  flex-direction: column;
+  width: 100%;
+  margin-top: 24px;
 }
