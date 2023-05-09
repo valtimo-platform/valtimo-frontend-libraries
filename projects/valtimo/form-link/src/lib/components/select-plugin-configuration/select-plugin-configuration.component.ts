@@ -16,7 +16,7 @@
 
 import {Component} from '@angular/core';
 import {map, switchMap} from 'rxjs/operators';
-import {ProcessLinkStateService} from '../../services/process-link-state.service';
+import {PluginStateService} from '../../services/plugin-state.service';
 import {combineLatest, Observable, of, Subscription} from 'rxjs';
 import {
   PluginConfiguration,
@@ -24,7 +24,7 @@ import {
   PluginManagementService,
   PluginService,
 } from '@valtimo/plugin';
-import {ProcessLinkButtonService, ProcessLinkState2Service} from '../../services';
+import {ProcessLinkButtonService, ProcessLinkStateService} from '../../services';
 
 @Component({
   selector: 'valtimo-select-plugin-configuration',
@@ -52,27 +52,17 @@ export class SelectPluginConfigurationComponent {
       )
     );
 
-  readonly selectedPluginConfiguration$ = this.processLinkStateService.selectedPluginConfiguration$;
+  readonly selectedPluginConfiguration$ = this.pluginStateService.selectedPluginConfiguration$;
 
   private _subscriptions = new Subscription();
 
   constructor(
     private readonly pluginManagementService: PluginManagementService,
-    private readonly processLinkStateService: ProcessLinkStateService,
+    private readonly pluginStateService: PluginStateService,
     private readonly pluginService: PluginService,
-    private readonly stateService: ProcessLinkState2Service,
+    private readonly stateService: ProcessLinkStateService,
     private readonly buttonService: ProcessLinkButtonService
   ) {}
-
-  selectConfiguration(configuration: PluginConfiguration): void {
-    this.processLinkStateService.selectPluginDefinition({key: configuration.pluginDefinition.key});
-    this.processLinkStateService.selectPluginConfiguration(configuration);
-  }
-
-  deselectConfiguration(): void {
-    this.processLinkStateService.deselectPluginDefinition();
-    this.processLinkStateService.deselectPluginConfiguration();
-  }
 
   ngOnInit(): void {
     this.openBackButtonSubscription();
@@ -85,6 +75,11 @@ export class SelectPluginConfigurationComponent {
   selected(event: {value: PluginConfiguration}): void {
     this.selectConfiguration(event.value);
     this.buttonService.enableNextButton();
+  }
+
+  private selectConfiguration(configuration: PluginConfiguration): void {
+    this.pluginStateService.selectPluginDefinition({key: configuration.pluginDefinition.key});
+    this.pluginStateService.selectPluginConfiguration(configuration);
   }
 
   private openBackButtonSubscription(): void {

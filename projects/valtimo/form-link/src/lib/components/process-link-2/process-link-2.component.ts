@@ -19,7 +19,7 @@ import {ModalParams} from '../../models';
 import {
   ProcessLinkButtonService,
   ProcessLinkService,
-  ProcessLinkState2Service,
+  ProcessLinkStateService,
   ProcessLinkStepService,
 } from '../../services';
 
@@ -27,12 +27,12 @@ import {
   selector: 'valtimo-process-link-2',
   templateUrl: './process-link-2.component.html',
   styleUrls: ['./process-link-2.component.scss'],
-  providers: [ProcessLinkState2Service, ProcessLinkStepService, ProcessLinkButtonService],
+  providers: [ProcessLinkStateService, ProcessLinkStepService, ProcessLinkButtonService],
 })
 export class ProcessLink2Component {
   constructor(
     private readonly processLinkService: ProcessLinkService,
-    private readonly processLinkState2Service: ProcessLinkState2Service
+    private readonly processLinkState2Service: ProcessLinkStateService
   ) {}
 
   openModal(params: ModalParams): void {

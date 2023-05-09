@@ -40,7 +40,7 @@ import {
   TooltipModule,
 } from '@valtimo/user-interface';
 import {SelectPluginConfigurationComponent} from './components/select-plugin-configuration/select-plugin-configuration.component';
-import {SelectPluginFunctionComponent} from './components/select-plugin-function/select-plugin-function.component';
+import {SelectPluginActionComponent} from './components/select-plugin-action/select-plugin-action.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PluginConfigurationContainerModule, PluginTranslatePipeModule} from '@valtimo/plugin';
 import {PluginFunctionConfigurationComponent} from './components/plugin-function-configuration/plugin-function-configuration.component';
@@ -70,7 +70,7 @@ import {SelectFormFlowComponent} from './components/select-form-flow';
     FormLinkProcessDiagramComponent,
     FormLinkModalComponent,
     SelectPluginConfigurationComponent,
-    SelectPluginFunctionComponent,
+    SelectPluginActionComponent,
     PluginFunctionConfigurationComponent,
     ProcessLinkModalComponent,
     ChooseProcessLinkTypeComponent,
@@ -115,7 +115,7 @@ import {SelectFormFlowComponent} from './components/select-form-flow';
     ProcessLinkComponent,
     ProcessLink2Component,
     SelectPluginConfigurationComponent,
-    SelectPluginFunctionComponent,
+    SelectPluginActionComponent,
     PluginFunctionConfigurationComponent,
     ProcessLinkModalComponent,
     FormFlowComponent,

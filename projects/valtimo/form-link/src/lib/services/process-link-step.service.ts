@@ -25,6 +25,7 @@ export class ProcessLinkStepService {
   private readonly _steps$ = new BehaviorSubject<Array<Step>>(undefined);
   private readonly _currentStepIndex$ = new BehaviorSubject<number>(0);
   private readonly _disableSteps$ = new BehaviorSubject<boolean>(false);
+  private readonly _hasOneProcessLinkType$ = new BehaviorSubject<boolean>(false);
 
   get steps$(): Observable<Array<Step>> {
     return combineLatest([
@@ -58,6 +59,10 @@ export class ProcessLinkStepService {
       ),
       map(([steps, currentStepIndex]) => steps[currentStepIndex]?.label)
     );
+  }
+
+  get hasOneProcessLinkType$(): Observable<boolean> {
+    return this._hasOneProcessLinkType$.asObservable();
   }
 
   constructor(private readonly translateService: TranslateService) {}
@@ -124,6 +129,10 @@ export class ProcessLinkStepService {
 
   enableSteps(): void {
     this._disableSteps$.next(false);
+  }
+
+  setHasOneProcessLinkType(hasOne: boolean): void {
+    this._hasOneProcessLinkType$.next(hasOne);
   }
 
   private setChoiceSteps(): void {

@@ -15,9 +15,9 @@
  */
 
 import {Component, EventEmitter, Output} from '@angular/core';
-import {ProcessLinkStateService} from '../../services';
-import {combineLatest, of, switchMap} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
+import {PluginStateService} from '../../services';
+import {of, switchMap} from 'rxjs';
+import {map} from 'rxjs/operators';
 import {PluginConfigurationData} from '@valtimo/plugin';
 
 @Component({
@@ -44,7 +44,7 @@ export class PluginFunctionConfigurationComponent {
     )
   );
 
-  constructor(private readonly stateService: ProcessLinkStateService) {}
+  constructor(private readonly stateService: PluginStateService) {}
 
   onValid(valid: boolean): void {
     this.valid.emit(valid);

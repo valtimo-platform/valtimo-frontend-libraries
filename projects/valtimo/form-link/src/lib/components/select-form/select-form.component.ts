@@ -20,7 +20,7 @@ import {combineLatest, map, Observable, Subscription, switchMap} from 'rxjs';
 import {
   ProcessLinkButtonService,
   ProcessLinkService,
-  ProcessLinkState2Service,
+  ProcessLinkStateService,
 } from '../../services';
 import {FormDefinitionListItem} from '../../models';
 import {take} from 'rxjs/operators';
@@ -49,7 +49,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly formService: FormService,
-    private readonly stateService: ProcessLinkState2Service,
+    private readonly stateService: ProcessLinkStateService,
     private readonly processLinkService: ProcessLinkService,
     private readonly buttonService: ProcessLinkButtonService
   ) {}

@@ -18,7 +18,7 @@ import {Component, ViewChild} from '@angular/core';
 import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
 import {ModalParams, SaveProcessLinkRequest, UpdateProcessLinkRequest} from '../../models';
 import {ModalComponent, ModalService} from '@valtimo/user-interface';
-import {ProcessLinkStateService} from '../../services/process-link-state.service';
+import {PluginStateService} from '../../services/plugin-state.service';
 import {take} from 'rxjs/operators';
 import {PluginConfigurationData} from '@valtimo/plugin';
 import {ProcessLinkService} from '../../services';
@@ -47,7 +47,7 @@ export class ProcessLinkComponent {
 
   constructor(
     private readonly modalService: ModalService,
-    private readonly stateService: ProcessLinkStateService,
+    private readonly stateService: PluginStateService,
     private readonly processLinkService: ProcessLinkService,
     private readonly logger: NGXLogger
   ) {}

@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 import {
   ProcessLinkButtonService,
-  ProcessLinkState2Service,
+  ProcessLinkStateService,
   ProcessLinkStepService,
 } from '../../services';
 
@@ -38,11 +38,11 @@ export class ProcessLinkModalComponent {
   public readonly showNextButton$ = this.buttonService.showNextButton$;
   public readonly enableNextButton$ = this.buttonService.enableNextButton$;
 
-  public readonly hasOneOption$ = this.processLinkState2Service.hasOneOption$;
+  public readonly hasOneProcessLinkType$ = this.processLinkStepService.hasOneProcessLinkType$;
   public readonly saving$ = this.processLinkState2Service.saving$;
 
   constructor(
-    private readonly processLinkState2Service: ProcessLinkState2Service,
+    private readonly processLinkState2Service: ProcessLinkStateService,
     private readonly processLinkStepService: ProcessLinkStepService,
     private readonly buttonService: ProcessLinkButtonService
   ) {}

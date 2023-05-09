@@ -14,44 +14,39 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {switchMap, take, tap} from 'rxjs/operators';
-import {
-  PluginDefinition,
-  PluginConfiguration,
-  PluginFunction,
-  PluginManagementService,
-} from '@valtimo/plugin';
-import {ProcessLinkStateService} from '../../services/process-link-state.service';
+import {Component} from '@angular/core';
+import {switchMap} from 'rxjs/operators';
+import {PluginFunction, PluginManagementService} from '@valtimo/plugin';
+import {PluginStateService} from '../../services/plugin-state.service';
 import {Observable, of} from 'rxjs';
 
 @Component({
-  selector: 'valtimo-select-plugin-function',
-  templateUrl: './select-plugin-function.component.html',
-  styleUrls: ['./select-plugin-function.component.scss'],
+  selector: 'valtimo-select-plugin-action',
+  templateUrl: './select-plugin-action.component.html',
+  styleUrls: ['./select-plugin-action.component.scss'],
 })
-export class SelectPluginFunctionComponent {
+export class SelectPluginActionComponent {
   readonly pluginFunctions$: Observable<Array<PluginFunction> | undefined> =
-    this.processLinkStateService.selectedPluginDefinition$.pipe(
+    this.stateService.selectedPluginDefinition$.pipe(
       switchMap(selectedDefinition =>
         selectedDefinition
           ? this.pluginManagementService.getPluginFunctions(selectedDefinition.key)
           : of(undefined)
       )
     );
-  readonly selectedPluginDefinition$ = this.processLinkStateService.selectedPluginDefinition$;
-  readonly selectedPluginFunction$ = this.processLinkStateService.selectedPluginFunction$;
+  readonly selectedPluginDefinition$ = this.stateService.selectedPluginDefinition$;
+  readonly selectedPluginFunction$ = this.stateService.selectedPluginFunction$;
 
   constructor(
     private readonly pluginManagementService: PluginManagementService,
-    private readonly processLinkStateService: ProcessLinkStateService
+    private readonly stateService: PluginStateService
   ) {}
 
   selectFunction(pluginFunction: PluginFunction): void {
-    this.processLinkStateService.selectPluginFunction(pluginFunction);
+    this.stateService.selectPluginFunction(pluginFunction);
   }
 
   deselectFunction(): void {
-    this.processLinkStateService.deselectPluginFunction();
+    this.stateService.deselectPluginFunction();
   }
 }
