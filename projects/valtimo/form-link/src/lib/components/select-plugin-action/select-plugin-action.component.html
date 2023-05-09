@@ -15,14 +15,7 @@
   -->
 
 <ng-container *ngIf="pluginFunctions$ | async as pluginFunctions; else loading">
-  <div
-    class="choose-plugin-action"
-    *ngIf="
-      pluginFunctions?.length > 0;
-      else noPluginFunctionsTemplate;
-      context: {pluginFunctions: pluginFunctions}
-    "
-  >
+  <div class="choose-plugin-action" *ngIf="pluginFunctions?.length > 0">
     <p class="step-description">
       {{ 'processLinkConfiguration.choosePluginActionDescription' | translate }}
     </p>
@@ -43,9 +36,12 @@
       </ibm-tile-group>
     </div>
   </div>
+  <ng-container *ngIf="!pluginFunctions || pluginFunctions?.length === 0">
+    <ng-container *ngTemplateOutlet="noPluginFunctionsTemplate"> </ng-container>
+  </ng-container>
 </ng-container>
 
-<ng-template #noPluginFunctionsTemplate let-pluginFunctions="pluginFunctions">
+<ng-template #noPluginFunctionsTemplate>
   <p class="step-description">
     {{ 'processLink.noPluginFunctions' | translate }}
   </p>
