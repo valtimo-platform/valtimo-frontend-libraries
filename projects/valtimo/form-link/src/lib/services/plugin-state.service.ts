@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, combineLatest, Observable, Subject, switchMap} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of, Subject, switchMap} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {
   PluginConfiguration,
@@ -64,17 +64,15 @@ export class PluginStateService {
       switchMap(processLink =>
         !processLink
           ? this._selectedPluginFunction$.pipe(map(pluginFunction => pluginFunction?.key))
-          : this._selectedProcessLink$.pipe(
-              map(processLink => processLink?.pluginActionDefinitionKey)
-            )
+          : of(processLink?.pluginActionDefinitionKey)
       )
     );
   }
 
   get pluginDefinitionKey$(): Observable<string> {
     return this._selectedProcessLink$.pipe(
-      switchMap(processLink =>
-        !processLink
+      switchMap(selectedProcesLink =>
+        !selectedProcesLink
           ? this._selectedPluginConfiguration$.pipe(
               map(configuration => configuration?.pluginDefinition.key)
             )

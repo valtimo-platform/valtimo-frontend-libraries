@@ -22,7 +22,7 @@ import {
   ProcessLinkStateService,
   ProcessLinkStepService,
 } from '../../services';
-import {combineLatest, of, Subscription, switchMap} from 'rxjs';
+import {combineLatest, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {PluginConfigurationData} from '@valtimo/plugin';
 import {PluginProcessLinkCreateDto, PluginProcessLinkUpdateDto} from '../../models';
@@ -42,13 +42,7 @@ export class PluginActionConfigurationComponent implements OnInit, OnDestroy {
   public readonly save$ = this.pluginStateService.save$;
   public readonly saving$ = this.stateService.saving$;
   public readonly prefillConfiguration$ = this.stateService.selectedProcessLink$.pipe(
-    switchMap(processLink =>
-      processLink
-        ? this.stateService.selectedProcessLink$.pipe(
-            map(processLink => processLink?.actionProperties)
-          )
-        : of(undefined)
-    )
+    map(processLink => (processLink ? processLink?.actionProperties : undefined))
   );
 
   private _subscriptions = new Subscription();
