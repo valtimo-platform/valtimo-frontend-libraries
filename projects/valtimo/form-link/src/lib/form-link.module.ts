@@ -28,7 +28,6 @@ import {
   ValtimoIbmModalDirectiveModule,
 } from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
-import {ProcessLinkComponent} from './components/process-link/process-link.component';
 import {
   ButtonModule,
   CardModule,
@@ -66,7 +65,6 @@ import {SelectFormFlowComponent} from './components/select-form-flow';
 @NgModule({
   declarations: [
     FormLinkComponent,
-    ProcessLinkComponent,
     ProcessLink2Component,
     FormLinkProcessDiagramComponent,
     FormLinkModalComponent,
@@ -114,7 +112,6 @@ import {SelectFormFlowComponent} from './components/select-form-flow';
   ],
   exports: [
     FormLinkComponent,
-    ProcessLinkComponent,
     ProcessLink2Component,
     SelectPluginConfigurationComponent,
     SelectPluginActionComponent,

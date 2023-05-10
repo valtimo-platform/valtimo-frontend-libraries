@@ -21,7 +21,6 @@
 export * from './lib/services/form-flow.service';
 export * from './lib/services/form-link.service';
 export * from './lib/components/form-link/form-link.component';
-export * from './lib/components/process-link/process-link.component';
 export * from './lib/components/select-plugin-configuration/select-plugin-configuration.component';
 export * from './lib/components/select-plugin-action/select-plugin-action.component';
 export * from './lib/components/plugin-action-configuration/plugin-action-configuration.component';
