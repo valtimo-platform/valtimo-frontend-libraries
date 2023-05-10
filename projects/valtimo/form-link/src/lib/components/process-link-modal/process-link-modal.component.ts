@@ -17,9 +17,11 @@
 import {Component} from '@angular/core';
 import {
   ProcessLinkButtonService,
+  ProcessLinkService,
   ProcessLinkStateService,
   ProcessLinkStepService,
 } from '../../services';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-process-link-modal',
@@ -27,32 +29,29 @@ import {
   styleUrls: ['./process-link-modal.component.scss'],
 })
 export class ProcessLinkModalComponent {
-  public readonly showModal$ = this.processLinkStateService.showModal$;
-  public readonly processStepName$ = this.processLinkStateService.elementName$;
-  public readonly steps$ = this.processLinkStepService.steps$;
-  public readonly currentStepIndex$ = this.processLinkStepService.currentStepIndex$;
-  public readonly currentStepId$ = this.processLinkStepService.currentStepId$;
+  public readonly showModal$ = this.stateService.showModal$;
+  public readonly processStepName$ = this.stateService.elementName$;
+  public readonly steps$ = this.stepService.steps$;
+  public readonly currentStepIndex$ = this.stepService.currentStepIndex$;
+  public readonly currentStepId$ = this.stepService.currentStepId$;
   public readonly showSaveButton$ = this.buttonService.showSaveButton$;
   public readonly enableSaveButton$ = this.buttonService.enableSaveButton$;
   public readonly showBackButton$ = this.buttonService.showBackButton$;
   public readonly showNextButton$ = this.buttonService.showNextButton$;
   public readonly enableNextButton$ = this.buttonService.enableNextButton$;
-  public readonly hasOneProcessLinkType$ = this.processLinkStepService.hasOneProcessLinkType$;
-  public readonly hideProgressIndicator$ = this.processLinkStateService.hideProgressIndicator$;
-  public readonly saving$ = this.processLinkStateService.saving$;
+  public readonly hideProgressIndicator$ = this.stateService.hideProgressIndicator$;
+  public readonly saving$ = this.stateService.saving$;
+  public readonly typeOfSelectedProcessLink$ = this.stateService.typeOfSelectedProcessLink$;
 
   constructor(
-    private readonly processLinkStateService: ProcessLinkStateService,
-    private readonly processLinkStepService: ProcessLinkStepService,
-    private readonly buttonService: ProcessLinkButtonService
+    private readonly stateService: ProcessLinkStateService,
+    private readonly stepService: ProcessLinkStepService,
+    private readonly buttonService: ProcessLinkButtonService,
+    private readonly processLinkService: ProcessLinkService
   ) {}
 
-  selectProcessLinkType(processLinkTypeId: string): void {
-    this.processLinkStateService.selectProcessLinkType(processLinkTypeId);
-  }
-
   closeModal(): void {
-    this.processLinkStateService.closeModal();
+    this.stateService.closeModal();
   }
 
   backButtonClick(): void {
@@ -65,5 +64,20 @@ export class ProcessLinkModalComponent {
 
   nextButtonClick(): void {
     this.buttonService.clickNextButton();
+  }
+
+  unlinkButtonClick(): void {
+    this.stateService.startSaving();
+
+    this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
+      this.processLinkService.deleteProcessLink(selectedProcessLink.id).subscribe(
+        () => {
+          this.stateService.closeModal();
+        },
+        () => {
+          this.stateService.stopSaving();
+        }
+      );
+    });
   }
 }

@@ -1078,7 +1078,8 @@
     "complete": "Complete",
     "back": "Go back",
     "next": "Next",
-    "pluginDescription": "Plugin description"
+    "pluginDescription": "Plugin description",
+    "unlink": "Unlink"
   },
   "processLinkType": {
     "plugin": "Plugin",

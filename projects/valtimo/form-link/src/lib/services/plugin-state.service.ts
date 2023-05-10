@@ -24,7 +24,7 @@ import {
   PluginManagementService,
   PluginService,
 } from '@valtimo/plugin';
-import {ProcessLink, ProcessLinkModalType} from '../models';
+import {ProcessLink} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -35,11 +35,9 @@ export class PluginStateService {
     undefined
   );
   private readonly _selectedPluginFunction$ = new BehaviorSubject<PluginFunction>(undefined);
-  private readonly _selectedProcessLink$ = new BehaviorSubject<ProcessLink>(undefined);
   private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
   private readonly _save$ = new Subject<null>();
-  private readonly _saveModify$ = new Subject<null>();
-  private readonly _modalType$ = new BehaviorSubject<ProcessLinkModalType>('create');
+  private readonly _selectedProcessLink$ = new BehaviorSubject<ProcessLink>(undefined);
 
   constructor(
     private readonly pluginManagementService: PluginManagementService,
@@ -62,34 +60,14 @@ export class PluginStateService {
     return this._inputDisabled$.asObservable();
   }
 
-  get isCreateModal$(): Observable<boolean> {
-    return this._modalType$.pipe(map(modalType => modalType === 'create'));
-  }
-
-  get isEditModal$(): Observable<boolean> {
-    return this._modalType$.pipe(map(modalType => modalType === 'edit'));
-  }
-
   get save$(): Observable<any> {
-    return this.isCreateModal$.pipe(
-      switchMap(isCreateModal =>
-        isCreateModal ? this._save$.asObservable() : this._saveModify$.asObservable()
-      )
-    );
-  }
-
-  get selectedProcessLink$(): Observable<ProcessLink> {
-    return this._selectedProcessLink$.asObservable();
-  }
-
-  get modalType$(): Observable<ProcessLinkModalType> {
-    return this._modalType$.asObservable();
+    return this._save$.asObservable();
   }
 
   get functionKey$(): Observable<string> {
-    return this.isCreateModal$.pipe(
-      switchMap(isCreateModal =>
-        isCreateModal
+    return this._selectedProcessLink$.pipe(
+      switchMap(processLink =>
+        !processLink
           ? this._selectedPluginFunction$.pipe(map(pluginFunction => pluginFunction?.key))
           : this._selectedProcessLink$.pipe(
               map(processLink => processLink?.pluginActionDefinitionKey)
@@ -99,9 +77,9 @@ export class PluginStateService {
   }
 
   get pluginDefinitionKey$(): Observable<string> {
-    return this.isCreateModal$.pipe(
-      switchMap(isCreateModal =>
-        isCreateModal
+    return this._selectedProcessLink$.pipe(
+      switchMap(processLink =>
+        !processLink
           ? this._selectedPluginConfiguration$.pipe(
               map(configuration => configuration?.pluginDefinition.key)
             )
@@ -135,11 +113,6 @@ export class PluginStateService {
   selectPluginFunction(pluginFunction: PluginFunction): void {
     this._selectedPluginFunction$.next(pluginFunction);
   }
-
-  selectProcessLink(processLink: ProcessLink): void {
-    this._selectedProcessLink$.next(processLink);
-  }
-
   deselectPluginDefinition(): void {
     this._selectedPluginDefinition$.next(undefined);
   }
@@ -150,6 +123,10 @@ export class PluginStateService {
 
   deselectPluginFunction(): void {
     this._selectedPluginFunction$.next(undefined);
+  }
+
+  selectProcessLink(processLink: ProcessLink): void {
+    this._selectedProcessLink$.next(processLink);
   }
 
   deselectProcessLink(): void {
@@ -166,20 +143,5 @@ export class PluginStateService {
 
   save(): void {
     this._save$.next(null);
-  }
-
-  saveModify(): void {
-    this._saveModify$.next(null);
-  }
-
-  setModalType(type: ProcessLinkModalType): void {
-    this._modalType$.next(type);
-  }
-
-  clear(): void {
-    this.deselectPluginDefinition();
-    this.deselectPluginConfiguration();
-    this.deselectPluginFunction();
-    this.deselectProcessLink();
   }
 }

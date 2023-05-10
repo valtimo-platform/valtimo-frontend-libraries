@@ -1081,7 +1081,8 @@
     "complete": "Voltooien",
     "back": "Terug",
     "next": "Volgende",
-    "pluginDescription": "Plugin-omschrijving"
+    "pluginDescription": "Plugin-omschrijving",
+    "unlink": "Ontkoppelen"
   },
   "processLinkType": {
     "plugin": "Plugin",

@@ -15,7 +15,7 @@
  */
 
 import {Component} from '@angular/core';
-import {ModalParams, ProcessLinkType} from '../../models';
+import {ModalParams} from '../../models';
 import {
   ProcessLinkButtonService,
   ProcessLinkService,
@@ -33,7 +33,7 @@ import {of, switchMap, tap} from 'rxjs';
 export class ProcessLinkComponent {
   constructor(
     private readonly processLinkService: ProcessLinkService,
-    private readonly processLinkStateService: ProcessLinkStateService
+    private readonly stateService: ProcessLinkStateService
   ) {}
 
   openModal(params: ModalParams): void {
@@ -54,16 +54,19 @@ export class ProcessLinkComponent {
             }
           }),
           tap(res => {
-            if ((res as any).processLink) {
-              console.log('linked', (res as any).processLink);
+            const result = res as any;
+            const processLink = result.processLink;
+
+            this.stateService.setModalParams(params);
+            this.stateService.setElementName(params?.element?.name);
+
+            if (processLink) {
+              this.stateService.selectProcessLink(processLink);
             } else {
-              this.processLinkStateService.setAvailableProcessLinkTypes(
-                res as Array<ProcessLinkType>
-              );
-              this.processLinkStateService.setModalParams(params);
-              this.processLinkStateService.setElementName(params?.element?.name);
-              this.processLinkStateService.showModal();
+              this.stateService.setAvailableProcessLinkTypes(result);
             }
+
+            this.stateService.showModal();
           })
         )
         .subscribe();

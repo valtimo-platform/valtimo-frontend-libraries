@@ -1080,7 +1080,8 @@
     "complete": "Vervollständigen",
     "back": "Zurück",
     "next": "Nächste",
-    "pluginDescription": "Plugin-Beschreibung"
+    "pluginDescription": "Plugin-Beschreibung",
+    "unlink": "Verknüpfung aufheben"
   },
   "processLinkType": {
     "plugin": "Plugin",

@@ -20,6 +20,7 @@ interface SaveProcessLinkRequest {
   activityType: string;
   pluginConfigurationId: string;
   pluginActionDefinitionKey: string;
+  processLinkType: string;
   actionProperties: {
     [key: string]: any;
   };
@@ -35,17 +36,6 @@ interface GetProcessLinkRequest {
   activityId: string;
   processDefinitionId: string;
 }
-
-interface UpdateProcessLinkRequest {
-  id: string;
-  pluginConfigurationId: string;
-  pluginActionDefinitionKey: string;
-  actionProperties: {
-    [key: string]: any;
-  };
-}
-
-type ProcessLinkModalType = 'edit' | 'create';
 
 interface ProcessLinkType {
   enabled: boolean;
@@ -87,16 +77,36 @@ interface PluginProcessLinkCreateDto {
   actionProperties: object;
 }
 
+interface PluginProcessLinkUpdateDto {
+  id: string;
+  pluginConfigurationId: string;
+  pluginActionDefinitionKey: string;
+  actionProperties: {
+    [key: string]: any;
+  };
+}
+
+interface FormFlowProcessLinkUpdateRequestDto {
+  id: string;
+  formFlowDefinitionId: string;
+}
+
+interface FormProcessLinkUpdateRequestDto {
+  id: string;
+  formDefinitionId: string;
+}
+
 export {
   SaveProcessLinkRequest,
   GetProcessLinkRequest,
   ProcessLink,
   GetProcessLinkResponse,
-  UpdateProcessLinkRequest,
-  ProcessLinkModalType,
+  PluginProcessLinkUpdateDto,
   ProcessLinkType,
   ProcessLinkConfigurationStep,
   FormProcessLinkCreateRequestDto,
   FormFlowProcessLinkCreateRequestDto,
   PluginProcessLinkCreateDto,
+  FormFlowProcessLinkUpdateRequestDto,
+  FormProcessLinkUpdateRequestDto,
 };

@@ -15,10 +15,11 @@
  */
 
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, map, Observable, Subscription} from 'rxjs';
-import {ModalParams, ProcessLinkType} from '../models';
+import {BehaviorSubject, map, Observable, Subscription, tap} from 'rxjs';
+import {ModalParams, ProcessLink, ProcessLinkType} from '../models';
 import {ProcessLinkStepService} from './process-link-step.service';
 import {ProcessLinkButtonService} from './process-link-button.service';
+import {PluginStateService} from './plugin-state.service';
 
 @Injectable()
 export class ProcessLinkStateService implements OnDestroy {
@@ -28,6 +29,7 @@ export class ProcessLinkStateService implements OnDestroy {
   private readonly _selectedProcessLinkTypeId$ = new BehaviorSubject<string>('');
   private readonly _saving$ = new BehaviorSubject<boolean>(false);
   private readonly _modalParams$ = new BehaviorSubject<ModalParams>(undefined);
+  private readonly _selectedProcessLink$ = new BehaviorSubject<ProcessLink>(undefined);
 
   private _availableProcessLinkTypesSubscription!: Subscription;
 
@@ -61,9 +63,20 @@ export class ProcessLinkStateService implements OnDestroy {
     return this._modalParams$.asObservable();
   }
 
+  get selectedProcessLink$(): Observable<ProcessLink> {
+    return this._selectedProcessLink$.asObservable();
+  }
+
+  get typeOfSelectedProcessLink$(): Observable<string> {
+    return this.selectedProcessLink$
+      .pipe(map(processLink => processLink?.processLinkType || ''))
+      .pipe(tap(isEditing => console.log('editing', isEditing)));
+  }
+
   constructor(
     private readonly processLinkStepService: ProcessLinkStepService,
-    private readonly buttonService: ProcessLinkButtonService
+    private readonly buttonService: ProcessLinkButtonService,
+    private readonly pluginStateService: PluginStateService
   ) {
     this.openAvailableProcessLinkTypesSubscription();
   }
@@ -127,6 +140,16 @@ export class ProcessLinkStateService implements OnDestroy {
     this._modalParams$.next(params);
   }
 
+  selectProcessLink(processLink: ProcessLink): void {
+    this._selectedProcessLink$.next(processLink);
+    this.pluginStateService.selectProcessLink(processLink);
+  }
+
+  deselectProcessLink(): void {
+    this._selectedProcessLink$.next(undefined);
+    this.pluginStateService.deselectProcessLink();
+  }
+
   private openAvailableProcessLinkTypesSubscription(): void {
     this._availableProcessLinkTypesSubscription = this._availableProcessLinkTypes$.subscribe(
       availableProcessLinkTypes => {
@@ -136,11 +159,13 @@ export class ProcessLinkStateService implements OnDestroy {
       }
     );
   }
+
   private reset(): void {
     this.setAvailableProcessLinkTypes([]);
     this.processLinkStepService.reset();
     this.stopSaving();
     this.buttonService.resetButtons();
     this.clearSelectedProcessLinkType();
+    this.deselectProcessLink();
   }
 }

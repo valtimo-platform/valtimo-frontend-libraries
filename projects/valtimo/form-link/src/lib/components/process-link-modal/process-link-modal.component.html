@@ -27,9 +27,9 @@
     showBackButton: showBackButton$ | async,
     showNextButton: showNextButton$ | async,
     enableNextButton: enableNextButton$ | async,
-    hasOneProcessLinkType: hasOneProcessLinkType$ | async,
     saving: saving$ | async,
-    hideProgressIndicator: hideProgressIndicator$ | async
+    hideProgressIndicator: hideProgressIndicator$ | async,
+    typeOfSelectedProgressLink: typeOfSelectedProcessLink$ | async
   } as obs"
 >
   <ibm-modal valtimoIbmModal [open]="obs.showModal" size="lg">
@@ -41,7 +41,7 @@
             | translate : {processStepName: obs.processStepName || '-'}
         }}
       </h3>
-      <div class="process-link-progress">
+      <div class="process-link-progress" *ngIf="!obs.typeOfSelectedProgressLink">
         <ng-container *ngTemplateOutlet="progressIndicator; context: {obs: obs}"></ng-container>
       </div>
     </ibm-modal-header>
@@ -65,26 +65,33 @@
   <div class="ibm-loading-container" *ngIf="obs.saving">
     <ibm-loading></ibm-loading>
   </div>
-  <ng-container *ngIf="obs.currentStepId as stepId">
-    <ng-container *ngIf="stepId === 'chooseProcessLinkType'">
-      <valtimo-choose-process-link-type></valtimo-choose-process-link-type>
+  <div [ngClass]="{hidden: obs.saving}">
+    <ng-container>
+      <ng-container *ngIf="obs.currentStepId === 'chooseProcessLinkType'">
+        <valtimo-choose-process-link-type></valtimo-choose-process-link-type>
+      </ng-container>
+      <ng-container *ngIf="obs.currentStepId === 'selectForm'">
+        <valtimo-select-form></valtimo-select-form>
+      </ng-container>
+      <ng-container *ngIf="obs.currentStepId === 'selectFormFlow'">
+        <valtimo-select-form-flow></valtimo-select-form-flow>
+      </ng-container>
+      <ng-container *ngIf="obs.currentStepId === 'choosePluginConfiguration'">
+        <valtimo-select-plugin-configuration></valtimo-select-plugin-configuration>
+      </ng-container>
+      <ng-container *ngIf="obs.currentStepId === 'choosePluginAction'">
+        <valtimo-select-plugin-action></valtimo-select-plugin-action>
+      </ng-container>
+      <ng-container
+        *ngIf="
+          obs.currentStepId === 'configurePluginAction' ||
+          obs.typeOfSelectedProgressLink === 'plugin'
+        "
+      >
+        <valtimo-plugin-action-configuration></valtimo-plugin-action-configuration>
+      </ng-container>
     </ng-container>
-    <ng-container *ngIf="stepId === 'selectForm'">
-      <valtimo-select-form></valtimo-select-form>
-    </ng-container>
-    <ng-container *ngIf="stepId === 'selectFormFlow'">
-      <valtimo-select-form-flow></valtimo-select-form-flow>
-    </ng-container>
-    <ng-container *ngIf="stepId === 'choosePluginConfiguration'">
-      <valtimo-select-plugin-configuration></valtimo-select-plugin-configuration>
-    </ng-container>
-    <ng-container *ngIf="stepId === 'choosePluginAction'">
-      <valtimo-select-plugin-action></valtimo-select-plugin-action>
-    </ng-container>
-    <ng-container *ngIf="stepId === 'configurePluginAction'">
-      <valtimo-plugin-action-configuration></valtimo-plugin-action-configuration>
-    </ng-container>
-  </ng-container>
+  </div>
 </ng-template>
 
 <ng-template #footer let-obs="obs">
@@ -111,8 +118,15 @@
         {{ 'processLinkConfiguration.next' | translate }}
       </button>
       <button
+        ibmButton="danger--primary"
+        *ngIf="obs.typeOfSelectedProgressLink"
+        (click)="unlinkButtonClick()"
+      >
+        {{ 'processLinkConfiguration.unlink' | translate }}
+      </button>
+      <button
         ibmButton="primary"
-        *ngIf="obs.showSaveButton && !obs.saving"
+        *ngIf="(obs.showSaveButton && !obs.saving) || obs.typeOfSelectedProgressLink"
         [disabled]="obs.enableSaveButton === false"
         (click)="saveButtonClick()"
       >

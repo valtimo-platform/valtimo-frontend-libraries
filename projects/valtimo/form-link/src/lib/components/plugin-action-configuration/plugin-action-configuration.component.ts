@@ -25,7 +25,7 @@ import {
 import {combineLatest, of, Subscription, switchMap} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {PluginConfigurationData} from '@valtimo/plugin';
-import {PluginProcessLinkCreateDto} from '../../models';
+import {PluginProcessLinkCreateDto, PluginProcessLinkUpdateDto} from '../../models';
 
 @Component({
   selector: 'valtimo-plugin-action-configuration',
@@ -41,10 +41,10 @@ export class PluginActionConfigurationComponent implements OnInit, OnDestroy {
   readonly functionKey$ = this.pluginStateService.functionKey$;
   readonly save$ = this.pluginStateService.save$;
   readonly disabled$ = this.pluginStateService.inputDisabled$;
-  readonly prefillConfiguration$ = this.pluginStateService.modalType$.pipe(
-    switchMap(modalType =>
-      modalType === 'edit'
-        ? this.pluginStateService.selectedProcessLink$.pipe(
+  readonly prefillConfiguration$ = this.stateService.selectedProcessLink$.pipe(
+    switchMap(processLink =>
+      processLink
+        ? this.stateService.selectedProcessLink$.pipe(
             map(processLink => processLink?.actionProperties)
           )
         : of(undefined)
@@ -81,6 +81,36 @@ export class PluginActionConfigurationComponent implements OnInit, OnDestroy {
   onConfiguration(configuration: PluginConfigurationData): void {
     this.stateService.startSaving();
 
+    this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
+      if (selectedProcessLink) {
+        this.updateProcessLink(configuration);
+      } else {
+        this.saveNewProcessLink(configuration);
+      }
+    });
+  }
+
+  private updateProcessLink(configuration: PluginConfigurationData): void {
+    this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
+      const updateProcessLinkRequest: PluginProcessLinkUpdateDto = {
+        id: selectedProcessLink.id,
+        pluginConfigurationId: selectedProcessLink.pluginConfigurationId,
+        pluginActionDefinitionKey: selectedProcessLink.pluginActionDefinitionKey,
+        actionProperties: configuration,
+      };
+
+      this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
+        () => {
+          this.stateService.closeModal();
+        },
+        () => {
+          this.stateService.stopSaving();
+        }
+      );
+    });
+  }
+
+  private saveNewProcessLink(configuration: PluginConfigurationData): void {
     combineLatest([
       this.stateService.modalParams$,
       this.pluginStateService.selectedPluginConfiguration$,
