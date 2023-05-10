@@ -17,7 +17,7 @@
 import {Injectable} from '@angular/core';
 import {Step} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
-import {ProcessLinkType} from '../models';
+import {ProcessLinkConfigurationStep, ProcessLinkType} from '../models';
 import {TranslateService} from '@ngx-translate/core';
 import {ProcessLinkButtonService} from './process-link-button.service';
 import {take} from 'rxjs/operators';
@@ -55,10 +55,12 @@ export class ProcessLinkStepService {
     return this._currentStepIndex$.asObservable();
   }
 
-  get currentStepId$(): Observable<string> {
+  get currentStepId$(): Observable<ProcessLinkConfigurationStep | ''> {
     return combineLatest([this._steps$, this.currentStepIndex$]).pipe(
       filter(([steps, currentStepIndex]) => !!steps && typeof currentStepIndex === 'number'),
-      map(([steps, currentStepIndex]) => (steps.length > 0 ? steps[currentStepIndex]?.label : ''))
+      map(([steps, currentStepIndex]) =>
+        steps.length > 0 ? (steps[currentStepIndex]?.label as ProcessLinkConfigurationStep) : ''
+      )
     );
   }
 

@@ -15,14 +15,14 @@
  */
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {combineLatest, map, Observable, Subscription, switchMap} from 'rxjs';
+import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {
   FormFlowService,
   ProcessLinkButtonService,
   ProcessLinkService,
   ProcessLinkStateService,
 } from '../../services';
-import {FormDefinitionListItem} from '../../models';
+import {FormDefinitionListItem, FormFlowProcessLinkUpdateRequestDto} from '../../models';
 import {take} from 'rxjs/operators';
 
 @Component({
@@ -33,15 +33,25 @@ import {take} from 'rxjs/operators';
 export class SelectFormFlowComponent implements OnInit, OnDestroy {
   public readonly saving$ = this.stateService.saving$;
   private readonly formFlowDefinitions$ = this.formFlowService.getFormFlowDefinitions();
+
   public readonly formFlowDefinitionListItems$: Observable<Array<FormDefinitionListItem>> =
-    this.formFlowDefinitions$.pipe(
-      map(formFlowDefinitions =>
+    combineLatest([this.stateService.selectedProcessLink$, this.formFlowDefinitions$]).pipe(
+      map(([selectedProcessLink, formFlowDefinitions]) =>
         formFlowDefinitions.map(definition => ({
           content: definition.name,
           id: definition.id,
-          selected: false,
+          selected: selectedProcessLink
+            ? selectedProcessLink.formFlowDefinitionId === definition.id
+            : false,
         }))
-      )
+      ),
+      tap(formFlowDefinitionListItems => {
+        const selectedItem = formFlowDefinitionListItems.find(item => item.selected);
+
+        if (selectedItem) {
+          this.selectFormFlowDefinition(selectedItem);
+        }
+      })
     );
 
   private _selectedFormFlowDefinition!: FormDefinitionListItem;
@@ -91,6 +101,34 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   }
 
   private saveFormFlowLink(): void {
+    this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
+      if (selectedProcessLink) {
+        this.updateProcessLink();
+      } else {
+        this.saveNewProcessLink();
+      }
+    });
+  }
+
+  private updateProcessLink(): void {
+    this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
+      const updateProcessLinkRequest: FormFlowProcessLinkUpdateRequestDto = {
+        id: selectedProcessLink.id,
+        formFlowDefinitionId: this._selectedFormFlowDefinition.id,
+      };
+
+      this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
+        () => {
+          this.stateService.closeModal();
+        },
+        () => {
+          this.stateService.stopSaving();
+        }
+      );
+    });
+  }
+
+  private saveNewProcessLink(): void {
     combineLatest([this.stateService.modalParams$, this.stateService.selectedProcessLinkTypeId$])
       .pipe(
         take(1),

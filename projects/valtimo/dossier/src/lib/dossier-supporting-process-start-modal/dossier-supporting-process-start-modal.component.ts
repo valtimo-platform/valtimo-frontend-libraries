@@ -156,7 +156,6 @@ export class DossierSupportingProcessStartModalComponent {
   }
 
   openModal(processDocumentDefinition: ProcessDocumentDefinition, documentId: string) {
-    console.log('processDocumentDefinition', processDocumentDefinition);
     this.documentId = documentId;
     this.documentDefinitionName = processDocumentDefinition.id.documentDefinitionId.name;
     this.processDefinitionKey = processDocumentDefinition.id.processDefinitionKey;

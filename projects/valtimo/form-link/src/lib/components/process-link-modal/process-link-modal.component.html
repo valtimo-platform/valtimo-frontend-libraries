@@ -70,10 +70,16 @@
       <ng-container *ngIf="obs.currentStepId === 'chooseProcessLinkType'">
         <valtimo-choose-process-link-type></valtimo-choose-process-link-type>
       </ng-container>
-      <ng-container *ngIf="obs.currentStepId === 'selectForm'">
+      <ng-container
+        *ngIf="obs.currentStepId === 'selectForm' || obs.typeOfSelectedProgressLink === 'form'"
+      >
         <valtimo-select-form></valtimo-select-form>
       </ng-container>
-      <ng-container *ngIf="obs.currentStepId === 'selectFormFlow'">
+      <ng-container
+        *ngIf="
+          obs.currentStepId === 'selectFormFlow' || obs.typeOfSelectedProgressLink === 'form-flow'
+        "
+      >
         <valtimo-select-form-flow></valtimo-select-form-flow>
       </ng-container>
       <ng-container *ngIf="obs.currentStepId === 'choosePluginConfiguration'">

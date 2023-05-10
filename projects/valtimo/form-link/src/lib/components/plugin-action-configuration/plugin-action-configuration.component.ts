@@ -37,11 +37,11 @@ export class PluginActionConfigurationComponent implements OnInit, OnDestroy {
   @Output() configuration: EventEmitter<PluginConfigurationData> =
     new EventEmitter<PluginConfigurationData>();
 
-  readonly pluginDefinitionKey$ = this.pluginStateService.pluginDefinitionKey$;
-  readonly functionKey$ = this.pluginStateService.functionKey$;
-  readonly save$ = this.pluginStateService.save$;
-  readonly disabled$ = this.pluginStateService.inputDisabled$;
-  readonly prefillConfiguration$ = this.stateService.selectedProcessLink$.pipe(
+  public readonly pluginDefinitionKey$ = this.pluginStateService.pluginDefinitionKey$;
+  public readonly functionKey$ = this.pluginStateService.functionKey$;
+  public readonly save$ = this.pluginStateService.save$;
+  public readonly saving$ = this.stateService.saving$;
+  public readonly prefillConfiguration$ = this.stateService.selectedProcessLink$.pipe(
     switchMap(processLink =>
       processLink
         ? this.stateService.selectedProcessLink$.pipe(

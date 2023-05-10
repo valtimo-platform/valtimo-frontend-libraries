@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-interface SaveProcessLinkRequest {
+interface ProcessLink {
+  id: string;
   processDefinitionId: string;
   activityId: string;
   activityType: string;
-  pluginConfigurationId: string;
-  pluginActionDefinitionKey: string;
   processLinkType: string;
-  actionProperties: {
+  pluginConfigurationId?: string;
+  pluginActionDefinitionKey?: string;
+  actionProperties?: {
     [key: string]: any;
   };
-}
-
-interface ProcessLink extends SaveProcessLinkRequest {
-  id: string;
+  formDefinitionId?: string;
+  formFlowDefinitionId?: string;
 }
 
 type GetProcessLinkResponse = Array<ProcessLink>;
@@ -97,7 +96,6 @@ interface FormProcessLinkUpdateRequestDto {
 }
 
 export {
-  SaveProcessLinkRequest,
   GetProcessLinkRequest,
   ProcessLink,
   GetProcessLinkResponse,

@@ -35,7 +35,6 @@ export class PluginStateService {
     undefined
   );
   private readonly _selectedPluginFunction$ = new BehaviorSubject<PluginFunction>(undefined);
-  private readonly _inputDisabled$ = new BehaviorSubject<boolean>(false);
   private readonly _save$ = new Subject<null>();
   private readonly _selectedProcessLink$ = new BehaviorSubject<ProcessLink>(undefined);
 
@@ -54,10 +53,6 @@ export class PluginStateService {
 
   get selectedPluginFunction$(): Observable<PluginFunction> {
     return this._selectedPluginFunction$.asObservable();
-  }
-
-  get inputDisabled$(): Observable<boolean> {
-    return this._inputDisabled$.asObservable();
   }
 
   get save$(): Observable<any> {
@@ -113,17 +108,6 @@ export class PluginStateService {
   selectPluginFunction(pluginFunction: PluginFunction): void {
     this._selectedPluginFunction$.next(pluginFunction);
   }
-  deselectPluginDefinition(): void {
-    this._selectedPluginDefinition$.next(undefined);
-  }
-
-  deselectPluginConfiguration(): void {
-    this._selectedPluginConfiguration$.next(undefined);
-  }
-
-  deselectPluginFunction(): void {
-    this._selectedPluginFunction$.next(undefined);
-  }
 
   selectProcessLink(processLink: ProcessLink): void {
     this._selectedProcessLink$.next(processLink);
@@ -131,14 +115,6 @@ export class PluginStateService {
 
   deselectProcessLink(): void {
     this._selectedProcessLink$.next(undefined);
-  }
-
-  disableInput(): void {
-    this._inputDisabled$.next(true);
-  }
-
-  enableInput(): void {
-    this._inputDisabled$.next(false);
   }
 
   save(): void {

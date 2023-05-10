@@ -15,7 +15,7 @@
  */
 
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, map, Observable, Subscription, tap} from 'rxjs';
+import {BehaviorSubject, map, Observable, Subscription} from 'rxjs';
 import {ModalParams, ProcessLink, ProcessLinkType} from '../models';
 import {ProcessLinkStepService} from './process-link-step.service';
 import {ProcessLinkButtonService} from './process-link-button.service';
@@ -68,9 +68,7 @@ export class ProcessLinkStateService implements OnDestroy {
   }
 
   get typeOfSelectedProcessLink$(): Observable<string> {
-    return this.selectedProcessLink$
-      .pipe(map(processLink => processLink?.processLinkType || ''))
-      .pipe(tap(isEditing => console.log('editing', isEditing)));
+    return this.selectedProcessLink$.pipe(map(processLink => processLink?.processLinkType || ''));
   }
 
   constructor(
