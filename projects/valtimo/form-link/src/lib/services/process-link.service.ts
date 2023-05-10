@@ -22,6 +22,7 @@ import {
   FormProcessLinkCreateRequestDto,
   GetProcessLinkRequest,
   GetProcessLinkResponse,
+  PluginProcessLinkCreateDto,
   ProcessLinkType,
   UpdateProcessLinkRequest,
 } from '../models';
@@ -61,7 +62,10 @@ export class ProcessLinkService {
   }
 
   saveProcessLink(
-    saveProcessLinkRequest: FormProcessLinkCreateRequestDto | FormFlowProcessLinkCreateRequestDto
+    saveProcessLinkRequest:
+      | FormProcessLinkCreateRequestDto
+      | FormFlowProcessLinkCreateRequestDto
+      | PluginProcessLinkCreateDto
   ): Observable<null> {
     return this.http.post<null>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link`,

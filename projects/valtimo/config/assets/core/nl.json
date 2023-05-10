@@ -1080,7 +1080,8 @@
     "cancel": "Annuleren",
     "complete": "Voltooien",
     "back": "Terug",
-    "next": "Volgende"
+    "next": "Volgende",
+    "pluginDescription": "Plugin-omschrijving"
   },
   "processLinkType": {
     "plugin": "Plugin",

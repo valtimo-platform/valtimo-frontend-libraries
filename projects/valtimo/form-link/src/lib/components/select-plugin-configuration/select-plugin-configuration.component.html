@@ -25,7 +25,9 @@
         <ibm-list-column nowrap="true">{{
           'pluginManagement.labels.configurationName' | translate
         }}</ibm-list-column>
-        <ibm-list-column>{{ 'pluginManagement.labels.pluginName' | translate }}</ibm-list-column>
+        <ibm-list-column>{{
+          'processLinkConfiguration.pluginDescription' | translate
+        }}</ibm-list-column>
       </ibm-list-header>
       <ibm-list-row
         *ngFor="let pluginConfiguration of pluginConfigurations"

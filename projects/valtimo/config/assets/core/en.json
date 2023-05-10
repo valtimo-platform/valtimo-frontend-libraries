@@ -1077,7 +1077,8 @@
     "cancel": "Cancel",
     "complete": "Complete",
     "back": "Go back",
-    "next": "Next"
+    "next": "Next",
+    "pluginDescription": "Plugin description"
   },
   "processLinkType": {
     "plugin": "Plugin",

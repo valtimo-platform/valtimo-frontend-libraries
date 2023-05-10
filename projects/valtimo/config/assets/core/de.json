@@ -1079,7 +1079,8 @@
     "cancel": "Stornieren",
     "complete": "Vervollständigen",
     "back": "Zurück",
-    "next": "Nächste"
+    "next": "Nächste",
+    "pluginDescription": "Plugin-Beschreibung"
   },
   "processLinkType": {
     "plugin": "Plugin",
