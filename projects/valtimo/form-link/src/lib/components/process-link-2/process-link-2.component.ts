@@ -15,13 +15,14 @@
  */
 
 import {Component} from '@angular/core';
-import {ModalParams} from '../../models';
+import {ModalParams, ProcessLinkType} from '../../models';
 import {
   ProcessLinkButtonService,
   ProcessLinkService,
   ProcessLinkStateService,
   ProcessLinkStepService,
 } from '../../services';
+import {of, switchMap, tap} from 'rxjs';
 
 @Component({
   selector: 'valtimo-process-link-2',
@@ -39,12 +40,33 @@ export class ProcessLink2Component {
     const activityType = params?.element?.activityListenerType;
 
     if (activityType) {
-      this.processLinkService.getProcessLinkCandidates(activityType).subscribe(processLinkTypes => {
-        this.processLinkStateService.setAvailableProcessLinkTypes(processLinkTypes);
-        this.processLinkStateService.setModalParams(params);
-        this.processLinkStateService.setElementName(params?.element?.name);
-        this.processLinkStateService.showModal();
-      });
+      this.processLinkService
+        .getProcessLink({
+          activityId: params.element.id,
+          processDefinitionId: params.processDefinitionId,
+        })
+        .pipe(
+          switchMap(processLinks => {
+            if (processLinks.length > 0) {
+              return of({processLink: processLinks[0]});
+            } else {
+              return this.processLinkService.getProcessLinkCandidates(activityType);
+            }
+          }),
+          tap(res => {
+            if ((res as any).processLink) {
+              console.log('linked', (res as any).processLink);
+            } else {
+              this.processLinkStateService.setAvailableProcessLinkTypes(
+                res as Array<ProcessLinkType>
+              );
+              this.processLinkStateService.setModalParams(params);
+              this.processLinkStateService.setElementName(params?.element?.name);
+              this.processLinkStateService.showModal();
+            }
+          })
+        )
+        .subscribe();
     }
   }
 }
