@@ -38,6 +38,10 @@
   box-sizing: border-box;
 }
 
+.navigation-buttons {
+  justify-content: flex-end;
+}
+
 .navigation-buttons,
 .cancel-button {
   max-width: 50%;

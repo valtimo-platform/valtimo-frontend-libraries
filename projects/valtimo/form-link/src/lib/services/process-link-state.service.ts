@@ -15,7 +15,7 @@
  */
 
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, map, Observable, Subscription} from 'rxjs';
 import {ModalParams, ProcessLinkType} from '../models';
 import {ProcessLinkStepService} from './process-link-step.service';
 import {ProcessLinkButtonService} from './process-link-button.service';
@@ -39,6 +39,17 @@ export class ProcessLinkStateService implements OnDestroy {
   }
   get availableProcessLinkTypes$(): Observable<Array<ProcessLinkType>> {
     return this._availableProcessLinkTypes$.asObservable();
+  }
+  get hideProgressIndicator$(): Observable<boolean> {
+    return this._availableProcessLinkTypes$
+      .asObservable()
+      .pipe(
+        map(
+          availableTypes =>
+            (availableTypes.length === 1 && availableTypes[0].processLinkType === 'form') ||
+            availableTypes[0].processLinkType === 'form-flow'
+        )
+      );
   }
   get selectedProcessLinkTypeId$(): Observable<string> {
     return this._selectedProcessLinkTypeId$.asObservable();

@@ -147,6 +147,7 @@ export class ProcessLinkStepService {
           ]);
           this._currentStepIndex$.next(1);
           this.buttonService.showNextButton();
+          this.buttonService.showBackButton();
           this.buttonService.hideSaveButton();
           this.buttonService.disableNextButton();
         } else {
@@ -158,6 +159,8 @@ export class ProcessLinkStepService {
           ]);
           this._currentStepIndex$.next(2);
           this.buttonService.showNextButton();
+          this.buttonService.showBackButton();
+
           this.buttonService.hideSaveButton();
           this.buttonService.disableNextButton();
         }

@@ -37,8 +37,8 @@ export class ProcessLinkModalComponent {
   public readonly showBackButton$ = this.buttonService.showBackButton$;
   public readonly showNextButton$ = this.buttonService.showNextButton$;
   public readonly enableNextButton$ = this.buttonService.enableNextButton$;
-
   public readonly hasOneProcessLinkType$ = this.processLinkStepService.hasOneProcessLinkType$;
+  public readonly hideProgressIndicator$ = this.processLinkState2Service.hideProgressIndicator$;
   public readonly saving$ = this.processLinkState2Service.saving$;
 
   constructor(

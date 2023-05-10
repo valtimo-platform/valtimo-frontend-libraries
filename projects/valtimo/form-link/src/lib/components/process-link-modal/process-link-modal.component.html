@@ -28,7 +28,8 @@
     showNextButton: showNextButton$ | async,
     enableNextButton: enableNextButton$ | async,
     hasOneProcessLinkType: hasOneProcessLinkType$ | async,
-    saving: saving$ | async
+    saving: saving$ | async,
+    hideProgressIndicator: hideProgressIndicator$ | async
   } as obs"
 >
   <ibm-modal valtimoIbmModal [open]="obs.showModal" size="lg">
@@ -53,7 +54,7 @@
 
 <ng-template #progressIndicator let-obs="obs">
   <ibm-progress-indicator
-    *ngIf="obs.steps && !obs.hasOneProcessLinkType"
+    *ngIf="obs.steps && !obs.hideProgressIndicator"
     [steps]="obs.steps"
     [current]="obs.currentStepIndex"
     spacing="equal"
