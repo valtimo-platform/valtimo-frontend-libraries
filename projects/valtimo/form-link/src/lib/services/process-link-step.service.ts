@@ -57,11 +57,8 @@ export class ProcessLinkStepService {
 
   get currentStepId$(): Observable<string> {
     return combineLatest([this._steps$, this.currentStepIndex$]).pipe(
-      filter(
-        ([steps, currentStepIndex]) =>
-          !!steps && typeof currentStepIndex === 'number' && steps.length > 0
-      ),
-      map(([steps, currentStepIndex]) => steps[currentStepIndex]?.label)
+      filter(([steps, currentStepIndex]) => !!steps && typeof currentStepIndex === 'number'),
+      map(([steps, currentStepIndex]) => (steps.length > 0 ? steps[currentStepIndex]?.label : ''))
     );
   }
 
