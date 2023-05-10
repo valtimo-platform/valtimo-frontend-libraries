@@ -208,7 +208,7 @@
     "@angular/compiler-cli": "^14.3.0",
     "@angular/core": "^14.3.0",
     "@angular/elements": "^14.3.0",
-    "@angular/flex-layout": "^14.0.0-beta.40",
+    "@angular/flex-layout": "^14.0.0-beta.41",
     "@angular/forms": "^14.3.0",
     "@angular/language-service": "^14.3.0",
     "@angular/localize": "^14.3.0",
