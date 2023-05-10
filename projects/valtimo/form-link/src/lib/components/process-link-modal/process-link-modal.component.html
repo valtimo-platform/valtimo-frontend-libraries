@@ -40,9 +40,11 @@
             | translate : {processStepName: obs.processStepName || '-'}
         }}
       </h3>
+      <div class="process-link-progress">
+        <ng-container *ngTemplateOutlet="progressIndicator; context: {obs: obs}"></ng-container>
+      </div>
     </ibm-modal-header>
     <section ibmModalContent>
-      <ng-container *ngTemplateOutlet="progressIndicator; context: {obs: obs}"></ng-container>
       <ng-container *ngTemplateOutlet="stepContent; context: {obs: obs}"></ng-container>
     </section>
     <ng-template *ngTemplateOutlet="footer; context: {obs: obs}"></ng-template>

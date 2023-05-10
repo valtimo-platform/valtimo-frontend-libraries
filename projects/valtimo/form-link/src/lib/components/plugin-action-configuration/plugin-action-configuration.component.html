@@ -14,15 +14,13 @@
   ~ limitations under the License.
   -->
 
-<div class="configure-plugin-action">
-  <valtimo-plugin-configuration-container
-    [pluginDefinitionKey]="pluginDefinitionKey$ | async"
-    [functionKey]="functionKey$ | async"
-    [save$]="save$"
-    [disabled$]="disabled$"
-    [prefillConfiguration$]="prefillConfiguration$"
-    (valid)="onValid($event)"
-    (configuration)="onConfiguration($event)"
-    type="function"
-  ></valtimo-plugin-configuration-container>
-</div>
+<valtimo-plugin-configuration-container
+  [pluginDefinitionKey]="pluginDefinitionKey$ | async"
+  [functionKey]="functionKey$ | async"
+  [save$]="save$"
+  [disabled$]="disabled$"
+  [prefillConfiguration$]="prefillConfiguration$"
+  (valid)="onValid($event)"
+  (configuration)="onConfiguration($event)"
+  type="function"
+></valtimo-plugin-configuration-container>
