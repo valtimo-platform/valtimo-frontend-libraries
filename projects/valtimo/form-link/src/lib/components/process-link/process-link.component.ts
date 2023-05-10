@@ -26,11 +26,11 @@ import {of, switchMap, tap} from 'rxjs';
 
 @Component({
   selector: 'valtimo-process-link-2',
-  templateUrl: './process-link-2.component.html',
-  styleUrls: ['./process-link-2.component.scss'],
+  templateUrl: './process-link.component.html',
+  styleUrls: ['./process-link.component.scss'],
   providers: [ProcessLinkStateService, ProcessLinkStepService, ProcessLinkButtonService],
 })
-export class ProcessLink2Component {
+export class ProcessLinkComponent {
   constructor(
     private readonly processLinkService: ProcessLinkService,
     private readonly processLinkStateService: ProcessLinkStateService

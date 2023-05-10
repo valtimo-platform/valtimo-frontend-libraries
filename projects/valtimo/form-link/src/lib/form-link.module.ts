@@ -43,7 +43,7 @@ import {SelectPluginActionComponent} from './components/select-plugin-action/sel
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PluginConfigurationContainerModule, PluginTranslatePipeModule} from '@valtimo/plugin';
 import {PluginActionConfigurationComponent} from './components/plugin-action-configuration/plugin-action-configuration.component';
-import {ProcessLink2Component} from './components/process-link-2/process-link-2.component';
+import {ProcessLinkComponent} from './components/process-link/process-link.component';
 import {ProcessLinkModalComponent} from './components/process-link-modal/process-link-modal.component';
 import {
   ButtonModule as CarbonButtonModule,
@@ -65,7 +65,7 @@ import {SelectFormFlowComponent} from './components/select-form-flow';
 @NgModule({
   declarations: [
     FormLinkComponent,
-    ProcessLink2Component,
+    ProcessLinkComponent,
     FormLinkProcessDiagramComponent,
     FormLinkModalComponent,
     SelectPluginConfigurationComponent,
@@ -112,7 +112,7 @@ import {SelectFormFlowComponent} from './components/select-form-flow';
   ],
   exports: [
     FormLinkComponent,
-    ProcessLink2Component,
+    ProcessLinkComponent,
     SelectPluginConfigurationComponent,
     SelectPluginActionComponent,
     PluginActionConfigurationComponent,
