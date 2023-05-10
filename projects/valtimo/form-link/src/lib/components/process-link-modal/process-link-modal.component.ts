@@ -27,8 +27,8 @@ import {
   styleUrls: ['./process-link-modal.component.scss'],
 })
 export class ProcessLinkModalComponent {
-  public readonly showModal$ = this.processLinkState2Service.showModal$;
-  public readonly processStepName$ = this.processLinkState2Service.elementName$;
+  public readonly showModal$ = this.processLinkStateService.showModal$;
+  public readonly processStepName$ = this.processLinkStateService.elementName$;
   public readonly steps$ = this.processLinkStepService.steps$;
   public readonly currentStepIndex$ = this.processLinkStepService.currentStepIndex$;
   public readonly currentStepId$ = this.processLinkStepService.currentStepId$;
@@ -38,21 +38,21 @@ export class ProcessLinkModalComponent {
   public readonly showNextButton$ = this.buttonService.showNextButton$;
   public readonly enableNextButton$ = this.buttonService.enableNextButton$;
   public readonly hasOneProcessLinkType$ = this.processLinkStepService.hasOneProcessLinkType$;
-  public readonly hideProgressIndicator$ = this.processLinkState2Service.hideProgressIndicator$;
-  public readonly saving$ = this.processLinkState2Service.saving$;
+  public readonly hideProgressIndicator$ = this.processLinkStateService.hideProgressIndicator$;
+  public readonly saving$ = this.processLinkStateService.saving$;
 
   constructor(
-    private readonly processLinkState2Service: ProcessLinkStateService,
+    private readonly processLinkStateService: ProcessLinkStateService,
     private readonly processLinkStepService: ProcessLinkStepService,
     private readonly buttonService: ProcessLinkButtonService
   ) {}
 
   selectProcessLinkType(processLinkTypeId: string): void {
-    this.processLinkState2Service.selectProcessLinkType(processLinkTypeId);
+    this.processLinkStateService.selectProcessLinkType(processLinkTypeId);
   }
 
   closeModal(): void {
-    this.processLinkState2Service.closeModal();
+    this.processLinkStateService.closeModal();
   }
 
   backButtonClick(): void {

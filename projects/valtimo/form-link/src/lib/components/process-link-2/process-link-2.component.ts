@@ -32,7 +32,7 @@ import {
 export class ProcessLink2Component {
   constructor(
     private readonly processLinkService: ProcessLinkService,
-    private readonly processLinkState2Service: ProcessLinkStateService
+    private readonly processLinkStateService: ProcessLinkStateService
   ) {}
 
   openModal(params: ModalParams): void {
@@ -40,10 +40,10 @@ export class ProcessLink2Component {
 
     if (activityType) {
       this.processLinkService.getProcessLinkCandidates(activityType).subscribe(processLinkTypes => {
-        this.processLinkState2Service.setAvailableProcessLinkTypes(processLinkTypes);
-        this.processLinkState2Service.setModalParams(params);
-        this.processLinkState2Service.setElementName(params?.element?.name);
-        this.processLinkState2Service.showModal();
+        this.processLinkStateService.setAvailableProcessLinkTypes(processLinkTypes);
+        this.processLinkStateService.setModalParams(params);
+        this.processLinkStateService.setElementName(params?.element?.name);
+        this.processLinkStateService.showModal();
       });
     }
   }

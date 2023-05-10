@@ -24,11 +24,11 @@ import {ProcessLinkStateService} from '../../services';
 })
 export class ChooseProcessLinkTypeComponent {
   public readonly availableProcessLinkTypes$ =
-    this.processLinkState2Service.availableProcessLinkTypes$;
+    this.processLinkStateService.availableProcessLinkTypes$;
 
-  constructor(private readonly processLinkState2Service: ProcessLinkStateService) {}
+  constructor(private readonly processLinkStateService: ProcessLinkStateService) {}
 
   selectProcessLinkType(processLinkTypeId: string): void {
-    this.processLinkState2Service.selectProcessLinkType(processLinkTypeId);
+    this.processLinkStateService.selectProcessLinkType(processLinkTypeId);
   }
 }
