@@ -128,14 +128,14 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
             const smallScreen = breakpoints[breakpointKeys[0]];
             const largeScreen = breakpoints[breakpointKeys[1]];
 
-            if (!collapsibleWidescreenMenu) {
-              if (!this.breakpointsInitialized) {
-                if (smallScreen) {
-                  this.shellService.toggleSideBar();
-                }
-                this.breakpointsInitialized = true;
+            if (!this.breakpointsInitialized) {
+              if (smallScreen || collapsibleWidescreenMenu) {
+                this.shellService.collapseSideBar();
               }
+              this.breakpointsInitialized = true;
+            }
 
+            if (!collapsibleWidescreenMenu) {
               if (
                 (this.lastSmallScreen && largeScreen && !sideBarExpanded) ||
                 (this.lastLargeScreen && smallScreen && sideBarExpanded)

@@ -166,6 +166,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(() => {
         localStorage.setItem('langKey', langKey);
+        this.selectedLanguage$.next(langKey);
 
         if (saveSettings) {
           this.saveUserSettings();

@@ -36,7 +36,7 @@ export class ShellService implements OnDestroy {
     map((e: MouseEvent) => e.pageX)
   );
   private readonly _isResizing$ = new BehaviorSubject<boolean>(false);
-  private readonly _collapsibleWidescreenMenu$ = new BehaviorSubject<boolean>(true);
+  private readonly _collapsibleWidescreenMenu$ = new BehaviorSubject<boolean>(false);
   private sidenavWidthOnClick!: number;
   private xOnClick!: number;
   private sidenavSizeSubscription!: Subscription;
@@ -180,8 +180,10 @@ export class ShellService implements OnDestroy {
         collapsibleWidescreenMenu,
       ]) => {
         if (
-          (!largeScreen && sidenavElement && contentElement && resizeBorderElement) ||
-          collapsibleWidescreenMenu
+          (!largeScreen || collapsibleWidescreenMenu) &&
+          sidenavElement &&
+          contentElement &&
+          resizeBorderElement
         ) {
           this.renderer.removeStyle(sidenavElement, 'min-width');
           this.renderer.removeStyle(sidenavElement, 'width');
