@@ -136,7 +136,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     };
 
     //only load from formlink when process link failed for backwards compatibility
-    console.log(this.taskProcessLinkType$.getValue());
     if (!this.taskProcessLinkType$.getValue()) {
       this.formLinkService
         .getPreFilledFormDefinitionByFormLinkId(
