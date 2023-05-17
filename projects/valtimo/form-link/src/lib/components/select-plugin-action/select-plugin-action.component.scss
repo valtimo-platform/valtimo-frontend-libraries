@@ -48,11 +48,13 @@
 
 .action-tiles {
   margin-top: 24px;
+  width: calc(100% + 8px);
+  margin-left: -8px;
 }
 
 ::ng-deep .choose-plugin-action ibm-selection-tile {
   display: flex;
-  width: calc(33.3% - (16px / 3));
+  width: calc(33.3% - 8px);
 }
 
 ::ng-deep .choose-plugin-action .cds--tile {
@@ -65,10 +67,18 @@
   flex-wrap: wrap;
 }
 
-::ng-deep .choose-plugin-action ibm-selection-tile:not(:nth-child(4n)):not(:first-child) {
+::ng-deep .choose-plugin-action ibm-selection-tile {
   margin-left: 8px;
 }
 
 ::ng-deep .choose-plugin-action ibm-selection-tile:nth-child(n + 4) {
   margin-top: 8px;
+}
+
+::ng-deep .action-tiles .cds--tile {
+  background-color: var(--cds-layer-02, #ffffff);
+
+  &:hover {
+    background: var(--cds-layer-hover);
+  }
 }
