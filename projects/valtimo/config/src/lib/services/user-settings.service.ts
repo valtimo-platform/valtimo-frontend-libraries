@@ -19,6 +19,6 @@ export class UserSettingsService {
   }
 
   saveUserSettings(settings: UserSettings): Observable<any> {
-    return this.http.post(`${this.valtimoApiUri}v1/user/settings`, settings);
+    return this.http.put(`${this.valtimoApiUri}v1/user/settings`, settings);
   }
 }
