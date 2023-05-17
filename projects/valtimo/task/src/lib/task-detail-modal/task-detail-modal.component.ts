@@ -279,6 +279,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   }
 
   private setFormDefinitionAndOpenModal(formDefinition: any): void {
+    this.taskProcessLinkType$.next('form');
     this.formDefinition = formDefinition;
     this.modal.show();
   }
