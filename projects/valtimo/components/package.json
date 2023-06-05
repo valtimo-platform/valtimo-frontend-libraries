@@ -22,10 +22,10 @@
     "ngx-spinner": "^14.0.0",
     "tslib": "^2.5.0",
     "ng-multiselect-dropdown": "^1.0.0-beta.19",
-    "@carbon/icons": "^11.14.0",
-    "@carbon/grid": "^11.13.0",
-    "@carbon/styles": "^1.25.0",
-    "carbon-components-angular": "^5.8.0",
+    "@carbon/icons": "~11.9.0",
+    "@carbon/grid": "~11.9.0",
+    "@carbon/styles": "~1.27.0",
+    "carbon-components-angular":  "~5.2.1",
     "@carbon/icons-angular": "^11.2.2"
   },
   "devDependencies": {
