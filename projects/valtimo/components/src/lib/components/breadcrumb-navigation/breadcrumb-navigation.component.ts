@@ -17,8 +17,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, Router} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
-import {Subscription} from 'rxjs';
+import {combineLatest, Observable, Subscription} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
+import {BreadcrumbItem} from 'carbon-components-angular';
+import {MenuService} from '../menu/menu.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-breadcrumb-navigation',
@@ -27,17 +30,70 @@ import {ConfigService} from '@valtimo/config';
 })
 export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
   public breadcrumbs: Array<any> = [];
+  public readonly breadcrumbItems$: Observable<Array<BreadcrumbItem>> = combineLatest([
+    this.router.events,
+    this.menuService.activeParentSequenceNumber$,
+    this.menuService.menuItems$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    filter(([routerEvent]) => routerEvent instanceof NavigationEnd),
+    map(([routerEvent, activeParentSequenceNumber, menuItems]) => {
+      const activeParentBreadcrumbTitle = menuItems.find(
+        menuItem => `${menuItem.sequence}` === activeParentSequenceNumber
+      )?.title;
+      const activeParentBreadcrumbTitleTranslation =
+        activeParentBreadcrumbTitle && this.translateService.instant(activeParentBreadcrumbTitle);
+      const activeParentBreadcrumbItem = {
+        content: activeParentBreadcrumbTitleTranslation,
+      };
+      const secondBreadCrumb = this.getSecondBreadcrumb(routerEvent as NavigationEnd);
+
+      console.log('router event', routerEvent);
+
+      return [
+        ...(activeParentSequenceNumber ? [activeParentBreadcrumbItem] : []),
+        ...(secondBreadCrumb ? [secondBreadCrumb] : []),
+      ];
+    })
+  );
   public appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
   private routerSub = Subscription.EMPTY;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly menuService: MenuService,
+    private readonly translateService: TranslateService
   ) {}
 
   ngOnInit() {
     this.setBreadcrumbs(this.route);
+    this.openRouterSubscription();
+  }
+
+  ngOnDestroy() {
+    this.routerSub.unsubscribe();
+  }
+
+  private getSecondBreadcrumb(routerEvent: NavigationEnd): BreadcrumbItem | false {
+    const url = routerEvent.url;
+    const splitUrl = url.split('/');
+    const filteredSplitUrl = splitUrl.filter(urlPart => !!urlPart);
+
+    console.log(filteredSplitUrl.slice(0, 2));
+
+    if (filteredSplitUrl.length > 1) {
+      return {
+        route: [filteredSplitUrl.slice(0, 2)],
+        content: filteredSplitUrl[1],
+      };
+    }
+
+    return false;
+  }
+
+  private openRouterSubscription(): void {
     this.routerSub = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .pipe(map(() => this.route))
@@ -91,9 +147,5 @@ export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
         }
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.routerSub.unsubscribe();
   }
 }

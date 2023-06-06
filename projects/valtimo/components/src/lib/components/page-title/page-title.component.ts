@@ -15,12 +15,13 @@
  */
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {NGXLogger} from 'ngx-logger';
 import {ConfigService} from '@valtimo/config';
+import {filter, map, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-page-title',
@@ -29,6 +30,10 @@ import {ConfigService} from '@valtimo/config';
 })
 export class PageTitleComponent implements OnInit, OnDestroy {
   public appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
+  public readonly hidePageTitle$: Observable<boolean> = this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    map(() => !!this.activatedRoute.firstChild?.snapshot?.data?.hidePageTitle)
+  );
   readonly translatedTitle$ = new BehaviorSubject<string>('');
   private appTitleAsSuffix =
     this.configService?.config?.featureToggles?.applicationTitleAsSuffix || false;
