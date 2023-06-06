@@ -48,8 +48,6 @@ export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
       };
       const secondBreadCrumb = this.getSecondBreadcrumb(routerEvent as NavigationEnd);
 
-      console.log('router event', routerEvent);
-
       return [
         ...(activeParentSequenceNumber ? [activeParentBreadcrumbItem] : []),
         ...(secondBreadCrumb ? [secondBreadCrumb] : []),
@@ -78,15 +76,19 @@ export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
 
   private getSecondBreadcrumb(routerEvent: NavigationEnd): BreadcrumbItem | false {
     const url = routerEvent.url;
-    const splitUrl = url.split('/');
+    const urlWithoutParams = url.includes('?') ? url.split('?')[0] : url;
+    const splitUrl = urlWithoutParams.split('/');
     const filteredSplitUrl = splitUrl.filter(urlPart => !!urlPart);
 
-    console.log(filteredSplitUrl.slice(0, 2));
-
     if (filteredSplitUrl.length > 1) {
+      const route = filteredSplitUrl[0];
+      const routeString = `/${route}`;
+      const content = this.router.config.find(routeConfig => routeConfig.path === route)?.data
+        ?.title;
+
       return {
-        route: [filteredSplitUrl.slice(0, 2)],
-        content: filteredSplitUrl[1],
+        route: [routeString],
+        content: this.translateService.instant(content),
       };
     }
 
