@@ -14,140 +14,19 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, Router} from '@angular/router';
-import {filter, map} from 'rxjs/operators';
-import {combineLatest, Observable, Subscription} from 'rxjs';
-import {ConfigService} from '@valtimo/config';
+import {Component} from '@angular/core';
+import {Observable} from 'rxjs';
 import {BreadcrumbItem} from 'carbon-components-angular';
-import {MenuService} from '../menu/menu.service';
-import {TranslateService} from '@ngx-translate/core';
+import {BreadcrumbService} from './breadcrumb.service';
 
 @Component({
   selector: 'valtimo-breadcrumb-navigation',
   templateUrl: './breadcrumb-navigation.component.html',
   styleUrls: ['./breadcrumb-navigation.component.css'],
 })
-export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
-  public breadcrumbs: Array<any> = [];
-  public readonly breadcrumbItems$: Observable<Array<BreadcrumbItem>> = combineLatest([
-    this.router.events,
-    this.menuService.activeParentSequenceNumber$,
-    this.menuService.menuItems$,
-    this.translateService.stream('key'),
-  ]).pipe(
-    filter(([routerEvent]) => routerEvent instanceof NavigationEnd),
-    map(([routerEvent, activeParentSequenceNumber, menuItems]) => {
-      const activeParentBreadcrumbTitle = menuItems.find(
-        menuItem => `${menuItem.sequence}` === activeParentSequenceNumber
-      )?.title;
-      const activeParentBreadcrumbTitleTranslation =
-        activeParentBreadcrumbTitle && this.translateService.instant(activeParentBreadcrumbTitle);
-      const activeParentBreadcrumbItem = {
-        content: activeParentBreadcrumbTitleTranslation,
-      };
-      const secondBreadCrumb = this.getSecondBreadcrumb(routerEvent as NavigationEnd);
+export class BreadcrumbNavigationComponent {
+  public readonly breadcrumbItems$: Observable<Array<BreadcrumbItem>> =
+    this.breadcrumbService.breadcrumbItems$;
 
-      return [
-        ...(activeParentSequenceNumber ? [activeParentBreadcrumbItem] : []),
-        ...(secondBreadCrumb ? [secondBreadCrumb] : []),
-      ];
-    })
-  );
-  public appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
-  private routerSub = Subscription.EMPTY;
-
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private readonly configService: ConfigService,
-    private readonly menuService: MenuService,
-    private readonly translateService: TranslateService
-  ) {}
-
-  ngOnInit() {
-    this.setBreadcrumbs(this.route);
-    this.openRouterSubscription();
-  }
-
-  ngOnDestroy() {
-    this.routerSub.unsubscribe();
-  }
-
-  private getSecondBreadcrumb(routerEvent: NavigationEnd): BreadcrumbItem | false {
-    const url = routerEvent.url;
-    const urlWithoutParams = url.includes('?') ? url.split('?')[0] : url;
-    const splitUrl = urlWithoutParams.split('/');
-    const filteredSplitUrl = splitUrl.filter(urlPart => !!urlPart);
-
-    if (filteredSplitUrl.length > 1) {
-      const route = filteredSplitUrl[0];
-      const routeString = `/${route}`;
-      const content = this.router.config.find(routeConfig => routeConfig.path === route)?.data
-        ?.title;
-
-      return {
-        route: [routeString],
-        content: this.translateService.instant(content),
-      };
-    }
-
-    return false;
-  }
-
-  private openRouterSubscription(): void {
-    this.routerSub = this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .pipe(map(() => this.route))
-      .pipe(
-        map(route => {
-          while (route.firstChild) {
-            route = route.firstChild;
-          }
-          return route;
-        })
-      )
-      .pipe(filter(route => route.outlet === PRIMARY_OUTLET))
-      .subscribe(route => {
-        this.setBreadcrumbs(route);
-      });
-  }
-
-  private setBreadcrumbs(route: ActivatedRoute) {
-    while (route.firstChild) {
-      route = route.firstChild;
-    }
-    if (route.outlet === PRIMARY_OUTLET) {
-      const snapshot = route.snapshot;
-      const activeRoute = {
-        url: snapshot.url.join('/'),
-        path: snapshot.routeConfig.path,
-        label: snapshot.data['title'],
-        params: snapshot.params,
-      };
-      this.generateBreadcrumbs(activeRoute);
-    }
-  }
-
-  private generateBreadcrumbs(activeBreadcrumb: any) {
-    this.breadcrumbs = [];
-    this.router.config.map(routerConfig => {
-      if (
-        activeBreadcrumb.path.indexOf(routerConfig.path + '/') === 0 &&
-        activeBreadcrumb.path !== routerConfig.path &&
-        routerConfig.path !== ''
-      ) {
-        const parentRoute = {
-          url: routerConfig.path.replace(/:(.+?)\b/g, (_, p1) => activeBreadcrumb.params[p1]),
-          path: routerConfig.path,
-          label: routerConfig.data['title'],
-          params: activeBreadcrumb.params,
-        };
-        const exist = this.breadcrumbs.findIndex(item => item.url === parentRoute.url);
-        if (exist === -1) {
-          this.breadcrumbs.push(parentRoute);
-        }
-      }
-    });
-  }
+  constructor(private readonly breadcrumbService: BreadcrumbService) {}
 }

@@ -54,9 +54,7 @@ export * from './lib/components/page-title/page-title.module';
 
 export * from './lib/components/breadcrumb-navigation/breadcrumb-navigation.component';
 export * from './lib/components/breadcrumb-navigation/breadcrumb-navigation.module';
-
-export * from './lib/components/breadcrumb-navigation/breadcrumb-navigation.component';
-export * from './lib/components/breadcrumb-navigation/breadcrumb-navigation.module';
+export * from './lib/components/breadcrumb-navigation/breadcrumb.service';
 
 export * from './lib/components/widget/widget.component';
 export * from './lib/components/widget/widget.module';
