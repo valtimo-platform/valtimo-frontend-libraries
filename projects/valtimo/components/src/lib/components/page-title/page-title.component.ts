@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
@@ -27,7 +27,8 @@ import {PageTitleService} from './page-title.service';
 @Component({
   selector: 'valtimo-page-title',
   templateUrl: './page-title.component.html',
-  styleUrls: ['./page-title.component.css'],
+  styleUrls: ['./page-title.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PageTitleComponent implements OnInit, OnDestroy {
   public appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
