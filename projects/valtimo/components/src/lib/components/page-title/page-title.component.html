@@ -14,6 +14,21 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="(hidePageTitle$ | async) === false && {title: translatedTitle$ | async} as obs">
-  <h2 class="page-title" *ngIf="obs.title !== ''">{{obs.title}}</h2>
+<ng-container
+  *ngIf="
+    (hidePageTitle$ | async) === false && {
+      title: translatedTitle$ | async,
+      hasCustomPageTitle: hasCustomPageTitle$ | async,
+      customPageTitle: customPageTitle$ | async,
+      customPageTitleSet: customPageTitleSet$ | async
+    } as obs
+  "
+>
+  <h2
+    class="page-title"
+    *ngIf="obs.hasCustomPageTitle ? obs.customPageTitleSet : obs.title !== ''"
+    [title]="obs.hasCustomPageTitle ? obs.customPageTitle : obs.title"
+  >
+    {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
+  </h2>
 </ng-container>

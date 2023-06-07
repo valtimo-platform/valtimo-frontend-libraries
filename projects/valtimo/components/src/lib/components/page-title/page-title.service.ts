@@ -1,0 +1,47 @@
+import {Injectable, OnDestroy} from '@angular/core';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {NavigationEnd, Router} from '@angular/router';
+import {filter, tap} from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PageTitleService implements OnDestroy {
+  private readonly _customPageTitle$ = new BehaviorSubject<string>('');
+  private readonly _customPageTitleSet$ = new BehaviorSubject<boolean>(false);
+
+  private _routeSubscription!: Subscription;
+
+  get customPageTitle$(): Observable<string> {
+    return this._customPageTitle$.asObservable();
+  }
+
+  get customPageTitleSet$(): Observable<boolean> {
+    return this._customPageTitleSet$.asObservable();
+  }
+
+  constructor(private readonly router: Router) {
+    this.openRouteSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this._routeSubscription?.unsubscribe();
+  }
+
+  setCustomPageTitle(title: string): void {
+    this._customPageTitle$.next(title);
+    this._customPageTitleSet$.next(true);
+  }
+
+  private openRouteSubscription(): void {
+    this._routeSubscription = this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        tap(() => {
+          this._customPageTitle$.next('');
+          this._customPageTitleSet$.next(false);
+        })
+      )
+      .subscribe();
+  }
+}

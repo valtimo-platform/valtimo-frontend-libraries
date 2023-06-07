@@ -15,5 +15,9 @@
  */
 
 .page-title {
-  font-weight: 300
+  font-weight: 300;
+  margin-bottom: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

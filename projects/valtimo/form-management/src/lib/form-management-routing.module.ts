@@ -39,7 +39,7 @@ const routes: Routes = [
     path: 'form-management/edit/:id',
     component: FormManagementEditComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Form Builder', roles: [ROLE_ADMIN], hidePageTitle: true},
+    data: {title: 'Form Builder', roles: [ROLE_ADMIN], customPageTitle: true},
   },
 ];
 
