@@ -46,7 +46,7 @@ import {
   SearchFieldValues,
   SortState,
 } from '@valtimo/config';
-import {ListField, Pagination} from '@valtimo/components';
+import {ListField, PageTitleService, Pagination} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {
   AdvancedDocumentSearchRequest,
@@ -94,7 +94,13 @@ export class DossierListComponent implements OnInit, OnDestroy {
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinition(documentDefinitionName)
     ),
-    map(documentDefinition => documentDefinition?.schema)
+    map(documentDefinition => documentDefinition?.schema),
+    tap(schema => {
+      if (schema?.title) {
+        this.pageTitleService.disableReset();
+        this.pageTitleService.setCustomPageTitle(schema?.title);
+      }
+    })
   );
 
   public readonly searchFieldValues$ = this.parameterService.searchFieldValues$;
@@ -289,7 +295,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly parameterService: DossierParameterService,
     private readonly documentService: DocumentService,
     private readonly router: Router,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly pageTitleService: PageTitleService
   ) {}
 
   ngOnInit(): void {
@@ -299,6 +306,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._documentDefinitionNameSubscription?.unsubscribe();
+    this.pageTitleService.enableReset();
   }
 
   search(searchFieldValues: SearchFieldValues): void {

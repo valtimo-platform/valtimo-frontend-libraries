@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {combineLatest, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {BreadcrumbItem} from 'carbon-components-angular';
 import {filter, map} from 'rxjs/operators';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
@@ -11,14 +11,16 @@ import {TranslateService} from '@ngx-translate/core';
   providedIn: 'root',
 })
 export class BreadcrumbService {
+  private readonly _manualSecondBreadcrumb$ = new BehaviorSubject<BreadcrumbItem | null>(null);
   private readonly _breadcrumbItems$: Observable<Array<BreadcrumbItem>> = combineLatest([
     this.router.events,
     this.menuService.activeParentSequenceNumber$,
     this.menuService.menuItems$,
+    this._manualSecondBreadcrumb$,
     this.translateService.stream('key'),
   ]).pipe(
     filter(([routerEvent]) => routerEvent instanceof NavigationEnd),
-    map(([routerEvent, activeParentSequenceNumber, menuItems]) => {
+    map(([routerEvent, activeParentSequenceNumber, menuItems, manualSecondBreadcrumb]) => {
       const activeParentBreadcrumbTitle = menuItems.find(
         menuItem => `${menuItem.sequence}` === activeParentSequenceNumber
       )?.title;
@@ -31,7 +33,8 @@ export class BreadcrumbService {
 
       return [
         ...(activeParentSequenceNumber ? [activeParentBreadcrumbItem] : []),
-        ...(secondBreadCrumb ? [secondBreadCrumb] : []),
+        ...(manualSecondBreadcrumb ? [manualSecondBreadcrumb] : []),
+        ...(secondBreadCrumb && !manualSecondBreadcrumb ? [secondBreadCrumb] : []),
       ];
     })
   );
@@ -48,6 +51,14 @@ export class BreadcrumbService {
     private readonly translateService: TranslateService
   ) {}
 
+  setSecondBreadcrumb(breadcrumb: BreadcrumbItem): void {
+    this._manualSecondBreadcrumb$.next(breadcrumb);
+  }
+
+  clearSecondBreadcrumb(): void {
+    this._manualSecondBreadcrumb$.next(null);
+  }
+
   private getSecondBreadcrumb(routerEvent: NavigationEnd): BreadcrumbItem | false {
     const url = routerEvent.url;
     const urlWithoutParams = url.includes('?') ? url.split('?')[0] : url;
@@ -60,10 +71,12 @@ export class BreadcrumbService {
       const content = this.router.config.find(routeConfig => routeConfig.path === route)?.data
         ?.title;
 
-      return {
-        route: [routeString],
-        content: this.translateService.instant(content),
-      };
+      if (route && content) {
+        return {
+          route: [routeString],
+          content: this.translateService.instant(content),
+        };
+      }
     }
 
     return false;

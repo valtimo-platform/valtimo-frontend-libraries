@@ -12,6 +12,8 @@ export class PageTitleService implements OnDestroy {
 
   private _routeSubscription!: Subscription;
 
+  private _preventReset!: boolean;
+
   get customPageTitle$(): Observable<string> {
     return this._customPageTitle$.asObservable();
   }
@@ -33,13 +35,23 @@ export class PageTitleService implements OnDestroy {
     this._customPageTitleSet$.next(true);
   }
 
+  disableReset(): void {
+    this._preventReset = true;
+  }
+
+  enableReset(): void {
+    this._preventReset = false;
+  }
+
   private openRouteSubscription(): void {
     this._routeSubscription = this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
         tap(() => {
-          this._customPageTitle$.next('');
-          this._customPageTitleSet$.next(false);
+          if (!this._preventReset) {
+            this._customPageTitle$.next('');
+            this._customPageTitleSet$.next(false);
+          }
         })
       )
       .subscribe();
