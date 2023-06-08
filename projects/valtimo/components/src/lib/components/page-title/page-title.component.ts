@@ -15,13 +15,13 @@
  */
 
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, startWith, Subscription, switchMap} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {NGXLogger} from 'ngx-logger';
 import {ConfigService} from '@valtimo/config';
-import {filter, map, startWith} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {PageTitleService} from './page-title.service';
 
 @Component({
@@ -33,24 +33,18 @@ import {PageTitleService} from './page-title.service';
 export class PageTitleComponent implements OnInit, OnDestroy {
   public appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
   public readonly hidePageTitle$: Observable<boolean> = this.router.events.pipe(
-    filter(
-      event =>
-        event instanceof NavigationEnd ||
-        event instanceof NavigationStart ||
-        event instanceof ResolveEnd
-    ),
     startWith(this.router),
-    map(() => !!this.activatedRoute.firstChild?.snapshot?.data?.hidePageTitle)
+    switchMap(() => this.activatedRoute.firstChild.data),
+    map(data => {
+      return !!data?.hidePageTitle;
+    })
   );
   public readonly hasCustomPageTitle$: Observable<boolean> = this.router.events.pipe(
-    filter(
-      event =>
-        event instanceof NavigationEnd ||
-        event instanceof NavigationStart ||
-        event instanceof ResolveEnd
-    ),
     startWith(this.router),
-    map(() => !!this.activatedRoute.firstChild?.snapshot?.data?.customPageTitle)
+    switchMap(() => this.activatedRoute.firstChild.data),
+    map(data => {
+      return !!data?.customPageTitle;
+    })
   );
   public readonly customPageTitle$ = this.pageTitleService.customPageTitle$;
   public readonly customPageTitleSet$ = this.pageTitleService.customPageTitleSet$;

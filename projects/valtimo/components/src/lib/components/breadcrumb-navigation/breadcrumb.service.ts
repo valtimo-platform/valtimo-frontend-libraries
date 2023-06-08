@@ -1,16 +1,8 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, startWith} from 'rxjs';
 import {BreadcrumbItem} from 'carbon-components-angular';
-import {filter, map} from 'rxjs/operators';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  NavigationStart,
-  Params,
-  ResolveEnd,
-  Router,
-  UrlSerializer,
-} from '@angular/router';
+import {map} from 'rxjs/operators';
+import {ActivatedRoute, Params, Router, UrlSerializer} from '@angular/router';
 import {ConfigService} from '@valtimo/config';
 import {MenuService} from '../menu/menu.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -22,19 +14,13 @@ export class BreadcrumbService {
   private _cachedQueryParams: {[routeMatchString: string]: Params} = {};
   private readonly _manualSecondBreadcrumb$ = new BehaviorSubject<BreadcrumbItem | null>(null);
   private readonly _breadcrumbItems$: Observable<Array<BreadcrumbItem>> = combineLatest([
-    this.router.events,
     this.menuService.activeParentSequenceNumber$,
     this.menuService.menuItems$,
     this._manualSecondBreadcrumb$,
     this.translateService.stream('key'),
+    this.router.events.pipe(startWith(this.router)),
   ]).pipe(
-    filter(
-      ([event]) =>
-        event instanceof NavigationEnd ||
-        event instanceof NavigationStart ||
-        event instanceof ResolveEnd
-    ),
-    map(([routerEvent, activeParentSequenceNumber, menuItems, manualSecondBreadcrumb]) => {
+    map(([activeParentSequenceNumber, menuItems, manualSecondBreadcrumb]) => {
       const activeParentBreadcrumbTitle = menuItems.find(
         menuItem => `${menuItem.sequence}` === activeParentSequenceNumber
       )?.title;
@@ -43,7 +29,7 @@ export class BreadcrumbService {
       const activeParentBreadcrumbItem = {
         content: activeParentBreadcrumbTitleTranslation,
       };
-      const secondBreadCrumb = this.getSecondBreadcrumb(routerEvent as NavigationEnd);
+      const secondBreadCrumb = this.getSecondBreadcrumb();
 
       return [
         ...(activeParentSequenceNumber ? [activeParentBreadcrumbItem] : []),
@@ -83,8 +69,8 @@ export class BreadcrumbService {
     }
   }
 
-  private getSecondBreadcrumb(routerEvent: NavigationEnd): BreadcrumbItem | false {
-    const url = routerEvent.url;
+  private getSecondBreadcrumb(): BreadcrumbItem | false {
+    const url = this.router.url;
     const urlWithoutParams = url.includes('?') ? url.split('?')[0] : url;
     const splitUrl = urlWithoutParams.split('/');
     const filteredSplitUrl = splitUrl.filter(urlPart => !!urlPart);
