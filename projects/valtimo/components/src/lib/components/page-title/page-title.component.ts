@@ -35,16 +35,12 @@ export class PageTitleComponent implements OnInit, OnDestroy {
   public readonly hidePageTitle$: Observable<boolean> = this.router.events.pipe(
     startWith(this.router),
     switchMap(() => this.activatedRoute.firstChild.data),
-    map(data => {
-      return !!data?.hidePageTitle;
-    })
+    map(data => !!data?.hidePageTitle)
   );
   public readonly hasCustomPageTitle$: Observable<boolean> = this.router.events.pipe(
     startWith(this.router),
     switchMap(() => this.activatedRoute.firstChild.data),
-    map(data => {
-      return !!data?.customPageTitle;
-    })
+    map(data => !!data?.customPageTitle)
   );
   public readonly customPageTitle$ = this.pageTitleService.customPageTitle$;
   public readonly customPageTitleSet$ = this.pageTitleService.customPageTitleSet$;

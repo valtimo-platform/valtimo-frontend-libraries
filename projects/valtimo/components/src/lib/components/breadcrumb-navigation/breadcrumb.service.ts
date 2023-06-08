@@ -37,9 +37,7 @@ export class BreadcrumbService {
         ...(secondBreadCrumb && !manualSecondBreadcrumb ? [secondBreadCrumb] : []),
       ];
     }),
-    map(breadCrumbItems => {
-      return this.matchCachedQueryParams(breadCrumbItems);
-    })
+    map(breadCrumbItems => this.matchCachedQueryParams(breadCrumbItems))
   );
 
   get breadcrumbItems$(): Observable<Array<BreadcrumbItem>> {
@@ -97,9 +95,9 @@ export class BreadcrumbService {
     let hasCachedParams = false;
 
     const mappedItems = breadcrumbItems.map(breadCrumbItem => {
-      const cachedParamKey = Object.keys(this._cachedQueryParams).find(cachedParamKey =>
+      const cachedParamKey = Object.keys(this._cachedQueryParams).find(cachedQueryParamKey =>
         this.routeStringToPlain(breadCrumbItem.href).includes(
-          this.routeStringToPlain(cachedParamKey)
+          this.routeStringToPlain(cachedQueryParamKey)
         )
       );
       const cachedParams = cachedParamKey && this._cachedQueryParams[cachedParamKey];
