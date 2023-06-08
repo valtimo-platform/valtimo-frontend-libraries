@@ -255,6 +255,7 @@ export class DossierDetailComponent implements OnInit, OnDestroy {
     this.breadcrumbService.setSecondBreadcrumb({
       route: [`/dossiers/${this.documentDefinitionName}`],
       content: this.documentDefinitionNameTitle,
+      href: `/dossiers/${this.documentDefinitionName}`,
     });
   }
 }

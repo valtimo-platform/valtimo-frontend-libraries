@@ -75,6 +75,7 @@ export class BreadcrumbService {
         return {
           route: [routeString],
           content: this.translateService.instant(content),
+          href: `${routeString}`,
         };
       }
     }
