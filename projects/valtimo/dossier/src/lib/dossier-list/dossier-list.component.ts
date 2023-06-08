@@ -46,7 +46,7 @@ import {
   SearchFieldValues,
   SortState,
 } from '@valtimo/config';
-import {ListField, PageTitleService, Pagination} from '@valtimo/components';
+import {BreadcrumbService, ListField, PageTitleService, Pagination} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {
   AdvancedDocumentSearchRequest,
@@ -97,8 +97,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     map(documentDefinition => documentDefinition?.schema),
     tap(schema => {
       if (schema?.title) {
-        this.pageTitleService.disableReset();
-        this.pageTitleService.setCustomPageTitle(schema?.title);
+        this.pageTitleService.setCustomPageTitle(schema?.title, true);
       }
     })
   );
@@ -165,7 +164,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
       this.parameterService.queryPaginationParams$
         .pipe(take(1))
         .subscribe(queryPaginationParams => {
-          if (defaultListField && !queryPaginationParams?.sort.isSorting) {
+          if (defaultListField && !queryPaginationParams?.sort?.isSorting) {
             const sortDirection =
               typeof defaultListField.default === 'string' ? defaultListField.default : 'DESC';
             this.paginationService.sortChanged({
@@ -296,7 +295,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly documentService: DocumentService,
     private readonly router: Router,
     private readonly configService: ConfigService,
-    private readonly pageTitleService: PageTitleService
+    private readonly pageTitleService: PageTitleService,
+    private readonly breadcrumbService: BreadcrumbService
   ) {}
 
   ngOnInit(): void {
@@ -315,6 +315,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   rowClick(document: any): void {
     this.listService.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+      this.breadcrumbService.cacheQueryParams(
+        `/dossiers/${documentDefinitionName}`,
+        this.route.snapshot.queryParams
+      );
       this.router.navigate([
         `/dossiers/${documentDefinitionName}/document/${document.id}/${DefaultTabs.summary}`,
       ]);

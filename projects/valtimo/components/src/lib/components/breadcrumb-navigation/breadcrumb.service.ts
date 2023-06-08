@@ -2,7 +2,15 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {BreadcrumbItem} from 'carbon-components-angular';
 import {filter, map} from 'rxjs/operators';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  Params,
+  ResolveEnd,
+  Router,
+  UrlSerializer,
+} from '@angular/router';
 import {ConfigService} from '@valtimo/config';
 import {MenuService} from '../menu/menu.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -11,6 +19,7 @@ import {TranslateService} from '@ngx-translate/core';
   providedIn: 'root',
 })
 export class BreadcrumbService {
+  private _cachedQueryParams: {[routeMatchString: string]: Params} = {};
   private readonly _manualSecondBreadcrumb$ = new BehaviorSubject<BreadcrumbItem | null>(null);
   private readonly _breadcrumbItems$: Observable<Array<BreadcrumbItem>> = combineLatest([
     this.router.events,
@@ -19,7 +28,12 @@ export class BreadcrumbService {
     this._manualSecondBreadcrumb$,
     this.translateService.stream('key'),
   ]).pipe(
-    filter(([routerEvent]) => routerEvent instanceof NavigationEnd),
+    filter(
+      ([event]) =>
+        event instanceof NavigationEnd ||
+        event instanceof NavigationStart ||
+        event instanceof ResolveEnd
+    ),
     map(([routerEvent, activeParentSequenceNumber, menuItems, manualSecondBreadcrumb]) => {
       const activeParentBreadcrumbTitle = menuItems.find(
         menuItem => `${menuItem.sequence}` === activeParentSequenceNumber
@@ -36,6 +50,9 @@ export class BreadcrumbService {
         ...(manualSecondBreadcrumb ? [manualSecondBreadcrumb] : []),
         ...(secondBreadCrumb && !manualSecondBreadcrumb ? [secondBreadCrumb] : []),
       ];
+    }),
+    map(breadCrumbItems => {
+      return this.matchCachedQueryParams(breadCrumbItems);
     })
   );
 
@@ -48,7 +65,8 @@ export class BreadcrumbService {
     private readonly route: ActivatedRoute,
     private readonly configService: ConfigService,
     private readonly menuService: MenuService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly serializer: UrlSerializer
   ) {}
 
   setSecondBreadcrumb(breadcrumb: BreadcrumbItem): void {
@@ -57,6 +75,12 @@ export class BreadcrumbService {
 
   clearSecondBreadcrumb(): void {
     this._manualSecondBreadcrumb$.next(null);
+  }
+
+  cacheQueryParams(routeMatchString: string, params: Params): void {
+    if (routeMatchString && typeof params === 'object' && Object.keys(params).length > 0) {
+      this._cachedQueryParams = {...this._cachedQueryParams, [routeMatchString]: params};
+    }
   }
 
   private getSecondBreadcrumb(routerEvent: NavigationEnd): BreadcrumbItem | false {
@@ -81,5 +105,37 @@ export class BreadcrumbService {
     }
 
     return false;
+  }
+
+  private matchCachedQueryParams(breadcrumbItems: Array<BreadcrumbItem>): Array<BreadcrumbItem> {
+    let hasCachedParams = false;
+
+    const mappedItems = breadcrumbItems.map(breadCrumbItem => {
+      const cachedParamKey = Object.keys(this._cachedQueryParams).find(cachedParamKey =>
+        this.routeStringToPlain(breadCrumbItem.href).includes(
+          this.routeStringToPlain(cachedParamKey)
+        )
+      );
+      const cachedParams = cachedParamKey && this._cachedQueryParams[cachedParamKey];
+
+      if (cachedParams) {
+        const tree = this.router.createUrlTree(breadCrumbItem.route, {queryParams: cachedParams});
+        const serializedUrl = this.serializer.serialize(tree);
+        hasCachedParams = true;
+        return {...breadCrumbItem, routeExtras: {queryParams: cachedParams}, href: serializedUrl};
+      }
+
+      return breadCrumbItem;
+    });
+
+    if (hasCachedParams) {
+      this._cachedQueryParams = {};
+    }
+
+    return mappedItems;
+  }
+
+  private routeStringToPlain(routeString: string): string {
+    return routeString?.replace('/', '').toLowerCase() || '';
   }
 }

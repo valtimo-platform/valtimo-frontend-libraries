@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
-import {NavigationEnd, Router} from '@angular/router';
+import {NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
 import {filter, tap} from 'rxjs/operators';
 
 @Injectable({
@@ -30,9 +30,13 @@ export class PageTitleService implements OnDestroy {
     this._routeSubscription?.unsubscribe();
   }
 
-  setCustomPageTitle(title: string): void {
+  setCustomPageTitle(title: string, preventReset = false): void {
     this._customPageTitle$.next(title);
     this._customPageTitleSet$.next(true);
+
+    if (preventReset) {
+      this.disableReset();
+    }
   }
 
   disableReset(): void {
@@ -46,7 +50,12 @@ export class PageTitleService implements OnDestroy {
   private openRouteSubscription(): void {
     this._routeSubscription = this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter(
+          event =>
+            event instanceof NavigationEnd ||
+            event instanceof NavigationStart ||
+            event instanceof ResolveEnd
+        ),
         tap(() => {
           if (!this._preventReset) {
             this._customPageTitle$.next('');
