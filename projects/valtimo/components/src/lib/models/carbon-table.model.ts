@@ -24,9 +24,9 @@ export interface ActionItem {
 }
 
 export interface ColumnConfig {
+  columnType: ColumnType;
   fieldName: string;
   fieldLabel: string;
-  columnType: ColumnType;
   actions?: ActionItem[];
   template?: TemplateRef<any>;
 }

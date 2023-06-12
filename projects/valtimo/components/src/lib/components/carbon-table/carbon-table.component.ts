@@ -9,7 +9,6 @@ import {
   Output,
   TemplateRef,
   ViewChild,
-  ViewEncapsulation,
 } from '@angular/core';
 import {OverflowMenu, TableHeaderItem, TableItem, TableModel} from 'carbon-components-angular';
 import {
@@ -42,6 +41,7 @@ export class CarbonTableComponent<T> implements AfterViewInit {
     }
 
     this.tableModel.data = this.getTableItems(value);
+    this.tableData = this.getTableItems(value);
 
     if (!this.paginationConfig) {
       return;

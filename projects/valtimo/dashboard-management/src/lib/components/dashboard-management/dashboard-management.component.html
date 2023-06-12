@@ -1,0 +1,66 @@
+<valtimo-carbon-table [data]="tableData$ | async" [tableConfig]="tableConfig">
+  <ng-container carbonTableTitle> {{ 'dashboardManagement.title' | translate }} </ng-container>
+
+  <div carbonToolbarContent>
+    <button ibmButton="primary" (click)="openModal()">
+      {{ 'dashboardManagement.addDashboard' | translate }}
+    </button>
+  </div>
+</valtimo-carbon-table>
+
+<ibm-modal
+  [open]="openModal$ | async"
+  showFooter="true"
+  title="{{ 'dashboardManagement.addDashboard' | translate }}"
+  valtimoIbmModal
+>
+  <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+    <h3 ibmModalHeaderHeading>
+      {{ 'dashboardManagement.addDashboard' | translate }}
+    </h3>
+  </ibm-modal-header>
+
+  <section ibmModalContent>
+    <form [formGroup]="form" class="valtimo-dashboard-management__form">
+      <ibm-label [invalid]="form.invalid">
+        {{ 'dashboardManagement.addModal.name' | translate }}
+
+        <input
+          formControlName="name"
+          ibmText
+          placeholder="{{ 'dashboardManagement.addModal.placeholder' | translate }}"
+          [attr.modal-primary-focus]="true"
+          [invalid]="form.invalid"
+        />
+      </ibm-label>
+
+      <ibm-label>
+        {{ 'dashboardManagement.addModal.description' | translate }}
+
+        <input
+          formControlName="description"
+          ibmText
+          placeholder="{{ 'dashboardManagement.addModal.description' | translate }}"
+        />
+      </ibm-label>
+
+      <ibm-dropdown
+        label="{{ 'dashboardManagement.addModal.roles' | translate }}"
+        formControlName="roles"
+        type="multi"
+      >
+        <ibm-dropdown-list [items]="roleItems$ | async" type="multi"></ibm-dropdown-list>
+      </ibm-dropdown>
+    </form>
+  </section>
+
+  <ibm-modal-footer>
+    <button ibmButton="ghost" (click)="closeModal()">
+      {{ 'dashboardManagement.cancel' | translate }}
+    </button>
+
+    <button [disabled]="this.form.invalid" (click)="createDashboard()" ibmButton="primary">
+      {{ 'dashboardManagement.create' | translate }}
+    </button>
+  </ibm-modal-footer>
+</ibm-modal>

@@ -22,6 +22,7 @@ speed-measure-plugin.json
 .c9/
 *.launch
 .settings/
+.vscode
 *.sublime-workspace
 *.iml
 
@@ -44,6 +45,9 @@ yarn-error.log
 testem.log
 /typings
 *.eslintrc.json
+
+#Local lint
+.eslintrc.json
 
 # System Files
 .DS_Store

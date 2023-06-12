@@ -205,6 +205,21 @@
       "title": "Task"
     }
   },
+  "dashboardManagement": {
+    "addDashboard": "Add new dashboard",
+    "addModal": {
+      "description": "Description",
+      "name": "Dashboard name",
+      "placeholder": "Enter name here",
+      "roles": "Roles"
+    },
+    "assignedTo": "Assigned to",
+    "cancel": "Cancel",
+    "create": "Create",
+    "name": "Name",
+    "title": "All dashboards"
+  },
+  "cancel": "Cancel22",
   "account": {
     "title": "Account",
     "informationTitle": "Information",
