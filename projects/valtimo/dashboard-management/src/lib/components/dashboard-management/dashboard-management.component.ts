@@ -7,6 +7,7 @@ import {BehaviorSubject} from 'rxjs';
 
 import {dashboardListMock} from '../../mocks/dashboard-list.mock';
 import {DashboardItem} from '../../models';
+import {Router} from '@angular/router';
 
 @Component({
   templateUrl: './dashboard-management.component.html',
@@ -72,7 +73,7 @@ export class DashboardManagementComponent implements OnInit {
   ]);
   public form: FormGroup;
 
-  constructor(private readonly fb: FormBuilder) {}
+  constructor(private readonly fb: FormBuilder, private readonly router: Router) {}
 
   public ngOnInit(): void {
     this.form = this.fb.group({
@@ -111,6 +112,10 @@ export class DashboardManagementComponent implements OnInit {
 
   public openModal(): void {
     this.openModal$.next(true);
+  }
+
+  public rowClick(dashboardItem: DashboardItem): void {
+    this.router.navigate([`/dashboard-management/${dashboardItem.key}`]);
   }
 
   private deleteDashboard(dashboard: DashboardItem): void {
