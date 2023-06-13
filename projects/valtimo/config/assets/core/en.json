@@ -221,7 +221,10 @@
     "widgets": {
       "title": "Widgets",
       "description": "Fill the dashboard by adding new widgets. Arrange these widgets by dragging them to their desired position in the list. ",
-      "add": "Add new widget"
+      "add": "Add new widget",
+      "edit": "Edit widget",
+      "save": "Save",
+      "cancel": "Cancel"
     }
   },
   "cancel": "Cancel22",

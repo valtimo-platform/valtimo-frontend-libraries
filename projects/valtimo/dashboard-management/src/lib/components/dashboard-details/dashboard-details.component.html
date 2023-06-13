@@ -18,6 +18,8 @@
   </valtimo-carbon-table>
 </div>
 
+<valtimo-widget-modal [showModal$]="showModal$" [type]="modalType"></valtimo-widget-modal>
+
 <ng-template #moveButtonsTemplate>
   <div class="move-buttons-container">
     <button [ibmButton]="'tertiary'" [iconOnly]="true">

@@ -23,9 +23,10 @@ import {DashboardDetailsComponent} from './components/dashboard-details/dashboar
 import {DashboardManagementComponent} from './components/dashboard-management/dashboard-management.component';
 import {DashboardManagementRoutingModule} from './dashboard-management-routing.module';
 import {ArrowDownModule, ArrowUpModule} from '@carbon/icons-angular';
+import {WidgetModalComponent} from './components/widget-modal/widget-modal.component';
 
 @NgModule({
-  declarations: [DashboardManagementComponent, DashboardDetailsComponent],
+  declarations: [DashboardManagementComponent, DashboardDetailsComponent, WidgetModalComponent],
   imports: [
     ButtonModule,
     CarbonTableModule,

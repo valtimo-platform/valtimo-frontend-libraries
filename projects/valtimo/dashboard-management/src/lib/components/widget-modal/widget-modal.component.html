@@ -1,0 +1,27 @@
+<ibm-modal
+  *ngIf="{
+    title:
+      type === 'edit'
+        ? ('dashboardManagement.widgets.edit' | translate)
+        : ('dashboardManagement.widgets.add' | translate)
+  } as vars"
+  [open]="open$ | async"
+  showFooter="true"
+  title="{{ vars.title }}"
+  valtimoIbmModal
+>
+  <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+    <h3 ibmModalHeaderHeading>
+      {{ vars.title }}
+    </h3>
+  </ibm-modal-header>
+  <section ibmModalContent></section>
+  <ibm-modal-footer>
+    <button ibmButton="ghost" (click)="closeModal()">
+      {{ 'dashboardManagement.widgets.cancel' | translate }}
+    </button>
+    <button (click)="save()" ibmButton="primary">
+      {{ 'dashboardManagement.widgets.save' | translate }}
+    </button>
+  </ibm-modal-footer>
+</ibm-modal>

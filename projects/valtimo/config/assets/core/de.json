@@ -209,7 +209,10 @@
     "widgets": {
       "title": "Widgets",
       "description": "Füllen Sie das Dashboard, indem Sie neue Widgets hinzufügen. Ordnen Sie diese Widgets an, indem Sie sie an die gewünschte Position in der Liste ziehen.",
-      "add": "Widget hinzufügen"
+      "add": "Widget hinzufügen",
+      "edit": "Widget bearbeiten",
+      "save": "Speichern",
+      "cancel": "Stornieren"
     }
   },
   "account": {

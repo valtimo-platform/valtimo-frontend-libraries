@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, TemplateRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
-import {DashboardItem, DashboardWidget} from '../../models';
+import {DashboardItem, DashboardWidget, WidgetModalType} from '../../models';
 import {dashboardListMock, widgetListMock} from '../../mocks';
 import {
   CarbonTableConfig,
@@ -25,6 +25,10 @@ export class DashboardDetailsComponent implements AfterViewInit {
     })
   );
 
+  public readonly showModal$ = new BehaviorSubject<boolean>(false);
+
+  public modalType: WidgetModalType = 'create';
+
   public tableConfig!: CarbonTableConfig;
 
   private data: Array<DashboardWidget> = widgetListMock;
@@ -40,7 +44,10 @@ export class DashboardDetailsComponent implements AfterViewInit {
     this.setTableConfig();
   }
 
-  addWidget(): void {}
+  addWidget(): void {
+    this.modalType = 'create';
+    this.showModal();
+  }
 
   private setTableConfig(): void {
     this.tableConfig = createCarbonTableConfig({
@@ -78,7 +85,14 @@ export class DashboardDetailsComponent implements AfterViewInit {
     });
   }
 
-  private editWidget(): void {}
+  private editWidget(): void {
+    this.modalType = 'edit';
+    this.showModal();
+  }
 
   private deleteWidget(): void {}
+
+  private showModal(): void {
+    this.showModal$.next(true);
+  }
 }
