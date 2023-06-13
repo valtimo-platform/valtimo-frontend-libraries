@@ -1,17 +1,17 @@
-.move-buttons-container {
-  width: 100%;
-  justify-content: flex-end;
-  display: flex;
-  flex-direction: row;
+.dashboard-detail-table {
+  .move-buttons-container {
+    width: 100%;
+    justify-content: flex-end;
+    display: flex;
+    flex-direction: row;
 
-  button:not(:last-child) {
-    margin-right: 8px;
+    button:not(:last-child) {
+      margin-right: 8px;
+    }
   }
-}
 
-::ng-deep .dashboard-detail-table {
-  td[headers='table-header-0-1-0'],
-  td[headers='table-header-0-2-0'] {
+  td:last-child,
+  td:nth-child(2) {
     width: 1px;
   }
 }

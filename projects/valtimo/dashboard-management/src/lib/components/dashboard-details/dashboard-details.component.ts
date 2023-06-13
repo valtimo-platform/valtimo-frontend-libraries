@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, TemplateRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
 import {DashboardItem, DashboardWidget} from '../../models';
@@ -13,6 +13,7 @@ import {
 @Component({
   templateUrl: './dashboard-details.component.html',
   styleUrls: ['./dashboard-details.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DashboardDetailsComponent implements AfterViewInit {
   @ViewChild('moveButtonsTemplate', {static: false}) moveButtonsTemplate: TemplateRef<any>;

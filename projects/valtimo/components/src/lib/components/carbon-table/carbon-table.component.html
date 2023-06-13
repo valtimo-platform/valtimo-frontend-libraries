@@ -57,7 +57,7 @@
     <ibm-overflow-menu-option
       *ngFor="let action of data.actions"
       (selected)="onActionItemClick(action, data.item)"
-      [type]="action.type || 'normal'"
+      [type]="action.type"
     >
       {{ action.actionName }}
     </ibm-overflow-menu-option>
