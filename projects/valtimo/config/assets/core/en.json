@@ -217,7 +217,12 @@
     "cancel": "Cancel",
     "create": "Create",
     "name": "Name",
-    "title": "All dashboards"
+    "title": "All dashboards",
+    "widgets": {
+      "title": "Widgets",
+      "description": "Fill the dashboard by adding new widgets. Arrange these widgets by dragging them to their desired position in the list. ",
+      "add": "Add new widget"
+    }
   },
   "cancel": "Cancel22",
   "account": {

@@ -205,6 +205,13 @@
       "title": "Aufgabe"
     }
   },
+  "dashboardManagement": {
+    "widgets": {
+      "title": "Widgets",
+      "description": "Füllen Sie das Dashboard, indem Sie neue Widgets hinzufügen. Ordnen Sie diese Widgets an, indem Sie sie an die gewünschte Position in der Liste ziehen.",
+      "add": "Widget hinzufügen"
+    }
+  },
   "account": {
     "title": "Account",
     "informationTitle": "Informationen",

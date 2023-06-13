@@ -1,1 +1,20 @@
-<ng-container *ngIf="{currentDashboard: currentDashbboard$ | async} as obs"> </ng-container>
+<ng-container *ngIf="tableConfig && {currentDashboard: currentDashbboard$ | async} as obs">
+  <valtimo-carbon-table [data]="widgetData$ | async" [tableConfig]="tableConfig">
+    <ng-container carbonTableTitle>
+      {{ 'dashboardManagement.widgets.title' | translate }}
+    </ng-container>
+    <ng-container carbonTableDescription>
+      {{ 'dashboardManagement.widgets.description' | translate }}
+    </ng-container>
+
+    <div carbonToolbarContent>
+      <button ibmButton="primary" (click)="addWidget()">
+        {{ 'dashboardManagement.widgets.add' | translate }}
+      </button>
+    </div>
+  </valtimo-carbon-table>
+</ng-container>
+
+<ng-template #moveUpTemplate> move up </ng-template>
+
+<ng-template #moveDownTemplate> move down </ng-template>

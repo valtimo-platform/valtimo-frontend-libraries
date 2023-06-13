@@ -205,6 +205,13 @@
       "title": "Taak"
     }
   },
+  "dashboardManagement": {
+    "widgets": {
+      "title": "Widgets",
+      "description": "Vul het dashboard door nieuwe widgets toe te voegen. Rangschik deze widgets door ze naar de gewenste positie in de lijst te slepen.",
+      "add": "Widget toevoegen"
+    }
+  },
   "account": {
     "title": "Account",
     "informationTitle": "Gegevens",
