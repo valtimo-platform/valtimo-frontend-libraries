@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
 import {DashboardItem, DashboardWidget} from '../../models';
@@ -14,9 +14,8 @@ import {
   templateUrl: './dashboard-details.component.html',
   styleUrls: ['./dashboard-details.component.scss'],
 })
-export class DashboardDetailsComponent implements OnInit {
-  @ViewChild('moveUpTemplate', {read: TemplateRef}) moveUpTemplateRef: TemplateRef<any>;
-  @ViewChild('moveDownTemplate', {read: TemplateRef}) moveDownTemplateRef: TemplateRef<any>;
+export class DashboardDetailsComponent implements AfterViewInit {
+  @ViewChild('moveButtonsTemplate', {static: false}) moveButtonsTemplate: TemplateRef<any>;
 
   public readonly currentDashbboard$: Observable<DashboardItem> = this.route.params.pipe(
     map(params => dashboardListMock.find(mockItem => mockItem.key === params.id)),
@@ -36,7 +35,7 @@ export class DashboardDetailsComponent implements OnInit {
     private readonly pageTitleService: PageTitleService
   ) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.setTableConfig();
   }
 
@@ -52,15 +51,9 @@ export class DashboardDetailsComponent implements OnInit {
         },
         {
           columnType: ColumnType.TEMPLATE,
-          template: this.moveUpTemplateRef,
-          fieldName: 'name',
-          fieldLabel: 'Name',
-        },
-        {
-          columnType: ColumnType.TEMPLATE,
-          template: this.moveDownTemplateRef,
-          fieldName: 'name',
-          fieldLabel: 'Name',
+          template: this.moveButtonsTemplate,
+          fieldName: '',
+          fieldLabel: '',
         },
       ],
       searchable: true,

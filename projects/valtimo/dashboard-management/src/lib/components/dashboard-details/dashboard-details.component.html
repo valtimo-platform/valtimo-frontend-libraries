@@ -15,6 +15,13 @@
   </valtimo-carbon-table>
 </ng-container>
 
-<ng-template #moveUpTemplate> move up </ng-template>
-
-<ng-template #moveDownTemplate> move down </ng-template>
+<ng-template #moveButtonsTemplate>
+  <div class="move-buttons-container">
+    <button [ibmButton]="'tertiary'" [iconOnly]="true">
+      <svg class="cds--btn__icon" ibmIconArrowUp size="16"></svg>
+    </button>
+    <button [ibmButton]="'tertiary'" [iconOnly]="true">
+      <svg class="cds--btn__icon" ibmIconArrowDown size="16"></svg>
+    </button>
+  </div>
+</ng-template>

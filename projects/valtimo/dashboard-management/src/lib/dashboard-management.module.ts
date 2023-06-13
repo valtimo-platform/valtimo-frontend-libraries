@@ -22,6 +22,7 @@ import {ButtonModule, DropdownModule, InputModule, ModalModule} from 'carbon-com
 import {DashboardDetailsComponent} from './components/dashboard-details/dashboard-details.component';
 import {DashboardManagementComponent} from './components/dashboard-management/dashboard-management.component';
 import {DashboardManagementRoutingModule} from './dashboard-management-routing.module';
+import {ArrowDownModule, ArrowUpModule} from '@carbon/icons-angular';
 
 @NgModule({
   declarations: [DashboardManagementComponent, DashboardDetailsComponent],
@@ -37,6 +38,8 @@ import {DashboardManagementRoutingModule} from './dashboard-management-routing.m
     ReactiveFormsModule,
     SpinnerModule,
     TranslateModule,
+    ArrowUpModule,
+    ArrowDownModule,
   ],
   exports: [],
 })
