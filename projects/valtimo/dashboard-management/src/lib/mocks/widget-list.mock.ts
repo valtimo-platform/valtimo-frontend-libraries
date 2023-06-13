@@ -11,6 +11,16 @@ const widgetListMock: Array<DashboardWidget> = [
     },
     order: 0,
   },
+  {
+    title: 'test2',
+    key: 'test2',
+    displayType: 'test2',
+    dataSourceKey: 'test2',
+    dataSourceProperties: {
+      test: 'test2',
+    },
+    order: 1,
+  },
 ];
 
 export {widgetListMock};

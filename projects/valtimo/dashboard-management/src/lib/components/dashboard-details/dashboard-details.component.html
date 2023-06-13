@@ -1,4 +1,7 @@
-<ng-container *ngIf="tableConfig && {currentDashboard: currentDashbboard$ | async} as obs">
+<div
+  class="dashboard-detail-table"
+  *ngIf="tableConfig && {currentDashboard: currentDashbboard$ | async} as obs"
+>
   <valtimo-carbon-table [data]="widgetData$ | async" [tableConfig]="tableConfig">
     <ng-container carbonTableTitle>
       {{ 'dashboardManagement.widgets.title' | translate }}
@@ -13,7 +16,7 @@
       </button>
     </div>
   </valtimo-carbon-table>
-</ng-container>
+</div>
 
 <ng-template #moveButtonsTemplate>
   <div class="move-buttons-container">

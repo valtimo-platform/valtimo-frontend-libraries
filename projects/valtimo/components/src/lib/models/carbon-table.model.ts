@@ -19,6 +19,7 @@ export interface CarbonTableConfig {
 }
 
 export interface ActionItem {
+  type?: 'normal' | 'danger';
   actionName: string;
   callback: (_) => void;
 }

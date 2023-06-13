@@ -8,3 +8,10 @@
     margin-right: 8px;
   }
 }
+
+::ng-deep .dashboard-detail-table {
+  td[headers='table-header-0-1-0'],
+  td[headers='table-header-0-2-0'] {
+    width: 1px;
+  }
+}

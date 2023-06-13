@@ -55,9 +55,29 @@ export class DashboardDetailsComponent implements AfterViewInit {
           fieldName: '',
           fieldLabel: '',
         },
+        {
+          columnType: ColumnType.ACTION,
+          fieldName: '',
+          fieldLabel: '',
+          actions: [
+            {
+              actionName: 'Edit',
+              callback: this.editWidget.bind(this),
+            },
+            {
+              actionName: 'Delete',
+              callback: this.deleteWidget.bind(this),
+              type: 'danger',
+            },
+          ],
+        },
       ],
       searchable: true,
       showSelectionColumn: false,
     });
   }
+
+  private editWidget(): void {}
+
+  private deleteWidget(): void {}
 }
