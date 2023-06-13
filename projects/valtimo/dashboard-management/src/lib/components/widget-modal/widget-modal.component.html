@@ -1,27 +1,59 @@
-<ibm-modal
+<ng-container
   *ngIf="{
-    title:
-      type === 'edit'
-        ? ('dashboardManagement.widgets.edit' | translate)
-        : ('dashboardManagement.widgets.add' | translate)
+    isEdit: type === 'edit',
+    isCreate: type === 'create',
+    isDelete: type === 'delete'
   } as vars"
-  [open]="open$ | async"
-  showFooter="true"
-  title="{{ vars.title }}"
-  valtimoIbmModal
 >
-  <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
-    <h3 ibmModalHeaderHeading>
-      {{ vars.title }}
-    </h3>
-  </ibm-modal-header>
-  <section ibmModalContent></section>
-  <ibm-modal-footer>
-    <button ibmButton="ghost" (click)="closeModal()">
-      {{ 'dashboardManagement.widgets.cancel' | translate }}
-    </button>
-    <button (click)="save()" ibmButton="primary">
-      {{ 'dashboardManagement.widgets.save' | translate }}
-    </button>
-  </ibm-modal-footer>
-</ibm-modal>
+  <ibm-modal
+    *ngIf="{
+      title: vars.isEdit
+        ? ('dashboardManagement.widgets.edit' | translate)
+        : vars.isCreate
+        ? ('dashboardManagement.widgets.add' | translate)
+        : ('dashboardManagement.widgets.delete' | translate)
+    } as translations"
+    [open]="open$ | async"
+    showFooter="true"
+    title="{{ translations.title }}"
+    valtimoIbmModal
+  >
+    <ibm-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+      <h3 ibmModalHeaderHeading>
+        {{ translations.title }}
+      </h3>
+    </ibm-modal-header>
+    <section ibmModalContent>
+      <ng-container *ngIf="vars.isDelete; else widgetForm">
+        {{ 'dashboardManagement.widgets.deleteDescription' | translate }}</ng-container
+      >
+    </section>
+    <ibm-modal-footer>
+      <ng-container *ngIf="vars.isEdit || vars.isCreate">
+        <ng-container *ngTemplateOutlet="editButtons"></ng-container>
+      </ng-container>
+      <ng-container *ngIf="vars.isDelete">
+        <ng-container *ngTemplateOutlet="deleteButtons"></ng-container>
+      </ng-container>
+    </ibm-modal-footer>
+  </ibm-modal>
+</ng-container>
+<ng-template #widgetForm> widgetform </ng-template>
+
+<ng-template #editButtons>
+  <button ibmButton="ghost" (click)="closeModal()">
+    {{ 'dashboardManagement.widgets.cancel' | translate }}
+  </button>
+  <button (click)="save()" ibmButton="primary">
+    {{ 'dashboardManagement.widgets.save' | translate }}
+  </button>
+</ng-template>
+
+<ng-template #deleteButtons>
+  <button ibmButton="secondary" (click)="closeModal()">
+    {{ 'dashboardManagement.widgets.cancel' | translate }}
+  </button>
+  <button (click)="delete()" ibmButton="danger">
+    {{ 'dashboardManagement.widgets.delete' | translate }}
+  </button>
+</ng-template>

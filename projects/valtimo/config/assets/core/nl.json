@@ -212,7 +212,9 @@
       "add": "Widget toevoegen",
       "edit": "Widget bewerken",
       "save": "Opslaan",
-      "cancel": "Annuleren"
+      "cancel": "Annuleren",
+      "delete": "Verwijderen",
+      "deleteDescription": "Weet u zeker dat u deze widget wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden."
     }
   },
   "account": {

@@ -212,7 +212,9 @@
       "add": "Widget hinzufügen",
       "edit": "Widget bearbeiten",
       "save": "Speichern",
-      "cancel": "Stornieren"
+      "cancel": "Stornieren",
+      "delete": "Löschen",
+      "deleteDescription": "Sind Sie sicher, dass Sie dieses Widget löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
     }
   },
   "account": {

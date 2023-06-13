@@ -90,7 +90,10 @@ export class DashboardDetailsComponent implements AfterViewInit {
     this.showModal();
   }
 
-  private deleteWidget(): void {}
+  private deleteWidget(): void {
+    this.modalType = 'delete';
+    this.showModal();
+  }
 
   private showModal(): void {
     this.showModal$.next(true);

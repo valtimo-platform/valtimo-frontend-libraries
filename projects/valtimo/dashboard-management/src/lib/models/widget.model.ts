@@ -7,6 +7,6 @@ interface DashboardWidget {
   order: number;
 }
 
-type WidgetModalType = 'create' | 'edit';
+type WidgetModalType = 'create' | 'edit' | 'delete';
 
 export {DashboardWidget, WidgetModalType};

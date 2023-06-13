@@ -30,4 +30,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   }
 
   save(): void {}
+
+  delete(): void {}
 }
