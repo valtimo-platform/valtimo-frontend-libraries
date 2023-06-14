@@ -214,7 +214,13 @@
       "save": "Speichern",
       "cancel": "Stornieren",
       "delete": "Löschen",
-      "deleteDescription": "Sind Sie sicher, dass Sie dieses Widget löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+      "deleteDescription": "Sind Sie sicher, dass Sie dieses Widget löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "form": {
+        "title": "Widget-Titel",
+        "titleHelperText": "Der primäre Titel, der auf der Widget-Kachel angezeigt wird",
+        "key": "Widget-Schlüssel",
+        "keyHelperText": "Weisen Sie diesem Widget einen eindeutigen Schlüssel zu"
+      }
     }
   },
   "account": {

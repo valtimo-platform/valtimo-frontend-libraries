@@ -214,7 +214,13 @@
       "save": "Opslaan",
       "cancel": "Annuleren",
       "delete": "Verwijderen",
-      "deleteDescription": "Weet u zeker dat u deze widget wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden."
+      "deleteDescription": "Weet u zeker dat u deze widget wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+      "form": {
+        "title": "Widgettitel",
+        "titleHelperText": "De primaire titel die wordt weergegeven op de widgettegel",
+        "key": "Widgetsleutel",
+        "keyHelperText": "Wijs een unieke sleutel toe aan deze widget"
+      }
     }
   },
   "account": {

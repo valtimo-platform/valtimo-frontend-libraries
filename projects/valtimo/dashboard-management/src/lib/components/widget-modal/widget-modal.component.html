@@ -38,7 +38,21 @@
     </ibm-modal-footer>
   </ibm-modal>
 </ng-container>
-<ng-template #widgetForm> widgetform </ng-template>
+<ng-template #widgetForm>
+  <form *ngIf="form" [formGroup]="form" class="dashboard-modal__form">
+    <ibm-label
+      [invalid]="form.invalid"
+      [helperText]="'dashboardManagement.widgets.form.titleHelperText' | translate"
+    >
+      {{ 'dashboardManagement.widgets.form.title' | translate }}
+      <input formControlName="title" ibmText [attr.modal-primary-focus]="true" />
+    </ibm-label>
+    <ibm-label [helperText]="'dashboardManagement.widgets.form.keyHelperText' | translate">
+      {{ 'dashboardManagement.widgets.form.key' | translate }}
+      <input formControlName="key" ibmText [invalid]="form.invalid" />
+    </ibm-label>
+  </form>
+</ng-template>
 
 <ng-template #editButtons>
   <button ibmButton="ghost" (click)="closeModal()">

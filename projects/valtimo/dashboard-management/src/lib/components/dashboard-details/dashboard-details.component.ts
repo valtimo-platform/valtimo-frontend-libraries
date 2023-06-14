@@ -18,6 +18,8 @@ import {
 export class DashboardDetailsComponent implements AfterViewInit {
   @ViewChild('moveButtonsTemplate', {static: false}) moveButtonsTemplate: TemplateRef<any>;
 
+  public modalType: WidgetModalType = 'create';
+  public tableConfig!: CarbonTableConfig;
   public readonly currentDashbboard$: Observable<DashboardItem> = this.route.params.pipe(
     map(params => dashboardListMock.find(mockItem => mockItem.key === params.id)),
     tap(currentDashboard => {
@@ -26,13 +28,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
   );
 
   public readonly showModal$ = new BehaviorSubject<boolean>(false);
-
-  public modalType: WidgetModalType = 'create';
-
-  public tableConfig!: CarbonTableConfig;
-
   private data: Array<DashboardWidget> = widgetListMock;
-
   public readonly widgetData$ = new BehaviorSubject<Array<DashboardWidget>>(this.data);
 
   constructor(
