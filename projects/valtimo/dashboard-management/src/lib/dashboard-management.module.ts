@@ -17,8 +17,19 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {CarbonTableModule, ListModule, SpinnerModule} from '@valtimo/components';
-import {ButtonModule, DropdownModule, InputModule, ModalModule} from 'carbon-components-angular';
+import {
+  CarbonTableModule,
+  ConfirmationModalModule,
+  ListModule,
+  SpinnerModule,
+} from '@valtimo/components';
+import {
+  ButtonModule,
+  DropdownModule,
+  IconModule,
+  InputModule,
+  ModalModule,
+} from 'carbon-components-angular';
 import {DashboardDetailsComponent} from './components/dashboard-details/dashboard-details.component';
 import {DashboardManagementComponent} from './components/dashboard-management/dashboard-management.component';
 import {DashboardManagementRoutingModule} from './dashboard-management-routing.module';
@@ -29,8 +40,10 @@ import {DashboardManagementRoutingModule} from './dashboard-management-routing.m
     ButtonModule,
     CarbonTableModule,
     CommonModule,
+    ConfirmationModalModule,
     DashboardManagementRoutingModule,
     DropdownModule,
+    IconModule,
     InputModule,
     ListModule,
     ModalModule,

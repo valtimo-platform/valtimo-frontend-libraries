@@ -215,8 +215,15 @@
     },
     "assignedTo": "Assigned to",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "create": "Create",
+    "delete": "Delete",
+    "deleteModalContent": "Are you sure you want to delete this dashboard? This action cannot be undone.",
     "name": "Name",
+    "noResults": {
+      "description": "Click <strong>Add new dashboard</strong> to start designing your dashboard",
+      "title": "No dashboards added"
+    },
     "title": "All dashboards"
   },
   "cancel": "Cancel22",

@@ -1,1 +1,0 @@
-export * from './dashboard-list.mock';
