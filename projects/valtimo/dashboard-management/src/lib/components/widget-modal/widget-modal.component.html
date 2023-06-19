@@ -2,7 +2,8 @@
   *ngIf="{
     isEdit: type === 'edit',
     isCreate: type === 'create',
-    isDelete: type === 'delete'
+    isDelete: type === 'delete',
+    open: open$ | async
   } as vars"
 >
   <ibm-modal
@@ -13,7 +14,7 @@
         ? ('dashboardManagement.widgets.add' | translate)
         : ('dashboardManagement.widgets.delete' | translate)
     } as translations"
-    [open]="open$ | async"
+    [open]="vars.open"
     showFooter="true"
     title="{{ translations.title }}"
     valtimoIbmModal
@@ -24,9 +25,12 @@
       </h3>
     </ibm-modal-header>
     <section ibmModalContent>
-      <ng-container *ngIf="vars.isDelete; else widgetForm">
+      <ng-container *ngIf="vars.isDelete">
         {{ 'dashboardManagement.widgets.deleteDescription' | translate }}</ng-container
       >
+      <ng-container *ngIf="!vars.isDelete">
+        <ng-container *ngTemplateOutlet="widgetForm"></ng-container>
+      </ng-container>
     </section>
     <ibm-modal-footer>
       <ng-container *ngIf="vars.isEdit || vars.isCreate">
@@ -41,15 +45,24 @@
 <ng-template #widgetForm>
   <form *ngIf="form" [formGroup]="form" class="dashboard-modal__form">
     <ibm-label
-      [invalid]="form.invalid"
+      [invalid]="title.dirty && title.invalid"
       [helperText]="'dashboardManagement.widgets.form.titleHelperText' | translate"
     >
       {{ 'dashboardManagement.widgets.form.title' | translate }}
-      <input formControlName="title" ibmText [attr.modal-primary-focus]="true" />
+      <input
+        formControlName="title"
+        ibmText
+        [attr.modal-primary-focus]="true"
+        [invalid]="title.dirty && title.invalid"
+      />
     </ibm-label>
-    <ibm-label [helperText]="'dashboardManagement.widgets.form.keyHelperText' | translate">
+    <ibm-label
+      [invalid]="key.dirty && key.invalid"
+      [helperText]="'dashboardManagement.widgets.form.keyHelperText' | translate"
+      [invalidText]="'dashboardManagement.widgets.form.keyHelperText' | translate"
+    >
       {{ 'dashboardManagement.widgets.form.key' | translate }}
-      <input formControlName="key" ibmText [invalid]="form.invalid" />
+      <input formControlName="key" ibmText [invalid]="key.dirty && key.invalid" />
     </ibm-label>
   </form>
 </ng-template>
@@ -58,7 +71,7 @@
   <button ibmButton="ghost" (click)="closeModal()">
     {{ 'dashboardManagement.widgets.cancel' | translate }}
   </button>
-  <button (click)="save()" ibmButton="primary">
+  <button (click)="save()" ibmButton="primary" [disabled]="form.invalid">
     {{ 'dashboardManagement.widgets.save' | translate }}
   </button>
 </ng-template>

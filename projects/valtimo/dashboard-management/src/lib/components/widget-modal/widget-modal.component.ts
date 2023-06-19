@@ -16,6 +16,13 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   public readonly open$ = new BehaviorSubject<boolean>(false);
   private _openSubscription!: Subscription;
 
+  get title() {
+    return this.form.get('title');
+  }
+  get key() {
+    return this.form.get('key');
+  }
+
   constructor(private readonly fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -29,6 +36,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
 
   closeModal(): void {
     this.open$.next(false);
+    this.form.reset();
   }
 
   save(): void {}

@@ -230,7 +230,7 @@
       "form": {
         "title": "Widget title",
         "titleHelperText": "The primary title displayed on the widget tile",
-        "key": "Widget key",
+        "key": "Widget key (required)",
         "keyHelperText": "Assign a unique key to this widget"
       }
     }
