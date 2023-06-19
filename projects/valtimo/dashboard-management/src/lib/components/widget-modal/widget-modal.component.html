@@ -70,6 +70,7 @@
       [label]="'dashboardManagement.widgets.form.dateSource' | translate"
       [helperText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
       [invalidText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
+      (selected)="dataSourceSelected($event)"
     >
       <ibm-dropdown-list [items]="dataSourceItems$ | async" type="multi"></ibm-dropdown-list>
     </ibm-dropdown>
