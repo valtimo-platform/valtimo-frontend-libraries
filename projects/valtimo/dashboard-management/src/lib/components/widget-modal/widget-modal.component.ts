@@ -4,7 +4,7 @@ import {WidgetModalType} from '../../models';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ListItem} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
-import {widgetDataSourcesMock} from '../../mocks';
+import {widgetChartTypesMock, widgetDataSourcesMock} from '../../mocks';
 
 @Component({
   selector: 'valtimo-widget-modal',
@@ -27,6 +27,15 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       dataSourceItems.map(mockItem => ({content: mockItem, selected: false}))
     )
   );
+  private readonly _chartTypeItems$ = new BehaviorSubject<Array<string>>([]);
+  public readonly chartTypeItems$: Observable<Array<ListItem>> = combineLatest([
+    this._dataSourceItems$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([chartTypeItems]) =>
+      chartTypeItems.map(mockItem => ({content: mockItem, selected: false}))
+    )
+  );
   private _openSubscription!: Subscription;
 
   get title() {
@@ -35,17 +44,20 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   get key() {
     return this.form.get('key');
   }
-
   get dataSource() {
     return this.form.get('dataSource');
   }
+  get chartType() {
+    return this.form.get('chartType');
+  }
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.setDataSourceItems();
+    this.setDropdownData();
     this.openOpenSubscription();
     this.setForm();
   }
@@ -57,7 +69,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   closeModal(): void {
     this.open$.next(false);
     this.form.reset();
-    this.setDataSourceItems();
+    this.setDropdownData();
   }
 
   save(): void {}
@@ -68,8 +80,21 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     this.dataSource.setValue(dataSource?.item?.content);
   }
 
+  chartTypeSelected(chartType: any): void {
+    this.dataSource.setValue(chartType?.item?.content);
+  }
+
+  private setDropdownData(): void {
+    this.setDataSourceItems();
+    this.setChartTypeItems();
+  }
+
   private setDataSourceItems(): void {
     this._dataSourceItems$.next(widgetDataSourcesMock);
+  }
+
+  private setChartTypeItems(): void {
+    this._chartTypeItems$.next(widgetChartTypesMock);
   }
 
   private setForm(): void {
@@ -77,6 +102,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       title: this.fb.control(''),
       key: this.fb.control('', [Validators.required]),
       dataSource: this.fb.control('', [Validators.required]),
+      chartType: this.fb.control('', [Validators.required]),
     });
   }
 

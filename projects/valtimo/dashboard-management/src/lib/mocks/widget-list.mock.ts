@@ -25,4 +25,6 @@ const widgetListMock: Array<DashboardWidget> = [
 
 const widgetDataSourcesMock = ['test 1', 'test 2'];
 
-export {widgetListMock, widgetDataSourcesMock};
+const widgetChartTypesMock = ['test 1', 'test 2'];
+
+export {widgetListMock, widgetDataSourcesMock, widgetChartTypesMock};

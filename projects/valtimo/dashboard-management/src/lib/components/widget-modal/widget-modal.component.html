@@ -80,6 +80,18 @@
         <ibm-dropdown-list [items]="dataSourceItems$ | async" type="multi"></ibm-dropdown-list>
       </ibm-dropdown>
     </div>
+    <div class="widget-form__element">
+      <ibm-dropdown
+        formControlName="chartType"
+        [invalid]="chartType.dirty && chartType.invalid"
+        [label]="'dashboardManagement.widgets.form.chartType' | translate"
+        [helperText]="'dashboardManagement.widgets.form.chartTypeHelperText' | translate"
+        [invalidText]="'dashboardManagement.widgets.form.chartTypeHelperText' | translate"
+        (selected)="chartTypeSelected($event)"
+      >
+        <ibm-dropdown-list [items]="dataSourceItems$ | async" type="multi"></ibm-dropdown-list>
+      </ibm-dropdown>
+    </div>
   </form>
 </ng-template>
 
