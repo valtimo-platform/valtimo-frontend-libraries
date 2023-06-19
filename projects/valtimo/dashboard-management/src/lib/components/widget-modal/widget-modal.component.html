@@ -64,6 +64,15 @@
       {{ 'dashboardManagement.widgets.form.key' | translate }}
       <input formControlName="key" ibmText [invalid]="key.dirty && key.invalid" />
     </ibm-label>
+    <ibm-dropdown
+      formControlName="dateSource"
+      [invalid]="dataSource.dirty && dataSource.invalid"
+      [label]="'dashboardManagement.widgets.form.dateSource' | translate"
+      [helperText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
+      [invalidText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
+    >
+      <ibm-dropdown-list [items]="dataSourceItems$ | async" type="multi"></ibm-dropdown-list>
+    </ibm-dropdown>
   </form>
 </ng-template>
 

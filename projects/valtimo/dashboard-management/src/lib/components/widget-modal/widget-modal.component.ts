@@ -1,7 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, map, Observable, Subscription} from 'rxjs';
 import {WidgetModalType} from '../../models';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ListItem} from 'carbon-components-angular';
+import {TranslateService} from '@ngx-translate/core';
+import {widgetDataSourcesMock} from '../../mocks';
 
 @Component({
   selector: 'valtimo-widget-modal',
@@ -14,6 +17,9 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
 
   public form!: FormGroup;
   public readonly open$ = new BehaviorSubject<boolean>(false);
+  public readonly dataSourceItems$: Observable<Array<ListItem>> = this.translateService
+    .stream('key')
+    .pipe(map(() => widgetDataSourcesMock.map(mockItem => ({content: mockItem, selected: false}))));
   private _openSubscription!: Subscription;
 
   get title() {
@@ -23,7 +29,13 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     return this.form.get('key');
   }
 
-  constructor(private readonly fb: FormBuilder) {}
+  get dataSource() {
+    return this.form.get('dataSource');
+  }
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly translateService: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.openOpenSubscription();
@@ -47,6 +59,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       title: this.fb.control(''),
       key: this.fb.control('', [Validators.required]),
+      dataSource: this.fb.control('', [Validators.required]),
     });
   }
 

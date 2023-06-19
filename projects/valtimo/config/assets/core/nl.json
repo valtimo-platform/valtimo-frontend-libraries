@@ -219,7 +219,9 @@
         "title": "Widgettitel",
         "titleHelperText": "De primaire titel die wordt weergegeven op de widgettegel",
         "key": "Widgetsleutel (vereist)",
-        "keyHelperText": "Wijs een unieke sleutel toe aan deze widget"
+        "keyHelperText": "Wijs een unieke sleutel toe aan deze widget",
+        "dataSource": "Databron (vereist)",
+        "dataSourceHelperText": "Selecteer de bron van de data die u in de widget wilt weergeven"
       }
     }
   },
