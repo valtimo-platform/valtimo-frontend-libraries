@@ -44,36 +44,42 @@
 </ng-container>
 <ng-template #widgetForm>
   <form *ngIf="form" [formGroup]="form" class="dashboard-modal__form">
-    <ibm-label
-      [invalid]="title.dirty && title.invalid"
-      [helperText]="'dashboardManagement.widgets.form.titleHelperText' | translate"
-    >
-      {{ 'dashboardManagement.widgets.form.title' | translate }}
-      <input
-        formControlName="title"
-        ibmText
-        [attr.modal-primary-focus]="true"
+    <div class="widget-form__element">
+      <ibm-label
         [invalid]="title.dirty && title.invalid"
-      />
-    </ibm-label>
-    <ibm-label
-      [invalid]="key.dirty && key.invalid"
-      [helperText]="'dashboardManagement.widgets.form.keyHelperText' | translate"
-      [invalidText]="'dashboardManagement.widgets.form.keyHelperText' | translate"
-    >
-      {{ 'dashboardManagement.widgets.form.key' | translate }}
-      <input formControlName="key" ibmText [invalid]="key.dirty && key.invalid" />
-    </ibm-label>
-    <ibm-dropdown
-      formControlName="dateSource"
-      [invalid]="dataSource.dirty && dataSource.invalid"
-      [label]="'dashboardManagement.widgets.form.dateSource' | translate"
-      [helperText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
-      [invalidText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
-      (selected)="dataSourceSelected($event)"
-    >
-      <ibm-dropdown-list [items]="dataSourceItems$ | async" type="multi"></ibm-dropdown-list>
-    </ibm-dropdown>
+        [helperText]="'dashboardManagement.widgets.form.titleHelperText' | translate"
+      >
+        {{ 'dashboardManagement.widgets.form.title' | translate }}
+        <input
+          formControlName="title"
+          ibmText
+          [attr.modal-primary-focus]="true"
+          [invalid]="title.dirty && title.invalid"
+        />
+      </ibm-label>
+    </div>
+    <div class="widget-form__element">
+      <ibm-label
+        [invalid]="key.dirty && key.invalid"
+        [helperText]="'dashboardManagement.widgets.form.keyHelperText' | translate"
+        [invalidText]="'dashboardManagement.widgets.form.keyHelperText' | translate"
+      >
+        {{ 'dashboardManagement.widgets.form.key' | translate }}
+        <input formControlName="key" ibmText [invalid]="key.dirty && key.invalid" />
+      </ibm-label>
+    </div>
+    <div class="widget-form__element">
+      <ibm-dropdown
+        formControlName="dateSource"
+        [invalid]="dataSource.dirty && dataSource.invalid"
+        [label]="'dashboardManagement.widgets.form.dateSource' | translate"
+        [helperText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
+        [invalidText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
+        (selected)="dataSourceSelected($event)"
+      >
+        <ibm-dropdown-list [items]="dataSourceItems$ | async" type="multi"></ibm-dropdown-list>
+      </ibm-dropdown>
+    </div>
   </form>
 </ng-template>
 

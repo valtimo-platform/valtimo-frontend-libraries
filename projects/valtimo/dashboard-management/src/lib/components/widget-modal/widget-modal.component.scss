@@ -1,5 +1,3 @@
-.dashboard-modal__form {
-  ibm-label:not(:last-child) {
-    margin-bottom: 32px;
-  }
+.widget-form__element:not(:last-child) {
+  margin-bottom: 32px;
 }
