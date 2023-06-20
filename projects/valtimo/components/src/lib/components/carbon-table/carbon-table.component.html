@@ -1,5 +1,5 @@
 <ibm-table-container>
-  <ibm-table-header>
+  <ibm-table-header *ngIF="!hideTableHeader">
     <h4 ibmTableHeaderTitle>
       <ng-content select="[carbonTableTitle]"></ng-content>
     </h4>

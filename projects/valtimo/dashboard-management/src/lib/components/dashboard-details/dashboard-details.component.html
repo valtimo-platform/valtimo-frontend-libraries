@@ -2,14 +2,11 @@
   class="dashboard-detail-table"
   *ngIf="tableConfig && {currentDashboard: currentDashbboard$ | async} as obs"
 >
-  <valtimo-carbon-table [data]="widgetData$ | async" [tableConfig]="tableConfig">
-    <ng-container carbonTableTitle>
-      {{ 'dashboardManagement.widgets.title' | translate }}
-    </ng-container>
-    <ng-container carbonTableDescription>
-      {{ 'dashboardManagement.widgets.description' | translate }}
-    </ng-container>
-
+  <valtimo-carbon-table
+    [data]="widgetData$ | async"
+    [tableConfig]="tableConfig"
+    [hideTableHeader]="true"
+  >
     <div carbonToolbarContent>
       <button ibmButton="primary" (click)="addWidget()">
         {{ 'dashboardManagement.widgets.add' | translate }}
