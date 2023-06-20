@@ -18,8 +18,8 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from '@valtimo/security';
 import {ROLE_ADMIN} from '@valtimo/config';
-import { DashboardManagementComponent } from './components/dashboard-management/dashboard-management.component';
-import { DashboardDetailsComponent } from './components/dashboard-details/dashboard-details.component';
+import {DashboardManagementComponent} from './components/dashboard-management/dashboard-management.component';
+import {DashboardDetailsComponent} from './components/dashboard-details/dashboard-details.component';
 
 const routes: Routes = [
   {

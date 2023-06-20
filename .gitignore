@@ -44,10 +44,6 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-*.eslintrc.json
-
-#Local lint
-.eslintrc.json
 
 # System Files
 .DS_Store
