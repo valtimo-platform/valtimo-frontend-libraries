@@ -57,4 +57,11 @@
       margin-left: 16px;
     }
   }
+
+  .page-actions {
+    &.--visible {
+      margin-left: auto;
+      padding-left: 32px;
+    }
+  }
 }

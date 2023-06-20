@@ -219,6 +219,7 @@
     "name": "Name",
     "title": "All dashboards",
     "widgets": {
+      "editButton": "Edit",
       "title": "Widgets",
       "description": "Fill the dashboard by adding new widgets. Arrange these widgets by dragging them to their desired position in the list. ",
       "add": "Add new widget",

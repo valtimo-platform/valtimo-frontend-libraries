@@ -207,6 +207,7 @@
   },
   "dashboardManagement": {
     "widgets": {
+      "editButton": "Bewerken",
       "title": "Widgets",
       "description": "Vul het dashboard door nieuwe widgets toe te voegen. Rangschik deze widgets door ze naar de gewenste positie in de lijst te slepen.",
       "add": "Widget toevoegen",

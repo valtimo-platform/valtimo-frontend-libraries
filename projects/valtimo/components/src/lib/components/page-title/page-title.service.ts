@@ -1,5 +1,5 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {Injectable, OnDestroy, ViewContainerRef} from '@angular/core';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
 import {filter, tap} from 'rxjs/operators';
 
@@ -11,6 +11,11 @@ export class PageTitleService implements OnDestroy {
   private readonly _customPageTitleSet$ = new BehaviorSubject<boolean>(false);
   private readonly _customPageSubtitle$ = new BehaviorSubject<string>('');
   private readonly _customPageSubtitleSet$ = new BehaviorSubject<boolean>(false);
+  private readonly _hasPageActions$ = new BehaviorSubject<boolean>(false);
+
+  private readonly _pageActionsViewContainerRef$ = new BehaviorSubject<ViewContainerRef | null>(
+    null
+  );
 
   private _routeSubscription!: Subscription;
 
@@ -30,6 +35,14 @@ export class PageTitleService implements OnDestroy {
 
   get customPageSubtitleSet$(): Observable<boolean> {
     return this._customPageSubtitleSet$.asObservable();
+  }
+
+  get pageActionsViewContainerRef$(): Observable<ViewContainerRef> {
+    return this._pageActionsViewContainerRef$.asObservable();
+  }
+
+  get hasPageActions$(): Observable<boolean> {
+    return this._hasPageActions$.asObservable();
   }
 
   constructor(private readonly router: Router) {
@@ -62,21 +75,37 @@ export class PageTitleService implements OnDestroy {
     this._preventReset = false;
   }
 
+  setPageActionsViewContainerRef(ref: ViewContainerRef): void {
+    this._pageActionsViewContainerRef$.next(ref);
+  }
+
+  setHasPageActions(value: boolean): void {
+    this._hasPageActions$.next(value);
+  }
+
   private openRouteSubscription(): void {
-    this._routeSubscription = this.router.events
+    this._routeSubscription = combineLatest([
+      this.router.events,
+      this._pageActionsViewContainerRef$,
+    ])
       .pipe(
         filter(
-          event =>
+          ([event]) =>
             event instanceof NavigationEnd ||
             event instanceof NavigationStart ||
             event instanceof ResolveEnd
         ),
-        tap(() => {
+        tap(([event, pageActionsViewContainerRef]) => {
           if (!this._preventReset) {
             this._customPageTitle$.next('');
             this._customPageTitleSet$.next(false);
             this._customPageSubtitle$.next('');
             this._customPageSubtitleSet$.next(false);
+
+            if (pageActionsViewContainerRef) {
+              pageActionsViewContainerRef.clear();
+              this.setHasPageActions(false);
+            }
           }
         })
       )

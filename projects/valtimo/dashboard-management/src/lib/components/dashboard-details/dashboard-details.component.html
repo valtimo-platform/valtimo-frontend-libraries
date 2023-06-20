@@ -28,3 +28,12 @@
     </button>
   </div>
 </ng-template>
+
+<ng-container renderInPageHeader>
+  <ng-template>
+    <button ibmButton="tertiary" size="md" (click)="addWidget()">
+      {{ 'dashboardManagement.widgets.editButton' | translate }}
+      <svg class="cds--btn__icon" ibmIconEdit size="16"></svg>
+    </button>
+  </ng-template>
+</ng-container>

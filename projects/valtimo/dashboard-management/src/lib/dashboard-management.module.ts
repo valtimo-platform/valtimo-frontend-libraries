@@ -17,12 +17,17 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {CarbonTableModule, ListModule, SpinnerModule} from '@valtimo/components';
+import {
+  CarbonTableModule,
+  ListModule,
+  RenderInPageHeaderDirectiveModule,
+  SpinnerModule,
+} from '@valtimo/components';
 import {ButtonModule, DropdownModule, InputModule, ModalModule} from 'carbon-components-angular';
 import {DashboardDetailsComponent} from './components/dashboard-details/dashboard-details.component';
 import {DashboardManagementComponent} from './components/dashboard-management/dashboard-management.component';
 import {DashboardManagementRoutingModule} from './dashboard-management-routing.module';
-import {AddModule, ArrowDownModule, ArrowUpModule} from '@carbon/icons-angular';
+import {AddModule, ArrowDownModule, ArrowUpModule, EditModule} from '@carbon/icons-angular';
 import {WidgetModalComponent} from './components/widget-modal/widget-modal.component';
 
 @NgModule({
@@ -42,6 +47,8 @@ import {WidgetModalComponent} from './components/widget-modal/widget-modal.compo
     ArrowUpModule,
     ArrowDownModule,
     AddModule,
+    RenderInPageHeaderDirectiveModule,
+    EditModule,
   ],
   exports: [],
 })
