@@ -20,8 +20,11 @@
     (hidePageTitle$ | async) === false && {
       title: translatedTitle$ | async,
       hasCustomPageTitle: hasCustomPageTitle$ | async,
+      hasCustomPageSubtitle: hasCustomPageSubtitle$ | async,
       customPageTitle: customPageTitle$ | async,
-      customPageTitleSet: customPageTitleSet$ | async
+      customPageTitleSet: customPageTitleSet$ | async,
+      customPageSubtitle: customPageSubtitle$ | async,
+      customPageSubtitleSet: customPageSubtitleSet$ | async
     } as obs
   "
 >
@@ -35,4 +38,17 @@
   >
     {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
   </h2>
+  <div
+    class="subtitle-skeleton-container"
+    *ngIf="obs.hasCustomPageSubtitle && !obs.customPageSubtitleSet"
+  >
+    <ibm-skeleton-placeholder></ibm-skeleton-placeholder>
+  </div>
+  <span
+    class="page-subtitle"
+    *ngIf="obs.hasCustomPageSubtitle && obs.customPageSubtitleSet"
+    [title]="obs.customPageSubtitle"
+    [innerHtml]="obs.customPageSubtitle"
+  >
+  </span>
 </div>

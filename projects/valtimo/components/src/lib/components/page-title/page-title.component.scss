@@ -15,20 +15,46 @@
  */
 
 .page-title-container {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
   .page-title {
     font-weight: 300;
-    margin-bottom: 2rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .skeleton-container {
-    margin-bottom: 2rem;
+  .page-subtitle {
+    margin-left: 16px;
+    padding-bottom: 4px;
+    color: var(--cds-text-helper, #6f6f6f);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14.2px;
+    line-height: 18.2px;
 
+    b {
+      font-weight: bolder;
+    }
+  }
+
+  .skeleton-container {
     .cds--skeleton__placeholder {
       width: 200px;
       height: 40px;
+    }
+  }
+
+  .subtitle-skeleton-container {
+    .cds--skeleton__placeholder {
+      height: 18.5px;
+      margin-bottom: 8px;
+      width: 200px;
+      margin-left: 16px;
     }
   }
 }

@@ -42,8 +42,15 @@ export class PageTitleComponent implements OnInit, OnDestroy {
     switchMap(() => this.activatedRoute.firstChild.data),
     map(data => !!data?.customPageTitle)
   );
+  public readonly hasCustomPageSubtitle$: Observable<boolean> = this.router.events.pipe(
+    startWith(this.router),
+    switchMap(() => this.activatedRoute.firstChild.data),
+    map(data => !!data?.customPageSubtitle)
+  );
   public readonly customPageTitle$ = this.pageTitleService.customPageTitle$;
   public readonly customPageTitleSet$ = this.pageTitleService.customPageTitleSet$;
+  public readonly customPageSubtitle$ = this.pageTitleService.customPageSubtitle$;
+  public readonly customPageSubtitleSet$ = this.pageTitleService.customPageSubtitleSet$;
   readonly translatedTitle$ = new BehaviorSubject<string>('');
   private appTitleAsSuffix =
     this.configService?.config?.featureToggles?.applicationTitleAsSuffix || false;
