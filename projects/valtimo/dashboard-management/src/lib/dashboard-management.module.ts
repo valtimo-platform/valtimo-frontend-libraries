@@ -40,6 +40,7 @@ import {DashboardManagementRoutingModule} from './dashboard-management-routing.m
     ButtonModule,
     CarbonTableModule,
     CommonModule,
+    TranslateModule,
     ConfirmationModalModule,
     DashboardManagementRoutingModule,
     DropdownModule,
@@ -49,7 +50,6 @@ import {DashboardManagementRoutingModule} from './dashboard-management-routing.m
     ModalModule,
     ReactiveFormsModule,
     SpinnerModule,
-    TranslateModule,
   ],
   exports: [],
 })

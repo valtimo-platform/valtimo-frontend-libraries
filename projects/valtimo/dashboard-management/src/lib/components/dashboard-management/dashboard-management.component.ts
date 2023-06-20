@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CarbonTableConfig, ColumnType, createCarbonTableConfig} from '@valtimo/components';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, finalize, Observable, of} from 'rxjs';
 import {DashboardItem} from '../../models';
 import {DashboardManagementService} from '../../services/dashboard-management.service';
 
@@ -23,17 +23,17 @@ export class DashboardManagementComponent implements OnInit {
       {
         columnType: ColumnType.TEXT,
         fieldName: 'title',
-        fieldLabel: 'Name',
+        translationKey: 'dashboardManagement.name',
       },
       {
         columnType: ColumnType.TEXT,
         fieldName: 'description',
-        fieldLabel: 'Description',
+        translationKey: 'dashboardManagement.description',
       },
       {
         columnType: ColumnType.TEXT,
         fieldName: 'key',
-        fieldLabel: 'Key',
+        translationKey: 'dashboardManagement.key',
       },
       {
         columnType: ColumnType.ACTION,
@@ -77,16 +77,22 @@ export class DashboardManagementComponent implements OnInit {
 
     const newDashboard: DashboardItem = this.form.getRawValue();
     this.dashboardManagementService.dispatchAction(
-      this.dashboardManagementService.createDashboard({...newDashboard, key: newDashboard.title})
+      this.dashboardManagementService.createDashboard(newDashboard).pipe(
+        finalize(() => {
+          this.closeModal();
+        })
+      )
     );
-    this.closeModal();
   }
 
   public onConfirmEvent(dashboardKey: string): void {
     this.dashboardManagementService.dispatchAction(
-      this.dashboardManagementService.deleteDashboard(dashboardKey)
+      this.dashboardManagementService.deleteDashboard(dashboardKey).pipe(
+        finalize(() => {
+          this.closeModal();
+        })
+      )
     );
-    this.closeModal();
   }
 
   public openModal(): void {
