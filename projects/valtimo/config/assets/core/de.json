@@ -215,6 +215,7 @@
       "cancel": "Stornieren",
       "delete": "Löschen",
       "deleteDescription": "Sind Sie sicher, dass Sie dieses Widget löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "metadata": "<b>Erstellt von</b> {{createdBy}} | <b>Erstellt am</b> {{createdOn}} | <b>Widget-Schlüssel</b> {{key}}",
       "form": {
         "title": "Widget-Titel",
         "titleHelperText": "Der primäre Titel, der auf der Widget-Kachel angezeigt wird",

@@ -9,6 +9,8 @@ import {filter, tap} from 'rxjs/operators';
 export class PageTitleService implements OnDestroy {
   private readonly _customPageTitle$ = new BehaviorSubject<string>('');
   private readonly _customPageTitleSet$ = new BehaviorSubject<boolean>(false);
+  private readonly _customPageSubtitle$ = new BehaviorSubject<string>('');
+  private readonly _customPageSubtitleSet$ = new BehaviorSubject<boolean>(false);
 
   private _routeSubscription!: Subscription;
 
@@ -20,6 +22,14 @@ export class PageTitleService implements OnDestroy {
 
   get customPageTitleSet$(): Observable<boolean> {
     return this._customPageTitleSet$.asObservable();
+  }
+
+  get customPageSubtitle$(): Observable<string> {
+    return this._customPageSubtitle$.asObservable();
+  }
+
+  get customPageSubtitleSet$(): Observable<boolean> {
+    return this._customPageSubtitleSet$.asObservable();
   }
 
   constructor(private readonly router: Router) {
@@ -37,6 +47,11 @@ export class PageTitleService implements OnDestroy {
     if (preventReset) {
       this.disableReset();
     }
+  }
+
+  setCustomPageSubtitle(title: string): void {
+    this._customPageSubtitle$.next(title);
+    this._customPageSubtitleSet$.next(true);
   }
 
   disableReset(): void {
@@ -60,6 +75,8 @@ export class PageTitleService implements OnDestroy {
           if (!this._preventReset) {
             this._customPageTitle$.next('');
             this._customPageTitleSet$.next(false);
+            this._customPageSubtitle$.next('');
+            this._customPageSubtitleSet$.next(false);
           }
         })
       )

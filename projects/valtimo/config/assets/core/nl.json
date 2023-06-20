@@ -215,6 +215,7 @@
       "cancel": "Annuleren",
       "delete": "Verwijderen",
       "deleteDescription": "Weet u zeker dat u deze widget wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+      "metadata": "<b>Aangemaakt door</b> {{createdBy}} | <b>Aangemaakt op</b> {{createdOn}} | <b>Widget-sleutel</b> {{key}}",
       "form": {
         "title": "Widgettitel",
         "titleHelperText": "De primaire titel die wordt weergegeven op de widgettegel",

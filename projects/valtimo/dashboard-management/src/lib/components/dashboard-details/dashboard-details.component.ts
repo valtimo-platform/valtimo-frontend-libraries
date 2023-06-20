@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, TemplateRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, map, Observable, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, tap} from 'rxjs';
 import {DashboardItem, DashboardWidget, WidgetModalType} from '../../models';
 import {dashboardListMock, widgetListMock} from '../../mocks';
 import {
@@ -9,6 +9,7 @@ import {
   createCarbonTableConfig,
   PageTitleService,
 } from '@valtimo/components';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   templateUrl: './dashboard-details.component.html',
@@ -20,10 +21,20 @@ export class DashboardDetailsComponent implements AfterViewInit {
 
   public modalType: WidgetModalType = 'create';
   public tableConfig!: CarbonTableConfig;
-  public readonly currentDashbboard$: Observable<DashboardItem> = this.route.params.pipe(
-    map(params => dashboardListMock.find(mockItem => mockItem.key === params.id)),
+  public readonly currentDashbboard$: Observable<DashboardItem> = combineLatest([
+    this.route.params,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([params]) => dashboardListMock.find(mockItem => mockItem.key === params.id)),
     tap(currentDashboard => {
       this.pageTitleService.setCustomPageTitle(currentDashboard.name);
+      this.pageTitleService.setCustomPageSubtitle(
+        this.translateService.instant('dashboardManagement.widgets.metadata', {
+          createdBy: currentDashboard.createdBy,
+          createdOn: currentDashboard.createdOn,
+          key: currentDashboard.key,
+        })
+      );
     })
   );
 
@@ -33,7 +44,8 @@ export class DashboardDetailsComponent implements AfterViewInit {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly pageTitleService: PageTitleService
+    private readonly pageTitleService: PageTitleService,
+    private readonly translateService: TranslateService
   ) {}
 
   ngAfterViewInit(): void {
