@@ -208,15 +208,24 @@
   "dashboardManagement": {
     "addDashboard": "Add new dashboard",
     "addModal": {
-      "description": "Description",
+      "descriptionPlaceholder": "Enter description here",
+      "descriptionHelperText": "*Desription is only visible in the dashboard configuration page",
       "name": "Dashboard name",
-      "placeholder": "Enter name here",
-      "roles": "Roles"
+      "namePlaceholder": "Enter name here"
     },
     "assignedTo": "Assigned to",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "create": "Create",
+    "delete": "Delete",
+    "deleteModalContent": "Are you sure you want to delete this dashboard? This action cannot be undone.",
+    "description": "Description",
+    "key": "Key",
     "name": "Name",
+    "noResults": {
+      "description": "Click <strong>Add new dashboard</strong> to start designing your dashboard",
+      "title": "No dashboards added"
+    },
     "title": "All dashboards",
     "widgets": {
       "editButton": "Edit",

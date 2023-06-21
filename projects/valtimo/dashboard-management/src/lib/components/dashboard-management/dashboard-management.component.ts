@@ -1,47 +1,39 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CarbonTableConfig, ColumnType, createCarbonTableConfig} from '@valtimo/components';
-import {ROLE_ADMIN, ROLE_DEVELOPER, ROLE_USER} from '@valtimo/config';
-import {ListItem} from 'carbon-components-angular';
-import {BehaviorSubject} from 'rxjs';
-
-import {dashboardListMock} from '../../mocks/dashboard-list.mock';
+import {BehaviorSubject, finalize, Observable, of} from 'rxjs';
 import {DashboardItem} from '../../models';
-import {Router} from '@angular/router';
+import {DashboardManagementService} from '../../services/dashboard-management.service';
 
 @Component({
   templateUrl: './dashboard-management.component.html',
   styleUrls: ['./dashboard-management.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class DashboardManagementComponent implements OnInit {
+  public readonly deleteRowKey$: BehaviorSubject<string> = new BehaviorSubject('');
   public readonly openModal$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public readonly showDeleteModal$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  private data: Array<DashboardItem> = dashboardListMock;
-  public readonly tableData$: BehaviorSubject<Array<DashboardItem>> = new BehaviorSubject<
-    Array<DashboardItem>
-  >(this.data);
+  public readonly tableData$: Observable<DashboardItem[]> =
+    this.dashboardManagementService.dashboards$;
   public tableConfig: CarbonTableConfig = createCarbonTableConfig({
     fields: [
       {
         columnType: ColumnType.TEXT,
-        fieldName: 'name',
-        fieldLabel: 'Name',
+        fieldName: 'title',
+        translationKey: 'dashboardManagement.name',
       },
       {
         columnType: ColumnType.TEXT,
         fieldName: 'description',
-        fieldLabel: 'Description',
-      },
-      {
-        columnType: ColumnType.TEXT,
-        fieldName: 'roles',
-        fieldLabel: 'Roles',
+        translationKey: 'dashboardManagement.description',
       },
       {
         columnType: ColumnType.TEXT,
         fieldName: 'key',
-        fieldLabel: 'Key',
+        translationKey: 'dashboardManagement.key',
       },
       {
         columnType: ColumnType.ACTION,
@@ -51,35 +43,25 @@ export class DashboardManagementComponent implements OnInit {
           {
             actionName: 'Delete',
             callback: this.deleteDashboard.bind(this),
+            type: 'danger',
           },
         ],
       },
     ],
     searchable: true,
   });
-  public readonly roleItems$: BehaviorSubject<ListItem[]> = new BehaviorSubject<ListItem[]>([
-    {
-      content: ROLE_ADMIN,
-      selected: false,
-    },
-    {
-      content: ROLE_DEVELOPER,
-      selected: false,
-    },
-    {
-      content: ROLE_USER,
-      selected: false,
-    },
-  ]);
   public form: FormGroup;
 
-  constructor(private readonly fb: FormBuilder, private readonly router: Router) {}
+  constructor(
+    private readonly dashboardManagementService: DashboardManagementService,
+    private readonly fb: FormBuilder
+  ) {}
 
   public ngOnInit(): void {
+    this.dashboardManagementService.loadData();
     this.form = this.fb.group({
       description: this.fb.control(''),
-      name: this.fb.control('', [Validators.required]),
-      roles: this.fb.control([]),
+      title: this.fb.control('', [Validators.required]),
     });
   }
 
@@ -88,38 +70,37 @@ export class DashboardManagementComponent implements OnInit {
   }
 
   public createDashboard(): void {
-    const control: AbstractControl | null = this.form.get('name');
+    const control: AbstractControl | null = this.form.get('title');
     if (!control || !control.valid) {
       return;
     }
 
-    const newDashboard: DashboardItem = {
-      key: `test-id${this.data.length + 1}`,
-      name: this.form.get('name')?.value,
-      description: this.form.get('description')?.value,
-      roles: this.form
-        .get('roles')
-        ?.value.map((item: ListItem) => item.content)
-        .toString(),
-    };
+    const newDashboard: DashboardItem = this.form.getRawValue();
+    this.dashboardManagementService.dispatchAction(
+      this.dashboardManagementService.createDashboard(newDashboard).pipe(
+        finalize(() => {
+          this.closeModal();
+        })
+      )
+    );
+  }
 
-    this.data = [...this.data, newDashboard];
-    console.log(this.data);
-    this.tableData$.next(this.data);
-
-    this.closeModal();
+  public onConfirmEvent(dashboardKey: string): void {
+    this.dashboardManagementService.dispatchAction(
+      this.dashboardManagementService.deleteDashboard(dashboardKey).pipe(
+        finalize(() => {
+          this.closeModal();
+        })
+      )
+    );
   }
 
   public openModal(): void {
     this.openModal$.next(true);
   }
 
-  public rowClick(dashboardItem: DashboardItem): void {
-    this.router.navigate([`/dashboard-management/${dashboardItem.key}`]);
-  }
-
   private deleteDashboard(dashboard: DashboardItem): void {
-    this.data = this.data.filter((item: DashboardItem) => item.key !== dashboard.key);
-    this.tableData$.next(this.data);
+    this.deleteRowKey$.next(dashboard.key);
+    this.showDeleteModal$.next(true);
   }
 }

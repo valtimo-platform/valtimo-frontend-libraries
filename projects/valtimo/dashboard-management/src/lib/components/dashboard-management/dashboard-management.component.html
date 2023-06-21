@@ -1,14 +1,36 @@
 <valtimo-carbon-table
   [data]="tableData$ | async"
   [tableConfig]="tableConfig"
-  (rowClick)="rowClick($event)"
+  class="valtimo-dashboard-management__table"
 >
   <ng-container carbonTableTitle> {{ 'dashboardManagement.title' | translate }} </ng-container>
 
   <div carbonToolbarContent>
     <button ibmButton="primary" (click)="openModal()">
       {{ 'dashboardManagement.addDashboard' | translate }}
+
+      <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
     </button>
+  </div>
+
+  <div class="valtimo-dashboard-management-no-results" noResultsView>
+    <img alt="{{ 'interface.noResults' | translate }}" src="valtimo-layout/img/no-results.svg" />
+
+    <section class="valtimo-dashboard-management-no-results__content">
+      <div>
+        <h4 class="valtimo-dashboard-management-no-results__title">
+          {{ 'dashboardManagement.noResults.title' | translate }}
+        </h4>
+
+        <span [innerHtml]="'dashboardManagement.noResults.description' | translate"></span>
+      </div>
+
+      <button ibmButton="primary" (click)="openModal()">
+        {{ 'dashboardManagement.addDashboard' | translate }}
+
+        <svg class="cds--btn__icon" ibmIcon="add" size="16"></svg>
+      </button>
+    </section>
   </div>
 </valtimo-carbon-table>
 
@@ -30,31 +52,23 @@
         {{ 'dashboardManagement.addModal.name' | translate }}
 
         <input
-          formControlName="name"
+          formControlName="title"
           ibmText
-          placeholder="{{ 'dashboardManagement.addModal.placeholder' | translate }}"
+          placeholder="{{ 'dashboardManagement.addModal.namePlaceholder' | translate }}"
           [attr.modal-primary-focus]="true"
           [invalid]="form.invalid"
         />
       </ibm-label>
 
-      <ibm-label>
-        {{ 'dashboardManagement.addModal.description' | translate }}
+      <ibm-label [helperText]="'dashboardManagement.addModal.descriptionHelperText' | translate">
+        {{ 'dashboardManagement.description' | translate }}
 
         <input
           formControlName="description"
           ibmText
-          placeholder="{{ 'dashboardManagement.addModal.description' | translate }}"
+          placeholder="{{ 'dashboardManagement.addModal.descriptionPlaceholder' | translate }}"
         />
       </ibm-label>
-
-      <ibm-dropdown
-        label="{{ 'dashboardManagement.addModal.roles' | translate }}"
-        formControlName="roles"
-        type="multi"
-      >
-        <ibm-dropdown-list [items]="roleItems$ | async" type="multi"></ibm-dropdown-list>
-      </ibm-dropdown>
     </form>
   </section>
 
@@ -68,3 +82,13 @@
     </button>
   </ibm-modal-footer>
 </ibm-modal>
+
+<valtimo-confirmation-modal
+  [outputOnConfirm]="deleteRowKey$ | async"
+  [showModalSubject$]="showDeleteModal$"
+  (confirmEvent)="onConfirmEvent($event)"
+  confirmButtonTextTranslationKey="dashboardManagement.deleteModal.confirm"
+  confirmButtonType="danger"
+  contentTranslationKey="dashboardManagement.deleteModalContent"
+  titleTranslationKey="dashboardManagement.delete"
+></valtimo-confirmation-modal>

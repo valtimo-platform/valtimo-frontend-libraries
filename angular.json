@@ -1061,8 +1061,8 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": [
-              "projects/valtimo/dashboard-management/**/*.ts",
-              "projects/valtimo/dashboard-management/**/*.html"
+              "projects/valtimo/dashboard-management/src/**/*.ts",
+              "projects/valtimo/dashboard-management/src/**/*.html"
             ]
           }
         }

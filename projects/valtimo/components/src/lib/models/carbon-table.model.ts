@@ -19,17 +19,18 @@ export interface CarbonTableConfig {
 }
 
 export interface ActionItem {
-  type?: 'normal' | 'danger';
   actionName: string;
   callback: (_) => void;
+  type?: 'normal' | 'danger';
 }
 
 export interface ColumnConfig {
   columnType: ColumnType;
   fieldName: string;
-  fieldLabel: string;
   actions?: ActionItem[];
+  fieldLabel?: string;
   template?: TemplateRef<any>;
+  translationKey?: string;
 }
 
 const defaultTableConfig: CarbonTableConfig = {
