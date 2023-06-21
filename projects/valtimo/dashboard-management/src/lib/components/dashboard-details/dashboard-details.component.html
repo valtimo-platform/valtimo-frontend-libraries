@@ -16,7 +16,11 @@
   </valtimo-carbon-table>
 </div>
 
-<valtimo-widget-modal [showModal$]="showModal$" [type]="modalType"></valtimo-widget-modal>
+<valtimo-widget-modal
+  [showModal$]="showModal$"
+  [type]="modalType"
+  [dashboard]="currentDashboard$ | async"
+></valtimo-widget-modal>
 
 <ng-template #moveButtonsTemplate>
   <div class="move-buttons-container">
@@ -31,7 +35,7 @@
 
 <ng-container renderInPageHeader>
   <ng-template>
-    <button ibmButton="tertiary" size="md" (click)="addWidget()">
+    <button ibmButton="tertiary" size="md" (click)="editDashboard()">
       {{ 'dashboardManagement.widgets.editButton' | translate }}
       <svg class="cds--btn__icon" ibmIconEdit size="16"></svg>
     </button>

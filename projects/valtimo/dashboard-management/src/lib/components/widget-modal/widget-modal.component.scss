@@ -1,19 +1,19 @@
-.widget-form__row {
+.form__row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
 }
 
-.widget-form__spacer {
+.form__spacer {
   width: 32px;
 }
 
-.widget-form__element {
+.form__element {
   width: 100%;
 }
 
-.widget-form__element.--with-button {
+.form__element.--with-button {
   display: flex;
   align-items: flex-end;
   flex-direction: row;
@@ -23,10 +23,10 @@
   }
 }
 
-.widget-form__element.--readonly input {
+.form__element.--readonly input {
   background-color: transparent;
 }
 
-.widget-form__element {
+.form__element {
   margin-bottom: 32px;
 }

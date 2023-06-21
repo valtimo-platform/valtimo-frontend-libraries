@@ -1,6 +1,6 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription} from 'rxjs';
-import {WidgetModalType} from '../../models';
+import {DashboardItem, WidgetModalType} from '../../models';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ListItem} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
@@ -11,11 +11,14 @@ import {widgetChartTypesMock, widgetDataSourcesMock} from '../../mocks';
   templateUrl: './widget-modal.component.html',
   styleUrls: ['./widget-modal.component.scss'],
 })
-export class WidgetModalComponent implements OnInit, OnDestroy {
+export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   @Input() showModal$: Observable<boolean>;
   @Input() type: WidgetModalType;
+  @Input() dashboard: DashboardItem;
 
   public form!: FormGroup;
+  public editDashboardForm!: FormGroup;
+
   public readonly open$ = new BehaviorSubject<boolean>(false);
 
   private readonly _dataSourceItems$ = new BehaviorSubject<Array<string>>([]);
@@ -36,6 +39,11 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       chartTypeItems.map(mockItem => ({content: mockItem, selected: false}))
     )
   );
+  public readonly roleItems$ = new BehaviorSubject<Array<ListItem>>([
+    {content: 'ROLE_ADMIN', selected: false},
+    {content: 'ROLE_USER', selected: false},
+    {content: 'ROLE_DEVELOPER', selected: false},
+  ]);
   private _openSubscription!: Subscription;
 
   get title() {
@@ -55,6 +63,18 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     return this.form.get('dataSourceField');
   }
 
+  get dashboardTitle() {
+    return this.editDashboardForm.get('title');
+  }
+
+  get dashboardDescription() {
+    return this.editDashboardForm.get('description');
+  }
+
+  get dashboardRoles() {
+    return this.editDashboardForm.get('roles');
+  }
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService
@@ -64,6 +84,12 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     this.setDropdownData();
     this.openOpenSubscription();
     this.setForm();
+    this.setEditDashboardForm();
+  }
+
+  ngOnChanges(): void {
+    this.setForm();
+    this.setEditDashboardForm();
   }
 
   ngOnDestroy(): void {
@@ -73,12 +99,15 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   closeModal(): void {
     this.open$.next(false);
     this.form.reset();
+    this.editDashboardForm.reset();
     this.setDropdownData();
   }
 
   save(): void {}
 
   delete(): void {}
+
+  saveDashboard(): void {}
 
   dataSourceSelected(dataSource: any): void {
     this.dataSource.setValue(dataSource?.item?.content);
@@ -112,8 +141,20 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       dataSourceField: this.fb.control('', [Validators.required]),
     });
 
-    this.form.get('key').setValue('test-key');
-    this.form.get('key').disable();
+    this.key.setValue('test-key');
+    this.key.disable();
+  }
+
+  private setEditDashboardForm(): void {
+    this.editDashboardForm = this.fb.group({
+      title: this.fb.control('', [Validators.required]),
+      description: this.fb.control('', [Validators.required]),
+      roles: this.fb.control([], [Validators.required]),
+    });
+
+    this.dashboardTitle.setValue(this.dashboard.title);
+    this.dashboardDescription.setValue(this.dashboard.description);
+    this.dashboardRoles.setValue(this.dashboard.roles);
   }
 
   private openOpenSubscription(): void {

@@ -207,6 +207,8 @@
   },
   "dashboardManagement": {
     "widgets": {
+      "complete": "Voltooien",
+      "editDashboard": "Dashboard bewerken",
       "editButton": "Bewerken",
       "title": "Widgets",
       "description": "Vul het dashboard door nieuwe widgets toe te voegen. Rangschik deze widgets door ze naar de gewenste positie in de lijst te slepen.",
@@ -225,7 +227,11 @@
         "dataSource": "Databron (vereist)",
         "dataSourceHelperText": "Selecteer de bron van de data die u in de widget wilt weergeven",
         "chartType": "Grafiektype (vereist)",
-        "dataSourceField": "Databronveld (vereist)"
+        "dataSourceField": "Databronveld (vereist)",
+        "dashboardTitle": "Dashboardnaam (vereist)",
+        "dashboardDescription": "Beschrijving (vereist)",
+        "dashboardDescriptionHelperText": "*Beschrijving is alleen zichtbaar op de configuratiepagina van het dashboard",
+        "roles": "Zichtbaarheid"
       }
     }
   },

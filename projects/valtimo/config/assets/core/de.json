@@ -207,6 +207,8 @@
   },
   "dashboardManagement": {
     "widgets": {
+      "complete": "Vervollständigen",
+      "editDashboard": "Dashboard bearbeiten",
       "editButton": "Bearbeiten",
       "title": "Widgets",
       "description": "Füllen Sie das Dashboard, indem Sie neue Widgets hinzufügen. Ordnen Sie diese Widgets an, indem Sie sie an die gewünschte Position in der Liste ziehen.",
@@ -225,7 +227,11 @@
         "dataSource": "Datenquelle (erforderlich)",
         "dataSourceHelperText": "Wählen Sie die Quelle der Daten aus, die Sie im Widget anzeigen möchten",
         "chartType": "Diagramm Typ (erforderlich)",
-        "dataSourceField": "Datenquellenfeld (erforderlich)"
+        "dataSourceField": "Datenquellenfeld (erforderlich)",
+        "dashboardTitle": "Dashboard-Name (erforderlich)",
+        "dashboardDescription": "Beschreibung (erforderlich)",
+        "dashboardDescriptionHelperText": "*Beschreibung ist nur auf der Dashboard-Konfigurationsseite sichtbar",
+        "roles": "Sichtweite"
       }
     }
   },

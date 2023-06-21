@@ -228,6 +228,8 @@
     },
     "title": "All dashboards",
     "widgets": {
+      "complete": "Complete",
+      "editDashboard": "Edit dashboard",
       "editButton": "Edit",
       "title": "Widgets",
       "description": "Fill the dashboard by adding new widgets. Arrange these widgets by dragging them to their desired position in the list. ",
@@ -246,7 +248,11 @@
         "dataSource": "Data source (required)",
         "dataSourceHelperText": "Select the source of the data you want to display within the widget",
         "chartType": "Chart type (required)",
-        "dataSourceField": "Data source field (required)"
+        "dataSourceField": "Data source field (required)",
+        "dashboardTitle": "Dashboard name (required)",
+        "dashboardDescription": "Description (required)",
+        "dashboardDescriptionHelperText": "*Description is only visible in the dashboard configuration page",
+        "roles": "Set visibility"
       }
     }
   },

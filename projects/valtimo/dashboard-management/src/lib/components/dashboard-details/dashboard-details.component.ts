@@ -57,6 +57,11 @@ export class DashboardDetailsComponent implements AfterViewInit {
     this.showModal();
   }
 
+  editDashboard(): void {
+    this.modalType = 'editDashboard';
+    this.showModal();
+  }
+
   private setTableConfig(): void {
     this.tableConfig = createCarbonTableConfig({
       fields: [
