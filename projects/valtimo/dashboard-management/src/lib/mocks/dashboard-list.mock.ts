@@ -40,7 +40,7 @@ export const dashboardListMock: Array<DashboardItem> = [
     description: 'Descriptio 1',
     roles: [ROLE_ADMIN, ROLE_DEVELOPER],
     createdBy: 'Asha Miller',
-    createdOn: 'Created on 19/06/2023 10:41AM',
+    createdOn: '19/06/2023 10:41AM',
   },
   // {
   //   key: 'test-id6',
