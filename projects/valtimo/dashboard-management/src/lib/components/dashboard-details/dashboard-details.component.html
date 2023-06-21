@@ -1,6 +1,6 @@
 <div
   class="dashboard-detail-table"
-  *ngIf="tableConfig && {currentDashboard: currentDashbboard$ | async} as obs"
+  *ngIf="tableConfig && {currentDashboard: currentDashboard$ | async} as obs"
 >
   <valtimo-carbon-table
     [data]="widgetData$ | async"

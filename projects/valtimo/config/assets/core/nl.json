@@ -223,7 +223,9 @@
         "key": "Widgetsleutel (vereist)",
         "keyHelperText": "Wijs een unieke sleutel toe aan deze widget",
         "dataSource": "Databron (vereist)",
-        "dataSourceHelperText": "Selecteer de bron van de data die u in de widget wilt weergeven"
+        "dataSourceHelperText": "Selecteer de bron van de data die u in de widget wilt weergeven",
+        "chartType": "Grafiektype (vereist)",
+        "dataSourceField": "Databronveld (vereist)"
       }
     }
   },

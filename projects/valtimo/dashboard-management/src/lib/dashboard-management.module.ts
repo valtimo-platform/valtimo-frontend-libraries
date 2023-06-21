@@ -19,6 +19,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {
   CarbonTableModule,
+  ConfirmationModalModule,
   ListModule,
   RenderInPageHeaderDirectiveModule,
   SpinnerModule,
@@ -27,7 +28,13 @@ import {ButtonModule, DropdownModule, InputModule, ModalModule} from 'carbon-com
 import {DashboardDetailsComponent} from './components/dashboard-details/dashboard-details.component';
 import {DashboardManagementComponent} from './components/dashboard-management/dashboard-management.component';
 import {DashboardManagementRoutingModule} from './dashboard-management-routing.module';
-import {AddModule, ArrowDownModule, ArrowUpModule, EditModule} from '@carbon/icons-angular';
+import {
+  AddModule,
+  ArrowDownModule,
+  ArrowUpModule,
+  CopyModule,
+  EditModule,
+} from '@carbon/icons-angular';
 import {WidgetModalComponent} from './components/widget-modal/widget-modal.component';
 
 @NgModule({
@@ -49,6 +56,8 @@ import {WidgetModalComponent} from './components/widget-modal/widget-modal.compo
     AddModule,
     RenderInPageHeaderDirectiveModule,
     EditModule,
+    ConfirmationModalModule,
+    CopyModule,
   ],
   exports: [],
 })

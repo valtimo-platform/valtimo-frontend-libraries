@@ -244,7 +244,9 @@
         "key": "Widget key (required)",
         "keyHelperText": "Assign a unique key to this widget",
         "dataSource": "Data source (required)",
-        "dataSourceHelperText": "Select the source of the data you want to display within the widget"
+        "dataSourceHelperText": "Select the source of the data you want to display within the widget",
+        "chartType": "Chart type (required)",
+        "dataSourceField": "Data source field (required)"
       }
     }
   },

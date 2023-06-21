@@ -1,3 +1,32 @@
-.widget-form__element:not(:last-child) {
+.widget-form__row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.widget-form__spacer {
+  width: 32px;
+}
+
+.widget-form__element {
+  width: 100%;
+}
+
+.widget-form__element.--with-button {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+
+  button {
+    margin-left: 16px;
+  }
+}
+
+.widget-form__element.--readonly input {
+  background-color: transparent;
+}
+
+.widget-form__element {
   margin-bottom: 32px;
 }

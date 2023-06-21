@@ -51,6 +51,10 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     return this.form.get('chartType');
   }
 
+  get dataSourceField() {
+    return this.form.get('dataSourceField');
+  }
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService
@@ -84,6 +88,8 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     this.dataSource.setValue(chartType?.item?.content);
   }
 
+  copyKey(): void {}
+
   private setDropdownData(): void {
     this.setDataSourceItems();
     this.setChartTypeItems();
@@ -103,7 +109,11 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       key: this.fb.control('', [Validators.required]),
       dataSource: this.fb.control('', [Validators.required]),
       chartType: this.fb.control('', [Validators.required]),
+      dataSourceField: this.fb.control('', [Validators.required]),
     });
+
+    this.form.get('key').setValue('test-key');
+    this.form.get('key').disable();
   }
 
   private openOpenSubscription(): void {

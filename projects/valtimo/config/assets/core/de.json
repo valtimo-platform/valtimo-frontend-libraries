@@ -223,7 +223,9 @@
         "key": "Widget-Schlüssel (erforderlich)",
         "keyHelperText": "Weisen Sie diesem Widget einen eindeutigen Schlüssel zu",
         "dataSource": "Datenquelle (erforderlich)",
-        "dataSourceHelperText": "Wählen Sie die Quelle der Daten aus, die Sie im Widget anzeigen möchten"
+        "dataSourceHelperText": "Wählen Sie die Quelle der Daten aus, die Sie im Widget anzeigen möchten",
+        "chartType": "Diagramm Typ (erforderlich)",
+        "dataSourceField": "Datenquellenfeld (erforderlich)"
       }
     }
   },

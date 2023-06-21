@@ -58,39 +58,54 @@
         />
       </ibm-label>
     </div>
-    <div class="widget-form__element">
-      <ibm-label
-        [invalid]="key.dirty && key.invalid"
-        [helperText]="'dashboardManagement.widgets.form.keyHelperText' | translate"
-        [invalidText]="'dashboardManagement.widgets.form.keyHelperText' | translate"
-      >
+    <div class="widget-form__element --with-button --readonly">
+      <ibm-label [disabled]="true" [invalid]="key.dirty && key.invalid">
         {{ 'dashboardManagement.widgets.form.key' | translate }}
-        <input formControlName="key" ibmText [invalid]="key.dirty && key.invalid" />
+        <input
+          formControlName="key"
+          ibmText
+          [invalid]="key.dirty && key.invalid"
+          [placeholder]="key.value"
+        />
       </ibm-label>
+      <button ibmButton="ghost" (click)="copyKey()" [iconOnly]="true">
+        <svg class="cds--btn__icon" ibmIconCopy size="16"></svg>
+      </button>
     </div>
     <div class="widget-form__element">
       <ibm-dropdown
         formControlName="dateSource"
         [invalid]="dataSource.dirty && dataSource.invalid"
-        [label]="'dashboardManagement.widgets.form.dateSource' | translate"
-        [helperText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
+        [label]="'dashboardManagement.widgets.form.dataSource' | translate"
+        [helperText]="'dashboardManagement.widgets.form.dataSourceHelperText' | translate"
         [invalidText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
         (selected)="dataSourceSelected($event)"
       >
         <ibm-dropdown-list [items]="dataSourceItems$ | async" type="multi"></ibm-dropdown-list>
       </ibm-dropdown>
     </div>
-    <div class="widget-form__element">
-      <ibm-dropdown
-        formControlName="chartType"
-        [invalid]="chartType.dirty && chartType.invalid"
-        [label]="'dashboardManagement.widgets.form.chartType' | translate"
-        [helperText]="'dashboardManagement.widgets.form.chartTypeHelperText' | translate"
-        [invalidText]="'dashboardManagement.widgets.form.chartTypeHelperText' | translate"
-        (selected)="chartTypeSelected($event)"
-      >
-        <ibm-dropdown-list [items]="dataSourceItems$ | async" type="multi"></ibm-dropdown-list>
-      </ibm-dropdown>
+    <div class="widget-form__row">
+      <div class="widget-form__element">
+        <ibm-dropdown
+          formControlName="chartType"
+          [invalid]="chartType.dirty && chartType.invalid"
+          [label]="'dashboardManagement.widgets.form.chartType' | translate"
+          (selected)="chartTypeSelected($event)"
+        >
+          <ibm-dropdown-list [items]="dataSourceItems$ | async" type="multi"></ibm-dropdown-list>
+        </ibm-dropdown>
+      </div>
+      <div class="widget-form__spacer"></div>
+      <div class="widget-form__element">
+        <ibm-label [invalid]="dataSourceField.dirty && dataSourceField.invalid">
+          {{ 'dashboardManagement.widgets.form.dataSourceField' | translate }}
+          <input
+            formControlName="dataSourceField"
+            ibmText
+            [invalid]="dataSourceField.dirty && dataSourceField.invalid"
+          />
+        </ibm-label>
+      </div>
     </div>
   </form>
 </ng-template>

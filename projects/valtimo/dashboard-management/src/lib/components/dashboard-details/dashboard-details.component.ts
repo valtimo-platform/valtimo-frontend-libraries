@@ -21,7 +21,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
 
   public modalType: WidgetModalType = 'create';
   public tableConfig!: CarbonTableConfig;
-  public readonly currentDashbboard$: Observable<DashboardItem> = combineLatest([
+  public readonly currentDashboard$: Observable<DashboardItem> = combineLatest([
     this.route.params,
     this.translateService.stream('key'),
   ]).pipe(
