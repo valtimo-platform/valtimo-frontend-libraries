@@ -15,7 +15,7 @@
  */
 
 .page-title-container {
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
@@ -34,8 +34,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 14.2px;
-    line-height: 18.2px;
+    font-size: 14px;
+    line-height: 18px;
 
     b {
       font-weight: bolder;
@@ -51,7 +51,7 @@
 
   .subtitle-skeleton-container {
     .cds--skeleton__placeholder {
-      height: 18.5px;
+      height: 18px;
       margin-bottom: 8px;
       width: 200px;
       margin-left: 16px;

@@ -48,16 +48,16 @@ export class DashboardDetailsComponent implements AfterViewInit {
     private readonly translateService: TranslateService
   ) {}
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.setTableConfig();
   }
 
-  addWidget(): void {
+  public addWidget(): void {
     this.modalType = 'create';
     this.showModal();
   }
 
-  editDashboard(): void {
+  public editDashboard(): void {
     this.modalType = 'editDashboard';
     this.showModal();
   }

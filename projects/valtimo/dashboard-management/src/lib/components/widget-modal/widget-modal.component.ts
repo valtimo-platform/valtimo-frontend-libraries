@@ -12,9 +12,9 @@ import {widgetChartTypesMock, widgetDataSourcesMock} from '../../mocks';
   styleUrls: ['./widget-modal.component.scss'],
 })
 export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() showModal$: Observable<boolean>;
-  @Input() type: WidgetModalType;
-  @Input() dashboard: DashboardItem;
+  @Input() public showModal$: Observable<boolean>;
+  @Input() public type: WidgetModalType;
+  @Input() public dashboard: DashboardItem;
 
   public form!: FormGroup;
   public editDashboardForm!: FormGroup;
@@ -46,32 +46,32 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   ]);
   private _openSubscription!: Subscription;
 
-  get title() {
+  public get title() {
     return this.form.get('title');
   }
-  get key() {
+  public get key() {
     return this.form.get('key');
   }
-  get dataSource() {
+  public get dataSource() {
     return this.form.get('dataSource');
   }
-  get chartType() {
+  public get chartType() {
     return this.form.get('chartType');
   }
 
-  get dataSourceField() {
+  public get dataSourceField() {
     return this.form.get('dataSourceField');
   }
 
-  get dashboardTitle() {
+  public get dashboardTitle() {
     return this.editDashboardForm.get('title');
   }
 
-  get dashboardDescription() {
+  public get dashboardDescription() {
     return this.editDashboardForm.get('description');
   }
 
-  get dashboardRoles() {
+  public get dashboardRoles() {
     return this.editDashboardForm.get('roles');
   }
 
@@ -80,44 +80,44 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     private readonly translateService: TranslateService
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.setDropdownData();
     this.openOpenSubscription();
     this.setForm();
     this.setEditDashboardForm();
   }
 
-  ngOnChanges(): void {
+  public ngOnChanges(): void {
     this.setForm();
     this.setEditDashboardForm();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this._openSubscription?.unsubscribe();
   }
 
-  closeModal(): void {
+  public closeModal(): void {
     this.open$.next(false);
     this.form.reset();
     this.editDashboardForm.reset();
     this.setDropdownData();
   }
 
-  save(): void {}
+  public save(): void {}
 
-  delete(): void {}
+  public delete(): void {}
 
-  saveDashboard(): void {}
+  public saveDashboard(): void {}
 
-  dataSourceSelected(dataSource: any): void {
+  public dataSourceSelected(dataSource: any): void {
     this.dataSource.setValue(dataSource?.item?.content);
   }
 
-  chartTypeSelected(chartType: any): void {
+  public chartTypeSelected(chartType: any): void {
     this.dataSource.setValue(chartType?.item?.content);
   }
 
-  copyKey(): void {}
+  public copyKey(): void {}
 
   private setDropdownData(): void {
     this.setDataSourceItems();

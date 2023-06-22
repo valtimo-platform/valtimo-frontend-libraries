@@ -32,7 +32,7 @@ export class CarbonTableComponent<T> implements AfterViewInit {
 
   @Input() public tableConfig: CarbonTableConfig;
   @Input() public paginationConfig: CarbonPaginationConfig = createPaginationConfig();
-  @Input() hideTableHeader = false;
+  @Input() public hideTableHeader = false;
 
   private _data: Array<T>;
   @Input() public set data(value: Array<T>) {

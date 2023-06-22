@@ -56,7 +56,6 @@
   <ibm-overflow-menu (click)="$event.stopPropagation()">
     <ibm-overflow-menu-option
       *ngFor="let action of data.actions"
-      [type]="action.type"
       (selected)="onActionItemClick(action, data.item)"
       [type]="action.type"
     >
