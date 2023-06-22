@@ -21,27 +21,27 @@ export class PageTitleService implements OnDestroy {
 
   private _preventReset!: boolean;
 
-  get customPageTitle$(): Observable<string> {
+  public get customPageTitle$(): Observable<string> {
     return this._customPageTitle$.asObservable();
   }
 
-  get customPageTitleSet$(): Observable<boolean> {
+  public get customPageTitleSet$(): Observable<boolean> {
     return this._customPageTitleSet$.asObservable();
   }
 
-  get customPageSubtitle$(): Observable<string> {
+  public get customPageSubtitle$(): Observable<string> {
     return this._customPageSubtitle$.asObservable();
   }
 
-  get customPageSubtitleSet$(): Observable<boolean> {
+  public get customPageSubtitleSet$(): Observable<boolean> {
     return this._customPageSubtitleSet$.asObservable();
   }
 
-  get pageActionsViewContainerRef$(): Observable<ViewContainerRef> {
+  public get pageActionsViewContainerRef$(): Observable<ViewContainerRef> {
     return this._pageActionsViewContainerRef$.asObservable();
   }
 
-  get hasPageActions$(): Observable<boolean> {
+  public get hasPageActions$(): Observable<boolean> {
     return this._hasPageActions$.asObservable();
   }
 
@@ -49,11 +49,11 @@ export class PageTitleService implements OnDestroy {
     this.openRouteSubscription();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this._routeSubscription?.unsubscribe();
   }
 
-  setCustomPageTitle(title: string, preventReset = false): void {
+  public setCustomPageTitle(title: string, preventReset = false): void {
     this._customPageTitle$.next(title);
     this._customPageTitleSet$.next(true);
 
@@ -62,24 +62,24 @@ export class PageTitleService implements OnDestroy {
     }
   }
 
-  setCustomPageSubtitle(title: string): void {
+  public setCustomPageSubtitle(title: string): void {
     this._customPageSubtitle$.next(title);
     this._customPageSubtitleSet$.next(true);
   }
 
-  disableReset(): void {
+  public disableReset(): void {
     this._preventReset = true;
   }
 
-  enableReset(): void {
+  public enableReset(): void {
     this._preventReset = false;
   }
 
-  setPageActionsViewContainerRef(ref: ViewContainerRef): void {
+  public setPageActionsViewContainerRef(ref: ViewContainerRef): void {
     this._pageActionsViewContainerRef$.next(ref);
   }
 
-  setHasPageActions(value: boolean): void {
+  public setHasPageActions(value: boolean): void {
     this._hasPageActions$.next(value);
   }
 
