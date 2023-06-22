@@ -45,9 +45,6 @@ yarn-error.log
 testem.log
 /typings
 
-#Local lint
-.eslintrc.json
-
 # System Files
 .DS_Store
 Thumbs.db
