@@ -6,7 +6,6 @@ import {
   PermissionRequestCollection,
   ResolvedPermissions,
 } from '../models';
-import {getCollectionKey} from '../utils';
 import {PermissionApiService} from './permission-api.service';
 import {KeycloakService} from 'keycloak-angular';
 import {fromPromise} from 'rxjs/internal/observable/innerFrom';
@@ -28,9 +27,8 @@ export class PermissionService {
     permissionRequestCollection: PermissionRequestCollection,
     permissionRequestCollectionKey: number
   ): Observable<boolean> {
-    const collectionKey = getCollectionKey(permissionRequestCollection);
-    const cachedResolvedPermissionCollection =
-      this._cachedResolvedPermissions[getCollectionKey(permissionRequestCollection)];
+    const collectionKey = this.getCollectionKey(permissionRequestCollection);
+    const cachedResolvedPermissionCollection = this._cachedResolvedPermissions[collectionKey];
     const pendingPermissionCollection = this._pendingPermissions[collectionKey];
 
     // return cached permission if available
@@ -52,7 +50,7 @@ export class PermissionService {
         {}
       );
 
-      this.requestPermissions(permissionRequestCollection);
+      this.requestPermissions(permissionRequestCollection, collectionKey);
 
       console.log('return new pending', permissionRequestCollectionKey);
 
@@ -60,13 +58,11 @@ export class PermissionService {
     }
   }
 
-  private requestPermissions(collection: PermissionRequestCollection): void {
+  private requestPermissions(collection: PermissionRequestCollection, collectionKey: string): void {
     this.permissionApiService
       .resolvePermissionRequestCollection(collection)
       .pipe(take(1))
       .subscribe(resolvedCollection => {
-        const collectionKey = getCollectionKey(collection);
-
         Object.keys(resolvedCollection).forEach(collectionPermissionKey => {
           this._pendingPermissions[collectionKey][collectionPermissionKey].next(
             resolvedCollection[collectionPermissionKey]
@@ -103,5 +99,16 @@ export class PermissionService {
             }
           });
       });
+  }
+
+  private getCollectionKey(requestCollection: PermissionRequestCollection): string {
+    const input = JSON.stringify(requestCollection);
+    let hash = 0,
+      len = input.length;
+    for (let i = 0; i < len; i++) {
+      hash = (hash << 5) - hash + input.charCodeAt(i);
+      hash |= 0; // to 32bit integer
+    }
+    return `${hash}`;
   }
 }
