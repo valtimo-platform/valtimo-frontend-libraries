@@ -6,11 +6,6 @@ interface PermissionRequest {
     [key: string]: any;
   };
 }
-
-interface PermissionRequestCollectionKeys {
-  [key: string]: string;
-}
-
 interface PermissionRequestCollection {
   [key: string]: PermissionRequest;
 }
@@ -34,7 +29,6 @@ interface ResolvedPermissions {
 export {
   PermissionRequest,
   PermissionRequestCollection,
-  PermissionRequestCollectionKeys,
   CachedResolvedPermissions,
   ResolvedPermissions,
   PendingPermissions,
