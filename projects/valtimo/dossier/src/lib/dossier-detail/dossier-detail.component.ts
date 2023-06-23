@@ -46,9 +46,7 @@ import {
 } from 'rxjs';
 import {KeycloakService} from 'keycloak-angular';
 import {NGXLogger} from 'ngx-logger';
-import {BreadcrumbService, PageTitleService} from '@valtimo/components';
-import {PermissionService} from '@valtimo/security';
-import {DOSSIER_DETAIL_PERMISSIONS, DOSSIER_DETAIL_PERMISSIONS_KEYS} from '../permissions';
+import {BreadcrumbService} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -129,14 +127,6 @@ export class DossierDetailComponent implements OnInit, OnDestroy {
     map(caseSettings => caseSettings?.canHaveAssignee)
   );
 
-  readonly canStartCase$ = this.permissionService
-    .requestPermission(DOSSIER_DETAIL_PERMISSIONS, DOSSIER_DETAIL_PERMISSIONS_KEYS.canCreateCase)
-    .pipe(
-      tap(permissionGranted => {
-        console.log('permission granted', permissionGranted);
-      })
-    );
-
   constructor(
     private readonly componentFactoryResolver: ComponentFactoryResolver,
     private readonly translateService: TranslateService,
@@ -149,9 +139,7 @@ export class DossierDetailComponent implements OnInit, OnDestroy {
     private readonly configService: ConfigService,
     private readonly keyCloakService: KeycloakService,
     private readonly logger: NGXLogger,
-    private readonly breadcrumbService: BreadcrumbService,
-    private readonly pageTitleService: PageTitleService,
-    private readonly permissionService: PermissionService
+    private readonly breadcrumbService: BreadcrumbService
   ) {
     this.snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = this.snapshot.get('documentDefinitionName') || '';

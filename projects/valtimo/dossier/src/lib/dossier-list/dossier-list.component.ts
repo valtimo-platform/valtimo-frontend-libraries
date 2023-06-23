@@ -57,6 +57,8 @@ import {
 } from '@valtimo/document';
 import {DefaultTabs} from '../dossier-detail-tab-enum';
 import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
+import {DOSSIER_DETAIL_PERMISSIONS, DOSSIER_DETAIL_PERMISSIONS_KEYS} from '../permissions';
+import {PermissionService} from '@valtimo/security';
 
 @Component({
   selector: 'valtimo-dossier-list',
@@ -80,6 +82,14 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public pagination!: Pagination;
   public canHaveAssignee!: boolean;
   public visibleDossierTabs: Array<DossierListTab> | null = null;
+
+  readonly canSearch$: Observable<boolean> = this.permissionService
+    .requestPermission(DOSSIER_DETAIL_PERMISSIONS, DOSSIER_DETAIL_PERMISSIONS_KEYS.canSearch)
+    .pipe(tap(permissionGranted => console.log('can search', permissionGranted)));
+
+  readonly canCreateCase$: Observable<boolean> = this.permissionService
+    .requestPermission(DOSSIER_DETAIL_PERMISSIONS, DOSSIER_DETAIL_PERMISSIONS_KEYS.canCreateCase)
+    .pipe(tap(permissionGranted => console.log('can create case', permissionGranted)));
 
   public readonly searchFields$: Observable<Array<SearchField> | null> =
     this.searchService.documentSearchFields$.pipe(
@@ -296,7 +306,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly configService: ConfigService,
     private readonly pageTitleService: PageTitleService,
-    private readonly breadcrumbService: BreadcrumbService
+    private readonly breadcrumbService: BreadcrumbService,
+    private readonly permissionService: PermissionService
   ) {}
 
   ngOnInit(): void {
