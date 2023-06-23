@@ -24,4 +24,3 @@ export * from './lib/error/error.component';
 export * from './lib/user-provider.service';
 export * from './lib/services';
 export * from './lib/models';
-export * from './lib/utils';
