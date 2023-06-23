@@ -15,37 +15,44 @@
   -->
 
 <ng-container
-  *ngIf="{
-    fields: fields$ | async,
-    documentItems: documentItems$ | async,
-    searchFields: searchFields$ | async,
-    schema: schema$ | async,
-    loaded:
-      !loadingFields &&
-      !loadingPagination &&
-      !loadingSearchFields &&
-      !loadingAssigneeFilter &&
-      !loadingDocumentItems
-  } as obs"
+  *ngIf="{canSearch: canSearch$ | async, canCreateCase: canCreateCase$ | async} as permissions"
 >
-  <div class="main-content pt-0">
-    <div class="container-fluid">
-      <div class="col-12 px-0 mb-5">
-        <valtimo-dossier-list-actions
-          [loading]="!obs.loaded"
-          (formFlowComplete)="refresh()"
-        ></valtimo-dossier-list-actions>
-        <ng-container *ngIf="obs.loaded; else loading">
-          <ng-container *ngTemplateOutlet="searchFields; context: {obs: obs}"></ng-container>
-          <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
-        </ng-container>
+  <ng-container
+    *ngIf="{
+      fields: fields$ | async,
+      documentItems: documentItems$ | async,
+      searchFields: searchFields$ | async,
+      schema: schema$ | async,
+      loaded:
+        !loadingFields &&
+        !loadingPagination &&
+        !loadingSearchFields &&
+        !loadingAssigneeFilter &&
+        !loadingDocumentItems
+    } as obs"
+  >
+    <div class="main-content pt-0">
+      <div class="container-fluid">
+        <div class="col-12 px-0 mb-5">
+          <valtimo-dossier-list-actions
+            *ngIf="permissions.canCreateCase"
+            [loading]="!obs.loaded"
+            (formFlowComplete)="refresh()"
+          ></valtimo-dossier-list-actions>
+          <ng-container *ngIf="obs.loaded; else loading">
+            <ng-container
+              *ngTemplateOutlet="searchFields; context: {obs: obs, permissions: permissions}"
+            ></ng-container>
+            <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+          </ng-container>
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 </ng-container>
 
-<ng-template #searchFields let-obs="obs">
-  <div class="mb-3">
+<ng-template #searchFields let-obs="obs" let-permissions="permissions">
+  <div class="mb-3" *ngIf="permissions.canSearch">
     <valtimo-search-fields
       [searchFields]="obs.searchFields"
       (doSearch)="search($event)"

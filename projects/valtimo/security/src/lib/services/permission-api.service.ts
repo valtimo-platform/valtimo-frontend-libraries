@@ -9,6 +9,8 @@ export class PermissionApiService {
   resolvePermissionRequestCollection(
     permissionRequestCollection: PermissionRequestCollection
   ): Observable<ResolvedPermissions> {
+    console.log('fire permission api request');
+
     const resolvedPermissions = Object.keys(permissionRequestCollection).reduce((acc, curr) => {
       return {...acc, [curr]: true};
     }, {});

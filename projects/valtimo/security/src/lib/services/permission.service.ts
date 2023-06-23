@@ -4,6 +4,7 @@ import {
   CachedResolvedPermissions,
   PendingPermissions,
   PermissionRequestCollection,
+  ResolvedPermissions,
 } from '../models';
 import {getCollectionKey} from '../utils';
 import {PermissionApiService} from './permission-api.service';
@@ -28,9 +29,13 @@ export class PermissionService {
 
     // return cached permission if available
     if (cachedResolvedPermissionCollection) {
+      console.log('return cached', permissionRequestCollectionKey);
+
       return of(cachedResolvedPermissionCollection[permissionRequestCollectionKey]);
       // return observable if request is already pending
     } else if (pendingPermissionCollection) {
+      console.log('return existing pending', permissionRequestCollectionKey);
+
       return pendingPermissionCollection[permissionRequestCollectionKey];
       // create new object of pending request observables and request permissions
     } else {
@@ -43,7 +48,9 @@ export class PermissionService {
 
       this.requestPermissions(permissionRequestCollection);
 
-      return this._pendingPermissions[collectionKey][permissionRequestCollectionKey];
+      console.log('return new pending', permissionRequestCollectionKey);
+
+      return this._pendingPermissions[collectionKey][permissionRequestCollectionKey].asObservable();
     }
   }
 
@@ -52,11 +59,22 @@ export class PermissionService {
       .resolvePermissionRequestCollection(collection)
       .pipe(take(1))
       .subscribe(resolvedCollection => {
-        Object.keys(resolvedCollection).forEach(collectionKey => {
-          this._pendingPermissions[getCollectionKey(collection)][collectionKey].next(
-            resolvedCollection[collectionKey]
+        Object.keys(resolvedCollection).forEach(collectionPermissionKey => {
+          const collectionKey = getCollectionKey(collection);
+
+          this._pendingPermissions[collectionKey][collectionPermissionKey].next(
+            resolvedCollection[collectionPermissionKey]
           );
+
+          this.cacheResolvedPermissions(collectionKey, resolvedCollection);
         });
       });
+  }
+
+  private cacheResolvedPermissions(
+    collectionKey: string,
+    resolvedPermissions: ResolvedPermissions
+  ): void {
+    this._cachedResolvedPermissions[collectionKey] = resolvedPermissions;
   }
 }

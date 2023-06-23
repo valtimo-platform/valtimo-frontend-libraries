@@ -17,7 +17,7 @@ interface PermissionRequestCollection {
 
 interface CachedResolvedPermissions {
   [collectionKey: string]: {
-    ResolvedPermission;
+    [permissionRequestCollectionKey: string]: boolean;
   };
 }
 
