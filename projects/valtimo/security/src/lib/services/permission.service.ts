@@ -29,10 +29,10 @@ export class PermissionService {
     // return cached permission if available
     if (cachedResolvedPermissionCollection) {
       return of(cachedResolvedPermissionCollection[permissionRequestCollectionKey]);
-      // return observable is request is already pending
+      // return observable if request is already pending
     } else if (pendingPermissionCollection) {
       return pendingPermissionCollection[permissionRequestCollectionKey];
-      // create new object of pending request observables and return observable
+      // create new object of pending request observables and request permissions
     } else {
       this._pendingPermissions[collectionKey] = Object.keys(permissionRequestCollection).reduce(
         (acc, permissionRequestCollectionKey) => {
