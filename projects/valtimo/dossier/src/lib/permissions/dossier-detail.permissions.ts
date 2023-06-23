@@ -1,11 +1,11 @@
-import {PermissionRequestCollection, PermissionRequestCollectionKeys} from '@valtimo/security';
+import {PermissionRequestCollection} from '@valtimo/security';
 
-const DOSSIER_DETAIL_PERMISSIONS_KEYS: PermissionRequestCollectionKeys = {
-  canCreateCase: 'canCreateCase',
-  canStartSubProcess: 'canStartSubProcess',
-  canOpenSummaryTab: 'canOpenSummaryTab',
-  canSearch: 'canSearch',
-};
+enum DOSSIER_DETAIL_PERMISSIONS_KEYS {
+  canCreateCase,
+  canStartSubProcess,
+  canOpenSummaryTab,
+  canSearch,
+}
 
 const DOSSIER_DETAIL_PERMISSIONS: PermissionRequestCollection = {
   [DOSSIER_DETAIL_PERMISSIONS_KEYS.canCreateCase]: {

@@ -26,7 +26,7 @@ export class PermissionService {
 
   requestPermission(
     permissionRequestCollection: PermissionRequestCollection,
-    permissionRequestCollectionKey: string
+    permissionRequestCollectionKey: number
   ): Observable<boolean> {
     const collectionKey = getCollectionKey(permissionRequestCollection);
     const cachedResolvedPermissionCollection =
@@ -65,15 +65,15 @@ export class PermissionService {
       .resolvePermissionRequestCollection(collection)
       .pipe(take(1))
       .subscribe(resolvedCollection => {
-        Object.keys(resolvedCollection).forEach(collectionPermissionKey => {
-          const collectionKey = getCollectionKey(collection);
+        const collectionKey = getCollectionKey(collection);
 
+        Object.keys(resolvedCollection).forEach(collectionPermissionKey => {
           this._pendingPermissions[collectionKey][collectionPermissionKey].next(
             resolvedCollection[collectionPermissionKey]
           );
-
-          this.cacheResolvedPermissions(collectionKey, resolvedCollection);
         });
+
+        this.cacheResolvedPermissions(collectionKey, resolvedCollection);
       });
   }
 
@@ -99,6 +99,7 @@ export class PermissionService {
             if (this._cachedResolvedPermissions[collectionKey]) {
               console.log('clear cache', collectionKey);
               delete this._cachedResolvedPermissions[collectionKey];
+              delete this._pendingPermissions[collectionKey];
             }
           });
       });
