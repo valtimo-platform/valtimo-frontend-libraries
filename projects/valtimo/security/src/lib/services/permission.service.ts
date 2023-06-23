@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of, Subject, take} from 'rxjs';
+import {Observable, of, Subject, take, timer} from 'rxjs';
 import {
   CachedResolvedPermissions,
   PendingPermissions,
@@ -8,6 +8,9 @@ import {
 } from '../models';
 import {getCollectionKey} from '../utils';
 import {PermissionApiService} from './permission-api.service';
+import {KeycloakService} from 'keycloak-angular';
+import {fromPromise} from 'rxjs/internal/observable/innerFrom';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +19,10 @@ export class PermissionService {
   private readonly _cachedResolvedPermissions: CachedResolvedPermissions = {};
   private readonly _pendingPermissions: PendingPermissions = {};
 
-  constructor(private readonly permissionApiService: PermissionApiService) {}
+  constructor(
+    private readonly permissionApiService: PermissionApiService,
+    private readonly keyCloakService: KeycloakService
+  ) {}
 
   requestPermission(
     permissionRequestCollection: PermissionRequestCollection,
@@ -75,6 +81,26 @@ export class PermissionService {
     collectionKey: string,
     resolvedPermissions: ResolvedPermissions
   ): void {
+    console.log('cache permissions', collectionKey, resolvedPermissions);
     this._cachedResolvedPermissions[collectionKey] = resolvedPermissions;
+    this.openClearCacheSubscription(collectionKey);
+  }
+
+  private openClearCacheSubscription(collectionKey): void {
+    fromPromise(this.keyCloakService.getToken())
+      .pipe(take(1))
+      .subscribe(token => {
+        const tokenExp = (jwt_decode(token) as any).exp * 1000;
+        const expiryTime = tokenExp - Date.now() - 1000;
+
+        timer(expiryTime)
+          .pipe(take(1))
+          .subscribe(() => {
+            if (this._cachedResolvedPermissions[collectionKey]) {
+              console.log('clear cache', collectionKey);
+              delete this._cachedResolvedPermissions[collectionKey];
+            }
+          });
+      });
   }
 }
