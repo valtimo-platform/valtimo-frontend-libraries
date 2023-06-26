@@ -60,7 +60,7 @@
   <form *ngIf="editDashboardForm" [formGroup]="editDashboardForm" class="dashboard-modal__form">
     <div class="form__element">
       <ibm-label [invalid]="dashboardTitle.dirty && dashboardTitle.invalid">
-        {{ 'dashboardManagement.widgets.form.dashboardTitle' }}
+        {{ 'dashboardManagement.widgets.form.dashboardTitle' | translate }}
         <input
           formControlName="title"
           ibmText
@@ -77,7 +77,7 @@
           'dashboardManagement.widgets.form.dashboardDescriptionHelperText' | translate
         "
       >
-        {{ 'dashboardManagement.widgets.form.dashboardDescription' }}
+        {{ 'dashboardManagement.widgets.form.dashboardDescription' | translate }}
         <input
           formControlName="description"
           ibmText
