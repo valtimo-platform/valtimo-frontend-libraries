@@ -4,6 +4,28 @@ In order to contribute to this project, please follow the below code formatting 
 
 ## Template
 
+### Attribute sorting
+
+On an element inside your template code, keep to the following sorting of attributes
+- Structural directives like `*ngIf` and `*ngFor`
+- Inputs sorted alphabetically
+- Outputs sorted alphabetically
+- Other attributes like `class`, `tabIndex` etc. - sorted alphabetically
+
+### Whitespace between siblings
+
+If two elements are on the same level in the DOM hierarchy, put whitespace between these elements, in order to improve
+readability.
+
+#### **`test.component.html`**
+```angular2html
+<div>
+  <p>test</p>
+  <!-- whitespace -->
+  <p>test 2</p>
+</div>
+```
+
 ## Typescript
 
 ### Injecting services
@@ -42,7 +64,7 @@ All constant properties should be written in screaming snake case: `public reado
 
 ### Property typing
 
-Unless initialized with a primitive, all properties and methods should have a return type specified:
+Unless initialized with a primitive or an explicit constructor, all properties and methods should have a return type specified:
 
 #### **`test.component.ts`**
 
@@ -89,3 +111,53 @@ As much possible, please keep to the following ordering of properties in Angular
   - ngOnDestroy
 - Public methods
 - Private methods
+
+#### Sort properties by domain and alphabetically
+
+Properties and methods belonging to a certain logical domain should be bundled together within a class. The bundle
+itself should be sorted alphabetically. This is a recommended way of organizing a class, and can be deviated from if
+another way is more practical.
+
+We recommend that logical grouping of methods takes precedence over grouping by access modifiers, since it is more likely
+that a developer will want to have easy access to methods relating to a certain domain, rather than methods with the same
+access modifier. Sorting by access modifier takes precedence over alphabetical sorting.
+
+#### **`test.component.ts`**
+
+```typescript
+...
+
+/*
+methods relating to title are bundled together and sorted alphabetically.
+This takes precedence over sorting by access modifiers.
+The grouping by access modifier in turn takes precedence over alphabetical sorting.
+*/
+
+public addTitle(title: string): void {
+  ...
+}
+
+public removeTitle(title: string): void {
+  ...
+}
+
+private compareTitle(title: string): void {
+  ...
+}
+
+// methods relating to description are bundled together and sorted alphabetically
+
+private addDescription(description: string): void {
+  ...
+}
+
+private compareDescription(description: string): void {
+  ...
+}
+
+private removeDescription(description: string): void {
+  ...
+}
+
+...
+```
