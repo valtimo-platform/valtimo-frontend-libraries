@@ -1,10 +1,11 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription} from 'rxjs';
 import {DashboardItem, WidgetModalType} from '../../models';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ListItem} from 'carbon-components-angular';
+import {ListItem, NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {widgetChartTypesMock, widgetDataSourcesMock} from '../../mocks';
+import {DOCUMENT} from '@angular/common';
 
 @Component({
   selector: 'valtimo-widget-modal',
@@ -77,7 +78,9 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly notificationService: NotificationService,
+    @Inject(DOCUMENT) private readonly document: Document
   ) {}
 
   public ngOnInit(): void {
@@ -117,7 +120,16 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     this.dataSource.setValue(chartType?.item?.content);
   }
 
-  public copyKey(): void {}
+  public copyKey(): void {
+    this.document.defaultView.navigator.clipboard.writeText(this.key.value);
+    this.notificationService.showToast({
+      caption: this.translateService.instant('dashboardManagement.widgets.form.keyCopied'),
+      type: 'success',
+      duration: 4000,
+      showClose: true,
+      title: this.translateService.instant('dashboardManagement.widgets.form.keyCopiedTitle'),
+    });
+  }
 
   private setDropdownData(): void {
     this.setDataSourceItems();
