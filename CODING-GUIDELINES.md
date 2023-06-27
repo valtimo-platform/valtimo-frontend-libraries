@@ -60,7 +60,7 @@ Any properties with a constant reference, should be marked as readonly. For exam
 
 #### Constants
 
-All constant properties should be written in screaming snake case: `public readonly MY_VALUE = 'my value';'`
+All constant properties should be written in screaming snake case: `public readonly MY_VALUE = 'my value';`
 
 ### Property typing
 
@@ -114,13 +114,11 @@ As much possible, please keep to the following ordering of properties in Angular
 
 #### Sort properties by domain and alphabetically
 
-Properties and methods belonging to a certain logical domain should be bundled together within a class. The bundle
-itself should be sorted alphabetically. This is a recommended way of organizing a class, and can be deviated from if
-another way is more practical.
+Properties and methods belonging to a certain logical domain should be bundled together within a class. The bundle itself should be sorted alphabetically.
+This is a recommended way of organizing a class, and can be deviated from if another way is more practical.
 
-We recommend that logical grouping of methods takes precedence over grouping by access modifiers, since it is more likely
-that a developer will want to have easy access to methods relating to a certain domain, rather than methods with the same
-access modifier. Sorting by access modifier takes precedence over alphabetical sorting.
+We recommend that logical grouping of methods takes precedence over grouping by access modifiers, since it is more likely that a developer will want to have easy access to methods relating to a certain domain, rather than methods with the same access modifier.
+Sorting by access modifier takes precedence over alphabetical sorting.
 
 #### **`test.component.ts`**
 
@@ -128,7 +126,7 @@ access modifier. Sorting by access modifier takes precedence over alphabetical s
 ...
 
 /*
-methods relating to title are bundled together and sorted alphabetically.
+Methods relating to title are bundled together and sorted alphabetically.
 This takes precedence over sorting by access modifiers.
 The grouping by access modifier in turn takes precedence over alphabetical sorting.
 */
@@ -145,7 +143,7 @@ private compareTitle(title: string): void {
   ...
 }
 
-// methods relating to description are bundled together and sorted alphabetically
+// Methods relating to description are bundled together and sorted alphabetically
 
 private addDescription(description: string): void {
   ...
