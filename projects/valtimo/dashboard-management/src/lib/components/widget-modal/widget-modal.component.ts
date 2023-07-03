@@ -1,4 +1,12 @@
-import {Component, Inject, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {
+  Component,
+  Inject,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription} from 'rxjs';
 import {DashboardItem, WidgetModalType} from '../../models';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -11,6 +19,7 @@ import {DOCUMENT} from '@angular/common';
   selector: 'valtimo-widget-modal',
   templateUrl: './widget-modal.component.html',
   styleUrls: ['./widget-modal.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public showModal$: Observable<boolean>;
@@ -113,14 +122,26 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   public saveDashboard(): void {}
 
   public dataSourceSelected(dataSource: any): void {
+    if (!this.dataSource) {
+      return;
+    }
+
     this.dataSource.setValue(dataSource?.item?.content);
   }
 
   public chartTypeSelected(chartType: any): void {
+    if (!this.dataSource) {
+      return;
+    }
+
     this.dataSource.setValue(chartType?.item?.content);
   }
 
   public copyKey(): void {
+    if (!this.key || !this.document.defaultView) {
+      return;
+    }
+
     this.document.defaultView.navigator.clipboard.writeText(this.key.value);
     this.notificationService.showToast({
       caption: this.translateService.instant('dashboardManagement.widgets.form.keyCopied'),
@@ -153,8 +174,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
       dataSourceField: this.fb.control('', [Validators.required]),
     });
 
-    this.key.setValue('test-key');
-    this.key.disable();
+    this.key?.setValue('test-key');
   }
 
   private setEditDashboardForm(): void {
@@ -164,9 +184,9 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
       roles: this.fb.control([], [Validators.required]),
     });
 
-    this.dashboardTitle.setValue(this.dashboard.title);
-    this.dashboardDescription.setValue(this.dashboard.description);
-    this.dashboardRoles.setValue(this.dashboard.roles);
+    this.dashboardTitle?.setValue(this.dashboard.title);
+    this.dashboardDescription?.setValue(this.dashboard.description);
+    this.dashboardRoles?.setValue(this.dashboard.roles);
   }
 
   private openOpenSubscription(): void {

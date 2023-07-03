@@ -255,6 +255,10 @@
         "dashboardDescription": "Beschreibung (erforderlich)",
         "dashboardDescriptionHelperText": "*Beschreibung ist nur auf der Dashboard-Konfigurationsseite sichtbar",
         "roles": "Sichtweite"
+      },
+      "noResults": {
+        "description": "Klicken Sie auf <strong>Neues Widget hinzufügen</strong>, um mit der Gestaltung Ihres Dashboards zu beginnen. <br/> Ziehen Sie Ihre Widgets an die gewünschte Position.",
+        "title": "Keine Widgets hinzugefügt"
       }
     },
     "title": "Alle Dashboards"

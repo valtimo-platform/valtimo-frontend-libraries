@@ -256,6 +256,10 @@
         "dashboardDescription": "Description (required)",
         "dashboardDescriptionHelperText": "*Description is only visible in the dashboard configuration page",
         "roles": "Set visibility"
+      },
+      "noResults": {
+        "description": "Click <strong>Add new widget</strong> to start designing your dashboard. <br/> Drag your widgets to the desired position.",
+        "title": "No widgets added"
       }
     }
   },
