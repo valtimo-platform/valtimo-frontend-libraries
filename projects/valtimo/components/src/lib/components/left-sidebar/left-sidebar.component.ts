@@ -23,7 +23,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {combineLatest, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {ConfigService, MenuItem} from '@valtimo/config';
 import {MenuService} from '../menu/menu.service';
@@ -71,6 +71,7 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
   private lastLargeScreen!: boolean;
 
   readonly closestSequence$: Observable<string> = this.menuService.closestSequence$;
+  readonly overflowMenuSequence$ = new BehaviorSubject<string>('');
 
   constructor(
     private readonly translateService: TranslateService,
@@ -98,19 +99,41 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
   navigateToRoute(route: Array<string>, event: MouseEvent) {
     event.preventDefault();
 
-    this.router.navigate(route);
+    if (!event.ctrlKey && !event.metaKey) {
+      this.router.navigate(route);
 
-    combineLatest([
-      this.shellService.sideBarExpanded$,
-      this.shellService.largeScreen$,
-      this.shellService.collapsibleWidescreenMenu$,
-    ])
-      .pipe(take(1))
-      .subscribe(([sideBarExpanded, largeScreen, collapsibleWidescreenMenu]) => {
-        if ((!largeScreen || collapsibleWidescreenMenu) && sideBarExpanded) {
-          this.shellService.setSideBarExpanded(false);
-        }
-      });
+      combineLatest([
+        this.shellService.sideBarExpanded$,
+        this.shellService.largeScreen$,
+        this.shellService.collapsibleWidescreenMenu$,
+      ])
+        .pipe(take(1))
+        .subscribe(([sideBarExpanded, largeScreen, collapsibleWidescreenMenu]) => {
+          if ((!largeScreen || collapsibleWidescreenMenu) && sideBarExpanded) {
+            this.shellService.setSideBarExpanded(false);
+          }
+        });
+    }
+  }
+
+  onRightClick(sequence: string): boolean {
+    this.overflowMenuSequence$.next(sequence);
+
+    return false;
+  }
+
+  onOverflowMenuClosed(sequence: string): void {
+    this.overflowMenuSequence$.pipe(take(1)).subscribe(overflowMenuSequence => {
+      if (overflowMenuSequence === sequence) {
+        this.overflowMenuSequence$.next('');
+      }
+    });
+  }
+
+  openInNewTab(link: Array<string> | undefined): void {
+    const url = this.router.serializeUrl(this.router.createUrlTree(link || ['/']));
+
+    window.open(url, '_blank');
   }
 
   private openBreakpointSubscription(): void {
