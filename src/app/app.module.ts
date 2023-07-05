@@ -23,6 +23,7 @@ import {AppComponent} from './app.component';
 import {LayoutModule} from '@valtimo/layout';
 import {TaskModule} from '@valtimo/task';
 import {environment} from '../environments/environment';
+import {AccessControlModule} from '@valtimo/access-control';
 import {SecurityModule} from '@valtimo/security';
 import {
   BpmnJsDiagramModule,
@@ -154,6 +155,7 @@ export function tabsFactory() {
     ConfigModule.forRoot(environment),
     LoggerModule.forRoot(environment.logger),
     environment.authentication.module,
+    AccessControlModule,
     SecurityModule,
     MenuModule,
     TaskModule,

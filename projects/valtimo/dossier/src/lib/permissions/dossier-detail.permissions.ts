@@ -1,28 +1,17 @@
-import {PermissionRequestCollection} from '@valtimo/security';
+import {
+  PermissionRequestCollection,
+  PERMISSION_ACTION,
+  PERMISSION_RESOURCE,
+} from '@valtimo/access-control';
 
 enum DOSSIER_DETAIL_PERMISSIONS_KEYS {
-  canCreateCase,
-  canStartSubProcess,
-  canOpenSummaryTab,
-  canSearch,
+  canClaimCase,
 }
 
 const DOSSIER_DETAIL_PERMISSIONS: PermissionRequestCollection = {
-  [DOSSIER_DETAIL_PERMISSIONS_KEYS.canCreateCase]: {
-    action: 'canCreateCase',
-    context: {caseId: 'test'},
-  },
-  [DOSSIER_DETAIL_PERMISSIONS_KEYS.canOpenSummaryTab]: {
-    action: 'canOpenTab',
-    context: {tabId: 'summary'},
-  },
-  [DOSSIER_DETAIL_PERMISSIONS_KEYS.canStartSubProcess]: {
-    action: 'canStartSubProcess',
-    context: {caseId: 'test'},
-  },
-  [DOSSIER_DETAIL_PERMISSIONS_KEYS.canSearch]: {
-    action: 'canSearch',
-    context: {caseId: 'test'},
+  [DOSSIER_DETAIL_PERMISSIONS_KEYS.canClaimCase]: {
+    action: PERMISSION_ACTION.claim,
+    resource: PERMISSION_RESOURCE.domain,
   },
 };
 

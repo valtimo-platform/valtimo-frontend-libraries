@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
+import jwt_decode from 'jwt-decode';
+import {KeycloakService} from 'keycloak-angular';
 import {Observable, of, Subject, take, timer} from 'rxjs';
+import {fromPromise} from 'rxjs/internal/observable/innerFrom';
 import {
   CachedResolvedPermissions,
   PendingPermissions,
+  PermissionContext,
   PermissionRequestCollection,
   ResolvedPermissions,
 } from '../models';
 import {PermissionApiService} from './permission-api.service';
-import {KeycloakService} from 'keycloak-angular';
-import {fromPromise} from 'rxjs/internal/observable/innerFrom';
-import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -19,51 +20,53 @@ export class PermissionService {
   private readonly _pendingPermissions: PendingPermissions = {};
 
   constructor(
-    private readonly permissionApiService: PermissionApiService,
-    private readonly keyCloakService: KeycloakService
+    private readonly keyCloakService: KeycloakService,
+    private readonly permissionApiService: PermissionApiService
   ) {}
 
-  requestPermission(
+  public requestPermission(
     permissionRequestCollection: PermissionRequestCollection,
-    permissionRequestCollectionKey: number
+    permissionRequestCollectionKey: number,
+    context: PermissionContext
   ): Observable<boolean> {
-    const collectionKey = this.getCollectionKey(permissionRequestCollection);
-    const cachedResolvedPermissionCollection = this._cachedResolvedPermissions[collectionKey];
-    const pendingPermissionCollection = this._pendingPermissions[collectionKey];
+    const collectionKey: string = this.getCollectionKey(permissionRequestCollection);
+    const cachedResolvedPermissionCollection: {[permissionRequestCollectionKey: string]: boolean} =
+      this._cachedResolvedPermissions[collectionKey];
+    const pendingPermissionCollection: {
+      [permissionRequestCollectionKey: string]: Subject<boolean>;
+    } = this._pendingPermissions[collectionKey];
 
-    // return cached permission if available
     if (cachedResolvedPermissionCollection) {
-      console.log('return cached', permissionRequestCollectionKey);
-
       return of(cachedResolvedPermissionCollection[permissionRequestCollectionKey]);
-      // return observable if request is already pending
-    } else if (pendingPermissionCollection) {
-      console.log('return existing pending', permissionRequestCollectionKey);
-
-      return pendingPermissionCollection[permissionRequestCollectionKey];
-      // create new object of pending request observables and request permissions
-    } else {
-      this._pendingPermissions[collectionKey] = Object.keys(permissionRequestCollection).reduce(
-        (acc, permissionRequestCollectionKey) => {
-          return {...acc, [permissionRequestCollectionKey]: new Subject<boolean>()};
-        },
-        {}
-      );
-
-      this.requestPermissions(permissionRequestCollection, collectionKey);
-
-      console.log('return new pending', permissionRequestCollectionKey);
-
-      return this._pendingPermissions[collectionKey][permissionRequestCollectionKey].asObservable();
     }
+
+    if (pendingPermissionCollection) {
+      return pendingPermissionCollection[permissionRequestCollectionKey];
+    }
+
+    this._pendingPermissions[collectionKey] = Object.keys(permissionRequestCollection).reduce(
+      (acc: {[key: string]: Subject<boolean>}, key: string) => ({
+        ...acc,
+        [key]: new Subject<boolean>(),
+      }),
+      {}
+    );
+
+    permissionRequestCollection[permissionRequestCollectionKey] = {
+      ...permissionRequestCollection[permissionRequestCollectionKey],
+      context,
+    };
+    this.requestPermissions(permissionRequestCollection, collectionKey);
+
+    return this._pendingPermissions[collectionKey][permissionRequestCollectionKey].asObservable();
   }
 
   private requestPermissions(collection: PermissionRequestCollection, collectionKey: string): void {
     this.permissionApiService
       .resolvePermissionRequestCollection(collection)
       .pipe(take(1))
-      .subscribe(resolvedCollection => {
-        Object.keys(resolvedCollection).forEach(collectionPermissionKey => {
+      .subscribe((resolvedCollection: ResolvedPermissions) => {
+        Object.keys(resolvedCollection).forEach((collectionPermissionKey: string) => {
           this._pendingPermissions[collectionKey][collectionPermissionKey].next(
             resolvedCollection[collectionPermissionKey]
           );
@@ -77,7 +80,6 @@ export class PermissionService {
     collectionKey: string,
     resolvedPermissions: ResolvedPermissions
   ): void {
-    console.log('cache permissions', collectionKey, resolvedPermissions);
     this._cachedResolvedPermissions[collectionKey] = resolvedPermissions;
     this.openClearCacheSubscription(collectionKey);
   }
@@ -93,7 +95,6 @@ export class PermissionService {
           .pipe(take(1))
           .subscribe(() => {
             if (this._cachedResolvedPermissions[collectionKey]) {
-              console.log('clear cache', collectionKey);
               delete this._cachedResolvedPermissions[collectionKey];
               delete this._pendingPermissions[collectionKey];
             }
@@ -103,8 +104,10 @@ export class PermissionService {
 
   private getCollectionKey(requestCollection: PermissionRequestCollection): string {
     const input = JSON.stringify(requestCollection);
-    let hash = 0,
-      len = input.length;
+    const len = input.length;
+
+    let hash = 0;
+
     for (let i = 0; i < len; i++) {
       hash = (hash << 5) - hash + input.charCodeAt(i);
       hash |= 0; // to 32bit integer

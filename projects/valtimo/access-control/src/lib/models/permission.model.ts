@@ -1,13 +1,25 @@
 import {Subject} from 'rxjs';
 
-interface PermissionRequest {
-  action: string;
-  context: {
-    [key: string]: any;
-  };
+import {PERMISSION_ACTION, PERMISSION_RESOURCE} from './permission.types';
+
+interface PermissionContext {
+  identifier: string;
+  resource: PERMISSION_RESOURCE;
 }
+
+interface PermissionRequest {
+  action: PERMISSION_ACTION;
+  resource: PERMISSION_RESOURCE;
+  context?: PermissionContext;
+}
+
 interface PermissionRequestCollection {
   [key: string]: PermissionRequest;
+}
+
+interface PermissionResponse {
+  request: PermissionRequest;
+  available: boolean;
 }
 
 interface CachedResolvedPermissions {
@@ -27,9 +39,11 @@ interface ResolvedPermissions {
 }
 
 export {
+  CachedResolvedPermissions,
+  PendingPermissions,
+  PermissionContext,
   PermissionRequest,
   PermissionRequestCollection,
-  CachedResolvedPermissions,
+  PermissionResponse,
   ResolvedPermissions,
-  PendingPermissions,
 };

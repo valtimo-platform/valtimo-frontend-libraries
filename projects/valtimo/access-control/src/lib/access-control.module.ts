@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {AccessControlOverviewComponent} from './components/access-control-overview/access-control-overview.component';
 
-/*
- * Public API Surface of security
- */
-export * from './lib/guard/auth-guard.service';
-export * from './lib/security.module';
-export * from './lib/error/error';
-export * from './lib/error/error.component';
-export * from './lib/user-provider.service';
+@NgModule({
+  declarations: [AccessControlOverviewComponent],
+  imports: [CommonModule],
+  exports: [],
+})
+export class AccessControlModule {}
