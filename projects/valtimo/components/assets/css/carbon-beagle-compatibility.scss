@@ -174,10 +174,8 @@ body {
 .cds--overflow-menu-options--open {
   z-index: 10000;
 
-  &.--hide-after {
-    &:after {
-      display: none;
-    }
+  &.--hide-after:after {
+    display: none;
   }
 
   &.--wide {

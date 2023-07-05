@@ -16,9 +16,9 @@
 
 <ibm-sidenav
   *ngIf="{
-    sideBarExpanded: sideBarExpanded$ | async,
     closestSequence: closestSequence$ | async,
-    overflowMenuSequence: overflowMenuSequence$ | async
+    overflowMenuSequence: overflowMenuSequence$ | async,
+    sideBarExpanded: sideBarExpanded$ | async
   } as obs"
   [allowExpansion]="false"
   [expanded]="obs.sideBarExpanded"
