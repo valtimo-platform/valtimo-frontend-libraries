@@ -22,14 +22,17 @@
     <div class="menu-item-icon-container">
       <i class="{{ menuItem.iconClass }}"></i>
     </div>
+
     {{ obs.titleTranslation + (accent ? ' >' : '') }}
   </span>
+
   <ng-container *ngTemplateOutlet="overflowTrigger"></ng-container>
+
   <ibm-overflow-menu
-    [open]="showOverFlowMenu"
     [customTrigger]="overflowTrigger"
-    placement="bottom"
+    [open]="showOverFlowMenu"
     [offset]="{x: 75, y: 25}"
+    placement="bottom"
     wrapperClass="--hide-after --wide"
     (openChange)="onOpenChange($event)"
   >

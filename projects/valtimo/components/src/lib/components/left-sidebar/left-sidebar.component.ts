@@ -59,19 +59,15 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
   }
 
   public includeFunctionObservables: {[key: string]: Observable<boolean>} = {};
+  public readonly menuItems$: Observable<Array<MenuItem>> = this.menuService.menuItems$;
+  public readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
+  public readonly closestSequence$: Observable<string> = this.menuService.closestSequence$;
+  public readonly overflowMenuSequence$ = new BehaviorSubject<string>('');
 
-  private breakpointSubscription!: Subscription;
-
-  readonly menuItems$: Observable<Array<MenuItem>> = this.menuService.menuItems$;
-
-  readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
-
-  private breakpointsInitialized = false;
-  private lastSmallScreen!: boolean;
-  private lastLargeScreen!: boolean;
-
-  readonly closestSequence$: Observable<string> = this.menuService.closestSequence$;
-  readonly overflowMenuSequence$ = new BehaviorSubject<string>('');
+  private _breakpointSubscription!: Subscription;
+  private _breakpointsInitialized = false;
+  private _lastSmallScreen!: boolean;
+  private _lastLargeScreen!: boolean;
 
   constructor(
     private readonly translateService: TranslateService,
@@ -85,18 +81,18 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
     this.includeFunctionObservables = this.menuService.includeFunctionObservables;
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.openBreakpointSubscription();
     this.shellService.setSidenavElement(
       this.elementRef.nativeElement.querySelector('.cds--side-nav')
     );
   }
 
-  ngOnDestroy(): void {
-    this.breakpointSubscription?.unsubscribe();
+  public ngOnDestroy(): void {
+    this._breakpointSubscription?.unsubscribe();
   }
 
-  navigateToRoute(route: Array<string>, event: MouseEvent) {
+  public navigateToRoute(route: Array<string>, event: MouseEvent) {
     event.preventDefault();
 
     if (!event.ctrlKey && !event.metaKey) {
@@ -116,13 +112,13 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  onRightClick(sequence: string): boolean {
+  public onRightClick(sequence: string): boolean {
     this.overflowMenuSequence$.next(sequence);
 
     return false;
   }
 
-  onOverflowMenuClosed(sequence: string): void {
+  public onOverflowMenuClosed(sequence: string): void {
     this.overflowMenuSequence$.pipe(take(1)).subscribe(overflowMenuSequence => {
       if (overflowMenuSequence === sequence) {
         this.overflowMenuSequence$.next('');
@@ -130,7 +126,7 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  openInNewTab(link: Array<string> | undefined): void {
+  public openInNewTab(link: Array<string> | undefined): void {
     const url = this.router.serializeUrl(this.router.createUrlTree(link || ['/']));
 
     window.open(url, '_blank');
@@ -151,24 +147,24 @@ export class LeftSidebarComponent implements AfterViewInit, OnDestroy {
             const smallScreen = breakpoints[breakpointKeys[0]];
             const largeScreen = breakpoints[breakpointKeys[1]];
 
-            if (!this.breakpointsInitialized) {
+            if (!this._breakpointsInitialized) {
               if (smallScreen || collapsibleWidescreenMenu) {
                 this.shellService.collapseSideBar();
               }
-              this.breakpointsInitialized = true;
+              this._breakpointsInitialized = true;
             }
 
             if (!collapsibleWidescreenMenu) {
               if (
-                (this.lastSmallScreen && largeScreen && !sideBarExpanded) ||
-                (this.lastLargeScreen && smallScreen && sideBarExpanded)
+                (this._lastSmallScreen && largeScreen && !sideBarExpanded) ||
+                (this._lastLargeScreen && smallScreen && sideBarExpanded)
               ) {
                 this.shellService.toggleSideBar();
               }
             }
 
-            this.lastSmallScreen = smallScreen;
-            this.lastLargeScreen = largeScreen;
+            this._lastSmallScreen = smallScreen;
+            this._lastLargeScreen = largeScreen;
             this.shellService.setLargeScreen(largeScreen);
           });
       });

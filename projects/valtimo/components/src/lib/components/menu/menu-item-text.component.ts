@@ -30,13 +30,13 @@ export class MenuItemTextComponent {
   @Output() overflowMenuClosed = new EventEmitter<any>();
   @Output() openInNewTab = new EventEmitter<any>();
 
-  onOpenChange(open: boolean): void {
+  public onOpenChange(open: boolean): void {
     if (!open) {
       this.overflowMenuClosed.emit();
     }
   }
 
-  onSelectOpenInNewTab(): void {
+  public onSelectOpenInNewTab(): void {
     this.openInNewTab.emit();
   }
 }
