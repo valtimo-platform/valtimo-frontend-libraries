@@ -112,10 +112,10 @@
           (includeFunctionObservables[menuItem.title] | async)
       }"
       [active]="vars.sequence === closestSequence"
-      href="javascript:void(0)"
       (click)="navigateToRoute(menuItem.link, $event)"
       (contextmenu)="onRightClick(vars.sequence)"
       (ctrl-click)="openInNewTab(menuItem.link.link)"
+      href="javascript:void(0)"
     >
       <valtimo-menu-item-text
         [menuItem]="menuItem"
