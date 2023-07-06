@@ -21,6 +21,7 @@
           <div
             *ngIf="{
               canClaim: canClaim$ | async,
+              canAssign: canAssign$ | async,
               canHaveAssignee: canHaveAssignee$ | async,
               document: document$ | async
             } as obs"
