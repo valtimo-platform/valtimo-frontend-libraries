@@ -1,15 +1,13 @@
 import {Subject} from 'rxjs';
 
-import {PERMISSION_ACTION, PERMISSION_RESOURCE} from './permission.types';
-
 interface PermissionContext {
   identifier: string;
-  resource: PERMISSION_RESOURCE;
+  resource: string;
 }
 
 interface PermissionRequest {
-  action: PERMISSION_ACTION;
-  resource: PERMISSION_RESOURCE;
+  action: string;
+  resource: string;
   context?: PermissionContext;
 }
 

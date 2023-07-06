@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
-import {map, Observable, tap} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {
   PermissionRequest,
   PermissionRequestCollection,
@@ -16,7 +16,7 @@ export class PermissionApiService {
   private valtimoEndpointUri: string;
 
   constructor(private readonly http: HttpClient, private readonly configService: ConfigService) {
-    this.valtimoEndpointUri = `${this.configService.config.valtimoApi.endpointUri}v1/permissions`;
+    this.valtimoEndpointUri = this.configService.config.valtimoApi.endpointUri;
   }
 
   public resolvePermissionRequestCollection(
@@ -38,6 +38,9 @@ export class PermissionApiService {
   }
 
   public requestPermission(request: PermissionRequest[]): Observable<PermissionResponse[]> {
-    return this.http.post<PermissionResponse[]>(this.valtimoEndpointUri, request);
+    return this.http.post<PermissionResponse[]>(
+      `${this.valtimoEndpointUri}v1/permissions`,
+      request
+    );
   }
 }

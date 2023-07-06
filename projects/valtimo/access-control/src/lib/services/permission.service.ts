@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import jwt_decode from 'jwt-decode';
 import {KeycloakService} from 'keycloak-angular';
+import {NGXLogger} from 'ngx-logger';
 import {Observable, of, Subject, take, timer} from 'rxjs';
 import {fromPromise} from 'rxjs/internal/observable/innerFrom';
 import {
@@ -21,6 +22,7 @@ export class PermissionService {
 
   constructor(
     private readonly keyCloakService: KeycloakService,
+    private readonly logger: NGXLogger,
     private readonly permissionApiService: PermissionApiService
   ) {}
 
@@ -37,10 +39,20 @@ export class PermissionService {
     } = this._pendingPermissions[collectionKey];
 
     if (cachedResolvedPermissionCollection) {
+      this.logger.debug(
+        'cached permissions',
+        permissionRequestCollection[permissionRequestCollectionKey]
+      );
+
       return of(cachedResolvedPermissionCollection[permissionRequestCollectionKey]);
     }
 
     if (pendingPermissionCollection) {
+      this.logger.debug(
+        'existing pending permissions',
+        permissionRequestCollection[permissionRequestCollectionKey]
+      );
+
       return pendingPermissionCollection[permissionRequestCollectionKey];
     }
 
@@ -57,6 +69,11 @@ export class PermissionService {
       context,
     };
     this.requestPermissions(permissionRequestCollection, collectionKey);
+
+    this.logger.debug(
+      'new pending permission',
+      permissionRequestCollection[permissionRequestCollectionKey]
+    );
 
     return this._pendingPermissions[collectionKey][permissionRequestCollectionKey].asObservable();
   }

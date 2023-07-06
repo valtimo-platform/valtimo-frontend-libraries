@@ -18,6 +18,5 @@
  * Public API Surface of access-control
  */
 
-export * from './lib/access-control.module';
 export * from './lib/models';
 export * from './lib/services';

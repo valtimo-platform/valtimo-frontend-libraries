@@ -24,7 +24,7 @@ import {
 } from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {PERMISSION_RESOURCE, PermissionService} from '@valtimo/access-control';
+import {PermissionService} from '@valtimo/access-control';
 import {BreadcrumbService} from '@valtimo/components';
 import {ConfigService, DossierListTab} from '@valtimo/config';
 import {Document, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
@@ -46,7 +46,11 @@ import {
 
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {TabLoaderImpl} from '../models';
-import {DOSSIER_DETAIL_PERMISSIONS, DOSSIER_DETAIL_PERMISSIONS_KEYS} from '../permissions';
+import {
+  DOSSIER_DETAIL_PERMISSION_RESOURCE,
+  DOSSIER_DETAIL_PERMISSIONS,
+  DOSSIER_DETAIL_PERMISSIONS_KEYS,
+} from '../permissions';
 import {TabService} from '../tab.service';
 
 @Component({
@@ -133,7 +137,7 @@ export class DossierDetailComponent implements OnInit, OnDestroy {
         DOSSIER_DETAIL_PERMISSIONS,
         DOSSIER_DETAIL_PERMISSIONS_KEYS.canClaimCase,
         {
-          resource: PERMISSION_RESOURCE.domain,
+          resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.domain,
           identifier: params.get('documentId') ?? '',
         }
       )
