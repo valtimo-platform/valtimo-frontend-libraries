@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import jwt_decode from 'jwt-decode';
 import {KeycloakService} from 'keycloak-angular';
 import {NGXLogger} from 'ngx-logger';
-import {Observable, of, Subject, Subscription, switchMap, take, tap, timer} from 'rxjs';
+import {Observable, of, Subject, Subscription, switchMap, take, timer} from 'rxjs';
 import {fromPromise} from 'rxjs/internal/observable/innerFrom';
 import {
   CachedResolvedPermissions,
@@ -79,34 +79,30 @@ export class PermissionService {
   }
 
   private openQueueSubscription(): void {
-    this._permissionQueueSubscription = timer(this.QUEUE_COLLECTION_PERIOD_MS)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.logger.debug('Permissions: queue timer finished');
-        this.logger.debug('Permissions: unsubscribe from queue timer');
-        this._permissionQueueSubscription?.unsubscribe();
+    this._permissionQueueSubscription = timer(this.QUEUE_COLLECTION_PERIOD_MS).subscribe(() => {
+      this.logger.debug('Permissions: queue timer finished');
 
-        const queueCopy = [...this._permissionRequestQueue];
+      const queueCopy = [...this._permissionRequestQueue];
 
-        this.emptyQueue();
+      this.emptyQueue();
 
-        this.permissionApiService
-          .resolvePermissionRequestQueue(queueCopy)
-          .pipe(take(1))
-          .subscribe(resolvedPermissions => {
-            Object.keys(resolvedPermissions).forEach(permissionRequestKey => {
-              this._pendingPermissions[permissionRequestKey].next(
-                resolvedPermissions[permissionRequestKey]
-              );
-              this.logger.debug(
-                `Permissions: resolved pending permission request ${permissionRequestKey}`,
-                resolvedPermissions[permissionRequestKey]
-              );
-            });
-
-            this.cacheResolvedPermissions(resolvedPermissions);
+      this.permissionApiService
+        .resolvePermissionRequestQueue(queueCopy)
+        .pipe(take(1))
+        .subscribe(resolvedPermissions => {
+          Object.keys(resolvedPermissions).forEach(permissionRequestKey => {
+            this._pendingPermissions[permissionRequestKey].next(
+              resolvedPermissions[permissionRequestKey]
+            );
+            this.logger.debug(
+              `Permissions: resolved pending permission request ${permissionRequestKey}`,
+              resolvedPermissions[permissionRequestKey]
+            );
           });
-      });
+
+          this.cacheResolvedPermissions(resolvedPermissions);
+        });
+    });
   }
 
   private cacheResolvedPermissions(resolvedPermissions: ResolvedPermissions): void {
@@ -129,14 +125,12 @@ export class PermissionService {
           const tokenExp = (jwt_decode(token) as any).exp * 1000;
           const expiryTime = tokenExp - Date.now() - 1000;
           return timer(expiryTime);
-        }),
-        tap(() => {
-          this.clearPending();
-          this.clearCache();
-          this._clearCacheSubscription?.unsubscribe();
         })
       )
-      .subscribe();
+      .subscribe(() => {
+        this.clearPending();
+        this.clearCache();
+      });
   }
 
   private emptyQueue(): void {
