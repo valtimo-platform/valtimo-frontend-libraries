@@ -582,7 +582,8 @@
     "collapse": "Kollaps",
     "expand": "Expandieren",
     "download": "Herunterladen",
-    "openInNewTab": "In neuem Tab öffnen"
+    "openInNewTab": "In neuem Tab öffnen",
+    "required": "erforderlich"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",

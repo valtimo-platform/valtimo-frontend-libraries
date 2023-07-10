@@ -582,7 +582,8 @@
     "collapse": "Inklappen",
     "expand": "Uitklappen",
     "download": "Download",
-    "openInNewTab": "In nieuw tabblad openen"
+    "openInNewTab": "In nieuw tabblad openen",
+    "required": "vereist"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",

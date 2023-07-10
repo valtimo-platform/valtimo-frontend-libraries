@@ -39,9 +39,9 @@
 
 <ng-template #textInput>
   <input
+    ibmText
     *ngIf="isText"
     type="text"
-    class="v-input"
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
@@ -62,7 +62,7 @@
 <ng-template #textareaInput>
   <textarea
     *ngIf="isTextarea"
-    class="v-input"
+    ibmTextArea
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
@@ -91,7 +91,7 @@
     >
       <input
         [type]="obs.showPassword ? 'text' : 'password'"
-        class="v-input"
+        ibmText
         [ngClass]="{
           'v-input--full-width': fullWidth
         }"
@@ -120,7 +120,7 @@
   <input
     *ngIf="isNumber"
     type="number"
-    class="v-input"
+    ibmText
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
@@ -143,7 +143,7 @@
   <input
     *ngIf="isDigitOnly"
     type="text"
-    class="v-input"
+    ibmText
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,

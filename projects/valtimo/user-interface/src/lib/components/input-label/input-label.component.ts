@@ -15,6 +15,8 @@
  */
 
 import {Component, Input} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 
 @Component({
   selector: 'v-input-label',
@@ -23,10 +25,38 @@ import {Component, Input} from '@angular/core';
 })
 export class InputLabelComponent {
   @Input() name = '';
-  @Input() title = '';
-  @Input() titleTranslationKey = '';
+  @Input() set title(value: string) {
+    this._title$.next(value);
+  }
+  @Input() set titleTranslationKey(value: string) {
+    this._titleTranslationKey$.next(value);
+  }
+  @Input() set required(value: boolean) {
+    this._required$.next(value);
+  }
   @Input() tooltip = '';
-  @Input() required = false;
   @Input() largeMargin = false;
   @Input() small = false;
+  @Input() disabled = false;
+
+  private readonly _title$ = new BehaviorSubject<string>('');
+  private readonly _titleTranslationKey$ = new BehaviorSubject<string>('');
+  private readonly _required$ = new BehaviorSubject<boolean>(false);
+
+  public readonly displayTitle$: Observable<string> = combineLatest([
+    this._title$,
+    this._titleTranslationKey$,
+    this._required$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([title, translationKey, required]) => {
+      const displayTitle = translationKey ? this.translateService.instant(translationKey) : title;
+
+      return required
+        ? `${displayTitle} (${this.translateService.instant('interface.required')})`
+        : displayTitle;
+    })
+  );
+
+  constructor(private readonly translateService: TranslateService) {}
 }

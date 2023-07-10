@@ -20,10 +20,19 @@ import {FormsModule} from '@angular/forms';
 import {InputLabelComponent} from './input-label.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {TooltipModule} from '../../directives';
+import {TooltipIconModule} from '../tooltip-icon/tooltip-icon.module';
+import {InputModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [InputLabelComponent],
-  imports: [CommonModule, TranslateModule, FormsModule, TooltipModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    FormsModule,
+    TooltipModule,
+    InputModule,
+    TooltipIconModule,
+  ],
   exports: [InputLabelComponent],
 })
 export class InputLabelModule {}
