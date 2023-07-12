@@ -25,7 +25,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {SelectedValue, SelectItem} from '../../models';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable, Subscription, combineLatest, map} from 'rxjs';
+import {ListItem} from 'carbon-components-angular';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'v-select',
@@ -33,7 +35,14 @@ import {BehaviorSubject, Observable, Subscription} from 'rxjs';
   styleUrls: ['./select.component.scss'],
 })
 export class SelectComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() items: Array<SelectItem> = [];
+  @Input() set items(value: Array<SelectItem>) {
+    this._listItems$.next(
+      value.map(
+        item =>
+          ({content: item.text || item.translationKey, id: item.id, selected: false} as ListItem)
+      )
+    );
+  }
   @Input() defaultSelection!: SelectItem;
   @Input() defaultSelectionId!: string;
   @Input() defaultSelectionIds!: Array<string>;
@@ -58,10 +67,33 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
   @Output() selectedChange: EventEmitter<SelectedValue> = new EventEmitter();
   @Output() clear: EventEmitter<any> = new EventEmitter();
 
-  selected$ = new BehaviorSubject<SelectedValue>('');
+  public readonly selected$ = new BehaviorSubject<SelectedValue>('');
+  private readonly _listItems$ = new BehaviorSubject<Array<ListItem>>([]);
 
-  private selectedSubscription!: Subscription;
-  private clearSubjectSubscription!: Subscription;
+  public readonly listItems$ = combineLatest([
+    this._listItems$,
+    this.selected$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([listItems, selected]) =>
+      listItems.map(listItem => {
+        const translation = this.translateService.instant(listItem.content);
+        const isSelected: boolean = Array.isArray(selected)
+          ? selected.includes(listItem.id)
+          : selected === listItem.id;
+
+        return {
+          ...listItem,
+          selected: isSelected,
+          content: translation !== listItem.content ? translation : listItem.content,
+        };
+      })
+    )
+  );
+  private _selectedSubscription!: Subscription;
+  private _clearSubjectSubscription!: Subscription;
+
+  constructor(private readonly translateService: TranslateService) {}
 
   setSelectedValue(selectedValue: SelectedValue): void {
     this.selected$.next(selectedValue);
@@ -85,8 +117,8 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.selectedSubscription?.unsubscribe();
-    this.clearSubjectSubscription?.unsubscribe();
+    this._selectedSubscription?.unsubscribe();
+    this._clearSubjectSubscription?.unsubscribe();
   }
 
   clearSelection(): void {
@@ -117,7 +149,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private openSelectedSubscription(): void {
-    this.selectedSubscription = this.selected$.subscribe(selectedValue => {
+    this._selectedSubscription = this.selected$.subscribe(selectedValue => {
       const defaultSelectionId = this.defaultSelection?.id || this.defaultSelectionId;
 
       if ((!this.multiple && selectedValue !== defaultSelectionId) || this.multiple) {
@@ -128,7 +160,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
 
   private openClearSubjectSubscription(): void {
     if (this.clearSelectionSubject$) {
-      this.clearSubjectSubscription = this.clearSelectionSubject$.subscribe(() => {
+      this._clearSubjectSubscription = this.clearSelectionSubject$.subscribe(() => {
         if (this.multiple) {
           this.setSelectedValue([]);
         } else {
