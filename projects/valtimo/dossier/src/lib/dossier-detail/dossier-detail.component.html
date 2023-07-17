@@ -146,6 +146,9 @@
 <ng-template #caseDetailAssignee let-canHaveAssignee="canHaveAssignee" let-document="document">
   <div class="row ml-0 mr-0 mt-1 mb-1" *ngIf="canHaveAssignee && document">
     <valtimo-dossier-assign-user
+      *ngIf="canAssignLoaded$ | async"
+      [assigneeFullName]="document?.assigneeFullName"
+      [assigneeId]="document.assigneeId"
       [documentId]="document.id"
       [assigneeId]="document.assigneeId"
       [assigneeFullName]="document?.assigneeFullName"
