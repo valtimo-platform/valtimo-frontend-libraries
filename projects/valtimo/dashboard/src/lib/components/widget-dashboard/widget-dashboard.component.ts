@@ -16,6 +16,8 @@
 
 import {Component} from '@angular/core';
 import {DashboardService} from '../../services';
+import {Dashboard} from '../../models';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'valtimo-widget-dashboard',
@@ -23,9 +25,7 @@ import {DashboardService} from '../../services';
   styleUrls: ['./widget-dashboard.component.css'],
 })
 export class WidgetDashboardComponent {
-  public dashboards$ = this.dashboardService.getDashboards()
+  public dashboards$: Observable<Array<Dashboard>> = this.dashboardService.getDashboards();
 
-  constructor(
-    private readonly dashboardService: DashboardService
-  ) {}
+  constructor(private readonly dashboardService: DashboardService) {}
 }

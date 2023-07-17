@@ -17,22 +17,20 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Dashboard} from '../models';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '@valtimo/config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
-  private valtimoApiConfig: any;
+  private endpointUri: String;
 
-  constructor(private http: HttpClient, private configService: ConfigService) {
-    this.valtimoApiConfig = configService.config.valtimoApi;
+  constructor(private readonly http: HttpClient, private readonly configService: ConfigService) {
+    this.endpointUri = configService.config.valtimoApi.endpointUri;
   }
 
   public getDashboards(): Observable<Array<Dashboard>> {
-    return this.http.get<Array<Dashboard>>(
-      `${this.valtimoApiConfig.endpointUri}v1/dashboard`
-    );
+    return this.http.get<Array<Dashboard>>(`${this.endpointUri}v1/dashboard`);
   }
 }
