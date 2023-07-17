@@ -16,6 +16,6 @@
 
 import {PluginConfigurationData} from '../../../models';
 
-interface ObjectManagementConfig extends PluginConfigurationData {}
+type ObjectManagementConfig = PluginConfigurationData
 
 export {ObjectManagementConfig};
