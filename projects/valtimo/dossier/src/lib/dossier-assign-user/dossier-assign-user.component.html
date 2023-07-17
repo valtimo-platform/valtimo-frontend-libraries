@@ -33,6 +33,7 @@
     <ng-container *ngIf="!hasPermission && obs.assigneeFullName">
       <ng-container *ngTemplateOutlet="fullName; context: {obs: obs}"></ng-container>
     </ng-container>
+
     <ng-container *ngIf="hasPermission">
       <ng-container *ngTemplateOutlet="selectUser; context: {obs: obs}"></ng-container>
     </ng-container>
@@ -45,13 +46,13 @@
     [clearSelectionButtonTitle]="'assignDocument.remove' | translate"
     [hasPermission]="false"
     [hasSelection]="true"
-    id="dossier-candidates-dropdown"
     [noResultsText]="'interface.noSearchResults' | translate"
     [searchText]="'interface.typeToSearch' | translate"
     [selectedTextValue]="obs.assigneeFullName"
     [selectedText]="'assignDocument.assignedTo' | translate"
     [style]="'underlinedText'"
     [width]="250"
+    class="dossier-candidates-dropdown"
   >
   </valtimo-searchable-dropdown-select>
 </ng-template>
@@ -59,14 +60,11 @@
 <ng-template #selectUser let-obs="obs">
   <ng-container *ngIf="userItems$ | async as userItems; else loadingUsers">
     <valtimo-searchable-dropdown-select
-      (clearSelection)="unassignDocument()"
-      (itemSelected)="assignDocument($event)"
       [buttonText]="'assignDocument.header' | translate"
       [clearSelectionButtonTitle]="'assignDocument.remove' | translate"
       [disabled]="obs.disabled"
       [hasPermission]="hasPermission"
       [hasSelection]="obs.assigneeId"
-      id="dossier-candidates-dropdown"
       [items]="userItems"
       [noResultsText]="'interface.noSearchResults' | translate"
       [searchText]="'interface.typeToSearch' | translate"
@@ -74,6 +72,9 @@
       [selectedText]="'assignDocument.assignedTo' | translate"
       [style]="'underlinedText'"
       [width]="250"
+      (clearSelection)="unassignDocument()"
+      (itemSelected)="assignDocument($event)"
+      class="dossier-candidates-dropdown"
     >
     </valtimo-searchable-dropdown-select>
   </ng-container>

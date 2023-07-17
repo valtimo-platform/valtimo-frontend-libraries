@@ -69,29 +69,23 @@ export class DossierAssignUserComponent {
 
     this.documentId$
       .pipe(
-        take(1),
-        switchMap(documentId => this.documentService.assignHandlerToDocument(documentId, userId)),
-        tap(res => {
-          this.emitChange();
-          this.enable();
-        })
+        switchMap(documentId => this.documentService.assignHandlerToDocument(documentId, userId))
       )
-      .subscribe();
+      .subscribe(() => {
+        this.emitChange();
+        this.enable();
+      });
   }
 
   public unassignDocument(): void {
     this.disable();
 
     this.documentId$
-      .pipe(
-        take(1),
-        switchMap(documentId => this.documentService.unassignHandlerFromDocument(documentId)),
-        tap(() => {
-          this.emitChange();
-          this.enable();
-        })
-      )
-      .subscribe();
+      .pipe(switchMap(documentId => this.documentService.unassignHandlerFromDocument(documentId)))
+      .subscribe(() => {
+        this.emitChange();
+        this.enable();
+      });
   }
 
   private mapUsersForDropdown(users: User[]): DropdownItem[] {
