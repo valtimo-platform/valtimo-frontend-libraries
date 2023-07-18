@@ -117,7 +117,7 @@ import {
 } from '@valtimo/plugin';
 import {ObjectManagementModule} from '@valtimo/object-management';
 import {ObjectModule} from '@valtimo/object';
-import {AccessControlModule} from '@valtimo/access-control';
+import {AccessControlManagementModule} from '@valtimo/access-control-management';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -149,7 +149,6 @@ export function tabsFactory() {
     BrowserModule,
     AppRoutingModule,
     LayoutModule,
-    AccessControlModule,
     CardModule,
     WidgetModule,
     BootstrapModule,
@@ -216,6 +215,7 @@ export function tabsFactory() {
     }),
     ObjectModule,
     ObjectManagementModule,
+    AccessControlManagementModule,
   ],
   providers: [
     FormioComponent,
