@@ -18,7 +18,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ROLE_ADMIN} from '@valtimo/config';
 import {AuthGuardService} from '@valtimo/security';
-
 import {AccessControlOverviewComponent} from './components/overview/access-control-overview.component';
 
 const routes: Routes = [
@@ -34,4 +33,4 @@ const routes: Routes = [
   imports: [CommonModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AccessControlRoutingModule {}
+export class AccessControlManagementRoutingModule {}

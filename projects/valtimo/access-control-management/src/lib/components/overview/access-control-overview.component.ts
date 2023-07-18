@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {CarbonTableConfig, ColumnType, createCarbonTableConfig} from '@valtimo/components';
 import {BehaviorSubject, finalize, Observable} from 'rxjs';
-
 import {Role} from '../../models';
 import {AccessControlService} from '../../services/access-control.service';
 
