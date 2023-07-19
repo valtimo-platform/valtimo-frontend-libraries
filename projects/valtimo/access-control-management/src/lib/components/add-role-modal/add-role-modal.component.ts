@@ -34,10 +34,7 @@ export class AddRoleModalComponent implements OnInit {
 
   public onCancel(): void {
     this.close.emit(null);
-
-    setTimeout(() => {
-      this.form.reset();
-    }, 240);
+    this.resetForm();
   }
 
   public onConfirm(): void {
@@ -48,5 +45,12 @@ export class AddRoleModalComponent implements OnInit {
     }
 
     this.close.emit({roleKey: nameControl.value});
+    this.resetForm();
+  }
+
+  private resetForm(): void {
+    setTimeout(() => {
+      this.form.reset();
+    }, 240);
   }
 }
