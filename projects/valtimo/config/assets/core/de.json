@@ -1183,7 +1183,8 @@
       "title": "Alle Rollen",
       "key": "Rollschlüssel",
       "add": "Neue Rolle hinzufügen",
-      "name": "Rollenname"
+      "name": "Rollenname",
+      "deleteModalContent": "Sind Sie sicher, dass Sie diese Rollen und alle untergeordneten Berechtigungen entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
     }
   }
 }

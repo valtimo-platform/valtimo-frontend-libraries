@@ -16,7 +16,7 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
-import {CarbonTableModule} from '@valtimo/components';
+import {CarbonTableModule, ConfirmationModalModule} from '@valtimo/components';
 import {AccessControlManagementRoutingModule} from './access-control-management-routing.module';
 import {AccessControlOverviewComponent} from './components/overview/access-control-overview.component';
 import {AddRoleModalComponent} from './components/add-role-modal/add-role-modal.component';
@@ -36,6 +36,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     ReactiveFormsModule,
     InputModule,
     IconModule,
+    ConfirmationModalModule,
   ],
 })
 export class AccessControlManagementModule {}

@@ -15,12 +15,14 @@
   (close)="onAdd($event)"
 ></valtimo-add-role-modal>
 
-<!-- <valtimo-confirmation-modal
+<button (click)="showDeleteModal()">delete</button>
+
+<valtimo-confirmation-modal
   [outputOnConfirm]="deleteRowKey$ | async"
   [showModalSubject$]="showDeleteModal$"
-  (confirmEvent)="onConfirmEvent($event)"
-  confirmButtonTextTranslationKey="common.confirm"
+  (confirmEvent)="onDelete($event)"
+  confirmButtonTextTranslationKey="interface.delete"
   confirmButtonType="danger"
-  contentTranslationKey="dashboardManagement.deleteModalContent"
-  titleTranslationKey="common.delete"
-></valtimo-confirmation-modal> -->
+  contentTranslationKey="accessControl.roles.deleteModalContent"
+  titleTranslationKey="interface.delete"
+></valtimo-confirmation-modal>

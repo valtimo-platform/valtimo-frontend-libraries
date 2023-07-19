@@ -1184,7 +1184,8 @@
       "title": "Alle rollen",
       "key": "Rolsleutel",
       "add": "Nieuwe rol toevoegen",
-      "name": "Rolnaam"
+      "name": "Rolnaam",
+      "deleteModalContent": "Weet u zeker dat u deze rollen en alle onderliggende machtigingen wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden."
     }
   }
 }
