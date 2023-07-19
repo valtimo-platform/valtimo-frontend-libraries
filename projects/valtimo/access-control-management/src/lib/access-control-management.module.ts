@@ -22,9 +22,14 @@ import {AccessControlOverviewComponent} from './components/overview/access-contr
 import {AddRoleModalComponent} from './components/add-role-modal/add-role-modal.component';
 import {ButtonModule, IconModule, InputModule, ModalModule} from 'carbon-components-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AccessControlEditorComponent} from './components/editor/access-control-editor.component';
 
 @NgModule({
-  declarations: [AccessControlOverviewComponent, AddRoleModalComponent],
+  declarations: [
+    AccessControlOverviewComponent,
+    AddRoleModalComponent,
+    AccessControlEditorComponent,
+  ],
   imports: [
     AccessControlManagementRoutingModule,
     ButtonModule,

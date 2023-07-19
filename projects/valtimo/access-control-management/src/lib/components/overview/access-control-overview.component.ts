@@ -9,7 +9,7 @@ import {AccessControlService} from '../../services/access-control.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccessControlOverviewComponent implements OnInit {
-  public tableConfig: CarbonTableConfig = createCarbonTableConfig({
+  public readonly tableConfig: CarbonTableConfig = createCarbonTableConfig({
     fields: [
       {
         columnType: ColumnType.TEXT,
@@ -68,6 +68,10 @@ export class AccessControlOverviewComponent implements OnInit {
         })
       )
     );
+  }
+
+  public onRowClick(event: any): void {
+    console.log(event);
   }
 
   private enableSkeleton(): void {

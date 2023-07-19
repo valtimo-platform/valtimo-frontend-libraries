@@ -1,4 +1,4 @@
-<valtimo-carbon-table [data]="roles$ | async" [tableConfig]="tableConfig">
+<valtimo-carbon-table [data]="roles$ | async" [tableConfig]="tableConfig" (rowClick)="onRowClick($event)">
   <ng-container carbonTableTitle> {{ 'accessControl.roles.title' | translate }} </ng-container>
 
   <div carbonToolbarContent>

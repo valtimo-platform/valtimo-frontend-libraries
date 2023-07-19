@@ -6,8 +6,9 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Role} from '../../models';
+import {CARBON_CONSTANTS} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-add-role-modal',
@@ -51,6 +52,6 @@ export class AddRoleModalComponent implements OnInit {
   private resetForm(): void {
     setTimeout(() => {
       this.form.reset();
-    }, 240);
+    }, CARBON_CONSTANTS.modalAnimationMs);
   }
 }
