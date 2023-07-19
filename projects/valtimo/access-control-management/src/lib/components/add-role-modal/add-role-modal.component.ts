@@ -20,6 +20,10 @@ export class AddRoleModalComponent implements OnInit {
 
   public form: FormGroup;
 
+  get key() {
+    return this.form.get('key');
+  }
+
   constructor(private readonly fb: FormBuilder) {}
 
   public ngOnInit(): void {
@@ -30,6 +34,10 @@ export class AddRoleModalComponent implements OnInit {
 
   public onCancel(): void {
     this.close.emit(null);
+
+    setTimeout(() => {
+      this.form.reset();
+    }, 240);
   }
 
   public onConfirm(): void {

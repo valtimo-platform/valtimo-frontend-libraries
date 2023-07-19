@@ -25,7 +25,7 @@ const routes: Routes = [
     path: 'access-control',
     component: AccessControlOverviewComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Access Control Overview', roles: [ROLE_ADMIN]},
+    data: {title: 'Access control', roles: [ROLE_ADMIN]},
   },
 ];
 

@@ -12,7 +12,7 @@
 
   <section ibmModalContent>
     <form [formGroup]="form">
-      <ibm-label [invalid]="form.invalid">
+      <ibm-label [invalid]="key.dirty && key.invalid">
         {{ 'accessControl.roles.name' | translate }}
 
         <input
@@ -20,7 +20,7 @@
           ibmText
           placeholder="{{ 'accessControl.roles.name' | translate }}"
           [attr.modal-primary-focus]="true"
-          [invalid]="form.invalid"
+          [invalid]="key.dirty && key.invalid"
         />
       </ibm-label>
     </form>
@@ -28,11 +28,11 @@
 
   <ibm-modal-footer>
     <button ibmButton="ghost" (click)="onCancel()">
-      {{ 'common.cancel' | translate }}
+      {{ 'interface.cancel' | translate }}
     </button>
 
     <button [disabled]="this.form.invalid" (click)="onConfirm()" ibmButton="primary">
-      {{ 'common.create' | translate }}
+      {{ 'interface.create' | translate }}
     </button>
   </ibm-modal-footer>
 </ibm-modal>
