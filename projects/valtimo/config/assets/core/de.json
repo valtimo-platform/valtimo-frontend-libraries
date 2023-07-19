@@ -589,7 +589,8 @@
       "ofLastPages": "von {{last}} Seiten",
       "singleSelect": "1 Element ausgewählt",
       "totalItems": "{{start}}-{{end}} von {{total}} Objekte"
-    }
+    },
+    "create": "Erstellen"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",
@@ -1183,5 +1184,14 @@
     "plugin": "Es sind keine Plugin-Konfigurationen verfügbar. Erstellen Sie eine Plugin-Konfiguration, um sie mit einem Prozessschritt verknüpfen zu können.",
     "form": "Es sind keine Formulare vorhanden. Erstellen Sie ein Formular, um es mit einem Prozessschritt verknüpfen zu können.",
     "form-flow": "Es sind keine FormFlows verfügbar. Erstellen Sie einen FormFlow, um ihn mit einem Prozessschritt verknüpfen zu können."
+  },
+  "accessControl": {
+    "roles": {
+      "title": "Alle Rollen",
+      "key": "Rollschlüssel",
+      "add": "Neue Rolle hinzufügen",
+      "name": "Rollenname",
+      "deleteModalContent": "Sind Sie sicher, dass Sie diese Rollen und alle untergeordneten Berechtigungen entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+    }
   }
 }
