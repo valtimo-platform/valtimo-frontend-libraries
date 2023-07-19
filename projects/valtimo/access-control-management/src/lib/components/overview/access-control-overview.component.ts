@@ -3,6 +3,7 @@ import {CarbonTableConfig, ColumnType, createCarbonTableConfig} from '@valtimo/c
 import {BehaviorSubject, finalize, Observable, take} from 'rxjs';
 import {Role} from '../../models';
 import {AccessControlService} from '../../services/access-control.service';
+import {Router} from '@angular/router';
 
 @Component({
   templateUrl: './access-control-overview.component.html',
@@ -25,7 +26,10 @@ export class AccessControlOverviewComponent implements OnInit {
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
   public readonly deleteRowKeys$ = new BehaviorSubject<Array<string>>([]);
 
-  constructor(private readonly accessControlService: AccessControlService) {}
+  constructor(
+    private readonly accessControlService: AccessControlService,
+    private readonly router: Router
+  ) {}
 
   public ngOnInit(): void {
     this.accessControlService.loadRoles();
@@ -70,8 +74,8 @@ export class AccessControlOverviewComponent implements OnInit {
     );
   }
 
-  public onRowClick(event: any): void {
-    console.log(event);
+  public onRowClick(role: Role): void {
+    this.router.navigate([`/access-control/${role.roleKey}`]);
   }
 
   private enableSkeleton(): void {

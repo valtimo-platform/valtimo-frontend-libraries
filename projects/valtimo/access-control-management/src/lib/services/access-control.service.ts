@@ -51,4 +51,8 @@ export class AccessControlService {
       },
     });
   }
+
+  public getRolePermissions(roleKey: string): Observable<any> {
+    return this.http.get<any>(`${this.valtimoEndpointUri}v1/roles/${roleKey}/permissions`);
+  }
 }
