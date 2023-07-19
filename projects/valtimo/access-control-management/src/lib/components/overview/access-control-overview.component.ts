@@ -20,9 +20,10 @@ export class AccessControlOverviewComponent implements OnInit {
   });
 
   public readonly roles$: Observable<Role[]> = this.accessControlService.roles$;
+  public readonly skeleton$ = new BehaviorSubject<boolean>(false);
   public readonly showAddModal$ = new BehaviorSubject<boolean>(false);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
-  public readonly deleteRowKey$ = new BehaviorSubject<string>('');
+  public readonly deleteRowKeys$ = new BehaviorSubject<Array<string>>([]);
 
   constructor(private readonly accessControlService: AccessControlService) {}
 
@@ -52,12 +53,28 @@ export class AccessControlOverviewComponent implements OnInit {
 
   public showDeleteModal(): void {
     this.roles$.pipe(take(1)).subscribe(roles => {
-      this.deleteRowKey$.next(roles[roles.length - 1].roleKey);
+      this.deleteRowKeys$.next([roles[roles.length - 1].roleKey]);
       this.showDeleteModal$.next(true);
     });
   }
 
-  public onDelete(roleKey: string): void {
-    console.log('delete', roleKey);
+  public onDelete(roles: Array<string>): void {
+    this.enableSkeleton();
+
+    this.accessControlService.dispatchAction(
+      this.accessControlService.deleteRoles({roles}).pipe(
+        finalize(() => {
+          this.disableSkeleton();
+        })
+      )
+    );
+  }
+
+  private enableSkeleton(): void {
+    this.skeleton$.next(true);
+  }
+
+  private disableSkeleton(): void {
+    this.skeleton$.next(false);
   }
 }

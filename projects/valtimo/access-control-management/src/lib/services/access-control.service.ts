@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {BehaviorSubject, catchError, Observable, of, switchMap, take} from 'rxjs';
-import {Role} from '../models';
+import {DeleteRolesRequest, Role} from '../models';
 
 @Injectable({providedIn: 'root'})
 export class AccessControlService {
@@ -22,8 +22,8 @@ export class AccessControlService {
     return this.http.post<Role>(`${this.valtimoEndpointUri}v1/roles`, role);
   }
 
-  public deleteRoles(roleKeys: string[]): Observable<null> {
-    return this.http.delete<null>(`${this.valtimoEndpointUri}v1/roles`, {body: roleKeys});
+  public deleteRoles(request: DeleteRolesRequest): Observable<null> {
+    return this.http.delete<null>(`${this.valtimoEndpointUri}v1/roles`, {body: request});
   }
 
   public dispatchAction(actionResult: Observable<Role | null>): void {
