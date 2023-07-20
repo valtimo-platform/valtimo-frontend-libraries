@@ -1,5 +1,5 @@
 <ng-container *ngIf="model$ | async as model; else loading">
-  <valtimo-editor [model]="model"></valtimo-editor>
+  <valtimo-editor [model]="model" [disabled]="true"></valtimo-editor>
 </ng-container>
 
 <ng-template #loading>

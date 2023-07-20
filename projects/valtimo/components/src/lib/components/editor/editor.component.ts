@@ -25,7 +25,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {EditorService} from './editor.service';
-import {combineLatest, delay, first, fromEvent, Subscription} from 'rxjs';
+import {first, Subscription} from 'rxjs';
 import {editor} from 'monaco-editor';
 import {EditorModel} from '../../models';
 import {ShellService} from '../../services/shell.service';
@@ -48,12 +48,17 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this._model = model;
     this.updateModel();
   }
+  @Input() set disabled(disabled: boolean) {
+    this._disabled = disabled;
+    this.setDisabled(disabled);
+  }
   @Input() formatOnLoad = true;
   @Input() widthPx!: number;
   @Input() heightPx!: number;
 
   @Output() valid: EventEmitter<boolean> = new EventEmitter();
 
+  private _disabled!: boolean;
   private _editor: editor.IStandaloneCodeEditor;
   private _editorOptions: editor.IEditorOptions;
   private _model: EditorModel;
@@ -77,11 +82,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   }
 
   private openLayoutSubscription(): void {
-    this._layoutSubscription = combineLatest([
-      fromEvent(window, 'resize'),
-      this.shellService.sideBarExpanded$.pipe(delay(1000)),
-      this.shellService.collapsibleWidescreenMenu$.pipe(delay(1000)),
-    ]).subscribe(() => {
+    this._layoutSubscription = this.shellService.mainContentResized$.subscribe(() => {
       if (this._editor) {
         this._editor.layout();
       }
@@ -106,10 +107,22 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  private setDisabled(disabled: boolean): void {
+    if (disabled) {
+      this._editor.updateOptions({readOnly: true});
+    } else {
+      this._editor.updateOptions({readOnly: false});
+    }
+  }
+
   private formatDocument = (): void => {
     if (this.formatOnLoad && this._editor) {
+      this.setDisabled(false);
       this._editor.getAction('editor.action.formatDocument').run();
       this.checkValidity();
+      setTimeout(() => {
+        this.setDisabled(this._disabled);
+      }, 100);
     }
   };
 
