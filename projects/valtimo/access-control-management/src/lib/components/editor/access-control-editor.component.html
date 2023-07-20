@@ -1,3 +1,7 @@
-<ng-container *ngIf="{permissions: permissions$ | async} as obs">
-  <valtimo-editor></valtimo-editor>
+<ng-container *ngIf="model$ | async as model; else loading">
+  <valtimo-editor [model]="model"></valtimo-editor>
 </ng-container>
+
+<ng-template #loading>
+  Loading
+</ng-template>

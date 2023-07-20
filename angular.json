@@ -36,7 +36,11 @@
                 "input": "node_modules/@valtimo/config/assets/core",
                 "output": "./valtimo-translation/core/"
               },
-              { "glob": "**/*", "input": "node_modules/monaco-editor", "output": "/assets/monaco/" }
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor",
+                "output": "assets/monaco-editor"
+              }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -78,7 +82,7 @@
               "dist/valtimo/layout/assets/js/app.js",
               "src/assets/bpmn/ValtimoBPMNModeler.js",
               "node_modules/@webcomponents/custom-elements/src/native-shim.js",
-              "node_modules/dmn-js/dist/dmn-modeler.development.js"
+              "node_modules/dmn-js/dist/dmn-modeler.development.js",
             ],
             "allowedCommonJsDependencies": [
               "swagger-ui",

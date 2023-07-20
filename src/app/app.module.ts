@@ -118,7 +118,6 @@ import {
 import {ObjectManagementModule} from '@valtimo/object-management';
 import {ObjectModule} from '@valtimo/object';
 import {AccessControlManagementModule} from '@valtimo/access-control-management';
-import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -217,7 +216,6 @@ export function tabsFactory() {
     ObjectModule,
     ObjectManagementModule,
     AccessControlManagementModule,
-    MonacoEditorModule.forRoot(),
   ],
   providers: [
     FormioComponent,
