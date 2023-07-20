@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {EditorService} from './editor.service';
-import {first} from 'rxjs';
+import {combineLatest, delay, first, fromEvent, Subscription} from 'rxjs';
 import {editor} from 'monaco-editor';
 import {EditorModel} from '../../models';
+import {ShellService} from '../../services/shell.service';
 
 declare var monaco: any;
 
@@ -27,7 +37,7 @@ declare var monaco: any;
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent implements AfterViewInit {
+export class EditorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('editorContainer', {static: true}) _editorContainer: ElementRef;
 
   @Input() set editorOptions(options: editor.IEditorOptions) {
@@ -42,23 +52,40 @@ export class EditorComponent implements AfterViewInit {
   @Input() widthPx!: number;
   @Input() heightPx!: number;
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    if (this._editor) {
-      this._editor.layout();
-    }
-  }
+  @Output() valid: EventEmitter<boolean> = new EventEmitter();
 
   private _editor: editor.IStandaloneCodeEditor;
   private _editorOptions: editor.IEditorOptions;
   private _model: EditorModel;
 
-  constructor(private readonly editorService: EditorService) {
+  private _layoutSubscription!: Subscription;
+
+  constructor(
+    private readonly editorService: EditorService,
+    private readonly shellService: ShellService
+  ) {
     this.editorService.load();
   }
 
   public ngAfterViewInit(): void {
+    this.openLayoutSubscription();
     this.initMonaco();
+  }
+
+  public ngOnDestroy(): void {
+    this._layoutSubscription?.unsubscribe();
+  }
+
+  private openLayoutSubscription(): void {
+    this._layoutSubscription = combineLatest([
+      fromEvent(window, 'resize'),
+      this.shellService.sideBarExpanded$.pipe(delay(1000)),
+      this.shellService.collapsibleWidescreenMenu$.pipe(delay(1000)),
+    ]).subscribe(() => {
+      if (this._editor) {
+        this._editor.layout();
+      }
+    });
   }
 
   private updateOptions(options: editor.IEditorOptions): void {
@@ -82,8 +109,25 @@ export class EditorComponent implements AfterViewInit {
   private formatDocument = (): void => {
     if (this.formatOnLoad && this._editor) {
       this._editor.getAction('editor.action.formatDocument').run();
+      this.checkValidity();
     }
   };
+
+  private checkValidity(): void {
+    const markers = monaco.editor.getModelMarkers() || [];
+    const valid = markers.length === 0;
+
+    this.valid.emit(valid);
+  }
+
+  private setEditorEvents(): void {
+    this._editor.onDidChangeModel(this.formatDocument);
+    this._editor.onDidChangeModelLanguageConfiguration(this.formatDocument);
+    this._editor.onDidLayoutChange(this.formatDocument);
+    monaco.editor.onDidChangeMarkers(() => {
+      this.checkValidity();
+    });
+  }
 
   private initMonaco(): void {
     if (!this.editorService.loaded) {
@@ -94,8 +138,8 @@ export class EditorComponent implements AfterViewInit {
     }
 
     this._editor = monaco.editor.create(this._editorContainer.nativeElement, this._editorOptions);
-    this._editor.onDidChangeModelLanguageConfiguration(this.formatDocument);
-    this._editor.onDidLayoutChange(this.formatDocument);
+
+    this.setEditorEvents();
     this.updateModel();
   }
 }
