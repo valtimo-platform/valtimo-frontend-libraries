@@ -1,38 +1,37 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
+import {WindowWithMonaco} from '../../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EditorService {
-  loaded: boolean = false;
+  public loadingFinished$ = new Subject<null>();
 
-  public loadingFinished: Subject<void> = new Subject<void>();
+  private _loaded = false;
 
-  private finishLoading() {
-    this.loaded = true;
-    this.loadingFinished.next();
+  get loaded(): boolean {
+    return this._loaded;
   }
 
-  public load() {
-    // load the assets
-
+  // load assets
+  public load(): void {
     const baseUrl = './assets' + '/monaco-editor/min/vs';
 
-    if (typeof (<any>window).monaco === 'object') {
+    if (typeof (<WindowWithMonaco>window).monaco === 'object') {
       this.finishLoading();
       return;
     }
 
-    const onGotAmdLoader: any = () => {
-      // load Monaco
+    const onGotAmdLoader = () => {
+      // load monaco
       (<any>window).require.config({paths: {vs: `${baseUrl}`}});
       (<any>window).require([`vs/editor/editor.main`], () => {
         this.finishLoading();
       });
     };
 
-    // load AMD loader, if necessary
+    // load amd loader if necessary
     if (!(<any>window).require) {
       const loaderScript: HTMLScriptElement = document.createElement('script');
       loaderScript.type = 'text/javascript';
@@ -42,5 +41,10 @@ export class EditorService {
     } else {
       onGotAmdLoader();
     }
+  }
+
+  private finishLoading(): void {
+    this._loaded = true;
+    this.loadingFinished$.next(null);
   }
 }

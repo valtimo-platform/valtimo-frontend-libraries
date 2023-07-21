@@ -38,7 +38,7 @@ declare var monaco: any;
   styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('editorContainer', {static: true}) _editorContainer: ElementRef;
+  @ViewChild('editorContainer', {static: true}) editorContainer: ElementRef;
 
   @Input() set editorOptions(options: editor.IEditorOptions) {
     this._editorOptions = options;
@@ -145,20 +145,20 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this._editor.onDidChangeModelContent(() => {
       this.valueChange.emit(this._editor.getValue());
     });
-    monaco.editor.onDidChangeMarkers(() => {
+    monaco?.editor?.onDidChangeMarkers(() => {
       this.checkValidity();
     });
   }
 
   private initMonaco(): void {
     if (!this.editorService.loaded) {
-      this.editorService.loadingFinished.pipe(first()).subscribe(() => {
+      this.editorService.loadingFinished$.pipe(first()).subscribe(() => {
         this.initMonaco();
       });
       return;
     }
 
-    this._editor = monaco.editor.create(this._editorContainer.nativeElement, this._editorOptions);
+    this._editor = monaco.editor.create(this.editorContainer.nativeElement, this._editorOptions);
 
     this.setEditorEvents();
     this.updateModel();

@@ -6,4 +6,8 @@ interface EditorModel {
   uri?: Uri;
 }
 
-export {EditorModel};
+interface WindowWithMonaco extends Window {
+  monaco?: object;
+}
+
+export {EditorModel, WindowWithMonaco};
