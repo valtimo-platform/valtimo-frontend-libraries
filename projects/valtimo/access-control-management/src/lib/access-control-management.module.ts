@@ -32,6 +32,7 @@ import {
   InputModule,
   LoadingModule,
   ModalModule,
+  NotificationModule,
 } from 'carbon-components-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AccessControlEditorComponent} from './components/editor/access-control-editor.component';
@@ -61,6 +62,7 @@ import {DeleteRoleModalComponent} from './components/delete-role-modal/delete-ro
     LoadingModule,
     IconModule,
     DialogModule,
+    NotificationModule,
   ],
 })
 export class AccessControlManagementModule {}

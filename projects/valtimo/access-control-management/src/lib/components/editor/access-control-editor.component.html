@@ -42,7 +42,7 @@
     type="edit"
     [defaultKeyValue]="obs.deleteRowKeys[0]"
     [open]="showEditModal$ | async"
-    (close)="onEdit($event)"
+    (close)="onEdit(obs.deleteRowKeys[0], $event)"
   ></valtimo-role-metadata-modal>
 </ng-container>
 

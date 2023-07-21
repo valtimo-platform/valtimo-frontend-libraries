@@ -1188,7 +1188,9 @@
       "name": "Rollenname",
       "deleteModalContent": "Sind Sie sicher, dass Sie diese Rollen und alle untergeordneten Berechtigungen entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
       "editMetadata": "Metadaten bearbeiten",
-      "editRole": "Rolle bearbeiten"
+      "editRole": "Rolle bearbeiten",
+      "savedSuccessTitle": "Erfolgreich gespeichert",
+      "savedSuccessTitleMessage": "{{roleKey}} wurde erfolgreich gespeichert"
     }
   }
 }

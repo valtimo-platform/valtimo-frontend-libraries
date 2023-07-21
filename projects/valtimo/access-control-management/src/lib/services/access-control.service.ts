@@ -62,4 +62,8 @@ export class AccessControlService {
       updatedPermission
     );
   }
+
+  public updateRole(roleKey: string, request: Role): Observable<object> {
+    return this.http.put<object>(`${this.valtimoEndpointUri}v1/roles/${roleKey}`, request);
+  }
 }

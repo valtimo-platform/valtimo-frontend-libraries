@@ -1,16 +1,18 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {AccessControlService} from '../../services/access-control.service';
-import {BehaviorSubject, combineLatest, finalize, switchMap, take, tap} from 'rxjs';
+import {BehaviorSubject, filter, finalize, map, Subscription, switchMap, take, tap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditorModel, PageTitleService} from '@valtimo/components';
 import {Role} from '../../models';
+import {NotificationService} from 'carbon-components-angular';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   templateUrl: './access-control-editor.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./access-control-editor.component.scss'],
 })
-export class AccessControlEditorComponent implements OnInit {
+export class AccessControlEditorComponent implements OnInit, OnDestroy {
   public readonly model$ = new BehaviorSubject<EditorModel | null>(null);
   public readonly saveDisabled$ = new BehaviorSubject<boolean>(true);
   public readonly editorDisabled$ = new BehaviorSubject<boolean>(false);
@@ -19,17 +21,27 @@ export class AccessControlEditorComponent implements OnInit {
   public readonly showEditModal$ = new BehaviorSubject<boolean>(false);
   public readonly deleteRowKeys$ = new BehaviorSubject<Array<string> | null>(null);
 
+  private _roleKeySubscription!: Subscription;
+  private _roleKey!: string;
   private readonly _updatedModelValue$ = new BehaviorSubject<string>('');
 
   constructor(
     private readonly accessControlService: AccessControlService,
     private readonly route: ActivatedRoute,
     private readonly pageTitleService: PageTitleService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly notificationService: NotificationService,
+    private readonly translateService: TranslateService
   ) {}
 
   public ngOnInit(): void {
     this.getPermissions();
+    this.openRoleKeySubscription();
+  }
+
+  public ngOnDestroy(): void {
+    this.pageTitleService.enableReset();
+    this._roleKeySubscription?.unsubscribe();
   }
 
   public onValid(valid: boolean): void {
@@ -45,11 +57,14 @@ export class AccessControlEditorComponent implements OnInit {
     this.disableSave();
     this.disableMore();
 
-    combineLatest([this.route.params, this._updatedModelValue$])
+    this._updatedModelValue$
       .pipe(
         take(1),
-        switchMap(([params, updatedModelValue]) =>
-          this.accessControlService.updateRolePermissions(params.id, JSON.parse(updatedModelValue))
+        switchMap(updatedModelValue =>
+          this.accessControlService.updateRolePermissions(
+            this._roleKey,
+            JSON.parse(updatedModelValue)
+          )
         )
       )
       .subscribe(
@@ -57,6 +72,7 @@ export class AccessControlEditorComponent implements OnInit {
           this.enableMore();
           this.enableSave();
           this.enableEditor();
+          this.showSuccessMessage(this._roleKey);
           this.setModel(result);
         },
         () => {
@@ -89,7 +105,7 @@ export class AccessControlEditorComponent implements OnInit {
     this.showEditModal$.next(true);
   }
 
-  public onEdit(data: Role | null): void {
+  public onEdit(currentRoleKey: string, data: Role | null): void {
     this.showEditModal$.next(false);
 
     if (!data) {
@@ -100,17 +116,31 @@ export class AccessControlEditorComponent implements OnInit {
     this.disableSave();
     this.disableMore();
 
-    this.accessControlService.dispatchAction(
-      this.accessControlService.addRole(data).pipe(
-        finalize(() => {
-          this.showEditModal$.next(false);
+    this.accessControlService.updateRole(currentRoleKey, data).subscribe(() => {
+      this.router.navigate([`/access-control/${data.roleKey}`]);
+      this.showSuccessMessage(data.roleKey);
+    });
+  }
+
+  private openRoleKeySubscription(): void {
+    this._roleKeySubscription = this.route.params
+      .pipe(
+        filter(params => params?.id),
+        map(params => params.id),
+        tap(roleKey => {
+          this._roleKey = roleKey;
+          this.pageTitleService.setCustomPageTitle(roleKey, true);
+          this.deleteRowKeys$.next([roleKey]);
+        }),
+        switchMap(roleKey => this.accessControlService.getRolePermissions(roleKey)),
+        tap(permissions => {
           this.enableMore();
           this.enableSave();
           this.enableEditor();
-          console.log('edit success', data);
+          this.setModel(permissions);
         })
       )
-    );
+      .subscribe();
   }
 
   private getPermissions(): void {
@@ -125,6 +155,7 @@ export class AccessControlEditorComponent implements OnInit {
       .subscribe(permissions => {
         this.enableMore();
         this.enableSave();
+        this.enableEditor();
         this.setModel(permissions);
       });
   }
@@ -158,5 +189,17 @@ export class AccessControlEditorComponent implements OnInit {
 
   private enableEditor(): void {
     this.editorDisabled$.next(false);
+  }
+
+  private showSuccessMessage(roleKey: string): void {
+    this.notificationService.showToast({
+      caption: this.translateService.instant('accessControl.roles.savedSuccessTitleMessage', {
+        roleKey,
+      }),
+      type: 'success',
+      duration: 4000,
+      showClose: true,
+      title: this.translateService.instant('accessControl.roles.savedSuccessTitle'),
+    });
   }
 }
