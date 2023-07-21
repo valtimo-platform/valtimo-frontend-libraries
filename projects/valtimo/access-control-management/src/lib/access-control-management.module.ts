@@ -16,19 +16,33 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
-import {CarbonTableModule, ConfirmationModalModule, EditorModule} from '@valtimo/components';
+import {
+  CarbonTableModule,
+  ConfirmationModalModule,
+  EditorModule,
+  RenderInPageHeaderDirectiveModule,
+} from '@valtimo/components';
 import {AccessControlManagementRoutingModule} from './access-control-management-routing.module';
 import {AccessControlOverviewComponent} from './components/overview/access-control-overview.component';
 import {AddRoleModalComponent} from './components/add-role-modal/add-role-modal.component';
-import {ButtonModule, IconModule, InputModule, ModalModule} from 'carbon-components-angular';
+import {
+  ButtonModule,
+  DialogModule,
+  IconModule,
+  InputModule,
+  LoadingModule,
+  ModalModule,
+} from 'carbon-components-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AccessControlEditorComponent} from './components/editor/access-control-editor.component';
+import {DeleteRoleModalComponent} from './components/delete-role-modal/delete-role-modal.component';
 
 @NgModule({
   declarations: [
     AccessControlOverviewComponent,
     AddRoleModalComponent,
     AccessControlEditorComponent,
+    DeleteRoleModalComponent,
   ],
   imports: [
     AccessControlManagementRoutingModule,
@@ -43,6 +57,10 @@ import {AccessControlEditorComponent} from './components/editor/access-control-e
     IconModule,
     ConfirmationModalModule,
     EditorModule,
+    RenderInPageHeaderDirectiveModule,
+    LoadingModule,
+    IconModule,
+    DialogModule,
   ],
 })
 export class AccessControlManagementModule {}

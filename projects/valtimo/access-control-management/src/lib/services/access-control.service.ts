@@ -52,7 +52,14 @@ export class AccessControlService {
     });
   }
 
-  public getRolePermissions(roleKey: string): Observable<any> {
-    return this.http.get<any>(`${this.valtimoEndpointUri}v1/roles/${roleKey}/permissions`);
+  public getRolePermissions(roleKey: string): Observable<object> {
+    return this.http.get<object>(`${this.valtimoEndpointUri}v1/roles/${roleKey}/permissions`);
+  }
+
+  public updateRolePermissions(roleKey: string, updatedPermission: object): Observable<object> {
+    return this.http.put<object>(
+      `${this.valtimoEndpointUri}v1/roles/${roleKey}/permissions`,
+      updatedPermission
+    );
   }
 }

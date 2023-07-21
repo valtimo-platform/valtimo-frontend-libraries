@@ -1,7 +1,40 @@
 <ng-container *ngIf="model$ | async as model; else loading">
-  <valtimo-editor [model]="model" [disabled]="true"></valtimo-editor>
+  <valtimo-editor
+    [model]="model"
+    [disabled]="editorDisabled$ | async"
+    (valid)="onValid($event)"
+    (valueChange)="onValueChange($event)"
+  ></valtimo-editor>
+</ng-container>
+
+<ng-container renderInPageHeader>
+  <ng-template>
+    <div class="buttons-container">
+      <ibm-overflow-menu class="overflow-button">
+        <ibm-overflow-menu-option>test</ibm-overflow-menu-option>
+      </ibm-overflow-menu>
+      <button
+        ibmButton="primary"
+        size="md"
+        [disabled]="saveDisabled$ | async"
+        (click)="updatePermissions()"
+      >
+        {{ 'interface.save' | translate }}
+        <svg class="cds--btn__icon" ibmIcon="save" size="16"></svg>
+      </button>
+    </div>
+  </ng-template>
 </ng-container>
 
 <ng-template #loading>
-  Loading
+  <div class="loading-container">
+    <ibm-loading></ibm-loading>
+  </div>
+</ng-template>
+
+<ng-template #moreTrigger>
+  <button class="overflow-button" ibmButton="tertiary" size="md" [disabled]="moreDisabled$ | async">
+    {{ 'interface.more' | translate }}
+    <svg class="cds--btn__icon" ibmIcon="overflow-menu--vertical" size="16"></svg>
+  </button>
 </ng-template>

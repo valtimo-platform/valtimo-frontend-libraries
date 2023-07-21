@@ -584,7 +584,9 @@
     "expand": "Expand",
     "download": "Download",
     "openInNewTab": "Open in new tab",
-    "create": "Create"
+    "create": "Create",
+    "save": "Save",
+    "more": "More"
   },
   "taskDetail": {
     "taskCreated": "Created",

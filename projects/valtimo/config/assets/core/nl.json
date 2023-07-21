@@ -583,7 +583,9 @@
     "expand": "Uitklappen",
     "download": "Download",
     "openInNewTab": "In nieuw tabblad openen",
-    "create": "Aanmaken"
+    "create": "Aanmaken",
+    "save": "Opslaan",
+    "more": "Meer"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",

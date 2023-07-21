@@ -17,7 +17,7 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 })
 export class AddRoleModalComponent implements OnInit {
   @Input() open: boolean = false;
-  @Output() close: EventEmitter<Role | null> = new EventEmitter<Role | null>();
+  @Output() close = new EventEmitter<Role | null>();
 
   public form: FormGroup;
 

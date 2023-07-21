@@ -583,7 +583,9 @@
     "expand": "Expandieren",
     "download": "Herunterladen",
     "openInNewTab": "In neuem Tab öffnen",
-    "create": "Erstellen"
+    "create": "Erstellen",
+    "save": "Speichern",
+    "More": "Mehr"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",

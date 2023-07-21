@@ -1,0 +1,9 @@
+<valtimo-confirmation-modal
+  [outputOnConfirm]="deleteRowKeys"
+  [showModalSubject$]="showDeleteModal$"
+  (confirmEvent)="onDelete($event)"
+  confirmButtonTextTranslationKey="interface.delete"
+  confirmButtonType="danger"
+  contentTranslationKey="accessControl.roles.deleteModalContent"
+  titleTranslationKey="interface.delete"
+></valtimo-confirmation-modal>

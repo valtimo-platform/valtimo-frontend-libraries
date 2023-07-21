@@ -57,6 +57,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   @Input() heightPx!: number;
 
   @Output() valid: EventEmitter<boolean> = new EventEmitter();
+  @Output() valueChange: EventEmitter<string> = new EventEmitter();
 
   private _disabled!: boolean;
   private _editor: editor.IStandaloneCodeEditor;
@@ -108,6 +109,10 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   }
 
   private setDisabled(disabled: boolean): void {
+    if (!this._editor) {
+      return;
+    }
+
     if (disabled) {
       this._editor.updateOptions({readOnly: true});
     } else {
@@ -137,6 +142,9 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this._editor.onDidChangeModel(this.formatDocument);
     this._editor.onDidChangeModelLanguageConfiguration(this.formatDocument);
     this._editor.onDidLayoutChange(this.formatDocument);
+    this._editor.onDidChangeModelContent(() => {
+      this.valueChange.emit(this._editor.getValue());
+    });
     monaco.editor.onDidChangeMarkers(() => {
       this.checkValidity();
     });
