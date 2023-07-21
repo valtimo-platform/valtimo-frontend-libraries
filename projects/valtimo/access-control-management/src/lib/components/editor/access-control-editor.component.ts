@@ -3,6 +3,7 @@ import {AccessControlService} from '../../services/access-control.service';
 import {BehaviorSubject, combineLatest, finalize, switchMap, take, tap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditorModel, PageTitleService} from '@valtimo/components';
+import {Role} from '../../models';
 
 @Component({
   templateUrl: './access-control-editor.component.html',
@@ -15,6 +16,7 @@ export class AccessControlEditorComponent implements OnInit {
   public readonly editorDisabled$ = new BehaviorSubject<boolean>(false);
   public readonly moreDisabled$ = new BehaviorSubject<boolean>(true);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showEditModal$ = new BehaviorSubject<boolean>(false);
   public readonly deleteRowKeys$ = new BehaviorSubject<Array<string> | null>(null);
 
   private readonly _updatedModelValue$ = new BehaviorSubject<string>('');
@@ -81,6 +83,34 @@ export class AccessControlEditorComponent implements OnInit {
 
   public showDeleteModal(): void {
     this.showDeleteModal$.next(true);
+  }
+
+  public showEditModal(): void {
+    this.showEditModal$.next(true);
+  }
+
+  public onEdit(data: Role | null): void {
+    this.showEditModal$.next(false);
+
+    if (!data) {
+      return;
+    }
+
+    this.disableEditor();
+    this.disableSave();
+    this.disableMore();
+
+    this.accessControlService.dispatchAction(
+      this.accessControlService.addRole(data).pipe(
+        finalize(() => {
+          this.showEditModal$.next(false);
+          this.enableMore();
+          this.enableSave();
+          this.enableEditor();
+          console.log('edit success', data);
+        })
+      )
+    );
   }
 
   private getPermissions(): void {

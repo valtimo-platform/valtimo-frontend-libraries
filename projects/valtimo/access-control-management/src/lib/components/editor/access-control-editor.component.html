@@ -11,6 +11,9 @@
   <ng-template>
     <div class="buttons-container">
       <ibm-overflow-menu class="overflow-button">
+        <ibm-overflow-menu-option (selected)="showEditModal()">{{
+          'accessControl.roles.editMetadata' | translate
+        }}</ibm-overflow-menu-option>
         <ibm-overflow-menu-option type="danger" (selected)="showDeleteModal()">{{
           'interface.delete' | translate
         }}</ibm-overflow-menu-option>
@@ -28,12 +31,20 @@
   </ng-template>
 </ng-container>
 
-<valtimo-delete-role-modal
-  (deleteEvent)="onDelete($event)"
-  [showDeleteModal$]="showDeleteModal$"
-  [deleteRowKeys]="deleteRowKeys$ | async"
->
-</valtimo-delete-role-modal>
+<ng-container *ngIf="{deleteRowKeys: deleteRowKeys$ | async} as obs">
+  <valtimo-delete-role-modal
+    (deleteEvent)="onDelete($event)"
+    [showDeleteModal$]="showDeleteModal$"
+    [deleteRowKeys]="obs.deleteRowKeys"
+  >
+  </valtimo-delete-role-modal>
+  <valtimo-role-metadata-modal
+    type="edit"
+    [defaultKeyValue]="obs.deleteRowKeys[0]"
+    [open]="showEditModal$ | async"
+    (close)="onEdit($event)"
+  ></valtimo-role-metadata-modal>
+</ng-container>
 
 <ng-template #loading>
   <div class="loading-container">

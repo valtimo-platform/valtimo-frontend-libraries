@@ -24,7 +24,7 @@ import {
 } from '@valtimo/components';
 import {AccessControlManagementRoutingModule} from './access-control-management-routing.module';
 import {AccessControlOverviewComponent} from './components/overview/access-control-overview.component';
-import {AddRoleModalComponent} from './components/add-role-modal/add-role-modal.component';
+import {RoleMetadataModalComponent} from './components/role-metadata-modal/role-metadata-modal.component';
 import {
   ButtonModule,
   DialogModule,
@@ -40,7 +40,7 @@ import {DeleteRoleModalComponent} from './components/delete-role-modal/delete-ro
 @NgModule({
   declarations: [
     AccessControlOverviewComponent,
-    AddRoleModalComponent,
+    RoleMetadataModalComponent,
     AccessControlEditorComponent,
     DeleteRoleModalComponent,
   ],

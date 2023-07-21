@@ -1185,7 +1185,9 @@
       "key": "Role key",
       "add": "Add new role",
       "name": "Role name",
-      "deleteModalContent": "Are you sure you want to delete these roles and all underlying permissions? This action cannot be undone."
+      "deleteModalContent": "Are you sure you want to delete these roles and all underlying permissions? This action cannot be undone.",
+      "editMetadata": "Edit metadata",
+      "editRole": "Edit Role"
     }
   }
 }
