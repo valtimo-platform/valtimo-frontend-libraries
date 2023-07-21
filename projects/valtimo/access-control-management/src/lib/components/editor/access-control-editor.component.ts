@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {AccessControlService} from '../../services/access-control.service';
-import {BehaviorSubject, combineLatest, switchMap, take, tap} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
+import {BehaviorSubject, combineLatest, finalize, switchMap, take, tap} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
 import {EditorModel, PageTitleService} from '@valtimo/components';
 
 @Component({
@@ -14,13 +14,16 @@ export class AccessControlEditorComponent implements OnInit {
   public readonly saveDisabled$ = new BehaviorSubject<boolean>(true);
   public readonly editorDisabled$ = new BehaviorSubject<boolean>(false);
   public readonly moreDisabled$ = new BehaviorSubject<boolean>(true);
+  public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
+  public readonly deleteRowKeys$ = new BehaviorSubject<Array<string> | null>(null);
 
   private readonly _updatedModelValue$ = new BehaviorSubject<string>('');
 
   constructor(
     private readonly accessControlService: AccessControlService,
     private readonly route: ActivatedRoute,
-    private readonly pageTitleService: PageTitleService
+    private readonly pageTitleService: PageTitleService,
+    private readonly router: Router
   ) {}
 
   public ngOnInit(): void {
@@ -62,11 +65,30 @@ export class AccessControlEditorComponent implements OnInit {
       );
   }
 
+  public onDelete(roles: Array<string>): void {
+    this.disableEditor();
+    this.disableSave();
+    this.disableMore();
+
+    this.accessControlService.dispatchAction(
+      this.accessControlService.deleteRoles({roles}).pipe(
+        finalize(() => {
+          this.router.navigate(['/access-control']);
+        })
+      )
+    );
+  }
+
+  public showDeleteModal(): void {
+    this.showDeleteModal$.next(true);
+  }
+
   private getPermissions(): void {
     this.route.params
       .pipe(
         tap(params => {
           this.pageTitleService.setCustomPageTitle(params?.id);
+          this.deleteRowKeys$.next([params?.id]);
         }),
         switchMap(params => this.accessControlService.getRolePermissions(params.id))
       )

@@ -11,7 +11,9 @@
   <ng-template>
     <div class="buttons-container">
       <ibm-overflow-menu class="overflow-button">
-        <ibm-overflow-menu-option>test</ibm-overflow-menu-option>
+        <ibm-overflow-menu-option type="danger" (selected)="showDeleteModal()">{{
+          'interface.delete' | translate
+        }}</ibm-overflow-menu-option>
       </ibm-overflow-menu>
       <button
         ibmButton="primary"
@@ -26,15 +28,15 @@
   </ng-template>
 </ng-container>
 
+<valtimo-delete-role-modal
+  (deleteEvent)="onDelete($event)"
+  [showDeleteModal$]="showDeleteModal$"
+  [deleteRowKeys]="deleteRowKeys$ | async"
+>
+</valtimo-delete-role-modal>
+
 <ng-template #loading>
   <div class="loading-container">
     <ibm-loading></ibm-loading>
   </div>
-</ng-template>
-
-<ng-template #moreTrigger>
-  <button class="overflow-button" ibmButton="tertiary" size="md" [disabled]="moreDisabled$ | async">
-    {{ 'interface.more' | translate }}
-    <svg class="cds--btn__icon" ibmIcon="overflow-menu--vertical" size="16"></svg>
-  </button>
 </ng-template>
