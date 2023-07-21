@@ -67,20 +67,20 @@ export class AccessControlEditorComponent implements OnInit, OnDestroy {
           )
         )
       )
-      .subscribe(
-        result => {
+      .subscribe({
+        next: result => {
           this.enableMore();
           this.enableSave();
           this.enableEditor();
           this.showSuccessMessage(this._roleKey);
           this.setModel(result);
         },
-        () => {
+        error: () => {
           this.enableMore();
           this.enableSave();
           this.enableEditor();
-        }
-      );
+        },
+      });
   }
 
   public onDelete(roles: Array<string>): void {
