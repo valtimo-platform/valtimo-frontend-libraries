@@ -30,9 +30,9 @@ declare var App;
 export class LayoutInternalComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mainContent') mainContentRef: ElementRef;
 
-  readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
-  readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
-  readonly collapsibleWidescreenMenu$ = this.shellService.collapsibleWidescreenMenu$;
+  public readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
+  public readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
+  public readonly collapsibleWidescreenMenu$ = this.shellService.collapsibleWidescreenMenu$;
 
   private _observer!: ResizeObserver;
 

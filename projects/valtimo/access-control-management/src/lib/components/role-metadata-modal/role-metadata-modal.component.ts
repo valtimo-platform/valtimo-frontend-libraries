@@ -22,7 +22,7 @@ export class RoleMetadataModalComponent implements OnInit {
     this._defaultKeyValue = value;
     this.setDefaultKeyValue(value);
   }
-  @Output() close = new EventEmitter<Role | null>();
+  @Output() closeEvent = new EventEmitter<Role | null>();
 
   public form = this.fb.group({
     key: this.fb.control('', Validators.required),
@@ -30,7 +30,7 @@ export class RoleMetadataModalComponent implements OnInit {
 
   private _defaultKeyValue!: string;
 
-  get key() {
+  public get key() {
     return this.form?.get('key');
   }
 
@@ -39,7 +39,7 @@ export class RoleMetadataModalComponent implements OnInit {
   public ngOnInit(): void {}
 
   public onCancel(): void {
-    this.close.emit(null);
+    this.closeEvent.emit(null);
     this.resetForm();
   }
 
@@ -48,7 +48,7 @@ export class RoleMetadataModalComponent implements OnInit {
       return;
     }
 
-    this.close.emit({roleKey: this.key.value});
+    this.closeEvent.emit({roleKey: this.key.value});
     this.resetForm();
   }
 

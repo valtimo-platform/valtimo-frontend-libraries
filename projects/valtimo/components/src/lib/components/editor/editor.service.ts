@@ -14,7 +14,6 @@ export class EditorService {
     return this._loaded;
   }
 
-  // load assets
   public load(): void {
     const baseUrl = './assets' + '/monaco-editor/min/vs';
 
@@ -24,14 +23,12 @@ export class EditorService {
     }
 
     const onGotAmdLoader = () => {
-      // load monaco
       (<any>window).require.config({paths: {vs: `${baseUrl}`}});
       (<any>window).require([`vs/editor/editor.main`], () => {
         this.finishLoading();
       });
     };
 
-    // load amd loader if necessary
     if (!(<any>window).require) {
       const loaderScript: HTMLScriptElement = document.createElement('script');
       loaderScript.type = 'text/javascript';

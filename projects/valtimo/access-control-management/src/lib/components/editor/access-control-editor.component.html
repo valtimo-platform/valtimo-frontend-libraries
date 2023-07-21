@@ -2,8 +2,8 @@
   <valtimo-editor
     [disabled]="editorDisabled$ | async"
     [model]="model"
-    (valid)="onValid($event)"
-    (valueChange)="onValueChange($event)"
+    (validEvent)="onValid($event)"
+    (valueChangeEvent)="onValueChange($event)"
   ></valtimo-editor>
 </ng-container>
 
@@ -21,10 +21,10 @@
       </ibm-overflow-menu>
 
       <button
+        [disabled]="saveDisabled$ | async"
         ibmButton="primary"
         size="md"
         (click)="updatePermissions()"
-        [disabled]="saveDisabled$ | async"
       >
         {{ 'interface.save' | translate }}
 
@@ -36,9 +36,9 @@
 
 <ng-container *ngIf="{deleteRowKeys: deleteRowKeys$ | async} as obs">
   <valtimo-delete-role-modal
+    [deleteRowKeys]="obs.deleteRowKeys"
     [showDeleteModal$]="showDeleteModal$"
     (deleteEvent)="onDelete($event)"
-    [deleteRowKeys]="obs.deleteRowKeys"
   >
   </valtimo-delete-role-modal>
 
@@ -46,7 +46,7 @@
     [defaultKeyValue]="obs.deleteRowKeys[0]"
     [open]="showEditModal$ | async"
     type="edit"
-    (close)="onEdit(obs.deleteRowKeys[0], $event)"
+    (closeEvent)="onEdit(obs.deleteRowKeys[0], $event)"
   ></valtimo-role-metadata-modal>
 </ng-container>
 

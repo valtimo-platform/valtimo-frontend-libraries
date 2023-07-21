@@ -56,8 +56,8 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   @Input() widthPx!: number;
   @Input() heightPx!: number;
 
-  @Output() valid: EventEmitter<boolean> = new EventEmitter();
-  @Output() valueChange: EventEmitter<string> = new EventEmitter();
+  @Output() validEvent: EventEmitter<boolean> = new EventEmitter();
+  @Output() valueChangeEvent: EventEmitter<string> = new EventEmitter();
 
   private _disabled!: boolean;
   private _editor: editor.IStandaloneCodeEditor;
@@ -135,7 +135,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     const markers = monaco.editor.getModelMarkers() || [];
     const valid = markers.length === 0;
 
-    this.valid.emit(valid);
+    this.validEvent.emit(valid);
   }
 
   private setEditorEvents(): void {
@@ -143,7 +143,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this._editor.onDidChangeModelLanguageConfiguration(this.formatDocument);
     this._editor.onDidLayoutChange(this.formatDocument);
     this._editor.onDidChangeModelContent(() => {
-      this.valueChange.emit(this._editor.getValue());
+      this.valueChangeEvent.emit(this._editor.getValue());
     });
     monaco?.editor?.onDidChangeMarkers(() => {
       this.checkValidity();

@@ -16,7 +16,7 @@
 
 <valtimo-role-metadata-modal
   [open]="showAddModal$ | async"
-  (close)="onAdd($event)"
+  (closeEvent)="onAdd($event)"
 ></valtimo-role-metadata-modal>
 
 <button (click)="showDeleteModal()">delete</button>
