@@ -21,10 +21,11 @@ import {
   ColumnType,
   createCarbonTableConfig,
 } from '@valtimo/components';
-import {BehaviorSubject, finalize, Observable, Subject, take} from 'rxjs';
+import {BehaviorSubject, delay, finalize, Observable, Subject, take, tap} from 'rxjs';
 import {ExportRoleOutput, Role} from '../../models';
 import {AccessControlService} from '../../services/access-control.service';
 import {Router} from '@angular/router';
+import {AccessControlExportService} from '../../services/access-control-export.service';
 
 @Component({
   templateUrl: './access-control-overview.component.html',
@@ -52,6 +53,7 @@ export class AccessControlOverviewComponent implements OnInit {
 
   constructor(
     private readonly accessControlService: AccessControlService,
+    private readonly accessControlExportService: AccessControlExportService,
     private readonly router: Router
   ) {}
 
@@ -109,12 +111,18 @@ export class AccessControlOverviewComponent implements OnInit {
     console.log('output', event);
     this.exportDisabled$.next(true);
 
-    setTimeout(() => {
-      this.resetExportType$.next(null);
-      setTimeout(() => {
-        this.exportDisabled$.next(false);
-      }, CARBON_CONSTANTS.modalAnimationMs);
-    }, 1000);
+    this.accessControlExportService
+      .exportRoles(event)
+      .pipe(
+        tap(() => {
+          this.resetExportType$.next(null);
+        }),
+        delay(CARBON_CONSTANTS.modalAnimationMs),
+        tap(() => {
+          this.exportDisabled$.next(false);
+        })
+      )
+      .subscribe();
   }
 
   public onRowClick(role: Role): void {

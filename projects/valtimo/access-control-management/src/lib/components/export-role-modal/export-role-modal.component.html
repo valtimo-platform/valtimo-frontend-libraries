@@ -30,13 +30,13 @@
 
   <section ibmModalContent>
     <div class="export-buttons">
-      <button [disabled]="disabled" ibmButton="secondary" (click)="selectType('separate')">
+      <button [disabled]="disabled" ibmButton="secondary" (click)="selectType('unified')">
         {{ 'accessControl.roles.singleExport' | translate }}
 
         <svg class="cds--btn__icon" ibmIcon="document" size="16"></svg>
       </button>
 
-      <button [disabled]="disabled" ibmButton="secondary" (click)="selectType('unified')">
+      <button [disabled]="disabled" ibmButton="secondary" (click)="selectType('separate')">
         {{ 'accessControl.roles.multipleExport' | translate }}
 
         <svg class="cds--btn__icon" ibmIcon="copy--file" size="16"></svg>
