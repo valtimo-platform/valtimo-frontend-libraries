@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {CarbonTableConfig, ColumnType, createCarbonTableConfig} from '@valtimo/components';
 import {BehaviorSubject, finalize, Observable, take} from 'rxjs';
-import {Role} from '../../models';
+import {ExportRoleOutput, Role} from '../../models';
 import {AccessControlService} from '../../services/access-control.service';
 import {Router} from '@angular/router';
 
@@ -24,7 +24,8 @@ export class AccessControlOverviewComponent implements OnInit {
   public readonly skeleton$ = new BehaviorSubject<boolean>(false);
   public readonly showAddModal$ = new BehaviorSubject<boolean>(false);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
-  public readonly deleteRowKeys$ = new BehaviorSubject<Array<string>>([]);
+  public readonly showExportModal$ = new BehaviorSubject<boolean>(false);
+  public readonly selectedRowKeys$ = new BehaviorSubject<Array<string>>([]);
 
   constructor(
     private readonly accessControlService: AccessControlService,
@@ -56,10 +57,17 @@ export class AccessControlOverviewComponent implements OnInit {
   }
 
   public showDeleteModal(): void {
-    this.roles$.pipe(take(1)).subscribe(roles => {
-      this.deleteRowKeys$.next([roles[roles.length - 1].roleKey]);
-      this.showDeleteModal$.next(true);
-    });
+    this.setSelectedRoleKeys();
+    this.showDeleteModal$.next(true);
+  }
+
+  public showExportModal(): void {
+    this.setSelectedRoleKeys();
+    this.showExportModal$.next(true);
+  }
+
+  public closeExportModal(): void {
+    this.showExportModal$.next(false);
   }
 
   public onDelete(roles: Array<string>): void {
@@ -74,6 +82,10 @@ export class AccessControlOverviewComponent implements OnInit {
     );
   }
 
+  public onExport(event: ExportRoleOutput): void {
+    console.log('export', event);
+  }
+
   public onRowClick(role: Role): void {
     this.router.navigate([`/access-control/${role.roleKey}`]);
   }
@@ -84,5 +96,15 @@ export class AccessControlOverviewComponent implements OnInit {
 
   private disableSkeleton(): void {
     this.skeleton$.next(false);
+  }
+
+  // remove when bulk actions are implemented
+  private setSelectedRoleKeys(): void {
+    this.roles$.pipe(take(1)).subscribe(roles => {
+      this.selectedRowKeys$.next([
+        roles[roles.length - 1].roleKey,
+        roles[roles.length - 2].roleKey,
+      ]);
+    });
   }
 }

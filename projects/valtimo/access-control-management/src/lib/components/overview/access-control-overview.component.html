@@ -20,10 +20,21 @@
 ></valtimo-role-metadata-modal>
 
 <button (click)="showDeleteModal()">delete</button>
+<button (click)="showExportModal()">export</button>
 
-<valtimo-delete-role-modal
-  (deleteEvent)="onDelete($event)"
-  [showDeleteModal$]="showDeleteModal$"
-  [deleteRowKeys]="deleteRowKeys$ | async"
->
-</valtimo-delete-role-modal>
+<ng-container *ngIf="{selectedRowKeys: selectedRowKeys$ | async} as obs">
+  <valtimo-delete-role-modal
+    [deleteRowKeys]="obs.selectedRowKeys"
+    [showDeleteModal$]="showDeleteModal$"
+    (deleteEvent)="onDelete($event)"
+  >
+  </valtimo-delete-role-modal>
+
+  <valtimo-export-role-modal
+    [exportRowKeys]="obs.selectedRowKeys"
+    [open]="showExportModal$ | async"
+    (exportEvent)="onExport($event)"
+    (closeEvent)="closeExportModal()"
+  >
+  </valtimo-export-role-modal>
+</ng-container>

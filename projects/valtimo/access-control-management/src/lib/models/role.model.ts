@@ -8,4 +8,11 @@ interface DeleteRolesRequest {
 
 type RoleMetadataModal = 'add' | 'edit';
 
-export {Role, DeleteRolesRequest, RoleMetadataModal};
+type RoleExport = 'unified' | 'separate';
+
+interface ExportRoleOutput {
+  roleKeys: Array<string>;
+  type: RoleExport;
+}
+
+export {Role, DeleteRolesRequest, RoleMetadataModal, RoleExport, ExportRoleOutput};

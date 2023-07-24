@@ -1,0 +1,44 @@
+<ibm-modal
+  *ngIf="{title: ('interface.export' | translate), selectedType: selectedType$ | async} as vars"
+  valtimoIbmModal
+  [open]="open"
+  size="sm"
+  showFooter="true"
+  [title]="vars.title"
+>
+  <ibm-modal-header [showCloseButton]="true" (closeSelect)="onCancel()">
+    <h3 ibmModalHeaderHeading>
+      {{ vars.title }}
+    </h3>
+  </ibm-modal-header>
+
+  <section ibmModalContent>
+    <div class="export-buttons">
+      <button ibmButton="secondary" (click)="selectType('separate')">
+        {{ 'accessControl.roles.singleExport' | translate }}
+
+        <svg class="cds--btn__icon" ibmIcon="document" size="16"></svg>
+      </button>
+
+      <button ibmButton="secondary" (click)="selectType('unified')">
+        {{ 'accessControl.roles.multipleExport' | translate }}
+
+        <svg class="cds--btn__icon" ibmIcon="copy--file" size="16"></svg>
+      </button>
+    </div>
+  </section>
+
+  <ibm-modal-footer>
+    <button ibmButton="ghost" (click)="onCancel()">
+      {{ 'interface.cancel' | translate }}
+    </button>
+
+    <button
+      [disabled]="!vars.selectedType"
+      (click)="onConfirm(vars.selectedType)"
+      ibmButton="primary"
+    >
+      {{ vars.title }}
+    </button>
+  </ibm-modal-footer>
+</ibm-modal>

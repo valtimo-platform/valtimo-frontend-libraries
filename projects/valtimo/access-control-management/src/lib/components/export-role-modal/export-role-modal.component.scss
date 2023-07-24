@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-.loading-container {
-  display: flex;
+.export-buttons {
+  display: grid;
   width: 100%;
-  justify-content: center;
-}
+  grid-template-columns: 1fr 1fr;
+  column-gap: 16px;
 
-.overflow-button {
-  margin-right: 16px;
-}
-
-.buttons-container {
-  display: flex;
-  flex-direction: row;
+  button {
+    width: 100%;
+  }
 }
