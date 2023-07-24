@@ -14,13 +14,13 @@
 
   <section ibmModalContent>
     <div class="export-buttons">
-      <button ibmButton="secondary" (click)="selectType('separate')">
+      <button [disabled]="disabled" ibmButton="secondary" (click)="selectType('separate')">
         {{ 'accessControl.roles.singleExport' | translate }}
 
         <svg class="cds--btn__icon" ibmIcon="document" size="16"></svg>
       </button>
 
-      <button ibmButton="secondary" (click)="selectType('unified')">
+      <button [disabled]="disabled" ibmButton="secondary" (click)="selectType('unified')">
         {{ 'accessControl.roles.multipleExport' | translate }}
 
         <svg class="cds--btn__icon" ibmIcon="copy--file" size="16"></svg>
@@ -29,14 +29,14 @@
   </section>
 
   <ibm-modal-footer>
-    <button ibmButton="ghost" (click)="onCancel()">
+    <button [disabled]="disabled" ibmButton="ghost" (click)="onCancel()">
       {{ 'interface.cancel' | translate }}
     </button>
 
     <button
-      [disabled]="!vars.selectedType"
-      (click)="onConfirm(vars.selectedType)"
+      [disabled]="!vars.selectedType || disabled"
       ibmButton="primary"
+      (click)="onConfirm(vars.selectedType)"
     >
       {{ vars.title }}
     </button>

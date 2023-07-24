@@ -31,8 +31,10 @@
   </valtimo-delete-role-modal>
 
   <valtimo-export-role-modal
+    [disabled]="exportDisabled$ | async"
     [exportRowKeys]="obs.selectedRowKeys"
     [open]="showExportModal$ | async"
+    [reset$]="resetExportType$"
     (exportEvent)="onExport($event)"
     (closeEvent)="closeExportModal()"
   >

@@ -1,6 +1,11 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {CarbonTableConfig, ColumnType, createCarbonTableConfig} from '@valtimo/components';
-import {BehaviorSubject, finalize, Observable, take} from 'rxjs';
+import {
+  CARBON_CONSTANTS,
+  CarbonTableConfig,
+  ColumnType,
+  createCarbonTableConfig,
+} from '@valtimo/components';
+import {BehaviorSubject, finalize, Observable, Subject, take} from 'rxjs';
 import {ExportRoleOutput, Role} from '../../models';
 import {AccessControlService} from '../../services/access-control.service';
 import {Router} from '@angular/router';
@@ -26,6 +31,8 @@ export class AccessControlOverviewComponent implements OnInit {
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
   public readonly showExportModal$ = new BehaviorSubject<boolean>(false);
   public readonly selectedRowKeys$ = new BehaviorSubject<Array<string>>([]);
+  public readonly resetExportType$ = new Subject<null>();
+  public readonly exportDisabled$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly accessControlService: AccessControlService,
@@ -83,7 +90,14 @@ export class AccessControlOverviewComponent implements OnInit {
   }
 
   public onExport(event: ExportRoleOutput): void {
-    console.log('export', event);
+    this.exportDisabled$.next(true);
+
+    setTimeout(() => {
+      this.resetExportType$.next(null);
+      setTimeout(() => {
+        this.exportDisabled$.next(false);
+      }, CARBON_CONSTANTS.modalAnimationMs);
+    }, 1000);
   }
 
   public onRowClick(role: Role): void {
