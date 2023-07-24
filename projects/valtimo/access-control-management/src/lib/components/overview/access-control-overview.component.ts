@@ -90,6 +90,7 @@ export class AccessControlOverviewComponent implements OnInit {
   }
 
   public onExport(event: ExportRoleOutput): void {
+    console.log('output', event);
     this.exportDisabled$.next(true);
 
     setTimeout(() => {
