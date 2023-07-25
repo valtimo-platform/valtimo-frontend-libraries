@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {AccessControlService} from './access-control.service';
-import {ExportRoleOutput} from '../models';
+import {ExportRoleOutput, RoleExport} from '../models';
 import {combineLatest, map, Observable, tap} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
@@ -33,12 +33,12 @@ export class AccessControlExportService {
             res.reduce((acc, curr) => {
               return [...acc, ...curr];
             }, []),
-            event
+            event.type
           );
         } else {
           res.forEach((permissions, index) => {
             const roleKey = event.roleKeys[index];
-            this.downloadJson(permissions, event, roleKey);
+            this.downloadJson(permissions, event.type, roleKey);
           });
         }
       }),
@@ -46,17 +46,13 @@ export class AccessControlExportService {
     );
   }
 
-  private downloadJson(
-    permissions: Array<object>,
-    event: ExportRoleOutput,
-    roleKey?: string
-  ): void {
+  public downloadJson(permissions: Array<object>, type: RoleExport, roleKey?: string): void {
     const sJson = JSON.stringify({permissions}, null, 2);
     const element = document.createElement('a');
     element.setAttribute('href', 'data:text/json;charset=UTF-8,' + encodeURIComponent(sJson));
     element.setAttribute(
       'download',
-      `${event.type === 'separate' ? roleKey : 'combined'}.permissions.json`
+      `${type === 'separate' ? roleKey : 'combined'}.permissions.json`
     );
     element.style.display = 'none';
     document.body.appendChild(element);

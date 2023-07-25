@@ -22,6 +22,7 @@ import {EditorModel, PageTitleService} from '@valtimo/components';
 import {Role} from '../../models';
 import {NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
+import {AccessControlExportService} from '../../services/access-control-export.service';
 
 @Component({
   templateUrl: './access-control-editor.component.html',
@@ -35,7 +36,7 @@ export class AccessControlEditorComponent implements OnInit, OnDestroy {
   public readonly moreDisabled$ = new BehaviorSubject<boolean>(true);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
   public readonly showEditModal$ = new BehaviorSubject<boolean>(false);
-  public readonly deleteRowKeys$ = new BehaviorSubject<Array<string> | null>(null);
+  public readonly selectedRowKeys$ = new BehaviorSubject<Array<string> | null>(null);
 
   private _roleKeySubscription!: Subscription;
   private _roleKey!: string;
@@ -47,7 +48,8 @@ export class AccessControlEditorComponent implements OnInit, OnDestroy {
     private readonly pageTitleService: PageTitleService,
     private readonly router: Router,
     private readonly notificationService: NotificationService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly accessControlExportService: AccessControlExportService
   ) {}
 
   public ngOnInit(): void {
@@ -138,6 +140,14 @@ export class AccessControlEditorComponent implements OnInit, OnDestroy {
     });
   }
 
+  public exportPermissions(model: EditorModel): void {
+    this.accessControlExportService.downloadJson(
+      JSON.parse(model.value),
+      'separate',
+      this._roleKey
+    );
+  }
+
   private openRoleKeySubscription(): void {
     this._roleKeySubscription = this.route.params
       .pipe(
@@ -146,7 +156,7 @@ export class AccessControlEditorComponent implements OnInit, OnDestroy {
         tap(roleKey => {
           this._roleKey = roleKey;
           this.pageTitleService.setCustomPageTitle(roleKey, true);
-          this.deleteRowKeys$.next([roleKey]);
+          this.selectedRowKeys$.next([roleKey]);
         }),
         switchMap(roleKey => this.accessControlService.getRolePermissions(roleKey)),
         tap(permissions => {
@@ -164,7 +174,7 @@ export class AccessControlEditorComponent implements OnInit, OnDestroy {
       .pipe(
         tap(params => {
           this.pageTitleService.setCustomPageTitle(params?.id);
-          this.deleteRowKeys$.next([params?.id]);
+          this.selectedRowKeys$.next([params?.id]);
         }),
         switchMap(params => this.accessControlService.getRolePermissions(params.id))
       )
