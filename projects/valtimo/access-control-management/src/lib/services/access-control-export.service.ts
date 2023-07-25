@@ -17,7 +17,7 @@
 import {Injectable} from '@angular/core';
 import {AccessControlService} from './access-control.service';
 import {ExportRoleOutput, RoleExport} from '../models';
-import {combineLatest, map, Observable, tap} from 'rxjs';
+import {catchError, combineLatest, map, Observable, of, tap} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class AccessControlExportService {
@@ -40,7 +40,8 @@ export class AccessControlExportService {
           });
         }
       }),
-      map(() => true)
+      map(() => true),
+      catchError(() => of(false))
     );
   }
 
