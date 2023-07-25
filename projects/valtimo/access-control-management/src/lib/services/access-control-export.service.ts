@@ -30,9 +30,7 @@ export class AccessControlExportService {
       tap(res => {
         if (event.type === 'unified') {
           this.downloadJson(
-            res.reduce((acc, curr) => {
-              return [...acc, ...curr];
-            }, []),
+            res.reduce((acc, curr) => [...acc, ...curr], []),
             event.type
           );
         } else {
