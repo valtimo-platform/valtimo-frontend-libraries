@@ -86,7 +86,7 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     return this._data;
   }
 
-  @Input() loading = true;
+  @Input() loading = false;
 
   @Output() paginationChange: EventEmitter<CarbonPaginationSelection> = new EventEmitter();
   @Output() rowClick: EventEmitter<T> = new EventEmitter();

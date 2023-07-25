@@ -138,8 +138,6 @@
       "path": "./projects/valtimo/task/tsconfig.spec.json"
     },
     {
-<<<<<<< HEAD
-=======
       "path": "./projects/valtimo/access-control/tsconfig.lib.json"
     },
     {
@@ -152,7 +150,6 @@
       "path": "./projects/valtimo/access-control-management/tsconfig.spec.json"
     },
     {
->>>>>>> ffbd24a4 (feat: access control overview (#516))
       "path": "./projects/valtimo/security/tsconfig.lib.json"
     },
     {

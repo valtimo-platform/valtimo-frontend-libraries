@@ -28,7 +28,9 @@ import {PermissionService} from '@valtimo/access-control';
 import {BreadcrumbService} from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
 import {Document, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
+import {KeycloakService} from 'keycloak-angular';
 import moment from 'moment';
+import {NGXLogger} from 'ngx-logger';
 import {
   BehaviorSubject,
   combineLatest,
@@ -41,7 +43,6 @@ import {
   take,
   tap,
 } from 'rxjs';
-
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {TabLoaderImpl} from '../models';
 import {
@@ -68,15 +69,10 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
   public documentDefinitionName: string;
   public documentDefinitionNameTitle: string;
   public documentId: string;
-  public document: Document = null;
-  public tabLoader: TabLoaderImpl = null;
   private snapshot: ParamMap;
   public processDefinitionListFields: Array<any> = [];
   public processDocumentDefinitions: ProcessDocumentDefinition[] = [];
   public tabLoader: TabLoaderImpl | null = null;
-
-  @ViewChild('supportingProcessStartModal')
-  supportingProcessStart: DossierSupportingProcessStartModalComponent;
 
   readonly refreshDocument$ = new BehaviorSubject<null>(null);
 
@@ -123,7 +119,7 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
     this.assigneeId$,
     this.userId$,
   ]).pipe(
-    map(([assigneeId, userId]) => assigneeId && userId && assigneeId === userId),
+    map(([assigneeId, userId]) => !!assigneeId && !!userId && assigneeId === userId),
     startWith(true)
   );
 

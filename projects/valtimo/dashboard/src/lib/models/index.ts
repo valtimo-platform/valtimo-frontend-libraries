@@ -18,6 +18,4 @@
  * Public API Surface of access-control
  */
 
-export * from './lib/models';
-export * from './lib/services';
-export * from './lib/utils';
+export * from './dashboard.model';
