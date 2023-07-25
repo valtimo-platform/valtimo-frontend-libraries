@@ -26,8 +26,8 @@
 <ng-container renderInPageHeader>
   <ng-template>
     <div
-      class="buttons-container"
       *ngIf="{model: model$ | async, moreDisabled: moreDisabled$ | async} as obs"
+      class="buttons-container"
     >
       <ibm-overflow-menu class="overflow-button">
         <ibm-overflow-menu-option [disabled]="obs.moreDisabled" (selected)="showEditModal()">{{
