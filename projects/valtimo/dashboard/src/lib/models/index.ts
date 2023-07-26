@@ -14,13 +14,4 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ValtimoIbmModalDirective} from './valtimo-ibm-modal.directive';
-
-@NgModule({
-  declarations: [ValtimoIbmModalDirective],
-  imports: [CommonModule],
-  exports: [ValtimoIbmModalDirective],
-})
-export class ValtimoIbmModalDirectiveModule {}
+export * from './dashboard.model';
