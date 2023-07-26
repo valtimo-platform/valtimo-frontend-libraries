@@ -10,9 +10,8 @@ import {
 import {BehaviorSubject, combineLatest, map, Observable, Subscription} from 'rxjs';
 import {DashboardItem, WidgetModalType} from '../../models';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ListItem, NotificationService} from 'carbon-components-angular';
+import {ListItem} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
-import {widgetChartTypesMock, widgetDataSourcesMock} from '../../mocks';
 import {DOCUMENT} from '@angular/common';
 
 @Component({
@@ -88,7 +87,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService,
-    private readonly notificationService: NotificationService,
+    // private readonly notificationService: NotificationService,
     @Inject(DOCUMENT) private readonly document: Document
   ) {}
 
@@ -143,13 +142,13 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.document.defaultView.navigator.clipboard.writeText(this.key.value);
-    this.notificationService.showToast({
-      caption: this.translateService.instant('dashboardManagement.widgets.form.keyCopied'),
-      type: 'success',
-      duration: 4000,
-      showClose: true,
-      title: this.translateService.instant('dashboardManagement.widgets.form.keyCopiedTitle'),
-    });
+    // this.notificationService.showToast({
+    //   caption: this.translateService.instant('dashboardManagement.widgets.form.keyCopied'),
+    //   type: 'success',
+    //   duration: 4000,
+    //   showClose: true,
+    //   title: this.translateService.instant('dashboardManagement.widgets.form.keyCopiedTitle'),
+    // });
   }
 
   private setDropdownData(): void {
@@ -158,11 +157,11 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private setDataSourceItems(): void {
-    this._dataSourceItems$.next(widgetDataSourcesMock);
+    // this._dataSourceItems$.next(widgetDataSourcesMock);
   }
 
   private setChartTypeItems(): void {
-    this._chartTypeItems$.next(widgetChartTypesMock);
+    // this._chartTypeItems$.next(widgetChartTypesMock);
   }
 
   private setForm(): void {

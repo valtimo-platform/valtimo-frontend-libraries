@@ -35,7 +35,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
 
       console.log('dash', currentDashboard);
 
-      this.pageTitleService.setCustomPageTitle(currentDashboard.name);
+      this.pageTitleService.setCustomPageTitle(currentDashboard.title);
       this.pageTitleService.setCustomPageSubtitle(
         this.translateService.instant('dashboardManagement.widgets.metadata', {
           createdBy: currentDashboard.createdBy,
@@ -46,10 +46,16 @@ export class DashboardDetailsComponent implements AfterViewInit {
     })
   );
 
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
+
   public readonly widgetData$ = this.dashboardKey$.pipe(
     switchMap(dashboardKey =>
       this.dashboardManagementService.getDashboardWidgetConfiguration(dashboardKey)
-    )
+    ),
+    tap(data => {
+      this.loading$.next(false);
+      console.log('widget data', data);
+    })
   );
 
   public readonly showModal$ = new BehaviorSubject<boolean>(false);
