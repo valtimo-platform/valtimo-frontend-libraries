@@ -10,7 +10,7 @@ import {
 import {BehaviorSubject, combineLatest, map, Observable, Subscription} from 'rxjs';
 import {DashboardItem, WidgetModalType} from '../../models';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ListItem} from 'carbon-components-angular';
+import {ListItem, NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {DOCUMENT} from '@angular/common';
 
@@ -19,6 +19,7 @@ import {DOCUMENT} from '@angular/common';
   templateUrl: './widget-modal.component.html',
   styleUrls: ['./widget-modal.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [NotificationService],
 })
 export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public showModal$: Observable<boolean>;
@@ -87,8 +88,8 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService,
-    // private readonly notificationService: NotificationService,
-    @Inject(DOCUMENT) private readonly document: Document
+    @Inject(DOCUMENT) private readonly document: Document,
+    private readonly notificationService: NotificationService
   ) {}
 
   public ngOnInit(): void {
@@ -142,13 +143,13 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.document.defaultView.navigator.clipboard.writeText(this.key.value);
-    // this.notificationService.showToast({
-    //   caption: this.translateService.instant('dashboardManagement.widgets.form.keyCopied'),
-    //   type: 'success',
-    //   duration: 4000,
-    //   showClose: true,
-    //   title: this.translateService.instant('dashboardManagement.widgets.form.keyCopiedTitle'),
-    // });
+    this.notificationService.showToast({
+      caption: this.translateService.instant('dashboardManagement.widgets.form.keyCopied'),
+      type: 'success',
+      duration: 4000,
+      showClose: true,
+      title: this.translateService.instant('dashboardManagement.widgets.form.keyCopiedTitle'),
+    });
   }
 
   private setDropdownData(): void {
@@ -156,13 +157,9 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     this.setChartTypeItems();
   }
 
-  private setDataSourceItems(): void {
-    // this._dataSourceItems$.next(widgetDataSourcesMock);
-  }
+  private setDataSourceItems(): void {}
 
-  private setChartTypeItems(): void {
-    // this._chartTypeItems$.next(widgetChartTypesMock);
-  }
+  private setChartTypeItems(): void {}
 
   private setForm(): void {
     this.form = this.fb.group({
