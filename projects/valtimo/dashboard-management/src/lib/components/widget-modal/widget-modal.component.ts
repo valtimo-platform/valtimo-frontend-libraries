@@ -157,8 +157,10 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     this.setChartTypeItems();
   }
 
+  // implement with new BE endpoints
   private setDataSourceItems(): void {}
 
+  // implement with new BE endpoints
   private setChartTypeItems(): void {}
 
   private setForm(): void {
