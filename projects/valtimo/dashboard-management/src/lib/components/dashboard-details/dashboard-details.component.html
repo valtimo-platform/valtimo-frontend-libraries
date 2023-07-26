@@ -2,9 +2,9 @@
   <div class="dashboard-detail-table">
     <valtimo-carbon-table
       [data]="widgetData$ | async"
+       [hideTableHeader]="true"
       [loading]="loading$ | async"
       [tableConfig]="tableConfig"
-      [hideTableHeader]="true"
     >
       <div carbonToolbarContent>
         <ng-container [ngTemplateOutlet]="addWidgetButton"></ng-container>
