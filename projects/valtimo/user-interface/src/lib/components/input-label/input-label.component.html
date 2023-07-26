@@ -18,10 +18,10 @@
   class="v-input-label-container"
   [ngClass]="{'v-input-label-container--large-margin': largeMargin}"
 >
-  <ibm-label [disabled]="disabled">
+  <cds-label [disabled]="disabled">
     <span class="label-with-tooltip">
       {{ displayTitle$ | async }}
       <v-tooltip-icon *ngIf="tooltip" [tooltip]="tooltip" [disabled]="disabled"></v-tooltip-icon>
     </span>
-  </ibm-label>
+  </cds-label>
 </div>
