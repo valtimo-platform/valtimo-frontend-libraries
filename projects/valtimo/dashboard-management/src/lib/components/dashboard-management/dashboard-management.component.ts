@@ -20,6 +20,7 @@ import {CarbonTableConfig, ColumnType, createCarbonTableConfig} from '@valtimo/c
 import {BehaviorSubject, finalize, Observable} from 'rxjs';
 import {DashboardItem} from '../../models';
 import {DashboardManagementService} from '../../services/dashboard-management.service';
+import {Router} from '@angular/router';
 
 @Component({
   templateUrl: './dashboard-management.component.html',
@@ -71,7 +72,8 @@ export class DashboardManagementComponent implements OnInit {
 
   constructor(
     private readonly dashboardManagementService: DashboardManagementService,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly router: Router
   ) {}
 
   public ngOnInit(): void {
@@ -115,6 +117,10 @@ export class DashboardManagementComponent implements OnInit {
 
   public openModal(): void {
     this.openModal$.next(true);
+  }
+
+  public onRowClick(item: DashboardItem): void {
+    this.router.navigate([`/dashboard-management/${item.key}`]);
   }
 
   private deleteDashboard(dashboard: DashboardItem): void {
