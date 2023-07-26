@@ -271,7 +271,6 @@
       "profile": "Profiel",
       "password": "Wachtwoord",
       "help": "Help",
-      "forum": "Forum",
       "feedback": "Feedback",
       "resetPassword": "Wachtwoord resetten",
       "signOut": "Afmelden",
@@ -583,7 +582,14 @@
     "expand": "Uitklappen",
     "download": "Download",
     "openInNewTab": "In nieuw tabblad openen",
-    "required": "vereist"
+    "table": {
+      "itemsPerPage": "Artikelen per pagina",
+      "multipleSelect": "{{count}} artikelen geselecteerd",
+      "ofLastPage": "van {{last}} pagina",
+      "ofLastPages": "van {{last}} pagina's",
+      "singleSelect": "1 artikel geselecteerd",
+      "totalItems": "{{start}}-{{end}} van {{total}} artikelen"
+    }
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",

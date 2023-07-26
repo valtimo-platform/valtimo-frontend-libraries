@@ -271,7 +271,6 @@
       "profile": "Profile",
       "password": "Passwort",
       "help": "Hilfe",
-      "forum": "Forum",
       "feedback": "Feedback",
       "resetPassword": "Passwort zurücksetzen",
       "signOut": "Abmeldung",
@@ -583,7 +582,14 @@
     "expand": "Expandieren",
     "download": "Herunterladen",
     "openInNewTab": "In neuem Tab öffnen",
-    "required": "erforderlich"
+    "table": {
+      "itemsPerPage": "Objekte pro Seite",
+      "multipleSelect": "{{count}} Elemente ausgewählt",
+      "ofLastPage": "von {{last}} Seite",
+      "ofLastPages": "von {{last}} Seiten",
+      "singleSelect": "1 Element ausgewählt",
+      "totalItems": "{{start}}-{{end}} von {{total}} Objekte"
+    }
   },
   "taskDetail": {
     "taskCreated": "Erstellt",
