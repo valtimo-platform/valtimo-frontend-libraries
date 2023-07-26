@@ -18,7 +18,7 @@
   [data]="roles$ | async"
   [loading]="loading$ | async"
   [tableConfig]="tableConfig"
-  (rowClick)="onRowClick($event)"
+  (rowClickEvent)="onRowClick($event)"
 >
   <ng-container carbonTableTitle> {{ 'accessControl.roles.title' | translate }} </ng-container>
 

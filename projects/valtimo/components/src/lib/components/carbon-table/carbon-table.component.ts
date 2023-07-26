@@ -88,9 +88,9 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
 
   @Input() loading = false;
 
-  @Output() paginationChange: EventEmitter<CarbonPaginationSelection> = new EventEmitter();
-  @Output() rowClick: EventEmitter<T> = new EventEmitter();
-  @Output() search: EventEmitter<string | null> = new EventEmitter();
+  @Output() paginationChangeEvent: EventEmitter<CarbonPaginationSelection> = new EventEmitter();
+  @Output() rowClickEvent: EventEmitter<T> = new EventEmitter();
+  @Output() searchEvent: EventEmitter<string | null> = new EventEmitter();
 
   public batchText$: Observable<{SINGLE: any; MULTIPLE: any}> = combineLatest([
     this.translateService.stream('interface.table.singleSelect'),
@@ -161,16 +161,16 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.rowClick.emit(this.data[itemInitialIndex]);
+    this.rowClickEvent.emit(this.data[itemInitialIndex]);
   }
 
   public onSearch(searchString: string | null): void {
-    this.search.emit(searchString);
+    this.searchEvent.emit(searchString);
   }
 
   public onSelectPage(pageIndex: number): void {
     this._tableModel.currentPage = pageIndex;
-    this.paginationChange.emit({
+    this.paginationChangeEvent.emit({
       currentPage: pageIndex,
       pageLength: this._tableModel.pageLength,
     });
