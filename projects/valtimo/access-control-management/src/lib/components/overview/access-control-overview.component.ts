@@ -130,7 +130,6 @@ export class AccessControlOverviewComponent implements OnInit {
   }
 
   public onRowClick(role: Role): void {
-    console.log(role);
     this.router.navigate([`/access-control/${role.roleKey}`]);
   }
 

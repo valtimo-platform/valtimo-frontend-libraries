@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {AfterViewInit, Component, TemplateRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
@@ -49,9 +48,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
         return;
       }
 
-      console.log('dash', currentDashboard);
-
-      this.pageTitleService.setCustomPageTitle(currentDashboard.title);
+      this.pageTitleService.setCustomPageTitle(currentDashboard.title ?? '');
       this.pageTitleService.setCustomPageSubtitle(
         this.translateService.instant('dashboardManagement.widgets.metadata', {
           createdBy: currentDashboard.createdBy,
