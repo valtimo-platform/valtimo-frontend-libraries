@@ -22,12 +22,13 @@ import {
   filter,
   map,
   Observable,
+  of,
   Subscription,
   switchMap,
   take,
   tap,
 } from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {
   DossierColumnService,
   DossierListAssigneeService,
@@ -57,6 +58,8 @@ import {
 } from '@valtimo/document';
 import {DefaultTabs} from '../dossier-detail-tab-enum';
 import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
+import {NO_PERMISSION, NoPermission, PermissionService} from '@valtimo/access-control';
+import {CAN_RETRIEVE_SEARCH_FIELDS_PERMISSIONS, DOSSIER_PERMISSION_RESOURCE} from '../permissions';
 
 @Component({
   selector: 'valtimo-dossier-list',
@@ -81,9 +84,19 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public canHaveAssignee!: boolean;
   public visibleDossierTabs: Array<DossierListTab> | null = null;
 
-  public readonly searchFields$: Observable<Array<SearchField> | null> =
-    this.searchService.documentSearchFields$.pipe(
-      tap(searchFields => {
+  public readonly searchFields$: Observable<Array<SearchField> | null | NoPermission> =
+    this.route.paramMap.pipe(
+      tap(parammap => console.log('ivo map', parammap)),
+      switchMap((params: ParamMap) =>
+        this.permissionService.requestPermission(CAN_RETRIEVE_SEARCH_FIELDS_PERMISSIONS, {
+          resource: DOSSIER_PERMISSION_RESOURCE.domain,
+          identifier: params.get('documentDefinitionName') ?? '',
+        })
+      ),
+      switchMap(hasPermission =>
+        hasPermission ? this.searchService.documentSearchFields$ : of(NO_PERMISSION)
+      ),
+      tap(() => {
         this.loadingSearchFields = false;
       })
     );
@@ -296,7 +309,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly configService: ConfigService,
     private readonly pageTitleService: PageTitleService,
-    private readonly breadcrumbService: BreadcrumbService
+    private readonly breadcrumbService: BreadcrumbService,
+    private readonly permissionService: PermissionService
   ) {}
 
   ngOnInit(): void {

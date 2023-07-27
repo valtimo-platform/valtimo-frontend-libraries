@@ -29,7 +29,7 @@ import {
   CAN_ADD_NOTE_PERMISSION,
   CAN_DELETE_NOTE_PERMISSION,
   CAN_EDIT_NOTE_PERMISSION,
-  DOSSIER_DETAIL_PERMISSION_RESOURCE,
+  DOSSIER_PERMISSION_RESOURCE,
 } from '../../../permissions';
 import {NotesService} from '../../../services/notes.service';
 
@@ -54,7 +54,7 @@ export class DossierDetailTabNotesComponent implements OnInit {
   public readonly canAdd$: Observable<boolean> = this.documentId$.pipe(
     switchMap((identifier: string) =>
       this.permissionService.requestPermission(CAN_ADD_NOTE_PERMISSION, {
-        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.domain,
+        resource: DOSSIER_PERMISSION_RESOURCE.domain,
         identifier,
       })
     )
@@ -104,13 +104,13 @@ export class DossierDetailTabNotesComponent implements OnInit {
         of(res),
         ...res.content.map(note =>
           this.permissionService.requestPermission(CAN_DELETE_NOTE_PERMISSION, {
-            resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.note,
+            resource: DOSSIER_PERMISSION_RESOURCE.note,
             identifier: note.id,
           })
         ),
         ...res.content.map(note =>
           this.permissionService.requestPermission(CAN_EDIT_NOTE_PERMISSION, {
-            resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.note,
+            resource: DOSSIER_PERMISSION_RESOURCE.note,
             identifier: note.id,
           })
         ),

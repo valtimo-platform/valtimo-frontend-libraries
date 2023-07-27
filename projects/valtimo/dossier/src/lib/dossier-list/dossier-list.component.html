@@ -45,7 +45,7 @@
 </ng-container>
 
 <ng-template #searchFields let-obs="obs">
-  <div class="mb-3">
+  <div class="mb-3" *ngIf="obs.searchFields !== 'NO_PERMISSION'">
     <valtimo-search-fields
       [searchFields]="obs.searchFields"
       (doSearch)="search($event)"

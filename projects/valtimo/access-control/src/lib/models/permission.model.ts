@@ -46,6 +46,8 @@ interface ResolvedPermissions {
   [permissionRequestKey: string]: boolean;
 }
 
+type NoPermission = 'NO_PERMISSION';
+
 export {
   CachedResolvedPermissions,
   PendingPermissions,
@@ -54,4 +56,5 @@ export {
   PermissionRequestQueue,
   PermissionResponse,
   ResolvedPermissions,
+  NoPermission,
 };

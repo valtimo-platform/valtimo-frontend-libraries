@@ -14,11 +14,4 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of access-control
- */
-
-export * from './lib/models';
-export * from './lib/services';
-export * from './lib/utils';
-export * from './lib/constants';
+export * from './permissions.constants';

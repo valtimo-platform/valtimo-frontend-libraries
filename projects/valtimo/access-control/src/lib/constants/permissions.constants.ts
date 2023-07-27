@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of access-control
- */
+import {NoPermission} from '../models';
 
-export * from './lib/models';
-export * from './lib/services';
-export * from './lib/utils';
-export * from './lib/constants';
+const NO_PERMISSION: NoPermission = 'NO_PERMISSION';
+
+export {NO_PERMISSION};
