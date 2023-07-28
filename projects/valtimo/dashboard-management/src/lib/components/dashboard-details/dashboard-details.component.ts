@@ -40,7 +40,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
       this.pageTitleService.setCustomPageSubtitle(
         this.translateService.instant('dashboardManagement.widgets.metadata', {
           createdBy: currentDashboard.createdBy,
-          createdOn: this.datePipe.transform(currentDashboard.createdOn ?? '', 'd/M/yy, h:mma'),
+          createdOn: this.datePipe.transform(currentDashboard.createdOn ?? '', 'd/M/yy, H:mm'),
           key: currentDashboard.key,
         })
       );
