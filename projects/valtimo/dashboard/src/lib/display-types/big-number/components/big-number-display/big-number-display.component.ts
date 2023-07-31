@@ -15,7 +15,7 @@
  */
 
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {DisplayComponent} from '../../../../models';
+import {DisplayComponent, WidgetSeverity} from '../../../../models';
 import {BigNumberData, BigNumberDisplayTypeProperties} from '../../models';
 
 @Component({
@@ -28,4 +28,22 @@ export class BigNumberDisplayComponent implements DisplayComponent {
   @Input() displayTypeKey: string;
   @Input() data: BigNumberData;
   @Input() displayTypeProperties: BigNumberDisplayTypeProperties;
+
+  public get severityClass(): string {
+    if (!this.displayTypeProperties.useKPI) {
+      return WidgetSeverity.BLACK;
+    }
+
+    const value: number = this.data.value;
+
+    if (value < this.displayTypeProperties.lowSeverityThreshold) {
+      return WidgetSeverity.GREEN;
+    } else if (value < this.displayTypeProperties.mediumSeverityThreshold) {
+      return WidgetSeverity.YELLOW;
+    } else if (value < this.displayTypeProperties.highSeverityThreshold) {
+      return WidgetSeverity.ORANGE;
+    }
+
+    return WidgetSeverity.RED;
+  }
 }

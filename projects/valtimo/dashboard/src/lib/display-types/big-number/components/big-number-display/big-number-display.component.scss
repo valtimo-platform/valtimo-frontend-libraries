@@ -1,8 +1,11 @@
+@use '@carbon/colors';
+
 :host {
   display: flex;
   flex-direction: column;
-  width: 304px;
-  padding: 20px;
+  width: 100%;
+  height: 100%;
+  padding: 20px 20px 0 20px;
   gap: 12px;
 }
 
@@ -25,7 +28,29 @@
 
   &__content {
     display: flex;
-    align-items: flex-end;
+    align-items: baseline;
     gap: 12px;
+  }
+}
+
+.valtimo-severity {
+  &__black {
+    color: colors.$black-100;
+  }
+
+  &__green {
+    color: colors.$green-40;
+  }
+
+  &__yellow {
+    color: colors.$yellow-30;
+  }
+
+  &__orange {
+    color: colors.$orange-40;
+  }
+
+  &__red {
+    color: colors.$red-60;
   }
 }

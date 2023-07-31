@@ -25,6 +25,7 @@ interface BigNumberDisplayTypeProperties {
   lowSeverityThreshold: number;
   mediumSeverityThreshold: number;
   highSeverityThreshold: number;
+  label?: string;
 }
 
 export {BigNumberData, BigNumberDisplayTypeProperties};
