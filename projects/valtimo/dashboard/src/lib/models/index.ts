@@ -15,3 +15,5 @@
  */
 
 export * from './dashboard.model';
+export * from './widget.model';
+export * from './widget-display.model';
