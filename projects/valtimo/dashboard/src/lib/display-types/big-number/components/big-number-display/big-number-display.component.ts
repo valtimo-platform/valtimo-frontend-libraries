@@ -25,6 +25,7 @@ import {BigNumberDisplayTypeProperties} from '../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BigNumberDisplayComponent implements DisplayComponent {
+  @Input() displayTypeKey: string;
   @Input() data: object;
   @Input() displayTypeProperties: BigNumberDisplayTypeProperties;
 }

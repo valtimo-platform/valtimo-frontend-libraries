@@ -18,6 +18,7 @@ import {Type} from '@angular/core';
 import {DisplayTypeConfigurationComponent} from './configuration.model';
 
 interface DisplayComponent {
+  displayTypeKey: string;
   displayTypeProperties: object;
   data: object;
 }
