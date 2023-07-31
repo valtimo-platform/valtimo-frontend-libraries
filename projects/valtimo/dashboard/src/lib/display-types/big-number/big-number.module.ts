@@ -17,10 +17,13 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BigNumberDisplayComponent} from './components/big-number-display/big-number-display.component';
+import {DISPLAY_TYPE_TOKEN} from '../../constants';
+import {bigNumberSpecification} from './big-number.specification';
 
 @NgModule({
   declarations: [BigNumberDisplayComponent],
   imports: [CommonModule],
   exports: [BigNumberDisplayComponent],
+  providers: [{provide: DISPLAY_TYPE_TOKEN, useValue: bigNumberSpecification, multi: true}],
 })
 export class BigNumberModule {}

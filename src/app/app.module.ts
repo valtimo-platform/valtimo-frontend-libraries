@@ -54,7 +54,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CustomFormExampleComponent} from './custom-form-example/custom-form-example.component';
 import {StartProcessCustomFormComponent} from './start-process-custom-form/start-process-custom-form.component';
 import {ContextModule} from '@valtimo/context';
-import {DashboardModule} from '@valtimo/dashboard';
+import {BigNumberModule, DashboardModule} from '@valtimo/dashboard';
 import {DashboardManagementModule} from '@valtimo/dashboard-management';
 import {DocumentModule} from '@valtimo/document';
 import {ContactMomentModule} from '@valtimo/contact-moment';
@@ -214,6 +214,7 @@ export function tabsFactory() {
     }),
     ObjectModule,
     ObjectManagementModule,
+    BigNumberModule,
   ],
   providers: [
     FormioComponent,
