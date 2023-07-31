@@ -14,6 +14,4 @@
  * limitations under the License.
  */
 
-export * from './big-number';
-export * from './bar-chart';
-export * from './meter'
+export * from './bar-chart-display.component';

@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-export * from './big-number';
-export * from './bar-chart';
-export * from './meter'
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MeterDisplayComponent} from './components/meter-display/meter-display.component';
+import {DISPLAY_TYPE_TOKEN} from '../../constants';
+import {meterSpecification} from './meter.specification';
+
+@NgModule({
+  declarations: [MeterDisplayComponent],
+  imports: [CommonModule],
+  exports: [MeterDisplayComponent],
+  providers: [{provide: DISPLAY_TYPE_TOKEN, useValue: meterSpecification, multi: true}],
+})
+export class MeterModule {}

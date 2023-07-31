@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-export * from './big-number';
-export * from './bar-chart';
-export * from './meter'
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {BarChartDisplayComponent} from './components/bar-chart-display/bar-chart-display.component';
+import {DISPLAY_TYPE_TOKEN} from '../../constants';
+import {barChartSpecification} from './bar-chart.specification';
+
+@NgModule({
+  declarations: [BarChartDisplayComponent],
+  imports: [CommonModule],
+  exports: [BarChartDisplayComponent],
+  providers: [{provide: DISPLAY_TYPE_TOKEN, useValue: barChartSpecification, multi: true}],
+})
+export class BarChartModule {}

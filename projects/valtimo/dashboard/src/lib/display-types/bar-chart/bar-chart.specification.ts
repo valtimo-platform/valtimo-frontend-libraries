@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-export * from './big-number';
-export * from './bar-chart';
-export * from './meter'
+import {DisplayTypeSpecification} from '../../models';
+import {BarChartDisplayComponent} from './components/bar-chart-display/bar-chart-display.component';
+
+export const barChartSpecification: DisplayTypeSpecification = {
+  displayTypeKey: 'bar-chart',
+  displayComponent: BarChartDisplayComponent,
+  width: 1,
+  height: 2,
+  translations: {},
+};

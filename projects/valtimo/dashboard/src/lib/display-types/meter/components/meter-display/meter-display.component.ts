@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
-export * from './big-number';
-export * from './bar-chart';
-export * from './meter'
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {DisplayComponent} from '../../../../models';
+import {MeterData, MeterDisplayTypeProperties} from '../../models';
+
+@Component({
+  selector: 'valtimo-meter-display',
+  templateUrl: './meter-display.component.html',
+  styleUrls: ['./meter-display.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class MeterDisplayComponent implements DisplayComponent {
+  @Input() displayTypeKey: string;
+  @Input() data: MeterData;
+  @Input() displayTypeProperties: MeterDisplayTypeProperties;
+}

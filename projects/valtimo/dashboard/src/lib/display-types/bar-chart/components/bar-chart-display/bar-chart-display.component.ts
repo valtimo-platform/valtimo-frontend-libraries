@@ -14,6 +14,19 @@
  * limitations under the License.
  */
 
-export * from './big-number';
-export * from './bar-chart';
-export * from './meter'
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {DisplayComponent} from '../../../../models';
+import {BarChartData, BarChartDisplayTypeProperties} from '../../models';
+
+@Component({
+  selector: 'valtimo-bar-chart-display',
+  templateUrl: './bar-chart-display.component.html',
+  styleUrls: ['./bar-chart-display.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BarChartDisplayComponent implements DisplayComponent {
+  @Input() displayTypeKey: string;
+  @Input() data: BarChartData;
+  @Input() displayTypeProperties: BarChartDisplayTypeProperties;
+
+}

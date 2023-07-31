@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
-export * from './big-number';
-export * from './bar-chart';
-export * from './meter'
+interface MeterData {
+  value: number;
+}
+
+interface MeterDisplayTypeProperties {
+  title: string;
+}
+
+export {MeterData, MeterDisplayTypeProperties};
