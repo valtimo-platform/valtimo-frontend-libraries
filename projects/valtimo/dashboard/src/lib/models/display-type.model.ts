@@ -16,7 +16,6 @@
 
 import {Type} from '@angular/core';
 import {DisplayTypeConfigurationComponent} from './configuration.model';
-import {DisplaySize} from './widget-display.model';
 
 interface DisplayComponent {
   displayTypeKey: string;
@@ -28,7 +27,8 @@ interface DisplayTypeSpecification {
   displayTypeKey: string;
   displayComponent: Type<DisplayComponent>;
   configurationComponent?: Type<DisplayTypeConfigurationComponent>;
-  supportedSizes: Array<DisplaySize>;
+  width: number;
+  height: number;
   translations: {
     [langKey: string]: {
       [translationKey: string]: string;

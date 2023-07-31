@@ -10,8 +10,4 @@ enum WidgetSeverity {
   RED = 'valtimo-severity__red',
 }
 
-enum DisplaySize {
-  '1x1',
-}
-
-export {DisplaySize, WidgetType, WidgetSeverity};
+export {WidgetType, WidgetSeverity};

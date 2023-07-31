@@ -13,3 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+const WIDGET_1X_HEIGHT = 200;
+const WIDGET_1X_MIN_WIDTH = 275;
+
+export {WIDGET_1X_HEIGHT, WIDGET_1X_MIN_WIDTH};

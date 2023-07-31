@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-import {DisplayTypeSpecification} from '../../models';
-import {BigNumberDisplayComponent} from './components/big-number-display/big-number-display.component';
-
-export const bigNumberSpecification: DisplayTypeSpecification = {
-  displayTypeKey: 'number',
-  displayComponent: BigNumberDisplayComponent,
-  width: 1,
-  height: 1,
-  translations: {},
-};
+.dashboards-container {
+  .cds--tab-content {
+    padding: 0;
+  }
+}

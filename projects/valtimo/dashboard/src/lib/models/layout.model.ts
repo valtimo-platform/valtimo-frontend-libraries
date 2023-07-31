@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-import {DisplayTypeSpecification} from '../../models';
-import {BigNumberDisplayComponent} from './components/big-number-display/big-number-display.component';
+interface Bin {
+  width: number;
+  height: number;
+}
 
-export const bigNumberSpecification: DisplayTypeSpecification = {
-  displayTypeKey: 'number',
-  displayComponent: BigNumberDisplayComponent,
-  width: 1,
-  height: 1,
-  translations: {},
-};
+interface WidgetConfigurationBin {
+  configurationKey: string;
+  width: number;
+  height: number;
+}
+
+interface PackResult {
+  height: number;
+  width: number;
+  items: Array<{width: number; height: number; x: number; y: number; item: WidgetConfigurationBin}>
+}
+
+export {Bin, WidgetConfigurationBin, PackResult}
