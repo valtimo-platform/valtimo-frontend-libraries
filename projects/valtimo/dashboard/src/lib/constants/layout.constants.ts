@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-const WIDGET_1X_HEIGHT = 200;
+const WIDGET_1X_HEIGHT = 232;
 const WIDGET_1X_MIN_WIDTH = 275;
 
 export {WIDGET_1X_HEIGHT, WIDGET_1X_MIN_WIDTH};

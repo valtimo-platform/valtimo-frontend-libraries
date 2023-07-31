@@ -14,10 +14,24 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, QueryList, Renderer2, ViewChild, ViewChildren} from '@angular/core';
-import {Dashboard, DashboardWidgetConfiguration} from '../../models';
+import {
+  AfterViewInit,
+  Component,
+  ComponentRef,
+  ElementRef,
+  Input,
+  OnDestroy,
+  QueryList,
+  Renderer2,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef
+} from '@angular/core';
+import {Dashboard, DashboardWidgetConfiguration, DisplayComponent} from '../../models';
 import {WidgetLayoutService} from '../../services/widget-layout.service';
-import {BehaviorSubject, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
+import {take} from 'rxjs/operators';
+import {WidgetService} from '../../services';
 
 @Component({
   selector: 'valtimo-widget-dashboard-content',
@@ -27,6 +41,9 @@ import {BehaviorSubject, Subscription} from 'rxjs';
 })
 export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('widgetConfiguration') widgetConfigurationRefs: QueryList<ElementRef<HTMLDivElement>>;
+  @ViewChildren('widgetConfigurationContent', {read: ViewContainerRef})
+  widgetConfigurationContentVcRefs: QueryList<ViewContainerRef>;
+
   @ViewChild('widgetContainer') widgetContainerRef: ElementRef<any>;
   @Input() set dashboard(value: Dashboard) {
     this.layoutService.setWidgetConfigurations(value.widgets);
@@ -38,7 +55,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
   private _observer!: ResizeObserver;
   private _packResultSubscription!: Subscription;
 
-  constructor(private readonly layoutService: WidgetLayoutService, private readonly renderer: Renderer2) {}
+  constructor(private readonly layoutService: WidgetLayoutService,private readonly widgetService: WidgetService,private readonly renderer: Renderer2) {}
 
   ngAfterViewInit(): void {
     this._observer = new ResizeObserver(event => {
@@ -46,6 +63,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
     });
     this._observer.observe(this.widgetContainerRef.nativeElement);
     this.openPackResultSubscription();
+    this.renderWidgets();
   }
 
   ngOnDestroy(): void {
@@ -73,6 +91,20 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
         this.renderer.setStyle(nativeElement, 'left', `${configPackResult.x}px`)
         this.renderer.setStyle(nativeElement, 'top', `${configPackResult.y}px`)
 
+      })
+    })
+  }
+
+  private renderWidgets(): void {
+    combineLatest([this.widgetConfigurations$, this.widgetService.supportedDisplayTypes$]).pipe(take(1)).subscribe(([configurations, displayTypes]) => {
+      configurations.forEach((configuration, index) => {
+        const displayType = displayTypes.find((type) => type.displayTypeKey === configuration.displayType);
+        const vcRef = this.widgetConfigurationContentVcRefs.toArray()[index];
+        vcRef.clear();
+        const componentInstance : ComponentRef<DisplayComponent> = vcRef.createComponent(displayType.displayComponent);
+        componentInstance.setInput('displayTypeKey', configuration.displayType);
+        componentInstance.setInput('displayTypeProperties', configuration.displayTypeProperties)
+        componentInstance.setInput('data', {value: 8})
       })
     })
   }

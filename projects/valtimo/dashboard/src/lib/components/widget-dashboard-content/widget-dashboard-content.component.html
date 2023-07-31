@@ -19,7 +19,7 @@
     <ng-container *ngFor="let config of widgetConfigurations">
       <div #widgetConfiguration class="widget-configuration" [id]="config.key">
         <div class="widget-configuration-content">
-          {{config.title}}
+          <ng-container #widgetConfigurationContent></ng-container>
         </div>
       </div>
     </ng-container>

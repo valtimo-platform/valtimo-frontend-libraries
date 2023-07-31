@@ -34,7 +34,7 @@ export class BigNumberDisplayComponent implements DisplayComponent {
       return WidgetSeverity.BLACK;
     }
 
-    const value: number = this.data.value;
+    const value: number = this.data?.value;
 
     if (value < this.displayTypeProperties.lowSeverityThreshold) {
       return WidgetSeverity.GREEN;
