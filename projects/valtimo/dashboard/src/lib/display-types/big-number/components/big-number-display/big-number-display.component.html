@@ -1,11 +1,11 @@
-<h3 class="valtimo-big-number-widget__title">{{ data.title }}</h3>
+<h3 class="valtimo-big-number-widget__title">{{ displayTypeProperties.title }}</h3>
 
-<span class="valtimo-big-number-widget__subtitle"> {{ data.subtitle }} </span>
+<span class="valtimo-big-number-widget__subtitle"> {{ displayTypeProperties.subtitle }} </span>
 
 <section class="valtimo-big-number-widget__content">
-  <span [class]="['valtimo-big-number-widget__number', data.severity]">{{ data.number }}</span>
+  <span [class]="['valtimo-big-number-widget__number']">{{ data.value }}</span>
 
-  <span *ngIf="data.label" class="valtimo-big-number-widget__label">
-    {{ data.label }}
+  <span *ngIf="displayTypeProperties" class="valtimo-big-number-widget__label">
+    {{ displayTypeProperties.subtitle }}
   </span>
 </section>

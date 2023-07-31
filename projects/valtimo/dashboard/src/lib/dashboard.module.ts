@@ -30,7 +30,6 @@ import {TabsModule, ThemeModule} from 'carbon-components-angular';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {WidgetDashboardContentComponent} from './components/widget-dashboard-content/widget-dashboard-content.component';
 import {WidgetDashboardComponent} from './components/widget-dashboard/widget-dashboard.component';
-import {BigNumberWidgetComponent, WidgetDisplayComponent} from './components/widget-display';
 import {DashboardRoutingModule} from './dashboard-routing.module';
 
 // AoT requires an exported function for factories
@@ -39,13 +38,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
-    BigNumberWidgetComponent,
-    DashboardComponent,
-    WidgetDashboardComponent,
-    WidgetDashboardContentComponent,
-    WidgetDisplayComponent,
-  ],
+  declarations: [DashboardComponent, WidgetDashboardComponent, WidgetDashboardContentComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -65,6 +58,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     TabsModule,
     ThemeModule,
   ],
-  exports: [DashboardComponent, WidgetDashboardComponent, WidgetDisplayComponent],
+  exports: [DashboardComponent, WidgetDashboardComponent],
 })
 export class DashboardModule {}

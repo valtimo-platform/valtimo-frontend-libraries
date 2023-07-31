@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {DisplayComponent} from '../../../../models';
-import {BigNumberData, BigNumberDisplayTypeProperties} from '../../models';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {BigNumberDisplayComponent} from './components/big-number-display/big-number-display.component';
 
-@Component({
-  selector: 'valtimo-big-number-display',
-  templateUrl: './big-number-display.component.html',
-  styleUrls: ['./big-number-display.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+@NgModule({
+  declarations: [BigNumberDisplayComponent],
+  imports: [CommonModule],
+  exports: [BigNumberDisplayComponent],
 })
-export class BigNumberDisplayComponent implements DisplayComponent {
-  @Input() displayTypeKey: string;
-  @Input() data: BigNumberData;
-  @Input() displayTypeProperties: BigNumberDisplayTypeProperties;
-}
+export class BigNumberModule {}

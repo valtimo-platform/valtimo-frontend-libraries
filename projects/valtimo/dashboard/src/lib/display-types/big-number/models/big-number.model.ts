@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+interface BigNumberData {
+  value: number;
+}
+
 interface BigNumberDisplayTypeProperties {
   title: string;
   subtitle: string;
@@ -23,4 +27,4 @@ interface BigNumberDisplayTypeProperties {
   highSeverityThreshold: number;
 }
 
-export {BigNumberDisplayTypeProperties};
+export {BigNumberData, BigNumberDisplayTypeProperties};
