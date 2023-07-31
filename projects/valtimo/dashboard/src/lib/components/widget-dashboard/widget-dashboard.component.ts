@@ -16,7 +16,7 @@
 
 import {Component} from '@angular/core';
 import {DashboardService} from '../../services';
-import {Dashboard} from '../../models';
+import {BigNumberData, Dashboard, WidgetSeverity, WidgetType} from '../../models';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -26,6 +26,15 @@ import {Observable} from 'rxjs';
 })
 export class WidgetDashboardComponent {
   public dashboards$: Observable<Array<Dashboard>> = this.dashboardService.getDashboards();
+
+  public type = WidgetType.BIG_NUMBER;
+  public data: BigNumberData = {
+    title: 'Lopende zaken',
+    subtitle: 'Ooievaarspas',
+    number: 8,
+    severity: WidgetSeverity.YELLOW,
+    label: 'Zaken ouder dan 4 weeken',
+  };
 
   constructor(private readonly dashboardService: DashboardService) {}
 }

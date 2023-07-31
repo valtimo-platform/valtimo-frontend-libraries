@@ -1,0 +1,31 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 304px;
+  padding: 20px;
+  gap: 12px;
+}
+
+.valtimo-big-number-widget {
+  &__title {
+    font-size: 20px;
+  }
+
+  &__subtitle {
+    font-size: 14px;
+  }
+
+  &__number {
+    font-size: 122px;
+  }
+
+  &__label {
+    font-size: 12px;
+  }
+
+  &__content {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+  }
+}
