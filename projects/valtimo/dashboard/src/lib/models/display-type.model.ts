@@ -14,8 +14,24 @@
  * limitations under the License.
  */
 
-export * from './dashboard.model';
-export * from './widget.model';
-export * from './widget-display.model';
-export * from './configuration.model';
-export * from './display-type.model';
+import {Type} from '@angular/core';
+import {DisplayTypeConfigurationComponent} from './configuration.model';
+
+interface DisplayComponent {
+  displayTypeProperties: object;
+  data: object;
+}
+
+interface DisplayTypeSpecification {
+  displayTypeKey: string;
+  displayComponent: Type<DisplayComponent>;
+  configurationComponent?: Type<DisplayTypeConfigurationComponent>;
+  supportedSizes: ['1x1'];
+  translations: {
+    [langKey: string]: {
+      [translationKey: string]: string;
+    };
+  };
+}
+
+export {DisplayComponent, DisplayTypeSpecification};

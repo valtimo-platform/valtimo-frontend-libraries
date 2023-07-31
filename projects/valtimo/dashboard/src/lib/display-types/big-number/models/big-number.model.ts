@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-export * from './dashboard.model';
-export * from './widget.model';
-export * from './widget-display.model';
-export * from './configuration.model';
-export * from './display-type.model';
+interface BigNumberDisplayTypeProperties {
+  title: string;
+  subtitle: string;
+  useKPI: boolean;
+  lowSeverityThreshold: number;
+  mediumSeverityThreshold: number;
+  highSeverityThreshold: number;
+}
+
+export {BigNumberDisplayTypeProperties};

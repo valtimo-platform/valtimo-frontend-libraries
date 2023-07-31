@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-export * from './dashboard.model';
-export * from './widget.model';
-export * from './widget-display.model';
-export * from './configuration.model';
-export * from './display-type.model';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {DisplayComponent} from '../../../../models';
+import {BigNumberDisplayTypeProperties} from '../../models';
+
+@Component({
+  selector: 'valtimo-big-number-display',
+  templateUrl: './big-number-display.component.html',
+  styleUrls: ['./big-number-display.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BigNumberDisplayComponent implements DisplayComponent {
+  @Input() data: object;
+  @Input() displayTypeProperties: BigNumberDisplayTypeProperties;
+}

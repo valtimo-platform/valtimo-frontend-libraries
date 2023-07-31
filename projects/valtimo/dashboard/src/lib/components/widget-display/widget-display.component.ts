@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, HostBinding, Input} from '@angular/core';
 
-import {WidgetData, WidgetSeverity, WidgetType} from '../../models';
+import {WidgetSeverity, WidgetType} from '../../models';
 
 @Component({
   selector: 'valtimo-widget-display',
@@ -12,7 +12,7 @@ export class WidgetDisplayComponent {
   @HostBinding('class') class = WidgetSeverity.RED;
 
   @Input() widgetType: WidgetType;
-  @Input() widgetData: WidgetData;
+  @Input() widgetData: object;
 
   public readonly WidgetType = WidgetType;
 }

@@ -14,8 +14,27 @@
  * limitations under the License.
  */
 
-export * from './dashboard.model';
-export * from './widget.model';
-export * from './widget-display.model';
-export * from './configuration.model';
-export * from './display-type.model';
+import {Observable} from 'rxjs';
+import {EventEmitter} from '@angular/core';
+
+interface ConfigurationComponent {
+  save$: Observable<void>;
+  disabled$: Observable<boolean>;
+  valid: EventEmitter<boolean>;
+  prefillConfiguration$?: Observable<object>;
+  configuration: EventEmitter<object>;
+}
+
+interface DisplayTypeConfigurationComponent extends ConfigurationComponent {
+  displayTypeKey: string;
+}
+
+interface DataSourceConfigurationComponent extends ConfigurationComponent {
+  dataSourceKey: string;
+}
+
+export {
+  ConfigurationComponent,
+  DisplayTypeConfigurationComponent,
+  DataSourceConfigurationComponent,
+};
