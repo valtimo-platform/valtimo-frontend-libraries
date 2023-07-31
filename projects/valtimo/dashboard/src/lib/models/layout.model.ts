@@ -28,7 +28,7 @@ interface WidgetConfigurationBin {
 interface PackResult {
   height: number;
   width: number;
-  items: Array<{width: number; height: number; x: number; y: number; item: WidgetConfigurationBin}>
+  items: Array<{width: number; height: number; x: number; y: number; item: WidgetConfigurationBin}>;
 }
 
-export {Bin, WidgetConfigurationBin, PackResult}
+export {Bin, WidgetConfigurationBin, PackResult};

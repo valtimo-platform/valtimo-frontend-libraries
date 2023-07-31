@@ -28,5 +28,4 @@ export class BarChartDisplayComponent implements DisplayComponent {
   @Input() displayTypeKey: string;
   @Input() data: BarChartData;
   @Input() displayTypeProperties: BarChartDisplayTypeProperties;
-
 }

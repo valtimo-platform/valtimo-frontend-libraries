@@ -23,7 +23,7 @@ import {Observable} from 'rxjs';
   selector: 'valtimo-widget-dashboard',
   templateUrl: './widget-dashboard.component.html',
   styleUrls: ['./widget-dashboard.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class WidgetDashboardComponent {
   public dashboards$: Observable<Array<Dashboard>> = this.dashboardService.getDashboards();

@@ -27,16 +27,15 @@ export class WidgetLayoutService implements OnDestroy {
   private readonly _widgetConfigurations$ = new BehaviorSubject<
     Array<DashboardWidgetConfiguration>
   >([]);
-  private readonly _widgetConfigurationBins$ = new BehaviorSubject<
-    Array<WidgetConfigurationBin> | null
-  >(null);
+  private readonly _widgetConfigurationBins$ =
+    new BehaviorSubject<Array<WidgetConfigurationBin> | null>(null);
   private readonly _widgetPackResult$ = new BehaviorSubject<PackResult | null>(null);
 
   private _layoutSubscription!: Subscription;
   private _configurationBinSubscription!: Subscription;
 
   public get widgetPackResult$(): Observable<PackResult> {
-    return this._widgetPackResult$.asObservable().pipe(filter((result) => !! result))
+    return this._widgetPackResult$.asObservable().pipe(filter(result => !!result));
   }
 
   private get widgetContainerWidth$(): Observable<number> {
@@ -44,7 +43,7 @@ export class WidgetLayoutService implements OnDestroy {
   }
 
   private get widgetConfigurationBins$(): Observable<Array<WidgetConfigurationBin>> {
-    return this._widgetConfigurationBins$.asObservable().pipe(filter((bins) => !!bins))
+    return this._widgetConfigurationBins$.asObservable().pipe(filter(bins => !!bins));
   }
 
   constructor(private readonly widgetService: WidgetService) {
@@ -66,15 +65,32 @@ export class WidgetLayoutService implements OnDestroy {
   }
 
   private openConfigurationBinSubscription(): void {
-    this._configurationBinSubscription = combineLatest([this.widgetService.supportedDisplayTypes$, this._widgetConfigurations$]).subscribe(([displayTypes, configurations]) => {
-      const configurationBins: Array<WidgetConfigurationBin> = configurations.reduce((acc, curr) => {
-        const specification = displayTypes.find((type) => type.displayTypeKey === curr.displayType);
+    this._configurationBinSubscription = combineLatest([
+      this.widgetService.supportedDisplayTypes$,
+      this._widgetConfigurations$,
+    ]).subscribe(([displayTypes, configurations]) => {
+      const configurationBins: Array<WidgetConfigurationBin> = configurations.reduce(
+        (acc, curr) => {
+          const specification = displayTypes.find(type => type.displayTypeKey === curr.displayType);
 
-        return [...acc, {configurationKey: curr.key, width: specification.width, height: specification.height}]
-      }, [])
+          if (specification) {
+            return [
+              ...acc,
+              {
+                configurationKey: curr.key,
+                width: specification.width,
+                height: specification.height,
+              },
+            ];
+          }
+
+          return acc;
+        },
+        []
+      );
 
       this._widgetConfigurationBins$.next(configurationBins);
-    })
+    });
   }
 
   private openLayoutSubscription(): void {
@@ -83,7 +99,11 @@ export class WidgetLayoutService implements OnDestroy {
       this.widgetConfigurationBins$,
     ]).subscribe(([widgetContainerWidth, configurationBins]) => {
       const widget1xWidth = this.getWidget1xWidth(widgetContainerWidth);
-      const binsToFit = configurationBins.map((configurationBin) => ({...configurationBin, width: configurationBin.width * widget1xWidth, height: configurationBin.height * WIDGET_1X_HEIGHT}))
+      const binsToFit = configurationBins.map(configurationBin => ({
+        ...configurationBin,
+        width: configurationBin.width * widget1xWidth,
+        height: configurationBin.height * WIDGET_1X_HEIGHT,
+      }));
       const result = pack(binsToFit, {maxWidth: widgetContainerWidth});
 
       this._widgetPackResult$.next(result);

@@ -16,4 +16,4 @@
 
 export * from './big-number';
 export * from './bar-chart';
-export * from './meter'
+export * from './meter';

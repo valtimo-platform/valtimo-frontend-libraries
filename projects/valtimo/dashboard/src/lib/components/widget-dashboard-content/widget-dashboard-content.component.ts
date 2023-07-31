@@ -25,7 +25,7 @@ import {
   Renderer2,
   ViewChild,
   ViewChildren,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import {Dashboard, DashboardWidgetConfiguration, DisplayComponent} from '../../models';
 import {WidgetLayoutService} from '../../services/widget-layout.service';
@@ -40,22 +40,29 @@ import {WidgetService} from '../../services';
   providers: [WidgetLayoutService],
 })
 export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy {
-  @ViewChildren('widgetConfiguration') widgetConfigurationRefs: QueryList<ElementRef<HTMLDivElement>>;
+  @ViewChildren('widgetConfiguration') widgetConfigurationRefs: QueryList<
+    ElementRef<HTMLDivElement>
+  >;
   @ViewChildren('widgetConfigurationContent', {read: ViewContainerRef})
   widgetConfigurationContentVcRefs: QueryList<ViewContainerRef>;
 
   @ViewChild('widgetContainer') widgetContainerRef: ElementRef<any>;
   @Input() set dashboard(value: Dashboard) {
     this.layoutService.setWidgetConfigurations(value.widgets);
-    this.widgetConfigurations$.next(value.widgets)
+    this.widgetConfigurations$.next(value.widgets);
   }
 
-  public readonly widgetConfigurations$ = new BehaviorSubject<Array<DashboardWidgetConfiguration> | null>(null)
+  public readonly widgetConfigurations$ =
+    new BehaviorSubject<Array<DashboardWidgetConfiguration> | null>(null);
 
   private _observer!: ResizeObserver;
   private _packResultSubscription!: Subscription;
 
-  constructor(private readonly layoutService: WidgetLayoutService,private readonly widgetService: WidgetService,private readonly renderer: Renderer2) {}
+  constructor(
+    private readonly layoutService: WidgetLayoutService,
+    private readonly widgetService: WidgetService,
+    private readonly renderer: Renderer2
+  ) {}
 
   ngAfterViewInit(): void {
     this._observer = new ResizeObserver(event => {
@@ -80,32 +87,49 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
   }
 
   private openPackResultSubscription(): void {
-    this._packResultSubscription = this.layoutService.widgetPackResult$.subscribe((packResult) => {
-      this.renderer.setStyle(this.widgetContainerRef.nativeElement, 'height', `${packResult.height}px`)
+    this._packResultSubscription = this.layoutService.widgetPackResult$.subscribe(packResult => {
+      this.renderer.setStyle(
+        this.widgetContainerRef.nativeElement,
+        'height',
+        `${packResult.height}px`
+      );
 
-      this.widgetConfigurationRefs.toArray().forEach((widgetConfigurationRef) => {
+      this.widgetConfigurationRefs.toArray().forEach(widgetConfigurationRef => {
         const nativeElement = widgetConfigurationRef.nativeElement;
-        const configPackResult = packResult.items.find((result) => result.item.configurationKey === nativeElement.id)
-        this.renderer.setStyle(nativeElement, 'height', `${configPackResult.height}px`)
-        this.renderer.setStyle(nativeElement, 'width', `${configPackResult.width}px`)
-        this.renderer.setStyle(nativeElement, 'left', `${configPackResult.x}px`)
-        this.renderer.setStyle(nativeElement, 'top', `${configPackResult.y}px`)
-
-      })
-    })
+        const configPackResult = packResult.items.find(
+          result => result.item.configurationKey === nativeElement.id
+        );
+        this.renderer.setStyle(nativeElement, 'height', `${configPackResult.height}px`);
+        this.renderer.setStyle(nativeElement, 'width', `${configPackResult.width}px`);
+        this.renderer.setStyle(nativeElement, 'left', `${configPackResult.x}px`);
+        this.renderer.setStyle(nativeElement, 'top', `${configPackResult.y}px`);
+      });
+    });
   }
 
   private renderWidgets(): void {
-    combineLatest([this.widgetConfigurations$, this.widgetService.supportedDisplayTypes$]).pipe(take(1)).subscribe(([configurations, displayTypes]) => {
-      configurations.forEach((configuration, index) => {
-        const displayType = displayTypes.find((type) => type.displayTypeKey === configuration.displayType);
-        const vcRef = this.widgetConfigurationContentVcRefs.toArray()[index];
-        vcRef.clear();
-        const componentInstance : ComponentRef<DisplayComponent> = vcRef.createComponent(displayType.displayComponent);
-        componentInstance.setInput('displayTypeKey', configuration.displayType);
-        componentInstance.setInput('displayTypeProperties', configuration.displayTypeProperties)
-        componentInstance.setInput('data', {value: 8})
-      })
-    })
+    combineLatest([this.widgetConfigurations$, this.widgetService.supportedDisplayTypes$])
+      .pipe(take(1))
+      .subscribe(([configurations, displayTypes]) => {
+        configurations.forEach((configuration, index) => {
+          const displayType = displayTypes.find(
+            type => type.displayTypeKey === configuration.displayType
+          );
+          const vcRef = this.widgetConfigurationContentVcRefs.toArray()[index];
+
+          if (displayType) {
+            vcRef.clear();
+            const componentInstance: ComponentRef<DisplayComponent> = vcRef.createComponent(
+              displayType.displayComponent
+            );
+            componentInstance.setInput('displayTypeKey', configuration.displayType);
+            componentInstance.setInput(
+              'displayTypeProperties',
+              configuration.displayTypeProperties
+            );
+            componentInstance.setInput('data', {value: 8});
+          }
+        });
+      });
   }
 }
