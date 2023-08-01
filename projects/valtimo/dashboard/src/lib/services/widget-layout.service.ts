@@ -80,21 +80,29 @@ export class WidgetLayoutService implements OnDestroy {
       this.widgetContainerWidth$,
       this.widgetConfigurationBins$,
     ]).subscribe(([widgetContainerWidth, configurationBins]) => {
-      const widget1xWidth = this.getWidget1xWidth(widgetContainerWidth);
+      const amountOfMinWidthColumns = this.getAmountOfMinWidthColumns(widgetContainerWidth);
+      const widget1xWidth = this.getWidget1xWidth(widgetContainerWidth, amountOfMinWidthColumns);
       const binsToFit = configurationBins.map(configurationBin => ({
         ...configurationBin,
         width: configurationBin.width * widget1xWidth,
         height: configurationBin.height * WIDGET_1X_HEIGHT,
       }));
-      const result: PackResult = pack(binsToFit, {maxWidth: widgetContainerWidth});
+      const heightConstraint = this.getHeightConstraint(configurationBins, amountOfMinWidthColumns);
+      const result: PackResult = pack(binsToFit, {
+        maxWidth: widgetContainerWidth,
+        maxHeight: heightConstraint,
+      });
       const resultWithMaxWidth = this.getResultWithMaxWidth(result, widgetContainerWidth);
 
       this._widgetPackResult$.next(resultWithMaxWidth);
     });
   }
 
-  private getWidget1xWidth(containerWidth: number): number {
-    const amountOfMinWidthColumns = Math.floor(containerWidth / WIDGET_1X_MIN_WIDTH);
+  private getAmountOfMinWidthColumns(containerWidth: number): number {
+    return Math.floor(containerWidth / WIDGET_1X_MIN_WIDTH);
+  }
+
+  private getWidget1xWidth(containerWidth: number, amountOfMinWidthColumns: number): number {
     const widget1xWidth = Math.floor(containerWidth / (amountOfMinWidthColumns || 1));
 
     return widget1xWidth;
@@ -108,5 +116,25 @@ export class WidgetLayoutService implements OnDestroy {
         width: item.width > containerWidth ? containerWidth : item.width,
       })),
     };
+  }
+
+  private getHeightConstraint(
+    binsToFit: Array<WidgetConfigurationBin>,
+    amountOfMinWidthColumns: number
+  ): number {
+    const amountOfSpacesNeeded = binsToFit.reduce((acc, curr) => {
+      return acc + curr.height * curr.width;
+    }, 0);
+    const minAmountOfRowsNeeded = Math.round(amountOfSpacesNeeded / amountOfMinWidthColumns);
+    const tallestWidgetHeightSpace = binsToFit.reduce(
+      (acc, curr) => (curr.height > acc ? curr.height : acc),
+      0
+    );
+    const amountOfRowsNeeded =
+      minAmountOfRowsNeeded < tallestWidgetHeightSpace
+        ? tallestWidgetHeightSpace
+        : minAmountOfRowsNeeded;
+
+    return amountOfRowsNeeded * WIDGET_1X_HEIGHT;
   }
 }
