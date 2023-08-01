@@ -139,6 +139,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
               'displayTypeProperties',
               configuration.displayTypeProperties
             );
+            // mock value, implement real data source
             componentInstance.setInput('data', {value: 8});
           }
         });

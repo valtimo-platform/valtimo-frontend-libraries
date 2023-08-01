@@ -1,6 +1,8 @@
-<h3 class="valtimo-big-number-widget__title">{{ displayTypeProperties.title }}</h3>
+<section class="valtimo-big-number-widget__header">
+  <h3 class="valtimo-big-number-widget__title">{{ displayTypeProperties.title }}</h3>
 
-<span class="valtimo-big-number-widget__subtitle"> {{ displayTypeProperties.subtitle }} </span>
+  <span class="valtimo-big-number-widget__subtitle"> {{ displayTypeProperties.subtitle }} </span>
+</section>
 
 <section class="valtimo-big-number-widget__content">
   <span [class]="['valtimo-big-number-widget__number', severityClass]">{{ data?.value }}</span>
