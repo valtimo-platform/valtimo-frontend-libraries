@@ -48,8 +48,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
 
   @ViewChild('widgetContainer') widgetContainerRef: ElementRef<any>;
   @Input() set dashboard(value: Dashboard) {
-    this.layoutService.setWidgetConfigurations(value.widgets);
-    this.widgetConfigurations$.next(value.widgets);
+    this.setWidgetConfigurations(value);
   }
 
   public readonly widgetConfigurations$ =
@@ -76,6 +75,19 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
   ngOnDestroy(): void {
     this._observer?.disconnect();
     this._packResultSubscription?.unsubscribe();
+  }
+
+  private setWidgetConfigurations(dashboard: Dashboard): void {
+    this.widgetService.supportedDisplayTypes$.pipe(take(1)).subscribe(supportedDisplayTypes => {
+      const supportedWidgetConfigurations =
+        dashboard.widgets?.filter(widgetConfiguration =>
+          supportedDisplayTypes.find(
+            type => type.displayTypeKey === widgetConfiguration.displayType
+          )
+        ) || [];
+      this.layoutService.setWidgetConfigurations(supportedWidgetConfigurations);
+      this.widgetConfigurations$.next(supportedWidgetConfigurations);
+    });
   }
 
   private observerMutation(event: Array<ResizeObserverEntry>): void {
