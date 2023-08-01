@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-.dashboards-container {
-  .cds--tab-content {
-    outline: 0;
-    padding: 0;
-  }
+.dashboards-container .cds--tab-content {
+  outline: 0;
+  padding: 0;
 }

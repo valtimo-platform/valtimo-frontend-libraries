@@ -26,7 +26,7 @@ export class WidgetService {
   private readonly _supportedDisplayTypes$ =
     new BehaviorSubject<Array<DisplayTypeSpecification> | null>(null);
 
-  get supportedDisplayTypes$(): Observable<Array<DisplayTypeSpecification>> {
+  public get supportedDisplayTypes$(): Observable<Array<DisplayTypeSpecification>> {
     return this._supportedDisplayTypes$
       .asObservable()
       .pipe(filter(specifications => !!specifications));
