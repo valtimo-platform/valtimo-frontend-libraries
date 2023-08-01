@@ -20,7 +20,7 @@ import {BarChartDisplayComponent} from './components/bar-chart-display/bar-chart
 export const barChartSpecification: DisplayTypeSpecification = {
   displayTypeKey: 'bar-chart',
   displayComponent: BarChartDisplayComponent,
-  width: 2,
-  height: 1,
+  width: 1,
+  height: 2,
   translations: {},
 };
