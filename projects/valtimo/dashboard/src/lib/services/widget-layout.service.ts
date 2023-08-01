@@ -88,9 +88,10 @@ export class WidgetLayoutService implements OnDestroy {
         height: configurationBin.height * WIDGET_1X_HEIGHT,
       }));
       const heightConstraint = this.getHeightConstraint(configurationBins, amountOfMinWidthColumns);
+      const useHeightConstraint = Math.floor(widgetContainerWidth / widget1xWidth) > 1;
       const result: PackResult = pack(binsToFit, {
         maxWidth: widgetContainerWidth,
-        maxHeight: heightConstraint,
+        ...(useHeightConstraint && {maxHeight: heightConstraint}),
       });
       const resultWithMaxWidth = this.getResultWithMaxWidth(result, widgetContainerWidth);
 
@@ -125,7 +126,7 @@ export class WidgetLayoutService implements OnDestroy {
     const amountOfSpacesNeeded = binsToFit.reduce((acc, curr) => {
       return acc + curr.height * curr.width;
     }, 0);
-    const minAmountOfRowsNeeded = Math.round(amountOfSpacesNeeded / amountOfMinWidthColumns);
+    const minAmountOfRowsNeeded = Math.ceil(amountOfSpacesNeeded / amountOfMinWidthColumns);
     const tallestWidgetHeightSpace = binsToFit.reduce(
       (acc, curr) => (curr.height > acc ? curr.height : acc),
       0
