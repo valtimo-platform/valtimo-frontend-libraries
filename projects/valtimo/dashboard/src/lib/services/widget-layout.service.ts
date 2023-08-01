@@ -86,9 +86,10 @@ export class WidgetLayoutService implements OnDestroy {
         width: configurationBin.width * widget1xWidth,
         height: configurationBin.height * WIDGET_1X_HEIGHT,
       }));
-      const result = pack(binsToFit, {maxWidth: widgetContainerWidth});
+      const result: PackResult = pack(binsToFit, {maxWidth: widgetContainerWidth});
+      const resultWithMaxWidth = this.getResultWithMaxWidth(result, widgetContainerWidth);
 
-      this._widgetPackResult$.next(result);
+      this._widgetPackResult$.next(resultWithMaxWidth);
     });
   }
 
@@ -97,5 +98,15 @@ export class WidgetLayoutService implements OnDestroy {
     const widget1xWidth = Math.floor(containerWidth / (amountOfMinWidthColumns || 1));
 
     return widget1xWidth;
+  }
+
+  private getResultWithMaxWidth(result: PackResult, containerWidth: number): PackResult {
+    return {
+      ...result,
+      items: result.items.map(item => ({
+        ...item,
+        width: item.width > containerWidth ? containerWidth : item.width,
+      })),
+    };
   }
 }
