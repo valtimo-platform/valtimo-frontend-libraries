@@ -1,7 +1,3 @@
-enum WidgetType {
-  BIG_NUMBER,
-}
-
 enum WidgetSeverity {
   BLACK = 'valtimo-severity__black',
   GREEN = 'valtimo-severity__green',
@@ -10,4 +6,4 @@ enum WidgetSeverity {
   RED = 'valtimo-severity__red',
 }
 
-export {WidgetType, WidgetSeverity};
+export {WidgetSeverity};

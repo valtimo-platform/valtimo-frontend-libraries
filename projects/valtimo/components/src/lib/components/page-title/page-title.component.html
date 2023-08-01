@@ -32,6 +32,7 @@
       <div class="skeleton-container" *ngIf="obs.hasCustomPageTitle && !obs.customPageTitleSet">
         <cds-skeleton-placeholder></cds-skeleton-placeholder>
       </div>
+
       <h2
         class="page-title"
         *ngIf="obs.hasCustomPageTitle ? obs.customPageTitleSet : obs.title !== ''"
@@ -39,12 +40,14 @@
       >
         {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
       </h2>
+
       <div
         class="subtitle-skeleton-container"
         *ngIf="obs.hasCustomPageSubtitle && !obs.customPageSubtitleSet"
       >
         <cds-skeleton-placeholder></cds-skeleton-placeholder>
       </div>
+
       <span
         class="page-subtitle"
         *ngIf="obs.hasCustomPageSubtitle && obs.customPageSubtitleSet"
@@ -52,6 +55,7 @@
         [innerHtml]="obs.customPageSubtitle"
       >
       </span>
+
       <div class="page-actions" [ngClass]="{'--visible': hasPageActions$ | async}">
         <ng-container #pageActionsVcr></ng-container>
       </div>

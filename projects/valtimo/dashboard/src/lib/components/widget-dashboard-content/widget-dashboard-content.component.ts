@@ -40,13 +40,14 @@ import {WidgetService} from '../../services';
   providers: [WidgetLayoutService],
 })
 export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy {
-  @ViewChildren('widgetConfiguration') widgetConfigurationRefs: QueryList<
+  @ViewChildren('widgetConfiguration') private _widgetConfigurationRefs: QueryList<
     ElementRef<HTMLDivElement>
   >;
   @ViewChildren('widgetConfigurationContent', {read: ViewContainerRef})
-  widgetConfigurationContentVcRefs: QueryList<ViewContainerRef>;
+  private _widgetConfigurationContentVcRefs: QueryList<ViewContainerRef>;
 
-  @ViewChild('widgetContainer') widgetContainerRef: ElementRef<any>;
+  @ViewChild('widgetContainer') private _widgetContainerRef: ElementRef<HTMLDivElement>;
+
   @Input() set dashboard(value: Dashboard) {
     this.setWidgetConfigurations(value);
   }
@@ -63,16 +64,16 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
     private readonly renderer: Renderer2
   ) {}
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this._observer = new ResizeObserver(event => {
       this.observerMutation(event);
     });
-    this._observer.observe(this.widgetContainerRef.nativeElement);
+    this._observer.observe(this._widgetContainerRef.nativeElement);
     this.openPackResultSubscription();
     this.renderWidgets();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this._observer?.disconnect();
     this._packResultSubscription?.unsubscribe();
   }
@@ -101,12 +102,12 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
   private openPackResultSubscription(): void {
     this._packResultSubscription = this.layoutService.widgetPackResult$.subscribe(packResult => {
       this.renderer.setStyle(
-        this.widgetContainerRef.nativeElement,
+        this._widgetContainerRef.nativeElement,
         'height',
         `${packResult.height}px`
       );
 
-      this.widgetConfigurationRefs.toArray().forEach(widgetConfigurationRef => {
+      this._widgetConfigurationRefs.toArray().forEach(widgetConfigurationRef => {
         const nativeElement = widgetConfigurationRef.nativeElement;
         const configPackResult = packResult.items.find(
           result => result.item.configurationKey === nativeElement.id
@@ -127,7 +128,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
           const displayType = displayTypes.find(
             type => type.displayTypeKey === configuration.displayType
           );
-          const vcRef = this.widgetConfigurationContentVcRefs.toArray()[index];
+          const vcRef = this._widgetConfigurationContentVcRefs.toArray()[index];
 
           if (displayType) {
             vcRef.clear();
