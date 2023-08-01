@@ -15,7 +15,7 @@
  */
 
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, combineLatest, filter, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
 import {WidgetService} from './widget.service';
 import {DashboardWidgetConfiguration, PackResult, WidgetConfigurationBin} from '../models';
 import {WIDGET_1X_HEIGHT, WIDGET_1X_MIN_WIDTH} from '../constants';
@@ -27,12 +27,9 @@ export class WidgetLayoutService implements OnDestroy {
   private readonly _widgetConfigurations$ = new BehaviorSubject<
     Array<DashboardWidgetConfiguration>
   >([]);
-  private readonly _widgetConfigurationBins$ =
-    new BehaviorSubject<Array<WidgetConfigurationBin> | null>(null);
   private readonly _widgetPackResult$ = new BehaviorSubject<PackResult | null>(null);
 
   private _layoutSubscription!: Subscription;
-  private _configurationBinSubscription!: Subscription;
 
   public get widgetPackResult$(): Observable<PackResult> {
     return this._widgetPackResult$.asObservable().pipe(filter(result => !!result));
@@ -43,17 +40,31 @@ export class WidgetLayoutService implements OnDestroy {
   }
 
   private get widgetConfigurationBins$(): Observable<Array<WidgetConfigurationBin>> {
-    return this._widgetConfigurationBins$.asObservable().pipe(filter(bins => !!bins));
+    return combineLatest([
+      this.widgetService.supportedDisplayTypes$,
+      this._widgetConfigurations$,
+    ]).pipe(
+      map(([displayTypes, configurations]) =>
+        configurations.map(configuration => {
+          const specification = displayTypes.find(
+            type => type.displayTypeKey === configuration.displayType
+          );
+          return {
+            configurationKey: configuration.key,
+            width: specification.width,
+            height: specification.height,
+          };
+        })
+      )
+    );
   }
 
   constructor(private readonly widgetService: WidgetService) {
     this.openLayoutSubscription();
-    this.openConfigurationBinSubscription();
   }
 
   ngOnDestroy(): void {
     this._layoutSubscription?.unsubscribe();
-    this._configurationBinSubscription?.unsubscribe();
   }
 
   setWidgetContainerWidth(width: number): void {
@@ -62,35 +73,6 @@ export class WidgetLayoutService implements OnDestroy {
 
   setWidgetConfigurations(configurations: Array<DashboardWidgetConfiguration>): void {
     this._widgetConfigurations$.next(configurations);
-  }
-
-  private openConfigurationBinSubscription(): void {
-    this._configurationBinSubscription = combineLatest([
-      this.widgetService.supportedDisplayTypes$,
-      this._widgetConfigurations$,
-    ]).subscribe(([displayTypes, configurations]) => {
-      const configurationBins: Array<WidgetConfigurationBin> = configurations.reduce(
-        (acc, curr) => {
-          const specification = displayTypes.find(type => type.displayTypeKey === curr.displayType);
-
-          if (specification) {
-            return [
-              ...acc,
-              {
-                configurationKey: curr.key,
-                width: specification.width,
-                height: specification.height,
-              },
-            ];
-          }
-
-          return acc;
-        },
-        []
-      );
-
-      this._widgetConfigurationBins$.next(configurationBins);
-    });
   }
 
   private openLayoutSubscription(): void {

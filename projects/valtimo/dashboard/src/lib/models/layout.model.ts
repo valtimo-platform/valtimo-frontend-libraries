@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-interface Bin {
-  width: number;
-  height: number;
-}
-
 interface WidgetConfigurationBin {
   configurationKey: string;
   width: number;
@@ -31,4 +26,4 @@ interface PackResult {
   items: Array<{width: number; height: number; x: number; y: number; item: WidgetConfigurationBin}>;
 }
 
-export {Bin, WidgetConfigurationBin, PackResult};
+export {WidgetConfigurationBin, PackResult};
