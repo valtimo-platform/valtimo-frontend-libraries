@@ -241,7 +241,7 @@
       "deleteDescription": "Weet u zeker dat u deze widget wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
       "metadata": "<b>Aangemaakt door</b> {{createdBy}} | <b>Aangemaakt op</b> {{createdOn}} | <b>Dashboard-sleutel</b> {{key}}",
       "form": {
-        "title": "Widgettitel",
+        "title": "Widgettitel (vereist)",
         "titleHelperText": "De naam van de widgetconfiguratie",
         "key": "Widgetsleutel (vereist)",
         "keyHelperText": "Wijs een unieke sleutel toe aan deze widget",

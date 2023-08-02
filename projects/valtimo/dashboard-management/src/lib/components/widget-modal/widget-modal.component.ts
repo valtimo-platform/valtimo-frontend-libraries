@@ -6,6 +6,7 @@ import {ListItem, NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {DOCUMENT} from '@angular/common';
 import {DashboardManagementService} from '../../services/dashboard-management.service';
+import {CARBON_CONSTANTS} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-widget-modal',
@@ -20,19 +21,23 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   @Input() public dashboard: DashboardItem;
 
   public form = this.fb.group({
-    title: this.fb.control(''),
+    title: this.fb.control('', [Validators.required]),
     dataSource: this.fb.control('', [Validators.required]),
   });
+
   public readonly open$ = new BehaviorSubject<boolean>(false);
+
+  private readonly _selectedDataSourceKey$ = new BehaviorSubject<string>('');
 
   public readonly dataSourceItems$: Observable<Array<ListItem>> = combineLatest([
     this.dashboardManagementService.getDataSources(),
+    this._selectedDataSourceKey$,
     this.translateService.stream('key'),
   ]).pipe(
-    map(([dataSources]) =>
+    map(([dataSources, selectedDataSourceKey]) =>
       dataSources.map(dataSource => ({
         content: dataSource.title,
-        selected: false,
+        selected: selectedDataSourceKey === dataSource.key,
         key: dataSource.key,
       }))
     )
@@ -68,7 +73,11 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
 
   public closeModal(): void {
     this.open$.next(false);
-    this.form.reset();
+
+    setTimeout(() => {
+      this.form.reset();
+      this._selectedDataSourceKey$.next('');
+    }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
   public save(): void {}
@@ -77,27 +86,13 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
 
   public saveDashboard(): void {}
 
-  public dataSourceSelected(dataSource: any): void {
+  public dataSourceSelected(dataSource: ListItem): void {
     if (!this.dataSource) {
       return;
     }
 
-    this.dataSource.setValue(dataSource?.item?.content);
-  }
-
-  public copyKey(): void {
-    if (!this.key || !this.document.defaultView) {
-      return;
-    }
-
-    this.document.defaultView.navigator.clipboard.writeText(this.key.value);
-    this.notificationService.showToast({
-      caption: this.translateService.instant('dashboardManagement.widgets.form.keyCopied'),
-      type: 'success',
-      duration: 4000,
-      showClose: true,
-      title: this.translateService.instant('dashboardManagement.widgets.form.keyCopiedTitle'),
-    });
+    this._selectedDataSourceKey$.next(dataSource?.item?.key);
+    this.dataSource.setValue(dataSource?.item?.key);
   }
 
   private openOpenSubscription(): void {

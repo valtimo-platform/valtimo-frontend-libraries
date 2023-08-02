@@ -18,11 +18,12 @@
     </valtimo-carbon-table>
   </div>
 
-  <!--  <valtimo-widget-modal-->
-  <!--    [dashboard]="obs.currentDashboard"-->
-  <!--    [showModal$]="showModal$"-->
-  <!--    [type]="modalType"-->
-  <!--  ></valtimo-widget-modal>-->
+  <valtimo-widget-modal
+    [dashboard]="obs.currentDashboard"
+    [showModal$]="showModal$"
+    [type]="modalType"
+  ></valtimo-widget-modal>
+
   <valtimo-edit-dashboard-modal
     [dashboard]="obs.currentDashboard"
     [refreshDashboardSubject$]="refreshDashboardSubject$"

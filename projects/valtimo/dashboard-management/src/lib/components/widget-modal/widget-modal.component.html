@@ -10,8 +10,7 @@
     *ngIf="{
       edit: vars.isEdit && ('dashboardManagement.widgets.edit' | translate),
       create: vars.isCreate && ('dashboardManagement.widgets.add' | translate),
-      delete: vars.isDelete && ('dashboardManagement.widgets.delete' | translate),
-
+      delete: vars.isDelete && ('dashboardManagement.widgets.delete' | translate)
     } as titles"
   >
     <cds-modal
@@ -96,7 +95,7 @@
 
     <div class="form__element">
       <cds-dropdown
-        formControlName="dateSource"
+        formControlName="dataSource"
         [invalid]="dataSource.dirty && dataSource.invalid"
         [label]="'dashboardManagement.widgets.form.dataSource' | translate"
         [helperText]="'dashboardManagement.widgets.form.dataSourceHelperText' | translate"
