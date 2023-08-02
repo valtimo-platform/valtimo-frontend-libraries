@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnChanges, OnInit, ViewEncapsulation} from '@angular/core';
-import {ListItem, NotificationService} from 'carbon-components-angular';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {DashboardItem} from '../../models';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CARBON_CONSTANTS} from '@valtimo/components';
+import {DashboardManagementService} from '../../services/dashboard-management.service';
 
 @Component({
   selector: 'valtimo-edit-dashboard-modal',
@@ -28,11 +29,13 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
   encapsulation: ViewEncapsulation.None,
   providers: [NotificationService],
 })
-export class EditDashboardModalComponent implements OnInit, OnChanges {
+export class EditDashboardModalComponent implements OnInit {
   @Input() public showModal$: Observable<boolean>;
+  @Input() public refreshDashboardSubject$: BehaviorSubject<null>;
   @Input() public dashboard: DashboardItem;
 
   public readonly open$ = new BehaviorSubject<boolean>(false);
+  public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   public editDashboardForm!: FormGroup;
 
@@ -44,27 +47,15 @@ export class EditDashboardModalComponent implements OnInit, OnChanges {
     return this.editDashboardForm.get('description');
   }
 
-  public get dashboardRoles() {
-    return this.editDashboardForm.get('roles');
-  }
-
-  public readonly roleItems$ = new BehaviorSubject<Array<ListItem>>([
-    {content: 'ROLE_ADMIN', selected: false},
-    {content: 'ROLE_USER', selected: false},
-    {content: 'ROLE_DEVELOPER', selected: false},
-  ]);
-
   private _openSubscription!: Subscription;
 
-  constructor(private readonly fb: FormBuilder) {}
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly dashboardManagementService: DashboardManagementService
+  ) {}
 
   public ngOnInit(): void {
     this.openOpenSubscription();
-    this.setEditDashboardForm();
-  }
-
-  public ngOnChanges(): void {
-    this.setEditDashboardForm();
   }
 
   public closeModal(): void {
@@ -75,23 +66,49 @@ export class EditDashboardModalComponent implements OnInit, OnChanges {
     }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
-  public saveDashboard(): void {}
+  public saveDashboard(): void {
+    this.disable();
+
+    this.dashboardManagementService
+      .updateDashboards([
+        {
+          description: this.dashboardDescription.value,
+          title: this.dashboardTitle.value,
+          key: this.dashboard.key,
+        },
+      ])
+      .subscribe(() => {
+        this.refreshDashboardSubject$.next(null);
+        this.closeModal();
+      });
+  }
 
   private setEditDashboardForm(): void {
     this.editDashboardForm = this.fb.group({
       title: this.fb.control('', [Validators.required]),
       description: this.fb.control('', [Validators.required]),
-      roles: this.fb.control([], [Validators.required]),
     });
 
-    this.dashboardTitle?.setValue(this.dashboard.title);
-    this.dashboardDescription?.setValue(this.dashboard.description);
-    this.dashboardRoles?.setValue(this.dashboard.roles);
+    if (this.dashboard) {
+      this.dashboardTitle?.setValue(this.dashboard.title);
+      this.dashboardDescription?.setValue(this.dashboard.description);
+    }
+
+    this.enable();
   }
 
   private openOpenSubscription(): void {
     this._openSubscription = this.showModal$.subscribe(show => {
+      this.setEditDashboardForm();
       this.open$.next(show);
     });
+  }
+
+  private disable(): void {
+    this.disabled$.next(true);
+  }
+
+  private enable(): void {
+    this.disabled$.next(false);
   }
 }

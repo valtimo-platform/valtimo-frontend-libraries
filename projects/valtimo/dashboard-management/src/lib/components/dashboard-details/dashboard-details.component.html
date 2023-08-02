@@ -23,6 +23,12 @@
   <!--    [showModal$]="showModal$"-->
   <!--    [type]="modalType"-->
   <!--  ></valtimo-widget-modal>-->
+  <valtimo-edit-dashboard-modal
+    [dashboard]="obs.currentDashboard"
+    [refreshDashboardSubject$]="refreshDashboardSubject$"
+    [showModal$]="showEditDashboardModal$"
+  >
+  </valtimo-edit-dashboard-modal>
 </ng-container>
 
 <ng-template #moveButtonsTemplate>

@@ -15,34 +15,40 @@
   -->
 
 <cds-modal
+  *ngIf="{disabled: disabled$ | async} as obs"
+  valtimoCdsModal
   [open]="open$ | async"
   showFooter="true"
   title="{{ 'dashboardManagement.widgets.editDashboard' | translate }}"
-  valtimoCdsModal
+  class="edit-dashboard-modal"
 >
   <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
     <h3 cdsModalHeaderHeading>{{ 'dashboardManagement.widgets.editDashboard' | translate }}</h3>
   </cds-modal-header>
 
   <section cdsModalContent>
-    <ng-container *ngTemplateOutlet="editDashboardFormTemplate"></ng-container>
+    <ng-container *ngTemplateOutlet="editDashboardFormTemplate;context:{obs: obs}"></ng-container>
   </section>
 
   <cds-modal-footer>
-    <ng-container *ngTemplateOutlet="editDashboardButtons"></ng-container>
+    <ng-container *ngTemplateOutlet="editDashboardButtons;context:{obs: obs}"></ng-container>
   </cds-modal-footer>
 </cds-modal>
 
-<ng-template #editDashboardFormTemplate>
+<ng-template #editDashboardFormTemplate let-obs="obs">
   <form *ngIf="editDashboardForm" [formGroup]="editDashboardForm" class="dashboard-modal__form">
     <div class="form__element">
-      <cds-label [invalid]="dashboardTitle.dirty && dashboardTitle.invalid">
+      <cds-label
+        [disabled]="obs.disabled"
+        [invalid]="dashboardTitle.dirty && dashboardTitle.invalid"
+      >
         {{ 'dashboardManagement.widgets.form.dashboardTitle' | translate }}
 
         <input
           formControlName="title"
           cdsText
           [attr.modal-primary-focus]="true"
+          [disabled]="obs.disabled"
           [invalid]="dashboardTitle.dirty && dashboardTitle.invalid"
         />
       </cds-label>
@@ -50,6 +56,7 @@
 
     <div class="form__element">
       <cds-label
+        [disabled]="obs.disabled"
         [invalid]="dashboardDescription.dirty && dashboardDescription.invalid"
         [helperText]="'dashboardManagement.widgets.form.dashboardDescriptionHelperText' | translate"
         [invalidText]="
@@ -62,31 +69,24 @@
           formControlName="description"
           cdsText
           [attr.modal-primary-focus]="true"
+          [disabled]="obs.disabled"
           [invalid]="dashboardDescription.dirty && dashboardDescription.invalid"
         />
       </cds-label>
     </div>
-
-    <div class="form__element">
-      <cds-dropdown
-        data-carbon-theme="g10"
-        type="multi"
-        formControlName="roles"
-        [invalid]="dashboardRoles.dirty && dashboardRoles.invalid"
-        [label]="'dashboardManagement.widgets.form.roles' | translate"
-      >
-        <cds-dropdown-list [items]="roleItems$ | async"></cds-dropdown-list>
-      </cds-dropdown>
-    </div>
   </form>
 </ng-template>
 
-<ng-template #editDashboardButtons>
-  <button cdsButton="ghost" (click)="closeModal()">
+<ng-template #editDashboardButtons let-obs="obs">
+  <button cdsButton="ghost" (click)="closeModal()" [disabled]="obs.disabled">
     {{ 'dashboardManagement.widgets.cancel' | translate }}
   </button>
 
-  <button (click)="saveDashboard()" cdsButton="primary" [disabled]="editDashboardForm.invalid">
+  <button
+    (click)="saveDashboard()"
+    cdsButton="primary"
+    [disabled]="editDashboardForm.invalid || obs.disabled"
+  >
     {{ 'dashboardManagement.widgets.complete' | translate }}
   </button>
 </ng-template>

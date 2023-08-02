@@ -10,7 +10,7 @@ import {
   PageTitleService,
 } from '@valtimo/components';
 import {IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {DashboardItem, WidgetModalType} from '../../models';
 import {DashboardManagementService} from '../../services/dashboard-management.service';
 
@@ -26,9 +26,11 @@ export class DashboardDetailsComponent implements AfterViewInit {
   public tableConfig!: CarbonTableConfig;
 
   private readonly dashboardKey$ = this.route.params.pipe(map(params => params.id));
+  public readonly refreshDashboardSubject$ = new BehaviorSubject<null>(null);
   public readonly currentDashboard$: Observable<DashboardItem | undefined> = combineLatest([
     this.dashboardKey$,
     this.translateService.stream('key'),
+    this.refreshDashboardSubject$,
   ]).pipe(
     switchMap(([dashboardKey]) => this.dashboardManagementService.getDashboard(dashboardKey)),
     tap((currentDashboard: DashboardItem) => {
@@ -60,6 +62,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
   );
 
   public readonly showModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showEditDashboardModal$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly dashboardManagementService: DashboardManagementService,
@@ -81,8 +84,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
   }
 
   public editDashboard(): void {
-    this.modalType = 'editDashboard';
-    this.showModal();
+    this.showEditDashboardModal();
   }
 
   private setTableConfig(): void {
@@ -133,5 +135,9 @@ export class DashboardDetailsComponent implements AfterViewInit {
 
   private showModal(): void {
     this.showModal$.next(true);
+  }
+
+  private showEditDashboardModal(): void {
+    this.showEditDashboardModal$.next(true);
   }
 }
