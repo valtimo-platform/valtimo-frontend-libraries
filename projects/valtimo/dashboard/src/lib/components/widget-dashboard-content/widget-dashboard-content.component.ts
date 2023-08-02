@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {
   AfterViewInit,
   Component,
@@ -27,11 +26,12 @@ import {
   ViewChildren,
   ViewContainerRef,
 } from '@angular/core';
-import {Dashboard, DashboardWidgetConfiguration, DisplayComponent} from '../../models';
-import {WidgetLayoutService} from '../../services/widget-layout.service';
-import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
+
+import {Dashboard, DashboardWidgetConfiguration, DisplayComponent, WidgetData} from '../../models';
 import {WidgetService} from '../../services';
+import {WidgetLayoutService} from '../../services/widget-layout.service';
 
 @Component({
   selector: 'valtimo-widget-dashboard-content',
@@ -49,6 +49,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
   @ViewChild('widgetContainer') private _widgetContainerRef: ElementRef<HTMLDivElement>;
 
   @Input() set dashboard(value: Dashboard) {
+    this.setWidgetData(value);
     this.setWidgetConfigurations(value);
   }
 
@@ -57,6 +58,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
 
   private _observer!: ResizeObserver;
   private _packResultSubscription!: Subscription;
+  private _widgetData$: Observable<WidgetData[]>;
 
   constructor(
     private readonly layoutService: WidgetLayoutService,
@@ -91,6 +93,10 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
     });
   }
 
+  private setWidgetData(dashboard: Dashboard): void {
+    this._widgetData$ = this.widgetService.getWidgetData(dashboard.key);
+  }
+
   private observerMutation(event: Array<ResizeObserverEntry>): void {
     const widgetContainerWidth = event[0]?.borderBoxSize[0]?.inlineSize;
 
@@ -112,36 +118,43 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
         const configPackResult = packResult.items.find(
           result => result.item.configurationKey === nativeElement.id
         );
-        this.renderer.setStyle(nativeElement, 'height', `${configPackResult.height}px`);
-        this.renderer.setStyle(nativeElement, 'width', `${configPackResult.width}px`);
-        this.renderer.setStyle(nativeElement, 'left', `${configPackResult.x}px`);
-        this.renderer.setStyle(nativeElement, 'top', `${configPackResult.y}px`);
+        this.renderer.setStyle(nativeElement, 'height', `${configPackResult?.height}px`);
+        this.renderer.setStyle(nativeElement, 'width', `${configPackResult?.width}px`);
+        this.renderer.setStyle(nativeElement, 'left', `${configPackResult?.x}px`);
+        this.renderer.setStyle(nativeElement, 'top', `${configPackResult?.y}px`);
       });
     });
   }
 
   private renderWidgets(): void {
-    combineLatest([this.widgetConfigurations$, this.widgetService.supportedDisplayTypes$])
+    combineLatest([
+      this.widgetConfigurations$,
+      this.widgetService.supportedDisplayTypes$,
+      this._widgetData$,
+    ])
       .pipe(take(1))
-      .subscribe(([configurations, displayTypes]) => {
-        configurations.forEach((configuration, index) => {
+      .subscribe(([configurations, displayTypes, data]) => {
+        configurations?.forEach((configuration, index) => {
           const displayType = displayTypes.find(
             type => type.displayTypeKey === configuration.displayType
           );
           const vcRef = this._widgetConfigurationContentVcRefs.toArray()[index];
 
-          if (displayType) {
+          if (displayType && data) {
             vcRef.clear();
             const componentInstance: ComponentRef<DisplayComponent> = vcRef.createComponent(
               displayType.displayComponent
             );
             componentInstance.setInput('displayTypeKey', configuration.displayType);
+            componentInstance.setInput('displayTypeProperties', {
+              ...configuration.displayTypeProperties,
+              title: configuration.title,
+            });
+
             componentInstance.setInput(
-              'displayTypeProperties',
-              configuration.displayTypeProperties
+              'data',
+              data.find(dataItem => dataItem.key === configuration.key)?.data
             );
-            // mock value, implement real data source
-            componentInstance.setInput('data', {value: 8});
           }
         });
       });
