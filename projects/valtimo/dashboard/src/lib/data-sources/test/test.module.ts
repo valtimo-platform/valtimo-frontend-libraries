@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-import {DisplayTypeSpecification} from '../../models';
-import {BigNumberDisplayComponent} from './components/big-number-display/big-number-display.component';
-import {DATA_FEATURES} from '../../constants';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {DATA_SOURCE_TOKEN} from '../../constants';
+import {testDataSourceSpecification} from './test.specification';
+import {TestConfigurationComponent} from './components';
 
-export const bigNumberSpecification: DisplayTypeSpecification = {
-  displayTypeKey: 'number',
-  displayComponent: BigNumberDisplayComponent,
-  width: 1,
-  height: 1,
-  translations: {},
-  requiredDataFeatures: [DATA_FEATURES.NUMBER],
-};
+@NgModule({
+  declarations: [TestConfigurationComponent],
+  imports: [CommonModule],
+  exports: [TestConfigurationComponent],
+  providers: [{provide: DATA_SOURCE_TOKEN, useValue: testDataSourceSpecification, multi: true}],
+})
+export class TestDataSourceModule {}

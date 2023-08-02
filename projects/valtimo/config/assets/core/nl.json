@@ -242,7 +242,7 @@
       "metadata": "<b>Aangemaakt door</b> {{createdBy}} | <b>Aangemaakt op</b> {{createdOn}} | <b>Dashboard-sleutel</b> {{key}}",
       "form": {
         "title": "Widgettitel",
-        "titleHelperText": "De primaire titel die wordt weergegeven op de widgettegel",
+        "titleHelperText": "De naam van de widgetconfiguratie",
         "key": "Widgetsleutel (vereist)",
         "keyHelperText": "Wijs een unieke sleutel toe aan deze widget",
         "keyTitle": "Sleutel kopiëren",

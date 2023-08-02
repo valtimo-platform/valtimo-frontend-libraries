@@ -36,9 +36,15 @@ import {DashboardDetailsComponent} from './components/dashboard-details/dashboar
 import {DashboardManagementComponent} from './components/dashboard-management/dashboard-management.component';
 import {DashboardManagementRoutingModule} from './dashboard-management-routing.module';
 import {WidgetModalComponent} from './components/widget-modal/widget-modal.component';
+import {EditDashboardModalComponent} from './components/edit-dashboard-modal/edit-dashboard-modal';
 
 @NgModule({
-  declarations: [DashboardManagementComponent, DashboardDetailsComponent, WidgetModalComponent],
+  declarations: [
+    DashboardManagementComponent,
+    DashboardDetailsComponent,
+    WidgetModalComponent,
+    EditDashboardModalComponent,
+  ],
   imports: [
     ButtonModule,
     CarbonTableModule,

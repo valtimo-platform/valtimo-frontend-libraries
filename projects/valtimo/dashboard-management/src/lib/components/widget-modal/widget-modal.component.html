@@ -128,29 +128,29 @@
       </cds-label>
     </div>
 
-    <div class="form__element --with-button --readonly">
-      <cds-label [invalid]="key.dirty && key.invalid">
-        {{ 'dashboardManagement.widgets.form.key' | translate }}
+    <!--    <div class="form__element &#45;&#45;with-button &#45;&#45;readonly">-->
+    <!--      <cds-label [invalid]="key.dirty && key.invalid">-->
+    <!--        {{ 'dashboardManagement.widgets.form.key' | translate }}-->
 
-        <input
-          formControlName="key"
-          cdsText
-          readonly
-          tabindex="-1"
-          [invalid]="key.dirty && key.invalid"
-          [placeholder]="key.value"
-        />
-      </cds-label>
+    <!--        <input-->
+    <!--          formControlName="key"-->
+    <!--          cdsText-->
+    <!--          readonly-->
+    <!--          tabindex="-1"-->
+    <!--          [invalid]="key.dirty && key.invalid"-->
+    <!--          [placeholder]="key.value"-->
+    <!--        />-->
+    <!--      </cds-label>-->
 
-      <button
-        [title]="'dashboardManagement.widgets.form.keyTitle' | translate"
-        cdsButton="ghost"
-        (click)="copyKey()"
-        [iconOnly]="true"
-      >
-        <svg class="cds--btn__icon" cdsIcon="copy" size="16"></svg>
-      </button>
-    </div>
+    <!--      <button-->
+    <!--        [title]="'dashboardManagement.widgets.form.keyTitle' | translate"-->
+    <!--        cdsButton="ghost"-->
+    <!--        (click)="copyKey()"-->
+    <!--        [iconOnly]="true"-->
+    <!--      >-->
+    <!--        <svg class="cds&#45;&#45;btn__icon" cdsIcon="copy" size="16"></svg>-->
+    <!--      </button>-->
+    <!--    </div>-->
 
     <div class="form__element">
       <cds-dropdown
@@ -165,31 +165,31 @@
       </cds-dropdown>
     </div>
 
-    <div class="form__row">
-      <div class="form__element">
-        <cds-dropdown
-          formControlName="chartType"
-          [invalid]="chartType.dirty && chartType.invalid"
-          [label]="'dashboardManagement.widgets.form.chartType' | translate"
-          (selected)="chartTypeSelected($event)"
-        >
-          <cds-dropdown-list [items]="dataSourceItems$ | async" type="multi"></cds-dropdown-list>
-        </cds-dropdown>
-      </div>
+    <!--    <div class="form__row">-->
+    <!--      <div class="form__element">-->
+    <!--        <cds-dropdown-->
+    <!--          formControlName="chartType"-->
+    <!--          [invalid]="chartType.dirty && chartType.invalid"-->
+    <!--          [label]="'dashboardManagement.widgets.form.chartType' | translate"-->
+    <!--          (selected)="chartTypeSelected($event)"-->
+    <!--        >-->
+    <!--          <cds-dropdown-list [items]="dataSourceItems$ | async" type="multi"></cds-dropdown-list>-->
+    <!--        </cds-dropdown>-->
+    <!--      </div>-->
 
-      <div class="form__spacer"></div>
+    <!--      <div class="form__spacer"></div>-->
 
-      <div class="form__element">
-        <cds-label [invalid]="dataSourceField.dirty && dataSourceField.invalid">
-          {{ 'dashboardManagement.widgets.form.dataSourceField' | translate }}
-          <input
-            formControlName="dataSourceField"
-            cdsText
-            [invalid]="dataSourceField.dirty && dataSourceField.invalid"
-          />
-        </cds-label>
-      </div>
-    </div>
+    <!--      <div class="form__element">-->
+    <!--        <cds-label [invalid]="dataSourceField.dirty && dataSourceField.invalid">-->
+    <!--          {{ 'dashboardManagement.widgets.form.dataSourceField' | translate }}-->
+    <!--          <input-->
+    <!--            formControlName="dataSourceField"-->
+    <!--            cdsText-->
+    <!--            [invalid]="dataSourceField.dirty && dataSourceField.invalid"-->
+    <!--          />-->
+    <!--        </cds-label>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </form>
 </ng-template>
 

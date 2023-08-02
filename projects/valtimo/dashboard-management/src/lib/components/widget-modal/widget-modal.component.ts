@@ -13,6 +13,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ListItem, NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {DOCUMENT} from '@angular/common';
+import {DashboardManagementService} from '../../services/dashboard-management.service';
 
 @Component({
   selector: 'valtimo-widget-modal',
@@ -26,29 +27,28 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public type: WidgetModalType;
   @Input() public dashboard: DashboardItem;
 
-  public form!: FormGroup;
+  public form = this.fb.group({
+    title: this.fb.control(''),
+    dataSource: this.fb.control('', [Validators.required]),
+  });
+
   public editDashboardForm!: FormGroup;
 
   public readonly open$ = new BehaviorSubject<boolean>(false);
 
-  private readonly _dataSourceItems$ = new BehaviorSubject<Array<string>>([]);
   public readonly dataSourceItems$: Observable<Array<ListItem>> = combineLatest([
-    this._dataSourceItems$,
+    this.dashboardManagementService.getDataSources(),
     this.translateService.stream('key'),
   ]).pipe(
-    map(([dataSourceItems]) =>
-      dataSourceItems.map(mockItem => ({content: mockItem, selected: false}))
+    map(([dataSources]) =>
+      dataSources.map(dataSource => ({
+        content: dataSource.title,
+        selected: false,
+        key: dataSource.key,
+      }))
     )
   );
-  private readonly _chartTypeItems$ = new BehaviorSubject<Array<string>>([]);
-  public readonly chartTypeItems$: Observable<Array<ListItem>> = combineLatest([
-    this._dataSourceItems$,
-    this.translateService.stream('key'),
-  ]).pipe(
-    map(([chartTypeItems]) =>
-      chartTypeItems.map(mockItem => ({content: mockItem, selected: false}))
-    )
-  );
+
   public readonly roleItems$ = new BehaviorSubject<Array<ListItem>>([
     {content: 'ROLE_ADMIN', selected: false},
     {content: 'ROLE_USER', selected: false},
@@ -86,21 +86,19 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   constructor(
+    @Inject(DOCUMENT) private readonly document: Document,
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService,
-    @Inject(DOCUMENT) private readonly document: Document,
-    private readonly notificationService: NotificationService
+    private readonly notificationService: NotificationService,
+    private readonly dashboardManagementService: DashboardManagementService
   ) {}
 
   public ngOnInit(): void {
-    this.setDropdownData();
     this.openOpenSubscription();
-    this.setForm();
     this.setEditDashboardForm();
   }
 
   public ngOnChanges(): void {
-    this.setForm();
     this.setEditDashboardForm();
   }
 
@@ -112,7 +110,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     this.open$.next(false);
     this.form.reset();
     this.editDashboardForm.reset();
-    this.setDropdownData();
   }
 
   public save(): void {}
@@ -129,14 +126,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     this.dataSource.setValue(dataSource?.item?.content);
   }
 
-  public chartTypeSelected(chartType: any): void {
-    if (!this.dataSource) {
-      return;
-    }
-
-    this.dataSource.setValue(chartType?.item?.content);
-  }
-
   public copyKey(): void {
     if (!this.key || !this.document.defaultView) {
       return;
@@ -150,29 +139,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
       showClose: true,
       title: this.translateService.instant('dashboardManagement.widgets.form.keyCopiedTitle'),
     });
-  }
-
-  private setDropdownData(): void {
-    this.setDataSourceItems();
-    this.setChartTypeItems();
-  }
-
-  // implement with new BE endpoints
-  private setDataSourceItems(): void {}
-
-  // implement with new BE endpoints
-  private setChartTypeItems(): void {}
-
-  private setForm(): void {
-    this.form = this.fb.group({
-      title: this.fb.control(''),
-      key: this.fb.control('', [Validators.required]),
-      dataSource: this.fb.control('', [Validators.required]),
-      chartType: this.fb.control('', [Validators.required]),
-      dataSourceField: this.fb.control('', [Validators.required]),
-    });
-
-    this.key?.setValue('test-key');
   }
 
   private setEditDashboardForm(): void {

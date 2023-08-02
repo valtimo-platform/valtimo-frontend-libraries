@@ -16,3 +16,4 @@
 
 export * from './injection-tokens';
 export * from './layout.constants';
+export * from './data-features.constants';

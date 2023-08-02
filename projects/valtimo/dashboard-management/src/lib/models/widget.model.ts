@@ -9,4 +9,10 @@ interface DashboardWidget {
 
 type WidgetModalType = 'create' | 'edit' | 'delete' | 'editDashboard';
 
-export {DashboardWidget, WidgetModalType};
+interface WidgetDataSource {
+  key: string;
+  title: string;
+  dataFeatures: Array<string>;
+}
+
+export {DashboardWidget, WidgetModalType, WidgetDataSource};

@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,16 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {DisplayTypeSpecification} from '../../models';
-import {BigNumberDisplayComponent} from './components/big-number-display/big-number-display.component';
-import {DATA_FEATURES} from '../../constants';
-
-export const bigNumberSpecification: DisplayTypeSpecification = {
-  displayTypeKey: 'number',
-  displayComponent: BigNumberDisplayComponent,
-  width: 1,
-  height: 1,
-  translations: {},
-  requiredDataFeatures: [DATA_FEATURES.NUMBER],
-};

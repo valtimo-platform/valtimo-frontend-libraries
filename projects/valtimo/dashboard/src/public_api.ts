@@ -23,4 +23,5 @@ export * from './lib/components/widget-dashboard/widget-dashboard.component';
 export * from './lib/components/widget-dashboard-content/widget-dashboard-content.component';
 export * from './lib/dashboard.module';
 export * from './lib/display-types';
+export * from './lib/data-sources';
 export * from './lib/constants';

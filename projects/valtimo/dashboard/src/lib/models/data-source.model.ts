@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-import {DisplayTypeSpecification} from '../../models';
-import {BigNumberDisplayComponent} from './components/big-number-display/big-number-display.component';
-import {DATA_FEATURES} from '../../constants';
+import {Type} from '@angular/core';
+import {DataSourceConfigurationComponent} from './configuration.model';
 
-export const bigNumberSpecification: DisplayTypeSpecification = {
-  displayTypeKey: 'number',
-  displayComponent: BigNumberDisplayComponent,
-  width: 1,
-  height: 1,
-  translations: {},
-  requiredDataFeatures: [DATA_FEATURES.NUMBER],
-};
+interface DataSourceSpecification {
+  dataSourceKey: string;
+  configurationComponent?: Type<DataSourceConfigurationComponent>;
+  translations: {
+    [langKey: string]: {
+      [translationKey: string]: string;
+    };
+  };
+}
+
+export {DataSourceSpecification};

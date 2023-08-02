@@ -23,4 +23,5 @@ export const barChartSpecification: DisplayTypeSpecification = {
   width: 1,
   height: 2,
   translations: {},
+  requiredDataFeatures: [],
 };

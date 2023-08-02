@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-import {DisplayTypeSpecification} from '../../models';
-import {BigNumberDisplayComponent} from './components/big-number-display/big-number-display.component';
-import {DATA_FEATURES} from '../../constants';
-
-export const bigNumberSpecification: DisplayTypeSpecification = {
-  displayTypeKey: 'number',
-  displayComponent: BigNumberDisplayComponent,
-  width: 1,
-  height: 1,
-  translations: {},
-  requiredDataFeatures: [DATA_FEATURES.NUMBER],
-};
+export * from './test.module';
+export * from './test.specification';
+export * from './components';

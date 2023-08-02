@@ -243,7 +243,7 @@
       "metadata": "<b>Created by</b> {{createdBy}} | <b>Created on</b> {{createdOn}} | <b>Dashboard key</b> {{key}}",
       "form": {
         "title": "Widget title",
-        "titleHelperText": "The primary title displayed on the widget tile",
+        "titleHelperText": "The name of the widget configuration",
         "key": "Widget key (required)",
         "keyHelperText": "Assign a unique key to this widget",
         "keyTitle": "Copy key",

@@ -31,7 +31,7 @@ import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {WidgetDashboardContentComponent} from './components/widget-dashboard-content/widget-dashboard-content.component';
 import {WidgetDashboardComponent} from './components/widget-dashboard/widget-dashboard.component';
 import {DashboardRoutingModule} from './dashboard-routing.module';
-import {DISPLAY_TYPE_TOKEN} from './constants';
+import {DATA_SOURCE_TOKEN, DISPLAY_TYPE_TOKEN} from './constants';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -60,6 +60,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ThemeModule,
   ],
   exports: [DashboardComponent, WidgetDashboardComponent],
-  providers: [{provide: DISPLAY_TYPE_TOKEN, useValue: null, multi: true}],
+  providers: [
+    {provide: DISPLAY_TYPE_TOKEN, useValue: null, multi: true},
+    {provide: DATA_SOURCE_TOKEN, useValue: null, multi: true},
+  ],
 })
 export class DashboardModule {}

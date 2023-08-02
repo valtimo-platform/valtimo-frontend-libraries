@@ -27,6 +27,7 @@ interface DisplayTypeSpecification {
   displayTypeKey: string;
   displayComponent: Type<DisplayComponent>;
   configurationComponent?: Type<DisplayTypeConfigurationComponent>;
+  requiredDataFeatures: Array<string>;
   width: number;
   height: number;
   translations: {

@@ -242,7 +242,7 @@
       "metadata": "<b>Erstellt von</b> {{createdBy}} | <b>Erstellt am</b> {{createdOn}} | <b>Dashboard-Schlüssel</b> {{key}}",
       "form": {
         "title": "Widget-Titel",
-        "titleHelperText": "Der primäre Titel, der auf der Widget-Kachel angezeigt wird",
+        "titleHelperText": "Der Name der Widget-Konfiguration",
         "key": "Widget-Schlüssel (erforderlich)",
         "keyHelperText": "Weisen Sie diesem Widget einen eindeutigen Schlüssel zu",
         "keyTitle": "Schlüssel kopieren",
