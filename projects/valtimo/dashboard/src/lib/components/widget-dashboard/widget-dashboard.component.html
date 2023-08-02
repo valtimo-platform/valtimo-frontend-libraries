@@ -20,14 +20,20 @@
 
     <valtimo-widget-dashboard-content
       [dashboard]="dashboards[0]"
+      [widgetData]="activeWidgetData$ | async"
     ></valtimo-widget-dashboard-content>
   </div>
 
   <div *ngIf="dashboards.length > 1">
     <cds-tabs>
-      <cds-tab *ngFor="let dashboard of dashboards" [heading]="dashboard.title">
+      <cds-tab
+        *ngFor="let dashboard of dashboards; trackBy: trackByIndex"
+        [heading]="dashboard.title"
+        (selected)="onTabSelected(dashboard.key)"
+      >
         <valtimo-widget-dashboard-content
           [dashboard]="dashboard"
+          [widgetData]="activeWidgetData$ | async"
         ></valtimo-widget-dashboard-content>
       </cds-tab>
     </cds-tabs>

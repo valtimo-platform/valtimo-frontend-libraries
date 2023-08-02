@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of dashboard
- */
+interface WidgetData {
+  key: string;
+  data: object;
+}
 
-export * from './lib/components/dashboard/dashboard.component';
-export * from './lib/components/widget-dashboard-content/widget-dashboard-content.component';
-export * from './lib/components/widget-dashboard/widget-dashboard.component';
-export * from './lib/constants';
-export * from './lib/dashboard.module';
-export * from './lib/data-sources';
-export * from './lib/display-types';
-export * from './lib/models';
-export * from './lib/pipes';
-export * from './lib/services';
+export {WidgetData};
