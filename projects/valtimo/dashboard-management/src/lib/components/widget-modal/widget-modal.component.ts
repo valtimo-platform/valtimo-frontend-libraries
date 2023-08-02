@@ -1,15 +1,7 @@
-import {
-  Component,
-  Inject,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import {Component, Inject, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription} from 'rxjs';
 import {DashboardItem, WidgetModalType} from '../../models';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {ListItem, NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {DOCUMENT} from '@angular/common';
@@ -22,7 +14,7 @@ import {DashboardManagementService} from '../../services/dashboard-management.se
   encapsulation: ViewEncapsulation.None,
   providers: [NotificationService],
 })
-export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
+export class WidgetModalComponent implements OnInit, OnDestroy {
   @Input() public showModal$: Observable<boolean>;
   @Input() public type: WidgetModalType;
   @Input() public dashboard: DashboardItem;
@@ -31,9 +23,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     title: this.fb.control(''),
     dataSource: this.fb.control('', [Validators.required]),
   });
-
-  public editDashboardForm!: FormGroup;
-
   public readonly open$ = new BehaviorSubject<boolean>(false);
 
   public readonly dataSourceItems$: Observable<Array<ListItem>> = combineLatest([
@@ -49,11 +38,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
     )
   );
 
-  public readonly roleItems$ = new BehaviorSubject<Array<ListItem>>([
-    {content: 'ROLE_ADMIN', selected: false},
-    {content: 'ROLE_USER', selected: false},
-    {content: 'ROLE_DEVELOPER', selected: false},
-  ]);
   private _openSubscription!: Subscription;
 
   public get title() {
@@ -64,25 +48,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   }
   public get dataSource() {
     return this.form.get('dataSource');
-  }
-  public get chartType() {
-    return this.form.get('chartType');
-  }
-
-  public get dataSourceField() {
-    return this.form.get('dataSourceField');
-  }
-
-  public get dashboardTitle() {
-    return this.editDashboardForm.get('title');
-  }
-
-  public get dashboardDescription() {
-    return this.editDashboardForm.get('description');
-  }
-
-  public get dashboardRoles() {
-    return this.editDashboardForm.get('roles');
   }
 
   constructor(
@@ -95,11 +60,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit(): void {
     this.openOpenSubscription();
-    this.setEditDashboardForm();
-  }
-
-  public ngOnChanges(): void {
-    this.setEditDashboardForm();
   }
 
   public ngOnDestroy(): void {
@@ -109,7 +69,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
   public closeModal(): void {
     this.open$.next(false);
     this.form.reset();
-    this.editDashboardForm.reset();
   }
 
   public save(): void {}
@@ -139,18 +98,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy, OnChanges {
       showClose: true,
       title: this.translateService.instant('dashboardManagement.widgets.form.keyCopiedTitle'),
     });
-  }
-
-  private setEditDashboardForm(): void {
-    this.editDashboardForm = this.fb.group({
-      title: this.fb.control('', [Validators.required]),
-      description: this.fb.control('', [Validators.required]),
-      roles: this.fb.control([], [Validators.required]),
-    });
-
-    this.dashboardTitle?.setValue(this.dashboard.title);
-    this.dashboardDescription?.setValue(this.dashboard.description);
-    this.dashboardRoles?.setValue(this.dashboard.roles);
   }
 
   private openOpenSubscription(): void {

@@ -7,7 +7,7 @@ interface DashboardWidget {
   order: number;
 }
 
-type WidgetModalType = 'create' | 'edit' | 'delete' | 'editDashboard';
+type WidgetModalType = 'create' | 'edit' | 'delete';
 
 interface WidgetDataSource {
   key: string;
