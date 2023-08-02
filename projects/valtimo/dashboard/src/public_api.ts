@@ -25,3 +25,5 @@ export * from './lib/dashboard.module';
 export * from './lib/display-types';
 export * from './lib/data-sources';
 export * from './lib/constants';
+export * from './lib/services';
+export * from './lib/models';

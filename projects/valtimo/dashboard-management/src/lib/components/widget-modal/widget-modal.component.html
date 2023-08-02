@@ -3,7 +3,8 @@
     isEdit: type === 'edit',
     isCreate: type === 'create',
     isDelete: type === 'delete',
-    open: open$ | async
+    open: open$ | async,
+    displayTypeDropdownDisabled: displayTypeDropdownDisabled$ | async
   } as vars"
 >
   <ng-container
@@ -34,7 +35,7 @@
         >
 
         <ng-container *ngIf="vars.isEdit || vars.isCreate">
-          <ng-container *ngTemplateOutlet="widgetForm"></ng-container>
+          <ng-container *ngTemplateOutlet="widgetForm; context: {vars: vars}"></ng-container>
         </ng-container>
       </section>
 
@@ -51,7 +52,7 @@
   </ng-container>
 </ng-container>
 
-<ng-template #widgetForm>
+<ng-template #widgetForm let-vars="vars">
   <form *ngIf="form" [formGroup]="form" class="dashboard-modal__form">
     <div class="form__element">
       <cds-label
@@ -103,6 +104,20 @@
         (selected)="dataSourceSelected($event)"
       >
         <cds-dropdown-list [items]="dataSourceItems$ | async" type="multi"></cds-dropdown-list>
+      </cds-dropdown>
+    </div>
+
+    <div class="form__element">
+      <cds-dropdown
+        formControlName="displayType"
+        [disabled]="vars.displayTypeDropdownDisabled"
+        [helperText]="'dashboardManagement.widgets.form.dataSourceHelperText' | translate"
+        [invalid]="displayType.dirty && displayType.invalid"
+        [invalidText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
+        [label]="'dashboardManagement.widgets.form.dataSource' | translate"
+        (selected)="displayTypeSelected($event)"
+      >
+        <cds-dropdown-list [items]="displayTypeItems$ | async" type="multi"></cds-dropdown-list>
       </cds-dropdown>
     </div>
 
