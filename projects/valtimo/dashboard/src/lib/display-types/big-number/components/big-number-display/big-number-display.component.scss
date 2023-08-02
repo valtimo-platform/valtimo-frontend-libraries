@@ -38,16 +38,18 @@
   &__number {
     font-weight: lighter;
     font-size: 122px;
+    line-height: 0.75em;
   }
 
   &__label {
     font-size: 12px;
     margin-left: 12px;
+    margin-bottom: -1px;
   }
 
   &__content {
     display: flex;
-    align-items: baseline;
+    align-items: flex-end;
   }
 }
 
