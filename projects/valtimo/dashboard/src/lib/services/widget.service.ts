@@ -15,8 +15,8 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {DISPLAY_TYPE_TOKEN} from '../constants';
-import {DisplayTypeSpecification} from '../models';
+import {DATA_SOURCE_TOKEN, DISPLAY_TYPE_TOKEN} from '../constants';
+import {DataSourceSpecification, DisplayTypeSpecification} from '../models';
 import {BehaviorSubject, filter, Observable} from 'rxjs';
 
 @Injectable({
@@ -26,22 +26,48 @@ export class WidgetService {
   private readonly _supportedDisplayTypes$ =
     new BehaviorSubject<Array<DisplayTypeSpecification> | null>(null);
 
+  private readonly _supportedDataSources$ =
+    new BehaviorSubject<Array<DataSourceSpecification> | null>(null);
+
   public get supportedDisplayTypes$(): Observable<Array<DisplayTypeSpecification>> {
     return this._supportedDisplayTypes$
       .asObservable()
       .pipe(filter(specifications => !!specifications));
   }
 
+  public get supportedDataSources$(): Observable<Array<DataSourceSpecification>> {
+    return this._supportedDataSources$
+      .asObservable()
+      .pipe(filter(specifications => !!specifications));
+  }
+
+  public get supportedDisplayTypes(): Array<DisplayTypeSpecification> {
+    return this._supportedDisplayTypes$.getValue() || [];
+  }
+
+  public get supportedDataSources(): Array<DataSourceSpecification> {
+    return this._supportedDataSources$.getValue() || [];
+  }
+
   constructor(
     @Inject(DISPLAY_TYPE_TOKEN)
-    private readonly supportedDisplayTypes: Array<DisplayTypeSpecification | null>
+    private readonly supportedDisplayTypesFromToken: Array<DisplayTypeSpecification | null>,
+    @Inject(DATA_SOURCE_TOKEN)
+    private readonly supportedDataSourcesFromToken: Array<DataSourceSpecification | null>
   ) {
-    this.setSupportedDisplayTypes(supportedDisplayTypes);
+    this.setSupportedDisplayTypes(supportedDisplayTypesFromToken);
+    this.setSupportedDataSources(supportedDataSourcesFromToken);
   }
 
   private setSupportedDisplayTypes(
     supportedDisplayTypes: Array<DisplayTypeSpecification | null>
   ): void {
     this._supportedDisplayTypes$.next(supportedDisplayTypes.filter(displayType => !!displayType));
+  }
+
+  private setSupportedDataSources(
+    supportedDataSources: Array<DataSourceSpecification | null>
+  ): void {
+    this._supportedDataSources$.next(supportedDataSources.filter(dataSource => !!dataSource));
   }
 }

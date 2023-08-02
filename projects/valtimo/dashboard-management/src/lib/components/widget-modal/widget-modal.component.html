@@ -111,10 +111,10 @@
       <cds-dropdown
         formControlName="displayType"
         [disabled]="vars.displayTypeDropdownDisabled"
-        [helperText]="'dashboardManagement.widgets.form.dataSourceHelperText' | translate"
+        [helperText]="'dashboardManagement.widgets.form.displayTypeHelperText' | translate"
         [invalid]="displayType.dirty && displayType.invalid"
-        [invalidText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
-        [label]="'dashboardManagement.widgets.form.dataSource' | translate"
+        [invalidText]="'dashboardManagement.widgets.form.displayTypeHelperText' | translate"
+        [label]="'dashboardManagement.widgets.form.displayType' | translate"
         (selected)="displayTypeSelected($event)"
       >
         <cds-dropdown-list [items]="displayTypeItems$ | async" type="multi"></cds-dropdown-list>

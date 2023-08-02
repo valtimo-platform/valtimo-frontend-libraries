@@ -255,7 +255,9 @@
         "dashboardTitle": "Dashboard-Name (erforderlich)",
         "dashboardDescription": "Beschreibung (erforderlich)",
         "dashboardDescriptionHelperText": "*Beschreibung ist nur auf der Dashboard-Konfigurationsseite sichtbar",
-        "roles": "Sichtweite"
+        "roles": "Sichtweite",
+        "displayType": "Anzeigetyp",
+        "displayTypeHelperText": "Wählen Sie aus, wie die Daten Ihres Widgets angezeigt werden sollen"
       },
       "noResults": {
         "description": "Klicken Sie auf <strong>Neues Widget hinzufügen</strong>, um mit der Gestaltung Ihres Dashboards zu beginnen. <br/> Ziehen Sie Ihre Widgets an die gewünschte Position.",

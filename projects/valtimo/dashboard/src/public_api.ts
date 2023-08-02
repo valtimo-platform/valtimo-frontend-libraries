@@ -27,3 +27,4 @@ export * from './lib/data-sources';
 export * from './lib/constants';
 export * from './lib/services';
 export * from './lib/models';
+export * from './lib/pipes';

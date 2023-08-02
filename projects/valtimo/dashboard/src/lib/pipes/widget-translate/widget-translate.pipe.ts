@@ -14,24 +14,17 @@
  * limitations under the License.
  */
 
-import {DisplayTypeSpecification} from '../../models';
-import {MeterDisplayComponent} from './components/meter-display/meter-display.component';
+import {Pipe, PipeTransform} from '@angular/core';
+import {Observable} from 'rxjs';
+import {WidgetTranslationService} from '../../services';
 
-export const meterSpecification: DisplayTypeSpecification = {
-  displayTypeKey: 'meter',
-  displayComponent: MeterDisplayComponent,
-  width: 3,
-  height: 2,
-  translations: {
-    nl: {
-      title: 'Meter',
-    },
-    en: {
-      title: 'Meter',
-    },
-    de: {
-      title: 'Meter',
-    },
-  },
-  requiredDataFeatures: [],
-};
+@Pipe({
+  name: 'widgetTranslate',
+})
+export class WidgetTranslatePipe implements PipeTransform {
+  constructor(private readonly widgetTranslationService: WidgetTranslationService) {}
+
+  transform(translateKey: string, key: string): Observable<string> {
+    return this.widgetTranslationService.translate(translateKey, key);
+  }
+}

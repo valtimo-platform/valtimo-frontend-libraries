@@ -32,6 +32,7 @@ interface DisplayTypeSpecification {
   height: number;
   translations: {
     [langKey: string]: {
+      title: string;
       [translationKey: string]: string;
     };
   };

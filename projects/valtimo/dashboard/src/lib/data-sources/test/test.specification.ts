@@ -20,5 +20,15 @@ import {TestConfigurationComponent} from './components';
 export const testDataSourceSpecification: DataSourceSpecification = {
   dataSourceKey: 'test',
   configurationComponent: TestConfigurationComponent,
-  translations: {},
+  translations: {
+    de: {
+      title: 'Test-Datenquelle',
+    },
+    en: {
+      title: 'Test data source',
+    },
+    nl: {
+      title: 'Testdatabron',
+    },
+  },
 };

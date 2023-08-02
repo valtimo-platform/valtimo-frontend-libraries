@@ -22,6 +22,7 @@ interface DataSourceSpecification {
   configurationComponent?: Type<DataSourceConfigurationComponent>;
   translations: {
     [langKey: string]: {
+      title: string;
       [translationKey: string]: string;
     };
   };

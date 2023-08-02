@@ -23,6 +23,16 @@ export const bigNumberSpecification: DisplayTypeSpecification = {
   displayComponent: BigNumberDisplayComponent,
   width: 1,
   height: 1,
-  translations: {},
+  translations: {
+    nl: {
+      title: 'Groot getal',
+    },
+    en: {
+      title: 'Big number',
+    },
+    de: {
+      title: 'Große Nummer',
+    },
+  },
   requiredDataFeatures: [DATA_FEATURES.NUMBER],
 };

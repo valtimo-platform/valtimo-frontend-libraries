@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-import {DisplayTypeSpecification} from '../../models';
-import {MeterDisplayComponent} from './components/meter-display/meter-display.component';
+import {WidgetTranslatePipe} from './widget-translate.pipe';
+import {NgModule} from '@angular/core';
+import {TranslateModule} from '@ngx-translate/core';
 
-export const meterSpecification: DisplayTypeSpecification = {
-  displayTypeKey: 'meter',
-  displayComponent: MeterDisplayComponent,
-  width: 3,
-  height: 2,
-  translations: {
-    nl: {
-      title: 'Meter',
-    },
-    en: {
-      title: 'Meter',
-    },
-    de: {
-      title: 'Meter',
-    },
-  },
-  requiredDataFeatures: [],
-};
+@NgModule({
+  imports: [TranslateModule],
+  declarations: [WidgetTranslatePipe],
+  exports: [WidgetTranslatePipe],
+})
+export class WidgetTranslatePipeModule {}

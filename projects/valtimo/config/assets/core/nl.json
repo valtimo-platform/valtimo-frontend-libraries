@@ -255,7 +255,9 @@
         "dashboardTitle": "Dashboardnaam (vereist)",
         "dashboardDescription": "Beschrijving (vereist)",
         "dashboardDescriptionHelperText": "*Beschrijving is alleen zichtbaar op de configuratiepagina van het dashboard",
-        "roles": "Zichtbaarheid"
+        "roles": "Zichtbaarheid",
+        "displayType": "Weergavetype",
+        "displayTypeHelperText": "Selecteer de manier waarop de gegevens van uw widget moeten worden weergegeven"
       },
       "noResults": {
         "description": "Klik op <strong>Nieuwe widget toevoegen</strong> om te beginnen met het ontwerpen van uw dashboard. <br/> Sleep uw widgets naar de gewenste positie.",

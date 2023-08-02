@@ -7,7 +7,11 @@ import {TranslateService} from '@ngx-translate/core';
 import {DOCUMENT} from '@angular/common';
 import {DashboardManagementService} from '../../services/dashboard-management.service';
 import {CARBON_CONSTANTS} from '@valtimo/components';
-import {DisplayTypeSpecification, WidgetService} from '@valtimo/dashboard';
+import {
+  DisplayTypeSpecification,
+  WidgetService,
+  WidgetTranslationService,
+} from '@valtimo/dashboard';
 
 @Component({
   selector: 'valtimo-widget-modal',
@@ -45,7 +49,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     }),
     map(([dataSources, selectedDataSourceKey]) =>
       dataSources.map(dataSource => ({
-        content: dataSource.title,
+        content: this.widgetTranslationService.instant('title', dataSource.key),
         selected: selectedDataSourceKey === dataSource.key,
         key: dataSource.key,
       }))
@@ -65,7 +69,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   ]).pipe(
     map(([compatibleDisplayTypes, selectedDisplayTypeKey]) =>
       compatibleDisplayTypes.map(displayType => ({
-        content: displayType.displayTypeKey,
+        content: this.widgetTranslationService.instant('title', displayType.displayTypeKey),
         selected: displayType.displayTypeKey === selectedDisplayTypeKey,
         key: displayType.displayTypeKey,
       }))
@@ -104,7 +108,8 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     private readonly translateService: TranslateService,
     private readonly notificationService: NotificationService,
     private readonly dashboardManagementService: DashboardManagementService,
-    private readonly widgetService: WidgetService
+    private readonly widgetService: WidgetService,
+    private readonly widgetTranslationService: WidgetTranslationService
   ) {}
 
   public ngOnInit(): void {

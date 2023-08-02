@@ -14,24 +14,4 @@
  * limitations under the License.
  */
 
-import {DisplayTypeSpecification} from '../../models';
-import {MeterDisplayComponent} from './components/meter-display/meter-display.component';
-
-export const meterSpecification: DisplayTypeSpecification = {
-  displayTypeKey: 'meter',
-  displayComponent: MeterDisplayComponent,
-  width: 3,
-  height: 2,
-  translations: {
-    nl: {
-      title: 'Meter',
-    },
-    en: {
-      title: 'Meter',
-    },
-    de: {
-      title: 'Meter',
-    },
-  },
-  requiredDataFeatures: [],
-};
+export * from './widget-translate';
