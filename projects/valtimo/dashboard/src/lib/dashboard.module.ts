@@ -26,7 +26,7 @@ import {
   WidgetModule,
 } from '@valtimo/components';
 import {TaskModule} from '@valtimo/task';
-import {TabsModule, ThemeModule} from 'carbon-components-angular';
+import {LoadingModule, TabsModule, ThemeModule} from 'carbon-components-angular';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {WidgetDashboardContentComponent} from './components/widget-dashboard-content/widget-dashboard-content.component';
 import {WidgetDashboardComponent} from './components/widget-dashboard/widget-dashboard.component';
@@ -58,6 +58,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     SpinnerModule,
     TabsModule,
     ThemeModule,
+    LoadingModule
   ],
   exports: [DashboardComponent, WidgetDashboardComponent],
   providers: [{provide: DISPLAY_TYPE_TOKEN, useValue: null, multi: true}],

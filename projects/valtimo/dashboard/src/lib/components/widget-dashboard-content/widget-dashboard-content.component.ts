@@ -26,7 +26,7 @@ import {
   ViewChildren,
   ViewContainerRef,
 } from '@angular/core';
-import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 import {Dashboard, DashboardWidgetConfiguration, DisplayComponent, WidgetData} from '../../models';
@@ -48,8 +48,14 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
 
   @ViewChild('widgetContainer') private _widgetContainerRef: ElementRef<HTMLDivElement>;
 
+  public readonly isLoading$ = new BehaviorSubject<boolean>(true);
+  private _widgetData$ = new BehaviorSubject<WidgetData[]>([]);
+  @Input() set widgetData(value: {data: WidgetData[]; loading: boolean}) {
+    this.isLoading$.next(value.loading);
+    this._widgetData$.next(value.data);
+  }
+
   @Input() set dashboard(value: Dashboard) {
-    this.setWidgetData(value);
     this.setWidgetConfigurations(value);
   }
 
@@ -57,8 +63,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
     new BehaviorSubject<Array<DashboardWidgetConfiguration> | null>(null);
 
   private _observer!: ResizeObserver;
-  private _packResultSubscription!: Subscription;
-  private _widgetData$: Observable<WidgetData[]>;
+  private _subscriptions = new Subscription();
 
   constructor(
     private readonly layoutService: WidgetLayoutService,
@@ -77,7 +82,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
 
   public ngOnDestroy(): void {
     this._observer?.disconnect();
-    this._packResultSubscription?.unsubscribe();
+    this._subscriptions?.unsubscribe();
   }
 
   private setWidgetConfigurations(dashboard: Dashboard): void {
@@ -93,10 +98,6 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
     });
   }
 
-  private setWidgetData(dashboard: Dashboard): void {
-    this._widgetData$ = this.widgetService.getWidgetData(dashboard.key);
-  }
-
   private observerMutation(event: Array<ResizeObserverEntry>): void {
     const widgetContainerWidth = event[0]?.borderBoxSize[0]?.inlineSize;
 
@@ -106,34 +107,35 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
   }
 
   private openPackResultSubscription(): void {
-    this._packResultSubscription = this.layoutService.widgetPackResult$.subscribe(packResult => {
-      this.renderer.setStyle(
-        this._widgetContainerRef.nativeElement,
-        'height',
-        `${packResult.height}px`
-      );
-
-      this._widgetConfigurationRefs.toArray().forEach(widgetConfigurationRef => {
-        const nativeElement = widgetConfigurationRef.nativeElement;
-        const configPackResult = packResult.items.find(
-          result => result.item.configurationKey === nativeElement.id
+    this._subscriptions.add(
+      this.layoutService.widgetPackResult$.subscribe(packResult => {
+        this.renderer.setStyle(
+          this._widgetContainerRef.nativeElement,
+          'height',
+          `${packResult.height}px`
         );
-        this.renderer.setStyle(nativeElement, 'height', `${configPackResult?.height}px`);
-        this.renderer.setStyle(nativeElement, 'width', `${configPackResult?.width}px`);
-        this.renderer.setStyle(nativeElement, 'left', `${configPackResult?.x}px`);
-        this.renderer.setStyle(nativeElement, 'top', `${configPackResult?.y}px`);
-      });
-    });
+
+        this._widgetConfigurationRefs.toArray().forEach(widgetConfigurationRef => {
+          const nativeElement = widgetConfigurationRef.nativeElement;
+          const configPackResult = packResult.items.find(
+            result => result.item.configurationKey === nativeElement.id
+          );
+          this.renderer.setStyle(nativeElement, 'height', `${configPackResult?.height}px`);
+          this.renderer.setStyle(nativeElement, 'width', `${configPackResult?.width}px`);
+          this.renderer.setStyle(nativeElement, 'left', `${configPackResult?.x}px`);
+          this.renderer.setStyle(nativeElement, 'top', `${configPackResult?.y}px`);
+        });
+      })
+    );
   }
 
   private renderWidgets(): void {
-    combineLatest([
-      this.widgetConfigurations$,
-      this.widgetService.supportedDisplayTypes$,
-      this._widgetData$,
-    ])
-      .pipe(take(1))
-      .subscribe(([configurations, displayTypes, data]) => {
+    this._subscriptions.add(
+      combineLatest([
+        this.widgetConfigurations$,
+        this.widgetService.supportedDisplayTypes$,
+        this._widgetData$,
+      ]).subscribe(([configurations, displayTypes, data]) => {
         configurations?.forEach((configuration, index) => {
           const displayType = displayTypes.find(
             type => type.displayTypeKey === configuration.displayType
@@ -157,6 +159,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
             );
           }
         });
-      });
+      })
+    );
   }
 }

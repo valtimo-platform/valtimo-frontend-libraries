@@ -45,7 +45,7 @@ export class WidgetService {
   }
 
   public getWidgetData(dashboardKey: string): Observable<WidgetData[]> {
-    return this.http.get<any[]>(`${this._endpointUri}/${dashboardKey}/data`);
+    return this.http.get<WidgetData[]>(`${this._endpointUri}/${dashboardKey}/data`);
   }
 
   private setSupportedDisplayTypes(
