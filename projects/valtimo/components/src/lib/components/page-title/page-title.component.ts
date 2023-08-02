@@ -42,11 +42,7 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('pageActionsVcr', {static: true, read: ViewContainerRef})
   pageActionsVcr!: ViewContainerRef;
   public appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
-  public readonly hidePageTitle$: Observable<boolean> = this.router.events.pipe(
-    startWith(this.router),
-    switchMap(() => this.activatedRoute.firstChild.data),
-    map(data => !!data?.hidePageTitle)
-  );
+  public hidePageTitle = false;
   public readonly hasCustomPageTitle$: Observable<boolean> = this.router.events.pipe(
     startWith(this.router),
     switchMap(() => this.activatedRoute.firstChild.data),
@@ -66,7 +62,13 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly translatedTitle$ = new BehaviorSubject<string>('');
   private appTitleAsSuffix =
     this.configService?.config?.featureToggles?.applicationTitleAsSuffix || false;
-  private routerTranslateSubscription!: Subscription;
+  private _routerTranslateSubscription!: Subscription;
+  private _hidePageTitleSubscription!: Subscription;
+  private readonly _hidePageTitle$: Observable<boolean> = this.router.events.pipe(
+    startWith(this.router),
+    switchMap(() => this.activatedRoute.firstChild.data),
+    map(data => !!data?.hidePageTitle)
+  );
 
   constructor(
     private readonly router: Router,
@@ -80,6 +82,7 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.openRouterTranslateSubscription();
+    this.openHidePageTitleSubscription();
   }
 
   ngAfterViewInit(): void {
@@ -87,11 +90,12 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.routerTranslateSubscription?.unsubscribe();
+    this._routerTranslateSubscription?.unsubscribe();
+    this._hidePageTitleSubscription?.unsubscribe();
   }
 
   private openRouterTranslateSubscription(): void {
-    this.routerTranslateSubscription = combineLatest([
+    this._routerTranslateSubscription = combineLatest([
       this.router.events,
       this.translateService.stream('key'),
     ]).subscribe(() => {
@@ -124,6 +128,12 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
         this.translatedTitle$.next('');
         this.titleService.setTitle(this.appTitle);
       }
+    });
+  }
+
+  private openHidePageTitleSubscription(): void {
+    this._hidePageTitleSubscription = this._hidePageTitle$.subscribe(hidePageTitle => {
+      this.hidePageTitle = hidePageTitle;
     });
   }
 }
