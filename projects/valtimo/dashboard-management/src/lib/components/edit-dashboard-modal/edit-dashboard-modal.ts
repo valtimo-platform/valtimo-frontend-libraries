@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {DashboardItem} from '../../models';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DashboardManagementService} from '../../services/dashboard-management.service';
+import {ConfigurationOutput} from '@valtimo/dashboard';
 
 @Component({
   selector: 'valtimo-edit-dashboard-modal',
@@ -31,8 +32,8 @@ import {DashboardManagementService} from '../../services/dashboard-management.se
 })
 export class EditDashboardModalComponent implements OnInit {
   @Input() public showModal$: Observable<boolean>;
-  @Input() public refreshDashboardSubject$: BehaviorSubject<null>;
   @Input() public dashboard: DashboardItem;
+  @Output() public saveEvent = new EventEmitter<ConfigurationOutput>();
 
   public readonly open$ = new BehaviorSubject<boolean>(false);
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
@@ -78,7 +79,7 @@ export class EditDashboardModalComponent implements OnInit {
         },
       ])
       .subscribe(() => {
-        this.refreshDashboardSubject$.next(null);
+        this.saveEvent.emit();
         this.closeModal();
       });
   }

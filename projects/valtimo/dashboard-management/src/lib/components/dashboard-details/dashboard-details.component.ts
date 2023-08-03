@@ -26,11 +26,11 @@ export class DashboardDetailsComponent implements AfterViewInit {
   public tableConfig!: CarbonTableConfig;
 
   private readonly dashboardKey$ = this.route.params.pipe(map(params => params.id));
-  public readonly refreshDashboardSubject$ = new BehaviorSubject<null>(null);
+  private readonly _refreshDashboardSubject$ = new BehaviorSubject<null>(null);
   public readonly currentDashboard$: Observable<DashboardItem | undefined> = combineLatest([
     this.dashboardKey$,
     this.translateService.stream('key'),
-    this.refreshDashboardSubject$,
+    this._refreshDashboardSubject$,
   ]).pipe(
     switchMap(([dashboardKey]) => this.dashboardManagementService.getDashboard(dashboardKey)),
     tap((currentDashboard: DashboardItem) => {
@@ -51,11 +51,16 @@ export class DashboardDetailsComponent implements AfterViewInit {
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  public readonly widgetData$ = this.dashboardKey$.pipe(
-    switchMap(dashboardKey =>
+  private readonly _refreshWidgetsSubject$ = new BehaviorSubject<null>(null);
+
+  public readonly widgetData$ = combineLatest([
+    this.dashboardKey$,
+    this._refreshWidgetsSubject$,
+  ]).pipe(
+    switchMap(([dashboardKey]) =>
       this.dashboardManagementService.getDashboardWidgetConfiguration(dashboardKey)
     ),
-    tap(data => {
+    tap(() => {
       this.loading$.next(false);
     })
   );
@@ -84,6 +89,14 @@ export class DashboardDetailsComponent implements AfterViewInit {
 
   public editDashboard(): void {
     this.showEditDashboardModal();
+  }
+
+  public refreshWidgets(): void {
+    this._refreshWidgetsSubject$.next(null);
+  }
+
+  public refreshDashboard(): void {
+    this._refreshDashboardSubject$.next(null);
   }
 
   private setTableConfig(): void {

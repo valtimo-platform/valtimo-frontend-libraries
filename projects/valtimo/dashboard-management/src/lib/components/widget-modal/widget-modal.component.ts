@@ -1,4 +1,13 @@
-import {Component, Inject, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import {
   BehaviorSubject,
   combineLatest,
@@ -34,6 +43,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   @Input() public showModal$: Observable<boolean>;
   @Input() public type: WidgetModalType;
   @Input() public dashboard: DashboardItem;
+  @Output() public saveEvent = new EventEmitter<ConfigurationOutput>();
 
   public readonly form = this.fb.group({
     title: this.fb.control('', [Validators.required]),
@@ -151,6 +161,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     this.open$.next(false);
 
     setTimeout(() => {
+      this.enable();
       this.form.reset();
       this.selectedDataSourceKey$.next('');
       this.selectedDisplayTypeKey$.next('');
@@ -185,6 +196,10 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe({
+        complete: () => {
+          this.saveEvent.emit();
+          this.closeModal();
+        },
         error: () => {
           this.enable();
         },

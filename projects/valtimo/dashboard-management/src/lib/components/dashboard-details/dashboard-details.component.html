@@ -22,12 +22,13 @@
     [dashboard]="obs.currentDashboard"
     [showModal$]="showModal$"
     [type]="modalType"
+    (saveEvent)="refreshWidgets()"
   ></valtimo-widget-modal>
 
   <valtimo-edit-dashboard-modal
     [dashboard]="obs.currentDashboard"
-    [refreshDashboardSubject$]="refreshDashboardSubject$"
     [showModal$]="showEditDashboardModal$"
+    (saveEvent)="refreshDashboard()"
   >
   </valtimo-edit-dashboard-modal>
 </ng-container>
