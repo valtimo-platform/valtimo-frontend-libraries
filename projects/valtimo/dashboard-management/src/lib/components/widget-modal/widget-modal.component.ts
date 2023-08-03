@@ -25,7 +25,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   @Input() public type: WidgetModalType;
   @Input() public dashboard: DashboardItem;
 
-  public form = this.fb.group({
+  public readonly form = this.fb.group({
     title: this.fb.control('', [Validators.required]),
     dataSource: this.fb.control('', [Validators.required]),
     displayType: this.fb.control('', [Validators.required]),

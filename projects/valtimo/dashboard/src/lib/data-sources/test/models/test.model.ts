@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-export * from './test.module';
-export * from './test.specification';
-export * from './components';
-export * from './models';
+interface TestConfiguration {
+  valid: number;
+  total: number;
+}
+
+export {TestConfiguration};

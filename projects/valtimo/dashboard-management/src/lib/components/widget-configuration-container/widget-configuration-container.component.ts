@@ -58,8 +58,6 @@ export class WidgetConfigurationContainerComponent
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<object> = new EventEmitter<object>();
 
-  public readonly noConfigurationComponentAvailable$ = new BehaviorSubject<boolean>(false);
-
   private _componentRefSubscription!: Subscription;
   private _configurationComponentSubscription!: Subscription;
   private _validSubscription!: Subscription;
@@ -114,9 +112,9 @@ export class WidgetConfigurationContainerComponent
           if (configurationComponent) {
             const componentRef = this.dynamicContainer.createComponent(configurationComponent);
             this._componentRef$.next(componentRef);
-            this.noConfigurationComponentAvailable$.next(false);
           } else {
-            this.noConfigurationComponentAvailable$.next(true);
+            this.configuration.emit({});
+            this.valid.emit(true);
           }
         })
       )

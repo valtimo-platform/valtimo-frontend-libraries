@@ -15,8 +15,3 @@
   -->
 
 <ng-template #widgetConfigurationComponent></ng-template>
-<ng-container *ngIf="noConfigurationComponentAvailable$ | async">
-  <div class="no-configuration-component-message">
-    {{ 'plugin.noConfigurationComponent' | translate }}
-  </div>
-</ng-container>

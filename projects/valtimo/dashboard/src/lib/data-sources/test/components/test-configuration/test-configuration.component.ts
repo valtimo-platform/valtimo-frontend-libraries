@@ -14,20 +14,47 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {DataSourceConfigurationComponent} from '../../../../models';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
+import {FormBuilder, Validators} from '@angular/forms';
+import {TestConfiguration} from '../../models';
 
 @Component({
   templateUrl: './test-configuration.component.html',
   styleUrls: ['./test-configuration.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TestConfigurationComponent implements DataSourceConfigurationComponent {
+export class TestConfigurationComponent
+  implements OnInit, OnDestroy, DataSourceConfigurationComponent
+{
   @Input() dataSourceKey: string;
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
-  @Input() prefillConfiguration$: Observable<object>;
+  @Input() prefillConfiguration$: Observable<TestConfiguration>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<object> = new EventEmitter<object>();
+  @Output() configuration: EventEmitter<object> = new EventEmitter<TestConfiguration>();
+
+  public readonly form = this.fb.group({
+    value: this.fb.control(0, [Validators.required]),
+    total: this.fb.control(0, [Validators.required]),
+  });
+
+  private _subscriptions = new Subscription();
+
+  constructor(private readonly fb: FormBuilder) {}
+
+  public ngOnInit(): void {}
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 }
