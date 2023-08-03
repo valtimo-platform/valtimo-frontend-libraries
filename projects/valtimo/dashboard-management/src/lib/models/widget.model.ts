@@ -1,10 +1,11 @@
 interface DashboardWidget {
   title: string;
-  key: string;
+  key?: string;
   dataSourceKey: string;
   dataSourceProperties: {[key: string]: any};
   displayType: string;
-  order: number;
+  displayTypeProperties: object;
+  order?: number;
 }
 
 type WidgetModalType = 'create' | 'edit' | 'delete';

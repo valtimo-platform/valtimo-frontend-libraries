@@ -19,6 +19,7 @@
       } as translations"
       [open]="vars.open"
       showFooter="true"
+      size="md"
       title="{{ translations.title }}"
       valtimoCdsModal
     >
@@ -59,7 +60,8 @@
         selectedDisplayTypeKey: selectedDisplayTypeKey$ | async,
         displayTypeDropdownDisabled: displayTypeDropdownDisabled$ | async,
         dataSourceItems: dataSourceItems$ | async,
-        displayTypeItems: displayTypeItems$ | async
+        displayTypeItems: displayTypeItems$ | async,
+        disabled: disabled$ | async
       } as obs
     "
     [formGroup]="form"
@@ -97,6 +99,7 @@
     <valtimo-widget-configuration-container
       *ngIf="obs.selectedDataSourceKey"
       [dataSourceKey]="obs.selectedDataSourceKey"
+      [disabled]="obs.disabled"
       (configuration)="dataSourceConfiguration($event)"
     ></valtimo-widget-configuration-container>
 
@@ -115,6 +118,7 @@
 
     <valtimo-widget-configuration-container
       *ngIf="obs.selectedDisplayTypeKey"
+      [disabled]="obs.disabled"
       [displayTypeKey]="obs.selectedDisplayTypeKey"
       (configuration)="displayTypeConfiguration($event)"
     ></valtimo-widget-configuration-container>
@@ -125,10 +129,11 @@
   <ng-container
     *ngIf="{
       dataSourceConfiguration: dataSourceConfiguration$ | async,
-      displayTypeConfiguration: displayTypeConfiguration$ | async
+      displayTypeConfiguration: displayTypeConfiguration$ | async,
+      disabled: disabled$ | async
     } as obs"
   >
-    <button cdsButton="ghost" (click)="closeModal()">
+    <button cdsButton="ghost" (click)="closeModal()" [disabled]="obs.disabled">
       {{ 'dashboardManagement.widgets.cancel' | translate }}
     </button>
 
@@ -136,7 +141,10 @@
       (click)="save()"
       cdsButton="primary"
       [disabled]="
-        form.invalid || !obs.dataSourceConfiguration.valid || !obs.displayTypeConfiguration.valid
+        form.invalid ||
+        !obs.dataSourceConfiguration.valid ||
+        !obs.displayTypeConfiguration.valid ||
+        obs.disabled
       "
     >
       {{ 'dashboardManagement.widgets.save' | translate }}

@@ -57,7 +57,6 @@ export class DashboardDetailsComponent implements AfterViewInit {
     ),
     tap(data => {
       this.loading$.next(false);
-      console.log('widget data', data);
     })
   );
 

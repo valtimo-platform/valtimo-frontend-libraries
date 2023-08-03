@@ -23,22 +23,24 @@ export const testDataSourceSpecification: DataSourceSpecification = {
   translations: {
     de: {
       title: 'Test-Datenquelle',
-      value: 'Wert',
+      value: 'Wert (erforderlich)',
       valueHelperText: 'Der im Widget angezeigte Wert',
-      total: 'Total value',
-      totalHelperText: 'The total value displayed in the widget'
+      total: 'Gesamtwert (erforderlich)',
+      totalHelperText: 'Der im Widget angezeigte Gesamtwert',
     },
     en: {
       title: 'Test data source',
-      value: 'Value',
+      value: 'Value (required)',
       valueHelperText: 'The value displayed in the widget',
-      total: 'Total value',
-      totalHelperText: 'The total value displayed in the widget'
+      total: 'Total value (required)',
+      totalHelperText: 'The total value displayed in the widget',
     },
     nl: {
       title: 'Testdatabron',
       value: 'Waarde',
       valueHelperText: 'De waarde die wordt weergegeven in de widget',
+      total: 'Totaalwaarde (vereist)',
+      totalHelperText: 'De totaalwaarde die wordt weergegeven in de widget',
     },
   },
 };

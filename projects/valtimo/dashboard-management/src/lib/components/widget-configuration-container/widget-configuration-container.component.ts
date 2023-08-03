@@ -122,6 +122,7 @@ export class WidgetConfigurationContainerComponent
 
           if (configurationComponent) {
             const componentRef = this.dynamicContainer.createComponent(configurationComponent);
+            this.configuration.emit({valid: false, data: {}});
             this._componentRef$.next(componentRef);
           } else {
             this.configuration.emit({valid: true, data: {}});

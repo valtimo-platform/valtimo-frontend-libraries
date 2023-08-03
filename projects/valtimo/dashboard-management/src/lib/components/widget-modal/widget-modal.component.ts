@@ -1,5 +1,14 @@
 import {Component, Inject, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, Subscription, take, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  Subscription,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import {DashboardItem, WidgetDataSource, WidgetModalType} from '../../models';
 import {FormBuilder, Validators} from '@angular/forms';
 import {ListItem, NotificationService} from 'carbon-components-angular';
@@ -102,6 +111,8 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     data: {},
   });
 
+  public readonly disabled$ = new BehaviorSubject<boolean>(false);
+
   private _openSubscription!: Subscription;
 
   public get title() {
@@ -146,7 +157,39 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
-  public save(): void {}
+  public save(): void {
+    this.disable();
+
+    combineLatest([
+      this.selectedDataSourceKey$,
+      this.selectedDisplayTypeKey$,
+      this.displayTypeConfiguration$,
+      this.dataSourceConfiguration$,
+    ])
+      .pipe(
+        take(1),
+        switchMap(
+          ([
+            selectedDataSourceKey,
+            selectedDisplayTypeKey,
+            displayTypeConfiguration,
+            dataSourceConfiguration,
+          ]) =>
+            this.dashboardManagementService.createDashboardWidgetConfiguration(this.dashboard.key, {
+              title: this.title.value,
+              displayType: selectedDisplayTypeKey,
+              dataSourceKey: selectedDataSourceKey,
+              dataSourceProperties: {...dataSourceConfiguration.data},
+              displayTypeProperties: {...displayTypeConfiguration.data},
+            })
+        )
+      )
+      .subscribe({
+        error: () => {
+          this.enable();
+        },
+      });
+  }
 
   public delete(): void {}
 
@@ -202,5 +245,15 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
 
       this._compatibleDisplayTypes$.next(compatibleDisplayTypes);
     });
+  }
+
+  private disable(): void {
+    this.disabled$.next(true);
+    this.form.disable();
+  }
+
+  private enable(): void {
+    this.disabled$.next(false);
+    this.form.enable();
   }
 }

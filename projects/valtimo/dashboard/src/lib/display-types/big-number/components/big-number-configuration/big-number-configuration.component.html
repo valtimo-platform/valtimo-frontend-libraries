@@ -1,0 +1,104 @@
+<!--
+  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<form [formGroup]="form">
+  <div class="form__element">
+    <cds-label
+      [invalid]="title.dirty && title.invalid"
+      [invalidText]="'formTitleHelperText' | widgetTranslate : displayTypeKey | async"
+      [helperText]="'formTitleHelperText' | widgetTranslate : displayTypeKey | async"
+    >
+      {{ 'formTitle' | widgetTranslate : displayTypeKey | async }}
+
+      <input formControlName="title" cdsText [invalid]="title.dirty && title.invalid" />
+    </cds-label>
+  </div>
+
+  <div class="form__element">
+    <cds-label
+      [invalid]="subtitle.dirty && subtitle.invalid"
+      [invalidText]="'subtitleHelperText' | widgetTranslate : displayTypeKey | async"
+      [helperText]="'subtitleHelperText' | widgetTranslate : displayTypeKey | async"
+    >
+      {{ 'subtitle' | widgetTranslate : displayTypeKey | async }}
+
+      <input formControlName="subtitle" cdsText [invalid]="subtitle.dirty && subtitle.invalid" />
+    </cds-label>
+  </div>
+
+  <div class="form__element">
+    <cds-label
+      [invalid]="label.dirty && label.invalid"
+      [invalidText]="'labelHelperText' | widgetTranslate : displayTypeKey | async"
+      [helperText]="'labelHelperText' | widgetTranslate : displayTypeKey | async"
+    >
+      {{ 'label' | widgetTranslate : displayTypeKey | async }}
+
+      <input formControlName="label" cdsText [invalid]="label.dirty && label.invalid" />
+    </cds-label>
+  </div>
+
+  <div class="form__element">
+    <cds-checkbox formControlName="useKPI">
+      {{ 'useKPI' | widgetTranslate : displayTypeKey | async }}
+    </cds-checkbox>
+  </div>
+
+  <div class="form__row" *ngIf="useKPI.value">
+    <div class="form__element">
+      <cds-label [invalid]="lowSeverityThreshold.dirty && lowSeverityThreshold.invalid">
+        {{ 'lowSeverityThreshold' | widgetTranslate : displayTypeKey | async }}
+
+        <input
+          type="number"
+          formControlName="lowSeverityThreshold"
+          cdsText
+          [invalid]="lowSeverityThreshold.dirty && lowSeverityThreshold.invalid"
+        />
+      </cds-label>
+    </div>
+
+    <div class="form__spacer"></div>
+
+    <div class="form__element">
+      <cds-label [invalid]="mediumSeverityThreshold.dirty && mediumSeverityThreshold.invalid">
+        {{ 'mediumSeverityThreshold' | widgetTranslate : displayTypeKey | async }}
+
+        <input
+          type="number"
+          formControlName="mediumSeverityThreshold"
+          cdsText
+          [invalid]="mediumSeverityThreshold.dirty && mediumSeverityThreshold.invalid"
+        />
+      </cds-label>
+    </div>
+
+    <div class="form__spacer"></div>
+
+    <div class="form__element">
+      <cds-label [invalid]="highSeverityThreshold.dirty && highSeverityThreshold.invalid">
+        {{ 'highSeverityThreshold' | widgetTranslate : displayTypeKey | async }}
+
+        <input
+          type="number"
+          formControlName="highSeverityThreshold"
+          cdsText
+          [invalid]="highSeverityThreshold.dirty && highSeverityThreshold.invalid"
+        />
+      </cds-label>
+    </div>
+  </div>
+</form>

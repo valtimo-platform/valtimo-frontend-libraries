@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 
-export * from './big-number-display';
-export * from './big-number-configuration';
+export * from './big-number-configuration.component';

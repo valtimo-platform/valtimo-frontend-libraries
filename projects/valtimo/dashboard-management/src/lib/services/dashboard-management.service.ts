@@ -78,6 +78,16 @@ export class DashboardManagementService {
     );
   }
 
+  public createDashboardWidgetConfiguration(
+    dashboardKey: string,
+    widgetConfiguration: DashboardWidget
+  ): Observable<DashboardWidget> {
+    return this.http.post<DashboardWidget>(
+      `${this.valtimoEndpointUri}/${dashboardKey}/widget-configuration`,
+      widgetConfiguration
+    );
+  }
+
   public getDataSources(): Observable<Array<WidgetDataSource>> {
     return this.http.get<Array<WidgetDataSource>>(`${this.valtimoEndpointUri}/widget-data-sources`);
   }
