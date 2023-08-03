@@ -46,6 +46,10 @@ export class DashboardManagementService {
     return this.http.put<Array<DashboardItem>>(this.valtimoEndpointUri, dashboards);
   }
 
+  public updateDashboard(dashboard: DashboardItem): Observable<DashboardItem> {
+    return this.http.put<DashboardItem>(`${this.valtimoEndpointUri}/${dashboard.key}`, dashboard);
+  }
+
   public deleteDashboard(dashboardKey: string): Observable<null> {
     return this.http.delete<null>(`${this.valtimoEndpointUri}/${dashboardKey}`);
   }

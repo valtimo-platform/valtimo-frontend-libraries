@@ -150,7 +150,6 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
             componentInstance.setInput('displayTypeKey', configuration.displayType);
             componentInstance.setInput('displayTypeProperties', {
               ...configuration.displayTypeProperties,
-              title: configuration.title,
             });
 
             componentInstance.setInput(

@@ -71,13 +71,11 @@ export class EditDashboardModalComponent implements OnInit {
     this.disable();
 
     this.dashboardManagementService
-      .updateDashboards([
-        {
-          description: this.dashboardDescription.value,
-          title: this.dashboardTitle.value,
-          key: this.dashboard.key,
-        },
-      ])
+      .updateDashboard({
+        description: this.dashboardDescription.value,
+        title: this.dashboardTitle.value,
+        key: this.dashboard.key,
+      })
       .subscribe(() => {
         this.saveEvent.emit();
         this.closeModal();
