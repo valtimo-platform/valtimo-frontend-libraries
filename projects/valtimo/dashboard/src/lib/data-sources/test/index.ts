@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export * from './test.module';
-export * from './test.specification';
 export * from './components';
 export * from './models';
+export * from './test.module';
+export * from './test.specification';

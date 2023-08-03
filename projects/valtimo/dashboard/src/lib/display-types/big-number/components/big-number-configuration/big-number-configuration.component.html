@@ -17,37 +17,37 @@
 <form [formGroup]="form">
   <div class="form__element">
     <cds-label
-      [invalid]="title.dirty && title.invalid"
-      [invalidText]="'formTitleHelperText' | widgetTranslate : displayTypeKey | async"
       [helperText]="'formTitleHelperText' | widgetTranslate : displayTypeKey | async"
+      [invalidText]="'formTitleHelperText' | widgetTranslate : displayTypeKey | async"
+      [invalid]="title.dirty && title.invalid"
     >
       {{ 'formTitle' | widgetTranslate : displayTypeKey | async }}
 
-      <input formControlName="title" cdsText [invalid]="title.dirty && title.invalid" />
+      <input cdsText formControlName="title" [invalid]="title.dirty && title.invalid" />
     </cds-label>
   </div>
 
   <div class="form__element">
     <cds-label
-      [invalid]="subtitle.dirty && subtitle.invalid"
-      [invalidText]="'subtitleHelperText' | widgetTranslate : displayTypeKey | async"
       [helperText]="'subtitleHelperText' | widgetTranslate : displayTypeKey | async"
+      [invalidText]="'subtitleHelperText' | widgetTranslate : displayTypeKey | async"
+      [invalid]="subtitle.dirty && subtitle.invalid"
     >
       {{ 'subtitle' | widgetTranslate : displayTypeKey | async }}
 
-      <input formControlName="subtitle" cdsText [invalid]="subtitle.dirty && subtitle.invalid" />
+      <input cdsText formControlName="subtitle" [invalid]="subtitle.dirty && subtitle.invalid" />
     </cds-label>
   </div>
 
   <div class="form__element">
     <cds-label
-      [invalid]="label.dirty && label.invalid"
-      [invalidText]="'labelHelperText' | widgetTranslate : displayTypeKey | async"
       [helperText]="'labelHelperText' | widgetTranslate : displayTypeKey | async"
+      [invalidText]="'labelHelperText' | widgetTranslate : displayTypeKey | async"
+      [invalid]="label.dirty && label.invalid"
     >
       {{ 'label' | widgetTranslate : displayTypeKey | async }}
 
-      <input formControlName="label" cdsText [invalid]="label.dirty && label.invalid" />
+      <input cdsText formControlName="label" [invalid]="label.dirty && label.invalid" />
     </cds-label>
   </div>
 
@@ -63,10 +63,10 @@
         {{ 'lowSeverityThreshold' | widgetTranslate : displayTypeKey | async }}
 
         <input
-          type="number"
-          formControlName="lowSeverityThreshold"
           cdsText
           [invalid]="lowSeverityThreshold.dirty && lowSeverityThreshold.invalid"
+          formControlName="lowSeverityThreshold"
+          type="number"
         />
       </cds-label>
     </div>
@@ -78,10 +78,10 @@
         {{ 'mediumSeverityThreshold' | widgetTranslate : displayTypeKey | async }}
 
         <input
-          type="number"
-          formControlName="mediumSeverityThreshold"
           cdsText
+          formControlName="mediumSeverityThreshold"
           [invalid]="mediumSeverityThreshold.dirty && mediumSeverityThreshold.invalid"
+          type="number"
         />
       </cds-label>
     </div>
@@ -93,10 +93,10 @@
         {{ 'highSeverityThreshold' | widgetTranslate : displayTypeKey | async }}
 
         <input
-          type="number"
-          formControlName="highSeverityThreshold"
           cdsText
+          formControlName="highSeverityThreshold"
           [invalid]="highSeverityThreshold.dirty && highSeverityThreshold.invalid"
+          type="number"
         />
       </cds-label>
     </div>

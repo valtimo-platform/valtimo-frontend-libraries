@@ -26,10 +26,10 @@ export class DashboardDetailsComponent implements AfterViewInit {
   public modalType: WidgetModalType = 'create';
   public tableConfig!: CarbonTableConfig;
 
-  private readonly dashboardKey$ = this.route.params.pipe(map(params => params.id));
+  private readonly _dashboardKey$ = this.route.params.pipe(map(params => params.id));
   private readonly _refreshDashboardSubject$ = new BehaviorSubject<null>(null);
   public readonly currentDashboard$: Observable<DashboardItem | undefined> = combineLatest([
-    this.dashboardKey$,
+    this._dashboardKey$,
     this.translateService.stream('key'),
     this._refreshDashboardSubject$,
   ]).pipe(
@@ -55,7 +55,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
   private readonly _refreshWidgetsSubject$ = new BehaviorSubject<null>(null);
 
   public readonly widgetData$ = combineLatest([
-    this.dashboardKey$,
+    this._dashboardKey$,
     this._refreshWidgetsSubject$,
   ]).pipe(
     switchMap(([dashboardKey]) =>
@@ -146,7 +146,8 @@ export class DashboardDetailsComponent implements AfterViewInit {
     this.showModal();
   }
 
-  private deleteWidget(): void {
+  private deleteWidget(event: DashboardWidgetConfiguration): void {
+    this.editWidgetConfiguration$.next({...event});
     this.modalType = 'delete';
     this.showModal();
   }

@@ -67,7 +67,6 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   });
 
   public readonly open$ = new BehaviorSubject<boolean>(false);
-
   public readonly selectedDataSourceKey$ = new BehaviorSubject<string>('');
   public readonly selectedDisplayTypeKey$ = new BehaviorSubject<string>('');
 
@@ -235,7 +234,21 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       });
   }
 
-  public delete(): void {}
+  public delete(): void {
+    this.disable();
+
+    this.dashboardManagementService
+      .deleteDashboardWidgetConfiguration(this.dashboard.key, this.widgetKey)
+      .subscribe({
+        complete: () => {
+          this.saveEvent.emit();
+          this.closeModal();
+        },
+        error: () => {
+          this.enable();
+        },
+      });
+  }
 
   public dataSourceSelected(dataSource: ListItem): void {
     if (!dataSource) {

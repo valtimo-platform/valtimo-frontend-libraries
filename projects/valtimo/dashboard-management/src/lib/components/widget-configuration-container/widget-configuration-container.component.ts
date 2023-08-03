@@ -39,24 +39,23 @@ import {
 @Component({
   selector: 'valtimo-widget-configuration-container',
   templateUrl: './widget-configuration-container.component.html',
-  styleUrls: ['./widget-configuration-container.component.scss'],
 })
 export class WidgetConfigurationContainerComponent
   implements OnInit, OnDestroy, ConfigurationComponent
 {
   @ViewChild('widgetConfigurationComponent', {static: true, read: ViewContainerRef})
-  public readonly dynamicContainer: ViewContainerRef;
+  private readonly _dynamicContainer: ViewContainerRef;
 
-  @Input() set dataSourceKey(value: string) {
+  @Input() public set dataSourceKey(value: string) {
     this._dataSourceKey$.next(value);
   }
-  @Input() set displayTypeKey(value: string) {
+  @Input() public set displayTypeKey(value: string) {
     this._displayTypeKey$.next(value);
   }
-  @Input() set disabled(disabledValue: boolean) {
+  @Input() public set disabled(disabledValue: boolean) {
     this._disabled$.next(disabledValue);
   }
-  @Input() set prefillConfiguration(prefillConfigurationValue) {
+  @Input() public set prefillConfiguration(prefillConfigurationValue) {
     this._prefillConfiguration$.next(prefillConfigurationValue);
   }
   @Output() public configuration: EventEmitter<ConfigurationOutput> =
@@ -105,7 +104,7 @@ export class WidgetConfigurationContainerComponent
             DisplayTypeConfigurationComponent | DataSourceConfigurationComponent
           >;
 
-          this.dynamicContainer.clear();
+          this._dynamicContainer.clear();
 
           const displayTypeSpecification =
             displayTypeKey &&
@@ -121,7 +120,7 @@ export class WidgetConfigurationContainerComponent
           }
 
           if (configurationComponent) {
-            const componentRef = this.dynamicContainer.createComponent(configurationComponent);
+            const componentRef = this._dynamicContainer.createComponent(configurationComponent);
             this.configuration.emit({valid: false, data: {}});
             this._componentRef$.next(componentRef);
           } else {

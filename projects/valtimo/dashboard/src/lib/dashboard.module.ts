@@ -60,7 +60,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     TabsModule,
     ThemeModule,
     WidgetTranslatePipeModule,
-    LoadingModule
+    LoadingModule,
   ],
   exports: [DashboardComponent, WidgetDashboardComponent],
   providers: [
