@@ -38,6 +38,7 @@ import {DashboardManagementRoutingModule} from './dashboard-management-routing.m
 import {WidgetModalComponent} from './components/widget-modal/widget-modal.component';
 import {EditDashboardModalComponent} from './components/edit-dashboard-modal/edit-dashboard-modal';
 import {WidgetTranslatePipeModule} from '@valtimo/dashboard';
+import {WidgetConfigurationContainerComponent} from './components/widget-configuration-container/widget-configuration-container.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import {WidgetTranslatePipeModule} from '@valtimo/dashboard';
     DashboardDetailsComponent,
     WidgetModalComponent,
     EditDashboardModalComponent,
+    WidgetConfigurationContainerComponent,
   ],
   imports: [
     ButtonModule,

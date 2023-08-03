@@ -3,8 +3,7 @@
     isEdit: type === 'edit',
     isCreate: type === 'create',
     isDelete: type === 'delete',
-    open: open$ | async,
-    displayTypeDropdownDisabled: displayTypeDropdownDisabled$ | async
+    open: open$ | async
   } as vars"
 >
   <ng-container
@@ -35,7 +34,7 @@
         >
 
         <ng-container *ngIf="vars.isEdit || vars.isCreate">
-          <ng-container *ngTemplateOutlet="widgetForm; context: {vars: vars}"></ng-container>
+          <ng-container *ngTemplateOutlet="widgetForm"></ng-container>
         </ng-container>
       </section>
 
@@ -52,8 +51,17 @@
   </ng-container>
 </ng-container>
 
-<ng-template #widgetForm let-vars="vars">
-  <form *ngIf="form" [formGroup]="form" class="dashboard-modal__form">
+<ng-template #widgetForm>
+  <form
+    *ngIf="
+      form && {
+        selectedDataSourceKey: selectedDataSourceKey$ | async,
+        displayTypeDropdownDisabled: displayTypeDropdownDisabled$ | async
+      } as obs
+    "
+    [formGroup]="form"
+    class="dashboard-modal__form"
+  >
     <div class="form__element">
       <cds-label
         [invalid]="title.dirty && title.invalid"
@@ -70,30 +78,6 @@
       </cds-label>
     </div>
 
-    <!--    <div class="form__element &#45;&#45;with-button &#45;&#45;readonly">-->
-    <!--      <cds-label [invalid]="key.dirty && key.invalid">-->
-    <!--        {{ 'dashboardManagement.widgets.form.key' | translate }}-->
-
-    <!--        <input-->
-    <!--          formControlName="key"-->
-    <!--          cdsText-->
-    <!--          readonly-->
-    <!--          tabindex="-1"-->
-    <!--          [invalid]="key.dirty && key.invalid"-->
-    <!--          [placeholder]="key.value"-->
-    <!--        />-->
-    <!--      </cds-label>-->
-
-    <!--      <button-->
-    <!--        [title]="'dashboardManagement.widgets.form.keyTitle' | translate"-->
-    <!--        cdsButton="ghost"-->
-    <!--        (click)="copyKey()"-->
-    <!--        [iconOnly]="true"-->
-    <!--      >-->
-    <!--        <svg class="cds&#45;&#45;btn__icon" cdsIcon="copy" size="16"></svg>-->
-    <!--      </button>-->
-    <!--    </div>-->
-
     <div class="form__element">
       <cds-dropdown
         formControlName="dataSource"
@@ -107,10 +91,16 @@
       </cds-dropdown>
     </div>
 
+    <valtimo-widget-configuration-container
+      *ngIf="obs.selectedDataSourceKey"
+      [dataSourceKey]="obs.selectedDataSourceKey"
+    ></valtimo-widget-configuration-container>
+
+    <div class="form__spacer"></div>
+
     <div class="form__element">
       <cds-dropdown
         formControlName="displayType"
-        [disabled]="vars.displayTypeDropdownDisabled"
         [helperText]="'dashboardManagement.widgets.form.displayTypeHelperText' | translate"
         [invalid]="displayType.dirty && displayType.invalid"
         [invalidText]="'dashboardManagement.widgets.form.displayTypeHelperText' | translate"
@@ -120,32 +110,6 @@
         <cds-dropdown-list [items]="displayTypeItems$ | async" type="multi"></cds-dropdown-list>
       </cds-dropdown>
     </div>
-
-    <!--    <div class="form__row">-->
-    <!--      <div class="form__element">-->
-    <!--        <cds-dropdown-->
-    <!--          formControlName="chartType"-->
-    <!--          [invalid]="chartType.dirty && chartType.invalid"-->
-    <!--          [label]="'dashboardManagement.widgets.form.chartType' | translate"-->
-    <!--          (selected)="chartTypeSelected($event)"-->
-    <!--        >-->
-    <!--          <cds-dropdown-list [items]="dataSourceItems$ | async" type="multi"></cds-dropdown-list>-->
-    <!--        </cds-dropdown>-->
-    <!--      </div>-->
-
-    <!--      <div class="form__spacer"></div>-->
-
-    <!--      <div class="form__element">-->
-    <!--        <cds-label [invalid]="dataSourceField.dirty && dataSourceField.invalid">-->
-    <!--          {{ 'dashboardManagement.widgets.form.dataSourceField' | translate }}-->
-    <!--          <input-->
-    <!--            formControlName="dataSourceField"-->
-    <!--            cdsText-->
-    <!--            [invalid]="dataSourceField.dirty && dataSourceField.invalid"-->
-    <!--          />-->
-    <!--        </cds-label>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </form>
 </ng-template>
 

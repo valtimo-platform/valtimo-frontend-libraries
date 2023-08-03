@@ -33,11 +33,11 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
 
   public readonly open$ = new BehaviorSubject<boolean>(false);
 
-  private readonly _selectedDataSourceKey$ = new BehaviorSubject<string>('');
+  public readonly selectedDataSourceKey$ = new BehaviorSubject<string>('');
 
   public readonly dataSourceItems$: Observable<Array<ListItem>> = combineLatest([
     this.dashboardManagementService.getDataSources(),
-    this._selectedDataSourceKey$,
+    this.selectedDataSourceKey$,
     this.translateService.stream('key'),
   ]).pipe(
     tap(([dataSources, selectedDataSourceKey]) => {
@@ -78,12 +78,19 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
 
   public readonly displayTypeDropdownDisabled$: Observable<boolean> = combineLatest([
     this._compatibleDisplayTypes$,
-    this._selectedDataSourceKey$,
+    this.selectedDataSourceKey$,
   ]).pipe(
     map(
       ([compatibleDisplayTypes, selectedDataSourceKey]) =>
         compatibleDisplayTypes?.length === 0 || !selectedDataSourceKey
-    )
+    ),
+    tap(displayTypeDropdownDisabled => {
+      if (displayTypeDropdownDisabled) {
+        this.displayType?.disable();
+      } else {
+        this.displayType?.enable();
+      }
+    })
   );
 
   private _openSubscription!: Subscription;
@@ -125,7 +132,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.form.reset();
-      this._selectedDataSourceKey$.next('');
+      this.selectedDataSourceKey$.next('');
       this._selectedDisplayTypeKey$.next('');
     }, CARBON_CONSTANTS.modalAnimationMs);
   }
@@ -139,7 +146,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._selectedDataSourceKey$.next(dataSource?.item?.key);
+    this.selectedDataSourceKey$.next(dataSource?.item?.key);
     this.dataSource.setValue(dataSource?.item?.key);
   }
 
