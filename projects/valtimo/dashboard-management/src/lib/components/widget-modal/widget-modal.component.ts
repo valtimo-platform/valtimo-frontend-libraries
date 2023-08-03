@@ -93,6 +93,15 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     })
   );
 
+  public readonly dataSourceConfiguration$ = new BehaviorSubject<ConfigurationOutput>({
+    valid: false,
+    data: {},
+  });
+  public readonly displayTypeConfiguration$ = new BehaviorSubject<ConfigurationOutput>({
+    valid: false,
+    data: {},
+  });
+
   private _openSubscription!: Subscription;
 
   public get title() {
@@ -160,11 +169,11 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   }
 
   public dataSourceConfiguration(configuration: ConfigurationOutput): void {
-    console.log('data source', configuration);
+    this.dataSourceConfiguration$.next(configuration);
   }
 
   public displayTypeConfiguration(configuration: ConfigurationOutput): void {
-    console.log('display type', configuration);
+    this.displayTypeConfiguration$.next(configuration);
   }
 
   private openOpenSubscription(): void {

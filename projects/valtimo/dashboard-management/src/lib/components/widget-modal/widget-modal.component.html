@@ -122,13 +122,26 @@
 </ng-template>
 
 <ng-template #editButtons>
-  <button cdsButton="ghost" (click)="closeModal()">
-    {{ 'dashboardManagement.widgets.cancel' | translate }}
-  </button>
+  <ng-container
+    *ngIf="{
+      dataSourceConfiguration: dataSourceConfiguration$ | async,
+      displayTypeConfiguration: displayTypeConfiguration$ | async
+    } as obs"
+  >
+    <button cdsButton="ghost" (click)="closeModal()">
+      {{ 'dashboardManagement.widgets.cancel' | translate }}
+    </button>
 
-  <button (click)="save()" cdsButton="primary" [disabled]="form.invalid">
-    {{ 'dashboardManagement.widgets.save' | translate }}
-  </button>
+    <button
+      (click)="save()"
+      cdsButton="primary"
+      [disabled]="
+        form.invalid || !obs.dataSourceConfiguration.valid || !obs.displayTypeConfiguration.valid
+      "
+    >
+      {{ 'dashboardManagement.widgets.save' | translate }}
+    </button>
+  </ng-container>
 </ng-template>
 
 <ng-template #deleteButtons>
