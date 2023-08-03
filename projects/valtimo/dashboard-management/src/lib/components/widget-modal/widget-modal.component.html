@@ -56,7 +56,10 @@
     *ngIf="
       form && {
         selectedDataSourceKey: selectedDataSourceKey$ | async,
-        displayTypeDropdownDisabled: displayTypeDropdownDisabled$ | async
+        selectedDisplayTypeKey: selectedDisplayTypeKey$ | async,
+        displayTypeDropdownDisabled: displayTypeDropdownDisabled$ | async,
+        dataSourceItems: dataSourceItems$ | async,
+        displayTypeItems: displayTypeItems$ | async
       } as obs
     "
     [formGroup]="form"
@@ -78,7 +81,7 @@
       </cds-label>
     </div>
 
-    <div class="form__element">
+    <div class="form__element" *ngIf="obs.dataSourceItems">
       <cds-dropdown
         formControlName="dataSource"
         [invalid]="dataSource.dirty && dataSource.invalid"
@@ -87,18 +90,17 @@
         [invalidText]="'dashboardManagement.widgets.form.dateSourceHelperText' | translate"
         (selected)="dataSourceSelected($event)"
       >
-        <cds-dropdown-list [items]="dataSourceItems$ | async" type="multi"></cds-dropdown-list>
+        <cds-dropdown-list [items]="obs.dataSourceItems" type="multi"></cds-dropdown-list>
       </cds-dropdown>
     </div>
 
     <valtimo-widget-configuration-container
       *ngIf="obs.selectedDataSourceKey"
-      [dataSourceKey]="'testt'"
+      [dataSourceKey]="obs.selectedDataSourceKey"
+      (configuration)="dataSourceConfiguration($event)"
     ></valtimo-widget-configuration-container>
 
-    <div class="form__spacer"></div>
-
-    <div class="form__element">
+    <div class="form__element" *ngIf="obs.displayTypeItems">
       <cds-dropdown
         formControlName="displayType"
         [helperText]="'dashboardManagement.widgets.form.displayTypeHelperText' | translate"
@@ -107,9 +109,15 @@
         [label]="'dashboardManagement.widgets.form.displayType' | translate"
         (selected)="displayTypeSelected($event)"
       >
-        <cds-dropdown-list [items]="displayTypeItems$ | async" type="multi"></cds-dropdown-list>
+        <cds-dropdown-list [items]="obs.displayTypeItems" type="multi"></cds-dropdown-list>
       </cds-dropdown>
     </div>
+
+    <valtimo-widget-configuration-container
+      *ngIf="obs.selectedDisplayTypeKey"
+      [displayTypeKey]="obs.selectedDisplayTypeKey"
+      (configuration)="displayTypeConfiguration($event)"
+    ></valtimo-widget-configuration-container>
   </form>
 </ng-template>
 

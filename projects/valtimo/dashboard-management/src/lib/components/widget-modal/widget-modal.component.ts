@@ -8,6 +8,7 @@ import {DOCUMENT} from '@angular/common';
 import {DashboardManagementService} from '../../services/dashboard-management.service';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {
+  ConfigurationOutput,
   DisplayTypeSpecification,
   WidgetService,
   WidgetTranslationService,
@@ -34,6 +35,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   public readonly open$ = new BehaviorSubject<boolean>(false);
 
   public readonly selectedDataSourceKey$ = new BehaviorSubject<string>('');
+  public readonly selectedDisplayTypeKey$ = new BehaviorSubject<string>('');
 
   public readonly dataSourceItems$: Observable<Array<ListItem>> = combineLatest([
     this.dashboardManagementService.getDataSources(),
@@ -56,15 +58,13 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     )
   );
 
-  private readonly _selectedDisplayTypeKey$ = new BehaviorSubject<string>('');
-
   private readonly _compatibleDisplayTypes$ = new BehaviorSubject<Array<DisplayTypeSpecification>>(
     []
   );
 
   public readonly displayTypeItems$: Observable<Array<ListItem>> = combineLatest([
     this._compatibleDisplayTypes$,
-    this._selectedDisplayTypeKey$,
+    this.selectedDisplayTypeKey$,
     this.translateService.stream('key'),
   ]).pipe(
     map(([compatibleDisplayTypes, selectedDisplayTypeKey]) =>
@@ -133,7 +133,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.form.reset();
       this.selectedDataSourceKey$.next('');
-      this._selectedDisplayTypeKey$.next('');
+      this.selectedDisplayTypeKey$.next('');
     }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
@@ -155,8 +155,16 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._selectedDisplayTypeKey$.next(displayType?.item?.key);
+    this.selectedDisplayTypeKey$.next(displayType?.item?.key);
     this.displayType.setValue(displayType?.item?.key);
+  }
+
+  public dataSourceConfiguration(configuration: ConfigurationOutput): void {
+    console.log('data source', configuration);
+  }
+
+  public displayTypeConfiguration(configuration: ConfigurationOutput): void {
+    console.log('display type', configuration);
   }
 
   private openOpenSubscription(): void {

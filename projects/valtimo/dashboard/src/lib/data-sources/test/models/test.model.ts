@@ -15,7 +15,7 @@
  */
 
 interface TestConfiguration {
-  valid: number;
+  value: number;
   total: number;
 }
 

@@ -19,10 +19,13 @@ import {CommonModule} from '@angular/common';
 import {DATA_SOURCE_TOKEN} from '../../constants';
 import {testDataSourceSpecification} from './test.specification';
 import {TestConfigurationComponent} from './components';
+import {ReactiveFormsModule} from '@angular/forms';
+import {WidgetTranslatePipeModule} from '../../pipes';
+import {InputModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [TestConfigurationComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule, WidgetTranslatePipeModule, InputModule],
   exports: [TestConfigurationComponent],
   providers: [{provide: DATA_SOURCE_TOKEN, useValue: testDataSourceSpecification, multi: true}],
 })

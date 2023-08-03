@@ -26,10 +26,11 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {
   ConfigurationComponent,
+  ConfigurationOutput,
   DataSourceConfigurationComponent,
   DisplayTypeConfigurationComponent,
   WidgetService,
@@ -52,15 +53,19 @@ export class WidgetConfigurationContainerComponent
   @Input() set displayTypeKey(value: string) {
     this._displayTypeKey$.next(value);
   }
-  @Input() save$: Observable<void>;
-  @Input() disabled$: Observable<boolean>;
-  @Input() prefillConfiguration$: Observable<any>;
-  @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<object> = new EventEmitter<object>();
+  @Input() set disabled(disabledValue: boolean) {
+    this._disabled$.next(disabledValue);
+  }
+  @Input() set prefillConfiguration(prefillConfigurationValue) {
+    this._prefillConfiguration$.next(prefillConfigurationValue);
+  }
+  @Output() configuration: EventEmitter<ConfigurationOutput> =
+    new EventEmitter<ConfigurationOutput>();
 
   private _componentRefSubscription!: Subscription;
   private _configurationComponentSubscription!: Subscription;
-  private _validSubscription!: Subscription;
+  private _prefillConfigurationSubscription!: Subscription;
+  private _disabledSubscription!: Subscription;
   private _configurationSubscription!: Subscription;
 
   private readonly _componentRef$ = new BehaviorSubject<
@@ -68,17 +73,23 @@ export class WidgetConfigurationContainerComponent
   >(undefined);
   private readonly _dataSourceKey$ = new BehaviorSubject<string>('');
   private readonly _displayTypeKey$ = new BehaviorSubject<string>('');
+  private readonly _disabled$ = new BehaviorSubject<boolean>(false);
+  private readonly _prefillConfiguration$ = new BehaviorSubject<object | null>(null);
 
   constructor(private readonly widgetService: WidgetService) {}
 
   public ngOnInit(): void {
     this.openConfigurationComponentSubscription();
     this.openComponentInstanceSubscription();
+    this.openDisabledSubscription();
+    this.openPrefillConfigurationSubscription();
   }
 
   public ngOnDestroy(): void {
     this._configurationComponentSubscription?.unsubscribe();
     this._componentRefSubscription?.unsubscribe();
+    this._disabledSubscription?.unsubscribe();
+    this._prefillConfigurationSubscription?.unsubscribe();
   }
 
   private openConfigurationComponentSubscription(): void {
@@ -113,8 +124,7 @@ export class WidgetConfigurationContainerComponent
             const componentRef = this.dynamicContainer.createComponent(configurationComponent);
             this._componentRef$.next(componentRef);
           } else {
-            this.configuration.emit({});
-            this.valid.emit(true);
+            this.configuration.emit({valid: true, data: {}});
           }
         })
       )
@@ -130,29 +140,42 @@ export class WidgetConfigurationContainerComponent
       const instance = ref?.instance;
 
       this._configurationSubscription?.unsubscribe();
-      this._validSubscription?.unsubscribe();
 
       if (instance) {
-        instance.save$ = this.save$;
-        instance.disabled$ = this.disabled$;
-
         if (displayTypeKey) {
           (instance as DisplayTypeConfigurationComponent).displayTypeKey = displayTypeKey;
         } else if (dataSourceKey) {
           (instance as DataSourceConfigurationComponent).dataSourceKey = dataSourceKey;
         }
 
-        if (this.prefillConfiguration$) {
-          instance.prefillConfiguration$ = this.prefillConfiguration$;
-        }
-
-        this._validSubscription = instance.valid.subscribe(valid => {
-          this.valid.emit(valid);
-        });
-
         this._configurationSubscription = instance.configuration.subscribe(configuration => {
           this.configuration.emit(configuration);
         });
+      }
+    });
+  }
+
+  private openDisabledSubscription(): void {
+    this._disabledSubscription = combineLatest([this._componentRef$, this._disabled$]).subscribe(
+      ([ref, disabled]) => {
+        const instance = ref?.instance;
+
+        if (instance) {
+          instance.disabled = disabled;
+        }
+      }
+    );
+  }
+
+  private openPrefillConfigurationSubscription(): void {
+    this._prefillConfigurationSubscription = combineLatest([
+      this._componentRef$,
+      this._prefillConfiguration$,
+    ]).subscribe(([ref, prefillConfiguration]) => {
+      const instance = ref?.instance;
+
+      if (instance && prefillConfiguration) {
+        instance.prefillConfiguration = prefillConfiguration;
       }
     });
   }

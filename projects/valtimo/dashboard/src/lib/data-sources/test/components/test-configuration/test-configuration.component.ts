@@ -23,8 +23,8 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {DataSourceConfigurationComponent} from '../../../../models';
-import {Observable, Subscription} from 'rxjs';
+import {ConfigurationOutput, DataSourceConfigurationComponent} from '../../../../models';
+import {Subscription} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
 import {TestConfiguration} from '../../models';
 
@@ -36,25 +36,55 @@ import {TestConfiguration} from '../../models';
 export class TestConfigurationComponent
   implements OnInit, OnDestroy, DataSourceConfigurationComponent
 {
-  @Input() dataSourceKey: string;
-  @Input() save$: Observable<void>;
-  @Input() disabled$: Observable<boolean>;
-  @Input() prefillConfiguration$: Observable<TestConfiguration>;
-  @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<object> = new EventEmitter<TestConfiguration>();
-
   public readonly form = this.fb.group({
-    value: this.fb.control(0, [Validators.required]),
-    total: this.fb.control(0, [Validators.required]),
+    value: this.fb.control(null, [Validators.required]),
+    total: this.fb.control(null, [Validators.required]),
   });
+
+  @Input() dataSourceKey: string;
+  @Input() set disabled(disabledValue: boolean) {
+    if (disabledValue) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
+  }
+
+  public get value() {
+    return this.form.get('value');
+  }
+
+  public get total() {
+    return this.form.get('total');
+  }
+
+  @Input() set prefillConfiguration(configurationValue: TestConfiguration) {
+    if (configurationValue) {
+      this.value.setValue(configurationValue.value);
+      this.total.setValue(configurationValue.total);
+    }
+  }
+
+  @Output() configuration: EventEmitter<ConfigurationOutput> =
+    new EventEmitter<ConfigurationOutput>();
 
   private _subscriptions = new Subscription();
 
   constructor(private readonly fb: FormBuilder) {}
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void {
+    this.openFormSubscription();
+  }
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+  }
+
+  private openFormSubscription(): void {
+    this._subscriptions.add(
+      this.form.valueChanges.subscribe(formValue => {
+        this.configuration.emit({valid: this.form.valid, data: formValue});
+      })
+    );
   }
 }

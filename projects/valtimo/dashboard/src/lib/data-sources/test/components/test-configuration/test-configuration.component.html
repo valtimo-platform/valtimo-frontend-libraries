@@ -14,4 +14,38 @@
   ~ limitations under the License.
   -->
 
-test configuration works
+<form [formGroup]="form">
+  <div class="form__element">
+    <cds-label
+      [invalid]="value.dirty && value.invalid"
+      [invalidText]="'valueHelperText' | widgetTranslate : dataSourceKey | async"
+      [helperText]="'valueHelperText' | widgetTranslate : dataSourceKey | async"
+    >
+      {{ 'value' | widgetTranslate : dataSourceKey | async }}
+
+      <input
+        formControlName="value"
+        cdsText
+        [invalid]="value.dirty && value.invalid"
+        type="number"
+      />
+    </cds-label>
+  </div>
+
+  <div class="form__element">
+    <cds-label
+      [invalid]="total.dirty && total.invalid"
+      [invalidText]="'totalHelperText' | widgetTranslate : dataSourceKey | async"
+      [helperText]="'totalHelperText' | widgetTranslate : dataSourceKey | async"
+    >
+      {{ 'total' | widgetTranslate : dataSourceKey | async }}
+
+      <input
+        formControlName="total"
+        cdsText
+        [invalid]="total.dirty && total.invalid"
+        type="number"
+      />
+    </cds-label>
+  </div>
+</form>
