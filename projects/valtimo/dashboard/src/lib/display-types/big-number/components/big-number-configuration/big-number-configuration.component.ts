@@ -24,7 +24,7 @@ import {
   Output,
 } from '@angular/core';
 import {ConfigurationOutput, DisplayTypeConfigurationComponent} from '../../../../models';
-import {Subscription} from 'rxjs';
+import {startWith, Subscription} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
 import {BigNumberDisplayTypeProperties} from '../../models';
 
@@ -113,7 +113,7 @@ export class BigNumberConfigurationComponent
 
   private openFormSubscription(): void {
     this._subscriptions.add(
-      this.form.valueChanges.subscribe(formValue => {
+      this.form.valueChanges.pipe(startWith(this.form.value)).subscribe(formValue => {
         this.configuration.emit({valid: this.form.valid, data: formValue});
       })
     );
@@ -121,7 +121,7 @@ export class BigNumberConfigurationComponent
 
   private openKPISubscription(): void {
     this._subscriptions.add(
-      this.useKPI.valueChanges.subscribe(useKpi => {
+      this.useKPI.valueChanges.pipe(startWith(this.useKPI.value)).subscribe(useKpi => {
         const validators = [Validators.required];
 
         if (useKpi) {

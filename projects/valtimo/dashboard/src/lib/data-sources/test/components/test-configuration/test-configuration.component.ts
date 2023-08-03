@@ -24,7 +24,7 @@ import {
   Output,
 } from '@angular/core';
 import {ConfigurationOutput, DataSourceConfigurationComponent} from '../../../../models';
-import {Subscription} from 'rxjs';
+import {startWith, Subscription} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
 import {TestConfiguration} from '../../models';
 
@@ -82,7 +82,7 @@ export class TestConfigurationComponent
 
   private openFormSubscription(): void {
     this._subscriptions.add(
-      this.form.valueChanges.subscribe(formValue => {
+      this.form.valueChanges.pipe(startWith(this.form.value)).subscribe(formValue => {
         this.configuration.emit({valid: this.form.valid, data: formValue});
       })
     );

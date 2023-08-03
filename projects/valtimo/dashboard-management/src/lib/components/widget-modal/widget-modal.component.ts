@@ -11,6 +11,7 @@ import {
 import {
   BehaviorSubject,
   combineLatest,
+  filter,
   map,
   Observable,
   Subscription,
@@ -27,6 +28,7 @@ import {DashboardManagementService} from '../../services/dashboard-management.se
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {
   ConfigurationOutput,
+  DashboardWidgetConfiguration,
   DisplayTypeSpecification,
   WidgetService,
   WidgetTranslationService,
@@ -43,12 +45,25 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
   @Input() public showModal$: Observable<boolean>;
   @Input() public type: WidgetModalType;
   @Input() public dashboard: DashboardItem;
+  @Input() public widgetKey!: string;
+  @Input() public set editWidgetConfiguration(configuration: DashboardWidgetConfiguration) {
+    if (configuration) {
+      this.title.setValue(configuration.title);
+      this.dataSourceSelected({item: {key: configuration.dataSourceKey}} as any);
+      this.displayTypeSelected({item: {key: configuration.displayType}} as any);
+      this.dataSourcePrefillConfig$.next(configuration.dataSourceProperties);
+      this.displayTypePrefillConfig$.next(configuration.displayTypeProperties);
+    } else {
+      this.dataSourcePrefillConfig$.next(null);
+      this.displayTypePrefillConfig$.next(null);
+    }
+  }
   @Output() public saveEvent = new EventEmitter<ConfigurationOutput>();
 
   public readonly form = this.fb.group({
     title: this.fb.control('', [Validators.required]),
-    dataSource: this.fb.control('', [Validators.required]),
-    displayType: this.fb.control('', [Validators.required]),
+    dataSource: this.fb.control(null, [Validators.required]),
+    displayType: this.fb.control(null, [Validators.required]),
   });
 
   public readonly open$ = new BehaviorSubject<boolean>(false);
@@ -61,6 +76,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     this.selectedDataSourceKey$,
     this.translateService.stream('key'),
   ]).pipe(
+    filter(([dataSources]) => !!dataSources),
     tap(([dataSources, selectedDataSourceKey]) => {
       if (selectedDataSourceKey) {
         this.setCompatibleDisplayTypes(dataSources, selectedDataSourceKey);
@@ -76,6 +92,9 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       }))
     )
   );
+
+  public readonly dataSourcePrefillConfig$ = new BehaviorSubject<object | null>(null);
+  public readonly displayTypePrefillConfig$ = new BehaviorSubject<object | null>(null);
 
   private readonly _compatibleDisplayTypes$ = new BehaviorSubject<Array<DisplayTypeSpecification>>(
     []
@@ -179,20 +198,30 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         take(1),
-        switchMap(
+        map(
           ([
             selectedDataSourceKey,
             selectedDisplayTypeKey,
             displayTypeConfiguration,
             dataSourceConfiguration,
-          ]) =>
-            this.dashboardManagementService.createDashboardWidgetConfiguration(this.dashboard.key, {
-              title: this.title.value,
-              displayType: selectedDisplayTypeKey,
-              dataSourceKey: selectedDataSourceKey,
-              dataSourceProperties: {...dataSourceConfiguration.data},
-              displayTypeProperties: {...displayTypeConfiguration.data},
-            })
+          ]) => ({
+            title: this.title.value,
+            displayType: selectedDisplayTypeKey,
+            dataSourceKey: selectedDataSourceKey,
+            dataSourceProperties: {...dataSourceConfiguration.data},
+            displayTypeProperties: {...displayTypeConfiguration.data},
+          })
+        ),
+        switchMap(widgetUpdateObject =>
+          this.type === 'create'
+            ? this.dashboardManagementService.createDashboardWidgetConfiguration(
+                this.dashboard.key,
+                widgetUpdateObject
+              )
+            : this.dashboardManagementService.updateDashboardWidgetConfigurations(
+                this.dashboard.key,
+                [{...widgetUpdateObject, key: this.widgetKey}]
+              )
         )
       )
       .subscribe({
@@ -253,7 +282,7 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
       const availableDataFeatures = selectedDataSource?.dataFeatures;
       const compatibleDisplayTypes = supportedDisplayTypes.filter(displayType => {
         const supportedDataFeatures = displayType.requiredDataFeatures.filter(feature =>
-          availableDataFeatures.includes(feature)
+          availableDataFeatures?.includes(feature)
         );
         return supportedDataFeatures.length === displayType.requiredDataFeatures.length;
       });

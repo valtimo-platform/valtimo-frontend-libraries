@@ -37,7 +37,7 @@ export const testDataSourceSpecification: DataSourceSpecification = {
     },
     nl: {
       title: 'Testdatabron',
-      value: 'Waarde',
+      value: 'Waarde (vereist)',
       valueHelperText: 'De waarde die wordt weergegeven in de widget',
       total: 'Totaalwaarde (vereist)',
       totalHelperText: 'De totaalwaarde die wordt weergegeven in de widget',

@@ -59,7 +59,7 @@ export class WidgetConfigurationContainerComponent
   @Input() set prefillConfiguration(prefillConfigurationValue) {
     this._prefillConfiguration$.next(prefillConfigurationValue);
   }
-  @Output() configuration: EventEmitter<ConfigurationOutput> =
+  @Output() public configuration: EventEmitter<ConfigurationOutput> =
     new EventEmitter<ConfigurationOutput>();
 
   private _componentRefSubscription!: Subscription;

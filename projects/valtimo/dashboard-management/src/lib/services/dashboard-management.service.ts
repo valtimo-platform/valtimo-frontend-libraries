@@ -88,6 +88,25 @@ export class DashboardManagementService {
     );
   }
 
+  public updateDashboardWidgetConfigurations(
+    dashboardKey: string,
+    widgetConfigurations: Array<DashboardWidget>
+  ): Observable<Array<DashboardWidget>> {
+    return this.http.put<Array<DashboardWidget>>(
+      `${this.valtimoEndpointUri}/${dashboardKey}/widget-configuration`,
+      widgetConfigurations
+    );
+  }
+
+  public deleteDashboardWidgetConfiguration(
+    dashboardKey: string,
+    widgetKey: string
+  ): Observable<DashboardWidget> {
+    return this.http.delete<DashboardWidget>(
+      `${this.valtimoEndpointUri}/${dashboardKey}/widget-configuration/${widgetKey}`
+    );
+  }
+
   public getDataSources(): Observable<Array<WidgetDataSource>> {
     return this.http.get<Array<WidgetDataSource>>(`${this.valtimoEndpointUri}/widget-data-sources`);
   }

@@ -13,6 +13,7 @@ import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {DashboardItem, WidgetModalType} from '../../models';
 import {DashboardManagementService} from '../../services/dashboard-management.service';
+import {DashboardWidgetConfiguration} from '@valtimo/dashboard';
 
 @Component({
   templateUrl: './dashboard-details.component.html',
@@ -68,6 +69,9 @@ export class DashboardDetailsComponent implements AfterViewInit {
   public readonly showModal$ = new BehaviorSubject<boolean>(false);
   public readonly showEditDashboardModal$ = new BehaviorSubject<boolean>(false);
 
+  public readonly editWidgetConfiguration$ =
+    new BehaviorSubject<DashboardWidgetConfiguration | null>(null);
+
   constructor(
     private readonly dashboardManagementService: DashboardManagementService,
     private readonly datePipe: DatePipe,
@@ -83,6 +87,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
   }
 
   public addWidget(): void {
+    this.editWidgetConfiguration$.next(null);
     this.modalType = 'create';
     this.showModal();
   }
@@ -135,7 +140,8 @@ export class DashboardDetailsComponent implements AfterViewInit {
     });
   }
 
-  private editWidget(): void {
+  private editWidget(event: DashboardWidgetConfiguration): void {
+    this.editWidgetConfiguration$.next({...event});
     this.modalType = 'edit';
     this.showModal();
   }

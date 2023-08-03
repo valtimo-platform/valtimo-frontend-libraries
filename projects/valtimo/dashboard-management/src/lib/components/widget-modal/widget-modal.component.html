@@ -3,7 +3,8 @@
     isEdit: type === 'edit',
     isCreate: type === 'create',
     isDelete: type === 'delete',
-    open: open$ | async
+    open: open$ | async,
+    disabled: disabled$ | async
   } as vars"
 >
   <ng-container
@@ -35,24 +36,24 @@
         >
 
         <ng-container *ngIf="vars.isEdit || vars.isCreate">
-          <ng-container *ngTemplateOutlet="widgetForm"></ng-container>
+          <ng-container *ngTemplateOutlet="widgetForm; context: {vars: vars}"></ng-container>
         </ng-container>
       </section>
 
       <cds-modal-footer>
         <ng-container *ngIf="vars.isEdit || vars.isCreate">
-          <ng-container *ngTemplateOutlet="editButtons"></ng-container>
+          <ng-container *ngTemplateOutlet="editButtons; context: {vars: vars}"></ng-container>
         </ng-container>
 
         <ng-container *ngIf="vars.isDelete">
-          <ng-container *ngTemplateOutlet="deleteButtons"></ng-container>
+          <ng-container *ngTemplateOutlet="deleteButtons; context: {vars: vars}"></ng-container>
         </ng-container>
       </cds-modal-footer>
     </cds-modal>
   </ng-container>
 </ng-container>
 
-<ng-template #widgetForm>
+<ng-template #widgetForm let-vars="vars">
   <form
     *ngIf="
       form && {
@@ -60,8 +61,7 @@
         selectedDisplayTypeKey: selectedDisplayTypeKey$ | async,
         displayTypeDropdownDisabled: displayTypeDropdownDisabled$ | async,
         dataSourceItems: dataSourceItems$ | async,
-        displayTypeItems: displayTypeItems$ | async,
-        disabled: disabled$ | async
+        displayTypeItems: displayTypeItems$ | async
       } as obs
     "
     [formGroup]="form"
@@ -69,8 +69,9 @@
   >
     <div class="form__element">
       <cds-label
-        [invalid]="title.dirty && title.invalid"
         [helperText]="'dashboardManagement.widgets.form.titleHelperText' | translate"
+        [invalid]="title.dirty && title.invalid"
+        [invalidText]="'dashboardManagement.widgets.form.titleHelperText' | translate"
       >
         {{ 'dashboardManagement.widgets.form.title' | translate }}
 
@@ -99,7 +100,8 @@
     <valtimo-widget-configuration-container
       *ngIf="obs.selectedDataSourceKey"
       [dataSourceKey]="obs.selectedDataSourceKey"
-      [disabled]="obs.disabled"
+      [disabled]="vars.disabled"
+      [prefillConfiguration]="dataSourcePrefillConfig$ | async"
       (configuration)="dataSourceConfiguration($event)"
     ></valtimo-widget-configuration-container>
 
@@ -118,22 +120,22 @@
 
     <valtimo-widget-configuration-container
       *ngIf="obs.selectedDisplayTypeKey"
-      [disabled]="obs.disabled"
+      [disabled]="vars.disabled"
       [displayTypeKey]="obs.selectedDisplayTypeKey"
+      [prefillConfiguration]="displayTypePrefillConfig$ | async"
       (configuration)="displayTypeConfiguration($event)"
     ></valtimo-widget-configuration-container>
   </form>
 </ng-template>
 
-<ng-template #editButtons>
+<ng-template #editButtons let-vars="vars">
   <ng-container
     *ngIf="{
       dataSourceConfiguration: dataSourceConfiguration$ | async,
-      displayTypeConfiguration: displayTypeConfiguration$ | async,
-      disabled: disabled$ | async
+      displayTypeConfiguration: displayTypeConfiguration$ | async
     } as obs"
   >
-    <button cdsButton="ghost" (click)="closeModal()" [disabled]="obs.disabled">
+    <button cdsButton="ghost" (click)="closeModal()" [disabled]="vars.disabled">
       {{ 'dashboardManagement.widgets.cancel' | translate }}
     </button>
 
@@ -144,7 +146,7 @@
         form.invalid ||
         !obs.dataSourceConfiguration.valid ||
         !obs.displayTypeConfiguration.valid ||
-        obs.disabled
+        vars.disabled
       "
     >
       {{ 'dashboardManagement.widgets.save' | translate }}
@@ -152,12 +154,12 @@
   </ng-container>
 </ng-template>
 
-<ng-template #deleteButtons>
-  <button cdsButton="secondary" (click)="closeModal()">
+<ng-template #deleteButtons let-vars="vars">
+  <button cdsButton="secondary" (click)="closeModal()" [disabled]="vars.disabled">
     {{ 'dashboardManagement.widgets.cancel' | translate }}
   </button>
 
-  <button (click)="delete()" cdsButton="danger">
+  <button (click)="delete()" cdsButton="danger" [disabled]="vars.disabled">
     {{ 'dashboardManagement.widgets.delete' | translate }}
   </button>
 </ng-template>
