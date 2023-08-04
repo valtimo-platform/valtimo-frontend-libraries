@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DisplayComponent, WidgetSeverity} from '../../../../models';
 import {BigNumberData, BigNumberDisplayTypeProperties} from '../../models';
 import {BehaviorSubject} from 'rxjs';
@@ -25,7 +25,6 @@ import {BehaviorSubject} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BigNumberDisplayComponent implements DisplayComponent {
-  @ViewChild('numberContainer') private readonly _numberContainerRef: ElementRef<HTMLDivElement>;
   @Input() displayTypeKey: string;
   @Input() data: BigNumberData;
   @Input() displayTypeProperties: BigNumberDisplayTypeProperties;
