@@ -135,7 +135,7 @@
       displayTypeConfiguration: displayTypeConfiguration$ | async
     } as obs"
   >
-    <button cdsButton="ghost" [disabled]="vars.disabled" click)="closeModal()">
+    <button cdsButton="ghost" [disabled]="vars.disabled" (click)="closeModal()">
       {{ 'dashboardManagement.widgets.cancel' | translate }}
     </button>
 
