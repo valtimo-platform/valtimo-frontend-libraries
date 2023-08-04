@@ -204,7 +204,8 @@
     "task": {
       "title": "Taak"
     },
-    "noWidgets": "Er zijn geen widgets geconfigureerd voor dit dashboard."
+    "noWidgets": "Er zijn geen widgets geconfigureerd voor dit dashboard",
+    "noDashboards": "Er zijn geen dashboards geconfigureerd"
   },
   "dashboardManagement": {
     "addDashboard": "Nieuw dashboard toevoegen",

@@ -60,6 +60,12 @@ $max-number-width: 130px;
     right: 20px;
     overflow-wrap: break-word;
     max-height: $max-number-height;
+    opacity: 0;
+    transition: opacity 100ms cubic-bezier(0, 0, 0.3, 1);
+
+    &.--show {
+      opacity: 1;
+    }
   }
 }
 

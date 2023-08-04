@@ -33,10 +33,12 @@
   </div>
 </div>
 
-<span
-  *ngIf="displayTypeProperties.label && labelWidth$ | async as labelWidth"
-  [style.width]="labelWidth"
-  class="valtimo-big-number-widget__label"
->
-  {{ displayTypeProperties.label }}
-</span>
+<ng-container *ngIf="displayTypeProperties.label && {labelWidth: labelWidth$ | async} as obs">
+  <span
+    [ngClass]="{'--show': obs.labelWidth}"
+    [style.width]="obs.labelWidth"
+    class="valtimo-big-number-widget__label"
+  >
+    {{ displayTypeProperties.label }}
+  </span>
+</ng-container>

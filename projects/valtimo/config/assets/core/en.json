@@ -204,7 +204,8 @@
     "task": {
       "title": "Task"
     },
-    "noWidgets": "No widgets have been configured for this dashboard."
+    "noWidgets": "No widgets have been configured for this dashboard",
+    "noDashboards": "No dashboards have been configured"
   },
   "dashboardManagement": {
     "addDashboard": "Add new dashboard",
