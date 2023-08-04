@@ -30,7 +30,6 @@ import {BigNumberDisplayTypeProperties} from '../../models';
 
 @Component({
   templateUrl: './big-number-configuration.component.html',
-  styleUrls: ['./big-number-configuration.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BigNumberConfigurationComponent
@@ -95,8 +94,7 @@ export class BigNumberConfigurationComponent
     }
   }
 
-  @Output() configuration: EventEmitter<ConfigurationOutput> =
-    new EventEmitter<ConfigurationOutput>();
+  @Output() public configurationEvent = new EventEmitter<ConfigurationOutput>();
 
   private _subscriptions = new Subscription();
 
@@ -114,7 +112,7 @@ export class BigNumberConfigurationComponent
   private openFormSubscription(): void {
     this._subscriptions.add(
       this.form.valueChanges.pipe(startWith(this.form.value)).subscribe(formValue => {
-        this.configuration.emit({valid: this.form.valid, data: formValue});
+        this.configurationEvent.emit({valid: this.form.valid, data: formValue});
       })
     );
   }

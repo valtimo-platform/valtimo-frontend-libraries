@@ -24,7 +24,7 @@ interface ConfigurationOutput {
 interface ConfigurationComponent {
   disabled: boolean;
   prefillConfiguration?: object;
-  configuration: EventEmitter<ConfigurationOutput>;
+  configurationEvent: EventEmitter<ConfigurationOutput>;
 }
 
 interface DisplayTypeConfigurationComponent extends ConfigurationComponent {

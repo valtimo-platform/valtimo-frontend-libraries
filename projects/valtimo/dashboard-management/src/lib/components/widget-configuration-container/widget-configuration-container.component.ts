@@ -58,14 +58,10 @@ export class WidgetConfigurationContainerComponent
   @Input() public set prefillConfiguration(prefillConfigurationValue) {
     this._prefillConfiguration$.next(prefillConfigurationValue);
   }
-  @Output() public configuration: EventEmitter<ConfigurationOutput> =
-    new EventEmitter<ConfigurationOutput>();
+  @Output() public configurationEvent = new EventEmitter<ConfigurationOutput>();
 
-  private _componentRefSubscription!: Subscription;
-  private _configurationComponentSubscription!: Subscription;
-  private _prefillConfigurationSubscription!: Subscription;
-  private _disabledSubscription!: Subscription;
   private _configurationSubscription!: Subscription;
+  private readonly _subscriptions = new Subscription();
 
   private readonly _componentRef$ = new BehaviorSubject<
     ComponentRef<DataSourceConfigurationComponent | DisplayTypeConfigurationComponent> | undefined
@@ -85,98 +81,100 @@ export class WidgetConfigurationContainerComponent
   }
 
   public ngOnDestroy(): void {
-    this._configurationComponentSubscription?.unsubscribe();
-    this._componentRefSubscription?.unsubscribe();
-    this._disabledSubscription?.unsubscribe();
-    this._prefillConfigurationSubscription?.unsubscribe();
+    this._subscriptions.unsubscribe();
   }
 
   private openConfigurationComponentSubscription(): void {
-    this._configurationComponentSubscription = combineLatest([
-      this._displayTypeKey$,
-      this._dataSourceKey$,
-      this.widgetService.supportedDisplayTypes$,
-      this.widgetService.supportedDataSources$,
-    ])
-      .pipe(
-        tap(([displayTypeKey, dataSourceKey, supportedDisplayTypes, supportedDataSources]) => {
-          let configurationComponent!: Type<
-            DisplayTypeConfigurationComponent | DataSourceConfigurationComponent
-          >;
+    this._subscriptions.add(
+      combineLatest([
+        this._displayTypeKey$,
+        this._dataSourceKey$,
+        this.widgetService.supportedDisplayTypes$,
+        this.widgetService.supportedDataSources$,
+      ])
+        .pipe(
+          tap(([displayTypeKey, dataSourceKey, supportedDisplayTypes, supportedDataSources]) => {
+            let configurationComponent!: Type<
+              DisplayTypeConfigurationComponent | DataSourceConfigurationComponent
+            >;
 
-          this._dynamicContainer.clear();
+            this._dynamicContainer.clear();
 
-          const displayTypeSpecification =
-            displayTypeKey &&
-            supportedDisplayTypes.find(type => type.displayTypeKey === displayTypeKey);
-          const dataSourceSpecification =
-            dataSourceKey &&
-            supportedDataSources.find(source => source.dataSourceKey === dataSourceKey);
+            const displayTypeSpecification =
+              displayTypeKey &&
+              supportedDisplayTypes.find(type => type.displayTypeKey === displayTypeKey);
+            const dataSourceSpecification =
+              dataSourceKey &&
+              supportedDataSources.find(source => source.dataSourceKey === dataSourceKey);
 
-          if (displayTypeSpecification && displayTypeSpecification.configurationComponent) {
-            configurationComponent = displayTypeSpecification.configurationComponent;
-          } else if (dataSourceSpecification && dataSourceSpecification.configurationComponent) {
-            configurationComponent = dataSourceSpecification.configurationComponent;
-          }
+            if (displayTypeSpecification && displayTypeSpecification.configurationComponent) {
+              configurationComponent = displayTypeSpecification.configurationComponent;
+            } else if (dataSourceSpecification && dataSourceSpecification.configurationComponent) {
+              configurationComponent = dataSourceSpecification.configurationComponent;
+            }
 
-          if (configurationComponent) {
-            const componentRef = this._dynamicContainer.createComponent(configurationComponent);
-            this.configuration.emit({valid: false, data: {}});
-            this._componentRef$.next(componentRef);
-          } else {
-            this.configuration.emit({valid: true, data: {}});
-          }
-        })
-      )
-      .subscribe();
+            if (configurationComponent) {
+              const componentRef = this._dynamicContainer.createComponent(configurationComponent);
+              this.configurationEvent.emit({valid: false, data: {}});
+              this._componentRef$.next(componentRef);
+            } else {
+              this.configurationEvent.emit({valid: true, data: {}});
+            }
+          })
+        )
+        .subscribe()
+    );
   }
 
   private openComponentInstanceSubscription(): void {
-    this._componentRefSubscription = combineLatest([
-      this._componentRef$,
-      this._dataSourceKey$,
-      this._displayTypeKey$,
-    ]).subscribe(([ref, dataSourceKey, displayTypeKey]) => {
-      const instance = ref?.instance;
+    this._subscriptions.add(
+      combineLatest([this._componentRef$, this._dataSourceKey$, this._displayTypeKey$]).subscribe(
+        ([ref, dataSourceKey, displayTypeKey]) => {
+          const instance = ref?.instance;
 
-      this._configurationSubscription?.unsubscribe();
+          this._configurationSubscription?.unsubscribe();
 
-      if (instance) {
-        if (displayTypeKey) {
-          (instance as DisplayTypeConfigurationComponent).displayTypeKey = displayTypeKey;
-        } else if (dataSourceKey) {
-          (instance as DataSourceConfigurationComponent).dataSourceKey = dataSourceKey;
+          if (instance) {
+            if (displayTypeKey) {
+              (instance as DisplayTypeConfigurationComponent).displayTypeKey = displayTypeKey;
+            } else if (dataSourceKey) {
+              (instance as DataSourceConfigurationComponent).dataSourceKey = dataSourceKey;
+            }
+
+            this._configurationSubscription = instance.configurationEvent.subscribe(
+              configuration => {
+                this.configurationEvent.emit(configuration);
+              }
+            );
+          }
         }
-
-        this._configurationSubscription = instance.configuration.subscribe(configuration => {
-          this.configuration.emit(configuration);
-        });
-      }
-    });
+      )
+    );
   }
 
   private openDisabledSubscription(): void {
-    this._disabledSubscription = combineLatest([this._componentRef$, this._disabled$]).subscribe(
-      ([ref, disabled]) => {
+    this._subscriptions.add(
+      combineLatest([this._componentRef$, this._disabled$]).subscribe(([ref, disabled]) => {
         const instance = ref?.instance;
 
         if (instance) {
           instance.disabled = disabled;
         }
-      }
+      })
     );
   }
 
   private openPrefillConfigurationSubscription(): void {
-    this._prefillConfigurationSubscription = combineLatest([
-      this._componentRef$,
-      this._prefillConfiguration$,
-    ]).subscribe(([ref, prefillConfiguration]) => {
-      const instance = ref?.instance;
+    this._subscriptions.add(
+      combineLatest([this._componentRef$, this._prefillConfiguration$]).subscribe(
+        ([ref, prefillConfiguration]) => {
+          const instance = ref?.instance;
 
-      if (instance && prefillConfiguration) {
-        instance.prefillConfiguration = prefillConfiguration;
-      }
-    });
+          if (instance && prefillConfiguration) {
+            instance.prefillConfiguration = prefillConfiguration;
+          }
+        }
+      )
+    );
   }
 }

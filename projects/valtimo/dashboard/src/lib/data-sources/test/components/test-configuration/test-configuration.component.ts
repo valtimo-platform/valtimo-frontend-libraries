@@ -65,8 +65,7 @@ export class TestConfigurationComponent
     }
   }
 
-  @Output() configuration: EventEmitter<ConfigurationOutput> =
-    new EventEmitter<ConfigurationOutput>();
+  @Output() public configurationEvent = new EventEmitter<ConfigurationOutput>();
 
   private _subscriptions = new Subscription();
 
@@ -83,7 +82,7 @@ export class TestConfigurationComponent
   private openFormSubscription(): void {
     this._subscriptions.add(
       this.form.valueChanges.pipe(startWith(this.form.value)).subscribe(formValue => {
-        this.configuration.emit({valid: this.form.valid, data: formValue});
+        this.configurationEvent.emit({valid: this.form.valid, data: formValue});
       })
     );
   }

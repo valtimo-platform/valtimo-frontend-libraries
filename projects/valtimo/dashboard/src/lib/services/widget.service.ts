@@ -30,15 +30,11 @@ export class WidgetService {
     new BehaviorSubject<Array<DataSourceSpecification> | null>(null);
 
   public get supportedDisplayTypes$(): Observable<Array<DisplayTypeSpecification>> {
-    return this._supportedDisplayTypes$
-      .asObservable()
-      .pipe(filter(specifications => !!specifications));
+    return this._supportedDisplayTypes$.pipe(filter(specifications => !!specifications));
   }
 
   public get supportedDataSources$(): Observable<Array<DataSourceSpecification>> {
-    return this._supportedDataSources$
-      .asObservable()
-      .pipe(filter(specifications => !!specifications));
+    return this._supportedDataSources$.pipe(filter(specifications => !!specifications));
   }
 
   public get supportedDisplayTypes(): Array<DisplayTypeSpecification> {

@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-.edit-dashboard-modal {
-  .form__row {
+.edit-dashboard-modal .form {
+  &__row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
   }
 
-  .form__element {
+  &__element {
     width: 100%;
-  }
-
-  .form__element {
     margin-bottom: 32px;
   }
 }

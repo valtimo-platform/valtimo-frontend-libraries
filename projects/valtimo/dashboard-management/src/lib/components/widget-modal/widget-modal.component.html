@@ -23,6 +23,7 @@
       showFooter="true"
       size="md"
       title="{{ translations.title }}"
+      class="widget-modal"
     >
       <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
         <h3 cdsModalHeaderHeading>
@@ -102,7 +103,7 @@
       [dataSourceKey]="obs.selectedDataSourceKey"
       [disabled]="vars.disabled"
       [prefillConfiguration]="dataSourcePrefillConfig$ | async"
-      (configuration)="dataSourceConfiguration($event)"
+      (configurationEvent)="dataSourceConfiguration($event)"
     ></valtimo-widget-configuration-container>
 
     <div class="form__element" *ngIf="obs.displayTypeItems">
@@ -123,7 +124,7 @@
       [disabled]="vars.disabled"
       [displayTypeKey]="obs.selectedDisplayTypeKey"
       [prefillConfiguration]="displayTypePrefillConfig$ | async"
-      (configuration)="displayTypeConfiguration($event)"
+      (configurationEvent)="displayTypeConfiguration($event)"
     ></valtimo-widget-configuration-container>
   </form>
 </ng-template>

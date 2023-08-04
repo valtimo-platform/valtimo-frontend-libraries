@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import {NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {DashboardItem} from '../../models';
@@ -29,6 +37,7 @@ import {ConfigurationOutput} from '@valtimo/dashboard';
   styleUrls: ['./edit-dashboard-modal.scss'],
   encapsulation: ViewEncapsulation.None,
   providers: [NotificationService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditDashboardModalComponent implements OnInit {
   @Input() public showModal$: Observable<boolean>;

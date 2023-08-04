@@ -82,8 +82,8 @@
   </button>
 
   <button
-    [disabled]="editDashboardForm.invalid || obs.disabled"
     cdsButton="primary"
+    [disabled]="editDashboardForm.invalid || obs.disabled"
     (click)="saveDashboard()"
   >
     {{ 'dashboardManagement.widgets.complete' | translate }}
