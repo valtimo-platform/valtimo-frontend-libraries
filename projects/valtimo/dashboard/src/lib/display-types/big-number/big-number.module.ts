@@ -22,6 +22,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {WidgetTranslatePipeModule} from '../../pipes';
 import {CheckboxModule, InputModule} from 'carbon-components-angular';
 import {BigNumberConfigurationComponent, BigNumberDisplayComponent} from './components';
+import {FittyDirectiveModule} from '@valtimo/components';
 
 @NgModule({
   declarations: [BigNumberDisplayComponent, BigNumberConfigurationComponent],
@@ -31,6 +32,7 @@ import {BigNumberConfigurationComponent, BigNumberDisplayComponent} from './comp
     WidgetTranslatePipeModule,
     InputModule,
     CheckboxModule,
+    FittyDirectiveModule,
   ],
   exports: [BigNumberDisplayComponent],
   providers: [{provide: DISPLAY_TYPE_TOKEN, useValue: bigNumberSpecification, multi: true}],

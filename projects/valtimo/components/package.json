@@ -25,7 +25,8 @@
     "@carbon/icons": "~11.22.1",
     "@carbon/grid": "~11.16.1",
     "@carbon/styles": "~1.33.1",
-    "carbon-components-angular": "~5.14.0"
+    "carbon-components-angular": "~5.14.0",
+    "fitty": "^2.3.7"
   },
   "devDependencies": {
     "karma-moment": "^0.1.0"

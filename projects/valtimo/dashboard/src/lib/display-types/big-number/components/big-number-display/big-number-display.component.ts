@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {DisplayComponent, WidgetSeverity} from '../../../../models';
 import {BigNumberData, BigNumberDisplayTypeProperties} from '../../models';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'valtimo-big-number-display',
@@ -24,9 +25,12 @@ import {BigNumberData, BigNumberDisplayTypeProperties} from '../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BigNumberDisplayComponent implements DisplayComponent {
+  @ViewChild('numberContainer') private readonly _numberContainerRef: ElementRef<HTMLDivElement>;
   @Input() displayTypeKey: string;
   @Input() data: BigNumberData;
   @Input() displayTypeProperties: BigNumberDisplayTypeProperties;
+
+  public readonly labelWidth$ = new BehaviorSubject<string>('');
 
   public get severityClass(): string {
     if (!this.displayTypeProperties.useKPI) {
@@ -46,11 +50,7 @@ export class BigNumberDisplayComponent implements DisplayComponent {
     return WidgetSeverity.RED;
   }
 
-  public get numberFontSize(): number {
-    if (!this.data) {
-      return 122;
-    }
-
-    return Math.floor(122 / this.data.value.toString().length) + 20;
+  public numberWidthChanged(width: number): void {
+    this.labelWidth$.next(`calc(100% - ${width + 56}px)`);
   }
 }

@@ -16,8 +16,12 @@
 
 @use '@carbon/colors';
 
+$max-number-height: 185px;
+$max-number-width: 130px;
+
 :host {
-  display: flex;
+  display: inline-flex;
+  position: relative;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
@@ -35,21 +39,27 @@
     font-size: 14px;
   }
 
+  &__number-container {
+    max-height: $max-number-height;
+    width: $max-number-width;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    flex-shrink: 0;
+    line-height: 0.76em;
+  }
+
   &__number {
     font-weight: lighter;
-    font-size: 122px;
-    line-height: 0.75em;
   }
 
   &__label {
     font-size: 12px;
-    margin-left: 12px;
-    margin-bottom: -1px;
-  }
-
-  &__content {
-    display: flex;
-    align-items: flex-end;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    overflow-wrap: break-word;
+    max-height: $max-number-height;
   }
 }
 

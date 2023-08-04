@@ -255,6 +255,7 @@
     "eslint-plugin-jsdoc": "^39.9.1",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-react": "^7.32.2",
+    "fitty": "^2.3.7",
     "flatpickr": "^4.6.13",
     "formiojs": "4.14.13",
     "hammerjs": "^2.0.8",

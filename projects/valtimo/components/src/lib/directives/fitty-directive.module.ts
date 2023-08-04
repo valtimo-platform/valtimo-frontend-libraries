@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-export * from './alert.model';
-export * from './carbon-pagination.model';
-export * from './carbon-table.model';
-export * from './documenten-api-metadata.model';
-export * from './fitty.model';
-export * from './form-io.model';
-export * from './list.model';
-export * from './pagination.model';
-export * from './searchable-dropdown.model';
-export * from './timeline.model';
-export * from './version.model';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FittyDirective} from './fitty.directive';
+
+@NgModule({
+  declarations: [FittyDirective],
+  imports: [CommonModule],
+  exports: [FittyDirective],
+})
+export class FittyDirectiveModule {}

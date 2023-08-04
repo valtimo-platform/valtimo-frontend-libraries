@@ -22,14 +22,21 @@
   </span>
 </section>
 
-<section class="valtimo-big-number-widget__content">
-  <span
-    [class]="['valtimo-big-number-widget__number', severityClass]"
-    [style.fontSize.px]="numberFontSize"
-    >{{ data?.value }}</span
+<div #numberContainer [class]="['valtimo-big-number-widget__number-container', severityClass]">
+  <div
+    fitty
+    [maxSize]="130"
+    (elementWidthChangedEvent)="numberWidthChanged($event)"
+    class="valtimo-big-number-widget__number"
   >
+    {{ data?.value }}
+  </div>
+</div>
 
-  <span *ngIf="displayTypeProperties.label" class="valtimo-big-number-widget__label">
-    {{ displayTypeProperties.label }}
-  </span>
-</section>
+<span
+  *ngIf="displayTypeProperties.label && labelWidth$ | async as labelWidth"
+  [style.width]="labelWidth"
+  class="valtimo-big-number-widget__label"
+>
+  {{ displayTypeProperties.label }}
+</span>
