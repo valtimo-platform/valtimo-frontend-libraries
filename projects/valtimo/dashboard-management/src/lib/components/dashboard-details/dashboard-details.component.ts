@@ -9,11 +9,11 @@ import {
   createCarbonTableConfig,
   PageTitleService,
 } from '@valtimo/components';
+import {DashboardWidgetConfiguration} from '@valtimo/dashboard';
 import {IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {DashboardItem, DashboardWidget, WidgetModalType} from '../../models';
 import {DashboardManagementService} from '../../services/dashboard-management.service';
-import {DashboardWidgetConfiguration} from '@valtimo/dashboard';
 
 @Component({
   templateUrl: './dashboard-details.component.html',
@@ -53,8 +53,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
   public readonly lastItemIndex$ = new BehaviorSubject<number>(0);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  private readonly _refreshWidgetsSubject$ = new BehaviorSubject<null>(null);
-  public readonly _orderWidgetsSubject$ = new BehaviorSubject<{
+  public readonly _refreshWidgetsSubject$ = new BehaviorSubject<{
     direction: 'UP' | 'DOWN';
     index: number;
   } | null>(null);
@@ -62,15 +61,14 @@ export class DashboardDetailsComponent implements AfterViewInit {
   private _widgetData: DashboardWidget[] | null = null;
   public readonly widgetData$: Observable<DashboardWidget[]> = combineLatest([
     this._dashboardKey$,
-    this._orderWidgetsSubject$,
     this._refreshWidgetsSubject$,
   ]).pipe(
-    switchMap(([dashboardKey, orderWidgets, refreshWidgets]) => {
-      if (!this._widgetData || !orderWidgets || refreshWidgets) {
+    switchMap(([dashboardKey, refreshWidgets]) => {
+      if (!this._widgetData || !refreshWidgets) {
         return this.dashboardManagementService.getDashboardWidgetConfiguration(dashboardKey);
       }
 
-      const {direction, index} = orderWidgets;
+      const {direction, index} = refreshWidgets;
 
       return this.dashboardManagementService.updateDashboardWidgetConfigurations(
         dashboardKey,
@@ -125,11 +123,11 @@ export class DashboardDetailsComponent implements AfterViewInit {
   }
 
   public onArrowDownClick(data: {item: DashboardWidget; index: number}): void {
-    this._orderWidgetsSubject$.next({direction: 'DOWN', index: data.index});
+    this._refreshWidgetsSubject$.next({direction: 'DOWN', index: data.index});
   }
 
   public onArrowUpClick(data: {item: DashboardWidget; index: number}): void {
-    this._orderWidgetsSubject$.next({direction: 'UP', index: data.index});
+    this._refreshWidgetsSubject$.next({direction: 'UP', index: data.index});
   }
 
   private setTableConfig(): void {
