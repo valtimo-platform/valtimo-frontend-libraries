@@ -25,7 +25,6 @@ import {
   Renderer2,
 } from '@angular/core';
 import {FittyEvent} from '../models';
-import {fromEvent, Subscription} from 'rxjs';
 
 declare const fitty: any;
 
@@ -40,7 +39,6 @@ export class FittyDirective implements AfterViewInit, OnDestroy {
 
   private _fitty!: any;
   private _observer!: ResizeObserver;
-  private readonly _subscriptions = new Subscription();
 
   constructor(private readonly elementRef: ElementRef, private readonly renderer: Renderer2) {}
 
@@ -53,43 +51,21 @@ export class FittyDirective implements AfterViewInit, OnDestroy {
       this.observerMutation(event);
     });
     this._observer.observe(this.elementRef.nativeElement);
-    this.setFittyStyles();
     this._fitty = fitty(this.elementRef.nativeElement, {
       ...(this.minSize && {minSize: this.minSize}),
       ...(this.maxSize && {maxSize: this.maxSize}),
     });
-    this.openFittySubscription();
   }
 
   ngOnDestroy() {
     this._fitty?.unsubscribe();
     this._observer?.disconnect();
-    this._subscriptions.unsubscribe();
-  }
-
-  private setFittyStyles(): void {
-    this.renderer.setStyle(this.elementRef.nativeElement, 'display', 'inline-block');
-    this.renderer.setStyle(this.elementRef.nativeElement, 'white-space', 'no-wrap');
-  }
-
-  private openFittySubscription(): void {
-    this._subscriptions.add(
-      fromEvent(this.elementRef.nativeElement, 'fit').subscribe(event => {
-        const fittyEvent = (event as any).detail as FittyEvent;
-
-        if (!fittyEvent) {
-          return;
-        }
-
-        this.fittyChangeEvent.emit(fittyEvent);
-      })
-    );
   }
 
   private observerMutation(event: Array<ResizeObserverEntry>): void {
     const elementWidth = event[0]?.borderBoxSize[0]?.inlineSize;
 
-    if (typeof elementWidth === 'number' && elementWidth !== 0) {
+    if (typeof elementWidth === 'number') {
       this.elementWidthChangedEvent.emit(elementWidth);
     }
   }

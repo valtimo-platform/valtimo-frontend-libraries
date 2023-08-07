@@ -33,10 +33,11 @@
   </div>
 </div>
 
-<ng-container *ngIf="displayTypeProperties.label && {labelWidth: labelWidth$ | async} as obs">
+<ng-container *ngIf="labelWidth$ | async as labelWidth">
   <span
-    [ngClass]="{'--show': obs.labelWidth}"
-    [style.width]="obs.labelWidth"
+    *ngIf="displayTypeProperties.label"
+    [ngClass]="{'--visible': labelWidth}"
+    [style.width]="labelWidth"
     class="valtimo-big-number-widget__label"
   >
     {{ displayTypeProperties.label }}

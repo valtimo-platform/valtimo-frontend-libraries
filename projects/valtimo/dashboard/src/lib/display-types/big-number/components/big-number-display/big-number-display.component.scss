@@ -51,20 +51,22 @@ $max-number-width: 130px;
 
   &__number {
     font-weight: lighter;
+    display: inline-block;
+    white-space: nowrap;
   }
 
   &__label {
+    visibility: hidden;
     font-size: 12px;
     position: absolute;
     bottom: 20px;
     right: 20px;
     overflow-wrap: break-word;
     max-height: $max-number-height;
-    opacity: 0;
-    transition: opacity 100ms cubic-bezier(0, 0, 0.3, 1);
+    width: 0;
 
-    &.--show {
-      opacity: 1;
+    &.--visible {
+      visibility: visible;
     }
   }
 }

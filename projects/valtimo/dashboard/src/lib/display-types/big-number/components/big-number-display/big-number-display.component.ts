@@ -50,6 +50,6 @@ export class BigNumberDisplayComponent implements DisplayComponent {
   }
 
   public numberWidthChanged(width: number): void {
-    this.labelWidth$.next(`calc(100% - ${width + 56}px)`);
+    this.labelWidth$.next(`calc(100% - ${Math.round(width) + 56}px)`);
   }
 }
