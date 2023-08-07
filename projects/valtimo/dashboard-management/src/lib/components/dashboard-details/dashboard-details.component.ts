@@ -64,6 +64,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
     this._refreshWidgetsSubject$,
   ]).pipe(
     switchMap(([dashboardKey, refreshWidgets]) => {
+      this.loading$.next(true);
       if (!this._widgetData || !refreshWidgets) {
         return this.dashboardManagementService.getDashboardWidgetConfiguration(dashboardKey);
       }

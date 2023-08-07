@@ -77,7 +77,7 @@
 </ng-container>
 
 <ng-template #addWidgetButton>
-  <button cdsButton="primary" (click)="addWidget()">
+  <button cdsButton="primary" [disabled]="loading$ | async" (click)="addWidget()">
     {{ 'dashboardManagement.widgets.add' | translate }}
 
     <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
