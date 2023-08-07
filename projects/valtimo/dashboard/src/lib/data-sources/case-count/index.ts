@@ -14,5 +14,7 @@
  * limitations under the License.
  */
 
-export * from './test';
-export * from './case-count';
+export * from './components';
+export * from './models';
+export * from './case-count.module';
+export * from './case-count.specification';

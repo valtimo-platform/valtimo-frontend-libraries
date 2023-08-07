@@ -14,5 +14,24 @@
  * limitations under the License.
  */
 
-export * from './test';
-export * from './case-count';
+interface QueryCondition {
+  queryPath: string;
+  queryOperator: string;
+  queryValue: string;
+}
+
+interface CaseCountConfiguration {
+  documentDefinition: string;
+  conditions: Array<QueryCondition>;
+}
+
+enum Operator {
+  NOT_EQUAL_TO = '!=',
+  EQUAL_TO = '==',
+  GREATER_THAN = '>',
+  GREATER_THAN_OR_EQUAL_TO = '>=',
+  LESS_THAN = '<',
+  LESS_THAN_OR_EQUAL_TO = '<=',
+}
+
+export {CaseCountConfiguration, QueryCondition, Operator};

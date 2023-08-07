@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 
-export * from './test';
-export * from './case-count';
+export * from './case-count-configuration';

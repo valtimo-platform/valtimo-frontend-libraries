@@ -54,6 +54,13 @@
           *ngTemplateOutlet="keyValue; context: {value: value, index: i}"
         ></ng-container>
       </ng-container>
+      <ng-container
+        *ngIf="type === 'keyDropdownValue' && {dropdownItems: dropdownItems$ | async} as obs"
+      >
+        <ng-container
+          *ngTemplateOutlet="keyValueDropdown; context: {value: value, index: i, obs: obs}"
+        ></ng-container>
+      </ng-container>
       <button
         *ngIf="!hideDeleteButton"
         [disabled]="values?.length <= this.minimumAmountOfRows || disabled"
@@ -103,6 +110,36 @@
       [disabled]="disabled"
       [defaultValue]="value.key"
     />
+  </div>
+  <div class="v-multi-input__input">
+    <cds-label *ngIf="index === 0 && keyColumnTitle && valueColumnTitle">{{
+      valueColumnTitle
+    }}</cds-label>
+    <input
+      cdsText
+      (input)="onValueChange(value, $event.target.value, 'value')"
+      [disabled]="disabled"
+      [defaultValue]="value.value"
+    />
+  </div>
+</ng-template>
+
+<ng-template #keyValueDropdown let-value="value" let-index="index" let-obs="obs">
+  <div class="v-multi-input__input">
+    <cds-label *ngIf="index === 0 && keyColumnTitle && valueColumnTitle">{{
+      keyColumnTitle
+    }}</cds-label>
+    <input
+      cdsText
+      (input)="onValueChange(value, $event.target.value, 'key')"
+      [disabled]="disabled"
+      [defaultValue]="value.key"
+    />
+  </div>
+  <div class="v-multi-input__input">
+    <cds-dropdown (selected)="onValueChange(value, $event.item.id, 'dropdown')">
+      <cds-dropdown-list [items]="obs.dropdownItems" type="multi"></cds-dropdown-list>
+    </cds-dropdown>
   </div>
   <div class="v-multi-input__input">
     <cds-label *ngIf="index === 0 && keyColumnTitle && valueColumnTitle">{{
