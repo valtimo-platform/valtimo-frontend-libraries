@@ -188,8 +188,6 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
       return {key: valueToMap.key, value: valueToMap.value, dropdown: valueToMap.dropdown};
     }
 
-    console.log(valueToMap);
-
     return valueToMap.value;
   }
 

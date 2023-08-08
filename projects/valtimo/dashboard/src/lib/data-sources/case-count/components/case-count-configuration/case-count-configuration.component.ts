@@ -29,7 +29,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {CaseCountConfiguration, Operator} from '../../models';
 import {DocumentService} from '@valtimo/document';
 import {ListItem} from 'carbon-components-angular';
-import {MultiInputKeyValue, MultiInputValues} from '@valtimo/components';
+import {ListItemWithId, MultiInputKeyValue, MultiInputValues} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {WidgetTranslationService} from '../../../../services';
 
@@ -41,14 +41,14 @@ import {WidgetTranslationService} from '../../../../services';
 export class CaseCountConfigurationComponent
   implements OnInit, OnDestroy, DataSourceConfigurationComponent
 {
+  @Input() public dataSourceKey: string;
+
   public readonly form = this.fb.group({
     documentDefinition: this.fb.control(null, [Validators.required]),
     conditions: this.fb.control(null, [Validators.required]),
   });
 
-  @Input() dataSourceKey: string;
-
-  @Input() set disabled(disabledValue: boolean) {
+  @Input() public set disabled(disabledValue: boolean) {
     if (disabledValue) {
       this.form.disable();
     } else {
@@ -79,7 +79,7 @@ export class CaseCountConfigurationComponent
     Operator.LESS_THAN_OR_EQUAL_TO,
   ];
 
-  public readonly operatorItems$: Observable<Array<ListItem>> = this.translateService
+  public readonly operatorItems$: Observable<Array<ListItemWithId>> = this.translateService
     .stream('key')
     .pipe(
       map(() =>

@@ -30,16 +30,17 @@
       <cds-dropdown-list [items]="obs?.documentItems || []" type="multi"></cds-dropdown-list>
     </cds-dropdown>
   </div>
+
   <div class="form__element">
     <valtimo-carbon-multi-input
-      type="keyDropdownValue"
-      (valueChange)="conditionsValueChange($event)"
-      [keyColumnTitle]="'path' | widgetTranslate : dataSourceKey | async"
-      [valueColumnTitle]="'value' | widgetTranslate : dataSourceKey | async"
+      [defaultValues]="defaultConditionValues$ | async"
       [dropdownColumnTitle]="'operator' | widgetTranslate : dataSourceKey | async"
       [dropdownItems]="operatorItems$ | async"
       [fullWidth]="true"
-      [defaultValues]="defaultConditionValues$ | async"
+      [keyColumnTitle]="'path' | widgetTranslate : dataSourceKey | async"
+      [valueColumnTitle]="'value' | widgetTranslate : dataSourceKey | async"
+      type="keyDropdownValue"
+      (valueChange)="conditionsValueChange($event)"
     ></valtimo-carbon-multi-input>
   </div>
 </form>
