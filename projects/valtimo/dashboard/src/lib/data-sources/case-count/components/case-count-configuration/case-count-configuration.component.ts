@@ -35,7 +35,6 @@ import {WidgetTranslationService} from '../../../../services';
 
 @Component({
   templateUrl: './case-count-configuration.component.html',
-  styleUrls: ['./case-count-configuration.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CaseCountConfigurationComponent
