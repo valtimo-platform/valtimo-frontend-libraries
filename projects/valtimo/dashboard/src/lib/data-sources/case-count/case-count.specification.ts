@@ -31,6 +31,9 @@ export const caseCountDataSourceSpecification: DataSourceSpecification = {
       '>=': 'Größer als oder gleich wie',
       '<': 'Weniger als',
       '<=': 'Gleich oder kleiner als',
+      path: 'Pfad',
+      operator: 'Operator',
+      value: 'Wert in Wochen',
     },
     en: {
       title: 'Case count',
@@ -42,6 +45,9 @@ export const caseCountDataSourceSpecification: DataSourceSpecification = {
       '>=': 'Greater than or equal to',
       '<': 'Less than',
       '<=': 'Less than or equal to',
+      path: 'Path (required)',
+      operator: 'Operator',
+      value: 'Value in weeks',
     },
     nl: {
       title: 'Aantal dossiers',
@@ -53,6 +59,9 @@ export const caseCountDataSourceSpecification: DataSourceSpecification = {
       '>=': 'Groter dan of gelijk aan',
       '<': 'Minder dan',
       '<=': 'Minder dan of gelijk aan',
+      path: 'Pad',
+      operator: 'Operator',
+      value: 'Waarde in weken',
     },
   },
 };

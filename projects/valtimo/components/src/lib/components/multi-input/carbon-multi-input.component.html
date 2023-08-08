@@ -58,7 +58,7 @@
         *ngIf="type === 'keyDropdownValue' && {dropdownItems: dropdownItems$ | async} as obs"
       >
         <ng-container
-          *ngTemplateOutlet="keyValueDropdown; context: {value: value, index: i, obs: obs}"
+          *ngTemplateOutlet="keyDropdownValue; context: {value: value, index: i, obs: obs}"
         ></ng-container>
       </ng-container>
       <button
@@ -124,11 +124,9 @@
   </div>
 </ng-template>
 
-<ng-template #keyValueDropdown let-value="value" let-index="index" let-obs="obs">
-  <div class="v-multi-input__input">
-    <cds-label *ngIf="index === 0 && keyColumnTitle && valueColumnTitle">{{
-      keyColumnTitle
-    }}</cds-label>
+<ng-template #keyDropdownValue let-value="value" let-index="index" let-obs="obs">
+  <div class="v-multi-input__input" [ngClass]="{'--full-width': fullWidth}">
+    <cds-label *ngIf="index === 0 && keyColumnTitle">{{ keyColumnTitle }}</cds-label>
     <input
       cdsText
       (input)="onValueChange(value, $event.target.value, 'key')"
@@ -136,15 +134,14 @@
       [defaultValue]="value.key"
     />
   </div>
-  <div class="v-multi-input__input">
+  <div [style.minWidth.px]="dropdownWidth" class="v-multi-input__input">
+    <cds-label *ngIf="index === 0 && dropdownColumnTitle">{{ dropdownColumnTitle }}</cds-label>
     <cds-dropdown (selected)="onValueChange(value, $event.item.id, 'dropdown')">
       <cds-dropdown-list [items]="obs.dropdownItems" type="multi"></cds-dropdown-list>
     </cds-dropdown>
   </div>
-  <div class="v-multi-input__input">
-    <cds-label *ngIf="index === 0 && keyColumnTitle && valueColumnTitle">{{
-      valueColumnTitle
-    }}</cds-label>
+  <div class="v-multi-input__input" [ngClass]="{'--full-width': fullWidth}">
+    <cds-label *ngIf="index === 0 && valueColumnTitle">{{ valueColumnTitle }}</cds-label>
     <input
       cdsText
       (input)="onValueChange(value, $event.target.value, 'value')"

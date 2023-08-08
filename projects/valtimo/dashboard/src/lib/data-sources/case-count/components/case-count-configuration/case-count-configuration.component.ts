@@ -16,6 +16,7 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -29,7 +30,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {CaseCountConfiguration, Operator} from '../../models';
 import {DocumentService} from '@valtimo/document';
 import {ListItem} from 'carbon-components-angular';
-import {MultiInputKeyValue} from '@valtimo/user-interface';
+import {MultiInputKeyValue} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {WidgetTranslationService} from '../../../../services';
 
@@ -43,9 +44,11 @@ export class CaseCountConfigurationComponent
 {
   public readonly form = this.fb.group({
     documentDefinition: this.fb.control(null, [Validators.required]),
+    conditions: this.fb.control(null, [Validators.required]),
   });
 
   @Input() dataSourceKey: string;
+
   @Input() set disabled(disabledValue: boolean) {
     if (disabledValue) {
       this.form.disable();
@@ -93,14 +96,17 @@ export class CaseCountConfigurationComponent
     return this.form.get('documentDefinition');
   }
 
-  public get total() {
-    return this.form.get('total');
+  public get conditions() {
+    return this.form.get('conditions');
   }
 
   @Input() set prefillConfiguration(configurationValue: CaseCountConfiguration) {
     if (configurationValue) {
-      // this.value.setValue(configurationValue.value);
-      // this.total.setValue(configurationValue.total);
+      this.documentDefinitionSelected({
+        item: {
+          content: configurationValue.documentDefinition,
+        },
+      } as any);
     }
   }
 
@@ -112,7 +118,8 @@ export class CaseCountConfigurationComponent
     private readonly fb: FormBuilder,
     private readonly documentService: DocumentService,
     private readonly translateService: TranslateService,
-    private readonly widgetTranslationService: WidgetTranslationService
+    private readonly widgetTranslationService: WidgetTranslationService,
+    private readonly cd: ChangeDetectorRef
   ) {}
 
   public ngOnInit(): void {
@@ -123,17 +130,27 @@ export class CaseCountConfigurationComponent
     this._subscriptions.unsubscribe();
   }
 
-  public documentDefinitionSelected(documentDefinition: ListItem): void {
-    if (!documentDefinition) {
+  public documentDefinitionSelected(documentDefinitionItem: ListItem): void {
+    if (!documentDefinitionItem) {
       return;
     }
 
-    this._selectedDocumentDefinition$.next(documentDefinition?.item?.content);
-    this.documentDefinition.setValue(documentDefinition?.item?.content);
+    this._selectedDocumentDefinition$.next(documentDefinitionItem?.item?.content);
+    this.documentDefinition.setValue(documentDefinitionItem?.item?.content);
   }
 
-  public conditionsValueChange(value: Array<MultiInputKeyValue>): void {
-    console.log(value);
+  public conditionsValueChange(values: Array<MultiInputKeyValue>): void {
+    if (values.length === 0) {
+      this.conditions.setValue(null);
+    } else {
+      this.conditions.setValue(
+        values.map(value => ({
+          queryPath: value.key,
+          queryOperator: value.dropdown,
+          queryValue: value.value,
+        }))
+      );
+    }
   }
 
   private openFormSubscription(): void {

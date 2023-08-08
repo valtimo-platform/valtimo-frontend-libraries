@@ -18,7 +18,7 @@
   *ngIf="{documentItems: documentItems$ | async, operatorItems: operatorItems$} as obs"
   [formGroup]="form"
 >
-  <div class="form__element" *ngIf="obs.documentItems">
+  <div class="form__element">
     <cds-dropdown
       formControlName="documentDefinition"
       [helperText]="'documentDefinitionHelperText' | widgetTranslate : dataSourceKey | async"
@@ -27,16 +27,18 @@
       [label]="'documentDefinition' | widgetTranslate : dataSourceKey | async"
       (selected)="documentDefinitionSelected($event)"
     >
-      <cds-dropdown-list [items]="obs.documentItems" type="multi"></cds-dropdown-list>
+      <cds-dropdown-list [items]="obs?.documentItems || []" type="multi"></cds-dropdown-list>
     </cds-dropdown>
   </div>
   <div class="form__element">
     <valtimo-carbon-multi-input
       type="keyDropdownValue"
       (valueChange)="conditionsValueChange($event)"
-      [keyColumnTitle]="'key'"
-      [valueColumnTitle]="'value'"
+      [keyColumnTitle]="'path' | widgetTranslate : dataSourceKey | async"
+      [valueColumnTitle]="'value' | widgetTranslate : dataSourceKey | async"
+      [dropdownColumnTitle]="'operator' | widgetTranslate : dataSourceKey | async"
       [dropdownItems]="operatorItems$ | async"
+      [fullWidth]="true"
     ></valtimo-carbon-multi-input>
   </div>
 </form>
