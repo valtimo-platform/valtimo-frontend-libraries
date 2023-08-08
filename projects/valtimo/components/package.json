@@ -3,9 +3,9 @@
   "license": "EUPL-1.2",
   "version": "10.4.0",
   "peerDependencies": {
-    "@angular/common": "^14.3.0",
-    "@angular/core": "^14.3.0",
-    "@angular/elements": "^14.3.0"
+    "@angular/common": "^15.2.9",
+    "@angular/core": "^15.2.9",
+    "@angular/elements": "^15.2.9"
   },
   "dependencies": {
     "@foxythemes/bootstrap-datetime-picker-bs4": "^2.3.5",
