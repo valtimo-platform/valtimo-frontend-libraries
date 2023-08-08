@@ -39,6 +39,7 @@
       [dropdownColumnTitle]="'operator' | widgetTranslate : dataSourceKey | async"
       [dropdownItems]="operatorItems$ | async"
       [fullWidth]="true"
+      [defaultValues]="defaultConditionValues$ | async"
     ></valtimo-carbon-multi-input>
   </div>
 </form>

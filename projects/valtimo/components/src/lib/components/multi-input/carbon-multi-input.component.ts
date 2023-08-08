@@ -123,6 +123,19 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
     return value.uuid as string;
   }
 
+  public getDropdownItemsForRow(index: number): Observable<Array<ListItemWithId>> {
+    return combineLatest([this.dropdownItems$, this.values$]).pipe(
+      map(([dropdownItems, values]) => {
+        const defaultValue = values[index] || this.defaultValues[index];
+
+        return dropdownItems.map(dropdownItem => ({
+          ...dropdownItem,
+          selected: defaultValue ? dropdownItem.id === defaultValue.dropdown : false,
+        }));
+      })
+    );
+  }
+
   public onValueChange(
     templateValue: MultiInputKeyValue,
     inputValue: string,
@@ -144,10 +157,6 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
         })
       );
     });
-  }
-
-  public itemSelected(item: any): void {
-    console.log(item);
   }
 
   private getInitialRows(): MultiInputValues {

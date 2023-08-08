@@ -30,7 +30,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {CaseCountConfiguration, Operator} from '../../models';
 import {DocumentService} from '@valtimo/document';
 import {ListItem} from 'carbon-components-angular';
-import {MultiInputKeyValue} from '@valtimo/components';
+import {MultiInputKeyValue, MultiInputValues} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {WidgetTranslationService} from '../../../../services';
 
@@ -92,6 +92,8 @@ export class CaseCountConfigurationComponent
       )
     );
 
+  public readonly defaultConditionValues$ = new BehaviorSubject<MultiInputValues>([]);
+
   public get documentDefinition() {
     return this.form.get('documentDefinition');
   }
@@ -107,6 +109,13 @@ export class CaseCountConfigurationComponent
           content: configurationValue.documentDefinition,
         },
       } as any);
+      this.defaultConditionValues$.next(
+        configurationValue.conditions.map(condition => ({
+          key: condition.queryPath,
+          dropdown: condition.queryOperator,
+          value: condition.queryValue,
+        }))
+      );
     }
   }
 

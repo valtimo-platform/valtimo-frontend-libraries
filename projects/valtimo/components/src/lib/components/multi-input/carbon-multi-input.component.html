@@ -137,7 +137,10 @@
   <div [style.minWidth.px]="dropdownWidth" class="v-multi-input__input">
     <cds-label *ngIf="index === 0 && dropdownColumnTitle">{{ dropdownColumnTitle }}</cds-label>
     <cds-dropdown (selected)="onValueChange(value, $event.item.id, 'dropdown')">
-      <cds-dropdown-list [items]="obs.dropdownItems" type="multi"></cds-dropdown-list>
+      <cds-dropdown-list
+        [items]="getDropdownItemsForRow(index) | async"
+        type="multi"
+      ></cds-dropdown-list>
     </cds-dropdown>
   </div>
   <div class="v-multi-input__input" [ngClass]="{'--full-width': fullWidth}">
