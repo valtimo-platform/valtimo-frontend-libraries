@@ -16,7 +16,6 @@
 
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -92,7 +91,7 @@ export class CaseCountConfigurationComponent
       )
     );
 
-  public readonly defaultConditionValues$ = new BehaviorSubject<MultiInputValues>([]);
+  public readonly defaultConditionValues$ = new BehaviorSubject<MultiInputValues | null>(null);
 
   public get documentDefinition() {
     return this.form.get('documentDefinition');
@@ -127,8 +126,7 @@ export class CaseCountConfigurationComponent
     private readonly fb: FormBuilder,
     private readonly documentService: DocumentService,
     private readonly translateService: TranslateService,
-    private readonly widgetTranslationService: WidgetTranslationService,
-    private readonly cd: ChangeDetectorRef
+    private readonly widgetTranslationService: WidgetTranslationService
   ) {}
 
   public ngOnInit(): void {
