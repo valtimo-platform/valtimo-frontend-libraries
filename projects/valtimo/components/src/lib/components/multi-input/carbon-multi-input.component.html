@@ -54,11 +54,9 @@
           *ngTemplateOutlet="keyValue; context: {value: value, index: i}"
         ></ng-container>
       </ng-container>
-      <ng-container
-        *ngIf="type === 'keyDropdownValue' && {dropdownItems: dropdownItems$ | async} as obs"
-      >
+      <ng-container *ngIf="type === 'keyDropdownValue'">
         <ng-container
-          *ngTemplateOutlet="keyDropdownValue; context: {value: value, index: i, obs: obs}"
+          *ngTemplateOutlet="keyDropdownValue; context: {value: value, index: i}"
         ></ng-container>
       </ng-container>
       <button
@@ -124,7 +122,7 @@
   </div>
 </ng-template>
 
-<ng-template #keyDropdownValue let-value="value" let-index="index" let-obs="obs">
+<ng-template #keyDropdownValue let-value="value" let-index="index">
   <div class="v-multi-input__input" [ngClass]="{'--full-width': fullWidth}">
     <cds-label *ngIf="index === 0 && keyColumnTitle">{{ keyColumnTitle }}</cds-label>
     <input
