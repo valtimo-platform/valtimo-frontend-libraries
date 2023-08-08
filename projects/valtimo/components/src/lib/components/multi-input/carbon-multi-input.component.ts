@@ -56,7 +56,6 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   @Input() public set dropdownItems(value: Array<ListItemWithId>) {
     this.dropdownItems$.next(value);
   }
-  @Input() public selectedDropdownItem(id: string) {}
   @Input() public dropdownWidth = 250;
   @Input() public fullWidth = false;
 
