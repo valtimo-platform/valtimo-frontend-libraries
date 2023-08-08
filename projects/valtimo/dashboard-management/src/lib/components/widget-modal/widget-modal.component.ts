@@ -217,9 +217,9 @@ export class WidgetModalComponent implements OnInit, OnDestroy {
                 this.dashboard.key,
                 widgetUpdateObject
               )
-            : this.dashboardManagementService.updateDashboardWidgetConfigurations(
+            : this.dashboardManagementService.updateDashboardWidgetConfiguration(
                 this.dashboard.key,
-                [{...widgetUpdateObject, key: this.widgetKey}]
+                {...widgetUpdateObject, key: this.widgetKey}
               )
         )
       )
