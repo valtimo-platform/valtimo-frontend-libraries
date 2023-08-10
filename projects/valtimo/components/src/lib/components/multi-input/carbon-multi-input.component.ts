@@ -162,7 +162,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   private getInitialRows(): MultiInputValues {
     const minimumRows = this.minimumAmountOfRows;
     const initialRows = this.initialAmountOfRows;
-    const amountOfInitalRows = minimumRows > initialRows ? minimumRows : initialRows;
+    const amountOfInitalRows = Math.max(minimumRows, initialRows);
 
     if (!this.defaultValues) {
       return new Array(amountOfInitalRows).fill(this.getEmptyValue());
