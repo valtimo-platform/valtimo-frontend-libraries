@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2020 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +36,18 @@ import {DashboardDetailsComponent} from './components/dashboard-details/dashboar
 import {DashboardManagementComponent} from './components/dashboard-management/dashboard-management.component';
 import {DashboardManagementRoutingModule} from './dashboard-management-routing.module';
 import {WidgetModalComponent} from './components/widget-modal/widget-modal.component';
+import {EditDashboardModalComponent} from './components/edit-dashboard-modal/edit-dashboard-modal';
+import {WidgetTranslatePipeModule} from '@valtimo/dashboard';
+import {WidgetConfigurationContainerComponent} from './components/widget-configuration-container/widget-configuration-container.component';
 
 @NgModule({
-  declarations: [DashboardManagementComponent, DashboardDetailsComponent, WidgetModalComponent],
+  declarations: [
+    DashboardManagementComponent,
+    DashboardDetailsComponent,
+    WidgetModalComponent,
+    EditDashboardModalComponent,
+    WidgetConfigurationContainerComponent,
+  ],
   imports: [
     ButtonModule,
     CarbonTableModule,
@@ -55,6 +64,7 @@ import {WidgetModalComponent} from './components/widget-modal/widget-modal.compo
     ConfirmationModalModule,
     NotificationModule,
     IconModule,
+    WidgetTranslatePipeModule,
   ],
   exports: [],
 })
