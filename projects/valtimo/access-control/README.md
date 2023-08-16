@@ -5,17 +5,17 @@ This library was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Code scaffolding
 
-Run `ng generate component component-name --project access-control` to generate a new
-component. You can also use
+Run `ng generate component component-name --project access-control` to generate a new component. You
+can also use
 `ng generate directive|pipe|service|class|guard|interface|enum|module --project access-control`.
 
-> Note: Don't forget to add `--project access-control` or else it will be added to the
-> default project in your `angular.json` file.
+> Note: Don't forget to add `--project access-control` or else it will be added to the default
+> project in your `angular.json` file.
 
 ## Build
 
-Run `ng build access-control` to build the project. The build artifacts will be stored in
-the `dist/` directory.
+Run `ng build access-control` to build the project. The build artifacts will be stored in the
+`dist/` directory.
 
 ## Publishing
 
@@ -24,8 +24,7 @@ After building your library with `ng build access-control`, go to the dist folde
 
 ## Running unit tests
 
-Run `ng test access-control` to execute the unit tests via
-[Karma](https://karma-runner.github.io).
+Run `ng test access-control` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## Further help
 
