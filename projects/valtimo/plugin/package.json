@@ -5,7 +5,6 @@
   "peerDependencies": {
     "@angular/common": "^14.3.0",
     "@angular/core": "^14.3.0",
-    "@angular/flex-layout": "^14.0.0-beta.41"
   },
   "dependencies": {
     "tslib": "^2.5.0"
