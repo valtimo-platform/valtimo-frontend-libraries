@@ -7,7 +7,7 @@
     "@angular/core": "^16.2.0"
   },
   "dependencies": {
-    "@foxythemes/bootstrap-datetime-picker-bs4": "^2.3.5",
+    "@foxythemes/bootstrap-datetime-picker-bs4": "2.3.5",
     "bootstrap": "^4.6.2",
     "popper.js": "^1.16.1",
     "jquery": "3.6.4",

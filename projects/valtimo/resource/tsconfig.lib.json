@@ -3,11 +3,10 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../../out-tsc/lib",
-    "declarationMap": true,
     "declaration": true,
+    "declarationMap": true,
     "inlineSources": true,
-    "types": [],
-    "allowSyntheticDefaultImports": true
+    "types": []
   },
   "angularCompilerOptions": {
     "compilationMode": "partial",
