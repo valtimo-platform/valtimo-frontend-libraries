@@ -8,14 +8,5 @@
     "inlineSources": true,
     "types": []
   },
-  "angularCompilerOptions": {
-    "skipTemplateCodegen": true,
-    "compilationMode": "partial",
-    "strictMetadataEmit": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
-    "enableResourceInlining": true,
-    "allowSyntheticDefaultImports": true
-  },
   "exclude": ["src/test.ts", "**/*.spec.ts"]
 }
