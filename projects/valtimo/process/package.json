@@ -10,8 +10,8 @@
     "ngx-toastr": "^15.2.2",
     "moment": "^2.29.4",
     "bpmn-js": "6.5.1",
-    "jquery": "3.6.4",
-    "heatmap.js-fixed": "^2.0.2",
+    "jquery": "3.7.0",
+    "heatmap.js-fixed": "2.0.2",
     "tslib": "^2.5.0"
   }
 }

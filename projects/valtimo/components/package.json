@@ -10,10 +10,10 @@
   "dependencies": {
     "@foxythemes/bootstrap-datetime-picker-bs4": "2.3.5",
     "bpmn-js": "6.5.1",
-    "formiojs": "4.14.13",
-    "jquery": "^3.6.4",
+    "formiojs": "4.16.0",
+    "jquery": "3.7.0",
     "moment": "^2.29.4",
-    "heatmap.js-fixed": "^2.0.2",
+    "heatmap.js-fixed": "2.0.2",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "8.0.0",
     "@ng-bootstrap/ng-bootstrap": "11.0.1",
@@ -23,10 +23,10 @@
     "ngx-spinner": "^14.0.0",
     "tslib": "^2.5.0",
     "ng-multiselect-dropdown": "1.0.0-beta.19",
-    "@carbon/icons": "11.24.0",
-    "@carbon/grid": "11.18.0",
-    "@carbon/styles": "1.35.0",
-    "carbon-components-angular": "5.14.4"
+    "@carbon/icons": "11.22.1",
+    "@carbon/grid": "11.16.1",
+    "@carbon/styles": "1.33.1",
+    "carbon-components-angular": "5.14.0"
   },
   "devDependencies": {
     "karma-moment": "^0.1.0"
