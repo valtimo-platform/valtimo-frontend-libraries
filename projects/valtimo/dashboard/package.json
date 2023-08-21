@@ -12,7 +12,7 @@
     "d3-shape": "^3.2.0",
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
-    "tslib": "^2.5.0",
+    "tslib": "2.6.2",
     "bin-pack-with-constraints": "1.0.1"
   },
   "devDependencies": {

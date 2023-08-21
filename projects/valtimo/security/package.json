@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "ngx-toastr": "17.0.2",
-    "tslib": "^2.5.0"
+    "tslib": "2.6.2"
   }
 }

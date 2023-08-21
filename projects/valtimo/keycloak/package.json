@@ -9,6 +9,6 @@
   "dependencies": {
     "keycloak-angular": "14.0.0",
     "keycloak-js": "22.0.1",
-    "tslib": "^2.5.0"
+    "tslib": "2.6.2"
   }
 }
