@@ -14,7 +14,7 @@
     "jquery": "3.7.0",
     "moment": "2.29.4",
     "heatmap.js-fixed": "2.0.2",
-    "@ngx-translate/core": "^14.0.0",
+    "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
     "@ng-bootstrap/ng-bootstrap": "11.0.1",
     "ngx-toastr": "17.0.2",
@@ -29,6 +29,6 @@
     "carbon-components-angular": "5.14.0"
   },
   "devDependencies": {
-    "karma-moment": "^0.1.0"
+    "karma-moment": "0.1.0"
   }
 }
