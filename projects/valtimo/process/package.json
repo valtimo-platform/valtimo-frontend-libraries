@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "ngx-toastr": "^15.2.2",
-    "moment": "^2.29.4",
+    "moment": "2.29.4",
     "bpmn-js": "6.5.1",
     "jquery": "3.7.0",
     "heatmap.js-fixed": "2.0.2",
