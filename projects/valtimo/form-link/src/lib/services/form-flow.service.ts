@@ -18,7 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, filter, Observable} from 'rxjs';
 import {
-  FormFlowAngularComponent,
+  FormFlowAngularComponentDefinition,
   FormFlowCreateRequest,
   FormFlowCreateResult,
   FormFlowDefinition,
@@ -32,9 +32,9 @@ import {FORM_FLOW_COMPONENT_TOKEN} from '../constants';
 })
 export class FormFlowService {
   private readonly _supportedComponents$ =
-    new BehaviorSubject<Array<FormFlowAngularComponent> | null>(null);
+    new BehaviorSubject<Array<FormFlowAngularComponentDefinition> | null>(null);
 
-  public get supportedComponents$(): Observable<Array<FormFlowAngularComponent>> {
+  public get supportedComponents$(): Observable<Array<FormFlowAngularComponentDefinition>> {
     return this._supportedComponents$.pipe(filter(components => !!components));
   }
 
@@ -44,7 +44,7 @@ export class FormFlowService {
     private http: HttpClient,
     private configService: ConfigService,
     @Inject(FORM_FLOW_COMPONENT_TOKEN)
-    private readonly supportedAngularComponents: Array<FormFlowAngularComponent>
+    private readonly supportedAngularComponents: Array<FormFlowAngularComponentDefinition>
   ) {
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
     this.setSupportedComponents(supportedAngularComponents);
@@ -95,7 +95,9 @@ export class FormFlowService {
     );
   }
 
-  private setSupportedComponents(supportedComponents: Array<FormFlowAngularComponent>): void {
+  private setSupportedComponents(
+    supportedComponents: Array<FormFlowAngularComponentDefinition>
+  ): void {
     this._supportedComponents$.next(supportedComponents);
   }
 }

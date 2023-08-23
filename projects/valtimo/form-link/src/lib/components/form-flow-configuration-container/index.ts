@@ -14,11 +14,4 @@
  * limitations under the License.
  */
 
-import {InjectionToken} from '@angular/core';
-import {FormFlowAngularComponentDefinition} from '../models';
-
-const FORM_FLOW_COMPONENT_TOKEN = new InjectionToken<Array<FormFlowAngularComponentDefinition>>(
-  'Supported form-flow Angular components'
-);
-
-export {FORM_FLOW_COMPONENT_TOKEN};
+export * from './form-flow-configuration-container.component';
