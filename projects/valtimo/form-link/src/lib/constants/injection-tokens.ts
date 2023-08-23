@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-export * from './form-link.model';
-export * from './process-link.model';
-export * from './form-flow.model';
+import {InjectionToken} from '@angular/core';
+import {FormFlowAngularComponent} from '../models';
+
+const FORM_FLOW_COMPONENT_TOKEN = new InjectionToken<Array<FormFlowAngularComponent>>(
+  'Supported form-flow Angular components'
+);
+
+export {FORM_FLOW_COMPONENT_TOKEN};
