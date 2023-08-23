@@ -18,7 +18,8 @@ import {InjectionToken} from '@angular/core';
 import {FormFlowAngularComponentDefinition} from '../models';
 
 const FORM_FLOW_COMPONENT_TOKEN = new InjectionToken<Array<FormFlowAngularComponentDefinition>>(
-  'Supported form-flow Angular components'
+  'Supported form-flow Angular components',
+  {factory: () => []}
 );
 
 export {FORM_FLOW_COMPONENT_TOKEN};

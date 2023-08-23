@@ -28,7 +28,7 @@ import {
 import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {ChangeEvent, FormFlowAngularComponent} from '../../models';
-import {FormFlowService} from '../../services';
+import {FormFlowComponentService} from '../../services';
 import {FormioSubmission} from '@valtimo/components';
 
 @Component({
@@ -63,7 +63,7 @@ export class FormFlowConfigurationContainerComponent
   private readonly _componentId$ = new BehaviorSubject<string>('');
   private readonly _formFlowInstanceId$ = new BehaviorSubject<string>('');
 
-  constructor(private readonly formFlowService: FormFlowService) {}
+  constructor(private readonly formFlowComponentService: FormFlowComponentService) {}
 
   public ngOnInit(): void {
     this.openConfigurationComponentSubscription();
@@ -77,7 +77,7 @@ export class FormFlowConfigurationContainerComponent
 
   private openConfigurationComponentSubscription(): void {
     this._subscriptions.add(
-      combineLatest([this.formFlowService.supportedComponents$, this._componentId$])
+      combineLatest([this.formFlowComponentService.supportedComponents$, this._componentId$])
         .pipe(
           tap(([supportedComponents, componentId]) => {
             const configurationComponent = supportedComponents.find(
