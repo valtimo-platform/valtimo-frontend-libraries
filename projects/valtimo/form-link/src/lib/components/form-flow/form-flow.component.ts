@@ -56,17 +56,17 @@ export class FormFlowComponent implements OnInit {
     this.formioOptions.disableAlerts = true;
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.getFormFlowStep();
   }
 
-  onChange(event: any): void {
+  public onChange(event: any): void {
     if (event.data) {
       this.formIoFormData.next(event.data);
     }
   }
 
-  onSubmit(submission: FormioSubmission): void {
+  public onSubmit(submission: FormioSubmission): void {
     this.disable();
 
     if (submission.data) {
@@ -89,6 +89,16 @@ export class FormFlowComponent implements OnInit {
           this.form?.showErrors(errors);
           this.enable();
         }
+      );
+    }
+  }
+
+  public saveData(): void {
+    const formIoFormData = this.formIoFormData.getValue();
+    if (formIoFormData && this.formFlowInstanceId) {
+      this.formFlowService.save(this.formFlowInstanceId, formIoFormData).subscribe(
+        () => null,
+        errors => this.form.showErrors(errors)
       );
     }
   }
