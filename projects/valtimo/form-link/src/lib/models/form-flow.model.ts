@@ -23,7 +23,7 @@ interface ChangeEvent {
 
 interface FormFlowAngularComponent {
   formFlowInstanceId: string;
-  componentId: string;
+  componentId?: string;
   disabled: boolean;
   changeEvent: EventEmitter<ChangeEvent>;
   submitEvent: EventEmitter<FormioSubmission>;
