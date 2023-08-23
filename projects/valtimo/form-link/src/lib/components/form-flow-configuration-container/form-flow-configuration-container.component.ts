@@ -27,32 +27,41 @@ import {
 } from '@angular/core';
 import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {ConfigurationOutput} from '../../models';
+import {ChangeEvent, FormFlowAngularComponent} from '../../models';
 import {FormFlowService} from '../../services';
+import {FormioSubmission} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-form-flow-configuration-container',
   templateUrl: './form-flow-configuration-container.component.html',
 })
-export class FormFlowConfigurationContainerComponent implements OnInit, OnDestroy {
+export class FormFlowConfigurationContainerComponent
+  implements OnInit, OnDestroy, FormFlowAngularComponent
+{
   @ViewChild('formFlowConfigurationComponent', {static: true, read: ViewContainerRef})
   private readonly _dynamicContainer: ViewContainerRef;
   @Input() public set disabled(disabledValue: boolean) {
     this._disabled$.next(disabledValue);
   }
-  @Input() public set id(value: string) {
-    this._id$.next(value);
+  @Input() public set componentId(value: string) {
+    this._componentId$.next(value);
   }
-  @Output() public configurationEvent = new EventEmitter<ConfigurationOutput>();
+  @Input() public set formFlowInstanceId(value: string) {
+    this._formFlowInstanceId$.next(value);
+  }
+  @Output() public changeEvent = new EventEmitter<ChangeEvent>();
+  @Output() public submitEvent = new EventEmitter<FormioSubmission>();
 
-  private _configurationSubscription!: Subscription;
+  private _changeSubscription!: Subscription;
+  private _submitSubscription!: Subscription;
+
   private readonly _subscriptions = new Subscription();
-
-  private readonly _componentRef$ = new BehaviorSubject<ComponentRef<Component> | undefined>(
-    undefined
-  );
+  private readonly _componentRef$ = new BehaviorSubject<
+    ComponentRef<FormFlowAngularComponent> | undefined
+  >(undefined);
   private readonly _disabled$ = new BehaviorSubject<boolean>(false);
-  private readonly _id$ = new BehaviorSubject<string>('');
+  private readonly _componentId$ = new BehaviorSubject<string>('');
+  private readonly _formFlowInstanceId$ = new BehaviorSubject<string>('');
 
   constructor(private readonly formFlowService: FormFlowService) {}
 
@@ -68,11 +77,11 @@ export class FormFlowConfigurationContainerComponent implements OnInit, OnDestro
 
   private openConfigurationComponentSubscription(): void {
     this._subscriptions.add(
-      combineLatest([this._id$, this.formFlowService.supportedComponents$])
+      combineLatest([this.formFlowService.supportedComponents$, this._componentId$])
         .pipe(
-          tap(([id, supportedComponents]) => {
+          tap(([supportedComponents, componentId]) => {
             const configurationComponent = supportedComponents.find(
-              component => component.id === id
+              component => component.id === componentId
             );
 
             this._dynamicContainer.clear();
@@ -81,10 +90,7 @@ export class FormFlowConfigurationContainerComponent implements OnInit, OnDestro
               const componentRef = this._dynamicContainer.createComponent(
                 configurationComponent.component
               );
-              this.configurationEvent.emit({valid: false, data: {}});
               this._componentRef$.next(componentRef);
-            } else {
-              this.configurationEvent.emit({valid: true, data: {}});
             }
           })
         )
@@ -94,23 +100,28 @@ export class FormFlowConfigurationContainerComponent implements OnInit, OnDestro
 
   private openComponentInstanceSubscription(): void {
     this._subscriptions.add(
-      combineLatest([this._componentRef$, this._id$]).subscribe(([ref, id]) => {
-        const instance = ref?.instance;
+      combineLatest([this._componentRef$, this._formFlowInstanceId$]).subscribe(
+        ([ref, formFlowInstanceId]) => {
+          const instance = ref?.instance;
 
-        this._configurationSubscription?.unsubscribe();
+          this._submitSubscription?.unsubscribe();
+          this._changeSubscription?.unsubscribe();
 
-        if (instance) {
-          if (id) {
-            (instance as any).id = id;
-          }
-
-          this._configurationSubscription = (instance as any).configurationEvent.subscribe(
-            configuration => {
-              this.configurationEvent.emit(configuration);
+          if (instance) {
+            if (formFlowInstanceId) {
+              instance.formFlowInstanceId = formFlowInstanceId;
             }
-          );
+
+            this._changeSubscription = instance.changeEvent.subscribe(change => {
+              this.changeEvent.emit(change);
+            });
+
+            this._submitSubscription = instance.submitEvent.subscribe(submit => {
+              this.submitEvent.emit(submit);
+            });
+          }
         }
-      })
+      )
     );
   }
 
@@ -120,23 +131,9 @@ export class FormFlowConfigurationContainerComponent implements OnInit, OnDestro
         const instance = ref?.instance;
 
         if (instance) {
-          (instance as any).disabled = disabled;
+          instance.disabled = disabled;
         }
       })
-    );
-  }
-
-  private openPrefillConfigurationSubscription(): void {
-    this._subscriptions.add(
-      combineLatest([this._componentRef$, this._prefillConfiguration$]).subscribe(
-        ([ref, prefillConfiguration]) => {
-          const instance = ref?.instance;
-
-          if (instance && prefillConfiguration) {
-            instance.prefillConfiguration = prefillConfiguration;
-          }
-        }
-      )
     );
   }
 }

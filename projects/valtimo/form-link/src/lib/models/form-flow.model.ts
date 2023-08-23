@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 
-import {Component, Type} from '@angular/core';
+import {EventEmitter, Type} from '@angular/core';
+import {FormioSubmission} from '@valtimo/components';
 
-interface FormFlowAngularComponent {
-  id: string;
-  component: Type<Component>;
-}
-
-interface ConfigurationOutput {
-  valid: boolean;
+interface ChangeEvent {
   data: object;
 }
 
-export {FormFlowAngularComponent, ConfigurationOutput};
+interface FormFlowAngularComponent {
+  formFlowInstanceId: string;
+  componentId: string;
+  disabled: boolean;
+  changeEvent: EventEmitter<ChangeEvent>;
+  submitEvent: EventEmitter<FormioSubmission>;
+}
+
+interface FormFlowAngularComponentDefinition {
+  id: string;
+  component: Type<FormFlowAngularComponent>;
+}
+
+export {FormFlowAngularComponentDefinition, FormFlowAngularComponent, ChangeEvent};
