@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-export * from './form-link.model';
-export * from './process-link.model';
-export * from './form-flow.model';
+import {Component, Type} from '@angular/core';
+
+interface FormFlowAngularComponent {
+  id: string;
+  component: Type<Component>;
+}
+
+interface ConfigurationOutput {
+  valid: boolean;
+  data: object;
+}
+
+export {FormFlowAngularComponent, ConfigurationOutput};

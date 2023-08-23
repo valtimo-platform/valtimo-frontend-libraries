@@ -14,25 +14,40 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, filter, Observable} from 'rxjs';
 import {
+  FormFlowAngularComponent,
   FormFlowCreateRequest,
   FormFlowCreateResult,
   FormFlowDefinition,
   FormFlowInstance,
 } from '../models';
 import {ConfigService} from '@valtimo/config';
+import {FORM_FLOW_COMPONENT_TOKEN} from '../constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormFlowService {
+  private readonly _supportedComponents$ =
+    new BehaviorSubject<Array<FormFlowAngularComponent> | null>(null);
+
+  public get supportedComponents$(): Observable<Array<FormFlowAngularComponent>> {
+    return this._supportedComponents$.pipe(filter(components => !!components));
+  }
+
   private valtimoEndpointUri!: string;
 
-  constructor(private http: HttpClient, private configService: ConfigService) {
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService,
+    @Inject(FORM_FLOW_COMPONENT_TOKEN)
+    private readonly supportedAngularComponents: Array<FormFlowAngularComponent>
+  ) {
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
+    this.setSupportedComponents(supportedAngularComponents);
   }
 
   getFormFlowDefinitions(): Observable<FormFlowDefinition[]> {
@@ -80,5 +95,9 @@ export class FormFlowService {
       `${this.valtimoEndpointUri}v1/form-flow/${formFlowInstanceId}/save`,
       submissionData
     );
+  }
+
+  private setSupportedComponents(supportedComponents: Array<FormFlowAngularComponent>): void {
+    this._supportedComponents$.next(supportedComponents);
   }
 }
