@@ -136,12 +136,11 @@ export const environment: ValtimoConfig = {
           {link: ['/dashboard-management'], title: 'Dashboard configuration', sequence: 10},
           {link: ['/access-control'], title: 'Access Control', sequence: 11},
           {title: 'A&E', textClass: 'text-dark font-weight-bold c-default', sequence: 12},
-          {link: ['/contexts'], title: 'Contexts', sequence: 13},
-          {link: ['/users'], title: 'Users', sequence: 14},
-          {link: ['/entitlements'], title: 'Entitlements', sequence: 15},
-          {title: 'Other', textClass: 'text-dark font-weight-bold c-default', sequence: 16},
-          {link: ['/process-migration'], title: 'Process migration', sequence: 17},
-          {link: ['/choice-fields'], title: 'Choice fields', sequence: 18},
+          {link: ['/users'], title: 'Users', sequence: 13},
+          {link: ['/entitlements'], title: 'Entitlements', sequence: 14},
+          {title: 'Other', textClass: 'text-dark font-weight-bold c-default', sequence: 15},
+          {link: ['/process-migration'], title: 'Process migration', sequence: 16},
+          {link: ['/choice-fields'], title: 'Choice fields', sequence: 17},
         ],
       },
       {
@@ -222,10 +221,6 @@ export const environment: ValtimoConfig = {
       {
         propertyName: 'assignee',
         translationKey: 'valtimoAssignee.fullName',
-      },
-      {
-        propertyName: 'context',
-        translationKey: 'context',
       },
     ],
     defaultSortedColumn: {
