@@ -95,7 +95,7 @@ export class DossierProcessStartModalComponent implements OnInit {
       });
   }
 
-  public gotoProcessLinkScreen() {
+  public gotoProcessLinkScreen(): void {
     this.modal.hide();
     this.router.navigate(['process-links'], {queryParams: {process: this.processDefinitionKey}});
   }
