@@ -248,7 +248,8 @@
 </ng-template>
 
 <ng-template #versionTemplate>
-  <ng-container *ngIf="{backendVersion: backendVersion$ | async} as obs">
+  <ng-container *ngIf="showValtimoVersions">
+    <ng-container *ngIf="{backendVersion: backendVersion$ | async} as obs">
     <cds-structured-list *ngIf="obs.backendVersion || frontendVersion">
       <cds-list-header>
         <cds-list-column>{{ 'settings.version.title' | translate }}</cds-list-column>
@@ -278,6 +279,7 @@
         </cds-list-column>
       </cds-list-row>
     </cds-structured-list>
+  </ng-container>
   </ng-container>
 </ng-template>
 
