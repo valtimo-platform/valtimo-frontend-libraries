@@ -128,7 +128,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     .getUserSubject()
     .pipe(map(userIdentity => userIdentity?.roles.includes('ROLE_ADMIN')));
 
-  public showValtimoVersions: boolean = true;
+  public showValtimoVersions = true;
 
   constructor(
     public translate: TranslateService,
