@@ -30,7 +30,7 @@ buildscript {
 
     }
     dependencies {
-        classpath "com.moowork.gradle:gradle-node-plugin:0.12"
+        classpath "com.moowork.gradle:gradle-node-plugin:0.14"
     }
 }
 
