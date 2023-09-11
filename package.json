@@ -288,7 +288,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "~7.8.1",
     "select2": "^4.1.0-rc.0",
-    "stylus": "^0.59.0",
+    "stylus": "^0.60.0",
     "swagger-ui": "^4.18.3",
     "tslib": "^2.5.0",
     "tslint-config-prettier": "^1.18.0",
