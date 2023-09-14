@@ -24,20 +24,21 @@ import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
   styleUrls: ['./input-label.component.scss'],
 })
 export class InputLabelComponent {
-  @Input() name = '';
-  @Input() tooltip = '';
-  @Input() largeMargin = false;
-  @Input() small = false;
-  @Input() set title(value: string) {
+  @Input() public name = '';
+  @Input() public tooltip = '';
+  @Input() public largeMargin = false;
+  @Input() public small = false;
+  @Input() public set title(value: string) {
     this._title$.next(value);
   }
-  @Input() set titleTranslationKey(value: string) {
+  @Input() public set titleTranslationKey(value: string) {
     this._titleTranslationKey$.next(value);
   }
-  @Input() set required(value: boolean) {
+  @Input() public set required(value: boolean) {
     this._required$.next(value);
   }
-  @Input() disabled = false;
+  @Input() public disabled = false;
+  @Input() public carbonTheme = 'g10';
 
   private readonly _title$ = new BehaviorSubject<string>('');
   private readonly _titleTranslationKey$ = new BehaviorSubject<string>('');

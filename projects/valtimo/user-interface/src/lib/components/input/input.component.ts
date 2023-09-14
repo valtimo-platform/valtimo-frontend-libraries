@@ -33,55 +33,55 @@ import {BehaviorSubject, Observable, Subscription, take} from 'rxjs';
   styleUrls: ['./input.component.scss'],
 })
 export class InputComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() name = '';
-  @Input() type: InputType = 'text';
-  @Input() title = '';
-  @Input() titleTranslationKey = '';
-  @Input() defaultValue = '';
-  @Input() widthPx!: number;
-  @Input() fullWidth = false;
-  @Input() margin = false;
-  @Input() smallMargin = false;
-  @Input() disabled = false;
-  @Input() step!: number;
-  @Input() min!: number;
-  @Input() maxLength = 250;
-  @Input() tooltip = '';
-  @Input() required = false;
-  @Input() hideNumberSpinBox = false;
-  @Input() smallLabel = false;
-  @Input() rows!: number;
-  @Input() clear$!: Observable<null>;
-  @Input() carbonTheme = 'g10';
+  @Input() public name = '';
+  @Input() public type: InputType = 'text';
+  @Input() public title = '';
+  @Input() public titleTranslationKey = '';
+  @Input() public defaultValue = '';
+  @Input() public widthPx!: number;
+  @Input() public fullWidth = false;
+  @Input() public margin = false;
+  @Input() public smallMargin = false;
+  @Input() public disabled = false;
+  @Input() public step!: number;
+  @Input() public min!: number;
+  @Input() public maxLength = 250;
+  @Input() public tooltip = '';
+  @Input() public required = false;
+  @Input() public hideNumberSpinBox = false;
+  @Input() public smallLabel = false;
+  @Input() public rows!: number;
+  @Input() public clear$!: Observable<null>;
+  @Input() public carbonTheme = 'g10';
 
-  @Output() valueChange: EventEmitter<any> = new EventEmitter();
+  @Output() public valueChange: EventEmitter<any> = new EventEmitter();
 
-  inputValue$ = new BehaviorSubject<any>(undefined);
+  public inputValue$ = new BehaviorSubject<any>(undefined);
 
-  isText!: boolean;
-  isTextarea!: boolean;
-  isNumber!: boolean;
-  isPassword!: boolean;
-  isDigitOnly!: boolean;
-  isCheckbox!: boolean;
+  public isText!: boolean;
+  public isTextarea!: boolean;
+  public isNumber!: boolean;
+  public isPassword!: boolean;
+  public isDigitOnly!: boolean;
+  public isCheckbox!: boolean;
 
-  readonly showPassword$ = new BehaviorSubject<boolean>(false);
+  public readonly showPassword$ = new BehaviorSubject<boolean>(false);
 
   private valueSubscription!: Subscription;
   private clearSubscription!: Subscription;
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.setInputType();
     this.setDefaultValue(this.defaultValue);
     this.openValueSubscription();
     this.openClearSubscription();
   }
 
-  onValueChange(value: any): void {
+  public onValueChange(value: any): void {
     this.inputValue$.next(value);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     const currentDefaultValue = changes?.defaultValue?.currentValue;
 
     if (currentDefaultValue) {
@@ -89,12 +89,12 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.valueSubscription?.unsubscribe();
     this.clearSubscription?.unsubscribe();
   }
 
-  onKeydown(event: KeyboardEvent): void {
+  public onKeydown(event: KeyboardEvent): void {
     if (event.code !== 'Enter') {
       return;
     }
@@ -102,13 +102,13 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
     event.preventDefault();
   }
 
-  toggleShowPassword(): void {
+  public toggleShowPassword(): void {
     this.showPassword$.pipe(take(1)).subscribe(showPassword => {
       this.showPassword$.next(!showPassword);
     });
   }
 
-  stopCheckboxEventPropagation(event: MouseEvent): void {
+  public stopCheckboxEventPropagation(event: MouseEvent): void {
     event.stopPropagation();
   }
 

@@ -27,86 +27,86 @@
 <ng-template #inputTitle>
   <v-input-label
     *ngIf="title || titleTranslationKey"
-    [title]="title"
-    [titleTranslationKey]="titleTranslationKey"
     [name]="name"
-    [tooltip]="tooltip"
     [required]="required"
     [small]="smallLabel"
+    [titleTranslationKey]="titleTranslationKey"
+    [title]="title"
+    [tooltip]="tooltip"
   >
   </v-input-label>
 </ng-template>
 
 <ng-template #textInput>
   <input
-    cdsText
     *ngIf="isText"
-    type="text"
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
       'v-input--small-margin': smallMargin
     }"
-    [style.width.px]="widthPx"
-    [disabled]="disabled"
     [ngModel]="inputValue$ | async"
-    (ngModelChange)="onValueChange($event)"
-    [step]="step"
+    cdsText
+    [disabled]="disabled"
+    [maxLength]="maxLength"
     [min]="0"
     [name]="name"
-    [maxLength]="maxLength"
-    [attr.data-carbon-theme]="carbonTheme"
+    [step]="step"
+    (ngModelChange)="onValueChange($event)"
     (keydown)="onKeydown($event)"
+    [attr.data-carbon-theme]="carbonTheme"
+    [style.width.px]="widthPx"
+    type="text"
   />
 </ng-template>
 
 <ng-template #textareaInput>
   <textarea
-    cdsTextArea
     *ngIf="isTextarea"
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
       'v-input--small-margin': smallMargin
     }"
-    [style.width.px]="widthPx"
+    cdsTextArea
     [disabled]="disabled"
-    [ngModel]="inputValue$ | async"
-    (ngModelChange)="onValueChange($event)"
-    [rows]="rows"
     [name]="name"
-    [attr.data-carbon-theme]="carbonTheme"
+    [ngModel]="inputValue$ | async"
+    [rows]="rows"
     (keydown)="onKeydown($event)"
+    (ngModelChange)="onValueChange($event)"
+    [attr.data-carbon-theme]="carbonTheme"
+    [style.width.px]="widthPx"
   ></textarea>
 </ng-template>
 
 <ng-template #passwordInput>
   <ng-container *ngIf="isPassword">
     <div
-      class="v-input__password-container"
       *ngIf="{showPassword: showPassword$ | async} as obs"
       [ngClass]="{
         'v-input--full-width': fullWidth,
         'v-input--margin': margin,
         'v-input--small-margin': smallMargin
       }"
+      class="v-input__password-container"
     >
       <input
-        cdsText
-        [type]="obs.showPassword ? 'text' : 'password'"
         [ngClass]="{
           'v-input--full-width': fullWidth
         }"
-        [style.width.px]="widthPx"
+        cdsText
         [disabled]="disabled"
-        [ngModel]="inputValue$ | async"
-        (ngModelChange)="onValueChange($event)"
-        [step]="step"
+        [maxLength]="maxLength"
         [min]="0"
         [name]="name"
-        [maxLength]="maxLength"
-        [attr.data-carbon-theme]="carbonTheme"
+        [ngModel]="inputValue$ | async"
+        [step]="step"
         (keydown)="onKeydown($event)"
+        (ngModelChange)="onValueChange($event)"
+        [attr.data-carbon-theme]="carbonTheme"
+        [style.width.px]="widthPx"
+        [type]="obs.showPassword ? 'text' : 'password'"
       />
       <div class="v-input__password-icon">
         <v-button
@@ -121,49 +121,49 @@
 
 <ng-template #numberInput>
   <input
-    cdsText
     *ngIf="isNumber"
-    type="number"
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
       'v-input--small-margin': smallMargin,
       'v-input--hide-spinbox': hideNumberSpinBox
     }"
-    [style.width.px]="widthPx"
+    cdsText
     [disabled]="disabled"
-    [ngModel]="inputValue$ | async"
-    (ngModelChange)="onValueChange($event)"
-    [step]="step"
+    [maxLength]="maxLength"
     [min]="min"
     [name]="name"
-    [maxLength]="maxLength"
-    [attr.data-carbon-theme]="carbonTheme"
+    [ngModel]="inputValue$ | async"
+    [step]="step"
     (keydown)="onKeydown($event)"
+    (ngModelChange)="onValueChange($event)"
+    [attr.data-carbon-theme]="carbonTheme"
+    [style.width.px]="widthPx"
+    type="number"
   />
 </ng-template>
 
 <ng-template #digitOnlyInput>
   <input
-    cdsText
     *ngIf="isDigitOnly"
-    type="text"
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
       'v-input--small-margin': smallMargin
     }"
-    [style.width.px]="widthPx"
+    cdsText
+    digitOnly
     [disabled]="disabled"
-    [ngModel]="inputValue$ | async"
-    (ngModelChange)="onValueChange($event)"
-    [step]="step"
+    [maxLength]="maxLength"
     [min]="0"
     [name]="name"
-    [maxLength]="maxLength"
-    [attr.data-carbon-theme]="carbonTheme"
+    [ngModel]="inputValue$ | async"
+    [step]="step"
     (keydown)="onKeydown($event)"
-    digitOnly
+    (ngModelChange)="onValueChange($event)"
+    [attr.data-carbon-theme]="carbonTheme"
+    [style.width.px]="widthPx"
+    type="text"
   />
 </ng-template>
 
@@ -171,10 +171,10 @@
   <div *ngIf="isCheckbox" (click)="stopCheckboxEventPropagation($event)">
     <cds-checkbox
       [disabled]="disabled"
-      [ngModel]="inputValue$ | async"
-      [attr.data-carbon-theme]="carbonTheme"
-      (ngModelChange)="onValueChange($event)"
       [name]="name"
+      [ngModel]="inputValue$ | async"
+      (ngModelChange)="onValueChange($event)"
+      [attr.data-carbon-theme]="carbonTheme"
     >
     </cds-checkbox>
   </div>
