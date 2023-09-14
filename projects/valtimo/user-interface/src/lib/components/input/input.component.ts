@@ -52,6 +52,7 @@ export class InputComponent implements OnInit, OnChanges, OnDestroy {
   @Input() smallLabel = false;
   @Input() rows!: number;
   @Input() clear$!: Observable<null>;
+  @Input() carbonTheme = 'g10';
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 

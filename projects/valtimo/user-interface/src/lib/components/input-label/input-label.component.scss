@@ -55,3 +55,8 @@
   content: ' *';
   color: var(--v-input-required-asterisk-color);
 }
+
+.label-with-tooltip {
+  display: flex;
+  align-items: center;
+}

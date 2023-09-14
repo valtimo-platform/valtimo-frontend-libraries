@@ -18,18 +18,10 @@
   class="v-input-label-container"
   [ngClass]="{'v-input-label-container--large-margin': largeMargin}"
 >
-  <label
-    *ngIf="title || titleTranslationKey"
-    class="v-input-label"
-    [for]="name"
-    [ngClass]="{'v-input-label--required': required, 'v-input-label--small': small}"
-  >
-    {{ titleTranslationKey ? (titleTranslationKey | translate) : title }}
-  </label>
-  <i
-    *ngIf="tooltip"
-    class="v-input-label__tooltip mdi mdi-help-circle"
-    placement="right"
-    vTooltip="{{ tooltip }}"
-  ></i>
+  <cds-label [disabled]="disabled">
+    <span class="label-with-tooltip">
+      {{ displayTitle$ | async }}
+      <v-tooltip-icon *ngIf="tooltip" [disabled]="disabled" [tooltip]="tooltip"></v-tooltip-icon>
+    </span>
+  </cds-label>
 </div>

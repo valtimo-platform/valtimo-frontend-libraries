@@ -39,9 +39,9 @@
 
 <ng-template #textInput>
   <input
+    cdsText
     *ngIf="isText"
     type="text"
-    class="v-input"
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
@@ -55,14 +55,15 @@
     [min]="0"
     [name]="name"
     [maxLength]="maxLength"
+    [attr.data-carbon-theme]="carbonTheme"
     (keydown)="onKeydown($event)"
   />
 </ng-template>
 
 <ng-template #textareaInput>
   <textarea
+    cdsTextArea
     *ngIf="isTextarea"
-    class="v-input"
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
@@ -74,6 +75,7 @@
     (ngModelChange)="onValueChange($event)"
     [rows]="rows"
     [name]="name"
+    [attr.data-carbon-theme]="carbonTheme"
     (keydown)="onKeydown($event)"
   ></textarea>
 </ng-template>
@@ -90,8 +92,8 @@
       }"
     >
       <input
+        cdsText
         [type]="obs.showPassword ? 'text' : 'password'"
-        class="v-input"
         [ngClass]="{
           'v-input--full-width': fullWidth
         }"
@@ -103,6 +105,7 @@
         [min]="0"
         [name]="name"
         [maxLength]="maxLength"
+        [attr.data-carbon-theme]="carbonTheme"
         (keydown)="onKeydown($event)"
       />
       <div class="v-input__password-icon">
@@ -118,9 +121,9 @@
 
 <ng-template #numberInput>
   <input
+    cdsText
     *ngIf="isNumber"
     type="number"
-    class="v-input"
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
@@ -135,15 +138,16 @@
     [min]="min"
     [name]="name"
     [maxLength]="maxLength"
+    [attr.data-carbon-theme]="carbonTheme"
     (keydown)="onKeydown($event)"
   />
 </ng-template>
 
 <ng-template #digitOnlyInput>
   <input
+    cdsText
     *ngIf="isDigitOnly"
     type="text"
-    class="v-input"
     [ngClass]="{
       'v-input--full-width': fullWidth,
       'v-input--margin': margin,
@@ -157,6 +161,7 @@
     [min]="0"
     [name]="name"
     [maxLength]="maxLength"
+    [attr.data-carbon-theme]="carbonTheme"
     (keydown)="onKeydown($event)"
     digitOnly
   />
@@ -167,6 +172,7 @@
     <cds-checkbox
       [disabled]="disabled"
       [ngModel]="inputValue$ | async"
+      [attr.data-carbon-theme]="carbonTheme"
       (ngModelChange)="onValueChange($event)"
       [name]="name"
     >
