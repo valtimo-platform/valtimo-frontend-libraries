@@ -23,7 +23,7 @@
     "tslib": "^2.5.0",
     "ng-multiselect-dropdown": "1.0.0-beta.19",
     "@carbon/icons": "~11.22.1",
-    "@carbon/grid": "~11.16.1",
+    "@carbon/grid": "~11.20.0",
     "@carbon/styles": "~1.33.1",
     "carbon-components-angular": "~5.14.0"
   }
