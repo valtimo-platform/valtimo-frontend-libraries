@@ -16,6 +16,9 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * @deprecated Migrate old design to Carbon
+ */
 @Component({
   selector: 'v-page-header',
   templateUrl: './page-header.component.html',

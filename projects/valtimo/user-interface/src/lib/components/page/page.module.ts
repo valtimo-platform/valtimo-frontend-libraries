@@ -22,6 +22,9 @@ import {PageHeaderComponent} from './page-header/page-header.component';
 import {PageHeaderActionsComponent} from './page-header-actions/page-header-actions.component';
 import {PageHeaderIntroductionComponent} from './page-header-introduction/page-header-introduction.component';
 
+/**
+ * @deprecated Migrate old design to Carbon
+ */
 @NgModule({
   declarations: [
     PageContainerComponent,
