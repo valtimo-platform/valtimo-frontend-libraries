@@ -21,10 +21,18 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {InputLabelModule} from '../input-label/input-label.module';
+import {DropdownModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [SelectComponent],
-  imports: [CommonModule, NgSelectModule, FormsModule, TranslateModule, InputLabelModule],
+  imports: [
+    CommonModule,
+    NgSelectModule,
+    FormsModule,
+    TranslateModule,
+    InputLabelModule,
+    DropdownModule,
+  ],
   exports: [SelectComponent],
 })
 export class SelectModule {}

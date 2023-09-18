@@ -14,32 +14,29 @@
   ~ limitations under the License.
   -->
 
-<div [ngClass]="{'ng-select--margin': margin, 'ng-select--small-margin': smallMargin}">
+<div
+  class="v-select-container"
+  [ngClass]="{'--margin': margin, '--small-margin': smallMargin}"
+  [style.width.px]="widthInPx"
+>
   <v-input-label
     *ngIf="title || titleTranslationKey"
-    [title]="title"
-    [titleTranslationKey]="titleTranslationKey"
     [name]="name"
-    [tooltip]="tooltip"
     [required]="required"
+    [titleTranslationKey]="titleTranslationKey"
+    [title]="title"
+    [tooltip]="tooltip"
   >
   </v-input-label>
-  <ng-select
-    [style.width.px]="widthInPx"
-    [ngModel]="selected$ | async"
-    (ngModelChange)="setSelectedValue($event)"
-    [clearable]="clearable"
-    [disabled]="disabled"
-    [multiple]="multiple"
-    [notFoundText]="notFoundText || ('interface.noItemsFound' | translate)"
-    [clearAllText]="clearAllText || ('interface.clearAll' | translate)"
-    (clear)="clearSelection()"
-    [loading]="loading"
-    [loadingText]="loadingText || ('interface.loading' | translate)"
-    [placeholder]="placeholder"
+  <cds-dropdown
+    [disabled]="disabled || loading"
+    [attr.data-carbon-theme]="carbonTheme"
+    (selected)="setSelected($event)"
   >
-    <ng-option *ngFor="let item of items" [value]="item.id">{{
-      item.translationKey ? (item.translationKey | translate) : item.text
-    }}</ng-option>
-  </ng-select>
+    <cds-dropdown-list
+      [items]="listItems$ | async"
+      [type]="multiple ? 'multi' : 'single'"
+      [attr.data-carbon-theme]="carbonTheme"
+    ></cds-dropdown-list>
+  </cds-dropdown>
 </div>
