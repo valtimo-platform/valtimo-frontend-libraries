@@ -88,7 +88,8 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
           content: translation !== listItem.content ? translation : listItem.content,
         };
       })
-    )
+    ),
+    tap(items => console.log(items))
   );
 
   private _selectedSubscription!: Subscription;
