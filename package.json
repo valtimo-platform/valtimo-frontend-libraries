@@ -256,7 +256,7 @@
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-react": "^7.32.2",
     "flatpickr": "^4.6.13",
-    "formiojs": "4.14.13",
+    "formiojs": "4.17.1",
     "hammerjs": "^2.0.8",
     "heatmap.js-fixed": "^2.0.2",
     "intl": "^1.2.5",
