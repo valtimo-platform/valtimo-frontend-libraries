@@ -88,8 +88,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
           content: translation !== listItem.content ? translation : listItem.content,
         };
       })
-    ),
-    tap(items => console.log(items))
+    )
   );
 
   private _selectedSubscription!: Subscription;
@@ -97,25 +96,13 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private readonly translateService: TranslateService) {}
 
-  setSelected(selectedValue: {item: ListItem}): void {
-    const id = selectedValue?.item?.id;
-
-    if (id && typeof id === 'string') {
-      this.setSelectedValue(id);
-    }
-  }
-
-  setSelectedValue(selectedValue: SelectedValue): void {
-    this.selected$.next(selectedValue);
-  }
-
-  ngOnInit() {
+  public ngOnInit(): void {
     this.setDefaultSelection();
     this.openSelectedSubscription();
     this.openClearSubjectSubscription();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     if (
       changes?.items?.currentValue ||
       changes?.defaultSelectionId?.currentValue ||
@@ -126,9 +113,21 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this._selectedSubscription?.unsubscribe();
     this._clearSubjectSubscription?.unsubscribe();
+  }
+
+  public setSelected(selectedValue: {item: ListItem}): void {
+    const id = selectedValue?.item?.id;
+
+    if (id && typeof id === 'string') {
+      this.setSelectedValue(id);
+    }
+  }
+
+  public setSelectedValue(selectedValue: SelectedValue): void {
+    this.selected$.next(selectedValue);
   }
 
   private setDefaultSelection(): void {
