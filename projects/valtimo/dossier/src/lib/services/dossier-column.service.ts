@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {Injectable} from '@angular/core';
-import {ConfigService, DefinitionColumn} from '@valtimo/config';
-import {map, Observable} from 'rxjs';
-import {CaseListColumn, DocumentService} from '@valtimo/document';
-import {ListField} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
+import {ColumnConfig} from '@valtimo/components';
+import {ConfigService, DefinitionColumn} from '@valtimo/config';
+import {CaseListColumn, DocumentService} from '@valtimo/document';
+import {map, Observable} from 'rxjs';
 
 @Injectable()
 export class DossierColumnService {
@@ -57,10 +56,10 @@ export class DossierColumnService {
     return !!this.configService.config?.customDefinitionTables[documentDefinitionName];
   }
 
-  mapDefinitionColumnsToListFields(
+  mapDefinitionColumnsToColumnConfigs(
     columns: Array<DefinitionColumn>,
     hasEnvConfig: boolean
-  ): Array<ListField> {
+  ): Array<ColumnConfig> {
     return columns.map(column => {
       const translationKey = `fieldLabels.${column.translationKey}`;
       const translation = this.translateService.instant(translationKey);
@@ -100,12 +99,10 @@ export class DossierColumnService {
     switch (caseListColumnDisplayType) {
       case 'arrayCount':
         return 'relatedFiles';
-        break;
       case 'underscoresToSpaces':
         return 'stringReplaceUnderscore';
       default:
         return caseListColumnDisplayType;
-        break;
     }
   }
 
