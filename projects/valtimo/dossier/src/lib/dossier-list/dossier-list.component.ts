@@ -140,7 +140,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
       })
     );
 
-  readonly fields$: Observable<Array<ListField>> = combineLatest([
+  public readonly fields$: Observable<Array<ListField>> = combineLatest([
     this._canHaveAssignee$,
     this._columns$,
     this._hasEnvColumnConfig$,
@@ -283,7 +283,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     map(([documents, hasEnvColumnConfig, hasApiColumnConfig]) =>
       this.listService.mapDocuments(documents, hasEnvColumnConfig, hasApiColumnConfig)
     ),
-    tap(res => {
+    tap(() => {
       this.loadingAssigneeFilter = false;
       this.loadingDocumentItems = false;
     })
@@ -291,6 +291,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   private _previousDocumentDefinitionName!: string;
   private _documentDefinitionNameSubscription!: Subscription;
+  private _tabsInitialized = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -348,6 +349,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   public tabChange(tab: DossierListTab): void {
+    if (!this._tabsInitialized) {
+      this._tabsInitialized = true;
+      return;
+    }
     this.paginationService.setPage(1);
     this.assigneeService.setAssigneeFilter(tab);
   }

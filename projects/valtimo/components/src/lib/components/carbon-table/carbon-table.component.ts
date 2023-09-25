@@ -65,9 +65,18 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
 
   @ViewChild('actionsMenu', {static: false}) actionsMenu: TemplateRef<OverflowMenu>;
 
-  @Input() fields: ColumnConfig[];
-  @Input() tableConfig: CarbonTableConfig = createCarbonTableConfig();
-  @Input() paginatorConfig: CarbonPaginatorConfig = DEFAULT_PAGINATOR_CONFIG;
+  private _fields: ColumnConfig[];
+  @Input() set fields(value: ColumnConfig[]) {
+    if (!value.length) {
+      return;
+    }
+    this._fields = value;
+    this._subscriptions$.add(this.getHeaderItems());
+  }
+  get fields(): ColumnConfig[] {
+    return this._fields;
+  }
+
   @Input() public set pagination(pagination: Pagination) {
     this.setPaginationModel(pagination);
   }
@@ -95,7 +104,27 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     return this._data;
   }
 
+  @Input() set initialSort(value: SortState) {
+    if (!!this._previousSortIndex || !this.fields.length || !value.isSorting) {
+      return;
+    }
+
+    const fieldIndex: number = this.fields.findIndex(
+      (field: ColumnConfig) => field.key === value.state.name
+    );
+
+    if (fieldIndex === -1) {
+      return;
+    }
+
+    const header: TableHeaderItem = this.tableModel.header[fieldIndex];
+    this._previousSortIndex = fieldIndex;
+    header.sorted = true;
+    header.ascending = value.state.direction === 'ASC';
+  }
   @Input() loading: boolean;
+  @Input() paginatorConfig: CarbonPaginatorConfig = DEFAULT_PAGINATOR_CONFIG;
+  @Input() tableConfig: CarbonTableConfig = createCarbonTableConfig();
 
   @Output() paginationChange: EventEmitter<CarbonPaginationSelection> = new EventEmitter();
   @Output() rowClick: EventEmitter<T> = new EventEmitter();
@@ -127,9 +156,10 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     }))
   );
 
+  private _previousSortIndex: number;
   private _skeletonTableModel: TableModel = Table.skeletonModel(5, 5);
-  private _tableModel: TableModel = new TableModel();
   private _subscriptions$: Subscription = new Subscription();
+  private _tableModel: TableModel = new TableModel();
 
   public get numberOfColumns(): number | null {
     return this.fields.length + (this.tableConfig.enableSingleSelect ? 0 : 1);
@@ -186,6 +216,7 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
   }
 
   public onSortClick(index: number): void {
+    this.resetSorting(index);
     const header: TableHeaderItem = this.tableModel.header[index];
     const sortState: SortState = {
       state: {name: this.fields[index].key, direction: 'ASC'},
@@ -239,6 +270,8 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
             data: translation,
             sortable: fields[index].sortable ?? true,
             className: fields[index].className ?? '',
+            sorted: this.tableModel.header[index]?.sorted ?? false,
+            ascending: this.tableModel.header[index]?.ascending ?? false,
           })
       );
     });
@@ -265,10 +298,24 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
                   template: column.template,
                 });
               default:
-                return new TableItem({data: this.resolveObject(column, item)});
+                return new TableItem({data: this.resolveObject(column, item) ?? '-'});
             }
           })
         );
+  }
+
+  private resetSorting(index: number): void {
+    if (this._previousSortIndex === undefined) {
+      this._previousSortIndex = index;
+      return;
+    }
+
+    if (this._previousSortIndex === index) {
+      return;
+    }
+
+    this.tableModel.header[this._previousSortIndex].sorted = false;
+    this._previousSortIndex = index;
   }
 
   private resolveObject(column: ColumnConfig, item: T): string {

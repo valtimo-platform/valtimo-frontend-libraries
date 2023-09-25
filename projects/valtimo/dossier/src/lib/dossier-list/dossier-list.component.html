@@ -66,6 +66,7 @@
     [fields]="obs.fields"
     hideTableHeader
     [loading]="loadingDocumentItems"
+    [initialSort]="pagination.sort"
     [tableConfig]="tableConfig"
     [pagination]="pagination"
     (paginationChange)="onPaginationChange($event)"
@@ -80,14 +81,17 @@
   <ng-container *ngIf="assigneeFilter$ | async as assigneeFilter">
     <cds-tabs type="contained" data-carbon-theme="g10" class="dossier-list-tabs">
       <cds-tab
+        [active]="assigneeFilter === 'ALL'"
         heading="{{ 'dossier.tabs.ALL' | translate }}"
         (selected)="tabChange('ALL')"
       ></cds-tab>
       <cds-tab
+        [active]="assigneeFilter === 'MINE'"
         heading="{{ 'dossier.tabs.MINE' | translate }}"
         (selected)="tabChange('MINE')"
       ></cds-tab>
       <cds-tab
+        [active]="assigneeFilter === 'OPEN'"
         heading="{{ 'dossier.tabs.OPEN' | translate }}"
         (selected)="tabChange('OPEN')"
       ></cds-tab>
@@ -100,6 +104,7 @@
     <cds-tabs type="contained" data-carbon-theme="g10" class="dossier-list-tabs">
       <cds-tab
         *ngFor="let tab of visibleDossierTabs"
+        [active]="assigneeFilter === tab"
         heading="{{ 'dossier.tabs.' + tab | translate }}"
         (selected)="tabChange(tab)"
       ></cds-tab>

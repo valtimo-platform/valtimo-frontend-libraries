@@ -66,7 +66,7 @@ export class DossierColumnService {
       const validTranslation = translation !== translationKey && translation;
       return {
         key: hasEnvConfig ? column.propertyName : column.translationKey,
-        label: column.title || validTranslation || column.translationKey,
+        label: column.title || translationKey || validTranslation,
         sortable: column.sortable,
         ...(column.viewType && {viewType: column.viewType}),
         ...(column.enum && {enum: column.enum}),
