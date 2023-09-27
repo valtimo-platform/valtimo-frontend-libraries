@@ -18,21 +18,22 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {FunctionConfigurationComponent} from '../../../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
 import {SetZaakopschortingConfig} from '../../models';
-import {PluginTranslatePipe} from "../../../../pipes";
-
+import {PluginTranslatePipe} from '../../../../pipes';
 
 @Component({
   providers: [PluginTranslatePipe],
   selector: 'valtimo-set-zaak-opschorting-configuration',
   templateUrl: './set-zaakopschorting.component.html',
 })
-
-export class SetZaakopschortingComponent implements FunctionConfigurationComponent, OnInit, OnDestroy {
+export class SetZaakopschortingComponent
+  implements FunctionConfigurationComponent, OnInit, OnDestroy
+{
   @Input() disabled$: Observable<boolean>;
   @Input() pluginId: string;
   @Input() prefillConfiguration$: Observable<SetZaakopschortingConfig>;
   @Input() save$: Observable<void>;
-  @Output() configuration: EventEmitter<SetZaakopschortingConfig> = new EventEmitter<SetZaakopschortingConfig>();
+  @Output() configuration: EventEmitter<SetZaakopschortingConfig> =
+    new EventEmitter<SetZaakopschortingConfig>();
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   private readonly formValue$ = new BehaviorSubject<SetZaakopschortingConfig | null>(null);
@@ -53,7 +54,11 @@ export class SetZaakopschortingComponent implements FunctionConfigurationCompone
   }
 
   private handleValid(formValue: SetZaakopschortingConfig): void {
-    const valid = !!(formValue.toelichtingVerlenging && formValue.toelichtingOpschorting && formValue.verlengingsduur);
+    const valid = !!(
+      formValue.toelichtingVerlenging &&
+      formValue.toelichtingOpschorting &&
+      formValue.verlengingsduur
+    );
 
     this.valid$.next(valid);
     this.valid.emit(valid);
