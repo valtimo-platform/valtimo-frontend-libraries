@@ -148,7 +148,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
       if (this.hideValtimoVersionsForNonAdmins && !isAdmin) {
         this.showValtimoVersions = false;
       }
-    })
+    });
   }
 
   showPlantATreeButton: boolean;

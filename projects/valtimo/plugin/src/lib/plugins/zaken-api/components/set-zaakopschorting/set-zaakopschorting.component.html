@@ -15,42 +15,42 @@
   -->
 
 <v-form
-    (valueChange)="formValueChange($event)"
-    *ngIf="{
-        disabled: disabled$ | async,
-        prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
-    } as obs"
-    >
-    <v-input
-      name="verlengingsduur"
-      [title]="'verlengingsduur' | pluginTranslate : pluginId | async"
-      [margin]="true"
-      [defaultValue]="obs.prefill?.verlengingsduur"
-      [disabled]="obs.disabled"
-      [required]="true"
-      [fullWidth]="true"
-    >
-    </v-input>
+  (valueChange)="formValueChange($event)"
+  *ngIf="{
+    disabled: disabled$ | async,
+    prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
+  } as obs"
+>
+  <v-input
+    name="verlengingsduur"
+    [title]="'verlengingsduur' | pluginTranslate : pluginId | async"
+    [margin]="true"
+    [defaultValue]="obs.prefill?.verlengingsduur"
+    [disabled]="obs.disabled"
+    [required]="true"
+    [fullWidth]="true"
+  >
+  </v-input>
 
-    <v-input
-      name="toelichtingVerlenging"
-      [title]="'toelichtingVerlenging' | pluginTranslate : pluginId | async"
-      [margin]="true"
-      [defaultValue]="obs.prefill?.toelichtingVerlenging"
-      [disabled]="obs.disabled"
-      [required]="true"
-      [fullWidth]="true"
-    >
-    </v-input>
+  <v-input
+    name="toelichtingVerlenging"
+    [title]="'toelichtingVerlenging' | pluginTranslate : pluginId | async"
+    [margin]="true"
+    [defaultValue]="obs.prefill?.toelichtingVerlenging"
+    [disabled]="obs.disabled"
+    [required]="true"
+    [fullWidth]="true"
+  >
+  </v-input>
 
-    <v-input
-      name="toelichtingOpschorting"
-      [title]="'toelichtingOpschorting' | pluginTranslate : pluginId | async"
-      [margin]="true"
-      [defaultValue]="obs.prefill?.toelichtingOpschorting"
-      [disabled]=""
-      [required]="true"
-      [fullWidth]="true"
-    >
-    </v-input>
+  <v-input
+    name="toelichtingOpschorting"
+    [title]="'toelichtingOpschorting' | pluginTranslate : pluginId | async"
+    [margin]="true"
+    [defaultValue]="obs.prefill?.toelichtingOpschorting"
+    [disabled]=""
+    [required]="true"
+    [fullWidth]="true"
+  >
+  </v-input>
 </v-form>

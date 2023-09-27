@@ -76,5 +76,5 @@ export {
   CreateZaakConfig,
   CreateNatuurlijkePersoonZaakRolConfig,
   CreateNietNatuurlijkePersoonZaakRolConfig,
-  SetZaakopschortingConfig
+  SetZaakopschortingConfig,
 };
