@@ -222,7 +222,7 @@
     "@bpmn-io/dmn-migrate": "^0.4.3",
     "@carbon/grid": "~11.16.1",
     "@carbon/icons": "~11.22.1",
-    "@carbon/styles": "~1.33.1",
+    "@carbon/styles": "~1.39.0",
     "@formio/angular": "^5.3.0",
     "@foxythemes/bootstrap-datetime-picker-bs4": "^2.3.5",
     "@mdi/font": "^7.2.96",
