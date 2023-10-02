@@ -33,6 +33,11 @@ interface CarbonTableSelectTranslations {
   multiple: string;
 }
 
+interface CarbonTableBatchText {
+  SINGLE: string;
+  MULTIPLE: string;
+}
+
 interface CarbonTableConfig {
   enableSingleSelect?: boolean;
   searchable?: boolean;
@@ -84,6 +89,7 @@ const createCarbonTableConfig = (config?: CarbonTableConfig): CarbonTableConfig 
 
 export {
   ActionItem,
+  CarbonTableBatchText,
   CarbonTableConfig,
   CarbonTableSelectTranslations,
   ColumnConfig,
