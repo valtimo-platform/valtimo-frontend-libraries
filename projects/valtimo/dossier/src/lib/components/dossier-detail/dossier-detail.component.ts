@@ -127,9 +127,7 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
     switchMap(documentDefinitionName =>
       this.documentService.getCaseSettings(documentDefinitionName)
     ),
-    map(caseSettings => {
-      return caseSettings?.canHaveAssignee;
-    })
+    map(caseSettings => caseSettings?.canHaveAssignee)
   );
 
   public readonly canAssignLoaded$ = new BehaviorSubject<boolean>(false);
