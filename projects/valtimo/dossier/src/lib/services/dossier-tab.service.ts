@@ -20,6 +20,7 @@ import {DEFAULT_TABS, TAB_MAP} from '../constants';
 import {ConfigService} from '@valtimo/config';
 import {ActivatedRoute, Event as NavigationEvent, NavigationEnd, Router} from '@angular/router';
 import {DossierDetailTabObjectTypeComponent} from '../components/dossier-detail/tab/object-type/object-type.component';
+import {DossierTabApiService} from './dossier-tab-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,8 +35,9 @@ export class DossierTabService {
   constructor(
     @Inject(TAB_MAP) tabMap: Map<string, object> = DEFAULT_TABS,
     private readonly configService: ConfigService,
-    private route: ActivatedRoute,
-    private router: Router
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly dossierTabApiService: DossierTabApiService
   ) {
     this.tabManagementEnabled = this.configService.config?.featureToggles?.enableTabManagement;
     this.tabMap = tabMap;
