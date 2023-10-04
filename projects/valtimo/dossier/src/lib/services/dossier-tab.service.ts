@@ -16,7 +16,7 @@
 
 import {Inject, Injectable, OnDestroy} from '@angular/core';
 import {TabImpl, TabLoaderImpl} from '../models';
-import {DEFAULT_TABS, TAB_MAP} from '../constants';
+import {DEFAULT_TAB_COMPONENTS, DEFAULT_TABS, TAB_MAP} from '../constants';
 import {ConfigService} from '@valtimo/config';
 import {ActivatedRoute, Event as NavigationEvent, NavigationEnd, Router} from '@angular/router';
 import {DossierDetailTabObjectTypeComponent} from '../components/dossier-detail/tab/object-type/object-type.component';
@@ -94,8 +94,17 @@ export class DossierTabService implements OnDestroy {
   }
 
   private setApiTabs(documentDefinitionName: string): void {
-    this.dossierTabApiService.getDossierTabs(documentDefinitionName).subscribe(res => {
-      console.log('res', res);
+    this.dossierTabApiService.getDossierTabs(documentDefinitionName).subscribe({
+      next: tabs => {
+        const supportedTabs = tabs.filter(tab => !!DEFAULT_TAB_COMPONENTS[tab.contentKey]);
+        const mappedTabs = supportedTabs.map(
+          (tab, index) => new TabImpl(tab.contentKey, index, DEFAULT_TAB_COMPONENTS[tab.contentKey])
+        );
+        this._tabs$.next(mappedTabs);
+      },
+      error: () => {
+        this._tabs$.next([]);
+      },
     });
   }
 

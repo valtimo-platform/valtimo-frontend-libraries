@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-interface ApiTab {
-  contentKey: string;
-  key: string;
-  name: string;
-  type: string;
+enum ApiTabType {
+  STANDARD = 'standard',
 }
 
-export {ApiTab};
+interface ApiTabItem {
+  title: string;
+  key: string;
+  type: ApiTabType;
+  contentKey: string;
+}
+
+export {ApiTabType, ApiTabItem};

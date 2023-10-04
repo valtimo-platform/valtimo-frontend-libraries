@@ -3,6 +3,7 @@ import {ConfigService, Page} from '@valtimo/config';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Note} from '../models/notes.model';
+import {ApiTabItem} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,8 @@ export class DossierTabApiService {
     private readonly http: HttpClient
   ) {}
 
-  public getDossierTabs(documentDefinitionName): Observable<any> {
-    return this.http.get<any>(
+  public getDossierTabs(documentDefinitionName): Observable<Array<ApiTabItem>> {
+    return this.http.get<Array<ApiTabItem>>(
       `${this.VALTIMO_API_ENDPOINT_URI}v1/case-definition/${documentDefinitionName}/tab`
     );
   }

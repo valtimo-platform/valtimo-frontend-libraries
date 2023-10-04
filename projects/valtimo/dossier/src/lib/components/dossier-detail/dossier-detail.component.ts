@@ -71,7 +71,6 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
   public documentDefinitionName: string;
   public documentDefinitionNameTitle: string;
   public documentId: string;
-  public dossierStatusTabs: Array<DossierListTab> | null = null;
   public processDefinitionListFields: Array<any> = [];
   public processDocumentDefinitions: ProcessDocumentDefinition[] = [];
   public tabLoader: TabLoaderImpl | null = null;
@@ -255,7 +254,6 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
         this.tabLoader.initial(this._initialTabName);
         this.loadingTabs$.next(false);
       } else {
-        console.log('else');
         this.noTabsConfigured$.next(true);
         this.loadingTabs$.next(false);
       }

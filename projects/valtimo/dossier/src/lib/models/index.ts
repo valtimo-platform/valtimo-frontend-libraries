@@ -20,3 +20,4 @@ export * from './search.model';
 export * from './tabs.model';
 export * from './zaakobjecten.model';
 export * from './dossier-detail-tab.model';
+export * from './tab-api.model';
