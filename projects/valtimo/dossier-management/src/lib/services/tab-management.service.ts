@@ -49,8 +49,6 @@ export class TabManagementService {
   }
 
   private getTabList(caseDefinitionId: string): Observable<ApiTabItem[]> {
-    return this.http
-      .get<ApiTabItem[]>(`${this._valtimoEndpointUri}/${caseDefinitionId}/tab`)
-      .pipe();
+    return this.http.get<ApiTabItem[]>(`${this._valtimoEndpointUri}/${caseDefinitionId}/tab`);
   }
 }
