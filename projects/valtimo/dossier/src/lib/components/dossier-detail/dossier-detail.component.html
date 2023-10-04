@@ -109,7 +109,18 @@
         </ul>
 
         <div class="card-body bg-white p-5 position-relative tab-container">
-          <ng-template #tabContainer>Loading...</ng-template>
+          <div *ngIf="loadingTabs$ | async" class="loading-container">
+            <cds-loading></cds-loading>
+          </div>
+
+          <div *ngIf="noTabsConfigured$ | async">
+            <valtimo-no-results
+              [title]="'dossier.tabs.noResults' | translate"
+              [description]="'dossier.tabs.noResultsDescription' | translate"
+            ></valtimo-no-results>
+          </div>
+
+          <ng-template #tabContainer></ng-template>
 
           <div class="clearfix"></div>
         </div>

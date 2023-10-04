@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-export * from './candidate-user.model';
-export * from './dossier-parameters.model';
-export * from './search.model';
-export * from './tabs.model';
-export * from './zaakobjecten.model';
-export * from './dossier-detail-tab.model';
+import {Type} from '@angular/core';
+
+enum DefaultTabs {
+  summary = 'summary',
+  progress = 'progress',
+  audit = 'audit',
+  documents = 'documents',
+  contactMoments = 'contact-moments',
+  zaakobjecten = 'zaakobjecten',
+  notes = 'notes',
+}
+
+type DefaultTabComponents = {
+  [key in DefaultTabs]: Type<any>;
+};
+
+export {DefaultTabs, DefaultTabComponents};
