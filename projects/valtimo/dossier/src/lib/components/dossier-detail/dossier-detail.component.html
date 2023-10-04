@@ -113,12 +113,11 @@
             <cds-loading></cds-loading>
           </div>
 
-          <div *ngIf="noTabsConfigured$ | async">
-            <valtimo-no-results
-              [description]="'dossier.tabs.noResultsDescription' | translate"
-              [title]="'dossier.tabs.noResults' | translate"
-            ></valtimo-no-results>
-          </div>
+          <valtimo-no-results
+            *ngIf="noTabsConfigured$ | async"
+            [description]="'dossier.tabs.noResultsDescription' | translate"
+            [title]="'dossier.tabs.noResults' | translate"
+          ></valtimo-no-results>
 
           <ng-template #tabContainer></ng-template>
 
