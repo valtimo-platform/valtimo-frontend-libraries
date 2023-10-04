@@ -52,18 +52,17 @@ export class DossierTabService implements OnDestroy {
   }
 
   private getConfigurableTabs(documentDefinitionName: string): Map<string, object> {
+    const tabMap = new Map<string, object>();
+
     if (this.configService?.config?.caseObjectTypes) {
       const allNamesObjects = this.configService?.config?.caseObjectTypes[documentDefinitionName];
-      const map = new Map();
 
       allNamesObjects?.forEach(name => {
-        map.set(name, DossierDetailTabObjectTypeComponent);
+        tabMap.set(name, DossierDetailTabObjectTypeComponent);
       });
-
-      return map;
-    } else {
-      return new Map<string, object>();
     }
+
+    return tabMap;
   }
 
   private getAllEnvironmentTabs(extraTabs: Map<string, object>): Array<TabImpl> {
