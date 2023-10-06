@@ -22,7 +22,7 @@ import {
   CarbonPaginatorConfig,
   CarbonTableComponent,
   CarbonTableConfig,
-  CarbonTableSelectTranslations,
+  CarbonTableTranslations,
   ColumnConfig,
   createCarbonTableConfig,
   DEFAULT_PAGINATOR_CONFIG,
@@ -48,6 +48,7 @@ import {
   DocumentService,
   SpecifiedDocuments,
 } from '@valtimo/document';
+import {Tab, Tabs} from 'carbon-components-angular';
 import {
   BehaviorSubject,
   combineLatest,
@@ -61,7 +62,6 @@ import {
   tap,
 } from 'rxjs';
 import {DefaultTabs} from '../../models';
-import {DossierListActionsComponent} from '../dossier-list-actions/dossier-list-actions.component';
 import {
   DossierBulkAssignService,
   DossierColumnService,
@@ -71,6 +71,7 @@ import {
   DossierListService,
   DossierParameterService,
 } from '../../services';
+import {DossierListActionsComponent} from '../dossier-list-actions/dossier-list-actions.component';
 
 @Component({
   selector: 'valtimo-dossier-list',
@@ -88,6 +89,7 @@ import {
 export class DossierListComponent implements OnInit, OnDestroy {
   @ViewChild(CarbonTableComponent) carbonTable: CarbonTableComponent<Document>;
   @ViewChild(DossierListActionsComponent) listActionsComponent: DossierListActionsComponent;
+  @ViewChild(Tabs) tabsComponent: Tabs;
 
   public loadingFields = true;
   public loadingPagination = true;
@@ -98,9 +100,21 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public canHaveAssignee!: boolean;
   public visibleDossierTabs: Array<DossierListTab> | null = null;
 
-  public readonly selectTranslations: CarbonTableSelectTranslations = {
-    single: 'dossier.select.single',
-    multiple: 'dossier.select.multiple',
+  public readonly defaultTabs: DossierListTab[] = [
+    DossierListTab.ALL,
+    DossierListTab.MINE,
+    DossierListTab.OPEN,
+  ];
+
+  public readonly tableTranslations: CarbonTableTranslations = {
+    select: {
+      single: 'dossier.select.single',
+      multiple: 'dossier.select.multiple',
+    },
+    pagination: {
+      itemsPerPage: 'dossier.pagination.itemsPerPage',
+      totalItems: 'dossier.pagination.totalItems',
+    },
   };
 
   public readonly tableConfig: CarbonTableConfig = createCarbonTableConfig({
@@ -114,6 +128,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   public readonly showAssignModal$ = new BehaviorSubject<boolean>(false);
   public readonly showChangePageModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showChangeTabModal$ = new BehaviorSubject<boolean>(false);
 
   public readonly searchFields$: Observable<Array<SearchField> | null> =
     this.searchService.documentSearchFields$.pipe(
@@ -141,6 +156,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public readonly assigneeFilter$: Observable<AssigneeFilter> =
     this.assigneeService.assigneeFilter$;
   public readonly paginationChange$ = new BehaviorSubject<CarbonPaginationSelection | null>(null);
+  public readonly tabChange$ = new BehaviorSubject<DossierListTab | null>(null);
   private readonly _pagination$ = this.paginationService.pagination$.pipe(
     tap(pagination => {
       this.pagination = pagination;
@@ -322,9 +338,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   private _previousDocumentDefinitionName!: string;
   private _documentDefinitionNameSubscription!: Subscription;
-  public get tabsDisabled(): boolean {
-    return !!this.carbonTable?.tableModel && this.carbonTable.tableModel.selectedRowsCount() > 0;
-  }
   private _previousTab: DossierListTab = null;
 
   constructor(
@@ -352,6 +365,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._documentDefinitionNameSubscription?.unsubscribe();
     this.pageTitleService.enableReset();
+  }
+
+  public trackByIndex(index: number): number {
+    return index;
   }
 
   public search(searchFieldValues: SearchFieldValues): void {
@@ -392,6 +409,31 @@ export class DossierListComponent implements OnInit, OnDestroy {
     if (this._previousTab === tab) {
       return;
     }
+
+    if (this.carbonTable.tableModel.selectedRowsCount()) {
+      this.showChangeTabModal$.next(true);
+      this.tabChange$.next(tab);
+      return;
+    }
+
+    this.onChangeTabConfirm(tab);
+  }
+
+  public onChangeTabCancel(): void {
+    if (!this.tabsComponent) {
+      return;
+    }
+
+    const prevTab: Tab = this.tabsComponent.tabs.find((tab: Tab) => tab.id === this._previousTab);
+    if (!prevTab) {
+      return;
+    }
+
+    this.tabsComponent.tabs.find((tab: Tab) => tab.active).active = false;
+    prevTab.active = true;
+  }
+
+  private onChangeTabConfirm(tab: DossierListTab): void {
     this.loadingAssigneeFilter = true;
     this._previousTab = tab;
     this.paginationService.setPage(1);
@@ -429,12 +471,12 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   public onChangePageConfirm(pagination: CarbonPaginationSelection): void {
-    if (pagination.page !== this.pagination.page) {
-      this.paginationService.pageChange(pagination.page);
+    if (pagination.size !== this.pagination.size) {
+      this.paginationService.pageSizeChange(pagination.size);
       return;
     }
 
-    this.paginationService.pageSizeChange(pagination.size);
+    this.paginationService.pageChange(pagination.page);
   }
 
   public startDossier(): void {
