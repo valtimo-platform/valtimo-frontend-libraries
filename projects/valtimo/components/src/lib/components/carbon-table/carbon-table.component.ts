@@ -28,6 +28,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {
   OverflowMenu,
@@ -56,7 +57,7 @@ import {
   CarbonPaginatorConfig,
   CarbonTableBatchText,
   CarbonTableConfig,
-  CarbonTableSelectTranslations,
+  CarbonTableTranslations,
   ColumnConfig,
   createCarbonTableConfig,
   DEFAULT_PAGINATOR_CONFIG,
@@ -65,7 +66,6 @@ import {
   ViewType,
 } from '../../models';
 import {ViewContentService} from '../view-content/view-content.service';
-import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'valtimo-carbon-table',
@@ -152,13 +152,18 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     this._loading = coerceBooleanProperty(value);
   }
 
-  private _selectTranslations$: BehaviorSubject<CarbonTableSelectTranslations> =
-    new BehaviorSubject({
-      single: 'interface.table.singleSelect',
-      multiple: 'interface.table.multipleSelect',
-    });
-  @Input() set selectTranslations(value: CarbonTableSelectTranslations) {
-    this._selectTranslations$.next(value);
+  private readonly _defaultTranslations: CarbonTableTranslations = {
+    select: {single: 'interface.table.singleSelect', multiple: 'interface.table.multipleSelect'},
+    pagination: {
+      itemsPerPage: 'interface.table.itemsPerPage',
+      totalItems: 'interface.table.totalItems',
+    },
+  };
+  private _tableTranslations$: BehaviorSubject<CarbonTableTranslations> = new BehaviorSubject(
+    this._defaultTranslations
+  );
+  @Input() set tableTranslations(value: Partial<CarbonTableTranslations>) {
+    this._tableTranslations$.next({...this._defaultTranslations, ...value});
   }
 
   @Input() paginatorConfig: CarbonPaginatorConfig = DEFAULT_PAGINATOR_CONFIG;
@@ -166,37 +171,41 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
 
   @Output() paginationChange: EventEmitter<CarbonPaginationSelection> = new EventEmitter();
   @Output() rowClick: EventEmitter<T> = new EventEmitter();
-  @Output() search: EventEmitter<string> = new EventEmitter();
+  @Output() search: EventEmitter<string | null> = new EventEmitter();
   @Output() sortChange: EventEmitter<SortState> = new EventEmitter();
 
-  public batchText$: Observable<CarbonTableBatchText> = this._selectTranslations$.pipe(
-    switchMap((translations: CarbonTableSelectTranslations) =>
+  public batchText$: Observable<CarbonTableBatchText> = this._tableTranslations$.pipe(
+    switchMap((translations: CarbonTableTranslations) =>
       combineLatest([
-        this.translateService.stream(translations.single),
-        this.translateService.stream(translations.multiple),
+        this.translateService.stream(translations.select.single),
+        this.translateService.stream(translations.select.multiple),
       ]).pipe(
-        map(([SINGLE, MULTIPLE]) => ({SINGLE, MULTIPLE})),
-        startWith({
-          SINGLE: this.translateService.instant(translations.single),
-          MULTIPLE: this.translateService.instant(translations.multiple),
-        })
+        startWith(
+          this.translateService.instant(translations.select.single),
+          this.translateService.instant(translations.select.multiple)
+        )
       )
-    )
+    ),
+    map(([SINGLE, MULTIPLE]) => ({SINGLE, MULTIPLE}))
   );
 
-  public paginationTranslations$: Observable<Partial<PaginationTranslations>> = combineLatest([
-    this.translateService.stream('interface.table.itemsPerPage'),
-    this.translateService.stream('interface.table.ofLastPage'),
-    this.translateService.stream('interface.table.ofLastPages'),
-    this.translateService.stream('interface.table.totalItems'),
-  ]).pipe(
-    map(([ITEMS_PER_PAGE, OF_LAST_PAGE, OF_LAST_PAGES, TOTAL_ITEMS]) => ({
-      ITEMS_PER_PAGE,
-      OF_LAST_PAGE,
-      OF_LAST_PAGES,
-      TOTAL_ITEMS,
-    }))
-  );
+  public paginationTranslations$: Observable<Partial<PaginationTranslations>> =
+    this._tableTranslations$.pipe(
+      switchMap((translations: CarbonTableTranslations) =>
+        combineLatest([
+          this.translateService.stream(translations.pagination.itemsPerPage),
+          this.translateService.stream(translations.pagination.totalItems),
+          this.translateService.stream('interface.table.ofLastPage'),
+          this.translateService.stream('interface.table.ofLastPages'),
+        ])
+      ),
+      map(([ITEMS_PER_PAGE, TOTAL_ITEMS, OF_LAST_PAGE, OF_LAST_PAGES]) => ({
+        ITEMS_PER_PAGE,
+        TOTAL_ITEMS,
+        OF_LAST_PAGE,
+        OF_LAST_PAGES,
+      }))
+    );
 
   public searchFormControl = new FormControl('');
 
@@ -215,9 +224,7 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
   public get selectedItems(): T[] {
     return this._tableModel.data.reduce(
       (items: T[], _, index: number) =>
-        this._tableModel.isRowSelected(index)
-          ? [...items, this.data[this.getItemInitialIndex(index)]]
-          : [...items],
+        this._tableModel.isRowSelected(index) ? [...items, this.data[index]] : [...items],
       []
     );
   }
@@ -244,7 +251,7 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     this._subscriptions$.add(
       this.searchFormControl.valueChanges
         .pipe(debounceTime(500))
-        .subscribe((searchString: string) => {
+        .subscribe((searchString: string | null) => {
           this.onSearch(searchString);
         })
     );
@@ -261,13 +268,11 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
   }
 
   public onRowClick(rowIndex: number): void {
-    const itemInitialIndex: number = this.getItemInitialIndex(rowIndex);
-
-    if (!this.data[itemInitialIndex]) {
+    if (!this.data[rowIndex]) {
       return;
     }
 
-    this.rowClick.emit(this.data[itemInitialIndex]);
+    this.rowClick.emit(this.data[rowIndex]);
   }
 
   public onSortClick(index: number): void {
@@ -327,12 +332,8 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     });
   }
 
-  private onSearch(searchString: string): void {
+  private onSearch(searchString: string | null): void {
     this.search.emit(searchString);
-  }
-
-  private getItemInitialIndex(rowIndex: number): number {
-    return (this._tableModel.currentPage - 1) * this._tableModel.pageLength + rowIndex;
   }
 
   private getTableItems(items: T[]): TableItem[][] {

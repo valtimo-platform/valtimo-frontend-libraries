@@ -27,10 +27,19 @@ enum ViewType {
   TEXT = 'text',
   UNDERSCORES_TO_SPACES = 'underscoresToSpaces',
 }
-
 interface CarbonTableSelectTranslations {
   single: string;
   multiple: string;
+}
+
+interface CarbonTablePaginationTranslations {
+  itemsPerPage: string;
+  totalItems: string;
+}
+
+interface CarbonTableTranslations {
+  select: CarbonTableSelectTranslations;
+  pagination: CarbonTablePaginationTranslations;
 }
 
 interface CarbonTableBatchText {
@@ -92,6 +101,7 @@ export {
   CarbonTableBatchText,
   CarbonTableConfig,
   CarbonTableSelectTranslations,
+  CarbonTableTranslations,
   ColumnConfig,
   createCarbonTableConfig,
   ListField,
