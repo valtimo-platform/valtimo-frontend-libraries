@@ -59,8 +59,8 @@ import {
   CarbonTableConfig,
   CarbonTableTranslations,
   ColumnConfig,
-  createCarbonTableConfig,
   DEFAULT_PAGINATOR_CONFIG,
+  DEFAULT_TABLE_CONFIG,
   Pagination,
   SortState,
   ViewType,
@@ -80,14 +80,15 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
   @ViewChild('actionsMenu', {static: false}) actionsMenu: TemplateRef<OverflowMenu>;
 
   private _fields: ColumnConfig[];
-  @Input() set fields(value: ColumnConfig[]) {
+  @Input() public set fields(value: ColumnConfig[]) {
     if (!value.length) {
       return;
     }
     this._fields = value;
-    this._subscriptions$.add(this.getHeaderItems());
+    this._headerItemsSubscription$.unsubscribe();
+    this._headerItemsSubscription$.add(this.getHeaderItems());
   }
-  get fields(): ColumnConfig[] {
+  public get fields(): ColumnConfig[] {
     return this._fields;
   }
 
@@ -144,12 +145,13 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     header.sorted = true;
     header.ascending = value.state.direction === 'ASC';
   }
+
   private _loading = false;
-  @Input() public get loading(): boolean {
-    return this._loading;
-  }
-  public set loading(value: boolean) {
+  @Input() public set loading(value: boolean) {
     this._loading = coerceBooleanProperty(value);
+  }
+  public get loading(): boolean {
+    return this._loading;
   }
 
   private readonly _defaultTranslations: CarbonTableTranslations = {
@@ -166,8 +168,21 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     this._tableTranslations$.next({...this._defaultTranslations, ...value});
   }
 
-  @Input() paginatorConfig: CarbonPaginatorConfig = DEFAULT_PAGINATOR_CONFIG;
-  @Input() tableConfig: CarbonTableConfig = createCarbonTableConfig();
+  private _paginatorConfig: CarbonPaginatorConfig = DEFAULT_PAGINATOR_CONFIG;
+  @Input() public set paginatorConfig(value: CarbonPaginatorConfig) {
+    this._paginatorConfig = {...DEFAULT_PAGINATOR_CONFIG, ...value};
+  }
+  public get paginatorConfig(): CarbonPaginatorConfig {
+    return this._paginatorConfig;
+  }
+
+  private _tableConfig: CarbonTableConfig = DEFAULT_TABLE_CONFIG;
+  @Input() public set tableConfig(value: CarbonTableConfig) {
+    this._tableConfig = {...DEFAULT_TABLE_CONFIG, ...value};
+  }
+  public get tableConfig(): CarbonTableConfig {
+    return this._tableConfig;
+  }
 
   @Output() paginationChange: EventEmitter<CarbonPaginationSelection> = new EventEmitter();
   @Output() rowClick: EventEmitter<T> = new EventEmitter();
@@ -211,6 +226,7 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
 
   private _previousSortIndex: number;
   private _skeletonTableModel: TableModel = Table.skeletonModel(5, 5);
+  private _headerItemsSubscription$ = new Subscription();
   private _subscriptions$: Subscription = new Subscription();
   private _tableModel: TableModel = new TableModel();
 
@@ -239,7 +255,7 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     if (this.loading) {
       return;
     }
-    this._subscriptions$.add(this.getHeaderItems());
+    this._headerItemsSubscription$.add(this.getHeaderItems());
 
     if (!this.data) {
       return;

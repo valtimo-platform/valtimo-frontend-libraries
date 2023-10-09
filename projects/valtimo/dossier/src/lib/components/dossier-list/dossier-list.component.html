@@ -17,6 +17,7 @@
 <ng-container
   *ngIf="{
     fields: fields$ | async,
+    canHaveAssignee: canHaveAssignee$ | async,
     documentItems: documentItems$ | async,
     searchFields: searchFields$ | async,
     schema: schema$ | async,
@@ -66,7 +67,7 @@
 </ng-template>
 
 <ng-template #list let-obs="obs">
-  <ng-container *ngIf="canHaveAssignee">
+  <ng-container *ngIf="obs.canHaveAssignee">
     <ng-container *ngTemplateOutlet="tabs"></ng-container>
   </ng-container>
 
@@ -171,7 +172,7 @@
 <ng-template #dossierListActions>
   <button
     cdsButton="primary"
-    [disabled]="listActionsComponent.disableStartDossierButton$ | async"
+    [disabled]="listActionsComponent?.disableStartDossierButton$ | async"
     (click)="startDossier()"
   >
     {{ 'Start Dossier' | translate }}

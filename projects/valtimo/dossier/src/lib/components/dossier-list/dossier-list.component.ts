@@ -24,8 +24,6 @@ import {
   CarbonTableConfig,
   CarbonTableTranslations,
   ColumnConfig,
-  createCarbonTableConfig,
-  DEFAULT_PAGINATOR_CONFIG,
   Direction,
   ListField,
   PageTitleService,
@@ -96,7 +94,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public loadingAssigneeFilter = true;
   public loadingDocumentItems = true;
   public pagination!: Pagination;
-  public canHaveAssignee!: boolean;
   public visibleDossierTabs: Array<DossierListTab> | null = null;
 
   public readonly defaultTabs: DossierListTab[] = [
@@ -116,12 +113,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     },
   };
 
-  public readonly tableConfig: CarbonTableConfig = createCarbonTableConfig({
-    showSelectionColumn: true,
-    withPagination: true,
-  });
+  public tableConfig: CarbonTableConfig;
   public readonly paginatorConfig: CarbonPaginatorConfig = {
-    ...DEFAULT_PAGINATOR_CONFIG,
     itemsPerPageOptions: [10, 25, 50, 100],
   };
 
@@ -156,6 +149,15 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.assigneeService.assigneeFilter$;
   public readonly paginationChange$ = new BehaviorSubject<CarbonPaginationSelection | null>(null);
   public readonly tabChange$ = new BehaviorSubject<DossierListTab | null>(null);
+  public readonly canHaveAssignee$: Observable<boolean> =
+    this.assigneeService.canHaveAssignee$.pipe(
+      tap((showSelectionColumn: boolean) => {
+        this.tableConfig = {
+          showSelectionColumn,
+          withPagination: true,
+        };
+      })
+    );
   private readonly _pagination$ = this.paginationService.pagination$.pipe(
     tap(pagination => {
       this.pagination = pagination;
@@ -165,7 +167,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
   private readonly _reload$ = new BehaviorSubject<boolean>(false);
   private readonly _hasEnvColumnConfig$: Observable<boolean> = this.listService.hasEnvColumnConfig$;
   private readonly _hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
-  private readonly _canHaveAssignee$: Observable<boolean> = this.assigneeService.canHaveAssignee$;
   private readonly _searchSwitch$ = this.searchService.searchSwitch$;
   private readonly _columns$: Observable<Array<DefinitionColumn>> =
     this.listService.documentDefinitionName$.pipe(
@@ -184,14 +185,11 @@ export class DossierListComponent implements OnInit, OnDestroy {
     );
 
   public readonly fields$: Observable<Array<ListField>> = combineLatest([
-    this._canHaveAssignee$,
+    this.canHaveAssignee$,
     this._columns$,
     this._hasEnvColumnConfig$,
     this.translateService.stream('key'),
   ]).pipe(
-    tap(([canHaveAssignee]) => {
-      this.canHaveAssignee = canHaveAssignee;
-    }),
     map(([canHaveAssignee, columns, hasEnvConfig]) => {
       const filteredAssigneeColumns = this.assigneeService.filterAssigneeColumns(
         columns,
