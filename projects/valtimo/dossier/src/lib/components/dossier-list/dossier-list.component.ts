@@ -363,7 +363,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
         `/dossiers/${documentDefinitionName}`,
         this.route.snapshot.queryParams
       );
-      this.router.navigate([`/dossiers/${documentDefinitionName}/document/${document.id}/x`]);
+      this.router.navigate([`/dossiers/${documentDefinitionName}/document/${document.id}`]);
     });
   }
 
