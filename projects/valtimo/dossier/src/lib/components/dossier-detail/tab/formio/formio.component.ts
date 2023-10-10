@@ -15,10 +15,51 @@
  */
 
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {DossierTabService} from '../../../../services';
+import {ActivatedRoute} from '@angular/router';
+import {FormService} from '@valtimo/form';
+import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
+import {FormioForm} from '@formio/angular';
+import {catchError} from 'rxjs/operators';
 
 @Component({
   templateUrl: './formio.component.html',
   styleUrls: ['./formio.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierDetailTabFormioComponent {}
+export class DossierDetailTabFormioComponent {
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly formNotFound$ = new BehaviorSubject<string>('');
+  public readonly noFormSpecified$ = new BehaviorSubject<boolean>(false);
+  private _formDefinitionName!: string;
+  public readonly prefilledForm$: Observable<FormioForm | null> = combineLatest([
+    this.tabService.tabs$,
+    this.route.params,
+  ]).pipe(
+    switchMap(([tabs, params]) => {
+      const currentTabName = params?.tab;
+      const documentId = params?.documentId;
+      const currentTab = tabs.find(tab => tab.name === currentTabName);
+
+      if (documentId && currentTab?.contentKey) {
+        this._formDefinitionName = currentTab.contentKey;
+        return this.formService.getFormDefinitionByNamePreFilled(currentTab.contentKey, documentId);
+      } else {
+        this.noFormSpecified$.next(true);
+        return of(null);
+      }
+    }),
+    tap(() => this.loading$.next(false)),
+    catchError(() => {
+      this.formNotFound$.next(this._formDefinitionName);
+      this.loading$.next(false);
+      return of(null);
+    })
+  );
+
+  constructor(
+    private readonly tabService: DossierTabService,
+    private readonly route: ActivatedRoute,
+    private readonly formService: FormService
+  ) {}
+}

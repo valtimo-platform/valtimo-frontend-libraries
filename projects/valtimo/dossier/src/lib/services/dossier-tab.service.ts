@@ -93,6 +93,12 @@ export class DossierTabService implements OnDestroy {
     );
   }
 
+  private setEnvironmentTabs(documentDefinitionName: string): void {
+    const configurableTabs = this.getConfigurableTabs(documentDefinitionName);
+    const allEnvironmentTabs = this.getAllEnvironmentTabs(configurableTabs);
+    this._tabs$.next(allEnvironmentTabs);
+  }
+
   private setApiTabs(documentDefinitionName: string): void {
     this.dossierTabApiService.getDossierTabs(documentDefinitionName).subscribe({
       next: tabs => {
@@ -104,12 +110,6 @@ export class DossierTabService implements OnDestroy {
         this._tabs$.next([]);
       },
     });
-  }
-
-  private setEnvironmentTabs(documentDefinitionName: string): void {
-    const configurableTabs = this.getConfigurableTabs(documentDefinitionName);
-    const allEnvironmentTabs = this.getAllEnvironmentTabs(configurableTabs);
-    this._tabs$.next(allEnvironmentTabs);
   }
 
   private filterTab(tab: ApiTabItem): boolean {
@@ -126,7 +126,7 @@ export class DossierTabService implements OnDestroy {
       case ApiTabType.STANDARD:
         return new TabImpl(tab.key, index, DEFAULT_TAB_COMPONENTS[tab.contentKey]);
       case ApiTabType.FORMIO:
-        return new TabImpl(tab.key, index, DossierDetailTabFormioComponent);
+        return new TabImpl(tab.key, index, DossierDetailTabFormioComponent, tab.contentKey);
     }
   }
 }

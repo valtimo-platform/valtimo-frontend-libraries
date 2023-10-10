@@ -14,4 +14,25 @@
   ~ limitations under the License.
   -->
 
-formio tab works
+<ng-container
+  *ngIf="{
+    prefilledForm: prefilledForm$ | async,
+    loading: loading$ | async,
+    formNotFound: formNotFound$ | async,
+    noFormSpecified: noFormSpecified$ | async
+  } as obs"
+>
+  <div *ngIf="obs.loading" class="loading-container">
+    <cds-loading></cds-loading>
+  </div>
+
+  <p *ngIf="obs.formNotFound" class="error-message">
+    {{ 'dossier.formio.formNotFound' | translate: {formDefinitionName: obs.formNotFound} }}
+  </p>
+
+  <p *ngIf="obs.noFormSpecified" class="error-message">
+    {{ 'dossier.formio.noFormSpecified' | translate }}
+  </p>
+
+  <valtimo-form-io *ngIf="obs.prefilledForm" [form]="obs.prefilledForm"> </valtimo-form-io>
+</ng-container>
