@@ -41,13 +41,13 @@ export class DossierDetailTabFormioComponent {
       const documentId = params?.documentId;
       const currentTab = tabs.find(tab => tab.name === currentTabName);
 
-      if (documentId && currentTab?.contentKey) {
-        this._formDefinitionName = currentTab.contentKey;
-        return this.formService.getFormDefinitionByNamePreFilled(currentTab.contentKey, documentId);
-      } else {
+      if (!documentId || !currentTab?.contentKey) {
         this.noFormSpecified$.next(true);
         return of(null);
       }
+
+      this._formDefinitionName = currentTab.contentKey;
+      return this.formService.getFormDefinitionByNamePreFilled(currentTab.contentKey, documentId);
     }),
     tap(() => this.loading$.next(false)),
     catchError(() => {
