@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-enum ApiTabType {
-  STANDARD = 'standard',
-  FORMIO = 'formio',
-  CUSTOM = 'custom',
-}
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
-interface ApiTabItem {
-  title: string;
-  key: string;
-  type: ApiTabType;
-  contentKey: string;
-}
-
-export {ApiTabType, ApiTabItem};
+@Component({
+  templateUrl: './formio.component.html',
+  styleUrls: ['./formio.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class DossierDetailTabFormioComponent {}
