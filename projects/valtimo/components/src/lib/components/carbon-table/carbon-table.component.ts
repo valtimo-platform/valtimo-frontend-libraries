@@ -84,11 +84,11 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     }
 
     if (!!this._fields) {
-      this._headerItemsSubscription$.unsubscribe();
+      this._headerItemsSubscription.unsubscribe();
     }
 
     this._fields = value;
-    this._headerItemsSubscription$.add(this.getHeaderItems());
+    this._headerItemsSubscription.add(this.getHeaderItems());
   }
   public get fields(): ColumnConfig[] {
     return this._fields;
@@ -226,11 +226,11 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
 
   public searchFormControl = new FormControl('');
 
+  private _headerItemsSubscription = new Subscription();
   private _previousSortIndex: number;
   private _skeletonTableModel: TableModel = Table.skeletonModel(5, 5);
-  private _headerItemsSubscription$: Subscription = new Subscription();
-  private _subscriptions$: Subscription = new Subscription();
-  private _tableModel: TableModel = new TableModel();
+  private _subscriptions = new Subscription();
+  private _tableModel = new TableModel();
 
   public get numberOfColumns(): number | null {
     return this.loading ? null : this.fields.length + (this.tableConfig.enableSingleSelect ? 0 : 1);
@@ -261,7 +261,7 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
     this._tableData = this.getTableItems(this.data);
     this._tableModel.data = this._tableData;
 
-    this._subscriptions$.add(
+    this._subscriptions.add(
       this.searchFormControl.valueChanges
         .pipe(debounceTime(500))
         .subscribe((searchString: string | null) => {
@@ -271,8 +271,8 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions$.unsubscribe();
-    this._headerItemsSubscription$.unsubscribe();
+    this._headerItemsSubscription.unsubscribe();
+    this._subscriptions.unsubscribe();
   }
 
   public onActionItemClick(action: ActionItem, item: T) {
