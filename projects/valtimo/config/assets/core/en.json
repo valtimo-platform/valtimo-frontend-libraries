@@ -417,6 +417,9 @@
         "name": "Tab name",
         "type": "Type"
       }
+    },
+    "tabType": {
+      "standard": "Standard"
     }
   },
   "task-list": {
