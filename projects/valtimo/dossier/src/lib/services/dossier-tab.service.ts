@@ -47,7 +47,6 @@ export class DossierTabService implements OnDestroy {
   ) {
     this._tabManagementEnabled = this.configService.config?.featureToggles?.enableTabManagement;
     this.openDocumentDefinitionNameSubscription();
-    console.log('case tab config', this.caseTabConfig);
   }
 
   public ngOnDestroy() {
