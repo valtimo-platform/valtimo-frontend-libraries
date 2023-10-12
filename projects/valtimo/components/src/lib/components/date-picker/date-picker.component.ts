@@ -66,9 +66,7 @@ export class DatePickerComponent implements AfterViewInit, OnDestroy {
   public readonly dateValue$ = new BehaviorSubject<string>('');
 
   private _flatpickrInstance!: flatpickr.Instance;
-  private _localeSubscription!: Subscription;
-  private _dateValueSubscription!: Subscription;
-  private _clearSubscription!: Subscription;
+  private readonly _subscriptions = new Subscription();
 
   constructor(private readonly translateService: TranslateService) {}
 
@@ -79,21 +77,23 @@ export class DatePickerComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this._localeSubscription?.unsubscribe();
-    this._dateValueSubscription?.unsubscribe();
-    this._clearSubscription?.unsubscribe();
+    this._subscriptions.unsubscribe();
   }
 
   private openLocaleSubscription(): void {
-    this._localeSubscription = this.translateService.stream('key').subscribe(() => {
-      this.setFlatpickrInstance(this.translateService.currentLang as LocaleKey);
-    });
+    this._subscriptions.add(
+      this.translateService.stream('key').subscribe(() => {
+        this.setFlatpickrInstance(this.translateService.currentLang as LocaleKey);
+      })
+    );
   }
 
   private openDateValueSubscription(): void {
-    this._dateValueSubscription = this.dateValue$.subscribe(dateValue => {
-      this.valueChange.emit(dateValue);
-    });
+    this._subscriptions.add(
+      this.dateValue$.subscribe(dateValue => {
+        this.valueChange.emit(dateValue);
+      })
+    );
   }
 
   private setFlatpickrInstance(localeKey: LocaleKey): void {
@@ -149,9 +149,11 @@ export class DatePickerComponent implements AfterViewInit, OnDestroy {
 
   private openClearSubscription(): void {
     if (this.clear$) {
-      this._clearSubscription = this.clear$.subscribe(() => {
-        this.dateValue$.next('');
-      });
+      this._subscriptions.add(
+        this.clear$.subscribe(() => {
+          this.dateValue$.next('');
+        })
+      );
     }
   }
 }

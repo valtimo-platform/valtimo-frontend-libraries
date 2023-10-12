@@ -134,11 +134,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public clear(): void {
-    if (this.multiple) {
-      this.setSelectedValue([]);
-    } else {
-      this.setSelectedValue('');
-    }
+    this.setSelectedValue(this.multiple ? [] : '');
   }
 
   private setDefaultSelection(): void {
@@ -156,11 +152,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
           this.setSelectedValue(defaultSelectionId);
         }
       } else if (defaultSelectionId && !itemsIds?.includes(defaultSelectionId)) {
-        if (this.multiple) {
-          this.setSelectedValue([]);
-        } else {
-          this.setSelectedValue('');
-        }
+        this.clear();
       }
     });
   }
