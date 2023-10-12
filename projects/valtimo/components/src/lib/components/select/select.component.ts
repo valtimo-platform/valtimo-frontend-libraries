@@ -28,7 +28,7 @@ import {SelectedValue, SelectItem} from '../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {ListItem} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
-import {map, take, tap} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
 
 @Component({
   selector: 'v-select',
@@ -53,6 +53,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public widthInPx!: number;
   @Input() public notFoundText!: string;
   @Input() public clearAllText!: string;
+  @Input() public clearText!: string;
   @Input() public name = '';
   @Input() public title = '';
   @Input() public titleTranslationKey = '';
@@ -118,10 +119,12 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
     this._clearSubjectSubscription?.unsubscribe();
   }
 
-  public setSelected(selectedValue: {item: ListItem}): void {
-    const id = selectedValue?.item?.id;
+  public setSelected(selectedValue: ListItem | Array<ListItem>): void {
+    const id = !Array.isArray(selectedValue) && selectedValue?.id;
 
-    if (id && typeof id === 'string') {
+    if (Array.isArray(selectedValue)) {
+      this.setSelectedValue(selectedValue.map(value => value.id));
+    } else if (id && typeof id === 'string') {
       this.setSelectedValue(id);
     }
   }
@@ -132,6 +135,10 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
         this.selected$.next(selectedValue);
       }
     });
+  }
+
+  public clear(): void {
+    this.setSelectedValue(this.multiple ? [] : '');
   }
 
   private setDefaultSelection(): void {
@@ -145,16 +152,11 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
       } else if (defaultSelectionId && itemsIds?.includes(defaultSelectionId)) {
         if (this.multiple) {
           this.setSelectedValue([defaultSelectionId]);
-          this.setSelectedValue([defaultSelectionId]);
         } else {
           this.setSelectedValue(defaultSelectionId);
         }
       } else if (defaultSelectionId && !itemsIds?.includes(defaultSelectionId)) {
-        if (this.multiple) {
-          this.setSelectedValue([]);
-        } else {
-          this.setSelectedValue('');
-        }
+        this.clear();
       }
     });
   }
@@ -172,11 +174,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
   private openClearSubjectSubscription(): void {
     if (this.clearSelectionSubject$) {
       this._clearSubjectSubscription = this.clearSelectionSubject$.subscribe(() => {
-        if (this.multiple) {
-          this.setSelectedValue([]);
-        } else {
-          this.setSelectedValue('');
-        }
+        this.clear();
       });
     }
   }
