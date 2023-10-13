@@ -127,7 +127,11 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public setSelectedValue(selectedValue: SelectedValue): void {
-    this.selected$.next(selectedValue);
+    this.selected$.pipe(take(1)).subscribe(currentSelected => {
+      if (JSON.stringify(currentSelected) !== JSON.stringify(selectedValue)) {
+        this.selected$.next(selectedValue);
+      }
+    });
   }
 
   private setDefaultSelection(): void {
