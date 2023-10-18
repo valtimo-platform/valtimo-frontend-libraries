@@ -140,7 +140,6 @@ export class TabImpl implements Tab {
     }
 
     if (title) {
-      console.log('set title', title);
       this._title = title;
     }
   }
