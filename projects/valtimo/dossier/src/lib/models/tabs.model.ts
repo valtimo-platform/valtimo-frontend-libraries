@@ -16,7 +16,6 @@
 
 import {ComponentFactoryResolver, ComponentRef, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Location} from '@angular/common';
 import {take} from 'rxjs';
 
 export interface TabLoader<T_TAB extends Tab> {
@@ -34,7 +33,6 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
   private _activeComponent: ComponentRef<any> = null;
   private _activeTab: TabImpl = null;
   private _router: Router;
-  private _location: Location;
   private _route: ActivatedRoute;
 
   constructor(
@@ -42,18 +40,20 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
     componentFactoryResolver: ComponentFactoryResolver,
     viewContainerRef: ViewContainerRef,
     router: Router,
-    location: Location,
     route: ActivatedRoute
   ) {
     this._tabs = tabs;
     this._componentFactoryResolver = componentFactoryResolver;
     this._viewContainerRef = viewContainerRef;
     this._router = router;
-    this._location = location;
     this._route = route;
   }
 
-  initial(tabName?: string): void {
+  public get tabs(): TabImpl[] {
+    return this._tabs;
+  }
+
+  public initial(tabName?: string): void {
     let initialTab;
     if (tabName) {
       initialTab = this._tabs.find(tab => tab.name === tabName);
@@ -63,7 +63,7 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
     this.load(initialTab);
   }
 
-  load(newTab: TabImpl): void {
+  public load(newTab: TabImpl): void {
     if (newTab !== this._activeTab) {
       this._tabs.forEach(tab => tab.deactivate());
       this.replaceView(newTab);
@@ -72,7 +72,7 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
     }
   }
 
-  refreshView() {
+  public refreshView() {
     this.replaceView(this._activeTab);
   }
 
@@ -103,10 +103,6 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
   private setActive(tab: TabImpl): void {
     tab.activate();
     this._activeTab = tab;
-  }
-
-  get tabs(): TabImpl[] {
-    return this._tabs;
   }
 }
 
@@ -144,35 +140,35 @@ export class TabImpl implements Tab {
     }
   }
 
-  get name(): string {
+  public get name(): string {
     return this._name;
   }
 
-  get sequence(): number {
+  public get sequence(): number {
     return this._sequence;
   }
 
-  get component(): any {
+  public get component(): any {
     return this._component;
   }
 
-  get contentKey(): string {
+  public get contentKey(): string {
     return this._contentKey;
   }
 
-  get title(): string {
+  public get title(): string {
     return this._title;
   }
 
-  activate(): void {
+  public activate(): void {
     this._active = true;
   }
 
-  deactivate(): void {
+  public deactivate(): void {
     this._active = false;
   }
 
-  isActive(): boolean {
+  public isActive(): boolean {
     return this._active;
   }
 }
