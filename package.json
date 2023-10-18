@@ -326,7 +326,7 @@
     "@valtimo/swagger": "file:dist/valtimo/swagger",
     "@valtimo/task": "file:dist/valtimo/task",
     "@valtimo/view-configurator": "file:dist/valtimo/view-configurator",
-    "cypress": "12.17.4",
+    "cypress": "13.3.1",
     "deepmerge-ts": "5.1.0",
     "puppeteer": "21.1.0",
     "sass": "1.66.1"
