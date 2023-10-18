@@ -74,7 +74,7 @@ export class TabManagementService {
   public addTab(tab: Partial<ApiTabItem>): Observable<ApiTabItem> {
     return this.http.post<ApiTabItem>(
       `${this._valtimoEndpointUri}/${this._caseDefinitionId}/tab`,
-      tab
+      this.getTabDto(tab)
     );
   }
 
@@ -87,7 +87,7 @@ export class TabManagementService {
   public editTab(tab: Partial<ApiTabItem>, tabKey: string): Observable<ApiTabItem> {
     return this.http.put<ApiTabItem>(
       `${this._valtimoEndpointUri}/${this._caseDefinitionId}/tab/${tabKey}`,
-      tab
+      this.getTabDto(tab)
     );
   }
 
@@ -97,5 +97,13 @@ export class TabManagementService {
 
   private getTabList(): Observable<ApiTabItem[]> {
     return this.http.get<ApiTabItem[]>(`${this._valtimoEndpointUri}/${this._caseDefinitionId}/tab`);
+  }
+
+  private getTabDto(tab: Partial<ApiTabItem>): Partial<ApiTabItem> {
+    if (tab.name === '') {
+      delete tab.name;
+    }
+
+    return tab;
   }
 }
