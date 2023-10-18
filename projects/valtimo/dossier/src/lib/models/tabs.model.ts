@@ -15,7 +15,6 @@
  */
 
 import {ComponentFactoryResolver, ComponentRef, ViewContainerRef} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {take} from 'rxjs';
@@ -26,8 +25,6 @@ export interface TabLoader<T_TAB extends Tab> {
   initial(tabName?: string): void;
 
   load(tabToLoad: T_TAB): void;
-
-  translateTabName(tab: T_TAB): string;
 }
 
 export class TabLoaderImpl implements TabLoader<TabImpl> {
@@ -36,7 +33,6 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
   private readonly _viewContainerRef: ViewContainerRef = null;
   private _activeComponent: ComponentRef<any> = null;
   private _activeTab: TabImpl = null;
-  private _translateService: TranslateService = null;
   private _router: Router;
   private _location: Location;
   private _route: ActivatedRoute;
@@ -45,7 +41,6 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
     tabs: TabImpl[],
     componentFactoryResolver: ComponentFactoryResolver,
     viewContainerRef: ViewContainerRef,
-    translateService: TranslateService,
     router: Router,
     location: Location,
     route: ActivatedRoute
@@ -53,7 +48,6 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
     this._tabs = tabs;
     this._componentFactoryResolver = componentFactoryResolver;
     this._viewContainerRef = viewContainerRef;
-    this._translateService = translateService;
     this._router = router;
     this._location = location;
     this._route = route;
@@ -114,12 +108,6 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
   get tabs(): TabImpl[] {
     return this._tabs;
   }
-
-  translateTabName(tab: TabImpl): string {
-    const translationId = 'dossier.tabs.' + tab.name;
-    const translation = this._translateService.instant('dossier.tabs.' + tab.name);
-    return translationId !== translation ? translation : tab.name;
-  }
 }
 
 export interface Tab {
@@ -139,15 +127,21 @@ export class TabImpl implements Tab {
   private readonly _sequence: number;
   private readonly _component: any;
   private readonly _contentKey: string;
+  private readonly _title: string;
   private _active = false;
 
-  constructor(name: string, sequence: number, component: any, contentKey?: string) {
+  constructor(name: string, sequence: number, component: any, contentKey?: string, title?: string) {
     this._name = name;
     this._sequence = sequence;
     this._component = component;
 
     if (contentKey) {
       this._contentKey = contentKey;
+    }
+
+    if (title) {
+      console.log('set title', title);
+      this._title = title;
     }
   }
 
@@ -165,6 +159,10 @@ export class TabImpl implements Tab {
 
   get contentKey(): string {
     return this._contentKey;
+  }
+
+  get title(): string {
+    return this._title;
   }
 
   activate(): void {

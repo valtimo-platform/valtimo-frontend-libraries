@@ -247,7 +247,6 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
           tabs,
           this.componentFactoryResolver,
           this.viewContainerRef,
-          this.translateService,
           this.router,
           this.location,
           this.route
