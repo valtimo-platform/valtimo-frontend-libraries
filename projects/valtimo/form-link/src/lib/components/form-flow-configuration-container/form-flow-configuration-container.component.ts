@@ -27,7 +27,7 @@ import {
 } from '@angular/core';
 import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {ChangeEvent, FormFlowAngularComponent} from '../../models';
+import {ChangeEvent, FormFlowCustomComponent} from '../../models';
 import {FormFlowComponentService} from '../../services';
 import {FormioSubmission} from '@valtimo/components';
 
@@ -36,7 +36,7 @@ import {FormioSubmission} from '@valtimo/components';
   templateUrl: './form-flow-configuration-container.component.html',
 })
 export class FormFlowConfigurationContainerComponent
-  implements OnInit, OnDestroy, FormFlowAngularComponent
+  implements OnInit, OnDestroy, FormFlowCustomComponent
 {
   @ViewChild('formFlowConfigurationComponent', {static: true, read: ViewContainerRef})
   private readonly _dynamicContainer: ViewContainerRef;
@@ -57,7 +57,7 @@ export class FormFlowConfigurationContainerComponent
 
   private readonly _subscriptions = new Subscription();
   private readonly _componentRef$ = new BehaviorSubject<
-    ComponentRef<FormFlowAngularComponent> | undefined
+    ComponentRef<FormFlowCustomComponent> | undefined
   >(undefined);
   private readonly _disabled$ = new BehaviorSubject<boolean>(false);
   private readonly _componentId$ = new BehaviorSubject<string>('');
