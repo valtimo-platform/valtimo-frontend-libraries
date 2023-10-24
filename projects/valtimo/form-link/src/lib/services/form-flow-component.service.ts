@@ -16,7 +16,7 @@
 
 import {Inject, Injectable} from '@angular/core';
 import {BehaviorSubject, filter, Observable} from 'rxjs';
-import {FormFlowAngularComponentDefinition} from '../models';
+import {FormFlowCustomComponentDefinition} from '../models';
 import {FORM_FLOW_COMPONENT_TOKEN} from '../constants';
 
 @Injectable({
@@ -24,21 +24,21 @@ import {FORM_FLOW_COMPONENT_TOKEN} from '../constants';
 })
 export class FormFlowComponentService {
   private readonly _supportedComponents$ =
-    new BehaviorSubject<Array<FormFlowAngularComponentDefinition> | null>(null);
+    new BehaviorSubject<Array<FormFlowCustomComponentDefinition> | null>(null);
 
-  public get supportedComponents$(): Observable<Array<FormFlowAngularComponentDefinition>> {
+  public get supportedComponents$(): Observable<Array<FormFlowCustomComponentDefinition>> {
     return this._supportedComponents$.pipe(filter(components => !!components));
   }
 
   constructor(
     @Inject(FORM_FLOW_COMPONENT_TOKEN)
-    private readonly supportedAngularComponents: Array<FormFlowAngularComponentDefinition>
+    private readonly supportedCustomComponents: Array<FormFlowCustomComponentDefinition>
   ) {
-    this.setSupportedComponents(supportedAngularComponents);
+    this.setSupportedComponents(supportedCustomComponents);
   }
 
   private setSupportedComponents(
-    supportedComponents: Array<FormFlowAngularComponentDefinition>
+    supportedComponents: Array<FormFlowCustomComponentDefinition>
   ): void {
     this._supportedComponents$.next(supportedComponents);
   }

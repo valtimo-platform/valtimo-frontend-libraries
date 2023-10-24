@@ -21,7 +21,7 @@ interface ChangeEvent {
   data: object;
 }
 
-interface FormFlowAngularComponent {
+interface FormFlowCustomComponent {
   formFlowInstanceId: string;
   componentId?: string;
   disabled: boolean;
@@ -29,9 +29,9 @@ interface FormFlowAngularComponent {
   submitEvent: EventEmitter<FormioSubmission>;
 }
 
-interface FormFlowAngularComponentDefinition {
+interface FormFlowCustomComponentDefinition {
   id: string;
-  component: Type<FormFlowAngularComponent>;
+  component: Type<FormFlowCustomComponent>;
 }
 
-export {FormFlowAngularComponentDefinition, FormFlowAngularComponent, ChangeEvent};
+export {FormFlowCustomComponentDefinition, FormFlowCustomComponent, ChangeEvent};
