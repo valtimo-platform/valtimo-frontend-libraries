@@ -40,7 +40,7 @@ export class FormFlowComponent implements OnInit {
 
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
   public readonly formFlowStepType$ = new BehaviorSubject<FormFlowStepType | null>(null);
-  public readonly formFlowAngularComponentId$ = new BehaviorSubject<string>('');
+  public readonly FormFlowCustomComponentId$ = new BehaviorSubject<string>('');
 
   formDefinition: FormioForm;
   formioOptions: ValtimoFormioOptions;
@@ -114,14 +114,14 @@ export class FormFlowComponent implements OnInit {
   private handleFormFlowStep(formFlowInstance: FormFlowInstance) {
     if (formFlowInstance.step === null) {
       this.formFlowStepType$.next(null);
-      this.formFlowAngularComponentId$.next('');
+      this.FormFlowCustomComponentId$.next('');
       this.formFlowInstanceId = null;
       this.formFlowStepInstanceId = null;
       this.formFlowComplete.emit(null);
     } else {
       this.modalService.scrollToTop();
       this.formFlowStepType$.next(formFlowInstance.step.type);
-      this.formFlowAngularComponentId$.next(formFlowInstance?.step?.typeProperties?.id || '');
+      this.FormFlowCustomComponentId$.next(formFlowInstance?.step?.typeProperties?.id || '');
       this.formFlowInstanceId = formFlowInstance.id;
       this.formFlowStepInstanceId = formFlowInstance.step.id;
       this.formDefinition = formFlowInstance.step.typeProperties.definition;

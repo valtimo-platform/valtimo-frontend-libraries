@@ -79,7 +79,7 @@ interface FormFlowCreateResult {
   formFlowInstanceId: string;
 }
 
-type FormFlowStepType = 'form' | 'angular-component';
+type FormFlowStepType = 'form' | 'custom-component';
 
 interface FormFlowStep {
   id: string;

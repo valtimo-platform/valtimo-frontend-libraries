@@ -24,9 +24,9 @@
       [options]="formioOptions"
     ></valtimo-form-io>
   </div>
-  <div body *ngIf="(formFlowStepType$ | async) === 'angular-component'">
+  <div body *ngIf="(formFlowStepType$ | async) === 'custom-component'">
     <valtimo-form-flow-configuration-container
-      [componentId]="formFlowAngularComponentId$ | async"
+      [componentId]="FormFlowCustomComponentId$ | async"
       [formFlowInstanceId]="formFlowInstanceId"
       [disabled]="disabled$ | async"
       (submit)="onSubmit($event)"
