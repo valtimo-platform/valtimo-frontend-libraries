@@ -286,7 +286,7 @@
     "tslint-config-prettier": "1.18.0",
     "uuid": "9.0.0",
     "webpack-bundle-analyzer": "4.9.0",
-    "zone.js": "0.13.1"
+    "zone.js": "0.14.1"
   },
   "devDependencies": {
     "@cypress/schematic": "^2.5.0",
