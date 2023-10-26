@@ -30,7 +30,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {UserProviderService} from '@valtimo/security';
 import jwt_decode from 'jwt-decode';
 import {NGXLogger} from 'ngx-logger';
-import {from, interval, Observable, Subject, Subscription} from 'rxjs';
+import {from, Observable, Subject, Subscription, timer} from 'rxjs';
 import {distinctUntilChanged, map, switchMap, take} from 'rxjs/operators';
 import {FormioSubmission, ValtimoFormioOptions} from '../../models';
 import {ValtimoModalService} from '../../services/valtimo-modal.service';
@@ -76,8 +76,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     })
   );
 
-  private _tokenRefreshTimerSubscription: Subscription;
-  private _formRefreshSubscription: Subscription;
+  private _formRefreshSubscription = new Subscription();
 
   constructor(
     private readonly logger: NGXLogger,
@@ -116,8 +115,6 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
       this.reloadForm();
     }
 
-    this.setInitialToken();
-
     if (changes.formDefinitionRefresh$) {
       this.unsubscribeFormRefresh();
       this.subscribeFormRefresh();
@@ -126,8 +123,6 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnDestroy(): void {
     this.unsubscribeFormRefresh();
-
-    this._tokenRefreshTimerSubscription?.unsubscribe();
   }
 
   public reloadForm(): void {
@@ -183,39 +178,33 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   private setTimerForTokenRefresh(token: string): void {
     const tokenExp = (jwt_decode(token) as any).exp * 1000;
     const expiryTime = tokenExp - Date.now() - 1000;
-    if (!this._tokenRefreshTimerSubscription) {
-      this._tokenRefreshTimerSubscription = interval(expiryTime).subscribe(() => {
-        this.refreshToken();
+
+    timer(expiryTime)
+      .pipe(
+        switchMap(() => this.userProviderService.updateToken(-1)),
+        switchMap(() => this.userProviderService.getToken()),
+        take(1)
+      )
+      .subscribe((token: string) => {
+        this.setToken(token);
       });
-    }
 
     this.logger.debug(`Timer for form.io token refresh set for: ${expiryTime}ms.`);
   }
 
-  private refreshToken(): void {
-    from(this.userProviderService.updateToken(-1))
-      .pipe(
-        switchMap(() => this.userProviderService.getToken()),
-        take(1)
-      )
-      .subscribe(token => {
-        this.setToken(token);
-      });
-  }
-
   private subscribeFormRefresh(): void {
     if (this.formRefresh$) {
-      this._formRefreshSubscription = this.formRefresh$.subscribe(refreshValue => {
-        if (refreshValue) {
-          this.refreshForm.emit(refreshValue);
-        }
-      });
+      this._formRefreshSubscription.add(
+        this.formRefresh$.subscribe(refreshValue => {
+          if (refreshValue) {
+            this.refreshForm.emit(refreshValue);
+          }
+        })
+      );
     }
   }
 
   private unsubscribeFormRefresh(): void {
-    if (this._formRefreshSubscription) {
-      this._formRefreshSubscription.unsubscribe();
-    }
+    this._formRefreshSubscription.unsubscribe();
   }
 }
