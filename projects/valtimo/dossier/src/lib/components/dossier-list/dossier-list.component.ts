@@ -325,13 +325,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this._hasApiColumnConfig$,
   ]).pipe(
     distinctUntilChanged(
-      (
-        [prevDocumentRequests, prevHasEnvColumnConfig, prevHasApiColumnConfig],
-        [currDocumentRequests, currHasEnvColumnConfig, currHasApiColumnConfig]
-      ) =>
-        prevDocumentRequests === currDocumentRequests &&
-        prevHasApiColumnConfig === currHasApiColumnConfig &&
-        prevHasEnvColumnConfig === currHasEnvColumnConfig
+      ([prevDocumentRequests], [currDocumentRequests]) =>
+        prevDocumentRequests === currDocumentRequests
     ),
     map(([documents, hasEnvColumnConfig, hasApiColumnConfig]) =>
       this.listService.mapDocuments(documents, hasEnvColumnConfig, hasApiColumnConfig)
