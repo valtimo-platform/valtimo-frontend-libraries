@@ -17,7 +17,11 @@
 import {Router} from '@angular/router';
 
 class RouterUtils {
-  static configureNavigationCanceling(router: Router): void {
+  public static configureRouter(router: Router): void {
+    this.configureNavigationCanceling(router);
+  }
+
+  private static configureNavigationCanceling(router: Router): void {
     router.canceledNavigationResolution = 'computed';
   }
 }

@@ -50,6 +50,6 @@ const routes: Routes = [
 })
 export class FormManagementRoutingModule {
   constructor(private router: Router) {
-    RouterUtils.configureNavigationCanceling(this.router);
+    RouterUtils.configureRouter(this.router);
   }
 }
