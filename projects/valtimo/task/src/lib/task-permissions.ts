@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-import {Subject} from 'rxjs';
+import {PermissionRequest} from '@valtimo/access-control';
 
-enum IncludeFunction {
-  HaalcentraalConnectorConfigured,
-  ObjectManagementEnabled,
+enum PERMISSION_ACTION {
+  assign = 'assign',
 }
 
-interface MenuItem {
-  title: string;
-  sequence: number;
-  id?: string;
-  link?: string[] | null;
-  textClass?: string;
-  iconClass?: string;
-  children?: MenuItem[];
-  roles?: string[];
-  show?: boolean;
-  count$?: Subject<number>;
-  includeFunction?: IncludeFunction;
+enum TASK_DETAIL_PERMISSION_RESOURCE {
+  task = 'com.ritense.valtimo.camunda.domain.CamundaTask',
 }
 
-export {MenuItem, IncludeFunction};
+const CAN_ASSIGN_TASK_PERMISSION: PermissionRequest = {
+  action: PERMISSION_ACTION.assign,
+  resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
+};
+
+export {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE};
