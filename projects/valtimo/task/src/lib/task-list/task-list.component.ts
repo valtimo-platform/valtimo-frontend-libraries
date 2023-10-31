@@ -64,12 +64,16 @@ export class TaskListComponent implements OnDestroy {
     this.setDefaultSorting();
   }
 
+  public ngOnDestroy(): void {
+    this.translationSubscription.unsubscribe();
+  }
+
   public paginationClicked(page: number, type: string) {
     this.tasks[type].page = page - 1;
     this.getTasks(type);
   }
 
-  paginationSet() {
+  public paginationSet() {
     this.tasks.mine.pagination.size =
       this.tasks.all.pagination.size =
       this.tasks.open.pagination.size =
@@ -81,16 +85,12 @@ export class TaskListComponent implements OnDestroy {
     this.tasks[type].page = 0;
   }
 
-  tabChange(tab) {
+  public tabChange(tab) {
     this.clearPagination(this.currentTaskType);
     this.getTasks(tab.nextId);
   }
 
-  showTask(task) {
-    this.router.navigate(['tasks', task.id]);
-  }
-
-  getTasks(type: string) {
+  public getTasks(type: string) {
     let params: any;
 
     this.translationSubscription = combineLatest([
@@ -147,7 +147,7 @@ export class TaskListComponent implements OnDestroy {
     });
   }
 
-  openRelatedCase(event: MouseEvent, index: number): void {
+  public openRelatedCase(event: MouseEvent, index: number): void {
     event.stopPropagation();
 
     const tasks = this.tasks[this.currentTaskType].tasks;
@@ -224,20 +224,15 @@ export class TaskListComponent implements OnDestroy {
     }
   }
 
-  setDefaultSorting() {
-    this.sortState = this.taskService.getConfigCustomTaskList()?.defaultSortedColumn || null;
-  }
-
   public sortChanged(sortState: SortState) {
     this.sortState = sortState;
     this.getTasks(this.currentTaskType);
   }
 
-  getSortString(sort: SortState): string {
+  private getSortString(sort: SortState): string {
     return `${sort.state.name},${sort.state.direction}`;
   }
-
-  ngOnDestroy(): void {
-    this.translationSubscription.unsubscribe();
+  private setDefaultSorting() {
+    this.sortState = this.taskService.getConfigCustomTaskList()?.defaultSortedColumn || null;
   }
 }
