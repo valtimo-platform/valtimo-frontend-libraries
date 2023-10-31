@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, OnDestroy, signal, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {TaskService} from '../task.service';
 import moment from 'moment';
@@ -37,12 +37,18 @@ moment.locale(localStorage.getItem('langKey') || '');
 })
 export class TaskListComponent implements OnDestroy {
   @ViewChild('taskDetail') taskDetail: TaskDetailModalComponent;
+  public readonly activeTab = signal('');
   public tasks = {
     mine: new TaskList(),
     open: new TaskList(),
     all: new TaskList(),
   };
   public visibleTabs: Array<TaskListTab> | null = null;
+  public readonly DEFAULT_TABS: Array<TaskListTab> = [
+    TaskListTab.MINE,
+    TaskListTab.OPEN,
+    TaskListTab.ALL,
+  ];
   public currentTaskType = 'mine';
   public listTitle: string | null = null;
   public listDescription: string | null = null;
@@ -87,11 +93,13 @@ export class TaskListComponent implements OnDestroy {
 
   public tabChange(tab) {
     this.clearPagination(this.currentTaskType);
-    this.getTasks(tab.nextId);
+    this.getTasks(tab);
   }
 
   public getTasks(type: string) {
     let params: any;
+
+    this.activeTab.set(type);
 
     this.translationSubscription = combineLatest([
       this.translateService.stream(`task-list.${type}.title`),

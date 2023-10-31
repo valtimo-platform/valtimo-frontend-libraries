@@ -16,6 +16,7 @@
 
 <div class="main-content">
   <div class="container-fluid">
+    <ng-container *ngTemplateOutlet="tabsTemplate"></ng-container>
     <valtimo-widget>
       <valtimo-list
         [items]="tasks[currentTaskType].tasks"
@@ -63,6 +64,35 @@
     ></valtimo-task-detail-modal>
   </div>
 </div>
+
+<ng-template #tabsTemplate>
+  <cds-tabs
+    *ngIf="visibleTabs === null; else configuredTabsTemplate"
+    type="contained"
+    data-carbon-theme="g10"
+    class="task-list-tabs"
+  >
+    <cds-tab
+      *ngFor="let defaultTab of DEFAULT_TABS"
+      [active]="activeTab() === defaultTab"
+      [heading]="'task-list.' + defaultTab + '.title' | translate"
+      [id]="defaultTab"
+      (selected)="tabChange(defaultTab)"
+    ></cds-tab>
+  </cds-tabs>
+</ng-template>
+
+<ng-template #configuredTabsTemplate>
+  <cds-tabs type="contained" data-carbon-theme="g10" class="task-list-tabs">
+    <cds-tab
+      *ngFor="let tab of visibleTabs"
+      [active]="activeTab() === tab"
+      [heading]="'task-list.' + (tab | lowercase) + '.title' | translate"
+      [id]="tab"
+      (selected)="tabChange(tab)"
+    ></cds-tab>
+  </cds-tabs>
+</ng-template>
 
 <ng-template #configuredTabs>
   <ul ngbNav [destroyOnHide]="false" (navChange)="tabChange($event)" class="nav-tabs">
