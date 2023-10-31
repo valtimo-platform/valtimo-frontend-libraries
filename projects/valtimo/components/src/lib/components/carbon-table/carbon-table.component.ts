@@ -22,6 +22,7 @@ import {
   EventEmitter,
   HostBinding,
   Input,
+  OnChanges,
   OnDestroy,
   Output,
   TemplateRef,
@@ -72,7 +73,7 @@ import {ViewContentService} from '../view-content/view-content.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
+export class CarbonTableComponent<T> implements AfterViewInit, OnChanges, OnDestroy {
   @HostBinding('attr.data-carbon-theme') public theme = 'g10';
   @HostBinding('class') public class = 'valtimo-carbon-table';
 
@@ -188,6 +189,7 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
   }
 
   @Output() paginationChange: EventEmitter<CarbonPaginationSelection> = new EventEmitter();
+  @Output() pageSizeSet: EventEmitter<number> = new EventEmitter();
   @Output() rowClick: EventEmitter<T> = new EventEmitter();
   @Output() search: EventEmitter<string | null> = new EventEmitter();
   @Output() sortChange: EventEmitter<SortState> = new EventEmitter();
@@ -270,7 +272,13 @@ export class CarbonTableComponent<T> implements AfterViewInit, OnDestroy {
         })
     );
 
+    this.pageSizeSet.emit(this._tableModel.pageLength);
+
     this.cd.detectChanges();
+  }
+
+  public ngOnChanges() {
+    this.pageSizeSet.emit(this._tableModel.pageLength);
   }
 
   public ngOnDestroy(): void {

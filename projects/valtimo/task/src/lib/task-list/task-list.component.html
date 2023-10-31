@@ -17,46 +17,7 @@
 <div class="main-content">
   <div class="container-fluid">
     <ng-container *ngTemplateOutlet="tabsTemplate"></ng-container>
-    <valtimo-widget>
-      <valtimo-list
-        [items]="tasks[currentTaskType].tasks"
-        [fields]="tasks[currentTaskType].fields"
-        [pagination]="tasks[currentTaskType].pagination"
-        [viewMode]="true"
-        (paginationClicked)="paginationClicked($event, currentTaskType)"
-        (paginationSet)="paginationSet()"
-        paginationIdentifier="taskList"
-        [isSearchable]="true"
-        [header]="true"
-        (rowClicked)="rowOpenTaskClick($event)"
-        (sortChanged)="sortChanged($event)"
-        [lastColumnTemplate]="caseLink"
-      >
-        <div header>
-          <h3 class="list-header-title">{{ listTitle }}</h3>
-          <h5 class="list-header-description">{{ listDescription }}</h5>
-        </div>
-        <div tabs>
-          <ul
-            *ngIf="visibleTabs === null; else configuredTabs"
-            ngbNav
-            [destroyOnHide]="false"
-            (navChange)="tabChange($event)"
-            class="nav-tabs"
-          >
-            <li ngbNavItem="mine" [title]="'task-list.mine.title' | translate">
-              <a ngbNavLink>{{ 'task-list.mine.title' | translate }}</a>
-            </li>
-            <li ngbNavItem="open" [title]="'task-list.open.title' | translate">
-              <a ngbNavLink>{{ 'task-list.open.title' | translate }}</a>
-            </li>
-            <li ngbNavItem="all" [title]="'task-list.all.title' | translate">
-              <a ngbNavLink>{{ 'task-list.all.title' | translate }}</a>
-            </li>
-          </ul>
-        </div>
-      </valtimo-list>
-    </valtimo-widget>
+    <ng-container *ngTemplateOutlet="listTemplate"></ng-container>
     <valtimo-task-detail-modal
       #taskDetail
       (formSubmit)="getTasks(currentTaskType)"
@@ -92,6 +53,39 @@
       (selected)="tabChange(tab)"
     ></cds-tab>
   </cds-tabs>
+</ng-template>
+
+<!--[items]="tasks[currentTaskType].tasks"-->
+<!--[fields]="tasks[currentTaskType].fields"-->
+<!--[pagination]="tasks[currentTaskType].pagination"-->
+<!--[viewMode]="true"-->
+<!--(paginationClicked)="paginationClicked($event, currentTaskType)"-->
+<!--(paginationSet)="paginationSet()"-->
+<!--paginationIdentifier="taskList"-->
+<!--[isSearchable]="true"-->
+<!--[header]="true"-->
+<!--(rowClicked)="rowOpenTaskClick($event)"-->
+<!--(sortChanged)="sortChanged($event)"-->
+<!--[lastColumnTemplate]="caseLink"-->
+
+<ng-template #listTemplate>
+  <valtimo-carbon-table
+    [data]="tasks[currentTaskType].tasks"
+    [tableConfig]="TABLE_CONFIG"
+    [fields]="tasks[currentTaskType].fields"
+    hideTableHeader
+    [pagination]="tasks[currentTaskType].pagination"
+    (paginationChange)="paginationClicked($event)"
+    (pageSizeSet)="paginationSet()"
+    (rowClick)="rowOpenTaskClick($event)"
+    (sortChange)="sortChanged($event)"
+  >
+    <valtimo-no-results
+      [action]="dossierListActions"
+      description="{{ 'dossier.noResults.description' | translate }}"
+      title="{{ 'dossier.noResults.title' | translate }}"
+    ></valtimo-no-results>
+  </valtimo-carbon-table>
 </ng-template>
 
 <ng-template #configuredTabs>

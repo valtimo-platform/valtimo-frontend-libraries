@@ -26,6 +26,11 @@ import {combineLatest, Subscription} from 'rxjs';
 import {ConfigService, SortState, TaskListTab} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {take} from 'rxjs/operators';
+import {
+  CarbonPaginationSelection,
+  CarbonTableConfig,
+  DEFAULT_TABLE_CONFIG,
+} from '@valtimo/components';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -49,6 +54,7 @@ export class TaskListComponent implements OnDestroy {
     TaskListTab.OPEN,
     TaskListTab.ALL,
   ];
+  public readonly TABLE_CONFIG: CarbonTableConfig = {...DEFAULT_TABLE_CONFIG, withPagination: true};
   public currentTaskType = 'mine';
   public listTitle: string | null = null;
   public listDescription: string | null = null;
@@ -74,21 +80,18 @@ export class TaskListComponent implements OnDestroy {
     this.translationSubscription.unsubscribe();
   }
 
-  public paginationClicked(page: number, type: string) {
-    this.tasks[type].page = page - 1;
-    this.getTasks(type);
+  public paginationClicked(selection: CarbonPaginationSelection) {
+    this.tasks[this.currentTaskType].page = selection.page - 1;
+    this.getTasks(this.currentTaskType);
   }
 
   public paginationSet() {
+    console.log('pagination set');
     this.tasks.mine.pagination.size =
       this.tasks.all.pagination.size =
       this.tasks.open.pagination.size =
         this.tasks[this.currentTaskType].pagination.size;
     this.getTasks(this.currentTaskType);
-  }
-
-  private clearPagination(type: string) {
-    this.tasks[type].page = 0;
   }
 
   public tabChange(tab) {
@@ -235,6 +238,10 @@ export class TaskListComponent implements OnDestroy {
   public sortChanged(sortState: SortState) {
     this.sortState = sortState;
     this.getTasks(this.currentTaskType);
+  }
+
+  private clearPagination(type: string) {
+    this.tasks[type].page = 0;
   }
 
   private getSortString(sort: SortState): string {
