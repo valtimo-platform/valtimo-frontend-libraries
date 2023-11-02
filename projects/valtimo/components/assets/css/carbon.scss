@@ -136,24 +136,4 @@ body {
   &--modal.is-visible {
     z-index: 10001 !important;
   }
-
-  &--list-box {
-    &__field {
-      z-index: 1;
-    }
-
-    &__wrapper {
-      z-index: 100001 !important;
-    }
-  }
-}
-
-.valtimo-carbon-list {
-  .cds--checkbox-label {
-    margin-bottom: 0 !important;
-  }
-
-  &__tabs cds-tab {
-    display: none !important;
-  }
 }
