@@ -57,15 +57,15 @@ export class DossierColumnService {
   }
 
   mapDefinitionColumnsToColumnConfigs(
-    columns: Array<DefinitionColumn>,
-    hasEnvConfig: boolean
+    columns: Array<DefinitionColumn>
   ): Array<ColumnConfig> {
     return columns.map(column => {
       const translationKey = `fieldLabels.${column.translationKey}`;
       const translation = this.translateService.instant(translationKey);
       const validTranslation = translation !== translationKey && translation;
+
       return {
-        key: hasEnvConfig ? column.propertyName : column.translationKey,
+        key: column.propertyName,
         label: column.title || translationKey || validTranslation,
         sortable: column.sortable,
         ...(column.viewType && {viewType: column.viewType}),

@@ -187,17 +187,15 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public readonly fields$: Observable<Array<ListField>> = combineLatest([
     this.canHaveAssignee$,
     this._columns$,
-    this._hasEnvColumnConfig$,
     this.translateService.stream('key'),
   ]).pipe(
-    map(([canHaveAssignee, columns, hasEnvConfig]) => {
+    map(([canHaveAssignee, columns]) => {
       const filteredAssigneeColumns = this.assigneeService.filterAssigneeColumns(
         columns,
         canHaveAssignee
       );
       const listFields = this.columnService.mapDefinitionColumnsToColumnConfigs(
-        filteredAssigneeColumns,
-        hasEnvConfig
+        filteredAssigneeColumns
       );
 
       const fieldsToReturn = this.assigneeService.addAssigneeColumnConfig(
