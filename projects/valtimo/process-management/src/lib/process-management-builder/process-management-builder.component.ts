@@ -23,10 +23,9 @@ import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
 import {LayoutService} from '@valtimo/layout';
 import Modeler from 'bpmn-js/lib/Modeler';
 import BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
-import PropertiesPanelModule from 'bpmn-js-properties-panel';
-import PropertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda';
-import CamundaExtensionModule from 'camunda-bpmn-moddle/lib';
-import CamundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda.json';
+import {BpmnPropertiesPanelModule, BpmnPropertiesProviderModule, CamundaPlatformPropertiesProviderModule} from 'bpmn-js-properties-panel';
+import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
+import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
 
 @Component({
   selector: 'valtimo-process-management-builder',
@@ -65,15 +64,16 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
         container: '#canvas',
         height: '90vh',
         additionalModules: [
-          PropertiesPanelModule,
-          PropertiesProviderModule,
-          CamundaExtensionModule,
+          BpmnPropertiesPanelModule,
+          BpmnPropertiesProviderModule,
+          CamundaPlatformPropertiesProviderModule,
+          camundaPlatformBehaviors
         ],
         propertiesPanel: {
           parent: '#properties',
         },
         moddleExtensions: {
-          camunda: CamundaModdleDescriptor,
+          camunda: CamundaBpmnModdle,
         },
         elementTemplates,
       });
