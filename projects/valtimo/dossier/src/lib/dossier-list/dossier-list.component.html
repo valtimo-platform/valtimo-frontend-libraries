@@ -28,8 +28,7 @@
       !loadingPagination &&
       !loadingSearchFields &&
       !loadingAssigneeFilter &&
-      !loadingDocumentItems,
-    canCreateDocument: canCreateDocument$ | async
+      !loadingDocumentItems
   } as obs"
 >
   <div class="main-content pt-0">
@@ -172,6 +171,7 @@
 
 <ng-template #dossierListActions>
   <button
+    *ngIf="canCreateDocument$ | async"
     cdsButton="primary"
     [disabled]="listActionsComponent?.disableStartDossierButton$ | async"
     (click)="startDossier()"
