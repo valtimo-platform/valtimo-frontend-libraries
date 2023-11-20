@@ -22,7 +22,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
 import {LayoutService} from '@valtimo/layout';
 import Modeler from 'bpmn-js/lib/Modeler';
-import BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
+import BpmnViewer from 'bpmn-js';
 import {BpmnPropertiesPanelModule, BpmnPropertiesProviderModule, CamundaPlatformPropertiesProviderModule} from 'bpmn-js-properties-panel';
 import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
 import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
@@ -77,7 +77,7 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
         },
         elementTemplates,
       });
-      this.bpmnViewer = new BpmnJS();
+      this.bpmnViewer = new BpmnViewer();
       this.bpmnViewer.attachTo('#readOnlyCanvas');
       if (this.processKey) {
         this.loadProcessVersions(this.processKey);
