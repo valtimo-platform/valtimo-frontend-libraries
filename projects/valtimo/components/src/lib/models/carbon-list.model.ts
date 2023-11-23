@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {TemplateRef} from '@angular/core';
 import {TableRowSize} from 'carbon-components-angular';
 
 enum ViewType {
-  ACTION = 'action',
+  ACTION = 'dropdownActions',
   ARRAY_COUNT = 'arrayCount',
   BOOLEAN = 'boolean',
   DATE = 'date',
@@ -27,22 +26,22 @@ enum ViewType {
   TEXT = 'text',
   UNDERSCORES_TO_SPACES = 'underscoresToSpaces',
 }
-interface CarbonTableSelectTranslations {
+interface CarbonListSelectTranslations {
   single: string;
   multiple: string;
 }
 
-interface CarbonTablePaginationTranslations {
+interface CarbonListPaginationTranslations {
   itemsPerPage: string;
   totalItems: string;
 }
 
-interface CarbonTableTranslations {
-  select: CarbonTableSelectTranslations;
-  pagination: CarbonTablePaginationTranslations;
+interface CarbonListTranslations {
+  select: CarbonListSelectTranslations;
+  pagination: CarbonListPaginationTranslations;
 }
 
-interface CarbonTableBatchText {
+interface CarbonListBatchText {
   SINGLE: string;
   MULTIPLE: string;
 }
@@ -58,8 +57,9 @@ interface CarbonTableConfig {
 }
 
 interface ActionItem {
-  actionName: string;
+  label: string;
   callback: (_) => void;
+  iconClass?: string;
   type?: 'normal' | 'danger';
 }
 
@@ -82,22 +82,31 @@ const DEFAULT_TABLE_CONFIG: CarbonTableConfig = {
   withPagination: false,
 };
 
+const DEFAULT_LIST_TRANSLATIONS: CarbonListTranslations = {
+  select: {single: 'interface.list.singleSelect', multiple: 'interface.list.multipleSelect'},
+  pagination: {
+    itemsPerPage: 'interface.list.itemsPerPage',
+    totalItems: 'interface.list.totalItems',
+  },
+};
+
 interface ListField {
   key: string;
   label: string;
-  viewType: string;
+  viewType?: string;
   default?: string | boolean;
   sortable?: boolean;
 }
 
 export {
   ActionItem,
-  CarbonTableBatchText,
+  CarbonListBatchText,
   CarbonTableConfig,
-  CarbonTableSelectTranslations,
-  CarbonTableTranslations,
+  CarbonListSelectTranslations,
+  CarbonListTranslations,
   ColumnConfig,
   DEFAULT_TABLE_CONFIG,
+  DEFAULT_LIST_TRANSLATIONS,
   ListField,
   ViewType,
 };

@@ -555,13 +555,17 @@
     "save": "Speichern",
     "More": "Mehr",
     "export": "Export",
-    "table": {
+    "list": {
       "itemsPerPage": "Objekte pro Seite",
       "multipleSelect": "{{count}} Elemente ausgewählt",
       "ofLastPage": "von {{last}} Seite",
       "ofLastPages": "von {{last}} Seiten",
       "singleSelect": "1 Element ausgewählt",
-      "totalItems": "{{start}}-{{end}} von {{total}} Objekte"
+      "totalItems": "{{start}}-{{end}} von {{total}} Objekte",
+      "viewMode": {
+        "table": "Table",
+        "tile": "Tile"
+      }
     },
     "required": "erforderlich",
     "filter": "Filter..."

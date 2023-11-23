@@ -13,3 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.click-able {
+  cursor: pointer;
+}
+
+.container-fluid {
+  background-color: var(--cds-layer);
+}
+
+.tile-holder {
+  background-color: whitesmoke;
+  border: 1px solid transparent;
+  &:hover {
+    background-color: #eee;
+    border: 1px solid #dee2e6;
+  }
+}
+
+th:first-child,
+td:first-child {
+  padding-left: 25px;
+}
+
+.valtimo-carbon-list {
+  &__toolbar:empty {
+    display: none;
+  }
+
+  &__no-results {
+    &:empty,
+    &:not(:empty) + td {
+      display: none;
+    }
+  }
+}
