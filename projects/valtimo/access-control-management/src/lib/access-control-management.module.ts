@@ -48,6 +48,7 @@ import {ExportRoleModalComponent} from './components/export-role-modal/export-ro
     ExportRoleModalComponent,
   ],
   imports: [
+    CommonModule,
     AccessControlManagementRoutingModule,
     ButtonModule,
     FormsModule,

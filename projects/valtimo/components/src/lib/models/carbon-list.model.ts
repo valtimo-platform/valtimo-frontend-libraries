@@ -46,16 +46,6 @@ interface CarbonListBatchText {
   MULTIPLE: string;
 }
 
-interface CarbonTableConfig {
-  enableSingleSelect?: boolean;
-  searchable?: boolean;
-  showSelectionColumn?: boolean;
-  size?: TableRowSize;
-  sortable?: boolean;
-  striped?: boolean;
-  withPagination?: boolean;
-}
-
 interface ActionItem {
   label: string;
   callback: (_) => void;
@@ -71,16 +61,6 @@ interface ColumnConfig extends ListField {
   enum?: Array<string> | {[key: string]: string};
   template?: TemplateRef<any>;
 }
-
-const DEFAULT_TABLE_CONFIG: CarbonTableConfig = {
-  enableSingleSelect: false,
-  searchable: false,
-  size: 'md',
-  showSelectionColumn: false,
-  sortable: true,
-  striped: false,
-  withPagination: false,
-};
 
 const DEFAULT_LIST_TRANSLATIONS: CarbonListTranslations = {
   select: {single: 'interface.list.singleSelect', multiple: 'interface.list.multipleSelect'},
@@ -101,11 +81,9 @@ interface ListField {
 export {
   ActionItem,
   CarbonListBatchText,
-  CarbonTableConfig,
   CarbonListSelectTranslations,
   CarbonListTranslations,
   ColumnConfig,
-  DEFAULT_TABLE_CONFIG,
   DEFAULT_LIST_TRANSLATIONS,
   ListField,
   ViewType,

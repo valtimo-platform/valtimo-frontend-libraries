@@ -13,7 +13,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <cds-table-container
   *ngIf="{
     sort: sort$ | async
@@ -79,7 +78,7 @@
   <cds-table
     *ngIf="(!viewMode || viewListAs === 'table') && !!obs.sort"
     [enableSingleSelect]="enableSingleSelect"
-    [model]="model"
+    [model]="loading ? skeletonModel : model"
     [showSelectionColumn]="showSelectionColumn"
     [skeleton]="loading"
     [striped]="striped"

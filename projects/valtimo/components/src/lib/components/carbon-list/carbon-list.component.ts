@@ -53,7 +53,6 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-
 import {
   CarbonListBatchText,
   CarbonListTranslations,
@@ -99,7 +98,6 @@ export class CarbonListComponent<T> implements OnInit, OnDestroy {
   private _fields: ColumnConfig[];
   public fields$: Observable<TableHeaderItem[]> = of([]);
   @Input() set fields(value: ColumnConfig[]) {
-    console.log(value);
     this._fields = value;
     this.buildHeaderItems(value);
 
@@ -131,27 +129,26 @@ export class CarbonListComponent<T> implements OnInit, OnDestroy {
     return this._pagination;
   }
 
-  private _loading = false;
-  @Input() public set loading(value: boolean) {
-    this._loading = value;
-    this.model = value ? Table.skeletonModel(5, 5) : new TableModel();
-  }
-  public get loading(): boolean {
-    return this._loading;
-  }
+  @Input() loading: boolean;
 
-  //To be deprecated
+  /**
+   * @deprecated The actions field is deprecated. Actions can be added through the **@Input field**.
+   */
   @Input() actions: any[] = [];
   @Input() header: boolean;
   @Input() initialSortState: SortState;
   @Input() isSearchable = false;
   @Input() enableSingleSelection = false;
-  //To be deprecated
+  /**
+   * @deprecated The lastColumnTemplate field is deprecated. Any template column can be added through the **@Input field**.
+   */
   @Input() lastColumnTemplate: TemplateRef<any>;
   @Input() paginationIdentifier: string;
   @Input() showSelectionColumn = false;
   @Input() striped = false;
-  //To be deprecated
+  /**
+   * @deprecated The viewMode field is deprecated.
+   */
   @Input() viewMode: boolean;
 
   @Output() rowClicked = new EventEmitter<any>();
@@ -200,6 +197,7 @@ export class CarbonListComponent<T> implements OnInit, OnDestroy {
 
   public readonly ViewType = ViewType;
   public model = new TableModel();
+  public skeletonModel = Table.skeletonModel(5, 5);
   public paginationModel: PaginationModel;
   public searchFormControl = new FormControl('');
   public searchModel: string;

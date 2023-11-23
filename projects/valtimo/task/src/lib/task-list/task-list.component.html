@@ -73,7 +73,7 @@
   >
     {{ 'task-list.goToCase' | translate }}
   </a>
-  <div *ngIf="tasks[currentTaskType].tasks[index].isLocked">
+  <div *ngIf="tasks[currentTaskType].tasks[data.index].isLocked">
     <span
       class="float-right badge badge-pill badge-secondary bg-grey"
       ngbTooltip="{{ 'task-list.taskLocked' | translate }}"
