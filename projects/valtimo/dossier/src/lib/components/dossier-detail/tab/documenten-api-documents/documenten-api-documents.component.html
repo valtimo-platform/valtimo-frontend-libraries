@@ -14,7 +14,24 @@
   ~ limitations under the License.
   -->
 
+<div style="margin: -1.923rem -1.923rem 0;">
+  <valtimo-carbon-table
+          hideTableHeader
+          [data]="relatedFiles$ | async"
+          [fields]="fields"
+          [loading]="loading$ | async"
+          [tableConfig]="tableConfig"
+  >
+    <div carbonToolbarContent>
+      <ng-container *ngTemplateOutlet="dossierListActions"></ng-container>
+    </div>
+  </valtimo-carbon-table>
+</div>
+
+<br/><br/>
+
 <ng-container *ngIf="{loading: loading$ | async} as obs">
+
   <div *ngIf="uploadProcessLinkedSet && !uploadProcessLinked">
     <div
       *ngIf="isAdmin"
@@ -100,5 +117,68 @@
       }}<svg class="cds--btn__icon" cdsIcon="download" size="16"></svg>
     </button>
     <cds-loading size="sm" *ngIf="vars.isDownloading"></cds-loading>
+  </div>
+</ng-template>
+
+<ng-template #dossierListActions>
+  <div style="display: flex">
+    <button
+            cdsButton="ghost"
+            [cdsOverflowMenu]="filterMenuRef"
+            [customPane]="true"
+            [flip]="true"
+            placement="bottom"
+            [offset]="{ x: 0, y: 48 }"
+    >
+      <svg cdsIcon="filter" size="16"></svg>
+    </button>
+    <ng-template #filterMenuRef>
+      <div style="padding: 0; background-color: white;">
+        <div style="padding: 16px; width: 300px; height: 200px;">
+          Filter menu
+        </div>
+      </div>
+    </ng-template>
+
+    <button
+            cdsButton="ghost"
+            [cdsOverflowMenu]="tagsMenuRef"
+            [customPane]="true"
+            [flip]="true"
+            placement="bottom"
+            [offset]="{ x: 0, y: 48 }"
+    >
+      <svg cdsIcon="tag--group" size="16"></svg>
+    </button>
+    <ng-template #tagsMenuRef>
+      <div style="padding: 0; background-color: white;">
+        <div style="padding: 16px; width: 300px; height: 200px;">
+          Trefwoorden menu
+        </div>
+      </div>
+    </ng-template>
+
+    <cds-file-uploader style="margin-top: -29px;"
+            (filesChange)="fileSelected($event)"
+            [buttonText]="'Upload'"
+            [buttonType]="'primary'"
+            [accept]="['pdf', 'jpg']"
+            [size]="'lg'"
+            [fileItemSize]="'lg'"
+            [multiple]="false"
+            [disabled]="false"
+            [drop]="false"
+    >
+      <svg class="cds--btn__icon" cdsIcon="upload" size="16"></svg>
+    </cds-file-uploader>
+
+<!--    <button-->
+<!--            cdsButton="primary"-->
+<!--            [disabled]="false"-->
+<!--    >-->
+<!--      {{ 'Upload' | translate }}-->
+
+<!--      <svg class="cds&#45;&#45;btn__icon" cdsIcon="upload" size="16"></svg>-->
+<!--    </button>-->
   </div>
 </ng-template>

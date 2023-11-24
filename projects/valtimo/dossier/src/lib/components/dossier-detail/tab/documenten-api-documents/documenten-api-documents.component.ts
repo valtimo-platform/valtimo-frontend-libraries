@@ -23,10 +23,12 @@ import {catchError, map, switchMap, take, tap} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfigService} from '@valtimo/config';
-import {DocumentenApiMetadata, PromptService} from '@valtimo/components';
+import {ListField, DocumentenApiMetadata, PromptService} from '@valtimo/components';
 import {UserProviderService} from '@valtimo/security';
 import {FileSortService} from '../../../../services/file-sort.service';
 import moment from 'moment';
+import {Filter16, TagGroup16, Upload16} from "@carbon/icons";
+import {IconService, Pagination} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -40,11 +42,21 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly acceptedFiles: string =
     this.configService?.config?.caseFileUploadAcceptedFiles || null;
   public fields = [
-    {key: 'fileName', label: 'File name'},
-    {key: 'sizeInBytes', label: 'Size in bytes'},
-    {key: 'createdOn', label: 'Created on'},
-    {key: 'createdBy', label: 'Created by'},
+    {key: 'title', label: 'document.inputTitle'},
+    {key: 'formaat', label: 'document.format'},
+    {key: 'description', label: 'document.inputDescription'},
+    {key: 'size', label: 'document.size'},
+    {key: 'createdOn', label: 'document.createdOn'},
+    {key: 'createdBy', label: 'document.createdBy'},
+    {key: 'trefwoorden', label: 'document.trefwoorden'},
+    {key: 'informatieobjecttype', label: 'document.informatieobjecttype'},
+    // {key: 'language', label: 'document.language'},
+    // {key: 'identification', label: 'document.id'},
   ];
+
+  public tableConfig = {
+    searchable: true
+  }
 
   public showZaakLinkWarning: boolean;
   public isAdmin: boolean;
@@ -69,17 +81,19 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       const translatedFiles = relatedFiles?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
+        language: this.translateService.instant(`document.${file.language}`)
       }));
-
+      console.log('translatedFiles: ', translatedFiles);
       return translatedFiles || [];
     }),
     map(relatedFiles => this.fileSortService.sortRelatedFilesByDateDescending(relatedFiles)),
     map(relatedFiles => {
       moment.locale(this.translateService.currentLang);
-
+      console.log('relatedFiles: ', relatedFiles);
       return relatedFiles.map(file => ({
         ...file,
         createdOn: moment(new Date(file.createdOn)).format('L'),
+        size: `${this.bytesToMegabytes(file.sizeInBytes)}`
       }));
     }),
     tap(() => this.loading$.next(false)),
@@ -101,7 +115,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
     private readonly userProviderService: UserProviderService,
-    private readonly fileSortService: FileSortService
+    private readonly fileSortService: FileSortService,
+    protected iconService: IconService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.documentId = snapshot.get('documentId') || '';
@@ -112,9 +127,13 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.refetchDocuments();
     this.setUploadProcessLinked();
     this.isUserAdmin();
+    this.iconService.register(Filter16);
+    this.iconService.register(TagGroup16);
+    this.iconService.register(Upload16);
   }
 
   fileSelected(file: File): void {
+    console.log('file: ', file);
     this.fileToBeUploaded$.next(file);
     this.showModal$.next(null);
   }
@@ -185,5 +204,10 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         this.uploadProcessLinkedSet = true;
       }
     );
+  }
+
+  private bytesToMegabytes(bytes: number): string {
+    const megabytes = bytes / (1024 * 1024);
+    return megabytes.toFixed(2) + ' MB';
   }
 }

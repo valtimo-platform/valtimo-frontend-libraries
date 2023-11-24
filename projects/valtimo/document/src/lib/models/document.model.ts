@@ -93,9 +93,17 @@ interface RelatedFile {
   fileId: string;
   fileName: string;
   sizeInBytes: number;
+  size?: string;
   createdOn: Date;
   createdBy: string;
+  title?: string;
+  language?: string;
   pluginConfigurationId?: string;
+  identification?: string;
+  description?: string;
+  informatieobjecttype?: string;
+  trefwoorden?: Array<String>;
+  formaat?: string;
 }
 
 type RelatedFileListItem = Omit<RelatedFile, 'createdOn'> & {createdOn: string};
