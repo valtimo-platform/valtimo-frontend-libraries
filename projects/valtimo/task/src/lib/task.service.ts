@@ -42,7 +42,9 @@ export class TaskService {
   }
 
   getCandidateUsers(id: string): Observable<NamedUser[]> {
-    return this.http.get<NamedUser[]>(this.valtimoEndpointUri + 'v2/task/' + id + '/candidate-user');
+    return this.http.get<NamedUser[]>(
+      this.valtimoEndpointUri + 'v2/task/' + id + '/candidate-user'
+    );
   }
 
   assignTask(id: string, assigneeRequest: AssigneeRequest): Observable<any> {
