@@ -150,7 +150,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     })
   );
 
-  public showSelectionColumn: boolean;
+  public showSelectionColumn!: boolean;
   public readonly searchFieldValues$ = this.parameterService.searchFieldValues$;
   public readonly assigneeFilter$: Observable<AssigneeFilter> =
     this.assigneeService.assigneeFilter$;

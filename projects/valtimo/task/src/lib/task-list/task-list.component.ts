@@ -61,7 +61,7 @@ export class TaskListComponent implements OnDestroy {
     private readonly translateService: TranslateService
   ) {
     this.visibleTabs = this.configService.config?.visibleTaskListTabs || null;
-    if (!!this.visibleTabs) {
+    if (this.visibleTabs) {
       this.currentTaskType = this.visibleTabs[0];
     }
     this.setDefaultSorting();

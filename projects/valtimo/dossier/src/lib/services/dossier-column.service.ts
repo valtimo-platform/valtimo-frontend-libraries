@@ -100,12 +100,10 @@ export class DossierColumnService {
     switch (caseListColumnDisplayType) {
       case 'arrayCount':
         return 'relatedFiles';
-        break;
       case 'underscoresToSpaces':
         return 'stringReplaceUnderscore';
       default:
         return caseListColumnDisplayType;
-        break;
     }
   }
 
