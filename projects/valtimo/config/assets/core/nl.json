@@ -556,15 +556,15 @@
     "more": "Meer",
     "export": "Exporteren",
     "list": {
-      "itemsPerPage": "Artikelen per pagina",
-      "multipleSelect": "{{count}} artikelen geselecteerd",
+      "itemsPerPage": "Items per pagina",
+      "multipleSelect": "{{count}} items geselecteerd",
       "ofLastPage": "van {{last}} pagina",
       "ofLastPages": "van {{last}} pagina's",
-      "singleSelect": "1 artikel geselecteerd",
-      "totalItems": "{{start}}-{{end}} van {{total}} artikelen",
+      "singleSelect": "1 item geselecteerd",
+      "totalItems": "{{start}}-{{end}} van {{total}} items",
       "viewMode": {
-        "table": "Table",
-        "tile": "Tile"
+        "table": "Tabel",
+        "tile": "Tegel"
       }
     },
     "required": "vereist",

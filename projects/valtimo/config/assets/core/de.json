@@ -557,14 +557,14 @@
     "export": "Export",
     "list": {
       "itemsPerPage": "Objekte pro Seite",
-      "multipleSelect": "{{count}} Elemente ausgewählt",
+      "multipleSelect": "{{count}} Objekte ausgewählt",
       "ofLastPage": "von {{last}} Seite",
       "ofLastPages": "von {{last}} Seiten",
-      "singleSelect": "1 Element ausgewählt",
+      "singleSelect": "1 Objekt ausgewählt",
       "totalItems": "{{start}}-{{end}} von {{total}} Objekte",
       "viewMode": {
-        "table": "Table",
-        "tile": "Tile"
+        "table": "Tabelle",
+        "tile": "Fliesen"
       }
     },
     "required": "erforderlich",
