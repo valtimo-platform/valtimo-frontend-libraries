@@ -387,6 +387,8 @@
     "readOnly": "Schreibgeschützt"
   },
   "dossierManagement": {
+    "more": "Mehr",
+    "export": "{{value}} exportieren",
     "readonly": "Schreibgeschützt",
     "connectedProcesses": "Verknüpfte Prozesse",
     "connectProcess": "Prozess verknüpfen",

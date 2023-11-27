@@ -387,6 +387,8 @@
     "readOnly": "Alleen-lezen"
   },
   "dossierManagement": {
+    "more": "Meer",
+    "export": "{{value}} exporteren",
     "readonly": "Alleen-lezen",
     "connectedProcesses": "Gekoppelde processen",
     "connectProcess": "Proces koppelen",

@@ -388,6 +388,8 @@
     "readOnly": "Read-only"
   },
   "dossierManagement": {
+    "more": "More",
+    "export": "Export {{value}}",
     "readonly": "Read-only",
     "connectedProcesses": "Connected processes",
     "connectProcess": "Connect process",

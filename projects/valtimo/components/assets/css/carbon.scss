@@ -141,3 +141,7 @@ body {
     z-index: 10001 !important;
   }
 }
+
+.hide-after::after {
+  display: none;
+}
