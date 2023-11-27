@@ -387,6 +387,7 @@
     "readOnly": "Schreibgeschützt"
   },
   "dossierManagement": {
+    "preparingDownload": "Download wird vorbereitet",
     "more": "Mehr",
     "export": "{{value}} exportieren",
     "readonly": "Schreibgeschützt",

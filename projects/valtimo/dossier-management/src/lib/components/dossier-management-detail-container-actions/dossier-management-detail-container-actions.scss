@@ -19,3 +19,14 @@
   width: 100%;
   justify-content: space-between;
 }
+
+.exporting-message {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__text {
+    margin-right: 16px;
+  }
+}

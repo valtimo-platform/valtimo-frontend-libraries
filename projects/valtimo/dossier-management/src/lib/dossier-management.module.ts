@@ -127,6 +127,7 @@ import {DossierManagementDetailContainerActionsComponent} from './components/dos
     RenderInPageHeaderDirectiveModule,
     DialogModule,
     ValtimoCdsOverflowButtonDirectiveModule,
+    NotificationModule,
   ],
   providers: [TabManagementService],
 })

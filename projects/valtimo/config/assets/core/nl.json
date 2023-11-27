@@ -387,6 +387,7 @@
     "readOnly": "Alleen-lezen"
   },
   "dossierManagement": {
+    "preparingDownload": "Download aan het voorbereiden",
     "more": "Meer",
     "export": "{{value}} exporteren",
     "readonly": "Alleen-lezen",

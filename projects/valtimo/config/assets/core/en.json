@@ -388,6 +388,7 @@
     "readOnly": "Read-only"
   },
   "dossierManagement": {
+    "preparingDownload": "Preparing download",
     "more": "More",
     "export": "Export {{value}}",
     "readonly": "Read-only",

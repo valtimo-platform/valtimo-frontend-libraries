@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<div class="dossier-actions">
+<div class="dossier-actions" *ngIf="{exporting: exporting$ | async} as obs">
   <span></span>
   {{ '' // replace with version dropdown }}
 
@@ -24,7 +24,7 @@
     [offset]="{y: 48, x: 37}"
     class="overflow-button"
   >
-    <cds-overflow-menu-option [disabled]="false"
+    <cds-overflow-menu-option [disabled]="obs.exporting" (selected)="export()"
       >{{ 'dossierManagement.export' | translate: {value: documentDefinitionTitle}
       }}</cds-overflow-menu-option
     >
@@ -36,4 +36,11 @@
     {{ 'dossierManagement.more' | translate }}
     <svg class="cds--btn__icon" cdsIcon="overflow-menu--vertical" size="16"></svg>
   </button>
+</ng-template>
+
+<ng-template #exportingMessage>
+  <div class="exporting-message">
+    <p class="exporting-message__text">{{'dossierManagement.preparingDownload' | translate}}</p>
+    <cds-loading size="sm"></cds-loading>
+  </div>
 </ng-template>

@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, Input, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {NotificationService} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container-actions',
@@ -22,7 +31,24 @@ import {ChangeDetectionStrategy, Component, Input, ViewEncapsulation} from '@ang
   styleUrls: ['./dossier-management-detail-container-actions.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  providers: [NotificationService],
 })
 export class DossierManagementDetailContainerActionsComponent {
+  @ViewChild('exportingMessage') private readonly _exportMessageTemplateRef: TemplateRef<any>;
+  public readonly exporting$ = new BehaviorSubject<boolean>(false);
+
   @Input() documentDefinitionTitle = '';
+  @Input() documentDefinitionName = '';
+
+  constructor(private readonly notificationService: NotificationService) {}
+
+  public export(): void {
+    this.notificationService.showNotification({
+      type: 'info',
+      title: 'test',
+      showClose: false,
+      template: this._exportMessageTemplateRef,
+    });
+    this.exporting$.next(true);
+  }
 }
