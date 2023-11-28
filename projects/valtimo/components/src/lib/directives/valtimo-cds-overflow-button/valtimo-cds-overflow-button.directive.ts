@@ -21,7 +21,6 @@ import {
   ElementRef,
   Inject,
   Input,
-  OnChanges,
   OnDestroy,
   Renderer2,
 } from '@angular/core';
@@ -29,7 +28,7 @@ import {OverflowMenu} from 'carbon-components-angular';
 import {v4 as uuidv4} from 'uuid';
 
 @Directive({selector: '[valtimoCdsOverflowButton]'})
-export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnChanges, OnDestroy {
+export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnDestroy {
   @Input() width = 0;
 
   private _observer!: MutationObserver;
@@ -46,10 +45,6 @@ export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnChang
     this.openMutationObserver();
     this.setHostInputs();
     this.setStyles();
-  }
-
-  ngOnChanges(): void {
-    this.setHostInputs();
   }
 
   ngOnDestroy(): void {
