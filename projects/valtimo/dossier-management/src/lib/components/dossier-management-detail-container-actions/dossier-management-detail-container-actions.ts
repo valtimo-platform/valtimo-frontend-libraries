@@ -26,7 +26,6 @@ import {BehaviorSubject, switchMap, tap} from 'rxjs';
 import {NotificationService} from 'carbon-components-angular';
 import {DossierExportService} from '../../services';
 import {TranslateService} from '@ngx-translate/core';
-import {DomSanitizer} from '@angular/platform-browser';
 import {DOCUMENT} from '@angular/common';
 import {HttpResponse} from '@angular/common/http';
 
@@ -51,8 +50,7 @@ export class DossierManagementDetailContainerActionsComponent {
     @Inject(DOCUMENT) private document: Document,
     private readonly notificationService: NotificationService,
     private readonly dossierExportService: DossierExportService,
-    private readonly translateService: TranslateService,
-    private readonly sanitizer: DomSanitizer
+    private readonly translateService: TranslateService
   ) {}
 
   public export(): void {
