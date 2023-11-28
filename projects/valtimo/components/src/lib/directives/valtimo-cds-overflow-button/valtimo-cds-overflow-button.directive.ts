@@ -20,6 +20,7 @@ import {
   Directive,
   ElementRef,
   Inject,
+  Input,
   OnChanges,
   OnDestroy,
   Renderer2,
@@ -29,6 +30,8 @@ import {v4 as uuidv4} from 'uuid';
 
 @Directive({selector: '[valtimoCdsOverflowButton]'})
 export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnChanges, OnDestroy {
+  @Input() width = 0;
+
   private _observer!: MutationObserver;
   private readonly WRAPPER_CLASS = uuidv4();
 
@@ -88,5 +91,9 @@ export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnChang
 
   private setOverFlowMenuProperties(element: HTMLUListElement): void {
     this.renderer.addClass(element, 'hide-after');
+
+    if (this.width) {
+      this.renderer.setStyle(element, 'width', `${this.width}px`);
+    }
   }
 }

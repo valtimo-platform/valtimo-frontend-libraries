@@ -15,11 +15,12 @@
   -->
 
 <div class="dossier-actions" *ngIf="{exporting: exporting$ | async} as obs">
-  <span></span>
   {{ '' // replace with version dropdown }}
+  <span></span>
 
   <cds-overflow-menu
     valtimoCdsOverflowButton
+    [width]="250"
     [customTrigger]="customTrigger"
     [offset]="{y: 48, x: 37}"
     class="overflow-button"
@@ -34,13 +35,17 @@
 <ng-template #customTrigger>
   <button cdsButton="tertiary">
     {{ 'dossierManagement.more' | translate }}
+
     <svg class="cds--btn__icon" cdsIcon="overflow-menu--vertical" size="16"></svg>
   </button>
 </ng-template>
 
 <ng-template #exportingMessage>
   <div class="exporting-message">
-    <p class="exporting-message__text">{{'dossierManagement.preparingDownload' | translate}}</p>
+    <span class="exporting-message__text cds--inline-notification__title"
+      >{{'dossierManagement.preparingDownload' | translate}}</span
+    >
+
     <cds-loading size="sm"></cds-loading>
   </div>
 </ng-template>
