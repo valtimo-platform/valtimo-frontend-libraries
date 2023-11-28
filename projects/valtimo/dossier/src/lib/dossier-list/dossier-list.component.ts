@@ -16,11 +16,12 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import {PermissionService} from '@valtimo/access-control';
 import {
   BreadcrumbService,
   CarbonListComponent,
-  CarbonPaginationSelection,
   CarbonListTranslations,
+  CarbonPaginationSelection,
   ListField,
   PageTitleService,
   Pagination,
@@ -49,8 +50,10 @@ import {
   combineLatest,
   distinctUntilChanged,
   filter,
+  forkJoin,
   map,
   Observable,
+  of,
   Subscription,
   switchMap,
   take,
@@ -59,6 +62,7 @@ import {
 
 import {DefaultTabs} from '../dossier-detail-tab-enum';
 import {DossierListActionsComponent} from '../dossier-list-actions/dossier-list-actions.component';
+import {CAN_CREATE_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../permissions';
 import {
   DossierBulkAssignService,
   DossierColumnService,
@@ -68,8 +72,6 @@ import {
   DossierListService,
   DossierParameterService,
 } from '../services';
-import {PermissionService} from '@valtimo/access-control';
-import {CAN_CREATE_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../permissions';
 
 @Component({
   selector: 'valtimo-dossier-list',
@@ -151,18 +153,11 @@ export class DossierListComponent implements OnInit, OnDestroy {
     })
   );
 
-  public showSelectionColumn!: boolean;
   public readonly searchFieldValues$ = this.parameterService.searchFieldValues$;
   public readonly assigneeFilter$: Observable<AssigneeFilter> =
     this.assigneeService.assigneeFilter$;
   public readonly paginationChange$ = new BehaviorSubject<CarbonPaginationSelection | null>(null);
   public readonly tabChange$ = new BehaviorSubject<DossierListTab | null>(null);
-  public readonly canHaveAssignee$: Observable<boolean> =
-    this.assigneeService.canHaveAssignee$.pipe(
-      tap((showSelectionColumn: boolean) => {
-        this.showSelectionColumn = showSelectionColumn;
-      })
-    );
   private readonly _pagination$ = this.paginationService.pagination$.pipe(
     tap(pagination => {
       this.pagination = pagination;
@@ -185,7 +180,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
       }),
       tap(columns => {
         this.listService.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
-          this.paginationService.setPagination(documentDefinitionName, columns);
+          this.paginationService.setPagination(columns);
         });
       })
     );
@@ -218,7 +213,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
     }),
     tap(listFields => {
       const defaultListField = listFields.find(field => field.default);
-
       // set default sort state if no pagination query parameters for sorting are available
       this.parameterService.queryPaginationParams$
         .pipe(take(1))
@@ -252,7 +246,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
       )
     );
 
-  private readonly _documentsRequest$: Observable<Documents | SpecifiedDocuments> = combineLatest([
+  public readonly documentItems$: Observable<any[]> = combineLatest([
     this._documentSearchRequest$,
     this.searchFieldValues$,
     this.assigneeFilter$,
@@ -297,44 +291,63 @@ export class DossierListComponent implements OnInit, OnDestroy {
         hasEnvColumnConfig,
         hasApiColumnConfig,
       ]) => {
+        const obsEnv: Observable<boolean> = of(hasEnvColumnConfig);
+        const obsApi: Observable<boolean> = of(hasApiColumnConfig);
+
         if ((Object.keys(searchValues) || []).length > 0) {
-          return hasEnvColumnConfig || !hasApiColumnConfig
-            ? this.documentService.getDocumentsSearch(
-                documentSearchRequest,
-                'AND',
-                assigneeFilter,
-                this.searchService.mapSearchValuesToFilters(searchValues)
-              )
-            : this.documentService.getSpecifiedDocumentsSearch(
-                documentSearchRequest,
-                'AND',
-                assigneeFilter,
-                this.searchService.mapSearchValuesToFilters(searchValues)
-              );
+          return forkJoin({
+            documents:
+              hasEnvColumnConfig || !hasApiColumnConfig
+                ? this.documentService.getDocumentsSearch(
+                    documentSearchRequest,
+                    'AND',
+                    assigneeFilter,
+                    this.searchService.mapSearchValuesToFilters(searchValues)
+                  )
+                : this.documentService.getSpecifiedDocumentsSearch(
+                    documentSearchRequest,
+                    'AND',
+                    assigneeFilter,
+                    this.searchService.mapSearchValuesToFilters(searchValues)
+                  ),
+            hasEnvColumnConfig: obsEnv,
+            hasApiColumnConfig: obsApi,
+          });
         }
 
-        return hasEnvColumnConfig || !hasApiColumnConfig
-          ? this.documentService.getDocumentsSearch(documentSearchRequest, 'AND', assigneeFilter)
-          : this.documentService.getSpecifiedDocumentsSearch(
-              documentSearchRequest,
-              'AND',
-              assigneeFilter
-            );
+        return forkJoin({
+          documents:
+            hasEnvColumnConfig || !hasApiColumnConfig
+              ? this.documentService.getDocumentsSearch(
+                  documentSearchRequest,
+                  'AND',
+                  assigneeFilter
+                )
+              : this.documentService.getSpecifiedDocumentsSearch(
+                  documentSearchRequest,
+                  'AND',
+                  assigneeFilter
+                ),
+          hasEnvColumnConfig: obsEnv,
+          hasApiColumnConfig: obsApi,
+        });
       }
     ),
-    tap(documents => {
-      this.paginationService.setCollectionSize(documents);
-      this.paginationService.checkPage(documents);
-    })
-  );
+    map(
+      (res: {
+        documents: Documents | SpecifiedDocuments;
+        hasEnvColumnConfig: boolean;
+        hasApiColumnConfig: boolean;
+      }) => {
+        this.paginationService.setCollectionSize(res.documents);
+        this.paginationService.checkPage(res.documents);
 
-  public documentItems$ = combineLatest([
-    this._documentsRequest$,
-    this._hasEnvColumnConfig$,
-    this._hasApiColumnConfig$,
-  ]).pipe(
-    map(([documents, hasEnvColumnConfig, hasApiColumnConfig]) =>
-      this.listService.mapDocuments(documents, hasEnvColumnConfig, hasApiColumnConfig)
+        return this.listService.mapDocuments(
+          res.documents,
+          res.hasEnvColumnConfig,
+          res.hasApiColumnConfig
+        );
+      }
     ),
     tap(() => {
       this.loadingAssigneeFilter = false;

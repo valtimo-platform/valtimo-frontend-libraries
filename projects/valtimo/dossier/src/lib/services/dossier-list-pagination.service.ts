@@ -113,7 +113,7 @@ export class DossierListPaginationService {
     this._pagination$.next(undefined);
   }
 
-  setPagination(documentDefinitionName: string, columns: Array<DefinitionColumn>): void {
+  setPagination(columns: Array<DefinitionColumn>): void {
     this.dossierParameterService.queryPaginationParams$
       .pipe(take(1))
       .subscribe(queryPaginationParams => {
