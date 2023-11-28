@@ -41,13 +41,13 @@ export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnDestr
     private readonly host: OverflowMenu
   ) {}
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.openMutationObserver();
     this.setHostInputs();
     this.setStyles();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this._observer?.disconnect();
   }
 

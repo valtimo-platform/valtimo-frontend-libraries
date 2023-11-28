@@ -32,7 +32,7 @@ export class DossierExportService {
     this.valtimoEndpointUri = this.configService.config.valtimoApi.endpointUri;
   }
 
-  exportDocumentDefinition(
+  public exportDocumentDefinition(
     documentDefinitionName: string,
     version = 1
   ): Observable<HttpResponse<Blob>> {

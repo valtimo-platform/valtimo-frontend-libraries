@@ -25,8 +25,5 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  &__text {
-    margin-right: 16px;
-  }
+  gap: 16px;
 }
