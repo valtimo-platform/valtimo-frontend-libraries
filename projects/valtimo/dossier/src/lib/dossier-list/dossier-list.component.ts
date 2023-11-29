@@ -71,6 +71,7 @@ import {
   DossierListService,
   DossierParameterService,
 } from '../services';
+import {isEqual} from 'lodash';
 
 @Component({
   selector: 'valtimo-dossier-list',
@@ -163,11 +164,11 @@ export class DossierListComponent implements OnInit, OnDestroy {
       this.loadingPagination = false;
     })
   );
-  private readonly _reload$ = new BehaviorSubject<boolean>(false);
   private readonly _hasEnvColumnConfig$: Observable<boolean> = this.listService.hasEnvColumnConfig$;
   private readonly _hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
   private readonly _canHaveAssignee$: Observable<boolean> = this.assigneeService.canHaveAssignee$;
   private readonly _searchSwitch$ = this.searchService.searchSwitch$;
+  private readonly _bulkAssignChanged$ = new BehaviorSubject<boolean>(false);
   private readonly _columns$: Observable<Array<DefinitionColumn>> =
     this.listService.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
@@ -236,59 +237,55 @@ export class DossierListComponent implements OnInit, OnDestroy {
   private readonly _documentSearchRequest$: Observable<AdvancedDocumentSearchRequest> =
     combineLatest([this._pagination$, this.listService.documentDefinitionName$]).pipe(
       filter(([pagination]) => !!pagination),
-      map(
-        ([pagination, documentDefinitionName]) =>
-          new AdvancedDocumentSearchRequestImpl(
-            documentDefinitionName,
-            pagination.page - 1,
-            pagination.size,
-            pagination.sort
-          )
-      )
+      map(([pagination, documentDefinitionName]) => {
+        const page = pagination.page - 1;
+
+        return new AdvancedDocumentSearchRequestImpl(
+          documentDefinitionName,
+          page >= 0 ? page : 0,
+          pagination.size,
+          pagination.sort
+        );
+      })
     );
 
-  public readonly documentItems$: Observable<any[]> = combineLatest([
-    this._documentSearchRequest$,
-    this.searchFieldValues$,
-    this.assigneeFilter$,
-    this._hasEnvColumnConfig$,
-    this._hasApiColumnConfig$,
-    this._searchSwitch$,
-    this._reload$,
-  ]).pipe(
+  public readonly documentItems$: Observable<any[]> = this._searchSwitch$.pipe(
+    switchMap(() =>
+      combineLatest([
+        this._documentSearchRequest$,
+        this.assigneeFilter$,
+        this.searchFieldValues$,
+        this._bulkAssignChanged$,
+        this._hasEnvColumnConfig$,
+        this._hasApiColumnConfig$,
+      ])
+    ),
     distinctUntilChanged(
       (
-        [
-          prevSearchRequest,
-          prevSearchValues,
-          prevAssigneeFilter,
-          prevHasEnvColumnConfig,
-          prevHasApiColumnConfig,
-          prevSearchSwitch,
-          prevReload,
-        ],
-        [
-          currSearchRequest,
-          currSearchValues,
-          currAssigneeFilter,
-          currHasEnvColumnConfig,
-          currHasApiColumnConfig,
-          currSearchSwitch,
-          currReload,
-        ]
+        [prevSearchRequest, prevAssigneeFilter, prevSearchFieldValues, prevBulkAssignChanged],
+        [currSearchRequest, currAssigneeFilter, currSearchFieldValues, currBulkAssignChanged]
       ) =>
-        JSON.stringify({...prevSearchRequest, ...prevSearchValues}) +
-          prevAssigneeFilter +
-          prevSearchSwitch ===
-          JSON.stringify({...currSearchRequest, ...currSearchValues}) +
-            currAssigneeFilter +
-            currSearchSwitch && prevReload !== currReload
+        isEqual(
+          {
+            ...prevSearchRequest,
+            assignee: prevAssigneeFilter,
+            ...prevSearchFieldValues,
+            bulkAssign: prevBulkAssignChanged,
+          },
+          {
+            ...currSearchRequest,
+            assignee: currAssigneeFilter,
+            ...currSearchFieldValues,
+            bulkAssign: currBulkAssignChanged,
+          }
+        )
     ),
     switchMap(
       ([
         documentSearchRequest,
-        searchValues,
         assigneeFilter,
+        searchValues,
+        _,
         hasEnvColumnConfig,
         hasApiColumnConfig,
       ]) => {
@@ -487,17 +484,9 @@ export class DossierListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.bulkAssignService
-      .bulkAssign(assigneeId, documentIds)
-      .pipe(
-        tap(() => {
-          this._reload$.next(false);
-        }),
-        take(1)
-      )
-      .subscribe(() => {
-        this._reload$.next(false);
-      });
+    this.bulkAssignService.bulkAssign(assigneeId, documentIds).subscribe(() => {
+      this.bulkAssignChanged();
+    });
   }
 
   public onChangePageConfirm(pagination: CarbonPaginationSelection): void {
@@ -543,5 +532,11 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   private setVisibleTabs(): void {
     this.visibleDossierTabs = this.configService.config?.visibleDossierListTabs || null;
+  }
+
+  private bulkAssignChanged(): void {
+    this._bulkAssignChanged$.pipe(take(1)).subscribe(bulkAssignChanged => {
+      this._bulkAssignChanged$.next(!bulkAssignChanged);
+    });
   }
 }

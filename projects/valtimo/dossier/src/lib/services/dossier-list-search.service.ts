@@ -48,7 +48,7 @@ export class DossierListSearchService {
   search(searchFieldValues: SearchFieldValues): void {
     this.dossierParameterService.setSearchFieldValues(searchFieldValues || {});
     this.dossierParameterService.setSearchParameters(searchFieldValues);
-    this._searchSwitch$.next(!this._searchSwitch$.getValue());
+    this.refresh();
   }
 
   refresh(): void {
