@@ -167,8 +167,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
   private readonly _hasEnvColumnConfig$: Observable<boolean> = this.listService.hasEnvColumnConfig$;
   private readonly _hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
   private readonly _canHaveAssignee$: Observable<boolean> = this.assigneeService.canHaveAssignee$;
-  private readonly _searchSwitch$ = this.searchService.searchSwitch$;
-  private readonly _bulkAssignChanged$ = new BehaviorSubject<boolean>(false);
   private readonly _columns$: Observable<Array<DefinitionColumn>> =
     this.listService.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
@@ -249,34 +247,34 @@ export class DossierListComponent implements OnInit, OnDestroy {
       })
     );
 
-  public readonly documentItems$: Observable<any[]> = this._searchSwitch$.pipe(
+  public readonly documentItems$: Observable<any[]> = this.listService.checkRefresh$.pipe(
     switchMap(() =>
       combineLatest([
         this._documentSearchRequest$,
         this.assigneeFilter$,
         this.searchFieldValues$,
-        this._bulkAssignChanged$,
+        this.listService.forceRefresh$,
         this._hasEnvColumnConfig$,
         this._hasApiColumnConfig$,
       ])
     ),
     distinctUntilChanged(
       (
-        [prevSearchRequest, prevAssigneeFilter, prevSearchFieldValues, prevBulkAssignChanged],
-        [currSearchRequest, currAssigneeFilter, currSearchFieldValues, currBulkAssignChanged]
+        [prevSearchRequest, prevAssigneeFilter, prevSearchFieldValues, prevForceRefresh],
+        [currSearchRequest, currAssigneeFilter, currSearchFieldValues, currForceRefresh]
       ) =>
         isEqual(
           {
             ...prevSearchRequest,
             assignee: prevAssigneeFilter,
             ...prevSearchFieldValues,
-            bulkAssign: prevBulkAssignChanged,
+            forceRefresh: prevForceRefresh,
           },
           {
             ...currSearchRequest,
             assignee: currAssigneeFilter,
             ...currSearchFieldValues,
-            bulkAssign: currBulkAssignChanged,
+            forceRefresh: currForceRefresh,
           }
         )
     ),
@@ -467,10 +465,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.assigneeService.setAssigneeFilter(tab);
   }
 
-  public refresh(): void {
-    this.searchService.refresh();
-  }
-
   public showAssignModal(): void {
     this.selectedDocumentIds$.next(
       this.carbonList.selectedItems.map((document: Document) => document.id)
@@ -485,7 +479,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     }
 
     this.bulkAssignService.bulkAssign(assigneeId, documentIds).subscribe(() => {
-      this.bulkAssignChanged();
+      this.forceRefresh();
     });
   }
 
@@ -500,6 +494,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   public startDossier(): void {
     this.listActionsComponent.startDossier();
+  }
+
+  public forceRefresh(): void {
+    this.listService.forceRefresh();
   }
 
   private openDocumentDefinitionNameSubscription(): void {
@@ -532,11 +530,5 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   private setVisibleTabs(): void {
     this.visibleDossierTabs = this.configService.config?.visibleDossierListTabs || null;
-  }
-
-  private bulkAssignChanged(): void {
-    this._bulkAssignChanged$.pipe(take(1)).subscribe(bulkAssignChanged => {
-      this._bulkAssignChanged$.next(!bulkAssignChanged);
-    });
   }
 }
