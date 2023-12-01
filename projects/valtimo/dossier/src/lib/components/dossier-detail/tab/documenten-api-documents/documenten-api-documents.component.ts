@@ -29,16 +29,11 @@ import {FileSortService} from '../../../../services/file-sort.service';
 import moment from 'moment';
 import {Filter16, TagGroup16, Upload16} from "@carbon/icons";
 import {IconService} from 'carbon-components-angular';
-import {DossierListPaginationService, DossierParameterService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
   templateUrl: './documenten-api-documents.component.html',
   styleUrls: ['./documenten-api-documents.component.scss'],
-  providers: [
-    DossierListPaginationService,
-    DossierParameterService
-  ]
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly documentId: string;
