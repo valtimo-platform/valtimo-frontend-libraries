@@ -166,7 +166,7 @@ export class MenuService {
 
       // check if the top level menu item specifies roles it requires. If so, check if the user roles contain at least one of these roles
       if (
-        Array.isArray(menuItem.roles)
+        Array.isArray(menuItem?.roles)
           ? userRoles.find(userRole => menuItem.roles.includes(userRole))
           : true
       ) {
