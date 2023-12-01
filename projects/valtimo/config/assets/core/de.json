@@ -203,7 +203,10 @@
     "informatieobjecttypeTooltip": "Ein Dokumenttyp, der sich auf den Falltyp des aktuellen Falls bezieht",
     "additionalDate": "Zusätzliches Dokumentdatum",
     "additionalDateTooltip": "Ein zusätzliches Datum, das dem Dokument als Metadaten hinzugefügt werden kann. Dieses zusätzliche Datum ist optional. Wenn „Eingangsdatum“ ausgewählt ist, kann der Dokumentstatus nur auf 'final' oder 'archiviert' gesetzt werden.",
-    "noAdditionalDate": "Kein Zusatztermin"
+    "noAdditionalDate": "Kein Zusatztermin",
+    "application/json": "JSON",
+    "application/pdf": "PDF",
+    "application/octet-stream": "BPMN"
   },
   "summary": {
     "userTasksDoneState": "Alles erledigt!",

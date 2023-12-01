@@ -103,7 +103,9 @@ interface RelatedFile {
   description?: string;
   informatieobjecttype?: string;
   trefwoorden?: Array<String>;
-  formaat?: string;
+  format?: string;
+  status?: string;
+  confidentialityLevel?: string;
 }
 
 type RelatedFileListItem = Omit<RelatedFile, 'createdOn'> & {createdOn: string};

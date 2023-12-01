@@ -23,17 +23,22 @@ import {catchError, map, switchMap, take, tap} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfigService} from '@valtimo/config';
-import {ListField, DocumentenApiMetadata, PromptService} from '@valtimo/components';
+import {DocumentenApiMetadata, PromptService} from '@valtimo/components';
 import {UserProviderService} from '@valtimo/security';
 import {FileSortService} from '../../../../services/file-sort.service';
 import moment from 'moment';
 import {Filter16, TagGroup16, Upload16} from "@carbon/icons";
-import {IconService, Pagination} from 'carbon-components-angular';
+import {IconService} from 'carbon-components-angular';
+import {DossierListPaginationService, DossierParameterService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
   templateUrl: './documenten-api-documents.component.html',
   styleUrls: ['./documenten-api-documents.component.scss'],
+  providers: [
+    DossierListPaginationService,
+    DossierParameterService
+  ]
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly documentId: string;
@@ -41,18 +46,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly maxFileSize: number = this.configService?.config?.caseFileSizeUploadLimitMB || 5;
   public readonly acceptedFiles: string =
     this.configService?.config?.caseFileUploadAcceptedFiles || null;
-  public fields = [
-    {key: 'title', label: 'document.inputTitle'},
-    {key: 'formaat', label: 'document.format'},
-    {key: 'description', label: 'document.inputDescription'},
-    {key: 'size', label: 'document.size'},
-    {key: 'createdOn', label: 'document.createdOn'},
-    {key: 'createdBy', label: 'document.createdBy'},
-    {key: 'trefwoorden', label: 'document.trefwoorden'},
-    {key: 'informatieobjecttype', label: 'document.informatieobjecttype'},
-    // {key: 'language', label: 'document.language'},
-    // {key: 'identification', label: 'document.id'},
-  ];
+  public fieldsConfig = ['title', 'informatieobjecttype', 'status', 'format', 'confidentialityLevel', 'trefwoorden'];
+  public fields = this.getFields(this.fieldsConfig);
 
   public tableConfig = {
     searchable: true
@@ -78,10 +73,14 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       ])
     ),
     map(([relatedFiles]) => {
+      console.log('>> relatedFiles: ', relatedFiles);
       const translatedFiles = relatedFiles?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
-        language: this.translateService.instant(`document.${file.language}`)
+        language: this.translateService.instant(`document.${file.language}`),
+        confidentialityLevel: this.translateService.instant(`document.${file.confidentialityLevel}`),
+        status: this.translateService.instant(`document.${file.status}`),
+        format: this.translateService.instant(`document.${file.format}`)
       }));
       console.log('translatedFiles: ', translatedFiles);
       return translatedFiles || [];
@@ -208,6 +207,35 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
   private bytesToMegabytes(bytes: number): string {
     const megabytes = bytes / (1024 * 1024);
-    return megabytes.toFixed(2) + ' MB';
+    if (megabytes < .01) {
+      return '< 0.01 MB';
+    } else if (megabytes < 1000) {
+      return megabytes.toFixed(2) + ' MB';
+    } else {
+      return (megabytes/1000).toFixed(2) + ' GB';
+    }
+  }
+
+  private getFields(fieldsConfig) {
+    const fields = [{key: 'title', label: 'document.inputTitle'},
+      {key: 'fileName', label: 'document.filename'},
+      {key: 'format', label: 'document.format'},
+      {key: 'description', label: 'document.inputDescription'},
+      {key: 'size', label: 'document.size'},
+      {key: 'createdOn', label: 'document.createdOn'},
+      {key: 'createdBy', label: 'document.createdBy'},
+      {key: 'author', label: 'document.author'},
+      {key: 'keywords', label: 'document.trefwoorden'},
+      {key: 'informatieobjecttype', label: 'document.informatieobjecttype'},
+      {key: 'language', label: 'document.language'},
+      {key: 'identification', label: 'document.id'},
+      {key: 'confidentialityLevel', label: 'document.confidentialityLevel'},
+      {key: 'receiptDate', label: 'document.receiptDate'},
+      {key: 'sendDate', label: 'document.sendDate'},
+      {key: 'status', label: 'document.status'}
+    ];
+    return fields.filter(field => {
+      return fieldsConfig.includes(field.key)
+    });
   }
 }

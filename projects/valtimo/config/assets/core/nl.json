@@ -203,7 +203,10 @@
     "informatieobjecttypeTooltip": "Een documenttype dat gerelateerd is aan het zaaktype van het huidige dossier",
     "additionalDate": "Aanvullende documentdatum",
     "additionalDateTooltip": "Een aanvullende datum die als metadata aan het document kan worden toegevoegd. Deze extra datum is optioneel. Als 'Ontvangstdatum' is geselecteerd, kan de documentstatus alleen worden ingesteld op 'definitief' of 'gearchiveerd'.",
-    "noAdditionalDate": "Geen aanvullende datum"
+    "noAdditionalDate": "Geen aanvullende datum",
+    "application/json": "JSON",
+    "application/pdf": "PDF",
+    "application/octet-stream": "BPMN"
   },
   "summary": {
     "userTasksDoneState": "Helemaal bij!",

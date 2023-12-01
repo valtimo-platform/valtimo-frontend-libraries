@@ -64,7 +64,7 @@ import {
   FileUploaderModule,
   IconModule,
   LoadingModule,
-  ModalModule as CarbonModalModule,
+  ModalModule as CarbonModalModule, PaginationModule,
   SelectModule as CarbonSelectModule,
   SkeletonModule,
   TabsModule,
@@ -195,6 +195,7 @@ export type TabsFactory = () => Map<string, object>;
     TagModule,
     DialogModule,
     FileUploaderModule,
+    PaginationModule,
   ],
   exports: [DossierListComponent, DossierDetailComponent],
 })
