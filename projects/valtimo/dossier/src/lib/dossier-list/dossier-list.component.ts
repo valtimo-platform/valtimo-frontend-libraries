@@ -435,7 +435,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.tabsComponent.tabs.find((tab: Tab) => tab.active)!.active = false;
+    this.tabsComponent.tabs.find((tab: Tab) => tab.active).active = false;
     prevTab.active = true;
   }
 
