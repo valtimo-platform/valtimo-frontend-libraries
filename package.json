@@ -252,7 +252,7 @@
     "heatmap.js-fixed": "2.0.2",
     "intl": "1.2.5",
     "jasmine-core": "5.1.0",
-    "jquery": "3.7.0",
+    "jquery": "3.7.1",
     "jwt-decode": "3.1.2",
     "karma": "6.4.2",
     "karma-chrome-launcher": "3.2.0",
