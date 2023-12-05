@@ -28,7 +28,6 @@ import {
   BpmnJsDiagramModule,
   ButtonModule,
   CamundaFormModule,
-  CarbonListModule,
   ConfirmationModalModule,
   DataListModule,
   DocumentenApiMetadataModalModule,
@@ -53,6 +52,7 @@ import {
   UploaderModule,
   VModalModule,
   WidgetModule,
+  CarbonListModule,
 } from '@valtimo/components';
 import {ConfigModule, HttpLoaderFactory} from '@valtimo/config';
 import {FormModule} from '@valtimo/form';
