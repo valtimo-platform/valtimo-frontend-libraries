@@ -18,7 +18,7 @@
   class="dossier-actions"
   *ngIf="{
   exporting: exporting$ | async,
-  loadingVersions: loadingVersion$ | async,
+  loadingVersion: loadingVersion$ | async,
   versionListItems: versionListItems$ | async
   } as obs"
 >
@@ -30,7 +30,7 @@
 <ng-template #versionSelection let-obs="obs">
   <cds-combo-box
     class="version-selection"
-    [disabled]="obs.loadingVersions || obs.versionListItems.length === 1"
+    [disabled]="obs.loadingVersion || obs.versionListItems.length === 1"
     type="single"
     [items]="obs.versionListItems"
     [attr.data-carbon-theme]="CARBON_THEME"
@@ -50,7 +50,7 @@
     [attr.data-carbon-theme]="CARBON_THEME"
   >
     <cds-overflow-menu-option
-      [disabled]="obs.exporting"
+      [disabled]="obs.exporting || obs.loadingVersion"
       (selected)="export() "
       [attr.data-carbon-theme]="CARBON_THEME"
       >{{ 'dossierManagement.export' | translate: {value: documentDefinitionTitle}
