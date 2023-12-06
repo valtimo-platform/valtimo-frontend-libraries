@@ -29,16 +29,15 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./dossier-management-detail.component.scss'],
 })
 export class DossierManagementDetailComponent implements OnInit {
+  @ViewChild('dossierConnectModal')
+  private readonly _dossierConnectModal: DossierManagementConnectModalComponent;
+  @ViewChild('dossierRemoveModal')
+  private readonly _dossierRemoveModal: DossierManagementRemoveModalComponent;
+
   public documentDefinitionName: string | null = null;
   public documentDefinition: DocumentDefinition | null = null;
   public processDocumentDefinitions: ProcessDocumentDefinition[] = [];
-
   public readonly loadingDocumentDefinition$ = this.dossierDetailService.loadingDocumentDefinition$;
-
-  @ViewChild('dossierConnectModal')
-  dossierConnectModal: DossierManagementConnectModalComponent;
-  @ViewChild('dossierRemoveModal')
-  dossierRemoveModal: DossierManagementRemoveModalComponent;
 
   constructor(
     private readonly documentService: DocumentService,
@@ -49,12 +48,12 @@ export class DossierManagementDetailComponent implements OnInit {
     this.documentDefinitionName = this.route.snapshot.paramMap.get('name');
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.loadDocumentDefinition();
     this.loadProcessDocumentDefinitions();
   }
 
-  loadProcessDocumentDefinitions() {
+  public loadProcessDocumentDefinitions(): void {
     this.documentService
       .findProcessDocumentDefinitions(this.documentDefinitionName)
       .subscribe((processDocumentDefinitions: ProcessDocumentDefinition[]) => {
@@ -62,23 +61,17 @@ export class DossierManagementDetailComponent implements OnInit {
       });
   }
 
-  loadDocumentDefinition() {
-    this.documentService
-      .getDocumentDefinitionForManagement(this.documentDefinitionName)
-      .subscribe((documentDefinition: DocumentDefinition) => {
-        this.documentDefinition = documentDefinition;
-      });
+  public publicopenDossierConnectModal(): void {
+    this._dossierConnectModal.openModal(this.documentDefinition);
   }
 
-  openDossierConnectModal() {
-    this.dossierConnectModal.openModal(this.documentDefinition);
+  public openDossierRemoveModal(): void {
+    this._dossierRemoveModal.openModal(this.documentDefinition);
   }
 
-  openDossierRemoveModal() {
-    this.dossierRemoveModal.openModal(this.documentDefinition);
-  }
-
-  deleteProcessDocumentDefinition(processDocumentDefinition: ProcessDocumentDefinition) {
+  public deleteProcessDocumentDefinition(
+    processDocumentDefinition: ProcessDocumentDefinition
+  ): void {
     this.documentService
       .deleteProcessDocumentDefinition({
         documentDefinitionName: processDocumentDefinition.id.documentDefinitionId.name,
@@ -97,7 +90,7 @@ export class DossierManagementDetailComponent implements OnInit {
       );
   }
 
-  downloadDefinition(): void {
+  public downloadDefinition(): void {
     this.dossierDetailService.documentDefinition$.pipe(take(1)).subscribe(definition => {
       const dataString =
         'data:text/json;charset=utf-8,' +
@@ -110,5 +103,13 @@ export class DossierManagementDetailComponent implements OnInit {
       );
       downloadAnchorElement.click();
     });
+  }
+
+  private loadDocumentDefinition(): void {
+    this.documentService
+      .getDocumentDefinitionForManagement(this.documentDefinitionName)
+      .subscribe((documentDefinition: DocumentDefinition) => {
+        this.documentDefinition = documentDefinition;
+      });
   }
 }

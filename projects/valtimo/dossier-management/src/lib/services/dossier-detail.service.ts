@@ -80,10 +80,9 @@ export class DossierDetailService implements OnDestroy {
     this._selectedDocumentDefinitionName$.next(name);
   }
 
-  public setLoadingDocumentDefinition(loading: boolean) {
+  public setLoadingDocumentDefinition(loading: boolean): void {
     this._loadingDocumentDefinition$.next(loading);
   }
-
   private openDocumentDefinitionSubscription(): void {
     this._subscriptions.add(
       combineLatest([this.selectedVersionNumber$, this.selectedDocumentDefinitionName$])
