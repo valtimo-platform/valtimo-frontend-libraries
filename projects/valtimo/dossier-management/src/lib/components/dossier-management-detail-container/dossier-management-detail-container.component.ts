@@ -19,7 +19,7 @@ import {ActivatedRoute} from '@angular/router';
 import {DocumentService} from '@valtimo/document';
 import {filter, map, Observable, Subscription, switchMap} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
-import {TabService} from '../../services';
+import {DossierDetailService, TabService} from '../../services';
 import {TabEnum} from '../../models';
 import {PageTitleService} from '@valtimo/components';
 import {tap} from 'rxjs/operators';
@@ -28,6 +28,7 @@ import {tap} from 'rxjs/operators';
   selector: 'valtimo-dossier-management-detail-container',
   templateUrl: './dossier-management-detail-container.component.html',
   styleUrls: ['./dossier-management-detail-container.component.css'],
+  providers: [DossierDetailService],
 })
 export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
   public currentTab: TabEnum;

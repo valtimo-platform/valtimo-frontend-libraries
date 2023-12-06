@@ -20,6 +20,8 @@ import {ActivatedRoute} from '@angular/router';
 import {DossierManagementConnectModalComponent} from '../dossier-management-connect-modal/dossier-management-connect-modal.component';
 import {AlertService} from '@valtimo/components';
 import {DossierManagementRemoveModalComponent} from '../dossier-management-remove-modal/dossier-management-remove-modal.component';
+import {DossierDetailService} from '../../services';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-dossier-management-detail',
@@ -31,15 +33,18 @@ export class DossierManagementDetailComponent implements OnInit {
   public documentDefinition: DocumentDefinition | null = null;
   public processDocumentDefinitions: ProcessDocumentDefinition[] = [];
 
+  public readonly loadingDocumentDefinition$ = this.dossierDetailService.loadingDocumentDefinition$;
+
   @ViewChild('dossierConnectModal')
   dossierConnectModal: DossierManagementConnectModalComponent;
   @ViewChild('dossierRemoveModal')
   dossierRemoveModal: DossierManagementRemoveModalComponent;
 
   constructor(
-    private documentService: DocumentService,
-    private route: ActivatedRoute,
-    private alertService: AlertService
+    private readonly documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly alertService: AlertService,
+    private readonly dossierDetailService: DossierDetailService
   ) {
     this.documentDefinitionName = this.route.snapshot.paramMap.get('name');
   }
@@ -93,16 +98,17 @@ export class DossierManagementDetailComponent implements OnInit {
   }
 
   downloadDefinition(): void {
-    const definition = this.documentDefinition;
-    const dataString =
-      'data:text/json;charset=utf-8,' +
-      encodeURIComponent(JSON.stringify(definition.schema, null, 2));
-    const downloadAnchorElement = document.getElementById('downloadAnchorElement');
-    downloadAnchorElement.setAttribute('href', dataString);
-    downloadAnchorElement.setAttribute(
-      'download',
-      `${definition.id.name}-v${definition.id.version}.json`
-    );
-    downloadAnchorElement.click();
+    this.dossierDetailService.documentDefinition$.pipe(take(1)).subscribe(definition => {
+      const dataString =
+        'data:text/json;charset=utf-8,' +
+        encodeURIComponent(JSON.stringify(definition.schema, null, 2));
+      const downloadAnchorElement = document.getElementById('downloadAnchorElement');
+      downloadAnchorElement.setAttribute('href', dataString);
+      downloadAnchorElement.setAttribute(
+        'download',
+        `${definition.id.name}-v${definition.id.version}.json`
+      );
+      downloadAnchorElement.click();
+    });
   }
 }

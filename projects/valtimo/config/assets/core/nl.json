@@ -387,6 +387,7 @@
     "readOnly": "Alleen-lezen"
   },
   "dossierManagement": {
+    "version": "Versie: ",
     "preparingDownload": "Download aan het voorbereiden",
     "more": "Meer",
     "export": "{{value}} exporteren",

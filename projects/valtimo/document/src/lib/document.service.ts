@@ -26,6 +26,7 @@ import {
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
   DocumentDefinitions,
+  DocumentDefinitionVersionsResult,
   DocumentResult,
   Documents,
   DocumentSendMessageRequest,
@@ -109,7 +110,9 @@ export class DocumentService {
     );
   }
 
-  getDocumentDefinitionForManagement(documentDefinitionName: string): Observable<DocumentDefinition> {
+  getDocumentDefinitionForManagement(
+    documentDefinitionName: string
+  ): Observable<DocumentDefinition> {
     return this.http.get<DocumentDefinition>(
       `${this.valtimoEndpointUri}management/v1/document-definition/${documentDefinitionName}`
     );
@@ -523,6 +526,23 @@ export class DocumentService {
   getZakenApiDocuments(documentId: string): Observable<Array<RelatedFile>> {
     return this.http.get<Array<RelatedFile>>(
       `${this.valtimoEndpointUri}v1/zaken-api/document/${documentId}/files`
+    );
+  }
+
+  getDocumentDefinitionVersions(
+    documentDefinitionName: string
+  ): Observable<DocumentDefinitionVersionsResult> {
+    return this.http.get<DocumentDefinitionVersionsResult>(
+      `${this.valtimoEndpointUri}management/v1/document-definition/${documentDefinitionName}/version`
+    );
+  }
+
+  getDocumentDefinitionByVersion(
+    documentDefinitionName: string,
+    version: number
+  ): Observable<DocumentDefinition> {
+    return this.http.get<DocumentDefinition>(
+      `${this.valtimoEndpointUri}management/v1/document-definition/${documentDefinitionName}/version/${version}`
     );
   }
 }
