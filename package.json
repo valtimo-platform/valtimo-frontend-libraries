@@ -222,7 +222,7 @@
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
     "@types/dropzone": "5.7.4",
-    "@types/jasmine": "4.3.5",
+    "@types/jasmine": "4.6.4",
     "@types/jasminewd2": "2.0.10",
     "@types/node": "20.5.0",
     "@types/uuid": "9.0.2",
