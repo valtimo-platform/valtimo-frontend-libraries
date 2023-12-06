@@ -6,7 +6,8 @@ In order to contribute to this project, please follow the below code formatting 
 
 ### Attribute sorting
 
-On an element inside your template code, we recommend you keep to the following sorting of attributes:
+On an element inside your template code, we recommend you keep to the following sorting of
+attributes:
 
 - Structural directives like `*ngIf` and `*ngFor`
 - Angular directives such as `ngStyle` and `ngClass`
