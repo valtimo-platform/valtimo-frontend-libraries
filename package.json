@@ -260,7 +260,7 @@
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.1.0",
     "keycloak-angular": "14.0.0",
-    "keycloak-js": "22.0.1",
+    "keycloak-js": "22.0.5",
     "lodash": "4.17.21",
     "moment": "2.29.4",
     "monaco-editor": "0.41.0",
