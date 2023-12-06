@@ -18,6 +18,7 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {
   BehaviorSubject,
   combineLatest,
+  distinctUntilChanged,
   filter,
   map,
   Observable,
@@ -43,11 +44,17 @@ export class DossierDetailService implements OnDestroy {
     );
 
   public get selectedVersionNumber$(): Observable<number> {
-    return this._selectedVersionNumber$.pipe(filter(version => typeof version === 'number'));
+    return this._selectedVersionNumber$.pipe(
+      filter(version => typeof version === 'number'),
+      distinctUntilChanged()
+    );
   }
 
   public get selectedDocumentDefinitionName$(): Observable<string> {
-    return this._selectedDocumentDefinitionName$.pipe(filter(name => !!name));
+    return this._selectedDocumentDefinitionName$.pipe(
+      filter(name => !!name),
+      distinctUntilChanged()
+    );
   }
 
   public get loadingDocumentDefinition$(): Observable<boolean> {
