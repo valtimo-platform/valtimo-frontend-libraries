@@ -22,7 +22,6 @@ import {ConfigService} from '@valtimo/config';
 import {DossierDetailService, TabService} from '../../services';
 import {TabEnum} from '../../models';
 import {PageTitleService} from '@valtimo/components';
-import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
@@ -49,10 +48,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   readonly documentDefinition$ = this.documentDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinitionForManagement(documentDefinitionName)
-    ),
-    tap(documentDefinition => {
-      this.pageTitleService.setCustomPageTitle(documentDefinition.schema.title);
-    })
+    )
   );
 
   constructor(

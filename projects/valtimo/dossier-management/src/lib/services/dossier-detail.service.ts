@@ -27,7 +27,7 @@ import {
   tap,
 } from 'rxjs';
 import {DocumentDefinition, DocumentService} from '@valtimo/document';
-import {EditorModel} from '@valtimo/components';
+import {EditorModel, PageTitleService} from '@valtimo/components';
 
 @Injectable()
 export class DossierDetailService implements OnDestroy {
@@ -71,7 +71,10 @@ export class DossierDetailService implements OnDestroy {
 
   private _subscriptions = new Subscription();
 
-  constructor(private readonly documentService: DocumentService) {
+  constructor(
+    private readonly documentService: DocumentService,
+    private readonly pageTitleService: PageTitleService
+  ) {
     this.openDocumentDefinitionSubscription();
   }
 
@@ -94,7 +97,10 @@ export class DossierDetailService implements OnDestroy {
     this._subscriptions.add(
       combineLatest([this.selectedVersionNumber$, this.selectedDocumentDefinitionName$])
         .pipe(
-          tap(() => this.setLoadingDocumentDefinition(true)),
+          tap(() => {
+            this.pageTitleService.setCustomPageTitleSet(false);
+            this.setLoadingDocumentDefinition(true);
+          }),
           switchMap(([selectedVersion, selectedDocumentDefinitionName]) =>
             this.documentService.getDocumentDefinitionByVersion(
               selectedDocumentDefinitionName,
@@ -103,6 +109,7 @@ export class DossierDetailService implements OnDestroy {
           ),
           tap(res => {
             this._documentDefinition$.next(res);
+            this.pageTitleService.setCustomPageTitle(res?.schema?.title || '-');
             this.setLoadingDocumentDefinition(false);
           })
         )
