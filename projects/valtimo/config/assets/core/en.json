@@ -403,6 +403,7 @@
     "readOnly": "Read-only"
   },
   "dossierManagement": {
+    "version": "Version: ",
     "preparingDownload": "Preparing download",
     "more": "More",
     "export": "Export {{value}}",
