@@ -28,6 +28,7 @@ import {
   BpmnJsDiagramModule,
   ButtonModule,
   CamundaFormModule,
+  CarbonListModule,
   ConfirmationModalModule,
   DataListModule,
   DocumentenApiMetadataModalModule,
@@ -51,7 +52,6 @@ import {
   UploaderModule,
   VModalModule,
   WidgetModule,
-  CarbonListModule,
 } from '@valtimo/components';
 import {ConfigModule, HttpLoaderFactory} from '@valtimo/config';
 import {FormModule} from '@valtimo/form';
@@ -92,6 +92,7 @@ import {TAB_MAP} from './constants';
 import {DossierBulkAssignService, DossierService} from './services';
 import {DossierDetailTabFormioComponent} from './components/dossier-detail/tab/formio/formio.component';
 import {TabTranslatePipeModule} from './pipes';
+import {DossierCustomSupportingProcessStartModalComponent} from './components/dossier-custom-supporting-process-start-modal/dossier-custom-supporting-process-start-modal.component';
 
 export type TabsFactory = () => Map<string, object>;
 
@@ -117,6 +118,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierAssignUserComponent,
     NoteModalComponent,
     DossierDetailTabFormioComponent,
+    DossierCustomSupportingProcessStartModalComponent,
   ],
   imports: [
     CommonModule,

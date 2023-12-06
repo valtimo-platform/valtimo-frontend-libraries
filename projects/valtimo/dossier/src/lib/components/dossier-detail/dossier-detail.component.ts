@@ -50,7 +50,7 @@ import {
   CAN_CLAIM_CASE_PERMISSION,
   DOSSIER_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
-import {DossierTabService} from '../../services';
+import {DossierSupportingProcessModalService, DossierTabService} from '../../services';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -153,6 +153,8 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
 
   public readonly loadingTabs$ = new BehaviorSubject<boolean>(true);
   public readonly noTabsConfigured$ = new BehaviorSubject<boolean>(false);
+  public readonly hasCustomSupportingProcessModal$ =
+    this.dossierSupportingProcessModalService.hasConfig$;
 
   private _snapshot: ParamMap;
   private _initialTabName: string;
@@ -168,7 +170,8 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
     private readonly permissionService: PermissionService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly dossierTabService: DossierTabService
+    private readonly dossierTabService: DossierTabService,
+    private readonly dossierSupportingProcessModalService: DossierSupportingProcessModalService
   ) {
     this._snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = this._snapshot.get('documentDefinitionName') || '';
@@ -259,6 +262,10 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
 
   public assignmentOfDocumentChanged(): void {
     this.refreshDocument$.next(null);
+  }
+
+  public openCustomSupportingProcessModal(): void {
+    this.dossierSupportingProcessModalService.openModal();
   }
 
   private getCustomDossierHeaderItem(item): void {

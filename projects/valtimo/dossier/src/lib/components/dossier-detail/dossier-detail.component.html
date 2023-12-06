@@ -18,7 +18,8 @@
     canAssign: canAssign$ | async,
     canClaim: canClaim$ | async,
     canHaveAssignee: canHaveAssignee$ | async,
-    document: document$ | async
+    document: document$ | async,
+    hasCustomSupportingProcessModal: hasCustomSupportingProcessModal$ | async
   } as obs"
   class="main-content"
 >
@@ -54,42 +55,21 @@
                 "
               ></ng-container>
 
-              <div class="dropdown">
-                <button
-                  [disabled]="processDocumentDefinitions.length === 0"
-                  [ngbTooltip]="processDocumentDefinitions.length === 0 ? 'No action' : null"
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                  class="btn btn-primary dropdown-toggle"
-                  data-toggle="dropdown"
-                  id="startProcessDropdown"
-                  placement="bottom"
-                  type="button"
-                >
-                  <span>{{ 'dossier.startSubProcess' | translate }}</span>
+              <ng-container
+                *ngTemplateOutlet="
+                  startSupportingProcessDropdownButton;
+                  context: {show: !obs.hasCustomSupportingProcessModal}
+                "
+              >
+              </ng-container>
 
-                  <i class="ml-1 mdi mdi-chevron-down"></i>
-                </button>
-
-                <div
-                  aria-labelledby="startProcessDropdown"
-                  class="dropdown-menu dropdown-menu-right"
-                >
-                  <button
-                    *ngFor="let processDocumentDefinition of processDocumentDefinitions"
-                    (click)="startProcess(processDocumentDefinition)"
-                    class="dropdown-item p"
-                    href="#"
-                  >
-                    {{
-                      (processDocumentDefinition?.id?.processDefinitionKey | translate) !==
-                      processDocumentDefinition?.id?.processDefinitionKey
-                        ? (processDocumentDefinition.id.processDefinitionKey | translate)
-                        : processDocumentDefinition.processName
-                    }}
-                  </button>
-                </div>
-              </div>
+              <ng-container
+                *ngTemplateOutlet="
+                  startCustomSupportingProcessDropdownButton;
+                  context: {show: obs.hasCustomSupportingProcessModal}
+                "
+              >
+              </ng-container>
             </div>
           </div>
         </div>
@@ -131,6 +111,11 @@
       #supportingProcessStartModal
     ></valtimo-dossier-supporting-process-start-modal>
   </div>
+
+  <valtimo-dossier-custom-supporting-process-start-modal
+    *ngIf="obs.hasCustomSupportingProcessModal"
+  >
+  </valtimo-dossier-custom-supporting-process-start-modal>
 </div>
 
 <ng-template
@@ -203,6 +188,54 @@
       type="button"
     >
       <span>{{ 'dossier.claimAssigneeCase' | translate }}</span>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #startSupportingProcessDropdownButton let-show="show">
+  <div *ngIf="show" class="dropdown">
+    <button
+      [disabled]="processDocumentDefinitions.length === 0"
+      [ngbTooltip]="processDocumentDefinitions.length === 0 ? 'No action' : null"
+      aria-expanded="false"
+      aria-haspopup="true"
+      class="btn btn-primary dropdown-toggle"
+      data-toggle="dropdown"
+      id="startProcessDropdown"
+      placement="bottom"
+      type="button"
+    >
+      <span>{{ 'dossier.startSubProcess' | translate }}</span>
+
+      <i class="ml-1 mdi mdi-chevron-down"></i>
+    </button>
+
+    <div aria-labelledby="startProcessDropdown" class="dropdown-menu dropdown-menu-right">
+      <button
+        *ngFor="let processDocumentDefinition of processDocumentDefinitions"
+        (click)="startProcess(processDocumentDefinition)"
+        class="dropdown-item p"
+        href="#"
+      >
+        {{
+          (processDocumentDefinition?.id?.processDefinitionKey | translate) !==
+          processDocumentDefinition?.id?.processDefinitionKey
+            ? (processDocumentDefinition.id.processDefinitionKey | translate)
+            : processDocumentDefinition.processName
+        }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #startCustomSupportingProcessDropdownButton let-show="show">
+  <div *ngIf="show">
+    <button
+      class="btn btn-space btn-primary"
+      type="button"
+      (click)="openCustomSupportingProcessModal()"
+    >
+      <span>{{ 'dossier.startSubProcess' | translate }}</span>
     </button>
   </div>
 </ng-template>

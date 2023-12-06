@@ -27,7 +27,7 @@
     "compodoc-serve": "npx compodoc -s -o -r 8088",
     "libs-build-all": "rimraf dist && npm-run-all libs:build:*",
     "libs-test-all": "WATCH_TESTS=false TEST_BROWSER=Chrome npm-run-all libs:test:*",
-    "libs-test-all-cicd": "WATCH_TESTS=false TEST_BROWSER=ChromeHeadless npm-run-all libs:test:*",
+    "lib2s-test-all-cicd": "WATCH_TESTS=false TEST_BROWSER=ChromeHeadless npm-run-all libs:test:*",
     "libs-lint-all": "npm-run-all libs:lint:*",
     "libs:watch:config": "ng build @valtimo/config --watch",
     "libs:watch:access-control": "ng build @valtimo/access-control --watch",

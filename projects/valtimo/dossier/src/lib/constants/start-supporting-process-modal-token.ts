@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-export * from './dossier-bulk-assign.service';
-export * from './dossier-column.service';
-export * from './zaakobjecten.service';
-export * from './dossier-parameter.service';
-export * from './dossier-list.service';
-export * from './dossier-list-assignee.service';
-export * from './dossier-list-pagination.service';
-export * from './dossier-list-search.service';
-export * from './dossier-tab.service';
-export * from './dossier.service';
-export * from './dossier-tab-api.service';
-export * from './dossier-supporting-process-modal.service';
+import {InjectionToken} from '@angular/core';
+import {StartSupportingProcessModalConfig} from '../models/start-supporting-process.model';
+
+const START_SUPPORTING_PROCESS_MODAL_TOKEN = new InjectionToken<StartSupportingProcessModalConfig>(
+  'Specify the configuration for the component you wish to display in the start supporting process modal.'
+);
+
+export {START_SUPPORTING_PROCESS_MODAL_TOKEN};

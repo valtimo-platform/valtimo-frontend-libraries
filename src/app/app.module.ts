@@ -48,6 +48,7 @@ import {
   DossierDetailTabSummaryComponent,
   DossierDetailTabZaakobjectenComponent,
   DossierModule,
+  START_SUPPORTING_PROCESS_MODAL_TOKEN,
 } from '@valtimo/dossier';
 import {ProcessModule} from '@valtimo/process';
 import {ViewConfiguratorModule} from '@valtimo/view-configurator';
@@ -256,6 +257,13 @@ export function tabsFactory() {
           component: CustomMapsTabComponent,
         },
       ],
+    },
+    {
+      provide: START_SUPPORTING_PROCESS_MODAL_TOKEN,
+      useValue: {
+        modalTitleTranslationKey: 'interface.mainMenu',
+        component: CustomDossierTabComponent,
+      },
     },
   ],
   bootstrap: [AppComponent],
