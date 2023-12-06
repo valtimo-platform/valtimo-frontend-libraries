@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {DossierSupportingProcessModalService} from '../../services';
+import {BehaviorSubject, combineLatest, filter, Observable, take} from 'rxjs';
 
 @Component({
   selector: 'valtimo-dossier-custom-supporting-process-start-modal',
@@ -23,11 +30,25 @@ import {DossierSupportingProcessModalService} from '../../services';
   styleUrls: ['./dossier-custom-supporting-process-start-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierCustomSupportingProcessStartModalComponent {
+export class DossierCustomSupportingProcessStartModalComponent implements AfterViewInit {
+  @ViewChild('container', {static: false, read: ViewContainerRef}) set _dynamicContainer(
+    container: ViewContainerRef
+  ) {
+    if (container) {
+      this._viewContainerRef$.next(container);
+    }
+  }
+
   public readonly startSupportingProcessModalConfig$ =
     this.dossierSupportingProcessModalService.startSupportingProcessModalConfig$;
 
   public readonly modalOpen$ = this.dossierSupportingProcessModalService.modalOpen$;
+
+  private readonly _viewContainerRef$ = new BehaviorSubject<ViewContainerRef | null>(null);
+
+  public get viewContainerRef$(): Observable<ViewContainerRef> {
+    return this._viewContainerRef$.pipe(filter(ref => !!ref));
+  }
 
   constructor(
     private readonly dossierSupportingProcessModalService: DossierSupportingProcessModalService
@@ -35,5 +56,18 @@ export class DossierCustomSupportingProcessStartModalComponent {
 
   public onClose(): void {
     this.dossierSupportingProcessModalService.closeModal();
+  }
+
+  public ngAfterViewInit(): void {
+    this.renderComponent();
+  }
+
+  private renderComponent(): void {
+    combineLatest([this.startSupportingProcessModalConfig$, this.viewContainerRef$])
+      .pipe(take(1))
+      .subscribe(([config, ref]) => {
+        ref.clear();
+        ref.createComponent(config.component);
+      });
   }
 }

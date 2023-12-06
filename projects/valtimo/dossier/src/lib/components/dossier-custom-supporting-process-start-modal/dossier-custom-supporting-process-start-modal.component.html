@@ -30,10 +30,12 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="startSupportingProcessModalConfig$ | async as config">
+<ng-container *ngIf="{config: startSupportingProcessModalConfig$ | async} as obs">
   <cds-modal
-    *ngIf="{title: config.modalTitle || (config.modalTitleTranslationKey | translate)} as vars"
     valtimoCdsModal
+    *ngIf="{
+      title: obs.config.modalTitle || (obs.config.modalTitleTranslationKey | translate)
+    } as vars"
     [open]="modalOpen$ | async"
     size="sm"
     showFooter="false"
@@ -45,6 +47,8 @@
       </h3>
     </cds-modal-header>
 
-    <section cdsModalContent>content</section>
+    <section cdsModalContent>
+      <ng-template #container></ng-template>
+    </section>
   </cds-modal>
 </ng-container>
