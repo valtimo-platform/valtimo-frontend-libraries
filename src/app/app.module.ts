@@ -258,13 +258,6 @@ export function tabsFactory() {
         },
       ],
     },
-    {
-      provide: START_SUPPORTING_PROCESS_MODAL_TOKEN,
-      useValue: {
-        modalTitleTranslationKey: 'interface.mainMenu',
-        component: CustomDossierTabComponent,
-      },
-    },
   ],
   bootstrap: [AppComponent],
 })
