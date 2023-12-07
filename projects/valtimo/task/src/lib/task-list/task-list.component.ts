@@ -22,7 +22,7 @@ import {Task, TaskList} from '../models';
 import {NGXLogger} from 'ngx-logger';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {TranslateService} from '@ngx-translate/core';
-import {combineLatest, of, Subscription, switchMap} from 'rxjs';
+import {BehaviorSubject, combineLatest, of, Subscription, switchMap} from 'rxjs';
 import {ConfigService, SortState, TaskListTab} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {take} from 'rxjs/operators';
@@ -49,6 +49,7 @@ export class TaskListComponent implements OnDestroy {
   public listTitle: string | null = null;
   public listDescription: string | null = null;
   public sortState: SortState | null = null;
+  public readonly loadingTasks$ = new BehaviorSubject<boolean>(true);
   private _translationSubscription!: Subscription;
 
   constructor(
@@ -95,6 +96,8 @@ export class TaskListComponent implements OnDestroy {
   }
 
   public getTasks(type: string): void {
+    this.loadingTasks$.next(true);
+
     let params: any;
 
     this.closeTranslationSubscription();
@@ -173,6 +176,8 @@ export class TaskListComponent implements OnDestroy {
         } else {
           this.defaultTaskListFields(type);
         }
+
+        this.loadingTasks$.next(false);
       });
   }
 
