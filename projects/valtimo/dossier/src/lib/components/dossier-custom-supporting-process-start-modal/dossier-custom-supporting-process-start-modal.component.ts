@@ -27,7 +27,6 @@ import {BehaviorSubject, combineLatest, filter, Observable, take} from 'rxjs';
 @Component({
   selector: 'valtimo-dossier-custom-supporting-process-start-modal',
   templateUrl: './dossier-custom-supporting-process-start-modal.component.html',
-  styleUrls: ['./dossier-custom-supporting-process-start-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierCustomSupportingProcessStartModalComponent implements AfterViewInit {
