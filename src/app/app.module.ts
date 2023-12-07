@@ -48,7 +48,6 @@ import {
   DossierDetailTabSummaryComponent,
   DossierDetailTabZaakobjectenComponent,
   DossierModule,
-  START_SUPPORTING_PROCESS_MODAL_TOKEN,
 } from '@valtimo/dossier';
 import {ProcessModule} from '@valtimo/process';
 import {ViewConfiguratorModule} from '@valtimo/view-configurator';
