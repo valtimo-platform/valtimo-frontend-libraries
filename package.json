@@ -242,7 +242,7 @@
     "dropzone": "6.0.0-beta.2",
     "eslint": "8.40.0",
     "eslint-config-prettier": "8.8.0",
-    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-import": "2.29.0",
     "eslint-plugin-jsdoc": "39.9.1",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-react": "7.32.2",
