@@ -28,6 +28,7 @@ import {PermissionService} from '@valtimo/access-control';
 import {BreadcrumbService} from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
 import {Document, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
+import {DossierService} from '../../services';
 import {KeycloakService} from 'keycloak-angular';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
@@ -75,9 +76,8 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
   public tabLoader: TabLoaderImpl | null = null;
 
   public readonly assigneeId$ = new BehaviorSubject<string>('');
-  public readonly refreshDocument$ = new BehaviorSubject<null>(null);
 
-  public readonly document$: Observable<Document | null> = this.refreshDocument$.pipe(
+  public readonly document$: Observable<Document | null> = this.dossierService.refreshDocument.pipe(
     switchMap(() => this.route.params),
     map((params: Params) => params?.documentId),
     switchMap((documentId: string) =>
@@ -164,6 +164,7 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
     private readonly componentFactoryResolver: ComponentFactoryResolver,
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
+    private readonly dossierService: DossierService,
     private readonly keyCloakService: KeycloakService,
     private readonly location: Location,
     private readonly logger: NGXLogger,
@@ -222,7 +223,7 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
       .subscribe({
         next: (): void => {
           this.isAssigning$.next(false);
-          this.refreshDocument$.next(null);
+          this.dossierService.refresh();
         },
         error: (): void => {
           this.isAssigning$.next(false);
@@ -261,7 +262,7 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
   }
 
   public assignmentOfDocumentChanged(): void {
-    this.refreshDocument$.next(null);
+    this.dossierService.refresh();
   }
 
   public openCustomSupportingProcessModal(): void {
