@@ -18,7 +18,10 @@
   *ngIf="dossiers$ | async as dossiers; else loading"
   [items]="dossiers"
   [fields]="dossierFields"
-  [isSearchable]="true"
+  [pagination]="pagination"
+  paginationIdentifier="dossierManagementList"
+  (paginationClicked)="paginationClicked($event)"
+  (paginationSet)="paginationSet($event)"
   (rowClicked)="redirectToDetails($event)"
 >
   <ng-container carbonToolbarContent [ngTemplateOutlet]="addCaseDefinitionButton"></ng-container>
@@ -28,7 +31,10 @@
   <valtimo-carbon-list loading="true"></valtimo-carbon-list>
 </ng-template>
 
-<valtimo-dossier-management-upload [show$]="showModal$"></valtimo-dossier-management-upload>
+<valtimo-dossier-management-upload
+  [show$]="showModal$"
+  (definitionUploaded)="onDefinitionUploaded()"
+></valtimo-dossier-management-upload>
 
 <ng-template #addCaseDefinitionButton>
   <button cdsButton="primary" (click)="showModal()">

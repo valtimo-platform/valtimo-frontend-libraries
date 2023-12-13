@@ -16,11 +16,11 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {Upload16} from '@carbon/icons';
-import {ColumnConfig, ViewType} from '@valtimo/components';
+import {ColumnConfig, Pagination, ViewType} from '@valtimo/components';
 import {DocumentDefinition, DocumentService, Page} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
-import {BehaviorSubject, map, Observable} from 'rxjs';
+import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -30,21 +30,37 @@ moment.locale(localStorage.getItem('langKey') || '');
   styleUrls: ['./dossier-management-list.component.scss'],
 })
 export class DossierManagementListComponent {
-  public dossiers$: Observable<DocumentDefinition[]> = this.documentService
-    .queryDefinitionsForManagement()
-    .pipe(
-      map((documentDefinitionPage: Page<DocumentDefinition>) =>
-        documentDefinitionPage.content.map((documentDefinition: DocumentDefinition) => ({
-          ...documentDefinition,
-          createdOn: moment(documentDefinition.createdOn).format('DD MMM YYYY HH:mm'),
-        }))
-      )
-    );
+  public pagination: Pagination = {
+    collectionSize: 0,
+    page: 1,
+    size: 10,
+  };
+
+  private readonly _refreshData$ = new BehaviorSubject<null>(null);
+  public dossiers$: Observable<DocumentDefinition[]> = this._refreshData$.pipe(
+    switchMap(() =>
+      this.documentService
+        .queryDefinitionsForManagement({page: this.pagination.page - 1, size: this.pagination.size})
+        .pipe(
+          map((documentDefinitionPage: Page<DocumentDefinition>) => {
+            this.pagination = {
+              ...this.pagination,
+              collectionSize: documentDefinitionPage.totalElements,
+            };
+
+            return documentDefinitionPage.content.map((documentDefinition: DocumentDefinition) => ({
+              ...documentDefinition,
+              createdOn: moment(documentDefinition.createdOn).format('DD MMM YYYY HH:mm'),
+            }));
+          })
+        )
+    )
+  );
 
   public dossierFields: ColumnConfig[] = [
     {key: 'schema.title', label: 'Title', viewType: ViewType.TEXT},
     {key: 'createdOn', label: 'Created On', viewType: ViewType.TEXT},
-    {key: 'readOnly', label: 'Read-only', viewType: ViewType.TEXT},
+    {key: 'readOnly', label: 'Read-only', viewType: ViewType.BOOLEAN},
   ];
 
   public readonly showModal$ = new BehaviorSubject<boolean>(false);
@@ -55,6 +71,20 @@ export class DossierManagementListComponent {
     private readonly router: Router
   ) {
     this.iconService.registerAll([Upload16]);
+  }
+
+  public onDefinitionUploaded(): void {
+    this._refreshData$.next(null);
+  }
+
+  public paginationClicked(page: number): void {
+    this.pagination = {...this.pagination, page};
+    this._refreshData$.next(null);
+  }
+
+  public paginationSet(size: number): void {
+    this.pagination = {...this.pagination, size};
+    this._refreshData$.next(null);
   }
 
   public redirectToDetails(documentDefinition: DocumentDefinition): void {
