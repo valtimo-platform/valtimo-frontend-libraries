@@ -53,10 +53,7 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-<<<<<<< HEAD
 import {BOOLEAN_CONVERTER_VALUES} from '../../constants';
-=======
->>>>>>> 57da3973 (Merged 11.1 into 11.2 (#693))
 import {
   CarbonListBatchText,
   CarbonListTranslations,
@@ -82,10 +79,8 @@ export class CarbonListComponent<T> implements OnInit, OnDestroy {
   @HostBinding('attr.data-carbon-theme') theme = 'g10';
   @ViewChild('actionsMenu') actionsMenu: TemplateRef<OverflowMenu>;
   @ViewChild('actionItem') actionItem: TemplateRef<any>;
-<<<<<<< HEAD
   @ViewChild('booleanTemplate') booleanTemplate: TemplateRef<any>;
-=======
->>>>>>> 57da3973 (Merged 11.1 into 11.2 (#693))
+  @ViewChild('defaultTemplate') defaultTemplate: TemplateRef<any>;
 
   private _completeDataSource: TableItem[][];
   private _items: T[];
@@ -402,7 +397,14 @@ export class CarbonListComponent<T> implements OnInit, OnDestroy {
               template: this.booleanTemplate,
             });
           default:
-            return new TableItem({data: this.resolveObject(column, item) ?? '-', item});
+            return new TableItem({
+              data: {
+                resolvedObject: this.resolveObject(column, item) ?? '-',
+                viewType: column.viewType,
+              },
+              item,
+              template: this.defaultTemplate,
+            });
         }
       });
 
