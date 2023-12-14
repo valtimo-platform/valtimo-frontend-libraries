@@ -80,7 +80,6 @@ export class CarbonListComponent<T> implements OnInit, OnDestroy {
   @ViewChild('actionsMenu') actionsMenu: TemplateRef<OverflowMenu>;
   @ViewChild('actionItem') actionItem: TemplateRef<any>;
   @ViewChild('booleanTemplate') booleanTemplate: TemplateRef<any>;
-  @ViewChild('defaultTemplate') defaultTemplate: TemplateRef<any>;
 
   private _completeDataSource: TableItem[][];
   private _items: T[];
@@ -388,23 +387,12 @@ export class CarbonListComponent<T> implements OnInit, OnDestroy {
               template: column.template,
             });
           case ViewType.BOOLEAN:
-            let data = this.resolveObject(column, item);
-            data = !BOOLEAN_CONVERTER_VALUES.includes(data)
-              ? data
-              : `${'viewTypeConverter.' + data}`;
             return new TableItem({
-              data,
+              data: this.resolveObject(column, item) ?? '-',
               template: this.booleanTemplate,
             });
           default:
-            return new TableItem({
-              data: {
-                resolvedObject: this.resolveObject(column, item) ?? '-',
-                viewType: column.viewType,
-              },
-              item,
-              template: this.defaultTemplate,
-            });
+            return new TableItem({data: this.resolveObject(column, item) ?? '-', item});
         }
       });
 
