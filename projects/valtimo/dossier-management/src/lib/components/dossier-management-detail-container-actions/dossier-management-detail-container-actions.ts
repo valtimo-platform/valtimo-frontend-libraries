@@ -30,6 +30,7 @@ import {DOCUMENT} from '@angular/common';
 import {HttpResponse} from '@angular/common/http';
 import {DocumentService} from '@valtimo/document';
 import {take} from 'rxjs/operators';
+import {DossierManagementRemoveModalComponent} from '../dossier-management-remove-modal/dossier-management-remove-modal.component';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container-actions',
@@ -41,6 +42,8 @@ import {take} from 'rxjs/operators';
 export class DossierManagementDetailContainerActionsComponent {
   @ViewChild('exportingMessage')
   private readonly _exportMessageTemplateRef: TemplateRef<HTMLDivElement>;
+  @ViewChild('dossierRemoveModal')
+  private readonly _dossierRemoveModal: DossierManagementRemoveModalComponent;
 
   @Input() public documentDefinitionTitle = '';
   @Input() public set documentDefinitionName(value: string) {
@@ -53,9 +56,7 @@ export class DossierManagementDetailContainerActionsComponent {
   public readonly selectedVersionNumber$ = this.dossierDetailService.selectedVersionNumber$;
   private readonly _documentDefinitionName$ =
     this.dossierDetailService.selectedDocumentDefinitionName$;
-
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
-
   private readonly _documentDefinitionVersions$ = this._documentDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinitionVersions(documentDefinitionName)
@@ -80,6 +81,7 @@ export class DossierManagementDetailContainerActionsComponent {
         })) || []
     )
   );
+  public readonly selectedDocumentDefinition$ = this.dossierDetailService.documentDefinition$;
 
   private _currentNotification!: Notification;
 
@@ -142,6 +144,27 @@ export class DossierManagementDetailContainerActionsComponent {
 
   public setVersion(version: any): void {
     this.dossierDetailService.setSelectedVersionNumber(Number(version.item.id));
+  }
+
+  public downloadDefinition(): void {
+    this.selectedDocumentDefinition$.pipe(take(1)).subscribe(definition => {
+      const dataString =
+        'data:text/json;charset=utf-8,' +
+        encodeURIComponent(JSON.stringify(definition.schema, null, 2));
+      const downloadAnchorElement = document.getElementById('downloadAnchorElement');
+      downloadAnchorElement.setAttribute('href', dataString);
+      downloadAnchorElement.setAttribute(
+        'download',
+        `${definition.id.name}-v${definition.id.version}.json`
+      );
+      downloadAnchorElement.click();
+    });
+  }
+
+  public openDossierRemoveModal(): void {
+    this.selectedDocumentDefinition$.pipe(take(1)).subscribe(definition => {
+      this._dossierRemoveModal.openModal(definition);
+    });
   }
 
   private startExporting(): void {

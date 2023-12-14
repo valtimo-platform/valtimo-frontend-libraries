@@ -19,7 +19,8 @@
   *ngIf="{
   exporting: exporting$ | async,
   loadingVersion: loadingVersion$ | async,
-  versionListItems: versionListItems$ | async
+  versionListItems: versionListItems$ | async,
+  selectedDocumentDefinition: selectedDocumentDefinition$ | async
   } as obs"
 >
   <ng-container *ngTemplateOutlet="versionSelection;context:{obs:obs}"></ng-container>
@@ -55,7 +56,24 @@
       >{{ 'dossierManagement.export' | translate: {value: documentDefinitionTitle}
       }}</cds-overflow-menu-option
     >
+
+    <cds-overflow-menu-option
+      [disabled]="obs.exporting || obs.loadingVersion"
+      (selected)="downloadDefinition() "
+      [attr.data-carbon-theme]="CARBON_THEME"
+      >{{ 'Download document definition' | translate }}</cds-overflow-menu-option
+    >
+
+    <cds-overflow-menu-option
+      *ngIf="obs.selectedDocumentDefinition && !obs.selectedDocumentDefinition.readOnly"
+      [disabled]="obs.exporting || obs.loadingVersion"
+      (selected)="openDossierRemoveModal() "
+      [attr.data-carbon-theme]="CARBON_THEME"
+      >{{ 'Remove document definition' | translate}}</cds-overflow-menu-option
+    >
   </cds-overflow-menu>
+
+  <a id="downloadAnchorElement" style="display: none"></a>
 </ng-template>
 
 <ng-template #customTrigger>
@@ -75,3 +93,7 @@
     <cds-loading size="sm"></cds-loading>
   </div>
 </ng-template>
+
+<valtimo-dossier-management-remove-modal
+  #dossierRemoveModal
+></valtimo-dossier-management-remove-modal>

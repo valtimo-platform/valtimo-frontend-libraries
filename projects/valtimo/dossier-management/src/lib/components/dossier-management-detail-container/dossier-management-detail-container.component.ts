@@ -26,7 +26,7 @@ import {PageTitleService} from '@valtimo/components';
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
   templateUrl: './dossier-management-detail-container.component.html',
-  styleUrls: ['./dossier-management-detail-container.component.css'],
+  styleUrls: ['./dossier-management-detail-container.component.scss'],
   providers: [DossierDetailService],
 })
 export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
@@ -78,7 +78,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   }
 
   ngOnDestroy(): void {
-    this.tabService.currentTab = TabEnum.CASE;
+    this.tabService.currentTab = TabEnum.DOCUMENT;
     this.tabSubscription?.unsubscribe();
   }
 }

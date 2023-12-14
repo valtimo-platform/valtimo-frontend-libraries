@@ -52,6 +52,7 @@ import {
   LoadingModule,
   ModalModule as CarbonModalModule,
   NotificationModule,
+  TabsModule,
 } from 'carbon-components-angular';
 import {DossierManagementAssigneeComponent} from './components/dossier-management-assignee/dossier-management-assignee.component';
 import {DossierManagementConnectModalComponent} from './components/dossier-management-connect-modal/dossier-management-connect-modal.component';
@@ -133,6 +134,7 @@ import {DossierManagementDocumentDefinitionComponent} from './components/dossier
     NotificationModule,
     EditorModule,
     CarbonListModule,
+    TabsModule,
   ],
   providers: [TabManagementService],
 })
