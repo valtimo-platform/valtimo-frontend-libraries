@@ -2273,6 +2273,76 @@
         }
       }
     },
+    "@valtimo/carbon": {
+      "projectType": "library",
+      "root": "projects/valtimo/carbon",
+      "sourceRoot": "projects/valtimo/carbon/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/valtimo/carbon/tsconfig.lib.json",
+            "project": "projects/valtimo/carbon/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/valtimo/carbon/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "tsConfig": "projects/valtimo/carbon/tsconfig.spec.json",
+            "karmaConfig": "projects/valtimo/carbon/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/carbon/src/**/*.ts",
+              "projects/valtimo/carbon/src/**/*.html"
+            ]
+          }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "@valtimo/carbon:serve",
+            "configFile": "projects/valtimo/carbon/cypress.config.js"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "@valtimo/carbon:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false,
+            "configFile": "projects/valtimo/carbon/cypress.config.js"
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "@valtimo/carbon:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "@valtimo/carbon:serve:production"
+            }
+          }
+        }
+      }
+    },
     "@valtimo/open-zaak": {
       "projectType": "library",
       "root": "projects/valtimo/open-zaak",

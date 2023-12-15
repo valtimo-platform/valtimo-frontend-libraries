@@ -14,6 +14,12 @@
   ~ limitations under the License.
   -->
 
+<vcds-button [disabled]="false" (onClick)="showAssignModal()">
+  <div vcdsContent>
+    {{ 'interface.save' | translate }}
+  </div>
+</vcds-button>
+
 <ng-container
   *ngIf="{
     fields: fields$ | async,
