@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
+::ng-deep.dossier-management-tabs .cds--tab-content {
+  background-color: var(--cds-layer);
+}
+
 ::ng-deep.dossier-management-tabs .no-padding .cds--tab-content {
   padding: 0;
+  margin-top: calc(0 - var(--cds-layout-density-padding-inline-normal));
 }
 
 .tab-container {
@@ -33,4 +38,10 @@
 .dossier-title {
   margin-top: 0;
   margin-bottom: 7px;
+}
+
+.dossier-management-detail-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }

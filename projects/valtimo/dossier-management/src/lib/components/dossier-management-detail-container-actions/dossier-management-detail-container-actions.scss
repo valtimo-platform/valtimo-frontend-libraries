@@ -36,3 +36,10 @@
   align-items: center;
   gap: 16px;
 }
+
+.dossier-metadata {
+  display: flex;
+  gap: 1.5rem;
+  flex-direction: row;
+  align-items: flex-end;
+}

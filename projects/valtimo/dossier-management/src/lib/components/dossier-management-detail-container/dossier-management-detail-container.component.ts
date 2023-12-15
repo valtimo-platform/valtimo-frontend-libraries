@@ -35,6 +35,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   public tabManagementEnabled!: boolean;
 
   public readonly documentDefinitionTitle$ = this.pageTitleService.customPageTitle$;
+  public readonly CARBON_THEME = 'g10';
 
   private tabSubscription: Subscription;
 

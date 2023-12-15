@@ -14,13 +14,9 @@
   ~ limitations under the License.
   -->
 
-<div id="management-datail-content" class="pt-0">
-  <ng-container *ngTemplateOutlet="widget"></ng-container>
-</div>
-
-<ng-template #widget>
+<div class="col-12 px-0 mb-5">
   <valtimo-widget *ngIf="documentDefinition">
-    <div class="row bg-white mt-4 mb-5 pb-4 pl-2 pr-2">
+    <div class="row mt-4 mb-5 pb-4 pl-2 pr-2">
       <div class="col-6">
         <ng-container *ngTemplateOutlet="connectedProcesses"></ng-container>
       </div>
@@ -37,7 +33,7 @@
       </div>
     </div>
   </valtimo-widget>
-</ng-template>
+</div>
 
 <ng-template #connectedProcesses>
   <h2 class="mb-2">{{ 'dossierManagement.connectedProcesses' | translate }}</h2>

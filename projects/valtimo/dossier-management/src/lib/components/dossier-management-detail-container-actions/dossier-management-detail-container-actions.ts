@@ -83,6 +83,9 @@ export class DossierManagementDetailContainerActionsComponent {
   );
   public readonly selectedDocumentDefinition$ = this.dossierDetailService.documentDefinition$;
 
+  public readonly selectedDocumentDefinitionIsReadOnly$ =
+    this.dossierDetailService.selectedDocumentDefinitionIsReadOnly$;
+
   private _currentNotification!: Notification;
 
   constructor(

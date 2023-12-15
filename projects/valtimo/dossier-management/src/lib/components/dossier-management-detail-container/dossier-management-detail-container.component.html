@@ -14,33 +14,16 @@
   ~ limitations under the License.
   -->
 
-<div class="main-content">
-  <div class="container-fluid">
-    <div class="col-12 px-0 mb-5">
-      <valtimo-widget>
-        <ng-container *ngTemplateOutlet="title"></ng-container>
-        <ng-container *ngTemplateOutlet="tabs"></ng-container>
-      </valtimo-widget>
-    </div>
-  </div>
+<div class="dossier-management-detail-container">
+  <ng-container *ngTemplateOutlet="tabs"></ng-container>
 </div>
 
-<ng-template #title>
-  <ng-container *ngIf="documentDefinition$ | async as documentDefinition">
-    <div class="bg-light dossier-header" *ngIf="documentDefinition.readOnly">
-      <h3 class="dossier-title">
-        <div class="pull-right">
-          <span class="badge badge-pill badge-info increase-size">{{
-            'dossierManagement.readonly' | translate
-          }}</span>
-        </div>
-      </h3>
-    </div>
-  </ng-container>
-</ng-template>
-
 <ng-template #tabs>
-  <cds-tabs class="dossier-management-tabs">
+  <cds-tabs
+    class="dossier-management-tabs"
+    type="contained"
+    [attr.data-carbon-theme]="CARBON_THEME"
+  >
     <cds-tab
       [active]="currentTab === TabEnum.DOCUMENT"
       [heading]="'dossierManagement.tabs.document' | translate"
@@ -49,7 +32,7 @@
       <valtimo-dossier-management-document-definition></valtimo-dossier-management-document-definition>
     </cds-tab>
     <cds-tab
-      class="no-padding"
+      class="no-padding main-content"
       [active]="currentTab === TabEnum.CASE"
       [heading]="'dossierManagement.tabs.cases' | translate"
       (selected)="displayBodyComponent(TabEnum.CASE)"
@@ -57,7 +40,7 @@
       <valtimo-dossier-management-detail></valtimo-dossier-management-detail>
     </cds-tab>
     <cds-tab
-      class="no-padding"
+      class="no-padding main-content"
       [active]="currentTab === TabEnum.SEARCH"
       [heading]="'dossierManagement.tabs.searchFields' | translate"
       (selected)="displayBodyComponent(TabEnum.SEARCH)"
@@ -65,7 +48,7 @@
       <valtimo-dossier-management-search-fields></valtimo-dossier-management-search-fields>
     </cds-tab>
     <cds-tab
-      class="no-padding"
+      class="no-padding main-content"
       [active]="currentTab === TabEnum.LIST"
       [heading]="'dossierManagement.tabs.listColumns' | translate"
       (selected)="displayBodyComponent(TabEnum.LIST)"
