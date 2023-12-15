@@ -99,7 +99,9 @@
       "@valtimo/plugin": ["dist/valtimo/plugin"],
       "@valtimo/plugin/*": ["dist/valtimo/plugin/*"],
       "@valtimo/exact-plugin": ["dist/valtimo/exact-plugin"],
-      "@valtimo/exact-plugin/*": ["dist/valtimo/exact-plugin/*"]
+      "@valtimo/exact-plugin/*": ["dist/valtimo/exact-plugin/*"],
+      "@valtimo/carbon": ["dist/valtimo/carbon"],
+      "@valtimo/carbon/*": ["dist/valtimo/carbon/*"]
     }
   },
   "files": [],
@@ -346,6 +348,12 @@
     },
     {
       "path": "./projects/valtimo/object/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/valtimo/carbon/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/valtimo/carbon/tsconfig.spec.json"
     }
   ]
 }
