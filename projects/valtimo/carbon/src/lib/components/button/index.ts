@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 
-export * from './lib/components';
-export * from './lib/directives';
+export * from './button.components';

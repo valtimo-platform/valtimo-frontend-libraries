@@ -7,6 +7,10 @@
     "@angular/core": "^16.2.0"
   },
   "dependencies": {
-    "tslib": "2.6.2"
+    "tslib": "2.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@carbon/react": "^1.45.0",
+    "html-to-react": "^1.7.0"
   }
 }

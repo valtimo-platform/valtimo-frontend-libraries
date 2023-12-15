@@ -14,4 +14,10 @@
  * limitations under the License.
  */
 
-export * from './versions';
+import {Directive} from '@angular/core';
+
+@Directive({
+  selector: '[vcdsContent]',
+  standalone: true,
+})
+export class VcdsContentDirective {}

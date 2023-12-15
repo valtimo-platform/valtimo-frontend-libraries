@@ -14,8 +14,4 @@
  * limitations under the License.
  */
 
-const VERSIONS = {
-  frontendLibraries: '11.1.0',
-};
-
-export {VERSIONS};
+export * from './button';

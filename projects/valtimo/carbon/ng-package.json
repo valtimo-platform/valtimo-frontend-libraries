@@ -4,5 +4,6 @@
   "assets": ["./assets"],
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["react", "react-dom", "@carbon/react", "html-to-react"]
 }
