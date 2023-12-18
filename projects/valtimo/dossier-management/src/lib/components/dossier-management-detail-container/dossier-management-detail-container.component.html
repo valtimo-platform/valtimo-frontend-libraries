@@ -32,7 +32,7 @@
       <valtimo-dossier-management-document-definition></valtimo-dossier-management-document-definition>
     </cds-tab>
     <cds-tab
-      class="no-padding main-content"
+      class="no-padding-left-right main-content"
       [active]="currentTab === TabEnum.CASE"
       [heading]="'dossierManagement.tabs.cases' | translate"
       (selected)="displayBodyComponent(TabEnum.CASE)"
@@ -40,7 +40,7 @@
       <valtimo-dossier-management-detail></valtimo-dossier-management-detail>
     </cds-tab>
     <cds-tab
-      class="no-padding main-content"
+      class="no-padding-left-right no-padding-top-bottom main-content"
       [active]="currentTab === TabEnum.SEARCH"
       [heading]="'dossierManagement.tabs.searchFields' | translate"
       (selected)="displayBodyComponent(TabEnum.SEARCH)"
@@ -48,7 +48,7 @@
       <valtimo-dossier-management-search-fields></valtimo-dossier-management-search-fields>
     </cds-tab>
     <cds-tab
-      class="no-padding main-content"
+      class="no-padding-left-right no-padding-top-bottom"
       [active]="currentTab === TabEnum.LIST"
       [heading]="'dossierManagement.tabs.listColumns' | translate"
       (selected)="displayBodyComponent(TabEnum.LIST)"
@@ -56,7 +56,7 @@
       <valtimo-dossier-management-list-columns></valtimo-dossier-management-list-columns>
     </cds-tab>
     <cds-tab
-      class="no-padding"
+      class="no-padding-left-right no-padding-top-bottom"
       [active]="currentTab === TabEnum.TABS"
       [heading]="'dossierManagement.tabs.tabManagement' | translate"
       (selected)="displayBodyComponent(TabEnum.TABS)"

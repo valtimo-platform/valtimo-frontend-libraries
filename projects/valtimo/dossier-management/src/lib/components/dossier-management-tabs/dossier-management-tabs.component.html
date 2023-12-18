@@ -63,6 +63,7 @@
       cdsButton="tertiary"
       [disabled]="data.index === 0"
       [iconOnly]="true"
+      size="sm"
       (click)="onArrowClick('UP', data.index, $event)"
     >
       <svg cdsIcon="arrow--up" size="16" class="cds--btn__icon"></svg>
@@ -72,6 +73,7 @@
       cdsButton="tertiary"
       [disabled]="(lastItemIndex$ | async) === data.index"
       [iconOnly]="true"
+      size="sm"
       (click)="onArrowClick('DOWN', data.index, $event)"
     >
       <svg cdsIcon="arrow--down" size="16" class="cds--btn__icon"></svg>

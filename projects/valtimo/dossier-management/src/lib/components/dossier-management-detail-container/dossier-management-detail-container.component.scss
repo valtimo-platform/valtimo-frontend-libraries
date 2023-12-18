@@ -18,9 +18,14 @@
   background-color: var(--cds-layer);
 }
 
-::ng-deep.dossier-management-tabs .no-padding .cds--tab-content {
-  padding: 0;
-  margin-top: calc(0 - var(--cds-layout-density-padding-inline-normal));
+::ng-deep.dossier-management-tabs .no-padding-left-right .cds--tab-content {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+::ng-deep.dossier-management-tabs .no-padding-top-bottom .cds--tab-content {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .tab-container {
