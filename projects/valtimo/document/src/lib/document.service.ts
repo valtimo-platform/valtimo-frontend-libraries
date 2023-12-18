@@ -56,7 +56,6 @@ import {
   SearchFilter,
   SearchFilterRange,
   SearchOperator,
-  User,
 } from '@valtimo/config';
 import {AdvancedDocumentSearchRequest} from './advanced-document-search-request';
 
@@ -443,8 +442,8 @@ export class DocumentService {
     return this.http.post<void>(`${this.valtimoEndpointUri}v1/document/${documentId}/unassign`, {});
   }
 
-  public getCandidateUsers(documentId: string): Observable<Array<User>> {
-    return this.http.get<Array<User>>(
+  public getCandidateUsers(documentId: string): Observable<Array<NamedUser>> {
+    return this.http.get<Array<NamedUser>>(
       `${this.valtimoEndpointUri}v1/document/${documentId}/candidate-user`
     );
   }
