@@ -287,7 +287,7 @@
     "typescript": "5.1.6",
     "uuid": "9.0.0",
     "webpack-bundle-analyzer": "4.9.0",
-    "zone.js": "0.13.1"
+    "zone.js": "0.14.2"
   },
   "devDependencies": {
     "@cypress/schematic": "^2.5.0",
