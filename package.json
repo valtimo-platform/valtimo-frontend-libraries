@@ -286,7 +286,7 @@
     "tslint-config-prettier": "1.18.0",
     "typescript": "5.1.6",
     "uuid": "9.0.0",
-    "webpack-bundle-analyzer": "4.9.0",
+    "webpack-bundle-analyzer": "4.10.1",
     "zone.js": "0.13.1"
   },
   "devDependencies": {
