@@ -221,7 +221,7 @@
     "@ng-bootstrap/ng-bootstrap": "11.0.1",
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
-    "@types/dropzone": "5.7.4",
+    "@types/dropzone": "5.7.8",
     "@types/jasmine": "4.3.5",
     "@types/jasminewd2": "2.0.10",
     "@types/node": "20.5.0",
