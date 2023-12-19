@@ -334,6 +334,6 @@
     "karma-coverage": "^2.2.1",
     "ng-mocks": "^14.11.0",
     "puppeteer": "21.1.0",
-    "sass": "1.66.1"
+    "sass": "1.69.5"
   }
 }
