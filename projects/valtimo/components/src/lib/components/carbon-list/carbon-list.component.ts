@@ -147,6 +147,7 @@ export class CarbonListComponent<T> implements OnInit, OnDestroy {
   @Input() paginationIdentifier: string;
   @Input() showSelectionColumn = false;
   @Input() striped = false;
+  @Input() hideToolbar = false;
 
   @Output() rowClicked = new EventEmitter<any>();
   @Output() paginationClicked = new EventEmitter<number>();

@@ -24,21 +24,20 @@
     downloadName: downloadName$ | async
   } as obs"
 >
-  <div class="container-fluid pr-0 pl-0">
-    <div class="text-right">
-      <div class="btn-group mt-m3px mb-3 mr-2">
-        <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
-      </div>
-    </div>
-    <ng-container *ngIf="!obs.hasEnvironmentConfig; else environmentConfigWarning">
-      <ng-container *ngIf="!loadingCaseListColumns; else loading">
-        <ng-container *ngIf="obs.caseListColumn?.length > 0; else noConfigWarning">
-          <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
-        </ng-container>
+  <div class="cds--toolbar-content list-columns__buttons">
+    <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
+  </div>
+
+  <ng-container *ngIf="!obs.hasEnvironmentConfig; else environmentConfigWarning">
+    <ng-container *ngIf="(loadingCaseListColumns$ | async) === false; else loading">
+      <ng-container *ngIf="obs.caseListColumn?.length > 0; else noConfigWarning">
+        <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
       </ng-container>
     </ng-container>
-  </div>
+  </ng-container>
+
   <ng-container *ngTemplateOutlet="createEditModal"></ng-container>
+
   <ng-container *ngTemplateOutlet="deleteModal"></ng-container>
 </ng-container>
 
@@ -59,43 +58,44 @@
   >
     {{ 'listColumn.downloadButtonText' | translate }}
   </a>
+
   <button
     (click)="openModal('create')"
     cdsButton="primary"
-    size="md"
     [disabled]="obs.hasEnvironmentConfig || loadingCaseListColumns"
-    class="ml-3"
   >
     {{ 'listColumn.addButtonText' | translate }}
     <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
   </button>
 </ng-template>
 
-<ng-template #moveRowButtons let-index="index" let-length="length">
+<ng-template #moveRowButtons let-data="data">
   <div
-    class="move-row-buttons"
+    class="dossier-list-columns__actions"
     *ngIf="{
       disableInput: disableInput$ | async,
       documentDefinitionName: documentDefinitionName$ | async
     } as obs"
   >
-    <i
-      class="mdi mdi-delete btn btn-outline-danger mr-1"
-      (click)="deleteRow(index, $event)"
-      [ngClass]="{'disabled disabled-move-row-button': obs.disableInput}"
-    ></i>
-    <i
-      class="mdi mdi-arrow-up-bold btn btn-outline-primary mr-1"
-      (click)="moveRow(index, true, $event, obs.documentDefinitionName)"
-      [ngClass]="{'disabled disabled-move-row-button': index === 0 || obs.disableInput}"
-    ></i>
-    <i
-      class="mdi mdi-arrow-down-bold btn btn-outline-secondary"
-      (click)="moveRow(index, false, $event, obs.documentDefinitionName)"
-      [ngClass]="{
-        'disabled disabled-move-row-button': index === length - 1 || obs.disableInput
-      }"
-    ></i>
+    <button
+      cdsButton="tertiary"
+      [disabled]="data.index === 0 || obs.disableInput"
+      [iconOnly]="true"
+      size="sm"
+      (click)="moveRow(data.index, true, $event, obs.documentDefinitionName)"
+    >
+      <svg cdsIcon="arrow--up" size="16" class="cds--btn__icon"></svg>
+    </button>
+
+    <button
+      cdsButton="tertiary"
+      [disabled]="obs.disableInput || (lastItemIndex$ | async) === data.index"
+      [iconOnly]="true"
+      size="sm"
+      (click)="moveRow(data.index, false, $event, obs.documentDefinitionName)"
+    >
+      <svg cdsIcon="arrow--down" size="16" class="cds--btn__icon"></svg>
+    </button>
   </div>
 </ng-template>
 
@@ -105,8 +105,8 @@
     [fields]="obs.fields"
     [viewMode]="false"
     [header]="false"
+    [hideToolbar]="true"
     *ngIf="obs.caseListColumn; else loading"
-    [lastColumnTemplate]="moveRowButtonsTemplateRef"
     (rowClicked)="columnRowClicked($event)"
   >
   </valtimo-carbon-list>
@@ -119,7 +119,7 @@
 </ng-template>
 
 <ng-template #environmentConfigWarning>
-  <div class="pl-2 pr-2 pb-2">
+  <div class="pl-2 pr-2 pb-2 pt-2">
     <cds-notification
       [notificationObj]="{
         type: 'warning',
@@ -133,7 +133,7 @@
 </ng-template>
 
 <ng-template #noConfigWarning>
-  <div class="pl-2 pr-2 pb-2">
+  <div class="pl-2 pr-2 pb-2 pt-2">
     <cds-notification
       [notificationObj]="{
         type: 'info',
@@ -337,7 +337,7 @@
 <ng-template #deleteModal>
   <valtimo-confirmation-modal
     [showModalSubject$]="showDeleteModal$"
-    [outputOnConfirm]="deleteRowIndex$ | async"
+    [outputOnConfirm]="deleteRowKey$ | async"
     (confirmEvent)="deleteRowConfirmation($event)"
     confirmButtonTextTranslationKey="listColumn.deleteColumn"
     titleTranslationKey="listColumn.deleteColumn"

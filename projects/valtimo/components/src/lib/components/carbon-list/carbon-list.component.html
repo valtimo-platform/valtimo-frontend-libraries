@@ -26,6 +26,7 @@
   <ng-content select="[tabs]"></ng-content>
 
   <cds-table-toolbar
+    *ngIf="!hideToolbar"
     class="valtimo-carbon-list__toolbar"
     [model]="model"
     [batchText]="batchText$ | async"

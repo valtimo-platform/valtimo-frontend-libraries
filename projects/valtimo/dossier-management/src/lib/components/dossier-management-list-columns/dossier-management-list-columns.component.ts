@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {ListField, MultiInputValues, ViewType} from '@valtimo/components';
+import {ColumnConfig, MultiInputValues, ViewType} from '@valtimo/components';
 import {ConfigService, DefinitionColumn} from '@valtimo/config';
 import {
   CaseListColumn,
@@ -47,8 +47,9 @@ import {ListColumnModal} from '../../models';
   templateUrl: './dossier-management-list-columns.component.html',
   styleUrls: ['./dossier-management-list-columns.component.scss'],
 })
-export class DossierManagementListColumnsComponent {
-  @ViewChild('moveRowButtons') public moveRowButtonsTemplateRef: TemplateRef<any>;
+export class DossierManagementListColumnsComponent implements AfterViewInit {
+  @ViewChild('moveRowButtons', {read: TemplateRef})
+  public moveRowButtonsTemplateRef: TemplateRef<any>;
   readonly downloadName$ = new BehaviorSubject<string>('');
   readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
 
@@ -97,17 +98,49 @@ export class DossierManagementListColumnsComponent {
     },
   ];
 
-  loadingCaseListColumns = true;
+  private readonly _lastColumnTemplate$ = new BehaviorSubject<TemplateRef<any> | null>(null);
 
-  readonly fields$: Observable<Array<ListField>> = this.translateService.stream('key').pipe(
-    map(() =>
-      this.COLUMNS.map(column => ({
-        key: column.propertyName,
-        label: this.translateService.instant(`listColumn.${column.translationKey}`),
-        sortable: column.sortable,
-        ...(column.viewType && {viewType: column.viewType}),
-        ...(column.enum && {enum: column.enum}),
-      }))
+  public readonly loadingCaseListColumns$ = new BehaviorSubject<boolean>(true);
+
+  public readonly lastItemIndex$ = new BehaviorSubject<number>(-1);
+
+  readonly fields$: Observable<Array<ColumnConfig>> = combineLatest([
+    this._lastColumnTemplate$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    filter(([lastColumnTemplate]) => !!lastColumnTemplate),
+    map(
+      ([lastColumnTemplate]) =>
+        [
+          ...this.COLUMNS.map(column => ({
+            key: column.propertyName,
+            label: this.translateService.instant(`listColumn.${column.translationKey}`),
+            sortable: column.sortable,
+            ...(column.viewType && {viewType: column.viewType}),
+            ...(column.enum && {enum: column.enum}),
+          })),
+          {
+            className: 'dossier-list-columns__actions',
+            key: '',
+            label: '',
+            sortable: false,
+            template: lastColumnTemplate,
+            viewType: ViewType.TEMPLATE,
+          },
+          {
+            actions: [
+              {
+                label: 'interface.delete',
+                callback: this.deleteRow.bind(this),
+                type: 'danger',
+              },
+            ],
+            className: 'dossier-list-columns__actions',
+            key: '',
+            label: '',
+            viewType: ViewType.ACTION,
+          },
+        ] as Array<ColumnConfig>
     )
   );
 
@@ -144,8 +177,9 @@ export class DossierManagementListColumnsComponent {
       });
     }),
     tap(caseListColumns => {
+      this.lastItemIndex$.next(caseListColumns.length - 1);
       this.cachedCaseListColumns = caseListColumns;
-      this.loadingCaseListColumns = false;
+      this.loadingCaseListColumns$.next(false);
       this.enableInput();
     })
   );
@@ -325,7 +359,7 @@ export class DossierManagementListColumnsComponent {
 
   readonly showDeleteModal$ = new Subject<boolean>();
 
-  readonly deleteRowIndex$ = new BehaviorSubject<number>(0);
+  readonly deleteRowKey$ = new BehaviorSubject<string>('');
 
   readonly defaultEnumValues$ = new BehaviorSubject<MultiInputValues>(undefined);
 
@@ -336,6 +370,11 @@ export class DossierManagementListColumnsComponent {
     private readonly configService: ConfigService,
     private readonly sanitizer: DomSanitizer
   ) {}
+
+  public ngAfterViewInit(): void {
+    this._lastColumnTemplate$.next(this.moveRowButtonsTemplateRef);
+  }
+
   openModal(modalType: ListColumnModal): void {
     this.showModal$.next(true);
     this.currentModalType$.next(modalType);
@@ -352,16 +391,12 @@ export class DossierManagementListColumnsComponent {
     this.showModal$.next(false);
   }
 
-  deleteRow(caseListColumnRowIndex: number, clickEvent: MouseEvent): void {
-    clickEvent.stopPropagation();
-
+  deleteRow(caseListColumn: CaseListColumn): void {
     this.showDeleteModal$.next(true);
-    this.deleteRowIndex$.next(caseListColumnRowIndex);
+    this.deleteRowKey$.next(caseListColumn.key);
   }
 
-  deleteRowConfirmation(caseListColumnRowIndex: number): void {
-    const columnKey = this.cachedCaseListColumns[caseListColumnRowIndex]?.key;
-
+  deleteRowConfirmation(columnKey: string): void {
     if (columnKey) {
       this.disableInput();
 
