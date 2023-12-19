@@ -149,21 +149,6 @@ export class DossierManagementDetailContainerActionsComponent {
     this.dossierDetailService.setSelectedVersionNumber(Number(version.item.id));
   }
 
-  public downloadDefinition(): void {
-    this.selectedDocumentDefinition$.pipe(take(1)).subscribe(definition => {
-      const dataString =
-        'data:text/json;charset=utf-8,' +
-        encodeURIComponent(JSON.stringify(definition.schema, null, 2));
-      const downloadAnchorElement = document.getElementById('downloadAnchorElement');
-      downloadAnchorElement.setAttribute('href', dataString);
-      downloadAnchorElement.setAttribute(
-        'download',
-        `${definition.id.name}-v${definition.id.version}.json`
-      );
-      downloadAnchorElement.click();
-    });
-  }
-
   public openDossierRemoveModal(): void {
     this.selectedDocumentDefinition$.pipe(take(1)).subscribe(definition => {
       this._dossierRemoveModal.openModal(definition);

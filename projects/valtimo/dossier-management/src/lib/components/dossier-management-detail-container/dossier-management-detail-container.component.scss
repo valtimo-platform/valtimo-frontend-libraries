@@ -32,6 +32,10 @@
   padding-bottom: 0;
 }
 
+::ng-deep.dossier-management-tabs .no-padding-bottom .cds--tab-content {
+  padding-bottom: 0;
+}
+
 .tab-container {
   min-height: 300px;
 }

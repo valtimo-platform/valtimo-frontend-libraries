@@ -63,13 +63,6 @@
     >
 
     <cds-overflow-menu-option
-      [disabled]="obs.exporting || obs.loadingVersion"
-      (selected)="downloadDefinition() "
-      [attr.data-carbon-theme]="CARBON_THEME"
-      >{{ 'Download document definition' | translate }}</cds-overflow-menu-option
-    >
-
-    <cds-overflow-menu-option
       *ngIf="obs.selectedDocumentDefinition && !obs.selectedDocumentDefinition.readOnly"
       [disabled]="obs.exporting || obs.loadingVersion"
       (selected)="openDossierRemoveModal() "
@@ -77,8 +70,6 @@
       >{{ 'Remove document definition' | translate}}</cds-overflow-menu-option
     >
   </cds-overflow-menu>
-
-  <a id="downloadAnchorElement" style="display: none"></a>
 </ng-template>
 
 <ng-template #customTrigger>

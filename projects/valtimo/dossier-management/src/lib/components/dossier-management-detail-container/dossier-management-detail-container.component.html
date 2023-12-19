@@ -25,6 +25,7 @@
     [attr.data-carbon-theme]="CARBON_THEME"
   >
     <cds-tab
+      class="no-padding-left-right no-padding-top-bottom"
       [active]="currentTab === TabEnum.DOCUMENT"
       [heading]="'dossierManagement.tabs.document' | translate"
       (selected)="displayBodyComponent(TabEnum.DOCUMENT)"
@@ -40,7 +41,7 @@
       <valtimo-dossier-management-detail></valtimo-dossier-management-detail>
     </cds-tab>
     <cds-tab
-      class="main-content"
+      class="main-content no-padding-left-right no-padding-bottom"
       [active]="currentTab === TabEnum.SEARCH"
       [heading]="'dossierManagement.tabs.searchFields' | translate"
       (selected)="displayBodyComponent(TabEnum.SEARCH)"
