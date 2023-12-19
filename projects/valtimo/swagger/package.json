@@ -7,7 +7,7 @@
     "@angular/core": "^16.2.0"
   },
   "dependencies": {
-    "swagger-ui": "5.4.2",
+    "swagger-ui": "5.10.5",
     "tslib": "2.6.2"
   }
 }
