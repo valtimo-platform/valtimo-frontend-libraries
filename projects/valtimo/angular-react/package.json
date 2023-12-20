@@ -1,0 +1,17 @@
+{
+  "name": "@valtimo/angular-react",
+  "license": "EUPL-1.2",
+  "version": "11.2.0",
+  "peerDependencies": {
+    "@angular/common": "^16.2.0",
+    "@angular/core": "^16.2.0"
+  },
+  "dependencies": {
+    "tslib": "2.6.2",
+    "classnames": "2.3.2",
+    "css-to-style": "1.4.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "stylenames": "1.1.6"
+  }
+}

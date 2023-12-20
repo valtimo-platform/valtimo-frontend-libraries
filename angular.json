@@ -2343,6 +2343,76 @@
         }
       }
     },
+    "@valtimo/angular-react": {
+      "projectType": "library",
+      "root": "projects/valtimo/angular-react",
+      "sourceRoot": "projects/valtimo/angular-react/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/valtimo/angular-react/tsconfig.lib.json",
+            "project": "projects/valtimo/angular-react/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/valtimo/angular-react/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "tsConfig": "projects/valtimo/angular-react/tsconfig.spec.json",
+            "karmaConfig": "projects/valtimo/angular-react/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/angular-react/src/**/*.ts",
+              "projects/valtimo/angular-react/src/**/*.html"
+            ]
+          }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "@valtimo/angular-react:serve",
+            "configFile": "projects/valtimo/angular-react/cypress.config.js"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "@valtimo/angular-react:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false,
+            "configFile": "projects/valtimo/angular-react/cypress.config.js"
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "@valtimo/angular-react:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "@valtimo/angular-react:serve:production"
+            }
+          }
+        }
+      }
+    },
     "@valtimo/open-zaak": {
       "projectType": "library",
       "root": "projects/valtimo/open-zaak",
