@@ -45,6 +45,10 @@
       "OPEN": {
         "description": "Kommen Sie später wieder.",
         "title": "Alle cases wurden zugewiesen"
+      },
+      "search": {
+        "description": "Es sind keine Dateien vorhanden, die Ihren Suchkriterien entsprechen.",
+        "title": "Keine Cases gefunden"
       }
     },
     "pagination": {
@@ -936,7 +940,9 @@
     "complete": "Plugin-Aktion verbinden"
   },
   "plugin": {
-    "noConfigurationComponent": "Es ist keine Konfigurationskomponente verfügbar."
+    "noConfigurationComponent": "Es ist keine Konfigurationskomponente verfügbar.",
+    "configurationId": "Konfigurations ID",
+    "configurationIdTooltip": "Unter dieser ID wird das Plugin gespeichert. Die ID muss im Format einer UUID vorliegen"
   },
   "pluginManagement": {
     "tableItemsText": "Plugin-Konfigurationen",
