@@ -21,7 +21,9 @@
     documentDefinitionName: documentDefinitionName$ | async,
     hasEnvironmentConfig: hasEnvironmentConfig$ | async,
     downloadUrl: downloadUrl$ | async,
-    downloadName: downloadName$ | async
+    downloadName: downloadName$ | async,
+    loadingCaseListColumns: loadingCaseListColumns$ | async,
+    loadingFields: loadingFields$ | async
   } as obs"
 >
   <div class="cds--toolbar-content list-columns__buttons">
@@ -29,7 +31,9 @@
   </div>
 
   <ng-container *ngIf="!obs.hasEnvironmentConfig; else environmentConfigWarning">
-    <ng-container *ngIf="(loadingCaseListColumns$ | async) === false; else loading">
+    <ng-container
+      *ngIf="obs.loadingCaseListColumns === false && obs.loadingFields === false; else loading"
+    >
       <ng-container *ngIf="obs.caseListColumn?.length > 0; else noConfigWarning">
         <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
       </ng-container>
@@ -40,6 +44,18 @@
 
   <ng-container *ngTemplateOutlet="deleteModal"></ng-container>
 </ng-container>
+
+<ng-template #list let-obs="obs">
+  <valtimo-carbon-list
+    [items]="obs.caseListColumn"
+    [fields]="obs.fields"
+    [viewMode]="false"
+    [header]="false"
+    [hideToolbar]="true"
+    (rowClicked)="columnRowClicked($event)"
+  >
+  </valtimo-carbon-list>
+</ng-template>
 
 <ng-template #buttons let-obs="obs">
   <a
@@ -97,19 +113,6 @@
       <svg cdsIcon="arrow--down" size="16" class="cds--btn__icon"></svg>
     </button>
   </div>
-</ng-template>
-
-<ng-template #list let-obs="obs">
-  <valtimo-carbon-list
-    [items]="obs.caseListColumn"
-    [fields]="obs.fields"
-    [viewMode]="false"
-    [header]="false"
-    [hideToolbar]="true"
-    *ngIf="obs.caseListColumn; else loading"
-    (rowClicked)="columnRowClicked($event)"
-  >
-  </valtimo-carbon-list>
 </ng-template>
 
 <ng-template #loading>

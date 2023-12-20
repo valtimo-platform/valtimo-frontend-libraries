@@ -41,6 +41,8 @@ import {
 } from 'rxjs';
 import {take} from 'rxjs/operators';
 import {ListColumnModal} from '../../models';
+import {IconService} from 'carbon-components-angular';
+import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 
 @Component({
   selector: 'valtimo-dossier-management-list-columns',
@@ -101,6 +103,7 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
   private readonly _lastColumnTemplate$ = new BehaviorSubject<TemplateRef<any> | null>(null);
 
   public readonly loadingCaseListColumns$ = new BehaviorSubject<boolean>(true);
+  public readonly loadingFields$ = new BehaviorSubject<boolean>(true);
 
   public readonly lastItemIndex$ = new BehaviorSubject<number>(-1);
 
@@ -141,7 +144,10 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
             viewType: ViewType.ACTION,
           },
         ] as Array<ColumnConfig>
-    )
+    ),
+    tap(() => {
+      this.loadingFields$.next(false);
+    })
   );
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
@@ -368,10 +374,13 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
-    private readonly sanitizer: DomSanitizer
+    private readonly sanitizer: DomSanitizer,
+    private readonly iconService: IconService
   ) {}
 
   public ngAfterViewInit(): void {
+    this.iconService.registerAll([ArrowDown16, ArrowUp16]);
+
     this._lastColumnTemplate$.next(this.moveRowButtonsTemplateRef);
   }
 
