@@ -32,7 +32,6 @@ import {FormEvent} from 'react';
     >
     </Checkbox>
   `,
-  // styles: ['react-renderer'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> implements OnInit {
