@@ -31,12 +31,12 @@
   </div>
 
   <ng-container *ngIf="!obs.hasEnvironmentConfig; else environmentConfigWarning">
-    <ng-container
-      *ngIf="obs.loadingCaseListColumns === false && obs.loadingFields === false; else loading"
-    >
-      <ng-container *ngIf="obs.caseListColumn?.length > 0; else noConfigWarning">
-        <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
-      </ng-container>
+    <ng-container *ngIf="!obs.caseListColumn || obs.caseListColumn?.length > 0">
+      <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="obs.caseListColumn?.length === 0">
+      <ng-container *ngTemplateOutlet="noConfigWarning"></ng-container>
     </ng-container>
   </ng-container>
 
@@ -47,6 +47,7 @@
 
 <ng-template #list let-obs="obs">
   <valtimo-carbon-list
+    [loading]="obs.loadingCaseListColumns || obs.loadingFields"
     [items]="obs.caseListColumn"
     [fields]="obs.fields"
     [viewMode]="false"
@@ -112,12 +113,6 @@
     >
       <svg cdsIcon="arrow--down" size="16" class="cds--btn__icon"></svg>
     </button>
-  </div>
-</ng-template>
-
-<ng-template #loading>
-  <div class="mb-3">
-    <valtimo-spinner></valtimo-spinner>
   </div>
 </ng-template>
 
@@ -331,10 +326,6 @@
       </button>
     </ng-container>
   </cds-modal-footer>
-</ng-template>
-
-<ng-template #loading>
-  <div class="loading-icon"><<cds-loading></cds-loading></div>
 </ng-template>
 
 <ng-template #deleteModal>
