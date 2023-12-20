@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-::ng-deep.dossier-management-tabs .cds--tab-content {
-  background-color: var(--cds-layer);
+::ng-deep.dossier-management-tabs {
+  .cds--tab-content {
+    background-color: var(--cds-layer);
 
-  &:focus {
-    outline: none;
+    &:focus {
+      outline: none;
+    }
   }
-}
 
-::ng-deep.dossier-management-tabs .no-padding-left-right .cds--tab-content {
-  padding-left: 0;
-  padding-right: 0;
-}
+  .no-padding-left-right .cds--tab-content {
+    padding-left: 0;
+    padding-right: 0;
+  }
 
-::ng-deep.dossier-management-tabs .no-padding-top-bottom .cds--tab-content {
-  padding-top: 0;
-  padding-bottom: 0;
-}
+  .no-padding-top-bottom .cds--tab-content {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 
-::ng-deep.dossier-management-tabs .no-padding-bottom .cds--tab-content {
-  padding-bottom: 0;
+  .no-padding-bottom .cds--tab-content {
+    padding-bottom: 0;
+  }
 }
 
 .tab-container {
