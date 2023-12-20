@@ -18,4 +18,6 @@
  * Public API Surface of config
  */
 
-export * from './lib/constants';
+// checkbox
+export * from './lib/components/checkbox/checkbox.component';
+export * from './lib/components/checkbox/checkbox.module';

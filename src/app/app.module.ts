@@ -122,6 +122,8 @@ import {
 import {ObjectManagementModule} from '@valtimo/object-management';
 import {ObjectModule} from '@valtimo/object';
 import {AccessControlManagementModule} from '@valtimo/access-control-management';
+import {AngularReactBrowserModule} from '@valtimo/angular-react';
+import {VcdsCheckboxModule} from '../../projects/valtimo/carbon/src/lib/components/checkbox/checkbox.module';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -221,6 +223,8 @@ export function tabsFactory() {
     TestDataSourceModule,
     CaseCountDataSourceModule,
     AccessControlManagementModule,
+    AngularReactBrowserModule,
+    VcdsCheckboxModule,
   ],
   providers: [
     FormioComponent,

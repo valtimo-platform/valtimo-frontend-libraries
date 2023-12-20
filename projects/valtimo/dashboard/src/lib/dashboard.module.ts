@@ -33,6 +33,7 @@ import {WidgetDashboardComponent} from './components/widget-dashboard/widget-das
 import {DashboardRoutingModule} from './dashboard-routing.module';
 import {DATA_SOURCE_TOKEN, DISPLAY_TYPE_TOKEN} from './constants';
 import {WidgetTranslatePipeModule} from './pipes';
+import {VcdsCheckboxModule} from '@valtimo/carbon';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -61,6 +62,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ThemeModule,
     WidgetTranslatePipeModule,
     LoadingModule,
+    VcdsCheckboxModule,
   ],
   exports: [DashboardComponent, WidgetDashboardComponent],
   providers: [

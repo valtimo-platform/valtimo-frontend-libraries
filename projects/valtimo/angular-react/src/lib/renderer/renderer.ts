@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import {Injectable, NgZone, Renderer2, RendererStyleFlags2, RendererType2} from '@angular/core';
+import {Injectable, NgZone, Renderer2, RendererStyleFlags2} from '@angular/core';
 import {EventManager, ɵDomRendererFactory2, ɵSharedStylesHost} from '@angular/platform-browser';
 import {StringMap} from '../declarations/string-map';
 import {Disguise} from './components/Disguise';
@@ -40,8 +40,15 @@ export class AngularReactRendererFactory extends ɵDomRendererFactory2 {
     this.defaultReactRenderer = new ReactRenderer(this);
   }
 
-  createRenderer(element: any, type: RendererType2 | null): Renderer2 {
-    if (type && type.styles.length && type.styles[0] === 'react-renderer') {
+  createRenderer(element: any, type: any | null): Renderer2 {
+    if (
+      type &&
+      Array.isArray(type.selectors) &&
+      type.selectors.find(
+        selectors =>
+          Array.isArray(selectors) && selectors.find(selector => selector.includes('vcds'))
+      )
+    ) {
       return this.defaultReactRenderer;
     }
 
