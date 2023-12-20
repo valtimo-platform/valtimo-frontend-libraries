@@ -3,9 +3,9 @@
 
 import * as React from 'react';
 
-export type ComponentResolver = () => React.ReactType;
+export type ComponentResolver = () => React.ElementType;
 
-const elementMap = new Map<string, { resolver: ComponentResolver }>();
+const elementMap = new Map<string, {resolver: ComponentResolver}>();
 const camelCaseSplit = /([a-z0-9])([A-Z])/g;
 
 /**
@@ -22,7 +22,7 @@ export function registerElement(elementName: string, resolver: ComponentResolver
     // React-wrapper components' @NgModule, ensuring that `registerElement` is only called once.
     return;
   } else {
-    const entry = { resolver: resolver };
+    const entry = {resolver: resolver};
     elementMap.set(elementName, entry);
     elementMap.set(elementName.toLowerCase(), entry);
     elementMap.set(elementName.replace(camelCaseSplit, '$1-$2').toLowerCase(), entry);
@@ -33,7 +33,7 @@ export function isKnownComponent(elementName: string): boolean {
   return elementMap.has(elementName) || elementMap.has(elementName.toLowerCase());
 }
 
-export function getComponentClass(elementName: string): React.ReactType | string {
+export function getComponentClass(elementName: string): React.ElementType | string {
   const entry = elementMap.get(elementName) || elementMap.get(elementName.toLowerCase());
   if (!entry) {
     // throw new TypeError(`No known component for element ${elementName}.`);

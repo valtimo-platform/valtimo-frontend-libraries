@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { EmbeddedViewRef, NgZone, TemplateRef } from '@angular/core';
+import {EmbeddedViewRef, NgZone, TemplateRef} from '@angular/core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Subscription } from 'rxjs';
-import { throttleTime } from 'rxjs/operators';
+import {Subscription} from 'rxjs';
+import {throttleTime} from 'rxjs/operators';
 
 const DEBUG = false;
 const TEMPLATE_DETECT_CHANGES_THROTTLE_MS = 250;
@@ -37,7 +37,7 @@ export function createReactTemplateElement<TContext extends object | void>(
   ngZone: NgZone,
   additionalProps?: ReactTemplateProps
 ) {
-  return React.createElement(ReactTemplate, { ngZone, templateRef, context, ...additionalProps });
+  return React.createElement(ReactTemplate, {ngZone, templateRef, context, ...additionalProps});
 }
 
 /**
@@ -64,14 +64,14 @@ export class ReactTemplate<TContext extends object | void> extends React.Compone
 
   componentDidUpdate() {
     // Context has changes, trigger change detection after pushing the new context in
-    if (this.props.context != null && this._embeddedViewRef.context != null) {
+    if (this.props.context != null && this._embeddedViewRef.context) {
       Object.assign(this._embeddedViewRef.context, this.props.context);
     }
     this._embeddedViewRef.detectChanges();
   }
 
   componentDidMount() {
-    const { context, ngZone, templateRef } = this.props;
+    const {context, ngZone, templateRef} = this.props;
 
     this._embeddedViewRef = templateRef.createEmbeddedView(context);
     const element = ReactDOM.findDOMNode(this);
@@ -91,7 +91,12 @@ export class ReactTemplate<TContext extends object | void> extends React.Compone
     // Throttling the detect changes to an empirically selected value so we don't overload too much work.
     // TODO: This needs some better solution to listen to changes to the binding sources of the template.
     this._ngZoneSubscription = ngZone.onStable
-      .pipe(throttleTime(TEMPLATE_DETECT_CHANGES_THROTTLE_MS, undefined, { leading: true, trailing: true }))
+      .pipe(
+        throttleTime(TEMPLATE_DETECT_CHANGES_THROTTLE_MS, undefined, {
+          leading: true,
+          trailing: true,
+        })
+      )
       .subscribe(() => {
         this._embeddedViewRef.detectChanges();
       });
@@ -107,6 +112,9 @@ export class ReactTemplate<TContext extends object | void> extends React.Compone
 
   render() {
     // TODO: See if we can just render React.Fragment and the children within it, having no extra DOM nodes.
-    return React.createElement('react-template', !this.props.legacyRenderMode && { style: { display: 'none' } });
+    return React.createElement(
+      'react-template',
+      !this.props.legacyRenderMode && {style: {display: 'none'}}
+    );
   }
 }

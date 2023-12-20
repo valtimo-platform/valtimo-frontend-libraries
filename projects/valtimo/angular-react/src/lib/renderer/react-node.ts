@@ -4,10 +4,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { StringMap } from '../declarations/string-map';
+import {StringMap} from '../declarations/string-map';
 import removeUndefinedProperties from '../utils/object/remove-undefined-properties';
-import { CHILDREN_TO_APPEND_PROP } from './react-content';
-import { getComponentClass } from './registry';
+import {CHILDREN_TO_APPEND_PROP} from './react-content';
+import {getComponentClass} from './registry';
 
 const DEBUG = false;
 
@@ -58,7 +58,7 @@ export class ReactNode {
     return this._isDestroyPending;
   }
 
-  constructor(private type?: React.ReactType | string) {
+  constructor(private type?: React.ElementType | string) {
     this.setRenderPending();
     this._tryResolveTypeIsReactElementClass();
   }
@@ -92,7 +92,7 @@ export class ReactNode {
    * @param value The new value.
    */
   setAttribute(name: string, value: string) {
-    this.setAttributes({ [name]: value });
+    this.setAttributes({[name]: value});
   }
 
   /**
@@ -114,7 +114,7 @@ export class ReactNode {
    * @param value The new value.
    */
   setProperty(name: string, value: any) {
-    this.setProperties({ [name]: value });
+    this.setProperties({[name]: value});
   }
 
   /**
@@ -213,7 +213,12 @@ export class ReactNode {
     if (!isReactNode(this._parent)) {
       if (this._isDestroyPending && this._parent) {
         if (DEBUG) {
-          console.log('ReactNode > render > destroy > node:', this.toString(), 'parent:', this.parent);
+          console.log(
+            'ReactNode > render > destroy > node:',
+            this.toString(),
+            'parent:',
+            this.parent
+          );
         }
         ReactDOM.unmountComponentAtNode(this._parent);
         return this;
@@ -312,8 +317,9 @@ export class ReactNode {
 
   private _transformProps<TProps extends object>(props: TProps) {
     return Object.entries(props).reduce((acc, [key, value]) => {
-      const [newKey, newValue] = typeof key !== 'string' ? [key, value] : this._transformProp(key, value);
-      return Object.assign(acc, { [newKey]: newValue });
+      const [newKey, newValue] =
+        typeof key !== 'string' ? [key, value] : this._transformProp(key, value);
+      return Object.assign(acc, {[newKey]: newValue});
     }, {});
   }
 

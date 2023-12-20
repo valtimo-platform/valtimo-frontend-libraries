@@ -3,34 +3,40 @@
 /// <reference path="../@types/geteventlisteners.d.ts" />
 
 import {
+  AfterContentInit,
   AfterViewInit,
   ChangeDetectorRef,
   ElementRef,
+  Injectable,
   Input,
   NgZone,
   OnChanges,
   Renderer2,
   SimpleChanges,
-  AfterContentInit,
 } from '@angular/core';
 import classnames from 'classnames';
 import toStyle from 'css-to-style';
-import stylenames, { StyleObject } from 'stylenames';
+import stylenames, {StyleObject} from 'stylenames';
 
-import { Many } from '../declarations/many';
-import { ReactContentProps } from '../renderer/react-content';
-import { isReactNode } from '../renderer/react-node';
-import { isReactRendererData } from '../renderer/renderer';
-import { toObject } from '../utils/object/to-object';
-import { afterRenderFinished } from '../utils/render/render-delay';
-import { InputRendererOptions, JsxRenderFunc, createInputJsxRenderer, createRenderPropHandler } from './render-props';
+import {Many} from '../declarations/many';
+import {ReactContentProps} from '../renderer/react-content';
+import {isReactNode} from '../renderer/react-node';
+import {isReactRendererData} from '../renderer/renderer';
+import {toObject} from '../utils/object/to-object';
+import {afterRenderFinished} from '../utils/render/render-delay';
+import {
+  createInputJsxRenderer,
+  createRenderPropHandler,
+  InputRendererOptions,
+  JsxRenderFunc,
+} from './render-props';
 
 // Forbidden attributes are still ignored, since they may be set from the wrapper components themselves (forbidden is only applied for users of the wrapper components)
 const ignoredAttributeMatchers = [/^_?ng-?.*/, /^style$/, /^class$/];
 
 const ngClassRegExp = /^ng-/;
 
-export type ContentClassValue = string[] | Set<string> | { [klass: string]: any };
+export type ContentClassValue = string[] | Set<string> | {[klass: string]: any};
 export type ContentStyleValue = string | StyleObject;
 
 /**
@@ -59,7 +65,10 @@ const defaultWrapperComponentOptions: WrapperComponentOptions = {
  * Simplifies some of the handling around passing down props and CSS styling on the host component.
  */
 // NOTE: TProps is not used at the moment, but a preparation for a potential future change.
-export abstract class ReactWrapperComponent<TProps extends {}> implements AfterContentInit, AfterViewInit, OnChanges {
+@Injectable()
+export abstract class ReactWrapperComponent<TProps extends {}>
+  implements AfterContentInit, AfterViewInit, OnChanges
+{
   private _contentClass: Many<ContentClassValue>;
   private _contentStyle: ContentStyleValue;
 
@@ -78,7 +87,7 @@ export abstract class ReactWrapperComponent<TProps extends {}> implements AfterC
   set contentClass(value: Many<ContentClassValue>) {
     this._contentClass = value;
     if (isReactNode(this.reactNodeRef.nativeElement)) {
-      this.reactNodeRef.nativeElement.setProperty('className', classnames(value));
+      this.reactNodeRef.nativeElement.setProperty('className', classnames(value as any));
       this.markForCheck();
     }
   }
@@ -118,7 +127,7 @@ export abstract class ReactWrapperComponent<TProps extends {}> implements AfterC
     public readonly elementRef: ElementRef<HTMLElement>,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly renderer: Renderer2,
-    { setHostDisplay, ngZone }: WrapperComponentOptions = defaultWrapperComponentOptions
+    {setHostDisplay, ngZone}: WrapperComponentOptions = defaultWrapperComponentOptions
   ) {
     this._ngZone = ngZone;
     this._shouldSetHostDisplay = setHostDisplay;
@@ -179,7 +188,9 @@ export abstract class ReactWrapperComponent<TProps extends {}> implements AfterC
     }
 
     if (!this._ngZone) {
-      throw new Error('To create an input JSX renderer you must pass an NgZone to the constructor.');
+      throw new Error(
+        'To create an input JSX renderer you must pass an NgZone to the constructor.'
+      );
     }
 
     return createInputJsxRenderer(input, this._ngZone, additionalProps);
@@ -213,15 +224,18 @@ export abstract class ReactWrapperComponent<TProps extends {}> implements AfterC
       const [forbidden, alternativeAttrName] = this._isForbiddenAttribute(attr);
       if (forbidden) {
         throw new Error(
-          `[${(this.elementRef
-            .nativeElement as HTMLElement).tagName.toLowerCase()}] React wrapper components cannot have the '${
+          `[${(
+            this.elementRef.nativeElement as HTMLElement
+          ).tagName.toLowerCase()}] React wrapper components cannot have the '${
             attr.name
           }' attribute set. Use the following alternative: ${alternativeAttrName || ''}`
         );
       }
     });
 
-    const whitelistedHostAttributes = hostAttributes.filter(attr => !this._isIgnoredAttribute(attr));
+    const whitelistedHostAttributes = hostAttributes.filter(
+      attr => !this._isIgnoredAttribute(attr)
+    );
     const props = whitelistedHostAttributes.reduce(
       (acc, attr) => ({
         ...acc,
@@ -234,16 +248,18 @@ export abstract class ReactWrapperComponent<TProps extends {}> implements AfterC
     const eventHandlersProps =
       eventListeners && Object.keys(eventListeners).length
         ? toObject(
-            Object.values(eventListeners).map<[string, React.EventHandler<React.SyntheticEvent>]>(([eventListener]) => [
-              eventListener.type,
-              (ev: React.SyntheticEvent) => eventListener.listener(ev && ev.nativeEvent),
-            ])
+            Object.values(eventListeners).map<[string, React.EventHandler<React.SyntheticEvent>]>(
+              ([eventListener]) => [
+                eventListener.type,
+                (ev: React.SyntheticEvent) => eventListener.listener(ev && ev.nativeEvent),
+              ]
+            )
           )
         : {};
     {
     }
 
-    this.reactNodeRef.nativeElement.setProperties({ ...props, ...eventHandlersProps });
+    this.reactNodeRef.nativeElement.setProperties({...props, ...eventHandlersProps});
   }
 
   private _setHostDisplay() {
@@ -263,7 +279,7 @@ export abstract class ReactWrapperComponent<TProps extends {}> implements AfterC
   }
 
   private _isForbiddenAttribute(attr: Attr): [boolean, string | undefined] {
-    const { name, value } = attr;
+    const {name, value} = attr;
 
     if (name === 'key') return [true, undefined];
     if (name === 'class' && value.split(' ').some(className => !ngClassRegExp.test(className)))

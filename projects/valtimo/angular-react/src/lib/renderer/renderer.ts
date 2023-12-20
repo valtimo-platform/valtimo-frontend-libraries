@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { Injectable, Renderer2, RendererStyleFlags2, RendererType2 } from '@angular/core';
-import { EventManager, ɵDomRendererFactory2, ɵDomSharedStylesHost } from '@angular/platform-browser';
-import { StringMap } from '../declarations/string-map';
-import { Disguise } from './components/Disguise';
-import { ReactContent } from './react-content';
-import { isReactNode, ReactNode } from './react-node';
-import { registerElement } from './registry';
+import {Injectable, NgZone, Renderer2, RendererStyleFlags2, RendererType2} from '@angular/core';
+import {EventManager, ɵDomRendererFactory2, ɵSharedStylesHost} from '@angular/platform-browser';
+import {StringMap} from '../declarations/string-map';
+import {Disguise} from './components/Disguise';
+import {ReactContent} from './react-content';
+import {isReactNode, ReactNode} from './react-node';
+import {registerElement} from './registry';
 import './geteventlisteners';
 
 const DEBUG = false;
@@ -33,8 +33,8 @@ export class AngularReactRendererFactory extends ɵDomRendererFactory2 {
     this.isRenderPending = true;
   };
 
-  constructor(eventManager: EventManager, sharedStylesHost: ɵDomSharedStylesHost) {
-    super(eventManager, sharedStylesHost, 'app-id');
+  constructor(eventManager: EventManager, sharedStylesHost: ɵSharedStylesHost, ngZone: NgZone) {
+    super(eventManager, sharedStylesHost, 'app-id', true, document, 'browser', ngZone);
 
     // tslint:disable-next-line: no-use-before-declare
     this.defaultReactRenderer = new ReactRenderer(this);
@@ -66,7 +66,9 @@ export class AngularReactRendererFactory extends ɵDomRendererFactory2 {
 
     if (this.isRenderPending) {
       // Remove root nodes that are pending destroy after render.
-      this.reactRootNodes = new Set(Array.from(this.reactRootNodes).filter(node => !node.render().destroyPending));
+      this.reactRootNodes = new Set(
+        Array.from(this.reactRootNodes).filter(node => !node.render().destroyPending)
+      );
       this.isRenderPending = false;
     }
   }
@@ -103,7 +105,12 @@ export class ReactRenderer implements Renderer2 {
 
   createElement(name: string, namespace?: string): ReactNode {
     if (DEBUG) {
-      console.error('Renderer > createElement > name:', name, namespace ? 'namespace:' : '', namespace);
+      console.error(
+        'Renderer > createElement > name:',
+        name,
+        namespace ? 'namespace:' : '',
+        namespace
+      );
     }
     return new ReactNode(name);
   }
@@ -137,7 +144,12 @@ export class ReactRenderer implements Renderer2 {
     // once the ReactNode is fully defined and it is subsequently rendered.
     if (!isReactNode(parent)) {
       if (DEBUG) {
-        console.warn('Renderer > appendChild > asDOM > parent:', parent.toString(), 'node:', node.toString());
+        console.warn(
+          'Renderer > appendChild > asDOM > parent:',
+          parent.toString(),
+          'node:',
+          node.toString()
+        );
       }
       node.setRenderPendingCallback = this.rootRenderer.setRenderPendingCallback;
 
@@ -147,7 +159,12 @@ export class ReactRenderer implements Renderer2 {
     }
 
     if (DEBUG) {
-      console.warn('Renderer > appendChild > asReact > parent:', parent.toString(), 'node:', node.toString());
+      console.warn(
+        'Renderer > appendChild > asReact > parent:',
+        parent.toString(),
+        'node:',
+        node.toString()
+      );
     }
 
     node.setRenderPendingCallback = () => parent.setRenderPending();
@@ -191,21 +208,34 @@ export class ReactRenderer implements Renderer2 {
     // result in the ReactNode unloading itself.
     if (!isReactNode(parent)) {
       if (DEBUG) {
-        console.warn('Renderer > removeChild > asDOM > parent:', parent.toString(), 'node:', node.toString());
+        console.warn(
+          'Renderer > removeChild > asDOM > parent:',
+          parent.toString(),
+          'node:',
+          node.toString()
+        );
       }
       node.parent = null;
       return;
     }
 
     if (DEBUG) {
-      console.warn('Renderer > removeChild > asReact > parent:', parent.toString(), 'node:', node.toString());
+      console.warn(
+        'Renderer > removeChild > asReact > parent:',
+        parent.toString(),
+        'node:',
+        node.toString()
+      );
     }
     parent.removeChild(node);
   }
 
   selectRootElement(selectorOrNode: string | any): any {
     if (DEBUG) {
-      console.log('NOT IMPLEMENTED - Renderer > selectRootElement > selectorOrNode:', selectorOrNode);
+      console.log(
+        'NOT IMPLEMENTED - Renderer > selectRootElement > selectorOrNode:',
+        selectorOrNode
+      );
     }
   }
 
@@ -275,22 +305,38 @@ export class ReactRenderer implements Renderer2 {
   setStyle(node: ReactNode, style: string, value: any, flags: RendererStyleFlags2): void {
     // if (DEBUG) { console.log('Renderer > setStyle > node: ', node.toString(), 'style:', style, 'value:', value, 'flags:', flags); }
     if (flags & RendererStyleFlags2.DashCase) {
-      node.setProperty('style', { style: value + !!(flags & RendererStyleFlags2.Important) ? ' !important' : '' });
+      node.setProperty('style', {
+        style: value + !!(flags & RendererStyleFlags2.Important) ? ' !important' : '',
+      });
     } else {
-      node.setProperty('style', { style: value });
+      node.setProperty('style', {style: value});
     }
   }
 
   removeStyle(node: ReactNode, style: string, flags: RendererStyleFlags2): void {
     if (DEBUG) {
-      console.log('Renderer > removeStyle > node:', node.toString(), 'style:', style, 'flags:', flags);
+      console.log(
+        'Renderer > removeStyle > node:',
+        node.toString(),
+        'style:',
+        style,
+        'flags:',
+        flags
+      );
     }
     node.removeProperty('style', style);
   }
 
   setProperty(node: ReactNode, name: string, value: any): void {
     if (DEBUG) {
-      console.log('Renderer > setProperty > node:', node.toString(), 'name:', name, 'value:', value);
+      console.log(
+        'Renderer > setProperty > node:',
+        node.toString(),
+        'name:',
+        name,
+        'value:',
+        value
+      );
     }
     node.setProperty(name, value);
   }

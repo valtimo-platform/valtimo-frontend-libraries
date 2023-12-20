@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
+import {ReactElement} from 'react';
 import * as ReactDOM from 'react-dom';
-import { ReactWrapperComponent } from '../../components/wrapper-component';
-import { getPassProps } from '../../renderer/pass-prop-decorator';
+import {ReactWrapperComponent} from '../../components/wrapper-component';
+import {getPassProps} from '../../renderer/pass-prop-decorator';
 import removeUndefinedProperties from '../../utils/object/remove-undefined-properties';
-import { ReactContent } from '../react-content';
-import { ReactElement } from 'react';
+import {ReactContent} from '../react-content';
 
 /**
  * Props for `Disguise` component.
@@ -17,13 +17,13 @@ export interface DisguiseProps {
    * The type to render the root component as.
    * @default React.Fragment
    */
-  disguiseRootAs?: React.ReactType;
+  disguiseRootAs?: React.ElementType;
 
   /**
    * The type to render the child components as.
    * @default the Children's own type.
    */
-  disguiseChildrenAs?: React.ReactType;
+  disguiseChildrenAs?: React.ElementType;
 
   /**
    * The Angular child components to render.
@@ -36,7 +36,8 @@ export interface DisguiseProps {
  */
 export class Disguise extends React.PureComponent<DisguiseProps> {
   render() {
-    const { disguiseRootAs, disguiseChildrenAs, children, ngChildComponents, ...rest } = this.props;
+    const {disguiseRootAs, disguiseChildrenAs, children, ngChildComponents, ...rest} = this
+      .props as any;
     const Root = disguiseRootAs || React.Fragment;
 
     const renderedChildren = ngChildComponents
@@ -49,7 +50,7 @@ export class Disguise extends React.PureComponent<DisguiseProps> {
   }
 
   private _isReactContentOnlyChild(): boolean {
-    const { children } = this.props;
+    const {children} = this.props as any;
 
     if (React.Children.count(children) === 1) {
       const [onlyChild] = React.Children.toArray(children);
@@ -62,12 +63,12 @@ export class Disguise extends React.PureComponent<DisguiseProps> {
   }
 
   private _renderReactContentChildren() {
-    const { ngChildComponents, disguiseChildrenAs } = this.props;
+    const {ngChildComponents, disguiseChildrenAs} = this.props;
 
     const renderedChildren = ngChildComponents.map((child, index) => {
       const propsToPass = removeUndefinedProperties(
         getPassProps(child).reduce(
-          (acc, passProp) => Object.assign(acc, { [passProp.targetKey]: child[passProp.sourceKey] }),
+          (acc, passProp) => Object.assign(acc, {[passProp.targetKey]: child[passProp.sourceKey]}),
           {}
         )
       );
@@ -90,7 +91,7 @@ export class Disguise extends React.PureComponent<DisguiseProps> {
   }
 
   private _renderChildrenNaive() {
-    const { children, disguiseChildrenAs } = this.props;
+    const {children, disguiseChildrenAs} = this.props as any;
 
     const renderedChildren = React.Children.map(children, child => {
       if (!disguiseChildrenAs || typeof child !== 'object') {
@@ -100,7 +101,7 @@ export class Disguise extends React.PureComponent<DisguiseProps> {
       const ChildRoot = (<ReactElement<any>>child).type || disguiseChildrenAs;
       return React.createElement(
         ChildRoot,
-        { ...(<ReactElement<any>>child).props, key: (<ReactElement<any>>child).key },
+        {...(<ReactElement<any>>child).props, key: (<ReactElement<any>>child).key},
         child
       );
     });
