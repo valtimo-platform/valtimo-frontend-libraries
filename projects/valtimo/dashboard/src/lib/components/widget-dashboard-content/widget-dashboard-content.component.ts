@@ -49,6 +49,8 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
   public readonly isLoading$ = new BehaviorSubject<boolean>(true);
   private _widgetData$ = new BehaviorSubject<WidgetData[]>([]);
 
+  public checkBoxChecked = false;
+
   @Input() set widgetData(value: {data: WidgetData[]; loading: boolean}) {
     this.isLoading$.next(value.loading);
     this._widgetData$.next(value.data);
@@ -76,11 +78,19 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
     this._observer.observe(this._widgetContainerRef.nativeElement);
     this.openPackResultSubscription();
     this.renderWidgets();
+
+    setTimeout(() => {
+      this.checkBoxChecked = true;
+    }, 1000);
   }
 
   public ngOnDestroy(): void {
     this._observer?.disconnect();
     this._subscriptions?.unsubscribe();
+  }
+
+  public xChanged(event: any): void {
+    console.log(event);
   }
 
   private setWidgetConfigurations(dashboard: Dashboard): void {

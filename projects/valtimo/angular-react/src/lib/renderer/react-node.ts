@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 
 import {StringMap} from '../declarations/string-map';
 import removeUndefinedProperties from '../utils/object/remove-undefined-properties';
 import {CHILDREN_TO_APPEND_PROP} from './react-content';
 import {getComponentClass} from './registry';
+import {createRoot, Root} from 'react-dom/client';
 
 const DEBUG = false;
 
@@ -33,6 +33,7 @@ export class ReactNode {
   private _childrenToAppend: Array<HTMLElement> = [];
   private _renderedDomElement: HTMLElement;
   private _parent: HTMLElement | ReactNode;
+  private _root!: Root;
   private _isNotRenderable: boolean;
   private _isDestroyPending: boolean = false;
   private _isRenderPending = true;
@@ -43,11 +44,20 @@ export class ReactNode {
 
   set parent(parent: HTMLElement | ReactNode) {
     this._parent = parent;
+
+    if (!this._root) {
+      this._root = createRoot(this._parent as HTMLElement);
+    }
+
     this.setRenderPending();
   }
 
   get parent(): HTMLElement | ReactNode {
     return this._parent;
+  }
+
+  get root(): Root | null {
+    return this._root;
   }
 
   get shouldRender() {
@@ -211,7 +221,7 @@ export class ReactNode {
     // Those that are parented by other ReactNodes will be rendered recursively by their
     // parent.
     if (!isReactNode(this._parent)) {
-      if (this._isDestroyPending && this._parent) {
+      if (this._isDestroyPending && this._root) {
         if (DEBUG) {
           console.log(
             'ReactNode > render > destroy > node:',
@@ -220,17 +230,17 @@ export class ReactNode {
             this.parent
           );
         }
-        ReactDOM.unmountComponentAtNode(this._parent);
+        this._root.unmount();
         return this;
       }
 
-      if (this._isRenderPending) {
+      if (this._isRenderPending && this._root) {
         if (DEBUG) {
           console.log('ReactNode > render > node:', this.toString(), 'parent:', this.parent);
         }
         // It is expected that the element will be recreated and re-rendered with each attribute change.
         // See: https://reactjs.org/docs/rendering-elements.html
-        ReactDOM.render(this._renderRecursive() as React.ReactElement<{}>, this._parent);
+        this._root.render(this._renderRecursive());
         this._isRenderPending = false;
       }
     }

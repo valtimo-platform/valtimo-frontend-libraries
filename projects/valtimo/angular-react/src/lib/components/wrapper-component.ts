@@ -214,6 +214,7 @@ export abstract class ReactWrapperComponent<TProps extends {}>
 
   private _passAttributesAsProps() {
     const hostAttributes = Array.from((this.elementRef.nativeElement as HTMLElement).attributes);
+    console.log('host attributes', hostAttributes);
 
     console.log('react node ref', this.reactNodeRef);
 
@@ -245,6 +246,8 @@ export abstract class ReactWrapperComponent<TProps extends {}>
       }),
       {}
     );
+
+    console.log('props', whitelistedHostAttributes, props);
 
     const eventListeners = this.elementRef.nativeElement.getEventListeners();
     const eventHandlersProps =

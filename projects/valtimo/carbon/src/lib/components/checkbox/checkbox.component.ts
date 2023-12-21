@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import {InputRendererOptions, JsxRenderFunc, ReactWrapperComponent} from '@valtimo/angular-react';
+import {ReactWrapperComponent} from '@valtimo/angular-react';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -10,13 +10,11 @@ import {
   EventEmitter,
   Input,
   NgZone,
-  OnInit,
   Output,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import {CheckboxProps} from '@carbon/react';
-import {FormEvent} from 'react';
 
 @Component({
   selector: 'vcds-checkbox',
@@ -27,31 +25,46 @@ import {FormEvent} from 'react';
       [id]="id"
       [labelText]="labelText"
       [disabled]="disabled"
-      [RenderLabel]="renderLabel && onRenderLabel"
+      [checked]="checked"
+      [invalid]="invalid"
+      [hideLabel]="hideLabel"
+      [helperText]="helperText"
+      [defaultChecked]="defaultChecked"
+      [indeterminate]="indeterminate"
+      [readOnly]="readOnly"
+      [warn]="warn"
+      [warnText]="warnText"
+      [title]="title"
+      [slug]="slug"
+      [className]="className"
       [Change]="onChangeHandler"
+      [Click]="onClickHandler"
     >
     </Checkbox>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> implements OnInit {
+export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> {
   @ViewChild('reactNode', {static: true}) protected reactNodeRef: ElementRef;
 
   @Input({required: true}) id: CheckboxProps['id'];
   @Input({required: true}) labelText: CheckboxProps['labelText'];
   @Input() disabled?: CheckboxProps['disabled'];
-  @Input() renderLabel?: InputRendererOptions<CheckboxProps>;
+  @Input() checked: CheckboxProps['checked'];
+  @Input() hideLabel: CheckboxProps['hideLabel'];
+  @Input() defaultChecked: CheckboxProps['defaultChecked'];
+  @Input() indeterminate: CheckboxProps['indeterminate'];
+  @Input() helperText: CheckboxProps['helperText'];
+  @Input() warnText: CheckboxProps['warnText'];
+  @Input() className: CheckboxProps['className'];
+  @Input() title: CheckboxProps['title'];
+  @Input() slug: CheckboxProps['slug'];
+  @Input() invalid: CheckboxProps['invalid'];
+  @Input() readOnly: CheckboxProps['readOnly'];
+  @Input() warn: CheckboxProps['warn'];
 
-  @Output() readonly onChange = new EventEmitter<{ev?: Event; checked?: boolean}>();
-
-  /* Non-React props, more native support for Angular */
-  // support for two-way data binding for `@Input() checked`.
-  @Output() readonly checkedChange = new EventEmitter<boolean>();
-
-  onRenderLabel: (
-    props?: CheckboxProps,
-    defaultRender?: JsxRenderFunc<CheckboxProps>
-  ) => JSX.Element;
+  @Output() readonly onChange = new EventEmitter<any>();
+  @Output() readonly onClick = new EventEmitter<any>();
 
   constructor(
     elementRef: ElementRef,
@@ -61,20 +74,17 @@ export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> 
   ) {
     super(elementRef, changeDetectorRef, renderer, {ngZone});
 
-    // coming from React context - we need to bind to this so we can access the Angular Component properties
     this.onChangeHandler = this.onChangeHandler.bind(this);
+    this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  ngOnInit() {
-    this.onRenderLabel = this.createRenderPropHandler(this.renderLabel);
+  public onChangeHandler(x: any): void {
+    console.log('on change handler', x);
+    this.onChange.emit(x);
   }
 
-  onChangeHandler(ev?: FormEvent<HTMLElement | HTMLInputElement>, checked?: boolean) {
-    this.onChange.emit({
-      ev: ev && ev.nativeEvent,
-      checked,
-    });
-
-    this.checkedChange.emit(checked);
+  public onClickHandler(x: any): void {
+    console.log('on click handler', x);
+    this.onClick.emit(x);
   }
 }
