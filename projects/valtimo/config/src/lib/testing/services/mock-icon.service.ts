@@ -15,12 +15,22 @@
  */
 
 import {Injectable} from '@angular/core';
+<<<<<<<< HEAD:projects/valtimo/config/src/lib/testing/services/mock-icon.service.ts
+========
+import {Observable, of} from 'rxjs';
+>>>>>>>> release/11.0.0:projects/valtimo/config/src/lib/testing/services/mock-translate.service.ts
 
 @Injectable({
   providedIn: 'root',
 })
+<<<<<<<< HEAD:projects/valtimo/config/src/lib/testing/services/mock-icon.service.ts
 export class MockIconService {
   public registerAll(value: Array<any>): void {
     return;
+========
+export class MockTranslateService {
+  public stream(key: string): Observable<any> {
+    return of(null);
+>>>>>>>> release/11.0.0:projects/valtimo/config/src/lib/testing/services/mock-translate.service.ts
   }
 }

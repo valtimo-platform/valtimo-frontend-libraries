@@ -18,10 +18,10 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
-import {DossierDetailComponent} from './components/dossier-detail/dossier-detail.component';
-import {DossierUpdateComponent} from './components/dossier-update/dossier-update.component';
+import {DossierDetailComponent} from './dossier-detail/dossier-detail.component';
+import {DossierUpdateComponent} from './dossier-update/dossier-update.component';
 import {ROLE_USER} from '@valtimo/config';
-import {DossierListComponent} from './components/dossier-list/dossier-list.component';
+import {DossierListComponent} from './dossier-list/dossier-list.component';
 
 const routes: Routes = [
   {
@@ -32,16 +32,6 @@ const routes: Routes = [
   },
   {
     path: 'dossiers/:documentDefinitionName/document/:documentId/:tab',
-    component: DossierDetailComponent,
-    canActivate: [AuthGuardService],
-    data: {
-      title: 'Dossier details',
-      parentPath: 'dossiers/:documentDefinitionName',
-      roles: [ROLE_USER],
-    },
-  },
-  {
-    path: 'dossiers/:documentDefinitionName/document/:documentId',
     component: DossierDetailComponent,
     canActivate: [AuthGuardService],
     data: {
