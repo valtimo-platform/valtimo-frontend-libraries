@@ -16,7 +16,6 @@ Element.prototype.addEventListener = function <K extends keyof ElementEventMap>(
   listener: (this: Element, ev: ElementEventMap[K]) => any,
   options?: boolean | AddEventListenerOptions
 ): void {
-  console.log('add ev list', type, listener, options);
   if (options === undefined) options = false;
 
   // declare listener

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "tslib": "2.6.2",
-    "@carbon/react": "1.46.0"
+    "@carbon/react": "1.46.0",
+    "uuid": "9.0.0"
   }
 }

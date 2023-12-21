@@ -15,6 +15,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import {CheckboxProps} from '@carbon/react';
+import {v4 as uuidv4} from 'uuid';
+import React from 'react';
+import {CheckboxChangeOutput} from '../../models';
 
 @Component({
   selector: 'vcds-checkbox',
@@ -46,7 +49,7 @@ import {CheckboxProps} from '@carbon/react';
 export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> {
   @ViewChild('reactNode', {static: true}) protected reactNodeRef: ElementRef;
 
-  @Input({required: true}) id: CheckboxProps['id'];
+  @Input() id: CheckboxProps['id'] = uuidv4();
   @Input({required: true}) labelText: CheckboxProps['labelText'];
   @Input() disabled?: CheckboxProps['disabled'];
   @Input() checked: CheckboxProps['checked'];
@@ -62,7 +65,7 @@ export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> 
   @Input() readOnly: CheckboxProps['readOnly'];
   @Input() warn: CheckboxProps['warn'];
 
-  @Output() readonly change = new EventEmitter<any>();
+  @Output() readonly changeEvent = new EventEmitter<CheckboxChangeOutput>();
 
   constructor(
     elementRef: ElementRef,
@@ -75,8 +78,17 @@ export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> 
     this.onChangeHandler = this.onChangeHandler.bind(this);
   }
 
-  public onChangeHandler = (x: any): void => {
-    console.log('on change handler');
-    this.change.emit(x);
+  public onChangeHandler = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    data: {
+      checked: boolean;
+      id: string;
+    }
+  ): void => {
+    this.changeEvent.emit({
+      event,
+      id: data.id,
+      checked: data.checked,
+    });
   };
 }

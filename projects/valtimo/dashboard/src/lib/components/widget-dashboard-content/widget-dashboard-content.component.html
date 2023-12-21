@@ -14,14 +14,6 @@
   ~ limitations under the License.
   -->
 
-<vcds-checkbox
-  id="test"
-  [checked]="checkBoxChecked"
-  [labelText]="'dashboard.noWidgets' | translate"
-  [invalid]="false"
-  (onChange)="xChanged($event)"
-  (onClick)="xChanged($event)"
-></vcds-checkbox>
 <div #widgetContainer [class.loading]="isLoading$ | async" class="widget-container">
   <ng-container *ngIf="widgetConfigurations$ | async as widgetConfigurations">
     <ng-container *ngFor="let config of widgetConfigurations">

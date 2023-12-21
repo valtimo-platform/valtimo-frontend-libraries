@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {NgModule} from '@angular/core';
+import {CarbonPlaygroundRoutingModule} from './carbon-playground-routing.module';
+import {VcdsPlaygroundComponent} from './components/playground/playground.component';
+import {CommonModule} from '@angular/common';
+import {VcdsCheckboxModule} from './components/checkbox/checkbox.module';
+import {TranslateModule} from '@ngx-translate/core';
 
-/*
- * Public API Surface of config
- */
-
-// playground
-export * from './lib/carbon-playground.module';
-export * from './lib/carbon-playground-routing.module';
-
-// checkbox
-export * from './lib/components/checkbox/checkbox.component';
-export * from './lib/components/checkbox/checkbox.module';
+@NgModule({
+  declarations: [VcdsPlaygroundComponent],
+  imports: [CommonModule, CarbonPlaygroundRoutingModule, VcdsCheckboxModule, TranslateModule],
+})
+export class CarbonPlaygroundModule {}

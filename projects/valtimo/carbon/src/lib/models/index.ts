@@ -14,14 +14,4 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of config
- */
-
-// playground
-export * from './lib/carbon-playground.module';
-export * from './lib/carbon-playground-routing.module';
-
-// checkbox
-export * from './lib/components/checkbox/checkbox.component';
-export * from './lib/components/checkbox/checkbox.module';
+export * from './checkbox.model';

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of config
- */
+import * as React from 'react';
 
-// playground
-export * from './lib/carbon-playground.module';
-export * from './lib/carbon-playground-routing.module';
+interface CheckboxChangeOutput {
+  event: React.ChangeEvent<HTMLInputElement>;
+  checked: boolean;
+  id: string;
+}
 
-// checkbox
-export * from './lib/components/checkbox/checkbox.component';
-export * from './lib/components/checkbox/checkbox.module';
+export {CheckboxChangeOutput};

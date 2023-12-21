@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of config
- */
+import {Component} from '@angular/core';
+import {CheckboxChangeOutput} from '../../models';
 
-// playground
-export * from './lib/carbon-playground.module';
-export * from './lib/carbon-playground-routing.module';
-
-// checkbox
-export * from './lib/components/checkbox/checkbox.component';
-export * from './lib/components/checkbox/checkbox.module';
+@Component({
+  templateUrl: './playground.component.html',
+  styleUrls: ['./playground.component.scss'],
+})
+export class VcdsPlaygroundComponent {
+  public checkBoxChange(event: CheckboxChangeOutput): void {
+    console.log('checkbox change', event);
+  }
+}

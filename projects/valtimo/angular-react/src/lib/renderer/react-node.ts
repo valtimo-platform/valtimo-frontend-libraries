@@ -133,10 +133,9 @@ export class ReactNode {
    * @param properties An object with the props.
    */
   setProperties(properties: StringMap) {
-    console.log('set properties', properties);
-
+    console.log('set properties', this._transformProps(removeUndefinedProperties(properties)));
     this.setRenderPending();
-    Object.assign(this._props, removeUndefinedProperties(properties));
+    Object.assign(this._props, this._transformProps(removeUndefinedProperties(properties)));
   }
 
   /**

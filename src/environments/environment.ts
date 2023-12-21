@@ -138,6 +138,7 @@ export const environment: ValtimoConfig = {
           {title: 'Other', textClass: 'text-dark font-weight-bold c-default', sequence: 12},
           {link: ['/process-migration'], title: 'Process migration', sequence: 13},
           {link: ['/choice-fields'], title: 'Choice fields', sequence: 14},
+          {link: ['/carbon-playground'], title: 'Playground', sequence: 15},
         ],
       },
       {
