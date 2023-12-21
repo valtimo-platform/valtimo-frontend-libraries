@@ -38,7 +38,6 @@ import {CheckboxProps} from '@carbon/react';
       [slug]="slug"
       [className]="className"
       [Change]="onChangeHandler"
-      [Click]="onClickHandler"
     >
     </Checkbox>
   `,
@@ -63,8 +62,7 @@ export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> 
   @Input() readOnly: CheckboxProps['readOnly'];
   @Input() warn: CheckboxProps['warn'];
 
-  @Output() readonly onChange = new EventEmitter<any>();
-  @Output() readonly onClick = new EventEmitter<any>();
+  @Output() readonly change = new EventEmitter<any>();
 
   constructor(
     elementRef: ElementRef,
@@ -75,16 +73,10 @@ export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> 
     super(elementRef, changeDetectorRef, renderer, {ngZone});
 
     this.onChangeHandler = this.onChangeHandler.bind(this);
-    this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  public onChangeHandler(x: any): void {
-    console.log('on change handler', x);
-    this.onChange.emit(x);
-  }
-
-  public onClickHandler(x: any): void {
-    console.log('on click handler', x);
-    this.onClick.emit(x);
-  }
+  public onChangeHandler = (x: any): void => {
+    console.log('on change handler');
+    this.change.emit(x);
+  };
 }

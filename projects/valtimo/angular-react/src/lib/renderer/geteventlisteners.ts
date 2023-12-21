@@ -11,11 +11,12 @@
 Element.prototype['_addEventListener'] = Element.prototype.addEventListener;
 Element.prototype['_removeEventListener'] = Element.prototype.removeEventListener;
 
-Element.prototype.addEventListener = function<K extends keyof ElementEventMap>(
+Element.prototype.addEventListener = function <K extends keyof ElementEventMap>(
   type: K,
   listener: (this: Element, ev: ElementEventMap[K]) => any,
   options?: boolean | AddEventListenerOptions
 ): void {
+  console.log('add ev list', type, listener, options);
   if (options === undefined) options = false;
 
   // declare listener
@@ -32,7 +33,7 @@ Element.prototype.addEventListener = function<K extends keyof ElementEventMap>(
   });
 };
 
-Element.prototype.removeEventListener = function<K extends keyof ElementEventMap>(
+Element.prototype.removeEventListener = function <K extends keyof ElementEventMap>(
   type: K,
   listener: (this: Element, ev: ElementEventMap[K]) => any,
   options?: boolean | EventListenerOptions
@@ -62,11 +63,12 @@ Element.prototype.removeEventListener = function<K extends keyof ElementEventMap
   if (this.eventListenerList[type].length == 0) delete this.eventListenerList[type];
 };
 
-Element.prototype.getEventListeners = function<K extends keyof ElementEventMap>(type?: K) {
+Element.prototype.getEventListeners = function <K extends keyof ElementEventMap>(type?: K) {
   if (!this.eventListenerList) this.eventListenerList = {};
 
   // return requested listeners type or all them
   if (type === undefined) return this.eventListenerList;
+
   return this.eventListenerList[type];
 };
 

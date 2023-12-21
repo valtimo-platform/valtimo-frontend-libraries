@@ -356,12 +356,13 @@ export class ReactRenderer implements Renderer2 {
   }
 
   listen(target: ReactNode, event: string, callback: (event: any) => boolean): () => void {
+    console.log('listen man', target, event, callback);
     if (DEBUG) {
       console.log('Renderer > listen > target:', target, 'event:', event);
     }
     target.setProperty(event, callback);
 
-    // TODO: NEEDS WORK: Implement prevent default callback behavior.
+    // // TODO: NEEDS WORK: Implement prevent default callback behavior.
     // return <() => void>this.eventManager.addEventListener(
     //            target, event, decoratePreventDefault(callback)) as() => void;
 

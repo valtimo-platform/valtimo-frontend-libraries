@@ -9,7 +9,8 @@
     "types": []
   },
   "angularCompilerOptions": {
-    "compilationMode": "partial"
+    "compilationMode": "partial",
+    "enableIvy": false
   },
   "exclude": ["src/test.ts", "**/*.spec.ts"]
 }

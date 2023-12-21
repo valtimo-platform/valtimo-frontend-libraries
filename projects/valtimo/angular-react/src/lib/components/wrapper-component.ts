@@ -247,9 +247,29 @@ export abstract class ReactWrapperComponent<TProps extends {}>
       {}
     );
 
-    console.log('props', whitelistedHostAttributes, props);
+    const registeredEvents: [{callback: any; name: string; type: 'dom' | 'output'; element: any}] =
+      (window as any)?.ng?.getListeners(this.elementRef.nativeElement);
+
+    console.log('registered events', registeredEvents);
+
+    const registeredEventsProps =
+      registeredEvents && Object.keys(registeredEvents).length
+        ? toObject(
+            Object.values(registeredEvents.filter(event => event.type === 'output')).map<
+              [string, React.EventHandler<React.SyntheticEvent>]
+            >(eventListener => [
+              eventListener.name,
+              (ev: React.SyntheticEvent) => eventListener.callback(ev && ev.nativeEvent),
+            ])
+          )
+        : {};
+    {
+    }
+
+    console.log('registered props', registeredEventsProps);
 
     const eventListeners = this.elementRef.nativeElement.getEventListeners();
+
     const eventHandlersProps =
       eventListeners && Object.keys(eventListeners).length
         ? toObject(
@@ -264,7 +284,7 @@ export abstract class ReactWrapperComponent<TProps extends {}>
     {
     }
 
-    this.reactNodeRef.nativeElement.setProperties({...props, ...eventHandlersProps});
+    this.reactNodeRef.nativeElement.setProperties({...props, ...registeredEventsProps});
   }
 
   private _setHostDisplay() {
