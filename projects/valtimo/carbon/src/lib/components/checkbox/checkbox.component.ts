@@ -25,7 +25,7 @@ import {CheckboxChangeOutput} from '../../models';
   template: `
     <Checkbox
       #reactNode
-      [id]="id"
+      [id]="checkboxId"
       [labelText]="labelText"
       [disabled]="disabled"
       [checked]="checked"
@@ -49,7 +49,7 @@ import {CheckboxChangeOutput} from '../../models';
 export class VcdsCheckboxComponent extends ReactWrapperComponent<CheckboxProps> {
   @ViewChild('reactNode', {static: true}) protected reactNodeRef: ElementRef;
 
-  @Input() id: CheckboxProps['id'] = uuidv4();
+  @Input() checkboxId: CheckboxProps['id'] = uuidv4();
   @Input({required: true}) labelText: CheckboxProps['labelText'];
   @Input() disabled?: CheckboxProps['disabled'];
   @Input() checked: CheckboxProps['checked'];

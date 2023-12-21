@@ -133,7 +133,6 @@ export class ReactNode {
    * @param properties An object with the props.
    */
   setProperties(properties: StringMap) {
-    console.log('set properties', this._transformProps(removeUndefinedProperties(properties)));
     this.setRenderPending();
     Object.assign(this._props, this._transformProps(removeUndefinedProperties(properties)));
   }
@@ -323,8 +322,6 @@ export class ReactNode {
         children
       );
     }
-
-    console.log('cleared props', clearedProps);
 
     return React.createElement(this.type, clearedProps, children.length > 0 ? children : undefined);
   }

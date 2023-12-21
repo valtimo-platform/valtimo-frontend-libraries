@@ -214,9 +214,6 @@ export abstract class ReactWrapperComponent<TProps extends {}>
 
   private _passAttributesAsProps() {
     const hostAttributes = Array.from((this.elementRef.nativeElement as HTMLElement).attributes);
-    console.log('host attributes', hostAttributes);
-
-    console.log('react node ref', this.reactNodeRef);
 
     if (!this.reactNodeRef || !isReactNode(this.reactNodeRef.nativeElement)) {
       throw new Error('reactNodeRef must hold a reference to a ReactNode');
@@ -247,27 +244,6 @@ export abstract class ReactWrapperComponent<TProps extends {}>
       {}
     );
 
-    const registeredEvents: [{callback: any; name: string; type: 'dom' | 'output'; element: any}] =
-      (window as any)?.ng?.getListeners(this.elementRef.nativeElement);
-
-    console.log('registered events', registeredEvents);
-
-    const registeredEventsProps =
-      registeredEvents && Object.keys(registeredEvents).length
-        ? toObject(
-            Object.values(registeredEvents.filter(event => event.type === 'output')).map<
-              [string, React.EventHandler<React.SyntheticEvent>]
-            >(eventListener => [
-              eventListener.name,
-              (ev: React.SyntheticEvent) => eventListener.callback(ev && ev.nativeEvent),
-            ])
-          )
-        : {};
-    {
-    }
-
-    console.log('registered props', registeredEventsProps);
-
     const eventListeners = this.elementRef.nativeElement.getEventListeners();
 
     const eventHandlersProps =
@@ -284,7 +260,11 @@ export abstract class ReactWrapperComponent<TProps extends {}>
     {
     }
 
-    this.reactNodeRef.nativeElement.setProperties({...props, ...registeredEventsProps});
+    /*
+    Previously eventHandlersProps were also included in the spread operator. removing this fixed components breaking on prop change.
+    Unknown at time of writing what consequences of this are.
+     */
+    this.reactNodeRef.nativeElement.setProperties({...props});
   }
 
   private _setHostDisplay() {
