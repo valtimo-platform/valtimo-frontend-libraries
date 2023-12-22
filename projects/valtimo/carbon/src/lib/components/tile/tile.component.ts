@@ -20,7 +20,7 @@ import {v4 as uuidv4} from 'uuid';
   exportAs: 'vcdsTile',
   template: `
     <Tile [id]="tileId" #reactNode>
-      <ng-content></ng-content>
+      <ReactContent><ng-content></ng-content></ReactContent>
     </Tile>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
