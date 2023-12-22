@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import {Injectable, NgZone, Renderer2, RendererStyleFlags2} from '@angular/core';
+import {
+  Inject,
+  Injectable,
+  NgZone,
+  PLATFORM_ID,
+  Renderer2,
+  RendererStyleFlags2,
+} from '@angular/core';
 import {EventManager, ɵDomRendererFactory2, ɵSharedStylesHost} from '@angular/platform-browser';
 import {StringMap} from '../declarations/string-map';
 import {Disguise} from './components/Disguise';
@@ -9,6 +16,7 @@ import {ReactContent} from './react-content';
 import {isReactNode, ReactNode} from './react-node';
 import {registerElement} from './registry';
 import './geteventlisteners';
+import {DOCUMENT} from '@angular/common';
 
 const DEBUG = false;
 
@@ -33,12 +41,25 @@ export class AngularReactRendererFactory extends ɵDomRendererFactory2 {
     this.isRenderPending = true;
   };
 
-  constructor(eventManager: EventManager, sharedStylesHost: ɵSharedStylesHost, ngZone: NgZone) {
-    super(eventManager, sharedStylesHost, 'app-id', true, document, 'browser', ngZone);
+  constructor(
+    eventManager: EventManager,
+    sharedStylesHost: ɵSharedStylesHost,
+    ngZone: NgZone,
+    @Inject(PLATFORM_ID) platformId,
+    @Inject(DOCUMENT) injectedDocument: Document
+  ) {
+    super(eventManager, sharedStylesHost, 'app-id', true, injectedDocument, platformId, ngZone);
 
     // tslint:disable-next-line: no-use-before-declare
     this.defaultReactRenderer = new ReactRenderer(this);
   }
+
+  // constructor(eventManager: EventManager, sharedStylesHost: ɵDomSharedStylesHost) {
+  //   super(eventManager, sharedStylesHost, 'app-id');
+  //
+  //   // tslint:disable-next-line: no-use-before-declare
+  //   this.defaultReactRenderer = new ReactRenderer(this);
+  // }
 
   createRenderer(element: any, type: any | null): Renderer2 {
     if (
