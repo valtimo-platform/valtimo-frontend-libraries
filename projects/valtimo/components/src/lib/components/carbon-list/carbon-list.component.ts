@@ -77,7 +77,7 @@ import {filter} from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [CarbonListFilterPipe],
 })
-export class CarbonListComponent<T> implements OnInit, AfterViewInit, OnDestroy {
+export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('attr.data-carbon-theme') theme = 'g10';
   @ViewChild('actionsMenu') actionsMenu: TemplateRef<OverflowMenu>;
   @ViewChild('actionItem') actionItem: TemplateRef<any>;
@@ -271,11 +271,6 @@ export class CarbonListComponent<T> implements OnInit, AfterViewInit, OnDestroy 
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
-  }
-
-  public ngAfterViewInit(): void {
-    this.model.data = this.buildTableItems();
-    this._completeDataSource = this.model.data;
   }
 
   public onRowClick(index: number): void {

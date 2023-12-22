@@ -77,11 +77,11 @@ interface Documents {
   sort: any;
   totalElements: number;
   totalPages: number;
-  locked: boolean;
+  locked?: boolean;
 }
 
 type SpecifiedDocuments = Omit<Documents, 'content'> & {
-  content: Array<{id: string; items: Array<{key: string; value: string}>; locked: boolean}>;
+  content: Array<{id: string; items: Array<{key: string; value: string}>; locked?: boolean}>;
 };
 
 interface RelatedFile {
