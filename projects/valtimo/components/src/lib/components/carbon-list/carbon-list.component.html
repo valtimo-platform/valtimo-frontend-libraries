@@ -104,3 +104,14 @@
 <ng-template #booleanTemplate let-data="data">
   {{ 'viewTypeConverter.' + data | translate }}
 </ng-template>
+
+<ng-template #rowDisabled let-data="data">
+  <div *ngIf="data.locked" class="disabled">
+    <span
+      class="float-right badge badge-pill badge-secondary bg-grey"
+      ngbTooltip="{{ translationKey + '.rowLocked' | translate }}"
+    >
+      <i class="icon mdi mdi-lock"></i>
+    </span>
+  </div>
+</ng-template>
