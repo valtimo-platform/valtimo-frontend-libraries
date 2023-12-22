@@ -215,6 +215,8 @@ export abstract class ReactWrapperComponent<TProps extends {}>
   private _passAttributesAsProps() {
     const hostAttributes = Array.from((this.elementRef.nativeElement as HTMLElement).attributes);
 
+    console.log('hi teo', this.reactNodeRef);
+
     if (!this.reactNodeRef || !isReactNode(this.reactNodeRef.nativeElement)) {
       throw new Error('reactNodeRef must hold a reference to a ReactNode');
     }
@@ -245,7 +247,6 @@ export abstract class ReactWrapperComponent<TProps extends {}>
     );
 
     const eventListeners = this.elementRef.nativeElement.getEventListeners();
-
     const eventHandlersProps =
       eventListeners && Object.keys(eventListeners).length
         ? toObject(
@@ -260,10 +261,8 @@ export abstract class ReactWrapperComponent<TProps extends {}>
     {
     }
 
-    /*
-    Previously eventHandlersProps were also included in the spread operator. removing this fixed components breaking on prop change.
-    Unknown at time of writing what consequences of this are.
-     */
+    // remove event handler props
+    // this.reactNodeRef.nativeElement.setProperties({...props, ...eventHandlersProps});
     this.reactNodeRef.nativeElement.setProperties({...props});
   }
 

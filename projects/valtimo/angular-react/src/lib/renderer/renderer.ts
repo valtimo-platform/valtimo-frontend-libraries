@@ -361,7 +361,7 @@ export class ReactRenderer implements Renderer2 {
     }
     target.setProperty(event, callback);
 
-    // // TODO: NEEDS WORK: Implement prevent default callback behavior.
+    // TODO: NEEDS WORK: Implement prevent default callback behavior.
     // return <() => void>this.eventManager.addEventListener(
     //            target, event, decoratePreventDefault(callback)) as() => void;
 

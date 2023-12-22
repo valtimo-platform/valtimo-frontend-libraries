@@ -18,19 +18,31 @@
   <button cdsButton (click)="rerender()">Re-render components</button>
 </div>
 <div class="playground__grid" *ngIf="showGrid$ | async; else loading">
-  <div class="playground__component">
-    <span class="playground__component-title">Checkbox</span>
+  <ng-container *ngTemplateOutlet="checkbox; context: {show: true}"></ng-container>
+  <ng-container *ngTemplateOutlet="tile; context: {show: true}"></ng-container>
+</div>
+
+<ng-template #checkbox let-show="show">
+  <div *ngIf="show" class="playground__component">
+    <span class="playground__component-title">vcds-checkbox</span>
     <vcds-checkbox
       [labelText]="'interface.username' | translate"
       (changeEvent)="checkBoxChange($event)"
     ></vcds-checkbox>
   </div>
+</ng-template>
 
-  <div class="playground__component">
-    <span class="playground__component-title">Tile</span>
-    <vcds-tile><span>test content</span></vcds-tile>
+<ng-template #tile let-show="show">
+  <div *ngIf="show" class="playground__component">
+    <span class="playground__component-title">vcds-tile</span>
+    <vcds-tile
+      ><div>
+        <h2>test</h2>
+        <h1>test</h1>
+      </div></vcds-tile
+    >
   </div>
-</div>
+</ng-template>
 
 <ng-template #loading>
   <div class="playground__loading">

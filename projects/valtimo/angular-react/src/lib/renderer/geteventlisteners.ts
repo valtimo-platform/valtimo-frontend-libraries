@@ -67,7 +67,6 @@ Element.prototype.getEventListeners = function <K extends keyof ElementEventMap>
 
   // return requested listeners type or all them
   if (type === undefined) return this.eventListenerList;
-
   return this.eventListenerList[type];
 };
 
