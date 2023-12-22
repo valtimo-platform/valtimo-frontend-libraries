@@ -355,10 +355,9 @@ export class DossierListComponent implements OnInit, OnDestroy {
           res.documents.content.map(document =>
             this.permissionService
               .requestPermission(CAN_VIEW_CASE_PERMISSION, {
-                  resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
-                  identifier: document.id,
-                }
-              )
+                resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+                identifier: document.id,
+              })
               .pipe(take(1))
           )
         ).pipe(defaultIfEmpty([] as boolean[])),
@@ -439,9 +438,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
         `/dossiers/${documentDefinitionName}`,
         this.route.snapshot.queryParams
       );
-      this.router.navigate([
-        `/dossiers/${documentDefinitionName}/document/${document.id}`,
-      ]);
+      this.router.navigate([`/dossiers/${documentDefinitionName}/document/${document.id}`]);
     });
   }
 
