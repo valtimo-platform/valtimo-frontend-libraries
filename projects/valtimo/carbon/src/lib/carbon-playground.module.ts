@@ -19,9 +19,19 @@ import {VcdsPlaygroundComponent} from './components/playground/playground.compon
 import {CommonModule} from '@angular/common';
 import {VcdsCheckboxModule} from './components/checkbox/checkbox.module';
 import {TranslateModule} from '@ngx-translate/core';
+import {VcdsTileModule} from './components/tile/tile.module';
+import {ButtonModule, LoadingModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [VcdsPlaygroundComponent],
-  imports: [CommonModule, CarbonPlaygroundRoutingModule, VcdsCheckboxModule, TranslateModule],
+  imports: [
+    CommonModule,
+    CarbonPlaygroundRoutingModule,
+    TranslateModule,
+    ButtonModule,
+    LoadingModule,
+    VcdsCheckboxModule,
+    VcdsTileModule,
+  ],
 })
 export class CarbonPlaygroundModule {}

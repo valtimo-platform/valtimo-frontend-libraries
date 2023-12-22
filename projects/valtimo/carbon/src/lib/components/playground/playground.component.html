@@ -14,8 +14,26 @@
   ~ limitations under the License.
   -->
 
-<vcds-checkbox
-  checkboxId="test"
-  [labelText]="'interface.username' | translate"
-  (changeEvent)="checkBoxChange($event)"
-></vcds-checkbox>
+<div class="playground__actions">
+  <button cdsButton (click)="rerender()">Re-render components</button>
+</div>
+<div class="playground__grid" *ngIf="showGrid$ | async; else loading">
+  <div class="playground__component">
+    <span class="playground__component-title">Checkbox</span>
+    <vcds-checkbox
+      [labelText]="'interface.username' | translate"
+      (changeEvent)="checkBoxChange($event)"
+    ></vcds-checkbox>
+  </div>
+
+  <div class="playground__component">
+    <span class="playground__component-title">Tile</span>
+    <vcds-tile><span>test content</span></vcds-tile>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="playground__loading">
+    <cds-loading size="sm"></cds-loading>
+  </div>
+</ng-template>

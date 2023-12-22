@@ -25,3 +25,6 @@ export * from './lib/carbon-playground-routing.module';
 // checkbox
 export * from './lib/components/checkbox/checkbox.component';
 export * from './lib/components/checkbox/checkbox.module';
+// tile
+export * from './lib/components/tile/tile.component';
+export * from './lib/components/tile/tile.module';

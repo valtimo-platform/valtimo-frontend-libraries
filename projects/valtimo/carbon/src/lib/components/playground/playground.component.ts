@@ -16,13 +16,23 @@
 
 import {Component} from '@angular/core';
 import {CheckboxChangeOutput} from '../../models';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   templateUrl: './playground.component.html',
   styleUrls: ['./playground.component.scss'],
 })
 export class VcdsPlaygroundComponent {
+  public readonly showGrid$ = new BehaviorSubject<boolean>(true);
   public checkBoxChange(event: CheckboxChangeOutput): void {
     console.log('checkbox change', event);
+  }
+
+  public rerender(): void {
+    this.showGrid$.next(false);
+
+    setTimeout(() => {
+      this.showGrid$.next(true);
+    }, 500);
   }
 }
