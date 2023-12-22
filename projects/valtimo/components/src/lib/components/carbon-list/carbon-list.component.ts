@@ -68,6 +68,7 @@ import {
 } from '../../models';
 import {ViewContentService} from '../view-content/view-content.service';
 import {CarbonListFilterPipe} from './CarbonListFilterPipe.directive';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-carbon-list',
@@ -76,7 +77,7 @@ import {CarbonListFilterPipe} from './CarbonListFilterPipe.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [CarbonListFilterPipe],
 })
-export class CarbonListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CarbonListComponent<T> implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('attr.data-carbon-theme') theme = 'g10';
   @ViewChild('actionsMenu') actionsMenu: TemplateRef<OverflowMenu>;
   @ViewChild('actionItem') actionItem: TemplateRef<any>;
@@ -92,8 +93,10 @@ export class CarbonListComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    this.model.data = this.buildTableItems();
-    this._completeDataSource = this.model.data;
+    this.buildTableItems().subscribe(tableItems => {
+      this.model.data = tableItems;
+      this._completeDataSource = this.model.data;
+    });
   }
   public get items(): CarbonListItem[] {
     return this._items;
@@ -109,7 +112,9 @@ export class CarbonListComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    this.model.data = this.buildTableItems();
+    this.buildTableItems().subscribe(tableItems => {
+      this.model.data = tableItems;
+    });
   }
 
   private _tableTranslations$: BehaviorSubject<CarbonListTranslations> = new BehaviorSubject(
@@ -150,6 +155,7 @@ export class CarbonListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() paginationIdentifier: string;
   @Input() showSelectionColumn = false;
   @Input() striped = false;
+  @Input() hideToolbar = false;
   @Input() translationKey = '';
 
   @Output() rowClicked = new EventEmitter<any>();
@@ -216,6 +222,12 @@ export class CarbonListComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
+  private readonly _viewInitialized$ = new BehaviorSubject<boolean>(false);
+
+  public get viewInitialized$(): Observable<boolean> {
+    return this._viewInitialized$.pipe(filter(initialized => initialized));
+  }
+
   constructor(
     private readonly filterPipe: CarbonListFilterPipe,
     private readonly iconService: IconService,
@@ -251,6 +263,10 @@ export class CarbonListComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         })
     );
+  }
+
+  public ngAfterViewInit(): void {
+    this._viewInitialized$.next(true);
   }
 
   public ngOnDestroy(): void {
@@ -394,64 +410,70 @@ export class CarbonListComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  private buildTableItems(): TableItem[][] {
+  private buildTableItems(): Observable<TableItem[][]> {
     const itemCount: number = this._items.length;
     const showLocks = !!this._items?.find(item => !!item.locked)?.locked;
-    return this._items.map((item: CarbonListItem, index: number) => {
-      const fields = this._fields.map((column: ColumnConfig) => {
-        switch (column.viewType) {
-          case ViewType.ACTION:
-            return new TableItem({
-              data: {actions: column.actions, item},
-              template: this.actionsMenu,
-            });
-          case ViewType.TEMPLATE:
-            return new TableItem({
-              data: {item, index, length: itemCount},
-              template: column.template,
-            });
-          case ViewType.BOOLEAN:
-            return new TableItem({
-              data: this.resolveObject(column, item) ?? '-',
-              template: this.booleanTemplate,
-            });
-          default:
-            return new TableItem({data: this.resolveObject(column, item) ?? '-', item});
-        }
-      });
 
-      if (!!this.actions) {
-        fields.push(
-          ...this.actions.map(
-            action =>
+    return this.viewInitialized$.pipe(
+      take(1),
+      map(() =>
+        this._items.map((item: CarbonListItem, index: number) => {
+          const fields = this._fields.map((column: ColumnConfig) => {
+            switch (column.viewType) {
+              case ViewType.ACTION:
+                return new TableItem({
+                  data: {actions: column.actions, item},
+                  template: this.actionsMenu,
+                });
+              case ViewType.TEMPLATE:
+                return new TableItem({
+                  data: {item, index, length: itemCount},
+                  template: column.template,
+                });
+              case ViewType.BOOLEAN:
+                return new TableItem({
+                  data: this.resolveObject(column, item) ?? '-',
+                  template: this.booleanTemplate,
+                });
+              default:
+                return new TableItem({data: this.resolveObject(column, item) ?? '-', item});
+            }
+          });
+
+          if (!!this.actions) {
+            fields.push(
+              ...this.actions.map(
+                action =>
+                  new TableItem({
+                    data: {item, callback: action.callback, iconClass: action.iconClass},
+                    template: this.actionItem,
+                  })
+              )
+            );
+          }
+
+          if (!!this.lastColumnTemplate) {
+            fields.push(
               new TableItem({
-                data: {item, callback: action.callback, iconClass: action.iconClass},
-                template: this.actionItem,
+                data: {item, index, length: itemCount},
+                template: this.lastColumnTemplate,
               })
-          )
-        );
-      }
+            );
+          }
 
-      if (!!this.lastColumnTemplate) {
-        fields.push(
-          new TableItem({
-            data: {item, index, length: itemCount},
-            template: this.lastColumnTemplate,
-          })
-        );
-      }
+          if (showLocks) {
+            fields.push(
+              new TableItem({
+                data: {locked: item.locked},
+                template: this.rowDisabled,
+              })
+            );
+          }
 
-      if (showLocks) {
-        fields.push(
-          new TableItem({
-            data: {locked: item.locked},
-            template: this.rowDisabled,
-          })
-        );
-      }
-
-      return fields;
-    });
+          return fields;
+        })
+      )
+    );
   }
 
   private loadPaginationSize(): void {
