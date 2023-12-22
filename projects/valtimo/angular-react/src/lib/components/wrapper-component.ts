@@ -215,8 +215,6 @@ export abstract class ReactWrapperComponent<TProps extends {}>
   private _passAttributesAsProps() {
     const hostAttributes = Array.from((this.elementRef.nativeElement as HTMLElement).attributes);
 
-    console.log('hi teo', this.reactNodeRef);
-
     if (!this.reactNodeRef || !isReactNode(this.reactNodeRef.nativeElement)) {
       throw new Error('reactNodeRef must hold a reference to a ReactNode');
     }

@@ -20,6 +20,7 @@
 <div class="playground__grid" *ngIf="showGrid$ | async; else loading">
   <ng-container *ngTemplateOutlet="checkbox; context: {show: true}"></ng-container>
   <ng-container *ngTemplateOutlet="tile; context: {show: true}"></ng-container>
+  <ng-container *ngTemplateOutlet="heading; context: {show: true}"></ng-container>
 </div>
 
 <ng-template #checkbox let-show="show">
@@ -41,6 +42,13 @@
         <h1>test</h1>
       </div></vcds-tile
     >
+  </div>
+</ng-template>
+
+<ng-template #heading let-show="show">
+  <div *ngIf="show" class="playground__component">
+    <span class="playground__component-title">vcds-heading</span>
+    <vcds-heading>{{ 'interface.username' | translate }}</vcds-heading>
   </div>
 </ng-template>
 

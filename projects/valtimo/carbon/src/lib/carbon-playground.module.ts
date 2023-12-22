@@ -21,6 +21,7 @@ import {VcdsCheckboxModule} from './components/checkbox/checkbox.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {VcdsTileModule} from './components/tile/tile.module';
 import {ButtonModule, LoadingModule} from 'carbon-components-angular';
+import {VcdsHeadingModule} from './components/heading/heading.module';
 
 @NgModule({
   declarations: [VcdsPlaygroundComponent],
@@ -32,6 +33,7 @@ import {ButtonModule, LoadingModule} from 'carbon-components-angular';
     LoadingModule,
     VcdsCheckboxModule,
     VcdsTileModule,
+    VcdsHeadingModule,
   ],
 })
 export class CarbonPlaygroundModule {}
