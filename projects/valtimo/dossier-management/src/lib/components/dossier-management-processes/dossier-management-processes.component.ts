@@ -15,8 +15,9 @@
  */
 import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {AlertService, ColumnConfig, ViewType} from '@valtimo/components';
+import {ColumnConfig, ViewType} from '@valtimo/components';
 import {DocumentDefinition, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
+import {NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, switchMap} from 'rxjs';
 import {DossierManagementConnectModalComponent} from '../dossier-management-connect-modal/dossier-management-connect-modal.component';
 
@@ -25,6 +26,7 @@ import {DossierManagementConnectModalComponent} from '../dossier-management-conn
   templateUrl: './dossier-management-processes.component.html',
   styleUrls: ['./dossier-management-processes.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [NotificationService],
 })
 export class DossierManagementProcessesComponent {
   @ViewChild('dossierConnectModal')
@@ -77,9 +79,9 @@ export class DossierManagementProcessesComponent {
   ];
 
   constructor(
-    private readonly alertService: AlertService,
     private readonly documentService: DocumentService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly notificationService: NotificationService
   ) {}
 
   public deleteProcessDocumentDefinition(
@@ -94,11 +96,18 @@ export class DossierManagementProcessesComponent {
       })
       .subscribe({
         next: () => {
-          this.alertService.success('Successfully deleted process document definition');
+          this.notificationService.showNotification({
+            type: 'success',
+            title: 'Successfully deleted process document definition',
+          });
           this.loadProcessDocumentDefinitions();
         },
         error: () => {
-          this.alertService.error('Failed to delete process document definition');
+          this.notificationService.showNotification({
+            type: 'error',
+            title: '',
+            subtitle: 'Failed to delete process document definition',
+          });
         },
       });
   }
