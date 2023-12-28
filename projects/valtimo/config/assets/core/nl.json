@@ -257,9 +257,7 @@
       "title": "Taak"
     },
     "noDashboards": "Er zijn geen dashboards geconfigureerd.",
-    "noDashboardsDescription": "Neem contact op met uw systeembeheerder om dashboards te configureren.",
-    "noWidgets": "Er zijn geen widgets geconfigureerd voor dit dashboard.",
-    "noWidgetsDescription": "Neem contact op met uw systeembeheerder om widgets te configureren."
+    "noWidgets": "Er zijn geen widgets geconfigureerd voor dit dashboard."
   },
   "dashboardManagement": {
     "addDashboard": "Nieuw dashboard toevoegen",
@@ -279,8 +277,8 @@
     "key": "Sleutel",
     "name": "Naam",
     "noResults": {
-      "description": "Klik op <strong>Nieuw dashboard toevoegen</strong> om te beginnen met het ontwerpen van uw dashboard",
-      "title": "Geen dashboards toegevoegd"
+      "description": "Klik op <strong>Nieuw dashboard toevoegen</strong> om een dashboard te maken",
+      "title": "Er zijn geen dashboards"
     },
     "widgets": {
       "complete": "Voltooien",
@@ -434,6 +432,7 @@
     },
     "tabs": {
       "cases": "Configuratie",
+      "processes": "Processen",
       "searchFields": "Zoekvelden",
       "listColumns": "Lijst",
       "tabManagement": "Tabbladen",
@@ -577,6 +576,7 @@
     "readOnlySystemProcessWarningMessage": "Dit is een systeemproces, daarmee is het gemarkeerd als alleen-lezen. Dit proces is wel te gebruiken maar niet aan te passen."
   },
   "processCaseConnection": {
+    "noProcesses": "Er zijn nog geen processen gekoppeld aan deze Case definition.",
     "processCreatesCase": "Proces maakt nieuw dossier aan",
     "processCreatesCaseTooltip": "Wanneer deze optie is geselecteerd wordt bij het starten van dit proces een nieuw dossier aangemaakt. Hiervoor moet er een startformulier gekoppeld zijn aan de eerste stap in het proces.",
     "startableWithinCase": "Kan gestart worden binnen bestaand dossier",

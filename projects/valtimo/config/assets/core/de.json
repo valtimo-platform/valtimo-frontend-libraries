@@ -257,9 +257,7 @@
       "title": "Aufgabe"
     },
     "noDashboards": "Es sind keine Dashboards konfiguriert.",
-    "noDashboardsDescription": "Um Dashboards zu konfigurieren, wenden Sie sich an Ihren Systemadministrator.",
-    "noWidgets": "Für dieses Dashboard wurden keine Widgets konfiguriert.",
-    "noWidgetsDescription": "Um Widgets zu konfigurieren, wenden Sie sich an Ihren Systemadministrator."
+    "noWidgets": "Für dieses Dashboard wurden keine Widgets konfiguriert."
   },
   "dashboardManagement": {
     "addDashboard": "Neues Dashboard hinzufügen",
@@ -434,6 +432,7 @@
     },
     "tabs": {
       "cases": "Konfiguration",
+      "processes": "Prozesse",
       "searchFields": "Suchfelder",
       "listColumns": "Aufführen",
       "tabManagement": "Tabs",
@@ -577,6 +576,7 @@
     "readOnlySystemProcessWarningMessage": "Dies ist ein Systemprozess, daher ist er als schreibgeschützt gekennzeichnet. Dieser Prozess kann verwendet, aber nicht geändert werden."
   },
   "processCaseConnection": {
+    "noProcesses": "Mit dieser Falldefinition sind noch keine Prozesse verbunden.",
     "processCreatesCase": "Prozess erstellt neuen Case",
     "processCreatesCaseTooltip": "Wenn diese Option ausgewählt ist, wird eine neue Case erstellt, wenn dieser Prozess gestartet wird. Dazu muss ein Startformular mit dem ersten Prozessschritt verknüpft werden.",
     "startableWithinCase": "Kann im bestehenden Case gestartet werden",

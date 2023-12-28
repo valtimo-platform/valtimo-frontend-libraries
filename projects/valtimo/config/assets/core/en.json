@@ -257,9 +257,7 @@
       "title": "Task"
     },
     "noDashboards": "No dashboards have been configured.",
-    "noDashboardsDescription": "In order to configure dashboards, contact your system administrator.",
-    "noWidgets": "No widgets have been configured for this dashboard.",
-    "noWidgetsDescription": "In order to configure widgets, contact your system administrator."
+    "noWidgets": "No widgets have been configured for this dashboard."
   },
   "dashboardManagement": {
     "addDashboard": "Add new dashboard",
@@ -435,6 +433,7 @@
     },
     "tabs": {
       "cases": "Configuration",
+      "processes": "Processes",
       "searchFields": "Search Fields",
       "listColumns": "List",
       "tabManagement": "Tabs",
@@ -578,6 +577,7 @@
     "readOnlySystemProcessWarningMessage": "This is a system process, so it is marked as read-only. This process can be used but not modified."
   },
   "processCaseConnection": {
+    "noProcesses": "There are no processes connected yet to this Case definition",
     "processCreatesCase": "Process creates new case",
     "processCreatesCaseTooltip": "When this option is selected, a new case is created when this process is started. For this to be possible, a start form must be linked to the first step in the process.",
     "startableWithinCase": "Can be started within existing case",

@@ -73,6 +73,7 @@ import {TabManagementService} from './services';
 import {DossierManagementEditTabModalComponent} from './components/dossier-management-tabs/dossier-management-edit-tab-modal/dossier-management-edit-tab-modal.component';
 import {DossierManagementDetailContainerActionsComponent} from './components/dossier-management-detail-container-actions/dossier-management-detail-container-actions';
 import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition';
+import { DossierManagementProcessesComponent } from './components/dossier-management-processes/dossier-management-processes.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import {DossierManagementDocumentDefinitionComponent} from './components/dossier
     DossierManagementEditTabModalComponent,
     DossierManagementDetailContainerActionsComponent,
     DossierManagementDocumentDefinitionComponent,
+    DossierManagementProcessesComponent
   ],
   imports: [
     CommonModule,
