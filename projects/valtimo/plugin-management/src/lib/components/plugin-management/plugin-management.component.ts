@@ -16,7 +16,7 @@
 
 import {Component} from '@angular/core';
 import {BehaviorSubject, combineLatest} from 'rxjs';
-import {TableColumn} from '@valtimo/components';
+import {ColumnConfig, TableColumn, ViewType} from '@valtimo/components';
 import {PluginManagementStateService} from '../../services';
 import {TranslateService} from '@ngx-translate/core';
 import {map, switchMap, tap} from 'rxjs/operators';
@@ -32,24 +32,37 @@ import {
   styleUrls: ['./plugin-management.component.scss'],
 })
 export class PluginManagementComponent {
-  readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly fields: ColumnConfig[] = [
+    {
+      key: 'pluginName',
+      label: 'pluginManagement.labels.pluginName',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'definitionKey',
+      label: 'pluginManagement.labels.identifier',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'title',
+      label: 'pluginManagement.labels.configurationName',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: '',
+      label: '',
+      viewType: ViewType.ACTION,
+      actions: [
+        {
+          callback: this.editConfiguration.bind(this),
+          label: 'interface.edit',
+        },
+      ],
+    },
+  ];
 
-  readonly columns$ = new BehaviorSubject<Array<TableColumn>>([
-    {
-      labelTranslationKey: 'pluginManagement.labels.pluginName',
-      dataKey: 'pluginName',
-    },
-    {
-      labelTranslationKey: 'pluginManagement.labels.identifier',
-      dataKey: 'definitionKey',
-    },
-    {
-      labelTranslationKey: 'pluginManagement.labels.configurationName',
-      dataKey: 'title',
-    },
-  ]);
-
-  readonly pluginConfigurations$ = this.stateService.refresh$.pipe(
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly pluginConfigurations$ = this.stateService.refresh$.pipe(
     switchMap(() =>
       combineLatest([
         this.pluginManagementService.getAllPluginConfigurations(),
@@ -60,9 +73,9 @@ export class PluginManagementComponent {
             ...configuration,
             pluginName: this.pluginTranslationService.instant(
               'title',
-              configuration.pluginDefinition.key
+              configuration.pluginDefinition?.key ?? ''
             ),
-            definitionKey: configuration.pluginDefinition.key,
+            definitionKey: configuration.pluginDefinition?.key ?? '',
           }))
         ),
         tap(() => {
@@ -79,11 +92,11 @@ export class PluginManagementComponent {
     private readonly pluginTranslationService: PluginTranslationService
   ) {}
 
-  showAddModal(): void {
+  public showAddModal(): void {
     this.stateService.showModal('add');
   }
 
-  rowClicked(configuration: PluginConfiguration): void {
+  public editConfiguration(configuration: PluginConfiguration): void {
     this.stateService.selectPluginConfiguration(configuration);
     this.stateService.showModal('edit');
   }

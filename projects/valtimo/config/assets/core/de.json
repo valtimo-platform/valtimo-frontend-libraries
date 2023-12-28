@@ -929,7 +929,8 @@
     },
     "plugins": {
       "title": "Plugins",
-      "description": "Auf dieser Seite können Sie Konfigurationen von Plugins erstellen, ändern und löschen, die Ihrer Anwendung hinzugefügt wurden."
+      "description": "Auf dieser Seite können Sie Konfigurationen von Plugins erstellen, ändern und löschen, die Ihrer Anwendung hinzugefügt wurden.",
+      "noResults": "Es sind keine Plugins konfiguriert"
     },
     "customercases": {
       "title": "Cases",

@@ -15,15 +15,13 @@
   -->
 
 <valtimo-carbon-list
-  [header]="true"
+  [header]="false"
   [items]="roles$ | async"
   [fields]="fields"
   [loading]="loading$ | async"
   [showSelectionColumn]="true"
   (rowClicked)="onRowClick($event)"
 >
-  <ng-container header> {{ 'accessControl.roles.title' | translate }} </ng-container>
-
   <div carbonToolbarContent>
     <ng-container [ngTemplateOutlet]="addRoleButton"></ng-container>
   </div>
