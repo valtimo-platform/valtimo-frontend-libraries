@@ -23,7 +23,27 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {ActivatedRoute} from '@angular/router';
+import {ArrowDown16, ArrowUp16} from '@carbon/icons';
+import {TranslateService} from '@ngx-translate/core';
+import {
+  ColumnConfig,
+  ModalComponent,
+  MultiInputOutput,
+  MultiInputValues,
+  SelectItem,
+  TableColumn,
+  ViewType,
+} from '@valtimo/components';
+import {
+  SearchField,
+  SearchFieldDataType,
+  SearchFieldFieldType,
+  SearchFieldMatchType,
+} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
+import {IconService} from 'carbon-components-angular';
 import {
   BehaviorSubject,
   combineLatest,
@@ -37,18 +57,6 @@ import {
   take,
   tap,
 } from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
-import {ListField, ModalComponent} from '@valtimo/components';
-import {TranslateService} from '@ngx-translate/core';
-import {
-  DefinitionColumn,
-  SearchField,
-  SearchFieldDataType,
-  SearchFieldFieldType,
-  SearchFieldMatchType,
-} from '@valtimo/config';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {MultiInputOutput, MultiInputValues, SelectItem, TableColumn} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-dossier-management-search-fields',
@@ -61,45 +69,45 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   @Output() searchField: EventEmitter<SearchField> = new EventEmitter();
 
-  readonly downloadName$ = new BehaviorSubject<string>('');
-  readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
-  readonly disableInput$ = new BehaviorSubject<boolean>(false);
-  readonly selectedSearchField$ = new BehaviorSubject<SearchField | null>(null);
-  readonly formData$ = new BehaviorSubject<SearchField>(null);
-  readonly valid$ = new BehaviorSubject<boolean>(false);
+  public readonly downloadName$ = new BehaviorSubject<string>('');
+  public readonly downloadUrl$ = new BehaviorSubject<SafeUrl | undefined>(undefined);
+  public readonly disableInput$ = new BehaviorSubject<boolean>(false);
+  public readonly selectedSearchField$ = new BehaviorSubject<SearchField | undefined>(undefined);
+  public readonly formData$ = new BehaviorSubject<SearchField | null>(null);
+  public readonly valid$ = new BehaviorSubject<boolean>(false);
 
-  private subscriptions = new Subscription();
+  private _subscriptions = new Subscription();
 
-  private readonly COLUMNS: Array<DefinitionColumn> = [
+  public readonly fields: ColumnConfig[] = [
     {
       viewType: 'string',
       sortable: false,
-      propertyName: 'title',
-      translationKey: 'title',
+      key: 'title',
+      label: 'searchFieldsOverview.title',
     },
     {
       viewType: 'string',
       sortable: false,
-      propertyName: 'key',
-      translationKey: 'key',
+      key: 'key',
+      label: 'searchFieldsOverview.key',
     },
     {
       viewType: 'string',
       sortable: false,
-      propertyName: 'path',
-      translationKey: 'path',
+      key: 'path',
+      label: 'searchFieldsOverview.path',
     },
     {
       viewType: 'string',
       sortable: false,
-      propertyName: 'dataType',
-      translationKey: 'dataType',
+      key: 'dataType',
+      label: 'searchFieldsOverview.dataType',
     },
     {
       viewType: 'string',
       sortable: false,
-      propertyName: 'fieldType',
-      translationKey: 'fieldType',
+      key: 'fieldType',
+      label: 'searchFieldsOverview.fieldType',
     },
   ];
 
@@ -176,18 +184,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
         }))
       )
     );
-
-  readonly fields$: Observable<Array<ListField>> = this.translateService.stream('key').pipe(
-    map(() =>
-      this.COLUMNS.map(column => ({
-        key: column.propertyName,
-        label: this.translateService.instant(`searchFieldsOverview.${column.translationKey}`),
-        sortable: column.sortable,
-        ...(column.viewType && {viewType: column.viewType}),
-        ...(column.enum && {enum: column.enum}),
-      }))
-    )
-  );
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || ''),
@@ -289,7 +285,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     this.fieldTypeIsDropdown$,
   ]).pipe(map(([dataTypeIsText, fieldTypeIsDropdown]) => dataTypeIsText && !fieldTypeIsDropdown));
 
-  readonly showReadonlyDropdownTable$: Observable<boolean> = combineLatest([
+  public readonly showReadonlyDropdownTable$: Observable<boolean> = combineLatest([
     this.dataTypeIsText$,
     this.fieldTypeIsDropdown$,
     this.formData$,
@@ -298,12 +294,12 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       ([dataTypeIsText, fieldTypeIsDropdown, formData]) =>
         dataTypeIsText &&
         fieldTypeIsDropdown &&
-        formData?.dropdownDataProvider &&
+        !!formData?.dropdownDataProvider &&
         !this.dropdownDataProviderSupportsUpdates(formData?.dropdownDataProvider)
     )
   );
 
-  readonly showInputDropdownTable$: Observable<boolean> = combineLatest([
+  public readonly showInputDropdownTable$: Observable<boolean> = combineLatest([
     this.dataTypeIsText$,
     this.fieldTypeIsDropdown$,
     this.formData$,
@@ -312,7 +308,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       ([dataTypeIsText, fieldTypeIsDropdown, formData]) =>
         dataTypeIsText &&
         fieldTypeIsDropdown &&
-        formData?.dropdownDataProvider &&
+        !!formData?.dropdownDataProvider &&
         this.dropdownDataProviderSupportsUpdates(formData?.dropdownDataProvider)
     )
   );
@@ -321,22 +317,32 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly sanitizer: DomSanitizer
-  ) {}
+    private readonly sanitizer: DomSanitizer,
+    private readonly iconService: IconService
+  ) {
+    this.iconService.registerAll([ArrowDown16, ArrowUp16]);
+  }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.openSelectedSearchFieldSubscription();
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.openModalShowingSubscription();
+
+    this.fields.push({
+      key: '',
+      label: '',
+      viewType: ViewType.TEMPLATE,
+      template: this.moveRowButtonsTemplateRef,
+    });
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
-  searchFieldClicked(searchField: SearchField, searchFieldActionTypeIsAdd: boolean): void {
+  public searchFieldClicked(searchField: SearchField, searchFieldActionTypeIsAdd: boolean): void {
     this.disableInput$.pipe(take(1)).subscribe(inputDisabled => {
       if (!inputDisabled) {
         this.searchFieldActionTypeIsAdd = searchFieldActionTypeIsAdd;
@@ -348,7 +354,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     });
   }
 
-  formValueChange(data: SearchField): void {
+  public formValueChange(data: SearchField): void {
     setTimeout(() => {
       this.nextIfChanged(this.dataTypeIsText$, data.dataType === 'text');
       this.nextIfChanged(this.dataTypeIsBoolean$, data.dataType === 'boolean');
@@ -358,11 +364,11 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     }, 0);
   }
 
-  dropdownDatalistChange(data: MultiInputOutput): void {
+  public dropdownDatalistChange(data: MultiInputOutput): void {
     this.modifiedDropdownValues$.next(data as MultiInputValues);
   }
 
-  moveRow(
+  public moveRow(
     searchFieldRowIndex: number,
     moveUp: boolean,
     clickEvent: MouseEvent,
@@ -395,7 +401,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     }
   }
 
-  deleteSelectedSearchField(
+  public deleteSelectedSearchField(
     documentDefinitionName: string,
     selectedSearchField: SearchField
   ): void {
@@ -404,7 +410,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     if (this.dropdownDataProviderSupportsUpdates(selectedSearchField?.dropdownDataProvider)) {
       this.documentService
         .deleteDropdownData(
-          selectedSearchField.dropdownDataProvider,
+          selectedSearchField?.dropdownDataProvider ?? '',
           documentDefinitionName,
           selectedSearchField.key
         )
@@ -413,26 +419,29 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
     this.documentService
       .deleteDocumentSearch(documentDefinitionName, selectedSearchField.key)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.enableInput();
           this.hideModal();
           this.refreshSearchFields();
         },
-        () => {
+        error: () => {
           this.enableInput();
-        }
-      );
+        },
+      });
   }
 
-  saveSearchField(documentDefinitionName: string): void {
+  public saveSearchField(documentDefinitionName: string): void {
     this.disableInput();
 
     this.formData$.pipe(take(1)).subscribe(formData => {
+      if (!formData) {
+        return;
+      }
       const mappedFormData: SearchField = {
         ...formData,
         matchType:
-          !this.isFieldTypeDropdown(formData.fieldType) && formData.dataType === 'text'
+          !this.isFieldTypeDropdown(formData?.fieldType) && formData?.dataType === 'text'
             ? formData.matchType
             : 'exact',
         fieldType: formData.dataType !== 'boolean' ? formData.fieldType : 'single',
@@ -441,16 +450,17 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       const prevFormData = this.selectedSearchField$.value;
       if (
         this.dropdownDataProviderSupportsUpdates(prevFormData?.dropdownDataProvider) &&
-        prevFormData.dropdownDataProvider !== mappedFormData?.dropdownDataProvider
+        prevFormData?.dropdownDataProvider !== mappedFormData?.dropdownDataProvider
       ) {
         this.documentService
           .deleteDropdownData(
-            prevFormData.dropdownDataProvider,
+            prevFormData?.dropdownDataProvider ?? '',
             documentDefinitionName,
-            prevFormData.key
+            prevFormData?.key ?? ''
           )
           .subscribe();
       }
+
       if (this.dropdownDataProviderSupportsUpdates(mappedFormData.dropdownDataProvider)) {
         this.modifiedDropdownValues$.pipe(take(1)).subscribe(dropdownValues => {
           const request = dropdownValues.reduce(
@@ -459,7 +469,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
           );
           this.documentService
             .postDropdownData(
-              mappedFormData.dropdownDataProvider,
+              mappedFormData.dropdownDataProvider ?? '',
               documentDefinitionName,
               mappedFormData.key,
               request
@@ -490,7 +500,10 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     });
   }
 
-  updateSearchFields(documentDefinitionName: string, newSearchFields: Array<SearchField>): void {
+  public updateSearchFields(
+    documentDefinitionName: string,
+    newSearchFields: Array<SearchField>
+  ): void {
     this.disableInput();
 
     this.documentService.putDocumentSearch(documentDefinitionName, newSearchFields).subscribe(
@@ -540,7 +553,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   }
 
   private openSelectedSearchFieldSubscription(): void {
-    this.subscriptions.add(
+    this._subscriptions.add(
       this.selectedSearchField$.subscribe(() => {
         this.showModal();
       })
@@ -548,7 +561,7 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   }
 
   private openModalShowingSubscription(): void {
-    this.subscriptions.add(
+    this._subscriptions.add(
       this.modal.modalShowing$.subscribe(modalShowing => {
         if (modalShowing) {
           setTimeout(() => {
