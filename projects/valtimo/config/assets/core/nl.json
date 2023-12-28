@@ -256,7 +256,10 @@
     "task": {
       "title": "Taak"
     },
-    "noWidgets": "Er zijn geen widgets geconfigureerd voor dit dashboard."
+    "noDashboards": "Er zijn geen dashboards geconfigureerd.",
+    "noDashboardsDescription": "Neem contact op met uw systeembeheerder om dashboards te configureren.",
+    "noWidgets": "Er zijn geen widgets geconfigureerd voor dit dashboard.",
+    "noWidgetsDescription": "Neem contact op met uw systeembeheerder om widgets te configureren."
   },
   "dashboardManagement": {
     "addDashboard": "Nieuw dashboard toevoegen",

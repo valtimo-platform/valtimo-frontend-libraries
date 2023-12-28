@@ -256,7 +256,10 @@
     "task": {
       "title": "Aufgabe"
     },
-    "noWidgets": "Für dieses Dashboard wurden keine Widgets konfiguriert."
+    "noDashboards": "Es sind keine Dashboards konfiguriert.",
+    "noDashboardsDescription": "Um Dashboards zu konfigurieren, wenden Sie sich an Ihren Systemadministrator.",
+    "noWidgets": "Für dieses Dashboard wurden keine Widgets konfiguriert.",
+    "noWidgetsDescription": "Um Widgets zu konfigurieren, wenden Sie sich an Ihren Systemadministrator."
   },
   "dashboardManagement": {
     "addDashboard": "Neues Dashboard hinzufügen",

@@ -21,6 +21,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {
   AlertModule,
   BpmnJsDiagramModule,
+  CarbonListModule,
   ListModule,
   SpinnerModule,
   WidgetModule,
@@ -61,6 +62,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ThemeModule,
     WidgetTranslatePipeModule,
     LoadingModule,
+    CarbonListModule
   ],
   exports: [DashboardComponent, WidgetDashboardComponent],
   providers: [
