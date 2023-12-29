@@ -20,7 +20,7 @@ import {ColumnConfig, Pagination, ViewType} from '@valtimo/components';
 import {DocumentDefinition, DocumentService, Page} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
-import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
+import {BehaviorSubject, map, Observable, switchMap, tap} from 'rxjs';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -38,23 +38,26 @@ export class DossierManagementListComponent {
 
   private readonly _refreshData$ = new BehaviorSubject<null>(null);
   public dossiers$: Observable<DocumentDefinition[]> = this._refreshData$.pipe(
+    tap(() => {
+      console.log('up in here');
+    }),
     switchMap(() =>
-      this.documentService
-        .queryDefinitionsForManagement({page: this.pagination.page - 1, size: this.pagination.size})
-        .pipe(
-          map((documentDefinitionPage: Page<DocumentDefinition>) => {
-            this.pagination = {
-              ...this.pagination,
-              collectionSize: documentDefinitionPage.totalElements,
-            };
+      this.documentService.queryDefinitionsForManagement({
+        page: this.pagination.page - 1,
+        size: this.pagination.size,
+      })
+    ),
+    map((documentDefinitionPage: Page<DocumentDefinition>) => {
+      this.pagination = {
+        ...this.pagination,
+        collectionSize: documentDefinitionPage.totalElements,
+      };
 
-            return documentDefinitionPage.content.map((documentDefinition: DocumentDefinition) => ({
-              ...documentDefinition,
-              createdOn: moment(documentDefinition.createdOn).format('DD MMM YYYY HH:mm'),
-            }));
-          })
-        )
-    )
+      return documentDefinitionPage.content.map((documentDefinition: DocumentDefinition) => ({
+        ...documentDefinition,
+        createdOn: moment(documentDefinition.createdOn).format('DD MMM YYYY HH:mm'),
+      }));
+    })
   );
 
   public dossierFields: ColumnConfig[] = [
@@ -73,7 +76,13 @@ export class DossierManagementListComponent {
     this.iconService.registerAll([Upload16]);
   }
 
-  public onDefinitionUploaded(): void {
+  public onCloseModal(definitionUploaded: boolean): void {
+    console.log('definition uploaded', definitionUploaded);
+    this.showModal$.next(false);
+
+    if (!definitionUploaded) {
+      return;
+    }
     this._refreshData$.next(null);
   }
 

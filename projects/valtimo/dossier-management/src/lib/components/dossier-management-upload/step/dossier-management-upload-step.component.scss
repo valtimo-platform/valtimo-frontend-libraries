@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.valtimo-upload-step {
+  &__message {
+    font-size: 20px;
+  }
+
+  &__illustration {
+    max-width: 200px;
+  }
+}
