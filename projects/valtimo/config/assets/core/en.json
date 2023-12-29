@@ -413,7 +413,14 @@
     "exportSuccessTitle": "Download will start shortly",
     "readonly": "Read-only",
     "connectedProcesses": "Connected processes",
-    "connectProcess": "Connect process",
+    "processLink": "Link process",
+    "unlinkProcess": "Unlink",
+    "processLinkNotification": {
+      "linkSuccess": "Successfully linked process",
+      "linkFailure": "Failed to link process",
+      "unlinkSuccess": "Successfully unlinked process",
+      "unlinkFailure": "Failed to unlink process"
+    },
     "selectProcessDef": "Select process definition",
     "noResults": {
       "title": "There are no case-definitions",

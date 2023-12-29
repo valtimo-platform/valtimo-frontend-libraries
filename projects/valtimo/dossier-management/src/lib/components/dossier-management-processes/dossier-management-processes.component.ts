@@ -15,6 +15,7 @@
  */
 import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 import {ColumnConfig, ViewType} from '@valtimo/components';
 import {DocumentDefinition, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {NotificationService} from 'carbon-components-angular';
@@ -70,7 +71,7 @@ export class DossierManagementProcessesComponent {
       className: 'dossier-management-processes_actions',
       actions: [
         {
-          label: 'interface.delete',
+          label: 'dossierManagement.unlinkProcess',
           callback: this.deleteProcessDocumentDefinition.bind(this),
           type: 'danger',
         },
@@ -81,7 +82,8 @@ export class DossierManagementProcessesComponent {
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
-    private readonly notificationService: NotificationService
+    private readonly notificationService: NotificationService,
+    private readonly translateService: TranslateService
   ) {}
 
   public deleteProcessDocumentDefinition(
@@ -98,15 +100,20 @@ export class DossierManagementProcessesComponent {
         next: () => {
           this.notificationService.showNotification({
             type: 'success',
-            title: 'Successfully deleted process document definition',
+            title: this.translateService.instant(
+              'dossierManagement.processLinkNotification.unlinkSuccess'
+            ),
+            duration: 5000,
           });
           this.loadProcessDocumentDefinitions();
         },
         error: () => {
           this.notificationService.showNotification({
             type: 'error',
-            title: '',
-            subtitle: 'Failed to delete process document definition',
+            title: this.translateService.instant(
+              'dossierManagement.processLinkNotification.unlinkFailure'
+            ),
+            duration: 5000,
           });
         },
       });

@@ -412,7 +412,14 @@
     "exportSuccessTitle": "Download start binnenkort",
     "readonly": "Alleen-lezen",
     "connectedProcesses": "Gekoppelde processen",
-    "connectProcess": "Proces koppelen",
+    "processLink": "Proces koppelen",
+    "unlinkProcess": "Ontkoppelen",
+    "processLinkNotification": {
+      "linkSuccess": "Succesvol gekoppeld proces",
+      "linkFailure": "Kan het proces niet koppelen",
+      "unlinkSuccess": "Het proces is ontkoppeld",
+      "unlinkFailure": "Kan het proces niet ontkoppelen"
+    },
     "selectProcessDef": "Procesdefinitie kiezen",
     "noResults": {
       "title": "Er zijn geen case-definities",

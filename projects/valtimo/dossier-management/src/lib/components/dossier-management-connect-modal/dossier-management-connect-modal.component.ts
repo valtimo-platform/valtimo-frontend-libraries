@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 import {ModalComponent} from '@valtimo/components';
 import {
   DocumentDefinition,
@@ -23,6 +24,7 @@ import {
 } from '@valtimo/document';
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
 import {NotificationService} from 'carbon-components-angular';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'valtimo-dossier-management-connect-modal',
@@ -42,6 +44,7 @@ export class DossierManagementConnectModalComponent implements OnInit {
   public processDocumentDefinitionExists: any = {};
 
   constructor(
+    private readonly translateService: TranslateService,
     private readonly processService: ProcessService,
     private readonly documentService: DocumentService,
     private readonly notificationService: NotificationService
@@ -90,20 +93,30 @@ export class DossierManagementConnectModalComponent implements OnInit {
       documentDefinitionName: this.documentDefinition?.id.name ?? '',
       processDefinitionKey: this.newDocumentProcessDefinition?.key ?? '',
     };
-    this.documentService.createProcessDocumentDefinition(request).subscribe({
-      next: () => {
-        this.notificationService.showNotification({
-          type: 'success',
-          title: 'Successfully added new process document definition',
-        });
-        this.reloadProcessDocumentDefinitions.emit();
-      },
-      error: () => {
-        this.notificationService.showNotification({
-          type: 'error',
-          title: 'Failed to add new process document definition',
-        });
-      },
-    });
+
+    this.documentService
+      .createProcessDocumentDefinition(request)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.notificationService.showNotification({
+            type: 'success',
+            title: this.translateService.instant(
+              'dossierManagement.processLinkNotification.linkSuccess'
+            ),
+            duration: 5000,
+          });
+          this.reloadProcessDocumentDefinitions.emit();
+        },
+        error: () => {
+          this.notificationService.showNotification({
+            type: 'error',
+            title: this.translateService.instant(
+              'dossierManagement.processLinkNotification.linkFailure'
+            ),
+            duration: 5000,
+          });
+        },
+      });
   }
 }

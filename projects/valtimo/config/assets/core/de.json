@@ -412,8 +412,15 @@
     "exportSuccessTitle": "Download beginnt in Kürze",
     "readonly": "Schreibgeschützt",
     "connectedProcesses": "Verknüpfte Prozesse",
-    "connectProcess": "Prozess verknüpfen",
+    "processLink": "Prozess verknüpfen",
     "selectProcessDef": "Prozessdefinition auswählen",
+    "unlinkProcess": "Verknüpfung aufheben",
+    "processLinkNotification": {
+      "linkSuccess": "Erfolgreich verknüpfter Prozess",
+      "linkFailure": "Prozess konnte nicht verknüpft werden",
+      "unlinkSuccess": "Verknüpfung des Prozesses erfolgreich aufgehoben",
+      "unlinkFailure": "Die Verknüpfung des Prozesses konnte nicht aufgehoben werden"
+    },
     "noResults": {
       "title": "Es gibt keine Cases-Definitionen",
       "description": "Fügen Sie eine Case-Definition hinzu"
