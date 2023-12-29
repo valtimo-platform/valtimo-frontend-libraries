@@ -19,6 +19,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -48,7 +49,7 @@ import {STEPS, UPLOAD_STATUS, UPLOAD_STEP} from './dossier-management-upload.con
   styleUrls: ['./dossier-management-upload.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementUploadComponent implements OnInit, AfterViewInit {
+export class DossierManagementUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('uploadDefinitionModal') modal: ModalComponent;
 
   @Input() open = false;
