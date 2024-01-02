@@ -137,6 +137,10 @@ interface ProcessDocumentInstance {
   id: ProcessDocumentInstanceId;
   processName: string;
   isActive: boolean;
+  version: number;
+  latestVersion: number;
+  startedBy: string;
+  startedOn: Date;
 }
 
 interface AssignHandlerToDocumentResult {
