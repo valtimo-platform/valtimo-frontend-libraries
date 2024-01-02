@@ -21,9 +21,7 @@
     selectedProcessInstance: selectedProcessInstance$ | async
   } as obs"
 >
-  <div *ngIf="!obs.processInstanceItems">
-    <span>{{ 'progress.noProcessDocumentInstances' | translate }}</span>
-  </div>
+    <span *ngIf="!obs.processInstanceItems">{{ 'progress.noProcessDocumentInstances' | translate }}</span>
   <div class="process-info-row">
     <div *ngIf="obs.processInstanceItems">
       <cds-combo-box

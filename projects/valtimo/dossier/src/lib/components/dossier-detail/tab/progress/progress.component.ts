@@ -31,10 +31,10 @@ export class DossierDetailTabProgressComponent {
   ).pipe(
     switchMap(documentId => this.documentService.findProcessDocumentInstances(documentId)),
     map(processDocumentInstances =>
-      processDocumentInstances.map(processDocumentInstance => {
-        processDocumentInstance.startedOn = new Date(processDocumentInstance.startedOn);
-        return processDocumentInstance;
-      })
+      processDocumentInstances.map(processDocumentInstance => ({
+        ...processDocumentInstance,
+        startedOn: new Date(processDocumentInstance.startedOn);
+      }))
     ),
     map(processDocumentInstances =>
       processDocumentInstances.sort((a, b) =>
