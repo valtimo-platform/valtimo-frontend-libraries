@@ -387,8 +387,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
             ];
           }
 
-          const showLocks = !!this._items?.find(item => !!item.locked)?.locked;
-          if (showLocks) {
+          if (this._items?.any(item => item.locked)) {
             header = [
               ...header,
               new TableHeaderItem({
