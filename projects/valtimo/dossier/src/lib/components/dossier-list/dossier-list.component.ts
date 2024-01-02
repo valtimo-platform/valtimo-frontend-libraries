@@ -363,12 +363,12 @@ export class DossierListComponent implements OnInit, OnDestroy {
         ).pipe(defaultIfEmpty([] as boolean[])),
       ])
     ),
-    map(([res, documentsAuthorization]) => {
-      res.documents.content.forEach((document, index) => {
-        document.locked = !documentsAuthorization[index];
-      });
-      return res;
-    }),
+    map(([res, documentsAuthorization]) => 
+      res.documents.content.map((document, index) => ({
+        ...document,
+        locked: !documentsAuthorization[index];
+      }))
+    ),
     map(
       (res: {
         documents: Documents | SpecifiedDocuments;
