@@ -488,10 +488,7 @@
     },
     "importDefinition": {
       "title": "Casedefinitie importeren",
-      "warning": {
-        "title": "Waarschuwing",
-        "message": "Bestaande configuraties en definities kunnen worden overschreven."
-      },
+      "overwriteWarning": "Als je case-definitie configuraties, modellen en/of definities bevat met dezelfde naam of identifier als die al op je systeem aanwezig zijn, worden deze overschreven.",
       "info": {
         "title": "Aandacht",
         "message": "Zorg er vóór het importeren voor dat de plug-inconfiguraties waarnaar wordt verwezen in proceslinks aanwezig zijn."
@@ -514,7 +511,7 @@
       "steps": {
         "accessControl": "Vergeet niet de rechten in Access Control in te stellen. Zonder de juiste rechten is uw nieuwe casusdefinitie niet toegankelijk.",
         "dashboard": "Als u wilt dat widgets op uw dashboard verschijnen, moet u deze handmatig configureren. Doe dit via 'dashboard configuration'",
-        "plugins": "Dit proces kan gebruik maken van plug-ins. Zorg ervoor dat u ze correct configureert."
+        "plugins": "Dit proces maakt mogelijk gebruik van plugins. Zorg dat je deze goed instelt."
       }
     }
   },

@@ -18,6 +18,7 @@
   &__content {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 24px;
   }
 
@@ -47,5 +48,9 @@
 
   &__file-uploader ::ng-deep cds-file {
     max-width: unset;
+  }
+
+  ::ng-deep .cds--modal-container {
+    height: 450px;
   }
 }

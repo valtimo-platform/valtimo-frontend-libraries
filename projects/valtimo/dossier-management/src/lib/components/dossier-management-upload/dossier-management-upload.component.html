@@ -19,7 +19,6 @@
     activeStep: activeStep$ | async,
     backButtonEnabled: backButtonEnabled$ | async,
     nextButtonDisabled: nextButtonDisabled$ | async,
-    notification: notificationObj$ | async,
     uploadStatus: uploadStatus$ | async
   } as obs"
   valtimoCdsModal
@@ -47,13 +46,16 @@
     <ng-template ngSwitchDefault>
       <valtimo-dossier-management-upload-step
         [illustration]="'valtimo-layout/img/' + obs.activeStep + '.svg'"
-        [messageKey]="'dossierManagement.importDefinition.steps.' + obs.activeStep"
-      ></valtimo-dossier-management-upload-step>
+      >
+        {{ 'dossierManagement.importDefinition.steps.' + obs.activeStep | translate }}
+
+        <span *ngIf="obs.activeStep === UPLOAD_STEP.PLUGINS">
+          {{ 'dossierManagement.importDefinition.overwriteWarning' | translate }}
+        </span>
+      </valtimo-dossier-management-upload-step>
     </ng-template>
 
     <ng-container *ngSwitchCase="UPLOAD_STEP.FILE_SELECT">
-      <cds-inline-notification [notificationObj]="obs.notification"></cds-inline-notification>
-
       <form [formGroup]="form">
         <cds-file-uploader
           [accept]="acceptedFiles"
@@ -81,7 +83,7 @@
 
   <cds-modal-footer class="valtimo-definition-uploader__footer">
     <button
-      *ngIf="obs.uploadStatus !== UPLOAD_STATUS.ERROR && obs.activeStep"
+      *ngIf="obs.uploadStatus !== UPLOAD_STATUS.ERROR && obs.activeStep !== UPLOAD_STEP.FILE_UPLOAD"
       class="valtimo-definition-uploader__cancel"
       cdsButton="ghost"
       (click)="

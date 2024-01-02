@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
@@ -28,17 +27,8 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 import {TranslateService} from '@ngx-translate/core';
 import {CARBON_CONSTANTS, ModalComponent} from '@valtimo/components';
 import {DocumentDefinitionCreateRequest, DocumentService} from '@valtimo/document';
-import {FileItem, NotificationContent} from 'carbon-components-angular';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  Subscription,
-  switchMap,
-  take,
-} from 'rxjs';
+import {FileItem} from 'carbon-components-angular';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, take} from 'rxjs';
 
 import {DossierImportService} from '../../services/dossier-import.service';
 import {STEPS, UPLOAD_STATUS, UPLOAD_STEP} from './dossier-management-upload.constants';
@@ -49,7 +39,7 @@ import {STEPS, UPLOAD_STATUS, UPLOAD_STEP} from './dossier-management-upload.con
   styleUrls: ['./dossier-management-upload.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementUploadComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DossierManagementUploadComponent implements OnInit, OnDestroy {
   @ViewChild('uploadDefinitionModal') modal: ModalComponent;
 
   @Input() open = false;
@@ -70,33 +60,16 @@ export class DossierManagementUploadComponent implements OnInit, AfterViewInit, 
       )
     )
   );
-  public readonly jsonString$ = new BehaviorSubject<string>('');
   public readonly nextButtonDisabled$ = combineLatest([this.activeStep$, this._disabled$]).pipe(
     map(([activeStep, disabled]) => ![UPLOAD_STEP.PLUGINS].includes(activeStep) && disabled)
   );
   public readonly uploadStatus$ = new BehaviorSubject<UPLOAD_STATUS>(UPLOAD_STATUS.ACTIVE);
-
-  public readonly notificationObj$: Observable<NotificationContent | null> = this.translateService
-    .stream('key')
-    .pipe(
-      map(() => ({
-        title: this.translateService.instant('dossierManagement.importDefinition.warning.title'),
-        message: this.translateService.instant(
-          'dossierManagement.importDefinition.warning.message'
-        ),
-        type: 'warning',
-        lowContrast: true,
-        showClose: false,
-        closeLabel: '',
-      }))
-    );
-
+  private readonly _importFile$ = new BehaviorSubject<string | FormData>('');
   public form: FormGroup = this.fb.group({
     file: this.fb.control(new Set<any>(), [Validators.required]),
   });
 
   private readonly _subscriptions = new Subscription();
-  private readonly _zipFd$ = new BehaviorSubject<FormData | null>(null);
 
   constructor(
     private readonly documentService: DocumentService,
@@ -129,10 +102,6 @@ export class DossierManagementUploadComponent implements OnInit, AfterViewInit, 
     );
   }
 
-  public ngAfterViewInit(): void {
-    this.clearJsonString();
-  }
-
   public ngOnDestroy(): void {
     this.resetModal();
   }
@@ -162,15 +131,9 @@ export class DossierManagementUploadComponent implements OnInit, AfterViewInit, 
       return;
     }
 
-    if (this._fileItem.file.type === 'application/json') {
-      this.uploadJsonDefinition();
-      return;
-    }
-
-    this.uploadZipDefinition();
+    this.uploadDefinition();
   }
 
-  private _fileItem: FileItem;
   private setJsonFile(fileItem: FileItem | undefined): void {
     const file = fileItem?.file;
 
@@ -178,16 +141,13 @@ export class DossierManagementUploadComponent implements OnInit, AfterViewInit, 
       this.clearJsonString();
       return;
     }
-    this._fileItem = fileItem;
-
     const reader = new FileReader();
 
     reader.onloadend = () => {
       const result = (reader.result ?? '').toString();
-      console.log('valid', this.stringIsValidJson(result));
       if (this.stringIsValidJson(result)) {
         this._disabled$.next(false);
-        this.jsonString$.next(result);
+        this._importFile$.next(result);
         return;
       }
 
@@ -202,50 +162,27 @@ export class DossierManagementUploadComponent implements OnInit, AfterViewInit, 
     const file = fileItem?.file;
 
     if (!file) {
-      this._zipFd$.next(null);
+      this._importFile$.next('');
       return;
     }
 
-    this._fileItem = fileItem;
     const blob = new Blob([fileItem.file], {type: fileItem.file.type});
     const fd = new FormData();
     fd.append('file', blob, fileItem.file.name);
-    this._zipFd$.next(fd);
+    this._importFile$.next(fd);
     this._disabled$.next(false);
   }
 
-  private uploadJsonDefinition(): void {
+  private uploadDefinition(): void {
     this._disabled$.next(true);
-
-    this.jsonString$
+    this._importFile$
       .pipe(
-        switchMap(jsonString =>
-          this.documentService.createDocumentDefinitionForManagement(
-            new DocumentDefinitionCreateRequest(jsonString)
-          )
-        ),
-        take(1)
-      )
-      .subscribe({
-        next: () => {
-          this._disabled$.next(false);
-          this.uploadStatus$.next(UPLOAD_STATUS.FINISHED);
-        },
-        error: () => {
-          this.uploadStatus$.next(UPLOAD_STATUS.ERROR);
-          this._disabled$.next(false);
-        },
-      });
-  }
-
-  private uploadZipDefinition(): void {
-    this._disabled$.next(true);
-
-    this._zipFd$
-      .pipe(
-        filter((fd: FormData | null) => !!fd),
-        switchMap((fd: FormData | null) =>
-          this.dossierImportService.importDocumentDefinitionZip(fd ?? new FormData())
+        switchMap((file: string | FormData) =>
+          file instanceof FormData
+            ? this.dossierImportService.importDocumentDefinitionZip(file)
+            : this.documentService.createDocumentDefinitionForManagement(
+                new DocumentDefinitionCreateRequest(file)
+              )
         ),
         take(1)
       )
@@ -262,7 +199,7 @@ export class DossierManagementUploadComponent implements OnInit, AfterViewInit, 
   }
 
   private clearJsonString(): void {
-    this.jsonString$.next('');
+    this._importFile$.next('');
   }
 
   private stringIsValidJson(string: string) {

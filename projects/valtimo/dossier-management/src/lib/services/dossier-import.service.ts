@@ -33,7 +33,6 @@ export class DossierImportService {
   }
 
   public importDocumentDefinitionZip(file: FormData): Observable<HttpResponse<Blob>> {
-    console.log(file);
     return this.http.post<HttpResponse<Blob>>(
       `${this.valtimoEndpointUri}management/v1/case/import`,
       file

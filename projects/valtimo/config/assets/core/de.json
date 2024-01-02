@@ -488,10 +488,7 @@
     },
     "importDefinition": {
       "title": "Casedefinition importieren",
-      "warning": {
-        "title": "Warnung",
-        "message": "Vorhandene Konfigurationen und Definitionen können überschrieben werden."
-      },
+      "overwriteWarning": "Wenn Ihre Casedefinition Konfigurationen, Modelle und/oder Definitionen mit demselben Namen oder derselben Kennung enthält wie bereits auf Ihrem System, werden diese überschrieben.",
       "info": {
         "title": "Aufmerksamkeit",
         "message": "Bitte stellen Sie vor dem Import sicher, dass die Plugin-Konfigurationen, auf die in den Prozesslinks verwiesen wird, vorhanden sind."

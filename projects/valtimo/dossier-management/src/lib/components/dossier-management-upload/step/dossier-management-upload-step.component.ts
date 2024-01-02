@@ -6,6 +6,5 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./dossier-management-upload-step.component.scss'],
 })
 export class DossierManagementUploadStepComponent {
-  @Input() messageKey!: string;
   @Input() illustration!: string;
 }

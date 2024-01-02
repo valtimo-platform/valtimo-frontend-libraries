@@ -489,10 +489,7 @@
     },
     "importDefinition": {
       "title": "Import case definition",
-      "warning": {
-        "title": "Warning",
-        "message": "Existing configurations and definitions may be overwritten."
-      },
+      "overwriteWarning": "If your Case definition contains configurations, models and/or definitions with the same name or identifier as already on your system, they will be overwritten.",
       "info": {
         "title": "Attention",
         "message": "Before importing, please make sure the plugin configurations that are referenced in process links are present."
