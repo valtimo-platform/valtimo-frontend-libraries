@@ -82,7 +82,7 @@
     [lastColumnTemplate]="caseLink"
     [pagination]="tasks[currentTaskType].pagination"
     paginationIdentifier="taskList"
-    translationKey="task-list"
+    lockedTooltipTranslationKey="task-list.rowLocked"
     (paginationClicked)="paginationClicked($event, currentTaskType)"
     (paginationSet)="paginationSet($event)"
     (rowClicked)="rowOpenTaskClick($event)"

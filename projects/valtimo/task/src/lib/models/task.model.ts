@@ -44,8 +44,8 @@ interface Task {
   businessKey: string;
   processDefinitionKey: string;
   valtimoAssignee: User;
-  isLocked?: boolean;
-  isCaseLocked?: boolean;
+  locked?: boolean;
+  caseLocked?: boolean;
 }
 
 interface ListItemField {

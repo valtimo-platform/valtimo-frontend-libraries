@@ -112,7 +112,7 @@
   <div *ngIf="data.locked" class="disabled">
     <span
       class="float-right badge badge-pill badge-secondary bg-grey"
-      ngbTooltip="{{ translationKey + '.rowLocked' | translate }}"
+      ngbTooltip="{{ lockedTooltipTranslationKey | translate }}"
     >
       <i class="icon mdi mdi-lock"></i>
     </span>

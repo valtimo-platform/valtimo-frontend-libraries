@@ -279,7 +279,7 @@ export class TaskListComponent implements OnDestroy {
   }
 
   public rowOpenTaskClick(task): void | boolean {
-    if (!task.endTime && !task.isLocked) {
+    if (!task.endTime && !task.locked) {
       this.taskDetail.openTaskDetails(task);
     } else {
       return false;

@@ -156,7 +156,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() showSelectionColumn = false;
   @Input() striped = false;
   @Input() hideToolbar = false;
-  @Input() translationKey = '';
+  @Input() lockedTooltipTranslationKey = '';
 
   @Output() rowClicked = new EventEmitter<any>();
   @Output() paginationClicked = new EventEmitter<number>();
@@ -387,7 +387,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
             ];
           }
 
-          if (this._items?.any(item => item.locked)) {
+          if (this._items?.some(item => item.locked)) {
             header = [
               ...header,
               new TableHeaderItem({
