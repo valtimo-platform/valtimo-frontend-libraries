@@ -487,10 +487,10 @@
       "standard": "Standaard"
     },
     "importDefinition": {
-      "title": "Casedefinitie importeren",
-      "overwriteWarning": "Als je case-definitie configuraties, modellen en/of definities bevat met dezelfde naam of identifier als die al op je systeem aanwezig zijn, worden deze overschreven.",
+      "title": "Case-definitie importeren",
+      "overwriteWarning": "Als je case-definitie configuraties, modellen en/of definities bevat met een naam of identifier die al op je systeem aanwezig zijn, worden deze overschreven.",
       "info": {
-        "title": "Aandacht",
+        "title": "Let op",
         "message": "Zorg er vóór het importeren voor dat de plug-inconfiguraties waarnaar wordt verwezen in proceslinks aanwezig zijn."
       },
       "upload": {
@@ -500,9 +500,9 @@
       },
       "progressBar": {
         "active": "Dit kan een tijdje duren",
-        "error": "Kan casus niet importeren. Er is niets geïmporteerd vanwege een fout aan onze kant. Probeer het later opnieuw. Neem contact op met de ondersteuning als het probleem zich blijft voordoen.",
-        "finished": "Case succesvol geïmporteerd",
-        "label": "Case importeren"
+        "error": "Kan case-definitie niet importeren. Er is niets geïmporteerd vanwege een fout aan onze kant. Probeer het later opnieuw. Neem contact op met de ondersteuning als het probleem zich blijft voordoen.",
+        "finished": "Case-definitie succesvol geïmporteerd",
+        "label": "Case-definitie importeren"
       },
       "invalidJsonError": {
         "text": "Zorg ervoor dat deze een geldige JSON-waarde bevat.",

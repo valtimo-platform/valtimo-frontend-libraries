@@ -489,7 +489,7 @@
     },
     "importDefinition": {
       "title": "Import case definition",
-      "overwriteWarning": "If your Case definition contains configurations, models and/or definitions with the same name or identifier as already on your system, they will be overwritten.",
+      "overwriteWarning": "If your case definition contains configurations, models and/or definitions with the same name or identifier as already on your system, they will be overwritten.",
       "info": {
         "title": "Attention",
         "message": "Before importing, please make sure the plugin configurations that are referenced in process links are present."
@@ -501,9 +501,9 @@
       },
       "progressBar": {
         "active": "This may take a while",
-        "error": "Unable to import case. Nothing was imported due to an error at our end. Please try again later.If the issue keeps happening, contact support.",
-        "finished": "Case successfully imported",
-        "label": "Importing case"
+        "error": "Unable to import case definition. Nothing was imported due to an error at our end. Please try again later.If the issue keeps happening, contact support.",
+        "finished": "Case definition successfully imported",
+        "label": "Importing case definition"
       },
       "invalidJsonError": {
         "text": "Please make sure it contains a valid JSON value.",

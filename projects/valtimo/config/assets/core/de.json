@@ -500,9 +500,9 @@
       },
       "progressBar": {
         "active": "Das kann eine Weile dauern",
-        "error": "Case konnte nicht importiert werden. Aufgrund eines Fehlers unsererseits konnte nichts importiert werden. Bitte versuchen Sie es später erneut. Wenn das Problem weiterhin auftritt, wenden Sie sich an den Support.",
-        "finished": "Case erfolgreich importiert",
-        "label": "Importing case"
+        "error": "Casedefinition nicht importiert werden. Aufgrund eines Fehlers unsererseits konnte nichts importiert werden. Bitte versuchen Sie es später erneut. Wenn das Problem weiterhin auftritt, wenden Sie sich an den Support.",
+        "finished": "Casedefinition importiert",
+        "label": "Importing Casedefinition"
       },
       "invalidJsonError": {
         "text": "Bitte stellen Sie sicher, dass es einen gültigen JSON-Wert enthält.",
