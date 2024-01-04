@@ -165,11 +165,12 @@ export class PluginConfigurationContainerComponent
           instance.prefillConfiguration$ = this.prefillConfiguration$;
         }
 
-        this.validSubscription = combineLatest([instance.valid, this._validDefaultConfiguration]).subscribe(
-          ([instanceValid, defaultConfigurationValid]) => {
-            this.valid.emit(instanceValid && defaultConfigurationValid);
-          }
-        );
+        this.validSubscription = combineLatest([
+          instance.valid,
+          this._validDefaultConfiguration,
+        ]).subscribe(([instanceValid, defaultConfigurationValid]) => {
+          this.valid.emit(instanceValid && defaultConfigurationValid);
+        });
 
         this.configurationSubscription = instance.configuration.subscribe(configuration => {
           const configurationId = this._defaultConfiguration.value?.configurationId;
