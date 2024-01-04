@@ -13,33 +13,25 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<v-page-container
+<ng-container
   *ngIf="{
     pluginConfigurations: pluginConfigurations$ | async,
     loading: loading$ | async
   } as obs"
 >
-  <v-page-header>
-    <v-page-header-introduction>
-      <v-paragraph>{{ 'pages.plugins.description' | translate }}</v-paragraph>
-    </v-page-header-introduction>
-  </v-page-header>
+  <valtimo-carbon-list
+    [loading]="obs.loading"
+    [items]="obs.pluginConfigurations"
+    [fields]="fields"
+    [header]="false"
+  >
+    <ng-container carbonToolbarContent [ngTemplateOutlet]="configurePluginButton"></ng-container>
 
-  <v-page-content>
-    <valtimo-carbon-list
-      [loading]="obs.loading"
-      [items]="obs.pluginConfigurations"
-      [fields]="fields"
-      [header]="false"
-    >
-      <ng-container carbonToolbarContent [ngTemplateOutlet]="configurePluginButton"></ng-container>
-
-      <valtimo-no-results
-        [action]="configurePluginButton"
-        [title]="'pages.plugins.noResults' | translate"
-      ></valtimo-no-results>
-    </valtimo-carbon-list>
-  </v-page-content>
+    <valtimo-no-results
+      [action]="configurePluginButton"
+      [title]="'pages.plugins.noResults' | translate"
+    ></valtimo-no-results>
+  </valtimo-carbon-list>
 
   <ng-template #configurePluginButton>
     <button cdsButton="primary" [disabled]="obs.loading" (click)="showAddModal()">
@@ -48,7 +40,7 @@
       <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
     </button>
   </ng-template>
-</v-page-container>
+</ng-container>
 
 <valtimo-plugin-add-modal></valtimo-plugin-add-modal>
 
