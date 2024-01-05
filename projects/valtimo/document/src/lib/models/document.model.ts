@@ -352,10 +352,10 @@ interface DocumentDefinitionVersionsResult {
   versions: Array<number>;
 }
 
-type LoadedValue<T> = {
+interface LoadedValue<T> {
   isLoading: boolean;
   value?: T;
-};
+}
 
 export {
   AssignHandlerToDocumentResult,
