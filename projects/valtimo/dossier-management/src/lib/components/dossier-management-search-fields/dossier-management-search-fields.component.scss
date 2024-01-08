@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- valtimo-list::ng-deep table {
+valtimo-list::ng-deep table {
   border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
 
@@ -40,6 +40,10 @@
       margin-right: 8px;
     }
   }
+}
+
+.list-actions {
+  width: 1px;
 }
 
 .modal-header::ng-deep {

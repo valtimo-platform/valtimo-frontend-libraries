@@ -80,31 +80,31 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   public readonly fields: ColumnConfig[] = [
     {
-      viewType: 'string',
+      viewType: ViewType.TEXT,
       sortable: false,
       key: 'title',
       label: 'searchFieldsOverview.title',
     },
     {
-      viewType: 'string',
+      viewType: ViewType.TEXT,
       sortable: false,
       key: 'key',
       label: 'searchFieldsOverview.key',
     },
     {
-      viewType: 'string',
+      viewType: ViewType.TEXT,
       sortable: false,
       key: 'path',
       label: 'searchFieldsOverview.path',
     },
     {
-      viewType: 'string',
+      viewType: ViewType.TEXT,
       sortable: false,
       key: 'dataType',
       label: 'searchFieldsOverview.dataType',
     },
     {
-      viewType: 'string',
+      viewType: ViewType.TEXT,
       sortable: false,
       key: 'fieldType',
       label: 'searchFieldsOverview.fieldType',
@@ -185,9 +185,11 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
       )
     );
 
+  private _documentDefinitionName: string;
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || ''),
-    filter(docDefName => !!docDefName)
+    filter(docDefName => !!docDefName),
+    tap((documentDefinitionName: string) => (this._documentDefinitionName = documentDefinitionName))
   );
 
   private cachedSearchFields!: Array<SearchField>;
@@ -330,12 +332,28 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   public ngAfterViewInit(): void {
     this.openModalShowingSubscription();
 
-    this.fields.push({
-      key: '',
-      label: '',
-      viewType: ViewType.TEMPLATE,
-      template: this.moveRowButtonsTemplateRef,
-    });
+    this.fields.push(
+      {
+        key: '',
+        label: '',
+        viewType: ViewType.TEMPLATE,
+        template: this.moveRowButtonsTemplateRef,
+      },
+      {
+        viewType: ViewType.ACTION,
+        sortable: false,
+        key: '',
+        label: '',
+        className: 'list-actions',
+        actions: [
+          {
+            callback: this.deleteSelectedSearchField.bind(this),
+            label: 'interface.delete',
+            type: 'danger',
+          },
+        ],
+      }
+    );
   }
 
   public ngOnDestroy(): void {
@@ -401,24 +419,21 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     }
   }
 
-  public deleteSelectedSearchField(
-    documentDefinitionName: string,
-    selectedSearchField: SearchField
-  ): void {
+  public deleteSelectedSearchField(selectedSearchField: SearchField): void {
     this.disableInput();
 
     if (this.dropdownDataProviderSupportsUpdates(selectedSearchField?.dropdownDataProvider)) {
       this.documentService
         .deleteDropdownData(
           selectedSearchField?.dropdownDataProvider ?? '',
-          documentDefinitionName,
+          this._documentDefinitionName,
           selectedSearchField.key
         )
         .subscribe();
     }
 
     this.documentService
-      .deleteDocumentSearch(documentDefinitionName, selectedSearchField.key)
+      .deleteDocumentSearch(this._documentDefinitionName, selectedSearchField.key)
       .subscribe({
         next: () => {
           this.enableInput();

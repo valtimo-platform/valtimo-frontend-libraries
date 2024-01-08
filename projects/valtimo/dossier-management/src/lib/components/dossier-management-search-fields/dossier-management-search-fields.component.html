@@ -57,8 +57,8 @@
 
 <ng-template #list let-obs="obs">
   <valtimo-carbon-list
+    *ngIf="obs.searchFields; else loading"
     [fields]="fields"
-    [loading]="!obs.searchFields"
     [items]="obs.searchFields"
     [header]="false"
     (rowClicked)="searchFieldClicked($event, false)"
@@ -69,6 +69,8 @@
     ></ng-container>
   </valtimo-carbon-list>
 </ng-template>
+
+<ng-template #loading><valtimo-carbon-list [loading]="true"></valtimo-carbon-list></ng-template>
 
 <ng-template #moveRowButtons let-data="data">
   <div
@@ -249,7 +251,7 @@
         class="btn btn-space btn-secondary"
         *ngIf="!searchFieldActionTypeIsAdd"
         [disabled]="obs.disableInput"
-        (click)="deleteSelectedSearchField(obs.documentDefinitionName, searchObs.searchField)"
+        (click)="deleteSelectedSearchField(searchObs.searchField)"
       >
         {{ 'searchFieldsOverview.delete' | translate }}
       </button>
