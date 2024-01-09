@@ -263,7 +263,10 @@
     "task": {
       "title": "Task"
     },
-    "noWidgets": "No widgets have been configured for this dashboard."
+    "noDashboards": "No dashboards have been configured.",
+    "noDashboardsDescription": "In order to configure dashboards, contact your system administrator.",
+    "noWidgets": "No widgets have been configured for this dashboard.",
+    "noWidgetsDescription": "In order to configure widgets, contact your system administrator."
   },
   "dashboardManagement": {
     "addDashboard": "Add new dashboard",
