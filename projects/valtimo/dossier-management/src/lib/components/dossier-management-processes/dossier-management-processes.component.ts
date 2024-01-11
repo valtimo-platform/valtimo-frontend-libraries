@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnDestroy, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Link16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {ColumnConfig, ViewType} from '@valtimo/components';
 import {DocumentDefinition, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {IconService, NotificationService} from 'carbon-components-angular';
-import {BehaviorSubject, Observable, switchMap} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription, switchMap} from 'rxjs';
+import {DossierDetailService} from '../../services';
 import {DossierManagementConnectModalComponent} from '../dossier-management-connect-modal/dossier-management-connect-modal.component';
 
 @Component({
@@ -29,16 +30,21 @@ import {DossierManagementConnectModalComponent} from '../dossier-management-conn
   styleUrls: ['./dossier-management-processes.component.scss'],
   providers: [NotificationService],
 })
-export class DossierManagementProcessesComponent {
+export class DossierManagementProcessesComponent implements OnDestroy {
   @ViewChild('dossierConnectModal')
   private readonly _dossierConnectModal: DossierManagementConnectModalComponent;
 
   private readonly _refresh$ = new BehaviorSubject<null>(null);
   public readonly processDocumentDefinitions$: Observable<ProcessDocumentDefinition[]> =
     this._refresh$.pipe(
-      switchMap(() => this.route.paramMap),
-      switchMap((params: ParamMap) =>
-        this.documentService.findProcessDocumentDefinitions(params.get('name') ?? '')
+      switchMap(() =>
+        combineLatest([this.route.paramMap, this.dossierDetailService.selectedVersionNumber$])
+      ),
+      switchMap(([params, version]) =>
+        this.documentService.findProcessDocumentDefinitionsByVersion(
+          params.get('name') ?? '',
+          version
+        )
       )
     );
 
@@ -79,47 +85,56 @@ export class DossierManagementProcessesComponent {
     },
   ];
 
+  private readonly _subscriptions = new Subscription();
+
   constructor(
     private readonly documentService: DocumentService,
     private readonly iconService: IconService,
+    private readonly dossierDetailService: DossierDetailService,
     private readonly route: ActivatedRoute,
     private readonly notificationService: NotificationService,
     private readonly translateService: TranslateService
   ) {
     this.iconService.register(Link16);
   }
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   public deleteProcessDocumentDefinition(
     processDocumentDefinition: ProcessDocumentDefinition
   ): void {
-    this.documentService
-      .deleteProcessDocumentDefinition({
-        documentDefinitionName: processDocumentDefinition.id.documentDefinitionId.name,
-        processDefinitionKey: processDocumentDefinition.id.processDefinitionKey,
-        canInitializeDocument: processDocumentDefinition.canInitializeDocument,
-        startableByUser: processDocumentDefinition.startableByUser,
-      })
-      .subscribe({
-        next: () => {
-          this.notificationService.showNotification({
-            type: 'success',
-            title: this.translateService.instant(
-              'dossierManagement.processLinkNotification.unlinkSuccess'
-            ),
-            duration: 5000,
-          });
-          this.loadProcessDocumentDefinitions();
-        },
-        error: () => {
-          this.notificationService.showNotification({
-            type: 'error',
-            title: this.translateService.instant(
-              'dossierManagement.processLinkNotification.unlinkFailure'
-            ),
-            duration: 5000,
-          });
-        },
-      });
+    this._subscriptions.add(
+      this.documentService
+        .deleteProcessDocumentDefinition({
+          documentDefinitionName: processDocumentDefinition.id.documentDefinitionId.name,
+          processDefinitionKey: processDocumentDefinition.id.processDefinitionKey,
+          documentDefinitionVersion: processDocumentDefinition.id.documentDefinitionId.version,
+          canInitializeDocument: processDocumentDefinition.canInitializeDocument,
+          startableByUser: processDocumentDefinition.startableByUser,
+        })
+        .subscribe({
+          next: () => {
+            this.notificationService.showNotification({
+              type: 'success',
+              title: this.translateService.instant(
+                'dossierManagement.processLinkNotification.unlinkSuccess'
+              ),
+              duration: 5000,
+            });
+            this.loadProcessDocumentDefinitions();
+          },
+          error: () => {
+            this.notificationService.showNotification({
+              type: 'error',
+              title: this.translateService.instant(
+                'dossierManagement.processLinkNotification.unlinkFailure'
+              ),
+              duration: 5000,
+            });
+          },
+        })
+    );
   }
 
   public loadProcessDocumentDefinitions(): void {
