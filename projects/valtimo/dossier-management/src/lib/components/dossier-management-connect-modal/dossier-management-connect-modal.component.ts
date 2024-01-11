@@ -33,7 +33,7 @@ import {take} from 'rxjs';
   providers: [NotificationService],
 })
 export class DossierManagementConnectModalComponent implements OnInit {
-  @ViewChild('dossierConnectModal') modal: ModalComponent;
+  @ViewChild('dossierConnectModal') private readonly _modal: ModalComponent;
   @Output() public reloadProcessDocumentDefinitions = new EventEmitter<any>();
 
   public documentDefinition: DocumentDefinition | null = null;
@@ -83,7 +83,7 @@ export class DossierManagementConnectModalComponent implements OnInit {
     this.newDocumentProcessDefinitionInit = true;
     this.newDocumentProcessDefinitionStartableByUser = false;
     this.loadProcessDocumentDefinitions();
-    this.modal.show();
+    this._modal.show();
   }
 
   public submit(): void {
