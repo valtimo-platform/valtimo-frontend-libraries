@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
+import {Link16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {ColumnConfig, ViewType} from '@valtimo/components';
 import {DocumentDefinition, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
-import {NotificationService} from 'carbon-components-angular';
+import {IconService, NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, switchMap} from 'rxjs';
 import {DossierManagementConnectModalComponent} from '../dossier-management-connect-modal/dossier-management-connect-modal.component';
 
@@ -26,7 +27,6 @@ import {DossierManagementConnectModalComponent} from '../dossier-management-conn
   selector: 'valtimo-dossier-management-processes',
   templateUrl: './dossier-management-processes.component.html',
   styleUrls: ['./dossier-management-processes.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NotificationService],
 })
 export class DossierManagementProcessesComponent {
@@ -81,10 +81,13 @@ export class DossierManagementProcessesComponent {
 
   constructor(
     private readonly documentService: DocumentService,
+    private readonly iconService: IconService,
     private readonly route: ActivatedRoute,
     private readonly notificationService: NotificationService,
     private readonly translateService: TranslateService
-  ) {}
+  ) {
+    this.iconService.register(Link16);
+  }
 
   public deleteProcessDocumentDefinition(
     processDocumentDefinition: ProcessDocumentDefinition

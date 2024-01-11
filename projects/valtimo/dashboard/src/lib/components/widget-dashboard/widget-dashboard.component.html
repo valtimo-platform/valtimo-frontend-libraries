@@ -17,7 +17,6 @@
 <div *ngIf="dashboards$ | async as dashboards" class="dashboards-container">
   <valtimo-no-results
     *ngIf="!dashboards.length"
-    [description]="'dashboard.noDashboardsDescription' | translate"
     [title]="'dashboard.noDashboards' | translate"
   ></valtimo-no-results>
 
