@@ -31,8 +31,13 @@ class UrlUtils {
   }
 
   static getUrlHost(urlString: string): string {
-    const url = new URL(urlString);
-    return url?.host || '';
+    let url!: URL;
+
+    try {
+      url = new URL(urlString);
+    } catch (_) {}
+
+    return url ? url.host : '';
   }
 }
 
