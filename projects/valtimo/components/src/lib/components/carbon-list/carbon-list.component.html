@@ -82,7 +82,7 @@
   ></cds-pagination>
 </cds-table-container>
 
-<ng-template #actionItem let-data="data">
+<ng-template #actionTemplate let-data="data">
   <i
     class="clickable"
     [ngClass]="data.iconClass"
@@ -94,7 +94,7 @@
   {{ data | translate }}
 </ng-template>
 
-<ng-template #actionsMenu let-data="data">
+<ng-template #actionsMenuTemplate let-data="data">
   <cds-overflow-menu (click)="$event.stopPropagation()">
     <cds-overflow-menu-option
       *ngFor="let action of data.actions"
@@ -116,5 +116,29 @@
     >
       <i class="icon mdi mdi-lock"></i>
     </span>
+  </div>
+</ng-template>
+
+<ng-template #moveRowsTemplate let-data="data">
+  <div class="valtimo-carbon-list__move-rows">
+    <button
+      cdsButton="tertiary"
+      [disabled]="data.index === 0"
+      [iconOnly]="true"
+      size="sm"
+      (click)="onMoveUpClick($event, data)"
+    >
+      <svg cdsIcon="arrow--up" size="16" class="cds--btn__icon"></svg>
+    </button>
+
+    <button
+      cdsButton="tertiary"
+      [disabled]="data.index === data.length - 1"
+      [iconOnly]="true"
+      size="sm"
+      (click)="onMoveDownClick($event, data)"
+    >
+      <svg cdsIcon="arrow--down" size="16" class="cds--btn__icon"></svg>
+    </button>
   </div>
 </ng-template>

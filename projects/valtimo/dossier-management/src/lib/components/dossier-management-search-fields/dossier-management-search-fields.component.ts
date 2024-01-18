@@ -28,6 +28,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {
+  ActionItem,
   ColumnConfig,
   ModalComponent,
   MultiInputOutput,
@@ -78,6 +79,13 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   private _subscriptions = new Subscription();
 
+  public readonly actionItems: ActionItem[] = [
+    {
+      callback: this.deleteSelectedSearchField.bind(this),
+      label: 'interface.delete',
+      type: 'danger',
+    },
+  ];
   public readonly fields: ColumnConfig[] = [
     {
       viewType: ViewType.TEXT,
@@ -332,28 +340,12 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   public ngAfterViewInit(): void {
     this.openModalShowingSubscription();
 
-    this.fields.push(
-      {
-        key: '',
-        label: '',
-        viewType: ViewType.TEMPLATE,
-        template: this.moveRowButtonsTemplateRef,
-      },
-      {
-        viewType: ViewType.ACTION,
-        sortable: false,
-        key: '',
-        label: '',
-        className: 'list-actions',
-        actions: [
-          {
-            callback: this.deleteSelectedSearchField.bind(this),
-            label: 'interface.delete',
-            type: 'danger',
-          },
-        ],
-      }
-    );
+    this.fields.push({
+      key: '',
+      label: '',
+      viewType: ViewType.TEMPLATE,
+      template: this.moveRowButtonsTemplateRef,
+    });
   }
 
   public ngOnDestroy(): void {

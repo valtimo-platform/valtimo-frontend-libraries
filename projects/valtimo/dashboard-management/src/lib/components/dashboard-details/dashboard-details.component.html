@@ -30,6 +30,8 @@
       [fields]="fields"
       [header]="false"
       [loading]="obs.loading"
+      [moveRows]="true"
+      (moveRow)="onMoveRow($event)"
     >
       <div carbonToolbarContent>
         <ng-container [ngTemplateOutlet]="addWidgetButton"></ng-container>
@@ -59,7 +61,7 @@
   >
   </valtimo-edit-dashboard-modal>
 </ng-container>
-
+<!-- 
 <ng-template #moveButtonsTemplate let-data="data">
   <div class="move-buttons-container">
     <button
@@ -80,7 +82,7 @@
       <svg cdsIcon="arrow--down" size="16" class="cds--btn__icon"></svg>
     </button>
   </div>
-</ng-template>
+</ng-template> -->
 
 <ng-container renderInPageHeader>
   <ng-template>
