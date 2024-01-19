@@ -16,7 +16,7 @@
     "startHmr": "ng serve --proxy-config proxy.conf.json --hmr",
     "buildTest": "ng build --configuration production --configuration=test",
     "build": "ng build",
-    "test": "ng test --configuration=production",
+    "test": "ng test --sourcemap=false",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
