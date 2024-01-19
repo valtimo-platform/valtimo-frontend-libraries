@@ -23,11 +23,11 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {filter, take} from 'rxjs/operators';
+import {filter} from 'rxjs/operators';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {PlaceholderService} from 'carbon-components-angular';
 import {ConfigService} from '@valtimo/config';
-import {CspService} from '../../services';
+import {CspService} from '@valtimo/security';
 
 // eslint-disable-next-line no-var
 declare var App: any;
@@ -56,7 +56,6 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     this.openRouterSubscription();
-    this.registerCsp();
   }
 
   public ngAfterViewInit(): void {
@@ -86,14 +85,5 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     const cspConfig = this.configService?.config?.csp;
 
     this.hasCspConfig$.next(!!cspConfig);
-
-    if (cspConfig) {
-      this.cspService
-        .registerCsp(cspConfig)
-        .pipe(take(1))
-        .subscribe(cspHeaderAdded => {
-          this.cspHeaderAdded$.next(cspHeaderAdded);
-        });
-    }
   }
 }

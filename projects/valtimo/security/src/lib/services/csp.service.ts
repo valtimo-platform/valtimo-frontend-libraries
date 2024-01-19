@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of security
- */
-export * from './lib/guard/auth-guard.service';
-export * from './lib/security.module';
-export * from './lib/error/error';
-export * from './lib/error/error.component';
-export * from './lib/user-provider.service';
-export * from './lib/services';
-export * from './lib/constants';
-export * from './lib/initializers';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CspService {
+  private readonly _cspNonce$ = new BehaviorSubject<string>('');
+
+  public get cspNonce$(): Observable<string> {
+    return this._cspNonce$.asObservable();
+  }
+
+  public get cspNone(): string {
+    return this._cspNonce$.getValue();
+  }
+
+  public setCspNonce(nonce: string): void {
+    this._cspNonce$.next(nonce);
+  }
+}

@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of security
- */
-export * from './lib/guard/auth-guard.service';
-export * from './lib/security.module';
-export * from './lib/error/error';
-export * from './lib/error/error.component';
-export * from './lib/user-provider.service';
-export * from './lib/services';
-export * from './lib/constants';
-export * from './lib/initializers';
+const BASE_NONCE = 'nonce-';
+
+const NONCE = `'${BASE_NONCE}'`;
+
+const NONCE_RESPONSE_HEADER = 'Content-Security-Policy';
+
+const NONCE_WINDOW_PROPERTY = 'cspNonce';
+
+const NONCE_FACTORY = () => (window as any)[NONCE_WINDOW_PROPERTY];
+
+const CSP_META_ID = 'CSP_META';
+
+export {
+  BASE_NONCE,
+  NONCE,
+  NONCE_RESPONSE_HEADER,
+  NONCE_WINDOW_PROPERTY,
+  NONCE_FACTORY,
+  CSP_META_ID,
+};

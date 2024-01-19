@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
+import {CSP_NONCE, NgModule} from '@angular/core';
 import {ErrorComponent} from './error/error.component';
 import {ErrorRoutingModule} from './error/error-routing.module';
 import {AuthGuardService} from './guard/auth-guard.service';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {ZoneOffsetInterceptor} from './interceptors';
+import {CspService} from './services';
 
 @NgModule({
   declarations: [ErrorComponent],
@@ -28,6 +29,13 @@ import {ZoneOffsetInterceptor} from './interceptors';
   providers: [
     AuthGuardService,
     {provide: HTTP_INTERCEPTORS, useClass: ZoneOffsetInterceptor, multi: true},
+    {
+      provide: CSP_NONCE,
+      useFactory: (cspService: CspService) => {
+        return cspService.cspNone;
+      },
+      deps: [CspService],
+    },
   ],
 })
 export class SecurityModule {}
