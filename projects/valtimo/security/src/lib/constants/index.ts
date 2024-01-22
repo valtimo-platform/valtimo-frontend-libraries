@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export * from './nonce.constant';
+export * from './csp.constant';
