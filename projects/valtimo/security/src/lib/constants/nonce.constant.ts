@@ -20,17 +20,6 @@ const NONCE = `'${BASE_NONCE}'`;
 
 const NONCE_RESPONSE_HEADER = 'Content-Security-Policy';
 
-const NONCE_WINDOW_PROPERTY = 'cspNonce';
-
-const NONCE_FACTORY = () => (window as any)[NONCE_WINDOW_PROPERTY];
-
 const CSP_META_ID = 'CSP_META';
 
-export {
-  BASE_NONCE,
-  NONCE,
-  NONCE_RESPONSE_HEADER,
-  NONCE_WINDOW_PROPERTY,
-  NONCE_FACTORY,
-  CSP_META_ID,
-};
+export {BASE_NONCE, NONCE, NONCE_RESPONSE_HEADER, CSP_META_ID};

@@ -69,21 +69,6 @@ const appendElementToHead = (element: HTMLMetaElement, document: Document): void
   document.head.appendChild(element);
 };
 
-const checkElementExists = async (elementId: string, document: Document, timeout = Infinity) => {
-  let startTime = Date.now();
-  return new Promise(resolve => {
-    const intervalId = setInterval(() => {
-      if (document.getElementById(elementId)) {
-        clearInterval(intervalId);
-        resolve(true);
-      } else if (Date.now() - startTime >= timeout * 1000) {
-        clearInterval(intervalId);
-        resolve(false);
-      }
-    }, 100);
-  });
-};
-
 export const initializeCsp = (
   httpClient: HttpClient,
   logger: NGXLogger,
