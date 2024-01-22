@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {CSPHeaderParams, DATA, SELF} from 'csp-header';
+import {CSPHeaderParams, DATA, SELF, UNSAFE_EVAL, UNSAFE_INLINE} from 'csp-header';
 import {UrlUtils} from '@valtimo/config';
 import {authenticationKeycloak} from '../auth/keycloak-config.prod';
-import {NONCE} from '@valtimo/security';
 
 export const cspHeaderParamsProd: CSPHeaderParams = {
   directives: {
@@ -25,7 +24,7 @@ export const cspHeaderParamsProd: CSPHeaderParams = {
     // DATA is needed because of use of inline images
     'img-src': [SELF, DATA],
     // UNSAFE_EVAL is needed because of javascript in form.io forms (i.e. on summary page)
-    'script-src': [SELF, NONCE],
+    'script-src': [SELF, 'https://cdn.form.io/', UNSAFE_EVAL],
     // DATA is needed because of use of inline fonts
     'font-src': [
       SELF,
@@ -40,7 +39,7 @@ export const cspHeaderParamsProd: CSPHeaderParams = {
     // UNSAFE_INLINE is needed because of use of inline styles
     'style-src': [
       SELF,
-      NONCE,
+      UNSAFE_INLINE,
       'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/',
       'https://fonts.googleapis.com',
     ],

@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-const BASE_NONCE = 'nonce-';
-
-const NONCE = `'${BASE_NONCE}'`;
-
-const NONCE_RESPONSE_HEADER = 'Content-Security-Policy';
+const CSP_HTTP_EQUIV = 'Content-Security-Policy';
 
 const CSP_META_ID = 'CSP_META';
 
-export {BASE_NONCE, NONCE, NONCE_RESPONSE_HEADER, CSP_META_ID};
+export {CSP_HTTP_EQUIV, CSP_META_ID};

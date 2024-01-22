@@ -19,8 +19,7 @@ import {NGXLogger} from 'ngx-logger';
 import {initialize, initializerFactory} from './init';
 import {ConfigService, INITIALIZERS} from '@valtimo/config';
 import {TranslateService} from '@ngx-translate/core';
-import {CspService, initializeCsp} from '@valtimo/security';
-import {HttpClient} from '@angular/common/http';
+import {initializeCsp} from '@valtimo/security';
 import {DOCUMENT} from '@angular/common';
 import {DomSanitizer} from '@angular/platform-browser';
 
@@ -43,7 +42,7 @@ import {DomSanitizer} from '@angular/platform-browser';
       provide: APP_INITIALIZER,
       useFactory: initializeCsp,
       multi: true,
-      deps: [HttpClient, NGXLogger, ConfigService, DOCUMENT, DomSanitizer, CspService],
+      deps: [NGXLogger, ConfigService, DOCUMENT, DomSanitizer],
     },
   ],
   exports: [],

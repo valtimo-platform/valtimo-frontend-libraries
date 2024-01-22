@@ -15,14 +15,11 @@
  */
 
 import {NGXLogger} from 'ngx-logger';
-import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '@valtimo/config';
-import {firstValueFrom} from 'rxjs';
-import {BASE_NONCE, CSP_META_ID, NONCE_RESPONSE_HEADER} from '../constants';
+import {CSP_HTTP_EQUIV, CSP_META_ID} from '../constants';
 import {DomSanitizer} from '@angular/platform-browser';
 import {CSPHeaderParams, getCSP} from 'csp-header';
 import {SecurityContext} from '@angular/core';
-import {CspService} from '../services';
 
 const getSanitizedCspString = (
   cspHeaderParams: CSPHeaderParams,
@@ -32,33 +29,15 @@ const getSanitizedCspString = (
   return domSanitizer.sanitize(SecurityContext.HTML, csp);
 };
 
-const replaceStringInObj = (obj: object, matchString: string, replaceValue: string) => {
-  const objCopy = {...obj};
-
-  Object.keys(objCopy).forEach(key => {
-    if (Array.isArray(objCopy[key])) {
-      objCopy[key] = objCopy[key].map(value =>
-        value.includes(matchString) ? replaceValue : value
-      );
-    } else if (typeof objCopy[key] === 'object') {
-      objCopy[key] = replaceStringInObj(objCopy[key], matchString, replaceValue);
-    }
-  });
-
-  return objCopy;
-};
-
 const getCspHeaderElement = (
   cspHeaderParams: CSPHeaderParams,
-  cspNonce: string,
   domSanitizer: DomSanitizer,
   document: Document
 ): HTMLMetaElement => {
-  const cspHeaderParamsWithNonce = replaceStringInObj(cspHeaderParams, BASE_NONCE, `'${cspNonce}'`);
-  const csp = getSanitizedCspString(cspHeaderParamsWithNonce, domSanitizer);
+  const csp = getSanitizedCspString(cspHeaderParams, domSanitizer);
   const cspMeta = document.createElement('meta');
 
-  cspMeta.httpEquiv = NONCE_RESPONSE_HEADER;
+  cspMeta.httpEquiv = CSP_HTTP_EQUIV;
   cspMeta.content = csp;
   cspMeta.id = CSP_META_ID;
 
@@ -69,41 +48,34 @@ const appendElementToHead = (element: HTMLMetaElement, document: Document): void
   document.head.appendChild(element);
 };
 
+const isElementLoaded = async (elementId: string, document: Document): Promise<boolean> => {
+  while (document.getElementById(elementId) === null) {
+    await new Promise(resolve => requestAnimationFrame(resolve));
+  }
+  return !!document.getElementById(elementId);
+};
+
 export const initializeCsp = (
-  httpClient: HttpClient,
   logger: NGXLogger,
   configService: ConfigService,
   document: Document,
-  domSanitizer: DomSanitizer,
-  cspService: CspService
-): (() => Promise<void>) => {
-  return async () => {
+  domSanitizer: DomSanitizer
+): (() => Promise<boolean>) => {
+  return async (): Promise<boolean> => {
     const cspHeaderParams = configService?.config?.csp;
 
     if (cspHeaderParams) {
-      const response = await firstValueFrom(
-        httpClient.get(`${configService.config.valtimoApi.endpointUri}v1/ping`, {
-          observe: 'response',
-          responseType: 'text',
-        })
-      );
-      const responseCspHeader = response.headers.get(NONCE_RESPONSE_HEADER);
+      logger.log('Create CSP header element from:', cspHeaderParams);
 
-      if (responseCspHeader) {
-        const nonceString = responseCspHeader.replace(BASE_NONCE, '');
-        cspService.setCspNonce(nonceString);
+      const cspHeaderElement = getCspHeaderElement(cspHeaderParams, domSanitizer, document);
 
-        logger.log('CSP nonce set on window:', responseCspHeader);
+      appendElementToHead(cspHeaderElement, document);
 
-        const cspHeaderElement = getCspHeaderElement(
-          cspHeaderParams,
-          responseCspHeader,
-          domSanitizer,
-          document
-        );
-
-        appendElementToHead(cspHeaderElement, document);
-      }
+      return await isElementLoaded(CSP_META_ID, document);
     }
+
+    logger.log('No CSP config present.');
+
+    return true;
   };
 };

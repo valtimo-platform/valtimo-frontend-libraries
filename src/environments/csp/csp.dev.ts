@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {CSPHeaderParams, DATA, SELF, UNSAFE_EVAL} from 'csp-header';
+import {CSPHeaderParams, DATA, SELF, UNSAFE_EVAL, UNSAFE_INLINE} from 'csp-header';
 import {UrlUtils} from '@valtimo/config';
 import {authenticationKeycloak} from '../auth/keycloak-config.dev';
-import {NONCE} from '@valtimo/security';
 
 export const cspHeaderParamsDev: CSPHeaderParams = {
   directives: {
@@ -40,7 +39,7 @@ export const cspHeaderParamsDev: CSPHeaderParams = {
     // UNSAFE_INLINE is needed because of use of inline styles
     'style-src': [
       SELF,
-      NONCE,
+      UNSAFE_INLINE,
       'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/',
       'https://fonts.googleapis.com',
     ],
