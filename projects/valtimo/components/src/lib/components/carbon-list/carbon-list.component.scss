@@ -37,8 +37,12 @@ td:first-child {
 }
 
 .valtimo-carbon-list {
-  &__actions {
-    width: 1px !important;
+  ::ng-deep &__header--hidden thead {
+    display: none;
+  }
+
+  ::ng-deep &--unclickable tr {
+    cursor: default;
   }
 
   &__toolbar:empty {

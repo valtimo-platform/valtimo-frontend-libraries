@@ -108,7 +108,6 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _fields: ColumnConfig[];
-  public fields$: Observable<TableHeaderItem[]> = of([]);
   @Input() set fields(value: ColumnConfig[]) {
     this._fields = value;
     this.buildHeaderItems(value);
@@ -131,7 +130,11 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() paginatorConfig: CarbonPaginatorConfig = DEFAULT_PAGINATOR_CONFIG;
   private _pagination: Pagination;
-  @Input() public set pagination(value: Partial<Pagination>) {
+  @Input() public set pagination(value: Partial<Pagination> | false) {
+    if (!value) {
+      return;
+    }
+
     if (!this._pagination) {
       this._pagination = {...DEFAULT_PAGINATION, ...value};
     }
@@ -151,6 +154,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() actions: any[] = [];
   @Input() actionItems: ActionItem[];
   @Input() header: boolean;
+  @Input() hideColumnHeader: boolean;
   @Input() initialSortState: SortState;
   @Input() isSearchable = false;
   @Input() enableSingleSelection = false;
@@ -246,6 +250,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    console.log(!this.rowClicked.observed);
     if (this.pagination) {
       this.loadPaginationSize();
     }
@@ -480,15 +485,6 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
                 return new TableItem({data: this.resolveObject(column, item) ?? '-', item});
             }
           });
-          if (this.movingRowsEnabled) {
-            fields.push(
-              new TableItem({
-                data: {item, index, length: itemCount},
-                template: this.moveRowsTemplate,
-              })
-            );
-          }
-
           if (!!this.actions) {
             fields.push(
               ...this.actions.map(
@@ -519,9 +515,19 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
             );
           }
 
+          if (this.movingRowsEnabled) {
+            fields.push(
+              new TableItem({
+                data: {item, index, length: itemCount},
+                template: this.moveRowsTemplate,
+              })
+            );
+          }
+
           if (!!this.actionItems) {
             fields.push(
               new TableItem({
+                className: 'valtimo-carbon-list__actions',
                 data: {actions: this.actionItems, item},
                 template: this.actionsMenuTemplate,
               })

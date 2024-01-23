@@ -25,6 +25,7 @@ import {
   ColumnConfig,
   MoveRowEvent,
   MoveRowDirection,
+  ActionItem,
 } from '@valtimo/components';
 import {DashboardWidgetConfiguration} from '@valtimo/dashboard';
 import {IconService} from 'carbon-components-angular';
@@ -42,6 +43,17 @@ export class DashboardDetailsComponent implements AfterViewInit {
 
   public modalType: WidgetModalType = 'create';
   public fields!: ColumnConfig[];
+  public readonly actionItems: ActionItem[] = [
+    {
+      label: 'Edit',
+      callback: this.editWidget.bind(this),
+    },
+    {
+      label: 'Delete',
+      callback: this.deleteWidget.bind(this),
+      type: 'danger',
+    },
+  ];
 
   private readonly _dashboardKey$ = this.route.params.pipe(map(params => params.id));
   private readonly _refreshDashboardSubject$ = new BehaviorSubject<null>(null);
@@ -154,23 +166,6 @@ export class DashboardDetailsComponent implements AfterViewInit {
         className: 'dashboard-detail-table__actions',
         key: '',
         label: '',
-      },
-      {
-        viewType: ViewType.ACTION,
-        className: 'dashboard-detail-table__actions',
-        key: '',
-        label: '',
-        actions: [
-          {
-            label: 'Edit',
-            callback: this.editWidget.bind(this),
-          },
-          {
-            label: 'Delete',
-            callback: this.deleteWidget.bind(this),
-            type: 'danger',
-          },
-        ],
       },
     ];
   }

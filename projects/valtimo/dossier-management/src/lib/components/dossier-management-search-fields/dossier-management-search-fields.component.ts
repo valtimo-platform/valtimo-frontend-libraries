@@ -31,6 +31,8 @@ import {
   ActionItem,
   ColumnConfig,
   ModalComponent,
+  MoveRowDirection,
+  MoveRowEvent,
   MultiInputOutput,
   MultiInputValues,
   SelectItem,
@@ -65,7 +67,6 @@ import {
   styleUrls: ['./dossier-management-search-fields.component.scss'],
 })
 export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('moveRowButtons') public moveRowButtonsTemplateRef: TemplateRef<any>;
   @ViewChild('searchFieldModal') modal: ModalComponent;
 
   @Output() searchField: EventEmitter<SearchField> = new EventEmitter();
@@ -339,13 +340,6 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
 
   public ngAfterViewInit(): void {
     this.openModalShowingSubscription();
-
-    this.fields.push({
-      key: '',
-      label: '',
-      viewType: ViewType.TEMPLATE,
-      template: this.moveRowButtonsTemplateRef,
-    });
   }
 
   public ngOnDestroy(): void {
@@ -378,16 +372,11 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     this.modifiedDropdownValues$.next(data as MultiInputValues);
   }
 
-  public moveRow(
-    searchFieldRowIndex: number,
-    moveUp: boolean,
-    clickEvent: MouseEvent,
-    documentDefinitionName: string
-  ): void {
+  public onMoveRowClick(moveEvent: MoveRowEvent, documentDefinitionName: string): void {
+    const {index, direction} = moveEvent;
+    const moveUp = direction === MoveRowDirection.UP;
     const searchFields = [...this.cachedSearchFields];
-    const searchFieldRow = searchFields[searchFieldRowIndex];
-
-    clickEvent.stopPropagation();
+    const searchFieldRow = searchFields[index];
 
     const searchFieldIndex = searchFields.findIndex(field => field.key === searchFieldRow.key);
     const foundSearchField = {...searchFields[searchFieldIndex]};

@@ -13,6 +13,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+{{ movingRowsEnabled }}
+{{ viewInitialized$ | async }}
 <cds-table-container
   *ngIf="
     (viewInitialized$ | async) && {
@@ -50,6 +52,10 @@
 
   <cds-table
     *ngIf="!!obs.sort"
+    [ngClass]="{
+      'valtimo-carbon-list__header--hidden': hideColumnHeader,
+      'valtimo-carbon-list--unclickable': !this.rowClicked.observed
+    }"
     [enableSingleSelect]="enableSingleSelect"
     [model]="loading ? skeletonModel : model"
     [showSelectionColumn]="showSelectionColumn"
