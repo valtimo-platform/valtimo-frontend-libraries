@@ -93,7 +93,7 @@ export class DossierSupportingProcessStartModalComponent implements AfterViewIni
   ) {}
 
   public ngAfterViewInit(): void {
-    if (this.modal.modalShowing$) {
+    if (this.modal?.modalShowing$) {
       this._subscriptions.add(
         this.modal.modalShowing$.subscribe(modalShowing => {
           if (!modalShowing) {
