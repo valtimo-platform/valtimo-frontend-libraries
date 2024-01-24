@@ -13,17 +13,17 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-{{ movingRowsEnabled }}
-{{ viewInitialized$ | async }}
 <cds-table-container
   *ngIf="
     (viewInitialized$ | async) && {
-      sort: sort$ | async
+      sort: sort$ | async,
+      model: model$ | async
     } as obs
   "
   class="valtimo-carbon-list"
 >
   <cds-table-header *ngIf="header">
+    {{ obs.tableItems.length }}
     <ng-content select="[header]"></ng-content>
   </cds-table-header>
 
@@ -32,7 +32,7 @@
   <cds-table-toolbar
     *ngIf="!hideToolbar"
     class="valtimo-carbon-list__toolbar"
-    [model]="model"
+    [model]="obs.model"
     [batchText]="batchText$ | async"
   >
     <cds-table-toolbar-actions>
@@ -57,20 +57,20 @@
       'valtimo-carbon-list--unclickable': !this.rowClicked.observed
     }"
     [enableSingleSelect]="enableSingleSelect"
-    [model]="loading ? skeletonModel : model"
+    [model]="loading ? skeletonModel : obs.model"
     [showSelectionColumn]="showSelectionColumn"
     [skeleton]="loading"
     [striped]="striped"
-    (sort)="onSort(model.header[$event])"
+    (sort)="onSort(obs.model.header[$event])"
     (rowClick)="onRowClick($event)"
   >
     <tbody cdsTableBody>
       <tr class="valtimo-carbon-list__no-results">
-        <td [attr.colspan]="model.header.length + (showSelectionColumn ? 1 : 0)">
+        <td [attr.colspan]="obs.model.header.length + (showSelectionColumn ? 1 : 0)">
           <ng-content></ng-content>
         </td>
 
-        <td [attr.colspan]="model.header.length + (showSelectionColumn ? 1 : 0)">
+        <td [attr.colspan]="obs.model.header.length + (showSelectionColumn ? 1 : 0)">
           {{ 'list.noResults' | translate }}
         </td>
       </tr>

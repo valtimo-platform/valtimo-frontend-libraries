@@ -27,7 +27,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {SettingsView16, ArrowUp16, ArrowDown16} from '@carbon/icons';
+import {ArrowDown16, ArrowUp16, SettingsView16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {SortState} from '@valtimo/document';
 import {
@@ -48,7 +48,6 @@ import {
   debounceTime,
   map,
   Observable,
-  of,
   startWith,
   Subscription,
   switchMap,
@@ -88,37 +87,23 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('booleanTemplate') booleanTemplate: TemplateRef<any>;
   @ViewChild('moveRowsTemplate') moveRowsTemplate: TemplateRef<any>;
   @ViewChild('rowDisabled') rowDisabled: TemplateRef<any>;
+  @ViewChild(Table) private _table: Table;
 
   private _completeDataSource: TableItem[][];
+  private readonly _items$ = new BehaviorSubject<CarbonListItem[]>([]);
   private _items: CarbonListItem[];
   public items$ = new BehaviorSubject<TableItem[][]>([]);
   @Input() set items(value: CarbonListItem[]) {
     this._items = value;
-    if (!this._fields) {
-      return;
-    }
-
-    this.buildTableItems().subscribe(tableItems => {
-      this.model.data = tableItems;
-      this._completeDataSource = this.model.data;
-    });
+    this._items$.next(value);
   }
   public get items(): CarbonListItem[] {
     return this._items;
   }
 
-  private _fields: ColumnConfig[];
+  private readonly _fields$ = new BehaviorSubject<ColumnConfig[]>([]);
   @Input() set fields(value: ColumnConfig[]) {
-    this._fields = value;
-    this.buildHeaderItems(value);
-
-    if (!this._items?.length) {
-      return;
-    }
-
-    this.buildTableItems().subscribe(tableItems => {
-      this.model.data = tableItems;
-    });
+    this._fields$.next(value);
   }
 
   private _tableTranslations$: BehaviorSubject<CarbonListTranslations> = new BehaviorSubject(
@@ -167,7 +152,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() striped = false;
   @Input() hideToolbar = false;
   @Input() lockedTooltipTranslationKey = '';
-  @Input() movingRowsEnabled = false;
+  @Input() movingRowsEnabled: boolean;
 
   @Output() rowClicked = new EventEmitter<any>();
   @Output() paginationClicked = new EventEmitter<number>();
@@ -217,7 +202,6 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   });
 
   public readonly ViewType = ViewType;
-  public model = new TableModel();
   public skeletonModel = Table.skeletonModel(5, 5);
   public paginationModel: PaginationModel;
   public searchFormControl = new FormControl('');
@@ -226,9 +210,11 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly _subscriptions = new Subscription();
 
   public get selectedItems(): CarbonListItem[] {
-    return this.model.data.reduce(
+    const model = this._table.model;
+
+    return model.data.reduce(
       (items: CarbonListItem[], _, index: number) =>
-        this.model.isRowSelected(index) ? [...items, this.items[index]] : [...items],
+        model.isRowSelected(index) ? [...items, this.items[index]] : [...items],
       []
     );
   }
@@ -237,6 +223,10 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public get viewInitialized$(): Observable<boolean> {
     return this._viewInitialized$.pipe(filter(initialized => initialized));
+  }
+
+  public get model(): TableModel {
+    return this._table.model;
   }
 
   constructor(
@@ -250,7 +240,6 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    console.log(!this.rowClicked.observed);
     if (this.pagination) {
       this.loadPaginationSize();
     }
@@ -266,10 +255,11 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
           if (this.search.observed) {
             this.search.emit(searchString);
           } else {
-            this.model.data = this.filterPipe.transform(
-              this._completeDataSource,
-              searchString ?? ''
-            );
+            // FIX THIS FIX THIS FIX THIS FIX THIS FIX THIS
+            // this.model.data = this.filterPipe.transform(
+            //   this._completeDataSource,
+            //   searchString ?? ''
+            // );
           }
         })
     );
@@ -284,7 +274,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public onRowClick(index: number): void {
-    const item = this.model.data[index][0]['item'];
+    const item = this._table.model.data[index][0]['item'];
 
     if (!item || item?.locked) {
       return;
@@ -341,98 +331,104 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
-  private buildHeaderItems(fields: ColumnConfig[]): void {
-    const translationStreams: Observable<string>[] = fields.map((column: ColumnConfig) =>
-      !column.label ? of('') : this.translateService.stream(column.label)
-    );
+  private _translatedFields$: Observable<ColumnConfig[]> = this.translateService.stream('key').pipe(
+    switchMap(() => this._fields$),
+    map((fields: ColumnConfig[]) =>
+      fields.map((field: ColumnConfig) => ({
+        ...field,
+        label: !field.label ? '' : this.translateService.instant(field.label),
+      }))
+    )
+  );
 
-    this._subscriptions.add(
-      combineLatest(translationStreams)
-        .pipe(
-          switchMap((translationResults: string[]) =>
-            this.sort$.pipe(map((sortState: SortState) => ({translationResults, sortState})))
-          ),
-          map(({translationResults, sortState}) => [
-            ...translationResults.map(
-              (translation: string, index: number) =>
-                new TableHeaderItem({
-                  data: translation,
-                  sortable: !!fields[index].sortable,
-                  className: fields[index].className ?? '',
-                  key: fields[index].key,
-                  sorted: sortState.isSorting && fields[index].key === sortState.state.name,
-                  ascending:
-                    fields[index].key === sortState.state.name &&
-                    sortState.state.direction === 'ASC',
-                })
-            ),
-          ])
-        )
-        .subscribe((header: TableHeaderItem[]) => {
-          if (this.movingRowsEnabled) {
-            header = [
-              ...header,
+  private _headerItems$: Observable<TableHeaderItem[]> = combineLatest([
+    this._translatedFields$,
+    this.sort$,
+  ]).pipe(
+    map(([translatedFields, sortState]) =>
+      translatedFields.map(
+        (field: ColumnConfig) =>
+          new TableHeaderItem({
+            data: field.label,
+            sortable: field.sortable,
+            className: field.className,
+            key: field.key,
+            sorted: sortState.isSorting && field.key === sortState.state.name,
+            ascending: field.key === sortState.state.name && sortState.state.direction === 'ASC',
+          })
+      )
+    ),
+    map((header: TableHeaderItem[]) => [...header, ...this.extraColumns])
+  );
+
+  private readonly _tableItems$: Observable<TableItem[][]> = this._viewInitialized$.pipe(
+    switchMap(() => combineLatest([this._fields$, this._items$])),
+    filter(([fields, items]) => !!fields && !!items),
+    map(([fields, items]) =>
+      items.map((item: CarbonListItem, index: number) => [
+        ...fields.map((field: ColumnConfig) => {
+          switch (field.viewType) {
+            case ViewType.TEMPLATE:
+              return new TableItem({
+                data: {item, index, length: items.length},
+                template: field.template,
+              });
+            case ViewType.BOOLEAN:
+              let data = this.resolveObject(field, item);
+              data = !BOOLEAN_CONVERTER_VALUES.includes(data)
+                ? data
+                : `${'viewTypeConverter.' + data}`;
+              return new TableItem({
+                data,
+                template: this.booleanTemplate,
+              });
+            default:
+              return new TableItem({data: this.resolveObject(field, item) ?? '-', item});
+          }
+        }),
+        ...this.getExtraItems(item, index, items.length),
+      ])
+    )
+  );
+
+  public readonly model$: Observable<TableModel> = combineLatest([
+    this._headerItems$,
+    this._tableItems$,
+  ]).pipe(
+    map(([header, data]) => {
+      const model = new TableModel();
+      model.header = header;
+      this._completeDataSource = data;
+      model.data = data;
+      return model;
+    }),
+    startWith(new TableModel())
+  );
+
+  private get extraColumns(): TableHeaderItem[] {
+    const emptyHeader = new TableHeaderItem();
+    return [
+      ...(this.movingRowsEnabled ? [emptyHeader] : []),
+      ...(!!this.actions
+        ? this.actions.map(
+            action =>
               new TableHeaderItem({
-                data: '',
-                key: '',
+                data: action.columnName,
+                key: action.columnName,
                 sortable: false,
-              }),
-            ];
-          }
-
-          if (!!this.actions.length) {
-            header = [
-              ...header,
-              ...this.actions.map(
-                action =>
-                  new TableHeaderItem({
-                    data: action.columnName,
-                    key: action.columnName,
-                    sortable: false,
-                  })
-              ),
-            ];
-          }
-
-          if (!!this.lastColumnTemplate) {
-            header = [
-              ...header,
-              new TableHeaderItem({
-                data: '',
-                key: '',
-                viewType: ViewType.ACTION,
-                sortable: false,
-              }),
-            ];
-          }
-
-          if (this._items?.some(item => item.locked)) {
-            header = [
-              ...header,
-              new TableHeaderItem({
-                data: '',
-                key: '',
-                viewType: ViewType.TEMPLATE,
-                sortable: false,
-              }),
-            ];
-          }
-
-          if (!!this.actionItems) {
-            header = [
-              ...header,
-              new TableHeaderItem({
-                className: 'valtimo-carbon-list__actions',
-                data: '',
-                key: '',
-                sortable: '',
-              }),
-            ];
-          }
-
-          this.model.header = header;
-        })
-    );
+              })
+          )
+        : []),
+      ...(!!this.lastColumnTemplate ? [emptyHeader] : []),
+      ...(this._items?.some(item => item.locked) ? [emptyHeader] : []),
+      ...(!!this.actionItems
+        ? [
+            new TableHeaderItem({
+              className: 'valtimo-carbon-list__actions',
+            }),
+          ]
+        : []),
+    ];
   }
 
   public onMoveDownClick(
@@ -457,87 +453,43 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private buildTableItems(): Observable<TableItem[][]> {
-    const itemCount: number = this._items.length;
-    const showLocks = this._items?.some(item => item.locked);
-
-    return this.viewInitialized$.pipe(
-      take(1),
-      map(() =>
-        this._items.map((item: CarbonListItem, index: number) => {
-          const fields = this._fields.map((column: ColumnConfig) => {
-            switch (column.viewType) {
-              case ViewType.TEMPLATE:
-                return new TableItem({
-                  data: {item, index, length: itemCount},
-                  template: column.template,
-                });
-              case ViewType.BOOLEAN:
-                let data = this.resolveObject(column, item);
-                data = !BOOLEAN_CONVERTER_VALUES.includes(data)
-                  ? data
-                  : `${'viewTypeConverter.' + data}`;
-                return new TableItem({
-                  data,
-                  template: this.booleanTemplate,
-                });
-              default:
-                return new TableItem({data: this.resolveObject(column, item) ?? '-', item});
-            }
-          });
-          if (!!this.actions) {
-            fields.push(
-              ...this.actions.map(
-                action =>
-                  new TableItem({
-                    data: {item, callback: action.callback, iconClass: action.iconClass},
-                    template: this.actionTemplate,
-                  })
-              )
-            );
-          }
-
-          if (!!this.lastColumnTemplate) {
-            fields.push(
+  private getExtraItems(item: CarbonListItem, index: number, length: number): TableItem[] {
+    return [
+      ...(!!this.actions
+        ? this.actions.map(
+            action =>
               new TableItem({
-                data: {item, index, length: itemCount},
-                template: this.lastColumnTemplate,
+                data: {item, callback: action.callback, iconClass: action.iconClass},
+                template: this.actionTemplate,
               })
-            );
-          }
-
-          if (showLocks) {
-            fields.push(
-              new TableItem({
-                data: {locked: item.locked},
-                template: this.rowDisabled,
-              })
-            );
-          }
-
-          if (this.movingRowsEnabled) {
-            fields.push(
-              new TableItem({
-                data: {item, index, length: itemCount},
-                template: this.moveRowsTemplate,
-              })
-            );
-          }
-
-          if (!!this.actionItems) {
-            fields.push(
-              new TableItem({
-                className: 'valtimo-carbon-list__actions',
-                data: {actions: this.actionItems, item},
-                template: this.actionsMenuTemplate,
-              })
-            );
-          }
-
-          return fields;
-        })
-      )
-    );
+          )
+        : []),
+      ...(this._items?.some(item => item.locked)
+        ? [
+            new TableItem({
+              data: {locked: item.locked},
+              template: this.rowDisabled,
+            }),
+          ]
+        : []),
+      ...(this.movingRowsEnabled
+        ? [
+            new TableItem({
+              data: {item, index, length},
+              template: this.moveRowsTemplate,
+            }),
+          ]
+        : []),
+      ...(!!this.actionItems
+        ? [
+            new TableItem({
+              className: 'valtimo-carbon-list__actions',
+              data: {actions: this.actionItems, item},
+              template: this.actionsMenuTemplate,
+            }),
+          ]
+        : []),
+    ];
   }
 
   private loadPaginationSize(): void {
