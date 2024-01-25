@@ -35,16 +35,13 @@ import {
 } from '@valtimo/components';
 import {Task, TaskProcessLinkType} from '../models';
 import {
-  FormAssociation,
   FormFlowComponent,
   FormFlowService,
-  FormLinkService,
   FormSubmissionResult,
   ProcessLinkService,
 } from '@valtimo/form-link';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
-import {NGXLogger} from 'ngx-logger';
 import {ToastrService} from 'ngx-toastr';
 import {map, take} from 'rxjs/operators';
 import {TaskService} from '../task.service';
@@ -93,18 +90,15 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     map(type => type === 'form-flow')
   );
 
-  private readonly formAssociation$ = new BehaviorSubject<FormAssociation>(undefined);
   private readonly processLinkId$ = new BehaviorSubject<string>(undefined);
 
   private _subscriptions = new Subscription();
 
   constructor(
     private readonly toastr: ToastrService,
-    private readonly formLinkService: FormLinkService,
     private readonly processLinkService: ProcessLinkService,
     private readonly formFlowService: FormFlowService,
     private readonly router: Router,
-    private readonly logger: NGXLogger,
     private readonly route: ActivatedRoute,
     private readonly taskService: TaskService,
     private readonly userProviderService: UserProviderService,
@@ -155,47 +149,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
 
     //only load from formlink when process link failed for backwards compatibility
     if (!this.taskProcessLinkType$.getValue()) {
-      this.formLinkService
-        .getPreFilledFormDefinitionByFormLinkId(
-          task.processDefinitionKey,
-          documentId,
-          task.taskDefinitionKey,
-          task.id // taskInstanceId
-        )
-        .subscribe(
-          formDefinition => {
-            this.formAssociation$.next(formDefinition.formAssociation);
-
-            const className = formDefinition.formAssociation.formLink.className.split('.');
-            const linkType = className[className.length - 1];
-
-            switch (linkType) {
-              case 'BpmnElementFormIdLink':
-                this.setFormDefinitionAndOpenModal(formDefinition);
-                break;
-              case 'BpmnElementFormFlowIdLink':
-                // We can't use the formDefinition here because the form definition is provided per form flow step
-                // I'm still leaving this in here in case we want to add form flow specific code.
-                this.modal.show();
-                break;
-              case 'BpmnElementUrlLink':
-                this.openUrlLink(formDefinition);
-                break;
-              case 'BpmnElementAngularStateUrlLink':
-                this.openAngularStateUrlLink(task, formDefinition);
-                break;
-              default:
-                this.logger.fatal('Unsupported class name');
-            }
-          },
-          errors => {
-            if (errors?.error?.detail) {
-              this.errorMessage$.next(errors.error.detail);
-            }
-
-            this.modal.show();
-          }
-        );
+      this.modal.show();
     }
   }
 
@@ -215,14 +169,9 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
       this.formIoFormData$.next(submission.data);
     }
 
-    combineLatest([
-      this.processLinkId$,
-      this.taskProcessLinkType$,
-      this.task$,
-      this.formAssociation$,
-    ])
+    combineLatest([this.processLinkId$, this.taskProcessLinkType$, this.task$])
       .pipe(take(1))
-      .subscribe(([processLinkId, taskProcessLinkType, task, formAssociation]) => {
+      .subscribe(([processLinkId, taskProcessLinkType, task]) => {
         if (taskProcessLinkType === 'form') {
           if (processLinkId) {
             this.processLinkService
@@ -235,23 +184,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
                   this.form.showErrors(errors);
                 },
               });
-          } else {
-            this.formLinkService
-              .onSubmit(
-                task.processDefinitionKey,
-                formAssociation.formLink.id,
-                submission.data,
-                task.businessKey,
-                task.id
-              )
-              .subscribe(
-                (_: FormSubmissionResult) => {
-                  this.completeTask();
-                },
-                errors => {
-                  this.form.showErrors(errors);
-                }
-              );
           }
         }
       });
@@ -317,35 +249,12 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   private resetTaskProcessLinkType(): void {
     this.taskProcessLinkType$.next(null);
     this.processLinkId$.next(null);
-    this.formAssociation$.next(null);
   }
 
   private setFormDefinitionAndOpenModal(formDefinition: any): void {
     this.taskProcessLinkType$.next('form');
     this.formDefinition$.next(formDefinition);
     this.modal.show();
-  }
-
-  private openUrlLink(formDefinition: any): void {
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree([formDefinition.formAssociation.formLink.url])
-    );
-
-    window.open(url, '_blank');
-  }
-
-  private openAngularStateUrlLink(task: Task, formDefinition: any): void {
-    this.route.params.pipe(take(1)).subscribe(params => {
-      const taskId = task?.id;
-      const documentId = params?.documentId;
-
-      this.router.navigate([formDefinition.formAssociation.formLink.url], {
-        state: {
-          ...(taskId && {taskId}),
-          ...(documentId && {documentId}),
-        },
-      });
-    });
   }
 
   private setDocumentDefinitionNameInService(task: Task): void {

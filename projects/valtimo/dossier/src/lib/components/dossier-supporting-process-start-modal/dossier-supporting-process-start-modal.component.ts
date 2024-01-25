@@ -23,19 +23,12 @@ import {
   ModalComponent,
   ValtimoFormioOptions,
 } from '@valtimo/components';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {ProcessService} from '@valtimo/process';
-import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
-import {
-  FormAssociation,
-  FormFlowService,
-  FormLinkService,
-  FormSubmissionResult,
-  ProcessLinkService,
-} from '@valtimo/form-link';
-import {NGXLogger} from 'ngx-logger';
-import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
-import {catchError, map, take} from 'rxjs/operators';
+import {ProcessDocumentDefinition} from '@valtimo/document';
+import {FormSubmissionResult, ProcessLinkService} from '@valtimo/form-link';
+import {BehaviorSubject, combineLatest, Observable, switchMap} from 'rxjs';
+import {map, take} from 'rxjs/operators';
 import {UserProviderService} from '@valtimo/security';
 
 @Component({
@@ -55,7 +48,6 @@ export class DossierSupportingProcessStartModalComponent {
   public readonly processName$ = new BehaviorSubject<string>('');
   public readonly formDefinition$ = new BehaviorSubject<FormioForm>(undefined);
   public readonly formioSubmission$ = new BehaviorSubject<FormioSubmission>(undefined);
-  public readonly formAssociation$ = new BehaviorSubject<FormAssociation>(undefined);
   public readonly processLinkId$ = new BehaviorSubject<string>('');
   public readonly options$ = new BehaviorSubject<ValtimoFormioOptions>(undefined);
   public readonly submission$ = new BehaviorSubject<object>(undefined);
@@ -68,14 +60,9 @@ export class DossierSupportingProcessStartModalComponent {
     .pipe(map(userIdentity => userIdentity?.roles?.includes('ROLE_ADMIN')));
 
   constructor(
-    private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly processService: ProcessService,
     private readonly processLinkService: ProcessLinkService,
-    private readonly documentService: DocumentService,
-    private readonly formLinkService: FormLinkService,
-    private readonly formFlowService: FormFlowService,
-    private readonly logger: NGXLogger,
     private readonly userProviderService: UserProviderService
   ) {}
 
@@ -103,62 +90,8 @@ export class DossierSupportingProcessStartModalComponent {
               break;
           }
           this.modal.show();
-        } else {
-          // backwards compatibility for form associations
-          combineLatest([this.processDefinitionKey$, this.documentId$])
-            .pipe(
-              take(1),
-              switchMap(([processDefinitionKey, documentId]) =>
-                this.formLinkService.getStartEventFormDefinitionByProcessDefinitionKey(
-                  processDefinitionKey,
-                  documentId
-                )
-              ),
-              tap(formDefinitionWithFormAssociation => {
-                this.openFormAssociation(formDefinitionWithFormAssociation);
-              }),
-              catchError(() => {
-                this.modal.show();
-                return of(null);
-              })
-            )
-            .subscribe();
         }
       });
-  }
-
-  private openFormAssociation(formDefinitionWithFormAssociation: any): void {
-    const formAssociation = formDefinitionWithFormAssociation.formAssociation;
-    const className = formAssociation.formLink.className.split('.');
-
-    this.formAssociation$.next(formAssociation);
-
-    const linkType = className[className.length - 1];
-    switch (linkType) {
-      case 'BpmnElementFormIdLink':
-        this.setFormDefinition(formDefinitionWithFormAssociation);
-        break;
-      case 'BpmnElementFormFlowIdLink':
-        this.setFormFlow();
-        break;
-      case 'BpmnElementUrlLink':
-        const url = this.router.serializeUrl(
-          this.router.createUrlTree([this.formAssociation$.getValue().formLink.url])
-        );
-        window.open(url, '_blank');
-        break;
-      case 'BpmnElementAngularStateUrlLink':
-        this.route.params.pipe(take(1)).subscribe(params => {
-          const documentId = params?.documentId;
-
-          this.router.navigate([this.formAssociation$.getValue().formLink.url], {
-            state: {...(documentId && {documentId})},
-          });
-        });
-        break;
-      default:
-        this.logger.fatal('Unsupported class name');
-    }
   }
 
   public openModal(processDocumentDefinition: ProcessDocumentDefinition, documentId: string): void {
@@ -200,27 +133,6 @@ export class DossierSupportingProcessStartModalComponent {
             this.form.showErrors(errors);
           },
         });
-    } else {
-      combineLatest([this.processDefinitionKey$, this.formAssociation$, this.documentId$])
-        .pipe(
-          take(1),
-          switchMap(([processDefinitionKey, formAssociation, documentId]) =>
-            this.formLinkService.onSubmit(
-              processDefinitionKey,
-              formAssociation.formLink.id,
-              submission.data,
-              documentId
-            )
-          )
-        )
-        .subscribe(
-          (formSubmissionResult: FormSubmissionResult) => {
-            this.formSubmitted();
-          },
-          errors => {
-            this.form.showErrors(errors);
-          }
-        );
     }
   }
 
@@ -234,43 +146,5 @@ export class DossierSupportingProcessStartModalComponent {
     this.router.navigate(['form-links'], {
       queryParams: {process: this.processDefinitionKey$.getValue()},
     });
-  }
-
-  private setFormDefinition(formDefinitionWithFormAssociation: any): void {
-    this.formDefinition$.next(formDefinitionWithFormAssociation);
-    this.documentId$
-      .pipe(
-        take(1),
-        switchMap(documentId => this.documentService.getDocument(documentId)),
-        tap(document => {
-          this.submission$.next({
-            data: document.content,
-          });
-        }),
-        tap(() => {
-          this.modal.show();
-        })
-      )
-      .subscribe();
-  }
-
-  private setFormFlow(): void {
-    combineLatest([this.processDefinitionKey$, this.documentId$])
-      .pipe(
-        take(1),
-        switchMap(([processDefinitionKey, documentId]) =>
-          this.formFlowService.createInstanceForNewProcess(processDefinitionKey, {
-            documentId,
-            documentDefinitionName: null,
-          })
-        ),
-        tap(result => {
-          this.formFlowInstanceId$.next(result.formFlowInstanceId);
-        }),
-        tap(() => {
-          this.modal.show();
-        })
-      )
-      .subscribe();
   }
 }
