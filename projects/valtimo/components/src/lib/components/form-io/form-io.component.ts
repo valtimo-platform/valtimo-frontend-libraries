@@ -79,12 +79,12 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   private tokenRefreshTimerSubscription: Subscription;
   private formRefreshSubscription: Subscription;
 
-  readonly currentLanguage$ = this.translateService.stream('key').pipe(
+  public readonly currentLanguage$ = this.translateService.stream('key').pipe(
     map(() => this.translateService.currentLang),
     distinctUntilChanged()
   );
 
-  readonly formioOptions$: Observable<ValtimoFormioOptions> = combineLatest([
+  public readonly formioOptions$: Observable<ValtimoFormioOptions> = combineLatest([
     this.currentLanguage$,
     this.options$,
   ]).pipe(
