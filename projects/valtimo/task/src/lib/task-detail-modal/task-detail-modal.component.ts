@@ -146,9 +146,9 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  public gotoFormLinkScreen(): void {
+  public gotoProcessLinkScreen(): void {
     this.modal.hide();
-    this.router.navigate(['form-links']);
+    this.router.navigate(['process-links']);
   }
 
   public onChange(event: any): void {
