@@ -128,9 +128,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    this.setInitialToken();
-
-    if (changes.formDefinitionRefresh$) {
+    if (changes?.formDefinitionRefresh$) {
       this.unsubscribeFormRefresh();
       this.subscribeFormRefresh();
     }
