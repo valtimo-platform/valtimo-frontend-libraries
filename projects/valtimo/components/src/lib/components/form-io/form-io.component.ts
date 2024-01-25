@@ -68,7 +68,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     this.clearTokenFromLocalStorage();
   }
 
-  public readonly refreshForm: EventEmitter<FormioRefreshValue> = new EventEmitter();
+  public refreshForm = new EventEmitter<FormioRefreshValue>();
 
   public readonly submission$ = new BehaviorSubject<object>(undefined);
   public readonly form$ = new BehaviorSubject<object>(undefined);
