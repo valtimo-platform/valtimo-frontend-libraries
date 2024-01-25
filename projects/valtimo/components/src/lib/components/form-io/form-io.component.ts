@@ -76,9 +76,6 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   public readonly readOnly$ = new BehaviorSubject<boolean>(false);
   public readonly errors$ = new BehaviorSubject<Array<string>>([]);
 
-  private _tokenRefreshTimerSubscription!: Subscription;
-  private _formRefreshSubscription!: Subscription;
-
   public readonly currentLanguage$ = this.translateService.stream('key').pipe(
     map(() => this.translateService.currentLang),
     distinctUntilChanged()
@@ -105,8 +102,10 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     })
   );
 
+  private _tokenRefreshTimerSubscription!: Subscription;
+  private _formRefreshSubscription!: Subscription;
   private readonly _subscriptions = new Subscription();
-  private _tokenTimerSubscription = new Subscription();
+  private readonly _tokenTimerSubscription = new Subscription();
 
   private readonly _FORMIO_TOKEN_LOCAL_STORAGE_KEY = 'formioToken';
 
