@@ -118,7 +118,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     private readonly modalService: ValtimoModalService
   ) {}
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.openRouteSubscription();
     this.errors$.next([]);
     this.setInitialToken();
@@ -141,11 +141,11 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     this.clearTokenFromLocalStorage();
   }
 
-  public showErrors(errors: string[]) {
+  public showErrors(errors: string[]): void {
     this.errors$.next(errors);
   }
 
-  public onSubmit(submission: FormioSubmission) {
+  public onSubmit(submission: FormioSubmission): void {
     this.errors$.next([]);
     this.submit.emit(submission);
   }
