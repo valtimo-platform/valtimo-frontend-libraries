@@ -23,7 +23,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {
   FormioComponent,
   FormioOptionsImpl,
@@ -34,12 +34,7 @@ import {
   ValtimoModalService,
 } from '@valtimo/components';
 import {Task, TaskProcessLinkType} from '../models';
-import {
-  FormFlowComponent,
-  FormFlowService,
-  FormSubmissionResult,
-  ProcessLinkService,
-} from '@valtimo/form-link';
+import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/form-link';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
 import {ToastrService} from 'ngx-toastr';
@@ -97,9 +92,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   constructor(
     private readonly toastr: ToastrService,
     private readonly processLinkService: ProcessLinkService,
-    private readonly formFlowService: FormFlowService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
     private readonly taskService: TaskService,
     private readonly userProviderService: UserProviderService,
     private readonly modalService: ValtimoModalService,
