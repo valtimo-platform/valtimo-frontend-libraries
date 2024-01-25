@@ -140,6 +140,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     this.unsubscribeFormRefresh();
     this.tokenRefreshTimerSubscription?.unsubscribe();
     this._subscriptions.unsubscribe();
+    this.clearTokenFromLocalStorage();
   }
 
   public showErrors(errors: string[]) {
