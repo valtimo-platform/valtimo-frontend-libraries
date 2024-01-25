@@ -32,7 +32,7 @@ import {Formio, FormioComponent as FormIoSourceComponent} from '@formio/angular'
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import jwt_decode from 'jwt-decode';
 import {NGXLogger} from 'ngx-logger';
-import {BehaviorSubject, combineLatest, from, Observable, Subject, Subscription, timer} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subject, Subscription, timer} from 'rxjs';
 import {distinctUntilChanged, map, switchMap, take} from 'rxjs/operators';
 import {FormIoStateService} from './services/form-io-state.service';
 import {ActivatedRoute} from '@angular/router';
@@ -59,9 +59,9 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   @Input() formRefresh$!: Subject<FormioRefreshValue>;
 
   // eslint-disable-next-line @angular-eslint/no-output-native
-  @Output() submit: EventEmitter<any> = new EventEmitter();
+  @Output() submit = new EventEmitter<any>();
   // eslint-disable-next-line @angular-eslint/no-output-native
-  @Output() change: EventEmitter<any> = new EventEmitter();
+  @Output() change = new EventEmitter<any>();
 
   @HostListener('window:beforeunload', ['$event'])
   private handleBeforeUnload() {
@@ -106,6 +106,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   );
 
   private readonly _subscriptions = new Subscription();
+  private _tokenTimerSubscription = new Subscription();
 
   private readonly _FORMIO_TOKEN_LOCAL_STORAGE_KEY = 'formioToken';
 
@@ -168,7 +169,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     this.scrollToTop();
   }
 
-  private openReloadFormSubscription() {
+  private openReloadFormSubscription(): void {
     this._subscriptions.add(
       this.form$.subscribe(form => {
         this.refreshForm.emit({
@@ -178,7 +179,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  private openReloadSubmissionSubscription() {
+  private openReloadSubmissionSubscription(): void {
     this._subscriptions.add(
       this.submission$.subscribe(submission => {
         this.refreshForm.emit({
@@ -209,24 +210,20 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   private setTimerForTokenRefresh(token: string): void {
     const tokenExp = (jwt_decode(token) as any).exp * 1000;
     const expiryTime = tokenExp - Date.now() - 1000;
-    if (!this.tokenRefreshTimerSubscription) {
-      this.tokenRefreshTimerSubscription = timer(expiryTime).subscribe(() => {
-        this.refreshToken();
-      });
-    }
+
+    this._tokenTimerSubscription.add(
+      timer(expiryTime)
+        .pipe(
+          switchMap(() => this.userProviderService.updateToken(-1)),
+          switchMap(() => this.userProviderService.getToken()),
+          take(1)
+        )
+        .subscribe((refreshedToken: string) => {
+          this.setToken(refreshedToken);
+        })
+    );
 
     this.logger.debug(`Timer for form.io token refresh set for: ${expiryTime}ms.`);
-  }
-
-  private refreshToken(): void {
-    from(this.userProviderService.updateToken(-1))
-      .pipe(
-        switchMap(() => this.userProviderService.getToken()),
-        take(1)
-      )
-      .subscribe(token => {
-        this.setToken(token);
-      });
   }
 
   private subscribeFormRefresh(): void {
