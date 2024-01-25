@@ -76,8 +76,8 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   public readonly readOnly$ = new BehaviorSubject<boolean>(false);
   public readonly errors$ = new BehaviorSubject<Array<string>>([]);
 
-  private tokenRefreshTimerSubscription: Subscription;
-  private formRefreshSubscription: Subscription;
+  private _tokenRefreshTimerSubscription!: Subscription;
+  private _formRefreshSubscription!: Subscription;
 
   public readonly currentLanguage$ = this.translateService.stream('key').pipe(
     map(() => this.translateService.currentLang),
@@ -139,7 +139,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnDestroy(): void {
     this.unsubscribeFormRefresh();
-    this.tokenRefreshTimerSubscription?.unsubscribe();
+    this._tokenRefreshTimerSubscription?.unsubscribe();
     this._subscriptions.unsubscribe();
     this.clearTokenFromLocalStorage();
   }
@@ -228,7 +228,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
 
   private subscribeFormRefresh(): void {
     if (this.formRefresh$) {
-      this.formRefreshSubscription = this.formRefresh$.subscribe(refreshValue => {
+      this._formRefreshSubscription = this.formRefresh$.subscribe(refreshValue => {
         if (refreshValue) {
           this.refreshForm.emit(refreshValue);
         }
@@ -237,8 +237,8 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private unsubscribeFormRefresh(): void {
-    if (this.formRefreshSubscription) {
-      this.formRefreshSubscription.unsubscribe();
+    if (this._formRefreshSubscription) {
+      this._formRefreshSubscription.unsubscribe();
     }
   }
 
