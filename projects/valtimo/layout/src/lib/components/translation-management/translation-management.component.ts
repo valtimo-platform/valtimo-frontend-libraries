@@ -195,14 +195,14 @@ export class TranslationManagementComponent implements OnInit {
   }
 
   private flattenObject = (ob: object): object => {
-    var toReturn = {};
+    const toReturn = {};
 
     for (const i in ob) {
       if (!ob.hasOwnProperty(i)) continue;
 
       if (typeof ob[i] == 'object' && ob[i] !== null) {
         const flatObject = this.flattenObject(ob[i]);
-        for (var x in flatObject) {
+        for (const x in flatObject) {
           if (!flatObject.hasOwnProperty(x)) continue;
 
           toReturn[i + '.' + x] = flatObject[x];
