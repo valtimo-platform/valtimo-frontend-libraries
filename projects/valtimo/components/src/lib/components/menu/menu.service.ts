@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {Injectable, OnInit} from '@angular/core';
-import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/config';
-import {NGXLogger} from 'ngx-logger';
-import {UserProviderService} from '@valtimo/security';
-import {NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
-import {BehaviorSubject, combineLatest, Observable, Subject, timer} from 'rxjs';
-import {DocumentDefinitions, DocumentService} from '@valtimo/document';
-import {filter, map, switchMap, take} from 'rxjs/operators';
-import {KeycloakService} from 'keycloak-angular';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
+import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/config';
+import {DocumentDefinitions, DocumentService} from '@valtimo/document';
+import {UserProviderService} from '@valtimo/security';
 import {SseService} from '@valtimo/sse';
+import {KeycloakService} from 'keycloak-angular';
+import {NGXLogger} from 'ngx-logger';
+import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
+import {filter, map, switchMap, take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MenuService implements OnInit {
+export class MenuService {
   private readonly _activeParentSequenceNumber$ = new BehaviorSubject<string>('');
   public includeFunctionObservables: {[key: string]: Observable<boolean>} = {};
 
@@ -42,8 +41,6 @@ export class MenuService implements OnInit {
   get activeParentSequenceNumber$(): Observable<string> {
     return this._activeParentSequenceNumber$.asObservable();
   }
-
-  private readonly refreshCount$ = new BehaviorSubject<null>(null);
 
   constructor(
     private readonly configService: ConfigService,
@@ -60,10 +57,6 @@ export class MenuService implements OnInit {
     this.menuConfig = config?.menu;
     this.disableCaseCount = config?.featureToggles?.disableCaseCount;
     this.enableObjectManagement = config?.featureToggles?.enableObjectManagement;
-  }
-
-  public ngOnInit(): void {
-    // this.openSseMessagesSubscription();
   }
 
   private readonly currentRoute$ = this.router.events.pipe(
@@ -291,7 +284,7 @@ export class MenuService implements OnInit {
       });
     });
   }
-
+  private refreshCount$ = new BehaviorSubject<null>(null);
   private getOpenDocumentCountMap(definitions: DocumentDefinitions): Map<string, Subject<number>> {
     const countMap = new Map<string, Subject<number>>();
     definitions.content.forEach(definition =>
@@ -299,9 +292,18 @@ export class MenuService implements OnInit {
     );
 
     // timer(0, 5000).subscribe(() => {
-    this.sseService
-      .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
-      .pipe(switchMap(() => this.documentService.getOpenDocumentCount()))
+
+    this.refreshCount$
+      .pipe(
+        switchMap(() =>
+          this.sseService.getSseMessagesObservableByEventType([
+            'CASE_UNASSIGNED',
+            'CASE_ASSIGNED',
+            'CASE_CREATED',
+          ])
+        ),
+        switchMap(() => this.documentService.getOpenDocumentCount())
+      )
       .subscribe(openDocumentCountList => {
         openDocumentCountList.forEach(openDocumentCount =>
           countMap
@@ -309,6 +311,16 @@ export class MenuService implements OnInit {
             .next(openDocumentCount.openDocumentCount)
         );
       });
+    // this.sseService
+    //   .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
+    //   .pipe(switchMap(() => this.documentService.getOpenDocumentCount()))
+    //   .subscribe(openDocumentCountList => {
+    //     openDocumentCountList.forEach(openDocumentCount =>
+    //       countMap
+    //         .get(openDocumentCount.documentDefinitionName)
+    //         .next(openDocumentCount.openDocumentCount)
+    //     );
+    //   });
     // });
     return countMap;
   }
@@ -340,12 +352,4 @@ export class MenuService implements OnInit {
       `${this.configService.config.valtimoApi.endpointUri}v1/object/management/configuration`
     );
   }
-
-  // private openSseMessagesSubscription(): void {
-  //   this.sseService
-  //     .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
-  //     .subscribe(() => {
-  //       this.refreshCount$.next(null);
-  //     });
-  // }
 }
