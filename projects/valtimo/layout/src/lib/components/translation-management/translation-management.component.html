@@ -14,4 +14,24 @@
   ~ limitations under the License.
   -->
 
-translation management works
+<ng-container
+  *ngIf="{
+    globalSettingsTranslationValues: globalSettingsTranslationValues$ | async,
+    loading: loading$ | async
+  } as obs"
+>
+  <ng-container *ngIf="!obs.loading && obs.globalSettingsTranslationValues; else loading">
+    <valtimo-carbon-multi-input
+      [arbitraryAmountTitles]="multiInputTiles$ | async"
+      [fullWidth]="true"
+      [minimumAmountOfRows]="0"
+      type="arbitraryAmount"
+      [arbitraryValueAmount]="amountOfArbitraryValues$ | async"
+      [defaultValues]="obs.globalSettingsTranslationValues"
+    ></valtimo-carbon-multi-input>
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <div class="loading-container"><cds-loading></cds-loading></div>
+</ng-template>

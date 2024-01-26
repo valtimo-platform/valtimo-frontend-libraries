@@ -38,6 +38,16 @@ export class GlobalSettingsService {
     return this.http.get<GlobalSettings>(`${this.valtimoApiUri}v1/settings`);
   }
 
+  getGlobalSettingsTranslations(): Observable<object> {
+    return this.getGlobalSettings().pipe(
+      map(globalSettings => {
+        const translations = globalSettings?.translations;
+
+        return translations || {};
+      })
+    );
+  }
+
   getGlobalSettingsTranslationsByLangKey(languageKey: string): Observable<object> {
     return this.getGlobalSettings().pipe(
       map(globalSettings => {

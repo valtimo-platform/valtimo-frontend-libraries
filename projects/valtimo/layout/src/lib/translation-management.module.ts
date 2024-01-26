@@ -19,10 +19,19 @@ import {NgModule} from '@angular/core';
 import {TranslationManagementComponent} from './components/translation-management/translation-management.component';
 import {TranslationManagementRoutingModule} from './translation-management-routing.module';
 import {TranslateModule} from '@ngx-translate/core';
+import {CarbonMultiInputModule, MultiInputFormModule} from '@valtimo/components';
+import {LoadingModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [TranslationManagementComponent],
-  imports: [CommonModule, TranslateModule, TranslationManagementRoutingModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    TranslationManagementRoutingModule,
+    MultiInputFormModule,
+    CarbonMultiInputModule,
+    LoadingModule,
+  ],
   exports: [],
 })
 export class TranslationManagementModule {}

@@ -16,14 +16,16 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {
+  ArbitraryInputTitles,
   ListItemWithId,
+  MultiInputArbitraryValue,
   MultiInputKeyValue,
   MultiInputOutput,
   MultiInputType,
   MultiInputValues,
 } from '../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
-import {map, take} from 'rxjs/operators';
+import {map, take, tap} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
 
 @Component({
@@ -36,6 +38,11 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   @Input() public title = '';
   @Input() public titleTranslationKey = '';
   @Input() public type: MultiInputType = 'value';
+  @Input() public set arbitraryValueAmount(value: number) {
+    this.amountOfArbitraryValues = value;
+    this.amountOfArbitraryValuesArray$.next(this.getArrayOfXLength(value));
+  }
+  @Input() public arbitraryAmountTitles!: ArbitraryInputTitles;
   @Input() public initialAmountOfRows = 1;
   @Input() public minimumAmountOfRows = 1;
   @Input() public maxRows = null;
@@ -58,12 +65,17 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   }
   @Input() public dropdownWidth = 250;
   @Input() public fullWidth = false;
+  @Input() public carbonTheme = 'g10';
 
   @Output() public valueChange: EventEmitter<MultiInputOutput> = new EventEmitter();
   @Output() public allValuesValidEvent: EventEmitter<boolean> = new EventEmitter();
 
+  public amountOfArbitraryValues!: number;
+  public readonly amountOfArbitraryValuesArray$ = new BehaviorSubject<Array<0>>([]);
+
   public readonly values$ = new BehaviorSubject<MultiInputValues>([]);
   public readonly mappedValues$: Observable<MultiInputOutput> = this.values$.pipe(
+    tap(values => console.log('values', values)),
     map(
       values =>
         values
@@ -80,6 +92,11 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
                   (value as MultiInputKeyValue).key &&
                   (value as MultiInputKeyValue).dropdown
                 );
+              case 'arbitraryAmount':
+                const values = Object.values(value as MultiInputArbitraryValue);
+                const positiveValuesAmount = values.filter(value => !!value);
+
+                return values.length === positiveValuesAmount.length;
             }
           }) as MultiInputOutput
     )
@@ -137,9 +154,10 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   }
 
   public onValueChange(
-    templateValue: MultiInputKeyValue,
+    templateValue: MultiInputKeyValue | MultiInputArbitraryValue,
     inputValue: string,
-    change: 'key' | 'value' | 'dropdown'
+    change: 'key' | 'value' | 'dropdown' | 'arbitrary',
+    arbitraryIndex?: number
   ): void {
     this.values$.pipe(take(1)).subscribe(values => {
       this.values$.next(
@@ -151,6 +169,8 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
               return {...stateValue, key: inputValue};
             } else if (change === 'dropdown') {
               return {...stateValue, dropdown: inputValue};
+            } else if (change === 'arbitrary') {
+              return {...stateValue, [arbitraryIndex]: inputValue};
             }
           }
           return stateValue;
@@ -160,6 +180,8 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   }
 
   private getInitialRows(): MultiInputValues {
+    console.log('default value', this.defaultValues);
+
     const minimumRows = this.minimumAmountOfRows;
     const initialRows = this.initialAmountOfRows;
     const amountOfInitalRows = Math.max(minimumRows, initialRows);
@@ -171,7 +193,19 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
     return this.defaultValues.map(defaultValue => ({...defaultValue, uuid: uuidv4()}));
   }
 
-  private getEmptyValue(): MultiInputKeyValue {
+  private getEmptyValue(): MultiInputKeyValue | MultiInputArbitraryValue {
+    if (this.type === 'arbitraryAmount') {
+      const emptyValue = {
+        uuid: uuidv4(),
+      };
+
+      this.getArrayOfXLength(this.amountOfArbitraryValues).forEach((_, index) => {
+        emptyValue[`${index}`] = '';
+      });
+
+      return emptyValue;
+    }
+
     return {
       key: '',
       value: '',
@@ -180,11 +214,15 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
     };
   }
 
-  private getMappedValue(valueToMap: MultiInputKeyValue): MultiInputKeyValue | string {
+  private getMappedValue(
+    valueToMap: MultiInputKeyValue | MultiInputArbitraryValue
+  ): MultiInputKeyValue | MultiInputArbitraryValue | string {
     if (this.type === 'keyValue') {
       return {key: valueToMap.key, value: valueToMap.value};
     } else if (this.type === 'keyDropdownValue') {
       return {key: valueToMap.key, value: valueToMap.value, dropdown: valueToMap.dropdown};
+    } else if (this.type === 'arbitraryAmount') {
+      return {...valueToMap};
     }
 
     return valueToMap.value;
@@ -197,5 +235,9 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
         this.allValuesValidEvent.emit(values.length === mappedValues.length);
       }
     );
+  }
+
+  private getArrayOfXLength(length: number): Array<0> {
+    return Array(length).fill(0);
   }
 }
