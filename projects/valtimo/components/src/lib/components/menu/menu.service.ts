@@ -63,7 +63,7 @@ export class MenuService implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.openSseMessagesSubscription();
+    // this.openSseMessagesSubscription();
   }
 
   private readonly currentRoute$ = this.router.events.pipe(
@@ -299,7 +299,8 @@ export class MenuService implements OnInit {
     );
 
     // timer(0, 5000).subscribe(() => {
-    this.refreshCount$
+    this.sseService
+      .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
       .pipe(switchMap(() => this.documentService.getOpenDocumentCount()))
       .subscribe(openDocumentCountList => {
         openDocumentCountList.forEach(openDocumentCount =>
@@ -340,11 +341,11 @@ export class MenuService implements OnInit {
     );
   }
 
-  private openSseMessagesSubscription(): void {
-    this.sseService
-      .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
-      .subscribe(() => {
-        this.refreshCount$.next(null);
-      });
-  }
+  // private openSseMessagesSubscription(): void {
+  //   this.sseService
+  //     .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
+  //     .subscribe(() => {
+  //       this.refreshCount$.next(null);
+  //     });
+  // }
 }
