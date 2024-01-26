@@ -284,7 +284,6 @@ export class MenuService {
       });
     });
   }
-  private refreshCount$ = new BehaviorSubject<null>(null);
   private getOpenDocumentCountMap(definitions: DocumentDefinitions): Map<string, Subject<number>> {
     const countMap = new Map<string, Subject<number>>();
     definitions.content.forEach(definition =>
@@ -293,17 +292,9 @@ export class MenuService {
 
     // timer(0, 5000).subscribe(() => {
 
-    this.refreshCount$
-      .pipe(
-        switchMap(() =>
-          this.sseService.getSseMessagesObservableByEventType([
-            'CASE_UNASSIGNED',
-            'CASE_ASSIGNED',
-            'CASE_CREATED',
-          ])
-        ),
-        switchMap(() => this.documentService.getOpenDocumentCount())
-      )
+    this.sseService
+      .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
+      .pipe(switchMap(() => this.documentService.getOpenDocumentCount()))
       .subscribe(openDocumentCountList => {
         openDocumentCountList.forEach(openDocumentCount =>
           countMap
@@ -311,17 +302,6 @@ export class MenuService {
             .next(openDocumentCount.openDocumentCount)
         );
       });
-    // this.sseService
-    //   .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
-    //   .pipe(switchMap(() => this.documentService.getOpenDocumentCount()))
-    //   .subscribe(openDocumentCountList => {
-    //     openDocumentCountList.forEach(openDocumentCount =>
-    //       countMap
-    //         .get(openDocumentCount.documentDefinitionName)
-    //         .next(openDocumentCount.openDocumentCount)
-    //     );
-    //   });
-    // });
     return countMap;
   }
 
