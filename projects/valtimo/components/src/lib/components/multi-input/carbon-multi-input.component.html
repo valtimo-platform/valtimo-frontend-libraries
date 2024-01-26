@@ -139,6 +139,7 @@
 <ng-template #arbitraryValue let-value="value" let-index="index">
   <div
     class="v-multi-input__input"
+    [ngClass]="{'--full-width': fullWidth}"
     *ngFor="let _ of amountOfArbitraryValuesArray$ | async; index as i"
   >
     <cds-label *ngIf="index === 0">{{

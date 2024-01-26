@@ -24,7 +24,8 @@
     titleTranslation: titleTranslationKey | translate,
     contentTranslation: contentTranslationKey | translate,
     confirmButtonTranslation: confirmButtonTextTranslationKey | translate,
-    cancelButtonTranslation: cancelButtonTextTranslationKey | translate
+    cancelButtonTranslation: cancelButtonTextTranslationKey | translate,
+    optionalButtonTranslation: optionalButtonTextTranslationKey | translate
   } as obs"
 >
   <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
@@ -56,6 +57,21 @@
             : '') ||
             cancelButtonText ||
             obs.cancelTranslation
+        }}
+      </button>
+      <div *ngIf="spacerAfterCancelButton" class="modal-spacer"></div>
+      <button
+        *ngIf="showOptionalButton"
+        [attr.modal-primary-focus]="true"
+        [cdsButton]="optionalButtonType"
+        (click)="optional()"
+      >
+        {{
+          (optionalButtonTextTranslationKey !== obs.optionalButtonTranslation
+            ? obs.optionalButtonTranslation
+            : '') ||
+            optionalButtonText ||
+            obs.deleteTranslation
         }}
       </button>
       <button [attr.modal-primary-focus]="true" [cdsButton]="confirmButtonType" (click)="confirm()">

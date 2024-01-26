@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, take, tap} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {GlobalSettingsService} from '@valtimo/config';
@@ -24,6 +24,7 @@ import {
   MultiInputOutput,
 } from '@valtimo/components';
 import {isEqual} from 'lodash';
+import {DOCUMENT} from '@angular/common';
 
 @Component({
   selector: 'valtimo-translation-management',
@@ -46,6 +47,8 @@ export class TranslationManagementComponent implements OnInit {
   private _defaultValues: Array<MultiInputArbitraryValue> = [];
 
   private readonly _changedValues$ = new BehaviorSubject<MultiInputOutput>(undefined);
+
+  public readonly showConfirmationModal$ = new BehaviorSubject<boolean>(false);
 
   public readonly valuesChanged$: Observable<boolean> = this._changedValues$.pipe(
     map(changedValues => !isEqual(changedValues, this._defaultValues))
@@ -107,7 +110,8 @@ export class TranslationManagementComponent implements OnInit {
 
   constructor(
     private readonly translateService: TranslateService,
-    private readonly globalSettingsService: GlobalSettingsService
+    private readonly globalSettingsService: GlobalSettingsService,
+    @Inject(DOCUMENT) private readonly document: Document
   ) {}
 
   public ngOnInit(): void {
@@ -122,7 +126,23 @@ export class TranslationManagementComponent implements OnInit {
     this._changedValues$.next(value);
   }
 
-  public saveChanges(): void {
+  public saveAndRefresh(): void {
+    this.saveChanges(true);
+  }
+
+  public saveAndStay(): void {
+    this.saveChanges();
+  }
+
+  public cancel(): void {
+    this.hideModal();
+  }
+
+  public showModal(): void {
+    this.showConfirmationModal$.next(true);
+  }
+
+  public saveChanges(reload = false): void {
     this.disable();
 
     combineLatest([this._changedValues$, this._languageOptions$])
@@ -161,8 +181,12 @@ export class TranslationManagementComponent implements OnInit {
         switchMap(newSettings => this.globalSettingsService.updateGlobalSettings(newSettings))
       )
       .subscribe(() => {
-        this._refreshGlobalSettings$.next(null);
-        this.enable();
+        if (reload) {
+          this.document?.defaultView?.location?.reload();
+        } else {
+          this._refreshGlobalSettings$.next(null);
+          this.enable();
+        }
       });
   }
 
@@ -207,5 +231,9 @@ export class TranslationManagementComponent implements OnInit {
 
   private enable(): void {
     this.disabled$.next(false);
+  }
+
+  private hideModal(): void {
+    this.showConfirmationModal$.next(false);
   }
 }

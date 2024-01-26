@@ -1307,5 +1307,12 @@
         "title": "No roles added"
       }
     }
+  },
+  "translationManagement": {
+    "add": "Add translation",
+    "modalTitle": "Save translations",
+    "modalContent": "Displaying new translations in the application might require a page reload.",
+    "saveWithoutReload": "Save",
+    "saveWithReload": "Save and reload"
   }
 }

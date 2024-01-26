@@ -1307,5 +1307,12 @@
         "title": "Keine Rollen hinzugefügt"
       }
     }
+  },
+  "translationManagement": {
+    "add": "Übersetzung hinzufügen",
+    "modalTitle": "Übersetzungen speichern",
+    "modalContent": "Die Anzeige neuer Übersetzungen in der Anwendung erfordert möglicherweise ein Neuladen der Seite.",
+    "saveWithoutReload": "Speichern",
+    "saveWithReload": "Speichern und neu laden"
   }
 }

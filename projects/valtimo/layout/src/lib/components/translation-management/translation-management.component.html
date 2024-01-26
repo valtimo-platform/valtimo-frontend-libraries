@@ -32,6 +32,7 @@
       [defaultValues]="obs.globalSettingsTranslationValues"
       (allValuesValidEvent)="validChange($event)"
       (valueChange)="valueChange($event)"
+      addRowTranslationKey="translationManagement.add"
     ></valtimo-carbon-multi-input>
   </ng-container>
 </ng-container>
@@ -40,12 +41,27 @@
   <div class="loading-container"><cds-loading></cds-loading></div>
 </ng-template>
 
+<valtimo-confirmation-modal
+  [showModalSubject$]="showConfirmationModal$"
+  (confirmEvent)="saveAndRefresh()"
+  (optionalEvent)="saveAndStay()"
+  (cancelEvent)="cancel()"
+  [showOptionalButton]="true"
+  cancelButtonType="ghost"
+  optionalButtonType="secondary"
+  confirmButtonTextTranslationKey="translationManagement.saveWithReload"
+  optionalButtonTextTranslationKey="translationManagement.saveWithoutReload"
+  titleTranslationKey="translationManagement.modalTitle"
+  contentTranslationKey="translationManagement.modalContent"
+  [spacerAfterCancelButton]="true"
+></valtimo-confirmation-modal>
+
 <ng-container renderInPageHeader>
   <ng-template>
     <button
       cdsButton="primary"
       size="md"
-      (click)="saveChanges()"
+      (click)="showModal()"
       [disabled]="
         (allChangedValuesValid$ | async) === false ||
         (disabled$ | async) ||

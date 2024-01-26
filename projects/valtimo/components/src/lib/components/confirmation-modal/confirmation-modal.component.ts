@@ -30,13 +30,20 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
   @Input() confirmButtonText = '';
   @Input() confirmButtonTextTranslationKey = '';
   @Input() confirmButtonType = ModalButtonType.primary;
+  @Input() showOptionalButton = false;
+  @Input() optionalButtonText = '';
+  @Input() optionalButtonTextTranslationKey = '';
+  @Input() optionalButtonType = ModalButtonType.tertiary;
   @Input() cancelButtonText = '';
   @Input() cancelButtonTextTranslationKey = '';
   @Input() cancelButtonType = ModalButtonType.secondary;
   @Input() showModalSubject$: Observable<boolean>;
   @Input() outputOnConfirm: any = {};
+  @Input() outputOnOptional: any = {};
+  @Input() spacerAfterCancelButton = false;
 
   @Output() confirmEvent: EventEmitter<any> = new EventEmitter();
+  @Output() optionalEvent: EventEmitter<void> = new EventEmitter();
   @Output() cancelEvent: EventEmitter<void> = new EventEmitter();
 
   readonly modalOpen$ = new BehaviorSubject<boolean>(false);
@@ -51,6 +58,11 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
   confirm(): void {
     this.modalOpen$.next(false);
     this.confirmEvent.emit(this.outputOnConfirm);
+  }
+
+  optional(): void {
+    this.modalOpen$.next(false);
+    this.optionalEvent.emit(this.outputOnConfirm);
   }
 
   ngOnInit(): void {

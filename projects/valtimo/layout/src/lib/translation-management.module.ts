@@ -21,6 +21,7 @@ import {TranslationManagementRoutingModule} from './translation-management-routi
 import {TranslateModule} from '@ngx-translate/core';
 import {
   CarbonMultiInputModule,
+  ConfirmationModalModule,
   MultiInputFormModule,
   RenderInPageHeaderDirectiveModule,
 } from '@valtimo/components';
@@ -38,6 +39,7 @@ import {ButtonModule, IconModule, LoadingModule} from 'carbon-components-angular
     RenderInPageHeaderDirectiveModule,
     ButtonModule,
     IconModule,
+    ConfirmationModalModule,
   ],
   exports: [],
 })
