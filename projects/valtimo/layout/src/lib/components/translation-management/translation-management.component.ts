@@ -15,10 +15,15 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, take, tap} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {GlobalSettingsService} from '@valtimo/config';
-import {ArbitraryInputTitles, MultiInputArbitraryValue} from '@valtimo/components';
+import {
+  ArbitraryInputTitles,
+  MultiInputArbitraryValue,
+  MultiInputOutput,
+} from '@valtimo/components';
+import {isEqual} from 'lodash';
 
 @Component({
   selector: 'valtimo-translation-management',
@@ -27,6 +32,8 @@ import {ArbitraryInputTitles, MultiInputArbitraryValue} from '@valtimo/component
 })
 export class TranslationManagementComponent implements OnInit {
   public readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly allChangedValuesValid$ = new BehaviorSubject<boolean>(false);
+  public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   private readonly _languageOptions$ = new BehaviorSubject<Array<string>>(undefined);
   private readonly _refreshGlobalSettings$ = new BehaviorSubject<null>(null);
@@ -34,6 +41,14 @@ export class TranslationManagementComponent implements OnInit {
     tap(() => this.loading$.next(true)),
     switchMap(() => this.globalSettingsService.getGlobalSettingsTranslations()),
     tap(() => this.loading$.next(false))
+  );
+
+  private _defaultValues: Array<MultiInputArbitraryValue> = [];
+
+  private readonly _changedValues$ = new BehaviorSubject<MultiInputOutput>(undefined);
+
+  public readonly valuesChanged$: Observable<boolean> = this._changedValues$.pipe(
+    map(changedValues => !isEqual(changedValues, this._defaultValues))
   );
 
   public readonly globalSettingsTranslationValues$: Observable<Array<MultiInputArbitraryValue>> =
@@ -63,7 +78,9 @@ export class TranslationManagementComponent implements OnInit {
           return emptyArbitraryValue;
         });
       }),
-      tap(res => console.log('returned', res))
+      tap(defaultValues => {
+        this._defaultValues = defaultValues;
+      })
     );
 
   public readonly multiInputTiles$: Observable<ArbitraryInputTitles> = combineLatest([
@@ -97,9 +114,60 @@ export class TranslationManagementComponent implements OnInit {
     this.setLanguages();
   }
 
+  public validChange(valid: boolean): void {
+    this.allChangedValuesValid$.next(valid);
+  }
+
+  public valueChange(value: MultiInputOutput): void {
+    this._changedValues$.next(value);
+  }
+
+  public saveChanges(): void {
+    this.disable();
+
+    combineLatest([this._changedValues$, this._languageOptions$])
+      .pipe(
+        take(1),
+        map(([changedValues, languageOptions]) => {
+          const translationObject = {};
+
+          languageOptions.forEach(languageOption => {
+            translationObject[languageOption] = {};
+          });
+
+          changedValues.forEach(changedValue => {
+            languageOptions.forEach((languageOption, index) => {
+              translationObject[languageOption] = {
+                ...translationObject[languageOption],
+                [changedValue[0]]: changedValue[index + 1],
+              };
+            });
+          });
+
+          languageOptions.forEach(languageOption => {
+            translationObject[languageOption] = this.unflattenObject(
+              translationObject[languageOption]
+            );
+          });
+
+          return translationObject;
+        }),
+        switchMap(newTranslations =>
+          combineLatest([this.globalSettingsService.getGlobalSettings(), of(newTranslations)])
+        ),
+        map(([globalSettings, newTranslations]) => {
+          return {...globalSettings, translations: newTranslations};
+        }),
+        switchMap(newSettings => this.globalSettingsService.updateGlobalSettings(newSettings))
+      )
+      .subscribe(() => {
+        this._refreshGlobalSettings$.next(null);
+        this.enable();
+      });
+  }
+
   private setLanguages(): void {
     this._languageOptions$.next(this.translateService.langs);
-    console.log(this._languageOptions$.getValue());
   }
 
   private flattenObject = (ob: object): object => {
@@ -132,4 +200,12 @@ export class TranslationManagementComponent implements OnInit {
       );
       return res;
     }, {});
+
+  private disable(): void {
+    this.disabled$.next(true);
+  }
+
+  private enable(): void {
+    this.disabled$.next(false);
+  }
 }

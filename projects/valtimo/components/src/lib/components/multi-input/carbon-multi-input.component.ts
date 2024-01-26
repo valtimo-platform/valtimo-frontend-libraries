@@ -25,7 +25,7 @@ import {
   MultiInputValues,
 } from '../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
-import {map, take, tap} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
 
 @Component({
@@ -75,7 +75,6 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
 
   public readonly values$ = new BehaviorSubject<MultiInputValues>([]);
   public readonly mappedValues$: Observable<MultiInputOutput> = this.values$.pipe(
-    tap(values => console.log('values', values)),
     map(
       values =>
         values
@@ -180,8 +179,6 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   }
 
   private getInitialRows(): MultiInputValues {
-    console.log('default value', this.defaultValues);
-
     const minimumRows = this.minimumAmountOfRows;
     const initialRows = this.initialAmountOfRows;
     const amountOfInitalRows = Math.max(minimumRows, initialRows);
@@ -222,7 +219,9 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
     } else if (this.type === 'keyDropdownValue') {
       return {key: valueToMap.key, value: valueToMap.value, dropdown: valueToMap.dropdown};
     } else if (this.type === 'arbitraryAmount') {
-      return {...valueToMap};
+      const objCopy = {...valueToMap};
+      delete objCopy.uuid;
+      return objCopy;
     }
 
     return valueToMap.value;

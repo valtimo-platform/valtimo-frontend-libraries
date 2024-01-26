@@ -34,11 +34,15 @@ export class GlobalSettingsService {
     this.valtimoApiUri = configService?.config?.valtimoApi?.endpointUri;
   }
 
-  getGlobalSettings(): Observable<GlobalSettings> {
+  public getGlobalSettings(): Observable<GlobalSettings> {
     return this.http.get<GlobalSettings>(`${this.valtimoApiUri}v1/settings`);
   }
 
-  getGlobalSettingsTranslations(): Observable<object> {
+  public updateGlobalSettings(updatedSettings: GlobalSettings): Observable<GlobalSettings> {
+    return this.http.put<GlobalSettings>(`${this.valtimoApiUri}v1/settings`, updatedSettings);
+  }
+
+  public getGlobalSettingsTranslations(): Observable<object> {
     return this.getGlobalSettings().pipe(
       map(globalSettings => {
         const translations = globalSettings?.translations;
@@ -48,7 +52,7 @@ export class GlobalSettingsService {
     );
   }
 
-  getGlobalSettingsTranslationsByLangKey(languageKey: string): Observable<object> {
+  public getGlobalSettingsTranslationsByLangKey(languageKey: string): Observable<object> {
     return this.getGlobalSettings().pipe(
       map(globalSettings => {
         const translations = globalSettings?.translations;

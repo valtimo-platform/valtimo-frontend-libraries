@@ -17,17 +17,21 @@
 <ng-container
   *ngIf="{
     globalSettingsTranslationValues: globalSettingsTranslationValues$ | async,
-    loading: loading$ | async
+    loading: loading$ | async,
+    disabled: disabled$ | async
   } as obs"
 >
   <ng-container *ngIf="!obs.loading && obs.globalSettingsTranslationValues; else loading">
     <valtimo-carbon-multi-input
+      [disabled]="obs.disabled"
       [arbitraryAmountTitles]="multiInputTiles$ | async"
       [fullWidth]="true"
       [minimumAmountOfRows]="0"
       type="arbitraryAmount"
       [arbitraryValueAmount]="amountOfArbitraryValues$ | async"
       [defaultValues]="obs.globalSettingsTranslationValues"
+      (allValuesValidEvent)="validChange($event)"
+      (valueChange)="valueChange($event)"
     ></valtimo-carbon-multi-input>
   </ng-container>
 </ng-container>
@@ -35,3 +39,22 @@
 <ng-template #loading>
   <div class="loading-container"><cds-loading></cds-loading></div>
 </ng-template>
+
+<ng-container renderInPageHeader>
+  <ng-template>
+    <button
+      cdsButton="primary"
+      size="md"
+      (click)="saveChanges()"
+      [disabled]="
+        (allChangedValuesValid$ | async) === false ||
+        (disabled$ | async) ||
+        (valuesChanged$ | async) === false
+      "
+    >
+      {{ 'interface.save' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="save" size="16"></svg>
+    </button>
+  </ng-template>
+</ng-container>
