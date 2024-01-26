@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {ConfigService, MenuConfig, MenuIncludeService, MenuItem} from '@valtimo/config';
 import {NGXLogger} from 'ngx-logger';
 import {UserProviderService} from '@valtimo/security';
 import {NavigationEnd, NavigationStart, ResolveEnd, Router} from '@angular/router';
 import {BehaviorSubject, combineLatest, Observable, Subject, timer} from 'rxjs';
 import {DocumentDefinitions, DocumentService} from '@valtimo/document';
-import {filter, map, take} from 'rxjs/operators';
+import {filter, map, switchMap, take} from 'rxjs/operators';
 import {KeycloakService} from 'keycloak-angular';
 import {HttpClient} from '@angular/common/http';
+import {SseService} from '@valtimo/sse';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MenuService {
+export class MenuService implements OnInit {
   private readonly _activeParentSequenceNumber$ = new BehaviorSubject<string>('');
   public includeFunctionObservables: {[key: string]: Observable<boolean>} = {};
 
@@ -42,6 +43,8 @@ export class MenuService {
     return this._activeParentSequenceNumber$.asObservable();
   }
 
+  private readonly refreshCount$ = new BehaviorSubject<null>(null);
+
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
@@ -50,12 +53,17 @@ export class MenuService {
     private readonly menuIncludeService: MenuIncludeService,
     private readonly router: Router,
     private readonly keycloakService: KeycloakService,
-    private http: HttpClient
+    private http: HttpClient,
+    private readonly sseService: SseService
   ) {
     const config = configService?.config;
     this.menuConfig = config?.menu;
     this.disableCaseCount = config?.featureToggles?.disableCaseCount;
     this.enableObjectManagement = config?.featureToggles?.enableObjectManagement;
+  }
+
+  public ngOnInit(): void {
+    this.openSseMessagesSubscription();
   }
 
   private readonly currentRoute$ = this.router.events.pipe(
@@ -290,15 +298,17 @@ export class MenuService {
       countMap.set(definition.id.name, new Subject<number>())
     );
 
-    timer(0, 5000).subscribe(() => {
-      this.documentService.getOpenDocumentCount().subscribe(openDocumentCountList => {
+    // timer(0, 5000).subscribe(() => {
+    this.refreshCount$
+      .pipe(switchMap(() => this.documentService.getOpenDocumentCount()))
+      .subscribe(openDocumentCountList => {
         openDocumentCountList.forEach(openDocumentCount =>
           countMap
             .get(openDocumentCount.documentDefinitionName)
             .next(openDocumentCount.openDocumentCount)
         );
       });
-    });
+    // });
     return countMap;
   }
 
@@ -328,5 +338,13 @@ export class MenuService {
     return this.http.get(
       `${this.configService.config.valtimoApi.endpointUri}v1/object/management/configuration`
     );
+  }
+
+  private openSseMessagesSubscription(): void {
+    this.sseService
+      .getSseMessagesObservableByEventType(['CASE_UNASSIGNED', 'CASE_ASSIGNED', 'CASE_CREATED'])
+      .subscribe(() => {
+        this.refreshCount$.next(null);
+      });
   }
 }
