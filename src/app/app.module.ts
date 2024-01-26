@@ -17,7 +17,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {Injector, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {HttpBackend, HttpClientModule} from '@angular/common/http';
+import {HttpBackend, HttpClient, HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LayoutModule, TranslationManagementModule} from '@valtimo/layout';
@@ -82,7 +82,12 @@ import {LoggerModule} from 'ngx-logger';
 import {FORM_FLOW_COMPONENT_TOKEN, FormLinkModule} from '@valtimo/form-link';
 import {MigrationModule} from '@valtimo/migration';
 import {BootstrapModule} from '@valtimo/bootstrap';
-import {ConfigModule, ConfigService, MultiTranslateHttpLoaderFactory} from '@valtimo/config';
+import {
+  ConfigModule,
+  ConfigService,
+  CustomMultiTranslateHttpLoaderFactory,
+  GlobalSettingsService,
+} from '@valtimo/config';
 import {FormManagementModule} from '@valtimo/form-management';
 import {DossierManagementModule} from '@valtimo/dossier-management';
 import {OpenZaakModule} from '@valtimo/open-zaak';
@@ -209,8 +214,8 @@ export function tabsFactory() {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: MultiTranslateHttpLoaderFactory,
-        deps: [HttpBackend, ConfigService],
+        useFactory: CustomMultiTranslateHttpLoaderFactory,
+        deps: [HttpBackend, HttpClient, ConfigService, GlobalSettingsService],
       },
     }),
     ObjectModule,

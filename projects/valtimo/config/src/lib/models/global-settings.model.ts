@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {TranslationManagementComponent} from './components/translation-management/translation-management.component';
-import {TranslationManagementRoutingModule} from './translation-management-routing.module';
-import {TranslateModule} from '@ngx-translate/core';
+interface GlobalSettings {
+  translations?: {
+    [languageKey: string]: object;
+  };
+}
 
-@NgModule({
-  declarations: [TranslationManagementComponent],
-  imports: [CommonModule, TranslateModule, TranslationManagementRoutingModule],
-  exports: [],
-})
-export class TranslationManagementModule {}
+export {GlobalSettings};

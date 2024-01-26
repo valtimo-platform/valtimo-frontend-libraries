@@ -14,11 +14,26 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-translation-management',
   templateUrl: './translation-management.component.html',
   styleUrls: ['./translation-management.component.scss'],
 })
-export class TranslationManagementComponent {}
+export class TranslationManagementComponent implements OnInit {
+  private readonly _languageOptions$ = new BehaviorSubject<Array<string>>(undefined);
+
+  constructor(private readonly translateService: TranslateService) {}
+
+  public ngOnInit(): void {
+    this.setLanguages();
+  }
+
+  private setLanguages(): void {
+    this._languageOptions$.next(this.translateService.langs);
+    console.log(this._languageOptions$.getValue());
+  }
+}

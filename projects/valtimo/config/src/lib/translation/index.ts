@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {TranslationManagementComponent} from './components/translation-management/translation-management.component';
-import {TranslationManagementRoutingModule} from './translation-management-routing.module';
-import {TranslateModule} from '@ngx-translate/core';
-
-@NgModule({
-  declarations: [TranslationManagementComponent],
-  imports: [CommonModule, TranslateModule, TranslationManagementRoutingModule],
-  exports: [],
-})
-export class TranslationManagementModule {}
+export * from './custom-multi-translate-http-loader';
+export * from './custom-multi-translate-http-loader-factory';
+export * from './multi-translate-http-loader-factory';
