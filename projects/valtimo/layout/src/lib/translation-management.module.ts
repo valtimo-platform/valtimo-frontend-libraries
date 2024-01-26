@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of layout
- */
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {TranslationManagementComponent} from './components/translation-management/translation-management.component';
+import {TranslationManagementRoutingModule} from './translation-management-routing.module';
 
-export * from './lib/services/layout/layout.service';
-export * from './lib/components/layout/layout.component';
-export * from './lib/layout.module';
-export * from './lib/translation-management.module';
+@NgModule({
+  declarations: [TranslationManagementComponent],
+  imports: [CommonModule, TranslationManagementRoutingModule],
+  exports: [],
+})
+export class TranslationManagementModule {}
