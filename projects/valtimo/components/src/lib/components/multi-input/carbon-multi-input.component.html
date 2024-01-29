@@ -66,7 +66,7 @@
 
       <ng-container *ngIf="type === 'arbitraryAmount'">
         <ng-container
-          *ngTemplateOutlet="arbitraryValue; context: {value: value, index: i}"
+          *ngTemplateOutlet="arbitraryAmountValue; context: {value: value, index: i}"
         ></ng-container>
       </ng-container>
 
@@ -136,7 +136,7 @@
   </div>
 </ng-template>
 
-<ng-template #arbitraryValue let-value="value" let-index="index">
+<ng-template #arbitraryAmountValue let-value="value" let-index="index">
   <div
     class="v-multi-input__input"
     [ngClass]="{'--full-width': fullWidth}"

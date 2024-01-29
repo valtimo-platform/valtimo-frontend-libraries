@@ -39,7 +39,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   @Input() public titleTranslationKey = '';
   @Input() public type: MultiInputType = 'value';
   @Input() public set arbitraryValueAmount(value: number) {
-    this.amountOfArbitraryValues = value;
+    this._amountOfArbitraryValues = value;
     this.amountOfArbitraryValuesArray$.next(this.getArrayOfXLength(value));
   }
   @Input() public arbitraryAmountTitles!: ArbitraryInputTitles;
@@ -70,7 +70,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   @Output() public valueChange: EventEmitter<MultiInputOutput> = new EventEmitter();
   @Output() public allValuesValidEvent: EventEmitter<boolean> = new EventEmitter();
 
-  public amountOfArbitraryValues!: number;
+  private _amountOfArbitraryValues!: number;
   public readonly amountOfArbitraryValuesArray$ = new BehaviorSubject<Array<0>>([]);
 
   public readonly values$ = new BehaviorSubject<MultiInputValues>([]);
@@ -196,7 +196,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
         uuid: uuidv4(),
       };
 
-      this.getArrayOfXLength(this.amountOfArbitraryValues).forEach((_, index) => {
+      this.getArrayOfXLength(this._amountOfArbitraryValues).forEach((_, index) => {
         emptyValue[`${index}`] = '';
       });
 
