@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<!-- <div class="main-content container-fluid" *ngIf="{loading: loading$ | async} as obs">
+<div class="main-content container-fluid" *ngIf="{loading: loading$ | async} as obs">
   <h4 class="title">
     {{ 'dashboard.openTasks.title' | translate }}
     <sup *ngIf="obs.loading === false" class="ml-1 badge badge-pill badge-primary">{{
@@ -35,7 +35,8 @@
     (formSubmit)="getOpenTasks()"
     (assignmentOfTaskChanged)="getOpenTasks()"
   ></valtimo-task-detail-modal>
-</div> -->
+</div>
+
 <ng-template #loading>
   <valtimo-spinner></valtimo-spinner>
 </ng-template>
