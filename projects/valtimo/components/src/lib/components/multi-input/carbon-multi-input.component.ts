@@ -92,10 +92,10 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
                   (value as MultiInputKeyValue).dropdown
                 );
               case 'arbitraryAmount':
-                const values = Object.values(value as MultiInputArbitraryValue);
-                const positiveValuesAmount = values.filter(value => !!value);
+                const objectValues = Object.values(value as MultiInputArbitraryValue);
+                const positiveValuesAmount = objectValues.filter(objectValue => !!objectValue);
 
-                return values.length === positiveValuesAmount.length;
+                return objectValues.length === positiveValuesAmount.length;
             }
           }) as MultiInputOutput
     )

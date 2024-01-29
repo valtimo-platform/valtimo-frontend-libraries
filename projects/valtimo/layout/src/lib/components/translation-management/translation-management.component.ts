@@ -136,9 +136,10 @@ export class TranslationManagementComponent implements OnInit {
         switchMap(newTranslations =>
           combineLatest([this.globalSettingsService.getGlobalSettings(), of(newTranslations)])
         ),
-        map(([globalSettings, newTranslations]) => {
-          return {...globalSettings, translations: newTranslations};
-        }),
+        map(([globalSettings, newTranslations]) => ({
+          ...globalSettings,
+          translations: newTranslations,
+        })),
         switchMap(newSettings => this.globalSettingsService.updateGlobalSettings(newSettings))
       )
       .subscribe(() => {
