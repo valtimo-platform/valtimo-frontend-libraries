@@ -67,12 +67,12 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
     this.cancelEvent.emit();
   }
 
-  public confirm(): void {
+  public onConfirm(): void {
     this.modalOpen$.next(false);
     this.confirmEvent.emit(this.outputOnConfirm);
   }
 
-  public optional(): void {
+  public onOptional(): void {
     this.modalOpen$.next(false);
     this.optionalEvent.emit(this.outputOnOptional);
   }

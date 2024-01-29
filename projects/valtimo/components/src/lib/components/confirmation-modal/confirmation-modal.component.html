@@ -64,7 +64,7 @@
         *ngIf="showOptionalButton"
         [attr.modal-primary-focus]="true"
         [cdsButton]="optionalButtonType"
-        (click)="optional()"
+        (click)="onOptional()"
       >
         {{
           (optionalButtonTextTranslationKey !== obs.optionalButtonTranslation
@@ -74,7 +74,11 @@
             obs.deleteTranslation
         }}
       </button>
-      <button [attr.modal-primary-focus]="true" [cdsButton]="confirmButtonType" (click)="confirm()">
+      <button
+        [attr.modal-primary-focus]="true"
+        [cdsButton]="confirmButtonType"
+        (click)="onConfirm()"
+      >
         {{
           (confirmButtonTextTranslationKey !== obs.confirmButtonTranslation
             ? obs.confirmButtonTranslation
