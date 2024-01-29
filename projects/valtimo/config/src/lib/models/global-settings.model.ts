@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-interface GlobalSettings {
-  translations?: {
-    [languageKey: string]: object;
-  };
+interface GlobalSettingsTranslations {
+  [languageKey: string]: object;
 }
 
-export {GlobalSettings};
+interface GlobalSettings {
+  translations?: GlobalSettingsTranslations;
+}
+
+export {GlobalSettings, GlobalSettingsTranslations};

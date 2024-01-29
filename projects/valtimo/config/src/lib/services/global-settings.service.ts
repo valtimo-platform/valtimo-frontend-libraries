@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {GlobalSettings} from '../models';
+import {GlobalSettings, GlobalSettingsTranslations} from '../models';
 import {HttpClient} from '@angular/common/http';
 import {ConfigService} from './config.service';
 import {Observable} from 'rxjs';
@@ -42,7 +42,7 @@ export class GlobalSettingsService {
     return this.http.put<GlobalSettings>(`${this.valtimoApiUri}v1/settings`, updatedSettings);
   }
 
-  public getGlobalSettingsTranslations(): Observable<object> {
+  public getGlobalSettingsTranslations(): Observable<GlobalSettingsTranslations> {
     return this.getGlobalSettings().pipe(
       map(globalSettings => {
         const translations = globalSettings?.translations;

@@ -18,59 +18,60 @@
   *ngIf="{
     globalSettingsTranslationValues: globalSettingsTranslationValues$ | async,
     loading: loading$ | async,
-    disabled: disabled$ | async
+    disabled: disabled$ | async,
+    multiInputTitles: multiInputTiles$ | async,
+    amountOfArbitraryValues: amountOfArbitraryValues$ | async,
+    showConfirmationModal: showConfirmationModal$,
+    allChangedValuesValid: allChangedValuesValid$ | async,
+    valuesChanged: valuesChanged$ | async
   } as obs"
 >
   <ng-container *ngIf="!obs.loading && obs.globalSettingsTranslationValues; else loading">
     <valtimo-carbon-multi-input
       [disabled]="obs.disabled"
-      [arbitraryAmountTitles]="multiInputTiles$ | async"
+      [arbitraryAmountTitles]="obs.multiInputTitles"
       [fullWidth]="true"
       [minimumAmountOfRows]="0"
       type="arbitraryAmount"
-      [arbitraryValueAmount]="amountOfArbitraryValues$ | async"
+      [arbitraryValueAmount]="obs.amountOfArbitraryValues"
       [defaultValues]="obs.globalSettingsTranslationValues"
       (allValuesValidEvent)="validChange($event)"
       (valueChange)="valueChange($event)"
       addRowTranslationKey="translationManagement.add"
     ></valtimo-carbon-multi-input>
   </ng-container>
-</ng-container>
 
-<ng-template #loading>
-  <div class="loading-container"><cds-loading></cds-loading></div>
-</ng-template>
-
-<valtimo-confirmation-modal
-  [showModalSubject$]="showConfirmationModal$"
-  (confirmEvent)="saveAndRefresh()"
-  (optionalEvent)="saveAndStay()"
-  (cancelEvent)="cancel()"
-  [showOptionalButton]="true"
-  cancelButtonType="ghost"
-  optionalButtonType="secondary"
-  confirmButtonTextTranslationKey="translationManagement.saveWithReload"
-  optionalButtonTextTranslationKey="translationManagement.saveWithoutReload"
-  titleTranslationKey="translationManagement.modalTitle"
-  contentTranslationKey="translationManagement.modalContent"
-  [spacerAfterCancelButton]="true"
-></valtimo-confirmation-modal>
-
-<ng-container renderInPageHeader>
-  <ng-template>
-    <button
-      cdsButton="primary"
-      size="md"
-      (click)="showModal()"
-      [disabled]="
-        (allChangedValuesValid$ | async) === false ||
-        (disabled$ | async) ||
-        (valuesChanged$ | async) === false
-      "
-    >
-      {{ 'interface.save' | translate }}
-
-      <svg class="cds--btn__icon" cdsIcon="save" size="16"></svg>
-    </button>
+  <ng-template #loading>
+    <div class="loading-container"><cds-loading></cds-loading></div>
   </ng-template>
+
+  <valtimo-confirmation-modal
+    [showModalSubject$]="obs.showConfirmationModal"
+    (confirmEvent)="saveAndRefresh()"
+    (optionalEvent)="saveAndStay()"
+    (cancelEvent)="cancel()"
+    [showOptionalButton]="true"
+    cancelButtonType="ghost"
+    optionalButtonType="secondary"
+    confirmButtonTextTranslationKey="translationManagement.saveWithReload"
+    optionalButtonTextTranslationKey="translationManagement.saveWithoutReload"
+    titleTranslationKey="translationManagement.modalTitle"
+    contentTranslationKey="translationManagement.modalContent"
+    [spacerAfterCancelButton]="true"
+  ></valtimo-confirmation-modal>
+
+  <ng-container renderInPageHeader>
+    <ng-template>
+      <button
+        cdsButton="primary"
+        size="md"
+        (click)="showModal()"
+        [disabled]="!obs.allChangedValuesValid || obs.disabled || !obs.valuesChanged"
+      >
+        {{ 'interface.save' | translate }}
+
+        <svg class="cds--btn__icon" cdsIcon="save" size="16"></svg>
+      </button>
+    </ng-template>
+  </ng-container>
 </ng-container>

@@ -17,7 +17,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, take, tap} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
-import {GlobalSettingsService} from '@valtimo/config';
+import {GlobalSettingsService, GlobalSettingsTranslations} from '@valtimo/config';
 import {
   ArbitraryInputTitles,
   MultiInputArbitraryValue,
@@ -56,31 +56,13 @@ export class TranslationManagementComponent implements OnInit {
 
   public readonly globalSettingsTranslationValues$: Observable<Array<MultiInputArbitraryValue>> =
     combineLatest([
-      this._globalSettingsTranslations$,
       this._languageOptions$,
+      this._globalSettingsTranslations$,
       this.translateService.stream('key'),
     ]).pipe(
-      map(([globalSettingsTranslations, languageOptions]) => {
-        const firstLanguageOption = languageOptions[0];
-        const firstLanguageTranslations =
-          firstLanguageOption && globalSettingsTranslations[firstLanguageOption];
-        const flattenedFirstLanguageTranslations =
-          firstLanguageTranslations && this.flattenObject(firstLanguageTranslations);
-
-        return Object.keys(flattenedFirstLanguageTranslations).map(flattenedTranslationKey => {
-          const emptyArbitraryValue = {};
-
-          emptyArbitraryValue['0'] = flattenedTranslationKey;
-
-          languageOptions.forEach((languageOption, index) => {
-            emptyArbitraryValue[`${index + 1}`] = this.flattenObject(
-              globalSettingsTranslations[languageOption]
-            )[flattenedTranslationKey];
-          });
-
-          return emptyArbitraryValue;
-        });
-      }),
+      map(([languageOptions, globalSettingsTranslations]) =>
+        this.mapGlobalSettingsTranslationToMultiInput(languageOptions, globalSettingsTranslations)
+      ),
       tap(defaultValues => {
         this._defaultValues = defaultValues;
       })
@@ -148,30 +130,9 @@ export class TranslationManagementComponent implements OnInit {
     combineLatest([this._changedValues$, this._languageOptions$])
       .pipe(
         take(1),
-        map(([changedValues, languageOptions]) => {
-          const translationObject = {};
-
-          languageOptions.forEach(languageOption => {
-            translationObject[languageOption] = {};
-          });
-
-          changedValues.forEach(changedValue => {
-            languageOptions.forEach((languageOption, index) => {
-              translationObject[languageOption] = {
-                ...translationObject[languageOption],
-                [changedValue[0]]: changedValue[index + 1],
-              };
-            });
-          });
-
-          languageOptions.forEach(languageOption => {
-            translationObject[languageOption] = this.unflattenObject(
-              translationObject[languageOption]
-            );
-          });
-
-          return translationObject;
-        }),
+        map(([changedValues, languageOptions]) =>
+          this.getTranslationObjectForRequest(changedValues, languageOptions)
+        ),
         switchMap(newTranslations =>
           combineLatest([this.globalSettingsService.getGlobalSettings(), of(newTranslations)])
         ),
@@ -194,7 +155,19 @@ export class TranslationManagementComponent implements OnInit {
     this._languageOptions$.next(this.translateService.langs);
   }
 
-  private flattenObject = (ob: object): object => {
+  private disable(): void {
+    this.disabled$.next(true);
+  }
+
+  private enable(): void {
+    this.disabled$.next(false);
+  }
+
+  private hideModal(): void {
+    this.showConfirmationModal$.next(false);
+  }
+
+  private flattenObject(ob: object): object {
     const toReturn = {};
 
     for (const i in ob) {
@@ -212,10 +185,10 @@ export class TranslationManagementComponent implements OnInit {
       }
     }
     return toReturn;
-  };
+  }
 
-  private unflattenObject = (obj: object, delimiter = '.'): object =>
-    Object.keys(obj).reduce((res, k) => {
+  private unflattenObject(obj: object, delimiter = '.'): object {
+    return Object.keys(obj).reduce((res, k) => {
       k.split(delimiter).reduce(
         (acc, e, i, keys) =>
           acc[e] ||
@@ -224,16 +197,56 @@ export class TranslationManagementComponent implements OnInit {
       );
       return res;
     }, {});
-
-  private disable(): void {
-    this.disabled$.next(true);
   }
 
-  private enable(): void {
-    this.disabled$.next(false);
+  private getTranslationObjectForRequest(
+    changedValues: MultiInputOutput,
+    languageOptions: string[]
+  ): GlobalSettingsTranslations {
+    const translationObject = {};
+
+    languageOptions.forEach(languageOption => {
+      translationObject[languageOption] = {};
+    });
+
+    changedValues.forEach(changedValue => {
+      languageOptions.forEach((languageOption, index) => {
+        translationObject[languageOption] = {
+          ...translationObject[languageOption],
+          [changedValue[0]]: changedValue[index + 1],
+        };
+      });
+    });
+
+    languageOptions.forEach(languageOption => {
+      translationObject[languageOption] = this.unflattenObject(translationObject[languageOption]);
+    });
+
+    return translationObject;
   }
 
-  private hideModal(): void {
-    this.showConfirmationModal$.next(false);
+  private mapGlobalSettingsTranslationToMultiInput(
+    languageOptions: string[],
+    globalSettingsTranslations: GlobalSettingsTranslations
+  ) {
+    const firstLanguageOption = languageOptions[0];
+    const firstLanguageTranslations =
+      firstLanguageOption && globalSettingsTranslations[firstLanguageOption];
+    const flattenedFirstLanguageTranslations =
+      firstLanguageTranslations && this.flattenObject(firstLanguageTranslations);
+
+    return Object.keys(flattenedFirstLanguageTranslations).map(flattenedTranslationKey => {
+      const emptyArbitraryValue = {};
+
+      emptyArbitraryValue['0'] = flattenedTranslationKey;
+
+      languageOptions.forEach((languageOption, index) => {
+        emptyArbitraryValue[`${index + 1}`] = this.flattenObject(
+          globalSettingsTranslations[languageOption]
+        )[flattenedTranslationKey];
+      });
+
+      return emptyArbitraryValue;
+    });
   }
 }
