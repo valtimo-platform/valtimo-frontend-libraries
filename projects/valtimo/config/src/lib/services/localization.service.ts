@@ -44,13 +44,11 @@ export class LocalizationService {
   }
 
   public getMergedLocalizations(): Observable<MergedLocalizations> {
-    return this.http.get<Localization[]>(`${this.valtimoApiUri}v1/localization`).pipe(
-      map(res => {
-        return res.reduce((acc, curr) => {
-          return {...acc, [curr.languageKey]: curr.content};
-        }, {});
-      })
-    );
+    return this.http
+      .get<Localization[]>(`${this.valtimoApiUri}v1/localization`)
+      .pipe(
+        map(res => res.reduce((acc, curr) => ({...acc, [curr.languageKey]: curr.content}), {}))
+      );
   }
 
   public updateLocalization(
