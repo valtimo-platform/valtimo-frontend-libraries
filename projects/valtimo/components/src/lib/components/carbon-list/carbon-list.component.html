@@ -14,11 +14,20 @@
   ~ limitations under the License.
   -->
 <cds-table-container
+<<<<<<< HEAD
   *ngIf="{
     sort: sort$ | async,
     model: model$ | async,
     viewInitialized: viewInitialized$ | async
   } as obs"
+=======
+  *ngIf="
+    (viewInitialized$ | async) && {
+      sort: sort$ | async,
+      model: model$ | async
+    } as obs
+  "
+>>>>>>> cff53b63 ( List Improvements (#802))
   class="valtimo-carbon-list"
 >
   <cds-table-header *ngIf="header">
@@ -152,6 +161,7 @@
     </button>
   </div>
 </ng-template>
+<<<<<<< HEAD
 
 <ng-template #statusTemplate let-data="data">
   <div class="status-template">
@@ -164,3 +174,5 @@
     </cds-tag>
   </div>
 </ng-template>
+=======
+>>>>>>> cff53b63 ( List Improvements (#802))
