@@ -33,6 +33,7 @@ import {UserProviderService} from '@valtimo/security';
 import {take} from 'rxjs/operators';
 import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
 import {DossierListService} from '../../services';
+import {StartModalService} from '../../services/start-modal.service';
 
 @Component({
   selector: 'valtimo-dossier-process-start-modal',
@@ -64,7 +65,8 @@ export class DossierProcessStartModalComponent implements OnInit {
     private formFlowService: FormFlowService,
     private userProviderService: UserProviderService,
     private permissionService: PermissionService,
-    private listService: DossierListService
+    private listService: DossierListService,
+    private startModalService: StartModalService
   ) {}
 
   ngOnInit() {
@@ -104,7 +106,9 @@ export class DossierProcessStartModalComponent implements OnInit {
   }
 
   public get modalTitle() {
-    return `Start - ${this.processName}`;
+    this.processService.getProcessDefinitionXml(this.processDefinitionId).subscribe((result) => {
+      return this.startModalService.getStandardStartEventTitle(result.bpmn20Xml) || `Start - ${this.processName}`;
+    });
   }
 
   openModal(processDocumentDefinition: ProcessDocumentDefinition) {
