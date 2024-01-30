@@ -53,7 +53,7 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {filter, tap} from 'rxjs/operators';
 import {BOOLEAN_CONVERTER_VALUES} from '../../constants';
 import {
   ActionItem,
@@ -254,13 +254,17 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe((searchString: string | null) => {
           if (this.search.observed) {
             this.search.emit(searchString);
-          } else {
-            // FIX THIS FIX THIS FIX THIS FIX THIS FIX THIS
-            // this.model.data = this.filterPipe.transform(
-            //   this._completeDataSource,
-            //   searchString ?? ''
-            // );
+            return;
           }
+
+          if (!searchString) {
+            this._filteredItems$.next(null);
+            return;
+          }
+
+          this._filteredItems$.next(
+            this.filterPipe.transform(this._completeDataSource, searchString ?? '')
+          );
         })
     );
   }
@@ -388,18 +392,23 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
         }),
         ...this.getExtraItems(item, index, items.length),
       ])
-    )
+    ),
+    tap((data: TableItem[][]) => {
+      this._completeDataSource = data;
+    })
   );
+
+  private readonly _filteredItems$ = new BehaviorSubject<TableItem[][] | null>(null);
 
   public readonly model$: Observable<TableModel> = combineLatest([
     this._headerItems$,
     this._tableItems$,
+    this._filteredItems$,
   ]).pipe(
-    map(([header, data]) => {
+    map(([header, data, filteredData]) => {
       const model = new TableModel();
       model.header = header;
-      this._completeDataSource = data;
-      model.data = data;
+      model.data = filteredData ?? data;
       return model;
     }),
     startWith(new TableModel())
@@ -464,7 +473,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
               })
           )
         : []),
-      ...(this._items?.some(item => item.locked)
+      ...(this._items?.some(tableItem => tableItem.locked)
         ? [
             new TableItem({
               data: {locked: item.locked},
