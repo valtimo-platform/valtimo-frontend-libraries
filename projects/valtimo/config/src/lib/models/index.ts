@@ -29,4 +29,4 @@ export * from './search.model';
 export * from './versions.model';
 export * from './user-settings.model';
 export * from './translation.model';
-export * from './global-settings.model';
+export * from './localization.model';

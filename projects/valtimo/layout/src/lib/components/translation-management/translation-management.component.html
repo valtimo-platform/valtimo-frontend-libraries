@@ -16,7 +16,7 @@
 
 <ng-container
   *ngIf="{
-    globalSettingsTranslationValues: globalSettingsTranslationValues$ | async,
+    localizationTranslationValues: localizationTranslationValues$ | async,
     loading: loading$ | async,
     disabled: disabled$ | async,
     multiInputTitles: multiInputTiles$ | async,
@@ -26,7 +26,7 @@
     valuesChanged: valuesChanged$ | async
   } as obs"
 >
-  <ng-container *ngIf="!obs.loading && obs.globalSettingsTranslationValues; else loading">
+  <ng-container *ngIf="!obs.loading && obs.localizationTranslationValues; else loading">
     <valtimo-carbon-multi-input
       [disabled]="obs.disabled"
       [arbitraryAmountTitles]="obs.multiInputTitles"
@@ -34,7 +34,7 @@
       [minimumAmountOfRows]="0"
       type="arbitraryAmount"
       [arbitraryValueAmount]="obs.amountOfArbitraryValues"
-      [defaultValues]="obs.globalSettingsTranslationValues"
+      [defaultValues]="obs.localizationTranslationValues"
       (allValuesValidEvent)="validChange($event)"
       (valueChange)="valueChange($event)"
       addRowTranslationKey="translationManagement.add"

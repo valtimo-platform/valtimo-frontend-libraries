@@ -86,7 +86,7 @@ import {
   ConfigModule,
   ConfigService,
   CustomMultiTranslateHttpLoaderFactory,
-  GlobalSettingsService,
+  LocalizationService,
 } from '@valtimo/config';
 import {FormManagementModule} from '@valtimo/form-management';
 import {DossierManagementModule} from '@valtimo/dossier-management';
@@ -215,7 +215,7 @@ export function tabsFactory() {
       loader: {
         provide: TranslateLoader,
         useFactory: CustomMultiTranslateHttpLoaderFactory,
-        deps: [HttpBackend, HttpClient, ConfigService, GlobalSettingsService],
+        deps: [HttpBackend, HttpClient, ConfigService, LocalizationService],
       },
     }),
     ObjectModule,

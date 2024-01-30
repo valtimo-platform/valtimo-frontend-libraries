@@ -17,17 +17,17 @@
 import {HttpBackend, HttpClient} from '@angular/common/http';
 import {ConfigService} from '../services/config.service';
 import {CustomMultiTranslateHttpLoader} from './custom-multi-translate-http-loader';
-import {GlobalSettingsService} from '../services/global-settings.service';
+import {LocalizationService} from '../services/localization.service';
 
 export function CustomMultiTranslateHttpLoaderFactory(
   http: HttpBackend,
   httpClient: HttpClient,
   configService: ConfigService,
-  globalSettingsService: GlobalSettingsService
+  localizationService: LocalizationService
 ) {
   const translationResources = configService?.config?.translationResources;
 
-  return new CustomMultiTranslateHttpLoader(http, httpClient, globalSettingsService, [
+  return new CustomMultiTranslateHttpLoader(http, httpClient, localizationService, [
     './valtimo-translation/core/',
     ...(translationResources &&
     Array.isArray(translationResources) &&

@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-interface GlobalSettingsTranslations {
-  [languageKey: string]: object;
+type LocalizationContent = object;
+
+interface Localization {
+  languageKey: string;
+  content: LocalizationContent;
 }
 
-interface GlobalSettings {
-  translations?: GlobalSettingsTranslations;
+interface MergedLocalizations {
+  [languageKey: string]: LocalizationContent;
 }
 
-export {GlobalSettings, GlobalSettingsTranslations};
+export {Localization, LocalizationContent, MergedLocalizations};

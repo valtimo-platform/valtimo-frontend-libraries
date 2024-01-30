@@ -15,9 +15,9 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, take, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, take, tap} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
-import {GlobalSettingsService, GlobalSettingsTranslations} from '@valtimo/config';
+import {Localization, LocalizationService, MergedLocalizations} from '@valtimo/config';
 import {
   ArbitraryInputTitles,
   MultiInputArbitraryValue,
@@ -37,10 +37,10 @@ export class TranslationManagementComponent implements OnInit {
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   private readonly _languageOptions$ = new BehaviorSubject<Array<string>>(undefined);
-  private readonly _refreshGlobalSettings$ = new BehaviorSubject<null>(null);
-  private readonly _globalSettingsTranslations$ = this._refreshGlobalSettings$.pipe(
+  private readonly _refreshLocalizations$ = new BehaviorSubject<null>(null);
+  private readonly _localizationTranslations$ = this._refreshLocalizations$.pipe(
     tap(() => this.loading$.next(true)),
-    switchMap(() => this.globalSettingsService.getGlobalSettingsTranslations()),
+    switchMap(() => this.localizationService.getMergedLocalizations()),
     tap(() => this.loading$.next(false))
   );
 
@@ -54,14 +54,14 @@ export class TranslationManagementComponent implements OnInit {
     map(changedValues => !isEqual(changedValues, this._defaultValues))
   );
 
-  public readonly globalSettingsTranslationValues$: Observable<Array<MultiInputArbitraryValue>> =
+  public readonly localizationTranslationValues$: Observable<Array<MultiInputArbitraryValue>> =
     combineLatest([
       this._languageOptions$,
-      this._globalSettingsTranslations$,
+      this._localizationTranslations$,
       this.translateService.stream('key'),
     ]).pipe(
-      map(([languageOptions, globalSettingsTranslations]) =>
-        this.mapGlobalSettingsTranslationToMultiInput(languageOptions, globalSettingsTranslations)
+      map(([languageOptions, localizationTranslations]) =>
+        this.mapMergedLocalizationsToMultiInput(languageOptions, localizationTranslations)
       ),
       tap(defaultValues => {
         this._defaultValues = defaultValues;
@@ -92,7 +92,7 @@ export class TranslationManagementComponent implements OnInit {
 
   constructor(
     private readonly translateService: TranslateService,
-    private readonly globalSettingsService: GlobalSettingsService,
+    private readonly localizationService: LocalizationService,
     @Inject(DOCUMENT) private readonly document: Document
   ) {}
 
@@ -131,22 +131,17 @@ export class TranslationManagementComponent implements OnInit {
       .pipe(
         take(1),
         map(([changedValues, languageOptions]) =>
-          this.getTranslationObjectForRequest(changedValues, languageOptions)
+          this.getLocalizationsForUpdateRequest(changedValues, languageOptions)
         ),
-        switchMap(newTranslations =>
-          combineLatest([this.globalSettingsService.getGlobalSettings(), of(newTranslations)])
-        ),
-        map(([globalSettings, newTranslations]) => ({
-          ...globalSettings,
-          translations: newTranslations,
-        })),
-        switchMap(newSettings => this.globalSettingsService.updateGlobalSettings(newSettings))
+        switchMap(updatedLocalizations =>
+          this.localizationService.updateLocalizations(updatedLocalizations)
+        )
       )
       .subscribe(() => {
         if (reload) {
           this.document?.defaultView?.location?.reload();
         } else {
-          this._refreshGlobalSettings$.next(null);
+          this._refreshLocalizations$.next(null);
           this.enable();
         }
       });
@@ -200,10 +195,11 @@ export class TranslationManagementComponent implements OnInit {
     }, {});
   }
 
-  private getTranslationObjectForRequest(
+  private getLocalizationsForUpdateRequest(
     changedValues: MultiInputOutput,
     languageOptions: string[]
-  ): GlobalSettingsTranslations {
+  ): Localization[] {
+    const localizations: Localization[] = [];
     const translationObject = {};
 
     languageOptions.forEach(languageOption => {
@@ -223,16 +219,20 @@ export class TranslationManagementComponent implements OnInit {
       translationObject[languageOption] = this.unflattenObject(translationObject[languageOption]);
     });
 
-    return translationObject;
+    Object.keys(translationObject).forEach(languageKey => {
+      localizations.push({languageKey, content: translationObject[languageKey]});
+    });
+
+    return localizations;
   }
 
-  private mapGlobalSettingsTranslationToMultiInput(
+  private mapMergedLocalizationsToMultiInput(
     languageOptions: string[],
-    globalSettingsTranslations: GlobalSettingsTranslations
+    mergedLocalizations: MergedLocalizations
   ) {
     const firstLanguageOption = languageOptions[0];
     const firstLanguageTranslations =
-      firstLanguageOption && globalSettingsTranslations[firstLanguageOption];
+      firstLanguageOption && mergedLocalizations[firstLanguageOption];
     const flattenedFirstLanguageTranslations =
       firstLanguageTranslations && this.flattenObject(firstLanguageTranslations);
 
@@ -242,9 +242,8 @@ export class TranslationManagementComponent implements OnInit {
       emptyArbitraryValue['0'] = flattenedTranslationKey;
 
       languageOptions.forEach((languageOption, index) => {
-        emptyArbitraryValue[`${index + 1}`] = this.flattenObject(
-          globalSettingsTranslations[languageOption]
-        )[flattenedTranslationKey];
+        emptyArbitraryValue[`${index + 1}`] =
+          this.flattenObject(mergedLocalizations[languageOption])[flattenedTranslationKey] || '';
       });
 
       return emptyArbitraryValue;

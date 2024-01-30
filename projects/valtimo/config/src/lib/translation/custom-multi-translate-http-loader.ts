@@ -20,23 +20,23 @@ import {combineLatest, forkJoin, Observable, of} from 'rxjs';
 import {deepmerge} from 'deepmerge-ts';
 import {ITranslationResource} from '../models';
 import {TranslateLoader} from '@ngx-translate/core';
-import {GlobalSettingsService} from '../services/global-settings.service';
+import {LocalizationService} from '../services/localization.service';
 
 export class CustomMultiTranslateHttpLoader implements TranslateLoader {
   private readonly _handler: HttpBackend;
   private readonly _httpClient: HttpClient;
   private readonly _resourcesPrefix: Array<string> | ITranslationResource[];
-  private readonly _globalSettingsService: GlobalSettingsService;
+  private readonly _localizationService: LocalizationService;
   constructor(
     _handler: HttpBackend,
     _httpClient: HttpClient,
-    _globalSettingsService: GlobalSettingsService,
+    _localizationService: LocalizationService,
     _resourcesPrefix: Array<string> | ITranslationResource[]
   ) {
     this._handler = _handler;
     this._httpClient = _httpClient;
     this._resourcesPrefix = _resourcesPrefix;
-    this._globalSettingsService = _globalSettingsService;
+    this._localizationService = _localizationService;
   }
   getTranslation(lang: string): Observable<any> {
     const requests = this._resourcesPrefix.map(resource => {
@@ -58,13 +58,10 @@ export class CustomMultiTranslateHttpLoader implements TranslateLoader {
 
     return forkJoin(requests).pipe(
       switchMap(localResourcesResponse =>
-        combineLatest([
-          of(localResourcesResponse),
-          this._globalSettingsService.getGlobalSettingsTranslationsByLangKey(lang),
-        ])
+        combineLatest([of(localResourcesResponse), this._localizationService.getLocalization(lang)])
       ),
-      map(([localResourcesResponse, globalSettingsResponse]) =>
-        deepmerge(...[...localResourcesResponse, globalSettingsResponse])
+      map(([localResourcesResponse, localizationResponse]) =>
+        deepmerge(...[...localResourcesResponse, localizationResponse])
       )
     );
   }
