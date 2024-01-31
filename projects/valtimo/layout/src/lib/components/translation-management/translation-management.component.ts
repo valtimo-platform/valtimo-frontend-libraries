@@ -18,11 +18,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, switchMap, take, tap} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {Localization, LocalizationService, MergedLocalizations} from '@valtimo/config';
-import {
-  ArbitraryInputTitles,
-  MultiInputArbitraryValue,
-  MultiInputOutput,
-} from '@valtimo/components';
+import {ArbitraryInputTitles, MultiInputKeyValue, MultiInputOutput} from '@valtimo/components';
 import {isEqual} from 'lodash';
 import {DOCUMENT} from '@angular/common';
 
@@ -44,7 +40,7 @@ export class TranslationManagementComponent implements OnInit {
     tap(() => this.loading$.next(false))
   );
 
-  private _defaultValues: Array<MultiInputArbitraryValue> = [];
+  private _defaultValues: Array<MultiInputKeyValue> = [];
 
   private readonly _changedValues$ = new BehaviorSubject<MultiInputOutput>(undefined);
 
@@ -54,7 +50,7 @@ export class TranslationManagementComponent implements OnInit {
     map(changedValues => !isEqual(changedValues, this._defaultValues))
   );
 
-  public readonly localizationTranslationValues$: Observable<Array<MultiInputArbitraryValue>> =
+  public readonly localizationTranslationValues$: Observable<Array<MultiInputKeyValue>> =
     combineLatest([
       this._languageOptions$,
       this._localizationTranslations$,

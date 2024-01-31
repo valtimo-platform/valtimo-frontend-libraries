@@ -18,7 +18,6 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {
   ArbitraryInputTitles,
   ListItemWithId,
-  MultiInputArbitraryValue,
   MultiInputKeyValue,
   MultiInputOutput,
   MultiInputType,
@@ -92,7 +91,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
                   (value as MultiInputKeyValue).dropdown
                 );
               case 'arbitraryAmount':
-                const objectValues = Object.values(value as MultiInputArbitraryValue);
+                const objectValues = Object.values(value as MultiInputKeyValue);
                 const positiveValuesAmount = objectValues.filter(objectValue => !!objectValue);
 
                 return objectValues.length === positiveValuesAmount.length;
@@ -153,7 +152,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   }
 
   public onValueChange(
-    templateValue: MultiInputKeyValue | MultiInputArbitraryValue,
+    templateValue: MultiInputKeyValue,
     inputValue: string,
     change: 'key' | 'value' | 'dropdown' | 'arbitrary',
     arbitraryIndex?: number
@@ -190,7 +189,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
     return this.defaultValues.map(defaultValue => ({...defaultValue, uuid: uuidv4()}));
   }
 
-  private getEmptyValue(): MultiInputKeyValue | MultiInputArbitraryValue {
+  private getEmptyValue(): MultiInputKeyValue {
     if (this.type === 'arbitraryAmount') {
       const emptyValue = {
         uuid: uuidv4(),
@@ -211,9 +210,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
     };
   }
 
-  private getMappedValue(
-    valueToMap: MultiInputKeyValue | MultiInputArbitraryValue
-  ): MultiInputKeyValue | MultiInputArbitraryValue | string {
+  private getMappedValue(valueToMap: MultiInputKeyValue): MultiInputKeyValue | string {
     if (this.type === 'keyValue') {
       return {key: valueToMap.key, value: valueToMap.value};
     } else if (this.type === 'keyDropdownValue') {

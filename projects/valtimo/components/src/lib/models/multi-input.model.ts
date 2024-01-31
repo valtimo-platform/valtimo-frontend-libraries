@@ -21,13 +21,9 @@ type MultiInputType = 'keyValue' | 'value' | 'keyDropdownValue' | 'arbitraryAmou
 
 interface MultiInputKeyValue {
   uuid?: string;
-  key: string;
-  value: string;
+  key?: string;
+  value?: string;
   dropdown?: string;
-}
-
-interface MultiInputArbitraryValue {
-  uuid?: string;
   [index: string]: string;
 }
 
@@ -37,7 +33,7 @@ interface MultiInputFormValue {
   expanded?: boolean;
 }
 
-type MultiInputValues = Array<MultiInputKeyValue | MultiInputArbitraryValue>;
+type MultiInputValues = Array<MultiInputKeyValue>;
 
 type MultiInputFormsValues = Array<MultiInputFormValue>;
 
@@ -59,6 +55,5 @@ export {
   MultiInputFormValue,
   MultiInputFormsValues,
   ListItemWithId,
-  MultiInputArbitraryValue,
   ArbitraryInputTitles,
 };
