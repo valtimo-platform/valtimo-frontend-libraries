@@ -81,9 +81,11 @@ export class DossierProcessStartModalComponent implements OnInit {
     this.processLinkId = null;
     this.formDefinition = null;
     this.formFlowInstanceId = null;
-    this.processService.getProcessDefinitionXml(this.processDefinitionId).subscribe((result) => {
-      this.startEventName = this.startModalService.getStandardStartEventTitle(result.bpmn20Xml);
-    });
+    if (this.configService.config.featureToggles?.useStartEventNameAsStartFormTitle) {
+      this.processService.getProcessDefinitionXml(this.processDefinitionId).subscribe((result) => {
+        this.startEventName = this.startModalService.getStandardStartEventTitle(result.bpmn20Xml);
+      });
+    }
     this.processService
       .getProcessDefinitionStartProcessLink(
         this.processDefinitionId,
