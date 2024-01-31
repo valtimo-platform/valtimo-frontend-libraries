@@ -230,6 +230,10 @@ export class TranslationManagementComponent implements OnInit {
     languageOptions: string[],
     mergedLocalizations: MergedLocalizations
   ) {
+    if (Object.keys(mergedLocalizations).length === 0) {
+      return [];
+    }
+
     const firstLanguageOption = languageOptions[0];
     const firstLanguageTranslations =
       firstLanguageOption && mergedLocalizations[firstLanguageOption];
