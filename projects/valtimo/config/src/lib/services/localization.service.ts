@@ -20,7 +20,6 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ConfigService} from './config.service';
 import {map, Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {InterceptorSkip} from '@valtimo/security';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +37,7 @@ export class LocalizationService {
   public getLocalization(languageKey: string): Observable<LocalizationContent> {
     return this.http
       .get<LocalizationContent>(`${this.valtimoApiUri}v1/localization/${languageKey}`, {
-        headers: new HttpHeaders().set(InterceptorSkip, '403'),
+        headers: new HttpHeaders().set('X-Skip-Interceptor', '403'),
       })
       .pipe(catchError(() => of({})));
   }
