@@ -34,6 +34,7 @@ import {take} from 'rxjs/operators';
 import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
 import {DossierListService} from '../../services';
 import {StartModalService} from '../../services/start-modal.service';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-process-start-modal',
@@ -46,6 +47,7 @@ export class DossierProcessStartModalComponent implements OnInit {
   public processDefinitionId: string;
   public documentDefinitionName: string;
   public processName: string;
+  public startEventName: string;
   public formDefinition: FormioForm;
   public formFlowInstanceId: string;
   public formioSubmission: FormioSubmission;
@@ -66,8 +68,10 @@ export class DossierProcessStartModalComponent implements OnInit {
     private userProviderService: UserProviderService,
     private permissionService: PermissionService,
     private listService: DossierListService,
-    private startModalService: StartModalService
-  ) {}
+    private startModalService: StartModalService,
+    private configService: ConfigService
+  ) {
+  }
 
   ngOnInit() {
     this.isUserAdmin();
@@ -77,6 +81,9 @@ export class DossierProcessStartModalComponent implements OnInit {
     this.processLinkId = null;
     this.formDefinition = null;
     this.formFlowInstanceId = null;
+    this.processService.getProcessDefinitionXml(this.processDefinitionId).subscribe((result) => {
+      this.startEventName = this.startModalService.getStandardStartEventTitle(result.bpmn20Xml);
+    });
     this.processService
       .getProcessDefinitionStartProcessLink(
         this.processDefinitionId,
@@ -106,9 +113,8 @@ export class DossierProcessStartModalComponent implements OnInit {
   }
 
   public get modalTitle() {
-    this.processService.getProcessDefinitionXml(this.processDefinitionId).subscribe((result) => {
-      return this.startModalService.getStandardStartEventTitle(result.bpmn20Xml) || `Start - ${this.processName}`;
-    });
+    return this.configService.config.featureToggles?.useStartEventNameAsStartFormTitle ?
+      (this.startEventName || `Start - ${this.processName}`) : `Start - ${this.processName}`;
   }
 
   openModal(processDocumentDefinition: ProcessDocumentDefinition) {
