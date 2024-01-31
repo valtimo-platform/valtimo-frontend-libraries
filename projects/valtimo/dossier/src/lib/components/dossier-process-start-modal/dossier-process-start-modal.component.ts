@@ -48,7 +48,7 @@ export class DossierProcessStartModalComponent implements OnInit {
   public documentDefinitionName: string;
   public processName: string;
   private _startEventName: string;
-  private _useStartEventNameAsStartFormTitle!: boolean;
+  private readonly _useStartEventNameAsStartFormTitle!: boolean;
   public formDefinition: FormioForm;
   public formFlowInstanceId: string;
   public formioSubmission: FormioSubmission;
