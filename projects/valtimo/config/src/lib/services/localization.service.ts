@@ -16,9 +16,11 @@
 
 import {Injectable} from '@angular/core';
 import {Localization, LocalizationContent, MergedLocalizations} from '../models';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ConfigService} from './config.service';
-import {map, Observable} from 'rxjs';
+import {map, Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {InterceptorSkip} from '@valtimo/security';
 
 @Injectable({
   providedIn: 'root',
@@ -34,9 +36,11 @@ export class LocalizationService {
   }
 
   public getLocalization(languageKey: string): Observable<LocalizationContent> {
-    return this.http.get<LocalizationContent>(
-      `${this.valtimoApiUri}v1/localization/${languageKey}`
-    );
+    return this.http
+      .get<LocalizationContent>(`${this.valtimoApiUri}v1/localization/${languageKey}`, {
+        headers: new HttpHeaders().set(InterceptorSkip, '403'),
+      })
+      .pipe(catchError(() => of({})));
   }
 
   public getLocalizations(): Observable<Localization[]> {
