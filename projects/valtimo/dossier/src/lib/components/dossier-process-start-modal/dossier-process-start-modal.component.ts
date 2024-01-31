@@ -113,8 +113,9 @@ export class DossierProcessStartModalComponent implements OnInit {
   }
 
   public get modalTitle() {
+    const fallbackTitle = `Start - ${this.processName}`;
     return this.configService.config.featureToggles?.useStartEventNameAsStartFormTitle ?
-      (this.startEventName || `Start - ${this.processName}`) : `Start - ${this.processName}`;
+      (this.startEventName || fallbackTitle) : fallbackTitle;
   }
 
   openModal(processDocumentDefinition: ProcessDocumentDefinition) {
