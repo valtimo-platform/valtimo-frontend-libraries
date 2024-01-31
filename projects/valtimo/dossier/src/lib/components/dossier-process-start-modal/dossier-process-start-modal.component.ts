@@ -47,8 +47,8 @@ export class DossierProcessStartModalComponent implements OnInit {
   public processDefinitionId: string;
   public documentDefinitionName: string;
   public processName: string;
-  public startEventName: string;
-  public useStartEventNameAsStartFormTitle: boolean;
+  private _startEventName: string;
+  private _useStartEventNameAsStartFormTitle!: boolean;
   public formDefinition: FormioForm;
   public formFlowInstanceId: string;
   public formioSubmission: FormioSubmission;
@@ -72,7 +72,7 @@ export class DossierProcessStartModalComponent implements OnInit {
     private startModalService: StartModalService,
     private configService: ConfigService
   ) {
-    this.useStartEventNameAsStartFormTitle = this.configService.config.featureToggles?.useStartEventNameAsStartFormTitle
+    this._useStartEventNameAsStartFormTitle = this.configService.config.featureToggles?.useStartEventNameAsStartFormTitle
   }
 
   ngOnInit() {
@@ -83,9 +83,9 @@ export class DossierProcessStartModalComponent implements OnInit {
     this.processLinkId = null;
     this.formDefinition = null;
     this.formFlowInstanceId = null;
-    if (this.useStartEventNameAsStartFormTitle) {
+    if (this._useStartEventNameAsStartFormTitle) {
       this.processService.getProcessDefinitionXml(this.processDefinitionId).subscribe((result) => {
-        this.startEventName = this.startModalService.getStandardStartEventTitle(result.bpmn20Xml);
+        this._startEventName = this.startModalService.getStandardStartEventTitle(result.bpmn20Xml);
       });
     }
     this.processService
@@ -118,7 +118,7 @@ export class DossierProcessStartModalComponent implements OnInit {
 
   public get modalTitle() {
     const fallbackTitle = `Start - ${this.processName}`;
-    return this.useStartEventNameAsStartFormTitle ? (this.startEventName || fallbackTitle) : fallbackTitle;
+    return this._useStartEventNameAsStartFormTitle ? (this._startEventName || fallbackTitle) : fallbackTitle;
   }
 
   openModal(processDocumentDefinition: ProcessDocumentDefinition) {
