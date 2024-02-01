@@ -451,7 +451,8 @@
       "searchFields": "Zoekvelden",
       "listColumns": "Lijst",
       "tabManagement": "Tabbladen",
-      "document": "Document"
+      "document": "Document",
+      "statuses": "Statussen"
     },
     "tabManagement": {
       "columns": {

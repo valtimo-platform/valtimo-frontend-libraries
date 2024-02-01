@@ -452,7 +452,8 @@
       "searchFields": "Search Fields",
       "listColumns": "List",
       "tabManagement": "Tabs",
-      "document": "Document"
+      "document": "Document",
+      "statuses": "Statuses"
     },
     "tabManagement": {
       "columns": {

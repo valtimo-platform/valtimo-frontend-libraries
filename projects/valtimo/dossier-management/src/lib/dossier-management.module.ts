@@ -77,6 +77,7 @@ import {DossierManagementDetailContainerActionsComponent} from './components/dos
 import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition';
 import {DossierManagementProcessesComponent} from './components/dossier-management-processes/dossier-management-processes.component';
 import {DossierManagementUploadStepComponent} from './components/dossier-management-upload/step/dossier-management-upload-step.component';
+import {DossierManagementStatusesComponent} from './components/dossier-management-statuses/dossier-management-statuses.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import {DossierManagementUploadStepComponent} from './components/dossier-managem
     DossierManagementDocumentDefinitionComponent,
     DossierManagementProcessesComponent,
     DossierManagementUploadStepComponent,
+    DossierManagementStatusesComponent,
   ],
   imports: [
     CommonModule,
