@@ -14,11 +14,87 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {DocumentStatusService, InternalDocumentStatus} from '@valtimo/document';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-dossier-management-statuses',
   templateUrl: './dossier-management-statuses.component.html',
   styleUrls: ['./dossier-management-statuses.component.scss'],
 })
-export class DossierManagementStatusesComponent {}
+export class DossierManagementStatusesComponent implements OnInit {
+  private readonly _reload$ = new BehaviorSubject<null>(null);
+
+  private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
+    map(params => params.name || ''),
+    filter(docDefName => !!docDefName)
+  );
+
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
+
+  public readonly documentStatuses$ = combineLatest([
+    this._documentDefinitionName$,
+    this._reload$,
+  ]).pipe(
+    tap(() => this.loading$.next(true)),
+    switchMap(([documentDefinitionName]) =>
+      this.documentStatusService.getDocumentStatuses(documentDefinitionName)
+    ),
+    tap(() => this.loading$.next(false))
+  );
+
+  public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
+
+  public readonly actionItems: ActionItem[] = [
+    {
+      label: 'interface.edit',
+      callback: this.openEditModal.bind(this),
+      type: 'normal',
+    },
+    {
+      label: 'interface.delete',
+      callback: this.openDeleteModal.bind(this),
+      type: 'danger',
+    },
+  ];
+
+  constructor(
+    private readonly documentStatusService: DocumentStatusService,
+    private readonly route: ActivatedRoute
+  ) {}
+
+  public ngOnInit(): void {
+    this.setFields();
+  }
+
+  public openDeleteModal(status: InternalDocumentStatus): void {
+    console.log(status);
+  }
+
+  public openEditModal(status: InternalDocumentStatus): void {
+    console.log(status);
+  }
+
+  private setFields(): void {
+    this.fields$.next([
+      {
+        key: 'title',
+        label: 'dossierManagement.statuses.columns.title',
+        viewType: ViewType.TEXT,
+      },
+      {
+        key: 'key',
+        label: 'dossierManagement.statuses.columns.key',
+        viewType: ViewType.TEXT,
+      },
+      {
+        key: 'visibleInCaseListByDefault',
+        label: 'dossierManagement.statuses.columns.visible',
+        viewType: ViewType.BOOLEAN,
+      },
+    ]);
+  }
+}

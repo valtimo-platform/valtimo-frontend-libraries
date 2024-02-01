@@ -538,6 +538,14 @@
           "title": "Plugin Konfigurationen"
         }
       }
+    },
+    "statuses": {
+      "add": "Status hinzufügen",
+      "columns": {
+        "title": "Statusname",
+        "key": "Statusschlüssel",
+        "visible": "Standardmäßig sichtbar"
+      }
     }
   },
   "task-list": {

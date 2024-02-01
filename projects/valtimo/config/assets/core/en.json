@@ -539,6 +539,14 @@
           "title": "Plugin Configuration"
         }
       }
+    },
+    "statuses": {
+      "add": "Add status",
+      "columns": {
+        "title": "Status name",
+        "key": "Status key",
+        "visible": "Visible by default"
+      }
     }
   },
   "task-list": {

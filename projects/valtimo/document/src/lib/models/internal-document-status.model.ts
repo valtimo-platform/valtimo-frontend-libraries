@@ -17,7 +17,9 @@
 interface InternalDocumentStatus {
   key: string;
   title: string;
+  documentDefinitionName: string;
   visibleInCaseListByDefault: boolean;
+  order: number;
 }
 
 export {InternalDocumentStatus};

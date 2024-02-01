@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BaseApiService} from '@valtimo/config';
+import {BaseApiService, ConfigService} from '@valtimo/config';
 import {HttpClient} from '@angular/common/http';
 import {InternalDocumentStatus} from '../models/internal-document-status.model';
 import {delay, Observable, of} from 'rxjs';
@@ -26,7 +26,7 @@ import {delay, Observable, of} from 'rxjs';
 export class DocumentStatusService extends BaseApiService {
   constructor(
     protected readonly httpClient: HttpClient,
-    protected readonly configService
+    protected readonly configService: ConfigService
   ) {
     super(httpClient, configService);
   }
@@ -36,8 +36,20 @@ export class DocumentStatusService extends BaseApiService {
     console.log(url);
 
     return of([
-      {key: 'test', title: 'test', visibleInCaseListByDefault: true},
-      {key: 'test2', title: '2', visibleInCaseListByDefault: false},
+      {
+        key: 'test',
+        title: 'test',
+        documentDefinitionName: 'test',
+        visibleInCaseListByDefault: true,
+        order: 0,
+      },
+      {
+        key: 'test2',
+        title: '2',
+        documentDefinitionName: 'test',
+        visibleInCaseListByDefault: false,
+        order: 1,
+      },
     ] as InternalDocumentStatus[]).pipe(delay(1000));
   }
 }

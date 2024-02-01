@@ -14,4 +14,34 @@
   ~ limitations under the License.
   -->
 
-works
+<ng-container
+  *ngIf="{
+    loading: loading$ | async,
+    documentStatuses: documentStatuses$ | async,
+    fields: fields$ | async
+  } as obs"
+>
+  <valtimo-carbon-list
+    [items]="obs.documentStatuses"
+    [fields]="obs.fields"
+    [header]="false"
+    [loading]="obs.loading"
+    [movingRowsEnabled]="true"
+    [actionItems]="actionItems"
+  >
+    <ng-container
+      carbonToolbarContent
+      *ngTemplateOutlet="buttons; context: {obs: obs}"
+    ></ng-container>
+  </valtimo-carbon-list>
+</ng-container>
+
+<ng-template #buttons let-obs="obs">
+  <div class="dossier-management-search-fields__buttons">
+    <button cdsButton="primary" [disabled]="obs.loading">
+      <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
+
+      {{ 'dossierManagement.statuses.add' | translate }}
+    </button>
+  </div>
+</ng-template>

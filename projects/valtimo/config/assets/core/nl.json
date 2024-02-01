@@ -538,6 +538,14 @@
           "title": "Plugin configuraties"
         }
       }
+    },
+    "statuses": {
+      "add": "Status toevoegen",
+      "columns": {
+        "title": "Statusnaam",
+        "key": "Statussleutel",
+        "visible": "Standaard zichtbaar"
+      }
     }
   },
   "task-list": {
