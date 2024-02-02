@@ -14,22 +14,20 @@
   ~ limitations under the License.
   -->
 
-<div [attr.data-carbon-theme]="carbonTheme">
-  <ng-container *ngIf="loading">
-    <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
-  </ng-container>
-  <ng-container *ngIf="!loading">
-    <cds-accordion [attr.data-carbon-theme]="carbonTheme">
-      <cds-accordion-item
-        [title]="'searchFields.searchButtonText' | translate"
-        (selected)="toggleExpanded()"
-        [attr.data-carbon-theme]="carbonTheme"
-      >
-        <ng-container *ngTemplateOutlet="searchFieldsTemplate"></ng-container>
-      </cds-accordion-item>
-    </cds-accordion>
-  </ng-container>
-</div>
+<ng-container *ngIf="loading">
+  <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+</ng-container>
+<ng-container *ngIf="!loading">
+  <cds-accordion [attr.data-carbon-theme]="carbonTheme">
+    <cds-accordion-item
+      [title]="'searchFields.searchButtonText' | translate"
+      (selected)="toggleExpanded()"
+      [attr.data-carbon-theme]="carbonTheme"
+    >
+      <ng-container *ngTemplateOutlet="searchFieldsTemplate"></ng-container>
+    </cds-accordion-item>
+  </cds-accordion>
+</ng-container>
 
 <ng-template #loadingTemplate>
   <valtimo-spinner></valtimo-spinner>

@@ -52,8 +52,8 @@
 
   .col-4,
   .col-12 {
-    padding-right: 1rem;
-    padding-left: 1rem;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
   }
 
   &--hidden {
@@ -74,6 +74,11 @@
   background-color: #fff;
 }
 
+::ng-deep .cds--accordion__item {
+  border-inline-start: 1px solid var(--cds-border-subtle);
+  border-inline-end: 1px solid var(--cds-border-subtle);
+}
+
 ::ng-deep .cds--accordion__content {
-  padding: 0;
+  padding: 0 0.5rem 0 0.5rem;
 }
