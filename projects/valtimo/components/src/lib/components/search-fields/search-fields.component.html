@@ -14,12 +14,20 @@
   ~ limitations under the License.
   -->
 
-<div class="search fields">
+<div [attr.data-carbon-theme]="carbonTheme">
   <ng-container *ngIf="loading">
     <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
   </ng-container>
   <ng-container *ngIf="!loading">
-    <ng-container *ngTemplateOutlet="searchFieldsTemplate"></ng-container>
+    <cds-accordion [attr.data-carbon-theme]="carbonTheme">
+      <cds-accordion-item
+        [title]="'searchFields.searchButtonText' | translate"
+        (selected)="toggleExpanded()"
+        [attr.data-carbon-theme]="carbonTheme"
+      >
+        <ng-container *ngTemplateOutlet="searchFieldsTemplate"></ng-container>
+      </cds-accordion-item>
+    </cds-accordion>
   </ng-container>
 </div>
 
@@ -28,35 +36,28 @@
 </ng-template>
 
 <ng-template #searchFieldsTemplate>
-  <valtimo-widget>
-    <div class="row">
-      <div class="col-12">
-        <ng-container *ngTemplateOutlet="buttonAccordion"></ng-container>
-      </div>
-    </div>
-    <div
-      class="row p-3"
-      [ngClass]="{'row--hidden': (expanded$ | async) === false}"
-      *ngIf="searchFields$ | async as searchFields"
-    >
-      <ng-container *ngFor="let searchField of searchFields; let i = index">
-        <div class="col-4">
-          <ng-container
-            *ngTemplateOutlet="searchFieldTemplate; context: {searchField: searchField}"
-          ></ng-container>
-        </div>
-        <div class="w-100" *ngIf="(i + 1) % 3 === 0"></div>
-      </ng-container>
-      <div class="col-12">
+  <div
+    class="search-fields-container row"
+    [ngClass]="{'search-fields-container--hidden': (expanded$ | async) === false}"
+    *ngIf="searchFields$ | async as searchFields"
+  >
+    <ng-container *ngFor="let searchField of searchFields; let i = index">
+      <div class="col-4">
         <ng-container
-          *ngTemplateOutlet="
-            buttonsTemplate;
-            context: {noSearchFields: !searchFields || searchFields.length === 0}
-          "
+          *ngTemplateOutlet="searchFieldTemplate; context: {searchField: searchField}"
         ></ng-container>
       </div>
+      <div class="w-100" *ngIf="(i + 1) % 3 === 0"></div>
+    </ng-container>
+    <div class="col-12">
+      <ng-container
+        *ngTemplateOutlet="
+          buttonsTemplate;
+          context: {noSearchFields: !searchFields || searchFields.length === 0}
+        "
+      ></ng-container>
     </div>
-  </valtimo-widget>
+  </div>
 </ng-template>
 
 <ng-template #searchFieldTemplate let-searchField="searchField">
@@ -609,21 +610,5 @@
     <v-paragraph [fullWidth]="true" [center]="true">{{
       'searchFields.noneConfigured' | translate
     }}</v-paragraph>
-  </div>
-</ng-template>
-
-<ng-template #buttonAccordion>
-  <div class="buttons-container" *ngIf="{expanded: expanded$ | async} as obs">
-    <button
-      [disabled]="loading || inputDisabled"
-      type="button"
-      class="accordion-button"
-      (click)="toggleExpanded()"
-      [ngClass]="
-        obs.expanded ? 'mdi mdi-chevron-right accordion-button--active' : 'mdi mdi-chevron-down'
-      "
-    >
-      {{ 'searchFields.searchButtonText' | translate }}
-    </button>
   </div>
 </ng-template>

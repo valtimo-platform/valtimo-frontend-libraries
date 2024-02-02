@@ -17,9 +17,11 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {SearchField, SearchFieldBoolean, SearchFieldValues} from '@valtimo/config';
 import {BehaviorSubject, combineLatest, map, Observable, Subject, Subscription, take} from 'rxjs';
-import {SelectItem} from '../../models';
+import {CARBON_THEME, SelectItem} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
 import {DocumentService} from '@valtimo/document';
+import {IconService} from 'carbon-components-angular';
+import {ChevronDown16, ChevronUp16} from '@carbon/icons';
 
 @Component({
   selector: 'valtimo-search-fields',
@@ -41,6 +43,8 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   @Input() setValuesSubject$: Observable<SearchFieldValues>;
   @Input() defaultValues: SearchFieldValues;
   @Input() inputDisabled = false;
+  @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.WHITE;
+
   @Output() doSearch: EventEmitter<SearchFieldValues> = new EventEmitter<SearchFieldValues>();
 
   readonly documentDefinitionName$ = new BehaviorSubject<string>('');
@@ -86,8 +90,11 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly documentService: DocumentService,
-    private readonly translateService: TranslateService
-  ) {}
+    private readonly translateService: TranslateService,
+    private readonly iconService: IconService
+  ) {
+    this.iconService.registerAll([ChevronDown16, ChevronUp16]);
+  }
 
   ngOnInit() {
     this.openDocumentDefinitionNameSubscription();
