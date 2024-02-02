@@ -20,14 +20,13 @@ import {SearchFieldsComponent} from './search-fields.component';
 import {SpinnerModule} from '../spinner/spinner.module';
 import {WidgetModule} from '../widget/widget.module';
 import {TranslateModule} from '@ngx-translate/core';
-import {ButtonModule} from '../button/button.module';
 import {DatePickerModule} from '../date-picker/date-picker.module';
 import {FormModule} from '../form/form.module';
 import {InputLabelModule} from '../input-label/input-label.module';
 import {InputModule} from '../input/input.module';
 import {ParagraphModule} from '../paragraph/paragraph.module';
 import {SelectModule} from '../select/select.module';
-import {AccordionModule, LayerModule} from 'carbon-components-angular';
+import {AccordionModule, ButtonModule, IconModule, LayerModule} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [SearchFieldsComponent],
@@ -45,6 +44,8 @@ import {AccordionModule, LayerModule} from 'carbon-components-angular';
     SelectModule,
     AccordionModule,
     LayerModule,
+    ButtonModule,
+    IconModule,
   ],
   exports: [SearchFieldsComponent],
 })

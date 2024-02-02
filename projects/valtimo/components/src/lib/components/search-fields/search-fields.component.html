@@ -580,25 +580,30 @@
   <div class="buttons-container" *ngIf="{expanded: expanded$ | async} as obs">
     <div class="right-buttons">
       <button
+        *ngIf="obs.expanded"
+        cdsButton="tertiary"
         (click)="clear()"
         [disabled]="loading || noSearchFields || inputDisabled"
         type="button"
         id="clear"
-        class="btn btn-space btn-secondary"
-        *ngIf="obs.expanded"
       >
+        <svg cdsIcon="trash-can" size="16" class="cds--btn__icon"></svg>
+
         {{ 'searchFields.clearButtonText' | translate }}
       </button>
+
       <button
+        *ngIf="obs.expanded"
+        cdsButton="primary"
         (click)="search()"
         [disabled]="
           loading || noSearchFields || (hasValidValues$ | async) === false || inputDisabled
         "
         type="button"
         id="search"
-        class="btn btn-space btn-primary"
-        *ngIf="obs.expanded"
       >
+        <svg cdsIcon="search" size="16" class="cds--btn__icon"></svg>
+
         {{ 'searchFields.searchButtonText' | translate }}
       </button>
     </div>
