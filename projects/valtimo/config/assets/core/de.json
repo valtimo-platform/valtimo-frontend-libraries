@@ -541,6 +541,7 @@
     },
     "statuses": {
       "add": "Status hinzufügen",
+      "edit": "Status bearbeiten",
       "columns": {
         "title": "Statusname",
         "key": "Statusschlüssel",

@@ -18,7 +18,8 @@
   *ngIf="{
     loading: loading$ | async,
     documentStatuses: documentStatuses$ | async,
-    fields: fields$ | async
+    fields: fields$ | async,
+    statusModalType: statusModalType$ | async
   } as obs"
 >
   <valtimo-carbon-list
@@ -34,11 +35,16 @@
       *ngTemplateOutlet="buttons; context: {obs: obs}"
     ></ng-container>
   </valtimo-carbon-list>
+
+  <valtimo-dossier-management-status-modal
+    [type]="obs.statusModalType"
+    (closeModalEvent)="closeModal($event)"
+  ></valtimo-dossier-management-status-modal>
 </ng-container>
 
 <ng-template #buttons let-obs="obs">
   <div class="dossier-management-search-fields__buttons">
-    <button cdsButton="primary" [disabled]="obs.loading">
+    <button cdsButton="primary" [disabled]="obs.loading" (click)="openAddModal()">
       <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
 
       {{ 'dossierManagement.statuses.add' | translate }}

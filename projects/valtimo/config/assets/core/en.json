@@ -542,6 +542,7 @@
     },
     "statuses": {
       "add": "Add status",
+      "edit": "Edit status",
       "columns": {
         "title": "Status name",
         "key": "Status key",

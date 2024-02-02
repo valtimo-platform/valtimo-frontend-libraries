@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {DocumentStatusService, InternalDocumentStatus} from '@valtimo/document';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
+import {StatusModalCloseEvent, StatusModalType} from '../../models';
 
 @Component({
   selector: 'valtimo-dossier-management-statuses',
   templateUrl: './dossier-management-statuses.component.html',
   styleUrls: ['./dossier-management-statuses.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierManagementStatusesComponent implements OnInit {
   private readonly _reload$ = new BehaviorSubject<null>(null);
@@ -61,6 +63,8 @@ export class DossierManagementStatusesComponent implements OnInit {
     },
   ];
 
+  public readonly statusModalType$ = new BehaviorSubject<StatusModalType>('closed');
+
   constructor(
     private readonly documentStatusService: DocumentStatusService,
     private readonly route: ActivatedRoute
@@ -75,7 +79,15 @@ export class DossierManagementStatusesComponent implements OnInit {
   }
 
   public openEditModal(status: InternalDocumentStatus): void {
-    console.log(status);
+    this.statusModalType$.next('edit');
+  }
+
+  public openAddModal(): void {
+    this.statusModalType$.next('add');
+  }
+
+  public closeModal(closeModalEvent: StatusModalCloseEvent): void {
+    this.statusModalType$.next('closed');
   }
 
   private setFields(): void {
