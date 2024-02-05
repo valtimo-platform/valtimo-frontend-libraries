@@ -67,11 +67,21 @@
     {{ 'interface.cancel' | translate }}
   </button>
 
-  <button *ngIf="obs.isAdd" cdsButton="primary" [disabled]="invalid" (click)="addStatus()">
+  <button
+    *ngIf="obs.isAdd"
+    cdsButton="primary"
+    [disabled]="invalid || pristine"
+    (click)="addStatus()"
+  >
     {{ 'interface.add' | translate }}
   </button>
 
-  <button *ngIf="obs.isEdit" cdsButton="primary" [disabled]="invalid" (click)="editStatus()">
+  <button
+    *ngIf="obs.isEdit"
+    cdsButton="primary"
+    [disabled]="invalid || pristine"
+    (click)="editStatus()"
+  >
     {{ 'interface.save' | translate }}
   </button>
 </ng-template>

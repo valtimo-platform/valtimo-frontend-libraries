@@ -77,7 +77,11 @@ export class DossierManagementStatusModalComponent {
   }
 
   public get invalid(): boolean {
-    return this.statusFormGroup?.invalid;
+    return !!this.statusFormGroup?.invalid;
+  }
+
+  public get pristine(): boolean {
+    return !!this.statusFormGroup?.pristine;
   }
 
   constructor(private readonly fb: FormBuilder) {}
@@ -106,6 +110,7 @@ export class DossierManagementStatusModalComponent {
       title: prefillStatus.title,
       visibleInCaseListByDefault: prefillStatus.visibleInCaseListByDefault,
     });
+    this.statusFormGroup.markAsPristine();
   }
 
   private resetForm(): void {
@@ -114,5 +119,6 @@ export class DossierManagementStatusModalComponent {
       title: '',
       visibleInCaseListByDefault: true,
     });
+    this.statusFormGroup.markAsPristine();
   }
 }
