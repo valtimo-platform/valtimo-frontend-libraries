@@ -27,6 +27,7 @@
     [loading]="obs.loading"
     [movingRowsEnabled]="true"
     [actionItems]="ACTION_ITEMS"
+    (rowClicked)="openEditModal($event)"
   >
     <ng-container
       carbonToolbarContent
@@ -40,6 +41,16 @@
   [prefill]="prefillStatus$ | async"
   (closeModalEvent)="closeModal($event)"
 ></valtimo-dossier-management-status-modal>
+
+<valtimo-confirmation-modal
+  confirmButtonTextTranslationKey="interface.delete"
+  confirmButtonType="danger"
+  contentTranslationKey="dossierManagement.statuses.deleteText"
+  [outputOnConfirm]="statusToDelete$ | async"
+  [showModalSubject$]="showDeleteModal$"
+  titleTranslationKey="interface.delete"
+  (confirmEvent)="confirmDeleteStatus($event)"
+></valtimo-confirmation-modal>
 
 <ng-template #buttons let-obs="obs">
   <div class="dossier-management-search-fields__buttons">

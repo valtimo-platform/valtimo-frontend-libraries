@@ -16,7 +16,16 @@
 
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {DocumentStatusService, InternalDocumentStatus} from '@valtimo/document';
-import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {ActionItem, ViewType} from '@valtimo/components';
 import {StatusModalCloseEvent, StatusModalType} from '../../models';
@@ -31,7 +40,7 @@ export class DossierManagementStatusesComponent {
   private readonly _reload$ = new BehaviorSubject<null>(null);
 
   private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.name || ''),
+    map(params => params?.name),
     filter(docDefName => !!docDefName)
   );
 
@@ -82,13 +91,17 @@ export class DossierManagementStatusesComponent {
   public readonly statusModalType$ = new BehaviorSubject<StatusModalType>('closed');
   public readonly prefillStatus$ = new BehaviorSubject<InternalDocumentStatus>(undefined);
 
+  public readonly statusToDelete$ = new BehaviorSubject<InternalDocumentStatus>(undefined);
+  public readonly showDeleteModal$ = new Subject<boolean>();
+
   constructor(
     private readonly documentStatusService: DocumentStatusService,
     private readonly route: ActivatedRoute
   ) {}
 
   public openDeleteModal(status: InternalDocumentStatus): void {
-    console.log(status);
+    this.statusToDelete$.next(status);
+    this.showDeleteModal$.next(true);
   }
 
   public openEditModal(status: InternalDocumentStatus): void {
@@ -102,5 +115,9 @@ export class DossierManagementStatusesComponent {
 
   public closeModal(closeModalEvent: StatusModalCloseEvent): void {
     this.statusModalType$.next('closed');
+  }
+
+  public confirmDeleteStatus(status: InternalDocumentStatus) {
+    console.log(status);
   }
 }

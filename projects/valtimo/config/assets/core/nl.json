@@ -545,6 +545,7 @@
       "visibleTitle": "Standaardzichtbaarheid in dossierlijst",
       "visible": "Zichtbaar",
       "invisible": "Niet zichtbaar",
+      "deleteText": "Weet je zeker dat je deze status wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
       "columns": {
         "title": "Statusnaam",
         "key": "Statussleutel",

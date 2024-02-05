@@ -545,6 +545,7 @@
       "visibleTitle": "Standardsichtbarkeit in der Fallliste",
       "visible": "Sichtbar",
       "invisible": "Nicht sichtbar",
+      "deleteText": "Sind Sie sicher, dass Sie diesen Status löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
       "columns": {
         "title": "Statusname",
         "key": "Statusschlüssel",
