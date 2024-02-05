@@ -50,6 +50,13 @@ export class DocumentStatusService extends BaseApiService {
         visibleInCaseListByDefault: false,
         order: 1,
       },
+      {
+        key: 'test-1',
+        title: 'testt',
+        documentDefinitionName: 'test',
+        visibleInCaseListByDefault: true,
+        order: 2,
+      },
     ] as InternalDocumentStatus[]).pipe(delay(1000));
   }
 }

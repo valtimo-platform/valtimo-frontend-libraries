@@ -46,6 +46,8 @@ export class DossierManagementStatusesComponent {
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
+  public readonly usedKeys$ = new BehaviorSubject<string[]>([]);
+
   public readonly documentStatuses$ = combineLatest([
     this._documentDefinitionName$,
     this._reload$,
@@ -54,6 +56,9 @@ export class DossierManagementStatusesComponent {
     switchMap(([documentDefinitionName]) =>
       this.documentStatusService.getDocumentStatuses(documentDefinitionName)
     ),
+    tap(statuses => {
+      this.usedKeys$.next(statuses.map(status => status.key));
+    }),
     tap(() => this.loading$.next(false))
   );
 

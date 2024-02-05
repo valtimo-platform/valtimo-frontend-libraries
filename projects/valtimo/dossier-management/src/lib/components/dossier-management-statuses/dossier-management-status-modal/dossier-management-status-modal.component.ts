@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {StatusModalCloseEvent, StatusModalType} from '../../../models';
-import {BehaviorSubject, combineLatest, map, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Subscription, tap} from 'rxjs';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {FormBuilder, Validators} from '@angular/forms';
 import {InternalDocumentStatus} from '@valtimo/document';
+import {IconService} from 'carbon-components-angular';
+import {Edit16} from '@carbon/icons';
 
 @Component({
   selector: 'valtimo-dossier-management-status-modal',
@@ -27,7 +37,7 @@ import {InternalDocumentStatus} from '@valtimo/document';
   styleUrls: ['./dossier-management-status-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementStatusModalComponent {
+export class DossierManagementStatusModalComponent implements OnInit, OnDestroy {
   @Input() public set type(value: StatusModalType) {
     this._type.next(value);
 
@@ -43,6 +53,8 @@ export class DossierManagementStatusModalComponent {
   @Input() public set prefill(value: InternalDocumentStatus) {
     this._prefillStatus.next(value);
   }
+
+  @Input() public usedKeys!: string[];
 
   @Output() public closeModalEvent = new EventEmitter<StatusModalCloseEvent>();
 
@@ -76,6 +88,14 @@ export class DossierManagementStatusModalComponent {
     return this.statusFormGroup?.get('visibleInCaseListByDefault');
   }
 
+  public get key() {
+    return this.statusFormGroup?.get('key');
+  }
+
+  public get title() {
+    return this.statusFormGroup?.get('title');
+  }
+
   public get invalid(): boolean {
     return !!this.statusFormGroup?.invalid;
   }
@@ -84,7 +104,34 @@ export class DossierManagementStatusModalComponent {
     return !!this.statusFormGroup?.pristine;
   }
 
-  constructor(private readonly fb: FormBuilder) {}
+  private readonly _editingKey$ = new BehaviorSubject<boolean>(false);
+
+  public readonly editingKey$ = this._editingKey$.pipe(
+    tap(editing => {
+      if (editing) {
+        this.key?.enable();
+      } else {
+        this.key?.disable();
+      }
+    })
+  );
+
+  private readonly _subscriptions = new Subscription();
+
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly iconService: IconService
+  ) {
+    this.iconService.registerAll([Edit16]);
+  }
+
+  public ngOnInit(): void {
+    this.openAutoKeySubscription();
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   public onClose(): void {
     this.closeModalEvent.emit('close');
@@ -104,6 +151,10 @@ export class DossierManagementStatusModalComponent {
     console.log('edit');
   }
 
+  public editKeyButtonClick(): void {
+    this._editingKey$.next(true);
+  }
+
   private prefillForm(prefillStatus: InternalDocumentStatus): void {
     this.statusFormGroup.patchValue({
       key: prefillStatus.key,
@@ -111,6 +162,7 @@ export class DossierManagementStatusModalComponent {
       visibleInCaseListByDefault: prefillStatus.visibleInCaseListByDefault,
     });
     this.statusFormGroup.markAsPristine();
+    this.resetEditingKey();
   }
 
   private resetForm(): void {
@@ -120,5 +172,58 @@ export class DossierManagementStatusModalComponent {
       visibleInCaseListByDefault: true,
     });
     this.statusFormGroup.markAsPristine();
+    this.resetEditingKey();
+  }
+
+  private resetEditingKey(): void {
+    this._editingKey$.next(false);
+  }
+
+  private openAutoKeySubscription(): void {
+    this._subscriptions.add(
+      combineLatest([this.isAdd$, this.title.valueChanges, this.editingKey$]).subscribe(
+        ([isAdd, titleValue, editingKey]) => {
+          if (isAdd && !editingKey) {
+            if (titleValue) {
+              this.statusFormGroup.patchValue({key: this.getUniqueKey(titleValue)});
+            } else {
+              this.clearKey();
+            }
+          }
+        }
+      )
+    );
+  }
+
+  private getUniqueKey(title: string): string {
+    const dashCaseTitle = `${title}`.toLowerCase().replace(/\s+/g, '-');
+    const usedKeys = this.usedKeys;
+
+    if (!usedKeys.includes(dashCaseTitle)) {
+      return dashCaseTitle;
+    } else {
+      return this.getUniqueKeyWithNumber(dashCaseTitle, usedKeys);
+    }
+  }
+
+  private getUniqueKeyWithNumber(dashCaseKey: string, usedKeys: string[]): string {
+    const numbersFromCurrentKey = (dashCaseKey.match(/^\d+|\d+\b|\d+(?=\w)/g) || []).map(
+      (numberValue: string) => +numberValue
+    );
+    const lastNumberFromCurrentKey =
+      numbersFromCurrentKey.length > 0 && numbersFromCurrentKey[numbersFromCurrentKey.length - 1];
+    const newKey = lastNumberFromCurrentKey
+      ? `${dashCaseKey.replace(`${lastNumberFromCurrentKey}`, `${lastNumberFromCurrentKey + 1}`)}`
+      : `${dashCaseKey}-1`;
+
+    if (usedKeys.includes(newKey)) {
+      return this.getUniqueKeyWithNumber(newKey, usedKeys);
+    }
+
+    return newKey;
+  }
+
+  private clearKey(): void {
+    this.statusFormGroup.patchValue({key: ''});
   }
 }

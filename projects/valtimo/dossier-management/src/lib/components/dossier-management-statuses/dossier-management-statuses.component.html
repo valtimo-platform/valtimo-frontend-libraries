@@ -39,6 +39,7 @@
 <valtimo-dossier-management-status-modal
   [type]="statusModalType$ | async"
   [prefill]="prefillStatus$ | async"
+  [usedKeys]="usedKeys$ | async"
   (closeModalEvent)="closeModal($event)"
 ></valtimo-dossier-management-status-modal>
 

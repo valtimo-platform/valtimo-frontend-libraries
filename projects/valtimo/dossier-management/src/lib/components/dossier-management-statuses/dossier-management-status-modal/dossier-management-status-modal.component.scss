@@ -19,3 +19,11 @@
   flex-direction: column;
   gap: 16px;
 }
+
+.edit-key-input {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-end;
+}
