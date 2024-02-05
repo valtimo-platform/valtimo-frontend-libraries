@@ -64,6 +64,7 @@ export class DossierManagementStatusesComponent implements OnInit {
   ];
 
   public readonly statusModalType$ = new BehaviorSubject<StatusModalType>('closed');
+  public readonly prefillStatus$ = new BehaviorSubject<InternalDocumentStatus>(undefined);
 
   constructor(
     private readonly documentStatusService: DocumentStatusService,
@@ -79,6 +80,7 @@ export class DossierManagementStatusesComponent implements OnInit {
   }
 
   public openEditModal(status: InternalDocumentStatus): void {
+    this.prefillStatus$.next(status);
     this.statusModalType$.next('edit');
   }
 

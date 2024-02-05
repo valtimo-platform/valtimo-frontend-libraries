@@ -28,4 +28,32 @@
       {{ obs.isEdit ? ('dossierManagement.statuses.edit' | translate) : '' }}
     </h3>
   </cds-modal-header>
+
+  <section cdsModalContent>
+    <ng-container *ngTemplateOutlet="statusForm"></ng-container>
+  </section>
 </cds-modal>
+
+<ng-template #statusForm>
+  <form [formGroup]="statusFormGroup" class="status-form">
+    <cds-label>
+      {{ 'dossierManagement.tabManagement.addModal.tabNameLabel' | translate }}
+
+      <input cdsText formControlName="title" [attr.modal-primary-focus]="true" />
+    </cds-label>
+
+    <cds-label>
+      {{ 'dossierManagement.tabManagement.addModal.tabNameLabel' | translate }}
+
+      <input cdsText formControlName="key" />
+    </cds-label>
+
+    <cds-toggle
+      [label]="'test'"
+      [onText]="'on'"
+      [offText]="'off'"
+      [checked]="visibleInCaseListByDefault?.value"
+      (checkedChange)="toggleCheckedChange($event)"
+    ></cds-toggle>
+  </form>
+</ng-template>

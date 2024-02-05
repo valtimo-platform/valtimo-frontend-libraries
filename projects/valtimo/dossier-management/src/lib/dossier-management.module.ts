@@ -56,6 +56,7 @@ import {
   ProgressBarModule,
   TabsModule,
   TagModule,
+  ToggleModule,
 } from 'carbon-components-angular';
 import {DossierManagementAssigneeComponent} from './components/dossier-management-assignee/dossier-management-assignee.component';
 import {DossierManagementConnectModalComponent} from './components/dossier-management-connect-modal/dossier-management-connect-modal.component';
@@ -148,6 +149,7 @@ import {DossierManagementStatusModalComponent} from './components/dossier-manage
     TagModule,
     FileUploaderModule,
     ProgressBarModule,
+    ToggleModule,
   ],
   providers: [TabManagementService],
 })
