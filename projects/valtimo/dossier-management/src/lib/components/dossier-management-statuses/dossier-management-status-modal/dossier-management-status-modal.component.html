@@ -32,28 +32,46 @@
   <section cdsModalContent>
     <ng-container *ngTemplateOutlet="statusForm"></ng-container>
   </section>
+
+  <cds-modal-footer>
+    <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
+  </cds-modal-footer>
 </cds-modal>
 
 <ng-template #statusForm>
   <form [formGroup]="statusFormGroup" class="status-form">
     <cds-label>
-      {{ 'dossierManagement.tabManagement.addModal.tabNameLabel' | translate }}
+      {{ 'dossierManagement.statuses.columns.title' | translate }}
 
       <input cdsText formControlName="title" [attr.modal-primary-focus]="true" />
     </cds-label>
 
     <cds-label>
-      {{ 'dossierManagement.tabManagement.addModal.tabNameLabel' | translate }}
+      {{ 'dossierManagement.statuses.columns.key' | translate }}
 
       <input cdsText formControlName="key" />
     </cds-label>
 
     <cds-toggle
-      [label]="'test'"
-      [onText]="'on'"
-      [offText]="'off'"
+      [label]="'dossierManagement.statuses.visibleTitle' | translate"
+      [onText]="'dossierManagement.statuses.visible' | translate"
+      [offText]="'dossierManagement.statuses.invisible' | translate"
       [checked]="visibleInCaseListByDefault?.value"
       (checkedChange)="toggleCheckedChange($event)"
     ></cds-toggle>
   </form>
+</ng-template>
+
+<ng-template #buttons let-obs="obs">
+  <button cdsButton="secondary" (click)="onClose()">
+    {{ 'interface.cancel' | translate }}
+  </button>
+
+  <button *ngIf="obs.isAdd" cdsButton="primary" [disabled]="invalid" (click)="addStatus()">
+    {{ 'interface.add' | translate }}
+  </button>
+
+  <button *ngIf="obs.isEdit" cdsButton="primary" [disabled]="invalid" (click)="editStatus()">
+    {{ 'interface.save' | translate }}
+  </button>
 </ng-template>

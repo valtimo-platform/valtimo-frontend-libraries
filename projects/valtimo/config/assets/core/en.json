@@ -543,6 +543,9 @@
     "statuses": {
       "add": "Add status",
       "edit": "Edit status",
+      "visibleTitle": "Default visibility in case list",
+      "visible": "Visible",
+      "invisible": "Not visible",
       "columns": {
         "title": "Status name",
         "key": "Status key",
@@ -733,7 +736,8 @@
     "filter": "Filter...",
     "back": "Back",
     "warning": "Warning",
-    "finish": "Finish"
+    "finish": "Finish",
+    "add": "Add"
   },
   "taskDetail": {
     "taskCreated": "Created",

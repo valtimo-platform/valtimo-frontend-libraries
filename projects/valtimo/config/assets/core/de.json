@@ -542,6 +542,9 @@
     "statuses": {
       "add": "Status hinzufügen",
       "edit": "Status bearbeiten",
+      "visibleTitle": "Standardsichtbarkeit in der Fallliste",
+      "visible": "Sichtbar",
+      "invisible": "Nicht sichtbar",
       "columns": {
         "title": "Statusname",
         "key": "Statusschlüssel",
@@ -731,7 +734,8 @@
     "filter": "Filter...",
     "back": "Zurück",
     "warning": "Warnung",
-    "finish": "Beenden"
+    "finish": "Beenden",
+    "add": "Hinzufügen"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",

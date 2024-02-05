@@ -542,6 +542,9 @@
     "statuses": {
       "add": "Status toevoegen",
       "edit": "Status bewerken",
+      "visibleTitle": "Standaardzichtbaarheid in dossierlijst",
+      "visible": "Zichtbaar",
+      "invisible": "Niet zichtbaar",
       "columns": {
         "title": "Statusnaam",
         "key": "Statussleutel",
@@ -732,7 +735,8 @@
     "filter": "Filteren...",
     "back": "Terug",
     "warning": "Waarschuwing",
-    "finish": "Finish"
+    "finish": "Finish",
+    "add": "Toevoegen"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",

@@ -76,6 +76,10 @@ export class DossierManagementStatusModalComponent {
     return this.statusFormGroup?.get('visibleInCaseListByDefault');
   }
 
+  public get invalid(): boolean {
+    return this.statusFormGroup?.invalid;
+  }
+
   constructor(private readonly fb: FormBuilder) {}
 
   public onClose(): void {
@@ -86,6 +90,14 @@ export class DossierManagementStatusModalComponent {
     this.statusFormGroup.patchValue({
       visibleInCaseListByDefault: checked,
     });
+  }
+
+  public addStatus(): void {
+    console.log('add');
+  }
+
+  public editStatus(): void {
+    console.log('edit');
   }
 
   private prefillForm(prefillStatus: InternalDocumentStatus): void {

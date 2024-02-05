@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {DocumentStatusService, InternalDocumentStatus} from '@valtimo/document';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
+import {ActionItem, ViewType} from '@valtimo/components';
 import {StatusModalCloseEvent, StatusModalType} from '../../models';
 
 @Component({
@@ -27,7 +27,7 @@ import {StatusModalCloseEvent, StatusModalType} from '../../models';
   styleUrls: ['./dossier-management-statuses.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementStatusesComponent implements OnInit {
+export class DossierManagementStatusesComponent {
   private readonly _reload$ = new BehaviorSubject<null>(null);
 
   private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
@@ -48,9 +48,25 @@ export class DossierManagementStatusesComponent implements OnInit {
     tap(() => this.loading$.next(false))
   );
 
-  public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
+  public readonly FIELDS = [
+    {
+      key: 'title',
+      label: 'dossierManagement.statuses.columns.title',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'key',
+      label: 'dossierManagement.statuses.columns.key',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'visibleInCaseListByDefault',
+      label: 'dossierManagement.statuses.columns.visible',
+      viewType: ViewType.BOOLEAN,
+    },
+  ];
 
-  public readonly actionItems: ActionItem[] = [
+  public readonly ACTION_ITEMS: ActionItem[] = [
     {
       label: 'interface.edit',
       callback: this.openEditModal.bind(this),
@@ -71,10 +87,6 @@ export class DossierManagementStatusesComponent implements OnInit {
     private readonly route: ActivatedRoute
   ) {}
 
-  public ngOnInit(): void {
-    this.setFields();
-  }
-
   public openDeleteModal(status: InternalDocumentStatus): void {
     console.log(status);
   }
@@ -90,25 +102,5 @@ export class DossierManagementStatusesComponent implements OnInit {
 
   public closeModal(closeModalEvent: StatusModalCloseEvent): void {
     this.statusModalType$.next('closed');
-  }
-
-  private setFields(): void {
-    this.fields$.next([
-      {
-        key: 'title',
-        label: 'dossierManagement.statuses.columns.title',
-        viewType: ViewType.TEXT,
-      },
-      {
-        key: 'key',
-        label: 'dossierManagement.statuses.columns.key',
-        viewType: ViewType.TEXT,
-      },
-      {
-        key: 'visibleInCaseListByDefault',
-        label: 'dossierManagement.statuses.columns.visible',
-        viewType: ViewType.BOOLEAN,
-      },
-    ]);
   }
 }

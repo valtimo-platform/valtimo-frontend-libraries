@@ -17,17 +17,16 @@
 <ng-container
   *ngIf="{
     loading: loading$ | async,
-    documentStatuses: documentStatuses$ | async,
-    fields: fields$ | async
+    documentStatuses: documentStatuses$ | async
   } as obs"
 >
   <valtimo-carbon-list
     [items]="obs.documentStatuses"
-    [fields]="obs.fields"
+    [fields]="FIELDS"
     [header]="false"
     [loading]="obs.loading"
     [movingRowsEnabled]="true"
-    [actionItems]="actionItems"
+    [actionItems]="ACTION_ITEMS"
   >
     <ng-container
       carbonToolbarContent
