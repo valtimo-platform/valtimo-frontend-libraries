@@ -41,7 +41,7 @@ export class OpenZaakTypeLinkExtensionComponent {
   public zaakTypes: ZaakType[];
   public zaakTypeLink: ZaakTypeLink;
   public selectedZaakType: ZaakType;
-  public informatieObjectTypeSelectionEnabled: Boolean
+  public informatieObjectTypeSelectionEnabled: boolean
   public informatieObjectTypes: InformatieObjectType[];
   public selectedInformatieObjectTypeUrl: string = null;
   private readonly documentDefinitionName: string;
@@ -63,7 +63,7 @@ export class OpenZaakTypeLinkExtensionComponent {
     configService: ConfigService
   ) {
     this.documentDefinitionName = this.route.snapshot.paramMap.get('name');
-    this.informatieObjectTypeSelectionEnabled = configService.config.uploadProvider == UploadProvider.OPEN_ZAAK
+    this.informatieObjectTypeSelectionEnabled = configService.config.uploadProvider === UploadProvider.OPEN_ZAAK
   }
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnInit() {
