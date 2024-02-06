@@ -15,7 +15,7 @@
   -->
 
 <cds-modal
-  *ngIf="{title: ('interface.export' | translate), selectedType: selectedType$ | async} as vars"
+  *ngIf="{title: ('interface.export' | translate)} as vars"
   valtimoCdsModal
   [open]="open"
   size="sm"
@@ -50,9 +50,9 @@
     </button>
 
     <button
-      [disabled]="!vars.selectedType || disabled"
+      [disabled]="disabled"
       cdsButton="primary"
-      (click)="onConfirm(vars.selectedType)"
+      (click)="onConfirm()"
     >
       {{ vars.title }}
     </button>

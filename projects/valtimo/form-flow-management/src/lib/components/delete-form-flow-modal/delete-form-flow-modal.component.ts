@@ -23,11 +23,11 @@ import {Observable} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteFormFlowModalComponent {
-  @Input() deleteRowKeys: Array<string>;
+  @Input() deleteFormFlowDefinitionKey: string;
   @Input() showDeleteModal$: Observable<boolean>;
-  @Output() deleteEvent = new EventEmitter<Array<string>>();
+  @Output() deleteEvent = new EventEmitter<string>();
 
-  public onDelete(formFlows: Array<string>): void {
-    this.deleteEvent.emit(formFlows);
+  public onDelete(formFlowDefinitionKey: string): void {
+    this.deleteEvent.emit(formFlowDefinitionKey);
   }
 }

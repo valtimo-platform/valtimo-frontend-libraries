@@ -15,10 +15,9 @@
  */
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
-import {CARBON_CONSTANTS, CarbonListComponent, ColumnConfig, ViewType} from '@valtimo/components';
-import {BehaviorSubject, delay, finalize, Observable, Subject, tap} from 'rxjs';
-import {DownloadFormFlowOutput, FormFlow} from '../../models';
-import {FormFlowExportService} from '../../services/form-flow-export.service';
+import {CarbonListComponent, ColumnConfig, ViewType} from '@valtimo/components';
+import {BehaviorSubject, finalize, Observable} from 'rxjs';
+import {FormFlowDefinition, ListFormFlowDefinition} from '../../models';
 import {FormFlowService} from '../../services/form-flow.service';
 
 @Component({
@@ -32,23 +31,26 @@ export class FormFlowOverviewComponent implements OnInit {
     {
       viewType: ViewType.TEXT,
       key: 'key',
-      label: 'formFlow.formFlows.key',
+      label: 'formFlow.key',
+    },
+    {
+      viewType: ViewType.TEXT,
+      key: 'version',
+      label: 'formFlow.version',
+    },
+    {
+      viewType: ViewType.BOOLEAN,
+      key: 'readOnly',
+      label: 'formFlow.readOnly',
     },
   ];
 
-  public readonly formFlows$: Observable<FormFlow[]> = this.formFlowService.formFlows$;
+  public readonly formFlowDefinitions$: Observable<ListFormFlowDefinition[]> = this.formFlowService.formFlows$;
   public readonly loading$: Observable<boolean> = this.formFlowService.loading$;
-  public readonly skeleton$ = new BehaviorSubject<boolean>(false);
   public readonly showAddModal$ = new BehaviorSubject<boolean>(false);
-  public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
-  public readonly showExportModal$ = new BehaviorSubject<boolean>(false);
-  public readonly selectedRowKeys$ = new BehaviorSubject<Array<string>>([]);
-  public readonly resetExportType$ = new Subject<null>();
-  public readonly exportDisabled$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly formFlowService: FormFlowService,
-    private readonly formFlowExportService: FormFlowExportService,
     private readonly router: Router
   ) {}
 
@@ -60,7 +62,7 @@ export class FormFlowOverviewComponent implements OnInit {
     this.showAddModal$.next(true);
   }
 
-  public onAdd(data: FormFlow | null): void {
+  public onAdd(data: FormFlowDefinition | null): void {
     this.showAddModal$.next(false);
 
     if (!data) {
@@ -76,62 +78,7 @@ export class FormFlowOverviewComponent implements OnInit {
     );
   }
 
-  public showDeleteModal(): void {
-    this.setSelectedFormFlowKeys();
-    this.showDeleteModal$.next(true);
-  }
-
-  public showExportModal(): void {
-    this.setSelectedFormFlowKeys();
-    this.showExportModal$.next(true);
-  }
-
-  public closeExportModal(): void {
-    this.showExportModal$.next(false);
-  }
-
-  public onDelete(formFlows: Array<string>): void {
-    this.enableSkeleton();
-
-    this.formFlowService.dispatchAction(
-      this.formFlowService.deleteFormFlows({formFlows}).pipe(
-        finalize(() => {
-          this.disableSkeleton();
-        })
-      )
-    );
-  }
-
-  public onExport(event: DownloadFormFlowOutput): void {
-    this.exportDisabled$.next(true);
-
-    this.formFlowExportService
-      .downloadFormFlows(event)
-      .pipe(
-        tap(() => {
-          this.resetExportType$.next(null);
-        }),
-        delay(CARBON_CONSTANTS.modalAnimationMs),
-        tap(() => {
-          this.exportDisabled$.next(false);
-        })
-      )
-      .subscribe();
-  }
-
-  public onRowClick(formFlow: FormFlow): void {
-    this.router.navigate([`/form-flow/${formFlow.key}`]);
-  }
-
-  private enableSkeleton(): void {
-    this.skeleton$.next(true);
-  }
-
-  private disableSkeleton(): void {
-    this.skeleton$.next(false);
-  }
-
-  private setSelectedFormFlowKeys(): void {
-    this.selectedRowKeys$.next(this.carbonList.selectedItems.map((formFlow: FormFlow) => formFlow.key));
+  public onRowClick(formFlow: FormFlowDefinition): void {
+    this.router.navigate([`/form-flow-management/${formFlow.key}`]);
   }
 }

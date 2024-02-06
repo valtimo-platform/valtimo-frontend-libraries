@@ -18,17 +18,17 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {BehaviorSubject, catchError, Observable, of, switchMap, take, tap} from 'rxjs';
-import {DeleteFormFlowsRequest, FormFlow} from '../models';
+import {DeleteFormFlowsRequest, FormFlowDefinition, ListFormFlowDefinition} from '../models';
 
 @Injectable({providedIn: 'root'})
 export class FormFlowService {
-  public readonly formFlows$ = new BehaviorSubject<FormFlow[]>([]);
+  public readonly formFlows$ = new BehaviorSubject<ListFormFlowDefinition[]>([]);
   public readonly loading$ = new BehaviorSubject<boolean>(false);
 
   private valtimoEndpointUri: string;
 
-  private get formFlowDtos$(): Observable<FormFlow[]> {
-    return this.http.get<FormFlow[]>(`${this.valtimoEndpointUri}v1/form-flow`);
+  private get formFlowDefinitions$(): Observable<ListFormFlowDefinition[]> {
+    return this.http.get<ListFormFlowDefinition[]>(`${this.valtimoEndpointUri}v1/form-flow/definition`);
   }
 
   constructor(
@@ -38,26 +38,26 @@ export class FormFlowService {
     this.valtimoEndpointUri = `${this.configService.config.valtimoApi.endpointUri}management/`;
   }
 
-  public addFormFlow(formFlow: FormFlow): Observable<FormFlow> {
-    return this.http.post<FormFlow>(`${this.valtimoEndpointUri}v1/form-flow`, formFlow);
+  public addFormFlow(definition: FormFlowDefinition): Observable<FormFlowDefinition> {
+    return this.http.post<FormFlowDefinition>(`${this.valtimoEndpointUri}v1/form-flow/definition`, definition);
   }
 
-  public deleteFormFlows(request: DeleteFormFlowsRequest): Observable<null> {
-    return this.http.delete<null>(`${this.valtimoEndpointUri}v1/form-flow`, {body: request});
+  public deleteFormFlowDefinition(key: string): Observable<null> {
+    return this.http.delete<null>(`${this.valtimoEndpointUri}v1/form-flow/definition/${key}`);
   }
 
-  public dispatchAction(actionResult: Observable<FormFlow | null>): void {
+  public dispatchAction(actionResult: Observable<FormFlowDefinition | null>): void {
     actionResult
       .pipe(
         tap(() => {
           this.loading$.next(true);
         }),
-        switchMap(() => this.formFlowDtos$),
+        switchMap(() => this.formFlowDefinitions$),
         take(1),
         catchError(error => of(error))
       )
       .subscribe({
-        next: (formFlows: FormFlow[]) => {
+        next: (formFlows: ListFormFlowDefinition[]) => {
           this.formFlows$.next(formFlows);
           this.loading$.next(false);
         },
@@ -68,7 +68,7 @@ export class FormFlowService {
   }
 
   public loadFormFlows(): void {
-    this.formFlowDtos$
+    this.formFlowDefinitions$
       .pipe(
         tap(() => {
           this.loading$.next(true);
@@ -76,7 +76,7 @@ export class FormFlowService {
         take(1)
       )
       .subscribe({
-        next: (items: FormFlow[]) => {
+        next: (items: ListFormFlowDefinition[]) => {
           this.formFlows$.next(items);
           this.loading$.next(false);
         },
@@ -86,24 +86,20 @@ export class FormFlowService {
       });
   }
 
-  public getFormFlow(key: string): Observable<Array<object>> {
-    return this.http.get<Array<object>>(
-      `${this.valtimoEndpointUri}v1/form-flow/${key}`
+  public getFormFlowDefinition(key: string): Observable<FormFlowDefinition> {
+    return this.http.get<FormFlowDefinition>(
+      `${this.valtimoEndpointUri}v1/form-flow/definition/${key}`
     );
   }
 
-  public downloadFormFlowPermissions(formFlows: string[]): Observable<object[]> {
-    return this.http.post<object[]>(`${this.valtimoEndpointUri}v1/download`, {formFlows});
+  public downloadFormFlowDefinition(key: string, version: number): Observable<object> {
+    return this.http.get<object>(`${this.valtimoEndpointUri}v1/form-flow/definition/${key}/${version}/download`);
   }
 
-  public updateFormFlowPermissions(key: string, updatedPermission: object): Observable<object> {
-    return this.http.put<object>(
-      `${this.valtimoEndpointUri}v1/form-flow/${key}`,
-      updatedPermission
+  public updateFormFlowDefinition(key: string, updatedDefinition: FormFlowDefinition): Observable<FormFlowDefinition> {
+    return this.http.put<FormFlowDefinition>(
+      `${this.valtimoEndpointUri}v1/form-flow/definition/${key}`,
+      updatedDefinition
     );
-  }
-
-  public updateFormFlow(key: string, request: FormFlow): Observable<object> {
-    return this.http.put<object>(`${this.valtimoEndpointUri}v1/form-flow/${key}`, request);
   }
 }

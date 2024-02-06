@@ -26,22 +26,22 @@
 <ng-container renderInPageHeader>
   <ng-template>
     <div
-      *ngIf="{model: model$ | async, moreDisabled: moreDisabled$ | async} as obs"
+      *ngIf="{model: model$ | async, moreDisabled: moreDisabled$ | async, editorDisabled: editorDisabled$ | async} as obs"
       class="buttons-container"
     >
       <cds-overflow-menu class="overflow-button">
-        <cds-overflow-menu-option [disabled]="obs.moreDisabled" (selected)="showEditModal()">{{
+        <cds-overflow-menu-option [disabled]="obs.moreDisabled || obs.editorDisabled" (selected)="showEditModal()">{{
           'formFlow.formFlows.editMetadata' | translate
         }}</cds-overflow-menu-option>
 
         <cds-overflow-menu-option
           [disabled]="obs.moreDisabled"
-          (selected)="exportPermissions(obs.model)"
+          (selected)="downloadFormFlowDefinition(obs.model)"
           >{{ 'interface.export' | translate }}</cds-overflow-menu-option
         >
 
         <cds-overflow-menu-option
-          [disabled]="obs.moreDisabled"
+          [disabled]="obs.moreDisabled || obs.editorDisabled"
           type="danger"
           (selected)="showDeleteModal()"
           >{{ 'interface.delete' | translate }}</cds-overflow-menu-option
@@ -62,19 +62,19 @@
   </ng-template>
 </ng-container>
 
-<ng-container *ngIf="{selectedRowKeys: selectedRowKeys$ | async} as obs">
+<ng-container *ngIf="{formFlowDefinitionKey: formFlowDefinitionKey$ | async} as obs">
   <valtimo-delete-form-flow-modal
-    [deleteRowKeys]="obs.selectedRowKeys"
+    [deleteFormFlowDefinitionKey]="obs.formFlowDefinitionKey"
     [showDeleteModal$]="showDeleteModal$"
     (deleteEvent)="onDelete($event)"
   >
   </valtimo-delete-form-flow-modal>
 
   <valtimo-form-flow-metadata-modal
-    [defaultKeyValue]="obs.selectedRowKeys[0]"
+    [defaultKeyValue]="obs.formFlowDefinitionKey"
     [open]="showEditModal$ | async"
     type="edit"
-    (closeEvent)="onEdit(obs.selectedRowKeys[0], $event)"
+    (closeEvent)="onEdit(obs.formFlowDefinitionKey, $event)"
   ></valtimo-form-flow-metadata-modal>
 </ng-container>
 

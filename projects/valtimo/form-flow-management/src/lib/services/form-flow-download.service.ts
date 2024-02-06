@@ -16,31 +16,17 @@
 
 import {Injectable} from '@angular/core';
 import {FormFlowService} from './form-flow.service';
-import {DownloadFormFlowOutput, FormFlowExport} from '../models';
-import {catchError, combineLatest, map, Observable, of, tap} from 'rxjs';
+import {catchError, map, Observable, of, tap} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
-export class FormFlowExportService {
+export class FormFlowDownloadService {
   constructor(private readonly formFlowService: FormFlowService) {}
 
-  public downloadFormFlows(event: DownloadFormFlowOutput): Observable<boolean> {
+  public downloadFormFlowDefinition(formFlowDefinitionKey: string, version: number): Observable<boolean> {
     return (
-      event.type === 'unified'
-        ? this.formFlowService.downloadFormFlowPermissions(event.keys).pipe(
+        this.formFlowService.downloadFormFlowDefinition(formFlowDefinitionKey, version).pipe(
             tap(res => {
-              this.downloadJson(res, event.type);
-            })
-          )
-        : combineLatest(
-            event.keys.map((key: string) =>
-              this.formFlowService.downloadFormFlowPermissions([key])
-            )
-          ).pipe(
-            tap(res => {
-              res.forEach((permissions, index) => {
-                const key = event.keys[index];
-                this.downloadJson(permissions, event.type, key);
-              });
+              this.downloadJson(res, formFlowDefinitionKey);
             })
           )
     ).pipe(
@@ -49,13 +35,13 @@ export class FormFlowExportService {
     );
   }
 
-  public downloadJson(permissions: Array<object>, type: FormFlowExport, key?: string): void {
-    const sJson = JSON.stringify({permissions}, null, 2);
+  public downloadJson(json: object, key: string): void {
+    const sJson = JSON.stringify(json, null, 2);
     const element = document.createElement('a');
     element.setAttribute('href', 'data:text/json;charset=UTF-8,' + encodeURIComponent(sJson));
     element.setAttribute(
       'download',
-      `${type === 'separate' ? key : 'combined'}.permissions.json`
+      `${key}.json`
     );
     element.style.display = 'none';
     document.body.appendChild(element);

@@ -19,10 +19,10 @@ import {FormFlowService} from '../../services/form-flow.service';
 import {BehaviorSubject, filter, finalize, map, Subscription, switchMap, take, tap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditorModel, PageTitleService} from '@valtimo/components';
-import {FormFlow} from '../../models';
+import {FormFlowDefinition} from '../../models';
 import {NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
-import {FormFlowExportService} from '../../services/form-flow-export.service';
+import {FormFlowDownloadService} from '../../services/form-flow-download.service';
 
 @Component({
   templateUrl: './form-flow-editor.component.html',
@@ -37,7 +37,7 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
   public readonly moreDisabled$ = new BehaviorSubject<boolean>(true);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
   public readonly showEditModal$ = new BehaviorSubject<boolean>(false);
-  public readonly selectedRowKeys$ = new BehaviorSubject<Array<string> | null>(null);
+  public readonly formFlowDefinitionKey$ = new BehaviorSubject<string | null>(null);
 
   private _keySubscription!: Subscription;
   private _key!: string;
@@ -50,7 +50,7 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly notificationService: NotificationService,
     private readonly translateService: TranslateService,
-    private readonly formFlowExportService: FormFlowExportService
+    private readonly formFlowDownloadService: FormFlowDownloadService
   ) {}
 
   public ngOnInit(): void {
@@ -80,9 +80,9 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
       .pipe(
         take(1),
         switchMap(updatedModelValue =>
-          this.formFlowService.updateFormFlowPermissions(
+          this.formFlowService.updateFormFlowDefinition(
             this._key,
-            JSON.parse(updatedModelValue)
+            JSON.parse(updatedModelValue) as FormFlowDefinition
           )
         )
       )
@@ -102,15 +102,15 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onDelete(formFlows: Array<string>): void {
+  public onDelete(formFlowDefinitionKey: string): void {
     this.disableEditor();
     this.disableSave();
     this.disableMore();
 
     this.formFlowService.dispatchAction(
-      this.formFlowService.deleteFormFlows({formFlows}).pipe(
+      this.formFlowService.deleteFormFlowDefinition(formFlowDefinitionKey).pipe(
         finalize(() => {
-          this.router.navigate(['/form-flow']);
+          this.router.navigate(['/form-flow-management']);
         })
       )
     );
@@ -124,7 +124,7 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     this.showEditModal$.next(true);
   }
 
-  public onEdit(currentFormFlowKey: string, data: FormFlow | null): void {
+  public onEdit(currentFormFlowKey: string, data: FormFlowDefinition | null): void {
     this.showEditModal$.next(false);
 
     if (!data) {
@@ -135,16 +135,15 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     this.disableSave();
     this.disableMore();
 
-    this.formFlowService.updateFormFlow(currentFormFlowKey, data).subscribe(() => {
-      this.router.navigate([`/form-flow/${data.key}`]);
+    this.formFlowService.updateFormFlowDefinition(currentFormFlowKey, data).subscribe(() => {
+      this.router.navigate([`/form-flow-management/${data.key}`]);
       this.showSuccessMessage(data.key);
     });
   }
 
-  public exportPermissions(model: EditorModel): void {
-    this.formFlowExportService.downloadJson(
+  public downloadFormFlowDefinition(model: EditorModel): void {
+    this.formFlowDownloadService.downloadJson(
       JSON.parse(model.value),
-      'separate',
       this._key
     );
   }
@@ -157,14 +156,19 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
         tap(key => {
           this._key = key;
           this.pageTitleService.setCustomPageTitle(key, true);
-          this.selectedRowKeys$.next([key]);
+          this.formFlowDefinitionKey$.next(key);
         }),
-        switchMap(key => this.formFlowService.getFormFlow(key)),
-        tap(permissions => {
+        switchMap(key => this.formFlowService.getFormFlowDefinition(key)),
+        tap(formFlowDefinition => {
           this.enableMore();
-          this.enableSave();
-          this.enableEditor();
-          this.setModel(permissions);
+          if (formFlowDefinition.readOnly) {
+            this.disableSave();
+            this.disableEditor();
+          } else {
+            this.enableSave();
+            this.enableEditor();
+          }
+          this.setModel(formFlowDefinition);
         })
       )
       .subscribe();
@@ -175,21 +179,29 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
       .pipe(
         tap(params => {
           this.pageTitleService.setCustomPageTitle(params?.id);
-          this.selectedRowKeys$.next([params?.id]);
+          this.formFlowDefinitionKey$.next(params?.id);
         }),
-        switchMap(params => this.formFlowService.getFormFlow(params.id))
+        switchMap(params => this.formFlowService.getFormFlowDefinition(params.id))
       )
-      .subscribe(permissions => {
+      .subscribe(formFlowDefinition => {
         this.enableMore();
-        this.enableSave();
-        this.enableEditor();
-        this.setModel(permissions);
+        if (formFlowDefinition.readOnly) {
+          this.disableSave();
+          this.disableEditor();
+        } else {
+          this.enableSave();
+          this.enableEditor();
+        }
+        this.setModel(formFlowDefinition);
       });
   }
 
-  private setModel(permissions: object): void {
+  private setModel(formFlowDefinition: FormFlowDefinition): void {
+    let copy = formFlowDefinition;
+    delete copy.version;
+    delete copy.readOnly;
     this.model$.next({
-      value: JSON.stringify(permissions),
+      value: JSON.stringify(copy),
       language: 'json',
     });
   }

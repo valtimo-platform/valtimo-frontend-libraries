@@ -23,13 +23,13 @@ import {FormFlowEditorComponent} from './components/editor/form-flow-editor.comp
 
 const routes: Routes = [
   {
-    path: 'form-flow',
+    path: 'form-flow-management',
     component: FormFlowOverviewComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Form flow', formFlows: [ROLE_ADMIN]},
   },
   {
-    path: 'form-flow/:id',
+    path: 'form-flow-management/:id',
     component: FormFlowEditorComponent,
     canActivate: [AuthGuardService],
     data: {

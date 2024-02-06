@@ -16,10 +16,9 @@
 
 <valtimo-carbon-list
   [header]="false"
-  [items]="formFlows$ | async"
+  [items]="formFlowDefinitions$ | async"
   [fields]="fields"
   [loading]="loading$ | async"
-  [showSelectionColumn]="true"
   (rowClicked)="onRowClick($event)"
 >
   <ng-container header> {{ 'formFlow.formFlows.title' | translate }} </ng-container>
@@ -27,20 +26,6 @@
   <div carbonToolbarContent>
     <ng-container [ngTemplateOutlet]="addFormFlowButton"></ng-container>
   </div>
-
-  <ng-container carbonToolbarActions>
-    <button cdsButton="primary" (click)="showDeleteModal()">
-      {{ 'interface.delete' | translate }}
-
-      <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
-    </button>
-
-    <button cdsButton="primary" (click)="showExportModal()">
-      {{ 'interface.export' | translate }}
-
-      <svg class="cds--btn__icon" cdsIcon="download" size="16"></svg>
-    </button>
-  </ng-container>
 
   <valtimo-no-results
     [action]="addFormFlowButton"
@@ -53,25 +38,6 @@
   [open]="showAddModal$ | async"
   (closeEvent)="onAdd($event)"
 ></valtimo-form-flow-metadata-modal>
-
-<ng-container *ngIf="{selectedRowKeys: selectedRowKeys$ | async} as obs">
-  <valtimo-delete-form-flow-modal
-    [deleteRowKeys]="obs.selectedRowKeys"
-    [showDeleteModal$]="showDeleteModal$"
-    (deleteEvent)="onDelete($event)"
-  >
-  </valtimo-delete-form-flow-modal>
-
-  <valtimo-download-form-flow-modal
-    [disabled]="exportDisabled$ | async"
-    [exportRowKeys]="obs.selectedRowKeys"
-    [open]="showExportModal$ | async"
-    [reset$]="resetExportType$"
-    (exportEvent)="onExport($event)"
-    (closeEvent)="closeExportModal()"
-  >
-  </valtimo-download-form-flow-modal>
-</ng-container>
 
 <ng-template #addFormFlowButton>
   <button cdsButton="primary" (click)="openAddModal()">

@@ -23,7 +23,7 @@ import {
   Output,
 } from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {FormFlow, FormFlowMetadataModal} from '../../models';
+import {FormFlowDefinition, FormFlowMetadataModal, ListFormFlowDefinition} from '../../models';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 
 @Component({
@@ -38,7 +38,7 @@ export class FormFlowMetadataModalComponent implements OnInit {
     this._defaultKeyValue = value;
     this.setDefaultKeyValue(value);
   }
-  @Output() closeEvent = new EventEmitter<FormFlow | null>();
+  @Output() closeEvent = new EventEmitter<FormFlowDefinition | null>();
 
   public form = this.fb.group({
     key: this.fb.control('', Validators.required),
@@ -64,7 +64,7 @@ export class FormFlowMetadataModalComponent implements OnInit {
       return;
     }
 
-    this.closeEvent.emit({key: this.key.value});
+    this.closeEvent.emit({key: this.key.value, startStep: 'start-step', steps: []});
     this.resetForm();
   }
 

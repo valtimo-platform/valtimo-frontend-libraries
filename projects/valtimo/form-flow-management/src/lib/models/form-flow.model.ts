@@ -14,21 +14,61 @@
  * limitations under the License.
  */
 
-interface FormFlow {
+interface ListFormFlowDefinition {
   key: string;
+  version: number;
+  readOnly?: boolean;
+}
+
+interface FormFlowDefinition {
+  key: string;
+  version?: number;
+  readOnly?: boolean;
+  startStep: string;
+  steps: Array<FormFlowStep>
+}
+
+interface FormFlowStep {
+  key: string;
+  nextSteps: Array<FormFlowNextStep>;
+  onBack: Array<string>;
+  onOpen: Array<string>;
+  onComplete: Array<string>;
+  type: FormFlowStepType;
+}
+
+interface FormFlowNextStep {
+  condition?: string;
+  step: string;
+}
+
+interface FormFlowStepType {
+  name: string;
+  properties: FormStepTypeProperties | CustomComponentStepTypeProperties;
+}
+
+interface FormStepTypeProperties {
+  definition: string;
+}
+
+interface CustomComponentStepTypeProperties {
+  componentId: string;
 }
 
 interface DeleteFormFlowsRequest {
-  formFlows: Array<string>;
+  formFlowKeys: Array<string>;
 }
 
 type FormFlowMetadataModal = 'add' | 'edit';
 
-type FormFlowExport = 'unified' | 'separate';
-
-interface DownloadFormFlowOutput {
-  keys: Array<string>;
-  type: FormFlowExport;
-}
-
-export {FormFlow, DeleteFormFlowsRequest, FormFlowMetadataModal, FormFlowExport, DownloadFormFlowOutput};
+export {
+  ListFormFlowDefinition,
+  FormFlowDefinition,
+  FormFlowStep,
+  FormFlowNextStep,
+  FormFlowStepType,
+  FormStepTypeProperties,
+  CustomComponentStepTypeProperties,
+  DeleteFormFlowsRequest,
+  FormFlowMetadataModal
+};

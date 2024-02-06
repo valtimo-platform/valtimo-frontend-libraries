@@ -23,9 +23,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {DownloadFormFlowOutput, FormFlowExport} from '../../models';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
-import {CARBON_CONSTANTS} from '@valtimo/components';
+import {Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'valtimo-download-form-flow-modal',
@@ -35,14 +33,12 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 })
 export class DownloadFormFlowModalComponent implements OnInit, OnDestroy {
   @Input() open = false;
-  @Input() exportRowKeys: Array<string>;
+  @Input() downloadFormFlowDefinitionKey: string;
   @Input() reset$!: Observable<null>;
   @Input() disabled: boolean;
 
-  @Output() exportEvent = new EventEmitter<DownloadFormFlowOutput>();
+  @Output() downloadEvent = new EventEmitter<string>();
   @Output() closeEvent = new EventEmitter<any>();
-
-  public readonly selectedType$ = new BehaviorSubject<FormFlowExport | null>(null);
 
   private _resetSubscription!: Subscription;
 
@@ -56,29 +52,17 @@ export class DownloadFormFlowModalComponent implements OnInit, OnDestroy {
 
   public onCancel(): void {
     if (!this.disabled) {
-      this.resetType();
       this.closeEvent.emit();
     }
   }
 
-  public onConfirm(type: FormFlowExport): void {
-    this.exportEvent.emit({type, keys: this.exportRowKeys});
-  }
-
-  public selectType(type: FormFlowExport): void {
-    this.selectedType$.next(type);
-  }
-
-  private resetType(): void {
-    setTimeout(() => {
-      this.selectedType$.next(null);
-    }, CARBON_CONSTANTS.modalAnimationMs);
+  public onConfirm(): void {
+    this.downloadEvent.emit(this.downloadFormFlowDefinitionKey);
   }
 
   private openResetSubscription(): void {
     this._resetSubscription = this.reset$?.subscribe(() => {
       this.closeEvent.emit();
-      this.resetType();
     });
   }
 }
