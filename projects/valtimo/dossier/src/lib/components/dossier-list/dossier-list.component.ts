@@ -75,6 +75,7 @@ import {
   DossierListPaginationService,
   DossierListSearchService,
   DossierListService,
+  DossierListStatusService,
   DossierParameterService,
 } from '../../services';
 import {
@@ -94,6 +95,7 @@ import {
     DossierParameterService,
     DossierListPaginationService,
     DossierListSearchService,
+    DossierListStatusService,
   ],
 })
 export class DossierListComponent implements OnInit, OnDestroy {
@@ -401,7 +403,8 @@ export class DossierListComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly searchService: DossierListSearchService,
     private readonly translateService: TranslateService,
-    private readonly permissionService: PermissionService
+    private readonly permissionService: PermissionService,
+    private readonly statusService: DossierListStatusService
   ) {}
 
   public ngOnInit(): void {
