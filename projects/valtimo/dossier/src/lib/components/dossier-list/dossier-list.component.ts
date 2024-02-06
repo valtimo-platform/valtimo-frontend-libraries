@@ -20,7 +20,7 @@ import {PermissionService} from '@valtimo/access-control';
 import {
   BreadcrumbService,
   CarbonListComponent,
-  CarbonListTranslations,
+  CarbonListNoResultsMessage,
   CarbonPaginationSelection,
   DEFAULT_PAGINATOR_CONFIG,
   ListField,
@@ -64,8 +64,8 @@ import {
 } from 'rxjs';
 import {DossierListActionsComponent} from '../dossier-list-actions/dossier-list-actions.component';
 import {
-  CAN_VIEW_CASE_PERMISSION,
   CAN_CREATE_CASE_PERMISSION,
+  CAN_VIEW_CASE_PERMISSION,
   DOSSIER_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
 import {
@@ -77,7 +77,11 @@ import {
   DossierListService,
   DossierParameterService,
 } from '../../services';
-import {DefaultTabs} from '../../models';
+import {
+  DEFAULT_DOSSIER_LIST_TABS,
+  DOSSIER_LIST_NO_RESULTS_MESSAGE,
+  DOSSIER_LIST_TABLE_TRANSLATIONS,
+} from '../../constants';
 
 @Component({
   selector: 'valtimo-dossier-list',
@@ -107,33 +111,12 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public canHaveAssignee!: boolean;
   public visibleDossierTabs: Array<DossierListTab> | null = null;
 
-  public readonly defaultTabs: DossierListTab[] = [
-    DossierListTab.ALL,
-    DossierListTab.MINE,
-    DossierListTab.OPEN,
-  ];
+  public readonly defaultTabs = DEFAULT_DOSSIER_LIST_TABS;
+  public readonly tableTranslations = DOSSIER_LIST_TABLE_TRANSLATIONS;
 
-  public readonly tableTranslations: CarbonListTranslations = {
-    select: {
-      single: 'dossier.select.single',
-      multiple: 'dossier.select.multiple',
-    },
-    pagination: {
-      itemsPerPage: 'dossier.pagination.itemsPerPage',
-      totalItem: 'dossier.pagination.totalItem',
-      totalItems: 'dossier.pagination.totalItems',
-    },
-  };
-
-  public readonly noResultsMessage$ = new BehaviorSubject<{
-    description: string;
-    isSearchResult: boolean;
-    title: string;
-  }>({
-    description: 'dossier.noResults.ALL.description',
-    isSearchResult: false,
-    title: 'dossier.noResults.ALL.title',
-  });
+  public readonly noResultsMessage$ = new BehaviorSubject<CarbonListNoResultsMessage>(
+    DOSSIER_LIST_NO_RESULTS_MESSAGE
+  );
   public readonly showAssignModal$ = new BehaviorSubject<boolean>(false);
   public readonly showChangePageModal$ = new BehaviorSubject<boolean>(false);
   public readonly showChangeTabModal$ = new BehaviorSubject<boolean>(false);
