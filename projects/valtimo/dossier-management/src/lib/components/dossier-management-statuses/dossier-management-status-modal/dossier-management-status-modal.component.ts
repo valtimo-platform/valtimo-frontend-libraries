@@ -26,7 +26,13 @@ import {
 import {StatusModalCloseEvent, StatusModalType} from '../../../models';
 import {BehaviorSubject, combineLatest, map, Subscription, tap} from 'rxjs';
 import {CARBON_CONSTANTS} from '@valtimo/components';
-import {FormBuilder, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import {InternalDocumentStatus} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import {Edit16} from '@carbon/icons';
@@ -66,7 +72,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
   public readonly statusFormGroup = this.fb.group({
     title: this.fb.control('', Validators.required),
-    key: this.fb.control('', Validators.required),
+    key: this.fb.control('', [Validators.required, this.uniqueKeyValidator()]),
     visibleInCaseListByDefault: this.fb.control(true, Validators.required),
   });
 
@@ -225,5 +231,12 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
   private clearKey(): void {
     this.statusFormGroup.patchValue({key: ''});
+  }
+
+  private uniqueKeyValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null =>
+      this.usedKeys?.every((key: string) => key !== control.value)
+        ? null
+        : {uniqueKey: {value: control.value}};
   }
 }

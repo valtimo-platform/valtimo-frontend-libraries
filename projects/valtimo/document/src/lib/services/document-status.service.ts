@@ -24,6 +24,30 @@ import {delay, Observable, of} from 'rxjs';
   providedIn: 'root',
 })
 export class DocumentStatusService extends BaseApiService {
+  private readonly MOCK_STATUSES = [
+    {
+      key: 'test',
+      title: 'test',
+      documentDefinitionName: 'test',
+      visibleInCaseListByDefault: true,
+      order: 0,
+    },
+    {
+      key: 'test2',
+      title: '2',
+      documentDefinitionName: 'test',
+      visibleInCaseListByDefault: false,
+      order: 1,
+    },
+    {
+      key: 'test-1',
+      title: 'testt',
+      documentDefinitionName: 'test',
+      visibleInCaseListByDefault: true,
+      order: 2,
+    },
+  ] as InternalDocumentStatus[];
+
   constructor(
     protected readonly httpClient: HttpClient,
     protected readonly configService: ConfigService
@@ -35,28 +59,6 @@ export class DocumentStatusService extends BaseApiService {
     const url = this.getApiUrl(`/document/status/${documentDefinitionName}`);
     console.log(url);
 
-    return of([
-      {
-        key: 'test',
-        title: 'test',
-        documentDefinitionName: 'test',
-        visibleInCaseListByDefault: true,
-        order: 0,
-      },
-      {
-        key: 'test2',
-        title: '2',
-        documentDefinitionName: 'test',
-        visibleInCaseListByDefault: false,
-        order: 1,
-      },
-      {
-        key: 'test-1',
-        title: 'testt',
-        documentDefinitionName: 'test',
-        visibleInCaseListByDefault: true,
-        order: 2,
-      },
-    ] as InternalDocumentStatus[]).pipe(delay(1000));
+    return of(this.MOCK_STATUSES).pipe(delay(1000));
   }
 }
