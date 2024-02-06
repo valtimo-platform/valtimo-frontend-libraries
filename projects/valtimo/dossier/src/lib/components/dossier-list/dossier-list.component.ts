@@ -22,7 +22,6 @@ import {
   CarbonListComponent,
   CarbonListNoResultsMessage,
   CarbonPaginationSelection,
-  DEFAULT_PAGINATOR_CONFIG,
   ListField,
   PageTitleService,
   Pagination,
@@ -43,6 +42,7 @@ import {
   Document,
   Documents,
   DocumentService,
+  InternalDocumentStatus,
   SpecifiedDocuments,
 } from '@valtimo/document';
 import {Tab, Tabs} from 'carbon-components-angular';
@@ -63,11 +63,7 @@ import {
   tap,
 } from 'rxjs';
 import {DossierListActionsComponent} from '../dossier-list-actions/dossier-list-actions.component';
-import {
-  CAN_CREATE_CASE_PERMISSION,
-  CAN_VIEW_CASE_PERMISSION,
-  DOSSIER_DETAIL_PERMISSION_RESOURCE,
-} from '../../permissions';
+import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
 import {
   DossierBulkAssignService,
   DossierColumnService,
@@ -109,6 +105,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public loadingSearchFields = true;
   public loadingAssigneeFilter = true;
   public loadingDocumentItems = true;
+  public loadingStatuses = true;
   public pagination!: Pagination;
   public canHaveAssignee!: boolean;
   public visibleDossierTabs: Array<DossierListTab> | null = null;
@@ -130,16 +127,15 @@ export class DossierListComponent implements OnInit, OnDestroy {
       })
     );
 
+  public readonly documentStatuses$: Observable<Array<InternalDocumentStatus>> =
+    this.statusService.documentStatuses$.pipe(
+      tap(() => {
+        this.loadingStatuses = false;
+      })
+    );
+
   public readonly documentDefinitionName$ = this.listService.documentDefinitionName$;
 
-  public readonly canCreateDocument$: Observable<boolean> = this.documentDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
-      this.permissionService.requestPermission(CAN_CREATE_CASE_PERMISSION, {
-        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocumentDefinition,
-        identifier: documentDefinitionName,
-      })
-    )
-  );
   public readonly selectedDocumentIds$ = new BehaviorSubject<string[]>([]);
 
   public readonly schema$ = this.listService.documentDefinitionName$.pipe(
@@ -186,7 +182,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
       })
     );
 
-  public paginatorConfig = {...DEFAULT_PAGINATOR_CONFIG, itemsPerPageOptions: [1, 2, 3, 4, 10]};
   public readonly fields$: Observable<Array<ListField>> = combineLatest([
     this._canHaveAssignee$,
     this._columns$,

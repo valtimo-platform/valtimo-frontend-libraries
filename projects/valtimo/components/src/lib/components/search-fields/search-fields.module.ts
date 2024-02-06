@@ -26,7 +26,13 @@ import {InputLabelModule} from '../input-label/input-label.module';
 import {InputModule} from '../input/input.module';
 import {ParagraphModule} from '../paragraph/paragraph.module';
 import {SelectModule} from '../select/select.module';
-import {AccordionModule, ButtonModule, IconModule, LayerModule} from 'carbon-components-angular';
+import {
+  AccordionModule,
+  ButtonModule,
+  IconModule,
+  LayerModule,
+  LoadingModule,
+} from 'carbon-components-angular';
 
 @NgModule({
   declarations: [SearchFieldsComponent],
@@ -46,6 +52,7 @@ import {AccordionModule, ButtonModule, IconModule, LayerModule} from 'carbon-com
     LayerModule,
     ButtonModule,
     IconModule,
+    LoadingModule,
   ],
   exports: [SearchFieldsComponent],
 })

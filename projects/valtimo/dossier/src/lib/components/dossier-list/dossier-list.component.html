@@ -20,6 +20,7 @@
     documentItems: documentItems$ | async,
     noResultsMessage: noResultsMessage$ | async,
     searchFields: searchFields$ | async,
+    statuses: documentStatuses$ | async,
     schema: schema$ | async,
     showAssignModal: showAssignModal$ | async,
     selectedDocumentIds: selectedDocumentIds$ | async,
@@ -28,7 +29,8 @@
       !loadingPagination &&
       !loadingSearchFields &&
       !loadingAssigneeFilter &&
-      !loadingDocumentItems
+      !loadingDocumentItems &&
+      !loadingStatuses
   } as obs"
 >
   <div class="main-content pt-0">

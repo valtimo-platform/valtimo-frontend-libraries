@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-.w-100 {
-  height: 1rem;
-
-  &:last-child {
-    display: none;
-  }
-}
-
 ::ng-deep .multiple-search-fields {
   display: flex !important;
   flex-direction: row !important;
@@ -47,23 +39,34 @@
 }
 
 .search-fields-container {
-  padding-top: 1rem;
   padding-bottom: 1rem;
-
-  .col-4,
-  .col-12 {
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
-  }
+  padding-top: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
 
   &--hidden {
     display: none;
   }
 }
 
-.row {
-  padding-right: 1rem;
-  padding-left: 1rem;
+.meta-container {
+  width: 100%;
+  padding-bottom: 1rem;
+}
+
+.loading-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.no-search-fields-message {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .search-fields-tile {
@@ -80,5 +83,5 @@
 }
 
 ::ng-deep .cds--accordion__content {
-  padding: 0 0.5rem 0 0.5rem;
+  padding: 0 1rem;
 }
