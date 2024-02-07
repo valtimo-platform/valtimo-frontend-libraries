@@ -65,7 +65,7 @@
         />
 
         <cds-icon-button
-          *ngIf="!obs.editingKey"
+          *ngIf="!obs.editingKey && obs.isAdd"
           [disabled]="obs.disabled"
           (click)="editKeyButtonClick()"
           kind="secondary"

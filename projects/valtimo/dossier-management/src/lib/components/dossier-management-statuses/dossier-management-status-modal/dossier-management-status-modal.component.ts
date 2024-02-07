@@ -24,7 +24,7 @@ import {
   Output,
 } from '@angular/core';
 import {StatusModalCloseEvent, StatusModalType} from '../../../models';
-import {BehaviorSubject, combineLatest, map, Subscription, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Subscription, switchMap, take, tap} from 'rxjs';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {
   AbstractControl,
@@ -125,6 +125,8 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
     })
   );
 
+  private readonly _originalStatusKey$ = new BehaviorSubject<string>('');
+
   private readonly _subscriptions = new Subscription();
 
   constructor(
@@ -157,7 +159,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
     this.disable();
 
     this.caseStatusService
-      .saveInternalCaseStatuses(this.documentDefinitionName, this.getFormValue())
+      .saveInternalCaseStatus(this.documentDefinitionName, this.getFormValue())
       .subscribe(() => {
         this.enable();
         this.closeAndRefresh();
@@ -166,6 +168,22 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
   public editStatus(): void {
     this.disable();
+
+    this._originalStatusKey$
+      .pipe(
+        take(1),
+        switchMap(originalStatusKey =>
+          this.caseStatusService.updateInternalCaseStatus(
+            this.documentDefinitionName,
+            originalStatusKey,
+            this.getFormValue()
+          )
+        )
+      )
+      .subscribe(() => {
+        this.enable();
+        this.closeAndRefresh();
+      });
   }
 
   public editKeyButtonClick(): void {
@@ -173,6 +191,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
   }
 
   private prefillForm(prefillStatus: InternalCaseStatus): void {
+    this._originalStatusKey$.next(prefillStatus.key);
     this.statusFormGroup.patchValue({
       key: prefillStatus.key,
       title: prefillStatus.title,

@@ -37,13 +37,44 @@ export class CaseStatusService extends BaseApiService {
     );
   }
 
-  public saveInternalCaseStatuses(
+  public saveInternalCaseStatus(
     caseDefinitionName: string,
     status: InternalCaseStatus
   ): Observable<InternalCaseStatus> {
     return this.httpClient.post<InternalCaseStatus>(
       this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/internal-status`),
       status
+    );
+  }
+
+  public deleteInternalCaseStatus(caseDefinitionName: string, statusKey: string): Observable<void> {
+    return this.httpClient.delete<void>(
+      this.getApiUrl(
+        `/management/v1/case-definition/${caseDefinitionName}/internal-status/${statusKey}`
+      )
+    );
+  }
+
+  public updateInternalCaseStatus(
+    caseDefinitionName: string,
+    currentStatusKey: string,
+    updatedStatus: InternalCaseStatus
+  ): Observable<InternalCaseStatus> {
+    return this.httpClient.put<InternalCaseStatus>(
+      this.getApiUrl(
+        `/management/v1/case-definition/${caseDefinitionName}/internal-status/${currentStatusKey}`
+      ),
+      updatedStatus
+    );
+  }
+
+  public updateInternalCaseStatuses(
+    caseDefinitionName: string,
+    reorderedStatus: InternalCaseStatus[]
+  ): Observable<InternalCaseStatus[]> {
+    return this.httpClient.put<InternalCaseStatus[]>(
+      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/internal-status`),
+      reorderedStatus
     );
   }
 }

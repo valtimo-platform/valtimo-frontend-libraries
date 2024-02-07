@@ -27,7 +27,7 @@ import {
   tap,
 } from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {ActionItem, ViewType} from '@valtimo/components';
+import {ActionItem, MoveRowDirection, MoveRowEvent, ViewType} from '@valtimo/components';
 import {StatusModalCloseEvent, StatusModalType} from '../../models';
 
 @Component({
@@ -37,7 +37,7 @@ import {StatusModalCloseEvent, StatusModalType} from '../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierManagementStatusesComponent {
-  private readonly _reload$ = new BehaviorSubject<null>(null);
+  private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
 
   private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params?.name),
@@ -52,15 +52,22 @@ export class DossierManagementStatusesComponent {
 
   public readonly usedKeys$ = new BehaviorSubject<string[]>([]);
 
+  private _documentStatuses: InternalCaseStatus[] = [];
+
   public readonly documentStatuses$ = combineLatest([
     this._documentDefinitionName$,
     this._reload$,
   ]).pipe(
-    tap(() => this.loading$.next(true)),
+    tap(([_, reload]) => {
+      if (reload === null) {
+        this.loading$.next(true);
+      }
+    }),
     switchMap(([documentDefinitionName]) =>
       this.caseStatusService.getInternalCaseStatuses(documentDefinitionName)
     ),
     tap(statuses => {
+      this._documentStatuses = statuses;
       this.usedKeys$.next(statuses.map(status => status.key));
     }),
     tap(() => this.loading$.next(false))
@@ -124,13 +131,55 @@ export class DossierManagementStatusesComponent {
 
   public closeModal(closeModalEvent: StatusModalCloseEvent): void {
     if (closeModalEvent === 'closeAndRefresh') {
-      this._reload$.next(null);
+      this.reload();
     }
 
     this.statusModalType$.next('closed');
   }
 
   public confirmDeleteStatus(status: InternalCaseStatus) {
-    console.log(status);
+    this.documentDefinitionName$
+      .pipe(
+        switchMap(documentDefinitionName =>
+          this.caseStatusService.deleteInternalCaseStatus(documentDefinitionName, status.key)
+        )
+      )
+      .subscribe(() => {
+        this.reload();
+      });
+  }
+
+  public onMoveRowClick(event: MoveRowEvent): void {
+    const {direction, index} = event;
+
+    const orderedStatuses: InternalCaseStatus[] =
+      direction === MoveRowDirection.UP
+        ? this.swapStatuses(this._documentStatuses, index - 1, index)
+        : this.swapStatuses(this._documentStatuses, index, index + 1);
+
+    this.documentDefinitionName$
+      .pipe(
+        switchMap(documentDefinitionName =>
+          this.caseStatusService.updateInternalCaseStatuses(documentDefinitionName, orderedStatuses)
+        )
+      )
+      .subscribe(() => {
+        this.reload(true);
+      });
+  }
+
+  private reload(noAnimation = false): void {
+    this._reload$.next(noAnimation ? 'noAnimation' : null);
+  }
+
+  private swapStatuses(
+    statuses: InternalCaseStatus[],
+    index1: number,
+    index2: number
+  ): InternalCaseStatus[] {
+    const temp = [...statuses];
+    temp[index1] = temp.splice(index2, 1, temp[index1])[0];
+
+    return temp;
   }
 }

@@ -28,6 +28,7 @@
     [movingRowsEnabled]="true"
     [actionItems]="ACTION_ITEMS"
     (rowClicked)="openEditModal($event)"
+    (moveRow)="onMoveRowClick($event)"
   >
     <ng-container
       carbonToolbarContent
