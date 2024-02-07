@@ -33,7 +33,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import {InternalCaseStatus} from '@valtimo/document';
+import {CaseStatusService, InternalCaseStatus} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import {Edit16} from '@carbon/icons';
 
@@ -61,6 +61,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
   }
 
   @Input() public usedKeys!: string[];
+  @Input() public documentDefinitionName!: string;
 
   @Output() public closeModalEvent = new EventEmitter<StatusModalCloseEvent>();
 
@@ -89,6 +90,8 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
       if (isAdd) this.resetForm();
     })
   );
+
+  public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   public get visibleInCaseListByDefault() {
     return this.statusFormGroup?.get('visibleInCaseListByDefault');
@@ -126,7 +129,8 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly iconService: IconService
+    private readonly iconService: IconService,
+    private readonly caseStatusService: CaseStatusService
   ) {
     this.iconService.registerAll([Edit16]);
   }
@@ -140,7 +144,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
   }
 
   public onClose(): void {
-    this.closeModalEvent.emit('close');
+    this.close();
   }
 
   public toggleCheckedChange(checked: boolean): void {
@@ -150,11 +154,18 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
   }
 
   public addStatus(): void {
-    console.log('add');
+    this.disable();
+
+    this.caseStatusService
+      .saveInternalCaseStatuses(this.documentDefinitionName, this.getFormValue())
+      .subscribe(() => {
+        this.enable();
+        this.closeAndRefresh();
+      });
   }
 
   public editStatus(): void {
-    console.log('edit');
+    this.disable();
   }
 
   public editKeyButtonClick(): void {
@@ -238,5 +249,33 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
       this.usedKeys?.every((key: string) => key !== control.value)
         ? null
         : {uniqueKey: {value: control.value}};
+  }
+
+  private disable(): void {
+    this.disabled$.next(true);
+    this.statusFormGroup.disable();
+  }
+
+  private enable(): void {
+    setTimeout(() => {
+      this.disabled$.next(false);
+      this.statusFormGroup.enable();
+    }, CARBON_CONSTANTS.modalAnimationMs);
+  }
+
+  private close(): void {
+    this.closeModalEvent.emit('close');
+  }
+
+  private closeAndRefresh(): void {
+    this.closeModalEvent.emit('closeAndRefresh');
+  }
+
+  private getFormValue(): InternalCaseStatus {
+    return {
+      key: this.key.value,
+      title: this.title.value,
+      visibleInCaseListByDefault: this.visibleInCaseListByDefault.value,
+    };
   }
 }

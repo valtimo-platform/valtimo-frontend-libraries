@@ -44,6 +44,10 @@ export class DossierManagementStatusesComponent {
     filter(docDefName => !!docDefName)
   );
 
+  public get documentDefinitionName$(): Observable<string> {
+    return this._documentDefinitionName$;
+  }
+
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
   public readonly usedKeys$ = new BehaviorSubject<string[]>([]);
@@ -119,6 +123,10 @@ export class DossierManagementStatusesComponent {
   }
 
   public closeModal(closeModalEvent: StatusModalCloseEvent): void {
+    if (closeModalEvent === 'closeAndRefresh') {
+      this._reload$.next(null);
+    }
+
     this.statusModalType$.next('closed');
   }
 

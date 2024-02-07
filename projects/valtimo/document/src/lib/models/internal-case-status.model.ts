@@ -17,9 +17,9 @@
 interface InternalCaseStatus {
   key: string;
   title: string;
-  documentDefinitionName: string;
   visibleInCaseListByDefault: boolean;
-  order: number;
+  documentDefinitionName?: string;
+  order?: number;
 }
 
 export {InternalCaseStatus};

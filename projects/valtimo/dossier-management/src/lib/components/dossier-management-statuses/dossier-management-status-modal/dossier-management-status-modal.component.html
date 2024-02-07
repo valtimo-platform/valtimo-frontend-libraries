@@ -19,7 +19,8 @@
     isAdd: isAdd$ | async,
     isEdit: isEdit$ | async,
     isClosed: isClosed$ | async,
-    editingKey: editingKey$ | async
+    editingKey: editingKey$ | async,
+    disabled: disabled$ | async
   } as obs"
   [open]="!obs.isClosed"
   size="sm"
@@ -63,7 +64,12 @@
           "
         />
 
-        <cds-icon-button *ngIf="!obs.editingKey" (click)="editKeyButtonClick()" kind="secondary">
+        <cds-icon-button
+          *ngIf="!obs.editingKey"
+          [disabled]="obs.disabled"
+          (click)="editKeyButtonClick()"
+          kind="secondary"
+        >
           <svg class="cds--btn__icon" cdsIcon="edit" size="16"></svg>
         </cds-icon-button>
       </div>
@@ -73,6 +79,7 @@
       [label]="'dossierManagement.statuses.visibleTitle' | translate"
       [onText]="'dossierManagement.statuses.visible' | translate"
       [offText]="'dossierManagement.statuses.invisible' | translate"
+      [disabled]="obs.disabled"
       [checked]="visibleInCaseListByDefault?.value"
       (checkedChange)="toggleCheckedChange($event)"
     ></cds-toggle>
@@ -80,14 +87,14 @@
 </ng-template>
 
 <ng-template #buttons let-obs="obs">
-  <button cdsButton="secondary" (click)="onClose()">
+  <button cdsButton="secondary" (click)="onClose()" [disabled]="obs.disabled">
     {{ 'interface.cancel' | translate }}
   </button>
 
   <button
     *ngIf="obs.isAdd"
     cdsButton="primary"
-    [disabled]="invalid || pristine"
+    [disabled]="invalid || pristine || obs.disabled"
     (click)="addStatus()"
   >
     {{ 'interface.add' | translate }}
@@ -96,7 +103,7 @@
   <button
     *ngIf="obs.isEdit"
     cdsButton="primary"
-    [disabled]="invalid || pristine"
+    [disabled]="invalid || pristine || obs.disabled"
     (click)="editStatus()"
   >
     {{ 'interface.save' | translate }}
