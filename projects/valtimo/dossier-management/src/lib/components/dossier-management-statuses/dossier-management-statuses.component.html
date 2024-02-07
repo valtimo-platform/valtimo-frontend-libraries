@@ -14,28 +14,25 @@
   ~ limitations under the License.
   -->
 
-<ng-container
+<valtimo-carbon-list
   *ngIf="{
     loading: loading$ | async,
     documentStatuses: documentStatuses$ | async
   } as obs"
+  [items]="obs.documentStatuses"
+  [fields]="FIELDS"
+  [header]="false"
+  [loading]="obs.loading"
+  [movingRowsEnabled]="true"
+  [actionItems]="ACTION_ITEMS"
+  (rowClicked)="openEditModal($event)"
+  (moveRow)="onMoveRowClick($event)"
 >
-  <valtimo-carbon-list
-    [items]="obs.documentStatuses"
-    [fields]="FIELDS"
-    [header]="false"
-    [loading]="obs.loading"
-    [movingRowsEnabled]="true"
-    [actionItems]="ACTION_ITEMS"
-    (rowClicked)="openEditModal($event)"
-    (moveRow)="onMoveRowClick($event)"
-  >
-    <ng-container
-      carbonToolbarContent
-      *ngTemplateOutlet="buttons; context: {obs: obs}"
-    ></ng-container>
-  </valtimo-carbon-list>
-</ng-container>
+  <ng-container
+    carbonToolbarContent
+    *ngTemplateOutlet="buttons; context: {obs: obs}"
+  ></ng-container>
+</valtimo-carbon-list>
 
 <valtimo-dossier-management-status-modal
   [type]="statusModalType$ | async"
