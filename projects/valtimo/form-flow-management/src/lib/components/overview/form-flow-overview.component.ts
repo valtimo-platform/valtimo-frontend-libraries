@@ -35,7 +35,7 @@ export class FormFlowOverviewComponent implements OnInit {
     },
     {
       viewType: ViewType.TEXT,
-      key: 'version',
+      key: 'versions.0',
       label: 'formFlow.version',
     },
     {
@@ -45,7 +45,8 @@ export class FormFlowOverviewComponent implements OnInit {
     },
   ];
 
-  public readonly formFlowDefinitions$: Observable<ListFormFlowDefinition[]> = this.formFlowService.formFlows$;
+  public readonly formFlowDefinitions$: Observable<ListFormFlowDefinition[]> =
+    this.formFlowService.formFlows$;
   public readonly loading$: Observable<boolean> = this.formFlowService.loading$;
   public readonly showAddModal$ = new BehaviorSubject<boolean>(false);
 
@@ -79,6 +80,6 @@ export class FormFlowOverviewComponent implements OnInit {
   }
 
   public onRowClick(formFlow: ListFormFlowDefinition): void {
-    this.router.navigate([`/form-flow-management/${formFlow.key}/${formFlow.versions[0]}`]);
+    this.router.navigate([`/form-flow-management/${formFlow.key}`]);
   }
 }

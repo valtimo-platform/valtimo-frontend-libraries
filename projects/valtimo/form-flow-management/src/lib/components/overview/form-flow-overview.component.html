@@ -34,10 +34,10 @@
   ></valtimo-no-results>
 </valtimo-carbon-list>
 
-<valtimo-form-flow-metadata-modal
+<valtimo-new-form-flow-modal
   [open]="showAddModal$ | async"
   (closeEvent)="onAdd($event)"
-></valtimo-form-flow-metadata-modal>
+></valtimo-new-form-flow-modal>
 
 <ng-template #addFormFlowButton>
   <button cdsButton="primary" (click)="openAddModal()">

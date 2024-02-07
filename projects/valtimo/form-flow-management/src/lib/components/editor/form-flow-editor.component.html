@@ -16,7 +16,7 @@
 
 <ng-container *ngIf="model$ | async as model; else loading">
   <valtimo-editor
-    [disabled]="editorDisabled$ | async"
+    [disabled]="!(loading$ | async) && readOnly$ | async"
     [model]="model"
     (validEvent)="onValid($event)"
     (valueChangeEvent)="onValueChange($event)"
@@ -26,22 +26,32 @@
 <ng-container renderInPageHeader>
   <ng-template>
     <div
-      *ngIf="{model: model$ | async, moreDisabled: moreDisabled$ | async, editorDisabled: editorDisabled$ | async} as obs"
+      *ngIf="{
+        model: model$ | async,
+        valid: valid$ | async,
+        readOnly: readOnly$ | async,
+        versions: formFlowDefinitionVersionItems$ | async
+      } as obs"
       class="buttons-container"
     >
-      <cds-overflow-menu class="overflow-button">
-        <cds-overflow-menu-option [disabled]="obs.moreDisabled || obs.editorDisabled" (selected)="showEditModal()">{{
-          'formFlow.editMetadata' | translate
-        }}</cds-overflow-menu-option>
+      <cds-dropdown
+        [dropUp]="false"
+        [skeleton]="obs.versions.isLoading"
+        [style.width.px]="100"
+        (selected)="loadFormFlowDefinitionId($event.item.formFlowDefinitionId)"
+      >
+        <cds-dropdown-list [items]="obs.versions.value || []"></cds-dropdown-list>
+      </cds-dropdown>
 
+      <cds-overflow-menu class="overflow-button">
         <cds-overflow-menu-option
-          [disabled]="obs.moreDisabled"
+          [disabled]="!obs.valid"
           (selected)="downloadFormFlowDefinition(obs.model)"
           >{{ 'interface.export' | translate }}</cds-overflow-menu-option
         >
 
         <cds-overflow-menu-option
-          [disabled]="obs.moreDisabled || obs.editorDisabled"
+          [disabled]="obs.readOnly"
           type="danger"
           (selected)="showDeleteModal()"
           >{{ 'interface.delete' | translate }}</cds-overflow-menu-option
@@ -49,7 +59,7 @@
       </cds-overflow-menu>
 
       <button
-        [disabled]="saveDisabled$ | async"
+        [disabled]="!obs.valid || obs.readOnly"
         cdsButton="primary"
         size="md"
         (click)="updateFormFlowDefinition()"
@@ -62,20 +72,13 @@
   </ng-template>
 </ng-container>
 
-<ng-container *ngIf="{formFlowDefinitionKey: formFlowDefinitionId$ | async} as obs">
+<ng-container *ngIf="{formFlowDefinitionId: formFlowDefinitionId$ | async} as obs">
   <valtimo-delete-form-flow-modal
-    [deleteFormFlowDefinitionKey]="obs.formFlowDefinitionKey"
+    [deleteFormFlowDefinitionKey]="obs.formFlowDefinitionId?.key"
     [showDeleteModal$]="showDeleteModal$"
     (deleteEvent)="onDelete($event)"
   >
   </valtimo-delete-form-flow-modal>
-
-  <valtimo-form-flow-metadata-modal
-    [defaultKeyValue]="obs.formFlowDefinitionKey"
-    [open]="showEditModal$ | async"
-    type="edit"
-    (closeEvent)="onEdit(obs.formFlowDefinitionKey, $event)"
-  ></valtimo-form-flow-metadata-modal>
 </ng-container>
 
 <ng-template #loading>

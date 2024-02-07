@@ -16,25 +16,11 @@
 
 import {Injectable} from '@angular/core';
 import {FormFlowService} from './form-flow.service';
-import {catchError, map, Observable, of, tap} from 'rxjs';
-import {FormFlowDefinitionId} from "../models";
+import {FormFlowDefinitionId} from '../models';
 
 @Injectable({providedIn: 'root'})
 export class FormFlowDownloadService {
   constructor(private readonly formFlowService: FormFlowService) {}
-
-  public downloadFormFlowDefinition(formFlowDefinitionId: FormFlowDefinitionId): Observable<boolean> {
-    return (
-        this.formFlowService.downloadFormFlowDefinition(formFlowDefinitionId).pipe(
-            tap(res => {
-              this.downloadJson(res, formFlowDefinitionId);
-            })
-          )
-    ).pipe(
-      map(() => true),
-      catchError(() => of(false))
-    );
-  }
 
   public downloadJson(json: object, formFlowDefinitionId: FormFlowDefinitionId): void {
     const sJson = JSON.stringify(json, null, 2);

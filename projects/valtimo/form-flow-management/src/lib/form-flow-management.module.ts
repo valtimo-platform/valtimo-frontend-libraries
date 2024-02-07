@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
@@ -24,10 +25,11 @@ import {
 } from '@valtimo/components';
 import {FormFlowManagementRoutingModule} from './form-flow-management-routing.module';
 import {FormFlowOverviewComponent} from './components/overview/form-flow-overview.component';
-import {FormFlowMetadataModalComponent} from './components/form-flow-metadata-modal/form-flow-metadata-modal.component';
+import {NewFormFlowModalComponent} from './components/new-form-flow-modal/new-form-flow-modal.component';
 import {
   ButtonModule,
   DialogModule,
+  DropdownModule,
   IconModule,
   InputModule,
   LoadingModule,
@@ -37,15 +39,13 @@ import {
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FormFlowEditorComponent} from './components/editor/form-flow-editor.component';
 import {DeleteFormFlowModalComponent} from './components/delete-form-flow-modal/delete-form-flow-modal.component';
-import {DownloadFormFlowModalComponent} from './components/download-form-flow-modal/download-form-flow-modal.component';
 
 @NgModule({
   declarations: [
     FormFlowOverviewComponent,
-    FormFlowMetadataModalComponent,
+    NewFormFlowModalComponent,
     FormFlowEditorComponent,
     DeleteFormFlowModalComponent,
-    DownloadFormFlowModalComponent,
   ],
   imports: [
     CommonModule,
@@ -65,6 +65,7 @@ import {DownloadFormFlowModalComponent} from './components/download-form-flow-mo
     DialogModule,
     NotificationModule,
     CarbonListModule,
+    DropdownModule,
   ],
 })
 export class FormFlowManagementModule {}

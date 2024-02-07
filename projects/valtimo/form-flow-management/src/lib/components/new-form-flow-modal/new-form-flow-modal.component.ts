@@ -23,28 +23,21 @@ import {
   Output,
 } from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {FormFlowDefinition, FormFlowMetadataModal, ListFormFlowDefinition} from '../../models';
+import {FormFlowDefinition} from '../../models';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 
 @Component({
-  selector: 'valtimo-form-flow-metadata-modal',
-  templateUrl: './form-flow-metadata-modal.component.html',
+  selector: 'valtimo-new-form-flow-modal',
+  templateUrl: './new-form-flow-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormFlowMetadataModalComponent implements OnInit {
+export class NewFormFlowModalComponent implements OnInit {
   @Input() open = false;
-  @Input() type: FormFlowMetadataModal = 'add';
-  @Input() set defaultKeyValue(value: string) {
-    this._defaultKeyValue = value;
-    this.setDefaultKeyValue(value);
-  }
   @Output() closeEvent = new EventEmitter<FormFlowDefinition | null>();
 
   public form = this.fb.group({
     key: this.fb.control('', Validators.required),
   });
-
-  private _defaultKeyValue!: string;
 
   public get key() {
     return this.form?.get('key');
@@ -64,20 +57,18 @@ export class FormFlowMetadataModalComponent implements OnInit {
       return;
     }
 
-    this.closeEvent.emit({key: this.key.value, startStep: 'start-step', steps: []});
+    this.closeEvent.emit({
+      key: this.key.value,
+      version: 1,
+      startStep: 'start-step',
+      steps: [],
+    });
     this.resetForm();
-  }
-
-  private setDefaultKeyValue(value: string) {
-    this.key.setValue(value);
   }
 
   private resetForm(): void {
     setTimeout(() => {
       this.form.reset();
-      if (this.type === 'edit') {
-        this.setDefaultKeyValue(this._defaultKeyValue);
-      }
     }, CARBON_CONSTANTS.modalAnimationMs);
   }
 }

@@ -18,7 +18,12 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {BehaviorSubject, catchError, Observable, of, switchMap, take, tap} from 'rxjs';
-import {DeleteFormFlowsRequest, FormFlowDefinition, FormFlowDefinitionId, ListFormFlowDefinition} from '../models';
+import {
+  DeleteFormFlowsRequest,
+  FormFlowDefinition,
+  FormFlowDefinitionId,
+  ListFormFlowDefinition,
+} from '../models';
 
 @Injectable({providedIn: 'root'})
 export class FormFlowService {
@@ -28,7 +33,9 @@ export class FormFlowService {
   private valtimoEndpointUri: string;
 
   private get formFlowDefinitions$(): Observable<ListFormFlowDefinition[]> {
-    return this.http.get<ListFormFlowDefinition[]>(`${this.valtimoEndpointUri}v1/form-flow/definition`);
+    return this.http.get<ListFormFlowDefinition[]>(
+      `${this.valtimoEndpointUri}v1/form-flow/definition`
+    );
   }
 
   constructor(
@@ -39,7 +46,10 @@ export class FormFlowService {
   }
 
   public addFormFlow(definition: FormFlowDefinition): Observable<FormFlowDefinition> {
-    return this.http.post<FormFlowDefinition>(`${this.valtimoEndpointUri}v1/form-flow/definition`, definition);
+    return this.http.post<FormFlowDefinition>(
+      `${this.valtimoEndpointUri}v1/form-flow/definition`,
+      definition
+    );
   }
 
   public deleteFormFlowDefinition(key: string): Observable<null> {
@@ -92,11 +102,10 @@ export class FormFlowService {
     );
   }
 
-  public downloadFormFlowDefinition(id: FormFlowDefinitionId): Observable<object> {
-    return this.http.get<object>(`${this.valtimoEndpointUri}v1/form-flow/definition/${id.key}/${id.version}/download`);
-  }
-
-  public updateFormFlowDefinition(key: string, updatedDefinition: FormFlowDefinition): Observable<FormFlowDefinition> {
+  public updateFormFlowDefinition(
+    key: string,
+    updatedDefinition: FormFlowDefinition
+  ): Observable<FormFlowDefinition> {
     return this.http.put<FormFlowDefinition>(
       `${this.valtimoEndpointUri}v1/form-flow/definition/${key}`,
       updatedDefinition

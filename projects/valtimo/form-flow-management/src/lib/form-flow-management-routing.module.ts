@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
@@ -30,16 +31,6 @@ const routes: Routes = [
   },
   {
     path: 'form-flow-management/:key',
-    component: FormFlowEditorComponent,
-    canActivate: [AuthGuardService],
-    data: {
-      title: 'FormFlow details',
-      formFlows: [ROLE_ADMIN],
-      customPageTitle: true,
-    },
-  },
-  {
-    path: 'form-flow-management/:key/:version',
     component: FormFlowEditorComponent,
     canActivate: [AuthGuardService],
     data: {

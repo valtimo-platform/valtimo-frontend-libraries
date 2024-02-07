@@ -99,7 +99,7 @@ export const environment: ValtimoConfig = {
           {title: 'Basics', textClass: 'text-dark font-weight-bold c-default', sequence: 1},
           {link: ['/processes'], title: 'Processes', sequence: 2},
           {link: ['/form-management'], title: 'Forms', sequence: 3},
-          {link: ['/form-flow-management'], title: 'Form Flow', sequence: 4},
+          {link: ['/form-flow-management'], title: 'Form Flows', sequence: 4},
           {link: ['/decision-tables'], title: 'Decision tables', sequence: 5},
           {link: ['/dossier-management'], title: 'Dossiers', sequence: 6},
           {link: ['/connectors'], title: 'Connectors', sequence: 6},

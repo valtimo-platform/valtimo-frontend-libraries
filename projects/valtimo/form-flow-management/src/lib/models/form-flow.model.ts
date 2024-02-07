@@ -25,7 +25,7 @@ interface FormFlowDefinition {
   version?: number;
   readOnly?: boolean;
   startStep: string;
-  steps: Array<FormFlowStep>
+  steps: Array<FormFlowStep>;
 }
 
 interface FormFlowDefinitionId {
@@ -64,7 +64,10 @@ interface DeleteFormFlowsRequest {
   formFlowKeys: Array<string>;
 }
 
-type FormFlowMetadataModal = 'add' | 'edit';
+interface LoadedValue<T> {
+  isLoading: boolean;
+  value?: T;
+}
 
 export {
   ListFormFlowDefinition,
@@ -76,5 +79,5 @@ export {
   FormStepTypeProperties,
   CustomComponentStepTypeProperties,
   DeleteFormFlowsRequest,
-  FormFlowMetadataModal
+  LoadedValue,
 };
