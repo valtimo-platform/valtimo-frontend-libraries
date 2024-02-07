@@ -29,7 +29,7 @@ export class DossierListStatusService {
       )
     );
 
-  get caseStatuses$(): Observable<Array<InternalCaseStatus>> {
+  public get caseStatuses$(): Observable<Array<InternalCaseStatus>> {
     return this._caseStatuses$;
   }
 

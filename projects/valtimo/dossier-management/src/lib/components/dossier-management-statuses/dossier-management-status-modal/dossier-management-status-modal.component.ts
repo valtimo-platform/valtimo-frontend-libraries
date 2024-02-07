@@ -93,15 +93,15 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
-  public get visibleInCaseListByDefault() {
+  public get visibleInCaseListByDefault(): AbstractControl<boolean, boolean> {
     return this.statusFormGroup?.get('visibleInCaseListByDefault');
   }
 
-  public get key() {
+  public get key(): AbstractControl<string, string> {
     return this.statusFormGroup?.get('key');
   }
 
-  public get title() {
+  public get title(): AbstractControl<string, string> {
     return this.statusFormGroup?.get('title');
   }
 
@@ -161,9 +161,14 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
     this.caseStatusService
       .saveInternalCaseStatus(this.documentDefinitionName, this.getFormValue())
-      .subscribe(() => {
-        this.enable();
-        this.closeAndRefresh();
+      .subscribe({
+        next: () => {
+          this.enable();
+          this.closeAndRefresh();
+        },
+        error: () => {
+          this.enable(false);
+        },
       });
   }
 
@@ -181,9 +186,14 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
           )
         )
       )
-      .subscribe(() => {
-        this.enable();
-        this.closeAndRefresh();
+      .subscribe({
+        next: () => {
+          this.enable();
+          this.closeAndRefresh();
+        },
+        error: () => {
+          this.enable(false);
+        },
       });
   }
 
@@ -276,11 +286,14 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
     this.statusFormGroup.disable();
   }
 
-  private enable(): void {
-    setTimeout(() => {
-      this.disabled$.next(false);
-      this.statusFormGroup.enable();
-    }, CARBON_CONSTANTS.modalAnimationMs);
+  private enable(delay = true): void {
+    setTimeout(
+      () => {
+        this.disabled$.next(false);
+        this.statusFormGroup.enable();
+      },
+      delay ? CARBON_CONSTANTS.modalAnimationMs : 0
+    );
   }
 
   private close(): void {

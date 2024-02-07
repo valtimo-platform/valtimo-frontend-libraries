@@ -33,7 +33,6 @@ import {StatusModalCloseEvent, StatusModalType} from '../../models';
 @Component({
   selector: 'valtimo-dossier-management-statuses',
   templateUrl: './dossier-management-statuses.component.html',
-  styleUrls: ['./dossier-management-statuses.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierManagementStatusesComponent {
@@ -137,7 +136,7 @@ export class DossierManagementStatusesComponent {
     this.statusModalType$.next('closed');
   }
 
-  public confirmDeleteStatus(status: InternalCaseStatus) {
+  public confirmDeleteStatus(status: InternalCaseStatus): void {
     this.documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>
