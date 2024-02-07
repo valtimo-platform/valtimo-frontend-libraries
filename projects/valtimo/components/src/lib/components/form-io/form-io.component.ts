@@ -233,7 +233,6 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-<<<<<<< HEAD
   private unsubscribeFormRefresh(): void {
     if (this._formRefreshSubscription) {
       this._formRefreshSubscription.unsubscribe();
@@ -257,8 +256,6 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-=======
->>>>>>> 38a34838 (clear on destroy and browser unload (#652))
   private clearTokenFromLocalStorage(): void {
     localStorage.removeItem(this._FORMIO_TOKEN_LOCAL_STORAGE_KEY);
   }
