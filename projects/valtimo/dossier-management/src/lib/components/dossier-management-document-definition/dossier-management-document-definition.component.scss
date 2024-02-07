@@ -21,3 +21,7 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
+
+::ng-deep .cds--dropdown__wrapper {
+  z-index: 10001 !important;
+}
