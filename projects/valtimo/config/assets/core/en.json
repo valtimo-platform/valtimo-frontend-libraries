@@ -1349,8 +1349,6 @@
     "deleteModalContent": "Are you sure you want to delete this form flow?",
     "savedSuccessTitle": "Saved successfully",
     "savedSuccessTitleMessage": "{{key}} was saved successfully",
-    "singleExport": "One JSON file",
-    "multipleExport": "Separate files per form flow",
     "noResults": {
       "description": "Click <strong>Add new form flow</strong> to start designing your form flow",
       "title": "No form flows added"
