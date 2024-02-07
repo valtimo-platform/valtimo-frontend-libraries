@@ -29,7 +29,17 @@ const routes: Routes = [
     data: {title: 'Form flow', formFlows: [ROLE_ADMIN]},
   },
   {
-    path: 'form-flow-management/:id',
+    path: 'form-flow-management/:key',
+    component: FormFlowEditorComponent,
+    canActivate: [AuthGuardService],
+    data: {
+      title: 'FormFlow details',
+      formFlows: [ROLE_ADMIN],
+      customPageTitle: true,
+    },
+  },
+  {
+    path: 'form-flow-management/:key/:version',
     component: FormFlowEditorComponent,
     canActivate: [AuthGuardService],
     data: {

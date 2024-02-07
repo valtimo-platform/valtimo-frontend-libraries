@@ -17,16 +17,17 @@
 import {Injectable} from '@angular/core';
 import {FormFlowService} from './form-flow.service';
 import {catchError, map, Observable, of, tap} from 'rxjs';
+import {FormFlowDefinitionId} from "../models";
 
 @Injectable({providedIn: 'root'})
 export class FormFlowDownloadService {
   constructor(private readonly formFlowService: FormFlowService) {}
 
-  public downloadFormFlowDefinition(formFlowDefinitionKey: string, version: number): Observable<boolean> {
+  public downloadFormFlowDefinition(formFlowDefinitionId: FormFlowDefinitionId): Observable<boolean> {
     return (
-        this.formFlowService.downloadFormFlowDefinition(formFlowDefinitionKey, version).pipe(
+        this.formFlowService.downloadFormFlowDefinition(formFlowDefinitionId).pipe(
             tap(res => {
-              this.downloadJson(res, formFlowDefinitionKey);
+              this.downloadJson(res, formFlowDefinitionId);
             })
           )
     ).pipe(
@@ -35,13 +36,13 @@ export class FormFlowDownloadService {
     );
   }
 
-  public downloadJson(json: object, key: string): void {
+  public downloadJson(json: object, formFlowDefinitionId: FormFlowDefinitionId): void {
     const sJson = JSON.stringify(json, null, 2);
     const element = document.createElement('a');
     element.setAttribute('href', 'data:text/json;charset=UTF-8,' + encodeURIComponent(sJson));
     element.setAttribute(
       'download',
-      `${key}.json`
+      `${formFlowDefinitionId.key}-${formFlowDefinitionId.version}.json`
     );
     element.style.display = 'none';
     document.body.appendChild(element);

@@ -27,8 +27,8 @@
     <h3 cdsModalHeaderHeading>
       {{
         vars.isAdd
-          ? ('formFlow.formFlows.add' | translate)
-          : ('formFlow.formFlows.editFormFlow' | translate)
+          ? ('formFlow.add' | translate)
+          : ('formFlow.editFormFlow' | translate)
       }}
     </h3>
   </cds-modal-header>
@@ -36,12 +36,12 @@
   <section cdsModalContent>
     <form [formGroup]="form">
       <cds-label [invalid]="key.dirty && key.invalid">
-        {{ 'formFlow.formFlows.name' | translate }}
+        {{ 'formFlow.name' | translate }}
 
         <input
           formControlName="key"
           cdsText
-          placeholder="{{ 'formFlow.formFlows.name' | translate }}"
+          placeholder="{{ 'formFlow.name' | translate }}"
           [attr.modal-primary-focus]="true"
           [invalid]="key.dirty && key.invalid"
         />

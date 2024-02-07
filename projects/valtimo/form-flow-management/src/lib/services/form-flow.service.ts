@@ -18,7 +18,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {BehaviorSubject, catchError, Observable, of, switchMap, take, tap} from 'rxjs';
-import {DeleteFormFlowsRequest, FormFlowDefinition, ListFormFlowDefinition} from '../models';
+import {DeleteFormFlowsRequest, FormFlowDefinition, FormFlowDefinitionId, ListFormFlowDefinition} from '../models';
 
 @Injectable({providedIn: 'root'})
 export class FormFlowService {
@@ -86,14 +86,14 @@ export class FormFlowService {
       });
   }
 
-  public getFormFlowDefinition(key: string): Observable<FormFlowDefinition> {
+  public getFormFlowDefinition(id: FormFlowDefinitionId): Observable<FormFlowDefinition> {
     return this.http.get<FormFlowDefinition>(
-      `${this.valtimoEndpointUri}v1/form-flow/definition/${key}`
+      `${this.valtimoEndpointUri}v1/form-flow/definition/${id.key}/${id.version}`
     );
   }
 
-  public downloadFormFlowDefinition(key: string, version: number): Observable<object> {
-    return this.http.get<object>(`${this.valtimoEndpointUri}v1/form-flow/definition/${key}/${version}/download`);
+  public downloadFormFlowDefinition(id: FormFlowDefinitionId): Observable<object> {
+    return this.http.get<object>(`${this.valtimoEndpointUri}v1/form-flow/definition/${id.key}/${id.version}/download`);
   }
 
   public updateFormFlowDefinition(key: string, updatedDefinition: FormFlowDefinition): Observable<FormFlowDefinition> {

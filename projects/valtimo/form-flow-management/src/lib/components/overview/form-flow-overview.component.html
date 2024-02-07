@@ -21,7 +21,7 @@
   [loading]="loading$ | async"
   (rowClicked)="onRowClick($event)"
 >
-  <ng-container header> {{ 'formFlow.formFlows.title' | translate }} </ng-container>
+  <ng-container header> {{ 'formFlow.title' | translate }} </ng-container>
 
   <div carbonToolbarContent>
     <ng-container [ngTemplateOutlet]="addFormFlowButton"></ng-container>
@@ -29,8 +29,8 @@
 
   <valtimo-no-results
     [action]="addFormFlowButton"
-    description="{{ 'formFlow.formFlows.noResults.description' | translate }}"
-    title="{{ 'formFlow.formFlows.noResults.title' | translate }}"
+    description="{{ 'formFlow.noResults.description' | translate }}"
+    title="{{ 'formFlow.noResults.title' | translate }}"
   ></valtimo-no-results>
 </valtimo-carbon-list>
 
@@ -41,7 +41,7 @@
 
 <ng-template #addFormFlowButton>
   <button cdsButton="primary" (click)="openAddModal()">
-    {{ 'formFlow.formFlows.add' | translate }}
+    {{ 'formFlow.add' | translate }}
 
     <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
   </button>

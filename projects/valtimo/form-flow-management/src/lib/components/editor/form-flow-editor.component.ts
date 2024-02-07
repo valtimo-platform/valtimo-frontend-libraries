@@ -16,10 +16,21 @@
 
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormFlowService} from '../../services/form-flow.service';
-import {BehaviorSubject, filter, finalize, map, Subscription, switchMap, take, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  finalize,
+  map, merge,
+  Observable, of,
+  Subscription,
+  switchMap,
+  take,
+  tap
+} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditorModel, PageTitleService} from '@valtimo/components';
-import {FormFlowDefinition} from '../../models';
+import {FormFlowDefinition, FormFlowDefinitionId} from '../../models';
 import {NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {FormFlowDownloadService} from '../../services/form-flow-download.service';
@@ -37,10 +48,9 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
   public readonly moreDisabled$ = new BehaviorSubject<boolean>(true);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
   public readonly showEditModal$ = new BehaviorSubject<boolean>(false);
-  public readonly formFlowDefinitionKey$ = new BehaviorSubject<string | null>(null);
+  public readonly formFlowDefinitionId$ = new BehaviorSubject<FormFlowDefinitionId | null>(null);
+  private _idSubscription!: Subscription;
 
-  private _keySubscription!: Subscription;
-  private _key!: string;
   private readonly _updatedModelValue$ = new BehaviorSubject<string>('');
 
   constructor(
@@ -54,13 +64,13 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.getPermissions();
-    this.openFormFlowKeySubscription();
+    this.getFormFlowDefinitions();
+    this.openFormFlowDefinitionIdSubscription();
   }
 
   public ngOnDestroy(): void {
     this.pageTitleService.enableReset();
-    this._keySubscription?.unsubscribe();
+    this._idSubscription?.unsubscribe();
   }
 
   public onValid(valid: boolean): void {
@@ -71,28 +81,32 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     this._updatedModelValue$.next(value);
   }
 
-  public updatePermissions(): void {
+  public updateFormFlowDefinition(): void {
     this.disableEditor();
     this.disableSave();
     this.disableMore();
 
-    this._updatedModelValue$
+    combineLatest([this._updatedModelValue$, this.formFlowDefinitionId$])
       .pipe(
         take(1),
-        switchMap(updatedModelValue =>
+        map(([updatedModelValue, formFlowDefinitionId]) => {
+          return {
+            ...JSON.parse(updatedModelValue) as FormFlowDefinition,
+            key: formFlowDefinitionId.key,
+            version: (++formFlowDefinitionId.version)
+          };
+        }),
+        switchMap(updatedFormFlowDefinition =>
           this.formFlowService.updateFormFlowDefinition(
-            this._key,
-            JSON.parse(updatedModelValue) as FormFlowDefinition
+            updatedFormFlowDefinition.key,
+            updatedFormFlowDefinition
           )
         )
       )
       .subscribe({
         next: result => {
-          this.enableMore();
-          this.enableSave();
-          this.enableEditor();
-          this.showSuccessMessage(this._key);
-          this.setModel(result);
+          this.router.navigate([`/form-flow-management/${result.key}/${result.version}`]);
+          this.showSuccessMessage({key: result.key, version: result.version});
         },
         error: () => {
           this.enableMore();
@@ -136,52 +150,58 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     this.disableMore();
 
     this.formFlowService.updateFormFlowDefinition(currentFormFlowKey, data).subscribe(() => {
-      this.router.navigate([`/form-flow-management/${data.key}`]);
-      this.showSuccessMessage(data.key);
+      this.router.navigate([`/form-flow-management/${data.key}/${data.version}`]);
+      this.showSuccessMessage({key: data.key, version: data.version});
     });
   }
 
   public downloadFormFlowDefinition(model: EditorModel): void {
-    this.formFlowDownloadService.downloadJson(
-      JSON.parse(model.value),
-      this._key
+    this.formFlowDefinitionId$.subscribe(formFlowDefinitionId =>
+      this.formFlowDownloadService.downloadJson(
+        JSON.parse(model.value),
+        formFlowDefinitionId
+      )
     );
   }
 
-  private openFormFlowKeySubscription(): void {
-    this._keySubscription = this.route.params
-      .pipe(
-        filter(params => params?.id),
-        map(params => params.id),
-        tap(key => {
-          this._key = key;
-          this.pageTitleService.setCustomPageTitle(key, true);
-          this.formFlowDefinitionKey$.next(key);
-        }),
-        switchMap(key => this.formFlowService.getFormFlowDefinition(key)),
-        tap(formFlowDefinition => {
-          this.enableMore();
-          if (formFlowDefinition.readOnly) {
-            this.disableSave();
-            this.disableEditor();
-          } else {
-            this.enableSave();
-            this.enableEditor();
-          }
-          this.setModel(formFlowDefinition);
-        })
-      )
-      .subscribe();
-  }
-
-  private getPermissions(): void {
+  private getFormFlowDefinitions(): void {
     this.route.params
       .pipe(
-        tap(params => {
-          this.pageTitleService.setCustomPageTitle(params?.id);
-          this.formFlowDefinitionKey$.next(params?.id);
+        filter(params => params?.key),
+        map(params => {
+          return {key: params.key, version: params.version || 1};
         }),
-        switchMap(params => this.formFlowService.getFormFlowDefinition(params.id))
+        tap(formFlowDefinitionId => {
+          this.pageTitleService.setCustomPageTitle(formFlowDefinitionId.key);
+          this.formFlowDefinitionId$.next(formFlowDefinitionId);
+        }),
+        switchMap(id => this.formFlowService.getFormFlowDefinition(id))
+      )
+      .subscribe(formFlowDefinition => {
+        this.enableMore();
+        if (formFlowDefinition.readOnly) {
+          this.disableSave();
+          this.disableEditor();
+        } else {
+          this.enableSave();
+          this.enableEditor();
+        }
+        this.setModel(formFlowDefinition);
+      });
+  }
+
+  private openFormFlowDefinitionIdSubscription(): void {
+    this._idSubscription = this.route.params
+      .pipe(
+        filter(params => params?.key),
+        map(params => {
+          return {key: params.key, version: params.version || 1};
+        }),
+        tap(formFlowDefinitionId => {
+          this.pageTitleService.setCustomPageTitle(formFlowDefinitionId.key);
+          this.formFlowDefinitionId$.next(formFlowDefinitionId);
+        }),
+        switchMap(id => this.formFlowService.getFormFlowDefinition(id))
       )
       .subscribe(formFlowDefinition => {
         this.enableMore();
@@ -230,15 +250,16 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     this.editorDisabled$.next(false);
   }
 
-  private showSuccessMessage(key: string): void {
+  private showSuccessMessage(id: FormFlowDefinitionId): void {
     this.notificationService.showToast({
-      caption: this.translateService.instant('formFlow.formFlows.savedSuccessTitleMessage', {
-        key,
+      caption: this.translateService.instant('formFlow.savedSuccessTitleMessage', {
+        key: id.key,
+        version: id.version
       }),
       type: 'success',
       duration: 4000,
       showClose: true,
-      title: this.translateService.instant('formFlow.formFlows.savedSuccessTitle'),
+      title: this.translateService.instant('formFlow.savedSuccessTitle'),
     });
   }
 }

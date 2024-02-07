@@ -16,7 +16,7 @@
 
 interface ListFormFlowDefinition {
   key: string;
-  version: number;
+  versions: Array<number>;
   readOnly?: boolean;
 }
 
@@ -26,6 +26,11 @@ interface FormFlowDefinition {
   readOnly?: boolean;
   startStep: string;
   steps: Array<FormFlowStep>
+}
+
+interface FormFlowDefinitionId {
+  key: string;
+  version: number;
 }
 
 interface FormFlowStep {
@@ -64,6 +69,7 @@ type FormFlowMetadataModal = 'add' | 'edit';
 export {
   ListFormFlowDefinition,
   FormFlowDefinition,
+  FormFlowDefinitionId,
   FormFlowStep,
   FormFlowNextStep,
   FormFlowStepType,

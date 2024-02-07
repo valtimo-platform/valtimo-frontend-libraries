@@ -78,7 +78,7 @@ export class FormFlowOverviewComponent implements OnInit {
     );
   }
 
-  public onRowClick(formFlow: FormFlowDefinition): void {
-    this.router.navigate([`/form-flow-management/${formFlow.key}`]);
+  public onRowClick(formFlow: ListFormFlowDefinition): void {
+    this.router.navigate([`/form-flow-management/${formFlow.key}/${formFlow.versions[0]}`]);
   }
 }

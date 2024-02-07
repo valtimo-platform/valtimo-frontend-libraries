@@ -31,7 +31,7 @@
     >
       <cds-overflow-menu class="overflow-button">
         <cds-overflow-menu-option [disabled]="obs.moreDisabled || obs.editorDisabled" (selected)="showEditModal()">{{
-          'formFlow.formFlows.editMetadata' | translate
+          'formFlow.editMetadata' | translate
         }}</cds-overflow-menu-option>
 
         <cds-overflow-menu-option
@@ -52,7 +52,7 @@
         [disabled]="saveDisabled$ | async"
         cdsButton="primary"
         size="md"
-        (click)="updatePermissions()"
+        (click)="updateFormFlowDefinition()"
       >
         {{ 'interface.save' | translate }}
 
@@ -62,7 +62,7 @@
   </ng-template>
 </ng-container>
 
-<ng-container *ngIf="{formFlowDefinitionKey: formFlowDefinitionKey$ | async} as obs">
+<ng-container *ngIf="{formFlowDefinitionKey: formFlowDefinitionId$ | async} as obs">
   <valtimo-delete-form-flow-modal
     [deleteFormFlowDefinitionKey]="obs.formFlowDefinitionKey"
     [showDeleteModal$]="showDeleteModal$"
