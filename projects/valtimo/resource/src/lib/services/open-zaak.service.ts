@@ -58,7 +58,9 @@ export class OpenZaakService {
   }
 
   getZaakTypes(): Observable<ZaakType[]> {
-    return this.http.get<ZaakType[]>(`${this.valtimoApiConfig.endpointUri}management/v1/zgw/zaaktype`);
+    return this.http.get<ZaakType[]>(
+      `${this.valtimoApiConfig.endpointUri}management/v1/zgw/zaaktype`
+    );
   }
 
   getBesluittypen(): Observable<any> {
@@ -87,7 +89,10 @@ export class OpenZaakService {
   }
 
   createZaakTypeLink(request: CreateZaakTypeLinkRequest): Observable<any> {
-    return this.http.post<any>(`${this.valtimoApiConfig.endpointUri}management/v1/zaak-type-link`, request);
+    return this.http.post<any>(
+      `${this.valtimoApiConfig.endpointUri}management/v1/zaak-type-link`,
+      request
+    );
   }
 
   /**
@@ -101,7 +106,9 @@ export class OpenZaakService {
   }
 
   deleteZaakTypeLink(documentDefinitionName: string): Observable<any> {
-    return this.http.delete<any>(`${this.valtimoApiConfig.endpointUri}management/v1/zaak-type-link/${documentDefinitionName}`);
+    return this.http.delete<any>(
+      `${this.valtimoApiConfig.endpointUri}management/v1/zaak-type-link/${documentDefinitionName}`
+    );
   }
 
   /**

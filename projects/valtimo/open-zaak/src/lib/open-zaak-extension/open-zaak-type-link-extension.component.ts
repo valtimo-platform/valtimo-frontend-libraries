@@ -43,7 +43,7 @@ export class OpenZaakTypeLinkExtensionComponent {
   public pluginConfigurations: PluginConfiguration[];
   public zaakTypeLink: ZaakTypeLink;
   public zaakTypeLinkRequest: CreateZaakTypeLinkRequest;
-  public informatieObjectTypeSelectionEnabled: boolean
+  public informatieObjectTypeSelectionEnabled: boolean;
   public informatieObjectTypes: InformatieObjectType[];
   public selectedZaakType: ZaakType = null;
   public selectedPluginConfiguration: PluginConfiguration = null;
@@ -68,30 +68,29 @@ export class OpenZaakTypeLinkExtensionComponent {
     configService: ConfigService
   ) {
     this.documentDefinitionName = this.route.snapshot.paramMap.get('name');
-    this.informatieObjectTypeSelectionEnabled = configService.config.uploadProvider === UploadProvider.OPEN_ZAAK
+    this.informatieObjectTypeSelectionEnabled =
+      configService.config.uploadProvider === UploadProvider.OPEN_ZAAK;
   }
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnInit() {
     this.zaakTypeLinkRequest = {
       documentDefinitionName: this.documentDefinitionName,
       createWithDossier: false,
-    }
-    this.openZaakService
-      .getZaakTypeLink(this.documentDefinitionName)
-      .subscribe(zaakTypeLink => {
-        if (zaakTypeLink !== null) {
-          this.zaakTypeLinkRequest = {
-            documentDefinitionName: this.documentDefinitionName,
-            createWithDossier: zaakTypeLink?.createWithDossier,
-            rsin: zaakTypeLink?.rsin,
-            zakenApiPluginConfigurationId: zaakTypeLink?.zakenApiPluginConfigurationId,
-            zaakTypeUrl: zaakTypeLink?.zaakTypeUrl,
-          }
-        }
-        this.zaakTypeLink = zaakTypeLink;
-        this.loadZaakTypes();
-        this.loadZakenApiPluginConfigurations();
-      });
+    };
+    this.openZaakService.getZaakTypeLink(this.documentDefinitionName).subscribe(zaakTypeLink => {
+      if (zaakTypeLink !== null) {
+        this.zaakTypeLinkRequest = {
+          documentDefinitionName: this.documentDefinitionName,
+          createWithDossier: zaakTypeLink?.createWithDossier,
+          rsin: zaakTypeLink?.rsin,
+          zakenApiPluginConfigurationId: zaakTypeLink?.zakenApiPluginConfigurationId,
+          zaakTypeUrl: zaakTypeLink?.zaakTypeUrl,
+        };
+      }
+      this.zaakTypeLink = zaakTypeLink;
+      this.loadZaakTypes();
+      this.loadZakenApiPluginConfigurations();
+    });
     this.loading$.next(false);
   }
 
@@ -137,7 +136,7 @@ export class OpenZaakTypeLinkExtensionComponent {
       rsin: this.zaakTypeLink?.rsin,
       zakenApiPluginConfigurationId: this.zaakTypeLink?.zakenApiPluginConfigurationId,
       zaakTypeUrl: this.zaakTypeLink?.zaakTypeUrl,
-    }
+    };
     if (this.informatieObjectTypeSelectionEnabled) {
       this.openZaakService.getOpenZaakConfig().subscribe(config => {
         if (config === null) {
@@ -148,7 +147,8 @@ export class OpenZaakTypeLinkExtensionComponent {
             .getInformatieObjectTypeLink(this.documentDefinitionName)
             .subscribe(informatieObjectTypeLink => {
               if (informatieObjectTypeLink !== null) {
-                this.selectedInformatieObjectTypeUrl = informatieObjectTypeLink.informatieObjectType;
+                this.selectedInformatieObjectTypeUrl =
+                  informatieObjectTypeLink.informatieObjectType;
               }
             });
         }
@@ -180,17 +180,17 @@ export class OpenZaakTypeLinkExtensionComponent {
       zaakType: this.zaakTypeLinkRequest.zaakTypeUrl,
       informatieObjectType: this.selectedInformatieObjectTypeUrl,
     };
-    console.log(this.zaakTypeLinkRequest)
+    console.log(this.zaakTypeLinkRequest);
     this.openZaakService.createZaakTypeLink(this.zaakTypeLinkRequest).subscribe(
       linkResult => {
         this.zaakTypeLink = linkResult;
         this.zaakTypeLinkRequest = {
-            documentDefinitionName: this.documentDefinitionName,
-            createWithDossier: this.zaakTypeLink?.createWithDossier,
-            rsin: this.zaakTypeLink?.rsin,
-            zakenApiPluginConfigurationId: this.zaakTypeLink?.zakenApiPluginConfigurationId,
-            zaakTypeUrl: this.zaakTypeLink?.zaakTypeUrl,
-        }
+          documentDefinitionName: this.documentDefinitionName,
+          createWithDossier: this.zaakTypeLink?.createWithDossier,
+          rsin: this.zaakTypeLink?.rsin,
+          zakenApiPluginConfigurationId: this.zaakTypeLink?.zakenApiPluginConfigurationId,
+          zaakTypeUrl: this.zaakTypeLink?.zaakTypeUrl,
+        };
         this.findZaakType(this.zaakTypeLink.zaakTypeUrl);
         this.findPluginConfiguration(this.zaakTypeLink.zakenApiPluginConfigurationId);
         if (requestInformatieObjectTypeLink.informatieObjectType !== null) {
