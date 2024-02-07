@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@use '@carbon/colors';
+
 ::ng-deep .multiple-search-fields {
   display: flex !important;
   flex-direction: row !important;
@@ -28,7 +30,6 @@
 .buttons-container {
   width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: flex-end;
 }
 
@@ -63,7 +64,6 @@
 
 .no-search-fields-message {
   display: flex;
-  flex-direction: row;
   width: 100%;
   justify-content: center;
   margin-top: 16px;
@@ -74,7 +74,7 @@
 }
 
 ::ng-deep .cds--accordion {
-  background-color: #fff;
+  background-color: colors.$white;
 }
 
 ::ng-deep .cds--accordion__item {

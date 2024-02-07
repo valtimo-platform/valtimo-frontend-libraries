@@ -27,7 +27,13 @@ import {
   tap,
 } from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {ActionItem, MoveRowDirection, MoveRowEvent, ViewType} from '@valtimo/components';
+import {
+  ActionItem,
+  ColumnConfig,
+  MoveRowDirection,
+  MoveRowEvent,
+  ViewType,
+} from '@valtimo/components';
 import {StatusModalCloseEvent, StatusModalType} from '../../models';
 
 @Component({
@@ -68,11 +74,11 @@ export class DossierManagementStatusesComponent {
     tap(statuses => {
       this._documentStatuses = statuses;
       this.usedKeys$.next(statuses.map(status => status.key));
-    }),
-    tap(() => this.loading$.next(false))
+      this.loading$.next(false);
+    })
   );
 
-  public readonly FIELDS = [
+  public readonly FIELDS: ColumnConfig[] = [
     {
       key: 'title',
       label: 'dossierManagement.statuses.columns.title',
