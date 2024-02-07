@@ -16,3 +16,4 @@
 
 export * from './list-column.model';
 export * from './tab.enum';
+export * from './status.model';

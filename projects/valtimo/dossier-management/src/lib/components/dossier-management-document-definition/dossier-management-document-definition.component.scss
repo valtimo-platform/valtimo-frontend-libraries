@@ -18,4 +18,10 @@
   display: flex;
   width: 100%;
   justify-content: center;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+::ng-deep .cds--dropdown__wrapper {
+  z-index: 10001 !important;
 }
