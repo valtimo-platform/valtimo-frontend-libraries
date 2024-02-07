@@ -248,9 +248,9 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
     if (!usedKeys.includes(dashCaseTitle)) {
       return dashCaseTitle;
-    } else {
-      return this.getUniqueKeyWithNumber(dashCaseTitle, usedKeys);
     }
+
+    return this.getUniqueKeyWithNumber(dashCaseTitle, usedKeys);
   }
 
   private getUniqueKeyWithNumber(dashCaseKey: string, usedKeys: string[]): string {
