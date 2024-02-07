@@ -16,26 +16,26 @@
 
 import {Injectable} from '@angular/core';
 import {DossierListService} from './dossier-list.service';
-import {DocumentStatusService, InternalDocumentStatus} from '@valtimo/document';
+import {CaseStatusService, InternalCaseStatus} from '@valtimo/document';
 import {DossierParameterService} from './dossier-parameter.service';
 import {Observable, switchMap} from 'rxjs';
 
 @Injectable()
 export class DossierListStatusService {
-  private readonly _documentStatuses$: Observable<Array<InternalDocumentStatus>> =
+  private readonly _caseStatuses$: Observable<Array<InternalCaseStatus>> =
     this.dossierListService.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
-        this.documentStatusService.getDocumentStatuses(documentDefinitionName)
+        this.caseStatusService.getInternalCaseStatuses(documentDefinitionName)
       )
     );
 
-  get documentStatuses$(): Observable<Array<InternalDocumentStatus>> {
-    return this._documentStatuses$;
+  get caseStatuses$(): Observable<Array<InternalCaseStatus>> {
+    return this._caseStatuses$;
   }
 
   constructor(
     private readonly dossierListService: DossierListService,
-    private readonly documentStatusService: DocumentStatusService,
+    private readonly caseStatusService: CaseStatusService,
     private readonly dossierParameterService: DossierParameterService
   ) {}
 }

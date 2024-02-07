@@ -33,7 +33,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import {InternalDocumentStatus} from '@valtimo/document';
+import {InternalCaseStatus} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import {Edit16} from '@carbon/icons';
 
@@ -56,7 +56,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
     }
   }
 
-  @Input() public set prefill(value: InternalDocumentStatus) {
+  @Input() public set prefill(value: InternalCaseStatus) {
     this._prefillStatus.next(value);
   }
 
@@ -66,7 +66,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
   private readonly _type = new BehaviorSubject<StatusModalType>(undefined);
   private readonly _typeAnimationDelay$ = new BehaviorSubject<StatusModalType>(undefined);
-  private readonly _prefillStatus = new BehaviorSubject<InternalDocumentStatus>(undefined);
+  private readonly _prefillStatus = new BehaviorSubject<InternalCaseStatus>(undefined);
 
   public readonly isClosed$ = this._type.pipe(map(type => type === 'closed'));
 
@@ -161,7 +161,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
     this._editingKey$.next(true);
   }
 
-  private prefillForm(prefillStatus: InternalDocumentStatus): void {
+  private prefillForm(prefillStatus: InternalCaseStatus): void {
     this.statusFormGroup.patchValue({
       key: prefillStatus.key,
       title: prefillStatus.title,

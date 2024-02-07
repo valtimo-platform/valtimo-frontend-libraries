@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-interface InternalDocumentStatus {
+interface InternalCaseStatus {
   key: string;
   title: string;
   documentDefinitionName: string;
@@ -22,4 +22,4 @@ interface InternalDocumentStatus {
   order: number;
 }
 
-export {InternalDocumentStatus};
+export {InternalCaseStatus};

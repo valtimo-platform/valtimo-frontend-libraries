@@ -42,7 +42,6 @@ import {
   Document,
   Documents,
   DocumentService,
-  InternalDocumentStatus,
   SpecifiedDocuments,
 } from '@valtimo/document';
 import {Tab, Tabs} from 'carbon-components-angular';
@@ -124,13 +123,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.searchService.documentSearchFields$.pipe(
       tap(() => {
         this.loadingSearchFields = false;
-      })
-    );
-
-  public readonly documentStatuses$: Observable<Array<InternalDocumentStatus>> =
-    this.statusService.documentStatuses$.pipe(
-      tap(() => {
-        this.loadingStatuses = false;
       })
     );
 

@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from './document-status.service';
+export * from './case-status.service';
 export * from './document.service';

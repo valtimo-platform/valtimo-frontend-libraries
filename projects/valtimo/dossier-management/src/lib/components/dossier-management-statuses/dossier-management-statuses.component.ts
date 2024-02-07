@@ -15,7 +15,7 @@
  */
 
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DocumentStatusService, InternalDocumentStatus} from '@valtimo/document';
+import {CaseStatusService, InternalCaseStatus} from '@valtimo/document';
 import {
   BehaviorSubject,
   combineLatest,
@@ -54,7 +54,7 @@ export class DossierManagementStatusesComponent {
   ]).pipe(
     tap(() => this.loading$.next(true)),
     switchMap(([documentDefinitionName]) =>
-      this.documentStatusService.getDocumentStatuses(documentDefinitionName)
+      this.caseStatusService.getInternalCaseStatuses(documentDefinitionName)
     ),
     tap(statuses => {
       this.usedKeys$.next(statuses.map(status => status.key));
@@ -94,22 +94,22 @@ export class DossierManagementStatusesComponent {
   ];
 
   public readonly statusModalType$ = new BehaviorSubject<StatusModalType>('closed');
-  public readonly prefillStatus$ = new BehaviorSubject<InternalDocumentStatus>(undefined);
+  public readonly prefillStatus$ = new BehaviorSubject<InternalCaseStatus>(undefined);
 
-  public readonly statusToDelete$ = new BehaviorSubject<InternalDocumentStatus>(undefined);
+  public readonly statusToDelete$ = new BehaviorSubject<InternalCaseStatus>(undefined);
   public readonly showDeleteModal$ = new Subject<boolean>();
 
   constructor(
-    private readonly documentStatusService: DocumentStatusService,
+    private readonly caseStatusService: CaseStatusService,
     private readonly route: ActivatedRoute
   ) {}
 
-  public openDeleteModal(status: InternalDocumentStatus): void {
+  public openDeleteModal(status: InternalCaseStatus): void {
     this.statusToDelete$.next(status);
     this.showDeleteModal$.next(true);
   }
 
-  public openEditModal(status: InternalDocumentStatus): void {
+  public openEditModal(status: InternalCaseStatus): void {
     this.prefillStatus$.next(status);
     this.statusModalType$.next('edit');
   }
@@ -122,7 +122,7 @@ export class DossierManagementStatusesComponent {
     this.statusModalType$.next('closed');
   }
 
-  public confirmDeleteStatus(status: InternalDocumentStatus) {
+  public confirmDeleteStatus(status: InternalCaseStatus) {
     console.log(status);
   }
 }

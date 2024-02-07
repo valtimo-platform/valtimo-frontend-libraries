@@ -17,37 +17,13 @@
 import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
 import {HttpClient} from '@angular/common/http';
-import {InternalDocumentStatus} from '../models/internal-document-status.model';
-import {delay, Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
+import {InternalCaseStatus} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DocumentStatusService extends BaseApiService {
-  private readonly MOCK_STATUSES = [
-    {
-      key: 'test',
-      title: 'test',
-      documentDefinitionName: 'test',
-      visibleInCaseListByDefault: true,
-      order: 0,
-    },
-    {
-      key: 'test2',
-      title: '2',
-      documentDefinitionName: 'test',
-      visibleInCaseListByDefault: false,
-      order: 1,
-    },
-    {
-      key: 'test-1',
-      title: 'testt',
-      documentDefinitionName: 'test',
-      visibleInCaseListByDefault: true,
-      order: 2,
-    },
-  ] as InternalDocumentStatus[];
-
+export class CaseStatusService extends BaseApiService {
   constructor(
     protected readonly httpClient: HttpClient,
     protected readonly configService: ConfigService
@@ -55,10 +31,9 @@ export class DocumentStatusService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public getDocumentStatuses(documentDefinitionName: string): Observable<InternalDocumentStatus[]> {
-    const url = this.getApiUrl(`/document/status/${documentDefinitionName}`);
-    console.log(url);
-
-    return of(this.MOCK_STATUSES).pipe(delay(1000));
+  public getInternalCaseStatuses(caseDefinitionName: string): Observable<InternalCaseStatus[]> {
+    return this.httpClient.get<InternalCaseStatus[]>(
+      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/internal-status`)
+    );
   }
 }

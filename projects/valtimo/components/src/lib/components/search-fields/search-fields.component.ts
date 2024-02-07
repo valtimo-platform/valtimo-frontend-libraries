@@ -19,7 +19,7 @@ import {SearchField, SearchFieldBoolean, SearchFieldValues} from '@valtimo/confi
 import {BehaviorSubject, combineLatest, map, Observable, Subject, Subscription, take} from 'rxjs';
 import {CARBON_THEME, SelectItem} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
-import {DocumentService, InternalDocumentStatus} from '@valtimo/document';
+import {DocumentService} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import {ChevronDown16, ChevronUp16} from '@carbon/icons';
 
@@ -40,9 +40,6 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
       }
     });
   }
-  @Input() public set statuses(statuses: InternalDocumentStatus[]) {
-    this.statuses$.next(statuses || []);
-  }
   @Input() public setValuesSubject$!: Observable<SearchFieldValues>;
   @Input() public defaultValues!: SearchFieldValues;
   @Input() public inputDisabled = false;
@@ -52,7 +49,6 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
     new EventEmitter<SearchFieldValues>();
 
   public readonly searchFields$ = new BehaviorSubject<Array<SearchField>>([]);
-  public readonly statuses$ = new BehaviorSubject<InternalDocumentStatus[]>([]);
   public readonly values$ = new BehaviorSubject<SearchFieldValues>({});
   public readonly hasValidValues$: Observable<boolean> = this.values$.pipe(
     map(values => {
