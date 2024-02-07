@@ -153,6 +153,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
     this.statusFormGroup.patchValue({
       visibleInCaseListByDefault: checked,
     });
+    this.statusFormGroup.markAsDirty();
   }
 
   public addStatus(): void {
