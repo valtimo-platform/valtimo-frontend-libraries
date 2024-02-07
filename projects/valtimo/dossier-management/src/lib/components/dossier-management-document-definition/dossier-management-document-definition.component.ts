@@ -13,19 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {Edit16, Save16} from '@carbon/icons';
-import {EditorModel} from '@valtimo/components';
 import {
-  DefinitionId,
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import {Edit16, Save16} from '@carbon/icons';
+import {ConfirmationModalComponent, EditorModel} from '@valtimo/components';
+import {
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
   DocumentService,
 } from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {map, switchMap, take, tap} from 'rxjs/operators';
-
 import {DossierDetailService} from '../../services';
 
 @Component({
@@ -35,6 +40,11 @@ import {DossierDetailService} from '../../services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierManagementDocumentDefinitionComponent {
+  @ViewChild('cancelModal') public cancelModal: ConfirmationModalComponent;
+  @Input() documentDefinitionName: string;
+  @Output() cancelRedirect = new EventEmitter();
+  @Output() confirmRedirect = new EventEmitter();
+
   public readonly loadingDocumentDefinition$ = this.dossierDetailService.loadingDocumentDefinition$;
   private readonly _refreshEditor$ = new BehaviorSubject<null>(null);
   public readonly documentDefinitionModel$: Observable<EditorModel> = this._refreshEditor$.pipe(
@@ -46,7 +56,9 @@ export class DossierManagementDocumentDefinitionComponent {
   public readonly showSaveConfirmation$ = new BehaviorSubject<boolean>(false);
   public readonly showCancelConfirmation$ = new BehaviorSubject<boolean>(false);
   public readonly selectedDocumentDefinition$ = this.dossierDetailService.documentDefinition$.pipe(
-    tap((documentDefinition: DocumentDefinition) => (this._initialId = documentDefinition.id))
+    tap(
+      (documentDefinition: DocumentDefinition) => (this._initialId = documentDefinition.schema.$id)
+    )
   );
   private readonly _changeIsValid$ = new BehaviorSubject<boolean>(false);
   private readonly _idChanged$ = new BehaviorSubject<boolean>(false);
@@ -61,8 +73,8 @@ export class DossierManagementDocumentDefinitionComponent {
     )
   );
 
-  private _changesToSave: DocumentDefinition;
-  private _initialId: DefinitionId;
+  private _changesToSave: any;
+  private _initialId: string;
 
   constructor(
     private readonly documentService: DocumentService,
@@ -91,36 +103,47 @@ export class DossierManagementDocumentDefinitionComponent {
     });
   }
 
+  public discardChanges(): void {
+    this.showCancelConfirmation$.next(false);
+    this.confirmRedirect.emit();
+    this.resetEditorState();
+  }
+
+  public keepEditingDefinition(): void {
+    this.cancelRedirect.emit();
+    this.showSaveConfirmation$.next(false);
+    this.showCancelConfirmation$.next(false);
+  }
+
   public onCancelClick(pendingChanges: boolean): void {
     if (pendingChanges) {
       this.showCancelConfirmation$.next(true);
       return;
     }
 
-    this.editActive$.next(false);
-    this._refreshEditor$.next(null);
+    this.resetEditorState();
   }
 
-  public onSaveEvent(): void {
+  public saveDefinition(): void {
     this.showSaveConfirmation$.next(false);
     this.editActive$.next(false);
     const newDocumentDefinition = new DocumentDefinitionCreateRequest(
       JSON.stringify(this._changesToSave)
     );
 
-    console.log(JSON.stringify(this._changesToSave));
-    console.log(newDocumentDefinition);
-
     this.documentService
       .createDocumentDefinitionForManagement(newDocumentDefinition)
       .pipe(take(1))
-      .subscribe(res => {
-        console.log(res);
+      .subscribe({
+        next: () => {
+          this.dossierDetailService.setSelectedDocumentDefinitionName(this.documentDefinitionName);
+          this.confirmRedirect.emit();
+          this.pendingChanges$.next(false);
+        },
+        error: () => {
+          this.cancelRedirect.emit();
+        },
       });
-  }
-
-  public onSaveCancelEvent(): void {
-    this.showSaveConfirmation$.next(false);
   }
 
   public onEditClick(): void {
@@ -133,12 +156,22 @@ export class DossierManagementDocumentDefinitionComponent {
 
   public onValueChangeEvent(value: string): void {
     this.pendingChanges$.next(true);
-    this._changesToSave = JSON.parse(value);
-    const {name, version} = this._changesToSave.id;
-    this._idChanged$.next(this._initialId.name !== name || this._initialId.version !== version);
+    this._changesToSave = JSON.parse(value).schema;
+    const id: string = this._changesToSave.$id;
+    this._idChanged$.next(this._initialId !== id);
   }
 
   public onValidEvent(valid: boolean): void {
     this._changeIsValid$.next(valid);
+  }
+
+  public onCanDeactivate(): void {
+    this.showCancelConfirmation$.next(true);
+  }
+
+  private resetEditorState(): void {
+    this._refreshEditor$.next(null);
+    this.editActive$.next(false);
+    this.pendingChanges$.next(false);
   }
 }

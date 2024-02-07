@@ -71,13 +71,31 @@
   </ng-template>
 
   <valtimo-confirmation-modal
-    [cancelButtonText]="'interface.cancel' | translate"
-    [confirmButtonText]="'interface.save' | translate"
-    [content]="'dossierManagement.documentDefinition.saveModalContent' | translate"
     [showModalSubject$]="showSaveConfirmation$"
-    [title]="'interface.save' | translate"
-    (confirmEvent)="onSaveEvent()"
-    (cancelEvent)="onSaveCancelEvent()"
+    cancelButtonTextTranslationKey="interface.cancel"
+    confirmButtonTextTranslationKey="interface.save"
+    contentTranslationKey="dossierManagement.documentDefinition.saveModalContent"
+    titleTranslationKey="interface.save"
+    (cancelEvent)="keepEditing()"
+    (confirmEvent)="saveDefinition()"
+  ></valtimo-confirmation-modal>
+
+  <valtimo-confirmation-modal
+    #cancelModal
+    [showModalSubject$]="showCancelConfirmation$"
+    cancelButtonTextTranslationKey="dossierManagement.documentDefinition.cancelModal.keepEditing"
+    cancelButtonType="ghost"
+    confirmButtonTextTranslationKey="interface.discard"
+    confirmButtonType="danger"
+    contentTranslationKey="dossierManagement.documentDefinition.cancelModal.content"
+    optionalButtonTextTranslationKey="interface.save"
+    optionalButtonType="secondary"
+    titleTranslationKey="dossierManagement.documentDefinition.cancelModal.title"
+    showOptionalButton="true"
+    spacerAfterCancelButton="true"
+    (cancelEvent)="keepEditingDefinition()"
+    (confirmEvent)="discardChanges()"
+    (optionalEvent)="saveDefinition()"
   ></valtimo-confirmation-modal>
 </ng-container>
 
