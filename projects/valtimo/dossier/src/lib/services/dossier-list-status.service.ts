@@ -18,19 +18,30 @@ import {Injectable} from '@angular/core';
 import {DossierListService} from './dossier-list.service';
 import {CaseStatusService, InternalCaseStatus} from '@valtimo/document';
 import {DossierParameterService} from './dossier-parameter.service';
-import {Observable, switchMap} from 'rxjs';
+import {BehaviorSubject, Observable, switchMap, tap} from 'rxjs';
 
 @Injectable()
 export class DossierListStatusService {
+  private readonly _selectedCaseStatuses$ = new BehaviorSubject<InternalCaseStatus[]>([]);
+
   private readonly _caseStatuses$: Observable<Array<InternalCaseStatus>> =
     this.dossierListService.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
         this.caseStatusService.getInternalCaseStatuses(documentDefinitionName)
-      )
+      ),
+      tap(statuses => {
+        this._selectedCaseStatuses$.next(
+          statuses.filter(status => status.visibleInCaseListByDefault)
+        );
+      })
     );
 
   public get caseStatuses$(): Observable<Array<InternalCaseStatus>> {
     return this._caseStatuses$;
+  }
+
+  public get selectedCaseStatuses$(): Observable<Array<InternalCaseStatus>> {
+    return this._selectedCaseStatuses$;
   }
 
   constructor(
@@ -38,4 +49,8 @@ export class DossierListStatusService {
     private readonly caseStatusService: CaseStatusService,
     private readonly dossierParameterService: DossierParameterService
   ) {}
+
+  public setSelectedStatuses(statuses: InternalCaseStatus[]): void {
+    this._selectedCaseStatuses$.next(statuses);
+  }
 }

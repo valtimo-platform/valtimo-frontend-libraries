@@ -42,6 +42,7 @@ import {
   Document,
   Documents,
   DocumentService,
+  InternalCaseStatus,
   SpecifiedDocuments,
 } from '@valtimo/document';
 import {Tab, Tabs} from 'carbon-components-angular';
@@ -120,11 +121,12 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public readonly showChangeTabModal$ = new BehaviorSubject<boolean>(false);
 
   public readonly searchFields$: Observable<Array<SearchField> | null> =
-    this.searchService.documentSearchFields$.pipe(
-      tap(() => {
-        this.loadingSearchFields = false;
-      })
-    );
+    this.searchService.documentSearchFields$.pipe(tap(() => (this.loadingSearchFields = false)));
+
+  public readonly statuses$ = this.statusService.caseStatuses$.pipe(
+    tap(() => (this.loadingStatuses = false))
+  );
+  public readonly selectedStatuses$ = this.statusService.selectedCaseStatuses$;
 
   public readonly documentDefinitionName$ = this.listService.documentDefinitionName$;
 
@@ -522,6 +524,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   public forceRefresh(): void {
     this.listService.forceRefresh();
+  }
+
+  public onSelectedStatusesChange(statuses: InternalCaseStatus[]): void {
+    this.statusService.setSelectedStatuses(statuses);
   }
 
   private openDocumentDefinitionNameSubscription(): void {

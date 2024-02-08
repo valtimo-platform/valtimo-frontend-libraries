@@ -36,12 +36,18 @@
 
 <ng-template #searchFieldsTemplate>
   <ng-container *ngIf="searchFields$ | async as searchFields">
-    <ng-container *ngIf="{noSearchFields: !searchFields || searchFields.length === 0} as vars">
+    <ng-container
+      *ngIf="{
+        noSearchFields: (!searchFields || searchFields.length === 0) && !externalSearchField
+      } as vars"
+    >
       <div
         *ngIf="!vars.noSearchFields"
         class="search-fields-container"
         [ngClass]="{'search-fields-container--hidden': (expanded$ | async) === false}"
       >
+        <ng-content></ng-content>
+
         <ng-container *ngFor="let searchField of searchFields">
           <ng-container
             *ngTemplateOutlet="searchFieldTemplate; context: {searchField: searchField}"
@@ -55,6 +61,16 @@
         ></ng-container>
       </div>
     </ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #statusSelectorTemplate>
+  <ng-container *ngIf="statuses.length > 0">
+    <valtimo-status-selector
+      [statuses]="statuses"
+      [selectedStatuses]="selectedStatuses"
+      [carbonTheme]="carbonTheme"
+    ></valtimo-status-selector>
   </ng-container>
 </ng-template>
 

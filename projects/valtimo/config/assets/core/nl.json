@@ -548,6 +548,7 @@
       "saveModalContent": "Weet je zeker dat je de documentdefinitie wilt opslaan? Het verwijderen of wijzigen van een attribuut kan de zaakdefinitie verbreken."
     },
     "statuses": {
+      "searchFieldTitle": "Status",
       "add": "Status toevoegen",
       "edit": "Status bewerken",
       "visibleTitle": "Standaardzichtbaarheid in dossierlijst",
