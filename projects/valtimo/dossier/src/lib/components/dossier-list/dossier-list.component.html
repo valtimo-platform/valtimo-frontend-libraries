@@ -55,14 +55,28 @@
 </ng-container>
 
 <ng-template #searchFields let-obs="obs">
-  <div class="mb-3">
-    <valtimo-search-fields
-      [searchFields]="obs.searchFields"
-      (doSearch)="search($event)"
-      [documentDefinitionName]="documentDefinitionName$ | async"
-      [defaultValues]="searchFieldValues$ | async"
-      [inputDisabled]="!obs.loaded"
-    ></valtimo-search-fields>
+  <div
+    *ngIf="{statuses: statuses$ | async, selectedStatuses: selectedStatuses$ | async} as statusObs"
+    class="mb-3"
+  >
+    <ng-container *ngIf="{showStatusSelector: statusObs?.statuses?.length > 1} as vars">
+      <valtimo-search-fields
+        [searchFields]="obs.searchFields"
+        (doSearch)="search($event)"
+        [documentDefinitionName]="documentDefinitionName$ | async"
+        [defaultValues]="searchFieldValues$ | async"
+        [inputDisabled]="!obs.loaded"
+        [externalSearchField]="vars.showStatusSelector"
+      >
+        <valtimo-status-selector
+          *ngIf="vars.showStatusSelector"
+          [statuses]="statusObs.statuses"
+          [selectedStatuses]="statusObs.selectedStatuses"
+          [disabled]="!obs.loaded"
+          (selectedStatusesChangeEvent)="onSelectedStatusesChange($event)"
+        ></valtimo-status-selector>
+      </valtimo-search-fields>
+    </ng-container>
   </div>
 </ng-template>
 
