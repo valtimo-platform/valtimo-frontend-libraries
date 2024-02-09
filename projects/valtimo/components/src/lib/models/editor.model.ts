@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import {Uri} from 'monaco-editor';
-
 interface EditorModel {
   value: string;
   language?: string;
-  uri?: Uri;
+  uri?: string;
 }
 
 interface WindowWithMonaco extends Window {

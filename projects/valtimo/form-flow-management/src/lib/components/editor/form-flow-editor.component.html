@@ -18,6 +18,7 @@
   <valtimo-editor
     [disabled]="!(loading$ | async) && readOnly$ | async"
     [model]="model"
+    [jsonSchema]="formFlowSchemaJson"
     (validEvent)="onValid($event)"
     (valueChangeEvent)="onValueChange($event)"
   ></valtimo-editor>
@@ -25,49 +26,52 @@
 
 <ng-container renderInPageHeader>
   <ng-template>
-    <div
+    <div class="buttons-container"
       *ngIf="{
         model: model$ | async,
         valid: valid$ | async,
         readOnly: readOnly$ | async,
         versions: formFlowDefinitionVersionItems$ | async
       } as obs"
-      class="buttons-container"
     >
       <cds-dropdown
         [dropUp]="false"
         [skeleton]="obs.versions.isLoading"
-        [style.width.px]="100"
+        [attr.data-carbon-theme]="CARBON_THEME"
         (selected)="loadFormFlowDefinitionId($event.item.formFlowDefinitionId)"
       >
         <cds-dropdown-list [items]="obs.versions.value || []"></cds-dropdown-list>
       </cds-dropdown>
 
-      <cds-overflow-menu class="overflow-button">
-        <cds-overflow-menu-option
-          [disabled]="!obs.valid"
-          (selected)="downloadFormFlowDefinition(obs.model)"
-          >{{ 'interface.export' | translate }}</cds-overflow-menu-option
+      <div class="buttons-container-right">
+        <cds-overflow-menu class="overflow-button">
+          <cds-overflow-menu-option
+            [disabled]="!obs.valid"
+            (selected)="downloadFormFlowDefinition(obs.model)"
+          >{{ 'interface.export' | translate }}
+          </cds-overflow-menu-option
+          >
+
+          <cds-overflow-menu-option
+            [disabled]="obs.readOnly"
+            type="danger"
+            (selected)="showDeleteModal()"
+          >{{ 'interface.delete' | translate }}
+          </cds-overflow-menu-option
+          >
+        </cds-overflow-menu>
+
+        <button
+          [disabled]="!obs.valid || obs.readOnly"
+          cdsButton="primary"
+          size="md"
+          (click)="updateFormFlowDefinition()"
         >
+          {{ 'interface.save' | translate }}
 
-        <cds-overflow-menu-option
-          [disabled]="obs.readOnly"
-          type="danger"
-          (selected)="showDeleteModal()"
-          >{{ 'interface.delete' | translate }}</cds-overflow-menu-option
-        >
-      </cds-overflow-menu>
-
-      <button
-        [disabled]="!obs.valid || obs.readOnly"
-        cdsButton="primary"
-        size="md"
-        (click)="updateFormFlowDefinition()"
-      >
-        {{ 'interface.save' | translate }}
-
-        <svg class="cds--btn__icon" cdsIcon="save" size="16"></svg>
-      </button>
+          <svg class="cds--btn__icon" cdsIcon="save" size="16"></svg>
+        </button>
+      </div>
     </div>
   </ng-template>
 </ng-container>

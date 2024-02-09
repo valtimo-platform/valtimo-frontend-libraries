@@ -16,7 +16,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ConfigService} from '@valtimo/config';
+import {ConfigService, Page} from '@valtimo/config';
 import {BehaviorSubject, catchError, Observable, of, switchMap, take, tap} from 'rxjs';
 import {
   DeleteFormFlowsRequest,
@@ -32,8 +32,8 @@ export class FormFlowService {
 
   private valtimoEndpointUri: string;
 
-  private get formFlowDefinitions$(): Observable<ListFormFlowDefinition[]> {
-    return this.http.get<ListFormFlowDefinition[]>(
+  private get formFlowDefinitions$(): Observable<Page<ListFormFlowDefinition>> {
+    return this.http.get<Page<ListFormFlowDefinition>>(
       `${this.valtimoEndpointUri}v1/form-flow/definition`
     );
   }
@@ -67,8 +67,8 @@ export class FormFlowService {
         catchError(error => of(error))
       )
       .subscribe({
-        next: (formFlows: ListFormFlowDefinition[]) => {
-          this.formFlows$.next(formFlows);
+        next: (formFlows: Page<ListFormFlowDefinition>) => {
+          this.formFlows$.next(formFlows.content);
           this.loading$.next(false);
         },
         error: error => {
@@ -86,8 +86,8 @@ export class FormFlowService {
         take(1)
       )
       .subscribe({
-        next: (items: ListFormFlowDefinition[]) => {
-          this.formFlows$.next(items);
+        next: (items: Page<ListFormFlowDefinition>) => {
+          this.formFlows$.next(items.content);
           this.loading$.next(false);
         },
         error: error => {

@@ -37,6 +37,8 @@ import {NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {FormFlowDownloadService} from '../../services/form-flow-download.service';
 import {ListItem} from 'carbon-components-angular/dropdown';
+import {NGXLogger} from "ngx-logger";
+import formFlowSchemaJson from './formflow.schema.json';
 
 @Component({
   templateUrl: './form-flow-editor.component.html',
@@ -54,6 +56,9 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
   public readonly formFlowDefinitionId$ = new BehaviorSubject<FormFlowDefinitionId | null>(null);
   private _idSubscription!: Subscription;
   private _definitionSubscription!: Subscription;
+  public readonly CARBON_THEME = 'g10';
+
+  public readonly formFlowSchemaJson = formFlowSchemaJson;
 
   private readonly _updatedModelValue$ = new BehaviorSubject<string>('');
 
@@ -68,7 +73,7 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
                 key: formFlowDefinitionId.key,
                 version: version,
               } as FormFlowDefinitionId,
-              content: version || '-',
+              content: `${this.translateService.instant('formFlow.version')}: ${version}`,
               selected: version === formFlowDefinitionId.version,
             }) as ListItem
         );
@@ -90,6 +95,7 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly pageTitleService: PageTitleService,
     private readonly router: Router,
+    private readonly logger: NGXLogger,
     private readonly notificationService: NotificationService,
     private readonly translateService: TranslateService,
     private readonly formFlowDownloadService: FormFlowDownloadService
@@ -217,6 +223,7 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     this.model$.next({
       value: JSON.stringify(clone),
       language: 'json',
+      uri: formFlowDefinition.key,
     });
     setTimeout(() => {
       this.loading$.next(false);
