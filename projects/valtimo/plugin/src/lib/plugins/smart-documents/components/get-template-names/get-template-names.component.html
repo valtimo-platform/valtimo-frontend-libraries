@@ -14,28 +14,28 @@
   ~ limitations under the License.
   -->
 <v-form
-        (valueChange)="formValueChange($event)"
-        *ngIf="{
-      disabled: disabled$ | async,
-      prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
-    } as obs"
+  (valueChange)="formValueChange($event)"
+  *ngIf="{
+    disabled: disabled$ | async,
+    prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
+  } as obs"
 >
-    <v-input
-            name="templateGroupName"
-            [title]="'templateGroupName' | pluginTranslate: pluginId | async"
-            [margin]="true"
-            [defaultValue]="obs.prefill?.templateGroupName"
-            [disabled]="obs.disabled"
-            [required]="true"
-    >
-    </v-input>
-    <v-input
-            name="resultingTemplateNameListProcessVariableName"
-            [title]="'resultingTemplateNameListProcessVariableName' | pluginTranslate: pluginId | async"
-            [margin]="true"
-            [defaultValue]="obs.prefill?.resultingTemplateNameListProcessVariableName"
-            [disabled]="obs.disabled"
-            [required]="true"
-    >
-    </v-input>
+  <v-input
+    name="templateGroupName"
+    [title]="'templateGroupName' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [defaultValue]="obs.prefill?.templateGroupName"
+    [disabled]="obs.disabled"
+    [required]="true"
+  >
+  </v-input>
+  <v-input
+    name="resultingTemplateNameListProcessVariableName"
+    [title]="'resultingTemplateNameListProcessVariableName' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [defaultValue]="obs.prefill?.resultingTemplateNameListProcessVariableName"
+    [disabled]="obs.disabled"
+    [required]="true"
+  >
+  </v-input>
 </v-form>
