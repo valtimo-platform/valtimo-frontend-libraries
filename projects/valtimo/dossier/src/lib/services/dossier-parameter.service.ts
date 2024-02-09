@@ -221,18 +221,12 @@ export class DossierParameterService implements OnDestroy {
     ])
       .pipe(take(1))
       .subscribe(([paginationParams, searchParams, assigneeParams, statusParams]) => {
-        if (paginationParams) {
-          this.setPaginationParameters(paginationParams);
-        }
+        if (paginationParams) this.setPaginationParameters(paginationParams);
+        if (assigneeParams) this.setAssigneeParameter(assigneeParams);
+        if (statusParams) this.setStatusParameter(statusParams);
         if (searchParams) {
           this.setSearchParameters(searchParams);
           this.setSearchFieldValues(searchParams);
-        }
-        if (assigneeParams) {
-          this.setAssigneeParameter(assigneeParams);
-        }
-        if (statusParams) {
-          this.setStatusParameter(statusParams);
         }
 
         this.openDossierParametersSubscription();
