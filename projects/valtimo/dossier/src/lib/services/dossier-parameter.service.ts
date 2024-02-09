@@ -28,7 +28,6 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {AssigneeFilter, Direction, SearchFieldValues} from '@valtimo/config';
 import {Pagination} from '@valtimo/components';
-import {InternalCaseStatus} from '@valtimo/document/lib/models/internal-case-status.model';
 
 @Injectable()
 export class DossierParameterService implements OnDestroy {
@@ -97,13 +96,13 @@ export class DossierParameterService implements OnDestroy {
     );
   }
 
-  public get queryStatusParams$(): Observable<InternalCaseStatus[]> {
+  public get queryStatusParams$(): Observable<string[] | null> {
     return this.route.queryParams.pipe(
       map(params => {
-        if (params.status) {
-          return JSON.parse(atob(params.status)) as InternalCaseStatus[];
+        if (params?.status) {
+          return JSON.parse(atob(params.status)) as string[];
         }
-        return [];
+        return null;
       }),
       distinctUntilChanged(
         (prevParams, currParams) => JSON.stringify(prevParams) === JSON.stringify(currParams)
@@ -171,12 +170,12 @@ export class DossierParameterService implements OnDestroy {
     });
   }
 
-  public setStatusParameter(statusParameters: InternalCaseStatus[]): void {
+  public setStatusParameter(statusKeyParameters: string[]): void {
     this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
-      if (Object.keys(statusParameters || []).length > 0) {
+      if ((statusKeyParameters || []).length > 0) {
         this._dossierParameters$.next({
           ...dossierParameters,
-          status: this.objectToBase64(statusParameters),
+          status: this.objectToBase64(statusKeyParameters),
         });
       } else {
         if (dossierParameters?.status) {
