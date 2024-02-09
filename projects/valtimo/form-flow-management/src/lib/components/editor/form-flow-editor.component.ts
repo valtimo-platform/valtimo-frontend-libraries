@@ -64,19 +64,19 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
   public readonly formFlowDefinitionVersionItems$: Observable<LoadedValue<Array<ListItem>>> =
     combineLatest([this.formFlowDefinitionVersions$, this.formFlowDefinitionId$]).pipe(
       filter(([versions, formFlowDefinitionId]) => !!versions && !!formFlowDefinitionId),
-      map(([versions, formFlowDefinitionId]) => {
-        return versions.map(
+      map(([versions, formFlowDefinitionId]) =>
+        versions.map(
           version =>
             ({
               formFlowDefinitionId: {
                 key: formFlowDefinitionId.key,
-                version: version,
+                version,
               } as FormFlowDefinitionId,
               content: `${this.translateService.instant('formFlow.version')}: ${version}`,
               selected: version === formFlowDefinitionId.version,
             }) as ListItem
-        );
-      }),
+        )
+      ),
       map(formFlowDefinitionVersionItems => ({
         value: formFlowDefinitionVersionItems,
         isLoading: false,
@@ -124,13 +124,11 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     combineLatest([this._updatedModelValue$, this.formFlowDefinitionId$])
       .pipe(
         take(1),
-        map(([updatedModelValue, formFlowDefinitionId]) => {
-          return {
-            ...(JSON.parse(updatedModelValue) as FormFlowDefinition),
-            key: formFlowDefinitionId.key,
-            version: this.formFlowDefinitionVersions$.value[0] + 1,
-          };
-        }),
+        map(([updatedModelValue, formFlowDefinitionId]) => ({
+          ...(JSON.parse(updatedModelValue) as FormFlowDefinition),
+          key: formFlowDefinitionId.key,
+          version: this.formFlowDefinitionVersions$.value[0] + 1,
+        })),
         switchMap(updatedFormFlowDefinition =>
           this.formFlowService.updateFormFlowDefinition(
             updatedFormFlowDefinition.key,
@@ -140,7 +138,7 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: result => {
-          let id = {key: result.key, version: result.version};
+          const id = {key: result.key, version: result.version};
           this.showSuccessMessage(result.key);
           this.formFlowDefinitionId$.next(id);
           this.formFlowDefinitionVersions$.next(
@@ -215,7 +213,7 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
   }
 
   private setModel(formFlowDefinition: FormFlowDefinition): void {
-    let clone = {...formFlowDefinition};
+    const clone = {...formFlowDefinition};
     delete clone.version;
     delete clone.readOnly;
     this.model$.next({
@@ -231,7 +229,7 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
   private showSuccessMessage(key: string): void {
     this.notificationService.showToast({
       caption: this.translateService.instant('formFlow.savedSuccessTitleMessage', {
-        key: key,
+        key,
       }),
       type: 'success',
       duration: 4000,

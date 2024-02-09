@@ -16,7 +16,7 @@
 
 <ng-container *ngIf="model$ | async as model; else loading">
   <valtimo-editor
-    [disabled]="!(loading$ | async) && readOnly$ | async"
+    [disabled]="(loading$ | async) === false && readOnly$ | async"
     [model]="model"
     [jsonSchema]="formFlowSchemaJson"
     (validEvent)="onValid($event)"
