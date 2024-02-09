@@ -26,7 +26,8 @@
 
 <ng-container renderInPageHeader>
   <ng-template>
-    <div class="buttons-container"
+    <div
+      class="buttons-container"
       *ngIf="{
         model: model$ | async,
         valid: valid$ | async,
@@ -48,17 +49,15 @@
           <cds-overflow-menu-option
             [disabled]="!obs.valid"
             (selected)="downloadFormFlowDefinition(obs.model)"
-          >{{ 'interface.export' | translate }}
-          </cds-overflow-menu-option
-          >
+            >{{ 'interface.export' | translate }}
+          </cds-overflow-menu-option>
 
           <cds-overflow-menu-option
             [disabled]="obs.readOnly"
             type="danger"
             (selected)="showDeleteModal()"
-          >{{ 'interface.delete' | translate }}
-          </cds-overflow-menu-option
-          >
+            >{{ 'interface.delete' | translate }}
+          </cds-overflow-menu-option>
         </cds-overflow-menu>
 
         <button

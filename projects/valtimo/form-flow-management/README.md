@@ -9,13 +9,13 @@ Run `ng generate component component-name --project form-flow-management` to gen
 component. You can also use
 `ng generate directive|pipe|service|class|guard|interface|enum|module --project form-flow-management`.
 
-> Note: Don't forget to add `--project form-flow-management` or else it will be added to the
-> default project in your `angular.json` file.
+> Note: Don't forget to add `--project form-flow-management` or else it will be added to the default
+> project in your `angular.json` file.
 
 ## Build
 
-Run `ng build form-flow-management` to build the project. The build artifacts will be stored in
-the `dist/` directory.
+Run `ng build form-flow-management` to build the project. The build artifacts will be stored in the
+`dist/` directory.
 
 ## Publishing
 

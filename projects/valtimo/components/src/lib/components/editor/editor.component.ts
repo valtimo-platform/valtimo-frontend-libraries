@@ -29,7 +29,6 @@ import {first, Subscription} from 'rxjs';
 import {editor} from 'monaco-editor';
 import {EditorModel} from '../../models';
 import {ShellService} from '../../services/shell.service';
-import {NGXLogger} from "ngx-logger";
 
 declare const monaco: any;
 
@@ -71,7 +70,6 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private readonly editorService: EditorService,
-    private readonly logger: NGXLogger,
     private readonly shellService: ShellService
   ) {
     this.editorService.load();
@@ -182,14 +180,15 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
   private initJsonSchemaValidation() {
     if (this.jsonSchema && this._model.uri) {
-      this.logger.info(this.jsonSchema);
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
         validate: true,
-        schemas: [{
-          uri: this.jsonSchema['$id'],
-          fileMatch: ["*"],
-          schema: this.jsonSchema
-        }]
+        schemas: [
+          {
+            uri: this.jsonSchema['$id'],
+            fileMatch: ['*'],
+            schema: this.jsonSchema,
+          },
+        ],
       });
     }
   }

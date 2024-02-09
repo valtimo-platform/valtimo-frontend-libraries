@@ -37,7 +37,6 @@ import {NotificationService} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {FormFlowDownloadService} from '../../services/form-flow-download.service';
 import {ListItem} from 'carbon-components-angular/dropdown';
-import {NGXLogger} from "ngx-logger";
 import formFlowSchemaJson from './formflow.schema.json';
 
 @Component({
@@ -95,7 +94,6 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly pageTitleService: PageTitleService,
     private readonly router: Router,
-    private readonly logger: NGXLogger,
     private readonly notificationService: NotificationService,
     private readonly translateService: TranslateService,
     private readonly formFlowDownloadService: FormFlowDownloadService
