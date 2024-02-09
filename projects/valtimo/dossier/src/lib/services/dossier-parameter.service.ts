@@ -28,21 +28,22 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {AssigneeFilter, Direction, SearchFieldValues} from '@valtimo/config';
 import {Pagination} from '@valtimo/components';
+import {InternalCaseStatus} from '@valtimo/document/lib/models/internal-case-status.model';
 
 @Injectable()
 export class DossierParameterService implements OnDestroy {
   private readonly _dossierParameters$ = new BehaviorSubject<DossierParameters>(undefined);
   private readonly _searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
 
-  get dossierParameters$(): Observable<DossierParameters> {
+  public get dossierParameters$(): Observable<DossierParameters> {
     return this._dossierParameters$.asObservable();
   }
 
-  get searchFieldValues$(): Observable<SearchFieldValues> {
+  public get searchFieldValues$(): Observable<SearchFieldValues> {
     return this._searchFieldValues$.asObservable();
   }
 
-  get querySearchParams$(): Observable<SearchFieldValues> {
+  public get querySearchParams$(): Observable<SearchFieldValues> {
     return this.route.queryParams.pipe(
       map(params => {
         if (params.search) {
@@ -56,14 +57,10 @@ export class DossierParameterService implements OnDestroy {
     );
   }
 
-  get queryPaginationParams$(): Observable<Pagination | null> {
+  public get queryPaginationParams$(): Observable<Pagination | null> {
     return this.route.queryParams.pipe(
       map(params => {
         const paramsCopy = {...params} as any as DossierParameters;
-
-        if (paramsCopy.search) {
-          delete paramsCopy.search;
-        }
 
         return paramsCopy.collectionSize
           ? {
@@ -88,7 +85,7 @@ export class DossierParameterService implements OnDestroy {
     );
   }
 
-  get queryAssigneeParam$(): Observable<AssigneeFilter> {
+  public get queryAssigneeParam$(): Observable<AssigneeFilter> {
     return this.route.queryParams.pipe(
       map(params => {
         if (params?.assignee) {
@@ -100,7 +97,21 @@ export class DossierParameterService implements OnDestroy {
     );
   }
 
-  dossierParametersSubscription!: Subscription;
+  public get queryStatusParams$(): Observable<InternalCaseStatus[]> {
+    return this.route.queryParams.pipe(
+      map(params => {
+        if (params.status) {
+          return JSON.parse(atob(params.status)) as InternalCaseStatus[];
+        }
+        return [];
+      }),
+      distinctUntilChanged(
+        (prevParams, currParams) => JSON.stringify(prevParams) === JSON.stringify(currParams)
+      )
+    );
+  }
+
+  private _dossierParametersSubscription!: Subscription;
 
   constructor(
     private readonly router: Router,
@@ -109,15 +120,15 @@ export class DossierParameterService implements OnDestroy {
     this.setDossierParameters();
   }
 
-  ngOnDestroy(): void {
-    this.dossierParametersSubscription?.unsubscribe();
+  public ngOnDestroy(): void {
+    this._dossierParametersSubscription?.unsubscribe();
   }
 
-  setSearchFieldValues(searchFieldValues: SearchFieldValues): void {
+  public setSearchFieldValues(searchFieldValues: SearchFieldValues): void {
     this._searchFieldValues$.next(searchFieldValues);
   }
 
-  setSearchParameters(searchParameters: SearchFieldValues): void {
+  public setSearchParameters(searchParameters: SearchFieldValues): void {
     this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
       if (Object.keys(searchParameters || {}).length > 0) {
         this._dossierParameters$.next({
@@ -133,7 +144,7 @@ export class DossierParameterService implements OnDestroy {
     });
   }
 
-  setPaginationParameters(pagination: Pagination): void {
+  public setPaginationParameters(pagination: Pagination): void {
     if (pagination) {
       this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
         this._dossierParameters$.next({
@@ -151,7 +162,7 @@ export class DossierParameterService implements OnDestroy {
     }
   }
 
-  setAssigneeParameter(assigneeFilter: AssigneeFilter): void {
+  public setAssigneeParameter(assigneeFilter: AssigneeFilter): void {
     this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
       this._dossierParameters$.next({
         ...dossierParameters,
@@ -160,17 +171,33 @@ export class DossierParameterService implements OnDestroy {
     });
   }
 
-  clearSearchFieldValues(): void {
+  public setStatusParameter(statusParameters: InternalCaseStatus[]): void {
+    this._dossierParameters$.pipe(take(1)).subscribe(dossierParameters => {
+      if (Object.keys(statusParameters || []).length > 0) {
+        this._dossierParameters$.next({
+          ...dossierParameters,
+          status: this.objectToBase64(statusParameters),
+        });
+      } else {
+        if (dossierParameters?.status) {
+          delete dossierParameters.status;
+        }
+        this._dossierParameters$.next(dossierParameters);
+      }
+    });
+  }
+
+  public clearSearchFieldValues(): void {
     this._searchFieldValues$.next({});
   }
 
-  clearParameters(): void {
+  public clearParameters(): void {
     this._dossierParameters$.next(undefined);
     this.router.navigate([this.getUrlWithoutParams()]);
   }
 
   private openDossierParametersSubscription(): void {
-    this.dossierParametersSubscription = this.dossierParameters$.subscribe(dossierParams => {
+    this._dossierParametersSubscription = this.dossierParameters$.subscribe(dossierParams => {
       this.router.navigate([this.getUrlWithoutParams()], {queryParams: dossierParams});
     });
   }
@@ -187,9 +214,14 @@ export class DossierParameterService implements OnDestroy {
   }
 
   private setDossierParameters(): void {
-    combineLatest([this.queryPaginationParams$, this.querySearchParams$, this.queryAssigneeParam$])
+    combineLatest([
+      this.queryPaginationParams$,
+      this.querySearchParams$,
+      this.queryAssigneeParam$,
+      this.queryStatusParams$,
+    ])
       .pipe(take(1))
-      .subscribe(([paginationParams, searchParams, assigneeParams]) => {
+      .subscribe(([paginationParams, searchParams, assigneeParams, statusParams]) => {
         if (paginationParams) {
           this.setPaginationParameters(paginationParams);
         }
@@ -199,6 +231,9 @@ export class DossierParameterService implements OnDestroy {
         }
         if (assigneeParams) {
           this.setAssigneeParameter(assigneeParams);
+        }
+        if (statusParams) {
+          this.setStatusParameter(statusParams);
         }
 
         this.openDossierParametersSubscription();

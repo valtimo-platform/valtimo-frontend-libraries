@@ -49,9 +49,11 @@
         <ng-content></ng-content>
 
         <ng-container *ngFor="let searchField of searchFields">
-          <ng-container
-            *ngTemplateOutlet="searchFieldTemplate; context: {searchField: searchField}"
-          ></ng-container>
+          <div class="search-field-container">
+            <ng-container
+              *ngTemplateOutlet="searchFieldTemplate; context: {searchField: searchField}"
+            ></ng-container>
+          </div>
         </ng-container>
       </div>
 
