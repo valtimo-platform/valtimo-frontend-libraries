@@ -543,10 +543,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
           this.parameterService.clearSearchFieldValues();
         }
         this._previousDocumentDefinitionName = documentDefinitonName;
-        this.setLoading();
         this.paginationService.clearPagination();
         this.assigneeService.resetAssigneeFilter();
         this.listService.setDocumentDefinitionName(documentDefinitonName);
+        this.setLoading();
       });
   }
 
@@ -556,6 +556,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.loadingSearchFields = true;
     this.loadingAssigneeFilter = true;
     this.loadingDocumentItems = true;
+    this.loadingStatuses = true;
   }
 
   private setVisibleTabs(): void {
