@@ -20,9 +20,10 @@ import {InternalCaseStatus} from '@valtimo/document';
 import {CheckboxModule, DropdownModule, InputModule, ListItem} from 'carbon-components-angular';
 import {CARBON_THEME} from '../../models';
 import {CommonModule} from '@angular/common';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {distinctUntilChanged, filter, take} from 'rxjs/operators';
 import {isEqual} from 'lodash';
+import {CASES_WITHOUT_STATUS_KEY} from '../../constants';
 
 @Component({
   selector: 'valtimo-status-selector',
@@ -51,11 +52,15 @@ export class StatusSelectorComponent {
   public readonly listItems$: Observable<ListItem[]> = combineLatest([
     this._statuses$,
     this._selectedStatuses$,
+    this.translateService.stream('key'),
   ]).pipe(
     filter(([statuses, selectedStatuses]) => !!statuses && !!selectedStatuses),
     map(([statuses, selectedStatuses]) =>
       statuses.map(status => ({
-        content: status.title,
+        content:
+          status.key === CASES_WITHOUT_STATUS_KEY
+            ? this.translateService.instant('dossierManagement.statuses.withoutStatus')
+            : status.title,
         selected: !!selectedStatuses.find(selectedStatus => selectedStatus.key === status.key),
         key: status.key,
       }))
@@ -63,13 +68,15 @@ export class StatusSelectorComponent {
     distinctUntilChanged((previous, current) => isEqual(previous, current))
   );
 
+  constructor(private readonly translateService: TranslateService) {}
+
   public itemSelected(event: ListItem[]): void {
     const newSelectedItems = event?.filter(item => item?.selected) || [];
 
     this._statuses$.pipe(take(1)).subscribe(statuses => {
-      const newSelectedStatuses = newSelectedItems.map(item =>
-        statuses.find(status => status.key === item.key)
-      );
+      const newSelectedStatuses = newSelectedItems
+        .map(item => statuses.find(status => status.key === item.key))
+        .filter(status => !!status);
 
       this.selectedStatusesChangeEvent.emit(newSelectedStatuses);
     });

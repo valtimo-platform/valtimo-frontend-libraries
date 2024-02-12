@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-interface InternalCaseStatus {
-  key: string;
-  title: string;
-  visibleInCaseListByDefault: boolean;
-  caseDefinitionName?: string;
-  order?: number;
-}
+const CASES_WITHOUT_STATUS_KEY = 'CASES_WITHOUT_STATUS_KEY';
 
-export {InternalCaseStatus};
+export {CASES_WITHOUT_STATUS_KEY};

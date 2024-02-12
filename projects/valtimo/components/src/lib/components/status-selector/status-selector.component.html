@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<cds-label class="status-selector">
+<cds-label class="status-selector" *ngIf="listItems$ | async as listItems">
   {{ 'dossierManagement.statuses.searchFieldTitle' | translate }}
 
   <cds-dropdown
@@ -25,6 +25,6 @@
     selectionFeedback="fixed"
     (selected)="itemSelected($event)"
   >
-    <cds-dropdown-list [items]="listItems$ | async"></cds-dropdown-list>
+    <cds-dropdown-list [items]="listItems"></cds-dropdown-list>
   </cds-dropdown>
 </cds-label>

@@ -549,6 +549,7 @@
       "saveModalContent": "Are you sure you want to save the Document definition? Removing or changing an attribute can break the case definition."
     },
     "statuses": {
+      "withoutStatus": "Show cases without a status",
       "searchFieldTitle": "Status",
       "add": "Add status",
       "edit": "Edit status",

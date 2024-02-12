@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-interface InternalCaseStatus {
-  key: string;
-  title: string;
-  visibleInCaseListByDefault: boolean;
-  caseDefinitionName?: string;
-  order?: number;
-}
+import {CASES_WITHOUT_STATUS_KEY} from '@valtimo/components';
 
-export {InternalCaseStatus};
+const CASE_WITHOUT_STATUS_STATUS = {
+  key: CASES_WITHOUT_STATUS_KEY,
+  caseDefinitionName: '',
+  title: '',
+  visibleInCaseListByDefault: false,
+};
+
+export {CASES_WITHOUT_STATUS_KEY, CASE_WITHOUT_STATUS_STATUS};
