@@ -66,16 +66,6 @@
   </ng-container>
 </ng-template>
 
-<ng-template #statusSelectorTemplate>
-  <ng-container *ngIf="statuses.length > 0">
-    <valtimo-status-selector
-      [statuses]="statuses"
-      [selectedStatuses]="selectedStatuses"
-      [carbonTheme]="carbonTheme"
-    ></valtimo-status-selector>
-  </ng-container>
-</ng-template>
-
 <ng-template #searchFieldTemplate let-searchField="searchField">
   <ng-container
     *ngIf="{
