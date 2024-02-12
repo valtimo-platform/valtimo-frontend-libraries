@@ -260,6 +260,12 @@
       "path": "./projects/valtimo/form-management/tsconfig.spec.json"
     },
     {
+      "path": "./projects/valtimo/form-flow-management/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/valtimo/form-flow-management/tsconfig.spec.json"
+    },
+    {
       "path": "./projects/valtimo/form-link/tsconfig.lib.json"
     },
     {
