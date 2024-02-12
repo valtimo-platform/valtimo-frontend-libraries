@@ -41,7 +41,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly maxFileSize: number = this.configService?.config?.caseFileSizeUploadLimitMB || 5;
   public readonly acceptedFiles: string =
     this.configService?.config?.caseFileUploadAcceptedFiles || null;
-  public fieldsConfig = ['title', 'informatieobjecttype', 'status', 'format', 'confidentialityLevel', 'trefwoorden'];
+  public fieldsConfig = ['title', 'informatieobjecttype', 'status', 'size', 'format', 'confidentialityLevel', 'trefwoorden'];
   public fields = this.getFields(this.fieldsConfig);
 
   public tableConfig = {

@@ -206,7 +206,7 @@
     "noAdditionalDate": "No additional date",
     "application/json": "JSON",
     "application/pdf": "PDF",
-    "application/octet-stream": "BPMN"
+    "application/octet-stream": "Unknown"
   },
   "summary": {
     "userTasksDoneState": "All done!",

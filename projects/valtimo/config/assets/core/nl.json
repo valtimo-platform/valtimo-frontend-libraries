@@ -206,7 +206,7 @@
     "noAdditionalDate": "Geen aanvullende datum",
     "application/json": "JSON",
     "application/pdf": "PDF",
-    "application/octet-stream": "BPMN"
+    "application/octet-stream": "Onbekend"
   },
   "summary": {
     "userTasksDoneState": "Helemaal bij!",
