@@ -153,7 +153,6 @@ export class DossierManagementDetailContainerActionsComponent {
 
   public setVersion(version: any): void {
     this.versionSet.emit(Number(version.item.id));
-    // this.dossierDetailService.setSelectedVersionNumber(Number(version.item.id));
   }
 
   public openDossierRemoveModal(): void {
