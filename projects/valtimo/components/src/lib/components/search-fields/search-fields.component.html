@@ -451,7 +451,6 @@
       [items]="booleanItems"
       [margin]="false"
       [required]="false"
-      [widthInPx]="200"
       [name]="searchField.key"
       [clearSelectionSubject$]="clear$"
       (selectedChange)="singleValueChange(searchField.key, $event)"
@@ -459,6 +458,7 @@
       [defaultSelectionId]="getDefaultBooleanSelectionId(values, searchField.key)"
       [disabled]="inputDisabled"
       [carbonTheme]="carbonTheme"
+      [appendInline]="false"
     ></v-select>
   </ng-container>
 </ng-template>
@@ -552,7 +552,6 @@
       [items]="searchFieldSelectItems"
       [margin]="false"
       [required]="false"
-      [widthInPx]="200"
       [name]="searchField.key"
       [clearSelectionSubject$]="clear$"
       (selectedChange)="singleValueChange(searchField.key, $event)"
@@ -560,6 +559,7 @@
       [defaultSelectionId]="values[searchField.key]"
       [disabled]="inputDisabled"
       [carbonTheme]="carbonTheme"
+      [appendInline]="false"
     ></v-select>
   </ng-container>
 </ng-template>
@@ -586,7 +586,6 @@
       [margin]="false"
       [multiple]="true"
       [required]="false"
-      [widthInPx]="200"
       [name]="searchField.key"
       [clearSelectionSubject$]="clear$"
       (selectedChange)="multipleValueChange(searchField.key, $event)"
@@ -594,6 +593,7 @@
       [defaultSelectionIds]="values[searchField.key]"
       [disabled]="inputDisabled"
       [carbonTheme]="carbonTheme"
+      [appendInline]="false"
     ></v-select>
   </ng-container>
 </ng-template>
