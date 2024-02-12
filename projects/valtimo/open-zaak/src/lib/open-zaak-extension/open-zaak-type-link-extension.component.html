@@ -34,7 +34,7 @@
             {{ this.selectedZaakType?.omschrijving || '-' }}
           </div>
           <div class="controls">
-            <button class="btn btn-danger ml-3" (click)="openModal()">
+            <button class="btn btn-danger ml-3" (click)="openModal(obs.zaakTypeLink)">
               <i class="icon mdi mdi-pencil"></i>
             </button>
             <button class="btn btn-danger ml-3" (click)="removeZaakTypeLink()">
@@ -79,7 +79,7 @@
 
 <ng-template #addSync>
   <div class="text-right mt-5">
-    <button class="btn btn-primary" (click)="openModal()">
+    <button class="btn btn-primary" (click)="openModal(null)">
       <i class="icon mdi mdi-plus mr-1"></i>{{ 'openZaak.linkZaakType' | translate }}
     </button>
   </div>

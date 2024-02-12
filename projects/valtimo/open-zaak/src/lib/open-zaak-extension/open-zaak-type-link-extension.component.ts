@@ -123,8 +123,7 @@ export class OpenZaakTypeLinkExtensionComponent {
       });
   }
 
-  openModal() {
-    var zaakTypeLink = this.zaakTypeLink$.getValue()
+  openModal(zaakTypeLink: ZaakTypeLink) {
     this.zaakTypeLinkRequest = {
       documentDefinitionName: this.documentDefinitionName,
       createWithDossier: zaakTypeLink?.createWithDossier,
