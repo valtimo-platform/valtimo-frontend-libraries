@@ -84,26 +84,25 @@
 </ng-template>
 
 <ng-template #modal let-obs="obs">
-  <cds-modal size="sm" [open]="modalShowing$ | async">
-    <cds-modal-header showCloseButton="true" (closeSelect)="onModalClose()">
-      <h3 cdsModalHeaderHeading>
-        {{
-          searchFieldActionTypeIsAdd
-            ? ('searchFieldsOverview.addRow' | translate)
-            : ('searchFieldsOverview.edit' | translate)
-        }}
-      </h3>
-    </cds-modal-header>
-
-    <section
-      cdsModalContent
-      *ngIf="
-        (showFields$ | async) && {
-          searchField: selectedSearchField$ | async
-        } as searchObs
-      "
-    >
-      <v-form (valueChange)="formValueChange($event)">
+  <valtimo-modal
+    #searchFieldModal
+    elementId="searchFieldModal"
+    [title]="
+      searchFieldActionTypeIsAdd
+        ? ('searchFieldsOverview.addRow' | translate)
+        : ('searchFieldsOverview.edit' | translate)
+    "
+    [showFooter]="true"
+  >
+    <div body class="mt-2">
+      <v-form
+        (valueChange)="formValueChange($event)"
+        *ngIf="
+          (showFields$ | async) && {
+            searchField: selectedSearchField$ | async
+          } as searchObs
+        "
+      >
         <v-input
           name="title"
           [title]="'searchFieldsOverview.title' | translate"
