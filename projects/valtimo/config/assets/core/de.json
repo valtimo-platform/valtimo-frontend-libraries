@@ -558,6 +558,7 @@
       "saveModalContent": "Sind Sie sicher, dass Sie die Dokumentdefinition speichern möchten? Das Entfernen oder Ändern eines Attributs kann die Falldefinition zerstören."
     },
     "statuses": {
+      "withoutStatus": "Dateien ohne Status anzeigen",
       "searchFieldTitle": "Status",
       "add": "Status hinzufügen",
       "edit": "Status bearbeiten",

@@ -127,6 +127,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     tap(() => (this.loadingStatuses = false))
   );
   public readonly selectedStatuses$ = this.statusService.selectedCaseStatuses$;
+  public readonly showStatusSelector$ = this.statusService.showStatusSelector$;
 
   public readonly documentDefinitionName$ = this.listService.documentDefinitionName$;
 

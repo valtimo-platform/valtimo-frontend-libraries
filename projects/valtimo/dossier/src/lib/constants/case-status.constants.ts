@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-export * from './carbon.constants';
-export * from './view-type-converter.constants';
-export * from './status.constants';
+import {CASES_WITHOUT_STATUS_KEY} from '@valtimo/components';
+
+const CASE_WITHOUT_STATUS_STATUS = {
+  key: CASES_WITHOUT_STATUS_KEY,
+  caseDefinitionName: '',
+  title: '',
+  visibleInCaseListByDefault: false,
+};
+
+export {CASES_WITHOUT_STATUS_KEY, CASE_WITHOUT_STATUS_STATUS};
