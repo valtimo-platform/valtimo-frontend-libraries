@@ -160,7 +160,7 @@ export class OpenZaakTypeLinkExtensionComponent {
         if (this.selectedInformatieObjectTypeUrl !== null) {
           this.openZaakService.deleteInformatieObjectTypeLink(this.documentDefinitionName);
         }
-        this.toasterService.success('Successfully de-linked zaaktype')
+        this.toasterService.success('Successfully de-linked zaaktype');
         this.zaakTypeLink$.next(null);
       },
       () => {
