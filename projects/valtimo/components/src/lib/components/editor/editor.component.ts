@@ -62,6 +62,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   @Output() valueChangeEvent: EventEmitter<string> = new EventEmitter();
 
   private _disabled!: boolean;
+  private _formatting: boolean = false;
   private _editor: editor.IStandaloneCodeEditor;
   private _editorOptions: editor.IEditorOptions;
   private _model: EditorModel;
@@ -118,11 +119,12 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
       this._editor.setModel(model);
       this.initJsonSchemaValidation();
+      this.formatDocument();
     }
   }
 
   private setDisabled(disabled: boolean): void {
-    if (!this._editor) {
+    if (!this._editor || this._formatting) {
       return;
     }
 
@@ -136,11 +138,12 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   private formatDocument = (): void => {
     if (this.formatOnLoad && this._editor) {
       this.setDisabled(false);
-      this._editor.getAction('editor.action.formatDocument').run();
-      this.checkValidity();
-      setTimeout(() => {
+      this._formatting = true
+      this._editor.getAction('editor.action.formatDocument').run().finally(() => {
+        this._formatting = false;
         this.setDisabled(this._disabled);
-      }, 100);
+      });
+      this.checkValidity();
     }
   };
 
@@ -156,7 +159,6 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this._editor.onDidChangeModelLanguageConfiguration(this.formatDocument);
     this._editor.onDidLayoutChange(this.formatDocument);
     this._editor.onDidChangeModelContent(() => {
-      this.formatDocument();
       this.valueChangeEvent.emit(this._editor.getValue());
     });
     monaco?.editor?.onDidChangeMarkers(() => {
@@ -179,16 +181,22 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   }
 
   private initJsonSchemaValidation() {
-    if (this.jsonSchema && this._model.uri) {
+    if (!!this.jsonSchema && !!this._model.uri) {
+      const id = this.jsonSchema['$id'];
+      const key = id.split('.')[0];
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
         validate: true,
         schemas: [
           {
-            uri: this.jsonSchema['$id'],
-            fileMatch: ['*'],
+            uri: id,
+            fileMatch: ['*.' + key + '.json'],
             schema: this.jsonSchema,
           },
         ],
+      });
+    } else {
+      monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+        validate: true
       });
     }
   }

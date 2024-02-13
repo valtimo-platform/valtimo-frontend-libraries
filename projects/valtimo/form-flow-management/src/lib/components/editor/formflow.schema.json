@@ -21,6 +21,7 @@
           },
           "type": {
             "type": "object",
+            "description": "The type of form that should be displayed",
             "properties": {
               "name": {
                 "type": "string",
@@ -31,7 +32,10 @@
                 "description": "This object holds additional properties for the specified type"
               }
             },
-            "required": ["name", "properties"]
+            "required": [
+              "name",
+              "properties"
+            ]
           },
           "onOpen": {
             "type": "array",
@@ -60,19 +64,30 @@
                   "title": "The key of the next step. This should match one of the keys in the steps array"
                 },
                 "condition": {
-                  "type": ["string", "null"],
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "title": "This should contain an expression telling what condition should be met to go to this next step. If there is no condition this is the default next step."
                 }
               },
-              "required": ["step"]
+              "required": [
+                "step"
+              ]
             }
           }
         },
-        "required": ["key"]
+        "required": [
+          "key",
+          "type"
+        ]
       },
       "minItems": 1,
       "uniqueItems": true
     }
   },
-  "required": ["startStep", "steps"]
+  "required": [
+    "startStep",
+    "steps"
+  ]
 }
