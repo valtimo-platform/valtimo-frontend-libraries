@@ -62,7 +62,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   @Output() valueChangeEvent: EventEmitter<string> = new EventEmitter();
 
   private _disabled!: boolean;
-  private _formatting: boolean = false;
+  private _formatting = false;
   private _editor: editor.IStandaloneCodeEditor;
   private _editorOptions: editor.IEditorOptions;
   private _model: EditorModel;
@@ -138,11 +138,14 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   private formatDocument = (): void => {
     if (this.formatOnLoad && this._editor) {
       this.setDisabled(false);
-      this._formatting = true
-      this._editor.getAction('editor.action.formatDocument').run().finally(() => {
-        this._formatting = false;
-        this.setDisabled(this._disabled);
-      });
+      this._formatting = true;
+      this._editor
+        .getAction('editor.action.formatDocument')
+        .run()
+        .finally(() => {
+          this._formatting = false;
+          this.setDisabled(this._disabled);
+        });
       this.checkValidity();
     }
   };
@@ -196,7 +199,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       });
     } else {
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-        validate: true
+        validate: true,
       });
     }
   }
