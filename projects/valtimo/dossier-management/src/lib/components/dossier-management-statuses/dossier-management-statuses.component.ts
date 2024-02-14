@@ -45,6 +45,7 @@ import {StatusModalCloseEvent, StatusModalType} from '../../models';
 @Component({
   selector: 'valtimo-dossier-management-statuses',
   templateUrl: './dossier-management-statuses.component.html',
+  styleUrls: ['./dossier-management-statuses.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierManagementStatusesComponent implements AfterViewInit {

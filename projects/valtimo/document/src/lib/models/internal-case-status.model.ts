@@ -23,7 +23,7 @@ enum InternalCaseStatusColor {
   Purple = 'PURPLE',
   Blue = 'BLUE',
   Cyan = 'CYAN',
-  Teal = 'Teal',
+  Teal = 'TEAL',
   Green = 'GREEN',
   Gray = 'GRAY',
   CoolGray = 'COOLGRAY',
