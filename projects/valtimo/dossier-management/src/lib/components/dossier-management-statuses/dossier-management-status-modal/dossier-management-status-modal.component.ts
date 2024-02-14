@@ -33,7 +33,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import {CaseStatusService, InternalCaseStatus} from '@valtimo/document';
+import {CaseStatusService, InternalCaseStatus, InternalCaseStatusColor} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import {Edit16} from '@carbon/icons';
 
@@ -75,6 +75,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
     title: this.fb.control('', Validators.required),
     key: this.fb.control('', [Validators.required, this.uniqueKeyValidator()]),
     visibleInCaseListByDefault: this.fb.control(true, Validators.required),
+    color: this.fb.control('', [Validators.required, this.colorValidator()]),
   });
 
   public readonly isEdit$ = combineLatest([this._typeAnimationDelay$, this._prefillStatus]).pipe(
@@ -103,6 +104,10 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
   public get title(): AbstractControl<string, string> {
     return this.statusFormGroup?.get('title');
+  }
+
+  public get color(): AbstractControl<string, string> {
+    return this.statusFormGroup?.get('color');
   }
 
   public get invalid(): boolean {
@@ -207,6 +212,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
       key: prefillStatus.key,
       title: prefillStatus.title,
       visibleInCaseListByDefault: prefillStatus.visibleInCaseListByDefault,
+      color: prefillStatus.color,
     });
     this.statusFormGroup.markAsPristine();
     this.resetEditingKey();
@@ -217,6 +223,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
       key: '',
       title: '',
       visibleInCaseListByDefault: true,
+      color: '',
     });
     this.statusFormGroup.markAsPristine();
     this.resetEditingKey();
@@ -281,6 +288,11 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
         : {uniqueKey: {value: control.value}};
   }
 
+  private colorValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null =>
+      control.value in InternalCaseStatusColor ? null : {color: {value: control.value}};
+  }
+
   private disable(): void {
     this.disabled$.next(true);
     this.statusFormGroup.disable();
@@ -309,6 +321,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
       key: this.key.value,
       title: this.title.value,
       visibleInCaseListByDefault: this.visibleInCaseListByDefault.value,
+      color: this.color.value as InternalCaseStatusColor,
     };
   }
 }

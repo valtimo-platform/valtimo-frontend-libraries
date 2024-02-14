@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
+enum InternalCaseStatusColor {
+  Gray = 'GRAY',
+  Red = 'RED',
+  Magenta = 'MAGENTA',
+  Purple = 'PURPLE',
+  Blue = 'BLUE',
+  Cyan = 'CYAN',
+  Teal = 'Teal',
+  Green = 'GREEN',
+}
+
 interface InternalCaseStatus {
   key: string;
   title: string;
   visibleInCaseListByDefault: boolean;
+  color: InternalCaseStatusColor;
   documentDefinitionName?: string;
   order?: number;
 }
 
-export {InternalCaseStatus};
+export {InternalCaseStatus, InternalCaseStatusColor};

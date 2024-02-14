@@ -90,6 +90,11 @@ export class DossierManagementStatusesComponent {
       viewType: ViewType.TEXT,
     },
     {
+      key: 'color',
+      label: 'dossierManagement.statuses.columns.color',
+      viewType: ViewType.TEXT,
+    },
+    {
       key: 'visibleInCaseListByDefault',
       label: 'dossierManagement.statuses.columns.visible',
       viewType: ViewType.BOOLEAN,
