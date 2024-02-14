@@ -69,7 +69,7 @@
       [documentDefinitionName]="documentDefinitionName$ | async"
       [defaultValues]="searchFieldValues$ | async"
       [inputDisabled]="!obs.loaded"
-      [externalSearchField]="obs.showStatusSelector"
+      [externalSearchField]="statusObs.showStatusSelector"
     >
       <valtimo-status-selector
         *ngIf="statusObs.showStatusSelector"

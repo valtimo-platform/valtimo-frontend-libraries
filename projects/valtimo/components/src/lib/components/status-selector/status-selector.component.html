@@ -25,6 +25,27 @@
     selectionFeedback="fixed"
     (selected)="itemSelected($event)"
   >
-    <cds-dropdown-list [items]="listItems"></cds-dropdown-list>
+    <cds-dropdown-list
+      [items]="listItems"
+      [listTpl]="colorDropdownItemTemplate"
+    ></cds-dropdown-list>
   </cds-dropdown>
 </cds-label>
+
+<ng-template #colorDropdownItemTemplate let-item="item">
+  <div class="status-selector-dropdown-template">
+    <cds-checkbox [checked]="item.selected"></cds-checkbox>
+
+    <span *ngIf="item.key === CASES_WITHOUT_STATUS_KEY" class="generic-span">{{
+      item?.content
+    }}</span>
+
+    <cds-tag
+      *ngIf="item.key !== CASES_WITHOUT_STATUS_KEY"
+      class="cds-tag--no-margin"
+      [type]="item?.tagType"
+    >
+      {{ item?.content }}
+    </cds-tag>
+  </div>
+</ng-template>

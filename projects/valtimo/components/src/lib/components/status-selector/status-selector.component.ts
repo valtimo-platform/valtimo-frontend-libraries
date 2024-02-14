@@ -16,8 +16,14 @@
 
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
-import {InternalCaseStatus} from '@valtimo/document';
-import {CheckboxModule, DropdownModule, InputModule, ListItem} from 'carbon-components-angular';
+import {InternalCaseStatus, InternalCaseStatusUtils} from '@valtimo/document';
+import {
+  CheckboxModule,
+  DropdownModule,
+  InputModule,
+  ListItem,
+  TagModule,
+} from 'carbon-components-angular';
 import {CARBON_THEME} from '../../models';
 import {CommonModule} from '@angular/common';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -31,11 +37,16 @@ import {CASES_WITHOUT_STATUS_KEY} from '../../constants';
   styleUrls: ['./status-selector.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, DropdownModule, CheckboxModule, InputModule, TranslateModule],
+  imports: [CommonModule, DropdownModule, CheckboxModule, InputModule, TranslateModule, TagModule],
 })
 export class StatusSelectorComponent {
   @Input() public set statuses(value: InternalCaseStatus[]) {
-    this._statuses$.next(value);
+    this._statuses$.next(
+      value.map(status => ({
+        ...status,
+        tagType: InternalCaseStatusUtils.getTagTypeFromInternalCaseStatusColor(status.color),
+      }))
+    );
   }
   @Input() public set selectedStatuses(value: InternalCaseStatus[]) {
     this._selectedStatuses$.next(value);
@@ -49,6 +60,8 @@ export class StatusSelectorComponent {
 
   private readonly _selectedStatuses$ = new BehaviorSubject<InternalCaseStatus[]>([]);
 
+  public readonly CASES_WITHOUT_STATUS_KEY = CASES_WITHOUT_STATUS_KEY;
+
   public readonly listItems$: Observable<ListItem[]> = combineLatest([
     this._statuses$,
     this._selectedStatuses$,
@@ -58,11 +71,12 @@ export class StatusSelectorComponent {
     map(([statuses, selectedStatuses]) =>
       statuses.map(status => ({
         content:
-          status.key === CASES_WITHOUT_STATUS_KEY
+          status.key === this.CASES_WITHOUT_STATUS_KEY
             ? this.translateService.instant('dossierManagement.statuses.withoutStatus')
             : status.title,
         selected: !!selectedStatuses.find(selectedStatus => selectedStatus.key === status.key),
         key: status.key,
+        tagType: status.tagType,
       }))
     ),
     distinctUntilChanged((previous, current) => isEqual(previous, current))

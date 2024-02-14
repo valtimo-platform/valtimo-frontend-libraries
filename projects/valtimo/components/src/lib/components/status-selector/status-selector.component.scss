@@ -22,3 +22,17 @@
 ::ng-deep .status-selector .cds--multiselect {
   margin-top: 8px;
 }
+
+::ng-deep .status-selector-dropdown-template {
+  display: flex;
+  margin-top: -4px;
+
+  .cds--tag {
+    margin: 0;
+  }
+
+  .generic-span {
+    display: flex;
+    align-items: center;
+  }
+}
