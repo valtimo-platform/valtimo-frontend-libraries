@@ -571,7 +571,8 @@
       "columns": {
         "title": "Status name",
         "key": "Status key",
-        "visible": "Visible by default"
+        "visible": "Visible by default",
+        "color": "Color"
       }
     }
   },
@@ -764,7 +765,21 @@
     "back": "Back",
     "warning": "Warning",
     "finish": "Finish",
-    "add": "Add"
+    "add": "Add",
+    "tagType": {
+      "red": "Red",
+      "magenta": "Magenta",
+      "purple": "Purple",
+      "blue": "Blue",
+      "cyan": "Cyan",
+      "teal": "Teal",
+      "green": "Green",
+      "gray": "Gray",
+      "cool-gray": "Cool gray",
+      "warm-gray": "Warm gray",
+      "high-contrast": "High contrast",
+      "outline": "Outline"
+    }
   },
   "taskDetail": {
     "taskCreated": "Created",

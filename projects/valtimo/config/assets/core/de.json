@@ -570,7 +570,8 @@
       "columns": {
         "title": "Statusname",
         "key": "Statusschlüssel",
-        "visible": "Standardmäßig sichtbar"
+        "visible": "Standardmäßig sichtbar",
+        "color": "Farbe"
       }
     }
   },
@@ -762,7 +763,21 @@
     "back": "Zurück",
     "warning": "Warnung",
     "finish": "Beenden",
-    "add": "Hinzufügen"
+    "add": "Hinzufügen",
+    "tagType": {
+      "red": "Rot",
+      "magenta": "Magenta",
+      "purple": "Lila",
+      "blue": "Blau",
+      "cyan": "Cyan",
+      "teal": "Blaugrün",
+      "green": "Grün",
+      "gray": "Grau",
+      "cool-gray": "Kühles Grau",
+      "warm-gray": "Warmes Grau",
+      "high-contrast": "Hoher Kontrast",
+      "outline": "Umrissen"
+    }
   },
   "taskDetail": {
     "taskCreated": "Erstellt",
