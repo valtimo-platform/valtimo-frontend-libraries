@@ -23,7 +23,6 @@ import {PluginTranslatePipe} from '../../../../pipes';
 @Component({
   selector: 'valtimo-start-hersteltermijn-configuration',
   templateUrl: './start-hersteltermijn-configuration.component.html',
-  styleUrls: ['./start-hersteltermijn-configuration.component.scss'],
   providers: [PluginTranslatePipe],
 })
 export class StartHersteltermijnConfigurationComponent
