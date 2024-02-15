@@ -23,6 +23,9 @@
     schema: schema$ | async,
     showAssignModal: showAssignModal$ | async,
     selectedDocumentIds: selectedDocumentIds$ | async,
+    statuses: statuses$ | async,
+    selectedStatuses: selectedStatuses$ | async,
+    showStatusSelector: showStatusSelector$ | async,
     loaded:
       !loadingFields &&
       !loadingPagination &&
@@ -55,26 +58,19 @@
 </ng-container>
 
 <ng-template #searchFields let-obs="obs">
-  <div
-    *ngIf="{
-      statuses: statuses$ | async,
-      selectedStatuses: selectedStatuses$ | async,
-      showStatusSelector: showStatusSelector$ | async
-    } as statusObs"
-    class="mb-3"
-  >
+  <div class="mb-3">
     <valtimo-search-fields
       [searchFields]="obs.searchFields"
       (doSearch)="search($event)"
       [documentDefinitionName]="documentDefinitionName$ | async"
       [defaultValues]="searchFieldValues$ | async"
       [inputDisabled]="!obs.loaded"
-      [externalSearchField]="statusObs.showStatusSelector"
+      [externalSearchField]="obs.showStatusSelector"
     >
       <valtimo-status-selector
-        *ngIf="statusObs.showStatusSelector"
-        [statuses]="statusObs.statuses"
-        [selectedStatuses]="statusObs.selectedStatuses"
+        *ngIf="obs.showStatusSelector"
+        [statuses]="obs.statuses"
+        [selectedStatuses]="obs.selectedStatuses"
         [disabled]="!obs.loaded"
         (selectedStatusesChangeEvent)="onSelectedStatusesChange($event)"
       ></valtimo-status-selector>
