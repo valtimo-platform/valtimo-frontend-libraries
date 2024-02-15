@@ -30,15 +30,11 @@ export class StartHersteltermijnConfigurationComponent
 {
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
-  @Input() set pluginId(value: string) {
-    this.pluginId$.next(value);
-  }
+  @Input() pluginId: string;
   @Input() prefillConfiguration$: Observable<StartHersteltermijnConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<StartHersteltermijnConfig> =
     new EventEmitter<StartHersteltermijnConfig>();
-
-  readonly pluginId$ = new BehaviorSubject<string>('');
 
   private saveSubscription!: Subscription;
 
