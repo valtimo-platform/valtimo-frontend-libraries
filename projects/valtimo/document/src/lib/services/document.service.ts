@@ -25,7 +25,7 @@ import {
   SearchOperator,
 } from '@valtimo/config';
 import {InterceptorSkip} from '@valtimo/security';
-import {catchError, Observable, of, switchMap} from 'rxjs';
+import {catchError, Observable, of, switchMap, tap} from 'rxjs';
 
 import {
   AssignHandlerToDocumentResult,
@@ -56,6 +56,7 @@ import {
   RelatedFile,
   SpecifiedDocuments,
   TemplatePayload,
+  TemplateResponse,
   UndeployDocumentDefinitionResult,
   UploadProcessLink,
 } from '../models';
@@ -310,9 +311,12 @@ export class DocumentService {
     payload: TemplatePayload
   ): Observable<CreateDocumentDefinitionResponse> {
     return this.http
-      .post<any>(`${this.valtimoEndpointUri}management/v1/document-definition-template`, payload)
+      .post<TemplateResponse>(
+        `${this.valtimoEndpointUri}management/v1/document-definition-template`,
+        payload
+      )
       .pipe(
-        switchMap((definition: any) =>
+        switchMap((definition: TemplateResponse) =>
           this.createDocumentDefinitionForManagement({definition: JSON.stringify(definition)})
         )
       );

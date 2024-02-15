@@ -368,6 +368,15 @@ interface TemplatePayload {
   documentDefinitionTitle: string;
 }
 
+interface TemplateResponse {
+  $id: string;
+  $schema: string;
+  additionalProperties: boolean;
+  properties: {[key: string]: {[key: string]: string}};
+  title: string;
+  type: string;
+}
+
 export {
   AssignHandlerToDocumentResult,
   CaseListColumn,
@@ -416,6 +425,7 @@ export {
   SortResult,
   SpecifiedDocuments,
   TemplatePayload,
+  TemplateResponse,
   UndeployDocumentDefinitionResult,
   UpdateUploadProcessLinkRequest,
   UploadProcessLink,
