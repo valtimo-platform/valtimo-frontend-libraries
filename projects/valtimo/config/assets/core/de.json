@@ -1234,7 +1234,8 @@
     "boolean": "Ja/nein",
     "enum": "Aufzählung",
     "arrayCount": "Quantität",
-    "underscoresToSpaces": "Unterstriche zu Leerzeichen"
+    "underscoresToSpaces": "Unterstriche zu Leerzeichen",
+    "status": "Status"
   },
   "object": {
     "title": "Objekte",

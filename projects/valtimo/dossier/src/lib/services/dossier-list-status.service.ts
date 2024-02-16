@@ -53,9 +53,7 @@ export class DossierListStatusService {
   }
 
   public get showStatusSelector$(): Observable<boolean> {
-    return this._showStatusSelector$
-      .asObservable()
-      .pipe(tap(showStatus => console.log(showStatus)));
+    return this._showStatusSelector$.asObservable();
   }
 
   public get selectedCaseStatuses$(): Observable<Array<InternalCaseStatus>> {

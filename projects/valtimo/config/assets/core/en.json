@@ -1236,7 +1236,8 @@
     "boolean": "Yes/no",
     "enum": "Enumeration",
     "arrayCount": "Count",
-    "underscoresToSpaces": "Underscores to spaces"
+    "underscoresToSpaces": "Underscores to spaces",
+    "status": "Status"
   },
   "object": {
     "title": "Objects",

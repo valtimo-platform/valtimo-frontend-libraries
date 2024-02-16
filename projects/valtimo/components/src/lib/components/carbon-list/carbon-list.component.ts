@@ -87,6 +87,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('booleanTemplate') booleanTemplate: TemplateRef<any>;
   @ViewChild('moveRowsTemplate') moveRowsTemplate: TemplateRef<any>;
   @ViewChild('rowDisabled') rowDisabled: TemplateRef<any>;
+  @ViewChild('statusTemplate') statusTemplate: TemplateRef<any>;
   @ViewChild(Table) private _table: Table;
 
   private _completeDataSource: TableItem[][];
@@ -386,6 +387,11 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
                 data,
                 template: this.booleanTemplate,
               });
+            case ViewType.STATUS:
+              return new TableItem({
+                data: {item, index, length: items.length},
+                template: this.statusTemplate,
+              });
             default:
               return new TableItem({data: this.resolveObject(field, item) ?? '-', item});
           }
@@ -543,6 +549,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
       ? definitionKey.split(customPropString)[1]
       : definitionKey;
     const resolvedObjValue = _get(obj, key, null);
+    console.log(resolvedObjValue, definition);
     return this.viewContentService.get(resolvedObjValue, definition);
   }
 }

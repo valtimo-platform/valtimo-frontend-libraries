@@ -1235,7 +1235,8 @@
     "boolean": "Ja/nee",
     "enum": "Opsomming",
     "arrayCount": "Hoeveelheid",
-    "underscoresToSpaces": "Lage strepen naar spaties"
+    "underscoresToSpaces": "Lage strepen naar spaties",
+    "status": "Status"
   },
   "object": {
     "title": "Objects",
