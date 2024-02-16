@@ -78,7 +78,7 @@ export class DossierManagementStatusesComponent implements AfterViewInit {
       }
     }),
     switchMap(([documentDefinitionName]) =>
-      this.caseStatusService.getInternalCaseStatuses(documentDefinitionName)
+      this.caseStatusService.getInternalCaseStatusesManagement(documentDefinitionName)
     ),
     map(statuses =>
       statuses.map(status => ({
