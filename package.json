@@ -270,6 +270,7 @@
     "ngx-color-picker": "14.0.0",
     "ngx-csv": "0.3.2",
     "ngx-logger": "5.0.12",
+    "ngx-mask": "^17.0.4",
     "ngx-skeleton-loader": "8.0.0",
     "ngx-spinner": "16.0.2",
     "ngx-toastr": "17.0.2",

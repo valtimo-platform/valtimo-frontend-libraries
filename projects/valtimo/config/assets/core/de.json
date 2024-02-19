@@ -1306,5 +1306,17 @@
         "title": "Keine Rollen hinzugefügt"
       }
     }
+  },
+  "custom-form-io-components": {
+    "isRequired": "ist erforderlich",
+    "isInvalid": "ist ungültig",
+    "form-io-address": {
+      "street": "Straße",
+      "house-number": "Hausnummer",
+      "house-letter": "Hausbuchstabe",
+      "house-number-addition": "Hausnummernzusatz",
+      "postal-code": "Postleitzahl",
+      "city": "Stadt"
+    }
   }
 }

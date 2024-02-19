@@ -31,6 +31,7 @@ import {
   MenuModule,
   registerDocumentenApiFormioUploadComponent,
   registerFormioCurrentUserComponent,
+  registerFormioAddressComponent,
   registerFormioFileSelectorComponent,
   registerFormioUploadComponent,
   UploaderModule,
@@ -266,5 +267,6 @@ export class AppModule {
     registerFormioUploadComponent(injector);
     registerFormioFileSelectorComponent(injector);
     registerDocumentenApiFormioUploadComponent(injector);
+    registerFormioAddressComponent(injector);
   }
 }

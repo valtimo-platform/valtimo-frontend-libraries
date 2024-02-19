@@ -1308,5 +1308,17 @@
         "title": "Geen rollen toegevoegd"
       }
     }
+  },
+  "custom-form-io-components": {
+    "isRequired": "is verplicht",
+    "isInvalid": "is ongeldig",
+    "form-io-address": {
+      "street": "Straat",
+      "house-number": "Huisnummer",
+      "house-letter": "Huisletter",
+      "house-number-addition": "Huisnummertoevoeging",
+      "postal-code": "Postcode",
+      "city": "Plaats"
+    }
   }
 }

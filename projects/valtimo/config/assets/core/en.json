@@ -1306,5 +1306,17 @@
         "title": "No roles added"
       }
     }
+  },
+  "custom-form-io-components": {
+    "isRequired": "is required",
+    "isInvalid": "is invalid",
+    "form-io-address": {
+      "street": "Street",
+      "house-number": "House Number",
+      "house-letter": "House Letter",
+      "house-number-addition": "House Number Addition",
+      "postal-code": "Postal Code",
+      "city": "City"
+    }
   }
 }

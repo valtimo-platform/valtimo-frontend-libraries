@@ -32,6 +32,12 @@ import {DocumentenApiUploaderComponent} from './documenten-api-uploader/document
 import {DocumentenApiMetadataModalModule} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.module';
 import {FormIoCurrentUserComponent} from './form-io-current-user/form-io-current-user.component';
 import {ConfigService} from '@valtimo/config';
+import {FormIoAddressComponent} from './form-io-address/form-io-address.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  InputModule as CarbonInputModule
+} from 'carbon-components-angular';
+import {NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
   imports: [
@@ -44,6 +50,10 @@ import {ConfigService} from '@valtimo/config';
     ResourceModule,
     RouterModule,
     DocumentenApiMetadataModalModule,
+    ReactiveFormsModule,
+    CarbonInputModule,
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
   declarations: [
     FormioComponent,
@@ -51,6 +61,7 @@ import {ConfigService} from '@valtimo/config';
     FormIoUploaderComponent,
     DocumentenApiUploaderComponent,
     FormIoCurrentUserComponent,
+    FormIoAddressComponent
   ],
   exports: [
     FormioComponent,
@@ -58,6 +69,7 @@ import {ConfigService} from '@valtimo/config';
     FormIoUploaderComponent,
     DocumentenApiUploaderComponent,
     FormIoCurrentUserComponent,
+    FormIoAddressComponent
   ],
   providers: [
     FormIoDomService,
@@ -66,6 +78,7 @@ import {ConfigService} from '@valtimo/config';
       deps: [ConfigService],
       useFactory: (configService: ConfigService) => getFormioAppConfig(configService.config),
     },
+    provideNgxMask()
   ],
 })
 export class FormIoModule {}

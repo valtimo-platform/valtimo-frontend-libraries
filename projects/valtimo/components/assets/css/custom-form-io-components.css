@@ -1,0 +1,7 @@
+label.field-required:has(+ div .custom-form-io-component):after {
+  display: none;
+}
+
+div:has(.custom-form-io-component) + div.formio-errors {
+  display: none !important;
+}
