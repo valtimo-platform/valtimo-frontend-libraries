@@ -195,8 +195,6 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
 
   public ngOnInit(): void {
     this.openAutoKeySubscription();
-
-    console.log(this.COLORS);
   }
 
   public ngOnDestroy(): void {
@@ -281,7 +279,6 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
       color: prefillStatus.color,
     });
     this._selectedColor$.next(prefillStatus.color);
-    console.log(this.statusFormGroup.value);
     this.statusFormGroup.markAsPristine();
     this.resetEditingKey();
   }
