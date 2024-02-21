@@ -130,7 +130,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
     tap(() => (this.loadingStatuses = false))
   );
   public readonly selectedStatuses$ = this.statusService.selectedCaseStatuses$;
-  public readonly showStatusSelector$ = this.statusService.showStatusSelector$;
 
   public readonly documentDefinitionName$ = this.listService.documentDefinitionName$;
 
@@ -179,6 +178,12 @@ export class DossierListComponent implements OnInit, OnDestroy {
         });
       })
     );
+  public readonly showStatusSelector$: Observable<boolean> = combineLatest([
+    this.statusService.showStatusSelector$,
+    this._hasApiColumnConfig$,
+  ]).pipe(
+    map(([showStatusSelector, hasApiColumnConfig]) => showStatusSelector && !hasApiColumnConfig)
+  );
 
   private readonly _statusField: ListField = {
     label: 'document.status',
@@ -212,7 +217,9 @@ export class DossierListComponent implements OnInit, OnDestroy {
         canHaveAssignee
       );
 
-      return statuses.some((status: InternalCaseStatus) => status.key !== CASES_WITHOUT_STATUS_KEY)
+      return statuses.some(
+        (status: InternalCaseStatus) => status.key !== CASES_WITHOUT_STATUS_KEY
+      ) && !hasApiConfig
         ? [...fieldsToReturn, this._statusField]
         : fieldsToReturn;
     }),
