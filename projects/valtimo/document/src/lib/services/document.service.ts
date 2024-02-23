@@ -152,7 +152,7 @@ export class DocumentService {
       ...(searchOperator && {searchOperator}),
       ...(assigneeFilter && {assigneeFilter}),
       ...(otherFilters && {otherFilters}),
-      ...(statusFilter && { statusFilter}),
+      ...(statusFilter && {statusFilter}),
     };
 
     return this.http
