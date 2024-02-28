@@ -47,6 +47,7 @@ import {
   TableModule,
   TimelineModule,
   TitleModule,
+  TooltipModule,
   UploaderModule,
   VModalModule,
   WidgetModule,
@@ -64,11 +65,13 @@ import {
   FileUploaderModule,
   IconModule,
   LoadingModule,
-  ModalModule as CarbonModalModule, PaginationModule,
+  ModalModule as CarbonModalModule,
+  PaginationModule,
   SelectModule as CarbonSelectModule,
   SkeletonModule,
   TabsModule,
   TagModule,
+  TooltipModule as CarbonTooltipModule,
 } from 'carbon-components-angular';
 
 import { DossierAssignUserComponent } from './components/dossier-assign-user/dossier-assign-user.component';
@@ -196,6 +199,8 @@ export type TabsFactory = () => Map<string, object>;
     DialogModule,
     FileUploaderModule,
     PaginationModule,
+    TooltipModule,
+    CarbonTooltipModule,
   ],
   exports: [DossierListComponent, DossierDetailComponent],
 })

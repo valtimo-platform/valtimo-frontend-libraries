@@ -14,86 +14,45 @@
   ~ limitations under the License.
   -->
 
-<div style="margin: -1.923rem -1.923rem 0;">
+<div class="carbon-document-table-wrapper">
   <valtimo-carbon-table
-          hideTableHeader
           [data]="relatedFiles$ | async"
           [fields]="fields"
           [loading]="loading$ | async"
           [tableConfig]="tableConfig"
+          (rowClick)="onRowClick($event)"
+          hideTableHeader
   >
     <div carbonToolbarContent>
       <ng-container *ngTemplateOutlet="dossierListActions"></ng-container>
     </div>
+
+    <ng-container *ngIf="(showZaakLinkWarning && isAdmin); then zaakLinkWarning; else noFiles"></ng-container>
   </valtimo-carbon-table>
 </div>
 
-<br/><br/>
+<ng-template #zaakLinkWarning>
+  <valtimo-no-results
+          [action]="navigateToCaseAdminButton"
+          description="{{ 'dossier.documenten.noZaakFound' | translate }}"
+          title="{{ 'dossier.documenten.noZaakFoundTitle' | translate }}"
+  ></valtimo-no-results>
+</ng-template>
 
-<ng-container *ngIf="{loading: loading$ | async} as obs">
-
-  <div *ngIf="uploadProcessLinkedSet && !uploadProcessLinked">
-    <div
-      *ngIf="isAdmin"
-      [translate]="'dossier.documenten.noProcessLinked.adminRole'"
-      class="bg-warning text-black mb-2 p-3 text-center"
-    ></div>
-    <div
-      *ngIf="!isAdmin"
-      [translate]="'dossier.documenten.noProcessLinked.regularUser'"
-      class="bg-warning text-black mb-2 p-3 text-center"
-    ></div>
-  </div>
-  <div *ngIf="showZaakLinkWarning">
-    <div
-      [translate]="'dossier.documenten.noZaakFound'"
-      class="bg-warning text-black mb-2 p-3 text-center"
-    ></div>
-  </div>
-
-  <valtimo-dropzone
-    *ngIf="!obs.loading"
-    (fileSelected)="fileSelected($event)"
-    [acceptedFiles]="acceptedFiles"
-    [camera]="false"
-    [disabled]="
-      !uploadProcessLinkedSet || !uploadProcessLinked || obs.loading || showZaakLinkWarning
-    "
-    [hideFilePreview]="true"
-    [hideTitle]="true"
-    [maxFileSize]="maxFileSize"
-    [maxFiles]="1"
-    [showMaxFileSize]="true"
-    [uploading]="uploading$ | async"
-  ></valtimo-dropzone>
-
-  <valtimo-widget>
-    <valtimo-list
-      [ngClass]="{hidden: obs.loading}"
-      [fields]="fields"
-      [header]="true"
-      [isSearchable]="true"
-      [items]="relatedFiles$ | async"
-      [viewMode]="true"
-      [lastColumnTemplate]="downloadButton"
-    >
-      <div header>
-        <h3 class="list-header-title">{{ 'Related documents' | translate }}</h3>
-        <h5 class="list-header-description">
-          {{ 'Overview of all documents in this dossier' | translate }}
-        </h5>
-      </div>
-    </valtimo-list>
-    <ng-container *ngTemplateOutlet="loading; context: {loading: obs.loading}"></ng-container>
-  </valtimo-widget>
-</ng-container>
+<ng-template #noFiles>
+  <valtimo-no-results
+          [action]="uploadButton"
+          description="{{ 'dossier.documenten.noFiles' | translate }}"
+          title="{{ 'dossier.documenten.noFilesTitle' | translate }}"
+  ></valtimo-no-results>
+</ng-template>
 
 <valtimo-documenten-api-metadata-modal
-  (metadata)="metadataSet($event)"
   [disabled$]="modalDisabled$"
   [file$]="fileToBeUploaded$"
   [hide$]="hideModal$"
   [show$]="showModal$"
+  (metadata)="metadataSet($event)"
 ></valtimo-documenten-api-metadata-modal>
 
 <ng-template #loading let-loading="loading">
@@ -122,63 +81,83 @@
 
 <ng-template #dossierListActions>
   <div style="display: flex">
-    <button
-            cdsButton="ghost"
-            [cdsOverflowMenu]="filterMenuRef"
-            [customPane]="true"
-            [flip]="true"
-            placement="bottom"
-            [offset]="{ x: 0, y: 48 }"
-    >
-      <svg cdsIcon="filter" size="16"></svg>
-    </button>
-    <ng-template #filterMenuRef>
-      <div style="padding: 0; background-color: white;">
-        <div style="padding: 16px; width: 300px; height: 200px;">
-          Filter menu
-        </div>
-      </div>
-    </ng-template>
-
-    <button
-            cdsButton="ghost"
-            [cdsOverflowMenu]="tagsMenuRef"
-            [customPane]="true"
-            [flip]="true"
-            placement="bottom"
-            [offset]="{ x: 0, y: 48 }"
-    >
-      <svg cdsIcon="tag--group" size="16"></svg>
-    </button>
-    <ng-template #tagsMenuRef>
-      <div style="padding: 0; background-color: white;">
-        <div style="padding: 16px; width: 300px; height: 200px;">
-          Trefwoorden menu
-        </div>
-      </div>
-    </ng-template>
-
-    <cds-file-uploader style="margin-top: -29px;"
-            (filesChange)="fileSelected($event)"
-            [buttonText]="'Upload'"
-            [buttonType]="'primary'"
-            [accept]="['pdf', 'jpg']"
-            [size]="'lg'"
-            [fileItemSize]="'lg'"
-            [multiple]="false"
-            [disabled]="false"
-            [drop]="false"
-    >
-      <svg class="cds--btn__icon" cdsIcon="upload" size="16"></svg>
-    </cds-file-uploader>
-
+<!--    TODO: implement filtering when Documenten API supports this-->
 <!--    <button-->
-<!--            cdsButton="primary"-->
-<!--            [disabled]="false"-->
+<!--            cdsButton="ghost"-->
+<!--            [cdsOverflowMenu]="filterMenuRef"-->
+<!--            [customPane]="true"-->
+<!--            [flip]="true"-->
+<!--            placement="bottom"-->
+<!--            [offset]="{ x: 0, y: 48 }"-->
 <!--    >-->
-<!--      {{ 'Upload' | translate }}-->
-
-<!--      <svg class="cds&#45;&#45;btn__icon" cdsIcon="upload" size="16"></svg>-->
+<!--      <svg cdsIcon="filter" size="16"></svg>-->
 <!--    </button>-->
+<!--    <ng-template #filterMenuRef>-->
+<!--      <div style="padding: 0; background-color: white;">-->
+<!--        <div style="padding: 16px; width: 300px; height: 200px;">-->
+<!--          Filter menu-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </ng-template>-->
+
+<!--    TODO: implement tags when Documenten API supports this-->
+<!--    <button-->
+<!--            cdsButton="ghost"-->
+<!--            [cdsOverflowMenu]="tagsMenuRef"-->
+<!--            [customPane]="true"-->
+<!--            [flip]="true"-->
+<!--            placement="bottom"-->
+<!--            [offset]="{ x: 0, y: 48 }"-->
+<!--    >-->
+<!--      <svg cdsIcon="tag&#45;&#45;group" size="16"></svg>-->
+<!--    </button>-->
+<!--    <ng-template #tagsMenuRef>-->
+<!--      <div style="padding: 0; background-color: white;">-->
+<!--        <div style="padding: 16px; width: 300px; height: 200px;">-->
+<!--          Trefwoorden menu-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </ng-template>-->
+
+    <input
+           [accept]="acceptedFiles"
+           (change)="onFileSelected($event)"
+           hidden
+           type="file"
+           #fileInput
+    />
+    <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #uploadButton>
+  <button
+          [disabled]="uploadProcessLinkedSet && !uploadProcessLinked || showZaakLinkWarning"
+          [vTooltip]="getUploadButtonTooltip() | translate"
+          (click)="onUploadButtonClick()"
+          cdsButton="primary"
+  >
+    {{ 'Upload' | translate }}
+    <svg class="cds--btn__icon" cdsIcon="upload" size="16"></svg>
+  </button>
+</ng-template>
+
+<ng-template #navigateToCaseAdminButton>
+  <button
+          (click)="onNavigateToCaseAdminClick()"
+          cdsButton="primary"
+  >
+    {{ 'dossier.documenten.navigateToCaseAdmin' | translate }}
+    <svg class="cds--btn__icon" cdsIcon="settings" size="16"></svg>
+  </button>
+</ng-template>
+
+<ng-template #tooltipTemplate>
+  <p>Your tooltip text here.</p>
+</ng-template>
+
+<ng-template #sizeTemplate let-data="data">
+  <div style="text-align: right;">
+    {{ bytesToMegabytes(data.item.sizeInBytes) }}
   </div>
 </ng-template>
