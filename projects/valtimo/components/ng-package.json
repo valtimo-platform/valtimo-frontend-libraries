@@ -18,7 +18,6 @@
     "@formio/angular",
     "ngx-spinner",
     "ng-multiselect-dropdown",
-    "formiojs",
     "@carbon/icons",
     "@carbon/grid",
     "@carbon/styles",
