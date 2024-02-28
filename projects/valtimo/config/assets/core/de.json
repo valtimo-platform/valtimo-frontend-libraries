@@ -34,11 +34,26 @@
       "confirm": "Seite Tab"
     },
     "noResults": {
-      "description": "Klicken Sie auf <strong>Neuen Case erstellen</strong>, um einen neuen Case zu starten.",
-      "title": "Keine Case gefunden"
+      "ALL": {
+        "description": "Hier gibt es nichts zu tun.",
+        "title": "Keine Cases gefunden"
+      },
+      "MINE": {
+        "description": "Kurze Pause.",
+        "title": "Es sind Ihnen keine Cases zugewiesen"
+      },
+      "OPEN": {
+        "description": "Kommen Sie später wieder.",
+        "title": "Alle cases wurden zugewiesen"
+      },
+      "search": {
+        "description": "Es sind keine Dateien vorhanden, die Ihren Suchkriterien entsprechen.",
+        "title": "Keine Cases gefunden"
+      }
     },
     "pagination": {
       "itemsPerPage": "Cases pro Seite",
+      "totalItem": "{{start}}-{{end}} von {{total}} Case",
       "totalItems": "{{start}}-{{end}} von {{total}} Cases"
     },
     "select": {
@@ -135,7 +150,8 @@
     "formio": {
       "noFormSpecified": "Für diese Registerkarte wurde keine Formulardefinition angegeben.",
       "formNotFound": "Die Formulardefinition '{{formDefinitionName}}' konnte nicht gefunden werden."
-    }
+    },
+    "rowLocked": "Kein Zugriff zu dieser Fall!"
   },
   "document": {
     "title": {
@@ -221,7 +237,13 @@
     "taskCreated": "Erstellt"
   },
   "progress": {
-    "noProcessDocumentInstances": "Es wurde noch kein Prozess gestartet"
+    "noProcessDocumentInstances": "Es wurde noch kein Prozess gestartet",
+    "process": "Prozess",
+    "version": "Version",
+    "startedBy": "Gestartet von",
+    "startedOn": "Gestartet am",
+    "system": "System",
+    "of": "von"
   },
   "dashboard": {
     "openTasks": {
@@ -268,6 +290,7 @@
     "task": {
       "title": "Aufgabe"
     },
+    "noDashboards": "Es sind keine Dashboards konfiguriert.",
     "noWidgets": "Für dieses Dashboard wurden keine Widgets konfiguriert."
   },
   "dashboardManagement": {
@@ -414,10 +437,29 @@
     "readOnly": "Schreibgeschützt"
   },
   "dossierManagement": {
+    "version": "Version: ",
+    "preparingDownload": "Download wird vorbereitet",
+    "more": "Mehr",
+    "export": "{{value}} exportieren",
+    "exportErrorTitle": "Fehler",
+    "exportErrorMessage": "Etwas ist schief gelaufen",
+    "exportSuccessTitle": "Download beginnt in Kürze",
     "readonly": "Schreibgeschützt",
     "connectedProcesses": "Verknüpfte Prozesse",
     "connectProcess": "Prozess verknüpfen",
+    "processLink": "Prozess verknüpfen",
     "selectProcessDef": "Prozessdefinition auswählen",
+    "unlinkProcess": "Verknüpfung aufheben",
+    "processLinkNotification": {
+      "linkSuccess": "Erfolgreich verknüpfter Prozess",
+      "linkFailure": "Prozess konnte nicht verknüpft werden",
+      "unlinkSuccess": "Verknüpfung des Prozesses erfolgreich aufgehoben",
+      "unlinkFailure": "Die Verknüpfung des Prozesses konnte nicht aufgehoben werden"
+    },
+    "noResults": {
+      "title": "Es gibt keine Cases-Definitionen",
+      "description": "Fügen Sie eine Case-Definition hinzu"
+    },
     "linkProcess": {
       "title": "Verknüpfen Sie den Upload-Prozess mit dem Fall",
       "description": "Wählen Sie einen Prozess, der das Hochladen von Dateien handhaben soll."
@@ -431,10 +473,12 @@
       "checkboxDescription": "Aufgaben automatisch zu Fallbearbeiter zuweisen"
     },
     "tabs": {
-      "cases": "Falldetails",
+      "cases": "Konfiguration",
+      "processes": "Prozesse",
       "searchFields": "Suchfelder",
       "listColumns": "Aufführen",
-      "tabManagement": "Tabs"
+      "tabManagement": "Tabs",
+      "document": "Dokument"
     },
     "tabManagement": {
       "columns": {
@@ -478,6 +522,48 @@
       "custom": "Brauch",
       "formio": "FormIO",
       "standard": "Standard"
+    },
+    "importDefinition": {
+      "title": "Casedefinition importieren",
+      "overwriteWarning": "Wenn Ihre Casedefinition Konfigurationen, Modelle und/oder Definitionen mit demselben Namen oder derselben Kennung enthält wie bereits auf Ihrem System, werden diese überschrieben.",
+      "startUpload": "Upload starten",
+      "checkbox": {
+        "message": "Ich verstehe, dass Konfigurationen überschrieben werden können",
+        "error": "Das Feld ist obligatorisch"
+      },
+      "info": {
+        "title": "Aufmerksamkeit",
+        "message": "Bitte stellen Sie vor dem Import sicher, dass die Plugin-Konfigurationen, auf die in den Prozesslinks verwiesen wird, vorhanden sind."
+      },
+      "upload": {
+        "title": "Datei hochladen",
+        "description": "Die maximale Dateigröße beträgt 500kb. Unterstützte Dateitypen sind ZIP und JSON.",
+        "buttonText": "Datei aussuchen"
+      },
+      "progressBar": {
+        "active": "Das kann eine Weile dauern",
+        "error": "Casedefinition nicht importiert werden. Aufgrund eines Fehlers unsererseits konnte nichts importiert werden. Bitte versuchen Sie es später erneut. Wenn das Problem weiterhin auftritt, wenden Sie sich an den Support.",
+        "finished": "Casedefinition importiert",
+        "label": "Importing Casedefinition"
+      },
+      "invalidJsonError": {
+        "text": "Bitte stellen Sie sicher, dass es einen gültigen JSON-Wert enthält.",
+        "title": "Die Datei enthält einen Fehler."
+      },
+      "steps": {
+        "accessControl": {
+          "message": "Vergessen Sie nicht, die Rechte in der Access Control festzulegen. Ohne die entsprechenden Rechte ist Ihre neue Falldefinition nicht zugänglich.",
+          "titlle": "Access control"
+        },
+        "dashboard": {
+          "message": "Wenn Sie möchten, dass Widgets auf Ihrem Dashboard angezeigt werden, müssen Sie diese manuell konfigurieren. Tun Sie dies über 'dashboard configuration'",
+          "title": "Dashboard"
+        },
+        "plugins": {
+          "message": "Dieser Prozess kann Plugins verwenden. Stellen Sie sicher, dass Sie sie richtig konfigurieren.",
+          "title": "Plugin Konfigurationen"
+        }
+      }
     }
   },
   "task-list": {
@@ -491,17 +577,25 @@
     },
     "mine": {
       "title": "Meine Aufgaben",
-      "description": "Überblick alle zugeordneten Aufgaben"
+      "description": "Überblick alle zugeordneten Aufgaben",
+      "noResultsDescription": "Kurze Pause.",
+      "noResultsTitle": "Es sind Ihnen keine Aufgaben zugewiesen"
     },
     "open": {
       "title": "Nicht zugeordnete Aufgaben",
-      "description": "Überblick alle nicht zugeordneten Aufgaben"
+      "description": "Überblick alle nicht zugeordneten Aufgaben",
+      "noResultsDescription": "Kommen Sie später wieder.",
+      "noResultsTitle": "Alle Aufgaben wurden zugewiesen"
     },
     "all": {
       "title": "Alle Aufgaben",
-      "description": "Überblick alle Aufgaben"
+      "description": "Überblick alle Aufgaben",
+      "noResultsDescription": "Hier gibt es nichts zu tun.",
+      "noResultsTitle": "Keine Aufgaben gefunden"
     },
-    "goToCase": "Gehen Sie zum Fall"
+    "goToCase": "Gehen Sie zum Fall",
+    "caseLocked": "Kein Zugriff zu dieser Fall!",
+    "rowLocked": "Kein Zugriff zu dieser Aufgabe!"
   },
   "Task": "Aufgabe",
   "Tasks": "Aufgaben",
@@ -535,13 +629,13 @@
   "Process migration warning": "<b>Warnung:</b> Wenn ein Prozess migriert wird, werden die User-Gruppen der laufenden Instanzen nicht geupdatet. Dies kann bei Bedarf in der Datenbank erfolgen. (Zum Beispiel, wenn eine spezifische User-Aufgabe für ROLE_USER offen ist und die User-Gruppe für die User-Aufgabe wird im Prozess auf ROLE_ADMIN angepasst, wird diese Aufgabe nachwievor für ROLE_USER verfügbar sein. Nur neu gestartete Prozesse werden die neue User-Gruppe berücksichtigen.)",
   "Dossier": "Case",
   "Dossiers": "Cases",
-  "document definition": "Case-Definition",
-  "Upload document definition": "Upload Case-Definition",
-  "Remove document definition": "Case-Definition löschen",
-  "remove-document-definition-confirmation": "Warnung: <br/><br/> Diese Case-Definition und alle verbundenen Cases werden gelöscht. Für verknüpfte Prozesse wird die Verknüpfung aufgehoben.<br/> Das Entfernen einer Case-Definition kann nicht rückgängig gemacht werden.",
+  "document definition": "Dokumentdefinition",
+  "Upload document definition": "Upload Dokumentdefinition",
+  "Remove document definition": "Dokumentdefinition löschen",
+  "remove-document-definition-confirmation": "Warnung: <br/><br/> Diese Dokumentdefinition und alle verbundenen Cases werden gelöscht. Für verknüpfte Prozesse wird die Verknüpfung aufgehoben.<br/> Das Entfernen einer Dokumentdefinition kann nicht rückgängig gemacht werden.",
   "remove-document-definition-confirmation-button": "Löschen",
-  "remove-document-definition-success": "Case-Definition gelöscht",
-  "Download document definition": "Download Case-Definition",
+  "remove-document-definition-success": "Dokumentdefinition gelöscht",
+  "Download document definition": "Download Dokumentdefinition",
   "Select a document definition": "Datei für Upload auswählen",
   "Overview of all Dossiers": "Überblick alle Cases",
   "Start Dossier": "Neuen Case erstellen",
@@ -552,6 +646,7 @@
   "Other": "Andere",
   "Download": "Download",
   "Upload": "Upload",
+  "Import": "Import",
   "Select process definition for document definition": "Prozess-Definition für Dokument-Definition auswählen",
   "Select options for the selected process": "Optionen für gewählten Prozess auswählen",
   "Save": "Speichern",
@@ -567,6 +662,7 @@
     "readOnlySystemProcessWarningMessage": "Dies ist ein Systemprozess, daher ist er als schreibgeschützt gekennzeichnet. Dieser Prozess kann verwendet, aber nicht geändert werden."
   },
   "processCaseConnection": {
+    "noProcesses": "Mit dieser Falldefinition sind noch keine Prozesse verbunden.",
     "processCreatesCase": "Prozess erstellt neuen Case",
     "processCreatesCaseTooltip": "Wenn diese Option ausgewählt ist, wird eine neue Case erstellt, wenn dieser Prozess gestartet wird. Dazu muss ein Startformular mit dem ersten Prozessschritt verknüpft werden.",
     "startableWithinCase": "Kann im bestehenden Case gestartet werden",
@@ -606,7 +702,7 @@
     "items": "Elemente",
     "of": "von",
     "visible": "sichtbar",
-    "next": "Nächste >",
+    "nextArrow": "Nächste >",
     "previous": "< Vorherige",
     "addRow": "Zeile hinzufügen",
     "deleteRow": "Zeile löschen",
@@ -622,6 +718,9 @@
     "delete": "Löschen",
     "deleteConfirmation": "Sind Sie sicher, dass Sie löschen möchten?",
     "cancel": "Absagen",
+    "close": "Schließen",
+    "next": "Nächste",
+    "skip": "Springen",
     "confirm": "Bestätigen",
     "collapse": "Kollaps",
     "expand": "Expandieren",
@@ -631,21 +730,24 @@
     "save": "Speichern",
     "More": "Mehr",
     "export": "Export",
-    "table": {
+    "list": {
       "itemsPerPage": "Objekte pro Seite",
-      "multipleSelect": "{{count}} Elemente ausgewählt",
+      "multipleSelect": "{{count}} Objekte ausgewählt",
       "ofLastPage": "von {{last}} Seite",
       "ofLastPages": "von {{last}} Seiten",
-      "singleSelect": "1 Element ausgewählt",
-      "totalItems": "{{start}}-{{end}} von {{total}} Objekte"
+      "singleSelect": "1 Objekt ausgewählt",
+      "totalItems": "{{start}}-{{end}} von {{total}} Objekte",
+      "totalItem": "{{start}}-{{end}} von {{total}} Objekt"
     },
     "pendingChanges": {
       "title": "Seite verlassen",
-      "content": "Du hast nicht gespeicherte Änderungen. Bist du dir sicher, dass du weitermachen willst?"
+      "content": "Sie verlassen die Seite. Alle nicht gespeicherten Änderungen gehen verloren. Sind Sie sicher, dass Sie fortfahren möchten?"
     },
     "required": "erforderlich",
     "filter": "Filter...",
-    "back": "Zurück"
+    "back": "Zurück",
+    "warning": "Warnung",
+    "finish": "Beenden"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",
@@ -690,7 +792,9 @@
     "files": "Dateien",
     "firstName": "Vorname",
     "assigneeFullName": "Eigentümer",
-    "accepted": "Akzeptiert"
+    "accepted": "Akzeptiert",
+    "title": "Titel",
+    "readOnly": "Schreibgeschützt"
   },
   "list": {
     "currentPage": "Seite {{current}} von {{total}}",
@@ -915,7 +1019,7 @@
     },
     "plugins": {
       "title": "Plugins",
-      "description": "Auf dieser Seite können Sie Konfigurationen von Plugins erstellen, ändern und löschen, die Ihrer Anwendung hinzugefügt wurden."
+      "noResults": "Es sind keine Plugins konfiguriert"
     },
     "customercases": {
       "title": "Cases",
@@ -930,7 +1034,9 @@
     "complete": "Plugin-Aktion verbinden"
   },
   "plugin": {
-    "noConfigurationComponent": "Es ist keine Konfigurationskomponente verfügbar."
+    "noConfigurationComponent": "Es ist keine Konfigurationskomponente verfügbar.",
+    "configurationId": "Konfigurations ID",
+    "configurationIdTooltip": "Unter dieser ID wird das Plugin gespeichert. Die ID muss im Format einer UUID vorliegen"
   },
   "pluginManagement": {
     "tableItemsText": "Plugin-Konfigurationen",
@@ -975,7 +1081,7 @@
     "collapseButtonText": "Ausblenden",
     "searchButtonText": "Suche",
     "clearButtonText": "Löschen",
-    "downloadButtonText": "Suchfeldkonfiguration herunterladen",
+    "downloadButtonText": "Konfiguration herunterladen",
     "to": "bis",
     "text": "Text",
     "number": "Nummer",

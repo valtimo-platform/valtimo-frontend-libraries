@@ -14,43 +14,84 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {DocumentService} from '@valtimo/document';
-import {ProcessDocumentInstance} from '@valtimo/document';
+import {Component} from '@angular/core';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {DocumentService, LoadedValue, ProcessDocumentInstance} from '@valtimo/document';
+import {BehaviorSubject, combineLatest, map, Observable, startWith, switchMap, tap} from 'rxjs';
+import {ListItem} from 'carbon-components-angular/dropdown';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-progress',
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.css'],
 })
-export class DossierDetailTabProgressComponent implements OnInit {
-  public processDocumentInstances: ProcessDocumentInstance[];
-  public selectedProcessInstanceId: string;
-  public readonly documentId: string;
+export class DossierDetailTabProgressComponent {
+  private readonly processDocumentInstances$: Observable<Array<ProcessDocumentInstance>> =
+    this.route.paramMap.pipe(
+      switchMap((params: ParamMap) =>
+        this.documentService.findProcessDocumentInstances(params.get('documentId'))
+      ),
+      map(processDocumentInstances =>
+        processDocumentInstances.map(processDocumentInstance => ({
+          ...processDocumentInstance,
+          startedOn: new Date(processDocumentInstance.startedOn),
+        }))
+      ),
+      map(processDocumentInstances =>
+        processDocumentInstances.sort((a, b) =>
+          a.isActive === b.isActive
+            ? b.startedOn.getTime() - a.startedOn.getTime()
+            : a.isActive
+            ? -1
+            : 1
+        )
+      ),
+      tap(processDocumentInstances => {
+        if (processDocumentInstances.length > 0) {
+          this.selectedProcessInstanceId$.next(processDocumentInstances[0].id.processInstanceId);
+        }
+      })
+    );
+
+  public readonly processInstanceItems$: Observable<LoadedValue<Array<ListItem>>> =
+    this.processDocumentInstances$.pipe(
+      map(processDocumentInstances =>
+        processDocumentInstances.map((processDocumentInstance, index) => ({
+          processInstanceId: processDocumentInstance.id.processInstanceId,
+          content: processDocumentInstance.processName || '-',
+          selected: index === 0,
+        }))
+      ),
+      map(processInstanceItems => ({
+        value: processInstanceItems,
+        isLoading: false,
+      })),
+      startWith({isLoading: true})
+    );
+
+  public readonly selectedProcessInstanceId$ = new BehaviorSubject<string | null>(null);
+  public readonly selectedProcessInstance$: Observable<LoadedValue<ProcessDocumentInstance>> =
+    combineLatest([this.processDocumentInstances$, this.selectedProcessInstanceId$]).pipe(
+      map(([processDocumentInstances, selectedProcessInstanceId]) =>
+        processDocumentInstances.find(
+          instance => instance.id.processInstanceId === selectedProcessInstanceId
+        )
+      ),
+      map(processInstanceItems => ({
+        value: processInstanceItems,
+        isLoading: false,
+      })),
+      startWith({isLoading: true})
+    );
 
   constructor(
-    private route: ActivatedRoute,
-    private documentService: DocumentService
-  ) {
-    const snapshot = this.route.snapshot.paramMap;
-    this.documentId = snapshot.get('documentId') || '';
-  }
-
-  ngOnInit() {
-    this.documentService
-      .findProcessDocumentInstances(this.documentId)
-      .subscribe(processDocumentInstances => {
-        this.processDocumentInstances = processDocumentInstances.sort((a, b) =>
-          a.isActive === b.isActive ? 0 : a.isActive ? -1 : 1
-        );
-        if (processDocumentInstances.length > 0) {
-          this.selectedProcessInstanceId = processDocumentInstances[0].id.processInstanceId;
-        }
-      });
-  }
+    private readonly route: ActivatedRoute,
+    private readonly documentService: DocumentService
+  ) {}
 
   public loadProcessInstance(processInstanceId: string) {
-    this.selectedProcessInstanceId = processInstanceId;
+    if (!!processInstanceId) {
+      this.selectedProcessInstanceId$.next(processInstanceId);
+    }
   }
 }

@@ -19,20 +19,23 @@ import {ActivatedRoute} from '@angular/router';
 import {DocumentService} from '@valtimo/document';
 import {filter, map, Observable, Subscription, switchMap} from 'rxjs';
 import {ConfigService} from '@valtimo/config';
-import {TabService} from '../../services';
+import {DossierDetailService, TabService} from '../../services';
 import {TabEnum} from '../../models';
 import {PageTitleService} from '@valtimo/components';
-import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
   templateUrl: './dossier-management-detail-container.component.html',
-  styleUrls: ['./dossier-management-detail-container.component.css'],
+  styleUrls: ['./dossier-management-detail-container.component.scss'],
+  providers: [DossierDetailService],
 })
 export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
   public currentTab: TabEnum;
   public caseListColumn!: boolean;
   public tabManagementEnabled!: boolean;
+
+  public readonly documentDefinitionTitle$ = this.pageTitleService.customPageTitle$;
+  public readonly CARBON_THEME = 'g10';
 
   private tabSubscription: Subscription;
 
@@ -45,11 +48,8 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
 
   readonly documentDefinition$ = this.documentDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
-      this.documentService.getDocumentDefinition(documentDefinitionName)
-    ),
-    tap(documentDefinition => {
-      this.pageTitleService.setCustomPageTitle(documentDefinition.schema.title);
-    })
+      this.documentService.getDocumentDefinitionForManagement(documentDefinitionName)
+    )
   );
 
   constructor(
@@ -60,8 +60,8 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
     private readonly pageTitleService: PageTitleService
   ) {
     const featureToggles = this.configService.config.featureToggles;
-    this.caseListColumn = featureToggles?.caseListColumn;
-    this.tabManagementEnabled = featureToggles?.enableTabManagement;
+    this.caseListColumn = !!featureToggles?.caseListColumn;
+    this.tabManagementEnabled = !!featureToggles?.enableTabManagement;
   }
 
   ngOnInit(): void {
@@ -79,7 +79,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   }
 
   ngOnDestroy(): void {
-    this.tabService.currentTab = TabEnum.CASE;
+    this.tabService.currentTab = TabEnum.DOCUMENT;
     this.tabSubscription?.unsubscribe();
   }
 }

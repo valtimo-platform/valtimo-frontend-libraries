@@ -132,4 +132,49 @@ body {
       cursor: pointer;
     }
   }
+
+  &--modal.is-visible {
+    z-index: 10001 !important;
+  }
+
+  &--inline-notification__text-wrapper {
+    width: 100%;
+  }
+
+  &--overflow-menu-options__btn {
+    min-width: 100%;
+  }
+
+  &--list-box {
+    &__field {
+      z-index: 1;
+    }
+
+    &__wrapper {
+      z-index: 100001 !important;
+    }
+  }
+
+  &--dropdown__wrapper {
+    z-index: 10002 !important;
+  }
+}
+
+.valtimo-carbon-list {
+  .cds--checkbox-label,
+  .cds--pagination__text {
+    margin-bottom: 0 !important;
+  }
+
+  &__tabs cds-tab {
+    display: none !important;
+  }
+
+  &__actions {
+    width: 1px !important;
+  }
+}
+
+.hide-after::after {
+  display: none;
 }

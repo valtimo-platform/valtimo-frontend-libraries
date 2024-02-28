@@ -13,43 +13,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {
-  DocumentService,
-  ProcessDocumentDefinitionRequest,
-  ProcessDocumentDefinition,
-  DocumentDefinition,
-} from '@valtimo/document';
-import {ProcessService, ProcessDefinition} from '@valtimo/process';
-import {ToastrService} from 'ngx-toastr';
+import {TranslateService} from '@ngx-translate/core';
 import {ModalComponent} from '@valtimo/components';
+import {
+  DocumentDefinition,
+  DocumentService,
+  ProcessDocumentDefinition,
+  ProcessDocumentDefinitionRequest,
+} from '@valtimo/document';
+import {ProcessDefinition, ProcessService} from '@valtimo/process';
+import {NotificationService} from 'carbon-components-angular';
+import {switchMap, take} from 'rxjs';
+import {DossierDetailService} from '../../services';
 
 @Component({
   selector: 'valtimo-dossier-management-connect-modal',
   templateUrl: './dossier-management-connect-modal.component.html',
   styleUrls: ['./dossier-management-connect-modal.component.scss'],
+  providers: [NotificationService],
 })
 export class DossierManagementConnectModalComponent implements OnInit {
+  @ViewChild('dossierConnectModal') private readonly _modal: ModalComponent;
+  @Output() public reloadProcessDocumentDefinitions = new EventEmitter<any>();
+
   public documentDefinition: DocumentDefinition | null = null;
   public processDefinitions: ProcessDefinition[];
   public newDocumentProcessDefinition: ProcessDefinition | null = null;
   public newDocumentProcessDefinitionInit = true;
   public newDocumentProcessDefinitionStartableByUser = false;
   public processDocumentDefinitionExists: any = {};
-  @Output() public reloadProcessDocumentDefinitions = new EventEmitter<any>();
-  @ViewChild('dossierConnectModal') modal: ModalComponent;
 
   constructor(
-    private processService: ProcessService,
-    private documentService: DocumentService,
-    private toasterService: ToastrService
+    private readonly documentService: DocumentService,
+    private readonly dossierDetailService: DossierDetailService,
+    private readonly notificationService: NotificationService,
+    private readonly processService: ProcessService,
+    private readonly translateService: TranslateService
   ) {}
 
-  loadProcessDocumentDefinitions() {
+  public loadProcessDocumentDefinitions(): void {
+    if (!this.documentDefinition) {
+      return;
+    }
+    const {name, version} = this.documentDefinition.id;
     this.processDocumentDefinitionExists = {};
     this.documentService
-      .findProcessDocumentDefinitions(this.documentDefinition.id.name)
+      .findProcessDocumentDefinitionsByVersion(name, version)
       .subscribe((processDocumentDefinitions: ProcessDocumentDefinition[]) => {
         processDocumentDefinitions.forEach(
           (processDocumentDefinition: ProcessDocumentDefinition) => {
@@ -61,7 +71,7 @@ export class DossierManagementConnectModalComponent implements OnInit {
       });
   }
 
-  loadProcessDefinitions() {
+  public loadProcessDefinitions(): void {
     this.processService
       .getProcessDefinitions()
       .subscribe((processDefinitions: ProcessDefinition[]) => {
@@ -69,34 +79,62 @@ export class DossierManagementConnectModalComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.loadProcessDefinitions();
   }
 
-  openModal(dossier: DocumentDefinition) {
+  public openModal(dossier: DocumentDefinition): void {
     this.documentDefinition = dossier;
     this.newDocumentProcessDefinition = null;
     this.newDocumentProcessDefinitionInit = true;
     this.newDocumentProcessDefinitionStartableByUser = false;
     this.loadProcessDocumentDefinitions();
-    this.modal.show();
+    this._modal.show();
   }
 
-  submit() {
+  public submit(): void {
+    if (!this.documentDefinition || !this.newDocumentProcessDefinition) {
+      return;
+    }
+
     const request: ProcessDocumentDefinitionRequest = {
       canInitializeDocument: this.newDocumentProcessDefinitionInit,
-      startableByUser: this.newDocumentProcessDefinitionStartableByUser,
       documentDefinitionName: this.documentDefinition.id.name,
+      documentDefinitionVersion: this.documentDefinition.id.version,
       processDefinitionKey: this.newDocumentProcessDefinition.key,
+      startableByUser: this.newDocumentProcessDefinitionStartableByUser,
     };
-    this.documentService.createProcessDocumentDefinition(request).subscribe(
-      () => {
-        this.toasterService.success('Successfully added new process document definition');
-        this.reloadProcessDocumentDefinitions.emit();
-      },
-      err => {
-        this.toasterService.error('Failed to add new process document definition');
-      }
-    );
+
+    this.dossierDetailService.selectedVersionNumber$
+      .pipe(
+        switchMap((documentDefinitionVersion: number) =>
+          this.documentService.createProcessDocumentDefinition({
+            ...request,
+            documentDefinitionVersion,
+          })
+        ),
+        take(1)
+      )
+      .subscribe({
+        next: () => {
+          this.notificationService.showNotification({
+            type: 'success',
+            title: this.translateService.instant(
+              'dossierManagement.processLinkNotification.linkSuccess'
+            ),
+            duration: 5000,
+          });
+          this.reloadProcessDocumentDefinitions.emit();
+        },
+        error: () => {
+          this.notificationService.showNotification({
+            type: 'error',
+            title: this.translateService.instant(
+              'dossierManagement.processLinkNotification.linkFailure'
+            ),
+            duration: 5000,
+          });
+        },
+      });
   }
 }

@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {Component} from '@angular/core';
-import {DocumentService, DocumentDefinition, Page} from '@valtimo/document';
 import {Router} from '@angular/router';
+import {Upload16} from '@carbon/icons';
+import {ColumnConfig, MenuService, Pagination, ViewType} from '@valtimo/components';
+import {DocumentDefinition, DocumentService, Page} from '@valtimo/document';
+import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -28,52 +30,75 @@ moment.locale(localStorage.getItem('langKey') || '');
   styleUrls: ['./dossier-management-list.component.scss'],
 })
 export class DossierManagementListComponent {
-  public dossiers: DocumentDefinition[] = [];
-  public pagination = {
+  public pagination: Pagination = {
     collectionSize: 0,
     page: 1,
     size: 10,
   };
-  public pageParam = 0;
-  public dossierFields = [
-    {key: 'schema.title', label: 'Title'},
-    {key: 'createdOn', label: 'Created On'},
-    {key: 'readOnly', label: 'Read-only'},
+
+  private readonly _refreshData$ = new BehaviorSubject<null>(null);
+  public dossiers$: Observable<DocumentDefinition[]> = this._refreshData$.pipe(
+    switchMap(() =>
+      this.documentService.queryDefinitionsForManagement({
+        page: this.pagination.page - 1,
+        size: this.pagination.size,
+      })
+    ),
+    map((documentDefinitionPage: Page<DocumentDefinition>) => {
+      this.pagination = {
+        ...this.pagination,
+        collectionSize: documentDefinitionPage.totalElements,
+      };
+
+      return documentDefinitionPage.content.map((documentDefinition: DocumentDefinition) => ({
+        ...documentDefinition,
+        createdOn: moment(documentDefinition.createdOn).format('DD MMM YYYY HH:mm'),
+      }));
+    })
+  );
+
+  public dossierFields: ColumnConfig[] = [
+    {key: 'schema.title', label: 'fieldLabels.title', viewType: ViewType.TEXT},
+    {key: 'createdOn', label: 'fieldLabels.createdOn', viewType: ViewType.TEXT},
+    {key: 'readOnly', label: 'fieldLabels.readOnly', viewType: ViewType.BOOLEAN},
   ];
 
-  readonly showModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showModal$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private documentService: DocumentService,
-    private router: Router
-  ) {}
-
-  public paginationClicked(page) {
-    this.pageParam = page - 1;
-    this.getDocumentDefinitions();
+    private readonly documentService: DocumentService,
+    private readonly iconService: IconService,
+    private readonly menuService: MenuService,
+    private readonly router: Router
+  ) {
+    this.iconService.registerAll([Upload16]);
   }
 
-  paginationSet() {
-    this.getDocumentDefinitions();
+  public onCloseModal(definitionUploaded: boolean): void {
+    this.showModal$.next(false);
+
+    if (!definitionUploaded) {
+      return;
+    }
+    this._refreshData$.next(null);
+    this.menuService.reload();
   }
 
-  redirectToDetails(documentDefinition: DocumentDefinition) {
+  public paginationClicked(page: number): void {
+    this.pagination = {...this.pagination, page};
+    this._refreshData$.next(null);
+  }
+
+  public paginationSet(size: number): void {
+    this.pagination = {...this.pagination, size};
+    this._refreshData$.next(null);
+  }
+
+  public redirectToDetails(documentDefinition: DocumentDefinition): void {
     this.router.navigate(['/dossier-management/dossier', documentDefinition.id.name]);
   }
 
-  private getDocumentDefinitions() {
-    this.documentService
-      .queryDefinitionsForManagement({page: this.pageParam, size: this.pagination.size})
-      .subscribe((documentDefinitionPage: Page<DocumentDefinition>) => {
-        this.pagination.collectionSize = documentDefinitionPage.totalElements;
-        this.dossiers = documentDefinitionPage.content;
-        this.dossiers.map((dossier: DocumentDefinition) => {
-          dossier.createdOn = moment(dossier.createdOn).format('DD MMM YYYY HH:mm');
-        });
-      });
-  }
-
-  showModal() {
+  public showModal(): void {
     this.showModal$.next(true);
   }
 }

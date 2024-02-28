@@ -34,11 +34,26 @@
       "confirm": "Wijzig tabblad"
     },
     "noResults": {
-      "description": "Klik op <strong>Creëer Nieuw Dossier</strong> om een nieuw dossier aan te maken.",
-      "title": "Geen dossiers gevonden"
+      "ALL": {
+        "description": "Er is hier niets te doen.",
+        "title": "Er zijn geen dossiers"
+      },
+      "MINE": {
+        "description": "Even pauze.",
+        "title": "Er zijn geen dossiers aan jou toegewezen"
+      },
+      "OPEN": {
+        "description": "Kom later nog eens terug.",
+        "title": "Alle dossiers hebben een behandelaar"
+      },
+      "search": {
+        "description": "Er zijn geen dossiers die voldoen aan je zoekcriteria.",
+        "title": "Geen dossiers gevonden"
+      }
     },
     "pagination": {
       "itemsPerPage": "Dossiers per pagina",
+      "totalItem": "{{start}}-{{end}} van {{total}} dossier",
       "totalItems": "{{start}}-{{end}} van {{total}} dossiers"
     },
     "select": {
@@ -135,7 +150,8 @@
     "formio": {
       "noFormSpecified": "Voor dit tabblad is geen formulierdefinitie opgegeven.",
       "formNotFound": "De formulierdefinitie '{{formDefinitionName}}' kan niet worden gevonden."
-    }
+    },
+    "rowLocked": "Je hebt geen toegang tot dit dossier"
   },
   "document": {
     "title": {
@@ -221,7 +237,13 @@
     "taskCreated": "Aangemaakt op"
   },
   "progress": {
-    "noProcessDocumentInstances": "Er is nog geen proces gestart"
+    "noProcessDocumentInstances": "Er is nog geen proces gestart",
+    "process": "Proces",
+    "version": "Versie",
+    "startedBy": "Gestart door",
+    "startedOn": "Gestart op",
+    "system": "Systeem",
+    "of": "van"
   },
   "dashboard": {
     "openTasks": {
@@ -268,6 +290,7 @@
     "task": {
       "title": "Taak"
     },
+    "noDashboards": "Er zijn geen dashboards geconfigureerd.",
     "noWidgets": "Er zijn geen widgets geconfigureerd voor dit dashboard."
   },
   "dashboardManagement": {
@@ -288,8 +311,8 @@
     "key": "Sleutel",
     "name": "Naam",
     "noResults": {
-      "description": "Klik op <strong>Nieuw dashboard toevoegen</strong> om te beginnen met het ontwerpen van uw dashboard",
-      "title": "Geen dashboards toegevoegd"
+      "description": "Klik op <strong>Nieuw dashboard toevoegen</strong> om een dashboard te maken",
+      "title": "Er zijn geen dashboards"
     },
     "widgets": {
       "complete": "Voltooien",
@@ -414,10 +437,29 @@
     "readOnly": "Alleen-lezen"
   },
   "dossierManagement": {
+    "version": "Versie: ",
+    "preparingDownload": "Download aan het voorbereiden",
+    "more": "Meer",
+    "export": "{{value}} exporteren",
+    "exportErrorTitle": "Oeps",
+    "exportErrorMessage": "Er is iets misgegaan",
+    "exportSuccessTitle": "Download start binnenkort",
     "readonly": "Alleen-lezen",
     "connectedProcesses": "Gekoppelde processen",
     "connectProcess": "Proces koppelen",
+    "processLink": "Proces koppelen",
     "selectProcessDef": "Procesdefinitie kiezen",
+    "unlinkProcess": "Ontkoppelen",
+    "processLinkNotification": {
+      "linkSuccess": "Succesvol gekoppeld proces",
+      "linkFailure": "Kan het proces niet koppelen",
+      "unlinkSuccess": "Het proces is ontkoppeld",
+      "unlinkFailure": "Kan het proces niet ontkoppelen"
+    },
+    "noResults": {
+      "title": "Er zijn geen case-definities",
+      "description": "Voeg een case-definitie toe om te beginnen"
+    },
     "linkProcess": {
       "title": "Uploadproces koppelen aan dossier",
       "description": "Kies welk proces het uploaden van bestanden moet afhandelen."
@@ -431,10 +473,12 @@
       "checkboxDescription": "Alle taken worden toegewezen aan de behandelaar"
     },
     "tabs": {
-      "cases": "Zaak Details",
+      "cases": "Configuratie",
+      "processes": "Processen",
       "searchFields": "Zoekvelden",
       "listColumns": "Lijst",
-      "tabManagement": "Tabbladen"
+      "tabManagement": "Tabbladen",
+      "document": "Document"
     },
     "tabManagement": {
       "columns": {
@@ -478,6 +522,48 @@
       "custom": "Inhoud",
       "formio": "FormIO",
       "standard": "Standaard"
+    },
+    "importDefinition": {
+      "title": "Case-definitie importeren",
+      "overwriteWarning": "Als je case-definitie configuraties, modellen en/of definities bevat met een naam of identifier die al op je systeem aanwezig zijn, worden deze overschreven.",
+      "startUpload": "Begin het uploaden",
+      "checkbox": {
+        "message": "Ik begrijp dat configuraties mogelijk worden overschreven",
+        "error": "Dit veld is verplicht"
+      },
+      "info": {
+        "title": "Let op",
+        "message": "Zorg er vóór het importeren voor dat de plug-inconfiguraties waarnaar wordt verwezen in proceslinks aanwezig zijn."
+      },
+      "upload": {
+        "title": "Upload bestand",
+        "description": "De maximale bestandsgrootte is 500kb. Ondersteunde bestandstypen zijn ZIP en JSON.",
+        "buttonText": "Selecteer bestand"
+      },
+      "progressBar": {
+        "active": "Dit kan een tijdje duren",
+        "error": "Kan case-definitie niet importeren. Er is niets geïmporteerd vanwege een fout aan onze kant. Probeer het later opnieuw. Neem contact op met de ondersteuning als het probleem zich blijft voordoen.",
+        "finished": "Case-definitie succesvol geïmporteerd",
+        "label": "Case-definitie importeren"
+      },
+      "invalidJsonError": {
+        "text": "Zorg ervoor dat deze een geldige JSON-waarde bevat.",
+        "title": "Het bestand bevat een fout."
+      },
+      "steps": {
+        "accessControl": {
+          "message": "Vergeet niet de rechten in Access Control in te stellen. Zonder de juiste rechten is uw nieuwe casusdefinitie niet toegankelijk.",
+          "title": "Access control"
+        },
+        "dashboard": {
+          "message": "Je kunt widgets voor dit proces op het dashboard plaatsen. Deze kun je configureren onder 'dashboards'.",
+          "title": "Dashboard"
+        },
+        "plugins": {
+          "message": "Dit proces maakt mogelijk gebruik van plugins. Zorg dat je deze goed instelt.",
+          "title": "Plugin configuraties"
+        }
+      }
     }
   },
   "task-list": {
@@ -491,17 +577,25 @@
     },
     "mine": {
       "title": "Mijn taken",
-      "description": "Overzicht van alle toegewezen taken"
+      "description": "Overzicht van alle toegewezen taken",
+      "noResultsDescription": "Even pauze.",
+      "noResultsTitle": "Je hebt geen taken op je naam staan"
     },
     "open": {
       "title": "Niet toegewezen taken",
-      "description": "Overzicht van alle niet toegewezen taken"
+      "description": "Overzicht van alle niet toegewezen taken",
+      "noResultsDescription": "Kom later nog eens terug.",
+      "noResultsTitle": "Alle taken zijn al toegewezen"
     },
     "all": {
       "title": "Alle taken",
-      "description": "Overzicht van alle taken"
+      "description": "Overzicht van alle taken",
+      "noResultsDescription": "Er is hier niets te doen.",
+      "noResultsTitle": "Er staan geen taken open"
     },
-    "goToCase": "Ga naar zaak"
+    "goToCase": "Ga naar dossier",
+    "caseLocked": "Je hebt geen toegang tot dit dossier",
+    "rowLocked": "Je hebt geen toegang tot deze taak"
   },
   "Task": "Taak",
   "Tasks": "Taken",
@@ -535,13 +629,13 @@
   "Process migration warning": "<b>Let op:</b> Bij het migreren van een proces worden de candidate groups van de lopende proces instanties niet meegenomen. Dit kan gedaan worden in de database indien nodig. (Voorbeeld: wanneer een specifieke gebruikerstaak op de ROLE_USER stond en de candidate group voor deze taak is veranderd in het proces naar ROLE_ADMIN blijft de taak beschikbaar voor ROLE_USER. Enkel nieuw gestartte processen krijgen de nieuwe candidate group)",
   "Dossier": "Dossier",
   "Dossiers": "Dossiers",
-  "document definition": "Dossier-definitie",
-  "Upload document definition": "Upload dossier-definitie",
-  "Remove document definition": "Verwijder dossier-definitie",
-  "remove-document-definition-confirmation": "Waarschuwing: <br/><br/> Deze dossier-definitie en alle hierbij horende dossiers zullen worden verwijderd. Gekoppelde processen worden ontkoppeld.<br/> Het verwijderen van een dossier-definitie en bijbehorende dossiers kan niet worden teruggedraaid",
+  "document definition": "Documentdefinitie",
+  "Upload document definition": "Upload documentdefinitie",
+  "Remove document definition": "Verwijder documentdefinitie",
+  "remove-document-definition-confirmation": "Waarschuwing: <br/><br/> Deze documentdefinitie en alle hierbij horende dossiers zullen worden verwijderd. Gekoppelde processen worden ontkoppeld.<br/> Het verwijderen van een documentdefinitie en bijbehorende dossiers kan niet worden teruggedraaid",
   "remove-document-definition-confirmation-button": "Verwijder",
-  "remove-document-definition-success": "Dossier-definitie verwijderd",
-  "Download document definition": "Download dossier-definitie",
+  "remove-document-definition-success": "Documentdefinitie verwijderd",
+  "Download document definition": "Download documentdefinitie",
   "Select a document definition": "Kies een bestand om te uploaden",
   "Overview of all Dossiers": "Overzicht van alle Dossiers",
   "Start Dossier": "Creëer Nieuw Dossier",
@@ -552,6 +646,7 @@
   "Other": "Overig",
   "Download": "Downloaden",
   "Upload": "Uploaden",
+  "Import": "Import",
   "Select process definition for document definition": "Selecteer een processdefinitie voor de documentdefinitie",
   "Select options for the selected process": "Kies opties voor het geselecteerde proces",
   "Save": "Opslaan",
@@ -567,6 +662,7 @@
     "readOnlySystemProcessWarningMessage": "Dit is een systeemproces, daarmee is het gemarkeerd als alleen-lezen. Dit proces is wel te gebruiken maar niet aan te passen."
   },
   "processCaseConnection": {
+    "noProcesses": "Er zijn nog geen processen gekoppeld aan deze Case definition.",
     "processCreatesCase": "Proces maakt nieuw dossier aan",
     "processCreatesCaseTooltip": "Wanneer deze optie is geselecteerd wordt bij het starten van dit proces een nieuw dossier aangemaakt. Hiervoor moet er een startformulier gekoppeld zijn aan de eerste stap in het proces.",
     "startableWithinCase": "Kan gestart worden binnen bestaand dossier",
@@ -607,7 +703,7 @@
     "items": "items",
     "of": "van",
     "visible": "zichtbaar",
-    "next": "Volgende >",
+    "nextArrow": "Volgende >",
     "previous": "< Vorige",
     "addRow": "Rij toevoegen",
     "deleteRow": "Rij verwijderen",
@@ -623,6 +719,9 @@
     "delete": "Verwijderen",
     "deleteConfirmation": "Weet u zeker dat u wilt verwijderen?",
     "cancel": "Annuleren",
+    "close": "Sluiten",
+    "next": "Volgende",
+    "skip": "Overslaan",
     "confirm": "Bevestigen",
     "collapse": "Inklappen",
     "expand": "Uitklappen",
@@ -632,21 +731,24 @@
     "save": "Opslaan",
     "more": "Meer",
     "export": "Exporteren",
-    "table": {
-      "itemsPerPage": "Artikelen per pagina",
-      "multipleSelect": "{{count}} artikelen geselecteerd",
+    "list": {
+      "itemsPerPage": "Items per pagina",
+      "multipleSelect": "{{count}} items geselecteerd",
       "ofLastPage": "van {{last}} pagina",
       "ofLastPages": "van {{last}} pagina's",
-      "singleSelect": "1 artikel geselecteerd",
-      "totalItems": "{{start}}-{{end}} van {{total}} artikelen"
+      "singleSelect": "1 item geselecteerd",
+      "totalItems": "{{start}}-{{end}} van {{total}} items",
+      "totalItem": "{{start}}-{{end}} van {{total}} item"
     },
     "pendingChanges": {
       "title": "Pagina verlaten",
-      "content": "Jij heeft niet-opgeslagen wijzigingen. Weet je zeker dat je door wilt gaan?"
+      "content": "Je gaat de pagina verlaten. Alle niet-opgeslagen wijzigingen gaan verloren. Weet je zeker dat je door wilt gaan?"
     },
     "required": "vereist",
     "filter": "Filteren...",
-    "back": "Terug"
+    "back": "Terug",
+    "warning": "Waarschuwing",
+    "finish": "Finish"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",
@@ -691,7 +793,9 @@
     "files": "Bestanden",
     "firstName": "Voornaam",
     "assigneeFullName": "Behandelaar",
-    "accepted": "Akkoord"
+    "accepted": "Akkoord",
+    "title": "Titel",
+    "readOnly": "Alleen-lezen"
   },
   "list": {
     "currentPage": "Pagina {{current}} van {{total}}",
@@ -916,7 +1020,7 @@
     },
     "plugins": {
       "title": "Plugins",
-      "description": "Op deze pagina kun je configuraties aanmaken, wijzigen en verwijderen van plugins die zijn toegevoegd aan je applicatie."
+      "noResults": "Er zijn geen plugins geconfigureerd"
     },
     "customercases": {
       "title": "Zaken",
@@ -931,7 +1035,9 @@
     "complete": "Pluginactie koppelen"
   },
   "plugin": {
-    "noConfigurationComponent": "Er is geen configuratie-component beschikbaar."
+    "noConfigurationComponent": "Er is geen configuratie-component beschikbaar.",
+    "configurationId": "Configuratie ID",
+    "configurationIdTooltip": "Onder deze ID zal de plugin worden opgeslagen. Het ID moet het format van een UUID hebben"
   },
   "pluginManagement": {
     "tableItemsText": "plugin-configuraties",
@@ -976,7 +1082,7 @@
     "collapseButtonText": "Verbergen",
     "searchButtonText": "Zoeken",
     "clearButtonText": "Wissen",
-    "downloadButtonText": "Download zoekveldconfiguratie",
+    "downloadButtonText": "Download configuratie",
     "to": "tot",
     "text": "Tekst",
     "number": "Nummer",

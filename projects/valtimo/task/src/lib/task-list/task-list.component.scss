@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-.tab-content {
-  padding: 0;
-  margin: 0;
+.hide-tasks-list {
+  display: none;
 }
 
-.nav.nav-tabs {
-  background-color: #f5f5f5;
+.cds--link--disabled {
+  cursor: not-allowed;
+  pointer-events: auto !important;
+  outline: 0 !important;
 }

@@ -17,8 +17,8 @@
 <ng-container
   *ngIf="{
     fields: fields$ | async,
-    canHaveAssignee: canHaveAssignee$ | async,
     documentItems: documentItems$ | async,
+    noResultsMessage: noResultsMessage$ | async,
     searchFields: searchFields$ | async,
     schema: schema$ | async,
     showAssignModal: showAssignModal$ | async,
@@ -36,12 +36,11 @@
       <div class="col-12 px-0 mb-5">
         <valtimo-dossier-list-actions
           [loading]="!obs.loaded"
-          (formFlowComplete)="refresh()"
+          (formFlowComplete)="forceRefresh()"
         ></valtimo-dossier-list-actions>
+        <ng-container *ngTemplateOutlet="searchFields; context: {obs: obs}"></ng-container>
 
         <ng-container *ngIf="obs.loaded; else loading">
-          <ng-container *ngTemplateOutlet="searchFields; context: {obs: obs}"></ng-container>
-
           <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
         </ng-container>
       </div>
@@ -62,28 +61,26 @@
       (doSearch)="search($event)"
       [documentDefinitionName]="documentDefinitionName$ | async"
       [defaultValues]="searchFieldValues$ | async"
+      [inputDisabled]="!obs.loaded"
     ></valtimo-search-fields>
   </div>
 </ng-template>
 
 <ng-template #list let-obs="obs">
-  <ng-container *ngIf="obs.canHaveAssignee">
-    <ng-container *ngTemplateOutlet="tabs"></ng-container>
-  </ng-container>
-
-  <valtimo-carbon-table
-    [data]="obs.documentItems"
+  <valtimo-carbon-list
     [fields]="obs.fields"
-    hideTableHeader
-    [initialSort]="pagination.sort"
-    [loading]="loadingDocumentItems"
+    [header]="false"
+    [initialSortState]="pagination.sort"
+    [items]="obs.documentItems"
     [pagination]="pagination"
-    [paginatorConfig]="paginatorConfig"
+    paginationIdentifier="dossierList"
+    lockedTooltipTranslationKey="dossier.rowLocked"
+    [showSelectionColumn]="canHaveAssignee"
     [tableTranslations]="tableTranslations"
-    [tableConfig]="tableConfig"
-    (paginationChange)="onPaginationChange($event)"
-    (rowClick)="onRowClick($event)"
-    (sortChange)="onSortChange($event)"
+    (paginationClicked)="pageChange($event)"
+    (paginationSet)="pageSizeChange($event)"
+    (rowClicked)="rowClick($event)"
+    (sortChanged)="sortChanged($event)"
   >
     <ng-container carbonToolbarActions>
       <button cdsButton="primary" (click)="showAssignModal()">
@@ -96,11 +93,15 @@
     </div>
 
     <valtimo-no-results
-      [action]="dossierListActions"
-      description="{{ 'dossier.noResults.description' | translate }}"
-      title="{{ 'dossier.noResults.title' | translate }}"
+      [action]="obs.noResultsMessage.isSearchResult ? null : dossierListActions"
+      [description]="obs.noResultsMessage.description | translate"
+      [title]="obs.noResultsMessage.title | translate"
     ></valtimo-no-results>
-  </valtimo-carbon-table>
+
+    <div tabs *ngIf="canHaveAssignee">
+      <ng-container *ngTemplateOutlet="tabs"></ng-container>
+    </div>
+  </valtimo-carbon-list>
 </ng-template>
 
 <ng-template #tabs>
@@ -124,7 +125,7 @@
 
 <ng-template #configuredTabs>
   <ng-container *ngIf="assigneeFilter$ | async as assigneeFilter">
-    <cds-tabs type="contained" data-carbon-theme="g10" class="dossier-list-tabs">
+    <cds-tabs type="contained" class="dossier-list-tabs">
       <cds-tab
         *ngFor="let tab of visibleDossierTabs; trackBy: trackByIndex"
         [active]="assigneeFilter === tab"
@@ -136,7 +137,12 @@
   </ng-container>
 </ng-template>
 
-<ng-template #loading><valtimo-carbon-table loading></valtimo-carbon-table></ng-template>
+<ng-template #loading
+  ><valtimo-carbon-list [loading]="true">
+    <div tabs *ngIf="canHaveAssignee">
+      <ng-container *ngTemplateOutlet="tabs"></ng-container>
+    </div> </valtimo-carbon-list
+></ng-template>
 
 <ng-template #bulkAssignModal let-obs="obs">
   <valtimo-dossier-bulk-assign-modal

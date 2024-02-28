@@ -28,7 +28,6 @@ import {
   BpmnJsDiagramModule,
   ButtonModule,
   CamundaFormModule,
-  CarbonTableModule,
   ConfirmationModalModule,
   DataListModule,
   DocumentenApiMetadataModalModule,
@@ -52,6 +51,7 @@ import {
   UploaderModule,
   VModalModule,
   WidgetModule,
+  CarbonListModule,
 } from '@valtimo/components';
 import {ConfigModule, HttpLoaderFactory} from '@valtimo/config';
 import {FormModule} from '@valtimo/form';
@@ -67,6 +67,8 @@ import {
   ModalModule as CarbonModalModule, PaginationModule,
   SelectModule as CarbonSelectModule,
   TabsModule, TooltipModule as CarbonTooltipModule,
+  SkeletonModule,
+  TabsModule,
 } from 'carbon-components-angular';
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
 import {DossierAssignUserComponent} from './components/dossier-assign-user/dossier-assign-user.component';
@@ -169,7 +171,6 @@ export type TabsFactory = () => Map<string, object>;
     CarbonButtonModule,
     IconModule,
     FormLinkModule,
-    CarbonTableModule,
     CarbonModalModule,
     CarbonSelectModule,
     ConfirmationModalModule,
@@ -177,6 +178,8 @@ export type TabsFactory = () => Map<string, object>;
     TabsModule,
     ComboBoxModule,
     TabTranslatePipeModule,
+    CarbonListModule,
+    SkeletonModule,
     DialogModule,
     FileUploaderModule,
     PaginationModule,

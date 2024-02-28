@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
+import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
-import {ListField, MultiInputValues, ViewType} from '@valtimo/components';
+import {ActionItem, ColumnConfig, MultiInputValues, ViewType} from '@valtimo/components';
 import {ConfigService, DefinitionColumn} from '@valtimo/config';
 import {
   CaseListColumn,
@@ -26,6 +27,7 @@ import {
   DisplayTypeParameters,
   DocumentService,
 } from '@valtimo/document';
+import {IconService} from 'carbon-components-angular';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {
   BehaviorSubject,
@@ -47,69 +49,65 @@ import {ListColumnModal} from '../../models';
   templateUrl: './dossier-management-list-columns.component.html',
   styleUrls: ['./dossier-management-list-columns.component.scss'],
 })
-export class DossierManagementListColumnsComponent {
-  @ViewChild('moveRowButtons') public moveRowButtonsTemplateRef: TemplateRef<any>;
+export class DossierManagementListColumnsComponent implements AfterViewInit {
   readonly downloadName$ = new BehaviorSubject<string>('');
   readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
 
-  private readonly COLUMNS: Array<DefinitionColumn> = [
+  public readonly actionItems: ActionItem[] = [
     {
-      viewType: 'string',
-      sortable: false,
-      propertyName: 'title',
-      translationKey: 'title',
-    },
-    {
-      viewType: 'string',
-      sortable: false,
-      propertyName: 'key',
-      translationKey: 'key',
-    },
-    {
-      viewType: 'string',
-      sortable: false,
-      propertyName: 'path',
-      translationKey: 'path',
-    },
-    {
-      viewType: 'string',
-      sortable: false,
-      propertyName: 'displayType',
-      translationKey: 'displayType',
-    },
-    {
-      viewType: 'string',
-      sortable: false,
-      propertyName: 'displayTypeParameters',
-      translationKey: 'displayTypeParameters',
-    },
-    {
-      viewType: 'string',
-      sortable: false,
-      propertyName: 'sortable',
-      translationKey: 'sortable',
-    },
-    {
-      viewType: 'string',
-      sortable: false,
-      propertyName: 'defaultSort',
-      translationKey: 'defaultSort',
+      label: 'interface.delete',
+      callback: this.deleteRow.bind(this),
+      type: 'danger',
     },
   ];
+  public readonly loadingCaseListColumns$ = new BehaviorSubject<boolean>(true);
 
-  loadingCaseListColumns = true;
+  public readonly lastItemIndex$ = new BehaviorSubject<number>(-1);
 
-  readonly fields$: Observable<Array<ListField>> = this.translateService.stream('key').pipe(
-    map(() =>
-      this.COLUMNS.map(column => ({
-        key: column.propertyName,
-        label: this.translateService.instant(`listColumn.${column.translationKey}`),
-        sortable: column.sortable,
-        ...(column.viewType && {viewType: column.viewType}),
-        ...(column.enum && {enum: column.enum}),
-      }))
-    )
-  );
+  public readonly fields: Array<ColumnConfig> = [
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'title',
+      label: 'listColumn.title',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'key',
+      label: 'listColumn.key',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'path',
+      label: 'listColumn.path',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'displayType',
+      label: 'listColumn.displayType',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'displayTypeParameters',
+      label: 'listColumn.displayTypeParameters',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'sortable',
+      label: 'listColumn.sortable',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'defaultSort',
+      label: 'listColumn.defaultSort',
+    },
+  ];
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || ''),
@@ -144,8 +142,9 @@ export class DossierManagementListColumnsComponent {
       });
     }),
     tap(caseListColumns => {
+      this.lastItemIndex$.next(caseListColumns.length - 1);
       this.cachedCaseListColumns = caseListColumns;
-      this.loadingCaseListColumns = false;
+      this.loadingCaseListColumns$.next(false);
       this.enableInput();
     })
   );
@@ -325,7 +324,7 @@ export class DossierManagementListColumnsComponent {
 
   readonly showDeleteModal$ = new Subject<boolean>();
 
-  readonly deleteRowIndex$ = new BehaviorSubject<number>(0);
+  readonly deleteRowKey$ = new BehaviorSubject<string>('');
 
   readonly defaultEnumValues$ = new BehaviorSubject<MultiInputValues>(undefined);
 
@@ -334,8 +333,14 @@ export class DossierManagementListColumnsComponent {
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
-    private readonly sanitizer: DomSanitizer
+    private readonly sanitizer: DomSanitizer,
+    private readonly iconService: IconService
   ) {}
+
+  public ngAfterViewInit(): void {
+    this.iconService.registerAll([ArrowDown16, ArrowUp16]);
+  }
+
   openModal(modalType: ListColumnModal): void {
     this.showModal$.next(true);
     this.currentModalType$.next(modalType);
@@ -352,16 +357,12 @@ export class DossierManagementListColumnsComponent {
     this.showModal$.next(false);
   }
 
-  deleteRow(caseListColumnRowIndex: number, clickEvent: MouseEvent): void {
-    clickEvent.stopPropagation();
-
+  deleteRow(caseListColumn: CaseListColumn): void {
     this.showDeleteModal$.next(true);
-    this.deleteRowIndex$.next(caseListColumnRowIndex);
+    this.deleteRowKey$.next(caseListColumn.key);
   }
 
-  deleteRowConfirmation(caseListColumnRowIndex: number): void {
-    const columnKey = this.cachedCaseListColumns[caseListColumnRowIndex]?.key;
-
+  deleteRowConfirmation(columnKey: string): void {
     if (columnKey) {
       this.disableInput();
 

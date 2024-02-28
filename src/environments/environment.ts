@@ -34,6 +34,7 @@ import {authenticationKeycloak} from './auth/keycloak-config.dev';
 import {emailExtensionInitializer, openZaakExtensionInitializer} from '@valtimo/open-zaak';
 import {connectorLinkExtensionInitializer} from '@valtimo/connector-management';
 import {LOGO_BASE_64} from './logo';
+import {cspHeaderParamsDev} from './csp';
 
 const defaultDefinitionColumns: Array<DefinitionColumn> = [
   {
@@ -132,7 +133,7 @@ export const environment: ValtimoConfig = {
           },
           {link: ['/connectors'], title: 'Connectors', sequence: 7},
           {link: ['/plugins'], title: 'Plugins', sequence: 8},
-          {link: ['/process-links'], title: 'Form links Plugin', sequence: 9},
+          {link: ['/process-links'], title: 'Process links', sequence: 9},
           {link: ['/dashboard-management'], title: 'Dashboard configuration', sequence: 10},
           {link: ['/access-control'], title: 'Access Control', sequence: 11},
           {title: 'Other', textClass: 'text-dark font-weight-bold c-default', sequence: 12},
@@ -249,6 +250,7 @@ export const environment: ValtimoConfig = {
     enableObjectManagement: true,
     returnToLastUrlAfterTokenExpiration: true,
     enableTabManagement: true,
+    useStartEventNameAsStartFormTitle: true
   },
   customDossierHeader: {
     leningen: [
@@ -259,6 +261,7 @@ export const environment: ValtimoConfig = {
       },
     ],
   },
+  csp: cspHeaderParamsDev,
 };
 
 /*

@@ -17,12 +17,13 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PluginConfigurationContainerComponent} from './plugin-configuration-container.component';
-import {SpinnerModule, ParagraphModule, TitleModule} from '@valtimo/components';
+import {ParagraphModule} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
+import {DefaultPluginConfigurationModule} from '../default-plugin-configuration/default-plugin-configuration.module';
 
 @NgModule({
   declarations: [PluginConfigurationContainerComponent],
-  imports: [CommonModule, ParagraphModule, TranslateModule],
+  imports: [CommonModule, ParagraphModule, TranslateModule, DefaultPluginConfigurationModule],
   exports: [PluginConfigurationContainerComponent],
 })
 export class PluginConfigurationContainerModule {}

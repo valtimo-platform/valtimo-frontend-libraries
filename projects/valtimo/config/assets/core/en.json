@@ -34,11 +34,26 @@
       "confirm": "Change tab"
     },
     "noResults": {
-      "description": "Click <strong>Create New Case</strong> to start a new case.",
-      "title": "No cases found"
+      "ALL": {
+        "description": "There is nothing to do here.",
+        "title": "There are no cases"
+      },
+      "MINE": {
+        "description": "Time for a short break.",
+        "title": "No cases assigned to you"
+      },
+      "OPEN": {
+        "description": "Come back later.",
+        "title": "All cases have been assigned"
+      },
+      "search": {
+        "description": "There are no cases that match your search criteria.",
+        "title": "No cases found"
+      }
     },
     "pagination": {
       "itemsPerPage": "Cases per page",
+      "totalItem": "{{start}}-{{end}} of {{total}} case",
       "totalItems": "{{start}}-{{end}} of {{total}} cases"
     },
     "select": {
@@ -135,7 +150,8 @@
     "formio": {
       "noFormSpecified": "No form definition has been specified for this tab.",
       "formNotFound": "The form definition '{{formDefinitionName}}' could not be found."
-    }
+    },
+    "rowLocked": "You don't have access to this case"
   },
   "document": {
     "title": {
@@ -221,7 +237,13 @@
     "taskCreated": "Created"
   },
   "progress": {
-    "noProcessDocumentInstances": "There is no process started yet"
+    "noProcessDocumentInstances": "There is no process started yet",
+    "process": "Process",
+    "version": "Version",
+    "startedBy": "Started by",
+    "startedOn": "Started on",
+    "system": "System",
+    "of": "of"
   },
   "dashboard": {
     "openTasks": {
@@ -268,6 +290,7 @@
     "task": {
       "title": "Task"
     },
+    "noDashboards": "No dashboards have been configured.",
     "noWidgets": "No widgets have been configured for this dashboard."
   },
   "dashboardManagement": {
@@ -415,10 +438,29 @@
     "readOnly": "Read-only"
   },
   "dossierManagement": {
+    "version": "Version: ",
+    "preparingDownload": "Preparing download",
+    "more": "More",
+    "export": "Export {{value}}",
+    "exportErrorTitle": "Error",
+    "exportErrorMessage": "Something went wrong",
+    "exportSuccessTitle": "Download will start shortly",
     "readonly": "Read-only",
     "connectedProcesses": "Connected processes",
     "connectProcess": "Connect process",
+    "processLink": "Link process",
     "selectProcessDef": "Select process definition",
+    "unlinkProcess": "Unlink",
+    "processLinkNotification": {
+      "linkSuccess": "Successfully linked process",
+      "linkFailure": "Failed to link process",
+      "unlinkSuccess": "Successfully unlinked process",
+      "unlinkFailure": "Failed to unlink process"
+    },
+    "noResults": {
+      "title": "There are no case-definitions",
+      "description": "Add a case-definition to start"
+    },
     "linkProcess": {
       "title": "Link upload process to case",
       "description": "Choose which process should handle file uploads."
@@ -432,10 +474,12 @@
       "checkboxDescription": "Automatically assign user tasks to the case handler"
     },
     "tabs": {
-      "cases": "Case Details",
+      "cases": "Configuration",
+      "processes": "Processes",
       "searchFields": "Search Fields",
       "listColumns": "List",
-      "tabManagement": "Tabs"
+      "tabManagement": "Tabs",
+      "document": "Document"
     },
     "tabManagement": {
       "columns": {
@@ -479,6 +523,48 @@
       "custom": "Custom",
       "formio": "FormIO",
       "standard": "Standard"
+    },
+    "importDefinition": {
+      "title": "Import case definition",
+      "overwriteWarning": "If your case definition contains configurations, models and/or definitions with the same name or identifier as already on your system, they will be overwritten.",
+      "startUpload": "Start upload",
+      "checkbox": {
+        "message": "I understand that configurations may be overwritten",
+        "error": "This field is mandatory"
+      },
+      "info": {
+        "title": "Attention",
+        "message": "Before importing, please make sure the plugin configurations that are referenced in process links are present."
+      },
+      "upload": {
+        "title": "Upload file",
+        "description": "Max file size is 500kb. Supported file types are ZIP and JSON.",
+        "buttonText": "Select file"
+      },
+      "progressBar": {
+        "active": "This may take a while",
+        "error": "Unable to import case definition. Nothing was imported due to an error at our end. Please try again later.If the issue keeps happening, contact support.",
+        "finished": "Case definition successfully imported",
+        "label": "Importing case definition"
+      },
+      "invalidJsonError": {
+        "text": "Please make sure it contains a valid JSON value.",
+        "title": "The file contains an error."
+      },
+      "steps": {
+        "accessControl": {
+          "message": "Don't forget to set the rights in Access Control. Without the proper rights your new case definition won't be accessible.",
+          "title": "Access control"
+        },
+        "dashboard": {
+          "message": "If you want widgets to appear on your dashboard, you'll have to manually configure these. Do this via 'dashboard configuration'",
+          "title": "Dashboard"
+        },
+        "plugins": {
+          "message": "This process may use plugins. Make sure you configure them correctly.",
+          "title": "Plugin Configuration"
+        }
+      }
     }
   },
   "task-list": {
@@ -492,17 +578,25 @@
     },
     "mine": {
       "title": "My tasks",
-      "description": "Overview of all tasks assigned to you"
+      "description": "Overview of all tasks assigned to you",
+      "noResultsDescription": "Time for a short break.",
+      "noResultsTitle": "No tasks assigned to you"
     },
     "open": {
       "title": "Unassigned tasks",
-      "description": "Overview of all unassigned tasks"
+      "description": "Overview of all unassigned tasks",
+      "noResultsDescription": "Come back later.",
+      "noResultsTitle": "All tasks have been assigned"
     },
     "all": {
       "title": "All tasks",
-      "description": "Overview of all tasks"
+      "description": "Overview of all tasks",
+      "noResultsDescription": "There is nothing to do here.",
+      "noResultsTitle": "No open tasks"
     },
-    "goToCase": "Go to case"
+    "goToCase": "Go to case",
+    "caseLocked": "You don't have access to this case",
+    "rowLocked": "You don't have access to this task"
   },
   "Task": "Task",
   "Tasks": "Tasks",
@@ -536,13 +630,13 @@
   "Process migration warning": "<b>Warning:</b> When migrating a process, the candidate groups of running instances will not be updated. This can be done in the database if necessary. (For example if a specific user task is open for ROLE_USER and the candidate group for the user task is updated in the process to ROLE_ADMIN, this user task is still accessible for ROLE_USER. Only newly started processes will use the updated candidate group)",
   "Dossier": "Case",
   "Dossiers": "Cases",
-  "document definition": "Case-definition",
-  "Upload document definition": "Upload case-definition",
-  "Remove document definition": "Remove case-definition",
-  "remove-document-definition-confirmation": "Warning: <br/><br/> This case-definition and all related cases will be removed. Linked processes will be unlinked.<br/> Please note that removing a case-definition and its cases cannot be reversed",
+  "document definition": "Document definition",
+  "Upload document definition": "Upload document definition",
+  "Remove document definition": "Remove document definition",
+  "remove-document-definition-confirmation": "Warning: <br/><br/> This document definition and all related cases will be removed. Linked processes will be unlinked.<br/> Please note that removing a document definition and its cases cannot be reversed",
   "remove-document-definition-confirmation-button": "Remove",
-  "remove-document-definition-success": "Removed case-definition",
-  "Download document definition": "Download case-definition",
+  "remove-document-definition-success": "Removed document definition",
+  "Download document definition": "Download document definition",
   "Select a document definition": "Select a file to upload",
   "Overview of all Dossiers": "Overview of all Cases",
   "Start Dossier": "Create New Case",
@@ -553,6 +647,7 @@
   "Other": "Other",
   "Download": "Download",
   "Upload": "Upload",
+  "Import": "Import",
   "Select process definition for document definition": "Select process definition for document definition",
   "Select options for the selected process": "Select options for the selected process",
   "Save": "Save",
@@ -568,6 +663,7 @@
     "readOnlySystemProcessWarningMessage": "This is a system process, so it is marked as read-only. This process can be used but not modified."
   },
   "processCaseConnection": {
+    "noProcesses": "There are no processes connected yet to this Case definition",
     "processCreatesCase": "Process creates new case",
     "processCreatesCaseTooltip": "When this option is selected, a new case is created when this process is started. For this to be possible, a start form must be linked to the first step in the process.",
     "startableWithinCase": "Can be started within existing case",
@@ -608,7 +704,7 @@
     "items": "items",
     "of": "of",
     "visible": "visible",
-    "next": "Next >",
+    "nextArrow": "Next >",
     "previous": "< Previous",
     "addRow": "Add row",
     "deleteRow": "Delete row",
@@ -624,6 +720,9 @@
     "delete": "Delete",
     "deleteConfirmation": "Are you sure you want to delete?",
     "cancel": "Cancel",
+    "close": "Close",
+    "next": "Next",
+    "skip": "Skip",
     "confirm": "Confirm",
     "collapse": "Collapse",
     "expand": "Expand",
@@ -633,21 +732,24 @@
     "save": "Save",
     "more": "More",
     "export": "Export",
-    "table": {
+    "list": {
       "itemsPerPage": "Items per page",
       "multipleSelect": "{{count}} items selected",
       "ofLastPage": "of {{last}} page",
       "ofLastPages": "of {{last}} pages",
       "singleSelect": "1 item selected",
-      "totalItems": "{{start}}-{{end}} of {{total}} items"
+      "totalItems": "{{start}}-{{end}} of {{total}} items",
+      "totalItem": "{{start}}-{{end}} of {{total}} item"
     },
     "pendingChanges": {
       "title": "Leaving page",
-      "content": "You have unsaved changes. Are you sure you want to continue?"
+      "content": "You are leaving the page. Any unsaved changes will be lost. Are you sure you want to continue?"
     },
     "required": "required",
     "filter": "Filter...",
-    "back": "Back"
+    "back": "Back",
+    "warning": "Warning",
+    "finish": "Finish"
   },
   "taskDetail": {
     "taskCreated": "Created",
@@ -692,7 +794,9 @@
     "files": "Files",
     "firstName": "First name",
     "assigneeFullName": "Assignee",
-    "accepted": "Accepted"
+    "accepted": "Accepted",
+    "title": "Title",
+    "readOnly": "Read-only"
   },
   "list": {
     "currentPage": "Page {{current}} of {{total}}",
@@ -917,7 +1021,7 @@
     },
     "plugins": {
       "title": "Plugins",
-      "description": "On this page you can create, change and delete configurations of plugins that have been added to your application."
+      "noResults": "There are no plugins configured yet"
     },
     "customercases": {
       "title": "Cases",
@@ -932,7 +1036,9 @@
     "complete": "Connect plugin action"
   },
   "plugin": {
-    "noConfigurationComponent": "No configuration component is available."
+    "noConfigurationComponent": "No configuration component is available.",
+    "configurationId": "Configuration ID",
+    "configurationIdTooltip": "The plugin will be saved under this ID. The ID must be in the format of a UUID"
   },
   "pluginManagement": {
     "tableItemsText": "plugin configurations",
@@ -977,7 +1083,7 @@
     "collapseButtonText": "Hide",
     "searchButtonText": "Search",
     "clearButtonText": "Clear",
-    "downloadButtonText": "Download search field configuration",
+    "downloadButtonText": "Download configuration",
     "to": "to",
     "text": "Text",
     "number": "Number",

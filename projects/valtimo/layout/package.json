@@ -1,7 +1,7 @@
 {
   "name": "@valtimo/layout",
   "license": "EUPL-1.2",
-  "version": "11.1.0",
+  "version": "11.2.0",
   "peerDependencies": {
     "@angular/common": "^16.2.0",
     "@angular/core": "^16.2.0"
@@ -15,6 +15,7 @@
     "moment": "2.29.4",
     "perfect-scrollbar": "1.5.5",
     "select2": "4.1.0-rc.0",
-    "tslib": "2.6.2"
+    "tslib": "2.6.2",
+    "csp-header": "5.2.1"
   }
 }

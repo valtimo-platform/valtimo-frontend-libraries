@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CanDeactivateFn} from '@angular/router';
-
 import {PendingChangesComponent} from '../components/pending-changes/pending-changes.component';
 
 export const pendingChangesGuard: CanDeactivateFn<PendingChangesComponent> = (

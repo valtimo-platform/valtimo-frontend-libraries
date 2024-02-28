@@ -15,6 +15,7 @@
  */
 
 import {Component, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
+import {PermissionService} from '@valtimo/access-control';
 import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {FormFlowService, FormSubmissionResult, ProcessLinkService} from '@valtimo/form-link';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -28,9 +29,12 @@ import {
 } from '@valtimo/components';
 import {FormioBeforeSubmit} from '@formio/angular/formio.common';
 import {FormioForm} from '@formio/angular';
-import {NGXLogger} from 'ngx-logger';
 import {UserProviderService} from '@valtimo/security';
 import {take} from 'rxjs/operators';
+import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
+import {DossierListService} from '../../services';
+import {StartModalService} from '../../services/start-modal.service';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-process-start-modal',
@@ -43,6 +47,8 @@ export class DossierProcessStartModalComponent implements OnInit {
   public processDefinitionId: string;
   public documentDefinitionName: string;
   public processName: string;
+  private _startEventName: string;
+  private readonly _useStartEventNameAsStartFormTitle!: boolean;
   public formDefinition: FormioForm;
   public formFlowInstanceId: string;
   public formioSubmission: FormioSubmission;
@@ -61,8 +67,13 @@ export class DossierProcessStartModalComponent implements OnInit {
     private processLinkService: ProcessLinkService,
     private formFlowService: FormFlowService,
     private userProviderService: UserProviderService,
-    private logger: NGXLogger
-  ) {}
+    private permissionService: PermissionService,
+    private listService: DossierListService,
+    private startModalService: StartModalService,
+    private configService: ConfigService
+  ) {
+    this._useStartEventNameAsStartFormTitle = this.configService.config.featureToggles?.useStartEventNameAsStartFormTitle
+  }
 
   ngOnInit() {
     this.isUserAdmin();
@@ -72,6 +83,11 @@ export class DossierProcessStartModalComponent implements OnInit {
     this.processLinkId = null;
     this.formDefinition = null;
     this.formFlowInstanceId = null;
+    if (this._useStartEventNameAsStartFormTitle) {
+      this.processService.getProcessDefinitionXml(this.processDefinitionId).subscribe((result) => {
+        this._startEventName = this.startModalService.getStandardStartEventTitle(result.bpmn20Xml);
+      });
+    }
     this.processService
       .getProcessDefinitionStartProcessLink(
         this.processDefinitionId,
@@ -101,7 +117,8 @@ export class DossierProcessStartModalComponent implements OnInit {
   }
 
   public get modalTitle() {
-    return `Start - ${this.processName}`;
+    const fallbackTitle = `Start - ${this.processName}`;
+    return this._useStartEventNameAsStartFormTitle ? (this._startEventName || fallbackTitle) : fallbackTitle;
   }
 
   openModal(processDocumentDefinition: ProcessDocumentDefinition) {
@@ -149,12 +166,22 @@ export class DossierProcessStartModalComponent implements OnInit {
 
   private submitCompleted(formSubmissionResult: FormSubmissionResult): void {
     this.modal.hide();
-    this.router.navigate([
-      'dossiers',
-      this.documentDefinitionName,
-      'document',
-      formSubmissionResult.documentId,
-      'summary',
-    ]);
+    this.permissionService
+      .requestPermission(CAN_VIEW_CASE_PERMISSION, {
+        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        identifier: formSubmissionResult.documentId,
+      })
+      .subscribe(canViewCase => {
+        if (canViewCase) {
+          this.router.navigate([
+            'dossiers',
+            this.documentDefinitionName,
+            'document',
+            formSubmissionResult.documentId,
+          ]);
+        } else {
+          this.listService.forceRefresh();
+        }
+      });
   }
 }

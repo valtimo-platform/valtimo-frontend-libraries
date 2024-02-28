@@ -19,35 +19,43 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {
+  CarbonListModule,
   CarbonMultiInputModule,
-  CarbonTableModule,
   ConfirmationModalModule,
   DropzoneModule,
+  EditorModule,
   FormModule,
   InputModule,
   ListModule,
   ModalModule,
   MultiselectDropdownModule,
   ParagraphModule,
+  RenderInPageHeaderDirectiveModule,
   SelectModule,
   SpinnerModule,
   TableModule,
   TooltipIconModule,
   ValtimoCdsModalDirectiveModule,
+  ValtimoCdsOverflowButtonDirectiveModule,
   WidgetModule,
 } from '@valtimo/components';
 import {ConfigModule} from '@valtimo/config';
 import {
   ButtonModule,
   CheckboxModule,
+  ComboBoxModule,
+  DialogModule,
   DropdownModule,
+  FileUploaderModule,
   IconModule,
   InputModule as CarbonInputModule,
   LinkModule,
   LoadingModule,
   ModalModule as CarbonModalModule,
   NotificationModule,
-  ComboBoxModule,
+  ProgressBarModule,
+  TabsModule,
+  TagModule,
 } from 'carbon-components-angular';
 import {DossierManagementAssigneeComponent} from './components/dossier-management-assignee/dossier-management-assignee.component';
 import {DossierManagementConnectModalComponent} from './components/dossier-management-connect-modal/dossier-management-connect-modal.component';
@@ -65,6 +73,10 @@ import {DossierManagementUploadComponent} from './components/dossier-management-
 import {DossierManagementRoutingModule} from './dossier-management-routing.module';
 import {TabManagementService} from './services';
 import {DossierManagementEditTabModalComponent} from './components/dossier-management-tabs/dossier-management-edit-tab-modal/dossier-management-edit-tab-modal.component';
+import {DossierManagementDetailContainerActionsComponent} from './components/dossier-management-detail-container-actions/dossier-management-detail-container-actions';
+import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition';
+import {DossierManagementProcessesComponent} from './components/dossier-management-processes/dossier-management-processes.component';
+import {DossierManagementUploadStepComponent} from './components/dossier-management-upload/step/dossier-management-upload-step.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +94,10 @@ import {DossierManagementEditTabModalComponent} from './components/dossier-manag
     DossierManagementAddTabModalComponent,
     TabFormComponent,
     DossierManagementEditTabModalComponent,
+    DossierManagementDetailContainerActionsComponent,
+    DossierManagementDocumentDefinitionComponent,
+    DossierManagementProcessesComponent,
+    DossierManagementUploadStepComponent,
   ],
   imports: [
     CommonModule,
@@ -114,11 +130,20 @@ import {DossierManagementEditTabModalComponent} from './components/dossier-manag
     LoadingModule,
     LinkModule,
     ConfirmationModalModule,
-    CarbonMultiInputModule,
     TableModule,
     ValtimoCdsModalDirectiveModule,
-    CarbonTableModule,
+    CarbonListModule,
     ComboBoxModule,
+    RenderInPageHeaderDirectiveModule,
+    DialogModule,
+    ValtimoCdsOverflowButtonDirectiveModule,
+    NotificationModule,
+    EditorModule,
+    CarbonListModule,
+    TabsModule,
+    TagModule,
+    FileUploaderModule,
+    ProgressBarModule,
   ],
   providers: [TabManagementService],
 })

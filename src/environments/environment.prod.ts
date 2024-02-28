@@ -26,6 +26,7 @@ import {
 import {authenticationKeycloak} from './auth/keycloak-config.prod';
 import {openZaakExtensionInitializer} from '@valtimo/open-zaak';
 import {LOGO_BASE_64} from './logo';
+import {cspHeaderParamsProd} from './csp';
 
 const defaultDefinitionColumns = [
   {
@@ -101,7 +102,7 @@ export const environment: ValtimoConfig = {
           {link: ['/decision-tables'], title: 'Decision tables', sequence: 4},
           {link: ['/dossier-management'], title: 'Dossiers', sequence: 5},
           {link: ['/connectors'], title: 'Connectors', sequence: 6},
-          {link: ['/form-links'], title: 'Form links', sequence: 7},
+          {link: ['/form-links'], title: 'Process links', sequence: 7},
           {link: ['/access-control'], title: 'Access Control', sequence: 8},
           {title: 'Other', textClass: 'text-dark font-weight-bold c-default', sequence: 9},
           {link: ['/process-migration'], title: 'Process migration', sequence: 10},
@@ -148,4 +149,5 @@ export const environment: ValtimoConfig = {
     largeLogoMargin: true,
     enableTabManagement: true,
   },
+  csp: cspHeaderParamsProd,
 };

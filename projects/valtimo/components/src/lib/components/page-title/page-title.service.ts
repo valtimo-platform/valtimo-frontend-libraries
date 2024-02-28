@@ -28,6 +28,7 @@ export class PageTitleService implements OnDestroy {
   private readonly _customPageSubtitle$ = new BehaviorSubject<string>('');
   private readonly _customPageSubtitleSet$ = new BehaviorSubject<boolean>(false);
   private readonly _hasPageActions$ = new BehaviorSubject<boolean>(false);
+  private readonly _pageActionsFullWidth$ = new BehaviorSubject<boolean>(false);
 
   private readonly _pageActionsViewContainerRef$ = new BehaviorSubject<ViewContainerRef | null>(
     null
@@ -59,6 +60,10 @@ export class PageTitleService implements OnDestroy {
 
   public get hasPageActions$(): Observable<boolean> {
     return this._hasPageActions$.asObservable();
+  }
+
+  public get pageActionsFullWidth$(): Observable<boolean> {
+    return this._pageActionsFullWidth$.asObservable();
   }
 
   constructor(private readonly router: Router) {
@@ -99,6 +104,14 @@ export class PageTitleService implements OnDestroy {
     this._hasPageActions$.next(value);
   }
 
+  public setPageActionsFullWidth(value: boolean): void {
+    this._pageActionsFullWidth$.next(value);
+  }
+
+  public setCustomPageTitleSet(set: boolean): void {
+    this._customPageTitleSet$.next(set);
+  }
+
   private openRouteSubscription(): void {
     this._routeSubscription = combineLatest([
       this.router.events,
@@ -117,11 +130,11 @@ export class PageTitleService implements OnDestroy {
             this._customPageTitleSet$.next(false);
             this._customPageSubtitle$.next('');
             this._customPageSubtitleSet$.next(false);
+          }
 
-            if (pageActionsViewContainerRef) {
-              pageActionsViewContainerRef.clear();
-              this.setHasPageActions(false);
-            }
+          if (pageActionsViewContainerRef) {
+            pageActionsViewContainerRef.clear();
+            this.setHasPageActions(false);
           }
         })
       )
