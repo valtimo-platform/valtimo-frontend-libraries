@@ -48,7 +48,7 @@ import {
   SpinnerModule,
   TableModule,
   TimelineModule,
-  TitleModule,
+  TitleModule, TooltipModule,
   UploaderModule,
   VModalModule,
   WidgetModule,
@@ -66,7 +66,7 @@ import {
   LoadingModule,
   ModalModule as CarbonModalModule, PaginationModule,
   SelectModule as CarbonSelectModule,
-  TabsModule,
+  TabsModule, TooltipModule as CarbonTooltipModule,
 } from 'carbon-components-angular';
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
 import {DossierAssignUserComponent} from './components/dossier-assign-user/dossier-assign-user.component';
@@ -180,6 +180,8 @@ export type TabsFactory = () => Map<string, object>;
     DialogModule,
     FileUploaderModule,
     PaginationModule,
+    TooltipModule,
+    CarbonTooltipModule,
   ],
   exports: [DossierListComponent, DossierDetailComponent],
 })

@@ -519,4 +519,11 @@ export class DocumentService {
       `${this.valtimoEndpointUri}v1/zaken-api/document/${documentId}/files`
     );
   }
+
+  // TODO: Should this be here or should this be moved to another service?
+  deleteDocument(file: RelatedFile): Observable<Array<RelatedFile>> {
+    return this.http.delete<Array<RelatedFile>>(
+      `${this.valtimoEndpointUri}v1/documenten-api/${file.pluginConfigurationId}/files/${file.fileId}`
+    );
+  }
 }
