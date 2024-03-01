@@ -28,7 +28,7 @@
     "@carbon/styles": "1.51.1",
     "carbon-components-angular": "5.20.1",
     "ngx-skeleton-loader": "8.0.0",
-    "@mdi/font": "7.2.96",
+    "@mdi/font": "7.4.47",
     "uuid": "9.0.0",
     "flatpickr": "4.6.13",
     "lodash": "4.17.21",
