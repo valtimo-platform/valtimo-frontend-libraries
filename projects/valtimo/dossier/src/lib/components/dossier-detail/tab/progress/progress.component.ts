@@ -42,8 +42,8 @@ export class DossierDetailTabProgressComponent {
           a.isActive === b.isActive
             ? b.startedOn.getTime() - a.startedOn.getTime()
             : a.isActive
-            ? -1
-            : 1
+              ? -1
+              : 1
         )
       ),
       tap(processDocumentInstances => {
