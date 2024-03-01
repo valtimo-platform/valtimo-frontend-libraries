@@ -29,6 +29,7 @@
     "uuid",
     "flatpickr",
     "lodash",
-    "formiojs"
+    "formiojs",
+    "deepmerge-ts"
   ]
 }

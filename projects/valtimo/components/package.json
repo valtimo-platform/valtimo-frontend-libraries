@@ -31,6 +31,7 @@
     "@mdi/font": "7.2.96",
     "uuid": "9.0.0",
     "flatpickr": "4.6.13",
-    "lodash": "4.17.21"
+    "lodash": "4.17.21",
+    "deepmerge-ts": "5.1.0"
   }
 }

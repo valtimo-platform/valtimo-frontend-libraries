@@ -28,16 +28,18 @@ import {
 import {FormioSubmission, ValtimoFormioOptions} from '../../models';
 import {ValtimoModalService} from '../../services/valtimo-modal.service';
 import {UserProviderService} from '@valtimo/security';
-import {FormioComponent as FormIoSourceComponent} from '@formio/angular';
+import {FormioComponent as FormIoSourceComponent, FormioOptions} from '@formio/angular';
 import {Formio} from 'formiojs';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import jwt_decode from 'jwt-decode';
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, combineLatest, Observable, Subject, Subscription, timer} from 'rxjs';
-import {distinctUntilChanged, map, switchMap, take} from 'rxjs/operators';
+import {distinctUntilChanged, map, switchMap, take, tap} from 'rxjs/operators';
 import {FormIoStateService} from './services/form-io-state.service';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import {deepmerge} from 'deepmerge-ts';
+import {ConfigService, ValtimoConfig} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-form-io',
@@ -82,25 +84,29 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     distinctUntilChanged()
   );
 
-  public readonly formioOptions$: Observable<ValtimoFormioOptions> = combineLatest([
+  private readonly _overrideOptions$ = new BehaviorSubject<FormioOptions>({});
+
+  public readonly formioOptions$: Observable<ValtimoFormioOptions | FormioOptions> = combineLatest([
     this.currentLanguage$,
     this.options$,
+    this._overrideOptions$,
   ]).pipe(
-    map(([language, options]) => {
+    map(([language, options, overrideOptions]) => {
       const formioTranslations = this.translateService.instant('formioTranslations');
-      return typeof formioTranslations === 'object'
-        ? {
-            ...options,
-            i18n: {
-              [language]: this.stateService.flattenTranslationsObject(formioTranslations),
-            },
-            language,
-          }
-        : {
-            ...options,
-            language,
-          };
-    })
+
+      const defaultOptions = {
+        ...options,
+        language,
+        ...(formioTranslations === 'object' && {
+          i18n: {
+            [language]: this.stateService.flattenTranslationsObject(formioTranslations),
+          },
+        }),
+      };
+
+      return deepmerge(defaultOptions, overrideOptions);
+    }),
+    tap(options => this.logger.debug('Form.IO options used', options))
   );
 
   private _tokenRefreshTimerSubscription!: Subscription;
@@ -116,8 +122,11 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     private readonly stateService: FormIoStateService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly modalService: ValtimoModalService
-  ) {}
+    private readonly modalService: ValtimoModalService,
+    private readonly configService: ConfigService
+  ) {
+    this.setOverrideOptions(configService.config);
+  }
 
   public ngOnInit(): void {
     this.openRouteSubscription();
@@ -259,5 +268,11 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
 
   private clearTokenFromLocalStorage(): void {
     localStorage.removeItem(this._FORMIO_TOKEN_LOCAL_STORAGE_KEY);
+  }
+
+  private setOverrideOptions(config: ValtimoConfig): void {
+    if (!config.formioOptions) return;
+
+    this._overrideOptions$.next(config.formioOptions);
   }
 }
