@@ -120,6 +120,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       this._editor.setModel(model);
       this.initJsonSchemaValidation();
       this.formatDocument();
+      this.themeUpdater();
     }
   }
 
@@ -179,8 +180,11 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
     this._editor = monaco.editor.create(this.editorContainer.nativeElement, this._editorOptions);
 
+
+
     this.setEditorEvents();
     this.updateModel();
+    this.themeUpdater();
   }
 
   private initJsonSchemaValidation() {
@@ -201,6 +205,15 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
         validate: true,
       });
+    }
+  }
+
+  private themeUpdater(){
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      monaco?.editor?.setTheme('vs-dark')
+    }
+    else {
+      monaco?.editor?.setTheme('vs')
     }
   }
 }

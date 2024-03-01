@@ -352,7 +352,7 @@
   /* paragraph */
   --v-paragraph-font-size: var(--v-font-size-default);
   --v-paragraph-line-height: var(--v-line-height-large);
-  --v-paragraph-color: var(--v-color-grey-1);
+  --v-paragraph-color: var(--cds-text-secondary);
   --v-paragraph-font-weight: var(--v-font-weight-lighter);
   --v-paragraph-margin: var(--v-spacing-block-l);
   --v-paragraph-skeleton-loading-width: 60px;
