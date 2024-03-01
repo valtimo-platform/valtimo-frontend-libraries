@@ -22,7 +22,7 @@ import {FormioOptions} from '@formio/angular';
 
 export const VALTIMO_CONFIG = new InjectionToken<ValtimoConfig>('valtimoConfig');
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line
 export const INITIALIZERS = new InjectionToken<(() => Function)[]>('initializers');
 export declare type Direction = 'ASC' | 'DESC';
 
@@ -74,7 +74,7 @@ export interface OverrideFormioOptions extends FormioOptions {
 }
 
 export interface ValtimoConfig {
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line
   logoSvgBase64?: string;
   logoPngBase64?: string;
   applicationTitle?: string;
