@@ -28,6 +28,7 @@
     "@mdi/font",
     "uuid",
     "flatpickr",
-    "lodash"
+    "lodash",
+    "formiojs"
   ]
 }

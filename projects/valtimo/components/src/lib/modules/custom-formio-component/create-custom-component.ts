@@ -1,7 +1,6 @@
-import {Components, ExtendedComponentSchema} from '@formio/angular';
+import {BuilderInfo, Components, ExtendedComponentSchema, Utils as FormioUtils} from 'formiojs';
 import {FormioCustomComponentInfo, FormioCustomElement, FormioEvent} from './elements.common';
 import {clone, isArray, isNil} from 'lodash';
-import {v4 as uuidv4} from 'uuid';
 
 const BaseInputComponent = Components.components.input;
 const TextfieldComponent = Components.components.textfield;
@@ -9,7 +8,7 @@ const TextfieldComponent = Components.components.textfield;
 export function createCustomFormioComponent(customComponentOptions: FormioCustomComponentInfo) {
   return class CustomComponent extends BaseInputComponent {
     static editForm = customComponentOptions.editForm || TextfieldComponent.editForm;
-    id = uuidv4();
+    id = FormioUtils.getRandomComponentId();
     type = customComponentOptions.type;
     _customAngularElement: FormioCustomElement;
 
@@ -30,13 +29,13 @@ export function createCustomFormioComponent(customComponentOptions: FormioCustom
       return customComponentOptions.emptyValue || null;
     }
 
-    static get builderInfo(): any {
+    static get builderInfo(): BuilderInfo {
       return {
         title: customComponentOptions.title,
         group: customComponentOptions.group,
         icon: customComponentOptions.icon,
-        weight: (customComponentOptions as any).weight,
-        documentation: (customComponentOptions as any).documentation,
+        weight: customComponentOptions.weight,
+        documentation: customComponentOptions.documentation,
         schema: CustomComponent.schema(),
       };
     }
@@ -58,9 +57,7 @@ export function createCustomFormioComponent(customComponentOptions: FormioCustom
       );
 
       if (customComponentOptions.extraValidators) {
-        (this.validators as any) = (this.validators as any).concat(
-          customComponentOptions.extraValidators
-        );
+        this.validators = this.validators.concat(customComponentOptions.extraValidators);
       }
     }
 
@@ -96,7 +93,6 @@ export function createCustomFormioComponent(customComponentOptions: FormioCustom
     attach(element: HTMLElement) {
       let superAttach = super.attach(element);
 
-      // @ts-ignore
       this._customAngularElement = element.querySelector(customComponentOptions.selector);
 
       // Bind the custom options and the validations to the Angular component's inputs (flattened)
@@ -108,7 +104,6 @@ export function createCustomFormioComponent(customComponentOptions: FormioCustom
         if (!this._customAngularElement.getAttribute('ng-version')) {
           this._customAngularElement.removeAttribute('ref');
 
-          // @ts-ignore
           const newCustomElement = document.createElement(
             customComponentOptions.selector
           ) as FormioCustomElement;
@@ -149,7 +144,6 @@ export function createCustomFormioComponent(customComponentOptions: FormioCustom
         // Attach event listener for emit event
         this._customAngularElement.addEventListener(
           'formioEvent',
-          // @ts-ignore
           (event: CustomEvent<FormioEvent>) => {
             this.emit(event.detail.eventName, {
               ...event.detail.data,

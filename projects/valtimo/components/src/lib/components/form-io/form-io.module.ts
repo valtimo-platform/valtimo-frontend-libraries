@@ -32,7 +32,6 @@ import {DocumentenApiUploaderComponent} from './documenten-api-uploader/document
 import {DocumentenApiMetadataModalModule} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.module';
 import {FormIoCurrentUserComponent} from './form-io-current-user/form-io-current-user.component';
 import {ConfigService} from '@valtimo/config';
-import {CustomTagsService} from '../../modules';
 
 @NgModule({
   imports: [
@@ -61,7 +60,6 @@ import {CustomTagsService} from '../../modules';
     FormIoCurrentUserComponent,
   ],
   providers: [
-    CustomTagsService,
     FormIoDomService,
     {
       provide: FormioAppConfig,

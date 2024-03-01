@@ -28,7 +28,8 @@ import {
 import {FormioSubmission, ValtimoFormioOptions} from '../../models';
 import {ValtimoModalService} from '../../services/valtimo-modal.service';
 import {UserProviderService} from '@valtimo/security';
-import {Formio, FormioComponent as FormIoSourceComponent} from '@formio/angular';
+import {FormioComponent as FormIoSourceComponent} from '@formio/angular';
+import {Formio} from 'formiojs';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import jwt_decode from 'jwt-decode';
 import {NGXLogger} from 'ngx-logger';
