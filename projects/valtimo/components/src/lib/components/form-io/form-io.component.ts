@@ -31,7 +31,7 @@ import {UserProviderService} from '@valtimo/security';
 import {FormioComponent as FormIoSourceComponent, FormioOptions} from '@formio/angular';
 import {Formio} from 'formiojs';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
-import jwt_decode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, combineLatest, Observable, Subject, Subscription, timer} from 'rxjs';
 import {distinctUntilChanged, map, switchMap, take, tap} from 'rxjs/operators';
@@ -215,7 +215,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private setTimerForTokenRefresh(token: string): void {
-    const tokenExp = (jwt_decode(token) as any).exp * 1000;
+    const tokenExp = jwtDecode(token).exp * 1000;
     const expiryTime = tokenExp - Date.now() - 1000;
 
     this._tokenTimerSubscription.add(

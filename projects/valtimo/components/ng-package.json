@@ -29,6 +29,7 @@
     "uuid",
     "flatpickr",
     "lodash",
+    "jwt-decode",
     "formiojs",
     "deepmerge-ts"
   ]
