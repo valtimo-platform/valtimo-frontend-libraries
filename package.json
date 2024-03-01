@@ -253,7 +253,7 @@
     "keycloak-js": "23.0.7",
     "lodash": "4.17.21",
     "moment": "2.30.1",
-    "monaco-editor": "0.46.0",
+    "monaco-editor": "0.45.0",
     "ng-multiselect-dropdown": "1.0.0-beta.19",
     "ngx-color-picker": "16.0.0",
     "ngx-csv": "0.3.2",

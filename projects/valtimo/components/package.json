@@ -19,7 +19,7 @@
     "@ng-bootstrap/ng-bootstrap": "11.0.1",
     "ngx-toastr": "18.0.0",
     "@formio/angular": "7.0.0",
-    "monaco-editor": "0.46.0",
+    "monaco-editor": "0.45.0",
     "ngx-spinner": "16.0.2",
     "tslib": "2.6.2",
     "ng-multiselect-dropdown": "1.0.0-beta.19",
