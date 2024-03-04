@@ -70,7 +70,7 @@ $lightThemeOverwriteVariables: (
 );
 
 @use '@carbon/styles/scss/theme' with (
-  $theme: map-merge(themes.$white, $lightThemeOverwriteVariables)
+  $theme: map-merge(themes.$g10, $lightThemeOverwriteVariables)
 );
 
 @use '@carbon/styles/scss/components/button/tokens' as button-tokens with (
@@ -169,7 +169,7 @@ body {
 
 @media (prefers-color-scheme: light) {
   :root {
-    @include theme.theme(themes.$g10);
+    @include theme.theme(themes.$g10, $lightThemeOverwriteVariables);
   }
 }
 
