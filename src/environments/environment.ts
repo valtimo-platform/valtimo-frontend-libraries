@@ -194,6 +194,7 @@ export const environment: ValtimoConfig = {
       },
     ],
   },
+  caseFileUploadAcceptedFiles: 'image/png, image/jpeg, text/plain, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/xml',
   visibleTaskListTabs: [TaskListTab.MINE, TaskListTab.OPEN, TaskListTab.ALL],
   visibleDossierListTabs: [DossierListTab.ALL, DossierListTab.MINE, DossierListTab.OPEN],
   customTaskList: {
