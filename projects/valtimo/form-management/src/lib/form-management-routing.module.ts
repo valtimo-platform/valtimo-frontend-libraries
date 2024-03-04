@@ -48,6 +48,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, RouterUtils.getRouterExtraOptions())],
   exports: [RouterModule],
 })
-export class FormManagementRoutingModule {
-  constructor() {}
-}
+export class FormManagementRoutingModule {}
