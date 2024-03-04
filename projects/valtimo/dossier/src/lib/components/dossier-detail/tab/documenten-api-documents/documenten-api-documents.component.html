@@ -15,20 +15,20 @@
   -->
 
 <div class="carbon-document-table-wrapper">
-  <valtimo-carbon-table
-          [data]="relatedFiles$ | async"
+  <valtimo-carbon-list
+          [actionItems]="actionItems"
+          [items]="relatedFiles$ | async"
           [fields]="fields"
           [loading]="loading$ | async"
-          [tableConfig]="tableConfig"
-          (rowClick)="onRowClick($event)"
-          hideTableHeader
+          (rowClicked)="onRowClick($event)"
+          hideColumnHeader
   >
     <div carbonToolbarContent>
       <ng-container *ngTemplateOutlet="dossierListActions"></ng-container>
     </div>
 
     <ng-container *ngIf="(showZaakLinkWarning && isAdmin); then zaakLinkWarning; else noFiles"></ng-container>
-  </valtimo-carbon-table>
+  </valtimo-carbon-list>
 </div>
 
 <ng-template #zaakLinkWarning>

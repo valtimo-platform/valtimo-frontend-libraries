@@ -68,7 +68,6 @@ import {
   SelectModule as CarbonSelectModule,
   TabsModule, TooltipModule as CarbonTooltipModule,
   SkeletonModule,
-  TabsModule,
 } from 'carbon-components-angular';
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
 import {DossierAssignUserComponent} from './components/dossier-assign-user/dossier-assign-user.component';

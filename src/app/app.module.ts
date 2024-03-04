@@ -20,7 +20,7 @@ import {CommonModule} from '@angular/common';
 import {HttpBackend, HttpClient, HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {LayoutModule, TranslationManagementModule} from '@valtimo/layout';
+import {LayoutModule} from '@valtimo/layout';
 import {TaskModule} from '@valtimo/task';
 import {environment} from '../environments/environment';
 import {SecurityModule} from '@valtimo/security';
@@ -126,6 +126,7 @@ import {
 import {ObjectManagementModule} from '@valtimo/object-management';
 import {ObjectModule} from '@valtimo/object';
 import {AccessControlManagementModule} from '@valtimo/access-control-management';
+import {TranslationManagementModule} from '../../projects/valtimo/layout/src/lib/translation-management.module';
 
 export function tabsFactory() {
   return new Map<string, object>([

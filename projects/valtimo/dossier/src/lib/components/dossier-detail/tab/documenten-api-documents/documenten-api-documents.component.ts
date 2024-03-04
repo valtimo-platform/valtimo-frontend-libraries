@@ -23,7 +23,7 @@ import {catchError, map, switchMap, take, tap} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfigService} from '@valtimo/config';
-import {ColumnConfig, DocumentenApiMetadata, PromptService, ViewType} from '@valtimo/components';
+import {ActionItem, ColumnConfig, DocumentenApiMetadata, PromptService, ViewType} from '@valtimo/components';
 import {UserProviderService} from '@valtimo/security';
 import {FileSortService} from '../../../../services/file-sort.service';
 import moment from 'moment';
@@ -40,6 +40,18 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   @ViewChild('sizeTemplate') public sizeTemplate: TemplateRef<any>;
 
   public fields: ColumnConfig[];
+  public actionItems: ActionItem[] = [
+    {
+      label: 'document.download',
+      callback: this.onDownloadActionClick.bind(this),
+      type: 'normal',
+    },
+    {
+      label: 'document.delete',
+      callback: this.onDeleteActionClick.bind(this),
+      type: 'danger',
+    },
+  ];
   public fieldsConfig = [ // TODO: Refactor this once admin page config is implemented
     'title',
     'fileName',
@@ -52,9 +64,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     'informatieobjecttype',
     'actions'
   ];
-  public tableConfig = {
-    searchable: false //TODO: implement searching when Documenten API supports this
-  }
 
   public readonly documentDefinitionName: string;
   public readonly documentId: string;
@@ -136,12 +145,10 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.refetchDocuments();
     this.setUploadProcessLinked();
     this.isUserAdmin();
-    this.iconService.register(Filter16);
-    this.iconService.register(TagGroup16);
-    this.iconService.register(Upload16);
+    this.iconService.registerAll([Filter16, TagGroup16, Upload16]);
   }
 
-  ngAfterViewInit() : void {
+  public ngAfterViewInit() : void {
     const fieldOptions = [
       {key: 'title', label: 'document.inputTitle'},
       {key: 'description', label: 'document.inputDescription'},
@@ -163,24 +170,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       {key: 'confidentialityLevel', label: 'document.confidentialityLevel'},
       {key: 'receiptDate', label: 'document.receiptDate'},
       {key: 'sendDate', label: 'document.sendDate'},
-      {key: 'status', label: 'document.status'},
-      {
-        actions: [
-          {
-            actionName: 'document.download',
-            callback: this.onDownloadActionClick.bind(this),
-            type: 'normal',
-          },
-          {
-            actionName: 'document.delete',
-            callback: this.onDeleteActionClick.bind(this),
-            type: 'danger',
-          },
-        ],
-        viewType: ViewType.ACTION,
-        label: '',
-        key: 'actions',
-      }
+      {key: 'status', label: 'document.status'}
     ];
 
     this.fields = [
@@ -199,7 +189,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     }
   }
 
-  public getUploadButtonTooltip() {
+  public getUploadButtonTooltip(): string {
     if (this.uploadProcessLinkedSet && this.uploadProcessLinked) {
       return 'Upload';
     } else if (this.isAdmin) {
