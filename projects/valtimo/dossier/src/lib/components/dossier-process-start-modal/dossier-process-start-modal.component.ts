@@ -33,8 +33,6 @@ import {UserProviderService} from '@valtimo/security';
 import {take} from 'rxjs/operators';
 import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
 import {DossierListService} from '../../services';
-import {StartModalService} from '../../services/start-modal.service';
-import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-process-start-modal',
@@ -47,8 +45,6 @@ export class DossierProcessStartModalComponent implements OnInit {
   public processDefinitionId: string;
   public documentDefinitionName: string;
   public processName: string;
-  private _startEventName: string;
-  private readonly _useStartEventNameAsStartFormTitle!: boolean;
   public formDefinition: FormioForm;
   public formFlowInstanceId: string;
   public formioSubmission: FormioSubmission;
@@ -68,12 +64,8 @@ export class DossierProcessStartModalComponent implements OnInit {
     private formFlowService: FormFlowService,
     private userProviderService: UserProviderService,
     private permissionService: PermissionService,
-    private listService: DossierListService,
-    private startModalService: StartModalService,
-    private configService: ConfigService
-  ) {
-    this._useStartEventNameAsStartFormTitle = this.configService.config.featureToggles?.useStartEventNameAsStartFormTitle
-  }
+    private listService: DossierListService
+  ) {}
 
   ngOnInit() {
     this.isUserAdmin();
@@ -83,11 +75,6 @@ export class DossierProcessStartModalComponent implements OnInit {
     this.processLinkId = null;
     this.formDefinition = null;
     this.formFlowInstanceId = null;
-    if (this._useStartEventNameAsStartFormTitle) {
-      this.processService.getProcessDefinitionXml(this.processDefinitionId).subscribe((result) => {
-        this._startEventName = this.startModalService.getStandardStartEventTitle(result.bpmn20Xml);
-      });
-    }
     this.processService
       .getProcessDefinitionStartProcessLink(
         this.processDefinitionId,
@@ -117,8 +104,7 @@ export class DossierProcessStartModalComponent implements OnInit {
   }
 
   public get modalTitle() {
-    const fallbackTitle = `Start - ${this.processName}`;
-    return this._useStartEventNameAsStartFormTitle ? (this._startEventName || fallbackTitle) : fallbackTitle;
+    return `Start - ${this.processName}`;
   }
 
   openModal(processDocumentDefinition: ProcessDocumentDefinition) {
