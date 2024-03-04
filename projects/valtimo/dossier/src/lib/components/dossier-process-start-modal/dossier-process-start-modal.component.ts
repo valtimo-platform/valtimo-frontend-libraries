@@ -33,8 +33,6 @@ import {UserProviderService} from '@valtimo/security';
 import {take} from 'rxjs/operators';
 import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
 import {DossierListService} from '../../services';
-import {StartModalService} from '../../services/start-modal.service';
-import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-process-start-modal',
@@ -47,8 +45,6 @@ export class DossierProcessStartModalComponent implements OnInit {
   public processDefinitionId: string;
   public documentDefinitionName: string;
   public processName: string;
-  private _startEventName: string;
-  private readonly _useStartEventNameAsStartFormTitle!: boolean;
   public formDefinition: FormioForm;
   public formFlowInstanceId: string;
   public formioSubmission: FormioSubmission;
