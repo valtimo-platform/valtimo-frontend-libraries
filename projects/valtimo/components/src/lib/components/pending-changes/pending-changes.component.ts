@@ -21,9 +21,6 @@ import {Observable, Subject} from 'rxjs';
 import {PendingChangesService} from './pending-changes.service';
 
 export class PendingChangesComponent {
-  protected customModal: any = null;
-  protected readonly deactivateSubject = new Subject<boolean>();
-
   private _activeModal: ComponentRef<any> | null = null;
   private _modalService: ModalService;
   private _pendingChangesService: PendingChangesService;
@@ -48,7 +45,7 @@ export class PendingChangesComponent {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (!this._pendingChangesService.pendingChanges) {
+    if (!this.pendingChanges) {
       return true;
     }
 
@@ -56,11 +53,6 @@ export class PendingChangesComponent {
 
     if (!!this._activeModal) {
       return false;
-    }
-
-    if (!!this.customModal) {
-      this._activeModal = this.customModal;
-      return this.deactivateSubject;
     }
 
     this._activeModal = this._modalService.show({
