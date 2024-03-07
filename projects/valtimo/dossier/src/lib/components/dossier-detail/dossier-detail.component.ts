@@ -63,7 +63,7 @@ import {DossierService, DossierTabService} from '../../services';
 @Component({
   selector: 'valtimo-dossier-detail',
   templateUrl: './dossier-detail.component.html',
-  styleUrls: ['./dossier-detail.component.css'],
+  styleUrls: ['./dossier-detail.component.scss'],
   providers: [DossierTabService],
 })
 export class DossierDetailComponent implements AfterViewInit, OnDestroy {
@@ -83,6 +83,8 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
   public tabLoader: TabLoaderImpl | null = null;
 
   public readonly assigneeId$ = new BehaviorSubject<string>('');
+
+  public readonly showModal$ = new BehaviorSubject<boolean>(false);
 
   private readonly _caseStatusKey$ = new BehaviorSubject<string | null | 'NOT_AVAILABLE'>(null);
 
@@ -266,6 +268,9 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
       });
   }
 
+  public showEmailModal(): void {
+    this.showModal$.next(true)
+  }
   private initBreadcrumb(): void {
     this.documentService
       .getDocumentDefinition(this.documentDefinitionName)

@@ -180,3 +180,37 @@ body {
 .cds--side-nav{
   background-color: var(--cds-layer);
 }
+
+//FormIO adjustments
+
+.card.card-border{
+  border: none;
+  background-color: var(--cds-layer-02) !important;
+}
+
+.card-body.bg-white, .form-control{
+  background-color: var(--cds-layer) !important;
+}
+
+.card-header.bg-light{
+  background-color: var(--cds-layer-02) !important;
+}
+
+.user-tasks-title{
+  color: var(--cds-text-primary) !important;
+}
+
+.nav.nav-tabs{
+  border-bottom: 2px solid var(--cds-border-strong) !important;
+  .nav-item{
+    margin-right: 0 !important;
+    .nav-link{
+      background-color: var(--cds-layer-accent) !important;
+      color: var(--cds-text-primary) !important;
+    }
+    .nav-link.active{
+      background-color: var(--cds-layer) !important;
+      border-bottom: 3px solid var(--cds-border-interactive) !important;
+    }
+  }
+}

@@ -51,7 +51,7 @@ import {
   TableModule,
   TimelineModule,
   TitleModule,
-  UploaderModule,
+  UploaderModule, ValtimoCdsOverflowButtonDirectiveModule,
   VModalModule,
   WidgetModule,
 } from '@valtimo/components';
@@ -61,16 +61,16 @@ import {ProcessLinkModule} from '@valtimo/process-link';
 import {ProcessModule} from '@valtimo/process';
 import {TaskModule} from '@valtimo/task';
 import {
-  ButtonModule as CarbonButtonModule,
-  ComboBoxModule,
-  DropdownModule,
-  IconModule,
-  LoadingModule,
-  ModalModule as CarbonModalModule,
-  SelectModule as CarbonSelectModule,
-  SkeletonModule,
-  TabsModule,
-  TagModule,
+    ButtonModule as CarbonButtonModule,
+    ComboBoxModule, DialogModule,
+    DropdownModule,
+    IconModule,
+    LoadingModule,
+    ModalModule as CarbonModalModule,
+    SelectModule as CarbonSelectModule,
+    SkeletonModule,
+    TabsModule,
+    TagModule,
 } from 'carbon-components-angular';
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
 import {DossierAssignUserComponent} from './components/dossier-assign-user/dossier-assign-user.component';
@@ -185,6 +185,8 @@ export type TabsFactory = () => Map<string, object>;
     StatusSelectorComponent,
     RenderInPageHeaderDirectiveModule,
     TagModule,
+    DialogModule,
+    ValtimoCdsOverflowButtonDirectiveModule,
   ],
   exports: [DossierListComponent, DossierDetailComponent],
 })

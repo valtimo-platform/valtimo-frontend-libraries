@@ -18,7 +18,8 @@
     canAssign: canAssign$ | async,
     canClaim: canClaim$ | async,
     canHaveAssignee: canHaveAssignee$ | async,
-    document: document$ | async
+    document: document$ | async,
+    showModal: showModal$ | async
   } as obs"
   class="main-content"
 >
@@ -45,6 +46,7 @@
                 module="dossier"
                 page="dossier-detail"
                 section="card-header"
+                [showModal]="obs.showModal"
               ></valtimo-extension>
 
               <ng-container
@@ -94,19 +96,35 @@
           </div>
         </div>
 
-        <ul *ngIf="tabLoader" class="nav nav-tabs">
-          <li class="nav-item" *ngFor="let tab of tabLoader.tabs">
-            <a
-              [ngClass]="{active: tab.isActive()}"
-              (click)="tabLoader.load(tab)"
-              class="nav-link clickable"
-              data-toggle="tab"
-              id="{{ tab.name }}-tab"
-            >
-              {{ tab | tabTranslate | async }}
-            </a>
-          </li>
-        </ul>
+        <ng-container *ngTemplateOutlet="tabs"></ng-container>
+        <ng-template #tabs>
+          <ng-container *ngIf="tabLoader">
+            <cds-tabs type="contained" class="case-detail-tabs"
+              >
+              <cds-tab
+                      *ngFor="let tab of tabLoader.tabs"
+                      [active]="tab.isActive()"
+                      heading="{{ tab | tabTranslate | async }}"
+                      [id]=""
+                      (selected)="tabLoader.load(tab)"
+                      ></cds-tab>
+            </cds-tabs>
+          </ng-container>
+        </ng-template>
+
+<!--        <ul *ngIf="tabLoader" class="nav nav-tabs">-->
+<!--          <li class="nav-item" *ngFor="let tab of tabLoader.tabs">-->
+<!--            <a-->
+<!--              [ngClass]="{active: tab.isActive()}"-->
+<!--              (click)="tabLoader.load(tab)"-->
+<!--              class="nav-link clickable"-->
+<!--              data-toggle="tab"-->
+<!--              id="{{ tab.name }}-tab"-->
+<!--            >-->
+<!--              {{ tab | tabTranslate | async }}-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
 
         <div class="card-body bg-white p-5 position-relative tab-container">
           <div *ngIf="loadingTabs$ | async" class="loading-container">
@@ -207,8 +225,49 @@
   </div>
 </ng-template>
 
-<ng-container renderInPageHeader [fullWidth]="true">
+<ng-template #customTrigger>
+  <button cdsButton="primary"
+          [disabled]="processDocumentDefinitions.length === 0"
+          [ngbTooltip]="processDocumentDefinitions.length === 0 ? 'No action' : null"
+  >
+    {{ 'dossier.startSubProcess' | translate }}
+
+    <svg class="cds--btn__icon" cdsIcon="chevron-down" size="16"></svg>
+  </button>
+</ng-template>
+
+<ng-container renderInPageHeader>
   <ng-template>
+    <div class="buttons-container">
+      <cds-overflow-menu class="overflow-button">
+        <cds-overflow-menu-option>
+          <button class="btn btn-secondary btn-space" (click)="showEmailModal()">
+            <i class="icon mdi mdi-email mr-1"></i>
+
+            {{ 'dossier.sendEmailExtension.buttonText' | translate }}
+          </button>
+        </cds-overflow-menu-option>
+
+      </cds-overflow-menu>
+      <cds-overflow-menu
+              valtimoCdsOverflowButton
+              [width]="250"
+              [customTrigger]="customTrigger"
+              [offset]="{y: 48, x: 37}"
+              class="overflow-button">
+        <cds-overflow-menu-option
+                *ngFor="let processDocumentDefinition of processDocumentDefinitions"
+                (click)="startProcess(processDocumentDefinition)"
+        >
+          {{
+          (processDocumentDefinition?.id?.processDefinitionKey | translate) !==
+          processDocumentDefinition?.id?.processDefinitionKey
+                  ? (processDocumentDefinition.id.processDefinitionKey | translate)
+                  : processDocumentDefinition.processName
+          }}
+        </cds-overflow-menu-option>
+      </cds-overflow-menu>
+    </div>
     <div *ngIf="caseStatus$ | async as caseStatus" class="dossier-detail-page-header">
       <cds-tag [type]="caseStatus.tagType">{{ caseStatus.title }}</cds-tag>
     </div>

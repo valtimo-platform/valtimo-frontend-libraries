@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ModalComponent} from '@valtimo/components';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
@@ -31,6 +31,14 @@ import {TranslateService} from '@ngx-translate/core';
 export class EmailExtensionComponent implements OnInit {
   @ViewChild('modal') modal: ModalComponent;
 
+  @Input() public set showModal(value: boolean) {
+    console.log('in the set', value);
+    if(!value) {
+      console.log('returned', value);
+      return;
+    }
+    this.modal.show();
+  }
   readonly documentId$ = new BehaviorSubject<string>('');
   readonly subject$ = new BehaviorSubject<string>('');
   readonly body$ = new BehaviorSubject<string>('');
