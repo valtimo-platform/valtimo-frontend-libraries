@@ -83,8 +83,8 @@
       name="apiVersion"
       [title]="'apiVersion' | pluginTranslate: pluginId | async"
       [disabled]="obs.disabled"
-      [defaultSelectionId]="obs.prefill?.apiVersion || pObs.apiVersionItems[0].id"
-      [required]="true"
+      [defaultSelectionId]="obs.prefill?.apiVersion"
+      [required]="false"
       [tooltip]="'apiVersionTooltip' | pluginTranslate: pluginId | async"
     ></v-select>
   </ng-container>

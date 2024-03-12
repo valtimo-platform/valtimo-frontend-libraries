@@ -20,6 +20,7 @@ interface DocumentenApiConfig extends PluginConfigurationData {
   url: string;
   bronorganisatie: string;
   authenticationPluginConfiguration: string;
+  apiVersion?: string;
 }
 
 type ConfidentialityLevel =

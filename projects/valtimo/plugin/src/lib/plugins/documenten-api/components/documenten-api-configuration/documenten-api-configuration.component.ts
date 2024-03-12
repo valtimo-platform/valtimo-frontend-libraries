@@ -83,6 +83,9 @@ export class DocumentenApiConfigurationComponent
   }
 
   formValueChange(formValue: DocumentenApiConfig): void {
+    if (!formValue.apiVersion) {
+      formValue.apiVersion = null;
+    }
     this.formValue$.next(formValue);
     this.handleValid(formValue);
   }
