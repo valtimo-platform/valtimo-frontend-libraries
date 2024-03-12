@@ -19,7 +19,6 @@
     canClaim: canClaim$ | async,
     canHaveAssignee: canHaveAssignee$ | async,
     document: document$ | async,
-    showModal: showModal$ | async
   } as obs"
   class="main-content"
 >
@@ -46,7 +45,6 @@
                 module="dossier"
                 page="dossier-detail"
                 section="card-header"
-                [showModal]="obs.showModal"
               ></valtimo-extension>
 
               <ng-container
@@ -241,11 +239,11 @@
     <div class="buttons-container">
       <cds-overflow-menu class="overflow-button">
         <cds-overflow-menu-option>
-          <button class="btn btn-secondary btn-space" (click)="showEmailModal()">
-            <i class="icon mdi mdi-email mr-1"></i>
-
-            {{ 'dossier.sendEmailExtension.buttonText' | translate }}
-          </button>
+          <valtimo-extension
+                  module="dossier"
+                  page="dossier-detail"
+                  section="card-header"
+          ></valtimo-extension>
         </cds-overflow-menu-option>
 
       </cds-overflow-menu>

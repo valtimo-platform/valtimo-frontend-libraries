@@ -84,8 +84,6 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
 
   public readonly assigneeId$ = new BehaviorSubject<string>('');
 
-  public readonly showModal$ = new BehaviorSubject<boolean>(false);
-
   private readonly _caseStatusKey$ = new BehaviorSubject<string | null | 'NOT_AVAILABLE'>(null);
 
   public readonly caseStatusKey$: Observable<string | 'NOT_AVAILABLE'> = this._caseStatusKey$.pipe(
@@ -268,9 +266,6 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
       });
   }
 
-  public showEmailModal(): void {
-    this.showModal$.next(true)
-  }
   private initBreadcrumb(): void {
     this.documentService
       .getDocumentDefinition(this.documentDefinitionName)
