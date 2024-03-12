@@ -16,16 +16,8 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
-import {
-  BehaviorSubject,
-  combineLatest,
-  map,
-  Observable,
-  of,
-  Subscription,
-  take,
-} from 'rxjs';
-import {DocumentenApiConfig, DocumentStatus} from '../../models';
+import {BehaviorSubject, combineLatest, map, Observable, of, Subscription, take} from 'rxjs';
+import {DocumentenApiConfig} from '../../models';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
 

@@ -68,5 +68,5 @@ export {
   DocumentLanguage,
   DocumentStatus,
   DocumentenApiVersion,
-  DocumentenApiManagementVersion
+  DocumentenApiManagementVersion,
 };

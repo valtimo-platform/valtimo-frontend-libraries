@@ -33,7 +33,7 @@ import {
   DocumentenApiManagementVersion,
   DocumentenApiService,
   PluginConfiguration,
-  PluginManagementService
+  PluginManagementService,
 } from '@valtimo/plugin';
 
 @Component({
@@ -58,9 +58,12 @@ export class OpenZaakTypeLinkExtensionComponent {
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || '')
   );
-  readonly documentenApiVersion$: Observable<DocumentenApiManagementVersion> = this.documentDefinitionName$.pipe(
-    switchMap(documentDefinitionName => this.documentenApiService.getManagementApiVersion(documentDefinitionName))
-  );
+  readonly documentenApiVersion$: Observable<DocumentenApiManagementVersion> =
+    this.documentDefinitionName$.pipe(
+      switchMap(documentDefinitionName =>
+        this.documentenApiService.getManagementApiVersion(documentDefinitionName)
+      )
+    );
 
   @ViewChild('openZaakTypeLinkModal') modal: ModalComponent;
 
