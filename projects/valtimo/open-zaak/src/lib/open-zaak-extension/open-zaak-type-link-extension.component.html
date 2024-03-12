@@ -32,7 +32,7 @@
     >
       <ng-container
         *ngIf="
-          obs.documentenApiVersion.detectedVersions.length == 1;
+          obs.documentenApiVersion.detectedVersions.length === 1;
           else multipleDocumentenApiVersionsWarning
         "
       >
