@@ -21,10 +21,9 @@ import {
   combineLatest,
   map,
   Observable,
+  of,
   Subscription,
-  switchMap,
   take,
-  tap,
 } from 'rxjs';
 import {DocumentenApiConfig, DocumentStatus} from '../../models';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
@@ -68,6 +67,14 @@ export class DocumentenApiConfigurationComponent
         }))
       )
     );
+  readonly apiVersionItems$: Observable<Array<{id: string; text: string}>> = of(
+    ['1.4.3', '1.4.1', '1.4.0', '1.3.0', '1.2.0', '1.1.0', '1.0.0', '1.0.1', '1.0.0'].map(
+      version => ({
+        id: version,
+        text: version,
+      })
+    )
+  );
 
   constructor(
     private readonly pluginManagementService: PluginManagementService,
