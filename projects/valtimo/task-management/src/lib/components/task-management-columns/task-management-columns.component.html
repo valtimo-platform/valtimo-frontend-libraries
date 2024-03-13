@@ -1,0 +1,64 @@
+<!--
+  ~ Copyright 2015-2024 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<ng-container
+  *ngIf="{
+    taskListColumns: taskListColumns$ | async,
+    documentDefinitionName: documentDefinitionName$ | async,
+    loadingColumns: loadingColumns$ | async
+  } as obs"
+>
+  <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+</ng-container>
+
+<ng-template #list let-obs="obs">
+  <valtimo-carbon-list
+    *ngIf="!obs.loadingColumns; else loading"
+    [actionItems]="actionItems"
+    [loading]="obs.loadingCaseListColumns"
+    [items]="obs.caseListColumn"
+    [fields]="fields"
+    [viewMode]="false"
+    [header]="false"
+    [movingRowsEnabled]="true"
+    (moveRow)="onMoveRowEvent($event, obs.documentDefinitionName)"
+    (rowClicked)="columnRowClicked($event)"
+  >
+    <ng-container
+      carbonToolbarContent
+      *ngTemplateOutlet="buttons; context: {obs: obs}"
+    ></ng-container>
+
+    <valtimo-no-results
+      [title]="'listColumn.noConfigWarningTitle' | translate"
+      [description]="'listColumn.noConfigWarning' | translate"
+      illustration="valtimo-layout/img/emptystate-empty.svg"
+    ></valtimo-no-results>
+  </valtimo-carbon-list>
+</ng-template>
+
+<ng-template #loading>
+  <valtimo-carbon-list [loading]="true"></valtimo-carbon-list>
+</ng-template>
+
+<ng-template #buttons let-obs="obs">
+  <button cdsButton="primary">
+    {{ 'listColumn.addButtonText' | translate }}
+    <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+  </button>
+</ng-template>
+
+<valtimo-task-management-column-modal></valtimo-task-management-column-modal>

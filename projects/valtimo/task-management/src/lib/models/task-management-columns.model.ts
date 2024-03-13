@@ -14,7 +14,24 @@
  * limitations under the License.
  */
 
-export * from './task-management';
-export * from './task-management-detail';
-export * from './task-management-columns';
-export * from './task-management-column-modal';
+enum TaskListColumnDefaultSort {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+interface TaskListColumnDisplayType {
+  type: string;
+  displayTypeParameters: object;
+}
+
+interface TaskListColumn {
+  title: string;
+  key: string;
+  path: string;
+  displayType: TaskListColumnDisplayType;
+  sortable: boolean;
+  defaultSort: TaskListColumnDefaultSort;
+  order?: number;
+}
+
+export {TaskListColumn, TaskListColumnDisplayType, TaskListColumnDefaultSort};

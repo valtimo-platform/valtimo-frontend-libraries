@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, ViewEncapsulation} from '@angular/core';
 import {CARBON_THEME, CarbonListModule, PageTitleService} from '@valtimo/components';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
@@ -24,14 +24,22 @@ import {DocumentDefinition, DocumentService} from '@valtimo/document';
 import {TabsModule} from 'carbon-components-angular';
 import {TaskManagementService} from '../../services';
 import {TaskManagementTab} from '../../models';
+import {TaskManagementColumnsComponent} from '../task-management-columns';
 
 @Component({
   templateUrl: './task-management-detail.component.html',
   styleUrls: ['./task-management-detail.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, CarbonListModule, TranslateModule, TabsModule],
+  imports: [
+    CommonModule,
+    CarbonListModule,
+    TranslateModule,
+    TabsModule,
+    TaskManagementColumnsComponent,
+  ],
   providers: [TaskManagementService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class TaskManagementDetailComponent {
   @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.G10;

@@ -1,0 +1,157 @@
+/*
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {
+  ActionItem,
+  CARBON_THEME,
+  CarbonListModule,
+  ColumnConfig,
+  MoveRowEvent,
+} from '@valtimo/components';
+import {CommonModule} from '@angular/common';
+import {TranslateModule} from '@ngx-translate/core';
+import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
+import {TaskManagementService} from '../../services';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {TaskManagementApiService} from '../../services/task-management-api.service';
+import {TaskListColumn} from '../../models/task-management-columns.model';
+import {TaskManagementColumnModalComponent} from '../task-management-column-modal';
+
+@Component({
+  selector: 'valtimo-task-management-columns',
+  templateUrl: './task-management-columns.component.html',
+  styleUrls: ['./task-management-columns.component.scss'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    CarbonListModule,
+    TranslateModule,
+    TabsModule,
+    TaskManagementColumnModalComponent,
+    ButtonModule,
+    IconModule,
+  ],
+  providers: [TaskManagementService],
+})
+export class TaskManagementColumnsComponent {
+  @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.G10;
+
+  private readonly _refreshColumns$ = new BehaviorSubject<null>(null);
+
+  public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
+    map(params => params?.name),
+    filter(name => !!name)
+  );
+
+  public readonly loadingColumns$ = new BehaviorSubject<boolean>(true);
+
+  public readonly taskListColumns$: Observable<TaskListColumn[]> = combineLatest([
+    this.documentDefinitionName$,
+    this._refreshColumns$,
+  ]).pipe(
+    tap(() => this.loadingColumns$.next(true)),
+    switchMap(([documentDefinitionName]) =>
+      this.taskManagementApiService.getTaskListColumns(documentDefinitionName)
+    ),
+    tap(() => this.loadingColumns$.next(false))
+  );
+
+  public readonly showDeleteModal$ = new Subject<boolean>();
+  public readonly deleteRowKey$ = new BehaviorSubject<string>('');
+
+  public readonly fields: Array<ColumnConfig> = [
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'title',
+      label: 'listColumn.title',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'key',
+      label: 'listColumn.key',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'path',
+      label: 'listColumn.path',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'displayType',
+      label: 'listColumn.displayType',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'displayTypeParameters',
+      label: 'listColumn.displayTypeParameters',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'sortable',
+      label: 'listColumn.sortable',
+    },
+    {
+      viewType: 'string',
+      sortable: false,
+      key: 'defaultSort',
+      label: 'listColumn.defaultSort',
+    },
+  ];
+
+  public readonly actionItems: ActionItem[] = [
+    {
+      label: 'interface.delete',
+      callback: this.deleteRow.bind(this),
+      type: 'danger',
+    },
+  ];
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly taskManagementApiService: TaskManagementApiService
+  ) {}
+
+  public refreshColumns(): void {
+    this._refreshColumns$.next(null);
+  }
+
+  public deleteRow(taskListColumn: TaskListColumn): void {
+    this.showDeleteModal$.next(true);
+    this.deleteRowKey$.next(taskListColumn.key);
+  }
+
+  public onMoveRowEvent(event: MoveRowEvent, documentDefinitionName: string): void {}
+
+  public columnRowClicked(row: {key: string}): void {}
+}
