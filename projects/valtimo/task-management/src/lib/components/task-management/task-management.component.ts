@@ -79,6 +79,6 @@ export class TaskManagementComponent {
   }
 
   public redirectToDetails(documentDefinition: DocumentDefinition): void {
-    this.router.navigate(['/dossier-management/dossier', documentDefinition.id.name]);
+    this.router.navigate(['/task-management/dossier', documentDefinition.id.name]);
   }
 }

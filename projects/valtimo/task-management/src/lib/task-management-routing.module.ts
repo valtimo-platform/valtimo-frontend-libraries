@@ -19,7 +19,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
 import {ROLE_ADMIN} from '@valtimo/config';
-import {TaskManagementComponent} from './components';
+import {TaskManagementComponent, TaskManagementDetailComponent} from './components';
 
 const routes: Routes = [
   {
@@ -27,6 +27,12 @@ const routes: Routes = [
     component: TaskManagementComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Tasks', roles: [ROLE_ADMIN]},
+  },
+  {
+    path: 'task-management/dossier/:name',
+    component: TaskManagementDetailComponent,
+    canActivate: [AuthGuardService],
+    data: {title: 'Task details', roles: [ROLE_ADMIN], customPageTitle: true},
   },
 ];
 
