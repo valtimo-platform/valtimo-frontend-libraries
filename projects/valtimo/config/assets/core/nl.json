@@ -585,7 +585,8 @@
       "valtimoAssignee.fullName": "Eigenaar",
       "due": "Opleveringsdatum",
       "context": "Context",
-      "case": "Dossier"
+      "case": "Dossier",
+      "caseName": "Dossiernaam"
     },
     "mine": {
       "title": "Mijn taken",

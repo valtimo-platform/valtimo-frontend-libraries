@@ -14,4 +14,23 @@
   ~ limitations under the License.
   -->
 
-task management works
+<valtimo-carbon-list
+  *ngIf="dossiers$ | async as dossiers; else loading"
+  [items]="dossiers"
+  [fields]="dossierFields"
+  [pagination]="pagination"
+  paginationIdentifier="dossierManagementList"
+  (paginationClicked)="paginationClicked($event)"
+  (paginationSet)="paginationSet($event)"
+  (rowClicked)="redirectToDetails($event)"
+  [hideToolbar]="true"
+>
+  <valtimo-no-results
+    [description]="'dossierManagement.noResults.description' | translate"
+    [title]="'dossierManagement.noResults.title' | translate"
+  ></valtimo-no-results>
+</valtimo-carbon-list>
+
+<ng-template #loading>
+  <valtimo-carbon-list loading="true"></valtimo-carbon-list>
+</ng-template>

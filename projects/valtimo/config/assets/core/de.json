@@ -585,7 +585,8 @@
       "valtimoAssignee.fullName": "Eigentümer",
       "due": "Geburtstermin",
       "context": "Context",
-      "case": "Case"
+      "case": "Case",
+      "caseName": "Fallname"
     },
     "mine": {
       "title": "Meine Aufgaben",
