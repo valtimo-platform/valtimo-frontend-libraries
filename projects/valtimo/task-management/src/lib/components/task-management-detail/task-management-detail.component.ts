@@ -14,22 +14,28 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {CarbonListModule, PageTitleService} from '@valtimo/components';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {CARBON_THEME, CarbonListModule, PageTitleService} from '@valtimo/components';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentDefinition, DocumentService} from '@valtimo/document';
+import {TabsModule} from 'carbon-components-angular';
+import {TaskManagementService} from '../../services';
+import {TaskManagementTab} from '../../models';
 
 @Component({
   templateUrl: './task-management-detail.component.html',
   styleUrls: ['./task-management-detail.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, CarbonListModule, TranslateModule],
+  imports: [CommonModule, CarbonListModule, TranslateModule, TabsModule],
+  providers: [TaskManagementService],
 })
 export class TaskManagementDetailComponent {
+  @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.G10;
+
   public readonly setDocumentDefinitionName$: Observable<DocumentDefinition> =
     this.route.params.pipe(
       map(params => params.name || ''),
@@ -42,9 +48,18 @@ export class TaskManagementDetailComponent {
       })
     );
 
+  public readonly activeTab$ = this.taskManagementService.activeTab$;
+
+  public readonly TAB_ENUM = TaskManagementTab;
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly documentService: DocumentService,
-    private readonly pageTitleService: PageTitleService
+    private readonly pageTitleService: PageTitleService,
+    private readonly taskManagementService: TaskManagementService
   ) {}
+
+  public setActiveTab(tab: TaskManagementTab): void {
+    this.taskManagementService.setActiveTab(tab);
+  }
 }

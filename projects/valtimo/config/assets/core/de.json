@@ -1392,5 +1392,8 @@
       "description": "Klicken Sie auf <strong>Neuen Formularablauf hinzufügen</strong>, um mit dem Entwerfen Ihres Formularablaufs zu beginnen",
       "title": "Keine form flow hinzugefügt"
     }
+  },
+  "taskManagement": {
+    "columns": "Säulen"
   }
 }

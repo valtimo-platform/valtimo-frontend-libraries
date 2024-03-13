@@ -14,5 +14,17 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="{documentDefinitionName: setDocumentDefinitionName$ | async} as obs">
+<ng-container
+  *ngIf="{
+    documentDefinitionName: setDocumentDefinitionName$ | async,
+    activeTab: activeTab$ | async
+  } as obs"
+>
+  <cds-tabs class="dossier-management-tabs" type="contained" [attr.data-carbon-theme]="carbonTheme">
+    <cds-tab
+      [active]="obs.activeTab === TAB_ENUM.COLUMNS"
+      [heading]="'taskManagement.columns' | translate"
+      (selected)="setActiveTab(TAB_ENUM.COLUMNS)"
+    ></cds-tab>
+  </cds-tabs>
 </ng-container>
