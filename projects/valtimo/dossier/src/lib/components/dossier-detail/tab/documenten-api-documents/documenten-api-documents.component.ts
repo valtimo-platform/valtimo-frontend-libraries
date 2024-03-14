@@ -83,7 +83,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public readonly showModal$ = new Subject<null>();
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
-  // private readonly downloadingFileIndexes$ = new BehaviorSubject<Array<number>>([]);
   private readonly refetch$ = new BehaviorSubject<null>(null);
   private readonly uploading$ = new BehaviorSubject<boolean>(false);
 
@@ -126,10 +125,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly documentService: DocumentService,
-    private readonly toastrService: ToastrService,
     private readonly uploadProviderService: UploadProviderService,
     private readonly downloadService: DownloadService,
-    private readonly promptService: PromptService,
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
     private readonly userProviderService: UserProviderService,
@@ -289,26 +286,4 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     );
   }
 
-  // TODO: Do we still need this downloading construction?
-  // downloadDocument(relatedFile: RelatedFile, index: number): void {
-  //   console.log('downloading: ', relatedFile, index);
-  //   this.downloadingFileIndexes$.pipe(take(1)).subscribe(indexes => {
-  //     this.downloadingFileIndexes$.next([...indexes, index]);
-  //
-  //     const finished$: Observable<null> = this.downloadService.downloadFile(
-  //       `/api/v1/documenten-api/${relatedFile.pluginConfigurationId}/files/${relatedFile.fileId}/download`,
-  //       relatedFile.fileName
-  //     );
-  //
-  //     finished$.pipe(take(1)).subscribe(() => {
-  //       this.downloadingFileIndexes$.next(
-  //         this.downloadingFileIndexes$.getValue().filter(downloadIndex => downloadIndex !== index)
-  //       );
-  //     });
-  //   });
-  // }
-
-  // indexesIncludeIndex(indexes: Array<number>, index: number): boolean {
-  //   return indexes.includes(index);
-  // }
 }
