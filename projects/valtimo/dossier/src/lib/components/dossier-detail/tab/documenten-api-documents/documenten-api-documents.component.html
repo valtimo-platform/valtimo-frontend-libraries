@@ -56,7 +56,7 @@
 ></valtimo-documenten-api-metadata-modal>
 
 <ng-template #dossierListActions>
-  <div style="display: flex">
+  <div>
 <!--    TODO: implement filtering when Documenten API supports this-->
 <!--    <button-->
 <!--            cdsButton="ghost"-->
@@ -133,7 +133,7 @@
 </ng-template>
 
 <ng-template #sizeTemplate let-data="data">
-  <div style="text-align: right;">
+  <div class="documenten-api-documents-filesize-template">
     {{ bytesToMegabytes(data.item.sizeInBytes) }}
   </div>
 </ng-template>
