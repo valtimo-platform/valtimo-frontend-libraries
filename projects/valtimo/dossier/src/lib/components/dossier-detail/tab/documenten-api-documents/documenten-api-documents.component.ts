@@ -73,7 +73,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public uploadProcessLinkedSet = false;
   public uploadProcessLinked!: boolean;
 
-  public readonly acceptedFiles: string =
+  public readonly acceptedFiles: string | null =
     this.configService?.config?.caseFileUploadAcceptedFiles || null;
   public readonly maxFileSize: number = this.configService?.config?.caseFileSizeUploadLimitMB || 5;
 
@@ -134,7 +134,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     private readonly configService: ConfigService,
     private readonly userProviderService: UserProviderService,
     private readonly fileSortService: FileSortService,
-    protected iconService: IconService
+    private readonly iconService: IconService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.documentId = snapshot.get('documentId') || '';
@@ -249,15 +249,15 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.showModal$.next(null);
   }
 
-  public onNavigateToCaseAdminClick() {
+  public onNavigateToCaseAdminClick(): void {
     this.router.navigate([`/dossier-management/dossier/${this.documentDefinitionName}`]);
   }
 
-  public onRowClick(event: any) {
+  public onRowClick(event: any): void {
     this.downloadDocument(event, false);
   }
 
-  public onUploadButtonClick() {
+  public onUploadButtonClick(): void {
     this.fileInput.nativeElement.click();
   }
 
@@ -274,9 +274,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   private getFields(fieldOptions, fieldsConfig) {
-    return fieldOptions.filter(fieldOption => {
-      return fieldsConfig.includes(fieldOption.key)
-    });
+    return fieldOptions.filter(fieldOption => fieldsConfig.includes(fieldOption.key));
   }
 
   private setUploadProcessLinked(): void {
