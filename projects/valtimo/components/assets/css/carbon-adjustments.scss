@@ -1,0 +1,79 @@
+/*!
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+body {
+  background-color: var(--cds-background);
+}
+
+.cds {
+  &--header, &--side-nav{
+    background-color: var(--cds-layer) !important;
+  }
+
+  &--modal-container{
+    background-color: var(--cds-background) !important;
+    input{
+      background-color: var(--cds-layer) !important;
+    }
+  }
+
+  &--link--disabled {
+    pointer-events: none;
+  }
+
+  &--text-input:read-only {
+    color: var(--cds-text-primary);
+    border-color: var(--cds-border-subtle-01);
+    outline: none;
+  }
+
+  &--data-table {
+    &-container {
+      padding-top: 0 !important;
+    }
+
+    tr {
+      cursor: pointer;
+    }
+  }
+
+  &--inline-notification__text-wrapper {
+    width: 100%;
+  }
+
+  &--overflow-menu-options__btn {
+    min-width: 100%;
+  }
+}
+
+.valtimo-carbon-list {
+  .cds--checkbox-label,
+  .cds--pagination__text {
+    margin-bottom: 0 !important;
+  }
+
+  &__tabs cds-tab {
+    display: none !important;
+  }
+
+  &__actions {
+    width: 1px !important;
+  }
+}
+
+.hide-after::after {
+  display: none;
+}
