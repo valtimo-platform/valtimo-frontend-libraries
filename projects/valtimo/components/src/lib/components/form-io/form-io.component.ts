@@ -31,6 +31,7 @@ import {UserProviderService} from '@valtimo/security';
 import {
   Formio,
   FormioComponent as FormIoSourceComponent,
+  FormioOptions,
   FormioSubmission,
   FormioUtils,
 } from '@formio/angular';
