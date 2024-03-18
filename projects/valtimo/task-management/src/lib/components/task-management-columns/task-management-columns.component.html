@@ -26,12 +26,10 @@
 
 <ng-template #list let-obs="obs">
   <valtimo-carbon-list
-    *ngIf="!obs.loadingColumns; else loading"
     [actionItems]="actionItems"
-    [loading]="obs.loadingCaseListColumns"
-    [items]="obs.caseListColumn"
+    [items]="obs.taskListColumns"
+    [loading]="obs.loadingColumns"
     [fields]="fields"
-    [viewMode]="false"
     [header]="false"
     [movingRowsEnabled]="true"
     (moveRow)="onMoveRowEvent($event, obs.documentDefinitionName)"
@@ -48,10 +46,6 @@
       illustration="valtimo-layout/img/emptystate-empty.svg"
     ></valtimo-no-results>
   </valtimo-carbon-list>
-</ng-template>
-
-<ng-template #loading>
-  <valtimo-carbon-list [loading]="true"></valtimo-carbon-list>
 </ng-template>
 
 <ng-template #buttons let-obs="obs">

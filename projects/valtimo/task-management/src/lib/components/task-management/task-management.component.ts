@@ -60,7 +60,7 @@ export class TaskManagementComponent {
   );
 
   public readonly dossierFields: ColumnConfig[] = [
-    {key: 'schema.title', label: 'fieldLabels.caseName', viewType: ViewType.TEXT},
+    {key: 'schema.title', label: 'taskManagement.caseName', viewType: ViewType.TEXT},
   ];
 
   constructor(

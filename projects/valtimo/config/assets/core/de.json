@@ -585,8 +585,7 @@
       "valtimoAssignee.fullName": "Eigentümer",
       "due": "Geburtstermin",
       "context": "Context",
-      "case": "Case",
-      "caseName": "Fallname"
+      "case": "Case"
     },
     "mine": {
       "title": "Meine Aufgaben",
@@ -1402,6 +1401,7 @@
     }
   },
   "taskManagement": {
-    "columns": "Säulen"
+    "columns": "Säulen",
+    "caseName": "Fallname"
   }
 }

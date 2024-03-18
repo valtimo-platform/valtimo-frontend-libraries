@@ -586,8 +586,7 @@
       "valtimoAssignee.fullName": "Assignee",
       "due": "Due date",
       "context": "Context",
-      "case": "Case",
-      "caseName": "Case name"
+      "case": "Case"
     },
     "mine": {
       "title": "My tasks",
@@ -1402,6 +1401,7 @@
     }
   },
   "taskManagement": {
-    "columns": "Columns"
+    "columns": "Columns",
+    "caseName": "Case name"
   }
 }

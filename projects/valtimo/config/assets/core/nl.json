@@ -585,8 +585,7 @@
       "valtimoAssignee.fullName": "Eigenaar",
       "due": "Opleveringsdatum",
       "context": "Context",
-      "case": "Dossier",
-      "caseName": "Dossiernaam"
+      "case": "Dossier"
     },
     "mine": {
       "title": "Mijn taken",
@@ -1404,6 +1403,7 @@
     }
   },
   "taskManagement": {
-    "columns": "Kolommen"
+    "columns": "Kolommen",
+    "caseName": "Dossiernaam"
   }
 }
