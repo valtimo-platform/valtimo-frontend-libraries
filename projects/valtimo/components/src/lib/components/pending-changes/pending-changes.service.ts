@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {Injectable} from '@angular/core';
 
-export * from './menu-item-translation.pipe';
-export * from './components-pipes.module';
-export * from './case-count.pipe';
-export * from './is-array.pipe';
+@Injectable({
+  providedIn: 'root',
+})
+export class PendingChangesService {
+  private _pendingChanges = false;
+  public set pendingChanges(value: boolean) {
+    this._pendingChanges = value;
+  }
+  public get pendingChanges(): boolean {
+    return this._pendingChanges;
+  }
+}

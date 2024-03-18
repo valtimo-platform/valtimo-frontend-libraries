@@ -14,7 +14,4 @@
  * limitations under the License.
  */
 
-export * from './menu-item-translation.pipe';
-export * from './components-pipes.module';
-export * from './case-count.pipe';
-export * from './is-array.pipe';
+export * from './documenten-api.service';
