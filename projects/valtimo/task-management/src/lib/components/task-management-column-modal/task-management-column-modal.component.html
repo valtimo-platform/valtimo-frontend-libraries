@@ -21,12 +21,10 @@
     isAdd: isAdd$ | async,
     isEdit: isEdit$ | async,
     disabled: disabled$ | async,
-    validKey: validKey$ | async,
     showDateFormat: showDateFormat$ | async,
     showEnum: showEnum$ | async,
     isYesNo: isYesNo$ | async,
-    disableDefaultSort: disableDefaultSort$ | async,
-    valid: valid$ | async
+    disableDefaultSort: disableDefaultSort$ | async
   } as obs"
 >
   <cds-modal size="sm" [open]="obs.show">
@@ -67,6 +65,7 @@
 
     <div class="cds--text-input__field-wrapper">
       <cds-label
+        [invalid]="key?.touched && key?.invalid"
         [disabled]="obs.disabled || obs.isEdit"
         [invalidText]="'listColumn.uniqueKeyWarning' | translate"
       >
@@ -198,14 +197,15 @@
 <ng-template #modalFooter let-obs="obs">
   <cds-modal-footer>
     <ng-container>
-      <button cdsButton="secondary" [attr.modal-primary-focus]="true" [disabled]="obs.disables">
+      <button cdsButton="secondary" [attr.modal-primary-focus]="true" [disabled]="obs.disabled">
         {{ 'listColumn.close' | translate }}
       </button>
+
       <button
         cdsButton="primary"
         [attr.modal-primary-focus]="true"
         [disabled]="!obs.valid"
-        [disabled]="obs.disabled || obs.valid === false || obs.validKey === false"
+        [disabled]="obs.disabled || formGroup?.invalid"
       >
         {{ 'listColumn.save' | translate }}
       </button>
