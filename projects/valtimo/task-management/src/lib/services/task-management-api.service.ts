@@ -36,4 +36,14 @@ export class TaskManagementApiService extends BaseApiService {
       this.getApiUrl(`/management/v1/case/${caseDefinitionName}/task-list-column`)
     );
   }
+
+  public updateTaskListColumn(
+    caseDefinitionName: string,
+    column: TaskListColumn
+  ): Observable<TaskListColumn> {
+    return this.httpClient.put<TaskListColumn>(
+      this.getApiUrl(`/management/v1/case/${caseDefinitionName}/task-list-column/${column.key}`),
+      column
+    );
+  }
 }

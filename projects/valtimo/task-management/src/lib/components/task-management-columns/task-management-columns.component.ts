@@ -38,8 +38,8 @@ import {
 } from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {TaskManagementApiService} from '../../services/task-management-api.service';
-import {TaskListColumn} from '../../models/task-management-columns.model';
-import {TaskManagementColumnModalComponent} from '../task-management-column-modal';
+import {TaskListColumn, TaskListColumnModalType} from '../../models';
+import {TaskManagementColumnModalComponent} from '../task-management-column-modal/task-management-column-modal.component';
 
 @Component({
   selector: 'valtimo-task-management-columns',
@@ -137,6 +137,9 @@ export class TaskManagementColumnsComponent {
     },
   ];
 
+  public readonly modalType$ = new BehaviorSubject<TaskListColumnModalType>('add');
+  public readonly showModal$ = new Subject<boolean>();
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly taskManagementApiService: TaskManagementApiService
@@ -154,4 +157,13 @@ export class TaskManagementColumnsComponent {
   public onMoveRowEvent(event: MoveRowEvent, documentDefinitionName: string): void {}
 
   public columnRowClicked(row: {key: string}): void {}
+
+  public showModal(type: TaskListColumnModalType): void {
+    this.modalType$.next(type);
+    this.showModal$.next(true);
+  }
+
+  public onModalCloseEvent(): void {
+    this.showModal$.next(false);
+  }
 }

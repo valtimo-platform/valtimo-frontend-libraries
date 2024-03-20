@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {CARBON_THEME, CarbonListModule} from '@valtimo/components';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {CARBON_THEME, CarbonListModule, ViewType} from '@valtimo/components';
 import {CommonModule} from '@angular/common';
-import {TranslateModule} from '@ngx-translate/core';
-import {TabsModule} from 'carbon-components-angular';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {ModalModule, TabsModule} from 'carbon-components-angular';
 import {TaskManagementService} from '../../services';
+import {AbstractControl, FormControl, FormGroup, FormsModule, Validators} from '@angular/forms';
+import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
+import {TaskListColumn, TaskListColumnModalType} from '../../models';
 
 @Component({
   selector: 'valtimo-task-management-column-modal',
@@ -27,9 +31,139 @@ import {TaskManagementService} from '../../services';
   styleUrls: ['./task-management-column-modal.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, CarbonListModule, TranslateModule, TabsModule],
+  imports: [CommonModule, CarbonListModule, TranslateModule, TabsModule, FormsModule, ModalModule],
   providers: [TaskManagementService],
 })
 export class TaskManagementColumnModalComponent {
   @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.G10;
+  @Input() public set taskListColumns(value: TaskListColumn[]) {
+    this._taskListColumns$.next(value);
+  }
+  @Input() public set type(value: TaskListColumnModalType) {
+    this.type$.next(value);
+    if (value === 'add') this.resetForm();
+  }
+  @Input() public set show(value: boolean) {
+    this.show$.next(value);
+  }
+  @Output() closeEvent = new EventEmitter<void>();
+
+  public readonly type$ = new BehaviorSubject<TaskListColumnModalType>('add');
+  public readonly show$ = new BehaviorSubject<boolean>(false);
+
+  private readonly _taskListColumns$ = new BehaviorSubject<TaskListColumn[]>([]);
+
+  private readonly _INVALID_KEY = 'INVALID_KEY';
+
+  private readonly DISPLAY_TYPES: Array<ViewType> = [
+    ViewType.TEXT,
+    ViewType.DATE,
+    ViewType.BOOLEAN,
+    ViewType.ENUM,
+    ViewType.ARRAY_COUNT,
+    ViewType.UNDERSCORES_TO_SPACES,
+  ];
+
+  public readonly formGroup = new FormGroup({
+    title: new FormControl(''),
+    key: new FormControl('', Validators.required),
+    path: new FormControl('', Validators.required),
+    dateFormat: new FormControl(''),
+    displayType: new FormControl(),
+    sortable: new FormControl(false),
+    defaultSort: new FormControl(),
+    enum: new FormControl([]),
+  });
+
+  public get title(): AbstractControl<string> {
+    return this.formGroup.get('title');
+  }
+
+  public get key(): AbstractControl<string> {
+    return this.formGroup.get('key');
+  }
+
+  public get path(): AbstractControl<string> {
+    return this.formGroup.get('path');
+  }
+
+  public get dateFormat(): AbstractControl<string> {
+    return this.formGroup.get('dateFormat');
+  }
+
+  public get displayType(): AbstractControl<ViewType> {
+    return this.formGroup.get('displayType');
+  }
+
+  public get sortable(): AbstractControl<boolean> {
+    return this.formGroup.get('sortable');
+  }
+
+  private readonly _selectedSortItemIndex$ = new BehaviorSubject<number>(0);
+
+  public readonly sortItems$: Observable<Array<ListItem>> = combineLatest([
+    this._selectedSortItemIndex$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([selectedSortItemIndex]) =>
+      [
+        {
+          content: this.translateService.instant(`listColumn.selectDefaultSort`),
+          key: this._INVALID_KEY,
+        },
+        {
+          content: this.translateService.instant(`listColumn.sortableAsc`),
+          key: 'ASC',
+        },
+        {
+          content: this.translateService.instant(`listColumn.sortableDesc`),
+          key: 'DESC',
+        },
+      ].map((item, index) => ({
+        ...item,
+        selected: index === selectedSortItemIndex,
+      }))
+    )
+  );
+
+  private readonly _selectedViewTypeItemIndex$ = new BehaviorSubject<number>(0);
+
+  public readonly viewTypeItems$: Observable<Array<ListItem>> = combineLatest([
+    this._selectedViewTypeItemIndex$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([selectedViewTypeItemIndex]) =>
+      [
+        {
+          content: this.translateService.instant(`listColumnDisplayType.select`),
+          key: this._INVALID_KEY,
+        },
+        ...this.DISPLAY_TYPES.map(type => ({
+          content: this.translateService.instant(`listColumnDisplayType.${type}`),
+          key: type,
+        })),
+      ].map((item, index) => ({
+        ...item,
+        selected: index === selectedViewTypeItemIndex,
+      }))
+    )
+  );
+
+  constructor(private readonly translateService: TranslateService) {}
+
+  public closeModal(): void {
+    this.closeEvent.emit();
+  }
+
+  private resetForm(): void {
+    this.formGroup.patchValue({
+      title: '',
+      key: '',
+      dateFormat: '',
+      displayType: '',
+      sortable: false,
+      defaultSort: '',
+      enum: [],
+    });
+  }
 }

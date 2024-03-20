@@ -34,4 +34,11 @@ interface TaskListColumn {
   order?: number;
 }
 
-export {TaskListColumn, TaskListColumnDisplayType, TaskListColumnDefaultSort};
+type TaskListColumnModalType = 'edit' | 'add';
+
+export {
+  TaskListColumn,
+  TaskListColumnDisplayType,
+  TaskListColumnDefaultSort,
+  TaskListColumnModalType,
+};

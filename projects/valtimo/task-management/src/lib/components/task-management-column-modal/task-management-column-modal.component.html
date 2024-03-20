@@ -14,4 +14,18 @@
   ~ limitations under the License.
   -->
 
-test
+<ng-container *ngIf="{show: show$ | async, type: type$ | async} as obs">
+  <cds-modal [open]="obs.show">
+    <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+      <h3 cdsModalHeaderHeading>
+        {{
+          obs.type === 'add'
+            ? ('listColumn.addButtonText' | translate)
+            : ('listColumn.editColumnTitle' | translate)
+        }}
+      </h3>
+    </cds-modal-header>
+
+    <section cdsModalContent></section>
+  </cds-modal>
+</ng-container>

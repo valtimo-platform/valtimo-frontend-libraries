@@ -18,10 +18,19 @@
   *ngIf="{
     taskListColumns: taskListColumns$ | async,
     documentDefinitionName: documentDefinitionName$ | async,
-    loadingColumns: loadingColumns$ | async
+    loadingColumns: loadingColumns$ | async,
+    modalType: modalType$ | async,
+    showModal: showModal$ | async
   } as obs"
 >
   <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
+
+  <valtimo-task-management-column-modal
+    [taskListColumns]="obs.taskListColumns"
+    [type]="obs.modalType"
+    [show]="obs.showModal"
+    (closeEvent)="onModalCloseEvent()"
+  ></valtimo-task-management-column-modal>
 </ng-container>
 
 <ng-template #list let-obs="obs">
@@ -35,10 +44,7 @@
     (moveRow)="onMoveRowEvent($event, obs.documentDefinitionName)"
     (rowClicked)="columnRowClicked($event)"
   >
-    <ng-container
-      carbonToolbarContent
-      *ngTemplateOutlet="buttons; context: {obs: obs}"
-    ></ng-container>
+    <ng-container carbonToolbarContent *ngTemplateOutlet="buttons"></ng-container>
 
     <valtimo-no-results
       [title]="'listColumn.noConfigWarningTitle' | translate"
@@ -48,11 +54,9 @@
   </valtimo-carbon-list>
 </ng-template>
 
-<ng-template #buttons let-obs="obs">
-  <button cdsButton="primary">
+<ng-template #buttons>
+  <button cdsButton="primary" (click)="showModal('add')">
     {{ 'listColumn.addButtonText' | translate }}
     <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
   </button>
 </ng-template>
-
-<valtimo-task-management-column-modal></valtimo-task-management-column-modal>
