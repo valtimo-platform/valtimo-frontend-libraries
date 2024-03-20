@@ -25,7 +25,8 @@
     showDateFormat: showDateFormat$ | async,
     showEnum: showEnum$ | async,
     isYesNo: isYesNo$ | async,
-    disableDefaultSort: disableDefaultSort$ | async
+    disableDefaultSort: disableDefaultSort$ | async,
+    valid: valid$ | async
   } as obs"
 >
   <cds-modal size="sm" [open]="obs.show">
@@ -42,6 +43,8 @@
     <section cdsModalContent>
       <ng-container *ngTemplateOutlet="form; context: {obs: obs}"></ng-container>
     </section>
+
+    <ng-container *ngTemplateOutlet="modalFooter; context: {obs: obs}"> </ng-container>
   </cds-modal>
 </ng-container>
 
@@ -190,4 +193,22 @@
       </cds-label>
     </div>
   </form>
+</ng-template>
+
+<ng-template #modalFooter let-obs="obs">
+  <cds-modal-footer>
+    <ng-container>
+      <button cdsButton="secondary" [attr.modal-primary-focus]="true" [disabled]="obs.disables">
+        {{ 'listColumn.close' | translate }}
+      </button>
+      <button
+        cdsButton="primary"
+        [attr.modal-primary-focus]="true"
+        [disabled]="!obs.valid"
+        [disabled]="obs.disabled || obs.valid === false || obs.validKey === false"
+      >
+        {{ 'listColumn.save' | translate }}
+      </button>
+    </ng-container>
+  </cds-modal-footer>
 </ng-template>

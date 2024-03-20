@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
+
 enum TaskListColumnDefaultSort {
   ASC = 'ASC',
   DESC = 'DESC',
@@ -36,9 +38,14 @@ interface TaskListColumn {
 
 type TaskListColumnModalType = 'edit' | 'add';
 
+interface TaskListColumnListItem extends ListItem {
+  key: string;
+}
+
 export {
   TaskListColumn,
   TaskListColumnDisplayType,
   TaskListColumnDefaultSort,
   TaskListColumnModalType,
+  TaskListColumnListItem,
 };

@@ -25,6 +25,7 @@ import {
 import {CommonModule} from '@angular/common';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
+  ButtonModule,
   CheckboxModule,
   DropdownModule,
   InputModule,
@@ -40,9 +41,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {BehaviorSubject, combineLatest, map, Observable, startWith} from 'rxjs';
-import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
-import {TaskListColumn, TaskListColumnModalType} from '../../models';
+import {BehaviorSubject, combineLatest, map, Observable, of, startWith} from 'rxjs';
+import {TaskListColumn, TaskListColumnListItem, TaskListColumnModalType} from '../../models';
 
 @Component({
   selector: 'valtimo-task-management-column-modal',
@@ -63,6 +63,7 @@ import {TaskListColumn, TaskListColumnModalType} from '../../models';
     ReactiveFormsModule,
     TooltipIconModule,
     CarbonMultiInputModule,
+    ButtonModule,
   ],
   providers: [TaskManagementService],
 })
@@ -99,14 +100,43 @@ export class TaskManagementColumnModalComponent {
     ViewType.UNDERSCORES_TO_SPACES,
   ];
 
+  private getInvalidListItem = (translateKey: string): TaskListColumnListItem => ({
+    content: this.translateService.instant(translateKey),
+    key: this._INVALID_KEY,
+    selected: true,
+  });
+
+  private uniqueKeyValidator = (
+    keyFormControl: AbstractControl<string>
+  ): Observable<{notUnique: boolean} | null> =>
+    this._taskListColumns$.pipe(
+      map(taskListColumns =>
+        !taskListColumns.find(
+          column => column.key.trim().toLowerCase() === keyFormControl.value.trim().toLowerCase()
+        )
+          ? null
+          : {notUnique: true}
+      )
+    );
+
+  private listItemValidator = (
+    listItemControl: AbstractControl<TaskListColumnListItem>
+  ): {invalidItem: boolean} | null =>
+    listItemControl?.value?.key !== this._INVALID_KEY ? null : {invalidItem: true};
+
   public readonly formGroup = new FormGroup({
     title: new FormControl(''),
-    key: new FormControl('', Validators.required, this.uniqueKeyValidator),
+    key: new FormControl('', Validators.required, this.uniqueKeyValidator.bind(this)),
     path: new FormControl('', Validators.required),
     dateFormat: new FormControl(''),
-    displayType: new FormControl(),
+    displayType: new FormControl(this.getInvalidListItem(`listColumn.selectDefaultSort`), [
+      Validators.required,
+      this.listItemValidator.bind(this),
+    ]),
     sortable: new FormControl(false),
-    defaultSort: new FormControl(),
+    defaultSort: new FormControl(this.getInvalidListItem(`listColumn.selectDefaultSort`), [
+      Validators.required,
+    ]),
     enum: new FormControl([]),
   });
 
@@ -122,16 +152,19 @@ export class TaskManagementColumnModalComponent {
   public get dateFormat(): AbstractControl<string> {
     return this.formGroup.get('dateFormat');
   }
-  public get displayType(): AbstractControl<ViewType> {
+  public get displayType(): AbstractControl<TaskListColumnListItem> {
     return this.formGroup.get('displayType');
   }
   public get sortable(): AbstractControl<boolean> {
     return this.formGroup.get('sortable');
   }
+  public get defaultSort(): AbstractControl<TaskListColumnListItem> {
+    return this.formGroup.get('defaultSort');
+  }
 
   public readonly validKey$: Observable<boolean> = combineLatest([
     this._taskListColumns$,
-    this.key.valueChanges,
+    this.key?.valueChanges || of(''),
   ]).pipe(
     map(
       ([taskListColumns, keyValue]) =>
@@ -143,16 +176,13 @@ export class TaskManagementColumnModalComponent {
 
   private readonly _selectedSortItemIndex$ = new BehaviorSubject<number>(0);
 
-  public readonly sortItems$: Observable<Array<ListItem>> = combineLatest([
+  public readonly sortItems$: Observable<Array<TaskListColumnListItem>> = combineLatest([
     this._selectedSortItemIndex$,
     this.translateService.stream('key'),
   ]).pipe(
     map(([selectedSortItemIndex]) =>
       [
-        {
-          content: this.translateService.instant(`listColumn.selectDefaultSort`),
-          key: this._INVALID_KEY,
-        },
+        this.getInvalidListItem(`listColumn.selectDefaultSort`),
         {
           content: this.translateService.instant(`listColumn.sortableAsc`),
           key: 'ASC',
@@ -170,7 +200,7 @@ export class TaskManagementColumnModalComponent {
 
   private readonly _selectedViewTypeItemIndex$ = new BehaviorSubject<number>(0);
 
-  public readonly viewTypeItems$: Observable<Array<ListItem>> = combineLatest([
+  public readonly viewTypeItems$: Observable<Array<TaskListColumnListItem>> = combineLatest([
     this._selectedViewTypeItemIndex$,
     this.translateService.stream('key'),
   ]).pipe(
@@ -218,12 +248,29 @@ export class TaskManagementColumnModalComponent {
   ]).pipe(
     map(
       ([currentModalType, taskListColumns]) =>
-        currentModalType === 'add' && this.taskListColumns.find(column => !!column.defaultSort)
+        currentModalType === 'add' && this.taskListColumns?.find(column => !!column.defaultSort)
     ),
     startWith(false)
   );
 
-  constructor(private readonly translateService: TranslateService) {}
+  public readonly valid$ = combineLatest([this.formGroup.valueChanges, this.validKey$]).pipe(
+    map(
+      ([formValues, validKey]) =>
+        !!(
+          formValues.displayType?.key !== this._INVALID_KEY &&
+          formValues.path &&
+          validKey &&
+          (formValues.displayType.key === 'enum' ? formValues.enum?.length > 0 : true)
+        )
+    ),
+    startWith(false)
+  );
+
+  constructor(private readonly translateService: TranslateService) {
+    setTimeout(() => {
+      console.log(this.displayType.value);
+    }, 10000);
+  }
 
   public closeModal(): void {
     this.closeEvent.emit();
@@ -234,9 +281,9 @@ export class TaskManagementColumnModalComponent {
       title: '',
       key: '',
       dateFormat: '',
-      displayType: '',
+      displayType: this.getInvalidListItem('listColumnDisplayType.select'),
       sortable: false,
-      defaultSort: '',
+      defaultSort: this.getInvalidListItem(`listColumn.selectDefaultSort`),
       enum: [],
     });
   }
@@ -247,9 +294,5 @@ export class TaskManagementColumnModalComponent {
 
   private enable(): void {
     this.disabled$.next(true);
-  }
-
-  private uniqueKeyValidator(): Observable<{notUnique: boolean} | null> {
-    return this.validKey$.pipe(map(validKey => (validKey ? null : {notUnique: true})));
   }
 }
