@@ -15,13 +15,32 @@
  */
 
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {CARBON_THEME, CarbonListModule, ViewType} from '@valtimo/components';
+import {
+  CARBON_THEME,
+  CarbonListModule,
+  CarbonMultiInputModule,
+  TooltipIconModule,
+  ViewType,
+} from '@valtimo/components';
 import {CommonModule} from '@angular/common';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ModalModule, TabsModule} from 'carbon-components-angular';
+import {
+  CheckboxModule,
+  DropdownModule,
+  InputModule,
+  ModalModule,
+  TabsModule,
+} from 'carbon-components-angular';
 import {TaskManagementService} from '../../services';
-import {AbstractControl, FormControl, FormGroup, FormsModule, Validators} from '@angular/forms';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {BehaviorSubject, combineLatest, map, Observable, startWith} from 'rxjs';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {TaskListColumn, TaskListColumnModalType} from '../../models';
 
@@ -31,7 +50,20 @@ import {TaskListColumn, TaskListColumnModalType} from '../../models';
   styleUrls: ['./task-management-column-modal.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, CarbonListModule, TranslateModule, TabsModule, FormsModule, ModalModule],
+  imports: [
+    CommonModule,
+    CarbonListModule,
+    TranslateModule,
+    TabsModule,
+    FormsModule,
+    ModalModule,
+    CheckboxModule,
+    DropdownModule,
+    InputModule,
+    ReactiveFormsModule,
+    TooltipIconModule,
+    CarbonMultiInputModule,
+  ],
   providers: [TaskManagementService],
 })
 export class TaskManagementColumnModalComponent {
@@ -49,7 +81,10 @@ export class TaskManagementColumnModalComponent {
   @Output() closeEvent = new EventEmitter<void>();
 
   public readonly type$ = new BehaviorSubject<TaskListColumnModalType>('add');
+  public readonly isAdd$ = this.type$.pipe(map(type => type === 'add'));
+  public readonly isEdit$ = this.type$.pipe(map(type => type === 'edit'));
   public readonly show$ = new BehaviorSubject<boolean>(false);
+  public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   private readonly _taskListColumns$ = new BehaviorSubject<TaskListColumn[]>([]);
 
@@ -66,7 +101,7 @@ export class TaskManagementColumnModalComponent {
 
   public readonly formGroup = new FormGroup({
     title: new FormControl(''),
-    key: new FormControl('', Validators.required),
+    key: new FormControl('', Validators.required, this.uniqueKeyValidator),
     path: new FormControl('', Validators.required),
     dateFormat: new FormControl(''),
     displayType: new FormControl(),
@@ -78,26 +113,33 @@ export class TaskManagementColumnModalComponent {
   public get title(): AbstractControl<string> {
     return this.formGroup.get('title');
   }
-
   public get key(): AbstractControl<string> {
     return this.formGroup.get('key');
   }
-
   public get path(): AbstractControl<string> {
     return this.formGroup.get('path');
   }
-
   public get dateFormat(): AbstractControl<string> {
     return this.formGroup.get('dateFormat');
   }
-
   public get displayType(): AbstractControl<ViewType> {
     return this.formGroup.get('displayType');
   }
-
   public get sortable(): AbstractControl<boolean> {
     return this.formGroup.get('sortable');
   }
+
+  public readonly validKey$: Observable<boolean> = combineLatest([
+    this._taskListColumns$,
+    this.key.valueChanges,
+  ]).pipe(
+    map(
+      ([taskListColumns, keyValue]) =>
+        !taskListColumns.find(
+          column => column.key.toLowerCase().trim() === keyValue.trim().toLowerCase()
+        )
+    )
+  );
 
   private readonly _selectedSortItemIndex$ = new BehaviorSubject<number>(0);
 
@@ -149,6 +191,38 @@ export class TaskManagementColumnModalComponent {
     )
   );
 
+  public readonly showDateFormat$ = this.formGroup.valueChanges.pipe(
+    map(formValues => !!(formValues.displayType?.key === this.DISPLAY_TYPES[1]))
+  );
+
+  public readonly showEnum$ = this.formGroup.valueChanges.pipe(
+    map(
+      formValues =>
+        !!(
+          formValues.displayType?.key === this.DISPLAY_TYPES[3] ||
+          formValues.displayType?.key === this.DISPLAY_TYPES[2]
+        )
+    )
+  );
+
+  public readonly isYesNo$ = this.formGroup.valueChanges.pipe(
+    map(formValues => !!(formValues.displayType?.key === this.DISPLAY_TYPES[2]))
+  );
+
+  public readonly CARBON_THEME_WHITE = CARBON_THEME.WHITE;
+
+  public readonly disableDefaultSort$ = combineLatest([
+    this.type$,
+    this._taskListColumns$,
+    this.formGroup.valueChanges,
+  ]).pipe(
+    map(
+      ([currentModalType, taskListColumns]) =>
+        currentModalType === 'add' && this.taskListColumns.find(column => !!column.defaultSort)
+    ),
+    startWith(false)
+  );
+
   constructor(private readonly translateService: TranslateService) {}
 
   public closeModal(): void {
@@ -165,5 +239,17 @@ export class TaskManagementColumnModalComponent {
       defaultSort: '',
       enum: [],
     });
+  }
+
+  private disable(): void {
+    this.disabled$.next(false);
+  }
+
+  private enable(): void {
+    this.disabled$.next(true);
+  }
+
+  private uniqueKeyValidator(): Observable<{notUnique: boolean} | null> {
+    return this.validKey$.pipe(map(validKey => (validKey ? null : {notUnique: true})));
   }
 }

@@ -13,3 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.cds--text-input__field-wrapper {
+  cds-label {
+    width: 100%;
+  }
+
+  ::ng-deep.cds--label {
+    width: 100%;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}
+
+.label-with-tooltip {
+  display: flex;
+  align-items: center;
+}
+
+.select-label {
+  padding-bottom: 0.5rem;
+}

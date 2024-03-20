@@ -14,8 +14,21 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="{show: show$ | async, type: type$ | async} as obs">
-  <cds-modal [open]="obs.show">
+<ng-container
+  *ngIf="{
+    show: show$ | async,
+    type: type$ | async,
+    isAdd: isAdd$ | async,
+    isEdit: isEdit$ | async,
+    disabled: disabled$ | async,
+    validKey: validKey$ | async,
+    showDateFormat: showDateFormat$ | async,
+    showEnum: showEnum$ | async,
+    isYesNo: isYesNo$ | async,
+    disableDefaultSort: disableDefaultSort$ | async
+  } as obs"
+>
+  <cds-modal size="sm" [open]="obs.show">
     <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
       <h3 cdsModalHeaderHeading>
         {{
@@ -26,6 +39,155 @@
       </h3>
     </cds-modal-header>
 
-    <section cdsModalContent></section>
+    <section cdsModalContent>
+      <ng-container *ngTemplateOutlet="form; context: {obs: obs}"></ng-container>
+    </section>
   </cds-modal>
 </ng-container>
+
+<ng-template #form let-obs="obs">
+  <form [formGroup]="formGroup" class="list-column-form">
+    <div class="cds--text-input__field-wrapper">
+      <cds-label [disabled]="obs.disabled">
+        <span class="label-with-tooltip">
+          {{ 'listColumn.titleTitle' | translate }}
+
+          <v-tooltip-icon
+            [tooltip]="'listColumn.titleTooltip' | translate"
+            [disabled]="obs.disabled"
+          ></v-tooltip-icon>
+        </span>
+
+        <input cdsText formControlName="title" />
+      </cds-label>
+    </div>
+
+    <div class="cds--text-input__field-wrapper">
+      <cds-label
+        [disabled]="obs.disabled || obs.isEdit"
+        [invalidText]="'listColumn.uniqueKeyWarning' | translate"
+      >
+        <span class="label-with-tooltip">
+          {{ 'listColumn.key' | translate }}
+
+          <v-tooltip-icon
+            [tooltip]="'listColumn.keyTooltip' | translate"
+            [disabled]="obs.disabled"
+          ></v-tooltip-icon>
+        </span>
+
+        <input cdsText formControlName="key" />
+      </cds-label>
+    </div>
+
+    <div class="cds--text-input__field-wrapper">
+      <cds-label [disabled]="obs.disabled">
+        <span class="label-with-tooltip">
+          {{ 'listColumn.path' | translate }}
+
+          <v-tooltip-icon
+            [tooltip]="'listColumn.pathTooltip' | translate"
+            [disabled]="obs.disabled"
+          ></v-tooltip-icon>
+        </span>
+
+        <input cdsText formControlName="path" />
+      </cds-label>
+    </div>
+
+    <div class="cds--text-input__field-wrapper">
+      <cds-label [disabled]="obs.disabled">
+        <span class="label-with-tooltip select-label">
+          {{ 'listColumn.displayType' | translate }}
+
+          <v-tooltip-icon
+            [tooltip]="'listColumn.displayTypeTooltip' | translate"
+            [disabled]="obs.disabled"
+          ></v-tooltip-icon>
+        </span>
+
+        <cds-dropdown formControlName="displayType" [disabled]="obs.disabled">
+          <cds-dropdown-list [items]="viewTypeItems$ | async"></cds-dropdown-list>
+        </cds-dropdown>
+      </cds-label>
+    </div>
+
+    <div class="cds--text-input__field-wrapper" *ngIf="obs.showDateFormat">
+      <cds-label [disabled]="obs.disabled">
+        <span class="label-with-tooltip">
+          {{ 'listColumn.dateFormat' | translate }}
+
+          <v-tooltip-icon
+            [tooltip]="'listColumn.dateFormatTooltip' | translate"
+            [disabled]="obs.disabled"
+          ></v-tooltip-icon>
+        </span>
+
+        <input cdsText formControlName="dateFormat" />
+      </cds-label>
+    </div>
+
+    <div
+      class="cds--text-input__field-wrapper"
+      *ngIf="obs.showEnum || obs.isYesNo"
+      [ngClass]="{'no-margin': obs.isYesNo}"
+    >
+      <cds-label [disabled]="obs.disabled">
+        <span class="label-with-tooltip select-label">
+          {{
+            obs.isYesNo
+              ? ('listColumn.enumTitleOptional' | translate)
+              : ('listColumn.enumTitle' | translate)
+          }}
+
+          <v-tooltip-icon
+            [tooltip]="
+              obs.isYesNo
+                ? ('listColumn.enumTooltipOptional' | translate)
+                : ('listColumn.enumTooltip' | translate)
+            "
+            [disabled]="obs.disabled"
+          ></v-tooltip-icon>
+        </span>
+
+        <valtimo-carbon-multi-input
+          [fullWidth]="true"
+          [carbonTheme]="CARBON_THEME_WHITE"
+          type="keyValue"
+          [hideAddButton]="obs.isYesNo"
+          [hideDeleteButton]="obs.isYesNo"
+          [maxRows]="obs.isYesNo ? 1 : null"
+          [minimumAmountOfRows]="1"
+          [keyColumnTitle]="obs.isYesNo && ('viewTypeConverter.Yes' | translate)"
+          [valueColumnTitle]="obs.isYesNo && ('viewTypeConverter.No' | translate)"
+        ></valtimo-carbon-multi-input>
+      </cds-label>
+    </div>
+
+    <div class="cds--text-input__field-wrapper">
+      <cds-checkbox formControlName="sortable" [disabled]="obs.disabled"
+        >{{ 'listColumn.sortable' | translate }}
+      </cds-checkbox>
+    </div>
+
+    <div class="cds--text-input__field-wrapper">
+      <cds-label [disabled]="obs.disabled || obs.disableDefaultSort">
+        <span class="label-with-tooltip select-label">
+          {{ 'listColumn.defaultSortTitle' | translate }}
+
+          <v-tooltip-icon
+            [tooltip]="'listColumn.defaultSortTooltip' | translate"
+            [disabled]="obs.disabled"
+          ></v-tooltip-icon>
+        </span>
+
+        <cds-dropdown
+          formControlName="defaultSort"
+          [disabled]="obs.disabled || obs.disableDefaultSort"
+        >
+          <cds-dropdown-list [items]="sortItems$ | async"></cds-dropdown-list>
+        </cds-dropdown>
+      </cds-label>
+    </div>
+  </form>
+</ng-template>

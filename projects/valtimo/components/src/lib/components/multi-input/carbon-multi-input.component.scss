@@ -32,3 +32,7 @@
     width: 100%;
   }
 }
+
+.v-multi-input--no-delete-button .v-multi-input__input:last-child {
+  margin-inline-end: 0;
+}
