@@ -29,6 +29,7 @@ $valtimo-blue-10: #e9f6fd;
 @use '@carbon/colors';
 
 $lightThemeVariables: (
+  'white': themes.$white,
   'g10': themes.$g10,
 );
 
