@@ -42,10 +42,12 @@ export class FormManagementEditComponent
   @HostBinding('class') public readonly class = 'valtimo-form-management-edit';
 
   public modifiedFormDefinition: FormioForm | null = null;
-  public validJsonChange = true;
+  public validJsonChange: boolean | null = null;
 
   public readonly CARBON_THEME = 'g10';
   public readonly TABS = EDIT_TABS;
+
+  public activeTab = EDIT_TABS.BUILDER;
 
   public readonly formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
   public readonly jsonFormDefinition$ = new BehaviorSubject<EditorModel | null>(null);
@@ -183,27 +185,36 @@ export class FormManagementEditComponent
     link.remove();
   }
 
-  public showUploadModal(): void {
-    this.showModal$.next(true);
+  public onSelectedTab(tab: EDIT_TABS): void {
+    this.activeTab = tab;
   }
 
-  public onValueChangeEvent(value: string, definition: FormDefinition, disabled: boolean): void {
-    if (disabled || this._changeActive || !this.validJsonChange) {
+  public onValueChangeEvent(value: string, definition: FormDefinition): void {
+    if (this._changeActive || this.validJsonChange === false) {
       return;
     }
 
+    this.pendingChanges = true;
     this.formDefinition$.next({
       ...definition,
       formDefinition: JSON.parse(value),
     });
   }
 
-  public onValidEvent(value: boolean, disabled: boolean): void {
-    if (disabled || this._changeActive) {
+  public onValidEvent(value: boolean): void {
+    if (this._changeActive) {
+      return;
+    }
+    if (this.validJsonChange === null) {
+      this.validJsonChange = value;
       return;
     }
 
     this.validJsonChange = value;
+  }
+
+  public showUploadModal(): void {
+    this.showModal$.next(true);
   }
 
   public showDuplicateModal(definition: FormDefinition): void {
