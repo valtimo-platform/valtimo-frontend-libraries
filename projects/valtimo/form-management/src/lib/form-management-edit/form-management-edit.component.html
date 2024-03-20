@@ -65,33 +65,40 @@
     </ng-container>
 
     <cds-tabs type="contained" [attr.data-carbon-theme]="CARBON_THEME">
-      <cds-tab [heading]="TABS.BUILDER | translate">
+      <cds-tab [heading]="TABS.BUILDER | translate" (selected)="onSelectedTab(TABS.BUILDER)">
         <valtimo-form-io-builder
-          *ngIf="(reloading$ | async) === false"
+          *ngIf="(reloading$ | async) === false && activeTab === TABS.BUILDER"
           [form]="obs.formDefinition.formDefinition"
           (change)="formBuilderChanged($event, obs.jsonFormDefinition)"
         ></valtimo-form-io-builder>
       </cds-tab>
 
-      <cds-tab [heading]="TABS.EDITOR | translate">
-        <ng-container
-          *ngTemplateOutlet="
-            jsonEditor;
-            context: {data: {model: obs.jsonFormDefinition, disabled: false}}
-          "
-        ></ng-container>
+      <cds-tab [heading]="TABS.EDITOR | translate" (selected)="onSelectedTab(TABS.EDITOR)">
+        <valtimo-editor
+          *ngIf="activeTab === TABS.EDITOR"
+          [model]="obs.jsonFormDefinition"
+          (validEvent)="onValidEvent($event)"
+          (valueChangeEvent)="onValueChangeEvent($event, obs.formDefinition)"
+          heightStyle="calc(100vh - 316px)"
+        ></valtimo-editor>
       </cds-tab>
 
-      <cds-tab [heading]="TABS.OUTPUT | translate" class="valtimo-form-management-edit__output">
+      <cds-tab
+        [heading]="TABS.OUTPUT | translate"
+        (selected)="onSelectedTab(TABS.OUTPUT)"
+        class="valtimo-form-management-edit__output"
+      >
         <valtimo-form-io
-          [attr.data-carbon-theme]="CARBON_THEME"
           [form]="obs.formDefinition.formDefinition"
           (change)="onOutputChange($event)"
         ></valtimo-form-io>
 
-        <ng-container
-          *ngTemplateOutlet="jsonEditor; context: {data: {model: obs.jsonOutput, disabled: true}}"
-        ></ng-container>
+        <valtimo-editor
+          *ngIf="activeTab === TABS.OUTPUT"
+          [model]="obs.jsonOutput"
+          [disabled]="true"
+          heightStyle="calc(100vh - 316px)"
+        ></valtimo-editor>
       </cds-tab>
     </cds-tabs>
   } @else {
