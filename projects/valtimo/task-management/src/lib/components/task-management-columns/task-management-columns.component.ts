@@ -74,6 +74,8 @@ export class TaskManagementColumnsComponent {
 
   public readonly loadingColumns$ = new BehaviorSubject<boolean>(true);
 
+  private _cachedTaskListColumns: TaskListColumn[] = [];
+
   public readonly taskListColumns$: Observable<TaskListColumn[]> = combineLatest([
     this.documentDefinitionName$,
     this._refreshColumns$,
@@ -83,6 +85,7 @@ export class TaskManagementColumnsComponent {
     switchMap(([documentDefinitionName]) =>
       this.taskManagementApiService.getTaskListColumns(documentDefinitionName)
     ),
+    tap(columns => (this._cachedTaskListColumns = columns)),
     map(columns =>
       columns.map(column => ({
         ...column,

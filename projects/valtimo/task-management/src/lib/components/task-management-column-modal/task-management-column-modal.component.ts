@@ -42,9 +42,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {BehaviorSubject, combineLatest, map, Observable, startWith} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 import {
   TaskListColumn,
+  TaskListColumnDefaultSort,
   TaskListColumnListItem,
   TaskListColumnModalCloseEvent,
   TaskListColumnModalType,
@@ -237,16 +238,8 @@ export class TaskManagementColumnModalComponent {
 
   public readonly CARBON_THEME_WHITE = CARBON_THEME.WHITE;
 
-  public readonly disableDefaultSort$ = combineLatest([
-    this.type$,
-    this._taskListColumns$,
-    this.formGroup.valueChanges,
-  ]).pipe(
-    map(
-      ([currentModalType, taskListColumns]) =>
-        currentModalType === 'add' && this.taskListColumns?.find(column => !!column.defaultSort)
-    ),
-    startWith(false)
+  public readonly disableDefaultSort$ = combineLatest([this._taskListColumns$, this.show$]).pipe(
+    map(([taskListColumns]) => taskListColumns?.find(column => !!column.defaultSort))
   );
 
   constructor(
@@ -261,22 +254,8 @@ export class TaskManagementColumnModalComponent {
   public save(): void {
     this.disable();
 
-    const formValue = this.formGroup.value;
-    const taskListColumn: TaskListColumn = {
-      ...(formValue.title && {title: formValue.title}),
-      key: formValue.key,
-      path: formValue.path,
-      displayType: {
-        type: formValue.displayType.key,
-        displayTypeParameters: {
-          ...(formValue.dateFormat && {dateFormat: formValue.dateFormat}),
-        },
-      },
-      sortable: formValue.sortable,
-    };
-
     this.taskManagementApiService
-      .updateTaskListColumn(this.documentDefinitionName, taskListColumn)
+      .updateTaskListColumn(this.documentDefinitionName, this.getTaskListColumnFromFormValue())
       .subscribe({
         next: () => {
           this.closeModalAndRefresh();
@@ -316,5 +295,26 @@ export class TaskManagementColumnModalComponent {
 
   private closeModalAndRefresh(): void {
     this.closeEvent.emit('refresh');
+  }
+
+  private getTaskListColumnFromFormValue(): TaskListColumn {
+    const formValue = this.formGroup.value;
+    const taskListColumn: TaskListColumn = {
+      ...(formValue.title && {title: formValue.title}),
+      key: formValue.key,
+      path: formValue.path,
+      displayType: {
+        type: formValue.displayType.key,
+        displayTypeParameters: {
+          ...(formValue.dateFormat && {dateFormat: formValue.dateFormat}),
+        },
+      },
+      sortable: formValue.sortable,
+      ...(formValue.defaultSort.key !== this._INVALID_KEY && {
+        defaultSort: formValue.defaultSort.key as TaskListColumnDefaultSort,
+      }),
+    };
+
+    return taskListColumn;
   }
 }
