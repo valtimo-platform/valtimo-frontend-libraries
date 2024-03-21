@@ -23,7 +23,7 @@ import {
   MoveRowEvent,
 } from '@valtimo/components';
 import {CommonModule} from '@angular/common';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {TaskManagementApiService, TaskManagementService} from '../../services';
 import {
@@ -37,7 +37,12 @@ import {
   tap,
 } from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {TaskListColumn, TaskListColumnModalCloseEvent, TaskListColumnModalType} from '../../models';
+import {
+  TaskListColumn,
+  TaskListColumnDisplayTypeParameters,
+  TaskListColumnModalCloseEvent,
+  TaskListColumnModalType,
+} from '../../models';
 import {TaskManagementColumnModalComponent} from '../task-management-column-modal/task-management-column-modal.component';
 
 @Component({
@@ -72,10 +77,32 @@ export class TaskManagementColumnsComponent {
   public readonly taskListColumns$: Observable<TaskListColumn[]> = combineLatest([
     this.documentDefinitionName$,
     this._refreshColumns$,
+    this.translateService.stream('key'),
   ]).pipe(
     tap(() => this.loadingColumns$.next(true)),
     switchMap(([documentDefinitionName]) =>
       this.taskManagementApiService.getTaskListColumns(documentDefinitionName)
+    ),
+    map(columns =>
+      columns.map(column => ({
+        ...column,
+        title: column.title || '-',
+        sortable: column.sortable
+          ? this.translateService.instant('listColumn.sortableYes')
+          : this.translateService.instant('listColumn.sortableNo'),
+        defaultSort:
+          (column.defaultSort === 'ASC' &&
+            this.translateService.instant('listColumn.sortableAsc')) ||
+          (column.defaultSort === 'DESC' &&
+            this.translateService.instant('listColumn.sortableDesc')) ||
+          '-',
+        displayType: this.translateService.instant(
+          `listColumnDisplayType.${column?.displayType?.type}`
+        ),
+        displayTypeParameters: this.getDisplayTypeParametersView(
+          column.displayType.displayTypeParameters
+        ),
+      }))
     ),
     tap(() => this.loadingColumns$.next(false))
   );
@@ -141,7 +168,8 @@ export class TaskManagementColumnsComponent {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly taskManagementApiService: TaskManagementApiService
+    private readonly taskManagementApiService: TaskManagementApiService,
+    private readonly translateService: TranslateService
   ) {}
 
   public refreshColumns(): void {
@@ -166,5 +194,24 @@ export class TaskManagementColumnsComponent {
     this.showModal$.next(false);
 
     if (event === 'refresh') this.refreshColumns();
+  }
+
+  private getDisplayTypeParametersView(
+    displayTypeParameters: TaskListColumnDisplayTypeParameters
+  ): string {
+    if (displayTypeParameters?.dateFormat) {
+      return displayTypeParameters.dateFormat;
+    } else if (displayTypeParameters?.enum) {
+      return Object.keys(displayTypeParameters.enum).reduce((acc, curr) => {
+        const keyValuePairString = `${curr}: ${displayTypeParameters.enum[curr]}`;
+        if (!acc) {
+          return `${keyValuePairString}`;
+        }
+
+        return `${acc}, ${keyValuePairString}`;
+      }, '');
+    }
+
+    return '-';
   }
 }
