@@ -15,3 +15,4 @@
  */
 
 export * from './task-management.service';
+export * from './task-management-api.service';

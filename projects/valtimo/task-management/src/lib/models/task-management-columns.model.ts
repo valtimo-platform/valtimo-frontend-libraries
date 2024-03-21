@@ -23,20 +23,22 @@ enum TaskListColumnDefaultSort {
 
 interface TaskListColumnDisplayType {
   type: string;
-  displayTypeParameters: object;
+  displayTypeParameters?: object;
 }
 
 interface TaskListColumn {
-  title: string;
+  title?: string;
   key: string;
   path: string;
   displayType: TaskListColumnDisplayType;
   sortable: boolean;
-  defaultSort: TaskListColumnDefaultSort;
+  defaultSort?: TaskListColumnDefaultSort;
   order?: number;
 }
 
 type TaskListColumnModalType = 'edit' | 'add';
+
+type TaskListColumnModalCloseEvent = 'close' | 'refresh';
 
 interface TaskListColumnListItem extends ListItem {
   key: string;
@@ -48,4 +50,5 @@ export {
   TaskListColumnDefaultSort,
   TaskListColumnModalType,
   TaskListColumnListItem,
+  TaskListColumnModalCloseEvent,
 };

@@ -29,7 +29,8 @@
     [taskListColumns]="obs.taskListColumns"
     [type]="obs.modalType"
     [show]="obs.showModal"
-    (closeEvent)="onModalCloseEvent()"
+    [documentDefinitionName]="obs.documentDefinitionName"
+    (closeEvent)="onModalCloseEvent($event)"
   ></valtimo-task-management-column-modal>
 </ng-container>
 

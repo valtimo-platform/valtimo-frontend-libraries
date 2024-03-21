@@ -16,6 +16,7 @@
 
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {
+  CARBON_CONSTANTS,
   CARBON_THEME,
   CarbonListModule,
   CarbonMultiInputModule,
@@ -32,7 +33,7 @@ import {
   ModalModule,
   TabsModule,
 } from 'carbon-components-angular';
-import {TaskManagementService} from '../../services';
+import {TaskManagementApiService, TaskManagementService} from '../../services';
 import {
   AbstractControl,
   FormControl,
@@ -42,7 +43,12 @@ import {
   Validators,
 } from '@angular/forms';
 import {BehaviorSubject, combineLatest, map, Observable, startWith} from 'rxjs';
-import {TaskListColumn, TaskListColumnListItem, TaskListColumnModalType} from '../../models';
+import {
+  TaskListColumn,
+  TaskListColumnListItem,
+  TaskListColumnModalCloseEvent,
+  TaskListColumnModalType,
+} from '../../models';
 
 @Component({
   selector: 'valtimo-task-management-column-modal',
@@ -79,7 +85,8 @@ export class TaskManagementColumnModalComponent {
   @Input() public set show(value: boolean) {
     this.show$.next(value);
   }
-  @Output() closeEvent = new EventEmitter<void>();
+  @Input() public documentDefinitionName!: string;
+  @Output() closeEvent = new EventEmitter<TaskListColumnModalCloseEvent>();
 
   public readonly type$ = new BehaviorSubject<TaskListColumnModalType>('add');
   public readonly isAdd$ = this.type$.pipe(map(type => type === 'add'));
@@ -242,10 +249,43 @@ export class TaskManagementColumnModalComponent {
     startWith(false)
   );
 
-  constructor(private readonly translateService: TranslateService) {}
+  constructor(
+    private readonly translateService: TranslateService,
+    private readonly taskManagementApiService: TaskManagementApiService
+  ) {}
 
   public closeModal(): void {
-    this.closeEvent.emit();
+    this.closeEvent.emit('close');
+  }
+
+  public save(): void {
+    this.disable();
+
+    const formValue = this.formGroup.value;
+    const taskListColumn: TaskListColumn = {
+      ...(formValue.title && {title: formValue.title}),
+      key: formValue.key,
+      path: formValue.path,
+      displayType: {
+        type: formValue.displayType.key,
+        displayTypeParameters: {
+          ...(formValue.dateFormat && {dateFormat: formValue.dateFormat}),
+        },
+      },
+      sortable: formValue.sortable,
+    };
+
+    this.taskManagementApiService
+      .updateTaskListColumn(this.documentDefinitionName, taskListColumn)
+      .subscribe({
+        next: () => {
+          this.closeModalAndRefresh();
+          this.enableAfterTimeout();
+        },
+        error: () => {
+          this.enable();
+        },
+      });
   }
 
   private resetForm(): void {
@@ -264,7 +304,17 @@ export class TaskManagementColumnModalComponent {
     this.disabled$.next(false);
   }
 
+  private enableAfterTimeout(): void {
+    setTimeout(() => {
+      this.enable();
+    }, CARBON_CONSTANTS.modalAnimationMs);
+  }
+
   private enable(): void {
     this.disabled$.next(true);
+  }
+
+  private closeModalAndRefresh(): void {
+    this.closeEvent.emit('refresh');
   }
 }

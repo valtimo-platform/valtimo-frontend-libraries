@@ -25,7 +25,7 @@ import {
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
-import {TaskManagementService} from '../../services';
+import {TaskManagementApiService, TaskManagementService} from '../../services';
 import {
   BehaviorSubject,
   combineLatest,
@@ -37,8 +37,7 @@ import {
   tap,
 } from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {TaskManagementApiService} from '../../services/task-management-api.service';
-import {TaskListColumn, TaskListColumnModalType} from '../../models';
+import {TaskListColumn, TaskListColumnModalCloseEvent, TaskListColumnModalType} from '../../models';
 import {TaskManagementColumnModalComponent} from '../task-management-column-modal/task-management-column-modal.component';
 
 @Component({
@@ -163,7 +162,9 @@ export class TaskManagementColumnsComponent {
     this.showModal$.next(true);
   }
 
-  public onModalCloseEvent(): void {
+  public onModalCloseEvent(event: TaskListColumnModalCloseEvent): void {
     this.showModal$.next(false);
+
+    if (event === 'refresh') this.refreshColumns();
   }
 }

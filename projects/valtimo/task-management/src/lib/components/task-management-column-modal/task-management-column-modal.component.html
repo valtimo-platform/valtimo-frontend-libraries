@@ -197,11 +197,17 @@
 <ng-template #modalFooter let-obs="obs">
   <cds-modal-footer>
     <ng-container>
-      <button cdsButton="secondary" [attr.modal-primary-focus]="true" [disabled]="obs.disabled">
+      <button
+        (click)="closeModal()"
+        cdsButton="secondary"
+        [attr.modal-primary-focus]="true"
+        [disabled]="obs.disabled"
+      >
         {{ 'listColumn.close' | translate }}
       </button>
 
       <button
+        (click)="save()"
         cdsButton="primary"
         [attr.modal-primary-focus]="true"
         [disabled]="!obs.valid"
