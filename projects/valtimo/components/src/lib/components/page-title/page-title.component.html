@@ -80,7 +80,8 @@
   <div
     [ngClass]="{
       'page-actions--visible': hasPageActions$ | async,
-      'page-actions--full-width': pageActionsFullWidth$ | async
+      'page-actions--full-width': pageActionsFullWidth$ | async,
+      'page-actions--compact': (hasPageActions$ | async) && compactMode
     }"
     class="page-actions"
     #pageActions
