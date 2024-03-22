@@ -14,7 +14,10 @@
   ~ limitations under the License.
   -->
 
-<div [ngClass]="{'--no-margin': hidePageTitle}" class="page-title-container">
+<div
+  [ngClass]="{'--no-margin': hidePageTitle || compactMode, '--compact': compactMode}"
+  class="page-title-container"
+>
   <ng-container
     *ngIf="
       hidePageTitle === false && {
@@ -28,21 +31,38 @@
       } as obs
     "
   >
-    <div class="skeleton-container" *ngIf="obs.hasCustomPageTitle && !obs.customPageTitleSet">
+    <div
+      class="skeleton-container"
+      *ngIf="obs.hasCustomPageTitle && !obs.customPageTitleSet"
+      [ngClass]="{'--compact': compactMode}"
+    >
       <cds-skeleton-placeholder></cds-skeleton-placeholder>
     </div>
 
-    <h2
-      *ngIf="obs.hasCustomPageTitle ? obs.customPageTitleSet : obs.title !== ''"
-      [title]="obs.hasCustomPageTitle ? obs.customPageTitle : obs.title"
-      class="page-title"
-    >
-      {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
-    </h2>
+    <ng-container *ngIf="obs.hasCustomPageTitle ? obs.customPageTitleSet : obs.title !== ''">
+      <h2
+        *ngIf="!compactMode"
+        [title]="obs.hasCustomPageTitle ? obs.customPageTitle : obs.title"
+        class="page-title"
+      >
+        {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
+      </h2>
+
+      <span
+        *ngIf="compactMode"
+        [title]="obs.hasCustomPageTitle ? obs.customPageTitle : obs.title"
+        class="cds--breadcrumb compact-page-title"
+      >
+        {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
+      </span>
+    </ng-container>
+
+    <ng-container *ngTemplateOutlet="compactDivider"></ng-container>
 
     <div
       *ngIf="obs.hasCustomPageSubtitle && !obs.customPageSubtitleSet"
       class="subtitle-skeleton-container"
+      [ngClass]="{'--compact': compactMode}"
     >
       <cds-skeleton-placeholder></cds-skeleton-placeholder>
     </div>
@@ -52,6 +72,7 @@
       [innerHtml]="obs.customPageSubtitle"
       [title]="obs.customPageSubtitle"
       class="page-subtitle"
+      [ngClass]="{'--compact': compactMode}"
     >
     </span>
   </ng-container>
@@ -62,7 +83,17 @@
       'page-actions--full-width': pageActionsFullWidth$ | async
     }"
     class="page-actions"
+    #pageActions
   >
     <ng-container #pageActionsVcr></ng-container>
   </div>
+
+  <ng-container *ngTemplateOutlet="compactDivider"></ng-container>
 </div>
+
+<ng-template #compactDivider>
+  <cds-header-navigation
+    class="compact-divider"
+    *ngIf="compactMode && ((pageActionsHasContent$ | async) || (hasCustomPageSubtitle$ | async))"
+  ></cds-header-navigation>
+</ng-template>

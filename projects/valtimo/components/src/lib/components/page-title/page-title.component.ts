@@ -16,6 +16,7 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   HostBinding,
   OnDestroy,
   OnInit,
@@ -51,7 +52,11 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('pageActionsVcr', {static: true, read: ViewContainerRef})
   private readonly _pageActionsVcr!: ViewContainerRef;
+  @ViewChild('pageActions')
+  private readonly _pageActions: ElementRef<HTMLDivElement>;
+
   public hidePageTitle = false;
+  public compactMode!: boolean;
   public readonly appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
   public readonly hasCustomPageTitle$: Observable<boolean> = this.router.events.pipe(
     startWith(this.router),
@@ -70,6 +75,7 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly hasPageActions$ = this.pageTitleService.hasPageActions$;
   public readonly pageActionsFullWidth$ = this.pageTitleService.pageActionsFullWidth$;
   public readonly translatedTitle$ = new BehaviorSubject<string>('');
+  public readonly pageActionsHasContent$ = new BehaviorSubject<boolean>(false);
   private appTitleAsSuffix =
     this.configService?.config?.featureToggles?.applicationTitleAsSuffix || false;
   private readonly _subscriptions = new Subscription();
@@ -78,6 +84,7 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
     switchMap(() => this.activatedRoute.firstChild.data),
     map(data => !!data?.hidePageTitle)
   );
+  private _pageActionsObserver!: MutationObserver;
 
   constructor(
     private readonly router: Router,
@@ -98,10 +105,12 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngAfterViewInit(): void {
     this.pageTitleService.setPageActionsViewContainerRef(this._pageActionsVcr);
+    this.openPageActionsMutationObserver();
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this._subscriptions.unsubscribe();
+    this._pageActionsObserver?.disconnect();
   }
 
   private openRouterTranslateSubscription(): void {
@@ -152,7 +161,31 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
     this._subscriptions.add(
       this.pageHeaderService.compactMode$.subscribe(compactMode => {
         this.isCompact = compactMode;
+        this.compactMode = compactMode;
       })
     );
+  }
+
+  private openPageActionsMutationObserver(): void {
+    if (!this._pageActions) return;
+
+    this._pageActionsObserver = new MutationObserver(mutations => {
+      console.log(mutations);
+      const firstMutation = mutations[0];
+      const target = firstMutation?.target as HTMLDivElement;
+      const children = target?.children;
+      const childrenArray = (children && Array.from(children)) || [];
+
+      this.pageActionsHasContent$.next(childrenArray.length > 0);
+    });
+
+    this._pageActionsObserver.observe(this._pageActions.nativeElement, {childList: true});
+    this.setInitialPageActionsHasChildren();
+  }
+
+  private setInitialPageActionsHasChildren(): void {
+    const children = this._pageActions.nativeElement.children;
+    const childrenArray = (children && Array.from(children)) || [];
+    this.pageActionsHasContent$.next(childrenArray.length > 0);
   }
 }

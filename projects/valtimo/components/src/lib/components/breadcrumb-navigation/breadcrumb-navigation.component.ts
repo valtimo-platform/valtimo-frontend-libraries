@@ -36,7 +36,7 @@ export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
     this.compactMode$,
   ]).pipe(
     map(([breadCrumbItems, compactMode]) => [
-      ...(compactMode && [{content: ''}]),
+      ...(compactMode && breadCrumbItems?.length > 0 ? [{content: ''}] : []),
       ...breadCrumbItems,
     ])
   );

@@ -57,8 +57,6 @@ export class TopbarComponent implements OnInit, AfterViewInit {
   public readonly largeScreen$ = this.shellService.largeScreen$;
   public readonly panelExpanded$ = this.shellService.panelExpanded$;
   public readonly collapsibleWidescreenMenu$ = this.shellService.collapsibleWidescreenMenu$;
-  public readonly compactMode$ = this.pageHeaderService.compactMode$;
-
   constructor(
     private readonly keyCloakService: KeycloakService,
     private readonly configService: ConfigService,
