@@ -236,6 +236,20 @@
         </cds-toggle>
       </cds-list-column>
     </cds-list-row>
+
+    <cds-list-row *ngIf="enableCompactModeToggle">
+      <cds-list-column>
+        <cds-toggle
+          [label]="'settings.interface.showUserName' | translate"
+          [onText]="'interface.on' | translate"
+          [offText]="'interface.off' | translate"
+          [disabled]="updatingUserSettings$ | async"
+          [ngModel]="showUserNameInTopBar$ | async"
+          (ngModelChange)="setShowUserName($event)"
+        >
+        </cds-toggle>
+      </cds-list-column>
+    </cds-list-row>
   </cds-structured-list>
 </ng-template>
 

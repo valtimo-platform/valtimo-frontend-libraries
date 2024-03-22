@@ -42,8 +42,6 @@ export class TopbarComponent implements OnInit, AfterViewInit {
   @ViewChild('headerVcr', {static: true, read: ViewContainerRef})
   private readonly _headerVcr!: ViewContainerRef;
 
-  public showUserNameInTopBar!: boolean;
-
   public logoBase64!: SafeResourceUrl;
 
   public readonly userFullName$ = of(this.keyCloakService.isLoggedIn()).pipe(
@@ -57,6 +55,8 @@ export class TopbarComponent implements OnInit, AfterViewInit {
   public readonly largeScreen$ = this.shellService.largeScreen$;
   public readonly panelExpanded$ = this.shellService.panelExpanded$;
   public readonly collapsibleWidescreenMenu$ = this.shellService.collapsibleWidescreenMenu$;
+  public readonly showUserNameInTopBar$ = this.pageHeaderService.showUserNameInTopBar$;
+
   constructor(
     private readonly keyCloakService: KeycloakService,
     private readonly configService: ConfigService,
@@ -68,7 +68,6 @@ export class TopbarComponent implements OnInit, AfterViewInit {
 
   public ngOnInit(): void {
     this.iconService.registerAll([User20]);
-    this.showUserNameInTopBar = this.configService.config.featureToggles?.showUserNameInTopBar;
     this.setLogo();
   }
 

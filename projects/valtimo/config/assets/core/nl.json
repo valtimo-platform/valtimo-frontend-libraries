@@ -376,7 +376,8 @@
     "interface": {
       "title": "Interface",
       "collapsibleMenu": "Navigatiebalk altijd inklapbaar",
-      "compactMode": "Compacte modus"
+      "compactMode": "Compacte modus",
+      "showUserName": "Toon naam van gebruiker"
     }
   },
   "decisions": {

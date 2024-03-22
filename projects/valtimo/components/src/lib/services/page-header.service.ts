@@ -28,6 +28,9 @@ export class PageHeaderService {
   private readonly _compactMode$ = new BehaviorSubject<boolean>(
     !!this.configService?.config?.featureToggles?.compactModeOnByDefault
   );
+  private readonly _showUserNameInTopBar$ = new BehaviorSubject<boolean>(
+    !!this.configService?.config?.featureToggles?.showUserNameInTopBar
+  );
 
   public get headerViewContainerRef$(): Observable<ViewContainerRef> {
     return this._headerViewContainerRef$.pipe(filter(ref => !!ref));
@@ -39,6 +42,10 @@ export class PageHeaderService {
 
   public get compactMode$(): Observable<boolean> {
     return this._compactMode$.asObservable();
+  }
+
+  public get showUserNameInTopBar$(): Observable<boolean> {
+    return this._showUserNameInTopBar$.asObservable();
   }
 
   constructor(private readonly configService: ConfigService) {}
@@ -53,5 +60,9 @@ export class PageHeaderService {
 
   public setCompactMode(compactMode: boolean): void {
     this._compactMode$.next(compactMode);
+  }
+
+  public setShowUserNameInTopBar(show: boolean): void {
+    this._showUserNameInTopBar$.next(show);
   }
 }

@@ -132,6 +132,7 @@ export interface ValtimoConfig {
     useStartEventNameAsStartFormTitle?: boolean;
     enableCompactModeToggle?: boolean;
     compactModeOnByDefault?: boolean;
+    enableUserNameInTopBarToggle?: boolean;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
   visibleDossierListTabs?: Array<DossierListTab>;

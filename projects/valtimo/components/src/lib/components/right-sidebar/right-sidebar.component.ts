@@ -116,6 +116,8 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   readonly compactMode$ = this.pageHeaderService.compactMode$;
 
+  readonly showUserNameInTopBar$ = this.pageHeaderService.showUserNameInTopBar$;
+
   readonly frontendVersion!: string;
 
   private formSubscription!: Subscription;
@@ -130,6 +132,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
   public showValtimoVersions = true;
 
   public enableCompactModeToggle = false;
+  public enableShowUserNameToggle = false;
 
   constructor(
     public translate: TranslateService,
@@ -152,6 +155,8 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     });
     this.enableCompactModeToggle =
       !!this.configService?.config?.featureToggles.enableCompactModeToggle;
+    this.enableShowUserNameToggle =
+      !!this.configService?.config?.featureToggles.enableUserNameInTopBarToggle;
   }
 
   showPlantATreeButton: boolean;
@@ -196,6 +201,14 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   setCompactMode(compactMode: boolean, saveSettings = true): void {
     this.pageHeaderService.setCompactMode(compactMode);
+
+    if (saveSettings) {
+      this.saveUserSettings();
+    }
+  }
+
+  setShowUserName(showUserName: boolean, saveSettings = true): void {
+    this.pageHeaderService.setShowUserNameInTopBar(showUserName);
 
     if (saveSettings) {
       this.saveUserSettings();
@@ -279,14 +292,20 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
   private saveUserSettings(): void {
     this.updatingUserSettings$.next(true);
 
-    combineLatest([this.selectedLanguage$, this.collapsibleWidescreenMenu$, this.compactMode$])
+    combineLatest([
+      this.selectedLanguage$,
+      this.collapsibleWidescreenMenu$,
+      this.compactMode$,
+      this.showUserNameInTopBar$,
+    ])
       .pipe(
         take(1),
-        switchMap(([languageCode, collapsibleWidescreenMenu, compactMode]) =>
+        switchMap(([languageCode, collapsibleWidescreenMenu, compactMode, showUserNameInTopBar]) =>
           this.userSettingsService.saveUserSettings({
             collapsibleWidescreenMenu,
             languageCode,
             ...(this.enableCompactModeToggle && {compactMode}),
+            ...(this.enableShowUserNameToggle && {showUserNameInTopBar}),
           })
         )
       )
@@ -300,5 +319,6 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     this.updateUserLanguage(settings.languageCode, false);
     this.setCollapsibleWidescreenMenu(settings.collapsibleWidescreenMenu, false);
     if (this.enableCompactModeToggle) this.setCompactMode(settings.compactMode, false);
+    if (this.enableShowUserNameToggle) this.setShowUserName(settings.showUserNameInTopBar, false);
   }
 }

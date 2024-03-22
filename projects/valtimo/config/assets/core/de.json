@@ -376,7 +376,8 @@
     "interface": {
       "title": "Interface",
       "collapsibleMenu": "Navigationsleiste immer einklappbar",
-      "compactMode": "Kompaktmodus"
+      "compactMode": "Kompaktmodus",
+      "showUserName": "Benutzernamen anzeigen"
     }
   },
   "decisions": {
