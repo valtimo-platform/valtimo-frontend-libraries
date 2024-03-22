@@ -16,6 +16,10 @@
 
 .breadcrumbs-container {
   margin-bottom: 1rem;
+
+  &.--compact {
+    margin-bottom: 0;
+  }
 }
 
 .valtimo-breadcrumb-navigation--compact {

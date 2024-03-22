@@ -15,7 +15,7 @@
  */
 
 import {Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {Observable, Subscription} from 'rxjs';
+import {combineLatest, map, Observable, Subscription} from 'rxjs';
 import {BreadcrumbItem} from 'carbon-components-angular';
 import {BreadcrumbService} from './breadcrumb.service';
 import {PageHeaderService} from '../../services';
@@ -29,8 +29,17 @@ import {PageHeaderService} from '../../services';
 export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
   @HostBinding('class.valtimo-breadcrumb-navigation--compact') isCompact!: boolean;
 
-  public readonly breadcrumbItems$: Observable<Array<BreadcrumbItem>> =
-    this.breadcrumbService.breadcrumbItems$;
+  public readonly compactMode$ = this.pageHeaderService.compactMode$;
+
+  public readonly breadcrumbItems$: Observable<Array<BreadcrumbItem>> = combineLatest([
+    this.breadcrumbService.breadcrumbItems$,
+    this.compactMode$,
+  ]).pipe(
+    map(([breadCrumbItems, compactMode]) => [
+      ...(compactMode && [{content: ''}]),
+      ...breadCrumbItems,
+    ])
+  );
 
   private readonly _subscriptions = new Subscription();
 
