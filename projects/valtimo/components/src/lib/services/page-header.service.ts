@@ -24,7 +24,7 @@ import {filter} from 'rxjs/operators';
 export class PageHeaderService {
   private readonly _headerViewContainerRef$ = new BehaviorSubject<ViewContainerRef | null>(null);
   private readonly _contentViewContainerRef$ = new BehaviorSubject<ViewContainerRef | null>(null);
-  private readonly _compactMode$ = new BehaviorSubject<boolean>(true);
+  private readonly _compactMode$ = new BehaviorSubject<boolean>(false);
 
   public get headerViewContainerRef$(): Observable<ViewContainerRef> {
     return this._headerViewContainerRef$.pipe(filter(ref => !!ref));

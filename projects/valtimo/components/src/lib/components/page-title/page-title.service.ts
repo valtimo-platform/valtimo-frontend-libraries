@@ -55,7 +55,7 @@ export class PageTitleService implements OnDestroy {
   }
 
   public get pageActionsViewContainerRef$(): Observable<ViewContainerRef> {
-    return this._pageActionsViewContainerRef$.asObservable();
+    return this._pageActionsViewContainerRef$.pipe(filter(ref => !!ref));
   }
 
   public get hasPageActions$(): Observable<boolean> {
@@ -113,10 +113,7 @@ export class PageTitleService implements OnDestroy {
   }
 
   private openRouteSubscription(): void {
-    this._routeSubscription = combineLatest([
-      this.router.events,
-      this._pageActionsViewContainerRef$,
-    ])
+    this._routeSubscription = combineLatest([this.router.events, this.pageActionsViewContainerRef$])
       .pipe(
         filter(
           ([event]) =>
