@@ -42,21 +42,22 @@ export class TopbarComponent implements OnInit, AfterViewInit {
   @ViewChild('headerVcr', {static: true, read: ViewContainerRef})
   private readonly _headerVcr!: ViewContainerRef;
 
-  showUserNameInTopBar!: boolean;
+  public showUserNameInTopBar!: boolean;
 
-  logoBase64!: SafeResourceUrl;
+  public logoBase64!: SafeResourceUrl;
 
-  readonly userFullName$ = of(this.keyCloakService.isLoggedIn()).pipe(
+  public readonly userFullName$ = of(this.keyCloakService.isLoggedIn()).pipe(
     switchMap(() => this.keyCloakService.loadUserProfile()),
     map(profile => `${profile.firstName} ${profile.lastName}`)
   );
 
-  readonly applicationTitle = this.configService.config.applicationTitle;
-  readonly largeLogoMargin = this.configService.config.featureToggles?.largeLogoMargin;
-  readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
-  readonly largeScreen$ = this.shellService.largeScreen$;
-  readonly panelExpanded$ = this.shellService.panelExpanded$;
-  readonly collapsibleWidescreenMenu$ = this.shellService.collapsibleWidescreenMenu$;
+  public readonly applicationTitle = this.configService.config.applicationTitle;
+  public readonly largeLogoMargin = this.configService.config.featureToggles?.largeLogoMargin;
+  public readonly sideBarExpanded$ = this.shellService.sideBarExpanded$;
+  public readonly largeScreen$ = this.shellService.largeScreen$;
+  public readonly panelExpanded$ = this.shellService.panelExpanded$;
+  public readonly collapsibleWidescreenMenu$ = this.shellService.collapsibleWidescreenMenu$;
+  public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   constructor(
     private readonly keyCloakService: KeycloakService,

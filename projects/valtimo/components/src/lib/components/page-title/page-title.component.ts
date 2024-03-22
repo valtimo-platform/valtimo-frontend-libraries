@@ -16,6 +16,7 @@
 import {
   AfterViewInit,
   Component,
+  HostBinding,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -37,6 +38,7 @@ import {
   switchMap,
 } from 'rxjs';
 import {PageTitleService} from './page-title.service';
+import {PageHeaderService} from '../../services';
 
 @Component({
   selector: 'valtimo-page-title',
@@ -45,6 +47,8 @@ import {PageTitleService} from './page-title.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
+  @HostBinding('class.valtimo-page-title--compact') isCompact!: boolean;
+
   @ViewChild('pageActionsVcr', {static: true, read: ViewContainerRef})
   private readonly _pageActionsVcr!: ViewContainerRef;
   public hidePageTitle = false;
@@ -82,12 +86,14 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly translateService: TranslateService,
     private readonly logger: NGXLogger,
     private readonly configService: ConfigService,
-    private readonly pageTitleService: PageTitleService
+    private readonly pageTitleService: PageTitleService,
+    private readonly pageHeaderService: PageHeaderService
   ) {}
 
   public ngOnInit(): void {
     this.openRouterTranslateSubscription();
     this.openHidePageTitleSubscription();
+    this.openCompactModeSubscription();
   }
 
   public ngAfterViewInit(): void {
@@ -138,6 +144,14 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
     this._subscriptions.add(
       this._hidePageTitle$.subscribe(hidePageTitle => {
         this.hidePageTitle = hidePageTitle;
+      })
+    );
+  }
+
+  private openCompactModeSubscription(): void {
+    this._subscriptions.add(
+      this.pageHeaderService.compactMode$.subscribe(compactMode => {
+        this.isCompact = compactMode;
       })
     );
   }

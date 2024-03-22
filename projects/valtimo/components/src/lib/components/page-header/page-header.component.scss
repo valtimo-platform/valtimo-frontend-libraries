@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
-.breadcrumbs-container {
-  margin-bottom: 1rem;
+.page-head--hidden {
+  display: none;
+}
+
+.page-header-container--compact {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }

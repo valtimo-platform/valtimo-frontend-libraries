@@ -21,13 +21,14 @@ import {PageHeaderService} from '../../services';
 @Component({
   selector: 'valtimo-page-header',
   templateUrl: './page-header.component.html',
-  styleUrls: ['./page-header.component.css'],
+  styleUrls: ['./page-header.component.scss'],
 })
 export class PageHeaderComponent implements AfterViewInit {
   @ViewChild('contentVcr', {static: true, read: ViewContainerRef})
   private readonly _contentrVcr!: ViewContainerRef;
 
-  readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
+  public readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
+  public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   constructor(
     private readonly userInterfaceService: UserInterfaceService,

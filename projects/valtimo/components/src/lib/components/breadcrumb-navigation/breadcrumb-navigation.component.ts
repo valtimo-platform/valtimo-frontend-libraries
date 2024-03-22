@@ -14,19 +14,40 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Observable, Subscription} from 'rxjs';
 import {BreadcrumbItem} from 'carbon-components-angular';
 import {BreadcrumbService} from './breadcrumb.service';
+import {PageHeaderService} from '../../services';
 
 @Component({
   selector: 'valtimo-breadcrumb-navigation',
   templateUrl: './breadcrumb-navigation.component.html',
-  styleUrls: ['./breadcrumb-navigation.component.css'],
+  styleUrls: ['./breadcrumb-navigation.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
-export class BreadcrumbNavigationComponent {
+export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
+  @HostBinding('class.valtimo-breadcrumb-navigation--compact') isCompact!: boolean;
+
   public readonly breadcrumbItems$: Observable<Array<BreadcrumbItem>> =
     this.breadcrumbService.breadcrumbItems$;
 
-  constructor(private readonly breadcrumbService: BreadcrumbService) {}
+  private readonly _subscriptions = new Subscription();
+
+  constructor(
+    private readonly breadcrumbService: BreadcrumbService,
+    private readonly pageHeaderService: PageHeaderService
+  ) {}
+
+  public ngOnInit(): void {
+    this._subscriptions.add(
+      this.pageHeaderService.compactMode$.subscribe(compactMode => {
+        this.isCompact = compactMode;
+      })
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 }

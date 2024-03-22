@@ -32,6 +32,8 @@
   <cds-header-global>
     <ng-container #headerVcr></ng-container>
 
+    <cds-header-navigation *ngIf="compactMode$ | async"></cds-header-navigation>
+
     <ng-container *ngTemplateOutlet="userFullName"></ng-container>
 
     <cds-header-action

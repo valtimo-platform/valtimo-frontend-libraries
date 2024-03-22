@@ -20,7 +20,7 @@
 
 <ng-container renderPageHeader>
   <ng-template>
-    <div class="page-header-container">
+    <div [ngClass]="{'page-header-container--compact': compactMode$ | async}">
       <valtimo-breadcrumb-navigation></valtimo-breadcrumb-navigation>
 
       <valtimo-page-title></valtimo-page-title>
