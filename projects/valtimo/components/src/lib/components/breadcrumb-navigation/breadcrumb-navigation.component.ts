@@ -19,6 +19,7 @@ import {combineLatest, map, Observable, Subscription} from 'rxjs';
 import {BreadcrumbItem} from 'carbon-components-angular';
 import {BreadcrumbService} from './breadcrumb.service';
 import {PageHeaderService} from '../../services';
+import {PageTitleService} from '../page-title/page-title.service';
 
 @Component({
   selector: 'valtimo-breadcrumb-navigation',
@@ -34,18 +35,19 @@ export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
   public readonly breadcrumbItems$: Observable<Array<BreadcrumbItem>> = combineLatest([
     this.breadcrumbService.breadcrumbItems$,
     this.compactMode$,
+    this.pageTitleService.pageTitleHidden$,
   ]).pipe(
-    map(([breadCrumbItems, compactMode]) => [
-      ...(compactMode && breadCrumbItems?.length > 0 ? [{content: ''}] : []),
-      ...breadCrumbItems,
-    ])
+    map(([breadCrumbItems, compactMode, pageTitleHidden]) => {
+      return [...(compactMode && !pageTitleHidden ? [{content: ''}] : []), ...breadCrumbItems];
+    })
   );
 
   private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly pageTitleService: PageTitleService
   ) {}
 
   public ngOnInit(): void {

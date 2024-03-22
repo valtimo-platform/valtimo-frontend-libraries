@@ -37,6 +37,7 @@ import {
   startWith,
   Subscription,
   switchMap,
+  tap,
 } from 'rxjs';
 import {PageTitleService} from './page-title.service';
 import {PageHeaderService} from '../../services';
@@ -82,7 +83,8 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly _hidePageTitle$: Observable<boolean> = this.router.events.pipe(
     startWith(this.router),
     switchMap(() => this.activatedRoute.firstChild.data),
-    map(data => !!data?.hidePageTitle)
+    map(data => !!data?.hidePageTitle),
+    tap(hidden => this.pageTitleService.setPageTitleHidden(hidden))
   );
   private _pageActionsObserver!: MutationObserver;
 

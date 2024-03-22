@@ -34,6 +34,8 @@ export class PageTitleService implements OnDestroy {
     null
   );
 
+  private readonly _pageTitleHidden$ = new BehaviorSubject<boolean>(false);
+
   private _routeSubscription!: Subscription;
 
   private _preventReset!: boolean;
@@ -64,6 +66,10 @@ export class PageTitleService implements OnDestroy {
 
   public get pageActionsFullWidth$(): Observable<boolean> {
     return this._pageActionsFullWidth$.asObservable();
+  }
+
+  public get pageTitleHidden$(): Observable<boolean> {
+    return this._pageTitleHidden$.asObservable();
   }
 
   constructor(private readonly router: Router) {
@@ -110,6 +116,10 @@ export class PageTitleService implements OnDestroy {
 
   public setCustomPageTitleSet(set: boolean): void {
     this._customPageTitleSet$.next(set);
+  }
+
+  public setPageTitleHidden(hidden: boolean): void {
+    this._pageTitleHidden$.next(hidden);
   }
 
   private openRouteSubscription(): void {
