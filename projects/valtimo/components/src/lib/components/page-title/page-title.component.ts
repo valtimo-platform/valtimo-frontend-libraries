@@ -16,6 +16,8 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
+  HostBinding,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -35,8 +37,10 @@ import {
   startWith,
   Subscription,
   switchMap,
+  tap,
 } from 'rxjs';
 import {PageTitleService} from './page-title.service';
+import {PageHeaderService} from '../../services';
 
 @Component({
   selector: 'valtimo-page-title',
@@ -45,9 +49,15 @@ import {PageTitleService} from './page-title.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
+  @HostBinding('class.valtimo-page-title--compact') isCompact!: boolean;
+
   @ViewChild('pageActionsVcr', {static: true, read: ViewContainerRef})
   private readonly _pageActionsVcr!: ViewContainerRef;
+  @ViewChild('pageActions')
+  private readonly _pageActions: ElementRef<HTMLDivElement>;
+
   public hidePageTitle = false;
+  public compactMode!: boolean;
   public readonly appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
   public readonly hasCustomPageTitle$: Observable<boolean> = this.router.events.pipe(
     startWith(this.router),
@@ -66,14 +76,17 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly hasPageActions$ = this.pageTitleService.hasPageActions$;
   public readonly pageActionsFullWidth$ = this.pageTitleService.pageActionsFullWidth$;
   public readonly translatedTitle$ = new BehaviorSubject<string>('');
+  public readonly pageActionsHasContent$ = new BehaviorSubject<boolean>(false);
   private appTitleAsSuffix =
     this.configService?.config?.featureToggles?.applicationTitleAsSuffix || false;
   private readonly _subscriptions = new Subscription();
   private readonly _hidePageTitle$: Observable<boolean> = this.router.events.pipe(
     startWith(this.router),
     switchMap(() => this.activatedRoute.firstChild.data),
-    map(data => !!data?.hidePageTitle)
+    map(data => !!data?.hidePageTitle),
+    tap(hidden => this.pageTitleService.setPageTitleHidden(hidden))
   );
+  private _pageActionsObserver!: MutationObserver;
 
   constructor(
     private readonly router: Router,
@@ -82,20 +95,24 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly translateService: TranslateService,
     private readonly logger: NGXLogger,
     private readonly configService: ConfigService,
-    private readonly pageTitleService: PageTitleService
+    private readonly pageTitleService: PageTitleService,
+    private readonly pageHeaderService: PageHeaderService
   ) {}
 
   public ngOnInit(): void {
     this.openRouterTranslateSubscription();
     this.openHidePageTitleSubscription();
+    this.openCompactModeSubscription();
   }
 
   public ngAfterViewInit(): void {
     this.pageTitleService.setPageActionsViewContainerRef(this._pageActionsVcr);
+    this.openPageActionsMutationObserver();
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this._subscriptions.unsubscribe();
+    this._pageActionsObserver?.disconnect();
   }
 
   private openRouterTranslateSubscription(): void {
@@ -140,5 +157,37 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
         this.hidePageTitle = hidePageTitle;
       })
     );
+  }
+
+  private openCompactModeSubscription(): void {
+    this._subscriptions.add(
+      this.pageHeaderService.compactMode$.subscribe(compactMode => {
+        this.isCompact = compactMode;
+        this.compactMode = compactMode;
+      })
+    );
+  }
+
+  private openPageActionsMutationObserver(): void {
+    if (!this._pageActions) return;
+
+    this._pageActionsObserver = new MutationObserver(mutations => {
+      console.log(mutations);
+      const firstMutation = mutations[0];
+      const target = firstMutation?.target as HTMLDivElement;
+      const children = target?.children;
+      const childrenArray = (children && Array.from(children)) || [];
+
+      this.pageActionsHasContent$.next(childrenArray.length > 0);
+    });
+
+    this._pageActionsObserver.observe(this._pageActions.nativeElement, {childList: true});
+    this.setInitialPageActionsHasChildren();
+  }
+
+  private setInitialPageActionsHasChildren(): void {
+    const children = this._pageActions.nativeElement.children;
+    const childrenArray = (children && Array.from(children)) || [];
+    this.pageActionsHasContent$.next(childrenArray.length > 0);
   }
 }

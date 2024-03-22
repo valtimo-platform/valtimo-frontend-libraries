@@ -130,6 +130,9 @@ export interface ValtimoConfig {
     enableTabManagement?: boolean;
     hideValtimoVersionsForNonAdmins?: boolean;
     useStartEventNameAsStartFormTitle?: boolean;
+    enableCompactModeToggle?: boolean;
+    compactModeOnByDefault?: boolean;
+    enableUserNameInTopBarToggle?: boolean;
   };
   visibleTaskListTabs?: Array<TaskListTab>;
   visibleDossierListTabs?: Array<DossierListTab>;

@@ -238,6 +238,9 @@ export * from './lib/directives/tooltip/tooltip.module';
 // render in page header
 export * from './lib/directives/render-in-page-header/render-in-page-header.directive';
 export * from './lib/directives/render-in-page-header/render-in-page-header-directive.module';
+// render page header
+export * from './lib/directives/render-page-header/render-page-header.directive';
+export * from './lib/directives/render-page-header/render-page-header-directive.module';
 // digit only
 export * from './lib/directives/digit-only/digit-only.directive';
 // command click

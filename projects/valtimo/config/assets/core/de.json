@@ -375,7 +375,9 @@
     },
     "interface": {
       "title": "Interface",
-      "collapsibleMenu": "Navigationsleiste immer einklappbar"
+      "collapsibleMenu": "Navigationsleiste immer einklappbar",
+      "compactMode": "Kompaktmodus",
+      "showUserName": "Benutzernamen anzeigen"
     }
   },
   "decisions": {

@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-interface UserSettings {
-  collapsibleWidescreenMenu?: boolean;
-  languageCode?: string;
-  compactMode?: boolean;
-  showUserNameInTopBar?: boolean;
+.breadcrumbs-container {
+  margin-bottom: 1rem;
+
+  &.--compact {
+    margin-bottom: 0;
+  }
 }
 
-export {UserSettings};
+.valtimo-breadcrumb-navigation--compact {
+  flex-shrink: 0;
+}

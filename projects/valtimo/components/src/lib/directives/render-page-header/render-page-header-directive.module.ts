@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-.breadcrumbs-container {
-  margin-bottom: 1rem;
-}
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RenderPageHeaderDirective} from './render-page-header.directive';
+
+@NgModule({
+  declarations: [RenderPageHeaderDirective],
+  imports: [CommonModule],
+  exports: [RenderPageHeaderDirective],
+})
+export class RenderPageHeaderDirectiveModule {}

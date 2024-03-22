@@ -21,8 +21,10 @@
     loadingVersion: loadingVersion$ | async,
     versionListItems: versionListItems$ | async,
     selectedDocumentDefinition: selectedDocumentDefinition$ | async,
-    selectedDocumentDefinitionIsReadOnly: selectedDocumentDefinitionIsReadOnly$ | async
+    selectedDocumentDefinitionIsReadOnly: selectedDocumentDefinitionIsReadOnly$ | async,
+    compactMode: compactMode$ | async
   } as obs"
+  [ngClass]="{'--compact': obs.compactMode}"
 >
   <div class="dossier-metadata">
     <ng-container *ngTemplateOutlet="versionSelection; context: {obs: obs}"></ng-container>
@@ -40,6 +42,7 @@
     [attr.data-carbon-theme]="CARBON_THEME"
     [skeleton]="obs.loadingVersion"
     (selected)="setVersion($event)"
+    [size]="obs.compactMode ? 'sm' : 'md'"
   >
     <cds-dropdown-list [items]="obs.versionListItems"></cds-dropdown-list>
   </cds-dropdown>
@@ -74,7 +77,11 @@
 </ng-template>
 
 <ng-template #customTrigger>
-  <button cdsButton="tertiary" [attr.data-carbon-theme]="CARBON_THEME">
+  <button
+    cdsButton="tertiary"
+    [size]="(compactMode$ | async) ? 'sm' : 'md'"
+    [attr.data-carbon-theme]="CARBON_THEME"
+  >
     {{ 'dossierManagement.more' | translate }}
 
     <svg class="cds--btn__icon" cdsIcon="overflow-menu--vertical" size="16"></svg>

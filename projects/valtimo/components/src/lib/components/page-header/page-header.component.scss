@@ -17,3 +17,11 @@
 .page-head--hidden {
   display: none;
 }
+
+.page-header-container--compact {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 16px;
+}
