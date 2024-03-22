@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ViewContainerRef} from '@angular/core';
 import {UserInterfaceService} from '../../services/user-interface.service';
+import {PageHeaderService} from '../../services';
 
 @Component({
   selector: 'valtimo-page-header',
   templateUrl: './page-header.component.html',
   styleUrls: ['./page-header.component.css'],
 })
-export class PageHeaderComponent {
+export class PageHeaderComponent implements AfterViewInit {
+  @ViewChild('contentVcr', {static: true, read: ViewContainerRef})
+  private readonly _contentrVcr!: ViewContainerRef;
+
   readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
 
-  constructor(private readonly userInterfaceService: UserInterfaceService) {}
+  constructor(
+    private readonly userInterfaceService: UserInterfaceService,
+    private readonly pageHeaderService: PageHeaderService
+  ) {}
+
+  public ngAfterViewInit(): void {
+    this.pageHeaderService.setContentViewContainerRef(this._contentrVcr);
+  }
 }

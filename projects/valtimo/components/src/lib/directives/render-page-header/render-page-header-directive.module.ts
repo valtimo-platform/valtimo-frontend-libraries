@@ -16,19 +16,11 @@
 
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {PageHeaderComponent} from './page-header.component';
-import {PageTitleModule} from '../page-title/page-title.module';
-import {BreadcrumbNavigationModule} from '../breadcrumb-navigation/breadcrumb-navigation.module';
-import {RenderPageHeaderDirectiveModule} from '../../directives/render-page-header/render-page-header-directive.module';
+import {RenderPageHeaderDirective} from './render-page-header.directive';
 
 @NgModule({
-  declarations: [PageHeaderComponent],
-  imports: [
-    CommonModule,
-    PageTitleModule,
-    BreadcrumbNavigationModule,
-    RenderPageHeaderDirectiveModule,
-  ],
-  exports: [PageHeaderComponent],
+  declarations: [RenderPageHeaderDirective],
+  imports: [CommonModule],
+  exports: [RenderPageHeaderDirective],
 })
-export class PageHeaderModule {}
+export class RenderPageHeaderDirectiveModule {}
