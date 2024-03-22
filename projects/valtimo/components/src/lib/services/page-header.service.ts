@@ -17,6 +17,7 @@
 import {Injectable, ViewContainerRef} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {filter} from 'rxjs/operators';
+import {ConfigService} from '@valtimo/config';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,9 @@ import {filter} from 'rxjs/operators';
 export class PageHeaderService {
   private readonly _headerViewContainerRef$ = new BehaviorSubject<ViewContainerRef | null>(null);
   private readonly _contentViewContainerRef$ = new BehaviorSubject<ViewContainerRef | null>(null);
-  private readonly _compactMode$ = new BehaviorSubject<boolean>(true);
+  private readonly _compactMode$ = new BehaviorSubject<boolean>(
+    !!this.configService?.config?.featureToggles?.compactModeOnByDefault
+  );
 
   public get headerViewContainerRef$(): Observable<ViewContainerRef> {
     return this._headerViewContainerRef$.pipe(filter(ref => !!ref));
@@ -37,6 +40,8 @@ export class PageHeaderService {
   public get compactMode$(): Observable<boolean> {
     return this._compactMode$.asObservable();
   }
+
+  constructor(private readonly configService: ConfigService) {}
 
   public setHeaderViewContainerRef(ref: ViewContainerRef): void {
     this._headerViewContainerRef$.next(ref);

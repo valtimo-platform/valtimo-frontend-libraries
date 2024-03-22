@@ -41,6 +41,7 @@ import {BehaviorSubject, combineLatest, Observable, Subscription, switchMap, tak
 import {VersionService} from '../version/version.service';
 import {ShellService} from '../../services/shell.service';
 import {map, tap} from 'rxjs/operators';
+import {PageHeaderService} from '../../services';
 
 @Component({
   selector: 'valtimo-right-sidebar',
@@ -113,6 +114,8 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   readonly collapsibleWidescreenMenu$ = this.shellService.collapsibleWidescreenMenu$;
 
+  readonly compactMode$ = this.pageHeaderService.compactMode$;
+
   readonly frontendVersion!: string;
 
   private formSubscription!: Subscription;
@@ -126,6 +129,8 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   public showValtimoVersions = true;
 
+  public enableCompactModeToggle = false;
+
   constructor(
     public translate: TranslateService,
     private readonly userProviderService: UserProviderService,
@@ -136,7 +141,8 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     private readonly shellService: ShellService,
     private readonly elementRef: ElementRef,
     private readonly configService: ConfigService,
-    private readonly userSettingsService: UserSettingsService
+    private readonly userSettingsService: UserSettingsService,
+    private readonly pageHeaderService: PageHeaderService
   ) {
     this.frontendVersion = VERSIONS?.frontendLibraries;
     this.isAdmin$.subscribe(isAdmin => {
@@ -144,6 +150,8 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
         this.showValtimoVersions = false;
       }
     });
+    this.enableCompactModeToggle =
+      !!this.configService?.config?.featureToggles.enableCompactModeToggle;
   }
 
   showPlantATreeButton: boolean;
@@ -180,6 +188,14 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   setCollapsibleWidescreenMenu(collapsible: boolean, saveSettings = true): void {
     this.shellService.setCollapsibleWidescreenMenu(collapsible);
+
+    if (saveSettings) {
+      this.saveUserSettings();
+    }
+  }
+
+  setCompactMode(compactMode: boolean, saveSettings = true): void {
+    this.pageHeaderService.setCompactMode(compactMode);
 
     if (saveSettings) {
       this.saveUserSettings();
@@ -263,13 +279,14 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
   private saveUserSettings(): void {
     this.updatingUserSettings$.next(true);
 
-    combineLatest([this.selectedLanguage$, this.collapsibleWidescreenMenu$])
+    combineLatest([this.selectedLanguage$, this.collapsibleWidescreenMenu$, this.compactMode$])
       .pipe(
         take(1),
-        switchMap(([languageCode, collapsibleWidescreenMenu]) =>
+        switchMap(([languageCode, collapsibleWidescreenMenu, compactMode]) =>
           this.userSettingsService.saveUserSettings({
             collapsibleWidescreenMenu,
             languageCode,
+            ...(this.enableCompactModeToggle && {compactMode}),
           })
         )
       )
@@ -282,5 +299,6 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     this.selectedLanguage$.next(settings.languageCode);
     this.updateUserLanguage(settings.languageCode, false);
     this.setCollapsibleWidescreenMenu(settings.collapsibleWidescreenMenu, false);
+    if (this.enableCompactModeToggle) this.setCompactMode(settings.compactMode, false);
   }
 }

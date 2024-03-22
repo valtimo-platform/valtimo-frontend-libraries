@@ -17,6 +17,7 @@
 interface UserSettings {
   collapsibleWidescreenMenu?: boolean;
   languageCode?: string;
+  compactMode?: boolean;
 }
 
 export {UserSettings};

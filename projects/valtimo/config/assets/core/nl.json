@@ -375,7 +375,8 @@
     },
     "interface": {
       "title": "Interface",
-      "collapsibleMenu": "Navigatiebalk altijd inklapbaar"
+      "collapsibleMenu": "Navigatiebalk altijd inklapbaar",
+      "compactMode": "Compacte modus"
     }
   },
   "decisions": {
