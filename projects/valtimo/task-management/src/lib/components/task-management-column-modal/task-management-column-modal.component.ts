@@ -43,7 +43,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, tap} from 'rxjs';
 import {
   TaskListColumn,
   TaskListColumnDefaultSort,
@@ -222,9 +222,14 @@ export class TaskManagementColumnModalComponent {
     )
   );
 
+  private _showDateFormat!: boolean;
+
   public readonly showDateFormat$ = this.formGroup.valueChanges.pipe(
-    map(formValues => !!(formValues.displayType?.key === this.DISPLAY_TYPES[1]))
+    map(formValues => !!(formValues.displayType?.key === this.DISPLAY_TYPES[1])),
+    tap(showDateFormat => (this._showDateFormat = showDateFormat))
   );
+
+  private _showEnum!: boolean;
 
   public readonly showEnum$ = this.formGroup.valueChanges.pipe(
     map(
@@ -233,7 +238,8 @@ export class TaskManagementColumnModalComponent {
           formValues.displayType?.key === this.DISPLAY_TYPES[3] ||
           formValues.displayType?.key === this.DISPLAY_TYPES[2]
         )
-    )
+    ),
+    tap(showEnum => (this._showEnum = showEnum))
   );
 
   public readonly isYesNo$ = this.formGroup.valueChanges.pipe(
@@ -269,7 +275,10 @@ export class TaskManagementColumnModalComponent {
     this.disable();
 
     this.taskManagementApiService
-      .updateTaskListColumn(this.documentDefinitionName, this.getTaskListColumnFromFormValue())
+      .updateTaskListColumn(
+        this.documentDefinitionName,
+        this.getTaskListColumnFromFormValue(this._showEnum, this._showDateFormat)
+      )
       .subscribe({
         next: () => {
           this.closeModalAndRefresh();
@@ -285,7 +294,12 @@ export class TaskManagementColumnModalComponent {
     this._enumValues$.next(value);
   }
 
+  private resetEnumValues(): void {
+    this._enumValues$.next(this._DEFAULT_ENUM_VALUES);
+  }
+
   private resetForm(): void {
+    this.resetEnumValues();
     this.formGroup.patchValue({
       title: null,
       key: null,
@@ -315,11 +329,14 @@ export class TaskManagementColumnModalComponent {
     this.closeEvent.emit('refresh');
   }
 
-  private getTaskListColumnFromFormValue(): TaskListColumn {
+  private getTaskListColumnFromFormValue(
+    includeEnum: boolean,
+    includeDateFormat: boolean
+  ): TaskListColumn {
     const enumValues = this._enumValues$.getValue();
     const validEnumValues =
       enumValues.length > 0 && enumValues.filter(value => value.value && value.key);
-    const mappendEnumValeus = validEnumValues && this.mapEnumValues(validEnumValues);
+    const mappedEnumValues = validEnumValues && this.mapEnumValues(validEnumValues);
 
     const formValue = this.formGroup.value;
     const taskListColumn: TaskListColumn = {
@@ -329,8 +346,8 @@ export class TaskManagementColumnModalComponent {
       displayType: {
         type: formValue.displayType.key,
         displayTypeParameters: {
-          ...(formValue.dateFormat && {dateFormat: formValue.dateFormat}),
-          ...(mappendEnumValeus && {enum: mappendEnumValeus}),
+          ...(includeDateFormat && formValue.dateFormat && {dateFormat: formValue.dateFormat}),
+          ...(includeEnum && mappedEnumValues && {enum: mappedEnumValues}),
         },
       },
       sortable: formValue.sortable,
@@ -340,10 +357,6 @@ export class TaskManagementColumnModalComponent {
     };
 
     return taskListColumn;
-  }
-
-  private resetEnumValues(): void {
-    this._enumValues$.next(this._DEFAULT_ENUM_VALUES);
   }
 
   private mapEnumValues(enumValues: MultiInputValues): TaskListColumnEnum {
