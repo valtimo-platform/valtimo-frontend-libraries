@@ -24,7 +24,8 @@
     showDateFormat: showDateFormat$ | async,
     showEnum: showEnum$ | async,
     isYesNo: isYesNo$ | async,
-    disableDefaultSort: disableDefaultSort$ | async
+    disableDefaultSort: disableDefaultSort$ | async,
+    enumValues: enumValues$ | async
   } as obs"
 >
   <cds-modal size="sm" [open]="obs.show">
@@ -155,13 +156,14 @@
         <valtimo-carbon-multi-input
           [fullWidth]="true"
           [carbonTheme]="CARBON_THEME_WHITE"
+          [defaultValues]="obs.enumValues"
           type="keyValue"
           [hideAddButton]="obs.isYesNo"
           [hideDeleteButton]="obs.isYesNo"
           [maxRows]="obs.isYesNo ? 1 : null"
-          [minimumAmountOfRows]="1"
           [keyColumnTitle]="obs.isYesNo && ('viewTypeConverter.Yes' | translate)"
           [valueColumnTitle]="obs.isYesNo && ('viewTypeConverter.No' | translate)"
+          (valueChange)="enumValueChange($event)"
         ></valtimo-carbon-multi-input>
       </cds-label>
     </div>

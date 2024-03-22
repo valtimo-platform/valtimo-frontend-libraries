@@ -20,6 +20,7 @@ import {
   CARBON_THEME,
   CarbonListModule,
   CarbonMultiInputModule,
+  MultiInputValues,
   TooltipIconModule,
   ViewType,
 } from '@valtimo/components';
@@ -46,10 +47,13 @@ import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 import {
   TaskListColumn,
   TaskListColumnDefaultSort,
+  TaskListColumnEnum,
   TaskListColumnListItem,
   TaskListColumnModalCloseEvent,
   TaskListColumnModalType,
 } from '../../models';
+import {distinctUntilChanged} from 'rxjs/operators';
+import {isEqual} from 'lodash';
 
 @Component({
   selector: 'valtimo-task-management-column-modal',
@@ -242,6 +246,16 @@ export class TaskManagementColumnModalComponent {
     map(([taskListColumns]) => taskListColumns?.find(column => !!column.defaultSort))
   );
 
+  private readonly _DEFAULT_ENUM_VALUES: MultiInputValues = [{key: '', value: ''}];
+
+  private readonly _enumValues$ = new BehaviorSubject<MultiInputValues>(this._DEFAULT_ENUM_VALUES);
+
+  public get enumValues$(): Observable<MultiInputValues> {
+    return this._enumValues$.pipe(
+      distinctUntilChanged((previous, current) => isEqual(previous, current))
+    );
+  }
+
   constructor(
     private readonly translateService: TranslateService,
     private readonly taskManagementApiService: TaskManagementApiService
@@ -265,6 +279,10 @@ export class TaskManagementColumnModalComponent {
           this.enable();
         },
       });
+  }
+
+  public enumValueChange(value: MultiInputValues): void {
+    this._enumValues$.next(value);
   }
 
   private resetForm(): void {
@@ -298,6 +316,11 @@ export class TaskManagementColumnModalComponent {
   }
 
   private getTaskListColumnFromFormValue(): TaskListColumn {
+    const enumValues = this._enumValues$.getValue();
+    const validEnumValues =
+      enumValues.length > 0 && enumValues.filter(value => value.value && value.key);
+    const mappendEnumValeus = validEnumValues && this.mapEnumValues(validEnumValues);
+
     const formValue = this.formGroup.value;
     const taskListColumn: TaskListColumn = {
       ...(formValue.title && {title: formValue.title}),
@@ -307,6 +330,7 @@ export class TaskManagementColumnModalComponent {
         type: formValue.displayType.key,
         displayTypeParameters: {
           ...(formValue.dateFormat && {dateFormat: formValue.dateFormat}),
+          ...(mappendEnumValeus && {enum: mappendEnumValeus}),
         },
       },
       sortable: formValue.sortable,
@@ -316,5 +340,15 @@ export class TaskManagementColumnModalComponent {
     };
 
     return taskListColumn;
+  }
+
+  private resetEnumValues(): void {
+    this._enumValues$.next(this._DEFAULT_ENUM_VALUES);
+  }
+
+  private mapEnumValues(enumValues: MultiInputValues): TaskListColumnEnum {
+    return enumValues.reduce((acc, curr) => {
+      return {...acc, [curr.key]: curr.value};
+    }, {});
   }
 }

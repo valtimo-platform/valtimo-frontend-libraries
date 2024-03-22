@@ -21,10 +21,12 @@ enum TaskListColumnDefaultSort {
   DESC = 'DESC',
 }
 
+interface TaskListColumnEnum {
+  [key: string]: string;
+}
+
 interface TaskListColumnDisplayTypeParameters {
-  enum?: {
-    [key: string]: string;
-  };
+  enum?: TaskListColumnEnum;
   dateFormat?: string;
 }
 
@@ -59,4 +61,5 @@ export {
   TaskListColumnListItem,
   TaskListColumnModalCloseEvent,
   TaskListColumnDisplayTypeParameters,
+  TaskListColumnEnum,
 };
