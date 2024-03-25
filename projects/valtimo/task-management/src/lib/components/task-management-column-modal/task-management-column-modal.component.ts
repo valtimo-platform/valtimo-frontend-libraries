@@ -364,9 +364,11 @@ export class TaskManagementColumnModalComponent {
     includeYesNo: boolean
   ): TaskListColumn {
     const validEnumValues = this.getValidEnumValues(this._enumValues$.getValue());
-    const mappedEnumValues = validEnumValues && this.mapEnumValues(validEnumValues);
+    const mappedEnumValues =
+      validEnumValues && validEnumValues.length > 0 && this.mapEnumValues(validEnumValues);
     const validYesNoValues = this.getValidEnumValues(this._yesNoValues$.getValue());
-    const mappedYesNoValues = validYesNoValues && this.mapEnumValues(validYesNoValues);
+    const mappedYesNoValues =
+      validYesNoValues && validYesNoValues.length > 0 && this.mapEnumValues(validYesNoValues);
 
     const formValue = this.formGroup.value;
     const taskListColumn: TaskListColumn = {
