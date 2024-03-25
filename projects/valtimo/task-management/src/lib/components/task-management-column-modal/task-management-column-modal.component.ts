@@ -91,8 +91,9 @@ export class TaskManagementColumnModalComponent {
   }
   @Input() public set show(showModal: boolean) {
     this.show$.next(showModal);
-
-    if (showModal && this.type === 'add') {
+    if (!showModal) return;
+    this.enable();
+    if (this.type === 'add') {
       this.resetForm();
     }
   }
@@ -156,8 +157,6 @@ export class TaskManagementColumnModalComponent {
     defaultSort: new FormControl(this.getInvalidListItem(`listColumn.selectDefaultSort`), [
       Validators.required,
     ]),
-    enum: new FormControl([]),
-    yesNo: new FormControl([]),
   });
 
   public get title(): AbstractControl<string> {
@@ -240,14 +239,20 @@ export class TaskManagementColumnModalComponent {
 
   public readonly showEnum$ = this.formGroup.valueChanges.pipe(
     map(formValues => !!(formValues.displayType?.key === ViewType.ENUM)),
-    tap(showEnum => (this._showEnum = showEnum))
+    tap(showEnum => {
+      this._showEnum = showEnum;
+      if ((this._enumValues$.getValue() || []).length === 0) this.resetEnumValues();
+    })
   );
 
   private _showYesNo!: boolean;
 
   public readonly showYesNo$ = this.formGroup.valueChanges.pipe(
     map(formValues => !!(formValues.displayType?.key === ViewType.BOOLEAN)),
-    tap(showYesNo => (this._showYesNo = showYesNo))
+    tap(showYesNo => {
+      this._showYesNo = showYesNo;
+      if ((this._yesNoValues$.getValue() || []).length === 0) this.resetYesNoValues();
+    })
   );
 
   public readonly CARBON_THEME_WHITE = CARBON_THEME.WHITE;
@@ -264,6 +269,10 @@ export class TaskManagementColumnModalComponent {
     return this._enumValues$.pipe(
       distinctUntilChanged((previous, current) => isEqual(previous, current))
     );
+  }
+
+  public get enumValid$(): Observable<boolean> {
+    return this.enumValues$.pipe(map(values => this.getValidEnumValues(values).length > 0));
   }
 
   private readonly _yesNoValues$ = new BehaviorSubject<MultiInputValues>(this._DEFAULT_ENUM_VALUES);
@@ -328,12 +337,11 @@ export class TaskManagementColumnModalComponent {
       displayType: this.getInvalidListItem('listColumnDisplayType.select'),
       sortable: false,
       defaultSort: this.getInvalidListItem(`listColumn.selectDefaultSort`),
-      enum: [],
     });
   }
 
   private disable(): void {
-    this.disabled$.next(false);
+    this.disabled$.next(true);
   }
 
   private enableAfterTimeout(): void {
@@ -343,7 +351,7 @@ export class TaskManagementColumnModalComponent {
   }
 
   private enable(): void {
-    this.disabled$.next(true);
+    this.disabled$.next(false);
   }
 
   private closeModalAndRefresh(): void {
@@ -355,13 +363,9 @@ export class TaskManagementColumnModalComponent {
     includeDateFormat: boolean,
     includeYesNo: boolean
   ): TaskListColumn {
-    const enumValues = this._enumValues$.getValue();
-    const validEnumValues =
-      enumValues.length > 0 && enumValues.filter(value => value.value && value.key);
+    const validEnumValues = this.getValidEnumValues(this._enumValues$.getValue());
     const mappedEnumValues = validEnumValues && this.mapEnumValues(validEnumValues);
-    const yesNoValues = this._yesNoValues$.getValue();
-    const validYesNoValues =
-      yesNoValues.length > 0 && yesNoValues.filter(value => value.value && value.key);
+    const validYesNoValues = this.getValidEnumValues(this._yesNoValues$.getValue());
     const mappedYesNoValues = validYesNoValues && this.mapEnumValues(validYesNoValues);
 
     const formValue = this.formGroup.value;
@@ -390,5 +394,9 @@ export class TaskManagementColumnModalComponent {
     return enumValues.reduce((acc, curr) => {
       return {...acc, [curr.key]: curr.value};
     }, {});
+  }
+
+  private getValidEnumValues(values: MultiInputValues): MultiInputValues {
+    return (values || []).filter(value => value.value && value.key);
   }
 }

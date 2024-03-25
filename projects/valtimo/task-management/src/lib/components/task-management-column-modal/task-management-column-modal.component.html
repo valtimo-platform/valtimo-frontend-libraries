@@ -26,6 +26,7 @@
     showYesNo: showYesNo$ | async,
     disableDefaultSort: disableDefaultSort$ | async,
     enumValues: enumValues$ | async,
+    enumValid: enumValid$ | async,
     yesNoValues: yesNoValues$ | async
   } as obs"
 >
@@ -143,6 +144,7 @@
         </span>
 
         <valtimo-carbon-multi-input
+          *ngIf="obs.showEnum"
           [fullWidth]="true"
           [carbonTheme]="CARBON_THEME_WHITE"
           [defaultValues]="obs.enumValues"
@@ -152,7 +154,7 @@
       </cds-label>
     </div>
 
-    <div class="cds--text-input__field-wrapper" *ngIf="obs.showYesNo" class="no-margin">
+    <div class="cds--text-input__field-wrapper" *ngIf="obs.showYesNo" [ngClass]="'no-margin'">
       <cds-label [disabled]="obs.disabled">
         <span class="label-with-tooltip select-label">
           {{ 'listColumn.enumTitleOptional' | translate }}
@@ -164,6 +166,7 @@
         </span>
 
         <valtimo-carbon-multi-input
+          *ngIf="obs.showYesNo"
           [fullWidth]="true"
           [carbonTheme]="CARBON_THEME_WHITE"
           [defaultValues]="obs.yesNoValues"
@@ -223,7 +226,7 @@
         cdsButton="primary"
         [attr.modal-primary-focus]="true"
         [disabled]="!obs.valid"
-        [disabled]="obs.disabled || formGroup?.invalid"
+        [disabled]="obs.disabled || formGroup?.invalid || (obs.showEnum && !obs.enumValid)"
       >
         {{ 'listColumn.save' | translate }}
       </button>
