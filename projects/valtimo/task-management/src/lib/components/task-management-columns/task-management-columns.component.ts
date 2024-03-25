@@ -166,7 +166,7 @@ export class TaskManagementColumnsComponent {
     },
   ];
 
-  public readonly modalType$ = new BehaviorSubject<TaskListColumnModalType>('add');
+  public readonly modalType$ = new Subject<TaskListColumnModalType>();
   public readonly showModal$ = new Subject<boolean>();
 
   constructor(

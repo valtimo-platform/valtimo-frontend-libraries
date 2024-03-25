@@ -85,10 +85,16 @@ export class TaskManagementColumnModalComponent {
   }
   @Input() public set type(value: TaskListColumnModalType) {
     this.type$.next(value);
-    if (value === 'add') this.resetForm();
   }
-  @Input() public set show(value: boolean) {
-    this.show$.next(value);
+  public get type(): TaskListColumnModalType {
+    return this.type$.getValue();
+  }
+  @Input() public set show(showModal: boolean) {
+    this.show$.next(showModal);
+
+    if (showModal && this.type === 'add') {
+      this.resetForm();
+    }
   }
   @Input() public documentDefinitionName!: string;
   @Output() closeEvent = new EventEmitter<TaskListColumnModalCloseEvent>();
@@ -124,7 +130,7 @@ export class TaskManagementColumnModalComponent {
     const taskListColumns = this._taskListColumns$.getValue();
 
     return !taskListColumns?.find(
-      column => column.key.trim().toLowerCase() === keyFormControl.value.trim().toLowerCase()
+      column => column?.key?.trim()?.toLowerCase() === keyFormControl?.value?.trim()?.toLowerCase()
     )
       ? null
       : {notUnique: true};
@@ -300,7 +306,7 @@ export class TaskManagementColumnModalComponent {
 
   private resetForm(): void {
     this.resetEnumValues();
-    this.formGroup.patchValue({
+    this.formGroup.reset({
       title: null,
       key: null,
       dateFormat: null,
