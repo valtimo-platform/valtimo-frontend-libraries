@@ -1,5 +1,5 @@
-/*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+/*!
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-interface UserSettings {
-  collapsibleWidescreenMenu?: boolean;
-  languageCode?: string;
-  preferredTheme?: string;
-}
-
-export {UserSettings};
+$color-100: #002547;
+$color-90: #002c54;
+$color-80: #003361;
+$color-70: #286198;
+$color-60: #2b79bd;
+$color-50: #61aedf;
+$color-40: #8acff2;
+$color-30: #aadcf6;
+$color-20: #c9e9f9;
+$color-10: #e9f6fd;

@@ -45,6 +45,7 @@ export class ShellService implements OnDestroy {
   );
   private readonly _isResizing$ = new BehaviorSubject<boolean>(false);
   private readonly _collapsibleWidescreenMenu$ = new BehaviorSubject<boolean>(false);
+  private readonly _preferredTheme$ = new BehaviorSubject<string>(undefined);
   private readonly _mainContentResized$ = new Subject<null>();
   private sidenavWidthOnClick!: number;
   private xOnClick!: number;
@@ -73,6 +74,10 @@ export class ShellService implements OnDestroy {
 
   get collapsibleWidescreenMenu$(): Observable<boolean> {
     return this._collapsibleWidescreenMenu$.asObservable();
+  }
+
+  get preferredTheme$(): Observable<string> {
+    return this._preferredTheme$.asObservable();
   }
 
   get mainContentResized$(): Observable<null> {
@@ -138,6 +143,10 @@ export class ShellService implements OnDestroy {
     if (collapsible) {
       this.collapseSideBar();
     }
+  }
+
+  setPreferredTheme(selectedTheme: string) {
+    this._preferredTheme$.next(selectedTheme);
   }
 
   onMainContentResize(): void {

@@ -40,6 +40,7 @@ import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, combineLatest, Observable, Subscription, switchMap, take} from 'rxjs';
 import {VersionService} from '../version/version.service';
 import {ShellService} from '../../services/shell.service';
+import {ThemeService} from '../../services/theme.service';
 import {map, tap} from 'rxjs/operators';
 
 @Component({
@@ -113,6 +114,8 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   readonly collapsibleWidescreenMenu$ = this.shellService.collapsibleWidescreenMenu$;
 
+  readonly preferredTheme$ = this.shellService.preferredTheme$;
+
   readonly frontendVersion!: string;
 
   private formSubscription!: Subscription;
@@ -126,6 +129,10 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   public showValtimoVersions = true;
 
+  public currentTheme: string = '';
+
+  public themeOptions: { name: string, value: string }[];
+
   constructor(
     public translate: TranslateService,
     private readonly userProviderService: UserProviderService,
@@ -136,7 +143,8 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     private readonly shellService: ShellService,
     private readonly elementRef: ElementRef,
     private readonly configService: ConfigService,
-    private readonly userSettingsService: UserSettingsService
+    private readonly userSettingsService: UserSettingsService,
+    private readonly themeService: ThemeService
   ) {
     this.frontendVersion = VERSIONS?.frontendLibraries;
     this.isAdmin$.subscribe(isAdmin => {
@@ -144,6 +152,14 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
         this.showValtimoVersions = false;
       }
     });
+    this.themeService.theme$.subscribe(theme => {
+      this.currentTheme = theme;
+    });
+    this.themeOptions = [
+      { name: this.translate.instant('settings.interface.themes.light'), value: this.themeService.CDS_THEME.G10 },
+      { name: this.translate.instant('settings.interface.themes.dark'), value: this.themeService.CDS_THEME.G90 },
+      { name: this.translate.instant('settings.interface.themes.system'), value: this.themeService.CDS_THEME.SYSTEM }
+    ];
   }
 
   showPlantATreeButton: boolean;
@@ -186,8 +202,22 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     }
   }
 
+  setPreferredTheme(selectedTheme: string, saveSettings = true): void {
+    this.shellService.setPreferredTheme(selectedTheme);
+    this.themeService.setTheme(selectedTheme);
+
+    if (saveSettings) {
+      this.saveUserSettings();
+    }
+  }
+
   logout(): void {
     this.userProviderService.logout();
+  }
+
+  changeTheme(selectedTheme: string): void {
+    this.themeService.setTheme(selectedTheme);
+    this.setPreferredTheme(selectedTheme);
   }
 
   private openFormSubscription(): void {
@@ -263,13 +293,14 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
   private saveUserSettings(): void {
     this.updatingUserSettings$.next(true);
 
-    combineLatest([this.selectedLanguage$, this.collapsibleWidescreenMenu$])
+    combineLatest([this.selectedLanguage$, this.collapsibleWidescreenMenu$, this.preferredTheme$])
       .pipe(
         take(1),
-        switchMap(([languageCode, collapsibleWidescreenMenu]) =>
+        switchMap(([languageCode, collapsibleWidescreenMenu, preferredTheme]) =>
           this.userSettingsService.saveUserSettings({
             collapsibleWidescreenMenu,
             languageCode,
+            preferredTheme,
           })
         )
       )
@@ -282,5 +313,6 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     this.selectedLanguage$.next(settings.languageCode);
     this.updateUserLanguage(settings.languageCode, false);
     this.setCollapsibleWidescreenMenu(settings.collapsibleWidescreenMenu, false);
+    this.setPreferredTheme(settings.preferredTheme, false);
   }
 }
