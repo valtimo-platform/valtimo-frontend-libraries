@@ -226,6 +226,7 @@
     "@carbon/grid": "11.21.0",
     "@carbon/icons": "11.36.0",
     "@carbon/styles": "1.51.1",
+    "@carbon/themes": "11.32.0",
     "@formio/angular": "7.0.0",
     "@foxythemes/bootstrap-datetime-picker-bs4": "2.3.5",
     "@mdi/font": "7.4.47",
