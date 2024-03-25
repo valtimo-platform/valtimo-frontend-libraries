@@ -157,6 +157,7 @@ export class TaskManagementColumnModalComponent {
       Validators.required,
     ]),
     enum: new FormControl([]),
+    yesNo: new FormControl([]),
   });
 
   public get title(): AbstractControl<string> {
@@ -238,18 +239,15 @@ export class TaskManagementColumnModalComponent {
   private _showEnum!: boolean;
 
   public readonly showEnum$ = this.formGroup.valueChanges.pipe(
-    map(
-      formValues =>
-        !!(
-          formValues.displayType?.key === this.DISPLAY_TYPES[3] ||
-          formValues.displayType?.key === this.DISPLAY_TYPES[2]
-        )
-    ),
+    map(formValues => !!(formValues.displayType?.key === ViewType.ENUM)),
     tap(showEnum => (this._showEnum = showEnum))
   );
 
-  public readonly isYesNo$ = this.formGroup.valueChanges.pipe(
-    map(formValues => !!(formValues.displayType?.key === this.DISPLAY_TYPES[2]))
+  private _showYesNo!: boolean;
+
+  public readonly showYesNo$ = this.formGroup.valueChanges.pipe(
+    map(formValues => !!(formValues.displayType?.key === ViewType.BOOLEAN)),
+    tap(showYesNo => (this._showYesNo = showYesNo))
   );
 
   public readonly CARBON_THEME_WHITE = CARBON_THEME.WHITE;
@@ -264,6 +262,14 @@ export class TaskManagementColumnModalComponent {
 
   public get enumValues$(): Observable<MultiInputValues> {
     return this._enumValues$.pipe(
+      distinctUntilChanged((previous, current) => isEqual(previous, current))
+    );
+  }
+
+  private readonly _yesNoValues$ = new BehaviorSubject<MultiInputValues>(this._DEFAULT_ENUM_VALUES);
+
+  public get yesNoValues$(): Observable<MultiInputValues> {
+    return this._yesNoValues$.pipe(
       distinctUntilChanged((previous, current) => isEqual(previous, current))
     );
   }
@@ -283,7 +289,7 @@ export class TaskManagementColumnModalComponent {
     this.taskManagementApiService
       .updateTaskListColumn(
         this.documentDefinitionName,
-        this.getTaskListColumnFromFormValue(this._showEnum, this._showDateFormat)
+        this.getTaskListColumnFromFormValue(this._showEnum, this._showDateFormat, this._showYesNo)
       )
       .subscribe({
         next: () => {
@@ -300,12 +306,21 @@ export class TaskManagementColumnModalComponent {
     this._enumValues$.next(value);
   }
 
+  public yesNoValueChange(value: MultiInputValues): void {
+    this._yesNoValues$.next(value);
+  }
+
   private resetEnumValues(): void {
     this._enumValues$.next(this._DEFAULT_ENUM_VALUES);
   }
 
+  private resetYesNoValues(): void {
+    this._yesNoValues$.next(this._DEFAULT_ENUM_VALUES);
+  }
+
   private resetForm(): void {
     this.resetEnumValues();
+    this.resetYesNoValues();
     this.formGroup.reset({
       title: null,
       key: null,
@@ -337,12 +352,17 @@ export class TaskManagementColumnModalComponent {
 
   private getTaskListColumnFromFormValue(
     includeEnum: boolean,
-    includeDateFormat: boolean
+    includeDateFormat: boolean,
+    includeYesNo: boolean
   ): TaskListColumn {
     const enumValues = this._enumValues$.getValue();
     const validEnumValues =
       enumValues.length > 0 && enumValues.filter(value => value.value && value.key);
     const mappedEnumValues = validEnumValues && this.mapEnumValues(validEnumValues);
+    const yesNoValues = this._yesNoValues$.getValue();
+    const validYesNoValues =
+      yesNoValues.length > 0 && yesNoValues.filter(value => value.value && value.key);
+    const mappedYesNoValues = validYesNoValues && this.mapEnumValues(validYesNoValues);
 
     const formValue = this.formGroup.value;
     const taskListColumn: TaskListColumn = {
@@ -354,6 +374,7 @@ export class TaskManagementColumnModalComponent {
         displayTypeParameters: {
           ...(includeDateFormat && formValue.dateFormat && {dateFormat: formValue.dateFormat}),
           ...(includeEnum && mappedEnumValues && {enum: mappedEnumValues}),
+          ...(includeYesNo && mappedYesNoValues && {enum: mappedYesNoValues}),
         },
       },
       sortable: formValue.sortable,

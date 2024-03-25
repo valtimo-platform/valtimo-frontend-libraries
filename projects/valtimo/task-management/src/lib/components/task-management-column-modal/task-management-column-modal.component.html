@@ -23,9 +23,10 @@
     disabled: disabled$ | async,
     showDateFormat: showDateFormat$ | async,
     showEnum: showEnum$ | async,
-    isYesNo: isYesNo$ | async,
+    showYesNo: showYesNo$ | async,
     disableDefaultSort: disableDefaultSort$ | async,
-    enumValues: enumValues$ | async
+    enumValues: enumValues$ | async,
+    yesNoValues: yesNoValues$ | async
   } as obs"
 >
   <cds-modal size="sm" [open]="obs.show">
@@ -130,25 +131,13 @@
       </cds-label>
     </div>
 
-    <div
-      class="cds--text-input__field-wrapper"
-      *ngIf="obs.showEnum || obs.isYesNo"
-      [ngClass]="{'no-margin': obs.isYesNo}"
-    >
+    <div class="cds--text-input__field-wrapper" *ngIf="obs.showEnum">
       <cds-label [disabled]="obs.disabled">
         <span class="label-with-tooltip select-label">
-          {{
-            obs.isYesNo
-              ? ('listColumn.enumTitleOptional' | translate)
-              : ('listColumn.enumTitle' | translate)
-          }}
+          {{ 'listColumn.enumTitle' | translate }}
 
           <v-tooltip-icon
-            [tooltip]="
-              obs.isYesNo
-                ? ('listColumn.enumTooltipOptional' | translate)
-                : ('listColumn.enumTooltip' | translate)
-            "
+            [tooltip]="'listColumn.enumTooltip' | translate"
             [disabled]="obs.disabled"
           ></v-tooltip-icon>
         </span>
@@ -158,12 +147,33 @@
           [carbonTheme]="CARBON_THEME_WHITE"
           [defaultValues]="obs.enumValues"
           type="keyValue"
-          [hideAddButton]="obs.isYesNo"
-          [hideDeleteButton]="obs.isYesNo"
-          [maxRows]="obs.isYesNo ? 1 : null"
-          [keyColumnTitle]="obs.isYesNo && ('viewTypeConverter.Yes' | translate)"
-          [valueColumnTitle]="obs.isYesNo && ('viewTypeConverter.No' | translate)"
           (valueChange)="enumValueChange($event)"
+        ></valtimo-carbon-multi-input>
+      </cds-label>
+    </div>
+
+    <div class="cds--text-input__field-wrapper" *ngIf="obs.showYesNo" class="no-margin">
+      <cds-label [disabled]="obs.disabled">
+        <span class="label-with-tooltip select-label">
+          {{ 'listColumn.enumTitleOptional' | translate }}
+
+          <v-tooltip-icon
+            [tooltip]="'listColumn.enumTooltipOptional' | translate"
+            [disabled]="obs.disabled"
+          ></v-tooltip-icon>
+        </span>
+
+        <valtimo-carbon-multi-input
+          [fullWidth]="true"
+          [carbonTheme]="CARBON_THEME_WHITE"
+          [defaultValues]="obs.yesNoValues"
+          type="keyValue"
+          [hideAddButton]="true"
+          [hideDeleteButton]="true"
+          [maxRows]="1"
+          [keyColumnTitle]="'viewTypeConverter.Yes' | translate"
+          [valueColumnTitle]="'viewTypeConverter.No' | translate"
+          (valueChange)="yesNoValueChange($event)"
         ></valtimo-carbon-multi-input>
       </cds-label>
     </div>
