@@ -34,6 +34,15 @@
     [selectedTaskListColumn]="selectedTaskListColumn$ | async"
     (closeEvent)="onModalCloseEvent($event)"
   ></valtimo-task-management-column-modal>
+
+  <valtimo-confirmation-modal
+    [showModalSubject$]="showDeleteModal$"
+    [outputOnConfirm]="deleteRowKey$ | async"
+    (confirmEvent)="deleteRowConfirmation($event)"
+    confirmButtonTextTranslationKey="listColumn.deleteColumn"
+    titleTranslationKey="listColumn.deleteColumn"
+    contentTranslationKey="listColumn.deleteColumnConfirmation"
+  ></valtimo-confirmation-modal>
 </ng-container>
 
 <ng-template #list let-obs="obs">
