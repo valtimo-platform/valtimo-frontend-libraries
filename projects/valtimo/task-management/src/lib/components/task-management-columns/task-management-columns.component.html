@@ -17,6 +17,7 @@
 <ng-container
   *ngIf="{
     taskListColumns: taskListColumns$ | async,
+    cachedTaskListColumns: cachedTaskListColumns$ | async,
     documentDefinitionName: documentDefinitionName$ | async,
     loadingColumns: loadingColumns$ | async,
     modalType: modalType$ | async,
@@ -26,10 +27,11 @@
   <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
 
   <valtimo-task-management-column-modal
-    [taskListColumns]="obs.taskListColumns"
+    [taskListColumns]="obs.cachedTaskListColumns"
     [type]="obs.modalType"
     [show]="obs.showModal"
     [documentDefinitionName]="obs.documentDefinitionName"
+    [selectedTaskListColumn]="selectedTaskListColumn$ | async"
     (closeEvent)="onModalCloseEvent($event)"
   ></valtimo-task-management-column-modal>
 </ng-container>

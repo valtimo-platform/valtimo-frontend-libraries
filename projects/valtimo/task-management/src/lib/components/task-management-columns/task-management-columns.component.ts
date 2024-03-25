@@ -34,6 +34,7 @@ import {
   Observable,
   Subject,
   switchMap,
+  take,
   tap,
 } from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
@@ -74,7 +75,9 @@ export class TaskManagementColumnsComponent {
 
   public readonly loadingColumns$ = new BehaviorSubject<boolean>(true);
 
-  private _cachedTaskListColumns: TaskListColumn[] = [];
+  public readonly selectedTaskListColumn$ = new Subject<TaskListColumn>();
+
+  public readonly cachedTaskListColumns$ = new BehaviorSubject<TaskListColumn[]>([]);
 
   public readonly taskListColumns$: Observable<TaskListColumn[]> = combineLatest([
     this.documentDefinitionName$,
@@ -85,7 +88,9 @@ export class TaskManagementColumnsComponent {
     switchMap(([documentDefinitionName]) =>
       this.taskManagementApiService.getTaskListColumns(documentDefinitionName)
     ),
-    tap(columns => (this._cachedTaskListColumns = columns)),
+    tap(columns => {
+      this.cachedTaskListColumns$.next(columns);
+    }),
     map(columns =>
       columns.map(column => ({
         ...column,
@@ -186,7 +191,13 @@ export class TaskManagementColumnsComponent {
 
   public onMoveRowEvent(event: MoveRowEvent, documentDefinitionName: string): void {}
 
-  public columnRowClicked(row: {key: string}): void {}
+  public columnRowClicked(row: {key: string}): void {
+    this.cachedTaskListColumns$.pipe(take(1)).subscribe(cachedTaskListColumns => {
+      const selectedTaskListColumn = cachedTaskListColumns.find(column => column.key === row.key);
+      this.selectedTaskListColumn$.next(selectedTaskListColumn);
+      this.showModal('edit');
+    });
+  }
 
   public showModal(type: TaskListColumnModalType): void {
     this.modalType$.next(type);

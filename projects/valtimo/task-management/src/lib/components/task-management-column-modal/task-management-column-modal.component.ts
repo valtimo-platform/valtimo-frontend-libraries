@@ -22,6 +22,7 @@ import {
   CarbonMultiInputModule,
   MultiInputValues,
   TooltipIconModule,
+  ValtimoCdsModalDirectiveModule,
   ViewType,
 } from '@valtimo/components';
 import {CommonModule} from '@angular/common';
@@ -34,7 +35,7 @@ import {
   ModalModule,
   TabsModule,
 } from 'carbon-components-angular';
-import {TaskManagementApiService, TaskManagementService} from '../../services';
+import {TaskManagementApiService} from '../../services';
 import {
   AbstractControl,
   FormControl,
@@ -43,7 +44,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {BehaviorSubject, combineLatest, map, Observable, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, tap} from 'rxjs';
 import {
   TaskListColumn,
   TaskListColumnDefaultSort,
@@ -75,8 +76,8 @@ import {isEqual} from 'lodash';
     TooltipIconModule,
     CarbonMultiInputModule,
     ButtonModule,
+    ValtimoCdsModalDirectiveModule,
   ],
-  providers: [TaskManagementService],
 })
 export class TaskManagementColumnModalComponent {
   @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.G10;
@@ -91,18 +92,27 @@ export class TaskManagementColumnModalComponent {
   }
   @Input() public set show(showModal: boolean) {
     this.show$.next(showModal);
-    if (!showModal) return;
-    this.enable();
-    if (this.type === 'add') {
-      this.resetForm();
-    }
+    if (showModal) this.enable();
+    if (!showModal) this.resetFormAfterTimeout();
   }
   @Input() public documentDefinitionName!: string;
+  @Input() public set selectedTaskListColumn(column: TaskListColumn) {
+    this.prefillForm(column);
+  }
   @Output() closeEvent = new EventEmitter<TaskListColumnModalCloseEvent>();
 
   public readonly type$ = new BehaviorSubject<TaskListColumnModalType>('add');
   public readonly isAdd$ = this.type$.pipe(map(type => type === 'add'));
-  public readonly isEdit$ = this.type$.pipe(map(type => type === 'edit'));
+  public readonly isEdit$ = this.type$.pipe(
+    map(type => type === 'edit'),
+    tap(isEdit => {
+      if (isEdit) {
+        this.key.disable();
+      } else {
+        this.key.enable();
+      }
+    })
+  );
   public readonly show$ = new BehaviorSubject<boolean>(false);
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
@@ -181,62 +191,59 @@ export class TaskManagementColumnModalComponent {
     return this.formGroup.get('defaultSort');
   }
 
-  private readonly _selectedSortItemIndex$ = new BehaviorSubject<number>(0);
-
+  private get _SORT_ASC_ITEM() {
+    return {
+      content: this.translateService.instant(`listColumn.sortableAsc`),
+      key: 'ASC',
+    } as TaskListColumnListItem;
+  }
+  private get _SORT_DESC_ITEM() {
+    return {
+      content: this.translateService.instant(`listColumn.sortableDesc`),
+      key: 'DESC',
+    } as TaskListColumnListItem;
+  }
   public readonly sortItems$: Observable<Array<TaskListColumnListItem>> = combineLatest([
-    this._selectedSortItemIndex$,
+    this.defaultSort?.valueChanges || of(null),
     this.translateService.stream('key'),
   ]).pipe(
-    map(([selectedSortItemIndex]) =>
+    map(([defaultSortItem]) =>
       [
         this.getInvalidListItem(`listColumn.selectDefaultSort`),
-        {
-          content: this.translateService.instant(`listColumn.sortableAsc`),
-          key: 'ASC',
-        },
-        {
-          content: this.translateService.instant(`listColumn.sortableDesc`),
-          key: 'DESC',
-        },
+        this._SORT_ASC_ITEM,
+        this._SORT_DESC_ITEM,
       ].map((item, index) => ({
         ...item,
-        selected: index === selectedSortItemIndex,
+        selected: defaultSortItem?.key === item?.key,
       }))
     )
   );
 
-  private readonly _selectedViewTypeItemIndex$ = new BehaviorSubject<number>(0);
-
   public readonly viewTypeItems$: Observable<Array<TaskListColumnListItem>> = combineLatest([
-    this._selectedViewTypeItemIndex$,
+    this.displayType?.valueChanges || of(null),
     this.translateService.stream('key'),
   ]).pipe(
-    map(([selectedViewTypeItemIndex]) =>
+    map(([displayTypeItem]) =>
       [
         {
           content: this.translateService.instant(`listColumnDisplayType.select`),
           key: this._INVALID_KEY,
         },
-        ...this.DISPLAY_TYPES.map(type => ({
-          content: this.translateService.instant(`listColumnDisplayType.${type}`),
-          key: type,
-        })),
+        ...this.DISPLAY_TYPES.map(type => this.getListItemFromViewType(type)),
       ].map((item, index) => ({
         ...item,
-        selected: index === selectedViewTypeItemIndex,
+        selected: displayTypeItem?.key === item?.key,
       }))
     )
   );
 
   private _showDateFormat!: boolean;
-
   public readonly showDateFormat$ = this.formGroup.valueChanges.pipe(
     map(formValues => !!(formValues.displayType?.key === this.DISPLAY_TYPES[1])),
     tap(showDateFormat => (this._showDateFormat = showDateFormat))
   );
 
   private _showEnum!: boolean;
-
   public readonly showEnum$ = this.formGroup.valueChanges.pipe(
     map(formValues => !!(formValues.displayType?.key === ViewType.ENUM)),
     tap(showEnum => {
@@ -246,7 +253,6 @@ export class TaskManagementColumnModalComponent {
   );
 
   private _showYesNo!: boolean;
-
   public readonly showYesNo$ = this.formGroup.valueChanges.pipe(
     map(formValues => !!(formValues.displayType?.key === ViewType.BOOLEAN)),
     tap(showYesNo => {
@@ -257,8 +263,22 @@ export class TaskManagementColumnModalComponent {
 
   public readonly CARBON_THEME_WHITE = CARBON_THEME.WHITE;
 
-  public readonly disableDefaultSort$ = combineLatest([this._taskListColumns$, this.show$]).pipe(
-    map(([taskListColumns]) => taskListColumns?.find(column => !!column.defaultSort))
+  public readonly disableDefaultSort$ = combineLatest([
+    this.defaultSort?.valueChanges || of(null),
+    this._taskListColumns$,
+    this.show$,
+  ]).pipe(
+    map(([sortValue, taskListColumns]) => {
+      if (sortValue.key !== this._INVALID_KEY) {
+        return false;
+      }
+
+      return !!taskListColumns.find(
+        column =>
+          column?.defaultSort === TaskListColumnDefaultSort.ASC ||
+          column?.defaultSort === TaskListColumnDefaultSort.DESC
+      );
+    })
   );
 
   private readonly _DEFAULT_ENUM_VALUES: MultiInputValues = [{key: '', value: ''}];
@@ -327,6 +347,12 @@ export class TaskManagementColumnModalComponent {
     this._yesNoValues$.next(this._DEFAULT_ENUM_VALUES);
   }
 
+  private resetFormAfterTimeout(): void {
+    setTimeout(() => {
+      this.resetForm();
+    }, CARBON_CONSTANTS.modalAnimationMs);
+  }
+
   private resetForm(): void {
     this.resetEnumValues();
     this.resetYesNoValues();
@@ -370,7 +396,7 @@ export class TaskManagementColumnModalComponent {
     const mappedYesNoValues =
       validYesNoValues && validYesNoValues.length > 0 && this.mapEnumValues(validYesNoValues);
 
-    const formValue = this.formGroup.value;
+    const formValue = this.formGroup.getRawValue();
     const taskListColumn: TaskListColumn = {
       ...(formValue.title && {title: formValue.title}),
       key: formValue.key,
@@ -400,5 +426,60 @@ export class TaskManagementColumnModalComponent {
 
   private getValidEnumValues(values: MultiInputValues): MultiInputValues {
     return (values || []).filter(value => value.value && value.key);
+  }
+
+  private getListItemFromViewType(viewType: ViewType | string): TaskListColumnListItem {
+    return {
+      content: this.translateService.instant(`listColumnDisplayType.${viewType}`),
+      key: viewType,
+    } as TaskListColumnListItem;
+  }
+
+  private getMultiInputValuesFromTaskListColumnEnum(
+    taskListColumnEnum: TaskListColumnEnum
+  ): MultiInputValues {
+    return Object.keys(taskListColumnEnum).reduce((acc, curr) => {
+      return [...acc, {key: curr, value: taskListColumnEnum[curr]}];
+    }, []);
+  }
+
+  private prefillForm(column: TaskListColumn): void {
+    if (
+      column.displayType.type === ViewType.ENUM &&
+      column.displayType.displayTypeParameters.enum
+    ) {
+      this._enumValues$.next(
+        this.getMultiInputValuesFromTaskListColumnEnum(
+          column.displayType.displayTypeParameters.enum
+        )
+      );
+    }
+
+    if (
+      column.displayType.type === ViewType.BOOLEAN &&
+      column.displayType.displayTypeParameters.enum
+    ) {
+      this._yesNoValues$.next(
+        this.getMultiInputValuesFromTaskListColumnEnum(
+          column.displayType.displayTypeParameters.enum
+        )
+      );
+    }
+
+    this.formGroup.patchValue({
+      key: column.key,
+      path: column.path,
+      sortable: column.sortable,
+      displayType: this.getListItemFromViewType(column.displayType.type),
+      ...(column.title && {title: column.title}),
+      ...(!column.defaultSort && {
+        defaultSort: this.getInvalidListItem(`listColumn.selectDefaultSort`),
+      }),
+      ...(column.defaultSort === 'ASC' && {defaultSort: this._SORT_ASC_ITEM}),
+      ...(column.defaultSort === 'DESC' && {defaultSort: this._SORT_DESC_ITEM}),
+      ...(column.displayType?.type === ViewType.DATE && {
+        dateFormat: column.displayType.displayTypeParameters.dateFormat,
+      }),
+    });
   }
 }
