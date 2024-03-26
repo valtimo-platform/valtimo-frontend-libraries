@@ -21,10 +21,19 @@ import {
   EditorModel,
   PageTitleService,
   PendingChangesComponent,
+  ShellService,
 } from '@valtimo/components';
 import {ModalService} from 'carbon-components-angular';
-import {BehaviorSubject, first, Subscription, switchMap, take} from 'rxjs';
-
+import {
+  BehaviorSubject,
+  distinctUntilChanged,
+  filter,
+  first,
+  Subscription,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import {FormManagementDuplicateComponent} from '../form-management-duplicate/form-management-duplicate.component';
 import {EDIT_TABS, FormDefinition, ModifyFormDefinitionRequest} from '../models';
 import {FormManagementService} from '../services';
@@ -49,7 +58,15 @@ export class FormManagementEditComponent
 
   public activeTab = EDIT_TABS.BUILDER;
 
-  public readonly formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
+  private readonly _formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
+  public readonly formDefinition$ = this._formDefinition$.pipe(
+    filter((definition: FormDefinition | null) => !!definition),
+    distinctUntilChanged(),
+    tap(val => {
+      console.log(val);
+      this.pendingChanges = true;
+    })
+  );
   public readonly jsonFormDefinition$ = new BehaviorSubject<EditorModel | null>(null);
   public readonly jsonOutput$ = new BehaviorSubject<EditorModel | null>(null);
   public readonly reloading$ = new BehaviorSubject<boolean>(false);
@@ -65,7 +82,8 @@ export class FormManagementEditComponent
     private readonly modalService: ModalService,
     private readonly pageTitleService: PageTitleService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly shellService: ShellService
   ) {
     super();
   }
@@ -90,7 +108,7 @@ export class FormManagementEditComponent
         )
       )
       .subscribe((definition: FormDefinition) => {
-        this.formDefinition$.next(definition);
+        this._formDefinition$.next(definition);
         this.pageTitleService.setCustomPageTitle(definition.name);
         this.jsonFormDefinition$.next({
           value: JSON.stringify(definition.formDefinition),
@@ -123,7 +141,6 @@ export class FormManagementEditComponent
 
   public formBuilderChanged(event, definition: EditorModel): void {
     this._changeActive = true;
-    this.pendingChanges = true;
     this.modifiedFormDefinition = event.form;
     if (event.type === 'updateComponent') {
       return;
@@ -187,24 +204,32 @@ export class FormManagementEditComponent
 
   public onSelectedTab(tab: EDIT_TABS): void {
     this.activeTab = tab;
-  }
 
-  public onValueChangeEvent(value: string, definition: FormDefinition): void {
-    if (this._changeActive || this.validJsonChange === false) {
+    if (tab === EDIT_TABS.BUILDER) {
       return;
     }
 
-    this.pendingChanges = true;
-    this.formDefinition$.next({
+    setTimeout(() => {
+      this.shellService.onMainContentResize();
+    });
+  }
+
+  public onValueChangeEvent(value: string, definition: FormDefinition, disabled: boolean): void {
+    if (this._changeActive || this.validJsonChange === false || disabled) {
+      return;
+    }
+
+    this._formDefinition$.next({
       ...definition,
       formDefinition: JSON.parse(value),
     });
   }
 
-  public onValidEvent(value: boolean): void {
-    if (this._changeActive) {
+  public onValidEvent(value: boolean, disabled: boolean): void {
+    if (this._changeActive || disabled) {
       return;
     }
+
     if (this.validJsonChange === null) {
       this.validJsonChange = value;
       return;
