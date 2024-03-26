@@ -17,6 +17,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {
   ActionItem,
+  CARBON_CONSTANTS,
   CARBON_THEME,
   CarbonListModule,
   ColumnConfig,
@@ -243,6 +244,10 @@ export class TaskManagementColumnsComponent {
       this.disable();
       this.refreshColumns();
     }
+
+    setTimeout(() => {
+      this.clearSelectedTaskListColumn();
+    }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
   public deleteRowConfirmation(columnKey: string, documentDefinitionName: string): void {
@@ -283,5 +288,9 @@ export class TaskManagementColumnsComponent {
 
   private enable(): void {
     this.disabled$.next(false);
+  }
+
+  private clearSelectedTaskListColumn(): void {
+    this.selectedTaskListColumn$.next(null);
   }
 }
