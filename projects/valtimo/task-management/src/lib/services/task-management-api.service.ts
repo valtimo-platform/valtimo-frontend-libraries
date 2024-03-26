@@ -46,4 +46,15 @@ export class TaskManagementApiService extends BaseApiService {
       column
     );
   }
+
+  public swapTaskListColumns(
+    caseDefinitionName: string,
+    firstColumn: TaskListColumn,
+    secondColumn: TaskListColumn
+  ): Observable<TaskListColumn[]> {
+    return this.httpClient.post<TaskListColumn[]>(
+      this.getApiUrl(`/management/v1/case/${caseDefinitionName}/task-list-column`),
+      {first: firstColumn.key, second: secondColumn.key}
+    );
+  }
 }

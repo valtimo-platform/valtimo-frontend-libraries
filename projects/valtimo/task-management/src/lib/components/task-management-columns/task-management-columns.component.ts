@@ -20,6 +20,7 @@ import {
   CARBON_THEME,
   CarbonListModule,
   ColumnConfig,
+  MoveRowDirection,
   MoveRowEvent,
 } from '@valtimo/components';
 import {CommonModule} from '@angular/common';
@@ -66,7 +67,7 @@ import {TaskManagementColumnModalComponent} from '../task-management-column-moda
 export class TaskManagementColumnsComponent {
   @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.G10;
 
-  private readonly _refreshColumns$ = new BehaviorSubject<null>(null);
+  private readonly _refreshColumns$ = new BehaviorSubject<null | 'noAnimation'>(null);
 
   public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params?.name),
@@ -84,7 +85,9 @@ export class TaskManagementColumnsComponent {
     this._refreshColumns$,
     this.translateService.stream('key'),
   ]).pipe(
-    tap(() => this.loadingColumns$.next(true)),
+    tap(([_, refresh]) => {
+      if (refresh !== 'noAnimation') this.loadingColumns$.next(true);
+    }),
     switchMap(([documentDefinitionName]) =>
       this.taskManagementApiService.getTaskListColumns(documentDefinitionName)
     ),
@@ -180,8 +183,8 @@ export class TaskManagementColumnsComponent {
     private readonly translateService: TranslateService
   ) {}
 
-  public refreshColumns(): void {
-    this._refreshColumns$.next(null);
+  public refreshColumns(noAnimation = false): void {
+    this._refreshColumns$.next(noAnimation ? 'noAnimation' : null);
   }
 
   public deleteRow(taskListColumn: TaskListColumn): void {
@@ -189,7 +192,26 @@ export class TaskManagementColumnsComponent {
     this.deleteRowKey$.next(taskListColumn.key);
   }
 
-  public onMoveRowEvent(event: MoveRowEvent, documentDefinitionName: string): void {}
+  public onMoveRowClick(event: MoveRowEvent, documentDefinitionName: string): void {
+    const {direction, index} = event;
+
+    this.cachedTaskListColumns$
+      .pipe(
+        take(1),
+        switchMap(taskListColumns =>
+          this.taskManagementApiService.swapTaskListColumns(
+            documentDefinitionName,
+            taskListColumns[index],
+            taskListColumns[direction === MoveRowDirection.UP ? index - 1 : index + 1]
+          )
+        )
+      )
+      .subscribe({
+        next: () => {
+          this.refreshColumns(true);
+        },
+      });
+  }
 
   public columnRowClicked(row: {key: string}): void {
     this.cachedTaskListColumns$.pipe(take(1)).subscribe(cachedTaskListColumns => {

@@ -53,8 +53,8 @@
     [fields]="fields"
     [header]="false"
     [movingRowsEnabled]="true"
-    (moveRow)="onMoveRowEvent($event, obs.documentDefinitionName)"
     (rowClicked)="columnRowClicked($event)"
+    (moveRow)="onMoveRowClick($event, obs.documentDefinitionName)"
   >
     <ng-container carbonToolbarContent *ngTemplateOutlet="buttons"></ng-container>
 
