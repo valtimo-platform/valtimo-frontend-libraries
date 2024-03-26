@@ -147,7 +147,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     ])
   );
 
-  private readonly _subsciptions = new Subscription();
+  private readonly _subscriptions = new Subscription();
 
   constructor(
     public translate: TranslateService,
@@ -163,7 +163,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     private readonly cdsThemeService: CdsThemeService
   ) {
     this.frontendVersion = VERSIONS?.frontendLibraries;
-    this._subsciptions.add(
+    this._subscriptions.add(
       this.isAdmin$.subscribe(isAdmin => {
         if (this.hideValtimoVersionsForNonAdmins && !isAdmin) {
           this.showValtimoVersions = false;
@@ -190,7 +190,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe();
-    this._subsciptions.unsubscribe();
+    this._subscriptions.unsubscribe();
   }
 
   updateUserLanguage(langKey: string, saveSettings = true): void {
