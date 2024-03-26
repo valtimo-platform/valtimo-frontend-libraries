@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-$color-100: #002547;
-$color-90: #002c54;
-$color-80: #003361;
-$color-70: #286198;
-$color-60: #2b79bd;
-$color-50: #61aedf;
-$color-40: #8acff2;
-$color-30: #aadcf6;
-$color-20: #c9e9f9;
-$color-10: #e9f6fd;
+:root {
+  --vcds-color-100: #130218;
+  --vcds-color-90: #390647;
+  --vcds-color-80: #600a76;
+  --vcds-color-70: #860ea5;
+  --vcds-color-60: #ac12d4;
+  --vcds-color-50: #c62bed;
+  --vcds-color-40: #d35af1;
+  --vcds-color-30: #df89f5;
+  --vcds-color-20: #ecb8f9;
+  --vcds-color-10: #f9e7fd;
+}

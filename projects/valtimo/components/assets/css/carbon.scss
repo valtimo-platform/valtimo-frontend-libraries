@@ -14,20 +14,8 @@
  * limitations under the License.
  */
 
-$valtimo-color-100: #002547;
-$valtimo-color-90: #002c54;
-$valtimo-color-80: #003361;
-$valtimo-color-70: #286198;
-$valtimo-color-60: #2b79bd;
-$valtimo-color-50: #61aedf;
-$valtimo-color-40: #8acff2;
-$valtimo-color-30: #aadcf6;
-$valtimo-color-20: #c9e9f9;
-$valtimo-color-10: #e9f6fd;
-
 @use '@carbon/styles/scss/themes';
 @use '@carbon/colors';
-@use './color';
 
 $lightThemeVariables: (
   'g10': themes.$g10,
@@ -40,64 +28,64 @@ $darkThemeVariables: (
 
 $lightThemeOverwriteVariables: (
   // Color 80
-  active-primary: color.$color-80,
-  active-tertiary: color.$color-80,
+  active-primary: var(--vcds-color-80),
+  active-tertiary: var(--vcds-color-80),
   // Color 70
-  link-02: color.$color-70,
-  support-04: color.$color-70,
-  hover-primary-text: color.$color-70,
-  link-secondary: color.$color-70,
-  support-info: color.$color-70,
-  link-primary-hover: color.$color-70,
+  link-02: var(--vcds-color-70),
+  support-04: var(--vcds-color-70),
+  hover-primary-text: var(--vcds-color-70),
+  link-secondary: var(--vcds-color-70),
+  support-info: var(--vcds-color-70),
+  link-primary-hover: var(--vcds-color-70),
   // Color 60
-  interactive-01: color.$color-60,
-  interactive-03: color.$color-60,
-  interactive-04: color.$color-60,
-  link-01: color.$color-60,
-  focus: color.$color-60,
-  background-brand: color.$color-60,
-  interactive: color.$color-60,
-  border-interactive: color.$color-60,
-  link-primary: color.$color-60,
-  brand-01: color.$color-60,
-  brand-03: color.$color-60,
+  interactive-01: var(--vcds-color-60),
+  interactive-03: var(--vcds-color-60),
+  interactive-04: var(--vcds-color-60),
+  link-01: var(--vcds-color-60),
+  focus: var(--vcds-color-60),
+  background-brand: var(--vcds-color-60),
+  interactive: var(--vcds-color-60),
+  border-interactive: var(--vcds-color-60),
+  link-primary: var(--vcds-color-60),
+  brand-01: var(--vcds-color-60),
+  brand-03: var(--vcds-color-60),
   // Color 50
-  inverse-support-04: color.$color-50,
-  support-info-inverse: color.$color-50,
+  inverse-support-04: var(--vcds-color-50),
+  support-info-inverse: var(--vcds-color-50),
   // Color 40
-  inverse-link: color.$color-40,
-  link-inverse: color.$color-40,
+  inverse-link: var(--vcds-color-40),
+  link-inverse: var(--vcds-color-40),
   // Color 20
-  highlight: color.$color-20
+  highlight: var(--vcds-color-20)
 );
 
 $darkThemeOverwriteVariables: (
   // Color 80
-  active-primary: color.$color-80,
-  active-tertiary: color.$color-80,
-  highlight: color.$color-80,
+  active-primary: var(--vcds-color-80),
+  active-tertiary: var(--vcds-color-80),
+  highlight: var(--vcds-color-80),
   // Color 70
-  inverse-support-04: color.$color-70,
-  support-info-inverse: color.$color-70,
+  inverse-support-04: var(--vcds-color-70),
+  support-info-inverse: var(--vcds-color-70),
   // Color 60
-  interactive-01: color.$color-60,
-  background-brand: color.$color-60,
-  brand-01: color.$color-60,
-  brand-03: color.$color-60,
+  interactive-01: var(--vcds-color-60),
+  background-brand: var(--vcds-color-60),
+  brand-01: var(--vcds-color-60),
+  brand-03: var(--vcds-color-60),
   // Color 50
-  support-04: color.$color-50,
-  support-info: color.$color-50,
-  interactive-04: color.$color-50,
-  interactive: color.$color-50,
-  border-interactive: color.$color-50,
+  support-04: var(--vcds-color-50),
+  support-info: var(--vcds-color-50),
+  interactive-04: var(--vcds-color-50),
+  interactive: var(--vcds-color-50),
+  border-interactive: var(--vcds-color-50),
   // Color 40
-  link-01: color.$color-40,
-  link-primary: color.$color-40,
+  link-01: var(--vcds-color-40),
+  link-primary: var(--vcds-color-40),
   // Color 30
-  link-02: color.$color-30,
-  hover-primary-text: color.$color-30,
-  link-secondary: color.$color-30,
-  link-primary-hover: color.$color-30
+  link-02: var(--vcds-color-30),
+  hover-primary-text: var(--vcds-color-30),
+  link-secondary: var(--vcds-color-30),
+  link-primary-hover: var(--vcds-color-30)
 );
 
 @use '@carbon/styles/scss/theme' with (
@@ -105,21 +93,21 @@ $darkThemeOverwriteVariables: (
 );
 
 @use '@carbon/styles/scss/components/button/tokens' as button-tokens with (
-  $button-primary-active: color.$color-80,
-  $button-tertiary-active: color.$color-80,
-  $button-primary-hover: color.$color-70,
-  $button-tertiary-hover: color.$color-70,
-  $button-primary: color.$color-60,
-  $button-tertiary: color.$color-60
+  $button-primary-active: var(--vcds-color-80),
+  $button-tertiary-active: var(--vcds-color-80),
+  $button-primary-hover: var(--vcds-color-70),
+  $button-tertiary-hover: var(--vcds-color-70),
+  $button-primary: var(--vcds-color-60),
+  $button-tertiary: var(--vcds-color-60)
 );
 
 @use '@carbon/styles/scss/components/tag/tokens' as tag-tokens with (
-  $tag-color-blue: $valtimo-color-80,
-  $tag-background-blue: $valtimo-color-20
+  $tag-color-blue: var(--vcds-color-80),
+  $tag-background-blue: var(--vcds-color-20)
 );
 
 @use '@carbon/styles/scss/components/notification/tokens' as notification-tokens with (
-  $notification-background-info: $valtimo-color-10
+  $notification-background-info: var(--vcds-color-10)
 );
 
 @use '@carbon/styles';
@@ -136,4 +124,19 @@ $darkThemeOverwriteVariables: (
   [data-carbon-theme='#{$name}'] {
     @include theme.theme($variable, $darkThemeOverwriteVariables);
   }
+}
+
+/* default Valtimo colors */
+
+:root {
+  --vcds-color-100: #002547;
+  --vcds-color-90: #002c54;
+  --vcds-color-80: #003361;
+  --vcds-color-70: #286198;
+  --vcds-color-60: #2b79bd;
+  --vcds-color-50: #61aedf;
+  --vcds-color-40: #8acff2;
+  --vcds-color-30: #aadcf6;
+  --vcds-color-20: #c9e9f9;
+  --vcds-color-10: #e9f6fd;
 }
