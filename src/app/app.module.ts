@@ -128,6 +128,7 @@ import {ObjectModule} from '@valtimo/object';
 import {AccessControlManagementModule} from '@valtimo/access-control-management';
 import {FormFlowManagementModule} from '@valtimo/form-flow-management';
 import {CustomFormFlowComponent} from '@src/app/custom-form-flow-component/custom-form-flow.component';
+import {CaseMigrationModule} from '@valtimo/case-migration';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -168,6 +169,7 @@ export function tabsFactory() {
     SecurityModule,
     MenuModule,
     TaskModule,
+    CaseMigrationModule,
     ChoicefieldModule,
     DossierModule.forRoot(tabsFactory),
     ProcessModule,
