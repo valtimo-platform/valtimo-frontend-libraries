@@ -27,7 +27,7 @@ $valtimo-color-10: #e9f6fd;
 
 @use '@carbon/styles/scss/themes';
 @use '@carbon/colors';
-@use 'projects/valtimo/components/assets/css/color';
+@use './color';
 
 $lightThemeVariables: (
   'g10': themes.$g10,
