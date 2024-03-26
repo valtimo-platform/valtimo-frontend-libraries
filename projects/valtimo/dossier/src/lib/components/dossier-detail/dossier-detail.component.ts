@@ -188,7 +188,7 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
 
   public getAllAssociatedProcessDefinitions(): void {
     this.documentService
-      .findProcessDocumentDefinitions(this.documentDefinitionName)
+      .findProcessDocumentDefinitionsByStartableByUser(this.documentDefinitionName, true)
       .subscribe((processDocumentDefinitions: ProcessDocumentDefinition[]) => {
         this.processDocumentDefinitions = processDocumentDefinitions.filter(
           processDocumentDefinition => processDocumentDefinition.startableByUser
