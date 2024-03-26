@@ -20,6 +20,7 @@ import {
   CARBON_THEME,
   CarbonListModule,
   ColumnConfig,
+  ConfirmationModalModule,
   MoveRowDirection,
   MoveRowEvent,
 } from '@valtimo/components';
@@ -61,6 +62,7 @@ import {TaskManagementColumnModalComponent} from '../task-management-column-moda
     TaskManagementColumnModalComponent,
     ButtonModule,
     IconModule,
+    ConfirmationModalModule,
   ],
   providers: [TaskManagementService],
 })
@@ -115,11 +117,16 @@ export class TaskManagementColumnsComponent {
         ),
       }))
     ),
-    tap(() => this.loadingColumns$.next(false))
+    tap(() => {
+      this.enable();
+      this.loadingColumns$.next(false);
+    })
   );
 
   public readonly showDeleteModal$ = new Subject<boolean>();
   public readonly deleteRowKey$ = new BehaviorSubject<string>('');
+
+  public readonly disabled$ = new BehaviorSubject<boolean>(true);
 
   public readonly fields: Array<ColumnConfig> = [
     {
@@ -195,6 +202,8 @@ export class TaskManagementColumnsComponent {
   public onMoveRowClick(event: MoveRowEvent, documentDefinitionName: string): void {
     const {direction, index} = event;
 
+    this.disable();
+
     this.cachedTaskListColumns$
       .pipe(
         take(1),
@@ -210,6 +219,7 @@ export class TaskManagementColumnsComponent {
         next: () => {
           this.refreshColumns(true);
         },
+        error: () => this.enable(),
       });
   }
 
@@ -229,7 +239,23 @@ export class TaskManagementColumnsComponent {
   public onModalCloseEvent(event: TaskListColumnModalCloseEvent): void {
     this.showModal$.next(false);
 
-    if (event === 'refresh') this.refreshColumns();
+    if (event === 'refresh') {
+      this.disable();
+      this.refreshColumns();
+    }
+  }
+
+  public deleteRowConfirmation(columnKey: string, documentDefinitionName: string): void {
+    this.disable();
+
+    this.taskManagementApiService
+      .deleteTaskListColumn(documentDefinitionName, columnKey)
+      .subscribe({
+        next: () => {
+          this.refreshColumns(true);
+        },
+        error: () => this.enable(),
+      });
   }
 
   private getDisplayTypeParametersView(
@@ -249,5 +275,13 @@ export class TaskManagementColumnsComponent {
     }
 
     return '-';
+  }
+
+  private disable(): void {
+    this.disabled$.next(true);
+  }
+
+  private enable(): void {
+    this.disabled$.next(false);
   }
 }

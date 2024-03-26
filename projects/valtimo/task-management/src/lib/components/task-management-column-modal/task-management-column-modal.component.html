@@ -27,7 +27,9 @@
     disableDefaultSort: disableDefaultSort$ | async,
     enumValues: enumValues$ | async,
     enumValid: enumValid$ | async,
-    yesNoValues: yesNoValues$ | async
+    yesNoValues: yesNoValues$ | async,
+    viewTypeItems: viewTypeItems$ | async,
+    sortItems: sortItems$ | async
   } as obs"
 >
   <cds-modal size="sm" [open]="obs.show" valtimoCdsModal>
@@ -111,8 +113,12 @@
           ></v-tooltip-icon>
         </span>
 
-        <cds-dropdown formControlName="displayType" [disabled]="obs.disabled">
-          <cds-dropdown-list [items]="viewTypeItems$ | async"></cds-dropdown-list>
+        <cds-dropdown
+          *ngIf="obs.viewTypeItems"
+          formControlName="displayType"
+          [disabled]="obs.disabled"
+        >
+          <cds-dropdown-list [items]="obs.viewTypeItems"></cds-dropdown-list>
         </cds-dropdown>
       </cds-label>
     </div>
@@ -198,11 +204,8 @@
           ></v-tooltip-icon>
         </span>
 
-        <cds-dropdown
-          formControlName="defaultSort"
-          [disabled]="obs.disabled || obs.disableDefaultSort"
-        >
-          <cds-dropdown-list [items]="sortItems$ | async"></cds-dropdown-list>
+        <cds-dropdown formControlName="defaultSort" [disabled]="obs.disabled" *ngIf="obs.sortItems">
+          <cds-dropdown-list [items]="obs.sortItems"></cds-dropdown-list>
         </cds-dropdown>
       </cds-label>
     </div>

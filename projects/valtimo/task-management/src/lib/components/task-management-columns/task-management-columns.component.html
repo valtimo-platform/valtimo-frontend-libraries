@@ -21,7 +21,8 @@
     documentDefinitionName: documentDefinitionName$ | async,
     loadingColumns: loadingColumns$ | async,
     modalType: modalType$ | async,
-    showModal: showModal$ | async
+    showModal: showModal$ | async,
+    disabled: disabled$ | async
   } as obs"
 >
   <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
@@ -38,7 +39,7 @@
   <valtimo-confirmation-modal
     [showModalSubject$]="showDeleteModal$"
     [outputOnConfirm]="deleteRowKey$ | async"
-    (confirmEvent)="deleteRowConfirmation($event)"
+    (confirmEvent)="deleteRowConfirmation($event, obs.documentDefinitionName)"
     confirmButtonTextTranslationKey="listColumn.deleteColumn"
     titleTranslationKey="listColumn.deleteColumn"
     contentTranslationKey="listColumn.deleteColumnConfirmation"
@@ -56,7 +57,10 @@
     (rowClicked)="columnRowClicked($event)"
     (moveRow)="onMoveRowClick($event, obs.documentDefinitionName)"
   >
-    <ng-container carbonToolbarContent *ngTemplateOutlet="buttons"></ng-container>
+    <ng-container
+      carbonToolbarContent
+      *ngTemplateOutlet="buttons; context: {obs: obs}"
+    ></ng-container>
 
     <valtimo-no-results
       [title]="'listColumn.noConfigWarningTitle' | translate"
@@ -66,8 +70,8 @@
   </valtimo-carbon-list>
 </ng-template>
 
-<ng-template #buttons>
-  <button cdsButton="primary" (click)="showModal('add')">
+<ng-template #buttons let-obs="obs">
+  <button cdsButton="primary" (click)="showModal('add')" [disabled]="obs.disabled">
     {{ 'listColumn.addButtonText' | translate }}
     <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
   </button>

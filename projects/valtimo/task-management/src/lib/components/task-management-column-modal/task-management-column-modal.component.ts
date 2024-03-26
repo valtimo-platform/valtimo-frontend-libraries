@@ -82,7 +82,9 @@ import {isEqual} from 'lodash';
 export class TaskManagementColumnModalComponent {
   @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.G10;
   @Input() public set taskListColumns(value: TaskListColumn[]) {
-    this._taskListColumns$.next(value);
+    if (value?.length > 0) {
+      this._taskListColumns$.next(value);
+    }
   }
   @Input() public set type(value: TaskListColumnModalType) {
     this.type$.next(value);
@@ -97,7 +99,7 @@ export class TaskManagementColumnModalComponent {
   }
   @Input() public documentDefinitionName!: string;
   @Input() public set selectedTaskListColumn(column: TaskListColumn) {
-    this.prefillForm(column);
+    if (column) this.prefillForm(column);
   }
   @Output() closeEvent = new EventEmitter<TaskListColumnModalCloseEvent>();
 
@@ -117,6 +119,12 @@ export class TaskManagementColumnModalComponent {
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   private readonly _taskListColumns$ = new BehaviorSubject<TaskListColumn[]>([]);
+
+  public get taskListColumns$(): Observable<TaskListColumn[]> {
+    return this._taskListColumns$.pipe(
+      distinctUntilChanged((previous, current) => isEqual(previous, current))
+    );
+  }
 
   private readonly _INVALID_KEY = 'INVALID_KEY';
 
@@ -174,6 +182,9 @@ export class TaskManagementColumnModalComponent {
   }
   public get key(): AbstractControl<string> {
     return this.formGroup.get('key');
+  }
+  public get keyValue$(): Observable<string> {
+    return this.key.valueChanges.pipe(distinctUntilChanged());
   }
   public get path(): AbstractControl<string> {
     return this.formGroup.get('path');
@@ -263,21 +274,23 @@ export class TaskManagementColumnModalComponent {
 
   public readonly CARBON_THEME_WHITE = CARBON_THEME.WHITE;
 
-  public readonly disableDefaultSort$ = combineLatest([
-    this.defaultSort?.valueChanges || of(null),
-    this._taskListColumns$,
-    this.show$,
-  ]).pipe(
-    map(([sortValue, taskListColumns]) => {
-      if (sortValue.key !== this._INVALID_KEY) {
-        return false;
-      }
-
-      return !!taskListColumns.find(
+  public readonly disableDefaultSort$ = combineLatest([this.taskListColumns$, this.keyValue$]).pipe(
+    map(([taskListColumns, keyValue]) => {
+      const defaultSortColumn = taskListColumns.find(
         column =>
           column?.defaultSort === TaskListColumnDefaultSort.ASC ||
           column?.defaultSort === TaskListColumnDefaultSort.DESC
       );
+      const defaultSortColumnExists = !!defaultSortColumn;
+      const enabled = !defaultSortColumnExists || defaultSortColumn.key === keyValue;
+
+      if (enabled) {
+        this.defaultSort?.enable();
+      } else {
+        this.defaultSort?.disable();
+      }
+
+      return !enabled;
     })
   );
 
@@ -445,8 +458,8 @@ export class TaskManagementColumnModalComponent {
 
   private prefillForm(column: TaskListColumn): void {
     if (
-      column.displayType.type === ViewType.ENUM &&
-      column.displayType.displayTypeParameters.enum
+      column?.displayType?.type === ViewType.ENUM &&
+      column?.displayType?.displayTypeParameters?.enum
     ) {
       this._enumValues$.next(
         this.getMultiInputValuesFromTaskListColumnEnum(
@@ -456,8 +469,8 @@ export class TaskManagementColumnModalComponent {
     }
 
     if (
-      column.displayType.type === ViewType.BOOLEAN &&
-      column.displayType.displayTypeParameters.enum
+      column?.displayType?.type === ViewType.BOOLEAN &&
+      column?.displayType?.displayTypeParameters?.enum
     ) {
       this._yesNoValues$.next(
         this.getMultiInputValuesFromTaskListColumnEnum(
