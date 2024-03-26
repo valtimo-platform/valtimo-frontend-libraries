@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-// theme-preference.service.ts
 import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {SelectableCarbonTheme} from '../models';
