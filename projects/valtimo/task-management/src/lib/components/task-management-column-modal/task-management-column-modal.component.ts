@@ -432,9 +432,7 @@ export class TaskManagementColumnModalComponent {
   }
 
   private mapEnumValues(enumValues: MultiInputValues): TaskListColumnEnum {
-    return enumValues.reduce((acc, curr) => {
-      return {...acc, [curr.key]: curr.value};
-    }, {});
+    return enumValues.reduce((acc, curr) => ({...acc, [curr.key]: curr.value}), {});
   }
 
   private getValidEnumValues(values: MultiInputValues): MultiInputValues {
@@ -451,9 +449,10 @@ export class TaskManagementColumnModalComponent {
   private getMultiInputValuesFromTaskListColumnEnum(
     taskListColumnEnum: TaskListColumnEnum
   ): MultiInputValues {
-    return Object.keys(taskListColumnEnum).reduce((acc, curr) => {
-      return [...acc, {key: curr, value: taskListColumnEnum[curr]}];
-    }, []);
+    return Object.keys(taskListColumnEnum).reduce(
+      (acc, curr) => [...acc, {key: curr, value: taskListColumnEnum[curr]}],
+      []
+    );
   }
 
   private prefillForm(column: TaskListColumn): void {

@@ -52,7 +52,6 @@ import {TaskManagementColumnModalComponent} from '../task-management-column-moda
 @Component({
   selector: 'valtimo-task-management-columns',
   templateUrl: './task-management-columns.component.html',
-  styleUrls: ['./task-management-columns.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
