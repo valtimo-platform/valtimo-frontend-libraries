@@ -54,7 +54,7 @@ export class TaskListComponent {
     },
     {
       key: 'name',
-      label: `task-list.fieldLabels.valtimoAssignee.fullName`,
+      label: `task-list.fieldLabels.name`,
       viewType: ViewType.TEXT,
     },
     {
@@ -99,7 +99,12 @@ export class TaskListComponent {
   public readonly paginationForCurrentTaskType$ = combineLatest([
     this._selectedTaskType$,
     this._pagination$,
-  ]).pipe(map(([selectedTaskType, pagination]) => pagination[selectedTaskType]));
+  ]).pipe(
+    map(([selectedTaskType, pagination]) => {
+      const paginationForType = pagination[selectedTaskType];
+      return {...paginationForType, page: paginationForType.page + 1};
+    })
+  );
 
   private readonly _sortState$ = new BehaviorSubject<{[key in TaskListTab]: SortState | null}>({
     [TaskListTab.ALL]: this.getDefaultSortState(),
@@ -164,11 +169,16 @@ export class TaskListComponent {
       this.updateTaskPagination(selectedTaskType, {collectionSize: taskResult.totalElements});
 
       return taskResult?.content?.map((task, taskIndex) => {
-        if (task.due) task.due = moment(task.due).format('DD MMM YYYY HH:mm');
-        task.created = moment(task.created).format('DD MMM YYYY HH:mm');
-        if (canViewTaskPermissions) task.locked = !canViewTaskPermissions[taskIndex];
-        if (canViewCasePermissions) task.caseLocked = !canViewCasePermissions[taskIndex];
-        return task;
+        const createdDate = moment(task.created);
+        const dueDate = moment(task.due);
+        const taskCopy = {...task};
+
+        if (task.due && dueDate.isValid()) taskCopy.due = dueDate.format('DD MMM YYYY HH:mm');
+        if (createdDate.isValid()) taskCopy.created = createdDate.format('DD MMM YYYY HH:mm');
+        if (canViewTaskPermissions) taskCopy.locked = !canViewTaskPermissions[taskIndex];
+        if (canViewCasePermissions) taskCopy.caseLocked = !canViewCasePermissions[taskIndex];
+
+        return taskCopy;
       });
     }),
     tap(tasks => {
@@ -189,7 +199,7 @@ export class TaskListComponent {
   }
 
   public paginationClicked(page: number, type: TaskListTab | string): void {
-    this.updateTaskPagination(type as TaskListTab, {page});
+    this.updateTaskPagination(type as TaskListTab, {page: page - 1});
   }
 
   public paginationSet(size: number): void {
@@ -197,8 +207,12 @@ export class TaskListComponent {
   }
 
   public tabChange(tab: TaskListTab | string): void {
-    this._selectedTaskType$.next(tab as TaskListTab);
-    this.updateTaskPagination(tab as TaskListTab, {page: 0});
+    this._selectedTaskType$.pipe(take(1)).subscribe(selectedTaskType => {
+      if (selectedTaskType !== tab) {
+        this._selectedTaskType$.next(tab as TaskListTab);
+        this.updateTaskPagination(tab as TaskListTab, {page: 0});
+      }
+    });
   }
 
   public showTask(task: Task): void {
