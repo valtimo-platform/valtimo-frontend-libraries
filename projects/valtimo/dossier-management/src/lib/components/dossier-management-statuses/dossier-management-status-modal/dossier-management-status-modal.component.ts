@@ -168,17 +168,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
     return !!this.statusFormGroup?.pristine;
   }
 
-  private readonly _editingKey$ = new BehaviorSubject<boolean>(false);
-
-  public readonly editingKey$ = this._editingKey$.pipe(
-    tap(editing => {
-      if (editing) {
-        this.key?.enable();
-      } else {
-        this.key?.disable();
-      }
-    })
-  );
+  private readonly editingKey$ = new BehaviorSubject<boolean>(false);
 
   private readonly _originalStatusKey$ = new BehaviorSubject<string>('');
 
@@ -254,7 +244,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
   }
 
   public editKeyButtonClick(): void {
-    this._editingKey$.next(true);
+    this.editingKey$.next(true);
   }
 
   public colorDropdownChange(event: {
@@ -296,7 +286,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
   }
 
   private resetEditingKey(): void {
-    this._editingKey$.next(false);
+    this.editingKey$.next(false);
   }
 
   private openAutoKeySubscription(): void {
