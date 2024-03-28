@@ -168,7 +168,7 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
     return !!this.statusFormGroup?.pristine;
   }
 
-  private readonly editingKey$ = new BehaviorSubject<boolean>(false);
+  public readonly editingKey$ = new BehaviorSubject<boolean>(false);
 
   private readonly _originalStatusKey$ = new BehaviorSubject<string>('');
 
