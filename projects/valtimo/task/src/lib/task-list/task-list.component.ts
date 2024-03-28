@@ -89,56 +89,54 @@ export class TaskListComponent {
     })
   );
 
-  private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
-
   private readonly _pagination$ = new BehaviorSubject<{[key in TaskListTab]: TaskPageParams}>({
     [TaskListTab.ALL]: this.getDefaultPagination(),
     [TaskListTab.MINE]: this.getDefaultPagination(),
     [TaskListTab.OPEN]: this.getDefaultPagination(),
   });
-  public readonly paginationForCurrentTaskType$ = combineLatest([
+  private readonly _paginationForCurrentTaskType$ = combineLatest([
     this._selectedTaskType$,
     this._pagination$,
-  ]).pipe(
-    map(([selectedTaskType, pagination]) => {
-      const paginationForType = pagination[selectedTaskType];
-      return {...paginationForType, page: paginationForType.page + 1};
-    })
-  );
-
+  ]).pipe(map(([selectedTaskType, pagination]) => pagination[selectedTaskType]));
+  public get paginationForCurrentTaskType$(): Observable<TaskPageParams> {
+    return this._paginationForCurrentTaskType$.pipe(
+      map(pagination => ({...pagination, page: pagination.page + 1}))
+    );
+  }
   private readonly _sortState$ = new BehaviorSubject<{[key in TaskListTab]: SortState | null}>({
     [TaskListTab.ALL]: this.getDefaultSortState(),
     [TaskListTab.MINE]: this.getDefaultSortState(),
     [TaskListTab.OPEN]: this.getDefaultSortState(),
   });
 
+  private _enableLoadingAnimation: boolean = true;
+
   public readonly cachedTasks$ = new BehaviorSubject<Task[] | null>(null);
   public readonly tasks$: Observable<Task[]> = combineLatest([
-    this._reload$,
     this.selectedTaskType$,
     this._pagination$,
     this._sortState$,
     this.taskListService.caseDefinitionName$,
   ]).pipe(
-    map(([reload, selectedTaskType, pagination, sortState, caseDefinitionName]) => {
+    map(([selectedTaskType, pagination, sortState, caseDefinitionName]) => {
       const paginationParam = {...pagination[selectedTaskType]};
-      delete paginationParam.collectionSize;
       const sortParams = sortState[selectedTaskType];
       const params = {
         ...paginationParam,
         ...(sortParams && {sort: this.getSortString(sortParams)}),
       };
 
+      delete params.collectionSize;
+
       return {
         selectedTaskType,
         params,
         caseDefinitionName,
-        reload,
       };
     }),
     distinctUntilChanged((previous, current) => isEqual(previous, current)),
-    tap(({reload}) => {
-      if (reload !== 'noAnimation') this.loadingTasks$.next(true);
+    tap(() => {
+      if (this._enableLoadingAnimation) this.loadingTasks$.next(true);
     }),
     switchMap(({selectedTaskType, params, caseDefinitionName}) =>
       this.taskService.queryTasksPageV3(selectedTaskType, params, caseDefinitionName)
@@ -166,7 +164,9 @@ export class TaskListComponent {
       ])
     ),
     map(([selectedTaskType, taskResult, canViewTaskPermissions, canViewCasePermissions]) => {
-      this.updateTaskPagination(selectedTaskType, {collectionSize: taskResult.totalElements});
+      this.updateTaskPagination(selectedTaskType, {
+        collectionSize: Number(taskResult.totalElements),
+      });
 
       return taskResult?.content?.map((task, taskIndex) => {
         const createdDate = moment(task.created);
@@ -184,6 +184,7 @@ export class TaskListComponent {
     tap(tasks => {
       this.cachedTasks$.next(tasks);
       this.loadingTasks$.next(false);
+      this.disableLoadingAnimation();
     })
   );
 
@@ -202,13 +203,25 @@ export class TaskListComponent {
     this.updateTaskPagination(type as TaskListTab, {page: page - 1});
   }
 
-  public paginationSet(size: number): void {
-    this.updateTaskPaginationForAll({size});
+  public paginationSet(newSize: number): void {
+    combineLatest([this._paginationForCurrentTaskType$, this._selectedTaskType$])
+      .pipe(take(1))
+      .subscribe(([pagination, selectedTaskType]) => {
+        this.updateTaskPagination(selectedTaskType, {
+          size: Number(newSize),
+          page: this.getLastAvailablePage(
+            pagination.page,
+            Number(newSize),
+            pagination.collectionSize
+          ),
+        });
+      });
   }
 
   public tabChange(tab: TaskListTab | string): void {
     this._selectedTaskType$.pipe(take(1)).subscribe(selectedTaskType => {
       if (selectedTaskType !== tab) {
+        this.enableLoadingAnimation();
         this._selectedTaskType$.next(tab as TaskListTab);
         this.updateTaskPagination(tab as TaskListTab, {page: 0});
       }
@@ -272,10 +285,6 @@ export class TaskListComponent {
     });
   }
 
-  public reload(animation = true): void {
-    this._reload$.next(animation ? null : 'noAnimation');
-  }
-
   private getSortString(sort: SortState): string {
     return `${sort.state.name},${sort.state.direction}`;
   }
@@ -310,16 +319,6 @@ export class TaskListComponent {
     });
   }
 
-  private updateTaskPaginationForAll(updatedPagination: Partial<TaskPageParams>): void {
-    this._pagination$.pipe(take(1)).subscribe(pagination => {
-      this._pagination$.next({
-        [TaskListTab.ALL]: {...pagination[TaskListTab.ALL], ...updatedPagination},
-        [TaskListTab.MINE]: {...pagination[TaskListTab.MINE], ...updatedPagination},
-        [TaskListTab.OPEN]: {...pagination[TaskListTab.OPEN], ...updatedPagination},
-      });
-    });
-  }
-
   private updateSortState(taskType: TaskListTab, updatedSortState: SortState): void {
     this._sortState$.pipe(take(1)).subscribe(sortState => {
       this._sortState$.next({
@@ -327,5 +326,29 @@ export class TaskListComponent {
         [taskType]: {...sortState[taskType], ...updatedSortState},
       });
     });
+  }
+
+  private isNumber(value: any): boolean {
+    return typeof value === 'number';
+  }
+
+  private getLastAvailablePage(page: number, size: number, collectionSize: number): number {
+    if (this.isNumber(page) && this.isNumber(size) && this.isNumber(collectionSize) && page !== 0) {
+      const amountOfPages = Math.ceil(collectionSize / size);
+
+      if (page + 1 > amountOfPages) {
+        return amountOfPages - 1;
+      }
+    }
+
+    return page;
+  }
+
+  private disableLoadingAnimation(): void {
+    this._enableLoadingAnimation = false;
+  }
+
+  private enableLoadingAnimation(): void {
+    this._enableLoadingAnimation = true;
   }
 }
