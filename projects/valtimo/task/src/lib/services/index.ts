@@ -14,22 +14,5 @@
  * limitations under the License.
  */
 
-interface TaskPageParams {
-  page: number;
-  size: number;
-  collectionSize?: number;
-  sort?: string;
-}
-
-class TaskList {
-  public tasks = [];
-  fields = [];
-  pagination = {
-    collectionSize: 0,
-    page: 1,
-    size: 10,
-  };
-  page = 0;
-}
-
-export {TaskList, TaskPageParams};
+export * from './task.service';
+export * from './task-list.service';

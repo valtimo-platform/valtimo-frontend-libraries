@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-interface TaskPageParams {
-  page: number;
-  size: number;
-  collectionSize?: number;
-  sort?: string;
-}
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
 
-class TaskList {
-  public tasks = [];
-  fields = [];
-  pagination = {
-    collectionSize: 0,
-    page: 1,
-    size: 10,
-  };
-  page = 0;
-}
+@Injectable({providedIn: 'root'})
+export class TaskListService {
+  private readonly _caseDefinitionName$ = new BehaviorSubject<string | null>(null);
 
-export {TaskList, TaskPageParams};
+  public get caseDefinitionName$(): Observable<string | null> {
+    return this._caseDefinitionName$.asObservable();
+  }
+
+  public setCaseDefinitionName(caseDefinitionName: string): void {
+    this._caseDefinitionName$.next(caseDefinitionName);
+  }
+}
