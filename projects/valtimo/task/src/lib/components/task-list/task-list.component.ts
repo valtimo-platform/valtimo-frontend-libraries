@@ -162,27 +162,34 @@ export class TaskListComponent {
         params.caseDefinitionName
       )
     ),
-    switchMap(tasksResult =>
-      combineLatest([
+    switchMap(tasksResult => {
+      const taskResults = tasksResult.content;
+      const hasTaskResults = Array.isArray(taskResults) && taskResults.length > 0;
+
+      return combineLatest([
         of(tasksResult),
-        combineLatest(
-          tasksResult?.content.map(task =>
-            this.permissionService.requestPermission(CAN_VIEW_TASK_PERMISSION, {
-              resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
-              identifier: task.id,
-            })
-          )
-        ),
-        combineLatest(
-          tasksResult?.content.map(task =>
-            this.permissionService.requestPermission(CAN_VIEW_CASE_PERMISSION, {
-              resource: TASK_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
-              identifier: task.businessKey,
-            })
-          )
-        ),
-      ])
-    ),
+        hasTaskResults
+          ? combineLatest(
+              taskResults.map(task =>
+                this.permissionService.requestPermission(CAN_VIEW_TASK_PERMISSION, {
+                  resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
+                  identifier: task.id,
+                })
+              )
+            )
+          : of(null),
+        hasTaskResults
+          ? combineLatest(
+              taskResults.map(task =>
+                this.permissionService.requestPermission(CAN_VIEW_CASE_PERMISSION, {
+                  resource: TASK_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+                  identifier: task.businessKey,
+                })
+              )
+            )
+          : of(null),
+      ]);
+    }),
     map(([taskResult, canViewTaskPermissions, canViewCasePermissions]) => {
       this.updateTaskPagination(this._selectedTaskType, {
         collectionSize: Number(taskResult.totalElements),
