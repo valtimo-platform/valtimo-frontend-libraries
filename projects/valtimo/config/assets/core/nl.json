@@ -415,7 +415,12 @@
     "delete": "Verwijderen",
     "deploy": "Deploy",
     "duplicate": "Dupliceren",
-    "readOnly": "Alleen-lezen"
+    "readOnly": "Alleen-lezen",
+    "tabs": {
+      "formBuilder": "Formulier editor",
+      "jsonEditor": "JSON editor",
+      "output": "Uitvoer"
+    }
   },
   "dossierManagement": {
     "version": "Versie: ",
@@ -694,8 +699,8 @@
     "documentenApi": {
       "title": "Documenten API",
       "documentenApiVersion": "De Documenten API-plugin gebruikt versie",
-      "noVersionWarningTitle": "Geen Documenten API-plugin gedetecteerd",
-      "noVersionWarningMessage": "Configureer het uploadproces om het Documenten API-plugin te koppelen",
+      "noVersionWarningTitle": "Geen Documenten API-plugin versie gedetecteerd",
+      "noVersionWarningMessage": "Configureer de Documenten API-plugin versie en configureer het uploadproces",
       "multipleVersionsWarningTitle": "Meerdere Documenten API-plugins gedetecteerd",
       "multipleVersionsWarningMessage": "Het uploadproces is gekoppelt aan meerdere Documenten API's met verschillende versies"
     },
