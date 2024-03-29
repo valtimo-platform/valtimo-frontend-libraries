@@ -113,9 +113,9 @@ export class TaskListComponent {
     );
   }
   private readonly _sortState$ = new BehaviorSubject<{[key in TaskListTab]: SortState | null}>({
-    [TaskListTab.ALL]: this.defaultSortState,
-    [TaskListTab.MINE]: this.defaultSortState,
-    [TaskListTab.OPEN]: this.defaultSortState,
+    [TaskListTab.ALL]: this._defaultSortState,
+    [TaskListTab.MINE]: this._defaultSortState,
+    [TaskListTab.OPEN]: this._defaultSortState,
   });
 
   private _enableLoadingAnimation$ = new BehaviorSubject<boolean>(true);
@@ -338,7 +338,7 @@ export class TaskListComponent {
     return `${sort.state.name},${sort.state.direction}`;
   }
 
-  private get defaultSortState(): SortState | null {
+  private get _defaultSortState(): SortState | null {
     return this.taskService.getConfigCustomTaskList()?.defaultSortedColumn || null;
   }
 
