@@ -58,12 +58,20 @@ export class FormManagementEditComponent
 
   public activeTab = EDIT_TABS.BUILDER;
 
+  private _editorInitialized = false;
   private readonly _formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
   public readonly formDefinition$ = this._formDefinition$.pipe(
     filter((definition: FormDefinition | null) => !!definition),
-    distinctUntilChanged(),
-    tap(val => {
-      console.log(val);
+    distinctUntilChanged(
+      (prevFormDefinition, currFormDefinition) =>
+        JSON.stringify(prevFormDefinition?.formDefinition.components) ===
+        JSON.stringify(currFormDefinition?.formDefinition.components)
+    ),
+    tap(() => {
+      if (!this._editorInitialized) {
+        this._editorInitialized = true;
+        return;
+      }
       this.pendingChanges = true;
     })
   );
