@@ -16,9 +16,9 @@
 
 import {ChangeDetectionStrategy, Component, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
-import {TaskService} from '../services/task.service';
+import {TaskService} from '../../services/task.service';
 import moment from 'moment';
-import {Task, TaskPageParams} from '../models';
+import {Task, TaskPageParams} from '../../models';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
 import {ConfigService, SortState, TaskListTab} from '@valtimo/config';
@@ -29,10 +29,12 @@ import {
   CAN_VIEW_CASE_PERMISSION,
   CAN_VIEW_TASK_PERMISSION,
   TASK_DETAIL_PERMISSION_RESOURCE,
-} from '../task-permissions';
-import {TaskListService} from '../services';
+} from '../../task-permissions';
+import {TaskListService} from '../../services';
 import {isEqual} from 'lodash';
 import {ColumnConfig, ViewType} from '@valtimo/components';
+import {ListItem} from 'carbon-components-angular';
+import {TranslateService} from '@ngx-translate/core';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -42,6 +44,7 @@ moment.locale(localStorage.getItem('langKey') || '');
   styleUrls: ['./task-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [TaskListService],
 })
 export class TaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetail: TaskDetailModalComponent;
@@ -116,6 +119,8 @@ export class TaskListComponent {
 
   public readonly cachedTasks$ = new BehaviorSubject<Task[] | null>(null);
 
+  private readonly _ALL_CASES_ID = 'ALL_CASES';
+
   public readonly tasks$: Observable<Task[]> = combineLatest([
     this.selectedTaskType$,
     this._pagination$,
@@ -137,7 +142,8 @@ export class TaskListComponent {
         params: {
           selectedTaskType,
           params,
-          caseDefinitionName,
+          ...(caseDefinitionName &&
+            caseDefinitionName !== this._ALL_CASES_ID && {caseDefinitionName}),
         },
         enableLoadingAnimation,
       };
@@ -199,13 +205,36 @@ export class TaskListComponent {
     })
   );
 
+  public readonly loadingCaseListItems$ = new BehaviorSubject<boolean>(true);
+  private readonly _selectedCaseDefinitionId$ = new BehaviorSubject<string>(this._ALL_CASES_ID);
+  public readonly caseListItems$: Observable<ListItem[]> = combineLatest([
+    this.documentService.getAllDefinitions(),
+    this._selectedCaseDefinitionId$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([documentDefinitionRes, selectedCaseDefinitionId]) => [
+      {
+        content: this.translateService.instant('task-list.allCases'),
+        id: this._ALL_CASES_ID,
+        selected: selectedCaseDefinitionId === this._ALL_CASES_ID,
+      },
+      ...documentDefinitionRes.content.map(documentDefinition => ({
+        id: documentDefinition.id.name,
+        content: documentDefinition?.schema?.title,
+        selected: documentDefinition.id.name === selectedCaseDefinitionId,
+      })),
+    ]),
+    tap(() => this.loadingCaseListItems$.next(false))
+  );
+
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
     private readonly permissionService: PermissionService,
     private readonly router: Router,
     private readonly taskService: TaskService,
-    private readonly taskListService: TaskListService
+    private readonly taskListService: TaskListService,
+    private readonly translateService: TranslateService
   ) {
     this.setVisibleTabs();
   }
@@ -294,6 +323,10 @@ export class TaskListComponent {
     this._selectedTaskType$.pipe(take(1)).subscribe(selectedTaskType => {
       this.updateSortState(selectedTaskType, sortState);
     });
+  }
+
+  public setCaseDefinition(definition: {item: {id: string}}): void {
+    if (definition.item.id) this.taskListService.setCaseDefinitionName(definition.item.id);
   }
 
   private getSortString(sort: SortState): string {

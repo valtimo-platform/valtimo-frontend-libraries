@@ -179,3 +179,20 @@
     </div>
   </valtimo-carbon-list>
 </ng-template>
+
+<ng-container renderInPageHeader [fullWidth]="true">
+  <ng-template>
+    <cds-dropdown
+      class="case-definition-selection"
+      *ngIf="{
+        loadingCaseListItems: loadingCaseListItems$ | async,
+        caseListItems: caseListItems$ | async
+      } as obs"
+      [disabled]="obs.loadingCaseListItems || obs.caseListItems.length === 1"
+      [skeleton]="obs.loadingCaseListItems"
+      (selected)="setCaseDefinition($event)"
+    >
+      <cds-dropdown-list
+        [items]="obs.caseListItems"
+      ></cds-dropdown-list></cds-dropdown></ng-template
+></ng-container>

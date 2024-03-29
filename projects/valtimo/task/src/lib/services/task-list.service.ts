@@ -17,7 +17,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class TaskListService {
   private readonly _caseDefinitionName$ = new BehaviorSubject<string | null>(null);
 
