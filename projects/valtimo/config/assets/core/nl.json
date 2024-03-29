@@ -375,7 +375,13 @@
     },
     "interface": {
       "title": "Interface",
-      "collapsibleMenu": "Navigatiebalk altijd inklapbaar"
+      "collapsibleMenu": "Navigatiebalk altijd inklapbaar",
+      "themePreference": "Thema",
+      "themes": {
+        "light": "Licht",
+        "dark": "Donker",
+        "system": "Systeem"
+      }
     }
   },
   "decisions": {
@@ -687,8 +693,8 @@
     "documentenApi": {
       "title": "Documenten API",
       "documentenApiVersion": "De Documenten API-plugin gebruikt versie",
-      "noVersionWarningTitle": "Geen Documenten API-plugin gedetecteerd",
-      "noVersionWarningMessage": "Configureer het uploadproces om het Documenten API-plugin te koppelen",
+      "noVersionWarningTitle": "Geen Documenten API-plugin versie gedetecteerd",
+      "noVersionWarningMessage": "Configureer de Documenten API-plugin versie en configureer het uploadproces",
       "multipleVersionsWarningTitle": "Meerdere Documenten API-plugins gedetecteerd",
       "multipleVersionsWarningMessage": "Het uploadproces is gekoppelt aan meerdere Documenten API's met verschillende versies"
     },
@@ -1418,5 +1424,9 @@
       "description": "Klik op <strong>Nieuwe form flow toevoegen</strong> om te beginnen met het ontwerpen van je form flow",
       "title": "Geen formulierstromen toegevoegd"
     }
+  },
+  "taskManagement": {
+    "columns": "Kolommen",
+    "caseName": "Dossiernaam"
   }
 }

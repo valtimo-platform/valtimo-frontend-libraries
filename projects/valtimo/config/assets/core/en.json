@@ -376,7 +376,13 @@
     },
     "interface": {
       "title": "Interface",
-      "collapsibleMenu": "Navigation bar always collapsible"
+      "collapsibleMenu": "Navigation bar always collapsible",
+      "themePreference": "Theme",
+      "themes": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
     }
   },
   "decisions": {
@@ -688,8 +694,8 @@
     "documentenApi": {
       "title": "Documenten API",
       "documentenApiVersion": "The Documenten API plugin is using version",
-      "noVersionWarningTitle": "No Documenten API plugin detected",
-      "noVersionWarningMessage": "Please configure the upload process to link the Documenten API plugin",
+      "noVersionWarningTitle": "No Documents API plugin version detected",
+      "noVersionWarningMessage": "Please configure the Documents API plugin version and configure the upload process",
       "multipleVersionsWarningTitle": "Multiple Documenten API plugins detected",
       "multipleVersionsWarningMessage": "The upload process links to multiple Documenten APIs with different versions"
     },
@@ -1416,5 +1422,9 @@
       "description": "Click <strong>Add new form flow</strong> to start designing your form flow",
       "title": "No form flows added"
     }
+  },
+  "taskManagement": {
+    "columns": "Columns",
+    "caseName": "Case name"
   }
 }

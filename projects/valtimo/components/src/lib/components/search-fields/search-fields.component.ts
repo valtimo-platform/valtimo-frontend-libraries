@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,6 @@ export class SearchFieldsComponent implements OnInit, OnDestroy {
   @Input() public setValuesSubject$!: Observable<SearchFieldValues>;
   @Input() public defaultValues!: SearchFieldValues;
   @Input() public inputDisabled = false;
-  @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.WHITE;
   @Input() public externalSearchField = false;
 
   @Output() public doSearch: EventEmitter<SearchFieldValues> =
