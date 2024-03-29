@@ -20,7 +20,7 @@ import {TaskService} from '../services/task.service';
 import moment from 'moment';
 import {Task, TaskPageParams} from '../models';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
-import {BehaviorSubject, combineLatest, Observable, of, startWith, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
 import {ConfigService, SortState, TaskListTab} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {distinctUntilChanged, map, take} from 'rxjs/operators';
@@ -88,6 +88,9 @@ export class TaskListComponent {
       }
     })
   );
+  private get _selectedTaskType(): TaskListTab {
+    return this._selectedTaskType$.getValue();
+  }
 
   private readonly _pagination$ = new BehaviorSubject<{[key in TaskListTab]: TaskPageParams}>({
     [TaskListTab.ALL]: this.getDefaultPagination(),
@@ -109,16 +112,18 @@ export class TaskListComponent {
     [TaskListTab.OPEN]: this.getDefaultSortState(),
   });
 
-  private _enableLoadingAnimation: boolean = true;
+  private _enableLoadingAnimation$ = new BehaviorSubject<boolean>(true);
 
   public readonly cachedTasks$ = new BehaviorSubject<Task[] | null>(null);
+
   public readonly tasks$: Observable<Task[]> = combineLatest([
     this.selectedTaskType$,
     this._pagination$,
     this._sortState$,
     this.taskListService.caseDefinitionName$,
+    this._enableLoadingAnimation$,
   ]).pipe(
-    map(([selectedTaskType, pagination, sortState, caseDefinitionName]) => {
+    map(([selectedTaskType, pagination, sortState, caseDefinitionName, enableLoadingAnimation]) => {
       const paginationParam = {...pagination[selectedTaskType]};
       const sortParams = sortState[selectedTaskType];
       const params = {
@@ -129,21 +134,27 @@ export class TaskListComponent {
       delete params.collectionSize;
 
       return {
-        selectedTaskType,
-        params,
-        caseDefinitionName,
+        params: {
+          selectedTaskType,
+          params,
+          caseDefinitionName,
+        },
+        enableLoadingAnimation,
       };
     }),
-    distinctUntilChanged((previous, current) => isEqual(previous, current)),
-    tap(() => {
-      if (this._enableLoadingAnimation) this.loadingTasks$.next(true);
+    distinctUntilChanged((previous, current) => isEqual(previous.params, current.params)),
+    tap(({enableLoadingAnimation}) => {
+      if (enableLoadingAnimation) this.loadingTasks$.next(true);
     }),
-    switchMap(({selectedTaskType, params, caseDefinitionName}) =>
-      this.taskService.queryTasksPageV3(selectedTaskType, params, caseDefinitionName)
+    switchMap(({params}) =>
+      this.taskService.queryTasksPageV3(
+        params.selectedTaskType,
+        params.params,
+        params.caseDefinitionName
+      )
     ),
     switchMap(tasksResult =>
       combineLatest([
-        this._selectedTaskType$,
         of(tasksResult),
         combineLatest(
           tasksResult?.content.map(task =>
@@ -152,7 +163,7 @@ export class TaskListComponent {
               identifier: task.id,
             })
           )
-        ).pipe(startWith(null)),
+        ),
         combineLatest(
           tasksResult?.content.map(task =>
             this.permissionService.requestPermission(CAN_VIEW_CASE_PERMISSION, {
@@ -160,11 +171,11 @@ export class TaskListComponent {
               identifier: task.businessKey,
             })
           )
-        ).pipe(startWith(null)),
+        ),
       ])
     ),
-    map(([selectedTaskType, taskResult, canViewTaskPermissions, canViewCasePermissions]) => {
-      this.updateTaskPagination(selectedTaskType, {
+    map(([taskResult, canViewTaskPermissions, canViewCasePermissions]) => {
+      this.updateTaskPagination(this._selectedTaskType, {
         collectionSize: Number(taskResult.totalElements),
       });
 
@@ -345,10 +356,10 @@ export class TaskListComponent {
   }
 
   private disableLoadingAnimation(): void {
-    this._enableLoadingAnimation = false;
+    this._enableLoadingAnimation$.next(false);
   }
 
   private enableLoadingAnimation(): void {
-    this._enableLoadingAnimation = true;
+    this._enableLoadingAnimation$.next(true);
   }
 }
