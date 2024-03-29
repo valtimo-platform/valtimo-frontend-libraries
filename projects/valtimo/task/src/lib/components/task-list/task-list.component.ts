@@ -113,9 +113,9 @@ export class TaskListComponent {
     );
   }
   private readonly _sortState$ = new BehaviorSubject<{[key in TaskListTab]: SortState | null}>({
-    [TaskListTab.ALL]: this.getDefaultSortState(),
-    [TaskListTab.MINE]: this.getDefaultSortState(),
-    [TaskListTab.OPEN]: this.getDefaultSortState(),
+    [TaskListTab.ALL]: this.defaultSortState,
+    [TaskListTab.MINE]: this.defaultSortState,
+    [TaskListTab.OPEN]: this.defaultSortState,
   });
 
   private _enableLoadingAnimation$ = new BehaviorSubject<boolean>(true);
@@ -132,10 +132,9 @@ export class TaskListComponent {
     this._enableLoadingAnimation$,
   ]).pipe(
     map(([selectedTaskType, pagination, sortState, caseDefinitionName, enableLoadingAnimation]) => {
-      const paginationParam = {...pagination[selectedTaskType]};
       const sortParams = sortState[selectedTaskType];
       const params = {
-        ...paginationParam,
+        ...pagination[selectedTaskType],
         ...(sortParams && {sort: this.getSortString(sortParams)}),
       };
 
@@ -322,11 +321,7 @@ export class TaskListComponent {
   }
 
   public rowOpenTaskClick(task): void | boolean {
-    if (!task.endTime && !task.locked) {
-      this._taskDetail.openTaskDetails(task);
-    } else {
-      return false;
-    }
+    return !task.endTime && !task.locked ? this._taskDetail.openTaskDetails(task) : false;
   }
 
   public sortChanged(sortState: SortState): void {
@@ -343,7 +338,7 @@ export class TaskListComponent {
     return `${sort.state.name},${sort.state.direction}`;
   }
 
-  private getDefaultSortState(): SortState | null {
+  private get defaultSortState(): SortState | null {
     return this.taskService.getConfigCustomTaskList()?.defaultSortedColumn || null;
   }
 
