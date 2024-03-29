@@ -79,7 +79,7 @@ export class CarbonListComponent<T> implements OnInit, OnDestroy {
   @HostBinding('attr.data-carbon-theme') theme = 'g10';
   @ViewChild('actionsMenu') actionsMenu: TemplateRef<OverflowMenu>;
   @ViewChild('actionItem') actionItem: TemplateRef<any>;
-  @ViewChild('booleanTemplate') booleanTemplate: TemplateRef<any>;
+  @ViewChild('booleanTemplate', {static: true}) booleanTemplate: TemplateRef<any>;
 
   private _completeDataSource: TableItem[][];
   private _items: T[];
