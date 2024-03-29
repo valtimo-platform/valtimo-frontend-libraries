@@ -58,7 +58,6 @@ export class FormManagementEditComponent
 
   public activeTab = EDIT_TABS.BUILDER;
 
-  private _editorInitialized = false;
   private readonly _formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
   public readonly formDefinition$ = this._formDefinition$.pipe(
     filter((definition: FormDefinition | null) => !!definition),
@@ -83,6 +82,7 @@ export class FormManagementEditComponent
   private _activeOuput: string;
   private _alertSub: Subscription = Subscription.EMPTY;
   private _changeActive = false;
+  private _editorInitialized = false;
 
   constructor(
     private readonly alertService: AlertService,
@@ -105,46 +105,6 @@ export class FormManagementEditComponent
   public ngOnDestroy(): void {
     this._alertSub.unsubscribe();
     this.pageTitleService.enableReset();
-  }
-
-  private loadFormDefinition(): void {
-    this.route.paramMap
-      .pipe(
-        take(1),
-        switchMap((paramMap: ParamMap) =>
-          this.formManagementService.getFormDefinition(paramMap.get('id') ?? '')
-        )
-      )
-      .subscribe((definition: FormDefinition) => {
-        this._formDefinition$.next(definition);
-        this.pageTitleService.setCustomPageTitle(definition.name);
-        this.jsonFormDefinition$.next({
-          value: JSON.stringify(definition.formDefinition),
-          language: 'json',
-        });
-      });
-  }
-
-  public modifyFormDefinition(definition: FormDefinition): void {
-    this.pendingChanges = false;
-
-    const form = JSON.stringify(
-      this.modifiedFormDefinition !== null ? this.modifiedFormDefinition : definition.formDefinition
-    );
-    const request: ModifyFormDefinitionRequest = {
-      id: definition.id,
-      name: definition.name,
-      formDefinition: form,
-    };
-    this.formManagementService.modifyFormDefinition(request).subscribe({
-      next: () => {
-        this.router.navigate(['/form-management']);
-        this.alertService.success('Form deployed');
-      },
-      error: () => {
-        this.alertService.error('Error deploying Form');
-      },
-    });
   }
 
   public formBuilderChanged(event, definition: EditorModel): void {
@@ -210,6 +170,28 @@ export class FormManagementEditComponent
     link.remove();
   }
 
+  public modifyFormDefinition(definition: FormDefinition): void {
+    this.pendingChanges = false;
+
+    const form = JSON.stringify(
+      this.modifiedFormDefinition !== null ? this.modifiedFormDefinition : definition.formDefinition
+    );
+    const request: ModifyFormDefinitionRequest = {
+      id: definition.id,
+      name: definition.name,
+      formDefinition: form,
+    };
+    this.formManagementService.modifyFormDefinition(request).subscribe({
+      next: () => {
+        this.router.navigate(['/form-management']);
+        this.alertService.success('Form deployed');
+      },
+      error: () => {
+        this.alertService.error('Error deploying Form');
+      },
+    });
+  }
+
   public onSelectedTab(tab: EDIT_TABS): void {
     this.activeTab = tab;
 
@@ -220,6 +202,17 @@ export class FormManagementEditComponent
     setTimeout(() => {
       this.shellService.onMainContentResize();
     });
+  }
+
+  public onOutputChange(event: {data: object | undefined}): void {
+    if (!event.data) {
+      return;
+    } else if (JSON.stringify(event.data) === this._activeOuput) {
+      return;
+    }
+
+    this._activeOuput = JSON.stringify(event.data);
+    this.jsonOutput$.next({value: this._activeOuput, language: 'json'});
   }
 
   public onValueChangeEvent(value: string, definition: FormDefinition, disabled: boolean): void {
@@ -279,17 +272,6 @@ export class FormManagementEditComponent
     this.reloading$.next(false);
   }
 
-  public onOutputChange(event: {data: object | undefined}): void {
-    if (!event.data) {
-      return;
-    } else if (JSON.stringify(event.data) === this._activeOuput) {
-      return;
-    }
-
-    this._activeOuput = JSON.stringify(event.data);
-    this.jsonOutput$.next({value: this._activeOuput, language: 'json'});
-  }
-
   protected onConfirmRedirect(): void {
     const cancelButton: HTMLElement | null = document.querySelector('button[ref="cancelButton"]');
     if (!cancelButton) {
@@ -305,5 +287,23 @@ export class FormManagementEditComponent
         this.showUploadModal();
       }
     });
+  }
+
+  private loadFormDefinition(): void {
+    this.route.paramMap
+      .pipe(
+        take(1),
+        switchMap((paramMap: ParamMap) =>
+          this.formManagementService.getFormDefinition(paramMap.get('id') ?? '')
+        )
+      )
+      .subscribe((definition: FormDefinition) => {
+        this._formDefinition$.next(definition);
+        this.pageTitleService.setCustomPageTitle(definition.name);
+        this.jsonFormDefinition$.next({
+          value: JSON.stringify(definition.formDefinition),
+          language: 'json',
+        });
+      });
   }
 }
