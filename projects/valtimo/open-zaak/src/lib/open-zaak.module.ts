@@ -23,6 +23,9 @@ import {OpenZaakTypeLinkExtensionComponent} from './open-zaak-extension/open-zaa
 import {EmailExtensionComponent} from './email-extension/email-extension.component';
 import {NotificationModule} from 'carbon-components-angular';
 
+/**
+ * @deprecated Used functionality already moved to new modules
+ */
 @NgModule({
   declarations: [OpenZaakTypeLinkExtensionComponent, EmailExtensionComponent],
   imports: [

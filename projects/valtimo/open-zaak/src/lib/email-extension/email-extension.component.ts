@@ -23,6 +23,9 @@ import {DocumentService} from '@valtimo/document';
 import {AlertService} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 
+/**
+ * @deprecated Used functionality already moved to new modules
+ */
 @Component({
   selector: 'valtimo-email-extension',
   templateUrl: './email-extension.component.html',

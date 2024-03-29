@@ -37,12 +37,8 @@
       "@valtimo/security/*": ["dist/valtimo/security/*"],
       "@valtimo/dossier": ["dist/valtimo/dossier"],
       "@valtimo/dossier/*": ["dist/valtimo/dossier/*"],
-      "@valtimo/choicefield": ["dist/valtimo/choicefield"],
-      "@valtimo/choicefield/*": ["dist/valtimo/choicefield/*"],
       "@valtimo/process": ["dist/valtimo/process"],
       "@valtimo/process/*": ["dist/valtimo/process/*"],
-      "@valtimo/view-configurator": ["dist/valtimo/view-configurator"],
-      "@valtimo/view-configurator/*": ["dist/valtimo/view-configurator/*"],
       "@valtimo/dashboard": ["dist/valtimo/dashboard"],
       "@valtimo/dashboard/*": ["dist/valtimo/dashboard/*"],
       "@valtimo/dashboard-management": ["dist/valtimo/dashboard-management"],
@@ -166,22 +162,10 @@
       "path": "./projects/valtimo/dossier/tsconfig.spec.json"
     },
     {
-      "path": "./projects/valtimo/choicefield/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/valtimo/choicefield/tsconfig.spec.json"
-    },
-    {
       "path": "./projects/valtimo/process/tsconfig.lib.json"
     },
     {
       "path": "./projects/valtimo/process/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/valtimo/view-configurator/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/valtimo/view-configurator/tsconfig.spec.json"
     },
     {
       "path": "./projects/valtimo/dashboard/tsconfig.lib.json"

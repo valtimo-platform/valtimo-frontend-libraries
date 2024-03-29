@@ -36,6 +36,9 @@ import {
   PluginManagementService,
 } from '@valtimo/plugin';
 
+/**
+ * @deprecated Used functionality already moved to new modules
+ */
 @Component({
   selector: 'valtimo-open-zaak-type-link-extension',
   templateUrl: './open-zaak-type-link-extension.component.html',
