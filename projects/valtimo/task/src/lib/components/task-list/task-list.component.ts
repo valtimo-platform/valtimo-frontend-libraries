@@ -49,16 +49,18 @@ moment.locale(localStorage.getItem('langKey') || '');
 export class TaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetail: TaskDetailModalComponent;
 
-  private readonly _DEFAULT_TASK_LIST_FIELDS = [
+  private readonly _DEFAULT_TASK_LIST_FIELDS: ColumnConfig[] = [
     {
       key: 'created',
       label: `task-list.fieldLabels.created`,
       viewType: ViewType.TEXT,
+      sortable: true,
     },
     {
       key: 'name',
       label: `task-list.fieldLabels.name`,
       viewType: ViewType.TEXT,
+      sortable: true,
     },
     {
       key: 'valtimoAssignee.fullName',
@@ -69,6 +71,7 @@ export class TaskListComponent {
       key: 'due',
       label: `task-list.fieldLabels.due`,
       viewType: ViewType.TEXT,
+      sortable: true,
     },
     {
       key: 'context',
