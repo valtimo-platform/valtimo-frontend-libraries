@@ -55,12 +55,14 @@ export class TaskService extends BaseApiService {
     pageParams: TaskPageParams,
     caseDefinitionName?: string
   ): Observable<Page<Task>> {
-    const httpParams = new HttpParams()
+    let httpParams = new HttpParams()
       .set('filter', assigneeFilter.toUpperCase())
       .set('page', pageParams.page)
       .set('size', pageParams.size);
 
-    if (pageParams.sort) httpParams.append('sort', pageParams.sort);
+    if (pageParams.sort) {
+      httpParams = httpParams.append('sort', pageParams.sort);
+    }
 
     return this.httpClient.post<Page<Task>>(
       this.getApiUrl('/v3/task'),
