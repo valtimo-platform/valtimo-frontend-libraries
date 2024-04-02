@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {
   AfterViewInit,
   Component,
@@ -24,11 +23,11 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import {EditorService} from './editor.service';
-import {first, Subscription} from 'rxjs';
 import {editor} from 'monaco-editor';
+import {first, Subscription} from 'rxjs';
 import {EditorModel} from '../../models';
 import {ShellService} from '../../services/shell.service';
+import {EditorService} from './editor.service';
 
 declare const monaco: any;
 
@@ -141,7 +140,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       this._formatting = true;
       this._editor
         .getAction('editor.action.formatDocument')
-        .run()
+        ?.run()
         .finally(() => {
           this._formatting = false;
           this.setDisabled(this._disabled);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -136,7 +136,7 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit(): void {
     FormioUtils.Evaluator.templateSettings.escape = /\{{2,3}([\s\S]+?)\}{2,3}/g;
-    FormioUtils.Evaluator.templateSettings.interpolate = /\[\[([\s\S]+?)\]\]/g;
+    FormioUtils.Evaluator.templateSettings.interpolate = /\{(?!%)([\s\S]+?)\}/g;
 
     this.openRouteSubscription();
     this.errors$.next([]);

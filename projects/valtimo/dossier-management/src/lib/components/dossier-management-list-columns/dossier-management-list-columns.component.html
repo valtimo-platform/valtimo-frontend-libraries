@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
+  ~ Copyright 2015-2024 Ritense BV, the Netherlands.
   ~
   ~ Licensed under EUPL, Version 1.2 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -44,22 +44,22 @@
     (rowClicked)="columnRowClicked($event)"
   >
     <ng-container
-            carbonToolbarContent
-            *ngTemplateOutlet="buttons; context: {obs: obs}"
+      carbonToolbarContent
+      *ngTemplateOutlet="buttons; context: {obs: obs}"
     ></ng-container>
 
     <valtimo-no-results
-            *ngIf="!obs.hasEnvironmentConfig"
-            [title]="'listColumn.noConfigWarningTitle' | translate"
-            [description]="'listColumn.noConfigWarning' | translate"
-            illustration="valtimo-layout/img/emptystate-empty.svg"
+      *ngIf="!obs.hasEnvironmentConfig"
+      [title]="'listColumn.noConfigWarningTitle' | translate"
+      [description]="'listColumn.noConfigWarning' | translate"
+      illustration="valtimo-layout/img/emptystate-empty.svg"
     ></valtimo-no-results>
 
     <valtimo-no-results
-            *ngIf="obs.hasEnvironmentConfig"
-            [title]="'listColumn.hasEnvConfigWarningTitle' | translate"
-            [description]="'listColumn.hasEnvConfigWarning' | translate"
-            illustration="valtimo-layout/img/emptystate-error.svg"
+      *ngIf="obs.hasEnvironmentConfig"
+      [title]="'listColumn.hasEnvConfigWarningTitle' | translate"
+      [description]="'listColumn.hasEnvConfigWarning' | translate"
+      illustration="valtimo-layout/img/emptystate-error.svg"
     ></valtimo-no-results>
   </valtimo-carbon-list>
 </ng-template>

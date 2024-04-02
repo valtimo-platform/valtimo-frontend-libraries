@@ -376,6 +376,13 @@
     "interface": {
       "title": "Interface",
       "collapsibleMenu": "Navigatiebalk altijd inklapbaar",
+      "themePreference": "Thema",
+      "themes": {
+        "light": "Licht",
+        "dark": "Donker",
+        "system": "Systeem"
+      },
+      "collapsibleMenu": "Navigatiebalk altijd inklapbaar",
       "compactMode": "Compacte modus",
       "showUserName": "Toon naam van gebruiker"
     }
@@ -411,7 +418,12 @@
     "delete": "Verwijderen",
     "deploy": "Deploy",
     "duplicate": "Dupliceren",
-    "readOnly": "Alleen-lezen"
+    "readOnly": "Alleen-lezen",
+    "tabs": {
+      "formBuilder": "Formulier editor",
+      "jsonEditor": "JSON editor",
+      "output": "Uitvoer"
+    }
   },
   "dossierManagement": {
     "version": "Versie: ",
@@ -609,7 +621,8 @@
     },
     "goToCase": "Ga naar dossier",
     "caseLocked": "Je hebt geen toegang tot dit dossier",
-    "rowLocked": "Je hebt geen toegang tot deze taak"
+    "rowLocked": "Je hebt geen toegang tot deze taak",
+    "allCases": "Alle dossiers"
   },
   "Task": "Taak",
   "Tasks": "Taken",
@@ -689,8 +702,8 @@
     "documentenApi": {
       "title": "Documenten API",
       "documentenApiVersion": "De Documenten API-plugin gebruikt versie",
-      "noVersionWarningTitle": "Geen Documenten API-plugin gedetecteerd",
-      "noVersionWarningMessage": "Configureer het uploadproces om het Documenten API-plugin te koppelen",
+      "noVersionWarningTitle": "Geen Documenten API-plugin versie gedetecteerd",
+      "noVersionWarningMessage": "Configureer de Documenten API-plugin versie en configureer het uploadproces",
       "multipleVersionsWarningTitle": "Meerdere Documenten API-plugins gedetecteerd",
       "multipleVersionsWarningMessage": "Het uploadproces is gekoppelt aan meerdere Documenten API's met verschillende versies"
     },
@@ -1403,5 +1416,9 @@
       "description": "Klik op <strong>Nieuwe form flow toevoegen</strong> om te beginnen met het ontwerpen van je form flow",
       "title": "Geen formulierstromen toegevoegd"
     }
+  },
+  "taskManagement": {
+    "columns": "Kolommen",
+    "caseName": "Dossiernaam"
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-export class TaskList {
-  public tasks = [];
-  fields = [];
-  pagination = {
-    collectionSize: 0,
-    page: 1,
-    size: 10,
-  };
-  page = 0;
+interface TaskPageParams {
+  page: number;
+  size: number;
+  collectionSize?: number;
+  sort?: string;
 }
+
+export {TaskPageParams};
