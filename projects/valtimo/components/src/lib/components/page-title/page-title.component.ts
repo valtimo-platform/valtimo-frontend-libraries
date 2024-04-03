@@ -13,7 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostBinding,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation,
+} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
@@ -30,7 +39,7 @@ import {
   tap,
 } from 'rxjs';
 import {PageTitleService} from './page-title.service';
-import {PageHeaderService} from '../../services';
+import {PageHeaderService, PageSubtitleService} from '../../services';
 
 @Component({
   selector: 'valtimo-page-title',
@@ -38,8 +47,11 @@ import {PageHeaderService} from '../../services';
   styleUrls: ['./page-title.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class PageTitleComponent implements OnInit, OnDestroy {
+export class PageTitleComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class.valtimo-page-title--compact') isCompact!: boolean;
+
+  @ViewChild('subtitleVcr', {static: true, read: ViewContainerRef})
+  private readonly _subtitleVcr!: ViewContainerRef;
 
   public hidePageTitle = false;
   public compactMode!: boolean;
@@ -70,13 +82,18 @@ export class PageTitleComponent implements OnInit, OnDestroy {
     private readonly logger: NGXLogger,
     private readonly configService: ConfigService,
     private readonly pageTitleService: PageTitleService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly pageSubtitleService: PageSubtitleService
   ) {}
 
   public ngOnInit(): void {
     this.openRouterTranslateSubscription();
     this.openHidePageTitleSubscription();
     this.openCompactModeSubscription();
+  }
+
+  public ngAfterViewInit(): void {
+    this.pageSubtitleService.setTitleViewContainerRef(this._subtitleVcr);
   }
 
   public ngOnDestroy() {

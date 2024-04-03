@@ -14,8 +14,13 @@
   ~ limitations under the License.
   -->
 
-<div class="page-actions-container">
-  <ng-container *ngTemplateOutlet="subtitle"></ng-container>
+<div
+  class="page-actions-container"
+  [ngClass]="{
+    '--compact': compactMode$ | async
+  }"
+>
+  <ng-container #subtitleVcr></ng-container>
 
   <div
     #pageActions
@@ -29,33 +34,3 @@
     <ng-container #pageActionsVcr></ng-container>
   </div>
 </div>
-
-<ng-template #subtitle>
-  <ng-container
-    *ngIf="{
-      hasCustomPageSubtitle: hasCustomPageSubtitle$ | async,
-      customPageSubtitleSet: customPageSubtitleSet$ | async,
-      customPageSubtitle: customPageSubtitle$ | async,
-      compactMode: compactMode$ | async,
-      hasPageActions: hasPageActions$ | async,
-      pageActionsFullWidth: pageActionsFullWidth$ | async
-    } as obs"
-  >
-    <div
-      *ngIf="obs.hasCustomPageSubtitle && !obs.customPageSubtitleSet"
-      class="subtitle-skeleton-container"
-      [ngClass]="{'--compact': obs.compactMode}"
-    >
-      <cds-skeleton-placeholder></cds-skeleton-placeholder>
-    </div>
-
-    <span
-      *ngIf="obs.hasCustomPageSubtitle && obs.customPageSubtitleSet"
-      [innerHtml]="obs.customPageSubtitle"
-      [title]="obs.customPageSubtitle"
-      class="page-subtitle"
-      [ngClass]="{'--compact': obs.compactMode}"
-    >
-    </span>
-  </ng-container>
-</ng-template>

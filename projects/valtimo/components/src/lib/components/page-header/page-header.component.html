@@ -19,10 +19,12 @@
   [ngClass]="{
     '--hidden': (showPageHeader$ | async) === false,
     '--compact': compactMode$ | async,
-    '--no-content': (pageActionsHasContent$ | async) === false
+    '--no-content': (compactMode$ | async) && (pageActionsHasContent$ | async) === false
   }"
 >
   <ng-container #contentVcr></ng-container>
+
+  <valtimo-page-subtitle></valtimo-page-subtitle>
 
   <valtimo-page-actions></valtimo-page-actions>
 </div>

@@ -29,7 +29,7 @@ import {SkeletonModule} from 'carbon-components-angular';
 import {map, Observable, startWith, switchMap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageTitleService} from '../page-title/page-title.service';
-import {PageHeaderService} from '../../services';
+import {PageHeaderService, PageSubtitleService} from '../../services';
 
 @Component({
   selector: 'valtimo-page-actions',
@@ -44,6 +44,8 @@ export class PageActionsComponent implements AfterViewInit, OnDestroy {
   private readonly _pageActionsVcr!: ViewContainerRef;
   @ViewChild('pageActions')
   private readonly _pageActions!: ElementRef<HTMLDivElement>;
+  @ViewChild('subtitleVcr', {static: true, read: ViewContainerRef})
+  private readonly _subtitleVcr!: ViewContainerRef;
   @HostBinding('class') class = 'valtimo-page-actions';
 
   public readonly hasCustomPageSubtitle$: Observable<boolean> = this.router.events.pipe(
@@ -53,8 +55,6 @@ export class PageActionsComponent implements AfterViewInit, OnDestroy {
   );
   public readonly hasPageActions$ = this.pageTitleService.hasPageActions$;
   public readonly pageActionsFullWidth$ = this.pageTitleService.pageActionsFullWidth$;
-  public readonly customPageSubtitleSet$ = this.pageTitleService.customPageSubtitleSet$;
-  public readonly customPageSubtitle$ = this.pageTitleService.customPageSubtitle$;
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   private _pageActionsObserver!: MutationObserver;
@@ -63,11 +63,13 @@ export class PageActionsComponent implements AfterViewInit, OnDestroy {
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly pageTitleService: PageTitleService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly pageSubtitleService: PageSubtitleService
   ) {}
 
   public ngAfterViewInit(): void {
     this.pageTitleService.setPageActionsViewContainerRef(this._pageActionsVcr);
+    this.pageSubtitleService.setActionsViewContainerRef(this._subtitleVcr);
     this.openPageActionsMutationObserver();
     console.log(this._pageActionsVcr);
   }

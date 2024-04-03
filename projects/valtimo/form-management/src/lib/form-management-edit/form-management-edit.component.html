@@ -17,7 +17,8 @@
   *ngIf="{
     formDefinition: formDefinition$ | async,
     jsonFormDefinition: jsonFormDefinition$ | async,
-    jsonOutput: jsonOutput$ | async
+    jsonOutput: jsonOutput$ | async,
+    compactMode: compactMode$ | async
   } as obs"
 >
   @if (obs.formDefinition) {
@@ -54,6 +55,7 @@
           <button
             cdsButton="primary"
             [disabled]="obs.formDefinition.readOnly || !validJsonChange"
+            [size]="obs.compactMode ? 'sm' : 'md'"
             (click)="modifyFormDefinition(obs.formDefinition)"
           >
             {{ 'interface.save' | translate }}

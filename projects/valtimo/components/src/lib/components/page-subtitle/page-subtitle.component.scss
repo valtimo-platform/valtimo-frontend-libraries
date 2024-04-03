@@ -14,32 +14,7 @@
  * limitations under the License.
  */
 
-.valtimo-page-actions {
-  width: 100%;
-}
-
-.page-actions-container {
-  display: flex;
-
-  &.--compact {
-    align-items: flex-start;
-  }
-
-  .page-actions {
-    &--visible {
-      margin-left: auto;
-      padding-left: 32px;
-    }
-
-    &--compact {
-      padding-left: 0;
-    }
-
-    &--full-width {
-      width: 100%;
-    }
-  }
-
+.subtitle-container {
   .subtitle-skeleton-container {
     .cds--skeleton__placeholder {
       height: 18px;

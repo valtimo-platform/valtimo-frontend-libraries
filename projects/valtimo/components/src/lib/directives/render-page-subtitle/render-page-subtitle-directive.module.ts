@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-.breadcrumbs-container {
-  margin-bottom: 1rem;
-  display: flex;
-  width: max-content;
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RenderPageSubtitleDirective} from './render-page-subtitle.directive';
 
-  &.--compact {
-    margin-bottom: 0;
-  }
-}
-
-.valtimo-breadcrumb-navigation--compact {
-  flex-shrink: 0;
-}
+@NgModule({
+  declarations: [RenderPageSubtitleDirective],
+  imports: [CommonModule],
+  exports: [RenderPageSubtitleDirective],
+})
+export class RenderPageSubtitleDirectiveModule {}
