@@ -29,7 +29,8 @@
     margin-bottom: 16px;
   }
 
-  &.--no-content {
+  &.--no-content,
+  &.--no-margin {
     margin-bottom: 0;
   }
 }

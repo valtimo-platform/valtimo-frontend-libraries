@@ -28,8 +28,7 @@ import {CommonModule} from '@angular/common';
 import {SkeletonModule} from 'carbon-components-angular';
 import {map, Observable, startWith, switchMap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PageTitleService} from '../page-title/page-title.service';
-import {PageHeaderService, PageSubtitleService} from '../../services';
+import {PageHeaderService, PageSubtitleService, PageTitleService} from '../../services';
 
 @Component({
   selector: 'valtimo-page-actions',

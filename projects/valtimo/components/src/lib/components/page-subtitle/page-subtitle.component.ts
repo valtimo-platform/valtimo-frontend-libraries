@@ -19,8 +19,7 @@ import {CommonModule} from '@angular/common';
 import {SkeletonModule} from 'carbon-components-angular';
 import {map, Observable, startWith, switchMap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PageTitleService} from '../page-title/page-title.service';
-import {PageHeaderService} from '../../services';
+import {PageHeaderService, PageTitleService} from '../../services';
 import {RenderPageSubtitleDirectiveModule} from '../../directives/render-page-subtitle/render-page-subtitle-directive.module';
 import {RenderPageHeaderDirectiveModule} from '../../directives/render-page-header/render-page-header-directive.module';
 

@@ -18,8 +18,7 @@ import {Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation} from '@ang
 import {combineLatest, map, Observable, Subscription} from 'rxjs';
 import {BreadcrumbItem} from 'carbon-components-angular';
 import {BreadcrumbService} from './breadcrumb.service';
-import {PageHeaderService} from '../../services';
-import {PageTitleService} from '../page-title/page-title.service';
+import {PageHeaderService, PageTitleService} from '../../services';
 
 @Component({
   selector: 'valtimo-breadcrumb-navigation',

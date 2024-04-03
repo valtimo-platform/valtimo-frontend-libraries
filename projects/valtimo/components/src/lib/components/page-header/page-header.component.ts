@@ -23,7 +23,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {UserInterfaceService} from '../../services/user-interface.service';
-import {PageHeaderService} from '../../services';
+import {PageHeaderService, PageTitleService} from '../../services';
 
 @Component({
   selector: 'valtimo-page-header',
@@ -38,12 +38,14 @@ export class PageHeaderComponent implements AfterViewInit, OnDestroy {
   public readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
   public readonly pageActionsHasContent$ = this.pageHeaderService.pageActionsHasContent$;
+  public readonly pageTitleHidden$ = this.pageTitleService.pageTitleHidden$;
 
   private _pageHeadResizeObserver!: ResizeObserver;
 
   constructor(
     private readonly userInterfaceService: UserInterfaceService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly pageTitleService: PageTitleService
   ) {}
 
   public ngAfterViewInit(): void {

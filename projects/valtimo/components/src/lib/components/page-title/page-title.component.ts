@@ -38,8 +38,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import {PageTitleService} from './page-title.service';
-import {PageHeaderService, PageSubtitleService} from '../../services';
+import {PageHeaderService, PageSubtitleService, PageTitleService} from '../../services';
 
 @Component({
   selector: 'valtimo-page-title',

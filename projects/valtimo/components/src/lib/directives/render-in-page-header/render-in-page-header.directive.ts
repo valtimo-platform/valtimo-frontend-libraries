@@ -24,8 +24,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import {Subscription, take} from 'rxjs';
-import {PageTitleService} from '../../components/page-title/page-title.service';
-import {PageHeaderService} from '../../services';
+import {PageHeaderService, PageTitleService} from '../../services';
 
 @Directive({selector: '[renderInPageHeader]'})
 export class RenderInPageHeaderDirective implements OnInit, AfterContentInit, OnDestroy {
