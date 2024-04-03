@@ -15,7 +15,7 @@
   -->
 
 <div
-  [ngClass]="{'--no-margin': hidePageTitle || compactMode, '--compact': compactMode}"
+  [ngClass]="{'--no-margin': hidePageTitle || isCompact, '--compact': isCompact}"
   class="page-title-container"
 >
   <ng-container
@@ -31,27 +31,24 @@
     <div
       class="skeleton-container"
       *ngIf="obs.hasCustomPageTitle && !obs.customPageTitleSet"
-      [ngClass]="{'--compact': compactMode}"
+      [ngClass]="{'--compact': isCompact}"
     >
       <cds-skeleton-placeholder></cds-skeleton-placeholder>
     </div>
 
     <ng-container *ngIf="obs.hasCustomPageTitle ? obs.customPageTitleSet : obs.title !== ''">
-      <h2
-        *ngIf="!compactMode"
-        [title]="obs.hasCustomPageTitle ? obs.customPageTitle : obs.title"
-        class="page-title"
-      >
-        {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
-      </h2>
-
-      <span
-        *ngIf="compactMode"
-        [title]="obs.hasCustomPageTitle ? obs.customPageTitle : obs.title"
-        class="cds--breadcrumb compact-page-title"
-      >
-        {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
-      </span>
+      @if (!isCompact) {
+        <h2 [title]="obs.hasCustomPageTitle ? obs.customPageTitle : obs.title" class="page-title">
+          {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
+        </h2>
+      } @else {
+        <span
+          [title]="obs.hasCustomPageTitle ? obs.customPageTitle : obs.title"
+          class="cds--breadcrumb compact-page-title"
+        >
+          {{ obs.hasCustomPageTitle ? obs.customPageTitle : obs.title }}
+        </span>
+      }
     </ng-container>
   </ng-container>
 

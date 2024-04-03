@@ -53,7 +53,6 @@ export class PageTitleComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly _subtitleVcr!: ViewContainerRef;
 
   public hidePageTitle = false;
-  public compactMode!: boolean;
   public readonly appTitle = this.configService?.config?.applicationTitle || 'Valtimo';
   public readonly hasCustomPageTitle$: Observable<boolean> = this.router.events.pipe(
     startWith(this.router),
@@ -95,7 +94,7 @@ export class PageTitleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pageSubtitleService.setTitleViewContainerRef(this._subtitleVcr);
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
@@ -147,7 +146,6 @@ export class PageTitleComponent implements OnInit, AfterViewInit, OnDestroy {
     this._subscriptions.add(
       this.pageHeaderService.compactMode$.subscribe(compactMode => {
         this.isCompact = compactMode;
-        this.compactMode = compactMode;
       })
     );
   }

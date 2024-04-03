@@ -36,9 +36,10 @@ export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
     this.compactMode$,
     this.pageTitleService.pageTitleHidden$,
   ]).pipe(
-    map(([breadCrumbItems, compactMode, pageTitleHidden]) => {
-      return [...(compactMode && !pageTitleHidden ? [{content: ''}] : []), ...breadCrumbItems];
-    })
+    map(([breadCrumbItems, compactMode, pageTitleHidden]) => [
+      ...(compactMode && !pageTitleHidden ? [{content: ''}] : []),
+      ...breadCrumbItems,
+    ])
   );
 
   private readonly _subscriptions = new Subscription();

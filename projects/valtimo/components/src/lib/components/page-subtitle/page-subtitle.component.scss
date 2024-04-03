@@ -15,21 +15,16 @@
  */
 
 .subtitle-container {
-  .subtitle-skeleton-container {
-    .cds--skeleton__placeholder {
-      height: 18px;
-      margin-bottom: 8px;
-      width: 200px;
-      margin-left: 16px;
-    }
+  .subtitle-skeleton-container .cds--skeleton__placeholder {
+    height: 18px;
+    margin-bottom: 8px;
+    width: 200px;
+    margin-left: 16px;
   }
-
-  .subtitle-skeleton-container.--compact {
-    .cds--skeleton__placeholder {
-      height: 18px;
-      width: 60px;
-      margin: 0;
-    }
+  .subtitle-skeleton-container.--compact .cds--skeleton__placeholder {
+    height: 18px;
+    width: 60px;
+    margin: 0;
   }
 
   .page-subtitle {

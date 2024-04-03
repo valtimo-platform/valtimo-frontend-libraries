@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,9 +39,8 @@ import {UserProviderService} from '@valtimo/security';
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, combineLatest, Observable, Subscription, switchMap, take} from 'rxjs';
 import {VersionService} from '../version/version.service';
-import {CdsThemeService, ShellService} from '../../services';
+import {CdsThemeService, PageHeaderService, ShellService} from '../../services';
 import {map, tap} from 'rxjs/operators';
-import {PageHeaderService} from '../../services';
 
 @Component({
   selector: 'valtimo-right-sidebar',
@@ -336,18 +335,25 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
       this.collapsibleWidescreenMenu$,
       this.compactMode$,
       this.showUserNameInTopBar$,
-      this.preferredTheme$
+      this.preferredTheme$,
     ])
       .pipe(
         take(1),
-        switchMap(([languageCode, collapsibleWidescreenMenu, compactMode, showUserNameInTopBar, preferredTheme]) =>
-          this.userSettingsService.saveUserSettings({
-            collapsibleWidescreenMenu,
+        switchMap(
+          ([
             languageCode,
-            ...(this.enableCompactModeToggle && {compactMode}),
-            ...(this.enableShowUserNameToggle && {showUserNameInTopBar}),
-            ...(this.allowUserThemeSwitching && {preferredTheme}),
-          })
+            collapsibleWidescreenMenu,
+            compactMode,
+            showUserNameInTopBar,
+            preferredTheme,
+          ]) =>
+            this.userSettingsService.saveUserSettings({
+              collapsibleWidescreenMenu,
+              languageCode,
+              ...(this.enableCompactModeToggle && {compactMode}),
+              ...(this.enableShowUserNameToggle && {showUserNameInTopBar}),
+              ...(this.allowUserThemeSwitching && {preferredTheme}),
+            })
         )
       )
       .subscribe(() => {

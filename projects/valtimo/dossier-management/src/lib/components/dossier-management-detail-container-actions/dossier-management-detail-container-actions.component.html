@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015-2023 Ritense BV, the Netherlands.
+  ~ Copyright 2015-2024 Ritense BV, the Netherlands.
   ~
   ~ Licensed under EUPL, Version 1.2 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -73,10 +73,7 @@
 </ng-template>
 
 <ng-template #customTrigger>
-  <button
-    cdsButton="tertiary"
-    [size]="(compactMode$ | async) ? 'sm' : 'md'"
-  >
+  <button cdsButton="tertiary" [size]="(compactMode$ | async) ? 'sm' : 'md'">
     {{ 'dossierManagement.more' | translate }}
 
     <svg class="cds--btn__icon" cdsIcon="overflow-menu--vertical" size="16"></svg>
