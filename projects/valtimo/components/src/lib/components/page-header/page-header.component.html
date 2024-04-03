@@ -14,13 +14,22 @@
   ~ limitations under the License.
   -->
 
-<div class="page-head" [ngClass]="{'page-head--hidden': (showPageHeader$ | async) === false}">
+<div
+  class="page-head"
+  [ngClass]="{
+    '--hidden': (showPageHeader$ | async) === false,
+    '--compact': compactMode$ | async,
+    '--no-content': (pageActionsHasContent$ | async) === false
+  }"
+>
   <ng-container #contentVcr></ng-container>
+
+  <valtimo-page-actions></valtimo-page-actions>
 </div>
 
 <ng-container renderPageHeader>
   <ng-template>
-    <div [ngClass]="{'page-header-container--compact': compactMode$ | async}">
+    <div class="page-header-container" [ngClass]="{'--compact': compactMode$ | async}">
       <valtimo-breadcrumb-navigation></valtimo-breadcrumb-navigation>
 
       <valtimo-page-title></valtimo-page-title>

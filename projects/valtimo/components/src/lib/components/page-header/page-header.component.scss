@@ -14,14 +14,35 @@
  * limitations under the License.
  */
 
-.page-head--hidden {
-  display: none;
-}
-
-.page-header-container--compact {
+.page-head {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  align-items: center;
-  padding-inline: 16px;
+  align-items: flex-end;
+  margin-bottom: 32px;
+
+  &.--hidden {
+    display: none;
+  }
+
+  &.--compact {
+    margin-bottom: 16px;
+  }
+
+  &.--no-content {
+    margin-bottom: 0;
+  }
+}
+
+.page-header-container {
+  width: min-content;
+
+  &.--compact {
+    width: 100%;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 16px;
+  }
 }

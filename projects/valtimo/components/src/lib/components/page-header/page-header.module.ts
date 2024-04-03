@@ -20,6 +20,7 @@ import {PageHeaderComponent} from './page-header.component';
 import {PageTitleModule} from '../page-title/page-title.module';
 import {BreadcrumbNavigationModule} from '../breadcrumb-navigation/breadcrumb-navigation.module';
 import {RenderPageHeaderDirectiveModule} from '../../directives/render-page-header/render-page-header-directive.module';
+import {PageActionsComponent} from '../page-actions/page-actions.component';
 
 @NgModule({
   declarations: [PageHeaderComponent],
@@ -28,6 +29,7 @@ import {RenderPageHeaderDirectiveModule} from '../../directives/render-page-head
     PageTitleModule,
     BreadcrumbNavigationModule,
     RenderPageHeaderDirectiveModule,
+    PageActionsComponent,
   ],
   exports: [PageHeaderComponent],
 })

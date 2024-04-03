@@ -13,17 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  HostBinding,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-  ViewEncapsulation,
-} from '@angular/core';
+import {Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
@@ -48,13 +38,8 @@ import {PageHeaderService} from '../../services';
   styleUrls: ['./page-title.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PageTitleComponent implements OnInit, OnDestroy {
   @HostBinding('class.valtimo-page-title--compact') isCompact!: boolean;
-
-  @ViewChild('pageActionsVcr', {static: true, read: ViewContainerRef})
-  private readonly _pageActionsVcr!: ViewContainerRef;
-  @ViewChild('pageActions')
-  private readonly _pageActions: ElementRef<HTMLDivElement>;
 
   public hidePageTitle = false;
   public compactMode!: boolean;
@@ -64,19 +49,9 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
     switchMap(() => this.activatedRoute.firstChild.data),
     map(data => !!data?.customPageTitle)
   );
-  public readonly hasCustomPageSubtitle$: Observable<boolean> = this.router.events.pipe(
-    startWith(this.router),
-    switchMap(() => this.activatedRoute.firstChild.data),
-    map(data => !!data?.customPageSubtitle)
-  );
   public readonly customPageTitle$ = this.pageTitleService.customPageTitle$;
   public readonly customPageTitleSet$ = this.pageTitleService.customPageTitleSet$;
-  public readonly customPageSubtitle$ = this.pageTitleService.customPageSubtitle$;
-  public readonly customPageSubtitleSet$ = this.pageTitleService.customPageSubtitleSet$;
-  public readonly hasPageActions$ = this.pageTitleService.hasPageActions$;
-  public readonly pageActionsFullWidth$ = this.pageTitleService.pageActionsFullWidth$;
   public readonly translatedTitle$ = new BehaviorSubject<string>('');
-  public readonly pageActionsHasContent$ = new BehaviorSubject<boolean>(false);
   private appTitleAsSuffix =
     this.configService?.config?.featureToggles?.applicationTitleAsSuffix || false;
   private readonly _subscriptions = new Subscription();
@@ -86,7 +61,6 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
     map(data => !!data?.hidePageTitle),
     tap(hidden => this.pageTitleService.setPageTitleHidden(hidden))
   );
-  private _pageActionsObserver!: MutationObserver;
 
   constructor(
     private readonly router: Router,
@@ -105,14 +79,8 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
     this.openCompactModeSubscription();
   }
 
-  public ngAfterViewInit(): void {
-    this.pageTitleService.setPageActionsViewContainerRef(this._pageActionsVcr);
-    this.openPageActionsMutationObserver();
-  }
-
   public ngOnDestroy() {
     this._subscriptions.unsubscribe();
-    this._pageActionsObserver?.disconnect();
   }
 
   private openRouterTranslateSubscription(): void {
@@ -166,28 +134,5 @@ export class PageTitleComponent implements OnInit, OnDestroy, AfterViewInit {
         this.compactMode = compactMode;
       })
     );
-  }
-
-  private openPageActionsMutationObserver(): void {
-    if (!this._pageActions) return;
-
-    this._pageActionsObserver = new MutationObserver(mutations => {
-      console.log(mutations);
-      const firstMutation = mutations[0];
-      const target = firstMutation?.target as HTMLDivElement;
-      const children = target?.children;
-      const childrenArray = (children && Array.from(children)) || [];
-
-      this.pageActionsHasContent$.next(childrenArray.length > 0);
-    });
-
-    this._pageActionsObserver.observe(this._pageActions.nativeElement, {childList: true});
-    this.setInitialPageActionsHasChildren();
-  }
-
-  private setInitialPageActionsHasChildren(): void {
-    const children = this._pageActions.nativeElement.children;
-    const childrenArray = (children && Array.from(children)) || [];
-    this.pageActionsHasContent$.next(childrenArray.length > 0);
   }
 }

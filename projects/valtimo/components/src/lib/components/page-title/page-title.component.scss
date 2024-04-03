@@ -15,7 +15,6 @@
  */
 
 .page-title-container {
-  margin-bottom: 32px;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
@@ -41,25 +40,6 @@
     flex-shrink: 0;
   }
 
-  .page-subtitle {
-    margin-left: 16px;
-    padding-bottom: 4px;
-    color: var(--cds-text-helper, #6f6f6f);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 14px;
-    line-height: 18px;
-
-    b {
-      font-weight: bolder;
-    }
-
-    &.--compact {
-      padding-bottom: 0;
-    }
-  }
-
   .skeleton-container {
     .cds--skeleton__placeholder {
       width: 200px;
@@ -72,45 +52,6 @@
     height: 18px;
     overflow: hidden;
     margin-left: 8px;
-  }
-
-  .subtitle-skeleton-container {
-    .cds--skeleton__placeholder {
-      height: 18px;
-      margin-bottom: 8px;
-      width: 200px;
-      margin-left: 16px;
-    }
-  }
-
-  .subtitle-skeleton-container.--compact {
-    .cds--skeleton__placeholder {
-      height: 18px;
-      width: 60px;
-      margin: 0;
-    }
-  }
-
-  .page-actions {
-    &--visible {
-      margin-left: auto;
-      padding-left: 32px;
-    }
-
-    &--compact {
-      padding-left: 16px;
-    }
-
-    &--full-width {
-      width: 100%;
-    }
-  }
-
-  .compact-divider {
-    height: 100%;
-    display: flex;
-    width: 0;
-    margin-left: 16px;
   }
 }
 

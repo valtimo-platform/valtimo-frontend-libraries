@@ -29,6 +29,7 @@ export class PageHeaderComponent implements AfterViewInit {
 
   public readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
+  public readonly pageActionsHasContent$ = this.pageHeaderService.pageActionsHasContent$;
 
   constructor(
     private readonly userInterfaceService: UserInterfaceService,

@@ -31,6 +31,7 @@ export class PageHeaderService {
   private readonly _showUserNameInTopBar$ = new BehaviorSubject<boolean>(
     !!this.configService?.config?.featureToggles?.showUserNameInTopBar
   );
+  private readonly _pageActionsHasContent$ = new BehaviorSubject<boolean>(false);
 
   public get headerViewContainerRef$(): Observable<ViewContainerRef> {
     return this._headerViewContainerRef$.pipe(filter(ref => !!ref));
@@ -46,6 +47,10 @@ export class PageHeaderService {
 
   public get showUserNameInTopBar$(): Observable<boolean> {
     return this._showUserNameInTopBar$.asObservable();
+  }
+
+  public get pageActionsHasContent$(): Observable<boolean> {
+    return this._pageActionsHasContent$.asObservable();
   }
 
   constructor(private readonly configService: ConfigService) {}
@@ -64,5 +69,9 @@ export class PageHeaderService {
 
   public setShowUserNameInTopBar(show: boolean): void {
     this._showUserNameInTopBar$.next(show);
+  }
+
+  public setPageActionsHasContent(hasContent: boolean): void {
+    this._pageActionsHasContent$.next(hasContent);
   }
 }
