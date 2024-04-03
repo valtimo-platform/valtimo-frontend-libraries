@@ -55,7 +55,8 @@
     [disabled]="!obs.editActive"
     (validEvent)="onValidEvent($event)"
     (valueChangeEvent)="onValueChangeEvent($event)"
-    [heightStyle]="obs.compactMode ? 'calc(100vh - 208px)' : 'calc(100vh - 316px)'"
+    [fitPage]="true"
+    [fitPageExtraSpace]="96"
   >
   </valtimo-editor>
 

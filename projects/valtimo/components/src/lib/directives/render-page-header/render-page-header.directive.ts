@@ -23,7 +23,6 @@ export class RenderPageHeaderDirective implements AfterContentInit, OnDestroy {
   @ContentChild(TemplateRef) templateRef;
 
   private readonly _subscriptions = new Subscription();
-
   constructor(private readonly pageHeaderService: PageHeaderService) {}
 
   public ngAfterContentInit(): void {

@@ -125,7 +125,8 @@
       [disabled]="data.disabled"
       (validEvent)="onValidEvent($event, data.disabled)"
       (valueChangeEvent)="onValueChangeEvent($event, data.formDefinition, data.disabled)"
-      heightStyle="calc(100vh - 316px)"
+      [fitPage]="true"
+      [fitPageExtraSpace]="80"
     ></valtimo-editor>
   </ng-template>
 </ng-container>

@@ -71,7 +71,6 @@ export class PageActionsComponent implements AfterViewInit, OnDestroy {
     this.pageTitleService.setPageActionsViewContainerRef(this._pageActionsVcr);
     this.pageSubtitleService.setActionsViewContainerRef(this._subtitleVcr);
     this.openPageActionsMutationObserver();
-    console.log(this._pageActionsVcr);
   }
 
   public ngOnDestroy(): void {

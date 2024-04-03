@@ -20,7 +20,7 @@
     [model]="model"
     (validEvent)="onValid($event)"
     (valueChangeEvent)="onValueChange($event)"
-    [heightStyle]="(compactMode$ | async) ? 'calc(100vh - 111px)' : 'calc(100vh - 219px)'"
+    [fitPage]="true"
   ></valtimo-editor>
 </ng-container>
 

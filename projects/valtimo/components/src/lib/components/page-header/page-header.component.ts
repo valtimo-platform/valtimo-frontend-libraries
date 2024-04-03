@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild, ViewContainerRef} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {UserInterfaceService} from '../../services/user-interface.service';
 import {PageHeaderService} from '../../services';
 
@@ -23,13 +30,16 @@ import {PageHeaderService} from '../../services';
   templateUrl: './page-header.component.html',
   styleUrls: ['./page-header.component.scss'],
 })
-export class PageHeaderComponent implements AfterViewInit {
+export class PageHeaderComponent implements AfterViewInit, OnDestroy {
   @ViewChild('contentVcr', {static: true, read: ViewContainerRef})
   private readonly _contentrVcr!: ViewContainerRef;
-
+  @ViewChild('pageHead', {static: true, read: ElementRef})
+  private readonly _pageHead!: ElementRef<HTMLDivElement>;
   public readonly showPageHeader$ = this.userInterfaceService.showPageHeader$;
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
   public readonly pageActionsHasContent$ = this.pageHeaderService.pageActionsHasContent$;
+
+  private _pageHeadResizeObserver!: ResizeObserver;
 
   constructor(
     private readonly userInterfaceService: UserInterfaceService,
@@ -38,5 +48,21 @@ export class PageHeaderComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     this.pageHeaderService.setContentViewContainerRef(this._contentrVcr);
+    this.openPageHeadResizeObserver();
+  }
+
+  public ngOnDestroy(): void {
+    this._pageHeadResizeObserver?.disconnect();
+  }
+
+  private openPageHeadResizeObserver(): void {
+    this._pageHeadResizeObserver = new ResizeObserver(entries => {
+      const pageHeadEntry = Array.isArray(entries) && entries[0];
+      const pageHeadHeight = pageHeadEntry?.contentRect?.height;
+
+      if (pageHeadHeight) this.pageHeaderService.setPageHeadHeight(pageHeadHeight);
+    });
+
+    this._pageHeadResizeObserver.observe(this._pageHead.nativeElement);
   }
 }
