@@ -88,7 +88,6 @@ import {
 } from '@valtimo/config';
 import {FormManagementModule} from '@valtimo/form-management';
 import {DossierManagementModule} from '@valtimo/dossier-management';
-import {OpenZaakModule} from '@valtimo/open-zaak';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {CustomerModule} from '@valtimo/customer';
 import {PluginManagementModule} from '@valtimo/plugin-management';
@@ -191,7 +190,6 @@ export function tabsFactory() {
     MigrationModule,
     FormManagementModule,
     DossierManagementModule,
-    OpenZaakModule,
     CustomerModule,
     PluginManagementModule,
     NotificatiesApiPluginModule,
