@@ -241,6 +241,9 @@ export * from './lib/directives/render-in-page-header/render-in-page-header-dire
 // render page header
 export * from './lib/directives/render-page-header/render-page-header.directive';
 export * from './lib/directives/render-page-header/render-page-header-directive.module';
+// fit page
+export * from './lib/directives/fit-page/fit-page.directive';
+export * from './lib/directives/fit-page/fit-page-directive.module';
 // digit only
 export * from './lib/directives/digit-only/digit-only.directive';
 // command click
