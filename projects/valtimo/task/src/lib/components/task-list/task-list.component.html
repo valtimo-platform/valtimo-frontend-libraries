@@ -21,7 +21,7 @@
     tasks: tasks$ | async,
     fields: fields$ | async,
     visibleTabs: visibleTabs$ | async,
-    pagination: paginationForCurrentTaskType$ | async,
+    pagination: paginationForCurrentTaskTypeForList$ | async,
     taskListColumnsForCase: taskListColumnsForCase$ | async
   } as obs"
   class="main-content"
@@ -194,6 +194,6 @@
       (selected)="setCaseDefinition($event)"
     >
       <cds-dropdown-list
-        [items]="obs.caseListItems"
+        [items]="obs.caseListItems || []"
       ></cds-dropdown-list></cds-dropdown></ng-template
 ></ng-container>

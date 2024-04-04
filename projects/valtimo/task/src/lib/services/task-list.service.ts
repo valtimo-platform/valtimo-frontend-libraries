@@ -18,12 +18,13 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, filter, Observable, switchMap} from 'rxjs';
 import {TaskListColumn} from '../models';
 import {TaskService} from './task.service';
+import {TaskListTab} from '@valtimo/config';
 
 @Injectable()
 export class TaskListService {
   private readonly _loadingTaskListColumns$ = new BehaviorSubject<boolean>(false);
   private readonly _caseDefinitionName$ = new BehaviorSubject<string | null>(null);
-
+  private readonly _selectedTaskType$ = new BehaviorSubject<TaskListTab>(TaskListTab.MINE);
   public get caseDefinitionName$(): Observable<string | null> {
     return this._caseDefinitionName$.asObservable();
   }
@@ -39,7 +40,19 @@ export class TaskListService {
     );
   }
 
+  public get selectedTaskType$(): Observable<TaskListTab> {
+    return this._selectedTaskType$.asObservable();
+  }
+
+  public get selectedTaskType(): TaskListTab {
+    return this._selectedTaskType$.getValue();
+  }
+
   constructor(private readonly taskService: TaskService) {}
+
+  public setSelectedTaskType(type: TaskListTab): void {
+    this._selectedTaskType$.next(type);
+  }
 
   public setCaseDefinitionName(caseDefinitionName: string): void {
     this._caseDefinitionName$.next(caseDefinitionName);

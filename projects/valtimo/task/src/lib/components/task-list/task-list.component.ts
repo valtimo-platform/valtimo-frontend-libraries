@@ -18,10 +18,10 @@ import {ChangeDetectionStrategy, Component, ViewChild, ViewEncapsulation} from '
 import {Router} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import moment from 'moment';
-import {Task, TaskPageParams} from '../../models';
+import {Task, TaskListParams, TaskPageParams} from '../../models';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
-import {ConfigService, SortState, TaskListTab} from '@valtimo/config';
+import {ConfigService, Page, SortState, TaskListTab} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {distinctUntilChanged, map, take} from 'rxjs/operators';
 import {PermissionService} from '@valtimo/access-control';
@@ -30,10 +30,11 @@ import {
   CAN_VIEW_TASK_PERMISSION,
   TASK_DETAIL_PERMISSION_RESOURCE,
 } from '../../task-permissions';
-import {TaskListColumnService, TaskListService} from '../../services';
+import {TaskListColumnService, TaskListPaginationService, TaskListService} from '../../services';
 import {isEqual} from 'lodash';
 import {ListItem} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
+import {TaskListSortService} from '../../services/task-list-sort.service';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -43,44 +44,20 @@ moment.locale(localStorage.getItem('langKey') || '');
   styleUrls: ['./task-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TaskListService, TaskListColumnService],
+  providers: [
+    TaskListService,
+    TaskListColumnService,
+    TaskListPaginationService,
+    TaskListSortService,
+  ],
 })
 export class TaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetail: TaskDetailModalComponent;
 
+  public readonly selectedTaskType$ = this.taskListService.selectedTaskType$;
   public readonly fields$ = this.taskListColumnService.fields$;
   public readonly loadingTasks$ = new BehaviorSubject<boolean>(true);
   public readonly visibleTabs$ = new BehaviorSubject<Array<TaskListTab> | null>(null);
-
-  private readonly _selectedTaskType$ = new BehaviorSubject<TaskListTab>(TaskListTab.MINE);
-  public readonly selectedTaskType$ = this._selectedTaskType$.pipe(
-    tap(type => {
-      this.taskListColumnService.resetTaskListFields();
-    })
-  );
-  private get _selectedTaskType(): TaskListTab {
-    return this._selectedTaskType$.getValue();
-  }
-
-  private readonly _pagination$ = new BehaviorSubject<{[key in TaskListTab]: TaskPageParams}>({
-    [TaskListTab.ALL]: this.getDefaultPagination(),
-    [TaskListTab.MINE]: this.getDefaultPagination(),
-    [TaskListTab.OPEN]: this.getDefaultPagination(),
-  });
-  private readonly _paginationForCurrentTaskType$ = combineLatest([
-    this._selectedTaskType$,
-    this._pagination$,
-  ]).pipe(map(([selectedTaskType, pagination]) => pagination[selectedTaskType]));
-  public get paginationForCurrentTaskType$(): Observable<TaskPageParams> {
-    return this._paginationForCurrentTaskType$.pipe(
-      map(pagination => ({...pagination, page: pagination.page + 1}))
-    );
-  }
-  private readonly _sortState$ = new BehaviorSubject<{[key in TaskListTab]: SortState | null}>({
-    [TaskListTab.ALL]: this._defaultSortState,
-    [TaskListTab.MINE]: this._defaultSortState,
-    [TaskListTab.OPEN]: this._defaultSortState,
-  });
 
   private _enableLoadingAnimation$ = new BehaviorSubject<boolean>(true);
 
@@ -88,32 +65,32 @@ export class TaskListComponent {
 
   private readonly _ALL_CASES_ID = 'ALL_CASES';
 
+  public readonly paginationForCurrentTaskTypeForList$ =
+    this.taskListPaginationService.paginationForCurrentTaskTypeForList$;
+
   public readonly tasks$: Observable<Task[]> = combineLatest([
     this.selectedTaskType$,
-    this._pagination$,
-    this._sortState$,
+    this.taskListPaginationService.paginationForCurrentTaskType$,
+    this.taskListSortService.sortStringForCurrentTaskType$,
     this.taskListService.caseDefinitionName$,
     this._enableLoadingAnimation$,
   ]).pipe(
-    map(([selectedTaskType, pagination, sortState, caseDefinitionName, enableLoadingAnimation]) => {
-      const sortParams = sortState[selectedTaskType];
-      const params = {
-        ...pagination[selectedTaskType],
-        ...(sortParams && {sort: this.getSortString(sortParams)}),
-      };
-
-      delete params.collectionSize;
-
-      return {
-        params: {
-          selectedTaskType,
-          params,
-          ...(caseDefinitionName &&
-            caseDefinitionName !== this._ALL_CASES_ID && {caseDefinitionName}),
-        },
+    map(
+      ([
+        selectedTaskType,
+        paginationForSelectedTaskType,
+        sortStringForSelectedTaskType,
+        caseDefinitionName,
         enableLoadingAnimation,
-      };
-    }),
+      ]) =>
+        this.getTaskListParams(
+          paginationForSelectedTaskType,
+          sortStringForSelectedTaskType,
+          selectedTaskType,
+          caseDefinitionName,
+          enableLoadingAnimation
+        )
+    ),
     distinctUntilChanged((previous, current) => isEqual(previous.params, current.params)),
     tap(({enableLoadingAnimation}) => {
       if (enableLoadingAnimation) this.loadingTasks$.next(true);
@@ -125,51 +102,13 @@ export class TaskListComponent {
         params.caseDefinitionName
       )
     ),
-    switchMap(tasksResult => {
-      const taskResults = tasksResult.content;
-      const hasTaskResults = Array.isArray(taskResults) && taskResults.length > 0;
-
-      return combineLatest([
-        of(tasksResult),
-        hasTaskResults
-          ? combineLatest(
-              taskResults.map(task =>
-                this.permissionService.requestPermission(CAN_VIEW_TASK_PERMISSION, {
-                  resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
-                  identifier: task.id,
-                })
-              )
-            )
-          : of(null),
-        hasTaskResults
-          ? combineLatest(
-              taskResults.map(task =>
-                this.permissionService.requestPermission(CAN_VIEW_CASE_PERMISSION, {
-                  resource: TASK_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
-                  identifier: task.businessKey,
-                })
-              )
-            )
-          : of(null),
-      ]);
-    }),
+    switchMap(tasksResult => this.getTaskListPermissionsRequest(tasksResult)),
     map(([taskResult, canViewTaskPermissions, canViewCasePermissions]) => {
-      this.updateTaskPagination(this._selectedTaskType, {
+      this.taskListPaginationService.updateTaskPagination(this.taskListService.selectedTaskType, {
         collectionSize: Number(taskResult.totalElements),
       });
 
-      return taskResult?.content?.map((task, taskIndex) => {
-        const createdDate = moment(task.created);
-        const dueDate = moment(task.due);
-        const taskCopy = {...task};
-
-        if (task.due && dueDate.isValid()) taskCopy.due = dueDate.format('DD MMM YYYY HH:mm');
-        if (createdDate.isValid()) taskCopy.created = createdDate.format('DD MMM YYYY HH:mm');
-        if (canViewTaskPermissions) taskCopy.locked = !canViewTaskPermissions[taskIndex];
-        if (canViewCasePermissions) taskCopy.caseLocked = !canViewCasePermissions[taskIndex];
-
-        return taskCopy;
-      });
+      return this.mapTasksForList(taskResult, canViewTaskPermissions, canViewCasePermissions);
     }),
     tap(tasks => {
       this.cachedTasks$.next(tasks);
@@ -210,22 +149,27 @@ export class TaskListComponent {
     private readonly taskService: TaskService,
     private readonly taskListService: TaskListService,
     private readonly translateService: TranslateService,
-    private readonly taskListColumnService: TaskListColumnService
+    private readonly taskListColumnService: TaskListColumnService,
+    private readonly taskListPaginationService: TaskListPaginationService,
+    private readonly taskListSortService: TaskListSortService
   ) {
     this.setVisibleTabs();
   }
 
   public paginationClicked(page: number, type: TaskListTab | string): void {
-    this.updateTaskPagination(type as TaskListTab, {page: page - 1});
+    this.taskListPaginationService.updateTaskPagination(type as TaskListTab, {page: page - 1});
   }
 
   public paginationSet(newSize: number): void {
-    combineLatest([this._paginationForCurrentTaskType$, this._selectedTaskType$])
+    combineLatest([
+      this.taskListPaginationService.paginationForCurrentTaskType$,
+      this.taskListService.selectedTaskType$,
+    ])
       .pipe(take(1))
       .subscribe(([pagination, selectedTaskType]) => {
-        this.updateTaskPagination(selectedTaskType, {
+        this.taskListPaginationService.updateTaskPagination(selectedTaskType, {
           size: Number(newSize),
-          page: this.getLastAvailablePage(
+          page: this.taskListPaginationService.getLastAvailablePage(
             pagination.page,
             Number(newSize),
             pagination.collectionSize
@@ -235,17 +179,13 @@ export class TaskListComponent {
   }
 
   public tabChange(tab: TaskListTab | string): void {
-    this._selectedTaskType$.pipe(take(1)).subscribe(selectedTaskType => {
+    this.taskListService.selectedTaskType$.pipe(take(1)).subscribe(selectedTaskType => {
       if (selectedTaskType !== tab) {
         this.enableLoadingAnimation();
-        this._selectedTaskType$.next(tab as TaskListTab);
-        this.updateTaskPagination(tab as TaskListTab, {page: 0});
+        this.taskListService.setSelectedTaskType(tab as TaskListTab);
+        this.taskListPaginationService.updateTaskPagination(tab as TaskListTab, {page: 0});
       }
     });
-  }
-
-  public showTask(task: Task): void {
-    this.router.navigate(['tasks', task.id]);
   }
 
   public openRelatedCase(event: MouseEvent, index: number): void {
@@ -272,72 +212,17 @@ export class TaskListComponent {
   }
 
   public sortChanged(sortState: SortState): void {
-    this._selectedTaskType$.pipe(take(1)).subscribe(selectedTaskType => {
-      this.updateSortState(selectedTaskType, sortState);
-    });
+    this.taskListSortService.updateSortState(this.taskListService.selectedTaskType, sortState);
   }
 
   public setCaseDefinition(definition: {item: {id: string}}): void {
     if (definition.item.id) this.taskListService.setCaseDefinitionName(definition.item.id);
   }
 
-  private getSortString(sort: SortState): string {
-    return `${sort.state.name},${sort.state.direction}`;
-  }
-
-  private get _defaultSortState(): SortState | null {
-    return this.taskService.getConfigCustomTaskList()?.defaultSortedColumn || null;
-  }
-
-  private getDefaultPagination(): TaskPageParams {
-    return {
-      page: 0,
-      size: 10,
-    };
-  }
-
   private setVisibleTabs(): void {
     const visibleTabs = this.configService.config?.visibleTaskListTabs || null;
     this.visibleTabs$.next(visibleTabs);
-    if (visibleTabs) this._selectedTaskType$.next(visibleTabs[0]);
-  }
-
-  private updateTaskPagination(
-    taskType: TaskListTab,
-    updatedPagination: Partial<TaskPageParams>
-  ): void {
-    this._pagination$.pipe(take(1)).subscribe(pagination => {
-      const currentPagination = pagination[taskType];
-      this._pagination$.next({
-        ...pagination,
-        [taskType]: {...currentPagination, ...updatedPagination},
-      });
-    });
-  }
-
-  private updateSortState(taskType: TaskListTab, updatedSortState: SortState): void {
-    this._sortState$.pipe(take(1)).subscribe(sortState => {
-      this._sortState$.next({
-        ...sortState,
-        [taskType]: {...sortState[taskType], ...updatedSortState},
-      });
-    });
-  }
-
-  private isNumber(value: any): boolean {
-    return typeof value === 'number';
-  }
-
-  private getLastAvailablePage(page: number, size: number, collectionSize: number): number {
-    if (this.isNumber(page) && this.isNumber(size) && this.isNumber(collectionSize) && page !== 0) {
-      const amountOfPages = Math.ceil(collectionSize / size);
-
-      if (page + 1 > amountOfPages) {
-        return amountOfPages - 1;
-      }
-    }
-
-    return page;
+    if (visibleTabs) this.taskListService.setSelectedTaskType(visibleTabs[0]);
   }
 
   private disableLoadingAnimation(): void {
@@ -346,5 +231,78 @@ export class TaskListComponent {
 
   private enableLoadingAnimation(): void {
     this._enableLoadingAnimation$.next(true);
+  }
+
+  private getTaskListParams(
+    paginationForSelectedTaskType: TaskPageParams,
+    sortStringForSelectedTaskType: string,
+    selectedTaskType: TaskListTab,
+    caseDefinitionName: string,
+    enableLoadingAnimation: boolean
+  ): TaskListParams {
+    const params = {
+      ...paginationForSelectedTaskType,
+      ...(sortStringForSelectedTaskType && {sort: sortStringForSelectedTaskType}),
+    };
+
+    delete params.collectionSize;
+
+    return {
+      params: {
+        selectedTaskType,
+        params,
+        ...(caseDefinitionName &&
+          caseDefinitionName !== this._ALL_CASES_ID && {caseDefinitionName}),
+      },
+      enableLoadingAnimation,
+    };
+  }
+
+  private getTaskListPermissionsRequest(tasksResult: Page<Task>) {
+    const taskResults = tasksResult.content;
+    const hasTaskResults = Array.isArray(taskResults) && taskResults.length > 0;
+
+    return combineLatest([
+      of(tasksResult),
+      hasTaskResults
+        ? combineLatest(
+            taskResults.map(task =>
+              this.permissionService.requestPermission(CAN_VIEW_TASK_PERMISSION, {
+                resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
+                identifier: task.id,
+              })
+            )
+          )
+        : of(null),
+      hasTaskResults
+        ? combineLatest(
+            taskResults.map(task =>
+              this.permissionService.requestPermission(CAN_VIEW_CASE_PERMISSION, {
+                resource: TASK_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+                identifier: task.businessKey,
+              })
+            )
+          )
+        : of(null),
+    ]);
+  }
+
+  private mapTasksForList(
+    tasks: Page<Task>,
+    canViewTaskPermissions: boolean[] | null,
+    canViewCasePermissions: boolean[] | null
+  ): Task[] {
+    return tasks?.content?.map((task, taskIndex) => {
+      const createdDate = moment(task.created);
+      const dueDate = moment(task.due);
+      const taskCopy = {...task};
+
+      if (task.due && dueDate.isValid()) taskCopy.due = dueDate.format('DD MMM YYYY HH:mm');
+      if (createdDate.isValid()) taskCopy.created = createdDate.format('DD MMM YYYY HH:mm');
+      if (canViewTaskPermissions) taskCopy.locked = !canViewTaskPermissions[taskIndex];
+      if (canViewCasePermissions) taskCopy.caseLocked = !canViewCasePermissions[taskIndex];
+
+      return taskCopy;
+    });
   }
 }

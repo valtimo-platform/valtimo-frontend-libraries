@@ -15,6 +15,7 @@
  */
 
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
+import {TaskListTab} from '@valtimo/config';
 
 interface TaskPageParams {
   page: number;
@@ -60,6 +61,15 @@ interface TaskListColumnListItem extends ListItem {
   key: string;
 }
 
+interface TaskListParams {
+  params: {
+    selectedTaskType: TaskListTab;
+    params: TaskPageParams;
+    caseDefinitionName?: string;
+  };
+  enableLoadingAnimation: boolean;
+}
+
 export {
   TaskListColumn,
   TaskListColumnDisplayType,
@@ -70,4 +80,5 @@ export {
   TaskListColumnDisplayTypeParameters,
   TaskListColumnEnum,
   TaskPageParams,
+  TaskListParams,
 };
