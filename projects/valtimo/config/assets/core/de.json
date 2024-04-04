@@ -589,6 +589,10 @@
         "key": "Statusschlüssel",
         "visible": "Standardmäßig sichtbar",
         "color": "Farbe"
+      },
+      "noResults": {
+        "title": "Keine Status gefunden",
+        "description": "Fügen Sie einen Status hinzu"
       }
     }
   },

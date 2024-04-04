@@ -589,6 +589,10 @@
         "key": "Statussleutel",
         "visible": "Standaard zichtbaar",
         "color": "Kleur"
+      },
+      "noResults": {
+        "title": "Er zijn geen statussen",
+        "description": "Voeg een status toe om te beginnen"
       }
     }
   },

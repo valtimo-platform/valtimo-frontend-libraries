@@ -83,6 +83,8 @@ import {TabManagementService} from './services';
 import {DossierManagementStatusesComponent} from './components/dossier-management-statuses/dossier-management-statuses.component';
 import {DossierManagementStatusModalComponent} from './components/dossier-management-statuses/dossier-management-status-modal/dossier-management-status-modal.component';
 import {DossierManagementCreateComponent} from './components/dossier-management-create/dossier-management-create.component';
+import {DossierManagementZgwComponent} from './components/dossier-management-zgw/dossier-management-zgw.component';
+import {DossierManagementZgwModalComponent} from './components/dossier-management-zgw/dossier-management-status-modal/dossier-management-zgw-modal.component';
 
 @NgModule({
   declarations: [
@@ -107,6 +109,8 @@ import {DossierManagementCreateComponent} from './components/dossier-management-
     DossierManagementStatusesComponent,
     DossierManagementStatusModalComponent,
     DossierManagementCreateComponent,
+    DossierManagementZgwComponent,
+    DossierManagementZgwModalComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-export enum TabEnum {
-  DOCUMENT = 'document',
-  CASE = 'case',
-  PROCESSES = 'processes',
-  SEARCH = 'search',
-  LIST = 'list',
-  TABS = 'tabs',
-  STATUSES = 'statuses',
-  ZGW = 'zgw',
+::ng-deep .cds-tag--no-margin {
+  margin: 0;
 }

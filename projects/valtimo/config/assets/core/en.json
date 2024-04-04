@@ -590,6 +590,10 @@
         "key": "Status key",
         "visible": "Visible by default",
         "color": "Color"
+      },
+      "noResults": {
+        "title": "No statuses",
+        "description": "Add a status to start"
       }
     }
   },
