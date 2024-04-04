@@ -30,9 +30,8 @@ import {
   CAN_VIEW_TASK_PERMISSION,
   TASK_DETAIL_PERMISSION_RESOURCE,
 } from '../../task-permissions';
-import {TaskListService} from '../../services';
+import {TaskListColumnService, TaskListService} from '../../services';
 import {isEqual} from 'lodash';
-import {ColumnConfig, ViewType} from '@valtimo/components';
 import {ListItem} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -44,54 +43,19 @@ moment.locale(localStorage.getItem('langKey') || '');
   styleUrls: ['./task-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TaskListService],
+  providers: [TaskListService, TaskListColumnService],
 })
 export class TaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetail: TaskDetailModalComponent;
 
-  private readonly _DEFAULT_TASK_LIST_FIELDS: ColumnConfig[] = [
-    {
-      key: 'created',
-      label: `task-list.fieldLabels.created`,
-      viewType: ViewType.TEXT,
-      sortable: true,
-    },
-    {
-      key: 'name',
-      label: `task-list.fieldLabels.name`,
-      viewType: ViewType.TEXT,
-      sortable: true,
-    },
-    {
-      key: 'valtimoAssignee.fullName',
-      label: `task-list.fieldLabels.valtimoAssignee.fullName`,
-      viewType: ViewType.TEXT,
-    },
-    {
-      key: 'due',
-      label: `task-list.fieldLabels.due`,
-      viewType: ViewType.TEXT,
-      sortable: true,
-    },
-    {
-      key: 'context',
-      label: `task-list.fieldLabels.context`,
-      viewType: ViewType.TEXT,
-    },
-  ];
-
-  public readonly fields$ = new BehaviorSubject<ColumnConfig[]>(this._DEFAULT_TASK_LIST_FIELDS);
+  public readonly fields$ = this.taskListColumnService.fields$;
   public readonly loadingTasks$ = new BehaviorSubject<boolean>(true);
   public readonly visibleTabs$ = new BehaviorSubject<Array<TaskListTab> | null>(null);
 
   private readonly _selectedTaskType$ = new BehaviorSubject<TaskListTab>(TaskListTab.MINE);
   public readonly selectedTaskType$ = this._selectedTaskType$.pipe(
     tap(type => {
-      if (this.taskService.getConfigCustomTaskList()) {
-        this.customTaskListFields();
-      } else {
-        this.defaultTaskListFields();
-      }
+      this.taskListColumnService.resetTaskListFields();
     })
   );
   private get _selectedTaskType(): TaskListTab {
@@ -245,7 +209,8 @@ export class TaskListComponent {
     private readonly router: Router,
     private readonly taskService: TaskService,
     private readonly taskListService: TaskListService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly taskListColumnService: TaskListColumnService
   ) {
     this.setVisibleTabs();
   }
@@ -300,26 +265,6 @@ export class TaskListComponent {
           });
       }
     });
-  }
-
-  public defaultTaskListFields(): void {
-    this.fields$.next(this._DEFAULT_TASK_LIST_FIELDS);
-  }
-
-  public customTaskListFields(): void {
-    const customTaskListFields = this.taskService.getConfigCustomTaskList().fields;
-
-    if (customTaskListFields) {
-      this.fields$.next(
-        customTaskListFields.map((column, index) => ({
-          key: column.propertyName,
-          label: `task-list.fieldLabels.${column.translationKey}`,
-          sortable: column.sortable,
-          ...(column.viewType && {viewType: column.viewType}),
-          ...(column.enum && {enum: column.enum}),
-        }))
-      );
-    }
   }
 
   public rowOpenTaskClick(task): void | boolean {
