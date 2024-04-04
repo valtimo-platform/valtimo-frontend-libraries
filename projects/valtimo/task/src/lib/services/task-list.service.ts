@@ -15,29 +15,18 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, filter, Observable, switchMap} from 'rxjs';
-import {TaskListColumn} from '../models';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {TaskService} from './task.service';
 import {TaskListTab} from '@valtimo/config';
 
 @Injectable()
 export class TaskListService {
-  private readonly _loadingTaskListColumns$ = new BehaviorSubject<boolean>(false);
   private readonly _caseDefinitionName$ = new BehaviorSubject<string | null>(null);
   private readonly _selectedTaskType$ = new BehaviorSubject<TaskListTab>(TaskListTab.MINE);
+  private readonly _loadingStateForCaseDefinition$ = new BehaviorSubject<boolean>(false);
+
   public get caseDefinitionName$(): Observable<string | null> {
     return this._caseDefinitionName$.asObservable();
-  }
-
-  public get loadingTaskListColumns$(): Observable<boolean> {
-    return this._loadingTaskListColumns$.asObservable();
-  }
-
-  public get taskListColumnsForCase$(): Observable<TaskListColumn[]> {
-    return this.caseDefinitionName$.pipe(
-      filter(caseDefinitionName => !!caseDefinitionName),
-      switchMap(caseDefinitionName => this.taskService.getTaskListColumns(caseDefinitionName))
-    );
   }
 
   public get selectedTaskType$(): Observable<TaskListTab> {
@@ -48,6 +37,10 @@ export class TaskListService {
     return this._selectedTaskType$.getValue();
   }
 
+  public get loadingStateForCaseDefinition$(): Observable<boolean> {
+    return this._loadingStateForCaseDefinition$.asObservable();
+  }
+
   constructor(private readonly taskService: TaskService) {}
 
   public setSelectedTaskType(type: TaskListTab): void {
@@ -55,6 +48,11 @@ export class TaskListService {
   }
 
   public setCaseDefinitionName(caseDefinitionName: string): void {
+    this._loadingStateForCaseDefinition$.next(true);
     this._caseDefinitionName$.next(caseDefinitionName);
+  }
+
+  public setLoadingStateForCaseDefinition(loading: boolean): void {
+    this._loadingStateForCaseDefinition$.next(loading);
   }
 }

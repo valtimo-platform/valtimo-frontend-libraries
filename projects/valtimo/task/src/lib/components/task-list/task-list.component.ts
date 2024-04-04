@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import {Router} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import moment from 'moment';
@@ -23,7 +29,7 @@ import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.c
 import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
 import {ConfigService, Page, SortState, TaskListTab} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
-import {distinctUntilChanged, map, take} from 'rxjs/operators';
+import {distinctUntilChanged, filter, map, take} from 'rxjs/operators';
 import {PermissionService} from '@valtimo/access-control';
 import {
   CAN_VIEW_CASE_PERMISSION,
@@ -51,7 +57,7 @@ moment.locale(localStorage.getItem('langKey') || '');
     TaskListSortService,
   ],
 })
-export class TaskListComponent {
+export class TaskListComponent implements OnInit {
   @ViewChild('taskDetail') private readonly _taskDetail: TaskDetailModalComponent;
 
   public readonly selectedTaskType$ = this.taskListService.selectedTaskType$;
@@ -69,14 +75,17 @@ export class TaskListComponent {
     this.taskListPaginationService.paginationForCurrentTaskTypeForList$;
 
   public readonly tasks$: Observable<Task[]> = combineLatest([
+    this.taskListService.loadingStateForCaseDefinition$,
     this.selectedTaskType$,
     this.taskListPaginationService.paginationForCurrentTaskType$,
     this.taskListSortService.sortStringForCurrentTaskType$,
     this.taskListService.caseDefinitionName$,
     this._enableLoadingAnimation$,
   ]).pipe(
+    filter(([loadingStateForCaseDefinition]) => loadingStateForCaseDefinition === false),
     map(
       ([
+        _,
         selectedTaskType,
         paginationForSelectedTaskType,
         sortStringForSelectedTaskType,
@@ -139,7 +148,7 @@ export class TaskListComponent {
     tap(() => this.loadingCaseListItems$.next(false))
   );
 
-  public readonly taskListColumnsForCase$ = this.taskListService.taskListColumnsForCase$;
+  public readonly taskListColumnsForCase$ = this.taskListColumnService.taskListColumnsForCase$;
 
   constructor(
     private readonly configService: ConfigService,
@@ -152,7 +161,10 @@ export class TaskListComponent {
     private readonly taskListColumnService: TaskListColumnService,
     private readonly taskListPaginationService: TaskListPaginationService,
     private readonly taskListSortService: TaskListSortService
-  ) {
+  ) {}
+
+  public ngOnInit(): void {
+    this.taskListColumnService.resetTaskListFields();
     this.setVisibleTabs();
   }
 
@@ -216,7 +228,10 @@ export class TaskListComponent {
   }
 
   public setCaseDefinition(definition: {item: {id: string}}): void {
-    if (definition.item.id) this.taskListService.setCaseDefinitionName(definition.item.id);
+    if (definition.item.id) {
+      this.loadingTasks$.next(true);
+      this.taskListService.setCaseDefinitionName(definition.item.id);
+    }
   }
 
   private setVisibleTabs(): void {

@@ -16,8 +16,10 @@
 
 import {Injectable} from '@angular/core';
 import {ColumnConfig, ViewType} from '@valtimo/components';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, filter, Observable, switchMap} from 'rxjs';
 import {TaskService} from './task.service';
+import {TaskListColumn} from '../models';
+import {TaskListService} from './task-list.service';
 
 @Injectable()
 export class TaskListColumnService {
@@ -52,13 +54,27 @@ export class TaskListColumnService {
     },
   ];
 
-  public readonly fields$ = new BehaviorSubject<ColumnConfig[]>(this._DEFAULT_TASK_LIST_FIELDS);
+  private readonly _fields$ = new BehaviorSubject<ColumnConfig[]>(this._DEFAULT_TASK_LIST_FIELDS);
 
   private get hasCustomConfigTaskList(): boolean {
     return !!this.taskService.getConfigCustomTaskList();
   }
 
-  constructor(private readonly taskService: TaskService) {}
+  public get fields$(): Observable<ColumnConfig[]> {
+    return this._fields$.asObservable();
+  }
+
+  public get taskListColumnsForCase$(): Observable<TaskListColumn[]> {
+    return this.taskListService.caseDefinitionName$.pipe(
+      filter(caseDefinitionName => !!caseDefinitionName),
+      switchMap(caseDefinitionName => this.taskService.getTaskListColumns(caseDefinitionName))
+    );
+  }
+
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly taskListService: TaskListService
+  ) {}
 
   public resetTaskListFields(): void {
     if (this.hasCustomConfigTaskList) {
@@ -72,7 +88,7 @@ export class TaskListColumnService {
     const customTaskListFields = this.taskService.getConfigCustomTaskList().fields;
 
     if (customTaskListFields) {
-      this.fields$.next(
+      this._fields$.next(
         customTaskListFields.map((column, index) => ({
           key: column.propertyName,
           label: `task-list.fieldLabels.${column.translationKey}`,
@@ -85,6 +101,40 @@ export class TaskListColumnService {
   }
 
   private setFieldsToDefaultTaskListFields(): void {
-    this.fields$.next(this._DEFAULT_TASK_LIST_FIELDS);
+    this._fields$.next(this._DEFAULT_TASK_LIST_FIELDS);
+  }
+
+  private mapTaskListColumnToColumnConfig(
+    taskListColumns: Array<TaskListColumn>
+  ): Array<ColumnConfig> {
+    return taskListColumns.map(taskListColumn => ({
+      label: taskListColumn.key,
+      sortable: taskListColumn.sortable,
+      default: taskListColumn.defaultSort,
+      viewType: this.getViewType(taskListColumn.displayType.type),
+      key: this.getPropertyName(taskListColumn.path),
+      ...(taskListColumn.title && {title: taskListColumn.title}),
+      ...(taskListColumn?.displayType?.displayTypeParameters?.enum && {
+        enum: taskListColumn.displayType.displayTypeParameters.enum as any,
+      }),
+      ...(taskListColumn.displayType?.displayTypeParameters?.dateFormat && {
+        format: taskListColumn.displayType?.displayTypeParameters?.dateFormat,
+      }),
+    }));
+  }
+
+  private getViewType(taskListColumnColumnDisplayType: string): string {
+    switch (taskListColumnColumnDisplayType) {
+      case 'arrayCount':
+        return 'relatedFiles';
+      case 'underscoresToSpaces':
+        return 'stringReplaceUnderscore';
+      default:
+        return taskListColumnColumnDisplayType;
+    }
+  }
+
+  private getPropertyName(caseListColumnPath: string): string {
+    return caseListColumnPath.replace('doc:', '$.').replace('case:', '');
   }
 }
