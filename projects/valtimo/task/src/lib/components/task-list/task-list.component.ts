@@ -236,6 +236,8 @@ export class TaskListComponent {
     tap(() => this.loadingCaseListItems$.next(false))
   );
 
+  public readonly taskListColumnsForCase$ = this.taskListService.taskListColumnsForCase$;
+
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,

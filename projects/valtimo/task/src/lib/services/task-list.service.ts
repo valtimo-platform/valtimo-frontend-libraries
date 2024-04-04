@@ -15,15 +15,31 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, filter, Observable, switchMap} from 'rxjs';
+import {TaskListColumn} from '../models';
+import {TaskService} from './task.service';
 
 @Injectable()
 export class TaskListService {
+  private readonly _loadingTaskListColumns$ = new BehaviorSubject<boolean>(false);
   private readonly _caseDefinitionName$ = new BehaviorSubject<string | null>(null);
 
   public get caseDefinitionName$(): Observable<string | null> {
     return this._caseDefinitionName$.asObservable();
   }
+
+  public get loadingTaskListColumns$(): Observable<boolean> {
+    return this._loadingTaskListColumns$.asObservable();
+  }
+
+  public get taskListColumnsForCase$(): Observable<TaskListColumn[]> {
+    return this.caseDefinitionName$.pipe(
+      filter(caseDefinitionName => !!caseDefinitionName),
+      switchMap(caseDefinitionName => this.taskService.getTaskListColumns(caseDefinitionName))
+    );
+  }
+
+  constructor(private readonly taskService: TaskService) {}
 
   public setCaseDefinitionName(caseDefinitionName: string): void {
     this._caseDefinitionName$.next(caseDefinitionName);

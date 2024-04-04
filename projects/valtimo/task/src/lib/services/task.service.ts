@@ -17,7 +17,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AssigneeRequest, Task, TaskPageParams, TaskProcessLinkResult} from '../models';
+import {
+  AssigneeRequest,
+  Task,
+  TaskListColumn,
+  TaskPageParams,
+  TaskProcessLinkResult,
+} from '../models';
 import {
   BaseApiService,
   ConfigService,
@@ -112,6 +118,12 @@ export class TaskService extends BaseApiService {
   public getTaskProcessLinkV1(taskId: string): Observable<TaskProcessLinkResult> {
     return this.httpClient.get<TaskProcessLinkResult>(
       this.getApiUrl(`/v1/process-link/task/${taskId}`)
+    );
+  }
+
+  public getTaskListColumns(caseDefinitionName: string): Observable<TaskListColumn[]> {
+    return this.httpClient.get<TaskListColumn[]>(
+      this.getApiUrl(`/v1/case/${caseDefinitionName}/task-list-column`)
     );
   }
 
