@@ -330,7 +330,18 @@ export class TaskListComponent implements OnInit {
   ): Task[] | MappedSpecifiedTask[] {
     if (isSpecified) {
       return (tasks as Page<SpecifiedTask>).content.map(specifiedTask =>
-        specifiedTask.items.reduce((acc, curr) => ({...acc, [curr.key]: curr.value}), {})
+        specifiedTask.items.reduce(
+          (acc, curr) => ({
+            id: specifiedTask.id,
+            businessKey: specifiedTask.businessKey,
+            processInstanceId: specifiedTask.processInstanceId,
+            name: specifiedTask.name,
+            created: specifiedTask.created,
+            ...acc,
+            [curr.key]: curr.value,
+          }),
+          {}
+        )
       ) as MappedSpecifiedTask[];
     }
 

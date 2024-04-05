@@ -73,10 +73,17 @@ interface TaskProcessLinkResult {
 interface SpecifiedTask {
   id: string;
   businessKey: string;
+  processInstanceId: string;
+  name: string;
+  created: Date;
   items: {key: string; value: any}[];
 }
 
 interface MappedSpecifiedTask {
+  id: string;
+  businessKey: string;
+  name: string;
+  created: Date;
   [key: string]: any;
 }
 
