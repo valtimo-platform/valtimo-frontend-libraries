@@ -82,6 +82,7 @@ interface SpecifiedTask {
 interface MappedSpecifiedTask {
   id: string;
   businessKey: string;
+  processInstanceId: string;
   name: string;
   created: Date;
   [key: string]: any;
