@@ -155,8 +155,15 @@ export class TaskListColumnService {
 
       return {
         viewType: this.getViewType(column.displayType.type),
-        key: this.getPropertyName(column.path),
+        key: column.key,
         label: column.title || column.key,
+        sortable: column.sortable,
+        ...(column?.displayType?.displayTypeParameters?.enum && {
+          enum: column?.displayType?.displayTypeParameters?.enum,
+        }),
+        ...(column?.displayType?.displayTypeParameters?.dateFormat && {
+          format: column?.displayType?.displayTypeParameters?.dateFormat,
+        }),
       };
     });
   }

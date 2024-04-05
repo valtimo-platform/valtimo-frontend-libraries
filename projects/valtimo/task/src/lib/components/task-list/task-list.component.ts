@@ -24,7 +24,13 @@ import {
 import {Router} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import moment from 'moment';
-import {SpecifiedTask, Task, TaskListParams, TaskPageParams} from '../../models';
+import {
+  MappedSpecifiedTask,
+  SpecifiedTask,
+  Task,
+  TaskListParams,
+  TaskPageParams,
+} from '../../models';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
 import {ConfigService, Page, SortState, TaskListTab} from '@valtimo/config';
@@ -67,12 +73,12 @@ export class TaskListComponent implements OnInit {
 
   private _enableLoadingAnimation$ = new BehaviorSubject<boolean>(true);
 
-  public readonly cachedTasks$ = new BehaviorSubject<Task[] | null>(null);
+  public readonly cachedTasks$ = new BehaviorSubject<Task[] | MappedSpecifiedTask[] | null>(null);
 
   public readonly paginationForCurrentTaskTypeForList$ =
     this.taskListPaginationService.paginationForCurrentTaskTypeForList$;
 
-  public readonly tasks$: Observable<Task[]> = combineLatest([
+  public readonly tasks$: Observable<Task[] | MappedSpecifiedTask[]> = combineLatest([
     this.taskListService.loadingStateForCaseDefinition$,
     this.selectedTaskType$,
     this.taskListPaginationService.paginationForCurrentTaskType$,
@@ -321,8 +327,14 @@ export class TaskListComponent implements OnInit {
     tasks: Page<Task> | Page<SpecifiedTask>,
     canViewTaskPermissions: boolean[] | null,
     canViewCasePermissions: boolean[] | null
-  ): Task[] {
-    return tasks?.content?.map((task, taskIndex) => {
+  ): Task[] | MappedSpecifiedTask[] {
+    if (isSpecified) {
+      return (tasks as Page<SpecifiedTask>).content.map(specifiedTask =>
+        specifiedTask.items.reduce((acc, curr) => ({...acc, [curr.key]: curr.value}), {})
+      ) as MappedSpecifiedTask[];
+    }
+
+    return (tasks as Page<Task>)?.content?.map((task, taskIndex) => {
       const createdDate = moment(task.created);
       const dueDate = moment(task.due);
       const taskCopy = {...task};
@@ -333,6 +345,6 @@ export class TaskListComponent implements OnInit {
       if (canViewCasePermissions) taskCopy.caseLocked = !canViewCasePermissions[taskIndex];
 
       return taskCopy;
-    });
+    }) as Task[];
   }
 }

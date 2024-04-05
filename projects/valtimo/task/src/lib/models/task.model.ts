@@ -76,6 +76,10 @@ interface SpecifiedTask {
   items: {key: string; value: any}[];
 }
 
+interface MappedSpecifiedTask {
+  [key: string]: any;
+}
+
 export {
   AssigneeRequest,
   ListItemField,
@@ -83,4 +87,5 @@ export {
   TaskProcessLinkResult,
   TaskProcessLinkType,
   SpecifiedTask,
+  MappedSpecifiedTask,
 };
