@@ -24,7 +24,7 @@ import {
 import {Router} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import moment from 'moment';
-import {Task, TaskListParams, TaskPageParams} from '../../models';
+import {SpecifiedTask, Task, TaskListParams, TaskPageParams} from '../../models';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
 import {ConfigService, Page, SortState, TaskListTab} from '@valtimo/config';
@@ -69,8 +69,6 @@ export class TaskListComponent implements OnInit {
 
   public readonly cachedTasks$ = new BehaviorSubject<Task[] | null>(null);
 
-  private readonly _ALL_CASES_ID = 'ALL_CASES';
-
   public readonly paginationForCurrentTaskTypeForList$ =
     this.taskListPaginationService.paginationForCurrentTaskTypeForList$;
 
@@ -105,19 +103,29 @@ export class TaskListComponent implements OnInit {
       if (enableLoadingAnimation) this.loadingTasks$.next(true);
     }),
     switchMap(({params}) =>
-      this.taskService.queryTasksPageV3(
-        params.selectedTaskType,
-        params.params,
-        params.caseDefinitionName
-      )
+      combineLatest([
+        this.taskService.queryTasksPageV3(
+          params.selectedTaskType,
+          params.params,
+          params.caseDefinitionName
+        ),
+        of(!!params.caseDefinitionName),
+      ])
     ),
-    switchMap(tasksResult => this.getTaskListPermissionsRequest(tasksResult)),
-    map(([taskResult, canViewTaskPermissions, canViewCasePermissions]) => {
+    switchMap(([tasksResult, isSpecified]) =>
+      this.getTaskListPermissionsRequest(tasksResult, isSpecified)
+    ),
+    map(([isSpecified, taskResult, canViewTaskPermissions, canViewCasePermissions]) => {
       this.taskListPaginationService.updateTaskPagination(this.taskListService.selectedTaskType, {
         collectionSize: Number(taskResult.totalElements),
       });
 
-      return this.mapTasksForList(taskResult, canViewTaskPermissions, canViewCasePermissions);
+      return this.mapTasksForList(
+        isSpecified,
+        taskResult,
+        canViewTaskPermissions,
+        canViewCasePermissions
+      );
     }),
     tap(tasks => {
       this.cachedTasks$.next(tasks);
@@ -127,7 +135,9 @@ export class TaskListComponent implements OnInit {
   );
 
   public readonly loadingCaseListItems$ = new BehaviorSubject<boolean>(true);
-  private readonly _selectedCaseDefinitionId$ = new BehaviorSubject<string>(this._ALL_CASES_ID);
+  private readonly _selectedCaseDefinitionId$ = new BehaviorSubject<string>(
+    this.taskListService.ALL_CASES_ID
+  );
   public readonly caseListItems$: Observable<ListItem[]> = combineLatest([
     this.documentService.getAllDefinitions(),
     this._selectedCaseDefinitionId$,
@@ -136,8 +146,8 @@ export class TaskListComponent implements OnInit {
     map(([documentDefinitionRes, selectedCaseDefinitionId]) => [
       {
         content: this.translateService.instant('task-list.allCases'),
-        id: this._ALL_CASES_ID,
-        selected: selectedCaseDefinitionId === this._ALL_CASES_ID,
+        id: this.taskListService.ALL_CASES_ID,
+        selected: selectedCaseDefinitionId === this.taskListService.ALL_CASES_ID,
       },
       ...documentDefinitionRes.content.map(documentDefinition => ({
         id: documentDefinition.id.name,
@@ -267,24 +277,28 @@ export class TaskListComponent implements OnInit {
         selectedTaskType,
         params,
         ...(caseDefinitionName &&
-          caseDefinitionName !== this._ALL_CASES_ID && {caseDefinitionName}),
+          caseDefinitionName !== this.taskListService.ALL_CASES_ID && {caseDefinitionName}),
       },
       enableLoadingAnimation,
     };
   }
 
-  private getTaskListPermissionsRequest(tasksResult: Page<Task>) {
+  private getTaskListPermissionsRequest(
+    tasksResult: Page<Task> | Page<SpecifiedTask>,
+    isSpecified: boolean
+  ) {
     const taskResults = tasksResult.content;
     const hasTaskResults = Array.isArray(taskResults) && taskResults.length > 0;
 
     return combineLatest([
+      of(isSpecified),
       of(tasksResult),
       hasTaskResults
         ? combineLatest(
             taskResults.map(task =>
               this.permissionService.requestPermission(CAN_VIEW_TASK_PERMISSION, {
                 resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
-                identifier: task.id,
+                identifier: !isSpecified ? (task as Task).id : (task as SpecifiedTask).id,
               })
             )
           )
@@ -303,7 +317,8 @@ export class TaskListComponent implements OnInit {
   }
 
   private mapTasksForList(
-    tasks: Page<Task>,
+    isSpecified: boolean,
+    tasks: Page<Task> | Page<SpecifiedTask>,
     canViewTaskPermissions: boolean[] | null,
     canViewCasePermissions: boolean[] | null
   ): Task[] {

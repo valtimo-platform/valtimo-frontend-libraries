@@ -19,6 +19,7 @@ import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
   AssigneeRequest,
+  SpecifiedTask,
   Task,
   TaskListColumn,
   TaskPageParams,
@@ -60,7 +61,7 @@ export class TaskService extends BaseApiService {
     assigneeFilter: TaskListTab = TaskListTab.ALL,
     pageParams: TaskPageParams,
     caseDefinitionName?: string
-  ): Observable<Page<Task>> {
+  ): Observable<Page<Task> | Page<SpecifiedTask>> {
     let httpParams = new HttpParams()
       .set('filter', assigneeFilter.toUpperCase())
       .set('page', pageParams.page)
@@ -70,13 +71,17 @@ export class TaskService extends BaseApiService {
       httpParams = httpParams.append('sort', pageParams.sort);
     }
 
-    return this.httpClient.post<Page<Task>>(
-      this.getApiUrl('/v3/task'),
-      {
-        ...(caseDefinitionName && {caseDefinitionName}),
-      },
-      {params: httpParams}
-    );
+    if (caseDefinitionName) {
+      return this.httpClient.post<Page<SpecifiedTask>>(
+        this.getApiUrl('/v3/task'),
+        {
+          caseDefinitionName,
+        },
+        {params: httpParams}
+      );
+    }
+
+    return this.httpClient.post<Page<Task>>(this.getApiUrl('/v3/task'), {}, {params: httpParams});
   }
 
   public getTasks(): Observable<Task[]> {

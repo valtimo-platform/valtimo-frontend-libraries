@@ -16,10 +16,11 @@
 
 import {Injectable} from '@angular/core';
 import {ColumnConfig, ViewType} from '@valtimo/components';
-import {BehaviorSubject, filter, Observable, switchMap} from 'rxjs';
+import {BehaviorSubject, filter, Observable, switchMap, tap} from 'rxjs';
 import {TaskService} from './task.service';
 import {TaskListColumn} from '../models';
 import {TaskListService} from './task-list.service';
+import {TaskListSortService} from './task-list-sort.service';
 
 @Injectable()
 export class TaskListColumnService {
@@ -66,14 +67,27 @@ export class TaskListColumnService {
 
   public get taskListColumnsForCase$(): Observable<TaskListColumn[]> {
     return this.taskListService.caseDefinitionName$.pipe(
-      filter(caseDefinitionName => !!caseDefinitionName),
-      switchMap(caseDefinitionName => this.taskService.getTaskListColumns(caseDefinitionName))
+      tap(caseDefinitionName => {
+        if (caseDefinitionName === this.taskListService.ALL_CASES_ID) {
+          this.resetTaskListFields();
+        }
+      }),
+      filter(
+        caseDefinitionName =>
+          !!caseDefinitionName && caseDefinitionName !== this.taskListService.ALL_CASES_ID
+      ),
+      switchMap(caseDefinitionName => this.taskService.getTaskListColumns(caseDefinitionName)),
+      tap(taskListColumns =>
+        this._fields$.next(this.mapTaskListColumnToColumnConfig(taskListColumns))
+      ),
+      tap(() => this.taskListService.setLoadingStateForCaseDefinition(false))
     );
   }
 
   constructor(
     private readonly taskService: TaskService,
-    private readonly taskListService: TaskListService
+    private readonly taskListService: TaskListService,
+    private readonly taskListSortService: TaskListSortService
   ) {}
 
   public resetTaskListFields(): void {
@@ -82,6 +96,9 @@ export class TaskListColumnService {
     } else {
       this.setFieldsToDefaultTaskListFields();
     }
+
+    this.taskListSortService.resetDefaultSortStates();
+    this.taskListService.setLoadingStateForCaseDefinition(false);
   }
 
   private setFieldsToCustomTaskListFields(): void {
@@ -107,20 +124,41 @@ export class TaskListColumnService {
   private mapTaskListColumnToColumnConfig(
     taskListColumns: Array<TaskListColumn>
   ): Array<ColumnConfig> {
-    return taskListColumns.map(taskListColumn => ({
-      label: taskListColumn.key,
-      sortable: taskListColumn.sortable,
-      default: taskListColumn.defaultSort,
-      viewType: this.getViewType(taskListColumn.displayType.type),
-      key: this.getPropertyName(taskListColumn.path),
-      ...(taskListColumn.title && {title: taskListColumn.title}),
-      ...(taskListColumn?.displayType?.displayTypeParameters?.enum && {
-        enum: taskListColumn.displayType.displayTypeParameters.enum as any,
-      }),
-      ...(taskListColumn.displayType?.displayTypeParameters?.dateFormat && {
-        format: taskListColumn.displayType?.displayTypeParameters?.dateFormat,
-      }),
-    }));
+    const selectedTaskType = this.taskListService.selectedTaskType;
+    const hasDefaultSort = !!taskListColumns.find(column => column.defaultSort);
+    const firstSortableColumn = taskListColumns.find(column => column.sortable);
+
+    if (!hasDefaultSort && firstSortableColumn) {
+      this.taskListSortService.updateSortState(selectedTaskType, {
+        isSorting: true,
+        state: {
+          name: firstSortableColumn.key,
+          direction: 'ASC',
+        },
+      });
+    }
+
+    if (!hasDefaultSort && !firstSortableColumn) {
+      this.taskListSortService.clearSortStates();
+    }
+
+    return taskListColumns.map((column, index) => {
+      if (column.defaultSort) {
+        this.taskListSortService.updateSortState(selectedTaskType, {
+          isSorting: true,
+          state: {
+            name: column.key,
+            direction: column.defaultSort,
+          },
+        });
+      }
+
+      return {
+        viewType: this.getViewType(column.displayType.type),
+        key: this.getPropertyName(column.path),
+        label: column.title || column.key,
+      };
+    });
   }
 
   private getViewType(taskListColumnColumnDisplayType: string): string {

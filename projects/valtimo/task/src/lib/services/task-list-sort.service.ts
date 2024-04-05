@@ -58,6 +58,30 @@ export class TaskListSortService {
     });
   }
 
+  public clearSortStates(): void {
+    this._sortState$.pipe(take(1)).subscribe(sortStates => {
+      const sortStatesCopy = {...sortStates};
+
+      Object.keys(sortStates).forEach(taskType => {
+        sortStatesCopy[taskType] = null;
+      });
+
+      this._sortState$.next(sortStatesCopy);
+    });
+  }
+
+  public resetDefaultSortStates(): void {
+    this._sortState$.pipe(take(1)).subscribe(sortStates => {
+      const sortStatesCopy = {...sortStates};
+
+      Object.keys(sortStates).forEach(taskType => {
+        sortStatesCopy[taskType] = this._defaultSortState;
+      });
+
+      this._sortState$.next(sortStatesCopy);
+    });
+  }
+
   private getSortString(sort: SortState | null): string {
     return `${sort.state.name},${sort.state.direction}`;
   }

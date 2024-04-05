@@ -21,6 +21,7 @@ import {TaskListTab} from '@valtimo/config';
 
 @Injectable()
 export class TaskListService {
+  private readonly _ALL_CASES_ID = 'ALL_CASES';
   private readonly _caseDefinitionName$ = new BehaviorSubject<string | null>(null);
   private readonly _selectedTaskType$ = new BehaviorSubject<TaskListTab>(TaskListTab.MINE);
   private readonly _loadingStateForCaseDefinition$ = new BehaviorSubject<boolean>(false);
@@ -39,6 +40,10 @@ export class TaskListService {
 
   public get loadingStateForCaseDefinition$(): Observable<boolean> {
     return this._loadingStateForCaseDefinition$.asObservable();
+  }
+
+  public get ALL_CASES_ID(): string {
+    return this._ALL_CASES_ID;
   }
 
   constructor(private readonly taskService: TaskService) {}
