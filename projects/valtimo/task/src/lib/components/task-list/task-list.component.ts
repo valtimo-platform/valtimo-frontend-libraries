@@ -328,18 +328,27 @@ export class TaskListComponent implements OnInit {
     canViewTaskPermissions: boolean[] | null,
     canViewCasePermissions: boolean[] | null
   ): Task[] | MappedSpecifiedTask[] {
+    const MOMENT_FORMAT = 'DD MMM YYYY HH:mm';
+
     if (isSpecified) {
-      return (tasks as Page<SpecifiedTask>).content.map(specifiedTask =>
+      return (tasks as Page<SpecifiedTask>).content.map((specifiedTask, specifiedTaskIndex) =>
         specifiedTask.items.reduce(
-          (acc, curr) => ({
-            id: specifiedTask.id,
-            businessKey: specifiedTask.businessKey,
-            processInstanceId: specifiedTask.processInstanceId,
-            name: specifiedTask.name,
-            created: specifiedTask.created,
-            ...acc,
-            [curr.key]: curr.value,
-          }),
+          (acc, curr) =>
+            ({
+              id: specifiedTask.id,
+              businessKey: specifiedTask.businessKey,
+              processInstanceId: specifiedTask.processInstanceId,
+              name: specifiedTask.name,
+              ...(moment(specifiedTask.created).isValid() && {
+                created: moment(specifiedTask.created).format(MOMENT_FORMAT),
+              }),
+              ...(canViewTaskPermissions && {locked: !canViewTaskPermissions[specifiedTaskIndex]}),
+              ...(canViewCasePermissions && {
+                caseLocked: !canViewCasePermissions[specifiedTaskIndex],
+              }),
+              ...acc,
+              [curr.key]: curr.value,
+            }) as MappedSpecifiedTask,
           {}
         )
       ) as MappedSpecifiedTask[];
@@ -350,8 +359,8 @@ export class TaskListComponent implements OnInit {
       const dueDate = moment(task.due);
       const taskCopy = {...task};
 
-      if (task.due && dueDate.isValid()) taskCopy.due = dueDate.format('DD MMM YYYY HH:mm');
-      if (createdDate.isValid()) taskCopy.created = createdDate.format('DD MMM YYYY HH:mm');
+      if (task.due && dueDate.isValid()) taskCopy.due = dueDate.format(MOMENT_FORMAT);
+      if (createdDate.isValid()) taskCopy.created = createdDate.format(MOMENT_FORMAT);
       if (canViewTaskPermissions) taskCopy.locked = !canViewTaskPermissions[taskIndex];
       if (canViewCasePermissions) taskCopy.caseLocked = !canViewCasePermissions[taskIndex];
 

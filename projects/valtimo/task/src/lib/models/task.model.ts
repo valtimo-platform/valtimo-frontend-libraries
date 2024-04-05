@@ -84,7 +84,9 @@ interface MappedSpecifiedTask {
   businessKey: string;
   processInstanceId: string;
   name: string;
-  created: Date;
+  created?: string;
+  locked?: boolean;
+  caseLocked?: boolean;
   [key: string]: any;
 }
 
