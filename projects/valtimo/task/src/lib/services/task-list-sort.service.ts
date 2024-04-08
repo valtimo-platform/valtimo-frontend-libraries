@@ -34,8 +34,12 @@ export class TaskListSortService {
     this._sortState$,
   ]).pipe(map(([selectedTaskType, sortStates]) => sortStates[selectedTaskType]));
 
+  public get sortStateForCurrentTaskType$(): Observable<SortState> {
+    return this._sortStateForCurrentTaskType$;
+  }
+
   public get sortStringForCurrentTaskType$(): Observable<string | null> {
-    return this._sortStateForCurrentTaskType$.pipe(
+    return this.sortStateForCurrentTaskType$.pipe(
       map(sortState => (sortState ? this.getSortString(sortState) : null))
     );
   }
@@ -55,6 +59,18 @@ export class TaskListSortService {
         ...sortState,
         [taskType]: {...sortState[taskType], ...updatedSortState},
       });
+    });
+  }
+
+  public updateSortStates(updatedSortState: SortState): void {
+    this._sortState$.pipe(take(1)).subscribe(sortStates => {
+      const sortStatesCopy = {...sortStates};
+
+      Object.keys(sortStates).forEach(taskType => {
+        sortStatesCopy[taskType] = {...sortStatesCopy[taskType], ...updatedSortState};
+      });
+
+      this._sortState$.next(sortStatesCopy);
     });
   }
 

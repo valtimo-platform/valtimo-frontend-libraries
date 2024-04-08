@@ -55,6 +55,32 @@ export class TaskListColumnService {
     },
   ];
 
+  private readonly _DEFAULT_SPECIFIED_TASK_LIST_FIELDS: ColumnConfig[] = [
+    {
+      key: 'createTime',
+      label: `task-list.fieldLabels.created`,
+      viewType: ViewType.TEXT,
+      sortable: true,
+    },
+    {
+      key: 'name',
+      label: `task-list.fieldLabels.name`,
+      viewType: ViewType.TEXT,
+      sortable: true,
+    },
+    {
+      key: 'assignee',
+      label: `task-list.fieldLabels.valtimoAssignee.fullName`,
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'dueDate',
+      label: `task-list.fieldLabels.due`,
+      viewType: ViewType.TEXT,
+      sortable: true,
+    },
+  ];
+
   private readonly _fields$ = new BehaviorSubject<ColumnConfig[]>(this._DEFAULT_TASK_LIST_FIELDS);
 
   private get hasCustomConfigTaskList(): boolean {
@@ -77,9 +103,20 @@ export class TaskListColumnService {
           !!caseDefinitionName && caseDefinitionName !== this.taskListService.ALL_CASES_ID
       ),
       switchMap(caseDefinitionName => this.taskService.getTaskListColumns(caseDefinitionName)),
-      tap(taskListColumns =>
-        this._fields$.next(this.mapTaskListColumnToColumnConfig(taskListColumns))
-      ),
+      tap(taskListColumns => {
+        if (taskListColumns.length === 0) {
+          this.taskListSortService.updateSortStates({
+            isSorting: true,
+            state: {
+              name: this._DEFAULT_SPECIFIED_TASK_LIST_FIELDS[0].key,
+              direction: 'DESC',
+            },
+          });
+          this._fields$.next(this._DEFAULT_SPECIFIED_TASK_LIST_FIELDS);
+        } else {
+          this._fields$.next(this.mapTaskListColumnToColumnConfig(taskListColumns));
+        }
+      }),
       tap(() => this.taskListService.setLoadingStateForCaseDefinition(false))
     );
   }
@@ -124,16 +161,15 @@ export class TaskListColumnService {
   private mapTaskListColumnToColumnConfig(
     taskListColumns: Array<TaskListColumn>
   ): Array<ColumnConfig> {
-    const selectedTaskType = this.taskListService.selectedTaskType;
     const hasDefaultSort = !!taskListColumns.find(column => column.defaultSort);
     const firstSortableColumn = taskListColumns.find(column => column.sortable);
 
     if (!hasDefaultSort && firstSortableColumn) {
-      this.taskListSortService.updateSortState(selectedTaskType, {
+      this.taskListSortService.updateSortStates({
         isSorting: true,
         state: {
           name: firstSortableColumn.key,
-          direction: 'ASC',
+          direction: 'DESC',
         },
       });
     }
@@ -144,7 +180,7 @@ export class TaskListColumnService {
 
     return taskListColumns.map((column, index) => {
       if (column.defaultSort) {
-        this.taskListSortService.updateSortState(selectedTaskType, {
+        this.taskListSortService.updateSortStates({
           isSorting: true,
           state: {
             name: column.key,
@@ -177,9 +213,5 @@ export class TaskListColumnService {
       default:
         return taskListColumnColumnDisplayType;
     }
-  }
-
-  private getPropertyName(caseListColumnPath: string): string {
-    return caseListColumnPath.replace('doc:', '$.').replace('case:', '');
   }
 }

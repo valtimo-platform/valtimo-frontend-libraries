@@ -22,7 +22,8 @@
     fields: fields$ | async,
     visibleTabs: visibleTabs$ | async,
     pagination: paginationForCurrentTaskTypeForList$ | async,
-    taskListColumnsForCase: taskListColumnsForCase$ | async
+    taskListColumnsForCase: taskListColumnsForCase$ | async,
+    sortState: sortStateForCurrentTaskType$ | async
   } as obs"
   class="main-content"
 >
@@ -100,6 +101,7 @@
     [pagination]="obs.pagination"
     paginationIdentifier="taskList"
     lockedTooltipTranslationKey="task-list.rowLocked"
+    [initialSortState]="obs.sortState"
     (paginationClicked)="paginationClicked($event, obs.selectedTaskType)"
     (paginationSet)="paginationSet($event)"
     (rowClicked)="rowOpenTaskClick($event)"

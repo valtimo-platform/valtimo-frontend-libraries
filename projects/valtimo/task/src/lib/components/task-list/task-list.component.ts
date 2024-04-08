@@ -78,6 +78,9 @@ export class TaskListComponent implements OnInit {
   public readonly paginationForCurrentTaskTypeForList$ =
     this.taskListPaginationService.paginationForCurrentTaskTypeForList$;
 
+  public readonly sortStateForCurrentTaskType$ =
+    this.taskListSortService.sortStateForCurrentTaskType$;
+
   public readonly tasks$: Observable<Task[] | MappedSpecifiedTask[]> = combineLatest([
     this.taskListService.loadingStateForCaseDefinition$,
     this.selectedTaskType$,
@@ -122,9 +125,7 @@ export class TaskListComponent implements OnInit {
       this.getTaskListPermissionsRequest(tasksResult, isSpecified)
     ),
     map(([isSpecified, taskResult, canViewTaskPermissions, canViewCasePermissions]) => {
-      this.taskListPaginationService.updateTaskPagination(this.taskListService.selectedTaskType, {
-        collectionSize: Number(taskResult.totalElements),
-      });
+      this.updateTaskListPaginationAfterResponse(Number(taskResult.totalElements));
 
       return this.mapTasksForList(
         isSpecified,
@@ -248,6 +249,21 @@ export class TaskListComponent implements OnInit {
       this.loadingTasks$.next(true);
       this.taskListService.setCaseDefinitionName(definition.item.id);
     }
+  }
+
+  private updateTaskListPaginationAfterResponse(newCollectionSize: number): void {
+    this.taskListPaginationService.paginationForCurrentTaskType$
+      .pipe(take(1))
+      .subscribe(currentPagination => {
+        this.taskListPaginationService.updateTaskPagination(this.taskListService.selectedTaskType, {
+          collectionSize: Number(newCollectionSize),
+          page: this.taskListPaginationService.getLastAvailablePage(
+            currentPagination.page,
+            currentPagination.size,
+            newCollectionSize
+          ),
+        });
+      });
   }
 
   private setVisibleTabs(): void {
