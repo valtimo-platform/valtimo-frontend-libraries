@@ -29,7 +29,7 @@ export class TaskListSortService {
     [TaskListTab.OPEN]: this._defaultSortState,
   });
 
-  private readonly _sortStateForCurrentTaskType$ = combineLatest([
+  private readonly _sortStateForCurrentTaskType$: Observable<SortState> = combineLatest([
     this.taskListService.selectedTaskType$,
     this._sortState$,
   ]).pipe(map(([selectedTaskType, sortStates]) => sortStates[selectedTaskType]));

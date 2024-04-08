@@ -178,7 +178,7 @@ export class TaskListColumnService {
       this.taskListSortService.clearSortStates();
     }
 
-    return taskListColumns.map((column, index) => {
+    return taskListColumns.map(column => {
       if (column.defaultSort) {
         this.taskListSortService.updateSortStates({
           isSorting: true,

@@ -19,7 +19,7 @@ import {TaskPageParams} from '../models';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {TaskListTab} from '@valtimo/config';
 import {map, take} from 'rxjs/operators';
-import {TaskListService} from '.';
+import {TaskListService} from './task-list.service';
 
 @Injectable()
 export class TaskListPaginationService {
@@ -29,7 +29,7 @@ export class TaskListPaginationService {
     [TaskListTab.OPEN]: this.getDefaultPagination(),
   });
 
-  private readonly _paginationForCurrentTaskType$ = combineLatest([
+  private readonly _paginationForCurrentTaskType$: Observable<TaskPageParams> = combineLatest([
     this.taskListService.selectedTaskType$,
     this._pagination$,
   ]).pipe(map(([selectedTaskType, pagination]) => pagination[selectedTaskType]));
