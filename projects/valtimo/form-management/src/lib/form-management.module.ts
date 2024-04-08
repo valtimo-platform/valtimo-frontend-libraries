@@ -33,7 +33,8 @@ import {
   PageTitleModule,
   RenderInPageHeaderDirectiveModule,
   EditorModule,
-  SpinnerModule, ConfirmationModalModule,
+  SpinnerModule,
+  ConfirmationModalModule,
 } from '@valtimo/components';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -92,7 +93,7 @@ import {
     EditorModule,
     SpinnerModule,
     IconModule,
-    ConfirmationModalModule
+    ConfirmationModalModule,
   ],
   exports: [FormManagementComponent],
 })
