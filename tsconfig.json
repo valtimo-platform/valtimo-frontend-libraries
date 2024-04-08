@@ -45,6 +45,8 @@
       "@valtimo/dashboard-management/*": ["dist/valtimo/dashboard-management/*"],
       "@valtimo/document": ["dist/valtimo/document"],
       "@valtimo/document/*": ["dist/valtimo/document/*"],
+      "@valtimo/document-management": ["dist/valtimo/document-management"],
+      "@valtimo/document-management/*": ["dist/valtimo/document-management/*"],
       "@valtimo/account": ["dist/valtimo/account"],
       "@valtimo/account/*": ["dist/valtimo/account/*"],
       "@valtimo/choice-field": ["dist/valtimo/choice-field"],
@@ -183,6 +185,12 @@
     },
     {
       "path": "./projects/valtimo/document/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/valtimo/document-management/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/valtimo/document-management/tsconfig.spec.json"
     },
     {
       "path": "./projects/valtimo/account/tsconfig.lib.json"
