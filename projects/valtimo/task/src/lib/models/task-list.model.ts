@@ -66,6 +66,7 @@ interface TaskListParams {
     selectedTaskType: TaskListTab;
     params: TaskPageParams;
     caseDefinitionName?: string;
+    reload: boolean;
   };
   enableLoadingAnimation: boolean;
 }

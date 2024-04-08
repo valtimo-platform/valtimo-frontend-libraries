@@ -81,6 +81,8 @@ export class TaskListComponent implements OnInit {
   public readonly sortStateForCurrentTaskType$ =
     this.taskListSortService.sortStateForCurrentTaskType$;
 
+  private readonly _reload$ = new BehaviorSubject<boolean>(true);
+
   public readonly tasks$: Observable<Task[] | MappedSpecifiedTask[]> = combineLatest([
     this.taskListService.loadingStateForCaseDefinition$,
     this.selectedTaskType$,
@@ -88,6 +90,7 @@ export class TaskListComponent implements OnInit {
     this.taskListSortService.sortStringForCurrentTaskType$,
     this.taskListService.caseDefinitionName$,
     this._enableLoadingAnimation$,
+    this._reload$,
   ]).pipe(
     filter(([loadingStateForCaseDefinition]) => loadingStateForCaseDefinition === false),
     map(
@@ -98,13 +101,15 @@ export class TaskListComponent implements OnInit {
         sortStringForSelectedTaskType,
         caseDefinitionName,
         enableLoadingAnimation,
+        reload,
       ]) =>
         this.getTaskListParams(
           paginationForSelectedTaskType,
           sortStringForSelectedTaskType,
           selectedTaskType,
           caseDefinitionName,
-          enableLoadingAnimation
+          enableLoadingAnimation,
+          reload
         )
     ),
     distinctUntilChanged((previous, current) => isEqual(previous.params, current.params)),
@@ -251,6 +256,11 @@ export class TaskListComponent implements OnInit {
     }
   }
 
+  public reload(): void {
+    this.enableLoadingAnimation();
+    this._reload$.next(!this._reload$.getValue());
+  }
+
   private updateTaskListPaginationAfterResponse(newCollectionSize: number): void {
     this.taskListPaginationService.paginationForCurrentTaskType$
       .pipe(take(1))
@@ -285,7 +295,8 @@ export class TaskListComponent implements OnInit {
     sortStringForSelectedTaskType: string,
     selectedTaskType: TaskListTab,
     caseDefinitionName: string,
-    enableLoadingAnimation: boolean
+    enableLoadingAnimation: boolean,
+    reload: boolean
   ): TaskListParams {
     const params = {
       ...paginationForSelectedTaskType,
@@ -296,6 +307,7 @@ export class TaskListComponent implements OnInit {
 
     return {
       params: {
+        reload,
         selectedTaskType,
         params,
         ...(caseDefinitionName &&
