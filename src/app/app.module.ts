@@ -36,7 +36,6 @@ import {
   UploaderModule,
   WidgetModule,
 } from '@valtimo/components';
-import {ChoicefieldModule} from '@valtimo/choicefield';
 import {
   CASE_TAB_TOKEN,
   DefaultTabs,
@@ -50,7 +49,6 @@ import {
   DossierModule,
 } from '@valtimo/dossier';
 import {ProcessModule} from '@valtimo/process';
-import {ViewConfiguratorModule} from '@valtimo/view-configurator';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CustomFormExampleComponent} from './custom-form-example/custom-form-example.component';
 import {StartProcessCustomFormComponent} from './start-process-custom-form/start-process-custom-form.component';
@@ -90,7 +88,6 @@ import {
 } from '@valtimo/config';
 import {FormManagementModule} from '@valtimo/form-management';
 import {DossierManagementModule} from '@valtimo/dossier-management';
-import {OpenZaakModule} from '@valtimo/open-zaak';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {CustomerModule} from '@valtimo/customer';
 import {PluginManagementModule} from '@valtimo/plugin-management';
@@ -171,10 +168,8 @@ export function tabsFactory() {
     MenuModule,
     TaskModule,
     CaseMigrationModule,
-    ChoicefieldModule,
     DossierModule.forRoot(tabsFactory),
     ProcessModule,
-    ViewConfiguratorModule,
     BpmnJsDiagramModule,
     FormsModule,
     ReactiveFormsModule,
@@ -197,7 +192,6 @@ export function tabsFactory() {
     MigrationModule,
     FormManagementModule,
     DossierManagementModule,
-    OpenZaakModule,
     CustomerModule,
     PluginManagementModule,
     NotificatiesApiPluginModule,

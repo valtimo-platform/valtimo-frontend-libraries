@@ -381,7 +381,10 @@
         "light": "Hell",
         "dark": "Dunkel",
         "system": "System"
-      }
+      },
+      "collapsibleMenu": "Navigationsleiste immer einklappbar",
+      "compactMode": "Kompaktmodus",
+      "showUserName": "Benutzernamen anzeigen"
     }
   },
   "decisions": {
@@ -618,7 +621,8 @@
     },
     "goToCase": "Gehen Sie zum Fall",
     "caseLocked": "Kein Zugriff zu dieser Fall!",
-    "rowLocked": "Kein Zugriff zu dieser Aufgabe!"
+    "rowLocked": "Kein Zugriff zu dieser Aufgabe!",
+    "allCases": "Alle Fälle"
   },
   "Task": "Aufgabe",
   "Tasks": "Aufgaben",

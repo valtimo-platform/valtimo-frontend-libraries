@@ -382,7 +382,10 @@
         "light": "Light",
         "dark": "Dark",
         "system": "System"
-      }
+      },
+      "collapsibleMenu": "Navigation bar always collapsible",
+      "compactMode": "Compact mode",
+      "showUserName": "Show name of user"
     }
   },
   "decisions": {
@@ -619,7 +622,8 @@
     },
     "goToCase": "Go to case",
     "caseLocked": "You don't have access to this case",
-    "rowLocked": "You don't have access to this task"
+    "rowLocked": "You don't have access to this task",
+    "allCases": "All cases"
   },
   "Task": "Task",
   "Tasks": "Tasks",
