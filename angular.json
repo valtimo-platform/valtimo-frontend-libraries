@@ -1013,6 +1013,76 @@
         }
       }
     },
+    "@valtimo/documenten-api": {
+      "root": "projects/valtimo/documenten-api",
+      "sourceRoot": "projects/valtimo/documenten-api/src",
+      "projectType": "library",
+      "prefix": "valtimo",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/valtimo/documenten-api/tsconfig.lib.json",
+            "project": "projects/valtimo/documenten-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/valtimo/documenten-api/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "tsConfig": "projects/valtimo/documenten-api/tsconfig.spec.json",
+            "karmaConfig": "projects/valtimo/documenten-api/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/valtimo/documenten-api/src/**/*.ts",
+              "projects/valtimo/documenten-api/src/**/*.html"
+            ]
+          }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "@valtimo/documenten-api:serve",
+            "configFile": "projects/valtimo/documenten-api/cypress.config.js"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "@valtimo/documenten-api:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false,
+            "configFile": "projects/valtimo/documenten-api/cypress.config.js"
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "@valtimo/documenten-api:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "@valtimo/documenten-api:serve:production"
+            }
+          }
+        }
+      }
+    },
     "@valtimo/contact-moment": {
       "root": "projects/valtimo/contact-moment",
       "sourceRoot": "projects/valtimo/contact-moment/src",
