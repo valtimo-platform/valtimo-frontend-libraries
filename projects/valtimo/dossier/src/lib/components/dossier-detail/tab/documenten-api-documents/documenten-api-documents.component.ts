@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Filter16, TagGroup16, Upload16} from '@carbon/icons';
+import {TranslateService} from '@ngx-translate/core';
+import {ActionItem, ColumnConfig, DocumentenApiMetadata, ViewType} from '@valtimo/components';
+import {ConfigService} from '@valtimo/config';
 import {DocumentService, RelatedFile, RelatedFileListItem} from '@valtimo/document';
 import {DownloadService, UploadProviderService} from '@valtimo/resource';
-import {ToastrService} from 'ngx-toastr';
-import {catchError, map, switchMap, take, tap} from 'rxjs/operators';
-import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
-import {TranslateService} from '@ngx-translate/core';
-import {ConfigService} from '@valtimo/config';
-import {ActionItem, ColumnConfig, DocumentenApiMetadata, PromptService, ViewType} from '@valtimo/components';
 import {UserProviderService} from '@valtimo/security';
-import {FileSortService} from '../../../../services/file-sort.service';
-import moment from 'moment';
-import {Filter16, TagGroup16, Upload16} from "@carbon/icons";
 import {IconService} from 'carbon-components-angular';
+import moment from 'moment';
+import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
+import {catchError, map, switchMap, take, tap} from 'rxjs/operators';
+import {FileSortService} from '../../../../services/file-sort.service';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -52,7 +50,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       type: 'danger',
     },
   ];
-  public fieldsConfig = [ // TODO: Refactor this once admin page config is implemented
+  public fieldsConfig = [
+    // TODO: Refactor this once admin page config is implemented
     'title',
     'fileName',
     'format',
@@ -62,7 +61,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     'createdBy',
     'author',
     'informatieobjecttype',
-    'actions'
+    'actions',
   ];
 
   public readonly documentDefinitionName: string;
@@ -98,10 +97,12 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
         language: this.translateService.instant(`document.${file.language}`),
-        confidentialityLevel: this.translateService.instant(`document.${file.confidentialityLevel}`),
+        confidentialityLevel: this.translateService.instant(
+          `document.${file.confidentialityLevel}`
+        ),
         status: this.translateService.instant(`document.${file.status}`),
-        format: this.translateService.instant(`document.${file.format}`)
-      }));
+        format: this.translateService.instant(`document.${file.format}`),
+    }));
       return translatedFiles || [];
     }),
     map(relatedFiles => this.fileSortService.sortRelatedFilesByDateDescending(relatedFiles)),
@@ -110,13 +111,15 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       return relatedFiles.map(file => ({
         ...file,
         createdOn: moment(new Date(file.createdOn)).format('L'),
-        size: `${this.bytesToMegabytes(file.sizeInBytes)}`
+        size: `${this.bytesToMegabytes(file.sizeInBytes)}`,
       }));
     }),
-    tap(() => this.loading$.next(false)),
+    tap(() => {
+      this.loading$.next(false);
+    }),
     catchError(() => {
       this.showZaakLinkWarning = true;
-      this.loading$.next(false)
+      this.loading$.next(false);
       return of([]);
     })
   );
@@ -145,7 +148,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.iconService.registerAll([Filter16, TagGroup16, Upload16]);
   }
 
-  public ngAfterViewInit() : void {
+  public ngAfterViewInit(): void {
     const fieldOptions = [
       {key: 'title', label: 'document.inputTitle'},
       {key: 'description', label: 'document.inputDescription'},
@@ -167,22 +170,20 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       {key: 'confidentialityLevel', label: 'document.confidentialityLevel'},
       {key: 'receiptDate', label: 'document.receiptDate'},
       {key: 'sendDate', label: 'document.sendDate'},
-      {key: 'status', label: 'document.status'}
+      {key: 'status', label: 'document.status'},
     ];
 
-    this.fields = [
-      ...this.getFields(fieldOptions, this.fieldsConfig),
-    ];
+    this.fields = [...this.getFields(fieldOptions, this.fieldsConfig)];
   }
 
   public bytesToMegabytes(bytes: number): string {
     const megabytes = bytes / (1024 * 1024);
     if (megabytes < 1) {
-      return `${Math.ceil(megabytes*1000)} KB`;
+      return `${Math.ceil(megabytes * 1000)} KB`;
     } else if (megabytes < 1000) {
       return megabytes.toFixed(2) + ' MB';
     } else {
-      return (megabytes/1000).toFixed(2) + ' GB';
+      return (megabytes / 1000).toFixed(2) + ' GB';
     }
   }
 
@@ -214,10 +215,12 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.fileToBeUploaded$
       .pipe(take(1))
       .pipe(
-        tap(file => {
+        tap((file: File | null) => {
+          if (!file) return;
+
           this.uploadProviderService
             .uploadFileWithMetadata(file, this.documentId, metadata)
-            .subscribe(res => {
+            .subscribe(() => {
               this.refetchDocuments();
               this.uploading$.next(false);
               this.fileToBeUploaded$.next(null);
@@ -229,12 +232,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
 
   public onDeleteActionClick(item: RelatedFile): void {
     this.documentService.deleteDocument(item).subscribe(() => {
-        // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
-        this.refetchDocuments();
-      },
-      () => {
-        console.log(`File could not be deleted.`);
-      });
+      // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
+      this.refetchDocuments();
+    });
   }
 
   public onDownloadActionClick(file: RelatedFile): void {
@@ -275,15 +275,15 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   private setUploadProcessLinked(): void {
-    this.uploadProviderService.checkUploadProcessLink(this.documentDefinitionName).subscribe(
-      linked => {
+    this.uploadProviderService
+      .checkUploadProcessLink(this.documentDefinitionName)
+      .pipe(
+        tap(() => {
+          this.uploadProcessLinkedSet = true;
+        })
+      )
+      .subscribe((linked: boolean) => {
         this.uploadProcessLinked = linked;
-        this.uploadProcessLinkedSet = true;
-      },
-      () => {
-        this.uploadProcessLinkedSet = true;
-      }
-    );
+      });
   }
-
 }

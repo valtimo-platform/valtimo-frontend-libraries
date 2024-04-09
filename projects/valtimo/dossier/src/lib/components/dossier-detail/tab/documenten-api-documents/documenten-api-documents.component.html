@@ -16,36 +16,40 @@
 
 <div class="carbon-document-table-wrapper">
   <valtimo-carbon-list
-          [actionItems]="actionItems"
-          [items]="relatedFiles$ | async"
-          [fields]="fields"
-          [loading]="loading$ | async"
-          (rowClicked)="onRowClick($event)"
-          hideColumnHeader
+    [actionItems]="actionItems"
+    [items]="relatedFiles$ | async"
+    [fields]="fields"
+    [loading]="loading$ | async"
+    (rowClicked)="onRowClick($event)"
+    hideColumnHeader
   >
     <div carbonToolbarContent>
-      <ng-container *ngTemplateOutlet="dossierListActions"></ng-container>
+      <input
+        [accept]="acceptedFiles"
+        (change)="onFileSelected($event)"
+        hidden
+        type="file"
+        #fileInput
+      />
+
+      <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
     </div>
 
-    <ng-container *ngIf="(showZaakLinkWarning && isAdmin); then zaakLinkWarning; else noFiles"></ng-container>
+    @if (showZaakLinkWarning && isAdmin) {
+      <valtimo-no-results
+        [action]="navigateToCaseAdminButton"
+        description="{{ 'dossier.documenten.noZaakFound' | translate }}"
+        title="{{ 'dossier.documenten.noZaakFoundTitle' | translate }}"
+      ></valtimo-no-results>
+    } @else {
+      <valtimo-no-results
+        [action]="uploadButton"
+        description="{{ 'dossier.documenten.noFiles' | translate }}"
+        title="{{ 'dossier.documenten.noFilesTitle' | translate }}"
+      ></valtimo-no-results>
+    }
   </valtimo-carbon-list>
 </div>
-
-<ng-template #zaakLinkWarning>
-  <valtimo-no-results
-          [action]="navigateToCaseAdminButton"
-          description="{{ 'dossier.documenten.noZaakFound' | translate }}"
-          title="{{ 'dossier.documenten.noZaakFoundTitle' | translate }}"
-  ></valtimo-no-results>
-</ng-template>
-
-<ng-template #noFiles>
-  <valtimo-no-results
-          [action]="uploadButton"
-          description="{{ 'dossier.documenten.noFiles' | translate }}"
-          title="{{ 'dossier.documenten.noFilesTitle' | translate }}"
-  ></valtimo-no-results>
-</ng-template>
 
 <valtimo-documenten-api-metadata-modal
   [disabled$]="modalDisabled$"
@@ -55,16 +59,10 @@
   (metadata)="metadataSet($event)"
 ></valtimo-documenten-api-metadata-modal>
 
-<ng-template #loading let-loading="loading">
-  <div *ngIf="loading" class="loading-container">
-    <cds-loading></cds-loading>
-  </div>
-</ng-template>
-
 <ng-template #downloadButton let-index="index" let-item="item">
   <div
-    class="download-button-container"
     *ngIf="{isDownloading: indexesIncludeIndex(downloadingFileIndexes$ | async, index)} as vars"
+    class="download-button-container"
   >
     <button
       *ngIf="!vars.isDownloading"
@@ -72,70 +70,26 @@
       size="sm"
       (click)="downloadDocument(item, index)"
     >
-      {{ 'interface.download' | translate
-      }}<svg class="cds--btn__icon" cdsIcon="download" size="16"></svg>
+      {{ 'interface.download' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="download" size="16"></svg>
     </button>
+
     <cds-loading size="sm" *ngIf="vars.isDownloading"></cds-loading>
   </div>
 </ng-template>
 
 <ng-template #dossierListActions>
-  <div>
-<!--    TODO: implement filtering when Documenten API supports this-->
-<!--    <button-->
-<!--            cdsButton="ghost"-->
-<!--            [cdsOverflowMenu]="filterMenuRef"-->
-<!--            [customPane]="true"-->
-<!--            [flip]="true"-->
-<!--            placement="bottom"-->
-<!--            [offset]="{ x: 0, y: 48 }"-->
-<!--    >-->
-<!--      <svg cdsIcon="filter" size="16"></svg>-->
-<!--    </button>-->
-<!--    <ng-template #filterMenuRef>-->
-<!--      <div style="padding: 0; background-color: white;">-->
-<!--        <div style="padding: 16px; width: 300px; height: 200px;">-->
-<!--          Filter menu-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </ng-template>-->
-
-<!--    TODO: implement tags when Documenten API supports this-->
-<!--    <button-->
-<!--            cdsButton="ghost"-->
-<!--            [cdsOverflowMenu]="tagsMenuRef"-->
-<!--            [customPane]="true"-->
-<!--            [flip]="true"-->
-<!--            placement="bottom"-->
-<!--            [offset]="{ x: 0, y: 48 }"-->
-<!--    >-->
-<!--      <svg cdsIcon="tag&#45;&#45;group" size="16"></svg>-->
-<!--    </button>-->
-<!--    <ng-template #tagsMenuRef>-->
-<!--      <div style="padding: 0; background-color: white;">-->
-<!--        <div style="padding: 16px; width: 300px; height: 200px;">-->
-<!--          Trefwoorden menu-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </ng-template>-->
-
-    <input
-           [accept]="acceptedFiles"
-           (change)="onFileSelected($event)"
-           hidden
-           type="file"
-           #fileInput
-    />
-    <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
-  </div>
+  <input [accept]="acceptedFiles" (change)="onFileSelected($event)" hidden type="file" #fileInput />
+  <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
 </ng-template>
 
 <ng-template #uploadButton>
   <button
-          [disabled]="uploadProcessLinkedSet && !uploadProcessLinked || showZaakLinkWarning"
-          [vTooltip]="getUploadButtonTooltip() | translate"
-          (click)="onUploadButtonClick()"
-          cdsButton="primary"
+    [disabled]="(uploadProcessLinkedSet && !uploadProcessLinked) || showZaakLinkWarning"
+    [vTooltip]="getUploadButtonTooltip() | translate"
+    (click)="onUploadButtonClick()"
+    cdsButton="primary"
   >
     {{ 'Upload' | translate }}
     <svg class="cds--btn__icon" cdsIcon="upload" size="16"></svg>
@@ -143,17 +97,10 @@
 </ng-template>
 
 <ng-template #navigateToCaseAdminButton>
-  <button
-          (click)="onNavigateToCaseAdminClick()"
-          cdsButton="primary"
-  >
+  <button (click)="onNavigateToCaseAdminClick()" cdsButton="primary">
     {{ 'dossier.documenten.navigateToCaseAdmin' | translate }}
     <svg class="cds--btn__icon" cdsIcon="settings" size="16"></svg>
   </button>
-</ng-template>
-
-<ng-template #tooltipTemplate>
-  <p>Your tooltip text here.</p>
 </ng-template>
 
 <ng-template #sizeTemplate let-data="data">
