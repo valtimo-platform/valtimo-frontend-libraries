@@ -21,7 +21,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {CaseStatusService, InternalCaseStatus, InternalCaseStatusUtils} from '@valtimo/document';
+import {CaseStatusService, ConfiguredColumn, ConfiguredColumnUtils, ZgwDocumentColumnService} from '@valtimo/document';
 import {
   BehaviorSubject,
   combineLatest,
@@ -37,10 +37,12 @@ import {
   ActionItem,
   ColumnConfig,
   MoveRowDirection,
-  MoveRowEvent,
+  MoveRowEvent, PendingChangesComponent,
   ViewType,
 } from '@valtimo/components';
-import {StatusModalCloseEvent, StatusModalType} from '../../models';
+import {StatusModalCloseEvent, StatusModalType, TabEnum} from '../../models';
+import {TabService} from '../../services';
+import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
 
 @Component({
   selector: 'valtimo-dossier-management-zgw',
@@ -48,8 +50,9 @@ import {StatusModalCloseEvent, StatusModalType} from '../../models';
   styleUrls: ['./dossier-management-zgw.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementZgwComponent implements AfterViewInit {
+export class DossierManagementZgwComponent extends PendingChangesComponent implements AfterViewInit {
   @ViewChild('colorColumnTemplate') colorColumnTemplate: TemplateRef<any>;
+  private _documentDefinitionTab: DossierManagementDocumentDefinitionComponent;
 
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
 
@@ -66,7 +69,7 @@ export class DossierManagementZgwComponent implements AfterViewInit {
 
   public readonly usedKeys$ = new BehaviorSubject<string[]>([]);
 
-  private _documentStatuses: InternalCaseStatus[] = [];
+  private _documentStatuses: ConfiguredColumn[] = [];
 
   public readonly documentStatuses$ = combineLatest([
     this._documentDefinitionName$,
@@ -78,12 +81,12 @@ export class DossierManagementZgwComponent implements AfterViewInit {
       }
     }),
     switchMap(([documentDefinitionName]) =>
-      this.caseStatusService.getInternalCaseStatusesManagement(documentDefinitionName)
+      this.caseStatusService.getConfiguredColumnesManagement(documentDefinitionName)
     ),
     map(statuses =>
       statuses.map(status => ({
         ...status,
-        tagType: InternalCaseStatusUtils.getTagTypeFromInternalCaseStatusColor(status.color),
+        tagType: ConfiguredColumnUtils.getTagTypeFromConfiguredColumnColor(status.color),
       }))
     ),
     tap(statuses => {
@@ -108,27 +111,49 @@ export class DossierManagementZgwComponent implements AfterViewInit {
     },
   ];
 
-  public readonly statusModalType$ = new BehaviorSubject<StatusModalType>('closed');
-  public readonly prefillStatus$ = new BehaviorSubject<InternalCaseStatus>(undefined);
+  public readonly CARBON_THEME = 'g10';
 
-  public readonly statusToDelete$ = new BehaviorSubject<InternalCaseStatus>(undefined);
-  public readonly showDeleteModal$ = new Subject<boolean>();
+  public readonly statusModalType$ = new BehaviorSubject<StatusModalType>('closed');
+  public readonly prefillStatus$ = new BehaviorSubject<ConfiguredColumn>(undefined);
+
+  public readonly columnToUpdate$ = new BehaviorSubject<ConfiguredColumn>(undefined);
+  public readonly showDisableModal$ = new Subject<boolean>();
+
+  public _activeTab: TabEnum;
+
+  public currentTab$ = this.tabService.currentTab$.pipe(
+    tap((currentTab: TabEnum) => {
+      this._activeTab = currentTab;
+    })
+  );
 
   constructor(
     private readonly caseStatusService: CaseStatusService,
-    private readonly route: ActivatedRoute
-  ) {}
+    private readonly route: ActivatedRoute,
+    private readonly tabService: TabService,
+    private readonly zgwDocumentColumnService: ZgwDocumentColumnService
+  ) {
+    super();
+
+    this._documentDefinitionName$.subscribe((documentDefinitionName) => {
+      zgwDocumentColumnService.getConfiguredColumns(documentDefinitionName).subscribe((configuredColumns) => {
+        console.log(configuredColumns);
+      }, (error) => {
+        console.error(error);
+      });
+    });
+  }
 
   public ngAfterViewInit(): void {
     this.initFields();
   }
 
-  public openDeleteModal(status: InternalCaseStatus): void {
-    this.statusToDelete$.next(status);
-    this.showDeleteModal$.next(true);
+  public openDeleteModal(status: ConfiguredColumn): void {
+    this.columnToUpdate$.next(status);
+    this.showDisableModal$.next(true);
   }
 
-  public openEditModal(status: InternalCaseStatus): void {
+  public openEditModal(status: ConfiguredColumn): void {
     this.prefillStatus$.next(status);
     this.statusModalType$.next('edit');
   }
@@ -145,11 +170,11 @@ export class DossierManagementZgwComponent implements AfterViewInit {
     this.statusModalType$.next('closed');
   }
 
-  public confirmDeleteStatus(status: InternalCaseStatus): void {
+  public confirmDeleteStatus(status: ConfiguredColumn): void {
     this.documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>
-          this.caseStatusService.deleteInternalCaseStatus(documentDefinitionName, status.key)
+          this.caseStatusService.deleteConfiguredColumn(documentDefinitionName, status.key)
         )
       )
       .subscribe(() => {
@@ -160,7 +185,7 @@ export class DossierManagementZgwComponent implements AfterViewInit {
   public onMoveRowClick(event: MoveRowEvent): void {
     const {direction, index} = event;
 
-    const orderedStatuses: InternalCaseStatus[] =
+    const orderedStatuses: ConfiguredColumn[] =
       direction === MoveRowDirection.UP
         ? this.swapStatuses(this._documentStatuses, index - 1, index)
         : this.swapStatuses(this._documentStatuses, index, index + 1);
@@ -168,7 +193,7 @@ export class DossierManagementZgwComponent implements AfterViewInit {
     this.documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>
-          this.caseStatusService.updateInternalCaseStatuses(documentDefinitionName, orderedStatuses)
+          this.caseStatusService.updateConfiguredColumnes(documentDefinitionName, orderedStatuses)
         )
       )
       .subscribe(() => {
@@ -176,15 +201,22 @@ export class DossierManagementZgwComponent implements AfterViewInit {
       });
   }
 
+  public displayBodyComponent(tab: TabEnum): void {
+    if (this.pendingChanges) {
+      this.onCanDeactivate();
+    }
+    this.tabService.currentTab = tab;
+  }
+
   private reload(noAnimation = false): void {
     this._reload$.next(noAnimation ? 'noAnimation' : null);
   }
 
   private swapStatuses(
-    statuses: InternalCaseStatus[],
+    statuses: ConfiguredColumn[],
     index1: number,
     index2: number
-  ): InternalCaseStatus[] {
+  ): ConfiguredColumn[] {
     const temp = [...statuses];
     temp[index1] = temp.splice(index2, 1, temp[index1])[0];
 
@@ -216,4 +248,10 @@ export class DossierManagementZgwComponent implements AfterViewInit {
       },
     ]);
   }
+
+  protected onCanDeactivate(): void {
+    this._documentDefinitionTab.onCanDeactivate();
+  }
+
+  protected readonly TabEnum = TabEnum;
 }

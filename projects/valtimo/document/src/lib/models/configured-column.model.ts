@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
-export * from './case-status.service';
-export * from './document.service';
-export * from './zgw-document-column.service';
+interface ConfiguredColumn {
+  key: string;
+  enabled: boolean;
+}
+
+export {ConfiguredColumn};
