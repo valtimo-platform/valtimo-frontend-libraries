@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 import {TemplateRef} from '@angular/core';
+import { CarbonTag } from './carbon-tag.model';
 
 enum ViewType {
   ACTION = 'dropdownActions',
   ARRAY_COUNT = 'arrayCount',
   BOOLEAN = 'boolean',
   DATE = 'date',
-  STATUS = 'status',
+  TAG = 'tag',
   ENUM = 'enum',
   TEMPLATE = 'template',
   TEXT = 'text',
@@ -40,6 +41,7 @@ interface CarbonListPaginationTranslations {
 interface CarbonListItem {
   [key: string]: any;
   locked?: boolean;
+  tags?: CarbonTag[];
 }
 
 interface CarbonListTranslations {
