@@ -59,6 +59,7 @@ import {
   ToggleModule,
   TooltipModule,
 } from 'carbon-components-angular';
+import {DocumentenApiModule} from '@valtimo/documenten-api';
 
 import {DossierManagementAssigneeComponent} from './components/dossier-management-assignee/dossier-management-assignee.component';
 import {DossierManagementConnectModalComponent} from './components/dossier-management-connect-modal/dossier-management-connect-modal.component';
@@ -156,6 +157,7 @@ import {DossierManagementCreateComponent} from './components/dossier-management-
     ConfirmationModalModule,
     ToggleModule,
     TooltipModule,
+    DocumentenApiModule,
   ],
   providers: [TabManagementService],
 })
