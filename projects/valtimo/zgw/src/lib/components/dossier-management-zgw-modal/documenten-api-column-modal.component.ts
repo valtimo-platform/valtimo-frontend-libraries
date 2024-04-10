@@ -23,7 +23,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {StatusModalCloseEvent, StatusModalType} from '../../../models';
+import {DocumentenApiColumnModalType, DocumentenApiColumnModalTypeCloseEvent} from '../../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -48,19 +48,19 @@ import {
   InternalCaseStatusColor,
   InternalCaseStatusUtils,
 } from '@valtimo/document';
-import {IconService} from 'carbon-components-angular';
+import {IconService, ListItem} from 'carbon-components-angular';
 import {Edit16} from '@carbon/icons';
-import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'valtimo-dossier-management-zgw-modal',
-  templateUrl: './dossier-management-zgw-modal.component.html',
-  styleUrls: ['./dossier-management-zgw-modal.component.scss'],
+  selector: 'valtimo-documenten-api-column-modal',
+  templateUrl: './documenten-api-column-modal.component.html',
+  styleUrls: ['./documenten-api-column-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
-export class DossierManagementZgwModalComponent implements OnInit, OnDestroy {
-  @Input() public set type(value: StatusModalType) {
+export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
+  @Input() public set type(value: DocumentenApiColumnModalType) {
     this._type.next(value);
 
     if (value === 'closed') {
@@ -79,10 +79,12 @@ export class DossierManagementZgwModalComponent implements OnInit, OnDestroy {
   @Input() public usedKeys!: string[];
   @Input() public documentDefinitionName!: string;
 
-  @Output() public closeModalEvent = new EventEmitter<StatusModalCloseEvent>();
+  @Output() public closeModalEvent = new EventEmitter<DocumentenApiColumnModalTypeCloseEvent>();
 
-  private readonly _type = new BehaviorSubject<StatusModalType>(undefined);
-  private readonly _typeAnimationDelay$ = new BehaviorSubject<StatusModalType>(undefined);
+  private readonly _type = new BehaviorSubject<DocumentenApiColumnModalType>(undefined);
+  private readonly _typeAnimationDelay$ = new BehaviorSubject<DocumentenApiColumnModalType>(
+    undefined
+  );
   private readonly _prefillStatus = new BehaviorSubject<InternalCaseStatus>(undefined);
 
   public readonly isClosed$ = this._type.pipe(map(type => type === 'closed'));

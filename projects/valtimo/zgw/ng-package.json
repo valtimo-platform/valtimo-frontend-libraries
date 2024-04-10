@@ -1,6 +1,6 @@
 {
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../../dist/valtimo/documenten-api",
+  "dest": "../../../dist/valtimo/zgw",
   "lib": {
     "entryFile": "src/public_api.ts"
   }

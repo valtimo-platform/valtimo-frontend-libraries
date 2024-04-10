@@ -14,13 +14,4 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {DocumentenApiComponent} from './components/documenten-api/documenten-api.component';
-
-@NgModule({
-  imports: [CommonModule],
-  declarations: [DocumentenApiComponent],
-  exports: [DocumentenApiComponent],
-})
-export class DocumentenApiModule {}
+export * from './zgw-document-column.service';

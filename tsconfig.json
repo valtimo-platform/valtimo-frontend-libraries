@@ -45,8 +45,8 @@
       "@valtimo/dashboard-management/*": ["dist/valtimo/dashboard-management/*"],
       "@valtimo/document": ["dist/valtimo/document"],
       "@valtimo/document/*": ["dist/valtimo/document/*"],
-      "@valtimo/documenten-api": ["dist/valtimo/documenten-api"],
-      "@valtimo/documenten-api/*": ["dist/valtimo/documenten-api/*"],
+      "@valtimo/zgw": ["dist/valtimo/zgw"],
+      "@valtimo/zgw/*": ["dist/valtimo/zgw/*"],
       "@valtimo/account": ["dist/valtimo/account"],
       "@valtimo/account/*": ["dist/valtimo/account/*"],
       "@valtimo/choice-field": ["dist/valtimo/choice-field"],
@@ -187,10 +187,10 @@
       "path": "./projects/valtimo/document/tsconfig.spec.json"
     },
     {
-      "path": "./projects/valtimo/documenten-api/tsconfig.lib.json"
+      "path": "./projects/valtimo/zgw/tsconfig.lib.json"
     },
     {
-      "path": "./projects/valtimo/documenten-api/tsconfig.spec.json"
+      "path": "./projects/valtimo/zgw/tsconfig.spec.json"
     },
     {
       "path": "./projects/valtimo/account/tsconfig.lib.json"

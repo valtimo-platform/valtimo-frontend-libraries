@@ -1013,21 +1013,21 @@
         }
       }
     },
-    "@valtimo/documenten-api": {
-      "root": "projects/valtimo/documenten-api",
-      "sourceRoot": "projects/valtimo/documenten-api/src",
+    "@valtimo/zgw": {
+      "root": "projects/valtimo/zgw",
+      "sourceRoot": "projects/valtimo/zgw/src",
       "projectType": "library",
       "prefix": "valtimo",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/valtimo/documenten-api/tsconfig.lib.json",
-            "project": "projects/valtimo/documenten-api/ng-package.json"
+            "tsConfig": "projects/valtimo/zgw/tsconfig.lib.json",
+            "project": "projects/valtimo/zgw/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/valtimo/documenten-api/tsconfig.lib.prod.json"
+              "tsConfig": "projects/valtimo/zgw/tsconfig.lib.prod.json"
             }
           }
         },
@@ -1035,28 +1035,28 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "tsConfig": "projects/valtimo/documenten-api/tsconfig.spec.json",
-            "karmaConfig": "projects/valtimo/documenten-api/karma.conf.js"
+            "tsConfig": "projects/valtimo/zgw/tsconfig.spec.json",
+            "karmaConfig": "projects/valtimo/zgw/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": [
-              "projects/valtimo/documenten-api/src/**/*.ts",
-              "projects/valtimo/documenten-api/src/**/*.html"
+              "projects/valtimo/zgw/src/**/*.ts",
+              "projects/valtimo/zgw/src/**/*.html"
             ]
           }
         },
         "cypress-run": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "@valtimo/documenten-api:serve",
-            "configFile": "projects/valtimo/documenten-api/cypress.config.js"
+            "devServerTarget": "@valtimo/zgw:serve",
+            "configFile": "projects/valtimo/zgw/cypress.config.js"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "@valtimo/documenten-api:serve:production"
+              "devServerTarget": "@valtimo/zgw:serve:production"
             }
           }
         },
@@ -1065,19 +1065,19 @@
           "options": {
             "watch": true,
             "headless": false,
-            "configFile": "projects/valtimo/documenten-api/cypress.config.js"
+            "configFile": "projects/valtimo/zgw/cypress.config.js"
           }
         },
         "e2e": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "@valtimo/documenten-api:serve",
+            "devServerTarget": "@valtimo/zgw:serve",
             "watch": true,
             "headless": false
           },
           "configurations": {
             "production": {
-              "devServerTarget": "@valtimo/documenten-api:serve:production"
+              "devServerTarget": "@valtimo/zgw:serve:production"
             }
           }
         }

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-export * from './document.model';
-export * from './list-sorting.model';
-export * from './audit.model';
-export * from './advanced-document-search-request';
-export * from './document-search-request';
-export * from './internal-case-status.model';
+type DocumentenApiColumnModalType = 'edit' | 'add' | 'closed';
+
+type DocumentenApiColumnModalTypeCloseEvent = 'close' | 'closeAndRefresh';
+
+export {DocumentenApiColumnModalType, DocumentenApiColumnModalTypeCloseEvent};

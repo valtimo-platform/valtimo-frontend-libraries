@@ -14,10 +14,7 @@
   ~ limitations under the License.
   -->
 <div *ngIf="currentTab$ | async as currentTab">
-  <cds-tabs
-    class="dossier-management-tabs"
-    [attr.data-carbon-theme]="CARBON_THEME"
-  >
+  <cds-tabs class="dossier-management-tabs" [attr.data-carbon-theme]="CARBON_THEME">
     <cds-tab
       *ngIf="{active: currentTab === TabEnum.ZGW} as vars"
       class="no-padding-left-right no-padding-top-bottom"
@@ -48,13 +45,13 @@
   </cds-tabs>
 </div>
 
-<valtimo-dossier-management-zgw-modal
+<valtimo-documenten-api-column-modal
   [type]="statusModalType$ | async"
   [prefill]="prefillStatus$ | async"
   [usedKeys]="usedKeys$ | async"
   [documentDefinitionName]="documentDefinitionName$ | async"
   (closeModalEvent)="closeModal($event)"
-></valtimo-dossier-management-zgw-modal>
+></valtimo-documenten-api-column-modal>
 
 <valtimo-confirmation-modal
   confirmButtonTextTranslationKey="interface.delete"

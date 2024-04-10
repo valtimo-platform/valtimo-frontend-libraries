@@ -21,7 +21,8 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {CaseStatusService, ConfiguredColumn, ConfiguredColumnUtils, ZgwDocumentColumnService} from '@valtimo/document';
+import {ZgwDocumentColumnService} from '../../services';
+import {ConfiguredColumn} from '../../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -37,20 +38,30 @@ import {
   ActionItem,
   ColumnConfig,
   MoveRowDirection,
-  MoveRowEvent, PendingChangesComponent,
+  MoveRowEvent,
+  PendingChangesComponent,
   ViewType,
 } from '@valtimo/components';
-import {StatusModalCloseEvent, StatusModalType, TabEnum} from '../../models';
-import {TabService} from '../../services';
-import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
+import {
+  StatusModalCloseEvent,
+  StatusModalType,
+  TabEnum,
+} from '../../../../../dossier-management/src/lib/models';
+import {TabService} from '../../../../../dossier-management/src/lib/services';
+import {DossierManagementDocumentDefinitionComponent} from '../../../../../dossier-management/src/lib/components/dossier-management-document-definition/dossier-management-document-definition.component';
+import {DocumentenApiColumnModalComponent} from '../dossier-management-zgw-modal/documenten-api-column-modal.component';
 
 @Component({
-  selector: 'valtimo-dossier-management-zgw',
-  templateUrl: './dossier-management-zgw.component.html',
-  styleUrls: ['./dossier-management-zgw.component.scss'],
+  templateUrl: './documenten-api-columns.component.html',
+  styleUrls: ['./documenten-api-columns.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [DocumentenApiColumnModalComponent],
 })
-export class DossierManagementZgwComponent extends PendingChangesComponent implements AfterViewInit {
+export class DossierManagementZgwComponent
+  extends PendingChangesComponent
+  implements AfterViewInit
+{
   @ViewChild('colorColumnTemplate') colorColumnTemplate: TemplateRef<any>;
   private _documentDefinitionTab: DossierManagementDocumentDefinitionComponent;
 
@@ -81,13 +92,7 @@ export class DossierManagementZgwComponent extends PendingChangesComponent imple
       }
     }),
     switchMap(([documentDefinitionName]) =>
-      this.caseStatusService.getConfiguredColumnesManagement(documentDefinitionName)
-    ),
-    map(statuses =>
-      statuses.map(status => ({
-        ...status,
-        tagType: ConfiguredColumnUtils.getTagTypeFromConfiguredColumnColor(status.color),
-      }))
+      this.zgwDocumentColumnService.getConfiguredColumns(documentDefinitionName)
     ),
     tap(statuses => {
       this._documentStatuses = statuses;
@@ -128,19 +133,21 @@ export class DossierManagementZgwComponent extends PendingChangesComponent imple
   );
 
   constructor(
-    private readonly caseStatusService: CaseStatusService,
     private readonly route: ActivatedRoute,
     private readonly tabService: TabService,
     private readonly zgwDocumentColumnService: ZgwDocumentColumnService
   ) {
     super();
 
-    this._documentDefinitionName$.subscribe((documentDefinitionName) => {
-      zgwDocumentColumnService.getConfiguredColumns(documentDefinitionName).subscribe((configuredColumns) => {
-        console.log(configuredColumns);
-      }, (error) => {
-        console.error(error);
-      });
+    this._documentDefinitionName$.subscribe(documentDefinitionName => {
+      zgwDocumentColumnService.getConfiguredColumns(documentDefinitionName).subscribe(
+        configuredColumns => {
+          console.log(configuredColumns);
+        },
+        error => {
+          console.error(error);
+        }
+      );
     });
   }
 
@@ -174,7 +181,7 @@ export class DossierManagementZgwComponent extends PendingChangesComponent imple
     this.documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>
-          this.caseStatusService.deleteConfiguredColumn(documentDefinitionName, status.key)
+          this.zgwDocumentColumnService.deleteConfiguredColumn(documentDefinitionName, status.key)
         )
       )
       .subscribe(() => {
@@ -193,7 +200,10 @@ export class DossierManagementZgwComponent extends PendingChangesComponent imple
     this.documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>
-          this.caseStatusService.updateConfiguredColumnes(documentDefinitionName, orderedStatuses)
+          this.zgwDocumentColumnService.updateConfiguredColumnes(
+            documentDefinitionName,
+            orderedStatuses
+          )
         )
       )
       .subscribe(() => {
