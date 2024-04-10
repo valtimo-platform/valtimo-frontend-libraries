@@ -198,7 +198,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   private readonly _statusField: ListField = {
     label: 'document.status',
     key: 'internalStatus',
-    viewType: ViewType.TAG,
+    viewType: ViewType.TAGS,
     sortable: true,
   };
   public readonly fields$: Observable<Array<ListField>> = combineLatest([
@@ -416,16 +416,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
         this.paginationService.setCollectionSize(res.documents);
         this.paginationService.checkPage(res.documents);
         this.updateNoResultsMessage(res.isSearchResult);
-        // res.documents = {
-        //   ...res.documents,
-        //   content: res.documents.content.map(
-        //     (val, index) =>
-        //       ({
-        //         ...val,
-        //         internalStatus: index % 2 ? 'closed' : 'started',
-        //       }) as Documents | SpecifiedDocuments
-        //   ) as any,
-        // };
 
         return {
           data: this.listService.mapDocuments(
@@ -444,33 +434,20 @@ export class DossierListComponent implements OnInit, OnDestroy {
         const status = res.statuses.find(
           (status: InternalCaseStatus) => status.key === item.internalStatus
         );
+        if (!status) return item;
 
         return {
           ...item,
           tags: [
             {
-              content: status?.title,
-              type: InternalCaseStatusUtils.getTagTypeFromInternalCaseStatusColor(
-                status?.color ?? InternalCaseStatusColor.CoolGray
-              ),
+              content: status.title,
+              type: InternalCaseStatusUtils.getTagTypeFromInternalCaseStatusColor(status.color),
             },
-            // {
-            //   content: status?.title,
-            //   type: InternalCaseStatusUtils.getTagTypeFromInternalCaseStatusColor(
-            //     status?.color ?? InternalCaseStatusColor.CoolGray
-            //   ),
-            // },
-            // {
-            //   content: status?.title,
-            //   type: InternalCaseStatusUtils.getTagTypeFromInternalCaseStatusColor(
-            //     status?.color ?? InternalCaseStatusColor.CoolGray
-            //   ),
-            // },
           ],
         };
       });
     }),
-    tap(res => {
+    tap(() => {
       this.loadingAssigneeFilter = false;
       this.loadingDocumentItems = false;
     })

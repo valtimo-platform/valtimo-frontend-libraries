@@ -13,28 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgbPaginationModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
-import {CardModule} from '../card/card.module';
-import {CarbonListComponent} from './carbon-list.component';
-import {CarbonListFilterPipe} from './CarbonListFilterPipe.directive';
-import {CarbonNoResultsComponent} from './no-results/carbon-no-results.component';
 import {
   ButtonModule,
   ContentSwitcherModule,
   DialogModule,
   IconModule,
+  InputModule,
+  ModalModule,
   PaginationModule,
   TableModule,
   TagModule,
 } from 'carbon-components-angular';
+import {ValtimoCdsModalDirectiveModule} from '../../directives/valtimo-cds-modal/valtimo-cds-modal-directive.module';
+import {CardModule} from '../card/card.module';
+import {CarbonListComponent} from './carbon-list.component';
+import {CarbonListFilterPipe} from './CarbonListFilterPipe.directive';
+import {CarbonNoResultsComponent} from './no-results/carbon-no-results.component';
+import {CarbonTagsModalComponent} from './tags-modal/tags-modal.component';
 
 @NgModule({
-  declarations: [CarbonListComponent, CarbonListFilterPipe, CarbonNoResultsComponent],
+  declarations: [
+    CarbonListComponent,
+    CarbonListFilterPipe,
+    CarbonNoResultsComponent,
+    CarbonTagsModalComponent,
+  ],
   imports: [
     CardModule,
     CommonModule,
@@ -50,6 +58,9 @@ import {
     DialogModule,
     NgbTooltipModule,
     TagModule,
+    ModalModule,
+    InputModule,
+    ValtimoCdsModalDirectiveModule,
   ],
   exports: [CarbonListComponent, CarbonListFilterPipe, CarbonNoResultsComponent],
 })

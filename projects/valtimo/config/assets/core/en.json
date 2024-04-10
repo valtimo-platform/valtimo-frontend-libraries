@@ -793,6 +793,7 @@
     "warning": "Warning",
     "finish": "Finish",
     "add": "Add",
+    "tags": "Tags",
     "tagType": {
       "red": "Red",
       "magenta": "Magenta",

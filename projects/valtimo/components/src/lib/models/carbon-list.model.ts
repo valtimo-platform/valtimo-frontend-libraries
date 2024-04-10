@@ -21,7 +21,7 @@ enum ViewType {
   ARRAY_COUNT = 'arrayCount',
   BOOLEAN = 'boolean',
   DATE = 'date',
-  TAG = 'tag',
+  TAGS = 'tags',
   ENUM = 'enum',
   TEMPLATE = 'template',
   TEXT = 'text',

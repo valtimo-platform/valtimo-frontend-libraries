@@ -61,6 +61,7 @@ import {
   CarbonListItem,
   CarbonListTranslations,
   CarbonPaginatorConfig,
+  CarbonTag,
   ColumnConfig,
   DEFAULT_LIST_TRANSLATIONS,
   DEFAULT_PAGINATION,
@@ -203,6 +204,8 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     state: {name: '', direction: 'DESC'},
     isSorting: false,
   });
+  public readonly tagModalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly tagModalData$ = new BehaviorSubject<CarbonTag[]>([]);
 
   public readonly CASES_WITHOUT_STATUS_KEY = CASES_WITHOUT_STATUS_KEY;
   public readonly ViewType = ViewType;
@@ -390,7 +393,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
                 data,
                 template: this.booleanTemplate,
               });
-            case ViewType.TAG:
+            case ViewType.TAGS:
               return new TableItem({
                 data: {tags: item.tags},
                 template: this.tagTemplate,
@@ -489,6 +492,16 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.moveRow.emit(moveRowEvent);
     this.itemsReordered.emit(orderedItems);
+  }
+
+  public onTagClick(event: Event, tags: CarbonTag[]): void {
+    event.stopImmediatePropagation();
+    this.tagModalOpen$.next(true);
+    this.tagModalData$.next(tags);
+  }
+
+  public onCloseEvent(): void {
+    this.tagModalOpen$.next(false);
   }
 
   private getExtraItems(item: CarbonListItem, index: number, length: number): TableItem[] {
