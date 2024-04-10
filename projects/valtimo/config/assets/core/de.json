@@ -1264,7 +1264,7 @@
     "enum": "Aufzählung",
     "arrayCount": "Quantität",
     "underscoresToSpaces": "Unterstriche zu Leerzeichen",
-    "status": "Status"
+    "tags": "Tags"
   },
   "object": {
     "title": "Objekte",

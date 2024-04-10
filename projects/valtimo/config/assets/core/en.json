@@ -1266,7 +1266,7 @@
     "enum": "Enumeration",
     "arrayCount": "Count",
     "underscoresToSpaces": "Underscores to spaces",
-    "status": "Status"
+    "tags": "Tags"
   },
   "object": {
     "title": "Objects",
