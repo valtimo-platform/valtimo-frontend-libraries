@@ -13,6 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {ZgwTabEnum} from '../models';
 
-export * from './documenten-api-column.service';
-export * from './dossier-management-zgw.service';
+@Injectable({
+  providedIn: 'root',
+})
+export class DossierManagementZgwService {
+  public configuredTabKeys: string[];
+
+  private _currentTab$ = new BehaviorSubject<ZgwTabEnum>(ZgwTabEnum.DOCUMENTEN_API_COLUMNS);
+  public get currentTab$(): Observable<ZgwTabEnum> {
+    return this._currentTab$.asObservable();
+  }
+  public set currentTab(tab: ZgwTabEnum) {
+    this._currentTab$.next(tab);
+  }
+}

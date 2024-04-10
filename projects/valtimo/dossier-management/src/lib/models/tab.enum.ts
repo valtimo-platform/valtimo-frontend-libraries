@@ -22,5 +22,4 @@ export enum TabEnum {
   LIST = 'list',
   TABS = 'tabs',
   STATUSES = 'statuses',
-  ZGW = 'zgw',
 }

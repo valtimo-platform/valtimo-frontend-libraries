@@ -21,7 +21,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {ZgwDocumentColumnService} from '../../services';
+import {DocumentenApiColumnService} from '../../services';
 import {ConfiguredColumn} from '../../models';
 import {
   BehaviorSubject,
@@ -135,7 +135,7 @@ export class DossierManagementZgwComponent
   constructor(
     private readonly route: ActivatedRoute,
     private readonly tabService: TabService,
-    private readonly zgwDocumentColumnService: ZgwDocumentColumnService
+    private readonly zgwDocumentColumnService: DocumentenApiColumnService
   ) {
     super();
 

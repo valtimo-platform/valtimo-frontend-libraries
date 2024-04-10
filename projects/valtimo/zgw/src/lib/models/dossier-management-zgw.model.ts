@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 
-export * from './documenten-api-column.service';
-export * from './dossier-management-zgw.service';
+export enum ZgwTabEnum {
+  DOCUMENTEN_API_COLUMNS,
+}

@@ -22,7 +22,7 @@ import {ConfiguredColumn} from '../models';
 @Injectable({
   providedIn: 'root',
 })
-export class ZgwDocumentColumnService extends BaseApiService {
+export class DocumentenApiColumnService extends BaseApiService {
   constructor(
     private http: HttpClient,
     configService: ConfigService

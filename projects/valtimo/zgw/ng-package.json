@@ -3,5 +3,6 @@
   "dest": "../../../dist/valtimo/zgw",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["carbon-components-angular"]
 }

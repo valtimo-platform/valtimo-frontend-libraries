@@ -16,3 +16,4 @@
 
 export * from './configured-column.model';
 export * from './documenten-api-column-modal.model';
+export * from './dossier-management-zgw.model';
