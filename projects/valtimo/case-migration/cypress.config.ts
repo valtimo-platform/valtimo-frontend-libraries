@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {defineConfig} from 'cypress';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class MockTranslateService {
-  public stream(key: string): Observable<any> {
-    return of(null);
-  }
-
-  public instant(key: string): string {
-    return '';
-  }
-}
+export default defineConfig({
+  e2e: {
+    baseUrl: 'http://localhost:4200',
+    supportFile: false,
+  },
+});

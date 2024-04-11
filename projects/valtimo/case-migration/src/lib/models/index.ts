@@ -14,18 +14,4 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class MockTranslateService {
-  public stream(key: string): Observable<any> {
-    return of(null);
-  }
-
-  public instant(key: string): string {
-    return '';
-  }
-}
+export * from './case-migration.model';

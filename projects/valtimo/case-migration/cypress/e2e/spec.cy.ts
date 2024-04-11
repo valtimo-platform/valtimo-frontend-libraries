@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-
-@Injectable({
-  providedIn: 'root',
+describe('My First Test', () => {
+  it('Visits the initial project page', () => {
+    cy.visit('/')
+    cy.contains('app is running!')
+  })
 })
-export class MockTranslateService {
-  public stream(key: string): Observable<any> {
-    return of(null);
-  }
-
-  public instant(key: string): string {
-    return '';
-  }
-}
