@@ -76,17 +76,6 @@
         *ngIf="vars.active"
       ></valtimo-dossier-management-statuses>
     </cds-tab>
-    <cds-tab
-      *ngIf="{active: currentTab === TabEnum.ZGW} as vars"
-      class="no-padding-left-right no-padding-top-bottom"
-      [active]="vars.active"
-      [heading]="'dossierManagement.tabs.zgw' | translate"
-      (selected)="displayBodyComponent(TabEnum.ZGW)"
-    >
-      <valtimo-dossier-management-zgw
-        *ngIf="vars.active"
-      ></valtimo-dossier-management-zgw>
-    </cds-tab>
   </cds-tabs>
 
   <div class="dossier-management-detail-container__content">

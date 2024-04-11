@@ -59,7 +59,6 @@ import {
   ToggleModule,
   TooltipModule,
 } from 'carbon-components-angular';
-import {DocumentenApiModule} from '@valtimo/documenten-api';
 
 import {DossierManagementAssigneeComponent} from './components/dossier-management-assignee/dossier-management-assignee.component';
 import {DossierManagementConnectModalComponent} from './components/dossier-management-connect-modal/dossier-management-connect-modal.component';
@@ -84,8 +83,6 @@ import {TabManagementService} from './services';
 import {DossierManagementStatusesComponent} from './components/dossier-management-statuses/dossier-management-statuses.component';
 import {DossierManagementStatusModalComponent} from './components/dossier-management-statuses/dossier-management-status-modal/dossier-management-status-modal.component';
 import {DossierManagementCreateComponent} from './components/dossier-management-create/dossier-management-create.component';
-import {DossierManagementZgwComponent} from './components/dossier-management-zgw/dossier-management-zgw.component';
-import {DossierManagementZgwModalComponent} from './components/dossier-management-zgw/dossier-management-status-modal/dossier-management-zgw-modal.component';
 
 @NgModule({
   declarations: [
@@ -110,8 +107,6 @@ import {DossierManagementZgwModalComponent} from './components/dossier-managemen
     DossierManagementStatusesComponent,
     DossierManagementStatusModalComponent,
     DossierManagementCreateComponent,
-    DossierManagementZgwComponent,
-    DossierManagementZgwModalComponent
   ],
   imports: [
     CommonModule,
@@ -161,7 +156,6 @@ import {DossierManagementZgwModalComponent} from './components/dossier-managemen
     ConfirmationModalModule,
     ToggleModule,
     TooltipModule,
-    DocumentenApiModule,
   ],
   providers: [TabManagementService],
 })

@@ -16,4 +16,3 @@
 
 export * from './case-status.service';
 export * from './document.service';
-export * from '../../../../documenten-api/src/lib/services/zgw-document-column.service';
