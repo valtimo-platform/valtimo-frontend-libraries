@@ -18,6 +18,7 @@
  * Public API Surface of documenten-api
  */
 
-export * from './lib/components/dossier-management-zgw/dossier-management-zgw.component';
+export * from './lib/components';
 export * from './lib/models';
 export * from './lib/services';
+export * from './lib/modules';

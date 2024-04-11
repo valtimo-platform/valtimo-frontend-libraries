@@ -14,4 +14,7 @@
  * limitations under the License.
  */
 
-export * from './dossier-management-zgw.model';
+export * from './components';
+export * from './models';
+export * from './formio';
+export * from './services';

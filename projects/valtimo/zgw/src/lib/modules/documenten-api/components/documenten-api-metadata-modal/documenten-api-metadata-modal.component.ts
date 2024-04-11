@@ -15,9 +15,14 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {VModalComponent} from '../v-modal/modal.component';
-import {ModalService} from '../../services';
-import {SelectItem} from '../../models';
+
+import {
+  AdditionalDocumentDate,
+  ConfidentialityLevel,
+  DocumentenApiMetadata,
+  DocumentLanguage,
+  DocumentStatus,
+} from '../../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -31,24 +36,45 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import {
-  AdditionalDocumentDate,
-  ConfidentialityLevel,
-  DocumentenApiMetadata,
-  DocumentLanguage,
-  DocumentStatus,
-} from '../../models';
-import {TranslateService} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
-import {DocumentService} from '@valtimo/document';
+import {DocumentService} from 'dist/valtimo/document';
 import {KeycloakService} from 'keycloak-angular';
-import {ValtimoModalService} from '../../services/valtimo-modal.service';
 import {tap} from 'rxjs/operators';
+import {CommonModule} from '@angular/common';
+import {
+  ButtonModule,
+  DatePickerModule,
+  FormModule,
+  InputLabelModule,
+  InputModule,
+  ModalService,
+  SelectItem,
+  SelectModule,
+  TitleModule,
+  ValtimoModalService,
+  VModalComponent,
+  VModalModule,
+} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
   templateUrl: './documenten-api-metadata-modal.component.html',
   styleUrls: ['./documenten-api-metadata-modal.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    VModalModule,
+    TitleModule,
+    ButtonModule,
+    TranslateModule,
+    FormModule,
+    InputModule,
+    SelectModule,
+    DatePickerModule,
+    InputLabelModule,
+  ],
 })
 export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @ViewChild('documentenApiMetadataModal') documentenApiMetadataModal: VModalComponent;

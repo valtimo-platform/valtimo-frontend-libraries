@@ -19,7 +19,7 @@ import {
   createCustomFormioComponent,
   FormioCustomComponentInfo,
   registerCustomFormioComponentWithClass,
-} from '../../../modules';
+} from '@valtimo/components';
 import {DocumentenApiUploaderComponent} from './documenten-api-uploader.component';
 import {documentenApiUploaderEditForm} from './documenten-api-uploader-edit-form';
 

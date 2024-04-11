@@ -15,18 +15,20 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormioCustomComponent} from '../../../modules';
+import {
+  FormioCustomComponent,
+  FormIoDomService,
+  FormIoStateService,
+  ValtimoModalService,
+} from '@valtimo/components';
 import {BehaviorSubject, combineLatest, Observable, of, startWith, Subject, switchMap} from 'rxjs';
 import {
   DocumentenApiFileReference,
   DownloadService,
   UploadProviderService,
 } from '@valtimo/resource';
-import {FormIoStateService} from '../services/form-io-state.service';
-import {FormIoDomService} from '../services/form-io-dom.service';
-import {DocumentenApiMetadata} from '../../../models';
+import {DocumentenApiMetadata} from '../../models';
 import {filter, map, take, tap} from 'rxjs/operators';
-import {ValtimoModalService} from '../../../services/valtimo-modal.service';
 import {UserProviderService} from '@valtimo/security';
 import {ActivatedRoute} from '@angular/router';
 

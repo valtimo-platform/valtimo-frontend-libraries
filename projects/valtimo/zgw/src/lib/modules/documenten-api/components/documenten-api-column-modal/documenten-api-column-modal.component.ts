@@ -34,7 +34,7 @@ import {
   take,
   tap,
 } from 'rxjs';
-import {CARBON_CONSTANTS} from '@valtimo/components';
+import {CARBON_CONSTANTS} from 'dist/valtimo/components';
 import {
   AbstractControl,
   FormBuilder,
@@ -48,7 +48,7 @@ import {
   InternalCaseStatus,
   InternalCaseStatusColor,
   InternalCaseStatusUtils,
-} from '@valtimo/document';
+} from 'dist/valtimo/document';
 import {
   ButtonModule,
   DropdownModule,

@@ -20,7 +20,7 @@ import {DossierManagementZgwService} from '../../services';
 import {ZgwTabEnum} from '../../models';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
-import {DocumentenApiColumnsComponent} from '../documenten-api-columns/documenten-api-columns.component';
+import {DocumentenApiColumnsComponent} from '../../modules';
 
 @Component({
   templateUrl: './dossier-management-zgw.component.html',

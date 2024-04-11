@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-export * from './dossier-management-zgw.model';
+export * from './documenten-api-formio.module';
+export * from './documenten-api-uploader/documenten-api-uploader.component';

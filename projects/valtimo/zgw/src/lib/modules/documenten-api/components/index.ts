@@ -14,4 +14,6 @@
  * limitations under the License.
  */
 
-export * from './dossier-management-zgw.model';
+export * from './documenten-api-column-modal/documenten-api-column-modal.component';
+export * from './documenten-api-columns/documenten-api-columns.component';
+export * from './documenten-api-metadata-modal/documenten-api-metadata-modal.component';

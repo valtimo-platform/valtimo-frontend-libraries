@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 
-export * from './documenten-api-column.service';
 export * from './dossier-management-zgw.service';
