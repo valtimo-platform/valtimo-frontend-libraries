@@ -100,6 +100,8 @@
   </cds-tabs>
 
   <div class="dossier-management-detail-container__content">
+    <ng-template #contentContainer></ng-template>
+
     <valtimo-dossier-management-document-definition
       *ngIf="
         (obs.currentTab === TabEnum.DOCUMENT && !pendingChanges) || pendingTab === TabEnum.DOCUMENT
