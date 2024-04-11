@@ -471,6 +471,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
         ? [
             new TableHeaderItem({
               className: 'valtimo-carbon-list__actions',
+              sortable: false,
             }),
           ]
         : []),

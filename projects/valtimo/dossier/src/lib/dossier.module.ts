@@ -13,17 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {CommonModule} from '@angular/common';
-import {HttpClient} from '@angular/common/http';
-import {ModuleWithProviders, NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {
-  NgbButtonsModule,
-  NgbModule,
-  NgbPaginationModule,
-  NgbTooltipModule,
-} from '@ng-bootstrap/ng-bootstrap';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbButtonsModule, NgbModule, NgbPaginationModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   BpmnJsDiagramModule,
   ButtonModule,
@@ -52,51 +47,65 @@ import {
   TableModule,
   TimelineModule,
   TitleModule,
+  TooltipModule,
   UploaderModule,
   VModalModule,
   WidgetModule,
 } from '@valtimo/components';
-import {ConfigModule, HttpLoaderFactory} from '@valtimo/config';
-import {FormModule} from '@valtimo/form';
-import {ProcessLinkModule} from '@valtimo/process-link';
-import {ProcessModule} from '@valtimo/process';
-import {TaskModule} from '@valtimo/task';
+import { ConfigModule, HttpLoaderFactory } from '@valtimo/config';
+import { FormModule } from '@valtimo/form';
+import { ProcessModule } from '@valtimo/process';
+import { ProcessLinkModule } from '@valtimo/process-link';
+import { TaskModule } from '@valtimo/task';
 import {
   ButtonModule as CarbonButtonModule,
   ComboBoxModule,
+  DialogModule,
   DropdownModule,
+  FileUploaderModule,
   IconModule,
   LoadingModule,
   ModalModule as CarbonModalModule,
+  PaginationModule,
   SelectModule as CarbonSelectModule,
   SkeletonModule,
   TabsModule,
   TagModule,
+  TooltipModule as CarbonTooltipModule,
 } from 'carbon-components-angular';
-import {NoteModalComponent} from './components/note-modal/note-modal.component';
-import {DossierAssignUserComponent} from './components/dossier-assign-user/dossier-assign-user.component';
-import {DossierBulkAssignModalComponent} from './components/dossier-bulk-assign-modal/dossier-bulk-assign-modal.component';
-import {DossierDetailComponent} from './components/dossier-detail/dossier-detail.component';
-import {DossierDetailTabAuditComponent} from './components/dossier-detail/tab/audit/audit.component';
-import {DossierDetailTabContactMomentsComponent} from './components/dossier-detail/tab/contact-moments/contact-moments.component';
-import {DossierDetailTabDocumentenApiDocumentsComponent} from './components/dossier-detail/tab/documenten-api-documents/documenten-api-documents.component';
-import {DossierDetailTabDocumentsComponent} from './components/dossier-detail/tab/documents/documents.component';
-import {DossierDetailTabNotesComponent} from './components/dossier-detail/tab/notes/notes.component';
-import {DossierDetailTabObjectTypeComponent} from './components/dossier-detail/tab/object-type/object-type.component';
-import {DossierDetailTabProgressComponent} from './components/dossier-detail/tab/progress/progress.component';
-import {DossierDetailTabS3DocumentsComponent} from './components/dossier-detail/tab/s3-documents/s3-documents.component';
-import {DossierDetailTabSummaryComponent} from './components/dossier-detail/tab/summary/summary.component';
-import {DossierDetailTabZaakobjectenComponent} from './components/dossier-detail/tab/zaakobjecten/zaakobjecten.component';
-import {DossierListActionsComponent} from './components/dossier-list-actions/dossier-list-actions.component';
-import {DossierListComponent} from './components/dossier-list/dossier-list.component';
-import {DossierProcessStartModalComponent} from './components/dossier-process-start-modal/dossier-process-start-modal.component';
-import {DossierRoutingModule} from './dossier-routing.module';
-import {DossierSupportingProcessStartModalComponent} from './components/dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
-import {DossierUpdateComponent} from './components/dossier-update/dossier-update.component';
-import {TAB_MAP} from './constants';
-import {DossierBulkAssignService, DossierService} from './services';
-import {DossierDetailTabFormioComponent} from './components/dossier-detail/tab/formio/formio.component';
-import {TabTranslatePipeModule} from './pipes';
+
+import { DossierAssignUserComponent } from './components/dossier-assign-user/dossier-assign-user.component';
+import { DossierBulkAssignModalComponent } from './components/dossier-bulk-assign-modal/dossier-bulk-assign-modal.component';
+import { DossierDetailComponent } from './components/dossier-detail/dossier-detail.component';
+import { DossierDetailTabAuditComponent } from './components/dossier-detail/tab/audit/audit.component';
+import {
+  DossierDetailTabContactMomentsComponent,
+} from './components/dossier-detail/tab/contact-moments/contact-moments.component';
+import {
+  DossierDetailTabDocumentenApiDocumentsComponent,
+} from './components/dossier-detail/tab/documenten-api-documents/documenten-api-documents.component';
+import { DossierDetailTabDocumentsComponent } from './components/dossier-detail/tab/documents/documents.component';
+import { DossierDetailTabFormioComponent } from './components/dossier-detail/tab/formio/formio.component';
+import { DossierDetailTabNotesComponent } from './components/dossier-detail/tab/notes/notes.component';
+import { DossierDetailTabObjectTypeComponent } from './components/dossier-detail/tab/object-type/object-type.component';
+import { DossierDetailTabProgressComponent } from './components/dossier-detail/tab/progress/progress.component';
+import { DossierDetailTabS3DocumentsComponent } from './components/dossier-detail/tab/s3-documents/s3-documents.component';
+import { DossierDetailTabSummaryComponent } from './components/dossier-detail/tab/summary/summary.component';
+import { DossierDetailTabZaakobjectenComponent } from './components/dossier-detail/tab/zaakobjecten/zaakobjecten.component';
+import { DossierListActionsComponent } from './components/dossier-list-actions/dossier-list-actions.component';
+import { DossierListComponent } from './components/dossier-list/dossier-list.component';
+import {
+  DossierProcessStartModalComponent,
+} from './components/dossier-process-start-modal/dossier-process-start-modal.component';
+import {
+  DossierSupportingProcessStartModalComponent,
+} from './components/dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
+import { DossierUpdateComponent } from './components/dossier-update/dossier-update.component';
+import { NoteModalComponent } from './components/note-modal/note-modal.component';
+import { TAB_MAP } from './constants';
+import { DossierRoutingModule } from './dossier-routing.module';
+import { TabTranslatePipeModule } from './pipes';
+import { DossierBulkAssignService, DossierService } from './services';
 
 export type TabsFactory = () => Map<string, object>;
 
@@ -187,6 +196,11 @@ export type TabsFactory = () => Map<string, object>;
     StatusSelectorComponent,
     RenderInPageHeaderDirectiveModule,
     TagModule,
+    DialogModule,
+    FileUploaderModule,
+    PaginationModule,
+    TooltipModule,
+    CarbonTooltipModule,
   ],
   exports: [DossierListComponent, DossierDetailComponent],
 })

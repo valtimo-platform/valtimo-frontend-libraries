@@ -25,11 +25,10 @@
   justify-content: center;
 }
 
-.download-button-container {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  min-height: 32px;
+.carbon-document-table-wrapper {
+  margin: 0;
+}
+
+.documenten-api-documents-filesize-template {
+  text-align: right;
 }

@@ -589,7 +589,13 @@ export class DocumentService {
     version: number
   ): Observable<DocumentDefinition> {
     return this.http.get<DocumentDefinition>(
-      `${this.valtimoEndpointUri}management/v1/document-definition/${documentDefinitionName}/version/${version}`
+      `${this.valtimoEndpointUri}management/v1/document-definition/${documentDefinitionName}/version/${version}`);
+    }
+    
+  // TODO: Should this be here or should this be moved to another service?
+  public deleteDocument(file: RelatedFile): Observable<Array<RelatedFile>> {
+    return this.http.delete<Array<RelatedFile>>(
+      `${this.valtimoEndpointUri}v1/documenten-api/${file.pluginConfigurationId}/files/${file.fileId}`
     );
   }
 }

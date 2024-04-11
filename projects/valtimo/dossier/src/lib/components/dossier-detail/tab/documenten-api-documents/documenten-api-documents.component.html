@@ -14,81 +14,55 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="{loading: loading$ | async} as obs">
-  <div *ngIf="uploadProcessLinkedSet && !uploadProcessLinked">
-    <div
-      *ngIf="isAdmin"
-      [translate]="'dossier.documenten.noProcessLinked.adminRole'"
-      class="bg-warning text-black mb-2 p-3 text-center"
-    ></div>
-    <div
-      *ngIf="!isAdmin"
-      [translate]="'dossier.documenten.noProcessLinked.regularUser'"
-      class="bg-warning text-black mb-2 p-3 text-center"
-    ></div>
-  </div>
-  <div *ngIf="showZaakLinkWarning">
-    <div
-      [translate]="'dossier.documenten.noZaakFound'"
-      class="bg-warning text-black mb-2 p-3 text-center"
-    ></div>
-  </div>
+<div class="carbon-document-table-wrapper">
+  <valtimo-carbon-list
+    [actionItems]="actionItems"
+    [items]="relatedFiles$ | async"
+    [fields]="fields"
+    [loading]="loading$ | async"
+    (rowClicked)="onRowClick($event)"
+    hideColumnHeader
+  >
+    <div carbonToolbarContent>
+      <input
+        [accept]="acceptedFiles"
+        (change)="onFileSelected($event)"
+        hidden
+        type="file"
+        #fileInput
+      />
 
-  <valtimo-dropzone
-    *ngIf="!obs.loading"
-    (fileSelected)="fileSelected($event)"
-    [acceptedFiles]="acceptedFiles"
-    [camera]="false"
-    [disabled]="
-      !uploadProcessLinkedSet || !uploadProcessLinked || obs.loading || showZaakLinkWarning
-    "
-    [hideFilePreview]="true"
-    [hideTitle]="true"
-    [maxFileSize]="maxFileSize"
-    [maxFiles]="1"
-    [showMaxFileSize]="true"
-    [uploading]="uploading$ | async"
-  ></valtimo-dropzone>
+      <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
+    </div>
 
-  <valtimo-widget>
-    <valtimo-list
-      [ngClass]="{hidden: obs.loading}"
-      [fields]="fields"
-      [header]="true"
-      [isSearchable]="true"
-      [items]="relatedFiles$ | async"
-      [viewMode]="true"
-      [lastColumnTemplate]="downloadButton"
-    >
-      <div header>
-        <h3 class="list-header-title">{{ 'Related documents' | translate }}</h3>
-        <h5 class="list-header-description">
-          {{ 'Overview of all documents in this dossier' | translate }}
-        </h5>
-      </div>
-    </valtimo-list>
-    <ng-container *ngTemplateOutlet="loading; context: {loading: obs.loading}"></ng-container>
-  </valtimo-widget>
-</ng-container>
+    @if (showZaakLinkWarning && isAdmin) {
+      <valtimo-no-results
+        [action]="navigateToCaseAdminButton"
+        description="{{ 'dossier.documenten.noZaakFound' | translate }}"
+        title="{{ 'dossier.documenten.noZaakFoundTitle' | translate }}"
+      ></valtimo-no-results>
+    } @else {
+      <valtimo-no-results
+        [action]="uploadButton"
+        description="{{ 'dossier.documenten.noFiles' | translate }}"
+        title="{{ 'dossier.documenten.noFilesTitle' | translate }}"
+      ></valtimo-no-results>
+    }
+  </valtimo-carbon-list>
+</div>
 
 <valtimo-documenten-api-metadata-modal
-  (metadata)="metadataSet($event)"
   [disabled$]="modalDisabled$"
   [file$]="fileToBeUploaded$"
   [hide$]="hideModal$"
   [show$]="showModal$"
+  (metadata)="metadataSet($event)"
 ></valtimo-documenten-api-metadata-modal>
-
-<ng-template #loading let-loading="loading">
-  <div *ngIf="loading" class="loading-container">
-    <cds-loading></cds-loading>
-  </div>
-</ng-template>
 
 <ng-template #downloadButton let-index="index" let-item="item">
   <div
-    class="download-button-container"
     *ngIf="{isDownloading: indexesIncludeIndex(downloadingFileIndexes$ | async, index)} as vars"
+    class="download-button-container"
   >
     <button
       *ngIf="!vars.isDownloading"
@@ -96,9 +70,41 @@
       size="sm"
       (click)="downloadDocument(item, index)"
     >
-      {{ 'interface.download' | translate
-      }}<svg class="cds--btn__icon" cdsIcon="download" size="16"></svg>
+      {{ 'interface.download' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="download" size="16"></svg>
     </button>
+
     <cds-loading size="sm" *ngIf="vars.isDownloading"></cds-loading>
+  </div>
+</ng-template>
+
+<ng-template #dossierListActions>
+  <input [accept]="acceptedFiles" (change)="onFileSelected($event)" hidden type="file" #fileInput />
+  <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
+</ng-template>
+
+<ng-template #uploadButton>
+  <button
+    [disabled]="(uploadProcessLinkedSet && !uploadProcessLinked) || showZaakLinkWarning"
+    [vTooltip]="getUploadButtonTooltip() | translate"
+    (click)="onUploadButtonClick()"
+    cdsButton="primary"
+  >
+    {{ 'Upload' | translate }}
+    <svg class="cds--btn__icon" cdsIcon="upload" size="16"></svg>
+  </button>
+</ng-template>
+
+<ng-template #navigateToCaseAdminButton>
+  <button (click)="onNavigateToCaseAdminClick()" cdsButton="primary">
+    {{ 'dossier.documenten.navigateToCaseAdmin' | translate }}
+    <svg class="cds--btn__icon" cdsIcon="settings" size="16"></svg>
+  </button>
+</ng-template>
+
+<ng-template #sizeTemplate let-data="data">
+  <div class="documenten-api-documents-filesize-template">
+    {{ bytesToMegabytes(data.item.sizeInBytes) }}
   </div>
 </ng-template>

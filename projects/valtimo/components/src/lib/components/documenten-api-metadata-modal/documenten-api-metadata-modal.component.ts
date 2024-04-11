@@ -74,6 +74,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() disableDescription: boolean;
   @Input() confidentialityLevel: string;
   @Input() disableConfidentialityLevel: boolean;
+  @Input() trefwoorden: boolean;
+  @Input() disableTrefwoorden: boolean;
 
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
 
