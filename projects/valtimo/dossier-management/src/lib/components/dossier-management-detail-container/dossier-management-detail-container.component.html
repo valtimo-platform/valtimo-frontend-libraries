@@ -14,7 +14,14 @@
   ~ limitations under the License.
   -->
 
-<div *ngIf="currentTab$ | async as currentTab" class="dossier-management-detail-container">
+<div
+  *ngIf="{
+    currentTab: currentTab$ | async,
+    injectedTabs: injectedCaseManagementTabs$ | async
+  } as obs"
+  class="dossier-management-detail-container"
+>
+  <valtimo-documenten-api></valtimo-documenten-api>
   <cds-tabs
     class="dossier-management-tabs"
     type="contained"
