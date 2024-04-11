@@ -17,3 +17,4 @@
 export * from './list-column.model';
 export * from './tab.enum';
 export * from './status.model';
+export * from './case-management-tab.model';

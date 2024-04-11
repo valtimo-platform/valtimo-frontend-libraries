@@ -58,6 +58,7 @@ export class DossierManagementDetailContainerComponent
       this._activeTab = currentTab;
     })
   );
+  public readonly injectedCaseManagementTabs$ = this.tabService.injectedCaseManagementTabs$;
   public readonly documentDefinitionTitle$ = this.pageTitleService.customPageTitle$;
   public readonly CARBON_THEME = 'g10';
   public readonly DossierManagementTabs = Object.values(TabEnum);
@@ -95,7 +96,7 @@ export class DossierManagementDetailContainerComponent
     this.pageTitleService.enableReset();
   }
 
-  public displayBodyComponent(tab: TabEnum): void {
+  public displayBodyComponent(tab: TabEnum | string, isInjectedTab = false): void {
     if (this.pendingChanges) {
       this.onCanDeactivate();
     }

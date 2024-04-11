@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of dossier-management
- */
+import {Type} from '@angular/core';
 
-export * from './lib/dossier-management.module';
-export * from './lib/components/dossier-management-list/dossier-management-list.component';
-export * from './lib/models';
-export * from './lib/constants';
+interface CaseManagementTabConfig {
+  [tabTranslationKey: string]: Type<any>;
+}
+
+interface InjectedCaseManagementTab {
+  translationKey: string;
+  component: Type<any>;
+}
+
+export {CaseManagementTabConfig, InjectedCaseManagementTab};

@@ -21,6 +21,8 @@ import {ListItem} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 
 import {TabEnum} from '../models/tab.enum';
+import {CASE_MANAGEMENT_TAB_TOKEN} from '../constants';
+import {CaseManagementTabConfig, InjectedCaseManagementTab} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -28,11 +30,17 @@ import {TabEnum} from '../models/tab.enum';
 export class TabService {
   public configuredTabKeys: string[];
 
-  private _currentTab$ = new BehaviorSubject<TabEnum>(TabEnum.DOCUMENT);
-  public get currentTab$(): Observable<TabEnum> {
+  private _injectedCaseManagementTabs$ = new BehaviorSubject<InjectedCaseManagementTab[]>([]);
+
+  public get injectedCaseManagementTabs$(): Observable<InjectedCaseManagementTab[]> {
+    return this._injectedCaseManagementTabs$.asObservable();
+  }
+
+  private _currentTab$ = new BehaviorSubject<TabEnum | string>(TabEnum.DOCUMENT);
+  public get currentTab$(): Observable<TabEnum | string> {
     return this._currentTab$.asObservable();
   }
-  public set currentTab(tab: TabEnum) {
+  public set currentTab(tab: TabEnum | string) {
     this._currentTab$.next(tab);
   }
 
@@ -99,7 +107,24 @@ export class TabService {
 
   constructor(
     @Optional() @Inject(CASE_TAB_TOKEN) private readonly caseTabConfig: CaseTabConfig,
+    @Optional()
+    @Inject(CASE_MANAGEMENT_TAB_TOKEN)
+    private readonly caseManagementTabConfig: CaseManagementTabConfig,
     private readonly formService: FormService,
     private readonly translateService: TranslateService
-  ) {}
+  ) {
+    this.setInjectedCaseManagementTabs(this.caseManagementTabConfig);
+  }
+
+  private setInjectedCaseManagementTabs(caseManagementTabConfig?: CaseManagementTabConfig): void {
+    if (!caseManagementTabConfig) return;
+
+    const injectedTabs: InjectedCaseManagementTab[] = [];
+
+    Object.keys(caseManagementTabConfig).forEach(tabKey => {
+      injectedTabs.push({translationKey: tabKey, component: caseManagementTabConfig[tabKey]});
+    });
+
+    this._injectedCaseManagementTabs$.next(injectedTabs);
+  }
 }

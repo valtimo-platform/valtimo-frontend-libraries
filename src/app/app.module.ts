@@ -87,7 +87,7 @@ import {
   LocalizationService,
 } from '@valtimo/config';
 import {FormManagementModule} from '@valtimo/form-management';
-import {DossierManagementModule} from '@valtimo/dossier-management';
+import {CASE_MANAGEMENT_TAB_TOKEN, DossierManagementModule} from '@valtimo/dossier-management';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {CustomerModule} from '@valtimo/customer';
 import {PluginManagementModule} from '@valtimo/plugin-management';
@@ -127,6 +127,7 @@ import {FormFlowManagementModule} from '@valtimo/form-flow-management';
 import {CustomFormFlowComponent} from '@src/app/custom-form-flow-component/custom-form-flow.component';
 import {TaskManagementModule} from '@valtimo/task-management';
 import {CaseMigrationModule} from '@valtimo/case-migration';
+import {DossierManagementZgwComponent} from '@valtimo/zgw';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -262,6 +263,12 @@ export function tabsFactory() {
           component: CustomFormFlowComponent,
         },
       ],
+    },
+    {
+      provide: CASE_MANAGEMENT_TAB_TOKEN,
+      useValue: {
+        'zgw.zgwTab': DossierManagementZgwComponent,
+      },
     },
   ],
   bootstrap: [AppComponent],

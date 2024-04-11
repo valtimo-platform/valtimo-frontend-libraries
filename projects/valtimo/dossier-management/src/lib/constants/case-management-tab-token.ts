@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of dossier-management
- */
+import {InjectionToken} from '@angular/core';
+import {CaseManagementTabConfig} from '../models';
 
-export * from './lib/dossier-management.module';
-export * from './lib/components/dossier-management-list/dossier-management-list.component';
-export * from './lib/models';
-export * from './lib/constants';
+const CASE_MANAGEMENT_TAB_TOKEN = new InjectionToken<CaseManagementTabConfig>(
+  'Specify a component to display per configured tab translation key.'
+);
+
+export {CASE_MANAGEMENT_TAB_TOKEN};
