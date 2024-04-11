@@ -51,7 +51,7 @@ import {
 import {DocumentenApiColumnModalComponent} from '../documenten-api-column-modal/documenten-api-column-modal.component';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {TagModule} from 'carbon-components-angular';
+import {ButtonModule, TagModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-documenten-api-columns',
@@ -66,6 +66,7 @@ import {TagModule} from 'carbon-components-angular';
     TranslateModule,
     ConfirmationModalModule,
     TagModule,
+    ButtonModule,
   ],
 })
 export class DocumentenApiColumnsComponent

@@ -25,7 +25,15 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {PageTitleService, PendingChangesComponent} from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
-import {combineLatest, filter, map, Observable, Subscription, tap} from 'rxjs';
+import {
+  combineLatest,
+  distinctUntilChanged,
+  filter,
+  map,
+  Observable,
+  Subscription,
+  tap,
+} from 'rxjs';
 import {TabEnum} from '../../models';
 import {DossierDetailService, TabService} from '../../services';
 import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
@@ -155,19 +163,20 @@ export class DossierManagementDetailContainerComponent
 
   private openInjectedTabSubscription(): void {
     this._subscriptions.add(
-      combineLatest([this.currentTab$, this.injectedCaseManagementTabs$]).subscribe(
-        ([currentTab, injectedCaseManagementTabs]) => {
-          const findInjectedTab = injectedCaseManagementTabs.find(
-            injectedTab => injectedTab.translationKey === currentTab
-          );
+      combineLatest([
+        this.currentTab$.pipe(distinctUntilChanged()),
+        this.injectedCaseManagementTabs$,
+      ]).subscribe(([currentTab, injectedCaseManagementTabs]) => {
+        const findInjectedTab = injectedCaseManagementTabs.find(
+          injectedTab => injectedTab.translationKey === currentTab
+        );
 
-          if (findInjectedTab && this._contentContainer) {
-            this._contentContainer.createComponent(findInjectedTab.component);
-          } else {
-            this._contentContainer.clear();
-          }
+        if (findInjectedTab && this._contentContainer) {
+          this._contentContainer.createComponent(findInjectedTab.component);
+        } else {
+          this._contentContainer.clear();
         }
-      )
+      })
     );
   }
 
