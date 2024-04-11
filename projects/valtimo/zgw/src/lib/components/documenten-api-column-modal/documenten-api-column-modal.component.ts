@@ -38,6 +38,7 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 import {
   AbstractControl,
   FormBuilder,
+  ReactiveFormsModule,
   ValidationErrors,
   ValidatorFn,
   Validators,
@@ -48,9 +49,19 @@ import {
   InternalCaseStatusColor,
   InternalCaseStatusUtils,
 } from '@valtimo/document';
-import {IconService, ListItem} from 'carbon-components-angular';
+import {
+  ButtonModule,
+  DropdownModule,
+  IconService,
+  InputModule,
+  ListItem,
+  ModalModule,
+  TagModule,
+  ToggleModule,
+} from 'carbon-components-angular';
 import {Edit16} from '@carbon/icons';
-import {TranslateService} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'valtimo-documenten-api-column-modal',
@@ -58,6 +69,17 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrls: ['./documenten-api-column-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
+  imports: [
+    CommonModule,
+    ModalModule,
+    TagModule,
+    TranslateModule,
+    InputModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    DropdownModule,
+    ToggleModule,
+  ],
 })
 export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
   @Input() public set type(value: DocumentenApiColumnModalType) {

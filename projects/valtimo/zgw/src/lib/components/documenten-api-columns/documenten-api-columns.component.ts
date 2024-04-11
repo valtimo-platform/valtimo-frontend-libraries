@@ -22,7 +22,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import {DocumentenApiColumnService} from '../../services';
-import {ConfiguredColumn} from '../../models';
+import {
+  ConfiguredColumn,
+  DocumentenApiColumnModalType,
+  DocumentenApiColumnModalTypeCloseEvent,
+} from '../../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -36,34 +40,39 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {
   ActionItem,
+  CarbonListModule,
   ColumnConfig,
+  ConfirmationModalModule,
   MoveRowDirection,
   MoveRowEvent,
   PendingChangesComponent,
   ViewType,
 } from '@valtimo/components';
-import {
-  StatusModalCloseEvent,
-  StatusModalType,
-  TabEnum,
-} from '../../../../../dossier-management/src/lib/models';
-import {TabService} from '../../../../../dossier-management/src/lib/services';
-import {DossierManagementDocumentDefinitionComponent} from '../../../../../dossier-management/src/lib/components/dossier-management-document-definition/dossier-management-document-definition.component';
-import {DocumentenApiColumnModalComponent} from '../dossier-management-zgw-modal/documenten-api-column-modal.component';
+import {DocumentenApiColumnModalComponent} from '../documenten-api-column-modal/documenten-api-column-modal.component';
+import {CommonModule} from '@angular/common';
+import {TranslateModule} from '@ngx-translate/core';
+import {TagModule} from 'carbon-components-angular';
 
 @Component({
+  selector: 'valtimo-documenten-api-columns',
   templateUrl: './documenten-api-columns.component.html',
   styleUrls: ['./documenten-api-columns.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [DocumentenApiColumnModalComponent],
+  imports: [
+    CommonModule,
+    DocumentenApiColumnModalComponent,
+    CarbonListModule,
+    TranslateModule,
+    ConfirmationModalModule,
+    TagModule,
+  ],
 })
-export class DossierManagementZgwComponent
+export class DocumentenApiColumnsComponent
   extends PendingChangesComponent
   implements AfterViewInit
 {
   @ViewChild('colorColumnTemplate') colorColumnTemplate: TemplateRef<any>;
-  private _documentDefinitionTab: DossierManagementDocumentDefinitionComponent;
 
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
 
@@ -82,7 +91,7 @@ export class DossierManagementZgwComponent
 
   private _documentStatuses: ConfiguredColumn[] = [];
 
-  public readonly documentStatuses$ = combineLatest([
+  public readonly documentStatuses$: Observable<ConfiguredColumn[]> = combineLatest([
     this._documentDefinitionName$,
     this._reload$,
   ]).pipe(
@@ -118,23 +127,14 @@ export class DossierManagementZgwComponent
 
   public readonly CARBON_THEME = 'g10';
 
-  public readonly statusModalType$ = new BehaviorSubject<StatusModalType>('closed');
+  public readonly statusModalType$ = new BehaviorSubject<DocumentenApiColumnModalType>('closed');
   public readonly prefillStatus$ = new BehaviorSubject<ConfiguredColumn>(undefined);
 
   public readonly columnToUpdate$ = new BehaviorSubject<ConfiguredColumn>(undefined);
   public readonly showDisableModal$ = new Subject<boolean>();
 
-  public _activeTab: TabEnum;
-
-  public currentTab$ = this.tabService.currentTab$.pipe(
-    tap((currentTab: TabEnum) => {
-      this._activeTab = currentTab;
-    })
-  );
-
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly tabService: TabService,
     private readonly zgwDocumentColumnService: DocumentenApiColumnService
   ) {
     super();
@@ -169,7 +169,7 @@ export class DossierManagementZgwComponent
     this.statusModalType$.next('add');
   }
 
-  public closeModal(closeModalEvent: StatusModalCloseEvent): void {
+  public closeModal(closeModalEvent: DocumentenApiColumnModalTypeCloseEvent): void {
     if (closeModalEvent === 'closeAndRefresh') {
       this.reload();
     }
@@ -200,7 +200,7 @@ export class DossierManagementZgwComponent
     this.documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>
-          this.zgwDocumentColumnService.updateConfiguredColumnes(
+          this.zgwDocumentColumnService.updateConfiguredColumns(
             documentDefinitionName,
             orderedStatuses
           )
@@ -209,13 +209,6 @@ export class DossierManagementZgwComponent
       .subscribe(() => {
         this.reload(true);
       });
-  }
-
-  public displayBodyComponent(tab: TabEnum): void {
-    if (this.pendingChanges) {
-      this.onCanDeactivate();
-    }
-    this.tabService.currentTab = tab;
   }
 
   private reload(noAnimation = false): void {
@@ -258,10 +251,4 @@ export class DossierManagementZgwComponent
       },
     ]);
   }
-
-  protected onCanDeactivate(): void {
-    this._documentDefinitionTab.onCanDeactivate();
-  }
-
-  protected readonly TabEnum = TabEnum;
 }

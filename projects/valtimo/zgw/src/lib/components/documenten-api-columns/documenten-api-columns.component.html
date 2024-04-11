@@ -13,41 +13,28 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div *ngIf="currentTab$ | async as currentTab">
-  <cds-tabs class="dossier-management-tabs" [attr.data-carbon-theme]="CARBON_THEME">
-    <cds-tab
-      *ngIf="{active: currentTab === TabEnum.ZGW} as vars"
-      class="no-padding-left-right no-padding-top-bottom"
-      [active]="vars.active"
-      [heading]="'dossierManagement.tabs.zgw' | translate"
-      (selected)="displayBodyComponent(TabEnum.ZGW)"
-    >
-      <valtimo-carbon-list
-        *ngIf="{
-          loading: loading$ | async,
-          documentStatuses: documentStatuses$ | async
-        } as obs"
-        [items]="obs.documentStatuses"
-        [fields]="fields$ | async"
-        [header]="false"
-        [loading]="obs.loading"
-        [movingRowsEnabled]="true"
-        [actionItems]="ACTION_ITEMS"
-        (rowClicked)="openEditModal($event)"
-        (moveRow)="onMoveRowClick($event)"
-      >
-        <ng-container
-          carbonToolbarContent
-          *ngTemplateOutlet="buttons; context: {obs: obs}"
-        ></ng-container>
-      </valtimo-carbon-list>
-    </cds-tab>
-  </cds-tabs>
-</div>
+
+<valtimo-carbon-list
+  *ngIf="{
+    loading: loading$ | async,
+    documentStatuses: documentStatuses$ | async
+  } as obs"
+  [fields]="fields$ | async"
+  [header]="false"
+  [loading]="obs.loading"
+  [movingRowsEnabled]="true"
+  [actionItems]="ACTION_ITEMS"
+  (rowClicked)="openEditModal($event)"
+  (moveRow)="onMoveRowClick($event)"
+>
+  <ng-container
+    carbonToolbarContent
+    *ngTemplateOutlet="buttons; context: {obs: obs}"
+  ></ng-container>
+</valtimo-carbon-list>
 
 <valtimo-documenten-api-column-modal
   [type]="statusModalType$ | async"
-  [prefill]="prefillStatus$ | async"
   [usedKeys]="usedKeys$ | async"
   [documentDefinitionName]="documentDefinitionName$ | async"
   (closeModalEvent)="closeModal($event)"

@@ -16,7 +16,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {ConfiguredColumn} from '../models';
 
 @Injectable({
@@ -54,5 +54,16 @@ export class DocumentenApiColumnService extends BaseApiService {
       ),
       column
     );
+  }
+
+  public deleteConfiguredColumn(caseDefinitionKey: string, statusKey: string): Observable<null> {
+    return of(null);
+  }
+
+  public updateConfiguredColumns(
+    caseDefinitionKey: string,
+    orderColumns: ConfiguredColumn[]
+  ): Observable<null> {
+    return of(null);
   }
 }

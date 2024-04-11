@@ -19,13 +19,15 @@ import {TabsModule} from 'carbon-components-angular';
 import {DossierManagementZgwService} from '../../services';
 import {ZgwTabEnum} from '../../models';
 import {TranslateModule} from '@ngx-translate/core';
+import {CommonModule} from '@angular/common';
+import {DocumentenApiColumnsComponent} from '../documenten-api-columns/documenten-api-columns.component';
 
 @Component({
   templateUrl: './dossier-management-zgw.component.html',
   styleUrls: ['./dossier-management-zgw.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [TabsModule, TranslateModule],
+  imports: [CommonModule, TabsModule, TranslateModule, DocumentenApiColumnsComponent],
 })
 export class DossierManagementZgwComponent {
   public readonly ZgwTabEnum = ZgwTabEnum;

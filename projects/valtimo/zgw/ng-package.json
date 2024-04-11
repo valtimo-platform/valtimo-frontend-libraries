@@ -4,5 +4,9 @@
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "allowedNonPeerDependencies": ["carbon-components-angular"]
+  "allowedNonPeerDependencies": [
+    "carbon-components-angular",
+    "@ngx-translate/core",
+    "@angular/forms"
+  ]
 }
