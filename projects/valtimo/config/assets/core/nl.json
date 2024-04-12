@@ -823,6 +823,7 @@
     "warning": "Waarschuwing",
     "finish": "Finish",
     "add": "Toevoegen",
+    "tags": "Tags",
     "tagType": {
       "red": "Rood",
       "magenta": "Magenta",
@@ -1295,7 +1296,7 @@
     "enum": "Opsomming",
     "arrayCount": "Hoeveelheid",
     "underscoresToSpaces": "Lage strepen naar spaties",
-    "status": "Status"
+    "tags": "Tags"
   },
   "object": {
     "title": "Objects",
