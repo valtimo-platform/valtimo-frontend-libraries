@@ -14,5 +14,10 @@
  * limitations under the License.
  */
 
-export * from './documenten-api';
-export * from './objecten-api';
+import {InjectionToken, Type} from '@angular/core';
+
+const ZGW_OBJECT_TYPE_COMPONENT_TOKEN = new InjectionToken<Type<any>>(
+  'Specify a component to display ZGW object types.'
+);
+
+export {ZGW_OBJECT_TYPE_COMPONENT_TOKEN};

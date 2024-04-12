@@ -320,6 +320,7 @@
     "@valtimo/swagger": "file:dist/valtimo/swagger",
     "@valtimo/task": "file:dist/valtimo/task",
     "@valtimo/task-management": "file:dist/valtimo/task-management",
+    "@valtimo/zgw": "file:dist/valtimo/zgw",
     "cross-env": "7.0.3",
     "cypress": "12.17.4",
     "deepmerge-ts": "5.1.0",

@@ -21,7 +21,7 @@ import {DossierDetailTabAuditComponent} from '../components/dossier-detail/tab/a
 import {DossierDetailTabDocumentsComponent} from '../components/dossier-detail/tab/documents/documents.component';
 import {DefaultTabComponents, DefaultTabs} from '../models';
 import {DossierDetailTabContactMomentsComponent} from '../components/dossier-detail/tab/contact-moments/contact-moments.component';
-import {DossierDetailTabZaakobjectenComponent} from '../components/dossier-detail/tab/zaakobjecten/zaakobjecten.component';
+import {DossierDetailTabNotFoundComponent} from '../components/dossier-detail/tab/not-found/not-found.component';
 import {DossierDetailTabNotesComponent} from '../components/dossier-detail/tab/notes/notes.component';
 
 const TAB_MAP = new InjectionToken<Map<string, object>>('TabMap');
@@ -39,7 +39,7 @@ const DEFAULT_TAB_COMPONENTS: DefaultTabComponents = {
   [DefaultTabs.audit]: DossierDetailTabAuditComponent,
   [DefaultTabs.documents]: DossierDetailTabDocumentsComponent,
   [DefaultTabs.contactMoments]: DossierDetailTabContactMomentsComponent,
-  [DefaultTabs.zaakobjecten]: DossierDetailTabZaakobjectenComponent,
+  [DefaultTabs.zaakobjecten]: DossierDetailTabNotFoundComponent,
   [DefaultTabs.notes]: DossierDetailTabNotesComponent,
 };
 

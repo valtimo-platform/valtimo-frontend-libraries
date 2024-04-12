@@ -14,5 +14,11 @@
  * limitations under the License.
  */
 
-export * from './documenten-api';
-export * from './objecten-api';
+import {Component} from '@angular/core';
+
+@Component({
+  selector: 'valtimo-dossier-detail-not-found',
+  templateUrl: './not-found.component.html',
+  styleUrls: ['./not-found.component.scss'],
+})
+export class DossierDetailTabNotFoundComponent {}

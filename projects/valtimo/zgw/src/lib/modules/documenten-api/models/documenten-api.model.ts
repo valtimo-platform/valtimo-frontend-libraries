@@ -14,5 +14,23 @@
  * limitations under the License.
  */
 
-export * from './documenten-api';
-export * from './objecten-api';
+import {RelatedFile} from '@valtimo/document';
+
+interface DocumentenApiRelatedFile extends RelatedFile {
+  size?: string;
+  title?: string;
+  language?: string;
+  identification?: string;
+  description?: string;
+  informatieobjecttype?: string;
+  trefwoorden?: Array<String>;
+  format?: string;
+  status?: string;
+  confidentialityLevel?: string;
+}
+
+type DocumentenApiRelatedFileListItem = Omit<DocumentenApiRelatedFile, 'createdOn'> & {
+  createdOn: string;
+};
+
+export {DocumentenApiRelatedFile, DocumentenApiRelatedFileListItem};

@@ -14,5 +14,16 @@
  * limitations under the License.
  */
 
-export * from './documenten-api';
-export * from './objecten-api';
+import {NgModule} from '@angular/core';
+import {ZGW_OBJECT_TYPE_COMPONENT_TOKEN} from '@valtimo/config';
+import {DossierDetailTabObjectTypeComponent} from './components/object-type/object-type.component';
+
+@NgModule({
+  providers: [
+    {
+      provide: ZGW_OBJECT_TYPE_COMPONENT_TOKEN,
+      useValue: DossierDetailTabObjectTypeComponent,
+    },
+  ],
+})
+export class ObjectenApiModule {}

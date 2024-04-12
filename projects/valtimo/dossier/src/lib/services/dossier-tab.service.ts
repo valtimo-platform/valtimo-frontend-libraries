@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable, OnDestroy, Optional} from '@angular/core';
+import {Inject, Injectable, OnDestroy, Optional, Type} from '@angular/core';
 import {ApiTabItem, ApiTabType, CaseTabConfig, TabImpl} from '../models';
 import {CASE_TAB_TOKEN, DEFAULT_TAB_COMPONENTS, DEFAULT_TABS, TAB_MAP} from '../constants';
-import {ConfigService} from '@valtimo/config';
+import {ConfigService, ZGW_OBJECT_TYPE_COMPONENT_TOKEN} from '@valtimo/config';
 import {ActivatedRoute} from '@angular/router';
-import {DossierDetailTabObjectTypeComponent} from '../components/dossier-detail/tab/object-type/object-type.component';
 import {DossierTabApiService} from './dossier-tab-api.service';
 import {BehaviorSubject, filter, map, Observable, Subscription} from 'rxjs';
 import {DossierDetailTabFormioComponent} from '../components/dossier-detail/tab/formio/formio.component';
@@ -41,6 +40,9 @@ export class DossierTabService implements OnDestroy {
   constructor(
     @Inject(TAB_MAP) private readonly tabMap: Map<string, object> = DEFAULT_TABS,
     @Optional() @Inject(CASE_TAB_TOKEN) private readonly caseTabConfig: CaseTabConfig,
+    @Optional()
+    @Inject(ZGW_OBJECT_TYPE_COMPONENT_TOKEN)
+    private readonly zgwObjectTypeComponent: Type<any>,
     private readonly configService: ConfigService,
     private readonly route: ActivatedRoute,
     private readonly dossierTabApiService: DossierTabApiService
@@ -57,11 +59,11 @@ export class DossierTabService implements OnDestroy {
   private getConfigurableTabs(documentDefinitionName: string): Map<string, object> {
     const tabMap = new Map<string, object>();
 
-    if (this.configService?.config?.caseObjectTypes) {
+    if (this.configService?.config?.caseObjectTypes && this.zgwObjectTypeComponent) {
       const allNamesObjects = this.configService?.config?.caseObjectTypes[documentDefinitionName];
 
       allNamesObjects?.forEach(name => {
-        tabMap.set(name, DossierDetailTabObjectTypeComponent);
+        tabMap.set(name, this.zgwObjectTypeComponent);
       });
     }
 

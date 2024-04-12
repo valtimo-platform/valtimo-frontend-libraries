@@ -29,7 +29,6 @@ import {
   CardModule,
   FormIoModule,
   MenuModule,
-  registerDocumentenApiFormioUploadComponent,
   registerFormioCurrentUserComponent,
   registerFormioFileSelectorComponent,
   registerFormioUploadComponent,
@@ -45,7 +44,6 @@ import {
   DossierDetailTabNotesComponent,
   DossierDetailTabProgressComponent,
   DossierDetailTabSummaryComponent,
-  DossierDetailTabZaakobjectenComponent,
   DossierModule,
 } from '@valtimo/dossier';
 import {ProcessModule} from '@valtimo/process';
@@ -127,7 +125,12 @@ import {FormFlowManagementModule} from '@valtimo/form-flow-management';
 import {CustomFormFlowComponent} from '@src/app/custom-form-flow-component/custom-form-flow.component';
 import {TaskManagementModule} from '@valtimo/task-management';
 import {CaseMigrationModule} from '@valtimo/case-migration';
-import {DossierManagementZgwComponent} from '@valtimo/zgw';
+import {
+  DocumentenApiFormioModule,
+  DossierManagementZgwComponent,
+  ObjectenApiModule,
+  registerDocumentenApiFormioUploadComponent,
+} from '@valtimo/zgw';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -136,7 +139,6 @@ export function tabsFactory() {
     [DefaultTabs.audit, DossierDetailTabAuditComponent],
     [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
     [DefaultTabs.contactMoments, DossierDetailTabContactMomentsComponent],
-    [DefaultTabs.zaakobjecten, DossierDetailTabZaakobjectenComponent],
     [DefaultTabs.notes, DossierDetailTabNotesComponent],
     ['custom-maps', CustomMapsTabComponent],
     ['custom-dossier', CustomDossierTabComponent],
@@ -228,6 +230,8 @@ export function tabsFactory() {
     TranslationManagementModule,
     CustomFormFlowComponent,
     TaskManagementModule,
+    DocumentenApiFormioModule,
+    ObjectenApiModule,
   ],
   providers: [
     FormioComponent,

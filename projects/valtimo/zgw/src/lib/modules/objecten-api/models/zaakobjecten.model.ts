@@ -14,5 +14,32 @@
  * limitations under the License.
  */
 
-export * from './documenten-api';
-export * from './objecten-api';
+import {FormioForm} from '@formio/angular';
+
+interface ZaakObjectType {
+  name: string;
+  url: string;
+}
+
+interface ZaakObject {
+  index: number;
+  registrationAt: string;
+  title: string | null;
+  url: string;
+}
+
+interface ZaakobjectFormResponse {
+  documentMappedFields: Array<{
+    defaultValue: string;
+    input: boolean;
+    key: string;
+    label: string;
+    type: string;
+  }>;
+  formDefinition: FormioForm;
+  id: string;
+  name: string;
+  readOnly: boolean;
+}
+
+export {ZaakObjectType, ZaakObject, ZaakobjectFormResponse};

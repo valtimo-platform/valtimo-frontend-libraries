@@ -16,7 +16,6 @@
 
 export * from './dossier-bulk-assign.service';
 export * from './dossier-column.service';
-export * from './zaakobjecten.service';
 export * from './dossier-parameter.service';
 export * from './dossier-list.service';
 export * from './dossier-list-assignee.service';

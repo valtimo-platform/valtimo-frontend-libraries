@@ -23,6 +23,7 @@ import {DocumentModule} from '@valtimo/document';
 import {ResourceModule} from '@valtimo/resource';
 import {RouterModule} from '@angular/router';
 import {DocumentenApiUploaderComponent} from './documenten-api-uploader/documenten-api-uploader.component';
+import {DocumentenApiMetadataModalComponent} from '../components';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import {DocumentenApiUploaderComponent} from './documenten-api-uploader/document
     FileSizeModule,
     ResourceModule,
     RouterModule,
+    DocumentenApiMetadataModalComponent,
   ],
   declarations: [DocumentenApiUploaderComponent],
   exports: [DocumentenApiUploaderComponent],

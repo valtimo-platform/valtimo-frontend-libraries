@@ -15,4 +15,4 @@
  */
 
 export * from './documenten-api-formio.module';
-export * from './documenten-api-uploader/documenten-api-uploader.component';
+export * from './documenten-api-uploader';

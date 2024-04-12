@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from './documenten-api';
-export * from './objecten-api';
+export * from './zaakobjecten/zaakobjecten.component';
+export * from './object-type/object-type.component';

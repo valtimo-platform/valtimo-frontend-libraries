@@ -17,3 +17,4 @@
 export * from './documenten-api-column-modal/documenten-api-column-modal.component';
 export * from './documenten-api-columns/documenten-api-columns.component';
 export * from './documenten-api-metadata-modal/documenten-api-metadata-modal.component';
+export * from './documenten-api-documents/documenten-api-documents.component';

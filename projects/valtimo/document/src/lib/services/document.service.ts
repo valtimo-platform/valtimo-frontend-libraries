@@ -25,7 +25,7 @@ import {
   SearchOperator,
 } from '@valtimo/config';
 import {InterceptorSkip} from '@valtimo/security';
-import {catchError, Observable, of, switchMap, tap} from 'rxjs';
+import {catchError, Observable, of, switchMap} from 'rxjs';
 
 import {
   AssignHandlerToDocumentResult,
@@ -53,7 +53,6 @@ import {
   ProcessDocumentDefinition,
   ProcessDocumentDefinitionRequest,
   ProcessDocumentInstance,
-  RelatedFile,
   SpecifiedDocuments,
   TemplatePayload,
   TemplateResponse,
@@ -570,12 +569,6 @@ export class DocumentService {
     );
   }
 
-  public getZakenApiDocuments(documentId: string): Observable<Array<RelatedFile>> {
-    return this.http.get<Array<RelatedFile>>(
-      `${this.valtimoEndpointUri}v1/zaken-api/document/${documentId}/files`
-    );
-  }
-
   public getDocumentDefinitionVersions(
     documentDefinitionName: string
   ): Observable<DocumentDefinitionVersionsResult> {
@@ -589,13 +582,7 @@ export class DocumentService {
     version: number
   ): Observable<DocumentDefinition> {
     return this.http.get<DocumentDefinition>(
-      `${this.valtimoEndpointUri}management/v1/document-definition/${documentDefinitionName}/version/${version}`);
-    }
-    
-  // TODO: Should this be here or should this be moved to another service?
-  public deleteDocument(file: RelatedFile): Observable<Array<RelatedFile>> {
-    return this.http.delete<Array<RelatedFile>>(
-      `${this.valtimoEndpointUri}v1/documenten-api/${file.pluginConfigurationId}/files/${file.fileId}`
+      `${this.valtimoEndpointUri}management/v1/document-definition/${documentDefinitionName}/version/${version}`
     );
   }
 }

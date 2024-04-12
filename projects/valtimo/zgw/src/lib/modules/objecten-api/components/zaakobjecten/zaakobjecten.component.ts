@@ -16,17 +16,43 @@
 
 import {Component, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {ZaakobjectenService} from '../../../../services/zaakobjecten.service';
+import {ZaakobjectenService} from '../../services';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
-import {ZaakObject, ZaakObjectType} from '../../../../models';
-import {VModalComponent, ModalService, SelectItem, TableColumn} from '@valtimo/components';
+import {ZaakObject, ZaakObjectType} from '../../models';
+import {
+  FormIoModule,
+  InputLabelModule,
+  ModalService,
+  ParagraphModule,
+  SelectItem,
+  SelectModule,
+  TableColumn,
+  TableModule,
+  TitleModule,
+  VModalComponent,
+  VModalModule,
+} from '@valtimo/components';
 import {take} from 'rxjs/operators';
 import {FormioForm} from '@formio/angular';
+import {CommonModule} from '@angular/common';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-zaakobjecten',
   templateUrl: './zaakobjecten.component.html',
   styleUrls: ['./zaakobjecten.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SelectModule,
+    InputLabelModule,
+    ParagraphModule,
+    TableModule,
+    VModalModule,
+    TitleModule,
+    FormIoModule,
+    TranslateModule,
+  ],
 })
 export class DossierDetailTabZaakobjectenComponent {
   @ViewChild('viewZaakobjectModal') viewZaakobjectModal: VModalComponent;

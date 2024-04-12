@@ -16,22 +16,40 @@
 import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Filter16, TagGroup16, Upload16} from '@carbon/icons';
-import {TranslateService} from '@ngx-translate/core';
-import {ActionItem, ColumnConfig, DocumentenApiMetadata, ViewType} from '@valtimo/components';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {
+  ActionItem,
+  CarbonListModule,
+  ColumnConfig,
+  DocumentenApiMetadata,
+  ViewType,
+} from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
-import {DocumentService, RelatedFile, RelatedFileListItem} from '@valtimo/document';
+import {DocumentService, FileSortService} from '@valtimo/document';
 import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {UserProviderService} from '@valtimo/security';
-import {IconService} from 'carbon-components-angular';
+import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import moment from 'moment';
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {catchError, map, switchMap, take, tap} from 'rxjs/operators';
-import {FileSortService} from '../../../../services/file-sort.service';
+import {DocumentenApiRelatedFile, DocumentenApiRelatedFileListItem} from '../../models';
+import {DocumentenApiDocumentService} from '../../services/documenten-api-document.service';
+import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.component';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
   templateUrl: './documenten-api-documents.component.html',
   styleUrls: ['./documenten-api-documents.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    CarbonListModule,
+    DocumentenApiMetadataModalComponent,
+    ButtonModule,
+    IconModule,
+    TranslateModule,
+  ],
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, AfterViewInit {
   @ViewChild('fileInput') fileInput: ElementRef;
@@ -85,10 +103,10 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   private readonly refetch$ = new BehaviorSubject<null>(null);
   private readonly uploading$ = new BehaviorSubject<boolean>(false);
 
-  public relatedFiles$: Observable<Array<RelatedFileListItem>> = this.refetch$.pipe(
+  public relatedFiles$: Observable<Array<DocumentenApiRelatedFileListItem>> = this.refetch$.pipe(
     switchMap(() =>
       combineLatest([
-        this.documentService.getZakenApiDocuments(this.documentId),
+        this.documentenApiDocumentService.getZakenApiDocuments(this.documentId),
         this.translateService.stream('key'),
       ])
     ),
@@ -102,7 +120,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
         ),
         status: this.translateService.instant(`document.${file.status}`),
         format: this.translateService.instant(`document.${file.format}`),
-    }));
+      }));
       return translatedFiles || [];
     }),
     map(relatedFiles => this.fileSortService.sortRelatedFilesByDateDescending(relatedFiles)),
@@ -134,7 +152,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     private readonly configService: ConfigService,
     private readonly userProviderService: UserProviderService,
     private readonly fileSortService: FileSortService,
-    private readonly iconService: IconService
+    private readonly iconService: IconService,
+    private readonly documentenApiDocumentService: DocumentenApiDocumentService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.documentId = snapshot.get('documentId') || '';
@@ -230,14 +249,14 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       .subscribe();
   }
 
-  public onDeleteActionClick(item: RelatedFile): void {
-    this.documentService.deleteDocument(item).subscribe(() => {
+  public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
+    this.documentenApiDocumentService.deleteDocument(item).subscribe(() => {
       // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
       this.refetchDocuments();
     });
   }
 
-  public onDownloadActionClick(file: RelatedFile): void {
+  public onDownloadActionClick(file: DocumentenApiRelatedFile): void {
     this.downloadDocument(file, true);
   }
 
@@ -262,7 +281,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.refetch$.next(null);
   }
 
-  private downloadDocument(relatedFile: RelatedFile, forceDownload: boolean): void {
+  private downloadDocument(relatedFile: DocumentenApiRelatedFile, forceDownload: boolean): void {
     this.downloadService.downloadFile(
       `/api/v1/documenten-api/${relatedFile.pluginConfigurationId}/files/${relatedFile.fileId}/download`,
       relatedFile.fileName,

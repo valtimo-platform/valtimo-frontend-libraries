@@ -26,7 +26,6 @@ export * from './lib/components/dossier-detail/tab/documents/documents.component
 export * from './lib/components/dossier-detail/tab/notes/notes.component';
 export * from './lib/components/dossier-detail/tab/progress/progress.component';
 export * from './lib/components/dossier-detail/tab/summary/summary.component';
-export * from './lib/components/dossier-detail/tab/zaakobjecten/zaakobjecten.component';
 export * from './lib/components/dossier-list/dossier-list.component';
 export * from './lib/constants';
 export * from './lib/dossier.module';
