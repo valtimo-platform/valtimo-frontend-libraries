@@ -791,6 +791,7 @@
     "warning": "Warnung",
     "finish": "Beenden",
     "add": "Hinzufügen",
+    "tags": "Tags",
     "tagType": {
       "red": "Rot",
       "magenta": "Magenta",
@@ -1263,7 +1264,7 @@
     "enum": "Aufzählung",
     "arrayCount": "Quantität",
     "underscoresToSpaces": "Unterstriche zu Leerzeichen",
-    "status": "Status"
+    "tags": "Tags"
   },
   "object": {
     "title": "Objekte",
