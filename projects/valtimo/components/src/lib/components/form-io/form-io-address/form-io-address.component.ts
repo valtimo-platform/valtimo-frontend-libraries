@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { FormioCustomComponent } from '@formio/angular';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -119,6 +119,7 @@ export class FormIoAddressComponent implements FormioCustomComponent<any> {
     console.log('this: ', this);
     setTimeout( () => {
       console.log('langcon: ', this.keyLanguage);
+
       this.addressForm.controls.street.setValue(this.value?.street);
       this.addressForm.controls.street.setValidators(this.requiredStreet ? Validators.required : []);
       this.addressForm.controls.street.updateValueAndValidity();
@@ -136,7 +137,7 @@ export class FormIoAddressComponent implements FormioCustomComponent<any> {
       this.addressForm.controls.houseNumberAddition.updateValueAndValidity();
 
       this.addressForm.controls.postalCode.setValue(this.value?.postalCode);
-      this.addressForm.controls.postalCode.setValidators(this.requiredPostalCode ? [Validators.required, Validators.pattern(/^[0-9]{4} [A-Z]{2}$/)] : Validators.pattern(/^[0-9]{4} [A-Z]{2}$/));
+      this.addressForm.controls.postalCode.setValidators(this.requiredPostalCode ? [Validators.required, Validators.pattern(/^[0-9]{4} ?[A-Z]{2}$/)] : Validators.pattern(/^[0-9]{4} ?[A-Z]{2}$/));
       this.addressForm.controls.postalCode.updateValueAndValidity();
 
       this.addressForm.controls.city.setValue(this.value?.city);
@@ -156,6 +157,7 @@ export class FormIoAddressComponent implements FormioCustomComponent<any> {
   }
 
   onValueChange(): void {
+    console.log('value: ', this.value);
     let valueWithTranslatedKeys;
     console.log('lang: ', this.keyLanguage);
     if (this.keyLanguage === 'nl') {
