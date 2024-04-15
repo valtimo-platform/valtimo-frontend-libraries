@@ -15,3 +15,4 @@
  */
 
 export * from './zgw-object-type-component-token';
+export * from './zgw-documenten-api-documents-component-token';

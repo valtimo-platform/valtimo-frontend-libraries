@@ -19,9 +19,13 @@ import {
   CustomerModule,
   DocumentenApiMetadataModalComponent,
   DocumentenApiUploaderComponent,
+  DossierDetailTabDocumentenApiDocumentsComponent,
   DossierDetailTabObjectTypeComponent,
 } from './modules';
-import {ZGW_OBJECT_TYPE_COMPONENT_TOKEN} from '@valtimo/config';
+import {
+  ZGW_DOCUMENTEN_API_DOCUMENTS_COMPONENT_TOKEN,
+  ZGW_OBJECT_TYPE_COMPONENT_TOKEN,
+} from '@valtimo/config';
 import {CommonModule} from '@angular/common';
 import {FormioModule} from '@formio/angular';
 import {TranslateModule} from '@ngx-translate/core';
@@ -49,6 +53,10 @@ import {ResourceModule} from '@valtimo/resource';
     {
       provide: ZGW_OBJECT_TYPE_COMPONENT_TOKEN,
       useValue: DossierDetailTabObjectTypeComponent,
+    },
+    {
+      provide: ZGW_DOCUMENTEN_API_DOCUMENTS_COMPONENT_TOKEN,
+      useValue: DossierDetailTabDocumentenApiDocumentsComponent,
     },
   ],
 })

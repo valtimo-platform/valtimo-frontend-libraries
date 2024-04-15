@@ -25,13 +25,13 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
-import {DocumentService, FileSortService} from '@valtimo/document';
+import {FileSortService} from '@valtimo/document';
 import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {UserProviderService} from '@valtimo/security';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import moment from 'moment';
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
-import {catchError, map, switchMap, take, tap} from 'rxjs/operators';
+import {catchError, filter, map, switchMap, take, tap} from 'rxjs/operators';
 import {DocumentenApiRelatedFile, DocumentenApiRelatedFileListItem} from '../../models';
 import {DocumentenApiDocumentService} from '../../services/documenten-api-document.service';
 import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.component';
@@ -82,8 +82,15 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     'actions',
   ];
 
-  public readonly documentDefinitionName: string;
-  public readonly documentId: string;
+  private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
+    map(params => params?.documentDefinitionName),
+    filter(documentDefinitionName => !!documentDefinitionName)
+  );
+
+  private readonly _documentId$: Observable<string> = this.route.params.pipe(
+    map(params => params?.documentId),
+    filter(documentId => !!documentId)
+  );
 
   public isAdmin: boolean;
   public showZaakLinkWarning: boolean;
@@ -103,10 +110,16 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   private readonly refetch$ = new BehaviorSubject<null>(null);
   private readonly uploading$ = new BehaviorSubject<boolean>(false);
 
-  public relatedFiles$: Observable<Array<DocumentenApiRelatedFileListItem>> = this.refetch$.pipe(
-    switchMap(() =>
+  public readonly loadingFiles$ = new BehaviorSubject<boolean>(true);
+
+  public relatedFiles$: Observable<Array<DocumentenApiRelatedFileListItem>> = combineLatest([
+    this._documentId$,
+    this.refetch$,
+  ]).pipe(
+    tap(() => this.loading$.next(true)),
+    switchMap(([documentId]) =>
       combineLatest([
-        this.documentenApiDocumentService.getZakenApiDocuments(this.documentId),
+        this.documentenApiDocumentService.getZakenApiDocuments(documentId),
         this.translateService.stream('key'),
       ])
     ),
@@ -145,7 +158,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly documentService: DocumentService,
     private readonly uploadProviderService: UploadProviderService,
     private readonly downloadService: DownloadService,
     private readonly translateService: TranslateService,
@@ -154,11 +166,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     private readonly fileSortService: FileSortService,
     private readonly iconService: IconService,
     private readonly documentenApiDocumentService: DocumentenApiDocumentService
-  ) {
-    const snapshot = this.route.snapshot.paramMap;
-    this.documentId = snapshot.get('documentId') || '';
-    this.documentDefinitionName = snapshot.get('documentDefinitionName') || '';
-  }
+  ) {}
 
   ngOnInit(): void {
     this.refetchDocuments();
@@ -231,14 +239,14 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.uploading$.next(true);
     this.hideModal$.next(null);
 
-    this.fileToBeUploaded$
+    combineLatest([this.fileToBeUploaded$, this._documentId$])
       .pipe(take(1))
       .pipe(
-        tap((file: File | null) => {
+        tap(([file, documentId]) => {
           if (!file) return;
 
           this.uploadProviderService
-            .uploadFileWithMetadata(file, this.documentId, metadata)
+            .uploadFileWithMetadata(file, documentId, metadata)
             .subscribe(() => {
               this.refetchDocuments();
               this.uploading$.next(false);
@@ -250,6 +258,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
+    this.loading$.next(true);
     this.documentenApiDocumentService.deleteDocument(item).subscribe(() => {
       // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
       this.refetchDocuments();
@@ -266,7 +275,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   public onNavigateToCaseAdminClick(): void {
-    this.router.navigate([`/dossier-management/dossier/${this.documentDefinitionName}`]);
+    this._documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+      this.router.navigate([`/dossier-management/dossier/${documentDefinitionName}`]);
+    });
   }
 
   public onRowClick(event: any): void {
@@ -294,9 +305,12 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   private setUploadProcessLinked(): void {
-    this.uploadProviderService
-      .checkUploadProcessLink(this.documentDefinitionName)
+    this._documentDefinitionName$
       .pipe(
+        switchMap(documentDefinitionName =>
+          this.uploadProviderService.checkUploadProcessLink(documentDefinitionName)
+        ),
+        take(1),
         tap(() => {
           this.uploadProcessLinkedSet = true;
         })

@@ -13,3 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import {InjectionToken, Type} from '@angular/core';
+
+const ZGW_DOCUMENTEN_API_DOCUMENTS_COMPONENT_TOKEN = new InjectionToken<Type<any>>(
+  'Specify a component to display on documents tab when Documenten API is set as the upload provider in the environment file.'
+);
+
+export {ZGW_DOCUMENTEN_API_DOCUMENTS_COMPONENT_TOKEN};

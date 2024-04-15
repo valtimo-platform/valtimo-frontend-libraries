@@ -155,6 +155,7 @@ export interface FeedbackMailTo {
 
 export enum UploadProvider {
   S3,
+  /**@deprecated This upload provider will be removed in the future. */
   OPEN_ZAAK,
   DOCUMENTEN_API,
 }

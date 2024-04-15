@@ -33,13 +33,13 @@ export class DocumentenApiDocumentService extends BaseApiService {
 
   public getZakenApiDocuments(documentId: string): Observable<Array<DocumentenApiRelatedFile>> {
     return this.httpClient.get<Array<DocumentenApiRelatedFile>>(
-      this.getApiUrl('/v1/zaken-api/document/${documentId}/files')
+      this.getApiUrl(`/v1/zaken-api/document/${documentId}/files`)
     );
   }
 
   public deleteDocument(file: DocumentenApiRelatedFile): Observable<DocumentenApiRelatedFile[]> {
     return this.httpClient.delete<DocumentenApiRelatedFile[]>(
-      this.getApiUrl('/v1/documenten-api/${file.pluginConfigurationId}/files/${file.fileId}')
+      this.getApiUrl(`/v1/documenten-api/${file.pluginConfigurationId}/files/${file.fileId}`)
     );
   }
 }

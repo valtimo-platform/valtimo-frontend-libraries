@@ -14,12 +14,36 @@
   ~ limitations under the License.
   -->
 
-<div class="carbon-document-table-wrapper">
+<div
+  class="carbon-document-table-wrapper"
+  *ngIf="{
+    loading: loading$ | async,
+    uploading: uploading$ | async,
+    relatedFiles: relatedFiles$ | async
+  } as obs"
+>
+  @if (!obs.loading && !obs.uploading && obs.relatedFiles) {
+    <ng-container
+      *ngTemplateOutlet="list; context: {relatedFiles: obs.relatedFiles}"
+    ></ng-container>
+  } @else {
+    <ng-container *ngTemplateOutlet="listLoading"></ng-container>
+  }
+</div>
+
+<valtimo-documenten-api-metadata-modal
+  [disabled$]="modalDisabled$"
+  [file$]="fileToBeUploaded$"
+  [hide$]="hideModal$"
+  [show$]="showModal$"
+  (metadata)="metadataSet($event)"
+></valtimo-documenten-api-metadata-modal>
+
+<ng-template #list let-relatedFiles="relatedFiles">
   <valtimo-carbon-list
     [actionItems]="actionItems"
-    [items]="relatedFiles$ | async"
+    [items]="relatedFiles"
     [fields]="fields"
-    [loading]="loading$ | async"
     (rowClicked)="onRowClick($event)"
     hideColumnHeader
   >
@@ -49,15 +73,15 @@
       ></valtimo-no-results>
     }
   </valtimo-carbon-list>
-</div>
+</ng-template>
 
-<valtimo-documenten-api-metadata-modal
-  [disabled$]="modalDisabled$"
-  [file$]="fileToBeUploaded$"
-  [hide$]="hideModal$"
-  [show$]="showModal$"
-  (metadata)="metadataSet($event)"
-></valtimo-documenten-api-metadata-modal>
+<ng-template #listLoading>
+  <valtimo-carbon-list [items]="[]" [fields]="fields" [loading]="true" hideColumnHeader>
+    <div carbonToolbarContent>
+      <ng-container *ngTemplateOutlet="uploadButton; context: {disabled: true}"></ng-container>
+    </div>
+  </valtimo-carbon-list>
+</ng-template>
 
 <ng-template #downloadButton let-index="index" let-item="item">
   <div
@@ -84,9 +108,9 @@
   <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
 </ng-template>
 
-<ng-template #uploadButton>
+<ng-template #uploadButton let-disabled="disabled">
   <button
-    [disabled]="(uploadProcessLinkedSet && !uploadProcessLinked) || showZaakLinkWarning"
+    [disabled]="(uploadProcessLinkedSet && !uploadProcessLinked) || showZaakLinkWarning || disabled"
     [vTooltip]="getUploadButtonTooltip() | translate"
     (click)="onUploadButtonClick()"
     cdsButton="primary"
