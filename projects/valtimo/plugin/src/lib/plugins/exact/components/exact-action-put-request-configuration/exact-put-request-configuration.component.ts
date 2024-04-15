@@ -16,7 +16,7 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
-import {FunctionConfigurationComponent} from '@valtimo/plugin';
+import {FunctionConfigurationComponent} from '../../../../models';
 import ExactPutRequestConfiguration from './exact-put-request-configuration';
 
 @Component({

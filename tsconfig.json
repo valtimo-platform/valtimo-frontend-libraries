@@ -51,10 +51,6 @@
       "@valtimo/account/*": ["dist/valtimo/account/*"],
       "@valtimo/choice-field": ["dist/valtimo/choice-field"],
       "@valtimo/choice-field/*": ["dist/valtimo/choice-field/*"],
-      "@valtimo/exact-plugin": [
-        "dist/valtimo/exact-plugin/valtimo-exact-plugin",
-        "dist/valtimo/exact-plugin"
-      ],
       "@valtimo/form": ["dist/valtimo/form"],
       "@valtimo/form/*": ["dist/valtimo/form/*"],
       "@valtimo/swagger": ["dist/valtimo/swagger"],
@@ -97,8 +93,6 @@
       "@valtimo/plugin-management/*": ["dist/valtimo/plugin-management/*"],
       "@valtimo/plugin": ["dist/valtimo/plugin"],
       "@valtimo/plugin/*": ["dist/valtimo/plugin/*"],
-      "@valtimo/exact-plugin": ["dist/valtimo/exact-plugin"],
-      "@valtimo/exact-plugin/*": ["dist/valtimo/exact-plugin/*"],
       "@valtimo/zgw": ["dist/valtimo/zgw"],
       "@valtimo/zgw/*": ["dist/valtimo/zgw/*"]
     }
@@ -329,12 +323,6 @@
     },
     {
       "path": "./projects/valtimo/plugin/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/valtimo/exact-plugin/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/valtimo/exact-plugin/tsconfig.spec.json"
     },
     {
       "path": "./projects/valtimo/object-management/tsconfig.lib.json"

@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of exact-plugin
- */
+import {PluginConfigurationData} from '../../models';
 
-export * from './lib/exact.plugin.specification';
-export * from './lib/exact-plugin.module';
+interface ExactPluginConfig extends PluginConfigurationData {
+  clientId: string;
+  clientSecret: string;
+  accessToken: string;
+  accessTokenExpiresOn: Date;
+  refreshToken: string;
+  refreshTokenExpiresOn: Date;
+}
+
+export {ExactPluginConfig};

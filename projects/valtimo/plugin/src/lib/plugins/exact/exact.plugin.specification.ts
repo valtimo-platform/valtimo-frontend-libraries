@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {PluginSpecification} from '@valtimo/plugin';
+import {PluginSpecification} from '../../models';
 import {ExactPluginConfigurationComponent} from './components/exact-plugin-configuration/exact-plugin-configuration.component';
 import {ExactGetRequestConfigurationComponent} from './components/exact-action-get-request-configuration/exact-get-request-configuration.component';
 import {ExactPutRequestConfigurationComponent} from './components/exact-action-put-request-configuration/exact-put-request-configuration.component';

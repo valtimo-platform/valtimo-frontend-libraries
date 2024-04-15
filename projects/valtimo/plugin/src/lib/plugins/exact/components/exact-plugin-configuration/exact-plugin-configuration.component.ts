@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {PluginConfigurationComponent} from '@valtimo/plugin';
+import {PluginConfigurationComponent} from '../../../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
 import {ExactPluginService} from '../../exact-plugin.service';
 import {ExactPluginConfig} from '../../exact-plugin';

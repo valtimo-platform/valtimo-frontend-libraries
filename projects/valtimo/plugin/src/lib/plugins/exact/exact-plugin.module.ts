@@ -17,7 +17,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ButtonModule, FormModule, InputModule} from '@valtimo/components';
-import {PluginTranslatePipeModule} from '@valtimo/plugin';
+import {PluginTranslatePipeModule} from '../../pipes';
 import {ExactPluginRoutingModule} from './exact-plugin-routing.module';
 import {ExactGetRequestConfigurationComponent} from './components/exact-action-get-request-configuration/exact-get-request-configuration.component';
 import {ExactPostRequestConfigurationComponent} from './components/exact-action-post-request-configuration/exact-post-request-configuration.component';
