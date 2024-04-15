@@ -14,12 +14,4 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of contact-moment
- */
-
-export * from './lib/customer.module';
-export * from './lib/components/customer-list/customer-list.component';
-export * from './lib/components/cases-list/cases-list.component';
-export * from './lib/services/customer.service';
-export * from './lib/models';
+export * from './customer.service';

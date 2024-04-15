@@ -16,6 +16,7 @@
 
 import {NgModule} from '@angular/core';
 import {
+  CustomerModule,
   DocumentenApiMetadataModalComponent,
   DocumentenApiUploaderComponent,
   DossierDetailTabObjectTypeComponent,
@@ -40,6 +41,7 @@ import {ResourceModule} from '@valtimo/resource';
     ResourceModule,
     RouterModule,
     DocumentenApiMetadataModalComponent,
+    CustomerModule,
   ],
   declarations: [DocumentenApiUploaderComponent],
   exports: [DocumentenApiUploaderComponent],
