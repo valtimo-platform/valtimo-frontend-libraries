@@ -79,7 +79,6 @@ import {DossierAssignUserComponent} from './components/dossier-assign-user/dossi
 import {DossierBulkAssignModalComponent} from './components/dossier-bulk-assign-modal/dossier-bulk-assign-modal.component';
 import {DossierDetailComponent} from './components/dossier-detail/dossier-detail.component';
 import {DossierDetailTabAuditComponent} from './components/dossier-detail/tab/audit/audit.component';
-import {DossierDetailTabContactMomentsComponent} from './components/dossier-detail/tab/contact-moments/contact-moments.component';
 import {DossierDetailTabDocumentsComponent} from './components/dossier-detail/tab/documents/documents.component';
 import {DossierDetailTabNotesComponent} from './components/dossier-detail/tab/notes/notes.component';
 import {DossierDetailTabProgressComponent} from './components/dossier-detail/tab/progress/progress.component';
@@ -109,7 +108,6 @@ export type TabsFactory = () => Map<string, object>;
     DossierDetailTabProgressComponent,
     DossierDetailTabAuditComponent,
     DossierDetailTabDocumentsComponent,
-    DossierDetailTabContactMomentsComponent,
     DossierDetailTabNotesComponent,
     DossierUpdateComponent,
     DossierProcessStartModalComponent,

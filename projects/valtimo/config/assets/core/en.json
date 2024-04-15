@@ -79,7 +79,9 @@
       "notes": "Notes",
       "MINE": "My cases",
       "OPEN": "Unassigned cases",
-      "ALL": "All cases"
+      "ALL": "All cases",
+      "componentNotFound": "Tab component not found",
+      "componentNotFoundMessage": "No component has been found for this tab. Please contact your system administrator."
     },
     "forms": {
       "globalSearchPlaceHolder": "Everything",

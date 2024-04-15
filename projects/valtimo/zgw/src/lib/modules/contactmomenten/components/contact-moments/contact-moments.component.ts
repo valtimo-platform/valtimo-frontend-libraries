@@ -15,13 +15,22 @@
  */
 
 import {Component, ViewChild} from '@angular/core';
-import {ContactMomentService} from '@valtimo/contact-moment';
+import {ContactMomentService} from '../../services';
 import moment from 'moment';
-import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
-import {ModalComponent, TimelineItem, TimelineItemImpl} from '@valtimo/components';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {
+  AlertService,
+  ModalComponent,
+  ModalModule,
+  SpinnerModule,
+  TimelineItem,
+  TimelineItemImpl,
+  TimelineModule,
+} from '@valtimo/components';
 import {map, switchMap, take} from 'rxjs/operators';
-import {AlertService} from '@valtimo/components';
-import {TranslateService} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -29,6 +38,8 @@ moment.locale(localStorage.getItem('langKey') || '');
   selector: 'valtimo-dossier-detail-tab-contact-moments',
   templateUrl: './contact-moments.component.html',
   styleUrls: ['./contact-moments.component.scss'],
+  standalone: true,
+  imports: [CommonModule, ModalModule, TranslateModule, FormsModule, SpinnerModule, TimelineModule],
 })
 export class DossierDetailTabContactMomentsComponent {
   @ViewChild('contactMomentsNoteModal') modal: ModalComponent;

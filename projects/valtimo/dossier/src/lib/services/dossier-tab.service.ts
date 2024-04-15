@@ -22,6 +22,7 @@ import {ActivatedRoute} from '@angular/router';
 import {DossierTabApiService} from './dossier-tab-api.service';
 import {BehaviorSubject, filter, map, Observable, Subscription} from 'rxjs';
 import {DossierDetailTabFormioComponent} from '../components/dossier-detail/tab/formio/formio.component';
+import {DossierDetailTabNotFoundComponent} from '../components/dossier-detail/tab/not-found/not-found.component';
 
 @Injectable()
 export class DossierTabService implements OnDestroy {
@@ -59,11 +60,11 @@ export class DossierTabService implements OnDestroy {
   private getConfigurableTabs(documentDefinitionName: string): Map<string, object> {
     const tabMap = new Map<string, object>();
 
-    if (this.configService?.config?.caseObjectTypes && this.zgwObjectTypeComponent) {
+    if (this.configService?.config?.caseObjectTypes) {
       const allNamesObjects = this.configService?.config?.caseObjectTypes[documentDefinitionName];
 
       allNamesObjects?.forEach(name => {
-        tabMap.set(name, this.zgwObjectTypeComponent);
+        tabMap.set(name, this.zgwObjectTypeComponent || DossierDetailTabNotFoundComponent);
       });
     }
 

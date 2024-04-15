@@ -51,8 +51,6 @@
       "@valtimo/account/*": ["dist/valtimo/account/*"],
       "@valtimo/choice-field": ["dist/valtimo/choice-field"],
       "@valtimo/choice-field/*": ["dist/valtimo/choice-field/*"],
-      "@valtimo/contact-moment": ["dist/valtimo/contact-moment"],
-      "@valtimo/contact-moment/*": ["dist/valtimo/contact-moment/*"],
       "@valtimo/exact-plugin": [
         "dist/valtimo/exact-plugin/valtimo-exact-plugin",
         "dist/valtimo/exact-plugin"
@@ -102,7 +100,9 @@
       "@valtimo/plugin": ["dist/valtimo/plugin"],
       "@valtimo/plugin/*": ["dist/valtimo/plugin/*"],
       "@valtimo/exact-plugin": ["dist/valtimo/exact-plugin"],
-      "@valtimo/exact-plugin/*": ["dist/valtimo/exact-plugin/*"]
+      "@valtimo/exact-plugin/*": ["dist/valtimo/exact-plugin/*"],
+      "@valtimo/zgw": ["dist/valtimo/zgw"],
+      "@valtimo/zgw/*": ["dist/valtimo/zgw/*"]
     }
   },
   "files": [],

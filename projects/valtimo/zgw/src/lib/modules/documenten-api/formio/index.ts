@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 
-export * from './documenten-api-formio.module';
 export * from './documenten-api-uploader';

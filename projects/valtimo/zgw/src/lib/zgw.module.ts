@@ -15,15 +15,19 @@
  */
 
 import {NgModule} from '@angular/core';
+import {
+  DocumentenApiMetadataModalComponent,
+  DocumentenApiUploaderComponent,
+  DossierDetailTabObjectTypeComponent,
+} from './modules';
+import {ZGW_OBJECT_TYPE_COMPONENT_TOKEN} from '@valtimo/config';
 import {CommonModule} from '@angular/common';
 import {FormioModule} from '@formio/angular';
-import {DropzoneModule, FileSizeModule} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
+import {RouterModule} from '@angular/router';
+import {DropzoneModule, FileSizeModule} from '@valtimo/components';
 import {DocumentModule} from '@valtimo/document';
 import {ResourceModule} from '@valtimo/resource';
-import {RouterModule} from '@angular/router';
-import {DocumentenApiUploaderComponent} from './documenten-api-uploader/documenten-api-uploader.component';
-import {DocumentenApiMetadataModalComponent} from '../components';
 
 @NgModule({
   imports: [
@@ -39,5 +43,11 @@ import {DocumentenApiMetadataModalComponent} from '../components';
   ],
   declarations: [DocumentenApiUploaderComponent],
   exports: [DocumentenApiUploaderComponent],
+  providers: [
+    {
+      provide: ZGW_OBJECT_TYPE_COMPONENT_TOKEN,
+      useValue: DossierDetailTabObjectTypeComponent,
+    },
+  ],
 })
-export class DocumentenApiFormioModule {}
+export class ZgwModule {}

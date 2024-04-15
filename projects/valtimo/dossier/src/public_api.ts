@@ -21,7 +21,6 @@
 export * from './lib/components/dossier-bulk-assign-modal/dossier-bulk-assign-modal.component';
 export * from './lib/components/dossier-detail/dossier-detail.component';
 export * from './lib/components/dossier-detail/tab/audit/audit.component';
-export * from './lib/components/dossier-detail/tab/contact-moments/contact-moments.component';
 export * from './lib/components/dossier-detail/tab/documents/documents.component';
 export * from './lib/components/dossier-detail/tab/notes/notes.component';
 export * from './lib/components/dossier-detail/tab/progress/progress.component';

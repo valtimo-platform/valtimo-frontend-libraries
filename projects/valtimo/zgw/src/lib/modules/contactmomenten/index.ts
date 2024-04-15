@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-describe('My First Test', () => {
-  it('Visits the initial project page', () => {
-    cy.visit('/')
-    cy.contains('app is running!')
-  })
-})
+export * from './models';
+export * from './components';
+export * from './services';

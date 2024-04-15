@@ -39,7 +39,6 @@ import {
   CASE_TAB_TOKEN,
   DefaultTabs,
   DossierDetailTabAuditComponent,
-  DossierDetailTabContactMomentsComponent,
   DossierDetailTabDocumentsComponent,
   DossierDetailTabNotesComponent,
   DossierDetailTabProgressComponent,
@@ -126,10 +125,11 @@ import {CustomFormFlowComponent} from '@src/app/custom-form-flow-component/custo
 import {TaskManagementModule} from '@valtimo/task-management';
 import {CaseMigrationModule} from '@valtimo/case-migration';
 import {
-  DocumentenApiFormioModule,
+  DossierDetailTabContactMomentsComponent,
+  DossierDetailTabZaakobjectenComponent,
   DossierManagementZgwComponent,
-  ObjectenApiModule,
   registerDocumentenApiFormioUploadComponent,
+  ZgwModule,
 } from '@valtimo/zgw';
 
 export function tabsFactory() {
@@ -138,7 +138,6 @@ export function tabsFactory() {
     [DefaultTabs.progress, DossierDetailTabProgressComponent],
     [DefaultTabs.audit, DossierDetailTabAuditComponent],
     [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
-    [DefaultTabs.contactMoments, DossierDetailTabContactMomentsComponent],
     [DefaultTabs.notes, DossierDetailTabNotesComponent],
     ['custom-maps', CustomMapsTabComponent],
     ['custom-dossier', CustomDossierTabComponent],
@@ -230,8 +229,7 @@ export function tabsFactory() {
     TranslationManagementModule,
     CustomFormFlowComponent,
     TaskManagementModule,
-    DocumentenApiFormioModule,
-    ObjectenApiModule,
+    ZgwModule,
   ],
   providers: [
     FormioComponent,
@@ -257,6 +255,8 @@ export function tabsFactory() {
       provide: CASE_TAB_TOKEN,
       useValue: {
         'custom-dossier-tab': CustomDossierTabComponent,
+        zaakobjecten: DossierDetailTabZaakobjectenComponent,
+        contactmomenten: DossierDetailTabContactMomentsComponent,
       },
     },
     {

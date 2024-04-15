@@ -79,7 +79,9 @@
       "notes": "Notizen",
       "MINE": "Meine Cases",
       "OPEN": "Nicht zugeordnete Cases",
-      "ALL": "Alle Cases"
+      "ALL": "Alle Cases",
+      "componentNotFound": "Tab-Komponente nicht gefunden",
+      "componentNotFoundMessage": "Für diese Registerkarte ist keine Komponente verfügbar. Wenden Sie sich an den Systemadministrator."
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
