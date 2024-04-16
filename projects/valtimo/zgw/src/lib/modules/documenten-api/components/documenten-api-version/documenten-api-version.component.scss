@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-export * from './documenten-api-metadata.model';
-export * from './configured-column.model';
-export * from './documenten-api-column-modal.model';
-export * from './documenten-api.model';
-export * from './documenten-api-link-process.model';
-export * from './documenten-api-version.model';
+.select-documenten-api-version {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.loading-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}

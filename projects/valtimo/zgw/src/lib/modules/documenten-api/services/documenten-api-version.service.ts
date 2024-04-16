@@ -15,35 +15,37 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {BaseApiService, ConfigService} from '@valtimo/config';
 import {HttpClient} from '@angular/common/http';
-import {ConfigService} from '@valtimo/config';
-import {DocumentenApiManagementVersion, DocumentenApiVersion} from '../models';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {DocumentenApiManagementVersion} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DocumentenApiService {
-  private valtimoEndpointUri: string;
+export class DocumentenApiVersionService extends BaseApiService {
+  private readonly _refresh$ = new BehaviorSubject<null>(null);
 
-  constructor(
-    private http: HttpClient,
-    configService: ConfigService
-  ) {
-    this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
+  public get refresh$(): Observable<null> {
+    return this._refresh$.asObservable();
   }
 
-  public getApiVersion(caseDefinitionName: string): Observable<DocumentenApiVersion> {
-    return this.http.get<DocumentenApiVersion>(
-      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionName}/documenten-api/version`
-    );
+  constructor(
+    protected readonly httpClient: HttpClient,
+    protected readonly configService: ConfigService
+  ) {
+    super(httpClient, configService);
   }
 
   public getManagementApiVersion(
     caseDefinitionName: string
   ): Observable<DocumentenApiManagementVersion> {
-    return this.http.get<DocumentenApiManagementVersion>(
-      `${this.valtimoEndpointUri}management/v1/case-definition/${caseDefinitionName}/documenten-api/version`
+    return this.httpClient.get<DocumentenApiManagementVersion>(
+      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/documenten-api/version`)
     );
+  }
+
+  public refresh(): void {
+    this._refresh$.next(null);
   }
 }

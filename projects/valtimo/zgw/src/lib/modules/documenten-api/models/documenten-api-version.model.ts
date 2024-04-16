@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-export * from './documenten-api-metadata.model';
-export * from './configured-column.model';
-export * from './documenten-api-column-modal.model';
-export * from './documenten-api.model';
-export * from './documenten-api-link-process.model';
-export * from './documenten-api-version.model';
+interface DocumentenApiManagementVersion {
+  selectedVersion: string;
+  detectedVersions: string;
+}
+
+export {DocumentenApiManagementVersion};

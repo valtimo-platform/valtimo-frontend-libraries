@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export * from './documenten-api.service';
+export * from './zaken-api-zaaktype-link.model';

@@ -15,28 +15,20 @@
  */
 import {Component, OnInit} from '@angular/core';
 import {ConfigService, UploadProvider, ValtimoConfig} from '@valtimo/config';
-import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';
-import {ParagraphModule, SelectModule} from '@valtimo/components';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
+import {ParagraphModule} from '@valtimo/components';
 import {ActivatedRoute} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {filter} from 'rxjs/operators';
-import {DocumentenApiLinkProcessService} from '../../services';
+import {DocumentenApiLinkProcessService, DocumentenApiVersionService} from '../../services';
 import {TranslateModule} from '@ngx-translate/core';
 import {ComboBoxModule, ListItem} from 'carbon-components-angular';
-import {ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'valtimo-dossier-management-link-process',
   templateUrl: './dossier-management-link-process.component.html',
   standalone: true,
-  imports: [
-    CommonModule,
-    ParagraphModule,
-    SelectModule,
-    TranslateModule,
-    ComboBoxModule,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, ParagraphModule, TranslateModule, ComboBoxModule],
 })
 export class DossierManagementLinkProcessComponent implements OnInit {
   public readonly documentenApiUploadProviders$ = new BehaviorSubject<boolean>(false);
@@ -59,7 +51,8 @@ export class DossierManagementLinkProcessComponent implements OnInit {
           id: process.key,
           selected: selectedProcessKey === process.key,
         }))
-    )
+    ),
+    tap(() => this.documentenApiVersionService.refresh())
   );
 
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
@@ -67,7 +60,8 @@ export class DossierManagementLinkProcessComponent implements OnInit {
   constructor(
     private readonly configService: ConfigService,
     private readonly route: ActivatedRoute,
-    private readonly documentenApiLinkProcessService: DocumentenApiLinkProcessService
+    private readonly documentenApiLinkProcessService: DocumentenApiLinkProcessService,
+    private readonly documentenApiVersionService: DocumentenApiVersionService
   ) {}
 
   public ngOnInit(): void {

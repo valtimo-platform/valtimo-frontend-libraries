@@ -19,6 +19,7 @@ import {
   CustomerModule,
   DocumentenApiMetadataModalComponent,
   DocumentenApiUploaderComponent,
+  DocumentenApiVersionComponent,
   DossierDetailTabDocumentenApiDocumentsComponent,
   DossierDetailTabObjectTypeComponent,
   DossierManagementLinkProcessComponent,
@@ -62,7 +63,7 @@ import {ResourceModule} from '@valtimo/resource';
     },
     {
       provide: ZGW_CASE_CONFIGURATION_EXTENSIONS_TOKEN,
-      useValue: [DossierManagementLinkProcessComponent],
+      useValue: [DossierManagementLinkProcessComponent, DocumentenApiVersionComponent],
     },
   ],
 })

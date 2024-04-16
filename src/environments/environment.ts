@@ -28,7 +28,6 @@ import {
   ValtimoConfig,
 } from '@valtimo/config';
 import {authenticationKeycloak} from './auth/keycloak-config.dev';
-import {openZaakExtensionInitializer} from '@valtimo/plugin';
 import {
   DARK_MODE_LOGO_BASE_64,
   DARK_MODE_LOGO_BASE_64_PNG,
@@ -75,7 +74,6 @@ export const environment: ValtimoConfig = {
   darkModeLogoPngBase64: DARK_MODE_LOGO_BASE_64_PNG,
   applicationTitle: '',
   production: false,
-  initializers: [openZaakExtensionInitializer],
   authentication: authenticationKeycloak,
   menu: {
     menuItems: [

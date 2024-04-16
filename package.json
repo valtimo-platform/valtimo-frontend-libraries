@@ -81,7 +81,7 @@
     "libs:build-4:form-management": "ng build @valtimo/form-management",
     "libs:build-5:task": "ng build @valtimo/task",
     "libs:build-5:task-management": "ng build @valtimo/task-management",
-    "libs:build-3:zgw": "ng build @valtimo/zgw",
+    "libs:build-5:zgw": "ng build @valtimo/zgw",
     "libs:build-5:dashboard": "ng build @valtimo/dashboard",
     "libs:build-5:dossier": "ng build @valtimo/dossier",
     "libs:build-5:dossier-management": "ng build @valtimo/dossier-management",

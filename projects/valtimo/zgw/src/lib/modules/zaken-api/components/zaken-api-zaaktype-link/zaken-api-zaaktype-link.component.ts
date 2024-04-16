@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {
   CreateInformatieObjectTypeLinkRequest,
   CreateZaakTypeLinkRequest,
@@ -27,25 +27,22 @@ import {FormsModule} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {AlertService, ModalComponent, ModalModule} from '@valtimo/components';
 import {ToastrService} from 'ngx-toastr';
-import {TranslateService} from '@ngx-translate/core';
-import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {BehaviorSubject, map, Observable} from 'rxjs';
 import {ConfigService, UploadProvider} from '@valtimo/config';
-import {PluginConfiguration} from '../../../../models';
-import {PluginManagementService} from '../../../../services';
-import {DocumentenApiManagementVersion} from '../../../documenten-api/models';
-import {DocumentenApiService} from '../../../documenten-api/services/documenten-api.service';
+import {PluginConfiguration} from '@valtimo/plugin';
 import {CommonModule} from '@angular/common';
-import {TranslateModule} from '@ngx-translate/core';
 import {NotificationModule} from 'carbon-components-angular';
+import {ZakenApiZaaktypeLinkService} from '../../services';
 
 @Component({
-  selector: 'valtimo-open-zaak-type-link-extension',
-  templateUrl: './open-zaak-type-link-extension.component.html',
-  styleUrls: ['./open-zaak-type-link-extension.component.scss'],
+  selector: 'valtimo-zaken-api-zaaktype-link',
+  templateUrl: './zaken-api-zaaktype-link.component.html',
+  styleUrls: ['./zaken-api-zaaktype-link.component.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule, ModalModule, NotificationModule, TranslateModule],
 })
-export class OpenZaakTypeLinkExtensionComponent {
+export class ZakenApiZaaktypeLinkComponent implements OnInit {
   public zaakTypes: ZaakType[];
   public pluginConfigurations: PluginConfiguration[];
   public zaakTypeLinkRequest: CreateZaakTypeLinkRequest;
@@ -62,31 +59,24 @@ export class OpenZaakTypeLinkExtensionComponent {
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || '')
   );
-  readonly documentenApiVersion$: Observable<DocumentenApiManagementVersion> =
-    this.documentDefinitionName$.pipe(
-      switchMap(documentDefinitionName =>
-        this.documentenApiService.getManagementApiVersion(documentDefinitionName)
-      )
-    );
 
   @ViewChild('openZaakTypeLinkModal') modal: ModalComponent;
 
   constructor(
-    private route: ActivatedRoute,
-    private openZaakService: OpenZaakService,
-    private alertService: AlertService,
-    private toasterService: ToastrService,
-    private translateService: TranslateService,
-    private pluginManagementService: PluginManagementService,
-    private documentenApiService: DocumentenApiService,
-    configService: ConfigService
+    private readonly route: ActivatedRoute,
+    private readonly openZaakService: OpenZaakService,
+    private readonly alertService: AlertService,
+    private readonly toasterService: ToastrService,
+    private readonly translateService: TranslateService,
+    private readonly zakenApiZaaktypeLinkService: ZakenApiZaaktypeLinkService,
+    private readonly configService: ConfigService
   ) {
     this.documentDefinitionName = this.route.snapshot.paramMap.get('name');
     this.informatieObjectTypeSelectionEnabled =
-      configService.config.uploadProvider === UploadProvider.OPEN_ZAAK;
+      this.configService.config.uploadProvider === UploadProvider.OPEN_ZAAK;
   }
-  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
-  ngOnInit() {
+
+  public ngOnInit() {
     this.zaakTypeLinkRequest = {
       documentDefinitionName: this.documentDefinitionName,
       createWithDossier: false,
@@ -127,7 +117,7 @@ export class OpenZaakTypeLinkExtensionComponent {
   }
 
   loadZakenApiPluginConfigurations() {
-    return this.pluginManagementService
+    return this.zakenApiZaaktypeLinkService
       .getPluginConfigurationsByPluginDefinitionKey('zakenapi')
       .subscribe((plugins: PluginConfiguration[]) => {
         this.pluginConfigurations = plugins;

@@ -32,7 +32,7 @@
       (selected)="selectProcess($event)"
       [disabled]="obs.disabled || !obs.processItems"
     >
-      <cds-dropdown-list [items]="obs.processItems"></cds-dropdown-list>
+      <cds-dropdown-list [items]="obs.processItems || []"></cds-dropdown-list>
     </cds-combo-box>
   </ng-container>
 </ng-container>
