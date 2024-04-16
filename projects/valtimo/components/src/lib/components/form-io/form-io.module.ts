@@ -30,6 +30,8 @@ import {ResourceModule} from '@valtimo/resource';
 import {RouterModule} from '@angular/router';
 import {FormIoCurrentUserComponent} from './form-io-current-user/form-io-current-user.component';
 import {ConfigService} from '@valtimo/config';
+import {FormIoIbanComponent} from './form-io-iban/iban.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -41,18 +43,21 @@ import {ConfigService} from '@valtimo/config';
     FileSizeModule,
     ResourceModule,
     RouterModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     FormioComponent,
     FormioBuilderComponent,
     FormIoUploaderComponent,
     FormIoCurrentUserComponent,
+    FormIoIbanComponent,
   ],
   exports: [
     FormioComponent,
     FormioBuilderComponent,
     FormIoUploaderComponent,
     FormIoCurrentUserComponent,
+    FormIoIbanComponent,
   ],
   providers: [
     FormIoDomService,
