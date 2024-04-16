@@ -111,7 +111,7 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
   loadZaakTypes() {
     return this.openZaakService.getZaakTypes().subscribe((zaakTypes: ZaakType[]) => {
       this.zaakTypes = zaakTypes;
-      this.findZaakType(this.zaakTypeLink$.getValue().zaakTypeUrl);
+      this.findZaakType(this.zaakTypeLink$.getValue()?.zaakTypeUrl);
       this.loading$.next(false);
     });
   }
@@ -121,7 +121,7 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
       .getPluginConfigurationsByPluginDefinitionKey('zakenapi')
       .subscribe((plugins: PluginConfiguration[]) => {
         this.pluginConfigurations = plugins;
-        this.findPluginConfiguration(this.zaakTypeLink$.getValue().zakenApiPluginConfigurationId);
+        this.findPluginConfiguration(this.zaakTypeLink$.getValue()?.zakenApiPluginConfigurationId);
       });
   }
 

@@ -23,6 +23,7 @@ import {
   DossierDetailTabDocumentenApiDocumentsComponent,
   DossierDetailTabObjectTypeComponent,
   DossierManagementLinkProcessComponent,
+  ZakenApiZaaktypeLinkComponent,
 } from './modules';
 import {
   ZGW_CASE_CONFIGURATION_EXTENSIONS_TOKEN,
@@ -63,7 +64,11 @@ import {ResourceModule} from '@valtimo/resource';
     },
     {
       provide: ZGW_CASE_CONFIGURATION_EXTENSIONS_TOKEN,
-      useValue: [DossierManagementLinkProcessComponent, DocumentenApiVersionComponent],
+      useValue: [
+        DossierManagementLinkProcessComponent,
+        DocumentenApiVersionComponent,
+        ZakenApiZaaktypeLinkComponent,
+      ],
     },
   ],
 })
