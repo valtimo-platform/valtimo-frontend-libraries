@@ -57,7 +57,6 @@ import {
   TemplatePayload,
   TemplateResponse,
   UndeployDocumentDefinitionResult,
-  UploadProcessLink,
 } from '../models';
 import {AdvancedDocumentSearchRequest} from '../models/advanced-document-search-request';
 import {DocumentSearchRequest} from '../models/document-search-request';
@@ -442,31 +441,6 @@ export class DocumentService {
   public getDocumentTypes(documentDefinitionName: string): Observable<Array<DocumentType>> {
     return this.http.get<Array<DocumentType>>(
       `${this.valtimoEndpointUri}v1/documentdefinition/${documentDefinitionName}/zaaktype/documenttype`
-    );
-  }
-
-  public getLinkedUploadProcess(documentDefinitionName: string): Observable<UploadProcessLink> {
-    return this.http.get<UploadProcessLink>(
-      `${this.valtimoEndpointUri}v1/process-document/demo/${documentDefinitionName}/process`
-    );
-  }
-
-  public updateLinkedUploadProcess(
-    documentDefinitionName: string,
-    processDefinitionKey: string
-  ): Observable<UploadProcessLink> {
-    return this.http.put<UploadProcessLink>(
-      `${this.valtimoEndpointUri}v1/process-document/demo/${documentDefinitionName}/process`,
-      {
-        processDefinitionKey,
-        linkType: 'DOCUMENT_UPLOAD',
-      }
-    );
-  }
-
-  public deleteLinkedUploadProcess(documentDefinitionName: string): Observable<void> {
-    return this.http.delete<void>(
-      `${this.valtimoEndpointUri}v1/process-document/demo/${documentDefinitionName}/process`
     );
   }
 

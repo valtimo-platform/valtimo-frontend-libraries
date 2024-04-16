@@ -106,15 +106,14 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
   public readonly showModal$ = new Subject<null>();
 
+  public readonly uploading$ = new BehaviorSubject<boolean>(false);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
-  private readonly refetch$ = new BehaviorSubject<null>(null);
-  private readonly uploading$ = new BehaviorSubject<boolean>(false);
 
-  public readonly loadingFiles$ = new BehaviorSubject<boolean>(true);
+  private readonly _refetch$ = new BehaviorSubject<null>(null);
 
   public relatedFiles$: Observable<Array<DocumentenApiRelatedFileListItem>> = combineLatest([
     this._documentId$,
-    this.refetch$,
+    this._refetch$,
   ]).pipe(
     tap(() => this.loading$.next(true)),
     switchMap(([documentId]) =>
@@ -289,7 +288,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   public refetchDocuments(): void {
-    this.refetch$.next(null);
+    this._refetch$.next(null);
   }
 
   private downloadDocument(relatedFile: DocumentenApiRelatedFile, forceDownload: boolean): void {

@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,3 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+interface UploadProcessLink {
+  processDefinitionKey: string;
+  processName: string;
+}
+
+interface UpdateUploadProcessLinkRequest {
+  processDefinitionKey: string;
+}
+
+export {UploadProcessLink, UpdateUploadProcessLinkRequest};

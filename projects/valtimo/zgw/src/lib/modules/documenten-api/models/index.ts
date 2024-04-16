@@ -18,3 +18,4 @@ export * from './documenten-api-metadata.model';
 export * from './configured-column.model';
 export * from './documenten-api-column-modal.model';
 export * from './documenten-api.model';
+export * from './documenten-api-link-process.model';

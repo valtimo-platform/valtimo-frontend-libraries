@@ -15,3 +15,5 @@
  */
 
 export * from './documenten-api-column.service';
+export * from './documenten-api-link-process.service';
+export * from './documenten-api-document.service';

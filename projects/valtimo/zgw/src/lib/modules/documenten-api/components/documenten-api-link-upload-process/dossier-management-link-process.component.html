@@ -14,11 +14,13 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="documentenApiUploadProvider">
+<ng-container *ngIf="documentenApiUploadProviders$ | async">
   <h2 class="mb-4">{{ 'dossierManagement.linkProcess.title' | translate }}</h2>
+
   <v-paragraph [margin]="true">{{
     'dossierManagement.linkProcess.description' | translate
   }}</v-paragraph>
+
   <ng-container
     *ngIf="{
       processItems: processItems$ | async,
@@ -31,7 +33,7 @@
       (selectedChange)="selectProcess($event)"
       [defaultSelectionId]="obs.defaultSelectionId"
       [disabled]="obs.disabled"
-      [items]="obs.processItems"
+      [items]="obs.processItems || []"
       [loading]="!obs.processItems"
       [margin]="true"
       [required]="false"
