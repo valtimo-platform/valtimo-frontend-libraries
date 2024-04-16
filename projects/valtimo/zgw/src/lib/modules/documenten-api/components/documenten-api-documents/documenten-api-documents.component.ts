@@ -208,9 +208,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       return `${Math.ceil(megabytes * 1000)} KB`;
     } else if (megabytes < 1000) {
       return megabytes.toFixed(2) + ' MB';
-    } else {
-      return (megabytes / 1000).toFixed(2) + ' GB';
     }
+
+    return (megabytes / 1000).toFixed(2) + ' GB';
   }
 
   public getUploadButtonTooltip(): string {
@@ -218,9 +218,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       return 'Upload';
     } else if (this.isAdmin) {
       return 'dossier.documenten.noProcessLinked.adminRole';
-    } else {
-      return 'dossier.documenten.noProcessLinked.regularUser';
     }
+
+    return 'dossier.documenten.noProcessLinked.regularUser';
   }
 
   public isUserAdmin() {
