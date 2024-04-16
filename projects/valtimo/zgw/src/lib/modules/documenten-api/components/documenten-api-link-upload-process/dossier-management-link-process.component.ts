@@ -15,20 +15,28 @@
  */
 import {Component, OnInit} from '@angular/core';
 import {ConfigService, UploadProvider, ValtimoConfig} from '@valtimo/config';
-import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
-import {ParagraphModule, SelectItem, SelectModule} from '@valtimo/components';
-import {ProcessService} from '@valtimo/process';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';
+import {ParagraphModule, SelectModule} from '@valtimo/components';
 import {ActivatedRoute} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {filter} from 'rxjs/operators';
 import {DocumentenApiLinkProcessService} from '../../services';
 import {TranslateModule} from '@ngx-translate/core';
+import {ComboBoxModule, ListItem} from 'carbon-components-angular';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'valtimo-dossier-management-link-process',
   templateUrl: './dossier-management-link-process.component.html',
   standalone: true,
-  imports: [CommonModule, ParagraphModule, SelectModule, TranslateModule],
+  imports: [
+    CommonModule,
+    ParagraphModule,
+    SelectModule,
+    TranslateModule,
+    ComboBoxModule,
+    ReactiveFormsModule,
+  ],
 })
 export class DossierManagementLinkProcessComponent implements OnInit {
   public readonly documentenApiUploadProviders$ = new BehaviorSubject<boolean>(false);
@@ -38,19 +46,26 @@ export class DossierManagementLinkProcessComponent implements OnInit {
     filter(name => !!name)
   );
 
-  public readonly selectionId$ = new BehaviorSubject<string>('');
-  public readonly processItems$: Observable<Array<SelectItem>> = this.processService
-    .getProcessDefinitions()
-    .pipe(
-      map(definitions => definitions.filter(definition => !!definition?.key) || []),
-      map(processes => processes.map(process => ({text: process?.name || '-', id: process.key})))
-    );
+  public readonly selectedProcessKey$ = new BehaviorSubject<string>('');
+  public readonly processItems$: Observable<Array<ListItem>> = combineLatest([
+    this.documentenApiLinkProcessService.getProcessDefinitions(),
+    this.selectedProcessKey$,
+  ]).pipe(
+    map(([definitions, selectedProcessKey]) =>
+      (definitions || [])
+        .filter(definition => !!definition?.key)
+        .map(process => ({
+          content: process?.name || '-',
+          id: process.key,
+          selected: selectedProcessKey === process.key,
+        }))
+    )
+  );
 
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly processService: ProcessService,
     private readonly route: ActivatedRoute,
     private readonly documentenApiLinkProcessService: DocumentenApiLinkProcessService
   ) {}
@@ -59,15 +74,12 @@ export class DossierManagementLinkProcessComponent implements OnInit {
     this.setDocumentenApiUploaderProvider(this.configService.config);
   }
 
-  public selectProcess(processDefinitionKey: string): void {
-    console.log(processDefinitionKey);
+  public selectProcess(item: {id: string}): void {
+    const processDefinitionKey = item?.id;
     this.disabled$.next(true);
-    const currentSelectionId = this.selectionId$.getValue();
-    if (
-      !Array.isArray(processDefinitionKey) &&
-      processDefinitionKey &&
-      processDefinitionKey !== currentSelectionId
-    ) {
+    const currentSelectionId = this.selectedProcessKey$.getValue();
+
+    if (processDefinitionKey && processDefinitionKey !== currentSelectionId) {
       this.disabled$.next(true);
       this._documentDefinitionName$
         .pipe(
@@ -79,13 +91,10 @@ export class DossierManagementLinkProcessComponent implements OnInit {
           )
         )
         .subscribe(processLink => {
-          this.selectionId$.next(processLink.processDefinitionKey);
+          this.selectedProcessKey$.next(processLink.processDefinitionKey);
           this.disabled$.next(false);
         });
-    } else if (
-      !processDefinitionKey ||
-      (Array.isArray(processDefinitionKey) && processDefinitionKey.length === 0)
-    ) {
+    } else if (!processDefinitionKey) {
       this._documentDefinitionName$
         .pipe(
           switchMap(documentDefinitionName =>
@@ -93,6 +102,7 @@ export class DossierManagementLinkProcessComponent implements OnInit {
           )
         )
         .subscribe(() => {
+          this.selectedProcessKey$.next('');
           this.disabled$.next(false);
         });
     }
@@ -114,7 +124,7 @@ export class DossierManagementLinkProcessComponent implements OnInit {
       )
       .subscribe(linkedUploadProcess => {
         if (linkedUploadProcess) {
-          this.selectionId$.next(linkedUploadProcess.processDefinitionKey);
+          this.selectedProcessKey$.next(linkedUploadProcess.processDefinitionKey);
         }
       });
   }

@@ -60,7 +60,6 @@ import {
 } from '@valtimo/dashboard';
 import {DashboardManagementModule} from '@valtimo/dashboard-management';
 import {DocumentModule} from '@valtimo/document';
-import {ContactMomentModule} from '@valtimo/contact-moment';
 import {AccountModule} from '@valtimo/account';
 import {ChoiceFieldModule} from '@valtimo/choice-field';
 import {ResourceModule} from '@valtimo/resource';
@@ -87,7 +86,6 @@ import {
 import {FormManagementModule} from '@valtimo/form-management';
 import {CASE_MANAGEMENT_TAB_TOKEN, DossierManagementModule} from '@valtimo/dossier-management';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {CustomerModule} from '@valtimo/customer';
 import {PluginManagementModule} from '@valtimo/plugin-management';
 import {
   BesluitenApiPluginModule,
@@ -176,7 +174,6 @@ export function tabsFactory() {
     BpmnJsDiagramModule,
     FormsModule,
     ReactiveFormsModule,
-    ContactMomentModule,
     DashboardModule,
     DashboardManagementModule,
     DocumentModule,
@@ -195,7 +192,6 @@ export function tabsFactory() {
     MigrationModule,
     FormManagementModule,
     DossierManagementModule,
-    CustomerModule,
     PluginManagementModule,
     NotificatiesApiPluginModule,
     ObjectTokenAuthenticationPluginModule,

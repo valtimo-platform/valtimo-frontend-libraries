@@ -24,19 +24,15 @@
   <ng-container
     *ngIf="{
       processItems: processItems$ | async,
-      disabled: disabled$ | async,
-      defaultSelectionId: selectionId$ | async
+      disabled: disabled$ | async
     } as obs"
   >
-    <v-select
-      *ngIf="obs.processItems"
-      (selectedChange)="selectProcess($event)"
-      [defaultSelectionId]="obs.defaultSelectionId"
-      [disabled]="obs.disabled"
-      [items]="obs.processItems || []"
-      [loading]="!obs.processItems"
-      [margin]="true"
-      [required]="false"
-    ></v-select>
+    <cds-combo-box
+      [appendInline]="true"
+      (selected)="selectProcess($event)"
+      [disabled]="obs.disabled || !obs.processItems"
+    >
+      <cds-dropdown-list [items]="obs.processItems"></cds-dropdown-list>
+    </cds-combo-box>
   </ng-container>
 </ng-container>

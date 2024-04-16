@@ -14,13 +14,27 @@
  * limitations under the License.
  */
 
+interface ProcessDefinition {
+  visibleInMenu: any;
+  category: string;
+  deploymentId: string;
+  description: string;
+  diagram: string;
+  historyTimeToLive: string;
+  id: string;
+  key: string;
+  name: string;
+  resource: string;
+  startableInTasklist: boolean;
+  suspended: false;
+  tenantId: string;
+  version: number;
+  versionTag: string;
+}
+
 interface UploadProcessLink {
   processDefinitionKey: string;
   processName: string;
 }
 
-interface UpdateUploadProcessLinkRequest {
-  processDefinitionKey: string;
-}
-
-export {UploadProcessLink, UpdateUploadProcessLinkRequest};
+export {UploadProcessLink, ProcessDefinition};

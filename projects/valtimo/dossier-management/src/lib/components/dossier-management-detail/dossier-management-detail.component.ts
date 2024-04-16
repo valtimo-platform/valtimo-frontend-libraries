@@ -15,6 +15,7 @@
  */
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   Inject,
   Optional,
@@ -47,7 +48,8 @@ export class DossierManagementDetailComponent implements AfterViewInit {
     private readonly route: ActivatedRoute,
     @Optional()
     @Inject(ZGW_CASE_CONFIGURATION_EXTENSIONS_TOKEN)
-    private readonly zgwCaseConfigurationExtensionComponents: Type<any>[]
+    private readonly zgwCaseConfigurationExtensionComponents: Type<any>[],
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   public ngAfterViewInit(): void {
@@ -65,5 +67,7 @@ export class DossierManagementDetailComponent implements AfterViewInit {
     this.zgwCaseConfigurationExtensionComponents.forEach(extensionComponent => {
       this._extensions.createComponent(extensionComponent);
     });
+
+    this.cdr.detectChanges();
   }
 }

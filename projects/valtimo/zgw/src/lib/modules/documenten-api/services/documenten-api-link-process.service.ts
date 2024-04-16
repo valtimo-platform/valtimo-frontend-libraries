@@ -34,7 +34,7 @@ import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {UploadProcessLink} from '../models';
+import {ProcessDefinition, UploadProcessLink} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +45,10 @@ export class DocumentenApiLinkProcessService extends BaseApiService {
     protected readonly configService: ConfigService
   ) {
     super(httpClient, configService);
+  }
+
+  public getProcessDefinitions(): Observable<ProcessDefinition[]> {
+    return this.httpClient.get<ProcessDefinition[]>(this.getApiUrl('/v1/process/definition'));
   }
 
   public getLinkedUploadProcess(documentDefinitionName: string): Observable<UploadProcessLink> {
