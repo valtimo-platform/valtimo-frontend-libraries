@@ -21,8 +21,7 @@ import {ListItem} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 
 import {TabEnum} from '../models/tab.enum';
-import {CASE_MANAGEMENT_TAB_TOKEN} from '../constants';
-import {CaseManagementTabConfig, InjectedCaseManagementTab} from '../models';
+import {CASE_MANAGEMENT_TAB_TOKEN, CaseManagementTabConfig} from '@valtimo/config';
 
 @Injectable({
   providedIn: 'root',
@@ -30,9 +29,9 @@ import {CaseManagementTabConfig, InjectedCaseManagementTab} from '../models';
 export class TabService {
   public configuredTabKeys: string[];
 
-  private _injectedCaseManagementTabs$ = new BehaviorSubject<InjectedCaseManagementTab[]>([]);
+  private _injectedCaseManagementTabs$ = new BehaviorSubject<CaseManagementTabConfig[]>([]);
 
-  public get injectedCaseManagementTabs$(): Observable<InjectedCaseManagementTab[]> {
+  public get injectedCaseManagementTabs$(): Observable<CaseManagementTabConfig[]> {
     return this._injectedCaseManagementTabs$.asObservable();
   }
 
@@ -109,22 +108,20 @@ export class TabService {
     @Optional() @Inject(CASE_TAB_TOKEN) private readonly caseTabConfig: CaseTabConfig,
     @Optional()
     @Inject(CASE_MANAGEMENT_TAB_TOKEN)
-    private readonly caseManagementTabConfig: CaseManagementTabConfig,
+    private readonly caseManagementTabConfig: CaseManagementTabConfig[],
     private readonly formService: FormService,
     private readonly translateService: TranslateService
   ) {
     this.setInjectedCaseManagementTabs(this.caseManagementTabConfig);
   }
 
-  private setInjectedCaseManagementTabs(caseManagementTabConfig?: CaseManagementTabConfig): void {
+  private setInjectedCaseManagementTabs(
+    caseManagementTabConfig?: CaseManagementTabConfig[] | CaseManagementTabConfig
+  ): void {
     if (!caseManagementTabConfig) return;
 
-    const injectedTabs: InjectedCaseManagementTab[] = [];
-
-    Object.keys(caseManagementTabConfig).forEach(tabKey => {
-      injectedTabs.push({translationKey: tabKey, component: caseManagementTabConfig[tabKey]});
-    });
-
-    this._injectedCaseManagementTabs$.next(injectedTabs);
+    this._injectedCaseManagementTabs$.next(
+      Array.isArray(caseManagementTabConfig) ? caseManagementTabConfig : [caseManagementTabConfig]
+    );
   }
 }

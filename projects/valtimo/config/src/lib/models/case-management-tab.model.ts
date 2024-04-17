@@ -17,12 +17,8 @@
 import {Type} from '@angular/core';
 
 interface CaseManagementTabConfig {
-  [tabTranslationKey: string]: Type<any>;
-}
-
-interface InjectedCaseManagementTab {
   translationKey: string;
   component: Type<any>;
 }
 
-export {CaseManagementTabConfig, InjectedCaseManagementTab};
+export {CaseManagementTabConfig};
