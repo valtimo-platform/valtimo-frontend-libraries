@@ -14,10 +14,10 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="{currentTab: currentTab$ | async} as obs">
+<ng-container *ngIf="currentTab$ | async as currentTab">
   <ng-container
     *ngIf="{
-      documentenApiColumnsActive: obs.currentTab === ZgwTabEnum.DOCUMENTEN_API_COLUMNS
+      documentenApiColumnsActive: currentTab === ZgwTabEnum.DOCUMENTEN_API_COLUMNS
     } as vars"
   >
     <cds-tabs class="dossier-management-tabs">

@@ -64,16 +64,18 @@ export class DossierDetailTabDocumentsComponent implements OnInit, AfterViewInit
   }
 
   public ngAfterViewInit(): void {
-    this.documentenApiUploadProvider$.subscribe(uploadProviderIsDocumentenApi => {
-      this.noMargin = uploadProviderIsDocumentenApi;
-      this.noMinHeight = uploadProviderIsDocumentenApi;
+    this._subscriptions.add(
+      this.documentenApiUploadProvider$.subscribe(uploadProviderIsDocumentenApi => {
+        this.noMargin = uploadProviderIsDocumentenApi;
+        this.noMinHeight = uploadProviderIsDocumentenApi;
 
-      if (!uploadProviderIsDocumentenApi) return;
+        if (!uploadProviderIsDocumentenApi) return;
 
-      this._externalDocumentsTab.createComponent(
-        this.zgwDocumentenApiDocumentsComponent || DossierDetailTabNotFoundComponent
-      );
-    });
+        this._externalDocumentsTab.createComponent(
+          this.zgwDocumentenApiDocumentsComponent || DossierDetailTabNotFoundComponent
+        );
+      })
+    );
   }
 
   public ngOnDestroy(): void {

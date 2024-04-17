@@ -89,14 +89,15 @@
       ></valtimo-dossier-management-statuses>
     </cds-tab>
 
-    <cds-tab
-      *ngFor="let injectedTab of obs.injectedTabs"
-      class="no-padding-left-right no-padding-top-bottom"
-      [active]="obs.currentTab === injectedTab.translationKey"
-      [heading]="injectedTab.translationKey | translate"
-      (selected)="displayBodyComponent(injectedTab.translationKey, true)"
-    >
-    </cds-tab>
+    @for (injectedTab of obs.injectedTabs; track injectedTab.translationKey) {
+      <cds-tab
+        class="no-padding-left-right no-padding-top-bottom"
+        [active]="obs.currentTab === injectedTab.translationKey"
+        [heading]="injectedTab.translationKey | translate"
+        (selected)="displayBodyComponent(injectedTab.translationKey, true)"
+      >
+      </cds-tab>
+    }
   </cds-tabs>
 
   <div class="dossier-management-detail-container__content">

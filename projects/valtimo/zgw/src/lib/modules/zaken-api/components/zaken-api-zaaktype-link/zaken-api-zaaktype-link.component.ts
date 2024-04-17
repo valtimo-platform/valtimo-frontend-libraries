@@ -76,7 +76,7 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
       this.configService.config.uploadProvider === UploadProvider.OPEN_ZAAK;
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.zaakTypeLinkRequest = {
       documentDefinitionName: this.documentDefinitionName,
       createWithDossier: false,

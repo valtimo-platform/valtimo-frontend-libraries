@@ -13,36 +13,34 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div class="select-documenten-api-version">
-  <div class="input-group mt-4 mb-2 align-items-center">
-    <div>
-      <h2>{{ 'openZaak.documentenApi.title' | translate }}</h2>
-    </div>
+<div class="input-group mt-4 mb-2 align-items-center">
+  <div>
+    <h2>{{ 'openZaak.documentenApi.title' | translate }}</h2>
   </div>
+</div>
 
-  <ng-container
-    *ngIf="{
-      loading: loading$ | async,
-      documentenApiVersion: documentenApiVersion$ | async
-    } as obs"
-  >
-    <ng-container *ngIf="obs.loading === false; else loading">
+<ng-container
+  *ngIf="{
+    loading: loading$ | async,
+    documentenApiVersion: documentenApiVersion$ | async
+  } as obs"
+>
+  <ng-container *ngIf="obs.loading === false; else loading">
+    <ng-container
+      *ngIf="obs.documentenApiVersion.selectedVersion; else noDocumentenApiVersionWarning"
+    >
       <ng-container
-        *ngIf="obs.documentenApiVersion.selectedVersion; else noDocumentenApiVersionWarning"
+        *ngIf="
+          obs.documentenApiVersion.detectedVersions.length === 1;
+          else multipleDocumentenApiVersionsWarning
+        "
       >
-        <ng-container
-          *ngIf="
-            obs.documentenApiVersion.detectedVersions.length === 1;
-            else multipleDocumentenApiVersionsWarning
-          "
-        >
-          {{ 'openZaak.documentenApi.documentenApiVersion' | translate }}
-          <strong> {{ obs.documentenApiVersion.selectedVersion }} </strong>
-        </ng-container>
+        {{ 'openZaak.documentenApi.documentenApiVersion' | translate }}
+        <strong> {{ obs.documentenApiVersion.selectedVersion }} </strong>
       </ng-container>
     </ng-container>
   </ng-container>
-</div>
+</ng-container>
 
 <ng-template #noDocumentenApiVersionWarning>
   <div class="pb-2">
