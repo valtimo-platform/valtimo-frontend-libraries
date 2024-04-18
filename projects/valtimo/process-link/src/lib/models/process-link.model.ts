@@ -27,6 +27,7 @@ interface ProcessLink {
   };
   formDefinitionId?: string;
   formFlowDefinitionId?: string;
+  viewModelEnabled?: boolean;
 }
 
 type GetProcessLinkResponse = Array<ProcessLink>;

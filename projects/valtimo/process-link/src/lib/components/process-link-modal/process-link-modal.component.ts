@@ -83,9 +83,7 @@ export class ProcessLinkModalComponent {
   }
 
   public toggleCheckedChange(): void {
-    console.log('before', this.viewModelEnabled)
     this.viewModelEnabled = !this.viewModelEnabled;
-    console.log('after',this.viewModelEnabled)
   }
 
 }
