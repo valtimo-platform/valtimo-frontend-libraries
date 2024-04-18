@@ -139,6 +139,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
+            viewModelEnabled: modalParams.viewModelEnabled
           })
         )
       )
