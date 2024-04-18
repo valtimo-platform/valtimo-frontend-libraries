@@ -25,7 +25,7 @@ import {
 } from '@valtimo/resource';
 import {FormsModule} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-import {AlertService, ModalComponent, ModalModule} from '@valtimo/components';
+import {AlertService, ModalComponent, ModalModule, SpinnerModule} from '@valtimo/components';
 import {ToastrService} from 'ngx-toastr';
 import {TranslateService} from '@ngx-translate/core';
 import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
@@ -37,13 +37,15 @@ import {DocumentenApiService} from '../../../documenten-api/services/documenten-
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {NotificationModule} from 'carbon-components-angular';
+import {DossierDetailService} from '@valtimo/dossier-management/lib/services';
+import {ObjectManagementApiService} from '../../../objectmanagement-api/services';
 
 @Component({
   selector: 'valtimo-open-zaak-type-link-extension',
   templateUrl: './open-zaak-type-link-extension.component.html',
   styleUrls: ['./open-zaak-type-link-extension.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalModule, NotificationModule, TranslateModule],
+  imports: [CommonModule, FormsModule, ModalModule, NotificationModule, TranslateModule, SpinnerModule],
 })
 export class OpenZaakTypeLinkExtensionComponent {
   public zaakTypes: ZaakType[];
@@ -58,6 +60,7 @@ export class OpenZaakTypeLinkExtensionComponent {
 
   readonly loading$ = new BehaviorSubject<boolean>(true);
   readonly zaakTypeLink$ = new BehaviorSubject<ZaakTypeLink>(null);
+  readonly zaakDetailSync$ = new BehaviorSubject<ZaakTypeLink>(null);
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || '')
@@ -69,7 +72,8 @@ export class OpenZaakTypeLinkExtensionComponent {
       )
     );
 
-  @ViewChild('openZaakTypeLinkModal') modal: ModalComponent;
+  @ViewChild('openZaakTypeLinkModal') zaakTypeLinkModal: ModalComponent;
+  @ViewChild('openZaakDetailSyncModal') zaakDetailSyncModal: ModalComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -79,11 +83,17 @@ export class OpenZaakTypeLinkExtensionComponent {
     private translateService: TranslateService,
     private pluginManagementService: PluginManagementService,
     private documentenApiService: DocumentenApiService,
-    configService: ConfigService
+    configService: ConfigService,
+    private objectManagementApiService: ObjectManagementApiService
+    // private dossierDetailService: DossierDetailService
   ) {
     this.documentDefinitionName = this.route.snapshot.paramMap.get('name');
     this.informatieObjectTypeSelectionEnabled =
       configService.config.uploadProvider === UploadProvider.OPEN_ZAAK;
+    // console.log(this.dossierDetailService.selectedVersionNumber$);
+    // this.objectManagementApiService.getAllObjectManagement().subscribe((objectManagement) => {
+    //   console.log(objectManagement);
+    // });
   }
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnInit() {
@@ -143,7 +153,11 @@ export class OpenZaakTypeLinkExtensionComponent {
       });
   }
 
-  openModal(zaakTypeLink: ZaakTypeLink) {
+  openOpenZaakDetailSyncModal() {
+    this.zaakDetailSyncModal.show();
+  }
+
+  openOpenZaakTypeLinkModal(zaakTypeLink: ZaakTypeLink) {
     this.zaakTypeLinkRequest = {
       documentDefinitionName: this.documentDefinitionName,
       createWithDossier: zaakTypeLink?.createWithDossier,
@@ -166,10 +180,10 @@ export class OpenZaakTypeLinkExtensionComponent {
               }
             });
         }
-        this.modal.show();
+        this.zaakTypeLinkModal.show();
       });
     } else {
-      this.modal.show();
+      this.zaakTypeLinkModal.show();
     }
   }
 
