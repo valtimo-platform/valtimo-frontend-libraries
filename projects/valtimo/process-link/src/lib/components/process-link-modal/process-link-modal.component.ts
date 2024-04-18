@@ -42,6 +42,7 @@ export class ProcessLinkModalComponent {
   public readonly hideProgressIndicator$ = this.stateService.hideProgressIndicator$;
   public readonly saving$ = this.stateService.saving$;
   public readonly typeOfSelectedProcessLink$ = this.stateService.typeOfSelectedProcessLink$;
+  public viewModelEnabled: Boolean = false;
 
   constructor(
     private readonly stateService: ProcessLinkStateService,
@@ -80,4 +81,11 @@ export class ProcessLinkModalComponent {
       );
     });
   }
+
+  public toggleCheckedChange(): void {
+    console.log('before', this.viewModelEnabled)
+    this.viewModelEnabled = !this.viewModelEnabled;
+    console.log('after',this.viewModelEnabled)
+  }
+
 }

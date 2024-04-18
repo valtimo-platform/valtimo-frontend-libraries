@@ -1394,7 +1394,11 @@
     "back": "Zurück",
     "next": "Nächste",
     "pluginDescription": "Plugin-Beschreibung",
-    "unlink": "Verknüpfung aufheben"
+    "unlink": "Verknüpfung aufheben",
+    "toggleViewModel": {
+      "title": "View Model ermöglicht?",
+      "checkboxDescription": "TOOLTIP TODO"
+    }
   },
   "processLinkType": {
     "plugin": "Plugin",

@@ -1396,7 +1396,11 @@
     "back": "Terug",
     "next": "Volgende",
     "pluginDescription": "Plugin-omschrijving",
-    "unlink": "Ontkoppelen"
+    "unlink": "Ontkoppelen",
+    "toggleViewModel": {
+      "title": "View Model ingeschakeld?",
+      "checkboxDescription": "TOOLTIP TODO"
+    }
   },
   "processLinkType": {
     "plugin": "Plugin",
