@@ -114,6 +114,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       const updateProcessLinkRequest: FormProcessLinkUpdateRequestDto = {
         id: selectedProcessLink.id,
         formDefinitionId: this._selectedFormDefinition.id,
+        viewModelEnabled: false // TODO fixme
       };
 
       this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
