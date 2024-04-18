@@ -149,6 +149,7 @@
     <cds-list-row>
       <cds-list-column>
         <cds-dropdown
+          [id]="'language-dropdown'"
           [appendInline]="true"
           (click)="$event.stopPropagation()"
           (selected)="updateUserLanguage($event)"
