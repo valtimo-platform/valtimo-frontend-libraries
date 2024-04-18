@@ -17,11 +17,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormService} from '@valtimo/form';
 import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
-import {
-  ProcessLinkButtonService,
-  ProcessLinkService,
-  ProcessLinkStateService,
-} from '../../services';
+import {ProcessLinkButtonService, ProcessLinkService, ProcessLinkStateService,} from '../../services';
 import {FormDefinitionListItem, FormProcessLinkUpdateRequestDto} from '../../models';
 import {take} from 'rxjs/operators';
 
@@ -61,7 +57,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     private readonly stateService: ProcessLinkStateService,
     private readonly processLinkService: ProcessLinkService,
     private readonly buttonService: ProcessLinkButtonService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.openBackButtonSubscription();
@@ -114,7 +111,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       const updateProcessLinkRequest: FormProcessLinkUpdateRequestDto = {
         id: selectedProcessLink.id,
         formDefinitionId: this._selectedFormDefinition.id,
-        viewModelEnabled: false // TODO fixme
+        viewModelEnabled: selectedProcessLink.viewModelEnabled
       };
 
       this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
