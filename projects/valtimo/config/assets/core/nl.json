@@ -1399,7 +1399,7 @@
     "unlink": "Ontkoppelen",
     "toggleViewModel": {
       "title": "View Model ingeschakeld?",
-      "checkboxDescription": "TOOLTIP TODO"
+      "checkboxDescription": "Activeert MVVM form afhandeling"
     }
   },
   "processLinkType": {

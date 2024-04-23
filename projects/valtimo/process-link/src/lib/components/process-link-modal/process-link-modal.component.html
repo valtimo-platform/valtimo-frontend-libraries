@@ -79,7 +79,7 @@
           [label]="'processLinkConfiguration.toggleViewModel.title' | translate"
           [onText]="'processLinkConfiguration.toggleViewModel.checkboxDescription' | translate"
           [offText]="'processLinkConfiguration.toggleViewModel.checkboxDescription' | translate"
-          [checked]="viewModelEnabled?.value"
+          [checked]="viewModelEnabled$ | async"
           (checkedChange)="toggleCheckedChange($event)"></cds-toggle>
       </ng-container>
       <ng-container

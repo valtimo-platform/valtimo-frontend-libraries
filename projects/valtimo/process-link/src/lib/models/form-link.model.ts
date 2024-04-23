@@ -64,7 +64,6 @@ interface ModalParams {
   element: BpmnElement;
   processDefinitionKey: string;
   processDefinitionId: string;
-  viewModelEnabled: boolean;
 }
 
 interface FormDefinitionListItem extends ListItem {

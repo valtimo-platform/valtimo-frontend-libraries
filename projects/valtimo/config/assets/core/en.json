@@ -1397,7 +1397,7 @@
     "unlink": "Unlink",
     "toggleViewModel": {
       "title": "View Model enabled?",
-      "checkboxDescription": "TOOLTIP TODO"
+      "checkboxDescription": "Enables MVVM form processing"
     }
   },
   "processLinkType": {
