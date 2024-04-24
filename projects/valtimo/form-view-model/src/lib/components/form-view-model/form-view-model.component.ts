@@ -28,8 +28,6 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   selector: 'valtimo-form-view-model',
   templateUrl: './form-view-model.component.html',
   styleUrls: ['./form-view-model.component.css'],
-  standalone: true,
-  imports: [CommonModule, FormioModule]
 })
 export class FormViewModelComponent implements OnInit {
 

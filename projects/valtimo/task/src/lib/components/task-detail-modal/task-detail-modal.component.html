@@ -50,7 +50,6 @@
             (change)="onChange($event)"
             [options]="obs.formioOptions"
     ></valtimo-form-view-model>
-    {{obs.formDefinition | json}}
   </div>
   <div body *ngIf="obs.processLinkIsFormFlow">
     <valtimo-form-flow
