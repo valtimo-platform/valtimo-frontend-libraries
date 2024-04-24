@@ -14,7 +14,21 @@
   ~ limitations under the License.
   -->
 
-<div>
+<div
+        *ngIf="{
+    submission: submission$ | async,
+    readOnly: readOnly$ | async,
+    form: form$ | async,
+    errors: errors$ | async,
+    tokenSetInLocalStorage: tokenSetInLocalStorage$ | async
+  } as obs">
   <formio
+          [submission]="obs.submission"
+          [form]="obs.form"
+          [refresh]="refreshForm"
+          [readOnly]="obs.readOnly"
+          (submit)="onSubmit($event)"
+          (ready)="formReady($event)"
+          (change)="onChange($event)"
   ></formio>
 </div>

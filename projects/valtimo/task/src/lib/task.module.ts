@@ -44,6 +44,7 @@ import {AssignUserToTaskComponent} from './components/assign-user-to-task/assign
 import {TaskDetailModalComponent} from './components/task-detail-modal/task-detail-modal.component';
 import {TaskListComponent} from './components/task-list/task-list.component';
 import {TaskRoutingModule} from './task-routing.module';
+import {FormViewModelComponent} from '../../../form-view-model/src/lib/components/form-view-model/form-view-model.component';
 
 @NgModule({
   declarations: [TaskListComponent, TaskDetailModalComponent, AssignUserToTaskComponent],
@@ -78,6 +79,7 @@ import {TaskRoutingModule} from './task-routing.module';
     ContentSwitcherModule,
     RenderInPageHeaderDirectiveModule,
     DropdownModule,
+    FormViewModelComponent
   ],
   exports: [TaskListComponent, TaskDetailModalComponent, AssignUserToTaskComponent],
 })

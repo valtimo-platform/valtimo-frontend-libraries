@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {
-  FormioModule
+  FormioModule, FormioSubmission
 } from '@formio/angular';
 import {CommonModule} from '@angular/common';
+import {FormioRefreshValue} from '@formio/angular/formio.common';
+import {FormioComponent as FormIoSourceComponent} from '@formio/angular/components/formio/formio.component';
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
@@ -31,16 +33,53 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
 })
 export class FormViewModelComponent implements OnInit {
 
+  @Input() set options(optionsValue: any) {
+    this.options$.next(optionsValue);
+  }
+  @Input() set submission(submissionValue: FormioSubmission) {
+    this.submission$.next(submissionValue);
+  }
+  @Input() set form(formValue: object) {
+    this.form$.next(formValue);
+  }
+  @Input() set readOnly(readOnlyValue: boolean) {
+    this.readOnly$.next(readOnlyValue);
+  }
+  @Input() formRefresh$!: Subject<FormioRefreshValue>;
+
+  // eslint-disable-next-line @angular-eslint/no-output-native
+  @Output() submit = new EventEmitter<any>();
+  // eslint-disable-next-line @angular-eslint/no-output-native
+  @Output() change = new EventEmitter<any>();
+
+  public refreshForm = new EventEmitter<FormioRefreshValue>();
+
+  public readonly submission$ = new BehaviorSubject<FormioSubmission>({});
+  public readonly form$ = new BehaviorSubject<object>(undefined);
+  public readonly options$ = new BehaviorSubject<any>(undefined);
+  public readonly readOnly$ = new BehaviorSubject<boolean>(false);
+  public readonly errors$ = new BehaviorSubject<Array<string>>([]);
+  public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
+
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-  ) {}
+  ) {
+    this.form$.subscribe(form => console.log("form", form))
+  }
 
   ngOnInit() {
   }
 
-  public onChange(event: any): void {
-    if (event?.data) {
-    }
+  public onSubmit(submission: FormioSubmission): void {
+    this.errors$.next([]);
+    this.submit.emit(submission);
+  }
+
+  public formReady(form: FormIoSourceComponent): void {
+  }
+
+  public onChange(object: any): void {
+    this.change.emit(object);
   }
 }

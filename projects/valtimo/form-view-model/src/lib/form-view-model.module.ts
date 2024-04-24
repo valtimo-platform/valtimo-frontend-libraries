@@ -13,25 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-import {FormViewModelComponent} from './components/form-view-model/form-view-model.component';
-import {FormioModule} from '@formio/angular';
-import {TranslateModule} from '@ngx-translate/core';
-import {ResourceModule} from '@valtimo/resource';
-import {RouterModule} from '@angular/router';
-import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
-    CommonModule,
-    TranslateModule,
-    ResourceModule,
-    RouterModule,
-    ReactiveFormsModule,
   ],
-  declarations: [FormViewModelComponent],
-  exports: [FormViewModelComponent],
+  declarations: [],
+  exports: [],
   providers: [],
 })
 export class FormViewModelModule {}
