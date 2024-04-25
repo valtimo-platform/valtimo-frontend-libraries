@@ -17,11 +17,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormService} from '@valtimo/form';
 import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
-import {
-  ProcessLinkButtonService,
-  ProcessLinkService,
-  ProcessLinkStateService,
-} from '../../services';
+import {ProcessLinkButtonService, ProcessLinkService, ProcessLinkStateService,} from '../../services';
 import {FormDefinitionListItem, FormProcessLinkUpdateRequestDto} from '../../models';
 import {take} from 'rxjs/operators';
 
@@ -110,10 +106,13 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   }
 
   private updateProcessLink(): void {
-    this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
+    combineLatest([this.stateService.selectedProcessLink$, this.stateService.viewModelEnabled$])
+      .pipe(take(1))
+      .subscribe(([selectedProcessLink, viewModelEnabled]) => {
       const updateProcessLinkRequest: FormProcessLinkUpdateRequestDto = {
         id: selectedProcessLink.id,
         formDefinitionId: this._selectedFormDefinition.id,
+        viewModelEnabled
       };
 
       this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -128,17 +127,19 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   }
 
   private saveNewProcessLink(): void {
-    combineLatest([this.stateService.modalParams$, this.stateService.selectedProcessLinkTypeId$])
+    combineLatest([this.stateService.modalParams$, this.stateService.selectedProcessLinkTypeId$, this.stateService.viewModelEnabled$])
       .pipe(
         take(1),
-        switchMap(([modalParams, processLinkTypeId]) =>
-          this.processLinkService.saveProcessLink({
-            formDefinitionId: this._selectedFormDefinition.id,
-            activityType: modalParams.element.activityListenerType,
-            processDefinitionId: modalParams.processDefinitionId,
-            processLinkType: processLinkTypeId,
-            activityId: modalParams.element.id,
-          })
+        switchMap(([modalParams, processLinkTypeId, viewModelEnabled]) => {
+            return this.processLinkService.saveProcessLink({
+              formDefinitionId: this._selectedFormDefinition.id,
+              activityType: modalParams.element.activityListenerType,
+              processDefinitionId: modalParams.processDefinitionId,
+              processLinkType: processLinkTypeId,
+              activityId: modalParams.element.id,
+              viewModelEnabled
+            })
+          }
         )
       )
       .subscribe(

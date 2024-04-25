@@ -42,12 +42,14 @@ export class ProcessLinkModalComponent {
   public readonly hideProgressIndicator$ = this.stateService.hideProgressIndicator$;
   public readonly saving$ = this.stateService.saving$;
   public readonly typeOfSelectedProcessLink$ = this.stateService.typeOfSelectedProcessLink$;
+  public readonly viewModelEnabled$ = this.stateService.viewModelEnabled$;
 
   constructor(
     private readonly stateService: ProcessLinkStateService,
     private readonly stepService: ProcessLinkStepService,
     private readonly buttonService: ProcessLinkButtonService,
-    private readonly processLinkService: ProcessLinkService
+    private readonly processLinkService: ProcessLinkService,
+    private readonly processLinkStateService: ProcessLinkStateService
   ) {}
 
   closeModal(): void {
@@ -80,4 +82,9 @@ export class ProcessLinkModalComponent {
       );
     });
   }
+
+  public toggleCheckedChange(value: boolean): void {
+    this.processLinkStateService.setViewModelEnabled(value);
+  }
+
 }
