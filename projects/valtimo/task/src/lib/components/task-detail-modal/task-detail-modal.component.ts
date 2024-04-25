@@ -68,7 +68,9 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   @Output() assignmentOfTaskChanged = new EventEmitter();
 
   public readonly task$ = new BehaviorSubject<Task | null>(null);
+  public readonly taskInstanceId$ = new BehaviorSubject<string>(null);
   public readonly formDefinition$ = new BehaviorSubject<FormioForm>(undefined);
+  public readonly formDefinitionId$ = new BehaviorSubject<string>(undefined);
   public readonly formFlowInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly page$ = new BehaviorSubject<any>(null);
   public readonly formioOptions$ = new BehaviorSubject<ValtimoFormioOptions>(null);
@@ -136,6 +138,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     this.stateService.setDocumentId(documentId);
 
     this.task$.next(task);
+    this.taskInstanceId$.next(task.id);
     this.page$.next({
       title: task.name,
       subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${task.created}`,
@@ -217,6 +220,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
               this.taskProcessLinkType$.next('form-view-model');
               this.processLinkId$.next(res.processLinkId);
               this.formDefinition$.next(res.properties.formDefinition);
+              this.formDefinitionId$.next(res.properties.formDefinitionId)
               this.modal.show();
               break;
           }

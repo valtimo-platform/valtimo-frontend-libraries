@@ -20,7 +20,9 @@
     loading: loading$ | async,
     page: page$ | async,
     task: task$ | async,
+    taskId: taskInstanceId$ | async,
     formDefinition: formDefinition$ | async,
+    formDefinitionId: formDefinitionId$ | async,
     processLinkIsForm: processLinkIsForm$ | async,
     processLinkIsFormViewModel: processLinkIsFormViewModel$ | async,
     formioOptions: formioOptions$ | async,
@@ -46,6 +48,8 @@
     <valtimo-form-view-model
             #form
             [form]="obs.formDefinition"
+            [formDefinitionId]="obs.formDefinitionId"
+            [taskInstanceId]="obs.taskId"
             (submit)="onSubmit($event)"
             (change)="onChange($event)"
             [options]="obs.formioOptions"
