@@ -117,11 +117,11 @@ export class ProcessLinkStateService implements OnDestroy {
     this.processLinkStepService.setProcessLinkTypeSteps(processLinkTypeId, hasOneOption);
   }
 
-  setViewModelEnabled(viewModelEnabled: boolean): void {
+  public setViewModelEnabled(viewModelEnabled: boolean): void {
     this._viewModelEnabled$.next(viewModelEnabled);
   }
 
-  get viewModelEnabled$(): Observable<boolean> {
+  public get viewModelEnabled$(): Observable<boolean> {
     return this._viewModelEnabled$.asObservable();
   }
 
