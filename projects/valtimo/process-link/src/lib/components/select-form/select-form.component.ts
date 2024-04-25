@@ -113,7 +113,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       const updateProcessLinkRequest: FormProcessLinkUpdateRequestDto = {
         id: selectedProcessLink.id,
         formDefinitionId: this._selectedFormDefinition.id,
-        viewModelEnabled: viewModelEnabled
+        viewModelEnabled
       };
 
       this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -138,7 +138,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
               processDefinitionId: modalParams.processDefinitionId,
               processLinkType: processLinkTypeId,
               activityId: modalParams.element.id,
-              viewModelEnabled: viewModelEnabled
+              viewModelEnabled
             })
           }
         )
