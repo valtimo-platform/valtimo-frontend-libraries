@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import moment from 'moment';
-import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subject, take} from 'rxjs';
 import {
-  FormioModule, FormioSubmission
+  FormioSubmission
 } from '@formio/angular';
-import {CommonModule} from '@angular/common';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {FormioComponent as FormIoSourceComponent} from '@formio/angular/components/formio/formio.component';
 import {ViewModelService} from '../../services';
@@ -39,7 +38,13 @@ export class FormViewModelComponent implements OnInit {
     this.submission$.next(submissionValue);
   }
   @Input() set form(formValue: object) {
-    this.form$.next(formValue);
+    const instance = this;
+    const form = {
+      loadInitialViewModel: () => instance.loadInitialViewModel(),
+      updateViewModel: () => instance.updateViewModel(),
+      ...formValue
+    }
+    this.form$.next(form);
   }
   @Input() set formDefinitionId(formDefinitionId: string) {
     this.formDefinitionId$.next(formDefinitionId);
@@ -68,7 +73,7 @@ export class FormViewModelComponent implements OnInit {
   public readonly errors$ = new BehaviorSubject<Array<string>>([]);
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
 
-  public readonly disabled$ = new BehaviorSubject<boolean>(false);
+  public readonly updating$ = new BehaviorSubject<boolean>(true);
 
   constructor(
     private readonly viewModelService: ViewModelService
@@ -92,12 +97,48 @@ export class FormViewModelComponent implements OnInit {
   }
 
   public loadInitialViewModel() {
-    combineLatest([this.formDefinitionId$, this.taskInstanceId$]).subscribe(([formId, taskInstanceId]) => {
+    combineLatest([this.formDefinitionId$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formId, taskInstanceId]) => {
       this.viewModelService.getViewModel(formId, taskInstanceId).subscribe(viewModel => {
-        const initialViewModel: {[k: string]: any} = {};
-        Object.keys(viewModel).forEach(key => initialViewModel['pw:' + key] = viewModel[key]);
-        this.submission$.next({data: initialViewModel});
+        this.change.pipe(take(1)).subscribe(change => {
+          this.updating$.next(false);
+        })
+        this.submission$.next(this.convertViewModelToSubmission(viewModel))
       })
     })
+  }
+
+  public updateViewModel() {
+    this.updating$.pipe(take(1)).subscribe(updating => {
+      if(!updating) {
+        this.updating$.next(true)
+        combineLatest([this.formDefinitionId$, this.taskInstanceId$, this.change]).pipe(take(1)).subscribe(([formId, taskInstanceId, change]) => {
+          const viewModel = this.convertSubmissionToViewModel(change.data);
+          this.viewModelService.updateViewModel(formId, taskInstanceId, viewModel).subscribe(viewModel => {
+            const submission = this.convertViewModelToSubmission(viewModel, change.data);
+            this.change.pipe(take(1)).subscribe(change => {
+              this.updating$.next(false);
+            })
+            this.submission$.next(submission);
+          })
+        })
+      }
+    })
+  }
+
+  public convertSubmissionToViewModel(submission: any) {
+    const viewModel: {[k: string]: any} = {};
+    Object.keys(submission)
+      .filter(key => key.startsWith("vm:"))
+      .forEach(key => {
+        const viewModelKey = key.replace('vm:', '');
+        viewModel[viewModelKey] = submission[key]
+      })
+    return viewModel
+  }
+
+  public convertViewModelToSubmission(viewModel: any, existingSubmission?: any) {
+    const submission: {[k: string]: any} = (typeof existingSubmission !== "undefined") ? existingSubmission : {};
+    Object.keys(viewModel).forEach(key => submission['vm:'+key] = viewModel[key]);
+    return {data: submission};
   }
 }
