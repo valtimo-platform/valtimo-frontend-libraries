@@ -94,8 +94,8 @@ export class FormViewModelComponent implements OnInit {
   public loadInitialViewModel() {
     combineLatest([this.formDefinitionId$, this.taskInstanceId$]).subscribe(([formId, taskInstanceId]) => {
       this.viewModelService.getViewModel(formId, taskInstanceId).subscribe(viewModel => {
-        var initialViewModel: {[k: string]: any} = {};
-        Object.keys(viewModel).forEach(key => initialViewModel['pw:' + key] = viewModel[key])
+        const initialViewModel: {[k: string]: any} = {};
+        Object.keys(viewModel).forEach(key => initialViewModel['pw:' + key] = viewModel[key]);
         this.submission$.next({data: initialViewModel});
       })
     })
