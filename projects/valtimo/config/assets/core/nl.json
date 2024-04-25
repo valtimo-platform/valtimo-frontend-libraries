@@ -633,10 +633,10 @@
       "column": "Kolom",
       "add": "Kolom toevoegen",
       "edit": "Kolom bewerken",
-      "deleteText": "Weet je zeker dat je dit kolom wilt verwijderen?"
+      "deleteText": "Weet je zeker dat je deze kolom wilt verwijderen?"
     },
     "tabs": {
-      "documentColumns": "Documentkolommen"
+      "documentColumns": "Document kolommen"
     }
   },
   "task-list": {
