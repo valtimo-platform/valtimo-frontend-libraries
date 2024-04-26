@@ -66,9 +66,6 @@ export class FormViewModelComponent implements OnInit {
     this.form$.subscribe(form => console.log("form", form))
   }
 
-  ngOnInit() {
-  }
-
   public onSubmit(submission: FormioSubmission): void {
     this.errors$.next([]);
     this.submit.emit(submission);
