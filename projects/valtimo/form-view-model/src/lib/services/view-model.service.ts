@@ -52,6 +52,18 @@ export class ViewModelService extends BaseApiService {
       });
   }
 
+  public submitViewModel(formId: string, taskInstanceId: string, viewModel: any): Observable<any> {
+    return this.httpClient.post(
+      this.getApiUrl(`/v1/form/view-model/submit`),
+      viewModel,
+      {
+        params: {
+          formId,
+          taskInstanceId
+        }
+      });
+  }
+
   public applyViewModel(viewModel: any) {
 
   }

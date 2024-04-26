@@ -15,13 +15,18 @@
  */
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import moment from 'moment';
-import {BehaviorSubject, combineLatest, Subject, take} from 'rxjs';
+import {BehaviorSubject, catchError, combineLatest, filter, Observable, Subject, take, throwError, windowCount} from 'rxjs';
 import {
-  FormioSubmission
+  FormioOptions,
+  FormioSubmission, FormioSubmissionCallback
 } from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {FormioComponent as FormIoSourceComponent} from '@formio/angular/components/formio/formio.component';
 import {ViewModelService} from '../../services';
+import {distinctUntilChanged, map, tap} from 'rxjs/operators';
+import {deepmerge} from 'deepmerge-ts';
+import {FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
+import {TranslateService} from '@ngx-translate/core';
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
@@ -56,27 +61,60 @@ export class FormViewModelComponent implements OnInit {
     this.readOnly$.next(readOnlyValue);
   }
   @Input() formRefresh$!: Subject<FormioRefreshValue>;
-
-  // eslint-disable-next-line @angular-eslint/no-output-native
   @Output() submit = new EventEmitter<any>();
-  // eslint-disable-next-line @angular-eslint/no-output-native
-  @Output() change = new EventEmitter<any>();
 
   public refreshForm = new EventEmitter<FormioRefreshValue>();
 
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
-  public readonly options$ = new BehaviorSubject<any>(undefined);
+  public readonly options$ = new BehaviorSubject<ValtimoFormioOptions>(undefined);
   public readonly taskInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly formDefinitionId$ = new BehaviorSubject<string>(undefined);
   public readonly readOnly$ = new BehaviorSubject<boolean>(false);
-  public readonly errors$ = new BehaviorSubject<Array<string>>([]);
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
+  public readonly change$ = new BehaviorSubject<any>(null);
+  public readonly errors$ = new BehaviorSubject<Array<string>>([]);
 
   public readonly updating$ = new BehaviorSubject<boolean>(true);
 
+
+  public readonly currentLanguage$ = this.translateService.stream('key').pipe(
+    map(() => this.translateService.currentLang),
+    distinctUntilChanged()
+  );
+
+  private readonly _overrideOptions$ = new BehaviorSubject<FormioOptions>({
+    hooks: {
+      beforeSubmit: this.beforeSubmitHook(this)
+    }
+  });
+  public readonly formioOptions$: Observable<ValtimoFormioOptions | FormioOptions> = combineLatest([
+    this.currentLanguage$,
+    this.options$,
+    this._overrideOptions$,
+  ]).pipe(
+    map(([language, options, overrideOptions]) => {
+      const formioTranslations = this.translateService.instant('formioTranslations');
+
+      const defaultOptions = {
+        ...options,
+        language,
+        ...(formioTranslations === 'object' && {
+          i18n: {
+            [language]: this.stateService.flattenTranslationsObject(formioTranslations),
+          },
+        }),
+      };
+
+      return deepmerge(defaultOptions, overrideOptions);
+    }),
+    tap(options => console.log('Form.IO options used', options))
+  );
+
   constructor(
-    private readonly viewModelService: ViewModelService
+    private readonly viewModelService: ViewModelService,
+    private readonly translateService: TranslateService,
+    private readonly stateService: FormIoStateService
   ) {
   }
 
@@ -84,22 +122,50 @@ export class FormViewModelComponent implements OnInit {
       this.loadInitialViewModel();
   }
 
+  public beforeSubmitHook(instance: FormViewModelComponent) {
+    return (submission, callback) => instance.beforeSubmit(submission, callback)
+  }
+
+  public beforeSubmit(submission: any, callback: FormioSubmissionCallback) {
+    this.errors$.next([])
+    combineLatest([this.formDefinitionId$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formId, taskInstanceId]) => {
+      this.viewModelService.submitViewModel(formId, taskInstanceId, this.convertSubmissionToViewModel(submission.data))
+        .pipe(catchError(error => {
+          callback({message: error, component: null}, null)
+          return this.handleSubmitError(error)
+        }))
+        .subscribe(response => {
+          if(!response) {
+            callback(null, submission)
+          } else {
+            callback({message: response.error, component: response.component}, submission)
+            this.errors$.next([response.error])
+          }
+      })
+    })
+  }
+
+  private handleSubmitError(error: any) {
+    return throwError(error);
+  }
+
   public onSubmit(submission: FormioSubmission): void {
-    this.errors$.next([]);
-    this.submit.emit(submission);
+    this.submit.next(submission)
   }
 
   public formReady(form: FormIoSourceComponent): void {
   }
 
   public onChange(object: any): void {
-    this.change.emit(object);
+    if(object.data) {
+      this.change$.next(object);
+    }
   }
 
   public loadInitialViewModel() {
     combineLatest([this.formDefinitionId$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formId, taskInstanceId]) => {
       this.viewModelService.getViewModel(formId, taskInstanceId).subscribe(viewModel => {
-        this.change.pipe(take(1)).subscribe(change => {
+        this.change$.pipe(take(1)).subscribe(change => {
           this.updating$.next(false);
         })
         this.submission$.next(this.convertViewModelToSubmission(viewModel))
@@ -111,14 +177,14 @@ export class FormViewModelComponent implements OnInit {
     this.updating$.pipe(take(1)).subscribe(updating => {
       if(!updating) {
         this.updating$.next(true)
-        combineLatest([this.formDefinitionId$, this.taskInstanceId$, this.change]).pipe(take(1)).subscribe(([formId, taskInstanceId, change]) => {
+        combineLatest([this.formDefinitionId$, this.taskInstanceId$, this.change$]).pipe(take(1)).subscribe(([formId, taskInstanceId, change]) => {
           const viewModel = this.convertSubmissionToViewModel(change.data);
           this.viewModelService.updateViewModel(formId, taskInstanceId, viewModel).subscribe(viewModel => {
             const submission = this.convertViewModelToSubmission(viewModel, change.data);
-            this.change.pipe(take(1)).subscribe(change => {
+            this.submission$.next(submission);
+            this.change$.pipe(take(1)).subscribe(change => {
               this.updating$.next(false);
             })
-            this.submission$.next(submission);
           })
         })
       }
