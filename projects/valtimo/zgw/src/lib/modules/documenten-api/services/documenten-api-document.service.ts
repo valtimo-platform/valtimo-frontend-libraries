@@ -15,7 +15,7 @@
  */
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BaseApiService, ConfigService} from '@valtimo/config';
+import {BaseApiService, ConfigService, Page} from '@valtimo/config';
 import {Observable} from 'rxjs';
 import {DocumentenApiRelatedFile} from '../models';
 
@@ -39,15 +39,15 @@ export class DocumentenApiDocumentService extends BaseApiService {
   public getFilteredZakenApiDocuments(
     documentId: string,
     filters?: any
-  ): Observable<Array<DocumentenApiRelatedFile>> {
+  ): Observable<Page<DocumentenApiRelatedFile>> {
     const params = new HttpParams({fromObject: filters});
 
     return !!filters
-      ? this.httpClient.get<Array<DocumentenApiRelatedFile>>(
+      ? this.httpClient.get<Page<DocumentenApiRelatedFile>>(
           this.getApiUrl(`/v2/zaken-api/document/${documentId}/files`),
           {params}
         )
-      : this.httpClient.get<Array<DocumentenApiRelatedFile>>(
+      : this.httpClient.get<Page<DocumentenApiRelatedFile>>(
           this.getApiUrl(`/v2/zaken-api/document/${documentId}/files`)
         );
   }
