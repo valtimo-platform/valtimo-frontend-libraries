@@ -57,7 +57,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     private readonly stateService: ProcessLinkStateService,
     private readonly processLinkService: ProcessLinkService,
     private readonly buttonService: ProcessLinkButtonService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.openBackButtonSubscription();

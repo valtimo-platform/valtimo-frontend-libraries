@@ -81,6 +81,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
 
   private readonly taskProcessLinkType$ = new BehaviorSubject<TaskProcessLinkType | null>(null);
   public readonly processLinkIsForm$ = this.taskProcessLinkType$.pipe(map(type => type === 'form'));
+  public readonly processLinkIsFormViewModel$ = this.taskProcessLinkType$.pipe(map(type => type === 'form-view-model'));
   public readonly processLinkIsFormFlow$ = this.taskProcessLinkType$.pipe(
     map(type => type === 'form-flow')
   );
@@ -211,6 +212,12 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
             case 'form-flow':
               this.taskProcessLinkType$.next('form-flow');
               this.formFlowInstanceId$.next(res.properties.formFlowInstanceId);
+              break;
+            case 'form-view-model':
+              this.taskProcessLinkType$.next('form-view-model');
+              this.processLinkId$.next(res.processLinkId);
+              this.formDefinition$.next(res.properties.formDefinition);
+              this.modal.show();
               break;
           }
           this.loading$.next(false);
