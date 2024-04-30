@@ -29,7 +29,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   templateUrl: './form-view-model.component.html',
   styleUrls: ['./form-view-model.component.css'],
 })
-export class FormViewModelComponent implements OnInit {
+export class FormViewModelComponent {
 
   @Input() set options(optionsValue: any) {
     this.options$.next(optionsValue);
@@ -65,8 +65,6 @@ export class FormViewModelComponent implements OnInit {
   ) {
     this.form$.subscribe(form => console.log("form", form))
   }
-
-  ngOnInit(): void {}
 
   public onSubmit(submission: FormioSubmission): void {
     this.errors$.next([]);
