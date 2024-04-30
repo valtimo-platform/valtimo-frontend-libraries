@@ -56,6 +56,18 @@
         #fileInput
       />
 
+      <button
+        [cdsOverflowMenu]="overflowFilter"
+        [customPane]="true"
+        [iconOnly]="true"
+        [flip]="true"
+        [offset]="{x: 0, y: 47}"
+        cdsButton="ghost"
+        placement="bottom"
+      >
+        <svg class="cds--btn__icon" cdsIcon="filter" size="16"></svg>
+      </button>
+
       <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
     </div>
 
@@ -106,6 +118,12 @@
 <ng-template #dossierListActions>
   <input [accept]="acceptedFiles" (change)="onFileSelected($event)" hidden type="file" #fileInput />
   <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
+</ng-template>
+
+<ng-template #overflowFilter>
+  <valtimo-dossier-detail-tab-documenten-api-filter
+    (filterEvent)="onFilterEvent($event)"
+  ></valtimo-dossier-detail-tab-documenten-api-filter>
 </ng-template>
 
 <ng-template #uploadButton let-disabled="disabled">

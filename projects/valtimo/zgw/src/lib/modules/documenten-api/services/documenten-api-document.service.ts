@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
-import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {DocumentenApiRelatedFile} from '../models';
 
@@ -35,6 +34,22 @@ export class DocumentenApiDocumentService extends BaseApiService {
     return this.httpClient.get<Array<DocumentenApiRelatedFile>>(
       this.getApiUrl(`/v1/zaken-api/document/${documentId}/files`)
     );
+  }
+
+  public getFilteredZakenApiDocuments(
+    documentId: string,
+    filters?: any
+  ): Observable<Array<DocumentenApiRelatedFile>> {
+    const params = new HttpParams({fromObject: filters});
+
+    return !!filters
+      ? this.httpClient.get<Array<DocumentenApiRelatedFile>>(
+          this.getApiUrl(`/v2/zaken-api/document/${documentId}/files`),
+          {params}
+        )
+      : this.httpClient.get<Array<DocumentenApiRelatedFile>>(
+          this.getApiUrl(`/v2/zaken-api/document/${documentId}/files`)
+        );
   }
 
   public deleteDocument(file: DocumentenApiRelatedFile): Observable<DocumentenApiRelatedFile[]> {

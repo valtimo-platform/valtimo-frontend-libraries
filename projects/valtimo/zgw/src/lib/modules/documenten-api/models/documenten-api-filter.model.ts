@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-export * from './documenten-api-metadata.model';
-export * from './configured-column.model';
-export * from './documenten-api-column-modal.model';
-export * from './documenten-api.model';
-export * from './documenten-api-link-process.model';
-export * from './documenten-api-version.model';
-export * from './documenten-api-filter.model';
+export interface DocumentenApiFilterModel {
+  author?: string;
+  confidentialityLevel?: string;
+  creationDateFrom?: Date;
+  creationDateTo?: Date;
+  informationObjectType?: string;
+  tags?: Array<string>;
+  title?: string;
+}

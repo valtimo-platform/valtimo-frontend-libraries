@@ -1,0 +1,24 @@
+:host {
+  .valtimo-documenten-api-filter {
+    display: flex;
+    flex-direction: column;
+    max-width: 880px;
+
+    &__form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 16px;
+      gap: 16px;
+    }
+
+    &__dates {
+      display: flex;
+      gap: 16px;
+    }
+
+    &__footer {
+      display: flex;
+      padding: 0 16px 16px 16px;
+    }
+  }
+}
