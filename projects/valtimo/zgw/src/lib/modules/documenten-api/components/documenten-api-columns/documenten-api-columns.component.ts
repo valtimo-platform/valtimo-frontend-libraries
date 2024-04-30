@@ -84,7 +84,7 @@ export class DocumentenApiColumnsComponent extends PendingChangesComponent {
       if (reload === null) this.loading$.next(true);
     }),
     switchMap(([documentDefinitionName]) =>
-      this.zgwDocumentColumnService.getConfiguredColumns(documentDefinitionName)
+      this.zgwDocumentColumnService.getAdminConfiguredColumns(documentDefinitionName)
     ),
     tap(() => {
       this.loading$.next(false);

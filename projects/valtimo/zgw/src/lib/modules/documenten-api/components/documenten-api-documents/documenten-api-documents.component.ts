@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Filter16, TagGroup16, Upload16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
@@ -33,11 +33,14 @@ import {ButtonModule, DialogModule, IconModule, IconService} from 'carbon-compon
 import moment from 'moment';
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {catchError, filter, map, switchMap, take, tap} from 'rxjs/operators';
+
 import {
+  ConfiguredColumn,
   DocumentenApiFilterModel,
   DocumentenApiRelatedFile,
   DocumentenApiRelatedFileListItem,
 } from '../../models';
+import {DocumentenApiColumnService} from '../../services';
 import {DocumentenApiDocumentService} from '../../services/documenten-api-document.service';
 import {DocumentenApiFilterComponent} from '../documenten-api-filter/documenten-api-filter.component';
 import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.component';
@@ -58,11 +61,24 @@ import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-mo
     DialogModule,
   ],
 })
-export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, AfterViewInit {
+export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   @ViewChild('sizeTemplate') public sizeTemplate: TemplateRef<any>;
 
-  public fields: ColumnConfig[];
+  public readonly fields$: Observable<ColumnConfig[]> = this.route.paramMap.pipe(
+    switchMap((paramMap: ParamMap) =>
+      this.documentenApiColumnService.getConfiguredColumns(
+        paramMap.get('documentDefinitionName') ?? ''
+      )
+    ),
+    map((columns: ConfiguredColumn[]) =>
+      columns.map((column: ConfiguredColumn) => ({
+        key: column.key,
+        label: `document.${column.key}`,
+        viewType: ViewType.TEXT,
+      }))
+    )
+  );
   public actionItems: ActionItem[] = [
     {
       label: 'document.download',
@@ -74,19 +90,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       callback: this.onDeleteActionClick.bind(this),
       type: 'danger',
     },
-  ];
-  public fieldsConfig = [
-    // TODO: Refactor this once admin page config is implemented
-    'title',
-    'fileName',
-    'format',
-    'size',
-    'description',
-    'createdOn',
-    'createdBy',
-    'author',
-    'informatieobjecttype',
-    'actions',
   ];
 
   private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
@@ -130,7 +133,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       ])
     ),
     map(([relatedFiles]) => {
-      const translatedFiles = relatedFiles?.map(file => ({
+      const translatedFiles = relatedFiles?.content?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
         language: this.translateService.instant(`document.${file.language}`),
@@ -151,7 +154,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
         size: `${this.bytesToMegabytes(file.sizeInBytes)}`,
       }));
     }),
-    tap(() => {
+    tap(res => {
+      console.log(res);
       this.loading$.next(false);
     }),
     catchError(() => {
@@ -171,7 +175,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     private readonly userProviderService: UserProviderService,
     private readonly fileSortService: FileSortService,
     private readonly iconService: IconService,
-    private readonly documentenApiDocumentService: DocumentenApiDocumentService
+    private readonly documentenApiDocumentService: DocumentenApiDocumentService,
+    private readonly documentenApiColumnService: DocumentenApiColumnService
   ) {}
 
   ngOnInit(): void {
@@ -179,34 +184,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.setUploadProcessLinked();
     this.isUserAdmin();
     this.iconService.registerAll([Filter16, TagGroup16, Upload16]);
-  }
-
-  public ngAfterViewInit(): void {
-    const fieldOptions = [
-      {key: 'title', label: 'document.inputTitle'},
-      {key: 'description', label: 'document.inputDescription'},
-      {key: 'fileName', label: 'document.filename'},
-      {
-        viewType: ViewType.TEMPLATE,
-        label: 'document.size',
-        key: 'size',
-        template: this.sizeTemplate,
-      },
-      {key: 'format', label: 'document.format'},
-      {key: 'createdOn', label: 'document.createdOn'},
-      {key: 'createdBy', label: 'document.createdBy'},
-      {key: 'author', label: 'document.author'},
-      {key: 'keywords', label: 'document.trefwoorden'},
-      {key: 'informatieobjecttype', label: 'document.informatieobjecttype'},
-      {key: 'language', label: 'document.language'},
-      {key: 'identification', label: 'document.id'},
-      {key: 'confidentialityLevel', label: 'document.confidentialityLevel'},
-      {key: 'receiptDate', label: 'document.receiptDate'},
-      {key: 'sendDate', label: 'document.sendDate'},
-      {key: 'status', label: 'document.status'},
-    ];
-
-    this.fields = [...this.getFields(fieldOptions, this.fieldsConfig)];
   }
 
   public bytesToMegabytes(bytes: number): string {
@@ -266,7 +243,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
     this.loading$.next(true);
     this.documentenApiDocumentService.deleteDocument(item).subscribe(() => {
-      // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
       this.refetchDocuments();
     });
   }
@@ -295,15 +271,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   public onFilterEvent(filter: DocumentenApiFilterModel): void {
-    this._documentId$
-      .pipe(
-        switchMap((documentId: string) =>
-          this.documentenApiDocumentService.getFilteredZakenApiDocuments(documentId, filter)
-        )
-      )
-      .subscribe(res => {
-        console.log(res);
-      });
+    this._refetch$.next(filter);
   }
 
   public refetchDocuments(): void {
@@ -316,10 +284,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       relatedFile.fileName,
       forceDownload
     );
-  }
-
-  private getFields(fieldOptions, fieldsConfig) {
-    return fieldOptions.filter(fieldOption => fieldsConfig.includes(fieldOption.key));
   }
 
   private setUploadProcessLinked(): void {

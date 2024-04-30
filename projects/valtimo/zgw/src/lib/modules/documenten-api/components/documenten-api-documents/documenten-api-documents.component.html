@@ -19,12 +19,13 @@
   *ngIf="{
     loading: loading$ | async,
     uploading: uploading$ | async,
-    relatedFiles: relatedFiles$ | async
+    relatedFiles: relatedFiles$ | async,
+    fields: fields$ | async
   } as obs"
 >
   @if (!obs.loading && !obs.uploading && obs.relatedFiles) {
     <ng-container
-      *ngTemplateOutlet="list; context: {relatedFiles: obs.relatedFiles}"
+      *ngTemplateOutlet="list; context: {relatedFiles: obs.relatedFiles, fields: obs.fields}"
     ></ng-container>
   } @else {
     <ng-container *ngTemplateOutlet="listLoading"></ng-container>
@@ -39,7 +40,7 @@
   (metadata)="metadataSet($event)"
 ></valtimo-documenten-api-metadata-modal>
 
-<ng-template #list let-relatedFiles="relatedFiles">
+<ng-template #list let-relatedFiles="relatedFiles" let-fields="fields">
   <valtimo-carbon-list
     [actionItems]="actionItems"
     [items]="relatedFiles"
