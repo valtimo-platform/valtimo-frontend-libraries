@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {CommonModule} from '@angular/common';
 import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Filter16, TagGroup16, Upload16} from '@carbon/icons';
@@ -28,14 +29,18 @@ import {ConfigService} from '@valtimo/config';
 import {FileSortService} from '@valtimo/document';
 import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {UserProviderService} from '@valtimo/security';
-import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
+import {ButtonModule, DialogModule, IconModule, IconService} from 'carbon-components-angular';
 import moment from 'moment';
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {catchError, filter, map, switchMap, take, tap} from 'rxjs/operators';
-import {DocumentenApiRelatedFile, DocumentenApiRelatedFileListItem} from '../../models';
+import {
+  DocumentenApiFilterModel,
+  DocumentenApiRelatedFile,
+  DocumentenApiRelatedFileListItem,
+} from '../../models';
 import {DocumentenApiDocumentService} from '../../services/documenten-api-document.service';
+import {DocumentenApiFilterComponent} from '../documenten-api-filter/documenten-api-filter.component';
 import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.component';
-import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -49,6 +54,8 @@ import {CommonModule} from '@angular/common';
     ButtonModule,
     IconModule,
     TranslateModule,
+    DocumentenApiFilterComponent,
+    DialogModule,
   ],
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, AfterViewInit {
@@ -109,16 +116,16 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public readonly uploading$ = new BehaviorSubject<boolean>(false);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  private readonly _refetch$ = new BehaviorSubject<null>(null);
+  private readonly _refetch$ = new BehaviorSubject<DocumentenApiFilterModel | undefined>(undefined);
 
   public relatedFiles$: Observable<Array<DocumentenApiRelatedFileListItem>> = combineLatest([
     this._documentId$,
     this._refetch$,
   ]).pipe(
     tap(() => this.loading$.next(true)),
-    switchMap(([documentId]) =>
+    switchMap(([documentId, filter]) =>
       combineLatest([
-        this.documentenApiDocumentService.getZakenApiDocuments(documentId),
+        this.documentenApiDocumentService.getFilteredZakenApiDocuments(documentId, filter),
         this.translateService.stream('key'),
       ])
     ),
@@ -287,8 +294,20 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.fileInput.nativeElement.click();
   }
 
+  public onFilterEvent(filter: DocumentenApiFilterModel): void {
+    this._documentId$
+      .pipe(
+        switchMap((documentId: string) =>
+          this.documentenApiDocumentService.getFilteredZakenApiDocuments(documentId, filter)
+        )
+      )
+      .subscribe(res => {
+        console.log(res);
+      });
+  }
+
   public refetchDocuments(): void {
-    this._refetch$.next(null);
+    this._refetch$.next(undefined);
   }
 
   private downloadDocument(relatedFile: DocumentenApiRelatedFile, forceDownload: boolean): void {

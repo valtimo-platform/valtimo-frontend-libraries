@@ -1,0 +1,65 @@
+<div class="valtimo-documenten-api-filter" (click)="$event.stopImmediatePropagation()">
+  <form
+    *ngIf="{
+      confidentialityLevels: confidentialityLevels$ | async,
+      informationObjectTypes: informationObjectTypes$ | async,
+      tags: tags$ | async
+    } as obs"
+    class="valtimo-documenten-api-filter__form"
+    [formGroup]="formGroup"
+  >
+    <cds-text-label>
+      Title
+
+      <input cdsText formControlName="title" />
+    </cds-text-label>
+
+    <cds-dropdown
+      [disabled]="!obs.informationObjectTypes?.length"
+      [dropUp]="false"
+      [label]="'Information object type' | translate"
+      formControlName="informationObjectType"
+    >
+      <cds-dropdown-list [items]="obs.informationObjectTypes"></cds-dropdown-list>
+    </cds-dropdown>
+
+    <div class="valtimo-documenten-api-filter__dates">
+      <cds-date-picker-input
+        [dateFormat]="'d/m/Y'"
+        [label]="'Date creation from' | translate"
+        formControlName="creationDateFrom"
+      ></cds-date-picker-input>
+
+      <cds-date-picker-input
+        [dateFormat]="'d/m/Y'"
+        [label]="'Date creation to' | translate"
+        formControlName="creationDateTo"
+      ></cds-date-picker-input>
+    </div>
+
+    <cds-text-label>
+      Author
+
+      <input cdsText formControlName="author" />
+    </cds-text-label>
+
+    <cds-dropdown
+      [label]="'Confidentiality level' | translate"
+      formControlName="confidentialityLevel"
+    >
+      <cds-dropdown-list [items]="obs.confidentialityLevels"></cds-dropdown-list>
+    </cds-dropdown>
+
+    <cds-dropdown [label]="'Tags' | translate" formControlName="tags" type="multi">
+      <cds-dropdown-list [items]="obs.tags"></cds-dropdown-list>
+    </cds-dropdown>
+  </form>
+
+  <footer class="valtimo-documenten-api-filter__footer">
+    <button cdsButton="tertiary" (click)="resetForm()">
+      {{ 'Reset filter' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+    </button>
+  </footer>
+</div>
