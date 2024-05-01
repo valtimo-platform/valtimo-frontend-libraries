@@ -42,6 +42,20 @@ export class DocumentenApiColumnService extends BaseApiService {
     );
   }
 
+  public getAdminConfigurableColumns(): Observable<ConfiguredColumn[]> {
+    return this.http.get<ConfiguredColumn[]>(
+      this.getApiUrl(`/management/v1/case-definition/zgw-document-column-key`)
+    );
+  }
+
+  public deleteColumn(caseDefinitionName: string, columnKey: string): Observable<void> {
+    return this.http.delete<void>(
+      this.getApiUrl(
+        `/management/v1/case-definition/${caseDefinitionName}/zgw-document-column/${columnKey}`
+      )
+    );
+  }
+
   public updateColumn(caseDefinitionName: string, column: ConfiguredColumn): Observable<void> {
     return this.http.put<void>(
       this.getApiUrl(

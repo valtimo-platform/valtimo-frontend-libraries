@@ -15,11 +15,11 @@
  */
 
 export interface DocumentenApiFilterModel {
-  author?: string;
-  confidentialityLevel?: string;
-  creationDateFrom?: Date;
-  creationDateTo?: Date;
-  informationObjectType?: string;
-  tags?: Array<string>;
-  title?: string;
+  auteur?: string;
+  vertrouwelijkHeidaanduiding?: string;
+  creatieDatumFrom?: Date;
+  creatieDatumTo?: Date;
+  informatieObjectType?: string;
+  trefwoorden?: Array<string>;
+  titel?: string;
 }

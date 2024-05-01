@@ -16,7 +16,9 @@
 
 interface ConfiguredColumn {
   key: string;
-  enabled: boolean;
+  sortable: boolean;
+  filterable: boolean;
+  defaultSort: 'ascending' | 'descending' | null;
 }
 
 export {ConfiguredColumn};

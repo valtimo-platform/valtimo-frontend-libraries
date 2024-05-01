@@ -76,7 +76,7 @@ export class DocumentenApiColumnsComponent extends PendingChangesComponent {
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  private readonly _documentColumns$: Observable<ConfiguredColumn[]> = combineLatest([
+  public readonly configuredColumns$: Observable<ConfiguredColumn[]> = combineLatest([
     this._documentDefinitionName$,
     this._reload$,
   ]).pipe(
@@ -91,16 +91,19 @@ export class DocumentenApiColumnsComponent extends PendingChangesComponent {
     })
   );
 
-  public readonly enabledColumns$ = this._documentColumns$.pipe(
-    map((columns: ConfiguredColumn[]) =>
-      columns.filter((column: ConfiguredColumn) => column.enabled)
-    )
-  );
+  public readonly configurableColumns$: Observable<ConfiguredColumn[]> = combineLatest([
+    this.zgwDocumentColumnService.getAdminConfigurableColumns(),
+    this.configuredColumns$,
+  ]).pipe(
+    map(([configurableColumns, configuredColumns]) => {
+      const configuredKeys: string[] = configuredColumns.map(
+        (column: ConfiguredColumn) => column.key
+      );
 
-  public readonly disabledColumns$ = this._documentColumns$.pipe(
-    map((columns: ConfiguredColumn[]) =>
-      columns.filter((column: ConfiguredColumn) => !column.enabled)
-    )
+      return configurableColumns.filter(
+        (column: ConfiguredColumn) => !configuredKeys.includes(column.key)
+      );
+    })
   );
 
   public readonly fields: ColumnConfig[] = [
@@ -109,21 +112,19 @@ export class DocumentenApiColumnsComponent extends PendingChangesComponent {
       label: 'zgw.columns.column',
       viewType: ViewType.TEXT,
     },
-    //TODO: enable when sorting is BE supported
-    // {
-    //   key: 'sort',
-    //   label: 'interface.defaultSort',
-    //   viewType: ViewType.TEXT,
-    // },
+    {
+      key: 'defaultSort',
+      label: 'interface.defaultSort',
+      viewType: ViewType.TEXT,
+    },
   ];
 
   public readonly ACTION_ITEMS: ActionItem[] = [
-    // TODO: enable when sorting is BE supported
-    // {
-    //   label: 'interface.edit',
-    //   callback: this.openEditModal.bind(this),
-    //   type: 'normal',
-    // },
+    {
+      label: 'interface.edit',
+      callback: this.openEditModal.bind(this),
+      type: 'normal',
+    },
     {
       label: 'interface.delete',
       callback: this.openDeleteModal.bind(this),
@@ -151,13 +152,14 @@ export class DocumentenApiColumnsComponent extends PendingChangesComponent {
     this.showDeleteModal$.next(true);
   }
 
-  public openEditModal(status: ConfiguredColumn): void {
-    this.prefillColumn$.next(status);
+  public openEditModal(column: ConfiguredColumn): void {
+    this.prefillColumn$.next(column);
     this.columnModalType$.next('edit');
   }
 
   public openAddModal(): void {
     this.columnModalType$.next('add');
+    this.prefillColumn$.next(undefined);
   }
 
   public onCloseModal(closeModalEvent: DocumentenApiColumnModalTypeCloseEvent): void {
@@ -167,23 +169,15 @@ export class DocumentenApiColumnsComponent extends PendingChangesComponent {
   }
 
   public confirmDeleteStatus(column: ConfiguredColumn, definitionName: string): void {
-    this.zgwDocumentColumnService
-      .updateColumn(definitionName, {...column, enabled: false})
-      .subscribe(() => {
-        this.reload();
-      });
+    this.zgwDocumentColumnService.deleteColumn(definitionName, column.key).subscribe(() => {
+      this.reload();
+    });
   }
 
-  public onItemsReordered(
-    definitionName: string,
-    enabledColumns: ConfiguredColumn[],
-    disabledColumns: ConfiguredColumn[]
-  ): void {
-    this.zgwDocumentColumnService
-      .updateConfiguredColumns(definitionName, [...enabledColumns, ...disabledColumns])
-      .subscribe(() => {
-        this.reload(true);
-      });
+  public onItemsReordered(definitionName: string, columns: ConfiguredColumn[]): void {
+    this.zgwDocumentColumnService.updateConfiguredColumns(definitionName, columns).subscribe(() => {
+      this.reload(true);
+    });
   }
 
   private reload(noAnimation = false): void {

@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {
@@ -31,6 +40,7 @@ import {
   DocumentenApiColumnModalTypeCloseEvent,
 } from '../../models';
 import {DocumentenApiColumnService} from '../../services';
+import {Subscriber, Subscription, switchMap} from 'rxjs';
 
 @Component({
   selector: 'valtimo-documenten-api-column-modal',
@@ -49,51 +59,137 @@ import {DocumentenApiColumnService} from '../../services';
     RadioModule,
   ],
 })
-export class DocumentenApiColumnModalComponent {
+export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
   @Input() definitionName: string;
-  @Input() type: DocumentenApiColumnModalType;
-  @Input() prefillColumn: ConfiguredColumn;
+
+  private _prefillColumn: ListItem[] | null;
+  @Input() public set prefillColumn(value: ConfiguredColumn | undefined) {
+    if (!value) {
+      return;
+    }
+
+    const column = {content: value.key, selected: true, column: value};
+    this.formGroup.patchValue({column});
+    this.formGroup.get('column')?.disable();
+    this._prefillColumn = [column];
+
+    if (value.sortable) {
+      return;
+    }
+
+    this.formGroup.get('defaultSort')?.disable();
+  }
+  public get prefillColumn(): ListItem[] | null {
+    return this._prefillColumn;
+  }
+
+  private _type: DocumentenApiColumnModalType;
+  @Input() public set type(value: DocumentenApiColumnModalType) {
+    this._type = value;
+    if (value === 'edit') {
+      this.formGroup.get('column')?.disable;
+    }
+  }
+  public get type(): DocumentenApiColumnModalType {
+    return this._type;
+  }
 
   private _availableColumns: ListItem[] = [];
   @Input() public set availableColumns(value: ConfiguredColumn[]) {
+    if (!value) return;
+
+    console.log(value);
     this._availableColumns = value.map((column: ConfiguredColumn) => ({
       content: column.key,
       selected: false,
+      column,
     }));
   }
   public get availableColumns(): ListItem[] {
     return this._availableColumns;
   }
 
+  private _defaultSortedColumn: ConfiguredColumn | undefined;
+  @Input() public set configuredColumns(value: ConfiguredColumn[]) {
+    if (!value) return;
+
+    this._defaultSortedColumn = value.find((column: ConfiguredColumn) => !!column.defaultSort);
+  }
+
   @Output() closeModal = new EventEmitter<DocumentenApiColumnModalTypeCloseEvent>();
 
   public formGroup = this.fb.group({
-    column: this.fb.control({content: '', selected: false}, Validators.required),
+    column: this.fb.control(
+      {content: '', selected: false, column: {} as ConfiguredColumn},
+      Validators.required
+    ),
+    defaultSort: this.fb.control('noDefault'),
   });
 
+  private readonly _subscriptions = new Subscription();
+
   constructor(
+    private readonly cd: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly zgwDocumentenApiColumnService: DocumentenApiColumnService
   ) {}
 
+  public ngOnInit(): void {
+    this.openDisableRadioSubscription();
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
   public onClose(refresh = false): void {
+    this.formGroup.reset();
+    this.formGroup.enable();
+    this._prefillColumn = null;
     this.closeModal.emit(refresh ? 'closeAndRefresh' : 'close');
   }
 
-  public addColumn(): void {
+  public updateColumn(): void {
     const columnValue: ListItem | null | undefined = this.formGroup.get('column')?.value;
     if (!columnValue || !this.definitionName) {
       return;
     }
+    const column = {...columnValue.column, defaultSort: this.formGroup.get('defaultSort')?.value};
 
-    this.zgwDocumentenApiColumnService
-      .updateColumn(this.definitionName, {key: columnValue.content, enabled: true})
-      .subscribe(() => {
-        this.closeModal.emit('closeAndRefresh');
-      });
+    if (!!this._defaultSortedColumn && this._defaultSortedColumn.key !== column.key) {
+      this.zgwDocumentenApiColumnService
+        .updateColumn(this.definitionName, {
+          ...this._defaultSortedColumn,
+          defaultSort: null,
+        })
+        .pipe(
+          switchMap(() =>
+            this.zgwDocumentenApiColumnService.updateColumn(this.definitionName, column)
+          )
+        )
+        .subscribe(() => {
+          this.closeModal.emit('closeAndRefresh');
+        });
+
+      return;
+    }
+
+    this.zgwDocumentenApiColumnService.updateColumn(this.definitionName, column).subscribe(() => {
+      this.closeModal.emit('closeAndRefresh');
+    });
   }
 
-  public editColumn(): void {
-    // TODO: implement when sorting is BE supported
+  private openDisableRadioSubscription(): void {
+    this._subscriptions.add(
+      this.formGroup.get('column')?.valueChanges.subscribe(columnValue => {
+        if (!columnValue?.column.sortable) {
+          this.formGroup.get('defaultSort')?.disable();
+        } else {
+          this.formGroup.get('defaultSort')?.enable();
+        }
+
+        this.cd.detectChanges();
+      })
+    );
   }
 }
