@@ -24,7 +24,7 @@
 >
   <cds-modal-header showCloseButton="true" (closeSelect)="onClose()">
     <h3 cdsModalHeaderHeading>
-      {{ 'some-add-header' | translate }} {{ open }}
+      {{ 'zgw.tags.addModal.header' | translate }}
     </h3>
   </cds-modal-header>
 
@@ -40,7 +40,7 @@
 <ng-template #tagForm let-obs="obs">
   <form [formGroup]="tagFormGroup" class="status-form">
     <cds-label>
-      {{ 'value-text-goes-here' | translate }}
+      {{ 'zgw.tags.fields.value' | translate }}
 
       <input cdsText formControlName="value" [attr.modal-primary-focus]="true" />
     </cds-label>

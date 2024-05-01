@@ -500,7 +500,8 @@
       "listColumns": "Aufführen",
       "tabManagement": "Tabs",
       "document": "Dokument",
-      "statuses": "Status"
+      "statuses": "Status",
+      "zgw": "ZGW"
     },
     "tabManagement": {
       "columns": {
@@ -635,8 +636,25 @@
       "edit": "Spalte bearbeiten",
       "deleteText": "Sind Sie sicher, dass Sie dieses Spalte löschen möchten?"
     },
+    "tags": {
+      "tag": "Schlüsselwört",
+      "add": "Schlüsselwört hinzufügen",
+      "deleteText": "Sind Sie sicher, dass Sie dieses Schlüsselwört löschen möchten?",
+      "deleteMultipleText": "Sind Sie sicher, dass Sie diese Schlüsselwörter löschen möchten?",
+      "addModal": {
+        "header": "Schlüsselwört hinzufügen"
+      },
+      "list": {
+        "noResultsTitle": "Kein Schlüsselwörter gefunden",
+        "noResultsDescription": "Fügen Sie ein Schlüsselwört hinzu"
+      },
+      "fields": {
+        "value": "Schlüsselwört"
+      }
+    },
     "tabs": {
-      "documentColumns": "Dokumentspalten"
+      "documentColumns": "Dokumentspalten",
+      "documentTags": "Dokumentschlüsselwörter"
     }
   },
   "task-list": {

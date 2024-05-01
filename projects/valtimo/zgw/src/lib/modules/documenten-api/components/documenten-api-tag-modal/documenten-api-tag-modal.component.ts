@@ -73,7 +73,6 @@ export class DocumentenApiTagModalComponent implements OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly documentenApiTagService: DocumentenApiTagService,
-    private readonly translateService: TranslateService
   ) {}
 
   public ngOnDestroy(): void {

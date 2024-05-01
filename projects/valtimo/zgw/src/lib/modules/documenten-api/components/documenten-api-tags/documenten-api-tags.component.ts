@@ -19,7 +19,7 @@ import {DocumentenApiColumnModalTypeCloseEvent,} from '../../models';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subject, switchMap, tap,} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {
-  ActionItem,
+  ActionItem, CarbonListComponent,
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
@@ -30,12 +30,11 @@ import {
 import {DocumentenApiColumnModalComponent} from '../documenten-api-column-modal/documenten-api-column-modal.component';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {ButtonModule, TagModule} from 'carbon-components-angular';
+import {ButtonModule, IconModule, TagModule} from 'carbon-components-angular';
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 import {DocumentenApiTag} from '../../models/documenten-api-tag.model';
 import {DocumentenApiTagModalComponent} from '../documenten-api-tag-modal/documenten-api-tag-modal.component';
-import {DocumentDefinition, Page} from '@valtimo/document';
-import moment from 'moment/moment';
+import {Page} from '@valtimo/document';
 
 @Component({
   selector: 'valtimo-documenten-api-tags',
@@ -52,42 +51,60 @@ import moment from 'moment/moment';
     TagModule,
     ButtonModule,
     DocumentenApiTagModalComponent,
+    IconModule,
   ],
 })
 export class DocumentenApiTagsComponent
   extends PendingChangesComponent
   implements AfterViewInit
 {
-  @ViewChild('colorColumnTemplate') colorColumnTemplate: TemplateRef<any>;
+  @ViewChild(CarbonListComponent) carbonList: CarbonListComponent;
+
+  public readonly ACTION_ITEMS: ActionItem[] = [
+    {
+      label: 'interface.delete',
+      callback: this.openDeleteModal.bind(this),
+      type: 'danger',
+    }
+  ];
+
+  public readonly CARBON_THEME = 'g10';
 
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
-
   private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params?.name),
     filter(docDefName => !!docDefName)
   );
 
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
+  public readonly addModalClosed$ = new BehaviorSubject<boolean>(true);
+  public readonly showDeleteMultipleModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showDeleteModal$ = new Subject<boolean>();
+  public readonly selectedRowKeys$ = new BehaviorSubject<Array<string>>([]);
+  public readonly searchTerm$ = new BehaviorSubject<string>('');
+
   public get documentDefinitionName$(): Observable<string> {
     return this._documentDefinitionName$;
   }
 
-  public readonly loading$ = new BehaviorSubject<boolean>(true);
-
   public readonly documentTags$: Observable<DocumentenApiTag[]> = combineLatest([
     this._documentDefinitionName$,
+    this.searchTerm$,
     this._reload$,
   ]).pipe(
-    tap(([_, reload]) => {
+    tap(([_, searchTerm, reload]) => {
       if (reload === null) {
         this.loading$.next(true);
       }
     }),
-    switchMap(([documentDefinitionName]) =>
+    switchMap(([documentDefinitionName, searchTerm]) =>
       this.documentenApiTagService.getTagsForAdmin(
         documentDefinitionName,
         {
           page: this.pagination.page - 1,
           size: this.pagination.size,
+          search: searchTerm
         }
       )
     ),
@@ -103,21 +120,6 @@ export class DocumentenApiTagsComponent
       this.loading$.next(false);
     })
   );
-
-  public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
-
-  public readonly ACTION_ITEMS: ActionItem[] = [
-    {
-      label: 'interface.delete',
-      callback: this.openDeleteModal.bind(this),
-      type: 'danger',
-    },
-  ];
-
-  public readonly CARBON_THEME = 'g10';
-
-  public readonly addModalClosed$ = new BehaviorSubject<boolean>(true);
-  public readonly showDisableModal$ = new Subject<boolean>();
 
   public pagination: Pagination = {
     collectionSize: 0,
@@ -136,8 +138,11 @@ export class DocumentenApiTagsComponent
     this.initFields();
   }
 
+  public readonly tagToDelete$ = new BehaviorSubject<DocumentenApiTag | null>(null);
+
   public openDeleteModal(tag: DocumentenApiTag): void {
-    this.showDisableModal$.next(true);
+    this.tagToDelete$.next(tag);
+    this.showDeleteModal$.next(true);
   }
 
   public openAddModal(): void {
@@ -151,6 +156,15 @@ export class DocumentenApiTagsComponent
     this.addModalClosed$.next(true);
   }
 
+  public showDeleteMultipleModal(): void {
+    this.setSelectedRoleKeys();
+    this.showDeleteMultipleModal$.next(true);
+  }
+
+  private setSelectedRoleKeys(): void {
+    this.selectedRowKeys$.next(this.carbonList.selectedItems.map((tag: DocumentenApiTag) => tag.value));
+  }
+
   public paginationClicked(page: number): void {
     this.pagination = {...this.pagination, page};
     this.reload();
@@ -161,7 +175,8 @@ export class DocumentenApiTagsComponent
     this.reload();
   }
 
-  public confirmDeleteStatus(tag: DocumentenApiTag): void {
+  public confirmDeleteTag(tag: DocumentenApiTag): void {
+    console.log(tag)
     this.documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>
@@ -173,6 +188,25 @@ export class DocumentenApiTagsComponent
       });
   }
 
+  public confirmDeleteMultipleTag(): void {
+    combineLatest([
+      this.documentDefinitionName$,
+      this.selectedRowKeys$,
+    ]).pipe(
+      switchMap(([documentDefinitionName, keys]) =>
+        this.documentenApiTagService.deleteTags(documentDefinitionName, keys)
+      )
+    )
+    .subscribe(() => {
+      this.reload();
+    });
+  }
+
+  public searchTermEntered(searchTerm: string): void {
+    this.pagination = {...this.pagination, page: 1};
+    this.searchTerm$.next(searchTerm);
+  }
+
   private reload(noAnimation = false): void {
     this._reload$.next(noAnimation ? 'noAnimation' : null);
   }
@@ -181,7 +215,7 @@ export class DocumentenApiTagsComponent
     this.fields$.next([
       {
         key: 'value',
-        label: 'title-goes-here',
+        label: 'zgw.tags.fields.value',
         viewType: ViewType.TEXT,
       }
     ]);

@@ -57,10 +57,10 @@ export class DocumentenApiTagService extends BaseApiService {
     );
   }
 
-  //TODO: this is not correct because the endpoint doesn't exist
   public deleteTags(caseDefinitionName: string, tagKeys: string[]): Observable<void> {
     return this.http.delete<void>(
-      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord/${tagKeys.join(',')}`)
+      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord`),
+      {body: tagKeys}
     );
   }
 }
