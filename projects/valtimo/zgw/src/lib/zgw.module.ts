@@ -39,6 +39,7 @@ import {DropzoneModule, FileSizeModule} from '@valtimo/components';
 import {DocumentModule} from '@valtimo/document';
 import {ResourceModule} from '@valtimo/resource';
 import {DossierManagementZgwComponent} from './components';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import {DossierManagementZgwComponent} from './components';
     TranslateModule,
     DocumentModule,
     FileSizeModule,
+    ReactiveFormsModule,
     ResourceModule,
     RouterModule,
     DocumentenApiMetadataModalComponent,
