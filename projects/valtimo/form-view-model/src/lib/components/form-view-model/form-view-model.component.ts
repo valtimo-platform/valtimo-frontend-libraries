@@ -15,13 +15,14 @@
  */
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
 import {
   FormioModule, FormioSubmission
 } from '@formio/angular';
 import {CommonModule} from '@angular/common';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {FormioComponent as FormIoSourceComponent} from '@formio/angular/components/formio/formio.component';
+import {ViewModelService} from '../../services';
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
@@ -29,7 +30,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   templateUrl: './form-view-model.component.html',
   styleUrls: ['./form-view-model.component.css'],
 })
-export class FormViewModelComponent {
+export class FormViewModelComponent implements OnInit {
 
   @Input() set options(optionsValue: any) {
     this.options$.next(optionsValue);
@@ -39,6 +40,12 @@ export class FormViewModelComponent {
   }
   @Input() set form(formValue: object) {
     this.form$.next(formValue);
+  }
+  @Input() set formDefinitionId(formDefinitionId: string) {
+    this.formDefinitionId$.next(formDefinitionId);
+  }
+  @Input() set taskInstanceId(taskInstanceId: string) {
+    this.taskInstanceId$.next(taskInstanceId);
   }
   @Input() set readOnly(readOnlyValue: boolean) {
     this.readOnly$.next(readOnlyValue);
@@ -52,9 +59,11 @@ export class FormViewModelComponent {
 
   public refreshForm = new EventEmitter<FormioRefreshValue>();
 
-  public readonly submission$ = new BehaviorSubject<FormioSubmission>({});
+  public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
   public readonly options$ = new BehaviorSubject<any>(undefined);
+  public readonly taskInstanceId$ = new BehaviorSubject<string>(undefined);
+  public readonly formDefinitionId$ = new BehaviorSubject<string>(undefined);
   public readonly readOnly$ = new BehaviorSubject<boolean>(false);
   public readonly errors$ = new BehaviorSubject<Array<string>>([]);
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
@@ -62,8 +71,11 @@ export class FormViewModelComponent {
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-  ) {
-    this.form$.subscribe(form => console.log("form", form))
+    private readonly viewModelService: ViewModelService
+  ) {}
+
+  ngOnInit() {
+      this.loadInitialViewModel();
   }
 
   public onSubmit(submission: FormioSubmission): void {
@@ -76,5 +88,15 @@ export class FormViewModelComponent {
 
   public onChange(object: any): void {
     this.change.emit(object);
+  }
+
+  public loadInitialViewModel() {
+    combineLatest([this.formDefinitionId$, this.taskInstanceId$]).subscribe(([formId, taskInstanceId]) => {
+      this.viewModelService.getViewModel(formId, taskInstanceId).subscribe(viewModel => {
+        const initialViewModel: {[k: string]: any} = {};
+        Object.keys(viewModel).forEach(key => initialViewModel['pw:' + key] = viewModel[key]);
+        this.submission$.next({data: initialViewModel});
+      })
+    })
   }
 }
