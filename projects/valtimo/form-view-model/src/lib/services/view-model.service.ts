@@ -63,8 +63,4 @@ export class ViewModelService extends BaseApiService {
         }
       });
   }
-
-  public applyViewModel(viewModel: any) {
-
-  }
 }
