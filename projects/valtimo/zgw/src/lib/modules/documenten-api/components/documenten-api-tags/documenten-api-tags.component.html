@@ -15,27 +15,24 @@
   -->
 
 <valtimo-carbon-list
-        *ngIf="{
+  *ngIf="{
     loading: loading$ | async,
     documentTags: documentTags$ | async,
-    addModalClosed: addModalClosed$ | async,
+    addModalClosed: addModalClosed$ | async
   } as obs"
-        [items]="obs.documentTags"
-        [fields]="fields$ | async"
-        [header]="false"
-        [loading]="obs.loading"
-        [actionItems]="ACTION_ITEMS"
-        [showSelectionColumn]="true"
-        [isSearchable]="true"
-        [pagination]="pagination"
-        (paginationClicked)="paginationClicked($event)"
-        (paginationSet)="paginationSet($event)"
-        (search)="searchTermEntered($event)"
+  [items]="obs.documentTags"
+  [fields]="fields$ | async"
+  [header]="false"
+  [loading]="obs.loading"
+  [actionItems]="ACTION_ITEMS"
+  [showSelectionColumn]="true"
+  [isSearchable]="true"
+  [pagination]="pagination"
+  (paginationClicked)="paginationClicked($event)"
+  (paginationSet)="paginationSet($event)"
+  (search)="searchTermEntered($event)"
 >
-  <ng-container
-    carbonToolbarContent
-    *ngTemplateOutlet="buttons"
-  ></ng-container>
+  <ng-container carbonToolbarContent *ngTemplateOutlet="buttons"></ng-container>
 
   <ng-container carbonToolbarActions>
     <button cdsButton="primary" (click)="showDeleteMultipleModal()">
@@ -45,45 +42,46 @@
   </ng-container>
 
   <valtimo-no-results
-          *ngIf="(searchTerm$ | async) === ''"
-          [action]="addButtton"
-          title="{{ 'zgw.tags.list.noResultsTitle' | translate }}"
-          description="{{ 'zgw.tags.list.noResultsDescription' | translate }}"
+    *ngIf="(searchTerm$ | async) === ''"
+    [action]="addButtton"
+    title="{{ 'zgw.tags.list.noResultsTitle' | translate }}"
+    description="{{ 'zgw.tags.list.noResultsDescription' | translate }}"
   ></valtimo-no-results>
 </valtimo-carbon-list>
 
 <valtimo-documenten-api-tag-modal
-        *ngIf="{
-          addModalClosed: addModalClosed$ | async,
-        } as obs"
-        [open]="!obs.addModalClosed"
-        [documentDefinitionName]="documentDefinitionName$ | async"
-        (closeModalEvent)="closeModal($event)"
+  *ngIf="{
+    addModalClosed: addModalClosed$ | async
+  } as obs"
+  [open]="!obs.addModalClosed"
+  [documentDefinitionName]="documentDefinitionName$ | async"
+  (closeModalEvent)="closeModal($event)"
 ></valtimo-documenten-api-tag-modal>
 
 <valtimo-confirmation-modal
-        confirmButtonTextTranslationKey="interface.delete"
-        confirmButtonType="danger"
-        contentTranslationKey="zgw.tags.deleteText"
-        [showModalSubject$]="showDeleteModal$"
-        titleTranslationKey="interface.delete"
-        [outputOnConfirm]="tagToDelete$ | async"
-        (confirmEvent)="confirmDeleteTag($event)"
+  confirmButtonTextTranslationKey="interface.delete"
+  confirmButtonType="danger"
+  contentTranslationKey="zgw.tags.deleteText"
+  [showModalSubject$]="showDeleteModal$"
+  titleTranslationKey="interface.delete"
+  [outputOnConfirm]="tagToDelete$ | async"
+  (confirmEvent)="confirmDeleteTag($event)"
 ></valtimo-confirmation-modal>
 
 <valtimo-confirmation-modal
-        confirmButtonTextTranslationKey="interface.delete"
-        confirmButtonType="danger"
-        [contentTranslationKey]="(selectedRowKeys$ | async).length > 1 ? 'zgw.tags.deleteMultipleText' : 'zgw.tags.deleteText'"
-        [showModalSubject$]="showDeleteMultipleModal$"
-        titleTranslationKey="interface.delete"
-        (confirmEvent)="confirmDeleteMultipleTag()"
+  confirmButtonTextTranslationKey="interface.delete"
+  confirmButtonType="danger"
+  [contentTranslationKey]="
+    (selectedRowKeys$ | async).length > 1 ? 'zgw.tags.deleteMultipleText' : 'zgw.tags.deleteText'
+  "
+  [showModalSubject$]="showDeleteMultipleModal$"
+  titleTranslationKey="interface.delete"
+  (confirmEvent)="confirmDeleteMultipleTag()"
 ></valtimo-confirmation-modal>
 
 <ng-template #buttons>
   <div class="dossier-management-search-fields__buttons">
-    <ng-container *ngTemplateOutlet="addButtton;"
-    ></ng-container>
+    <ng-container *ngTemplateOutlet="addButtton"></ng-container>
   </div>
 </ng-template>
 

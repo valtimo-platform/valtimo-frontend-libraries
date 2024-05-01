@@ -36,7 +36,10 @@ export class DocumentenApiTagService extends BaseApiService {
     );
   }
 
-  public getTagsForAdmin(caseDefinitionName: string, params?: any): Observable<Page<DocumentenApiTag>> {
+  public getTagsForAdmin(
+    caseDefinitionName: string,
+    params?: any
+  ): Observable<Page<DocumentenApiTag>> {
     return this.http.get<Page<DocumentenApiTag>>(
       this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord`),
       {params}
@@ -45,14 +48,18 @@ export class DocumentenApiTagService extends BaseApiService {
 
   public createTag(caseDefinitionName: string, tagKey: string): Observable<void> {
     return this.http.post<void>(
-      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord/${tagKey}`),
+      this.getApiUrl(
+        `/management/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord/${tagKey}`
+      ),
       {} //empty body because all data exists in path
     );
   }
 
   public deleteTag(caseDefinitionName: string, tagKey: string): Observable<void> {
     return this.http.delete<void>(
-      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord/${tagKey}`)
+      this.getApiUrl(
+        `/management/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord/${tagKey}`
+      )
     );
   }
 

@@ -18,7 +18,7 @@
   <ng-container
     *ngIf="{
       documentenApiColumnsActive: currentTab === ZgwTabEnum.DOCUMENTEN_API_COLUMNS,
-      documentenApiTagsActive: currentTab === ZgwTabEnum.DOCUMENTEN_API_TAGS,
+      documentenApiTagsActive: currentTab === ZgwTabEnum.DOCUMENTEN_API_TAGS
     } as vars"
   >
     <cds-tabs class="dossier-management-tabs">
@@ -37,7 +37,7 @@
     </cds-tabs>
 
     <div class="dossier-management-zgw__content">
-    <valtimo-documenten-api-columns
+      <valtimo-documenten-api-columns
         *ngIf="vars.documentenApiColumnsActive"
       ></valtimo-documenten-api-columns>
     </div>

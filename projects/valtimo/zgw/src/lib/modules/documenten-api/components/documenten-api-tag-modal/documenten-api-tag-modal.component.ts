@@ -14,12 +14,26 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output,} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import {DocumentenApiColumnModalTypeCloseEvent} from '../../models';
-import {BehaviorSubject, Subscription,} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {CARBON_CONSTANTS} from '@valtimo/components';
-import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators,} from '@angular/forms';
-import {ButtonModule, DropdownModule, InputModule, ModalModule, TagModule, ToggleModule,} from 'carbon-components-angular';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  ButtonModule,
+  DropdownModule,
+  InputModule,
+  ModalModule,
+  TagModule,
+  ToggleModule,
+} from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
@@ -71,7 +85,7 @@ export class DocumentenApiTagModalComponent implements OnDestroy {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly documentenApiTagService: DocumentenApiTagService,
+    private readonly documentenApiTagService: DocumentenApiTagService
   ) {}
 
   public ngOnDestroy(): void {

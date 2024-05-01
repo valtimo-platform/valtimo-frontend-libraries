@@ -27,7 +27,13 @@ import {DocumentenApiColumnsComponent, DocumentenApiTagsComponent} from '../../m
   styleUrls: ['./dossier-management-zgw.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, TabsModule, TranslateModule, DocumentenApiTagsComponent, DocumentenApiColumnsComponent],
+  imports: [
+    CommonModule,
+    TabsModule,
+    TranslateModule,
+    DocumentenApiTagsComponent,
+    DocumentenApiColumnsComponent,
+  ],
 })
 export class DossierManagementZgwComponent {
   public readonly ZgwTabEnum = ZgwTabEnum;

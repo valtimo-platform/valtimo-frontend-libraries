@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, ChangeDetectionStrategy, Component, TemplateRef, ViewChild,} from '@angular/core';
-import {DocumentenApiColumnModalTypeCloseEvent,} from '../../models';
-import {BehaviorSubject, combineLatest, filter, map, Observable, Subject, switchMap, tap,} from 'rxjs';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
+import {DocumentenApiColumnModalTypeCloseEvent} from '../../models';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {
-  ActionItem, CarbonListComponent,
+  ActionItem,
+  CarbonListComponent,
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
@@ -54,10 +64,7 @@ import {Page} from '@valtimo/document';
     IconModule,
   ],
 })
-export class DocumentenApiTagsComponent
-  extends PendingChangesComponent
-  implements AfterViewInit
-{
+export class DocumentenApiTagsComponent extends PendingChangesComponent implements AfterViewInit {
   @ViewChild(CarbonListComponent) carbonList: CarbonListComponent;
 
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
@@ -90,14 +97,11 @@ export class DocumentenApiTagsComponent
       }
     }),
     switchMap(([documentDefinitionName, searchTerm]) =>
-      this.documentenApiTagService.getTagsForAdmin(
-        documentDefinitionName,
-        {
-          page: this.pagination.page - 1,
-          size: this.pagination.size,
-          search: searchTerm
-        }
-      )
+      this.documentenApiTagService.getTagsForAdmin(documentDefinitionName, {
+        page: this.pagination.page - 1,
+        size: this.pagination.size,
+        search: searchTerm,
+      })
     ),
     map((tagPage: Page<DocumentenApiTag>) => {
       this.pagination = {
@@ -117,7 +121,7 @@ export class DocumentenApiTagsComponent
       label: 'interface.delete',
       callback: this.openDeleteModal.bind(this),
       type: 'danger',
-    }
+    },
   ];
 
   public pagination: Pagination = {
@@ -159,7 +163,9 @@ export class DocumentenApiTagsComponent
   }
 
   private setSelectedRoleKeys(): void {
-    this.selectedRowKeys$.next(this.carbonList.selectedItems.map((tag: DocumentenApiTag) => tag.value));
+    this.selectedRowKeys$.next(
+      this.carbonList.selectedItems.map((tag: DocumentenApiTag) => tag.value)
+    );
   }
 
   public paginationClicked(page: number): void {
@@ -185,17 +191,15 @@ export class DocumentenApiTagsComponent
   }
 
   public confirmDeleteMultipleTag(): void {
-    combineLatest([
-      this.documentDefinitionName$,
-      this.selectedRowKeys$,
-    ]).pipe(
-      switchMap(([documentDefinitionName, keys]) =>
-        this.documentenApiTagService.deleteTags(documentDefinitionName, keys)
+    combineLatest([this.documentDefinitionName$, this.selectedRowKeys$])
+      .pipe(
+        switchMap(([documentDefinitionName, keys]) =>
+          this.documentenApiTagService.deleteTags(documentDefinitionName, keys)
+        )
       )
-    )
-    .subscribe(() => {
-      this.reload();
-    });
+      .subscribe(() => {
+        this.reload();
+      });
   }
 
   public searchTermEntered(searchTerm: string): void {
@@ -213,7 +217,7 @@ export class DocumentenApiTagsComponent
         key: 'value',
         label: 'zgw.tags.fields.value',
         viewType: ViewType.TEXT,
-      }
+      },
     ]);
   }
 }
