@@ -18,21 +18,21 @@
   *ngIf="{
     columnModalType: columnModalType$ | async,
     columnToUpdate: columnToUpdate$ | async,
-    disabledColumns: disabledColumns$ | async,
     documentDefinitionName: documentDefinitionName$ | async,
-    enabledColumns: enabledColumns$ | async,
-    loading: loading$ | async
+    configuredColumns: configuredColumns$ | async,
+    configurableColumns: configurableColumns$ | async,
+    loading: loading$ | async,
+    prefillColumn: prefillColumn$ | async
   } as obs"
 >
   <valtimo-carbon-list
     [actionItems]="ACTION_ITEMS"
     [fields]="fields"
     [header]="false"
-    [items]="obs.enabledColumns"
+    [items]="obs.configuredColumns"
     [loading]="obs.loading"
     [movingRowsEnabled]="true"
-    (rowClicked)="openEditModal($event)"
-    (itemsReordered)="onItemsReordered(obs.documentDefinitionName, $event, obs.disabledColumns)"
+    (itemsReordered)="onItemsReordered(obs.documentDefinitionName, $event)"
   >
     <ng-container carbonToolbarContent>
       <button cdsButton="primary" [disabled]="obs.loading" (click)="openAddModal()">
@@ -44,8 +44,10 @@
   </valtimo-carbon-list>
 
   <valtimo-documenten-api-column-modal
-    [availableColumns]="obs.disabledColumns"
+    [availableColumns]="obs.configurableColumns"
+    [configuredColumns]="obs.configuredColumns"
     [definitionName]="obs.documentDefinitionName"
+    [prefillColumn]="obs.prefillColumn"
     [type]="obs.columnModalType"
     (closeModal)="onCloseModal($event)"
   ></valtimo-documenten-api-column-modal>

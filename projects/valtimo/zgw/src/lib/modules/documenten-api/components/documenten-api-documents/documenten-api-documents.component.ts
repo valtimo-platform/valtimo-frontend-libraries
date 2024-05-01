@@ -154,8 +154,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         size: `${this.bytesToMegabytes(file.sizeInBytes)}`,
       }));
     }),
-    tap(res => {
-      console.log(res);
+    tap(() => {
       this.loading$.next(false);
     }),
     catchError(() => {

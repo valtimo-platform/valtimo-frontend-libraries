@@ -28,7 +28,7 @@ import {
 import {FormControl} from '@angular/forms';
 import {ArrowDown16, ArrowUp16, SettingsView16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
-import {InternalCaseStatus, InternalCaseStatusUtils, SortState} from '@valtimo/document';
+import {SortState} from '@valtimo/document';
 import {
   IconService,
   OverflowMenu,
@@ -38,7 +38,6 @@ import {
   TableHeaderItem,
   TableItem,
   TableModel,
-  TagType,
 } from 'carbon-components-angular';
 import {get as _get} from 'lodash';
 import {NGXLogger} from 'ngx-logger';

@@ -91,13 +91,13 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
   );
 
   public readonly formGroup = this.fb.group({
-    author: this.fb.control(''),
-    confidentialityLevel: this.fb.control({}),
-    creationDateFrom: this.fb.control(''),
-    creationDateTo: this.fb.control(''),
-    informationObjectType: this.fb.control({}),
-    tags: this.fb.control([]),
-    title: this.fb.control(''),
+    auteur: this.fb.control(''),
+    vertrouwelijkHeidaanduiding: this.fb.control({}),
+    creatieDatumFrom: this.fb.control(''),
+    creatieDatumTo: this.fb.control(''),
+    informatieObjectType: this.fb.control({}),
+    trefwoorden: this.fb.control([]),
+    titel: this.fb.control(''),
   });
 
   constructor(
@@ -115,22 +115,22 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
     this._subscriptions.add(
       this.formGroup.valueChanges.pipe(debounceTime(500)).subscribe(formValue => {
         this.filterEvent.emit({
-          ...(!!formValue.author && {author: formValue.author}),
-          ...(!!formValue.title && {title: formValue.title}),
-          ...(!!formValue.creationDateFrom && {
-            creationDateFrom: new Date(formValue.creationDateFrom),
+          ...(!!formValue.auteur && {author: formValue.auteur}),
+          ...(!!formValue.titel && {title: formValue.titel}),
+          ...(!!formValue.creatieDatumFrom && {
+            creatieDatumFrom: new Date(formValue.creatieDatumFrom),
           }),
-          ...(!!formValue.creationDateTo && {
-            creationDateTo: new Date(formValue.creationDateTo),
+          ...(!!formValue.creatieDatumTo && {
+            creatieDatumTo: new Date(formValue.creatieDatumTo),
           }),
-          ...(!!(formValue.confidentialityLevel as ListItem).id && {
-            confidentialityLevel: (formValue.confidentialityLevel as ListItem).id,
+          ...(!!(formValue.vertrouwelijkHeidaanduiding as ListItem).id && {
+            confidentialityLevel: (formValue.vertrouwelijkHeidaanduiding as ListItem).id,
           }),
-          ...(!!(formValue.informationObjectType as ListItem).id && {
-            informationObjectType: (formValue.informationObjectType as ListItem).id,
+          ...(!!(formValue.informatieObjectType as ListItem).id && {
+            informationObjectType: (formValue.informatieObjectType as ListItem).id,
           }),
-          ...(!!formValue.tags && {
-            tags: (formValue.tags as ListItem[]).map((tag: ListItem) => tag.content),
+          ...(!!formValue.trefwoorden && {
+            tags: (formValue.trefwoorden as ListItem[]).map((tag: ListItem) => tag.content),
           }),
         });
       })
