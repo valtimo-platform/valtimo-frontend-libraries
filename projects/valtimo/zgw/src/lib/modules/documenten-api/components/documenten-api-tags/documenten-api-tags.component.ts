@@ -60,16 +60,6 @@ export class DocumentenApiTagsComponent
 {
   @ViewChild(CarbonListComponent) carbonList: CarbonListComponent;
 
-  public readonly ACTION_ITEMS: ActionItem[] = [
-    {
-      label: 'interface.delete',
-      callback: this.openDeleteModal.bind(this),
-      type: 'danger',
-    }
-  ];
-
-  public readonly CARBON_THEME = 'g10';
-
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
   private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params?.name),
@@ -83,6 +73,7 @@ export class DocumentenApiTagsComponent
   public readonly showDeleteModal$ = new Subject<boolean>();
   public readonly selectedRowKeys$ = new BehaviorSubject<Array<string>>([]);
   public readonly searchTerm$ = new BehaviorSubject<string>('');
+  public readonly tagToDelete$ = new BehaviorSubject<DocumentenApiTag | null>(null);
 
   public get documentDefinitionName$(): Observable<string> {
     return this._documentDefinitionName$;
@@ -121,6 +112,14 @@ export class DocumentenApiTagsComponent
     })
   );
 
+  public readonly ACTION_ITEMS: ActionItem[] = [
+    {
+      label: 'interface.delete',
+      callback: this.openDeleteModal.bind(this),
+      type: 'danger',
+    }
+  ];
+
   public pagination: Pagination = {
     collectionSize: 0,
     page: 1,
@@ -137,8 +136,6 @@ export class DocumentenApiTagsComponent
   public ngAfterViewInit(): void {
     this.initFields();
   }
-
-  public readonly tagToDelete$ = new BehaviorSubject<DocumentenApiTag | null>(null);
 
   public openDeleteModal(tag: DocumentenApiTag): void {
     this.tagToDelete$.next(tag);
@@ -176,7 +173,6 @@ export class DocumentenApiTagsComponent
   }
 
   public confirmDeleteTag(tag: DocumentenApiTag): void {
-    console.log(tag)
     this.documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>

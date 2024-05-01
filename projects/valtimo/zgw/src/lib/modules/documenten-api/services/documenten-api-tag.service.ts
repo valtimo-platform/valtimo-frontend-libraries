@@ -16,8 +16,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService, Page} from '@valtimo/config';
-import {Observable, of} from 'rxjs';
-import {ConfiguredColumn} from '../models';
+import {Observable} from 'rxjs';
 import {DocumentenApiTag} from '../models/documenten-api-tag.model';
 
 @Injectable({
@@ -33,7 +32,7 @@ export class DocumentenApiTagService extends BaseApiService {
 
   public getTags(caseDefinitionName: string): Observable<DocumentenApiTag[]> {
     return this.http.get<DocumentenApiTag[]>(
-      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord`)
+      this.getApiUrl(`/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord`)
     );
   }
 

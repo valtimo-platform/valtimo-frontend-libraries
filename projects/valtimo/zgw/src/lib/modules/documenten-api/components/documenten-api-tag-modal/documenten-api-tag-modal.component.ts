@@ -45,10 +45,9 @@ import {DocumentenApiTag} from '../../models/documenten-api-tag.model';
 })
 export class DocumentenApiTagModalComponent implements OnDestroy {
   @Input() public documentDefinitionName!: string;
+  @Input() public open = false;
 
   @Output() public closeModalEvent = new EventEmitter<DocumentenApiColumnModalTypeCloseEvent>();
-
-  @Input() public open = false;
 
   public readonly tagFormGroup = this.fb.group({
     value: this.fb.control('', Validators.required),

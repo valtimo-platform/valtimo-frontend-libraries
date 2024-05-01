@@ -20,14 +20,14 @@ import {DossierManagementZgwService} from '../../services';
 import {ZgwTabEnum} from '../../models';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
-import {DocumentenApiTagsComponent} from '../../modules';
+import {DocumentenApiColumnsComponent, DocumentenApiTagsComponent} from '../../modules';
 
 @Component({
   templateUrl: './dossier-management-zgw.component.html',
   styleUrls: ['./dossier-management-zgw.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, TabsModule, TranslateModule, DocumentenApiTagsComponent],
+  imports: [CommonModule, TabsModule, TranslateModule, DocumentenApiTagsComponent, DocumentenApiColumnsComponent],
 })
 export class DossierManagementZgwComponent {
   public readonly ZgwTabEnum = ZgwTabEnum;
