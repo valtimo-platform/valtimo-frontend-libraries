@@ -32,10 +32,10 @@
 </div>
 
 <valtimo-documenten-api-metadata-modal
+  [open]="showUploadModal$ | async"
   [disabled$]="modalDisabled$"
   [file$]="fileToBeUploaded$"
-  [hide$]="hideModal$"
-  [show$]="showModal$"
+  (close)="closeMetadataModal()"
   (metadata)="metadataSet($event)"
 ></valtimo-documenten-api-metadata-modal>
 
