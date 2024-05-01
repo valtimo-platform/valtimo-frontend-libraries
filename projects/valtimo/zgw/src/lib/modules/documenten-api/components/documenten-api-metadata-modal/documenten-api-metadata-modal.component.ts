@@ -114,7 +114,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
   @Input() open = false;
 
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
-  @Output() close: EventEmitter<boolean> = new EventEmitter();
+  //@Output() close: EventEmitter<boolean> = new EventEmitter();
 
   public documentenApiMetadataForm: FormGroup;
 
