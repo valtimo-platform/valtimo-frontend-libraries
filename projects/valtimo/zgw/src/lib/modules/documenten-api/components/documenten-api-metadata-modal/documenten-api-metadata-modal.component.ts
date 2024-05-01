@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 import {
   AdditionalDocumentDate,
@@ -32,7 +32,6 @@ import {
   Observable,
   of,
   Subject,
-  Subscription,
   switchMap,
   take,
 } from 'rxjs';
@@ -42,20 +41,29 @@ import {DocumentService} from '@valtimo/document';
 import {KeycloakService} from 'keycloak-angular';
 import {tap} from 'rxjs/operators';
 import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {
-  ButtonModule,
-  DatePickerModule,
-  FormModule,
   InputLabelModule,
   InputModule,
   ModalService,
-  SelectItem,
   SelectModule,
-  TitleModule,
   ValtimoModalService,
-  VModalComponent,
-  VModalModule,
 } from '@valtimo/components';
+
+import {
+  ButtonModule,
+  ComboBoxModule,
+  DatePickerModule,
+  DropdownModule,
+  IconModule,
+  InputModule as CarbonInputModule,
+  ListItem,
+  ModalModule,
+  RadioModule,
+  TagModule,
+  TooltipModule,
+} from 'carbon-components-angular';
+import {DocumentenApiDocumentService} from '../../services';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -63,24 +71,25 @@ import {
   styleUrls: ['./documenten-api-metadata-modal.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
-    TranslateModule,
-    VModalModule,
-    TitleModule,
     ButtonModule,
-    TranslateModule,
-    FormModule,
-    InputModule,
-    SelectModule,
+    CarbonInputModule,
+    ComboBoxModule,
+    CommonModule,
     DatePickerModule,
+    DropdownModule,
+    IconModule,
     InputLabelModule,
+    InputModule,
+    ModalModule,
+    RadioModule,
+    ReactiveFormsModule,
+    SelectModule,
+    TagModule,
+    TooltipModule,
+    TranslateModule,
   ],
 })
-export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
-  @ViewChild('documentenApiMetadataModal') documentenApiMetadataModal: VModalComponent;
-
-  @Input() show$!: Observable<null>;
-  @Input() hide$!: Observable<null>;
+export class DocumentenApiMetadataModalComponent implements OnInit {
   @Input() disabled$!: Observable<boolean>;
   @Input() file$!: Observable<File>;
 
@@ -102,10 +111,14 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() disableConfidentialityLevel: boolean;
   @Input() trefwoorden: boolean;
   @Input() disableTrefwoorden: boolean;
+  @Input() open = false;
 
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
+  @Output() close: EventEmitter<boolean> = new EventEmitter();
 
-  readonly CONFIDENTIALITY_LEVELS: Array<ConfidentialityLevel> = [
+  public documentenApiMetadataForm: FormGroup;
+
+  public readonly CONFIDENTIALITY_LEVELS: Array<ConfidentialityLevel> = [
     'openbaar',
     'beperkt_openbaar',
     'intern',
@@ -115,17 +128,18 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     'geheim',
     'zeer_geheim',
   ];
-  readonly confidentialityLevelItems$: Observable<Array<SelectItem>> = this.translateService
+  public readonly confidentialityLevelItems$: Observable<Array<ListItem>> = this.translateService
     .stream('key')
     .pipe(
       map(() =>
         this.CONFIDENTIALITY_LEVELS.map(confidentialityLevel => ({
           id: confidentialityLevel,
-          text: this.translateService.instant(`document.${confidentialityLevel}`),
+          content: this.translateService.instant(`document.${confidentialityLevel}`),
+          selected: false,
         }))
       )
     );
-  readonly ADDITONAL_DOCUMENT_DATE_OPTIONS: Array<{
+  public readonly ADDITONAL_DOCUMENT_DATE_OPTIONS: Array<{
     value: AdditionalDocumentDate;
     translationKey: string;
   }> = [
@@ -142,17 +156,17 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       translationKey: 'document.receiptDate',
     },
   ];
-  readonly clearStatusSelection$ = new Subject<null>();
-  readonly additionalDocumentDate$ = new BehaviorSubject<AdditionalDocumentDate>('neither');
-  readonly STATUSES: Array<DocumentStatus> = [
+  public readonly clearStatusSelection$ = new Subject<null>();
+  public readonly additionalDocumentDate$ = new BehaviorSubject<AdditionalDocumentDate>('neither');
+  public readonly STATUSES: Array<DocumentStatus> = [
     'in_bewerking',
     'ter_vaststelling',
     'definitief',
     'gearchiveerd',
   ];
-  readonly RECEIPT_STATUSES: Array<DocumentStatus> = ['definitief', 'gearchiveerd'];
-  readonly formData$ = new BehaviorSubject<DocumentenApiMetadata>(null);
-  readonly statusItems$: Observable<Array<SelectItem>> = combineLatest([
+  public readonly RECEIPT_STATUSES: Array<DocumentStatus> = ['definitief', 'gearchiveerd'];
+  public readonly formData$ = new BehaviorSubject<DocumentenApiMetadata>(null);
+  public readonly statusItems$: Observable<Array<ListItem>> = combineLatest([
     this.additionalDocumentDate$,
     this.translateService.stream('key'),
   ]).pipe(
@@ -170,21 +184,39 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       (additionalDocumentDate === 'received' ? this.RECEIPT_STATUSES : this.STATUSES).map(
         status => ({
           id: status,
-          text: this.translateService.instant(`document.${status}`),
+          content: this.translateService.instant(`document.${status}`),
+          selected: false,
         })
       )
     )
   );
-  readonly LANGUAGES: Array<DocumentLanguage> = ['nld', 'eng', 'deu'];
-  readonly languageItems$: Observable<Array<SelectItem>> = this.translateService.stream('key').pipe(
-    map(() =>
-      this.LANGUAGES.map(language => ({
-        id: language,
-        text: this.translateService.instant(`document.${language}`),
-      }))
-    )
+  public readonly LANGUAGES: Array<DocumentLanguage> = ['nld', 'eng', 'deu'];
+  public readonly languageItems$: Observable<Array<ListItem>> = this.translateService
+    .stream('key')
+    .pipe(
+      map(() =>
+        this.LANGUAGES.map(
+          language =>
+            ({
+              id: language,
+              content: this.translateService.instant(`document.${language}`),
+              selected: false,
+            }) as ListItem
+        )
+      )
+    );
+
+  public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
+    this.valtimoModalService.documentDefinitionName$,
+  ]).pipe(
+    filter(([documentDefinitionName]) => !!documentDefinitionName),
+    switchMap(([documentDefinitionName]) =>
+      this.documentenApiDocumentService.getTags(documentDefinitionName)
+    ),
+    map(tags => tags.map(tag => ({id: '1', content: 'tag 1', selected: false})))
   );
-  readonly documentTypeItems$: Observable<Array<SelectItem>> = combineLatest([
+
+  public readonly documentTypeItems$: Observable<Array<ListItem>> = combineLatest([
     this.route?.params || of(null),
     this.route?.firstChild?.params || of(null),
     this.valtimoModalService.documentDefinitionName$,
@@ -204,91 +236,69 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
           documentDefinitionName
       )
     ),
-    map(documentTypes => documentTypes.map(type => ({id: type.url, text: type.name})))
+    map(documentTypes =>
+      documentTypes.map(type => ({id: type.url, content: type.name, selected: false}))
+    )
   );
-  readonly showForm$: Observable<boolean> = this.modalService.modalVisible$;
-  readonly valid$ = new BehaviorSubject<boolean>(false);
-  readonly userEmail$ = from(this.keycloakService.loadUserProfile()).pipe(
+  public readonly userEmail$ = from(this.keycloakService.loadUserProfile()).pipe(
     map(userProfile => userProfile?.email || '')
   );
 
-  private showSubscription!: Subscription;
-  private hideSubscription!: Subscription;
+  private readonly modalSize = 'lg';
 
   constructor(
-    private readonly modalService: ModalService,
-    private readonly translateService: TranslateService,
     private readonly route: ActivatedRoute,
     private readonly documentService: DocumentService,
+    private readonly documentenApiDocumentService: DocumentenApiDocumentService,
+    private readonly fb: FormBuilder,
     private readonly keycloakService: KeycloakService,
+    private readonly modalService: ModalService,
+    private readonly translateService: TranslateService,
     private readonly valtimoModalService: ValtimoModalService
   ) {}
 
-  ngOnInit(): void {
-    this.openShowSubscription();
-    this.openHideSubscription();
+  public ngOnInit(): void {
+    this.setInitForm();
   }
 
-  ngOnDestroy(): void {
-    this.showSubscription?.unsubscribe();
-    this.hideSubscription?.unsubscribe();
+  public save(): void {
+    this.documentenApiMetadataForm.patchValue({
+      language: this.documentenApiMetadataForm.controls.language.value.id,
+      confidentialityLevel: this.documentenApiMetadataForm.controls.confidentialityLevel.value.id,
+      informatieobjecttype:
+        this.documentenApiMetadataForm.controls.informatieobjecttype.value.content,
+      status: this.documentenApiMetadataForm.controls.status.value.id,
+    });
+
+    if (this.documentenApiMetadataForm.valid)
+      this.metadata.emit(this.documentenApiMetadataForm.value);
+
+    this.closeModal();
   }
 
-  hide(): void {
-    this.formData$.next(null);
-    this.valid$.next(false);
-    this.additionalDocumentDate$.next('neither');
-    this.modalService.closeModal();
+  public setInitForm(): void {
+    this.documentenApiMetadataForm = this.fb.group({
+      title: this.fb.control('', Validators.required),
+      description: this.fb.control('', Validators.required),
+      filename: this.fb.control(this.filename, Validators.required),
+      confidentialityLevel: this.fb.control('', Validators.required),
+      author: this.fb.control('', Validators.required),
+      status: this.fb.control('', Validators.required),
+      creationDate: this.fb.control('', Validators.required),
+      receiptDate: this.fb.control(''),
+      sendDate: this.fb.control(''),
+      language: this.fb.control('', Validators.required),
+      informatieobjecttype: this.fb.control('', Validators.required),
+    });
   }
 
-  cancel(): void {
-    this.hide();
-  }
-
-  save(): void {
-    combineLatest([this.valid$, this.formData$])
-      .pipe(take(1))
-      .subscribe(([valid, formData]) => {
-        if (valid) {
-          this.metadata.emit(formData);
-        }
-      });
-  }
-
-  formValueChange(data: DocumentenApiMetadata): void {
-    this.formData$.next(data);
-    this.setValid(data);
-  }
-
-  setAdditionalDate(value: AdditionalDocumentDate): void {
+  public setAdditionalDate(value: AdditionalDocumentDate): void {
     this.additionalDocumentDate$.next(value);
   }
 
-  private setValid(data: DocumentenApiMetadata): void {
-    this.valid$.next(
-      !!(
-        data.filename &&
-        data.title &&
-        data.author &&
-        data.creationDate &&
-        data.status &&
-        data.language &&
-        data.informatieobjecttype &&
-        data.description &&
-        data.confidentialityLevel
-      )
-    );
-  }
-
-  private openShowSubscription(): void {
-    this.showSubscription = this.show$.subscribe(() => {
-      this.modalService.openModal(this.documentenApiMetadataModal);
-    });
-  }
-
-  private openHideSubscription(): void {
-    this.hideSubscription = this.hide$.subscribe(() => {
-      this.hide();
-    });
+  public closeModal(): void {
+    this.setInitForm();
+    this.additionalDocumentDate$.next('neither');
+    this.open = false;
   }
 }
