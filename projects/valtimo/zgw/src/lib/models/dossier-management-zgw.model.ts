@@ -15,6 +15,6 @@
  */
 
 export enum ZgwTabEnum {
-  DOCUMENTEN_API_COLUMNS = "documentenApiColumns",
-  DOCUMENTEN_API_TAGS = "documentenApiTags",
+  DOCUMENTEN_API_COLUMNS = 'documentenApiColumns',
+  DOCUMENTEN_API_TAGS = 'documentenApiTags',
 }
