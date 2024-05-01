@@ -64,7 +64,7 @@ export class DocumentenApiTagModalComponent implements OnDestroy {
   @Output() public closeModalEvent = new EventEmitter<DocumentenApiColumnModalTypeCloseEvent>();
 
   public readonly tagFormGroup = this.fb.group({
-    value: this.fb.control('', Validators.required),
+    value: this.fb.control('', [Validators.required, Validators.maxLength(50)]),
   });
 
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
