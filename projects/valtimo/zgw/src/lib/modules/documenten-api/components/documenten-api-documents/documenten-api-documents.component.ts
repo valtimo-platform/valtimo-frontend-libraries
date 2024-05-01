@@ -63,9 +63,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       type: 'normal',
     },
     {
-      label: 'document.delete',
-      callback: this.onDeleteActionClick.bind(this),
-      type: 'danger',
+      label: 'document.edit',
+      callback: this.onEditMetadata.bind(this),
+      type: 'normal',
     },
   ];
   public fieldsConfig = [
@@ -105,6 +105,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public readonly hideModal$ = new Subject<null>();
   public readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
   public readonly showModal$ = new Subject<null>();
+  public readonly showUploadModal$ = new BehaviorSubject<boolean>(false);
 
   public readonly uploading$ = new BehaviorSubject<boolean>(false);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
@@ -236,14 +237,12 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
 
   public metadataSet(metadata: DocumentenApiMetadata): void {
     this.uploading$.next(true);
-    this.hideModal$.next(null);
 
     combineLatest([this.fileToBeUploaded$, this._documentId$])
       .pipe(take(1))
       .pipe(
         tap(([file, documentId]) => {
           if (!file) return;
-
           this.uploadProviderService
             .uploadFileWithMetadata(file, documentId, metadata)
             .subscribe(() => {
@@ -256,21 +255,21 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       .subscribe();
   }
 
-  public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
-    this.loading$.next(true);
-    this.documentenApiDocumentService.deleteDocument(item).subscribe(() => {
-      // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
-      this.refetchDocuments();
-    });
-  }
-
   public onDownloadActionClick(file: DocumentenApiRelatedFile): void {
     this.downloadDocument(file, true);
   }
 
+  public onEditMetadata(file: DocumentenApiRelatedFile): void {
+    // To complete
+  }
+
+  public closeMetadataModal(): void {
+    this.showUploadModal$.next(false);
+  }
+
   public onFileSelected(event: any): void {
     this.fileToBeUploaded$.next(event.target.files[0]);
-    this.showModal$.next(null);
+    this.showUploadModal$.next(true);
   }
 
   public onNavigateToCaseAdminClick(): void {
