@@ -72,8 +72,7 @@ export class FormViewModelComponent implements OnInit {
 
   constructor(
     private readonly viewModelService: ViewModelService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
       this.loadInitialViewModel();
