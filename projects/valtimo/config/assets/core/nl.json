@@ -174,7 +174,7 @@
     "save": "Opslaan",
     "size": "Omvang",
     "tags": "Labels",
-    "tagsTooltip": "Tooltip voor tags",
+    "tagsTooltip": "Tags worden gebruikt voor het makkelijk te zoeken en filteren van documenten. Je kunt meerdere tags aan een document toevoegen.",
     "tagsPlaceholder": "Kies tags",
     "format": "Bestandsformaat",
     "trefwoorden": "Trefwoorden",

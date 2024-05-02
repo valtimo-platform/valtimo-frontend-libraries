@@ -174,7 +174,7 @@
     "save": "Save",
     "size": "Size",
     "tags": "Tags",
-    "tagsTooltip": "Tags tooltip",
+    "tagsTooltip": "Tags are used for easy filtering and searching of documents. You can add multiple tags to a document",
     "tagsPlaceholder": "Choose tags",
     "format": "File format",
     "trefwoorden": "Keywords",
