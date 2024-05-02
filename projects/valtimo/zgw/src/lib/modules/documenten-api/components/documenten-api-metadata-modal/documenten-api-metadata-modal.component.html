@@ -25,10 +25,16 @@
     statusItems: statusItems$ | async
   } as obs"
 >
-  <cds-modal-header (closeSelect)="closeModal()">
-    <h3 cdsModalHeaderHeading>
-      {{ 'document.fillInMetadata' | translate | translate }}
-    </h3>
+  <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+    @if (isEditMode) {
+      <h3 cdsModalHeaderHeading>
+        {{ 'document.editMetadata' | translate  }}
+      </h3>
+    } @else {
+      <h3 cdsModalHeaderHeading>
+        {{ 'document.fillInMetadata' | translate }}
+      </h3>
+    }
   </cds-modal-header>
   <section cdsModalContent class="cds--modal-content">
     <ng-container *ngTemplateOutlet="metadataForm; context: {obs: obs}"></ng-container>

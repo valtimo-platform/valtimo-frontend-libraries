@@ -48,7 +48,7 @@ import {CommonModule} from '@angular/common';
     DocumentenApiMetadataModalComponent,
     ButtonModule,
     IconModule,
-    TranslateModule,
+    TranslateModule
   ],
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, AfterViewInit {
@@ -96,13 +96,13 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public showZaakLinkWarning: boolean;
   public uploadProcessLinkedSet = false;
   public uploadProcessLinked!: boolean;
+  public isEditMode: boolean = false;
 
   public readonly acceptedFiles: string | null =
     this.configService?.config?.caseFileUploadAcceptedFiles || null;
   public readonly maxFileSize: number = this.configService?.config?.caseFileSizeUploadLimitMB || 5;
 
   public readonly fileToBeUploaded$ = new BehaviorSubject<File | null>(null);
-  public readonly hideModal$ = new Subject<null>();
   public readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
   public readonly showModal$ = new Subject<null>();
   public readonly showUploadModal$ = new BehaviorSubject<boolean>(false);
@@ -168,7 +168,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     private readonly documentenApiDocumentService: DocumentenApiDocumentService
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.refetchDocuments();
     this.setUploadProcessLinked();
     this.isUserAdmin();
@@ -259,8 +259,10 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.downloadDocument(file, true);
   }
 
-  public onEditMetadata(file: DocumentenApiRelatedFile): void {
-    // To complete
+  public onEditMetadata(file: File): void {
+    this.isEditMode = true;
+    this.fileToBeUploaded$.next(file);
+    this.showUploadModal$.next(true);
   }
 
   public closeMetadataModal(): void {
@@ -268,6 +270,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   public onFileSelected(event: any): void {
+    this.isEditMode = false;
     this.fileToBeUploaded$.next(event.target.files[0]);
     this.showUploadModal$.next(true);
   }

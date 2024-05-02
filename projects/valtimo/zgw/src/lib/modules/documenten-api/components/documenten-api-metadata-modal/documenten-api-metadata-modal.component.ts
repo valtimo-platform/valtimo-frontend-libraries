@@ -95,6 +95,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
 
   @Input() documentTitle = '';
   @Input() disableDocumentTitle: boolean;
+  @Input() isEditMode: boolean;
   @Input() filename: string;
   @Input() disableFilename: boolean;
   @Input() author: string;
@@ -206,15 +207,15 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
       )
     );
 
-  public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
-    this.valtimoModalService.documentDefinitionName$,
-  ]).pipe(
-    filter(([documentDefinitionName]) => !!documentDefinitionName),
-    switchMap(([documentDefinitionName]) =>
-      this.documentenApiDocumentService.getTags(documentDefinitionName)
-    ),
-    map(tags => tags.map(tag => ({id: '1', content: 'tag 1', selected: false})))
-  );
+  // public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
+  //   this.valtimoModalService.documentDefinitionName$,
+  // ]).pipe(
+  //   filter(([documentDefinitionName]) => !!documentDefinitionName),
+  //   switchMap(([documentDefinitionName]) =>
+  //     this.documentenApiDocumentService.getTags(documentDefinitionName)
+  //   ),
+  //   map(tags => tags.map(tag => ({id: '1', content: 'tag 1', selected: false})))
+  // );
 
   public readonly documentTypeItems$: Observable<Array<ListItem>> = combineLatest([
     this.route?.params || of(null),
@@ -301,7 +302,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
   public closeModal(): void {
     this.setInitForm();
     this.additionalDocumentDate$.next('neither');
-    this.open = false;
+    this.close.emit();
   }
 
   private changeDateFormat(){
