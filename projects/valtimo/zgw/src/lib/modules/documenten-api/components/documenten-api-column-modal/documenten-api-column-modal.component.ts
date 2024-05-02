@@ -24,7 +24,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {
   ButtonModule,
@@ -34,13 +34,14 @@ import {
   ModalModule,
   RadioModule,
 } from 'carbon-components-angular';
+import {Subscription, switchMap} from 'rxjs';
+
 import {
   ConfiguredColumn,
   DocumentenApiColumnModalType,
   DocumentenApiColumnModalTypeCloseEvent,
 } from '../../models';
 import {DocumentenApiColumnService} from '../../services';
-import {Subscriber, Subscription, switchMap} from 'rxjs';
 
 @Component({
   selector: 'valtimo-documenten-api-column-modal',
@@ -98,7 +99,6 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
   @Input() public set availableColumns(value: ConfiguredColumn[]) {
     if (!value) return;
 
-    console.log(value);
     this._availableColumns = value.map((column: ConfiguredColumn) => ({
       content: column.key,
       selected: false,
@@ -123,7 +123,7 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
       {content: '', selected: false, column: {} as ConfiguredColumn},
       Validators.required
     ),
-    defaultSort: this.fb.control('noDefault'),
+    defaultSort: this.fb.control(null),
   });
 
   private readonly _subscriptions = new Subscription();
@@ -156,7 +156,11 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
     }
     const column = {...columnValue.column, defaultSort: this.formGroup.get('defaultSort')?.value};
 
-    if (!!this._defaultSortedColumn && this._defaultSortedColumn.key !== column.key) {
+    if (
+      !!this._defaultSortedColumn &&
+      this._defaultSortedColumn.key !== column.key &&
+      !!column.defaultSort
+    ) {
       this.zgwDocumentenApiColumnService
         .updateColumn(this.definitionName, {
           ...this._defaultSortedColumn,

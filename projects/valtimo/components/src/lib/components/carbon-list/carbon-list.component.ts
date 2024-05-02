@@ -39,7 +39,7 @@ import {
   TableItem,
   TableModel,
 } from 'carbon-components-angular';
-import {get as _get} from 'lodash';
+import {get as _get, initial} from 'lodash';
 import {NGXLogger} from 'ngx-logger';
 import {
   BehaviorSubject,
@@ -343,6 +343,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _translatedFields$: Observable<ColumnConfig[]> = this.translateService.stream('key').pipe(
     switchMap(() => this._fields$),
+    filter((fields: ColumnConfig[]) => !!fields),
     map((fields: ColumnConfig[]) =>
       fields.map((field: ColumnConfig) => ({
         ...field,
@@ -371,9 +372,12 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     map((header: TableHeaderItem[]) => [...header, ...this.extraColumns])
   );
 
-  private readonly _tableItems$: Observable<TableItem[][]> = this._viewInitialized$.pipe(
-    switchMap(() => combineLatest([this._fields$, this._items$])),
-    filter(([fields, items]) => !!fields && !!items),
+  private readonly _tableItems$: Observable<TableItem[][]> = combineLatest([
+    this._fields$,
+    this._items$,
+    this._viewInitialized$,
+  ]).pipe(
+    filter(([fields, items, viewInitialized]) => !!fields && !!items && viewInitialized),
     map(([fields, items]) =>
       items.map((item: CarbonListItem, index: number) => [
         ...fields.map((field: ColumnConfig) => {
