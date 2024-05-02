@@ -26,17 +26,7 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {ButtonModule, IconModule, TagModule} from 'carbon-components-angular';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  Subject,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {
   ConfiguredColumn,
   DocumentenApiColumnModalType,

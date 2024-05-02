@@ -23,6 +23,7 @@ import {
   CarbonListModule,
   ColumnConfig,
   DocumentenApiMetadata,
+  SortState,
   ViewType,
 } from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
@@ -71,13 +72,21 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         paramMap.get('documentDefinitionName') ?? ''
       )
     ),
-    map((columns: ConfiguredColumn[]) =>
-      columns.map((column: ConfiguredColumn) => ({
+    map((columns: ConfiguredColumn[]) => {
+      const defaultSortColumn: ConfiguredColumn | undefined = columns.find(
+        (column: ConfiguredColumn) => !!column.defaultSort
+      );
+      if (!!defaultSortColumn) {
+        this._sort$.next({sort: `${defaultSortColumn.key},${defaultSortColumn.defaultSort}`});
+      }
+
+      return columns.map((column: ConfiguredColumn) => ({
         key: column.key,
         label: `document.${column.key}`,
         viewType: ViewType.TEXT,
-      }))
-    )
+        sortable: column.sortable,
+      }));
+    })
   );
   public actionItems: ActionItem[] = [
     {
@@ -92,14 +101,33 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     },
   ];
 
-  private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
+  public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params?.documentDefinitionName),
     filter(documentDefinitionName => !!documentDefinitionName)
   );
 
-  private readonly _documentId$: Observable<string> = this.route.params.pipe(
+  public readonly documentId$: Observable<string> = this.route.params.pipe(
     map(params => params?.documentId),
     filter(documentId => !!documentId)
+  );
+
+  public readonly initialSortState$: Observable<SortState | null> = this.route.queryParamMap.pipe(
+    map(params => params['params']),
+    map(params => {
+      if (!!params['sort']) {
+        const paramsSplit = params['sort'].split(',');
+        const state = {
+          name: paramsSplit[0],
+          direction: paramsSplit[1],
+        };
+
+        return {
+          isSorting: true,
+          state,
+        };
+      }
+      return null;
+    }),
   );
 
   public isAdmin: boolean;
@@ -119,16 +147,22 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly uploading$ = new BehaviorSubject<boolean>(false);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  private readonly _refetch$ = new BehaviorSubject<DocumentenApiFilterModel | undefined>(undefined);
+  private readonly _refetch$ = new BehaviorSubject<null>(null);
+  private readonly _filter$ = new BehaviorSubject<DocumentenApiFilterModel | undefined>(undefined);
+  private readonly _sort$ = new BehaviorSubject<{sort: string} | undefined>(undefined);
 
   public relatedFiles$: Observable<Array<DocumentenApiRelatedFileListItem>> = combineLatest([
-    this._documentId$,
+    this.documentId$,
+    this.route.queryParamMap,
     this._refetch$,
   ]).pipe(
     tap(() => this.loading$.next(true)),
-    switchMap(([documentId, filter]) =>
+    switchMap(([documentId, queryParams, _]) =>
       combineLatest([
-        this.documentenApiDocumentService.getFilteredZakenApiDocuments(documentId, filter),
+        this.documentenApiDocumentService.getFilteredZakenApiDocuments(
+          documentId,
+          queryParams['params']
+        ),
         this.translateService.stream('key'),
       ])
     ),
@@ -179,7 +213,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.refetchDocuments();
+    this.openQueryParamsSubscription();
     this.setUploadProcessLinked();
     this.isUserAdmin();
     this.iconService.registerAll([Filter16, TagGroup16, Upload16]);
@@ -221,7 +255,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.uploading$.next(true);
     this.hideModal$.next(null);
 
-    combineLatest([this.fileToBeUploaded$, this._documentId$])
+    combineLatest([this.fileToBeUploaded$, this.documentId$])
       .pipe(take(1))
       .pipe(
         tap(([file, documentId]) => {
@@ -256,7 +290,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   }
 
   public onNavigateToCaseAdminClick(): void {
-    this._documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+    this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
       this.router.navigate([`/dossier-management/dossier/${documentDefinitionName}`]);
     });
   }
@@ -270,11 +304,19 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   }
 
   public onFilterEvent(filter: DocumentenApiFilterModel): void {
-    this._refetch$.next(filter);
+    this._filter$.next(filter);
+  }
+
+  public onSortChanged(sortState: SortState): void {
+    this._sort$.next(
+      sortState.isSorting
+        ? {sort: `${sortState.state.name},${sortState.state.direction}`}
+        : undefined
+    );
   }
 
   public refetchDocuments(): void {
-    this._refetch$.next(undefined);
+    this._refetch$.next(null);
   }
 
   private downloadDocument(relatedFile: DocumentenApiRelatedFile, forceDownload: boolean): void {
@@ -285,8 +327,21 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     );
   }
 
+  private openQueryParamsSubscription(): void {
+    combineLatest([
+      this.documentDefinitionName$,
+      this.documentId$,
+      this._filter$,
+      this._sort$,
+    ]).subscribe(([definitionName, documentId, filter, sort]) => {
+      this.router.navigate([`/dossiers/${definitionName}/document/${documentId}/documents`], {
+        queryParams: {...filter, ...sort},
+      });
+    });
+  }
+
   private setUploadProcessLinked(): void {
-    this._documentDefinitionName$
+    this.documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>
           this.uploadProviderService.checkUploadProcessLink(documentDefinitionName)

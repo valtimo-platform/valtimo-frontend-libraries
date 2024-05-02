@@ -20,16 +20,11 @@
     loading: loading$ | async,
     uploading: uploading$ | async,
     relatedFiles: relatedFiles$ | async,
-    fields: fields$ | async
+    fields: fields$ | async,
+    initialSortState: initialSortState$ | async
   } as obs"
 >
-  @if (!obs.loading && !obs.uploading && obs.relatedFiles) {
-    <ng-container
-      *ngTemplateOutlet="list; context: {relatedFiles: obs.relatedFiles, fields: obs.fields}"
-    ></ng-container>
-  } @else {
-    <ng-container *ngTemplateOutlet="listLoading"></ng-container>
-  }
+  <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
 </div>
 
 <valtimo-documenten-api-metadata-modal
@@ -40,12 +35,15 @@
   (metadata)="metadataSet($event)"
 ></valtimo-documenten-api-metadata-modal>
 
-<ng-template #list let-relatedFiles="relatedFiles" let-fields="fields">
+<ng-template #list let-obs="obs">
   <valtimo-carbon-list
     [actionItems]="actionItems"
-    [items]="relatedFiles"
-    [fields]="fields"
+    [items]="obs.relatedFiles"
+    [fields]="obs.fields"
+    [loading]="obs.loading"
+    [initialSortState]="obs.initialSortState"
     (rowClicked)="onRowClick($event)"
+    (sortChanged)="onSortChanged($event)"
     hideColumnHeader
   >
     <div carbonToolbarContent>
@@ -85,14 +83,6 @@
         title="{{ 'dossier.documenten.noFilesTitle' | translate }}"
       ></valtimo-no-results>
     }
-  </valtimo-carbon-list>
-</ng-template>
-
-<ng-template #listLoading>
-  <valtimo-carbon-list [items]="[]" [fields]="fields" [loading]="true" hideColumnHeader>
-    <div carbonToolbarContent>
-      <ng-container *ngTemplateOutlet="uploadButton; context: {disabled: true}"></ng-container>
-    </div>
   </valtimo-carbon-list>
 </ng-template>
 

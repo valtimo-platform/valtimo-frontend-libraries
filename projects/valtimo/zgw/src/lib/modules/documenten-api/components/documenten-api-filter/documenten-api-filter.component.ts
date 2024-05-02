@@ -23,7 +23,7 @@ import {
   InputModule,
   ListItem,
 } from 'carbon-components-angular';
-import {debounceTime, filter, map, Observable, Subscription, switchMap} from 'rxjs';
+import {debounceTime, filter, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {DocumentenApiFilterModel} from '../../models';
 import {DocumentenApiTagService} from '../../services';
 
@@ -78,7 +78,7 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
       this.documentService.getDocumentTypes(paramMap.get('documentDefinitionName') ?? '')
     ),
     map((types: DocumentType[]) =>
-      types.map((type: DocumentType) => ({content: type.name, selected: false, id: type.url}))
+      types.map((type: DocumentType) => ({content: type.name, selected: false}))
     )
   );
 
@@ -115,22 +115,22 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
     this._subscriptions.add(
       this.formGroup.valueChanges.pipe(debounceTime(500)).subscribe(formValue => {
         this.filterEvent.emit({
-          ...(!!formValue.auteur && {author: formValue.auteur}),
-          ...(!!formValue.titel && {title: formValue.titel}),
+          ...(!!formValue.auteur && {auteur: formValue.auteur}),
+          ...(!!formValue.titel && {titel: formValue.titel}),
           ...(!!formValue.creatieDatumFrom && {
             creatieDatumFrom: new Date(formValue.creatieDatumFrom),
           }),
           ...(!!formValue.creatieDatumTo && {
             creatieDatumTo: new Date(formValue.creatieDatumTo),
           }),
-          ...(!!(formValue.vertrouwelijkHeidaanduiding as ListItem).id && {
-            confidentialityLevel: (formValue.vertrouwelijkHeidaanduiding as ListItem).id,
+          ...(!!(formValue.vertrouwelijkHeidaanduiding as ListItem)?.id && {
+            vertrouwelijkheidaanduiding: (formValue.vertrouwelijkHeidaanduiding as ListItem).id,
           }),
-          ...(!!(formValue.informatieObjectType as ListItem).id && {
-            informationObjectType: (formValue.informatieObjectType as ListItem).id,
+          ...(!!(formValue.informatieObjectType as ListItem)?.content && {
+            informatieobjecttype: (formValue.informatieObjectType as ListItem).content,
           }),
           ...(!!formValue.trefwoorden && {
-            tags: (formValue.trefwoorden as ListItem[]).map((tag: ListItem) => tag.content),
+            trefwoorden: (formValue.trefwoorden as ListItem[]).map((tag: ListItem) => tag.content),
           }),
         });
       })

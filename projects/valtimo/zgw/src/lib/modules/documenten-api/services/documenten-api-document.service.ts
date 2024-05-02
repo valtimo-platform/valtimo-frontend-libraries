@@ -38,11 +38,11 @@ export class DocumentenApiDocumentService extends BaseApiService {
 
   public getFilteredZakenApiDocuments(
     documentId: string,
-    filters?: any
+    paramsMap?: any
   ): Observable<Page<DocumentenApiRelatedFile>> {
-    const params = new HttpParams({fromObject: filters});
+    const params = new HttpParams({fromObject: paramsMap});
 
-    return !!filters
+    return !!paramsMap
       ? this.httpClient.get<Page<DocumentenApiRelatedFile>>(
           this.getApiUrl(`/v2/zaken-api/document/${documentId}/files`),
           {params}
