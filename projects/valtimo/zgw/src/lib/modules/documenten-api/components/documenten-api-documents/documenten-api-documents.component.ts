@@ -67,6 +67,11 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       callback: this.onEditMetadata.bind(this),
       type: 'normal',
     },
+    {
+      label: 'document.delete',
+      callback: this.onDeleteActionClick.bind(this),
+      type: 'danger',
+    },
   ];
   public fieldsConfig = [
     // TODO: Refactor this once admin page config is implemented
@@ -202,6 +207,15 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
 
     this.fields = [...this.getFields(fieldOptions, this.fieldsConfig)];
   }
+
+  public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
+    this.loading$.next(true);
+    this.documentenApiDocumentService.deleteDocument(item).subscribe(() => {
+      // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
+      this.refetchDocuments();
+    });
+  }
+
 
   public bytesToMegabytes(bytes: number): string {
     const megabytes = bytes / (1024 * 1024);
