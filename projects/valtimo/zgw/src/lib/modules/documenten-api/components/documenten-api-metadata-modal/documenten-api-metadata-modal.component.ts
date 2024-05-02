@@ -266,9 +266,11 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
       language: this.documentenApiMetadataForm.controls.language.value.id,
       confidentialityLevel: this.documentenApiMetadataForm.controls.confidentialityLevel.value.id,
       informatieobjecttype:
-        this.documentenApiMetadataForm.controls.informatieobjecttype.value.content,
+        this.documentenApiMetadataForm.controls.informatieobjecttype.value.id,
       status: this.documentenApiMetadataForm.controls.status.value.id,
     });
+
+    this.changeDateFormat();
 
     if (this.documentenApiMetadataForm.valid)
       this.metadata.emit(this.documentenApiMetadataForm.value);
@@ -278,17 +280,17 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
 
   public setInitForm(): void {
     this.documentenApiMetadataForm = this.fb.group({
+      filename: this.fb.control('', Validators.required),
       title: this.fb.control('', Validators.required),
-      description: this.fb.control('', Validators.required),
-      filename: this.fb.control(this.filename, Validators.required),
-      confidentialityLevel: this.fb.control('', Validators.required),
       author: this.fb.control('', Validators.required),
+      description: this.fb.control('', Validators.required),
+      language: this.fb.control('', Validators.required),
+      informatieobjecttype: this.fb.control('', Validators.required),
       status: this.fb.control('', Validators.required),
+      confidentialityLevel: this.fb.control('', Validators.required),
       creationDate: this.fb.control('', Validators.required),
       receiptDate: this.fb.control(''),
       sendDate: this.fb.control(''),
-      language: this.fb.control('', Validators.required),
-      informatieobjecttype: this.fb.control('', Validators.required),
     });
   }
 
@@ -300,5 +302,12 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
     this.setInitForm();
     this.additionalDocumentDate$.next('neither');
     this.open = false;
+  }
+
+  private changeDateFormat(){
+    const date = new Date (this.documentenApiMetadataForm.controls.creationDate.value);
+    this.documentenApiMetadataForm.patchValue({
+      creationDate:`${date.getFullYear()}-${date.getMonth().toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')}`
+    })
   }
 }
