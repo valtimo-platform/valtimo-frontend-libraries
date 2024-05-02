@@ -37,12 +37,6 @@ export class DocumentenApiDocumentService extends BaseApiService {
     );
   }
 
-  public getTags(caseDefinitionName: string): Observable<Array<any>>{
-    return this.httpClient.get<Array<any>>(
-      this.getApiUrl(`/v1/case-definition/${caseDefinitionName}/zgw-document/trefwoord`)
-    );
-  }
-
   public deleteDocument(file: DocumentenApiRelatedFile): Observable<DocumentenApiRelatedFile[]> {
     return this.httpClient.delete<DocumentenApiRelatedFile[]>(
       this.getApiUrl(`/v1/documenten-api/${file.pluginConfigurationId}/files/${file.fileId}`)
