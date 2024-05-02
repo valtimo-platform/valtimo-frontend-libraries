@@ -47,6 +47,13 @@
     title="{{ 'zgw.tags.list.noResultsTitle' | translate }}"
     description="{{ 'zgw.tags.list.noResultsDescription' | translate }}"
   ></valtimo-no-results>
+
+  <valtimo-no-results
+    *ngIf="(searchTerm$ | async) !== ''"
+    title="{{ 'zgw.tags.search.noResultsTitle' | translate }}"
+    description="{{ 'zgw.tags.search.noResultsDescription' | translate }}"
+    illustration="valtimo-layout/img/emptystate-no-result.svg"
+  ></valtimo-no-results>
 </valtimo-carbon-list>
 
 <valtimo-documenten-api-tag-modal
@@ -73,7 +80,11 @@
   "
   [showModalSubject$]="showDeleteMultipleModal$"
   titleTranslationKey="interface.delete"
-  (confirmEvent)="confirmDeleteMultipleTag()"
+  [outputOnConfirm]="{
+    documentDefinitionName: documentDefinitionName$ | async,
+    tagIds: selectedRowKeys$ | async
+  }"
+  (confirmEvent)="confirmDeleteMultipleTag($event)"
 ></valtimo-confirmation-modal>
 
 <ng-template #addButtton>

@@ -648,6 +648,10 @@
         "noResultsTitle": "Kein Schlüsselwörter gefunden",
         "noResultsDescription": "Fügen Sie ein Schlüsselwört hinzu"
       },
+      "search": {
+        "noResultsTitle": "Keine Ergebnisse",
+        "noResultsDescription": "Versuchen Sie, die Suchfilter anzupassen, um das Gesuchte zu finden."
+      },
       "fields": {
         "value": "Schlüsselwört",
         "valueRequired": "Schlüsselwort ist erforderlich.",

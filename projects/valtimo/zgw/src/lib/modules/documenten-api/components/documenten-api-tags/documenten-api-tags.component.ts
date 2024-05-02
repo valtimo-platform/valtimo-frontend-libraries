@@ -191,13 +191,12 @@ export class DocumentenApiTagsComponent {
       });
   }
 
-  public confirmDeleteMultipleTag(): void {
-    combineLatest([this.documentDefinitionName$, this.selectedRowKeys$])
-      .pipe(
-        switchMap(([documentDefinitionName, keys]) =>
-          this.documentenApiTagService.deleteTags(documentDefinitionName, keys)
-        )
-      )
+  public confirmDeleteMultipleTag(tagsToDelete: {
+    documentDefinitionName: string;
+    tagIds: string[];
+  }): void {
+    this.documentenApiTagService
+      .deleteTags(tagsToDelete.documentDefinitionName, tagsToDelete.tagIds)
       .subscribe(() => {
         this.reload();
       });

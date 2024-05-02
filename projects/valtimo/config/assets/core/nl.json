@@ -648,6 +648,10 @@
         "noResultsTitle": "Geen trefwoorden",
         "noResultsDescription": "Voeg een trefwoord toe om te beginnen"
       },
+      "search": {
+        "noResultsTitle": "Geen resultaten",
+        "noResultsDescription": "Probeer de zoekfilters aan te passen om te vinden wat je zoekt."
+      },
       "fields": {
         "value": "Trefwoord",
         "valueRequired": "Trefwoord is verplicht.",

@@ -649,6 +649,10 @@
         "noResultsTitle": "No tags",
         "noResultsDescription": "Add a tag to start"
       },
+      "search": {
+        "noResultsTitle": "No results",
+        "noResultsDescription": "Try adjusting your search or filter options to find what you're looking for."
+      },
       "fields": {
         "value": "Tag",
         "valueRequired": "Tag is required.",
