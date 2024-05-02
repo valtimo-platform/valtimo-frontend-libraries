@@ -50,7 +50,7 @@
             [form]="obs.formDefinition"
             [formDefinitionId]="obs.formDefinitionId"
             [taskInstanceId]="obs.taskId"
-            (submit)="onSubmit($event)"
+            (formSubmit)="onSubmit($event)"
             (change)="onChange($event)"
             [options]="obs.formioOptions"
     ></valtimo-form-view-model>

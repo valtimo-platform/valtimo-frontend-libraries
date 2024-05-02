@@ -61,7 +61,7 @@ export class FormViewModelComponent implements OnInit {
     this.readOnly$.next(readOnlyValue);
   }
   @Input() formRefresh$!: Subject<FormioRefreshValue>;
-  @Output() submit = new EventEmitter<any>();
+  @Output() formSubmit = new EventEmitter<any>();
 
   public refreshForm = new EventEmitter<FormioRefreshValue>();
 
@@ -150,7 +150,7 @@ export class FormViewModelComponent implements OnInit {
   }
 
   public onSubmit(submission: FormioSubmission): void {
-    this.submit.next(submission)
+    this.formSubmit.next(submission)
   }
 
   public formReady(form: FormIoSourceComponent): void {
