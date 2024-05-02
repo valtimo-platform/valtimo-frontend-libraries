@@ -16,16 +16,7 @@
 
 import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {DocumentenApiColumnModalTypeCloseEvent} from '../../models';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  Subject,
-  switchMap,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, Subject, switchMap, tap,} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {
   ActionItem,
@@ -194,10 +185,21 @@ export class DocumentenApiTagsComponent {
   public confirmDeleteMultipleTag(tagsToDelete: {
     documentDefinitionName: string;
     tagIds: string[];
+    itemsOnCurrentPage: number;
   }): void {
     this.documentenApiTagService
       .deleteTags(tagsToDelete.documentDefinitionName, tagsToDelete.tagIds)
       .subscribe(() => {
+        const lastPage = Math.ceil(
+          (this.pagination.collectionSize as number) / this.pagination.size
+        );
+        if (
+          tagsToDelete.itemsOnCurrentPage <= tagsToDelete.tagIds.length &&
+          this.pagination.page > 1 &&
+          this.pagination.page === lastPage
+        ) {
+          this.pagination = {...this.pagination, page: this.pagination.page - 1};
+        }
         this.reload();
       });
   }
