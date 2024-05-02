@@ -179,7 +179,7 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
     }
 
     this.zgwDocumentenApiColumnService.updateColumn(this.definitionName, column).subscribe(() => {
-      this.closeModal.emit('closeAndRefresh');
+      this.onClose(true);
     });
   }
 
