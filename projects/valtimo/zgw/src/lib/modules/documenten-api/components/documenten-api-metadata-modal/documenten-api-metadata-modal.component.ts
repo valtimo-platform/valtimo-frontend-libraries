@@ -280,6 +280,16 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
   }
 
   public setInitForm(): void {
+    this.userEmail$.subscribe(email =>
+      this.documentenApiMetadataForm.patchValue({
+        author: email
+      })
+    );
+    this.file$.subscribe(file =>
+      this.documentenApiMetadataForm.patchValue({
+        filename: file?.name
+      })
+    );
     this.documentenApiMetadataForm = this.fb.group({
       filename: this.fb.control('', Validators.required),
       title: this.fb.control('', Validators.required),
