@@ -31,6 +31,16 @@
   }
 </div>
 
+<valtimo-confirmation-modal
+  confirmButtonTextTranslationKey="dashboardManagement.deleteModal.confirm"
+  contentTranslationKey="dossier.documenten.deleteConfirmationModal.content"
+  confirmButtonType="danger"
+  titleTranslationKey="dossier.documenten.deleteConfirmationModal.title"
+  [showModalSubject$]="showDeleteConfirmationModal$"
+  (confirmEvent)="deleteDocument($event)"
+>
+</valtimo-confirmation-modal>
+
 <valtimo-documenten-api-metadata-modal
   [open]="showUploadModal$ | async"
   [disabled$]="modalDisabled$"

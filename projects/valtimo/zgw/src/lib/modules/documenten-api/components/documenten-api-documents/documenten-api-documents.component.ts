@@ -21,6 +21,7 @@ import {
   ActionItem,
   CarbonListModule,
   ColumnConfig,
+  ConfirmationModalModule,
   DocumentenApiMetadata,
   ViewType,
 } from '@valtimo/components';
@@ -48,7 +49,8 @@ import {CommonModule} from '@angular/common';
     DocumentenApiMetadataModalComponent,
     ButtonModule,
     IconModule,
-    TranslateModule
+    TranslateModule,
+    ConfirmationModalModule
   ],
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, AfterViewInit {
@@ -56,6 +58,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   @ViewChild('sizeTemplate') public sizeTemplate: TemplateRef<any>;
 
   public fields: ColumnConfig[];
+  public document: DocumentenApiRelatedFile;
   public actionItems: ActionItem[] = [
     {
       label: 'document.download',
@@ -111,6 +114,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
   public readonly showModal$ = new Subject<null>();
   public readonly showUploadModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showDeleteConfirmationModal$ = new BehaviorSubject<boolean>(false);
 
   public readonly uploading$ = new BehaviorSubject<boolean>(false);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
@@ -209,8 +213,13 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
+    this.document = item;
+    this.showDeleteConfirmationModal$.next(true);
+  }
+
+  public deleteDocument(item: DocumentenApiRelatedFile): void{
     this.loading$.next(true);
-    this.documentenApiDocumentService.deleteDocument(item).subscribe(() => {
+    this.documentenApiDocumentService.deleteDocument(this.document).subscribe(() => {
       // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
       this.refetchDocuments();
     });

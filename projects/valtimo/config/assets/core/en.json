@@ -135,6 +135,10 @@
       }
     },
     "documenten": {
+      "deleteConfirmationModal": {
+        "title": "Delete document",
+        "content": "Are you sure you want to delete this document? This action cannot be undone."
+      },
       "noProcessLinked": {
         "regularUser": "The document upload is not available for this case. Please contact an administrator",
         "adminRole": "The process for uploading documents has not been configured. Please configure this process on the case management page"
