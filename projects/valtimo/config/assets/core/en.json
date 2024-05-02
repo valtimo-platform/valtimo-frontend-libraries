@@ -169,6 +169,7 @@
     "createdOn": "Created on",
     "sequence": "Sequence",
     "fillInMetadata": "Add file metadata",
+    "editMetadata": "Edit file metadata",
     "cancel": "Cancel",
     "upload": "Upload",
     "save": "Save",

@@ -169,6 +169,7 @@
     "createdOn": "Aanmaakdatum",
     "sequence": "Volgnummer",
     "fillInMetadata": "Voeg metagegevens van bestanden toe",
+    "editMetadata": "Bewerk metadata bewerken",
     "cancel": "Annuleren",
     "upload": "Uploaden",
     "save": "Opslaan",
