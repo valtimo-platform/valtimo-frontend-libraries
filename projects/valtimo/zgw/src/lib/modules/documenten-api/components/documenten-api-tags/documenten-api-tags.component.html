@@ -21,7 +21,7 @@
     addModalClosed: addModalClosed$ | async
   } as obs"
   [items]="obs.documentTags"
-  [fields]="fields$ | async"
+  [fields]="FIELDS"
   [header]="false"
   [loading]="obs.loading"
   [actionItems]="ACTION_ITEMS"
@@ -32,7 +32,7 @@
   (paginationSet)="paginationSet($event)"
   (search)="searchTermEntered($event)"
 >
-  <ng-container carbonToolbarContent *ngTemplateOutlet="buttons"></ng-container>
+  <ng-container carbonToolbarContent *ngTemplateOutlet="addButtton"></ng-container>
 
   <ng-container carbonToolbarActions>
     <button cdsButton="primary" (click)="showDeleteMultipleModal()">
@@ -50,10 +50,7 @@
 </valtimo-carbon-list>
 
 <valtimo-documenten-api-tag-modal
-  *ngIf="{
-    addModalClosed: addModalClosed$ | async
-  } as obs"
-  [open]="!obs.addModalClosed"
+  [open]="(addModalClosed$ | async) === false"
   [documentDefinitionName]="documentDefinitionName$ | async"
   (closeModalEvent)="closeModal($event)"
 ></valtimo-documenten-api-tag-modal>
@@ -78,12 +75,6 @@
   titleTranslationKey="interface.delete"
   (confirmEvent)="confirmDeleteMultipleTag()"
 ></valtimo-confirmation-modal>
-
-<ng-template #buttons>
-  <div class="dossier-management-search-fields__buttons">
-    <ng-container *ngTemplateOutlet="addButtton"></ng-container>
-  </div>
-</ng-template>
 
 <ng-template #addButtton>
   <button cdsButton="primary" [disabled]="loading$ | async" (click)="openAddModal()">

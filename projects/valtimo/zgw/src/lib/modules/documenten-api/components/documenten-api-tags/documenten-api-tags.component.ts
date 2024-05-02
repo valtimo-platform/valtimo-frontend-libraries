@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {DocumentenApiColumnModalTypeCloseEvent} from '../../models';
 import {
   BehaviorSubject,
@@ -34,7 +34,6 @@ import {
   ColumnConfig,
   ConfirmationModalModule,
   Pagination,
-  PendingChangesComponent,
   ViewType,
 } from '@valtimo/components';
 import {DocumentenApiColumnModalComponent} from '../documenten-api-column-modal/documenten-api-column-modal.component';
@@ -64,7 +63,7 @@ import {Page} from '@valtimo/document';
     IconModule,
   ],
 })
-export class DocumentenApiTagsComponent extends PendingChangesComponent implements AfterViewInit {
+export class DocumentenApiTagsComponent {
   @ViewChild(CarbonListComponent) carbonList: CarbonListComponent;
 
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
@@ -111,7 +110,7 @@ export class DocumentenApiTagsComponent extends PendingChangesComponent implemen
 
       return tagPage.content;
     }),
-    tap(tags => {
+    tap(() => {
       this.loading$.next(false);
     })
   );
@@ -124,6 +123,14 @@ export class DocumentenApiTagsComponent extends PendingChangesComponent implemen
     },
   ];
 
+  public readonly FIELDS: ColumnConfig[] = [
+    {
+      key: 'value',
+      label: 'zgw.tags.fields.value',
+      viewType: ViewType.TEXT,
+    },
+  ];
+
   public pagination: Pagination = {
     collectionSize: 0,
     page: 1,
@@ -133,13 +140,7 @@ export class DocumentenApiTagsComponent extends PendingChangesComponent implemen
   constructor(
     private readonly route: ActivatedRoute,
     private readonly documentenApiTagService: DocumentenApiTagService
-  ) {
-    super();
-  }
-
-  public ngAfterViewInit(): void {
-    this.initFields();
-  }
+  ) {}
 
   public openDeleteModal(tag: DocumentenApiTag): void {
     this.tagToDelete$.next(tag);
@@ -209,15 +210,5 @@ export class DocumentenApiTagsComponent extends PendingChangesComponent implemen
 
   private reload(noAnimation = false): void {
     this._reload$.next(noAnimation ? 'noAnimation' : null);
-  }
-
-  private initFields(): void {
-    this.fields$.next([
-      {
-        key: 'value',
-        label: 'zgw.tags.fields.value',
-        viewType: ViewType.TEXT,
-      },
-    ]);
   }
 }

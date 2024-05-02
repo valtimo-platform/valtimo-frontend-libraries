@@ -650,7 +650,9 @@
         "noResultsDescription": "Add a tag to start"
       },
       "fields": {
-        "value": "Tag"
+        "value": "Tag",
+        "valueRequired": "Tag is required.",
+        "valueMaxLength": "Tag is too long. Maximum length is {{ maxlength }} characters."
       }
     },
     "tabs": {

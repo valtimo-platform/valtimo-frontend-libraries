@@ -649,7 +649,9 @@
         "noResultsDescription": "Voeg een trefwoord toe om te beginnen"
       },
       "fields": {
-        "value": "Trefwoord"
+        "value": "Trefwoord",
+        "valueRequired": "Trefwoord is verplicht.",
+        "valueMaxLength": "Trefwoord is te lang. Maximum lengte is {{ maxlength }} tekens."
       }
     },
     "tabs": {

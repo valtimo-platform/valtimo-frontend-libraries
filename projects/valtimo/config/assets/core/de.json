@@ -649,7 +649,9 @@
         "noResultsDescription": "Fügen Sie ein Schlüsselwört hinzu"
       },
       "fields": {
-        "value": "Schlüsselwört"
+        "value": "Schlüsselwört",
+        "valueRequired": "Schlüsselwort ist erforderlich.",
+        "valueMaxLength": "Das Schlüsselwort ist zu lang. Die maximale Länge beträgt {{ maxlength }} Zeichen."
       }
     },
     "tabs": {

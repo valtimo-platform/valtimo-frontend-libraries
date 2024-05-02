@@ -29,30 +29,35 @@
   </cds-modal-header>
 
   <section cdsModalContent>
-    <ng-container *ngTemplateOutlet="tagForm; context: {obs: obs}"></ng-container>
+    <form [formGroup]="tagFormGroup" class="tag-form">
+      <cds-label
+              [invalidText]="
+        (value?.errors?.['required']
+          ? 'zgw.tags.fields.valueRequired'
+          : 'zgw.tags.fields.valueMaxLength'
+        ) | translate: {maxlength: value?.errors?.maxlength?.requiredLength}
+      "
+              [invalid]="value.dirty && value.invalid"
+      >
+        {{ 'zgw.tags.fields.value' | translate }}
+
+        <input
+                cdsText
+                formControlName="value"
+                [attr.modal-primary-focus]="true"
+                [invalid]="value.dirty && value.invalid"
+        />
+      </cds-label>
+    </form>
   </section>
 
   <cds-modal-footer>
-    <ng-container *ngTemplateOutlet="buttons; context: {obs: obs}"></ng-container>
+    <button cdsButton="secondary" (click)="onClose()" [disabled]="obs.disabled">
+      {{ 'interface.cancel' | translate }}
+    </button>
+
+    <button cdsButton="primary" [disabled]="invalid || pristine || obs.disabled" (click)="addTag()">
+      {{ 'interface.add' | translate }}
+    </button>
   </cds-modal-footer>
 </cds-modal>
-
-<ng-template #tagForm let-obs="obs">
-  <form [formGroup]="tagFormGroup" class="tag-form">
-    <cds-label>
-      {{ 'zgw.tags.fields.value' | translate }}
-
-      <input cdsText formControlName="value" [attr.modal-primary-focus]="true" />
-    </cds-label>
-  </form>
-</ng-template>
-
-<ng-template #buttons let-obs="obs">
-  <button cdsButton="secondary" (click)="onClose()" [disabled]="obs.disabled">
-    {{ 'interface.cancel' | translate }}
-  </button>
-
-  <button cdsButton="primary" [disabled]="invalid || pristine || obs.disabled" (click)="addTag()">
-    {{ 'interface.add' | translate }}
-  </button>
-</ng-template>

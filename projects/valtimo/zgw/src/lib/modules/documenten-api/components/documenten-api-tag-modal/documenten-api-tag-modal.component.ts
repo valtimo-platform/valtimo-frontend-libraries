@@ -38,11 +38,12 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 import {DocumentenApiTag} from '../../models/documenten-api-tag.model';
+import {Utils} from 'formiojs';
+import getValue = Utils.getValue;
 
 @Component({
   selector: 'valtimo-documenten-api-tag-modal',
   templateUrl: './documenten-api-tag-modal.component.html',
-  styleUrls: ['./documenten-api-tag-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -100,7 +101,7 @@ export class DocumentenApiTagModalComponent implements OnDestroy {
     this.disable();
 
     this.documentenApiTagService
-      .createTag(this.documentDefinitionName, this.getFormValue().value)
+      .createTag(this.documentDefinitionName, this.value.value)
       .subscribe({
         next: () => {
           this.enable();
@@ -114,10 +115,7 @@ export class DocumentenApiTagModalComponent implements OnDestroy {
   }
 
   private resetForm(): void {
-    this.tagFormGroup.patchValue({
-      value: '',
-    });
-    this.tagFormGroup.markAsPristine();
+    this.tagFormGroup.reset();
   }
 
   private disable(): void {
@@ -143,11 +141,5 @@ export class DocumentenApiTagModalComponent implements OnDestroy {
   private closeAndRefresh(): void {
     this.closeModalEvent.emit('closeAndRefresh');
     this.resetForm();
-  }
-
-  private getFormValue(): DocumentenApiTag {
-    return {
-      value: this.value.value,
-    };
   }
 }
