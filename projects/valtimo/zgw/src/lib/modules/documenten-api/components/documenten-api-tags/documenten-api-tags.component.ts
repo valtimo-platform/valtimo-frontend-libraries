@@ -193,7 +193,6 @@ export class DocumentenApiTagsComponent {
         const lastPage = Math.ceil(
           (this.pagination.collectionSize as number) / this.pagination.size
         );
-        // if the delete is going to result in an empty page, go back one page
         if (
           tagsToDelete.itemsOnCurrentPage <= tagsToDelete.tagIds.length &&
           this.pagination.page > 1 &&
