@@ -30,7 +30,7 @@ import {
   from,
   map,
   Observable,
-  of, publishReplay,
+  of,
   Subject,
   switchMap,
   take,
@@ -208,9 +208,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
       )
     );
 
-  public readonly documentDefinitionName$: Observable<string> = from(this.route.params.pipe(
-      map(params => params?.documentDefinitionName),
-    )
+  public readonly documentDefinitionName$: Observable<string> = from(
+    this.route.params.pipe(map(params => params?.documentDefinitionName))
   );
 
   public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
@@ -220,9 +219,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
     switchMap(([documentDefinitionName]) =>
       this.documentenApiTagService.getTags(documentDefinitionName)
     ),
-    map(tags =>
-      tags.map(tag => ({id: tag.value, content: tag.value, selected: false}))
-    )
+    map(tags => tags.map(tag => ({id: tag.value, content: tag.value, selected: false})))
   );
 
   public readonly documentTypeItems$: Observable<Array<ListItem>> = combineLatest([
@@ -270,29 +267,48 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
   public ngOnInit(): void {
     this.setInitForm();
 
-    this.file$?.subscribe( file => {
+    this.file$?.subscribe(file => {
       this.prefillForm(file);
-    })
+    });
   }
 
   public prefillForm(file) {
-    if(file){
-      const {fileName, title, description, author} = file;
+    if (file) {
+      const {
+        fileName,
+        title,
+        author,
+        description,
+        language,
+        informatieobjecttype,
+        status,
+        confidentialityLevel,
+        creationDate,
+        receiptDate,
+        sendDate,
+      } = file;
       this.documentenApiMetadataForm.patchValue({
-          author: author,
-          filename: fileName,
-          title: title,
-          description: description
-        }
-      )
+        filename: fileName,
+        title: title,
+        author: author,
+        description: description,
+        languages: this.findItemByContent(this.languageItems$, language),
+        informatieobjecttype: informatieobjecttype,
+        status: this.findItemByContent(this.statusItems$, status),
+        confidentialityLevel: this.findItemByContent(this.confidentialityLevelItems$, confidentialityLevel),
+        creationDate: creationDate,
+        receiptDate: receiptDate,
+        sendDate: sendDate,
+      });
     }
+    console.log('File: ', file);
   }
 
   public save(): void {
-    if(!this.isEditMode)
-      this.setCorrectValues();
-
-    this.changeDateFormat();
+    this.setCorrectValues();
+    this.formatDate('creationDate');
+    this.formatDate('sendDate');
+    this.formatDate('receiptDate');
 
     if (this.documentenApiMetadataForm.valid)
       this.metadata.emit(this.documentenApiMetadataForm.value);
@@ -300,7 +316,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
     this.closeModal();
   }
 
-  public setCorrectValues(){
+  public setCorrectValues(): void {
     this.documentenApiMetadataForm.patchValue({
       language: this.documentenApiMetadataForm.controls.language.value.id,
       confidentialityLevel: this.documentenApiMetadataForm.controls.confidentialityLevel.value.id,
@@ -310,12 +326,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
   }
 
   public setInitForm(): void {
-    this.userEmail$.subscribe(email =>
-      this.documentenApiMetadataForm.patchValue({
-        author: email
-      })
-    );
-
     this.documentenApiMetadataForm = this.fb.group({
       filename: this.fb.control('', Validators.required),
       title: this.fb.control('', Validators.required),
@@ -329,22 +339,43 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
       receiptDate: this.fb.control(''),
       sendDate: this.fb.control(''),
     });
+
+    // FIND OTHER WAY TO DO IT
+    combineLatest([this.userEmail$, this.file$])
+      .pipe(take(1))
+      .pipe(
+        tap(([userEmail, file]) => {
+          console.log("user email: ", userEmail);
+          this.documentenApiMetadataForm.patchValue({
+            fileName: file?.name,
+             author: userEmail
+           })
+        })
+      )
+      .subscribe();
   }
 
-  public setAdditionalDate(value: AdditionalDocumentDate): void {
+  private setAdditionalDate(value: AdditionalDocumentDate): void {
     this.additionalDocumentDate$.next(value);
-  }
-
-  private changeDateFormat(){
-    const date = new Date (this.documentenApiMetadataForm.controls.creationDate.value);
-    this.documentenApiMetadataForm.patchValue({
-      creationDate:`${date.getFullYear()}-${date.getMonth().toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')}`
-    })
   }
 
   public closeModal(): void {
     this.setInitForm();
     this.additionalDocumentDate$.next('neither');
     this.close.emit();
+  }
+
+  private findItemByContent(items$: Observable<any[]>, content: string): Observable<any> {
+    return items$.pipe(map(items => items.find(item => item.content === content)));
+  }
+
+  private formatDate(controlName: string) {
+    const control = this.documentenApiMetadataForm.controls[controlName];
+    if (control.value) {
+      const date = new Date(control.value);
+      this.documentenApiMetadataForm.patchValue({
+        [controlName]: `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
+      });
+    }
   }
 }
