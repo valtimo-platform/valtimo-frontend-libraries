@@ -16,7 +16,16 @@
 
 import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {DocumentenApiColumnModalTypeCloseEvent} from '../../models';
-import {BehaviorSubject, combineLatest, filter, map, Observable, Subject, switchMap, tap,} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {
   ActionItem,
