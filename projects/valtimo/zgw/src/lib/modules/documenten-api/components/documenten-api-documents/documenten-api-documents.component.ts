@@ -50,7 +50,7 @@ import {CommonModule} from '@angular/common';
     ButtonModule,
     IconModule,
     TranslateModule,
-    ConfirmationModalModule
+    ConfirmationModalModule,
   ],
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, AfterViewInit {
@@ -104,7 +104,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public showZaakLinkWarning: boolean;
   public uploadProcessLinkedSet = false;
   public uploadProcessLinked!: boolean;
-  public isEditMode: boolean = false;
+
+  public isEditMode$ = new BehaviorSubject<boolean>(false);
 
   public readonly acceptedFiles: string | null =
     this.configService?.config?.caseFileUploadAcceptedFiles || null;
@@ -217,14 +218,13 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     this.showDeleteConfirmationModal$.next(true);
   }
 
-  public deleteDocument(item: DocumentenApiRelatedFile): void{
+  public deleteDocument(item: DocumentenApiRelatedFile): void {
     this.loading$.next(true);
     this.documentenApiDocumentService.deleteDocument(this.document).subscribe(() => {
       // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
       this.refetchDocuments();
     });
   }
-
 
   public bytesToMegabytes(bytes: number): string {
     const megabytes = bytes / (1024 * 1024);
@@ -261,21 +261,25 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public metadataSet(metadata: DocumentenApiMetadata): void {
     this.uploading$.next(true);
 
-    combineLatest([this.fileToBeUploaded$, this._documentId$])
-      .pipe(take(1))
-      .pipe(
-        tap(([file, documentId]) => {
-          if (!file) return;
-          this.uploadProviderService
-            .uploadFileWithMetadata(file, documentId, metadata)
-            .subscribe(() => {
-              this.refetchDocuments();
-              this.uploading$.next(false);
-              this.fileToBeUploaded$.next(null);
-            });
-        })
-      )
-      .subscribe();
+    if(this.isEditMode$.getValue()){
+      console.log("Edit mode");
+    } else {
+      combineLatest([this.fileToBeUploaded$, this._documentId$])
+        .pipe(take(1))
+        .pipe(
+          tap(([file, documentId]) => {
+            if (!file) return;
+            this.uploadProviderService
+              .uploadFileWithMetadata(file, documentId, metadata)
+              .subscribe(() => {
+                this.refetchDocuments();
+                this.uploading$.next(false);
+                this.fileToBeUploaded$.next(null);
+              });
+          })
+        )
+        .subscribe();
+    }
   }
 
   public onDownloadActionClick(file: DocumentenApiRelatedFile): void {
@@ -283,7 +287,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   public onEditMetadata(file: File): void {
-    this.isEditMode = true;
+    this.isEditMode$.next(true);
     this.fileToBeUploaded$.next(file);
     this.showUploadModal$.next(true);
   }
@@ -293,7 +297,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   public onFileSelected(event: any): void {
-    this.isEditMode = false;
+    this.isEditMode$.next(false);
     this.fileToBeUploaded$.next(event.target.files[0]);
     this.showUploadModal$.next(true);
   }
