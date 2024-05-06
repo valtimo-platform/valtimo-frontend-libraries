@@ -345,7 +345,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
       .pipe(take(1))
       .pipe(
         tap(([userEmail, file]) => {
-          console.log("user email: ", userEmail);
           this.documentenApiMetadataForm.patchValue({
             fileName: file?.name,
              author: userEmail
