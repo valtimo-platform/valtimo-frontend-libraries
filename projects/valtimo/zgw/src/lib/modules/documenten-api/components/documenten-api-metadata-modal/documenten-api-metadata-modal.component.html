@@ -201,10 +201,10 @@
             <cds-combo-box
               [type]="'multi'"
               [placeholder]="'document.tagsPlaceholder' | translate"
-              [disabled]="obs.disabled"
+              [disabled]="obs.disabled || !!tagItems$"
               name="tags"
             >
-              <cds-dropdown-list [items]="languageItems$ | async"></cds-dropdown-list>
+              <cds-dropdown-list [items]="tagItems$ | async"></cds-dropdown-list>
             </cds-combo-box>
           </div>
         </div>

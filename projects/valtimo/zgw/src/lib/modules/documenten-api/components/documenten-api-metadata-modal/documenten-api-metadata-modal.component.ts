@@ -64,6 +64,7 @@ import {
   TooltipModule,
 } from 'carbon-components-angular';
 import {DocumentenApiDocumentService} from '../../services';
+import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -207,15 +208,22 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
       )
     );
 
-  // public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
-  //   this.valtimoModalService.documentDefinitionName$,
-  // ]).pipe(
-  //   filter(([documentDefinitionName]) => !!documentDefinitionName),
-  //   switchMap(([documentDefinitionName]) =>
-  //     this.documentenApiDocumentService.getTags(documentDefinitionName)
-  //   ),
-  //   map(tags => tags.map(tag => ({id: '1', content: 'tag 1', selected: false})))
-  // );
+  public readonly documentDefinitionName$: Observable<string> = from(this.route.params.pipe(
+      map(params => params?.documentDefinitionName),
+    )
+  );
+
+  public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
+    this.documentDefinitionName$
+  ]).pipe(
+    filter(([documentDefinitionName]) => !!documentDefinitionName),
+    switchMap(([documentDefinitionName]) =>
+      this.documentenApiTagService.getTags(documentDefinitionName)
+    ),
+    map(tags =>
+      tags.map(tag => ({id: tag.value, content: tag.value, selected: false}))
+    )
+  );
 
   public readonly documentTypeItems$: Observable<Array<ListItem>> = combineLatest([
     this.route?.params || of(null),
@@ -251,6 +259,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly documentService: DocumentService,
     private readonly documentenApiDocumentService: DocumentenApiDocumentService,
+    private readonly documentenApiTagService: DocumentenApiTagService,
     private readonly fb: FormBuilder,
     private readonly keycloakService: KeycloakService,
     private readonly modalService: ModalService,
@@ -267,14 +276,16 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
   }
 
   public prefillForm(file) {
-    const {fileName, title, description, author} = file;
-    this.documentenApiMetadataForm.patchValue({
-        author: author,
-        filename: fileName,
-        title: title,
-        description: description
-      }
-    )
+    if(file){
+      const {fileName, title, description, author} = file;
+      this.documentenApiMetadataForm.patchValue({
+          author: author,
+          filename: fileName,
+          title: title,
+          description: description
+        }
+      )
+    }
   }
 
   public save(): void {
