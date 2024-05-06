@@ -22,13 +22,14 @@
     file: file$ | async,
     disabled: disabled$ | async,
     languageItems: languageItems$ | async,
-    statusItems: statusItems$ | async
+    statusItems: statusItems$ | async,
+    userEmail: userEmail$ | async
   } as obs"
 >
   <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
     @if (isEditMode) {
       <h3 cdsModalHeaderHeading>
-        {{ 'document.editMetadata' | translate  }}
+        {{ 'document.editMetadata' | translate }}
       </h3>
     } @else {
       <h3 cdsModalHeaderHeading>
@@ -92,7 +93,7 @@
               <i class="mdi mdi-help-circle-outline"></i>
             </cds-tooltip>
             <input
-              [value]="author || (userEmail$ | async)"
+              [value]="author || obs.userEmail"
               [disabled]="obs.disabled || disableAuthor"
               [placeholder]="'document.authorPlaceholder' | translate"
               [required]="true"
