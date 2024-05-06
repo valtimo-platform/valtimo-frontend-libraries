@@ -30,7 +30,7 @@ import {
   from,
   map,
   Observable,
-  of,
+  of, publishReplay,
   Subject,
   switchMap,
   take,
@@ -91,28 +91,28 @@ import {DocumentenApiDocumentService} from '../../services';
 })
 export class DocumentenApiMetadataModalComponent implements OnInit {
   @Input() disabled$!: Observable<boolean>;
-  @Input() file$!: Observable<File>;
+  @Input() file$!: Observable<any>;
 
-  @Input() documentTitle = '';
-  @Input() disableDocumentTitle: boolean;
-  @Input() isEditMode: boolean;
-  @Input() filename: string;
-  @Input() disableFilename: boolean;
   @Input() author: string;
-  @Input() disableAuthor: boolean;
-  @Input() status: string;
-  @Input() disableStatus: boolean;
-  @Input() language: string;
-  @Input() disableLanguage: boolean;
-  @Input() documentType: string;
-  @Input() disableDocumentType: boolean;
-  @Input() description: string;
-  @Input() disableDescription: boolean;
   @Input() confidentialityLevel: string;
+  @Input() description: string;
+  @Input() disableAuthor: boolean;
   @Input() disableConfidentialityLevel: boolean;
-  @Input() trefwoorden: boolean;
+  @Input() disableDescription: boolean;
+  @Input() disableDocumentTitle: boolean;
+  @Input() disableDocumentType: boolean;
+  @Input() disableFilename: boolean;
+  @Input() disableLanguage: boolean;
+  @Input() disableStatus: boolean;
+  @Input() documentTitle = '';
+  @Input() documentType: string;
   @Input() disableTrefwoorden: boolean;
+  @Input() filename: string;
+  @Input() isEditMode: boolean;
+  @Input() language: string;
   @Input() open = false;
+  @Input() status: string;
+  @Input() trefwoorden: boolean;
 
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
   @Output() close: EventEmitter<boolean> = new EventEmitter();
@@ -260,16 +260,26 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
 
   public ngOnInit(): void {
     this.setInitForm();
+
+    this.file$?.subscribe( file => {
+      this.prefillForm(file);
+    })
+  }
+
+  public prefillForm(file) {
+    const {fileName, title, description, author} = file;
+    this.documentenApiMetadataForm.patchValue({
+        author: author,
+        filename: fileName,
+        title: title,
+        description: description
+      }
+    )
   }
 
   public save(): void {
-    this.documentenApiMetadataForm.patchValue({
-      language: this.documentenApiMetadataForm.controls.language.value.id,
-      confidentialityLevel: this.documentenApiMetadataForm.controls.confidentialityLevel.value.id,
-      informatieobjecttype:
-        this.documentenApiMetadataForm.controls.informatieobjecttype.value.id,
-      status: this.documentenApiMetadataForm.controls.status.value.id,
-    });
+    if(!this.isEditMode)
+      this.setCorrectValues();
 
     this.changeDateFormat();
 
@@ -279,17 +289,22 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
     this.closeModal();
   }
 
+  public setCorrectValues(){
+    this.documentenApiMetadataForm.patchValue({
+      language: this.documentenApiMetadataForm.controls.language.value.id,
+      confidentialityLevel: this.documentenApiMetadataForm.controls.confidentialityLevel.value.id,
+      informatieobjecttype: this.documentenApiMetadataForm.controls.informatieobjecttype.value.id,
+      status: this.documentenApiMetadataForm.controls.status.value.id,
+    });
+  }
+
   public setInitForm(): void {
     this.userEmail$.subscribe(email =>
       this.documentenApiMetadataForm.patchValue({
         author: email
       })
     );
-    this.file$.subscribe(file =>
-      this.documentenApiMetadataForm.patchValue({
-        filename: file?.name
-      })
-    );
+
     this.documentenApiMetadataForm = this.fb.group({
       filename: this.fb.control('', Validators.required),
       title: this.fb.control('', Validators.required),
@@ -309,16 +324,16 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
     this.additionalDocumentDate$.next(value);
   }
 
-  public closeModal(): void {
-    this.setInitForm();
-    this.additionalDocumentDate$.next('neither');
-    this.close.emit();
-  }
-
   private changeDateFormat(){
     const date = new Date (this.documentenApiMetadataForm.controls.creationDate.value);
     this.documentenApiMetadataForm.patchValue({
       creationDate:`${date.getFullYear()}-${date.getMonth().toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')}`
     })
+  }
+
+  public closeModal(): void {
+    this.setInitForm();
+    this.additionalDocumentDate$.next('neither');
+    this.close.emit();
   }
 }
