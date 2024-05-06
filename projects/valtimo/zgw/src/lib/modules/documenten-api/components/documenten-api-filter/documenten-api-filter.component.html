@@ -44,17 +44,14 @@
     </cds-text-label>
 
     <cds-dropdown
+      [dropUp]="false"
       [label]="'Confidentiality level' | translate"
       formControlName="vertrouwelijkHeidaanduiding"
     >
       <cds-dropdown-list [items]="obs.confidentialityLevels"></cds-dropdown-list>
     </cds-dropdown>
 
-    <cds-dropdown
-      [label]="'Tags' | translate"
-      formControlName="trefwoorden"
-      type="multi"
-    >
+    <cds-dropdown [label]="'Tags' | translate" formControlName="trefwoorden" type="multi">
       <cds-dropdown-list [items]="obs.tags"></cds-dropdown-list>
     </cds-dropdown>
   </form>

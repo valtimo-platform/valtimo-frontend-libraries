@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -23,7 +24,7 @@ import {
   InputModule,
   ListItem,
 } from 'carbon-components-angular';
-import {debounceTime, filter, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {debounceTime, filter, map, Observable, startWith, Subscription, switchMap, tap} from 'rxjs';
 import {DocumentenApiFilterModel} from '../../models';
 import {DocumentenApiTagService} from '../../services';
 
@@ -46,6 +47,9 @@ import {DocumentenApiTagService} from '../../services';
   ],
 })
 export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
+  @Input() set prefillFilter(val) {
+    console.log(val);
+  }
   @Output() filterEvent = new EventEmitter<DocumentenApiFilterModel>();
 
   private readonly _subscriptions = new Subscription();
@@ -69,7 +73,8 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
           selected: false,
           id: confidentialityLevel,
         }))
-      )
+      ),
+      startWith([])
     );
 
   public readonly informationObjectTypes$: Observable<ListItem[]> = this.route.paramMap.pipe(
@@ -79,7 +84,8 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
     ),
     map((types: DocumentType[]) =>
       types.map((type: DocumentType) => ({content: type.name, selected: false}))
-    )
+    ),
+    startWith([])
   );
 
   public readonly tags$: Observable<ListItem[]> = this.route.paramMap.pipe(
@@ -87,7 +93,8 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
     switchMap((paramMap: ParamMap) =>
       this.documentenApiTagService.getTags(paramMap.get('documentDefinitionName') ?? '')
     ),
-    map((tags: string[]) => tags.map((tag: string) => ({content: tag, selected: false})))
+    map((tags: string[]) => tags.map((tag: string) => ({content: tag, selected: false}))),
+    startWith([])
   );
 
   public readonly formGroup = this.fb.group({

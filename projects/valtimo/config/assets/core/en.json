@@ -635,7 +635,36 @@
       "column": "Column",
       "add": "Add column",
       "edit": "Edit column",
-      "deleteText": "Are you sure you want to delete this column?"
+      "deleteText": "Are you sure you want to delete this column?",
+      "notSortable": "This column is not sortable",
+      "defaultWarning": "When selecting a default sort, the previous sort will be overwritten"
+    },
+    "documentColumns": {
+      "auteur": "Author",
+      "beschrijving": "Description",
+      "bestandsnaam": "File name",
+      "bestandsomvang": "File size",
+      "bronorganisatie": "Source organisation",
+      "creatiedatum": "Creation date",
+      "formaat": "Format",
+      "identificatie": "Id",
+      "informatieobjecttype": "Information object type",
+      "locked": "Locked",
+      "status": "Status",
+      "taal": "Language",
+      "titel": "Title",
+      "versie": "Version",
+      "vertrouwelijkheidaanduiding": "Confidentiality level"
+    },
+    "documents": {
+      "noResults": {
+        "filterTitle": "No documents fount",
+        "filterDescription": "There are no documents that match your search criteria"
+      },
+      "noColumns": {
+        "description": "Please configure columns for this document",
+        "title": "No configured column"
+      }
     },
     "tags": {
       "tag": "Tag",
