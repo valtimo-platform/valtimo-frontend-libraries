@@ -16,7 +16,6 @@
 import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -25,23 +24,25 @@ import {
   Output,
 } from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   ButtonModule,
   DropdownModule,
   InputModule,
   ListItem,
   ModalModule,
+  NotificationContent,
+  NotificationModule,
   RadioModule,
 } from 'carbon-components-angular';
-import {Subscription, switchMap} from 'rxjs';
-
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap} from 'rxjs';
 import {
   ConfiguredColumn,
   DocumentenApiColumnModalType,
   DocumentenApiColumnModalTypeCloseEvent,
 } from '../../models';
 import {DocumentenApiColumnService} from '../../services';
+import {CARBON_CONSTANTS} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-documenten-api-column-modal',
@@ -58,6 +59,7 @@ import {DocumentenApiColumnService} from '../../services';
     ButtonModule,
     DropdownModule,
     RadioModule,
+    NotificationModule,
   ],
 })
 export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
@@ -95,19 +97,25 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
     return this._type;
   }
 
-  private _availableColumns: ListItem[] = [];
+  private _availableColumns$ = new BehaviorSubject<ConfiguredColumn[]>([]);
   @Input() public set availableColumns(value: ConfiguredColumn[]) {
     if (!value) return;
 
-    this._availableColumns = value.map((column: ConfiguredColumn) => ({
-      content: column.key,
-      selected: false,
-      column,
-    }));
+    this._availableColumns$.next(value);
   }
-  public get availableColumns(): ListItem[] {
-    return this._availableColumns;
-  }
+
+  public readonly availableColumns$: Observable<ListItem[]> = combineLatest([
+    this._availableColumns$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([columns]) =>
+      columns.map((column: ConfiguredColumn) => ({
+        content: this.translateService.instant(`zgw.documentColumns.${column.key}`),
+        selected: false,
+        column,
+      }))
+    )
+  );
 
   private _defaultSortedColumn: ConfiguredColumn | undefined;
   @Input() public set configuredColumns(value: ConfiguredColumn[]) {
@@ -126,11 +134,29 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
     defaultSort: this.fb.control(null),
   });
 
+  private readonly _notificationMessage$ = new BehaviorSubject<string>(
+    'zgw.columns.defaultWarning'
+  );
+  public readonly notificationObj$: Observable<NotificationContent> = combineLatest([
+    this._notificationMessage$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([message]) => ({
+      type: 'warning',
+      lowContrast: true,
+      title: this.translateService.instant('interface.warning'),
+      message: this.translateService.instant(message),
+      showClose: false,
+    }))
+  );
+
+  public showRadioButtons = true;
+
   private readonly _subscriptions = new Subscription();
 
   constructor(
-    private readonly cd: ChangeDetectorRef,
     private readonly fb: FormBuilder,
+    private readonly translateService: TranslateService,
     private readonly zgwDocumentenApiColumnService: DocumentenApiColumnService
   ) {}
 
@@ -143,10 +169,15 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
   }
 
   public onClose(refresh = false): void {
-    this.formGroup.reset();
-    this.formGroup.enable();
-    this._prefillColumn = null;
     this.closeModal.emit(refresh ? 'closeAndRefresh' : 'close');
+
+    setTimeout(() => {
+      this.formGroup.reset();
+      this.formGroup.enable();
+      this.showRadioButtons = true;
+      this._notificationMessage$.next('zgw.columns.defaultWarning');
+      this._prefillColumn = null;
+    }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
   public updateColumn(): void {
@@ -172,7 +203,7 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
           )
         )
         .subscribe(() => {
-          this.closeModal.emit('closeAndRefresh');
+          this.onClose(true);
         });
 
       return;
@@ -186,13 +217,11 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
   private openDisableRadioSubscription(): void {
     this._subscriptions.add(
       this.formGroup.get('column')?.valueChanges.subscribe(columnValue => {
-        if (!columnValue?.column.sortable) {
-          this.formGroup.get('defaultSort')?.disable();
-        } else {
-          this.formGroup.get('defaultSort')?.enable();
-        }
+        this.showRadioButtons = !!columnValue?.column.sortable;
 
-        this.cd.detectChanges();
+        this._notificationMessage$.next(
+          this.showRadioButtons ? 'zgw.columns.defaultWarning' : 'zgw.columns.notSortable'
+        );
       })
     );
   }

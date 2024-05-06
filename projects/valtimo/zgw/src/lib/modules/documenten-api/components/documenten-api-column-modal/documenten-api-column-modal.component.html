@@ -32,17 +32,19 @@
       [dropUp]="false"
     >
       <cds-dropdown-list
-        [items]="!prefillColumn ? availableColumns : prefillColumn"
+        [items]="!prefillColumn ? (availableColumns$ | async) : prefillColumn"
       ></cds-dropdown-list>
     </cds-dropdown>
 
-    <cds-radio-group legend="Default sort" formControlName="defaultSort">
+    <cds-radio-group *ngIf="showRadioButtons" legend="Default sort" formControlName="defaultSort">
       <cds-radio [value]="null"> No default sort </cds-radio>
 
       <cds-radio value="desc"> Descending </cds-radio>
 
       <cds-radio value="asc"> Ascending </cds-radio>
     </cds-radio-group>
+
+    <cds-inline-notification [notificationObj]="notificationObj$ | async"></cds-inline-notification>
   </form>
 
   <cds-modal-footer>

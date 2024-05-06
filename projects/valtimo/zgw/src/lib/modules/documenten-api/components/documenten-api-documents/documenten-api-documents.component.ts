@@ -32,7 +32,7 @@ import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {UserProviderService} from '@valtimo/security';
 import {ButtonModule, DialogModule, IconModule, IconService} from 'carbon-components-angular';
 import moment from 'moment';
-import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of, ReplaySubject, Subject} from 'rxjs';
 import {catchError, filter, map, switchMap, take, tap} from 'rxjs/operators';
 
 import {
@@ -82,7 +82,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
       return columns.map((column: ConfiguredColumn) => ({
         key: column.key,
-        label: `document.${column.key}`,
+        label: `zgw.documentColumns.${column.key}`,
         viewType: ViewType.TEXT,
         sortable: column.sortable,
       }));
@@ -127,7 +127,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         };
       }
       return null;
-    }),
+    })
   );
 
   public isAdmin: boolean;
@@ -148,8 +148,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
   private readonly _refetch$ = new BehaviorSubject<null>(null);
-  private readonly _filter$ = new BehaviorSubject<DocumentenApiFilterModel | undefined>(undefined);
-  private readonly _sort$ = new BehaviorSubject<{sort: string} | undefined>(undefined);
+  public readonly filter$ = new ReplaySubject<DocumentenApiFilterModel | null>();
+  private readonly _sort$ = new ReplaySubject<{sort: string} | null>();
 
   public relatedFiles$: Observable<Array<DocumentenApiRelatedFileListItem>> = combineLatest([
     this.documentId$,
@@ -170,12 +170,12 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       const translatedFiles = relatedFiles?.content?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
-        language: this.translateService.instant(`document.${file.language}`),
+        language: this.translateService.instant(`document.${file.taal}`),
         confidentialityLevel: this.translateService.instant(
-          `document.${file.confidentialityLevel}`
+          `document.${file.vertrouwelijkheidaanduiding}`
         ),
         status: this.translateService.instant(`document.${file.status}`),
-        format: this.translateService.instant(`document.${file.format}`),
+        format: this.translateService.instant(`document.${file.formaat}`),
       }));
       return translatedFiles || [];
     }),
@@ -210,7 +210,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     private readonly iconService: IconService,
     private readonly documentenApiDocumentService: DocumentenApiDocumentService,
     private readonly documentenApiColumnService: DocumentenApiColumnService
-  ) {}
+  ) {
+    this.iconService.register(Filter16);
+  }
 
   ngOnInit(): void {
     this.openQueryParamsSubscription();
@@ -304,14 +306,12 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   }
 
   public onFilterEvent(filter: DocumentenApiFilterModel): void {
-    this._filter$.next(filter);
+    this.filter$.next(filter);
   }
 
   public onSortChanged(sortState: SortState): void {
     this._sort$.next(
-      sortState.isSorting
-        ? {sort: `${sortState.state.name},${sortState.state.direction}`}
-        : undefined
+      sortState.isSorting ? {sort: `${sortState.state.name},${sortState.state.direction}`} : null
     );
   }
 
@@ -322,7 +322,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   private downloadDocument(relatedFile: DocumentenApiRelatedFile, forceDownload: boolean): void {
     this.downloadService.downloadFile(
       `/api/v1/documenten-api/${relatedFile.pluginConfigurationId}/files/${relatedFile.fileId}/download`,
-      relatedFile.fileName,
+      relatedFile.bestandsnaam ?? '',
       forceDownload
     );
   }
@@ -331,7 +331,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     combineLatest([
       this.documentDefinitionName$,
       this.documentId$,
-      this._filter$,
+      this.filter$,
       this._sort$,
     ]).subscribe(([definitionName, documentId, filter, sort]) => {
       this.router.navigate([`/dossiers/${definitionName}/document/${documentId}/documents`], {

@@ -17,16 +17,22 @@
 import {RelatedFile} from '@valtimo/document';
 
 interface DocumentenApiRelatedFile extends RelatedFile {
-  size?: string;
-  title?: string;
-  language?: string;
-  identification?: string;
-  description?: string;
+  auteur?: string;
+  beschrijving?: string;
+  bestandsnaam?: string;
+  bestandsomvang?: number;
+  bronorganisatie?: string;
+  creatiedatum?: Date;
+  formaat?: string;
+  identificatie?: string;
   informatieobjecttype?: string;
-  trefwoorden?: Array<String>;
-  format?: string;
+  locked?: boolean;
   status?: string;
-  confidentialityLevel?: string;
+  taal?: string;
+  titel?: String;
+  trefwoorden?: string[]
+  versie?: number;
+  vertrouwelijkheidaanduiding?: string;
 }
 
 type DocumentenApiRelatedFileListItem = Omit<DocumentenApiRelatedFile, 'createdOn'> & {

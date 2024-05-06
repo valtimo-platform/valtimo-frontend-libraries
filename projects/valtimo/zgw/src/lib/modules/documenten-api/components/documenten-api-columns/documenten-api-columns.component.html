@@ -35,12 +35,14 @@
     (itemsReordered)="onItemsReordered(obs.documentDefinitionName, $event)"
   >
     <ng-container carbonToolbarContent>
-      <button cdsButton="primary" [disabled]="obs.loading" (click)="openAddModal()">
-        <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
-
-        {{ 'zgw.columns.add' | translate }}
-      </button>
+      <ng-container *ngTemplateOutlet="addButton"></ng-container>
     </ng-container>
+
+    <valtimo-no-results
+      [action]="addButton"
+      [description]="'zgw.documents.noColumns.description' | translate"
+      [title]="'zgw.documents.noColumns.title' | translate"
+    ></valtimo-no-results>
   </valtimo-carbon-list>
 
   <valtimo-documenten-api-column-modal
@@ -62,3 +64,11 @@
     (confirmEvent)="confirmDeleteStatus($event, obs.documentDefinitionName)"
   ></valtimo-confirmation-modal>
 </ng-container>
+
+<ng-template #addButton>
+  <button cdsButton="primary" [disabled]="loading$ | async" (click)="openAddModal()">
+    <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
+
+    {{ 'zgw.columns.add' | translate }}
+  </button>
+</ng-template>
