@@ -51,8 +51,8 @@ export class FormViewModelComponent implements OnInit {
     }
     this.form$.next(form);
   }
-  @Input() set formDefinitionId(formDefinitionId: string) {
-    this.formDefinitionId$.next(formDefinitionId);
+  @Input() set formName(formName: string) {
+    this.formName$.next(formName);
   }
   @Input() set taskInstanceId(taskInstanceId: string) {
     this.taskInstanceId$.next(taskInstanceId);
@@ -67,9 +67,9 @@ export class FormViewModelComponent implements OnInit {
 
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
+  public readonly formName$ = new BehaviorSubject<string>(undefined);
   public readonly options$ = new BehaviorSubject<ValtimoFormioOptions>(undefined);
   public readonly taskInstanceId$ = new BehaviorSubject<string>(undefined);
-  public readonly formDefinitionId$ = new BehaviorSubject<string>(undefined);
   public readonly readOnly$ = new BehaviorSubject<boolean>(false);
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
   public readonly change$ = new BehaviorSubject<any>(null);
@@ -128,8 +128,8 @@ export class FormViewModelComponent implements OnInit {
 
   public beforeSubmit(submission: any, callback: FormioSubmissionCallback) {
     this.errors$.next([])
-    combineLatest([this.formDefinitionId$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formId, taskInstanceId]) => {
-      this.viewModelService.submitViewModel(formId, taskInstanceId, this.convertSubmissionToViewModel(submission.data))
+    combineLatest([this.formName$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formName, taskInstanceId]) => {
+      this.viewModelService.submitViewModel(formName, taskInstanceId, this.convertSubmissionToViewModel(submission.data))
         .pipe(catchError(error => {
           callback({message: error, component: null}, null)
           return this.handleSubmitError(error)
@@ -163,8 +163,8 @@ export class FormViewModelComponent implements OnInit {
   }
 
   public loadInitialViewModel() {
-    combineLatest([this.formDefinitionId$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formId, taskInstanceId]) => {
-      this.viewModelService.getViewModel(formId, taskInstanceId).subscribe(viewModel => {
+    combineLatest([this.formName$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formName, taskInstanceId]) => {
+      this.viewModelService.getViewModel(formName, taskInstanceId).subscribe(viewModel => {
         this.change$.pipe(take(1)).subscribe(change => {
           this.updating$.next(false);
         })
@@ -177,9 +177,9 @@ export class FormViewModelComponent implements OnInit {
     this.updating$.pipe(take(1)).subscribe(updating => {
       if(!updating) {
         this.updating$.next(true)
-        combineLatest([this.formDefinitionId$, this.taskInstanceId$, this.change$]).pipe(take(1)).subscribe(([formId, taskInstanceId, change]) => {
+        combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1)).subscribe(([formName, taskInstanceId, change]) => {
           const viewModel = this.convertSubmissionToViewModel(change.data);
-          this.viewModelService.updateViewModel(formId, taskInstanceId, viewModel).subscribe(viewModel => {
+          this.viewModelService.updateViewModel(formName, taskInstanceId, viewModel).subscribe(viewModel => {
             const submission = this.convertViewModelToSubmission(viewModel, change.data);
             this.submission$.next(submission);
             this.change$.pipe(take(1)).subscribe(change => {

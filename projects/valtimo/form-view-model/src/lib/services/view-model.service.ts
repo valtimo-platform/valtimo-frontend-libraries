@@ -31,34 +31,34 @@ export class ViewModelService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public getViewModel(formId: string, taskInstanceId: string): Observable<any> {
+  public getViewModel(formName: string, taskInstanceId: string): Observable<any> {
     return this.httpClient.get<any>(this.getApiUrl('/v1/form/view-model'), {
       params: {
-        formId,
+        formName,
         taskInstanceId
       }
     });
   }
 
-  public updateViewModel(formId: string, taskInstanceId: string, viewModel: any): Observable<any> {
+  public updateViewModel(formName: string, taskInstanceId: string, viewModel: any): Observable<any> {
     return this.httpClient.post(
       this.getApiUrl(`/v1/form/view-model`),
       viewModel,
       {
         params: {
-          formId,
+          formName,
           taskInstanceId
         }
       });
   }
 
-  public submitViewModel(formId: string, taskInstanceId: string, viewModel: any): Observable<any> {
+  public submitViewModel(formName: string, taskInstanceId: string, viewModel: any): Observable<any> {
     return this.httpClient.post(
       this.getApiUrl(`/v1/form/view-model/submit`),
       viewModel,
       {
         params: {
-          formId,
+          formName,
           taskInstanceId
         }
       });

@@ -23,6 +23,7 @@
     taskId: taskInstanceId$ | async,
     formDefinition: formDefinition$ | async,
     formDefinitionId: formDefinitionId$ | async,
+    formName: formName$ | async,
     processLinkIsForm: processLinkIsForm$ | async,
     processLinkIsFormViewModel: processLinkIsFormViewModel$ | async,
     formioOptions: formioOptions$ | async,
@@ -48,7 +49,7 @@
     <valtimo-form-view-model
             #form
             [form]="obs.formDefinition"
-            [formDefinitionId]="obs.formDefinitionId"
+            [formName]="obs.formName"
             [taskInstanceId]="obs.taskId"
             (formSubmit)="onSubmit($event)"
             (change)="onChange($event)"

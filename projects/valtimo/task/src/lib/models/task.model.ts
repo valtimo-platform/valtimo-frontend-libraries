@@ -68,6 +68,7 @@ interface TaskProcessLinkResult {
     formDefinitionId?: string;
     prefilledForm?: any;
     formDefinition?: any;
+    formName?: string;
   };
 }
 
