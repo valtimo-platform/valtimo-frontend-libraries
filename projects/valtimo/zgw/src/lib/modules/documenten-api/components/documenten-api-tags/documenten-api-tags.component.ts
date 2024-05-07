@@ -16,11 +16,21 @@
 
 import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {DocumentenApiColumnModalTypeCloseEvent} from '../../models';
-import {BehaviorSubject, combineLatest, filter, map, Observable, Subject, switchMap, tap,} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {
   ActionItem,
   CarbonListComponent,
+  CarbonListItem,
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
@@ -156,7 +166,7 @@ export class DocumentenApiTagsComponent {
 
   private setSelectedRoleKeys(): void {
     this.selectedRowKeys$.next(
-      this.carbonList.selectedItems.map((tag: DocumentenApiTag) => tag.value)
+      this.carbonList.selectedItems.map((item: CarbonListItem) => item.tag.value)
     );
   }
 

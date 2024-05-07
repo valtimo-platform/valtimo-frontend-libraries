@@ -16,10 +16,10 @@
 
 export interface DocumentenApiFilterModel {
   auteur?: string;
-  vertrouwelijkHeidaanduiding?: string;
-  creatieDatumFrom?: Date;
-  creatieDatumTo?: Date;
-  informatieObjectType?: string;
+  vertrouwelijkheidaanduiding?: string;
+  creatiedatumfrom?: string;
+  creatiedatumo?: string;
+  informatieobjectype?: string;
   trefwoorden?: Array<string>;
   titel?: string;
 }

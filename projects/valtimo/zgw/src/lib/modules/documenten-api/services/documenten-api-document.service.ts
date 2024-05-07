@@ -29,13 +29,7 @@ export class DocumentenApiDocumentService extends BaseApiService {
   ) {
     super(httpClient, configService);
   }
-
-  public getZakenApiDocuments(documentId: string): Observable<Array<DocumentenApiRelatedFile>> {
-    return this.httpClient.get<Array<DocumentenApiRelatedFile>>(
-      this.getApiUrl(`/v1/zaken-api/document/${documentId}/files`)
-    );
-  }
-
+  
   public getFilteredZakenApiDocuments(
     documentId: string,
     paramsMap?: any
