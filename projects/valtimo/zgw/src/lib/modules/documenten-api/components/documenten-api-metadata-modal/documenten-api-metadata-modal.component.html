@@ -73,7 +73,7 @@
               <i class="mdi mdi-help-circle-outline"></i>
             </cds-tooltip>
             <input
-              [value]="filename || obs.file?.name"
+              [value]="filename"
               [disabled]="obs.disabled || disableFilename"
               [placeholder]="'document.filenamePlaceholder' | translate"
               [required]="true"
@@ -93,7 +93,7 @@
               <i class="mdi mdi-help-circle-outline"></i>
             </cds-tooltip>
             <input
-              [value]="author || obs.userEmail"
+              [value]="author"
               [disabled]="obs.disabled || disableAuthor"
               [placeholder]="'document.authorPlaceholder' | translate"
               [required]="true"
