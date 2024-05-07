@@ -157,7 +157,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this._refetch$,
   ]).pipe(
     tap(() => this.loading$.next(true)),
-    switchMap(([documentId, queryParams, _]) =>
+    switchMap(([documentId, queryParams]) =>
       combineLatest([
         this.documentenApiDocumentService.getFilteredZakenApiDocuments(
           documentId,
