@@ -281,6 +281,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   }
 
   public prefillForm(file) {
+    this.prefillFilenameAndAuthor();
     if (file) {
       const {
         fileName,
@@ -353,8 +354,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       receiptDate: this.fb.control(''),
       sendDate: this.fb.control(''),
     });
-
-    this.prefillFilenameAndAuthor();
   }
 
   public closeModal(): void {
@@ -368,8 +367,9 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       combineLatest([this.file$, this.userEmail$])
         .pipe(
           tap(([file, userEmail]) => {
+            console.log("File: ", file, " and userEmail: ", userEmail);
             this.documentenApiMetadataForm.patchValue({
-              filename: file?.name || file.fileName,
+              filename: file?.name || file?.fileName,
               author: userEmail,
             });
           })
