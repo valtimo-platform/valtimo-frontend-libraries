@@ -117,7 +117,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() trefwoorden: boolean;
 
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
-  @Output() close: EventEmitter<boolean> = new EventEmitter();
+  //@Output() close: EventEmitter<boolean> = new EventEmitter();
 
   public documentenApiMetadataForm: FormGroup;
 
