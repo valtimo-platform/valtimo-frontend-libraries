@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 
 import {
   AdditionalDocumentDate,
@@ -32,6 +32,7 @@ import {
   Observable,
   of,
   Subject,
+  Subscription,
   switchMap,
   take,
 } from 'rxjs';
@@ -90,7 +91,7 @@ import {DocumentenApiTagService} from '../../services/documenten-api-tag.service
     TranslateModule,
   ],
 })
-export class DocumentenApiMetadataModalComponent implements OnInit {
+export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() disabled$!: Observable<boolean>;
   @Input() file$!: Observable<any>;
 
@@ -213,7 +214,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
   );
 
   public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
-    this.documentDefinitionName$
+    this.documentDefinitionName$,
   ]).pipe(
     filter(([documentDefinitionName]) => !!documentDefinitionName),
     switchMap(([documentDefinitionName]) =>
@@ -251,6 +252,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
   );
 
   private readonly modalSize = 'lg';
+  private _subscriptions = new Subscription();
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -267,9 +269,15 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
   public ngOnInit(): void {
     this.setInitForm();
 
-    this.file$?.subscribe(file => {
-      this.prefillForm(file);
-    });
+    this._subscriptions.add(
+      this.file$?.subscribe(file => {
+        this.prefillForm(file);
+      })
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   public prefillForm(file) {
@@ -283,10 +291,14 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
         informatieobjecttype,
         status,
         confidentialityLevel,
-        creationDate,
+        createdOn,
         receiptDate,
         sendDate,
       } = file;
+
+      if (sendDate) this.additionalDocumentDate$.next('sent');
+      else if (receiptDate) this.additionalDocumentDate$.next('received');
+
       this.documentenApiMetadataForm.patchValue({
         filename: fileName,
         title: title,
@@ -295,13 +307,15 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
         languages: this.findItemByContent(this.languageItems$, language),
         informatieobjecttype: informatieobjecttype,
         status: this.findItemByContent(this.statusItems$, status),
-        confidentialityLevel: this.findItemByContent(this.confidentialityLevelItems$, confidentialityLevel),
-        creationDate: creationDate,
+        confidentialityLevel: this.findItemByContent(
+          this.confidentialityLevelItems$,
+          confidentialityLevel
+        ),
+        creationDate: createdOn,
         receiptDate: receiptDate,
         sendDate: sendDate,
       });
     }
-    console.log('File: ', file);
   }
 
   public save(): void {
@@ -340,22 +354,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
       sendDate: this.fb.control(''),
     });
 
-    // FIND OTHER WAY TO DO IT
-    combineLatest([this.userEmail$, this.file$])
-      .pipe(take(1))
-      .pipe(
-        tap(([userEmail, file]) => {
-          this.documentenApiMetadataForm.patchValue({
-            fileName: file?.name,
-             author: userEmail
-           })
-        })
-      )
-      .subscribe();
-  }
-
-  private setAdditionalDate(value: AdditionalDocumentDate): void {
-    this.additionalDocumentDate$.next(value);
+    this.prefillFilenameAndAuthor();
   }
 
   public closeModal(): void {
@@ -364,8 +363,29 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
     this.close.emit();
   }
 
-  private findItemByContent(items$: Observable<any[]>, content: string): Observable<any> {
-    return items$.pipe(map(items => items.find(item => item.content === content)));
+  private prefillFilenameAndAuthor() {
+    this._subscriptions.add(
+      combineLatest([this.file$, this.userEmail$])
+        .pipe(
+          tap(([file, userEmail]) => {
+            this.documentenApiMetadataForm.patchValue({
+              filename: file?.name || file.fileName,
+              author: userEmail,
+            });
+          })
+        )
+        .subscribe()
+    );
+  }
+
+  private findItemByContent(items$: Observable<any[]>, content: string): any {
+    this._subscriptions.add(
+      items$
+        .pipe(map(items => items.find(item => item.content === content)))
+        .subscribe(foundItem => {
+          return foundItem;
+        })
+    );
   }
 
   private formatDate(controlName: string) {
@@ -376,5 +396,9 @@ export class DocumentenApiMetadataModalComponent implements OnInit {
         [controlName]: `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
       });
     }
+  }
+
+  private setAdditionalDate(value: AdditionalDocumentDate): void {
+    this.additionalDocumentDate$.next(value);
   }
 }
