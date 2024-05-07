@@ -15,11 +15,8 @@
  */
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import moment from 'moment';
-import {BehaviorSubject, catchError, combineLatest, filter, Observable, Subject, take, throwError, windowCount} from 'rxjs';
-import {
-  FormioOptions,
-  FormioSubmission, FormioSubmissionCallback
-} from '@formio/angular';
+import {BehaviorSubject, catchError, combineLatest, Observable, Subject, take, throwError} from 'rxjs';
+import {FormioOptions, FormioSubmission, FormioSubmissionCallback} from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {FormioComponent as FormIoSourceComponent} from '@formio/angular/components/formio/formio.component';
 import {ViewModelService} from '../../services';
@@ -27,6 +24,7 @@ import {distinctUntilChanged, map, tap} from 'rxjs/operators';
 import {deepmerge} from 'deepmerge-ts';
 import {FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
+
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
@@ -39,27 +37,33 @@ export class FormViewModelComponent implements OnInit {
   @Input() set options(optionsValue: any) {
     this.options$.next(optionsValue);
   }
+
   @Input() set submission(submissionValue: FormioSubmission) {
     this.submission$.next(submissionValue);
   }
+
   @Input() set form(formValue: object) {
     const instance = this;
     const form = {
       loadInitialViewModel: () => instance.loadInitialViewModel(),
       updateViewModel: () => instance.updateViewModel(),
       ...formValue
-    }
+    };
     this.form$.next(form);
   }
+
   @Input() set formName(formName: string) {
     this.formName$.next(formName);
   }
+
   @Input() set taskInstanceId(taskInstanceId: string) {
     this.taskInstanceId$.next(taskInstanceId);
   }
+
   @Input() set readOnly(readOnlyValue: boolean) {
     this.readOnly$.next(readOnlyValue);
   }
+
   @Input() formRefresh$!: Subject<FormioRefreshValue>;
   @Output() formSubmit = new EventEmitter<any>();
 
@@ -119,30 +123,30 @@ export class FormViewModelComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.loadInitialViewModel();
+    this.loadInitialViewModel();
   }
 
   public beforeSubmitHook(instance: FormViewModelComponent) {
-    return (submission, callback) => instance.beforeSubmit(submission, callback)
+    return (submission, callback) => instance.beforeSubmit(submission, callback);
   }
 
   public beforeSubmit(submission: any, callback: FormioSubmissionCallback) {
-    this.errors$.next([])
+    this.errors$.next([]);
     combineLatest([this.formName$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formName, taskInstanceId]) => {
-      this.viewModelService.submitViewModel(formName, taskInstanceId, this.convertSubmissionToViewModel(submission.data))
+      this.viewModelService.submitViewModel(formName, taskInstanceId, submission.data)
         .pipe(catchError(error => {
-          callback({message: error, component: null}, null)
-          return this.handleSubmitError(error)
+          callback({message: error, component: null}, null);
+          return this.handleSubmitError(error);
         }))
         .subscribe(response => {
-          if(!response) {
-            callback(null, submission)
+          if (!response) {
+            callback(null, submission);
           } else {
-            callback({message: response.error, component: response.component}, submission)
-            this.errors$.next([response.error])
+            callback({message: response.error, component: response.component}, submission);
+            this.errors$.next([response.error]);
           }
-      })
-    })
+        });
+    });
   }
 
   private handleSubmitError(error: any) {
@@ -150,14 +154,14 @@ export class FormViewModelComponent implements OnInit {
   }
 
   public onSubmit(submission: FormioSubmission): void {
-    this.formSubmit.next(submission)
+    this.formSubmit.next(submission);
   }
 
   public formReady(form: FormIoSourceComponent): void {
   }
 
   public onChange(object: any): void {
-    if(object.data) {
+    if (object.data) {
       this.change$.next(object);
     }
   }
@@ -167,44 +171,27 @@ export class FormViewModelComponent implements OnInit {
       this.viewModelService.getViewModel(formName, taskInstanceId).subscribe(viewModel => {
         this.change$.pipe(take(1)).subscribe(change => {
           this.updating$.next(false);
-        })
-        this.submission$.next(this.convertViewModelToSubmission(viewModel))
-      })
-    })
+        });
+        this.submission$.next(viewModel);
+      });
+    });
   }
 
   public updateViewModel() {
     this.updating$.pipe(take(1)).subscribe(updating => {
-      if(!updating) {
-        this.updating$.next(true)
+      if (!updating) {
+        this.updating$.next(true);
         combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1)).subscribe(([formName, taskInstanceId, change]) => {
-          const viewModel = this.convertSubmissionToViewModel(change.data);
+          const viewModel = change.data;
           this.viewModelService.updateViewModel(formName, taskInstanceId, viewModel).subscribe(viewModel => {
-            const submission = this.convertViewModelToSubmission(viewModel, change.data);
+            const submission = change.data;
             this.submission$.next(submission);
             this.change$.pipe(take(1)).subscribe(change => {
               this.updating$.next(false);
-            })
-          })
-        })
+            });
+          });
+        });
       }
-    })
-  }
-
-  public convertSubmissionToViewModel(submission: any) {
-    const viewModel: {[k: string]: any} = {};
-    Object.keys(submission)
-      .filter(key => key.startsWith("vm:"))
-      .forEach(key => {
-        const viewModelKey = key.replace('vm:', '');
-        viewModel[viewModelKey] = submission[key]
-      })
-    return viewModel
-  }
-
-  public convertViewModelToSubmission(viewModel: any, existingSubmission?: any) {
-    const submission: {[k: string]: any} = (typeof existingSubmission !== "undefined") ? existingSubmission : {};
-    Object.keys(viewModel).forEach(key => submission['vm:'+key] = viewModel[key]);
-    return {data: submission};
+    });
   }
 }
