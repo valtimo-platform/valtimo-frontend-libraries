@@ -261,14 +261,14 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public metadataSet(metadata: DocumentenApiMetadata): void {
     this.uploading$.next(true);
 
-    if(this.isEditMode$.getValue()){
-      console.log("Edit mode");
-    } else {
-      combineLatest([this.fileToBeUploaded$, this._documentId$])
-        .pipe(take(1))
-        .pipe(
-          tap(([file, documentId]) => {
-            if (!file) return;
+    combineLatest([this.fileToBeUploaded$, this._documentId$])
+      .pipe(take(1))
+      .pipe(
+        tap(([file, documentId]) => {
+          if (!file) return;
+          if (this.isEditMode$.getValue()) {
+            console.log('Edit mode');
+          } else {
             this.uploadProviderService
               .uploadFileWithMetadata(file, documentId, metadata)
               .subscribe(() => {
@@ -276,10 +276,10 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
                 this.uploading$.next(false);
                 this.fileToBeUploaded$.next(null);
               });
-          })
-        )
-        .subscribe();
-    }
+          }
+        })
+      )
+      .subscribe();
   }
 
   public onDownloadActionClick(file: DocumentenApiRelatedFile): void {
