@@ -137,11 +137,14 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       const translatedFiles = relatedFiles?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
-        language: this.translateService.instant(`document.${file.language}`),
-        confidentialityLevel: this.translateService.instant(
+        languageTitle: this.translateService.instant(`document.${file.language}`),
+        language: file.language,
+        confidentialityLevelTitle: this.translateService.instant(
           `document.${file.confidentialityLevel}`
         ),
-        status: this.translateService.instant(`document.${file.status}`),
+        confidentialityLevel: file.confidentialityLevel,
+        statusTitle: this.translateService.instant(`document.${file.status}`),
+        status: file.status,
         format: this.translateService.instant(`document.${file.format}`),
       }));
       return translatedFiles || [];
@@ -202,12 +205,12 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       {key: 'author', label: 'document.author'},
       {key: 'keywords', label: 'document.trefwoorden'},
       {key: 'informatieobjecttype', label: 'document.informatieobjecttype'},
-      {key: 'language', label: 'document.language'},
+      {key: 'languageTitle', label: 'document.language'},
       {key: 'identification', label: 'document.id'},
-      {key: 'confidentialityLevel', label: 'document.confidentialityLevel'},
+      {key: 'confidentialityLevelTitle', label: 'document.confidentialityLevel'},
       {key: 'receiptDate', label: 'document.receiptDate'},
       {key: 'sendDate', label: 'document.sendDate'},
-      {key: 'status', label: 'document.status'},
+      {key: 'statusTitle', label: 'document.status'},
     ];
 
     this.fields = [...this.getFields(fieldOptions, this.fieldsConfig)];
@@ -267,15 +270,19 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
         tap(([file, documentId]) => {
           if (!file) return;
           if (this.isEditMode$.getValue()) {
-            console.log('Edit mode');
-          } else {
-            this.uploadProviderService
-              .uploadFileWithMetadata(file, documentId, metadata)
-              .subscribe(() => {
-                this.refetchDocuments();
+            this.documentenApiDocumentService.updateDocument(file, metadata)
+              .subscribe(() =>{
                 this.uploading$.next(false);
                 this.fileToBeUploaded$.next(null);
               });
+          } else {
+          this.uploadProviderService
+            .uploadFileWithMetadata(file, documentId, metadata)
+            .subscribe(() => {
+              this.refetchDocuments();
+              this.uploading$.next(false);
+              this.fileToBeUploaded$.next(null);
+            });
           }
         })
       )
