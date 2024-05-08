@@ -14,9 +14,4 @@
  * limitations under the License.
  */
 
-interface DocumentenApiManagementVersion {
-  selectedVersion: string;
-  detectedVersions: string;
-}
-
-export {DocumentenApiManagementVersion};
+export * from './documenten-api.service';
