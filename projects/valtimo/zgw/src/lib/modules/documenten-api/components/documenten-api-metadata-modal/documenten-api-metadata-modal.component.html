@@ -118,7 +118,7 @@
               [placeholder]="'document.languagePlaceholder' | translate"
               [disabled]="obs.disabled || disableLanguage"
               id="language"
-              formControlName="language"
+              (selected)="languageSelected($event)"
             >
               <cds-dropdown-list [items]="obs.languageItems || []"></cds-dropdown-list>
             </cds-dropdown>
@@ -138,7 +138,7 @@
               [placeholder]="'document.confidentialityPlaceholder' | translate"
               [disabled]="obs.disabled || disableConfidentialityLevel"
               id="confidentialityLevel"
-              formControlName="confidentialityLevel"
+              (selected)="confidentialityLevelSelected($event)"
             >
               <cds-dropdown-list [items]="confidentialityLevelItems$ | async"></cds-dropdown-list>
             </cds-dropdown>
@@ -284,9 +284,8 @@
             <cds-dropdown
               [placeholder]="'document.statusPlaceholder' | translate"
               [disabled]="obs.disabled || disableStatus"
-              [itemValueKey]="status"
               id="status"
-              formControlName="status"
+              (selected)="statusSelected($event)"
             >
               <cds-dropdown-list [items]="obs.statusItems || []"></cds-dropdown-list>
             </cds-dropdown>
