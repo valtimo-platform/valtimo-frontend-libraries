@@ -42,9 +42,9 @@ export class DocumentenApiColumnService extends BaseApiService {
     );
   }
 
-  public getAdminConfigurableColumns(): Observable<ConfiguredColumn[]> {
+  public getAdminConfigurableColumns(caseDefinition: string): Observable<ConfiguredColumn[]> {
     return this.http.get<ConfiguredColumn[]>(
-      this.getApiUrl(`/management/v1/case-definition/zgw-document-column-key`)
+      this.getApiUrl(`/management/v1/case-definition/${caseDefinition}/zgw-document-column-key`)
     );
   }
 

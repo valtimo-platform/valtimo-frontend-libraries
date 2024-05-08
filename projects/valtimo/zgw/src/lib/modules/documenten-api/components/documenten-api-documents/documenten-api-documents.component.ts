@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Filter16, TagGroup16, Upload16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -31,15 +31,14 @@ import {FileSortService} from '@valtimo/document';
 import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {UserProviderService} from '@valtimo/security';
 import {ButtonModule, DialogModule, IconModule, IconService} from 'carbon-components-angular';
-import moment from 'moment';
 import {BehaviorSubject, combineLatest, Observable, of, ReplaySubject, Subject} from 'rxjs';
 import {catchError, filter, map, switchMap, take, tap} from 'rxjs/operators';
 
 import {
+  COLUMN_VIEW_TYPES,
   ConfiguredColumn,
   DocumentenApiFilterModel,
   DocumentenApiRelatedFile,
-  DocumentenApiRelatedFileListItem,
 } from '../../models';
 import {DocumentenApiColumnService} from '../../services';
 import {DocumentenApiDocumentService} from '../../services/documenten-api-document.service';
@@ -64,7 +63,6 @@ import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-mo
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
-  @ViewChild('sizeTemplate') public sizeTemplate: TemplateRef<any>;
 
   public readonly fields$: Observable<ColumnConfig[]> = this.route.paramMap.pipe(
     switchMap((paramMap: ParamMap) =>
@@ -81,9 +79,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       }
 
       return columns.map((column: ConfiguredColumn) => ({
-        key: column.key,
+        key: column.key === 'bestandsomvang' ? 'size' : column.key,
         label: `zgw.documentColumns.${column.key}`,
-        viewType: ViewType.TEXT,
+        viewType: !COLUMN_VIEW_TYPES[column.key] ? ViewType.TEXT : COLUMN_VIEW_TYPES[column.key],
         sortable: column.sortable,
       }));
     })
@@ -147,11 +145,11 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly uploading$ = new BehaviorSubject<boolean>(false);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  private readonly _refetch$ = new BehaviorSubject<null>(null);
   public readonly filter$ = new ReplaySubject<DocumentenApiFilterModel | null>();
+  private readonly _refetch$ = new BehaviorSubject<null>(null);
   private readonly _sort$ = new ReplaySubject<{sort: string} | null>();
 
-  public relatedFiles$: Observable<Array<DocumentenApiRelatedFileListItem>> = combineLatest([
+  public relatedFiles$: Observable<Array<DocumentenApiRelatedFile>> = combineLatest([
     this.documentId$,
     this.route.queryParamMap,
     this._refetch$,
@@ -176,17 +174,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         ),
         status: this.translateService.instant(`document.${file.status}`),
         format: this.translateService.instant(`document.${file.formaat}`),
+        size: this.bytesToMegabytes(file.bestandsomvang),
       }));
       return translatedFiles || [];
-    }),
-    map(relatedFiles => this.fileSortService.sortRelatedFilesByDateDescending(relatedFiles)),
-    map(relatedFiles => {
-      moment.locale(this.translateService.currentLang);
-      return relatedFiles.map(file => ({
-        ...file,
-        createdOn: moment(new Date(file.createdOn)).format('L'),
-        size: `${this.bytesToMegabytes(file.sizeInBytes)}`,
-      }));
     }),
     tap(() => {
       this.loading$.next(false);
@@ -214,14 +204,17 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.iconService.register(Filter16);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+    this.setInitialFilter();
     this.openQueryParamsSubscription();
     this.setUploadProcessLinked();
     this.isUserAdmin();
     this.iconService.registerAll([Filter16, TagGroup16, Upload16]);
   }
 
-  public bytesToMegabytes(bytes: number): string {
+  public bytesToMegabytes(bytes: number | undefined): string {
+    if (!bytes) return '';
+
     const megabytes = bytes / (1024 * 1024);
     if (megabytes < 1) {
       return `${Math.ceil(megabytes * 1000)} KB`;
@@ -353,6 +346,21 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       )
       .subscribe((linked: boolean) => {
         this.uploadProcessLinked = linked;
+      });
+  }
+
+  private setInitialFilter(): void {
+    this.route.queryParamMap
+      .pipe(
+        take(1),
+        map(queryParams => {
+          const {sort, ...filter} = queryParams['params'];
+          return filter;
+        }),
+        filter(filter => !!filter)
+      )
+      .subscribe(filter => {
+        this.filter$.next(filter);
       });
   }
 }

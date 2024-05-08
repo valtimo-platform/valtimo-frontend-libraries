@@ -35,8 +35,5 @@ interface DocumentenApiRelatedFile extends RelatedFile {
   vertrouwelijkheidaanduiding?: string;
 }
 
-type DocumentenApiRelatedFileListItem = Omit<DocumentenApiRelatedFile, 'createdOn'> & {
-  createdOn: string;
-};
 
-export {DocumentenApiRelatedFile, DocumentenApiRelatedFileListItem};
+export {DocumentenApiRelatedFile};

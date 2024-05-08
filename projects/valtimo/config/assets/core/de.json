@@ -636,6 +636,34 @@
       "edit": "Spalte bearbeiten",
       "deleteText": "Sind Sie sicher, dass Sie dieses Spalte löschen möchten?"
     },
+    "documentColumns": {
+      "auteur": "Autor",
+      "beschrijving": "Beschreibung",
+      "bestandsnaam": "Dateiname",
+      "bestandsomvang": "Dateigröße",
+      "bronorganisatie": "Quellorganisation",
+      "creatiedatum": "Erstellungsdatum",
+      "formaat": "Format",
+      "identificatie": "Identifikation",
+      "informatieobjecttype": "Informationsobjekttyp",
+      "locked": "Locked",
+      "status": "Status",
+      "taal": "Sprache",
+      "titel": "Titel",
+      "trefwoorden": "Stichworte",
+      "versie": "Ausführung",
+      "vertrouwelijkheidaanduiding": "Vertraulichkeitsstufen"
+    },
+    "documents": {
+      "noResults": {
+        "filterTitle": "Keine Dokumente gefunden",
+        "filterDescription": "Es sind keine Dokumente vorhanden, die Ihren Suchkriterien entsprechen"
+      },
+      "noColumns": {
+        "description": "Bitte konfigurieren Sie Spalten für dieses Dokument",
+        "title": "Keine konfigurierten Spalten"
+      }
+    },
     "tags": {
       "tag": "Schlüsselwört",
       "add": "Schlüsselwört hinzufügen",
@@ -876,6 +904,10 @@
       "warm-gray": "Warmes Grau",
       "high-contrast": "Hoher Kontrast",
       "outline": "Umrissen"
+    },
+    "labels": {
+      "dateCreationFrom": "Datum der Erstellung von",
+      "dateCreationTo": "Datum der Erstellung bis"
     }
   },
   "taskDetail": {
