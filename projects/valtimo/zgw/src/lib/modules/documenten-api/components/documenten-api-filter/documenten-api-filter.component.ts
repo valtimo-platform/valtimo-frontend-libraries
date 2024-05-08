@@ -218,11 +218,12 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterVie
           ...(!!(formValue.informatieObjectType as ListItem)?.id && {
             informatieobjecttype: (formValue.informatieObjectType as ListItem).id,
           }),
-          ...(!!formValue.trefwoorden && {
-            trefwoorden: this.objectToBase64(
-              (formValue.trefwoorden as ListItem[]).map((tag: ListItem) => tag.content)
-            ),
-          }),
+          ...(!!formValue.trefwoorden &&
+            formValue.trefwoorden.length > 0 && {
+              trefwoorden: this.objectToBase64(
+                (formValue.trefwoorden as ListItem[]).map((tag: ListItem) => tag.content)
+              ),
+            }),
         });
       })
     );
