@@ -159,7 +159,7 @@
                 [placeholder]="'document.informatieobjecttypePlaceholder' | translate"
                 [disabled]="obs.disabled || disableDocumentType"
                 id="informatieobjecttype"
-                formControlName="informatieobjecttype"
+                (selected)="informatieobjecttypeSelected($event)"
               >
                 <cds-dropdown-list [items]="obs.documentTypeItems"></cds-dropdown-list>
               </cds-dropdown>

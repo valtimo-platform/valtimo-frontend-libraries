@@ -270,7 +270,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   public readonly documentTypeItems$: Observable<Array<ListItem>> = combineLatest([
     this.route?.params || of(null),
     this.route?.firstChild?.params || of(null),
-    this.valtimoModalService.documentDefinitionName$
+    this.valtimoModalService.documentDefinitionName$,
+    this.informatieobjecttypeFormControl.valueChanges.pipe(startWith(this.informatieobjecttypeFormControl.value))
   ]).pipe(
     filter(
       ([params, firstChildParams, documentDefinitionName]) =>
@@ -288,7 +289,13 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       )
     ),
     map(documentTypes =>
-      documentTypes.map(type => ({id: type.url, content: type.name, selected: false}))
+      documentTypes.map((type:any) =>
+        ({
+          id: type.url,
+          content: type.name,
+          selected: this.informatieobjecttypeFormControl.value.toString() === type.url
+        })
+      )
     )
   );
   public readonly userEmail$ = from(this.keycloakService.loadUserProfile()).pipe(
@@ -392,10 +399,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   }
 
   public save(): void {
-    this.documentenApiMetadataForm.patchValue({
-      informatieobjecttype: this.documentenApiMetadataForm.controls.informatieobjecttype.value.id,
-    });
-
     this.formatDate('creationDate');
     this.formatDate('sendDate');
     this.formatDate('receiptDate');
