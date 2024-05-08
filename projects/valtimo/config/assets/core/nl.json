@@ -634,7 +634,37 @@
       "column": "Kolom",
       "add": "Kolom toevoegen",
       "edit": "Kolom bewerken",
-      "deleteText": "Weet je zeker dat je deze kolom wilt verwijderen?"
+      "deleteText": "Weet je zeker dat je deze kolom wilt verwijderen?",
+      "notSortable": "This column is not sortable",
+      "defaultWarning": "When selecting a default sort, the previous sort will be overwritten"
+    },
+    "documentColumns": {
+      "auteur": "Auteur",
+      "beschrijving": "Beschrijving",
+      "bestandsnaam": "Bestands naam",
+      "bestandsomvang": "Bestands omvang",
+      "bronorganisatie": "Bron organisatie",
+      "creatiedatum": "Creatie datum",
+      "formaat": "Formaat",
+      "identificatie": "Identificatie",
+      "informatieobjecttype": "Informatie object type",
+      "locked": "Locked",
+      "status": "Status",
+      "taal": "Taal",
+      "titel": "Titel",
+      "trefwoorden": "Trefwoorden",
+      "versie": "Versie",
+      "vertrouwelijkheidaanduiding": "Vertrouwelijk heidaanduiding"
+    },
+    "documents": {
+      "noResults": {
+        "filterTitle": "Geen documenten gevonden",
+        "filterDescription": "Er zijn geen documenten die voldoen aan je zoekcriteria."
+      },
+      "noColumns": {
+        "description": "Configureer kolommen voor dit document",
+        "title": "Er zijn geen kolommen geconfigureerd voor dit zaak."
+      }
     },
     "tags": {
       "tag": "Trefwoord",
@@ -877,6 +907,10 @@
       "warm-gray": "Warm grijs",
       "high-contrast": "Hoog contrast",
       "outline": "Omlijnd"
+    },
+    "labels": {
+      "dateCreationFrom": "Date creation from",
+      "dateCreationTo": "Date creation to"
     }
   },
   "taskDetail": {

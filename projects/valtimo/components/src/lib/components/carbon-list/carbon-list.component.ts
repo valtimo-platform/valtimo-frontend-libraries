@@ -39,7 +39,7 @@ import {
   TableItem,
   TableModel,
 } from 'carbon-components-angular';
-import {get as _get, initial} from 'lodash';
+import {get as _get} from 'lodash';
 import {NGXLogger} from 'ngx-logger';
 import {
   BehaviorSubject,
@@ -401,6 +401,8 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
                 data: {tags: item.tags},
                 template: this.tagTemplate,
               });
+            case ViewType.DATE:
+              return new TableItem({data: this.resolveObject(field, item) ?? '-', item});
             default:
               return new TableItem({data: this.resolveObject(field, item) ?? '-', item});
           }

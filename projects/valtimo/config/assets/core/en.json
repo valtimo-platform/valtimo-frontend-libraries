@@ -653,12 +653,13 @@
       "status": "Status",
       "taal": "Language",
       "titel": "Title",
+      "trefwoorden": "Tags",
       "versie": "Version",
       "vertrouwelijkheidaanduiding": "Confidentiality level"
     },
     "documents": {
       "noResults": {
-        "filterTitle": "No documents fount",
+        "filterTitle": "No documents found",
         "filterDescription": "There are no documents that match your search criteria"
       },
       "noColumns": {
@@ -908,6 +909,10 @@
       "warm-gray": "Warm gray",
       "high-contrast": "High contrast",
       "outline": "Outline"
+    },
+    "labels": {
+      "dateCreationFrom": "Date creation from",
+      "dateCreationTo": "Date creation to"
     }
   },
   "taskDetail": {

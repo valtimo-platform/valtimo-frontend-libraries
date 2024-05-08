@@ -30,7 +30,7 @@
     [fields]="fields"
     [header]="false"
     [items]="obs.configuredColumns"
-    [loading]="obs.loading"
+    [loading]="obs.loading || !fields"
     [movingRowsEnabled]="true"
     (itemsReordered)="onItemsReordered(obs.documentDefinitionName, $event)"
   >
@@ -71,4 +71,8 @@
 
     {{ 'zgw.columns.add' | translate }}
   </button>
+</ng-template>
+
+<ng-template #columnKeyTemplate let-data="data">
+  {{ 'zgw.documentColumns.' + data.item.key | translate }}
 </ng-template>

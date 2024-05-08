@@ -24,17 +24,21 @@
     </cds-dropdown>
 
     <div class="valtimo-documenten-api-filter__dates">
-      <cds-date-picker-input
+      <cds-date-picker
+        #creationDateFrom
+        [label]="'interface.labels.dateCreationFrom' | translate"
+        placeholder="dd/mm/yyyy"
         [dateFormat]="'d/m/Y'"
-        [label]="'Date creation from' | translate"
-        formControlName="creatiedatumfrom"
-      ></cds-date-picker-input>
+        (valueChange)="onDateSelected('createdFrom', $event)"
+      ></cds-date-picker>
 
-      <cds-date-picker-input
+      <cds-date-picker
+        #creationDateTo
+        [label]="'interface.labels.dateCreationTo' | translate"
+        placeholder="dd/mm/yyyy"
         [dateFormat]="'d/m/Y'"
-        [label]="'Date creation to' | translate"
-        formControlName="creatiedatumto"
-      ></cds-date-picker-input>
+        (valueChange)="onDateSelected('createdTo', $event)"
+      ></cds-date-picker>
     </div>
 
     <cds-text-label>

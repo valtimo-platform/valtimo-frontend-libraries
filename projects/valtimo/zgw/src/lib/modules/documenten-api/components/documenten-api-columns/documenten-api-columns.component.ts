@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {
@@ -52,7 +58,9 @@ import {DocumentenApiColumnModalComponent} from '../documenten-api-column-modal/
     IconModule,
   ],
 })
-export class DocumentenApiColumnsComponent extends PendingChangesComponent {
+export class DocumentenApiColumnsComponent implements AfterViewInit {
+  @ViewChild('columnKeyTemplate') public columnKeyTemplate: TemplateRef<any>;
+
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
 
   private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
@@ -81,33 +89,26 @@ export class DocumentenApiColumnsComponent extends PendingChangesComponent {
     })
   );
 
-  public readonly configurableColumns$: Observable<ConfiguredColumn[]> = combineLatest([
-    this.zgwDocumentColumnService.getAdminConfigurableColumns(),
-    this.configuredColumns$,
-  ]).pipe(
-    map(([configurableColumns, configuredColumns]) => {
-      const configuredKeys: string[] = configuredColumns.map(
-        (column: ConfiguredColumn) => column.key
-      );
+  public readonly configurableColumns$: Observable<ConfiguredColumn[]> =
+    this.documentDefinitionName$.pipe(
+      switchMap((documentDefinitionName: string) =>
+        combineLatest([
+          this.zgwDocumentColumnService.getAdminConfigurableColumns(documentDefinitionName),
+          this.configuredColumns$,
+        ])
+      ),
+      map(([configurableColumns, configuredColumns]) => {
+        const configuredKeys: string[] = configuredColumns.map(
+          (column: ConfiguredColumn) => column.key
+        );
 
-      return configurableColumns.filter(
-        (column: ConfiguredColumn) => !configuredKeys.includes(column.key)
-      );
-    })
-  );
+        return configurableColumns.filter(
+          (column: ConfiguredColumn) => !configuredKeys.includes(column.key)
+        );
+      })
+    );
 
-  public readonly fields: ColumnConfig[] = [
-    {
-      key: 'key',
-      label: 'zgw.columns.column',
-      viewType: ViewType.TEXT,
-    },
-    {
-      key: 'defaultSort',
-      label: 'interface.defaultSort',
-      viewType: ViewType.TEXT,
-    },
-  ];
+  public fields: ColumnConfig[];
 
   public readonly ACTION_ITEMS: ActionItem[] = [
     {
@@ -133,8 +134,22 @@ export class DocumentenApiColumnsComponent extends PendingChangesComponent {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly zgwDocumentColumnService: DocumentenApiColumnService
-  ) {
-    super();
+  ) {}
+
+  public ngAfterViewInit(): void {
+    this.fields = [
+      {
+        key: 'key',
+        label: 'zgw.columns.column',
+        viewType: ViewType.TEMPLATE,
+        template: this.columnKeyTemplate,
+      },
+      {
+        key: 'defaultSort',
+        label: 'interface.defaultSort',
+        viewType: ViewType.TEXT,
+      },
+    ];
   }
 
   public openDeleteModal(column: ConfiguredColumn): void {

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {ViewType} from '@valtimo/components';
+
 interface ConfiguredColumn {
   key: string;
   sortable: boolean;
@@ -21,4 +23,10 @@ interface ConfiguredColumn {
   defaultSort: 'ASC' | 'DESC' | null;
 }
 
-export {ConfiguredColumn};
+const COLUMN_VIEW_TYPES: {[key: string]: ViewType} = {
+  creatiedatum: ViewType.DATE,
+  locked: ViewType.BOOLEAN,
+  trefwoorden: ViewType.TAGS
+};
+
+export {ConfiguredColumn, COLUMN_VIEW_TYPES};

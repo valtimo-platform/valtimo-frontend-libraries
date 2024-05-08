@@ -17,9 +17,9 @@
 export interface DocumentenApiFilterModel {
   auteur?: string;
   vertrouwelijkheidaanduiding?: string;
-  creatiedatumfrom?: string;
-  creatiedatumo?: string;
+  creatiedatumFrom?: string;
+  creatiedatumTo?: string;
   informatieobjectype?: string;
-  trefwoorden?: Array<string>;
+  trefwoorden?: string;
   titel?: string;
 }

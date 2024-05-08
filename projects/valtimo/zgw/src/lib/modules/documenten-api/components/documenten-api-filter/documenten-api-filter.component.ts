@@ -1,11 +1,13 @@
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute, ParamMap} from '@angular/router';
@@ -15,6 +17,7 @@ import {ConfidentialityLevel} from '@valtimo/components';
 import {DocumentService, DocumentType} from '@valtimo/document';
 import {
   ButtonModule,
+  DatePicker,
   DatePickerInputModule,
   DatePickerModule,
   DropdownModule,
@@ -33,7 +36,6 @@ import {
   Subscription,
   switchMap,
 } from 'rxjs';
-
 import {DocumentenApiFilterModel} from '../../models';
 import {DocumentenApiTag} from '../../models/documenten-api-tag.model';
 import {DocumentenApiTagService} from '../../services';
@@ -56,7 +58,9 @@ import {DocumentenApiTagService} from '../../services';
     ReactiveFormsModule,
   ],
 })
-export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
+export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('creationDateFrom') public creationDateFromPicker: DatePicker;
+  @ViewChild('creationDateTo') public creationDateToPicker: DatePicker;
   @Output() filterEvent = new EventEmitter<DocumentenApiFilterModel>();
 
   private readonly _subscriptions = new Subscription();
@@ -73,8 +77,11 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
 
   private readonly _filter$ = this.route.queryParamMap.pipe(
     map(queryParams => {
-      const {sort, ...filter} = queryParams['params'];
+      let {sort, ...filter} = queryParams['params'];
       if (this.formGroup) {
+        if (!!filter.trefwoorden) {
+          filter = {...filter, trefwoorden: this.convertTrefwoordenParam(filter.trefwoorden)};
+        }
         this.formGroup.patchValue(filter, {emitEvent: false});
       }
       return filter;
@@ -116,19 +123,28 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
   public readonly tags$: Observable<ListItem[]> = this.route.paramMap.pipe(
     filter((paramMap: ParamMap) => !!paramMap.get('documentDefinitionName')),
     switchMap((paramMap: ParamMap) =>
-      this.documentenApiTagService.getTags(paramMap.get('documentDefinitionName') ?? '')
+      combineLatest([
+        this.documentenApiTagService.getTags(paramMap.get('documentDefinitionName') ?? ''),
+        this.route.queryParamMap,
+      ])
     ),
-    map((tags: DocumentenApiTag[]) =>
-      tags.map((tag: DocumentenApiTag) => ({content: tag.value, selected: false}))
-    ),
+    map(([tags, queryParamMap]) => {
+      const selectedTags = this.convertTrefwoordenParam(queryParamMap['params']?.trefwoorden).map(
+        (item: ListItem) => item.content
+      );
+      return tags.map((tag: DocumentenApiTag) => ({
+        content: tag.value,
+        selected: selectedTags.includes(tag.value),
+      }));
+    }),
     startWith([])
   );
 
   public readonly formGroup = this.fb.group({
     auteur: this.fb.control(''),
     vertrouwelijkHeidaanduiding: this.fb.control({}),
-    creatiedatumfrom: this.fb.control(''),
-    creatiedatumto: this.fb.control(''),
+    creatiedatumFrom: this.fb.control(''),
+    creatiedatumTo: this.fb.control(''),
     informatieObjectType: this.fb.control({}),
     trefwoorden: this.fb.control([]),
     titel: this.fb.control(''),
@@ -140,7 +156,8 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
     private readonly iconService: IconService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly documentenApiTagService: DocumentenApiTagService
+    private readonly documentenApiTagService: DocumentenApiTagService,
+    private readonly datePipe: DatePipe
   ) {
     this.iconService.register(TrashCan16);
   }
@@ -153,8 +170,33 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
+  public ngAfterViewInit(): void {
+    const creationDateFromControlValue = this.formGroup.get('creatiedatumFrom')?.value;
+    const creationDateToControlValue = this.formGroup.get('creatiedatumTo')?.value;
+
+    if (!!creationDateFromControlValue) {
+      console.log(creationDateFromControlValue);
+      this.creationDateFromPicker.writeValue([creationDateFromControlValue]);
+    }
+
+    if (!!creationDateToControlValue) {
+      this.creationDateFromPicker.writeValue([creationDateToControlValue]);
+    }
+  }
+
   public resetForm(): void {
+    this.creationDateFromPicker.writeValue([]);
+    this.creationDateToPicker.writeValue([]);
     this.formGroup.reset();
+  }
+
+  public onDateSelected(control: 'createdTo' | 'createdFrom', event: any): void {
+    if (control === 'createdFrom') {
+      this.formGroup.get('creatiedatumFrom')?.patchValue(event);
+      return;
+    }
+
+    this.formGroup.get('creatiedatumTo')?.patchValue(event);
   }
 
   private openFormValueSubscription(): void {
@@ -163,11 +205,13 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
         this.filterEvent.emit({
           ...(!!formValue.auteur && {auteur: formValue.auteur}),
           ...(!!formValue.titel && {titel: formValue.titel}),
-          ...(!!formValue.creatiedatumfrom && {
-            creatiedatumfrom: new Date(formValue.creatiedatumfrom).toLocaleDateString(),
+          ...(!!formValue.creatiedatumFrom && {
+            creatiedatumFrom:
+              this.datePipe.transform(new Date(formValue.creatiedatumFrom), 'yyyy-MM-dd') ?? '',
           }),
-          ...(!!formValue.creatiedatumto && {
-            creatiedatumo: new Date(formValue.creatiedatumto).toLocaleDateString(),
+          ...(!!formValue.creatiedatumTo && {
+            creatiedatumTo:
+              this.datePipe.transform(new Date(formValue.creatiedatumTo), 'yyyy-MM-dd') ?? '',
           }),
           ...(!!(formValue.vertrouwelijkHeidaanduiding as ListItem)?.id && {
             vertrouwelijkheidaanduiding: (formValue.vertrouwelijkHeidaanduiding as ListItem).id,
@@ -176,10 +220,25 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy {
             informatieobjecttype: (formValue.informatieObjectType as ListItem).id,
           }),
           ...(!!formValue.trefwoorden && {
-            trefwoorden: (formValue.trefwoorden as ListItem[]).map((tag: ListItem) => tag.content),
+            trefwoorden: this.objectToBase64(
+              (formValue.trefwoorden as ListItem[]).map((tag: ListItem) => tag.content)
+            ),
           }),
         });
       })
     );
+  }
+
+  private objectToBase64(trefwoorden: string[]): string {
+    return btoa(JSON.stringify(trefwoorden));
+  }
+
+  private convertTrefwoordenParam(base64: string): ListItem[] {
+    const array = JSON.parse(atob(base64));
+
+    return array.map((content: string) => ({
+      content,
+      selected: true,
+    }));
   }
 }
