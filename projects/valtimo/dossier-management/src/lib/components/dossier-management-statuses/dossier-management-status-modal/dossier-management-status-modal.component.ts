@@ -348,11 +348,11 @@ export class DossierManagementStatusModalComponent implements OnInit, OnDestroy 
   private uniqueKeyValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> =>
       combineLatest([this.isEdit$, control.valueChanges]).pipe(
-        map(([isEdit, keyValue]) => {
-          return this.usedKeys?.every((key: string) => key !== keyValue) || isEdit
+        map(([isEdit, keyValue]) =>
+          this.usedKeys?.every((key: string) => key !== keyValue) || isEdit
             ? null
-            : {uniqueKey: {value: control.value}};
-        })
+            : {uniqueKey: {value: control.value}}
+        )
       );
   }
 
