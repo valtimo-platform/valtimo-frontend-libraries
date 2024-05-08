@@ -175,7 +175,6 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterVie
     const creationDateToControlValue = this.formGroup.get('creatiedatumTo')?.value;
 
     if (!!creationDateFromControlValue) {
-      console.log(creationDateFromControlValue);
       this.creationDateFromPicker.writeValue([creationDateFromControlValue]);
     }
 
@@ -233,7 +232,8 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterVie
     return btoa(JSON.stringify(trefwoorden));
   }
 
-  private convertTrefwoordenParam(base64: string): ListItem[] {
+  private convertTrefwoordenParam(base64: string | undefined): ListItem[] {
+    if (!base64) return [];
     const array = JSON.parse(atob(base64));
 
     return array.map((content: string) => ({

@@ -74,7 +74,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       const defaultSortColumn: ConfiguredColumn | undefined = columns.find(
         (column: ConfiguredColumn) => !!column.defaultSort
       );
-      console.log(defaultSortColumn);
       if (!!defaultSortColumn) {
         this._sort$.next({sort: `${defaultSortColumn.key},${defaultSortColumn.defaultSort}`});
       }
@@ -85,8 +84,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         viewType: !COLUMN_VIEW_TYPES[column.key] ? ViewType.TEXT : COLUMN_VIEW_TYPES[column.key],
         sortable: column.sortable,
       }));
-    }),
-    tap(res => console.log(res))
+    })
   );
   public actionItems: ActionItem[] = [
     {
@@ -147,8 +145,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly uploading$ = new BehaviorSubject<boolean>(false);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  private readonly _refetch$ = new BehaviorSubject<null>(null);
   public readonly filter$ = new ReplaySubject<DocumentenApiFilterModel | null>();
+  private readonly _refetch$ = new BehaviorSubject<null>(null);
   private readonly _sort$ = new ReplaySubject<{sort: string} | null>();
 
   public relatedFiles$: Observable<Array<DocumentenApiRelatedFile>> = combineLatest([
@@ -206,7 +204,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.iconService.register(Filter16);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+    this.setInitialFilter();
     this.openQueryParamsSubscription();
     this.setUploadProcessLinked();
     this.isUserAdmin();
@@ -347,6 +346,21 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       )
       .subscribe((linked: boolean) => {
         this.uploadProcessLinked = linked;
+      });
+  }
+
+  private setInitialFilter(): void {
+    this.route.queryParamMap
+      .pipe(
+        take(1),
+        map(queryParams => {
+          const {sort, ...filter} = queryParams['params'];
+          return filter;
+        }),
+        filter(filter => !!filter)
+      )
+      .subscribe(filter => {
+        this.filter$.next(filter);
       });
   }
 }

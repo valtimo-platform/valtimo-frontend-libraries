@@ -664,7 +664,7 @@
       },
       "noColumns": {
         "description": "Please configure columns for this document",
-        "title": "No configured column"
+        "title": "No configured columns"
       }
     },
     "tags": {
