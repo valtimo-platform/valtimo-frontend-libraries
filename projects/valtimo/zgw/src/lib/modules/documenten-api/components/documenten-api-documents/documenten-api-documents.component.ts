@@ -137,8 +137,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       const translatedFiles = relatedFiles?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
-        languageTitle: this.translateService.instant(`document.${file.language}`),
-        language: file.language,
+        taalTitle: this.translateService.instant(`document.${file.language}`),
+        taal: file.language,
         confidentialityLevelTitle: this.translateService.instant(
           `document.${file.confidentialityLevel}`
         ),
@@ -207,7 +207,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       {key: 'author', label: 'document.author'},
       {key: 'keywords', label: 'document.trefwoorden'},
       {key: 'informatieobjecttypeTitle', label: 'document.informatieobjecttype'},
-      {key: 'languageTitle', label: 'document.language'},
+      {key: 'taalTitle', label: 'document.language'},
       {key: 'identification', label: 'document.id'},
       {key: 'confidentialityLevelTitle', label: 'document.confidentialityLevel'},
       {key: 'receiptDate', label: 'document.receiptDate'},
@@ -274,6 +274,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
           if (this.isEditMode$.getValue()) {
             this.documentenApiDocumentService.updateDocument(file, metadata)
               .subscribe(() =>{
+                this.refetchDocuments();
                 this.uploading$.next(false);
                 this.fileToBeUploaded$.next(null);
               });
