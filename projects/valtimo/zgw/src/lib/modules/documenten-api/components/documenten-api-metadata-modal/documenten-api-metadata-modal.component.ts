@@ -129,25 +129,26 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   @Output() close: EventEmitter<boolean> = new EventEmitter();
 
   public documentenApiMetadataForm: FormGroup = this.fb.group({
-    filename: this.fb.control('', Validators.required),
-    title: this.fb.control('', Validators.required),
-    author: this.fb.control('', Validators.required),
-    description: this.fb.control('', Validators.required),
-    language: this.fb.control('', Validators.required),
+    bestandsnaam: this.fb.control('', Validators.required),
+    titel: this.fb.control('', Validators.required),
+    auteur: this.fb.control('', Validators.required),
+    bescvhrijving: this.fb.control('', Validators.required),
+    taal: this.fb.control('', Validators.required),
     informatieobjecttype: this.fb.control('', Validators.required),
     status: this.fb.control('', Validators.required),
-    confidentialityLevel: this.fb.control('', Validators.required),
-    creationDate: this.fb.control('', Validators.required),
-    receiptDate: this.fb.control(''),
-    sendDate: this.fb.control(''),
+    vertrouwelijkheidaanduiding: this.fb.control('', Validators.required),
+    creatiedatum: this.fb.control('', Validators.required),
+    ontvangstdatum: this.fb.control(''),
+    verzenddatum: this.fb.control(''),
+    trefwoorden: this.fb.control([])
   });
 
   public get languageFormControl(): AbstractControl<string> {
-    return this.documentenApiMetadataForm.get('language');
+    return this.documentenApiMetadataForm.get('taal');
   }
 
   public get confidentialityLevelFormControl(): AbstractControl<string> {
-    return this.documentenApiMetadataForm.get('confidentialityLevel');
+    return this.documentenApiMetadataForm.get('vertrouwelijkheidaanduiding');
   }
 
   public get statusFormControl(): AbstractControl<string> {
@@ -333,7 +334,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   public languageSelected(event: {item: {id: string}}) {
     if (event.item.id) {
       this.documentenApiMetadataForm.patchValue({
-        language: event.item.id,
+        taal: event.item.id,
       });
     }
   }
@@ -341,7 +342,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   public confidentialityLevelSelected(event: {item: {id: string}}) {
     if (event.item.id) {
       this.documentenApiMetadataForm.patchValue({
-        confidentialityLevel: event.item.id,
+        vertrouwelijkheidaanduiding: event.item.id,
       });
     }
   }
@@ -352,6 +353,10 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
         status: event.item.id,
       });
     }
+  }
+
+  public tagsSelected(event: {item: {id: string}}) {
+    // TO DO
   }
 
   public informatieobjecttypeSelected(event: {item: {id: string}}) {
@@ -366,42 +371,44 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     this.prefillFilenameAndAuthor();
     if (file) {
       const {
-        filename,
+        bestandsnaam,
         title,
-        author,
-        description,
-        language,
+        auteur,
+        beschrijving,
+        taal,
         informatieobjecttype,
         status,
         confidentialityLevel,
         createdOn,
         receiptDate,
         sendDate,
+        trefwoorden
       } = file;
 
       if (sendDate) this.additionalDocumentDate$.next('sent');
       else if (receiptDate) this.additionalDocumentDate$.next('received');
 
       this.documentenApiMetadataForm.patchValue({
-        filename,
-        title,
-        author,
-        description,
-        language,
+        bestandsnaam,
+        titel: title,
+        auteur,
+        beschrijving,
+        taal,
         informatieobjecttype,
         status,
-        confidentialityLevel,
-        creationDate: createdOn,
-        receiptDate,
-        sendDate,
+        vertrouwelijkheidaanduiding: confidentialityLevel,
+        creatiedatum: createdOn,
+        ontvangstdatum: receiptDate,
+        verzenddatum: sendDate,
+        trefwoorden
       });
     }
   }
 
   public save(): void {
-    this.formatDate('creationDate');
-    this.formatDate('sendDate');
-    this.formatDate('receiptDate');
+    this.formatDate('creatiedatum');
+    this.formatDate('verzenddatum');
+    this.formatDate('ontvangstdatum');
 
     // if (this.documentenApiMetadataForm.valid)
     this.metadata.emit(this.documentenApiMetadataForm.value);
@@ -410,8 +417,26 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   }
 
   public closeModal(): void {
+   this.clearForm();
     this.additionalDocumentDate$.next('neither');
     this.close.emit();
+  }
+
+  private clearForm(){
+    this.documentenApiMetadataForm.patchValue({
+      bestandsnaam: '',
+      titel: '',
+      auteur: '',
+      bescvhrijving: '',
+      taal: '',
+      informatieobjecttype: '',
+      status: '',
+      vertrouwelijkheidaanduiding: '',
+      creatiedatum: '',
+      ontvangstdatum: '',
+      verzenddatum: '',
+      trefwoorden: ['']
+    });
   }
 
   private prefillFilenameAndAuthor() {
@@ -420,8 +445,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
         .pipe(
           tap(([file, userEmail]) => {
             this.documentenApiMetadataForm.patchValue({
-              filename: file?.name || file?.fileName,
-              author: userEmail,
+              bestandsnaam: file?.name || file?.fileName,
+              auteur: userEmail,
             });
           })
         )
