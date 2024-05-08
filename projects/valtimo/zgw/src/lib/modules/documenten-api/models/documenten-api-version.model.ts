@@ -18,5 +18,8 @@ interface DocumentenApiManagementVersion {
   selectedVersion: string;
   detectedVersions: string;
 }
+interface DocumentenApiManagementAllVersions {
+  versions: Array<string>;
+}
 
-export {DocumentenApiManagementVersion};
+export {DocumentenApiManagementVersion, DocumentenApiManagementAllVersions};

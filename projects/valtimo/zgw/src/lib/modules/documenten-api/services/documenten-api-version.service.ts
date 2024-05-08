@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {DocumentenApiManagementVersion} from '../models';
+import {DocumentenApiManagementAllVersions, DocumentenApiManagementVersion} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +42,12 @@ export class DocumentenApiVersionService extends BaseApiService {
   ): Observable<DocumentenApiManagementVersion> {
     return this.httpClient.get<DocumentenApiManagementVersion>(
       this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/documenten-api/version`)
+    );
+  }
+
+  public getManagementApiAllVersions(): Observable<DocumentenApiManagementAllVersions> {
+    return this.httpClient.get<DocumentenApiManagementAllVersions>(
+      this.getApiUrl(`/management/v1/documenten-api/versions`)
     );
   }
 
