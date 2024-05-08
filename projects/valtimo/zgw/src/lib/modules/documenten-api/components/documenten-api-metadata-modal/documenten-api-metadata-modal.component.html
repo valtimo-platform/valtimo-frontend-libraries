@@ -79,8 +79,8 @@
               [required]="true"
               cdsText
               type="text"
-              id="filename"
-              formControlName="filename"
+              id="bestandsnaam"
+              formControlName="bestandsnaam"
             />
           </cds-text-label>
           <cds-text-label class="documenten-metada-form-input">
@@ -98,8 +98,8 @@
               [placeholder]="'document.authorPlaceholder' | translate"
               [required]="true"
               cdsText
-              id="author"
-              formControlName="author"
+              id="auteur"
+              formControlName="auteur"
             />
           </cds-text-label>
           <cds-text-label>
@@ -137,7 +137,7 @@
             <cds-dropdown
               [placeholder]="'document.confidentialityPlaceholder' | translate"
               [disabled]="obs.disabled || disableConfidentialityLevel"
-              id="confidentialityLevel"
+              id="vertrouwelijkheidaanduiding"
               (selected)="confidentialityLevelSelected($event)"
             >
               <cds-dropdown-list [items]="confidentialityLevelItems$ | async"></cds-dropdown-list>
@@ -204,6 +204,8 @@
               [placeholder]="'document.tagsPlaceholder' | translate"
               [disabled]="obs.disabled"
               name="tags"
+              formControlName="trefwoorden"
+              (selected)="tagsSelected($event)">
             >
               <cds-dropdown-list [items]="tagItems$ | async"></cds-dropdown-list>
             </cds-combo-box>
@@ -220,8 +222,8 @@
               [required]="true"
               cdsText
               class="documenten-metada-form-input"
-              id="title"
-              formControlName="title"
+              id="titel"
+              formControlName="titel"
             />
             <cds-tooltip
               [isOpen]="false"
@@ -241,8 +243,8 @@
               [rows]="5"
               cdsTextArea
               class="documenten-metada-form-description-input documenten-metada-form-input"
-              id="description"
-              formControlName="description"
+              id="bescvhrijving"
+              formControlName="bescvhrijving"
             ></textarea>
             <cds-tooltip
               [isOpen]="false"
@@ -264,8 +266,8 @@
             <div class="documenten-metada-form-input">
               <cds-date-picker
                 [disabled]="obs.disabled"
-                id="creationDate"
-                formControlName="creationDate"
+                id="creatiedatum"
+                formControlName="creatiedatum"
               >
               </cds-date-picker>
             </div>
@@ -294,15 +296,15 @@
             *ngIf="additionalDate === 'received'"
             [disabled]="obs.disabled"
             [label]="'document.additionalDate' | translate"
-            id="receiptDate"
-            formControlName="receiptDate"
+            id="ontvangstdatum"
+            formControlName="ontvangstdatum"
           ></cds-date-picker>
           <cds-date-picker
             *ngIf="additionalDate === 'sent'"
             [disabled]="obs.disabled"
             [label]="'document.additionalDate' | translate"
-            id="sendDate"
-            formControlName="sendDate"
+            id="verzenddatum"
+            formControlName="verzenddatum"
           ></cds-date-picker>
         </div>
       </div>
