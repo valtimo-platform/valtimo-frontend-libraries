@@ -37,6 +37,13 @@ export class DocumentenApiDocumentService extends BaseApiService {
     );
   }
 
+  public updateDocument(file: any, metadata: any): Observable<void> {
+    return this.httpClient.put<void>(
+      this.getApiUrl(`/v1/documenten-api/${file.pluginConfigurationId}/files/${file.fileId}`),
+      metadata
+    );
+  }
+
   public deleteDocument(file: DocumentenApiRelatedFile): Observable<DocumentenApiRelatedFile[]> {
     return this.httpClient.delete<DocumentenApiRelatedFile[]>(
       this.getApiUrl(`/v1/documenten-api/${file.pluginConfigurationId}/files/${file.fileId}`)
