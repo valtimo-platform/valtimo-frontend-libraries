@@ -22,6 +22,7 @@ import {
   ActionItem,
   CarbonListModule,
   ColumnConfig,
+  ConfirmationModalModule,
   DocumentenApiMetadata,
   SortState,
   ViewType,
@@ -59,6 +60,7 @@ import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-mo
     TranslateModule,
     DocumentenApiFilterComponent,
     DialogModule,
+    ConfirmationModalModule,
   ],
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
@@ -86,10 +88,16 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       }));
     })
   );
+  public document: DocumentenApiRelatedFile;
   public actionItems: ActionItem[] = [
     {
       label: 'document.download',
       callback: this.onDownloadActionClick.bind(this),
+      type: 'normal',
+    },
+    {
+      label: 'document.edit',
+      callback: this.onEditMetadata.bind(this),
       type: 'normal',
     },
     {
@@ -133,14 +141,17 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public uploadProcessLinkedSet = false;
   public uploadProcessLinked!: boolean;
 
+  public isEditMode$ = new BehaviorSubject<boolean>(false);
+
   public readonly acceptedFiles: string | null =
     this.configService?.config?.caseFileUploadAcceptedFiles || null;
   public readonly maxFileSize: number = this.configService?.config?.caseFileSizeUploadLimitMB || 5;
 
   public readonly fileToBeUploaded$ = new BehaviorSubject<File | null>(null);
-  public readonly hideModal$ = new Subject<null>();
   public readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
   public readonly showModal$ = new Subject<null>();
+  public readonly showUploadModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showDeleteConfirmationModal$ = new BehaviorSubject<boolean>(false);
 
   public readonly uploading$ = new BehaviorSubject<boolean>(false);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
@@ -168,11 +179,16 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       const translatedFiles = relatedFiles?.content?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
-        language: this.translateService.instant(`document.${file.taal}`),
-        confidentialityLevel: this.translateService.instant(
+        taalTitle: this.translateService.instant(`document.${file.taal}`),
+        taal: file.taal,
+        confidentialityLevelTitle: this.translateService.instant(
           `document.${file.vertrouwelijkheidaanduiding}`
         ),
-        status: this.translateService.instant(`document.${file.status}`),
+        informatieobjecttype: file.informatieobjecttype,
+        informatieobjecttypeTitle: this.translateService.instant(`document.${file.informatieobjecttype}`),
+        confidentialityLevel: file.vertrouwelijkheidaanduiding,
+        statusTitle: this.translateService.instant(`document.${file.status}`),
+        status: file.status,
         format: this.translateService.instant(`document.${file.formaat}`),
         size: this.bytesToMegabytes(file.bestandsomvang),
       }));
@@ -212,6 +228,19 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.iconService.registerAll([Filter16, TagGroup16, Upload16]);
   }
 
+  public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
+    this.document = item;
+    this.showDeleteConfirmationModal$.next(true);
+  }
+
+  public deleteDocument(item: DocumentenApiRelatedFile): void {
+    this.loading$.next(true);
+    this.documentenApiDocumentService.deleteDocument(this.document).subscribe(() => {
+      // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
+      this.refetchDocuments();
+    });
+  }
+
   public bytesToMegabytes(bytes: number | undefined): string {
     if (!bytes) return '';
 
@@ -248,14 +277,20 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
   public metadataSet(metadata: DocumentenApiMetadata): void {
     this.uploading$.next(true);
-    this.hideModal$.next(null);
 
     combineLatest([this.fileToBeUploaded$, this.documentId$])
       .pipe(take(1))
       .pipe(
         tap(([file, documentId]) => {
           if (!file) return;
-
+          if (this.isEditMode$.getValue()) {
+            this.documentenApiDocumentService.updateDocument(file, metadata)
+              .subscribe(() =>{
+                this.refetchDocuments();
+                this.uploading$.next(false);
+                this.fileToBeUploaded$.next(null);
+              });
+          } else {
           this.uploadProviderService
             .uploadFileWithMetadata(file, documentId, metadata)
             .subscribe(() => {
@@ -263,25 +298,30 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
               this.uploading$.next(false);
               this.fileToBeUploaded$.next(null);
             });
+          }
         })
       )
       .subscribe();
-  }
-
-  public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
-    this.loading$.next(true);
-    this.documentenApiDocumentService.deleteDocument(item).subscribe(() => {
-      this.refetchDocuments();
-    });
   }
 
   public onDownloadActionClick(file: DocumentenApiRelatedFile): void {
     this.downloadDocument(file, true);
   }
 
+  public onEditMetadata(file: File): void {
+    this.isEditMode$.next(true);
+    this.fileToBeUploaded$.next(file);
+    this.showUploadModal$.next(true);
+  }
+
+  public closeMetadataModal(): void {
+    this.showUploadModal$.next(false);
+  }
+
   public onFileSelected(event: any): void {
+    this.isEditMode$.next(false);
     this.fileToBeUploaded$.next(event.target.files[0]);
-    this.showModal$.next(null);
+    this.showUploadModal$.next(true);
   }
 
   public onNavigateToCaseAdminClick(): void {
