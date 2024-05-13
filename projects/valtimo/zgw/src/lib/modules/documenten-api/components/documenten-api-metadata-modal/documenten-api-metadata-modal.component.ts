@@ -27,7 +27,6 @@ import {
   BehaviorSubject,
   combineLatest,
   filter,
-  forkJoin,
   from,
   map,
   Observable,
@@ -37,7 +36,6 @@ import {
   Subscription,
   switchMap,
   take,
-  zip,
 } from 'rxjs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
@@ -132,7 +130,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     bestandsnaam: this.fb.control('', Validators.required),
     titel: this.fb.control('', Validators.required),
     auteur: this.fb.control('', Validators.required),
-    bescvhrijving: this.fb.control('', Validators.required),
+    beschrijving: this.fb.control('', Validators.required),
     taal: this.fb.control('', Validators.required),
     informatieobjecttype: this.fb.control('', Validators.required),
     status: this.fb.control('', Validators.required),
@@ -372,34 +370,34 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     if (file) {
       const {
         bestandsnaam,
-        title,
+        titel,
         auteur,
         beschrijving,
         taal,
         informatieobjecttype,
         status,
         confidentialityLevel,
-        createdOn,
-        receiptDate,
-        sendDate,
+        creatiedatum,
+        ontvangstdatum,
+        verzenddatum,
         trefwoorden
       } = file;
 
-      if (sendDate) this.additionalDocumentDate$.next('sent');
-      else if (receiptDate) this.additionalDocumentDate$.next('received');
+      if (verzenddatum) this.additionalDocumentDate$.next('sent');
+      else if (ontvangstdatum) this.additionalDocumentDate$.next('received');
 
       this.documentenApiMetadataForm.patchValue({
         bestandsnaam,
-        titel: title,
+        titel,
         auteur,
         beschrijving,
         taal,
         informatieobjecttype,
         status,
         vertrouwelijkheidaanduiding: confidentialityLevel,
-        creatiedatum: createdOn,
-        ontvangstdatum: receiptDate,
-        verzenddatum: sendDate,
+        creatiedatum,
+        ontvangstdatum,
+        verzenddatum,
         trefwoorden
       });
     }
@@ -427,7 +425,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       bestandsnaam: '',
       titel: '',
       auteur: '',
-      bescvhrijving: '',
+      beschrijving: '',
       taal: '',
       informatieobjecttype: '',
       status: '',
@@ -445,7 +443,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
         .pipe(
           tap(([file, userEmail]) => {
             this.documentenApiMetadataForm.patchValue({
-              bestandsnaam: file?.name || file?.fileName,
+              bestandsnaam: file?.name || file?.bestandsnaam,
               auteur: userEmail,
             });
           })

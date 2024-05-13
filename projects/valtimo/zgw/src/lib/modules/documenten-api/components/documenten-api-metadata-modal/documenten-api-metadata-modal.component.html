@@ -236,15 +236,14 @@
           <cds-textarea-label>
             {{ 'document.inputDescription' | translate }}
             <textarea
-              [defaultValue]="description || ''"
               [disabled]="obs.disabled || disableDescription"
               [placeholder]="'document.inputDescriptionPlaceholder' | translate"
               [required]="true"
               [rows]="5"
               cdsTextArea
               class="documenten-metada-form-description-input documenten-metada-form-input"
-              id="bescvhrijving"
-              formControlName="bescvhrijving"
+              id="beschrijving"
+              formControlName="beschrijving"
             ></textarea>
             <cds-tooltip
               [isOpen]="false"
