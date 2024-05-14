@@ -33,6 +33,7 @@ interface DocumentenApiRelatedFile extends RelatedFile {
   trefwoorden?: string[]
   versie?: number;
   vertrouwelijkheidaanduiding?: string;
+  tags?: {content: string}[];
 }
 
 
