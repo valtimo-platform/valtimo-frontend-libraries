@@ -28,7 +28,6 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
-import {FileSortService} from '@valtimo/document';
 import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {UserProviderService} from '@valtimo/security';
 import {ButtonModule, DialogModule, IconModule, IconService} from 'carbon-components-angular';
@@ -196,6 +195,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         status: file.status,
         format: this.translateService.instant(`document.${file.formaat}`),
         size: this.bytesToMegabytes(file.bestandsomvang),
+        tags: file.trefwoorden?.map((trefwoord: string) => ({
+          content: trefwoord,
+        })),
       }));
       return translatedFiles || [];
     }),
@@ -217,7 +219,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
     private readonly userProviderService: UserProviderService,
-    private readonly fileSortService: FileSortService,
     private readonly iconService: IconService,
     private readonly documentenApiDocumentService: DocumentenApiDocumentService,
     private readonly documentenApiColumnService: DocumentenApiColumnService
@@ -274,7 +275,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       userIdentity => {
         this.isAdmin = userIdentity.roles.includes('ROLE_ADMIN');
       },
-      error => {
+      () => {
         this.isAdmin = false;
       }
     );
@@ -301,7 +302,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
             .subscribe(() => {
               this.refetchDocuments();
               this.uploading$.next(false);
-              this.filter$.next(null);
               this.fileToBeUploaded$.next(null);
             });
           }
