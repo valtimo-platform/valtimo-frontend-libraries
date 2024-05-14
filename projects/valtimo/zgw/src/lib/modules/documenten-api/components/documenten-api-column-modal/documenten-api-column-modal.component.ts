@@ -67,20 +67,13 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
 
   private _prefillColumn: ListItem[] | null;
   @Input() public set prefillColumn(value: ConfiguredColumn | undefined) {
-    if (!value) {
-      return;
-    }
+    if (!value) return;
 
     const column = {content: value.key, selected: true, column: value};
-    this.formGroup.patchValue({column});
+    const defaultSort = value.defaultSort ?? 'noDefault';
+    this.formGroup.patchValue({column, defaultSort});
     this.formGroup.get('column')?.disable();
     this._prefillColumn = [column];
-
-    if (value.sortable) {
-      return;
-    }
-
-    this.formGroup.get('defaultSort')?.disable();
   }
   public get prefillColumn(): ListItem[] | null {
     return this._prefillColumn;
@@ -131,7 +124,7 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
       {content: '', selected: false, column: {} as ConfiguredColumn},
       Validators.required
     ),
-    defaultSort: this.fb.control(null),
+    defaultSort: this.fb.control<'ASC' | 'DESC' | 'noDefault'>('noDefault'),
   });
 
   private readonly _notificationMessage$ = new BehaviorSubject<string>(
@@ -185,7 +178,13 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
     if (!columnValue || !this.definitionName) {
       return;
     }
-    const column = {...columnValue.column, defaultSort: this.formGroup.get('defaultSort')?.value};
+    const defaultSortValue = this.formGroup.get('defaultSort')?.value;
+    const defaultSort = !defaultSortValue
+      ? null
+      : defaultSortValue === 'noDefault'
+        ? null
+        : defaultSortValue;
+    const column = {...columnValue.column, defaultSort};
 
     if (
       !!this._defaultSortedColumn &&

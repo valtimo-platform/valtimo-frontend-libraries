@@ -33,7 +33,6 @@ import {UserProviderService} from '@valtimo/security';
 import {ButtonModule, DialogModule, IconModule, IconService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, Observable, of, ReplaySubject, Subject} from 'rxjs';
 import {catchError, filter, map, switchMap, take, tap} from 'rxjs/operators';
-
 import {
   COLUMN_VIEW_TYPES,
   ConfiguredColumn,
@@ -65,6 +64,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
   public readonly fields$: Observable<ColumnConfig[]> = this.route.paramMap.pipe(
+    tap(() => this.fieldsLoading$.next(true)),
     switchMap((paramMap: ParamMap) =>
       this.documentenApiColumnService.getConfiguredColumns(
         paramMap.get('documentDefinitionName') ?? ''
@@ -84,7 +84,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         viewType: !COLUMN_VIEW_TYPES[column.key] ? ViewType.TEXT : COLUMN_VIEW_TYPES[column.key],
         sortable: column.sortable,
       }));
-    })
+    }),
+    tap(() => this.fieldsLoading$.next(false))
   );
   public actionItems: ActionItem[] = [
     {
@@ -143,7 +144,11 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public readonly showModal$ = new Subject<null>();
 
   public readonly uploading$ = new BehaviorSubject<boolean>(false);
-  public readonly loading$ = new BehaviorSubject<boolean>(true);
+  private readonly _itemsLoading$ = new BehaviorSubject<boolean>(true);
+  public readonly fieldsLoading$ = new BehaviorSubject<boolean>(true);
+  public readonly loading$ = combineLatest([this._itemsLoading$, this.fieldsLoading$]).pipe(
+    map(([itemsLoading, fieldsLoading]) => itemsLoading || fieldsLoading)
+  );
 
   public readonly filter$ = new ReplaySubject<DocumentenApiFilterModel | null>();
   private readonly _refetch$ = new BehaviorSubject<null>(null);
@@ -154,7 +159,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.route.queryParamMap,
     this._refetch$,
   ]).pipe(
-    tap(() => this.loading$.next(true)),
+    tap(() => this._itemsLoading$.next(true)),
     switchMap(([documentId, queryParams]) =>
       combineLatest([
         this.documentenApiDocumentService.getFilteredZakenApiDocuments(
@@ -179,11 +184,11 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       return translatedFiles || [];
     }),
     tap(() => {
-      this.loading$.next(false);
+      this._itemsLoading$.next(false);
     }),
     catchError(() => {
       this.showZaakLinkWarning = true;
-      this.loading$.next(false);
+      this._itemsLoading$.next(false);
       return of([]);
     })
   );
@@ -261,6 +266,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
             .subscribe(() => {
               this.refetchDocuments();
               this.uploading$.next(false);
+              this.filter$.next(null);
               this.fileToBeUploaded$.next(null);
             });
         })
@@ -269,7 +275,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   }
 
   public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
-    this.loading$.next(true);
+    this._itemsLoading$.next(true);
     this.documentenApiDocumentService.deleteDocument(item).subscribe(() => {
       this.refetchDocuments();
     });

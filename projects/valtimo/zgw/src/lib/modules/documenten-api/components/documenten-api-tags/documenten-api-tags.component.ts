@@ -22,6 +22,7 @@ import {
   filter,
   map,
   Observable,
+  startWith,
   Subject,
   switchMap,
   tap,
@@ -91,7 +92,7 @@ export class DocumentenApiTagsComponent {
     this.searchTerm$,
     this._reload$,
   ]).pipe(
-    tap(([_, searchTerm, reload]) => {
+    tap(([_1, _2, reload]) => {
       if (reload === null) {
         this.loading$.next(true);
       }
@@ -111,6 +112,7 @@ export class DocumentenApiTagsComponent {
 
       return tagPage.content;
     }),
+    startWith([]),
     tap(() => {
       this.loading$.next(false);
     })
@@ -166,7 +168,7 @@ export class DocumentenApiTagsComponent {
 
   private setSelectedRoleKeys(): void {
     this.selectedRowKeys$.next(
-      this.carbonList.selectedItems.map((item: CarbonListItem) => item.tag.value)
+      this.carbonList.selectedItems.map((item: CarbonListItem) => item.value)
     );
   }
 

@@ -28,7 +28,6 @@ import {
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
-  PendingChangesComponent,
   ViewType,
 } from '@valtimo/components';
 import {ButtonModule, IconModule, TagModule} from 'carbon-components-angular';

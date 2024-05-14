@@ -1,4 +1,4 @@
-import {CommonModule, DatePipe} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -26,6 +26,7 @@ import {
   InputModule,
   ListItem,
 } from 'carbon-components-angular';
+import flatpickr from 'flatpickr';
 import {
   combineLatest,
   debounceTime,
@@ -156,8 +157,7 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterVie
     private readonly iconService: IconService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly documentenApiTagService: DocumentenApiTagService,
-    private readonly datePipe: DatePipe
+    private readonly documentenApiTagService: DocumentenApiTagService
   ) {
     this.iconService.register(TrashCan16);
   }
@@ -175,15 +175,19 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterVie
     const creationDateToControlValue = this.formGroup.get('creatiedatumTo')?.value;
 
     if (!!creationDateFromControlValue) {
-      this.creationDateFromPicker.writeValue([creationDateFromControlValue]);
+      this.creationDateFromPicker.writeValue([
+        flatpickr.formatDate(new Date(creationDateFromControlValue), 'd-m-Y'),
+      ]);
     }
 
     if (!!creationDateToControlValue) {
-      this.creationDateFromPicker.writeValue([creationDateToControlValue]);
+      this.creationDateFromPicker.writeValue([
+        flatpickr.formatDate(new Date(creationDateToControlValue), 'd-m-Y'),
+      ]);
     }
   }
 
-  public resetForm(): void {
+  public resetFilter(): void {
     this.creationDateFromPicker.writeValue([]);
     this.creationDateToPicker.writeValue([]);
     this.formGroup.reset();
@@ -205,12 +209,10 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterVie
           ...(!!formValue.auteur && {auteur: formValue.auteur}),
           ...(!!formValue.titel && {titel: formValue.titel}),
           ...(!!formValue.creatiedatumFrom && {
-            creatiedatumFrom:
-              this.datePipe.transform(new Date(formValue.creatiedatumFrom), 'yyyy-MM-dd') ?? '',
+            creatiedatumFrom: flatpickr.formatDate(new Date(formValue.creatiedatumFrom), 'Y-m-d'),
           }),
           ...(!!formValue.creatiedatumTo && {
-            creatiedatumTo:
-              this.datePipe.transform(new Date(formValue.creatiedatumTo), 'yyyy-MM-dd') ?? '',
+            creatiedatumTo: flatpickr.formatDate(new Date(formValue.creatiedatumTo), 'Y-m-d'),
           }),
           ...(!!(formValue.vertrouwelijkHeidaanduiding as ListItem)?.id && {
             vertrouwelijkheidaanduiding: (formValue.vertrouwelijkHeidaanduiding as ListItem).id,

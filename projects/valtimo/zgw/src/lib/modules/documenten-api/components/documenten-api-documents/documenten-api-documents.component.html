@@ -18,13 +18,14 @@
   class="carbon-document-table-wrapper"
   *ngIf="{
     loading: loading$ | async,
+    fieldsLoading: fieldsLoading$ | async,
     uploading: uploading$ | async,
     relatedFiles: relatedFiles$ | async,
     fields: fields$ | async,
     initialSortState: initialSortState$ | async
   } as obs"
 >
-  @if (!!obs.fields?.length) {
+  @if ((!obs.fieldsLoading && obs.fields.length) || obs.fieldsLoading) {
     <valtimo-carbon-list
       [actionItems]="actionItems"
       [items]="obs.relatedFiles"
@@ -154,4 +155,3 @@
     <svg class="cds--btn__icon" cdsIcon="settings" size="16"></svg>
   </button>
 </ng-template>
-

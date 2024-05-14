@@ -27,16 +27,16 @@
       <cds-date-picker
         #creationDateFrom
         [label]="'interface.labels.dateCreationFrom' | translate"
-        placeholder="dd/mm/yyyy"
-        [dateFormat]="'d/m/Y'"
+        placeholder="DD-MM-YYYY"
+        [dateFormat]="'d-m-Y'"
         (valueChange)="onDateSelected('createdFrom', $event)"
       ></cds-date-picker>
 
       <cds-date-picker
         #creationDateTo
         [label]="'interface.labels.dateCreationTo' | translate"
-        placeholder="dd/mm/yyyy"
-        [dateFormat]="'d/m/Y'"
+        placeholder="DD-MM-YYYY"
+        [dateFormat]="'d-m-Y'"
         (valueChange)="onDateSelected('createdTo', $event)"
       ></cds-date-picker>
     </div>
@@ -61,7 +61,7 @@
   </form>
 
   <footer class="valtimo-documenten-api-filter__footer">
-    <button cdsButton="tertiary" (click)="resetForm()">
+    <button cdsButton="tertiary" (click)="resetFilter()">
       {{ 'Reset filter' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
