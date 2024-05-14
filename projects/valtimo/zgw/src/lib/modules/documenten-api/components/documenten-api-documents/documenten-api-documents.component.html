@@ -86,7 +86,7 @@
   [disabled$]="modalDisabled$"
   [file$]="fileToBeUploaded$"
   [isEditMode]="isEditMode$ | async"
-  (close)="closeMetadataModal()"
+  (modalClose)="closeMetadataModal()"
   (metadata)="metadataSet($event)"
 ></valtimo-documenten-api-metadata-modal>
 

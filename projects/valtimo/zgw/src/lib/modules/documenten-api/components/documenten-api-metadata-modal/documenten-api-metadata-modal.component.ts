@@ -123,7 +123,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   @Input() status: string;
 
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
-  @Output() close: EventEmitter<boolean> = new EventEmitter();
+  @Output() modalClose: EventEmitter<boolean> = new EventEmitter();
 
   public documentenApiMetadataForm: FormGroup = this.fb.group({
     bestandsnaam: this.fb.control('', Validators.required),
@@ -430,7 +430,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   public closeModal(): void {
     this.clearForm();
     this.additionalDocumentDate$.next('neither');
-    this.close.emit();
+    this.modalClose.emit();
   }
 
   private clearForm() {
