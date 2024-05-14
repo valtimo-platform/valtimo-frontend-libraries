@@ -39,7 +39,7 @@ import {
   TableItem,
   TableModel,
 } from 'carbon-components-angular';
-import {get as _get} from 'lodash';
+import {get as _get, initial} from 'lodash';
 import {NGXLogger} from 'ngx-logger';
 import {
   BehaviorSubject,
