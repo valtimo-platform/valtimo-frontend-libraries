@@ -24,7 +24,7 @@ import {
   DocumentenApiMetadata,
   ViewType,
 } from '@valtimo/components';
-import {ConfigService} from '@valtimo/config';
+import {BaseApiService, ConfigService} from '@valtimo/config';
 import {FileSortService} from '@valtimo/document';
 import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {UserProviderService} from '@valtimo/security';
@@ -33,9 +33,10 @@ import moment from 'moment';
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {catchError, filter, map, switchMap, take, tap} from 'rxjs/operators';
 import {DocumentenApiRelatedFile, DocumentenApiRelatedFileListItem} from '../../models';
-import {DocumentenApiDocumentService} from '../../services/documenten-api-document.service';
+import {DocumentenApiDocumentService} from '../../services';
 import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.component';
 import {CommonModule} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -51,7 +52,7 @@ import {CommonModule} from '@angular/common';
     TranslateModule,
   ],
 })
-export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, AfterViewInit {
+export class DossierDetailTabDocumentenApiDocumentsComponent extends BaseApiService implements OnInit, AfterViewInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   @ViewChild('sizeTemplate') public sizeTemplate: TemplateRef<any>;
 
@@ -160,12 +161,15 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     private readonly uploadProviderService: UploadProviderService,
     private readonly downloadService: DownloadService,
     private readonly translateService: TranslateService,
-    private readonly configService: ConfigService,
     private readonly userProviderService: UserProviderService,
     private readonly fileSortService: FileSortService,
     private readonly iconService: IconService,
-    private readonly documentenApiDocumentService: DocumentenApiDocumentService
-  ) {}
+    private readonly documentenApiDocumentService: DocumentenApiDocumentService,
+    public readonly configService: ConfigService,
+    public readonly httpClient: HttpClient,
+  ) {
+    super(httpClient, configService)
+  }
 
   ngOnInit(): void {
     this.refetchDocuments();
@@ -192,11 +196,11 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       {key: 'keywords', label: 'document.trefwoorden'},
       {key: 'informatieobjecttype', label: 'document.informatieobjecttype'},
       {key: 'language', label: 'document.language'},
-      {key: 'identification', label: 'document.id'},
       {key: 'confidentialityLevel', label: 'document.confidentialityLevel'},
       {key: 'receiptDate', label: 'document.receiptDate'},
       {key: 'sendDate', label: 'document.sendDate'},
       {key: 'status', label: 'document.status'},
+      {key: 'identification', label: 'document.id'},
     ];
 
     this.fields = [...this.getFields(fieldOptions, this.fieldsConfig)];
@@ -228,7 +232,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       userIdentity => {
         this.isAdmin = userIdentity.roles.includes('ROLE_ADMIN');
       },
-      error => {
+      () => {
         this.isAdmin = false;
       }
     );
@@ -293,7 +297,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
 
   private downloadDocument(relatedFile: DocumentenApiRelatedFile, forceDownload: boolean): void {
     this.downloadService.downloadFile(
-      `/api/v1/documenten-api/${relatedFile.pluginConfigurationId}/files/${relatedFile.fileId}/download`,
+      this.getApiUrl(`/v1/documenten-api/${relatedFile.pluginConfigurationId}/files/${relatedFile.fileId}/download`),
       relatedFile.fileName,
       forceDownload
     );
