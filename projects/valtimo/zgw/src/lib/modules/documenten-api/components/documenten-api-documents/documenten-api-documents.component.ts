@@ -239,7 +239,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   }
 
   public deleteDocument(item: DocumentenApiRelatedFile): void {
-    this.loading$.next(true);
+    this._itemsLoading$.next(true);
     this.documentenApiDocumentService.deleteDocument(this.document).subscribe(() => {
       // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
       this.refetchDocuments();
