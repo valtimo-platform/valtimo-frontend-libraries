@@ -9,7 +9,7 @@
     [formGroup]="formGroup"
   >
     <cds-text-label>
-      Title
+      {{ 'zgw.documentColumns.titel' | translate }}
 
       <input cdsText formControlName="titel" />
     </cds-text-label>
@@ -17,7 +17,7 @@
     <cds-dropdown
       [disabled]="!obs.informationObjectTypes?.length"
       [dropUp]="false"
-      [label]="'Information object type' | translate"
+      [label]="'zgw.documentColumns.informatieobjecttype' | translate"
       formControlName="informatieObjectType"
     >
       <cds-dropdown-list [items]="obs.informationObjectTypes"></cds-dropdown-list>
@@ -42,20 +42,24 @@
     </div>
 
     <cds-text-label>
-      Author
+      {{ 'zgw.documentColumns.auteur' | translate }}
 
       <input cdsText formControlName="auteur" />
     </cds-text-label>
 
     <cds-dropdown
       [dropUp]="false"
-      [label]="'Confidentiality level' | translate"
+      [label]="'zgw.documentColumns.vertrouwelijkheidaanduiding' | translate"
       formControlName="vertrouwelijkHeidaanduiding"
     >
       <cds-dropdown-list [items]="obs.confidentialityLevels"></cds-dropdown-list>
     </cds-dropdown>
 
-    <cds-dropdown [label]="'Tags' | translate" formControlName="trefwoorden" type="multi">
+    <cds-dropdown
+      [label]="'zgw.documentColumns.trefwoorden' | translate"
+      formControlName="trefwoorden"
+      type="multi"
+    >
       <cds-dropdown-list [items]="obs.tags"></cds-dropdown-list>
     </cds-dropdown>
   </form>
