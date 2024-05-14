@@ -121,7 +121,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   @Input() language: string;
   @Input() open = false;
   @Input() status: string;
-  @Input() trefwoorden: boolean;
 
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
   @Output() close: EventEmitter<boolean> = new EventEmitter();
@@ -138,9 +137,9 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     creatiedatum: this.fb.control('', Validators.required),
     ontvangstdatum: this.fb.control(''),
     verzenddatum: this.fb.control(''),
-    trefwoorden: this.fb.control([])
+    trefwoorden: this.fb.control([]),
   });
-  public tags: string[] = [''];
+
   public get confidentialityLevelFormControl(): AbstractControl<string> {
     return this.documentenApiMetadataForm.get('vertrouwelijkheidaanduiding');
   }
@@ -157,7 +156,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     return this.documentenApiMetadataForm.get('status');
   }
 
-  public get tagFormControl(): AbstractControl<string> {
+  public get tagFormControl(): AbstractControl<string[]> {
     return this.documentenApiMetadataForm.get('trefwoorden');
   }
 
@@ -243,32 +242,24 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     this.route.params.pipe(map(params => params?.documentDefinitionName))
   );
 
-  // public readonly tags$ : Observable<Array<string>> = combineLatest([
-  //   this.documentDefinitionName$
-  //   ]).pipe(
-  //   filter(([documentDefinitionName]) => !!documentDefinitionName),
-  //   switchMap(([documentDefinitionName]) =>
-  //     this.documentenApiTagService.getTags(documentDefinitionName)
-  //   ),
-  //   map(tags => tags.map(tag => (tag.value)))
-  // );
-
   public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
     this.documentDefinitionName$,
-   // this.tagFormControl.valueChanges
-    this.tagFormControl.valueChanges.pipe(
-      startWith(this.tagFormControl.value)
-    ),
+    this.tagFormControl.valueChanges.pipe(startWith(this.tagFormControl.value)),
   ]).pipe(
     filter(([documentDefinitionName]) => !!documentDefinitionName),
-    switchMap(([documentDefinitionName]) =>
-      this.documentenApiTagService.getTags(documentDefinitionName)
+    switchMap(([documentDefinitionName, tagFormControlValue]) =>
+      combineLatest([
+        this.documentenApiTagService.getTags(documentDefinitionName),
+        of(tagFormControlValue),
+      ])
     ),
-    map(tags => tags.map(tag => ({
-      id: tag.value,
-      content: tag.value,
-      selected:false
-    })))
+    map(([tags, tagFormControlValue]) =>
+      tags.map(tag => ({
+        id: tag.value,
+        content: tag.value,
+        selected: tagFormControlValue.includes(tag.value),
+      }))
+    )
   );
 
   public readonly LANGUAGES: Array<DocumentLanguage> = ['nld', 'eng', 'deu'];
@@ -292,7 +283,9 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     this.route?.params || of(null),
     this.route?.firstChild?.params || of(null),
     this.valtimoModalService.documentDefinitionName$,
-    this.informatieobjecttypeFormControl.valueChanges.pipe(startWith(this.informatieobjecttypeFormControl.value))
+    this.informatieobjecttypeFormControl.valueChanges.pipe(
+      startWith(this.informatieobjecttypeFormControl.value)
+    ),
   ]).pipe(
     filter(
       ([params, firstChildParams, documentDefinitionName]) =>
@@ -310,13 +303,11 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       )
     ),
     map(documentTypes =>
-      documentTypes.map((type:any) =>
-        ({
-          id: type.url,
-          content: type.name,
-          selected: this.informatieobjecttypeFormControl.value.toString() === type.url
-        })
-      )
+      documentTypes.map((type: any) => ({
+        id: type.url,
+        content: type.name,
+        selected: this.informatieobjecttypeFormControl.value.toString() === type.url,
+      }))
     )
   );
   public readonly userEmail$ = from(this.keycloakService.loadUserProfile()).pipe(
@@ -359,12 +350,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     }
   }
 
-  public tagsSelected() {
-    this.tags = this.documentenApiMetadataForm.controls['trefwoorden'].value.map(tag => tag.id);
-    // this.documentenApiMetadataForm.patchValue({
-    //   trefwoorden: this.tags
-    // });
-    console.log("Tags: ",  this.tags)
+  public tagsSelected(event: Array<ListItem>) {
+    this.tagFormControl.patchValue(event.filter(tag => tag.selected).map(tag => tag.id));
   }
 
   public confidentialityLevelSelected(event: {item: {id: string}}) {
@@ -393,7 +380,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
 
   public prefillForm(file) {
     this.prefillFilenameAndAuthor();
-    console.log("File: ", file);
     if (file) {
       const {
         bestandsnaam,
@@ -434,9 +420,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     this.formatDate('creatiedatum');
     this.formatDate('verzenddatum');
     this.formatDate('ontvangstdatum');
-    this.documentenApiMetadataForm.patchValue({
-      trefwoorden: this.tags
-    });
 
     if (this.documentenApiMetadataForm.valid)
       this.metadata.emit(this.documentenApiMetadataForm.value);
@@ -445,12 +428,12 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   }
 
   public closeModal(): void {
-   this.clearForm();
+    this.clearForm();
     this.additionalDocumentDate$.next('neither');
     this.close.emit();
   }
 
-  private clearForm(){
+  private clearForm() {
     this.documentenApiMetadataForm.patchValue({
       bestandsnaam: '',
       titel: '',
@@ -463,7 +446,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       creatiedatum: '',
       ontvangstdatum: '',
       verzenddatum: '',
-      trefwoorden: ['']
+      trefwoorden: [''],
     });
   }
 
@@ -505,20 +488,5 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
 
   private setAdditionalDate(value: AdditionalDocumentDate): void {
     this.additionalDocumentDate$.next(value);
-  }
-
-  private checkSelectedTags(tag: string): boolean {
-    // let result = false;
-    // this.ta
-    // console.log("This tags: ", this.tags);
-    // this.tags.forEach(selectedTag => {
-    //   console.log("Selected tag: ", selectedTag, 'and tag: ', tag);
-    //   if(selectedTag === tag) {
-    //     result = true;
-    //   }
-    // });
-    // return result;
-
-    return false;
   }
 }

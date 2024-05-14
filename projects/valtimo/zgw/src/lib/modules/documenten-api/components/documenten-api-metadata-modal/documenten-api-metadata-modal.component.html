@@ -203,9 +203,9 @@
               [type]="'multi'"
               [placeholder]="'document.tagsPlaceholder' | translate"
               [disabled]="obs.disabled"
-              name="tags"
-              (selected)="tagsSelected()">
+              (selected)="tagsSelected($event)"
             >
+              >
               <cds-dropdown-list [items]="tagItems$ | async"></cds-dropdown-list>
             </cds-combo-box>
           </div>

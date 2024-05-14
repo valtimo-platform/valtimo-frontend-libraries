@@ -30,10 +30,9 @@ interface DocumentenApiRelatedFile extends RelatedFile {
   status?: string;
   taal?: string;
   titel?: String;
-  trefwoorden?: string[]
+  trefwoorden?: string[];
   versie?: number;
   vertrouwelijkheidaanduiding?: string;
 }
-
 
 export {DocumentenApiRelatedFile};
