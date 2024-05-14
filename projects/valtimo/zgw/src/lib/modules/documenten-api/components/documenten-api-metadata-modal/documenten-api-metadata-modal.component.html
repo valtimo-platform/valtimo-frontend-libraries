@@ -204,8 +204,7 @@
               [placeholder]="'document.tagsPlaceholder' | translate"
               [disabled]="obs.disabled"
               name="tags"
-              formControlName="trefwoorden"
-              (selected)="tagsSelected($event)">
+              (selected)="tagsSelected()">
             >
               <cds-dropdown-list [items]="tagItems$ | async"></cds-dropdown-list>
             </cds-combo-box>
@@ -265,6 +264,8 @@
             <div class="documenten-metada-form-input">
               <cds-date-picker
                 [disabled]="obs.disabled"
+                [placeholder]="'yyyy/mm/dd'"
+                [dateFormat]="'Y/m/d'"
                 id="creatiedatum"
                 formControlName="creatiedatum"
               >
