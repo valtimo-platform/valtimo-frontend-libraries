@@ -393,11 +393,12 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
         creatiedatum,
         ontvangstdatum,
         verzenddatum,
-        trefwoorden
+        trefwoorden,
       } = file;
 
       if (verzenddatum) this.additionalDocumentDate$.next('sent');
       else if (ontvangstdatum) this.additionalDocumentDate$.next('received');
+      else this.additionalDocumentDate$.next('neither');
 
       this.documentenApiMetadataForm.patchValue({
         bestandsnaam,
@@ -411,7 +412,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
         creatiedatum,
         ontvangstdatum,
         verzenddatum,
-        trefwoorden
+        trefwoorden,
       });
     }
   }
@@ -428,9 +429,9 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   }
 
   public closeModal(): void {
-    this.clearForm();
     this.additionalDocumentDate$.next('neither');
     this.modalClose.emit();
+    this.clearForm();
   }
 
   private clearForm() {
