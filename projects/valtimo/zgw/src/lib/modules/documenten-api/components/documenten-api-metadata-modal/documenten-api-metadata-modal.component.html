@@ -296,6 +296,8 @@
             *ngIf="additionalDate === 'received'"
             [disabled]="obs.disabled"
             [label]="'document.additionalDate' | translate"
+            [placeholder]="'yyyy/mm/dd'"
+            [dateFormat]="'Y/m/d'"
             id="ontvangstdatum"
             formControlName="ontvangstdatum"
           ></cds-date-picker>
@@ -303,6 +305,8 @@
             *ngIf="additionalDate === 'sent'"
             [disabled]="obs.disabled"
             [label]="'document.additionalDate' | translate"
+            [placeholder]="'yyyy/mm/dd'"
+            [dateFormat]="'Y/m/d'"
             id="verzenddatum"
             formControlName="verzenddatum"
           ></cds-date-picker>
