@@ -21,9 +21,9 @@
     tokenSetInLocalStorage: tokenSetInLocalStorage$ | async,
     formioOptions: formioOptions$ | async,
     errors: errors$ | async,
-    updating: updating$ | async
+    loading: loading$ | async
   } as obs">
-  <div *ngIf="obs.updating" class="loading-icon">
+  <div *ngIf="obs.loading" class="loading-icon">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
   <div *ngIf="obs.errors.length > 0" class="alert alert-danger pt-5 pb-5 mb-2">

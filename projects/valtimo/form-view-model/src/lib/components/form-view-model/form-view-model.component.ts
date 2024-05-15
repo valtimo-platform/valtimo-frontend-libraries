@@ -78,10 +78,7 @@ export class FormViewModelComponent implements OnInit {
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
   public readonly change$ = new BehaviorSubject<any>(null);
   public readonly errors$ = new BehaviorSubject<Array<string>>([]);
-  public readonly updateViewModel$ = new Subject<void>();
-
-  public readonly updating$ = new BehaviorSubject<boolean>(true);
-
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
 
   public readonly currentLanguage$ = this.translateService.stream('key').pipe(
     map(() => this.translateService.currentLang),
@@ -120,11 +117,7 @@ export class FormViewModelComponent implements OnInit {
     private readonly viewModelService: ViewModelService,
     private readonly translateService: TranslateService,
     private readonly stateService: FormIoStateService
-  ) {
-    this.updateViewModel$
-      .pipe(debounceTime(500))
-      .subscribe(() => this.updateViewModel());
-  }
+  ) {}
 
   ngOnInit() {
     this.loadInitialViewModel();
@@ -171,7 +164,7 @@ export class FormViewModelComponent implements OnInit {
 
     if (object.changed) {
       this.submission$.next(this.submission);
-      this.updateViewModel$.next();
+      this.updateViewModel();
     }
   }
 
@@ -179,7 +172,7 @@ export class FormViewModelComponent implements OnInit {
     combineLatest([this.formName$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formName, taskInstanceId]) => {
       this.viewModelService.getViewModel(formName, taskInstanceId).subscribe(viewModel => {
         this.change$.pipe(take(1)).subscribe(change => {
-          this.updating$.next(false);
+          this.loading$.next(false);
         });
         this.submission$.next({data: viewModel});
       });
@@ -187,14 +180,14 @@ export class FormViewModelComponent implements OnInit {
   }
 
   public updateViewModel() {
-    this.updating$.pipe(take(1)).subscribe(updating => {
+    this.loading$.pipe(take(1)).subscribe(updating => {
       if (!updating) {
-        this.updating$.next(true);
-        combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1)).subscribe(([formName, taskInstanceId, change]) => {
+        this.loading$.next(true);
+        combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1), debounceTime(500)).subscribe(([formName, taskInstanceId, change]) => {
           this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).subscribe(viewModel => {
             this.submission$.next({data: viewModel});
             this.change$.pipe(take(1)).subscribe(change => {
-              this.updating$.next(false);
+              this.loading$.next(false);
             });
           });
         });
