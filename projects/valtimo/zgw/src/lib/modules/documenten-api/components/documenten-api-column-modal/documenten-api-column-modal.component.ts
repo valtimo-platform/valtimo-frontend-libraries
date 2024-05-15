@@ -110,7 +110,7 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
     )
   );
 
-  private _defaultSortedColumn: ConfiguredColumn | undefined;
+  private _defaultSortedColumn!: ConfiguredColumn | undefined;
   @Input() public set configuredColumns(value: ConfiguredColumn[]) {
     if (!value) return;
 
