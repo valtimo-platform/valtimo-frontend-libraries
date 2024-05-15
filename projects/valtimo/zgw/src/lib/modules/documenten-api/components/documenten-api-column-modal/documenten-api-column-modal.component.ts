@@ -65,7 +65,7 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
   @Input() definitionName: string;
 
-  private _prefillColumn: ListItem[] | null;
+  private _prefillColumn!: ListItem[] | null;
   @Input() public set prefillColumn(value: ConfiguredColumn | undefined) {
     if (!value) return;
 
