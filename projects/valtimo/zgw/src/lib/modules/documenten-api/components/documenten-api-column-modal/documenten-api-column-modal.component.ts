@@ -79,7 +79,7 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
     return this._prefillColumn;
   }
 
-  private _type: DocumentenApiColumnModalType;
+  private _type!: DocumentenApiColumnModalType;
   @Input() public set type(value: DocumentenApiColumnModalType) {
     this._type = value;
     if (value === 'edit') {
