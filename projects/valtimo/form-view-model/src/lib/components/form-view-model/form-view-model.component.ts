@@ -172,7 +172,7 @@ export class FormViewModelComponent implements OnInit {
         this.change$.pipe(take(1)).subscribe(change => {
           this.updating$.next(false);
         });
-        this.submission$.next(viewModel);
+        this.submission$.next({data: viewModel});
       });
     });
   }
@@ -182,10 +182,8 @@ export class FormViewModelComponent implements OnInit {
       if (!updating) {
         this.updating$.next(true);
         combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1)).subscribe(([formName, taskInstanceId, change]) => {
-          const viewModel = change.data;
-          this.viewModelService.updateViewModel(formName, taskInstanceId, viewModel).subscribe(viewModel => {
-            const submission = change.data;
-            this.submission$.next(submission);
+          this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).subscribe(viewModel => {
+            this.submission$.next({data: viewModel});
             this.change$.pipe(take(1)).subscribe(change => {
               this.updating$.next(false);
             });
