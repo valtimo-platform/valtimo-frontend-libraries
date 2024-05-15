@@ -90,7 +90,7 @@ export class DocumentenApiColumnModalComponent implements OnInit, OnDestroy {
     return this._type;
   }
 
-  private _availableColumns$ = new BehaviorSubject<ConfiguredColumn[]>([]);
+  private readonly _availableColumns$ = new BehaviorSubject<ConfiguredColumn[]>([]);
   @Input() public set availableColumns(value: ConfiguredColumn[]) {
     if (!value) return;
 
