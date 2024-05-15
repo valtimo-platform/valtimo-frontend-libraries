@@ -36,4 +36,24 @@ interface DocumentenApiRelatedFile extends RelatedFile {
   tags?: {content: string}[];
 }
 
-export {DocumentenApiRelatedFile};
+enum DOCUMENTEN_COLUMN_KEYS {
+  AUTEUR = 'auteur',
+  BESCHRIJVING = 'beschrijving',
+  BESTANDSNAAM = 'bestandsnaam',
+  BESTANDSOMVANG = 'bestandsomvang',
+  BRONORGANISATIE = 'bronorganisatie',
+  CREATIEDATUM = 'creatiedatum',
+  FORMAAT = 'formaat',
+  IDENTIFICATIE = 'identificatie',
+  INFORMATIEOBJECTTYPE = 'informatieobjecttype',
+  LOCKED = 'locked',
+  STATUS = 'status',
+  TAAL = 'taal',
+  TITEL = 'titel',
+  TREFWOORDEN = 'trefwoorden',
+  VERSIE = 'versie',
+  VERTROUWELIJKHEIDAANDUIDING = 'vertrouwelijkheidaanduiding',
+  TAGS = 'tags',
+}
+
+export {DocumentenApiRelatedFile, DOCUMENTEN_COLUMN_KEYS};

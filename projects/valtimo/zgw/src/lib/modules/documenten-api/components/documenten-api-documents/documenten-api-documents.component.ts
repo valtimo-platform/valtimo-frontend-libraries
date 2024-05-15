@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Filter16, TagGroup16, Upload16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -36,6 +36,7 @@ import {catchError, filter, map, switchMap, take, tap} from 'rxjs/operators';
 import {
   COLUMN_VIEW_TYPES,
   ConfiguredColumn,
+  DOCUMENTEN_COLUMN_KEYS,
   DocumentenApiFilterModel,
   DocumentenApiRelatedFile,
 } from '../../models';
@@ -63,6 +64,7 @@ import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-mo
 })
 export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('translationTemplate') translationTemplate: TemplateRef<any>;
 
   public readonly fields$: Observable<ColumnConfig[]> = this.route.paramMap.pipe(
     tap(() => this.fieldsLoading$.next(true)),
@@ -80,13 +82,21 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       }
 
       return columns.map((column: ConfiguredColumn) => ({
-        key: column.key === 'bestandsomvang' ? 'size' : column.key,
+        key: column.key === DOCUMENTEN_COLUMN_KEYS.BESTANDSOMVANG ? 'size' : column.key,
         label: `zgw.documentColumns.${column.key}`,
         viewType: !COLUMN_VIEW_TYPES[column.key] ? ViewType.TEXT : COLUMN_VIEW_TYPES[column.key],
+        ...(COLUMN_VIEW_TYPES[column.key] === ViewType.TEMPLATE && {
+          template: this.translationTemplate,
+          templateData: {key: column.key},
+        }),
+        ...(column.key === DOCUMENTEN_COLUMN_KEYS.CREATIEDATUM && {format: 'DD-MM-YYYY'}),
         sortable: column.sortable,
       }));
     }),
-    tap(() => this.fieldsLoading$.next(false))
+    tap(res => {
+      console.log(res);
+      this.fieldsLoading$.next(false);
+    })
   );
   public document: DocumentenApiRelatedFile;
   public actionItems: ActionItem[] = [
@@ -183,17 +193,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       const translatedFiles = relatedFiles?.content?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
-        taalTitle: this.translateService.instant(`document.${file.taal}`),
-        taal: file.taal,
-        confidentialityLevelTitle: this.translateService.instant(
-          `document.${file.vertrouwelijkheidaanduiding}`
-        ),
-        informatieobjecttype: file.informatieobjecttype,
-        informatieobjecttypeTitle: this.translateService.instant(`document.${file.informatieobjecttype}`),
-        confidentialityLevel: file.vertrouwelijkheidaanduiding,
-        statusTitle: this.translateService.instant(`document.${file.status}`),
-        status: file.status,
-        format: this.translateService.instant(`document.${file.formaat}`),
         size: this.bytesToMegabytes(file.bestandsomvang),
         tags: file.trefwoorden?.map((trefwoord: string) => ({
           content: trefwoord,
@@ -242,7 +241,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public deleteDocument(item: DocumentenApiRelatedFile): void {
     this._itemsLoading$.next(true);
     this.documentenApiDocumentService.deleteDocument(this.document).subscribe(() => {
-      // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
       this.refetchDocuments();
     });
   }
@@ -290,20 +288,19 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         tap(([file, documentId]) => {
           if (!file) return;
           if (this.isEditMode$.getValue()) {
-            this.documentenApiDocumentService.updateDocument(file, metadata)
-              .subscribe(() =>{
-                this.refetchDocuments();
-                this.uploading$.next(false);
-                this.fileToBeUploaded$.next(null);
-              });
-          } else {
-          this.uploadProviderService
-            .uploadFileWithMetadata(file, documentId, metadata)
-            .subscribe(() => {
+            this.documentenApiDocumentService.updateDocument(file, metadata).subscribe(() => {
               this.refetchDocuments();
               this.uploading$.next(false);
               this.fileToBeUploaded$.next(null);
             });
+          } else {
+            this.uploadProviderService
+              .uploadFileWithMetadata(file, documentId, metadata)
+              .subscribe(() => {
+                this.refetchDocuments();
+                this.uploading$.next(false);
+                this.fileToBeUploaded$.next(null);
+              });
           }
         })
       )

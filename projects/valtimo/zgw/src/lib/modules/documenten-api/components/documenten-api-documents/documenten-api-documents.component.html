@@ -159,6 +159,10 @@
   </button>
 </ng-template>
 
+<ng-template #translationTemplate let-data="data">
+  {{ 'document.' + data.item[data.key] | translate }}
+</ng-template>
+
 <ng-template #navigateToCaseAdminButton>
   <button (click)="onNavigateToCaseAdminClick()" cdsButton="primary">
     {{ 'dossier.documenten.navigateToCaseAdmin' | translate }}

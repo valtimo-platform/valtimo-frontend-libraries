@@ -39,7 +39,7 @@ import {
   TableItem,
   TableModel,
 } from 'carbon-components-angular';
-import {get as _get, initial} from 'lodash';
+import {get as _get} from 'lodash';
 import {NGXLogger} from 'ngx-logger';
 import {
   BehaviorSubject,
@@ -384,7 +384,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
           switch (field.viewType) {
             case ViewType.TEMPLATE:
               return new TableItem({
-                data: {item, index, length: items.length},
+                data: {item, index, length: items.length, ...field.templateData},
                 template: field.template,
               });
             case ViewType.BOOLEAN:
@@ -577,7 +577,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paginationSet.emit(numberOfEntries);
   }
 
-  private resolveObject(definition: any, obj: any) {
+  private resolveObject(definition: any, obj: any, format?: string) {
     const definitionKey = definition.key;
     const customPropString = '$.';
     const key = definitionKey.includes(customPropString)

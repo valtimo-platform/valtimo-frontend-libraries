@@ -15,6 +15,7 @@
  */
 
 import {ViewType} from '@valtimo/components';
+import {DOCUMENTEN_COLUMN_KEYS} from './documenten-api.model';
 
 interface ConfiguredColumn {
   key: string;
@@ -24,9 +25,12 @@ interface ConfiguredColumn {
 }
 
 const COLUMN_VIEW_TYPES: {[key: string]: ViewType} = {
-  creatiedatum: ViewType.DATE,
-  locked: ViewType.BOOLEAN,
-  trefwoorden: ViewType.TAGS
+  [DOCUMENTEN_COLUMN_KEYS.CREATIEDATUM]: ViewType.DATE,
+  [DOCUMENTEN_COLUMN_KEYS.LOCKED]: ViewType.BOOLEAN,
+  [DOCUMENTEN_COLUMN_KEYS.TREFWOORDEN]: ViewType.TAGS,
+  [DOCUMENTEN_COLUMN_KEYS.STATUS]: ViewType.TEMPLATE,
+  [DOCUMENTEN_COLUMN_KEYS.TAAL]: ViewType.TEMPLATE,
+  [DOCUMENTEN_COLUMN_KEYS.VERTROUWELIJKHEIDAANDUIDING]: ViewType.TEMPLATE,
 };
 
 export {ConfiguredColumn, COLUMN_VIEW_TYPES};
