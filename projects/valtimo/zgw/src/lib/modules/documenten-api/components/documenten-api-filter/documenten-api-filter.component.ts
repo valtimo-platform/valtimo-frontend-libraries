@@ -62,7 +62,7 @@ import {DocumentenApiTagService} from '../../services';
 export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('creationDateFrom') public readonly creationDateFromPicker: DatePicker;
   @ViewChild('creationDateTo') public readonly creationDateToPicker: DatePicker;
-  @Output() filterEvent = new EventEmitter<DocumentenApiFilterModel>();
+  @Output() public filterEvent = new EventEmitter<DocumentenApiFilterModel>();
 
   private readonly _subscriptions = new Subscription();
   private readonly _confidentialityLevels: Array<ConfidentialityLevel> = [
