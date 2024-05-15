@@ -15,7 +15,7 @@
  */
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import moment from 'moment';
-import {BehaviorSubject, catchError, combineLatest, Observable, Subject, take, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, combineLatest, debounceTime, Observable, Subject, take, throwError} from 'rxjs';
 import {FormioOptions, FormioSubmission, FormioSubmissionCallback} from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {FormioComponent as FormIoSourceComponent} from '@formio/angular/components/formio/formio.component';
@@ -78,6 +78,7 @@ export class FormViewModelComponent implements OnInit {
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
   public readonly change$ = new BehaviorSubject<any>(null);
   public readonly errors$ = new BehaviorSubject<Array<string>>([]);
+  public readonly updateViewModel$ = new Subject<void>();
 
   public readonly updating$ = new BehaviorSubject<boolean>(true);
 
@@ -92,6 +93,7 @@ export class FormViewModelComponent implements OnInit {
       beforeSubmit: this.beforeSubmitHook(this)
     }
   });
+
   public readonly formioOptions$: Observable<ValtimoFormioOptions | FormioOptions> = combineLatest([
     this.currentLanguage$,
     this.options$,
@@ -111,8 +113,7 @@ export class FormViewModelComponent implements OnInit {
       };
 
       return deepmerge(defaultOptions, overrideOptions);
-    }),
-    tap(options => console.log('Form.IO options used', options))
+    })
   );
 
   constructor(
@@ -120,6 +121,9 @@ export class FormViewModelComponent implements OnInit {
     private readonly translateService: TranslateService,
     private readonly stateService: FormIoStateService
   ) {
+    this.updateViewModel$
+      .pipe(debounceTime(500))
+      .subscribe(() => this.updateViewModel());
   }
 
   ngOnInit() {
@@ -163,6 +167,11 @@ export class FormViewModelComponent implements OnInit {
   public onChange(object: any): void {
     if (object.data) {
       this.change$.next(object);
+    }
+
+    if (object.changed) {
+      this.submission$.next(this.submission);
+      this.updateViewModel$.next();
     }
   }
 
