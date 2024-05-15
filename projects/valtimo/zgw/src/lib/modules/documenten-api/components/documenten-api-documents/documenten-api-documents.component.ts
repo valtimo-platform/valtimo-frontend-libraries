@@ -93,10 +93,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         sortable: column.sortable,
       }));
     }),
-    tap(res => {
-      console.log(res);
-      this.fieldsLoading$.next(false);
-    })
+    tap(() => this.fieldsLoading$.next(false))
   );
   public document: DocumentenApiRelatedFile;
   public actionItems: ActionItem[] = [
@@ -226,7 +223,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.setInitialFilter();
+    this.setInitialFilterAndSort();
     this.openQueryParamsSubscription();
     this.setUploadProcessLinked();
     this.isUserAdmin();
@@ -238,7 +235,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.showDeleteConfirmationModal$.next(true);
   }
 
-  public deleteDocument(item: DocumentenApiRelatedFile): void {
+  public deleteDocument(): void {
     this._itemsLoading$.next(true);
     this.documentenApiDocumentService.deleteDocument(this.document).subscribe(() => {
       this.refetchDocuments();
@@ -298,6 +295,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
               .uploadFileWithMetadata(file, documentId, metadata)
               .subscribe(() => {
                 this.refetchDocuments();
+                this.filter$.next(null);
                 this.uploading$.next(false);
                 this.fileToBeUploaded$.next(null);
               });
@@ -341,7 +339,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
-  public onFilterEvent(filter: DocumentenApiFilterModel): void {
+  public onFilterEvent(filter: DocumentenApiFilterModel | null): void {
     this.filter$.next(filter);
   }
 
@@ -392,17 +390,17 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       });
   }
 
-  private setInitialFilter(): void {
+  private setInitialFilterAndSort(): void {
     this.route.queryParamMap
       .pipe(
         take(1),
         map(queryParams => {
           const {sort, ...filter} = queryParams['params'];
-          return filter;
-        }),
-        filter(filter => !!filter)
+          return {sort, filter};
+        })
       )
-      .subscribe(filter => {
+      .subscribe(({filter, sort}) => {
+        this._sort$.next({sort});
         this.filter$.next(filter);
       });
   }

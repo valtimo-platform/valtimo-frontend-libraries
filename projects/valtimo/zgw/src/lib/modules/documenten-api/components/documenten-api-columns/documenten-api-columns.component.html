@@ -76,3 +76,12 @@
 <ng-template #columnKeyTemplate let-data="data">
   {{ 'zgw.documentColumns.' + data.item.key | translate }}
 </ng-template>
+
+<ng-template #defaultSortTemplate let-data="data">
+  {{
+    data.item.defaultSort === null
+      ? '-'
+      : ('interface.sorting.' + (data.item.defaultSort === 'ASC' ? 'ascending' : 'descending')
+        | translate)
+  }}
+</ng-template>

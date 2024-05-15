@@ -257,7 +257,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       tags.map(tag => ({
         id: tag.value,
         content: tag.value,
-        selected: tagFormControlValue.includes(tag.value),
+        selected: !!tagFormControlValue ? tagFormControlValue.includes(tag.value) : false,
       }))
     )
   );
@@ -306,7 +306,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       documentTypes.map((type: any) => ({
         id: type.url,
         content: type.name,
-        selected: this.informatieobjecttypeFormControl.value.toString() === type.url,
+        selected: this.informatieobjecttypeFormControl.value?.toString() === type.name,
       }))
     )
   );
@@ -395,6 +395,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
         verzenddatum,
         trefwoorden,
       } = file;
+      console.log(file);
 
       if (verzenddatum) this.additionalDocumentDate$.next('sent');
       else if (ontvangstdatum) this.additionalDocumentDate$.next('received');
@@ -434,21 +435,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     this.clearForm();
   }
 
-  private clearForm() {
-    this.documentenApiMetadataForm.patchValue({
-      bestandsnaam: '',
-      titel: '',
-      auteur: '',
-      beschrijving: '',
-      taal: '',
-      informatieobjecttype: '',
-      status: '',
-      vertrouwelijkheidaanduiding: '',
-      creatiedatum: '',
-      ontvangstdatum: '',
-      verzenddatum: '',
-      trefwoorden: [''],
-    });
+  private clearForm(): void {
+    this.documentenApiMetadataForm.reset();
   }
 
   private prefillFilenameAndAuthor() {

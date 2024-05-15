@@ -926,6 +926,11 @@
     "labels": {
       "dateCreationFrom": "Datum der Erstellung von",
       "dateCreationTo": "Datum der Erstellung bis"
+    },
+    "sorting": {
+      "ascending": "Aufsteigend",
+      "descending": "Absteigend",
+      "noDefault": "Keine Standardsortierung"
     }
   },
   "taskDetail": {

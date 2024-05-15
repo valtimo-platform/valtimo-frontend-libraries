@@ -37,11 +37,11 @@
     </cds-dropdown>
 
     <cds-radio-group *ngIf="showRadioButtons" legend="Default sort" formControlName="defaultSort">
-      <cds-radio value="noDefault"> No default sort </cds-radio>
+      <cds-radio value="noDefault"> {{ 'interface.sorting.noDefault' | translate }} </cds-radio>
 
-      <cds-radio value="DESC"> Descending </cds-radio>
+      <cds-radio value="DESC"> {{ 'interface.sorting.descending' | translate }} </cds-radio>
 
-      <cds-radio value="ASC"> Ascending </cds-radio>
+      <cds-radio value="ASC"> {{ 'interface.sorting.ascending' | translate }} </cds-radio>
     </cds-radio-group>
 
     <cds-inline-notification [notificationObj]="notificationObj$ | async"></cds-inline-notification>

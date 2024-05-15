@@ -59,6 +59,7 @@ import {DocumentenApiColumnModalComponent} from '../documenten-api-column-modal/
 })
 export class DocumentenApiColumnsComponent implements AfterViewInit {
   @ViewChild('columnKeyTemplate') public columnKeyTemplate: TemplateRef<any>;
+  @ViewChild('defaultSortTemplate') public defaultSortTemplate: TemplateRef<any>;
 
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
 
@@ -146,7 +147,8 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
       {
         key: 'defaultSort',
         label: 'interface.defaultSort',
-        viewType: ViewType.TEXT,
+        viewType: ViewType.TEMPLATE,
+        template: this.defaultSortTemplate,
       },
     ];
   }

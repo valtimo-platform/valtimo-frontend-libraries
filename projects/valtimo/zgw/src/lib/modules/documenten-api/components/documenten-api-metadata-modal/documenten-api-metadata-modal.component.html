@@ -264,8 +264,8 @@
             <div class="documenten-metada-form-input">
               <cds-date-picker
                 [disabled]="obs.disabled"
-                [placeholder]="'yyyy/mm/dd'"
-                [dateFormat]="'Y/m/d'"
+                [placeholder]="'DD-MM-YYYY'"
+                [dateFormat]="'d-m-Y'"
                 id="creatiedatum"
                 formControlName="creatiedatum"
               >
@@ -296,8 +296,8 @@
             *ngIf="additionalDate === 'received'"
             [disabled]="obs.disabled"
             [label]="'document.additionalDate' | translate"
-            [placeholder]="'yyyy/mm/dd'"
-            [dateFormat]="'Y/m/d'"
+            [placeholder]="'DD-MM-YYYY'"
+            [dateFormat]="'d-m-Y'"
             id="ontvangstdatum"
             formControlName="ontvangstdatum"
           ></cds-date-picker>
@@ -305,8 +305,8 @@
             *ngIf="additionalDate === 'sent'"
             [disabled]="obs.disabled"
             [label]="'document.additionalDate' | translate"
-            [placeholder]="'yyyy/mm/dd'"
-            [dateFormat]="'Y/m/d'"
+            [placeholder]="'DD-MM-YYYY'"
+            [dateFormat]="'d-m-Y'"
             id="verzenddatum"
             formControlName="verzenddatum"
           ></cds-date-picker>

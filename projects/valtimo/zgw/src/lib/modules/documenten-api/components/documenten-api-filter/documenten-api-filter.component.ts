@@ -181,7 +181,7 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterVie
     }
 
     if (!!creationDateToControlValue) {
-      this.creationDateFromPicker.writeValue([
+      this.creationDateToPicker.writeValue([
         flatpickr.formatDate(new Date(creationDateToControlValue), 'd-m-Y'),
       ]);
     }
@@ -222,8 +222,9 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterVie
           }),
           ...(!!formValue.trefwoorden &&
             formValue.trefwoorden.length > 0 && {
-              trefwoorden: this.objectToBase64(
-                (formValue.trefwoorden as ListItem[]).map((tag: ListItem) => tag.content)
+              trefwoorden: (formValue.trefwoorden as ListItem[]).reduce(
+                (acc, curr, index) => (index === 0 ? curr.content : `${acc},${curr.content}`),
+                ''
               ),
             }),
         });
@@ -231,13 +232,9 @@ export class DocumentenApiFilterComponent implements OnInit, OnDestroy, AfterVie
     );
   }
 
-  private objectToBase64(trefwoorden: string[]): string {
-    return btoa(JSON.stringify(trefwoorden));
-  }
-
-  private convertTrefwoordenParam(base64: string | undefined): ListItem[] {
-    if (!base64) return [];
-    const array = JSON.parse(atob(base64));
+  private convertTrefwoordenParam(stringArray: string | undefined): ListItem[] {
+    if (!stringArray) return [];
+    const array = stringArray.split(',');
 
     return array.map((content: string) => ({
       content,
