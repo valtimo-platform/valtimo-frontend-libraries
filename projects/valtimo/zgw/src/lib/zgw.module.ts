@@ -59,7 +59,7 @@ import {DossierManagementZgwComponent} from './components';
     {
       provide: CASE_MANAGEMENT_TAB_TOKEN,
       useValue: {
-        translationKey: 'dossierManagement.tabs.zgw',
+        translationKey: 'zgw.zgwTab',
         component: DossierManagementZgwComponent,
       },
       multi: true,
