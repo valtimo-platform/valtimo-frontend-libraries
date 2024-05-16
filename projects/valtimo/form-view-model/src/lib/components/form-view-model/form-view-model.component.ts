@@ -139,13 +139,14 @@ export class FormViewModelComponent implements OnInit {
             callback(null, submission);
           },
           error: error => {
-            this.handleFormError(error, callback);
+            this.handleFormError(error);
+            callback({message: error.error.error, component: null}, null)
           }
         });
     });
   }
 
-  private handleFormError(error: HttpErrorResponse, callback: FormioSubmissionCallback) {
+  private handleFormError(error: HttpErrorResponse) {
     const formInstance = this.formio.formio;
     const component = formInstance.getComponent(error.error?.component);
     if (component == null) {
@@ -155,7 +156,6 @@ export class FormViewModelComponent implements OnInit {
         component?.setCustomValidity(error.error.error);
       }, 500);
     }
-    callback({message: error.error.error, component: null}, null);
   }
 
   public onSubmit(submission: FormioSubmission): void {
@@ -191,11 +191,19 @@ export class FormViewModelComponent implements OnInit {
       if (!updating) {
         this.loading$.next(true);
         combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1)).subscribe(([formName, taskInstanceId, change]) => {
-          this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).subscribe(viewModel => {
-            this.submission$.next({data: viewModel});
-            this.change$.pipe(take(1)).subscribe(change => {
-              this.loading$.next(false);
-            });
+          this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).subscribe({
+            next: viewModel => {
+              this.submission$.next({data: viewModel});
+              this.change$.pipe(take(1)).subscribe(change => {
+                this.loading$.next(false);
+              });
+            },
+            error: error => {
+              this.change$.pipe(take(1)).subscribe(change => {
+                this.loading$.next(false);
+              });
+              this.handleFormError(error);
+            }
           });
         });
       }
