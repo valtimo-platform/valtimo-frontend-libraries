@@ -15,12 +15,13 @@
  */
 
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
   BaseApiService,
   ConfigService,
 } from '@valtimo/config';
+import {InterceptorSkip} from '@valtimo/security';
 
 @Injectable({providedIn: 'root'})
 export class ViewModelService extends BaseApiService {
@@ -36,7 +37,8 @@ export class ViewModelService extends BaseApiService {
       params: {
         formName,
         taskInstanceId
-      }
+      },
+      headers: new HttpHeaders().set(InterceptorSkip, 'all')
     });
   }
 
@@ -48,7 +50,8 @@ export class ViewModelService extends BaseApiService {
         params: {
           formName,
           taskInstanceId
-        }
+        },
+        headers: new HttpHeaders().set(InterceptorSkip, 'all')
       });
   }
 
@@ -60,7 +63,8 @@ export class ViewModelService extends BaseApiService {
         params: {
           formName,
           taskInstanceId
-        }
+        },
+        headers: new HttpHeaders().set(InterceptorSkip, 'all')
       });
   }
 }

@@ -34,13 +34,13 @@
     </ol>
   </div>
   <formio
+          #formio
           [submission]="obs.submission"
           [form]="obs.form"
           [refresh]="refreshForm"
           [readOnly]="obs.readOnly"
           [options]="obs.formioOptions"
           (submit)="onSubmit($event)"
-          (ready)="formReady($event)"
           (change)="onChange($event)"
   ></formio>
 </div>

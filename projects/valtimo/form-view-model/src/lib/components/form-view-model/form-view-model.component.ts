@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import moment from 'moment';
 import {BehaviorSubject, catchError, combineLatest, debounceTime, Observable, Subject, take, throwError} from 'rxjs';
-import {FormioOptions, FormioSubmission, FormioSubmissionCallback} from '@formio/angular';
+import {FormioComponent, FormioOptions, FormioSubmission, FormioSubmissionCallback} from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
-import {FormioComponent as FormIoSourceComponent} from '@formio/angular/components/formio/formio.component';
 import {ViewModelService} from '../../services';
-import {distinctUntilChanged, map, tap} from 'rxjs/operators';
+import {distinctUntilChanged, map} from 'rxjs/operators';
 import {deepmerge} from 'deepmerge-ts';
 import {FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
@@ -33,6 +32,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   styleUrls: ['./form-view-model.component.css'],
 })
 export class FormViewModelComponent implements OnInit {
+  @ViewChild('formio') formio: FormioComponent;
 
   @Input() set options(optionsValue: any) {
     this.options$.next(optionsValue);
@@ -132,14 +132,18 @@ export class FormViewModelComponent implements OnInit {
     combineLatest([this.formName$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formName, taskInstanceId]) => {
       this.viewModelService.submitViewModel(formName, taskInstanceId, submission.data)
         .pipe(catchError(error => {
-          callback({message: error, component: null}, null);
+          const formInstance = this.formio.formio;
+          const component = formInstance.getComponent(error.error?.component);
+          component?.setCustomValidity(error.error.error);
+          callback({message: error.error.error, component: null}, null);
+          this.errors$.next([error.error.error]);
           return this.handleSubmitError(error);
         }))
         .subscribe(response => {
           if (!response) {
             callback(null, submission);
           } else {
-            callback({message: response.error, component: response.component}, submission);
+            callback({message: response.error, component: null}, submission);
             this.errors$.next([response.error]);
           }
         });
@@ -152,9 +156,6 @@ export class FormViewModelComponent implements OnInit {
 
   public onSubmit(submission: FormioSubmission): void {
     this.formSubmit.next(submission);
-  }
-
-  public formReady(form: FormIoSourceComponent): void {
   }
 
   public onChange(object: any): void {
