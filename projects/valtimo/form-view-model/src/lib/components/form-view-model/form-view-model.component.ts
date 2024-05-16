@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import moment from 'moment';
 import {BehaviorSubject, catchError, combineLatest, debounceTime, Observable, Subject, take, throwError} from 'rxjs';
-import {FormioOptions, FormioSubmission, FormioSubmissionCallback} from '@formio/angular';
+import {FormioComponent, FormioOptions, FormioSubmission, FormioSubmissionCallback} from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
-import {FormioComponent as FormIoSourceComponent} from '@formio/angular/components/formio/formio.component';
 import {ViewModelService} from '../../services';
-import {distinctUntilChanged, map, tap} from 'rxjs/operators';
+import {distinctUntilChanged, map} from 'rxjs/operators';
 import {deepmerge} from 'deepmerge-ts';
 import {FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
 
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
@@ -33,6 +33,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   styleUrls: ['./form-view-model.component.css'],
 })
 export class FormViewModelComponent implements OnInit {
+  @ViewChild('formio') formio: FormioComponent;
 
   @Input() set options(optionsValue: any) {
     this.options$.next(optionsValue);
@@ -128,33 +129,37 @@ export class FormViewModelComponent implements OnInit {
   }
 
   public beforeSubmit(submission: any, callback: FormioSubmissionCallback) {
-    this.errors$.next([]);
     combineLatest([this.formName$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formName, taskInstanceId]) => {
       this.viewModelService.submitViewModel(formName, taskInstanceId, submission.data)
-        .pipe(catchError(error => {
-          callback({message: error, component: null}, null);
-          return this.handleSubmitError(error);
-        }))
-        .subscribe(response => {
-          if (!response) {
+        .pipe(
+          take(1)
+        )
+        .subscribe({
+          next: response => {
             callback(null, submission);
-          } else {
-            callback({message: response.error, component: response.component}, submission);
-            this.errors$.next([response.error]);
+          },
+          error: error => {
+            this.handleFormError(error, callback);
           }
         });
     });
   }
 
-  private handleSubmitError(error: any) {
-    return throwError(error);
+  private handleFormError(error: HttpErrorResponse, callback: FormioSubmissionCallback) {
+    const formInstance = this.formio.formio;
+    const component = formInstance.getComponent(error.error?.component);
+    if (component == null) {
+      this.errors$.next([error.error.error]);
+    } else {
+      setTimeout(() => {
+        component?.setCustomValidity(error.error.error);
+      }, 500);
+    }
+    callback({message: error.error.error, component: null}, null);
   }
 
   public onSubmit(submission: FormioSubmission): void {
     this.formSubmit.next(submission);
-  }
-
-  public formReady(form: FormIoSourceComponent): void {
   }
 
   public onChange(object: any): void {
@@ -164,7 +169,9 @@ export class FormViewModelComponent implements OnInit {
 
     if (object.changed) {
       this.submission$.next(this.submission);
-      this.updateViewModel();
+      this.change$.pipe(debounceTime(500), take(1)).subscribe(() => {
+        this.updateViewModel();
+      });
     }
   }
 
@@ -183,7 +190,7 @@ export class FormViewModelComponent implements OnInit {
     this.loading$.pipe(take(1)).subscribe(updating => {
       if (!updating) {
         this.loading$.next(true);
-        combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1), debounceTime(500)).subscribe(([formName, taskInstanceId, change]) => {
+        combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1)).subscribe(([formName, taskInstanceId, change]) => {
           this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).subscribe(viewModel => {
             this.submission$.next({data: viewModel});
             this.change$.pipe(take(1)).subscribe(change => {
