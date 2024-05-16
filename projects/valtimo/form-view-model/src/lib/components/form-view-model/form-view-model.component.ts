@@ -151,7 +151,9 @@ export class FormViewModelComponent implements OnInit {
     if (component == null) {
       this.errors$.next([error.error.error]);
     } else {
-      component?.setCustomValidity(error.error.error);
+      setTimeout(() => {
+        component?.setCustomValidity(error.error.error);
+      }, 500);
     }
     callback({message: error.error.error, component: null}, null);
   }
