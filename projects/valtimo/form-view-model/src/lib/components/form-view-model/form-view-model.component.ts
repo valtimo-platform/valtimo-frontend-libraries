@@ -23,6 +23,7 @@ import {distinctUntilChanged, map} from 'rxjs/operators';
 import {deepmerge} from 'deepmerge-ts';
 import {FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
 
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
@@ -128,34 +129,31 @@ export class FormViewModelComponent implements OnInit {
   }
 
   public beforeSubmit(submission: any, callback: FormioSubmissionCallback) {
-    this.errors$.next([]);
     combineLatest([this.formName$, this.taskInstanceId$]).pipe(take(1)).subscribe(([formName, taskInstanceId]) => {
       this.viewModelService.submitViewModel(formName, taskInstanceId, submission.data)
-        .pipe(catchError(error => {
-          const formInstance = this.formio.formio;
-          const component = formInstance.getComponent(error.error?.component);
-          if (component == null) {
-            this.errors$.next([error.error.error]);
-          } else {
-            component?.setCustomValidity(error.error.error);
-            this.errors$.next([]);
-          }
-          callback({message: error.error.error, component: null}, null);
-          return this.handleSubmitError(error);
-        }))
-        .subscribe(response => {
-          if (!response) {
+        .pipe(
+          take(1)
+        )
+        .subscribe({
+          next: response => {
             callback(null, submission);
-          } else {
-            callback({message: response.error, component: null}, submission);
-            this.errors$.next([response.error]);
+          },
+          error: error => {
+            this.handleFormError(error, callback);
           }
         });
     });
   }
 
-  private handleSubmitError(error: any) {
-    return throwError(error);
+  private handleFormError(error: HttpErrorResponse, callback: FormioSubmissionCallback) {
+    const formInstance = this.formio.formio;
+    const component = formInstance.getComponent(error.error?.component);
+    if (component == null) {
+      this.errors$.next([error.error.error]);
+    } else {
+      component?.setCustomValidity(error.error.error);
+    }
+    callback({message: error.error.error, component: null}, null);
   }
 
   public onSubmit(submission: FormioSubmission): void {

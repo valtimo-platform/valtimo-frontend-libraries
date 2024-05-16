@@ -170,7 +170,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     combineLatest([this.processLinkId$, this.taskProcessLinkType$, this.task$])
       .pipe(take(1))
       .subscribe(([processLinkId, taskProcessLinkType, task]) => {
-        console.log(taskProcessLinkType);
         if (taskProcessLinkType === 'form') {
           if (processLinkId) {
             this.processLinkService
