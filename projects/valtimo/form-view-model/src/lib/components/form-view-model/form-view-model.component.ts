@@ -133,10 +133,14 @@ export class FormViewModelComponent implements OnInit {
       this.viewModelService.submitViewModel(formName, taskInstanceId, submission.data)
         .pipe(catchError(error => {
           const formInstance = this.formio.formio;
-          const component = formInstance.getComponent(error.error?.component);
+          const component = formInstance.getComponent(null);
           component?.setCustomValidity(error.error.error);
           callback({message: error.error.error, component: null}, null);
-          this.errors$.next([error.error.error]);
+          if (component == null) {
+            this.errors$.next([error.error.error]);
+          } else {
+            this.errors$.next([]);
+          }
           return this.handleSubmitError(error);
         }))
         .subscribe(response => {
