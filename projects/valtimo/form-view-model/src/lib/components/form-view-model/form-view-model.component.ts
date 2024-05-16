@@ -169,7 +169,9 @@ export class FormViewModelComponent implements OnInit {
 
     if (object.changed) {
       this.submission$.next(this.submission);
-      this.updateViewModel();
+      this.change$.pipe(debounceTime(500), take(1)).subscribe(() => {
+        this.updateViewModel();
+      });
     }
   }
 
@@ -188,7 +190,7 @@ export class FormViewModelComponent implements OnInit {
     this.loading$.pipe(take(1)).subscribe(updating => {
       if (!updating) {
         this.loading$.next(true);
-        combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1), debounceTime(500)).subscribe(([formName, taskInstanceId, change]) => {
+        combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(take(1)).subscribe(([formName, taskInstanceId, change]) => {
           this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).subscribe(viewModel => {
             this.submission$.next({data: viewModel});
             this.change$.pipe(take(1)).subscribe(change => {
