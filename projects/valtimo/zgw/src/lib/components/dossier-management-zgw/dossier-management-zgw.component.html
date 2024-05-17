@@ -15,13 +15,14 @@
   -->
 
 <cds-tabs class="dossier-management-tabs">
-  <cds-tab
-    *ngFor="let zgwTab of (zgwTabs$ | async) || []"
-    [class]="zgwTab.class"
-    [active]="zgwTab.active"
-    [heading]="zgwTab.headingTranslationKey | translate"
-    (selected)="displayTab(zgwTab.tab)"
-  ></cds-tab>
+  @for (zgwTab of (zgwTabs$ | async) || []; track zgwTab.tab) {
+    <cds-tab
+      [class]="zgwTab.class"
+      [active]="zgwTab.active"
+      [heading]="zgwTab.headingTranslationKey | translate"
+      (selected)="displayTab(zgwTab.tab)"
+    ></cds-tab>
+  }
 </cds-tabs>
 
 <div class="dossier-management-zgw__content">
