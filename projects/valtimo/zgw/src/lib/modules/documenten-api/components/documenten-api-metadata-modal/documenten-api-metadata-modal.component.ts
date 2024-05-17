@@ -401,7 +401,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
         verzenddatum,
         trefwoorden,
       } = file;
-      console.log(file);
 
       if (verzenddatum) this.additionalDocumentDate$.next('sent');
       else if (ontvangstdatum) this.additionalDocumentDate$.next('received');
