@@ -21,12 +21,14 @@
   *ngIf="{
     file: file$ | async,
     disabled: disabled$ | async,
+    isDefinitiveStatus: isDefinitiveStatus$ | async,
     languageItems: languageItems$ | async,
     statusItems: statusItems$ | async,
+    tagItems: tagItems$ | async,
     userEmail: userEmail$ | async
   } as obs"
 >
-  <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+  <cds-modal-header (closeSelect)="closeModal()">
     @if (isEditMode) {
       <h3 cdsModalHeaderHeading>
         {{ 'document.editMetadata' | translate }}
@@ -47,7 +49,7 @@
     <button
       cdsButton="primary"
       type="submit"
-      [disabled]="obs.disabled || !documentenApiMetadataForm.valid"
+      [disabled]="obs.disabled || !documentenApiMetadataForm.valid || obs.isDefinitiveStatus"
       (click)="save()"
     >
       {{ 'document.save' | translate }}
@@ -187,7 +189,6 @@
               {{ option.translationKey | translate }}
             </cds-radio>
           </cds-radio-group>
-
           <cds-text-label>
             {{ 'document.tags' | translate }}
             <cds-tooltip
@@ -202,11 +203,11 @@
             <cds-combo-box
               [type]="'multi'"
               [placeholder]="'document.tagsPlaceholder' | translate"
-              [disabled]="obs.disabled"
+              [disabled]="obs.disabled || obs.tagItems.length === 0"
               (selected)="tagsSelected($event)"
             >
               >
-              <cds-dropdown-list [items]="(tagItems$ | async) || []"></cds-dropdown-list>
+              <cds-dropdown-list [items]="obs.tagItems || []"></cds-dropdown-list>
             </cds-combo-box>
           </div>
         </div>
@@ -215,7 +216,6 @@
           <cds-text-label>
             {{ 'document.inputTitle' | translate }}
             <input
-              [value]="documentTitle"
               [disabled]="obs.disabled || disableDocumentTitle"
               [placeholder]="'document.inputTitlePlaceholder' | translate"
               [required]="true"
