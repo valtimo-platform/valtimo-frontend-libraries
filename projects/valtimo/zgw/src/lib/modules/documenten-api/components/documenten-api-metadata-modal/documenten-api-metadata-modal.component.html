@@ -28,7 +28,7 @@
     userEmail: userEmail$ | async
   } as obs"
 >
-  <cds-modal-header (closeSelect)="closeModal()">
+  <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
     @if (isEditMode) {
       <h3 cdsModalHeaderHeading>
         {{ 'document.editMetadata' | translate }}
