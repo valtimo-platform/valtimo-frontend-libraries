@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-export * from './tab.service';
-export * from './tab-management.service';
-export * from './dossier-export.service';
-export * from './dossier-detail.service';
-export * from './widget-tab-management.service';
+.edit-widget-tab-modal .form {
+  &__row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  &__element {
+    width: 100%;
+    margin-bottom: 32px;
+  }
+}
