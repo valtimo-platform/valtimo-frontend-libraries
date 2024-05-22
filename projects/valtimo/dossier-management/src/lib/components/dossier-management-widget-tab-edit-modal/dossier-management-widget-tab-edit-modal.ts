@@ -66,7 +66,7 @@ export class DossierManagementWidgetTabEditModalComponent implements OnInit, OnD
   }
 
   public ngOnDestroy(): void {
-    this._openSubscription.unsubscribe();
+    this._openSubscription?.unsubscribe();
   }
 
   public closeModal(): void {

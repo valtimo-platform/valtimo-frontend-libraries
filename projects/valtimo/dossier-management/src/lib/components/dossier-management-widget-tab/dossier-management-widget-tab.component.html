@@ -14,14 +14,12 @@
   ~ limitations under the License.
   -->
 
-<ng-container>
-  <valtimo-dossier-management-widget-tab-edit-modal
-    [widgetTab]="currentWidgetTab$ | async"
-    [showModal$]="showEditWidgetTabModal$"
-    (saveEvent)="refreshWidgetTab()"
-  >
-  </valtimo-dossier-management-widget-tab-edit-modal>
-</ng-container>
+<valtimo-dossier-management-widget-tab-edit-modal
+  [widgetTab]="currentWidgetTab$ | async"
+  [showModal$]="showEditWidgetTabModal$"
+  (saveEvent)="refreshWidgetTab()"
+>
+</valtimo-dossier-management-widget-tab-edit-modal>
 
 <ng-container renderInPageHeader>
   <ng-template>
