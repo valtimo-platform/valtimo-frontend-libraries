@@ -15,7 +15,7 @@
  */
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
-import {BehaviorSubject, combineLatest, Observable, pairwise, Subject, take} from 'rxjs';
+import {BehaviorSubject, combineLatest, debounceTime, filter, Observable, pairwise, Subject, take} from 'rxjs';
 import {FormioComponent, FormioOptions, FormioSubmission, FormioSubmissionCallback} from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {ViewModelService} from '../../services';
@@ -209,14 +209,16 @@ export class FormViewModelComponent implements OnInit {
   }
 
   private handleChanges() {
-    this.change$.pipe(pairwise()).subscribe(([prevChange, currentChange]) => {
-      console.log(prevChange?.changed?.value, currentChange?.changed?.value);
-      if (prevChange?.changed?.value == undefined || currentChange?.changed?.value == undefined) {
-        return;
-      }
-      if (prevChange?.changed?.value != currentChange?.changed?.value) {
+    this.change$.pipe(
+        pairwise(),
+        debounceTime(500),
+        filter(([prevChange, currentChange]) =>
+          prevChange?.changed?.value !== undefined &&
+          currentChange?.changed?.value !== undefined &&
+          prevChange.changed.value !== currentChange.changed.value
+        )
+      ).subscribe(() => {
         this.updateViewModel();
-      }
-    });
+      });
   }
 }
