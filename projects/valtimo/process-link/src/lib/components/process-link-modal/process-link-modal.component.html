@@ -76,6 +76,7 @@
         <valtimo-select-form></valtimo-select-form>
         <br/>
         <cds-toggle
+          *ngIf="showViewModelToggle"
           [label]="'processLinkConfiguration.toggleViewModel.title' | translate"
           [onText]="'processLinkConfiguration.toggleViewModel.checkboxDescription' | translate"
           [offText]="'processLinkConfiguration.toggleViewModel.checkboxDescription' | translate"
