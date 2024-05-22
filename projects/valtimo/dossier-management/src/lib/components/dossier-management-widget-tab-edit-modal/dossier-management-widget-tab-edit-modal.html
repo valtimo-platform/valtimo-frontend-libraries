@@ -37,7 +37,7 @@
 
 <ng-template #editWidgetTabFormTemplate let-obs="obs">
   <form *ngIf="editWidgetTabForm" [formGroup]="editWidgetTabForm" class="widget-tab-modal__form">
-    <cds-label class="form__element" [disabled]="obs.disabled" [invalid]="widgetTabName.dirty && widgetTabName.invalid">
+    <cds-label [disabled]="obs.disabled" [invalid]="widgetTabName.dirty && widgetTabName.invalid">
       {{ 'widgetTabManagement.tab.form.tabName' | translate }}
 
       <input
