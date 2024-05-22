@@ -476,9 +476,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       this._fileSubscription = this.file$.subscribe(file => {
         if (file) {
           this.prefillForm(file);
-          this.isDefinitiveStatus$.next(
-            file.status === 'definitief' && this.isEditMode ? true : false
-          );
+          this.isDefinitiveStatus$.next(file.status === 'definitief' && this.isEditMode ? true : false);
         }
       });
     }

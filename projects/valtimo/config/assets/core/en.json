@@ -539,8 +539,7 @@
         "tabKeyLabel": "Key",
         "tabNameLabel": "Tab name (optional)",
         "title": "Add new tab in {{documentDefinitionName}}",
-        "uniqueKeyError": "The key for this column must be unique.",
-        "widgetsComponent": "Widgets component"
+        "uniqueKeyError": "The key for this column must be unique."
       },
       "titles": {
         "custom": "Add new tab with custom component",
@@ -646,18 +645,6 @@
       "noResults": {
         "title": "No statuses",
         "description": "Add a status to start"
-      }
-    }
-  },
-  "widgetTabManagement": {
-    "tab": {
-      "metadata": "<b>Created by</b> {{createdBy}} | <b>Created on</b> {{createdOn}} | <b>Key</b> {{key}}",
-      "editButton": "Edit",
-      "editWidgetTab": "Edit widget tab",
-      "cancel": "Cancel",
-      "save": "Save",
-      "form": {
-        "tabName": "Tab name"
       }
     }
   },
