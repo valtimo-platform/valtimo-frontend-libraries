@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
-import {BehaviorSubject, catchError, combineLatest, debounceTime, Observable, Subject, take, throwError} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, pairwise, Subject, take} from 'rxjs';
 import {FormioComponent, FormioOptions, FormioSubmission, FormioSubmissionCallback} from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {ViewModelService} from '../../services';
@@ -140,7 +140,7 @@ export class FormViewModelComponent implements OnInit {
           },
           error: error => {
             this.handleFormError(error);
-            callback({message: error.error.error, component: null}, null)
+            callback({message: error.error.error, component: null}, null);
           }
         });
     });
@@ -169,9 +169,7 @@ export class FormViewModelComponent implements OnInit {
 
     if (object.changed) {
       this.submission$.next(this.submission);
-      this.change$.pipe(debounceTime(500), take(1)).subscribe(() => {
-        this.updateViewModel();
-      });
+      this.handleChanges();
     }
   }
 
@@ -206,6 +204,18 @@ export class FormViewModelComponent implements OnInit {
             }
           });
         });
+      }
+    });
+  }
+
+  private handleChanges() {
+    this.change$.pipe(pairwise()).subscribe(([prevChange, currentChange]) => {
+      console.log(prevChange?.changed?.value, currentChange?.changed?.value);
+      if (prevChange?.changed?.value == undefined || currentChange?.changed?.value == undefined) {
+        return;
+      }
+      if (prevChange?.changed?.value != currentChange?.changed?.value) {
+        this.updateViewModel();
       }
     });
   }
