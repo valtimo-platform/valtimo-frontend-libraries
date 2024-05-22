@@ -50,13 +50,12 @@ export class BreadcrumbService {
         };
         const secondBreadCrumb = this.getSecondBreadcrumb();
 
-        const breadcrumbs = [
+        return [
           ...(activeParentSequenceNumber ? [activeParentBreadcrumbItem] : []),
           ...(manualSecondBreadcrumb ? [manualSecondBreadcrumb] : []),
           ...(secondBreadCrumb && !manualSecondBreadcrumb ? [secondBreadCrumb] : []),
           ...(!!manualThirdBreadcrumb ? [manualThirdBreadcrumb] : []),
         ];
-        return breadcrumbs;
       }
     ),
     map(breadCrumbItems => this.matchCachedQueryParams(breadCrumbItems))
