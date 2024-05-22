@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-.edit-widget-tab-modal .form {
-  &__row {
+.edit-widget-tab-modal .form__row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-  }
 }
