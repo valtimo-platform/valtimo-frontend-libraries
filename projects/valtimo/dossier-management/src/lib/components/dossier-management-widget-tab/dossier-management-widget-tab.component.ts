@@ -27,7 +27,6 @@ import {IconService} from 'carbon-components-angular';
 @Component({
   selector: 'valtimo-dossier-management-case-widgets',
   templateUrl: './dossier-management-widget-tab.component.html',
-  styleUrls: ['./dossier-management-widget-tab.component.scss'],
 })
 export class DossierManagementWidgetTabComponent implements AfterViewInit, OnDestroy {
   public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(

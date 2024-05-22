@@ -18,14 +18,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
+  Input, OnDestroy,
   OnInit,
   Output,
   ViewEncapsulation,
 } from '@angular/core';
 import {NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
-import {FormBuilder, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {WidgetTabItem} from '../../models/widget-tab-item.type';
 import {WidgetTabManagementService} from '../../services';
@@ -38,7 +38,7 @@ import {WidgetTabManagementService} from '../../services';
   providers: [NotificationService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementWidgetTabEditModalComponent implements OnInit {
+export class DossierManagementWidgetTabEditModalComponent implements OnInit, OnDestroy {
   @Input() public showModal$: Observable<boolean>;
   @Input() public widgetTab: WidgetTabItem;
   @Output() public saveEvent = new EventEmitter<any>();
@@ -49,7 +49,7 @@ export class DossierManagementWidgetTabEditModalComponent implements OnInit {
     name: this.fb.control('', [Validators.required]),
   });
 
-  public get widgetTabName() {
+  public get widgetTabName(): AbstractControl<string, string> {
     return this.editWidgetTabForm.get('name');
   }
 
@@ -62,6 +62,10 @@ export class DossierManagementWidgetTabEditModalComponent implements OnInit {
 
   public ngOnInit(): void {
     this.openOpenSubscription();
+  }
+
+  public ngOnDestroy(): void {
+    this._openSubscription.unsubscribe();
   }
 
   public closeModal(): void {

@@ -37,19 +37,17 @@
 
 <ng-template #editWidgetTabFormTemplate let-obs="obs">
   <form *ngIf="editWidgetTabForm" [formGroup]="editWidgetTabForm" class="widget-tab-modal__form">
-    <div class="form__element">
-      <cds-label [disabled]="obs.disabled" [invalid]="widgetTabName.dirty && widgetTabName.invalid">
-        {{ 'widgetTabManagement.tab.form.tabName' | translate }}
+    <cds-label class="form__element" [disabled]="obs.disabled" [invalid]="widgetTabName.dirty && widgetTabName.invalid">
+      {{ 'widgetTabManagement.tab.form.tabName' | translate }}
 
-        <input
-          cdsText
-          [disabled]="obs.disabled"
-          [invalid]="widgetTabName.dirty && widgetTabName.invalid"
-          formControlName="name"
-          [attr.modal-primary-focus]="true"
-        />
-      </cds-label>
-    </div>
+      <input
+        cdsText
+        [disabled]="obs.disabled"
+        [invalid]="widgetTabName.dirty && widgetTabName.invalid"
+        formControlName="name"
+        [attr.modal-primary-focus]="true"
+      />
+    </cds-label>
   </form>
 </ng-template>
 

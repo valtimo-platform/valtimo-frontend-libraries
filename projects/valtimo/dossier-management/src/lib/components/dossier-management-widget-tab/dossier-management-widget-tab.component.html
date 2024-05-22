@@ -14,13 +14,9 @@
   ~ limitations under the License.
   -->
 
-<ng-container
-  *ngIf="{
-    currentWidgetTab: currentWidgetTab$ | async
-  } as obs"
->
+<ng-container>
   <valtimo-dossier-management-widget-tab-edit-modal
-    [widgetTab]="obs.currentWidgetTab"
+    [widgetTab]="currentWidgetTab$ | async"
     [showModal$]="showEditWidgetTabModal$"
     (saveEvent)="refreshWidgetTab()"
   >

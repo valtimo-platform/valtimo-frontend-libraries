@@ -54,10 +54,8 @@ export class BreadcrumbService {
           ...(activeParentSequenceNumber ? [activeParentBreadcrumbItem] : []),
           ...(manualSecondBreadcrumb ? [manualSecondBreadcrumb] : []),
           ...(secondBreadCrumb && !manualSecondBreadcrumb ? [secondBreadCrumb] : []),
+          ...(!!manualThirdBreadcrumb ? [manualThirdBreadcrumb] : []),
         ];
-        if (manualThirdBreadcrumb) {
-          breadcrumbs.push(manualThirdBreadcrumb);
-        }
         return breadcrumbs;
       }
     ),
@@ -83,7 +81,6 @@ export class BreadcrumbService {
 
   clearSecondBreadcrumb(): void {
     this._manualSecondBreadcrumb$.next(null);
-    this._manualThirdBreadcrumb$.next(null);
   }
 
   setThirdBreadcrumb(breadcrumb: BreadcrumbItem): void {
