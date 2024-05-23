@@ -23,6 +23,7 @@ import {DossierTabApiService} from './dossier-tab-api.service';
 import {BehaviorSubject, filter, map, Observable, Subscription} from 'rxjs';
 import {DossierDetailTabFormioComponent} from '../components/dossier-detail/tab/formio/formio.component';
 import {DossierDetailTabNotFoundComponent} from '../components/dossier-detail/tab/not-found/not-found.component';
+import {DossierDetailWidgetsComponent} from '../components/dossier-detail/tab/widgets/widgets.component';
 
 @Injectable()
 export class DossierTabService implements OnDestroy {
@@ -153,6 +154,11 @@ export class DossierTabService implements OnDestroy {
           this.caseTabConfig[tab.contentKey],
           tab.contentKey,
           tab.name
+        );
+      case ApiTabType.WIDGETS:
+        return (
+          this.configService.featureToggles?.enableCaseWidgets &&
+          new TabImpl(tab.key, index, DossierDetailWidgetsComponent, tab.contentKey, tab.name)
         );
       default:
         return null;
