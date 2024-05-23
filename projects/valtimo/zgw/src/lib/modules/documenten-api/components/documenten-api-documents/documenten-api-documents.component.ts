@@ -344,6 +344,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.isEditMode$.next(false);
     this.fileToBeUploaded$.next(event.target.files[0]);
     this.showUploadModal$.next(true);
+    this.resetFileInput();
   }
 
   public onNavigateToCaseAdminClick(): void {
@@ -366,7 +367,11 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
   public onSortChanged(sortState: SortState): void {
     this._sort$.next(
-      sortState.isSorting ? {sort: `${sortState.state.name},${sortState.state.direction}`} : null
+      sortState.isSorting
+        ? {
+            sort: `${sortState.state.name === 'size' ? DOCUMENTEN_COLUMN_KEYS.BESTANDSOMVANG : sortState.state.name},${sortState.state.direction}`,
+          }
+        : null
     );
   }
 
@@ -393,6 +398,10 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
         queryParams: {...filter, ...sort},
       });
     });
+  }
+
+  private resetFileInput(): void {
+    this.fileInput.nativeElement.value = '';
   }
 
   private setUploadProcessLinked(): void {
