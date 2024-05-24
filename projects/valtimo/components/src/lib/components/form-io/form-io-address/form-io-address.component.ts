@@ -116,10 +116,7 @@ export class FormIoAddressComponent implements FormioCustomComponent<any> {
   });
 
   constructor() {
-    console.log('this: ', this);
     setTimeout( () => {
-      console.log('langcon: ', this.keyLanguage);
-
       this.addressForm.controls.street.setValue(this.value?.street);
       this.addressForm.controls.street.setValidators(this.requiredStreet ? Validators.required : []);
       this.addressForm.controls.street.updateValueAndValidity();
@@ -157,9 +154,7 @@ export class FormIoAddressComponent implements FormioCustomComponent<any> {
   }
 
   onValueChange(): void {
-    console.log('value: ', this.value);
     let valueWithTranslatedKeys;
-    console.log('lang: ', this.keyLanguage);
     if (this.keyLanguage === 'nl') {
       valueWithTranslatedKeys = {
         straat: this.addressForm.value.street,

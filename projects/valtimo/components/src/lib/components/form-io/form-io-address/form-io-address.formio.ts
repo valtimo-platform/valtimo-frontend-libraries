@@ -9,7 +9,6 @@ function extendDefaultEditForm(defaultEditForm) {
 
   if (tabsComponent) {
     tabsComponent.components = [...formIoAddressEditForm.components[0].components]; //To add default tabs, use: '...tabsComponent.components'
-    console.log('tabs: ', tabsComponent.components);
   } else {
     defaultForm.components = [
       {
