@@ -14,4 +14,18 @@
   ~ limitations under the License.
   -->
 
-  Type step
+<cds-tile-group
+  [multiple]="false"
+  (selected)="onSelectedEvent($event)"
+  class="valtimo-widget-wizard-type-step__content"
+>
+  @for (widgetType of availableWidgetTypes; track widgetType.titleKey) {
+    <cds-selection-tile class="valtimo-widget-wizard-type-step__tile" [value]="widgetType.type">
+      <h3>{{ widgetType.titleKey | translate }}</h3>
+
+      <span>{{ widgetType.descriptionKey | translate }}</span>
+
+      <img [src]="widgetType.illustrationUrl" [alt]="'widgetType.titleKey' | translate" />
+    </cds-selection-tile>
+  }
+</cds-tile-group>

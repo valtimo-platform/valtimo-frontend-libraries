@@ -15,15 +15,32 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
+import {AVAILABLE_WIDGET_TYPES, WidgetType} from '../../../../models';
+import {TilesModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-widget-wizard-type-step',
   templateUrl: './widget-wizard-type-step.component.html',
   styleUrls: ['./widget-wizard-type-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, TilesModule],
 })
-export class WidgetWizardTypeStepComponent {}
+export class WidgetWizardTypeStepComponent {
+  @Output() typeSelected = new EventEmitter<WidgetType>();
+
+  public readonly availableWidgetTypes = AVAILABLE_WIDGET_TYPES;
+
+  public onSelectedEvent(event: {value: WidgetType}): void {
+    this.typeSelected.emit(event.value);
+  }
+}

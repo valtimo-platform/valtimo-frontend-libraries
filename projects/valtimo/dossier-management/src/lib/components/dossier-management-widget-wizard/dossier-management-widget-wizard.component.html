@@ -16,10 +16,11 @@
 
 <cds-modal
   [open]="open"
-  valtimoCdsModal
-  size="lg"
-  showFooter="true"
   [title]="'widgetTabManagement.wizard.title' | translate"
+  showFooter="true"
+  size="lg"
+  valtimoCdsModal
+  class="valtimo-dossier-management-widget-wizard"
 >
   <cds-modal-header [showCloseButton]="true" (closeSelect)="onClose()">
     <h3 cdsModalHeaderHeading>
@@ -27,7 +28,7 @@
     </h3>
   </cds-modal-header>
 
-  <section cdsModalContent>
+  <section cdsModalContent class="valtimo-dossier-management-widget-wizard__content">
     <cds-progress-indicator
       *ngIf="{steps: steps$ | async} as obs"
       [current]="currentStep"
@@ -40,7 +41,11 @@
 
     @switch (currentStep) {
       @case (WidgetWizardSteps.TYPE) {
-        <valtimo-widget-wizard-type-step></valtimo-widget-wizard-type-step>
+        <p>{{ 'widgetTabManagement.types.title' | translate }}</p>
+
+        <valtimo-widget-wizard-type-step
+          (typeSelected)="onTypeSelected($event)"
+        ></valtimo-widget-wizard-type-step>
       }
       @case (WidgetWizardSteps.WIDTH) {
         <valtimo-widget-wizard-width-step></valtimo-widget-wizard-width-step>
@@ -78,6 +83,7 @@
     <button
       class="valtimo-dossier-management-widget-wizard__next"
       cdsButton="primary"
+      [disabled]="nextButtonDisabled"
       (click)="onNextButtonClick(currentStep === WidgetWizardSteps.CONTENT)"
     >
       {{ currentStep === WidgetWizardSteps.CONTENT ? 'Save' : ' Next' }}

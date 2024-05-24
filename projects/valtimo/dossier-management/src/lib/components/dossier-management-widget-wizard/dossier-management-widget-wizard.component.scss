@@ -15,8 +15,14 @@
  */
 
 .valtimo-dossier-management-widget-wizard {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
   &__footer footer {
-    display: grid !important;
+    display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-areas: 'cancel . back next';
 
@@ -35,5 +41,9 @@
 
   &__next {
     grid-area: next;
+  }
+
+  .cds--modal-container {
+    background: var(--cds-layer-02);
   }
 }

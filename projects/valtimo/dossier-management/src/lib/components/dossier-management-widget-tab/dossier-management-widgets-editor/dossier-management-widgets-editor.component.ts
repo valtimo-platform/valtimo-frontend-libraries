@@ -69,7 +69,7 @@ export class DossierManagementWidgetsEditor {
     },
   ]);
 
-  public readonly addModalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly addModalOpen$ = new BehaviorSubject<boolean>(true);
 
   public openAddModal(): void {
     this.addModalOpen$.next(true);

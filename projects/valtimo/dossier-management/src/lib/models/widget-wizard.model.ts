@@ -18,7 +18,27 @@ enum WidgetWizardSteps {
   TYPE,
   WIDTH,
   STYLE,
-  CONTENT
+  CONTENT,
 }
 
-export {WidgetWizardSteps}
+enum WidgetType {
+  FIELDS = 'fields',
+}
+
+interface WidgetTypeTile {
+  titleKey: string;
+  descriptionKey: string;
+  illustrationUrl: string;
+  type: WidgetType;
+}
+
+const AVAILABLE_WIDGET_TYPES: WidgetTypeTile[] = [
+  {
+    titleKey: 'widgetTabManagement.types.fields.title',
+    descriptionKey: 'widgetTabManagement.types.fields.description',
+    illustrationUrl: 'valtimo-layout/img/widget-management/types/fields.svg',
+    type: WidgetType.FIELDS,
+  },
+];
+
+export {WidgetWizardSteps, WidgetTypeTile, AVAILABLE_WIDGET_TYPES, WidgetType};

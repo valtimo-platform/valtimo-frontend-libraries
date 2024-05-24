@@ -26,7 +26,7 @@ import {
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {WIDGET_STEPS} from './steps';
 import {ButtonModule, ModalModule, ProgressIndicatorModule, Step} from 'carbon-components-angular';
-import {WidgetWizardSteps} from '../../models';
+import {WidgetType, WidgetWizardSteps} from '../../models';
 import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
 import {ModalCloseEventType} from '@valtimo/components';
 
@@ -82,13 +82,9 @@ export class DossierManagementWidgetWizardComponent {
       },
     ])
   );
-  public readonly steps: Step[] = [
-    {
-      label: 'Choose widget type',
-    },
-  ];
 
   public currentStep = WidgetWizardSteps.TYPE;
+  public nextButtonDisabled = true;
 
   constructor(private readonly translateService: TranslateService) {}
 
@@ -111,5 +107,10 @@ export class DossierManagementWidgetWizardComponent {
 
   public onClose(): void {
     this.closeEvent.emit('close');
+  }
+
+  public onTypeSelected(type: WidgetType): void {
+    this.nextButtonDisabled = false;
+    console.log(type);
   }
 }

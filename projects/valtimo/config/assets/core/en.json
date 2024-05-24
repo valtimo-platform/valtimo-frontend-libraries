@@ -675,6 +675,13 @@
         "type": "Choose widget type",
         "width": "Choose widget width"
       }
+    },
+    "types": {
+      "title": "Choose the widget type you want to configure",
+      "fields": {
+        "title": "Fields",
+        "description": "Text data with content and a label"
+      }
     }
   },
   "zgw": {
