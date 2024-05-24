@@ -17,30 +17,44 @@
 import {CommonModule} from '@angular/common';
 import {Component, HostBinding} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {filter, map, Observable} from 'rxjs';
-import {DossierTabService} from '../../../../services';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
+import {DossierTabService, DossierWidgetsApiService} from '../../../../services';
+import {LoadingModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-dossier-detail-widgets',
   templateUrl: './widgets.component.html',
   styleUrls: ['./widgets.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingModule],
 })
 export class DossierDetailWidgetsComponent {
   @HostBinding('class.tab--no-margin') private readonly _noMargin = true;
   @HostBinding('class.tab--no-background') private readonly _noBackground = true;
   @HostBinding('class.tab--no-min-height') private readonly _noMinHeight = true;
 
-  public readonly documentDefinitionName$ = this.route.params.pipe(
+  private readonly _documentDefinitionName$ = this.route.params.pipe(
     map(params => params?.documentDefinitionName),
     filter(documentDefinitionName => !!documentDefinitionName)
   );
 
-  public readonly tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
+  private readonly _tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
+
+  public readonly loadingWidgetConfiguration$ = new BehaviorSubject<boolean>(true);
+
+  public readonly widgetConfiguration$ = combineLatest([
+    this._documentDefinitionName$,
+    this._tabKey$,
+  ]).pipe(
+    switchMap(([documentDefinitionName, tabKey]) =>
+      this.widgetsApiService.getWidgetTabConfiguration(documentDefinitionName, tabKey)
+    ),
+    tap(() => this.loadingWidgetConfiguration$.next(false))
+  );
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly dossierTabService: DossierTabService
+    private readonly dossierTabService: DossierTabService,
+    private readonly widgetsApiService: DossierWidgetsApiService
   ) {}
 }

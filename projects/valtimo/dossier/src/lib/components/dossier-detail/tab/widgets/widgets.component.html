@@ -14,4 +14,19 @@
   ~ limitations under the License.
   -->
 
-{{ tabKey$ | async }}
+<ng-container
+  *ngIf="{
+    loadingWidgetConfiguration: loadingWidgetConfiguration$ | async,
+    widgetConfiguration: widgetConfiguration$ | async
+  } as obs"
+>
+  @if (obs.loadingWidgetConfiguration) {
+    <ng-container *ngTemplateOutlet="loading"></ng-container>
+  }
+</ng-container>
+
+<ng-template #loading>
+  <div class="loading-container">
+    <cds-loading></cds-loading>
+  </div>
+</ng-template>
