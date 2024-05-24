@@ -44,14 +44,22 @@
         <p>{{ 'widgetTabManagement.types.title' | translate }}</p>
 
         <valtimo-widget-wizard-type-step
+          class="valtimo-widget-wizard-step"
           (typeSelected)="onTypeSelected($event)"
         ></valtimo-widget-wizard-type-step>
       }
       @case (WidgetWizardSteps.WIDTH) {
-        <valtimo-widget-wizard-width-step></valtimo-widget-wizard-width-step>
+        <p>{{ 'widgetTabManagement.width.title' | translate }}</p>
+
+        <valtimo-widget-wizard-width-step
+          class="valtimo-widget-wizard-step"
+          (widthSelected)="onWidthSelected($event)"
+        ></valtimo-widget-wizard-width-step>
       }
       @case (WidgetWizardSteps.STYLE) {
-        <valtimo-widget-wizard-style-step></valtimo-widget-wizard-style-step>
+        <valtimo-widget-wizard-style-step
+          class="valtimo-widget-wizard-step"
+        ></valtimo-widget-wizard-style-step>
       }
       @case (WidgetWizardSteps.CONTENT) {
         <valtimo-widget-wizard-content-step></valtimo-widget-wizard-content-step>

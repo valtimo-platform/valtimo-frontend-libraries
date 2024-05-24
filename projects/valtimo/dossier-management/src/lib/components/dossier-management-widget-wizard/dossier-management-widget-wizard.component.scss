@@ -46,4 +46,18 @@
   .cds--modal-container {
     background: var(--cds-layer-02);
   }
+
+  .valtimo-widget-wizard-step {
+    &__content fieldset {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    &__tile .cds--tile-content {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+  }
 }

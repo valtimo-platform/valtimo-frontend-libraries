@@ -13,4 +13,58 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-  Width step
+<cds-tile-group
+  [multiple]="false"
+  (selected)="onSelectedEvent($event)"
+  class="valtimo-widget-wizard-step__content"
+>
+  <cds-selection-tile class="valtimo-widget-wizard-step__tile" [value]="WidgetWidth.QUARTER">
+    <h3>{{ 'widgetTabManagement.width.quarter.title' | translate }}</h3>
+
+    <span>{{ 'widgetTabManagement.width.quarter.description' | translate }}</span>
+
+    <img
+      src="valtimo-layout/img/widget-management/width/quarter.svg"
+      [alt]="'widgetTabManagement.width.quarter.title' | translate"
+    />
+  </cds-selection-tile>
+
+  <cds-selection-tile class="valtimo-widget-wizard-step__tile" [value]="WidgetWidth.HALF">
+    <h3>{{ 'widgetTabManagement.width.half.title' | translate }}</h3>
+
+    <span>{{ 'widgetTabManagement.width.half.description' | translate }}</span>
+
+    <img
+      src="valtimo-layout/img/widget-management/width/half.svg"
+      [alt]="'widgetTabManagement.width.half.title' | translate"
+    />
+  </cds-selection-tile>
+
+  <cds-selection-tile
+    class="valtimo-widget-wizard-step__tile"
+    [value]="WidgetWidth.THREE_QUARTERS"
+  >
+    <h3>{{ 'widgetTabManagement.width.threeQuarters.title' | translate }}</h3>
+
+    <span>{{ 'widgetTabManagement.width.threeQuarters.description' | translate }}</span>
+
+    <img
+      src="valtimo-layout/img/widget-management/width/three-quarters.svg"
+      [alt]="'widgetTabManagement.width.threeQuarters.title' | translate"
+    />
+  </cds-selection-tile>
+
+  <cds-selection-tile
+    class="valtimo-widget-wizard-step__tile"
+    [value]="WidgetWidth.FULL_WIDTH"
+  >
+    <h3>{{ 'widgetTabManagement.width.fullWidth.title' | translate }}</h3>
+
+    <span>{{ 'widgetTabManagement.width.fullWidth.description' | translate }}</span>
+
+    <img
+      src="valtimo-layout/img/widget-management/width/full-width.svg"
+      [alt]="'widgetTabManagement.width.fullWidth.title' | translate"
+    />
+  </cds-selection-tile>
+</cds-tile-group>

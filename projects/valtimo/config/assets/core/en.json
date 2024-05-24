@@ -677,10 +677,29 @@
       }
     },
     "types": {
-      "title": "Choose the widget type you want to configure",
+      "title": "Choose the widget type you want to configure.",
       "fields": {
         "title": "Fields",
         "description": "Text data with content and a label"
+      }
+    },
+    "width": {
+      "title": "Select the desired width for the widget. Be aware that there can be no more than 4 columns of content next to each other.",
+      "quarter": {
+        "title": "1/4",
+        "description": "One column of content"
+      },
+      "half": {
+        "title": "Half",
+        "description": "Two columns of content"
+      },
+      "threeQuarters": {
+        "title": "3/4",
+        "description": "Three columns of content"
+      },
+      "fullWidth": {
+        "title": "Full-width",
+        "description": "Four columns of content"
       }
     }
   },

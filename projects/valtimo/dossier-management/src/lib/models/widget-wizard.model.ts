@@ -25,6 +25,13 @@ enum WidgetType {
   FIELDS = 'fields',
 }
 
+enum WidgetWidth {
+  QUARTER = 1,
+  HALF,
+  THREE_QUARTERS,
+  FULL_WIDTH,
+}
+
 interface WidgetTypeTile {
   titleKey: string;
   descriptionKey: string;
@@ -41,4 +48,4 @@ const AVAILABLE_WIDGET_TYPES: WidgetTypeTile[] = [
   },
 ];
 
-export {WidgetWizardSteps, WidgetTypeTile, AVAILABLE_WIDGET_TYPES, WidgetType};
+export {WidgetWizardSteps, WidgetTypeTile, AVAILABLE_WIDGET_TYPES, WidgetType, WidgetWidth};

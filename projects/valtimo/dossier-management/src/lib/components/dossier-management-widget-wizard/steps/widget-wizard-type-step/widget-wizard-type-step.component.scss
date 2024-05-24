@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-.valtimo-widget-wizard-type-step {
-  &__content fieldset {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
+// .valtimo-widget-wizard-type-step {
+//   &__content fieldset {
+//     display: grid;
+//     grid-template-columns: repeat(4, 1fr);
+//     gap: 16px;
+//   }
 
-  &__tile .cds--tile-content{
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
-}
+//   &__tile .cds--tile-content{
+//     display: flex;
+//     flex-direction: column;
+//     gap: 32px;
+//   }
+// }

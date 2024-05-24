@@ -17,10 +17,10 @@
 <cds-tile-group
   [multiple]="false"
   (selected)="onSelectedEvent($event)"
-  class="valtimo-widget-wizard-type-step__content"
+  class="valtimo-widget-wizard-step__content"
 >
   @for (widgetType of availableWidgetTypes; track widgetType.titleKey) {
-    <cds-selection-tile class="valtimo-widget-wizard-type-step__tile" [value]="widgetType.type">
+    <cds-selection-tile class="valtimo-widget-wizard-step__tile" [value]="widgetType.type">
       <h3>{{ widgetType.titleKey | translate }}</h3>
 
       <span>{{ widgetType.descriptionKey | translate }}</span>

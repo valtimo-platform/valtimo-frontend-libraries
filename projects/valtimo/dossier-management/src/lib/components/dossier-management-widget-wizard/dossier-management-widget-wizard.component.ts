@@ -26,7 +26,7 @@ import {
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {WIDGET_STEPS} from './steps';
 import {ButtonModule, ModalModule, ProgressIndicatorModule, Step} from 'carbon-components-angular';
-import {WidgetType, WidgetWizardSteps} from '../../models';
+import {WidgetType, WidgetWidth, WidgetWizardSteps} from '../../models';
 import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
 import {ModalCloseEventType} from '@valtimo/components';
 
@@ -99,6 +99,7 @@ export class DossierManagementWidgetWizardComponent {
     }
 
     this.currentStep += 1;
+    this.nextButtonDisabled = true;
   }
 
   public onBackButtonClick(): void {
@@ -112,5 +113,10 @@ export class DossierManagementWidgetWizardComponent {
   public onTypeSelected(type: WidgetType): void {
     this.nextButtonDisabled = false;
     console.log(type);
+  }
+
+  public onWidthSelected(width: WidgetWidth): void {
+    this.nextButtonDisabled = false;
+    console.log(width);
   }
 }
