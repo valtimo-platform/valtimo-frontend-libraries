@@ -14,4 +14,30 @@
   ~ limitations under the License.
   -->
 
-  Style step
+<cds-tile-group
+  [multiple]="false"
+  (selected)="onSelectedEvent($event)"
+  class="valtimo-widget-wizard-step__content"
+>
+  <cds-selection-tile class="valtimo-widget-wizard-step__tile" [value]="false">
+    <h3>{{ 'widgetTabManagement.style.default.title' | translate }}</h3>
+
+    <span>{{ 'widgetTabManagement.style.default.description' | translate }}</span>
+
+    <img
+      src="valtimo-layout/img/widget-management/style/default.svg"
+      [alt]="'widgetTabManagement.style.default.title' | translate"
+    />
+  </cds-selection-tile>
+
+  <cds-selection-tile class="valtimo-widget-wizard-step__tile" [value]="true">
+    <h3>{{ 'widgetTabManagement.style.highContrast.title' | translate }}</h3>
+
+    <span>{{ 'widgetTabManagement.style.highContrast.description' | translate }}</span>
+
+    <img
+      src="valtimo-layout/img/widget-management/style/high-contrast.svg"
+      [alt]="'widgetTabManagement.style.highContrast.title' | translate"
+    />
+  </cds-selection-tile>
+</cds-tile-group>

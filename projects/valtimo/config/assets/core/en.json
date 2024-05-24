@@ -701,6 +701,17 @@
         "title": "Full-width",
         "description": "Four columns of content"
       }
+    },
+    "style": {
+      "title": "Select the desired style for the widget",
+      "default": {
+        "title": "Default",
+        "description": "For regular content"
+      },
+      "highContrast": {
+        "title": "High contrast",
+        "description": "For higher priority content"
+      }
     }
   },
   "zgw": {

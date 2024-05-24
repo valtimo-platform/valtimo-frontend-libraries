@@ -15,8 +15,9 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
+import {TilesModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-widget-wizard-style-step',
@@ -24,6 +25,12 @@ import {TranslateModule} from '@ngx-translate/core';
   styleUrls: ['./widget-wizard-style-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, TilesModule],
 })
-export class WidgetWizardStyleStepComponent {}
+export class WidgetWizardStyleStepComponent {
+  @Output() public styleSelected = new EventEmitter<boolean>();
+
+  public onSelectedEvent(event: {value: boolean}): void {
+    this.styleSelected.emit(event.value);
+  }
+}

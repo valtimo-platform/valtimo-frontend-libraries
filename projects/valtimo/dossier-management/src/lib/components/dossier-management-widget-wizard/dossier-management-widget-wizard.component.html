@@ -59,6 +59,7 @@
       @case (WidgetWizardSteps.STYLE) {
         <valtimo-widget-wizard-style-step
           class="valtimo-widget-wizard-step"
+          (styleSelected)="onStyleSelected($event)"
         ></valtimo-widget-wizard-style-step>
       }
       @case (WidgetWizardSteps.CONTENT) {

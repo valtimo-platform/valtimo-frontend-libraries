@@ -112,11 +112,16 @@ export class DossierManagementWidgetWizardComponent {
 
   public onTypeSelected(type: WidgetType): void {
     this.nextButtonDisabled = false;
-    console.log(type);
+    console.log({type});
   }
 
   public onWidthSelected(width: WidgetWidth): void {
     this.nextButtonDisabled = false;
-    console.log(width);
+    console.log({width});
+  }
+
+  public onStyleSelected(highContrast: boolean): void {
+    this.nextButtonDisabled = false;
+    console.log({highContrast})
   }
 }
