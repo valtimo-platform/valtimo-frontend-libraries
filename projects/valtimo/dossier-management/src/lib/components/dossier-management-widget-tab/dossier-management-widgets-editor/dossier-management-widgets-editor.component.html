@@ -1,0 +1,49 @@
+<!--
+  ~ Copyright 2015-2024 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<cds-tabs type="contained">
+  <cds-tab [heading]="'interface.editor.visualEditor' | translate">
+    <valtimo-carbon-list
+      [fields]="FIELDS"
+      [header]="false"
+      [items]="items$ | async"
+      [movingRowsEnabled]="true"
+      (itemsReordered)="onItemsReordered($event)"
+    >
+      <ng-container carbonToolbarContent>
+        <ng-container *ngTemplateOutlet="addWidgetButton"></ng-container>
+      </ng-container>
+
+      <valtimo-no-results
+        description="Click here to configure widgets"
+        title="No widgets have been configured"
+      ></valtimo-no-results>
+    </valtimo-carbon-list>
+  </cds-tab>
+</cds-tabs>
+
+<ng-template #addWidgetButton>
+  <button cdsButton="primary" (click)="openAddModal()">
+    {{ 'widgetTabManagement.list.add' | translate }}
+
+    <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+  </button>
+</ng-template>
+
+<valtimo-dossier-management-widget-wizard
+  [open]="addModalOpen$ | async"
+  (closeEvent)="onCloseEvent($event)"
+></valtimo-dossier-management-widget-wizard>

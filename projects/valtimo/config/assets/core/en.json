@@ -663,6 +663,18 @@
       "form": {
         "tabName": "Tab name"
       }
+    },
+    "list": {
+      "add": "Add widget"
+    },
+    "wizard": {
+      "title": "Create widget",
+      "steps": {
+        "content": "Choose widget content",
+        "style": "Choose widget style",
+        "type": "Choose widget type",
+        "width": "Choose widget width"
+      }
     }
   },
   "zgw": {
@@ -953,6 +965,9 @@
       "ascending": "Ascending",
       "descending": "Descending",
       "noDefault": "No default sort"
+    },
+    "editor": {
+      "visualEditor": "Visual editor"
     }
   },
   "taskDetail": {

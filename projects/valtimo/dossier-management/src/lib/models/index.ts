@@ -15,5 +15,7 @@
  */
 
 export * from './list-column.model';
-export * from './tab.enum';
 export * from './status.model';
+export * from './tab.enum';
+export * from './widget-tab-item.type';
+export * from './widget-wizard.model';

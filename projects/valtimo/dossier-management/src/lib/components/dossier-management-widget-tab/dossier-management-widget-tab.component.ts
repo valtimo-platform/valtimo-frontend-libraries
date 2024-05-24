@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {AfterViewInit, Component, OnDestroy} from '@angular/core';
-import {BreadcrumbService, PageHeaderService, PageTitleService} from '@valtimo/components';
-import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
-import {TabManagementService, WidgetTabManagementService} from '../../services';
 import {ActivatedRoute} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
 import {Edit16} from '@carbon/icons';
-import {IconService} from 'carbon-components-angular';
+import {TranslateService} from '@ngx-translate/core';
+import {BreadcrumbService, PageHeaderService, PageTitleService} from '@valtimo/components';
 import {ApiTabItem} from '@valtimo/dossier';
+import {IconService} from 'carbon-components-angular';
 import moment from 'moment/moment';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
+
+import {TabManagementService, WidgetTabManagementService} from '../../services';
 
 @Component({
   selector: 'valtimo-dossier-management-case-widgets',

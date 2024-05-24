@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-:root {
-  --vcds-color-100: #051515;
-  --vcds-color-90: #0e3f3e;
-  --vcds-color-80: #176968;
-  --vcds-color-70: #209291;
-  --vcds-color-60: #29bcba;
-  --vcds-color-50: #43d6d4;
-  --vcds-color-40: #6ddfde;
-  --vcds-color-30: #96e8e7;
-  --vcds-color-20: #c0f1f1;
-  --vcds-color-10: #eafafa;
-}
+import {CommonModule} from '@angular/common';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {TranslateModule} from '@ngx-translate/core';
+
+@Component({
+  selector: 'valtimo-widget-wizard-type-step',
+  templateUrl: './widget-wizard-type-step.component.html',
+  styleUrls: ['./widget-wizard-type-step.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CommonModule, TranslateModule],
+})
+export class WidgetWizardTypeStepComponent {}

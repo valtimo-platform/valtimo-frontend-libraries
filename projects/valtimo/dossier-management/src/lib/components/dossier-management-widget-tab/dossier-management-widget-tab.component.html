@@ -21,6 +21,8 @@
 >
 </valtimo-dossier-management-widget-tab-edit-modal>
 
+<valtimo-dossier-management-widgets-editor></valtimo-dossier-management-widgets-editor>
+
 <ng-container renderInPageHeader>
   <ng-template>
     <button
@@ -34,3 +36,10 @@
     </button>
   </ng-template>
 </ng-container>
+
+<valtimo-dossier-management-widget-tab-edit-modal
+  [widgetTab]="currentWidgetTab$ | async"
+  [showModal$]="showEditWidgetTabModal$"
+  (saveEvent)="refreshWidgetTab()"
+>
+</valtimo-dossier-management-widget-tab-edit-modal>

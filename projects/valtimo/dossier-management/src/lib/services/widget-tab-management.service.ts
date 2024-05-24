@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {Observable} from 'rxjs';
+
 import {WidgetTabConfiguration} from '../models/widget-tab-item.type';
 
 @Injectable({

@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-:root {
-  --vcds-color-100: #051515;
-  --vcds-color-90: #0e3f3e;
-  --vcds-color-80: #176968;
-  --vcds-color-70: #209291;
-  --vcds-color-60: #29bcba;
-  --vcds-color-50: #43d6d4;
-  --vcds-color-40: #6ddfde;
-  --vcds-color-30: #96e8e7;
-  --vcds-color-20: #c0f1f1;
-  --vcds-color-10: #eafafa;
+.valtimo-dossier-management-widget-wizard {
+  &__footer footer {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas: 'cancel . back next';
+
+    button {
+      width: 100%;
+    }
+  }
+
+  &__cancel {
+    grid-area: cancel;
+  }
+
+  &__back {
+    grid-area: back;
+  }
+
+  &__next {
+    grid-area: next;
+  }
 }
