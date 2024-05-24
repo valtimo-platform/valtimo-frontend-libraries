@@ -14,16 +14,33 @@
  * limitations under the License.
  */
 
+import {CommonModule} from '@angular/common';
 import {Component, HostBinding} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {filter, map, Observable} from 'rxjs';
+import {DossierTabService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-dossier-detail-widgets',
   templateUrl: './widgets.component.html',
   styleUrls: ['./widgets.component.scss'],
   standalone: true,
+  imports: [CommonModule],
 })
 export class DossierDetailWidgetsComponent {
-  @HostBinding('class.tab--no-margin') noMargin = true;
-  @HostBinding('class.tab--no-background') noBackground = true;
-  @HostBinding('class.tab--no-min-height') noMinHeight = true;
+  @HostBinding('class.tab--no-margin') private readonly _noMargin = true;
+  @HostBinding('class.tab--no-background') private readonly _noBackground = true;
+  @HostBinding('class.tab--no-min-height') private readonly _noMinHeight = true;
+
+  public readonly documentDefinitionName$ = this.route.params.pipe(
+    map(params => params?.documentDefinitionName),
+    filter(documentDefinitionName => !!documentDefinitionName)
+  );
+
+  public readonly tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly dossierTabService: DossierTabService
+  ) {}
 }
