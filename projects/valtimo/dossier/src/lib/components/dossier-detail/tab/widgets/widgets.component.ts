@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, HostBinding} from '@angular/core';
 
 @Component({
   selector: 'valtimo-dossier-detail-widgets',
@@ -22,4 +22,8 @@ import {Component} from '@angular/core';
   styleUrls: ['./widgets.component.scss'],
   standalone: true,
 })
-export class DossierDetailWidgetsComponent {}
+export class DossierDetailWidgetsComponent {
+  @HostBinding('class.tab--no-margin') noMargin = true;
+  @HostBinding('class.tab--no-background') noBackground = true;
+  @HostBinding('class.tab--no-min-height') noMinHeight = true;
+}
