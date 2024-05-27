@@ -96,7 +96,9 @@ export class DossierWidgetsLayoutService implements OnDestroy {
 
   public setWidgetContentHeight(uuid: string, height: number): void {
     this._widgetsContentHeightsSubject$.pipe(take(1)).subscribe(widgetsContentHeights => {
-      this._widgetsContentHeightsSubject$.next({...widgetsContentHeights, [uuid]: height});
+      if (widgetsContentHeights[uuid] !== height) {
+        this._widgetsContentHeightsSubject$.next({...widgetsContentHeights, [uuid]: height});
+      }
     });
   }
 

@@ -50,6 +50,8 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     return this._widget$.pipe(map(widget => JSON.stringify(widget)));
   }
 
+  public readonly packResultAvailable$ = new BehaviorSubject<boolean>(false);
+
   public readonly caseWidgetXY$: Observable<CaseWidgetXY> = combineLatest([
     this.dossierWidgetsLayoutService.packResult$,
     this.widget$,
@@ -58,6 +60,8 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
       const widgetPackResult = packResult.items.find(
         packItem => packItem.item.configurationKey === widget.uuid
       );
+
+      if (widgetPackResult) this.packResultAvailable$.next(true);
 
       return widgetPackResult ? {x: widgetPackResult.x, y: widgetPackResult.y} : {x: 0, y: 0};
     })
@@ -71,7 +75,6 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   private readonly _subscriptions = new Subscription();
 
-  private _setToVisible = false;
   private _observer!: ResizeObserver;
 
   constructor(
@@ -97,11 +100,7 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
           const widgetWidth = caseWidgetsWidths[widget.uuid];
 
           if (widgetWidth) {
-            if (!this._setToVisible) {
-              this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'visibility', 'visible');
-            }
             this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'width', `${widgetWidth}px`);
-            this._setToVisible = true;
           }
         }
       )
