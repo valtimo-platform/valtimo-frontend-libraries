@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CaseWidgetWidthsPx, CaseWidgetWithUuid} from '../../../../../../models';
+import {CaseWidgetWithUuid} from '../../../../../../models';
+import {Subscription} from 'rxjs';
+import {DossierWidgetsLayoutService} from '../../../../../../services';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
@@ -25,8 +35,45 @@ import {CaseWidgetWidthsPx, CaseWidgetWithUuid} from '../../../../../../models';
   standalone: true,
   imports: [CommonModule],
 })
-export class WidgetBlockComponent {
+export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('widgetBlock') private _widgetBlockRef: ElementRef<HTMLDivElement>;
+
   @Input() public readonly widget: CaseWidgetWithUuid;
-  @Input() public readonly caseWidgetWidthsPx: CaseWidgetWidthsPx;
+
+  private readonly _caseWidgetWidthsPx$ = this.dossierWidgetsLayoutService.caseWidgetWidthsPx$;
+
+  private readonly _subscriptions = new Subscription();
+
+  private _setToVisible = false;
+
   protected readonly JSON = JSON;
+
+  constructor(
+    private readonly dossierWidgetsLayoutService: DossierWidgetsLayoutService,
+    private readonly renderer: Renderer2
+  ) {}
+
+  public ngAfterViewInit(): void {
+    this.openWidgetWidthSubscription();
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
+  private openWidgetWidthSubscription(): void {
+    this._subscriptions.add(
+      this._caseWidgetWidthsPx$.subscribe(caseWidgetsWidths => {
+        const widgetWidth = caseWidgetsWidths[this.widget.uuid];
+
+        if (widgetWidth) {
+          if (!this._setToVisible) {
+            this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'visibility', 'visible');
+          }
+          this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'width', `${widgetWidth}px`);
+          this._setToVisible = true;
+        }
+      })
+    );
+  }
 }

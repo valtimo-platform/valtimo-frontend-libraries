@@ -17,4 +17,6 @@
 .widget-block {
   box-sizing: border-box;
   padding: 8px;
+  overflow-wrap: break-word;
+  visibility: hidden;
 }
