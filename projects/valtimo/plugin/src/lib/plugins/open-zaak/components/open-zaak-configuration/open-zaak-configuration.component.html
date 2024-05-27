@@ -27,6 +27,7 @@
     [margin]="true"
     [disabled]="obs.disabled"
     [defaultValue]="obs.prefill?.configurationTitle"
+    [widthPx]="350"
     [required]="true"
     [tooltip]="'configurationTitleTooltip' | pluginTranslate: pluginId | async"
     placeholder="OpenZaak Plugin"
@@ -38,6 +39,7 @@
     [margin]="true"
     [disabled]="obs.disabled"
     [defaultValue]="obs.prefill?.clientId"
+    [widthPx]="350"
     [required]="true"
     [tooltip]="'clientIdTooltip' | pluginTranslate: pluginId | async"
     placeholder="client-id"
@@ -51,6 +53,7 @@
     [disabled]="obs.disabled"
     [defaultValue]="obs.prefill?.clientSecret"
     [required]="true"
+    [fullWidth]="true"
     [tooltip]="'clientSecretTooltip' | pluginTranslate: pluginId | async"
     placeholder=""
   >

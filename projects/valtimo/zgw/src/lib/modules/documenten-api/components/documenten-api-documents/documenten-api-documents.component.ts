@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {CommonModule} from '@angular/common';
-import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Filter16, TagGroup16, Upload16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -22,29 +21,21 @@ import {
   ActionItem,
   CarbonListModule,
   ColumnConfig,
-  ConfirmationModalModule,
   DocumentenApiMetadata,
-  SortState,
   ViewType,
 } from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
+import {FileSortService} from '@valtimo/document';
 import {DownloadService, UploadProviderService} from '@valtimo/resource';
 import {UserProviderService} from '@valtimo/security';
-import {ButtonModule, DialogModule, IconModule, IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, Observable, of, ReplaySubject, Subject} from 'rxjs';
+import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
+import moment from 'moment';
+import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {catchError, filter, map, switchMap, take, tap} from 'rxjs/operators';
-import {
-  COLUMN_VIEW_TYPES,
-  ConfiguredColumn,
-  DOCUMENTEN_COLUMN_KEYS,
-  DocumentenApiFilterModel,
-  DocumentenApiRelatedFile,
-  SupportedDocumentenApiFeatures,
-} from '../../models';
-import {DocumentenApiColumnService, DocumentenApiVersionService} from '../../services';
+import {DocumentenApiRelatedFile, DocumentenApiRelatedFileListItem} from '../../models';
 import {DocumentenApiDocumentService} from '../../services/documenten-api-document.service';
-import {DocumentenApiFilterComponent} from '../documenten-api-filter/documenten-api-filter.component';
 import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.component';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -58,73 +49,17 @@ import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-mo
     ButtonModule,
     IconModule,
     TranslateModule,
-    DocumentenApiFilterComponent,
-    DialogModule,
-    ConfirmationModalModule,
   ],
 })
-export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
+export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, AfterViewInit {
   @ViewChild('fileInput') fileInput: ElementRef;
-  @ViewChild('translationTemplate') translationTemplate: TemplateRef<any>;
+  @ViewChild('sizeTemplate') public sizeTemplate: TemplateRef<any>;
 
-  private readonly _documentDefinitionName$ = this.route.params.pipe(
-    map(params => params?.documentDefinitionName),
-    filter(caseDefinitionName => !!caseDefinitionName)
-  );
-
-  public readonly supportedDocumentenApiFeatures$ =
-    new BehaviorSubject<SupportedDocumentenApiFeatures | null>(null);
-
-  private readonly _supportedDocumentenApiFeatures$: Observable<SupportedDocumentenApiFeatures> =
-    this._documentDefinitionName$.pipe(
-      switchMap(caseDefinitionName =>
-        this.documentenApiVersionService.getSupportedApiFeatures(caseDefinitionName)
-      ),
-      tap(supportedDocumentenApiFeatures =>
-        this.supportedDocumentenApiFeatures$.next(supportedDocumentenApiFeatures)
-      )
-    );
-
-  public readonly fields$: Observable<ColumnConfig[]> = this._documentDefinitionName$.pipe(
-    tap(() => this.fieldsLoading$.next(true)),
-    switchMap(documentDefinitionName =>
-      combineLatest([
-        this.documentenApiColumnService.getConfiguredColumns(documentDefinitionName),
-        this._supportedDocumentenApiFeatures$,
-      ])
-    ),
-    map(([columns, supportedDocumentenApiFeatures]) => {
-      const defaultSortColumn: ConfiguredColumn | undefined = columns.find(
-        (column: ConfiguredColumn) => !!column.defaultSort
-      );
-      if (!!defaultSortColumn && supportedDocumentenApiFeatures.supportsSortableColumns) {
-        this._sort$.next({sort: `${defaultSortColumn.key},${defaultSortColumn.defaultSort}`});
-      }
-
-      return columns.map((column: ConfiguredColumn) => ({
-        key: column.key === DOCUMENTEN_COLUMN_KEYS.BESTANDSOMVANG ? 'size' : column.key,
-        label: `zgw.documentColumns.${column.key}`,
-        viewType: !COLUMN_VIEW_TYPES[column.key] ? ViewType.TEXT : COLUMN_VIEW_TYPES[column.key],
-        ...(COLUMN_VIEW_TYPES[column.key] === ViewType.TEMPLATE && {
-          template: this.translationTemplate,
-          templateData: {key: column.key},
-        }),
-        ...(column.key === DOCUMENTEN_COLUMN_KEYS.CREATIEDATUM && {format: 'DD-MM-YYYY'}),
-        sortable: column.sortable && supportedDocumentenApiFeatures.supportsSortableColumns,
-      }));
-    }),
-    tap(() => this.fieldsLoading$.next(false))
-  );
-  public document: DocumentenApiRelatedFile;
+  public fields: ColumnConfig[];
   public actionItems: ActionItem[] = [
     {
       label: 'document.download',
       callback: this.onDownloadActionClick.bind(this),
-      type: 'normal',
-    },
-    {
-      label: 'document.edit',
-      callback: this.onEditMetadata.bind(this),
       type: 'normal',
     },
     {
@@ -133,34 +68,28 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       type: 'danger',
     },
   ];
+  public fieldsConfig = [
+    // TODO: Refactor this once admin page config is implemented
+    'title',
+    'fileName',
+    'format',
+    'size',
+    'description',
+    'createdOn',
+    'createdBy',
+    'author',
+    'informatieobjecttype',
+    'actions',
+  ];
 
-  public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
+  private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params?.documentDefinitionName),
     filter(documentDefinitionName => !!documentDefinitionName)
   );
 
-  public readonly documentId$: Observable<string> = this.route.params.pipe(
+  private readonly _documentId$: Observable<string> = this.route.params.pipe(
     map(params => params?.documentId),
     filter(documentId => !!documentId)
-  );
-
-  public readonly initialSortState$: Observable<SortState | null> = this.route.queryParamMap.pipe(
-    map(params => params['params']),
-    map(params => {
-      if (!!params['sort']) {
-        const paramsSplit = params['sort'].split(',');
-        const state = {
-          name: paramsSplit[0],
-          direction: paramsSplit[1],
-        };
-
-        return {
-          isSorting: true,
-          state,
-        };
-      }
-      return null;
-    })
   );
 
   public isAdmin: boolean;
@@ -168,61 +97,59 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   public uploadProcessLinkedSet = false;
   public uploadProcessLinked!: boolean;
 
-  public isEditMode$ = new BehaviorSubject<boolean>(false);
-
   public readonly acceptedFiles: string | null =
     this.configService?.config?.caseFileUploadAcceptedFiles || null;
   public readonly maxFileSize: number = this.configService?.config?.caseFileSizeUploadLimitMB || 5;
 
   public readonly fileToBeUploaded$ = new BehaviorSubject<File | null>(null);
+  public readonly hideModal$ = new Subject<null>();
   public readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
   public readonly showModal$ = new Subject<null>();
-  public readonly showUploadModal$ = new BehaviorSubject<boolean>(false);
-  public readonly showDeleteConfirmationModal$ = new BehaviorSubject<boolean>(false);
 
   public readonly uploading$ = new BehaviorSubject<boolean>(false);
-  private readonly _itemsLoading$ = new BehaviorSubject<boolean>(true);
-  public readonly fieldsLoading$ = new BehaviorSubject<boolean>(true);
-  public readonly loading$ = combineLatest([this._itemsLoading$, this.fieldsLoading$]).pipe(
-    map(([itemsLoading, fieldsLoading]) => itemsLoading || fieldsLoading)
-  );
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  public readonly filter$ = new ReplaySubject<DocumentenApiFilterModel | null>();
   private readonly _refetch$ = new BehaviorSubject<null>(null);
-  private readonly _sort$ = new ReplaySubject<{sort: string} | null>();
 
-  public relatedFiles$: Observable<Array<DocumentenApiRelatedFile>> = combineLatest([
-    this.documentId$,
-    this.route.queryParamMap,
+  public relatedFiles$: Observable<Array<DocumentenApiRelatedFileListItem>> = combineLatest([
+    this._documentId$,
     this._refetch$,
   ]).pipe(
-    tap(() => this._itemsLoading$.next(true)),
-    switchMap(([documentId, queryParams]) =>
+    tap(() => this.loading$.next(true)),
+    switchMap(([documentId]) =>
       combineLatest([
-        this.documentenApiDocumentService.getFilteredZakenApiDocuments(
-          documentId,
-          queryParams['params']
-        ),
+        this.documentenApiDocumentService.getZakenApiDocuments(documentId),
         this.translateService.stream('key'),
       ])
     ),
     map(([relatedFiles]) => {
-      const translatedFiles = relatedFiles?.content?.map(file => ({
+      const translatedFiles = relatedFiles?.map(file => ({
         ...file,
         createdBy: file.createdBy || this.translateService.instant('list.automaticallyGenerated'),
-        size: this.bytesToMegabytes(file.bestandsomvang),
-        tags: file.trefwoorden?.map((trefwoord: string) => ({
-          content: trefwoord,
-        })),
+        language: this.translateService.instant(`document.${file.language}`),
+        confidentialityLevel: this.translateService.instant(
+          `document.${file.confidentialityLevel}`
+        ),
+        status: this.translateService.instant(`document.${file.status}`),
+        format: this.translateService.instant(`document.${file.format}`),
       }));
       return translatedFiles || [];
     }),
+    map(relatedFiles => this.fileSortService.sortRelatedFilesByDateDescending(relatedFiles)),
+    map(relatedFiles => {
+      moment.locale(this.translateService.currentLang);
+      return relatedFiles.map(file => ({
+        ...file,
+        createdOn: moment(new Date(file.createdOn)).format('L'),
+        size: `${this.bytesToMegabytes(file.sizeInBytes)}`,
+      }));
+    }),
     tap(() => {
-      this._itemsLoading$.next(false);
+      this.loading$.next(false);
     }),
     catchError(() => {
       this.showZaakLinkWarning = true;
-      this._itemsLoading$.next(false);
+      this.loading$.next(false);
       return of([]);
     })
   );
@@ -235,37 +162,47 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
     private readonly userProviderService: UserProviderService,
+    private readonly fileSortService: FileSortService,
     private readonly iconService: IconService,
-    private readonly documentenApiDocumentService: DocumentenApiDocumentService,
-    private readonly documentenApiColumnService: DocumentenApiColumnService,
-    private readonly documentenApiVersionService: DocumentenApiVersionService
-  ) {
-    this.iconService.register(Filter16);
-  }
+    private readonly documentenApiDocumentService: DocumentenApiDocumentService
+  ) {}
 
-  public ngOnInit(): void {
-    this.setInitialFilterAndSort();
-    this.openQueryParamsSubscription();
+  ngOnInit(): void {
+    this.refetchDocuments();
     this.setUploadProcessLinked();
     this.isUserAdmin();
     this.iconService.registerAll([Filter16, TagGroup16, Upload16]);
   }
 
-  public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
-    this.document = item;
-    this.showDeleteConfirmationModal$.next(true);
+  public ngAfterViewInit(): void {
+    const fieldOptions = [
+      {key: 'title', label: 'document.inputTitle'},
+      {key: 'description', label: 'document.inputDescription'},
+      {key: 'fileName', label: 'document.filename'},
+      {
+        viewType: ViewType.TEMPLATE,
+        label: 'document.size',
+        key: 'size',
+        template: this.sizeTemplate,
+      },
+      {key: 'format', label: 'document.format'},
+      {key: 'createdOn', label: 'document.createdOn'},
+      {key: 'createdBy', label: 'document.createdBy'},
+      {key: 'author', label: 'document.author'},
+      {key: 'keywords', label: 'document.trefwoorden'},
+      {key: 'informatieobjecttype', label: 'document.informatieobjecttype'},
+      {key: 'language', label: 'document.language'},
+      {key: 'identification', label: 'document.id'},
+      {key: 'confidentialityLevel', label: 'document.confidentialityLevel'},
+      {key: 'receiptDate', label: 'document.receiptDate'},
+      {key: 'sendDate', label: 'document.sendDate'},
+      {key: 'status', label: 'document.status'},
+    ];
+
+    this.fields = [...this.getFields(fieldOptions, this.fieldsConfig)];
   }
 
-  public deleteDocument(): void {
-    this._itemsLoading$.next(true);
-    this.documentenApiDocumentService.deleteDocument(this.document).subscribe(() => {
-      this.refetchDocuments();
-    });
-  }
-
-  public bytesToMegabytes(bytes: number | undefined): string {
-    if (!bytes) return '';
-
+  public bytesToMegabytes(bytes: number): string {
     const megabytes = bytes / (1024 * 1024);
     if (megabytes < 1) {
       return `${Math.ceil(megabytes * 1000)} KB`;
@@ -291,7 +228,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       userIdentity => {
         this.isAdmin = userIdentity.roles.includes('ROLE_ADMIN');
       },
-      () => {
+      error => {
         this.isAdmin = false;
       }
     );
@@ -299,56 +236,45 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
 
   public metadataSet(metadata: DocumentenApiMetadata): void {
     this.uploading$.next(true);
+    this.hideModal$.next(null);
 
-    combineLatest([this.fileToBeUploaded$, this.documentId$])
+    combineLatest([this.fileToBeUploaded$, this._documentId$])
       .pipe(take(1))
       .pipe(
         tap(([file, documentId]) => {
           if (!file) return;
-          if (this.isEditMode$.getValue()) {
-            this.documentenApiDocumentService.updateDocument(file, metadata).subscribe(() => {
+
+          this.uploadProviderService
+            .uploadFileWithMetadata(file, documentId, metadata)
+            .subscribe(() => {
               this.refetchDocuments();
               this.uploading$.next(false);
               this.fileToBeUploaded$.next(null);
             });
-          } else {
-            this.uploadProviderService
-              .uploadFileWithMetadata(file, documentId, metadata)
-              .subscribe(() => {
-                this.refetchDocuments();
-                this.filter$.next(null);
-                this.uploading$.next(false);
-                this.fileToBeUploaded$.next(null);
-              });
-          }
         })
       )
       .subscribe();
+  }
+
+  public onDeleteActionClick(item: DocumentenApiRelatedFile): void {
+    this.loading$.next(true);
+    this.documentenApiDocumentService.deleteDocument(item).subscribe(() => {
+      // TODO: Use refetchDocuments() or should we just remove the document from relatedFiles$?
+      this.refetchDocuments();
+    });
   }
 
   public onDownloadActionClick(file: DocumentenApiRelatedFile): void {
     this.downloadDocument(file, true);
   }
 
-  public onEditMetadata(file: File): void {
-    this.isEditMode$.next(true);
-    this.fileToBeUploaded$.next(file);
-    this.showUploadModal$.next(true);
-  }
-
-  public closeMetadataModal(): void {
-    this.showUploadModal$.next(false);
-  }
-
   public onFileSelected(event: any): void {
-    this.isEditMode$.next(false);
     this.fileToBeUploaded$.next(event.target.files[0]);
-    this.showUploadModal$.next(true);
-    this.resetFileInput();
+    this.showModal$.next(null);
   }
 
   public onNavigateToCaseAdminClick(): void {
-    this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+    this._documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
       this.router.navigate([`/dossier-management/dossier/${documentDefinitionName}`]);
     });
   }
@@ -361,20 +287,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
-  public onFilterEvent(filter: DocumentenApiFilterModel | null): void {
-    this.filter$.next(filter);
-  }
-
-  public onSortChanged(sortState: SortState): void {
-    this._sort$.next(
-      sortState.isSorting
-        ? {
-            sort: `${sortState.state.name === 'size' ? DOCUMENTEN_COLUMN_KEYS.BESTANDSOMVANG : sortState.state.name},${sortState.state.direction}`,
-          }
-        : null
-    );
-  }
-
   public refetchDocuments(): void {
     this._refetch$.next(null);
   }
@@ -382,30 +294,17 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
   private downloadDocument(relatedFile: DocumentenApiRelatedFile, forceDownload: boolean): void {
     this.downloadService.downloadFile(
       `/api/v1/documenten-api/${relatedFile.pluginConfigurationId}/files/${relatedFile.fileId}/download`,
-      relatedFile.bestandsnaam ?? '',
+      relatedFile.fileName,
       forceDownload
     );
   }
 
-  private openQueryParamsSubscription(): void {
-    combineLatest([
-      this.documentDefinitionName$,
-      this.documentId$,
-      this.filter$,
-      this._sort$,
-    ]).subscribe(([definitionName, documentId, filter, sort]) => {
-      this.router.navigate([`/dossiers/${definitionName}/document/${documentId}/documents`], {
-        queryParams: {...filter, ...sort},
-      });
-    });
-  }
-
-  private resetFileInput(): void {
-    this.fileInput.nativeElement.value = '';
+  private getFields(fieldOptions, fieldsConfig) {
+    return fieldOptions.filter(fieldOption => fieldsConfig.includes(fieldOption.key));
   }
 
   private setUploadProcessLinked(): void {
-    this.documentDefinitionName$
+    this._documentDefinitionName$
       .pipe(
         switchMap(documentDefinitionName =>
           this.uploadProviderService.checkUploadProcessLink(documentDefinitionName)
@@ -417,21 +316,6 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit {
       )
       .subscribe((linked: boolean) => {
         this.uploadProcessLinked = linked;
-      });
-  }
-
-  private setInitialFilterAndSort(): void {
-    this.route.queryParamMap
-      .pipe(
-        take(1),
-        map(queryParams => {
-          const {sort, ...filter} = queryParams['params'];
-          return {sort, filter};
-        })
-      )
-      .subscribe(({filter, sort}) => {
-        this._sort$.next({sort});
-        this.filter$.next(filter);
       });
   }
 }

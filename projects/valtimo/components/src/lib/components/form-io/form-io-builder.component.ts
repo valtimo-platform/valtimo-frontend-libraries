@@ -16,11 +16,11 @@
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Components} from 'formiojs';
-import {delay, distinctUntilChanged, map, tap} from 'rxjs/operators';
+import {distinctUntilChanged, map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {FormioOptions} from '@formio/angular/formio.common';
 import {FormIoStateService} from './services/form-io-state.service';
-import {Observable} from 'rxjs';
 
 @Component({
   selector: 'valtimo-form-io-builder',
@@ -53,9 +53,7 @@ export class FormioBuilderComponent implements OnInit {
 
       this.triggerRebuild.emit(options);
       return options;
-    }),
-    delay(1000),
-    tap(options => this.triggerRebuild.emit(options))
+    })
   );
 
   constructor(

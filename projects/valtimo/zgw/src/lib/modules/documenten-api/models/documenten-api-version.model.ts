@@ -19,11 +19,4 @@ interface DocumentenApiManagementVersion {
   detectedVersions: string;
 }
 
-interface SupportedDocumentenApiFeatures {
-  selectedVersion: string;
-  supportsFilterableColumns: boolean;
-  supportsSortableColumns: boolean;
-  supportsTrefwoorden: boolean;
-}
-
-export {DocumentenApiManagementVersion, SupportedDocumentenApiFeatures};
+export {DocumentenApiManagementVersion};

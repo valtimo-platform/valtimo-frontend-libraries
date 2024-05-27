@@ -36,7 +36,6 @@
   </cds-label>
 
   <cds-combo-box
-    *ngIf="tabType !== 'widgets'"
     [dropUp]="false"
     formControlName="contentKey"
     [items]="listItems$ | async"

@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {PluginManagementStateService} from '../../services';
 import {take} from 'rxjs/operators';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {VModalComponent, ModalService} from '@valtimo/components';
+import {BehaviorSubject, Subject, Subscription} from 'rxjs';
 import {PluginConfigurationData, PluginManagementService} from '@valtimo/plugin';
 import {NGXLogger} from 'ngx-logger';
 
@@ -26,21 +27,28 @@ import {NGXLogger} from 'ngx-logger';
   templateUrl: './plugin-add-modal.component.html',
   styleUrls: ['./plugin-add-modal.component.scss'],
 })
-export class PluginAddModalComponent {
-  @Input() open = false;
-
-  @Output() closeModal: EventEmitter<boolean> = new EventEmitter();
+export class PluginAddModalComponent implements OnInit {
+  @ViewChild('pluginAddModal') pluginAddModal: VModalComponent;
 
   readonly inputDisabled$ = this.stateService.inputDisabled$;
   readonly selectedPluginDefinition$ = this.stateService.selectedPluginDefinition$;
   readonly configurationValid$ = new BehaviorSubject<boolean>(false);
   readonly returnToFirstStepSubject$ = new Subject<boolean>();
 
+  private showSubscription!: Subscription;
+  private hideSubscription!: Subscription;
+
   constructor(
     private readonly stateService: PluginManagementStateService,
+    private readonly modalService: ModalService,
     private readonly pluginManagementService: PluginManagementService,
     private readonly logger: NGXLogger
   ) {}
+
+  ngOnInit(): void {
+    this.openShowSubscription();
+    this.openHideSubscription();
+  }
 
   complete(): void {
     this.stateService.save();
@@ -51,10 +59,12 @@ export class PluginAddModalComponent {
   }
 
   hide(): void {
-    this.closeModal.emit();
-    this.returnToFirstStep();
-    this.stateService.enableInput();
-    this.stateService.clear();
+    this.stateService.disableInput();
+    this.modalService.closeModal(() => {
+      this.returnToFirstStep();
+      this.stateService.enableInput();
+      this.stateService.clear();
+    });
   }
 
   onValid(valid: boolean): void {
@@ -88,7 +98,25 @@ export class PluginAddModalComponent {
     });
   }
 
+  private openShowSubscription(): void {
+    this.showSubscription = this.stateService.showModal$.subscribe(modalType => {
+      if (modalType === 'add') {
+        this.show();
+      }
+    });
+  }
+
+  private openHideSubscription(): void {
+    this.hideSubscription = this.stateService.hideModal$.subscribe(() => {
+      this.hide();
+    });
+  }
+
   private returnToFirstStep(): void {
     this.returnToFirstStepSubject$.next(true);
+  }
+
+  private show(): void {
+    this.modalService.openModal(this.pluginAddModal);
   }
 }

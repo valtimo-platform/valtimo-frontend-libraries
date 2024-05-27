@@ -32,11 +32,10 @@ import {
   MoveRowEvent,
   ViewType,
 } from '@valtimo/components';
-import {ApiTabItem, ApiTabType} from '@valtimo/dossier';
+import {ApiTabItem} from '@valtimo/dossier';
 import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
 import {TabManagementService, TabService} from '../../services';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'valtimo-dossier-management-tabs',
@@ -96,8 +95,7 @@ export class DossierManagementTabsComponent implements AfterViewInit {
     private readonly iconService: IconService,
     private readonly tabManagementService: TabManagementService,
     private readonly tabService: TabService,
-    private readonly translateService: TranslateService,
-    private readonly router: Router
+    private readonly translateService: TranslateService
   ) {}
 
   public ngAfterViewInit(): void {
@@ -151,13 +149,7 @@ export class DossierManagementTabsComponent implements AfterViewInit {
 
   public onRowClicked(tab: ApiTabItem): void {
     this.tab$.next(tab);
-    if (tab.type === ApiTabType.WIDGETS) {
-      this.router.navigate([
-        `/dossier-management/dossier/${this._documentDefinitionName}/widget-tab/${tab.key}`,
-      ]);
-    } else {
-      this.openEditModal$.next(true);
-    }
+    this.openEditModal$.next(true);
   }
 
   public onCloseAddModalEvent(tab: ApiTabItem | null): void {
