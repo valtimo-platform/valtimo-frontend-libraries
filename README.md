@@ -67,7 +67,6 @@ Run the following command to run the unit tests: `npm run libs:test:libraryName`
 Contributions are welcome! To get you in the right direction, please consult the [Valtimo documentation](https://docs.valtimo.nl/readme/contributing) for guidelines on how to contribute.
 
 #### Code guidelines
-<!--- TODO: write the coding guidelines--->
 For contributing code, please refer to the [coding guidelines](CODING-GUIDELINES.md).
 
 #### Branching strategy
