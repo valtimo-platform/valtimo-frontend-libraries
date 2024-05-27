@@ -18,6 +18,7 @@ import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {CaseWidgetsRes} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -30,8 +31,11 @@ export class DossierWidgetsApiService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public getWidgetTabConfiguration(caseDefinitionName: string, tabKey: string): Observable<any> {
-    return this.httpClient.get<any>(
+  public getWidgetTabConfiguration(
+    caseDefinitionName: string,
+    tabKey: string
+  ): Observable<CaseWidgetsRes> {
+    return this.httpClient.get<CaseWidgetsRes>(
       this.getApiUrl(`/v1/case-definition/${caseDefinitionName}/widget-tab/${tabKey}`)
     );
   }

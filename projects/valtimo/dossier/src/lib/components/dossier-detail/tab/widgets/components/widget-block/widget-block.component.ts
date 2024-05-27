@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-export * from './candidate-user.model';
-export * from './dossier-parameters.model';
-export * from './search.model';
-export * from './tabs.model';
-export * from './dossier-detail-tab.model';
-export * from './tab-api.model';
-export * from './case-widget-display.model';
-export * from './case-widget.model';
+import {Component, Input} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {CaseWidget} from '../../../../../../models';
+
+@Component({
+  selector: 'valtimo-dossier-widget-block',
+  templateUrl: './widget-block.component.html',
+  styleUrls: ['./widget-block.component.scss'],
+  standalone: true,
+  imports: [CommonModule],
+})
+export class WidgetBlockComponent {
+  @Input() public readonly widget: CaseWidget;
+}

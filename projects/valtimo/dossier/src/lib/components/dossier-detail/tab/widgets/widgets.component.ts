@@ -20,13 +20,13 @@ import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {DossierTabService, DossierWidgetsApiService} from '../../../../services';
 import {LoadingModule} from 'carbon-components-angular';
+import {WidgetsContainerComponent} from './components/widgets-container/widgets-container.component';
 
 @Component({
-  selector: 'valtimo-dossier-detail-widgets',
   templateUrl: './widgets.component.html',
   styleUrls: ['./widgets.component.scss'],
   standalone: true,
-  imports: [CommonModule, LoadingModule],
+  imports: [CommonModule, LoadingModule, WidgetsContainerComponent],
 })
 export class DossierDetailWidgetsComponent {
   @HostBinding('class.tab--no-margin') private readonly _noMargin = true;
