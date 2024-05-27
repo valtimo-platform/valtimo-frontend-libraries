@@ -118,6 +118,35 @@ export class DossierWidgetsLayoutService implements OnDestroy {
     });
   }
 
+  private getAmountOfMinWidthColumns(containerWidth: number): number {
+    return Math.floor(containerWidth / WIDGET_WIDTH_1X);
+  }
+
+  private getHeightConstraint(
+    binsToFit: Array<CaseWidgetConfigurationBin>,
+    amountOfMinWidthColumns: number
+  ): number {
+    const amountOfSpacesNeeded = binsToFit.reduce((acc, curr) => acc + curr.height * curr.width, 0);
+    const minAmountOfRowsNeeded = Math.ceil(amountOfSpacesNeeded / amountOfMinWidthColumns);
+    const tallestWidgetHeightSpace = binsToFit.reduce(
+      (acc, curr) => (curr.height > acc ? curr.height : acc),
+      0
+    );
+    const amountOfRowsNeeded =
+      minAmountOfRowsNeeded < tallestWidgetHeightSpace
+        ? tallestWidgetHeightSpace
+        : minAmountOfRowsNeeded;
+
+    return amountOfRowsNeeded;
+  }
+
+  private checkIfPackResultExceedsBoundary(
+    result: CaseWidgetPackResult,
+    maxWidth: number
+  ): boolean {
+    return !!result.items.find(item => item.width + item.x > maxWidth);
+  }
+
   private openPackSubscription(): void {
     this._subscriptions.add(
       combineLatest([
@@ -131,9 +160,25 @@ export class DossierWidgetsLayoutService implements OnDestroy {
           width: widgetWidths[widget.uuid],
           height: contentHeights[widget.uuid],
         }));
+        const heightConstraint = this.getHeightConstraint(
+          configurationBins,
+          this.getAmountOfMinWidthColumns(containerWidth)
+        );
         const resultWithoutHeightConstraint = this.getPackResult(configurationBins, containerWidth);
+        const resultWithHeightConstraint = this.getPackResult(
+          configurationBins,
+          containerWidth,
+          heightConstraint
+        );
+        const resultWithHeightConstraintExceedsBoundary = this.checkIfPackResultExceedsBoundary(
+          resultWithHeightConstraint,
+          containerWidth
+        );
+        const resultToUse = resultWithHeightConstraintExceedsBoundary
+          ? resultWithoutHeightConstraint
+          : resultWithHeightConstraint;
 
-        this._packResult$.next(resultWithoutHeightConstraint);
+        this._packResult$.next(resultToUse);
       })
     );
   }
