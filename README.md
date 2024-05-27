@@ -61,12 +61,23 @@ Please make sure your code conforms to the project's Prettier code formatting ru
 raising a Pull Request.
 
 #### Running unit tests
-Run `npm run libs:test:libraryName` to execute unit tests.
+Run the following command to run the unit tests: `npm run libs:test:libraryName`.
+
+### Contributing
+Contributions are welcome! To get you in the right direction, please consult the [Valtimo documentation](https://docs.valtimo.nl/readme/contributing) for guidelines on how to contribute.
 
 #### Code guidelines
+<!--- TODO: write the coding guidelines--->
 For contributing code, please refer to the [coding guidelines](CODING-GUIDELINES.md).
 
-### Branching strategy
+#### Branching strategy
 For more information on what branches to create while working in this project, please refer
 to [this page](https://github.com/valtimo-platform/valtimo-documentation/blob/next-minor/contributing/branching-and-release-strategy.md).
-<!--- TODO: change url --->
+
+### License
+The source files in this repo are licensed under the [EUPL 1.2](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12).
+If you have any questions about the use of this codebase in a larger work: please reach out through the [Valtimo website](https://www.valtimo.nl/contact/).
+
+### More information
+- Website: https://www.valtimo.nl
+- Documentation: https://docs.valtimo.nl
