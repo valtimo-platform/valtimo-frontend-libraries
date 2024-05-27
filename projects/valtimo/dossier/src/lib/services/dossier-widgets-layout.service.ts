@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
-import {CaseWidgetWidthsPx, CaseWidgetWithUuid} from '../models';
-import {WIDGET_WIDTH_1X} from '../constants';
+import {BehaviorSubject, combineLatest, filter, map, Observable, take} from 'rxjs';
+import {CaseWidgetContentHeightsPx, CaseWidgetWidthsPx, CaseWidgetWithUuid} from '../models';
+import {WIDGET_HEIGHT_1X, WIDGET_WIDTH_1X} from '../constants';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +9,9 @@ import {WIDGET_WIDTH_1X} from '../constants';
 export class DossierWidgetsLayoutService {
   private readonly _containerWidthSubject$ = new BehaviorSubject<number | null>(null);
   private readonly _widgetsSubject$ = new BehaviorSubject<CaseWidgetWithUuid[] | null>(null);
+  private readonly _widgetsContentHeightsSubject$ = new BehaviorSubject<CaseWidgetContentHeightsPx>(
+    {}
+  );
 
   private get _containerWidth$(): Observable<number> {
     return this._containerWidthSubject$.pipe(filter(width => width !== null));
@@ -25,6 +28,30 @@ export class DossierWidgetsLayoutService {
 
   private get _widgets$(): Observable<CaseWidgetWithUuid[]> {
     return this._widgetsSubject$.pipe(filter(widgets => widgets !== null));
+  }
+
+  private get _widgetsContentHeights$(): Observable<CaseWidgetContentHeightsPx> {
+    return combineLatest([this._widgetsContentHeightsSubject$, this._widgets$]).pipe(
+      filter(
+        ([widgetsContentHeights, widgets]) =>
+          Object.keys(widgetsContentHeights).length === widgets.length
+      ),
+      map(([widgetsContentHeights]) => widgetsContentHeights)
+    );
+  }
+
+  public get widgetsContentHeightsRounded$(): Observable<CaseWidgetContentHeightsPx> {
+    return this._widgetsContentHeights$.pipe(
+      map(widgetsContentHeights =>
+        Object.keys(widgetsContentHeights).reduce((acc, curr) => {
+          return {
+            ...acc,
+            [curr]:
+              Math.ceil((widgetsContentHeights[curr] + 16) / WIDGET_HEIGHT_1X) * WIDGET_HEIGHT_1X,
+          };
+        }, {})
+      )
+    );
   }
 
   public get caseWidgetWidthsPx$(): Observable<CaseWidgetWidthsPx> {
@@ -45,5 +72,11 @@ export class DossierWidgetsLayoutService {
 
   public setContainerWidth(width: number): void {
     this._containerWidthSubject$.next(width);
+  }
+
+  public setWidgetContentHeight(uuid: string, height: number): void {
+    this._widgetsContentHeightsSubject$.pipe(take(1)).subscribe(widgetsContentHeights => {
+      this._widgetsContentHeightsSubject$.next({...widgetsContentHeights, [uuid]: height});
+    });
   }
 }

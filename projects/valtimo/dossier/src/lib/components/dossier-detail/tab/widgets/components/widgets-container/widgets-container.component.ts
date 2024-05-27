@@ -38,7 +38,6 @@ export class WidgetsContainerComponent implements AfterViewInit, OnDestroy {
     const widgetsWithUuids = value.map(widget => ({...widget, uuid: uuid()}));
     this.dossierWidgetsLayoutService.setWidgets(widgetsWithUuids);
     this.widgetsWithUuids$.next(widgetsWithUuids);
-    console.log(widgetsWithUuids);
   }
 
   private _observer!: ResizeObserver;

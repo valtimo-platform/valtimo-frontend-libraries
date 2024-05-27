@@ -36,15 +36,19 @@ import {DossierWidgetsLayoutService} from '../../../../../../services';
   imports: [CommonModule],
 })
 export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('widgetBlockContent') private _widgetBlockContentRef: ElementRef<HTMLDivElement>;
   @ViewChild('widgetBlock') private _widgetBlockRef: ElementRef<HTMLDivElement>;
 
   @Input() public readonly widget: CaseWidgetWithUuid;
 
   private readonly _caseWidgetWidthsPx$ = this.dossierWidgetsLayoutService.caseWidgetWidthsPx$;
+  private readonly _widgetsContentHeightsRounded$ =
+    this.dossierWidgetsLayoutService.widgetsContentHeightsRounded$;
 
   private readonly _subscriptions = new Subscription();
 
   private _setToVisible = false;
+  private _observer!: ResizeObserver;
 
   protected readonly JSON = JSON;
 
@@ -55,10 +59,13 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   public ngAfterViewInit(): void {
     this.openWidgetWidthSubscription();
+    this.openContentHeightObserver();
+    this.openWidgetHeightSubscription();
   }
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+    this._observer?.disconnect();
   }
 
   private openWidgetWidthSubscription(): void {
@@ -75,5 +82,35 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
         }
       })
     );
+  }
+
+  private openWidgetHeightSubscription(): void {
+    this._subscriptions.add(
+      this._widgetsContentHeightsRounded$.subscribe(caseWidgetContentHeights => {
+        const widgetHeight = caseWidgetContentHeights[this.widget.uuid];
+
+        if (widgetHeight) {
+          this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'height', `${widgetHeight}px`);
+        }
+      })
+    );
+  }
+
+  private openContentHeightObserver(): void {
+    this._observer = new ResizeObserver(event => {
+      this.observerMutation(event);
+    });
+    this._observer.observe(this._widgetBlockContentRef.nativeElement);
+  }
+
+  private observerMutation(event: Array<ResizeObserverEntry>): void {
+    const widgetContentHeight = event[0]?.borderBoxSize[0]?.blockSize;
+
+    if (typeof widgetContentHeight === 'number' && widgetContentHeight !== 0) {
+      this.dossierWidgetsLayoutService.setWidgetContentHeight(
+        this.widget.uuid,
+        widgetContentHeight
+      );
+    }
   }
 }

@@ -58,4 +58,15 @@ interface CaseWidgetWidthsPx {
   [uuid: string]: number;
 }
 
-export {FieldsCaseWidget, CaseWidget, CaseWidgetsRes, CaseWidgetWithUuid, CaseWidgetWidthsPx};
+interface CaseWidgetContentHeightsPx {
+  [uuid: string]: number;
+}
+
+export {
+  FieldsCaseWidget,
+  CaseWidget,
+  CaseWidgetsRes,
+  CaseWidgetWithUuid,
+  CaseWidgetWidthsPx,
+  CaseWidgetContentHeightsPx,
+};
