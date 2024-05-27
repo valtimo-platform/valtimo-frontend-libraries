@@ -38,7 +38,7 @@ export class ViewModelService extends BaseApiService {
         formName,
         taskInstanceId
       },
-      headers: new HttpHeaders().set(InterceptorSkip, 'all')
+      headers: new HttpHeaders().set(InterceptorSkip, '400')
     });
   }
 
@@ -51,7 +51,7 @@ export class ViewModelService extends BaseApiService {
           formName,
           taskInstanceId
         },
-        headers: new HttpHeaders().set(InterceptorSkip, 'all')
+        headers: new HttpHeaders().set(InterceptorSkip, '400')
       });
   }
 
@@ -64,7 +64,7 @@ export class ViewModelService extends BaseApiService {
           formName,
           taskInstanceId
         },
-        headers: new HttpHeaders().set(InterceptorSkip, 'all')
+        headers: new HttpHeaders().set(InterceptorSkip, '400')
       });
   }
 }

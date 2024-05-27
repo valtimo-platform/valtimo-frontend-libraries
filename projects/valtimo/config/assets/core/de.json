@@ -1397,7 +1397,7 @@
     "unlink": "Verknüpfung aufheben",
     "toggleViewModel": {
       "title": "View Model ermöglicht?",
-      "checkboxDescription": "Aktiviert die MVVM-Formularverarbeitung"
+      "checkboxDescription": "Aktiviert die Form View Model Formularverarbeitung"
     }
   },
   "processLinkType": {
