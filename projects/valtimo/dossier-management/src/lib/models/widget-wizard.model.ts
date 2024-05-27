@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-enum WidgetWizardSteps {
+import {Type} from '@angular/core';
+import {DossierManagementWidgetFieldsComponent} from '../components/dossier-management-widget-configurators/fields/dossier-management-widget-fields.component';
+import {WidgetContentComponent} from './widget-content.model';
+
+enum WidgetWizardStep {
   TYPE,
   WIDTH,
   STYLE,
   CONTENT,
 }
 
-enum WidgetType {
+enum WidgetTypes {
   FIELDS = 'fields',
 }
 
@@ -32,20 +36,50 @@ enum WidgetWidth {
   FULL_WIDTH,
 }
 
-interface WidgetTypeTile {
+enum WidgetStyle {
+  DEFAULT = 'default',
+  HIGH_CONTRAST = 'high-contrast',
+}
+
+interface WidgetType {
   titleKey: string;
   descriptionKey: string;
   illustrationUrl: string;
-  type: WidgetType;
+  type: WidgetTypes;
+  component: Type<WidgetContentComponent>;
+  data: object;
 }
 
-const AVAILABLE_WIDGET_TYPES: WidgetTypeTile[] = [
+const AVAILABLE_WIDGETS: WidgetType[] = [
   {
     titleKey: 'widgetTabManagement.types.fields.title',
     descriptionKey: 'widgetTabManagement.types.fields.description',
     illustrationUrl: 'valtimo-layout/img/widget-management/types/fields.svg',
-    type: WidgetType.FIELDS,
+    type: WidgetTypes.FIELDS,
+    component: DossierManagementWidgetFieldsComponent,
+    data: {},
   },
 ];
 
-export {WidgetWizardSteps, WidgetTypeTile, AVAILABLE_WIDGET_TYPES, WidgetType, WidgetWidth};
+const WIDGET_WIDTH_LABELS: {[key: number]: string} = {
+  [WidgetWidth.QUARTER]: 'widgetTabManagement.width.quarter.title',
+  [WidgetWidth.HALF]: 'widgetTabManagement.width.half.title',
+  [WidgetWidth.THREE_QUARTERS]: 'widgetTabManagement.width.threeQuarters.title',
+  [WidgetWidth.FULL_WIDTH]: 'widgetTabManagement.width.fullWidth.title',
+};
+
+const WIDGET_STYLE_LABELS: {[key: string]: string} = {
+  [WidgetStyle.DEFAULT]: 'widgetTabManagement.style.default.title',
+  [WidgetStyle.HIGH_CONTRAST]: 'widgetTabManagement.style.highContrast.title',
+};
+
+export {
+  WidgetWizardStep,
+  WidgetType,
+  AVAILABLE_WIDGETS,
+  WidgetTypes,
+  WidgetWidth,
+  WidgetStyle,
+  WIDGET_WIDTH_LABELS,
+  WIDGET_STYLE_LABELS,
+};

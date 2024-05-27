@@ -15,6 +15,7 @@
   -->
 
 <cds-modal
+  *ngIf="{steps: steps$ | async} as obs"
   [open]="open"
   [title]="'widgetTabManagement.wizard.title' | translate"
   showFooter="true"
@@ -30,8 +31,7 @@
 
   <section cdsModalContent class="valtimo-dossier-management-widget-wizard__content">
     <cds-progress-indicator
-      *ngIf="{steps: steps$ | async} as obs"
-      [current]="currentStep"
+      [current]="currentStep()"
       [skeleton]="!obs.steps"
       [spacing]="'equal'"
       [steps]="obs.steps"
@@ -39,33 +39,36 @@
     >
     </cds-progress-indicator>
 
-    @switch (currentStep) {
+    @switch (currentStep()) {
       @case (WidgetWizardSteps.TYPE) {
-        <p>{{ 'widgetTabManagement.types.title' | translate }}</p>
+        <p>{{ 'widgetTabManagement.types.description' | translate }}</p>
 
         <valtimo-widget-wizard-type-step
           class="valtimo-widget-wizard-step"
-          (typeSelected)="onTypeSelected($event)"
         ></valtimo-widget-wizard-type-step>
       }
       @case (WidgetWizardSteps.WIDTH) {
-        <p>{{ 'widgetTabManagement.width.title' | translate }}</p>
+        <p>{{ 'widgetTabManagement.width.description' | translate }}</p>
 
         <valtimo-widget-wizard-width-step
           class="valtimo-widget-wizard-step"
-          (widthSelected)="onWidthSelected($event)"
         ></valtimo-widget-wizard-width-step>
       }
       @case (WidgetWizardSteps.STYLE) {
+        <p>{{ 'widgetTabManagement.style.description' | translate }}</p>
+
         <valtimo-widget-wizard-style-step
           class="valtimo-widget-wizard-step"
-          (styleSelected)="onStyleSelected($event)"
         ></valtimo-widget-wizard-style-step>
       }
       @case (WidgetWizardSteps.CONTENT) {
+        <p>{{ 'widgetTabManagement.content.description' | translate }}</p>
+
         <valtimo-widget-wizard-content-step></valtimo-widget-wizard-content-step>
       }
       @default {
+        <p>{{ 'widgetTabManagement.types.description' | translate }}</p>
+
         <valtimo-widget-wizard-type-step></valtimo-widget-wizard-type-step>
       }
     }
@@ -77,25 +80,27 @@
       cdsButton="ghost"
       (click)="onClose()"
     >
-      Cancel
+      {{ 'interface.cancel' | translate }}
     </button>
 
     <button
       class="valtimo-dossier-management-widget-wizard__back"
       cdsButton="secondary"
-      [disabled]="currentStep === WidgetWizardSteps.TYPE"
+      [disabled]="currentStep() === WidgetWizardSteps.TYPE"
       (click)="onBackButtonClick()"
     >
-      Back
+      {{ 'interface.back' | translate }}
     </button>
 
     <button
       class="valtimo-dossier-management-widget-wizard__next"
       cdsButton="primary"
-      [disabled]="nextButtonDisabled"
-      (click)="onNextButtonClick(currentStep === WidgetWizardSteps.CONTENT)"
+      [disabled]="nextButtonDisabled()"
+      (click)="onNextButtonClick()"
     >
-      {{ currentStep === WidgetWizardSteps.CONTENT ? 'Save' : ' Next' }}
+      {{
+        'interface.' + (currentStep() === WidgetWizardSteps.CONTENT ? 'save' : 'next') | translate
+      }}
     </button>
   </cds-modal-footer>
 </cds-modal>

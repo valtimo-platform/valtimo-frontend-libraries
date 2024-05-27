@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   EventEmitter,
   Input,
   Output,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
+import {toObservable} from '@angular/core/rxjs-interop';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {WIDGET_STEPS} from './steps';
-import {ButtonModule, ModalModule, ProgressIndicatorModule, Step} from 'carbon-components-angular';
-import {WidgetType, WidgetWidth, WidgetWizardSteps} from '../../models';
-import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
 import {ModalCloseEventType} from '@valtimo/components';
+import {ButtonModule, ModalModule, ProgressIndicatorModule, Step} from 'carbon-components-angular';
+import {combineLatest, map, Observable} from 'rxjs';
+import {WIDGET_STYLE_LABELS, WIDGET_WIDTH_LABELS, WidgetWizardStep} from '../../models';
+import {WidgetWizardService} from '../../services';
+import {WIDGET_STEPS} from './steps';
 
 @Component({
   selector: 'valtimo-dossier-management-widget-wizard',
@@ -40,88 +43,97 @@ import {ModalCloseEventType} from '@valtimo/components';
   imports: [
     CommonModule,
     TranslateModule,
-    ...WIDGET_STEPS,
     ProgressIndicatorModule,
     ModalModule,
     ButtonModule,
+    ...WIDGET_STEPS,
   ],
 })
 export class DossierManagementWidgetWizardComponent {
   @Input() public open = false;
-
   @Output() public closeEvent = new EventEmitter<ModalCloseEventType>();
 
-  public readonly WidgetWizardSteps = WidgetWizardSteps;
-  private readonly _secondaryLabels$ = new BehaviorSubject<{[step: number]: string}>({
-    [WidgetWizardSteps.TYPE]: '',
-    [WidgetWizardSteps.WIDTH]: '',
-    [WidgetWizardSteps.STYLE]: '',
-    [WidgetWizardSteps.CONTENT]: '',
+  public readonly WidgetWizardSteps = WidgetWizardStep;
+  private readonly _secondaryLabels = computed(() => {
+    const selectedWidgetType = this.widgetWizardService.selectedWidget()?.type ?? '';
+    const selectedWidth = this.widgetWizardService.widgetWidth() ?? '';
+    const selectedStyle = this.widgetWizardService.widgetStyle() ?? '';
+
+    return {
+      [WidgetWizardStep.TYPE]: selectedWidgetType,
+      [WidgetWizardStep.WIDTH]: WIDGET_WIDTH_LABELS[selectedWidth] ?? '',
+      [WidgetWizardStep.STYLE]: WIDGET_STYLE_LABELS[selectedStyle] ?? '',
+    };
   });
 
   public readonly steps$: Observable<Step[]> = combineLatest([
-    this._secondaryLabels$,
+    toObservable(this._secondaryLabels),
     this.translateService.stream('key'),
   ]).pipe(
-    map(([secondaryLabels]) => [
-      {
-        label: this.translateService.instant('widgetTabManagement.wizard.steps.type'),
-        secondaryLabel: secondaryLabels[WidgetWizardSteps.TYPE],
-      },
-      {
-        label: this.translateService.instant('widgetTabManagement.wizard.steps.width'),
-        secondaryLabel: secondaryLabels[WidgetWizardSteps.WIDTH],
-      },
-      {
-        label: this.translateService.instant('widgetTabManagement.wizard.steps.style'),
-        secondaryLabel: secondaryLabels[WidgetWizardSteps.STYLE],
-      },
-      {
-        label: this.translateService.instant('widgetTabManagement.wizard.steps.content'),
-        secondaryLabel: secondaryLabels[WidgetWizardSteps.CONTENT],
-      },
-    ])
+    map(([secondaryLabels]) => {
+      return [
+        {
+          label: this.translateService.instant('widgetTabManagement.wizard.steps.type'),
+          ...(secondaryLabels[WidgetWizardStep.TYPE] && {
+            secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.TYPE]),
+          }),
+        },
+        {
+          label: this.translateService.instant('widgetTabManagement.wizard.steps.width'),
+          ...(secondaryLabels[WidgetWizardStep.WIDTH] && {
+            secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.WIDTH]),
+          }),
+        },
+        {
+          label: this.translateService.instant('widgetTabManagement.wizard.steps.style'),
+          ...(secondaryLabels[WidgetWizardStep.STYLE] && {
+            secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.STYLE]),
+          }),
+        },
+        {
+          label: this.translateService.instant('widgetTabManagement.wizard.steps.content'),
+        },
+      ];
+    })
   );
 
-  public currentStep = WidgetWizardSteps.TYPE;
-  public nextButtonDisabled = true;
+  public readonly currentStep = signal<WidgetWizardStep>(WidgetWizardStep.TYPE);
+  public nextButtonDisabled = computed(() => {
+    switch (this.currentStep()) {
+      case WidgetWizardStep.TYPE:
+        return !this.widgetWizardService.selectedWidget();
+      case WidgetWizardStep.WIDTH:
+        return !this.widgetWizardService.widgetWidth();
+      case WidgetWizardStep.STYLE:
+        return this.widgetWizardService.widgetStyle() === null;
+      default:
+        return true;
+    }
+  });
 
-  constructor(private readonly translateService: TranslateService) {}
+  constructor(
+    private readonly translateService: TranslateService,
+    private readonly widgetWizardService: WidgetWizardService
+  ) {}
 
-  public onStepSelected(event: {step: Step; index: number}): void {
-    this.currentStep = event.index;
+  public onStepSelected(event: {step: Step; index: WidgetWizardStep}): void {
+    this.currentStep.set(event.index);
   }
 
-  public onNextButtonClick(save: boolean): void {
-    if (save) {
+  public onNextButtonClick(): void {
+    if (this.currentStep() === WidgetWizardStep.CONTENT) {
       this.closeEvent.emit('closeAndRefresh');
       return;
     }
 
-    this.currentStep += 1;
-    this.nextButtonDisabled = true;
+    this.currentStep.update((step: WidgetWizardStep) => step + 1);
   }
 
   public onBackButtonClick(): void {
-    this.currentStep -= 1;
+    this.currentStep.update((step: WidgetWizardStep) => step - 1);
   }
 
   public onClose(): void {
     this.closeEvent.emit('close');
-  }
-
-  public onTypeSelected(type: WidgetType): void {
-    this.nextButtonDisabled = false;
-    console.log({type});
-  }
-
-  public onWidthSelected(width: WidgetWidth): void {
-    this.nextButtonDisabled = false;
-    console.log({width});
-  }
-
-  public onStyleSelected(highContrast: boolean): void {
-    this.nextButtonDisabled = false;
-    console.log({highContrast})
   }
 }

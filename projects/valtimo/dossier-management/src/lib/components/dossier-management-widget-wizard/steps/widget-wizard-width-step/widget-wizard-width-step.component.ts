@@ -19,6 +19,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular
 import {TranslateModule} from '@ngx-translate/core';
 import {TilesModule} from 'carbon-components-angular';
 import {WidgetWidth} from '../../../../models';
+import {WidgetWizardService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-widget-wizard-width-step',
@@ -29,10 +30,14 @@ import {WidgetWidth} from '../../../../models';
   imports: [CommonModule, TranslateModule, TilesModule],
 })
 export class WidgetWizardWidthStepComponent {
-  @Output() public widthSelected = new EventEmitter<WidgetWidth>();
+  // @Output() public widthSelected = new EventEmitter<WidgetWidth>();
   public readonly WidgetWidth = WidgetWidth;
+  public readonly widgetWidth = this.widgetWizardService.widgetWidth();
+
+  constructor(private readonly widgetWizardService: WidgetWizardService) {}
 
   public onSelectedEvent(event: {value: WidgetWidth}): void {
-    this.widthSelected.emit(event.value);
+    this.widgetWizardService.widgetWidth.set(event.value);
+    // this.widthSelected.emit(event.value);
   }
 }

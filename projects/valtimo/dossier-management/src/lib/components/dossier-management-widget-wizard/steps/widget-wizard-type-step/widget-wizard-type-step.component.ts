@@ -23,8 +23,9 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
-import {AVAILABLE_WIDGET_TYPES, WidgetType} from '../../../../models';
+import {AVAILABLE_WIDGETS, WidgetType} from '../../../../models';
 import {TilesModule} from 'carbon-components-angular';
+import {WidgetWizardService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-widget-wizard-type-step',
@@ -36,11 +37,12 @@ import {TilesModule} from 'carbon-components-angular';
   imports: [CommonModule, TranslateModule, TilesModule],
 })
 export class WidgetWizardTypeStepComponent {
-  @Output() typeSelected = new EventEmitter<WidgetType>();
+  public readonly availableWidgets = AVAILABLE_WIDGETS;
+  public readonly selectedWidget = this.widgetWizardService.selectedWidget();
 
-  public readonly availableWidgetTypes = AVAILABLE_WIDGET_TYPES;
+  constructor(private readonly widgetWizardService: WidgetWizardService) {}
 
   public onSelectedEvent(event: {value: WidgetType}): void {
-    this.typeSelected.emit(event.value);
+    this.widgetWizardService.selectedWidget.set(event.value);
   }
 }

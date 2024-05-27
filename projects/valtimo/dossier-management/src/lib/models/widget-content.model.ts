@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-export * from './tab.service';
-export * from './tab-management.service';
-export * from './dossier-export.service';
-export * from './dossier-detail.service';
-export * from './widget-tab-management.service';
-export * from './widget-wizard.service';
+import {EventEmitter} from '@angular/core';
+
+interface WidgetContentComponent {
+  columnData: object;
+  changeEvent: EventEmitter<any>;
+}
+
+export {WidgetContentComponent};

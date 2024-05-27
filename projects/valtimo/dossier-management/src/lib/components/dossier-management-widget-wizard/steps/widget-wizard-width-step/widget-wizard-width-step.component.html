@@ -18,7 +18,11 @@
   (selected)="onSelectedEvent($event)"
   class="valtimo-widget-wizard-step__content"
 >
-  <cds-selection-tile class="valtimo-widget-wizard-step__tile" [value]="WidgetWidth.QUARTER">
+  <cds-selection-tile
+    class="valtimo-widget-wizard-step__tile"
+    [value]="WidgetWidth.QUARTER"
+    [selected]="widgetWidth === WidgetWidth.QUARTER"
+  >
     <h3>{{ 'widgetTabManagement.width.quarter.title' | translate }}</h3>
 
     <span>{{ 'widgetTabManagement.width.quarter.description' | translate }}</span>
@@ -29,7 +33,11 @@
     />
   </cds-selection-tile>
 
-  <cds-selection-tile class="valtimo-widget-wizard-step__tile" [value]="WidgetWidth.HALF">
+  <cds-selection-tile
+    class="valtimo-widget-wizard-step__tile"
+    [value]="WidgetWidth.HALF"
+    [selected]="widgetWidth === WidgetWidth.HALF"
+  >
     <h3>{{ 'widgetTabManagement.width.half.title' | translate }}</h3>
 
     <span>{{ 'widgetTabManagement.width.half.description' | translate }}</span>
@@ -43,6 +51,7 @@
   <cds-selection-tile
     class="valtimo-widget-wizard-step__tile"
     [value]="WidgetWidth.THREE_QUARTERS"
+    [selected]="widgetWidth === WidgetWidth.THREE_QUARTERS"
   >
     <h3>{{ 'widgetTabManagement.width.threeQuarters.title' | translate }}</h3>
 
@@ -57,6 +66,7 @@
   <cds-selection-tile
     class="valtimo-widget-wizard-step__tile"
     [value]="WidgetWidth.FULL_WIDTH"
+    [selected]="widgetWidth === WidgetWidth.FULL_WIDTH"
   >
     <h3>{{ 'widgetTabManagement.width.fullWidth.title' | translate }}</h3>
 
