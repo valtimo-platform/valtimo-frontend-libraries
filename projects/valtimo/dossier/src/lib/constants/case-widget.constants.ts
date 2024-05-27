@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-export * from './tab';
-export * from './case-tab-token';
-export * from './dossier-list.constants';
-export * from './case-status.constants';
-export * from './case-widget.constants';
+const WIDGET_WIDTH_1X = 320;
+const WIDGET_HEIGHT_1X = 50;
+
+export {WIDGET_WIDTH_1X, WIDGET_HEIGHT_1X};

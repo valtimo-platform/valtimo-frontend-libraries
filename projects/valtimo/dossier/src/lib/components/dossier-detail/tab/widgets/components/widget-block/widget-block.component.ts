@@ -16,7 +16,7 @@
 
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CaseWidget} from '../../../../../../models';
+import {CaseWidgetWidthsPx, CaseWidgetWithUuid} from '../../../../../../models';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
@@ -26,5 +26,7 @@ import {CaseWidget} from '../../../../../../models';
   imports: [CommonModule],
 })
 export class WidgetBlockComponent {
-  @Input() public readonly widget: CaseWidget;
+  @Input() public readonly widget: CaseWidgetWithUuid;
+  @Input() public readonly caseWidgetWidthsPx: CaseWidgetWidthsPx;
+  protected readonly JSON = JSON;
 }

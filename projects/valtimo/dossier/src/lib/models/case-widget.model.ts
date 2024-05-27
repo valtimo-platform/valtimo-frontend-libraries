@@ -44,10 +44,18 @@ interface FieldsCaseWidget extends BasicCaseWidget {
 
 type CaseWidget = FieldsCaseWidget;
 
+interface CaseWidgetWithUuid extends CaseWidget {
+  uuid: string;
+}
+
 interface CaseWidgetsRes {
   caseDefinitionName: string;
   key: string;
   widgets: CaseWidget[];
 }
 
-export {FieldsCaseWidget, CaseWidget, CaseWidgetsRes};
+interface CaseWidgetWidthsPx {
+  [uuid: string]: number;
+}
+
+export {FieldsCaseWidget, CaseWidget, CaseWidgetsRes, CaseWidgetWithUuid, CaseWidgetWidthsPx};

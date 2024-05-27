@@ -23,7 +23,9 @@
   @if (obs.loadingWidgetConfiguration) {
     <ng-container *ngTemplateOutlet="loading"></ng-container>
   } @else {
-    <valtimo-dossier-widgets-container></valtimo-dossier-widgets-container>
+    <valtimo-dossier-widgets-container
+      [widgets]="obs.widgetConfiguration?.widgets || []"
+    ></valtimo-dossier-widgets-container>
   }
 </ng-container>
 

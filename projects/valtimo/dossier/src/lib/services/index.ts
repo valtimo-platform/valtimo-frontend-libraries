@@ -27,3 +27,4 @@ export * from './dossier-tab-api.service';
 export * from './dossier-list-status.service';
 export * from './start-modal.service';
 export * from './dossier-widgets-api-service';
+export * from './dossier-widgets-layout.service';
