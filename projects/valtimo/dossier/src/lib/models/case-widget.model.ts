@@ -62,6 +62,29 @@ interface CaseWidgetContentHeightsPx {
   [uuid: string]: number;
 }
 
+interface CaseWidgetConfigurationBin {
+  configurationKey: string;
+  width: number;
+  height: number;
+}
+
+interface CaseWidgetPackResult {
+  height: number;
+  width: number;
+  items: Array<{
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+    item: CaseWidgetConfigurationBin;
+  }>;
+}
+
+interface CaseWidgetXY {
+  x: number;
+  y: number;
+}
+
 export {
   FieldsCaseWidget,
   CaseWidget,
@@ -69,4 +92,7 @@ export {
   CaseWidgetWithUuid,
   CaseWidgetWidthsPx,
   CaseWidgetContentHeightsPx,
+  CaseWidgetConfigurationBin,
+  CaseWidgetPackResult,
+  CaseWidgetXY,
 };

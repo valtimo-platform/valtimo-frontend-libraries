@@ -15,10 +15,14 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {Component, HostBinding} from '@angular/core';
+import {Component, HostBinding, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
-import {DossierTabService, DossierWidgetsApiService} from '../../../../services';
+import {
+  DossierTabService,
+  DossierWidgetsApiService,
+  DossierWidgetsLayoutService,
+} from '../../../../services';
 import {LoadingModule} from 'carbon-components-angular';
 import {WidgetsContainerComponent} from './components/widgets-container/widgets-container.component';
 
@@ -28,7 +32,7 @@ import {WidgetsContainerComponent} from './components/widgets-container/widgets-
   standalone: true,
   imports: [CommonModule, LoadingModule, WidgetsContainerComponent],
 })
-export class DossierDetailWidgetsComponent {
+export class DossierDetailWidgetsComponent implements OnDestroy {
   @HostBinding('class.tab--no-margin') private readonly _noMargin = true;
   @HostBinding('class.tab--no-background') private readonly _noBackground = true;
   @HostBinding('class.tab--no-min-height') private readonly _noMinHeight = true;
@@ -55,6 +59,11 @@ export class DossierDetailWidgetsComponent {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly dossierTabService: DossierTabService,
-    private readonly widgetsApiService: DossierWidgetsApiService
+    private readonly widgetsApiService: DossierWidgetsApiService,
+    private readonly dossierWidgetsLayoutService: DossierWidgetsLayoutService
   ) {}
+
+  public ngOnDestroy(): void {
+    this.dossierWidgetsLayoutService.reset();
+  }
 }

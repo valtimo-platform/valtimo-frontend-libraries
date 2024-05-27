@@ -33,6 +33,7 @@ export class WidgetsContainerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('widgetsContainer') private _widgetsContainerRef: ElementRef<HTMLDivElement>;
 
   public readonly widgetsWithUuids$ = new BehaviorSubject<CaseWidgetWithUuid[]>([]);
+  public readonly packResult$ = this.dossierWidgetsLayoutService.packResult$;
 
   @Input() public set widgets(value: CaseWidget[]) {
     const widgetsWithUuids = value.map(widget => ({...widget, uuid: uuid()}));

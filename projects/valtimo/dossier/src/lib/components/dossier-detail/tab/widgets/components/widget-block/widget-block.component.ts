@@ -24,8 +24,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CaseWidgetWithUuid} from '../../../../../../models';
-import {Subscription} from 'rxjs';
+import {CaseWidgetWithUuid, CaseWidgetXY} from '../../../../../../models';
+import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription, take} from 'rxjs';
 import {DossierWidgetsLayoutService} from '../../../../../../services';
 
 @Component({
@@ -39,18 +39,40 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   @ViewChild('widgetBlockContent') private _widgetBlockContentRef: ElementRef<HTMLDivElement>;
   @ViewChild('widgetBlock') private _widgetBlockRef: ElementRef<HTMLDivElement>;
 
-  @Input() public readonly widget: CaseWidgetWithUuid;
+  private readonly _widget$ = new BehaviorSubject<CaseWidgetWithUuid | null>(null);
+
+  public get widget$(): Observable<CaseWidgetWithUuid> {
+    return this._widget$.pipe(filter(widget => widget !== null));
+  }
+
+  // to remove
+  public get stringifiedWidget$(): Observable<string> {
+    return this._widget$.pipe(map(widget => JSON.stringify(widget)));
+  }
+
+  public readonly caseWidgetXY$: Observable<CaseWidgetXY> = combineLatest([
+    this.dossierWidgetsLayoutService.packResult$,
+    this.widget$,
+  ]).pipe(
+    map(([packResult, widget]) => {
+      const widgetPackResult = packResult.items.find(
+        packItem => packItem.item.configurationKey === widget.uuid
+      );
+
+      return widgetPackResult ? {x: widgetPackResult.x, y: widgetPackResult.y} : {x: 0, y: 0};
+    })
+  );
+
+  @Input() public set widget(value: CaseWidgetWithUuid) {
+    this._widget$.next(value);
+  }
 
   private readonly _caseWidgetWidthsPx$ = this.dossierWidgetsLayoutService.caseWidgetWidthsPx$;
-  private readonly _widgetsContentHeightsRounded$ =
-    this.dossierWidgetsLayoutService.widgetsContentHeightsRounded$;
 
   private readonly _subscriptions = new Subscription();
 
   private _setToVisible = false;
   private _observer!: ResizeObserver;
-
-  protected readonly JSON = JSON;
 
   constructor(
     private readonly dossierWidgetsLayoutService: DossierWidgetsLayoutService,
@@ -70,24 +92,29 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   private openWidgetWidthSubscription(): void {
     this._subscriptions.add(
-      this._caseWidgetWidthsPx$.subscribe(caseWidgetsWidths => {
-        const widgetWidth = caseWidgetsWidths[this.widget.uuid];
+      combineLatest([this._caseWidgetWidthsPx$, this.widget$]).subscribe(
+        ([caseWidgetsWidths, widget]) => {
+          const widgetWidth = caseWidgetsWidths[widget.uuid];
 
-        if (widgetWidth) {
-          if (!this._setToVisible) {
-            this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'visibility', 'visible');
+          if (widgetWidth) {
+            if (!this._setToVisible) {
+              this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'visibility', 'visible');
+            }
+            this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'width', `${widgetWidth}px`);
+            this._setToVisible = true;
           }
-          this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'width', `${widgetWidth}px`);
-          this._setToVisible = true;
         }
-      })
+      )
     );
   }
 
   private openWidgetHeightSubscription(): void {
     this._subscriptions.add(
-      this._widgetsContentHeightsRounded$.subscribe(caseWidgetContentHeights => {
-        const widgetHeight = caseWidgetContentHeights[this.widget.uuid];
+      combineLatest([
+        this.dossierWidgetsLayoutService.widgetsContentHeightsRounded$,
+        this.widget$,
+      ]).subscribe(([caseWidgetContentHeights, widget]) => {
+        const widgetHeight = caseWidgetContentHeights[widget.uuid];
 
         if (widgetHeight) {
           this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'height', `${widgetHeight}px`);
@@ -107,10 +134,9 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     const widgetContentHeight = event[0]?.borderBoxSize[0]?.blockSize;
 
     if (typeof widgetContentHeight === 'number' && widgetContentHeight !== 0) {
-      this.dossierWidgetsLayoutService.setWidgetContentHeight(
-        this.widget.uuid,
-        widgetContentHeight
-      );
+      this.widget$.pipe(take(1)).subscribe(widget => {
+        this.dossierWidgetsLayoutService.setWidgetContentHeight(widget.uuid, widgetContentHeight);
+      });
     }
   }
 }
