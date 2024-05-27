@@ -28,12 +28,11 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import {Code16, Development16, TableBuilt16, WatsonHealthPageScroll16} from '@carbon/icons';
+import {Code16, Development16, WatsonHealthPageScroll16} from '@carbon/icons';
 import {ApiTabItem, ApiTabType} from '@valtimo/dossier';
 import {IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map} from 'rxjs';
+import {BehaviorSubject, map} from 'rxjs';
 import {TabService} from '../../../services';
-import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-management-add-tab-modal',
@@ -49,11 +48,8 @@ export class DossierManagementAddTabModalComponent {
   @Output() closeModalEvent = new EventEmitter<Partial<ApiTabItem> | null>();
 
   public readonly ApiTabType = ApiTabType;
-  public readonly tabTypes$ = combineLatest([
-    this.tabService.disableAddTabs$,
-    this.configService.featureToggles$,
-  ]).pipe(
-    map(([disabled, featureToggles]) => [
+  public readonly tabTypes$ = this.tabService.disableAddTabs$.pipe(
+    map(disabled => [
       {
         icon: 'development',
         title: 'dossierManagement.tabManagement.addModal.standardTab',
@@ -72,16 +68,6 @@ export class DossierManagementAddTabModalComponent {
         type: ApiTabType.CUSTOM,
         disabled: disabled.custom,
       },
-      ...(featureToggles?.enableCaseWidgets
-        ? [
-            {
-              icon: 'table--built',
-              title: 'dossierManagement.tabManagement.addModal.widgetsComponent',
-              type: ApiTabType.WIDGETS,
-              disabled: disabled.widgets,
-            },
-          ]
-        : []),
     ])
   );
 
@@ -95,19 +81,15 @@ export class DossierManagementAddTabModalComponent {
   constructor(
     private readonly fb: FormBuilder,
     private readonly iconService: IconService,
-    private readonly tabService: TabService,
-    private readonly configService: ConfigService
+    private readonly tabService: TabService
   ) {
-    this.iconService.registerAll([Code16, Development16, TableBuilt16, WatsonHealthPageScroll16]);
+    this.iconService.registerAll([Code16, Development16, WatsonHealthPageScroll16]);
   }
 
   public addTab(type: ApiTabType): void {
-    let {contentKey, key, name} = this.form.getRawValue();
-    if (!contentKey) {
-      contentKey = '-';
-    }
+    const {contentKey, key, name} = this.form.getRawValue();
 
-    if (!key) {
+    if (!contentKey || !key) {
       return;
     }
     this.closeModalEvent.emit({name, key, contentKey, type});

@@ -86,7 +86,6 @@ export class TabService {
     standard: boolean;
     custom: boolean;
     formIO: boolean;
-    widgets: boolean;
   }> = combineLatest([
     this.configuredContentKeys$,
     this.formDefinitions$,
@@ -101,7 +100,6 @@ export class TabService {
       formIO:
         !formDefinitions.length ||
         formDefinitions.every((tabItem: ListItem) => tabKeys.includes(tabItem.contentKey)),
-      widgets: false,
     }))
   );
 

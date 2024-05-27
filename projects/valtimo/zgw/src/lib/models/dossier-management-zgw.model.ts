@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-import {Type} from '@angular/core';
-
-enum ZgwTabEnum {
-  DOCUMENTEN_API_COLUMNS = 'documentenApiColumns',
-  DOCUMENTEN_API_TAGS = 'documentenApiTags',
+export enum ZgwTabEnum {
+  DOCUMENTEN_API_COLUMNS,
 }
-
-interface ZgwTab {
-  class: string;
-  headingTranslationKey: string;
-  tab: ZgwTabEnum;
-  active?: boolean;
-  component: Type<any>;
-}
-
-export {ZgwTabEnum, ZgwTab};

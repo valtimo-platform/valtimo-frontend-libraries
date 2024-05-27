@@ -17,7 +17,6 @@
 import {ComponentFactoryResolver, Inject, Injectable, ViewContainerRef} from '@angular/core';
 import {Extension, ExtensionLoader, ExtensionPoint, VALTIMO_CONFIG, ValtimoConfig} from '../models';
 import {UrlUtils} from '../utils';
-import {Observable, of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -63,14 +62,6 @@ export class ConfigService {
       }),
       applicationTitle: config.applicationTitle || this.DEFAULT_APPLICATION_TITLE,
     };
-  }
-
-  public get config$(): Observable<ValtimoConfig> {
-    return of(this.config);
-  }
-
-  public get featureToggles$(): Observable<ValtimoConfig['featureToggles']> {
-    return of(this.config.featureToggles);
   }
 
   public get initializers() {

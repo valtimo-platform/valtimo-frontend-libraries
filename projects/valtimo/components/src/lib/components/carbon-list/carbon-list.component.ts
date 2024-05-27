@@ -28,7 +28,7 @@ import {
 import {FormControl} from '@angular/forms';
 import {ArrowDown16, ArrowUp16, SettingsView16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
-import {SortState} from '@valtimo/document';
+import {InternalCaseStatus, InternalCaseStatusUtils, SortState} from '@valtimo/document';
 import {
   IconService,
   OverflowMenu,
@@ -38,6 +38,7 @@ import {
   TableHeaderItem,
   TableItem,
   TableModel,
+  TagType,
 } from 'carbon-components-angular';
 import {get as _get} from 'lodash';
 import {NGXLogger} from 'ngx-logger';
@@ -68,7 +69,6 @@ import {
   MoveRowDirection,
   MoveRowEvent,
   Pagination,
-  TAG_ELLIPSIS_LIMIT,
   ViewType,
 } from '../../models';
 import {ViewContentService} from '../view-content/view-content.service';
@@ -344,7 +344,6 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _translatedFields$: Observable<ColumnConfig[]> = this.translateService.stream('key').pipe(
     switchMap(() => this._fields$),
-    filter((fields: ColumnConfig[]) => !!fields),
     map((fields: ColumnConfig[]) =>
       fields.map((field: ColumnConfig) => ({
         ...field,
@@ -373,19 +372,16 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     map((header: TableHeaderItem[]) => [...header, ...this.extraColumns])
   );
 
-  private readonly _tableItems$: Observable<TableItem[][]> = combineLatest([
-    this._fields$,
-    this._items$,
-    this._viewInitialized$,
-  ]).pipe(
-    filter(([fields, items, viewInitialized]) => !!fields && !!items && viewInitialized),
+  private readonly _tableItems$: Observable<TableItem[][]> = this._viewInitialized$.pipe(
+    switchMap(() => combineLatest([this._fields$, this._items$])),
+    filter(([fields, items]) => !!fields && !!items),
     map(([fields, items]) =>
       items.map((item: CarbonListItem, index: number) => [
         ...fields.map((field: ColumnConfig) => {
           switch (field.viewType) {
             case ViewType.TEMPLATE:
               return new TableItem({
-                data: {item, index, length: items.length, ...field.templateData},
+                data: {item, index, length: items.length},
                 template: field.template,
               });
             case ViewType.BOOLEAN:
@@ -397,11 +393,11 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
                 data,
                 template: this.booleanTemplate,
               });
-            case ViewType.TAGS: {
-              return this.resolveTagObject(item.tags);
-            }
-            case ViewType.DATE:
-              return new TableItem({data: this.resolveObject(field, item) ?? '-', item});
+            case ViewType.TAGS:
+              return new TableItem({
+                data: {tags: item.tags},
+                template: this.tagTemplate,
+              });
             default:
               return new TableItem({data: this.resolveObject(field, item) ?? '-', item});
           }
@@ -509,14 +505,6 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tagModalOpen$.next(false);
   }
 
-  public handleActionOpenChange(actionId: string, isOpen: boolean): void {
-    if (isOpen) {
-      this.currentOpenActionId = actionId;
-    } else if (this.currentOpenActionId === actionId) {
-      this.currentOpenActionId = null;
-    }
-  }
-
   private getExtraItems(item: CarbonListItem, index: number, length: number): TableItem[] {
     return [
       ...(!!this.actions
@@ -601,27 +589,11 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     return temp;
   }
 
-  private resolveTagObject(itemTags: CarbonTag[] | undefined): TableItem {
-    if (!itemTags || itemTags.length === 0)
-      return new TableItem({
-        data: {tags: []},
-        template: this.tagTemplate,
-      });
-
-    const tags = itemTags.map((tag: CarbonTag, index: number) =>
-      index === 0 ? {...tag, ellipsisContent: this.transformTagEllipsis(tag.content)} : tag
-    );
-
-    return new TableItem({
-      data: {tags},
-      template: this.tagTemplate,
-    });
-  }
-
-  private transformTagEllipsis(tagContent: string): string {
-    return (
-      tagContent.substring(0, TAG_ELLIPSIS_LIMIT - 1) +
-      (tagContent.length > TAG_ELLIPSIS_LIMIT ? '...' : '')
-    );
+  public handleActionOpenChange(actionId: string, isOpen: boolean): void {
+    if (isOpen) {
+      this.currentOpenActionId = actionId;
+    } else if (this.currentOpenActionId === actionId) {
+      this.currentOpenActionId = null;
+    }
   }
 }
