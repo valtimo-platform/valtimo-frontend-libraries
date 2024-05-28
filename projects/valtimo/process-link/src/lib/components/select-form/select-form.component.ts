@@ -131,8 +131,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     combineLatest([this.stateService.modalParams$, this.stateService.selectedProcessLinkTypeId$, this.stateService.viewModelEnabled$])
       .pipe(
         take(1),
-        switchMap(([modalParams, processLinkTypeId, viewModelEnabled]) => {
-            return this.processLinkService.saveProcessLink({
+        switchMap(([modalParams, processLinkTypeId, viewModelEnabled]) => 
+            this.processLinkService.saveProcessLink({
               formDefinitionId: this._selectedFormDefinition.id,
               activityType: modalParams.element.activityListenerType,
               processDefinitionId: modalParams.processDefinitionId,
@@ -140,7 +140,6 @@ export class SelectFormComponent implements OnInit, OnDestroy {
               activityId: modalParams.element.id,
               viewModelEnabled
             })
-          }
         )
       )
       .subscribe(
