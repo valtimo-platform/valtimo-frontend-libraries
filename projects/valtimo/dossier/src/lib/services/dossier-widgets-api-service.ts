@@ -36,7 +36,13 @@ export class DossierWidgetsApiService extends BaseApiService {
     tabKey: string
   ): Observable<CaseWidgetsRes> {
     return this.httpClient.get<CaseWidgetsRes>(
-      this.getApiUrl(`/v1/case-definition/${caseDefinitionName}/widget-tab/${tabKey}`)
+      this.getApiUrl(`v1/case-definition/${caseDefinitionName}/widget-tab/${tabKey}`)
+    );
+  }
+
+  public getWidgetData(documentId: string, tabKey: string, widgetKey): Observable<object> {
+    return this.httpClient.get<object>(
+      this.getApiUrl(`v1/document/${documentId}/widget-tab/${tabKey}/widget/${widgetKey}`)
     );
   }
 }

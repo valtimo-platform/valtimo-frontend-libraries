@@ -25,15 +25,30 @@ import {
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CaseWidgetWithUuid, CaseWidgetXY} from '../../../../../../models';
-import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
-import {DossierWidgetsLayoutService} from '../../../../../../services';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subscription,
+  switchMap,
+  tap,
+} from 'rxjs';
+import {
+  DossierTabService,
+  DossierWidgetsApiService,
+  DossierWidgetsLayoutService,
+} from '../../../../../../services';
+import {ActivatedRoute} from '@angular/router';
+import {LoadingModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
   templateUrl: './widget-block.component.html',
   styleUrls: ['./widget-block.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingModule],
 })
 export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   @ViewChild('widgetBlockContent') private _widgetBlockContentRef: ElementRef<HTMLDivElement>;
@@ -74,6 +89,26 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   private readonly _caseWidgetWidthsPx$ = this.dossierWidgetsLayoutService.caseWidgetWidthsPx$;
 
+  public readonly loadingWidgetData$ = new BehaviorSubject<boolean>(true);
+
+  private readonly _documentId$ = this.route.params.pipe(
+    map(params => params?.documentId),
+    filter(documentId => !!documentId)
+  );
+
+  private readonly _tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
+
+  public readonly widgetData$ = combineLatest([
+    this.widget$,
+    this._tabKey$,
+    this._documentId$,
+  ]).pipe(
+    switchMap(([widget, tabkey, documentId]) =>
+      this.widgetsApiService.getWidgetData(documentId, tabkey, widget.key)
+    ),
+    tap(() => this.loadingWidgetData$.next(false))
+  );
+
   private readonly _subscriptions = new Subscription();
 
   private _observer!: ResizeObserver;
@@ -82,7 +117,10 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private readonly dossierWidgetsLayoutService: DossierWidgetsLayoutService,
-    private readonly renderer: Renderer2
+    private readonly renderer: Renderer2,
+    private readonly dossierTabService: DossierTabService,
+    private readonly route: ActivatedRoute,
+    private readonly widgetsApiService: DossierWidgetsApiService
   ) {}
 
   public ngAfterViewInit(): void {

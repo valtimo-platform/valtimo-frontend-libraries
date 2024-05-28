@@ -26,6 +26,7 @@ interface BasicCaseWidget {
   title: string;
   width: CaseWidgetWidth;
   highContrast: boolean;
+  key: string;
 }
 
 interface FieldsCaseWidgetValue {

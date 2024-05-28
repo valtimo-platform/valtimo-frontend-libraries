@@ -25,12 +25,20 @@ import {
 } from '../../../../services';
 import {LoadingModule} from 'carbon-components-angular';
 import {WidgetsContainerComponent} from './components/widgets-container/widgets-container.component';
+import {CarbonListModule} from '@valtimo/components';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   templateUrl: './widgets.component.html',
   styleUrls: ['./widgets.component.scss'],
   standalone: true,
-  imports: [CommonModule, LoadingModule, WidgetsContainerComponent],
+  imports: [
+    CommonModule,
+    LoadingModule,
+    WidgetsContainerComponent,
+    CarbonListModule,
+    TranslateModule,
+  ],
 })
 export class DossierDetailWidgetsComponent implements OnDestroy {
   @HostBinding('class.tab--no-margin') private readonly _noMargin = true;

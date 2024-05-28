@@ -49,13 +49,14 @@ export class DossierWidgetsLayoutService implements OnDestroy {
   public get widgetsContentHeightsRounded$(): Observable<CaseWidgetContentHeightsPx> {
     return this._widgetsContentHeights$.pipe(
       map(widgetsContentHeights =>
-        Object.keys(widgetsContentHeights).reduce((acc, curr) => {
-          return {
+        Object.keys(widgetsContentHeights).reduce(
+          (acc, curr) => ({
             ...acc,
             [curr]:
               Math.ceil((widgetsContentHeights[curr] + 16) / WIDGET_HEIGHT_1X) * WIDGET_HEIGHT_1X,
-          };
-        }, {})
+          }),
+          {}
+        )
       )
     );
   }

@@ -17,7 +17,9 @@
 <ng-container
   *ngIf="{
     caseWidgetXY: caseWidgetXY$ | async,
-    packResultAvailable: packResultAvailable$ | async
+    packResultAvailable: packResultAvailable$ | async,
+    widgetData: widgetData$ | async,
+    loadingData: loadingWidgetData$ | async
   } as obs"
 >
   <div
@@ -28,7 +30,11 @@
     [style.visibility]="obs.packResultAvailable ? 'visible' : 'hidden'"
   >
     <div #widgetBlockContent class="widget-block__content">
-      {{ stringifiedWidget$ | async }}
+      @if (obs.loadingData) {
+        <cds-loading></cds-loading>
+      } @else {
+        {{ stringifiedWidget$ | async }}
+      }
     </div>
   </div>
 </ng-container>
