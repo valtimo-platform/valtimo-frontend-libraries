@@ -120,7 +120,7 @@ export class FormViewModelComponent implements OnInit {
     private readonly stateService: FormIoStateService
   ) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.loadInitialViewModel();
   }
 
@@ -195,6 +195,7 @@ export class FormViewModelComponent implements OnInit {
               this.change$.pipe(take(1)).subscribe(change => {
                 this.loading$.next(false);
               });
+              this.errors$.next([]);
             },
             error: error => {
               this.change$.pipe(take(1)).subscribe(change => {

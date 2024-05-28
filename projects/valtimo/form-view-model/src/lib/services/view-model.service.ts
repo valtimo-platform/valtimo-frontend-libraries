@@ -22,6 +22,7 @@ import {
   ConfigService,
 } from '@valtimo/config';
 import {InterceptorSkip} from '@valtimo/security';
+import {ViewModel} from '../models';
 
 @Injectable({providedIn: 'root'})
 export class ViewModelService extends BaseApiService {
@@ -32,7 +33,7 @@ export class ViewModelService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public getViewModel(formName: string, taskInstanceId: string): Observable<any> {
+  public getViewModel(formName: string, taskInstanceId: string): Observable<ViewModel> {
     return this.httpClient.get<any>(this.getApiUrl('/v1/form/view-model'), {
       params: {
         formName,
@@ -42,7 +43,7 @@ export class ViewModelService extends BaseApiService {
     });
   }
 
-  public updateViewModel(formName: string, taskInstanceId: string, viewModel: any): Observable<any> {
+  public updateViewModel(formName: string, taskInstanceId: string, viewModel: ViewModel): Observable<ViewModel> {
     return this.httpClient.post(
       this.getApiUrl(`/v1/form/view-model`),
       viewModel,
@@ -55,7 +56,7 @@ export class ViewModelService extends BaseApiService {
       });
   }
 
-  public submitViewModel(formName: string, taskInstanceId: string, viewModel: any): Observable<any> {
+  public submitViewModel(formName: string, taskInstanceId: string, viewModel: ViewModel): Observable<ViewModel> {
     return this.httpClient.post(
       this.getApiUrl(`/v1/form/view-model/submit`),
       viewModel,

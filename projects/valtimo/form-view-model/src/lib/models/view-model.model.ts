@@ -13,17 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormioModule} from '@formio/angular';
-import {FormViewModelComponent} from './components/form-view-model/form-view-model.component';
 
-@NgModule({
-  imports: [
-    CommonModule,
-    FormioModule
-  ],
-  declarations: [FormViewModelComponent],
-  exports: [FormViewModelComponent]
-})
-export class FormViewModelModule {}
+
+export interface ViewModel {}
