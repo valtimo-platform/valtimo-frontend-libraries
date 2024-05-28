@@ -16,9 +16,9 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
 import {
-  BehaviorSubject,
+  BehaviorSubject, catchError,
   combineLatest,
-  debounceTime,
+  debounceTime, EMPTY,
   filter,
   Observable, of,
   pairwise,
@@ -144,21 +144,24 @@ export class FormViewModelComponent implements OnInit {
 
   public beforeSubmit(submission: any, callback: FormioSubmissionCallback): void {
     combineLatest([this.formName$, this.taskInstanceId$])
-      .pipe(take(1))
-      .subscribe(([formName, taskInstanceId]) => {
-        this.viewModelService
-          .submitViewModel(formName, taskInstanceId, submission.data)
-          .pipe(take(1))
-          .subscribe({
-            next: response => {
+      .pipe(
+        take(1),
+        switchMap(([formName, taskInstanceId]) =>
+          this.viewModelService.submitViewModel(formName, taskInstanceId, submission.data).pipe(
+            take(1),
+            switchMap(response => {
               callback(null, submission);
-            },
-            error: error => {
+              return of(response);
+            }),
+            catchError(error => {
               this.handleFormError(error);
               callback({message: error.error.error, component: null}, null);
-            },
-          });
-      });
+              return EMPTY; // return an empty observable to complete the stream
+            })
+          )
+        )
+      )
+      .subscribe();
   }
 
   private handleFormError(error: HttpErrorResponse): void {
@@ -190,15 +193,20 @@ export class FormViewModelComponent implements OnInit {
 
   public loadInitialViewModel(): void {
     combineLatest([this.formName$, this.taskInstanceId$])
-      .pipe(take(1))
-      .subscribe(([formName, taskInstanceId]) => {
-        this.viewModelService.getViewModel(formName, taskInstanceId).subscribe(viewModel => {
-          this.change$.pipe(take(1)).subscribe(change => {
-            this.loading$.next(false);
-          });
-          this.submission$.next({data: viewModel});
-        });
-      });
+      .pipe(
+        take(1),
+        switchMap(([formName, taskInstanceId]) =>
+          this.viewModelService.getViewModel(formName, taskInstanceId).pipe(
+            tap(viewModel => {
+              this.submission$.next({data: viewModel});
+              this.change$.pipe(take(1)).subscribe(() => {
+                this.loading$.next(false);
+              });
+            })
+          )
+        )
+      )
+      .subscribe();
   }
 
   public updateViewModel(): void {
