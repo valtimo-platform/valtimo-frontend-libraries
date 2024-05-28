@@ -32,12 +32,12 @@ interface CaseWidgetEnumDisplayType {
 
 interface CaseWidgetNumberDisplayType {
   type: CaseWidgetDisplayTypeKey.NUMBER;
-  digitsInfo: '1.0-0';
+  digitsInfo?: string;
 }
 
 interface CaseWidgetPercentDisplayType {
   type: CaseWidgetDisplayTypeKey.PERCENT;
-  digitsInfo: '1.0-0';
+  digitsInfo?: string;
 }
 
 type CaseWidgetDisplayType =
