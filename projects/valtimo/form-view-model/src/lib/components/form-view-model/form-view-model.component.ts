@@ -20,10 +20,10 @@ import {
   combineLatest,
   debounceTime,
   filter,
-  Observable,
+  Observable, of,
   pairwise,
-  Subject,
-  take,
+  Subject, switchMap,
+  take, tap,
 } from 'rxjs';
 import {
   FormioComponent,
@@ -138,11 +138,11 @@ export class FormViewModelComponent implements OnInit {
     this.loadInitialViewModel();
   }
 
-  public beforeSubmitHook(instance: FormViewModelComponent) {
+  public beforeSubmitHook(instance: FormViewModelComponent): (submission, callback) => void {
     return (submission, callback) => instance.beforeSubmit(submission, callback);
   }
 
-  public beforeSubmit(submission: any, callback: FormioSubmissionCallback) {
+  public beforeSubmit(submission: any, callback: FormioSubmissionCallback): void {
     combineLatest([this.formName$, this.taskInstanceId$])
       .pipe(take(1))
       .subscribe(([formName, taskInstanceId]) => {
@@ -161,7 +161,7 @@ export class FormViewModelComponent implements OnInit {
       });
   }
 
-  private handleFormError(error: HttpErrorResponse) {
+  private handleFormError(error: HttpErrorResponse): void {
     const formInstance = this.formio.formio;
     const component = formInstance.getComponent(error.error?.component);
     if (component == null) {
@@ -188,7 +188,7 @@ export class FormViewModelComponent implements OnInit {
     }
   }
 
-  public loadInitialViewModel() {
+  public loadInitialViewModel(): void {
     combineLatest([this.formName$, this.taskInstanceId$])
       .pipe(take(1))
       .subscribe(([formName, taskInstanceId]) => {
@@ -201,34 +201,37 @@ export class FormViewModelComponent implements OnInit {
       });
   }
 
-  public updateViewModel() {
-    this.loading$.pipe(take(1)).subscribe(updating => {
-      if (!updating) {
-        this.loading$.next(true);
-        combineLatest([this.formName$, this.taskInstanceId$, this.change$])
-          .pipe(take(1))
-          .subscribe(([formName, taskInstanceId, change]) => {
-            this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).subscribe({
-              next: viewModel => {
-                this.submission$.next({data: viewModel});
-                this.change$.pipe(take(1)).subscribe(change => {
-                  this.loading$.next(false);
-                });
-                this.errors$.next([]);
-              },
-              error: error => {
-                this.change$.pipe(take(1)).subscribe(change => {
-                  this.loading$.next(false);
-                });
-                this.handleFormError(error);
-              },
-            });
-          });
-      }
-    });
+  public updateViewModel(): void {
+    this.loading$.pipe(
+      take(1),
+      switchMap(updating => {
+        if (!updating) {
+          this.loading$.next(true);
+          return combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(
+            take(1),
+            switchMap(([formName, taskInstanceId, change]) =>
+              this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).pipe(
+                tap({
+                  next: viewModel => {
+                    this.submission$.next({data: viewModel});
+                    this.loading$.next(false);
+                    this.errors$.next([]);
+                  },
+                  error: error => {
+                    this.loading$.next(false);
+                    this.handleFormError(error);
+                  }
+                })
+              )
+            )
+          );
+        }
+        return of(null);  // Fallback to return an observable if updating is true
+      })
+    ).subscribe();
   }
 
-  private handleChanges() {
+  private handleChanges(): void {
     this.change$
       .pipe(
         pairwise(),
