@@ -29,7 +29,11 @@ import {
   take,
 } from 'rxjs';
 import {ListItem} from 'carbon-components-angular/dropdown';
-import {DocumentMigrationConflictRequest, DocumentMigrationPatch, LoadedValue} from '../../models';
+import {
+  DocumentMigrationConflictRequest,
+  DocumentMigrationPatch,
+  LoadedValue,
+} from '../../models';
 import {CaseMigrationService} from '../../services';
 import {WatsonHealthStackedMove16} from '@carbon/icons';
 import {IconService} from 'carbon-components-angular';
@@ -136,17 +140,18 @@ export class CaseMigrationComponent {
         )
       )
     );
-  public readonly patches$: Observable<Array<DocumentMigrationPatch>> = this.patchItems$.pipe(
-    map(patchItems =>
-      patchItems.map(
-        patchItem =>
-          ({
-            source: patchItem.key,
-            target: patchItem.value,
-          }) as DocumentMigrationPatch
+  public readonly patches$: Observable<Array<DocumentMigrationPatch>> =
+    this.patchItems$.pipe(
+      map(patchItems =>
+        patchItems.map(
+          patchItem =>
+            ({
+              source: patchItem.key,
+              target: patchItem.value,
+            }) as DocumentMigrationPatch
+        )
       )
-    )
-  );
+    );
 
   mappingValueChange(patches: MultiInputValues): void {
     this.patchItems$.next(patches);

@@ -27,7 +27,7 @@ import {TabService} from '../../../services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabFormComponent implements OnInit {
-  @Input() public tabType: ApiTabType;
+  @Input() tabType: ApiTabType;
 
   public readonly listItems$ = combineLatest([
     this.tabService.configuredContentKeys$,
@@ -43,8 +43,6 @@ export class TabFormComponent implements OnInit {
           return this.getListItems(customComponentKeys, tabKeys);
         case ApiTabType.FORMIO:
           return this.getListItems(formDefinitions, tabKeys);
-        case ApiTabType.WIDGETS:
-          return [];
       }
     }),
     startWith([])
@@ -60,12 +58,6 @@ export class TabFormComponent implements OnInit {
 
   public ngOnInit(): void {
     this.form = this.formGroupDirective.control;
-
-    if (this.tabType == ApiTabType.WIDGETS) {
-      this.form.get('contentKey')?.disable();
-    } else {
-      this.form.get('contentKey')?.enable();
-    }
   }
 
   public onSearch(): void {

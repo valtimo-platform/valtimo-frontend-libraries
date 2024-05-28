@@ -37,11 +37,7 @@ import {
   TitleModule,
   CarbonListModule,
 } from '@valtimo/components';
-import {
-  IconModule,
-  ButtonModule as CarbonButtonModule,
-  ModalModule as CarbonModalModule,
-} from 'carbon-components-angular';
+import {IconModule, ButtonModule as CarbonButtonModule} from 'carbon-components-angular';
 
 @NgModule({
   providers: [PluginManagementStateService],
@@ -69,7 +65,6 @@ import {
     PluginConfigurationContainerModule,
     CarbonButtonModule,
     CarbonListModule,
-    CarbonModalModule,
     IconModule,
   ],
   exports: [

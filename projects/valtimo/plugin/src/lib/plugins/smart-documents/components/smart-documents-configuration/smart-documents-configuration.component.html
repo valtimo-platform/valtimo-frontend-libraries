@@ -28,6 +28,7 @@
     [disabled]="obs.disabled"
     [defaultValue]="obs.prefill?.configurationTitle"
     [required]="true"
+    [widthPx]="350"
     [tooltip]="'configurationTitleTooltip' | pluginTranslate: pluginId | async"
     placeholder="Smart Documents Plugin"
   >
@@ -35,6 +36,7 @@
   <v-input
     name="url"
     [title]="'url' | pluginTranslate: pluginId | async"
+    [fullWidth]="true"
     [margin]="true"
     [disabled]="obs.disabled"
     [defaultValue]="obs.prefill?.url"
@@ -49,6 +51,7 @@
     [disabled]="obs.disabled"
     [defaultValue]="obs.prefill?.username"
     [required]="true"
+    [widthPx]="350"
     placeholder=""
   >
   </v-input>
@@ -60,6 +63,7 @@
     [disabled]="obs.disabled"
     [defaultValue]="obs.prefill?.password"
     [required]="true"
+    [widthPx]="350"
   >
   </v-input>
 </v-form>
