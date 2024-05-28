@@ -15,7 +15,7 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {Component, HostBinding, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {
@@ -39,6 +39,7 @@ import {TranslateModule} from '@ngx-translate/core';
     CarbonListModule,
     TranslateModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierDetailWidgetsComponent implements OnDestroy {
   @HostBinding('class.tab--no-margin') private readonly _noMargin = true;

@@ -16,6 +16,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Input,
@@ -49,6 +50,7 @@ import {LoadingModule} from 'carbon-components-angular';
   styleUrls: ['./widget-block.component.scss'],
   standalone: true,
   imports: [CommonModule, LoadingModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   @ViewChild('widgetBlockContent') private _widgetBlockContentRef: ElementRef<HTMLDivElement>;

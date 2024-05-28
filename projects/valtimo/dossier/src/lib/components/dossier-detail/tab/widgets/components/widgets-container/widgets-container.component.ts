@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CaseWidget, CaseWidgetWithUuid} from '../../../../../../models';
 import {WidgetBlockComponent} from '../widget-block/widget-block.component';
@@ -28,6 +36,7 @@ import {BehaviorSubject} from 'rxjs';
   styleUrls: ['./widgets-container.component.scss'],
   standalone: true,
   imports: [CommonModule, WidgetBlockComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetsContainerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('widgetsContainer') private _widgetsContainerRef: ElementRef<HTMLDivElement>;

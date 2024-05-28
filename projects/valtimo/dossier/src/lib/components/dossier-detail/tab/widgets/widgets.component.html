@@ -24,9 +24,9 @@
     <ng-container *ngTemplateOutlet="loading"></ng-container>
   } @else if (!obs.widgetConfiguration.widgets || obs.widgetConfiguration.widgets.length === 0) {
     <valtimo-no-results
-      [title]="'dashboard.noDashboards' | translate"
-      [description]="'dashboard.noDashboardsDescription' | translate"
-      illustration="valtimo-layout/img/no-dashboards.svg"
+      [title]="'dossier.widgets.noWidgets' | translate"
+      [description]="'dossier.widgets.noWidgetsDescription' | translate"
+      illustration="valtimo-layout/img/no-widgets.svg"
     ></valtimo-no-results>
   } @else {
     <valtimo-dossier-widgets-container
