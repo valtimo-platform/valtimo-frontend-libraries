@@ -29,18 +29,17 @@ type DocumentStatus = 'in_bewerking' | 'ter_vaststelling' | 'definitief' | 'gear
 type DocumentLanguage = 'nld' | 'eng' | 'deu';
 
 interface DocumentenApiMetadata {
-  titel: string;
-  bescvhrijving: string;
-  bestandsnaam: string;
-  vertrouwelijkheidaanduiding: ConfidentialityLevel;
-  auteur: string;
+  title: string;
+  description: string;
+  filename: string;
+  confidentialityLevel: ConfidentialityLevel;
+  author: string;
   status: DocumentStatus;
-  creatiedatum: string;
-  ontvangstdatum: string;
-  verzenddatum: string;
-  taal: DocumentLanguage;
+  creationDate: string;
+  receiptDate: string;
+  sendDate: string;
+  language: DocumentLanguage;
   informatieobjecttype: string;
-  trefwoorden: string[];
 }
 
 type AdditionalDocumentDate = 'sent' | 'received' | 'neither';

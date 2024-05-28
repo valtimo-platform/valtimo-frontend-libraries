@@ -29,6 +29,7 @@ import {
   BehaviorSubject,
   distinctUntilChanged,
   filter,
+  first,
   Subscription,
   switchMap,
   take,
@@ -59,15 +60,12 @@ export class FormManagementEditComponent
   public activeTab = EDIT_TABS.BUILDER;
 
   private readonly _formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
-  private get _formDefinition(): FormDefinition {
-    return this._formDefinition$.getValue();
-  }
   public readonly formDefinition$ = this._formDefinition$.pipe(
     filter((definition: FormDefinition | null) => !!definition),
     distinctUntilChanged(
       (prevFormDefinition, currFormDefinition) =>
-        JSON.stringify(prevFormDefinition?.formDefinition?.components) ===
-        JSON.stringify(currFormDefinition?.formDefinition?.components)
+        JSON.stringify(prevFormDefinition?.formDefinition.components) ===
+        JSON.stringify(currFormDefinition?.formDefinition.components)
     ),
     tap(() => {
       if (!this._editorInitialized) {
@@ -114,12 +112,11 @@ export class FormManagementEditComponent
   }
 
   public formBuilderChanged(event, definition: EditorModel): void {
+    this._changeActive = true;
+    this.modifiedFormDefinition = event.form;
     if (event.type === 'updateComponent') {
       return;
     }
-    this._changeActive = true;
-    this.modifiedFormDefinition = event.form;
-    this._formDefinition$.next({...this._formDefinition, formDefinition: event.form});
     this.jsonFormDefinition$.next({...definition, value: JSON.stringify(event.form)});
     this._changeActive = false;
   }
@@ -203,18 +200,19 @@ export class FormManagementEditComponent
       return;
     }
 
-    const parsedDefinition = JSON.parse(value);
-
-    this.modifiedFormDefinition = parsedDefinition;
-
     this._formDefinition$.next({
       ...definition,
-      formDefinition: parsedDefinition,
+      formDefinition: JSON.parse(value),
     });
   }
 
   public onValidEvent(value: boolean, disabled: boolean): void {
     if (this._changeActive || disabled) {
+      return;
+    }
+
+    if (this.validJsonChange === null) {
+      this.validJsonChange = value;
       return;
     }
 
@@ -250,11 +248,6 @@ export class FormManagementEditComponent
 
     this.modifiedFormDefinition = newDefinition;
     definition.formDefinition = newDefinition;
-
-    this.jsonFormDefinition$.next({
-      value: JSON.stringify(newDefinition),
-      language: 'json',
-    });
 
     this.reloading$.next(false);
   }

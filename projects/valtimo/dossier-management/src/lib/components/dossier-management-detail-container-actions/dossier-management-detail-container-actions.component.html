@@ -56,7 +56,6 @@
     class="overflow-button"
   >
     <cds-overflow-menu-option
-      [id]="'exportDocumentDefinition'"
       [disabled]="obs.exporting || obs.loadingVersion"
       (selected)="export()"
       >{{
@@ -66,7 +65,6 @@
 
     <cds-overflow-menu-option
       *ngIf="obs.selectedDocumentDefinition && !obs.selectedDocumentDefinition.readOnly"
-      [id]="'removeDocumentDefinition'"
       [disabled]="obs.exporting || obs.loadingVersion"
       (selected)="openDossierRemoveModal()"
       >{{ 'Remove document definition' | translate }}</cds-overflow-menu-option

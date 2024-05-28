@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {TemplateRef} from '@angular/core';
-import {CarbonTag} from './carbon-tag.model';
+import { CarbonTag } from './carbon-tag.model';
 
 enum ViewType {
   ACTION = 'dropdownActions',
@@ -67,7 +67,6 @@ interface ColumnConfig extends ListField {
   format?: string;
   enum?: Array<string> | {[key: string]: string};
   template?: TemplateRef<any>;
-  templateData?: object;
 }
 
 enum MoveRowDirection {
