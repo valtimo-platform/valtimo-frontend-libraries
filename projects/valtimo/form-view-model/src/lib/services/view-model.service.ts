@@ -17,10 +17,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {
-  BaseApiService,
-  ConfigService,
-} from '@valtimo/config';
+import {BaseApiService, ConfigService} from '@valtimo/config';
 import {InterceptorSkip} from '@valtimo/security';
 import {ViewModel} from '../models';
 
@@ -37,35 +34,37 @@ export class ViewModelService extends BaseApiService {
     return this.httpClient.get<any>(this.getApiUrl('/v1/form/view-model'), {
       params: {
         formName,
-        taskInstanceId
+        taskInstanceId,
       },
-      headers: new HttpHeaders().set(InterceptorSkip, '400')
+      headers: new HttpHeaders().set(InterceptorSkip, '400'),
     });
   }
 
-  public updateViewModel(formName: string, taskInstanceId: string, viewModel: ViewModel): Observable<ViewModel> {
-    return this.httpClient.post(
-      this.getApiUrl(`/v1/form/view-model`),
-      viewModel,
-      {
-        params: {
-          formName,
-          taskInstanceId
-        },
-        headers: new HttpHeaders().set(InterceptorSkip, '400')
-      });
+  public updateViewModel(
+    formName: string,
+    taskInstanceId: string,
+    viewModel: ViewModel
+  ): Observable<ViewModel> {
+    return this.httpClient.post(this.getApiUrl(`/v1/form/view-model`), viewModel, {
+      params: {
+        formName,
+        taskInstanceId,
+      },
+      headers: new HttpHeaders().set(InterceptorSkip, '400'),
+    });
   }
 
-  public submitViewModel(formName: string, taskInstanceId: string, viewModel: ViewModel): Observable<ViewModel> {
-    return this.httpClient.post(
-      this.getApiUrl(`/v1/form/view-model/submit`),
-      viewModel,
-      {
-        params: {
-          formName,
-          taskInstanceId
-        },
-        headers: new HttpHeaders().set(InterceptorSkip, '400')
-      });
+  public submitViewModel(
+    formName: string,
+    taskInstanceId: string,
+    viewModel: ViewModel
+  ): Observable<ViewModel> {
+    return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/submit`), viewModel, {
+      params: {
+        formName,
+        taskInstanceId,
+      },
+      headers: new HttpHeaders().set(InterceptorSkip, '400'),
+    });
   }
 }

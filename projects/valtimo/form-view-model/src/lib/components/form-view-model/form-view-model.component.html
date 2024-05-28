@@ -14,7 +14,9 @@
   ~ limitations under the License.
   -->
 
-<div class="form-container" *ngIf="{
+<div
+  class="form-container"
+  *ngIf="{
     submission: submission$ | async,
     readOnly: readOnly$ | async,
     form: form$ | async,
@@ -22,7 +24,8 @@
     formioOptions: formioOptions$ | async,
     errors: errors$ | async,
     loading: loading$ | async
-  } as obs">
+  } as obs"
+>
   <div *ngIf="obs.loading" class="loading-icon">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
@@ -34,13 +37,13 @@
     </ol>
   </div>
   <formio
-          #formio
-          [submission]="obs.submission"
-          [form]="obs.form"
-          [refresh]="refreshForm"
-          [readOnly]="obs.readOnly"
-          [options]="obs.formioOptions"
-          (submit)="onSubmit($event)"
-          (change)="onChange($event)"
+    #formio
+    [submission]="obs.submission"
+    [form]="obs.form"
+    [refresh]="refreshForm"
+    [readOnly]="obs.readOnly"
+    [options]="obs.formioOptions"
+    (submit)="onSubmit($event)"
+    (change)="onChange($event)"
   ></formio>
 </div>

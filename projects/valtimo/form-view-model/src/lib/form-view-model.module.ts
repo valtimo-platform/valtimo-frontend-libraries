@@ -19,11 +19,8 @@ import {FormioModule} from '@formio/angular';
 import {FormViewModelComponent} from './components/form-view-model/form-view-model.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormioModule
-  ],
+  imports: [CommonModule, FormioModule],
   declarations: [FormViewModelComponent],
-  exports: [FormViewModelComponent]
+  exports: [FormViewModelComponent],
 })
 export class FormViewModelModule {}
