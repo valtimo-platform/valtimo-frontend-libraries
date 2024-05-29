@@ -72,6 +72,7 @@ import {
 } from '../../models';
 import {ViewContentService} from '../view-content/view-content.service';
 import {CarbonListFilterPipe} from './CarbonListFilterPipe.directive';
+import {KeyStateService} from '../../services/key-state.service';
 
 @Component({
   selector: 'valtimo-carbon-list',
@@ -234,7 +235,8 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly iconService: IconService,
     private readonly logger: NGXLogger,
     private readonly translateService: TranslateService,
-    private readonly viewContentService: ViewContentService
+    private readonly viewContentService: ViewContentService,
+    private readonly keyStateService: KeyStateService
   ) {
     this.iconService.registerAll([ArrowDown16, ArrowUp16, SettingsView16]);
   }
@@ -279,6 +281,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onRowClick(index: number): void {
     const item = this._table.model.data[index][0]['item'];
+    item.ctrlClick = this.keyStateService.getCtrlOrCmdState();
 
     if (!item || item?.locked) {
       return;
