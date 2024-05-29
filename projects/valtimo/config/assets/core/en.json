@@ -719,9 +719,13 @@
       "widgetTitlePlaceholder": "Choose a short name",
       "column": "Column {{number}}",
       "fields": {
-        "type": "Type",
+        "add": "Add field",
+        "content": "Content",
+        "contentPlaceholder": "Path to content",
         "label": "Label",
-        "content": "Content"
+        "labelPlaceholder": "Path to label",
+        "type": "Type",
+        "typePlaceholder": "Choose type"
       }
     }
   },

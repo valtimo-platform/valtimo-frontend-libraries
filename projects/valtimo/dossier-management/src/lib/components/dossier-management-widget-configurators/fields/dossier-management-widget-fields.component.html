@@ -13,7 +13,56 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<form class="valtimo-dossier-management-widget-field" [formGroup]="formGroup">
+  <ng-container formArrayName="rows">
+    @for (formRow of formRows.controls; track $index) {
+      <form [formGroup]="formRow" class="valtimo-dossier-management-widget-field__container">
+        <cds-dropdown
+          [label]="'widgetTabManagement.content.fields.type' | translate"
+          [dropUp]="false"
+          [placeholder]="'widgetTabManagement.content.fields.typePlaceholder' | translate"
+          formControlName="type"
+        >
+          <cds-dropdown-list [items]="getItemsSelected(formRow)"></cds-dropdown-list>
+        </cds-dropdown>
 
-fields works
+        <cds-text-label>
+          {{ 'widgetTabManagement.content.fields.label' | translate }}
 
-{{ columnData.test }}
+          <input
+            cdsText
+            [placeholder]="'widgetTabManagement.content.fields.labelPlaceholder' | translate"
+            type="text"
+            formControlName="label"
+          />
+        </cds-text-label>
+
+        <cds-text-label>
+          {{ 'widgetTabManagement.content.fields.content' | translate }}
+
+          <input
+            cdsText
+            [placeholder]="'widgetTabManagement.content.fields.contentPlaceholder' | translate"
+            type="text"
+            formControlName="content"
+          />
+        </cds-text-label>
+
+        <button
+          cdsButton="danger--ghost"
+          [iconOnly]="true"
+          class="valtimo-dossier-management-widget-field__delete-button"
+          (click)="onDeleteFieldClick($index)"
+        >
+          <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+        </button>
+      </form>
+    }
+  </ng-container>
+
+  <button cdsButton="primary" size="sm" (click)="onAddFieldClick()">
+    {{ 'widgetTabManagement.content.fields.add' | translate }}
+
+    <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+  </button>
+</form>

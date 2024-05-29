@@ -19,10 +19,15 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   HostBinding,
+  OnDestroy,
+  OnInit,
+  Output,
   ViewChild,
   ViewContainerRef,
   ViewEncapsulation,
+  effect,
   signal,
 } from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -31,7 +36,7 @@ import {ButtonModule, IconModule, InputModule, TabsModule} from 'carbon-componen
 
 import {WidgetWizardService} from '../../../../services';
 import {CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
-import {map} from 'rxjs';
+import {BehaviorSubject, Subscription, combineLatest, debounceTime, map} from 'rxjs';
 
 @Component({
   selector: 'valtimo-widget-wizard-content-step',
@@ -50,16 +55,17 @@ import {map} from 'rxjs';
     ButtonModule,
   ],
 })
-export class WidgetWizardContentStepComponent {
+export class WidgetWizardContentStepComponent implements OnDestroy, OnInit {
   @HostBinding('class') public readonly class = 'valtimo-widget-wizard-content';
   @ViewChild('contentRenderer', {static: true, read: ViewContainerRef})
   private readonly _vcr: ViewContainerRef;
+  @Output() public readonly validEvent = new EventEmitter<boolean>();
 
   public form = this.fb.group({
-    widgetTitle: this.fb.control('', Validators.required),
+    widgetTitle: this.fb.control(this.widgetWizardService.widgetTitle(), Validators.required),
   });
 
-  public readonly columns = signal<object[]>([{}]);
+  public readonly columns = signal<null[]>([null]);
   public readonly widgetWidth = this.widgetWizardService.widgetWidth();
   public readonly selectedTabIndex = -1;
   public readonly theme$ = this.cdsThemeService.currentTheme$.pipe(
@@ -68,24 +74,61 @@ export class WidgetWizardContentStepComponent {
     )
   );
 
+  private readonly _subscriptions = new Subscription();
+  private readonly _contentValid = new BehaviorSubject<boolean>(false);
+
   constructor(
     private readonly cdsThemeService: CdsThemeService,
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly widgetWizardService: WidgetWizardService
-  ) {}
-
-  public onAddColumnClick(): void {
-    this.columns.update(value => [...value, {columnData: {}}]);
+  ) {
+    effect(() => {
+      console.log(this.widgetWizardService.widgetContent());
+    });
   }
 
-  public onColumnSelected(index: number): void {
-    console.log(index);
-    this.renderComponent({test: `Component ${index + 1}`});
+  public ngOnInit(): void {
+    this._subscriptions.add(
+      combineLatest([this.form.valueChanges, this._contentValid])
+        .pipe(debounceTime(100))
+        .subscribe(([formValid, contentValid]) => {
+          if (formValid)
+            this.widgetWizardService.widgetTitle.set(this.form.get('widgetTitle')?.value ?? '');
+          this.validEvent.emit(formValid && contentValid);
+        })
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
+  public onAddColumnClick(): void {
+    this.columns.update(value => [...value, null]);
+  }
+
+  public onColumnTabSelected(index: number): void {
+    this.renderComponent(index);
   }
 
   public onDeleteColumnClick(index: number): void {
-    this.columns.update((columns: object[]) => {
+    this.widgetWizardService.widgetContent.update(
+      (content: {[columnIndex: number]: any} | null) => {
+        if (!content) return null;
+
+        let tempIndex = index;
+        while (tempIndex < this.columns().length - 1) {
+          content[tempIndex] = content[tempIndex + 1];
+          tempIndex++;
+        }
+        delete content[tempIndex];
+
+        return content;
+      }
+    );
+
+    this.columns.update((columns: null[]) => {
       const temp = columns;
       temp.splice(index, 1);
 
@@ -93,7 +136,7 @@ export class WidgetWizardContentStepComponent {
     });
   }
 
-  private renderComponent(columnData: object): void {
+  private renderComponent(columnIndex: number): void {
     this._vcr.clear();
     const widget = this.widgetWizardService.selectedWidget();
     if (!widget) return;
@@ -101,7 +144,18 @@ export class WidgetWizardContentStepComponent {
     const componentInstance = this._vcr.createComponent(widget.component).instance;
     if (!componentInstance) return;
 
-    componentInstance.columnData = columnData;
+    const widgetContent = this.widgetWizardService.widgetContent();
+    if (!!widgetContent) componentInstance.columnData = widgetContent[columnIndex];
+
+    this._subscriptions.add(
+      componentInstance.changeEvent.subscribe((event: {data: any; valid: boolean}) => {
+        this.widgetWizardService.widgetContent.update(content => ({
+          ...content,
+          [columnIndex]: event.data,
+        }));
+        this._contentValid.next(event.valid);
+      })
+    );
     this.cdr.detectChanges();
   }
 }

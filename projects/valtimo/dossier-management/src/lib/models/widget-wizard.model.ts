@@ -47,7 +47,6 @@ interface WidgetType {
   illustrationUrl: string;
   type: WidgetTypes;
   component: Type<WidgetContentComponent>;
-  data: object;
 }
 
 const AVAILABLE_WIDGETS: WidgetType[] = [
@@ -57,7 +56,6 @@ const AVAILABLE_WIDGETS: WidgetType[] = [
     illustrationUrl: 'valtimo-layout/img/widget-management/types/fields.svg',
     type: WidgetTypes.FIELDS,
     component: DossierManagementWidgetFieldsComponent,
-    data: {},
   },
 ];
 

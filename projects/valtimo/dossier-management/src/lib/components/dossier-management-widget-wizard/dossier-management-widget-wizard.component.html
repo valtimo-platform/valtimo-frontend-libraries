@@ -64,7 +64,9 @@
       @case (WidgetWizardSteps.CONTENT) {
         <p>{{ 'widgetTabManagement.content.description' | translate }}</p>
 
-        <valtimo-widget-wizard-content-step></valtimo-widget-wizard-content-step>
+        <valtimo-widget-wizard-content-step
+          (validEvent)="onContentValidEvent($event)"
+        ></valtimo-widget-wizard-content-step>
       }
       @default {
         <p>{{ 'widgetTabManagement.types.description' | translate }}</p>

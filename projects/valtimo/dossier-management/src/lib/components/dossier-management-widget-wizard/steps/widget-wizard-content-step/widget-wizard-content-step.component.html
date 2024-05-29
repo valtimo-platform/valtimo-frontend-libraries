@@ -33,7 +33,11 @@
 <ng-container>
   <cds-tabs type="contained">
     @for (column of columns(); track $index) {
-      <cds-tab [heading]="columnHeading" [context]="$index" (selected)="onColumnSelected($index)">
+      <cds-tab
+        [heading]="columnHeading"
+        [context]="{index: $index, count: $count}"
+        (selected)="onColumnTabSelected($index)"
+      >
       </cds-tab>
     }
     <cds-tab
@@ -53,11 +57,17 @@
   </button>
 </ng-template>
 
-<ng-template #columnHeading let-index>
+<ng-template #columnHeading let-data>
   <div class="valtimo-widget-wizard-content__heading">
-    {{ 'widgetTabManagement.content.column' | translate: {number: index + 1} }}
+    {{ 'widgetTabManagement.content.column' | translate: {number: data.index + 1} }}
 
-    <button cdsButton="ghost" [iconOnly]="true" size="sm" (click)="onDeleteColumnClick(index)">
+    <button
+      cdsButton="ghost"
+      [disabled]="data.count === 1"
+      [iconOnly]="true"
+      size="sm"
+      (click)="onDeleteColumnClick(index)"
+    >
       <svg class="cds--btn__icon" cdsIcon="close" size="16"></svg>
     </button>
   </div>

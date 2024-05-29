@@ -60,7 +60,9 @@ export class DossierManagementWidgetWizardComponent {
     const selectedStyle = this.widgetWizardService.widgetStyle() ?? '';
 
     return {
-      [WidgetWizardStep.TYPE]: selectedWidgetType,
+      [WidgetWizardStep.TYPE]: selectedWidgetType
+        ? `widgetTabManagement.types.${selectedWidgetType}.title`
+        : '',
       [WidgetWizardStep.WIDTH]: WIDGET_WIDTH_LABELS[selectedWidth] ?? '',
       [WidgetWizardStep.STYLE]: WIDGET_STYLE_LABELS[selectedStyle] ?? '',
     };
@@ -83,20 +85,27 @@ export class DossierManagementWidgetWizardComponent {
           ...(secondaryLabels[WidgetWizardStep.WIDTH] && {
             secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.WIDTH]),
           }),
+          disabled: !secondaryLabels[WidgetWizardStep.TYPE],
         },
         {
           label: this.translateService.instant('widgetTabManagement.wizard.steps.style'),
           ...(secondaryLabels[WidgetWizardStep.STYLE] && {
             secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.STYLE]),
           }),
+          disabled: !secondaryLabels[WidgetWizardStep.WIDTH],
         },
         {
           label: this.translateService.instant('widgetTabManagement.wizard.steps.content'),
+          disabled:
+            !secondaryLabels[WidgetWizardStep.TYPE] ||
+            !secondaryLabels[WidgetWizardStep.WIDTH] ||
+            !secondaryLabels[WidgetWizardStep.STYLE],
         },
       ];
     })
   );
 
+  private readonly _contentStepValid = signal<boolean>(false);
   public readonly currentStep = signal<WidgetWizardStep>(WidgetWizardStep.TYPE);
   public nextButtonDisabled = computed(() => {
     switch (this.currentStep()) {
@@ -106,6 +115,8 @@ export class DossierManagementWidgetWizardComponent {
         return !this.widgetWizardService.widgetWidth();
       case WidgetWizardStep.STYLE:
         return this.widgetWizardService.widgetStyle() === null;
+      case WidgetWizardStep.CONTENT:
+        return this.widgetWizardService.widgetContent() === null || !this._contentStepValid();
       default:
         return true;
     }
@@ -135,5 +146,9 @@ export class DossierManagementWidgetWizardComponent {
 
   public onClose(): void {
     this.closeEvent.emit('close');
+  }
+
+  public onContentValidEvent(valid: boolean): void {
+    this._contentStepValid.set(valid);
   }
 }

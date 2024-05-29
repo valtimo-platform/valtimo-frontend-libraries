@@ -13,3 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+.valtimo-dossier-management-widget-field {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: var(--cds-layer-01);
+
+  &__container {
+    display: grid;
+    grid-template-columns: 1fr 3fr 3fr auto;
+    align-items: flex-end;
+    gap: 16px;
+  }
+
+  &__delete-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+}
