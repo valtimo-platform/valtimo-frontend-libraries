@@ -1,4 +1,4 @@
-# Welcome at Valtimo
+# Welcome to Valtimo
 
 ### What is Valtimo?
 Valtimo is the low-code platform for Business Process Automation. Our goal is to make implementing business process automation and case management easy.
@@ -15,8 +15,8 @@ Valtimo is the low-code platform for Business Process Automation. Our goal is to
 
 ### What are the 'Valtimo frontend libraries'?
 This repository contains:
-- A collection of Angular libraries that together form the Valtimo frontend
-- The `app` module, containing an Angular application, used for library development
+- A collection of Angular libraries that together form the Valtimo frontend.
+- The `app` module, containing an Angular application, used for library development.
 
 ### Starting the Valtimo platform
 Starting up the Valtimo platform requires three steps:
@@ -30,10 +30,10 @@ Starting up the Valtimo platform requires three steps:
 2. Install Node v20: `nvm install 20 && nvm use 20`
 
 #### Install dependencies
-Run the following command to install the dependencies: `npm install`
+Run the following command to install the dependencies: `npm install`.
 
 #### Build libraries
-Run the following command to build all the Valtimo libraries: `npm run libs-build-all`
+Run the following command to build all the Valtimo libraries: `npm run libs-build-all`.
 
 #### Start application
 - Run the following command to start the Angular application: `npm start`.

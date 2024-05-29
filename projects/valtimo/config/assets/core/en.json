@@ -161,7 +161,11 @@
       "noFormSpecified": "No form definition has been specified for this tab.",
       "formNotFound": "The form definition '{{formDefinitionName}}' could not be found."
     },
-    "rowLocked": "You don't have access to this case"
+    "rowLocked": "You don't have access to this case",
+    "widgets": {
+      "noWidgets": "No widgets",
+      "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them."
+    }
   },
   "document": {
     "title": {
@@ -679,7 +683,7 @@
       "creatiedatum": "Creation date",
       "formaat": "Format",
       "identificatie": "Id",
-      "informatieobjecttype": "Information object type",
+      "informatieobjecttypeOmschrijving": "Information object type",
       "locked": "Locked",
       "status": "Status",
       "taal": "Language",
@@ -1500,7 +1504,11 @@
     "back": "Go back",
     "next": "Next",
     "pluginDescription": "Plugin description",
-    "unlink": "Unlink"
+    "unlink": "Unlink",
+    "toggleViewModel": {
+      "title": "View Model enabled?",
+      "checkboxDescription": "Enables Form View Model form processing"
+    }
   },
   "processLinkType": {
     "plugin": "Plugin",
