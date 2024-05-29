@@ -722,8 +722,8 @@
         "add": "Add field",
         "content": "Content",
         "contentPlaceholder": "Path to content",
-        "label": "Label",
-        "labelPlaceholder": "Path to label",
+        "title": "Title",
+        "titlePlaceholder": "Choose a title",
         "type": "Type",
         "typePlaceholder": "Choose type"
       }

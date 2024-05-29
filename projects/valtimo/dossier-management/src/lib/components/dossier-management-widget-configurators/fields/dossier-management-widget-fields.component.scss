@@ -22,8 +22,8 @@
 
   &__container {
     display: grid;
-    grid-template-columns: 1fr 3fr 3fr auto;
-    align-items: flex-end;
+    grid-template-columns: 1fr 2fr 2fr auto 32px;
+    align-items: flex-start;
     gap: 16px;
   }
 
@@ -32,5 +32,28 @@
     align-items: center;
     justify-content: center;
     padding: 0;
+    align-self: center;
+
+    &.enum {
+      align-self: flex-end;
+    }
+  }
+
+  &__options {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__enum {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    &-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      align-items: flex-end;
+      gap: 16px;
+    }
   }
 }

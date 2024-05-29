@@ -21,19 +21,20 @@
           [label]="'widgetTabManagement.content.fields.type' | translate"
           [dropUp]="false"
           [placeholder]="'widgetTabManagement.content.fields.typePlaceholder' | translate"
+          (selected)="onTypeSelected(formRow, $event)"
           formControlName="type"
         >
-          <cds-dropdown-list [items]="getItemsSelected(formRow)"></cds-dropdown-list>
+          <cds-dropdown-list [items]="getDisplayItemsSelected(formRow)"></cds-dropdown-list>
         </cds-dropdown>
 
         <cds-text-label>
-          {{ 'widgetTabManagement.content.fields.label' | translate }}
+          {{ 'widgetTabManagement.content.fields.title' | translate }}
 
           <input
             cdsText
-            [placeholder]="'widgetTabManagement.content.fields.labelPlaceholder' | translate"
+            [placeholder]="'widgetTabManagement.content.fields.titlePlaceholder' | translate"
             type="text"
-            formControlName="label"
+            formControlName="title"
           />
         </cds-text-label>
 
@@ -48,11 +49,138 @@
           />
         </cds-text-label>
 
+        <div class="valtimo-dossier-management-widget-field__options">
+          @switch (formRow.get('type').value.content) {
+            @case (CaseWidgetDisplayTypeKey.CURRENCY) {
+              <cds-text-label>
+                {{ 'Currency Code' | translate }}
+
+                <input
+                  cdsText
+                  [placeholder]="'Currency code' | translate"
+                  type="text"
+                  formControlName="currencyCode"
+                />
+              </cds-text-label>
+
+              <cds-text-label>
+                {{ 'Display' | translate }}
+
+                <input
+                  cdsText
+                  [placeholder]="'Display' | translate"
+                  type="text"
+                  formControlName="display"
+                />
+              </cds-text-label>
+
+              <cds-text-label>
+                {{ 'Digits info' | translate }}
+
+                <input
+                  cdsText
+                  [placeholder]="'Digits info' | translate"
+                  type="text"
+                  formControlName="digitsInfo"
+                />
+              </cds-text-label>
+            }
+            @case (CaseWidgetDisplayTypeKey.DATE) {
+              <cds-text-label>
+                {{ 'Format' | translate }}
+
+                <input
+                  cdsText
+                  [placeholder]="'Format' | translate"
+                  type="text"
+                  formControlName="format"
+                />
+              </cds-text-label>
+            }
+            @case (CaseWidgetDisplayTypeKey.ENUM) {
+              <div class="valtimo-dossier-management-widget-field__enum" formArrayName="values">
+                @for (rowValue of formRow.get('values')?.controls; track $index) {
+                  <form
+                    [formGroup]="rowValue"
+                    class="valtimo-dossier-management-widget-field__enum-form"
+                  >
+                    <cds-text-label>
+                      {{ 'Key' | translate }}
+
+                      <input
+                        cdsText
+                        [placeholder]="'Key' | translate"
+                        type="text"
+                        formControlName="key"
+                      />
+                    </cds-text-label>
+
+                    <cds-text-label>
+                      {{ 'Value' | translate }}
+
+                      <input
+                        cdsText
+                        [placeholder]="'Value' | translate"
+                        type="text"
+                        formControlName="value"
+                      />
+                    </cds-text-label>
+
+                    <button
+                      cdsButton="danger--ghost"
+                      [disabled]="$count === 1"
+                      [iconOnly]="true"
+                      class="valtimo-dossier-management-widget-field__delete-button enum"
+                      (click)="onDeleteRowClick(formRow.get('values'), $index)"
+                    >
+                      <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+                    </button>
+                  </form>
+                }
+
+                <button
+                  cdsButton="primary"
+                  size="sm"
+                  (click)="onAddEnumValueClick(formRow.get('values'))"
+                >
+                  {{ 'Add enumvalue' | translate }}
+
+                  <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+                </button>
+              </div>
+            }
+            @case (CaseWidgetDisplayTypeKey.NUMBER) {
+              <cds-text-label>
+                {{ 'Digits info' | translate }}
+
+                <input
+                  cdsText
+                  [placeholder]="'Digits info' | translate"
+                  type="text"
+                  formControlName="digitsInfo"
+                />
+              </cds-text-label>
+            }
+            @case (CaseWidgetDisplayTypeKey.PERCENT) {
+              <cds-text-label>
+                {{ 'Digits info' | translate }}
+
+                <input
+                  cdsText
+                  [placeholder]="'Digits info' | translate"
+                  type="text"
+                  formControlName="digitsInfo"
+                />
+              </cds-text-label>
+            }
+          }
+        </div>
+
         <button
           cdsButton="danger--ghost"
           [iconOnly]="true"
           class="valtimo-dossier-management-widget-field__delete-button"
-          (click)="onDeleteFieldClick($index)"
+          (click)="onDeleteRowClick(formRows, $index)"
         >
           <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
         </button>
