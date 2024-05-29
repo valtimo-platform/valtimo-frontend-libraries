@@ -161,7 +161,11 @@
       "noFormSpecified": "Für diese Registerkarte wurde keine Formulardefinition angegeben.",
       "formNotFound": "Die Formulardefinition '{{formDefinitionName}}' konnte nicht gefunden werden."
     },
-    "rowLocked": "Kein Zugriff zu dieser Fall!"
+    "rowLocked": "Kein Zugriff zu dieser Fall!",
+    "widgets": {
+      "noWidgets": "Keine Widgets",
+      "noWidgetsDescription": "Für dieses Tab sind keine Widgets konfiguriert, oder Sie verfügen nicht über die entsprechenden Berechtigungen, um sie anzuzeigen."
+    }
   },
   "document": {
     "title": {
@@ -676,7 +680,7 @@
       "creatiedatum": "Erstellungsdatum",
       "formaat": "Format",
       "identificatie": "Identifikation",
-      "informatieobjecttype": "Informationsobjekttyp",
+      "informatieobjecttypeOmschrijving": "Informationsobjekttyp",
       "locked": "Locked",
       "status": "Status",
       "taal": "Sprache",
@@ -1497,7 +1501,11 @@
     "back": "Zurück",
     "next": "Nächste",
     "pluginDescription": "Plugin-Beschreibung",
-    "unlink": "Verknüpfung aufheben"
+    "unlink": "Verknüpfung aufheben",
+    "toggleViewModel": {
+      "title": "View Model ermöglicht?",
+      "checkboxDescription": "Aktiviert die Form View Model Formularverarbeitung"
+    }
   },
   "processLinkType": {
     "plugin": "Plugin",
