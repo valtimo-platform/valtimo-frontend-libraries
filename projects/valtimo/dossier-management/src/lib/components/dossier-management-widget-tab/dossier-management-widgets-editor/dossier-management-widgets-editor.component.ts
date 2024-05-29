@@ -19,6 +19,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@
 import {TranslateModule} from '@ngx-translate/core';
 import {
   ActionItem,
+  CARBON_CONSTANTS,
   CarbonListItem,
   CarbonListModule,
   ColumnConfig,
@@ -47,7 +48,7 @@ import {WidgetTabManagementService, WidgetWizardService} from '../../../services
     DossierManagementWidgetWizardComponent,
   ],
 })
-export class DossierManagementWidgetsEditor {
+export class DossierManagementWidgetsEditorComponent {
   @Input() public documentDefinitionName;
   @Input() public tabWidgetKey;
   private _currentWidgetTab: WidgetTabItem;
@@ -128,18 +129,26 @@ export class DossierManagementWidgetsEditor {
   }
 
   public onCloseEvent(event: any, widgets: any[]): void {
+    setTimeout(() => {
+      this.addModalOpen$.next(false);
+    }, CARBON_CONSTANTS.modalAnimationMs);
+
+    if (!event) return;
+
+    const isEdit = widgets.findIndex(widget => widget.key === event.key) !== -1;
     this.widgetTabManagementService
       .updateWidgets({
         caseDefinitionName: this.documentDefinitionName,
         key: this.tabWidgetKey,
         name: this.tabWidgetKey,
-        widgets: [...widgets, event],
+        widgets: isEdit
+          ? widgets.map(widget => (widget.key === event.key ? event : widget))
+          : [...widgets, event],
       })
       .pipe(take(1))
       .subscribe(() => {
         this.changeSaved.emit();
       });
-    this.addModalOpen$.next(false);
   }
 
   public onItemsReordered(widgets: CarbonListItem[]): void {

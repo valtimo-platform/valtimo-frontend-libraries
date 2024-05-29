@@ -84,18 +84,19 @@ export class DossierManagementWidgetFieldsComponent
 {
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field';
   @Input({required: true}) public set columnData(value: FieldsData[]) {
-    console.log(value);
     if (!value) return;
 
     const rowsControl = this.formGroup.get('rows') as FormArray;
     if (!rowsControl) return;
 
     value.forEach((row: FieldsData) => {
-      console.log(row);
       rowsControl.push(
         this.fb.group({
           type: this.fb.control<ListItem>(
-            {content: (row as any).displayProperties.type, selected: true},
+            {
+              content: (row as any).displayProperties?.type ?? CaseWidgetDisplayTypeKey.TEXT,
+              selected: true,
+            },
             Validators.required
           ),
           title: this.fb.control<string>(row.title, Validators.required),
@@ -104,17 +105,17 @@ export class DossierManagementWidgetFieldsComponent
             CaseWidgetDisplayTypeKey.CURRENCY,
             CaseWidgetDisplayTypeKey.NUMBER,
             CaseWidgetDisplayTypeKey.PERCENT,
-          ].includes((row as any).displayProperties.type as CaseWidgetDisplayTypeKey) && {
+          ].includes((row as any).displayProperties?.type as CaseWidgetDisplayTypeKey) && {
             digitsInfo: this.fb.control<string>(row.displayProperties?.digitsInfo ?? ''),
           }),
-          ...((row as any).displayProperties.type === CaseWidgetDisplayTypeKey.CURRENCY && {
+          ...((row as any).displayProperties?.type === CaseWidgetDisplayTypeKey.CURRENCY && {
             currencyCode: this.fb.control<string>(row.displayProperties?.currencyCode ?? ''),
             display: this.fb.control<string>(row.displayProperties?.display ?? ''),
           }),
-          ...((row as any).displayProperties.type === CaseWidgetDisplayTypeKey.DATE && {
+          ...((row as any).displayProperties?.type === CaseWidgetDisplayTypeKey.DATE && {
             format: this.fb.control<string>(row.displayProperties?.format ?? ''),
           }),
-          ...((row as any).displayProperties.type === CaseWidgetDisplayTypeKey.ENUM && {
+          ...((row as any).displayProperties?.type === CaseWidgetDisplayTypeKey.ENUM && {
             values: this.fb.array(
               Object.entries(row.displayProperties?.values).map(([key, value]) =>
                 this.fb.group({
@@ -174,7 +175,6 @@ export class DossierManagementWidgetFieldsComponent
   public getDisplayItemsSelected(row: AbstractControl): ListItem[] {
     const typeControlValue: ListItem = row.get('type')?.value;
 
-    console.log(typeControlValue);
     if (!typeControlValue) return this.displayTypeItems;
 
     return this.displayTypeItems.map((item: ListItem) => ({

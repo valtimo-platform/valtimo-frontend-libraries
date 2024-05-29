@@ -146,7 +146,7 @@ export class DossierManagementWidgetWizardComponent {
   }
 
   public onClose(): void {
-    this.closeEvent.emit('close');
+    this.closeEvent.emit(null);
   }
 
   public onContentValidEvent(valid: boolean): void {

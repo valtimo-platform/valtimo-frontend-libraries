@@ -82,11 +82,7 @@ export class WidgetWizardContentStepComponent implements OnDestroy, OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly widgetWizardService: WidgetWizardService
-  ) {
-    effect(() => {
-      console.log(this.widgetWizardService.widgetContent());
-    });
-  }
+  ) {}
 
   public ngOnInit(): void {
     this._subscriptions.add(
@@ -98,6 +94,10 @@ export class WidgetWizardContentStepComponent implements OnDestroy, OnInit {
           this.validEvent.emit(formValid && contentValid);
         })
     );
+    const widgetContent = this.widgetWizardService.widgetContent();
+    if (!widgetContent) return;
+
+    this.columns.set(Object.keys(widgetContent).map(() => null));
   }
 
   public ngOnDestroy(): void {
