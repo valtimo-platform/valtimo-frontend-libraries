@@ -17,7 +17,7 @@
 import {Versions} from '../models';
 
 const VERSIONS: Versions = {
-  frontendLibraries: '11.1.0',
+  frontendLibraries: '10.5.0-138.RC',
 };
 
 export {VERSIONS};

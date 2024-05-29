@@ -1,5 +1,5 @@
 {
-  "name": "@valtimo/process",
+  "name": "@valtimo/user-management",
   "license": "EUPL-1.2",
   "version": "10.5.0",
   "peerDependencies": {
@@ -7,11 +7,7 @@
     "@angular/core": "^14.2.5"
   },
   "dependencies": {
-    "ngx-toastr": "^15.2.1",
-    "moment": "^2.29.4",
-    "bpmn-js": "^6.4.2",
-    "jquery": "3.6.0",
-    "heatmap.js-fixed": "^2.0.2",
+    "@ng-bootstrap/ng-bootstrap": "^11.0.0",
     "tslib": "^2.0.0"
   }
 }
