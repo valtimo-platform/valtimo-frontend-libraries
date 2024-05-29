@@ -102,6 +102,7 @@ export class WidgetWizardContentStepComponent implements OnDestroy, OnInit {
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+    this.form.reset();
   }
 
   public onAddColumnClick(): void {

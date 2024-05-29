@@ -43,17 +43,6 @@ export class WidgetTabManagementService {
     );
   }
 
-  public updateWidgetTab(tab: WidgetTabConfiguration): Observable<WidgetTabConfiguration> {
-    // if (tab.name === '') {
-    //   delete tab.name;
-    // }
-
-    return this.http.put<WidgetTabConfiguration>(
-      `${this.valtimoEndpointUri}management/v1/case-definition/${tab.caseDefinitionName}/tab/${tab.key}`,
-      {...tab, contentKey: '-', type: ApiTabType.WIDGETS}
-    );
-  }
-
   public updateWidgets(tab: WidgetTabConfiguration): Observable<any> {
     return this.http.post<any>(
       `${this.valtimoEndpointUri}management/v1/case-definition/${tab.caseDefinitionName}/widget-tab/${tab.key}`,

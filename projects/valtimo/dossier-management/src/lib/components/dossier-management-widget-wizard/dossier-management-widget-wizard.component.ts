@@ -26,7 +26,7 @@ import {
 } from '@angular/core';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ModalCloseEventType} from '@valtimo/components';
+import {CARBON_CONSTANTS} from '@valtimo/components';
 import {ButtonModule, ModalModule, ProgressIndicatorModule, Step} from 'carbon-components-angular';
 import {combineLatest, map, Observable} from 'rxjs';
 import {WIDGET_STYLE_LABELS, WIDGET_WIDTH_LABELS, WidgetWizardStep} from '../../models';
@@ -134,7 +134,7 @@ export class DossierManagementWidgetWizardComponent {
   public onNextButtonClick(): void {
     if (this.currentStep() === WidgetWizardStep.CONTENT) {
       this.closeEvent.emit(this.widgetWizardService.widgetsConfig());
-
+      this.resetWizard();
       return;
     }
 
@@ -147,9 +147,17 @@ export class DossierManagementWidgetWizardComponent {
 
   public onClose(): void {
     this.closeEvent.emit(null);
+    this.resetWizard();
   }
 
   public onContentValidEvent(valid: boolean): void {
     this._contentStepValid.set(valid);
+  }
+
+  private resetWizard(): void {
+    setTimeout(() => {
+      this.widgetWizardService.resetWizard();
+      this.currentStep.set(WidgetWizardStep.TYPE);
+    }, CARBON_CONSTANTS.modalAnimationMs);
   }
 }

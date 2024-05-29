@@ -13,24 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
 import {
   ActionItem,
-  CARBON_CONSTANTS,
   CarbonListItem,
   CarbonListModule,
   ColumnConfig,
-  ModalCloseEventType,
+  ConfirmationModalModule,
   ViewType,
 } from '@valtimo/components';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, take} from 'rxjs';
-import {DossierManagementWidgetWizardComponent} from '../../dossier-management-widget-wizard/dossier-management-widget-wizard.component';
-import {AVAILABLE_WIDGETS, WidgetStyle, WidgetTabItem} from '../../../models';
+import {BehaviorSubject, Subject, take} from 'rxjs';
+import {AVAILABLE_WIDGETS, WidgetStyle, WidgetTabConfiguration} from '../../../models';
 import {WidgetTabManagementService, WidgetWizardService} from '../../../services';
+import {DossierManagementWidgetWizardComponent} from '../../dossier-management-widget-wizard/dossier-management-widget-wizard.component';
 
 @Component({
   selector: 'valtimo-dossier-management-widgets-editor',
@@ -46,17 +44,18 @@ import {WidgetTabManagementService, WidgetWizardService} from '../../../services
     IconModule,
     TabsModule,
     DossierManagementWidgetWizardComponent,
+    ConfirmationModalModule,
   ],
 })
 export class DossierManagementWidgetsEditorComponent {
   @Input() public documentDefinitionName;
   @Input() public tabWidgetKey;
-  private _currentWidgetTab: WidgetTabItem;
-  @Input() public set currentWidgetTab(value: WidgetTabItem) {
+  private _currentWidgetTab: WidgetTabConfiguration;
+  @Input() public set currentWidgetTab(value: WidgetTabConfiguration) {
     this._currentWidgetTab = value;
     this.items$.next(value.widgets);
   }
-  public get currentWidgetTab(): WidgetTabItem {
+  public get currentWidgetTab(): WidgetTabConfiguration {
     return this._currentWidgetTab;
   }
 
@@ -85,6 +84,8 @@ export class DossierManagementWidgetsEditorComponent {
   public readonly items$ = new BehaviorSubject<CarbonListItem[]>([]);
 
   public readonly addModalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly deleteModalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly deleteRowKey$ = new Subject<number>();
 
   constructor(
     private readonly widgetTabManagementService: WidgetTabManagementService,
@@ -116,11 +117,11 @@ export class DossierManagementWidgetsEditorComponent {
     this.addModalOpen$.next(true);
   }
 
-  private deleteWidget(tabWidget: any): void {
+  public onDeleteConfirm(widgetKey: string): void {
     this.widgetTabManagementService
       .updateWidgets({
         ...this.currentWidgetTab,
-        widgets: this.currentWidgetTab.widgets.filter(widget => widget.key !== tabWidget.key),
+        widgets: this.currentWidgetTab.widgets.filter(widget => widget.key !== widgetKey),
       })
       .pipe(take(1))
       .subscribe(() => {
@@ -128,10 +129,13 @@ export class DossierManagementWidgetsEditorComponent {
       });
   }
 
+  private deleteWidget(tabWidget: any): void {
+    this.deleteRowKey$.next(tabWidget.key);
+    this.deleteModalOpen$.next(true);
+  }
+
   public onCloseEvent(event: any, widgets: any[]): void {
-    setTimeout(() => {
-      this.addModalOpen$.next(false);
-    }, CARBON_CONSTANTS.modalAnimationMs);
+    this.addModalOpen$.next(false);
 
     if (!event) return;
 
@@ -140,7 +144,6 @@ export class DossierManagementWidgetsEditorComponent {
       .updateWidgets({
         caseDefinitionName: this.documentDefinitionName,
         key: this.tabWidgetKey,
-        name: this.tabWidgetKey,
         widgets: isEdit
           ? widgets.map(widget => (widget.key === event.key ? event : widget))
           : [...widgets, event],

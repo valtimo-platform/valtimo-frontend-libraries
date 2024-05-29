@@ -229,6 +229,7 @@ export class DossierManagementWidgetFieldsComponent
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+    this.formGroup.reset();
   }
 
   public onAddFieldClick(): void {

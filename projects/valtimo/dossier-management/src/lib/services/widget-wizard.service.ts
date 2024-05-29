@@ -6,17 +6,17 @@ import {WidgetStyle, WidgetType, WidgetTypes, WidgetWidth} from '../models';
   providedIn: 'root',
 })
 export class WidgetWizardService {
-  public selectedWidget: WritableSignal<WidgetType | null> = signal(null);
+  public readonly selectedWidget: WritableSignal<WidgetType | null> = signal(null);
 
-  public widgetWidth: WritableSignal<WidgetWidth | null> = signal(null);
+  public readonly widgetWidth: WritableSignal<WidgetWidth | null> = signal(null);
 
-  public widgetStyle: WritableSignal<WidgetStyle | null> = signal(null);
+  public readonly widgetStyle: WritableSignal<WidgetStyle | null> = signal(null);
 
-  public widgetContent: WritableSignal<{[columnIndex: number]: any} | null> = signal(null);
+  public readonly widgetContent: WritableSignal<{[columnIndex: number]: any} | null> = signal(null);
 
-  public widgetTitle: WritableSignal<string | null> = signal(null);
+  public readonly widgetTitle: WritableSignal<string | null> = signal(null);
 
-  public widgetsConfig = computed(() => ({
+  public readonly widgetsConfig = computed(() => ({
     key: this.widgetTitle()?.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase(),
     type: this.selectedWidget()?.type,
     title: this.widgetTitle(),
@@ -26,4 +26,12 @@ export class WidgetWizardService {
       columns: Object.values(this.widgetContent() ?? {}),
     },
   }));
+
+  public resetWizard(): void {
+    this.selectedWidget.set(null);
+    this.widgetWidth.set(null);
+    this.widgetStyle.set(null);
+    this.widgetContent.set(null);
+    this.widgetTitle.set(null);
+  }
 }

@@ -67,6 +67,15 @@ export class DossierManagementWidgetTabComponent implements AfterViewInit, OnDes
       );
     })
   );
+  public readonly currentWidgetTab$ = combineLatest([
+    this.documentDefinitionName$,
+    this.tabWidgetKey$,
+    this._refreshWidgetTabSubject$,
+  ]).pipe(
+    switchMap(([caseDefinitionName, tabWidgetKey]) =>
+      this.widgetTabManagementService.getWidgetTabConfiguration(caseDefinitionName, tabWidgetKey)
+    )
+  );
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
   constructor(

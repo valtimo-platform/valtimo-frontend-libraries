@@ -41,10 +41,3 @@
     </button>
   </ng-template>
 </ng-container>
-
-<valtimo-dossier-management-widget-tab-edit-modal
-  [widgetTab]="currentWidgetTab$ | async"
-  [showModal$]="showEditWidgetTabModal$"
-  (saveEvent)="refreshWidgetTab()"
->
-</valtimo-dossier-management-widget-tab-edit-modal>
