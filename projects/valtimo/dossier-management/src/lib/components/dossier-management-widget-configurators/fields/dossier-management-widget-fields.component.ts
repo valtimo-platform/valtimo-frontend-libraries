@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -27,17 +26,6 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
-import {CaseWidgetDisplayTypeKey} from '@valtimo/dossier';
-import {TranslateModule} from '@ngx-translate/core';
-import {
-  ButtonModule,
-  DropdownModule,
-  IconModule,
-  IconService,
-  InputModule,
-  ListItem,
-} from 'carbon-components-angular';
-import {WidgetContentComponent} from '../../../models';
 import {
   AbstractControl,
   FormArray,
@@ -47,7 +35,19 @@ import {
   Validators,
 } from '@angular/forms';
 import {TrashCan16} from '@carbon/icons';
-import {Subscription, debounceTime, skip} from 'rxjs';
+import {TranslateModule} from '@ngx-translate/core';
+import {CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
+import {CaseWidgetDisplayTypeKey} from '@valtimo/dossier';
+import {
+  ButtonModule,
+  DropdownModule,
+  IconModule,
+  IconService,
+  InputModule,
+  ListItem,
+} from 'carbon-components-angular';
+import {debounceTime, map, Subscription} from 'rxjs';
+import {WidgetContentComponent} from '../../../models';
 
 interface FieldsData {
   type: ListItem;
@@ -185,9 +185,16 @@ export class DossierManagementWidgetFieldsComponent
 
   public readonly CaseWidgetDisplayTypeKey = CaseWidgetDisplayTypeKey;
 
+  public readonly inputTheme$ = this.cdsThemeService.currentTheme$.pipe(
+    map((theme: CurrentCarbonTheme) =>
+      theme === CurrentCarbonTheme.G10 ? 'white' : CurrentCarbonTheme.G90
+    )
+  );
+
   private _subscriptions = new Subscription();
 
   constructor(
+    private readonly cdsThemeService: CdsThemeService,
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly iconService: IconService

@@ -25,6 +25,8 @@
     grid-template-columns: 1fr 2fr 2fr auto 32px;
     align-items: flex-start;
     gap: 16px;
+    padding: 16px;
+    background: var(--cds-layer-02);
   }
 
   &__delete-button {
