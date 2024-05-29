@@ -25,7 +25,7 @@
       (formFlowComplete)="formFlowSubmitted()"
     ></valtimo-form-flow>
   </div>
-  <div body *ngIf="isFormViewModel">
+  <div body *ngIf="formDefinition && isFormViewModel">
     <valtimo-form-view-model
       [form]="formDefinition"
       [options]="options"
