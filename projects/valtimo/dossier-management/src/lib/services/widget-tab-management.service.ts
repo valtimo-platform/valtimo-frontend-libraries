@@ -19,6 +19,7 @@ import {ConfigService} from '@valtimo/config';
 import {Observable} from 'rxjs';
 
 import {WidgetTabConfiguration} from '../models/widget-tab-item.type';
+import {ApiTabType} from '@valtimo/dossier';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,24 @@ export class WidgetTabManagementService {
   ): Observable<WidgetTabConfiguration> {
     return this.http.get<WidgetTabConfiguration>(
       `${this.valtimoEndpointUri}management/v1/case-definition/${caseDefinitionName}/widget-tab/${widgetTabKey}`
+    );
+  }
+
+  public updateWidgetTab(tab: WidgetTabConfiguration): Observable<WidgetTabConfiguration> {
+    // if (tab.name === '') {
+    //   delete tab.name;
+    // }
+
+    return this.http.put<WidgetTabConfiguration>(
+      `${this.valtimoEndpointUri}management/v1/case-definition/${tab.caseDefinitionName}/tab/${tab.key}`,
+      {...tab, contentKey: '-', type: ApiTabType.WIDGETS}
+    );
+  }
+
+  public updateWidgets(tab: WidgetTabConfiguration): Observable<any> {
+    return this.http.post<any>(
+      `${this.valtimoEndpointUri}management/v1/case-definition/${tab.caseDefinitionName}/widget-tab/${tab.key}`,
+      tab
     );
   }
 }

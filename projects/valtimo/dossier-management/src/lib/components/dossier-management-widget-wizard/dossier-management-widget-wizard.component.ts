@@ -51,7 +51,7 @@ import {WIDGET_STEPS} from './steps';
 })
 export class DossierManagementWidgetWizardComponent {
   @Input() public open = false;
-  @Output() public closeEvent = new EventEmitter<ModalCloseEventType>();
+  @Output() public closeEvent = new EventEmitter<any>();
 
   public readonly WidgetWizardSteps = WidgetWizardStep;
   private readonly _secondaryLabels = computed(() => {
@@ -133,7 +133,8 @@ export class DossierManagementWidgetWizardComponent {
 
   public onNextButtonClick(): void {
     if (this.currentStep() === WidgetWizardStep.CONTENT) {
-      this.closeEvent.emit('closeAndRefresh');
+      this.closeEvent.emit(this.widgetWizardService.widgetsConfig());
+
       return;
     }
 

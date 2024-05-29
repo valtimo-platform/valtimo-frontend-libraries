@@ -47,17 +47,19 @@ import {
   Validators,
 } from '@angular/forms';
 import {TrashCan16} from '@carbon/icons';
-import {Subscription, debounceTime} from 'rxjs';
+import {Subscription, debounceTime, skip} from 'rxjs';
 
 interface FieldsData {
   type: ListItem;
   content: string;
   title: string;
-  digitsInfo?: string;
-  display?: string;
-  currencyCode?: string;
-  values?: any;
-  format?: string;
+  displayProperties?: {
+    digitsInfo?: string;
+    display?: string;
+    currencyCode?: string;
+    values?: any;
+    format?: string;
+  };
 }
 
 @Component({
@@ -82,34 +84,39 @@ export class DossierManagementWidgetFieldsComponent
 {
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field';
   @Input({required: true}) public set columnData(value: FieldsData[]) {
+    console.log(value);
     if (!value) return;
 
     const rowsControl = this.formGroup.get('rows') as FormArray;
     if (!rowsControl) return;
 
     value.forEach((row: FieldsData) => {
+      console.log(row);
       rowsControl.push(
         this.fb.group({
-          type: this.fb.control<ListItem>(row.type, Validators.required),
+          type: this.fb.control<ListItem>(
+            {content: (row as any).displayProperties.type, selected: true},
+            Validators.required
+          ),
           title: this.fb.control<string>(row.title, Validators.required),
-          content: this.fb.control<string>(row.content, Validators.required),
+          content: this.fb.control<string>((row as any).value, Validators.required),
           ...([
             CaseWidgetDisplayTypeKey.CURRENCY,
             CaseWidgetDisplayTypeKey.NUMBER,
             CaseWidgetDisplayTypeKey.PERCENT,
-          ].includes(row.type.content as CaseWidgetDisplayTypeKey) && {
-            digitsInfo: this.fb.control<string>(row.digitsInfo ?? ''),
+          ].includes((row as any).displayProperties.type as CaseWidgetDisplayTypeKey) && {
+            digitsInfo: this.fb.control<string>(row.displayProperties?.digitsInfo ?? ''),
           }),
-          ...(row.type.content === CaseWidgetDisplayTypeKey.CURRENCY && {
-            currencyCode: this.fb.control<string>(row.currencyCode ?? ''),
-            display: this.fb.control<string>(row.display ?? ''),
+          ...((row as any).displayProperties.type === CaseWidgetDisplayTypeKey.CURRENCY && {
+            currencyCode: this.fb.control<string>(row.displayProperties?.currencyCode ?? ''),
+            display: this.fb.control<string>(row.displayProperties?.display ?? ''),
           }),
-          ...(row.type.content === CaseWidgetDisplayTypeKey.DATE && {
-            format: this.fb.control<string>(row.format ?? ''),
+          ...((row as any).displayProperties.type === CaseWidgetDisplayTypeKey.DATE && {
+            format: this.fb.control<string>(row.displayProperties?.format ?? ''),
           }),
-          ...(row.type.content === CaseWidgetDisplayTypeKey.ENUM && {
+          ...((row as any).displayProperties.type === CaseWidgetDisplayTypeKey.ENUM && {
             values: this.fb.array(
-              Object.entries(row.values).map(([key, value]) =>
+              Object.entries(row.displayProperties?.values).map(([key, value]) =>
                 this.fb.group({
                   key: this.fb.control<string>(key, Validators.required),
                   value: this.fb.control<string>(value as string, Validators.required),
@@ -117,18 +124,17 @@ export class DossierManagementWidgetFieldsComponent
               )
             ),
           }),
-        })
+        }),
+        {emitEvent: false}
       );
     });
 
-    console.log(rowsControl);
-
     this.cdr.detectChanges();
   }
-  @Output() public changeEvent = new EventEmitter<{data: (FieldsData | null)[]; valid: boolean}>();
+  @Output() public changeEvent = new EventEmitter<{data: (any | null)[]; valid: boolean}>();
 
   public formGroup = this.fb.group({
-    rows: this.fb.array<FieldsData>([]),
+    rows: this.fb.array<any>([]),
   });
 
   public get formRows(): FormArray | undefined {
@@ -138,6 +144,7 @@ export class DossierManagementWidgetFieldsComponent
   }
 
   public displayTypeItems: ListItem[] = [
+    {content: CaseWidgetDisplayTypeKey.TEXT, selected: true},
     {
       content: CaseWidgetDisplayTypeKey.BOOLEAN,
       selected: false,
@@ -167,6 +174,7 @@ export class DossierManagementWidgetFieldsComponent
   public getDisplayItemsSelected(row: AbstractControl): ListItem[] {
     const typeControlValue: ListItem = row.get('type')?.value;
 
+    console.log(typeControlValue);
     if (!typeControlValue) return this.displayTypeItems;
 
     return this.displayTypeItems.map((item: ListItem) => ({
@@ -192,15 +200,28 @@ export class DossierManagementWidgetFieldsComponent
       this.formGroup
         .get('rows')
         ?.valueChanges.pipe(debounceTime(100))
-        .subscribe((rows: (FieldsData | null)[]) => {
-          const mappedRows = rows.map((row: FieldsData | null) =>
-            !row || row.type.content !== CaseWidgetDisplayTypeKey.ENUM
-              ? row
-              : {
-                  ...row,
-                  values: row.values?.reduce((acc, curr) => ({...acc, [curr.key]: curr.value}), {}),
-                }
-          );
+        .subscribe((rows: any) => {
+          const mappedRows = rows.map((row: any | null) => ({
+            key: row.title.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase(),
+            title: row.title,
+            value: row.content,
+            ...(!!row?.type.content &&
+              row?.type.content !== CaseWidgetDisplayTypeKey.TEXT && {
+                displayProperties: {
+                  type: row.type.content,
+                  ...(!!row?.currencyCode && {currentCode: row.currencyCode}),
+                  ...(!!row?.display && {display: row.display}),
+                  ...(!!row?.digitsInfo && {digitsInfo: row.digitsInfo}),
+                  ...(!!row?.format && {format: row.format}),
+                  ...(!!row?.values && {
+                    values: row.values?.reduce(
+                      (acc, curr) => ({...acc, [curr.key]: curr.value}),
+                      {}
+                    ),
+                  }),
+                },
+              }),
+          }));
           this.changeEvent.emit({data: mappedRows, valid: this.formGroup.valid});
         })
     );
@@ -269,7 +290,6 @@ export class DossierManagementWidgetFieldsComponent
         (formRow as FormGroup).addControl('digitsInfo', this.fb.control(''));
         break;
     }
-    console.log(formRow);
   }
 
   public onAddEnumValueClick(valuesFormArray: AbstractControl): void {

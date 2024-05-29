@@ -17,4 +17,5 @@
 export interface WidgetTabConfiguration {
   caseDefinitionName: string;
   key: string;
+  widgets: any[];
 }

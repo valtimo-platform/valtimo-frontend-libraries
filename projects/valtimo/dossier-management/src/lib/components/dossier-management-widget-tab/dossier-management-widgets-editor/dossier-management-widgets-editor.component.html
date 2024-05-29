@@ -14,36 +14,39 @@
   ~ limitations under the License.
   -->
 
-<cds-tabs type="contained">
-  <cds-tab [heading]="'interface.editor.visualEditor' | translate">
-    <valtimo-carbon-list
-      [fields]="FIELDS"
-      [header]="false"
-      [items]="items$ | async"
-      [movingRowsEnabled]="true"
-      (itemsReordered)="onItemsReordered($event)"
-    >
-      <ng-container carbonToolbarContent>
-        <ng-container *ngTemplateOutlet="addWidgetButton"></ng-container>
-      </ng-container>
+<ng-container *ngIf="{addModalOpen: addModalOpen$ | async, items: items$ | async} as obs">
+  <cds-tabs type="contained">
+    <cds-tab [heading]="'interface.editor.visualEditor' | translate">
+      <valtimo-carbon-list
+        [actionItems]="ACTION_ITEMS"
+        [fields]="FIELDS"
+        [header]="false"
+        [items]="obs.items"
+        [movingRowsEnabled]="true"
+        (itemsReordered)="onItemsReordered($event)"
+      >
+        <ng-container carbonToolbarContent>
+          <ng-container *ngTemplateOutlet="addWidgetButton"></ng-container>
+        </ng-container>
 
-      <valtimo-no-results
-        description="Click here to configure widgets"
-        title="No widgets have been configured"
-      ></valtimo-no-results>
-    </valtimo-carbon-list>
-  </cds-tab>
-</cds-tabs>
+        <valtimo-no-results
+          description="Click here to configure widgets"
+          title="No widgets have been configured"
+        ></valtimo-no-results>
+      </valtimo-carbon-list>
+    </cds-tab>
+  </cds-tabs>
 
-<ng-template #addWidgetButton>
-  <button cdsButton="primary" (click)="openAddModal()">
-    {{ 'widgetTabManagement.list.add' | translate }}
+  <ng-template #addWidgetButton>
+    <button cdsButton="primary" (click)="openAddModal()">
+      {{ 'widgetTabManagement.list.add' | translate }}
 
-    <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
-  </button>
-</ng-template>
+      <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+    </button>
+  </ng-template>
 
-<valtimo-dossier-management-widget-wizard
-  [open]="addModalOpen$ | async"
-  (closeEvent)="onCloseEvent($event)"
-></valtimo-dossier-management-widget-wizard>
+  <valtimo-dossier-management-widget-wizard
+    [open]="obs.addModalOpen"
+    (closeEvent)="onCloseEvent($event, obs.items)"
+  ></valtimo-dossier-management-widget-wizard>
+</ng-container>

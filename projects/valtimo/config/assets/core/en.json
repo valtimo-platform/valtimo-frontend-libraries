@@ -720,8 +720,8 @@
       "column": "Column {{number}}",
       "fields": {
         "add": "Add field",
-        "content": "Content",
-        "contentPlaceholder": "Path to content",
+        "value": "Value",
+        "valuePlaceholder": "Path to value",
         "title": "Title",
         "titlePlaceholder": "Choose a title",
         "type": "Type",

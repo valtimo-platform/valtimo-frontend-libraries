@@ -15,9 +15,10 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
 import {
+  ActionItem,
   CarbonListItem,
   CarbonListModule,
   ColumnConfig,
@@ -25,8 +26,10 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, take} from 'rxjs';
 import {DossierManagementWidgetWizardComponent} from '../../dossier-management-widget-wizard/dossier-management-widget-wizard.component';
+import {AVAILABLE_WIDGETS, WidgetStyle, WidgetTabItem} from '../../../models';
+import {WidgetTabManagementService, WidgetWizardService} from '../../../services';
 
 @Component({
   selector: 'valtimo-dossier-management-widgets-editor',
@@ -45,42 +48,109 @@ import {DossierManagementWidgetWizardComponent} from '../../dossier-management-w
   ],
 })
 export class DossierManagementWidgetsEditor {
+  @Input() public documentDefinitionName;
+  @Input() public tabWidgetKey;
+  private _currentWidgetTab: WidgetTabItem;
+  @Input() public set currentWidgetTab(value: WidgetTabItem) {
+    this._currentWidgetTab = value;
+    this.items$.next(value.widgets);
+  }
+  public get currentWidgetTab(): WidgetTabItem {
+    return this._currentWidgetTab;
+  }
+
+  @Output() public readonly changeSaved = new EventEmitter();
+
   public readonly FIELDS: ColumnConfig[] = [
     {
       key: 'key',
       label: 'Key',
       viewType: ViewType.TEXT,
     },
+  ];
+
+  public readonly ACTION_ITEMS: ActionItem[] = [
     {
-      key: 'name',
-      label: 'Name',
-      viewType: ViewType.TEXT,
+      label: 'interface.edit',
+      callback: this.editWidget.bind(this),
+    },
+    {
+      label: 'interface.delete',
+      callback: this.deleteWidget.bind(this),
+      type: 'danger',
     },
   ];
 
-  public readonly items$ = new BehaviorSubject<CarbonListItem[]>([
-    {
-      key: 'key1',
-      name: 'Name1',
-    },
-    {
-      key: 'key2',
-      name: 'Name2',
-    },
-  ]);
+  public readonly items$ = new BehaviorSubject<CarbonListItem[]>([]);
 
-  public readonly addModalOpen$ = new BehaviorSubject<boolean>(true);
+  public readonly addModalOpen$ = new BehaviorSubject<boolean>(false);
+
+  constructor(
+    private readonly widgetTabManagementService: WidgetTabManagementService,
+    private readonly widgetWizardService: WidgetWizardService
+  ) {}
 
   public openAddModal(): void {
     this.addModalOpen$.next(true);
   }
 
-  public onCloseEvent(event: ModalCloseEventType): void {
-    console.log(event);
+  private editWidget(tabWidget: any): void {
+    this.widgetWizardService.widgetTitle.set(tabWidget.title);
+    this.widgetWizardService.widgetStyle.set(
+      tabWidget.highContrast ? WidgetStyle.HIGH_CONTRAST : WidgetStyle.DEFAULT
+    );
+    this.widgetWizardService.widgetWidth.set(tabWidget.width);
+    this.widgetWizardService.selectedWidget.set(
+      AVAILABLE_WIDGETS.find(available => available.type === tabWidget.type) ?? null
+    );
+    this.widgetWizardService.widgetContent.set(
+      tabWidget.properties.columns.reduce(
+        (acc, curr, index) => ({
+          ...acc,
+          [index]: curr,
+        }),
+        {}
+      )
+    );
+    this.addModalOpen$.next(true);
+  }
+
+  private deleteWidget(tabWidget: any): void {
+    this.widgetTabManagementService
+      .updateWidgets({
+        ...this.currentWidgetTab,
+        widgets: this.currentWidgetTab.widgets.filter(widget => widget.key !== tabWidget.key),
+      })
+      .pipe(take(1))
+      .subscribe(() => {
+        this.changeSaved.emit();
+      });
+  }
+
+  public onCloseEvent(event: any, widgets: any[]): void {
+    this.widgetTabManagementService
+      .updateWidgets({
+        caseDefinitionName: this.documentDefinitionName,
+        key: this.tabWidgetKey,
+        name: this.tabWidgetKey,
+        widgets: [...widgets, event],
+      })
+      .pipe(take(1))
+      .subscribe(() => {
+        this.changeSaved.emit();
+      });
     this.addModalOpen$.next(false);
   }
 
-  public onItemsReordered(items: CarbonListItem[]): void {
-    console.log(items);
+  public onItemsReordered(widgets: CarbonListItem[]): void {
+    this.widgetTabManagementService
+      .updateWidgets({
+        ...this.currentWidgetTab,
+        widgets,
+      })
+      .pipe(take(1))
+      .subscribe(() => {
+        this.changeSaved.emit();
+      });
   }
 }
