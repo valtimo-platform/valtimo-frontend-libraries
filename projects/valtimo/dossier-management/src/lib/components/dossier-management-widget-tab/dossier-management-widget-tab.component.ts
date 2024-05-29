@@ -51,18 +51,18 @@ export class DossierManagementWidgetTabComponent implements AfterViewInit, OnDes
     this._refreshWidgetTabSubject$,
   ]).pipe(
     switchMap(([tabKey]) => this.tabManagementService.getTab(tabKey)),
-    tap(tapItem => {
+    tap(tabItem => {
       const title =
-        tapItem.name ||
-        this.translateService.instant(`widgetTabManagement.metadata.${tapItem.key}`);
+        tabItem.name ||
+        this.translateService.instant(`widgetTabManagement.metadata.${tabItem.key}`);
       this.pageTitleService.setCustomPageTitle(title);
       this.pageTitleService.setCustomPageSubtitle(
         this.translateService.instant('widgetTabManagement.tab.metadata', {
-          createdBy: tapItem?.createdBy || '-',
-          createdOn: !!tapItem?.createdOn
-            ? moment(tapItem?.createdOn).format('DD MMM YYYY HH:mm')
+          createdBy: tabItem?.createdBy || '-',
+          createdOn: !!tabItem?.createdOn
+            ? moment(tabItem?.createdOn).format('DD MMM YYYY HH:mm')
             : '-',
-          key: tapItem.key,
+          key: tabItem.key,
         })
       );
     })
