@@ -683,7 +683,7 @@
       "creatiedatum": "Creation date",
       "formaat": "Format",
       "identificatie": "Id",
-      "informatieobjecttype": "Information object type",
+      "informatieobjecttypeOmschrijving": "Information object type",
       "locked": "Locked",
       "status": "Status",
       "taal": "Language",
@@ -1504,11 +1504,7 @@
     "back": "Go back",
     "next": "Next",
     "pluginDescription": "Plugin description",
-    "unlink": "Unlink",
-    "toggleViewModel": {
-      "title": "View Model enabled?",
-      "checkboxDescription": "Enables Form View Model form processing"
-    }
+    "unlink": "Unlink"
   },
   "processLinkType": {
     "plugin": "Plugin",

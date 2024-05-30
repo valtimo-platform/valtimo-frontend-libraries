@@ -101,7 +101,8 @@ export interface ProcessInstanceTask {
   assignee: string;
   created: string;
   createdUnix: number;
-  due: string;
+  due?: string;
+  dueUnix?: number;
   followUp: string;
   delegationState: string;
   description: string;
