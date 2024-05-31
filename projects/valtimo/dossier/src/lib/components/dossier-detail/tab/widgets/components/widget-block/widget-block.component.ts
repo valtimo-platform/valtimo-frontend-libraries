@@ -43,15 +43,17 @@ import {
 } from '../../../../../../services';
 import {ActivatedRoute} from '@angular/router';
 import {LoadingModule} from 'carbon-components-angular';
+import {FieldWidgetComponent} from '../field-widget/field-widget.component';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
   templateUrl: './widget-block.component.html',
   styleUrls: ['./widget-block.component.scss'],
   standalone: true,
-  imports: [CommonModule, LoadingModule],
+  imports: [CommonModule, LoadingModule, FieldWidgetComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   @ViewChild('widgetBlockContent') private _widgetBlockContentRef: ElementRef<HTMLDivElement>;
   @ViewChild('widgetBlock') private _widgetBlockRef: ElementRef<HTMLDivElement>;
