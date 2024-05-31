@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
 import {
   BehaviorSubject, catchError,
@@ -26,7 +26,7 @@ import {
   take, tap,
 } from 'rxjs';
 import {
-  FormioComponent,
+  FormioComponent, FormioModule,
   FormioOptions,
   FormioSubmission,
   FormioSubmissionCallback,
@@ -38,6 +38,7 @@ import {deepmerge} from 'deepmerge-ts';
 import {FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
+import {CommonModule} from '@angular/common';
 
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
@@ -45,6 +46,8 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   selector: 'valtimo-form-view-model',
   templateUrl: './form-view-model.component.html',
   styleUrls: ['./form-view-model.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormioModule]
 })
 export class FormViewModelComponent implements OnInit {
   @ViewChild('formio') formio: FormioComponent;

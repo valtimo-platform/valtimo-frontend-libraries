@@ -17,11 +17,12 @@
 import {
   AfterViewInit,
   Component,
-  EventEmitter,
-  OnDestroy,
+  EventEmitter, Inject,
+  OnDestroy, Optional,
   Output,
-  ViewChild,
+  ViewChild, ViewContainerRef,
   ViewEncapsulation,
+  Renderer2, ChangeDetectorRef
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {
@@ -38,7 +39,7 @@ import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valt
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
 import {ToastrService} from 'ngx-toastr';
-import {map, take} from 'rxjs/operators';
+import {filter, map, take} from 'rxjs/operators';
 import {TaskService} from '../../services/task.service';
 import {
   BehaviorSubject,
@@ -51,6 +52,7 @@ import {
 import {UserProviderService} from '@valtimo/security';
 import {DocumentService} from '@valtimo/document';
 import {TranslateService} from '@ngx-translate/core';
+import {FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -64,6 +66,8 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   @ViewChild('form') form: FormioComponent;
   @ViewChild('formFlow') formFlow: FormFlowComponent;
   @ViewChild('taskDetailModal') modal: ModalComponent;
+  @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef})
+  public formViewModelDynamicContainer: ViewContainerRef;
   @Output() formSubmit = new EventEmitter();
   @Output() assignmentOfTaskChanged = new EventEmitter();
 
@@ -102,7 +106,8 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     private readonly modalService: ValtimoModalService,
     private readonly stateService: FormIoStateService,
     private readonly documentService: DocumentService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel
   ) {
     const options = new FormioOptionsImpl();
     options.disableAlerts = true;
@@ -183,7 +188,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
                 },
               });
           }
-        } else if(taskProcessLinkType === 'form-view-model') {
+        } else if (taskProcessLinkType === 'form-view-model') {
           this.completeTask();
         }
       });
@@ -225,6 +230,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
               this.formDefinition$.next(res.properties.formDefinition);
               this.formName$.next(res.properties.formName);
               this.modal.show();
+              this.setFormViewModelComponent();
               break;
           }
           this.loading$.next(false);
@@ -239,17 +245,22 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   }
 
   private getLegacyTaskProcessLink(taskId: string): void {
-    this.taskService.getTaskProcessLinkV1(taskId).subscribe(resV1 => {
-      switch (resV1?.type) {
-        case 'form':
-          this.taskProcessLinkType$.next('form');
-          break;
-        case 'form-flow':
-          this.taskProcessLinkType$.next('form-flow');
-          this.formFlowInstanceId$.next(resV1.properties.formFlowInstanceId);
-          break;
+    this.taskService.getTaskProcessLinkV1(taskId).subscribe({
+      next: resV1 => {
+        switch (resV1?.type) {
+          case 'form':
+            this.taskProcessLinkType$.next('form');
+            break;
+          case 'form-flow':
+            this.taskProcessLinkType$.next('form-flow');
+            this.formFlowInstanceId$.next(resV1.properties.formFlowInstanceId);
+            break;
+        }
+        this.loading$.next(false);
+      },
+      error: _ => {
+          this.loading$.next(false);
       }
-      this.loading$.next(false);
     });
   }
 
@@ -272,5 +283,17 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
         this.modalService.setDocumentDefinitionName(documentDefinitionName);
         this.stateService.setDocumentDefinitionName(documentDefinitionName);
       });
+  }
+
+  private setFormViewModelComponent() {
+    if (!this.formViewModel) return;
+    this.formViewModelDynamicContainer.clear();
+    const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
+      this.formViewModel.component
+    );
+    formViewModelComponent.instance.form = this.formDefinition$.getValue();
+    formViewModelComponent.instance.formName = this.formName$.getValue();
+    formViewModelComponent.instance.taskInstanceId = this.taskInstanceId$.getValue();
+    formViewModelComponent.instance.isStartForm = false;
   }
 }

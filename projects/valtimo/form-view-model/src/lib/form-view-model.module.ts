@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormioModule} from '@formio/angular';
-import {FormViewModelComponent} from './components/form-view-model/form-view-model.component';
+import {FORM_VIEW_MODEL_TOKEN} from '@valtimo/config';
+import {FormViewModelComponent} from './components/form-view-model';
 
 @NgModule({
-  imports: [CommonModule, FormioModule],
-  declarations: [FormViewModelComponent],
-  exports: [FormViewModelComponent],
+  providers: [
+    {
+      provide: FORM_VIEW_MODEL_TOKEN,
+      useValue: {component: FormViewModelComponent}
+    }
+  ]
 })
 export class FormViewModelModule {}

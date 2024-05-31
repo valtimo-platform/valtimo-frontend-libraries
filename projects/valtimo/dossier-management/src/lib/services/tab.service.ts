@@ -107,9 +107,7 @@ export class TabService {
 
   constructor(
     @Optional() @Inject(CASE_TAB_TOKEN) private readonly caseTabConfig: CaseTabConfig,
-    @Optional()
-    @Inject(CASE_MANAGEMENT_TAB_TOKEN)
-    private readonly caseManagementTabConfig: CaseManagementTabConfig[],
+    @Optional() @Inject(CASE_MANAGEMENT_TAB_TOKEN) private readonly caseManagementTabConfig: CaseManagementTabConfig[],
     private readonly formService: FormService,
     private readonly translateService: TranslateService
   ) {
