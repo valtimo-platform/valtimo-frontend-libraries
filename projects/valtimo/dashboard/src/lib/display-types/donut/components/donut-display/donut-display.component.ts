@@ -47,6 +47,11 @@ export class DonutDisplayComponent implements DisplayComponent {
         labels: {
           enabled: false
         }
+      },
+      legend: {
+        truncation: {
+          numCharacter: 28
+        }
       }
     })),
   );

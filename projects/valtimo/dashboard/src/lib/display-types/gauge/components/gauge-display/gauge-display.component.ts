@@ -16,7 +16,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DisplayComponent} from '../../../../models';
 import {GaugeData, GaugeDisplayTypeProperties} from '../../models';
-import {type ChartTabularData, DonutChartOptions, GaugeChartOptions} from '@carbon/charts';
+import {type ChartTabularData, GaugeChartOptions} from '@carbon/charts';
 import {map, Observable} from "rxjs";
 import {CdsThemeService} from "@valtimo/components"
 
@@ -33,12 +33,12 @@ export class GaugeDisplayComponent implements DisplayComponent {
 
   private DELTA: number = -1.0;
 
-  readonly donutChartOptions$: Observable<DonutChartOptions> = this.themeService.currentTheme$.pipe(
+  readonly gaugeChartOptions$: Observable<GaugeChartOptions> = this.themeService.currentTheme$.pipe(
     map(currentTheme => ({
       resizable: true,
       toolbar: {enabled: false},
       height: '110px',
-      theme: currentTheme == 'g10' ? 'g20' : 'g100',
+      theme: currentTheme == 'g10' ? 'white' : 'g100',
       gauge: {
         alignment: 'center',
         numberFormatter: value => this.numberFormatter(this, value),
