@@ -15,7 +15,7 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {FormViewModel} from '@valtimo/config';
+import {FormViewModel} from '../models';
 
 const FORM_VIEW_MODEL_TOKEN = new InjectionToken<FormViewModel>(
   'Specify the form view model component.'
