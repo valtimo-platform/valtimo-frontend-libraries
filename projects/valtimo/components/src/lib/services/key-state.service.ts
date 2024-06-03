@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
-import { fromEvent, merge, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable, OnDestroy } from '@angular/core';
+import { fromEvent, merge, Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class KeyStateService {
-  private isCtrlOrCmdPressed: boolean = false;
+export class KeyStateService implements OnDestroy {
+  private _isCtrlOrCmdPressed: boolean = false;
+  private _destroy$ = new Subject<void>();
 
   constructor() {
     const keyDowns$: Observable<boolean> = fromEvent<KeyboardEvent>(document, 'keydown').pipe(
@@ -17,12 +18,19 @@ export class KeyStateService {
       map(() => false)
     );
 
-    merge(keyDowns$, keyUps$).subscribe(isPressed => {
-      this.isCtrlOrCmdPressed = isPressed;
-    });
+    merge(keyDowns$, keyUps$)
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(isPressed => {
+        this._isCtrlOrCmdPressed = isPressed;
+      });
   }
 
   public getCtrlOrCmdState(): boolean {
-    return this.isCtrlOrCmdPressed;
+    return this._isCtrlOrCmdPressed;
+  }
+
+  ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 }
