@@ -20,14 +20,7 @@ import {ROLE_USER} from '@valtimo/config';
 import {AuthGuardService} from '@valtimo/security';
 import {FormViewModelComponent} from './components/form-view-model/form-view-model.component';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: FormViewModelComponent,
-    canActivate: [AuthGuardService],
-    data: {title: 'FormViewModel', roles: [ROLE_USER], hidePageTitle: true},
-  },
-];
+const routes: Routes = [];
 
 @NgModule({
   declarations: [],
