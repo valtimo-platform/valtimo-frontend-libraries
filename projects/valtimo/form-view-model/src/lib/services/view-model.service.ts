@@ -19,7 +19,6 @@ import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common
 import {Observable} from 'rxjs';
 import {BaseApiService, ConfigService} from '@valtimo/config';
 import {InterceptorSkip} from '@valtimo/security';
-import {ViewModel} from '../models';
 
 @Injectable({providedIn: 'root'})
 export class ViewModelService extends BaseApiService {
@@ -30,7 +29,7 @@ export class ViewModelService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public getViewModel(formName: string, taskInstanceId: string): Observable<ViewModel> {
+  public getViewModel(formName: string, taskInstanceId: string): Observable<object> {
     return this.httpClient.get<any>(this.getApiUrl('/v1/form/view-model/user-task'), {
       params: {
         formName,
@@ -43,8 +42,8 @@ export class ViewModelService extends BaseApiService {
   public updateViewModel(
     formName: string,
     taskInstanceId: string,
-    viewModel: ViewModel
-  ): Observable<ViewModel> {
+    viewModel: object
+  ): Observable<object> {
     return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/user-task`), viewModel, {
       params: {
         formName,
@@ -57,8 +56,8 @@ export class ViewModelService extends BaseApiService {
   public submitViewModel(
     formName: string,
     taskInstanceId: string,
-    viewModel: ViewModel
-  ): Observable<ViewModel> {
+    viewModel: object
+  ): Observable<object> {
     return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/submit/user-task`), viewModel, {
       params: {
         formName,
@@ -68,7 +67,7 @@ export class ViewModelService extends BaseApiService {
     });
   }
 
-  public getViewModelForStartForm(formName: string, processDefinitionKey: string): Observable<ViewModel> {
+  public getViewModelForStartForm(formName: string, processDefinitionKey: string): Observable<object> {
     return this.httpClient.get<any>(this.getApiUrl('/v1/form/view-model/start-form'), {
       params: {
         formName,
@@ -80,8 +79,8 @@ export class ViewModelService extends BaseApiService {
 
   public updateViewModelForStartForm(
     formName: string,
-    viewModel: ViewModel
-  ): Observable<ViewModel> {
+    viewModel: object
+  ): Observable<object> {
     return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/start-form`), viewModel, {
       params: {
         formName
@@ -93,8 +92,8 @@ export class ViewModelService extends BaseApiService {
   public submitViewModelForStartForm(
     formName: string,
     processDefinitionKey: string,
-    viewModel: ViewModel
-  ): Observable<ViewModel> {
+    viewModel: object
+  ): Observable<object> {
     return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/submit/start-form`), viewModel, {
       params: {
         formName,
