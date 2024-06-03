@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,15 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
-import {ActionItem, ColumnConfig, MultiInputValues, ViewType} from '@valtimo/components';
-import {ConfigService, DefinitionColumn} from '@valtimo/config';
+import {
+  ActionItem,
+  ColumnConfig,
+  MoveRowDirection,
+  MoveRowEvent,
+  MultiInputValues,
+  ViewType,
+} from '@valtimo/components';
+import {ConfigService} from '@valtimo/config';
 import {
   CaseListColumn,
   CaseListColumnView,
@@ -218,6 +225,7 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
     ViewType.ENUM,
     ViewType.ARRAY_COUNT,
     ViewType.UNDERSCORES_TO_SPACES,
+    ViewType.TAGS,
   ];
 
   readonly showDateFormat$ = this.formGroup.valueChanges.pipe(
@@ -379,16 +387,10 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
     }
   }
 
-  moveRow(
-    caseListColumnRowIndex: number,
-    moveUp: boolean,
-    clickEvent: MouseEvent,
-    documentDefinitionName: string
-  ): void {
+  onMoveRowEvent(event: MoveRowEvent, documentDefinitionName: string): void {
     const caseListColumns = [...this.cachedCaseListColumns];
-    const caseListColumnRow = caseListColumns[caseListColumnRowIndex];
-
-    clickEvent.stopPropagation();
+    const caseListColumnRow = caseListColumns[event.index];
+    const moveUp: boolean = event.direction === MoveRowDirection.UP;
 
     const caseListColumnIndex = caseListColumns.findIndex(
       field => field.key === caseListColumnRow.key

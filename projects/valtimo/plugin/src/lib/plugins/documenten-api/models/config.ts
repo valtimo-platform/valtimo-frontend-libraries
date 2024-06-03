@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ interface DocumentenApiConfig extends PluginConfigurationData {
   url: string;
   bronorganisatie: string;
   authenticationPluginConfiguration: string;
+  apiVersion?: string;
 }
 
 type ConfidentialityLevel =
@@ -48,6 +49,10 @@ interface StoreTempDocumentConfig {
   informatieobjecttype: string;
 }
 
+interface DocumentenApiManagementAllVersions {
+  versions: Array<string>;
+}
+
 export interface DownloadDocumentConfig {
   processVariableName: string;
 }
@@ -58,4 +63,5 @@ export {
   ConfidentialityLevel,
   DocumentLanguage,
   DocumentStatus,
+  DocumentenApiManagementAllVersions,
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 import {TemplateRef} from '@angular/core';
+import {CarbonTag} from './carbon-tag.model';
 
 enum ViewType {
   ACTION = 'dropdownActions',
   ARRAY_COUNT = 'arrayCount',
   BOOLEAN = 'boolean',
   DATE = 'date',
+  TAGS = 'tags',
   ENUM = 'enum',
   TEMPLATE = 'template',
   TEXT = 'text',
@@ -39,6 +41,7 @@ interface CarbonListPaginationTranslations {
 interface CarbonListItem {
   [key: string]: any;
   locked?: boolean;
+  tags?: CarbonTag[];
 }
 
 interface CarbonListTranslations {
@@ -64,6 +67,7 @@ interface ColumnConfig extends ListField {
   format?: string;
   enum?: Array<string> | {[key: string]: string};
   template?: TemplateRef<any>;
+  templateData?: object;
 }
 
 enum MoveRowDirection {
@@ -93,6 +97,12 @@ interface ListField {
   sortable?: boolean;
 }
 
+interface CarbonListNoResultsMessage {
+  description: string;
+  isSearchResult: boolean;
+  title: string;
+}
+
 export {
   ActionItem,
   CarbonListBatchText,
@@ -105,4 +115,5 @@ export {
   MoveRowDirection,
   MoveRowEvent,
   ViewType,
+  CarbonListNoResultsMessage,
 };

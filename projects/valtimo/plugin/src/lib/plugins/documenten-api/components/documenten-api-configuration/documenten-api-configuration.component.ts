@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,11 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
-import {
-  BehaviorSubject,
-  combineLatest,
-  map,
-  Observable,
-  Subscription,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
-import {DocumentenApiConfig, DocumentStatus} from '../../models';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} from 'rxjs';
+import {DocumentenApiConfig} from '../../models';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
+import {DocumentenApiService} from '../../services';
 
 @Component({
   selector: 'valtimo-documenten-api-configuration',
@@ -68,11 +60,21 @@ export class DocumentenApiConfigurationComponent
         }))
       )
     );
+  readonly apiVersionItems$: Observable<Array<{id: string; text: string}>> =
+    this.documentenApiService.getManagementApiAllVersions().pipe(
+      map(response =>
+        response.versions.map(version => ({
+          id: version,
+          text: version,
+        }))
+      )
+    );
 
   constructor(
     private readonly pluginManagementService: PluginManagementService,
     private readonly translateService: TranslateService,
-    private readonly pluginTranslationService: PluginTranslationService
+    private readonly pluginTranslationService: PluginTranslationService,
+    private readonly documentenApiService: DocumentenApiService
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +86,9 @@ export class DocumentenApiConfigurationComponent
   }
 
   formValueChange(formValue: DocumentenApiConfig): void {
+    if (!formValue.apiVersion) {
+      formValue.apiVersion = null;
+    }
     this.formValue$.next(formValue);
     this.handleValid(formValue);
   }

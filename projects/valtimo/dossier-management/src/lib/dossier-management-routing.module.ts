@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AuthGuardService} from '@valtimo/security';
-import {DossierManagementListComponent} from './components/dossier-management-list/dossier-management-list.component';
+import {pendingChangesGuard} from '@valtimo/components';
 import {ROLE_ADMIN} from '@valtimo/config';
+import {AuthGuardService} from '@valtimo/security';
 import {DossierManagementDetailContainerComponent} from './components/dossier-management-detail-container/dossier-management-detail-container.component';
+import {DossierManagementListComponent} from './components/dossier-management-list/dossier-management-list.component';
+import {DossierManagementWidgetTabComponent} from './components/dossier-management-widget-tab/dossier-management-widget-tab.component';
 
 const routes: Routes = [
   {
@@ -29,9 +30,21 @@ const routes: Routes = [
     data: {title: 'Dossiers', roles: [ROLE_ADMIN]},
   },
   {
+    path: 'dossier-management/dossier/:name/widget-tab/:key',
+    component: DossierManagementWidgetTabComponent,
+    canActivate: [AuthGuardService],
+    data: {
+      title: 'Widget tab',
+      roles: [ROLE_ADMIN],
+      customPageTitle: true,
+      customPageSubtitle: true,
+    },
+  },
+  {
     path: 'dossier-management/dossier/:name',
     component: DossierManagementDetailContainerComponent,
     canActivate: [AuthGuardService],
+    canDeactivate: [pendingChangesGuard],
     data: {title: 'Dossier details', roles: [ROLE_ADMIN], customPageTitle: true},
   },
 ];

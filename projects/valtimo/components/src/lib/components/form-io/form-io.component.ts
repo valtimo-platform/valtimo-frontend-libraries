@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 import {
   Component,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
@@ -24,141 +25,185 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {FormioSubmission, ValtimoFormioOptions} from '../../models';
+import {ValtimoFormioOptions} from '../../models';
 import {ValtimoModalService} from '../../services/valtimo-modal.service';
 import {UserProviderService} from '@valtimo/security';
-import {Formio, FormioComponent as FormIoSourceComponent, FormioForm} from '@formio/angular';
-import {FormioRefreshValue} from '@formio/angular/formio.common';
-import jwt_decode from 'jwt-decode';
+import {
+  Formio,
+  FormioComponent as FormIoSourceComponent,
+  FormioOptions,
+  FormioRefreshValue,
+  FormioSubmission,
+} from '@formio/angular';
+import {jwtDecode} from 'jwt-decode';
 import {NGXLogger} from 'ngx-logger';
-import {from, Observable, Subject, Subscription, timer} from 'rxjs';
-import {distinctUntilChanged, map, switchMap, take} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable, Subject, Subscription, timer} from 'rxjs';
+import {distinctUntilChanged, map, switchMap, take, tap} from 'rxjs/operators';
 import {FormIoStateService} from './services/form-io-state.service';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import {FormIoLocalStorageService} from './services/form-io-local-storage.service';
+import {deepmerge} from 'deepmerge-ts';
+import {ConfigService, ValtimoConfig} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-form-io',
   templateUrl: './form-io.component.html',
   styleUrls: ['./form-io.component.css'],
+  providers: [FormIoLocalStorageService],
 })
 export class FormioComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() form: any;
-  @Input() options: ValtimoFormioOptions;
-  @Input() submission?: object = {};
-  @Input() readOnly?: boolean;
+  @Input() set options(optionsValue: ValtimoFormioOptions) {
+    this.options$.next(optionsValue);
+  }
+  @Input() set submission(submissionValue: FormioSubmission) {
+    this.submission$.next(submissionValue);
+  }
+  @Input() set form(formValue: object) {
+    this.form$.next(formValue);
+  }
+  @Input() set readOnly(readOnlyValue: boolean) {
+    this.readOnly$.next(readOnlyValue);
+  }
   @Input() formRefresh$!: Subject<FormioRefreshValue>;
-  // eslint-disable-next-line @angular-eslint/no-output-native
-  @Output() submit: EventEmitter<any> = new EventEmitter();
-  // eslint-disable-next-line @angular-eslint/no-output-native
-  @Output() change: EventEmitter<any> = new EventEmitter();
-  refreshForm: EventEmitter<FormioRefreshValue> = new EventEmitter();
-  formDefinition: FormioForm;
-  public errors: string[] = [];
 
-  private tokenRefreshTimerSubscription: Subscription;
-  private formRefreshSubscription: Subscription;
+  // eslint-disable-next-line @angular-eslint/no-output-native
+  @Output() submit = new EventEmitter<any>();
+  // eslint-disable-next-line @angular-eslint/no-output-native
+  @Output() change = new EventEmitter<any>();
 
-  readonly currentLanguage$ = this.translateService.stream('key').pipe(
+  @HostListener('window:beforeunload', ['$event'])
+  private handleBeforeUnload() {
+    this.localStorageService.clearTokenFromLocalStorage();
+  }
+
+  public refreshForm = new EventEmitter<FormioRefreshValue>();
+
+  public readonly submission$ = new BehaviorSubject<FormioSubmission>({});
+  public readonly form$ = new BehaviorSubject<object>(undefined);
+  public readonly options$ = new BehaviorSubject<ValtimoFormioOptions>(undefined);
+  public readonly readOnly$ = new BehaviorSubject<boolean>(false);
+  public readonly errors$ = new BehaviorSubject<Array<string>>([]);
+
+  public readonly currentLanguage$ = this.translateService.stream('key').pipe(
     map(() => this.translateService.currentLang),
     distinctUntilChanged()
   );
 
-  readonly formioOptions$: Observable<ValtimoFormioOptions> = this.currentLanguage$.pipe(
-    map(language => {
+  private readonly _overrideOptions$ = new BehaviorSubject<FormioOptions>({});
+
+  public readonly formioOptions$: Observable<ValtimoFormioOptions | FormioOptions> = combineLatest([
+    this.currentLanguage$,
+    this.options$,
+    this._overrideOptions$,
+  ]).pipe(
+    map(([language, options, overrideOptions]) => {
       const formioTranslations = this.translateService.instant('formioTranslations');
-      return typeof formioTranslations === 'object'
-        ? {
-            ...this.options,
-            language,
-            i18n: {
-              [language]: this.stateService.flattenTranslationsObject(formioTranslations),
-            },
-          }
-        : this.options;
-    })
+
+      const defaultOptions = {
+        ...options,
+        language,
+        ...(formioTranslations === 'object' && {
+          i18n: {
+            [language]: this.stateService.flattenTranslationsObject(formioTranslations),
+          },
+        }),
+      };
+
+      return deepmerge(defaultOptions, overrideOptions);
+    }),
+    tap(options => this.logger.debug('Form.IO options used', options))
   );
 
+  public readonly tokenSetInLocalStorage$ = this.localStorageService.tokenSetInLocalStorage$;
+
+  private _tokenRefreshTimerSubscription!: Subscription;
+  private _formRefreshSubscription!: Subscription;
+  private readonly _subscriptions = new Subscription();
+  private readonly _tokenTimerSubscription = new Subscription();
+
   constructor(
-    private userProviderService: UserProviderService,
-    private logger: NGXLogger,
+    private readonly userProviderService: UserProviderService,
+    private readonly logger: NGXLogger,
     private readonly stateService: FormIoStateService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly modalService: ValtimoModalService
-  ) {}
-
-  ngOnInit() {
-    const documentDefinitionName = this.route.snapshot.paramMap.get('documentDefinitionName');
-    const documentId = this.route.snapshot.paramMap.get('documentId');
-
-    this.formDefinition = this.form;
-    this.errors = [];
-
-    this.setInitialToken();
-
-    if (documentDefinitionName) {
-      this.stateService.setDocumentDefinitionName(documentDefinitionName);
-    }
-    if (documentId) {
-      this.stateService.setDocumentId(documentId);
-    }
-
-    this.subscribeFormRefresh();
+    private readonly localStorageService: FormIoLocalStorageService,
+    private readonly modalService: ValtimoModalService,
+    private readonly configService: ConfigService
+  ) {
+    this.setOverrideOptions(configService.config);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const currentForm = changes?.form?.currentValue;
+  public ngOnInit(): void {
+    Formio.setProjectUrl(location.origin);
+    Formio.authUrl = location.origin;
 
-    if (currentForm) {
-      this.formDefinition = currentForm;
-      this.reloadForm();
-    }
-
+    this.openRouteSubscription();
+    this.errors$.next([]);
     this.setInitialToken();
+    this.subscribeFormRefresh();
+    this.openReloadFormSubscription();
+    this.openReloadSubmissionSubscription();
+  }
 
-    if (changes.formDefinitionRefresh$) {
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes?.formDefinitionRefresh$) {
       this.unsubscribeFormRefresh();
       this.subscribeFormRefresh();
     }
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.unsubscribeFormRefresh();
-
-    this.tokenRefreshTimerSubscription?.unsubscribe();
+    this._tokenRefreshTimerSubscription?.unsubscribe();
+    this._subscriptions.unsubscribe();
+    this.localStorageService.clearTokenFromLocalStorage();
   }
 
-  reloadForm() {
-    this.refreshForm.emit({
-      form: this.formDefinition,
-    });
+  public showErrors(errors: string[]): void {
+    this.errors$.next(errors);
   }
 
-  showErrors(errors: string[]) {
-    this.errors = errors;
-  }
-
-  onSubmit(submission: FormioSubmission) {
-    this.errors = [];
+  public onSubmit(submission: FormioSubmission): void {
+    this.errors$.next([]);
     this.submit.emit(submission);
   }
 
-  formReady(form: FormIoSourceComponent): void {
-    this.reloadForm();
+  public formReady(form: FormIoSourceComponent): void {
     this.stateService.currentForm = form;
   }
 
-  onChange(object: any): void {
+  public onChange(object: any): void {
     this.change.emit(object);
   }
 
-  nextPage(): void {
+  public nextPage(): void {
     this.scrollToTop();
   }
 
-  prevPage(): void {
+  public prevPage(): void {
     this.scrollToTop();
+  }
+
+  private openReloadFormSubscription(): void {
+    this._subscriptions.add(
+      this.form$.subscribe(form => {
+        this.refreshForm.emit({
+          form,
+        });
+      })
+    );
+  }
+
+  private openReloadSubmissionSubscription(): void {
+    this._subscriptions.add(
+      this.submission$.subscribe(submission => {
+        this.refreshForm.emit({
+          submission,
+        });
+      })
+    );
   }
 
   private scrollToTop(): void {
@@ -172,39 +217,36 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private setToken(token: string): void {
+    Formio.setUser(jwtDecode(token));
     Formio.setToken(token);
-    localStorage.setItem('formioToken', token);
     this.setTimerForTokenRefresh(token);
+    this.localStorageService.setTokenInLocalStorage(token);
 
     this.logger.debug('New token set for form.io.');
   }
 
   private setTimerForTokenRefresh(token: string): void {
-    const tokenExp = (jwt_decode(token) as any).exp * 1000;
+    const tokenExp = jwtDecode(token).exp * 1000;
     const expiryTime = tokenExp - Date.now() - 1000;
-    if (!this.tokenRefreshTimerSubscription) {
-      this.tokenRefreshTimerSubscription = timer(expiryTime).subscribe(() => {
-        this.refreshToken();
-      });
-    }
+
+    this._tokenTimerSubscription.add(
+      timer(expiryTime)
+        .pipe(
+          switchMap(() => this.userProviderService.updateToken(-1)),
+          switchMap(() => this.userProviderService.getToken()),
+          take(1)
+        )
+        .subscribe((refreshedToken: string) => {
+          this.setToken(refreshedToken);
+        })
+    );
 
     this.logger.debug(`Timer for form.io token refresh set for: ${expiryTime}ms.`);
   }
 
-  private refreshToken(): void {
-    from(this.userProviderService.updateToken(-1))
-      .pipe(
-        switchMap(() => this.userProviderService.getToken()),
-        take(1)
-      )
-      .subscribe(token => {
-        this.setToken(token);
-      });
-  }
-
   private subscribeFormRefresh(): void {
     if (this.formRefresh$) {
-      this.formRefreshSubscription = this.formRefresh$.subscribe(refreshValue => {
+      this._formRefreshSubscription = this.formRefresh$.subscribe(refreshValue => {
         if (refreshValue) {
           this.refreshForm.emit(refreshValue);
         }
@@ -213,8 +255,31 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private unsubscribeFormRefresh(): void {
-    if (this.formRefreshSubscription) {
-      this.formRefreshSubscription.unsubscribe();
+    if (this._formRefreshSubscription) {
+      this._formRefreshSubscription.unsubscribe();
     }
+  }
+
+  private openRouteSubscription(): void {
+    this._subscriptions.add(
+      this.route.params.subscribe(params => {
+        const documentDefinitionName = params.documentDefinitionName;
+        const documentId = params.documentId;
+
+        if (documentDefinitionName) {
+          this.stateService.setDocumentDefinitionName(documentDefinitionName);
+        }
+
+        if (documentId) {
+          this.stateService.setDocumentId(documentId);
+        }
+      })
+    );
+  }
+
+  private setOverrideOptions(config: ValtimoConfig): void {
+    if (!config.formioOptions) return;
+
+    this._overrideOptions$.next(config.formioOptions);
   }
 }

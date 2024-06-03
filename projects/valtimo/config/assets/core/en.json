@@ -79,7 +79,9 @@
       "notes": "Notes",
       "MINE": "My cases",
       "OPEN": "Unassigned cases",
-      "ALL": "All cases"
+      "ALL": "All cases",
+      "componentNotFound": "Tab component not found",
+      "componentNotFoundMessage": "No component has been found for this tab. Please contact your system administrator."
     },
     "forms": {
       "globalSearchPlaceHolder": "Everything",
@@ -126,14 +128,26 @@
         "description": "Are you sure you want to delete this note?",
         "deletedMessage": "The note was deleted successfully."
       },
-      "editedMessage": "The note was edited successfully."
+      "editedMessage": "The note was edited successfully.",
+      "noResults": {
+        "title": "No notes",
+        "description": "There are no notes in this case."
+      }
     },
     "documenten": {
+      "deleteConfirmationModal": {
+        "title": "Delete document",
+        "content": "Are you sure you want to delete this document? This action cannot be undone."
+      },
       "noProcessLinked": {
         "regularUser": "The document upload is not available for this case. Please contact an administrator",
         "adminRole": "The process for uploading documents has not been configured. Please configure this process on the case management page"
       },
-      "noZaakFound": "No files could be retrieved because no Zaak was for found for this case."
+      "navigateToCaseAdmin": "Configure Zaak",
+      "noZaakFoundTitle": "No Zaak found",
+      "noZaakFound": "No files could be retrieved because no Zaak was for found for this case.",
+      "noFilesTitle": "No files",
+      "noFiles": "No files found for this case."
     },
     "startSubProcess": "Start",
     "claimAssigneeCase": "Claim",
@@ -147,7 +161,11 @@
       "noFormSpecified": "No form definition has been specified for this tab.",
       "formNotFound": "The form definition '{{formDefinitionName}}' could not be found."
     },
-    "rowLocked": "You don't have access to this case"
+    "rowLocked": "You don't have access to this case",
+    "widgets": {
+      "noWidgets": "No widgets",
+      "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them."
+    }
   },
   "document": {
     "title": {
@@ -158,17 +176,29 @@
     "createdBy": "Created by",
     "createdOn": "Created on",
     "sequence": "Sequence",
-    "fillInMetadata": "File information",
+    "fillInMetadata": "Add file metadata",
+    "editMetadata": "Edit file metadata",
     "cancel": "Cancel",
     "upload": "Upload",
+    "save": "Save",
+    "size": "Size",
+    "tags": "Tags (optional)",
+    "tagsTooltip": "Tags are used for easy filtering and searching of documents. You can add multiple tags to a document",
+    "tagsPlaceholder": "Choose tags",
+    "format": "File format",
+    "trefwoorden": "Keywords",
     "filename": "Filename",
     "filenameTooltip": "The name of the physical file in which the content of the document is captured, including extension",
+    "filenamePlaceholder": "Add filename",
     "confidentialityLevel": "Confidentiality level",
     "confidentialityLevelTooltip": "Indication of the extent to which the document is intended for public access",
+    "confidentialityPlaceholder": "Choose confidentiality",
     "inputTitle": "Title",
     "inputTitleTooltip": "The name by which the document is formally known",
+    "inputTitlePlaceholder": "Add title",
     "inputDescription": "Description",
     "inputDescriptionTooltip": "A generic description of the content of the document",
+    "inputDescriptionPlaceholder": "Add description",
     "openbaar": "Public",
     "beperkt_openbaar": "Restricted public",
     "intern": "Internal",
@@ -179,8 +209,10 @@
     "zeer_geheim": "Very secret",
     "author": "Author",
     "authorTooltip": "The original author of the document",
+    "authorPlaceholder": "Add author",
     "status": "Status",
     "statusTooltip": "The current status of the document. 'In editing': the document is being worked on; 'To be confirmed': the document is finished but has yet to be confirmed; 'Definitive': the document has been received or confirmed by an authorized person; 'Archived': the document has been stored lastingly.",
+    "statusPlaceholder": "Choose status",
     "in_bewerking": "In editing",
     "ter_vaststelling": "To be confirmed",
     "definitief": "Definitive",
@@ -193,14 +225,37 @@
     "sendDateTooltip": "The date the document was sent",
     "language": "Language",
     "languageTooltip": "The language in which the document is written",
+    "languagePlaceholder": "Choose language",
     "nld": "Dutch",
     "eng": "English",
     "deu": "German",
     "informatieobjecttype": "Document type",
     "informatieobjecttypeTooltip": "A document type which is related to the zaak type of the current case",
-    "additionalDate": "Additional document date",
+    "informatieobjecttypePlaceholder": "Choose information object type",
+    "additionalDate": "Additional date",
     "additionalDateTooltip": "An additional date that can be added to the document as metadata. This additional date is optional. If 'Receipt date' is selected, the document status can only be set to 'definitive' or 'archived'.",
-    "noAdditionalDate": "No additional date"
+    "noAdditionalDate": "No additional date",
+    "delete": "Delete",
+    "download": "Download",
+    "edit": "Edit",
+    "application/octet-stream": "Unknown",
+    "application/json": "JSON",
+    "application/msword": "DOC",
+    "application/pdf": "PDF",
+    "application/vnd.ms-powerpoint": "PPT",
+    "application/vnd.ms-excel": "XLS",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "DOCX",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "PPTX",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "XLSX",
+    "audio/mpeg": "MP3",
+    "image/bmp": "BMP",
+    "image/gif": "GIF",
+    "image/jpeg": "JPEG",
+    "image/png": "PNG",
+    "image/svg+xml": "SVG",
+    "text/csv": "CSV",
+    "text/plain": "TXT",
+    "video/mp4": "MP4"
   },
   "summary": {
     "userTasksDoneState": "All done!",
@@ -263,8 +318,10 @@
     "task": {
       "title": "Task"
     },
-    "noDashboards": "No dashboards have been configured.",
-    "noWidgets": "No widgets have been configured for this dashboard."
+    "noDashboards": "No dashboards",
+    "noDashboardsDescription": "It's possible that the system administrator hasn't configured any dashboards yet, or you don't have the rights to view dashboards.",
+    "noWidgets": "No widgets",
+    "noWidgetsDescription": "There are no widgets configured for this dashboard, or you don't have the rights to view them."
   },
   "dashboardManagement": {
     "addDashboard": "Add new dashboard",
@@ -374,7 +431,15 @@
     },
     "interface": {
       "title": "Interface",
-      "collapsibleMenu": "Navigation bar always collapsible"
+      "themePreference": "Theme",
+      "themes": {
+        "light": "Light",
+        "dark": "Dark (Beta)",
+        "system": "System (Beta)"
+      },
+      "collapsibleMenu": "Navigation bar always collapsible",
+      "compactMode": "Compact mode",
+      "showUserName": "Show name of user"
     }
   },
   "decisions": {
@@ -408,7 +473,12 @@
     "delete": "Delete",
     "deploy": "Deploy",
     "duplicate": "Duplicate",
-    "readOnly": "Read-only"
+    "readOnly": "Read-only",
+    "tabs": {
+      "formBuilder": "Form builder",
+      "jsonEditor": "JSON editor",
+      "output": "Output"
+    }
   },
   "dossierManagement": {
     "version": "Version: ",
@@ -452,7 +522,9 @@
       "searchFields": "Search Fields",
       "listColumns": "List",
       "tabManagement": "Tabs",
-      "document": "Document"
+      "document": "Document",
+      "statuses": "Statuses",
+      "zgw": "ZGW"
     },
     "tabManagement": {
       "columns": {
@@ -471,7 +543,8 @@
         "tabKeyLabel": "Key",
         "tabNameLabel": "Tab name (optional)",
         "title": "Add new tab in {{documentDefinitionName}}",
-        "uniqueKeyError": "The key for this column must be unique."
+        "uniqueKeyError": "The key for this column must be unique.",
+        "widgetsComponent": "Widgets component"
       },
       "titles": {
         "custom": "Add new tab with custom component",
@@ -538,6 +611,122 @@
           "title": "Plugin Configuration"
         }
       }
+    },
+    "createDefinition": {
+      "idError": "This definition name is already in use. Please change to a unique name",
+      "modalTitle": "Create case definition",
+      "name": "Case definition name",
+      "namePlaceholder": "Case definition name will be auto-generated here",
+      "nameTooltip": "The name is used for the system names, $id etc. No spaces or special characters are allowed other than “-”.",
+      "title": "Case definition title",
+      "titlePlaceholder": "Enter title here",
+      "titleTooltip": "The title is used for the visible name of the case definition in the UI"
+    },
+    "documentDefinition": {
+      "cancelModal": {
+        "title": "Leaving the editor",
+        "content": "Are you sure you want to leave the editor? There can be unsaved changes that will be lost. When saving, beware that removing or changing an attribute can break the case definition.",
+        "keepEditing": "Keep editing"
+      },
+      "saveModalContent": "Are you sure you want to save the Document definition? Removing or changing an attribute can break the case definition."
+    },
+    "statuses": {
+      "withoutStatus": "Show cases without a status",
+      "searchFieldTitle": "Status",
+      "add": "Add status",
+      "edit": "Edit status",
+      "visibleTitle": "Default visibility in case list",
+      "visible": "Visible",
+      "invisible": "Not visible",
+      "deleteText": "Are you sure you want to delete this status? This action cannot be undone.",
+      "keyAutoGenerated": "Key will be auto-generated",
+      "colorPlaceholder": "Choose a color",
+      "columns": {
+        "title": "Status name",
+        "key": "Status key",
+        "visible": "Visible by default",
+        "color": "Color"
+      },
+      "noResults": {
+        "title": "No statuses",
+        "description": "Add a status to start"
+      }
+    }
+  },
+  "widgetTabManagement": {
+    "tab": {
+      "metadata": "<b>Created by</b> {{createdBy}} | <b>Created on</b> {{createdOn}} | <b>Key</b> {{key}}",
+      "editButton": "Edit",
+      "editWidgetTab": "Edit widget tab",
+      "cancel": "Cancel",
+      "save": "Save",
+      "form": {
+        "tabName": "Tab name"
+      }
+    }
+  },
+  "zgw": {
+    "columns": {
+      "column": "Column",
+      "add": "Add column",
+      "edit": "Edit column",
+      "deleteText": "Are you sure you want to delete this column?",
+      "notSortable": "This column is not sortable",
+      "defaultWarning": "When selecting a default sort, the previous sort will be overwritten"
+    },
+    "documentColumns": {
+      "auteur": "Author",
+      "beschrijving": "Description",
+      "bestandsnaam": "File name",
+      "bestandsomvang": "File size",
+      "bronorganisatie": "Source organisation",
+      "creatiedatum": "Creation date",
+      "formaat": "Format",
+      "identificatie": "Id",
+      "informatieobjecttypeOmschrijving": "Information object type",
+      "locked": "Locked",
+      "status": "Status",
+      "taal": "Language",
+      "titel": "Title",
+      "trefwoorden": "Tags",
+      "versie": "Version",
+      "vertrouwelijkheidaanduiding": "Confidentiality level"
+    },
+    "documents": {
+      "noResults": {
+        "filterTitle": "No documents found",
+        "filterDescription": "There are no documents that match your search criteria"
+      },
+      "noColumns": {
+        "description": "Please configure columns for this document",
+        "title": "No configured columns"
+      }
+    },
+    "tags": {
+      "tag": "Tag",
+      "add": "Add tag",
+      "deleteText": "Are you sure you want to delete this tag?",
+      "deleteMultipleText": "Are you sure you want to delete these tags?",
+      "addModal": {
+        "header": "Add tag"
+      },
+      "list": {
+        "noResultsTitle": "No tags",
+        "noResultsDescription": "Add a tag to start"
+      },
+      "search": {
+        "noResultsTitle": "No results",
+        "noResultsDescription": "Try adjusting your search or filter options to find what you're looking for."
+      },
+      "fields": {
+        "value": "Tag",
+        "valueRequired": "Tag is required.",
+        "valueMaxLength": "Tag is too long. Maximum length is {{ maxlength }} characters."
+      }
+    },
+    "tabs": {
+      "documentColumns": "Document columns",
+      "documentTags": "Document tags"
     }
   },
   "task-list": {
@@ -569,7 +758,8 @@
     },
     "goToCase": "Go to case",
     "caseLocked": "You don't have access to this case",
-    "rowLocked": "You don't have access to this task"
+    "rowLocked": "You don't have access to this task",
+    "allCases": "All cases"
   },
   "Task": "Task",
   "Tasks": "Tasks",
@@ -637,7 +827,8 @@
     "readOnlySystemProcessWarningMessage": "This is a system process, so it is marked as read-only. This process can be used but not modified."
   },
   "processCaseConnection": {
-    "noProcesses": "There are no processes connected yet to this Case definition",
+    "noProcessesTitle": "No processes",
+    "noProcessesDescription": "There are no processes connected to this Case definition yet",
     "processCreatesCase": "Process creates new case",
     "processCreatesCaseTooltip": "When this option is selected, a new case is created when this process is started. For this to be possible, a start form must be linked to the first step in the process.",
     "startableWithinCase": "Can be started within existing case",
@@ -645,6 +836,14 @@
   },
   "openZaak": {
     "links": "Connected zaak type",
+    "documentenApi": {
+      "title": "Documenten API",
+      "documentenApiVersion": "The Documenten API plugin is using version",
+      "noVersionWarningTitle": "No Documents API plugin version detected",
+      "noVersionWarningMessage": "Please configure the Documents API plugin version and configure the upload process",
+      "multipleVersionsWarningTitle": "Multiple Documenten API plugins detected",
+      "multipleVersionsWarningMessage": "The upload process links to multiple Documenten APIs with different versions"
+    },
     "success": {
       "serviceTaskLinked": "Service task linked",
       "serviceTaskLinkUpdated": "Service task link updated",
@@ -660,6 +859,10 @@
     "autoCreateForCase": "Automatically create for each case",
     "selectZaakTypeForCase": "Select zaak type for case",
     "selectZaakType": "Select zaak type",
+    "selectZakenApiPluginForCase": "Select Zaken Api plugin for case",
+    "selectZakenApiPlugin": "Select Zaken Api plugin",
+    "zakenApiPlugin": "Zaken Api plugin",
+    "rsin": "RSIN used when creating the Zaak in the Zaken Api",
     "selectInfoObjectType": "Select information object type",
     "save": "Save"
   },
@@ -695,6 +898,7 @@
     "deleteConfirmation": "Are you sure you want to delete?",
     "cancel": "Cancel",
     "close": "Close",
+    "discard": "Discard",
     "next": "Next",
     "skip": "Skip",
     "confirm": "Confirm",
@@ -706,6 +910,7 @@
     "save": "Save",
     "more": "More",
     "export": "Export",
+    "defaultSort": "Default sort",
     "list": {
       "itemsPerPage": "Items per page",
       "multipleSelect": "{{count}} items selected",
@@ -723,7 +928,32 @@
     "filter": "Filter...",
     "back": "Back",
     "warning": "Warning",
-    "finish": "Finish"
+    "finish": "Finish",
+    "add": "Add",
+    "tags": "Tags",
+    "tagType": {
+      "red": "Red",
+      "magenta": "Magenta",
+      "purple": "Purple",
+      "blue": "Blue",
+      "cyan": "Cyan",
+      "teal": "Teal",
+      "green": "Green",
+      "gray": "Gray",
+      "cool-gray": "Cool gray",
+      "warm-gray": "Warm gray",
+      "high-contrast": "High contrast",
+      "outline": "Outline"
+    },
+    "labels": {
+      "dateCreationFrom": "Date creation from",
+      "dateCreationTo": "Date creation to"
+    },
+    "sorting": {
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "noDefault": "No default sort"
+    }
   },
   "taskDetail": {
     "taskCreated": "Created",
@@ -1112,7 +1342,9 @@
     "configFile": "Config file",
     "dropdownListValues": "Dropdown list values",
     "id": "ID",
-    "text": "Text"
+    "text": "Text",
+    "noSearchfieldsTitle": "No search fields",
+    "noSearchfieldsDescription": "There are no search fields configured for this case type."
   },
   "searchFieldsOverviewTooltips": {
     "title": "The title is an optional field that appears as a label for the current search field. When the title is not set, the default value will be the search field key translation (if there is no translation available, the original key value will be displayed).",
@@ -1154,9 +1386,9 @@
     "sortableAsc": "Ascending",
     "sortableDesc": "Descending",
     "hasEnvConfigWarningTitle": "Case type already has a column configuration",
-    "hasEnvConfigWarning": "This case type already has a column configuration available in the environment configuration of the application. In order to enable configuring the columns for this case type through the user interface, remove this environment configuration.",
-    "noConfigWarningTitle": "No columns configured",
-    "noConfigWarning": "There are no columns configured for this dossier type. Click the button above to add a column.",
+    "hasEnvConfigWarning": "This case type already has a column configuration in the environment configuration. Delete this in order to add columns here.",
+    "noConfigWarningTitle": "No columns",
+    "noConfigWarning": "There are no columns configured for this case type.",
     "addButtonText": "Add column",
     "editColumnTitle": "Edit column",
     "close": "Close",
@@ -1179,7 +1411,8 @@
     "boolean": "Yes/no",
     "enum": "Enumeration",
     "arrayCount": "Count",
-    "underscoresToSpaces": "Underscores to spaces"
+    "underscoresToSpaces": "Underscores to spaces",
+    "tags": "Tags"
   },
   "object": {
     "title": "Objects",
@@ -1248,7 +1481,10 @@
     "Cancel": "Cancel",
     "Remove": "Remove",
     "Next": "Next",
-    "Previous": "Previous"
+    "Previous": "Previous",
+    "formioIbanComponent": {
+      "errorMessage": "Not a valid IBAN. Please enter a valid IBAN."
+    }
   },
   "viewTypeConverter": {
     "Yes": "Yes",
@@ -1268,7 +1504,11 @@
     "back": "Go back",
     "next": "Next",
     "pluginDescription": "Plugin description",
-    "unlink": "Unlink"
+    "unlink": "Unlink",
+    "toggleViewModel": {
+      "title": "View Model enabled?",
+      "checkboxDescription": "Enables Form View Model form processing"
+    }
   },
   "processLinkType": {
     "plugin": "Plugin",
@@ -1314,5 +1554,40 @@
     "modalContent": "Displaying new translations in the application might require a page reload.",
     "saveWithoutReload": "Save",
     "saveWithReload": "Save and reload"
+  },
+  "caseMigration": {
+    "warningBeta": "Case migration is still in beta. Migrating cases might give unexpected results. Please use with care.",
+    "caseDefinition": "Case definition",
+    "sourceDocumentDefinitionName": "Source case definition name",
+    "sourceDocumentDefinitionVersion": "Source case definition version",
+    "targetDocumentDefinitionName": "Target case definition name",
+    "targetDocumentDefinitionVersion": "Target case definition version",
+    "patches": "Patches ",
+    "patchTooltip": "The old case can be migrated to the new case by using patches. Patches work by moving case properties from the source location to the target location. For example: source: '/oldLocation/firstName', target: '/newLocation/firstName'. A property can be removed by leaving the target empty. For example: source: '/gulden', target: ''. A property can be given a default value in the source field. For example, source: 'John', target: '/firstName'. A patch will always try to convert the type to the target type. For example, source: '/my/number', target: '/my/text'. A property can be set to [NULL] by using SpEL expressions. For example, source: '${null}', target: '/driversLicense'. A Spring bean can be called for more elaborate patches. For example, source: ${myBean.getAge(source.person.birthYear)}, target: '${myOtherBean.doMore(builder, sourceValue)}'",
+    "patchSource": "Source case field",
+    "patchTarget": "Target case field",
+    "errors": "Errors",
+    "checkPatches": "Verify patches",
+    "migrate": "Migrate cases",
+    "modalTitle": "Migrate cases",
+    "modalContent": "Are you sure you migrate the cases? Some changes can not be undone."
+  },
+  "formFlow": {
+    "title": "All form flows",
+    "key": "Key",
+    "version": "Version",
+    "readOnly": "Read only",
+    "add": "Add new form flow",
+    "deleteModalContent": "Are you sure you want to delete this form flow?",
+    "savedSuccessTitle": "Saved successfully",
+    "savedSuccessTitleMessage": "{{key}} was saved successfully",
+    "noResults": {
+      "description": "Click <strong>Add new form flow</strong> to start designing your form flow",
+      "title": "No form flows added"
+    }
+  },
+  "taskManagement": {
+    "columns": "Columns",
+    "caseName": "Case name"
   }
 }

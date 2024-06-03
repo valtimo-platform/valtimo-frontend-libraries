@@ -1,20 +1,18 @@
 {
   "name": "@valtimo/dashboard",
   "license": "EUPL-1.2",
-  "version": "10.5.0",
+  "version": "12.1.0",
   "peerDependencies": {
-    "@angular/common": "^14.2.5",
-    "@angular/core": "^14.2.5"
+    "@angular/common": "^17.2.2",
+    "@angular/core": "^17.2.2"
   },
   "dependencies": {
-    "moment": "^2.29.4",
-    "d3": "^7.6.1",
-    "d3-shape": "^3.1.0",
-    "@ngx-translate/core": "^14.0.0",
-    "@ngx-translate/http-loader": "7.0.0",
-    "tslib": "^2.0.0"
-  },
-  "devDependencies": {
-    "karma-moment": "^0.1.0"
+    "moment": "2.30.1",
+    "d3": "7.8.5",
+    "d3-shape": "3.2.0",
+    "@ngx-translate/core": "15.0.0",
+    "@ngx-translate/http-loader": "8.0.0",
+    "tslib": "2.6.2",
+    "bin-pack-with-constraints": "1.0.1"
   }
 }

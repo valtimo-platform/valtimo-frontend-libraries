@@ -29,28 +29,24 @@ import {
   CardModule,
   FormIoModule,
   MenuModule,
-  registerDocumentenApiFormioUploadComponent,
   registerFormioCurrentUserComponent,
   registerFormioFileSelectorComponent,
+  registerFormioIbanComponent,
   registerFormioUploadComponent,
   UploaderModule,
   WidgetModule,
 } from '@valtimo/components';
-import {ChoicefieldModule} from '@valtimo/choicefield';
 import {
   CASE_TAB_TOKEN,
   DefaultTabs,
   DossierDetailTabAuditComponent,
-  DossierDetailTabContactMomentsComponent,
   DossierDetailTabDocumentsComponent,
   DossierDetailTabNotesComponent,
   DossierDetailTabProgressComponent,
   DossierDetailTabSummaryComponent,
-  DossierDetailTabZaakobjectenComponent,
   DossierModule,
 } from '@valtimo/dossier';
 import {ProcessModule} from '@valtimo/process';
-import {ViewConfiguratorModule} from '@valtimo/view-configurator';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CustomFormExampleComponent} from './custom-form-example/custom-form-example.component';
 import {StartProcessCustomFormComponent} from './start-process-custom-form/start-process-custom-form.component';
@@ -64,7 +60,6 @@ import {
 } from '@valtimo/dashboard';
 import {DashboardManagementModule} from '@valtimo/dashboard-management';
 import {DocumentModule} from '@valtimo/document';
-import {ContactMomentModule} from '@valtimo/contact-moment';
 import {AccountModule} from '@valtimo/account';
 import {ChoiceFieldModule} from '@valtimo/choice-field';
 import {ResourceModule} from '@valtimo/resource';
@@ -79,7 +74,7 @@ import {ProcessManagementModule} from '@valtimo/process-management';
 import {DecisionModule} from '@valtimo/decision';
 import {MilestoneModule} from '@valtimo/milestone';
 import {LoggerModule} from 'ngx-logger';
-import {FORM_FLOW_COMPONENT_TOKEN, FormLinkModule} from '@valtimo/form-link';
+import {FORM_FLOW_COMPONENT_TOKEN, ProcessLinkModule} from '@valtimo/process-link';
 import {MigrationModule} from '@valtimo/migration';
 import {BootstrapModule} from '@valtimo/bootstrap';
 import {
@@ -90,9 +85,7 @@ import {
 } from '@valtimo/config';
 import {FormManagementModule} from '@valtimo/form-management';
 import {DossierManagementModule} from '@valtimo/dossier-management';
-import {OpenZaakModule} from '@valtimo/open-zaak';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {CustomerModule} from '@valtimo/customer';
 import {PluginManagementModule} from '@valtimo/plugin-management';
 import {
   BesluitenApiPluginModule,
@@ -126,6 +119,17 @@ import {
 import {ObjectManagementModule} from '@valtimo/object-management';
 import {ObjectModule} from '@valtimo/object';
 import {AccessControlManagementModule} from '@valtimo/access-control-management';
+import {FormFlowManagementModule} from '@valtimo/form-flow-management';
+import {CustomFormFlowComponent} from '@src/app/custom-form-flow-component/custom-form-flow.component';
+import {TaskManagementModule} from '@valtimo/task-management';
+import {CaseMigrationModule} from '@valtimo/case-migration';
+import {
+  DossierDetailTabContactMomentsComponent,
+  DossierDetailTabZaakobjectenComponent,
+  registerDocumentenApiFormioUploadComponent,
+  ZgwModule,
+} from '@valtimo/zgw';
+import {FormViewModelModule} from '@valtimo/form-view-model';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -133,8 +137,6 @@ export function tabsFactory() {
     [DefaultTabs.progress, DossierDetailTabProgressComponent],
     [DefaultTabs.audit, DossierDetailTabAuditComponent],
     [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
-    [DefaultTabs.contactMoments, DossierDetailTabContactMomentsComponent],
-    [DefaultTabs.zaakobjecten, DossierDetailTabZaakobjectenComponent],
     [DefaultTabs.notes, DossierDetailTabNotesComponent],
     ['custom-maps', CustomMapsTabComponent],
     ['custom-dossier', CustomDossierTabComponent],
@@ -166,14 +168,12 @@ export function tabsFactory() {
     SecurityModule,
     MenuModule,
     TaskModule,
-    ChoicefieldModule,
+    CaseMigrationModule,
     DossierModule.forRoot(tabsFactory),
     ProcessModule,
-    ViewConfiguratorModule,
     BpmnJsDiagramModule,
     FormsModule,
     ReactiveFormsModule,
-    ContactMomentModule,
     DashboardModule,
     DashboardManagementModule,
     DocumentModule,
@@ -188,12 +188,10 @@ export function tabsFactory() {
     ProcessManagementModule,
     DecisionModule,
     MilestoneModule,
-    FormLinkModule,
+    ProcessLinkModule,
     MigrationModule,
     FormManagementModule,
     DossierManagementModule,
-    OpenZaakModule,
-    CustomerModule,
     PluginManagementModule,
     NotificatiesApiPluginModule,
     ObjectTokenAuthenticationPluginModule,
@@ -224,7 +222,12 @@ export function tabsFactory() {
     TestDataSourceModule,
     CaseCountDataSourceModule,
     AccessControlManagementModule,
+    FormFlowManagementModule,
     TranslationManagementModule,
+    CustomFormFlowComponent,
+    TaskManagementModule,
+    ZgwModule,
+    FormViewModelModule
   ],
   providers: [
     FormioComponent,
@@ -250,6 +253,8 @@ export function tabsFactory() {
       provide: CASE_TAB_TOKEN,
       useValue: {
         'custom-dossier-tab': CustomDossierTabComponent,
+        zaakobjecten: DossierDetailTabZaakobjectenComponent,
+        contactmomenten: DossierDetailTabContactMomentsComponent,
       },
     },
     {
@@ -257,7 +262,7 @@ export function tabsFactory() {
       useValue: [
         {
           id: 'test-component',
-          component: CustomMapsTabComponent,
+          component: CustomFormFlowComponent,
         },
       ],
     },
@@ -270,5 +275,6 @@ export class AppModule {
     registerFormioUploadComponent(injector);
     registerFormioFileSelectorComponent(injector);
     registerDocumentenApiFormioUploadComponent(injector);
+    registerFormioIbanComponent(injector);
   }
 }

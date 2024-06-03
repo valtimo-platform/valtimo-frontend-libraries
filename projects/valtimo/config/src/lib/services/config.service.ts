@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 import {ComponentFactoryResolver, Inject, Injectable, ViewContainerRef} from '@angular/core';
 import {Extension, ExtensionLoader, ExtensionPoint, VALTIMO_CONFIG, ValtimoConfig} from '../models';
 import {UrlUtils} from '../utils';
+import {Observable, of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,7 @@ export class ConfigService {
 
     return {
       ...config,
+      initializers: config.initializers || [],
       whitelistedDomains: config.whitelistedDomains.map(domain =>
         UrlUtils.formatUrlTrailingSlash(domain, false)
       ),
@@ -63,8 +65,20 @@ export class ConfigService {
     };
   }
 
+  public get featureToggles(): ValtimoConfig['featureToggles'] {
+    return this.config.featureToggles;
+  }
+
+  public get config$(): Observable<ValtimoConfig> {
+    return of(this.config);
+  }
+
+  public get featureToggles$(): Observable<ValtimoConfig['featureToggles']> {
+    return of(this.config.featureToggles);
+  }
+
   public get initializers() {
-    return this.valtimoConfig.initializers;
+    return this.valtimoConfig?.initializers || [];
   }
 
   public addExtension(extension: Extension) {

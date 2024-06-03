@@ -1,12 +1,12 @@
 {
   "name": "@valtimo/analyse",
   "license": "EUPL-1.2",
-  "version": "10.5.0",
+  "version": "12.1.0",
   "peerDependencies": {
-    "@angular/common": "^14.2.5",
-    "@angular/core": "^14.2.5"
+    "@angular/common": "^17.2.2",
+    "@angular/core": "^17.2.2"
   },
   "dependencies": {
-    "tslib": "^2.0.0"
+    "tslib": "2.6.2"
   }
 }

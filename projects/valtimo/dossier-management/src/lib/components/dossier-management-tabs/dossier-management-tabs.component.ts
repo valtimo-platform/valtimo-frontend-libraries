@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,10 +32,11 @@ import {
   MoveRowEvent,
   ViewType,
 } from '@valtimo/components';
-import {ApiTabItem} from '@valtimo/dossier';
+import {ApiTabItem, ApiTabType} from '@valtimo/dossier';
 import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
 import {TabManagementService, TabService} from '../../services';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'valtimo-dossier-management-tabs',
@@ -95,7 +96,8 @@ export class DossierManagementTabsComponent implements AfterViewInit {
     private readonly iconService: IconService,
     private readonly tabManagementService: TabManagementService,
     private readonly tabService: TabService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly router: Router
   ) {}
 
   public ngAfterViewInit(): void {
@@ -149,7 +151,13 @@ export class DossierManagementTabsComponent implements AfterViewInit {
 
   public onRowClicked(tab: ApiTabItem): void {
     this.tab$.next(tab);
-    this.openEditModal$.next(true);
+    if (tab.type === ApiTabType.WIDGETS) {
+      this.router.navigate([
+        `/dossier-management/dossier/${this._documentDefinitionName}/widget-tab/${tab.key}`,
+      ]);
+    } else {
+      this.openEditModal$.next(true);
+    }
   }
 
   public onCloseAddModalEvent(tab: ApiTabItem | null): void {

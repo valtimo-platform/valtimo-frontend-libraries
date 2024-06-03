@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,11 @@ import {
   TitleModule,
   CarbonListModule,
 } from '@valtimo/components';
-import {IconModule, ButtonModule as CarbonButtonModule} from 'carbon-components-angular';
+import {
+  IconModule,
+  ButtonModule as CarbonButtonModule,
+  ModalModule as CarbonModalModule,
+} from 'carbon-components-angular';
 
 @NgModule({
   providers: [PluginManagementStateService],
@@ -65,6 +69,7 @@ import {IconModule, ButtonModule as CarbonButtonModule} from 'carbon-components-
     PluginConfigurationContainerModule,
     CarbonButtonModule,
     CarbonListModule,
+    CarbonModalModule,
     IconModule,
   ],
   exports: [

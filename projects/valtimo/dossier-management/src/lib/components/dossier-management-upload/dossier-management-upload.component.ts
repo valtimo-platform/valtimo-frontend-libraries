@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,15 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
 } from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {WarningFilled16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
-import {CARBON_CONSTANTS, ModalComponent} from '@valtimo/components';
+import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DocumentDefinitionCreateRequest, DocumentService} from '@valtimo/document';
 import {FileItem, IconService, NotificationContent} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, take} from 'rxjs';
-import {DossierImportService} from '../../services/dossier-import.service';
+import {DossierManagementService} from '../../services/dossier-management.service';
 import {STEPS, UPLOAD_STATUS, UPLOAD_STEP} from './dossier-management-upload.constants';
 
 @Component({
@@ -40,8 +39,6 @@ import {STEPS, UPLOAD_STATUS, UPLOAD_STEP} from './dossier-management-upload.con
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierManagementUploadComponent implements OnInit, OnDestroy {
-  @ViewChild('uploadDefinitionModal') modal: ModalComponent;
-
   @Input() open = false;
   @Output() closeModal = new EventEmitter<boolean>();
 
@@ -101,7 +98,7 @@ export class DossierManagementUploadComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly documentService: DocumentService,
-    private readonly dossierImportService: DossierImportService,
+    private readonly dossierManagementService: DossierManagementService,
     private readonly fb: FormBuilder,
     private readonly iconService: IconService,
     private readonly translateService: TranslateService
@@ -116,7 +113,7 @@ export class DossierManagementUploadComponent implements OnInit, OnDestroy {
     }
 
     this._subscriptions.add(
-      control.valueChanges.subscribe((fileSet: Set<FileItem>) => {
+      this.form.get('file').valueChanges.subscribe((fileSet: Set<FileItem>) => {
         const [fileItem] = fileSet;
         if (!fileItem) {
           this._disabled$.next(true);
@@ -136,6 +133,7 @@ export class DossierManagementUploadComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
     this.resetModal();
   }
 
@@ -227,7 +225,7 @@ export class DossierManagementUploadComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap((file: string | FormData) =>
           file instanceof FormData
-            ? this.dossierImportService.importDocumentDefinitionZip(file)
+            ? this.dossierManagementService.importDocumentDefinitionZip(file)
             : this.documentService.createDocumentDefinitionForManagement(
                 new DocumentDefinitionCreateRequest(file)
               )
@@ -275,7 +273,6 @@ export class DossierManagementUploadComponent implements OnInit, OnDestroy {
       this.activeStep$.next(UPLOAD_STEP.PLUGINS);
       this.uploadStatus$.next(UPLOAD_STATUS.ACTIVE);
       this.showCheckboxError$.next(false);
-      this._subscriptions.unsubscribe();
     }, CARBON_CONSTANTS.modalAnimationMs);
   }
 }

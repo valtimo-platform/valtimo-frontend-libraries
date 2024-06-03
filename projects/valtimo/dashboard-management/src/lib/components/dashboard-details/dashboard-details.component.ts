@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,13 @@ import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16, Edit16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {
-  ViewType,
-  PageTitleService,
-  ColumnConfig,
-  MoveRowEvent,
-  MoveRowDirection,
   ActionItem,
+  ColumnConfig,
+  MoveRowDirection,
+  MoveRowEvent,
+  PageHeaderService,
+  PageTitleService,
+  ViewType,
 } from '@valtimo/components';
 import {DashboardWidgetConfiguration} from '@valtimo/dashboard';
 import {IconService} from 'carbon-components-angular';
@@ -39,8 +40,6 @@ import {DashboardManagementService} from '../../services/dashboard-management.se
   encapsulation: ViewEncapsulation.None,
 })
 export class DashboardDetailsComponent implements AfterViewInit {
-  @ViewChild('moveButtonsTemplate') moveButtonsTemplate: TemplateRef<any>;
-
   public modalType: WidgetModalType = 'create';
   public fields!: ColumnConfig[];
   public readonly actionItems: ActionItem[] = [
@@ -117,13 +116,15 @@ export class DashboardDetailsComponent implements AfterViewInit {
   public readonly editWidgetConfiguration$ =
     new BehaviorSubject<DashboardWidgetConfiguration | null>(null);
 
+  public readonly compactMode$ = this.pageHeaderService.compactMode$;
   constructor(
     private readonly dashboardManagementService: DashboardManagementService,
     private readonly datePipe: DatePipe,
     private readonly iconService: IconService,
     private readonly pageTitleService: PageTitleService,
     private readonly route: ActivatedRoute,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly pageHeaderService: PageHeaderService
   ) {}
 
   public ngAfterViewInit(): void {
@@ -159,13 +160,6 @@ export class DashboardDetailsComponent implements AfterViewInit {
         viewType: ViewType.TEXT,
         key: 'title',
         label: 'Name',
-      },
-      {
-        viewType: ViewType.TEMPLATE,
-        template: this.moveButtonsTemplate,
-        className: 'dashboard-detail-table__actions',
-        key: '',
-        label: '',
       },
     ];
   }

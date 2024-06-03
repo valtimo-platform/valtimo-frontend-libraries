@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  HostBinding,
   Input,
   OnDestroy,
   OnInit,
@@ -54,13 +53,14 @@ import {
   take,
 } from 'rxjs';
 import {filter, tap} from 'rxjs/operators';
-import {BOOLEAN_CONVERTER_VALUES} from '../../constants';
+import {BOOLEAN_CONVERTER_VALUES, CASES_WITHOUT_STATUS_KEY} from '../../constants';
 import {
   ActionItem,
   CarbonListBatchText,
   CarbonListItem,
   CarbonListTranslations,
   CarbonPaginatorConfig,
+  CarbonTag,
   ColumnConfig,
   DEFAULT_LIST_TRANSLATIONS,
   DEFAULT_PAGINATION,
@@ -68,6 +68,7 @@ import {
   MoveRowDirection,
   MoveRowEvent,
   Pagination,
+  TAG_ELLIPSIS_LIMIT,
   ViewType,
 } from '../../models';
 import {ViewContentService} from '../view-content/view-content.service';
@@ -82,18 +83,20 @@ import {KeyStateService} from '../../services/key-state.service';
   providers: [CarbonListFilterPipe],
 })
 export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
-  @HostBinding('attr.data-carbon-theme') theme = 'g10';
   @ViewChild('actionsMenuTemplate') actionsMenuTemplate: TemplateRef<OverflowMenu>;
   @ViewChild('actionTemplate') actionTemplate: TemplateRef<any>;
   @ViewChild('booleanTemplate') booleanTemplate: TemplateRef<any>;
   @ViewChild('moveRowsTemplate') moveRowsTemplate: TemplateRef<any>;
   @ViewChild('rowDisabled') rowDisabled: TemplateRef<any>;
+  @ViewChild('tagTemplate') tagTemplate: TemplateRef<any>;
   @ViewChild(Table) private _table: Table;
 
   private _completeDataSource: TableItem[][];
   private readonly _items$ = new BehaviorSubject<CarbonListItem[]>([]);
   private _items: CarbonListItem[];
   public items$ = new BehaviorSubject<TableItem[][]>([]);
+  public currentOpenActionId: string | null = null;
+
   @Input() set items(value: CarbonListItem[]) {
     this._items = value;
     this._items$.next(value);
@@ -161,6 +164,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() search = new EventEmitter<any>();
   @Output() sortChanged = new EventEmitter<SortState>();
   @Output() moveRow = new EventEmitter<MoveRowEvent>();
+  @Output() itemsReordered = new EventEmitter<CarbonListItem[]>();
 
   public batchText$: Observable<CarbonListBatchText> = this._tableTranslations$.pipe(
     switchMap((translations: CarbonListTranslations) =>
@@ -201,7 +205,10 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     state: {name: '', direction: 'DESC'},
     isSorting: false,
   });
+  public readonly tagModalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly tagModalData$ = new BehaviorSubject<CarbonTag[]>([]);
 
+  public readonly CASES_WITHOUT_STATUS_KEY = CASES_WITHOUT_STATUS_KEY;
   public readonly ViewType = ViewType;
   public skeletonModel = Table.skeletonModel(5, 5);
   public paginationModel: PaginationModel;
@@ -340,6 +347,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _translatedFields$: Observable<ColumnConfig[]> = this.translateService.stream('key').pipe(
     switchMap(() => this._fields$),
+    filter((fields: ColumnConfig[]) => !!fields),
     map((fields: ColumnConfig[]) =>
       fields.map((field: ColumnConfig) => ({
         ...field,
@@ -368,16 +376,19 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     map((header: TableHeaderItem[]) => [...header, ...this.extraColumns])
   );
 
-  private readonly _tableItems$: Observable<TableItem[][]> = this._viewInitialized$.pipe(
-    switchMap(() => combineLatest([this._fields$, this._items$])),
-    filter(([fields, items]) => !!fields && !!items),
+  private readonly _tableItems$: Observable<TableItem[][]> = combineLatest([
+    this._fields$,
+    this._items$,
+    this._viewInitialized$,
+  ]).pipe(
+    filter(([fields, items, viewInitialized]) => !!fields && !!items && viewInitialized),
     map(([fields, items]) =>
       items.map((item: CarbonListItem, index: number) => [
         ...fields.map((field: ColumnConfig) => {
           switch (field.viewType) {
             case ViewType.TEMPLATE:
               return new TableItem({
-                data: {item, index, length: items.length},
+                data: {item, index, length: items.length, ...field.templateData},
                 template: field.template,
               });
             case ViewType.BOOLEAN:
@@ -389,6 +400,11 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
                 data,
                 template: this.booleanTemplate,
               });
+            case ViewType.TAGS: {
+              return this.resolveTagObject(item.tags);
+            }
+            case ViewType.DATE:
+              return new TableItem({data: this.resolveObject(field, item) ?? '-', item});
             default:
               return new TableItem({data: this.resolveObject(field, item) ?? '-', item});
           }
@@ -419,8 +435,18 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private get extraColumns(): TableHeaderItem[] {
     const emptyHeader = new TableHeaderItem();
+
+    emptyHeader.sortable = false;
+
     return [
-      ...(this.movingRowsEnabled ? [emptyHeader] : []),
+      ...(this.movingRowsEnabled
+        ? [
+            new TableHeaderItem({
+              className: 'valtimo-carbon-list__actions',
+              sortable: false,
+            }),
+          ]
+        : []),
       ...(!!this.actions
         ? this.actions.map(
             action =>
@@ -437,6 +463,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
         ? [
             new TableHeaderItem({
               className: 'valtimo-carbon-list__actions',
+              sortable: false,
             }),
           ]
         : []),
@@ -448,10 +475,15 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     data: {index: number; item: CarbonListItem; length: number}
   ): void {
     event.stopImmediatePropagation();
-    this.moveRow.emit({
+
+    const moveRowEvent = {
       direction: MoveRowDirection.DOWN,
       index: data.index,
-    });
+    };
+    const orderedItems = this.swapItems(this._items, moveRowEvent.index, moveRowEvent.index + 1);
+
+    this.moveRow.emit(moveRowEvent);
+    this.itemsReordered.emit(orderedItems);
   }
 
   public onMoveUpClick(
@@ -459,10 +491,33 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     data: {index: number; item: CarbonListItem; length: number}
   ): void {
     event.stopImmediatePropagation();
-    this.moveRow.emit({
+
+    const moveRowEvent = {
       direction: MoveRowDirection.UP,
       index: data.index,
-    });
+    };
+    const orderedItems = this.swapItems(this._items, moveRowEvent.index - 1, moveRowEvent.index);
+
+    this.moveRow.emit(moveRowEvent);
+    this.itemsReordered.emit(orderedItems);
+  }
+
+  public onTagClick(event: Event, tags: CarbonTag[]): void {
+    event.stopImmediatePropagation();
+    this.tagModalOpen$.next(true);
+    this.tagModalData$.next(tags);
+  }
+
+  public onCloseEvent(): void {
+    this.tagModalOpen$.next(false);
+  }
+
+  public handleActionOpenChange(actionId: string, isOpen: boolean): void {
+    if (isOpen) {
+      this.currentOpenActionId = actionId;
+    } else if (this.currentOpenActionId === actionId) {
+      this.currentOpenActionId = null;
+    }
   }
 
   private getExtraItems(item: CarbonListItem, index: number, length: number): TableItem[] {
@@ -483,6 +538,9 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
               template: this.rowDisabled,
             }),
           ]
+        : []),
+      ...(!!this.lastColumnTemplate
+        ? [new TableItem({data: {item, index, length}, template: this.lastColumnTemplate})]
         : []),
       ...(this.movingRowsEnabled
         ? [
@@ -537,5 +595,36 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
       : definitionKey;
     const resolvedObjValue = _get(obj, key, null);
     return this.viewContentService.get(resolvedObjValue, definition);
+  }
+
+  private swapItems(items: CarbonListItem[], index1: number, index2: number): CarbonListItem[] {
+    const temp = [...items];
+    temp[index1] = temp.splice(index2, 1, temp[index1])[0];
+
+    return temp;
+  }
+
+  private resolveTagObject(itemTags: CarbonTag[] | undefined): TableItem {
+    if (!itemTags || itemTags.length === 0)
+      return new TableItem({
+        data: {tags: []},
+        template: this.tagTemplate,
+      });
+
+    const tags = itemTags.map((tag: CarbonTag, index: number) =>
+      index === 0 ? {...tag, ellipsisContent: this.transformTagEllipsis(tag.content)} : tag
+    );
+
+    return new TableItem({
+      data: {tags},
+      template: this.tagTemplate,
+    });
+  }
+
+  private transformTagEllipsis(tagContent: string): string {
+    return (
+      tagContent.substring(0, TAG_ELLIPSIS_LIMIT - 1) +
+      (tagContent.length > TAG_ELLIPSIS_LIMIT ? '...' : '')
+    );
   }
 }

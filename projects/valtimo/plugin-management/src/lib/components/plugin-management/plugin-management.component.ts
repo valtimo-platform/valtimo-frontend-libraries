@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,6 +62,8 @@ export class PluginManagementComponent {
   ];
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly showEditModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showAddModal$ = new BehaviorSubject<boolean>(false);
   public readonly pluginConfigurations$ = this.stateService.refresh$.pipe(
     switchMap(() =>
       combineLatest([
@@ -93,12 +95,12 @@ export class PluginManagementComponent {
   ) {}
 
   public showAddModal(): void {
-    this.stateService.showModal('add');
+    this.showAddModal$.next(true);
   }
 
   public editConfiguration(configuration: PluginConfiguration): void {
+    this.showEditModal$.next(true);
     this.stateService.selectPluginConfiguration(configuration);
-    this.stateService.showModal('edit');
   }
 
   public deleteConfiguration(configuration: PluginConfiguration): void {
@@ -117,5 +119,13 @@ export class PluginManagementComponent {
           this.logger.error('Something went wrong with deleting the plugin configuration.');
         },
       });
+  }
+
+  public closeEditModal(): void {
+    this.showEditModal$.next(false);
+  }
+
+  public closeAddModal(): void {
+    this.showAddModal$.next(false);
   }
 }

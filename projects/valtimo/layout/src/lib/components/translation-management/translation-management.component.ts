@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,12 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, switchMap, take, tap} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {Localization, LocalizationService, MergedLocalizations} from '@valtimo/config';
-import {ArbitraryInputTitles, MultiInputKeyValue, MultiInputOutput} from '@valtimo/components';
+import {
+  ArbitraryInputTitles,
+  MultiInputKeyValue,
+  MultiInputOutput,
+  PageHeaderService,
+} from '@valtimo/components';
 import {isEqual} from 'lodash';
 import {DOCUMENT} from '@angular/common';
 
@@ -86,9 +91,12 @@ export class TranslationManagementComponent implements OnInit {
     map(multiInputTitles => Object.keys(multiInputTitles).length)
   );
 
+  public readonly compactMode$ = this.pageHeaderService.compactMode$;
+
   constructor(
     private readonly translateService: TranslateService,
     private readonly localizationService: LocalizationService,
+    private readonly pageHeaderService: PageHeaderService,
     @Inject(DOCUMENT) private readonly document: Document
   ) {}
 
