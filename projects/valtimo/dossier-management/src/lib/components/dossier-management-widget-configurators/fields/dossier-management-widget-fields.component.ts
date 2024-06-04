@@ -231,15 +231,15 @@ export class DossierManagementWidgetFieldsComponent
       case CaseWidgetDisplayTypeKey.BOOLEAN:
         break;
       case CaseWidgetDisplayTypeKey.CURRENCY:
-        (formRow as FormGroup).addControl('currencyCode', this.fb.control(''));
-        (formRow as FormGroup).addControl('display', this.fb.control(''));
-        (formRow as FormGroup).addControl('digitsInfo', this.fb.control(''));
+        formRow.addControl('currencyCode', this.fb.control(''));
+        formRow.addControl('display', this.fb.control(''));
+        formRow.addControl('digitsInfo', this.fb.control(''));
         break;
       case CaseWidgetDisplayTypeKey.DATE:
-        (formRow as FormGroup).addControl('format', this.fb.control(''));
+        formRow.addControl('format', this.fb.control(''));
         break;
       case CaseWidgetDisplayTypeKey.ENUM:
-        (formRow as FormGroup).addControl(
+        formRow.addControl(
           'values',
           this.fb.array(
             [
@@ -253,13 +253,13 @@ export class DossierManagementWidgetFieldsComponent
         );
         break;
       default:
-        (formRow as FormGroup).addControl('digitsInfo', this.fb.control(''));
+        formRow.addControl('digitsInfo', this.fb.control(''));
         break;
     }
   }
 
-  public onAddEnumValueClick(valuesFormArray: AbstractControl): void {
-    (valuesFormArray as FormArray).push(
+  public onAddEnumValueClick(valuesFormArray: FormArray): void {
+    valuesFormArray.push(
       this.fb.group({
         key: this.fb.control('', Validators.required),
         value: this.fb.control('', Validators.required),
