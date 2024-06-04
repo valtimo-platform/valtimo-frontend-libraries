@@ -24,7 +24,6 @@ import {CaseWidgetWidth} from '@valtimo/dossier';
 @Component({
   selector: 'valtimo-widget-wizard-width-step',
   templateUrl: './widget-wizard-width-step.component.html',
-  styleUrls: ['./widget-wizard-width-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule, TranslateModule, TilesModule],

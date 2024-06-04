@@ -30,7 +30,6 @@ import {WidgetWizardService} from '../../../../services';
 @Component({
   selector: 'valtimo-widget-wizard-type-step',
   templateUrl: './widget-wizard-type-step.component.html',
-  styleUrls: ['./widget-wizard-type-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,

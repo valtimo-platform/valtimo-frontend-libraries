@@ -667,11 +667,11 @@
       "add": "Widget toevoegen"
     },
     "wizard": {
-      "title": "Widget maken",
+      "title": "Widget aanmaken",
       "steps": {
         "content": "Kies widgetinhoud",
         "style": "Kies widgetstijl",
-        "type": "Kies widgetstype",
+        "type": "Kies widgettype",
         "width": "Kies widgetbreedte"
       }
     },
@@ -686,19 +686,19 @@
       "description": "Selecteer de gewenste breedte voor de widget. Houd er rekening mee dat er niet meer dan 4 kolommen met inhoud naast elkaar mogen staan.",
       "quarter": {
         "title": "1/4",
-        "description": "Eén kolom met inhoud"
+        "description": "Eén kolom inhoud"
       },
       "half": {
         "title": "Half",
-        "description": "Twee kolommen met inhoud"
+        "description": "Twee kolommen inhoud"
       },
       "threeQuarters": {
         "title": "3/4",
-        "description": "Drie kolommen met inhoud"
+        "description": "Drie kolommen inhoud"
       },
       "fullWidth": {
         "title": "Volle-breedte",
-        "description": "Vier kolommen met inhoud"
+        "description": "Vier kolommen inhoud"
       }
     },
     "style": {
@@ -713,24 +713,24 @@
       }
     },
     "content": {
-      "description": "Voer de inhoud voor elke kolom in. Houd er rekening mee dat niet alle velden even hoog zijn. Voor het beste resultaat moet u ervoor zorgen dat de artikelen op de juiste manier worden verdeeld.",
+      "description": "Voer de inhoud voor elke kolom in. Houd er rekening mee dat niet alle velden even hoog zijn. Zorg ervoor dat de gegevens op een gelijke manier worden verdeeld voor het beste resultaat.",
       "widgetTitle": "Widget titel",
       "widgetTitlePlaceholder": "Kies een korte naam",
       "column": "Kolom {{number}}",
       "fields": {
         "add": "Veld toevoegen",
         "addEnum": "Enum-waarde toevoegen",
-        "currencyCode": "Valuta code",
-        "digitsInfo": "Cijfers informatie",
+        "currencyCode": "Valutacode",
+        "digitsInfo": "Getalformaat",
         "display": "Weergave",
         "format": "Formaat",
         "key": "Sleutel",
         "title": "Titel",
-        "titlePlaceholder": "Kies een title",
+        "titlePlaceholder": "Kies een titel",
         "type": "Type",
         "typePlaceholder": "Kies type",
         "value": "Waarde",
-        "valuePlaceholder": "Paad naar waarde"
+        "valuePlaceholder": "Pad naar waarde"
       }
     }
   },

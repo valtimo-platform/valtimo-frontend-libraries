@@ -722,7 +722,7 @@
         "add": "Add field",
         "addEnum": "Add enum value",
         "currencyCode": "Currency code",
-        "digitsInfo": "Digits info",
+        "digitsInfo": "Number format",
         "display": "Display",
         "format": "Format",
         "key": "Key",

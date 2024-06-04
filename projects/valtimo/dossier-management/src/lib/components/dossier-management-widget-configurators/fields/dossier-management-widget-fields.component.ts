@@ -84,54 +84,7 @@ export class DossierManagementWidgetFieldsComponent
     if (!rowsControl) return;
 
     value.forEach((row: FieldsCaseWidgetValue) => {
-      rowsControl.push(
-        this.fb.group({
-          type: this.fb.control<ListItem>(
-            {
-              content: row.displayProperties?.type ?? CaseWidgetDisplayTypeKey.TEXT,
-              selected: true,
-            },
-            Validators.required
-          ),
-          title: this.fb.control<string>(row.title, Validators.required),
-          content: this.fb.control<string>(row.value, Validators.required),
-          ...([CaseWidgetDisplayTypeKey.NUMBER, CaseWidgetDisplayTypeKey.PERCENT].includes(
-            row.displayProperties?.type as CaseWidgetDisplayTypeKey
-          ) && {
-            digitsInfo: this.fb.control<string>(
-              (row.displayProperties as CaseWidgetNumberDisplayType).digitsInfo ?? ''
-            ),
-          }),
-          ...(row.displayProperties?.type === CaseWidgetDisplayTypeKey.CURRENCY && {
-            digitsInfo: this.fb.control<string>(
-              (row.displayProperties as CaseWidgetCurrencyDisplayType).digitsInfo ?? ''
-            ),
-            currencyCode: this.fb.control<string>(
-              (row.displayProperties as CaseWidgetCurrencyDisplayType).currencyCode ?? ''
-            ),
-            display: this.fb.control<string>(
-              (row.displayProperties as CaseWidgetCurrencyDisplayType).display ?? ''
-            ),
-          }),
-          ...(row.displayProperties?.type === CaseWidgetDisplayTypeKey.DATE && {
-            format: this.fb.control<string>(
-              (row.displayProperties as CaseWidgetDateDisplayType).format ?? ''
-            ),
-          }),
-          ...(row.displayProperties?.type === CaseWidgetDisplayTypeKey.ENUM && {
-            values: this.fb.array(
-              Object.entries((row.displayProperties as CaseWidgetEnumDisplayType).values).map(
-                ([key, value]) =>
-                  this.fb.group({
-                    key: this.fb.control<string>(key, Validators.required),
-                    value: this.fb.control<string>(value as string, Validators.required),
-                  })
-              )
-            ),
-          }),
-        }),
-        {emitEvent: false}
-      );
+      rowsControl.push(this.getRowForm(row), {emitEvent: false});
     });
 
     this.cdr.detectChanges();
@@ -261,20 +214,18 @@ export class DossierManagementWidgetFieldsComponent
     );
   }
 
-  public onDeleteRowClick(formArray: AbstractControl, index: number): void {
+  public onDeleteRowClick(formArray: FormArray, index: number): void {
     if (!formArray) return;
 
-    (formArray as FormArray).removeAt(index);
+    formArray.removeAt(index);
   }
 
-  public onTypeSelected(formRow: AbstractControl, event: {item: ListItem}): void {
-    const extraControlKeys = Object.keys((formRow as FormGroup).controls).filter(
+  public onTypeSelected(formRow: FormGroup, event: {item: ListItem}): void {
+    const extraControlKeys = Object.keys(formRow.controls).filter(
       (key: string) => !['title', 'content', 'type'].includes(key)
     );
 
-    extraControlKeys.forEach((controlKey: string) =>
-      (formRow as FormGroup).removeControl(controlKey)
-    );
+    extraControlKeys.forEach((controlKey: string) => formRow.removeControl(controlKey));
 
     switch (event.item.content) {
       case CaseWidgetDisplayTypeKey.BOOLEAN:
@@ -321,5 +272,53 @@ export class DossierManagementWidgetFieldsComponent
     if (!controlValue || !controlValue.selected) return {error: 'Type is not selected'};
 
     return null;
+  }
+
+  private getRowForm(row: FieldsCaseWidgetValue): FormGroup {
+    return this.fb.group({
+      type: this.fb.control<ListItem>(
+        {
+          content: row.displayProperties?.type ?? CaseWidgetDisplayTypeKey.TEXT,
+          selected: true,
+        },
+        Validators.required
+      ),
+      title: this.fb.control<string>(row.title, Validators.required),
+      content: this.fb.control<string>(row.value, Validators.required),
+      ...([CaseWidgetDisplayTypeKey.NUMBER, CaseWidgetDisplayTypeKey.PERCENT].includes(
+        row.displayProperties?.type as CaseWidgetDisplayTypeKey
+      ) && {
+        digitsInfo: this.fb.control<string>(
+          (row.displayProperties as CaseWidgetNumberDisplayType).digitsInfo ?? ''
+        ),
+      }),
+      ...(row.displayProperties?.type === CaseWidgetDisplayTypeKey.CURRENCY && {
+        digitsInfo: this.fb.control<string>(
+          (row.displayProperties as CaseWidgetCurrencyDisplayType).digitsInfo ?? ''
+        ),
+        currencyCode: this.fb.control<string>(
+          (row.displayProperties as CaseWidgetCurrencyDisplayType).currencyCode ?? ''
+        ),
+        display: this.fb.control<string>(
+          (row.displayProperties as CaseWidgetCurrencyDisplayType).display ?? ''
+        ),
+      }),
+      ...(row.displayProperties?.type === CaseWidgetDisplayTypeKey.DATE && {
+        format: this.fb.control<string>(
+          (row.displayProperties as CaseWidgetDateDisplayType).format ?? ''
+        ),
+      }),
+      ...(row.displayProperties?.type === CaseWidgetDisplayTypeKey.ENUM && {
+        values: this.fb.array(
+          Object.entries((row.displayProperties as CaseWidgetEnumDisplayType).values).map(
+            ([key, value]) =>
+              this.fb.group({
+                key: this.fb.control<string>(key, Validators.required),
+                value: this.fb.control<string>(value as string, Validators.required),
+              })
+          )
+        ),
+      }),
+    });
   }
 }

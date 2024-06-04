@@ -24,7 +24,6 @@ import {WidgetStyle} from '../../../../models';
 @Component({
   selector: 'valtimo-widget-wizard-style-step',
   templateUrl: './widget-wizard-style-step.component.html',
-  styleUrls: ['./widget-wizard-style-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule, TranslateModule, TilesModule],

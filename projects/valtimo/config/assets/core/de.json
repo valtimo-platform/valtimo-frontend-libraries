@@ -721,7 +721,7 @@
         "add": "Feld hinzufügen",
         "addEnum": "Enum-Wert hinzufügen",
         "currencyCode": "Währungscode",
-        "digitsInfo": "Zifferninfo",
+        "digitsInfo": "Zahlenformat",
         "display": "Anzeige",
         "format": "Format",
         "key": "Schlüssel",
