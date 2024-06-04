@@ -29,7 +29,7 @@ export class KeyStateService implements OnDestroy {
     return this._isCtrlOrCmdPressed;
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
   }
