@@ -60,36 +60,36 @@
           @switch (formRow.get('type').value.content) {
             @case (CaseWidgetDisplayTypeKey.CURRENCY) {
               <cds-text-label>
-                {{ 'Currency Code' | translate }}
+                {{ 'widgetTabManagement.content.fields.currencyCode' | translate }}
 
                 <input
                   cdsText
                   [attr.data-carbon-theme]="inputTheme"
-                  [placeholder]="'Currency code' | translate"
+                  [placeholder]="'widgetTabManagement.content.fields.currencyCode' | translate"
                   type="text"
                   formControlName="currencyCode"
                 />
               </cds-text-label>
 
               <cds-text-label>
-                {{ 'Display' | translate }}
+                {{ 'widgetTabManagement.content.fields.display' | translate }}
 
                 <input
                   cdsText
                   [attr.data-carbon-theme]="inputTheme"
-                  [placeholder]="'Display' | translate"
+                  [placeholder]="'widgetTabManagement.content.fields.display' | translate"
                   type="text"
                   formControlName="display"
                 />
               </cds-text-label>
 
               <cds-text-label>
-                {{ 'Digits info' | translate }}
+                {{ 'widgetTabManagement.content.fields.digitsInfo' | translate }}
 
                 <input
                   cdsText
                   [attr.data-carbon-theme]="inputTheme"
-                  [placeholder]="'Digits info' | translate"
+                  [placeholder]="'widgetTabManagement.content.fields.digitsInfo' | translate"
                   type="text"
                   formControlName="digitsInfo"
                 />
@@ -97,12 +97,12 @@
             }
             @case (CaseWidgetDisplayTypeKey.DATE) {
               <cds-text-label>
-                {{ 'Format' | translate }}
+                {{ 'widgetTabManagement.content.fields.format' | translate }}
 
                 <input
                   cdsText
                   [attr.data-carbon-theme]="inputTheme"
-                  [placeholder]="'Format' | translate"
+                  [placeholder]="'widgetTabManagement.content.fields.format' | translate"
                   type="text"
                   formControlName="format"
                 />
@@ -116,24 +116,24 @@
                     class="valtimo-dossier-management-widget-field__enum-form"
                   >
                     <cds-text-label>
-                      {{ 'Key' | translate }}
+                      {{ 'widgetTabManagement.content.fields.key' | translate }}
 
                       <input
                         [attr.data-carbon-theme]="inputTheme"
                         cdsText
-                        [placeholder]="'Key' | translate"
+                        [placeholder]="'widgetTabManagement.content.fields.key' | translate"
                         type="text"
                         formControlName="key"
                       />
                     </cds-text-label>
 
                     <cds-text-label>
-                      {{ 'Value' | translate }}
+                      {{ 'widgetTabManagement.content.fields.value' | translate }}
 
                       <input
                         cdsText
                         [attr.data-carbon-theme]="inputTheme"
-                        [placeholder]="'Value' | translate"
+                        [placeholder]="'widgetTabManagement.content.fields.value' | translate"
                         type="text"
                         formControlName="value"
                       />
@@ -156,7 +156,7 @@
                   size="sm"
                   (click)="onAddEnumValueClick(formRow.get('values'))"
                 >
-                  {{ 'Add enumvalue' | translate }}
+                  {{ 'widgetTabManagement.content.fields.addEnum' | translate }}
 
                   <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
                 </button>
@@ -164,12 +164,12 @@
             }
             @case (CaseWidgetDisplayTypeKey.NUMBER) {
               <cds-text-label>
-                {{ 'Digits info' | translate }}
+                {{ 'widgetTabManagement.content.fields.digitsInfo' | translate }}
 
                 <input
                   cdsText
                   [attr.data-carbon-theme]="inputTheme"
-                  [placeholder]="'Digits info' | translate"
+                  [placeholder]="'widgetTabManagement.content.fields.digitsInfo' | translate"
                   type="text"
                   formControlName="digitsInfo"
                 />
@@ -177,12 +177,12 @@
             }
             @case (CaseWidgetDisplayTypeKey.PERCENT) {
               <cds-text-label>
-                {{ 'Digits info' | translate }}
+                {{ 'widgetTabManagement.content.fields.digitsInfo' | translate }}
 
                 <input
                   cdsText
                   [attr.data-carbon-theme]="inputTheme"
-                  [placeholder]="'Digits info' | translate"
+                  [placeholder]="'widgetTabManagement.content.fields.digitsInfo' | translate"
                   type="text"
                   formControlName="digitsInfo"
                 />

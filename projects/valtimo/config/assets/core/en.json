@@ -720,12 +720,18 @@
       "column": "Column {{number}}",
       "fields": {
         "add": "Add field",
-        "value": "Value",
-        "valuePlaceholder": "Path to value",
+        "addEnum": "Add enum value",
+        "currencyCode": "Currency code",
+        "digitsInfo": "Digits info",
+        "display": "Display",
+        "format": "Format",
+        "key": "Key",
         "title": "Title",
         "titlePlaceholder": "Choose a title",
         "type": "Type",
-        "typePlaceholder": "Choose type"
+        "typePlaceholder": "Choose type",
+        "value": "Value",
+        "valuePlaceholder": "Path to value"
       }
     }
   },
@@ -1020,7 +1026,8 @@
     },
     "editor": {
       "visualEditor": "Visual editor"
-    }
+    },
+    "key": "Key"
   },
   "taskDetail": {
     "taskCreated": "Created",

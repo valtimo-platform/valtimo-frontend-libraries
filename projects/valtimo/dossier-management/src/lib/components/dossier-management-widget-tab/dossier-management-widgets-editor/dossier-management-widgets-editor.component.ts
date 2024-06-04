@@ -69,7 +69,12 @@ export class DossierManagementWidgetsEditorComponent {
   public readonly FIELDS: ColumnConfig[] = [
     {
       key: 'key',
-      label: 'Key',
+      label: 'interface.key',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'name',
+      label: 'interface.name',
       viewType: ViewType.TEXT,
     },
   ];
