@@ -23,7 +23,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
-import {AVAILABLE_WIDGETS, WidgetType} from '../../../../models';
+import {AVAILABLE_WIDGETS, WidgetTypeSelection} from '../../../../models';
 import {TilesModule} from 'carbon-components-angular';
 import {WidgetWizardService} from '../../../../services';
 
@@ -42,7 +42,7 @@ export class WidgetWizardTypeStepComponent {
 
   constructor(private readonly widgetWizardService: WidgetWizardService) {}
 
-  public onSelectedEvent(event: {value: WidgetType}): void {
+  public onSelectedEvent(event: {value: WidgetTypeSelection}): void {
     this.widgetWizardService.selectedWidget.set(event.value);
   }
 }

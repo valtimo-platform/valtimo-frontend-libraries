@@ -14,8 +14,29 @@
  * limitations under the License.
  */
 
-export interface WidgetTabConfiguration {
+import {CaseWidgetDisplayType} from '@valtimo/dossier';
+import {WidgetType, WidgetWidth} from './widget-wizard.model';
+
+interface WidgetTabConfiguration {
   caseDefinitionName: string;
   key: string;
-  widgets: any[];
+  widgets: WidgetConfig[];
 }
+
+interface WidgetContent {
+  key: string;
+  value: string;
+  title: string;
+  displayProperties?: CaseWidgetDisplayType;
+}
+
+interface WidgetConfig {
+  key: string;
+  title: string;
+  width: WidgetWidth;
+  highContrast: boolean;
+  type: WidgetType;
+  properties: {columns: WidgetContent[]};
+}
+
+export {WidgetConfig, WidgetContent, WidgetTabConfiguration};

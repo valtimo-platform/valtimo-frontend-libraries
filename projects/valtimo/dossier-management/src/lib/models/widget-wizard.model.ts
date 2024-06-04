@@ -25,7 +25,7 @@ enum WidgetWizardStep {
   CONTENT,
 }
 
-enum WidgetTypes {
+enum WidgetType {
   FIELDS = 'fields',
 }
 
@@ -41,20 +41,20 @@ enum WidgetStyle {
   HIGH_CONTRAST = 'high-contrast',
 }
 
-interface WidgetType {
+interface WidgetTypeSelection {
   titleKey: string;
   descriptionKey: string;
   illustrationUrl: string;
-  type: WidgetTypes;
+  type: WidgetType;
   component: Type<WidgetContentComponent>;
 }
 
-const AVAILABLE_WIDGETS: WidgetType[] = [
+const AVAILABLE_WIDGETS: WidgetTypeSelection[] = [
   {
     titleKey: 'widgetTabManagement.types.fields.title',
     descriptionKey: 'widgetTabManagement.types.fields.description',
     illustrationUrl: 'valtimo-layout/img/widget-management/types/fields.svg',
-    type: WidgetTypes.FIELDS,
+    type: WidgetType.FIELDS,
     component: DossierManagementWidgetFieldsComponent,
   },
 ];
@@ -73,9 +73,9 @@ const WIDGET_STYLE_LABELS: {[key: string]: string} = {
 
 export {
   WidgetWizardStep,
-  WidgetType,
+  WidgetTypeSelection,
   AVAILABLE_WIDGETS,
-  WidgetTypes,
+  WidgetType,
   WidgetWidth,
   WidgetStyle,
   WIDGET_WIDTH_LABELS,

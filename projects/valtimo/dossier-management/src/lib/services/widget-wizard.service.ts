@@ -1,12 +1,11 @@
-import {computed, Injectable, signal, WritableSignal} from '@angular/core';
-import {DossierManagementWidgetFieldsComponent} from '../components/dossier-management-widget-configurators/fields/dossier-management-widget-fields.component';
-import {WidgetStyle, WidgetType, WidgetTypes, WidgetWidth} from '../models';
+import {computed, Injectable, Signal, signal, WritableSignal} from '@angular/core';
+import {WidgetConfig, WidgetStyle, WidgetTypeSelection, WidgetType, WidgetWidth} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WidgetWizardService {
-  public readonly selectedWidget: WritableSignal<WidgetType | null> = signal(null);
+  public readonly selectedWidget: WritableSignal<WidgetTypeSelection | null> = signal(null);
 
   public readonly widgetWidth: WritableSignal<WidgetWidth | null> = signal(null);
 
@@ -16,12 +15,12 @@ export class WidgetWizardService {
 
   public readonly widgetTitle: WritableSignal<string | null> = signal(null);
 
-  public readonly widgetsConfig = computed(() => ({
-    key: this.widgetTitle()?.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase(),
-    type: this.selectedWidget()?.type,
-    title: this.widgetTitle(),
-    width: this.widgetWidth(),
-    highContrast: this.widgetStyle() === WidgetStyle.HIGH_CONTRAST,
+  public readonly widgetsConfig: Signal<WidgetConfig> = computed(() => ({
+    key: (this.widgetTitle() ?? '').replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase(),
+    title: this.widgetTitle() ?? '',
+    type: this.selectedWidget()?.type ?? WidgetType.FIELDS,
+    width: this.widgetWidth() ?? WidgetWidth.FULL_WIDTH,
+    highContrast: (this.widgetStyle() ?? WidgetStyle.DEFAULT) === WidgetStyle.HIGH_CONTRAST,
     properties: {
       columns: Object.values(this.widgetContent() ?? {}),
     },

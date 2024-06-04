@@ -57,6 +57,7 @@
     &__tile .cds--tile-content {
       display: flex;
       flex-direction: column;
+      max-width: 280px;
       gap: 32px;
     }
   }

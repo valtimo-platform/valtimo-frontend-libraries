@@ -26,7 +26,12 @@ import {
 } from '@valtimo/components';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {BehaviorSubject, Subject, take} from 'rxjs';
-import {AVAILABLE_WIDGETS, WidgetStyle, WidgetTabConfiguration} from '../../../models';
+import {
+  AVAILABLE_WIDGETS,
+  WidgetConfig,
+  WidgetStyle,
+  WidgetTabConfiguration,
+} from '../../../models';
 import {WidgetTabManagementService, WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetWizardComponent} from '../../dossier-management-widget-wizard/dossier-management-widget-wizard.component';
 
@@ -154,7 +159,7 @@ export class DossierManagementWidgetsEditorComponent {
       });
   }
 
-  public onItemsReordered(widgets: CarbonListItem[]): void {
+  public onItemsReordered(widgets: WidgetConfig[]): void {
     this.widgetTabManagementService
       .updateWidgets({
         ...this.currentWidgetTab,

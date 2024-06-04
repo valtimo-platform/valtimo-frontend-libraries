@@ -37,7 +37,13 @@ import {
 import {TrashCan16} from '@carbon/icons';
 import {TranslateModule} from '@ngx-translate/core';
 import {CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
-import {CaseWidgetDisplayTypeKey} from '@valtimo/dossier';
+import {
+  CaseWidgetCurrencyDisplayType,
+  CaseWidgetDateDisplayType,
+  CaseWidgetDisplayTypeKey,
+  CaseWidgetEnumDisplayType,
+  CaseWidgetNumberDisplayType,
+} from '@valtimo/dossier';
 import {
   ButtonModule,
   DropdownModule,
@@ -47,20 +53,8 @@ import {
   ListItem,
 } from 'carbon-components-angular';
 import {debounceTime, map, Subscription} from 'rxjs';
-import {WidgetContentComponent} from '../../../models';
 
-interface FieldsData {
-  type: ListItem;
-  content: string;
-  title: string;
-  displayProperties?: {
-    digitsInfo?: string;
-    display?: string;
-    currencyCode?: string;
-    values?: any;
-    format?: string;
-  };
-}
+import {WidgetContent, WidgetContentComponent} from '../../../models';
 
 @Component({
   selector: 'valtimo-dossier-management-widget-fields',
@@ -83,45 +77,55 @@ export class DossierManagementWidgetFieldsComponent
   implements WidgetContentComponent, OnInit, OnDestroy
 {
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field';
-  @Input({required: true}) public set columnData(value: FieldsData[]) {
+  @Input({required: true}) public set columnData(value: WidgetContent[]) {
     if (!value) return;
 
     const rowsControl = this.formGroup.get('rows') as FormArray;
     if (!rowsControl) return;
 
-    value.forEach((row: FieldsData) => {
+    value.forEach((row: WidgetContent) => {
       rowsControl.push(
         this.fb.group({
           type: this.fb.control<ListItem>(
             {
-              content: (row as any).displayProperties?.type ?? CaseWidgetDisplayTypeKey.TEXT,
+              content: row.displayProperties?.type ?? CaseWidgetDisplayTypeKey.TEXT,
               selected: true,
             },
             Validators.required
           ),
           title: this.fb.control<string>(row.title, Validators.required),
-          content: this.fb.control<string>((row as any).value, Validators.required),
-          ...([
-            CaseWidgetDisplayTypeKey.CURRENCY,
-            CaseWidgetDisplayTypeKey.NUMBER,
-            CaseWidgetDisplayTypeKey.PERCENT,
-          ].includes((row as any).displayProperties?.type as CaseWidgetDisplayTypeKey) && {
-            digitsInfo: this.fb.control<string>(row.displayProperties?.digitsInfo ?? ''),
+          content: this.fb.control<string>(row.value, Validators.required),
+          ...([CaseWidgetDisplayTypeKey.NUMBER, CaseWidgetDisplayTypeKey.PERCENT].includes(
+            row.displayProperties?.type as CaseWidgetDisplayTypeKey
+          ) && {
+            digitsInfo: this.fb.control<string>(
+              (row.displayProperties as CaseWidgetNumberDisplayType).digitsInfo ?? ''
+            ),
           }),
-          ...((row as any).displayProperties?.type === CaseWidgetDisplayTypeKey.CURRENCY && {
-            currencyCode: this.fb.control<string>(row.displayProperties?.currencyCode ?? ''),
-            display: this.fb.control<string>(row.displayProperties?.display ?? ''),
+          ...(row.displayProperties?.type === CaseWidgetDisplayTypeKey.CURRENCY && {
+            digitsInfo: this.fb.control<string>(
+              (row.displayProperties as CaseWidgetCurrencyDisplayType).digitsInfo ?? ''
+            ),
+            currencyCode: this.fb.control<string>(
+              (row.displayProperties as CaseWidgetCurrencyDisplayType).currencyCode ?? ''
+            ),
+            display: this.fb.control<string>(
+              (row.displayProperties as CaseWidgetCurrencyDisplayType).display ?? ''
+            ),
           }),
-          ...((row as any).displayProperties?.type === CaseWidgetDisplayTypeKey.DATE && {
-            format: this.fb.control<string>(row.displayProperties?.format ?? ''),
+          ...(row.displayProperties?.type === CaseWidgetDisplayTypeKey.DATE && {
+            format: this.fb.control<string>(
+              (row.displayProperties as CaseWidgetDateDisplayType).format ?? ''
+            ),
           }),
-          ...((row as any).displayProperties?.type === CaseWidgetDisplayTypeKey.ENUM && {
+          ...(row.displayProperties?.type === CaseWidgetDisplayTypeKey.ENUM && {
             values: this.fb.array(
-              Object.entries(row.displayProperties?.values).map(([key, value]) =>
-                this.fb.group({
-                  key: this.fb.control<string>(key, Validators.required),
-                  value: this.fb.control<string>(value as string, Validators.required),
-                })
+              Object.entries((row.displayProperties as CaseWidgetEnumDisplayType).values).map(
+                ([key, value]) =>
+                  this.fb.group({
+                    key: this.fb.control<string>(key, Validators.required),
+                    value: this.fb.control<string>(value as string, Validators.required),
+                  })
               )
             ),
           }),
@@ -132,7 +136,10 @@ export class DossierManagementWidgetFieldsComponent
 
     this.cdr.detectChanges();
   }
-  @Output() public changeEvent = new EventEmitter<{data: (any | null)[]; valid: boolean}>();
+  @Output() public changeEvent = new EventEmitter<{
+    data: (WidgetContent | null)[];
+    valid: boolean;
+  }>();
 
   public formGroup = this.fb.group({
     rows: this.fb.array<any>([]),
@@ -208,7 +215,7 @@ export class DossierManagementWidgetFieldsComponent
         .get('rows')
         ?.valueChanges.pipe(debounceTime(100))
         .subscribe((rows: any) => {
-          const mappedRows = rows.map((row: any | null) => ({
+          const mappedRows: WidgetContent[] = rows.map((row: any | null) => ({
             key: row.title.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase(),
             title: row.title,
             value: row.content,
