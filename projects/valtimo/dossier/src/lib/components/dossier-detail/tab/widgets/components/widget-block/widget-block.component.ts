@@ -32,6 +32,7 @@ import {
   filter,
   map,
   Observable,
+  of,
   Subscription,
   switchMap,
   tap,
@@ -104,7 +105,9 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     this._documentId$,
   ]).pipe(
     switchMap(([widget, tabkey, documentId]) =>
-      this.widgetsApiService.getWidgetData(documentId, tabkey, widget.key)
+      widget.type === 'custom'
+        ? of({})
+        : this.widgetsApiService.getWidgetData(documentId, tabkey, widget.key)
     ),
     tap(() => {
       this.dossierWidgetsLayoutService.setCaseWidgetDataLoaded(this._widgetUuid);
