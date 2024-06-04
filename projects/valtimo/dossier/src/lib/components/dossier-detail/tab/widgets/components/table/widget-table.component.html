@@ -14,26 +14,26 @@
   ~ limitations under the License.
   -->
 
-{{ widgetConfiguration?.title }}
-
-<ng-container
+<cds-tile
   *ngIf="{
     fields: fields$ | async,
     widgetData: widgetData$ | async,
+    theme: theme$ | async
   } as obs"
+  [attr.data-carbon-theme]="obs.theme"
 >
-  <valtimo-carbon-list
-    [loading]="!obs.widgetData || !obs.fields"
-    [header]="false"
-    [hideToolbar]="true"
-    [fields]="obs.fields"
-    [items]="obs.widgetData"
-    data-carbon-theme="white"
-  ></valtimo-carbon-list>
+  <span>{{ widgetConfiguration?.title }}</span>
 
-  <cds-pagination-nav
-    [model]="paginationModel()"
-    (selectPage)="onSelectPage($event)"
-  >
-  </cds-pagination-nav>
-</ng-container>
+  <section class="valtimo-widget-table__content">
+    <valtimo-carbon-list
+      [loading]="!obs.widgetData || !obs.fields"
+      [header]="false"
+      [hideToolbar]="true"
+      [fields]="obs.fields"
+      [items]="obs.widgetData"
+    ></valtimo-carbon-list>
+
+    <cds-pagination-nav [model]="paginationModel()" (selectPage)="onSelectPage($event)">
+    </cds-pagination-nav>
+  </section>
+</cds-tile>

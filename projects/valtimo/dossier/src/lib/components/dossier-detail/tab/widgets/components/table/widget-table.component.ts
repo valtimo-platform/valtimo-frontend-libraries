@@ -22,9 +22,16 @@ import {
   ViewEncapsulation,
   signal,
 } from '@angular/core';
-import {CarbonListItem, CarbonListModule, ColumnConfig, ViewType} from '@valtimo/components';
+import {
+  CarbonListItem,
+  CarbonListModule,
+  CdsThemeService,
+  ColumnConfig,
+  CurrentCarbonTheme,
+  ViewType,
+} from '@valtimo/components';
 import {Page} from '@valtimo/config';
-import {PaginationModel, PaginationModule} from 'carbon-components-angular';
+import {PaginationModel, PaginationModule, TilesModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, of, switchMap, tap} from 'rxjs';
 import {FieldsCaseWidgetValue, TableCaseWidget} from '../../../../../../models';
 import {DossierWidgetsApiService} from '../../../../../../services';
@@ -36,7 +43,7 @@ import {DossierWidgetsApiService} from '../../../../../../services';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, CarbonListModule, PaginationModule],
+  imports: [CommonModule, CarbonListModule, PaginationModule, TilesModule],
 })
 export class WidgetTableComponent {
   @HostBinding('class') public readonly class = 'valtimo-widget-table';
@@ -73,7 +80,6 @@ export class WidgetTableComponent {
   }
 
   public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
-  public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
   private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
   public readonly widgetData$ = combineLatest([this._widgetData$, this._queryParams$]).pipe(
     switchMap(([data, queryParams]) =>
@@ -84,9 +90,26 @@ export class WidgetTableComponent {
             .pipe(map((res: Page<CarbonListItem>) => res.content))
     )
   );
+  public readonly theme$ = this.cdsThemeService.currentTheme$.pipe(
+    map((currentTheme: CurrentCarbonTheme) => {
+      return currentTheme === CurrentCarbonTheme.G10
+        ? this.widgetConfiguration.highContrast
+          ? CurrentCarbonTheme.G90
+          : CurrentCarbonTheme.G10
+        : this.widgetConfiguration.highContrast
+          ? CurrentCarbonTheme.G10
+          : CurrentCarbonTheme.G90;
+    })
+  );
+
+  public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
+
   private paginationInit = false;
 
-  constructor(private dossierWidgetsApiService: DossierWidgetsApiService) {}
+  constructor(
+    private readonly dossierWidgetsApiService: DossierWidgetsApiService,
+    private readonly cdsThemeService: CdsThemeService
+  ) {}
 
   public onSelectPage(page: number): void {
     if (!this.paginationInit) {

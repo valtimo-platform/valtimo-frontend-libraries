@@ -15,6 +15,16 @@
  */
 
 .valtimo-widget-table {
+  &__content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    valtimo-carbon-list {
+      width: 100%;
+    }
+  }
+
   .cds--data-table > thead {
     background: transparent !important;
   }
