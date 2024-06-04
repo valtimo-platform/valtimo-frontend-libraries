@@ -43,6 +43,7 @@ import {
   CaseWidgetDisplayTypeKey,
   CaseWidgetEnumDisplayType,
   CaseWidgetNumberDisplayType,
+  FieldsCaseWidgetValue,
 } from '@valtimo/dossier';
 import {
   ButtonModule,
@@ -53,8 +54,7 @@ import {
   ListItem,
 } from 'carbon-components-angular';
 import {debounceTime, map, Subscription} from 'rxjs';
-
-import {WidgetContent, WidgetContentComponent} from '../../../models';
+import {WidgetContentComponent} from '../../../models';
 
 @Component({
   selector: 'valtimo-dossier-management-widget-fields',
@@ -77,13 +77,13 @@ export class DossierManagementWidgetFieldsComponent
   implements WidgetContentComponent, OnInit, OnDestroy
 {
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field';
-  @Input({required: true}) public set columnData(value: WidgetContent[]) {
+  @Input({required: true}) public set columnData(value: FieldsCaseWidgetValue[]) {
     if (!value) return;
 
     const rowsControl = this.formGroup.get('rows') as FormArray;
     if (!rowsControl) return;
 
-    value.forEach((row: WidgetContent) => {
+    value.forEach((row: FieldsCaseWidgetValue) => {
       rowsControl.push(
         this.fb.group({
           type: this.fb.control<ListItem>(
@@ -137,7 +137,7 @@ export class DossierManagementWidgetFieldsComponent
     this.cdr.detectChanges();
   }
   @Output() public changeEvent = new EventEmitter<{
-    data: (WidgetContent | null)[];
+    data: (FieldsCaseWidgetValue | null)[];
     valid: boolean;
   }>();
 
@@ -215,7 +215,7 @@ export class DossierManagementWidgetFieldsComponent
         .get('rows')
         ?.valueChanges.pipe(debounceTime(100))
         .subscribe((rows: any) => {
-          const mappedRows: WidgetContent[] = rows.map((row: any | null) => ({
+          const mappedRows: FieldsCaseWidgetValue[] = rows.map((row: any | null) => ({
             key: row.title.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase(),
             title: row.title,
             value: row.content,

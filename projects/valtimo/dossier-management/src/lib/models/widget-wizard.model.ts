@@ -17,23 +17,13 @@
 import {Type} from '@angular/core';
 import {DossierManagementWidgetFieldsComponent} from '../components/dossier-management-widget-configurators/fields/dossier-management-widget-fields.component';
 import {WidgetContentComponent} from './widget-content.model';
+import {CaseWidgetType} from '@valtimo/dossier';
 
 enum WidgetWizardStep {
   TYPE,
   WIDTH,
   STYLE,
   CONTENT,
-}
-
-enum WidgetType {
-  FIELDS = 'fields',
-}
-
-enum WidgetWidth {
-  QUARTER = 1,
-  HALF,
-  THREE_QUARTERS,
-  FULL_WIDTH,
 }
 
 enum WidgetStyle {
@@ -45,7 +35,7 @@ interface WidgetTypeSelection {
   titleKey: string;
   descriptionKey: string;
   illustrationUrl: string;
-  type: WidgetType;
+  type: CaseWidgetType;
   component: Type<WidgetContentComponent>;
 }
 
@@ -54,16 +44,16 @@ const AVAILABLE_WIDGETS: WidgetTypeSelection[] = [
     titleKey: 'widgetTabManagement.types.fields.title',
     descriptionKey: 'widgetTabManagement.types.fields.description',
     illustrationUrl: 'valtimo-layout/img/widget-management/types/fields.svg',
-    type: WidgetType.FIELDS,
+    type: CaseWidgetType.FIELDS,
     component: DossierManagementWidgetFieldsComponent,
   },
 ];
 
 const WIDGET_WIDTH_LABELS: {[key: number]: string} = {
-  [WidgetWidth.QUARTER]: 'widgetTabManagement.width.quarter.title',
-  [WidgetWidth.HALF]: 'widgetTabManagement.width.half.title',
-  [WidgetWidth.THREE_QUARTERS]: 'widgetTabManagement.width.threeQuarters.title',
-  [WidgetWidth.FULL_WIDTH]: 'widgetTabManagement.width.fullWidth.title',
+  1: 'widgetTabManagement.width.quarter.title',
+  2: 'widgetTabManagement.width.half.title',
+  3: 'widgetTabManagement.width.threeQuarters.title',
+  4: 'widgetTabManagement.width.fullWidth.title',
 };
 
 const WIDGET_STYLE_LABELS: {[key: string]: string} = {
@@ -75,8 +65,6 @@ export {
   WidgetWizardStep,
   WidgetTypeSelection,
   AVAILABLE_WIDGETS,
-  WidgetType,
-  WidgetWidth,
   WidgetStyle,
   WIDGET_WIDTH_LABELS,
   WIDGET_STYLE_LABELS,

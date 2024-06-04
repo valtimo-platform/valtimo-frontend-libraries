@@ -1,5 +1,6 @@
 import {computed, Injectable, Signal, signal, WritableSignal} from '@angular/core';
-import {WidgetConfig, WidgetStyle, WidgetTypeSelection, WidgetType, WidgetWidth} from '../models';
+import {WidgetStyle, WidgetTypeSelection} from '../models';
+import {CaseWidget, CaseWidgetType, CaseWidgetWidth} from '@valtimo/dossier';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,7 @@ import {WidgetConfig, WidgetStyle, WidgetTypeSelection, WidgetType, WidgetWidth}
 export class WidgetWizardService {
   public readonly selectedWidget: WritableSignal<WidgetTypeSelection | null> = signal(null);
 
-  public readonly widgetWidth: WritableSignal<WidgetWidth | null> = signal(null);
+  public readonly widgetWidth: WritableSignal<CaseWidgetWidth | null> = signal(null);
 
   public readonly widgetStyle: WritableSignal<WidgetStyle | null> = signal(null);
 
@@ -15,11 +16,11 @@ export class WidgetWizardService {
 
   public readonly widgetTitle: WritableSignal<string | null> = signal(null);
 
-  public readonly widgetsConfig: Signal<WidgetConfig> = computed(() => ({
+  public readonly widgetsConfig: Signal<CaseWidget> = computed(() => ({
     key: (this.widgetTitle() ?? '').replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase(),
     title: this.widgetTitle() ?? '',
-    type: this.selectedWidget()?.type ?? WidgetType.FIELDS,
-    width: this.widgetWidth() ?? WidgetWidth.FULL_WIDTH,
+    type: this.selectedWidget()?.type ?? CaseWidgetType.FIELDS,
+    width: this.widgetWidth() ?? 4,
     highContrast: (this.widgetStyle() ?? WidgetStyle.DEFAULT) === WidgetStyle.HIGH_CONTRAST,
     properties: {
       columns: Object.values(this.widgetContent() ?? {}),

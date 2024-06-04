@@ -26,14 +26,10 @@ import {
 } from '@valtimo/components';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {BehaviorSubject, Subject, take} from 'rxjs';
-import {
-  AVAILABLE_WIDGETS,
-  WidgetConfig,
-  WidgetStyle,
-  WidgetTabConfiguration,
-} from '../../../models';
+import {AVAILABLE_WIDGETS, WidgetStyle} from '../../../models';
 import {WidgetTabManagementService, WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetWizardComponent} from '../../dossier-management-widget-wizard/dossier-management-widget-wizard.component';
+import {CaseWidget, CaseWidgetsRes} from '@valtimo/dossier';
 
 @Component({
   selector: 'valtimo-dossier-management-widgets-editor',
@@ -55,12 +51,12 @@ import {DossierManagementWidgetWizardComponent} from '../../dossier-management-w
 export class DossierManagementWidgetsEditorComponent {
   @Input() public documentDefinitionName;
   @Input() public tabWidgetKey;
-  private _currentWidgetTab: WidgetTabConfiguration;
-  @Input() public set currentWidgetTab(value: WidgetTabConfiguration) {
+  private _currentWidgetTab: CaseWidgetsRes;
+  @Input() public set currentWidgetTab(value: CaseWidgetsRes) {
     this._currentWidgetTab = value;
     this.items$.next(value.widgets);
   }
-  public get currentWidgetTab(): WidgetTabConfiguration {
+  public get currentWidgetTab(): CaseWidgetsRes {
     return this._currentWidgetTab;
   }
 
@@ -164,7 +160,7 @@ export class DossierManagementWidgetsEditorComponent {
       });
   }
 
-  public onItemsReordered(widgets: WidgetConfig[]): void {
+  public onItemsReordered(widgets: CaseWidget[]): void {
     this.widgetTabManagementService
       .updateWidgets({
         ...this.currentWidgetTab,
