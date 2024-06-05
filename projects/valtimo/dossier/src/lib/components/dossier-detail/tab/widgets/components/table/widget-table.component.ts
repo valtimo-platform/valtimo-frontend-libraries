@@ -59,7 +59,19 @@ export class WidgetTableComponent {
         key: column.key,
         label: column.title,
         viewType: column.displayProperties?.type ?? ViewType.TEXT,
-        className: 'valtimo-widget-table--transparent',
+        className: `valtimo-widget-table--transparent`,
+        ...(!!column.displayProperties['format'] && {
+          format: column.displayProperties['format'],
+        }),
+        ...(!!column.displayProperties['digitsInfo'] && {
+          digitsInfo: column.displayProperties['digitsInfo'],
+        }),
+        ...(!!column.displayProperties['display'] && {
+          display: column.displayProperties['display'],
+        }),
+        ...(!!column.displayProperties['currencyCode'] && {
+          currencyCode: column.displayProperties['currencyCode'],
+        }),
       }))
     );
   }

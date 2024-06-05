@@ -13,42 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {inject} from '@angular/core';
+import {TypeConverter} from './type-converters.model';
+import {CurrencyPipe} from '@angular/common';
 
-.valtimo-widget-table {
-  padding: 16px;
+export class CurrencyTypeConverter implements TypeConverter {
+  private readonly _currencyPipe = inject(CurrencyPipe);
 
-  &__content {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  public getTypeString(): string {
+    return 'currency';
+  }
 
-    valtimo-carbon-list {
-      width: 100%;
+  convert(value: any, definition: any): string {
+    if (!value) {
+      return '-';
     }
-  }
 
-  .cds--data-table > thead {
-    background: transparent !important;
-  }
-
-  .cds--table-header-label > span {
-    font-weight: 400;
-    font-size: 12px;
-    color: var(--cds-text-secondary);
-  }
-
-  &--transparent {
-    background: transparent !important;
-  }
-
-  &--main {
-    border: none !important;
-    font-style: italic;
-  }
-
-  .widget-title {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
+    return (
+      this._currencyPipe.transform(
+        value,
+        definition.currencyCode,
+        definition.display,
+        definition.digitsInfo
+      ) ?? ''
+    );
   }
 }
