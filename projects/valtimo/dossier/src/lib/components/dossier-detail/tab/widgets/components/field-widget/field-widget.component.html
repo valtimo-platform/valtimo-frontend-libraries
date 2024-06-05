@@ -28,7 +28,7 @@
         <div class="column">
           @for (property of column; track property) {
             <div class="mb-3">
-              <cds-label>
+              <cds-label class="mb-3">
                 {{ property?.title }}
                 <input cdsText [value]="property?.value" [readonly]="true" />
               </cds-label>
