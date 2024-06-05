@@ -215,7 +215,7 @@ export class DossierProcessStartModalComponent implements OnInit {
     formViewModelComponent.instance.isStartForm = true;
     formViewModelComponent.instance.processDefinitionKey = this.processDefinitionKey;
     formViewModelComponent.instance.documentDefinitionName = this.documentDefinitionName;
-    formViewModelComponent.instance.formSubmit.subscribe(() => {
+    formViewModelComponent.instance.formSubmit.pipe(take(1)).subscribe(() => {
       this.listService.forceRefresh();
       this.modal.hide();
     });
