@@ -24,7 +24,7 @@ import {
   Output,
   ViewChild,
   ViewContainerRef,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import {PermissionService} from '@valtimo/access-control';
 import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
@@ -225,7 +225,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
     if (!this.formViewModel.component) return;
     this.formViewModelDynamicContainer.clear();
     const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
-        this.formViewModel.component
+      this.formViewModel.component
     );
     formViewModelComponent.instance.form = this.formDefinition;
     formViewModelComponent.instance.formName = this.formName;

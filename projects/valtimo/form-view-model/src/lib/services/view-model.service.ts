@@ -74,7 +74,7 @@ export class ViewModelService extends BaseApiService {
     return this.httpClient.get<any>(this.getApiUrl('/v1/form/view-model/start-form'), {
       params: {
         formName,
-        processDefinitionKey
+        processDefinitionKey,
       },
       headers: new HttpHeaders().set(InterceptorSkip, '400'),
     });
@@ -88,7 +88,7 @@ export class ViewModelService extends BaseApiService {
     return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/start-form`), viewModel, {
       params: {
         formName,
-        processDefinitionKey
+        processDefinitionKey,
       },
       headers: new HttpHeaders().set(InterceptorSkip, '400'),
     });
@@ -100,13 +100,17 @@ export class ViewModelService extends BaseApiService {
     documentDefinitionName: string,
     viewModel: object
   ): Observable<object> {
-    return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/submit/start-form`), viewModel, {
-      params: {
-        formName,
-        processDefinitionKey,
-        documentDefinitionName
-      },
-      headers: new HttpHeaders().set(InterceptorSkip, '400'),
-    });
+    return this.httpClient.post(
+      this.getApiUrl(`/v1/form/view-model/submit/start-form`),
+      viewModel,
+      {
+        params: {
+          formName,
+          processDefinitionKey,
+          documentDefinitionName,
+        },
+        headers: new HttpHeaders().set(InterceptorSkip, '400'),
+      }
+    );
   }
 }

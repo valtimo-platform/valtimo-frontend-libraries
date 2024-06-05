@@ -77,7 +77,7 @@ import {TaskRoutingModule} from './task-routing.module';
     TabsModule,
     ContentSwitcherModule,
     RenderInPageHeaderDirectiveModule,
-    DropdownModule
+    DropdownModule,
   ],
   exports: [TaskListComponent, TaskDetailModalComponent, AssignUserToTaskComponent],
 })

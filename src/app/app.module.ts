@@ -227,7 +227,7 @@ export function tabsFactory() {
     CustomFormFlowComponent,
     TaskManagementModule,
     ZgwModule,
-    FormViewModelModule
+    FormViewModelModule,
   ],
   providers: [
     FormioComponent,

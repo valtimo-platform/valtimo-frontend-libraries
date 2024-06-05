@@ -45,7 +45,8 @@ export class ProcessLinkModalComponent {
   public readonly typeOfSelectedProcessLink$ = this.stateService.typeOfSelectedProcessLink$;
   public readonly viewModelEnabled$ = this.stateService.viewModelEnabled$;
 
-  public readonly showViewModelToggle = this.configService.config.featureToggles.enableFormViewModel;
+  public readonly showViewModelToggle =
+    this.configService.config.featureToggles.enableFormViewModel;
 
   constructor(
     private readonly stateService: ProcessLinkStateService,
@@ -90,5 +91,4 @@ export class ProcessLinkModalComponent {
   public toggleCheckedChange(value: boolean): void {
     this.processLinkStateService.setViewModelEnabled(value);
   }
-
 }

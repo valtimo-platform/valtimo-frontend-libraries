@@ -21,8 +21,8 @@ import {FormViewModelComponent} from './components/form-view-model';
   providers: [
     {
       provide: FORM_VIEW_MODEL_TOKEN,
-      useValue: {component: FormViewModelComponent}
-    }
-  ]
+      useValue: {component: FormViewModelComponent},
+    },
+  ],
 })
 export class FormViewModelModule {}

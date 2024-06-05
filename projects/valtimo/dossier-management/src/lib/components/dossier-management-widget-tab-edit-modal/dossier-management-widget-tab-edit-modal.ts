@@ -80,7 +80,8 @@ export class DossierManagementWidgetTabEditModalComponent implements OnInit, OnD
   public saveWidgetTab(): void {
     this.disable();
 
-    this.tabManagementService.editTab(
+    this.tabManagementService
+      .editTab(
         {
           key: this.tabItem.key,
           name: this.widgetTabName.value,

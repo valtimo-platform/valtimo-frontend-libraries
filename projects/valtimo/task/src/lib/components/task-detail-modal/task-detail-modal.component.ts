@@ -17,12 +17,16 @@
 import {
   AfterViewInit,
   Component,
-  EventEmitter, Inject,
-  OnDestroy, Optional,
+  EventEmitter,
+  Inject,
+  OnDestroy,
+  Optional,
   Output,
-  ViewChild, ViewContainerRef,
+  ViewChild,
+  ViewContainerRef,
   ViewEncapsulation,
-  Renderer2, ChangeDetectorRef
+  Renderer2,
+  ChangeDetectorRef,
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {
@@ -88,7 +92,9 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
 
   private readonly taskProcessLinkType$ = new BehaviorSubject<TaskProcessLinkType | null>(null);
   public readonly processLinkIsForm$ = this.taskProcessLinkType$.pipe(map(type => type === 'form'));
-  public readonly processLinkIsFormViewModel$ = this.taskProcessLinkType$.pipe(map(type => type === 'form-view-model'));
+  public readonly processLinkIsFormViewModel$ = this.taskProcessLinkType$.pipe(
+    map(type => type === 'form-view-model')
+  );
   public readonly processLinkIsFormFlow$ = this.taskProcessLinkType$.pipe(
     map(type => type === 'form-flow')
   );
@@ -259,8 +265,8 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
         this.loading$.next(false);
       },
       error: _ => {
-          this.loading$.next(false);
-      }
+        this.loading$.next(false);
+      },
     });
   }
 

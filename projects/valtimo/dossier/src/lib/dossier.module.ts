@@ -183,7 +183,7 @@ export type TabsFactory = () => Map<string, object>;
     TagModule,
     DialogModule,
     ValtimoCdsOverflowButtonDirectiveModule,
-    DossierDetailWidgetsComponent
+    DossierDetailWidgetsComponent,
   ],
   exports: [DossierListComponent, DossierDetailComponent],
 })

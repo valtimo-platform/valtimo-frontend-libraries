@@ -21,21 +21,24 @@
   [subtitle]="(page$ | async)?.subtitle"
   [templateBelowSubtitle]="assignUserToTask"
 >
-  <div body *ngIf="{
-    loading: loading$ | async,
-    page: page$ | async,
-    task: task$ | async,
-    taskId: taskInstanceId$ | async,
-    formDefinition: formDefinition$ | async,
-    formDefinitionId: formDefinitionId$ | async,
-    formName: formName$ | async,
-    processLinkIsForm: processLinkIsForm$ | async,
-    processLinkIsFormViewModel: processLinkIsFormViewModel$ | async,
-    formioOptions: formioOptions$ | async,
-    processLinkIsFormFlow: processLinkIsFormFlow$ | async,
-    formFlowInstanceId: formFlowInstanceId$ | async,
-    errorMessage: errorMessage$ | async
-  } as obs">
+  <div
+    body
+    *ngIf="{
+      loading: loading$ | async,
+      page: page$ | async,
+      task: task$ | async,
+      taskId: taskInstanceId$ | async,
+      formDefinition: formDefinition$ | async,
+      formDefinitionId: formDefinitionId$ | async,
+      formName: formName$ | async,
+      processLinkIsForm: processLinkIsForm$ | async,
+      processLinkIsFormViewModel: processLinkIsFormViewModel$ | async,
+      formioOptions: formioOptions$ | async,
+      processLinkIsFormFlow: processLinkIsFormFlow$ | async,
+      formFlowInstanceId: formFlowInstanceId$ | async,
+      errorMessage: errorMessage$ | async
+    } as obs"
+  >
     <div *ngIf="obs.formDefinition && obs.processLinkIsForm">
       <valtimo-form-io
         #form
@@ -58,7 +61,11 @@
         {{ 'formManagement.loading' | translate }}
       </div>
     </div>
-    <div *ngIf="obs.loading === false && !obs.formDefinition && !obs.formFlowInstanceId && !obs.errorMessage">
+    <div
+      *ngIf="
+        obs.loading === false && !obs.formDefinition && !obs.formFlowInstanceId && !obs.errorMessage
+      "
+    >
       <div class="bg-warning text-black mb-0 p-3 text-center">
         {{
           (isAdmin$ | async)
