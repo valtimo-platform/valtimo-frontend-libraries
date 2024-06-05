@@ -105,6 +105,7 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     this._documentId$,
   ]).pipe(
     switchMap(([widget, tabkey, documentId]) =>
+      // custom component widgets do not fetch additional data
       widget.type === 'custom'
         ? of({})
         : this.widgetsApiService.getWidgetData(documentId, tabkey, widget.key)

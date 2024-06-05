@@ -1,6 +1,6 @@
 import {computed, Injectable, Signal, signal, WritableSignal} from '@angular/core';
 import {WidgetStyle, WidgetTypeSelection} from '../models';
-import {CaseWidget, CaseWidgetType, CaseWidgetWidth} from '@valtimo/dossier';
+import {BasicCaseWidget, CaseWidgetType, CaseWidgetWidth} from '@valtimo/dossier';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class WidgetWizardService {
 
   public readonly widgetTitle: WritableSignal<string | null> = signal(null);
 
-  public readonly widgetsConfig: Signal<CaseWidget> = computed(() => ({
+  public readonly widgetsConfig: Signal<BasicCaseWidget> = computed(() => ({
     key: (this.widgetTitle() ?? '').replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase(),
     title: this.widgetTitle() ?? '',
     type: this.selectedWidget()?.type ?? CaseWidgetType.FIELDS,

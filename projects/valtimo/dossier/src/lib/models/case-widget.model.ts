@@ -24,10 +24,12 @@ enum CaseWidgetType {
 type CaseWidgetWidth = 1 | 2 | 3 | 4;
 
 interface BasicCaseWidget {
+  type: CaseWidgetType;
   title: string;
   width: CaseWidgetWidth;
   highContrast: boolean;
   key: string;
+  properties: object;
 }
 
 interface FieldsCaseWidgetValue {
@@ -102,6 +104,7 @@ interface CaseWidgetXY {
 }
 
 export {
+  BasicCaseWidget,
   CaseWidget,
   CaseWidgetConfigurationBin,
   CaseWidgetContentHeightsPx,
