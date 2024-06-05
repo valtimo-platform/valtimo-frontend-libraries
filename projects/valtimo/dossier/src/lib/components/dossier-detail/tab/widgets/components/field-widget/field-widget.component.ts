@@ -16,7 +16,7 @@
 
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BehaviorSubject, combineLatest, map} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 import {CaseWidgetWithUuid} from '../../../../../../models';
 import {InputModule} from 'carbon-components-angular';
 
@@ -28,13 +28,12 @@ import {InputModule} from 'carbon-components-angular';
   imports: [CommonModule, FieldWidgetComponent, InputModule],
 })
 export class FieldWidgetComponent {
-  public readonly widget$ = new BehaviorSubject<CaseWidgetWithUuid | null>(null);
+  public readonly widgetConfiguration$ = new BehaviorSubject<CaseWidgetWithUuid | null>(null);
   public readonly widgetData$ = new BehaviorSubject<object | null>(null);
 
-  @Input() public set widget(value: CaseWidgetWithUuid) {
+  @Input() public set widgetConfiguration(value: CaseWidgetWithUuid) {
     if (!value) return;
-    this.widget$.next(value);
-    console.log('Widget: ', this.widget$);
+    this.widgetConfiguration$.next(value);
   }
 
   @Input() public set widgetData(value: object) {
@@ -42,20 +41,18 @@ export class FieldWidgetComponent {
     this.widgetData$.next(value);
   }
 
-  public readonly widgetPropertyValue$ = combineLatest([this.widget$, this.widgetData$]).pipe(
+  public readonly widgetPropertyValue$: Observable<any> = combineLatest([
+    this.widgetConfiguration$,
+    this.widgetData$,
+  ]).pipe(
     map(([widget, widgetData]) => {
-      widget.properties.columns.map(column => {
-        column.forEach(property => {
-          if (widgetData) {
-            if (widgetData.hasOwnProperty(property.key)) {
-              console.log('Widget data: ', widgetData[property.key]);
-              if (widgetData[property.key] === null) {
-                console.log('Widget data 2: ', widgetData[property.key]);
-
-                console.log('IS NULL');
-              }
-              return widgetData[property.key] || null;
-            }
+      return widget.properties.columns.map(column => {
+        return column.map(property => {
+          if (widgetData?.hasOwnProperty(property.key)) {
+            return {
+              title: property.title,
+              value: widgetData[property.key] || '-',
+            };
           }
         });
       });
