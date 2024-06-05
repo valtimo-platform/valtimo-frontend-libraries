@@ -29,7 +29,14 @@
     [style.left.px]="obs.caseWidgetXY?.x"
   >
     <div #widgetBlockContent class="widget-block__content">
-      {{ stringifiedWidget$ | async }}
+      @switch (obs.widgetConfiguration.type) {
+        @case (CaseWidgetType.CUSTOM) {
+          <valtimo-custom-widget [widgetConfig]="obs.widgetConfiguration"></valtimo-custom-widget>
+        }
+        @default {
+          {{ stringifiedWidget$ | async }}
+        }
+      }
     </div>
   </div>
 </ng-container>

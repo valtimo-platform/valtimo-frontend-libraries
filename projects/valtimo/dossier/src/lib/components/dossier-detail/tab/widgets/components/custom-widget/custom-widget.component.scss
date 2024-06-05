@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-export * from './tab';
-export * from './case-tab-token';
-export * from './dossier-list.constants';
-export * from './case-status.constants';
-export * from './case-widget.constants';
-export * from './custom-case-widget-token';
+.custom-widget {
+  background-color: var(--cds-layer-01);
+  padding: 16px;
+
+  &__title {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}

@@ -15,6 +15,7 @@
  */
 
 import {CaseWidgetDisplayType} from '.';
+import {Type} from '@angular/core';
 
 enum CaseWidgetType {
   FIELDS = 'fields',
@@ -103,6 +104,10 @@ interface CaseWidgetXY {
   y: number;
 }
 
+interface CustomCaseWidgetConfig {
+  [componentKey: string]: Type<any>;
+}
+
 export {
   BasicCaseWidget,
   CaseWidget,
@@ -118,4 +123,6 @@ export {
   CaseWidgetXY,
   FieldsCaseWidget,
   FieldsCaseWidgetValue,
+  CustomCaseWidgetConfig,
+  CustomCaseWidget,
 };

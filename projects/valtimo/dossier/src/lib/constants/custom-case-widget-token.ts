@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-export * from './tab';
-export * from './case-tab-token';
-export * from './dossier-list.constants';
-export * from './case-status.constants';
-export * from './case-widget.constants';
-export * from './custom-case-widget-token';
+import {InjectionToken} from '@angular/core';
+import {CustomCaseWidgetConfig} from '../models';
+
+const CUSTOM_CASE_WIDGET_TOKEN = new InjectionToken<CustomCaseWidgetConfig>(
+  'Specify a component to display per configured custom case widget component key.'
+);
+
+export {CUSTOM_CASE_WIDGET_TOKEN};

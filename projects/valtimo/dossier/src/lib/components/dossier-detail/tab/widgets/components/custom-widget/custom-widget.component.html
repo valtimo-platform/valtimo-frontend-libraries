@@ -14,23 +14,18 @@
   ~ limitations under the License.
   -->
 
-<div
-  #noResults
-  class="valtimo-no-results"
-  [ngClass]="{
-    'valtimo-no-results--small-padding': smallPadding,
-    'valtimo-no-results--render-vertically': renderVertically()
-  }"
->
-  <img [src]="illustration" alt="{{ 'interface.noResults' | translate }}" />
+<div class="custom-widget">
+  <h4 class="custom-widget__title">{{ (widgetConfig$ | async)?.title || '-' }}</h4>
 
-  <div class="valtimo-no-results__content">
-    <h4 class="valtimo-no-results__title">
-      {{ title }}
-    </h4>
+  <div class="custom-widget__content">
+    <ng-template #customWidgetContainer></ng-template>
 
-    <span [innerHtml]="description"></span>
-
-    <ng-container [ngTemplateOutlet]="action"></ng-container>
+    @if (noCustomComponentAvailable()) {
+      <valtimo-no-results
+        [collapseVertically]="true"
+        [description]="'dossier.widgets.noCustomComponentDescription' | translate"
+        [smallPadding]="true"
+      ></valtimo-no-results>
+    }
   </div>
 </div>

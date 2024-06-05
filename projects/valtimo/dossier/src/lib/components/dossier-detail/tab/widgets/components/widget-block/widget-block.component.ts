@@ -25,7 +25,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CaseWidgetWithUuid, CaseWidgetXY} from '../../../../../../models';
+import {CaseWidgetType, CaseWidgetWithUuid, CaseWidgetXY} from '../../../../../../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -44,13 +44,14 @@ import {
 } from '../../../../../../services';
 import {ActivatedRoute} from '@angular/router';
 import {LoadingModule} from 'carbon-components-angular';
+import {CustomWidgetComponent} from '../custom-widget/custom-widget.component';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
   templateUrl: './widget-block.component.html',
   styleUrls: ['./widget-block.component.scss'],
   standalone: true,
-  imports: [CommonModule, LoadingModule],
+  imports: [CommonModule, LoadingModule, CustomWidgetComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
@@ -72,6 +73,8 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   public get stringifiedWidget$(): Observable<string> {
     return this._widget$.pipe(map(widget => JSON.stringify(widget)));
   }
+
+  public readonly CaseWidgetType = CaseWidgetType;
 
   public readonly packResultAvailable$ = new BehaviorSubject<boolean>(false);
 
