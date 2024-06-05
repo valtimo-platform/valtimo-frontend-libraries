@@ -41,11 +41,14 @@
             (paginationEvent)="onPaginationEvent($event)"
           ></valtimo-widget-table>
         }
+
+        @case (CaseWidgetType.FIELDS) {
+          <valtimo-field-widget
+            [widgetConfiguration]="obs.widgetConfiguration"
+            [widgetData]="obs.widgetData"
+          ></valtimo-field-widget>
+        }
       }
-      <valtimo-field-widget
-        [widget]="obs.widgetConfiguration"
-        [widgetData]="obs.widgetData"
-      ></valtimo-field-widget>
     </div>
   </div>
 </ng-container>
