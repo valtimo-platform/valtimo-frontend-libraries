@@ -19,6 +19,7 @@ import {Type} from '@angular/core';
 
 enum CaseWidgetType {
   FIELDS = 'fields',
+  TABLE = 'table',
   CUSTOM = 'custom',
 }
 
@@ -47,6 +48,12 @@ interface FieldsCaseWidget extends BasicCaseWidget {
   };
 }
 
+interface TableCaseWidget extends BasicCaseWidget {
+  type: CaseWidgetType.TABLE;
+  properties: {
+    columns: FieldsCaseWidgetValue[];
+  };
+}
 interface CustomCaseWidget extends BasicCaseWidget {
   type: CaseWidgetType.CUSTOM;
   properties: {
@@ -54,7 +61,7 @@ interface CustomCaseWidget extends BasicCaseWidget {
   };
 }
 
-type CaseWidget = FieldsCaseWidget | CustomCaseWidget;
+type CaseWidget = FieldsCaseWidget | CustomCaseWidget  |TableCaseWidget;
 
 type CaseWidgetWithUuid = CaseWidget & {
   uuid: string;
@@ -125,4 +132,5 @@ export {
   FieldsCaseWidgetValue,
   CustomCaseWidgetConfig,
   CustomCaseWidget,
+  TableCaseWidget,
 };

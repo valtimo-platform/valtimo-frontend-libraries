@@ -25,7 +25,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CaseWidgetType, CaseWidgetWithUuid, CaseWidgetXY} from '../../../../../../models';
+import {CaseWidgetWithUuid, CaseWidgetXY, CaseWidgetType} from '../../../../../../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -44,6 +44,7 @@ import {
 } from '../../../../../../services';
 import {ActivatedRoute} from '@angular/router';
 import {LoadingModule} from 'carbon-components-angular';
+import {WidgetTableComponent} from '../table/widget-table.component';
 import {CustomWidgetComponent} from '../custom-widget/custom-widget.component';
 
 @Component({
@@ -51,7 +52,7 @@ import {CustomWidgetComponent} from '../custom-widget/custom-widget.component';
   templateUrl: './widget-block.component.html',
   styleUrls: ['./widget-block.component.scss'],
   standalone: true,
-  imports: [CommonModule, LoadingModule, CustomWidgetComponent],
+  imports: [CommonModule, LoadingModule, WidgetTableComponent, CustomWidgetComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
@@ -68,13 +69,6 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   public get widget$(): Observable<CaseWidgetWithUuid> {
     return this._widget$.pipe(filter(widget => widget !== null));
   }
-
-  // to remove
-  public get stringifiedWidget$(): Observable<string> {
-    return this._widget$.pipe(map(widget => JSON.stringify(widget)));
-  }
-
-  public readonly CaseWidgetType = CaseWidgetType;
 
   public readonly packResultAvailable$ = new BehaviorSubject<boolean>(false);
 
@@ -94,18 +88,19 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   );
 
   private readonly _caseWidgetWidthsPx$ = this.dossierWidgetsLayoutService.caseWidgetWidthsPx$;
+  public readonly CaseWidgetType = CaseWidgetType;
 
-  private readonly _documentId$ = this.route.params.pipe(
+  public readonly documentId$ = this.route.params.pipe(
     map(params => params?.documentId),
     filter(documentId => !!documentId)
   );
 
-  private readonly _tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
+  public readonly tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
 
   public readonly widgetData$ = combineLatest([
     this.widget$,
-    this._tabKey$,
-    this._documentId$,
+    this.tabKey$,
+    this.documentId$,
   ]).pipe(
     switchMap(([widget, tabkey, documentId]) =>
       // custom component widgets do not fetch additional data
