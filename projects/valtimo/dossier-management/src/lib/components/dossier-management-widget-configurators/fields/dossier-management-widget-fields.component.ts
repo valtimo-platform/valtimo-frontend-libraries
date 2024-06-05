@@ -17,6 +17,7 @@ import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   EventEmitter,
   HostBinding,
   OnDestroy,
@@ -71,7 +72,15 @@ export class DossierManagementWidgetFieldsComponent
       theme === CurrentCarbonTheme.G10 ? 'white' : CurrentCarbonTheme.G90
     )
   );
-  public readonly selectedWidgetContent = this.widgetWizardService.widgetContent;
+  public readonly selectedWidgetContent = computed(() =>
+    this.widgetWizardService.widgetContent()?.columns.reduce(
+      (acc, curr, index) => ({
+        ...acc,
+        [index]: curr,
+      }),
+      {}
+    )
+  );
   public readonly activeTab = signal<number>(0);
 
   private readonly _subscriptions = new Subscription();
@@ -94,7 +103,7 @@ export class DossierManagementWidgetFieldsComponent
           this.changeEvent.emit({data: '', valid: formValid && contentValid});
         })
     );
-    const widgetContent = this.widgetWizardService.widgetContent();
+    const widgetContent = this.widgetWizardService.widgetContent()?.columns;
     if (!widgetContent) return;
 
     this.columns.set(Object.keys(widgetContent).map(() => null));
@@ -111,25 +120,23 @@ export class DossierManagementWidgetFieldsComponent
   }
 
   public onTabSelected(index: number): void {
-    console.log(index);
     this.activeTab.set(index);
   }
 
   public onDeleteColumnClick(index: number): void {
-    this.widgetWizardService.widgetContent.update(
-      (content: {[columnIndex: number]: any} | null) => {
-        if (!content) return null;
+    this.widgetWizardService.widgetContent.update(content => {
+      if (!content) return null;
 
-        let tempIndex = index;
-        while (tempIndex < this.columns().length - 1) {
-          content[tempIndex] = content[tempIndex + 1];
-          tempIndex++;
-        }
-        delete content[tempIndex];
-
-        return content;
+      let tempIndex = index;
+      let tempContent = {...content};
+      while (tempIndex < this.columns().length - 1) {
+        tempContent.columns[tempIndex] = tempContent.columns[tempIndex + 1];
+        tempIndex++;
       }
-    );
+      tempContent.columns.splice(tempIndex, 1);
+
+      return tempContent;
+    });
 
     this.columns.update((columns: null[]) => {
       const temp = columns;
@@ -144,10 +151,17 @@ export class DossierManagementWidgetFieldsComponent
   }
 
   public onChangeEvent(event: {data: any; valid: boolean}, columnIndex: number): void {
-    this.widgetWizardService.widgetContent.update(content => ({
-      ...content,
-      [columnIndex]: event.data,
-    }));
+    this.widgetWizardService.widgetContent.update(content => {
+      if (!content) return {columns: [event.data]};
+
+      const columns = content?.columns.map((column, index) =>
+        index === columnIndex ? event.data : column
+      );
+      return {
+        ...content,
+        columns: columnIndex > columns.length - 1 ? [...columns, event.data] : columns,
+      };
+    });
     this._contentValid.next(event.valid);
   }
 }
