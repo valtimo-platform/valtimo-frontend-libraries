@@ -17,7 +17,6 @@
 import {EventEmitter} from '@angular/core';
 
 interface WidgetContentComponent {
-  columnData: object;
   changeEvent: EventEmitter<{data: any; valid: boolean}>;
 }
 
