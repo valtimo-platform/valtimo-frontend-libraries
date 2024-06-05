@@ -165,7 +165,7 @@
     "widgets": {
       "noWidgets": "No widgets",
       "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them.",
-      "noCustomComponent": "Component not found",
+      "noWidget": "Widget not found",
       "noCustomComponentDescription": "The custom component configured for this widget is not available."
     }
   },

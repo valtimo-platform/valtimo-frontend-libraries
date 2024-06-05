@@ -3,6 +3,7 @@ import {
   BehaviorSubject,
   combineLatest,
   debounceTime,
+  distinctUntilChanged,
   filter,
   map,
   Observable,
@@ -109,7 +110,9 @@ export class DossierWidgetsLayoutService implements OnDestroy {
 
   public get dataLoadedForAllWidgets$(): Observable<boolean> {
     return combineLatest([this._caseWidgetDataLoaded$, this._widgets$]).pipe(
-      map(([caseWidgetDataLoaded, widgets]) => caseWidgetDataLoaded.length === widgets.length)
+      filter(([_, widgets]) => widgets.length !== 0),
+      map(([caseWidgetDataLoaded, widgets]) => caseWidgetDataLoaded.length === widgets.length),
+      distinctUntilChanged()
     );
   }
 

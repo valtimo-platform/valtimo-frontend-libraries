@@ -25,7 +25,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CaseWidgetWithUuid, CaseWidgetXY, CaseWidgetType} from '../../../../../../models';
+import {CaseWidgetType, CaseWidgetWithUuid, CaseWidgetXY} from '../../../../../../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -43,16 +43,26 @@ import {
   DossierWidgetsLayoutService,
 } from '../../../../../../services';
 import {ActivatedRoute} from '@angular/router';
-import {LoadingModule} from 'carbon-components-angular';
+import {LoadingModule, TilesModule} from 'carbon-components-angular';
 import {WidgetTableComponent} from '../table/widget-table.component';
 import {CustomWidgetComponent} from '../custom-widget/custom-widget.component';
+import {CarbonListModule, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
   templateUrl: './widget-block.component.html',
   styleUrls: ['./widget-block.component.scss'],
   standalone: true,
-  imports: [CommonModule, LoadingModule, WidgetTableComponent, CustomWidgetComponent],
+  imports: [
+    CommonModule,
+    LoadingModule,
+    WidgetTableComponent,
+    CustomWidgetComponent,
+    CarbonListModule,
+    TranslateModule,
+    TilesModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
@@ -97,11 +107,7 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   public readonly tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
 
-  public readonly widgetData$ = combineLatest([
-    this.widget$,
-    this.tabKey$,
-    this.documentId$,
-  ]).pipe(
+  public readonly widgetData$ = combineLatest([this.widget$, this.tabKey$, this.documentId$]).pipe(
     switchMap(([widget, tabkey, documentId]) =>
       // custom component widgets do not fetch additional data
       widget.type === 'custom'
@@ -110,6 +116,18 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     ),
     tap(() => {
       this.dossierWidgetsLayoutService.setCaseWidgetDataLoaded(this._widgetUuid);
+    })
+  );
+
+  public readonly theme$ = combineLatest([this.cdsThemeService.currentTheme$, this.widget$]).pipe(
+    map(([currentTheme, widgetConfiguration]) => {
+      return currentTheme === CurrentCarbonTheme.G10
+        ? widgetConfiguration.highContrast
+          ? CurrentCarbonTheme.G90
+          : CurrentCarbonTheme.G10
+        : widgetConfiguration.highContrast
+          ? CurrentCarbonTheme.G10
+          : CurrentCarbonTheme.G90;
     })
   );
 
@@ -124,7 +142,8 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     private readonly renderer: Renderer2,
     private readonly dossierTabService: DossierTabService,
     private readonly route: ActivatedRoute,
-    private readonly widgetsApiService: DossierWidgetsApiService
+    private readonly widgetsApiService: DossierWidgetsApiService,
+    private readonly cdsThemeService: CdsThemeService
   ) {}
 
   public ngAfterViewInit(): void {

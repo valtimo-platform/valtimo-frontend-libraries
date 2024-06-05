@@ -21,12 +21,14 @@
     packResultAvailable: packResultAvailable$ | async,
     tabKey: tabKey$ | async,
     widgetConfiguration: widget$ | async,
-    widgetData: widgetData$ | async
+    widgetData: widgetData$ | async,
+    theme: theme$ | async
   } as obs"
 >
   <div
     #widgetBlock
     class="widget-block"
+    [attr.data-carbon-theme]="obs.theme"
     [style.top.px]="obs.caseWidgetXY?.y"
     [style.left.px]="obs.caseWidgetXY?.x"
   >
@@ -43,6 +45,15 @@
         }
         @case (CaseWidgetType.CUSTOM) {
           <valtimo-custom-widget [widgetConfig]="obs.widgetConfiguration"></valtimo-custom-widget>
+        }
+        @default {
+          <div class="widget-block__not-available">
+            <valtimo-no-results
+              [collapseVertically]="true"
+              [description]="'dossier.widgets.noWidget' | translate"
+              [smallPadding]="true"
+            ></valtimo-no-results>
+          </div>
         }
       }
     </div>
