@@ -14,8 +14,24 @@
   ~ limitations under the License.
   -->
 
-<div>
-
-</div>
-
-<h2>TESTIIIING</h2>
+<ng-container
+  *ngIf="{
+    widget: widget$ | async,
+    widgetData: widgetData$ | async,
+    widgetPropertyValue: widgetPropertyValue$ | async
+  } as obs"
+>
+  <div class="field-widget-container">
+    <h4 class="field-widget-title">{{ obs?.widget?.title }}</h4>
+    <div class="column-container">
+      <div *ngFor="let column of obs?.widget?.properties?.columns" class="column">
+        <div *ngFor="let property of column" class="property">
+          <cds-label>
+            {{ property?.title }}
+            <input cdsText [value]="obs?.widgetPropertyValue" [readonly]="true" />
+          </cds-label>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

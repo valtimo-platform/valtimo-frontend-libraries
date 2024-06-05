@@ -14,25 +14,53 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {BehaviorSubject, combineLatest, map} from 'rxjs';
+import {CaseWidgetWithUuid} from '../../../../../../models';
+import {InputModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-field-widget',
   templateUrl: './field-widget.component.html',
   styleUrls: ['./field-widget.component.scss'],
   standalone: true,
-  imports: [CommonModule, FieldWidgetComponent]
+  imports: [CommonModule, FieldWidgetComponent, InputModule],
 })
+export class FieldWidgetComponent {
+  public readonly widget$ = new BehaviorSubject<CaseWidgetWithUuid | null>(null);
+  public readonly widgetData$ = new BehaviorSubject<object | null>(null);
 
-export class FieldWidgetComponent implements OnInit{
-
-  @Input() widget;
-
-  constructor(){
+  @Input() public set widget(value: CaseWidgetWithUuid) {
+    if (!value) return;
+    this.widget$.next(value);
+    console.log('Widget: ', this.widget$);
   }
 
-  public ngOnInit(): void {
-    console.log("Widget: ", this.widget);
+  @Input() public set widgetData(value: object) {
+    if (!value) return;
+    this.widgetData$.next(value);
   }
+
+  public readonly widgetPropertyValue$ = combineLatest([this.widget$, this.widgetData$]).pipe(
+    map(([widget, widgetData]) => {
+      widget.properties.columns.map(column => {
+        column.forEach(property => {
+          if (widgetData) {
+            if (widgetData.hasOwnProperty(property.key)) {
+              console.log('Widget data: ', widgetData[property.key]);
+              if (widgetData[property.key] === null) {
+                console.log('Widget data 2: ', widgetData[property.key]);
+
+                console.log('IS NULL');
+              }
+              return widgetData[property.key] || null;
+            }
+          }
+        });
+      });
+    })
+  );
+
+  constructor() {}
 }

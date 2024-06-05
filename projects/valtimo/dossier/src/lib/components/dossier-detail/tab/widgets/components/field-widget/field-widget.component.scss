@@ -13,3 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.field-widget-container {
+  padding: 16px;
+  background-color: white;
+}
+
+.field-widget-title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 16px;
+}
+
+.column-container {
+  width: 100%;
+  display: flex;
+  column-gap: 20px;
+}
+
+.column {
+  width: 400px;
+}
+
+.property {
+  margin-bottom: 16px;
+}
