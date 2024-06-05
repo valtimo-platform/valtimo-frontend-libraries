@@ -25,7 +25,6 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
 import {WidgetWizardService} from '../../../../services';
 
 @Component({
@@ -41,7 +40,7 @@ export class WidgetWizardContentStepComponent implements OnInit {
   @ViewChild('contentRenderer', {static: true, read: ViewContainerRef})
   private readonly _vcr: ViewContainerRef;
 
-  @Output() public validEvent = new EventEmitter<boolean>();
+  @Output() public contentValidEvent = new EventEmitter<boolean>();
 
   constructor(
     private readonly cdr: ChangeDetectorRef,
@@ -60,7 +59,9 @@ export class WidgetWizardContentStepComponent implements OnInit {
     const componentInstance = this._vcr.createComponent(widget.component).instance;
     if (!componentInstance) return;
 
-    componentInstance.changeEvent.subscribe(event => this.validEvent.emit(event.valid));
+    componentInstance.changeValidEvent.subscribe((valid: boolean) =>
+      this.contentValidEvent.emit(valid)
+    );
 
     this.cdr.detectChanges();
   }

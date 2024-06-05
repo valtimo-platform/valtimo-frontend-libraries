@@ -73,14 +73,12 @@ import {WidgetContentComponent} from '../../../../models';
     IconModule,
   ],
 })
-export class DossierManagementWidgetFieldsColumnComponent
-  implements WidgetContentComponent, OnInit, OnDestroy
-{
+export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnDestroy {
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field-column';
   @Input({required: true}) public columnData: FieldsCaseWidgetValue[];
 
-  @Output() public changeEvent = new EventEmitter<{
-    data: (FieldsCaseWidgetValue | null)[];
+  @Output() public columnUpdateEvent = new EventEmitter<{
+    data: FieldsCaseWidgetValue[];
     valid: boolean;
   }>();
 
@@ -325,7 +323,7 @@ export class DossierManagementWidgetFieldsColumnComponent
                 },
               }),
           }));
-          this.changeEvent.emit({data: mappedRows, valid: this.formGroup.valid});
+          this.columnUpdateEvent.emit({data: mappedRows, valid: this.formGroup.valid});
         })
     );
   }

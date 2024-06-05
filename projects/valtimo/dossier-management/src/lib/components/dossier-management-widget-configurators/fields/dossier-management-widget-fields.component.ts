@@ -34,9 +34,9 @@ import {BehaviorSubject, combineLatest, debounceTime, map, Subscription} from 'r
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from './column/dossier-management-widget-fields-column.component';
+import {FieldsCaseWidgetValue} from '@valtimo/dossier';
 
 @Component({
-  selector: 'dossier-management-widget-fields',
   templateUrl: './dossier-management-widget-fields.component.html',
   styleUrls: ['./dossier-management-widget-fields.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,8 +57,7 @@ export class DossierManagementWidgetFieldsComponent
   implements WidgetContentComponent, OnDestroy, OnInit
 {
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field';
-  @Output() public readonly validEvent = new EventEmitter<boolean>();
-  @Output() changeEvent: EventEmitter<{data: any; valid: boolean}> = new EventEmitter();
+  @Output() public readonly changeValidEvent = new EventEmitter<boolean>();
 
   public form = this.fb.group({
     widgetTitle: this.fb.control(this.widgetWizardService.widgetTitle(), Validators.required),
@@ -99,8 +98,7 @@ export class DossierManagementWidgetFieldsComponent
         .subscribe(([formValid, contentValid]) => {
           if (formValid)
             this.widgetWizardService.widgetTitle.set(this.form.get('widgetTitle')?.value ?? '');
-          this.validEvent.emit(formValid && contentValid);
-          this.changeEvent.emit({data: '', valid: formValid && contentValid});
+          this.changeValidEvent.emit(formValid && contentValid);
         })
     );
     const widgetContent = this.widgetWizardService.widgetContent()?.columns;
@@ -150,7 +148,13 @@ export class DossierManagementWidgetFieldsComponent
     this.activeTab.set(-1);
   }
 
-  public onChangeEvent(event: {data: any; valid: boolean}, columnIndex: number): void {
+  public onColumnUpdateEvent(
+    event: {
+      data: FieldsCaseWidgetValue[];
+      valid: boolean;
+    },
+    columnIndex: number
+  ): void {
     this.widgetWizardService.widgetContent.update(content => {
       if (!content) return {columns: [event.data]};
 
@@ -158,7 +162,6 @@ export class DossierManagementWidgetFieldsComponent
         index === columnIndex ? event.data : column
       );
       return {
-        ...content,
         columns: columnIndex > columns.length - 1 ? [...columns, event.data] : columns,
       };
     });
