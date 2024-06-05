@@ -24,7 +24,7 @@ export class NumberTypeConverter implements TypeConverter {
     return 'number';
   }
 
-  convert(value: any, definition: any): string {
+  public convert(value: any, definition: any): string {
     if (!value) {
       return '-';
     }

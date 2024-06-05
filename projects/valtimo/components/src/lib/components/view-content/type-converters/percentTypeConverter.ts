@@ -24,7 +24,7 @@ export class PercentTypeConverter implements TypeConverter {
     return 'percent';
   }
 
-  convert(value: any, definition: any): string {
+  public convert(value: any, definition: any): string {
     if (!value) {
       return '-';
     }

@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  Input,
-  ViewEncapsulation,
-  signal,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, signal, ViewEncapsulation} from '@angular/core';
 import {
   CarbonListItem,
   CarbonListModule,
@@ -32,7 +25,7 @@ import {
 } from '@valtimo/components';
 import {Page} from '@valtimo/config';
 import {PaginationModel, PaginationModule, TilesModule} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, of, switchMap} from 'rxjs';
 import {FieldsCaseWidgetValue, TableCaseWidget} from '../../../../../../models';
 import {DossierWidgetsApiService} from '../../../../../../services';
 
@@ -46,8 +39,6 @@ import {DossierWidgetsApiService} from '../../../../../../services';
   imports: [CommonModule, CarbonListModule, PaginationModule, TilesModule],
 })
 export class WidgetTableComponent {
-  @HostBinding('class') public readonly class = 'valtimo-widget-table';
-
   @Input({required: true}) public documentId: string;
   @Input({required: true}) public tabKey: string;
 
@@ -119,8 +110,8 @@ export class WidgetTableComponent {
   private paginationInit = false;
 
   constructor(
-    private readonly dossierWidgetsApiService: DossierWidgetsApiService,
-    private readonly cdsThemeService: CdsThemeService
+    private readonly cdsThemeService: CdsThemeService,
+    private readonly dossierWidgetsApiService: DossierWidgetsApiService
   ) {}
 
   public onSelectPage(page: number): void {

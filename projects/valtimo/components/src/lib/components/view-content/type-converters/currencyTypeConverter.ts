@@ -24,7 +24,7 @@ export class CurrencyTypeConverter implements TypeConverter {
     return 'currency';
   }
 
-  convert(value: any, definition: any): string {
+  public convert(value: any, definition: any): string {
     if (!value) {
       return '-';
     }
