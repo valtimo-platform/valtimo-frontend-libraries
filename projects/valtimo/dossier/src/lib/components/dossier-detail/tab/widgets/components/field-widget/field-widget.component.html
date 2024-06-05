@@ -27,7 +27,7 @@
       @for (column of obs?.widgetPropertyValue; track column) {
         <div class="column">
           @for (property of column; track property) {
-            <div class="property">
+            <div class="mb-3">
               <cds-label>
                 {{ property?.title }}
                 <input cdsText [value]="property?.value" [readonly]="true" />
