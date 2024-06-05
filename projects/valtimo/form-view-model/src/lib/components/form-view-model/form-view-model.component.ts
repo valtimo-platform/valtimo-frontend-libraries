@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Optional, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
 import {
   BehaviorSubject, catchError,
@@ -39,6 +39,7 @@ import {FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
+import {DossierListService} from '@valtimo/dossier';
 
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
@@ -90,6 +91,10 @@ export class FormViewModelComponent implements OnInit {
     this.processDefinitionKey$.next(processDefinitionKeyValue);
   }
 
+  @Input() set documentDefinitionName(documentDefinitionNameValue: string) {
+    this.documentDefinitionName$.next(documentDefinitionNameValue);
+  }
+
   @Input() formRefresh$!: Subject<FormioRefreshValue>;
   @Output() formSubmit = new EventEmitter<any>();
 
@@ -107,6 +112,7 @@ export class FormViewModelComponent implements OnInit {
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly isStartForm$ = new BehaviorSubject<boolean>(false);
   public readonly processDefinitionKey$ = new BehaviorSubject<string>(undefined);
+  public readonly documentDefinitionName$ = new BehaviorSubject<string>(undefined);
 
   public readonly currentLanguage$ = this.translateService.stream('key').pipe(
     map(() => this.translateService.currentLang),
@@ -115,7 +121,7 @@ export class FormViewModelComponent implements OnInit {
 
   private readonly _overrideOptions$ = new BehaviorSubject<FormioOptions>({
     hooks: {
-      beforeSubmit: this.beforeSubmitHook(this),
+      beforeSubmit: this.beforeSubmitHook(this)
     },
   });
 
@@ -160,12 +166,12 @@ export class FormViewModelComponent implements OnInit {
   }
 
   public beforeSubmit(submission: any, callback: FormioSubmissionCallback): void {
-    combineLatest([this.formName$, this.taskInstanceId$, this.isStartForm$])
+    combineLatest([this.formName$, this.taskInstanceId$, this.processDefinitionKey$, this.documentDefinitionName$, this.isStartForm$])
       .pipe(
         take(1),
-        switchMap(([formName, taskInstanceId, isStartForm]) =>
+        switchMap(([formName, taskInstanceId, processDefinitionKey, documentDefinitionName, isStartForm]) =>
           isStartForm ?
-            this.viewModelService.submitViewModelForStartForm(formName, taskInstanceId, submission.data).pipe(
+            this.viewModelService.submitViewModelForStartForm(formName, processDefinitionKey, documentDefinitionName, submission.data).pipe(
               take(1),
               switchMap(response => {
                 callback(null, submission);
@@ -294,10 +300,10 @@ export class FormViewModelComponent implements OnInit {
       switchMap(updating => {
         if (!updating) {
           this.loading$.next(true);
-          return combineLatest([this.formName$, this.change$]).pipe(
+          return combineLatest([this.formName$, this.processDefinitionKey$, this.change$]).pipe(
             take(1),
-            switchMap(([formName, change]) =>
-              this.viewModelService.updateViewModelForStartForm(formName, change.data).pipe(
+            switchMap(([formName, processDefinitionKey, change]) =>
+              this.viewModelService.updateViewModelForStartForm(formName, processDefinitionKey, change.data).pipe(
                 tap({
                   next: viewModel => {
                     this.submission$.next({data: viewModel});

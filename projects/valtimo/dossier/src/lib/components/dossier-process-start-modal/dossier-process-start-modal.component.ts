@@ -36,6 +36,7 @@ import {DossierListService, StartModalService} from '../../services';
 import {ConfigService} from '@valtimo/config';
 import {FORM_VIEW_MODEL_TOKEN} from '@valtimo/config';
 import {FormViewModel} from '@valtimo/config';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'valtimo-dossier-process-start-modal',
@@ -204,8 +205,8 @@ export class DossierProcessStartModalComponent implements OnInit {
   }
 
   private setFormViewModelComponent() {
-    this.formViewModelDynamicContainer.clear();
     if (!this.formViewModel.component) return;
+    this.formViewModelDynamicContainer.clear();
     const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
         this.formViewModel.component
     );
@@ -213,5 +214,10 @@ export class DossierProcessStartModalComponent implements OnInit {
     formViewModelComponent.instance.formName = this.formName;
     formViewModelComponent.instance.isStartForm = true;
     formViewModelComponent.instance.processDefinitionKey = this.processDefinitionKey;
+    formViewModelComponent.instance.documentDefinitionName = this.documentDefinitionName;
+    formViewModelComponent.instance.formSubmit.subscribe(() => {
+      this.listService.forceRefresh();
+      this.modal.hide();
+    });
   }
 }

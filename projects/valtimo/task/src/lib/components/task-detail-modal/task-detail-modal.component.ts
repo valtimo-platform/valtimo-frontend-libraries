@@ -295,5 +295,11 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     formViewModelComponent.instance.formName = this.formName$.getValue();
     formViewModelComponent.instance.taskInstanceId = this.taskInstanceId$.getValue();
     formViewModelComponent.instance.isStartForm = false;
+    this._subscriptions.add(
+      formViewModelComponent.instance.formSubmit.subscribe(() => {
+        this.completeTask();
+        this.modal.hide();
+      })
+    );
   }
 }
