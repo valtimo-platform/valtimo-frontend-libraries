@@ -29,9 +29,10 @@
     [style.left.px]="obs.caseWidgetXY?.x"
   >
     <div #widgetBlockContent class="widget-block__content">
-      {{ stringifiedWidget$ | async }}
-      <valtimo-field-widget [widget]="stringifiedWidget$ | async"></valtimo-field-widget>
-
+      <valtimo-field-widget
+        [widget]="obs.widgetConfiguration"
+        [widgetData]="obs.widgetData"
+      ></valtimo-field-widget>
     </div>
   </div>
 </ng-container>
