@@ -14,7 +14,18 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Inject, OnInit, Optional, Output, ViewChild, ViewContainerRef, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation
+} from '@angular/core';
 import {PermissionService} from '@valtimo/access-control';
 import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {FormFlowService, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
@@ -44,7 +55,7 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./dossier-process-start-modal.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class DossierProcessStartModalComponent implements OnInit {
+export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
   public processDefinitionKey: string;
   public processDefinitionId: string;
   public documentDefinitionName: string;
@@ -64,6 +75,8 @@ export class DossierProcessStartModalComponent implements OnInit {
   @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef})
   public formViewModelDynamicContainer: ViewContainerRef;
   @Output() formFlowComplete = new EventEmitter();
+
+  private _subscriptions = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -85,6 +98,10 @@ export class DossierProcessStartModalComponent implements OnInit {
 
   ngOnInit() {
     this.isUserAdmin();
+  }
+
+  ngOnDestroy() {
+    this._subscriptions.unsubscribe();
   }
 
   private loadProcessLink() {
@@ -215,9 +232,11 @@ export class DossierProcessStartModalComponent implements OnInit {
     formViewModelComponent.instance.isStartForm = true;
     formViewModelComponent.instance.processDefinitionKey = this.processDefinitionKey;
     formViewModelComponent.instance.documentDefinitionName = this.documentDefinitionName;
-    formViewModelComponent.instance.formSubmit.pipe(take(1)).subscribe(() => {
-      this.listService.forceRefresh();
-      this.modal.hide();
-    });
+    this._subscriptions.add(
+      formViewModelComponent.instance.formSubmit.subscribe(() => {
+        this.listService.forceRefresh();
+        this.modal.hide();
+      })
+    );
   }
 }
