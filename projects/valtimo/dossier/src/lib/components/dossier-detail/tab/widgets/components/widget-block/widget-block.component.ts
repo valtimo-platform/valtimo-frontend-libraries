@@ -44,7 +44,7 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {LoadingModule} from 'carbon-components-angular';
 import {WidgetTableComponent} from '../table/widget-table.component';
-import {WidgetFieldComponent} from '../field-widget/widget-field.component';
+import {WidgetFieldComponent} from '../widget-field/widget-field.component';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
