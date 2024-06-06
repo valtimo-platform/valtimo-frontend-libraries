@@ -25,7 +25,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CaseWidgetType, CaseWidgetWithUuid, CaseWidgetXY} from '../../../../../../models';
+import {CaseWidgetPackResult, CaseWidgetType, CaseWidgetWithUuid} from '../../../../../../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -80,22 +80,30 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     return this._widget$.pipe(filter(widget => widget !== null));
   }
 
-  public readonly packResultAvailable$ = new BehaviorSubject<boolean>(false);
+  public readonly caseWidgetPackResult$: Observable<CaseWidgetPackResult> =
+    this.dossierWidgetsLayoutService.packResult$.pipe(
+      tap(packResult => {
+        const widgetPackResult = packResult.items.find(
+          packItem => packItem.item.configurationKey === this._widgetUuid
+        );
 
-  public readonly caseWidgetXY$: Observable<CaseWidgetXY> = combineLatest([
-    this.dossierWidgetsLayoutService.packResult$,
-    this.packResultAvailable$,
-  ]).pipe(
-    map(([packResult, packResultAvailable]) => {
-      const widgetPackResult = packResult.items.find(
-        packItem => packItem.item.configurationKey === this._widgetUuid
-      );
+        if (!widgetPackResult) return;
 
-      if (widgetPackResult && !packResultAvailable) this.packResultAvailable$.next(true);
+        this.renderer.setStyle(
+          this._widgetBlockRef.nativeElement,
+          'top',
+          `${widgetPackResult.y}px`
+        );
 
-      return widgetPackResult ? {x: widgetPackResult.x, y: widgetPackResult.y} : {x: 0, y: 0};
-    })
-  );
+        this.renderer.setStyle(
+          this._widgetBlockRef.nativeElement,
+          'left',
+          `${widgetPackResult.x}px`
+        );
+
+        this.dossierWidgetsLayoutService.setCaseWidgetXYSet(this._widgetUuid);
+      })
+    );
 
   private readonly _caseWidgetWidthsPx$ = this.dossierWidgetsLayoutService.caseWidgetWidthsPx$;
   public readonly CaseWidgetType = CaseWidgetType;
