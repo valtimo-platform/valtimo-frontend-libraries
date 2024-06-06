@@ -30,7 +30,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {DropdownModule, InputModule, SelectModule} from 'carbon-components-angular';
 import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {WidgetContentComponent, WidgetCustomContent} from '../../../models';
-import {CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
+import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {WidgetWizardService} from '../../../services';
 import {CUSTOM_CASE_WIDGET_TOKEN, CustomCaseWidgetConfig} from '@valtimo/dossier';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
@@ -66,7 +66,7 @@ export class DossierManagementWidgetCustomComponent
 
   public readonly theme$ = this.cdsThemeService.currentTheme$.pipe(
     map((theme: CurrentCarbonTheme) =>
-      theme === CurrentCarbonTheme.G10 ? 'white' : CurrentCarbonTheme.G90
+      theme === CurrentCarbonTheme.G10 ? CARBON_THEME.WHITE : CARBON_THEME.G90
     )
   );
 

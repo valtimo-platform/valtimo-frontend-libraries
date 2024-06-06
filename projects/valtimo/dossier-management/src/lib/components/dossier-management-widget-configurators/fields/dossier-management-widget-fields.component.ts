@@ -28,7 +28,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
+import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {ButtonModule, IconModule, InputModule, TabsModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, debounceTime, map, Subscription} from 'rxjs';
 import {WidgetContentComponent, WidgetFieldsContent} from '../../../models';
@@ -68,7 +68,7 @@ export class DossierManagementWidgetFieldsComponent
   public readonly selectedTabIndex = -1;
   public readonly theme$ = this.cdsThemeService.currentTheme$.pipe(
     map((theme: CurrentCarbonTheme) =>
-      theme === CurrentCarbonTheme.G10 ? 'white' : CurrentCarbonTheme.G90
+      theme === CurrentCarbonTheme.G10 ? CARBON_THEME.WHITE : CARBON_THEME.G90
     )
   );
   public readonly selectedWidgetContent = computed(() =>
@@ -101,7 +101,8 @@ export class DossierManagementWidgetFieldsComponent
           this.changeValidEvent.emit(formValid && contentValid);
         })
     );
-    const widgetContent = (this.widgetWizardService.widgetContent() as WidgetFieldsContent)?.columns;
+    const widgetContent = (this.widgetWizardService.widgetContent() as WidgetFieldsContent)
+      ?.columns;
     if (!widgetContent) return;
 
     this.columns.set(Object.keys(widgetContent).map(() => null));
@@ -122,7 +123,7 @@ export class DossierManagementWidgetFieldsComponent
   }
 
   public onDeleteColumnClick(index: number): void {
-    this.widgetWizardService.widgetContent.update((content) => {
+    this.widgetWizardService.widgetContent.update(content => {
       if (!content) return null;
 
       const widgetContent = content as WidgetFieldsContent;
