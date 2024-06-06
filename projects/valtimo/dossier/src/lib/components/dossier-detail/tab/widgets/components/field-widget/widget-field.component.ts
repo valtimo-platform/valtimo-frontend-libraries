@@ -28,14 +28,14 @@ import {InputModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-field-widget',
-  templateUrl: './field-widget.component.html',
-  styleUrls: ['./field-widget.component.scss'],
+  templateUrl: './widget-field.component.html',
+  styleUrls: ['./widget-field.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, FieldWidgetComponent, InputModule],
+  imports: [CommonModule, WidgetFieldComponent, InputModule],
 })
-export class FieldWidgetComponent {
+export class WidgetFieldComponent {
   @HostBinding('class') public readonly class = 'field-widget';
   @Input() public set widgetConfiguration(value: CaseWidgetWithUuid) {
     if (!value) return;

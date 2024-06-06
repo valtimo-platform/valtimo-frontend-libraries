@@ -25,7 +25,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CaseWidgetWithUuid, CaseWidgetXY, CaseWidgetType} from '../../../../../../models';
+import {CaseWidgetType, CaseWidgetWithUuid, CaseWidgetXY} from '../../../../../../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -44,17 +44,16 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {LoadingModule} from 'carbon-components-angular';
 import {WidgetTableComponent} from '../table/widget-table.component';
-import {FieldWidgetComponent} from '../field-widget/field-widget.component';
+import {WidgetFieldComponent} from '../field-widget/widget-field.component';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
   templateUrl: './widget-block.component.html',
   styleUrls: ['./widget-block.component.scss'],
   standalone: true,
-  imports: [CommonModule, LoadingModule, WidgetTableComponent, FieldWidgetComponent],
+  imports: [CommonModule, LoadingModule, WidgetTableComponent, WidgetFieldComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   @ViewChild('widgetBlockContent') private _widgetBlockContentRef: ElementRef<HTMLDivElement>;
   @ViewChild('widgetBlock') private _widgetBlockRef: ElementRef<HTMLDivElement>;
@@ -97,11 +96,7 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   public readonly tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
 
-  public readonly widgetData$ = combineLatest([
-    this.widget$,
-    this.tabKey$,
-    this.documentId$,
-  ]).pipe(
+  public readonly widgetData$ = combineLatest([this.widget$, this.tabKey$, this.documentId$]).pipe(
     switchMap(([widget, tabkey, documentId]) =>
       this.widgetsApiService.getWidgetData(documentId, tabkey, widget.key)
     ),

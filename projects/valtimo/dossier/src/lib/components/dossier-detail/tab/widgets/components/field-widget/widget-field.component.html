@@ -20,11 +20,11 @@
     widgetPropertyValue: widgetPropertyValue$ | async
   } as obs"
 >
-  <h4 class="field-widget__title">{{ obs?.widgetConfiguration?.title }}</h4>
+  <h4 class="widget-field__title">{{ obs?.widgetConfiguration?.title }}</h4>
 
-  <div class="field-widget__container">
+  <div class="widget-field__container">
     @for (column of obs?.widgetPropertyValue; track column.key) {
-      <div class="field-widget__column">
+      <div class="widget-field__column">
         @for (property of column; track property) {
           <cds-label>
             {{ property?.title }}
