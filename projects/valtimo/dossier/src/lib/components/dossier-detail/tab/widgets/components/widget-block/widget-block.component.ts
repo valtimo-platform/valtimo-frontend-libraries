@@ -63,8 +63,8 @@ import {WidgetFieldComponent} from '../field/widget-field.component';
     CarbonListModule,
     TranslateModule,
     TilesModule,
+    WidgetFieldComponent,
   ],
-  imports: [CommonModule, LoadingModule, WidgetTableComponent, WidgetFieldComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetBlockComponent implements AfterViewInit, OnDestroy {

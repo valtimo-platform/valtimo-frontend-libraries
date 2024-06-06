@@ -23,7 +23,7 @@ import {
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
-import {CaseWidgetWithUuid} from '../../../../../../models';
+import {FieldsCaseWidget} from '../../../../../../models';
 import {InputModule} from 'carbon-components-angular';
 
 @Component({
@@ -36,8 +36,8 @@ import {InputModule} from 'carbon-components-angular';
   imports: [CommonModule, WidgetFieldComponent, InputModule],
 })
 export class WidgetFieldComponent {
-  @HostBinding('class') public readonly class = 'field-widget';
-  @Input() public set widgetConfiguration(value: CaseWidgetWithUuid) {
+  @HostBinding('class') public readonly class = 'widget-field';
+  @Input() public set widgetConfiguration(value: FieldsCaseWidget) {
     if (!value) return;
     this.widgetConfiguration$.next(value);
   }
@@ -47,10 +47,10 @@ export class WidgetFieldComponent {
     this.widgetData$.next(value);
   }
 
-  public readonly widgetConfiguration$ = new BehaviorSubject<CaseWidgetWithUuid | null>(null);
+  public readonly widgetConfiguration$ = new BehaviorSubject<FieldsCaseWidget | null>(null);
   public readonly widgetData$ = new BehaviorSubject<object | null>(null);
 
-  public readonly widgetPropertyValue$: Observable<{title: string; value: string}[]> =
+  public readonly widgetPropertyValue$: Observable<{title: string; value: string}[][]> =
     combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
       map(([widget, widgetData]) =>
         widget.properties.columns.map(column =>
