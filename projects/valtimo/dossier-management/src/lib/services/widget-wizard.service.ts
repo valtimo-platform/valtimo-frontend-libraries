@@ -1,5 +1,5 @@
 import {computed, Injectable, Signal, signal, WritableSignal} from '@angular/core';
-import {WidgetStyle, WidgetTypeSelection} from '../models';
+import {WidgetContentProperties, WidgetStyle, WidgetTypeSelection} from '../models';
 import {BasicCaseWidget, CaseWidgetType, CaseWidgetWidth} from '@valtimo/dossier';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class WidgetWizardService {
 
   public readonly widgetStyle: WritableSignal<WidgetStyle | null> = signal(null);
 
-  public readonly widgetContent: WritableSignal<{[columnIndex: number]: any} | null> = signal(null);
+  public readonly widgetContent: WritableSignal<WidgetContentProperties | null> = signal(null);
 
   public readonly widgetTitle: WritableSignal<string | null> = signal(null);
 
@@ -23,7 +23,7 @@ export class WidgetWizardService {
     width: this.widgetWidth() ?? 4,
     highContrast: (this.widgetStyle() ?? WidgetStyle.DEFAULT) === WidgetStyle.HIGH_CONTRAST,
     properties: {
-      columns: Object.values(this.widgetContent() ?? {}),
+      ...this.widgetContent(),
     },
   }));
 
