@@ -15,12 +15,12 @@
  */
 
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Inject,
   Input,
   OnDestroy,
-  OnInit,
   Optional,
   signal,
   ViewChild,
@@ -41,7 +41,7 @@ import {TranslateModule} from '@ngx-translate/core';
   imports: [CommonModule, CarbonListModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomWidgetComponent implements OnInit, OnDestroy {
+export class CustomWidgetComponent implements AfterViewInit, OnDestroy {
   @ViewChild('customWidgetContainer', {read: ViewContainerRef})
   customWidgetContainerRef: ViewContainerRef;
 
@@ -69,7 +69,7 @@ export class CustomWidgetComponent implements OnInit, OnDestroy {
     if (customCaseWidgetConfig) this._customCaseWidgetConfig$.next(customCaseWidgetConfig);
   }
 
-  public ngOnInit(): void {
+  public ngAfterViewInit(): void {
     this.openCustomWidgetSubscription();
   }
 
@@ -88,6 +88,8 @@ export class CustomWidgetComponent implements OnInit, OnDestroy {
             this.noCustomComponentAvailable.set(true);
             return;
           }
+
+          this.customWidgetContainerRef.createComponent(customComponent);
         }
       )
     );
