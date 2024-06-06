@@ -17,25 +17,21 @@
 <ng-container
   *ngIf="{
     widgetConfiguration: widgetConfiguration$ | async,
-    widgetData: widgetData$ | async,
     widgetPropertyValue: widgetPropertyValue$ | async
   } as obs"
 >
-  <div class="field-widget-container">
-    <h4 class="field-widget-title">{{ obs?.widgetConfiguration?.title }}</h4>
-    <div class="column-container">
-      @for (column of obs?.widgetPropertyValue; track column) {
-        <div class="column">
-          @for (property of column; track property) {
-            <div class="mb-3">
-              <cds-label class="mb-3">
-                {{ property?.title }}
-                <input cdsText [value]="property?.value" [readonly]="true" />
-              </cds-label>
-            </div>
-          }
-        </div>
-      }
-    </div>
+  <h4 class="field-widget__title">{{ obs?.widgetConfiguration?.title }}</h4>
+
+  <div class="field-widget__container">
+    @for (column of obs?.widgetPropertyValue; track column.key) {
+      <div class="field-widget__column">
+        @for (property of column; track property) {
+          <cds-label>
+            {{ property?.title }}
+            <input cdsText [value]="property?.value" [readonly]="true" />
+          </cds-label>
+        }
+      </div>
+    }
   </div>
 </ng-container>

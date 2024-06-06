@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+  ViewEncapsulation,
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 import {CaseWidgetWithUuid} from '../../../../../../models';
@@ -24,13 +30,13 @@ import {InputModule} from 'carbon-components-angular';
   selector: 'valtimo-field-widget',
   templateUrl: './field-widget.component.html',
   styleUrls: ['./field-widget.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   standalone: true,
   imports: [CommonModule, FieldWidgetComponent, InputModule],
 })
 export class FieldWidgetComponent {
-  public readonly widgetConfiguration$ = new BehaviorSubject<CaseWidgetWithUuid | null>(null);
-  public readonly widgetData$ = new BehaviorSubject<object | null>(null);
-
+  @HostBinding('class') public readonly class = 'field-widget';
   @Input() public set widgetConfiguration(value: CaseWidgetWithUuid) {
     if (!value) return;
     this.widgetConfiguration$.next(value);
@@ -41,23 +47,22 @@ export class FieldWidgetComponent {
     this.widgetData$.next(value);
   }
 
-  public readonly widgetPropertyValue$: Observable<any> = combineLatest([
-    this.widgetConfiguration$,
-    this.widgetData$,
-  ]).pipe(
-    map(([widget, widgetData]) => {
-      return widget.properties.columns.map(column => {
-        return column.map(property => {
-          if (widgetData?.hasOwnProperty(property.key)) {
-            return {
-              title: property.title,
-              value: widgetData[property.key] || '-',
-            };
-          }
-        });
-      });
-    })
-  );
+  public readonly widgetConfiguration$ = new BehaviorSubject<CaseWidgetWithUuid | null>(null);
+  public readonly widgetData$ = new BehaviorSubject<object | null>(null);
 
-  constructor() {}
+  public readonly widgetPropertyValue$: Observable<{title: string; value: string}[]> =
+    combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
+      map(([widget, widgetData]) =>
+        widget.properties.columns.map(column =>
+          column.map(property => {
+            if (widgetData?.hasOwnProperty(property.key)) {
+              return {
+                title: property.title,
+                value: widgetData[property.key] || '-',
+              };
+            }
+          })
+        )
+      )
+    );
 }
