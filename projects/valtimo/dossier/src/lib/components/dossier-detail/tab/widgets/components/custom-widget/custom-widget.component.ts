@@ -43,7 +43,7 @@ import {TranslateModule} from '@ngx-translate/core';
 })
 export class CustomWidgetComponent implements AfterViewInit, OnDestroy {
   @ViewChild('customWidgetContainer', {read: ViewContainerRef})
-  customWidgetContainerRef: ViewContainerRef;
+  private readonly _customWidgetContainerRef: ViewContainerRef;
 
   @Input() public set widgetConfig(value: CustomCaseWidget) {
     if (value) this._widgetConfigSubject$.next(value);
@@ -89,7 +89,7 @@ export class CustomWidgetComponent implements AfterViewInit, OnDestroy {
             return;
           }
 
-          this.customWidgetContainerRef.createComponent(customComponent);
+          this._customWidgetContainerRef.createComponent(customComponent);
         }
       )
     );
