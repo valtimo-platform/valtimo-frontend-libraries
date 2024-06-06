@@ -28,6 +28,7 @@
         @for (property of column; track property) {
           <cds-label>
             {{ property?.title }}
+
             <input cdsText [value]="property?.value" [readonly]="true" />
           </cds-label>
         }

@@ -25,6 +25,7 @@ import {CommonModule} from '@angular/common';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 import {FieldsCaseWidget} from '../../../../../../models';
 import {InputModule} from 'carbon-components-angular';
+import {ViewContentService} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-widget-field',
@@ -53,16 +54,29 @@ export class WidgetFieldComponent {
   public readonly widgetPropertyValue$: Observable<{title: string; value: string}[][]> =
     combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
       map(([widget, widgetData]) =>
-        widget.properties.columns.map(column =>
-          column.map(property => {
-            if (widgetData?.hasOwnProperty(property.key)) {
-              return {
-                title: property.title,
-                value: widgetData[property.key] || '-',
-              };
-            }
-          })
+        widget?.properties.columns.map(column =>
+          column.reduce(
+            (columnFields, property) => [
+              ...columnFields,
+              ...(widgetData?.hasOwnProperty(property.key)
+                ? [
+                    {
+                      title: property.title,
+                      value: !!widgetData[property.key]
+                        ? this.viewContentService.get(widgetData[property.key], {
+                            ...property.displayProperties,
+                            viewType: property.displayProperties?.type,
+                          })
+                        : '-',
+                    },
+                  ]
+                : []),
+            ],
+            []
+          )
         )
       )
     );
+
+  constructor(private viewContentService: ViewContentService) {}
 }
