@@ -34,14 +34,14 @@ import {CarbonListModule} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
-  selector: 'valtimo-custom-widget',
-  templateUrl: './custom-widget.component.html',
-  styleUrls: ['./custom-widget.component.scss'],
+  selector: 'valtimo-widget-custom',
+  templateUrl: './widget-custom.component.html',
+  styleUrls: ['./widget-custom.component.scss'],
   standalone: true,
   imports: [CommonModule, CarbonListModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomWidgetComponent implements AfterViewInit, OnDestroy {
+export class WidgetCustomComponent implements AfterViewInit, OnDestroy {
   @ViewChild('customWidgetContainer', {read: ViewContainerRef})
   private readonly _customWidgetContainerRef: ViewContainerRef;
 

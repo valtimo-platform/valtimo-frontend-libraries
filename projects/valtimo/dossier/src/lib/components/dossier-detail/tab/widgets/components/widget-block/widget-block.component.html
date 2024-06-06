@@ -37,7 +37,7 @@
           ></valtimo-widget-table>
         }
         @case (CaseWidgetType.CUSTOM) {
-          <valtimo-custom-widget [widgetConfig]="obs.widgetConfiguration"></valtimo-custom-widget>
+          <valtimo-widget-custom [widgetConfig]="obs.widgetConfiguration"></valtimo-widget-custom>
         }
         @default {
           <div class="widget-block__not-available">

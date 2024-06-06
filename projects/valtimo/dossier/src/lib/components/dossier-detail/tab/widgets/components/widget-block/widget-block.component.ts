@@ -45,7 +45,7 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {LoadingModule, TilesModule} from 'carbon-components-angular';
 import {WidgetTableComponent} from '../table/widget-table.component';
-import {CustomWidgetComponent} from '../custom-widget/custom-widget.component';
+import {WidgetCustomComponent} from '../custom/widget-custom.component';
 import {CarbonListModule, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
 
@@ -58,7 +58,7 @@ import {TranslateModule} from '@ngx-translate/core';
     CommonModule,
     LoadingModule,
     WidgetTableComponent,
-    CustomWidgetComponent,
+    WidgetCustomComponent,
     CarbonListModule,
     TranslateModule,
     TilesModule,
