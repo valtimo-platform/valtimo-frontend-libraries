@@ -27,7 +27,7 @@ import {CaseWidgetWithUuid} from '../../../../../../models';
 import {InputModule} from 'carbon-components-angular';
 
 @Component({
-  selector: 'valtimo-field-widget',
+  selector: 'valtimo-widget-field',
   templateUrl: './widget-field.component.html',
   styleUrls: ['./widget-field.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
