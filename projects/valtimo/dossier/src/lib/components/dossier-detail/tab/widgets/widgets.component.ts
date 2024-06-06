@@ -15,9 +15,9 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, HostBinding, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, delay, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {
   DossierTabService,
   DossierWidgetsApiService,
@@ -41,7 +41,7 @@ import {TranslateModule} from '@ngx-translate/core';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierDetailWidgetsComponent implements OnDestroy {
+export class DossierDetailWidgetsComponent implements OnInit, OnDestroy {
   @HostBinding('class.tab--no-margin') private readonly _noMargin = true;
   @HostBinding('class.tab--no-background') private readonly _noBackground = true;
   @HostBinding('class.tab--no-min-height') private readonly _noMinHeight = true;
@@ -65,8 +65,7 @@ export class DossierDetailWidgetsComponent implements OnDestroy {
     tap(() => this.loadingWidgetConfiguration$.next(false))
   );
 
-  public readonly dataLoadedForAllWidgets$ =
-    this.dossierWidgetsLayoutService.dataLoadedForAllWidgets$;
+  public readonly loaded$ = this.dossierWidgetsLayoutService.loaded$.pipe(delay(0));
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -75,7 +74,12 @@ export class DossierDetailWidgetsComponent implements OnDestroy {
     private readonly dossierWidgetsLayoutService: DossierWidgetsLayoutService
   ) {}
 
+  public ngOnInit(): void {
+    this.dossierTabService.disableTabHorizontalOverflow();
+  }
+
   public ngOnDestroy(): void {
     this.dossierWidgetsLayoutService.reset();
+    this.dossierTabService.enableTabHorizontalOverflow();
   }
 }

@@ -15,18 +15,23 @@
  */
 
 import {CaseWidgetDisplayType} from '.';
+import {Type} from '@angular/core';
 
 enum CaseWidgetType {
   FIELDS = 'fields',
+  TABLE = 'table',
+  CUSTOM = 'custom',
 }
 
 type CaseWidgetWidth = 1 | 2 | 3 | 4;
 
 interface BasicCaseWidget {
+  type: CaseWidgetType;
   title: string;
   width: CaseWidgetWidth;
   highContrast: boolean;
   key: string;
+  properties: object;
 }
 
 interface FieldsCaseWidgetValue {
@@ -43,11 +48,24 @@ interface FieldsCaseWidget extends BasicCaseWidget {
   };
 }
 
-type CaseWidget = FieldsCaseWidget;
-
-interface CaseWidgetWithUuid extends CaseWidget {
-  uuid: string;
+interface TableCaseWidget extends BasicCaseWidget {
+  type: CaseWidgetType.TABLE;
+  properties: {
+    columns: FieldsCaseWidgetValue[];
+  };
 }
+interface CustomCaseWidget extends BasicCaseWidget {
+  type: CaseWidgetType.CUSTOM;
+  properties: {
+    componentKey: string;
+  };
+}
+
+type CaseWidget = FieldsCaseWidget | CustomCaseWidget  |TableCaseWidget;
+
+type CaseWidgetWithUuid = CaseWidget & {
+  uuid: string;
+};
 
 interface CaseWidgetsRes {
   caseDefinitionName: string;
@@ -93,15 +111,26 @@ interface CaseWidgetXY {
   y: number;
 }
 
+interface CustomCaseWidgetConfig {
+  [componentKey: string]: Type<any>;
+}
+
 export {
-  FieldsCaseWidget,
+  BasicCaseWidget,
   CaseWidget,
-  CaseWidgetsRes,
-  CaseWidgetWithUuid,
-  CaseWidgetWidthsPx,
+  CaseWidgetConfigurationBin,
   CaseWidgetContentHeightsPx,
   CaseWidgetContentHeightsPxWithContainerWidth,
-  CaseWidgetConfigurationBin,
   CaseWidgetPackResult,
+  CaseWidgetsRes,
+  CaseWidgetType,
+  CaseWidgetWidth,
+  CaseWidgetWidthsPx,
+  CaseWidgetWithUuid,
   CaseWidgetXY,
+  FieldsCaseWidget,
+  FieldsCaseWidgetValue,
+  CustomCaseWidgetConfig,
+  CustomCaseWidget,
+  TableCaseWidget,
 };
