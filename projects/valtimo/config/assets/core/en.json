@@ -164,7 +164,9 @@
     "rowLocked": "You don't have access to this case",
     "widgets": {
       "noWidgets": "No widgets",
-      "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them."
+      "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them.",
+      "noWidget": "Widget not found",
+      "noCustomComponentDescription": "The custom component configured for this widget is not available."
     }
   },
   "document": {
@@ -1578,7 +1580,11 @@
     "back": "Go back",
     "next": "Next",
     "pluginDescription": "Plugin description",
-    "unlink": "Unlink"
+    "unlink": "Unlink",
+    "toggleViewModel": {
+      "title": "View Model enabled?",
+      "checkboxDescription": "Enables Form View Model form processing"
+    }
   },
   "processLinkType": {
     "plugin": "Plugin",

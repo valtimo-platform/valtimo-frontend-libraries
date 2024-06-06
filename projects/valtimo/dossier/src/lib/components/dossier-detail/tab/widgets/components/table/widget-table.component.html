@@ -17,10 +17,8 @@
 <cds-tile
   *ngIf="{
     fields: fields$ | async,
-    widgetData: widgetData$ | async,
-    theme: theme$ | async
+    widgetData: widgetData$ | async
   } as obs"
-  [attr.data-carbon-theme]="obs.theme"
   class="valtimo-widget-table"
 >
   <span class="widget-title">{{ widgetConfiguration?.title }}</span>
