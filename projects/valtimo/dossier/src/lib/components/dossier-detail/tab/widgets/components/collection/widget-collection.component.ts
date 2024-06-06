@@ -13,3 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+  ViewEncapsulation,
+} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {InputModule} from 'carbon-components-angular';
+import {FieldsCaseWidget} from '../../../../../../models';
+import {BehaviorSubject} from 'rxjs';
+
+@Component({
+  selector: 'valtimo-widget-collection',
+  templateUrl: './widget-collection.component.html',
+  styleUrls: ['./widget-collection.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [CommonModule, WidgetCollectionComponent, InputModule],
+})
+export class WidgetCollectionComponent {
+  @HostBinding('class') public readonly class = 'widget-collection';
+  @Input() public set widgetConfiguration(value: FieldsCaseWidget) {
+    if (!value) return;
+    this.widgetConfiguration$.next(value);
+  }
+
+  @Input() public set widgetData(value: object) {
+    if (!value) return;
+    this.widgetData$.next(value);
+  }
+
+  public readonly widgetConfiguration$ = new BehaviorSubject<FieldsCaseWidget | null>(null);
+  public readonly widgetData$ = new BehaviorSubject<object | null>(null);
+
+  constructor() {}
+}

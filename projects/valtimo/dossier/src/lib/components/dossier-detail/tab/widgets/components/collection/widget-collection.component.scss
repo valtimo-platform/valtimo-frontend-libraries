@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-.widget-field {
+.widget-collection {
   padding: 24px;
 
   &__title {
@@ -23,5 +23,20 @@
     font-size: 16px;
     line-height: 24px;
     margin-bottom: 16px;
+  }
+
+  &__card {
+    &__title {
+      font-weight: 500;
+      font-size: 14px;
+      font-style: italic;
+      line-height: 22px;
+    }
+
+    &__container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
   }
 }

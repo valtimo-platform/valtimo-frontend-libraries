@@ -49,6 +49,7 @@ import {WidgetCustomComponent} from '../custom/widget-custom.component';
 import {CarbonListModule, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
 import {WidgetFieldComponent} from '../field/widget-field.component';
+import {WidgetCollectionComponent} from '../collection/widget-collection.component';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
@@ -64,6 +65,7 @@ import {WidgetFieldComponent} from '../field/widget-field.component';
     TranslateModule,
     TilesModule,
     WidgetFieldComponent,
+    WidgetCollectionComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

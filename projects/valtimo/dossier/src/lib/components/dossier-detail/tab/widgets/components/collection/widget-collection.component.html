@@ -14,6 +14,17 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="{} as obs">
-  <h4 class="widget-collection__title">{{}}</h4>
+<ng-container>
+  <h4 class="widget-collection__title">Testing</h4>
+  <div class="widget-collection__card">
+    <h4 class="widget-collection__card__title">Testing</h4>
+    <div class="widget-collection__card__container">
+      <div>
+        <cds-label>
+          Testing
+          <input cdsText [value]="''" [readonly]="true" />
+        </cds-label>
+      </div>
+    </div>
+  </div>
 </ng-container>
