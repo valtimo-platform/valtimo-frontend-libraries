@@ -164,7 +164,9 @@
     "rowLocked": "You don't have access to this case",
     "widgets": {
       "noWidgets": "No widgets",
-      "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them."
+      "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them.",
+      "noWidget": "Widget not found",
+      "noCustomComponentDescription": "The custom component configured for this widget is not available."
     }
   },
   "document": {
@@ -663,6 +665,84 @@
       "form": {
         "tabName": "Tab name"
       }
+    },
+    "list": {
+      "add": "Add widget"
+    },
+    "wizard": {
+      "title": "Create widget",
+      "steps": {
+        "content": "Choose widget content",
+        "style": "Choose widget style",
+        "type": "Choose widget type",
+        "width": "Choose widget width"
+      }
+    },
+    "types": {
+      "description": "Choose the widget type you want to configure.",
+      "fields": {
+        "title": "Fields",
+        "description": "Text data with content and a label"
+      },
+      "custom": {
+        "title": "Custom component",
+        "description": "For complex content"
+      }
+    },
+    "width": {
+      "description": "Select the desired width for the widget. Be aware that there can be no more than 4 columns of content next to each other.",
+      "quarter": {
+        "title": "1/4",
+        "description": "One column of content"
+      },
+      "half": {
+        "title": "Half",
+        "description": "Two columns of content"
+      },
+      "threeQuarters": {
+        "title": "3/4",
+        "description": "Three columns of content"
+      },
+      "fullWidth": {
+        "title": "Full-width",
+        "description": "Four columns of content"
+      }
+    },
+    "style": {
+      "description": "Select the desired style for the widget",
+      "default": {
+        "title": "Default",
+        "description": "For regular content"
+      },
+      "highContrast": {
+        "title": "High contrast",
+        "description": "For higher priority content"
+      }
+    },
+    "content": {
+      "description": "Enter the content for each column. Keep in mind that not all fields are the same height. For the best result make sure items are properly distributed.",
+      "widgetTitle": "Widget title",
+      "widgetTitlePlaceholder": "Choose a short name",
+      "column": "Column {{number}}",
+      "fields": {
+        "add": "Add field",
+        "addEnum": "Add enum value",
+        "currencyCode": "Currency code",
+        "digitsInfo": "Number format",
+        "display": "Display",
+        "format": "Format",
+        "key": "Key",
+        "title": "Title",
+        "titlePlaceholder": "Choose a title",
+        "type": "Type",
+        "typePlaceholder": "Choose type",
+        "value": "Value",
+        "valuePlaceholder": "Path to value"
+      },
+      "custom": {
+        "selectComponent": "Angular component",
+        "placeholder": "Select a component"
+      }
     }
   },
   "zgw": {
@@ -953,7 +1033,11 @@
       "ascending": "Ascending",
       "descending": "Descending",
       "noDefault": "No default sort"
-    }
+    },
+    "editor": {
+      "visualEditor": "Visual editor"
+    },
+    "key": "Key"
   },
   "taskDetail": {
     "taskCreated": "Created",
@@ -1504,7 +1588,11 @@
     "back": "Go back",
     "next": "Next",
     "pluginDescription": "Plugin description",
-    "unlink": "Unlink"
+    "unlink": "Unlink",
+    "toggleViewModel": {
+      "title": "View Model enabled?",
+      "checkboxDescription": "Enables Form View Model form processing"
+    }
   },
   "processLinkType": {
     "plugin": "Plugin",
