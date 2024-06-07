@@ -115,7 +115,7 @@ export class TaskService extends BaseApiService {
     return this.httpClient.get<TaskProcessLinkResult>(
       this.getApiUrl(`/v2/process-link/task/${taskId}`),
       {
-        headers: {[InterceptorSkip]: ''},
+        headers: {[InterceptorSkip]: '404'},
       }
     );
   }
