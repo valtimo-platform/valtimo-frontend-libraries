@@ -154,19 +154,19 @@ export class DossierWidgetsLayoutService implements OnDestroy {
   }
 
   public setWidgetContentHeight(uuid: string, height: number): void {
-    this._containerWidth$.pipe(take(1)).subscribe(containerWidth => {
-      const contentHeight = this._widgetsContentHeights[uuid];
+    this._containerWidth$.pipe(take(1)).subscribe(currentContainerWidth => {
+      const storedContentHeight = this._widgetsContentHeights[uuid];
 
       if (
-        !contentHeight ||
-        contentHeight.height !== height ||
-        contentHeight.containerWidth !== containerWidth
+        !storedContentHeight ||
+        storedContentHeight.height !== height ||
+        storedContentHeight.containerWidth !== currentContainerWidth
       ) {
         this._widgetsContentHeightsSubject$.next({
           ...this._widgetsContentHeights,
           [uuid]: {
             height: height,
-            containerWidth,
+            containerWidth: currentContainerWidth,
           },
         });
       }
