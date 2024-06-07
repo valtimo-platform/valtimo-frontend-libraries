@@ -66,20 +66,20 @@ export class DossierManagementWidgetFormioComponent
     )
   );
 
-  private readonly _selectedFormDefinitionId$ = new BehaviorSubject<string | null>(null);
+  private readonly _selectedFormDefinitionName$ = new BehaviorSubject<string | null>(null);
 
   private readonly _formDefinitionOptions$ = new BehaviorSubject<FormDefinitionOption[]>([]);
 
   public readonly formListItems$: Observable<ListItem[]> = combineLatest([
     this._formDefinitionOptions$,
-    this._selectedFormDefinitionId$,
+    this._selectedFormDefinitionName$,
   ]).pipe(
     filter(([options]) => !!options),
-    map(([options, selectedFormId]) =>
+    map(([options, selectedFormName]) =>
       options.map(option => ({
         content: option.name,
-        id: option.id,
-        selected: option.id === selectedFormId,
+        id: option.name,
+        selected: option.name === selectedFormName,
       }))
     )
   );
@@ -97,12 +97,12 @@ export class DossierManagementWidgetFormioComponent
     item: {id: string; selected: boolean};
     isUpdate: boolean;
   }): void {
-    const formDefinitionId = event?.item?.id;
+    const formDefinitionName = event?.item?.id;
 
-    if (!formDefinitionId) return;
+    if (!formDefinitionName) return;
 
-    this._selectedFormDefinitionId$.next(formDefinitionId);
-    this.widgetWizardService.widgetContent.set({formDefinition: formDefinitionId});
+    this._selectedFormDefinitionName$.next(formDefinitionName);
+    this.widgetWizardService.widgetContent.set({formDefinitionName: formDefinitionName});
     this.changeValidEvent.emit(true);
   }
 
@@ -131,12 +131,12 @@ export class DossierManagementWidgetFormioComponent
   }
 
   private prefill(): void {
-    const formDefinitionId = (this.widgetWizardService.widgetContent() as WidgetFormioContent)
-      ?.formDefinition;
+    const formDefinitionName = (this.widgetWizardService.widgetContent() as WidgetFormioContent)
+      ?.formDefinitionName;
 
-    if (!formDefinitionId) return;
+    if (!formDefinitionName) return;
 
-    this._selectedFormDefinitionId$.next(formDefinitionId);
+    this._selectedFormDefinitionName$.next(formDefinitionName);
     this.changeValidEvent.emit(true);
   }
 }
