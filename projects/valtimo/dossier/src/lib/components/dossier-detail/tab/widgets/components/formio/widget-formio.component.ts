@@ -18,47 +18,60 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {FormioCaseWidgetWidgetWithUuid} from '../../../../../../models';
-import {BehaviorSubject, combineLatest, filter, Observable, switchMap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {FormService} from '@valtimo/form';
+import {DossierWidgetsLayoutService} from '../../../../../../services';
+import {FormioForm} from '@formio/angular';
+import {FormIoModule} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-widget-formio',
   templateUrl: './widget-formio.component.html',
   styleUrls: ['./widget-formio.component.scss'],
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, FormIoModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetFormioComponent {
   @Input() public set documentId(value: string) {
-    if (value) this._documentId$.next(value);
+    if (value) this._documentIdSubject$.next(value);
   }
   @Input() public set widgetConfiguration(value: FormioCaseWidgetWidgetWithUuid) {
-    if (value) this._widgetConfigurationSubject$.next(value);
+    if (!value) return;
+    this.layoutService.setWidgetWithExternalData(value.uuid);
+    this._widgetConfigurationSubject$.next(value);
   }
 
   private readonly _widgetConfigurationSubject$ =
     new BehaviorSubject<FormioCaseWidgetWidgetWithUuid | null>(null);
-  private get widgetConfiguration$(): Observable<FormioCaseWidgetWidgetWithUuid> {
+  public get widgetConfiguration$(): Observable<FormioCaseWidgetWidgetWithUuid> {
     return this._widgetConfigurationSubject$.pipe(filter(config => !!config));
   }
 
-  private readonly _documentId$ = new BehaviorSubject<string>('');
-  private get documentId$(): Observable<string> {
-    return this._documentId$.pipe(filter(id => !!id));
+  private readonly _documentIdSubject$ = new BehaviorSubject<string>('');
+  private get _documentId$(): Observable<string> {
+    return this._documentIdSubject$.pipe(filter(id => !!id));
   }
 
-  public readonly prefilledFormDefinition$ = combineLatest([
+  public readonly prefilledFormDefinition$: Observable<FormioForm> = combineLatest([
     this.widgetConfiguration$,
-    this.documentId$,
+    this._documentId$,
   ]).pipe(
     switchMap(([config, documentId]) =>
-      this.formService.getFormDefinitionByNamePreFilled(
-        config.properties.formDefinition,
-        documentId
-      )
-    )
+      combineLatest([
+        this.formService.getFormDefinitionByNamePreFilled(
+          config.properties.formDefinition,
+          documentId
+        ),
+        of(config),
+      ])
+    ),
+    tap(([_, config]) => this.layoutService.setWidgetWithExternalDataReady(config.uuid)),
+    map(([formDef]) => formDef)
   );
 
-  constructor(private readonly formService: FormService) {}
+  constructor(
+    private readonly formService: FormService,
+    private readonly layoutService: DossierWidgetsLayoutService
+  ) {}
 }

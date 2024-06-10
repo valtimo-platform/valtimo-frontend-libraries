@@ -14,7 +14,8 @@
   ~ limitations under the License.
   -->
 
-<div
-  class="formioWidget-widget"
-  *ngIf="{prefilledFormDefinition: prefilledFormDefinition$ | async} as obs"
-></div>
+<div class="formio-widget" *ngIf="prefilledFormDefinition$ | async as prefilledFormDefinition">
+  <h4 class="formio-widget__title">{{ (widgetConfiguration$ | async)?.title || '-' }}</h4>
+
+  <valtimo-form-io [form]="prefilledFormDefinition"></valtimo-form-io>
+</div>
