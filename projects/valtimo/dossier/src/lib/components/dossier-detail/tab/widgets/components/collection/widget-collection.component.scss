@@ -16,6 +16,9 @@
 
 .widget-collection {
   padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
   &__title {
     color: var(--cds-text-primary);
@@ -25,18 +28,35 @@
     margin-bottom: 16px;
   }
 
-  &__card {
-    &__title {
-      font-weight: 500;
-      font-size: 14px;
-      font-style: italic;
-      line-height: 22px;
-    }
+  &__container {
+    display: flex;
+    column-gap: 24px;
+  }
 
-    &__container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+  &__column {
+    width: 100%;
+  }
+}
+
+.card-container {
+  background-color: var(--cds-background);
+  padding: 24px;
+
+  &__column-container {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__column {
+    width: 50%;
+  }
+
+  &__title {
+    color: var(--cds-text-primary);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 16px;
+    font-style: italic;
   }
 }

@@ -14,16 +14,57 @@
   ~ limitations under the License.
   -->
 
-<ng-container>
+<ng-container
+  *ngIf="{
+    widgetConfiguration: widgetConfiguration$ | async
+  } as obs"
+>
   <h4 class="widget-collection__title">Testing</h4>
-  <div class="widget-collection__card">
-    <h4 class="widget-collection__card__title">Testing</h4>
-    <div class="widget-collection__card__container">
-      <div>
-        <cds-label>
-          Testing
-          <input cdsText [value]="''" [readonly]="true" />
-        </cds-label>
+
+  <div class="widget-collection__container">
+    <div class="widget-collection__column">
+      <div class="card-container">
+        <h4 class="card-container__title">Testing column 1</h4>
+        <div class="card-container__column-container">
+          <div class="card-container__column">
+            <cds-label>
+              BSN
+
+              <input cdsText [value]="'Input test'" [readonly]="true" />
+            </cds-label>
+          </div>
+
+          <div class="card-container__column">
+            <cds-label>
+              Geboortedatum
+
+              <input cdsText [value]="'Input test'" [readonly]="true" />
+            </cds-label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget-collection__column">
+      <div class="card-container">
+        <h4 class="card-container__title">Testing column 1</h4>
+        <div class="card-container__column-container">
+          <div class="card-container__column">
+            <cds-label>
+              BSN
+
+              <input cdsText [value]="'Input test'" [readonly]="true" />
+            </cds-label>
+          </div>
+
+          <div class="card-container__column">
+            <cds-label>
+              Geboortedatum
+
+              <input cdsText [value]="'Input test'" [readonly]="true" />
+            </cds-label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
