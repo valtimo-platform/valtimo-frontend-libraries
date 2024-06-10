@@ -690,6 +690,10 @@
       "formio": {
         "title": "Form.io",
         "description": "Ausgefülltes Form.io-Formular"
+      },
+      "collection": {
+        "title": "Sammlung",
+        "description": "Widget-Sammlung erstellen"
       }
     },
     "width": {
@@ -749,6 +753,10 @@
       "formio": {
         "selectForm": "Formulardefinition",
         "placeholder": "Wählen Sie eine Formulardefinition aus"
+      },
+      "collection": {
+        "selectForm": "Sammlung",
+        "placeholder": "Wählen Sie eine Sammlung aus"
       }
     }
   },

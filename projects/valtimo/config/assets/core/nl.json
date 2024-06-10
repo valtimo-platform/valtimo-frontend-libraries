@@ -690,6 +690,10 @@
       "formio": {
         "title": "Form.io",
         "description": "Ingevuld Form.io-formulier"
+      },
+      "collection": {
+        "title": "Collectie",
+        "description": "Maak widgetcollectie"
       }
     },
     "width": {
@@ -749,6 +753,10 @@
       "formio": {
         "selectForm": "Formulierdefinitie",
         "placeholder": "Selecteer een formulierdefinitie"
+      },
+      "collection": {
+        "selectForm": "Collectie",
+        "placeholder": "Selecteer een collectie"
       }
     }
   },

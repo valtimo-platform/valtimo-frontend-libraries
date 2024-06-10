@@ -691,6 +691,10 @@
       "formio": {
         "title": "Form.io",
         "description": "Prefilled Form.io form"
+      },
+      "collection": {
+        "title": "Collection",
+        "description": "Create widget collection"
       }
     },
     "width": {
@@ -750,6 +754,10 @@
       "formio": {
         "selectForm": "Form definition",
         "placeholder": "Select a form definition"
+      },
+      "collection": {
+        "selectForm": "Collection",
+        "placeholder": "Select a collection"
       }
     }
   },
