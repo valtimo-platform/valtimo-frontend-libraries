@@ -54,6 +54,7 @@ interface TableCaseWidget extends BasicCaseWidget {
   type: CaseWidgetType.TABLE;
   properties: {
     columns: FieldsCaseWidgetValue[];
+    firstColumnAsTitle: boolean;
   };
 }
 interface CustomCaseWidget extends BasicCaseWidget {
