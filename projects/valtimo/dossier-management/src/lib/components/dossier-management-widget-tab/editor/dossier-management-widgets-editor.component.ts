@@ -34,7 +34,6 @@ import {DossierManagementWidgetWizardComponent} from '../../dossier-management-w
 @Component({
   selector: 'valtimo-dossier-management-widgets-editor',
   templateUrl: './dossier-management-widgets-editor.component.html',
-  styleUrls: ['./dossier-management-widgets-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [

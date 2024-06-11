@@ -13,21 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {AfterViewInit, Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Edit16} from '@carbon/icons';
-import {TranslateService} from '@ngx-translate/core';
-import {BreadcrumbService, PageHeaderService, PageTitleService} from '@valtimo/components';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {
+  BreadcrumbService,
+  PageHeaderService,
+  PageTitleService,
+  RenderInPageHeaderDirectiveModule,
+} from '@valtimo/components';
 import {ApiTabItem} from '@valtimo/dossier';
-import {IconService} from 'carbon-components-angular';
+import {ButtonModule, IconModule, IconService, TabsModule} from 'carbon-components-angular';
 import moment from 'moment/moment';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
-
 import {TabManagementService, WidgetTabManagementService} from '../../services';
+import {CommonModule} from '@angular/common';
+import {DossierManagementWidgetsEditorComponent} from './editor/dossier-management-widgets-editor.component';
+import {DossierManagementWidgetTabEditModalComponent} from '../dossier-management-widget-tab-edit-modal/dossier-management-widget-tab-edit-modal';
 
 @Component({
   selector: 'valtimo-dossier-management-case-widgets',
   templateUrl: './dossier-management-widget-tab.component.html',
+  styleUrl: './dossier-management-widget-tab.component.scss',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    DossierManagementWidgetsEditorComponent,
+    DossierManagementWidgetTabEditModalComponent,
+    RenderInPageHeaderDirectiveModule,
+    ButtonModule,
+    IconModule,
+    TabsModule,
+  ],
 })
 export class DossierManagementWidgetTabComponent implements AfterViewInit, OnDestroy {
   public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(

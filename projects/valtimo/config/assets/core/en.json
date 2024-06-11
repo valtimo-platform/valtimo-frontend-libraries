@@ -1051,7 +1051,8 @@
       "noDefault": "No default sort"
     },
     "editor": {
-      "visualEditor": "Visual editor"
+      "visualEditor": "Visual editor",
+      "jsonEditor": "JSON editor"
     },
     "key": "Key",
     "title": "Title"

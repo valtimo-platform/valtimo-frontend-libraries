@@ -1046,7 +1046,11 @@
       "noDefault": "Keine Standardsortierung"
     },
     "key": "Schlüssel",
-    "title": "Titel"
+    "title": "Titel",
+    "editor": {
+      "visualEditor": "Visuell editor",
+      "jsonEditor": "JSON editor"
+    }
   },
   "taskDetail": {
     "taskCreated": "Erstellt",

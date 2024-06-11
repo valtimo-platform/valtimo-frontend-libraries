@@ -1049,7 +1049,11 @@
       "noDefault": "Geen standaardsortering"
     },
     "key": "Sleutel",
-    "title": "Titel"
+    "title": "Titel",
+    "editor": {
+      "visualEditor": "Visueel editor",
+      "jsonEditor": "JSON editor"
+    }
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",
