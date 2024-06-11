@@ -1045,7 +1045,8 @@
       "descending": "Absteigend",
       "noDefault": "Keine Standardsortierung"
     },
-    "key": "Schlüssel"
+    "key": "Schlüssel",
+    "title": "Titel"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",

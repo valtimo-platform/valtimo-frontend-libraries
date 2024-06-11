@@ -1048,7 +1048,8 @@
       "descending": "Aflopend",
       "noDefault": "Geen standaardsortering"
     },
-    "key": "Sleutel"
+    "key": "Sleutel",
+    "title": "Titel"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",
