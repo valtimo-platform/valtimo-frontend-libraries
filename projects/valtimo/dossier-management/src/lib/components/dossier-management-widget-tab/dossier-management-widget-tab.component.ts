@@ -31,6 +31,7 @@ import {TabManagementService, WidgetTabManagementService} from '../../services';
 import {CommonModule} from '@angular/common';
 import {DossierManagementWidgetsEditorComponent} from './editor/dossier-management-widgets-editor.component';
 import {DossierManagementWidgetTabEditModalComponent} from '../dossier-management-widget-tab-edit-modal/dossier-management-widget-tab-edit-modal';
+import { DossierManagementWidgetsJsonEditorComponent } from './json-editor/dossier-management-widgets-json-editor.component';
 
 @Component({
   selector: 'valtimo-dossier-management-case-widgets',
@@ -43,6 +44,7 @@ import {DossierManagementWidgetTabEditModalComponent} from '../dossier-managemen
     TranslateModule,
     DossierManagementWidgetsEditorComponent,
     DossierManagementWidgetTabEditModalComponent,
+    DossierManagementWidgetsJsonEditorComponent,
     RenderInPageHeaderDirectiveModule,
     ButtonModule,
     IconModule,

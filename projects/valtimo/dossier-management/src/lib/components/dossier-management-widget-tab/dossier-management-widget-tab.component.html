@@ -22,6 +22,13 @@
 </valtimo-dossier-management-widget-tab-edit-modal>
 
 <cds-tabs type="contained">
+  <cds-tab [heading]="'interface.editor.jsonEditor' | translate">
+    <valtimo-dossier-management-widgets-json-editor
+      [currentWidgetTab]="currentWidgetTab$ | async"
+      (changeSaved)="refreshWidgetTab()"
+    ></valtimo-dossier-management-widgets-json-editor
+  ></cds-tab>
+
   <cds-tab [heading]="'interface.editor.visualEditor' | translate">
     <valtimo-dossier-management-widgets-editor
       [documentDefinitionName]="documentDefinitionName$ | async"
@@ -30,8 +37,6 @@
       (changeSaved)="refreshWidgetTab()"
     ></valtimo-dossier-management-widgets-editor>
   </cds-tab>
-
-  <cds-tab [heading]="'interface.editor.jsonEditor' | translate">JSON editor</cds-tab>
 </cds-tabs>
 
 <ng-container renderInPageHeader>
