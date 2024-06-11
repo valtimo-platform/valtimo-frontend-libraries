@@ -336,4 +336,8 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
         })
     );
   }
+
+  protected closeModal(): void {
+    this.modal.open = false;
+  }
 }
