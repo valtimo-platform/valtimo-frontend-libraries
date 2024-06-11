@@ -16,6 +16,12 @@
 
 import {CaseWidgetDisplayType} from '.';
 import {Type} from '@angular/core';
+import {
+  WidgetContentProperties,
+  WidgetCustomContent,
+  WidgetFieldsContent,
+  WidgetTableContent,
+} from './case-widget-content.model';
 
 enum CaseWidgetType {
   FIELDS = 'fields',
@@ -33,7 +39,7 @@ interface BasicCaseWidget {
   width: CaseWidgetWidth;
   highContrast: boolean;
   key: string;
-  properties: object;
+  properties: WidgetContentProperties;
 }
 
 interface FieldsCaseWidgetValue {
@@ -45,35 +51,40 @@ interface FieldsCaseWidgetValue {
 
 interface FieldsCaseWidget extends BasicCaseWidget {
   type: CaseWidgetType.FIELDS;
-  properties: {
-    columns: FieldsCaseWidgetValue[][];
-  };
+  properties: WidgetFieldsContent;
 }
 
 interface TableCaseWidget extends BasicCaseWidget {
   type: CaseWidgetType.TABLE;
-  properties: {
-    columns: FieldsCaseWidgetValue[];
-    firstColumnAsTitle: boolean;
-  };
+  properties: WidgetTableContent;
 }
+
 interface CustomCaseWidget extends BasicCaseWidget {
   type: CaseWidgetType.CUSTOM;
+  properties: WidgetCustomContent;
+}
+
+interface FormioCaseWidget extends BasicCaseWidget {
+  type: CaseWidgetType.FORMIO;
   properties: {
-    componentKey: string;
+    formDefinition: string;
   };
 }
 
-type CaseWidget = FieldsCaseWidget | CustomCaseWidget | TableCaseWidget;
+type CaseWidget = FieldsCaseWidget | CustomCaseWidget | TableCaseWidget | FormioCaseWidget;
 
 type CaseWidgetWithUuid = CaseWidget & {
+  uuid: string;
+};
+
+type FormioCaseWidgetWidgetWithUuid = FormioCaseWidget & {
   uuid: string;
 };
 
 interface CaseWidgetsRes {
   caseDefinitionName: string;
   key: string;
-  widgets: CaseWidget[];
+  widgets: BasicCaseWidget[];
 }
 
 interface CaseWidgetWidthsPx {
@@ -144,4 +155,5 @@ export {
   TableCaseWidget,
   CaseWidgetPackResultItem,
   CaseWidgetPackResultItemsByRow,
+  FormioCaseWidgetWidgetWithUuid,
 };

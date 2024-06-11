@@ -28,10 +28,14 @@ import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {DropdownModule, InputModule, SelectModule} from 'carbon-components-angular';
 import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {WidgetContentComponent, WidgetCustomContent} from '../../../models';
+import {WidgetContentComponent} from '../../../models';
 import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {WidgetWizardService} from '../../../services';
-import {CUSTOM_CASE_WIDGET_TOKEN, CustomCaseWidgetConfig} from '@valtimo/dossier';
+import {
+  CUSTOM_CASE_WIDGET_TOKEN,
+  CustomCaseWidgetConfig,
+  WidgetCustomContent,
+} from '@valtimo/dossier';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 
@@ -69,9 +73,7 @@ export class DossierManagementWidgetCustomComponent
   );
 
   private readonly _selectedCustomComponentKey$ = new BehaviorSubject<string | null>(null);
-  private readonly _customCaseWidgetConfig$ = new BehaviorSubject<CustomCaseWidgetConfig | null>(
-    null
-  );
+  private readonly _customCaseWidgetConfig$ = new BehaviorSubject<CustomCaseWidgetConfig>({});
 
   public readonly componentListItems$: Observable<ListItem[]> = combineLatest([
     this._customCaseWidgetConfig$,

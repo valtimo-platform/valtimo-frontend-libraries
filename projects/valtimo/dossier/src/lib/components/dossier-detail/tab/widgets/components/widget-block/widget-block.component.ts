@@ -52,6 +52,7 @@ import {
 } from '../../../../../../services';
 import {WidgetCustomComponent} from '../custom/widget-custom.component';
 import {WidgetFieldComponent} from '../field/widget-field.component';
+import {WidgetFormioComponent} from '../formio/widget-formio.component';
 import {WidgetTableComponent} from '../table/widget-table.component';
 import {WidgetCollectionComponent} from '../collection/widget-collection.component';
 
@@ -69,6 +70,7 @@ import {WidgetCollectionComponent} from '../collection/widget-collection.compone
     TranslateModule,
     TilesModule,
     WidgetFieldComponent,
+    WidgetFormioComponent,
     WidgetCollectionComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -127,8 +129,8 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   public readonly widgetData$ = combineLatest([this.widget$, this.tabKey$, this.documentId$]).pipe(
     switchMap(([widget, tabkey, documentId]) =>
-      // custom component widgets do not fetch additional data
-      widget.type === CaseWidgetType.CUSTOM
+      // custom component and formio widgets do not fetch additional data
+      widget.type === CaseWidgetType.CUSTOM || widget.type === CaseWidgetType.FORMIO
         ? of({})
         : this.widgetsApiService.getWidgetData(documentId, tabkey, widget.key)
     ),
