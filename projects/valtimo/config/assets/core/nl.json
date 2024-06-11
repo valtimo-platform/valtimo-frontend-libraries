@@ -479,6 +479,12 @@
       "formBuilder": "Formulier editor",
       "jsonEditor": "JSON editor",
       "output": "Uitvoer"
+    },
+    "intermediateSave": {
+      "save": "Voortgang opslaan",
+      "clear": "Invoervelden wissen",
+      "success": "Voortgang succesvol opgeslagen",
+      "error": "Voortgang kon niet worden opgeslagen"
     }
   },
   "dossierManagement": {
