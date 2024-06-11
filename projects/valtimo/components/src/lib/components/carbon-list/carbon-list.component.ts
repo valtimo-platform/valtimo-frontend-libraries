@@ -288,11 +288,25 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngAfterViewInit(): void {
     this._viewInitialized$.next(true);
-    this.dragAndDropService.setCarbonListElementRef(this.elementRef);
+    this.openDragAndDropSubscription();
   }
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+  }
+
+  public openDragAndDropSubscription(): void {
+    this._subscriptions.add(
+      this.dragAndDropService.dragAndDropEvents$.subscribe(dragAndDropEvent => {
+        const itemToInsert = this._items[dragAndDropEvent.startIndex];
+        const filteredItems = this._items.filter(
+          (_, index) => index !== dragAndDropEvent.startIndex
+        );
+        filteredItems.splice(dragAndDropEvent.newIndex, 0, itemToInsert);
+
+        this.itemsReordered.emit(filteredItems);
+      })
+    );
   }
 
   public onRowClick(index: number): void {
@@ -350,6 +364,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     mouseEvent: MouseEvent,
     carbonEvent: {index: number; item: CarbonListItem; length: number}
   ): void {
+    this.dragAndDropService.setCarbonListElementRef(this.elementRef);
     this.dragAndDropService.startDrag(mouseEvent.y, carbonEvent.index);
   }
 
