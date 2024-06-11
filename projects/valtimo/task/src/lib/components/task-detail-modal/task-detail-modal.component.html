@@ -20,7 +20,10 @@
         <p class="cds--modal-header__heading cds--type-beta">{{ (page$ | async)?.title }}</p>
         <p class="cds--modal-header__label cds--type-delta">{{ (page$ | async)?.subtitle }}</p>
       </div>
-      <div *ngIf="intermediateSaveEnabled && !(formFlowInstanceId$ | async)" class="save-buttons-margin">
+      <div
+        *ngIf="intermediateSaveEnabled && !(formFlowInstanceId$ | async)"
+        class="save-buttons-margin"
+      >
         <cds-tooltip
           [caret]="true"
           [description]="'formManagement.intermediateSave.save' | translate"
@@ -110,7 +113,10 @@
     </div>
   </div>
   <div footer>
-    <div class="mb-0 p-3 text-center" *ngIf="!(formDefinition$ | async) && !(formFlowInstanceId$ | async)">
+    <div
+      class="mb-0 p-3 text-center"
+      *ngIf="!(formDefinition$ | async) && !(formFlowInstanceId$ | async)"
+    >
       <button
         class="btn btn-secondary btn-space"
         type="button"
