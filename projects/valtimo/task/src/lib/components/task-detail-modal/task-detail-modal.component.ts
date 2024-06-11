@@ -40,7 +40,7 @@ import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valt
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
 import {ToastrService} from 'ngx-toastr';
-import {distinctUntilChanged, map, take} from 'rxjs/operators';
+import {distinctUntilChanged, map, switchMap, take} from 'rxjs/operators';
 import {TaskService} from '../../services/task.service';
 import {BehaviorSubject, combineLatest, Observable, Subscription, tap} from 'rxjs';
 import {UserProviderService} from '@valtimo/security';
@@ -161,7 +161,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   }
 
   public gotoProcessLinkScreen(): void {
-    this.modal.open = false;
+    this.closeModal();
     this.router.navigate(['process-links']);
   }
 
@@ -203,7 +203,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
       this.toastr.success(
         `${task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`
       );
-      this.modal.open = false;
+      this.closeModal();
       this.task$.next(null);
       this.formSubmit.emit();
     });
@@ -281,15 +281,18 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     this._subscriptions.add(
       formViewModelComponent.instance.formSubmit.subscribe(() => {
         this.completeTask();
-        this.modal.open = false;
+        this.closeModal();
       })
     );
   }
 
   private getCurrentProgress(): void {
     this._subscriptions.add(
-      this.taskIntermediateSaveService
-        .getIntermediateSubmission(this.taskInstanceId$.getValue())
+      this.taskInstanceId$.pipe(
+        switchMap((taskInstanceId: string) =>
+          this.taskIntermediateSaveService
+            .getIntermediateSubmission(taskInstanceId)
+        ))
         .subscribe({
           next: (intermediateSubmission: IntermediateSubmission) => {
             this.submission$.next({data: intermediateSubmission.submission});
@@ -311,12 +314,12 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
       this.taskIntermediateSaveService
         .storeIntermediateSubmission(intermediateSaveRequest)
         .subscribe({
-          next: intermediateSubmission => {
+          next: () => {
             this.toastr.success(
               this.translateService.instant('formManagement.intermediateSave.success')
             );
           },
-          error: intermediateSubmission => {
+          error: () => {
             this.toastr.error(
               this.translateService.instant('formManagement.intermediateSave.error')
             );
@@ -327,8 +330,11 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
 
   protected clearCurrentProgress(): void {
     this._subscriptions.add(
-      this.taskIntermediateSaveService
-        .clearIntermediateSubmission(this.taskInstanceId$.getValue())
+      this.taskInstanceId$.pipe(
+        switchMap((taskInstanceId: string) =>
+          this.taskIntermediateSaveService
+            .clearIntermediateSubmission(taskInstanceId)
+        ))
         .subscribe({
           next: () => {
             this.submission$.next({data: {}});
