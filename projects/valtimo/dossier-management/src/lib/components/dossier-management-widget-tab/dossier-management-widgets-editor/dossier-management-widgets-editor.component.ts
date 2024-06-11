@@ -143,7 +143,6 @@ export class DossierManagementWidgetsEditorComponent {
     this.widgetWizardService.resetWizard();
 
     if (!widgetResult) return;
-    console.log({widgetResult});
 
     this.widgetTabManagementService
       .updateWidgets({
