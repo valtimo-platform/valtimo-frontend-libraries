@@ -27,7 +27,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {ArrowDown16, ArrowUp16, Row16, SettingsView16} from '@carbon/icons';
+import {ArrowDown16, ArrowUp16, Draggable16, SettingsView16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {SortState} from '@valtimo/document';
 import {
@@ -253,7 +253,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly dragAndDropService: CarbonListDragAndDropService,
     private readonly elementRef: ElementRef
   ) {
-    this.iconService.registerAll([ArrowDown16, ArrowUp16, SettingsView16, Row16]);
+    this.iconService.registerAll([ArrowDown16, ArrowUp16, SettingsView16, Draggable16]);
   }
 
   public ngOnInit(): void {
