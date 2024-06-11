@@ -32,6 +32,8 @@ import {DragAndDropEvent, MoveRowDirection} from '../../../models';
 export class CarbonListDragAndDropService {
   public readonly dragAndDropEvents$ = new Subject<DragAndDropEvent>();
 
+  private readonly _ROW_DRAG_CLASS = 'valtimo-carbon-list__drag-table-row';
+
   private readonly _carbonListElementRefSubject$ =
     new BehaviorSubject<ElementRef<CarbonListComponent> | null>(null);
   private get _carbonListElementRef$(): Observable<ElementRef<CarbonListComponent>> {
@@ -166,6 +168,7 @@ export class CarbonListDragAndDropService {
     ])
       .pipe(take(1))
       .subscribe(([elementRef, movedRow, startIndex]) => {
+        movedRow.classList.remove(this._ROW_DRAG_CLASS);
         const htmlTableRowElements = this.getTableRows(elementRef);
         const newIndex =
           htmlTableRowElements && htmlTableRowElements.findIndex(row => row === movedRow);
@@ -203,10 +206,13 @@ export class CarbonListDragAndDropService {
   private setTableRows(tableRowToMoveIndex: number): void {
     this._carbonListElementRef$.pipe(take(1)).subscribe(elementRef => {
       const htmlTableRowElements = this.getTableRows(elementRef);
+      const tableRowToMove = htmlTableRowElements && htmlTableRowElements[tableRowToMoveIndex];
 
       if (htmlTableRowElements) this._tableRowsSubject$.next(htmlTableRowElements);
-      if (htmlTableRowElements && htmlTableRowElements[tableRowToMoveIndex]) {
-        this._tableRowToMoveSubject$.next(htmlTableRowElements[tableRowToMoveIndex]);
+
+      if (tableRowToMove) {
+        this._tableRowToMoveSubject$.next(tableRowToMove);
+        tableRowToMove.classList.add(this._ROW_DRAG_CLASS);
       }
     });
   }
