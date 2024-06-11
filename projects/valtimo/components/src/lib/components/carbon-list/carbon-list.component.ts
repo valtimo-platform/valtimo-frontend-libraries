@@ -17,6 +17,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
@@ -249,7 +250,8 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly translateService: TranslateService,
     private readonly viewContentService: ViewContentService,
     private readonly keyStateService: KeyStateService,
-    private readonly dragAndDropService: CarbonListDragAndDropService
+    private readonly dragAndDropService: CarbonListDragAndDropService,
+    private readonly elementRef: ElementRef
   ) {
     this.iconService.registerAll([ArrowDown16, ArrowUp16, SettingsView16, Row16]);
   }
@@ -286,6 +288,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngAfterViewInit(): void {
     this._viewInitialized$.next(true);
+    this.dragAndDropService.setCarbonListElementRef(this.elementRef);
   }
 
   public ngOnDestroy(): void {
@@ -343,8 +346,8 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  public startDragAndDrop(event: any): void {
-    console.log(event);
+  public onDragStart(event: any): void {
+    this.dragAndDropService.startDrag();
   }
 
   private buildPaginationModel(): void {
@@ -443,8 +446,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
       model.data = filteredData ?? data;
       return model;
     }),
-    startWith(new TableModel()),
-    tap(model => console.log(model))
+    startWith(new TableModel())
   );
 
   private get dragAndDropHeaderColumns(): TableHeaderItem[] {
