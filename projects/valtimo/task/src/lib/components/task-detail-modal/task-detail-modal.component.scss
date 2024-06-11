@@ -23,7 +23,6 @@
 .cds-modal-header {
   width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
 }
 
@@ -31,10 +30,6 @@
   width: 50%;
 }
 
-.save-icon-margin {
-  margin-top: 1px;
-}
-
-.cursor-pointer {
-  cursor: pointer;
+.save-buttons-margin {
+  margin-top: -15px;
 }

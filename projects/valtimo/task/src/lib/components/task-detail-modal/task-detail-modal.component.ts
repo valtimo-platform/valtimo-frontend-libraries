@@ -35,19 +35,14 @@ import {
   ValtimoFormioOptions,
   ValtimoModalService,
 } from '@valtimo/components';
-import {
-  IntermediateSaveRequest,
-  IntermediateSubmission,
-  Task,
-  TaskProcessLinkType,
-} from '../../models';
+import {IntermediateSaveRequest, IntermediateSubmission, Task, TaskProcessLinkType,} from '../../models';
 import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
 import {ToastrService} from 'ngx-toastr';
-import {map, take} from 'rxjs/operators';
+import {distinctUntilChanged, map, take} from 'rxjs/operators';
 import {TaskService} from '../../services/task.service';
-import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription, tap} from 'rxjs';
 import {UserProviderService} from '@valtimo/security';
 import {DocumentService} from '@valtimo/document';
 import {TranslateService} from '@ngx-translate/core';
@@ -67,7 +62,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   @ViewChild('form') form: FormioComponent;
   @ViewChild('formFlow') formFlow: FormFlowComponent;
   @ViewChild('taskDetailModal') modal: Modal;
-  @ViewChild('clearProgressModal') clearProgressModal: Modal;
   @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef})
   public formViewModelDynamicContainer: ViewContainerRef;
   @Output() formSubmit = new EventEmitter();
@@ -127,20 +121,18 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit(): void {
-    // this._subscriptions.add(
-    //   this.modal.open
-    //     .pipe(
-    //       distinctUntilChanged(),
-    //       tap(modalShowing => {
-    //         if (!modalShowing) {
-    //           if (this.formFlow) {
-    //             this.formFlow.saveData();
-    //           }
-    //         }
-    //       })
-    //     )
-    //     .subscribe()
-    // );
+    this._subscriptions.add(
+      this.modal.close
+        .pipe(
+          distinctUntilChanged(),
+          tap(() => {
+            if (this.formFlow) {
+              this.formFlow.saveData();
+            }
+          })
+        )
+        .subscribe()
+    );
   }
 
   public ngOnDestroy(): void {
@@ -294,7 +286,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  private getCurrentProgress() {
+  private getCurrentProgress(): void {
     this._subscriptions.add(
       this.taskIntermediateSaveService
         .getIntermediateSubmission(this.taskInstanceId$.getValue())
@@ -309,7 +301,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  protected saveCurrentProgress() {
+  protected saveCurrentProgress(): void {
     const intermediateSaveRequest: IntermediateSaveRequest = {
       submission: this.submission$.getValue().data,
       taskInstanceId: this.taskInstanceId$.getValue(),
@@ -333,7 +325,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  protected clearCurrentProgress() {
+  protected clearCurrentProgress(): void {
     this._subscriptions.add(
       this.taskIntermediateSaveService
         .clearIntermediateSubmission(this.taskInstanceId$.getValue())

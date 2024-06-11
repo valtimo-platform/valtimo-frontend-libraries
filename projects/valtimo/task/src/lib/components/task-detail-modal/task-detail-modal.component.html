@@ -20,28 +20,28 @@
         <p class="cds--modal-header__heading cds--type-beta">{{ (page$ | async)?.title }}</p>
         <p class="cds--modal-header__label cds--type-delta">{{ (page$ | async)?.subtitle }}</p>
       </div>
-      <div *ngIf="intermediateSaveEnabled">
+      <div *ngIf="intermediateSaveEnabled && !(formFlowInstanceId$ | async)" class="save-buttons-margin">
         <cds-tooltip
           [caret]="true"
           [description]="'formManagement.intermediateSave.save' | translate"
         >
-          <svg
-            class="cds--btn__icon save-icon-margin cursor-pointer"
+          <button
+            cdsButton="ghost"
+            iconOnly="true"
             cdsIcon="save"
-            size="16"
             (click)="saveCurrentProgress()"
-          ></svg>
+          ></button>
         </cds-tooltip>
         <cds-tooltip
           [caret]="true"
           [description]="'formManagement.intermediateSave.clear' | translate"
         >
-          <svg
-            class="cds--btn__icon cursor-pointer"
+          <button
+            cdsButton="ghost"
+            iconOnly="true"
             cdsIcon="trash-can"
-            size="16"
             (click)="showConfirmationModal$.next(true)"
-          ></svg>
+          ></button>
         </cds-tooltip>
       </div>
     </div>
@@ -80,7 +80,7 @@
     <div *ngIf="obs.processLinkIsFormFlow">
       <valtimo-form-flow
         #formFlow
-        [formIoFormData]="obs.formIoFormData"
+        [formIoFormData]="formIoFormData$"
         [formFlowInstanceId]="obs.formFlowInstanceId"
         (formFlowComplete)="completeTask()"
       ></valtimo-form-flow>
@@ -110,7 +110,7 @@
     </div>
   </div>
   <div footer>
-    <div class="mb-0 p-3 text-center" *ngIf="!(formDefinition$ | async)">
+    <div class="mb-0 p-3 text-center" *ngIf="!(formDefinition$ | async) && !(formFlowInstanceId$ | async)">
       <button
         class="btn btn-secondary btn-space"
         type="button"
