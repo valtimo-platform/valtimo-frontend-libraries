@@ -25,7 +25,6 @@ import {
   take,
 } from 'rxjs';
 import {CarbonListComponent} from '../carbon-list.component';
-import {TableItem} from 'carbon-components-angular';
 
 @Injectable()
 export class CarbonListDragAndDropService {
@@ -34,40 +33,38 @@ export class CarbonListDragAndDropService {
   private get _carbonListElementRef$(): Observable<ElementRef<CarbonListComponent>> {
     return this._carbonListElementRefSubject$.pipe(filter(ref => !!ref));
   }
+
   private readonly _tableRowsSubject$ = new BehaviorSubject<HTMLTableRowElement[] | null>(null);
   private get _tableRows$(): Observable<HTMLTableRowElement[]> {
     return this._tableRowsSubject$.pipe(filter(trs => !!trs));
   }
+
   private readonly _tableRowToMoveSubject$ = new BehaviorSubject<HTMLTableRowElement | null>(null);
   private get _tableRowToMove$(): Observable<HTMLTableRowElement> {
     return this._tableRowToMoveSubject$.pipe(filter(tr => !!tr));
   }
+
   private readonly _tableRowMouseOverSubject$ = new BehaviorSubject<HTMLTableRowElement | null>(
     null
   );
   private get _tableRowMouseOver$(): Observable<HTMLTableRowElement> {
     return this._tableRowMouseOverSubject$.pipe(filter(tr => !!tr));
   }
-  private readonly _movingRowIndex$ = new BehaviorSubject<number>(0);
+
   private readonly _mouseMoveDirection$ = new BehaviorSubject<'up' | 'down'>('up');
+
   private _lastMouseY = 0;
+
   private readonly _pauseSwap$ = new BehaviorSubject<boolean>(false);
 
-  private _mousemoveSubscription!: Subscription;
-  private _mouseupSubscription!: Subscription;
-  private _tableRowSubscription!: Subscription;
+  private readonly _subscriptions = new Subscription();
 
   public setCarbonListElementRef(ref: ElementRef<CarbonListComponent>): void {
     this._carbonListElementRefSubject$.next(ref);
   }
 
-  public startDrag(
-    startMouseY: number,
-    rowToBeMovedStartIndex: number,
-    tableItemsAtStart: TableItem[][]
-  ): void {
+  public startDrag(startMouseY: number, rowToBeMovedStartIndex: number): void {
     this._lastMouseY = startMouseY;
-    this._movingRowIndex$.next(rowToBeMovedStartIndex);
     this.setTableRows(rowToBeMovedStartIndex);
     this.openMouseMoveSubscription();
     this.openTableRowSubscription();
@@ -75,28 +72,30 @@ export class CarbonListDragAndDropService {
   }
 
   private openMouseMoveSubscription(): void {
-    this._mousemoveSubscription = fromEvent(document, 'mousemove').subscribe((e: MouseEvent) => {
-      this._mouseMoveDirection$.next(e.y > this._lastMouseY ? 'down' : 'up');
-      this._lastMouseY = e.y;
+    this._subscriptions.add(
+      fromEvent(document, 'mousemove').subscribe((e: MouseEvent) => {
+        this._mouseMoveDirection$.next(e.y > this._lastMouseY ? 'down' : 'up');
+        this._lastMouseY = e.y;
 
-      const elementsUnderMouse = document.querySelectorAll(':hover');
-      const arrayElementsUnderMouse = elementsUnderMouse && Array.from(elementsUnderMouse);
-      const tableRowUnderMouse = arrayElementsUnderMouse?.find(
-        element => element.localName === 'tr'
-      );
-      if (tableRowUnderMouse) this.setTableRowUnderMouse(tableRowUnderMouse as HTMLTableRowElement);
-    });
+        const elementsUnderMouse = document.querySelectorAll(':hover');
+        const arrayElementsUnderMouse = elementsUnderMouse && Array.from(elementsUnderMouse);
+        const tableRowUnderMouse = arrayElementsUnderMouse?.find(
+          element => element.localName === 'tr'
+        );
+        if (tableRowUnderMouse)
+          this.setTableRowUnderMouse(tableRowUnderMouse as HTMLTableRowElement);
+      })
+    );
   }
 
   private openTableRowSubscription(): void {
-    this._tableRowSubscription = combineLatest([
-      this._pauseSwap$,
-      this._tableRows$,
-      this._tableRowMouseOver$,
-      this._tableRowToMoveSubject$,
-      this._mouseMoveDirection$,
-    ]).subscribe(
-      ([pauseSwap, tableRows, tableRowMouseOver, tableRowToMove, mouseMoveDirection]) => {
+    this._subscriptions.add(
+      combineLatest([
+        this._pauseSwap$,
+        this._tableRowMouseOver$,
+        this._tableRowToMove$,
+        this._mouseMoveDirection$,
+      ]).subscribe(([pauseSwap, tableRowMouseOver, tableRowToMove, mouseMoveDirection]) => {
         if (tableRowMouseOver !== tableRowToMove && !pauseSwap) {
           this.pauseSwap();
 
@@ -108,15 +107,16 @@ export class CarbonListDragAndDropService {
             this.continueSwap();
           }
         }
-      }
+      })
     );
   }
 
   private openMouseUpSubscription(): void {
-    this._mouseupSubscription = fromEvent(document, 'mouseup').subscribe(() => {
-      console.log('mouse up');
-      this.stopDrag();
-    });
+    this._subscriptions.add(
+      fromEvent(document, 'mouseup').subscribe(() => {
+        this.stopDrag();
+      })
+    );
   }
 
   private setTableRowUnderMouse(element: HTMLTableRowElement): void {
@@ -139,12 +139,15 @@ export class CarbonListDragAndDropService {
     );
   }
 
-  private stopDrag(): void {
-    this._mousemoveSubscription?.unsubscribe();
-    this._mouseupSubscription?.unsubscribe();
-    this._tableRowSubscription?.unsubscribe();
+  private reset(): void {
     this._tableRowsSubject$.next(null);
     this._tableRowMouseOverSubject$.next(null);
+    this._pauseSwap$.next(false);
+  }
+
+  private stopDrag(): void {
+    this._subscriptions.unsubscribe();
+    this.reset();
   }
 
   private getTableRows(elementRef: ElementRef<CarbonListComponent>): HTMLTableRowElement[] | null {
@@ -170,7 +173,7 @@ export class CarbonListDragAndDropService {
       htmlTableBodyElement?.children &&
       (Array.from(htmlTableBodyElement.children) as any as HTMLTableRowElement[]);
 
-    return htmlTableRowElements || [];
+    return htmlTableRowElements || null;
   }
 
   private setTableRows(tableRowToMoveIndex: number): void {
@@ -178,8 +181,9 @@ export class CarbonListDragAndDropService {
       const htmlTableRowElements = this.getTableRows(elementRef);
 
       if (htmlTableRowElements) this._tableRowsSubject$.next(htmlTableRowElements);
-      if (htmlTableRowElements && htmlTableRowElements[tableRowToMoveIndex])
+      if (htmlTableRowElements && htmlTableRowElements[tableRowToMoveIndex]) {
         this._tableRowToMoveSubject$.next(htmlTableRowElements[tableRowToMoveIndex]);
+      }
     });
   }
 }
