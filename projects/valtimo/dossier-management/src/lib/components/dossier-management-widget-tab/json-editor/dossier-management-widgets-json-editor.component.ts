@@ -17,20 +17,25 @@ import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   EventEmitter,
   Input,
   Output,
   Signal,
-  computed,
   signal,
 } from '@angular/core';
 import {Edit16, Save16} from '@carbon/icons';
-import {TranslateModule} from '@ngx-translate/core';
-import {EditorModel, EditorModule} from '@valtimo/components';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {CARBON_CONSTANTS, EditorModel, EditorModule} from '@valtimo/components';
 import {CaseWidgetsRes} from '@valtimo/dossier';
-import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {WidgetTabManagementService} from '../../../services';
+import {
+  ButtonModule,
+  IconModule,
+  IconService,
+  NotificationService,
+} from 'carbon-components-angular';
 import {take} from 'rxjs';
+import {WidgetTabManagementService} from '../../../services';
 
 @Component({
   selector: 'valtimo-dossier-management-widgets-json-editor',
@@ -39,6 +44,7 @@ import {take} from 'rxjs';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, TranslateModule, EditorModule, ButtonModule, IconModule],
+  providers: [NotificationService],
 })
 export class DossierManagementWidgetsJsonEditorComponent {
   private _currentWidgetTab: CaseWidgetsRes;
@@ -68,6 +74,8 @@ export class DossierManagementWidgetsJsonEditorComponent {
 
   constructor(
     private readonly iconService: IconService,
+    private readonly notificationService: NotificationService,
+    private readonly translateService: TranslateService,
     private readonly widgetTabManagementService: WidgetTabManagementService
   ) {
     this.iconService.registerAll([Edit16, Save16]);
@@ -111,8 +119,26 @@ export class DossierManagementWidgetsJsonEditorComponent {
     this.widgetTabManagementService
       .updateWidgets(config)
       .pipe(take(1))
-      .subscribe(() => {
-        this.changeSaved.emit();
+      .subscribe({
+        next: () => {
+          this.notificationService.showNotification({
+            type: 'success',
+            title: this.translateService.instant('interface.success'),
+            message: this.translateService.instant('widgetTabManagement.notification.success'),
+            showClose: true,
+            duration: CARBON_CONSTANTS.notificationDuration,
+          });
+          this.changeSaved.emit();
+        },
+        error: () => {
+          this.notificationService.showNotification({
+            type: 'error',
+            title: this.translateService.instant('interface.error'),
+            message: this.translateService.instant('widgetTabManagement.notification.error'),
+            showClose: true,
+            duration: CARBON_CONSTANTS.notificationDuration,
+          });
+        },
       });
   }
 

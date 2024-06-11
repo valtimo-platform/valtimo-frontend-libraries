@@ -686,6 +686,10 @@
         "width": "Choose widget width"
       }
     },
+    "notification": {
+      "success": "Widget configuration updated successfully",
+      "error": "Widget configuration failed to update"
+    },
     "types": {
       "description": "Choose the widget type you want to configure.",
       "fields": {
@@ -1024,6 +1028,8 @@
     "filter": "Filter...",
     "back": "Back",
     "warning": "Warning",
+    "success": "Success",
+    "error": "Error",
     "finish": "Finish",
     "add": "Add",
     "tags": "Tags",

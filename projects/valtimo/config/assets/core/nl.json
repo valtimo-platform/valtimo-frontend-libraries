@@ -685,6 +685,10 @@
         "width": "Kies widgetbreedte"
       }
     },
+    "notification": {
+      "success": "Widget configuration updated successfully",
+      "error": "Widget configuration failed to update"
+    },
     "types": {
       "description": "Kies het widgettype dat je wilt configureren.",
       "fields": {
@@ -1022,6 +1026,8 @@
     "filter": "Filteren...",
     "back": "Terug",
     "warning": "Waarschuwing",
+    "success": "Succes",
+    "error": "Fout",
     "finish": "Finish",
     "add": "Toevoegen",
     "tags": "Tags",
