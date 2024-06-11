@@ -35,12 +35,7 @@ import {
   ValtimoFormioOptions,
   ValtimoModalService,
 } from '@valtimo/components';
-import {
-  IntermediateSaveRequest,
-  IntermediateSubmission,
-  Task,
-  TaskProcessLinkType,
-} from '../../models';
+import {IntermediateSaveRequest, IntermediateSubmission, Task, TaskProcessLinkType,} from '../../models';
 import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
@@ -161,7 +156,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
 
     //only load from formlink when process link failed for backwards compatibility
     if (!this.taskProcessLinkType$.getValue()) {
-      this.modal.open = true;
+      this.openModal();
     }
   }
 
@@ -239,7 +234,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
               this.processLinkId$.next(res.processLinkId);
               this.formDefinition$.next(res.properties.formDefinition);
               this.formName$.next(res.properties.formName);
-              this.modal.open = true;
+              this.openModal();
               this.setFormViewModelComponent();
               break;
           }
@@ -260,7 +255,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   private setFormDefinitionAndOpenModal(formDefinition: any): void {
     this.taskProcessLinkType$.next('form');
     this.formDefinition$.next(formDefinition);
-    this.modal.open = true;
+    this.openModal();
   }
 
   private setDocumentDefinitionNameInService(task: Task): void {
@@ -340,6 +335,10 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
           },
         })
     );
+  }
+
+  private openModal(): void {
+    this.modal.open = true;
   }
 
   protected closeModal(): void {
