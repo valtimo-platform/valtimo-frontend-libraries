@@ -35,14 +35,19 @@ import {
   ValtimoFormioOptions,
   ValtimoModalService,
 } from '@valtimo/components';
-import {IntermediateSaveRequest, IntermediateSubmission, Task, TaskProcessLinkType} from '../../models';
+import {
+  IntermediateSaveRequest,
+  IntermediateSubmission,
+  Task,
+  TaskProcessLinkType,
+} from '../../models';
 import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
 import {ToastrService} from 'ngx-toastr';
 import {map, take} from 'rxjs/operators';
 import {TaskService} from '../../services/task.service';
-import {BehaviorSubject, combineLatest, Observable, Subscription,} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {UserProviderService} from '@valtimo/security';
 import {DocumentService} from '@valtimo/document';
 import {TranslateService} from '@ngx-translate/core';
@@ -291,14 +296,16 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
 
   private getCurrentProgress() {
     this._subscriptions.add(
-      this.taskIntermediateSaveService.getIntermediateSubmission(this.taskInstanceId$.getValue()).subscribe({
-        next: (intermediateSubmission: IntermediateSubmission) => {
-          this.submission$.next({data: intermediateSubmission.submission});
-        },
-        error: () => {
-          this.submission$.next({data: {}});
-        },
-      })
+      this.taskIntermediateSaveService
+        .getIntermediateSubmission(this.taskInstanceId$.getValue())
+        .subscribe({
+          next: (intermediateSubmission: IntermediateSubmission) => {
+            this.submission$.next({data: intermediateSubmission.submission});
+          },
+          error: () => {
+            this.submission$.next({data: {}});
+          },
+        })
     );
   }
 
@@ -306,28 +313,35 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     const intermediateSaveRequest: IntermediateSaveRequest = {
       submission: this.submission$.getValue().data,
       taskInstanceId: this.taskInstanceId$.getValue(),
-    }
+    };
 
     this._subscriptions.add(
-      this.taskIntermediateSaveService.storeIntermediateSubmission(intermediateSaveRequest).subscribe({
-          next: (intermediateSubmission) => {
-            this.toastr.success(this.translateService.instant('formManagement.intermediateSave.success'));
+      this.taskIntermediateSaveService
+        .storeIntermediateSubmission(intermediateSaveRequest)
+        .subscribe({
+          next: intermediateSubmission => {
+            this.toastr.success(
+              this.translateService.instant('formManagement.intermediateSave.success')
+            );
           },
-          error: (intermediateSubmission) => {
-            this.toastr.error(this.translateService.instant('formManagement.intermediateSave.error'));
+          error: intermediateSubmission => {
+            this.toastr.error(
+              this.translateService.instant('formManagement.intermediateSave.error')
+            );
           },
-      })
+        })
     );
   }
 
   protected clearCurrentProgress() {
     this._subscriptions.add(
       this.taskIntermediateSaveService
-        .clearIntermediateSubmission(this.taskInstanceId$.getValue()).subscribe({
-        next: () => {
-          this.submission$.next({data: {}});
-        }
-      })
+        .clearIntermediateSubmission(this.taskInstanceId$.getValue())
+        .subscribe({
+          next: () => {
+            this.submission$.next({data: {}});
+          },
+        })
     );
   }
 }

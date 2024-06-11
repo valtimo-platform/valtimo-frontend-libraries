@@ -24,6 +24,6 @@ export interface IntermediateSubmission {
 }
 
 export interface IntermediateSaveRequest {
-    submission: object;
-    taskInstanceId: string;
+  submission: object;
+  taskInstanceId: string;
 }

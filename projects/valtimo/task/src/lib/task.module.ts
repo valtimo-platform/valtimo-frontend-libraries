@@ -85,7 +85,7 @@ import {TaskRoutingModule} from './task-routing.module';
     ButtonModule,
     IconModule,
     TooltipModule,
-    ConfirmationModalModule
+    ConfirmationModalModule,
   ],
   exports: [TaskListComponent, TaskDetailModalComponent, AssignUserToTaskComponent],
 })

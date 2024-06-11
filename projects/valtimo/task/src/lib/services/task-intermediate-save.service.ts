@@ -18,7 +18,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
-  AssigneeRequest, IntermediateSaveRequest, IntermediateSubmission,
+  AssigneeRequest,
+  IntermediateSaveRequest,
+  IntermediateSubmission,
   SpecifiedTask,
   Task,
   TaskListColumn,
@@ -45,32 +47,34 @@ export class TaskIntermediateSaveService extends BaseApiService {
   }
 
   public getIntermediateSubmission(taskInstanceId: string): Observable<IntermediateSubmission> {
-    return this.httpClient.get<IntermediateSubmission>(this.getApiUrl('/v1/form/intermediate/submission'), {
-      params: {
-        taskInstanceId
-      },
-      headers: new HttpHeaders().set(InterceptorSkip, '404')
-    });
+    return this.httpClient.get<IntermediateSubmission>(
+      this.getApiUrl('/v1/form/intermediate/submission'),
+      {
+        params: {
+          taskInstanceId,
+        },
+        headers: new HttpHeaders().set(InterceptorSkip, '404'),
+      }
+    );
   }
 
-  public storeIntermediateSubmission(request: IntermediateSaveRequest): Observable<IntermediateSubmission> {
+  public storeIntermediateSubmission(
+    request: IntermediateSaveRequest
+  ): Observable<IntermediateSubmission> {
     return this.httpClient.post<IntermediateSubmission>(
       this.getApiUrl('/v1/form/intermediate/submission'),
       request,
       {
-        headers: new HttpHeaders().set(InterceptorSkip, '400')
+        headers: new HttpHeaders().set(InterceptorSkip, '400'),
       }
     );
   }
 
   public clearIntermediateSubmission(taskInstanceId: string): Observable<void> {
-    return this.httpClient.delete<void>(
-      this.getApiUrl('/v1/form/intermediate/submission'),
-      {
-        params: {
-          taskInstanceId
-        }
-      }
-    );
+    return this.httpClient.delete<void>(this.getApiUrl('/v1/form/intermediate/submission'), {
+      params: {
+        taskInstanceId,
+      },
+    });
   }
 }

@@ -13,10 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<cds-modal
-  #taskDetailModal
-  id="taskDetailModal"
->
+<cds-modal #taskDetailModal id="taskDetailModal">
   <cds-modal-header (closeSelect)="modal.open = false">
     <div class="cds-modal-header">
       <div class="title-container">
@@ -25,16 +22,26 @@
       </div>
       <div *ngIf="intermediateSaveEnabled">
         <cds-tooltip
-        [caret]="true"
-        [description]="'formManagement.intermediateSave.save' | translate"
+          [caret]="true"
+          [description]="'formManagement.intermediateSave.save' | translate"
         >
-          <svg class="cds--btn__icon save-icon-margin cursor-pointer" cdsIcon="save" size="16" (click)="saveCurrentProgress()"></svg>
+          <svg
+            class="cds--btn__icon save-icon-margin cursor-pointer"
+            cdsIcon="save"
+            size="16"
+            (click)="saveCurrentProgress()"
+          ></svg>
         </cds-tooltip>
         <cds-tooltip
-        [caret]="true"
-        [description]="'formManagement.intermediateSave.clear' | translate"
+          [caret]="true"
+          [description]="'formManagement.intermediateSave.clear' | translate"
         >
-          <svg class="cds--btn__icon cursor-pointer" cdsIcon="trash-can" size="16" (click)="showConfirmationModal$.next(true)"></svg>
+          <svg
+            class="cds--btn__icon cursor-pointer"
+            cdsIcon="trash-can"
+            size="16"
+            (click)="showConfirmationModal$.next(true)"
+          ></svg>
         </cds-tooltip>
       </div>
     </div>
