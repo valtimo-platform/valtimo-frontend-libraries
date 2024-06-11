@@ -14,22 +14,8 @@
   ~ limitations under the License.
   -->
 
-<cds-tile-group
-  [multiple]="false"
-  (selected)="onSelectedEvent($event)"
-  class="valtimo-widget-wizard-step__content"
->
-  @for (widgetType of availableWidgets; track widgetType.titleKey) {
-    <cds-selection-tile
-      class="valtimo-widget-wizard-step__tile"
-      [value]="widgetType"
-      [selected]="widgetType.type === selectedWidget()?.type"
-    >
-      <h3>{{ widgetType.titleKey | translate }}</h3>
+<div class="formio-widget" *ngIf="prefilledFormDefinition$ | async as prefilledFormDefinition">
+  <h4 class="formio-widget__title">{{ (widgetConfiguration$ | async)?.title || '-' }}</h4>
 
-      <span>{{ widgetType.descriptionKey | translate }}</span>
-
-      <img [src]="widgetType.illustrationUrl" [alt]="widgetType.titleKey | translate" />
-    </cds-selection-tile>
-  }
-</cds-tile-group>
+  <valtimo-form-io [form]="prefilledFormDefinition"></valtimo-form-io>
+</div>

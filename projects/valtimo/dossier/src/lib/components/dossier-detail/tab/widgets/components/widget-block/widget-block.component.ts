@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import {CommonModule} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -24,8 +24,15 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {CaseWidgetPackResult, CaseWidgetType, CaseWidgetWithUuid} from '../../../../../../models';
+import {ActivatedRoute} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
+import {
+  CARBON_THEME,
+  CarbonListModule,
+  CdsThemeService,
+  CurrentCarbonTheme,
+} from '@valtimo/components';
+import {LoadingModule, TilesModule} from 'carbon-components-angular';
 import {
   BehaviorSubject,
   combineLatest,
@@ -37,23 +44,16 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import {CaseWidgetPackResult, CaseWidgetType, CaseWidgetWithUuid} from '../../../../../../models';
 import {
   DossierTabService,
   DossierWidgetsApiService,
   DossierWidgetsLayoutService,
 } from '../../../../../../services';
-import {ActivatedRoute} from '@angular/router';
-import {LoadingModule, TilesModule} from 'carbon-components-angular';
-import {WidgetTableComponent} from '../table/widget-table.component';
 import {WidgetCustomComponent} from '../custom/widget-custom.component';
-import {
-  CARBON_THEME,
-  CarbonListModule,
-  CdsThemeService,
-  CurrentCarbonTheme,
-} from '@valtimo/components';
-import {TranslateModule} from '@ngx-translate/core';
 import {WidgetFieldComponent} from '../field/widget-field.component';
+import {WidgetFormioComponent} from '../formio/widget-formio.component';
+import {WidgetTableComponent} from '../table/widget-table.component';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',
@@ -69,6 +69,7 @@ import {WidgetFieldComponent} from '../field/widget-field.component';
     TranslateModule,
     TilesModule,
     WidgetFieldComponent,
+    WidgetFormioComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -113,6 +114,8 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     );
 
   private readonly _caseWidgetWidthsPx$ = this.dossierWidgetsLayoutService.caseWidgetWidthsPx$;
+  private readonly _widthOverrides$ = this.dossierWidgetsLayoutService.widthOverrides$;
+
   public readonly CaseWidgetType = CaseWidgetType;
 
   public readonly documentId$ = this.route.params.pipe(
@@ -124,8 +127,8 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   public readonly widgetData$ = combineLatest([this.widget$, this.tabKey$, this.documentId$]).pipe(
     switchMap(([widget, tabkey, documentId]) =>
-      // custom component widgets do not fetch additional data
-      widget.type === 'custom'
+      // custom component and formio widgets do not fetch additional data
+      widget.type === CaseWidgetType.CUSTOM || widget.type === CaseWidgetType.FORMIO
         ? of({})
         : this.widgetsApiService.getWidgetData(documentId, tabkey, widget.key)
     ),
@@ -175,13 +178,16 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
 
   private openWidgetWidthSubscription(): void {
     this._subscriptions.add(
-      this._caseWidgetWidthsPx$.subscribe(caseWidgetsWidths => {
-        const widgetWidth = caseWidgetsWidths[this._widgetUuid];
+      combineLatest([this._caseWidgetWidthsPx$, this._widthOverrides$]).subscribe(
+        ([caseWidgetsWidths, widthOverrides]) => {
+          const widgetWidth =
+            widthOverrides[this._widgetUuid] || caseWidgetsWidths[this._widgetUuid];
 
-        if (widgetWidth) {
-          this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'width', `${widgetWidth}px`);
+          if (widgetWidth) {
+            this.renderer.setStyle(this._widgetBlockRef.nativeElement, 'width', `${widgetWidth}px`);
+          }
         }
-      })
+      )
     );
   }
 
