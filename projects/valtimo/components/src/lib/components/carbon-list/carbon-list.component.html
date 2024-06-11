@@ -158,7 +158,7 @@
 
 <ng-template #dragAndDropTemplate let-data="data">
   <div class="valtimo-carbon-list__move-rows">
-    <button cdsButton="ghost" [iconOnly]="true" size="sm" (mousedown)="onDragStart(data)">
+    <button cdsButton="ghost" [iconOnly]="true" size="sm" (mousedown)="onDragStart($event, data)">
       <svg cdsIcon="row" size="16" class="cds--btn__icon"></svg>
     </button>
   </div>

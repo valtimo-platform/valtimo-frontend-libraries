@@ -25,6 +25,7 @@ import {
   take,
 } from 'rxjs';
 import {CarbonListComponent} from '../carbon-list.component';
+import {TableItem} from 'carbon-components-angular';
 
 @Injectable()
 export class CarbonListDragAndDropService {
@@ -37,12 +38,20 @@ export class CarbonListDragAndDropService {
   private get _tableRows$(): Observable<HTMLTableRowElement[]> {
     return this._tableRowsSubject$.pipe(filter(trs => !!trs));
   }
+  private readonly _tableRowToMoveSubject$ = new BehaviorSubject<HTMLTableRowElement | null>(null);
+  private get _tableRowToMove$(): Observable<HTMLTableRowElement> {
+    return this._tableRowToMoveSubject$.pipe(filter(tr => !!tr));
+  }
   private readonly _tableRowMouseOverSubject$ = new BehaviorSubject<HTMLTableRowElement | null>(
     null
   );
   private get _tableRowMouseOver$(): Observable<HTMLTableRowElement> {
     return this._tableRowMouseOverSubject$.pipe(filter(tr => !!tr));
   }
+  private readonly _movingRowIndex$ = new BehaviorSubject<number>(0);
+  private readonly _mouseMoveDirection$ = new BehaviorSubject<'up' | 'down'>('up');
+  private _lastMouseY = 0;
+  private readonly _pauseSwap$ = new BehaviorSubject<boolean>(false);
 
   private _mousemoveSubscription!: Subscription;
   private _mouseupSubscription!: Subscription;
@@ -52,8 +61,14 @@ export class CarbonListDragAndDropService {
     this._carbonListElementRefSubject$.next(ref);
   }
 
-  public startDrag(): void {
-    this.setTableRows();
+  public startDrag(
+    startMouseY: number,
+    rowToBeMovedStartIndex: number,
+    tableItemsAtStart: TableItem[][]
+  ): void {
+    this._lastMouseY = startMouseY;
+    this._movingRowIndex$.next(rowToBeMovedStartIndex);
+    this.setTableRows(rowToBeMovedStartIndex);
     this.openMouseMoveSubscription();
     this.openTableRowSubscription();
     this.openMouseUpSubscription();
@@ -61,6 +76,9 @@ export class CarbonListDragAndDropService {
 
   private openMouseMoveSubscription(): void {
     this._mousemoveSubscription = fromEvent(document, 'mousemove').subscribe((e: MouseEvent) => {
+      this._mouseMoveDirection$.next(e.y > this._lastMouseY ? 'down' : 'up');
+      this._lastMouseY = e.y;
+
       const elementsUnderMouse = document.querySelectorAll(':hover');
       const arrayElementsUnderMouse = elementsUnderMouse && Array.from(elementsUnderMouse);
       const tableRowUnderMouse = arrayElementsUnderMouse?.find(
@@ -72,15 +90,31 @@ export class CarbonListDragAndDropService {
 
   private openTableRowSubscription(): void {
     this._tableRowSubscription = combineLatest([
+      this._pauseSwap$,
       this._tableRows$,
       this._tableRowMouseOver$,
-    ]).subscribe(([tableRows, tableRowMouseOver]) => {
-      console.log(tableRows, tableRowMouseOver);
-    });
+      this._tableRowToMoveSubject$,
+      this._mouseMoveDirection$,
+    ]).subscribe(
+      ([pauseSwap, tableRows, tableRowMouseOver, tableRowToMove, mouseMoveDirection]) => {
+        if (tableRowMouseOver !== tableRowToMove && !pauseSwap) {
+          this.pauseSwap();
+
+          if (mouseMoveDirection === 'up') {
+            tableRowToMove.parentNode.insertBefore(tableRowToMove, tableRowMouseOver);
+            this.continueSwap();
+          } else if (tableRowMouseOver.nextSibling) {
+            tableRowToMove.parentNode.insertBefore(tableRowToMove, tableRowMouseOver.nextSibling);
+            this.continueSwap();
+          }
+        }
+      }
+    );
   }
 
   private openMouseUpSubscription(): void {
     this._mouseupSubscription = fromEvent(document, 'mouseup').subscribe(() => {
+      console.log('mouse up');
       this.stopDrag();
     });
   }
@@ -95,6 +129,16 @@ export class CarbonListDragAndDropService {
       });
   }
 
+  private pauseSwap(): void {
+    this._pauseSwap$.next(true);
+  }
+
+  private continueSwap(): void {
+    window.requestAnimationFrame(() =>
+      window.requestAnimationFrame(() => this._pauseSwap$.next(false))
+    );
+  }
+
   private stopDrag(): void {
     this._mousemoveSubscription?.unsubscribe();
     this._mouseupSubscription?.unsubscribe();
@@ -103,31 +147,39 @@ export class CarbonListDragAndDropService {
     this._tableRowMouseOverSubject$.next(null);
   }
 
-  private setTableRows(): void {
+  private getTableRows(elementRef: ElementRef<CarbonListComponent>): HTMLTableRowElement[] | null {
+    const carbonListElement = elementRef.nativeElement as any as HTMLDivElement;
+    const carbonListChildren =
+      carbonListElement?.children && Array.from(carbonListElement?.children);
+    const tableContainerElement = carbonListChildren?.find(
+      child => child.localName === 'cds-table-container'
+    );
+    const tableContainerElementChildren =
+      tableContainerElement?.children && Array.from(tableContainerElement.children);
+    const tableElement = tableContainerElementChildren?.find(
+      child => child.localName === 'cds-table'
+    );
+    const tableElementChildren = tableElement?.children && Array.from(tableElement?.children);
+    const htmlTableElement = tableElementChildren?.find(child => child.localName === 'table');
+    const htmlTableElementChildren =
+      htmlTableElement?.children && Array.from(htmlTableElement?.children);
+    const htmlTableBodyElement = htmlTableElementChildren?.find(
+      child => child.localName === 'tbody'
+    );
+    const htmlTableRowElements =
+      htmlTableBodyElement?.children &&
+      (Array.from(htmlTableBodyElement.children) as any as HTMLTableRowElement[]);
+
+    return htmlTableRowElements || [];
+  }
+
+  private setTableRows(tableRowToMoveIndex: number): void {
     this._carbonListElementRef$.pipe(take(1)).subscribe(elementRef => {
-      const carbonListElement = elementRef.nativeElement as any as HTMLDivElement;
-      const carbonListChildren =
-        carbonListElement?.children && Array.from(carbonListElement?.children);
-      const tableContainerElement = carbonListChildren?.find(
-        child => child.localName === 'cds-table-container'
-      );
-      const tableContainerElementChildren =
-        tableContainerElement?.children && Array.from(tableContainerElement.children);
-      const tableElement = tableContainerElementChildren?.find(
-        child => child.localName === 'cds-table'
-      );
-      const tableElementChildren = tableElement?.children && Array.from(tableElement?.children);
-      const htmlTableElement = tableElementChildren?.find(child => child.localName === 'table');
-      const htmlTableElementChildren =
-        htmlTableElement?.children && Array.from(htmlTableElement?.children);
-      const htmlTableBodyElement = htmlTableElementChildren?.find(
-        child => child.localName === 'tbody'
-      );
-      const htmlTableRowElements =
-        htmlTableBodyElement?.children &&
-        (Array.from(htmlTableBodyElement.children) as any as HTMLTableRowElement[]);
+      const htmlTableRowElements = this.getTableRows(elementRef);
 
       if (htmlTableRowElements) this._tableRowsSubject$.next(htmlTableRowElements);
+      if (htmlTableRowElements && htmlTableRowElements[tableRowToMoveIndex])
+        this._tableRowToMoveSubject$.next(htmlTableRowElements[tableRowToMoveIndex]);
     });
   }
 }

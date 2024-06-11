@@ -346,8 +346,19 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  public onDragStart(event: any): void {
-    this.dragAndDropService.startDrag();
+  public onDragStart(
+    mouseEvent: MouseEvent,
+    carbonEvent: {index: number; item: CarbonListItem; length: number}
+  ): void {
+    combineLatest([this._tableItems$, this._filteredItems$])
+      .pipe(take(1))
+      .subscribe(([tableItems, filteredItems]) => {
+        this.dragAndDropService.startDrag(
+          mouseEvent.y,
+          carbonEvent.index,
+          filteredItems || tableItems
+        );
+      });
   }
 
   private buildPaginationModel(): void {
