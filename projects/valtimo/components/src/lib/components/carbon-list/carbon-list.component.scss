@@ -68,7 +68,8 @@ td:first-child {
     }
   }
 
-  &__move-rows {
+  &__move-rows,
+  &__draggable {
     width: 100%;
     justify-content: flex-end;
     display: flex;
