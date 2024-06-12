@@ -28,6 +28,7 @@ import {Edit16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   BreadcrumbService,
+  ConfirmationModalComponent,
   PageHeaderService,
   PageTitleService,
   PendingChangesComponent,
@@ -38,7 +39,11 @@ import {ButtonModule, IconModule, IconService, TabsModule} from 'carbon-componen
 import moment from 'moment/moment';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {WidgetEditorTab} from '../../models';
-import {TabManagementService, WidgetTabManagementService} from '../../services';
+import {
+  TabManagementService,
+  WidgetJsonEditorService,
+  WidgetTabManagementService,
+} from '../../services';
 import {DossierManagementWidgetTabEditModalComponent} from '../dossier-management-widget-tab-edit-modal/dossier-management-widget-tab-edit-modal';
 import {DossierManagementWidgetsEditorComponent} from './editor/dossier-management-widgets-editor.component';
 import {DossierManagementWidgetsJsonEditorComponent} from './json-editor/dossier-management-widgets-json-editor.component';
@@ -116,8 +121,8 @@ export class DossierManagementWidgetTabComponent
   );
 
   public readonly WidgetEditorTab = WidgetEditorTab;
-  public readonly activeTab = signal<WidgetEditorTab | null>(WidgetEditorTab.JSON);
-  public readonly activeContent = signal<WidgetEditorTab | null>(WidgetEditorTab.JSON);
+  public readonly activeTab = signal<WidgetEditorTab | null>(WidgetEditorTab.VISUAL);
+  public readonly activeContent = signal<WidgetEditorTab | null>(WidgetEditorTab.VISUAL);
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   private _pendingTab: WidgetEditorTab | null = null;
@@ -130,7 +135,8 @@ export class DossierManagementWidgetTabComponent
     private readonly tabManagementService: TabManagementService,
     private readonly widgetTabManagementService: WidgetTabManagementService,
     private readonly translateService: TranslateService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly widgetJsonEditorService: WidgetJsonEditorService
   ) {
     super();
   }
@@ -142,7 +148,6 @@ export class DossierManagementWidgetTabComponent
   public ngAfterViewInit(): void {
     this.iconService.registerAll([Edit16]);
     this.initBreadcrumb();
-    this.customModal = this._jsonEditor.pendingChangesModal;
   }
 
   public ngOnDestroy(): void {
@@ -178,6 +183,12 @@ export class DossierManagementWidgetTabComponent
     this._refreshWidgetTabSubject$.next(null);
   }
 
+  public onCustomModalLoaded(modal: ConfirmationModalComponent): void {
+    if (!!this.customModal) return;
+
+    this.customModal = modal;
+  }
+
   public onJsonCanDeactivate(canDeactivate: boolean): void {
     if (canDeactivate) {
       this.onCustomConfirm();
@@ -196,7 +207,7 @@ export class DossierManagementWidgetTabComponent
   }
 
   protected onCanDeactivate(): void {
-    this._jsonEditor.onCanDeactivate();
+    this.widgetJsonEditorService.showPendingModal.set(true);
   }
 
   private initBreadcrumb(): void {

@@ -49,9 +49,10 @@
   @case (WidgetEditorTab.JSON) {
     <valtimo-dossier-management-widgets-json-editor
       [currentWidgetTab]="currentWidgetTab$ | async"
-      (changeSaved)="refreshWidgetTab()"
-      (pendingChangesUpdate)="onPendingChangesUpdate($event)"
       (canDeactivate)="onJsonCanDeactivate($event)"
+      (changeSaved)="refreshWidgetTab()"
+      (customModalLoaded)="onCustomModalLoaded($event)"
+      (pendingChangesUpdate)="onPendingChangesUpdate($event)"
     ></valtimo-dossier-management-widgets-json-editor>
   }
 }
