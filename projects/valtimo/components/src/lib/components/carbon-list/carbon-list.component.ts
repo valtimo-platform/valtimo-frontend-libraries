@@ -298,13 +298,12 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   public openDragAndDropSubscription(): void {
     this._subscriptions.add(
       this.dragAndDropService.dragAndDropEvents$.subscribe(dragAndDropEvent => {
-        const itemToInsert = this._items[dragAndDropEvent.startIndex];
-        const filteredItems = this._items.filter(
-          (_, index) => index !== dragAndDropEvent.startIndex
+        const reorderedItems = this.swapItems(
+          this._items,
+          dragAndDropEvent.startIndex,
+          dragAndDropEvent.newIndex
         );
-        filteredItems.splice(dragAndDropEvent.newIndex, 0, itemToInsert);
-
-        this.itemsReordered.emit(filteredItems);
+        this.itemsReordered.emit(reorderedItems);
       })
     );
   }
@@ -661,10 +660,11 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private swapItems(items: CarbonListItem[], index1: number, index2: number): CarbonListItem[] {
-    const temp = [...items];
-    temp[index1] = temp.splice(index2, 1, temp[index1])[0];
+    const itemToInsert = items[index1];
+    const filteredItems = items.filter((_, index) => index !== index1);
+    filteredItems.splice(index2, 0, itemToInsert);
 
-    return temp;
+    return filteredItems;
   }
 
   private resolveTagObject(itemTags: CarbonTag[] | undefined): TableItem {
