@@ -35,7 +35,7 @@ interface WidgetCustomContent {
 }
 
 interface WidgetFormioContent {
-  formDefinition: string;
+  formDefinitionName: string;
 }
 
 type WidgetContentProperties =

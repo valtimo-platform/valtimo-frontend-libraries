@@ -67,7 +67,7 @@ interface CustomCaseWidget extends BasicCaseWidget {
 interface FormioCaseWidget extends BasicCaseWidget {
   type: CaseWidgetType.FORMIO;
   properties: {
-    formDefinition: string;
+    formDefinitionName: string;
   };
 }
 
