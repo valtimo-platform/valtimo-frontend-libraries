@@ -34,29 +34,31 @@
   }
 
   &__column {
+    margin-top: 16px;
     width: 100%;
-  }
-}
-
-.card-container {
-  background-color: var(--cds-background);
-  padding: 24px;
-
-  &__column-container {
-    display: flex;
-    gap: 16px;
+    background-color: var(--cds-background);
+    padding: 24px;
   }
 
-  &__column {
-    width: 50%;
-  }
-
-  &__title {
+  &__card-title {
     color: var(--cds-text-primary);
     font-weight: 500;
     font-size: 14px;
     line-height: 22px;
     margin-bottom: 16px;
     font-style: italic;
+  }
+
+  &__card-input {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__card-column {
+    width: 50%;
+  }
+
+  &__pagination {
+    padding: 8px 0;
   }
 }

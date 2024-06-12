@@ -18,6 +18,11 @@ import {FieldsCaseWidgetValue} from './case-widget.model';
 
 interface WidgetFieldsContent {
   columns: FieldsCaseWidgetValue[][];
+  fields: any;
+}
+
+interface WidgetCollectionContent {
+  fields: any;
 }
 
 interface WidgetTableContent {

@@ -19,12 +19,20 @@ import {
   Component,
   HostBinding,
   Input,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {InputModule} from 'carbon-components-angular';
+import {
+  InputModule,
+  PaginationModel,
+  PaginationModule,
+  TilesModule,
+} from 'carbon-components-angular';
 import {FieldsCaseWidget} from '../../../../../../models';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {CarbonListModule, ViewContentService} from '@valtimo/components';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-widget-collection',
@@ -33,7 +41,15 @@ import {BehaviorSubject} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, WidgetCollectionComponent, InputModule],
+  imports: [
+    CommonModule,
+    InputModule,
+    PaginationModule,
+    TilesModule,
+    WidgetCollectionComponent,
+    CarbonListModule,
+    TranslateModule,
+  ],
 })
 export class WidgetCollectionComponent {
   @HostBinding('class') public readonly class = 'widget-collection';
@@ -49,6 +65,42 @@ export class WidgetCollectionComponent {
 
   public readonly widgetConfiguration$ = new BehaviorSubject<FieldsCaseWidget | null>(null);
   public readonly widgetData$ = new BehaviorSubject<object | null>(null);
+  private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
+  public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
+  public readonly widgetPropertyValue$: Observable<{title: string; value: string}[][]> =
+    combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
+      map(([widget, widgetData]) =>
+        widget?.properties.fields.map(field =>
+          field.reduce(
+            (fields, property) => [
+              ...fields,
+              ...(widgetData?.hasOwnProperty(property.key)
+                ? [
+                    {
+                      title: property.title,
+                      value: !!widgetData[property.key]
+                        ? this.viewContentService.get(widgetData[property.key], {
+                            ...property.displayProperties,
+                            viewType: property.displayProperties?.type,
+                          })
+                        : '-',
+                    },
+                  ]
+                : []),
+            ],
+            []
+          )
+        )
+      )
+    );
 
-  constructor() {}
+  constructor(private viewContentService: ViewContentService) {}
+
+  public onSelectPage(page: number): void {
+    this._queryParams$.next(`page=${page - 1}&size=${this.paginationModel().pageLength}`);
+    this.paginationModel.update((model: PaginationModel) => ({
+      ...model,
+      currentPage: page,
+    }));
+  }
 }

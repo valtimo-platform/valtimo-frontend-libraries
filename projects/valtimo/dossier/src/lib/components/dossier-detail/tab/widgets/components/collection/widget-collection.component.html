@@ -14,58 +14,38 @@
   ~ limitations under the License.
   -->
 
-<ng-container
+<cds-tile
   *ngIf="{
-    widgetConfiguration: widgetConfiguration$ | async
+    widgetConfiguration: widgetConfiguration$ | async,
+    widgetPropertyValue: widgetPropertyValue$ | async
   } as obs"
 >
-  <h4 class="widget-collection__title">Testing</h4>
+  <span class="widget-collection__title">Main title</span>
 
   <div class="widget-collection__container">
     <div class="widget-collection__column">
-      <div class="card-container">
-        <h4 class="card-container__title">Testing column 1</h4>
-        <div class="card-container__column-container">
-          <div class="card-container__column">
-            <cds-label>
-              BSN
+      <h4 class="widget-collection__card-title">Testing column 1</h4>
+      @for (column of obs?.widgetData; track column.key) {
+        <div class="widget-collection__card-column>
+          @for (property of column; track property) {
+            <div class="widget-collection__card-input">
+              <cds-label>
+                {{ property?.title }}
 
-              <input cdsText [value]="'Input test'" [readonly]="true" />
-            </cds-label>
-          </div>
-
-          <div class="card-container__column">
-            <cds-label>
-              Geboortedatum
-
-              <input cdsText [value]="'Input test'" [readonly]="true" />
-            </cds-label>
-          </div>
+                <input cdsText [value]="property?.value" [readonly]="true" />
+              </cds-label>
+            </div>
+          }
         </div>
-      </div>
-    </div>
-
-    <div class="widget-collection__column">
-      <div class="card-container">
-        <h4 class="card-container__title">Testing column 1</h4>
-        <div class="card-container__column-container">
-          <div class="card-container__column">
-            <cds-label>
-              BSN
-
-              <input cdsText [value]="'Input test'" [readonly]="true" />
-            </cds-label>
-          </div>
-
-          <div class="card-container__column">
-            <cds-label>
-              Geboortedatum
-
-              <input cdsText [value]="'Input test'" [readonly]="true" />
-            </cds-label>
-          </div>
-        </div>
-      </div>
+      }
     </div>
   </div>
-</ng-container>
+
+  <cds-pagination-nav
+    *ngIf="paginationModel()"
+    class="widget-collection__pagination"
+    [model]="paginationModel()"
+    (selectPage)="onSelectPage($event)"
+  >
+  </cds-pagination-nav>
+</cds-tile>
