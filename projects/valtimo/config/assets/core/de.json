@@ -761,7 +761,12 @@
         "selectForm": "Formulardefinition",
         "placeholder": "Wählen Sie eine Formulardefinition aus"
       }
-    }
+    },
+    "cancelModal": {
+      "title": "Verlassen des Editors",
+      "content": "Sind Sie sicher, dass Sie den Editor verlassen möchten? Möglicherweise gehen nicht gespeicherte Änderungen verloren. Beachten Sie beim Speichern, dass das Entfernen oder Ändern eines Attributs die Widget-Konfiguration zerstören kann."
+    },
+    "saveModalContent": "Sind Sie sicher, dass Sie die Widget-Konfiguration speichern möchten? Das Entfernen oder Ändern eines Attributs kann die Widget-Konfiguration zerstören."
   },
   "zgw": {
     "columns": {

@@ -37,7 +37,7 @@
   </cds-tab>
 </cds-tabs>
 
-@switch (activeTab()) {
+@switch (activeContent()) {
   @case (WidgetEditorTab.VISUAL) {
     <valtimo-dossier-management-widgets-editor
       [documentDefinitionName]="documentDefinitionName$ | async"

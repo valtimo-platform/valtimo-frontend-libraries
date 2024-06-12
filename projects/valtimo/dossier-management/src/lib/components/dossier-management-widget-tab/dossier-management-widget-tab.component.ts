@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {CommonModule} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
-  ViewChild,
   signal,
+  ViewChild,
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Edit16} from '@carbon/icons';
@@ -37,12 +37,11 @@ import {ApiTabItem} from '@valtimo/dossier';
 import {ButtonModule, IconModule, IconService, TabsModule} from 'carbon-components-angular';
 import moment from 'moment/moment';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
-import {TabManagementService, WidgetTabManagementService} from '../../services';
-import {CommonModule} from '@angular/common';
-import {DossierManagementWidgetsEditorComponent} from './editor/dossier-management-widgets-editor.component';
-import {DossierManagementWidgetTabEditModalComponent} from '../dossier-management-widget-tab-edit-modal/dossier-management-widget-tab-edit-modal';
-import {DossierManagementWidgetsJsonEditorComponent} from './json-editor/dossier-management-widgets-json-editor.component';
 import {WidgetEditorTab} from '../../models';
+import {TabManagementService, WidgetTabManagementService} from '../../services';
+import {DossierManagementWidgetTabEditModalComponent} from '../dossier-management-widget-tab-edit-modal/dossier-management-widget-tab-edit-modal';
+import {DossierManagementWidgetsEditorComponent} from './editor/dossier-management-widgets-editor.component';
+import {DossierManagementWidgetsJsonEditorComponent} from './json-editor/dossier-management-widgets-json-editor.component';
 
 @Component({
   selector: 'valtimo-dossier-management-case-widgets',
@@ -67,7 +66,7 @@ export class DossierManagementWidgetTabComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   @ViewChild(DossierManagementWidgetsJsonEditorComponent)
-  private _jsonEditor: DossierManagementWidgetsJsonEditorComponent;
+  private readonly _jsonEditor: DossierManagementWidgetsJsonEditorComponent;
 
   public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || ''),
@@ -118,13 +117,13 @@ export class DossierManagementWidgetTabComponent
 
   public readonly WidgetEditorTab = WidgetEditorTab;
   public readonly activeTab = signal<WidgetEditorTab | null>(WidgetEditorTab.JSON);
+  public readonly activeContent = signal<WidgetEditorTab | null>(WidgetEditorTab.JSON);
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   private _pendingTab: WidgetEditorTab | null = null;
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly iconService: IconService,
     private readonly pageTitleService: PageTitleService,
     private readonly route: ActivatedRoute,
@@ -153,11 +152,13 @@ export class DossierManagementWidgetTabComponent
 
   public displayBodyComponent(tab: WidgetEditorTab): void {
     if (this.pendingChanges && tab !== this.activeTab()) {
-      this._pendingTab = tab;
+      this._pendingTab = this.activeTab();
+      this.activeTab.set(tab);
       this.onCanDeactivate();
       return;
     }
     this.activeTab.set(tab);
+    this.activeContent.set(tab);
   }
 
   public editWidgetTab(): void {
@@ -177,8 +178,8 @@ export class DossierManagementWidgetTabComponent
     this._refreshWidgetTabSubject$.next(null);
   }
 
-  public onJsonCanDeactivate(event): void {
-    if (event) {
+  public onJsonCanDeactivate(canDeactivate: boolean): void {
+    if (canDeactivate) {
       this.onCustomConfirm();
       return;
     }
@@ -187,13 +188,11 @@ export class DossierManagementWidgetTabComponent
   }
 
   protected onCancelRedirect(): void {
-    this.activeTab.update(tab => tab);
-    this._pendingTab
-    this.cdr.detectChanges();
+    this.activeTab.set(this._pendingTab);
   }
 
   protected onConfirmRedirect(): void {
-    this.activeTab.set(this._pendingTab);
+    this.activeContent.set(this.activeTab());
   }
 
   protected onCanDeactivate(): void {

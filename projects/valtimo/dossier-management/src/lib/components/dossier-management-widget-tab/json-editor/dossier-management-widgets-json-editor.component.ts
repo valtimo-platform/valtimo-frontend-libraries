@@ -34,7 +34,7 @@ import {
   EditorModel,
   EditorModule,
 } from '@valtimo/components';
-import {CaseWidgetsRes} from '@valtimo/dossier';
+import {BasicCaseWidget, CaseWidgetsRes} from '@valtimo/dossier';
 import {
   ButtonModule,
   IconModule,
@@ -64,8 +64,10 @@ export class DossierManagementWidgetsJsonEditorComponent {
   @ViewChild('pendingChangesModal') public pendingChangesModal: ConfirmationModalComponent;
 
   private _currentWidgetTab: CaseWidgetsRes;
+  private _currentWidgetKeys: string[];
   @Input() public set currentWidgetTab(value: CaseWidgetsRes) {
     this._currentWidgetTab = value;
+    this._currentWidgetKeys = value.widgets.map((widget: BasicCaseWidget) => widget.key);
     this.jsonModel.set({
       value: JSON.stringify(value),
       language: 'json',
@@ -85,9 +87,9 @@ export class DossierManagementWidgetsJsonEditorComponent {
   private readonly _widgetConfig = signal<CaseWidgetsRes | null>(null);
 
   private readonly _jsonValid = signal<boolean>(false);
-  private readonly _keyEdited = signal<boolean>(false);
+  private readonly _jsonSchemaInvalid = signal<boolean>(false);
   public readonly saveButtonDisabled: Signal<boolean> = computed(
-    () => !this._jsonValid() || this._keyEdited() || !this._widgetConfig()
+    () => !this._jsonValid() || this._jsonSchemaInvalid() || !this._widgetConfig()
   );
 
   constructor(
@@ -128,7 +130,7 @@ export class DossierManagementWidgetsJsonEditorComponent {
       ...model,
       value: JSON.stringify(this._currentWidgetTab),
     }));
-    this.pendingChangesUpdate.next(false);
+    this.pendingChangesUpdate.emit(false);
     this.canDeactivate.emit(true);
   }
 
@@ -150,6 +152,7 @@ export class DossierManagementWidgetsJsonEditorComponent {
             duration: CARBON_CONSTANTS.notificationDuration,
           });
           this.editActive.set(false);
+          this.pendingChangesUpdate.emit(false);
           this.changeSaved.emit();
           this.canDeactivate.emit(true);
         },
@@ -192,8 +195,16 @@ export class DossierManagementWidgetsJsonEditorComponent {
 
   public onValueChangeEvent(value: string) {
     const widgetConfig: CaseWidgetsRes = JSON.parse(value);
+    const editedWidgetKeys: string[] = widgetConfig.widgets.map(
+      (widget: BasicCaseWidget) => widget.key
+    );
 
-    this._keyEdited.set(widgetConfig.key !== this._currentWidgetTab.key);
+    this._jsonSchemaInvalid.set(
+      widgetConfig.key !== this._currentWidgetTab.key ||
+        widgetConfig.caseDefinitionName !== this._currentWidgetTab.caseDefinitionName ||
+        !this._currentWidgetKeys.every((key: string) => editedWidgetKeys.includes(key)) ||
+        new Set(editedWidgetKeys).size !== editedWidgetKeys.length
+    );
 
     if (!this._jsonValid() || !this.editActive()) return;
 

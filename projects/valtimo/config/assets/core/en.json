@@ -762,7 +762,12 @@
         "selectForm": "Form definition",
         "placeholder": "Select a form definition"
       }
-    }
+    },
+    "cancelModal": {
+      "title": "Leaving the editor",
+      "content": "Are you sure you want to leave the editor? There can be unsaved changes that will be lost. When saving, beware that removing or changing an attribute can break the widget configuration."
+    },
+    "saveModalContent": "Are you sure you want to save the widget configuration? Removing or changing an attribute can break the widget configuration."
   },
   "zgw": {
     "columns": {
