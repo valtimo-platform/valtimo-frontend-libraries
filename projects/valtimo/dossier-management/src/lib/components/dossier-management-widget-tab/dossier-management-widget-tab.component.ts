@@ -21,7 +21,6 @@ import {
   OnDestroy,
   OnInit,
   signal,
-  ViewChild,
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Edit16} from '@carbon/icons';
@@ -70,9 +69,6 @@ export class DossierManagementWidgetTabComponent
   extends PendingChangesComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @ViewChild(DossierManagementWidgetsJsonEditorComponent)
-  private readonly _jsonEditor: DossierManagementWidgetsJsonEditorComponent;
-
   public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || ''),
     filter(documentDefinitionName => !!documentDefinitionName),

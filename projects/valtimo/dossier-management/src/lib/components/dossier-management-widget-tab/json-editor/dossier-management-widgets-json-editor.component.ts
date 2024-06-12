@@ -190,10 +190,6 @@ export class DossierManagementWidgetsJsonEditorComponent implements AfterViewIni
     this.widgetJsonEditorService.showPendingModal.set(true);
   }
 
-  public onCanDeactivate(): void {
-    this.widgetJsonEditorService.showPendingModal.set(true);
-  }
-
   public onEditClick(): void {
     this.editActive.set(true);
   }
