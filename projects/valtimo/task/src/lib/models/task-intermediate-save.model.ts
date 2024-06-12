@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,3 +14,16 @@
  * limitations under the License.
  */
 
+export interface IntermediateSubmission {
+  submission: object;
+  taskInstanceId: string;
+  createdBy: string;
+  createdOn: string;
+  editedBy: string;
+  editedOn: string;
+}
+
+export interface IntermediateSaveRequest {
+  submission: object;
+  taskInstanceId: string;
+}

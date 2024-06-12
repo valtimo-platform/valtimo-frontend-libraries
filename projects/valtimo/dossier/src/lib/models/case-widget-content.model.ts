@@ -14,8 +14,35 @@
  * limitations under the License.
  */
 
-import {EventEmitter} from '@angular/core';
+import {FieldsCaseWidgetValue} from './case-widget.model';
 
-export interface WidgetContentComponent {
-  changeValidEvent: EventEmitter<boolean>;
+interface WidgetFieldsContent {
+  columns: FieldsCaseWidgetValue[][];
 }
+
+interface WidgetTableContent {
+  columns: FieldsCaseWidgetValue[];
+  firstColumnAsTitle: boolean;
+}
+
+interface WidgetCustomContent {
+  componentKey: string;
+}
+
+interface WidgetFormioContent {
+  formDefinitionName: string;
+}
+
+type WidgetContentProperties =
+  | WidgetFieldsContent
+  | WidgetTableContent
+  | WidgetCustomContent
+  | WidgetFormioContent;
+
+export {
+  WidgetContentProperties,
+  WidgetFieldsContent,
+  WidgetCustomContent,
+  WidgetFormioContent,
+  WidgetTableContent,
+};
