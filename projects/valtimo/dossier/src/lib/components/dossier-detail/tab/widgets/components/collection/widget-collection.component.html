@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<cds-tile
+<ng-container
   *ngIf="{
     widgetConfiguration: widgetConfiguration$ | async,
     widgetPropertyValue: widgetPropertyValue$ | async
@@ -23,21 +23,21 @@
   <span class="widget-collection__title">Main title</span>
 
   <div class="widget-collection__container">
-    <div class="widget-collection__column">
-      <h4 class="widget-collection__card-title">Testing column 1</h4>
-      @for (column of obs?.widgetData; track column.key) {
-        <div class="widget-collection__card-column>
-          @for (property of column; track property) {
-            <div class="widget-collection__card-input">
-              <cds-label>
-                {{ property?.title }}
+    <!--      <h4 class="widget-collection__card-title">Testing column 1</h4>-->
 
-                <input cdsText [value]="property?.value" [readonly]="true" />
-              </cds-label>
-            </div>
-          }
-        </div>
-      }
+    <div class="widget-collection__card" *ngFor="let field of obs?.widgetPropertyValue">
+      <div *ngFor="let property of field">
+        <cds-label>
+          {{ property?.title }}
+
+          <input
+            [value]="property?.value"
+            [readonly]="true"
+            class="widget-collection__card-input"
+            cdsText
+          />
+        </cds-label>
+      </div>
     </div>
   </div>
 
@@ -48,4 +48,4 @@
     (selectPage)="onSelectPage($event)"
   >
   </cds-pagination-nav>
-</cds-tile>
+</ng-container>

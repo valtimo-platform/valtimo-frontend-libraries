@@ -18,7 +18,6 @@ import {FieldsCaseWidgetValue} from './case-widget.model';
 
 interface WidgetFieldsContent {
   columns: FieldsCaseWidgetValue[][];
-  fields: any;
 }
 
 interface WidgetCollectionContent {
@@ -42,7 +41,8 @@ type WidgetContentProperties =
   | WidgetFieldsContent
   | WidgetTableContent
   | WidgetCustomContent
-  | WidgetFormioContent;
+  | WidgetFormioContent
+  | WidgetCollectionContent;
 
 export {
   WidgetContentProperties,
@@ -50,4 +50,5 @@ export {
   WidgetCustomContent,
   WidgetFormioContent,
   WidgetTableContent,
+  WidgetCollectionContent,
 };

@@ -16,28 +16,31 @@
 
 .widget-collection {
   padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 
   &__title {
     color: var(--cds-text-primary);
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
-    margin-bottom: 16px;
   }
 
   &__container {
     display: flex;
-    column-gap: 24px;
+    column-gap: 16px;
   }
 
+  &,
   &__column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__card {
     margin-top: 16px;
-    width: 100%;
+    display: flex;
     background-color: var(--cds-background);
-    padding: 24px;
+    padding: 16px;
+    column-gap: 16px;
   }
 
   &__card-title {
@@ -50,12 +53,7 @@
   }
 
   &__card-input {
-    display: flex;
-    gap: 16px;
-  }
-
-  &__card-column {
-    width: 50%;
+    background: transparent;
   }
 
   &__pagination {

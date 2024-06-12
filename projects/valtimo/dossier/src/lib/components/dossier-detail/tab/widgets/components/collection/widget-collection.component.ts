@@ -16,6 +16,7 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   HostBinding,
   Input,
@@ -29,9 +30,9 @@ import {
   PaginationModule,
   TilesModule,
 } from 'carbon-components-angular';
-import {FieldsCaseWidget} from '../../../../../../models';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
-import {CarbonListModule, ViewContentService} from '@valtimo/components';
+import {CollectionCaseWidget} from '../../../../../../models';
+import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
+import {CarbonListItem, CarbonListModule, ViewContentService} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
@@ -53,48 +54,68 @@ import {TranslateModule} from '@ngx-translate/core';
 })
 export class WidgetCollectionComponent {
   @HostBinding('class') public readonly class = 'widget-collection';
-  @Input() public set widgetConfiguration(value: FieldsCaseWidget) {
+  @Input() public set widgetConfiguration(value: CollectionCaseWidget) {
     if (!value) return;
     this.widgetConfiguration$.next(value);
   }
+  public readonly showPagination$ = new BehaviorSubject<boolean>(false);
 
-  @Input() public set widgetData(value: object) {
+  @Input() public set widgetData(value: any | null) {
     if (!value) return;
-    this.widgetData$.next(value);
+
+    this.showPagination$.next(value.totalElements > value.size);
+    this.widgetData$.next(value.content);
+
+    this.paginationModel.set(
+      value.totalPages < 0
+        ? null
+        : {
+            currentPage: 1,
+            totalDataLength: Math.ceil(value.totalElements / value.size),
+            pageLength: value.size,
+          }
+    );
+    this.cdr.detectChanges();
   }
 
-  public readonly widgetConfiguration$ = new BehaviorSubject<FieldsCaseWidget | null>(null);
-  public readonly widgetData$ = new BehaviorSubject<object | null>(null);
-  private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
-  public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
+  public readonly widgetConfiguration$ = new BehaviorSubject<CollectionCaseWidget | null>(null);
+  private widgetData$ = new BehaviorSubject<CarbonListItem[] | null>(null);
+
   public readonly widgetPropertyValue$: Observable<{title: string; value: string}[][]> =
     combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
+      filter(([widget, widgetData]) => !!widget && !!widgetData),
       map(([widget, widgetData]) =>
-        widget?.properties.fields.map(field =>
-          field.reduce(
-            (fields, property) => [
-              ...fields,
-              ...(widgetData?.hasOwnProperty(property.key)
+        widgetData.map(widgetFieldData => {
+          return widget?.properties.fields.reduce(
+            (columnFields, property) => [
+              ...columnFields,
+              ...(widgetFieldData.hasOwnProperty(property.key)
                 ? [
                     {
                       title: property.title,
-                      value: !!widgetData[property.key]
-                        ? this.viewContentService.get(widgetData[property.key], {
-                            ...property.displayProperties,
-                            viewType: property.displayProperties?.type,
-                          })
+                      value: this.viewContentService.get(widgetFieldData[property.key], {
+                        ...widgetFieldData[property.key].displayProperties,
+                        viewType: widgetFieldData[property.key].displayProperties?.type,
+                      })
+                        ? widgetFieldData[property.key]
                         : '-',
+                      width: property.width,
                     },
                   ]
                 : []),
             ],
             []
-          )
-        )
+          );
+        })
       )
     );
+  private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
+  public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
 
-  constructor(private viewContentService: ViewContentService) {}
+  constructor(
+    private viewContentService: ViewContentService,
+    private readonly cdr: ChangeDetectorRef
+  ) {}
 
   public onSelectPage(page: number): void {
     this._queryParams$.next(`page=${page - 1}&size=${this.paginationModel().pageLength}`);
