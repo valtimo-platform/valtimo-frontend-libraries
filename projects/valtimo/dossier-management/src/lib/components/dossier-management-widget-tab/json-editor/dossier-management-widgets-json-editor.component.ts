@@ -23,10 +23,17 @@ import {
   Output,
   Signal,
   signal,
+  ViewChild,
 } from '@angular/core';
 import {Edit16, Save16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CARBON_CONSTANTS, EditorModel, EditorModule} from '@valtimo/components';
+import {
+  CARBON_CONSTANTS,
+  ConfirmationModalComponent,
+  ConfirmationModalModule,
+  EditorModel,
+  EditorModule,
+} from '@valtimo/components';
 import {CaseWidgetsRes} from '@valtimo/dossier';
 import {
   ButtonModule,
@@ -34,7 +41,7 @@ import {
   IconService,
   NotificationService,
 } from 'carbon-components-angular';
-import {take} from 'rxjs';
+import {BehaviorSubject, take} from 'rxjs';
 import {WidgetTabManagementService} from '../../../services';
 
 @Component({
@@ -43,10 +50,19 @@ import {WidgetTabManagementService} from '../../../services';
   styleUrl: './dossier-management-widgets-json-editor.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, TranslateModule, EditorModule, ButtonModule, IconModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    EditorModule,
+    ButtonModule,
+    IconModule,
+    ConfirmationModalModule,
+  ],
   providers: [NotificationService],
 })
 export class DossierManagementWidgetsJsonEditorComponent {
+  @ViewChild('pendingChangesModal') public pendingChangesModal: ConfirmationModalComponent;
+
   private _currentWidgetTab: CaseWidgetsRes;
   @Input() public set currentWidgetTab(value: CaseWidgetsRes) {
     this._currentWidgetTab = value;
@@ -55,21 +71,23 @@ export class DossierManagementWidgetsJsonEditorComponent {
       language: 'json',
     });
   }
-  public get currentWidgetTab(): CaseWidgetsRes {
-    return this._currentWidgetTab;
-  }
 
+  @Output() public readonly canDeactivate = new EventEmitter<boolean>();
+  @Output() public readonly pendingChangesUpdate = new EventEmitter<boolean>();
   @Output() public readonly changeSaved = new EventEmitter();
 
   public readonly jsonModel = signal<EditorModel | null>(null);
   public readonly editActive = signal<boolean>(false);
+
+  public readonly showPendingModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showSaveConfirmation$ = new BehaviorSubject<boolean>(false);
 
   private readonly _widgetConfig = signal<CaseWidgetsRes | null>(null);
 
   private readonly _jsonValid = signal<boolean>(false);
   private readonly _keyEdited = signal<boolean>(false);
   public readonly saveButtonDisabled: Signal<boolean> = computed(
-    () => !this._jsonValid() || this._keyEdited()
+    () => !this._jsonValid() || this._keyEdited() || !this._widgetConfig()
   );
 
   constructor(
@@ -98,20 +116,23 @@ export class DossierManagementWidgetsJsonEditorComponent {
     downloadAnchorElement.click();
   }
 
-  public onCancelClick(): void {
+  public keepEditing(): void {
+    this.showPendingModal$.next(false);
+    this.showSaveConfirmation$.next(false);
+    this.canDeactivate.emit(false);
+  }
+
+  public discardChanges(): void {
     this.editActive.set(false);
     this.jsonModel.update((model: EditorModel | null) => ({
       ...model,
       value: JSON.stringify(this._currentWidgetTab),
     }));
+    this.pendingChangesUpdate.next(false);
+    this.canDeactivate.emit(true);
   }
 
-  public onEditClick(): void {
-    this.editActive.set(true);
-  }
-
-  public onSaveClick(): void {
-    this.editActive.set(false);
+  public save(): void {
     const config: CaseWidgetsRes | null = this._widgetConfig();
 
     if (!config) return;
@@ -128,7 +149,9 @@ export class DossierManagementWidgetsJsonEditorComponent {
             showClose: true,
             duration: CARBON_CONSTANTS.notificationDuration,
           });
+          this.editActive.set(false);
           this.changeSaved.emit();
+          this.canDeactivate.emit(true);
         },
         error: () => {
           this.notificationService.showNotification({
@@ -142,6 +165,27 @@ export class DossierManagementWidgetsJsonEditorComponent {
       });
   }
 
+  public onCancelClick(): void {
+    if (!this._widgetConfig()) {
+      this.editActive.set(false);
+      return;
+    }
+
+    this.showPendingModal$.next(true);
+  }
+
+  public onCanDeactivate(): void {
+    this.showPendingModal$.next(true);
+  }
+
+  public onEditClick(): void {
+    this.editActive.set(true);
+  }
+
+  public onSaveClick(): void {
+    this.showSaveConfirmation$.next(true);
+  }
+
   public onValidEvent(valid: boolean) {
     this._jsonValid.set(valid);
   }
@@ -151,8 +195,9 @@ export class DossierManagementWidgetsJsonEditorComponent {
 
     this._keyEdited.set(widgetConfig.key !== this._currentWidgetTab.key);
 
-    if (!this._jsonValid()) return;
+    if (!this._jsonValid() || !this.editActive()) return;
 
     this._widgetConfig.set(JSON.parse(value));
+    this.pendingChangesUpdate.emit(true);
   }
 }

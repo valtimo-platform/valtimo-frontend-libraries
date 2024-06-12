@@ -634,8 +634,7 @@
     "documentDefinition": {
       "cancelModal": {
         "title": "Verlassen des Editors",
-        "content": "Sind Sie sicher, dass Sie den Editor verlassen möchten? Möglicherweise gehen nicht gespeicherte Änderungen verloren. Beachten Sie beim Speichern, dass das Entfernen oder Ändern eines Attributs die Falldefinition zerstören kann.",
-        "keepEditing": "Bearbeiten Sie weiter"
+        "content": "Sind Sie sicher, dass Sie den Editor verlassen möchten? Möglicherweise gehen nicht gespeicherte Änderungen verloren. Beachten Sie beim Speichern, dass das Entfernen oder Ändern eines Attributs die Falldefinition zerstören kann."
       },
       "saveModalContent": "Sind Sie sicher, dass Sie die Dokumentdefinition speichern möchten? Das Entfernen oder Ändern eines Attributs kann die Falldefinition zerstören."
     },
@@ -1017,7 +1016,8 @@
     },
     "pendingChanges": {
       "title": "Seite verlassen",
-      "content": "Sie verlassen die Seite. Alle nicht gespeicherten Änderungen gehen verloren. Sind Sie sicher, dass Sie fortfahren möchten?"
+      "content": "Sie verlassen die Seite. Alle nicht gespeicherten Änderungen gehen verloren. Sind Sie sicher, dass Sie fortfahren möchten?",
+      "keepEditing": "Bearbeiten Sie weiter"
     },
     "required": "erforderlich",
     "filter": "Filter...",

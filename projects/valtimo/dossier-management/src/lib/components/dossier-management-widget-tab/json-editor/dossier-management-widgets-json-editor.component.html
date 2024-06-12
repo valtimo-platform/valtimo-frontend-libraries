@@ -52,3 +52,31 @@
 ></valtimo-editor>
 
 <a id="downloadAnchorElement" style="display: none"></a>
+
+<valtimo-confirmation-modal
+  [showModalSubject$]="showSaveConfirmation$"
+  cancelButtonTextTranslationKey="interface.cancel"
+  confirmButtonTextTranslationKey="interface.save"
+  contentTranslationKey="widgetTabManagement.saveModalContent"
+  titleTranslationKey="interface.save"
+  (cancelEvent)="keepEditing()"
+  (confirmEvent)="save()"
+></valtimo-confirmation-modal>
+
+<valtimo-confirmation-modal
+  #pendingChangesModal
+  [showModalSubject$]="showPendingModal$"
+  cancelButtonTextTranslationKey="interface.pendingChanges.keepEditing"
+  cancelButtonType="ghost"
+  confirmButtonTextTranslationKey="interface.discard"
+  confirmButtonType="danger"
+  contentTranslationKey="widgetTabManagement.cancelModal.content"
+  optionalButtonTextTranslationKey="interface.save"
+  optionalButtonType="secondary"
+  titleTranslationKey="widgetTabManagement.cancelModal.cancelModal.title"
+  showOptionalButton="true"
+  spacerAfterCancelButton="true"
+  (cancelEvent)="keepEditing()"
+  (confirmEvent)="discardChanges()"
+  (optionalEvent)="save()"
+></valtimo-confirmation-modal>

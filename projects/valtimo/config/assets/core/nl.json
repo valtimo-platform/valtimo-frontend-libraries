@@ -634,8 +634,7 @@
     "documentDefinition": {
       "cancelModal": {
         "title": "De editor verlaten",
-        "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut de zaakdefinitie kan beschadigen.",
-        "keepEditing": "Blijf bewerken"
+        "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut de zaakdefinitie kan beschadigen."
       },
       "saveModalContent": "Weet je zeker dat je de documentdefinitie wilt opslaan? Het verwijderen of wijzigen van een attribuut kan de zaakdefinitie verbreken."
     },
@@ -1020,7 +1019,8 @@
     },
     "pendingChanges": {
       "title": "Pagina verlaten",
-      "content": "Je gaat de pagina verlaten. Alle niet-opgeslagen wijzigingen gaan verloren. Weet je zeker dat je door wilt gaan?"
+      "content": "Je gaat de pagina verlaten. Alle niet-opgeslagen wijzigingen gaan verloren. Weet je zeker dat je door wilt gaan?",
+      "keepEditing": "Blijf bewerken"
     },
     "required": "vereist",
     "filter": "Filteren...",
