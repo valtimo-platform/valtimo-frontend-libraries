@@ -685,8 +685,8 @@
       }
     },
     "notification": {
-      "success": "Widget configuration updated successfully",
-      "error": "Widget configuration failed to update"
+      "success": "Widget-Konfiguration erfolgreich aktualisiert",
+      "error": "Die Widget-Konfiguration konnte nicht aktualisiert werden"
     },
     "types": {
       "description": "Wählen Sie den Widget-Typ aus, den Sie konfigurieren möchten.",
