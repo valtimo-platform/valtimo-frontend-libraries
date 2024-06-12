@@ -32,11 +32,20 @@
   }
 
   &__container {
-    display: flex;
-    column-gap: 24px;
+    max-width: 1600px;
+    display: grid;
+    grid-gap: 24px;
   }
+}
 
-  &__column {
-    width: 100%;
+@media (min-width: 600px) {
+  .widget-field__container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .widget-field__container {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
