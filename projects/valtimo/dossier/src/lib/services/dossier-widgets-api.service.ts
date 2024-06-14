@@ -33,7 +33,7 @@ export class DossierWidgetsApiService extends BaseApiService {
 
   public getWidgetTabConfiguration(documentId: string, tabKey: string): Observable<CaseWidgetsRes> {
     return this.httpClient.get<CaseWidgetsRes>(
-      this.getApiUrl(`document/${documentId}/widget-tab/${tabKey}`)
+      this.getApiUrl(`v1/document/${documentId}/widget-tab/${tabKey}`)
     );
   }
 
