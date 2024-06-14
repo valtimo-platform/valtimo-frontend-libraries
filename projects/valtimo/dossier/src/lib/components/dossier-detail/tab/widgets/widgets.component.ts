@@ -46,7 +46,7 @@ export class DossierDetailWidgetsComponent implements OnInit, OnDestroy {
   @HostBinding('class.tab--no-background') private readonly _noBackground = true;
   @HostBinding('class.tab--no-min-height') private readonly _noMinHeight = true;
 
-  public readonly documentId$ = this.route.params.pipe(
+  private readonly _documentId$ = this.route.params.pipe(
     map(params => params?.documentId),
     filter(documentId => !!documentId)
   );
@@ -55,7 +55,7 @@ export class DossierDetailWidgetsComponent implements OnInit, OnDestroy {
 
   public readonly loadingWidgetConfiguration$ = new BehaviorSubject<boolean>(true);
 
-  public readonly widgetConfiguration$ = combineLatest([this.documentId$, this._tabKey$]).pipe(
+  public readonly widgetConfiguration$ = combineLatest([this._documentId$, this._tabKey$]).pipe(
     switchMap(([documentId, tabKey]) =>
       this.widgetsApiService.getWidgetTabConfiguration(documentId, tabKey)
     ),
