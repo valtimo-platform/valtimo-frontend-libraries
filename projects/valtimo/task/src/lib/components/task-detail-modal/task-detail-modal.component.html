@@ -33,6 +33,7 @@
       >
         <cds-tooltip
           [caret]="true"
+          leaveDelayMs="0"
           [description]="'formManagement.intermediateSave.save' | translate"
         >
           <button
@@ -44,12 +45,13 @@
         </cds-tooltip>
         <cds-tooltip
           [caret]="true"
+          leaveDelayMs="0"
           [description]="'formManagement.intermediateSave.clear' | translate"
         >
           <button
             cdsButton="ghost"
             iconOnly="true"
-            cdsIcon="trash-can"
+            cdsIcon="recently-viewed"
             (click)="showConfirmationModal$.next(true)"
           ></button>
         </cds-tooltip>

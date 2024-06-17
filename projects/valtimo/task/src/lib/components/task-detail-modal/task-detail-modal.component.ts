@@ -48,7 +48,8 @@ import {DocumentService} from '@valtimo/document';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 import {TaskIntermediateSaveService} from '../../services/task-intermediate-save.service';
-import {Modal} from 'carbon-components-angular';
+import {IconService, Modal} from 'carbon-components-angular';
+import {RecentlyViewed16} from '@carbon/icons';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -112,13 +113,16 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     private readonly translateService: TranslateService,
     @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel,
     private readonly taskIntermediateSaveService: TaskIntermediateSaveService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly iconService: IconService
   ) {
     const options = new FormioOptionsImpl();
     options.disableAlerts = true;
     this.formioOptions$.next(options);
 
     this.intermediateSaveEnabled = this.configService.featureToggles.enableIntermediateSave;
+
+    this.iconService.registerAll([RecentlyViewed16]);
   }
 
   public ngAfterViewInit(): void {
@@ -235,6 +239,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
               this.processLinkId$.next(res.processLinkId);
               this.formDefinition$.next(res.properties.formDefinition);
               this.formName$.next(res.properties.formName);
+              this.getCurrentProgress();
               this.openModal();
               this.setFormViewModelComponent();
               break;
@@ -279,6 +284,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     formViewModelComponent.instance.formName = this.formName$.getValue();
     formViewModelComponent.instance.taskInstanceId = this.taskInstanceId$.getValue();
     formViewModelComponent.instance.isStartForm = false;
+    formViewModelComponent.instance.submission$ = this.submission$
     this._subscriptions.add(
       formViewModelComponent.instance.formSubmit.subscribe(() => {
         this.completeTask();
@@ -353,5 +359,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
 
   protected closeModal(): void {
     this.modal.open = false;
+    this._subscriptions.unsubscribe();
   }
 }
