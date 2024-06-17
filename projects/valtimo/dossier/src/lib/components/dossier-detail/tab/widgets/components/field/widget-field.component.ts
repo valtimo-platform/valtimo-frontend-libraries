@@ -15,10 +15,15 @@
  */
 
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   HostBinding,
   Input,
+  OnDestroy,
+  signal,
+  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
@@ -36,8 +41,12 @@ import {ViewContentService} from '@valtimo/components';
   standalone: true,
   imports: [CommonModule, WidgetFieldComponent, InputModule],
 })
-export class WidgetFieldComponent {
+export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
   @HostBinding('class') public readonly class = 'widget-field';
+
+  @ViewChild('widgetField') private _widgetFieldRef: ElementRef<HTMLDivElement>;
+
+  @Input() collapseVertically = false;
   @Input() public set widgetConfiguration(value: FieldsCaseWidget) {
     if (!value) return;
     this.widgetConfiguration$.next(value);
@@ -48,6 +57,7 @@ export class WidgetFieldComponent {
     this.widgetData$.next(value);
   }
 
+  public readonly renderVertically = signal(false);
   public readonly widgetConfiguration$ = new BehaviorSubject<FieldsCaseWidget | null>(null);
   public readonly widgetData$ = new BehaviorSubject<object | null>(null);
 
@@ -78,5 +88,30 @@ export class WidgetFieldComponent {
       )
     );
 
+  private _observer!: ResizeObserver;
+
   constructor(private viewContentService: ViewContentService) {}
+
+  public ngAfterViewInit(): void {
+    if (this.collapseVertically) this.openWidthObserver();
+  }
+
+  public ngOnDestroy(): void {
+    this._observer?.disconnect();
+  }
+
+  private openWidthObserver(): void {
+    this._observer = new ResizeObserver(event => {
+      this.observerMutation(event);
+    });
+    this._observer.observe(this._widgetFieldRef.nativeElement);
+  }
+
+  private observerMutation(event: Array<ResizeObserverEntry>): void {
+    const elementWidth = event[0]?.borderBoxSize[0]?.inlineSize;
+
+    if (typeof elementWidth === 'number' && elementWidth !== 0) {
+      this.renderVertically.set(elementWidth < 640);
+    }
+  }
 }

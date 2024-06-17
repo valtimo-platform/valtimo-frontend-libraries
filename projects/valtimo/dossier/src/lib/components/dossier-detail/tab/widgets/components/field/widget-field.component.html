@@ -22,7 +22,11 @@
 >
   <h4 class="widget-field__title">{{ obs?.widgetConfiguration?.title }}</h4>
 
-  <div class="widget-field__container">
+  <div
+    #widgetField
+    class="widget-field__container"
+    [ngClass]="renderVertically() ? 'widget-field--render-vertically' : 'widget-field__container'"
+  >
     @for (column of obs?.widgetPropertyValue; track column.key) {
       <div class="widget-field__column">
         @for (property of column; track property) {
