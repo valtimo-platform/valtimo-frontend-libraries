@@ -14,9 +14,4 @@
  * limitations under the License.
  */
 
-const CARBON_CONSTANTS = {
-  modalAnimationMs: 240,
-  notificationDuration: 4000
-};
-
-export {CARBON_CONSTANTS};
+export * from './carbon-list-drag-and-drop.service';
