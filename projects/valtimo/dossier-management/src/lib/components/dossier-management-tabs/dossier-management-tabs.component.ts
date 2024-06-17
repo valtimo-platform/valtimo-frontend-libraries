@@ -125,6 +125,11 @@ export class DossierManagementTabsComponent implements AfterViewInit {
         key: '',
         label: 'dossierManagement.tabManagement.columns.content',
       },
+      {
+        viewType: ViewType.BOOLEAN,
+        key: 'showTasks',
+        label: 'dossierManagement.tabManagement.columns.showTasks',
+      },
     ]);
 
     this.cd.detectChanges();

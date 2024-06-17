@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {FormGroup, FormGroupDirective} from '@angular/forms';
+import {AbstractControl, FormGroup, FormGroupDirective} from '@angular/forms';
 import {ApiTabType} from '@valtimo/dossier';
 import {ListItem} from 'carbon-components-angular';
 import {combineLatest, map, startWith} from 'rxjs';
@@ -49,7 +49,10 @@ export class TabFormComponent implements OnInit {
     }),
     startWith([])
   );
+
   public form!: FormGroup;
+
+  public showTasks!: AbstractControl<boolean>;
 
   private _searchActive: boolean;
 
@@ -60,6 +63,7 @@ export class TabFormComponent implements OnInit {
 
   public ngOnInit(): void {
     this.form = this.formGroupDirective.control;
+    this.showTasks = this.form.get('showTasks');
 
     if (this.tabType == ApiTabType.WIDGETS) {
       this.form.get('contentKey')?.disable();
@@ -79,6 +83,10 @@ export class TabFormComponent implements OnInit {
 
   public onSelected(): void {
     this._searchActive = false;
+  }
+
+  public toggleCheckedChange(event: boolean): void {
+    this.showTasks?.patchValue(!!event);
   }
 
   private getListItems(tabItems: ListItem[], configuredContentKeys: string[]): ListItem[] {
