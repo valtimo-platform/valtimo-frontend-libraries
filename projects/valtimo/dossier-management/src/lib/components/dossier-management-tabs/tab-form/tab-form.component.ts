@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, signal} from '@angular/core';
 import {AbstractControl, FormGroup, FormGroupDirective} from '@angular/forms';
-import {ApiTabType} from '@valtimo/dossier';
+import {ApiTabType, DefaultTabs} from '@valtimo/dossier';
 import {ListItem} from 'carbon-components-angular';
-import {combineLatest, map, startWith} from 'rxjs';
+import {combineLatest, map, startWith, Subscription} from 'rxjs';
 import {TabService} from '../../../services';
 
 @Component({
@@ -26,8 +26,10 @@ import {TabService} from '../../../services';
   styleUrls: ['./tab-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TabFormComponent implements OnInit {
+export class TabFormComponent implements OnInit, OnDestroy {
   @Input() public tabType: ApiTabType;
+
+  public disableTaskListVisibleToggle = signal(false);
 
   public readonly listItems$ = combineLatest([
     this.tabService.configuredContentKeys$,
@@ -56,6 +58,8 @@ export class TabFormComponent implements OnInit {
 
   private _searchActive: boolean;
 
+  private _subscriptions = new Subscription();
+
   constructor(
     private readonly tabService: TabService,
     private readonly formGroupDirective: FormGroupDirective
@@ -64,12 +68,17 @@ export class TabFormComponent implements OnInit {
   public ngOnInit(): void {
     this.form = this.formGroupDirective.control;
     this.showTasks = this.form.get('showTasks');
+    this.openTaskListToggleSubscription();
 
     if (this.tabType == ApiTabType.WIDGETS) {
       this.form.get('contentKey')?.disable();
     } else {
       this.form.get('contentKey')?.enable();
     }
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   public onSearch(): void {
@@ -87,6 +96,19 @@ export class TabFormComponent implements OnInit {
 
   public toggleCheckedChange(event: boolean): void {
     this.showTasks?.patchValue(!!event);
+  }
+
+  private openTaskListToggleSubscription(): void {
+    this.form.get('contentKey').valueChanges.subscribe(contentKey => {
+      const summarySelected = contentKey === DefaultTabs.summary;
+
+      if (summarySelected) {
+        this.toggleCheckedChange(false);
+        this.disableTaskListVisibleToggle.set(true);
+      } else {
+        this.disableTaskListVisibleToggle.set(false);
+      }
+    });
   }
 
   private getListItems(tabItems: ListItem[], configuredContentKeys: string[]): ListItem[] {

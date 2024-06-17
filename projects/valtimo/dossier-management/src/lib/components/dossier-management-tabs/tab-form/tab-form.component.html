@@ -54,5 +54,6 @@
     [offText]="'dossierManagement.tabManagement.addModal.invisible' | translate"
     [checked]="showTasks?.value"
     (checkedChange)="toggleCheckedChange($event)"
+    [disabled]="disableTaskListVisibleToggle()"
   ></cds-toggle>
 </form>
