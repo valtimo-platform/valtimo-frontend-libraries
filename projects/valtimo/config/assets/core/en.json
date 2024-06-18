@@ -261,7 +261,7 @@
     "video/mp4": "MP4"
   },
   "summary": {
-    "userTasksDoneState": "All done!",
+    "userTasksDoneState": "All tasks have been completed",
     "taskLocked": "You don't have access to this task",
     "userTasks": "User tasks",
     "taskOpen": "Open",

@@ -18,9 +18,9 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
-import {WidgetModule} from '@valtimo/components';
+import {CarbonListModule, WidgetModule} from '@valtimo/components';
 import {BehaviorSubject, combineLatest, of, repeat, Subscription, switchMap} from 'rxjs';
-import {LayerModule, LoadingModule, TilesModule} from 'carbon-components-angular';
+import {LayerModule, LoadingModule, TagModule, TilesModule} from 'carbon-components-angular';
 import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
 import moment from 'moment/moment';
 import {
@@ -52,6 +52,8 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
     TaskModule,
     TilesModule,
     LayerModule,
+    TagModule,
+    CarbonListModule,
   ],
 })
 export class DossierDetailTaskListComponent implements OnInit, OnDestroy {

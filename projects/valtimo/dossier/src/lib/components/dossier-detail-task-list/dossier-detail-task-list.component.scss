@@ -28,4 +28,45 @@
     line-height: 24px;
     margin-bottom: 16px;
   }
+
+  &__tasks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.task {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__title,
+  &__description {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0.16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__description {
+    font-weight: 400;
+  }
+}
+
+.loading-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
