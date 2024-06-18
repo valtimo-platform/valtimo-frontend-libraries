@@ -51,7 +51,9 @@
           <div class="clearfix"></div>
         </div>
 
-        <div *ngIf="showTaskList$ | async" class="tab-content-container__task-list">Task list</div>
+        <div *ngIf="showTaskList$ | async" class="tab-content-container__task-list">
+          <valtimo-dossier-detail-task-list></valtimo-dossier-detail-task-list>
+        </div>
       </div>
     </div>
 
