@@ -20,11 +20,12 @@ import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {WidgetModule} from '@valtimo/components';
 import {BehaviorSubject, combineLatest, of, repeat, Subscription, switchMap} from 'rxjs';
-import {LoadingModule} from 'carbon-components-angular';
+import {LayerModule, LoadingModule, TilesModule} from 'carbon-components-angular';
 import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
 import moment from 'moment/moment';
 import {
   CAN_VIEW_TASK_PERMISSION,
+  Task,
   TASK_DETAIL_PERMISSION_RESOURCE,
   TaskDetailModalComponent,
   TaskModule,
@@ -49,6 +50,8 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
     WidgetModule,
     LoadingModule,
     TaskModule,
+    TilesModule,
+    LayerModule,
   ],
 })
 export class DossierDetailTaskListComponent implements OnInit, OnDestroy {
@@ -106,7 +109,9 @@ export class DossierDetailTaskListComponent implements OnInit, OnDestroy {
     );
   }
 
-  public rowTaskClick(task: any): void {
+  public rowTaskClick(task: Task): void {
+    if (task.locked) return;
+
     this.taskDetail.openTaskDetails(task);
   }
 
