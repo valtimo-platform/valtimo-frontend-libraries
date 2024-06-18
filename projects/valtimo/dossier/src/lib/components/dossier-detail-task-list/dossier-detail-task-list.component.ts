@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
@@ -23,7 +23,12 @@ import {BehaviorSubject, combineLatest, of, repeat, Subscription, switchMap} fro
 import {LoadingModule} from 'carbon-components-angular';
 import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
 import moment from 'moment/moment';
-import {CAN_VIEW_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE, TaskModule} from '@valtimo/task';
+import {
+  CAN_VIEW_TASK_PERMISSION,
+  TASK_DETAIL_PERMISSION_RESOURCE,
+  TaskDetailModalComponent,
+  TaskModule,
+} from '@valtimo/task';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Document, DocumentService, ProcessDocumentInstance} from '@valtimo/document';
 import {UserProviderService} from '@valtimo/security';
@@ -47,6 +52,8 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   ],
 })
 export class DossierDetailTaskListComponent implements OnInit, OnDestroy {
+  @ViewChild('taskDetail') taskDetail: TaskDetailModalComponent;
+
   public tasks: ProcessInstanceTask[] = [];
   public processDocumentInstances: ProcessDocumentInstance[] = [];
   public roles: string[] = [];
@@ -97,6 +104,10 @@ export class DossierDetailTaskListComponent implements OnInit, OnDestroy {
         this.loadProcessDocumentInstances(this.documentId);
       })
     );
+  }
+
+  public rowTaskClick(task: any): void {
+    this.taskDetail.openTaskDetails(task);
   }
 
   public loadProcessDocumentInstances(documentId: string): void {
