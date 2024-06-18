@@ -103,7 +103,7 @@ export class TabFormComponent implements OnInit, OnDestroy {
       const summarySelected = contentKey === DefaultTabs.summary;
 
       if (summarySelected) {
-        this.toggleCheckedChange(false);
+        this.toggleCheckedChange(true);
         this.disableTaskListVisibleToggle.set(true);
       } else {
         this.disableTaskListVisibleToggle.set(false);

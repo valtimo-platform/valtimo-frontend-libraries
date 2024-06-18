@@ -65,6 +65,11 @@ export class DossierManagementTabsComponent implements AfterViewInit {
 
   public actionItems: ActionItem[] = [
     {
+      label: 'interface.edit',
+      callback: this.openEditModal.bind(this),
+      type: 'normal',
+    },
+    {
       label: 'interface.delete',
       callback: this.openDeleteConfirmationModal.bind(this),
       type: 'danger',
@@ -152,6 +157,11 @@ export class DossierManagementTabsComponent implements AfterViewInit {
 
   public openAddTabModal(): void {
     this.openAddModal$.next(true);
+  }
+
+  public openEditModal(tab: ApiTabItem): void {
+    this.tab$.next(tab);
+    this.openEditModal$.next(true);
   }
 
   public onRowClicked(tab: ApiTabItem): void {
