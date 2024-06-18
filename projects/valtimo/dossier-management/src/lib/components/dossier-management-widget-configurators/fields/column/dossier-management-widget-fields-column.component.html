@@ -64,7 +64,7 @@
           </div>
 
           <div class="valtimo-dossier-management-widget-field-column__options">
-            @switch (formRow.get('type').value.content) {
+            @switch (formRow.get('type').value.id) {
               @case (CaseWidgetDisplayTypeKey.CURRENCY) {
                 <cds-text-label>
                   {{ 'widgetTabManagement.content.fields.currencyCode' | translate }}
