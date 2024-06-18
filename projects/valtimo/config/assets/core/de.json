@@ -711,6 +711,10 @@
       "formio": {
         "title": "Form.io",
         "description": "Ausgefülltes Form.io-Formular"
+      },
+      "table": {
+        "title": "Tabelle",
+        "description": "Erstellen Sie eine Tabelle"
       }
     },
     "width": {
@@ -779,6 +783,15 @@
       "formio": {
         "selectForm": "Formulardefinition",
         "placeholder": "Wählen Sie eine Formulardefinition aus"
+      },
+      "table": {
+        "defaultPageSize": "Standardseitengröße",
+        "defaultPageSizePlaceholder": "Wählen Sie Ihre Standardseitengröße",
+        "collection": "Pfad für Tabelle",
+        "collectionPlaceholder": "Wählen Sie Ihren Pfad für die Tabelle",
+        "columns": "Säulen",
+        "options": "Optionen",
+        "firstColumnAsTitle": "Erste Spalte ist Titel"
       }
     },
     "cancelModal": {
@@ -1075,12 +1088,14 @@
       "descending": "Absteigend",
       "noDefault": "Keine Standardsortierung"
     },
-    "key": "Schlüssel",
-    "title": "Titel",
     "editor": {
       "visualEditor": "Visuell editor",
       "jsonEditor": "JSON editor"
-    }
+    },
+    "key": "Schlüssel",
+    "title": "Titel",
+    "yes": "Ja",
+    "no": "Nein"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",
