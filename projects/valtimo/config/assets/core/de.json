@@ -766,7 +766,7 @@
         "date": "Datum",
         "enum": "Aufzählung",
         "number": "Nummer",
-        "percent": "Prozent"
+        "percent": "Prozentsatz"
       },
       "custom": {
         "selectComponent": "Angular-komponente",

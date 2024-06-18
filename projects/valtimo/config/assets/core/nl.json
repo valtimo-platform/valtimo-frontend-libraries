@@ -766,7 +766,7 @@
         "date": "Datum",
         "enum": "Opsomming",
         "number": "Nummer",
-        "percent": "Procent"
+        "percent": "Percentage"
       },
       "custom": {
         "selectComponent": "Angular-component",
