@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Document, DocumentService, ProcessDocumentInstance} from '@valtimo/document';
 import {
   CAN_VIEW_TASK_PERMISSION,
   TASK_DETAIL_PERMISSION_RESOURCE,
   TaskDetailModalComponent,
-  TaskService,
 } from '@valtimo/task';
 import {FormService} from '@valtimo/form';
 import {FormioOptionsImpl, ValtimoFormioOptions} from '@valtimo/components';
@@ -65,12 +56,8 @@ export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();
 
   constructor(
-    private readonly router: Router,
     private readonly documentService: DocumentService,
-    private readonly taskService: TaskService,
     private readonly processService: ProcessService,
-    private readonly el: ElementRef,
-    private readonly renderer: Renderer2,
     private readonly route: ActivatedRoute,
     private readonly formService: FormService,
     private readonly userProviderService: UserProviderService,
