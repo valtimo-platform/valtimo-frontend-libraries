@@ -55,19 +55,22 @@
 
 <section class="valtimo-dossier-management-widget-table__columns">
   <valtimo-dossier-management-widget-fields-column
-    [columnData]="content()?.columns || []"
+    [addTranslateKey]="'widgetTabManagement.content.table.addColumn'"
+    [columnData]="content()?.columns"
     (columnUpdateEvent)="onColumnUpdateEvent($event)"
   ></valtimo-dossier-management-widget-fields-column>
 </section>
 
-<span class="valtimo-dossier-management-widget-table__subtitle">
-  {{ 'widgetTabManagement.content.table.options' | translate }}
-</span>
+<section class="valtimo-dossier-management-widget-table__toggle">
+  <span class="valtimo-dossier-management-widget-table__subtitle">
+    {{ 'widgetTabManagement.content.table.options' | translate }}
+  </span>
 
-<cds-toggle
-  [checked]="checked()"
-  [label]="'widgetTabManagement.content.table.firstColumnAsTitle' | translate"
-  [onText]="'interface.yes' | translate"
-  [offText]="'interface.no' | translate"
-  (checkedChange)="onCheckedChange($event)"
-></cds-toggle>
+  <cds-toggle
+    [checked]="checked()"
+    [label]="'widgetTabManagement.content.table.firstColumnAsTitle' | translate"
+    [onText]="'interface.yes' | translate"
+    [offText]="'interface.no' | translate"
+    (checkedChange)="onCheckedChange($event)"
+  ></cds-toggle>
+</section>

@@ -785,6 +785,7 @@
         "placeholder": "Selecteer een formulierdefinitie"
       },
       "table": {
+        "addColumn": "Kolom toevoegen",
         "defaultPageSize": "Standaard paginaformaat",
         "defaultPageSizePlaceholder": "Kies je standaardpaginaformaat",
         "collection": "Pad voor tabel",

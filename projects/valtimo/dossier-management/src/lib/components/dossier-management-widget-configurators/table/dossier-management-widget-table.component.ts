@@ -106,7 +106,6 @@ export class DossierManagementWidgetTableComponent
               ...content,
               collection: value?.collection || '',
               defaultPageSize: value?.defaultPageSize || 5,
-              firstColumnAsTitle: false,
             }) as WidgetTableContent
         );
 

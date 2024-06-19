@@ -26,7 +26,7 @@ import {
   KeyGeneratorService,
   ViewType,
 } from '@valtimo/components';
-import {BasicCaseWidget, CaseWidget, CaseWidgetType, CaseWidgetsRes} from '@valtimo/dossier';
+import {BasicCaseWidget, CaseWidget, CaseWidgetsRes} from '@valtimo/dossier';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {BehaviorSubject, Subject, take} from 'rxjs';
 import {AVAILABLE_WIDGETS, WidgetStyle} from '../../../models';

@@ -28,4 +28,10 @@
     font-weight: 600;
     line-height: 22px;
   }
+
+  &__toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 }

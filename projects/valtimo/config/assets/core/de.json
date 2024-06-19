@@ -785,6 +785,7 @@
         "placeholder": "Wählen Sie eine Formulardefinition aus"
       },
       "table": {
+        "addColumn": "Spalte hinzufügen",
         "defaultPageSize": "Standardseitengröße",
         "defaultPageSizePlaceholder": "Wählen Sie Ihre Standardseitengröße",
         "collection": "Pfad für Tabelle",

@@ -786,6 +786,7 @@
         "placeholder": "Select a form definition"
       },
       "table": {
+        "addColumn": "Add column",
         "defaultPageSize": "Default page size",
         "defaultPageSizePlaceholder": "Choose your default page size",
         "collection": "Path for table",
