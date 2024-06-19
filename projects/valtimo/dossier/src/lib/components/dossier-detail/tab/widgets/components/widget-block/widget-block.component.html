@@ -26,29 +26,27 @@
 >
   <div #widgetBlock class="widget-block" [attr.data-carbon-theme]="obs.theme">
     <div #widgetBlockContent class="widget-block__content">
-      @switch (obs.widgetConfiguration.type) {
-        @case (CaseWidgetType.TABLE) {
-          <valtimo-widget-table
-            [documentId]="obs.documentId"
-            [tabKey]="obs.tabKey"
-            [widgetConfiguration]="obs.widgetConfiguration"
-            [widgetData]="obs.widgetData"
-          ></valtimo-widget-table>
-        }
+      @if (obs.widgetData) {
+        @switch (obs.widgetConfiguration.type) {
+          @case (CaseWidgetType.TABLE) {
+            <valtimo-widget-table
+              [documentId]="obs.documentId"
+              [tabKey]="obs.tabKey"
+              [widgetConfiguration]="obs.widgetConfiguration"
+              [widgetData]="obs.widgetData"
+            ></valtimo-widget-table>
+          }
+
+          @case (CaseWidgetType.COLLECTION) {
+            <valtimo-widget-collection
+              [widgetConfiguration]="obs.widgetConfiguration"
+              [widgetData]="obs.widgetData"
+            ></valtimo-widget-collection>
+          }
 
           @case (CaseWidgetType.CUSTOM) {
             <valtimo-widget-custom [widgetConfig]="obs.widgetConfiguration"></valtimo-widget-custom>
           }
-        @case (CaseWidgetType.COLLECTION) {
-          <valtimo-widget-collection
-            [widgetConfiguration]="obs.widgetConfiguration"
-            [widgetData]="obs.widgetData"
-          ></valtimo-widget-collection>
-        }
-
-        @case (CaseWidgetType.CUSTOM) {
-          <valtimo-widget-custom [widgetConfig]="obs.widgetConfiguration"></valtimo-widget-custom>
-        }
 
           @case (CaseWidgetType.FIELDS) {
             <valtimo-widget-field
