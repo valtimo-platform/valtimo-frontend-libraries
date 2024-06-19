@@ -76,7 +76,7 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
   public readonly formDefinition$ = new BehaviorSubject<FormioForm>(undefined);
   public readonly formDefinitionId$ = new BehaviorSubject<string>(undefined);
   public readonly formName$ = new BehaviorSubject<string>(undefined);
-  public readonly submission$ = new BehaviorSubject<any>({});
+  public readonly submission$ = new BehaviorSubject<any>({data: {}});
   public readonly formFlowInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly page$ = new BehaviorSubject<any>(null);
   public readonly formioOptions$ = new BehaviorSubject<ValtimoFormioOptions>(null);
@@ -145,7 +145,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
-    this.submission$.unsubscribe();
     this._fvmSubmissionSubscription?.unsubscribe();
     this._submissionSubscription?.unsubscribe();
   }
