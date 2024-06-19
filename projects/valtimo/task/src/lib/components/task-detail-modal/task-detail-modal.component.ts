@@ -14,7 +14,18 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Inject, OnDestroy, Optional, Output, ViewChild, ViewContainerRef, ViewEncapsulation,} from '@angular/core';
+import {
+  Component,
+  ComponentRef,
+  EventEmitter,
+  Inject,
+  OnDestroy,
+  Optional,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation,
+} from '@angular/core';
 import {Router} from '@angular/router';
 import {
   FormioComponent,
@@ -282,16 +293,11 @@ export class TaskDetailModalComponent implements OnDestroy {
           }
         });
 
-      this.getCurrentProgress();
-      setTimeout(() => {
-        formViewModelComponent.instance.submission = {
-          data: this.currentIntermediateSave?.submission,
-        };
-      }, 300);
+      this.getCurrentProgress(formViewModelComponent);
     }
   }
 
-  private getCurrentProgress(): void {
+  private getCurrentProgress(formViewModelComponentRef?: ComponentRef<any>): void {
     this.taskInstanceId$
       .pipe(
         take(1),
@@ -303,6 +309,12 @@ export class TaskDetailModalComponent implements OnDestroy {
         next: (intermediateSubmission: IntermediateSubmission) => {
           this.submission$.next({data: intermediateSubmission.submission});
           this.currentIntermediateSave = intermediateSubmission;
+
+          if (formViewModelComponentRef) {
+            formViewModelComponentRef.instance.submission = {
+              data: this.currentIntermediateSave?.submission,
+            };
+          }
         },
       });
   }
