@@ -114,9 +114,6 @@ export class DossierManagementWidgetsEditorComponent {
     map(([items]) =>
       items.map(item => ({
         ...item,
-        // typeTranslation: this.translateService.instant(
-        //   `widgetTabManagement.types.${item.type}.title`
-        // ),
         widthTranslation: this.translateService.instant(this.getWidthTranslationKey(item.width)),
         tags: [
           {
