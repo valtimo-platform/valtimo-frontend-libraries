@@ -261,7 +261,7 @@
     "video/mp4": "MP4"
   },
   "summary": {
-    "userTasksDoneState": "Alles erledigt!",
+    "userTasksDoneState": "Alle Aufgaben sind erledigt",
     "taskLocked": "Kein Zugriff zu dieser Aufgabe!",
     "userTasks": "Aufgaben",
     "taskOpen": "Öffnen",
@@ -542,7 +542,8 @@
         "content": "Inhalt",
         "key": "Tab Schlüssel",
         "name": "Tab name",
-        "type": "Typ"
+        "type": "Typ",
+        "showTasks": "Aufgabenliste sichtbar"
       },
       "addModal": {
         "addTab": "Hinzufügen Tab",
@@ -555,7 +556,10 @@
         "tabNameLabel": "Tab name (Optional)",
         "title": "Neue Registerkarte hinzufügen {{documentDefinitionName}}",
         "uniqueKeyError": "Der Schlüssel für diese Spalte muss eindeutig sein.",
-        "widgetsComponent": "Widgets component"
+        "widgetsComponent": "Widgets component",
+        "visibleTitle": "Aufgabenliste auf Registerkarte sichtbar",
+        "visible": "Sichtbar",
+        "invisible": "Nicht sichtbar"
       },
       "titles": {
         "custom": "Neue Registerkarte hinzufügen mit brauch component",
@@ -707,6 +711,10 @@
       "formio": {
         "title": "Form.io",
         "description": "Ausgefülltes Form.io-Formular"
+      },
+      "table": {
+        "title": "Tabelle",
+        "description": "Erstellen Sie eine Tabelle"
       }
     },
     "width": {
@@ -754,10 +762,19 @@
         "key": "Schlüssel",
         "title": "Titel",
         "titlePlaceholder": "Wählen Sie einen Titel",
-        "type": "Type",
+        "type": "Anzeigetyp",
         "typePlaceholder": "Wählen Sie Typ",
         "value": "Wert",
         "valuePlaceholder": "Weg zum Wert"
+      },
+      "displayType": {
+        "text": "Text",
+        "boolean": "Ja/Nein",
+        "currency": "Währung",
+        "date": "Datum",
+        "enum": "Aufzählung",
+        "number": "Nummer",
+        "percent": "Prozentsatz"
       },
       "custom": {
         "selectComponent": "Angular-komponente",
@@ -766,6 +783,16 @@
       "formio": {
         "selectForm": "Formulardefinition",
         "placeholder": "Wählen Sie eine Formulardefinition aus"
+      },
+      "table": {
+        "addColumn": "Spalte hinzufügen",
+        "defaultPageSize": "Zeilen pro Seite",
+        "defaultPageSizePlaceholder": "Wählen Sie die Anzahl der Zeilen pro Seite",
+        "collection": "Pfad zu den Tabellendaten",
+        "collectionPlaceholder": "Geben Sie den Pfad zu den Tabellendaten an",
+        "columns": "Säulen",
+        "options": "Optionen",
+        "firstColumnAsTitle": "Die erste Spalte ist der Titel der Zeile"
       }
     },
     "cancelModal": {
@@ -1062,12 +1089,14 @@
       "descending": "Absteigend",
       "noDefault": "Keine Standardsortierung"
     },
-    "key": "Schlüssel",
-    "title": "Titel",
     "editor": {
       "visualEditor": "Visuell editor",
       "jsonEditor": "JSON editor"
-    }
+    },
+    "key": "Schlüssel",
+    "title": "Titel",
+    "yes": "Ja",
+    "no": "Nein"
   },
   "taskDetail": {
     "taskCreated": "Erstellt",

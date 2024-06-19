@@ -23,9 +23,10 @@ import {
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
+  KeyGeneratorService,
   ViewType,
 } from '@valtimo/components';
-import {BasicCaseWidget, CaseWidget, CaseWidgetType, CaseWidgetsRes} from '@valtimo/dossier';
+import {BasicCaseWidget, CaseWidget, CaseWidgetsRes} from '@valtimo/dossier';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {BehaviorSubject, Subject, take} from 'rxjs';
 import {AVAILABLE_WIDGETS, WidgetStyle} from '../../../models';
@@ -80,7 +81,6 @@ export class DossierManagementWidgetsEditorComponent {
     {
       label: 'interface.edit',
       callback: this.editWidget.bind(this),
-      disabledCallback: this.disableEdit.bind(this),
     },
     {
       label: 'interface.delete',
@@ -99,6 +99,7 @@ export class DossierManagementWidgetsEditorComponent {
   private _usedKeys: string[];
 
   constructor(
+    private readonly keyGeneratorService: KeyGeneratorService,
     private readonly widgetTabManagementService: WidgetTabManagementService,
     private readonly widgetWizardService: WidgetWizardService
   ) {}
@@ -153,7 +154,13 @@ export class DossierManagementWidgetsEditorComponent {
           ? existingWidgets.map((widget: BasicCaseWidget) =>
               widget.key === widgetResult.key ? widgetResult : widget
             )
-          : [...existingWidgets, {...widgetResult, key: this.getUniqueKey(widgetResult.title)}],
+          : [
+              ...existingWidgets,
+              {
+                ...widgetResult,
+                key: this.keyGeneratorService.getUniqueKey(widgetResult.title, this._usedKeys),
+              },
+            ],
       })
       .pipe(take(1))
       .subscribe(() => {
@@ -171,41 +178,5 @@ export class DossierManagementWidgetsEditorComponent {
       .subscribe(() => {
         this.changeSaved.emit();
       });
-  }
-
-  private disableEdit(widget: BasicCaseWidget): boolean {
-    return widget.type === CaseWidgetType.TABLE;
-  }
-
-  private getUniqueKey(widgetName: string): string {
-    const dashCaseKey = `${widgetName}`
-      .toLowerCase()
-      .replace(/[^a-z0-9-_]+|-[^a-z0-9]+/g, '-')
-      .replace(/_[-_]+/g, '_')
-      .replace(/^[^a-z]+/g, '');
-    const usedKeys = this._usedKeys;
-
-    if (!usedKeys.includes(dashCaseKey)) {
-      return dashCaseKey;
-    }
-
-    return this.getUniqueKeyWithNumber(dashCaseKey, usedKeys);
-  }
-
-  private getUniqueKeyWithNumber(dashCaseKey: string, usedKeys: string[]): string {
-    const numbersFromCurrentKey = (dashCaseKey.match(/^\d+|\d+\b|\d+(?=\w)/g) || []).map(
-      (numberValue: string) => +numberValue
-    );
-    const lastNumberFromCurrentKey =
-      numbersFromCurrentKey.length > 0 && numbersFromCurrentKey[numbersFromCurrentKey.length - 1];
-    const newKey = lastNumberFromCurrentKey
-      ? `${dashCaseKey.replace(`${lastNumberFromCurrentKey}`, `${lastNumberFromCurrentKey + 1}`)}`
-      : `${dashCaseKey}-1`;
-
-    if (usedKeys.includes(newKey)) {
-      return this.getUniqueKeyWithNumber(newKey, usedKeys);
-    }
-
-    return newKey;
   }
 }

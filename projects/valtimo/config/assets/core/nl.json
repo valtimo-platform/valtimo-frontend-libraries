@@ -261,7 +261,7 @@
     "video/mp4": "MP4"
   },
   "summary": {
-    "userTasksDoneState": "Helemaal bij!",
+    "userTasksDoneState": "Alle taken zijn afgerond",
     "taskLocked": "Je hebt geen toegang tot deze taak",
     "userTasks": "Taken",
     "taskOpen": "Open",
@@ -542,7 +542,8 @@
         "content": "Inhoud",
         "key": "Tab sleutel",
         "name": "Tab naam",
-        "type": "Type"
+        "type": "Type",
+        "showTasks": "Takenlijst zichtbaar"
       },
       "addModal": {
         "addTab": "Tabblad toevoegen",
@@ -555,7 +556,10 @@
         "tabNameLabel": "Tabblad naam (optioneel)",
         "title": "Nieuw tabblad toevoegen {{documentDefinitionName}}",
         "uniqueKeyError": "De sleutel voor deze kolom moet uniek zijn.",
-        "widgetsComponent": "Widgets component"
+        "widgetsComponent": "Widgets component",
+        "visibleTitle": "Takenlijst zichtbaar op tabblad",
+        "visible": "Zichtbaar",
+        "invisible": "Niet zichtbaar"
       },
       "titles": {
         "custom": "Nieuw tabblad toevoegen met aangepaste component",
@@ -707,6 +711,10 @@
       "formio": {
         "title": "Form.io",
         "description": "Ingevuld Form.io-formulier"
+      },
+      "table": {
+        "title": "Tabel",
+        "description": "Maak een table aan"
       }
     },
     "width": {
@@ -754,10 +762,19 @@
         "key": "Sleutel",
         "title": "Titel",
         "titlePlaceholder": "Kies een titel",
-        "type": "Type",
+        "type": "Weergavetype",
         "typePlaceholder": "Kies type",
         "value": "Waarde",
         "valuePlaceholder": "Pad naar waarde"
+      },
+      "displayType": {
+        "text": "Tekst",
+        "boolean": "Ja/Nee",
+        "currency": "Valuta",
+        "date": "Datum",
+        "enum": "Opsomming",
+        "number": "Nummer",
+        "percent": "Percentage"
       },
       "custom": {
         "selectComponent": "Angular-component",
@@ -766,6 +783,16 @@
       "formio": {
         "selectForm": "Formulierdefinitie",
         "placeholder": "Selecteer een formulierdefinitie"
+      },
+      "table": {
+        "addColumn": "Kolom toevoegen",
+        "defaultPageSize": "Rijen per pagina",
+        "defaultPageSizePlaceholder": "Kies het aantal rijen per pagina",
+        "collection": "Pad naar tabeldata",
+        "collectionPlaceholder": "Geef het pad naar de tabelgegevens op",
+        "columns": "Kolommen",
+        "options": "Opties",
+        "firstColumnAsTitle": "Eerste kolom is de titel van de rij"
       }
     },
     "cancelModal": {
@@ -1065,12 +1092,14 @@
       "descending": "Aflopend",
       "noDefault": "Geen standaardsortering"
     },
-    "key": "Sleutel",
-    "title": "Titel",
     "editor": {
       "visualEditor": "Visuele editor",
       "jsonEditor": "JSON editor"
-    }
+    },
+    "key": "Sleutel",
+    "title": "Titel",
+    "yes": "Ja",
+    "no": "Nee"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",

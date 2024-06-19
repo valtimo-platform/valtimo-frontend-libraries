@@ -261,7 +261,7 @@
     "video/mp4": "MP4"
   },
   "summary": {
-    "userTasksDoneState": "All done!",
+    "userTasksDoneState": "All tasks have been completed",
     "taskLocked": "You don't have access to this task",
     "userTasks": "User tasks",
     "taskOpen": "Open",
@@ -543,7 +543,8 @@
         "content": "Content",
         "key": "Tab key",
         "name": "Tab name",
-        "type": "Type"
+        "type": "Type",
+        "showTasks": "Task list visible"
       },
       "addModal": {
         "addTab": "Add tab",
@@ -556,7 +557,10 @@
         "tabNameLabel": "Tab name (optional)",
         "title": "Add new tab in {{documentDefinitionName}}",
         "uniqueKeyError": "The key for this column must be unique.",
-        "widgetsComponent": "Widgets component"
+        "widgetsComponent": "Widgets component",
+        "visibleTitle": "Task list visible on tab",
+        "visible": "Visible",
+        "invisible": "Not visible"
       },
       "titles": {
         "custom": "Add new tab with custom component",
@@ -708,6 +712,10 @@
       "formio": {
         "title": "Form.io",
         "description": "Prefilled Form.io form"
+      },
+      "table": {
+        "title": "Table",
+        "description": "Create a table"
       }
     },
     "width": {
@@ -755,10 +763,19 @@
         "key": "Key",
         "title": "Title",
         "titlePlaceholder": "Choose a title",
-        "type": "Type",
+        "type": "Display type",
         "typePlaceholder": "Choose type",
         "value": "Value",
         "valuePlaceholder": "Path to value"
+      },
+      "displayType": {
+        "text": "Text",
+        "boolean": "Yes/No",
+        "currency": "Currency",
+        "date": "Date",
+        "enum": "Enumeration",
+        "number": "Number",
+        "percent": "Percentage"
       },
       "custom": {
         "selectComponent": "Angular component",
@@ -767,6 +784,16 @@
       "formio": {
         "selectForm": "Form definition",
         "placeholder": "Select a form definition"
+      },
+      "table": {
+        "addColumn": "Add column",
+        "defaultPageSize": "Rows per page",
+        "defaultPageSizePlaceholder": "Choose amount of rows per page",
+        "collection": "Path to table data",
+        "collectionPlaceholder": "Specify the path to table data",
+        "columns": "Columns",
+        "options": "Options",
+        "firstColumnAsTitle": "First column is the title of the row"
       }
     },
     "cancelModal": {
@@ -1072,7 +1099,9 @@
       "jsonEditor": "JSON editor"
     },
     "key": "Key",
-    "title": "Title"
+    "title": "Title",
+    "yes": "Yes",
+    "no": "No"
   },
   "taskDetail": {
     "taskCreated": "Created",
