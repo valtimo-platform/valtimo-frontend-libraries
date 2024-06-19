@@ -26,7 +26,9 @@ interface WidgetCollectionContent {
 
 interface WidgetTableContent {
   columns: FieldsCaseWidgetValue[];
+  collection: string;
   firstColumnAsTitle: boolean;
+  defaultPageSize: number;
 }
 
 interface WidgetCustomContent {

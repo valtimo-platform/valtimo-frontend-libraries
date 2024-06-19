@@ -713,6 +713,10 @@
         "title": "Form.io",
         "description": "Prefilled Form.io form"
       },
+      "table": {
+        "title": "Table",
+        "description": "Create a table"
+      },
       "collection": {
         "title": "Collection",
         "description": "Create widget collection"
@@ -788,6 +792,16 @@
       "collection": {
         "selectForm": "Collection",
         "placeholder": "Select a collection"
+      },
+      "table": {
+        "addColumn": "Add column",
+        "defaultPageSize": "Rows per page",
+        "defaultPageSizePlaceholder": "Choose amount of rows per page",
+        "collection": "Path to table data",
+        "collectionPlaceholder": "Specify the path to table data",
+        "columns": "Columns",
+        "options": "Options",
+        "firstColumnAsTitle": "First column is the title of the row"
       }
     },
     "cancelModal": {
@@ -1093,7 +1107,9 @@
       "jsonEditor": "JSON editor"
     },
     "key": "Key",
-    "title": "Title"
+    "title": "Title",
+    "yes": "Yes",
+    "no": "No"
   },
   "taskDetail": {
     "taskCreated": "Created",

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
+import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -45,7 +46,12 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import {CaseWidgetPackResult, CaseWidgetType, CaseWidgetWithUuid} from '../../../../../../models';
+import {
+  CaseWidgetPackResult,
+  CaseWidgetType,
+  CaseWidgetWithUuid,
+  WidgetTableContent,
+} from '../../../../../../models';
 import {
   DossierTabService,
   DossierWidgetsApiService,
@@ -138,7 +144,12 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
       // custom component and formio widgets do not fetch additional data
       widget.type === CaseWidgetType.CUSTOM || widget.type === CaseWidgetType.FORMIO
         ? of({})
-        : this.widgetsApiService.getWidgetData(documentId, tabkey, widget.key, widget.type)
+        : this.widgetsApiService.getWidgetData(
+            documentId,
+            tabkey,
+            widget.key,
+            widget.type === CaseWidgetType.TABLE ? this.getPageSizeParam(widget) : undefined
+          )
     ),
     tap(() => {
       this.dossierWidgetsLayoutService.setCaseWidgetDataLoaded(this._widgetUuid);
@@ -246,5 +257,9 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
       this._widgetUuid,
       this._widgetBlockContentRef.nativeElement.offsetHeight
     );
+  }
+
+  private getPageSizeParam(widgetConfiguration: CaseWidgetWithUuid): string {
+    return `size=${(widgetConfiguration.properties as WidgetTableContent).defaultPageSize}`;
   }
 }
