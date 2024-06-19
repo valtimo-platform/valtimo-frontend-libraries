@@ -14,17 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  OnDestroy,
-  Optional,
-  Output,
-  ViewChild,
-  ViewContainerRef,
-  ViewEncapsulation,
-} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, Optional, Output, ViewChild, ViewContainerRef, ViewEncapsulation,} from '@angular/core';
 import {Router} from '@angular/router';
 import {
   FormioComponent,
@@ -34,12 +24,7 @@ import {
   ValtimoFormioOptions,
   ValtimoModalService,
 } from '@valtimo/components';
-import {
-  IntermediateSaveRequest,
-  IntermediateSubmission,
-  Task,
-  TaskProcessLinkType,
-} from '../../models';
+import {IntermediateSaveRequest, IntermediateSubmission, Task, TaskProcessLinkType,} from '../../models';
 import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
@@ -80,7 +65,7 @@ export class TaskDetailModalComponent implements OnDestroy {
   public readonly formDefinition$ = new BehaviorSubject<FormioForm>(undefined);
   public readonly formDefinitionId$ = new BehaviorSubject<string>(undefined);
   public readonly formName$ = new BehaviorSubject<string>(undefined);
-  public readonly submission$ = new BehaviorSubject<any>({data: {}});
+  public readonly submission$ = new BehaviorSubject<any>({});
   public readonly formFlowInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly page$ = new BehaviorSubject<any>(null);
   public readonly formioOptions$ = new BehaviorSubject<ValtimoFormioOptions>(null);
