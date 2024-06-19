@@ -14,18 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Inject,
-  OnDestroy,
-  Optional,
-  Output,
-  ViewChild,
-  ViewContainerRef,
-  ViewEncapsulation,
-} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, Optional, Output, ViewChild, ViewContainerRef, ViewEncapsulation,} from '@angular/core';
 import {Router} from '@angular/router';
 import {
   FormioComponent,
@@ -42,7 +31,7 @@ import moment from 'moment';
 import {ToastrService} from 'ngx-toastr';
 import {distinctUntilChanged, map, switchMap, take} from 'rxjs/operators';
 import {TaskService} from '../../services/task.service';
-import {BehaviorSubject, combineLatest, Observable, Subscription, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {UserProviderService} from '@valtimo/security';
 import {DocumentService} from '@valtimo/document';
 import {TranslateService} from '@ngx-translate/core';
@@ -59,7 +48,7 @@ moment.locale(localStorage.getItem('langKey') || '');
   styleUrls: ['./task-detail-modal.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
+export class TaskDetailModalComponent implements OnDestroy {
   @ViewChild('form') form: FormioComponent;
   @ViewChild('formFlow') formFlow: FormFlowComponent;
   @ViewChild('taskDetailModal') modal: Modal;
@@ -126,21 +115,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     this.intermediateSaveEnabled = this.configService.featureToggles.enableIntermediateSave;
 
     this.iconService.registerAll([RecentlyViewed16]);
-  }
-
-  public ngAfterViewInit(): void {
-    this._subscriptions.add(
-      this.modal.close
-        .pipe(
-          distinctUntilChanged(),
-          tap(() => {
-            if (this.formFlow) {
-              this.formFlow.saveData();
-            }
-          })
-        )
-        .subscribe()
-    );
   }
 
   public ngOnDestroy(): void {
@@ -371,18 +345,6 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
 
   private openModal(): void {
     this.modal.open = true;
-    this._subscriptions.add(
-      this.modal.close
-        .pipe(
-          distinctUntilChanged(),
-          tap(() => {
-            if (this.formFlow) {
-              this.formFlow.saveData();
-            }
-          })
-        )
-        .subscribe()
-    );
   }
 
   protected closeModal(): void {
@@ -390,5 +352,9 @@ export class TaskDetailModalComponent implements AfterViewInit, OnDestroy {
     this._subscriptions.unsubscribe();
     this._fvmSubmissionSubscription?.unsubscribe();
     this._submissionSubscription?.unsubscribe();
+
+    if (this.formFlow) {
+      this.formFlow.saveData();
+    }
   }
 }
