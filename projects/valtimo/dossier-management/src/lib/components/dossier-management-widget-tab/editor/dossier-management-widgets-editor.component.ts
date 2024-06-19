@@ -217,12 +217,6 @@ export class DossierManagementWidgetsEditorComponent {
         this.changeSaved.emit();
       });
   }
-<<<<<<< HEAD
-=======
-
-  private disableEdit(widget: BasicCaseWidget): boolean {
-    return widget.type === CaseWidgetType.TABLE;
-  }
 
   private getWidthTranslationKey(width: number): string {
     switch (width) {
@@ -238,5 +232,4 @@ export class DossierManagementWidgetsEditorComponent {
         return '-';
     }
   }
->>>>>>> 53d52354 (Add extra columns)
 }

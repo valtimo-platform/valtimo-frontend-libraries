@@ -23,10 +23,11 @@ enum WidgetEditorTab {
 }
 
 const WidgetTypeTags: {[key: string]: TagType} = {
-  [CaseWidgetType.FIELDS]: 'red',
-  [CaseWidgetType.CUSTOM]: 'blue',
-  [CaseWidgetType.FORMIO]: 'purple',
-  [CaseWidgetType.TABLE]: 'teal',
+  [CaseWidgetType.COLLECTION]: 'teal',
+  [CaseWidgetType.CUSTOM]: 'magenta',
+  [CaseWidgetType.FIELDS]: 'blue',
+  [CaseWidgetType.FORMIO]: 'green',
+  [CaseWidgetType.TABLE]: 'purple',
 };
 
 export {WidgetEditorTab, WidgetTypeTags};
