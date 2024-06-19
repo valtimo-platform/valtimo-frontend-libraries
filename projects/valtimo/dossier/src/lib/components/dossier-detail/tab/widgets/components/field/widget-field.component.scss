@@ -32,17 +32,29 @@
   }
 
   &__container {
-    display: flex;
-    column-gap: 24px;
-  }
-
-  &__column {
-    width: 100%;
+    display: grid;
+    grid-gap: 24px;
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
-.widget-field--render-vertically {
-  flex-direction: column;
-  justify-content: center;
-  gap: 16px;
+.widget-field__render {
+  &-vertically,
+  &-two-columns,
+  &-three-columns {
+    display: grid;
+    grid-gap: 24px;
+  }
+
+  &-vertically {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  &-two-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &-three-columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

@@ -57,7 +57,7 @@ export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
     this.widgetData$.next(value);
   }
 
-  public readonly renderVertically = signal(false);
+  public readonly renderVertically = signal(0);
   public readonly widgetConfiguration$ = new BehaviorSubject<FieldsCaseWidget | null>(null);
   public readonly widgetData$ = new BehaviorSubject<object | null>(null);
 
@@ -111,7 +111,15 @@ export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
     const elementWidth = event[0]?.borderBoxSize[0]?.inlineSize;
 
     if (typeof elementWidth === 'number' && elementWidth !== 0) {
-      this.renderVertically.set(elementWidth < 640);
+      if (elementWidth < 640) {
+        this.renderVertically.set(1);
+      } else if (elementWidth > 640 && elementWidth <= 768) {
+        this.renderVertically.set(2);
+      } else if (elementWidth > 768 && elementWidth <= 1080) {
+        this.renderVertically.set(3);
+      } else if (elementWidth > 1080) {
+        this.renderVertically.set(4);
+      }
     }
   }
 }
