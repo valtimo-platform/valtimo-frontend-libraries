@@ -15,12 +15,16 @@
  */
 
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   HostBinding,
   Input,
+  OnDestroy,
   signal,
+  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
@@ -52,8 +56,11 @@ import {TranslateModule} from '@ngx-translate/core';
     TranslateModule,
   ],
 })
-export class WidgetCollectionComponent {
+export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   @HostBinding('class') public readonly class = 'widget-collection';
+  @ViewChild('widgetCollection') private _widgetCollectionRef: ElementRef<HTMLDivElement>;
+
+  @Input() collapseVertically = false;
   @Input() public set widgetConfiguration(value: CollectionCaseWidget) {
     if (!value) return;
     this.widgetConfiguration$.next(value);
@@ -79,6 +86,8 @@ export class WidgetCollectionComponent {
   }
 
   public readonly widgetConfiguration$ = new BehaviorSubject<CollectionCaseWidget | null>(null);
+  public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
+  public readonly renderVertically = signal(0);
   private widgetData$ = new BehaviorSubject<CarbonListItem[] | null>(null);
 
   public readonly widgetPropertyValue$: Observable<{title: string; value: string}[][]> =
@@ -109,13 +118,22 @@ export class WidgetCollectionComponent {
         })
       )
     );
+
+  private _observer!: ResizeObserver;
   private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
-  public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
 
   constructor(
     private viewContentService: ViewContentService,
     private readonly cdr: ChangeDetectorRef
   ) {}
+
+  public ngAfterViewInit(): void {
+    if (this.collapseVertically) this.openWidthObserver();
+  }
+
+  public ngOnDestroy(): void {
+    this._observer?.disconnect();
+  }
 
   public onSelectPage(page: number): void {
     this._queryParams$.next(`page=${page - 1}&size=${this.paginationModel().pageLength}`);
@@ -123,5 +141,28 @@ export class WidgetCollectionComponent {
       ...model,
       currentPage: page,
     }));
+  }
+
+  private openWidthObserver(): void {
+    this._observer = new ResizeObserver(event => {
+      this.observerMutation(event);
+    });
+    this._observer.observe(this._widgetCollectionRef.nativeElement);
+  }
+
+  private observerMutation(event: Array<ResizeObserverEntry>): void {
+    const elementWidth = event[0]?.borderBoxSize[0]?.inlineSize;
+
+    if (typeof elementWidth === 'number' && elementWidth !== 0) {
+      if (elementWidth < 640) {
+        this.renderVertically.set(1);
+      } else if (elementWidth > 640 && elementWidth <= 768) {
+        this.renderVertically.set(2);
+      } else if (elementWidth > 768 && elementWidth <= 1080) {
+        this.renderVertically.set(3);
+      } else if (elementWidth > 1080) {
+        this.renderVertically.set(4);
+      }
+    }
   }
 }

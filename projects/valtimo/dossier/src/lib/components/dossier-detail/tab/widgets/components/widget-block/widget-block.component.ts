@@ -62,7 +62,6 @@ import {WidgetFieldComponent} from '../field/widget-field.component';
 import {WidgetFormioComponent} from '../formio/widget-formio.component';
 import {WidgetTableComponent} from '../table/widget-table.component';
 import {WidgetCollectionComponent} from '../collection/widget-collection.component';
-import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'valtimo-dossier-widget-block',

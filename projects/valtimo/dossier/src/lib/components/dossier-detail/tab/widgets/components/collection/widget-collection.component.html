@@ -22,11 +22,23 @@
 >
   <span class="widget-collection__title">Main title</span>
 
-  <div class="widget-collection__container">
-    <!--      <h4 class="widget-collection__card-title">Testing column 1</h4>-->
-
+  <div
+    #widgetCollection
+    [ngClass]="{
+      'widget-collection__render-vertically': renderVertically() == 1,
+      'widget-collection__render-two-columns': renderVertically() == 2,
+      'widget-collection__render-three-columns': renderVertically() == 3,
+      'widget-collection__container': renderVertically() == 4
+    }"
+  >
     <div class="widget-collection__card" *ngFor="let field of obs?.widgetPropertyValue">
-      <div *ngFor="let property of field">
+      <div
+        *ngFor="let property of field"
+        [ngClass]="{
+          'widget-collection__full-width-input': property?.width === 'full',
+          'widget-collection__half-width-input': property?.width === 'half'
+        }"
+      >
         <cds-label>
           {{ property?.title }}
 
