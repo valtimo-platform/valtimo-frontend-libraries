@@ -14,8 +14,12 @@
   ~ limitations under the License.
   -->
 
-<form [formGroup]="form" class="valtimo-dossier-management-widget-table__form">
-  <cds-text-label [attr.data-carbon-theme]="theme$ | async">
+<form
+  *ngIf="{theme: theme$ | async} as obs"
+  [formGroup]="form"
+  class="valtimo-dossier-management-widget-table__form"
+>
+  <cds-text-label [attr.data-carbon-theme]="obs.theme">
     {{ 'widgetTabManagement.content.widgetTitle' | translate }}
 
     <input
@@ -26,7 +30,7 @@
     />
   </cds-text-label>
 
-  <cds-text-label [attr.data-carbon-theme]="theme$ | async">
+  <cds-text-label [attr.data-carbon-theme]="obs.theme">
     {{ 'widgetTabManagement.content.table.defaultPageSize' | translate }}
 
     <input
@@ -37,7 +41,7 @@
     />
   </cds-text-label>
 
-  <cds-text-label [attr.data-carbon-theme]="theme$ | async">
+  <cds-text-label [attr.data-carbon-theme]="obs.theme">
     {{ 'widgetTabManagement.content.table.collection' | translate }}
 
     <input

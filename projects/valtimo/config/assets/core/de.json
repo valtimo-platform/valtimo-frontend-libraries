@@ -786,13 +786,13 @@
       },
       "table": {
         "addColumn": "Spalte hinzufügen",
-        "defaultPageSize": "Standardseitengröße",
-        "defaultPageSizePlaceholder": "Wählen Sie Ihre Standardseitengröße",
-        "collection": "Pfad für Tabelle",
-        "collectionPlaceholder": "Wählen Sie Ihren Pfad für die Tabelle",
+        "defaultPageSize": "Zeilen pro Seite",
+        "defaultPageSizePlaceholder": "Wählen Sie die Anzahl der Zeilen pro Seite",
+        "collection": "Pfad zu den Tabellendaten",
+        "collectionPlaceholder": "Geben Sie den Pfad zu den Tabellendaten an",
         "columns": "Säulen",
         "options": "Optionen",
-        "firstColumnAsTitle": "Erste Spalte ist Titel"
+        "firstColumnAsTitle": "Die erste Spalte ist der Titel der Zeile"
       }
     },
     "cancelModal": {

@@ -787,13 +787,13 @@
       },
       "table": {
         "addColumn": "Add column",
-        "defaultPageSize": "Default page size",
-        "defaultPageSizePlaceholder": "Choose your default page size",
-        "collection": "Path for table",
-        "collectionPlaceholder": "Choose your path for table",
+        "defaultPageSize": "Rows per page",
+        "defaultPageSizePlaceholder": "Choose amount of rows per page",
+        "collection": "Path to table data",
+        "collectionPlaceholder": "Specify the path to table data",
         "columns": "Columns",
         "options": "Options",
-        "firstColumnAsTitle": "First column is title"
+        "firstColumnAsTitle": "First column is the title of the row"
       }
     },
     "cancelModal": {
