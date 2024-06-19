@@ -23,7 +23,7 @@
           {{ 'formManagement.intermediateSave.lastSavedBy' | translate }}: {{ currentIntermediateSave?.editedBy ?
                 currentIntermediateSave?.editedBy : currentIntermediateSave.createdBy }}
           {{ 'formManagement.intermediateSave.on' | translate }}: {{ currentIntermediateSave?.editedOn ?
-                currentIntermediateSave?.editedOn : currentIntermediateSave.createdOn | date: 'short' }}
+                (currentIntermediateSave?.editedOn | date: 'short') : (currentIntermediateSave.createdOn | date: 'short') }}
         </p>
         <ng-container *ngTemplateOutlet="assignUserToTask"></ng-container>
       </div>
@@ -33,6 +33,7 @@
       >
         <cds-tooltip
           [caret]="true"
+          enterDelayMs="0"
           leaveDelayMs="0"
           [description]="'formManagement.intermediateSave.save' | translate"
         >
@@ -45,6 +46,7 @@
         </cds-tooltip>
         <cds-tooltip
           [caret]="true"
+          enterDelayMs="0"
           leaveDelayMs="0"
           [description]="'formManagement.intermediateSave.clear' | translate"
         >
@@ -52,6 +54,7 @@
             cdsButton="ghost"
             iconOnly="true"
             cdsIcon="recently-viewed"
+            [disabled]="!currentIntermediateSave"
             (click)="showConfirmationModal$.next(true)"
           ></button>
         </cds-tooltip>
@@ -139,7 +142,7 @@
       </button>
     </div>
   </div>
-  <div body>
+  <div body class="m-2">
     <ng-template #formViewModelComponent></ng-template>
   </div>
 </cds-modal>
