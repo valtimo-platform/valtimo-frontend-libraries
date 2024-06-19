@@ -312,7 +312,7 @@ export class TaskDetailModalComponent implements OnDestroy {
 
           if (formViewModelComponentRef) {
             formViewModelComponentRef.instance.submission = {
-              data: this.currentIntermediateSave?.submission,
+              data: intermediateSubmission.submission,
             };
           }
         },
