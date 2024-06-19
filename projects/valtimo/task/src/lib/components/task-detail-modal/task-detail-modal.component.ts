@@ -14,7 +14,17 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Inject, OnDestroy, Optional, Output, ViewChild, ViewContainerRef, ViewEncapsulation,} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnDestroy,
+  Optional,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation,
+} from '@angular/core';
 import {Router} from '@angular/router';
 import {
   FormioComponent,
@@ -24,7 +34,12 @@ import {
   ValtimoFormioOptions,
   ValtimoModalService,
 } from '@valtimo/components';
-import {IntermediateSaveRequest, IntermediateSubmission, Task, TaskProcessLinkType,} from '../../models';
+import {
+  IntermediateSaveRequest,
+  IntermediateSubmission,
+  Task,
+  TaskProcessLinkType,
+} from '../../models';
 import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
@@ -91,7 +106,6 @@ export class TaskDetailModalComponent implements OnDestroy {
   private _subscriptions = new Subscription();
   private _fvmSubmissionSubscription: Subscription;
   private _submissionSubscription: Subscription;
-
 
   constructor(
     private readonly toastr: ToastrService,
@@ -269,38 +283,42 @@ export class TaskDetailModalComponent implements OnDestroy {
     });
 
     if (this.intermediateSaveEnabled) {
-      this._fvmSubmissionSubscription =
-        formViewModelComponent.instance.submission$.subscribe((submission) => {
+      this._fvmSubmissionSubscription = formViewModelComponent.instance.submission$.subscribe(
+        submission => {
           this.submission$.next(submission);
-        });
-
-      this._submissionSubscription = this.submission$.pipe(
-        distinctUntilChanged(),
-      ).subscribe((submission?) => {
-        if (submission?.data && Object.keys(submission.data).length === 0) {
-          formViewModelComponent.instance.submission = {data: {}};
         }
-      });
+      );
+
+      this._submissionSubscription = this.submission$
+        .pipe(distinctUntilChanged())
+        .subscribe((submission?) => {
+          if (submission?.data && Object.keys(submission.data).length === 0) {
+            formViewModelComponent.instance.submission = {data: {}};
+          }
+        });
 
       this.getCurrentProgress();
       setTimeout(() => {
-        formViewModelComponent.instance.submission = {data: this.currentIntermediateSave?.submission};
+        formViewModelComponent.instance.submission = {
+          data: this.currentIntermediateSave?.submission,
+        };
       }, 300);
     }
   }
 
   private getCurrentProgress(): void {
-    this.taskInstanceId$.pipe(
-      take(1),
-      switchMap((taskInstanceId: string) =>
-        this.taskIntermediateSaveService
-          .getIntermediateSubmission(taskInstanceId)
-      ))
+    this.taskInstanceId$
+      .pipe(
+        take(1),
+        switchMap((taskInstanceId: string) =>
+          this.taskIntermediateSaveService.getIntermediateSubmission(taskInstanceId)
+        )
+      )
       .subscribe({
         next: (intermediateSubmission: IntermediateSubmission) => {
           this.submission$.next({data: intermediateSubmission.submission});
           this.currentIntermediateSave = intermediateSubmission;
-        }
+        },
       });
   }
 
@@ -314,32 +332,31 @@ export class TaskDetailModalComponent implements OnDestroy {
       .storeIntermediateSubmission(intermediateSaveRequest)
       .pipe(take(1))
       .subscribe({
-        next: (intermediateSubmission) => {
+        next: intermediateSubmission => {
           this.toastr.success(
             this.translateService.instant('formManagement.intermediateSave.success')
           );
           this.currentIntermediateSave = intermediateSubmission;
         },
         error: () => {
-          this.toastr.error(
-            this.translateService.instant('formManagement.intermediateSave.error')
-          );
+          this.toastr.error(this.translateService.instant('formManagement.intermediateSave.error'));
         },
       });
   }
 
   protected clearCurrentProgress(): void {
-    this.taskInstanceId$.pipe(
-      take(1),
-      switchMap((taskInstanceId: string) =>
-        this.taskIntermediateSaveService
-          .clearIntermediateSubmission(taskInstanceId)
-      ))
+    this.taskInstanceId$
+      .pipe(
+        take(1),
+        switchMap((taskInstanceId: string) =>
+          this.taskIntermediateSaveService.clearIntermediateSubmission(taskInstanceId)
+        )
+      )
       .subscribe({
         next: () => {
           this.submission$.next({data: {}});
           this.currentIntermediateSave = null;
-        }
+        },
       });
   }
 

@@ -30,7 +30,13 @@ import {
   take,
   tap,
 } from 'rxjs';
-import {FormioComponent, FormioModule, FormioOptions, FormioSubmission, FormioSubmissionCallback,} from '@formio/angular';
+import {
+  FormioComponent,
+  FormioModule,
+  FormioOptions,
+  FormioSubmission,
+  FormioSubmissionCallback,
+} from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {ViewModelService} from '../../services';
 import {distinctUntilChanged, map} from 'rxjs/operators';
