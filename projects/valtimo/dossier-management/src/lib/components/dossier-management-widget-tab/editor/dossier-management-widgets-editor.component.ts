@@ -29,7 +29,7 @@ import {
 import {BasicCaseWidget, CaseWidget, CaseWidgetsRes} from '@valtimo/dossier';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, Subject, combineLatest, map, take} from 'rxjs';
-import {AVAILABLE_WIDGETS, WidgetStyle} from '../../../models';
+import {AVAILABLE_WIDGETS, WidgetStyle, WidgetTypeTags} from '../../../models';
 import {WidgetTabManagementService, WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetWizardComponent} from '../../dossier-management-widget-wizard/dossier-management-widget-wizard.component';
 
@@ -73,9 +73,9 @@ export class DossierManagementWidgetsEditorComponent {
       viewType: ViewType.TEXT,
     },
     {
-      key: 'typeTranslation',
+      key: 'tags',
       label: 'widgetTabManagement.columns.type',
-      viewType: ViewType.TEXT,
+      viewType: ViewType.TAGS,
     },
     {
       key: 'key',
@@ -114,10 +114,16 @@ export class DossierManagementWidgetsEditorComponent {
     map(([items]) =>
       items.map(item => ({
         ...item,
-        typeTranslation: this.translateService.instant(
-          `widgetTabManagement.types.${item.type}.title`
-        ),
+        // typeTranslation: this.translateService.instant(
+        //   `widgetTabManagement.types.${item.type}.title`
+        // ),
         widthTranslation: this.translateService.instant(this.getWidthTranslationKey(item.width)),
+        tags: [
+          {
+            content: this.translateService.instant(`widgetTabManagement.types.${item.type}.title`),
+            type: WidgetTypeTags[item.type],
+          },
+        ],
       }))
     )
   );
