@@ -95,8 +95,8 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
     combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
       filter(([widget, widgetData]) => !!widget && !!widgetData),
       map(([widget, widgetData]) =>
-        widgetData.map(widgetFieldData => {
-          return widget?.properties.fields.reduce(
+        widgetData.map(widgetFieldData =>
+          widget?.properties.fields.reduce(
             (columnFields, property) => [
               ...columnFields,
               ...(widgetFieldData.hasOwnProperty(property.key)
@@ -115,8 +115,8 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
                 : []),
             ],
             []
-          );
-        })
+          )
+        )
       )
     );
 
@@ -124,7 +124,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
 
   constructor(
-    private viewContentService: ViewContentService,
+    private readonly viewContentService: ViewContentService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
