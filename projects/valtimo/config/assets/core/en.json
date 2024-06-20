@@ -484,7 +484,7 @@
     },
     "intermediateSave": {
       "save": "Save progress",
-      "clear": "Clear input fields",
+      "clear": "Undo latest changes",
       "clearConfirm": "Are you sure you want to clear your input fields? This action cannot be undone.",
       "success": "Progress saved successfully",
       "error": "Failed to save progress",
@@ -678,6 +678,11 @@
       "form": {
         "tabName": "Tab name"
       }
+    },
+    "columns": {
+      "highContrast": "High contrast",
+      "type": "Type",
+      "width": "Width"
     },
     "list": {
       "add": "Add widget",
