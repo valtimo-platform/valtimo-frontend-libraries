@@ -26,7 +26,12 @@
           [context]="{index: $index, title: formRow.get('title')?.value}"
           class="valtimo-dossier-management-widget-field-column__container"
         >
-          <div class="valtimo-dossier-management-widget-field-column__content">
+          <div
+            class="valtimo-dossier-management-widget-field-column__content"
+            [class.valtimo-dossier-management-widget-field-column__content--collection]="
+              !!fieldWidthDropdown
+            "
+          >
             <cds-text-label>
               {{ 'widgetTabManagement.content.fields.title' | translate }}
 

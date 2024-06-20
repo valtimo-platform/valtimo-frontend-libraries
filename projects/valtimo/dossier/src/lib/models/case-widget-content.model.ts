@@ -40,7 +40,7 @@ interface WidgetCollectionContent {
   collection: string;
   defaultPageSize: number;
   title: CollectionCaseWidgetTitle;
-  fields: CollectionCaseWidgetField[];
+  fields: (CollectionCaseWidgetField & {width: CollectionFieldWidth})[];
 }
 
 interface CollectionWidgetResolvedField {
@@ -69,12 +69,6 @@ interface WidgetCustomContent {
 
 interface WidgetFormioContent {
   formDefinitionName: string;
-}
-
-interface WidgetCollectionContent {
-  collection: string;
-  defaultPageSize: number;
-  fields: (FieldsCaseWidgetValue & {width: CollectionFieldWidth})[];
 }
 
 type WidgetContentProperties =

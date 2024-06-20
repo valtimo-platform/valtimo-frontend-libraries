@@ -38,6 +38,10 @@
     grid-template-columns: 1fr 1fr 180px;
     align-items: flex-end;
     gap: 16px;
+
+    &--collection {
+      grid-template-columns: 1fr 1fr 180px 180px;
+    }
   }
 
   &__title {

@@ -57,7 +57,6 @@ import {
   ListItem,
 } from 'carbon-components-angular';
 import {debounceTime, Observable, Subscription} from 'rxjs';
-import {WidgetWizardService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-dossier-management-widget-fields-column',
@@ -180,7 +179,6 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   public ngOnInit(): void {
     this.initForm();
     this.openFormSubscription();
-    console.log(this.fieldWidthDropdown);
   }
 
   public ngOnDestroy(): void {

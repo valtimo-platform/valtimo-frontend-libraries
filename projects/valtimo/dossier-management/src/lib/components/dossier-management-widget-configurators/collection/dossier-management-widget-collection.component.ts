@@ -22,10 +22,9 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  signal,
   ViewEncapsulation,
   WritableSignal,
-  effect,
-  signal,
 } from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -38,7 +37,6 @@ import {
 } from '@valtimo/dossier';
 import {DropdownModule, InputModule, ListItem} from 'carbon-components-angular';
 import {map, Observable, Subscription} from 'rxjs';
-
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
@@ -85,20 +83,18 @@ export class DossierManagementWidgetCollectionComponent
   public readonly content = this.widgetWizardService
     .widgetContent as WritableSignal<WidgetCollectionContent>;
 
-  public widthItems$: Observable<ListItem[]> = this.translateService.stream('key').pipe(
-    map(() => [
-      {
-        content: this.translateService.instant('widgetTabManagement.width.fullWidth.title'),
-        id: 'full',
-        selected: false,
-      },
-      {
-        content: this.translateService.instant('widgetTabManagement.width.half.title'),
-        id: 'half',
-        selected: false,
-      },
-    ])
-  );
+  public WIDTH_ITEMS: ListItem[] = [
+    {
+      content: this.translateService.instant('widgetTabManagement.width.fullWidth.title'),
+      id: 'full',
+      selected: true,
+    },
+    {
+      content: this.translateService.instant('widgetTabManagement.width.half.title'),
+      id: 'half',
+      selected: false,
+    },
+  ];
 
   private readonly _subscriptions = new Subscription();
   private readonly _contentValid = signal<boolean>(false);
@@ -108,11 +104,7 @@ export class DossierManagementWidgetCollectionComponent
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService
-  ) {
-    effect(() => {
-      console.log(this.widgetWizardService.widgetContent());
-    });
-  }
+  ) {}
 
   public ngOnInit(): void {
     this._subscriptions.add(
@@ -137,17 +129,31 @@ export class DossierManagementWidgetCollectionComponent
     this._subscriptions.unsubscribe();
   }
 
+  public getSelectedWidthItem(fieldIndex: number): ListItem[] {
+    const widgetContent: WidgetCollectionContent | null =
+      this.widgetWizardService.widgetContent() as WidgetCollectionContent;
+
+    return !widgetContent
+      ? this.WIDTH_ITEMS
+      : this.WIDTH_ITEMS.map((item: ListItem) => ({
+          ...item,
+          selected: widgetContent.fields?.[fieldIndex]?.width === item.id,
+        }));
+  }
+
   public onColumnUpdateEvent(event: {data: FieldsCaseWidgetValue[]; valid: boolean}): void {
     const {data, valid} = event;
-    this.widgetWizardService.widgetContent.update(
-      (content: WidgetContentProperties | null) =>
-        ({
-          ...content,
-          fields: (content as WidgetCollectionContent).fields.map(
-            (field: FieldsCaseWidgetValue, index: number) => ({...field, ...data[index]})
-          ),
-        }) as WidgetCollectionContent
-    );
+    this.widgetWizardService.widgetContent.update((content: WidgetContentProperties | null) => {
+      const existingFields = (content as WidgetCollectionContent)?.fields;
+
+      return {
+        ...content,
+        fields: data.map((item, index) => ({
+          ...item,
+          width: existingFields?.[index]?.width ?? 'full',
+        })),
+      } as WidgetCollectionContent;
+    });
     this._contentValid.set(valid);
     this.changeValidEvent.emit(valid && this.form.valid);
   }
@@ -157,7 +163,7 @@ export class DossierManagementWidgetCollectionComponent
       (content: WidgetContentProperties | null) =>
         ({
           ...content,
-          fields: (content as WidgetCollectionContent).fields.map(
+          fields: (content as WidgetCollectionContent)?.fields.map(
             (field: FieldsCaseWidgetValue & {width: CollectionFieldWidth}, index: number) =>
               index === fieldIndex ? {...field, width: event.item.id} : field
           ),
