@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -25,7 +25,7 @@ import {
 } from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {
-  CARBON_THEME,
+  CdsThemeService,
   FormModule,
   InputModule,
   SelectItem,
@@ -34,7 +34,7 @@ import {
   ValtimoCdsModalDirectiveModule,
 } from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
-import {BehaviorSubject, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, map, Observable, switchMap, tap} from 'rxjs';
 import {CommonModule} from '@angular/common';
 import {ButtonModule, CheckboxModule, ModalModule} from 'carbon-components-angular';
 import {DocumentObjectenApiSyncService} from '../../services';
@@ -61,7 +61,7 @@ import {DocumentDefinition} from '@valtimo/document';
     ModalModule,
   ],
 })
-export class DocumentObjectenApiSyncComponent implements OnInit, OnDestroy {
+export class DocumentObjectenApiSyncComponent implements OnInit {
   readonly loading$ = new BehaviorSubject<boolean>(true);
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || '')
@@ -83,6 +83,7 @@ export class DocumentObjectenApiSyncComponent implements OnInit, OnDestroy {
       )
     );
   readonly modalShowing$ = new BehaviorSubject<boolean>(false);
+  public readonly currentTheme$ = this.cdsThemeService.currentTheme$
   public readonly formGroup = new FormGroup({
     objectManagementConfigurationId: new FormControl('', Validators.required),
     enabled: new FormControl(true),
@@ -97,57 +98,49 @@ export class DocumentObjectenApiSyncComponent implements OnInit, OnDestroy {
   }
 
   public readonly valid$ = new BehaviorSubject<boolean>(false);
-  private _subscriptions = new Subscription();
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly documentObjectenApiSyncService: DocumentObjectenApiSyncService
+    private readonly documentObjectenApiSyncService: DocumentObjectenApiSyncService,
+    private readonly cdsThemeService: CdsThemeService
   ) {}
 
   public ngOnInit(): void {
     this.loadDocumentenObjectenApiSync();
   }
 
-  public ngOnDestroy(): void {
-    this._subscriptions.unsubscribe();
-  }
-
   public loadDocumentenObjectenApiSync(): void {
-    this._subscriptions.add(
-      this.documentDefinition$
-        .pipe(
-          switchMap(documentDefinition =>
-            this.documentObjectenApiSyncService.getDocumentObjectenApiSync(
-              documentDefinition.id.name,
-              documentDefinition.id.version
-            )
+    this.documentDefinition$
+      .pipe(
+        switchMap(documentDefinition =>
+          this.documentObjectenApiSyncService.getDocumentObjectenApiSync(
+            documentDefinition.id.name,
+            documentDefinition.id.version
           )
         )
-        .subscribe(documentObjectenApiSync => {
-          this.loading$.next(false);
-          this.configSelected(documentObjectenApiSync?.objectManagementConfigurationId);
-          this.enabled.patchValue(documentObjectenApiSync?.enabled);
-          this.documentObjectenApiSync$.next(documentObjectenApiSync);
-        })
-    );
+      )
+      .subscribe(documentObjectenApiSync => {
+        this.loading$.next(false);
+        this.configSelected(documentObjectenApiSync?.objectManagementConfigurationId);
+        this.enabled.patchValue(documentObjectenApiSync?.enabled);
+        this.documentObjectenApiSync$.next(documentObjectenApiSync);
+      });
   }
 
   public remove(): void {
-    this._subscriptions.add(
-      this.documentDefinition$
-        .pipe(
-          switchMap(documentDefinition =>
-            this.documentObjectenApiSyncService.deleteDocumentObjectenApiSync(
-              documentDefinition.id.name,
-              documentDefinition.id.version
-            )
-          ),
-          tap(() => {
-            this.documentObjectenApiSync$.next(null);
-          })
-        )
-        .subscribe()
-    );
+    this.documentDefinition$
+      .pipe(
+        switchMap(documentDefinition =>
+          this.documentObjectenApiSyncService.deleteDocumentObjectenApiSync(
+            documentDefinition.id.name,
+            documentDefinition.id.version
+          )
+        ),
+        tap(() => {
+          this.documentObjectenApiSync$.next(null);
+        })
+      )
+      .subscribe();
   }
 
   public submit(): void {
@@ -190,6 +183,4 @@ export class DocumentObjectenApiSyncComponent implements OnInit, OnDestroy {
   private hideModal(): void {
     this.modalShowing$.next(false);
   }
-
-  protected readonly CARBON_THEME = CARBON_THEME;
 }

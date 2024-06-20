@@ -106,7 +106,7 @@
           [margin]="true"
           [required]="true"
           name="objectManagementConfigurationId"
-          [carbonTheme]="CARBON_THEME"
+          [carbonTheme]="currentTheme$ | async"
           (selectedChange)="configSelected($event)"
         ></v-select>
 
