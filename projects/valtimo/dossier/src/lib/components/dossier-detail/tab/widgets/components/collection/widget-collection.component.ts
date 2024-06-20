@@ -87,7 +87,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
 
   public readonly widgetConfiguration$ = new BehaviorSubject<CollectionCaseWidget | null>(null);
   public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
-  public readonly renderVertically = signal(0);
+  public readonly amountOfColumns = signal(0);
   private widgetData$ = new BehaviorSubject<CarbonListItem[] | null>(null);
 
   public readonly widgetPropertyValue$: Observable<{title: string; value: string}[][]> =
@@ -123,7 +123,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
 
   constructor(
-    private viewContentService: ViewContentService,
+    private readonly viewContentService: ViewContentService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
@@ -155,13 +155,13 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
 
     if (typeof elementWidth === 'number' && elementWidth !== 0) {
       if (elementWidth < 640) {
-        this.renderVertically.set(1);
+        this.amountOfColumns.set(1);
       } else if (elementWidth > 640 && elementWidth <= 768) {
-        this.renderVertically.set(2);
+        this.amountOfColumns.set(2);
       } else if (elementWidth > 768 && elementWidth <= 1080) {
-        this.renderVertically.set(3);
+        this.amountOfColumns.set(3);
       } else if (elementWidth > 1080) {
-        this.renderVertically.set(4);
+        this.amountOfColumns.set(4);
       }
     }
   }

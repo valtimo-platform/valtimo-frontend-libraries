@@ -63,7 +63,7 @@
   }
 
   &__half-width-input {
-    width: 45%;
+    width: calc(50% - 16px);
     box-sizing: border-box;
   }
 
