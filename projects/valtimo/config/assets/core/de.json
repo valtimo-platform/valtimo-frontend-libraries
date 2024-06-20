@@ -720,10 +720,6 @@
       "table": {
         "title": "Tabelle",
         "description": "Erstellen Sie eine Tabelle"
-      },
-      "collection": {
-        "title": "Sammlung",
-        "description": "Widget-Sammlung erstellen"
       }
     },
     "width": {
@@ -802,10 +798,6 @@
         "columns": "Säulen",
         "options": "Optionen",
         "firstColumnAsTitle": "Die erste Spalte ist der Titel der Zeile"
-      },
-      "collection": {
-        "selectForm": "Sammlung",
-        "placeholder": "Wählen Sie eine Sammlung aus"
       }
     },
     "cancelModal": {

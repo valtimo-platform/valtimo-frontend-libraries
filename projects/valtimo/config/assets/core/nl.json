@@ -720,10 +720,6 @@
       "table": {
         "title": "Tabel",
         "description": "Maak een table aan"
-      },
-      "collection": {
-        "title": "Collectie",
-        "description": "Maak widgetcollectie"
       }
     },
     "width": {
@@ -792,10 +788,6 @@
       "formio": {
         "selectForm": "Formulierdefinitie",
         "placeholder": "Selecteer een formulierdefinitie"
-      },
-      "collection": {
-        "selectForm": "Collectie",
-        "placeholder": "Selecteer een collectie"
       },
       "table": {
         "addColumn": "Kolom toevoegen",
