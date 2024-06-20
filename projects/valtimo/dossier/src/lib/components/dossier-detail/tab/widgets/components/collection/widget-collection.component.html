@@ -25,10 +25,10 @@
   <div
     #widgetCollection
     [ngClass]="{
-      'widget-collection__render-vertically': renderVertically() == 1,
-      'widget-collection__render-two-columns': renderVertically() == 2,
-      'widget-collection__render-three-columns': renderVertically() == 3,
-      'widget-collection__container': renderVertically() == 4
+      'widget-collection__render-vertically': renderVertically() === 1,
+      'widget-collection__render-two-columns': renderVertically() === 2,
+      'widget-collection__render-three-columns': renderVertically() === 3,
+      'widget-collection__container': renderVertically() === 4
     }"
   >
     <div class="widget-collection__card" *ngFor="let field of obs?.widgetPropertyValue">

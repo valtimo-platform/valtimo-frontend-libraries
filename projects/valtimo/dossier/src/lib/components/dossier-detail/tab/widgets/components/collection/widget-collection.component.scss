@@ -38,10 +38,11 @@
   &__card {
     margin-top: 16px;
     display: flex;
+    flex-flow: row wrap;
     background-color: var(--cds-background);
     padding: 16px;
-    column-gap: 16px;
     width: 100%;
+    gap: 16px;
   }
 
   &__card-title {
@@ -57,6 +58,15 @@
     background: transparent;
   }
 
+  &__full-width-input {
+    width: 100%;
+  }
+
+  &__half-width-input {
+    width: 45%;
+    box-sizing: border-box;
+  }
+
   &__pagination {
     padding: 8px 0;
     display: flex;
@@ -69,7 +79,7 @@
   &-two-columns,
   &-three-columns {
     display: grid;
-    grid-gap: 24px;
+    grid-gap: 16px;
   }
 
   &-vertically {
