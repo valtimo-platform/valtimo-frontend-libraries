@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {FieldsCaseWidgetValue} from './case-widget.model';
 import {CaseWidgetDisplayType} from './case-widget-display.model';
+import {CollectionFieldWidth, FieldsCaseWidgetValue} from './case-widget.model';
 
 interface WidgetFieldsContent {
   columns: FieldsCaseWidgetValue[][];
@@ -71,6 +71,12 @@ interface WidgetFormioContent {
   formDefinitionName: string;
 }
 
+interface WidgetCollectionContent {
+  collection: string;
+  defaultPageSize: number;
+  fields: (FieldsCaseWidgetValue & {width: CollectionFieldWidth})[];
+}
+
 type WidgetContentProperties =
   | WidgetFieldsContent
   | WidgetTableContent
@@ -80,8 +86,8 @@ type WidgetContentProperties =
 
 export {
   WidgetContentProperties,
-  WidgetFieldsContent,
   WidgetCustomContent,
+  WidgetFieldsContent,
   WidgetFormioContent,
   WidgetTableContent,
   WidgetCollectionContent,

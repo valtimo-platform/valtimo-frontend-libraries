@@ -24,6 +24,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
 import {
@@ -48,6 +49,7 @@ import {
 import {
   AccordionModule,
   ButtonModule,
+  Dropdown,
   DropdownModule,
   IconModule,
   IconService,
@@ -79,6 +81,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field-column';
   @Input({required: true}) public columnData: FieldsCaseWidgetValue[];
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
+  @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
 
   @Output() public columnUpdateEvent = new EventEmitter<{
     data: FieldsCaseWidgetValue[];
@@ -177,6 +180,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   public ngOnInit(): void {
     this.initForm();
     this.openFormSubscription();
+    console.log(this.fieldWidthDropdown);
   }
 
   public ngOnDestroy(): void {

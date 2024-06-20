@@ -61,6 +61,10 @@
             >
               <cds-dropdown-list [items]="getDisplayItemsSelected(formRow)"></cds-dropdown-list>
             </cds-dropdown>
+
+            <ng-container
+              *ngTemplateOutlet="fieldWidthDropdown; context: {index: $index}"
+            ></ng-container>
           </div>
 
           <div class="valtimo-dossier-management-widget-field-column__options">

@@ -17,7 +17,7 @@
 <form
   *ngIf="{theme: theme$ | async} as obs"
   [formGroup]="form"
-  class="valtimo-dossier-management-widget-table__form"
+  class="valtimo-dossier-management-widget-collection__form"
 >
   <cds-text-label [attr.data-carbon-theme]="obs.theme">
     {{ 'widgetTabManagement.content.widgetTitle' | translate }}
@@ -31,48 +31,52 @@
   </cds-text-label>
 
   <cds-text-label [attr.data-carbon-theme]="obs.theme">
-    {{ 'widgetTabManagement.content.table.defaultPageSize' | translate }}
+    {{ 'widgetTabManagement.content.collection.defaultPageSize' | translate }}
 
     <input
       formControlName="defaultPageSize"
       cdsText
-      [placeholder]="'widgetTabManagement.content.table.defaultPageSizePlaceholder' | translate"
+      [placeholder]="
+        'widgetTabManagement.content.collection.defaultPageSizePlaceholder' | translate
+      "
       type="text"
     />
   </cds-text-label>
 
   <cds-text-label [attr.data-carbon-theme]="obs.theme">
-    {{ 'widgetTabManagement.content.table.collection' | translate }}
+    {{ 'widgetTabManagement.content.collection.collection' | translate }}
 
     <input
       formControlName="collection"
       cdsText
-      [placeholder]="'widgetTabManagement.content.table.collectionPlaceholder' | translate"
+      [placeholder]="'widgetTabManagement.content.collection.collectionPlaceholder' | translate"
       type="text"
     />
   </cds-text-label>
 </form>
 
-<span class="valtimo-dossier-management-widget-table__subtitle">
-  {{ 'widgetTabManagement.content.table.columns' | translate }}
+<span class="valtimo-dossier-management-widget-collection__subtitle">
+  {{ 'widgetTabManagement.content.collection.cardTitle' | translate }}
+</span>
+
+<span class="valtimo-dossier-management-widget-collection__subtitle">
+  {{ 'widgetTabManagement.content.collection.cardFields' | translate }}
 </span>
 
 <valtimo-dossier-management-widget-fields-column
-  [addTranslateKey]="'widgetTabManagement.content.table.addColumn'"
-  [columnData]="content()?.columns"
+  [columnData]="content()?.fields"
+  [fieldWidthDropdown]="fieldWidthDropdown"
   (columnUpdateEvent)="onColumnUpdateEvent($event)"
-></valtimo-dossier-management-widget-fields-column>
+>
+</valtimo-dossier-management-widget-fields-column>
 
-<section class="valtimo-dossier-management-widget-table__toggle">
-  <span class="valtimo-dossier-management-widget-table__subtitle">
-    {{ 'widgetTabManagement.content.table.options' | translate }}
-  </span>
-
-  <cds-toggle
-    [checked]="checked()"
-    [label]="'widgetTabManagement.content.table.firstColumnAsTitle' | translate"
-    [onText]="'interface.yes' | translate"
-    [offText]="'interface.no' | translate"
-    (checkedChange)="onCheckedChange($event)"
-  ></cds-toggle>
-</section>
+<ng-template #fieldWidthDropdown let-index="index">
+  <cds-dropdown
+    [label]="'widgetTabManagement.content.collection.fieldWidth' | translate"
+    [dropUp]="false"
+    [placeholder]="'widgetTabManagement.content.collection.fieldWidthPlaceholder' | translate"
+    (selected)="onWidthSelected($event, index)"
+  >
+    <cds-dropdown-list [items]="widthItems$ | async"></cds-dropdown-list>
+  </cds-dropdown>
+</ng-template>
