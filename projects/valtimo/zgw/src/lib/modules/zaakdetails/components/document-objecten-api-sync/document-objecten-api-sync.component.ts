@@ -62,8 +62,8 @@ import {DocumentDefinition} from '@valtimo/document';
   ],
 })
 export class DocumentObjectenApiSyncComponent implements OnInit {
-  readonly loading$ = new BehaviorSubject<boolean>(true);
-  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
+  private readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || '')
   );
   private readonly documentDefinition$: Observable<DocumentDefinition> =
@@ -72,8 +72,8 @@ export class DocumentObjectenApiSyncComponent implements OnInit {
         this.documentObjectenApiSyncService.getDocumentDefinition(documentDefinitionName)
       )
     );
-  readonly documentObjectenApiSync$ = new BehaviorSubject<DocumentObjectenApiSync>(null);
-  readonly objectManagementConfigurationItems$: Observable<Array<SelectItem>> =
+  public readonly documentObjectenApiSync$ = new BehaviorSubject<DocumentObjectenApiSync>(null);
+  public readonly objectManagementConfigurationItems$: Observable<Array<SelectItem>> =
     this.documentObjectenApiSyncService.getObjectManagementConfigurations().pipe(
       map(results =>
         results?.map(configuration => ({
@@ -82,7 +82,7 @@ export class DocumentObjectenApiSyncComponent implements OnInit {
         }))
       )
     );
-  readonly modalShowing$ = new BehaviorSubject<boolean>(false);
+  private readonly modalShowing$ = new BehaviorSubject<boolean>(false);
   public readonly currentTheme$ = this.cdsThemeService.currentTheme$
   public readonly formGroup = new FormGroup({
     objectManagementConfigurationId: new FormControl('', Validators.required),
