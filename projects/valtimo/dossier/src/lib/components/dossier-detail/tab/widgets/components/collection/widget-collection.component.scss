@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-.widget-collection {
+.valtimo-widget-collection {
   padding: 24px;
 
   &__title {
@@ -74,16 +74,12 @@
   }
 }
 
-.widget-collection__render {
+.valtimo-widget-collection__render {
   &-vertically,
   &-two-columns,
   &-three-columns {
     display: grid;
     grid-gap: 16px;
-  }
-
-  &-vertically {
-    grid-template-columns: repeat(1, 1fr);
   }
 
   &-two-columns {

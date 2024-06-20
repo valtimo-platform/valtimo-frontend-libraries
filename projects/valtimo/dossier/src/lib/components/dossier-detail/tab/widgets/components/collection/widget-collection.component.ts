@@ -38,6 +38,7 @@ import {CollectionCaseWidget} from '../../../../../../models';
 import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
 import {CarbonListItem, CarbonListModule, ViewContentService} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
+import {Page} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-widget-collection',
@@ -57,7 +58,7 @@ import {TranslateModule} from '@ngx-translate/core';
   ],
 })
 export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
-  @HostBinding('class') public readonly class = 'widget-collection';
+  @HostBinding('class') public readonly class = 'valtimo-widget-collection';
   @ViewChild('widgetCollection') private _widgetCollectionRef: ElementRef<HTMLDivElement>;
 
   @Input() collapseVertically = false;
@@ -67,7 +68,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   }
   public readonly showPagination$ = new BehaviorSubject<boolean>(false);
 
-  @Input() public set widgetData(value: any | null) {
+  @Input() public set widgetData(value: Page<CarbonListItem> | null) {
     if (!value) return;
 
     this.showPagination$.next(value.totalElements > value.size);
@@ -123,7 +124,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
 
   constructor(
-    private readonly viewContentService: ViewContentService,
+    private viewContentService: ViewContentService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 

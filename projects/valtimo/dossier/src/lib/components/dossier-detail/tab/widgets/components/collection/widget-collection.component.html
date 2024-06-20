@@ -20,42 +20,45 @@
     widgetPropertyValue: widgetPropertyValue$ | async
   } as obs"
 >
-  <span class="widget-collection__title">Main title</span>
+  <span class="valtimo-widget-collection__title">Main title</span>
 
   <div
     #widgetCollection
     [ngClass]="{
-      'widget-collection__render-vertically': renderVertically() === 1,
-      'widget-collection__render-two-columns': renderVertically() === 2,
-      'widget-collection__render-three-columns': renderVertically() === 3,
-      'widget-collection__container': renderVertically() === 4
+      'valtimo-widget-collection__render-vertically': amountOfColumns() === 1,
+      'valtimo-widget-collection__render-two-columns': amountOfColumns() === 2,
+      'valtimo-widget-collection__render-three-columns': amountOfColumns() === 3,
+      'valtimo-widget-collection__container': amountOfColumns() === 4
     }"
   >
-    <div class="widget-collection__card" *ngFor="let field of obs?.widgetPropertyValue">
-      <div
-        *ngFor="let property of field"
-        [ngClass]="{
-          'widget-collection__full-width-input': property?.width === 'full',
-          'widget-collection__half-width-input': property?.width === 'half'
-        }"
-      >
-        <cds-label>
-          {{ property?.title }}
+    @for (field of obs?.widgetPropertyValue; track field.key) {
+      <div class="valtimo-widget-collection__card">
+        @for (property of field; track property.value) {
+          <div
+            [ngClass]="{
+              'valtimo-widget-collection__full-width-input': property?.width === 'full',
+              'valtimo-widget-collection__half-width-input': property?.width === 'half'
+            }"
+          >
+            <cds-label>
+              {{ property?.title }}
 
-          <input
-            [value]="property?.value"
-            [readonly]="true"
-            class="widget-collection__card-input"
-            cdsText
-          />
-        </cds-label>
+              <input
+                [value]="property?.value"
+                [readonly]="true"
+                class="valtimo-widget-collection__card-input"
+                cdsText
+              />
+            </cds-label>
+          </div>
+        }
       </div>
-    </div>
+    }
   </div>
 
   <cds-pagination-nav
     *ngIf="paginationModel()"
-    class="widget-collection__pagination"
+    class="valtimo-widget-collection__pagination"
     [model]="paginationModel()"
     (selectPage)="onSelectPage($event)"
   >
