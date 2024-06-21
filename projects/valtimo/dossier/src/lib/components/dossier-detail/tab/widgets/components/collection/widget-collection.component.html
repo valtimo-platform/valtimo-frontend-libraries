@@ -61,8 +61,16 @@
     }
   </div>
 
+  @if (!obs?.collectionWidgetCards.length) {
+    <valtimo-no-results
+      [collapseVertically]="true"
+      [description]="'dossier.widgets.noData' | translate"
+      [smallPadding]="true"
+    ></valtimo-no-results>
+  }
+
   <cds-pagination-nav
-    *ngIf="paginationModel()"
+    *ngIf="paginationModel() && (showPagination$ | async)"
     class="valtimo-widget-collection__pagination"
     [model]="paginationModel()"
     (selectPage)="onSelectPage($event)"
