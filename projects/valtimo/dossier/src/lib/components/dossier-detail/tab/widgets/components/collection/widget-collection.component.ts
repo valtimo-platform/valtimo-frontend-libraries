@@ -116,18 +116,14 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
     this._widgetDataSubject$,
     this._queryParams$,
     this._initialNumberOfElements$,
+    this.widgetConfiguration$,
   ]).pipe(
-    switchMap(([data, queryParams, initialNumberOfElements]) =>
+    switchMap(([data, queryParams, initialNumberOfElements, widgetConfiguration]) =>
       combineLatest([
         !queryParams
           ? of(data)
           : this.widgetApiService
-              .getWidgetData(
-                this.documentId,
-                this.tabKey,
-                this.widgetConfiguration.key,
-                queryParams
-              )
+              .getWidgetData(this.documentId, this.tabKey, widgetConfiguration.key, queryParams)
               .pipe(map((res: Page<CollectionCaseWidgetCardData>) => res.content)),
         of(initialNumberOfElements),
       ])
@@ -145,24 +141,24 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   );
 
   public readonly collectionWidgetCards$: Observable<
-    {title: string; fields: CollectionWidgetResolvedField[]; key: number}[]
+    {title: string; fields: CollectionWidgetResolvedField[]; key: number; hidden: boolean}[]
   > = combineLatest([this.widgetConfiguration$, this._widgetData$]).pipe(
     filter(([widgetConfig, widgetData]) => !!widgetConfig && !!widgetData),
     tap(([widgetConfig]) => this.widgetTitle.set(widgetConfig.title)),
     map(([widgetConfig, widgetData]) =>
       widgetData.map((cardData, index) => ({
+        hidden: cardData.hidden,
         key: index,
         title: this.getCardTitle(widgetConfig.properties.title),
         fields: widgetConfig?.properties.fields.reduce(
-          (cardsAccumulator, currentField, index) => [
-            ...cardsAccumulator,
+          (cardFieldsAccumulator, currentField, index) => [
+            ...cardFieldsAccumulator,
             this.getCardField(currentField, cardData),
           ],
           []
         ),
       }))
-    ),
-    tap(result => console.log('result', result))
+    )
   );
 
   private _observer!: ResizeObserver;

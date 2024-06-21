@@ -32,7 +32,10 @@
     }"
   >
     @for (card of obs?.collectionWidgetCards; track card.key) {
-      <div class="valtimo-widget-collection__card">
+      <div
+        class="valtimo-widget-collection__card"
+        [ngClass]="{'valtimo-widget-collection__card--hidden': card.hidden}"
+      >
         <span class="valtimo-widget-collection__card-title">{{ card.title }}</span>
 
         @for (field of card.fields; track field.key) {
