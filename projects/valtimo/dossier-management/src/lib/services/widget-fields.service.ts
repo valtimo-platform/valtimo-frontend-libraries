@@ -90,6 +90,8 @@ export class WidgetFieldsService {
     switch (event.item.id) {
       case CaseWidgetDisplayTypeKey.BOOLEAN:
         break;
+      case CaseWidgetDisplayTypeKey.TEXT:
+        break;
       case CaseWidgetDisplayTypeKey.CURRENCY:
         formGroup.addControl('currencyCode', this.fb.control(''));
         formGroup.addControl('display', this.fb.control(''));

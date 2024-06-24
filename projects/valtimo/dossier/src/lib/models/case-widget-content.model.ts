@@ -40,7 +40,7 @@ interface WidgetCollectionContent {
   collection: string;
   defaultPageSize: number;
   title: CollectionCaseWidgetTitle;
-  fields: (CollectionCaseWidgetField & {width: CollectionFieldWidth})[];
+  fields: CollectionCaseWidgetField[];
 }
 
 interface CollectionWidgetResolvedField {

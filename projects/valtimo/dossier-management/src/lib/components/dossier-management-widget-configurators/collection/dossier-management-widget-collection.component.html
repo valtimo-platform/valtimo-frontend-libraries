@@ -134,56 +134,60 @@
             />
           </cds-text-label>
         }
-        <!-- @case (CaseWidgetDisplayTypeKey.ENUM) {
-      <div class="valtimo-dossier-management-widget-field-column__enum" formArrayName="values">
-        @for (rowValue of cardForm.get('values')?.controls; track $index) {
-          <form
-            [formGroup]="rowValue"
-            class="valtimo-dossier-management-widget-field-column__enum-form"
-          >
-            <cds-text-label>
-              {{ 'widgetTabManagement.content.fields.key' | translate }}
+        @case (CaseWidgetDisplayTypeKey.ENUM) {
+          <div class="valtimo-dossier-management-widget-collection__enum" formArrayName="values">
+            @for (rowValue of cardForm.get('values')?.controls; track $index) {
+              <form
+                [formGroup]="rowValue"
+                class="valtimo-dossier-management-widget-collection__enum-form"
+              >
+                <cds-text-label>
+                  {{ 'widgetTabManagement.content.fields.key' | translate }}
 
-              <input
-                [attr.data-carbon-theme]="obs.theme"
-                cdsText
-                [placeholder]="'widgetTabManagement.content.fields.key' | translate"
-                type="text"
-                formControlName="key"
-              />
-            </cds-text-label>
+                  <input
+                    [attr.data-carbon-theme]="obs.theme"
+                    cdsText
+                    [placeholder]="'widgetTabManagement.content.fields.key' | translate"
+                    type="text"
+                    formControlName="key"
+                  />
+                </cds-text-label>
 
-            <cds-text-label>
-              {{ 'widgetTabManagement.content.fields.value' | translate }}
+                <cds-text-label>
+                  {{ 'widgetTabManagement.content.fields.value' | translate }}
 
-              <input
-                cdsText
-                [attr.data-carbon-theme]="obs.theme"
-                [placeholder]="'widgetTabManagement.content.fields.value' | translate"
-                type="text"
-                formControlName="value"
-              />
-            </cds-text-label>
+                  <input
+                    cdsText
+                    [attr.data-carbon-theme]="obs.theme"
+                    [placeholder]="'widgetTabManagement.content.fields.value' | translate"
+                    type="text"
+                    formControlName="value"
+                  />
+                </cds-text-label>
+
+                <button
+                  cdsButton="danger--ghost"
+                  [disabled]="$count === 1"
+                  [iconOnly]="true"
+                  class="valtimo-dossier-management-widget-field-column__delete-button enum"
+                  (click)="onDeleteRowClick(cardForm.get('values'), $index)"
+                >
+                  <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+                </button>
+              </form>
+            }
 
             <button
-              cdsButton="danger--ghost"
-              [disabled]="$count === 1"
-              [iconOnly]="true"
-              class="valtimo-dossier-management-widget-field-column__delete-button enum"
-              (click)="onDeleteRowClick(formRow.get('values'), $index)"
+              cdsButton="primary"
+              size="sm"
+              (click)="onAddEnumValueClick(cardForm.get('values'))"
             >
-              <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+              {{ 'widgetTabManagement.content.fields.addEnum' | translate }}
+
+              <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
             </button>
-          </form>
+          </div>
         }
-
-        <button cdsButton="primary" size="sm" (click)="onAddEnumValueClick(formRow.get('values'))">
-          {{ 'widgetTabManagement.content.fields.addEnum' | translate }}
-
-          <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
-        </button>
-      </div>
-    } -->
         @case (CaseWidgetDisplayTypeKey.NUMBER) {
           <cds-text-label>
             {{ 'widgetTabManagement.content.fields.digitsInfo' | translate }}

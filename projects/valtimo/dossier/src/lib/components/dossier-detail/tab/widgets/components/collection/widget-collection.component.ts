@@ -35,6 +35,7 @@ import {
   TilesModule,
 } from 'carbon-components-angular';
 import {
+  CaseWidgetDisplayTypeKey,
   CollectionCaseWidget,
   CollectionCaseWidgetCardData,
   CollectionCaseWidgetField,
@@ -42,7 +43,7 @@ import {
   CollectionWidgetResolvedField,
 } from '../../../../../../models';
 import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
-import {CarbonListModule, ViewContentService} from '@valtimo/components';
+import {CarbonListModule, ViewContentService, ViewType} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
 import {Page} from '@valtimo/config';
 import {DossierWidgetsApiService} from '../../../../../../services';
@@ -84,6 +85,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   }
 
   @Input() public set widgetData(value: Page<CollectionCaseWidgetCardData> | null) {
+    console.log({value});
     if (!value) return;
 
     this.showPagination$.next(value.totalElements > value.size);
@@ -144,12 +146,18 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
     {title: string; fields: CollectionWidgetResolvedField[]; key: number; hidden: boolean}[]
   > = combineLatest([this.widgetConfiguration$, this._widgetData$]).pipe(
     filter(([widgetConfig, widgetData]) => !!widgetConfig && !!widgetData),
-    tap(([widgetConfig]) => this.widgetTitle.set(widgetConfig.title)),
+    tap(([widgetConfig, widgetData]) => {
+      this.widgetTitle.set(widgetConfig.title);
+      console.log({widgetConfig, widgetData});
+    }),
     map(([widgetConfig, widgetData]) =>
       widgetData.map((cardData, index) => ({
         hidden: cardData.hidden,
         key: index,
-        title: this.getCardTitle(widgetConfig.properties.title),
+        title: this.getCardTitle({
+          value: cardData.title,
+          displayProperties: widgetConfig.properties.title.displayProperties,
+        }),
         fields: widgetConfig?.properties.fields.reduce(
           (cardFieldsAccumulator, currentField, index) => [
             ...cardFieldsAccumulator,
@@ -191,7 +199,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   ): CollectionWidgetResolvedField {
     const resolvedValue = this.viewContentService.get(data.fields[field.key], {
       ...field.displayProperties,
-      viewType: field.displayProperties.type,
+      viewType: field.displayProperties?.type ?? CaseWidgetDisplayTypeKey.TEXT,
     });
 
     return {

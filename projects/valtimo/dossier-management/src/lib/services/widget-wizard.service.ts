@@ -12,17 +12,11 @@ import {DossierManagementWidgetCollectionComponent} from '../components/dossier-
   providedIn: 'root',
 })
 export class WidgetWizardService {
-  public readonly selectedWidget: WritableSignal<WidgetTypeSelection | null> = signal({
-    titleKey: 'widgetTabManagement.types.collection.title',
-    descriptionKey: 'widgetTabManagement.types.collection.description',
-    illustrationUrl: 'valtimo-layout/img/widget-management/types/collection.svg',
-    type: CaseWidgetType.COLLECTION,
-    component: DossierManagementWidgetCollectionComponent,
-  });
+  public readonly selectedWidget: WritableSignal<WidgetTypeSelection | null> = signal(null);
 
-  public readonly widgetWidth: WritableSignal<CaseWidgetWidth | null> = signal(4);
+  public readonly widgetWidth: WritableSignal<CaseWidgetWidth | null> = signal(null);
 
-  public readonly widgetStyle: WritableSignal<WidgetStyle | null> = signal(WidgetStyle.DEFAULT);
+  public readonly widgetStyle: WritableSignal<WidgetStyle | null> = signal(null);
 
   public readonly widgetContent: WritableSignal<WidgetContentProperties | null> = signal(null);
 

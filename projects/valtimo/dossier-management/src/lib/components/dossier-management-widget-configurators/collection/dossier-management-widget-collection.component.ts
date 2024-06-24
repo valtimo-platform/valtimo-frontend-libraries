@@ -17,6 +17,7 @@ import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   EventEmitter,
   HostBinding,
   OnDestroy,
@@ -28,6 +29,7 @@ import {
 } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -36,14 +38,23 @@ import {
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {
+  CaseWidgetCurrencyDisplayType,
+  CaseWidgetDateDisplayType,
   CaseWidgetDisplayTypeKey,
+  CaseWidgetEnumDisplayType,
   CollectionFieldWidth,
   FieldsCaseWidgetValue,
   WidgetCollectionContent,
   WidgetContentProperties,
 } from '@valtimo/dossier';
-import {DropdownModule, InputModule, ListItem} from 'carbon-components-angular';
-import {map, Observable, Subscription} from 'rxjs';
+import {
+  ButtonModule,
+  DropdownModule,
+  IconModule,
+  InputModule,
+  ListItem,
+} from 'carbon-components-angular';
+import {debounceTime, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetFieldsService, WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
@@ -61,6 +72,8 @@ import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dos
     ReactiveFormsModule,
     InputModule,
     DropdownModule,
+    ButtonModule,
+    IconModule,
   ],
 })
 export class DossierManagementWidgetCollectionComponent
@@ -81,14 +94,25 @@ export class DossierManagementWidgetCollectionComponent
     ),
   });
 
-  public readonly cardForm = this.fb.group({
-    value: this.fb.control('', Validators.required),
-    type: this.fb.control('', Validators.required),
-    currencyCode: this.fb.control('', Validators.required),
-    display: this.fb.control('', Validators.required),
-    digitsInfo: this.fb.control('', Validators.required),
-    format: this.fb.control('', Validators.required),
-    values: this.fb.control('', Validators.required),
+  public readonly cardForm = this.fb.group<any>({
+    value: this.fb.control(
+      (this.widgetWizardService.widgetContent() as WidgetCollectionContent)?.title?.value ?? '',
+      Validators.required
+    ),
+    type: this.fb.control<ListItem>(
+      {
+        content: this.translateService.instant(
+          this.translateService.instant(
+            `widgetTabManagement.content.displayType.${(this.widgetWizardService.widgetContent() as WidgetCollectionContent)?.title.displayProperties?.type ?? CaseWidgetDisplayTypeKey.TEXT}`
+          )
+        ),
+        id:
+          (this.widgetWizardService.widgetContent() as WidgetCollectionContent)?.title
+            ?.displayProperties?.type ?? CaseWidgetDisplayTypeKey.TEXT,
+        selected: true,
+      },
+      Validators.required
+    ),
   });
 
   public readonly theme$: Observable<CARBON_THEME> = this.cdsThemeService.currentTheme$.pipe(
@@ -124,14 +148,29 @@ export class DossierManagementWidgetCollectionComponent
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService,
     private readonly widgetFieldsService: WidgetFieldsService
-  ) {}
+  ) {
+    effect(() => {
+      console.log('content', this.widgetWizardService.widgetContent());
+    });
+  }
 
   public ngOnInit(): void {
     this.openWidgetFormSubscription();
+    this.openCardFormSubscription();
+    this.initForm();
   }
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+  }
+
+  public onAddEnumValueClick(valuesFormArray: FormArray): void {
+    valuesFormArray.push(
+      this.fb.group({
+        key: this.fb.control('', Validators.required),
+        value: this.fb.control('', Validators.required),
+      })
+    );
   }
 
   public getDisplayItemsSelected(control: AbstractControl): ListItem[] {
@@ -167,6 +206,12 @@ export class DossierManagementWidgetCollectionComponent
     this.changeValidEvent.emit(valid && this.widgetForm.valid);
   }
 
+  public onDeleteRowClick(formArray: FormArray, index: number): void {
+    if (!formArray) return;
+
+    formArray.removeAt(index);
+  }
+
   public onTypeSelected(formGroup: FormGroup, event: {item: ListItem}): void {
     this.widgetFieldsService.onDisplayTypeSelected(['value', 'type'], formGroup, event);
   }
@@ -184,9 +229,44 @@ export class DossierManagementWidgetCollectionComponent
     );
   }
 
+  private initForm(): void {
+    if (!this.widgetWizardService.widgetContent()) return;
+
+    const title = (this.widgetWizardService.widgetContent() as WidgetCollectionContent).title;
+    if (!title) return;
+    this.onTypeSelected(this.cardForm, {
+      item: {id: title.displayProperties?.type ?? '', content: '', selected: true},
+    });
+
+    this.cardForm.patchValue(
+      {
+        ...([
+          CaseWidgetDisplayTypeKey.NUMBER,
+          CaseWidgetDisplayTypeKey.PERCENT,
+          CaseWidgetDisplayTypeKey.CURRENCY,
+        ].includes(title.displayProperties?.type as CaseWidgetDisplayTypeKey) && {
+          digitsInfo: (title.displayProperties as CaseWidgetCurrencyDisplayType).digitsInfo,
+        }),
+        ...(title.displayProperties?.type === CaseWidgetDisplayTypeKey.CURRENCY && {
+          currencyCode: (title.displayProperties as CaseWidgetCurrencyDisplayType).currencyCode,
+          display: (title.displayProperties as CaseWidgetCurrencyDisplayType).display,
+        }),
+        ...(title.displayProperties?.type === CaseWidgetDisplayTypeKey.DATE && {
+          format: (title.displayProperties as CaseWidgetDateDisplayType).format,
+        }),
+        ...(title.displayProperties?.type === CaseWidgetDisplayTypeKey.ENUM && {
+          values: Object.entries((title.displayProperties as CaseWidgetEnumDisplayType).values).map(
+            ([key, value]) => ({key, value})
+          ),
+        }),
+      },
+      {emitEvent: false}
+    );
+  }
+
   private openWidgetFormSubscription(): void {
     this._subscriptions.add(
-      this.widgetForm.valueChanges.subscribe(value => {
+      this.widgetForm.valueChanges.pipe(debounceTime(500)).subscribe(value => {
         this.widgetWizardService.widgetTitle.set(value?.title ?? '');
 
         this.widgetWizardService.widgetContent.update(
@@ -198,7 +278,47 @@ export class DossierManagementWidgetCollectionComponent
             }) as WidgetCollectionContent
         );
 
-        this.changeValidEvent.emit(this.widgetForm.valid && this._contentValid());
+        this.changeValidEvent.emit(
+          this.widgetForm.valid && this.cardForm.valid && this._contentValid()
+        );
+      })
+    );
+  }
+
+  private openCardFormSubscription(): void {
+    this._subscriptions.add(
+      this.cardForm.valueChanges.pipe(debounceTime(500)).subscribe(formValue => {
+        console.log({formValue});
+        let {value, ...displayProperties} = formValue;
+        displayProperties = {
+          ...displayProperties,
+          ...(!!displayProperties.type && {
+            type: (displayProperties.type as ListItem).id,
+          }),
+          ...(!!formValue.values && {
+            values: (formValue.values as Array<{[key: string]: string}>)?.reduce(
+              (acc, curr) => ({...acc, [curr.key]: curr.value}),
+              {}
+            ),
+          }),
+        };
+
+        this.widgetWizardService.widgetContent.update(
+          (content: WidgetContentProperties | null) =>
+            ({
+              ...content,
+              title: {
+                value,
+                ...(displayProperties.type !== CaseWidgetDisplayTypeKey.TEXT && {
+                  displayProperties,
+                }),
+              },
+            }) as any
+        );
+
+        this.changeValidEvent.emit(
+          this.widgetForm.valid && this.cardForm.valid && this._contentValid()
+        );
       })
     );
   }
