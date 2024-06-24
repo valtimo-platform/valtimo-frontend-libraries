@@ -153,7 +153,7 @@ export class DossierDetailTaskListComponent {
   private getSortedTasks(tasks: ProcessInstanceTask[]): ProcessInstanceTask[] {
     return tasks.sort((t1, t2) => {
       // high priority tasks on top
-      if (t2.priority != t1.priority) {
+      if (t2.priority !== t1.priority) {
         return t2.priority - t1.priority;
       }
 
