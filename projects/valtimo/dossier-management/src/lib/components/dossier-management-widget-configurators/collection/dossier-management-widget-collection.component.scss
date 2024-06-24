@@ -29,4 +29,23 @@
     font-weight: 600;
     line-height: 22px;
   }
+
+  &__card {
+    flex-direction: column;
+    display: flex;
+    gap: 16px;
+
+    &-title {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      align-items: flex-end;
+    }
+
+    &-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+  }
 }

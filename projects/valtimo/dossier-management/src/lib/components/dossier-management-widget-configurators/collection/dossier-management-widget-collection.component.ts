@@ -26,10 +26,17 @@ import {
   ViewEncapsulation,
   WritableSignal,
 } from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {
+  CaseWidgetDisplayTypeKey,
   CollectionFieldWidth,
   FieldsCaseWidgetValue,
   WidgetCollectionContent,
@@ -38,7 +45,7 @@ import {
 import {DropdownModule, InputModule, ListItem} from 'carbon-components-angular';
 import {map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
-import {WidgetWizardService} from '../../../services';
+import {WidgetFieldsService, WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
 
 @Component({
@@ -62,7 +69,7 @@ export class DossierManagementWidgetCollectionComponent
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-collection';
   @Output() public readonly changeValidEvent = new EventEmitter<boolean>();
 
-  public form = this.fb.group({
+  public readonly widgetForm = this.fb.group({
     title: this.fb.control(this.widgetWizardService.widgetTitle() ?? '', Validators.required),
     defaultPageSize: this.fb.control(
       (this.widgetWizardService.widgetContent() as WidgetCollectionContent)?.defaultPageSize ?? 5,
@@ -74,14 +81,26 @@ export class DossierManagementWidgetCollectionComponent
     ),
   });
 
+  public readonly cardForm = this.fb.group({
+    value: this.fb.control('', Validators.required),
+    type: this.fb.control('', Validators.required),
+    currencyCode: this.fb.control('', Validators.required),
+    display: this.fb.control('', Validators.required),
+    digitsInfo: this.fb.control('', Validators.required),
+    format: this.fb.control('', Validators.required),
+    values: this.fb.control('', Validators.required),
+  });
+
   public readonly theme$: Observable<CARBON_THEME> = this.cdsThemeService.currentTheme$.pipe(
     map((theme: CurrentCarbonTheme) =>
       theme === CurrentCarbonTheme.G10 ? CARBON_THEME.WHITE : CARBON_THEME.G90
     )
   );
 
+  public readonly CaseWidgetDisplayTypeKey = CaseWidgetDisplayTypeKey;
   public readonly content = this.widgetWizardService
     .widgetContent as WritableSignal<WidgetCollectionContent>;
+  public readonly displayTypeItems: ListItem[] = this.widgetFieldsService.displayTypeItems;
 
   public WIDTH_ITEMS: ListItem[] = [
     {
@@ -103,30 +122,20 @@ export class DossierManagementWidgetCollectionComponent
     private readonly cdsThemeService: CdsThemeService,
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService,
-    private readonly widgetWizardService: WidgetWizardService
+    private readonly widgetWizardService: WidgetWizardService,
+    private readonly widgetFieldsService: WidgetFieldsService
   ) {}
 
   public ngOnInit(): void {
-    this._subscriptions.add(
-      this.form.valueChanges.subscribe(value => {
-        this.widgetWizardService.widgetTitle.set(value?.title ?? '');
-
-        this.widgetWizardService.widgetContent.update(
-          (content: WidgetContentProperties | null) =>
-            ({
-              ...content,
-              collection: value?.collection || '',
-              defaultPageSize: value?.defaultPageSize || 5,
-            }) as WidgetCollectionContent
-        );
-
-        this.changeValidEvent.emit(this.form.valid && this._contentValid());
-      })
-    );
+    this.openWidgetFormSubscription();
   }
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+  }
+
+  public getDisplayItemsSelected(control: AbstractControl): ListItem[] {
+    return this.widgetFieldsService.getDisplayItemsSelected(control);
   }
 
   public getSelectedWidthItem(fieldIndex: number): ListItem[] {
@@ -155,7 +164,11 @@ export class DossierManagementWidgetCollectionComponent
       } as WidgetCollectionContent;
     });
     this._contentValid.set(valid);
-    this.changeValidEvent.emit(valid && this.form.valid);
+    this.changeValidEvent.emit(valid && this.widgetForm.valid);
+  }
+
+  public onTypeSelected(formGroup: FormGroup, event: {item: ListItem}): void {
+    this.widgetFieldsService.onDisplayTypeSelected(['value', 'type'], formGroup, event);
   }
 
   public onWidthSelected(event: {item: ListItem}, fieldIndex: number): void {
@@ -168,6 +181,25 @@ export class DossierManagementWidgetCollectionComponent
               index === fieldIndex ? {...field, width: event.item.id} : field
           ),
         }) as WidgetCollectionContent
+    );
+  }
+
+  private openWidgetFormSubscription(): void {
+    this._subscriptions.add(
+      this.widgetForm.valueChanges.subscribe(value => {
+        this.widgetWizardService.widgetTitle.set(value?.title ?? '');
+
+        this.widgetWizardService.widgetContent.update(
+          (content: WidgetContentProperties | null) =>
+            ({
+              ...content,
+              collection: value?.collection || '',
+              defaultPageSize: value?.defaultPageSize || 5,
+            }) as WidgetCollectionContent
+        );
+
+        this.changeValidEvent.emit(this.widgetForm.valid && this._contentValid());
+      })
     );
   }
 }

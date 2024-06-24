@@ -18,19 +18,19 @@
   flex-direction: column;
   gap: 16px;
 
-  &__container {
+  &__item,
+  &__cotainer {
     background: var(--cds-layer-01);
+  }
 
-    .cds--accordion__content {
-      display: flex;
-      flex-direction: column;
-      padding-inline-end: 20px;
-      gap: 16px;
+  &__item .cds--accordion__content {
+    padding-inline-end: 20px;
+  }
 
-      button {
-        padding: 8px;
-      }
-    }
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   &__content {
