@@ -17,7 +17,6 @@ import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   EventEmitter,
   HostBinding,
   OnDestroy,
@@ -55,6 +54,7 @@ import {
   ListItem,
 } from 'carbon-components-angular';
 import {debounceTime, map, Observable, Subscription} from 'rxjs';
+
 import {WidgetContentComponent} from '../../../models';
 import {WidgetFieldsService, WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
@@ -148,11 +148,7 @@ export class DossierManagementWidgetCollectionComponent
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService,
     private readonly widgetFieldsService: WidgetFieldsService
-  ) {
-    effect(() => {
-      console.log('content', this.widgetWizardService.widgetContent());
-    });
-  }
+  ) {}
 
   public ngOnInit(): void {
     this.openWidgetFormSubscription();
@@ -288,7 +284,6 @@ export class DossierManagementWidgetCollectionComponent
   private openCardFormSubscription(): void {
     this._subscriptions.add(
       this.cardForm.valueChanges.pipe(debounceTime(500)).subscribe(formValue => {
-        console.log({formValue});
         let {value, ...displayProperties} = formValue;
         displayProperties = {
           ...displayProperties,

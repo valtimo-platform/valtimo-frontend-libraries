@@ -808,10 +808,10 @@
         "defaultPageSizePlaceholder": "Kies het aantal kaarten per pagina",
         "collection": "Pad naar collectiedata",
         "collectionPlaceholder": "Geef het pad naar de collectiegegevens op",
-        "cardTitle": "Kaart titel",
-        "cardFields": "Kaart velden",
+        "cardTitle": "Kaarttitel",
+        "cardFields": "Kaart-velden",
         "fieldWidth": "Veldbreedte",
-        "fieldWidthPlaceholder": "Kies veldbreedte",
+        "fieldWidthPlaceholder": "Kies veldbreedte"
       }
     },
     "cancelModal": {

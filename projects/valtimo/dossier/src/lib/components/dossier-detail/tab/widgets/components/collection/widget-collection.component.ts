@@ -85,7 +85,6 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   }
 
   @Input() public set widgetData(value: Page<CollectionCaseWidgetCardData> | null) {
-    console.log({value});
     if (!value) return;
 
     this.showPagination$.next(value.totalElements > value.size);
@@ -146,10 +145,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
     {title: string; fields: CollectionWidgetResolvedField[]; key: number; hidden: boolean}[]
   > = combineLatest([this.widgetConfiguration$, this._widgetData$]).pipe(
     filter(([widgetConfig, widgetData]) => !!widgetConfig && !!widgetData),
-    tap(([widgetConfig, widgetData]) => {
-      this.widgetTitle.set(widgetConfig.title);
-      console.log({widgetConfig, widgetData});
-    }),
+    tap(([widgetConfig]) => this.widgetTitle.set(widgetConfig.title)),
     map(([widgetConfig, widgetData]) =>
       widgetData.map((cardData, index) => ({
         hidden: cardData.hidden,
@@ -159,7 +155,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
           displayProperties: widgetConfig.properties.title.displayProperties,
         }),
         fields: widgetConfig?.properties.fields.reduce(
-          (cardFieldsAccumulator, currentField, index) => [
+          (cardFieldsAccumulator, currentField) => [
             ...cardFieldsAccumulator,
             this.getCardField(currentField, cardData),
           ],
