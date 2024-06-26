@@ -120,7 +120,6 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     this._viewContainerRef$,
   ]).pipe(
     tap(([amountOfColumns, widget, viewRef]) => {
-      console.log(amountOfColumns, widget.width);
       const percentage =
         widget.width > amountOfColumns ? 100 : (widget.width / amountOfColumns) * 100;
 

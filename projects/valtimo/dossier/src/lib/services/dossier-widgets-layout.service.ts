@@ -1,13 +1,5 @@
 import {Injectable} from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  distinctUntilChanged,
-  filter,
-  map,
-  Observable,
-  take,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, take} from 'rxjs';
 import {CaseWidgetWithUuid} from '../models';
 import {WIDGET_WIDTH_1X} from '../constants';
 
@@ -44,13 +36,14 @@ export class DossierWidgetsLayoutService {
       this._widgets$,
       this._widgetsWithExternalData$,
       this._widgetsWithExternalDataReady$,
+      this._containerWidth$,
     ]).pipe(
       map(
         ([caseWidgetDataLoaded, widgets, widgetsWithExternalData, widgetsWithExternalDataReady]) =>
           caseWidgetDataLoaded?.length === widgets.length &&
           widgetsWithExternalData.length === widgetsWithExternalDataReady.length
       ),
-      distinctUntilChanged()
+      filter(loaded => !!loaded)
     );
   }
 
