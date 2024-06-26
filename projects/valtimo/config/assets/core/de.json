@@ -1662,10 +1662,6 @@
     "Yes": "Ja",
     "No": "Nein"
   },
-  "booleanTypeConverter": {
-    "Yes": "Ja",
-    "No": "Nein"
-  },
   "processLinkConfiguration": {
     "configureStep": "Prozessschritt konfigurieren",
     "modalTitle": "Prozessschritt: {{processStepName}}",

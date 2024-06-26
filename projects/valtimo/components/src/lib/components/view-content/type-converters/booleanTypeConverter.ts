@@ -37,8 +37,6 @@ export class BooleanTypeConverter implements TypeConverter {
         : enumeration[Object.keys(enumeration)[0]] || 'No';
     }
 
-    return value
-      ? this.translateService.instant('booleanTypeConverter.Yes')
-      : this.translateService.instant('booleanTypeConverter.No');
+    return this.translateService.instant(`viewTypeConverter.${value ? 'Yes' : 'No'}`);
   }
 }

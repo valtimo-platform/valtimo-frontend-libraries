@@ -37,7 +37,7 @@ export class PercentTypeConverter implements TypeConverter {
 
     return (
       this._percentPipe.transform(
-        value / 100,
+        !!definition?.digitsInfo ? value / 100 : value,
         definition.digitsInfo,
         moment.locale(localStorage.getItem('langKey'))
       ) ?? ''

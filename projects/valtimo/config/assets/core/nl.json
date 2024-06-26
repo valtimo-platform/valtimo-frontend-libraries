@@ -1666,10 +1666,6 @@
     "Yes": "Ja",
     "No": "Nee"
   },
-  "booleanTypeConverter": {
-    "Yes": "Ja",
-    "No": "Nee"
-  },
   "processLinkConfiguration": {
     "configureStep": "Processtap configureren",
     "modalTitle": "Processtap: {{processStepName}}",

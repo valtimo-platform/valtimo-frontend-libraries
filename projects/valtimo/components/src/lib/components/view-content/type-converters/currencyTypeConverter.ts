@@ -38,7 +38,7 @@ export class CurrencyTypeConverter implements TypeConverter {
     return (
       this._currencyPipe.transform(
         value,
-        definition.currencyCode ? definition.currencyCode : 'EUR',
+        definition.currencyCode ?? 'EUR',
         definition.display,
         definition.digitsInfo,
         moment.locale(localStorage.getItem('langKey'))
