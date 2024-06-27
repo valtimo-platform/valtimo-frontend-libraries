@@ -19,5 +19,5 @@
  */
 
 export * from './lib/components/form-view-model/form-view-model.component';
-export * from './lib/services/view-model.service';
+export * from './lib/services';
 export * from './lib/form-view-model.module';
