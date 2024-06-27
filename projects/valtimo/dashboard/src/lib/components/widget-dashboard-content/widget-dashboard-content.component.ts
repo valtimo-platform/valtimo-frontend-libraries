@@ -31,6 +31,7 @@ import {take} from 'rxjs/operators';
 import {Dashboard, DashboardWidgetConfiguration, DisplayComponent, WidgetData} from '../../models';
 import {WidgetService} from '../../services';
 import {WidgetLayoutService} from '../../services/widget-layout.service';
+import {WIDGET_1X_HEIGHT} from '../../constants';
 
 @Component({
   selector: 'valtimo-widget-dashboard-content',
@@ -74,7 +75,7 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
       this.observerMutation(event);
     });
     this._observer.observe(this._widgetContainerRef.nativeElement);
-    this.openPackResultSubscription();
+    this.openWidgetSizeSubscription();
     this.renderWidgets();
   }
 
@@ -104,24 +105,31 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
     }
   }
 
-  private openPackResultSubscription(): void {
+  private openWidgetSizeSubscription(): void {
     this._subscriptions.add(
-      this.layoutService.widgetPackResult$.subscribe(packResult => {
-        this.renderer.setStyle(
-          this._widgetContainerRef.nativeElement,
-          'height',
-          `${packResult.height}px`
-        );
-
+      combineLatest([
+        this.layoutService.amountOfColumns$,
+        this.widgetConfigurations$,
+        this.widgetService.supportedDisplayTypes$,
+      ]).subscribe(([amountOfColumns, widgetConfigurations, supportedDisplayTypes]) => {
         this._widgetConfigurationRefs.toArray().forEach(widgetConfigurationRef => {
           const nativeElement = widgetConfigurationRef.nativeElement;
-          const configPackResult = packResult.items.find(
-            result => result.item.configurationKey === nativeElement.id
+          const widgetConfiguration = widgetConfigurations.find(
+            config => config.key === nativeElement.id
           );
-          this.renderer.setStyle(nativeElement, 'height', `${configPackResult?.height}px`);
-          this.renderer.setStyle(nativeElement, 'width', `${configPackResult?.width}px`);
-          this.renderer.setStyle(nativeElement, 'left', `${configPackResult?.x}px`);
-          this.renderer.setStyle(nativeElement, 'top', `${configPackResult?.y}px`);
+          const specification = supportedDisplayTypes.find(
+            type => type.displayTypeKey === widgetConfiguration.displayType
+          );
+          const widthPercentage =
+            specification.width > amountOfColumns
+              ? 100
+              : (specification.width / amountOfColumns) * 100;
+          this.renderer.setStyle(
+            nativeElement,
+            'height',
+            `${WIDGET_1X_HEIGHT * specification.height}px`
+          );
+          this.renderer.setStyle(nativeElement, 'width', `${widthPercentage}%`);
         });
       })
     );
