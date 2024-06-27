@@ -15,9 +15,19 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, filter, map, Observable} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  debounceTime,
+  filter,
+  map,
+  Observable,
+  Subject,
+  Subscription,
+} from 'rxjs';
 import {DashboardWidgetConfiguration} from '../models';
 import {WIDGET_1X_MIN_WIDTH} from '../constants';
+import Muuri from 'muuri';
 
 @Injectable()
 export class WidgetLayoutService {
@@ -25,6 +35,16 @@ export class WidgetLayoutService {
   private readonly _widgetConfigurations$ = new BehaviorSubject<
     Array<DashboardWidgetConfiguration>
   >([]);
+  private readonly _muuriSubject$ = new BehaviorSubject<Muuri | null>(null);
+  private readonly _triggerMuuriLayout$ = new Subject<null>();
+
+  public get muuri$(): Observable<Muuri> {
+    return this._muuriSubject$.pipe(filter(muuri => !!muuri));
+  }
+
+  public get muuriSubject$(): Observable<Muuri | null> {
+    return this._muuriSubject$.asObservable();
+  }
 
   private get widgetContainerWidth$(): Observable<number> {
     return this._widgetContainerWidth$.asObservable().pipe(filter(width => !!width));
@@ -36,11 +56,36 @@ export class WidgetLayoutService {
     );
   }
 
-  setWidgetContainerWidth(width: number): void {
+  private readonly _subscriptions = new Subscription();
+
+  constructor() {
+    this.openMuuriSubscription();
+  }
+
+  public setWidgetContainerWidth(width: number): void {
     this._widgetContainerWidth$.next(width);
   }
 
-  setWidgetConfigurations(configurations: Array<DashboardWidgetConfiguration>): void {
+  public setWidgetConfigurations(configurations: Array<DashboardWidgetConfiguration>): void {
     this._widgetConfigurations$.next(configurations);
+  }
+
+  public setMuuri(muuri: Muuri): void {
+    this._muuriSubject$.next(muuri);
+  }
+
+  public triggerMuuriLayout(): void {
+    this._triggerMuuriLayout$.next(null);
+  }
+
+  private openMuuriSubscription(): void {
+    this._subscriptions.add(
+      combineLatest([this.muuri$, this._triggerMuuriLayout$])
+        .pipe(debounceTime(150))
+        .subscribe(([muuri]) => {
+          muuri.refreshItems();
+          muuri.layout();
+        })
+    );
   }
 }

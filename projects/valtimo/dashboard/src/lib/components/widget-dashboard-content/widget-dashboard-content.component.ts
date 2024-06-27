@@ -26,12 +26,13 @@ import {
   ViewChildren,
   ViewContainerRef,
 } from '@angular/core';
-import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
+import {delay, map, take} from 'rxjs/operators';
 import {Dashboard, DashboardWidgetConfiguration, DisplayComponent, WidgetData} from '../../models';
 import {WidgetService} from '../../services';
 import {WidgetLayoutService} from '../../services/widget-layout.service';
 import {WIDGET_1X_HEIGHT} from '../../constants';
+import Muuri from 'muuri';
 
 @Component({
   selector: 'valtimo-widget-dashboard-content',
@@ -63,6 +64,17 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
 
   private _observer!: ResizeObserver;
   private _subscriptions = new Subscription();
+
+  private readonly _muuri$ = this.layoutService.muuriSubject$;
+
+  private _creatingMuuri = false;
+
+  public get muuriInitialized$(): Observable<boolean> {
+    return this._muuri$.pipe(
+      delay(500),
+      map(muuri => !!muuri)
+    );
+  }
 
   constructor(
     private readonly layoutService: WidgetLayoutService,
@@ -111,7 +123,8 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
         this.layoutService.amountOfColumns$,
         this.widgetConfigurations$,
         this.widgetService.supportedDisplayTypes$,
-      ]).subscribe(([amountOfColumns, widgetConfigurations, supportedDisplayTypes]) => {
+        this._muuri$,
+      ]).subscribe(([amountOfColumns, widgetConfigurations, supportedDisplayTypes, muuri]) => {
         this._widgetConfigurationRefs.toArray().forEach(widgetConfigurationRef => {
           const nativeElement = widgetConfigurationRef.nativeElement;
           const widgetConfiguration = widgetConfigurations.find(
@@ -130,6 +143,12 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
             `${WIDGET_1X_HEIGHT * specification.height}px`
           );
           this.renderer.setStyle(nativeElement, 'width', `${widthPercentage}%`);
+
+          if (!muuri) {
+            this.initMuuri();
+          } else {
+            this.layoutService.triggerMuuriLayout();
+          }
         });
       })
     );
@@ -166,5 +185,22 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
         });
       })
     );
+  }
+
+  private initMuuri(): void {
+    if (!this._widgetContainerRef || this._creatingMuuri) return;
+
+    this._creatingMuuri = true;
+
+    this.layoutService.setMuuri(
+      new Muuri(this._widgetContainerRef.nativeElement, {
+        layout: {
+          fillGaps: true,
+        },
+        layoutOnResize: false,
+      })
+    );
+
+    this._creatingMuuri = false;
   }
 }
