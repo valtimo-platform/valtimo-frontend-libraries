@@ -48,11 +48,11 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
   private _widgetConfigurationContentVcRefs: QueryList<ViewContainerRef>;
   @ViewChild('widgetContainer') private _widgetContainerRef: ElementRef<HTMLDivElement>;
 
-  public readonly isLoading$ = new BehaviorSubject<boolean>(true);
+  private readonly _isLoading$ = new BehaviorSubject<boolean>(true);
   private _widgetData$ = new BehaviorSubject<WidgetData[]>([]);
 
   @Input() set widgetData(value: {data: WidgetData[]; loading: boolean}) {
-    this.isLoading$.next(value.loading);
+    this._isLoading$.next(value.loading);
     this._widgetData$.next(value.data);
   }
   @Input() set dashboard(value: Dashboard) {
@@ -69,12 +69,22 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
 
   private _creatingMuuri = false;
 
-  public get muuriInitialized$(): Observable<boolean> {
-    return this._muuri$.pipe(
-      delay(500),
-      map(muuri => !!muuri)
-    );
+  private get _muuriInitialized$(): Observable<boolean> {
+    return this._muuri$.pipe(map(muuri => !!muuri));
   }
+
+  private readonly _noResults$ = new BehaviorSubject<boolean>(false);
+
+  public readonly loaded$ = combineLatest([
+    this._isLoading$,
+    this._muuriInitialized$,
+    this._noResults$,
+  ]).pipe(
+    map(
+      ([isLoading, muuriInitialized, noResults]) => !isLoading && (muuriInitialized || noResults)
+    ),
+    delay(400)
+  );
 
   constructor(
     private readonly layoutService: WidgetLayoutService,
@@ -143,13 +153,17 @@ export class WidgetDashboardContentComponent implements AfterViewInit, OnDestroy
             `${WIDGET_1X_HEIGHT * specification.height}px`
           );
           this.renderer.setStyle(nativeElement, 'width', `${widthPercentage}%`);
+        });
 
+        if (widgetConfigurations.length > 0) {
           if (!muuri) {
             this.initMuuri();
           } else {
             this.layoutService.triggerMuuriLayout();
           }
-        });
+        } else {
+          this._noResults$.next(true);
+        }
       })
     );
   }

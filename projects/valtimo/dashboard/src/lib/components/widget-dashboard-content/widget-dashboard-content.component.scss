@@ -23,6 +23,11 @@
   width: calc(100% + 16px);
   margin-left: -8px;
   position: relative;
+  visibility: hidden;
+
+  &__visible {
+    visibility: visible;
+  }
 }
 
 .widget-configuration {
@@ -38,14 +43,11 @@
   background-color: white;
 }
 
-.widget-loader {
+.loading-container {
+  padding-top: 32px;
   position: absolute;
   top: 0;
   display: flex;
+  width: 100%;
   justify-content: center;
-  padding-top: 32px;
-}
-
-.loading {
-  visibility: hidden;
 }
