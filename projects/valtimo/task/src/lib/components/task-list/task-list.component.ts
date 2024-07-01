@@ -29,7 +29,6 @@ import {
   SpecifiedTask,
   Task,
   TaskListParams,
-  TaskListSearchField,
   TaskPageParams,
 } from '../../models';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
@@ -50,7 +49,12 @@ import {
   CAN_VIEW_TASK_PERMISSION,
   TASK_DETAIL_PERMISSION_RESOURCE,
 } from '../../task-permissions';
-import {TaskListColumnService, TaskListPaginationService, TaskListService} from '../../services';
+import {
+  TaskListColumnService,
+  TaskListPaginationService,
+  TaskListSearchService,
+  TaskListService,
+} from '../../services';
 import {isEqual} from 'lodash';
 import {ListItem} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
@@ -69,6 +73,7 @@ moment.locale(localStorage.getItem('langKey') || '');
     TaskListColumnService,
     TaskListPaginationService,
     TaskListSortService,
+    TaskListSearchService,
   ],
 })
 export class TaskListComponent implements OnInit {
@@ -183,35 +188,10 @@ export class TaskListComponent implements OnInit {
   public readonly taskListColumnsForCase$ = this.taskListColumnService.taskListColumnsForCase$;
 
   public readonly enableTaskFiltering$: Observable<boolean> =
-    this.configService.getFeatureToggleObservable('enableTaskFiltering');
-
-  public readonly loadingSearchFields$ = new BehaviorSubject<boolean>(true);
-
-  public readonly searchFields$: Observable<SearchField[]> = combineLatest([
-    this.taskListService.caseDefinitionName$,
-    this.enableTaskFiltering$,
-  ]).pipe(
-    tap(() => this.loadingSearchFields$.next(true)),
-    switchMap(([caseDefinitionName, enableTaskFiltering]) =>
-      caseDefinitionName && enableTaskFiltering
-        ? this.taskService.getTaskListSearchFields(caseDefinitionName)
-        : of([] as TaskListSearchField[])
-    ),
-    map(searchFields =>
-      searchFields.map(searchField => {
-        const fieldTypeLowerCase = searchField.fieldType?.toLowerCase();
-
-        return {
-          ...searchField,
-          dataType: searchField.dataType?.toLowerCase(),
-          fieldType: fieldTypeLowerCase === 'text_contains' ? 'single' : fieldTypeLowerCase,
-          matchType: searchField?.matchType?.toLowerCase(),
-        } as unknown as SearchField;
-      })
-    ),
-    tap(fields => console.log(fields)),
-    tap(() => this.loadingSearchFields$.next(false))
-  );
+    this.taskListSearchService.enableTaskFiltering$;
+  public readonly loadingSearchFields$ = this.taskListSearchService.loadingSearchFields$;
+  public readonly searchFields$: Observable<SearchField[]> =
+    this.taskListSearchService.searchFields$;
 
   private readonly _DEFAULT_TASK_LIST_TABS: TaskListTab[] = [
     TaskListTab.MINE,
@@ -229,7 +209,8 @@ export class TaskListComponent implements OnInit {
     private readonly translateService: TranslateService,
     private readonly taskListColumnService: TaskListColumnService,
     private readonly taskListPaginationService: TaskListPaginationService,
-    private readonly taskListSortService: TaskListSortService
+    private readonly taskListSortService: TaskListSortService,
+    private readonly taskListSearchService: TaskListSearchService
   ) {}
 
   public ngOnInit(): void {
