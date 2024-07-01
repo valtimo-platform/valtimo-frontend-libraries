@@ -32,14 +32,18 @@
   class="main-content"
 >
   <div class="container-fluid">
-    <ng-container
-      *ngTemplateOutlet="
-        searchFields;
-        context: {
-          obs: obs
-        }
-      "
-    ></ng-container>
+    @if (
+      obs.enableTaskFiltering && obs.caseDefinitionName && obs.caseDefinitionName !== ALL_CASES_ID
+    ) {
+      <ng-container
+        *ngTemplateOutlet="
+          searchFields;
+          context: {
+            obs: obs
+          }
+        "
+      ></ng-container>
+    }
 
     <ng-container
       *ngTemplateOutlet="
@@ -180,6 +184,7 @@
       [inputDisabled]="obs.loadingSearchFields"
       [documentDefinitionName]="obs.caseDefinitionName"
       [values]="{}"
+      (doSearch)="search($event)"
     >
     </valtimo-search-fields>
   </div>

@@ -34,7 +34,14 @@ import {
 } from '../../models';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
-import {ConfigService, Page, SearchField, SortState, TaskListTab} from '@valtimo/config';
+import {
+  ConfigService,
+  Page,
+  SearchField,
+  SearchFieldValues,
+  SortState,
+  TaskListTab,
+} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {distinctUntilChanged, filter, map, take} from 'rxjs/operators';
 import {PermissionService} from '@valtimo/access-control';
@@ -66,6 +73,8 @@ moment.locale(localStorage.getItem('langKey') || '');
 })
 export class TaskListComponent implements OnInit {
   @ViewChild('taskDetail') private readonly _taskDetail: TaskDetailModalComponent;
+
+  public readonly ALL_CASES_ID = this.taskListService.ALL_CASES_ID;
 
   public readonly selectedTaskType$ = this.taskListService.selectedTaskType$;
   public readonly fields$ = this.taskListColumnService.fields$;
@@ -150,9 +159,7 @@ export class TaskListComponent implements OnInit {
   );
 
   public readonly loadingCaseListItems$ = new BehaviorSubject<boolean>(true);
-  private readonly _selectedCaseDefinitionId$ = new BehaviorSubject<string>(
-    this.taskListService.ALL_CASES_ID
-  );
+  private readonly _selectedCaseDefinitionId$ = new BehaviorSubject<string>(this.ALL_CASES_ID);
   public readonly caseListItems$: Observable<ListItem[]> = combineLatest([
     this.documentService.getAllDefinitions(),
     this._selectedCaseDefinitionId$,
@@ -161,8 +168,8 @@ export class TaskListComponent implements OnInit {
     map(([documentDefinitionRes, selectedCaseDefinitionId]) => [
       {
         content: this.translateService.instant('task-list.allCases'),
-        id: this.taskListService.ALL_CASES_ID,
-        selected: selectedCaseDefinitionId === this.taskListService.ALL_CASES_ID,
+        id: this.ALL_CASES_ID,
+        selected: selectedCaseDefinitionId === this.ALL_CASES_ID,
       },
       ...documentDefinitionRes.content.map(documentDefinition => ({
         id: documentDefinition.id.name,
@@ -301,6 +308,10 @@ export class TaskListComponent implements OnInit {
     this._reload$.next(!this._reload$.getValue());
   }
 
+  public search(searchFieldValues: SearchFieldValues): void {
+    console.log(searchFieldValues);
+  }
+
   private updateTaskListPaginationAfterResponse(newCollectionSize: number): void {
     this.taskListPaginationService.paginationForCurrentTaskType$
       .pipe(take(1))
@@ -356,8 +367,7 @@ export class TaskListComponent implements OnInit {
         reload,
         selectedTaskType,
         params,
-        ...(caseDefinitionName &&
-          caseDefinitionName !== this.taskListService.ALL_CASES_ID && {caseDefinitionName}),
+        ...(caseDefinitionName && caseDefinitionName !== this.ALL_CASES_ID && {caseDefinitionName}),
       },
       enableLoadingAnimation,
     };
