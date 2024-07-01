@@ -29,11 +29,12 @@ import {
   SpecifiedTask,
   Task,
   TaskListParams,
+  TaskListSearchField,
   TaskPageParams,
 } from '../../models';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
 import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
-import {ConfigService, Page, SortState, TaskListTab} from '@valtimo/config';
+import {ConfigService, Page, SearchField, SortState, TaskListTab} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {distinctUntilChanged, filter, map, take} from 'rxjs/operators';
 import {PermissionService} from '@valtimo/access-control';
@@ -66,9 +67,6 @@ moment.locale(localStorage.getItem('langKey') || '');
 export class TaskListComponent implements OnInit {
   @ViewChild('taskDetail') private readonly _taskDetail: TaskDetailModalComponent;
 
-  private readonly _enableTaskFiltering$: Observable<boolean> =
-    this.configService.getFeatureToggleObservable('enableTaskFiltering');
-
   public readonly selectedTaskType$ = this.taskListService.selectedTaskType$;
   public readonly fields$ = this.taskListColumnService.fields$;
   public readonly loadingTasks$ = new BehaviorSubject<boolean>(true);
@@ -86,12 +84,14 @@ export class TaskListComponent implements OnInit {
 
   private readonly _reload$ = new BehaviorSubject<boolean>(true);
 
+  public readonly caseDefinitionName$ = this.taskListService.caseDefinitionName$;
+
   public readonly tasks$: Observable<Task[] | MappedSpecifiedTask[]> = combineLatest([
     this.taskListService.loadingStateForCaseDefinition$,
     this.selectedTaskType$,
     this.taskListPaginationService.paginationForCurrentTaskType$,
     this.taskListSortService.sortStringForCurrentTaskType$,
-    this.taskListService.caseDefinitionName$,
+    this.caseDefinitionName$,
     this._enableLoadingAnimation$,
     this._reload$,
   ]).pipe(
@@ -175,10 +175,35 @@ export class TaskListComponent implements OnInit {
 
   public readonly taskListColumnsForCase$ = this.taskListColumnService.taskListColumnsForCase$;
 
-  public readonly searchFields$ = this.taskListService.caseDefinitionName$.pipe(
-    switchMap(caseDefinitionName =>
-      caseDefinitionName ? this.taskService.getTaskListSearchFields(caseDefinitionName) : of([])
-    )
+  public readonly enableTaskFiltering$: Observable<boolean> =
+    this.configService.getFeatureToggleObservable('enableTaskFiltering');
+
+  public readonly loadingSearchFields$ = new BehaviorSubject<boolean>(true);
+
+  public readonly searchFields$: Observable<SearchField[]> = combineLatest([
+    this.taskListService.caseDefinitionName$,
+    this.enableTaskFiltering$,
+  ]).pipe(
+    tap(() => this.loadingSearchFields$.next(true)),
+    switchMap(([caseDefinitionName, enableTaskFiltering]) =>
+      caseDefinitionName && enableTaskFiltering
+        ? this.taskService.getTaskListSearchFields(caseDefinitionName)
+        : of([] as TaskListSearchField[])
+    ),
+    map(searchFields =>
+      searchFields.map(searchField => {
+        const fieldTypeLowerCase = searchField.fieldType?.toLowerCase();
+
+        return {
+          ...searchField,
+          dataType: searchField.dataType?.toLowerCase(),
+          fieldType: fieldTypeLowerCase === 'text_contains' ? 'single' : fieldTypeLowerCase,
+          matchType: searchField?.matchType?.toLowerCase(),
+        } as unknown as SearchField;
+      })
+    ),
+    tap(fields => console.log(fields)),
+    tap(() => this.loadingSearchFields$.next(false))
   );
 
   private readonly _DEFAULT_TASK_LIST_TABS: TaskListTab[] = [
