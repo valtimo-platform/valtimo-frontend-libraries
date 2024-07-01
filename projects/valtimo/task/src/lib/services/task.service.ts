@@ -22,6 +22,7 @@ import {
   SpecifiedTask,
   Task,
   TaskListColumn,
+  TaskListSearchField,
   TaskPageParams,
   TaskProcessLinkResult,
 } from '../models';
@@ -128,5 +129,11 @@ export class TaskService extends BaseApiService {
 
   public getConfigCustomTaskList(): CustomTaskList {
     return this.configService.config.customTaskList;
+  }
+
+  public getTaskListSearchFields(caseDefinitionName: string): Observable<TaskListSearchField[]> {
+    return this.httpClient.get<TaskListSearchField[]>(
+      this.getApiUrl(`v1/search/field/TaskListSearchColumns/${caseDefinitionName}`)
+    );
   }
 }

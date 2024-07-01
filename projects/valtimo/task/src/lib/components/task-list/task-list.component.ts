@@ -175,6 +175,12 @@ export class TaskListComponent implements OnInit {
 
   public readonly taskListColumnsForCase$ = this.taskListColumnService.taskListColumnsForCase$;
 
+  public readonly searchFields$ = this.taskListService.caseDefinitionName$.pipe(
+    switchMap(caseDefinitionName =>
+      caseDefinitionName ? this.taskService.getTaskListSearchFields(caseDefinitionName) : of([])
+    )
+  );
+
   private readonly _DEFAULT_TASK_LIST_TABS: TaskListTab[] = [
     TaskListTab.MINE,
     TaskListTab.OPEN,
