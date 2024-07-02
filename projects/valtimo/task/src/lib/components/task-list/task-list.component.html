@@ -183,6 +183,7 @@
       [searchFields]="obs.searchFields"
       [inputDisabled]="obs.loadingSearchFields"
       [documentDefinitionName]="obs.caseDefinitionName"
+      [setValuesSubject$]="setSearchFieldValuesSubject$"
       (doSearch)="search($event)"
     >
     </valtimo-search-fields>

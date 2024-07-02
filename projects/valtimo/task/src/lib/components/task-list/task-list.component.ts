@@ -17,6 +17,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnDestroy,
   OnInit,
   ViewChild,
   ViewEncapsulation,
@@ -61,6 +62,7 @@ import {isEqual} from 'lodash';
 import {ListItem} from 'carbon-components-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {TaskListSortService} from '../../services/task-list-sort.service';
+import {PageTitleService} from '@valtimo/components';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -79,7 +81,7 @@ moment.locale(localStorage.getItem('langKey') || '');
     TaskListQueryParamService,
   ],
 })
-export class TaskListComponent implements OnInit {
+export class TaskListComponent implements OnInit, OnDestroy {
   @ViewChild('taskDetail') private readonly _taskDetail: TaskDetailModalComponent;
 
   public readonly ALL_CASES_ID = this.taskListService.ALL_CASES_ID;
@@ -208,6 +210,8 @@ export class TaskListComponent implements OnInit {
     TaskListTab.ALL,
   ];
 
+  public readonly setSearchFieldValuesSubject$ = new BehaviorSubject<SearchFieldValues>({});
+
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
@@ -220,12 +224,19 @@ export class TaskListComponent implements OnInit {
     private readonly taskListPaginationService: TaskListPaginationService,
     private readonly taskListSortService: TaskListSortService,
     private readonly taskListSearchService: TaskListSearchService,
-    private readonly taskListQueryParamService: TaskListQueryParamService
+    private readonly taskListQueryParamService: TaskListQueryParamService,
+    private readonly pageTitleService: PageTitleService
   ) {}
 
   public ngOnInit(): void {
     this.taskListColumnService.resetTaskListFields();
     this.setVisibleTabs();
+    this.pageTitleService.disableReset();
+    this.setParamsFromQueryParams();
+  }
+
+  public ngOnDestroy(): void {
+    this.pageTitleService.enableReset();
   }
 
   public paginationClicked(page: number, type: TaskListTab | string): void {
@@ -302,7 +313,7 @@ export class TaskListComponent implements OnInit {
   public search(searchFieldValues: SearchFieldValues): void {
     if (!searchFieldValues) return;
 
-    this.taskListSearchService.setOtherFilters(searchFieldValues);
+    this.taskListSearchService.setSearchFieldValues(searchFieldValues);
   }
 
   private updateTaskListPaginationAfterResponse(newCollectionSize: number): void {
@@ -445,5 +456,30 @@ export class TaskListComponent implements OnInit {
 
       return taskCopy;
     }) as Task[];
+  }
+
+  private setParamsFromQueryParams(): void {
+    const decodedParams = this.taskListQueryParamService.getTaskListQueryParams();
+
+    if (decodedParams.caseDefinitionName) {
+      this.taskListService.setCaseDefinitionName(decodedParams.caseDefinitionName);
+      this._selectedCaseDefinitionId$.next(decodedParams.caseDefinitionName);
+    }
+
+    if (decodedParams.otherFilters) {
+      const searchFieldValues = this.taskListSearchService.mapOtherFilterToSearchValues(
+        decodedParams.otherFilters
+      );
+      this.setSearchFieldValuesSubject$.next(searchFieldValues);
+    }
+
+    if (decodedParams.selectedTaskType)
+      this.taskListService.setSelectedTaskType(decodedParams.selectedTaskType);
+
+    if (decodedParams.params)
+      this.taskListPaginationService.updateTaskPagination(
+        this.taskListService.selectedTaskType,
+        decodedParams.params
+      );
   }
 }
