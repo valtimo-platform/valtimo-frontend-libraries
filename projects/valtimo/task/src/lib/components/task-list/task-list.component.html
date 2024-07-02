@@ -201,7 +201,7 @@
       [skeleton]="obs.loadingCaseListItems"
       (selected)="setCaseDefinition($event)"
     >
-      <cds-dropdown-list
-        [items]="obs.caseListItems || []"
-      ></cds-dropdown-list></cds-dropdown></ng-template
-></ng-container>
+      <cds-dropdown-list [items]="obs.caseListItems || []"></cds-dropdown-list>
+    </cds-dropdown>
+  </ng-template>
+</ng-container>
