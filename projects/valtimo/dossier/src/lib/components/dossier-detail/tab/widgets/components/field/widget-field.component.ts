@@ -76,7 +76,7 @@ export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
                     {
                       title: property.title,
                       value:
-                        widgetData[property.key] != null && widgetData[property.key] != undefined
+                        widgetData[property.key] !== null && widgetData[property.key] !== undefined
                           ? this.viewContentService.get(widgetData[property.key], {
                               ...property.displayProperties,
                               viewType: property.displayProperties?.type ?? 'text',
