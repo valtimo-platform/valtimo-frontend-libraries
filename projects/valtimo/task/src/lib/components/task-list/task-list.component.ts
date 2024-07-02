@@ -53,6 +53,7 @@ import {
 import {
   TaskListColumnService,
   TaskListPaginationService,
+  TaskListQueryParamService,
   TaskListSearchService,
   TaskListService,
 } from '../../services';
@@ -75,6 +76,7 @@ moment.locale(localStorage.getItem('langKey') || '');
     TaskListPaginationService,
     TaskListSortService,
     TaskListSearchService,
+    TaskListQueryParamService,
   ],
 })
 export class TaskListComponent implements OnInit {
@@ -134,8 +136,9 @@ export class TaskListComponent implements OnInit {
         )
     ),
     distinctUntilChanged((previous, current) => isEqual(previous.params, current.params)),
-    tap(({enableLoadingAnimation}) => {
-      if (enableLoadingAnimation) this.loadingTasks$.next(true);
+    tap(params => {
+      if (params.enableLoadingAnimation) this.loadingTasks$.next(true);
+      this.taskListQueryParamService.setTaskListParams(params.params);
     }),
     switchMap(({params}) =>
       combineLatest([
@@ -216,7 +219,8 @@ export class TaskListComponent implements OnInit {
     private readonly taskListColumnService: TaskListColumnService,
     private readonly taskListPaginationService: TaskListPaginationService,
     private readonly taskListSortService: TaskListSortService,
-    private readonly taskListSearchService: TaskListSearchService
+    private readonly taskListSearchService: TaskListSearchService,
+    private readonly taskListQueryParamService: TaskListQueryParamService
   ) {}
 
   public ngOnInit(): void {

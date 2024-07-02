@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-export * from './task.service';
-export * from './task-list.service';
-export * from './task-list-column.service';
-export * from './task-list-pagination.service';
-export * from './task-list-search.service';
-export * from './task-list-query-param.service';
+import {Injectable} from '@angular/core';
+import {TaskListParams} from '../models';
+
+@Injectable()
+export class TaskListQueryParamService {
+  public setTaskListParams(params: TaskListParams['params']): void {
+    console.log(params);
+  }
+}
