@@ -17,6 +17,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  HostListener,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -34,7 +35,7 @@ import {
   TaskPageParams,
 } from '../../models';
 import {TaskDetailModalComponent} from '../task-detail-modal/task-detail-modal.component';
-import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of, Subject, switchMap, tap} from 'rxjs';
 import {
   ConfigService,
   Page,
@@ -83,6 +84,13 @@ moment.locale(localStorage.getItem('langKey') || '');
 })
 export class TaskListComponent implements OnInit, OnDestroy {
   @ViewChild('taskDetail') private readonly _taskDetail: TaskDetailModalComponent;
+
+  @HostListener('window:popstate', ['$event'])
+  private onPopState() {
+    setTimeout(() => {
+      this.setParamsFromQueryParams();
+    });
+  }
 
   public readonly ALL_CASES_ID = this.taskListService.ALL_CASES_ID;
 
@@ -215,6 +223,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   ];
 
   public readonly setSearchFieldValuesSubject$ = new BehaviorSubject<SearchFieldValues>({});
+  public readonly clearSearchFieldValuesSubject$ = new Subject<null>();
 
   constructor(
     private readonly configService: ConfigService,
@@ -472,11 +481,13 @@ export class TaskListComponent implements OnInit, OnDestroy {
       this._selectedCaseDefinitionId$.next(decodedParams.caseDefinitionName);
     }
 
-    if (decodedParams.otherFilters) {
+    if (decodedParams.otherFilters?.length > 0) {
       const searchFieldValues = this.taskListSearchService.mapOtherFilterToSearchValues(
         decodedParams.otherFilters
       );
       this.setSearchFieldValuesSubject$.next(searchFieldValues);
+    } else {
+      this.clearSearchFieldValuesSubject$.next(null);
     }
 
     if (decodedParams.selectedTaskType)
