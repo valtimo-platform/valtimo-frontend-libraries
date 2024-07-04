@@ -16,7 +16,6 @@
 
 @use '@carbon/styles/scss/themes';
 @use '@carbon/colors';
-@use '@carbon/charts-angular/styles.min';
 
 $lightThemeVariables: (
   'white': themes.$white,
@@ -118,6 +117,8 @@ $darkThemeOverwriteVariables: (
     @include theme.theme($variable, $darkThemeOverwriteVariables);
   }
 }
+
+@import '~node_modules/@carbon/charts-angular/styles.min.css';
 
 /* default Valtimo colors */
 

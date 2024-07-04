@@ -32,6 +32,8 @@
     "lodash",
     "jwt-decode",
     "formiojs",
-    "deepmerge-ts"
+    "deepmerge-ts",
+    "@carbon/charts",
+    "@carbon/charts-angular"
   ]
 }
