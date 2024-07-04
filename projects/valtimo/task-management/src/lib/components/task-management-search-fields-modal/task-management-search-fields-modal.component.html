@@ -67,8 +67,10 @@
       </cds-dropdown>
 
       @if (
-        fieldTypeValue === TaskListSearchFieldFieldType.SINGLE_SELECT_DROPDOWN ||
-        fieldTypeValue === TaskListSearchFieldFieldType.MULTI_SELECT_DROPDOWN
+        [
+          TaskListSearchFieldFieldType.SINGLE_SELECT_DROPDOWN,
+          TaskListSearchFieldFieldType.MULTI_SELECT_DROPDOWN
+        ].contains(fieldTypeValue)
       ) {
         <cds-text-label>
           {{ 'searchFieldsOverview.dropdownDataProvider' | translate }}

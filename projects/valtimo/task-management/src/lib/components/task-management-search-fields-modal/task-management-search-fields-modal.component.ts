@@ -61,7 +61,7 @@ export class TaskManagementSearchFieldsModalComponent {
   public get prefillData(): TaskListSearchField | null {
     return this._prefillData;
   }
-  @Output() closeEvent = new EventEmitter<any | null>();
+  @Output() closeEvent = new EventEmitter<Partial<TaskListSearchField> | null>();
 
   public readonly form = this.fb.group({
     key: this.fb.control<string>('', Validators.required),

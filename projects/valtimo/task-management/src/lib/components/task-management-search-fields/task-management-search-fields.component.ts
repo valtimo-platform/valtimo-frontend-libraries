@@ -34,7 +34,6 @@ import {TaskManagementSearchFieldsModalComponent} from '../task-management-searc
 @Component({
   selector: 'valtimo-task-management-search-fields',
   templateUrl: 'task-management-search-fields.component.html',
-  styleUrl: './task-management-search-fields.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -51,9 +50,7 @@ export class TaskManagementSearchFieldsComponent {
   private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.name || ''),
     filter(docDefName => !!docDefName),
-    tap((docDefName: string) => {
-      this.searchFieldsService.setDocumentDefinitionName(docDefName);
-    })
+    tap((docDefName: string) => this.searchFieldsService.setDocumentDefinitionName(docDefName))
   );
 
   private readonly _refresh$ = new BehaviorSubject<null>(null);
