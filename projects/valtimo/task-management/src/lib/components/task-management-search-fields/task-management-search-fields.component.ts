@@ -25,11 +25,11 @@ import {
   ConfirmationModalModule,
   ViewType,
 } from '@valtimo/components';
+import {TaskListSearchField} from '@valtimo/task';
 import {ButtonModule, IconModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, take, tap} from 'rxjs';
 import {TaskManagementSearchFieldsService} from '../../services';
-import {TaskManagementSearchFieldsModal} from '../task-management-search-fields-modal/task-management-search-fields-modal.component';
-import {TaskListSearchField} from '@valtimo/task';
+import {TaskManagementSearchFieldsModalComponent} from '../task-management-search-fields-modal/task-management-search-fields-modal.component';
 
 @Component({
   selector: 'valtimo-task-management-search-fields',
@@ -43,7 +43,7 @@ import {TaskListSearchField} from '@valtimo/task';
     CarbonListModule,
     ButtonModule,
     IconModule,
-    TaskManagementSearchFieldsModal,
+    TaskManagementSearchFieldsModalComponent,
     ConfirmationModalModule,
   ],
 })

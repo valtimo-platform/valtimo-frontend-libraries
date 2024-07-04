@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CARBON_CONSTANTS} from '@valtimo/components';
@@ -38,7 +31,7 @@ import {
   ListItem,
   ModalModule,
 } from 'carbon-components-angular';
-import {BehaviorSubject, debounceTime, map, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, debounceTime, map, Observable} from 'rxjs';
 
 @Component({
   selector: 'valtimo-task-management-search-fields-modal',
@@ -48,15 +41,15 @@ import {BehaviorSubject, debounceTime, map, Observable} from 'rxjs';
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     ButtonModule,
     DropdownModule,
     InputModule,
     ModalModule,
     ReactiveFormsModule,
-    TranslateModule,
   ],
 })
-export class TaskManagementSearchFieldsModal {
+export class TaskManagementSearchFieldsModalComponent {
   @Input({required: true}) open: boolean;
 
   private _prefillData: TaskListSearchField | null;
@@ -96,104 +89,125 @@ export class TaskManagementSearchFieldsModal {
   }
 
   private readonly _prefilledDataTypeItemId$ = new BehaviorSubject<string | null>(null);
-  private readonly _dataTypeItems: ListItem[] = [
-    {
-      content: this.translateService.instant('searchFields.text'),
-      id: TaskListSearchFieldDataType.TEXT,
-      selected: false,
-    },
-    {
-      content: this.translateService.instant('searchFields.boolean'),
-      id: TaskListSearchFieldDataType.BOOLEAN,
-      selected: false,
-    },
-    {
-      content: this.translateService.instant('searchFields.date'),
-      id: TaskListSearchFieldDataType.DATE,
-      selected: false,
-    },
-    {
-      content: this.translateService.instant('searchFields.datetime'),
-      id: TaskListSearchFieldDataType.DATETIME,
-      selected: false,
-    },
-    {
-      content: this.translateService.instant('searchFields.number'),
-      id: TaskListSearchFieldDataType.NUMBER,
-      selected: false,
-    },
-    {
-      content: this.translateService.instant('searchFields.time'),
-      id: TaskListSearchFieldDataType.TIME,
-      selected: false,
-    },
-  ];
-  public dataTypeItems$: Observable<ListItem[]> = this._prefilledDataTypeItemId$.pipe(
-    map((itemId: string | null) =>
+  private readonly _dataTypeItems$: Observable<ListItem[]> = this.translateService
+    .stream('key')
+    .pipe(
+      map(() => [
+        {
+          content: this.translateService.instant('searchFields.text'),
+          id: TaskListSearchFieldDataType.TEXT,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFields.boolean'),
+          id: TaskListSearchFieldDataType.BOOLEAN,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFields.date'),
+          id: TaskListSearchFieldDataType.DATE,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFields.datetime'),
+          id: TaskListSearchFieldDataType.DATETIME,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFields.number'),
+          id: TaskListSearchFieldDataType.NUMBER,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFields.time'),
+          id: TaskListSearchFieldDataType.TIME,
+          selected: false,
+        },
+      ])
+    );
+  public dataTypeItems$: Observable<ListItem[]> = combineLatest([
+    this._prefilledDataTypeItemId$,
+    this._dataTypeItems$,
+  ]).pipe(
+    map(([itemId, dataTypeItems]) =>
       !itemId
-        ? this._dataTypeItems
-        : this._dataTypeItems.map((typeItem: ListItem) =>
+        ? dataTypeItems
+        : dataTypeItems.map((typeItem: ListItem) =>
             typeItem.id === itemId ? {...typeItem, selected: true} : typeItem
           )
     )
   );
 
   private readonly _prefilledFieldTypeItemId$ = new BehaviorSubject<string | null>(null);
-  private readonly _fieldTypeItems: ListItem[] = [
-    {
-      content: this.translateService.instant('searchFieldsOverview.textContains'),
-      id: TaskListSearchFieldFieldType.TEXT_CONTAINS,
-      selected: false,
-    },
-    {
-      content: this.translateService.instant('searchFieldsOverview.single'),
-      id: TaskListSearchFieldFieldType.SINGLE,
-      selected: false,
-    },
-    {
-      content: this.translateService.instant('searchFieldsOverview.range'),
-      id: TaskListSearchFieldFieldType.RANGE,
-      selected: false,
-    },
-    {
-      content: this.translateService.instant('searchFieldsOverview.single-select-dropdown'),
-      id: TaskListSearchFieldFieldType.SINGLE_SELECT_DROPDOWN,
-      selected: false,
-    },
-    {
-      content: TaskListSearchFieldFieldType.MULTI_SELECT_DROPDOWN,
-      id: this.translateService.instant('searchFieldsOverview.multi-select-dropdown'),
-      selected: false,
-    },
-  ];
-  public fieldTypeItems$: Observable<ListItem[]> = this._prefilledFieldTypeItemId$.pipe(
-    map((itemId: string | null) =>
+  private readonly _fieldTypeItems$: Observable<ListItem[]> = this.translateService
+    .stream('key')
+    .pipe(
+      map(() => [
+        {
+          content: this.translateService.instant('searchFieldsOverview.textContains'),
+          id: TaskListSearchFieldFieldType.TEXT_CONTAINS,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFieldsOverview.single'),
+          id: TaskListSearchFieldFieldType.SINGLE,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFieldsOverview.range'),
+          id: TaskListSearchFieldFieldType.RANGE,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFieldsOverview.single-select-dropdown'),
+          id: TaskListSearchFieldFieldType.SINGLE_SELECT_DROPDOWN,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFieldsOverview.multi-select-dropdown'),
+          id: TaskListSearchFieldFieldType.MULTI_SELECT_DROPDOWN,
+          selected: false,
+        },
+      ])
+    );
+  public fieldTypeItems$: Observable<ListItem[]> = combineLatest([
+    this._prefilledFieldTypeItemId$,
+    this._fieldTypeItems$,
+  ]).pipe(
+    map(([itemId, fieldTypeItems]) =>
       !itemId
-        ? this._fieldTypeItems
-        : this._fieldTypeItems.map((typeItem: ListItem) =>
+        ? fieldTypeItems
+        : fieldTypeItems.map((typeItem: ListItem) =>
             typeItem.id === itemId ? {...typeItem, selected: true} : typeItem
           )
     )
   );
 
   private readonly _prefilledMatchTypeItemId$ = new BehaviorSubject<string | null>(null);
-  private readonly _matchTypeItems: ListItem[] = [
-    {
-      content: this.translateService.instant('searchFieldsOverview.like'),
-      id: TaskListSearchFieldMatchType.LIKE,
-      selected: false,
-    },
-    {
-      content: TaskListSearchFieldMatchType.EXACT,
-      id: this.translateService.instant('searchFieldsOverview.exact'),
-      selected: false,
-    },
-  ];
-  public matchTypeItems$: Observable<ListItem[]> = this._prefilledMatchTypeItemId$.pipe(
-    map((itemId: string | null) =>
+  private readonly _matchTypeItems$: Observable<ListItem[]> = this.translateService
+    .stream('key')
+    .pipe(
+      map(() => [
+        {
+          content: this.translateService.instant('searchFieldsOverview.like'),
+          id: TaskListSearchFieldMatchType.LIKE,
+          selected: false,
+        },
+        {
+          content: this.translateService.instant('searchFieldsOverview.exact'),
+          id: TaskListSearchFieldMatchType.EXACT,
+          selected: false,
+        },
+      ])
+    );
+  public matchTypeItems$: Observable<ListItem[]> = combineLatest([
+    this._prefilledMatchTypeItemId$,
+    this._matchTypeItems$,
+  ]).pipe(
+    map(([itemId, matchTypeItems]) =>
       !itemId
-        ? this._matchTypeItems
-        : this._matchTypeItems.map((typeItem: ListItem) =>
+        ? matchTypeItems
+        : matchTypeItems.map((typeItem: ListItem) =>
             typeItem.id === itemId ? {...typeItem, selected: true} : typeItem
           )
     )
