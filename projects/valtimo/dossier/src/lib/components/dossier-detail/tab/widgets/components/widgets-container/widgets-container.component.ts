@@ -28,7 +28,8 @@ import {CaseWidget, CaseWidgetWithUuid} from '../../../../../../models';
 import {WidgetBlockComponent} from '../widget-block/widget-block.component';
 import {DossierWidgetsLayoutService} from '../../../../../../services';
 import {v4 as uuid} from 'uuid';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, delay, take} from 'rxjs';
+import Muuri from 'muuri';
 
 @Component({
   selector: 'valtimo-dossier-widgets-container',
@@ -42,7 +43,6 @@ export class WidgetsContainerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('widgetsContainer') private _widgetsContainerRef: ElementRef<HTMLDivElement>;
 
   public readonly widgetsWithUuids$ = new BehaviorSubject<CaseWidgetWithUuid[]>([]);
-  public readonly packResult$ = this.dossierWidgetsLayoutService.packResult$;
 
   @Input() public set widgets(value: CaseWidget[]) {
     const widgetsWithUuids = value.map(widget => ({...widget, uuid: uuid()}));
@@ -59,6 +59,8 @@ export class WidgetsContainerComponent implements AfterViewInit, OnDestroy {
       this.observerMutation(event);
     });
     this._observer.observe(this._widgetsContainerRef.nativeElement);
+
+    this.initMuuri();
   }
 
   public ngOnDestroy(): void {
@@ -70,6 +72,20 @@ export class WidgetsContainerComponent implements AfterViewInit, OnDestroy {
 
     if (typeof containerWidth === 'number' && containerWidth !== 0) {
       this.dossierWidgetsLayoutService.setContainerWidth(containerWidth);
+      this.dossierWidgetsLayoutService.triggerMuuriLayout();
     }
+  }
+
+  private initMuuri(): void {
+    this.dossierWidgetsLayoutService.loaded$.pipe(take(1), delay(300)).subscribe(() => {
+      this.dossierWidgetsLayoutService.setMuuri(
+        new Muuri(this._widgetsContainerRef.nativeElement, {
+          layout: {
+            fillGaps: true,
+          },
+          layoutOnResize: false,
+        })
+      );
+    });
   }
 }

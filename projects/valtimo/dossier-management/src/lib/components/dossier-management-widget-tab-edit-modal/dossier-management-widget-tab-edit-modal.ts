@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,12 +23,19 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
-import {NotificationService} from 'carbon-components-angular';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
-import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
-import {CARBON_CONSTANTS} from '@valtimo/components';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CARBON_CONSTANTS, ValtimoCdsModalDirectiveModule} from '@valtimo/components';
 import {TabManagementService} from '../../services';
 import {ApiTabItem, ApiTabType} from '@valtimo/dossier';
+import {
+  ButtonModule,
+  InputModule,
+  ModalModule,
+  NotificationService,
+} from 'carbon-components-angular';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {CommonModule} from '@angular/common';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-dossier-management-widget-tab-edit-modal',
@@ -38,6 +44,16 @@ import {ApiTabItem, ApiTabType} from '@valtimo/dossier';
   encapsulation: ViewEncapsulation.None,
   providers: [NotificationService],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ModalModule,
+    ValtimoCdsModalDirectiveModule,
+    ReactiveFormsModule,
+    InputModule,
+    ButtonModule,
+  ],
 })
 export class DossierManagementWidgetTabEditModalComponent implements OnInit, OnDestroy {
   @Input() public showModal$: Observable<boolean>;
@@ -50,7 +66,7 @@ export class DossierManagementWidgetTabEditModalComponent implements OnInit, OnD
     name: this.fb.control('', [Validators.required]),
   });
 
-  public get widgetTabName(): AbstractControl<string, string> {
+  public get widgetTabName(): AbstractControl<string | null, string | null> | null {
     return this.editWidgetTabForm.get('name');
   }
 
@@ -80,10 +96,11 @@ export class DossierManagementWidgetTabEditModalComponent implements OnInit, OnD
   public saveWidgetTab(): void {
     this.disable();
 
-    this.tabManagementService.editTab(
+    this.tabManagementService
+      .editTab(
         {
           key: this.tabItem.key,
-          name: this.widgetTabName.value,
+          name: this.widgetTabName?.value,
           contentKey: '-',
           type: ApiTabType.WIDGETS,
         },
@@ -97,7 +114,7 @@ export class DossierManagementWidgetTabEditModalComponent implements OnInit, OnD
 
   private setEditWidgetTabForm(): void {
     if (this.tabItem) {
-      this.widgetTabName?.setValue(this.tabItem.name);
+      this.widgetTabName?.setValue(this.tabItem.name ?? '');
     }
 
     this.enable();

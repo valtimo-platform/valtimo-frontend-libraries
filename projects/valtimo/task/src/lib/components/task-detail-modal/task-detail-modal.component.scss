@@ -19,3 +19,17 @@
     text-align: right;
   }
 }
+
+.cds-modal-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-container {
+  width: 50%;
+}
+
+.save-buttons-margin {
+  margin-top: -15px;
+}

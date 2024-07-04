@@ -13,8 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {NgModule} from '@angular/core';
+import {FORM_VIEW_MODEL_TOKEN} from '@valtimo/config';
+import {FormViewModelComponent} from './components/form-view-model';
 
-export interface WidgetTabConfiguration {
-  caseDefinitionName: string;
-  key: string;
-}
+@NgModule({
+  providers: [
+    {
+      provide: FORM_VIEW_MODEL_TOKEN,
+      useValue: {component: FormViewModelComponent},
+    },
+  ],
+})
+export class FormViewModelModule {}

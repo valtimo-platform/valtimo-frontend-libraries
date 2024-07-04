@@ -163,8 +163,11 @@
     },
     "rowLocked": "Je hebt geen toegang tot dit dossier",
     "widgets": {
+      "noData": "Geen data gevonden",
       "noWidgets": "Geen widgets",
-      "noWidgetsDescription": "Er zijn geen widgets geconfigureerd voor dit tabblad, of je hebt niet de juiste rechten om deze te zien."
+      "noWidgetsDescription": "Er zijn geen widgets geconfigureerd voor dit tabblad, of je hebt niet de juiste rechten om deze te zien.",
+      "noWidget": "Widget niet beschikbaar",
+      "noCustomComponentDescription": "De component die geconfigureerd is voor deze widget kon niet gevonden worden."
     }
   },
   "document": {
@@ -258,7 +261,7 @@
     "video/mp4": "MP4"
   },
   "summary": {
-    "userTasksDoneState": "Helemaal bij!",
+    "userTasksDoneState": "Alle taken zijn afgerond",
     "taskLocked": "Je hebt geen toegang tot deze taak",
     "userTasks": "Taken",
     "taskOpen": "Open",
@@ -477,6 +480,15 @@
       "formBuilder": "Formulier editor",
       "jsonEditor": "JSON editor",
       "output": "Uitvoer"
+    },
+    "intermediateSave": {
+      "save": "Voortgang opslaan",
+      "clear": "Laatste wijzigingen ongedaan maken",
+      "clearConfirm": "Weet u zeker dat u uw invoervelden wilt wissen? Deze actie kan niet ongedaan worden gemaakt.",
+      "success": "Voortgang succesvol opgeslagen",
+      "error": "Voortgang kon niet worden opgeslagen",
+      "lastSavedBy": "Laatst opgeslagen door",
+      "on": "op"
     }
   },
   "dossierManagement": {
@@ -530,25 +542,33 @@
         "content": "Inhoud",
         "key": "Tab sleutel",
         "name": "Tab naam",
-        "type": "Type"
+        "type": "Type",
+        "showTasks": "Takenlijst zichtbaar"
       },
       "addModal": {
         "addTab": "Tabblad toevoegen",
         "customComponent": "Aangepaste component",
-        "description": "Selecteer een van de drie opties om een ​​nieuw tabblad toe te voegen aan uw casusdefinitie",
+        "customComponentDisabled": "Er zijn geen aangepaste componenten beschikbaar, of ze zijn allemaal al toegevoegd.",
+        "description": "Selecteer een van de opties om een nieuw tabblad toe te voegen aan uw dossierdefinitie",
         "formIOComponent": "FormIO component",
-        "standardTab": "Standaard tabblad",
+        "formIOComponentDisabled": "Geen Form.io-formulierdefinities beschikbaar",
+        "standardTab": "Standaardtabblad",
+        "standardTabDisabled": "Alle standaardtabbladen zijn al toegevoegd aan je configuratie",
         "tabContentLabel": "Kies inhoud",
         "tabKeyLabel": "Sleutel",
         "tabNameLabel": "Tabblad naam (optioneel)",
         "title": "Nieuw tabblad toevoegen {{documentDefinitionName}}",
         "uniqueKeyError": "De sleutel voor deze kolom moet uniek zijn.",
-        "widgetsComponent": "Widgets component"
+        "widgetsComponent": "Widgets component",
+        "visibleTitle": "Takenlijst zichtbaar op tabblad",
+        "visible": "Zichtbaar",
+        "invisible": "Niet zichtbaar"
       },
       "titles": {
         "custom": "Nieuw tabblad toevoegen met aangepaste component",
         "formio": "Nieuw tabblad toevoegen met FormIO component",
-        "standard": "Nieuw tabblad toevoegen met standaard inhoud"
+        "standard": "Nieuw tabblad toevoegen met standaard inhoud",
+        "widgets": "Nieuw tabblad met widgets toevoegen"
       },
       "contentLabels": {
         "custom": "Kies aangepaste component",
@@ -624,10 +644,9 @@
     "documentDefinition": {
       "cancelModal": {
         "title": "De editor verlaten",
-        "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut de zaakdefinitie kan beschadigen.",
-        "keepEditing": "Blijf bewerken"
+        "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut de dossierdefinitie kan beschadigen."
       },
-      "saveModalContent": "Weet je zeker dat je de documentdefinitie wilt opslaan? Het verwijderen of wijzigen van een attribuut kan de zaakdefinitie verbreken."
+      "saveModalContent": "Weet je zeker dat je de dossierdefinitie wilt opslaan? Het verwijderen of wijzigen van een attribuut kan de dossierdefinitie verbreken."
     },
     "statuses": {
       "withoutStatus": "Toon dossiers zonder status",
@@ -662,7 +681,152 @@
       "form": {
         "tabName": "Tab naam"
       }
-    }
+    },
+    "columns": {
+      "highContrast": "Hoog contrast",
+      "type": "Type",
+      "width": "Breedte"
+    },
+    "list": {
+      "add": "Widget toevoegen",
+      "noResults": {
+        "title": "Er zijn geen widgets geconfigureerd",
+        "description": "Klik hier om widgets te configureren"
+      }
+    },
+    "wizard": {
+      "title": "Widget aanmaken",
+      "steps": {
+        "content": "Kies widgetinhoud",
+        "style": "Kies widgetstijl",
+        "type": "Kies widgettype",
+        "width": "Kies widgetbreedte"
+      }
+    },
+    "notification": {
+      "success": "Widgetconfiguratie succesvol bijgewerkt",
+      "error": "Widgetconfiguratie kan niet worden bijgewerkt"
+    },
+    "types": {
+      "description": "Kies het widgettype dat je wilt configureren.",
+      "fields": {
+        "title": "Velden",
+        "description": "Tekstgegevens met inhoud en een label"
+      },
+      "custom": {
+        "title": "Eigen component",
+        "description": "Voor complexe inhoud"
+      },
+      "formio": {
+        "title": "Form.io",
+        "description": "Ingevuld Form.io-formulier"
+      },
+      "table": {
+        "title": "Tabel",
+        "description": "Maak een tabel aan"
+      },
+      "collection": {
+        "title": "Collectie",
+        "description": "Maak een collectie aan"
+      }
+    },
+    "width": {
+      "description": "Selecteer de gewenste breedte voor de widget. Houd er rekening mee dat er niet meer dan 4 kolommen met inhoud naast elkaar mogen staan.",
+      "quarter": {
+        "title": "1/4",
+        "description": "Eén kolom inhoud"
+      },
+      "half": {
+        "title": "Half",
+        "description": "Twee kolommen inhoud"
+      },
+      "threeQuarters": {
+        "title": "3/4",
+        "description": "Drie kolommen inhoud"
+      },
+      "fullWidth": {
+        "title": "Volle-breedte",
+        "description": "Vier kolommen inhoud"
+      }
+    },
+    "style": {
+      "description": "Selecteer de gewenste stijl voor de widget",
+      "default": {
+        "title": "Standaard",
+        "description": "Voor reguliere inhoud"
+      },
+      "highContrast": {
+        "title": "Hoog contrast",
+        "description": "Voor inhoud met een hogere prioriteit"
+      }
+    },
+    "content": {
+      "description": "Voer de inhoud voor elke kolom in. Houd er rekening mee dat niet alle velden even hoog zijn. Zorg ervoor dat de gegevens op een gelijke manier worden verdeeld voor het beste resultaat.",
+      "widgetTitle": "Widget titel",
+      "widgetTitlePlaceholder": "Kies een korte naam",
+      "column": "Kolom {{number}}",
+      "fields": {
+        "add": "Veld toevoegen",
+        "addEnum": "Enum-waarde toevoegen",
+        "currencyCode": "Valutacode (optioneel)",
+        "currencyCodePlaceholder": "Valutacode",
+        "digitsInfo": "Getalformaat (optioneel)",
+        "digitsInfoPlaceholder": "Getalformaat",
+        "display": "Weergave (optioneel)",
+        "displayPlaceholder": "Weergave",
+        "format": "Formaat (optioneel)",
+        "formatPlaceholder": "Formaat",
+        "key": "Sleutel",
+        "title": "Titel",
+        "titlePlaceholder": "Kies een titel",
+        "type": "Weergavetype",
+        "typePlaceholder": "Kies type",
+        "value": "Waarde",
+        "valuePlaceholder": "Pad naar waarde"
+      },
+      "displayType": {
+        "text": "Tekst",
+        "boolean": "Ja/Nee",
+        "currency": "Valuta",
+        "date": "Datum",
+        "enum": "Opsomming",
+        "number": "Nummer",
+        "percent": "Percentage"
+      },
+      "custom": {
+        "selectComponent": "Angular-component",
+        "placeholder": "Selecteer een component"
+      },
+      "formio": {
+        "selectForm": "Formulierdefinitie",
+        "placeholder": "Selecteer een formulierdefinitie"
+      },
+      "table": {
+        "addColumn": "Kolom toevoegen",
+        "defaultPageSize": "Rijen per pagina",
+        "defaultPageSizePlaceholder": "Kies het aantal rijen per pagina",
+        "collection": "Pad naar tabeldata",
+        "collectionPlaceholder": "Geef het pad naar de tabelgegevens op",
+        "columns": "Kolommen",
+        "options": "Opties",
+        "firstColumnAsTitle": "Eerste kolom is de titel van de rij"
+      },
+      "collection": {
+        "defaultPageSize": "Kaarten per pagina",
+        "defaultPageSizePlaceholder": "Kies het aantal kaarten per pagina",
+        "collection": "Pad naar collectiedata",
+        "collectionPlaceholder": "Geef het pad naar de collectiegegevens op",
+        "cardTitle": "Kaarttitel",
+        "cardFields": "Kaart-velden",
+        "fieldWidth": "Veldbreedte",
+        "fieldWidthPlaceholder": "Kies veldbreedte"
+      }
+    },
+    "cancelModal": {
+      "title": "De editor verlaten",
+      "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut de widget configuratie kan beschadigen."
+    },
+    "saveModalContent": "Weet je zeker dat je de widget configuratie wilt opslaan? Het verwijderen of wijzigen van een attribuut kan de widget configuratie verbreken."
   },
   "zgw": {
     "columns": {
@@ -682,6 +846,7 @@
       "creatiedatum": "Aanmaakdatum",
       "formaat": "Formaat",
       "identificatie": "Identificatie",
+      "informatieobjecttype": "Informatieobjecttype",
       "informatieobjecttypeOmschrijving": "Informatieobjecttype",
       "locked": "Vergrendeld",
       "status": "Status",
@@ -865,6 +1030,20 @@
     "selectInfoObjectType": "Kies informatieobject-type",
     "save": "Opslaan"
   },
+  "zaakdetails": {
+    "title": "Zaakdetail-synchronisatie",
+    "enabled": "Ingeschakeld",
+    "yes": "Ja",
+    "no": "Nee",
+    "objectManagementConfigurationTitle": "Object management-configuratie",
+    "submitButton": "Configureer zaakdetail-synchronisatie",
+    "editModal": {
+      "title": "Voeg zaakdetail-synchronisatie toe",
+      "objectManagementConfiguration": "Object management-configuratie",
+      "objectManagementConfigurationPlaceholder": "Selecteer een object management-configuratie",
+      "enabled": "Ingeschakeld"
+    }
+  },
   "interface": {
     "mainMenu": "Hoofdmenu",
     "toggleMenu": "Menu",
@@ -920,12 +1099,15 @@
     },
     "pendingChanges": {
       "title": "Pagina verlaten",
-      "content": "Je gaat de pagina verlaten. Alle niet-opgeslagen wijzigingen gaan verloren. Weet je zeker dat je door wilt gaan?"
+      "content": "Je gaat de pagina verlaten. Alle niet-opgeslagen wijzigingen gaan verloren. Weet je zeker dat je door wilt gaan?",
+      "keepEditing": "Blijf bewerken"
     },
     "required": "vereist",
     "filter": "Filteren...",
     "back": "Terug",
     "warning": "Waarschuwing",
+    "success": "Succes",
+    "error": "Fout",
     "finish": "Finish",
     "add": "Toevoegen",
     "tags": "Tags",
@@ -951,7 +1133,15 @@
       "ascending": "Oplopend",
       "descending": "Aflopend",
       "noDefault": "Geen standaardsortering"
-    }
+    },
+    "editor": {
+      "visualEditor": "Visuele editor",
+      "jsonEditor": "JSON editor"
+    },
+    "key": "Sleutel",
+    "title": "Titel",
+    "yes": "Ja",
+    "no": "Nee"
   },
   "taskDetail": {
     "taskCreated": "Aangemaakt op",
@@ -1505,7 +1695,11 @@
     "back": "Terug",
     "next": "Volgende",
     "pluginDescription": "Plugin-omschrijving",
-    "unlink": "Ontkoppelen"
+    "unlink": "Ontkoppelen",
+    "toggleViewModel": {
+      "title": "View Model ingeschakeld?",
+      "checkboxDescription": "Activeert Form View Model form afhandeling"
+    }
   },
   "processLinkType": {
     "plugin": "Plugin",

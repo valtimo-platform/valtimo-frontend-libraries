@@ -13,13 +13,16 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div class="main-content">
+<div
+  class="main-content"
+  [ngClass]="{'main-content--no-horizontal-overflow': tabHorizontalOverflowDisabled()}"
+>
   <div class="container-fluid">
     <div class="col-12 px-0 mb-5">
       <ng-container *ngTemplateOutlet="tabs"></ng-container>
       <ng-template #tabs>
         <ng-container *ngIf="tabLoader">
-          <cds-tabs type="contained" class="case-detail-tabs">
+          <cds-tabs type="inline" class="case-detail-tabs">
             <cds-tab
               *ngFor="let tab of tabLoader.tabs"
               [active]="tab.isActive()"
@@ -31,20 +34,26 @@
         </ng-container>
       </ng-template>
 
-      <div class="card-body bg-white p-5 position-relative tab-container">
-        <div *ngIf="loadingTabs$ | async" class="loading-container">
-          <cds-loading></cds-loading>
+      <div class="tab-content-container">
+        <div class="card-body bg-white p-5 position-relative tab-container">
+          <div *ngIf="loadingTabs$ | async" class="loading-container">
+            <cds-loading></cds-loading>
+          </div>
+
+          <valtimo-no-results
+            *ngIf="noTabsConfigured$ | async"
+            [description]="'dossier.tabs.noResultsDescription' | translate"
+            [title]="'dossier.tabs.noResults' | translate"
+          ></valtimo-no-results>
+
+          <ng-template #tabContainer></ng-template>
+
+          <div class="clearfix"></div>
         </div>
 
-        <valtimo-no-results
-          *ngIf="noTabsConfigured$ | async"
-          [description]="'dossier.tabs.noResultsDescription' | translate"
-          [title]="'dossier.tabs.noResults' | translate"
-        ></valtimo-no-results>
-
-        <ng-template #tabContainer></ng-template>
-
-        <div class="clearfix"></div>
+        <div *ngIf="showTaskList$ | async" class="tab-content-container__task-list">
+          <valtimo-dossier-detail-task-list></valtimo-dossier-detail-task-list>
+        </div>
       </div>
     </div>
 
@@ -61,7 +70,7 @@
   let-document="document"
   let-canAssign="canAssign"
 >
-  <div class="row" *ngIf="customDossierHeaderItems.length > 0; else defaultTitle">
+  <div class="row" *ngIf="(customDossierHeaderItems || []).length > 0">
     <span
       *ngFor="let item of customDossierHeaderItems"
       [ngClass]="{
@@ -71,7 +80,7 @@
         h4: item.textSize === 'sm',
         h5: item.textSize === 'xs'
       }"
-      class="mb-0 mt-0 pb-2 align-self-end col-xl-{{ item.columnSize }} col-lg-{{
+      class="mb-0 mt-0 align-self-end col-xl-{{ item.columnSize }} col-lg-{{
         item.columnSize * 2
       }} {{ item.customClass }}"
     >
@@ -89,10 +98,6 @@
       context: {canHaveAssignee: canHaveAssignee, document: document, canAssign: canAssign}
     "
   ></ng-container>
-</ng-template>
-
-<ng-template #defaultTitle>
-  <div class="row ml-0 mr-0">{{ documentDefinitionNameTitle?.trim() }}</div>
 </ng-template>
 
 <ng-template
@@ -150,7 +155,10 @@
         caseStatus: caseStatus$ | async
       } as obs"
     >
-      <div class="dossier-status-assign" [ngClass]="{'--compact': compactMode$ | async}">
+      <div
+        class="dossier-status-assign-custom-title"
+        [ngClass]="{'--compact': compactMode$ | async}"
+      >
         @if (obs.caseStatus) {
           <cds-tag size="sm" [type]="obs.caseStatus.tagType">{{ obs.caseStatus.title }}</cds-tag>
         }
@@ -167,6 +175,8 @@
             "
           ></ng-container>
         </div>
+
+        <ng-container *ngTemplateOutlet="caseDetailHeader"></ng-container>
       </div>
 
       <div class="buttons-container">

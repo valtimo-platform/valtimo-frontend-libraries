@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
-import {TaskListTab} from '@valtimo/config';
+import {ListItem} from 'carbon-components-angular';
+import {SearchFilter, SearchFilterRange, TaskListTab} from '@valtimo/config';
 
 interface TaskPageParams {
   page: number;
@@ -61,13 +61,28 @@ interface TaskListColumnListItem extends ListItem {
   key: string;
 }
 
+type TaskListOtherFilters = Array<SearchFilter | SearchFilterRange>;
+
+interface TaskListQueryParams {
+  selectedTaskType: TaskListTab;
+  params: TaskPageParams;
+  caseDefinitionName?: string;
+  otherFilters?: TaskListOtherFilters;
+}
+
+interface TaskListEncodedQueryParams {
+  selectedTaskType: TaskListTab;
+  params: string;
+  caseDefinitionName?: string;
+  otherFilters?: string;
+}
+
+interface TaskListQueryParamsWithReload extends TaskListQueryParams {
+  reload: boolean;
+}
+
 interface TaskListParams {
-  params: {
-    selectedTaskType: TaskListTab;
-    params: TaskPageParams;
-    caseDefinitionName?: string;
-    reload: boolean;
-  };
+  params: TaskListQueryParamsWithReload;
   enableLoadingAnimation: boolean;
 }
 
@@ -82,4 +97,8 @@ export {
   TaskListColumnEnum,
   TaskPageParams,
   TaskListParams,
+  TaskListOtherFilters,
+  TaskListQueryParams,
+  TaskListQueryParamsWithReload,
+  TaskListEncodedQueryParams,
 };

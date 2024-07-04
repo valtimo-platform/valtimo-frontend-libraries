@@ -23,11 +23,29 @@
     visibleTabs: visibleTabs$ | async,
     pagination: paginationForCurrentTaskTypeForList$ | async,
     taskListColumnsForCase: taskListColumnsForCase$ | async,
-    sortState: sortStateForCurrentTaskType$ | async
+    sortState: sortStateForCurrentTaskType$ | async,
+    overrideSortState: overrideSortState$ | async,
+    searchFields: searchFields$ | async,
+    enableTaskFiltering: enableTaskFiltering$ | async,
+    loadingSearchFields: loadingSearchFields$ | async,
+    caseDefinitionName: caseDefinitionName$ | async
   } as obs"
   class="main-content"
 >
   <div class="container-fluid">
+    @if (
+      obs.enableTaskFiltering && obs.caseDefinitionName && obs.caseDefinitionName !== ALL_CASES_ID
+    ) {
+      <ng-container
+        *ngTemplateOutlet="
+          searchFields;
+          context: {
+            obs: obs
+          }
+        "
+      ></ng-container>
+    }
+
     <ng-container
       *ngTemplateOutlet="
         tasksList;
@@ -101,7 +119,7 @@
     [pagination]="obs.pagination"
     paginationIdentifier="taskList"
     lockedTooltipTranslationKey="task-list.rowLocked"
-    [initialSortState]="obs.sortState"
+    [sortState]="obs.overrideSortState || obs.sortState"
     (paginationClicked)="paginationClicked($event, obs.selectedTaskType)"
     (paginationSet)="paginationSet($event)"
     (rowClicked)="rowOpenTaskClick($event)"
@@ -160,6 +178,20 @@
   </valtimo-carbon-list>
 </ng-template>
 
+<ng-template #searchFields let-obs="obs">
+  <div class="mb-3">
+    <valtimo-search-fields
+      [searchFields]="obs.searchFields"
+      [inputDisabled]="obs.loadingSearchFields"
+      [documentDefinitionName]="obs.caseDefinitionName"
+      [setValuesSubject$]="setSearchFieldValuesSubject$"
+      [clearValuesSubject$]="clearSearchFieldValuesSubject$"
+      (doSearch)="search($event)"
+    >
+    </valtimo-search-fields>
+  </div>
+</ng-template>
+
 <ng-container renderInPageHeader [fullWidth]="true">
   <ng-template>
     <cds-dropdown
@@ -172,7 +204,7 @@
       [skeleton]="obs.loadingCaseListItems"
       (selected)="setCaseDefinition($event)"
     >
-      <cds-dropdown-list
-        [items]="obs.caseListItems || []"
-      ></cds-dropdown-list></cds-dropdown></ng-template
-></ng-container>
+      <cds-dropdown-list [items]="obs.caseListItems || []"></cds-dropdown-list>
+    </cds-dropdown>
+  </ng-template>
+</ng-container>

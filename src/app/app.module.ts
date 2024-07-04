@@ -38,6 +38,7 @@ import {
 } from '@valtimo/components';
 import {
   CASE_TAB_TOKEN,
+  CUSTOM_CASE_WIDGET_TOKEN,
   DefaultTabs,
   DossierDetailTabAuditComponent,
   DossierDetailTabDocumentsComponent,
@@ -131,6 +132,7 @@ import {
   registerDocumentenApiFormioUploadComponent,
   ZgwModule,
 } from '@valtimo/zgw';
+import {FormViewModelModule} from '../../projects/valtimo/form-view-model/src/lib/form-view-model.module';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -230,6 +232,7 @@ export function tabsFactory() {
     CustomFormFlowComponent,
     TaskManagementModule,
     ZgwModule,
+    FormViewModelModule,
   ],
   providers: [
     FormioComponent,
@@ -267,6 +270,12 @@ export function tabsFactory() {
           component: CustomFormFlowComponent,
         },
       ],
+    },
+    {
+      provide: CUSTOM_CASE_WIDGET_TOKEN,
+      useValue: {
+        caseWidgetComponent: CustomDossierTabComponent,
+      },
     },
   ],
   bootstrap: [AppComponent],

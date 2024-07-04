@@ -30,6 +30,7 @@ import {
 } from 'carbon-components-angular';
 import {ValtimoCdsModalDirectiveModule} from '../../directives/valtimo-cds-modal/valtimo-cds-modal-directive.module';
 import {CardModule} from '../card/card.module';
+import {ViewContentModule} from '../view-content/view-content.module';
 import {CarbonListComponent} from './carbon-list.component';
 import {CarbonListFilterPipe} from './CarbonListFilterPipe.directive';
 import {CarbonNoResultsComponent} from './no-results/carbon-no-results.component';
@@ -59,6 +60,7 @@ import {CarbonTagsModalComponent} from './tags-modal/tags-modal.component';
     TagModule,
     ModalModule,
     ValtimoCdsModalDirectiveModule,
+    ViewContentModule,
   ],
   exports: [CarbonListComponent, CarbonListFilterPipe, CarbonNoResultsComponent],
 })

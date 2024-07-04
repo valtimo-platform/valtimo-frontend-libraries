@@ -163,8 +163,11 @@
     },
     "rowLocked": "You don't have access to this case",
     "widgets": {
+      "noData": "No data found",
       "noWidgets": "No widgets",
-      "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them."
+      "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them.",
+      "noWidget": "Widget not found",
+      "noCustomComponentDescription": "The custom component configured for this widget is not available."
     }
   },
   "document": {
@@ -258,7 +261,7 @@
     "video/mp4": "MP4"
   },
   "summary": {
-    "userTasksDoneState": "All done!",
+    "userTasksDoneState": "All tasks have been completed",
     "taskLocked": "You don't have access to this task",
     "userTasks": "User tasks",
     "taskOpen": "Open",
@@ -478,6 +481,15 @@
       "formBuilder": "Form builder",
       "jsonEditor": "JSON editor",
       "output": "Output"
+    },
+    "intermediateSave": {
+      "save": "Save progress",
+      "clear": "Undo latest changes",
+      "clearConfirm": "Are you sure you want to clear your input fields? This action cannot be undone.",
+      "success": "Progress saved successfully",
+      "error": "Failed to save progress",
+      "lastSavedBy": "Last saved by",
+      "on": "on"
     }
   },
   "dossierManagement": {
@@ -531,25 +543,33 @@
         "content": "Content",
         "key": "Tab key",
         "name": "Tab name",
-        "type": "Type"
+        "type": "Type",
+        "showTasks": "Task list visible"
       },
       "addModal": {
         "addTab": "Add tab",
         "customComponent": "Custom component",
-        "description": "Select one of the three options to add a new tab in your case definition",
+        "customComponentDisabled": "There are no custom components available, or they have all been added already.",
+        "description": "Select one of the options to add a new tab to your case definition",
         "formIOComponent": "FormIO component",
+        "formIOComponentDisabled": "No Form.io form definitions available",
         "standardTab": "Standard tab",
+        "standardTabDisabled": "All standard tabs have already been added to your configuration",
         "tabContentLabel": "Choose content",
         "tabKeyLabel": "Key",
         "tabNameLabel": "Tab name (optional)",
         "title": "Add new tab in {{documentDefinitionName}}",
         "uniqueKeyError": "The key for this column must be unique.",
-        "widgetsComponent": "Widgets component"
+        "widgetsComponent": "Widgets component",
+        "visibleTitle": "Task list visible on tab",
+        "visible": "Visible",
+        "invisible": "Not visible"
       },
       "titles": {
         "custom": "Add new tab with custom component",
         "formio": "Add new tab with FormIO component",
-        "standard": "Add new tab with standard content"
+        "standard": "Add new tab with standard content",
+        "widgets": "Add a new tab with widgets"
       },
       "contentLabels": {
         "custom": "Choose custom component",
@@ -625,8 +645,7 @@
     "documentDefinition": {
       "cancelModal": {
         "title": "Leaving the editor",
-        "content": "Are you sure you want to leave the editor? There can be unsaved changes that will be lost. When saving, beware that removing or changing an attribute can break the case definition.",
-        "keepEditing": "Keep editing"
+        "content": "Are you sure you want to leave the editor? There can be unsaved changes that will be lost. When saving, beware that removing or changing an attribute can break the case definition."
       },
       "saveModalContent": "Are you sure you want to save the Document definition? Removing or changing an attribute can break the case definition."
     },
@@ -663,7 +682,152 @@
       "form": {
         "tabName": "Tab name"
       }
-    }
+    },
+    "columns": {
+      "highContrast": "High contrast",
+      "type": "Type",
+      "width": "Width"
+    },
+    "list": {
+      "add": "Add widget",
+      "noResults": {
+        "title": "No widgets have been configured",
+        "description": "Click here to configure widgets"
+      }
+    },
+    "wizard": {
+      "title": "Create widget",
+      "steps": {
+        "content": "Choose widget content",
+        "style": "Choose widget style",
+        "type": "Choose widget type",
+        "width": "Choose widget width"
+      }
+    },
+    "notification": {
+      "success": "Widget configuration updated successfully",
+      "error": "Widget configuration failed to update"
+    },
+    "types": {
+      "description": "Choose the widget type you want to configure.",
+      "fields": {
+        "title": "Fields",
+        "description": "Text data with content and a label"
+      },
+      "custom": {
+        "title": "Custom component",
+        "description": "For complex content"
+      },
+      "formio": {
+        "title": "Form.io",
+        "description": "Prefilled Form.io form"
+      },
+      "table": {
+        "title": "Table",
+        "description": "Create a table"
+      },
+      "collection": {
+        "title": "Collection",
+        "description": "Create a collection"
+      }
+    },
+    "width": {
+      "description": "Select the desired width for the widget. Be aware that there can be no more than 4 columns of content next to each other.",
+      "quarter": {
+        "title": "1/4",
+        "description": "One column of content"
+      },
+      "half": {
+        "title": "Half",
+        "description": "Two columns of content"
+      },
+      "threeQuarters": {
+        "title": "3/4",
+        "description": "Three columns of content"
+      },
+      "fullWidth": {
+        "title": "Full-width",
+        "description": "Four columns of content"
+      }
+    },
+    "style": {
+      "description": "Select the desired style for the widget",
+      "default": {
+        "title": "Default",
+        "description": "For regular content"
+      },
+      "highContrast": {
+        "title": "High contrast",
+        "description": "For higher priority content"
+      }
+    },
+    "content": {
+      "description": "Enter the content for each column. Keep in mind that not all fields are the same height. For the best result make sure items are properly distributed.",
+      "widgetTitle": "Widget title",
+      "widgetTitlePlaceholder": "Choose a short name",
+      "column": "Column {{number}}",
+      "fields": {
+        "add": "Add field",
+        "addEnum": "Add enum value",
+        "currencyCode": "Currency code (optional)",
+        "currencyCodePlaceholder": "Currency code",
+        "digitsInfo": "Number format (optional)",
+        "digitsInfoPlaceholder": "Number format",
+        "display": "Display (optional)",
+        "displayPlaceholder": "Display",
+        "format": "Format (optional)",
+        "formatPlaceholder": "Format",
+        "key": "Key",
+        "title": "Title",
+        "titlePlaceholder": "Choose a title",
+        "type": "Display type",
+        "typePlaceholder": "Choose type",
+        "value": "Value",
+        "valuePlaceholder": "Path to value"
+      },
+      "displayType": {
+        "text": "Text",
+        "boolean": "Yes/No",
+        "currency": "Currency",
+        "date": "Date",
+        "enum": "Enumeration",
+        "number": "Number",
+        "percent": "Percentage"
+      },
+      "custom": {
+        "selectComponent": "Angular component",
+        "placeholder": "Select a component"
+      },
+      "formio": {
+        "selectForm": "Form definition",
+        "placeholder": "Select a form definition"
+      },
+      "table": {
+        "addColumn": "Add column",
+        "defaultPageSize": "Rows per page",
+        "defaultPageSizePlaceholder": "Choose amount of rows per page",
+        "collection": "Path to table data",
+        "collectionPlaceholder": "Specify the path to table data",
+        "columns": "Columns",
+        "options": "Options",
+        "firstColumnAsTitle": "First column is the title of the row"
+      },
+      "collection": {
+        "defaultPageSize": "Cards per page",
+        "defaultPageSizePlaceholder": "Choose amount of cards per page",
+        "collection": "Path to collection data",
+        "collectionPlaceholder": "Specify the path to collection data",
+        "cardTitle": "Card title",
+        "cardFields": "Card fields",
+        "fieldWidth": "Field width",
+        "fieldWidthPlaceholder": "Choose field width"
+      }
+    },
+    "cancelModal": {
+      "title": "Leaving the editor",
+      "content": "Are you sure you want to leave the editor? There can be unsaved changes that will be lost. When saving, beware that removing or changing an attribute can break the widget configuration."
+    },
+    "saveModalContent": "Are you sure you want to save the widget configuration? Removing or changing an attribute can break the widget configuration."
   },
   "zgw": {
     "columns": {
@@ -683,6 +847,7 @@
       "creatiedatum": "Creation date",
       "formaat": "Format",
       "identificatie": "Id",
+      "informatieobjecttype": "Information object type",
       "informatieobjecttypeOmschrijving": "Information object type",
       "locked": "Locked",
       "status": "Status",
@@ -866,6 +1031,20 @@
     "selectInfoObjectType": "Select information object type",
     "save": "Save"
   },
+  "zaakdetails": {
+    "title": "Case detail synchronisation",
+    "enabled": "Enabled",
+    "yes": "Yes",
+    "no": "No",
+    "objectManagementConfigurationTitle": "Object management configuration",
+    "submitButton": "Configure case detail synchronisation",
+    "editModal": {
+      "title": "Add case detail synchronisation",
+      "objectManagementConfiguration": "Object management configuration",
+      "objectManagementConfigurationPlaceholder": "Select an object management configuration",
+      "enabled": "Enabled"
+    }
+  },
   "interface": {
     "mainMenu": "Main menu",
     "toggleMenu": "Menu",
@@ -922,12 +1101,15 @@
     },
     "pendingChanges": {
       "title": "Leaving page",
-      "content": "You are leaving the page. Any unsaved changes will be lost. Are you sure you want to continue?"
+      "content": "You are leaving the page. Any unsaved changes will be lost. Are you sure you want to continue?",
+      "keepEditing": "Keep editing"
     },
     "required": "required",
     "filter": "Filter...",
     "back": "Back",
     "warning": "Warning",
+    "success": "Success",
+    "error": "Error",
     "finish": "Finish",
     "add": "Add",
     "tags": "Tags",
@@ -953,7 +1135,15 @@
       "ascending": "Ascending",
       "descending": "Descending",
       "noDefault": "No default sort"
-    }
+    },
+    "editor": {
+      "visualEditor": "Visual editor",
+      "jsonEditor": "JSON editor"
+    },
+    "key": "Key",
+    "title": "Title",
+    "yes": "Yes",
+    "no": "No"
   },
   "taskDetail": {
     "taskCreated": "Created",
@@ -1504,7 +1694,11 @@
     "back": "Go back",
     "next": "Next",
     "pluginDescription": "Plugin description",
-    "unlink": "Unlink"
+    "unlink": "Unlink",
+    "toggleViewModel": {
+      "title": "View Model enabled?",
+      "checkboxDescription": "Enables Form View Model form processing"
+    }
   },
   "processLinkType": {
     "plugin": "Plugin",

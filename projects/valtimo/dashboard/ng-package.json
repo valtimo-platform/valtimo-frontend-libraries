@@ -15,5 +15,6 @@
     "bin-pack-with-constraints",
     "@carbon/charts",
     "@carbon/charts-angular"
+    "muuri"
   ]
 }

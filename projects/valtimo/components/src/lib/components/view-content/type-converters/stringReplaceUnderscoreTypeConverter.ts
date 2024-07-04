@@ -19,11 +19,11 @@ import {TypeConverter} from './type-converters.model';
 export class StringReplaceUnderscoreTypeConverter implements TypeConverter {
   public regExpStringRemoveUnderscore = /_/g;
 
-  getTypeString(): string {
+  public getTypeString(): string {
     return 'stringReplaceUnderscore';
   }
 
-  convert(value: any, definition: any): string {
+  public convert(value: any, definition: any): string {
     return value.replace(this.regExpStringRemoveUnderscore, ' ');
   }
 }

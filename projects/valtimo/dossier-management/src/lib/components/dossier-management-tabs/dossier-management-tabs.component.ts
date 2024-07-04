@@ -19,19 +19,14 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  signal,
   TemplateRef,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
-import {
-  ActionItem,
-  ColumnConfig,
-  MoveRowDirection,
-  MoveRowEvent,
-  ViewType,
-} from '@valtimo/components';
+import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
 import {ApiTabItem, ApiTabType} from '@valtimo/dossier';
 import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
@@ -65,6 +60,11 @@ export class DossierManagementTabsComponent implements AfterViewInit {
 
   public actionItems: ActionItem[] = [
     {
+      label: 'interface.edit',
+      callback: this.openEditModal.bind(this),
+      type: 'normal',
+    },
+    {
       label: 'interface.delete',
       callback: this.openDeleteConfirmationModal.bind(this),
       type: 'danger',
@@ -80,16 +80,16 @@ export class DossierManagementTabsComponent implements AfterViewInit {
   public readonly openAddModal$ = new BehaviorSubject<boolean>(false);
   public readonly lastItemIndex$ = new BehaviorSubject<number>(-1);
 
-  private _tabs: ApiTabItem[];
-  public readonly tabs$ = this.tabManagementService.tabs$.pipe(
-    tap((tabs: ApiTabItem[]) => {
-      this._tabs = tabs;
+  public readonly tabs$: Observable<ApiTabItem[]> = this.tabManagementService.tabs$.pipe(
+    tap(tabs => {
       this.tabService.configuredContentKeys = tabs.map((tab: ApiTabItem) => tab.contentKey);
       this.tabService.configuredTabKeys = tabs.map((tab: ApiTabItem) => tab.key);
       this.lastItemIndex$.next(tabs.length - 1);
+      this.dragAndDropDisabled.set(false);
     })
   );
   public readonly tab$ = new BehaviorSubject<ApiTabItem | null>(null);
+  public readonly dragAndDropDisabled = signal(false);
 
   constructor(
     private readonly cd: ChangeDetectorRef,
@@ -125,6 +125,11 @@ export class DossierManagementTabsComponent implements AfterViewInit {
         key: '',
         label: 'dossierManagement.tabManagement.columns.content',
       },
+      {
+        viewType: ViewType.BOOLEAN,
+        key: 'showTasks',
+        label: 'dossierManagement.tabManagement.columns.showTasks',
+      },
     ]);
 
     this.cd.detectChanges();
@@ -134,19 +139,13 @@ export class DossierManagementTabsComponent implements AfterViewInit {
     return this.translateService.instant(key) !== key;
   }
 
-  public onMoveRowClick(event: MoveRowEvent): void {
-    const {direction, index} = event;
-
-    const orderedTabs: ApiTabItem[] =
-      direction === MoveRowDirection.UP
-        ? this.swapTabs(this._tabs, index - 1, index)
-        : this.swapTabs(this._tabs, index, index + 1);
-
-    this.tabManagementService.dispatchAction(this.tabManagementService.editTabsOrder(orderedTabs));
-  }
-
   public openAddTabModal(): void {
     this.openAddModal$.next(true);
+  }
+
+  public openEditModal(tab: ApiTabItem): void {
+    this.tab$.next(tab);
+    this.openEditModal$.next(true);
   }
 
   public onRowClicked(tab: ApiTabItem): void {
@@ -189,6 +188,16 @@ export class DossierManagementTabsComponent implements AfterViewInit {
     this.deleteTab(tabKey);
   }
 
+  public onItemsReorderedEvent(reorderedItems: ApiTabItem[]): void {
+    if (!reorderedItems) return;
+
+    this.dragAndDropDisabled.set(true);
+
+    this.tabManagementService.dispatchAction(
+      this.tabManagementService.editTabsOrder(reorderedItems)
+    );
+  }
+
   private addTab(tab: Partial<ApiTabItem>): void {
     this.tabManagementService.dispatchAction(this.tabManagementService.addTab(tab));
   }
@@ -199,12 +208,5 @@ export class DossierManagementTabsComponent implements AfterViewInit {
 
   private editTab(tab: ApiTabItem): void {
     this.tabManagementService.dispatchAction(this.tabManagementService.editTab(tab, tab.key));
-  }
-
-  private swapTabs(tabItems: ApiTabItem[], index1: number, index2: number): ApiTabItem[] {
-    const temp = [...tabItems];
-    temp[index1] = temp.splice(index2, 1, temp[index1])[0];
-
-    return temp;
   }
 }

@@ -15,18 +15,33 @@
  */
 
 import {CaseWidgetDisplayType} from '.';
+import {Type} from '@angular/core';
+import {
+  WidgetCollectionContent,
+  WidgetContentProperties,
+  WidgetCustomContent,
+  WidgetFieldsContent,
+  WidgetTableContent,
+} from './case-widget-content.model';
 
 enum CaseWidgetType {
   FIELDS = 'fields',
+  TABLE = 'table',
+  CUSTOM = 'custom',
+  COLLECTION = 'collection',
+  FORMIO = 'formio',
 }
 
 type CaseWidgetWidth = 1 | 2 | 3 | 4;
+type CollectionFieldWidth = 'half' | 'full';
 
 interface BasicCaseWidget {
+  type: CaseWidgetType;
   title: string;
   width: CaseWidgetWidth;
   highContrast: boolean;
   key: string;
+  properties: WidgetContentProperties;
 }
 
 interface FieldsCaseWidgetValue {
@@ -38,21 +53,50 @@ interface FieldsCaseWidgetValue {
 
 interface FieldsCaseWidget extends BasicCaseWidget {
   type: CaseWidgetType.FIELDS;
+  properties: WidgetFieldsContent;
+}
+
+interface CollectionCaseWidget extends BasicCaseWidget {
+  type: CaseWidgetType.COLLECTION;
+  properties: WidgetCollectionContent;
+}
+
+interface TableCaseWidget extends BasicCaseWidget {
+  type: CaseWidgetType.TABLE;
+  properties: WidgetTableContent;
+}
+
+interface CustomCaseWidget extends BasicCaseWidget {
+  type: CaseWidgetType.CUSTOM;
+  properties: WidgetCustomContent;
+}
+
+interface FormioCaseWidget extends BasicCaseWidget {
+  type: CaseWidgetType.FORMIO;
   properties: {
-    columns: FieldsCaseWidgetValue[][];
+    formDefinitionName: string;
   };
 }
 
-type CaseWidget = FieldsCaseWidget;
+type CaseWidget =
+  | FieldsCaseWidget
+  | CollectionCaseWidget
+  | CustomCaseWidget
+  | TableCaseWidget
+  | FormioCaseWidget;
 
-interface CaseWidgetWithUuid extends CaseWidget {
+type CaseWidgetWithUuid = CaseWidget & {
   uuid: string;
-}
+};
+
+type FormioCaseWidgetWidgetWithUuid = FormioCaseWidget & {
+  uuid: string;
+};
 
 interface CaseWidgetsRes {
   caseDefinitionName: string;
   key: string;
-  widgets: CaseWidget[];
+  widgets: BasicCaseWidget[];
 }
 
 interface CaseWidgetWidthsPx {
@@ -76,16 +120,27 @@ interface CaseWidgetConfigurationBin {
   height: number;
 }
 
+interface CaseWidgetPackResultItem {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  item: CaseWidgetConfigurationBin;
+}
+
 interface CaseWidgetPackResult {
   height: number;
   width: number;
-  items: Array<{
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-    item: CaseWidgetConfigurationBin;
-  }>;
+  items: CaseWidgetPackResultItem[];
+}
+
+interface MaxRectsResult extends CaseWidgetConfigurationBin {
+  x: number;
+  y: number;
+}
+
+interface CaseWidgetPackResultItemsByRow {
+  [rowY: string]: CaseWidgetPackResultItem[];
 }
 
 interface CaseWidgetXY {
@@ -93,15 +148,32 @@ interface CaseWidgetXY {
   y: number;
 }
 
+interface CustomCaseWidgetConfig {
+  [componentKey: string]: Type<any>;
+}
+
 export {
-  FieldsCaseWidget,
+  BasicCaseWidget,
   CaseWidget,
-  CaseWidgetsRes,
-  CaseWidgetWithUuid,
-  CaseWidgetWidthsPx,
+  CaseWidgetConfigurationBin,
   CaseWidgetContentHeightsPx,
   CaseWidgetContentHeightsPxWithContainerWidth,
-  CaseWidgetConfigurationBin,
   CaseWidgetPackResult,
+  CaseWidgetsRes,
+  CaseWidgetType,
+  CaseWidgetWidth,
+  CaseWidgetWidthsPx,
+  CaseWidgetWithUuid,
   CaseWidgetXY,
+  CollectionFieldWidth,
+  FieldsCaseWidget,
+  FieldsCaseWidgetValue,
+  CollectionCaseWidget,
+  CustomCaseWidgetConfig,
+  CustomCaseWidget,
+  TableCaseWidget,
+  CaseWidgetPackResultItem,
+  CaseWidgetPackResultItemsByRow,
+  FormioCaseWidgetWidgetWithUuid,
+  MaxRectsResult,
 };

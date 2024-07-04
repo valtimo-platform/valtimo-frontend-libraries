@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
-import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {CaseWidgetsRes} from '../models';
+import {InterceptorSkip} from '@valtimo/security';
 
 @Injectable({
   providedIn: 'root',
@@ -31,18 +31,25 @@ export class DossierWidgetsApiService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public getWidgetTabConfiguration(
-    caseDefinitionName: string,
-    tabKey: string
-  ): Observable<CaseWidgetsRes> {
+  public getWidgetTabConfiguration(documentId: string, tabKey: string): Observable<CaseWidgetsRes> {
     return this.httpClient.get<CaseWidgetsRes>(
-      this.getApiUrl(`v1/case-definition/${caseDefinitionName}/widget-tab/${tabKey}`)
+      this.getApiUrl(`v1/document/${documentId}/widget-tab/${tabKey}`)
     );
   }
 
-  public getWidgetData(documentId: string, tabKey: string, widgetKey): Observable<object> {
+  public getWidgetData(
+    documentId: string,
+    tabKey: string,
+    widgetKey: string,
+    queryParams?: string
+  ): Observable<object> {
     return this.httpClient.get<object>(
-      this.getApiUrl(`v1/document/${documentId}/widget-tab/${tabKey}/widget/${widgetKey}`)
+      this.getApiUrl(
+        !queryParams
+          ? `v1/document/${documentId}/widget-tab/${tabKey}/widget/${widgetKey}`
+          : `v1/document/${documentId}/widget-tab/${tabKey}/widget/${widgetKey}?${queryParams}`
+      ),
+      {headers: new HttpHeaders().set(InterceptorSkip, '404')}
     );
   }
 }

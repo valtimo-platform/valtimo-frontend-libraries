@@ -16,3 +16,4 @@
 
 export * from './versions';
 export * from './case-management-tab-token';
+export * from './form-view-model-token';
