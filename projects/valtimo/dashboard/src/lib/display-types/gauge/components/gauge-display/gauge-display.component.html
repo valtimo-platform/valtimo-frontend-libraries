@@ -24,9 +24,10 @@
 
 <section class="valtimo-gauge-widget__content">
   <ibm-gauge-chart
+    *ngIf="chartData$ | async as chartData"
     type="gauge"
     class="n-chart"
-    [data]="toGaugeData()"
+    [data]="chartData"
     [options]="gaugeChartOptions$ | async"
   ></ibm-gauge-chart>
 </section>

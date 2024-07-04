@@ -17,8 +17,8 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DisplayComponent} from '../../../../models';
 import {DonutData, DonutDisplayTypeProperties} from '../../models';
 import {type ChartTabularData, DonutChartOptions} from '@carbon/charts';
-import {CdsThemeService} from "@valtimo/components"
-import {map, Observable} from "rxjs";
+import {CdsThemeService} from '@valtimo/components';
+import {BehaviorSubject, filter, map, Observable} from 'rxjs';
 
 @Component({
   selector: 'valtimo-donut-display',
@@ -27,46 +27,53 @@ import {map, Observable} from "rxjs";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DonutDisplayComponent implements DisplayComponent {
-  @Input() displayTypeKey: string;
-  @Input() data: DonutData;
-  @Input() displayTypeProperties: DonutDisplayTypeProperties;
+  @Input() public readonly displayTypeKey: string;
+  @Input() public set data(value: DonutData) {
+    if (!value) return;
+    this._data$.next(value);
+  }
+  @Input() public readonly displayTypeProperties: DonutDisplayTypeProperties;
 
-  readonly donutChartOptions$: Observable<DonutChartOptions> = this.themeService.currentTheme$.pipe(
-    map(currentTheme => ({
-      resizable: true,
-      toolbar: {enabled: false},
-      height: '300px',
-      theme: currentTheme,
-      donut: {
-        alignment: 'center',
-        center: {
-          label: this.displayTypeProperties.label
-        }
-      },
-      pie: {
-        labels: {
-          enabled: false
-        }
-      },
-      legend: {
-        truncation: {
-          numCharacter: 28
-        }
-      }
-    })),
+  private readonly _data$ = new BehaviorSubject<DonutData | null>(null);
+
+  public readonly donutData$: Observable<ChartTabularData> = this._data$.pipe(
+    filter(data => !!data),
+    map(data =>
+      data?.values.map(
+        dataValue =>
+          ({
+            group: dataValue.label,
+            value: dataValue.value,
+          }) || []
+      )
+    )
   );
 
-  constructor(private readonly themeService: CdsThemeService) {
-  }
+  public readonly donutChartOptions$: Observable<DonutChartOptions> =
+    this.themeService.currentTheme$.pipe(
+      map(currentTheme => ({
+        resizable: true,
+        toolbar: {enabled: false},
+        height: '300px',
+        theme: currentTheme,
+        donut: {
+          alignment: 'center',
+          center: {
+            label: this.displayTypeProperties.label,
+          },
+        },
+        pie: {
+          labels: {
+            enabled: false,
+          },
+        },
+        legend: {
+          truncation: {
+            numCharacter: 28,
+          },
+        },
+      }))
+    );
 
-  public toDonutData(): ChartTabularData {
-    let formattedValues = [];
-    this.data.values.forEach(value => {
-      formattedValues.push({
-        group: value.label,
-        value: value.value
-      })
-    })
-    return formattedValues;
-  }
+  constructor(private readonly themeService: CdsThemeService) {}
 }

@@ -17,8 +17,8 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DisplayComponent} from '../../../../models';
 import {GaugeData, GaugeDisplayTypeProperties} from '../../models';
 import {type ChartTabularData, GaugeChartOptions} from '@carbon/charts';
-import {map, Observable} from "rxjs";
-import {CdsThemeService} from "@valtimo/components"
+import {BehaviorSubject, filter, map, Observable} from 'rxjs';
+import {CdsThemeService} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-gauge-display',
@@ -27,56 +27,61 @@ import {CdsThemeService} from "@valtimo/components"
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GaugeDisplayComponent implements DisplayComponent {
-  @Input() displayTypeKey: string;
-  @Input() data: GaugeData;
-  @Input() displayTypeProperties: GaugeDisplayTypeProperties;
-
-  private DELTA: number = -1.0;
-
-  readonly gaugeChartOptions$: Observable<GaugeChartOptions> = this.themeService.currentTheme$.pipe(
-    map(currentTheme => ({
-      resizable: true,
-      toolbar: {enabled: false},
-      height: '110px',
-      theme: currentTheme == 'g10' ? 'white' : 'g100',
-      gauge: {
-        alignment: 'center',
-        numberFormatter: value => this.numberFormatter(this, value),
-        deltaArrow: {
-          enabled: false,
-        },
-        showPercentageSymbol: false,
-        type: 'semi',
-      },
-    })),
-  );
-
-  constructor(private readonly themeService: CdsThemeService) {
+  @Input() public readonly displayTypeKey: string;
+  @Input() public set data(value: GaugeData) {
+    if (!value) return;
+    this._data$.next(value);
   }
+  @Input() public readonly displayTypeProperties: GaugeDisplayTypeProperties;
 
-  public toGaugeData(): ChartTabularData {
-    return [
+  private readonly _DELTA: number = -1.0;
+
+  private readonly _data$ = new BehaviorSubject<GaugeData | null>(null);
+
+  public readonly chartData$: Observable<ChartTabularData> = this._data$.pipe(
+    filter(data => !!data),
+    map(data => [
       {
         group: 'value',
-        value: this.calculatePercentage(this.data.value, this.data.total),
+        value: this.calculatePercentage(data?.value || 0, data?.total || 0),
       },
       {
         group: 'delta',
-        value: this.DELTA,
+        value: this._DELTA,
       },
-    ];
-  }
+    ])
+  );
 
-  public calculatePercentage(value: number, total?: number): number {
+  public readonly gaugeChartOptions$: Observable<GaugeChartOptions> =
+    this.themeService.currentTheme$.pipe(
+      map(currentTheme => ({
+        resizable: true,
+        toolbar: {enabled: false},
+        height: '110px',
+        theme: currentTheme == 'g10' ? 'white' : 'g100',
+        gauge: {
+          alignment: 'center',
+          numberFormatter: value => this.numberFormatter(this, value),
+          deltaArrow: {
+            enabled: false,
+          },
+          showPercentageSymbol: false,
+          type: 'semi',
+        },
+      }))
+    );
+
+  constructor(private readonly themeService: CdsThemeService) {}
+
+  private calculatePercentage(value: number, total?: number): number {
     return (value * 100.0) / (total || 100.0);
   }
 
-  public numberFormatter(scope: GaugeDisplayComponent, value: number): string {
-    console.log(value);
-    if (value == scope.DELTA) {
-      return scope.data.total + ' ' + scope.displayTypeProperties.label;
+  private numberFormatter(scope: GaugeDisplayComponent, value: number): string {
+    if (value == scope._DELTA) {
+      return (scope.data?.total || 0) + ' ' + scope.displayTypeProperties.label;
     } else {
-      return Math.round(value * scope.data.total) / 100.0 + '';
+      return Math.round(value * (scope.data?.total || 0)) / 100.0 + '';
     }
   }
 }

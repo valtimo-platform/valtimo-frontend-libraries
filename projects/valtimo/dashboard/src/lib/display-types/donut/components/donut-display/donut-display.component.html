@@ -24,9 +24,10 @@
 
 <section class="valtimo-donut-widget__content">
   <ibm-donut-chart
+    *ngIf="donutData$ | async as donutData"
     type="donut"
     class="n-chart"
-    [data]="toDonutData()"
+    [data]="donutData"
     [options]="donutChartOptions$ | async"
   ></ibm-donut-chart>
 </section>
