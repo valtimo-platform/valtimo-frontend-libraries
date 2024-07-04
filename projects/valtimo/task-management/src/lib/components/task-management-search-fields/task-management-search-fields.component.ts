@@ -90,9 +90,10 @@ export class TaskManagementSearchFieldsComponent {
     ])
   );
 
-  public readonly fieldModalOpen$ = new BehaviorSubject<boolean>(false);
   public readonly deleteModalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly fieldModalOpen$ = new BehaviorSubject<boolean>(false);
   public readonly keyToDelete$ = new BehaviorSubject<string | null>(null);
+  public readonly prefillData$ = new BehaviorSubject<TaskListSearchField | null>(null);
 
   public readonly ACTION_ITEMS: ActionItem[] = [
     {
@@ -107,15 +108,13 @@ export class TaskManagementSearchFieldsComponent {
     },
   ];
 
-  public prefillData$ = new BehaviorSubject<any | null>(null);
-
   constructor(
     private readonly route: ActivatedRoute,
     private readonly searchFieldsService: TaskManagementSearchFieldsService,
     private readonly trasnlateService: TranslateService
   ) {}
 
-  public editField(item: CarbonListItem): void {
+  public editField(item: TaskListSearchField): void {
     this.prefillData$.next(item);
     this.fieldModalOpen$.next(true);
   }
