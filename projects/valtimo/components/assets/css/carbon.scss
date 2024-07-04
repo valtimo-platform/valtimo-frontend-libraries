@@ -16,6 +16,7 @@
 
 @use '@carbon/styles/scss/themes';
 @use '@carbon/colors';
+@use '@carbon/charts-angular/styles.min';
 
 $lightThemeVariables: (
   'white': themes.$white,
