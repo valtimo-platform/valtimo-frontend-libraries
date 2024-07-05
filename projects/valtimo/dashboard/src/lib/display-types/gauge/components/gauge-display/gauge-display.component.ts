@@ -17,8 +17,9 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DisplayComponent} from '../../../../models';
 import {GaugeData, GaugeDisplayTypeProperties} from '../../models';
 import {type ChartTabularData, GaugeChartOptions} from '@carbon/charts';
-import {BehaviorSubject, filter, map, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
 import {CdsThemeService} from '@valtimo/components';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-gauge-display',
@@ -52,36 +53,43 @@ export class GaugeDisplayComponent implements DisplayComponent {
     ])
   );
 
-  public readonly gaugeChartOptions$: Observable<GaugeChartOptions> =
-    this.themeService.currentTheme$.pipe(
-      map(currentTheme => ({
-        resizable: true,
-        toolbar: {enabled: false},
-        height: '110px',
-        theme: currentTheme == 'g10' ? 'white' : 'g100',
-        gauge: {
-          alignment: 'center',
-          numberFormatter: value => this.numberFormatter(this, value),
-          deltaArrow: {
-            enabled: false,
-          },
-          showPercentageSymbol: false,
-          type: 'semi',
+  public readonly gaugeChartOptions$: Observable<GaugeChartOptions> = combineLatest([
+    this.themeService.currentTheme$,
+    this.translateService.stream('key'),
+  ]).pipe(
+    map(([currentTheme]) => ({
+      resizable: true,
+      toolbar: {enabled: false},
+      height: '110px',
+      theme: currentTheme == 'g10' ? 'white' : 'g100',
+      gauge: {
+        alignment: 'center',
+        numberFormatter: value => this.numberFormatter(this, value),
+        deltaArrow: {
+          enabled: false,
         },
-      }))
-    );
+        showPercentageSymbol: false,
+        type: 'semi',
+      },
+    }))
+  );
 
-  constructor(private readonly themeService: CdsThemeService) {}
+  constructor(
+    private readonly themeService: CdsThemeService,
+    private readonly translateService: TranslateService
+  ) {}
 
   private calculatePercentage(value: number, total?: number): number {
     return (value * 100.0) / (total || 100.0);
   }
 
   private numberFormatter(scope: GaugeDisplayComponent, value: number): string {
+    const scopeData = scope._data$.getValue();
+
     if (value == scope._DELTA) {
-      return (scope.data?.total || 0) + ' ' + scope.displayTypeProperties.label;
+      return `${this.translateService.instant('dashboard.of')} ${scopeData?.total || 0} ${scope.displayTypeProperties.label} `;
     } else {
-      return Math.round(value * (scope.data?.total || 0)) / 100.0 + '';
+      return Math.round(value * (scopeData?.total || 0)) / 100.0 + '';
     }
   }
 }
