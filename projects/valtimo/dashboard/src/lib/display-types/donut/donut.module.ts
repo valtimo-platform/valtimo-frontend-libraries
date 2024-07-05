@@ -22,7 +22,9 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {WidgetTranslatePipeModule} from '../../pipes';
 import {CheckboxModule, InputModule} from 'carbon-components-angular';
 import {DonutConfigurationComponent, DonutDisplayComponent} from './components';
-import {ChartsModule} from '@carbon/charts-angular'
+import {ChartsModule} from '@carbon/charts-angular';
+import {CarbonListModule} from '@valtimo/components';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [DonutDisplayComponent, DonutConfigurationComponent],
@@ -34,6 +36,8 @@ import {ChartsModule} from '@carbon/charts-angular'
     CheckboxModule,
     CommonModule,
     ChartsModule,
+    CarbonListModule,
+    TranslateModule,
   ],
   exports: [DonutDisplayComponent],
   providers: [{provide: DISPLAY_TYPE_TOKEN, useValue: donutSpecification, multi: true}],

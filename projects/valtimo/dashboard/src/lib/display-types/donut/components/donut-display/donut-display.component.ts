@@ -38,14 +38,12 @@ export class DonutDisplayComponent implements DisplayComponent {
 
   public readonly donutData$: Observable<ChartTabularData> = this._data$.pipe(
     filter(data => !!data),
-    map(data =>
-      data?.values.map(
-        dataValue =>
-          ({
-            group: dataValue.label,
-            value: dataValue.value,
-          }) || []
-      )
+    map(
+      data =>
+        data?.values.map(dataValue => ({
+          group: dataValue.label,
+          value: dataValue.value,
+        })) || []
     )
   );
 

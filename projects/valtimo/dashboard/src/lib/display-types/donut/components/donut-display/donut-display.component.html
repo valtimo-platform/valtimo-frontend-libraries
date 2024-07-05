@@ -23,11 +23,20 @@
 </section>
 
 <section class="valtimo-donut-widget__content">
-  <ibm-donut-chart
-    *ngIf="donutData$ | async as donutData"
-    type="donut"
-    class="n-chart"
-    [data]="donutData"
-    [options]="donutChartOptions$ | async"
-  ></ibm-donut-chart>
+  <ng-container *ngIf="donutData$ | async as donutData">
+    @if (donutData.length > 0) {
+      <ibm-donut-chart
+        type="donut"
+        class="n-chart"
+        [data]="donutData"
+        [options]="donutChartOptions$ | async"
+      ></ibm-donut-chart>
+    } @else {
+      <valtimo-no-results
+        [collapseVertically]="true"
+        [description]="'dossier.widgets.noData' | translate"
+        [smallPadding]="true"
+      ></valtimo-no-results>
+    }
+  </ng-container>
 </section>
