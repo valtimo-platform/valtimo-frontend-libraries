@@ -33,26 +33,48 @@
     </cds-dropdown>
   </div>
 
-  <div class="form__element conditions-multi-input">
-    <cds-label
-      [helperText]="'conditionsHelperText' | widgetTranslate: dataSourceKey | async"
-      class="conditions-label"
-      >{{ 'conditions' | widgetTranslate: dataSourceKey | async }}</cds-label
+  <cds-label
+    [helperText]="'conditionsHelperText' | widgetTranslate: dataSourceKey | async"
+    class="conditions-label"
+    >{{ 'conditions' | widgetTranslate: dataSourceKey | async }}</cds-label
+  >
+
+  <div
+    class="form__element conditions-multi-input"
+    *ngFor="let queryItem of queryItemsValue$ | async; let i = index"
+  >
+    <v-input
+      [title]="'test'"
+      [margin]="true"
+      [defaultValue]="queryItem?.label"
+      [disabled]="formDisabled"
+      [required]="true"
+      [tooltip]="'test'"
+      [fullWidth]="true"
+      (valueChange)="labelValueChange(i, $event)"
     >
+    </v-input>
+
     <valtimo-carbon-multi-input
+      [disabled]="formDisabled"
       [addRowText]="'addCondition' | widgetTranslate: dataSourceKey | async"
-      [defaultValues]="defaultConditionValues$ | async"
+      [defaultValues]="queryItem?.queryConditions"
       [dropdownColumnTitle]="'operator' | widgetTranslate: dataSourceKey | async"
       [dropdownItems]="operatorItems$ | async"
       [fullWidth]="true"
-      [initialAmountOfRows]="0"
+      [initialAmountOfRows]="1"
       [keyColumnTitle]="'path' | widgetTranslate: dataSourceKey | async"
-      [minimumAmountOfRows]="0"
+      [minimumAmountOfRows]="1"
       [valueColumnTitle]="'value' | widgetTranslate: dataSourceKey | async"
       type="keyDropdownValue"
-      (allValuesValidEvent)="onAllConditionsValid($event)"
-      (valueChange)="conditionsValueChange($event)"
+      (valueChange)="conditionsValueChange(i, $event)"
       carbonTheme="white"
     ></valtimo-carbon-multi-input>
   </div>
+
+  <button cdsButton="primary" size="sm" [disabled]="formDisabled" (click)="addQueryItem()">
+    {{ 'Aantal toevoegen' }}
+
+    <svg class="cds--btn__icon" cdsIcon="download" size="16"></svg>
+  </button>
 </form>

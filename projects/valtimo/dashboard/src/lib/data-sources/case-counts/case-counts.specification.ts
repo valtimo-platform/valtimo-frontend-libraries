@@ -36,7 +36,7 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       value: 'Wert',
       conditions: 'Bedingungen',
       conditionsHelperText:
-        "Geben Sie optionale Bedingungen zum Abrufen der Anzahl der Fälle für den ausgewählten Falltyp an. Zum Beispiel: 'case:createdBy', 'Gleich', 'test@test.com'.",
+        "Geben Sie für jede Menge, die angezeigt werden soll, eine oder mehrere Bedingungen an. Zum Beispiel: 'case:createdBy', 'Gleich', 'test@test.com'.",
       addCondition: 'Bedingung hinzufügen',
     },
     en: {
@@ -54,7 +54,7 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       value: 'Value',
       conditions: 'Conditions',
       conditionsHelperText:
-        "Specify optional conditions for retrieving the number of cases for the selected case type. For example: 'case:createdBy', 'Equal to', 'test@test.com'.",
+        "Specify one or more conditions for each quantity that should be displayed. For example: 'case:createdBy', 'Equal to', 'test@test.com'.",
       addCondition: 'Add condition',
     },
     nl: {
@@ -70,9 +70,9 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       path: 'Pad',
       operator: 'Operator',
       value: 'Waarde',
-      conditions: 'Condities',
+      conditions: 'Aantallen',
       conditionsHelperText:
-        "Geef optionele condities op voor het ophalen van het aantal zaken voor het geselecteerde zaaktype. Bijvoorbeeld: 'case:createdBy', 'Gelijk aan', 'test@test.com'.",
+        "Geef per aantal dat getoond moet worden een of meerdere condities op. Bijvoorbeeld: 'case:createdBy', 'Gelijk aan', 'test@test.com'.",
       addCondition: 'Conditie toevoegen',
     },
   },

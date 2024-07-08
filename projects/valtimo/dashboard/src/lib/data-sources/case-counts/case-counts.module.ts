@@ -20,8 +20,8 @@ import {DATA_SOURCE_TOKEN} from '../../constants';
 import {CaseCountsConfigurationComponent} from './components';
 import {ReactiveFormsModule} from '@angular/forms';
 import {WidgetTranslatePipeModule} from '../../pipes';
-import {DropdownModule, InputModule} from 'carbon-components-angular';
-import {CarbonMultiInputModule} from '@valtimo/components';
+import {ButtonModule, DropdownModule} from 'carbon-components-angular';
+import {CarbonMultiInputModule, InputModule} from '@valtimo/components';
 import {caseCountsDataSourceSpecification} from './case-counts.specification';
 
 @NgModule({
@@ -33,6 +33,8 @@ import {caseCountsDataSourceSpecification} from './case-counts.specification';
     InputModule,
     DropdownModule,
     CarbonMultiInputModule,
+    InputModule,
+    ButtonModule,
   ],
   exports: [CaseCountsConfigurationComponent],
   providers: [

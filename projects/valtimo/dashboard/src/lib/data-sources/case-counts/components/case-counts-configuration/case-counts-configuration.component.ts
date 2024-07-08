@@ -25,13 +25,20 @@ import {
 } from '@angular/core';
 import {ConfigurationOutput, DataSourceConfigurationComponent, Operator} from '../../../../models';
 import {BehaviorSubject, combineLatest, map, Observable, startWith, Subscription} from 'rxjs';
-import {FormBuilder, Validators} from '@angular/forms';
-import {CaseCountsConfiguration} from '../../models';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormBuilder,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+import {CaseCountsConfiguration, CaseCountsQueryItem, CaseCountsQueryItemForm} from '../../models';
 import {DocumentService} from '@valtimo/document';
 import {ListItem} from 'carbon-components-angular';
-import {ListItemWithId, MultiInputKeyValue, MultiInputValues} from '@valtimo/components';
+import {ListItemWithId, MultiInputValues} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {WidgetTranslationService} from '../../../../services';
+import {isEqual} from 'lodash';
 
 @Component({
   templateUrl: './case-counts-configuration.component.html',
@@ -45,7 +52,7 @@ export class CaseCountsConfigurationComponent
 
   public readonly form = this.fb.group({
     documentDefinition: this.fb.control(null, [Validators.required]),
-    queryConditions: this.fb.control(null),
+    queryItems: this.fb.control([], [this.queryItemsValidator]),
   });
 
   @Input() public set disabled(disabledValue: boolean) {
@@ -55,6 +62,38 @@ export class CaseCountsConfigurationComponent
       this.form.enable();
     }
   }
+
+  public get queryItems(): AbstractControl<CaseCountsQueryItemForm[]> {
+    return this.form.get('queryItems');
+  }
+
+  public get queryItemsValue$(): Observable<CaseCountsQueryItemForm[]> {
+    return this.queryItems.valueChanges.pipe(startWith(this.queryItems.value || []));
+  }
+
+  public get documentDefinition() {
+    return this.form.get('documentDefinition');
+  }
+
+  public get formDisabled(): boolean {
+    return this.form.disabled;
+  }
+
+  @Input() set prefillConfiguration(configurationValue: CaseCountsConfiguration) {
+    if (!configurationValue) return;
+
+    this.documentDefinitionSelected({
+      item: {
+        content: configurationValue.documentDefinition,
+      },
+    } as any);
+
+    this.queryItems.patchValue(this.queryItemsToMultiInputValues(configurationValue.queryItems));
+  }
+
+  @Output() public configurationEvent = new EventEmitter<
+    ConfigurationOutput<CaseCountsConfiguration>
+  >();
 
   private readonly _selectedDocumentDefinition$ = new BehaviorSubject<string>('');
 
@@ -91,36 +130,6 @@ export class CaseCountsConfigurationComponent
       )
     );
 
-  public readonly defaultConditionValues$ = new BehaviorSubject<MultiInputValues | null>(null);
-  public readonly allConditionsValid$ = new BehaviorSubject<boolean>(true);
-
-  public get documentDefinition() {
-    return this.form.get('documentDefinition');
-  }
-
-  public get queryConditions() {
-    return this.form.get('queryConditions');
-  }
-
-  @Input() set prefillConfiguration(configurationValue: CaseCountsConfiguration) {
-    if (configurationValue) {
-      this.documentDefinitionSelected({
-        item: {
-          content: configurationValue.documentDefinition,
-        },
-      } as any);
-      this.defaultConditionValues$.next(
-        configurationValue.queryConditions.map(condition => ({
-          key: condition.queryPath,
-          dropdown: condition.queryOperator,
-          value: condition.queryValue,
-        }))
-      );
-    }
-  }
-
-  @Output() public configurationEvent = new EventEmitter<ConfigurationOutput>();
-
   private _subscriptions = new Subscription();
 
   constructor(
@@ -144,38 +153,105 @@ export class CaseCountsConfigurationComponent
     }
 
     this._selectedDocumentDefinition$.next(documentDefinitionItem?.item?.content);
-    this.documentDefinition.setValue(documentDefinitionItem?.item?.content);
   }
 
-  public conditionsValueChange(values: Array<MultiInputKeyValue>): void {
-    if (values.length === 0) {
-      this.queryConditions.setValue(null);
-    } else {
-      this.queryConditions.setValue(
-        values.map(value => ({
-          queryPath: value.key,
-          queryOperator: value.dropdown,
-          queryValue: value.value,
-        }))
-      );
-    }
+  public conditionsValueChange(index: number, values: MultiInputValues): void {
+    const currentQueryItemsValues = this.queryItems.value;
+
+    if (isEqual(currentQueryItemsValues[index].queryConditions, values)) return;
+
+    this.queryItems.patchValue(
+      currentQueryItemsValues.map((item, itemIndex) =>
+        itemIndex === index ? {...item, queryConditions: values} : item
+      )
+    );
   }
 
-  onAllConditionsValid(allConditionsValid: boolean): void {
-    this.allConditionsValid$.next(allConditionsValid);
+  public labelValueChange(index: number, value: string): void {
+    const currentQueryItemsValues = this.queryItems.value;
+
+    if (currentQueryItemsValues[index].label === value) return;
+
+    this.queryItems.patchValue(
+      currentQueryItemsValues.map((item, itemIndex) =>
+        itemIndex === index ? {...item, label: value} : item
+      )
+    );
+  }
+
+  public addQueryItem(): void {
+    const currentQueryItems = this.queryItems.value;
+    this.queryItems.patchValue([...currentQueryItems, {label: '', queryConditions: []}]);
   }
 
   private openFormSubscription(): void {
     this._subscriptions.add(
-      combineLatest([
-        this.form.valueChanges.pipe(startWith(this.form.value)),
-        this.allConditionsValid$,
-      ]).subscribe(([formValue, allConditionsValid]) => {
+      this.form.valueChanges.pipe(startWith(this.form.value)).subscribe(formValue => {
+        console.log('value', formValue);
+        console.log('valid', this.form.valid);
+
         this.configurationEvent.emit({
-          valid: this.form.valid && allConditionsValid,
-          data: formValue,
+          valid: this.form.valid,
+          data: {
+            ...formValue,
+            queryItems: this.multiInputValuesToQueryItems(formValue.queryItems),
+          } as CaseCountsConfiguration,
         });
       })
     );
+  }
+
+  private queryItemsToMultiInputValues(
+    queryItems: CaseCountsQueryItem[]
+  ): CaseCountsQueryItemForm[] {
+    return queryItems.map(queryItem => ({
+      ...queryItem,
+      queryConditions: queryItem.queryConditions.map(condition => ({
+        key: condition.queryPath,
+        dropdown: condition.queryOperator,
+        value: condition.queryValue,
+      })),
+    }));
+  }
+
+  private multiInputValuesToQueryItems(
+    multiInputValues: CaseCountsQueryItemForm[]
+  ): CaseCountsQueryItem[] {
+    return multiInputValues.map(queryItem => ({
+      ...queryItem,
+      queryConditions: queryItem.queryConditions.map(condition => ({
+        queryPath: condition.key,
+        queryOperator: condition.dropdown,
+        queryValue: condition.value,
+      })),
+    }));
+  }
+
+  private queryItemsValidator(): AsyncValidatorFn {
+    return (
+      control: AbstractControl<CaseCountsQueryItemForm[]>
+    ): Observable<ValidationErrors | null> =>
+      control.valueChanges.pipe(
+        map(queryItemsValues => {
+          const validQueryItems = queryItemsValues.filter(item => {
+            const validLabel = !!item.label;
+            const validConditions = item.queryConditions.filter(
+              condition => !!condition.value && !!condition.key && !!condition.dropdown
+            );
+
+            return (
+              validLabel &&
+              item.queryConditions.length > 0 &&
+              item.queryConditions.length === validConditions.length
+            );
+          });
+
+          return validQueryItems.length > 0 && validQueryItems.length === queryItemsValues.length
+            ? null
+            : {
+                invalidQueryItems: 'invalid',
+              };
+        })
+      );
   }
 }

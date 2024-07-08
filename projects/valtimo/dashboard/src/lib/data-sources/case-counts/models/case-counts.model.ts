@@ -15,10 +15,21 @@
  */
 
 import {QueryCondition} from '../../../models';
+import {MultiInputValues} from '@valtimo/components';
 
-interface CaseCountsConfiguration {
-  documentDefinition: string;
+interface CaseCountsQueryItem {
+  label: string;
   queryConditions: QueryCondition[];
 }
 
-export {CaseCountsConfiguration};
+interface CaseCountsConfiguration {
+  documentDefinition: string;
+  queryItems: CaseCountsQueryItem[];
+}
+
+interface CaseCountsQueryItemForm {
+  label: string;
+  queryConditions: MultiInputValues;
+}
+
+export {CaseCountsConfiguration, CaseCountsQueryItemForm, CaseCountsQueryItem};
