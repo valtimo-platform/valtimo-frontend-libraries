@@ -24,21 +24,30 @@ import {
   Output,
 } from '@angular/core';
 import {ConfigurationOutput, DataSourceConfigurationComponent, Operator} from '../../../../models';
-import {BehaviorSubject, combineLatest, map, Observable, startWith, Subscription} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  map,
+  Observable,
+  startWith,
+  Subscription,
+} from 'rxjs';
 import {
   AbstractControl,
-  AsyncValidatorFn,
   FormBuilder,
   ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import {CaseCountsConfiguration, CaseCountsQueryItem, CaseCountsQueryItemForm} from '../../models';
 import {DocumentService} from '@valtimo/document';
-import {ListItem} from 'carbon-components-angular';
+import {IconService, ListItem} from 'carbon-components-angular';
 import {ListItemWithId, MultiInputValues} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {WidgetTranslationService} from '../../../../services';
 import {isEqual} from 'lodash';
+import {Add16, TrashCan16} from '@carbon/icons';
 
 @Component({
   templateUrl: './case-counts-configuration.component.html',
@@ -50,9 +59,17 @@ export class CaseCountsConfigurationComponent
 {
   @Input() public dataSourceKey: string;
 
+  private readonly _EMPTY_QUERY_ITEM_VALUE: CaseCountsQueryItemForm = {
+    label: '',
+    queryConditions: [{key: '', value: '', dropdown: ''}],
+  };
+
   public readonly form = this.fb.group({
     documentDefinition: this.fb.control(null, [Validators.required]),
-    queryItems: this.fb.control([], [this.queryItemsValidator]),
+    queryItems: this.fb.control(
+      [this._EMPTY_QUERY_ITEM_VALUE, this._EMPTY_QUERY_ITEM_VALUE],
+      [this.queryItemsValidator()]
+    ),
   });
 
   @Input() public set disabled(disabledValue: boolean) {
@@ -71,6 +88,13 @@ export class CaseCountsConfigurationComponent
     return this.queryItems.valueChanges.pipe(startWith(this.queryItems.value || []));
   }
 
+  public get queryItemsList$(): Observable<null[]> {
+    return this.queryItemsValue$.pipe(
+      map(queryItemsValue => queryItemsValue.map(() => null)),
+      distinctUntilChanged((previous, current) => isEqual(previous, current))
+    );
+  }
+
   public get documentDefinition() {
     return this.form.get('documentDefinition');
   }
@@ -82,11 +106,18 @@ export class CaseCountsConfigurationComponent
   @Input() set prefillConfiguration(configurationValue: CaseCountsConfiguration) {
     if (!configurationValue) return;
 
+    console.log(
+      'prefill config',
+      configurationValue.queryItems,
+      this.queryItemsToMultiInputValues(configurationValue.queryItems)
+    );
+
     this.documentDefinitionSelected({
       item: {
         content: configurationValue.documentDefinition,
       },
     } as any);
+    this.documentDefinition.patchValue(configurationValue.documentDefinition);
 
     this.queryItems.patchValue(this.queryItemsToMultiInputValues(configurationValue.queryItems));
   }
@@ -136,8 +167,11 @@ export class CaseCountsConfigurationComponent
     private readonly fb: FormBuilder,
     private readonly documentService: DocumentService,
     private readonly translateService: TranslateService,
-    private readonly widgetTranslationService: WidgetTranslationService
-  ) {}
+    private readonly widgetTranslationService: WidgetTranslationService,
+    private readonly iconService: IconService
+  ) {
+    this.iconService.registerAll([Add16, TrashCan16]);
+  }
 
   public ngOnInit(): void {
     this.openFormSubscription();
@@ -181,14 +215,19 @@ export class CaseCountsConfigurationComponent
 
   public addQueryItem(): void {
     const currentQueryItems = this.queryItems.value;
-    this.queryItems.patchValue([...currentQueryItems, {label: '', queryConditions: []}]);
+    this.queryItems.patchValue([...currentQueryItems, this._EMPTY_QUERY_ITEM_VALUE]);
+  }
+
+  public deleteCount(i: number): void {
+    const currentQueryItems = this.queryItems.value;
+    this.queryItems.patchValue(currentQueryItems.filter((_, index) => index !== i));
   }
 
   private openFormSubscription(): void {
     this._subscriptions.add(
       this.form.valueChanges.pipe(startWith(this.form.value)).subscribe(formValue => {
         console.log('value', formValue);
-        console.log('valid', this.form.valid);
+        console.log('valid', `${this.form.valid}`);
 
         this.configurationEvent.emit({
           valid: this.form.valid,
@@ -227,31 +266,27 @@ export class CaseCountsConfigurationComponent
     }));
   }
 
-  private queryItemsValidator(): AsyncValidatorFn {
-    return (
-      control: AbstractControl<CaseCountsQueryItemForm[]>
-    ): Observable<ValidationErrors | null> =>
-      control.valueChanges.pipe(
-        map(queryItemsValues => {
-          const validQueryItems = queryItemsValues.filter(item => {
-            const validLabel = !!item.label;
-            const validConditions = item.queryConditions.filter(
-              condition => !!condition.value && !!condition.key && !!condition.dropdown
-            );
+  private queryItemsValidator(): ValidatorFn {
+    return (control: AbstractControl<CaseCountsQueryItemForm[]>): ValidationErrors | null => {
+      const queryItems = control.value;
+      const validQueryItems = queryItems.filter(item => {
+        const validLabel = !!item.label;
+        const validConditions = item.queryConditions.filter(
+          condition => !!condition.value && !!condition.key && !!condition.dropdown
+        );
 
-            return (
-              validLabel &&
-              item.queryConditions.length > 0 &&
-              item.queryConditions.length === validConditions.length
-            );
-          });
+        return (
+          validLabel &&
+          validConditions.length > 0 &&
+          item.queryConditions.length === validConditions.length
+        );
+      });
 
-          return validQueryItems.length > 0 && validQueryItems.length === queryItemsValues.length
-            ? null
-            : {
-                invalidQueryItems: 'invalid',
-              };
-        })
-      );
+      return validQueryItems.length > 1 && validQueryItems.length === queryItems.length
+        ? null
+        : {
+            invalidQueryItems: 'invalid',
+          };
+    };
   }
 }

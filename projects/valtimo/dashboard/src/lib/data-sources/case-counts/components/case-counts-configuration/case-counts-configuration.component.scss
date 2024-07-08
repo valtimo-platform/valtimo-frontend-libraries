@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
-::ng-deep .case-count-configuration-form {
+::ng-deep .case-counts-configuration-form {
   .conditions-label {
+    display: flex;
     margin-bottom: 16px;
   }
 
   .conditions-multi-input .cds--form__helper-text {
     font-style: italic;
+  }
+
+  .count-tile {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    &__input {
+      width: 100%;
+    }
   }
 }

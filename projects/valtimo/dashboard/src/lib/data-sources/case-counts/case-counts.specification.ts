@@ -36,8 +36,9 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       value: 'Wert',
       conditions: 'Bedingungen',
       conditionsHelperText:
-        "Geben Sie für jede Menge, die angezeigt werden soll, eine oder mehrere Bedingungen an. Zum Beispiel: 'case:createdBy', 'Gleich', 'test@test.com'.",
+        "Geben Sie für jede Menge, die angezeigt werden soll, eine oder mehrere Bedingungen an. Zum Beispiel: 'case:createdBy', 'Gleich', 'test@test.com'. Konfigurieren Sie mindestens zwei Zählwerte und mindestens eine Bedingung pro Zählwert.",
       addCondition: 'Bedingung hinzufügen',
+      countTitle: 'Zählwertetitel',
     },
     en: {
       title: 'Multiple case counts',
@@ -54,8 +55,9 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       value: 'Value',
       conditions: 'Conditions',
       conditionsHelperText:
-        "Specify one or more conditions for each quantity that should be displayed. For example: 'case:createdBy', 'Equal to', 'test@test.com'.",
+        "Specify one or more conditions for each count that should be displayed. For example: 'case:createdBy', 'Equal to', 'test@test.com'. Configure at least two counts and at least one condition per count.",
       addCondition: 'Add condition',
+      countTitle: 'Count title',
     },
     nl: {
       title: 'Meerdere dossieraantallen',
@@ -72,8 +74,9 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       value: 'Waarde',
       conditions: 'Aantallen',
       conditionsHelperText:
-        "Geef per aantal dat getoond moet worden een of meerdere condities op. Bijvoorbeeld: 'case:createdBy', 'Gelijk aan', 'test@test.com'.",
+        "Geef per aantal dat getoond moet worden een of meerdere condities op. Bijvoorbeeld: 'case:createdBy', 'Gelijk aan', 'test@test.com'. Configureer minimaal twee aantallen en minimaal één conditie per aantal.",
       addCondition: 'Conditie toevoegen',
+      countTitle: 'Aantaltitel',
     },
   },
 };
