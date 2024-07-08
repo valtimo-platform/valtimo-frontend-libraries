@@ -16,6 +16,7 @@
 
 import {DisplayTypeSpecification} from '../../models';
 import {MeterDisplayComponent} from './components/meter-display/meter-display.component';
+import {DATA_FEATURES} from '../../constants';
 
 export const meterSpecification: DisplayTypeSpecification = {
   displayTypeKey: 'meter',
@@ -33,5 +34,5 @@ export const meterSpecification: DisplayTypeSpecification = {
       title: 'Meter',
     },
   },
-  requiredDataFeatures: [],
+  requiredDataFeatures: [DATA_FEATURES.NUMBERS],
 };

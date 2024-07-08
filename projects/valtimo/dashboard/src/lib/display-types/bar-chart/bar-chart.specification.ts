@@ -16,6 +16,7 @@
 
 import {DisplayTypeSpecification} from '../../models';
 import {BarChartDisplayComponent} from './components/bar-chart-display/bar-chart-display.component';
+import {DATA_FEATURES} from '../../constants';
 
 export const barChartSpecification: DisplayTypeSpecification = {
   displayTypeKey: 'bar-chart',
@@ -33,5 +34,5 @@ export const barChartSpecification: DisplayTypeSpecification = {
       title: 'Balkendiagramm',
     },
   },
-  requiredDataFeatures: [],
+  requiredDataFeatures: [DATA_FEATURES.NUMBERS],
 };

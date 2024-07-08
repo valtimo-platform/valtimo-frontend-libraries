@@ -26,7 +26,7 @@ export const donutSpecification: DisplayTypeSpecification = {
   height: 2,
   translations: {
     nl: {
-      title: 'Graadmeter',
+      title: 'Donut-diagram',
       formTitle: 'Titel (vereist)',
       formTitleHelperText: 'De titel die wordt weergegeven in de widget',
       subtitle: 'Ondertitel',
@@ -35,7 +35,7 @@ export const donutSpecification: DisplayTypeSpecification = {
       labelHelperText: 'Het label dat wordt weergegeven in de widget',
     },
     en: {
-      title: 'Donut',
+      title: 'Donut chart',
       formTitle: 'Title (required)',
       formTitleHelperText: 'The title displayed in the widget',
       subtitle: 'Subtitle',
@@ -44,7 +44,7 @@ export const donutSpecification: DisplayTypeSpecification = {
       labelHelperText: 'The label displayed in the widget',
     },
     de: {
-      title: 'Messgerät',
+      title: 'Donut-Diagramm',
       formTitle: 'Titel (erforderlich)',
       formTitleHelperText: 'Der im Widget angezeigte Titel',
       subtitle: 'Untertitel',
