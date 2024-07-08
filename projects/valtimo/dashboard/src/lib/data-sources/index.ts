@@ -16,3 +16,4 @@
 
 export * from './test';
 export * from './case-count';
+export * from './case-counts';

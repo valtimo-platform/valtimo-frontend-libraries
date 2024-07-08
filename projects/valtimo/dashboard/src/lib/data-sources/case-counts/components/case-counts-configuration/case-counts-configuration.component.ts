@@ -26,7 +26,7 @@ import {
 import {ConfigurationOutput, DataSourceConfigurationComponent, Operator} from '../../../../models';
 import {BehaviorSubject, combineLatest, map, Observable, startWith, Subscription} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
-import {CaseCountConfiguration} from '../../models';
+import {CaseCountsConfiguration} from '../../models';
 import {DocumentService} from '@valtimo/document';
 import {ListItem} from 'carbon-components-angular';
 import {ListItemWithId, MultiInputKeyValue, MultiInputValues} from '@valtimo/components';
@@ -34,11 +34,11 @@ import {TranslateService} from '@ngx-translate/core';
 import {WidgetTranslationService} from '../../../../services';
 
 @Component({
-  templateUrl: './case-count-configuration.component.html',
+  templateUrl: './case-counts-configuration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./case-count-configuration.component.scss'],
+  styleUrls: ['./case-counts-configuration.component.scss'],
 })
-export class CaseCountConfigurationComponent
+export class CaseCountsConfigurationComponent
   implements OnInit, OnDestroy, DataSourceConfigurationComponent
 {
   @Input() public dataSourceKey: string;
@@ -102,7 +102,7 @@ export class CaseCountConfigurationComponent
     return this.form.get('queryConditions');
   }
 
-  @Input() set prefillConfiguration(configurationValue: CaseCountConfiguration) {
+  @Input() set prefillConfiguration(configurationValue: CaseCountsConfiguration) {
     if (configurationValue) {
       this.documentDefinitionSelected({
         item: {

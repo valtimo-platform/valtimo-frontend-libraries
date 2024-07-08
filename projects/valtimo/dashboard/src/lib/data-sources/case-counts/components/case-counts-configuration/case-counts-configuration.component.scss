@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import {QueryCondition} from '../../../models';
+::ng-deep .case-count-configuration-form {
+  .conditions-label {
+    margin-bottom: 16px;
+  }
 
-interface CaseCountConfiguration {
-  documentDefinition: string;
-  queryConditions: QueryCondition[];
+  .conditions-multi-input .cds--form__helper-text {
+    font-style: italic;
+  }
 }
-
-export {CaseCountConfiguration};

@@ -53,5 +53,5 @@ export const gaugeSpecification: DisplayTypeSpecification = {
       labelHelperText: 'Die im Widget angezeigte Beschriftung',
     },
   },
-  requiredDataFeatures: [DATA_FEATURES.NUMBER],
+  requiredDataFeatures: [DATA_FEATURES.NUMBER, DATA_FEATURES.TOTAL],
 };

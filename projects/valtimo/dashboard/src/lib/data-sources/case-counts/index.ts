@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-import {QueryCondition} from '../../../models';
-
-interface CaseCountConfiguration {
-  documentDefinition: string;
-  queryConditions: QueryCondition[];
-}
-
-export {CaseCountConfiguration};
+export * from './components';
+export * from './models';
+export * from './case-counts.module';
+export * from './case-counts.specification';

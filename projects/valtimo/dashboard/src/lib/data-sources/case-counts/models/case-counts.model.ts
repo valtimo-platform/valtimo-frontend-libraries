@@ -16,9 +16,9 @@
 
 import {QueryCondition} from '../../../models';
 
-interface CaseCountConfiguration {
+interface CaseCountsConfiguration {
   documentDefinition: string;
   queryConditions: QueryCondition[];
 }
 
-export {CaseCountConfiguration};
+export {CaseCountsConfiguration};
