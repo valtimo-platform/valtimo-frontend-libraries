@@ -106,12 +106,6 @@ export class CaseCountsConfigurationComponent
   @Input() set prefillConfiguration(configurationValue: CaseCountsConfiguration) {
     if (!configurationValue) return;
 
-    console.log(
-      'prefill config',
-      configurationValue.queryItems,
-      this.queryItemsToMultiInputValues(configurationValue.queryItems)
-    );
-
     this.documentDefinitionSelected({
       item: {
         content: configurationValue.documentDefinition,
@@ -226,9 +220,6 @@ export class CaseCountsConfigurationComponent
   private openFormSubscription(): void {
     this._subscriptions.add(
       this.form.valueChanges.pipe(startWith(this.form.value)).subscribe(formValue => {
-        console.log('value', formValue);
-        console.log('valid', `${this.form.valid}`);
-
         this.configurationEvent.emit({
           valid: this.form.valid,
           data: {
