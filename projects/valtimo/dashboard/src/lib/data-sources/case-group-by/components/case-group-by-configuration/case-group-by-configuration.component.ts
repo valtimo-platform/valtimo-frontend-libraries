@@ -230,11 +230,11 @@ export class CaseGroupByConfigurationComponent
   }
 
   private enumValidator(): ValidatorFn {
-    return (control: AbstractControl<CaseGroupByEnum>): ValidationErrors | null => {
-      const enumeration = control.value;
-      const enumLength = Object.keys(enumeration || {}).length;
-      const validEnumKeysLength = Object.keys(enumeration).filter(key => !!key).length;
-      const validEnumValuesLength = Object.values(enumeration).filter(key => !!key).length;
+    return (control: AbstractControl<MultiInputValues>): ValidationErrors | null => {
+      const enumeration = control.value || [];
+      const enumLength = enumeration.length;
+      const validEnumKeysLength = enumeration.filter(entry => !!entry.key).length;
+      const validEnumValuesLength = enumeration.filter(entry => !!entry.value).length;
 
       return enumLength === validEnumKeysLength && enumLength === validEnumValuesLength
         ? null
