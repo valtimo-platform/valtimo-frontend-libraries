@@ -43,6 +43,7 @@ export const caseGroupByDataSourceSpecification: DataSourceSpecification = {
       enumHelperText:
         "Einige Werte aus der Datenbank sind für den Endbenutzer nicht lesbar. Geben Sie hier an, wie die Werte angezeigt werden sollen. Beispiel: Wert: 'anfrage-gesendet', Anzeige: 'Anfrage gesendet'.",
       displayValue: 'Anzeige',
+      addDisplay: 'Ansicht hinzufügen',
     },
     en: {
       title: 'Group by',
@@ -66,6 +67,7 @@ export const caseGroupByDataSourceSpecification: DataSourceSpecification = {
       enumHelperText:
         "Some values from the database will not be readable by the end user. Specify here how the values should be displayed. For example: Value: 'request-sent', Display: 'Request sent'.",
       displayValue: 'Display',
+      addDisplay: 'Add display',
     },
     nl: {
       title: 'Groepering',
@@ -89,6 +91,7 @@ export const caseGroupByDataSourceSpecification: DataSourceSpecification = {
       enumHelperText:
         "Sommige waardes uit de database zullen niet leesbaar zijn voor de eindgebruiker. Geef hier op hoe de waardes weergegeven moeten worden. Bijvoorbeeld: Waarde: 'aanvraag-verzonden', Weergave: 'Aanvraag verzonden'.",
       displayValue: 'Weergave',
+      addDisplay: 'Weergave toevoegen',
     },
   },
 };
