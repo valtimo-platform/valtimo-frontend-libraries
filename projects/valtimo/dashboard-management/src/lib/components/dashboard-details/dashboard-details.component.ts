@@ -115,6 +115,7 @@ export class DashboardDetailsComponent implements AfterViewInit {
     new BehaviorSubject<DashboardWidgetConfiguration | null>(null);
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
+
   constructor(
     private readonly dashboardManagementService: DashboardManagementService,
     private readonly datePipe: DatePipe,
