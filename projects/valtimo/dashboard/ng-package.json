@@ -12,7 +12,6 @@
     "d3-shape",
     "@ngx-translate/core",
     "@ngx-translate/http-loader",
-    "@carbon/charts",
     "@carbon/charts-angular",
     "muuri"
   ]

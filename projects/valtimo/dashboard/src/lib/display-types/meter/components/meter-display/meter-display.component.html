@@ -25,12 +25,7 @@
 <section class="valtimo-donut-widget__content">
   <ng-container *ngIf="meterData$ | async as meterData">
     @if (meterData.length > 0) {
-      <ibm-meter-chart
-        type="donut"
-        class="n-chart"
-        [data]="meterData"
-        [options]="meterChartOptions$ | async"
-      ></ibm-meter-chart>
+      <ibm-meter-chart [data]="meterData" [options]="meterChartOptions$ | async"></ibm-meter-chart>
     } @else {
       <valtimo-no-results
         [collapseVertically]="true"

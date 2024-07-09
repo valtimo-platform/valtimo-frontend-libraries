@@ -26,7 +26,7 @@ export const meterSpecification: DisplayTypeSpecification = {
   height: 1,
   translations: {
     nl: {
-      title: 'Meter-diagram',
+      title: 'Meter',
       formTitle: 'Titel (vereist)',
       formTitleHelperText: 'De titel die wordt weergegeven in de widget',
       subtitle: 'Ondertitel',
@@ -35,7 +35,7 @@ export const meterSpecification: DisplayTypeSpecification = {
       labelHelperText: 'Het label dat wordt weergegeven in de widget',
     },
     en: {
-      title: 'Meter chart',
+      title: 'Meter',
       formTitle: 'Title (required)',
       formTitleHelperText: 'The title displayed in the widget',
       subtitle: 'Subtitle',
@@ -44,7 +44,7 @@ export const meterSpecification: DisplayTypeSpecification = {
       labelHelperText: 'The label displayed in the widget',
     },
     de: {
-      title: 'Meter-Diagramm',
+      title: 'Meter',
       formTitle: 'Titel (erforderlich)',
       formTitleHelperText: 'Der im Widget angezeigte Titel',
       subtitle: 'Untertitel',

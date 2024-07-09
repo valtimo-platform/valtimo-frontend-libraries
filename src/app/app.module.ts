@@ -52,7 +52,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CustomFormExampleComponent} from './custom-form-example/custom-form-example.component';
 import {StartProcessCustomFormComponent} from './start-process-custom-form/start-process-custom-form.component';
 import {
-  BarChartModule,
   BigNumberModule,
   CaseCountDataSourceModule,
   CaseCountsDataSourceModule,
@@ -221,7 +220,6 @@ export function tabsFactory() {
     ObjectModule,
     ObjectManagementModule,
     BigNumberModule,
-    BarChartModule,
     DonutModule,
     GaugeModule,
     MeterModule,

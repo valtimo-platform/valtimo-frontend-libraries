@@ -21,7 +21,7 @@ import {CdsThemeService} from '@valtimo/components';
 import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
 
 @Component({
-  selector: 'valtimo-donut-display',
+  selector: 'valtimo-meter-display',
   templateUrl: './meter-display.component.html',
   styleUrls: ['./meter-display.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
