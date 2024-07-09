@@ -119,7 +119,9 @@ export class CaseCountConfigurationComponent
     }
   }
 
-  @Output() public configurationEvent = new EventEmitter<ConfigurationOutput>();
+  @Output() public configurationEvent = new EventEmitter<
+    ConfigurationOutput<CaseCountConfiguration>
+  >();
 
   private _subscriptions = new Subscription();
 
@@ -173,7 +175,7 @@ export class CaseCountConfigurationComponent
       ]).subscribe(([formValue, allConditionsValid]) => {
         this.configurationEvent.emit({
           valid: this.form.valid && allConditionsValid,
-          data: formValue,
+          data: formValue as CaseCountConfiguration,
         });
       })
     );

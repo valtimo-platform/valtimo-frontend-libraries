@@ -56,6 +56,7 @@ import {
   BigNumberModule,
   CaseCountDataSourceModule,
   CaseCountsDataSourceModule,
+  CaseGroupByDataSourceModule,
   DashboardModule,
   DonutModule,
   GaugeModule,
@@ -132,7 +133,7 @@ import {
   registerDocumentenApiFormioUploadComponent,
   ZgwModule,
 } from '@valtimo/zgw';
-import {FormViewModelModule} from '../../projects/valtimo/form-view-model/src/lib/form-view-model.module';
+import {FormViewModelModule} from '@valtimo/form-view-model';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -226,6 +227,7 @@ export function tabsFactory() {
     MeterModule,
     CaseCountDataSourceModule,
     CaseCountsDataSourceModule,
+    CaseGroupByDataSourceModule,
     AccessControlManagementModule,
     FormFlowManagementModule,
     TranslationManagementModule,

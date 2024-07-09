@@ -14,7 +14,4 @@
  * limitations under the License.
  */
 
-export * from './test';
-export * from './case-count';
-export * from './case-counts';
-export * from './case-group-by';
+export * from './case-group-by-configuration.component';

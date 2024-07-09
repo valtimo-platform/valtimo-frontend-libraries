@@ -14,7 +14,23 @@
  * limitations under the License.
  */
 
-export * from './test';
-export * from './case-count';
-export * from './case-counts';
-export * from './case-group-by';
+import {QueryCondition} from '../../../models';
+import {MultiInputValues} from '@valtimo/components';
+
+type CaseGroupByEnum = {[key: string]: string};
+
+interface CaseGroupByConfiguration {
+  documentDefinition: string;
+  path: string;
+  queryConditions?: QueryCondition[];
+  enum?: CaseGroupByEnum;
+}
+
+interface CaseGroupByConfigurationFormValue {
+  documentDefinition: string;
+  path: string;
+  queryConditions?: MultiInputValues;
+  enum?: MultiInputValues;
+}
+
+export {CaseGroupByConfiguration, CaseGroupByEnum, CaseGroupByConfigurationFormValue};
