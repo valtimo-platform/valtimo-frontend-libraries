@@ -14,7 +14,4 @@
  * limitations under the License.
  */
 
-export * from './meter.module';
-export * from './meter.specification';
-export * from './components';
-export * from './models';
+export * from './meter-configuration.component';
