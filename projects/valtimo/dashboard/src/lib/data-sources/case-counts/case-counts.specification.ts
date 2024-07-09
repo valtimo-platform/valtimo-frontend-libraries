@@ -22,9 +22,9 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
   configurationComponent: CaseCountsConfigurationComponent,
   translations: {
     de: {
-      title: 'Mehrere Fallzählungen',
+      title: 'Mehrere Fallanzahllen',
       documentDefinition: 'Falltyp (erforderlich)',
-      documentDefinitionHelperText: 'Der Falltyp, für den die Anzahl abgerufen wird',
+      documentDefinitionHelperText: 'Der Falltyp, für den die Anzahllen abgeruft wirden',
       '!=': 'Nicht gleichzusetzen mit',
       '==': 'Gleich',
       '>': 'Größer als',
@@ -34,16 +34,16 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       path: 'Pfad',
       operator: 'Operator',
       value: 'Wert',
-      conditions: 'Bedingungen',
-      conditionsHelperText:
-        "Geben Sie für jede Menge, die angezeigt werden soll, eine oder mehrere Bedingungen an. Zum Beispiel: 'case:createdBy', 'Gleich', 'test@test.com'. Konfigurieren Sie mindestens zwei Zählwerte und mindestens eine Bedingung pro Zählwert.",
+      counts: 'Anzahllen',
+      countsHelperText:
+        "Geben Sie für jede Anzahl, die angezeigt werden soll, eine oder mehrere Bedingungen an. Zum Beispiel: 'case:createdBy', 'Gleich', 'test@test.com'. Konfigurieren Sie mindestens zwei Anzahllen und mindestens eine Bedingung pro Anzahl.",
       addCondition: 'Bedingung hinzufügen',
-      countTitle: 'Zählwertetitel',
+      countTitle: 'Anzahltitel',
     },
     en: {
       title: 'Multiple case counts',
       documentDefinition: 'Case type (required)',
-      documentDefinitionHelperText: 'The case type for which the count is retrieved',
+      documentDefinitionHelperText: 'The case type for which the counts are retrieved',
       '!=': 'Not equal to',
       '==': 'Equal to',
       '>': 'Greater than',
@@ -53,8 +53,8 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       path: 'Path (required)',
       operator: 'Operator',
       value: 'Value',
-      conditions: 'Conditions',
-      conditionsHelperText:
+      counts: 'Counts',
+      countsHelperText:
         "Specify one or more conditions for each count that should be displayed. For example: 'case:createdBy', 'Equal to', 'test@test.com'. Configure at least two counts and at least one condition per count.",
       addCondition: 'Add condition',
       countTitle: 'Count title',
@@ -62,7 +62,7 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
     nl: {
       title: 'Meerdere dossieraantallen',
       documentDefinition: 'Dossiertype (vereist)',
-      documentDefinitionHelperText: 'Het dossiertype waarvoor de telling wordt opgehaald',
+      documentDefinitionHelperText: 'Het dossiertype waarvoor de aantallen worden opgehaald',
       '!=': 'Niet gelijk aan',
       '==': 'Gelijk aan',
       '>': 'Groter dan',
@@ -72,8 +72,8 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       path: 'Pad',
       operator: 'Operator',
       value: 'Waarde',
-      conditions: 'Aantallen',
-      conditionsHelperText:
+      counts: 'Aantallen',
+      countsHelperText:
         "Geef per aantal dat getoond moet worden een of meerdere condities op. Bijvoorbeeld: 'case:createdBy', 'Gelijk aan', 'test@test.com'. Configureer minimaal twee aantallen en minimaal één conditie per aantal.",
       addCondition: 'Conditie toevoegen',
       countTitle: 'Aantaltitel',
