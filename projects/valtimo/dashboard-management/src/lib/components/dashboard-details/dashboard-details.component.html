@@ -35,6 +35,7 @@
       [dragAndDrop]="true"
       [dragAndDropDisabled]="obs.dragAndDropDisabled"
       (itemsReordered)="onItemsReordered($event)"
+      (rowClicked)="editWidget($event)"
     >
       <div carbonToolbarContent>
         <ng-container [ngTemplateOutlet]="addWidgetButton"></ng-container>

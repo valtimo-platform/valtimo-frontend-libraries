@@ -154,6 +154,12 @@ export class DashboardDetailsComponent implements AfterViewInit {
     this._refreshWidgetsSubject$.next(items);
   }
 
+  public editWidget(event: DashboardWidgetConfiguration): void {
+    this.editWidgetConfiguration$.next({...event});
+    this.modalType = 'edit';
+    this.showModal();
+  }
+
   private setFields(): void {
     this.fields = [
       {
@@ -162,12 +168,6 @@ export class DashboardDetailsComponent implements AfterViewInit {
         label: 'Name',
       },
     ];
-  }
-
-  private editWidget(event: DashboardWidgetConfiguration): void {
-    this.editWidgetConfiguration$.next({...event});
-    this.modalType = 'edit';
-    this.showModal();
   }
 
   private deleteWidget(event: DashboardWidgetConfiguration): void {
