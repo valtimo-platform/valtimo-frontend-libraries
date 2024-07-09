@@ -15,13 +15,17 @@
  */
 
 ::ng-deep .case-counts-configuration-form {
-  .conditions-label {
-    display: flex;
-    margin-bottom: 16px;
-  }
+  .conditions {
+    &__label {
+      display: flex;
+      margin-bottom: 8px;
+    }
 
-  .conditions-multi-input .cds--form__helper-text {
-    font-style: italic;
+    &__helper-text {
+      font-style: italic;
+      display: flex;
+      margin-bottom: 16px;
+    }
   }
 
   .count-tile {
@@ -34,5 +38,9 @@
     &__input {
       width: 100%;
     }
+  }
+
+  .add-count-button {
+    margin-bottom: 16px;
   }
 }

@@ -37,11 +37,13 @@
     </cds-dropdown>
   </div>
 
-  <cds-label
-    [helperText]="'conditionsHelperText' | widgetTranslate: dataSourceKey | async"
-    class="conditions-label"
-    >{{ 'conditions' | widgetTranslate: dataSourceKey | async }}</cds-label
-  >
+  <cds-label class="conditions__label">{{
+    'conditions' | widgetTranslate: dataSourceKey | async
+  }}</cds-label>
+
+  <p class="conditions__helper-text cds--form__helper-text">
+    {{ 'conditionsHelperText' | widgetTranslate: dataSourceKey | async }}
+  </p>
 
   <cds-tile
     *ngFor="let _ of queryItemsList$ | async; let i = index"
@@ -52,7 +54,7 @@
       <v-input
         [title]="'countTitle' | widgetTranslate: dataSourceKey | async"
         [margin]="true"
-        [defaultValue]="obs.queryItemsValue[i].queryItem?.label"
+        [defaultValue]="obs.queryItemsValue[i]?.label"
         [disabled]="formDisabled"
         [required]="true"
         [fullWidth]="true"
@@ -63,7 +65,7 @@
       <valtimo-carbon-multi-input
         [disabled]="formDisabled"
         [addRowText]="'addCondition' | widgetTranslate: dataSourceKey | async"
-        [defaultValues]="obs.queryItemsValue[i].queryItem?.queryConditions"
+        [defaultValues]="obs.queryItemsValue[i]?.queryConditions"
         [dropdownColumnTitle]="'operator' | widgetTranslate: dataSourceKey | async"
         [dropdownItems]="operatorItems$ | async"
         [fullWidth]="true"
@@ -89,7 +91,12 @@
     </div>
   </cds-tile>
 
-  <button cdsButton="primary" [disabled]="formDisabled" (click)="addQueryItem()">
+  <button
+    class="add-count-button"
+    cdsButton="primary"
+    [disabled]="formDisabled"
+    (click)="addQueryItem()"
+  >
     {{ 'Aantal toevoegen' }}
 
     <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
