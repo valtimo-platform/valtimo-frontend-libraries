@@ -18,7 +18,7 @@ import {DisplayComponent} from '../../../../models';
 import {BarChartData, BarChartDisplayTypeProperties} from '../../models';
 import {BarChartOptions, type ChartTabularData, ScaleTypes} from '@carbon/charts';
 import {CdsThemeService} from '@valtimo/components';
-import {BehaviorSubject, filter, map, Observable, tap} from 'rxjs';
+import {BehaviorSubject, filter, map, Observable} from 'rxjs';
 
 @Component({
   selector: 'valtimo-bar-chart-display',
@@ -44,8 +44,7 @@ export class BarChartDisplayComponent implements DisplayComponent {
           group: dataValue.label,
           value: dataValue.value,
         })) || []
-    ),
-    tap(data => console.log(data))
+    )
   );
 
   public readonly barChartChartOptions$: Observable<BarChartOptions> =

@@ -25,7 +25,7 @@ import {
 } from '@angular/core';
 import {ConfigurationOutput, DisplayTypeConfigurationComponent} from '../../../../models';
 import {startWith, Subscription} from 'rxjs';
-import {FormBuilder, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {BarChartDisplayTypeProperties} from '../../models';
 
 @Component({
@@ -40,7 +40,7 @@ export class BarChartConfigurationComponent
     subtitle: this.fb.control(''),
   });
 
-  @Input() displayTypeKey: string;
+  @Input() public readonly displayTypeKey: string;
 
   @Input() set disabled(disabledValue: boolean) {
     if (disabledValue) {
@@ -50,11 +50,11 @@ export class BarChartConfigurationComponent
     }
   }
 
-  public get title() {
+  public get title(): AbstractControl<string> {
     return this.form.get('title');
   }
 
-  public get subtitle() {
+  public get subtitle(): AbstractControl<string> {
     return this.form.get('subtitle');
   }
 

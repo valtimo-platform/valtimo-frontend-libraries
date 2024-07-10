@@ -45,50 +45,48 @@
     {{ 'countsHelperText' | widgetTranslate: dataSourceKey | async }}
   </p>
 
-  <cds-tile
-    *ngFor="let _ of queryItemsList$ | async; let i = index"
-    class="count-tile"
-    cdsLayer="1"
-  >
-    <div class="count-tile__input">
-      <v-input
-        [title]="'countTitle' | widgetTranslate: dataSourceKey | async"
-        [margin]="true"
-        [defaultValue]="obs.queryItemsValue[i]?.label"
-        [disabled]="formDisabled"
-        [required]="true"
-        [fullWidth]="true"
-        (valueChange)="labelValueChange(i, $event)"
-      >
-      </v-input>
+  @for (_ of queryItemsList$ | async; track $index; let i = $index) {
+    <cds-tile class="count-tile" cdsLayer="1">
+      <div class="count-tile__input">
+        <v-input
+          [title]="'countTitle' | widgetTranslate: dataSourceKey | async"
+          [margin]="true"
+          [defaultValue]="obs.queryItemsValue[i]?.label"
+          [disabled]="formDisabled"
+          [required]="true"
+          [fullWidth]="true"
+          (valueChange)="labelValueChange(i, $event)"
+        >
+        </v-input>
 
-      <valtimo-carbon-multi-input
-        [disabled]="formDisabled"
-        [addRowText]="'addCondition' | widgetTranslate: dataSourceKey | async"
-        [defaultValues]="obs.queryItemsValue[i]?.queryConditions"
-        [dropdownColumnTitle]="'operator' | widgetTranslate: dataSourceKey | async"
-        [dropdownItems]="operatorItems$ | async"
-        [fullWidth]="true"
-        [initialAmountOfRows]="1"
-        [keyColumnTitle]="'path' | widgetTranslate: dataSourceKey | async"
-        [minimumAmountOfRows]="1"
-        [valueColumnTitle]="'value' | widgetTranslate: dataSourceKey | async"
-        type="keyDropdownValue"
-        (valueChange)="conditionsValueChange(i, $event)"
-      ></valtimo-carbon-multi-input>
-    </div>
+        <valtimo-carbon-multi-input
+          [disabled]="formDisabled"
+          [addRowText]="'addCondition' | widgetTranslate: dataSourceKey | async"
+          [defaultValues]="obs.queryItemsValue[i]?.queryConditions"
+          [dropdownColumnTitle]="'operator' | widgetTranslate: dataSourceKey | async"
+          [dropdownItems]="operatorItems$ | async"
+          [fullWidth]="true"
+          [initialAmountOfRows]="1"
+          [keyColumnTitle]="'path' | widgetTranslate: dataSourceKey | async"
+          [minimumAmountOfRows]="1"
+          [valueColumnTitle]="'value' | widgetTranslate: dataSourceKey | async"
+          type="keyDropdownValue"
+          (valueChange)="conditionsValueChange(i, $event)"
+        ></valtimo-carbon-multi-input>
+      </div>
 
-    <div class="count-tile__delete-button">
-      <cds-icon-button
-        [disabled]="formDisabled || i < 2"
-        (click)="deleteCount(i)"
-        kind="danger"
-        size="sm"
-      >
-        <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
-      </cds-icon-button>
-    </div>
-  </cds-tile>
+      <div class="count-tile__delete-button">
+        <cds-icon-button
+          [disabled]="formDisabled || i < 2"
+          (click)="deleteCount(i)"
+          kind="danger"
+          size="sm"
+        >
+          <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+        </cds-icon-button>
+      </div>
+    </cds-tile>
+  }
 
   <button
     class="add-count-button"

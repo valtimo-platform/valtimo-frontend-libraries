@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output,} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {ConfigurationOutput, DisplayTypeConfigurationComponent} from '../../../../models';
 import {startWith, Subscription} from 'rxjs';
-import {FormBuilder, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {GaugeDisplayTypeProperties} from '../../models';
-
 
 @Component({
   templateUrl: './gauge-configuration.component.html',
@@ -35,7 +42,7 @@ export class GaugeConfigurationComponent
     useKPI: this.fb.control(false, [Validators.required]),
   });
 
-  @Input() displayTypeKey: string;
+  @Input() public readonly displayTypeKey: string;
   @Input() set disabled(disabledValue: boolean) {
     if (disabledValue) {
       this.form.disable();
@@ -44,15 +51,15 @@ export class GaugeConfigurationComponent
     }
   }
 
-  public get title() {
+  public get title(): AbstractControl<string> {
     return this.form.get('title');
   }
 
-  public get subtitle() {
+  public get subtitle(): AbstractControl<string> {
     return this.form.get('subtitle');
   }
 
-  public get label() {
+  public get label(): AbstractControl<string> {
     return this.form.get('label');
   }
 
@@ -64,7 +71,9 @@ export class GaugeConfigurationComponent
     }
   }
 
-  @Output() public configurationEvent = new EventEmitter<ConfigurationOutput>();
+  @Output() public configurationEvent = new EventEmitter<
+    ConfigurationOutput<GaugeDisplayTypeProperties>
+  >();
 
   private _subscriptions = new Subscription();
 
@@ -81,7 +90,10 @@ export class GaugeConfigurationComponent
   private openFormSubscription(): void {
     this._subscriptions.add(
       this.form.valueChanges.pipe(startWith(this.form.value)).subscribe(formValue => {
-        this.configurationEvent.emit({valid: this.form.valid, data: formValue});
+        this.configurationEvent.emit({
+          valid: this.form.valid,
+          data: formValue as GaugeDisplayTypeProperties,
+        });
       })
     );
   }
