@@ -1142,6 +1142,7 @@
       "jsonEditor": "JSON editor"
     },
     "key": "Key",
+    "value": "Value",
     "title": "Title",
     "yes": "Yes",
     "no": "No"
@@ -1484,6 +1485,7 @@
     "number": "Number",
     "date": "Date",
     "datetime": "Date and time",
+    "time": "Time",
     "boolean": "Yes / no",
     "numberRange": "Number range",
     "dateRange": "Date range",
@@ -1534,6 +1536,7 @@
     "dropdownListValues": "Dropdown list values",
     "id": "ID",
     "text": "Text",
+    "textContains": "Text contains",
     "noSearchfieldsTitle": "No search fields",
     "noSearchfieldsDescription": "There are no search fields configured for this case type."
   },
@@ -1779,6 +1782,7 @@
   },
   "taskManagement": {
     "columns": "Columns",
+    "searchFields": "Search fields",
     "caseName": "Case name"
   }
 }

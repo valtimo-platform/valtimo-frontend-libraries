@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,9 +14,30 @@
  * limitations under the License.
  */
 
-enum TaskManagementTab {
-  COLUMNS = 'columns',
-  SEARCH_FIELDS = 'searchFields',
-}
+.valtimo-task-management-search-fields-modal {
+  &__content,
+  &__dropdown-values {
+    display: flex;
+    gap: 16px;
+  }
 
-export {TaskManagementTab};
+  &__content {
+    flex-direction: column;
+  }
+
+  &__dropdown-values {
+    align-items: flex-end;
+    gap: 16px;
+  }
+
+  &__label {
+    display: flex;
+    gap: 4px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}

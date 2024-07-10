@@ -1140,6 +1140,7 @@
       "jsonEditor": "JSON editor"
     },
     "key": "Sleutel",
+    "value": "Waarde",
     "title": "Titel",
     "yes": "Ja",
     "no": "Nee"
@@ -1482,6 +1483,7 @@
     "number": "Nummer",
     "date": "Datum",
     "datetime": "Datum en tijd",
+    "time": "Tijd",
     "boolean": "Ja / nee",
     "numberRange": "Nummerreeks",
     "dateRange": "Datumreeks",
@@ -1532,6 +1534,7 @@
     "dropdownListValues": "Dropdown lijst waarden",
     "id": "ID",
     "text": "Text",
+    "textContains": "Tekst bevat",
     "noSearchfieldsTitle": "Geen zoekvelden",
     "noSearchfieldsDescription": "Er zijn geen zoekvelden geconfigureerd voor dit dossiertype."
   },
@@ -1780,6 +1783,7 @@
   },
   "taskManagement": {
     "columns": "Kolommen",
+    "searchFields": "Zoekvelden",
     "caseName": "Dossiernaam"
   }
 }
