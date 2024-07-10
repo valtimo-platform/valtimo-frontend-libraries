@@ -88,8 +88,8 @@ export class GaugeDisplayComponent implements DisplayComponent {
 
     if (value == scope._DELTA) {
       return `${this.translateService.instant('dashboard.of')} ${scopeData?.total || 0} ${scope.displayTypeProperties.label} `;
-    } else {
-      return Math.round(value * (scopeData?.total || 0)) / 100.0 + '';
     }
+
+    return Math.round(value * (scopeData?.total || 0)) / 100.0 + '';
   }
 }
