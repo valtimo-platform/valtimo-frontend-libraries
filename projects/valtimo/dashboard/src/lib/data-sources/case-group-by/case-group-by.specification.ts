@@ -61,7 +61,7 @@ export const caseGroupByDataSourceSpecification: DataSourceSpecification = {
       value: 'Value',
       conditions: 'Conditions',
       conditionsHelperText:
-        "Specify optional conditions for retrieving the grouping for the selected case type. For example: 'case:createdBy', 'Not equal to', 'test@test.com'.",
+        "Specify optional conditions for retrieving the grouping for the selected case type. For example: 'case:createdBy', 'Not equal to', 'test@test.com'. To compare with empty values, '${null}' can be entered as a value. To compare with the current date, '${localDateTimeNow}' can be entered as a value. This also supports, for example, the following logic: '${localDateTimeNow.minusWeeks(2)}'.",
       addCondition: 'Add condition',
       enum: 'Display of values',
       enumHelperText:
@@ -85,7 +85,7 @@ export const caseGroupByDataSourceSpecification: DataSourceSpecification = {
       value: 'Waarde',
       conditions: 'Condities',
       conditionsHelperText:
-        "Geef optionele condities op voor het ophalen van de groepering voor het geselecteerde dossiertype. Bijvoorbeeld: 'case:createdBy', 'Niet gelijk aan', 'test@test.com'.",
+        "Geef optionele condities op voor het ophalen van de groepering voor het geselecteerde dossiertype. Bijvoorbeeld: 'case:createdBy', 'Niet gelijk aan', 'test@test.com'. Voor het vergelijken met lege waardes kan '${null}' ingevuld worden als waarde. Voor het vergelijken met de huidige datum kan '${localDateTimeNow}' ingevuld worden als waarde. Deze ondersteunt ook bijvoorbeeld de volgende logica: '${localDateTimeNow.minusWeeks(2)}'.",
       addCondition: 'Conditie toevoegen',
       enum: 'Weergave van waardes',
       enumHelperText:

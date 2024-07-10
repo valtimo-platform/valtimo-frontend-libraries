@@ -36,7 +36,7 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       value: 'Wert',
       counts: 'Anzahllen',
       countsHelperText:
-        "Geben Sie für jede Anzahl, die angezeigt werden soll, eine oder mehrere Bedingungen an. Zum Beispiel: 'case:createdBy', 'Gleich', 'test@test.com'. Konfigurieren Sie mindestens zwei Anzahllen und mindestens eine Bedingung pro Anzahl.",
+        "Geben Sie eine oder mehrere Bedingungen für mindestens zwei Anzahllen an. Zum Beispiel: 'case:createdBy', 'Gleich', 'test@test.com'. Zum Vergleichen mit leeren Werten kann als Wert '${null}' eingegeben werden. Zum Vergleichen mit dem aktuellen Datum kann als Wert '${localDateTimeNow}' eingegeben werden. Damit wird beispielsweise auch folgende Logik unterstützt: '${localDateTimeNow.minusWeeks(2)}'.",
       addCondition: 'Bedingung hinzufügen',
       countTitle: 'Anzahltitel',
     },
@@ -74,7 +74,7 @@ export const caseCountsDataSourceSpecification: DataSourceSpecification = {
       value: 'Waarde',
       counts: 'Aantallen',
       countsHelperText:
-        "Geef per aantal dat getoond moet worden een of meerdere condities op. Bijvoorbeeld: 'case:createdBy', 'Gelijk aan', 'test@test.com'. Configureer minimaal twee aantallen en minimaal één conditie per aantal.",
+        "Geef een of meer condities op voor een minimum van twee aantallen. Bijvoorbeeld: 'case:createdBy', 'Gelijk aan', 'test@test.com'. Voor het vergelijken met lege waardes kan '${null}' ingevuld worden als waarde. Voor het vergelijken met de huidige datum kan '${localDateTimeNow}' ingevuld worden als waarde. Deze ondersteunt ook bijvoorbeeld de volgende logica: '${localDateTimeNow.minusWeeks(2)}'.",
       addCondition: 'Conditie toevoegen',
       countTitle: 'Aantaltitel',
     },
