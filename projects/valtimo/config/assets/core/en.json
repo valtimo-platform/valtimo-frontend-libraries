@@ -1784,5 +1784,10 @@
     "columns": "Columns",
     "searchFields": "Search fields",
     "caseName": "Case name"
+  },
+  "valuePathSelector": {
+    "placeholder": "Select a path",
+    "dropdown": "Dropdown",
+    "manual": "Manual"
   }
 }

@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import {Component, HostBinding, Input} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ValuePathSelectorService} from '../../services';
 import {
@@ -25,6 +33,7 @@ import {
   Observable,
   of,
   startWith,
+  Subscription,
   switchMap,
   tap,
 } from 'rxjs';
@@ -40,6 +49,8 @@ import {
   ToggleModule,
 } from 'carbon-components-angular';
 import {AbstractControl, FormBuilder, FormControl, ReactiveFormsModule} from '@angular/forms';
+import {InputLabelModule} from '../input-label/input-label.module';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-value-path-selector',
@@ -53,9 +64,12 @@ import {AbstractControl, FormBuilder, FormControl, ReactiveFormsModule} from '@a
     ReactiveFormsModule,
     ToggleModule,
     InputModule,
+    InputLabelModule,
+    InputLabelModule,
+    TranslateModule,
   ],
 })
-export class ValuePathSelectorComponent {
+export class ValuePathSelectorComponent implements OnInit, OnDestroy {
   @HostBinding('class.value-path-selector--margin-bottom') private _showMargin: boolean = false;
   @HostBinding('class.value-path-selector--margin-bottom-lg') private _showMarginLg: boolean =
     false;
@@ -83,6 +97,9 @@ export class ValuePathSelectorComponent {
   @Input() public set marginXl(value: boolean) {
     this._showMarginXl = value;
   }
+  @Input() public set disabled(value: boolean) {
+    this.disabled$.next(!!value);
+  }
   @Input() public set documentDefinitionName(value: string) {
     if (!value) return;
     this._documentDefinitionNameSubject$.next(value);
@@ -96,6 +113,13 @@ export class ValuePathSelectorComponent {
     this._prefixesSubject$.next(value);
   }
   @Input() public label = '';
+  @Input() public tooltip = '';
+  @Input() public required = false;
+  @Input() public set defaultValue(value: string) {
+    if (!value) return;
+    this.selectedPath.setValue(value);
+  }
+  @Output() valueChangeEvent: EventEmitter<string> = new EventEmitter();
 
   private readonly _documentDefinitionNameSubject$ = new BehaviorSubject<string>('');
   private get _documentDefinitionName$(): Observable<string> {
@@ -115,6 +139,7 @@ export class ValuePathSelectorComponent {
   }
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   private _cachedOptions: string[] = [];
 
@@ -146,10 +171,22 @@ export class ValuePathSelectorComponent {
     tap(() => this.loading$.next(false))
   );
 
+  private readonly _subscriptions = new Subscription();
+
   constructor(
     private readonly valuePathSelectorService: ValuePathSelectorService,
     private readonly formBuilder: FormBuilder
   ) {}
+
+  public ngOnInit(): void {
+    this._subscriptions.add(
+      this._selectedPath$.subscribe(path => this.valueChangeEvent.emit(path))
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   public onPathSelected(event: {item: {content: string}}): void {
     const selectedPath = event?.item?.content;

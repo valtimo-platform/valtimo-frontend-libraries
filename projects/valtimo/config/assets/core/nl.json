@@ -1785,5 +1785,10 @@
     "columns": "Kolommen",
     "searchFields": "Zoekvelden",
     "caseName": "Dossiernaam"
+  },
+  "valuePathSelector": {
+    "placeholder": "Selecteer een pad",
+    "dropdown": "Dropdown",
+    "manual": "Handmatig"
   }
 }

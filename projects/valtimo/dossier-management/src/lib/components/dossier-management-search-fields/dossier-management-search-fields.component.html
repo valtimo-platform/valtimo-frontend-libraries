@@ -141,24 +141,14 @@
         >
         </v-input>
 
-        <v-input
-          name="path"
-          [title]="'searchFieldsOverview.path' | translate"
-          [margin]="true"
-          [defaultValue]="searchObs.searchField?.path"
-          [disabled]="obs.disableInput"
-          [required]="true"
-          [fullWidth]="true"
-          [tooltip]="'searchFieldsOverviewTooltips.path' | translate"
-          [carbonTheme]="CARBON_THEME"
-        >
-        </v-input>
-
         <valtimo-value-path-selector
-          label="Pad"
+          [label]="'searchFieldsOverview.path' | translate"
+          [tooltip]="'searchFieldsOverviewTooltips.path' | translate"
           [marginXl]="true"
           [documentDefinitionName]="documentDefinitionName$ | async"
           [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
+          [defaultValue]="searchObs.searchField?.path"
+          (valueChangeEvent)="pathValueChange($event)"
         ></valtimo-value-path-selector>
 
         <v-select

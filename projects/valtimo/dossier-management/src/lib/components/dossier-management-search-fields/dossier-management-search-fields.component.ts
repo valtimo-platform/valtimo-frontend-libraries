@@ -384,6 +384,14 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
     }, 0);
   }
 
+  public pathValueChange(path: string): void {
+    this.formData$.pipe(take(1)).subscribe(currentData => {
+      const newData = {...currentData, path};
+      this.nextIfChanged(this.formData$, newData);
+      this.nextIfChanged(this.valid$, this.isValid(newData));
+    });
+  }
+
   public dropdownDatalistChange(data: MultiInputOutput): void {
     this.modifiedDropdownValues$.next(data as MultiInputValues);
   }

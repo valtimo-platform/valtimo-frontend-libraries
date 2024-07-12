@@ -18,23 +18,30 @@
   *ngIf="{
     inputModeIsDropdown: inputModeIsDropdown$ | async,
     valuePathListItems: valuePathListItems$ | async,
-    loading: loading$ | async
+    loading: loading$ | async,
+    disabled: disabled$ | async
   } as obs"
 >
   @if (!obs.loading && obs.valuePathListItems) {
-    <cds-label>{{ label }}</cds-label>
+    <v-input-label [required]="required" [title]="label" [tooltip]="tooltip"> </v-input-label>
+
     <form [formGroup]="formGroup" class="value-path-selector__form">
       @if (obs.inputModeIsDropdown) {
-        <cds-dropdown (selected)="onPathSelected($event)" placeholder="Select a path">
+        <cds-dropdown
+          [disabled]="obs.disabled"
+          (selected)="onPathSelected($event)"
+          [placeholder]="'valuePathSelector.placeholder' | translate"
+        >
           <cds-dropdown-list [items]="obs.valuePathListItems"></cds-dropdown-list>
         </cds-dropdown>
       } @else {
-        <input cdsText type="text" formControlName="selectedPath" />
+        <input cdsText [disabled]="obs.disabled" type="text" formControlName="selectedPath" />
       }
 
       <cds-toggle
-        [onText]="'Dropdown'"
-        [offText]="'Manual'"
+        [disabled]="obs.disabled"
+        [onText]="'valuePathSelector.dropdown' | translate"
+        [offText]="'valuePathSelector.manual' | translate"
         [checked]="obs.inputModeIsDropdown"
         (checkedChange)="onInputModeChange($event)"
       ></cds-toggle>
