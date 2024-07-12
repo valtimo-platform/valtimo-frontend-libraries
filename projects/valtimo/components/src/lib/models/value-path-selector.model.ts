@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-export * from './modal.service';
-export * from './prompt.service';
-export * from './shell.service';
-export * from './stepper.service';
-export * from './user-interface.service';
-export * from './valtimo-modal.service';
-export * from './page-header.service';
-export * from './cds-theme.service';
-export * from './choice-field.service';
-export * from './page-subtitle.service';
-export * from './page-title.service';
-export * from './key-generator.service';
-export * from './value-path-selector.service';
+interface ValuePathSelectorCache {
+  [documentDefinitionName: string]: {
+    documentProperties: string[];
+    valueResolvers: {
+      [prefix: string]: string[];
+    };
+  };
+}
+
+enum ValuePathSelectorPrefix {
+  DOC = 'doc',
+  CASE = 'case',
+  ZAAKOBJECT = 'zaakobject',
+  ZAAKRESULTAAT = 'zaakresultaat',
+  ZAAKSTATUS = 'zaakstatus',
+  ZAAK = 'zaak',
+}
+
+enum ValuePathSelectorInputMode {
+  DROPDOWN,
+  MANUAL,
+}
+
+export {ValuePathSelectorCache, ValuePathSelectorPrefix, ValuePathSelectorInputMode};

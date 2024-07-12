@@ -36,6 +36,7 @@ import {
   MultiInputValues,
   SelectItem,
   TableColumn,
+  ValuePathSelectorPrefix,
   ViewType,
 } from '@valtimo/components';
 import {
@@ -335,6 +336,8 @@ export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy
   );
 
   public readonly CARBON_THEME = 'white';
+
+  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
 
   constructor(
     private readonly documentService: DocumentService,

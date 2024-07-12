@@ -154,6 +154,13 @@
         >
         </v-input>
 
+        <valtimo-value-path-selector
+          label="Pad"
+          [margin]="true"
+          [documentDefinitionName]="documentDefinitionName$ | async"
+          [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
+        ></valtimo-value-path-selector>
+
         <v-select
           *ngIf="dataTypeItems$ | async as dataTypeItems"
           [appendInline]="true"

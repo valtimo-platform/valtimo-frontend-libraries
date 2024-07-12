@@ -257,3 +257,5 @@ export * from './lib/directives/valtimo-cds-overflow-button/valtimo-cds-overflow
 export * from './lib/directives/valtimo-cds-overflow-button/valtimo-cds-overflow-button-directive.module';
 // status selector
 export * from './lib/components/status-selector/status-selector.component';
+// value path selector
+export * from './lib/components/value-path-selector/value-path-selector.component';
