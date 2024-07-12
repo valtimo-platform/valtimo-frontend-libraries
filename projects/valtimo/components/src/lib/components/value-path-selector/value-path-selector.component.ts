@@ -57,6 +57,10 @@ import {AbstractControl, FormBuilder, FormControl, ReactiveFormsModule} from '@a
 })
 export class ValuePathSelectorComponent {
   @HostBinding('class.value-path-selector--margin-bottom') private _showMargin: boolean = false;
+  @HostBinding('class.value-path-selector--margin-bottom-lg') private _showMarginLg: boolean =
+    false;
+  @HostBinding('class.value-path-selector--margin-bottom-xl') private _showMarginXl: boolean =
+    false;
 
   public readonly formGroup = this.formBuilder.group({
     selectedPath: new FormControl(''),
@@ -72,6 +76,12 @@ export class ValuePathSelectorComponent {
 
   @Input() public set margin(value: boolean) {
     this._showMargin = value;
+  }
+  @Input() public set marginLg(value: boolean) {
+    this._showMarginLg = value;
+  }
+  @Input() public set marginXl(value: boolean) {
+    this._showMarginXl = value;
   }
   @Input() public set documentDefinitionName(value: string) {
     if (!value) return;

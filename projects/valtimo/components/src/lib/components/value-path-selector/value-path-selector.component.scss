@@ -24,6 +24,14 @@
   margin-bottom: 16px;
 }
 
+::ng-deep .value-path-selector--margin-bottom-lg {
+  margin-bottom: 24px;
+}
+
+::ng-deep .value-path-selector--margin-bottom-xl {
+  margin-bottom: 34px;
+}
+
 .value-path-selector__form {
   display: flex;
   width: 100%;
