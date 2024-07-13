@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-import {editor} from 'monaco-editor';
-
-interface EditorModel {
-  value: string;
-  language?: string;
-  uri?: string;
-}
-
-type MonacoEditor = typeof editor;
-
-enum MonacoTheme {
-  VS = 'vs',
-  VSDARK = 'vs-dark',
-}
-
-export {EditorModel, MonacoEditor, MonacoTheme};
+export const formioValueResolverSelectorEditForm = () => ({
+  components: [],
+});

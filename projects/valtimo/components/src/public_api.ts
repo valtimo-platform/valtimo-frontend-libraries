@@ -259,3 +259,6 @@ export * from './lib/directives/valtimo-cds-overflow-button/valtimo-cds-overflow
 export * from './lib/components/status-selector/status-selector.component';
 // value path selector
 export * from './lib/components/value-path-selector/value-path-selector.component';
+// formio value resoler selector
+export * from './lib/components/form-io/formio-value-resolver-selector/formio-value-resolver-selector.formio';
+export * from './lib/components/form-io/formio-value-resolver-selector/formio-value-resolver-selector.component';

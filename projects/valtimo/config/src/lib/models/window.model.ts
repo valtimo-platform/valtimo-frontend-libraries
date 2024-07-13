@@ -16,17 +16,15 @@
 
 import {editor} from 'monaco-editor';
 
-interface EditorModel {
-  value: string;
-  language?: string;
-  uri?: string;
-}
-
 type MonacoEditor = typeof editor;
 
-enum MonacoTheme {
-  VS = 'vs',
-  VSDARK = 'vs-dark',
+interface ValtimoWindow extends Window {
+  monaco?: {
+    editor?: MonacoEditor;
+  };
+  flags?: {
+    formioValueResolverSelectorComponentRegistered: boolean;
+  };
 }
 
-export {EditorModel, MonacoEditor, MonacoTheme};
+export {ValtimoWindow};
