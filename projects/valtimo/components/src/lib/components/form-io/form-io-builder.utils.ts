@@ -29,13 +29,16 @@ const modiyEditFormApiKeyInput = (editForm: any): void => {
 
 const addValueResolverSelectorToEditform = (editForm: any): void => {
   const valtimoWindow = window as ValtimoWindow;
+  const valtimoTabKey = 'valtimo';
 
   if (valtimoWindow?.flags?.formioValueResolverSelectorComponentRegistered) {
-    editForm?.components
-      ?.find(element => element.key === 'tabs')
-      ?.components?.push({
+    const tabComponents = editForm?.components?.find(element => element.key === 'tabs')?.components;
+    const hasValtimoTab = tabComponents?.find(component => component.key === valtimoTabKey);
+
+    if (tabComponents && !hasValtimoTab) {
+      tabComponents.push({
         label: 'Valtimo',
-        key: 'valtimo',
+        key: valtimoTabKey,
         weight: 70,
         components: [
           {
@@ -49,6 +52,7 @@ const addValueResolverSelectorToEditform = (editForm: any): void => {
           },
         ],
       });
+    }
   }
 
   return editForm;

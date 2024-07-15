@@ -16,10 +16,9 @@
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormioCustomComponent} from '../../../modules';
-import {KeycloakService} from 'keycloak-angular';
-import {KeycloakProfile} from 'keycloak-js';
 import {CommonModule} from '@angular/common';
 import {ValuePathSelectorComponent} from '../../value-path-selector/value-path-selector.component';
+import {DocumentService} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-formio-value-resolver-selector',
@@ -28,15 +27,10 @@ import {ValuePathSelectorComponent} from '../../value-path-selector/value-path-s
   standalone: true,
   imports: [CommonModule, ValuePathSelectorComponent],
 })
-export class FormioValueResolverSelectorComponent implements FormioCustomComponent<any> {
-  @Input() value: any;
-  @Input() disabled: boolean;
-  @Output() valueChange = new EventEmitter<any>();
+export class FormioValueResolverSelectorComponent implements FormioCustomComponent<string> {
+  @Input() public readonly value: any;
+  @Input() public readonly disabled: boolean;
+  @Output() public readonly valueChange = new EventEmitter<string>();
 
-  constructor(private readonly keycloakService: KeycloakService) {
-    this.keycloakService.loadUserProfile().then((profile: KeycloakProfile) => {
-      this.value = profile;
-      this.valueChange.emit();
-    });
-  }
+  constructor(private readonly documentService: DocumentService) {}
 }

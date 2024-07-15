@@ -46,7 +46,7 @@
         (checkedChange)="onInputModeChange($event)"
       ></cds-toggle>
     </form>
-  } @else {
+  } @else if (!showDocumentDefinitionSelector) {
     <cds-loading size="sm"></cds-loading>
   }
 </ng-container>

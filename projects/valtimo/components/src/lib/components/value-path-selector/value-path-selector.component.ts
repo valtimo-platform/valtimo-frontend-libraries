@@ -115,6 +115,8 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
   @Input() public label = '';
   @Input() public tooltip = '';
   @Input() public required = false;
+  @Input() public showDocumentDefinitionSelector = false;
+
   @Input() public set defaultValue(value: string) {
     if (!value) return;
     this.selectedPath.setValue(value);
