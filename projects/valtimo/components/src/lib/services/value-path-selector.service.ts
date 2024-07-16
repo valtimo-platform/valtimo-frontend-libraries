@@ -17,15 +17,29 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable, OnDestroy} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
-import {combineLatest, interval, map, Observable, of, Subscription, switchMap, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  interval,
+  map,
+  Observable,
+  of,
+  Subscription,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import {ValuePathSelectorCache, ValuePathSelectorPrefix, ValuePathVersionArgument} from '../models';
 import {deepmerge} from 'deepmerge-ts';
+import {DocumentDefinitions} from '@valtimo/document';
+import {isEqual} from 'lodash';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ValuePathSelectorService extends BaseApiService implements OnDestroy {
   private _cache: ValuePathSelectorCache = {};
+  private _documentDefinitionCache$ = new BehaviorSubject<DocumentDefinitions | null>(null);
 
   private readonly _subscriptions = new Subscription();
 
@@ -55,10 +69,21 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     this._subscriptions.unsubscribe();
   }
 
+  public setDocumentDefinitionCache(cache: DocumentDefinitions): void {
+    this._documentDefinitionCache$.pipe(take(1)).subscribe(currentCache => {
+      if (!isEqual(cache, currentCache)) this._documentDefinitionCache$.next(cache);
+    });
+  }
+
+  public getDocumentDefinitionCache(): Observable<DocumentDefinitions | null> {
+    return this._documentDefinitionCache$.asObservable();
+  }
+
   private openClearCacheSubscription(): void {
     this._subscriptions.add(
       interval(60 * 1000).subscribe(() => {
         this._cache = {};
+        this._documentDefinitionCache$.next(null);
       })
     );
   }

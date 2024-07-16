@@ -18,35 +18,54 @@
   *ngIf="{
     inputModeIsDropdown: inputModeIsDropdown$ | async,
     valuePathListItems: valuePathListItems$ | async,
-    loading: loading$ | async,
+    loadingValuePathItems: loadingValuePathItems$ | async,
     disabled: disabled$ | async
   } as obs"
 >
-  @if (!obs.loading && obs.valuePathListItems) {
-    <v-input-label [required]="required" [title]="label" [tooltip]="tooltip"> </v-input-label>
+  <v-input-label [required]="required" [title]="label" [tooltip]="tooltip"> </v-input-label>
 
-    <form [formGroup]="formGroup" class="value-path-selector__form">
-      @if (obs.inputModeIsDropdown) {
+  <form [formGroup]="formGroup" class="value-path-selector__form">
+    @if (obs.inputModeIsDropdown) {
+      <ng-container
+        *ngIf="
+          showDocumentDefinitionSelector && {
+            loadingDocumentDefinitionItems: loadingDocumentDefinitionItems$ | async,
+            documentDefinitionListItems: documentDefinitionListItems$ | async
+          } as docObs
+        "
+      >
         <cds-dropdown
-          [disabled]="obs.disabled"
-          (selected)="onPathSelected($event)"
+          [appendInline]="true"
+          [disabled]="
+            obs.disabled ||
+            docObs.loadingDocumentDefinitionItems ||
+            !docObs.documentDefinitionListItems
+          "
+          (selected)="onDocumentDefinitionSelected($event)"
           [placeholder]="'valuePathSelector.placeholder' | translate"
         >
-          <cds-dropdown-list [items]="obs.valuePathListItems"></cds-dropdown-list>
+          <cds-dropdown-list [items]="docObs.documentDefinitionListItems || []"></cds-dropdown-list>
         </cds-dropdown>
-      } @else {
-        <input cdsText [disabled]="obs.disabled" type="text" formControlName="selectedPath" />
-      }
+      </ng-container>
 
-      <cds-toggle
-        [disabled]="obs.disabled"
-        [onText]="'valuePathSelector.dropdown' | translate"
-        [offText]="'valuePathSelector.manual' | translate"
-        [checked]="obs.inputModeIsDropdown"
-        (checkedChange)="onInputModeChange($event)"
-      ></cds-toggle>
-    </form>
-  } @else if (!showDocumentDefinitionSelector) {
-    <cds-loading size="sm"></cds-loading>
-  }
+      <cds-dropdown
+        [appendInline]="true"
+        [disabled]="obs.disabled || obs.loadingValuePathItems || !obs.valuePathListItems"
+        (selected)="onPathSelected($event)"
+        [placeholder]="'valuePathSelector.placeholder' | translate"
+      >
+        <cds-dropdown-list [items]="obs.valuePathListItems || []"></cds-dropdown-list>
+      </cds-dropdown>
+    } @else {
+      <input cdsText [disabled]="obs.disabled" type="text" formControlName="selectedPath" />
+    }
+
+    <cds-toggle
+      [disabled]="obs.disabled"
+      [onText]="'valuePathSelector.dropdown' | translate"
+      [offText]="'valuePathSelector.manual' | translate"
+      [checked]="obs.inputModeIsDropdown"
+      (checkedChange)="onInputModeChange($event)"
+    ></cds-toggle>
+  </form>
 </ng-container>

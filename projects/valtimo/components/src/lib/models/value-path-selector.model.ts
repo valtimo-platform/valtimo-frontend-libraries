@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {ListItem} from 'carbon-components-angular';
+
 interface ValuePathSelectorCache {
   [documentDefinitionName: string]: {
     [version: string | number]: {
@@ -21,6 +23,8 @@ interface ValuePathSelectorCache {
     };
   };
 }
+
+type DocumentDefinitionItemsCache = ListItem[];
 
 enum ValuePathSelectorPrefix {
   DOC = 'doc',
@@ -43,4 +47,5 @@ export {
   ValuePathSelectorPrefix,
   ValuePathSelectorInputMode,
   ValuePathVersionArgument,
+  DocumentDefinitionItemsCache,
 };

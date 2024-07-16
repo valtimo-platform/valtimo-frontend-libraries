@@ -19,6 +19,7 @@ import {FormioCustomComponent} from '../../../modules';
 import {CommonModule} from '@angular/common';
 import {ValuePathSelectorComponent} from '../../value-path-selector/value-path-selector.component';
 import {DocumentService} from 'carbon-components-angular';
+import {ValuePathSelectorPrefix} from '../../../models';
 
 @Component({
   selector: 'valtimo-formio-value-resolver-selector',
@@ -31,6 +32,8 @@ export class FormioValueResolverSelectorComponent implements FormioCustomCompone
   @Input() public readonly value: any;
   @Input() public readonly disabled: boolean;
   @Output() public readonly valueChange = new EventEmitter<string>();
+
+  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
 
   constructor(private readonly documentService: DocumentService) {}
 }

@@ -51,6 +51,7 @@ import {
 import {AbstractControl, FormBuilder, FormControl, ReactiveFormsModule} from '@angular/forms';
 import {InputLabelModule} from '../input-label/input-label.module';
 import {TranslateModule} from '@ngx-translate/core';
+import {DocumentService} from '@valtimo/document';
 
 @Component({
   selector: 'valtimo-value-path-selector',
@@ -140,7 +141,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     return this._inputMode$.pipe(map(mode => mode === ValuePathSelectorInputMode.DROPDOWN));
   }
 
-  public readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly loadingValuePathItems$ = new BehaviorSubject<boolean>(true);
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   private _cachedOptions: string[] = [];
@@ -150,7 +151,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     this._prefixes$,
     this._version$,
   ]).pipe(
-    tap(() => this.loading$.next(true)),
+    tap(() => this.loadingValuePathItems$.next(true)),
     switchMap(([documentDefinitionName, prefixes, version]) =>
       typeof version === 'number'
         ? this.valuePathSelectorService.getResolvableKeysPerPrefix(
@@ -172,14 +173,39 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     map(([options, selectedPath]) =>
       options.map(option => ({content: option, selected: option === selectedPath}))
     ),
-    tap(() => this.loading$.next(false))
+    tap(() => this.loadingValuePathItems$.next(false))
   );
+
+  public readonly loadingDocumentDefinitionItems$ = new BehaviorSubject<boolean>(true);
+
+  public readonly documentDefinitionListItems$: Observable<ListItem[]> =
+    this.valuePathSelectorService.getDocumentDefinitionCache().pipe(
+      switchMap(cache =>
+        combineLatest([
+          cache ? of(cache) : this.documentService.getAllDefinitions(),
+          this._documentDefinitionName$.pipe(startWith(null)),
+        ]).pipe(
+          tap(([definitions]) => {
+            this.loadingDocumentDefinitionItems$.next(false);
+            this.valuePathSelectorService.setDocumentDefinitionCache(definitions);
+          }),
+          map(([definitions, documentDefinitionName]) =>
+            definitions.content.map(definition => ({
+              content: definition.id.name,
+              id: definition.id.name,
+              selected: definition.id.name === documentDefinitionName,
+            }))
+          )
+        )
+      )
+    );
 
   private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly valuePathSelectorService: ValuePathSelectorService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly documentService: DocumentService
   ) {}
 
   public ngOnInit(): void {
@@ -196,6 +222,13 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     const selectedPath = event?.item?.content;
     if (!selectedPath) return;
     this.selectedPath.setValue(selectedPath);
+  }
+
+  public onDocumentDefinitionSelected(event: {item: {id: string}}): void {
+    const selectedDef = event?.item?.id;
+    console.log(selectedDef);
+    if (!selectedDef) return;
+    this._documentDefinitionNameSubject$.next(selectedDef);
   }
 
   public onInputModeChange(toDropdownMode: boolean): void {
