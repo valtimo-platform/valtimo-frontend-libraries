@@ -16,8 +16,7 @@
 
 interface ValuePathSelectorCache {
   [documentDefinitionName: string]: {
-    documentProperties: string[];
-    valueResolvers: {
+    [version: string | number]: {
       [prefix: string]: string[];
     };
   };
@@ -37,4 +36,11 @@ enum ValuePathSelectorInputMode {
   MANUAL,
 }
 
-export {ValuePathSelectorCache, ValuePathSelectorPrefix, ValuePathSelectorInputMode};
+type ValuePathVersionArgument = number | 'latest';
+
+export {
+  ValuePathSelectorCache,
+  ValuePathSelectorPrefix,
+  ValuePathSelectorInputMode,
+  ValuePathVersionArgument,
+};

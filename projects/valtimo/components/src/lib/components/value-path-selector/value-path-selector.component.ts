@@ -152,11 +152,13 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
   ]).pipe(
     tap(() => this.loading$.next(true)),
     switchMap(([documentDefinitionName, prefixes, version]) =>
-      this.valuePathSelectorService.getResolvableKeysPerPrefix(
-        prefixes,
-        documentDefinitionName,
-        version
-      )
+      typeof version === 'number'
+        ? this.valuePathSelectorService.getResolvableKeysPerPrefix(
+            prefixes,
+            documentDefinitionName,
+            version
+          )
+        : this.valuePathSelectorService.getResolvableKeysPerPrefix(prefixes, documentDefinitionName)
     ),
     map(result =>
       Object.keys(result)
