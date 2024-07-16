@@ -19,6 +19,7 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
 import {
   BehaviorSubject,
+  catchError,
   combineLatest,
   interval,
   map,
@@ -100,16 +101,16 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
         if (!!resultFromCache) return of(resultFromCache);
 
         return typeof version !== 'number'
-          ? this.httpClient.get<string[]>(
-              this.getApiUrl(
-                `/v1/value-resolver/prefix/${prefix}/document-definition/${documentDefinitionName}/keys`
-              )
-            )
-          : this.httpClient.get<string[]>(
-              this.getApiUrl(
-                `/v1/value-resolver/prefix/${prefix}/document-definition/${documentDefinitionName}/version/${version}/keys`
-              )
-            );
+          ? this.httpClient
+              .get<
+                string[]
+              >(this.getApiUrl(`/v1/value-resolver/prefix/${prefix}/document-definition/${documentDefinitionName}/keys`))
+              .pipe(catchError(() => of([])))
+          : this.httpClient
+              .get<
+                string[]
+              >(this.getApiUrl(`/v1/value-resolver/prefix/${prefix}/document-definition/${documentDefinitionName}/version/${version}/keys`))
+              .pipe(catchError(() => of([])));
       }),
       tap(result => this.cacheResult(prefix, documentDefinitionName, version, result))
     );
