@@ -28,7 +28,7 @@ import {
   CARBON_CONSTANTS,
   CarbonListModule,
   ColumnConfig,
-  TooltipModule as VTooltipModule,
+  InputLabelModule,
   ViewType,
 } from '@valtimo/components';
 import {DocumentService} from '@valtimo/document';
@@ -75,7 +75,7 @@ import {
     ReactiveFormsModule,
     IconModule,
     CarbonListModule,
-    VTooltipModule,
+    InputLabelModule,
   ],
 })
 export class TaskManagementSearchFieldsModalComponent {
