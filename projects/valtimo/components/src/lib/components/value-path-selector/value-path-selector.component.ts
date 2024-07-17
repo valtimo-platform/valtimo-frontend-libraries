@@ -170,6 +170,9 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     ),
     tap(options => (this._cachedOptions = options)),
     switchMap(options => combineLatest([of(options), this._selectedPath$])),
+    tap(([options, selectedPath]) => {
+      if (!options.includes(selectedPath) && selectedPath !== '') this.selectedPath.setValue('');
+    }),
     map(([options, selectedPath]) =>
       options.map(option => ({content: option, selected: option === selectedPath}))
     ),
@@ -226,7 +229,6 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
 
   public onDocumentDefinitionSelected(event: {item: {id: string}}): void {
     const selectedDef = event?.item?.id;
-    console.log(selectedDef);
     if (!selectedDef) return;
     this._documentDefinitionNameSubject$.next(selectedDef);
   }
