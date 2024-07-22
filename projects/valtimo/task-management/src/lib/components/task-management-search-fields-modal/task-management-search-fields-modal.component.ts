@@ -17,9 +17,11 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {
   AbstractControl,
+  AsyncValidatorFn,
   FormArray,
   FormBuilder,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import {InformationFilled16, TrashCan16} from '@carbon/icons';
@@ -102,7 +104,7 @@ export class TaskManagementSearchFieldsModalComponent {
     fieldType: this.fb.control<ListItem | null>(null, Validators.required),
     dropdownDataProvider: this.fb.control<ListItem | null>(
       null,
-      this.dropdownDataProviderValidator
+      this.asyncDropdownDataProviderValidator
     ),
     dropdownValues: this.fb.array<{key: string; value: string}>([], this.dropdownValuesValidator),
   });
@@ -323,7 +325,6 @@ export class TaskManagementSearchFieldsModalComponent {
   ) {
     this.iconService.registerAll([TrashCan16, InformationFilled16]);
   }
-
   public addDropdownValue(prefillValue?: {key: string; value: string}): void {
     if (!this.dropdownValuesArray) return;
 
@@ -432,21 +433,23 @@ export class TaskManagementSearchFieldsModalComponent {
     return null;
   }
 
-  private dropdownDataProviderValidator(control: AbstractControl): null | {[key: string]: string} {
-    const controlValue: string | undefined = control.value;
-    const fieldTypeControlValue: ListItem | null | undefined =
-      control.parent?.get('fieldType')?.value;
+  private asyncDropdownDataProviderValidator(): AsyncValidatorFn {
+    return (): Observable<ValidationErrors> => {
+      return combineLatest([this.fieldTypeValue$, this.dropdownDataProviderValue$]).pipe(
+        map(([fieldTypeValue, dropdownDataProviderValue]) => {
+          if (
+            [
+              TaskListSearchFieldFieldType.SINGLE_SELECT_DROPDOWN,
+              TaskListSearchFieldFieldType.MULTI_SELECT_DROPDOWN,
+            ].includes(fieldTypeValue?.id) &&
+            !dropdownDataProviderValue
+          )
+            return {error: 'Dropdown source provider is not specified'};
 
-    if (
-      [
-        TaskListSearchFieldFieldType.SINGLE_SELECT_DROPDOWN,
-        TaskListSearchFieldFieldType.MULTI_SELECT_DROPDOWN,
-      ].includes(fieldTypeControlValue?.id) &&
-      !controlValue
-    )
-      return {error: 'Dropdown source provider is not specified'};
-
-    return null;
+          return null;
+        })
+      );
+    };
   }
 
   private dropdownValuesValidator(control: AbstractControl): null | {[key: string]: string} {
