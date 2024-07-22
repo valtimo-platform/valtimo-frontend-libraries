@@ -17,11 +17,9 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {
   AbstractControl,
-  AsyncValidatorFn,
   FormArray,
   FormBuilder,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import {InformationFilled16, TrashCan16} from '@carbon/icons';
@@ -60,6 +58,7 @@ import {
   Observable,
   startWith,
   switchMap,
+  tap,
 } from 'rxjs';
 
 @Component({
@@ -102,11 +101,8 @@ export class TaskManagementSearchFieldsModalComponent {
     dataType: this.fb.control<ListItem | null>(null, Validators.required),
     matchType: this.fb.control<ListItem | null>(null, this.matchTypeValidator),
     fieldType: this.fb.control<ListItem | null>(null, Validators.required),
-    dropdownDataProvider: this.fb.control<ListItem | null>(
-      null,
-      this.asyncDropdownDataProviderValidator
-    ),
-    dropdownValues: this.fb.array<{key: string; value: string}>([], this.dropdownValuesValidator),
+    dropdownDataProvider: this.fb.control<ListItem | null>(null),
+    dropdownValues: this.fb.array<{key: string; value: string}>([]),
   });
 
   public get dataType(): AbstractControl<ListItem | null> {
@@ -123,18 +119,37 @@ export class TaskManagementSearchFieldsModalComponent {
     return this.matchType.valueChanges.pipe(startWith(this.matchType.value));
   }
 
-  public get fieldType(): AbstractControl<ListItem | null> {
-    return this.form.get('fieldType');
-  }
-  public get fieldTypeValue$(): Observable<ListItem | null> {
-    return this.fieldType.valueChanges.pipe(startWith(this.fieldType.value));
-  }
-
   public get dropdownDataProvider(): AbstractControl<ListItem | null> {
     return this.form.get('dropdownDataProvider');
   }
   public get dropdownDataProviderValue$(): Observable<ListItem | null> {
     return this.dropdownDataProvider.valueChanges.pipe(startWith(this.dropdownDataProvider.value));
+  }
+
+  public get dropdownValues(): AbstractControl<any | null> {
+    return this.form.get('dropdownValues');
+  }
+
+  public get fieldType(): AbstractControl<ListItem | null> {
+    return this.form.get('fieldType');
+  }
+  public get fieldTypeValue$(): Observable<ListItem | null> {
+    return this.fieldType.valueChanges.pipe(startWith(this.fieldType.value)).pipe(
+      tap(fieldTypeValue => {
+        const fieldType = fieldTypeValue?.id;
+
+        if (
+          fieldType === TaskListSearchFieldFieldType.SINGLE_SELECT_DROPDOWN ||
+          fieldType === TaskListSearchFieldFieldType.MULTI_SELECT_DROPDOWN
+        ) {
+          this.dropdownDataProvider.setValidators(this.dropdownDataProviderValidator);
+          this.dropdownValues.setValidators(this.dropdownValuesValidator);
+        } else {
+          this.dropdownDataProvider.clearValidators();
+          this.dropdownValues.clearValidators();
+        }
+      })
+    );
   }
 
   public readonly TaskListSearchFieldDataType = TaskListSearchFieldDataType;
@@ -433,36 +448,20 @@ export class TaskManagementSearchFieldsModalComponent {
     return null;
   }
 
-  private asyncDropdownDataProviderValidator(): AsyncValidatorFn {
-    return (): Observable<ValidationErrors> => {
-      return combineLatest([this.fieldTypeValue$, this.dropdownDataProviderValue$]).pipe(
-        map(([fieldTypeValue, dropdownDataProviderValue]) => {
-          if (
-            [
-              TaskListSearchFieldFieldType.SINGLE_SELECT_DROPDOWN,
-              TaskListSearchFieldFieldType.MULTI_SELECT_DROPDOWN,
-            ].includes(fieldTypeValue?.id) &&
-            !dropdownDataProviderValue
-          )
-            return {error: 'Dropdown source provider is not specified'};
+  private dropdownDataProviderValidator(control: AbstractControl): null | {[key: string]: string} {
+    const controlValue: string | undefined = control.value;
 
-          return null;
-        })
-      );
-    };
+    if (!controlValue) return {error: 'Dropdown source provider is not specified'};
+
+    return null;
   }
 
   private dropdownValuesValidator(control: AbstractControl): null | {[key: string]: string} {
     const controlValue: {key: string; value: string}[] | undefined = control.value;
-    const fieldTypeControlValue = control.parent?.get('fieldType')?.value?.id;
     const dropdownProviderValue = control.parent?.get('dropdownDataProvider')?.value?.id;
 
     if (
       (!controlValue || controlValue?.length === 0) &&
-      [
-        TaskListSearchFieldFieldType.SINGLE_SELECT_DROPDOWN,
-        TaskListSearchFieldFieldType.MULTI_SELECT_DROPDOWN,
-      ].includes(fieldTypeControlValue) &&
       dropdownProviderValue === TaskListSearchDropdownDataProvider.DATABASE
     )
       return {error: 'Dropdown source provider is not specified or is empty'};
