@@ -26,16 +26,14 @@
     sortState: sortStateForCurrentTaskType$ | async,
     overrideSortState: overrideSortState$ | async,
     searchFields: searchFields$ | async,
-    enableTaskFiltering: enableTaskFiltering$ | async,
     loadingSearchFields: loadingSearchFields$ | async,
-    caseDefinitionName: caseDefinitionName$ | async
+    caseDefinitionName: caseDefinitionName$ | async,
+    noResultsMessage: noResultsMessage$ | async
   } as obs"
   class="main-content"
 >
   <div class="container-fluid">
-    @if (
-      obs.enableTaskFiltering && obs.caseDefinitionName && obs.caseDefinitionName !== ALL_CASES_ID
-    ) {
+    @if (obs.caseDefinitionName && obs.caseDefinitionName !== ALL_CASES_ID) {
       <ng-container
         *ngTemplateOutlet="
           searchFields;
@@ -137,8 +135,8 @@
     </div>
 
     <valtimo-no-results
-      [description]="'task-list.' + obs.selectedTaskType + '.noResultsDescription' | translate"
-      [title]="'task-list.' + obs.selectedTaskType + '.noResultsTitle' | translate"
+      [description]="obs.noResultsMessage.description | translate"
+      [title]="obs.noResultsMessage.title | translate"
     >
     </valtimo-no-results>
   </valtimo-carbon-list>

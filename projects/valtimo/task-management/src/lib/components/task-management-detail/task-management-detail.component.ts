@@ -46,15 +46,12 @@ import {ConfigService} from '@valtimo/config';
 export class TaskManagementDetailComponent {
   @Input() public carbonTheme: CARBON_THEME = CARBON_THEME.G10;
 
-  public readonly enableTaskFiltering$: Observable<boolean> =
-    this.configService.getFeatureToggleObservable('enableTaskFiltering');
-
   public readonly setDocumentDefinitionName$: Observable<DocumentDefinition> =
     this.route.params.pipe(
       map(params => params.name || ''),
       filter(docDefName => !!docDefName),
       switchMap(documentDefinitionName =>
-        this.documentService.getDocumentDefinition(documentDefinitionName)
+        this.documentService.getDocumentDefinitionForManagement(documentDefinitionName)
       ),
       tap(documentDefinition => {
         this.pageTitleService.setCustomPageTitle((documentDefinition as any)?.schema?.title || '-');
