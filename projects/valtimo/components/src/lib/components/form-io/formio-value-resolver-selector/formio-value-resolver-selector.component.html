@@ -17,6 +17,7 @@
 <valtimo-value-path-selector
   [defaultValue]="defaultValue$ | async"
   [showDocumentDefinitionSelector]="true"
-  [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
+  notation="slashes"
+  [prefixes]="[ValuePathSelectorPrefix.DOC]"
   (valueChangeEvent)="onValueChange($event)"
 ></valtimo-value-path-selector>

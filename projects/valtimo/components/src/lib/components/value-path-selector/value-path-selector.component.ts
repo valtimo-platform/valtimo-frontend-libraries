@@ -39,6 +39,7 @@ import {
 } from 'rxjs';
 import {
   ValuePathSelectorInputMode,
+  ValuePathSelectorNotation,
   ValuePathSelectorPrefix,
 } from '../../models/value-path-selector.model';
 import {
@@ -124,6 +125,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
   @Input() public tooltip = '';
   @Input() public required = false;
   @Input() public showDocumentDefinitionSelector = false;
+  @Input() public notation: ValuePathSelectorNotation = 'dots';
 
   @Input() public set defaultValue(value: string) {
     if (!value) return;
@@ -173,7 +175,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     map(result =>
       Object.keys(result)
         .reduce((acc, prefix) => {
-          return [...acc, ...result[prefix].map(value => `${prefix}:${this.removeSlashes(value)}`)];
+          return [...acc, ...result[prefix].map(path => this.getFormattedPath(prefix, path))];
         }, [])
         .sort((a, b) => a.localeCompare(b))
     ),
@@ -257,7 +259,20 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     );
   }
 
-  private removeSlashes(text?: string): string {
-    return text ? text.replace('/', '').replace('\\', '') : '';
+  private getFormattedPath(prefix: string, unformattedPath: string): string {
+    const requiredNotation = this.notation;
+    const unformattedPathNotation: ValuePathSelectorNotation = unformattedPath.includes('/')
+      ? 'slashes'
+      : 'dots';
+    const splitUnformattedPath = unformattedPath
+      .split(unformattedPathNotation === 'slashes' ? '/' : '.')
+      .filter(pathPart => pathPart !== '/' && pathPart !== '.')
+      .filter(pathPart => !!pathPart);
+    const formattedPath = splitUnformattedPath.reduce(
+      (acc, pathPart) => `${acc}${requiredNotation === 'slashes' ? '/' : '.'}${pathPart}`,
+      ''
+    );
+
+    return `${prefix}:${requiredNotation === 'dots' ? formattedPath.substring(1) : formattedPath}`;
   }
 }

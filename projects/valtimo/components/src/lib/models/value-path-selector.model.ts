@@ -40,6 +40,8 @@ enum ValuePathSelectorInputMode {
   MANUAL,
 }
 
+type ValuePathSelectorNotation = 'dots' | 'slashes';
+
 type ValuePathVersionArgument = number | 'latest';
 
 export {
@@ -48,4 +50,5 @@ export {
   ValuePathSelectorInputMode,
   ValuePathVersionArgument,
   DocumentDefinitionItemsCache,
+  ValuePathSelectorNotation,
 };
