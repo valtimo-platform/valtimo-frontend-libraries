@@ -178,9 +178,12 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
         .sort((a, b) => a.localeCompare(b))
     ),
     tap(options => (this._cachedOptions = options)),
-    switchMap(options => combineLatest([of(options), this._selectedPath$])),
-    tap(([options, selectedPath]) => {
-      if (!options.includes(selectedPath) && selectedPath !== '') this.selectedPath.setValue('');
+    switchMap(options =>
+      combineLatest([of(options), this._selectedPath$, this.inputModeIsDropdown$])
+    ),
+    tap(([options, selectedPath, inputModeIsDropdown]) => {
+      if (!options.includes(selectedPath) && selectedPath !== '' && inputModeIsDropdown)
+        this.selectedPath.setValue('');
     }),
     map(([options, selectedPath]) =>
       options.map(option => ({content: option, selected: option === selectedPath}))
