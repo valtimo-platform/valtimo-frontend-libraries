@@ -183,7 +183,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     ),
     tap(([options, selectedPath, inputModeIsDropdown]) => {
       if (!options.includes(selectedPath) && selectedPath !== '' && inputModeIsDropdown)
-        this.selectedPath.setValue('');
+        this._inputMode$.next(ValuePathSelectorInputMode.MANUAL);
     }),
     map(([options, selectedPath]) =>
       options.map(option => ({content: option, selected: option === selectedPath}))
