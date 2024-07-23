@@ -121,6 +121,8 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
   @Input() public set defaultValue(value: string) {
     if (!value) return;
     this.selectedPath.setValue(value);
+    if (this.showDocumentDefinitionSelector)
+      this._inputMode$.next(ValuePathSelectorInputMode.MANUAL);
   }
   @Output() valueChangeEvent: EventEmitter<string> = new EventEmitter();
 

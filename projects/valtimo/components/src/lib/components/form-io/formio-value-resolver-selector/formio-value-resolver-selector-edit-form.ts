@@ -15,5 +15,5 @@
  */
 
 export const formioValueResolverSelectorEditForm = () => ({
-  components: [],
+  components: [{key: 'type', type: 'hidden'}],
 });

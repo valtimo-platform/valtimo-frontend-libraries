@@ -42,9 +42,9 @@ const addValueResolverSelectorToEditform = (editForm: any): void => {
         weight: 70,
         components: [
           {
+            weight: 0,
             type: 'valtimo-value-resolver-selector',
-            input: true,
-            key: 'sourceField',
+            key: 'properties.sourceKey',
             label: 'Value resolver',
             validate: {
               required: false,

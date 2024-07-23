@@ -18,8 +18,8 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormioCustomComponent} from '../../../modules';
 import {CommonModule} from '@angular/common';
 import {ValuePathSelectorComponent} from '../../value-path-selector/value-path-selector.component';
-import {DocumentService} from 'carbon-components-angular';
 import {ValuePathSelectorPrefix} from '../../../models';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'valtimo-formio-value-resolver-selector',
@@ -29,11 +29,29 @@ import {ValuePathSelectorPrefix} from '../../../models';
   imports: [CommonModule, ValuePathSelectorComponent],
 })
 export class FormioValueResolverSelectorComponent implements FormioCustomComponent<string> {
-  @Input() public readonly value: any;
   @Input() public readonly disabled: boolean;
   @Output() public readonly valueChange = new EventEmitter<string>();
 
+  public readonly defaultValue$ = new BehaviorSubject<string>('');
+
+  private _value!: string;
+
+  @Input() public set value(value: string) {
+    if (!value) return;
+    this.defaultValue$.next(value);
+    this._value = value;
+  }
+
+  public get value() {
+    return this._value;
+  }
+
   public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
 
-  constructor(private readonly documentService: DocumentService) {}
+  public onValueChange(value: string): void {
+    if (value !== this._value) {
+      this._value = value;
+      this.valueChange.emit(value);
+    }
+  }
 }
