@@ -89,6 +89,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     return this.selectedPath.valueChanges.pipe(startWith(this.selectedPath.value));
   }
 
+  @Input() public name = '';
   @Input() public set margin(value: boolean) {
     this._showMargin = value;
   }
@@ -100,6 +101,12 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
   }
   @Input() public set disabled(value: boolean) {
     this.disabled$.next(!!value);
+
+    if (value) {
+      this.formGroup.disable();
+    } else {
+      this.formGroup.enable();
+    }
   }
   @Input() public set documentDefinitionName(value: string) {
     if (!value) return;

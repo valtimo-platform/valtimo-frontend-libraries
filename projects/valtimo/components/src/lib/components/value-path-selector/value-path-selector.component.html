@@ -57,7 +57,7 @@
         <cds-dropdown-list [items]="obs.valuePathListItems || []"></cds-dropdown-list>
       </cds-dropdown>
     } @else {
-      <input cdsText [disabled]="obs.disabled" type="text" formControlName="selectedPath" />
+      <input cdsText type="text" formControlName="selectedPath" />
     }
 
     <cds-toggle
