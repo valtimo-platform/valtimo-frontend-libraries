@@ -1788,6 +1788,7 @@
   "valuePathSelector": {
     "placeholder": "Wählen Sie einen Pfad",
     "dropdown": "Dropdown",
-    "manual": "Manuell"
+    "manual": "Manuell",
+    "selectDocDefPlaceholder": "Wählen Sie einen Fall"
   }
 }
