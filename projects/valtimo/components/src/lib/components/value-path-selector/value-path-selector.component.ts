@@ -17,6 +17,7 @@
 import {
   Component,
   EventEmitter,
+  forwardRef,
   HostBinding,
   Input,
   OnDestroy,
@@ -49,10 +50,18 @@ import {
   LoadingModule,
   ToggleModule,
 } from 'carbon-components-angular';
-import {AbstractControl, FormBuilder, FormControl, ReactiveFormsModule} from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormBuilder,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {InputLabelModule} from '../input-label/input-label.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {DocumentService} from '@valtimo/document';
+import {distinctUntilChanged} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-value-path-selector',
@@ -70,8 +79,16 @@ import {DocumentService} from '@valtimo/document';
     InputLabelModule,
     TranslateModule,
   ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: forwardRef(() => ValuePathSelectorComponent),
+    },
+  ],
+  host: {'(blur)': 'onBlurEvent()'},
 })
-export class ValuePathSelectorComponent implements OnInit, OnDestroy {
+export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlValueAccessor {
   @HostBinding('class.value-path-selector--margin-bottom') private _showMargin: boolean = false;
   @HostBinding('class.value-path-selector--margin-bottom-lg') private _showMarginLg: boolean =
     false;
@@ -86,8 +103,19 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
     return this.formGroup.get('selectedPath');
   }
 
+  private _onChangeFunction!: (value: string) => void;
+  private _onTouchedFunction!: () => void;
+
   public get _selectedPath$(): Observable<string> {
-    return this.selectedPath.valueChanges.pipe(startWith(this.selectedPath.value));
+    return this.selectedPath.valueChanges.pipe(
+      startWith(this.selectedPath.value),
+      distinctUntilChanged(),
+      tap(value => {
+        if (this._onChangeFunction) {
+          this._onChangeFunction(value);
+        }
+      })
+    );
   }
 
   @Input() public name = '';
@@ -233,6 +261,32 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+  }
+
+  public writeValue(value: string) {
+    this.selectedPath.setValue(value);
+  }
+
+  public registerOnChange(fn: (value: string) => void): void {
+    this._onChangeFunction = fn;
+  }
+
+  public registerOnTouched(fn: () => void): void {
+    this._onTouchedFunction = fn;
+  }
+
+  public onBlurEvent(): void {
+    if (!this._onTouchedFunction) return;
+
+    this._onTouchedFunction();
+  }
+
+  public setDisabledState(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.formGroup.disable();
+    } else {
+      this.formGroup.enable();
+    }
   }
 
   public onPathSelected(event: {item: {content: string}}): void {
