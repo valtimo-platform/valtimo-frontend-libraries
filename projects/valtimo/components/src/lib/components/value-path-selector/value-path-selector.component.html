@@ -35,7 +35,7 @@
         "
       >
         <cds-dropdown
-          [appendInline]="true"
+          [appendInline]="appendInline"
           [disabled]="
             obs.disabled ||
             docObs.loadingDocumentDefinitionItems ||
@@ -49,7 +49,7 @@
       </ng-container>
 
       <cds-dropdown
-        [appendInline]="true"
+        [appendInline]="appendInline"
         [disabled]="obs.disabled || obs.loadingValuePathItems || !obs.valuePathListItems"
         (selected)="onPathSelected($event)"
         [placeholder]="'valuePathSelector.placeholder' | translate"

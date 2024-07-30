@@ -119,6 +119,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
   }
 
   @Input() public name = '';
+  @Input() public appendInline = false;
   @Input() public set margin(value: boolean) {
     this._showMargin = value;
   }
@@ -201,11 +202,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
         : this.valuePathSelectorService.getResolvableKeysPerPrefix(prefixes, documentDefinitionName)
     ),
     map(result =>
-      Object.keys(result)
-        .reduce((acc, prefix) => {
-          return [...acc, ...result[prefix].map(path => this.getFormattedPath(prefix, path))];
-        }, [])
-        .sort((a, b) => a.localeCompare(b))
+      result.map(path => this.getFormattedPath(path)).sort((a, b) => a.localeCompare(b))
     ),
     tap(options => (this._cachedOptions = options)),
     switchMap(options =>
@@ -313,16 +310,20 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     );
   }
 
-  private getFormattedPath(prefix: string, unformattedPath: string): string {
+  private getFormattedPath(unformattedPath: string): string {
+    const splitPathPrefix = unformattedPath.split(':');
+    const prefix = splitPathPrefix[0];
+    const remainingPath = splitPathPrefix[1];
     const requiredNotation = this.notation;
-    const unformattedPathNotation: ValuePathSelectorNotation = unformattedPath.includes('/')
+    const pathNotation: ValuePathSelectorNotation = remainingPath.includes('/')
       ? 'slashes'
       : 'dots';
-    const splitUnformattedPath = unformattedPath
-      .split(unformattedPathNotation === 'slashes' ? '/' : '.')
+    const splitPath = remainingPath
+      .split(pathNotation === 'slashes' ? '/' : '.')
       .filter(pathPart => pathPart !== '/' && pathPart !== '.')
-      .filter(pathPart => !!pathPart);
-    const formattedPath = splitUnformattedPath.reduce(
+      .filter(pathPart => !!pathPart)
+      .map(pathPart => pathPart.replace('/', '').replace('.', ''));
+    const formattedPath = splitPath.reduce(
       (acc, pathPart) => `${acc}${requiredNotation === 'slashes' ? '/' : '.'}${pathPart}`,
       ''
     );

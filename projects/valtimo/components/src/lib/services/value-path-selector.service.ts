@@ -28,12 +28,12 @@ import {
   Subscription,
   switchMap,
   take,
-  tap,
 } from 'rxjs';
 import {ValuePathSelectorCache, ValuePathSelectorPrefix, ValuePathVersionArgument} from '../models';
 import {deepmerge} from 'deepmerge-ts';
 import {DocumentDefinitions} from '@valtimo/document';
 import {isEqual} from 'lodash';
+import {tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -56,13 +56,43 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     prefixes: ValuePathSelectorPrefix[],
     documentDefinitionName: string,
     version: ValuePathVersionArgument = 'latest'
-  ): Observable<{[key: string]: string[]}> {
-    return combineLatest(
-      prefixes.map(prefix => this.getResolvableKeys(prefix, documentDefinitionName, version))
-    ).pipe(
-      map(results => {
-        return results.reduce((acc, curr, index) => ({...acc, [prefixes[index]]: curr}), {});
-      })
+  ): Observable<string[]> {
+    return of(version).pipe(
+      switchMap(version => {
+        const prefixesWithCache = prefixes.filter(
+          prefix => !!this.getResultFromCache(prefix, documentDefinitionName, version)
+        );
+        const resultsFromCache = prefixesWithCache
+          .map(prefix => this.getResultFromCache(prefix, documentDefinitionName, version))
+          .reduce((acc, curr) => [...acc, ...curr], []);
+        const prefixesWithoutCache = prefixes.filter(prefix => !prefixesWithCache.includes(prefix));
+        const httpCall =
+          typeof version !== 'number'
+            ? this.httpClient
+                .post<
+                  string[]
+                >(this.getApiUrl(`/v1/value-resolver/document-definition/${documentDefinitionName}/keys`), prefixesWithoutCache)
+                .pipe(catchError(() => of([])))
+            : this.httpClient
+                .post<
+                  string[]
+                >(this.getApiUrl(`/v1/value-resolver/document-definition/${documentDefinitionName}/version/${version}/keys`), prefixesWithoutCache)
+                .pipe(catchError(() => of([])));
+
+        return combineLatest([
+          prefixesWithoutCache.length > 0 ? httpCall : of([]),
+          of(resultsFromCache),
+        ]);
+      }),
+      tap(([result, resultsFromCache]) => {
+        const combinedResults = [...result, ...resultsFromCache];
+        prefixes.forEach(prefix => {
+          const prefixResults = combinedResults.filter(valuePath => valuePath.includes(prefix));
+          this.cacheResult(prefix, documentDefinitionName, version, prefixResults);
+        });
+        console.log(result, resultsFromCache);
+      }),
+      map(([result, resultsFromCache]) => [...result, ...resultsFromCache])
     );
   }
 
@@ -86,33 +116,6 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
         this._cache = {};
         this._documentDefinitionCache$.next(null);
       })
-    );
-  }
-
-  private getResolvableKeys(
-    prefix: string,
-    documentDefinitionName: string,
-    version: ValuePathVersionArgument = 'latest'
-  ): Observable<string[]> {
-    return of(version).pipe(
-      switchMap(version => {
-        const resultFromCache = this.getResultFromCache(prefix, documentDefinitionName, version);
-
-        if (!!resultFromCache) return of(resultFromCache);
-
-        return typeof version !== 'number'
-          ? this.httpClient
-              .get<
-                string[]
-              >(this.getApiUrl(`/v1/value-resolver/prefix/${prefix}/document-definition/${documentDefinitionName}/keys`))
-              .pipe(catchError(() => of([])))
-          : this.httpClient
-              .get<
-                string[]
-              >(this.getApiUrl(`/v1/value-resolver/prefix/${prefix}/document-definition/${documentDefinitionName}/version/${version}/keys`))
-              .pipe(catchError(() => of([])));
-      }),
-      tap(result => this.cacheResult(prefix, documentDefinitionName, version, result))
     );
   }
 

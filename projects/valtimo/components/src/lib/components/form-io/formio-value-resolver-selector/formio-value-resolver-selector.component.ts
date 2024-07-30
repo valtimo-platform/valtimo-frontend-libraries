@@ -35,7 +35,6 @@ export class FormioValueResolverSelectorComponent implements FormioCustomCompone
   public readonly defaultValue$ = new BehaviorSubject<string>('');
 
   private _value!: string;
-
   @Input() public set value(value: string) {
     if (!value) return;
     this.defaultValue$.next(value);
