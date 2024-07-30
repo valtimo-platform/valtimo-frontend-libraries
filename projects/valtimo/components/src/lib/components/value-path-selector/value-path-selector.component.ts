@@ -295,6 +295,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
   public onDocumentDefinitionSelected(event: {item: {id: string}}): void {
     const selectedDef = event?.item?.id;
     if (!selectedDef) return;
+    this.selectedPath.setValue('');
     this._documentDefinitionNameSubject$.next(selectedDef);
   }
 
