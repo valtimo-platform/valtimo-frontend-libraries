@@ -24,7 +24,6 @@ import {BehaviorSubject} from 'rxjs';
 @Component({
   selector: 'valtimo-formio-value-resolver-selector',
   templateUrl: './formio-value-resolver-selector.component.html',
-  styleUrls: ['./formio-value-resolver-selector.component.scss'],
   standalone: true,
   imports: [CommonModule, ValuePathSelectorComponent],
 })
@@ -41,7 +40,7 @@ export class FormioValueResolverSelectorComponent implements FormioCustomCompone
     this._value = value;
   }
 
-  public get value() {
+  public get value(): string {
     return this._value;
   }
 
