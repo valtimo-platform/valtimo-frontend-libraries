@@ -95,7 +95,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
   @HostBinding('class.value-path-selector--margin-bottom-xl') private _showMarginXl: boolean =
     false;
   @HostListener('focusout')
-  public onBlur() {
+  public onBlur(): void {
     this.onBlurEvent();
   }
 
