@@ -70,3 +70,16 @@
 .formio-dialog-content {
   overflow-y: auto !important;
 }
+
+.documenten-api-uploader-metadata-modal section {
+  block-size: 564px;
+  inline-size: 987px;
+}
+
+.documenten-api-uploader-metadata-modal .cds--modal-container--lg {
+  inline-size: 100%;
+  block-size: 118.5%;
+  max-inline-size: 100%;
+  max-block-size: 118.5%;
+  min-block-size: 121.5%;
+}

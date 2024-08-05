@@ -70,8 +70,8 @@ export class DocumentenApiUploaderComponent
   readonly uploading$ = new BehaviorSubject<boolean>(false);
   readonly fileToBeUploaded$ = new BehaviorSubject<File | null>(null);
   readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
-  readonly showModal$ = new Subject<null>();
-  readonly hideModal$ = new Subject<null>();
+  readonly showModal$ = new BehaviorSubject<boolean>(false);
+  readonly hideModal$ = new Subject<null>(); //TODO: still need this?
   readonly uploadProcessLinked$: Observable<boolean | string> = combineLatest([
     this.route?.params || of(null),
     this.route?.firstChild?.params || of(null),
@@ -123,7 +123,7 @@ export class DocumentenApiUploaderComponent
 
   fileSelected(file: File): void {
     this.fileToBeUploaded$.next(file);
-    this.showModal$.next(null);
+    this.showModal$.next(true);
   }
 
   deleteFile(id: string): void {
@@ -136,7 +136,7 @@ export class DocumentenApiUploaderComponent
 
   metadataSet(metadata: DocumentenApiMetadata): void {
     this.uploading$.next(true);
-    this.hideModal$.next(null);
+    this.showModal$.next(false);
     this.domService.toggleSubmitButton(true);
 
     this.fileToBeUploaded$
@@ -151,5 +151,9 @@ export class DocumentenApiUploaderComponent
         })
       )
       .subscribe();
+  }
+
+  onModalClose() {
+    this.showModal$.next(false);
   }
 }
