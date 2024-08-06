@@ -125,6 +125,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public readonly noResultsMessage$ = new BehaviorSubject<CarbonListNoResultsMessage>(
     DOSSIER_LIST_NO_RESULTS_MESSAGE
   );
+  public readonly disableStartButton$ = new BehaviorSubject<boolean>(false);
   public readonly showAssignModal$ = new BehaviorSubject<boolean>(false);
   public readonly showChangePageModal$ = new BehaviorSubject<boolean>(false);
   public readonly showChangeTabModal$ = new BehaviorSubject<boolean>(false);
@@ -250,6 +251,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
           }
         });
     }),
+    debounceTime(100),
     tap(() => {
       this.loadingFields = false;
     })
@@ -280,7 +282,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
         this.listService.forceRefresh$,
         this._hasEnvColumnConfig$,
         this._hasApiColumnConfig$,
-      ]).pipe(debounceTime(10))
+      ]).pipe(debounceTime(50))
     ),
     distinctUntilChanged(
       (
@@ -608,6 +610,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   public onSelectedStatusesChange(statuses: InternalCaseStatus[]): void {
     this.statusService.setSelectedStatuses(statuses);
+  }
+
+  public onStartButtonDisableEvent(disabled: boolean): void {
+    this.disableStartButton$.next(disabled);
   }
 
   private openDocumentDefinitionNameSubscription(): void {
