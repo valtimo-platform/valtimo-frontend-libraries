@@ -251,7 +251,6 @@ export class DossierListComponent implements OnInit, OnDestroy {
           }
         });
     }),
-    debounceTime(100),
     tap(() => {
       this.loadingFields = false;
     })
