@@ -53,6 +53,7 @@ import {isEqual} from 'lodash';
 import {
   BehaviorSubject,
   combineLatest,
+  debounceTime,
   defaultIfEmpty,
   distinctUntilChanged,
   filter,
@@ -279,7 +280,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
         this.listService.forceRefresh$,
         this._hasEnvColumnConfig$,
         this._hasApiColumnConfig$,
-      ])
+      ]).pipe(debounceTime(10))
     ),
     distinctUntilChanged(
       (
