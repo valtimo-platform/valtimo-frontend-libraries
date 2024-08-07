@@ -25,7 +25,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
+import BpmnViewer from 'bpmn-js';
 import {NGXLogger} from 'ngx-logger';
 
 @Component({
@@ -34,7 +34,7 @@ import {NGXLogger} from 'ngx-logger';
   styleUrls: ['./migration-process-diagram.component.scss'],
 })
 export class MigrationProcessDiagramComponent implements OnInit, OnDestroy {
-  private bpmnJS: BpmnJS;
+  private bpmnViewer: BpmnViewer;
   public flowNodeMap: any = null;
 
   @ViewChild('ref') public el: ElementRef;
@@ -44,30 +44,30 @@ export class MigrationProcessDiagramComponent implements OnInit, OnDestroy {
   constructor(private logger: NGXLogger) {}
 
   ngOnInit() {
-    this.bpmnJS = new BpmnJS();
-    this.bpmnJS.on('import.done', ({error}: any) => {
+    this.bpmnViewer = new BpmnViewer();
+    this.bpmnViewer.on('import.done', ({error}: any) => {
       if (!error) {
-        const canvas = this.bpmnJS.get('canvas');
+        const canvas = this.bpmnViewer.get('canvas');
         canvas.zoom('fit-viewport', 'auto');
       }
     });
   }
 
   ngOnDestroy() {
-    if (this.bpmnJS) {
-      this.bpmnJS.destroy();
+    if (this.bpmnViewer) {
+      this.bpmnViewer.destroy();
     }
   }
 
   clear() {
-    this.bpmnJS.clear();
+    this.bpmnViewer.clear();
   }
 
   public loadXml(xml: string): void {
-    this.bpmnJS.attachTo(this.el.nativeElement);
-    this.bpmnJS.importXML(xml, err => {
+    this.bpmnViewer.attachTo(this.el.nativeElement);
+    this.bpmnViewer.importXML(xml, err => {
       this.logger.debug(err);
-      const processElements = this.bpmnJS.getDefinitions().rootElements.filter(function (element) {
+      const processElements = this.bpmnViewer.getDefinitions().rootElements.filter(function (element) {
         return element.isExecutable;
       });
       this.flowNodeMap = processElements[0].flowElements.filter(function (element) {
