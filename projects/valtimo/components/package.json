@@ -30,7 +30,7 @@
     "carbon-components-angular": "5.28.6",
     "ngx-skeleton-loader": "9.0.0",
     "@mdi/font": "7.4.47",
-    "uuid": "9.0.1",
+    "uuid": "10.0.0",
     "flatpickr": "4.6.13",
     "lodash": "4.17.21",
     "jwt-decode": "4.0.0",

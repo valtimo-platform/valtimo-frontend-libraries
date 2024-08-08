@@ -13,7 +13,7 @@
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
     "tslib": "2.6.3",
-    "uuid": "9.0.1",
+    "uuid": "10.0.0",
     "muuri": "0.9.5"
   }
 }
