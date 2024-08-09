@@ -15,7 +15,9 @@
  */
 
 label {
-  max-width: 80vh;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .valtimo-widget-collection {
@@ -88,6 +90,12 @@ label {
   &-three-columns {
     display: grid;
     grid-gap: 16px;
+    align-items: stretch;
+  }
+
+  &-vertically {
+    display: flex !important;
+    align-items: stretch !important;
   }
 
   &-two-columns {
