@@ -27,7 +27,8 @@ import {
   GetProcessLinkResponse,
   PluginProcessLinkCreateDto,
   PluginProcessLinkUpdateDto,
-  ProcessLinkType,
+  URLProcessLinkCreateDto,
+  ProcessLinkType, URLProcessLinkUpdateRequestDto,
 } from '../models';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
@@ -59,6 +60,7 @@ export class ProcessLinkService {
       | PluginProcessLinkUpdateDto
       | FormFlowProcessLinkUpdateRequestDto
       | FormProcessLinkUpdateRequestDto
+      | URLProcessLinkUpdateRequestDto
   ): Observable<null> {
     const pluginUpdateRequest = updateProcessLinkRequest as PluginProcessLinkUpdateDto;
     if (pluginUpdateRequest.actionProperties) {
@@ -80,6 +82,7 @@ export class ProcessLinkService {
       | FormProcessLinkCreateRequestDto
       | FormFlowProcessLinkCreateRequestDto
       | PluginProcessLinkCreateDto
+      | URLProcessLinkCreateDto
   ): Observable<null> {
     const pluginProcessLinkCreateRequest = saveProcessLinkRequest as PluginProcessLinkCreateDto;
     if (pluginProcessLinkCreateRequest.actionProperties) {
@@ -132,6 +135,34 @@ export class ProcessLinkService {
     return this.http.post<FormSubmissionResult>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link/${processLinkId}/form/submission`,
       formData,
+      httpOptions
+    );
+  }
+
+  submitURLProcessLink(
+    processLinkId: string,
+    documentId?: string,
+    taskInstanceId?: string,
+    documentDefinitionName?: string
+  ): Observable<FormSubmissionResult> {
+    let params = new HttpParams();
+
+    if (documentId) {
+      params = params.set('documentId', documentId);
+    }
+    if (taskInstanceId) {
+      params = params.set('taskInstanceId', taskInstanceId);
+    }
+    if (documentDefinitionName) {
+      params = params.set('documentDefinitionName', documentDefinitionName);
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      params,
+    };
+    return this.http.post<FormSubmissionResult>(
+      `${this.VALTIMO_ENDPOINT_URI}v1/process-link/url/${processLinkId}`,
       httpOptions
     );
   }

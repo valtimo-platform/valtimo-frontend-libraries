@@ -127,10 +127,12 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
               this.formDefinition = startProcessResult.properties.prefilledForm;
               this.processLinkId = startProcessResult.processLinkId;
               this.isFormViewModel = false;
+              this.modal.show();
               break;
             case 'form-flow':
               this.formFlowInstanceId = startProcessResult.properties.formFlowInstanceId;
               this.isFormViewModel = false;
+              this.modal.show();
               break;
             case 'form-view-model':
               this.formDefinition = startProcessResult.properties.formDefinition;
@@ -138,10 +140,19 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
               this.processLinkId = startProcessResult.processLinkId;
               this.isFormViewModel = true;
               this.setFormViewModelComponent();
+              this.modal.show();
+              break;
+            case 'url':
+              this.processLinkId = startProcessResult.processLinkId;
+              window.open(startProcessResult.properties.url, '_blank').focus();
+              this.processLinkService.submitURLProcessLink(
+                this.processLinkId
+              ).subscribe(result => {
+                this.submitCompleted(result);
+              });
               break;
           }
         }
-        this.modal.show();
       });
   }
 

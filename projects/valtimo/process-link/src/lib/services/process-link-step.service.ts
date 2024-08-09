@@ -202,6 +202,19 @@ export class ProcessLinkStepService {
       });
   }
 
+  setURLSteps(): void {
+    this._steps$.next([
+      {label: 'chooseProcessLinkType', secondaryLabel: 'processLinkType.url'},
+      {label: 'selectURL'},
+    ]);
+    this._currentStepIndex$.next(1);
+  }
+
+  setSingleURLStep(): void {
+    this._steps$.next([{label: 'selectURL'}]);
+    this._currentStepIndex$.next(0);
+  }
+
   disableSteps(): void {
     this._disableSteps$.next(true);
   }
@@ -247,6 +260,17 @@ export class ProcessLinkStepService {
           this.setChoosePluginConfigurationSteps();
           this.buttonService.showBackButton();
           this.buttonService.showNextButton();
+        }
+        break;
+      case 'url':
+        if (hasOneOption) {
+          this.setSingleURLStep();
+          this.buttonService.hideBackButton();
+          this.buttonService.showSaveButton();
+        } else {
+          this.setURLSteps();
+          this.buttonService.showBackButton();
+          this.buttonService.showSaveButton();
         }
         break;
     }

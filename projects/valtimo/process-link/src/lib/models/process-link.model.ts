@@ -28,6 +28,7 @@ interface ProcessLink {
   formDefinitionId?: string;
   formFlowDefinitionId?: string;
   viewModelEnabled?: boolean;
+  url?: string;
 }
 
 type GetProcessLinkResponse = Array<ProcessLink>;
@@ -98,6 +99,18 @@ interface FormProcessLinkUpdateRequestDto {
   viewModelEnabled: boolean;
 }
 
+interface URLProcessLinkCreateDto {
+  url: string;
+  activityId: string;
+  activityType: string;
+  processLinkType: string;
+}
+
+interface URLProcessLinkUpdateRequestDto {
+  url: string;
+  id: string;
+}
+
 export {
   GetProcessLinkRequest,
   ProcessLink,
@@ -110,4 +123,6 @@ export {
   PluginProcessLinkCreateDto,
   FormFlowProcessLinkUpdateRequestDto,
   FormProcessLinkUpdateRequestDto,
+  URLProcessLinkCreateDto,
+  URLProcessLinkUpdateRequestDto
 };
