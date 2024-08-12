@@ -92,7 +92,7 @@ export class DossierManagementWidgetWizardComponent {
             secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.TYPE]),
           }),
           disabled: editMode,
-          complete: editMode,
+          complete: this.widgetWizardService.selectedWidget()?.type ? true : false,
         },
         {
           label: this.translateService.instant('widgetTabManagement.wizard.steps.width'),
@@ -100,6 +100,7 @@ export class DossierManagementWidgetWizardComponent {
             secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.WIDTH]),
           }),
           disabled: !secondaryLabels[WidgetWizardStep.TYPE],
+          complete: this.widgetWizardService.widgetWidth() ? true : false,
         },
         {
           label: this.translateService.instant('widgetTabManagement.wizard.steps.style'),
@@ -107,6 +108,7 @@ export class DossierManagementWidgetWizardComponent {
             secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.STYLE]),
           }),
           disabled: !secondaryLabels[WidgetWizardStep.WIDTH],
+          complete: this.widgetWizardService.widgetStyle() ? true : false,
         },
         {
           label: this.translateService.instant('widgetTabManagement.wizard.steps.content'),
@@ -114,6 +116,7 @@ export class DossierManagementWidgetWizardComponent {
             !secondaryLabels[WidgetWizardStep.TYPE] ||
             !secondaryLabels[WidgetWizardStep.WIDTH] ||
             !secondaryLabels[WidgetWizardStep.STYLE],
+          // complete: this.widgetWizardService.widgetContent() ? true : false,
         },
       ];
     })
