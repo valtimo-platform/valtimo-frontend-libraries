@@ -116,7 +116,7 @@ export class DossierManagementWidgetWizardComponent {
             !secondaryLabels[WidgetWizardStep.TYPE] ||
             !secondaryLabels[WidgetWizardStep.WIDTH] ||
             !secondaryLabels[WidgetWizardStep.STYLE],
-          // complete: this.widgetWizardService.widgetContent() ? true : false,
+          complete: this.widgetWizardService.widgetContent() ? true : false,
         },
       ];
     })
