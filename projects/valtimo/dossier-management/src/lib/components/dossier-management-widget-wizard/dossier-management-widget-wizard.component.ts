@@ -125,9 +125,7 @@ export class DossierManagementWidgetWizardComponent {
   private readonly _contentStepValid = signal<boolean>(false);
   public readonly currentStep = signal<WidgetWizardStep>(WidgetWizardStep.TYPE);
   public readonly backButtonDisabled: Signal<boolean> = computed(
-    () =>
-      (this.widgetWizardService.editMode() && this.currentStep() === WidgetWizardStep.WIDTH) ||
-      this.currentStep() === WidgetWizardStep.TYPE
+    () => this.widgetWizardService.editMode() && this.currentStep() === WidgetWizardStep.WIDTH
   );
   public nextButtonDisabled = computed(() => {
     switch (this.currentStep()) {
