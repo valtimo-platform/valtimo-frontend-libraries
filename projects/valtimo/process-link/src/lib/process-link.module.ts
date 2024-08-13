@@ -59,6 +59,7 @@ import {SelectFormComponent} from './components/select-form';
 import {FormFlowComponent} from './components/form-flow/form-flow.component';
 import {SelectFormFlowComponent} from './components/select-form-flow';
 import {FormFlowConfigurationContainerComponent} from './components/form-flow-configuration-container';
+import {ProcessLinkStateService} from './services';
 
 @NgModule({
   declarations: [

@@ -26,6 +26,10 @@ import BpmnViewer from 'bpmn-js';
 import {BpmnPropertiesPanelModule, BpmnPropertiesProviderModule, CamundaPlatformPropertiesProviderModule} from 'bpmn-js-properties-panel';
 import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
 import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
+import magicPropertiesProviderModule from './customizer';
+import magicModdleDescriptor from './customizer/magic.json';
+import {ModalService} from '@valtimo/components';
+import {ProcessLinkService, ProcessLinkStateService,} from '@valtimo/process-link';
 
 @Component({
   selector: 'valtimo-process-management-builder',
@@ -50,8 +54,16 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
     private readonly alertService: AlertService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly pageTitleService: PageTitleService
-  ) {}
+    private readonly pageTitleService: PageTitleService,
+
+    private readonly modalService: ModalService,
+    private readonly stateService: ProcessLinkStateService,
+    private readonly processLinkService: ProcessLinkService,
+  ) {
+    (window as any).modalService = modalService;
+    (window as any).stateService = stateService;
+    (window as any).processLinkService = processLinkService;
+  }
 
   ngOnInit() {
     this.init();
@@ -60,6 +72,7 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
   init() {
     this.processKey = this.route.snapshot.paramMap.get('key');
     forkJoin(this.getElementTemplates()).subscribe((elementTemplates: any[]) => {
+
       this.bpmnModeler = new Modeler({
         container: '#canvas',
         height: '90vh',
@@ -67,13 +80,15 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
           BpmnPropertiesPanelModule,
           BpmnPropertiesProviderModule,
           CamundaPlatformPropertiesProviderModule,
-          camundaPlatformBehaviors
+          camundaPlatformBehaviors,
+          magicPropertiesProviderModule
         ],
         propertiesPanel: {
           parent: '#properties',
         },
         moddleExtensions: {
           camunda: CamundaBpmnModdle,
+          magic: magicModdleDescriptor
         },
         elementTemplates,
       });

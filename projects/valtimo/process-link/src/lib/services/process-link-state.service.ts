@@ -21,7 +21,9 @@ import {ProcessLinkStepService} from './process-link-step.service';
 import {ProcessLinkButtonService} from './process-link-button.service';
 import {PluginStateService} from './plugin-state.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ProcessLinkStateService implements OnDestroy {
   private readonly _showModal$ = new BehaviorSubject<boolean>(false);
   private readonly _availableProcessLinkTypes$ = new BehaviorSubject<Array<ProcessLinkType>>([]);
