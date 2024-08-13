@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 
 import {
   AdditionalDocumentDate,
@@ -56,6 +65,8 @@ import {
   ModalService,
   SelectModule,
   ValtimoModalService,
+  VModalComponent,
+  VModalModule,
 } from '@valtimo/components';
 
 import {
@@ -71,7 +82,6 @@ import {
   TagModule,
   TooltipModule,
 } from 'carbon-components-angular';
-import {DocumentenApiDocumentService} from '../../services';
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 
 @Component({
@@ -96,9 +106,12 @@ import {DocumentenApiTagService} from '../../services/documenten-api-tag.service
     TagModule,
     TooltipModule,
     TranslateModule,
+    VModalModule,
   ],
 })
 export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, OnDestroy {
+  @ViewChild('metadataModal') metadataModal: VModalComponent;
+
   @Input() disabled$!: Observable<boolean>;
   @Input() file$!: Observable<any>;
 
@@ -173,7 +186,19 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   @Input() filename: string;
   @Input() isEditMode: boolean;
   @Input() language: string;
-  @Input() open = false;
+
+  public readonly open$ = new BehaviorSubject<boolean>(false);
+
+  @Input() set open(value: boolean) {
+    this.open$.next(value);
+
+    if (value) {
+      this.modalService.openModal(this.metadataModal);
+    } else {
+      this.modalService.closeModal();
+    }
+  }
+
   @Input() status: string;
   @Input() supportsTrefwoorden = false;
 
@@ -415,14 +440,12 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     map(userProfile => userProfile?.email || '')
   );
 
-  private readonly modalSize = 'lg';
   private _subscriptions = new Subscription();
   private _fileSubscription!: Subscription;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly documentService: DocumentService,
-    private readonly documentenApiDocumentService: DocumentenApiDocumentService,
     private readonly documentenApiTagService: DocumentenApiTagService,
     private readonly fb: FormBuilder,
     private readonly keycloakService: KeycloakService,
@@ -433,6 +456,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
 
   public ngOnInit(): void {
     this.openFileSubscription();
+    this.openDisabledSubscription();
   }
 
   public ngOnChanges(): void {
@@ -537,9 +561,11 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   }
 
   public closeModal(): void {
-    this.additionalDocumentDate$.next('neither');
-    this.modalClose.emit();
-    this.clearForm();
+    this.modalService.closeModal(() => {
+      this.additionalDocumentDate$.next('neither');
+      this.modalClose.emit();
+      this.clearForm();
+    });
   }
 
   private clearForm(): void {
@@ -561,7 +587,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     );
   }
 
-  private formatDate(controlName: string) {
+  private formatDate(controlName: string): void {
     const control = this.documentenApiMetadataForm.controls[controlName];
     if (control.value) {
       const date = new Date(control.value);
