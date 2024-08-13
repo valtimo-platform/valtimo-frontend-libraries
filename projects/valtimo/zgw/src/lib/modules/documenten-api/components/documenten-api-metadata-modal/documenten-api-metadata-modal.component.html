@@ -43,9 +43,9 @@
   </div>
 
   <div role="content">
-    <ng-container *ngIf="obs.open">
+    @if (obs.open) {
       <ng-container *ngTemplateOutlet="metadataForm; context: {obs: obs}"></ng-container>
-    </ng-container>
+    }
   </div>
 
   <div role="footer" class="metadata-modal-footer">
