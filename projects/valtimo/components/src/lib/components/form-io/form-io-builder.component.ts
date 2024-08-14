@@ -21,10 +21,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {FormioOptions} from '@formio/angular/formio.common';
 import {FormIoStateService} from './services/form-io-state.service';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {
-  addValueResolverSelectorToEditform,
-  modiyEditFormApiKeyInput,
-} from './form-io-builder.utils';
+import {modiyEditFormApiKeyInput} from './form-io-builder.utils';
 
 @Component({
   selector: 'valtimo-form-io-builder',
@@ -87,7 +84,6 @@ export class FormioBuilderComponent implements OnInit {
     Components.baseEditForm = function (...extend) {
       const editForm = originalEditForm(...extend);
       modiyEditFormApiKeyInput(editForm);
-      addValueResolverSelectorToEditform(editForm);
 
       return editForm;
     };
