@@ -57,9 +57,6 @@ export class TabFormComponent implements OnInit, OnDestroy {
 
   public showTasks!: AbstractControl<boolean>;
 
-  public readonly enableCaseWidgets$ =
-    this.configService.getFeatureToggleObservable('enableCaseWidgets');
-
   private _searchActive: boolean;
 
   private _subscriptions = new Subscription();
@@ -84,6 +81,17 @@ export class TabFormComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+  }
+
+  public isKeyError(): boolean {
+    return this.form.get('key')?.hasError('uniqueKey')
+      || this.form.get('key')?.hasError('pattern')
+  }
+
+  public getKeyErrorMessage(): string {
+    if (this.form.get('key')?.hasError('uniqueKey')) return 'dossierManagement.tabManagement.addModal.uniqueKeyError';
+    if (this.form.get('key')?.hasError('pattern')) return 'dossierManagement.tabManagement.addModal.invalidKeyError';
+    return '';
   }
 
   public onSearch(): void {

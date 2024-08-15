@@ -51,7 +51,7 @@
   .valtimo-widget-wizard-step {
     &__content fieldset {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 16px;
     }
 
@@ -71,6 +71,10 @@
       .cds--tile:not(.cds--tile--disabled) .cds--tile-content {
         color: var(--cds-text-primary);
       }
+    }
+
+    &__tile-title {
+      font-size: 20px;
     }
   }
 }

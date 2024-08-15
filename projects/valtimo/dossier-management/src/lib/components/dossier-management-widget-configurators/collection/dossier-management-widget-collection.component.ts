@@ -35,7 +35,12 @@ import {
   Validators,
 } from '@angular/forms';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
+import {
+  CARBON_THEME,
+  CdsThemeService,
+  CurrentCarbonTheme,
+  InputLabelModule,
+} from '@valtimo/components';
 import {
   CaseWidgetCurrencyDisplayType,
   CaseWidgetDateDisplayType,
@@ -75,6 +80,7 @@ import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dos
     DropdownModule,
     ButtonModule,
     IconModule,
+    InputLabelModule,
   ],
 })
 export class DossierManagementWidgetCollectionComponent
@@ -129,12 +135,12 @@ export class DossierManagementWidgetCollectionComponent
 
   public WIDTH_ITEMS: ListItem[] = [
     {
-      content: this.translateService.instant('widgetTabManagement.width.fullWidth.title'),
+      content: this.translateService.instant('widgetTabManagement.width.fullWidth'),
       id: 'full',
       selected: true,
     },
     {
-      content: this.translateService.instant('widgetTabManagement.width.half.title'),
+      content: this.translateService.instant('widgetTabManagement.width.half'),
       id: 'half',
       selected: false,
     },

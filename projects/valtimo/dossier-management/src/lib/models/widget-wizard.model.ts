@@ -84,10 +84,10 @@ const AVAILABLE_WIDGETS: WidgetTypeSelection[] = [
 ];
 
 const WIDGET_WIDTH_LABELS: {[key: number]: string} = {
-  1: 'widgetTabManagement.width.quarter.title',
-  2: 'widgetTabManagement.width.half.title',
-  3: 'widgetTabManagement.width.threeQuarters.title',
-  4: 'widgetTabManagement.width.fullWidth.title',
+  1: 'widgetTabManagement.width.small.title',
+  2: 'widgetTabManagement.width.medium.title',
+  3: 'widgetTabManagement.width.large.title',
+  4: 'widgetTabManagement.width.xtraLarge.title',
 };
 
 const WIDGET_STYLE_LABELS: {[key: string]: string} = {

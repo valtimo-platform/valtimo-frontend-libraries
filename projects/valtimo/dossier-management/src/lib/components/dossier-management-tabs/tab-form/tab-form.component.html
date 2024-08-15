@@ -22,15 +22,16 @@
   </cds-label>
 
   <cds-label
-    [invalid]="!!this.form.get('key').errors?.uniqueKey"
-    [invalidText]="'dossierManagement.tabManagement.addModal.uniqueKeyError' | translate"
+    [invalid]="!!isKeyError()"
+    [invalidText]="getKeyErrorMessage() | translate"
   >
     {{ 'dossierManagement.tabManagement.addModal.tabKeyLabel' | translate }}
 
     <input
       cdsText
       formControlName="key"
-      [invalid]="!!this.form.get('key').errors?.uniqueKey"
+      pattern="[a-zA-Z0-9\-]+"
+      [invalid]="!!isKeyError()"
       [attr.modal-primary-focus]="true"
     />
   </cds-label>
@@ -48,14 +49,12 @@
     <cds-dropdown-list></cds-dropdown-list>
   </cds-combo-box>
 
-  @if (enableCaseWidgets$ | async) {
-    <cds-toggle
-      [label]="'dossierManagement.tabManagement.addModal.visibleTitle' | translate"
-      [onText]="'dossierManagement.tabManagement.addModal.visible' | translate"
-      [offText]="'dossierManagement.tabManagement.addModal.invisible' | translate"
-      [checked]="showTasks?.value"
-      (checkedChange)="toggleCheckedChange($event)"
-      [disabled]="disableTaskListVisibleToggle()"
-    ></cds-toggle>
-  }
+  <cds-toggle
+    [label]="'dossierManagement.tabManagement.addModal.visibleTitle' | translate"
+    [onText]="'dossierManagement.tabManagement.addModal.visible' | translate"
+    [offText]="'dossierManagement.tabManagement.addModal.invisible' | translate"
+    [checked]="showTasks?.value"
+    (checkedChange)="toggleCheckedChange($event)"
+    [disabled]="disableTaskListVisibleToggle()"
+  ></cds-toggle>
 </form>

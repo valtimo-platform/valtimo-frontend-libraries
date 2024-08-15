@@ -52,10 +52,15 @@ import {WIDGET_STEPS} from './steps';
 })
 export class DossierManagementWidgetWizardComponent {
   @Input() public open = false;
+  private _editMode: boolean;
   @Input() public set editMode(value: boolean) {
+    this._editMode = value;
     if (!value) return;
 
     this.currentStep.set(WidgetWizardStep.WIDTH);
+  }
+  public get editMode(): boolean {
+    return this._editMode;
   }
   @Output() public closeEvent = new EventEmitter<any>();
 
@@ -87,7 +92,7 @@ export class DossierManagementWidgetWizardComponent {
             secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.TYPE]),
           }),
           disabled: editMode,
-          complete: editMode,
+          complete: !!this.widgetWizardService.selectedWidget()?.type,
         },
         {
           label: this.translateService.instant('widgetTabManagement.wizard.steps.width'),
@@ -95,6 +100,7 @@ export class DossierManagementWidgetWizardComponent {
             secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.WIDTH]),
           }),
           disabled: !secondaryLabels[WidgetWizardStep.TYPE],
+          complete: !!this.widgetWizardService.widgetWidth(),
         },
         {
           label: this.translateService.instant('widgetTabManagement.wizard.steps.style'),
@@ -102,6 +108,7 @@ export class DossierManagementWidgetWizardComponent {
             secondaryLabel: this.translateService.instant(secondaryLabels[WidgetWizardStep.STYLE]),
           }),
           disabled: !secondaryLabels[WidgetWizardStep.WIDTH],
+          complete: !!this.widgetWizardService.widgetStyle(),
         },
         {
           label: this.translateService.instant('widgetTabManagement.wizard.steps.content'),
@@ -109,6 +116,7 @@ export class DossierManagementWidgetWizardComponent {
             !secondaryLabels[WidgetWizardStep.TYPE] ||
             !secondaryLabels[WidgetWizardStep.WIDTH] ||
             !secondaryLabels[WidgetWizardStep.STYLE],
+          complete: !!this.widgetWizardService.widgetContent(),
         },
       ];
     })
@@ -117,9 +125,7 @@ export class DossierManagementWidgetWizardComponent {
   private readonly _contentStepValid = signal<boolean>(false);
   public readonly currentStep = signal<WidgetWizardStep>(WidgetWizardStep.TYPE);
   public readonly backButtonDisabled: Signal<boolean> = computed(
-    () =>
-      (this.widgetWizardService.editMode() && this.currentStep() === WidgetWizardStep.WIDTH) ||
-      this.currentStep() === WidgetWizardStep.TYPE
+    () => this.widgetWizardService.editMode() && this.currentStep() === WidgetWizardStep.WIDTH
   );
   public nextButtonDisabled = computed(() => {
     switch (this.currentStep()) {

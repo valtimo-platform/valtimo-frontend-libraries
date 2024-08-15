@@ -230,13 +230,13 @@ export class DossierManagementWidgetsEditorComponent {
   private getWidthTranslationKey(width: number): string {
     switch (width) {
       case 1:
-        return 'widgetTabManagement.width.quarter.title';
+        return 'widgetTabManagement.width.small.title';
       case 2:
-        return 'widgetTabManagement.width.half.title';
+        return 'widgetTabManagement.width.medium.title';
       case 3:
-        return 'widgetTabManagement.width.threeQuarters.title';
+        return 'widgetTabManagement.width.large.title';
       case 4:
-        return 'widgetTabManagement.width.fullWidth.title';
+        return 'widgetTabManagement.width.xtraLarge.title';
       default:
         return '-';
     }
