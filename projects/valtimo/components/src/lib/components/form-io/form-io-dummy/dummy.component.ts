@@ -1,9 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormioCustomComponent} from '../../../modules';
 
-/**
- * Custom formio component for iban bank accounts.
- */
 @Component({
   selector: 'valtimo-dummy',
   template: '',
