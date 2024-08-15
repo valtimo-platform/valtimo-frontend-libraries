@@ -48,6 +48,7 @@ import {ConfigService} from '@valtimo/config';
 import {FORM_VIEW_MODEL_TOKEN} from '@valtimo/config';
 import {FormViewModel} from '@valtimo/config';
 import {Subscription} from 'rxjs';
+import {resolveUrlVariables} from '@valtimo/process-link'
 
 @Component({
   selector: 'valtimo-dossier-process-start-modal',
@@ -144,12 +145,16 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
               break;
             case 'url':
               this.processLinkId = startProcessResult.processLinkId;
-              window.open(startProcessResult.properties.url, '_blank').focus();
-              this.processLinkService.submitURLProcessLink(
-                this.processLinkId
-              ).subscribe(result => {
-                this.submitCompleted(result);
-              });
+              this.processLinkService.getVariables().subscribe(variables => {
+                let url = resolveUrlVariables(startProcessResult.properties.url, variables.variables)
+                window.open(url, '_blank').focus();
+                this.processLinkService.submitURLProcessLink(
+                    this.processLinkId
+                ).subscribe(result => {
+                  this.submitCompleted(result);
+                });
+              })
+
               break;
           }
         }

@@ -17,9 +17,10 @@
 <div>
   <div [formGroup]="urlForm">
     <cds-label [invalidText]="
-          'Invalid URL'
+          'processLinkUrlInvalid' | translate : { URL: (url.errors?.invalidUrl ?? '') }
         "
-               [invalid]="url.invalid && url.touched">Url
+               [invalid]="url.invalid && url.touched"
+    [helperText]="url.invalid ? '' : resolveUrlVariables(url.value) | async">Url
     <input
             cdsText
             type="text"

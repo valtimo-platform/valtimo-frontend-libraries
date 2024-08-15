@@ -116,6 +116,7 @@ import {SelectUrlComponent} from './components/select-url/select-url.component';
     PluginActionConfigurationComponent,
     ProcessLinkModalComponent,
     FormFlowComponent,
+    SelectUrlComponent,
   ],
 })
 export class ProcessLinkModule {}

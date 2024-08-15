@@ -31,6 +31,7 @@ import {
   ProcessLinkType, URLProcessLinkUpdateRequestDto,
 } from '../models';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {URLVariables} from "../models/process-link-url.model";
 
 @Injectable({
   providedIn: 'root',
@@ -164,6 +165,12 @@ export class ProcessLinkService {
     return this.http.post<FormSubmissionResult>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link/url/${processLinkId}`,
       httpOptions
+    );
+  }
+
+  getVariables(): Observable<URLVariables> {
+    return this.http.get<URLVariables>(
+      `${this.VALTIMO_ENDPOINT_URI}v1/process-link/url/variables`
     );
   }
 }
