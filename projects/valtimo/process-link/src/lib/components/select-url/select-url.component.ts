@@ -70,6 +70,8 @@ export class SelectUrlComponent implements OnInit, OnDestroy {
                 }
             })
 
+        this.stateService.url$
+            .subscribe(url => this.url.setValue(url));
 
         this.processLinkService.getVariables()
             .subscribe(variables => this._variables$.next(variables.variables))
