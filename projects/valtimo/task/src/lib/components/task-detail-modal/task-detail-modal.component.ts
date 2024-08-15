@@ -58,6 +58,7 @@ import {RecentlyViewed16} from '@carbon/icons';
 import {PermissionService} from '@valtimo/access-control';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
 import {NGXLogger} from 'ngx-logger';
+import {resolveUrlVariables} from '@valtimo/process-link'
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -262,6 +263,25 @@ export class TaskDetailModalComponent implements OnInit, OnDestroy {
               this.formName$.next(res.properties.formName);
               this.openModal();
               this.setFormViewModelComponent();
+              break;
+            case 'url':
+              this.taskProcessLinkType$.next('url');
+              this.processLinkId$.next(res.processLinkId);
+              combineLatest([
+                this.processLinkService.getVariables(),
+                this.task$
+              ]).subscribe(([variables, task]) => {
+                let url = resolveUrlVariables(res.properties.url, variables.variables);
+                window.open(url, '_blank').focus();
+                this.processLinkService.submitURLProcessLink(
+                    res.processLinkId,
+                    task.businessKey,
+                    task.id
+                ).subscribe(_ => {
+                  this.completeTask();
+                  this.closeModal();
+                });
+              })
               break;
           }
           this.loading$.next(false);

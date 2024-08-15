@@ -58,7 +58,7 @@ interface AssigneeRequest {
   assignee: string;
 }
 
-type TaskProcessLinkType = 'form' | 'form-flow' | 'form-view-model';
+type TaskProcessLinkType = 'form' | 'form-flow' | 'form-view-model' | 'url';
 
 interface TaskProcessLinkResult {
   processLinkId: string;
@@ -69,6 +69,7 @@ interface TaskProcessLinkResult {
     prefilledForm?: any;
     formDefinition?: any;
     formName?: string;
+    url?: string;
   };
 }
 

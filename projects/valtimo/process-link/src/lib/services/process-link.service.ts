@@ -164,6 +164,7 @@ export class ProcessLinkService {
     };
     return this.http.post<FormSubmissionResult>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link/url/${processLinkId}`,
+      {},
       httpOptions
     );
   }
