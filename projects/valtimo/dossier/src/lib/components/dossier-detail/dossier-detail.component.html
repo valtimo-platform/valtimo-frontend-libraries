@@ -51,7 +51,7 @@
           <div class="clearfix"></div>
         </div>
 
-        @if (!enableTaskPanel && (showTaskList$ | async)) {
+        @if (showTaskList$ | async) {
           <div class="tab-content-container__task-list">
             <valtimo-dossier-detail-task-list></valtimo-dossier-detail-task-list>
           </div>
