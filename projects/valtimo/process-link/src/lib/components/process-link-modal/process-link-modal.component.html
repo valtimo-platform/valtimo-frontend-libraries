@@ -29,7 +29,7 @@
     enableNextButton: enableNextButton$ | async,
     saving: saving$ | async,
     hideProgressIndicator: hideProgressIndicator$ | async,
-    typeOfSelectedProgressLink: typeOfSelectedProcessLink$ | async
+    typeOfSelectedProgressLink: typeOfSelectedProcessLink$ | async,
   } as obs"
 >
   <cds-modal valtimoCdsModal [open]="obs.showModal" size="lg">
@@ -75,6 +75,29 @@
       >
         <valtimo-select-form></valtimo-select-form>
         <br />
+
+        <cds-combo-box
+          [appendInline]="true"
+          [placeholder]="'processLinkSteps.selectFormDisplayTypePlaceholder' | translate"
+          [label]="'processLinkSteps.selectFormDisplayType' | translate"
+          [items]="formDisplayValues"
+          (selected)="selectFormDisplayType($event)"
+        >
+          <cds-dropdown-list></cds-dropdown-list>
+        </cds-combo-box>
+        <br />
+
+        <cds-combo-box
+          [appendInline]="true"
+          [placeholder]="'processLinkSteps.selectModalSizePlaceholder' | translate"
+          [label]="'processLinkSteps.selectModalSize' | translate"
+          [items]="formSizeValues"
+          (selected)="selectFormSize($event)"
+        >
+          <cds-dropdown-list></cds-dropdown-list>
+        </cds-combo-box>
+        <br />
+
         <cds-toggle
           *ngIf="showViewModelToggle"
           [label]="'processLinkConfiguration.toggleViewModel.title' | translate"
