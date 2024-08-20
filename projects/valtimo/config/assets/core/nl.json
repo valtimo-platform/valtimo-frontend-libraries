@@ -1746,7 +1746,12 @@
   "processLinkSteps": {
     "chooseProcessLinkType": "Kies soort koppeling",
     "empty": "........",
-    "selectForm": "Selecteer je formulier",
+    "selectForm": "Selecteer uw formulier",
+    "selectFormPlaceholder": "Selecteer een formulier",
+    "selectFormDisplayType": "Selecteer het weergavetype van het formulier",
+    "selectFormDisplayTypePlaceholder": "Selecteer hoe het formulier moet worden weergegeven",
+    "selectModalSize": "Selecteer de modale grootte",
+    "selectModalSizePlaceholder": "Selecteer een modale grootte",
     "selectFormFlow": "Selecteer je FormFlow",
     "choosePluginConfiguration": "Kies pluginconfiguratie",
     "choosePluginAction": "Kies je actie",
