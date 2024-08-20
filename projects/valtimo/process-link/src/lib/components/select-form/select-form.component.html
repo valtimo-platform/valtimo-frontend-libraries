@@ -17,7 +17,7 @@
 <ng-container
   *ngIf="{
     formDefinitions: formDefinitionListItems$ | async,
-    saving: saving$ | async
+    saving: saving$ | async,
   } as obs"
 >
   <p class="step-description">
@@ -28,7 +28,7 @@
       [appendInline]="true"
       [disabled]="!obs.formDefinitions || obs.saving"
       [items]="obs.formDefinitions || []"
-      [placeholder]="'interface.typeToSearch' | translate"
+      [placeholder]="'processLinkSteps.selectFormPlaceholder' | translate"
       (selected)="selectFormDefinition($event)"
       [label]="'processLinkSteps.selectForm' | translate"
       ><cds-dropdown-list></cds-dropdown-list
