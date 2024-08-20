@@ -69,10 +69,7 @@ export class ProcessLinkModalComponent {
     private readonly processLinkService: ProcessLinkService,
     private readonly processLinkStateService: ProcessLinkStateService,
     private readonly configService: ConfigService
-  ) {
-    console.log('formDisplayValues ', this.formDisplayValues);
-    console.log('formSizeValues ', this.formSizeValues);
-  }
+  ) {}
 
   public closeModal(): void {
     this.stateService.closeModal();
@@ -110,10 +107,10 @@ export class ProcessLinkModalComponent {
   }
 
   public selectFormDisplayType(event): void {
-    console.log('selectFormDisplayType event: ', event);
+    console.log('selectFormDisplayType event: ', event.id);
   }
 
   public selectFormSize(event): void {
-    console.log('selectFormSize event: ', event);
+    console.log('selectFormSize event: ', event.id);
   }
 }

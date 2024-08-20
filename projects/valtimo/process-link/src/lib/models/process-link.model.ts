@@ -98,6 +98,8 @@ interface FormProcessLinkUpdateRequestDto {
   id: string;
   formDefinitionId: string;
   viewModelEnabled: boolean;
+  formDisplayType?: FormDisplayType;
+  formSize?: FormSize;
 }
 
 enum FormDisplayType {
