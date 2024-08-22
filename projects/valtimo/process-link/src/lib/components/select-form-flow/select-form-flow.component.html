@@ -17,7 +17,7 @@
 <ng-container
   *ngIf="{
     formFlowDefinitions: formFlowDefinitionListItems$ | async,
-    saving: saving$ | async
+    saving: saving$ | async,
   } as obs"
 >
   <p class="step-description">
@@ -33,5 +33,27 @@
       [label]="'processLinkSteps.selectFormFlow' | translate"
       ><cds-dropdown-list></cds-dropdown-list
     ></cds-combo-box>
+    <br />
+
+    <cds-combo-box
+      [appendInline]="true"
+      [disabled]="obs.saving"
+      [placeholder]="'processLinkSteps.selectFormDisplayTypePlaceholder' | translate"
+      [label]="'processLinkSteps.selectFormDisplayType' | translate"
+      (selected)="selectFormDisplayType($event)"
+    >
+      <cds-dropdown-list [items]="obs.formDisplayValues || []"></cds-dropdown-list>
+    </cds-combo-box>
+    <br />
+
+    <cds-combo-box
+      [appendInline]="true"
+      [disabled]="obs.saving"
+      [placeholder]="'processLinkSteps.selectModalSizePlaceholder' | translate"
+      [label]="'processLinkSteps.selectModalSize' | translate"
+      (selected)="selectFormSize($event)"
+    >
+      <cds-dropdown-list [items]="obs.formSizeValues || []"></cds-dropdown-list>
+    </cds-combo-box>
   </div>
 </ng-container>

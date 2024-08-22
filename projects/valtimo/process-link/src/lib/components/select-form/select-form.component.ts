@@ -39,14 +39,14 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   public formDisplayValue: string;
   public formSizeValue: string;
 
-  public readonly formDisplayValues$ = combineLatest([this.stateService.selectedProcessLink$]).pipe(
-    map(([selectedProcessLink]) =>
-      Object.keys(FormDisplayType).map(key => ({
-        content: FormDisplayType[key],
+  public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
+    map(selectedProcessLink => {
+      return Object.keys(FormDisplayType).map(key => ({
+        content: FormDisplayType[key as keyof typeof FormDisplayType], // Ensures type safety for FormDisplayType keys
         id: key,
-        selected: selectedProcessLink.formDisplayType === key,
-      }))
-    )
+        selected: selectedProcessLink ? selectedProcessLink.formDisplayType === key : false,
+      }));
+    })
   );
 
   public readonly formSizeValues$ = combineLatest([this.stateService.selectedProcessLink$]).pipe(

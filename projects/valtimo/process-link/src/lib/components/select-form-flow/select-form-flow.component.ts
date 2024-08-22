@@ -22,7 +22,12 @@ import {
   ProcessLinkService,
   ProcessLinkStateService,
 } from '../../services';
-import {FormDefinitionListItem, FormFlowProcessLinkUpdateRequestDto} from '../../models';
+import {
+  FormDefinitionListItem,
+  FormDisplayType,
+  FormFlowProcessLinkUpdateRequestDto,
+  FormSize,
+} from '../../models';
 import {take} from 'rxjs/operators';
 
 @Component({
@@ -31,6 +36,29 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./select-form-flow.component.scss'],
 })
 export class SelectFormFlowComponent implements OnInit, OnDestroy {
+  public formDisplayValue: string;
+  public formSizeValue: string;
+
+  public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
+    map(selectedProcessLink => {
+      return Object.keys(FormDisplayType).map(key => ({
+        content: FormDisplayType[key as keyof typeof FormDisplayType], // Ensures type safety for FormDisplayType keys
+        id: key,
+        selected: selectedProcessLink.formDisplayType === key,
+      }));
+    })
+  );
+
+  public readonly formSizeValues$ = combineLatest([this.stateService.selectedProcessLink$]).pipe(
+    map(([selectedProcessLink]) =>
+      Object.keys(FormSize).map(key => ({
+        content: FormSize[key],
+        id: key,
+        selected: selectedProcessLink.formSize === key,
+      }))
+    )
+  );
+
   public readonly saving$ = this.stateService.saving$;
   private readonly formFlowDefinitions$ = this.formFlowService.getFormFlowDefinitions();
 
@@ -73,7 +101,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
-  selectFormFlowDefinition(formFlowDefinition: FormDefinitionListItem): void {
+  public selectFormFlowDefinition(formFlowDefinition: FormDefinitionListItem): void {
     if (typeof formFlowDefinition === 'object' && formFlowDefinition.id) {
       this._selectedFormFlowDefinition = formFlowDefinition;
       this.buttonService.enableSaveButton();
@@ -81,6 +109,14 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
       this._selectedFormFlowDefinition = null;
       this.buttonService.disableSaveButton();
     }
+  }
+
+  public selectFormDisplayType(event): void {
+    this.formDisplayValue = event.id;
+  }
+
+  public selectFormSize(event): void {
+    this.formSizeValue = event.id;
   }
 
   private openBackButtonSubscription(): void {
@@ -139,6 +175,8 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
+            formDisplayType: this.formDisplayValue,
+            formSize: this.formSizeValue,
           })
         )
       )
