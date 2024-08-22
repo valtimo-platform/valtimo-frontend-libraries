@@ -22,7 +22,12 @@ import {
   ProcessLinkService,
   ProcessLinkStateService,
 } from '../../services';
-import {FormDefinitionListItem, FormProcessLinkUpdateRequestDto} from '../../models';
+import {
+  FormDefinitionListItem,
+  FormDisplayType,
+  FormProcessLinkUpdateRequestDto,
+  FormSize,
+} from '../../models';
 import {take} from 'rxjs/operators';
 
 @Component({
@@ -31,6 +36,29 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./select-form.component.scss'],
 })
 export class SelectFormComponent implements OnInit, OnDestroy {
+  public formDisplayValue: string;
+  public formSizeValue: string;
+
+  public readonly formDisplayValues$ = combineLatest([this.stateService.selectedProcessLink$]).pipe(
+    map(([selectedProcessLink]) =>
+      Object.keys(FormDisplayType).map(key => ({
+        content: FormDisplayType[key],
+        id: key,
+        selected: selectedProcessLink.formDisplayType === key,
+      }))
+    )
+  );
+
+  public readonly formSizeValues$ = combineLatest([this.stateService.selectedProcessLink$]).pipe(
+    map(([selectedProcessLink]) =>
+      Object.keys(FormSize).map(key => ({
+        content: FormSize[key],
+        id: key,
+        selected: selectedProcessLink.formSize === key,
+      }))
+    )
+  );
+
   public readonly saving$ = this.stateService.saving$;
   private readonly formDefinitions$ = this.formService.getAllFormDefinitions();
   public readonly formDefinitionListItems$: Observable<Array<FormDefinitionListItem>> =
@@ -72,7 +100,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
-  selectFormDefinition(formDefinition: FormDefinitionListItem): void {
+  public selectFormDefinition(formDefinition: FormDefinitionListItem): void {
     if (typeof formDefinition === 'object' && formDefinition.id) {
       this._selectedFormDefinition = formDefinition;
       this.buttonService.enableSaveButton();
@@ -80,6 +108,14 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       this._selectedFormDefinition = null;
       this.buttonService.disableSaveButton();
     }
+  }
+
+  public selectFormDisplayType(event): void {
+    this.formDisplayValue = event.id;
+  }
+
+  public selectFormSize(event): void {
+    this.formSizeValue = event.id;
   }
 
   private openBackButtonSubscription(): void {
@@ -117,6 +153,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
           id: selectedProcessLink.id,
           formDefinitionId: this._selectedFormDefinition.id,
           viewModelEnabled,
+          formDisplayType: this.formDisplayValue,
+          formSize: this.formSizeValue,
         };
 
         this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -146,6 +184,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
             viewModelEnabled,
+            formDisplayType: this.formDisplayValue,
+            formSize: this.formSizeValue,
           })
         )
       )

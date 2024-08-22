@@ -60,6 +60,8 @@ interface FormProcessLinkCreateRequestDto {
   processLinkType: string;
   formDefinitionId: string;
   viewModelEnabled: boolean;
+  formDisplayType?: string;
+  formSize?: string;
 }
 
 interface FormFlowProcessLinkCreateRequestDto {
@@ -98,8 +100,8 @@ interface FormProcessLinkUpdateRequestDto {
   id: string;
   formDefinitionId: string;
   viewModelEnabled: boolean;
-  formDisplayType?: FormDisplayType;
-  formSize?: FormSize;
+  formDisplayType?: string;
+  formSize?: string;
 }
 
 enum FormDisplayType {

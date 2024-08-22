@@ -17,6 +17,8 @@
 <ng-container
   *ngIf="{
     formDefinitions: formDefinitionListItems$ | async,
+    formDisplayValues: formDisplayValues$ | async,
+    formSizeValues: formSizeValues$ | async,
     saving: saving$ | async,
   } as obs"
 >
@@ -29,9 +31,32 @@
       [disabled]="!obs.formDefinitions || obs.saving"
       [items]="obs.formDefinitions || []"
       [placeholder]="'processLinkSteps.selectFormPlaceholder' | translate"
-      (selected)="selectFormDefinition($event)"
+      (selected)="selectFormDefinitions($event)"
       [label]="'processLinkSteps.selectForm' | translate"
       ><cds-dropdown-list></cds-dropdown-list
     ></cds-combo-box>
+    <br />
+
+    <cds-combo-box
+      [appendInline]="true"
+      [disabled]="obs.saving"
+      [placeholder]="'processLinkSteps.selectFormDisplayTypePlaceholder' | translate"
+      [label]="'processLinkSteps.selectFormDisplayType' | translate"
+      (selected)="selectFormDisplayType($event)"
+    >
+      <cds-dropdown-list [items]="obs.formDisplayValues || []"></cds-dropdown-list>
+    </cds-combo-box>
+    <br />
+
+    <cds-combo-box
+      [appendInline]="true"
+      [disabled]="obs.saving"
+      [placeholder]="'processLinkSteps.selectModalSizePlaceholder' | translate"
+      [label]="'processLinkSteps.selectModalSize' | translate"
+      (selected)="selectFormSize($event)"
+    >
+      <cds-dropdown-list [items]="obs.formSizeValues || []"></cds-dropdown-list>
+    </cds-combo-box>
+    <br />
   </div>
 </ng-container>

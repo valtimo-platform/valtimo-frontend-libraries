@@ -23,8 +23,6 @@ import {
 } from '../../services';
 import {take} from 'rxjs/operators';
 import {ConfigService} from '@valtimo/config';
-import {FormDisplayType, FormSize} from '../../models';
-import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 
 @Component({
   selector: 'valtimo-process-link-modal',
@@ -46,18 +44,6 @@ export class ProcessLinkModalComponent {
   public readonly saving$ = this.stateService.saving$;
   public readonly typeOfSelectedProcessLink$ = this.stateService.typeOfSelectedProcessLink$;
   public readonly viewModelEnabled$ = this.stateService.viewModelEnabled$;
-
-  public readonly formDisplayValues: Array<ListItem> = Object.keys(FormDisplayType).map(key => ({
-    content: FormDisplayType[key],
-    id: key,
-    selected: false,
-  }));
-
-  public readonly formSizeValues: Array<ListItem> = Object.keys(FormSize).map(key => ({
-    content: FormSize[key],
-    id: key,
-    selected: false,
-  }));
 
   public readonly showViewModelToggle =
     this.configService.config.featureToggles.enableFormViewModel;
@@ -104,13 +90,5 @@ export class ProcessLinkModalComponent {
 
   public toggleCheckedChange(value: boolean): void {
     this.processLinkStateService.setViewModelEnabled(value);
-  }
-
-  public selectFormDisplayType(event): void {
-    console.log('selectFormDisplayType event: ', event.id);
-  }
-
-  public selectFormSize(event): void {
-    console.log('selectFormSize event: ', event.id);
   }
 }
