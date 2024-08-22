@@ -43,7 +43,7 @@ export class DossierListActionsComponent implements OnInit {
     switchMap(documentDefinitionName =>
       combineLatest([
         documentDefinitionName
-          ? this.documentService.findProcessDocumentDefinitionsByStartableByUser(documentDefinitionName, true)
+          ? this.documentService.findProcessDocumentDefinitionsByCanInitializeDocument(documentDefinitionName, true)
           : of([]),
         this._loading$,
       ])
