@@ -1,25 +1,26 @@
 /* 
 These styles were generated with Chatgpt with following process:
 
-For each component,
+- For each component,
   - render it in browser
   - copy the component's html structure
   - tell chatgpt to generate !important styles for it that mimic carbon design from 2024
   - if styles did not actually look good, instructed chatgpt what to change visually until it did
 
-After doing this for all components:
+- Ask Chatgpt to consolidate styles for component in a logical way
 
 
 */
 
 formio,
 form-builder {
-  /* text input */
-  .formio-component-textfield {
+  /* Common Styles */
+
+  .formio-component {
     margin-bottom: 1rem !important;
   }
 
-  .formio-component-textfield label {
+  .formio-component label {
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-size: 1rem !important;
     font-weight: 600 !important;
@@ -28,9 +29,7 @@ form-builder {
     display: inline-block !important;
   }
 
-  .formio-component-textfield input.form-control {
-    width: 100% !important;
-    padding: 0.75rem !important;
+  .formio-component .form-control {
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-size: 1rem !important;
     line-height: 1.5 !important;
@@ -38,34 +37,42 @@ form-builder {
     background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
     border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
     border-radius: 0.25rem !important;
+    padding: 0.75rem !important;
+    width: 100% !important;
     transition:
       border-color 0.15s ease-in-out !important,
       box-shadow 0.15s ease-in-out !important;
     box-shadow: none !important;
   }
 
-  .formio-component-textfield input.form-control:disabled {
-    background-color: #e0e0e0 !important; /* Disabled input background color */
-    color: #8d8d8d !important; /* Disabled input text color */
-    border-color: #c6c6c6 !important; /* Disabled input border color */
-  }
-
-  .formio-component-textfield input.form-control:focus {
+  .formio-component .form-control:focus {
     border-color: #0f62fe !important; /* Carbon's interactive border color */
     box-shadow: 0 0 0 1px #0f62fe !important;
     outline: none !important;
   }
 
-  .formio-component-textfield .formio-errors.invalid-feedback {
+  .formio-component .form-control:disabled {
+    background-color: #e0e0e0 !important; /* Disabled input background color */
+    color: #8d8d8d !important; /* Disabled input text color */
+    border-color: #c6c6c6 !important; /* Disabled input border color */
+    cursor: not-allowed !important;
+  }
+
+  .formio-component .formio-errors.invalid-feedback {
     margin-top: 0.25rem !important;
     font-size: 0.875rem !important;
     color: #da1e28 !important; /* Carbon's red color for errors */
   }
 
-  /* button */
+  /* Specific Component Styles */
 
+  /* Textfield */
+  .formio-component-textfield input.form-control {
+    padding: 0.75rem !important;
+  }
+
+  /* Button */
   .formio-component-button {
-    margin-bottom: 1rem !important;
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
@@ -109,60 +116,12 @@ form-builder {
     margin-top: 0.25rem !important;
   }
 
-  .formio-component-button .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* resource selector */
-
-  .formio-component-resource-selector {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-resource-selector label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
-  .formio-component-resource-selector .form-control {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-    color: #161616 !important;
-    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
-    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
-    border-radius: 0.25rem !important;
-    padding: 0.75rem !important;
-    width: 100% !important;
-    transition:
-      border-color 0.15s ease-in-out !important,
-      box-shadow 0.15s ease-in-out !important;
-    box-shadow: none !important;
-  }
-
-  .formio-component-resource-selector .form-control:focus {
-    border-color: #0f62fe !important; /* Carbon's interactive border color */
-    box-shadow: 0 0 0 1px #0f62fe !important;
-    outline: none !important;
-  }
-
-  .formio-component-resource-selector .choices__input--cloned {
+  /* Resource Selector */
+  .formio-component-resource-selector .choices__input--cloned,
+  .formio-component-resource-selector .choices__item--choice {
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-size: 1rem !important;
     color: #161616 !important;
-    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
-    border: none !important;
-    padding: 0.5rem !important;
-    margin: 0 !important;
-    width: 100% !important;
-    box-shadow: none !important;
-    outline: none !important;
   }
 
   .formio-component-resource-selector .choices__list--dropdown {
@@ -175,235 +134,27 @@ form-builder {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important; /* Soft shadow */
   }
 
-  .formio-component-resource-selector .choices__item--choice {
-    padding: 0.5rem 1rem !important;
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    color: #161616 !important;
-    cursor: pointer !important;
-  }
-
   .formio-component-resource-selector .choices__item--choice:hover,
   .formio-component-resource-selector .choices__item--choice.is-highlighted {
     background-color: #e0e0e0 !important; /* Light gray on hover */
   }
 
-  .formio-component-resource-selector .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* text area */
-
-  .formio-component-textarea {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-textarea label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
+  /* Text Area */
   .formio-component-textarea textarea.form-control {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-    color: #161616 !important;
-    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
-    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
-    border-radius: 0.25rem !important;
-    padding: 0.75rem !important;
-    width: 100% !important;
-    transition:
-      border-color 0.15s ease-in-out !important,
-      box-shadow 0.15s ease-in-out !important;
-    box-shadow: none !important;
     resize: vertical !important; /* Allow vertical resizing only */
     min-height: 3rem !important; /* Ensure a minimum height */
   }
 
-  .formio-component-textarea textarea.form-control:focus {
-    border-color: #0f62fe !important; /* Carbon's interactive border color */
-    box-shadow: 0 0 0 1px #0f62fe !important;
-    outline: none !important;
-  }
-
-  .formio-component-textarea .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* number */
-
-  .formio-component-number {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-number label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
+  /* Number */
   .formio-component-number input.form-control {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-    color: #161616 !important;
-    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
-    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
-    border-radius: 0.25rem !important;
-    padding: 0.75rem !important;
-    width: 100% !important;
-    transition:
-      border-color 0.15s ease-in-out !important,
-      box-shadow 0.15s ease-in-out !important;
-    box-shadow: none !important;
   }
 
-  .formio-component-number input.form-control:focus {
-    border-color: #0f62fe !important; /* Carbon's interactive border color */
-    box-shadow: 0 0 0 1px #0f62fe !important;
-    outline: none !important;
-  }
-
-  .formio-component-number input.form-control[disabled] {
-    background-color: #e0e0e0 !important; /* Disabled input background color */
-    color: #8d8d8d !important; /* Disabled input text color */
-    border-color: #c6c6c6 !important; /* Disabled input border color */
-    cursor: not-allowed !important;
-  }
-
-  .formio-component-number .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* password */
-
-  .formio-component-password {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-password label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
+  /* Password */
   .formio-component-password input.form-control {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-    color: #161616 !important;
-    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
-    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
-    border-radius: 0.25rem !important;
-    padding: 0.75rem !important;
-    width: 100% !important;
-    transition:
-      border-color 0.15s ease-in-out !important,
-      box-shadow 0.15s ease-in-out !important;
-    box-shadow: none !important;
   }
 
-  .formio-component-password input.form-control:focus {
-    border-color: #0f62fe !important; /* Carbon's interactive border color */
-    box-shadow: 0 0 0 1px #0f62fe !important;
-    outline: none !important;
-  }
-
-  .formio-component-password input.form-control[disabled] {
-    background-color: #e0e0e0 !important; /* Disabled input background color */
-    color: #8d8d8d !important; /* Disabled input text color */
-    border-color: #c6c6c6 !important; /* Disabled input border color */
-    cursor: not-allowed !important;
-  }
-
-  .formio-component-password .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* checkbox */
-
-  .formio-component-checkbox {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-checkbox .form-check-label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 400 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    display: flex !important;
-    align-items: center !important;
-  }
-
-  .formio-component-checkbox .form-check-input {
-    width: 1rem !important;
-    height: 1rem !important;
-    margin-right: 0.5rem !important;
-    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
-    background-color: #ffffff !important; /* White background */
-    border-radius: 0.125rem !important; /* Slightly rounded corners */
-    cursor: pointer !important;
-    transition:
-      background-color 0.15s ease-in-out !important,
-      border-color 0.15s ease-in-out !important;
-  }
-
-  .formio-component-checkbox .form-check-input:checked {
-    background-color: #0f62fe !important; /* Carbon's primary blue when checked */
-    border-color: #0f62fe !important;
-  }
-
-  .formio-component-checkbox .form-check-input:focus {
-    outline: none !important;
-    box-shadow: 0 0 0 1px #0f62fe !important;
-  }
-
-  .formio-component-checkbox .form-check-input:disabled {
-    background-color: #e0e0e0 !important; /* Disabled background color */
-    border-color: #c6c6c6 !important; /* Disabled border color */
-    cursor: not-allowed !important;
-  }
-
-  .formio-component-checkbox .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* select boxes */
-
-  .formio-component-selectBoxes {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-selectBoxes label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
+  /* Checkbox */
+  .formio-component-checkbox .form-check-label,
   .formio-component-selectBoxes .form-check-label {
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-size: 1rem !important;
@@ -411,9 +162,9 @@ form-builder {
     color: #161616 !important; /* Carbon Design's primary text color */
     display: flex !important;
     align-items: center !important;
-    margin-bottom: 0.5rem !important;
   }
 
+  .formio-component-checkbox .form-check-input,
   .formio-component-selectBoxes .form-check-input {
     width: 1rem !important;
     height: 1rem !important;
@@ -427,66 +178,26 @@ form-builder {
       border-color 0.15s ease-in-out !important;
   }
 
+  .formio-component-checkbox .form-check-input:checked,
   .formio-component-selectBoxes .form-check-input:checked {
     background-color: #0f62fe !important; /* Carbon's primary blue when checked */
     border-color: #0f62fe !important;
   }
 
+  .formio-component-checkbox .form-check-input:focus,
   .formio-component-selectBoxes .form-check-input:focus {
     outline: none !important;
     box-shadow: 0 0 0 1px #0f62fe !important;
   }
 
+  .formio-component-checkbox .form-check-input:disabled,
   .formio-component-selectBoxes .form-check-input:disabled {
     background-color: #e0e0e0 !important; /* Disabled background color */
     border-color: #c6c6c6 !important; /* Disabled border color */
     cursor: not-allowed !important;
   }
 
-  .formio-component-selectBoxes .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* select box */
-
-  .formio-component-select {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-select label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
-  .formio-component-select .form-control {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-    color: #161616 !important;
-    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
-    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
-    border-radius: 0.25rem !important;
-    padding: 0.75rem !important;
-    width: 100% !important;
-    transition:
-      border-color 0.15s ease-in-out !important,
-      box-shadow 0.15s ease-in-out !important;
-    box-shadow: none !important;
-    cursor: pointer !important;
-  }
-
-  .formio-component-select .form-control:focus {
-    border-color: #0f62fe !important; /* Carbon's interactive border color */
-    box-shadow: 0 0 0 1px #0f62fe !important;
-    outline: none !important;
-  }
-
+  /* Select Box */
   .formio-component-select .choices__list--dropdown {
     background-color: #ffffff !important; /* White background for dropdown */
     border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
@@ -510,182 +221,23 @@ form-builder {
     background-color: #e0e0e0 !important; /* Light gray on hover */
   }
 
-  .formio-component-select .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* email */
-
-  .formio-component-email {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-email label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
+  /* Email */
   .formio-component-email input.form-control {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-    color: #161616 !important;
-    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
-    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
-    border-radius: 0.25rem !important;
-    padding: 0.75rem !important;
-    width: 100% !important;
-    transition:
-      border-color 0.15s ease-in-out !important,
-      box-shadow 0.15s ease-in-out !important;
-    box-shadow: none !important;
   }
 
-  .formio-component-email input.form-control:focus {
-    border-color: #0f62fe !important; /* Carbon's interactive border color */
-    box-shadow: 0 0 0 1px #0f62fe !important;
-    outline: none !important;
-  }
-
-  .formio-component-email input.form-control[disabled] {
-    background-color: #e0e0e0 !important; /* Disabled input background color */
-    color: #8d8d8d !important; /* Disabled input text color */
-    border-color: #c6c6c6 !important; /* Disabled input border color */
-    cursor: not-allowed !important;
-  }
-
-  .formio-component-email .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* url */
-
-  .formio-component-url {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-url label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
+  /* URL */
   .formio-component-url input.form-control {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-    color: #161616 !important;
-    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
-    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
-    border-radius: 0.25rem !important;
-    padding: 0.75rem !important;
-    width: 100% !important;
-    transition:
-      border-color 0.15s ease-in-out !important,
-      box-shadow 0.15s ease-in-out !important;
-    box-shadow: none !important;
   }
 
-  .formio-component-url input.form-control:focus {
-    border-color: #0f62fe !important; /* Carbon's interactive border color */
-    box-shadow: 0 0 0 1px #0f62fe !important;
-    outline: none !important;
-  }
-
-  .formio-component-url input.form-control[disabled] {
-    background-color: #e0e0e0 !important; /* Disabled input background color */
-    color: #8d8d8d !important; /* Disabled input text color */
-    border-color: #c6c6c6 !important; /* Disabled input border color */
-    cursor: not-allowed !important;
-  }
-
-  .formio-component-url .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* phone number */
-
-  .formio-component-phoneNumber {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-phoneNumber label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
-  .formio-component-phoneNumber input.form-control {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-    color: #161616 !important;
-    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
-    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
-    border-radius: 0.25rem !important;
-    padding: 0.75rem !important;
-    width: 100% !important;
-    transition:
-      border-color 0.15s ease-in-out !important,
-      box-shadow 0.15s ease-in-out !important;
-    box-shadow: none !important;
-  }
-
-  .formio-component-phoneNumber input.form-control:focus {
-    border-color: #0f62fe !important; /* Carbon's interactive border color */
-    box-shadow: 0 0 0 1px #0f62fe !important;
-    outline: none !important;
-  }
-
-  .formio-component-phoneNumber input.form-control::placeholder {
+  /* Phone Number */
+  .formio-component-phoneNumber input.form-control::placeholder,
+  .formio-component-time .form-control::placeholder,
+  .formio-component-currency .form-control::placeholder {
     color: #8d8d8d !important; /* Carbon's gray placeholder color */
     opacity: 1 !important; /* Ensure placeholder color is visible */
   }
 
-  .formio-component-phoneNumber input.form-control[disabled] {
-    background-color: #e0e0e0 !important; /* Disabled input background color */
-    color: #8d8d8d !important; /* Disabled input text color */
-    border-color: #c6c6c6 !important; /* Disabled input border color */
-    cursor: not-allowed !important;
-  }
-
-  .formio-component-phoneNumber .formio-errors.invalid-feedback {
-    margin-top: 0.25rem !important;
-    font-size: 0.875rem !important;
-    color: #da1e28 !important; /* Carbon's red color for errors */
-  }
-
-  /* tags */
-
-  .formio-component-tags {
-    margin-bottom: 1rem !important;
-  }
-
-  .formio-component-tags label {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #161616 !important; /* Carbon Design's primary text color */
-    margin-bottom: 0.5rem !important;
-    display: inline-block !important;
-  }
-
+  /* Tags */
   .formio-component-tags .choices__inner {
     display: flex !important;
     flex-wrap: wrap !important;
@@ -694,26 +246,11 @@ form-builder {
     background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
     border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
     border-radius: 0.25rem !important;
-    transition:
-      border-color 0.15s ease-in-out !important,
-      box-shadow 0.15s ease-in-out !important;
     cursor: text !important;
   }
 
-  .formio-component-tags .choices__input {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 1rem !important;
-    color: #161616 !important;
-    background-color: transparent !important;
-    border: none !important;
-    outline: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    flex-grow: 1 !important;
-  }
-
   .formio-component-tags .choices__item--selectable,
-  .choices__item.is-highlighted {
+  .formio-component-tags .choices__item.is-highlighted {
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-size: 0.875rem !important;
     color: #ffffff !important; /* White text for selected items */
@@ -728,7 +265,6 @@ form-builder {
 
   .formio-component-tags .choices__item.is-highlighted {
     background-color: #0043ce !important; /* Carbon's darker blue for highlighted items */
-    color: #ffffff !important; /* White text for highlighted items */
   }
 
   .formio-component-tags .choices__button {
@@ -759,11 +295,748 @@ form-builder {
     cursor: pointer !important;
   }
 
-  .formio-component-tags .formio-errors.invalid-feedback {
+  /* Address */
+  .formio-component-address .address-autocomplete-container {
+    position: relative !important;
+  }
+
+  .formio-component-address .address-autocomplete-remove-value-icon {
+    position: absolute !important;
+    top: 50% !important;
+    right: 0.75rem !important;
+    transform: translateY(-50%) !important;
+    font-size: 1rem !important;
+    color: #da1e28 !important; /* Carbon's red color for delete icon */
+    cursor: pointer !important;
+  }
+
+  .formio-component-address .address-autocomplete-remove-value-icon:hover {
+    color: #a2191f !important; /* Darker red on hover */
+  }
+
+  /* DateTime */
+  .formio-component-dateTime .input-group {
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+  }
+
+  .formio-component-dateTime .input-group-append .input-group-text {
+    background-color: #f4f4f4 !important;
+    border: 1px solid #8d8d8d !important;
+    border-left: none !important;
+    border-radius: 0 0.25rem 0.25rem 0 !important;
+    padding: 0.75rem !important;
+  }
+
+  .formio-component-dateTime .input-group-append .input-group-text i {
+    color: #161616 !important; /* Carbon's primary icon color */
+  }
+
+  .formio-component-dateTime .input-group-append .input-group-text:hover i {
+    color: #0f62fe !important; /* Carbon's interactive color on hover */
+  }
+
+  /* Day */
+  .formio-component-day .row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  .formio-component-day .col {
+    padding: 0 !important;
+  }
+
+  .formio-component-day select.form-control {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    padding-right: 1.5rem !important; /* Ensure space for dropdown arrow */
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%238d8d8d" viewBox="0 0 16 16"%3E%3Cpath d="M12.5 5.5l-4 4-4-4 1.5-1.5L8 6.5l2.5-2.5z"/%3E%3C/svg%3E') !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.5rem center !important;
+  }
+
+  /* Time */
+  .formio-component-time input.form-control {
+  }
+
+  /* Currency */
+  .formio-component-currency input.form-control {
+  }
+
+  /* Survey */
+
+  .formio-component-survey {
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-survey label {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #161616 !important; /* Carbon Design's primary text color */
+    margin-bottom: 0.5rem !important;
+    display: inline-block !important;
+  }
+
+  .formio-component-survey .table {
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+    color: #161616 !important;
+    border-collapse: collapse !important;
+  }
+
+  .formio-component-survey .table th,
+  .formio-component-survey .table td {
+    padding: 0.75rem !important;
+    vertical-align: top !important;
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+    text-align: left !important;
+  }
+
+  .formio-component-survey .table th {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #161616 !important;
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
+    text-align: center !important;
+  }
+
+  .formio-component-survey .table td {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    color: #161616 !important;
+    background-color: #ffffff !important; /* White background for table cells */
+    text-align: center !important;
+  }
+
+  .formio-component-survey .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background for striped rows */
+  }
+
+  .formio-component-survey .fa-question-circle {
+    color: #8d8d8d !important; /* Carbon's medium gray for icons */
+    margin-left: 0.5rem !important;
+    cursor: pointer !important;
+  }
+
+  .formio-component-survey .fa-question-circle:hover {
+    color: #0f62fe !important; /* Carbon's primary blue on hover */
+  }
+
+  .formio-component-survey input[type='radio'] {
+    width: 1rem !important;
+    height: 1rem !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    accent-color: #0f62fe !important; /* Carbon's primary blue for selected radio button */
+  }
+
+  .formio-component-survey .formio-errors.invalid-feedback {
     margin-top: 0.25rem !important;
     font-size: 0.875rem !important;
     color: #da1e28 !important; /* Carbon's red color for errors */
   }
 
-  /* address */
+  /* signature */
+
+  .formio-component-signature {
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-signature label {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #161616 !important; /* Carbon Design's primary text color */
+    margin-bottom: 0.5rem !important;
+    display: inline-block !important;
+  }
+
+  .formio-component-signature .signature-pad-body {
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+    border-radius: 0.25rem !important;
+    background-color: #ffffff !important; /* White background for the signature pad */
+    position: relative !important;
+  }
+
+  .formio-component-signature .signature-pad-body canvas {
+    width: 100% !important;
+    height: 150px !important;
+    border-radius: 0.25rem !important;
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
+    touch-action: none !important;
+    user-select: none !important;
+  }
+
+  .formio-component-signature .signature-pad-refresh {
+    position: absolute !important;
+    top: 0.5rem !important;
+    right: 0.5rem !important;
+    background-color: #0f62fe !important; /* Carbon's primary blue background for the refresh button */
+    border: none !important;
+    border-radius: 0.25rem !important;
+    padding: 0.25rem 0.5rem !important;
+    color: #ffffff !important; /* White text for the refresh button */
+    cursor: pointer !important;
+  }
+
+  .formio-component-signature .signature-pad-refresh i {
+    color: #ffffff !important; /* White icon color */
+  }
+
+  .formio-component-signature .signature-pad-refresh:hover {
+    background-color: #0043ce !important; /* Darker blue on hover */
+  }
+
+  .formio-component-signature .signature-pad-footer {
+    margin-top: 0.5rem !important;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 0.875rem !important;
+    color: #8d8d8d !important; /* Carbon's medium gray text for footer */
+    text-align: center !important;
+  }
+
+  .formio-component-signature .formio-errors.invalid-feedback {
+    margin-top: 0.25rem !important;
+    font-size: 0.875rem !important;
+    color: #da1e28 !important; /* Carbon's red color for errors */
+  }
+
+  /* panel */
+
+  .formio-component-panel {
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-panel .card {
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+    border-radius: 0.25rem !important;
+    background-color: #ffffff !important; /* White background for the panel */
+  }
+
+  .formio-component-panel .card-header {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    margin-left: 0;
+    margin-right: 0;
+    background: #f4f4f4 !important;
+    padding: 0.75rem 1rem !important;
+    border-bottom: 1px solid #8d8d8d !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .formio-component-panel .card-title {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    color: #161616 !important; /* Carbon Design's primary text color */
+    margin: 0 !important;
+  }
+
+  .formio-component-panel .card-body {
+    padding: 1rem !important;
+    background-color: #ffffff !important;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
+
+  .formio-component-panel .drag-and-drop-alert {
+    background-color: #e0e0e0 !important; /* Carbon's light gray background for alerts */
+    color: #161616 !important; /* Carbon Design's primary text color */
+    border-radius: 0.25rem !important;
+    padding: 1rem !important;
+    text-align: center !important;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+  }
+
+  .formio-component-panel .formio-errors.invalid-feedback {
+    margin-top: 0.25rem !important;
+    font-size: 0.875rem !important;
+    color: #da1e28 !important; /* Carbon's red color for errors */
+  }
+
+  /* table */
+
+  .formio-component-table {
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-table .table {
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+    border-collapse: collapse !important;
+    color: #161616 !important; /* Carbon Design's primary text color */
+    background-color: #ffffff !important; /* White background for the table */
+  }
+
+  .formio-component-table .table-bordered {
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+  }
+
+  .formio-component-table .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f4f4f4 !important; /* Carbon's light gray background for striped rows */
+  }
+
+  .formio-component-table .table-condensed th,
+  .formio-component-table .table-condensed td {
+    padding: 0.5rem !important; /* Smaller padding for condensed tables */
+  }
+
+  .formio-component-table .table th,
+  .formio-component-table .table td {
+    padding: 0.75rem !important;
+    vertical-align: top !important;
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border for cells */
+    text-align: left !important;
+  }
+
+  .formio-component-table .table th {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background for header */
+    border-bottom: 2px solid #8d8d8d !important; /* Slightly thicker border for header bottom */
+  }
+
+  .formio-component-table .drag-and-drop-alert {
+    background-color: #e0e0e0 !important; /* Carbon's light gray background for alerts */
+    color: #161616 !important; /* Carbon Design's primary text color */
+    border-radius: 0.25rem !important;
+    padding: 1rem !important;
+    text-align: center !important;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+  }
+
+  .formio-component-table .formio-errors.invalid-feedback {
+    margin-top: 0.25rem !important;
+    font-size: 0.875rem !important;
+    color: #da1e28 !important; /* Carbon's red color for errors */
+  }
+
+  /* tabs */
+  .formio-component-tabs {
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-tabs .card {
+    border: none !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+  }
+
+  .formio-component-tabs .card-header {
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background for the header */
+    padding: 0 !important;
+    border-bottom: 1px solid #8d8d8d !important; /* Carbon's medium gray border for header */
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+  }
+
+  .formio-component-tabs .card-header-tabs {
+    margin: 0;
+  }
+
+  .formio-component-tabs .nav.nav-tabs .nav-item .nav-link {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #161616 !important; /* Carbon Design's primary text color */
+    border: 1px solid transparent !important;
+    border-radius: 0.25rem 0.25rem 0 0 !important;
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background for tabs */
+    padding: 0.75rem 1rem !important;
+    transition:
+      background-color 0.15s ease-in-out !important,
+      border-color 0.15s ease-in-out !important;
+  }
+
+  .formio-component-tabs .nav.nav-tabs .nav-item .nav-link:hover {
+    background-color: #e0e0e0 !important; /* Carbon's light gray background on hover */
+    color: #161616 !important; /* Carbon's primary text color on hover */
+  }
+
+  .formio-component-tabs .nav.nav-tabs .nav-item .nav-link.active {
+    background-color: #ffffff !important; /* White background for the active tab */
+    border-color: #8d8d8d #8d8d8d #ffffff !important; /* Medium gray borders except for the bottom */
+    color: #161616 !important; /* Carbon's primary text color for active tab */
+  }
+
+  .formio-component-tabs .card-body {
+    border: 1px solid #8d8d8d !important; /* Border around the tab content */
+    border-radius: 0.25rem !important;
+    background-color: #ffffff !important; /* White background for the tab content */
+    padding: 1rem !important;
+    margin-top: -1px !important; /* Ensure content overlaps tab borders */
+  }
+
+  .formio-component-tabs .formio-errors.invalid-feedback {
+    margin-top: 0.25rem !important;
+    font-size: 0.875rem !important;
+    color: #da1e28 !important; /* Carbon's red color for errors */
+  }
+
+  /* data map */
+
+  .formio-component-dataMap {
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-dataMap label {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #161616 !important; /* Carbon Design's primary text color */
+    margin-bottom: 0.5rem !important;
+    display: inline-block !important;
+  }
+
+  .formio-component-dataMap .table {
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+    border-collapse: collapse !important;
+    background-color: #ffffff !important; /* White background for the table */
+  }
+
+  .formio-component-dataMap .table-bordered {
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+  }
+
+  .formio-component-dataMap .table th,
+  .formio-component-dataMap .table td {
+    padding: 0.75rem !important;
+    vertical-align: top !important;
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+    text-align: left !important;
+    background-color: #ffffff !important; /* White background for table cells */
+  }
+
+  .formio-component-dataMap .table th {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
+  }
+
+  .formio-component-dataMap .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f4f4f4 !important; /* Carbon's light gray background for striped rows */
+  }
+
+  .formio-component-dataMap .form-control {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    color: #161616 !important;
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+    border-radius: 0.25rem !important;
+    padding: 0.75rem !important;
+    width: 100% !important;
+    transition:
+      border-color 0.15s ease-in-out !important,
+      box-shadow 0.15s ease-in-out !important;
+    box-shadow: none !important;
+  }
+
+  .formio-component-dataMap .form-control:focus {
+    border-color: #0f62fe !important; /* Carbon's interactive border color */
+    box-shadow: 0 0 0 1px #0f62fe !important;
+    outline: none !important;
+  }
+
+  .formio-component-dataMap .formio-errors.invalid-feedback {
+    margin-top: 0.25rem !important;
+    font-size: 0.875rem !important;
+    color: #da1e28 !important; /* Carbon's red color for errors */
+  }
+
+  /* data grid */
+
+  .formio-component-dataGrid {
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-dataGrid label {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #161616 !important; /* Carbon Design's primary text color */
+    margin-bottom: 0.5rem !important;
+    display: inline-block !important;
+  }
+
+  .formio-component-dataGrid .table {
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+    border-collapse: collapse !important;
+    background-color: #ffffff !important; /* White background for the table */
+  }
+
+  .formio-component-dataGrid .table-bordered {
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+  }
+
+  .formio-component-dataGrid .table th,
+  .formio-component-dataGrid .table td {
+    padding: 0.75rem !important;
+    vertical-align: middle !important;
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+    text-align: left !important;
+    background-color: #ffffff !important; /* White background for table cells */
+  }
+
+  .formio-component-dataGrid .table th {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background */
+    border-bottom: 2px solid #8d8d8d !important; /* Slightly thicker border for header bottom */
+  }
+
+  .formio-component-dataGrid .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f4f4f4 !important; /* Carbon's light gray background for striped rows */
+  }
+
+  .formio-component-dataGrid .formio-drag-button {
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background for drag button */
+    color: #161616 !important; /* Carbon Design's primary text color */
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+    border-radius: 0.25rem !important;
+    padding: 0.375rem 0.75rem !important;
+    cursor: move !important;
+  }
+
+  .formio-component-dataGrid .formio-button-remove-row {
+    background-color: #da1e28 !important; /* Carbon's red background for remove button */
+    color: #ffffff !important; /* White icon color */
+    border: none !important;
+    border-radius: 0.25rem !important;
+    padding: 0.375rem 0.75rem !important;
+    cursor: pointer !important;
+  }
+
+  .formio-component-dataGrid .formio-button-remove-row i {
+    color: #ffffff !important; /* White icon color */
+  }
+
+  .formio-component-dataGrid .formio-button-add-row {
+    background-color: #0f62fe !important; /* Carbon's primary blue background for add button */
+    color: #ffffff !important; /* White text color */
+    border: none !important;
+    border-radius: 0.25rem !important;
+    padding: 0.375rem 0.75rem !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .formio-component-dataGrid .formio-button-add-row i {
+    margin-right: 0.5rem !important;
+  }
+
+  .formio-component-dataGrid .formio-errors.invalid-feedback {
+    margin-top: 0.25rem !important;
+    font-size: 0.875rem !important;
+    color: #da1e28 !important; /* Carbon's red color for errors */
+  }
+
+  /* edit grid */
+
+  .formio-component-editGrid {
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-editGrid label {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #161616 !important; /* Carbon Design's primary text color */
+    margin-bottom: 0.5rem !important;
+    display: inline-block !important;
+  }
+
+  .formio-component-editGrid .editgrid-listgroup {
+    padding: 0 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-editGrid .list-group-item {
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+    border-radius: 0.25rem !important;
+    background-color: #ffffff !important; /* White background for list items */
+    padding: 1rem !important;
+    margin-bottom: 0.5rem !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  .formio-component-editGrid .list-group-header {
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background for header */
+    font-weight: 600 !important;
+    border-bottom: 2px solid #8d8d8d !important;
+  }
+
+  .formio-component-editGrid .editgrid-actions {
+    display: flex !important;
+    gap: 0.5rem !important;
+  }
+
+  .formio-component-editGrid .btn-primary {
+    background-color: #0f62fe !important; /* Carbon's primary blue background for save button */
+    color: #ffffff !important; /* White text color */
+    border: none !important;
+    border-radius: 0.25rem !important;
+    padding: 0.375rem 0.75rem !important;
+    cursor: pointer !important;
+  }
+
+  .formio-component-editGrid .btn-danger {
+    background-color: #da1e28 !important; /* Carbon's red background for cancel button */
+    color: #ffffff !important; /* White text color */
+    border: none !important;
+    border-radius: 0.25rem !important;
+    padding: 0.375rem 0.75rem !important;
+    cursor: pointer !important;
+  }
+
+  .formio-component-editGrid .btn-primary:hover,
+  .formio-component-editGrid .btn-danger:hover {
+    opacity: 0.8 !important;
+  }
+
+  .formio-component-editGrid .has-error .editgrid-row-error {
+    margin-top: 0.25rem !important;
+    font-size: 0.875rem !important;
+    color: #da1e28 !important; /* Carbon's red color for errors */
+  }
+
+  .formio-component-editGrid .formio-errors.invalid-feedback {
+    margin-top: 0.25rem !important;
+    font-size: 0.875rem !important;
+    color: #da1e28 !important; /* Carbon's red color for errors */
+  }
+
+  .formio-component-editGrid button.formio-button-add-row {
+    background-color: #0f62fe !important; /* Carbon's primary blue background for add button */
+    color: #ffffff !important; /* White text color */
+    border: none !important;
+    border-radius: 0.25rem !important;
+    padding: 0.375rem 0.75rem !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .formio-component-editGrid button.formio-button-add-row i {
+    margin-right: 0.5rem !important;
+  }
+
+  .formio-component-editGrid button.formio-button-add-row:hover {
+    background-color: #0043ce !important; /* Darker blue on hover */
+  }
+
+  /* uploader */
+
+  .formio-component-file {
+    margin-bottom: 1rem !important;
+  }
+
+  .formio-component-file label {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #161616 !important; /* Carbon Design's primary text color */
+    margin-bottom: 0.5rem !important;
+    display: inline-block !important;
+  }
+
+  .formio-component-file .list-group {
+    margin-bottom: 1rem !important;
+    border: 1px solid #8d8d8d !important; /* Carbon's medium gray border */
+    border-radius: 0.25rem !important;
+    background-color: #ffffff !important; /* White background for the list group */
+  }
+
+  .formio-component-file .list-group-item {
+    padding: 0.75rem 1rem !important;
+    border-bottom: 1px solid #8d8d8d !important; /* Carbon's medium gray border for list items */
+    background-color: #ffffff !important; /* White background for list items */
+  }
+
+  .formio-component-file .list-group-item.list-group-header {
+    background-color: #f4f4f4 !important; /* Carbon's lightest gray background for headers */
+    font-weight: 600 !important;
+  }
+
+  .formio-component-file .fileSelector {
+    padding: 1rem !important;
+    border: 2px dashed #8d8d8d !important; /* Dashed medium gray border */
+    border-radius: 0.25rem !important;
+    text-align: center !important;
+    background-color: #f4f4f4 !important; /* Light gray background for file selector */
+    color: #161616 !important; /* Primary text color */
+    cursor: pointer !important;
+    position: relative !important;
+  }
+
+  .formio-component-file .fileSelector i {
+    font-size: 2rem !important;
+    color: #0f62fe !important; /* Carbon's primary blue for the icon */
+    margin-bottom: 0.5rem !important;
+  }
+
+  .formio-component-file .fileSelector .browse {
+    color: #0f62fe !important; /* Carbon's primary blue for the browse link */
+    text-decoration: underline !important;
+  }
+
+  .formio-component-file .fileSelector:hover {
+    background-color: #e0e0e0 !important; /* Darker gray on hover */
+    border-color: #0f62fe !important; /* Change border color on hover */
+  }
+
+  .formio-component-file .loader-wrapper {
+    display: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background-color: rgba(255, 255, 255, 0.75) !important;
+    z-index: 1 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 0.25rem !important;
+  }
+
+  .formio-component-file .loader-wrapper .loader {
+    border: 4px solid #f3f3f3 !important; /* Light gray loader background */
+    border-top: 4px solid #0f62fe !important; /* Primary blue for the loader */
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    animation: spin 2s linear infinite !important;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .formio-component-file .formio-errors.invalid-feedback {
+    margin-top: 0.25rem !important;
+    font-size: 0.875rem !important;
+    color: #da1e28 !important; /* Carbon's red color for errors */
+  }
 }
