@@ -14,13 +14,13 @@
   ~ limitations under the License.
   -->
 
-<div>
-  <div
-    *ngIf="{
-      steps: steps$ | async,
-      currentStepIndex: currentStepIndex$ | async,
-    } as obs"
-  >
+<div
+  *ngIf="{
+    steps: steps$ | async,
+    currentStepIndex: currentStepIndex$ | async,
+  } as obs"
+>
+  <div body *ngIf="formDefinition && (formFlowStepType$ | async) === 'form'">
     <cds-progress-indicator
       [spacing]="'equal'"
       [skeleton]="!obs.steps"
@@ -29,8 +29,7 @@
       (stepSelected)="onStepSelected($event)"
     >
     </cds-progress-indicator>
-  </div>
-  <div body *ngIf="formDefinition && (formFlowStepType$ | async) === 'form'">
+
     <valtimo-form-io
       #form
       [form]="formDefinition"
