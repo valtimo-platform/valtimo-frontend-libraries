@@ -54,7 +54,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       Object.keys(FormSize).map(key => ({
         content: FormSize[key],
         id: key,
-        selected: selectedProcessLink.formSize === key,
+        selected: selectedProcessLink ? selectedProcessLink.formSize === key : false,
       }))
     )
   );
