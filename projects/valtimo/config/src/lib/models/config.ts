@@ -93,9 +93,9 @@ interface ValtimoConfigFeatureToggles {
   enableCompactModeToggle?: boolean;
   compactModeOnByDefault?: boolean;
   enableUserNameInTopBarToggle?: boolean;
-  enableCaseWidgets?: boolean;
   enableFormViewModel?: boolean;
   enableIntermediateSave?: boolean;
+  enableTaskPanel?: boolean;
 }
 
 interface ValtimoConfig {
