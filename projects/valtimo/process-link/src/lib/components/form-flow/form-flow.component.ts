@@ -32,7 +32,7 @@ import {Step} from 'carbon-components-angular';
 @Component({
   selector: 'valtimo-form-flow',
   templateUrl: './form-flow.component.html',
-  styleUrls: ['./form-flow.component.css'],
+  styleUrls: ['./form-flow.component.scss'],
 })
 export class FormFlowComponent implements OnInit {
   @ViewChild('form') form: FormioComponent;
@@ -68,6 +68,7 @@ export class FormFlowComponent implements OnInit {
 
   public onChange(event: any): void {
     if (event?.data) {
+      console.log('Event: ', event);
       this.formIoFormData.next(event.data);
     }
   }
@@ -86,7 +87,9 @@ export class FormFlowComponent implements OnInit {
           this.formIoFormData.getValue()
         )
         .subscribe(
-          (result: FormFlowInstance) => this.handleFormFlowStep(result),
+          (result: FormFlowInstance) => {
+            this.handleFormFlowStep(result);
+          },
           errors => {
             this.form?.showErrors(errors);
             this.enable();

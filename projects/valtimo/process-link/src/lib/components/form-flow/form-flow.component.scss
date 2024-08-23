@@ -13,3 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+.form-flow {
+  &__progress-bar-indicator {
+    height: 64px;
+    overflow-x: auto;
+  }
+}

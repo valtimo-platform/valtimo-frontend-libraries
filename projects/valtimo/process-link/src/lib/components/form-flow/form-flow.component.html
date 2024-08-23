@@ -20,15 +20,19 @@
     currentStepIndex: currentStepIndex$ | async,
   } as obs"
 >
-  <div body *ngIf="formDefinition && (formFlowStepType$ | async) === 'form'">
-    <cds-progress-indicator
-      [spacing]="'equal'"
-      [skeleton]="!obs.steps"
-      [current]="obs.currentStepIndex"
-      [steps]="obs.steps"
-      (stepSelected)="onStepSelected($event)"
-    >
-    </cds-progress-indicator>
+  <div *ngIf="formDefinition && (formFlowStepType$ | async) === 'form'">
+    @if (obs.steps) {
+      <div class="form-flow__progress-bar-indicator">
+        <cds-progress-indicator
+          [spacing]="'equal'"
+          [skeleton]="!obs.steps"
+          [current]="obs.currentStepIndex"
+          [steps]="obs.steps"
+          (stepSelected)="onStepSelected($event)"
+        >
+        </cds-progress-indicator>
+      </div>
+    }
 
     <valtimo-form-io
       #form
@@ -39,7 +43,7 @@
       [options]="formioOptions"
     ></valtimo-form-io>
   </div>
-  <div body *ngIf="(formFlowStepType$ | async) === 'custom-component'">
+  <div *ngIf="(formFlowStepType$ | async) === 'custom-component'">
     <valtimo-form-flow-configuration-container
       [componentId]="FormFlowCustomComponentId$ | async"
       [formFlowInstanceId]="formFlowInstanceId"
