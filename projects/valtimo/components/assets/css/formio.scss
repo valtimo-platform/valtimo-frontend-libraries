@@ -19,29 +19,20 @@ These styles were generated with Chatgpt with following process:
 
 /* CSS Variables for keeping one source of truth and translation layor between carbon variables, and variables used in this form.io override styling */
 :root {
-  --carbon-formio-primary-text-color: var(--cds-text-primary, #161616);
-  --carbon-formio-primary-blue: var(--cds-interactive, #0f62fe);
-  --carbon-formio-primary-blue-hover: var(--cds-button-primary-hover, var(--vcds-color-70));
-  --carbon-formio-primary-blue-active: var(--cds-tag-color-blue, #002d9c);
-  --carbon-formio-darker-blue: var(--cds-support-info, #0043ce);
-  --carbon-formio-disabled-background-color: var(
-    --cds-layer-accent,
-    var(--cds-layer-accent-01, #e0e0e0)
-  );
-  --carbon-formio-disabled-text-color: var(--cds-toggle-off, #8d8d8d);
-  --carbon-formio-disabled-border-color: var(--cds-border-disabled, #c6c6c6);
-  --carbon-formio-light-gray-background: var(--cds-background, #f4f4f4);
-  --carbon-formio-medium-gray-border: var(
-    --cds-border-strong,
-    var(--cds-border-strong-01, #8d8d8d)
-  );
-  --carbon-formio-error-color: var(--cds-text-error, #da1e28);
-  --carbon-formio-hover-gray-background: var(
-    --cds-layer-accent-hover,
-    var(--cds-layer-accent-hover-01, #d1d1d1)
-  );
-  --carbon-formio-white-background: var(--cds-field-01, #ffffff);
-  --carbon-formio-icon-color: var(--cds-icon-primary, #161616);
+  --carbon-formio-primary-text-color: #161616; /* Carbon Design's primary text color */
+  --carbon-formio-primary-blue: var(--vcds-color-60) /* Carbon's primary blue */
+    --carbon-formio-primary-blue-hover: var(--vcds-color-70); /* Darker blue on hover */
+  --carbon-formio-primary-blue-active: var(--vcds-color-50); /* Even darker blue on active */
+  --carbon-formio-darker-blue: var(--vcds-color-30); /* Darker blue for highlighted items */
+  --carbon-formio-disabled-background-color: #e0e0e0; /* Disabled background color */
+  --carbon-formio-disabled-text-color: #8d8d8d; /* Disabled text color */
+  --carbon-formio-disabled-border-color: #c6c6c6; /* Disabled border color */
+  --carbon-formio-light-gray-background: #f4f4f4; /* Carbon's lightest gray background */
+  --carbon-formio-medium-gray-border: #8d8d8d; /* Carbon's medium gray border */
+  --carbon-formio-error-color: #da1e28; /* Carbon's red color for errors */
+  --carbon-formio-hover-gray-background: #e0e0e0; /* Light gray on hover */
+  --carbon-formio-white-background: #ffffff; /* White background */
+  --carbon-formio-icon-color: #161616; /* Carbon's primary icon color */
 }
 
 formio,
@@ -67,9 +58,9 @@ form-builder,
     font-size: 1rem !important;
     line-height: 1.5 !important;
     color: var(--carbon-formio-primary-text-color) !important;
-    background-color: var(--carbon-formio-light-gray-background) !important;
-    border: 1px solid var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    background-color: transparent !important; /* Transparent background */
+    border: none !important; /* No border */
+    border-bottom: 1px solid var(--carbon-formio-medium-gray-border) !important; /* Bottom border only */
     padding: 0.75rem !important;
     width: 100% !important;
     transition:
@@ -78,16 +69,17 @@ form-builder,
     box-shadow: none !important;
   }
 
-  .formio-component .form-control:focus {
-    border-color: var(--carbon-formio-primary-blue) !important;
-    box-shadow: 0 0 0 1px var(--carbon-formio-primary-blue) !important;
+  .formio-component .form-control:focus,
+  .formio-component .form-control:active {
+    border-bottom-color: transparent !important;
+    box-shadow: inset 0 0 0 2px var(--carbon-formio-primary-blue) !important; /* Inner blue outline */
     outline: none !important;
   }
 
   .formio-component .form-control:disabled {
     background-color: var(--carbon-formio-disabled-background-color) !important;
     color: var(--carbon-formio-disabled-text-color) !important;
-    border-color: var(--carbon-formio-disabled-border-color) !important;
+    border-bottom-color: var(--carbon-formio-disabled-border-color) !important;
     cursor: not-allowed !important;
   }
 
