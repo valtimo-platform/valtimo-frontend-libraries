@@ -18,9 +18,17 @@
   <div
     *ngIf="{
       steps: steps$ | async,
+      currentStepIndex: currentStepIndex$ | async,
     } as obs"
   >
-    <cds-progress-indicator [spacing]="'equal'" [steps]="obs.steps"> </cds-progress-indicator>
+    <cds-progress-indicator
+      [spacing]="'equal'"
+      [skeleton]="!obs.steps"
+      [current]="obs.currentStepIndex"
+      [steps]="obs.steps"
+      (stepSelected)="onStepSelected($event)"
+    >
+    </cds-progress-indicator>
   </div>
   <div body *ngIf="formDefinition && (formFlowStepType$ | async) === 'form'">
     <valtimo-form-io

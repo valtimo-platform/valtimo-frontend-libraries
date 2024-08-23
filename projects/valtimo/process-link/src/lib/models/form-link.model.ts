@@ -71,7 +71,7 @@ interface FormDefinitionListItem extends ListItem {
 }
 
 interface FormFlowBreadcrumbs extends ListItem {
-  currentStepInstanceId: string;
+  currentStepIndex: number;
   breadcrumbs: Array<FormFlowBreadcrumb>;
 }
 
@@ -79,6 +79,7 @@ interface FormFlowBreadcrumb extends ListItem {
   title: string;
   key: string;
   stepInstanceId: string;
+  completed: boolean;
 }
 
 export {

@@ -45,6 +45,7 @@ export class FormFlowComponent implements OnInit {
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
   public readonly formFlowStepType$ = new BehaviorSubject<FormFlowStepType | null>(null);
   public readonly FormFlowCustomComponentId$ = new BehaviorSubject<string>('');
+  public readonly currentStepIndex$ = new BehaviorSubject<number>(0);
 
   formDefinition: FormioForm;
   formioOptions: ValtimoFormioOptions;
@@ -112,14 +113,15 @@ export class FormFlowComponent implements OnInit {
     }
   }
 
-  public navigateToStep(stepInstanceId: string): void {
+  public onStepSelected(event: {step: {stepInstanceId: string}; index: number}): void {
     this.disable();
+    this.currentStepIndex$.next(event.index);
     const submissionData = this.formIoFormData.getValue().data;
     this.formFlowService
       .navigateToStep(
         this.formFlowInstanceId,
         this.formFlowStepInstanceId,
-        stepInstanceId,
+        event.step.stepInstanceId,
         submissionData
       )
       .subscribe(
@@ -134,10 +136,12 @@ export class FormFlowComponent implements OnInit {
   private getSteps(): void {
     this.steps$ = this.formFlowService.getBreadcrumbs(this.formFlowInstanceId).pipe(
       map((breadcrumbs: FormFlowBreadcrumbs) => {
+        this.currentStepIndex$.next(breadcrumbs.currentStepIndex);
         return breadcrumbs.breadcrumbs.map(breadcrumb => ({
-          label: breadcrumb.key,
+          label: breadcrumb.title ?? breadcrumb.key,
           disabled: breadcrumb.stepInstanceId === null,
-          complete: true,
+          complete: breadcrumb.completed,
+          stepInstanceId: breadcrumb.stepInstanceId,
         }));
       })
     );
@@ -169,6 +173,7 @@ export class FormFlowComponent implements OnInit {
       this.formFlowStepInstanceId = null;
       this.formFlowComplete.emit(null);
     } else {
+      this.getSteps();
       this.modalService.scrollToTop();
       this.formFlowStepType$.next(formFlowInstance.step.type);
       this.FormFlowCustomComponentId$.next(formFlowInstance?.step?.typeProperties?.id || '');
