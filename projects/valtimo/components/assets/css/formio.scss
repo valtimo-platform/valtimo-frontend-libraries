@@ -1,23 +1,21 @@
 /* 
-These styles were generated with Chatgpt with following process:
+These styles were generated with ChatGPT with the following process:
 
 - For each component,
-  - render it in browser
-  - copy the component's html structure
-  - tell chatgpt to generate !important styles for it that mimic carbon design from 2024
-  - if styles did not actually look good, instructed chatgpt what to change visually until it did
+  - render it in the browser
+  - copy the component's HTML structure
+  - tell ChatGPT to generate !important styles for it that mimic Carbon Design from 2024
+  - if styles did not actually look good, instructed ChatGPT what to change visually until it did
   - otherwise make manual corrections
 
-- Asked Chatgpt to consolidate styles for component in a logical way
+- Asked ChatGPT to consolidate styles for components in a logical way
 
-- Asked Chatgpt to extract al colors form generated styles and put them in shared color variables
+- Asked ChatGPT to extract all colors from generated styles and put them in shared color variables
 
-- Asked Chatgpt to map these variables to closest carbon variables
-
-
+- Asked ChatGPT to map these variables to closest carbon variables
 */
 
-/* CSS Variables for keeping one source of truth and translation layor between carbon variables, and variables used in this form.io override styling */
+/* CSS Variables for keeping one source of truth and translation layer between carbon variables, and variables used in this form.io override styling */
 
 :root {
   --carbon-formio-primary-text-color: var(--cds-icon-primary);
@@ -34,6 +32,8 @@ These styles were generated with Chatgpt with following process:
   --carbon-formio-hover-gray-background: var(--cds-layer-hover-01);
   --carbon-formio-white-background: var(--cds-field-02);
   --carbon-formio-icon-color: var(--cds-icon-primary);
+  --carbon-formio-border-radius-small: 0;
+  --carbon-formio-border-radius-medium: 0;
 }
 
 formio,
@@ -111,7 +111,7 @@ form-builder,
     color: var(--carbon-formio-white-background) !important;
     background-color: var(--carbon-formio-primary-blue) !important;
     border: none !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     padding: 0.75rem 1.5rem !important;
     text-align: center !important;
     text-transform: none !important;
@@ -156,7 +156,7 @@ form-builder,
   .formio-component-tags .choices__list--dropdown {
     background-color: var(--carbon-formio-white-background) !important;
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     max-height: 10rem !important;
     overflow-y: auto !important;
     margin-top: 0.25rem !important;
@@ -209,7 +209,7 @@ form-builder,
     margin-right: 0.5rem !important;
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
     background-color: var(--carbon-formio-white-background) !important;
-    border-radius: 0.125rem !important;
+    border-radius: var(--carbon-formio-border-radius-small) !important;
     cursor: pointer !important;
     transition:
       background-color 0.15s ease-in-out !important,
@@ -275,7 +275,7 @@ form-builder,
     padding: 0.75rem !important;
     background-color: var(--carbon-formio-light-gray-background) !important;
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     cursor: text !important;
   }
 
@@ -285,7 +285,7 @@ form-builder,
     font-size: 0.875rem !important;
     color: var(--carbon-formio-white-background) !important;
     background-color: var(--carbon-formio-primary-blue) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     padding: 0.25rem 0.5rem !important;
     margin-right: 0.25rem !important;
     margin-bottom: 0.25rem !important;
@@ -335,7 +335,8 @@ form-builder,
     background-color: var(--carbon-formio-light-gray-background) !important;
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
     border-left: none !important;
-    border-radius: 0 0.25rem 0.25rem 0 !important;
+    border-radius: 0 var(--carbon-formio-border-radius-medium)
+      var(--carbon-formio-border-radius-medium) 0 !important;
     padding: 0.75rem !important;
   }
 
@@ -435,7 +436,7 @@ form-builder,
 
   .formio-component-signature .signature-pad-body {
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     background-color: var(--carbon-formio-white-background) !important;
     position: relative !important;
   }
@@ -443,7 +444,7 @@ form-builder,
   .formio-component-signature .signature-pad-body canvas {
     width: 100% !important;
     height: 150px !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     background-color: var(--carbon-formio-light-gray-background) !important;
     touch-action: none !important;
     user-select: none !important;
@@ -455,7 +456,7 @@ form-builder,
     right: 0.5rem !important;
     background-color: var(--carbon-formio-primary-blue) !important;
     border: none !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     padding: 0.25rem 0.5rem !important;
     color: var(--carbon-formio-white-background) !important;
     cursor: pointer !important;
@@ -477,13 +478,13 @@ form-builder,
 
   .formio-component-panel .card {
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     background-color: var(--carbon-formio-white-background) !important;
   }
 
   .formio-component-panel .card-header {
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
+    border-top-left-radius: var(--carbon-formio-border-radius-medium);
+    border-top-right-radius: var(--carbon-formio-border-radius-medium);
     background-color: var(--carbon-formio-light-gray-background) !important;
     padding: 0.75rem 1rem !important;
     border-bottom: 1px solid var(--carbon-formio-medium-gray-border) !important;
@@ -503,15 +504,15 @@ form-builder,
   .formio-component-panel .card-body {
     padding: 1rem !important;
     background-color: var(--carbon-formio-white-background) !important;
-    border-bottom-left-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: var(--carbon-formio-border-radius-medium);
+    border-bottom-right-radius: var(--carbon-formio-border-radius-medium);
   }
 
   .formio-component-panel .drag-and-drop-alert,
   .formio-component-table .drag-and-drop-alert {
     background-color: var(--carbon-formio-disabled-background-color) !important;
     color: var(--carbon-formio-primary-text-color) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     padding: 1rem !important;
     text-align: center !important;
     font-family: 'IBM Plex Sans', sans-serif !important;
@@ -555,7 +556,8 @@ form-builder,
     font-weight: 600 !important;
     color: var(--carbon-formio-primary-text-color) !important;
     border: 1px solid transparent !important;
-    border-radius: 0.25rem 0.25rem 0 0 !important;
+    border-radius: var(--carbon-formio-border-radius-medium)
+      var(--carbon-formio-border-radius-medium) 0 0 !important;
     background-color: var(--carbon-formio-light-gray-background) !important;
     padding: 0.75rem 1rem !important;
     transition:
@@ -577,7 +579,7 @@ form-builder,
 
   .formio-component-tabs .card-body {
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     background-color: var(--carbon-formio-white-background) !important;
     padding: 1rem !important;
     margin-top: -1px !important;
@@ -599,7 +601,7 @@ form-builder,
     background-color: var(--carbon-formio-light-gray-background) !important;
     color: var(--carbon-formio-primary-text-color) !important;
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     padding: 0.375rem 0.75rem !important;
     cursor: move !important;
   }
@@ -608,7 +610,7 @@ form-builder,
     background-color: var(--carbon-formio-error-color) !important;
     color: var(--carbon-formio-white-background) !important;
     border: none !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     padding: 0.375rem 0.75rem !important;
     cursor: pointer !important;
   }
@@ -617,7 +619,7 @@ form-builder,
     background-color: var(--carbon-formio-primary-blue) !important;
     color: var(--carbon-formio-white-background) !important;
     border: none !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     padding: 0.375rem 0.75rem !important;
     cursor: pointer !important;
     display: flex !important;
@@ -637,7 +639,7 @@ form-builder,
 
   .formio-component-editGrid .list-group-item {
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     background-color: var(--carbon-formio-white-background) !important;
     padding: 1rem !important;
     margin-bottom: 0.5rem !important;
@@ -654,7 +656,7 @@ form-builder,
   .formio-component-editGrid .btn-primary,
   .formio-component-editGrid .btn-danger {
     border: none !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     padding: 0.375rem 0.75rem !important;
     cursor: pointer !important;
   }
@@ -678,7 +680,7 @@ form-builder,
     background-color: var(--carbon-formio-primary-blue) !important;
     color: var(--carbon-formio-white-background) !important;
     border: none !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     padding: 0.375rem 0.75rem !important;
     cursor: pointer !important;
     display: flex !important;
@@ -698,14 +700,14 @@ form-builder,
   .formio-component-file .list-group {
     margin-bottom: 1rem !important;
     border: 1px solid var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     background-color: var(--carbon-formio-white-background) !important;
   }
 
   .formio-component-file .fileSelector {
     padding: 1rem !important;
     border: 2px dashed var(--carbon-formio-medium-gray-border) !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
     text-align: center !important;
     background-color: var(--carbon-formio-light-gray-background) !important;
     color: var(--carbon-formio-primary-text-color) !important;
@@ -735,7 +737,7 @@ form-builder,
     z-index: 1 !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 0.25rem !important;
+    border-radius: var(--carbon-formio-border-radius-medium) !important;
   }
 
   .formio-component-file .loader-wrapper .loader {
