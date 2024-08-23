@@ -18,21 +18,22 @@ These styles were generated with Chatgpt with following process:
 */
 
 /* CSS Variables for keeping one source of truth and translation layor between carbon variables, and variables used in this form.io override styling */
+
 :root {
-  --carbon-formio-primary-text-color: #161616; /* Carbon Design's primary text color */
-  --carbon-formio-primary-blue: var(--vcds-color-60) /* Carbon's primary blue */
-    --carbon-formio-primary-blue-hover: var(--vcds-color-70); /* Darker blue on hover */
-  --carbon-formio-primary-blue-active: var(--vcds-color-50); /* Even darker blue on active */
-  --carbon-formio-darker-blue: var(--vcds-color-30); /* Darker blue for highlighted items */
-  --carbon-formio-disabled-background-color: #e0e0e0; /* Disabled background color */
-  --carbon-formio-disabled-text-color: #8d8d8d; /* Disabled text color */
-  --carbon-formio-disabled-border-color: #c6c6c6; /* Disabled border color */
-  --carbon-formio-light-gray-background: #f4f4f4; /* Carbon's lightest gray background */
-  --carbon-formio-medium-gray-border: #8d8d8d; /* Carbon's medium gray border */
-  --carbon-formio-error-color: #da1e28; /* Carbon's red color for errors */
-  --carbon-formio-hover-gray-background: #e0e0e0; /* Light gray on hover */
-  --carbon-formio-white-background: #ffffff; /* White background */
-  --carbon-formio-icon-color: #161616; /* Carbon's primary icon color */
+  --carbon-formio-primary-text-color: var(--cds-icon-primary);
+  --carbon-formio-primary-blue: var(--vcds-color-60);
+  --carbon-formio-primary-blue-hover: var(--vcds-color-70);
+  --carbon-formio-primary-blue-active: var(--vcds-color-50);
+  --carbon-formio-darker-blue: var(--vcds-color-30);
+  --carbon-formio-disabled-background-color: var(--cds-layer-accent-01);
+  --carbon-formio-disabled-text-color: var(--cds-text-on-color-disabled);
+  --carbon-formio-disabled-border-color: var(--cds-border-disabled);
+  --carbon-formio-light-gray-background: var(--cds-background);
+  --carbon-formio-medium-gray-border: var(--cds-border-strong-01);
+  --carbon-formio-error-color: var(--cds-support-error);
+  --carbon-formio-hover-gray-background: var(--cds-layer-hover-01);
+  --carbon-formio-white-background: var(--cds-field-02);
+  --carbon-formio-icon-color: var(--cds-icon-primary);
 }
 
 formio,
