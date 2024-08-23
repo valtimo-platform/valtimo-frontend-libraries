@@ -45,8 +45,7 @@
       "@valtimo/dashboard-management/*": ["dist/valtimo/dashboard-management/*"],
       "@valtimo/document": ["dist/valtimo/document"],
       "@valtimo/document/*": ["dist/valtimo/document/*"],
-      "@valtimo/zgw": ["dist/valtimo/zgw"],
-      "@valtimo/zgw/*": ["dist/valtimo/zgw/*"],
+
       "@valtimo/account": ["dist/valtimo/account"],
       "@valtimo/account/*": ["dist/valtimo/account/*"],
       "@valtimo/choice-field": ["dist/valtimo/choice-field"],
@@ -106,9 +105,6 @@
     },
     {
       "path": "./src/tsconfig.spec.json"
-    },
-    {
-      "path": "./e2e/tsconfig.e2e.json"
     },
     {
       "path": "./projects/valtimo/layout/tsconfig.lib.json"
@@ -213,12 +209,6 @@
       "path": "./projects/valtimo/form/tsconfig.spec.json"
     },
     {
-      "path": "./projects/valtimo/management/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/valtimo/management/tsconfig.spec.json"
-    },
-    {
       "path": "./projects/valtimo/analyse/tsconfig.lib.json"
     },
     {
@@ -313,12 +303,6 @@
     },
     {
       "path": "./projects/valtimo/resource/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/valtimo/user-interface/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/valtimo/user-interface/tsconfig.spec.json"
     },
     {
       "path": "./projects/valtimo/plugin-management/tsconfig.lib.json"
