@@ -18,6 +18,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
+  FormFlowBreadcrumbs,
   FormFlowCreateRequest,
   FormFlowCreateResult,
   FormFlowDefinition,
@@ -79,6 +80,19 @@ export class FormFlowService {
   save(formFlowInstanceId: string, submissionData: any): Observable<null> {
     return this.http.post<null>(
       `${this.valtimoEndpointUri}v1/form-flow/instance/${formFlowInstanceId}/save`,
+      submissionData
+    );
+  }
+
+  getBreadcrumbs(formFlowInstanceId: string): Observable<FormFlowBreadcrumbs> {
+    return this.http.get<FormFlowBreadcrumbs>(
+      `${this.valtimoEndpointUri}v1/form-flow/instance/${formFlowInstanceId}/breadcrumbs`
+    );
+  }
+
+  navigateToStep(instanceId: string, currentStepInstanceId: string, targetStepInstanceId, submissionData: any): Observable<FormFlowInstance> {
+    return this.http.post<FormFlowInstance>(
+      `${this.valtimoEndpointUri}v1/form-flow/instance/${instanceId}/step/instance/${currentStepInstanceId}/to/step/instance/${targetStepInstanceId}`,
       submissionData
     );
   }

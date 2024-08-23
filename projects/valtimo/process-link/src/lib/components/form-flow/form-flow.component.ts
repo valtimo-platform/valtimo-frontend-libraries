@@ -25,7 +25,7 @@ import {
   ValtimoModalService,
 } from '@valtimo/components';
 import {FormFlowService} from '../../services';
-import {FormFlowInstance, FormFlowStepType} from '../../models';
+import {FormFlowBreadcrumbs, FormFlowInstance, FormFlowStepType} from '../../models';
 
 @Component({
   selector: 'valtimo-form-flow',
@@ -41,11 +41,12 @@ export class FormFlowComponent implements OnInit {
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
   public readonly formFlowStepType$ = new BehaviorSubject<FormFlowStepType | null>(null);
   public readonly FormFlowCustomComponentId$ = new BehaviorSubject<string>('');
+  public readonly breadcrumbs$ = new BehaviorSubject<FormFlowBreadcrumbs | null>(null);
 
   formDefinition: FormioForm;
   formioOptions: ValtimoFormioOptions;
 
-  private formFlowStepInstanceId: string;
+  formFlowStepInstanceId: string;
 
   constructor(
     private readonly formFlowService: FormFlowService,
@@ -106,6 +107,19 @@ export class FormFlowComponent implements OnInit {
     }
   }
 
+  public navigateToStep(stepInstanceId: string,): void {
+    this.disable();
+    const submissionData = this.formIoFormData.getValue().data;
+    this.formFlowService
+      .navigateToStep(this.formFlowInstanceId, this.formFlowStepInstanceId, stepInstanceId, submissionData)
+      .subscribe((result: FormFlowInstance) => this.handleFormFlowStep(result),
+        errors => {
+          this.form?.showErrors(errors);
+          this.enable();
+        }
+      );
+  }
+
   private getFormFlowStep(): void {
     this.formFlowService
       .getFormFlowStep(this.formFlowInstanceId)
@@ -132,6 +146,7 @@ export class FormFlowComponent implements OnInit {
       this.formFlowStepInstanceId = null;
       this.formFlowComplete.emit(null);
     } else {
+      this.getFormFlowBreadcrumbs();
       this.modalService.scrollToTop();
       this.formFlowStepType$.next(formFlowInstance.step.type);
       this.FormFlowCustomComponentId$.next(formFlowInstance?.step?.typeProperties?.id || '');
@@ -141,6 +156,14 @@ export class FormFlowComponent implements OnInit {
     }
 
     this.enable();
+  }
+
+  private getFormFlowBreadcrumbs(): void {
+    this.formFlowService
+      .getBreadcrumbs(this.formFlowInstanceId)
+      .subscribe((result: FormFlowBreadcrumbs) => {
+        this.breadcrumbs$.next(result)
+      });
   }
 
   private disable(): void {
