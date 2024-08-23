@@ -15,20 +15,12 @@
   -->
 
 <div>
-  <div *ngIf="{
-    breadcrumbs: breadcrumbs$ | async
-  } as obs">
-    @if (obs.breadcrumbs != null) {
-      @for (breadcrumb of obs.breadcrumbs.breadcrumbs; track $index) {
-        @if (breadcrumb.stepInstanceId === formFlowStepInstanceId) {
-          <strong>{{ breadcrumb?.key }}</strong>
-        } @else if (breadcrumb.stepInstanceId != null){
-          <a href="javascript:void(0)" cdsLink (click)="navigateToStep(breadcrumb.stepInstanceId)">{{ breadcrumb?.key }}</a>
-        } @else {
-          {{ breadcrumb?.key }}
-        }
-      }
-    }
+  <div
+    *ngIf="{
+      steps: steps$ | async,
+    } as obs"
+  >
+    <cds-progress-indicator [spacing]="'equal'" [steps]="obs.steps"> </cds-progress-indicator>
   </div>
   <div body *ngIf="formDefinition && (formFlowStepType$ | async) === 'form'">
     <valtimo-form-io

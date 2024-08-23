@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, map, Observable} from 'rxjs';
 import {FormioForm} from '@formio/angular';
 import {
   FormioComponent,
@@ -26,6 +26,8 @@ import {
 } from '@valtimo/components';
 import {FormFlowService} from '../../services';
 import {FormFlowBreadcrumbs, FormFlowInstance, FormFlowStepType} from '../../models';
+import {TranslateService} from '@ngx-translate/core';
+import {Step} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-form-flow',
@@ -38,10 +40,11 @@ export class FormFlowComponent implements OnInit {
   @Input() formFlowInstanceId: string;
   @Output() formFlowComplete = new EventEmitter();
 
+  public steps$: Observable<Step[]>;
+
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
   public readonly formFlowStepType$ = new BehaviorSubject<FormFlowStepType | null>(null);
   public readonly FormFlowCustomComponentId$ = new BehaviorSubject<string>('');
-  public readonly breadcrumbs$ = new BehaviorSubject<FormFlowBreadcrumbs | null>(null);
 
   formDefinition: FormioForm;
   formioOptions: ValtimoFormioOptions;
@@ -50,7 +53,8 @@ export class FormFlowComponent implements OnInit {
 
   constructor(
     private readonly formFlowService: FormFlowService,
-    private readonly modalService: ValtimoModalService
+    private readonly modalService: ValtimoModalService,
+    private readonly translateService: TranslateService
   ) {
     this.formioOptions = new FormioOptionsImpl();
     this.formioOptions.disableAlerts = true;
@@ -58,6 +62,7 @@ export class FormFlowComponent implements OnInit {
 
   public ngOnInit() {
     this.getFormFlowStep();
+    this.getSteps();
   }
 
   public onChange(event: any): void {
@@ -107,17 +112,35 @@ export class FormFlowComponent implements OnInit {
     }
   }
 
-  public navigateToStep(stepInstanceId: string,): void {
+  public navigateToStep(stepInstanceId: string): void {
     this.disable();
     const submissionData = this.formIoFormData.getValue().data;
     this.formFlowService
-      .navigateToStep(this.formFlowInstanceId, this.formFlowStepInstanceId, stepInstanceId, submissionData)
-      .subscribe((result: FormFlowInstance) => this.handleFormFlowStep(result),
+      .navigateToStep(
+        this.formFlowInstanceId,
+        this.formFlowStepInstanceId,
+        stepInstanceId,
+        submissionData
+      )
+      .subscribe(
+        (result: FormFlowInstance) => this.handleFormFlowStep(result),
         errors => {
           this.form?.showErrors(errors);
           this.enable();
         }
       );
+  }
+
+  private getSteps(): void {
+    this.steps$ = this.formFlowService.getBreadcrumbs(this.formFlowInstanceId).pipe(
+      map((breadcrumbs: FormFlowBreadcrumbs) => {
+        return breadcrumbs.breadcrumbs.map(breadcrumb => ({
+          label: breadcrumb.key,
+          disabled: breadcrumb.stepInstanceId === null,
+          complete: true,
+        }));
+      })
+    );
   }
 
   private getFormFlowStep(): void {
@@ -146,7 +169,6 @@ export class FormFlowComponent implements OnInit {
       this.formFlowStepInstanceId = null;
       this.formFlowComplete.emit(null);
     } else {
-      this.getFormFlowBreadcrumbs();
       this.modalService.scrollToTop();
       this.formFlowStepType$.next(formFlowInstance.step.type);
       this.FormFlowCustomComponentId$.next(formFlowInstance?.step?.typeProperties?.id || '');
@@ -156,14 +178,6 @@ export class FormFlowComponent implements OnInit {
     }
 
     this.enable();
-  }
-
-  private getFormFlowBreadcrumbs(): void {
-    this.formFlowService
-      .getBreadcrumbs(this.formFlowInstanceId)
-      .subscribe((result: FormFlowBreadcrumbs) => {
-        this.breadcrumbs$.next(result)
-      });
   }
 
   private disable(): void {
