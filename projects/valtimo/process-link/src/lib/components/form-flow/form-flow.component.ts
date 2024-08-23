@@ -67,10 +67,7 @@ export class FormFlowComponent implements OnInit {
   }
 
   public onChange(event: any): void {
-    if (event?.data) {
-      console.log('Event: ', event);
-      this.formIoFormData.next(event.data);
-    }
+    if (event?.data) this.formIoFormData.next(event.data);
   }
 
   public onSubmit(submission: FormioSubmission): void {
