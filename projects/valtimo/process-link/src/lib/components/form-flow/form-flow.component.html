@@ -16,23 +16,21 @@
 
 <div
   *ngIf="{
-    steps: steps$ | async,
+    breadcrumbs: breadcrumbs$ | async,
     currentStepIndex: currentStepIndex$ | async,
   } as obs"
 >
   <div *ngIf="formDefinition && (formFlowStepType$ | async) === 'form'">
-    @if (obs.steps) {
-      <div class="form-flow__progress-bar-indicator">
-        <cds-progress-indicator
-          [spacing]="'equal'"
-          [skeleton]="!obs.steps"
-          [current]="obs.currentStepIndex"
-          [steps]="obs.steps"
-          (stepSelected)="onStepSelected($event)"
-        >
-        </cds-progress-indicator>
-      </div>
-    }
+    <div *ngIf="enableFormFlowBreadcrumbs" class="form-flow__progress-bar-indicator">
+      <cds-progress-indicator
+        [spacing]="'equal'"
+        [skeleton]="obs.breadcrumbs.length === 0"
+        [current]="obs.currentStepIndex"
+        [steps]="obs.breadcrumbs"
+        (stepSelected)="onStepSelected($event)"
+      >
+      </cds-progress-indicator>
+    </div>
 
     <valtimo-form-io
       #form

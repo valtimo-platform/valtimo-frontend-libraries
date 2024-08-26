@@ -90,7 +90,12 @@ export class FormFlowService {
     );
   }
 
-  navigateToStep(instanceId: string, currentStepInstanceId: string, targetStepInstanceId, submissionData: any): Observable<FormFlowInstance> {
+  navigateToStep(
+    instanceId: string,
+    currentStepInstanceId: string,
+    targetStepInstanceId,
+    submissionData: any
+  ): Observable<FormFlowInstance> {
     return this.http.post<FormFlowInstance>(
       `${this.valtimoEndpointUri}v1/form-flow/instance/${instanceId}/step/instance/${currentStepInstanceId}/to/step/instance/${targetStepInstanceId}`,
       submissionData

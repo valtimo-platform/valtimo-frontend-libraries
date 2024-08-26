@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {BehaviorSubject, map, Observable} from 'rxjs';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {BehaviorSubject, combineLatest, Subscription,} from 'rxjs';
 import {FormioForm} from '@formio/angular';
 import {
   FormioComponent,
@@ -25,27 +25,30 @@ import {
   ValtimoModalService,
 } from '@valtimo/components';
 import {FormFlowService} from '../../services';
-import {FormFlowBreadcrumbs, FormFlowInstance, FormFlowStepType} from '../../models';
+import {FormFlowInstance, FormFlowStepType} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
 import {Step} from 'carbon-components-angular';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-form-flow',
   templateUrl: './form-flow.component.html',
   styleUrls: ['./form-flow.component.scss'],
 })
-export class FormFlowComponent implements OnInit {
+export class FormFlowComponent implements OnInit, OnDestroy {
   @ViewChild('form') form: FormioComponent;
   @Input() formIoFormData: BehaviorSubject<any> | null = new BehaviorSubject<any>(null);
   @Input() formFlowInstanceId: string;
   @Output() formFlowComplete = new EventEmitter();
 
-  public steps$: Observable<Step[]>;
-
+  public readonly breadcrumbs$ = new BehaviorSubject<Step[]>([]);
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
   public readonly formFlowStepType$ = new BehaviorSubject<FormFlowStepType | null>(null);
   public readonly FormFlowCustomComponentId$ = new BehaviorSubject<string>('');
   public readonly currentStepIndex$ = new BehaviorSubject<number>(0);
+  public readonly enableFormFlowBreadcrumbs!: boolean;
+
+  private readonly _subscriptions = new Subscription();
 
   formDefinition: FormioForm;
   formioOptions: ValtimoFormioOptions;
@@ -55,15 +58,22 @@ export class FormFlowComponent implements OnInit {
   constructor(
     private readonly formFlowService: FormFlowService,
     private readonly modalService: ValtimoModalService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    configService: ConfigService
   ) {
     this.formioOptions = new FormioOptionsImpl();
     this.formioOptions.disableAlerts = true;
+    this.enableFormFlowBreadcrumbs =
+      configService?.config?.featureToggles?.enableFormFlowBreadcrumbs ?? false;
   }
 
   public ngOnInit() {
     this.getFormFlowStep();
-    this.getSteps();
+    this.getBreadcrumbs();
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   public onChange(event: any): void {
@@ -133,18 +143,32 @@ export class FormFlowComponent implements OnInit {
       );
   }
 
-  private getSteps(): void {
-    this.steps$ = this.formFlowService.getBreadcrumbs(this.formFlowInstanceId).pipe(
-      map((breadcrumbs: FormFlowBreadcrumbs) => {
-        this.currentStepIndex$.next(breadcrumbs.currentStepIndex);
-        return breadcrumbs.breadcrumbs.map(breadcrumb => ({
-          label: breadcrumb.title ?? breadcrumb.key,
-          disabled: breadcrumb.stepInstanceId === null,
-          complete: breadcrumb.completed,
-          stepInstanceId: breadcrumb.stepInstanceId,
-        }));
-      })
-    );
+  private getBreadcrumbs(): void {
+    if (this.enableFormFlowBreadcrumbs) {
+      this._subscriptions.add(
+        combineLatest([
+          this.formFlowService.getBreadcrumbs(this.formFlowInstanceId),
+          this.translateService.stream('key'),
+        ]).subscribe(([breadcrumbs]) => {
+          this.currentStepIndex$.next(breadcrumbs.currentStepIndex);
+          this.breadcrumbs$.next(
+            breadcrumbs.breadcrumbs.map(breadcrumb => ({
+              label:
+                breadcrumb.title ??
+                this.translateService.instant(`formFlow.step.${breadcrumb.key}.title`) ??
+                breadcrumb.key,
+              disabled: breadcrumb.stepInstanceId === null,
+              complete: breadcrumb.completed,
+              stepInstanceId: breadcrumb.stepInstanceId,
+            }))
+          );
+          const classElement = document.getElementsByClassName('cds--progress-step--current');
+          if (classElement.length > 0) {
+            classElement[0].scrollIntoView({behavior: 'smooth', inline: 'center'});
+          }
+        })
+      );
+    }
   }
 
   private getFormFlowStep(): void {
@@ -173,7 +197,7 @@ export class FormFlowComponent implements OnInit {
       this.formFlowStepInstanceId = null;
       this.formFlowComplete.emit(null);
     } else {
-      this.getSteps();
+      this.getBreadcrumbs();
       this.modalService.scrollToTop();
       this.formFlowStepType$.next(formFlowInstance.step.type);
       this.FormFlowCustomComponentId$.next(formFlowInstance?.step?.typeProperties?.id || '');
