@@ -45,7 +45,7 @@ import {
   ButtonModule as CarbonButtonModule,
   ComboBoxModule,
   IconModule,
-  InputModule, LinkModule,
+  InputModule,
   LoadingModule,
   ModalModule as CarbonModalModule,
   ProgressIndicatorModule,
@@ -105,7 +105,6 @@ import {FormFlowConfigurationContainerComponent} from './components/form-flow-co
     RenderInPageHeaderDirectiveModule,
     SelectModule,
     ToggleModule,
-    LinkModule,
   ],
   exports: [
     ProcessLinkComponent,
