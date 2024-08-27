@@ -15,7 +15,7 @@
  */
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {
   FormFlowService,
   ProcessLinkButtonService,
@@ -37,8 +37,8 @@ import {take} from 'rxjs/operators';
 })
 export class SelectFormFlowComponent implements OnInit, OnDestroy {
   public readonly saving$ = this.stateService.saving$;
-  public formDisplayValue: string;
-  public formSizeValue: string;
+  public formDisplayValue$ = new BehaviorSubject<string>('');
+  public formSizeValue$ = new BehaviorSubject<string>('');
   private readonly formFlowDefinitions$ = this.formFlowService.getFormFlowDefinitions();
 
   public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
@@ -111,11 +111,11 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   }
 
   public selectFormDisplayType(event): void {
-    this.formDisplayValue = event.id;
+    this.formDisplayValue$.next(event.id);
   }
 
   public selectFormSize(event): void {
-    this.formSizeValue = event.id;
+    this.formSizeValue$.next(event.id);
   }
 
   private openBackButtonSubscription(): void {
@@ -150,8 +150,8 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
       const updateProcessLinkRequest: FormFlowProcessLinkUpdateRequestDto = {
         id: selectedProcessLink.id,
         formFlowDefinitionId: this._selectedFormFlowDefinition.id,
-        formDisplayType: this.formDisplayValue,
-        formSize: this.formSizeValue,
+        formDisplayType: this.formDisplayValue$.getValue(),
+        formSize: this.formSizeValue$.getValue(),
       };
 
       this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -176,8 +176,8 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
-            formDisplayType: this.formDisplayValue,
-            formSize: this.formSizeValue,
+            formDisplayType: this.formDisplayValue$.getValue(),
+            formSize: this.formSizeValue$.getValue(),
           })
         )
       )

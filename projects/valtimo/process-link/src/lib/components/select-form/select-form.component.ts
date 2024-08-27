@@ -16,7 +16,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormService} from '@valtimo/form';
-import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {
   ProcessLinkButtonService,
   ProcessLinkService,
@@ -36,8 +36,8 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./select-form.component.scss'],
 })
 export class SelectFormComponent implements OnInit, OnDestroy {
-  public formDisplayValue: string;
-  public formSizeValue: string;
+  public formDisplayValue$ = new BehaviorSubject<string>('');
+  public formSizeValue$ = new BehaviorSubject<string>('');
 
   public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
     map(selectedProcessLink => {
@@ -111,11 +111,11 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   }
 
   public selectFormDisplayType(event): void {
-    this.formDisplayValue = event.id;
+    this.formDisplayValue$.next(event.id);
   }
 
   public selectFormSize(event): void {
-    this.formSizeValue = event.id;
+    this.formSizeValue$.next(event.id);
   }
 
   private openBackButtonSubscription(): void {
@@ -153,8 +153,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
           id: selectedProcessLink.id,
           formDefinitionId: this._selectedFormDefinition.id,
           viewModelEnabled,
-          formDisplayType: this.formDisplayValue,
-          formSize: this.formSizeValue,
+          formDisplayType: this.formDisplayValue$.getValue(),
+          formSize: this.formSizeValue$.getValue(),
         };
 
         this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -184,8 +184,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
             viewModelEnabled,
-            formDisplayType: this.formDisplayValue,
-            formSize: this.formSizeValue,
+            formDisplayType: this.formDisplayValue$.getValue(),
+            formSize: this.formSizeValue$.getValue(),
           })
         )
       )

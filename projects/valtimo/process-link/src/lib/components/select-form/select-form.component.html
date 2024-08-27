@@ -29,19 +29,19 @@
     <cds-combo-box
       [appendInline]="true"
       [disabled]="!obs.formDefinitions || obs.saving"
-      [items]="obs.formDefinitions || []"
       [placeholder]="'processLinkSteps.selectFormPlaceholder' | translate"
-      (selected)="selectFormDefinitions($event)"
       [label]="'processLinkSteps.selectForm' | translate"
-      ><cds-dropdown-list></cds-dropdown-list
-    ></cds-combo-box>
+      (selected)="selectFormDefinitions($event)"
+    >
+      <cds-dropdown-list [items]="obs.formDefinitions || []"></cds-dropdown-list>
+    </cds-combo-box>
     <br />
 
     <cds-combo-box
       [appendInline]="true"
-      [disabled]="obs.saving"
       [placeholder]="'processLinkSteps.selectFormDisplayTypePlaceholder' | translate"
       [label]="'processLinkSteps.selectFormDisplayType' | translate"
+      [disabled]="obs.saving"
       (selected)="selectFormDisplayType($event)"
     >
       <cds-dropdown-list [items]="obs.formDisplayValues || []"></cds-dropdown-list>
