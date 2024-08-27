@@ -36,31 +36,30 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./select-form-flow.component.scss'],
 })
 export class SelectFormFlowComponent implements OnInit, OnDestroy {
+  public readonly saving$ = this.stateService.saving$;
   public formDisplayValue: string;
   public formSizeValue: string;
+  private readonly formFlowDefinitions$ = this.formFlowService.getFormFlowDefinitions();
 
   public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
     map(selectedProcessLink => {
       return Object.keys(FormDisplayType).map(key => ({
-        content: FormDisplayType[key as keyof typeof FormDisplayType], // Ensures type safety for FormDisplayType keys
+        content: FormDisplayType[key as keyof typeof FormDisplayType],
         id: key,
-        selected: selectedProcessLink.formDisplayType === key,
+        selected: selectedProcessLink ? selectedProcessLink.formDisplayType === key : false,
       }));
     })
   );
 
-  public readonly formSizeValues$ = combineLatest([this.stateService.selectedProcessLink$]).pipe(
-    map(([selectedProcessLink]) =>
-      Object.keys(FormSize).map(key => ({
-        content: FormSize[key],
+  public readonly formSizeValues$ = this.stateService.selectedProcessLink$.pipe(
+    map(selectedProcessLink => {
+      return Object.keys(FormSize).map(key => ({
+        content: FormSize[key as keyof typeof FormSize],
         id: key,
-        selected: selectedProcessLink.formSize === key,
-      }))
-    )
+        selected: selectedProcessLink ? selectedProcessLink.formSize === key : false,
+      }));
+    })
   );
-
-  public readonly saving$ = this.stateService.saving$;
-  private readonly formFlowDefinitions$ = this.formFlowService.getFormFlowDefinitions();
 
   public readonly formFlowDefinitionListItems$: Observable<Array<FormDefinitionListItem>> =
     combineLatest([this.stateService.selectedProcessLink$, this.formFlowDefinitions$]).pipe(
@@ -151,6 +150,8 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
       const updateProcessLinkRequest: FormFlowProcessLinkUpdateRequestDto = {
         id: selectedProcessLink.id,
         formFlowDefinitionId: this._selectedFormFlowDefinition.id,
+        formDisplayType: this.formDisplayValue,
+        formSize: this.formSizeValue,
       };
 
       this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(

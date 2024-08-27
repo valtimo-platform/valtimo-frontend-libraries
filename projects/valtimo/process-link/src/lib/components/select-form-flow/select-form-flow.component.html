@@ -17,6 +17,8 @@
 <ng-container
   *ngIf="{
     formFlowDefinitions: formFlowDefinitionListItems$ | async,
+    formDisplayValues: formDisplayValues$ | async,
+    formSizeValues: formSizeValues$ | async,
     saving: saving$ | async,
   } as obs"
 >
