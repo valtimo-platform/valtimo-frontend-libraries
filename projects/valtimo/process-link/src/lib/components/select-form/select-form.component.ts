@@ -42,21 +42,21 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
     map(selectedProcessLink => {
       return Object.keys(FormDisplayType).map(key => ({
-        content: FormDisplayType[key as keyof typeof FormDisplayType], // Ensures type safety for FormDisplayType keys
+        content: FormDisplayType[key],
         id: key,
         selected: selectedProcessLink ? selectedProcessLink.formDisplayType === key : false,
       }));
     })
   );
 
-  public readonly formSizeValues$ = combineLatest([this.stateService.selectedProcessLink$]).pipe(
-    map(([selectedProcessLink]) =>
-      Object.keys(FormSize).map(key => ({
+  public readonly formSizeValues$ = this.stateService.selectedProcessLink$.pipe(
+    map(selectedProcessLink => {
+      return Object.keys(FormSize).map(key => ({
         content: FormSize[key],
         id: key,
         selected: selectedProcessLink ? selectedProcessLink.formSize === key : false,
-      }))
-    )
+      }));
+    })
   );
 
   public readonly saving$ = this.stateService.saving$;
