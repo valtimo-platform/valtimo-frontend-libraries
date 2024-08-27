@@ -94,6 +94,8 @@ interface PluginProcessLinkUpdateDto {
 interface FormFlowProcessLinkUpdateRequestDto {
   id: string;
   formFlowDefinitionId: string;
+  formDisplayType?: string;
+  formSize?: string;
 }
 
 interface FormProcessLinkUpdateRequestDto {
