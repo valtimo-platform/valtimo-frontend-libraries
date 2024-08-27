@@ -18,10 +18,11 @@
   *ngIf="{
     breadcrumbs: breadcrumbs$ | async,
     currentStepIndex: currentStepIndex$ | async,
+    enableFormFlowBreadcrumbs: enableFormFlowBreadcrumbs$ | async,
   } as obs"
 >
   <div *ngIf="formDefinition && (formFlowStepType$ | async) === 'form'">
-    <div *ngIf="enableFormFlowBreadcrumbs" class="form-flow__progress-bar-indicator">
+    <div *ngIf="obs.enableFormFlowBreadcrumbs" class="form-flow__progress-bar-indicator">
       <cds-progress-indicator
         [spacing]="'equal'"
         [skeleton]="obs.breadcrumbs.length === 0"

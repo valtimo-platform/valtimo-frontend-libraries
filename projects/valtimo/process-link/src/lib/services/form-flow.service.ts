@@ -39,11 +39,11 @@ export class FormFlowService {
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
   }
 
-  getFormFlowDefinitions(): Observable<FormFlowDefinition[]> {
+  public getFormFlowDefinitions(): Observable<FormFlowDefinition[]> {
     return this.http.get<FormFlowDefinition[]>(`${this.valtimoEndpointUri}v1/form-flow/definition`);
   }
 
-  createInstanceForNewProcess(
+  public createInstanceForNewProcess(
     processDefinitionKey: string,
     request: FormFlowCreateRequest
   ): Observable<FormFlowCreateResult> {
@@ -53,13 +53,13 @@ export class FormFlowService {
     );
   }
 
-  getFormFlowStep(formFlowInstanceId: string): Observable<FormFlowInstance> {
+  public getFormFlowStep(formFlowInstanceId: string): Observable<FormFlowInstance> {
     return this.http.get<FormFlowInstance>(
       `${this.valtimoEndpointUri}v1/form-flow/instance/${formFlowInstanceId}`
     );
   }
 
-  submitStep(
+  public submitStep(
     formFlowInstanceId: string,
     stepInstanceId: string,
     submissionData: any
@@ -70,27 +70,27 @@ export class FormFlowService {
     );
   }
 
-  back(formFlowInstanceId: string, submissionData: any): Observable<FormFlowInstance> {
+  public back(formFlowInstanceId: string, submissionData: any): Observable<FormFlowInstance> {
     return this.http.post<FormFlowInstance>(
       `${this.valtimoEndpointUri}v1/form-flow/instance/${formFlowInstanceId}/back`,
       submissionData
     );
   }
 
-  save(formFlowInstanceId: string, submissionData: any): Observable<null> {
+  public save(formFlowInstanceId: string, submissionData: any): Observable<null> {
     return this.http.post<null>(
       `${this.valtimoEndpointUri}v1/form-flow/instance/${formFlowInstanceId}/save`,
       submissionData
     );
   }
 
-  getBreadcrumbs(formFlowInstanceId: string): Observable<FormFlowBreadcrumbs> {
+  public getBreadcrumbs(formFlowInstanceId: string): Observable<FormFlowBreadcrumbs> {
     return this.http.get<FormFlowBreadcrumbs>(
       `${this.valtimoEndpointUri}v1/form-flow/instance/${formFlowInstanceId}/breadcrumbs`
     );
   }
 
-  navigateToStep(
+  public navigateToStep(
     instanceId: string,
     currentStepInstanceId: string,
     targetStepInstanceId,
