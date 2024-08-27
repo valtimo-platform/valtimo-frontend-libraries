@@ -42,7 +42,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
     map(selectedProcessLink => {
       return Object.keys(FormDisplayType).map(key => ({
-        content: FormDisplayType[key],
+        content: FormDisplayType[key as keyof typeof FormDisplayType],
         id: key,
         selected: selectedProcessLink ? selectedProcessLink.formDisplayType === key : false,
       }));
@@ -52,7 +52,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   public readonly formSizeValues$ = this.stateService.selectedProcessLink$.pipe(
     map(selectedProcessLink => {
       return Object.keys(FormSize).map(key => ({
-        content: FormSize[key],
+        content: FormSize[key as keyof typeof FormSize],
         id: key,
         selected: selectedProcessLink ? selectedProcessLink.formSize === key : false,
       }));
