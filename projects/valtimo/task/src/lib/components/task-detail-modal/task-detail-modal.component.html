@@ -98,6 +98,7 @@
 
   <div body class="cds--modal-content pb-1">
     <valtimo-task-detail-content
+      [task]="task$ | async"
       (closeModalEvent)="closeModal()"
     ></valtimo-task-detail-content>
     <!-- <div *ngIf="obs.formDefinition && obs.processLinkIsForm">

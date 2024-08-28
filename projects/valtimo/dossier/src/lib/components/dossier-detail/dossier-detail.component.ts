@@ -304,7 +304,6 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
   }
 
   public onTaskClickEvent(task: ProcessInstanceTask): void {
-    console.log({task});
     this.taskToOpen$.next(task);
   }
 

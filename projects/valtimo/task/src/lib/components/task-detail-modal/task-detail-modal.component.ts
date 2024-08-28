@@ -83,7 +83,7 @@ export class TaskDetailModalComponent {
   public intermediateSaveEnabled = false;
   public currentIntermediateSave: IntermediateSubmission = null;
 
-  // public readonly task$ = new BehaviorSubject<Task | null>(null);
+  public readonly task$ = new BehaviorSubject<Task | null>(null);
   public readonly taskInstanceId$ = new BehaviorSubject<string>(null);
   public readonly formDefinition$ = new BehaviorSubject<FormioForm>(undefined);
   // public readonly formDefinitionId$ = new BehaviorSubject<string>(undefined);
@@ -168,8 +168,9 @@ export class TaskDetailModalComponent {
   // );
   // }
 
-  public openTaskDetails(task: Task): void {
-    this.taskDetail.openTaskDetails(task);
+  public openTaskDetails(task: Task | null): void {
+    this.task$.next(task);
+    // this.taskDetail.openTaskDetails(task);
     // this.resetTaskProcessLinkType();
     // this.resetFormDefinition();
     // this.getTaskProcessLink(task.id);
@@ -185,9 +186,9 @@ export class TaskDetailModalComponent {
     // });
 
     //only load from formlink when process link failed for backwards compatibility
-    if (!this.taskProcessLinkType$.getValue()) {
-      this.openModal();
-    }
+    // if (!this.taskProcessLinkType$.getValue()) {
+    this.openModal();
+    // }
   }
 
   public gotoProcessLinkScreen(): void {
@@ -282,11 +283,11 @@ export class TaskDetailModalComponent {
   //   this.processLinkId$.next(null);
   // }
 
-  private setFormDefinitionAndOpenModal(formDefinition: any): void {
-    this.taskProcessLinkType$.next('form');
-    this.formDefinition$.next(formDefinition);
-    this.openModal();
-  }
+  // private setFormDefinitionAndOpenModal(formDefinition: any): void {
+  //   this.taskProcessLinkType$.next('form');
+  //   this.formDefinition$.next(formDefinition);
+  //   this.openModal();
+  // }
 
   // private setDocumentDefinitionNameInService(task: Task): void {
   //   this.documentService
@@ -413,7 +414,6 @@ export class TaskDetailModalComponent {
   }
 
   protected closeModal(): void {
-    console.log('here');
     this.modal.open = false;
     // this._subscriptions.unsubscribe();
 

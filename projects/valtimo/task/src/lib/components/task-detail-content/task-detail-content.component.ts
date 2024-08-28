@@ -5,6 +5,7 @@ import {
   ComponentRef,
   EventEmitter,
   Inject,
+  Input,
   OnDestroy,
   OnInit,
   Optional,
@@ -24,6 +25,7 @@ import {
   FormIoStateService,
   FormioSubmission,
   ValtimoFormioOptions,
+  ValtimoModalService,
 } from '@valtimo/components';
 import {FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
@@ -57,6 +59,11 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
   @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef})
   public formViewModelDynamicContainer: ViewContainerRef;
   @ViewChild('formFlow') public formFlow: FormFlowComponent;
+  @Input() public set task(value: Task | null) {
+    if (!value) return;
+
+    this.loadTaskDetails(value);
+  }
   @Output() formSubmit = new EventEmitter();
   @Output() closeModalEvent = new EventEmitter();
 
@@ -94,6 +101,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     private readonly documentService: DocumentService,
     private readonly iconService: IconService,
     private readonly logger: NGXLogger,
+    private readonly modalService: ValtimoModalService,
     private readonly permissionService: PermissionService,
     private readonly processLinkService: ProcessLinkService,
     private readonly router: Router,
@@ -166,7 +174,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     }
   }
 
-  public openTaskDetails(task: Task): void {
+  private loadTaskDetails(task: Task): void {
     this.resetTaskProcessLinkType();
     this.resetFormDefinition();
     this.getTaskProcessLink(task.id);
@@ -275,7 +283,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
               identifier: task.id,
             })
             .subscribe((allowed: boolean) => {
-              console.log({allowed});
               this.canAssignUserToTask$.next(allowed);
             });
         } else {
@@ -344,7 +351,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
       .getProcessDocumentDefinitionFromProcessInstanceId(task.processInstanceId)
       .subscribe(processDocumentDefinition => {
         const documentDefinitionName = processDocumentDefinition.id.documentDefinitionId.name;
-        // this.modalService.setDocumentDefinitionName(documentDefinitionName);
+        this.modalService.setDocumentDefinitionName(documentDefinitionName);
         this.stateService.setDocumentDefinitionName(documentDefinitionName);
       });
   }
