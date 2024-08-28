@@ -50,7 +50,7 @@ import {TaskDetailModalComponent} from './components/task-detail-modal/task-deta
 import {TaskListComponent} from './components/task-list/task-list.component';
 import {TaskRoutingModule} from './task-routing.module';
 import {TaskDetailContentComponent} from './components/task-detail-content/task-detail-content.component';
-import {TaskDetailHeaderComponent} from './components/task-detail-header/task-detail-header.component';
+import {TaskDetailIntermediateSaveComponent} from './components/task-detail-intermediate-save/task-detail-intermediate-save.component';
 
 @NgModule({
   declarations: [TaskListComponent, TaskDetailModalComponent],
@@ -92,7 +92,7 @@ import {TaskDetailHeaderComponent} from './components/task-detail-header/task-de
     SearchFieldsModule,
     AssignUserToTaskComponent,
     TaskDetailContentComponent,
-    TaskDetailHeaderComponent,
+    TaskDetailIntermediateSaveComponent,
   ],
   exports: [TaskListComponent, TaskDetailModalComponent],
 })

@@ -14,11 +14,11 @@ import {ConfigService} from '@valtimo/config';
 import {ButtonModule, IconModule, IconService, TooltipModule} from 'carbon-components-angular';
 import {BehaviorSubject, take} from 'rxjs';
 import {IntermediateSubmission, Task} from '../../models';
-import {TaskService} from '../../services';
+import {TaskIntermediateSaveService, TaskService} from '../../services';
 
 @Component({
-  selector: 'valtimo-task-detail-header',
-  templateUrl: './task-detail-header.component.html',
+  selector: 'valtimo-task-detail-intermediate-save',
+  templateUrl: './task-detail-intermediate-save.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -30,7 +30,7 @@ import {TaskService} from '../../services';
     IconModule,
   ],
 })
-export class TaskDetailHeaderComponent {
+export class TaskDetailIntermediateSaveComponent {
   @Input() public set task(value: Task | null) {
     if (!value) return;
     this.taskService
@@ -41,6 +41,7 @@ export class TaskDetailHeaderComponent {
           this.formFlowInstanceId$.next(res.properties.formFlowInstanceId);
       });
 
+    this.taskValue.set(value);
     this.page.set({
       title: value.name,
       subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${value.created}`,
@@ -49,13 +50,13 @@ export class TaskDetailHeaderComponent {
   @Input() public set currentIntermediateSave(value: IntermediateSubmission | null) {
     this.currentIntermediateSaveValue.set(value);
   }
-  @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
   @Output() public readonly clearCurrentProgressEvent = new EventEmitter();
   @Output() public readonly saveCurrentProgressEvent = new EventEmitter();
   @Output() public readonly revertSaveEvent = new EventEmitter();
 
   public readonly formFlowInstanceId$ = new BehaviorSubject<string | undefined>(undefined);
 
+  public readonly taskValue = signal<Task | null>(null);
   public readonly page = signal<{title: string; subtitle: string} | null>(null);
   public readonly canAssignUserToTask = signal<boolean>(false);
 
@@ -66,6 +67,7 @@ export class TaskDetailHeaderComponent {
     private readonly configService: ConfigService,
     private readonly iconService: IconService,
     private readonly translateService: TranslateService,
+    private readonly taskIntermediateSaveService: TaskIntermediateSaveService,
     private readonly taskService: TaskService
   ) {
     this.intermediateSaveEnabled = !!this.configService.featureToggles?.enableIntermediateSave;
@@ -82,5 +84,16 @@ export class TaskDetailHeaderComponent {
 
   public revertSaveClick(): void {
     this.revertSaveEvent.emit();
+  }
+  public submission$ = new BehaviorSubject<any>({});
+
+  public clearCurrentProgress2(): void {
+    this.taskIntermediateSaveService
+      .clearIntermediateSubmission(this.taskValue()?.id ?? '')
+      .pipe(take(1))
+      .subscribe(() => {
+        this.submission$.next({data: {}});
+        this.currentIntermediateSave = null;
+      });
   }
 }

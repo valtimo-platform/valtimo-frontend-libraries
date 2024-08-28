@@ -365,7 +365,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
       )
       .subscribe((task: Task | null) => {
         this.completeTask(task);
-        // this.closeModal();
       });
 
     if (this.intermediateSaveEnabled) {

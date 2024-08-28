@@ -44,13 +44,14 @@
       <ng-container *ngTemplateOutlet="assignUserToTask"></ng-container>
     </div>
 
-    <valtimo-task-detail-header
+    <valtimo-task-detail-intermediate-save
+      class="save-buttons-margin"
       [currentIntermediateSave]="currentIntermediateSave$ | async"
       [task]="task$ | async"
       (revertSaveEvent)="showConfirmationModal$.next(true)"
       (saveCurrentProgressEvent)="saveCurrentProgress()"
       (clearCurrentProgressEvent)="clearCurrentProgress()"
-    ></valtimo-task-detail-header>
+    ></valtimo-task-detail-intermediate-save>
   </cds-modal-header>
 
   <div body class="cds--modal-content pb-1">

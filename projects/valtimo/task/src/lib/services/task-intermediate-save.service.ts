@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {
   AssigneeRequest,
   IntermediateSaveRequest,
@@ -39,6 +39,8 @@ import {InterceptorSkip} from '@valtimo/security';
 
 @Injectable({providedIn: 'root'})
 export class TaskIntermediateSaveService extends BaseApiService {
+  public readonly submission$ = new BehaviorSubject<any>({});
+
   constructor(
     protected readonly httpClient: HttpClient,
     protected readonly configService: ConfigService
