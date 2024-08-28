@@ -18,23 +18,30 @@
     <div class="cds-modal-header">
       <div class="title-container">
         <p class="cds--modal-header__heading cds--type-beta">{{ (page$ | async)?.title }}</p>
+
         <p class="cds--modal-header__label cds--type-delta">{{ (page$ | async)?.subtitle }}</p>
+
         <p class="cds--modal-header__label cds--type-delta" *ngIf="currentIntermediateSave">
           {{ 'formManagement.intermediateSave.lastSavedBy' | translate }}:
+
           {{
             currentIntermediateSave?.editedBy
               ? currentIntermediateSave?.editedBy
               : currentIntermediateSave.createdBy
           }}
+
           {{ 'formManagement.intermediateSave.on' | translate }}:
+
           {{
             currentIntermediateSave?.editedOn
               ? currentIntermediateSave?.editedOn
               : currentIntermediateSave.createdOn
           }}
         </p>
+
         <ng-container *ngTemplateOutlet="assignUserToTask"></ng-container>
       </div>
+
       <div
         *ngIf="intermediateSaveEnabled && (formFlowInstanceId$ | async) === undefined"
         class="save-buttons-margin"
@@ -52,6 +59,7 @@
             (click)="saveCurrentProgress()"
           ></button>
         </cds-tooltip>
+
         <cds-tooltip
           [caret]="true"
           enterDelayMs="0"
@@ -69,10 +77,8 @@
       </div>
     </div>
   </cds-modal-header>
-  <div
-    body
-    class="cds--modal-content pb-1"
-    *ngIf="{
+
+  <!-- *ngIf="{
       loading: loading$ | async,
       page: page$ | async,
       task: task$ | async,
@@ -87,10 +93,14 @@
       formioOptions: formioOptions$ | async,
       processLinkIsFormFlow: processLinkIsFormFlow$ | async,
       formFlowInstanceId: formFlowInstanceId$ | async,
-      errorMessage: errorMessage$ | async
-    } as obs"
-  >
-    <div *ngIf="obs.formDefinition && obs.processLinkIsForm">
+      errorMessage: errorMessage$ | async,
+    } as obs" -->
+
+  <div body class="cds--modal-content pb-1">
+    <valtimo-task-detail-content
+      (closeModalEvent)="closeModal()"
+    ></valtimo-task-detail-content>
+    <!-- <div *ngIf="obs.formDefinition && obs.processLinkIsForm">
       <valtimo-form-io
         #form
         [form]="obs.formDefinition"
@@ -130,16 +140,10 @@
       <div class="bg-danger text-black mb-0 p-3 text-center">
         {{ obs.errorMessage }}
       </div>
-    </div>
+    </div> -->
   </div>
-  <div
-    footer
-    *ngIf="{
-      formDefinition: formDefinition$ | async,
-      formFlowInstanceId: formFlowInstanceId$ | async
-    } as obs"
-  >
-    <div class="mb-0 p-3 text-center" *ngIf="!obs.formDefinition && !obs.formFlowInstanceId">
+  <!-- <div footer>
+    <div class="mb-0 p-3 text-center" *ngIf="(isProcessLinked$ | async) === false">
       <button
         class="btn btn-secondary btn-space"
         type="button"
@@ -152,7 +156,7 @@
   </div>
   <div body class="m-2">
     <ng-template #formViewModelComponent></ng-template>
-  </div>
+  </div> -->
 </cds-modal>
 
 <valtimo-confirmation-modal
@@ -166,10 +170,12 @@
 ></valtimo-confirmation-modal>
 
 <ng-template #assignUserToTask>
-  <ng-container *ngIf="{
-    task: task$ | async,
-    canAssignUserToTask: canAssignUserToTask$ | async
-  } as obs">
+  <ng-container
+    *ngIf="{
+      task: task$ | async,
+      canAssignUserToTask: canAssignUserToTask$ | async,
+    } as obs"
+  >
     <valtimo-assign-user-to-task
       *ngIf="obs.task && obs.canAssignUserToTask && assignmentOfTaskChanged"
       [taskId]="obs.task.id"

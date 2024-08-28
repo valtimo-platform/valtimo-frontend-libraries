@@ -60,6 +60,7 @@ import {
 import {DossierService, DossierTabService} from '../../services';
 import {IconService} from 'carbon-components-angular';
 import {ChevronDown16} from '@carbon/icons';
+import {ProcessInstanceTask} from '@valtimo/process';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -84,6 +85,8 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
   public tabLoader: TabLoaderImpl | null = null;
 
   public readonly assigneeId$ = new BehaviorSubject<string>('');
+
+  public readonly taskToOpen$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
 
   private readonly _caseStatusKey$ = new BehaviorSubject<string | null | 'NOT_AVAILABLE'>(null);
 
@@ -298,6 +301,15 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
           this.logger.debug('Something went wrong while unassigning user from case');
         },
       });
+  }
+
+  public onTaskClickEvent(task: ProcessInstanceTask): void {
+    console.log({task});
+    this.taskToOpen$.next(task);
+  }
+
+  public onTaskDetailsClose(): void {
+    this.taskToOpen$.next(null);
   }
 
   private initBreadcrumb(): void {

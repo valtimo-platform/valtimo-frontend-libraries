@@ -49,6 +49,7 @@ import {AssignUserToTaskComponent} from './components/assign-user-to-task/assign
 import {TaskDetailModalComponent} from './components/task-detail-modal/task-detail-modal.component';
 import {TaskListComponent} from './components/task-list/task-list.component';
 import {TaskRoutingModule} from './task-routing.module';
+import {TaskDetailContentComponent} from './components/task-detail-content/task-detail-content.component';
 
 @NgModule({
   declarations: [TaskListComponent, TaskDetailModalComponent, AssignUserToTaskComponent],
@@ -88,6 +89,7 @@ import {TaskRoutingModule} from './task-routing.module';
     TooltipModule,
     ConfirmationModalModule,
     SearchFieldsModule,
+    TaskDetailContentComponent,
   ],
   exports: [TaskListComponent, TaskDetailModalComponent, AssignUserToTaskComponent],
 })

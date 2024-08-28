@@ -19,7 +19,8 @@ import {
   ComponentRef,
   EventEmitter,
   Inject,
-  OnDestroy, OnInit,
+  OnDestroy,
+  OnInit,
   Optional,
   Output,
   ViewChild,
@@ -58,6 +59,7 @@ import {RecentlyViewed16} from '@carbon/icons';
 import {PermissionService} from '@valtimo/access-control';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
 import {NGXLogger} from 'ngx-logger';
+import {TaskDetailContentComponent} from '../task-detail-content/task-detail-content.component';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -67,48 +69,51 @@ moment.locale(localStorage.getItem('langKey') || '');
   styleUrls: ['./task-detail-modal.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TaskDetailModalComponent implements OnInit, OnDestroy {
+export class TaskDetailModalComponent {
   @ViewChild('form') form: FormioComponent;
   @ViewChild('formFlow') formFlow: FormFlowComponent;
   @ViewChild('taskDetailModal') modal: Modal;
   @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef})
   public formViewModelDynamicContainer: ViewContainerRef;
+
+  @ViewChild(TaskDetailContentComponent) public readonly taskDetail: TaskDetailContentComponent;
   @Output() formSubmit = new EventEmitter();
   @Output() assignmentOfTaskChanged = new EventEmitter();
 
   public intermediateSaveEnabled = false;
   public currentIntermediateSave: IntermediateSubmission = null;
 
-  public readonly task$ = new BehaviorSubject<Task | null>(null);
+  // public readonly task$ = new BehaviorSubject<Task | null>(null);
   public readonly taskInstanceId$ = new BehaviorSubject<string>(null);
   public readonly formDefinition$ = new BehaviorSubject<FormioForm>(undefined);
-  public readonly formDefinitionId$ = new BehaviorSubject<string>(undefined);
-  public readonly formName$ = new BehaviorSubject<string>(undefined);
+  // public readonly formDefinitionId$ = new BehaviorSubject<string>(undefined);
+  // public readonly formName$ = new BehaviorSubject<string>(undefined);
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly formFlowInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly page$ = new BehaviorSubject<any>(null);
-  public readonly formioOptions$ = new BehaviorSubject<ValtimoFormioOptions>(null);
-  public readonly errorMessage$ = new BehaviorSubject<string>(undefined);
-  public readonly isAdmin$: Observable<boolean> = this.userProviderService
-    .getUserSubject()
-    .pipe(map(userIdentity => userIdentity?.roles?.includes('ROLE_ADMIN')));
+  // public readonly formioOptions$ = new BehaviorSubject<ValtimoFormioOptions>(null);
+  // public readonly errorMessage$ = new BehaviorSubject<string>(undefined);
+  // public readonly isAdmin$: Observable<boolean> = this.userProviderService
+  //   .getUserSubject()
+  //   .pipe(map(userIdentity => userIdentity?.roles?.includes('ROLE_ADMIN')));
   public readonly formIoFormData$ = new BehaviorSubject<any>(null);
-  public readonly loading$ = new BehaviorSubject<boolean>(true);
+  // public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly showConfirmationModal$ = new BehaviorSubject<boolean>(false);
 
   private readonly taskProcessLinkType$ = new BehaviorSubject<TaskProcessLinkType | null>(null);
-  public readonly processLinkIsForm$ = this.taskProcessLinkType$.pipe(map(type => type === 'form'));
-  public readonly processLinkIsFormViewModel$ = this.taskProcessLinkType$.pipe(
-    map(type => type === 'form-view-model')
-  );
-  public readonly processLinkIsFormFlow$ = this.taskProcessLinkType$.pipe(
-    map(type => type === 'form-flow')
-  );
-  public readonly canAssignUserToTask$ = new BehaviorSubject<boolean>(false)
+  // public readonly processLinkIsForm$ = this.taskProcessLinkType$.pipe(map(type => type === 'form'));
+  // public readonly processLinkIsFormViewModel$ = this.taskProcessLinkType$.pipe(
+  //   map(type => type === 'form-view-model')
+  // );
+  // public readonly processLinkIsFormFlow$ = this.taskProcessLinkType$.pipe(
+  //   map(type => type === 'form-flow')
+  // );
+  //FIX THIS
+  // public readonly canAssignUserToTask$ = new BehaviorSubject<boolean>(false);
 
-  private readonly processLinkId$ = new BehaviorSubject<string>(undefined);
+  // private readonly processLinkId$ = new BehaviorSubject<string>(undefined);
 
-  private readonly _subscriptions = new Subscription();
+  // private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly toastr: ToastrService,
@@ -125,60 +130,59 @@ export class TaskDetailModalComponent implements OnInit, OnDestroy {
     private readonly configService: ConfigService,
     private readonly iconService: IconService,
     private readonly permissionService: PermissionService,
-    private readonly logger: NGXLogger,
+    private readonly logger: NGXLogger
   ) {
-    const options = new FormioOptionsImpl();
-    options.disableAlerts = true;
-    this.formioOptions$.next(options);
+    // const options = new FormioOptionsImpl();
+    // options.disableAlerts = true;
+    // this.formioOptions$.next(options);
 
     this.intermediateSaveEnabled = this.configService.featureToggles.enableIntermediateSave;
 
-    this.iconService.registerAll([RecentlyViewed16]);
+    // this.iconService.registerAll([RecentlyViewed16]);
 
-    this._subscriptions.add(
-      this.canAssignUserToTask$.subscribe((canAssign) => {
-        this.logger.debug("Is user allowed to assign a user to Task", canAssign);
-      })
-    )
+    // this._subscriptions.add(
+    //   this.canAssignUserToTask$.subscribe(canAssign => {
+    //     this.logger.debug('Is user allowed to assign a user to Task', canAssign);
+    //   })
+    // );
   }
 
-  public ngOnInit(): void {
-    this._subscriptions.add(
-      this.task$.subscribe(task => {
-        if (task) {
-          this.logger.debug("Checking if user allowed to assign a user to Task with id:", task.id);
-          this.permissionService.requestPermission(CAN_ASSIGN_TASK_PERMISSION, {
-            resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
-            identifier: task.id,
-          }).subscribe( (allowed: boolean) => {
-            this.canAssignUserToTask$.next(allowed)
-          })
-        } else {
-          this.logger.debug("Reset is user allowed to assign a user to Task as task is null");
-          this.canAssignUserToTask$.next(false)
-        }
-      })
-    )
-  }
-
-  public ngOnDestroy(): void {
-    this._subscriptions.unsubscribe();
-  }
+  // public ngOnInit(): void {
+  // this._subscriptions.add(
+  //   this.task$.subscribe(task => {
+  //     if (task) {
+  //       this.logger.debug('Checking if user allowed to assign a user to Task with id:', task.id);
+  //       this.permissionService
+  //         .requestPermission(CAN_ASSIGN_TASK_PERMISSION, {
+  //           resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
+  //           identifier: task.id,
+  //         })
+  //         .subscribe((allowed: boolean) => {
+  //           this.canAssignUserToTask$.next(allowed);
+  //         });
+  //     } else {
+  //       this.logger.debug('Reset is user allowed to assign a user to Task as task is null');
+  //       this.canAssignUserToTask$.next(false);
+  //     }
+  //   })
+  // );
+  // }
 
   public openTaskDetails(task: Task): void {
-    this.resetTaskProcessLinkType();
-    this.resetFormDefinition();
-    this.getTaskProcessLink(task.id);
-    this.setDocumentDefinitionNameInService(task);
-    const documentId = task.businessKey;
-    this.stateService.setDocumentId(documentId);
+    this.taskDetail.openTaskDetails(task);
+    // this.resetTaskProcessLinkType();
+    // this.resetFormDefinition();
+    // this.getTaskProcessLink(task.id);
+    // this.setDocumentDefinitionNameInService(task);
+    // const documentId = task.businessKey;
+    // this.stateService.setDocumentId(documentId);
 
-    this.task$.next(task);
-    this.taskInstanceId$.next(task.id);
-    this.page$.next({
-      title: task.name,
-      subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${task.created}`,
-    });
+    // this.task$.next(task);
+    // this.taskInstanceId$.next(task.id);
+    // this.page$.next({
+    //   title: task.name,
+    //   subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${task.created}`,
+    // });
 
     //only load from formlink when process link failed for backwards compatibility
     if (!this.taskProcessLinkType$.getValue()) {
@@ -191,92 +195,92 @@ export class TaskDetailModalComponent implements OnInit, OnDestroy {
     this.router.navigate(['process-links']);
   }
 
-  public onChange(event: any): void {
-    if (event.data) {
-      this.formIoFormData$.next(event.data);
-    }
-  }
+  // public onChange(event: any): void {
+  //   if (event.data) {
+  //     this.formIoFormData$.next(event.data);
+  //   }
+  // }
 
-  public onSubmit(submission: FormioSubmission): void {
-    if (submission.data) {
-      this.formIoFormData$.next(submission.data);
-    }
+  // public onSubmit(submission: FormioSubmission): void {
+  //   if (submission.data) {
+  //     this.formIoFormData$.next(submission.data);
+  //   }
 
-    combineLatest([this.processLinkId$, this.taskProcessLinkType$, this.task$])
-      .pipe(take(1))
-      .subscribe(([processLinkId, taskProcessLinkType, task]) => {
-        if (taskProcessLinkType === 'form') {
-          if (processLinkId) {
-            this.processLinkService
-              .submitForm(processLinkId, submission.data, task.businessKey, task.id)
-              .subscribe({
-                next: (_: FormSubmissionResult) => {
-                  this.completeTask();
-                },
-                error: errors => {
-                  this.form.showErrors(errors);
-                },
-              });
-          }
-        } else if (taskProcessLinkType === 'form-view-model') {
-          this.completeTask();
-        }
-      });
-  }
+  //   combineLatest([this.processLinkId$, this.taskProcessLinkType$, this.task$])
+  //     .pipe(take(1))
+  //     .subscribe(([processLinkId, taskProcessLinkType, task]) => {
+  //       if (taskProcessLinkType === 'form') {
+  //         if (processLinkId) {
+  //           this.processLinkService
+  //             .submitForm(processLinkId, submission.data, task.businessKey, task.id)
+  //             .subscribe({
+  //               next: (_: FormSubmissionResult) => {
+  //                 this.completeTask();
+  //               },
+  //               error: errors => {
+  //                 this.form.showErrors(errors);
+  //               },
+  //             });
+  //         }
+  //       } else if (taskProcessLinkType === 'form-view-model') {
+  //         this.completeTask();
+  //       }
+  //     });
+  // }
 
-  public completeTask(): void {
-    this.task$.pipe(take(1)).subscribe(task => {
-      this.toastr.success(
-        `${task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`
-      );
-      this.closeModal();
-      this.task$.next(null);
-      this.formSubmit.emit();
-    });
-  }
+  // public completeTask(): void {
+  //   this.task$.pipe(take(1)).subscribe(task => {
+  //     this.toastr.success(
+  //       `${task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`
+  //     );
+  //     this.closeModal();
+  //     this.task$.next(null);
+  //     this.formSubmit.emit();
+  //   });
+  // }
 
-  private resetFormDefinition(): void {
-    this.formDefinition$.next(null);
-    this.loading$.next(true);
-  }
+  // private resetFormDefinition(): void {
+  //   this.formDefinition$.next(null);
+  //   this.loading$.next(true);
+  // }
 
-  private getTaskProcessLink(taskId: string): void {
-    this.taskService.getTaskProcessLink(taskId).subscribe({
-      next: res => {
-        if (res != null) {
-          switch (res?.type) {
-            case 'form':
-              this.taskProcessLinkType$.next('form');
-              this.processLinkId$.next(res.processLinkId);
-              if (this.intermediateSaveEnabled) this.getCurrentProgress();
-              this.setFormDefinitionAndOpenModal(res.properties.prefilledForm);
-              break;
-            case 'form-flow':
-              this.taskProcessLinkType$.next('form-flow');
-              this.formFlowInstanceId$.next(res.properties.formFlowInstanceId);
-              break;
-            case 'form-view-model':
-              this.taskProcessLinkType$.next('form-view-model');
-              this.processLinkId$.next(res.processLinkId);
-              this.formDefinition$.next(res.properties.formDefinition);
-              this.formName$.next(res.properties.formName);
-              this.openModal();
-              this.setFormViewModelComponent();
-              break;
-          }
-          this.loading$.next(false);
-        }
-      },
-      error: _ => {
-        this.loading$.next(false);
-      },
-    });
-  }
+  // private getTaskProcessLink(taskId: string): void {
+  //   this.taskService.getTaskProcessLink(taskId).subscribe({
+  //     next: res => {
+  //       if (res != null) {
+  //         switch (res?.type) {
+  //           case 'form':
+  //             this.taskProcessLinkType$.next('form');
+  //             this.processLinkId$.next(res.processLinkId);
+  //             if (this.intermediateSaveEnabled) this.getCurrentProgress();
+  //             this.setFormDefinitionAndOpenModal(res.properties.prefilledForm);
+  //             break;
+  //           case 'form-flow':
+  //             this.taskProcessLinkType$.next('form-flow');
+  //             this.formFlowInstanceId$.next(res.properties.formFlowInstanceId);
+  //             break;
+  //           case 'form-view-model':
+  //             this.taskProcessLinkType$.next('form-view-model');
+  //             this.processLinkId$.next(res.processLinkId);
+  //             this.formDefinition$.next(res.properties.formDefinition);
+  //             this.formName$.next(res.properties.formName);
+  //             this.openModal();
+  //             this.setFormViewModelComponent();
+  //             break;
+  //         }
+  //         this.loading$.next(false);
+  //       }
+  //     },
+  //     error: _ => {
+  //       this.loading$.next(false);
+  //     },
+  //   });
+  // }
 
-  private resetTaskProcessLinkType(): void {
-    this.taskProcessLinkType$.next(null);
-    this.processLinkId$.next(null);
-  }
+  // private resetTaskProcessLinkType(): void {
+  //   this.taskProcessLinkType$.next(null);
+  //   this.processLinkId$.next(null);
+  // }
 
   private setFormDefinitionAndOpenModal(formDefinition: any): void {
     this.taskProcessLinkType$.next('form');
@@ -284,71 +288,70 @@ export class TaskDetailModalComponent implements OnInit, OnDestroy {
     this.openModal();
   }
 
-  private setDocumentDefinitionNameInService(task: Task): void {
-    this.documentService
-      .getProcessDocumentDefinitionFromProcessInstanceId(task.processInstanceId)
-      .subscribe(processDocumentDefinition => {
-        const documentDefinitionName = processDocumentDefinition.id.documentDefinitionId.name;
-        this.modalService.setDocumentDefinitionName(documentDefinitionName);
-        this.stateService.setDocumentDefinitionName(documentDefinitionName);
-      });
-  }
+  // private setDocumentDefinitionNameInService(task: Task): void {
+  //   this.documentService
+  //     .getProcessDocumentDefinitionFromProcessInstanceId(task.processInstanceId)
+  //     .subscribe(processDocumentDefinition => {
+  //       const documentDefinitionName = processDocumentDefinition.id.documentDefinitionId.name;
+  //       this.modalService.setDocumentDefinitionName(documentDefinitionName);
+  //       this.stateService.setDocumentDefinitionName(documentDefinitionName);
+  //     });
+  // }
 
-  private setFormViewModelComponent() {
-    this.formViewModelDynamicContainer.clear();
-    if (!this.formViewModel) return;
-    const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
-      this.formViewModel.component
-    );
-    formViewModelComponent.instance.form = this.formDefinition$.getValue();
-    formViewModelComponent.instance.formName = this.formName$.getValue();
-    formViewModelComponent.instance.taskInstanceId = this.taskInstanceId$.getValue();
-    formViewModelComponent.instance.isStartForm = false;
+  // private setFormViewModelComponent() {
+  //   this.formViewModelDynamicContainer.clear();
+  //   if (!this.formViewModel) return;
+  //   const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
+  //     this.formViewModel.component
+  //   );
+  //   formViewModelComponent.instance.form = this.formDefinition$.getValue();
+  //   formViewModelComponent.instance.formName = this.formName$.getValue();
+  //   formViewModelComponent.instance.taskInstanceId = this.taskInstanceId$.getValue();
+  //   formViewModelComponent.instance.isStartForm = false;
 
-    formViewModelComponent.instance.formSubmit.pipe(take(1)).subscribe(() => {
-      this.completeTask();
-      this.closeModal();
-    });
+  //   formViewModelComponent.instance.formSubmit.pipe(take(1)).subscribe(() => {
+  //     this.completeTask();
+  //     this.closeModal();
+  //   });
 
-    if (this.intermediateSaveEnabled) {
-      this._subscriptions.add(
-        formViewModelComponent.instance.submission$.subscribe(submission => {
-            this.submission$.next(submission);
-          }
-        )
-      )
-      this._subscriptions.add(
-        this.submission$.pipe(distinctUntilChanged()).subscribe((submission?) => {
-          if (submission?.data && Object.keys(submission.data).length === 0) {
-            formViewModelComponent.instance.submission = {data: {}};
-          }
-        })
-      )
-      this.getCurrentProgress(formViewModelComponent);
-    }
-  }
+  //   if (this.intermediateSaveEnabled) {
+  //     this._subscriptions.add(
+  //       formViewModelComponent.instance.submission$.subscribe(submission => {
+  //         this.submission$.next(submission);
+  //       })
+  //     );
+  //     this._subscriptions.add(
+  //       this.submission$.pipe(distinctUntilChanged()).subscribe((submission?) => {
+  //         if (submission?.data && Object.keys(submission.data).length === 0) {
+  //           formViewModelComponent.instance.submission = {data: {}};
+  //         }
+  //       })
+  //     );
+  //     this.getCurrentProgress(formViewModelComponent);
+  //   }
+  // }
 
-  private getCurrentProgress(formViewModelComponentRef?: ComponentRef<any>): void {
-    this.taskInstanceId$
-      .pipe(
-        take(1),
-        switchMap((taskInstanceId: string) =>
-          this.taskIntermediateSaveService.getIntermediateSubmission(taskInstanceId)
-        )
-      )
-      .subscribe({
-        next: (intermediateSubmission: IntermediateSubmission) => {
-          this.submission$.next({data: intermediateSubmission.submission});
-          this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSubmission);
+  // private getCurrentProgress(formViewModelComponentRef?: ComponentRef<any>): void {
+  //   this.taskInstanceId$
+  //     .pipe(
+  //       take(1),
+  //       switchMap((taskInstanceId: string) =>
+  //         this.taskIntermediateSaveService.getIntermediateSubmission(taskInstanceId)
+  //       )
+  //     )
+  //     .subscribe({
+  //       next: (intermediateSubmission: IntermediateSubmission) => {
+  //         this.submission$.next({data: intermediateSubmission.submission});
+  //         this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSubmission);
 
-          if (formViewModelComponentRef) {
-            formViewModelComponentRef.instance.submission = {
-              data: intermediateSubmission.submission,
-            };
-          }
-        },
-      });
-  }
+  //         if (formViewModelComponentRef) {
+  //           formViewModelComponentRef.instance.submission = {
+  //             data: intermediateSubmission.submission,
+  //           };
+  //         }
+  //       },
+  //     });
+  // }
 
   protected saveCurrentProgress(): void {
     const intermediateSaveRequest: IntermediateSaveRequest = {
@@ -410,11 +413,12 @@ export class TaskDetailModalComponent implements OnInit, OnDestroy {
   }
 
   protected closeModal(): void {
+    console.log('here');
     this.modal.open = false;
-    this._subscriptions.unsubscribe();
+    // this._subscriptions.unsubscribe();
 
-    if (this.formFlow) {
-      this.formFlow.saveData();
-    }
+    // if (this.formFlow) {
+    //   this.formFlow.saveData();
+    // }
   }
 }

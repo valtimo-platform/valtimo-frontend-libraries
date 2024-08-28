@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
@@ -67,6 +67,8 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
 })
 export class DossierDetailTaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetailModal: TaskDetailModalComponent;
+
+  @Output() public readonly taskClickEvent = new EventEmitter<ProcessInstanceTask>();
 
   public readonly loadingTasks$ = new BehaviorSubject<boolean>(true);
 
@@ -124,6 +126,7 @@ export class DossierDetailTaskListComponent {
   public rowTaskClick(task: ProcessInstanceTask): void {
     if (task.isLocked) return;
 
+    // this.taskClickEvent.emit(task);
     this._taskDetailModal.openTaskDetails(task as unknown as Task);
   }
 
