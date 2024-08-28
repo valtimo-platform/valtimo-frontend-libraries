@@ -19,6 +19,7 @@
  */
 
 export * from './lib/components/assign-user-to-task/assign-user-to-task.component';
+export * from './lib/components/task-detail-header/task-detail-header.component';
 export * from './lib/components/task-detail-content/task-detail-content.component';
 export * from './lib/components/task-detail-modal/task-detail-modal.component';
 export * from './lib/components/task-list/task-list.component';

@@ -43,7 +43,12 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import {IntermediateSubmission, Task, TaskProcessLinkType} from '../../models';
+import {
+  IntermediateSaveRequest,
+  IntermediateSubmission,
+  Task,
+  TaskProcessLinkType,
+} from '../../models';
 import {TaskIntermediateSaveService, TaskService} from '../../services';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
 
@@ -64,8 +69,10 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
 
     this.loadTaskDetails(value);
   }
-  @Output() formSubmit = new EventEmitter();
-  @Output() closeModalEvent = new EventEmitter();
+  @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
+  @Output() public readonly formSubmit = new EventEmitter();
+  @Output() public readonly closeModalEvent = new EventEmitter();
+  @Output() public readonly currentIntermediateSaveEvent = new EventEmitter();
 
   public readonly canAssignUserToTask$ = new BehaviorSubject<boolean>(false);
   public readonly errorMessage$ = new BehaviorSubject<string | null>(null);
@@ -118,7 +125,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     options.disableAlerts = true;
     this.formioOptions$.next(options);
   }
-
   public ngOnInit(): void {
     this.openPermissionSubscription();
   }
@@ -174,6 +180,48 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     }
   }
 
+  public saveCurrentProgress(): void {
+    const intermediateSaveRequest: IntermediateSaveRequest = {
+      submission: this.submission$.getValue().data
+        ? this.submission$.getValue().data
+        : this.formIoFormData$.getValue(),
+      taskInstanceId: this.taskInstanceId$.getValue() ?? '',
+    };
+
+    this.taskIntermediateSaveService
+      .storeIntermediateSubmission(intermediateSaveRequest)
+      .pipe(take(1))
+      .subscribe({
+        next: intermediateSubmission => {
+          this.toastr.success(
+            this.translateService.instant('formManagement.intermediateSave.success')
+          );
+          this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSubmission);
+          this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
+        },
+        error: () => {
+          this.toastr.error(this.translateService.instant('formManagement.intermediateSave.error'));
+        },
+      });
+  }
+
+  public clearCurrentProgress(): void {
+    this.taskInstanceId$
+      .pipe(
+        take(1),
+        switchMap((taskInstanceId: string | null) =>
+          this.taskIntermediateSaveService.clearIntermediateSubmission(taskInstanceId ?? '')
+        )
+      )
+      .subscribe({
+        next: () => {
+          this.submission$.next({data: {}});
+          this.currentIntermediateSave = null;
+          this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
+        },
+      });
+  }
+
   private loadTaskDetails(task: Task): void {
     this.resetTaskProcessLinkType();
     this.resetFormDefinition();
@@ -214,6 +262,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
         next: (intermediateSubmission: IntermediateSubmission) => {
           this.submission$.next({data: intermediateSubmission.submission});
           this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSubmission);
+          this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
 
           if (formViewModelComponentRef) {
             formViewModelComponentRef.instance.submission = {
@@ -227,13 +276,13 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
   private getTaskProcessLink(taskId: string): void {
     this.taskService.getTaskProcessLink(taskId).subscribe({
       next: res => {
-        if (res != null) {
+        if (res !== null) {
           switch (res?.type) {
             case 'form':
               this._taskProcessLinkType$.next('form');
               this._processLinkId$.next(res.processLinkId);
               if (this.intermediateSaveEnabled) this.getCurrentProgress();
-              this.setFormDefinitionAndOpenModal(res.properties.prefilledForm);
+              this.setFormDefinition(res.properties.prefilledForm);
               break;
             case 'form-flow':
               this._taskProcessLinkType$.next('form-flow');
@@ -293,7 +342,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     );
   }
 
-  private setFormDefinitionAndOpenModal(formDefinition: any): void {
+  private setFormDefinition(formDefinition: any): void {
     this._taskProcessLinkType$.next('form');
     this.formDefinition$.next(formDefinition);
   }

@@ -15,149 +15,51 @@
   -->
 <cds-modal #taskDetailModal id="taskDetailModal">
   <cds-modal-header (closeSelect)="closeModal()">
-    <div class="cds-modal-header">
-      <div class="title-container">
-        <p class="cds--modal-header__heading cds--type-beta">{{ (page$ | async)?.title }}</p>
+    <div class="title-container">
+      <p class="cds--modal-header__heading cds--type-beta">{{ (page$ | async)?.title }}</p>
 
-        <p class="cds--modal-header__label cds--type-delta">{{ (page$ | async)?.subtitle }}</p>
+      <p class="cds--modal-header__label cds--type-delta">{{ (page$ | async)?.subtitle }}</p>
 
-        <p class="cds--modal-header__label cds--type-delta" *ngIf="currentIntermediateSave">
-          {{ 'formManagement.intermediateSave.lastSavedBy' | translate }}:
-
-          {{
-            currentIntermediateSave?.editedBy
-              ? currentIntermediateSave?.editedBy
-              : currentIntermediateSave.createdBy
-          }}
-
-          {{ 'formManagement.intermediateSave.on' | translate }}:
-
-          {{
-            currentIntermediateSave?.editedOn
-              ? currentIntermediateSave?.editedOn
-              : currentIntermediateSave.createdOn
-          }}
-        </p>
-
-        <ng-container *ngTemplateOutlet="assignUserToTask"></ng-container>
-      </div>
-
-      <div
-        *ngIf="intermediateSaveEnabled && (formFlowInstanceId$ | async) === undefined"
-        class="save-buttons-margin"
+      <p
+        class="cds--modal-header__label cds--type-delta"
+        *ngIf="currentIntermediateSave$ | async as currentIntermediateSave"
       >
-        <cds-tooltip
-          [caret]="true"
-          enterDelayMs="0"
-          leaveDelayMs="0"
-          [description]="'formManagement.intermediateSave.save' | translate"
-        >
-          <button
-            cdsButton="ghost"
-            iconOnly="true"
-            cdsIcon="save"
-            (click)="saveCurrentProgress()"
-          ></button>
-        </cds-tooltip>
+        {{ 'formManagement.intermediateSave.lastSavedBy' | translate }}:
 
-        <cds-tooltip
-          [caret]="true"
-          enterDelayMs="0"
-          leaveDelayMs="0"
-          [description]="'formManagement.intermediateSave.clear' | translate"
-        >
-          <button
-            cdsButton="ghost"
-            iconOnly="true"
-            cdsIcon="recently-viewed"
-            [disabled]="!currentIntermediateSave"
-            (click)="showConfirmationModal$.next(true)"
-          ></button>
-        </cds-tooltip>
-      </div>
+        {{
+          currentIntermediateSave?.editedBy
+            ? currentIntermediateSave?.editedBy
+            : currentIntermediateSave.createdBy
+        }}
+
+        {{ 'formManagement.intermediateSave.on' | translate }}:
+
+        {{
+          currentIntermediateSave?.editedOn
+            ? currentIntermediateSave?.editedOn
+            : currentIntermediateSave.createdOn
+        }}
+      </p>
+
+      <ng-container *ngTemplateOutlet="assignUserToTask"></ng-container>
     </div>
-  </cds-modal-header>
 
-  <!-- *ngIf="{
-      loading: loading$ | async,
-      page: page$ | async,
-      task: task$ | async,
-      taskId: taskInstanceId$ | async,
-      formDefinition: formDefinition$ | async,
-      formDefinitionId: formDefinitionId$ | async,
-      formName: formName$ | async,
-      formIoFormData: formIoFormData$ | async,
-      submission: submission$ | async,
-      processLinkIsForm: processLinkIsForm$ | async,
-      processLinkIsFormViewModel: processLinkIsFormViewModel$ | async,
-      formioOptions: formioOptions$ | async,
-      processLinkIsFormFlow: processLinkIsFormFlow$ | async,
-      formFlowInstanceId: formFlowInstanceId$ | async,
-      errorMessage: errorMessage$ | async,
-    } as obs" -->
+    <valtimo-task-detail-header
+      [currentIntermediateSave]="currentIntermediateSave$ | async"
+      [task]="task$ | async"
+      (revertSaveEvent)="showConfirmationModal$.next(true)"
+      (saveCurrentProgressEvent)="saveCurrentProgress()"
+      (clearCurrentProgressEvent)="clearCurrentProgress()"
+    ></valtimo-task-detail-header>
+  </cds-modal-header>
 
   <div body class="cds--modal-content pb-1">
     <valtimo-task-detail-content
       [task]="task$ | async"
+      (currentIntermediateSaveEvent)="onCurrentIntermediateSaveEvent($event)"
       (closeModalEvent)="closeModal()"
     ></valtimo-task-detail-content>
-    <!-- <div *ngIf="obs.formDefinition && obs.processLinkIsForm">
-      <valtimo-form-io
-        #form
-        [form]="obs.formDefinition"
-        [submission]="obs.submission"
-        (submit)="onSubmit($event)"
-        (change)="onChange($event)"
-        [options]="obs.formioOptions"
-      ></valtimo-form-io>
-    </div>
-    <div *ngIf="obs.processLinkIsFormFlow">
-      <valtimo-form-flow
-        #formFlow
-        [formIoFormData]="formIoFormData$"
-        [formFlowInstanceId]="obs.formFlowInstanceId"
-        (formFlowComplete)="completeTask()"
-      ></valtimo-form-flow>
-    </div>
-    <div *ngIf="obs.loading">
-      <div class="text-black mb-0 p-3 text-center">
-        {{ 'formManagement.loading' | translate }}
-      </div>
-    </div>
-    <div
-      *ngIf="
-        obs.loading === false && !obs.formDefinition && !obs.formFlowInstanceId && !obs.errorMessage
-      "
-    >
-      <div class="bg-warning text-black mb-0 p-3 text-center">
-        {{
-          (isAdmin$ | async)
-            ? ('formManagement.noFormDefinitionFoundAdmin' | translate)
-            : ('formManagement.noFormDefinitionFoundUser' | translate)
-        }}
-      </div>
-    </div>
-    <div *ngIf="obs.errorMessage">
-      <div class="bg-danger text-black mb-0 p-3 text-center">
-        {{ obs.errorMessage }}
-      </div>
-    </div> -->
   </div>
-  <!-- <div footer>
-    <div class="mb-0 p-3 text-center" *ngIf="(isProcessLinked$ | async) === false">
-      <button
-        class="btn btn-secondary btn-space"
-        type="button"
-        (click)="gotoProcessLinkScreen()"
-        id="process-link-button"
-      >
-        {{ 'formManagement.gotoProcessLinksButton' | translate }}
-      </button>
-    </div>
-  </div>
-  <div body class="m-2">
-    <ng-template #formViewModelComponent></ng-template>
-  </div> -->
 </cds-modal>
 
 <valtimo-confirmation-modal
