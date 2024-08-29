@@ -132,7 +132,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  private checkCompletedForm() {
+  private checkCompletedForm(): void {
     if (
       this.selectedFormDefinition &&
       this.formDisplayValue$.getValue() &&

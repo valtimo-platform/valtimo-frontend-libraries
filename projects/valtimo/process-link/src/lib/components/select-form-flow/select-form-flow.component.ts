@@ -133,7 +133,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
     }
   }
 
-  private checkCompletedForm() {
+  private checkCompletedForm(): void {
     if (
       this.selectedFormFlowDefinition &&
       this.formDisplayValue$.getValue() &&
