@@ -126,8 +126,8 @@ export class DossierDetailTaskListComponent {
   public rowTaskClick(task: ProcessInstanceTask): void {
     if (task.isLocked) return;
 
-    // this.taskClickEvent.emit(task);
-    this._taskDetailModal.openTaskDetails(task as unknown as Task);
+    this.taskClickEvent.emit(task);
+    // this._taskDetailModal.openTaskDetails(task as unknown as Task);
   }
 
   public refresh(): void {

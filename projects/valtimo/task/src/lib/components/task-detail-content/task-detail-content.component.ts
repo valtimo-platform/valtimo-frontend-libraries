@@ -42,7 +42,7 @@ import {
   ValtimoFormioOptions,
   ValtimoModalService,
 } from '@valtimo/components';
-import {FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
+import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
 import {IconService} from 'carbon-components-angular';
@@ -96,7 +96,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
   public readonly task$ = new BehaviorSubject<Task | null>(null);
   public readonly taskInstanceId$ = new BehaviorSubject<string | null>(null);
   public intermediateSaveEnabled = false;
-  public currentIntermediateSave: IntermediateSubmission | null = null;
 
   private readonly _taskProcessLinkType$ = new BehaviorSubject<TaskProcessLinkType | null>(null);
   public readonly processLinkIsForm$ = this._taskProcessLinkType$.pipe(
@@ -113,6 +112,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
   private readonly _subscriptions = new Subscription();
 
   constructor(
+    private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
     private readonly iconService: IconService,
     private readonly logger: NGXLogger,
@@ -127,6 +127,8 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     private readonly translateService: TranslateService,
     @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel
   ) {
+    this.intermediateSaveEnabled = !!this.configService.featureToggles?.enableIntermediateSave;
+
     this.iconService.registerAll([RecentlyViewed16]);
 
     const options = new FormioOptionsImpl();
@@ -219,8 +221,8 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (intermediateSubmission: IntermediateSubmission) => {
+          console.log({intermediateSubmission});
           this.taskIntermediateSaveService.setSubmission({data: intermediateSubmission.submission});
-          this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSubmission);
 
           if (formViewModelComponentRef) {
             formViewModelComponentRef.instance.submission = {

@@ -61,6 +61,7 @@ import {DossierService, DossierTabService} from '../../services';
 import {IconService} from 'carbon-components-angular';
 import {ChevronDown16} from '@carbon/icons';
 import {ProcessInstanceTask} from '@valtimo/process';
+import {IntermediateSubmission} from '@valtimo/task';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -85,6 +86,9 @@ export class DossierDetailComponent implements AfterViewInit, OnDestroy {
   public tabLoader: TabLoaderImpl | null = null;
 
   public readonly assigneeId$ = new BehaviorSubject<string>('');
+  public readonly currentIntermediateSave$ = new BehaviorSubject<IntermediateSubmission | null>(
+    null
+  );
 
   public readonly taskToOpen$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
 
