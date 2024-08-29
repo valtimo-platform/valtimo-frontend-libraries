@@ -40,6 +40,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   public formSizeValue$ = new BehaviorSubject<string>('');
 
   public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
+    tap(selectedProcessLink => this.formDisplayValue$.next(selectedProcessLink.formDisplayType)),
     map(selectedProcessLink => {
       return Object.keys(FormDisplayType).map(key => ({
         content: FormDisplayType[key as keyof typeof FormDisplayType],
@@ -50,6 +51,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   );
 
   public readonly formSizeValues$ = this.stateService.selectedProcessLink$.pipe(
+    tap(selectedProcessLink => this.formSizeValue$.next(selectedProcessLink.formSize)),
     map(selectedProcessLink => {
       return Object.keys(FormSize).map(key => ({
         content: FormSize[key as keyof typeof FormSize],
@@ -81,7 +83,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       })
     );
 
-  private _selectedFormDefinition!: FormDefinitionListItem;
+  private selectedFormDefinition!: FormDefinitionListItem;
   private _subscriptions = new Subscription();
 
   constructor(
@@ -102,20 +104,42 @@ export class SelectFormComponent implements OnInit, OnDestroy {
 
   public selectFormDefinition(formDefinition: FormDefinitionListItem): void {
     if (typeof formDefinition === 'object' && formDefinition.id) {
-      this._selectedFormDefinition = formDefinition;
-      this.buttonService.enableSaveButton();
+      this.selectedFormDefinition = formDefinition;
+      this.checkCompletedForm();
     } else {
-      this._selectedFormDefinition = null;
+      this.selectedFormDefinition = null;
       this.buttonService.disableSaveButton();
     }
   }
 
   public selectFormDisplayType(event): void {
-    this.formDisplayValue$.next(event.id);
+    if (event.id) {
+      this.formDisplayValue$.next(event.id);
+      this.checkCompletedForm();
+    } else {
+      this.formDisplayValue$.next(null);
+      this.buttonService.disableSaveButton();
+    }
   }
 
   public selectFormSize(event): void {
-    this.formSizeValue$.next(event.id);
+    if (event.id) {
+      this.formSizeValue$.next(event.id);
+      this.checkCompletedForm();
+    } else {
+      this.formSizeValue$.next(null);
+      this.buttonService.disableSaveButton();
+    }
+  }
+
+  private checkCompletedForm() {
+    if (
+      this.selectedFormDefinition &&
+      this.formDisplayValue$.getValue() &&
+      this.formSizeValue$.getValue()
+    ) {
+      this.buttonService.enableSaveButton();
+    }
   }
 
   private openBackButtonSubscription(): void {
@@ -151,7 +175,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       .subscribe(([selectedProcessLink, viewModelEnabled]) => {
         const updateProcessLinkRequest: FormProcessLinkUpdateRequestDto = {
           id: selectedProcessLink.id,
-          formDefinitionId: this._selectedFormDefinition.id,
+          formDefinitionId: this.selectedFormDefinition.id,
           viewModelEnabled,
           formDisplayType: this.formDisplayValue$.getValue(),
           formSize: this.formSizeValue$.getValue(),
@@ -178,7 +202,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
         take(1),
         switchMap(([modalParams, processLinkTypeId, viewModelEnabled]) =>
           this.processLinkService.saveProcessLink({
-            formDefinitionId: this._selectedFormDefinition.id,
+            formDefinitionId: this.selectedFormDefinition.id,
             activityType: modalParams.element.activityListenerType,
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,

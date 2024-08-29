@@ -17,6 +17,7 @@
 <ng-container
   *ngIf="{
     formFlowDefinitions: formFlowDefinitionListItems$ | async,
+    formDisplayValue: formDisplayValue$ | async,
     formDisplayValues: formDisplayValues$ | async,
     formSizeValues: formSizeValues$ | async,
     saving: saving$ | async,
@@ -39,7 +40,7 @@
 
     <cds-combo-box
       [appendInline]="true"
-      [disabled]="obs.saving"
+      [disabled]="!selectedFormFlowDefinition || obs.saving"
       [placeholder]="'processLinkSteps.selectFormDisplayTypePlaceholder' | translate"
       [label]="'processLinkSteps.selectFormDisplayType' | translate"
       (selected)="selectFormDisplayType($event)"
@@ -50,7 +51,7 @@
 
     <cds-combo-box
       [appendInline]="true"
-      [disabled]="obs.saving"
+      [disabled]="!selectedFormFlowDefinition || !obs.formDisplayValue || obs.saving"
       [placeholder]="'processLinkSteps.selectModalSizePlaceholder' | translate"
       [label]="'processLinkSteps.selectModalSize' | translate"
       (selected)="selectFormSize($event)"

@@ -36,12 +36,15 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./select-form-flow.component.scss'],
 })
 export class SelectFormFlowComponent implements OnInit, OnDestroy {
-  public readonly saving$ = this.stateService.saving$;
   public formDisplayValue$ = new BehaviorSubject<string>('');
+  public selectedFormFlowDefinition!: FormDefinitionListItem;
   public formSizeValue$ = new BehaviorSubject<string>('');
+  public readonly saving$ = this.stateService.saving$;
+
   private readonly formFlowDefinitions$ = this.formFlowService.getFormFlowDefinitions();
 
   public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
+    tap(selectedProcessLink => this.formDisplayValue$.next(selectedProcessLink.formDisplayType)),
     map(selectedProcessLink => {
       return Object.keys(FormDisplayType).map(key => ({
         content: FormDisplayType[key as keyof typeof FormDisplayType],
@@ -52,6 +55,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   );
 
   public readonly formSizeValues$ = this.stateService.selectedProcessLink$.pipe(
+    tap(selectedProcessLink => this.formSizeValue$.next(selectedProcessLink.formSize)),
     map(selectedProcessLink => {
       return Object.keys(FormSize).map(key => ({
         content: FormSize[key as keyof typeof FormSize],
@@ -81,7 +85,6 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
       })
     );
 
-  private _selectedFormFlowDefinition!: FormDefinitionListItem;
   private _subscriptions = new Subscription();
 
   constructor(
@@ -102,20 +105,42 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
 
   public selectFormFlowDefinition(formFlowDefinition: FormDefinitionListItem): void {
     if (typeof formFlowDefinition === 'object' && formFlowDefinition.id) {
-      this._selectedFormFlowDefinition = formFlowDefinition;
-      this.buttonService.enableSaveButton();
+      this.selectedFormFlowDefinition = formFlowDefinition;
+      this.checkCompletedForm();
     } else {
-      this._selectedFormFlowDefinition = null;
+      this.selectedFormFlowDefinition = null;
       this.buttonService.disableSaveButton();
     }
   }
 
   public selectFormDisplayType(event): void {
-    this.formDisplayValue$.next(event.id);
+    if (event.id) {
+      this.formDisplayValue$.next(event.id);
+      this.checkCompletedForm();
+    } else {
+      this.formDisplayValue$.next(null);
+      this.buttonService.disableSaveButton();
+    }
   }
 
   public selectFormSize(event): void {
-    this.formSizeValue$.next(event.id);
+    if (event.id) {
+      this.formSizeValue$.next(event.id);
+      this.checkCompletedForm();
+    } else {
+      this.formSizeValue$.next(null);
+      this.buttonService.disableSaveButton();
+    }
+  }
+
+  private checkCompletedForm() {
+    if (
+      this.selectedFormFlowDefinition &&
+      this.formDisplayValue$.getValue() &&
+      this.formSizeValue$.getValue()
+    ) {
+      this.buttonService.enableSaveButton();
+    }
   }
 
   private openBackButtonSubscription(): void {
@@ -149,7 +174,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
     this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
       const updateProcessLinkRequest: FormFlowProcessLinkUpdateRequestDto = {
         id: selectedProcessLink.id,
-        formFlowDefinitionId: this._selectedFormFlowDefinition.id,
+        formFlowDefinitionId: this.selectedFormFlowDefinition.id,
         formDisplayType: this.formDisplayValue$.getValue(),
         formSize: this.formSizeValue$.getValue(),
       };
@@ -171,7 +196,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
         take(1),
         switchMap(([modalParams, processLinkTypeId]) =>
           this.processLinkService.saveProcessLink({
-            formFlowDefinitionId: this._selectedFormFlowDefinition.id,
+            formFlowDefinitionId: this.selectedFormFlowDefinition.id,
             activityType: modalParams.element.activityListenerType,
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,
