@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -11,10 +27,12 @@ import {RecentlyViewed16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ConfirmationModalModule} from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
-import {ButtonModule, IconModule, IconService, TooltipModule} from 'carbon-components-angular';
-import {BehaviorSubject, take} from 'rxjs';
-import {IntermediateSubmission, Task} from '../../models';
+import {ButtonModule, IconModule, IconService, ModalModule, TooltipModule} from 'carbon-components-angular';
+import {BehaviorSubject, combineLatest, switchMap, take} from 'rxjs';
+import {IntermediateSaveRequest, IntermediateSubmission, Task} from '../../models';
 import {TaskIntermediateSaveService, TaskService} from '../../services';
+import moment from 'moment';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'valtimo-task-detail-intermediate-save',
@@ -28,6 +46,7 @@ import {TaskIntermediateSaveService, TaskService} from '../../services';
     TooltipModule,
     ConfirmationModalModule,
     IconModule,
+    ModalModule
   ],
 })
 export class TaskDetailIntermediateSaveComponent {
@@ -47,53 +66,89 @@ export class TaskDetailIntermediateSaveComponent {
       subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${value.created}`,
     });
   }
-  @Input() public set currentIntermediateSave(value: IntermediateSubmission | null) {
-    this.currentIntermediateSaveValue.set(value);
-  }
-  @Output() public readonly clearCurrentProgressEvent = new EventEmitter();
-  @Output() public readonly saveCurrentProgressEvent = new EventEmitter();
-  @Output() public readonly revertSaveEvent = new EventEmitter();
+  @Output() public readonly currentIntermediateSaveEvent =
+    new EventEmitter<IntermediateSubmission | null>();
 
   public readonly formFlowInstanceId$ = new BehaviorSubject<string | undefined>(undefined);
+  public readonly showConfirmationModal$ = new BehaviorSubject<boolean>(false);
 
   public readonly taskValue = signal<Task | null>(null);
   public readonly page = signal<{title: string; subtitle: string} | null>(null);
   public readonly canAssignUserToTask = signal<boolean>(false);
+  public readonly submission$ = this.taskIntermediateSaveService.submission$;
+  public readonly formIoFormData$ = this.taskIntermediateSaveService.formIoFormData$;
 
   public intermediateSaveEnabled = false;
-  public currentIntermediateSaveValue = signal<IntermediateSubmission | null>(null);
+  public currentIntermediateSave: IntermediateSubmission | null = null;
 
   constructor(
     private readonly configService: ConfigService,
     private readonly iconService: IconService,
     private readonly translateService: TranslateService,
     private readonly taskIntermediateSaveService: TaskIntermediateSaveService,
-    private readonly taskService: TaskService
+    private readonly taskService: TaskService,
+    private readonly toastr: ToastrService
   ) {
     this.intermediateSaveEnabled = !!this.configService.featureToggles?.enableIntermediateSave;
     this.iconService.registerAll([RecentlyViewed16]);
   }
 
   public saveCurrentProgress(): void {
-    this.saveCurrentProgressEvent.emit();
-  }
+    combineLatest([this.submission$, this.formIoFormData$])
+      .pipe(
+        switchMap(([submission, formIoFormData]) => {
+          const intermediateSaveRequest: IntermediateSaveRequest = {
+            submission: submission?.data ? submission.data : formIoFormData,
+            taskInstanceId: this.taskValue()?.id ?? '',
+          };
 
-  public clearCurrentProgress(): void {
-    this.clearCurrentProgressEvent.emit();
+          return this.taskIntermediateSaveService.storeIntermediateSubmission(
+            intermediateSaveRequest
+          );
+        }),
+        take(1)
+      )
+      .subscribe({
+        next: intermediateSubmission => {
+          this.toastr.success(
+            this.translateService.instant('formManagement.intermediateSave.success')
+          );
+          this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSubmission);
+          this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
+        },
+        error: () => {
+          this.toastr.error(this.translateService.instant('formManagement.intermediateSave.error'));
+        },
+      });
   }
 
   public revertSaveClick(): void {
-    this.revertSaveEvent.emit();
+    this.showConfirmationModal$.next(true);
   }
-  public submission$ = new BehaviorSubject<any>({});
 
-  public clearCurrentProgress2(): void {
+  public clearCurrentProgress(): void {
     this.taskIntermediateSaveService
       .clearIntermediateSubmission(this.taskValue()?.id ?? '')
       .pipe(take(1))
       .subscribe(() => {
-        this.submission$.next({data: {}});
+        this.taskIntermediateSaveService.setSubmission({data: {}});
         this.currentIntermediateSave = null;
+        this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
       });
+  }
+
+  private formatIntermediateSubmission(
+    intermediateSubmission: IntermediateSubmission
+  ): IntermediateSubmission {
+    intermediateSubmission.createdOn = moment(intermediateSubmission.createdOn).format(
+      'DD MMM YYYY HH:mm'
+    );
+    if (intermediateSubmission.editedOn) {
+      intermediateSubmission.editedOn = moment(new Date(intermediateSubmission.editedOn)).format(
+        'DD MMM YYYY HH:mm'
+      );
+    }
+
+    return intermediateSubmission;
   }
 }

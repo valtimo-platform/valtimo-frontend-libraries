@@ -111,16 +111,8 @@ export class TaskDetailModalComponent {
     this.router.navigate(['process-links']);
   }
 
-  public saveCurrentProgress(): void {
-    this.taskDetailsContentComponent.saveCurrentProgress();
-  }
-
   public onCurrentIntermediateSaveEvent(value: IntermediateSubmission | null): void {
     this.currentIntermediateSave$.next(value);
-  }
-
-  public clearCurrentProgress(): void {
-    this.taskDetailsContentComponent.clearCurrentProgress();
   }
 
   private openModal(): void {

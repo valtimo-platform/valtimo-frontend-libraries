@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -69,10 +85,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
 
     this.loadTaskDetails(value);
   }
-  @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
-  @Output() public readonly formSubmit = new EventEmitter();
   @Output() public readonly closeModalEvent = new EventEmitter();
-  @Output() public readonly currentIntermediateSaveEvent = new EventEmitter();
 
   public readonly canAssignUserToTask$ = new BehaviorSubject<boolean>(false);
   public readonly errorMessage$ = new BehaviorSubject<string | null>(null);
@@ -84,7 +97,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
   public readonly formName$ = new BehaviorSubject<string | null>(null);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly page$ = new BehaviorSubject<any>(null);
-  public readonly submission$ = new BehaviorSubject<any>({});
+  public readonly submission$ = this.taskIntermediateSaveService.submission$;
   public readonly task$ = new BehaviorSubject<Task | null>(null);
   public readonly taskInstanceId$ = new BehaviorSubject<string | null>(null);
   public intermediateSaveEnabled = false;
@@ -135,7 +148,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
 
   public onSubmit(submission: FormioSubmission): void {
     if (submission.data) {
-      this.formIoFormData$.next(submission.data);
+      this.taskIntermediateSaveService.setFormIoFormData(submission.data);
     }
 
     combineLatest([this._processLinkId$, this._taskProcessLinkType$, this.task$])
@@ -167,59 +180,15 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
       `${task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`
     );
     this.task$.next(null);
-    this.formSubmit.emit();
     this.closeModalEvent.emit();
 
     if (this.formFlow) this.formFlow.saveData();
-    // closeModal
   }
 
   public onChange(event: any): void {
     if (event.data) {
-      this.formIoFormData$.next(event.data);
+      this.taskIntermediateSaveService.setFormIoFormData(event.data);
     }
-  }
-
-  public saveCurrentProgress(): void {
-    const intermediateSaveRequest: IntermediateSaveRequest = {
-      submission: this.submission$.getValue().data
-        ? this.submission$.getValue().data
-        : this.formIoFormData$.getValue(),
-      taskInstanceId: this.taskInstanceId$.getValue() ?? '',
-    };
-
-    this.taskIntermediateSaveService
-      .storeIntermediateSubmission(intermediateSaveRequest)
-      .pipe(take(1))
-      .subscribe({
-        next: intermediateSubmission => {
-          this.toastr.success(
-            this.translateService.instant('formManagement.intermediateSave.success')
-          );
-          this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSubmission);
-          this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
-        },
-        error: () => {
-          this.toastr.error(this.translateService.instant('formManagement.intermediateSave.error'));
-        },
-      });
-  }
-
-  public clearCurrentProgress(): void {
-    this.taskInstanceId$
-      .pipe(
-        take(1),
-        switchMap((taskInstanceId: string | null) =>
-          this.taskIntermediateSaveService.clearIntermediateSubmission(taskInstanceId ?? '')
-        )
-      )
-      .subscribe({
-        next: () => {
-          this.submission$.next({data: {}});
-          this.currentIntermediateSave = null;
-          this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
-        },
-      });
   }
 
   private loadTaskDetails(task: Task): void {
@@ -236,15 +205,9 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
       title: task.name,
       subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${task.created}`,
     });
-
-    //only load from formlink when process link failed for backwards compatibility
-    // if (!this.taskProcessLinkType$.getValue()) {
-    //   this.openModal();
-    // }
   }
 
   public gotoProcessLinkScreen(): void {
-    //closeModal
     this.closeModalEvent.emit();
     if (this.formFlow) this.formFlow.saveData();
     this.router.navigate(['process-links']);
@@ -260,9 +223,8 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (intermediateSubmission: IntermediateSubmission) => {
-          this.submission$.next({data: intermediateSubmission.submission});
+          this.taskIntermediateSaveService.setSubmission({data: intermediateSubmission.submission});
           this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSubmission);
-          this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
 
           if (formViewModelComponentRef) {
             formViewModelComponentRef.instance.submission = {
@@ -293,7 +255,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
               this._processLinkId$.next(res.processLinkId);
               this.formDefinition$.next(res.properties.formDefinition);
               this.formName$.next(res.properties.formName ?? '');
-              // this.openModal();
               this.setFormViewModelComponent();
               break;
           }
@@ -370,7 +331,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     if (this.intermediateSaveEnabled) {
       this._subscriptions.add(
         formViewModelComponent.instance.submission$.subscribe(submission => {
-          this.submission$.next(submission);
+          this.taskIntermediateSaveService.setSubmission(submission);
         })
       );
       this._subscriptions.add(

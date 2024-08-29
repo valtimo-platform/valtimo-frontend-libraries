@@ -23,8 +23,18 @@
       cdsButton="ghost"
       iconOnly="true"
       cdsIcon="recently-viewed"
-      [disabled]="!currentIntermediateSaveValue()"
+      [disabled]="!currentIntermediateSave"
       (click)="revertSaveClick()"
     ></button>
   </cds-tooltip>
 }
+
+<valtimo-confirmation-modal
+  [showModalSubject$]="showConfirmationModal$"
+  (confirmEvent)="clearCurrentProgress()"
+  (cancelEvent)="showConfirmationModal$.next(false)"
+  cancelButtonType="ghost"
+  confirmButtonTextTranslationKey="interface.confirm"
+  titleTranslationKey="formManagement.intermediateSave.clear"
+  contentTranslationKey="formManagement.intermediateSave.clearConfirm"
+></valtimo-confirmation-modal>
