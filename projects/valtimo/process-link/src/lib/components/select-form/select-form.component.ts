@@ -55,7 +55,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     selected: false,
   }));
 
-  public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
+  public readonly formDisplayItems$ = this.stateService.selectedProcessLink$.pipe(
     tap(selectedProcessLink => this.formDisplayValue$.next(selectedProcessLink.formDisplayType)),
     map(selectedProcessLink =>
       this.formDisplayOptions.map(option => ({
@@ -72,7 +72,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     selected: false,
   }));
 
-  public readonly formSizeValues$ = this.stateService.selectedProcessLink$.pipe(
+  public readonly formSizeItems$ = this.stateService.selectedProcessLink$.pipe(
     tap(selectedProcessLink => this.formSizeValue$.next(selectedProcessLink.formSize)),
     map(selectedProcessLink =>
       this.formSizeOptions.map(option => ({

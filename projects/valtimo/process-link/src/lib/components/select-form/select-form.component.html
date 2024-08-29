@@ -18,8 +18,8 @@
   *ngIf="{
     formDefinitions: formDefinitionListItems$ | async,
     formDisplayValue: formDisplayValue$ | async,
-    formDisplayValues: formDisplayValues$ | async,
-    formSizeValues: formSizeValues$ | async,
+    formDisplayItems: formDisplayItems$ | async,
+    formSizeItems: formSizeItems$ | async,
     saving: saving$ | async,
   } as obs"
 >
@@ -45,7 +45,7 @@
       [label]="'processLinkSteps.selectFormDisplayType' | translate"
       (selected)="selectFormDisplayType($event)"
     >
-      <cds-dropdown-list [items]="obs.formDisplayValues || []"></cds-dropdown-list>
+      <cds-dropdown-list [items]="obs.formDisplayItems || []"></cds-dropdown-list>
     </cds-combo-box>
     <br />
 
@@ -56,7 +56,7 @@
       [label]="'processLinkSteps.selectModalSize' | translate"
       (selected)="selectFormSize($event)"
     >
-      <cds-dropdown-list [items]="obs.formSizeValues || []"></cds-dropdown-list>
+      <cds-dropdown-list [items]="obs.formSizeItems || []"></cds-dropdown-list>
     </cds-combo-box>
     <br />
   </div>
