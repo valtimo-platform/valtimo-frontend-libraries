@@ -54,13 +54,13 @@ export class FormFlowComponent implements OnInit, OnDestroy {
   formDefinition: FormioForm;
   formioOptions: ValtimoFormioOptions;
 
-  formFlowStepInstanceId: string;
+  private formFlowStepInstanceId: string;
 
   constructor(
     private readonly formFlowService: FormFlowService,
     private readonly modalService: ValtimoModalService,
     private readonly translateService: TranslateService,
-    configService: ConfigService
+    private readonly configService: ConfigService
   ) {
     this.formioOptions = new FormioOptionsImpl();
     this.formioOptions.disableAlerts = true;
@@ -135,10 +135,12 @@ export class FormFlowComponent implements OnInit, OnDestroy {
         submissionData
       )
       .subscribe(
-        (result: FormFlowInstance) => this.handleFormFlowStep(result),
-        errors => {
-          this.form?.showErrors(errors);
-          this.enable();
+        {
+          next: (result: FormFlowInstance) => this.handleFormFlowStep(result),
+          error: errors => {
+            this.form?.showErrors(errors);
+            this.enable();
+          }
         }
       );
   }
