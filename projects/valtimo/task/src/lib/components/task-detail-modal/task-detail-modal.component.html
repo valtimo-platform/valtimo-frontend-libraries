@@ -48,16 +48,28 @@
       class="save-buttons-margin"
       [task]="task$ | async"
       (currentIntermediateSaveEvent)="onCurrentIntermediateSaveEvent($event)"
+      (showModalEvent)="onShowModalEvent()"
     ></valtimo-task-detail-intermediate-save>
   </cds-modal-header>
 
   <div body class="cds--modal-content pb-1">
     <valtimo-task-detail-content
       [task]="task$ | async"
+      (formSubmit)="onFormSubmit()"
       (closeModalEvent)="closeModal()"
     ></valtimo-task-detail-content>
   </div>
 </cds-modal>
+
+<valtimo-confirmation-modal
+  [showModalSubject$]="showConfirmationModal$"
+  (confirmEvent)="clearCurrentProgress()"
+  (cancelEvent)="showConfirmationModal$.next(false)"
+  cancelButtonType="ghost"
+  confirmButtonTextTranslationKey="interface.confirm"
+  titleTranslationKey="formManagement.intermediateSave.clear"
+  contentTranslationKey="formManagement.intermediateSave.clearConfirm"
+></valtimo-confirmation-modal>
 
 <ng-template #assignUserToTask>
   <ng-container

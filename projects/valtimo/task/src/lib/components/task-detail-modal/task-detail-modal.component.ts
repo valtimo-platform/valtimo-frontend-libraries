@@ -13,26 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {
-  Component,
-  EventEmitter,
-  Output,
-  ViewChild,
-  ViewContainerRef,
-  ViewEncapsulation,
-} from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
-import {FormioComponent} from '@valtimo/components';
-import {FormFlowComponent} from '@valtimo/process-link';
 import {Modal} from 'carbon-components-angular';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {IntermediateSubmission, Task} from '../../models';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
-import {TaskDetailContentComponent} from '../task-detail-content/task-detail-content.component';
+import {TaskDetailIntermediateSaveComponent} from '../task-detail-intermediate-save/task-detail-intermediate-save.component';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -43,15 +34,10 @@ moment.locale(localStorage.getItem('langKey') || '');
   encapsulation: ViewEncapsulation.None,
 })
 export class TaskDetailModalComponent {
-  @ViewChild('form') form: FormioComponent;
-  @ViewChild('formFlow') formFlow: FormFlowComponent;
-  @ViewChild('taskDetailModal') modal: Modal;
-  @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef})
-  public formViewModelDynamicContainer: ViewContainerRef;
-  @ViewChild(TaskDetailContentComponent)
-  public readonly taskDetailsContentComponent: TaskDetailContentComponent;
+  @ViewChild('taskDetailModal') private readonly _modal: Modal;
+  @ViewChild(TaskDetailIntermediateSaveComponent)
+  private readonly _intermediateSaveComponent: TaskDetailIntermediateSaveComponent;
 
-  @ViewChild(TaskDetailContentComponent) public readonly taskDetail: TaskDetailContentComponent;
   @Output() formSubmit = new EventEmitter();
   @Output() assignmentOfTaskChanged = new EventEmitter();
 
@@ -96,6 +82,10 @@ export class TaskDetailModalComponent {
     );
   }
 
+  public clearCurrentProgress(): void {
+    this._intermediateSaveComponent.clearCurrentProgress();
+  }
+
   public openTaskDetails(task: Task | null): void {
     this.task$.next(task);
     this.page$.next({
@@ -115,11 +105,19 @@ export class TaskDetailModalComponent {
     this.currentIntermediateSave$.next(value);
   }
 
-  private openModal(): void {
-    this.modal.open = true;
+  public onFormSubmit(): void {
+    this.formSubmit.emit();
   }
 
-  protected closeModal(): void {
-    this.modal.open = false;
+  public onShowModalEvent(): void {
+    this.showConfirmationModal$.next(true);
+  }
+
+  public closeModal(): void {
+    this._modal.open = false;
+  }
+
+  private openModal(): void {
+    this._modal.open = true;
   }
 }

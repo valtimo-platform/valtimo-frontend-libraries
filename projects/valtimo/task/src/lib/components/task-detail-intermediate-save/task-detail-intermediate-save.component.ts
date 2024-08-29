@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -27,12 +26,18 @@ import {RecentlyViewed16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ConfirmationModalModule} from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
-import {ButtonModule, IconModule, IconService, ModalModule, TooltipModule} from 'carbon-components-angular';
+import {
+  ButtonModule,
+  IconModule,
+  IconService,
+  ModalModule,
+  TooltipModule,
+} from 'carbon-components-angular';
+import moment from 'moment';
+import {ToastrService} from 'ngx-toastr';
 import {BehaviorSubject, combineLatest, switchMap, take} from 'rxjs';
 import {IntermediateSaveRequest, IntermediateSubmission, Task} from '../../models';
 import {TaskIntermediateSaveService, TaskService} from '../../services';
-import moment from 'moment';
-import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'valtimo-task-detail-intermediate-save',
@@ -46,7 +51,7 @@ import {ToastrService} from 'ngx-toastr';
     TooltipModule,
     ConfirmationModalModule,
     IconModule,
-    ModalModule
+    ModalModule,
   ],
 })
 export class TaskDetailIntermediateSaveComponent {
@@ -68,6 +73,7 @@ export class TaskDetailIntermediateSaveComponent {
   }
   @Output() public readonly currentIntermediateSaveEvent =
     new EventEmitter<IntermediateSubmission | null>();
+  @Output() public readonly showModalEvent = new EventEmitter();
 
   public readonly formFlowInstanceId$ = new BehaviorSubject<string | undefined>(undefined);
   public readonly showConfirmationModal$ = new BehaviorSubject<boolean>(false);
@@ -123,6 +129,11 @@ export class TaskDetailIntermediateSaveComponent {
   }
 
   public revertSaveClick(): void {
+    if (this.showModalEvent.observed) {
+      this.showModalEvent.emit();
+      return;
+    }
+
     this.showConfirmationModal$.next(true);
   }
 

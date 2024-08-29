@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -59,12 +58,7 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import {
-  IntermediateSaveRequest,
-  IntermediateSubmission,
-  Task,
-  TaskProcessLinkType,
-} from '../../models';
+import {IntermediateSubmission, Task, TaskProcessLinkType} from '../../models';
 import {TaskIntermediateSaveService, TaskService} from '../../services';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
 
@@ -86,6 +80,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     this.loadTaskDetails(value);
   }
   @Output() public readonly closeModalEvent = new EventEmitter();
+  @Output() public readonly formSubmit = new EventEmitter();
 
   public readonly canAssignUserToTask$ = new BehaviorSubject<boolean>(false);
   public readonly errorMessage$ = new BehaviorSubject<string | null>(null);
@@ -180,6 +175,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
       `${task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`
     );
     this.task$.next(null);
+    this.formSubmit.emit();
     this.closeModalEvent.emit();
 
     if (this.formFlow) this.formFlow.saveData();
