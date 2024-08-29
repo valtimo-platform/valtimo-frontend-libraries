@@ -15,7 +15,16 @@
  */
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  startWith,
+  Subscription,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {
   FormFlowService,
   ProcessLinkButtonService,
@@ -36,33 +45,45 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./select-form-flow.component.scss'],
 })
 export class SelectFormFlowComponent implements OnInit, OnDestroy {
-  public formDisplayValue$ = new BehaviorSubject<string>('');
   public selectedFormFlowDefinition!: FormDefinitionListItem;
+  public formDisplayValue$ = new BehaviorSubject<string>('');
   public formSizeValue$ = new BehaviorSubject<string>('');
   public readonly saving$ = this.stateService.saving$;
 
   private readonly formFlowDefinitions$ = this.formFlowService.getFormFlowDefinitions();
 
+  private readonly formDisplayOptions = Object.keys(FormDisplayType).map(key => ({
+    content: FormDisplayType[key as keyof typeof FormDisplayType],
+    id: key,
+    selected: false,
+  }));
+
   public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
     tap(selectedProcessLink => this.formDisplayValue$.next(selectedProcessLink.formDisplayType)),
-    map(selectedProcessLink => {
-      return Object.keys(FormDisplayType).map(key => ({
-        content: FormDisplayType[key as keyof typeof FormDisplayType],
-        id: key,
-        selected: selectedProcessLink ? selectedProcessLink.formDisplayType === key : false,
-      }));
-    })
+    map(selectedProcessLink =>
+      this.formDisplayOptions.map(option => ({
+        ...option,
+        selected: selectedProcessLink?.formDisplayType === option.id,
+      }))
+    ),
+    startWith(this.formDisplayOptions)
   );
+
+  private readonly formSizeOptions = Object.keys(FormSize).map(key => ({
+    content: FormSize[key as keyof typeof FormSize],
+    id: key,
+    selected: false,
+  }));
 
   public readonly formSizeValues$ = this.stateService.selectedProcessLink$.pipe(
     tap(selectedProcessLink => this.formSizeValue$.next(selectedProcessLink.formSize)),
-    map(selectedProcessLink => {
-      return Object.keys(FormSize).map(key => ({
-        content: FormSize[key as keyof typeof FormSize],
-        id: key,
-        selected: selectedProcessLink ? selectedProcessLink.formSize === key : false,
-      }));
-    })
+    map(selectedProcessLink =>
+      this.formSizeOptions.map(option => ({
+        ...option,
+        selected: selectedProcessLink?.formSize === option.id,
+      }))
+    ),
+    startWith(this.formSizeOptions)
   );
 
   public readonly formFlowDefinitionListItems$: Observable<Array<FormDefinitionListItem>> =

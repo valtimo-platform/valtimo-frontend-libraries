@@ -16,7 +16,16 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormService} from '@valtimo/form';
-import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  startWith,
+  Subscription,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {
   ProcessLinkButtonService,
   ProcessLinkService,
@@ -36,29 +45,42 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./select-form.component.scss'],
 })
 export class SelectFormComponent implements OnInit, OnDestroy {
+  public selectedFormDefinition!: FormDefinitionListItem;
   public formDisplayValue$ = new BehaviorSubject<string>('');
   public formSizeValue$ = new BehaviorSubject<string>('');
 
+  private readonly formDisplayOptions = Object.keys(FormDisplayType).map(key => ({
+    content: FormDisplayType[key as keyof typeof FormDisplayType],
+    id: key,
+    selected: false,
+  }));
+
   public readonly formDisplayValues$ = this.stateService.selectedProcessLink$.pipe(
     tap(selectedProcessLink => this.formDisplayValue$.next(selectedProcessLink.formDisplayType)),
-    map(selectedProcessLink => {
-      return Object.keys(FormDisplayType).map(key => ({
-        content: FormDisplayType[key as keyof typeof FormDisplayType],
-        id: key,
-        selected: selectedProcessLink ? selectedProcessLink.formDisplayType === key : false,
-      }));
-    })
+    map(selectedProcessLink =>
+      this.formDisplayOptions.map(option => ({
+        ...option,
+        selected: selectedProcessLink?.formDisplayType === option.id,
+      }))
+    ),
+    startWith(this.formDisplayOptions)
   );
+
+  private readonly formSizeOptions = Object.keys(FormSize).map(key => ({
+    content: FormSize[key as keyof typeof FormSize],
+    id: key,
+    selected: false,
+  }));
 
   public readonly formSizeValues$ = this.stateService.selectedProcessLink$.pipe(
     tap(selectedProcessLink => this.formSizeValue$.next(selectedProcessLink.formSize)),
-    map(selectedProcessLink => {
-      return Object.keys(FormSize).map(key => ({
-        content: FormSize[key as keyof typeof FormSize],
-        id: key,
-        selected: selectedProcessLink ? selectedProcessLink.formSize === key : false,
-      }));
-    })
+    map(selectedProcessLink =>
+      this.formSizeOptions.map(option => ({
+        ...option,
+        selected: selectedProcessLink?.formSize === option.id,
+      }))
+    ),
+    startWith(this.formSizeOptions)
   );
 
   public readonly saving$ = this.stateService.saving$;
@@ -83,7 +105,6 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       })
     );
 
-  private selectedFormDefinition!: FormDefinitionListItem;
   private _subscriptions = new Subscription();
 
   constructor(
