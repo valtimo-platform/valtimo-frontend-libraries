@@ -83,6 +83,23 @@
           [tooltip]="'zaakTypeSelectTooltip' | pluginTranslate: obs.pluginId | async"
         ></v-select>
       </ng-container>
+
+      <div *ngFor="let property of propertyList">
+        <ng-container [ngSwitch]="property">
+          <ng-container *ngSwitchCase="'description'">
+            <ng-container *ngTemplateOutlet="propertyOmschrijving"/>
+          </ng-container>
+        </ng-container>
+      </div>
+      <button
+              cdsButton="primary" [size]="'md'"
+              [cdsOverflowMenu]="addCasePropertyList"
+              [customPane]="true"
+              placement="bottom"
+      >
+        {{ 'addZaakProperty' | pluginTranslate: obs.pluginId | async }}
+        <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+      </button>
     </v-form>
   </ng-container>
 </ng-container>
@@ -90,5 +107,37 @@
 <ng-template #loading>
   <div class="loading-container">
     <cds-loading></cds-loading>
+  </div>
+</ng-template>
+
+<ng-template #addCasePropertyList>
+  <cds-overflow-menu-option
+          (click)="addCaseProperty('description')"
+          *ngIf="propertyList.indexOf('description') == -1">
+    Omschrijving
+  </cds-overflow-menu-option>
+  <cds-overflow-menu-option
+          (click)="addCaseProperty('plannedEndDate')"
+          *ngIf="propertyList.indexOf('plannedEndDate') == -1">
+    Einddatum gepland
+  </cds-overflow-menu-option>
+  <cds-overflow-menu-option>Uiterlijke einddatum afdoening</cds-overflow-menu-option>
+</ng-template>
+
+<ng-template #propertyOmschrijving let-obs=obs>
+  <div class="property-input">
+    <v-input
+            name="omschrijving"
+            [title]="'omschrijving' | pluginTranslate: obs.pluginId | async"
+            [margin]="true"
+            [defaultValue]="obs.prefill?.omschrijving"
+            [required]="true"
+    />
+    <button
+            class="btn btn-danger btn-space"
+            (click)="removeCaseProperty('description')"
+    >
+      <i class="icon mdi mdi-delete"></i>
+    </button>
   </div>
 </ng-template>

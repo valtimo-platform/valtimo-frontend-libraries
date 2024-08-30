@@ -157,6 +157,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       resultaattypeUrlSelectTooltip: 'Selecteer het resultaattype.',
       inputTypeZaakStatusToggle: 'Invoertype Zaakstatus-URL',
       inputTypeZaakResultaatToggle: 'Invoertype Zaakresultaat-URL',
+      addZaakProperty: "Voeg nieuwe parameter toe",
     },
     en: {
       title: 'Zaken API',
@@ -264,6 +265,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       resultaattypeUrlSelectTooltip: 'Select the resultaat type.',
       inputTypeZaakStatusToggle: 'Input type Zaakstatus-URL',
       inputTypeZaakResultaatToggle: 'Input type Zaakresultaat-URL',
+      addZaakProperty: "Add new case property",
     },
     de: {
       title: 'Zaken API',
@@ -371,6 +373,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       resultaattypeUrlSelectTooltip: 'Wählen Sie den Resultaattype aus.',
       inputTypeZaakStatusToggle: 'Eingabetyp Zaakstatus-URL',
       inputTypeZaakResultaatToggle: 'Eingabetyp Zaakresultaat-URL',
+      addZaakProperty: "Neue Case-Eigenschaft hinzufügen",
     },
   },
 };

@@ -14,7 +14,19 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  Directive,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  TemplateRef,
+  ViewChildren
+} from '@angular/core';
 import {FunctionConfigurationComponent} from '../../../../models';
 import {
   BehaviorSubject,
@@ -33,6 +45,8 @@ import {DocumentService} from '@valtimo/document';
 import {ModalService, RadioValue, SelectItem} from '@valtimo/components';
 import {PluginTranslatePipe} from '../../../../pipes';
 
+type Properties = 'description' | 'plannedEndDate' | 'finalCompletionDate';
+
 @Component({
   selector: 'valtimo-create-zaak-configuration',
   templateUrl: './create-zaak-configuration.component.html',
@@ -50,6 +64,8 @@ export class CreateZaakConfigurationComponent
   @Input() prefillConfiguration$: Observable<CreateZaakConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<CreateZaakConfig> = new EventEmitter<CreateZaakConfig>();
+
+  propertyList: Array<Properties> = [];
 
   readonly pluginId$ = new BehaviorSubject<string>('');
   readonly selectedInputOption$ = new BehaviorSubject<InputOption>('selection');
@@ -183,5 +199,13 @@ export class CreateZaakConfigurationComponent
           }
         });
     });
+  }
+
+  addCaseProperty(property: Properties) {
+    this.propertyList.push(property)
+  }
+
+  removeCaseProperty(property: Properties) {
+    this.propertyList.splice(this.propertyList.indexOf(property, 1))
   }
 }
