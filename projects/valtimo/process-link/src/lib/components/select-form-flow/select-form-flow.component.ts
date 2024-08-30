@@ -31,6 +31,8 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./select-form-flow.component.scss'],
 })
 export class SelectFormFlowComponent implements OnInit, OnDestroy {
+  public formDisplayValue: string = '';
+  public formSizeValue: string = '';
   public readonly saving$ = this.stateService.saving$;
   private readonly formFlowDefinitions$ = this.formFlowService.getFormFlowDefinitions();
 
@@ -67,13 +69,29 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.openBackButtonSubscription();
     this.openSaveButtonSubscription();
+    this._subscriptions.add(
+      this.stateService.selectedProcessLink$.subscribe(selectedProcessLink => {
+        if (selectedProcessLink) {
+          this.formDisplayValue = selectedProcessLink.formDisplayType;
+          this.formSizeValue = selectedProcessLink.formSize;
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
-  selectFormFlowDefinition(formFlowDefinition: FormDefinitionListItem): void {
+  public receiveFormDisplayValue(formDisplay): void {
+    this.formDisplayValue = formDisplay;
+  }
+
+  public receiveFormSizeValue(formSize): void {
+    this.formSizeValue = formSize;
+  }
+
+  public selectFormFlowDefinition(formFlowDefinition: FormDefinitionListItem): void {
     if (typeof formFlowDefinition === 'object' && formFlowDefinition.id) {
       this._selectedFormFlowDefinition = formFlowDefinition;
       this.buttonService.enableSaveButton();
@@ -139,6 +157,8 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
+            formDisplayType: this.formDisplayValue,
+            formSize: this.formSizeValue,
           })
         )
       )

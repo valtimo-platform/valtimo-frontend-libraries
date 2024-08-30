@@ -31,6 +31,9 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./select-form.component.scss'],
 })
 export class SelectFormComponent implements OnInit, OnDestroy {
+  public formDisplayValue: string = '';
+  public formSizeValue: string = '';
+
   public readonly saving$ = this.stateService.saving$;
   private readonly formDefinitions$ = this.formService.getAllFormDefinitions();
   public readonly formDefinitionListItems$: Observable<Array<FormDefinitionListItem>> =
@@ -66,6 +69,14 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.openBackButtonSubscription();
     this.openSaveButtonSubscription();
+    this._subscriptions.add(
+      this.stateService.selectedProcessLink$.subscribe(selectedProcessLink => {
+        if (selectedProcessLink) {
+          this.formDisplayValue = selectedProcessLink.formDisplayType;
+          this.formSizeValue = selectedProcessLink.formSize;
+        }
+      })
+    );
   }
 
   public ngOnDestroy(): void {
@@ -80,6 +91,14 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       this._selectedFormDefinition = null;
       this.buttonService.disableSaveButton();
     }
+  }
+
+  public receiveFormDisplayValue(formDisplay): void {
+    this.formDisplayValue = formDisplay;
+  }
+
+  public receiveFormSizeValue(formSize): void {
+    this.formSizeValue = formSize;
   }
 
   private openBackButtonSubscription(): void {
@@ -117,6 +136,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
           id: selectedProcessLink.id,
           formDefinitionId: this._selectedFormDefinition.id,
           viewModelEnabled,
+          formDisplayType: this.formDisplayValue,
+          formSize: this.formSizeValue,
         };
 
         this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -146,6 +167,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
             viewModelEnabled,
+            formDisplayType: this.formDisplayValue,
+            formSize: this.formSizeValue,
           })
         )
       )

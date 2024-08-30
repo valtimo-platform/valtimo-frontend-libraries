@@ -35,6 +35,9 @@
     ></cds-combo-box>
     <br />
 
-    <valtimo-form-display-configuration></valtimo-form-display-configuration>
+    <valtimo-form-display-configuration
+      (formDisplayValue)="receiveFormDisplayValue($event)"
+      (formSizeValue)="receiveFormSizeValue($event)"
+    ></valtimo-form-display-configuration>
   </div>
 </ng-container>
