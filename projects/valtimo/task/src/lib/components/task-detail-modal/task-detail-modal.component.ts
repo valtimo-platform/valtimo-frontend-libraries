@@ -41,7 +41,7 @@ import {
   Task,
   TaskProcessLinkType,
 } from '../../models';
-import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
+import {FormFlowComponent, FormSubmissionResult, ProcessLinkService, UrlResolverService} from '@valtimo/process-link';
 import {FormioForm} from '@formio/angular';
 import moment from 'moment';
 import {ToastrService} from 'ngx-toastr';
@@ -58,7 +58,6 @@ import {RecentlyViewed16} from '@carbon/icons';
 import {PermissionService} from '@valtimo/access-control';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
 import {NGXLogger} from 'ngx-logger';
-import {resolveUrlVariables} from '@valtimo/process-link'
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -127,6 +126,7 @@ export class TaskDetailModalComponent implements OnInit, OnDestroy {
     private readonly iconService: IconService,
     private readonly permissionService: PermissionService,
     private readonly logger: NGXLogger,
+    private readonly urlResolverService: UrlResolverService
   ) {
     const options = new FormioOptionsImpl();
     options.disableAlerts = true;
@@ -271,13 +271,13 @@ export class TaskDetailModalComponent implements OnInit, OnDestroy {
                 this.processLinkService.getVariables(),
                 this.task$
               ]).subscribe(([variables, task]) => {
-                let url = resolveUrlVariables(res.properties.url, variables.variables);
+                let url = this.urlResolverService.resolveUrlVariables(res.properties.url, variables.variables);
                 window.open(url, '_blank').focus();
                 this.processLinkService.submitURLProcessLink(
                     res.processLinkId,
                     task.businessKey,
                     task.id
-                ).subscribe(_ => {
+                ).subscribe(() => {
                   this.completeTask();
                   this.closeModal();
                 });

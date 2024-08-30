@@ -20,6 +20,7 @@
 
 export * from './lib/services/form-flow.service';
 export * from './lib/services/process-link.service';
+export * from './lib/services/url-resolver.service';
 export * from './lib/components/select-plugin-configuration/select-plugin-configuration.component';
 export * from './lib/components/select-plugin-action/select-plugin-action.component';
 export * from './lib/components/select-url/select-url.component';

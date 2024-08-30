@@ -140,7 +140,7 @@ export class ProcessLinkService {
     );
   }
 
-  submitURLProcessLink(
+  public submitURLProcessLink(
     processLinkId: string,
     documentId?: string,
     taskInstanceId?: string,
@@ -169,7 +169,7 @@ export class ProcessLinkService {
     );
   }
 
-  getVariables(): Observable<URLVariables> {
+  public getVariables(): Observable<URLVariables> {
     return this.http.get<URLVariables>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link/url/variables`
     );

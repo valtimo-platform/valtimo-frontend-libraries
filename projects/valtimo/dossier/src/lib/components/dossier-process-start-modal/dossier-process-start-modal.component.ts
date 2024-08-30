@@ -28,7 +28,7 @@ import {
 } from '@angular/core';
 import {PermissionService} from '@valtimo/access-control';
 import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
-import {FormFlowService, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
+import {FormFlowService, FormSubmissionResult, ProcessLinkService, UrlResolverService} from '@valtimo/process-link';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProcessService} from '@valtimo/process';
 import {
@@ -48,7 +48,6 @@ import {ConfigService} from '@valtimo/config';
 import {FORM_VIEW_MODEL_TOKEN} from '@valtimo/config';
 import {FormViewModel} from '@valtimo/config';
 import {Subscription} from 'rxjs';
-import {resolveUrlVariables} from '@valtimo/process-link'
 
 @Component({
   selector: 'valtimo-dossier-process-start-modal',
@@ -91,7 +90,8 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
     private listService: DossierListService,
     private startModalService: StartModalService,
     private configService: ConfigService,
-    @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel
+    @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel,
+    private urlResolverService: UrlResolverService,
   ) {
     this._useStartEventNameAsStartFormTitle =
       this.configService.config.featureToggles?.useStartEventNameAsStartFormTitle;
@@ -145,8 +145,10 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
               break;
             case 'url':
               this.processLinkId = startProcessResult.processLinkId;
-              this.processLinkService.getVariables().subscribe(variables => {
-                let url = resolveUrlVariables(startProcessResult.properties.url, variables.variables)
+              this.processLinkService.getVariables()
+                .pipe(take(1))
+                .subscribe(variables => {
+                let url = this.urlResolverService.resolveUrlVariables(startProcessResult.properties.url, variables.variables)
                 window.open(url, '_blank').focus();
                 this.processLinkService.submitURLProcessLink(
                     this.processLinkId

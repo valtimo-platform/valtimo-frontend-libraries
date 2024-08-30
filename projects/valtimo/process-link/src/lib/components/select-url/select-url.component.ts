@@ -17,178 +17,151 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, filter, map, Observable, of, Subscription, switchMap, tap} from 'rxjs';
 import {
-    ProcessLinkButtonService,
-    ProcessLinkStateService,
-    ProcessLinkService,
+  ProcessLinkButtonService,
+  ProcessLinkStateService,
+  ProcessLinkService,
 } from '../../services';
 import {distinctUntilChanged, take} from 'rxjs/operators';
 import {
-    AbstractControl,
-    AsyncValidatorFn,
-    FormControl,
-    FormGroup,
-    ValidationErrors,
-    ValidatorFn,
-    Validators
+  AbstractControl,
+  AsyncValidatorFn,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
 } from '@angular/forms';
 import {URLProcessLinkUpdateRequestDto} from '../../models';
+import {UrlValidatorService} from '../../services/url-validator.service';
+import {UrlResolverService} from '../../services/url-resolver.service';
 
 @Component({
-    selector: 'valtimo-select-url',
-    templateUrl: './select-url.component.html',
-    styleUrls: ['./select-url.component.scss'],
+  selector: 'valtimo-select-url',
+  templateUrl: './select-url.component.html',
 })
 export class SelectUrlComponent implements OnInit, OnDestroy {
-    public readonly saving$ = this.stateService.saving$;
-    private readonly _variables$ = new BehaviorSubject<Map<string, string>>(null);
+  public readonly saving$ = this.stateService.saving$;
+  private readonly _variables$ = new BehaviorSubject<Map<string, string>>(null);
 
-    private _subscriptions = new Subscription();
+  private _subscriptions = new Subscription();
 
-    public urlForm: FormGroup;
+  public urlForm: FormGroup;
 
-    constructor(
-        private readonly stateService: ProcessLinkStateService,
-        private readonly buttonService: ProcessLinkButtonService,
-        private readonly processLinkService: ProcessLinkService
-    ) {
-    }
+  constructor(
+    private readonly stateService: ProcessLinkStateService,
+    private readonly buttonService: ProcessLinkButtonService,
+    private readonly processLinkService: ProcessLinkService,
+    private readonly urlValidateService: UrlValidatorService,
+    private readonly urlResolverService: UrlResolverService
+  ) {
+  }
 
-    ngOnInit(): void {
-        this.openBackButtonSubscription();
-        this.openSaveButtonSubscription();
+  public ngOnInit(): void {
+    this.openBackButtonSubscription();
+    this.openSaveButtonSubscription();
 
-        this.urlForm = new FormGroup({
-            url: new FormControl("", Validators.required, urlValidator(this._variables$))
-        })
-        this.urlForm.statusChanges
-            .pipe(distinctUntilChanged())
-            .subscribe(status => {
-                if (status === 'VALID') {
-                    this.buttonService.enableSaveButton();
-                } else {
-                    this.buttonService.disableSaveButton();
-                }
-            })
+    this.urlForm = new FormGroup({
+      url: new FormControl('', Validators.required, this.urlValidateService.urlValidator(this._variables$))
+    });
+    this.urlForm.statusChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(status => {
+        if (status === 'VALID') {
+          this.buttonService.enableSaveButton();
+        } else {
+          this.buttonService.disableSaveButton();
+        }
+      });
 
-        this.stateService.url$
-            .subscribe(url => this.url.setValue(url));
+    this.stateService.url$
+      .subscribe(url => this.url.setValue(url));
 
-        this.processLinkService.getVariables()
-            .subscribe(variables => this._variables$.next(variables.variables))
-    }
+    this.processLinkService.getVariables()
+      .subscribe(variables => this._variables$.next(variables.variables));
+  }
 
-    ngOnDestroy(): void {
-        this._subscriptions.unsubscribe();
-    }
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
-    private openBackButtonSubscription(): void {
-        this._subscriptions.add(
-            this.buttonService.backButtonClick$.subscribe(() => {
-                this.stateService.setInitial();
-            })
+  private openBackButtonSubscription(): void {
+    this._subscriptions.add(
+      this.buttonService.backButtonClick$.subscribe(() => {
+        this.stateService.setInitial();
+      })
+    );
+  }
+
+  private openSaveButtonSubscription(): void {
+    this._subscriptions.add(
+      this.buttonService.saveButtonClick$.subscribe(() => {
+        this.stateService.startSaving();
+        this.saveProcessLink();
+      })
+    );
+  }
+
+  private saveProcessLink(): void {
+    this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
+      if (selectedProcessLink) {
+        this.updateProcessLink();
+      } else {
+        this.saveNewProcessLink();
+      }
+    });
+  }
+
+  private updateProcessLink(): void {
+    this.stateService.selectedProcessLink$
+      .pipe(take(1))
+      .subscribe((selectedProcessLink) => {
+        const updateProcessLinkRequest: URLProcessLinkUpdateRequestDto = {
+          id: selectedProcessLink.id,
+          url: this.url.value,
+        };
+
+        this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
+          () => {
+            this.stateService.closeModal();
+          },
+          () => {
+            this.stateService.stopSaving();
+          }
         );
-    }
+      });
+  }
 
-    private openSaveButtonSubscription(): void {
-        this._subscriptions.add(
-            this.buttonService.saveButtonClick$.subscribe(() => {
-                this.stateService.startSaving();
-                this.saveProcessLink();
-            })
-        );
-    }
-
-    private saveProcessLink(): void {
-        this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
-            if (selectedProcessLink) {
-                this.updateProcessLink();
-            } else {
-                this.saveNewProcessLink();
-            }
-        });
-    }
-
-    private updateProcessLink(): void {
-        this.stateService.selectedProcessLink$
-            .pipe(take(1))
-            .subscribe((selectedProcessLink) => {
-                const updateProcessLinkRequest: URLProcessLinkUpdateRequestDto = {
-                    id: selectedProcessLink.id,
-                    url: this.url.value,
-                };
-
-                this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
-                    () => {
-                        this.stateService.closeModal();
-                    },
-                    () => {
-                        this.stateService.stopSaving();
-                    }
-                );
-            });
-    }
-
-    private saveNewProcessLink(): void {
-        combineLatest([
-            this.stateService.modalParams$,
-            this.stateService.selectedProcessLinkTypeId$
-        ])
-            .pipe(
-                take(1),
-                switchMap(([modalParams, processLinkTypeId]) =>
-                    this.processLinkService.saveProcessLink({
-                        url: this.url.value,
-                        activityType: modalParams.element.activityListenerType,
-                        processDefinitionId: modalParams.processDefinitionId,
-                        processLinkType: processLinkTypeId,
-                        activityId: modalParams.element.id
-                    })
-                )
-            )
-            .subscribe(
-                () => {
-                    this.stateService.closeModal();
-                },
-                () => {
-                    this.stateService.stopSaving();
-                }
-            );
-    }
-
-    public resolveUrlVariables(url: string) {
-        return this._variables$.pipe(
-            take(1),
-            map(variables => resolveUrlVariables(url, variables))
+  private saveNewProcessLink(): void {
+    combineLatest([
+      this.stateService.modalParams$,
+      this.stateService.selectedProcessLinkTypeId$
+    ])
+      .pipe(
+        take(1),
+        switchMap(([modalParams, processLinkTypeId]) =>
+          this.processLinkService.saveProcessLink({
+            url: this.url.value,
+            activityType: modalParams.element.activityListenerType,
+            processDefinitionId: modalParams.processDefinitionId,
+            processLinkType: processLinkTypeId,
+            activityId: modalParams.element.id
+          })
         )
-    }
+      )
+      .subscribe({
+        complete: () => this.stateService.closeModal(),
+        error: (e) => this.stateService.stopSaving()
+      });
+  }
 
-    get url() {
-        return this.urlForm.get('url');
-    }
-}
+  public resolveUrlVariables(url: string): Observable<string> {
+    return this._variables$.pipe(
+      take(1),
+      map(variables => this.urlResolverService.resolveUrlVariables(url, variables))
+    );
+  }
 
-export function urlValidator(variables: Observable<Map<string, string>>): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-        return variables.pipe(
-            take(1),
-            map(variables => {
-                const url = resolveUrlVariables(control.value, variables)
-                try {
-                    new URL(url);
-                    return null;
-                } catch (_) {
-                    return {invalidUrl: url};
-                }
-            })
-        )
-    }
-}
-
-export function resolveUrlVariables(url: string, variables: Map<string, string>): string {
-    let resolvingUrl = url
-    Object.keys(variables).forEach(key => {
-        let value = variables[key]
-        resolvingUrl = resolvingUrl.replace("<" + key + ">", value)
-    })
-    return resolvingUrl
+  public get url(): AbstractControl {
+    return this.urlForm.get('url');
+  }
 }

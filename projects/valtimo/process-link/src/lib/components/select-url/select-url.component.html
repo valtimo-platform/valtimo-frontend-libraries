@@ -14,13 +14,12 @@
   ~ limitations under the License.
   -->
 
-<div>
-  <div [formGroup]="urlForm">
-    <cds-label [invalidText]="
+<div [formGroup]="urlForm">
+  <cds-label [invalidText]="
           'processLinkUrlInvalid' | translate : { URL: (url.errors?.invalidUrl ?? '') }
         "
-               [invalid]="url.invalid && url.touched"
-    [helperText]="url.invalid ? '' : resolveUrlVariables(url.value) | async">Url
+             [invalid]="url.invalid && url.touched"
+             [helperText]="url.invalid ? '' : resolveUrlVariables(url.value) | async">Url
     <input
             cdsText
             type="text"
@@ -30,6 +29,5 @@
             formControlName="url"
             [invalid]="url.invalid"
     >
-    </cds-label>
-  </div>
+  </cds-label>
 </div>

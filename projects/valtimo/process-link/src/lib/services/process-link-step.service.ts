@@ -202,7 +202,7 @@ export class ProcessLinkStepService {
       });
   }
 
-  setURLSteps(): void {
+  public setURLSteps(): void {
     this._steps$.next([
       {label: 'chooseProcessLinkType', secondaryLabel: 'processLinkType.url'},
       {label: 'selectURL'},
@@ -210,7 +210,7 @@ export class ProcessLinkStepService {
     this._currentStepIndex$.next(1);
   }
 
-  setSingleURLStep(): void {
+  public setSingleURLStep(): void {
     this._steps$.next([{label: 'selectURL'}]);
     this._currentStepIndex$.next(0);
   }
@@ -232,13 +232,12 @@ export class ProcessLinkStepService {
       case 'form':
         if (hasOneOption) {
           this.setSingleFormStep();
-          this.buttonService.hideSaveButton();
           this.buttonService.hideBackButton();
         } else {
           this.setFormSteps();
-          this.buttonService.showSaveButton();
           this.buttonService.showBackButton();
         }
+        this.buttonService.showSaveButton();
         break;
       case 'form-flow':
         if (hasOneOption) {
