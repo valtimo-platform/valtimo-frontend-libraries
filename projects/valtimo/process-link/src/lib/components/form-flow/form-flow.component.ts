@@ -47,7 +47,7 @@ export class FormFlowComponent implements OnInit, OnDestroy {
   public readonly formFlowStepType$ = new BehaviorSubject<FormFlowStepType | null>(null);
   public readonly FormFlowCustomComponentId$ = new BehaviorSubject<string>('');
   public readonly currentStepIndex$ = new BehaviorSubject<number>(0);
-  public readonly enableFormFlowBreadcrumbs$: Observable<boolean>;
+  public readonly enableFormFlowBreadcrumbs$ = this.configService.getFeatureToggleObservable('enableFormFlowBreadcrumbs');
 
   private readonly _subscriptions = new Subscription();
 
@@ -64,7 +64,6 @@ export class FormFlowComponent implements OnInit, OnDestroy {
   ) {
     this.formioOptions = new FormioOptionsImpl();
     this.formioOptions.disableAlerts = true;
-    this.enableFormFlowBreadcrumbs$ = configService.getFeatureToggleObservable('enableFormFlowBreadcrumbs');
   }
 
   public ngOnInit() {
