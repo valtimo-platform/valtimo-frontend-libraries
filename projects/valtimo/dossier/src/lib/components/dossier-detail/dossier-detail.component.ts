@@ -348,6 +348,10 @@ export class DossierDetailComponent
     this.tabLoader.load(tab);
   }
 
+  public onFormSubmitEvent(): void {
+    this.taskToOpen$.next(null);
+  }
+
   protected onConfirmRedirect(): void {
     if (!this.tabLoader || !this._pendingTab) return;
     this._activeChange = false;

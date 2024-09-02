@@ -43,6 +43,7 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {DocumentService} from '@valtimo/document';
 import {PermissionService} from '@valtimo/access-control';
+import {ConfigService} from '@valtimo/config';
 
 moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
@@ -116,18 +117,26 @@ export class DossierDetailTaskListComponent {
     tap(() => this.loadingTasks$.next(false))
   );
 
+  private taskPanelEnabled = false;
+
   constructor(
+    private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
     private readonly processService: ProcessService,
     private readonly route: ActivatedRoute,
     private readonly permissionService: PermissionService
-  ) {}
+  ) {
+    this.taskPanelEnabled = !!this.configService.featureToggles?.enableTaskPanel;
+  }
 
   public rowTaskClick(task: ProcessInstanceTask): void {
     if (task.isLocked) return;
 
-    this.taskClickEvent.emit(task);
-    // this._taskDetailModal.openTaskDetails(task as unknown as Task);
+    if (this.taskPanelEnabled) {
+      this.taskClickEvent.emit(task);
+      return;
+    }
+    this._taskDetailModal.openTaskDetails(task as unknown as Task);
   }
 
   public refresh(): void {

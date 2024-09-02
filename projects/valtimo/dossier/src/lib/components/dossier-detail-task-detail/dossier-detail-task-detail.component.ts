@@ -19,7 +19,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   signal,
 } from '@angular/core';
@@ -29,14 +28,14 @@ import {ConfigService} from '@valtimo/config';
 import {ProcessInstanceTask} from '@valtimo/process';
 import {
   AssignUserToTaskComponent,
+  CAN_ASSIGN_TASK_PERMISSION,
   IntermediateSubmission,
-  Task,
+  TASK_DETAIL_PERMISSION_RESOURCE,
   TaskDetailContentComponent,
   TaskDetailIntermediateSaveComponent,
 } from '@valtimo/task';
 import {ButtonModule, IconModule} from 'carbon-components-angular';
-import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '@valtimo/task';
-import {BehaviorSubject, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, switchMap} from 'rxjs';
 
 @Component({
   selector: 'valtimo-dossier-detail-task-detail',
@@ -69,6 +68,7 @@ export class DossierDetailsTaskDetailComponent {
   @Output() public readonly activeChange = new EventEmitter<boolean>();
   @Output() public readonly intermediateSaveEvent =
     new EventEmitter<IntermediateSubmission | null>();
+  @Output() public readonly formSubmit = new EventEmitter();
 
   public readonly task$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
   public readonly canAssignUserToTask$ = this.task$.pipe(
@@ -105,5 +105,9 @@ export class DossierDetailsTaskDetailComponent {
 
   public onActiveChangeEvent(activeChange: boolean): void {
     this.activeChange.emit(activeChange);
+  }
+
+  public onFormSubmitEvent(): void {
+    this.formSubmit.emit();
   }
 }
