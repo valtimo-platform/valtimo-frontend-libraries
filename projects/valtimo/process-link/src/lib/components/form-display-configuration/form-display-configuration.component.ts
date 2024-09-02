@@ -1,8 +1,8 @@
-import {Component, EventEmitter, OnDestroy, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {FormDisplayType, FormSize} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
-import {ProcessLinkStateService} from '../../services';
+import {ProcessLinkButtonService, ProcessLinkStateService} from '../../services';
 import {ListItem} from 'carbon-components-angular';
 import {map} from 'rxjs/operators';
 
@@ -11,11 +11,16 @@ import {map} from 'rxjs/operators';
   templateUrl: './form-display-configuration.component.html',
 })
 export class FormDisplayConfigurationComponent implements OnDestroy {
+  @Input() formDefinition: any;
+
   @Output() formDisplayValue = new EventEmitter<string>();
   @Output() formSizeValue = new EventEmitter<string>();
 
   public formDisplayValue$ = new BehaviorSubject<FormDisplayType | null>(null);
   public formSizeValue$ = new BehaviorSubject<FormSize | null>(null);
+  public disableDisplayTypeInput$ = new BehaviorSubject<boolean>(true);
+  public disableFormSizeInput$ = new BehaviorSubject<boolean>(true);
+  public readonly saving$ = this.stateService.saving$;
 
   private readonly _DISPLAY_TYPE_OPTIONS: FormDisplayType[] = ['modal', 'panel'];
   private readonly _FORM_SIZE_OPTIONS: FormSize[] = ['extraSmall', 'small', 'medium', 'large'];
@@ -48,6 +53,7 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
   );
 
   constructor(
+    private readonly buttonService: ProcessLinkButtonService,
     private readonly stateService: ProcessLinkStateService,
     private readonly translateService: TranslateService
   ) {}
@@ -56,6 +62,7 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
     this._subscriptions.add(
       this.stateService.selectedProcessLink$.subscribe(selectedProcessLink => {
         if (selectedProcessLink) {
+          if (selectedProcessLink.formDisplayType) this.disableFormSizeInput$.next(false);
           this.formDisplayValue$.next(selectedProcessLink.formDisplayType);
           this.formSizeValue$.next(selectedProcessLink.formSize);
         }
@@ -68,20 +75,34 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
   }
 
   public selectFormDisplayType(event): void {
-    if (event.key) {
-      this.formDisplayValue$.next(event.key);
-      this.formDisplayValue.emit(event.key);
-    } else {
-      this.formDisplayValue$.next(null);
-    }
+    this.updateFormDisplayType(event?.key);
+    this.enableSaveButton();
   }
 
   public selectFormSize(event): void {
-    if (event.key) {
-      this.formSizeValue$.next(event.key);
-      this.formSizeValue.emit(event.key);
-    } else {
-      this.formSizeValue$.next(null);
-    }
+    this.updateFormSize(event?.key);
+    this.enableSaveButton();
+  }
+
+  private updateFormDisplayType(formDisplayType): void {
+    formDisplayType ? this.disableFormSizeInput$.next(false) : this.resetFormSize();
+    this.formDisplayValue$.next(formDisplayType);
+    this.formDisplayValue.emit(formDisplayType);
+  }
+
+  private updateFormSize(formSize): void {
+    this.formSizeValue$.next(formSize);
+    this.formSizeValue.emit(formSize);
+  }
+
+  private resetFormSize(): void {
+    this.disableFormSizeInput$.next(true);
+    this.updateFormSize(null);
+  }
+
+  private enableSaveButton(): void {
+    this.formDisplayValue$.getValue() && this.formSizeValue$.getValue()
+      ? this.buttonService.enableSaveButton()
+      : this.buttonService.disableSaveButton();
   }
 }
