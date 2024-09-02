@@ -16,10 +16,10 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
   @Output() formDisplayValue = new EventEmitter<string>();
   @Output() formSizeValue = new EventEmitter<string>();
 
-  public formDisplayValue$ = new BehaviorSubject<FormDisplayType | null>(null);
-  public formSizeValue$ = new BehaviorSubject<FormSize | null>(null);
-  public disableDisplayTypeInput$ = new BehaviorSubject<boolean>(true);
-  public disableFormSizeInput$ = new BehaviorSubject<boolean>(true);
+  public readonly formDisplayValue$ = new BehaviorSubject<FormDisplayType | null>(null);
+  public readonly formSizeValue$ = new BehaviorSubject<FormSize | null>(null);
+  public readonly disableDisplayTypeInput$ = new BehaviorSubject<boolean>(true);
+  public readonly disableFormSizeInput$ = new BehaviorSubject<boolean>(true);
   public readonly saving$ = this.stateService.saving$;
 
   private readonly _DISPLAY_TYPE_OPTIONS: FormDisplayType[] = ['modal', 'panel'];
@@ -31,7 +31,7 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
     this.translateService.stream('key'),
   ]).pipe(
     map(([formDisplayValue]) =>
-      this._DISPLAY_TYPE_OPTIONS.map(key => ({
+      this._DISPLAY_TYPE_OPTIONS.map((key: string) => ({
         content: this.translateService.instant(`processLinkSteps.displayType.options.${key}`),
         key: key,
         selected: this.formDisplayValue$.getValue() === key,
@@ -43,8 +43,8 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
     this.formSizeValue$,
     this.translateService.stream('key'),
   ]).pipe(
-    map(([formDisplayValue]) =>
-      this._FORM_SIZE_OPTIONS.map(key => ({
+    map(([formSizeValue]) =>
+      this._FORM_SIZE_OPTIONS.map((key: string) => ({
         content: this.translateService.instant(`processLinkSteps.formSize.options.${key}`),
         key: key,
         selected: this.formSizeValue$.getValue() === key,
@@ -74,12 +74,12 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
-  public selectFormDisplayType(event): void {
+  public selectFormDisplayType(event: ListItem): void {
     this.updateFormDisplayType(event?.key);
     this.enableSaveButton();
   }
 
-  public selectFormSize(event): void {
+  public selectFormSize(event: ListItem): void {
     this.updateFormSize(event?.key);
     this.enableSaveButton();
   }

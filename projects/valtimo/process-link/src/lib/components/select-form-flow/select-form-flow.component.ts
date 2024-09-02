@@ -83,11 +83,11 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
-  public receiveFormDisplayValue(formDisplay): void {
+  public selectedFormDisplayValue(formDisplay: string): void {
     this.formDisplayValue = formDisplay;
   }
 
-  public receiveFormSizeValue(formSize): void {
+  public selectedFormSizeValue(formSize: string): void {
     this.formSizeValue = formSize;
   }
 

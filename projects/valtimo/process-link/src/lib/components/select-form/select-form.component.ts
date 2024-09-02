@@ -93,11 +93,11 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  public receiveFormDisplayValue(formDisplay): void {
+  public selectedFormDisplayValue(formDisplay: string): void {
     this.formDisplayValue = formDisplay;
   }
 
-  public receiveFormSizeValue(formSize): void {
+  public selectedFormSizeValue(formSize: string): void {
     this.formSizeValue = formSize;
   }
 
