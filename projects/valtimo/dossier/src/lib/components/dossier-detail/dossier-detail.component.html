@@ -57,13 +57,13 @@
               (taskClickEvent)="onTaskClickEvent($event)"
             ></valtimo-dossier-detail-task-list>
 
-            <valtimo-dossier-detail-task-details
+            <valtimo-dossier-detail-task-detail
               *ngIf="taskToOpen$ | async as task"
               [task]="task"
               (activeChange)="onActiveChangeEvent($event)"
               (closeEvent)="onTaskDetailsClose()"
             >
-            </valtimo-dossier-detail-task-details>
+            </valtimo-dossier-detail-task-detail>
           </div>
         }
       </div>

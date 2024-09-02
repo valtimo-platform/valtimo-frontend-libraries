@@ -39,7 +39,7 @@ import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '@valt
 import {BehaviorSubject, switchMap, tap} from 'rxjs';
 
 @Component({
-  selector: 'valtimo-dossier-detail-task-details',
+  selector: 'valtimo-dossier-detail-task-detail',
   templateUrl: './dossier-detail-task-detail.component.html',
   styleUrl: './dossier-detail-task-detail.component.scss',
   standalone: true,
