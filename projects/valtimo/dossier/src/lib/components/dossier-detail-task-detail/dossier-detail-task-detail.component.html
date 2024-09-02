@@ -65,6 +65,9 @@
       ></valtimo-assign-user-to-task>
     </div>
 
-    <valtimo-task-detail-content [task]="task$ | async"></valtimo-task-detail-content>
+    <valtimo-task-detail-content
+      [task]="task$ | async"
+      (activeChange)="onActiveChangeEvent($event)"
+    ></valtimo-task-detail-content>
   </section>
 </div>

@@ -81,6 +81,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
   }
   @Output() public readonly closeModalEvent = new EventEmitter();
   @Output() public readonly formSubmit = new EventEmitter();
+  @Output() public readonly activeChange = new EventEmitter<boolean>();
 
   public readonly canAssignUserToTask$ = new BehaviorSubject<boolean>(false);
   public readonly errorMessage$ = new BehaviorSubject<string | null>(null);
@@ -179,6 +180,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     this.task$.next(null);
     this.formSubmit.emit();
     this.closeModalEvent.emit();
+    this.activeChange.emit(false);
 
     if (this.formFlow) this.formFlow.saveData();
   }
@@ -186,6 +188,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
   public onChange(event: any): void {
     if (event.data) {
       this.taskIntermediateSaveService.setFormIoFormData(event.data);
+      this.activeChange.emit(true);
     }
   }
 
@@ -221,7 +224,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (intermediateSubmission: IntermediateSubmission) => {
-          console.log({intermediateSubmission});
           this.taskIntermediateSaveService.setSubmission({data: intermediateSubmission.submission});
 
           if (formViewModelComponentRef) {

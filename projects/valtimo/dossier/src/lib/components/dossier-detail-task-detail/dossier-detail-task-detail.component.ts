@@ -66,6 +66,7 @@ export class DossierDetailsTaskDetailComponent {
   }
   @Output() public readonly closeEvent = new EventEmitter();
   @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
+  @Output() public readonly activeChange = new EventEmitter<boolean>();
   @Output() public readonly intermediateSaveEvent =
     new EventEmitter<IntermediateSubmission | null>();
 
@@ -95,9 +96,14 @@ export class DossierDetailsTaskDetailComponent {
 
   public onClose(): void {
     this.closeEvent.emit();
+    this.onActiveChangeEvent(false);
   }
 
   public onCurrentIntermediateSaveEvent(value: IntermediateSubmission | null): void {
     this.intermediateSaveValue$.next(value);
+  }
+
+  public onActiveChangeEvent(activeChange: boolean): void {
+    this.activeChange.emit(activeChange);
   }
 }
