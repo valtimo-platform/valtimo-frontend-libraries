@@ -1751,8 +1751,8 @@
       }
     },
     "formSize": {
-      "label": "Wählen Sie die modale Größe aus",
-      "placeholder": "Wählen Sie eine modale Größe aus",
+      "label": "Wählen Sie die Modalgröße aus",
+      "placeholder": "Wählen Sie eine Modalgröße aus",
       "options": {
         "extraSmall": "Extra klein",
         "small": "Klein",

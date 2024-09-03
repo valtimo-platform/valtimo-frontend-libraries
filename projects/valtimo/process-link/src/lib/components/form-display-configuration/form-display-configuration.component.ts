@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
-import {FormDisplayType, FormSize} from '../../models';
+import {FormDefinitionListItem, FormDisplayType, FormSize} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
 import {ProcessLinkButtonService, ProcessLinkStateService} from '../../services';
 import {ListItem} from 'carbon-components-angular';
@@ -11,10 +11,10 @@ import {map} from 'rxjs/operators';
   templateUrl: './form-display-configuration.component.html',
 })
 export class FormDisplayConfigurationComponent implements OnDestroy {
-  @Input() selectedFormDefinition: any;
+  @Input() public selectedFormDefinition: FormDefinitionListItem;
 
-  @Output() formDisplayValue = new EventEmitter<string>();
-  @Output() formSizeValue = new EventEmitter<string>();
+  @Output() public formDisplayValue = new EventEmitter<string>();
+  @Output() public formSizeValue = new EventEmitter<string>();
 
   public readonly formDisplayValue$ = new BehaviorSubject<FormDisplayType | null>(null);
   public readonly formSizeValue$ = new BehaviorSubject<FormSize | null>(null);
@@ -75,12 +75,12 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
 
   public selectFormDisplayType(event: ListItem): void {
     this.updateFormDisplayType(event?.key);
-    this.enableSaveButton();
+    this.enableSaveButtonWhenValid();
   }
 
   public selectFormSize(event: ListItem): void {
     this.updateFormSize(event?.key);
-    this.enableSaveButton();
+    this.enableSaveButtonWhenValid();
   }
 
   private updateFormDisplayType(formDisplayType): void {
@@ -99,7 +99,7 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
     this.updateFormSize(null);
   }
 
-  private enableSaveButton(): void {
+  private enableSaveButtonWhenValid(): void {
     if (
       this.selectedFormDefinition &&
       this.formDisplayValue$.getValue() &&

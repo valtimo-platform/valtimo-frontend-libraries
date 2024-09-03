@@ -1757,8 +1757,8 @@
       }
     },
     "formSize": {
-      "label": "Selecteer modale grootte",
-      "placeholder": "Selecteer een modale grootte",
+      "label": "Selecteer modalgrootte",
+      "placeholder": "Selecteer een modalgrootte",
       "options": {
         "extraSmall": "Extra klein",
         "small": "Klein",
