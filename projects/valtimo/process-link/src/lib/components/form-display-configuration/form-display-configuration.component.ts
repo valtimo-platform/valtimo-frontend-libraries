@@ -18,7 +18,6 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
 
   public readonly formDisplayValue$ = new BehaviorSubject<FormDisplayType | null>(null);
   public readonly formSizeValue$ = new BehaviorSubject<FormSize | null>(null);
-  public readonly disableDisplayTypeInput$ = new BehaviorSubject<boolean>(true);
   public readonly disableFormSizeInput$ = new BehaviorSubject<boolean>(true);
   public readonly saving$ = this.stateService.saving$;
 
@@ -63,7 +62,6 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
       this.stateService.selectedProcessLink$.subscribe(selectedProcessLink => {
         if (selectedProcessLink) {
           if (selectedProcessLink.formDisplayType) this.disableFormSizeInput$.next(false);
-          if (selectedProcessLink.formDefinitionId) this.disableDisplayTypeInput$.next(false);
           this.formDisplayValue$.next(selectedProcessLink.formDisplayType);
           this.formSizeValue$.next(selectedProcessLink.formSize);
         }
