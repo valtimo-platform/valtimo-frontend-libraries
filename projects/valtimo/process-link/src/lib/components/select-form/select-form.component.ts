@@ -33,6 +33,7 @@ import {take} from 'rxjs/operators';
 export class SelectFormComponent implements OnInit, OnDestroy {
   public formDisplayValue: string = '';
   public formSizeValue: string = '';
+  public selectedFormDefinition!: FormDefinitionListItem;
 
   public readonly saving$ = this.stateService.saving$;
   private readonly formDefinitions$ = this.formService.getAllFormDefinitions();
@@ -56,7 +57,6 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       })
     );
 
-  private _selectedFormDefinition!: FormDefinitionListItem;
   private _subscriptions = new Subscription();
 
   constructor(
@@ -84,13 +84,11 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   }
 
   public selectFormDefinition(formDefinition: FormDefinitionListItem): void {
-    if (typeof formDefinition === 'object' && formDefinition.id) {
-      this._selectedFormDefinition = formDefinition;
-      this.buttonService.enableSaveButton();
-    } else {
-      this._selectedFormDefinition = null;
-      this.buttonService.disableSaveButton();
-    }
+    this.selectedFormDefinition = formDefinition?.id ? formDefinition : null;
+
+    this.selectedFormDefinition && this.formDisplayValue && this.formSizeValue
+      ? this.buttonService.enableSaveButton()
+      : this.buttonService.disableSaveButton();
   }
 
   public selectedFormDisplayValue(formDisplay: string): void {
@@ -134,7 +132,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       .subscribe(([selectedProcessLink, viewModelEnabled]) => {
         const updateProcessLinkRequest: FormProcessLinkUpdateRequestDto = {
           id: selectedProcessLink.id,
-          formDefinitionId: this._selectedFormDefinition.id,
+          formDefinitionId: this.selectedFormDefinition.id,
           viewModelEnabled,
           formDisplayType: this.formDisplayValue,
           formSize: this.formSizeValue,
@@ -161,7 +159,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
         take(1),
         switchMap(([modalParams, processLinkTypeId, viewModelEnabled]) =>
           this.processLinkService.saveProcessLink({
-            formDefinitionId: this._selectedFormDefinition.id,
+            formDefinitionId: this.selectedFormDefinition.id,
             activityType: modalParams.element.activityListenerType,
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,

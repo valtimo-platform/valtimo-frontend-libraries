@@ -36,6 +36,7 @@
     <br />
 
     <valtimo-form-display-configuration
+      [selectedFormDefinition]="selectedFormFlowDefinition"
       (formDisplayValue)="selectedFormDisplayValue($event)"
       (formSizeValue)="selectedFormSizeValue($event)"
     ></valtimo-form-display-configuration>

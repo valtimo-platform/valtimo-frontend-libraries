@@ -11,7 +11,7 @@ import {map} from 'rxjs/operators';
   templateUrl: './form-display-configuration.component.html',
 })
 export class FormDisplayConfigurationComponent implements OnDestroy {
-  @Input() formDefinition: any;
+  @Input() selectedFormDefinition: any;
 
   @Output() formDisplayValue = new EventEmitter<string>();
   @Output() formSizeValue = new EventEmitter<string>();
@@ -63,6 +63,7 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
       this.stateService.selectedProcessLink$.subscribe(selectedProcessLink => {
         if (selectedProcessLink) {
           if (selectedProcessLink.formDisplayType) this.disableFormSizeInput$.next(false);
+          if (selectedProcessLink.formDefinitionId) this.disableDisplayTypeInput$.next(false);
           this.formDisplayValue$.next(selectedProcessLink.formDisplayType);
           this.formSizeValue$.next(selectedProcessLink.formSize);
         }
@@ -101,8 +102,14 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
   }
 
   private enableSaveButton(): void {
-    this.formDisplayValue$.getValue() && this.formSizeValue$.getValue()
-      ? this.buttonService.enableSaveButton()
-      : this.buttonService.disableSaveButton();
+    if (
+      this.selectedFormDefinition &&
+      this.formDisplayValue$.getValue() &&
+      this.formSizeValue$.getValue()
+    ) {
+      this.buttonService.enableSaveButton();
+    } else {
+      this.buttonService.disableSaveButton();
+    }
   }
 }
