@@ -29,7 +29,8 @@ import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-plat
 import magicPropertiesProviderModule from './customizer';
 import magicModdleDescriptor from './customizer/magic.json';
 import {ModalService} from '@valtimo/components';
-import {ProcessLinkService, ProcessLinkStateService,} from '@valtimo/process-link';
+import {GetProcessLinkResponse, ProcessLink, ProcessLinkService, ProcessLinkStateService,} from '@valtimo/process-link';
+import {ProcessManagementService} from '../process-management.service';
 
 @Component({
   selector: 'valtimo-process-management-builder',
@@ -59,6 +60,7 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService,
     private readonly stateService: ProcessLinkStateService,
     private readonly processLinkService: ProcessLinkService,
+    private readonly processManagementService: ProcessManagementService
   ) {
     (window as any).modalService = modalService;
     (window as any).stateService = stateService;
@@ -166,6 +168,7 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
       version.version > acc.version ? version : acc
     );
     this.loadProcessBpmn();
+    (window as any).processLinks = this.processManagementService.getProcessLinks(this.selectedVersion.id);
   }
 
   loadProcessVersions(processDefinitionKey: string) {

@@ -45,9 +45,10 @@ export class ProcessLinkService {
   }
 
   getProcessLink(getProcessLinkRequest: GetProcessLinkRequest): Observable<GetProcessLinkResponse> {
-    const params = new HttpParams()
-      .set('activityId', getProcessLinkRequest.activityId)
-      .set('processDefinitionId', getProcessLinkRequest.processDefinitionId);
+    var params = new HttpParams()
+      .set('processDefinitionId', getProcessLinkRequest.processDefinitionId)
+      if (getProcessLinkRequest.activityId !== undefined)
+        params = params.set('activityId', getProcessLinkRequest.activityId)
 
     return this.http.get<GetProcessLinkResponse>(`${this.VALTIMO_ENDPOINT_URI}v1/process-link`, {
       params,

@@ -15,9 +15,10 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '@valtimo/config';
+import {GetProcessLinkResponse, ProcessLink, ProcessLinkService} from '@valtimo/process-link';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,7 @@ export class ProcessManagementService {
 
   constructor(
     private configService: ConfigService,
+    private processLinkService: ProcessLinkService,
     private http: HttpClient
   ) {
     this.valtimoApiConfig = configService.config.valtimoApi;
@@ -41,5 +43,30 @@ export class ProcessManagementService {
       `${this.valtimoApiConfig.endpointUri}v1/process/definition/deployment`,
       formData
     );
+  }
+
+  getProcessLinks(processDefinitionId: string) {
+    return new ProcessLinks(this.processLinkService, processDefinitionId);
+  }
+}
+
+export class ProcessLinks {
+  public processLinks$ = new BehaviorSubject<ProcessLink[]>([]);
+
+  constructor(
+    private readonly processLinkService: ProcessLinkService,
+    private readonly processDefinitionId: string
+  ) {
+    this.loadProcessLinks()
+  }
+
+  loadProcessLinks() {
+    this.processLinkService
+      .getProcessLink({
+        processDefinitionId: this.processDefinitionId,
+      })
+      .subscribe((processLinks: GetProcessLinkResponse) => {
+        this.processLinks$.next(processLinks);
+      });
   }
 }

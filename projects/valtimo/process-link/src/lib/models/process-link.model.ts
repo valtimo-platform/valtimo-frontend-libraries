@@ -33,7 +33,7 @@ interface ProcessLink {
 type GetProcessLinkResponse = Array<ProcessLink>;
 
 interface GetProcessLinkRequest {
-  activityId: string;
+  activityId?: string;
   processDefinitionId: string;
 }
 
