@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, filter, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
 import {DossierTabService} from './dossier-tab.service';
 import {ProcessInstanceTask} from '@valtimo/process';
 import {DossierDetailLayout} from '../models';
@@ -10,7 +10,6 @@ export class DossierDetailLayoutService {
   private readonly _tabContentContainerWidth$ = new BehaviorSubject<number | null>(null);
   private readonly _showTaskList$ = this.dossierTabService.showTaskList$;
   private readonly _taskToOpen$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
-  private readonly _dossierDetailLayout$ = new BehaviorSubject<DossierDetailLayout | null>(null);
   private readonly _formDisplayType$ = new BehaviorSubject<FormDisplayType | null>(null);
   private readonly _formDisplaySize$ = new BehaviorSubject<FormSize | null>(null);
 
@@ -22,9 +21,23 @@ export class DossierDetailLayoutService {
     return this._taskToOpen$.asObservable();
   }
 
-  public get dossierDetailLayout$(): Observable<DossierDetailLayout> {
-    return this._dossierDetailLayout$.pipe(filter(layout => layout !== null));
-  }
+  public readonly dossierDetailLayout$: Observable<DossierDetailLayout> = combineLatest([
+    this.tabContentContainerWidth$,
+    this._showTaskList$,
+    this._taskToOpen$,
+    this._formDisplayType$,
+    this._formDisplaySize$,
+  ]).pipe(
+    map(([showTaskList, taskToOpen, formDisplayType, formDisplaySize]) => {
+      if (!showTaskList) {
+        return {
+          showRightPanel: false,
+          leftPanelWidthPx: 
+        }
+      }
+      return {} as DossierDetailLayout;
+    })
+  );
 
   constructor(private readonly dossierTabService: DossierTabService) {}
 

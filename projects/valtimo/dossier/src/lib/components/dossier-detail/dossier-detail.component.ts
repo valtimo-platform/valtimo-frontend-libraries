@@ -221,6 +221,8 @@ export class DossierDetailComponent
 
   public readonly DOSSIER_DETAIL_GUTTER_SIZE = DOSSIER_DETAIL_GUTTER_SIZE;
 
+  public readonly dossierDetailLayout$ = this.dossierDetailLayoutService.dossierDetailLayout$;
+
   private _snapshot: ParamMap;
   private _initialTabName: string;
   private _activeChange = false;
