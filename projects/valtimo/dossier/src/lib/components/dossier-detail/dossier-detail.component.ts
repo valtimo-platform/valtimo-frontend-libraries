@@ -261,6 +261,7 @@ export class DossierDetailComponent
     this.openWidthObserver();
     this.pageTitleService.disableReset();
     this.iconService.registerAll([ChevronDown16]);
+    this.dossierDetailLayoutService.setDocumentStyle();
   }
 
   public ngOnDestroy(): void {
@@ -358,6 +359,7 @@ export class DossierDetailComponent
     }
 
     this.tabLoader.load(tab);
+    this.dossierDetailLayoutService.setDocumentStyle();
   }
 
   public onFormSubmitEvent(): void {

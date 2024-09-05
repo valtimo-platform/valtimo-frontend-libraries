@@ -1,12 +1,15 @@
+type DossierDetailLayoutUnit = 'pixel' | 'percent';
+
 interface DossierDetailLayout {
+  unit: DossierDetailLayoutUnit;
   widthAdjustable: boolean;
-  leftPanelWidthPx: number;
-  leftPanelMinWidthPx: number;
-  leftPanelMaxWidthPx: number;
-  showRightPanel: boolean;
-  rightPanelWidthPx: number;
-  rightPanelMinWidthPx: number;
-  rightPanelMaxWidthPx: number;
+  showRightPanel?: boolean;
+  leftPanelWidth?: number;
+  leftPanelMinWidth?: number;
+  leftPanelMaxWidth?: number;
+  rightPanelWidth?: number;
+  rightPanelMinWidth?: number;
+  rightPanelMaxWidth?: number;
 }
 
-export {DossierDetailLayout};
+export {DossierDetailLayoutUnit, DossierDetailLayout};

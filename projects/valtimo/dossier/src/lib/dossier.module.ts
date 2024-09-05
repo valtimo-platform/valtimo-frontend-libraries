@@ -55,6 +55,7 @@ import {
   ValtimoCdsOverflowButtonDirectiveModule,
   VModalModule,
   WidgetModule,
+  FitPageDirectiveModule,
 } from '@valtimo/components';
 import {ConfigModule, HttpLoaderFactory} from '@valtimo/config';
 import {FormModule} from '@valtimo/form';
@@ -98,7 +99,7 @@ import {DossierDetailTabNotFoundComponent} from './components/dossier-detail/tab
 import {DossierDetailWidgetsComponent} from './components/dossier-detail/tab/widgets/widgets.component';
 import {DossierDetailTaskListComponent} from './components/dossier-detail-task-list/dossier-detail-task-list.component';
 import {DossierDetailsTaskDetailComponent} from './components/dossier-detail-task-detail/dossier-detail-task-detail.component';
-import { AngularSplitModule } from 'angular-split';
+import {AngularSplitModule} from 'angular-split';
 
 export type TabsFactory = () => Map<string, object>;
 
@@ -124,6 +125,7 @@ export type TabsFactory = () => Map<string, object>;
   ],
   imports: [
     CommonModule,
+    FitPageDirectiveModule,
     DossierRoutingModule,
     ListModule,
     WidgetModule,
@@ -190,7 +192,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierDetailWidgetsComponent,
     DossierDetailTaskListComponent,
     DossierDetailsTaskDetailComponent,
-    AngularSplitModule
+    AngularSplitModule,
   ],
   exports: [DossierListComponent, DossierDetailComponent, DossierProcessStartModalComponent],
 })

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+.main-content {
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
 .main-content--no-horizontal-overflow {
   overflow-x: hidden;
 }
@@ -114,9 +119,16 @@
   overflow: hidden;
   display: flex;
   gap: 32px;
+  height: 100%;
+  overflow: auto;
+  margin-bottom: 16px;
 }
 
 .task-panel {
   width: 412px;
   transition: height 0.15s ease-in-out;
+}
+
+.container-fluid {
+  height: 100%;
 }
