@@ -45,7 +45,7 @@ import {DocumentService} from '@valtimo/document';
 import {ModalService, RadioValue, SelectItem} from '@valtimo/components';
 import {PluginTranslatePipe} from '../../../../pipes';
 
-type Properties = 'description' | 'plannedEndDate' | 'finalCompletionDate';
+type Properties = 'description' | 'plannedEndDate' | 'finalDeliveryDate';
 
 @Component({
   selector: 'valtimo-create-zaak-configuration',

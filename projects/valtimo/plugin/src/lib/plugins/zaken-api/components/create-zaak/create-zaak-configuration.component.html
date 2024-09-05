@@ -87,7 +87,46 @@
       <div *ngFor="let property of propertyList">
         <ng-container [ngSwitch]="property">
           <ng-container *ngSwitchCase="'description'">
-            <ng-container *ngTemplateOutlet="propertyOmschrijving"/>
+            <div class="property-input">
+              <v-input
+                      name="omschrijving"
+                      [title]="'omschrijving' | pluginTranslate: obs.pluginId | async"
+                      [margin]="true"
+                      [defaultValue]="obs.prefill?.omschrijving"
+                      [required]="true"
+              />
+              <button
+                      class="btn btn-danger btn-space"
+                      (click)="removeCaseProperty('description')"
+              >
+                <i class="icon mdi mdi-delete"></i>
+              </button>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'plannedEndDate'">
+            <div class="property-input">
+              <cds-date-picker-input
+                      name="plannedEndDate"
+                      [label]="'plannedEndDate' | pluginTranslate: obs.pluginId | async"
+                      size="lg"
+              ></cds-date-picker-input>
+              <button
+                      class="btn btn-danger btn-space"
+                      (click)="removeCaseProperty('plannedEndDate')"
+              >
+                <i class="icon mdi mdi-delete"></i>
+              </button>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'finalDeliveryDate'">
+            <div class="property-input">
+              <button
+                      class="btn btn-danger btn-space"
+                      (click)="removeCaseProperty('finalDeliveryDate')"
+              >
+                <i class="icon mdi mdi-delete"></i>
+              </button>
+            </div>
           </ng-container>
         </ng-container>
       </div>
@@ -121,23 +160,9 @@
           *ngIf="propertyList.indexOf('plannedEndDate') == -1">
     Einddatum gepland
   </cds-overflow-menu-option>
-  <cds-overflow-menu-option>Uiterlijke einddatum afdoening</cds-overflow-menu-option>
-</ng-template>
-
-<ng-template #propertyOmschrijving let-obs=obs>
-  <div class="property-input">
-    <v-input
-            name="omschrijving"
-            [title]="'omschrijving' | pluginTranslate: obs.pluginId | async"
-            [margin]="true"
-            [defaultValue]="obs.prefill?.omschrijving"
-            [required]="true"
-    />
-    <button
-            class="btn btn-danger btn-space"
-            (click)="removeCaseProperty('description')"
-    >
-      <i class="icon mdi mdi-delete"></i>
-    </button>
-  </div>
+  <cds-overflow-menu-option
+          (click)="addCaseProperty('finalDeliveryDate')"
+          *ngIf="propertyList.indexOf('finalDeliveryDate') == -1">
+    Uiterlijke einddatum afdoening
+  </cds-overflow-menu-option>
 </ng-template>
