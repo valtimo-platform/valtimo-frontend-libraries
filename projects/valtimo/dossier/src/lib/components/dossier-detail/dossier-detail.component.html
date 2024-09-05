@@ -16,8 +16,6 @@
 <div
   class="main-content"
   [ngClass]="{'main-content--no-horizontal-overflow': tabHorizontalOverflowDisabled()}"
-  fitPage
-  [extraSpace]="-24"
 >
   <div class="container-fluid">
     <ng-container *ngTemplateOutlet="tabs"></ng-container>
@@ -38,6 +36,9 @@
     <div
       #tabContentContainer
       class="tab-content-container"
+      [ngClass]="{
+        'tab-content-container--compact': compactMode$ | async,
+      }"
       *ngIf="{
         noTabsConfigured: noTabsConfigured$ | async,
         showTaskList: showTaskList$ | async,

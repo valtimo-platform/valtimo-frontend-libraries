@@ -55,7 +55,6 @@ import {
   ValtimoCdsOverflowButtonDirectiveModule,
   VModalModule,
   WidgetModule,
-  FitPageDirectiveModule,
 } from '@valtimo/components';
 import {ConfigModule, HttpLoaderFactory} from '@valtimo/config';
 import {FormModule} from '@valtimo/form';
@@ -125,7 +124,6 @@ export type TabsFactory = () => Map<string, object>;
   ],
   imports: [
     CommonModule,
-    FitPageDirectiveModule,
     DossierRoutingModule,
     ListModule,
     WidgetModule,

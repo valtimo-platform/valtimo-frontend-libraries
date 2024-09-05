@@ -119,9 +119,13 @@
   overflow: hidden;
   display: flex;
   gap: 32px;
-  height: 100%;
   overflow: auto;
   margin-bottom: 16px;
+  height: calc(100vh - 258px);
+
+  &--compact {
+    height: calc(100vh - 216px);
+  }
 }
 
 .task-panel {
