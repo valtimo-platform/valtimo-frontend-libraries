@@ -17,6 +17,7 @@ import {
   AfterViewInit,
   Component,
   ComponentFactoryResolver,
+  ElementRef,
   OnDestroy,
   ViewChild,
   ViewContainerRef,
@@ -63,14 +64,15 @@ import {
   CAN_CLAIM_CASE_PERMISSION,
   DOSSIER_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
-import {DossierService, DossierTabService} from '../../services';
+import {DossierDetailLayoutService, DossierService, DossierTabService} from '../../services';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
+import {DOSSIER_DETAIL_GUTTER_SIZE} from '../../constants';
 
 @Component({
   selector: 'valtimo-dossier-detail',
   templateUrl: './dossier-detail.component.html',
   styleUrls: ['./dossier-detail.component.scss'],
-  providers: [DossierTabService],
+  providers: [DossierTabService, DossierDetailLayoutService],
 })
 export class DossierDetailComponent
   extends PendingChangesComponent
@@ -81,6 +83,9 @@ export class DossierDetailComponent
 
   @ViewChild('tabContainer', {read: ViewContainerRef})
   viewContainerRef: ViewContainerRef;
+
+  @ViewChild('tabContentContainer')
+  private readonly _tabContentContainer!: ElementRef<HTMLDivElement>;
 
   public customDossierHeaderItems: Array<any> = [];
   public document: Document | null = null;
@@ -96,7 +101,7 @@ export class DossierDetailComponent
     null
   );
 
-  public readonly taskToOpen$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
+  public readonly taskToOpen$ = this.dossierDetailLayoutService.taskToOpen$;
 
   private readonly _caseStatusKey$ = new BehaviorSubject<string | null | 'NOT_AVAILABLE'>(null);
 
@@ -214,11 +219,14 @@ export class DossierDetailComponent
 
   public readonly activeTabName$ = new BehaviorSubject<string>('');
 
+  public readonly DOSSIER_DETAIL_GUTTER_SIZE = DOSSIER_DETAIL_GUTTER_SIZE;
+
   private _snapshot: ParamMap;
   private _initialTabName: string;
   private _activeChange = false;
   private _pendingTab: TabImpl;
   private _oldTabName: string;
+  private _observer!: ResizeObserver;
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
@@ -235,7 +243,8 @@ export class DossierDetailComponent
     private readonly caseStatusService: CaseStatusService,
     private readonly pageTitleService: PageTitleService,
     private readonly iconService: IconService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly dossierDetailLayoutService: DossierDetailLayoutService
   ) {
     super();
     this._snapshot = this.route.snapshot.paramMap;
@@ -247,6 +256,7 @@ export class DossierDetailComponent
     this.initTabLoader();
     this.initBreadcrumb();
     this.getAllAssociatedProcessDefinitions();
+    this.openWidthObserver();
     this.pageTitleService.disableReset();
     this.iconService.registerAll([ChevronDown16]);
   }
@@ -320,11 +330,11 @@ export class DossierDetailComponent
   }
 
   public onTaskClickEvent(task: ProcessInstanceTask): void {
-    this.taskToOpen$.next(task);
+    this.dossierDetailLayoutService.setTaskToOpen(task);
   }
 
   public onTaskDetailsClose(): void {
-    this.taskToOpen$.next(null);
+    this.dossierDetailLayoutService.setTaskToOpen(null);
   }
 
   public onActiveChangeEvent(event: boolean): void {
@@ -349,7 +359,7 @@ export class DossierDetailComponent
   }
 
   public onFormSubmitEvent(): void {
-    this.taskToOpen$.next(null);
+    this.dossierDetailLayoutService.setTaskToOpen(null);
   }
 
   protected onConfirmRedirect(): void {
@@ -357,7 +367,7 @@ export class DossierDetailComponent
     this._activeChange = false;
     this.activeTabName$.next(this._pendingTab.name);
     this.tabLoader.load(this._pendingTab);
-    this.taskToOpen$.next(null);
+    this.dossierDetailLayoutService.setTaskToOpen(null);
   }
 
   protected onCancelRedirect(): void {
@@ -446,5 +456,22 @@ export class DossierDetailComponent
       content: this.documentDefinitionNameTitle,
       href: `/dossiers/${this.documentDefinitionName}`,
     });
+  }
+
+  private openWidthObserver(): void {
+    if (!this._tabContentContainer.nativeElement) return;
+
+    this._observer = new ResizeObserver(event => {
+      this.observerMutation(event);
+    });
+    this._observer.observe(this._tabContentContainer.nativeElement);
+  }
+
+  private observerMutation(event: Array<ResizeObserverEntry>): void {
+    const elementWidth = event[0]?.borderBoxSize[0]?.inlineSize;
+
+    if (typeof elementWidth === 'number' && elementWidth !== 0) {
+      this.dossierDetailLayoutService.setTabContentContainerWidth(elementWidth);
+    }
   }
 }

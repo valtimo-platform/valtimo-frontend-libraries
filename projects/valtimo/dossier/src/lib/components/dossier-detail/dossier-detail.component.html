@@ -33,40 +33,62 @@
         </ng-container>
       </ng-template>
 
-      <div class="tab-content-container">
-        <div class="card-body bg-white p-5 position-relative tab-container">
-          <div *ngIf="loadingTabs$ | async" class="loading-container">
-            <cds-loading></cds-loading>
-          </div>
+      <div
+        #tabContentContainer
+        class="tab-content-container"
+        *ngIf="{
+          noTabsConfigured: noTabsConfigured$ | async,
+          showTaskList: showTaskList$ | async,
+          taskToOpen: taskToOpen$ | async,
+        } as tabContentObs"
+      >
+        <as-split
+          direction="horizontal"
+          [disabled]="!tabContentObs.taskToOpen"
+          [gutterSize]="DOSSIER_DETAIL_GUTTER_SIZE"
+          unit="px"
+        >
+          <as-split-area [size]="100">
+            <div class="card-body bg-white p-5 position-relative tab-container">
+              <div *ngIf="loadingTabs$ | async" class="loading-container">
+                <cds-loading></cds-loading>
+              </div>
 
-          <valtimo-no-results
-            *ngIf="noTabsConfigured$ | async"
-            [description]="'dossier.tabs.noResultsDescription' | translate"
-            [title]="'dossier.tabs.noResults' | translate"
-          ></valtimo-no-results>
+              <valtimo-no-results
+                *ngIf="tabContentObs.noTabsConfigured"
+                [description]="'dossier.tabs.noResultsDescription' | translate"
+                [title]="'dossier.tabs.noResults' | translate"
+              ></valtimo-no-results>
 
-          <ng-template #tabContainer></ng-template>
+              <ng-template #tabContainer></ng-template>
 
-          <div class="clearfix"></div>
-        </div>
+              <div class="clearfix"></div>
+            </div>
+          </as-split-area>
 
-        @if (showTaskList$ | async) {
-          <div class="task-panel">
-            <valtimo-dossier-detail-task-list
-              *ngIf="(taskToOpen$ | async) === null"
-              (taskClickEvent)="onTaskClickEvent($event)"
-            ></valtimo-dossier-detail-task-list>
+          <as-split-area
+            *ngIf="tabContentObs.showTaskList"
+            [size]="!tabContentObs.taskToOpen ? 412 : 100"
+          >
+            @if (tabContentObs.showTaskList) {
+              <div class="task-panel">
+                <valtimo-dossier-detail-task-list
+                  *ngIf="!tabContentObs.taskToOpen"
+                  (taskClickEvent)="onTaskClickEvent($event)"
+                ></valtimo-dossier-detail-task-list>
 
-            <valtimo-dossier-detail-task-detail
-              *ngIf="taskToOpen$ | async as task"
-              [task]="task"
-              (activeChange)="onActiveChangeEvent($event)"
-              (closeEvent)="onTaskDetailsClose()"
-              (formSubmit)="onFormSubmitEvent()"
-            >
-            </valtimo-dossier-detail-task-detail>
-          </div>
-        }
+                <valtimo-dossier-detail-task-detail
+                  *ngIf="tabContentObs.taskToOpen"
+                  [task]="tabContentObs.taskToOpen"
+                  (activeChange)="onActiveChangeEvent($event)"
+                  (closeEvent)="onTaskDetailsClose()"
+                  (formSubmit)="onFormSubmitEvent()"
+                >
+                </valtimo-dossier-detail-task-detail>
+              </div>
+            }
+          </as-split-area>
+        </as-split>
       </div>
     </div>
 
