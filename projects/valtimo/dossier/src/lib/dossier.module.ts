@@ -192,7 +192,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierDetailsTaskDetailComponent,
     AngularSplitModule
   ],
-  exports: [DossierListComponent, DossierDetailComponent],
+  exports: [DossierListComponent, DossierDetailComponent, DossierProcessStartModalComponent],
 })
 export class DossierModule {
   static forRoot(tabsFactory: TabsFactory): ModuleWithProviders<DossierModule> {
