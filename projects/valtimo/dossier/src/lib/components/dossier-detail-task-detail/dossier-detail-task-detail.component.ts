@@ -26,6 +26,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
 import {ConfigService} from '@valtimo/config';
 import {ProcessInstanceTask} from '@valtimo/process';
+import {FormDisplayType, FormSize} from '@valtimo/process-link';
 import {
   AssignUserToTaskComponent,
   CAN_ASSIGN_TASK_PERMISSION,
@@ -36,6 +37,7 @@ import {
 } from '@valtimo/task';
 import {ButtonModule, IconModule} from 'carbon-components-angular';
 import {BehaviorSubject, switchMap} from 'rxjs';
+import {DossierDetailLayoutService} from '../../services';
 
 @Component({
   selector: 'valtimo-dossier-detail-task-detail',
@@ -89,7 +91,8 @@ export class DossierDetailsTaskDetailComponent {
   constructor(
     private readonly configService: ConfigService,
     private readonly permissionService: PermissionService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly dossierDetailLayoutService: DossierDetailLayoutService
   ) {
     this.enableIntermediateSave = !!this.configService.featureToggles?.enableIntermediateSave;
   }
@@ -109,5 +112,13 @@ export class DossierDetailsTaskDetailComponent {
 
   public onFormSubmitEvent(): void {
     this.formSubmit.emit();
+  }
+
+  public onFormSizeChange(event: FormSize): void {
+    this.dossierDetailLayoutService.setFormDisplaySize(event);
+  }
+
+  public onFormDisplayTypeChange(event: FormDisplayType): void {
+    this.dossierDetailLayoutService.setFormDisplayType(event);
   }
 }

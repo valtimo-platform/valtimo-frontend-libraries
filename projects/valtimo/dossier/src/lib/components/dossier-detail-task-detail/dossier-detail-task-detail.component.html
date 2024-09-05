@@ -69,6 +69,8 @@
       [task]="task$ | async"
       (activeChange)="onActiveChangeEvent($event)"
       (formSubmit)="onFormSubmitEvent()"
+      (formSizeChangeEvent)="onFormSizeChange($event)"
+      (formDisplayTypeChangeEvent)="onFormDisplayTypeChange($event)"
     ></valtimo-task-detail-content>
   </section>
 </div>
