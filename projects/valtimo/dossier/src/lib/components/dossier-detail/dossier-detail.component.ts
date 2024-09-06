@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {DOCUMENT} from '@angular/common';
 import {
   AfterViewInit,
   Component,
   ComponentFactoryResolver,
   ElementRef,
+  Inject,
   OnDestroy,
+  Renderer2,
+  RendererStyleFlags2,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -34,11 +38,11 @@ import {
 import {ConfigService} from '@valtimo/config';
 import {
   CaseStatusService,
-  Document,
   DocumentService,
   InternalCaseStatus,
   InternalCaseStatusUtils,
   ProcessDocumentDefinition,
+  Document as ValtimoDocument,
 } from '@valtimo/document';
 import {ProcessInstanceTask} from '@valtimo/process';
 import {IntermediateSubmission} from '@valtimo/task';
@@ -58,6 +62,7 @@ import {
   take,
   tap,
 } from 'rxjs';
+import {DOSSIER_DETAIL_GUTTER_SIZE} from '../../constants';
 import {TabImpl, TabLoaderImpl} from '../../models';
 import {
   CAN_ASSIGN_CASE_PERMISSION,
@@ -66,7 +71,6 @@ import {
 } from '../../permissions';
 import {DossierDetailLayoutService, DossierService, DossierTabService} from '../../services';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
-import {DOSSIER_DETAIL_GUTTER_SIZE} from '../../constants';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -88,7 +92,7 @@ export class DossierDetailComponent
   private readonly _tabContentContainer!: ElementRef<HTMLDivElement>;
 
   public customDossierHeaderItems: Array<any> = [];
-  public document: Document | null = null;
+  public document: ValtimoDocument | null = null;
   public documentDefinitionName: string;
   public documentDefinitionNameTitle: string;
   public documentId: string;
@@ -109,14 +113,14 @@ export class DossierDetailComponent
     filter(key => !!key)
   );
 
-  public readonly document$: Observable<Document | null> =
+  public readonly document$: Observable<ValtimoDocument | null> =
     this.dossierService.refreshDocument$.pipe(
       switchMap(() => this.route.params),
       map((params: Params) => params?.documentId),
       switchMap((documentId: string) =>
         documentId ? this.documentService.getDocument(this.documentId) : of(null)
       ),
-      tap((document: Document | null) => {
+      tap((document: ValtimoDocument | null) => {
         if (document) {
           this.assigneeId$.next(document.assigneeId);
           this.document = document;
@@ -246,7 +250,9 @@ export class DossierDetailComponent
     private readonly pageTitleService: PageTitleService,
     private readonly iconService: IconService,
     private readonly pageHeaderService: PageHeaderService,
-    private readonly dossierDetailLayoutService: DossierDetailLayoutService
+    private readonly dossierDetailLayoutService: DossierDetailLayoutService,
+    private readonly renderer: Renderer2,
+    @Inject(DOCUMENT) private readonly htmlDocument: Document
   ) {
     super();
     this._snapshot = this.route.snapshot.paramMap;
@@ -261,12 +267,13 @@ export class DossierDetailComponent
     this.openWidthObserver();
     this.pageTitleService.disableReset();
     this.iconService.registerAll([ChevronDown16]);
-    this.dossierDetailLayoutService.setDocumentStyle();
+    this.setDocumentStyle();
   }
 
   public ngOnDestroy(): void {
     this.breadcrumbService.clearSecondBreadcrumb();
     this.pageTitleService.enableReset();
+    this.removeDocumentStyle();
   }
 
   public getAllAssociatedProcessDefinitions(): void {
@@ -359,7 +366,7 @@ export class DossierDetailComponent
     }
 
     this.tabLoader.load(tab);
-    this.dossierDetailLayoutService.setDocumentStyle();
+    this.setDocumentStyle();
   }
 
   public onFormSubmitEvent(): void {
@@ -477,5 +484,18 @@ export class DossierDetailComponent
     if (typeof elementWidth === 'number' && elementWidth !== 0) {
       this.dossierDetailLayoutService.setTabContentContainerWidth(elementWidth);
     }
+  }
+
+  private setDocumentStyle(): void {
+    this.renderer.setStyle(
+      this.htmlDocument.getElementsByTagName('html')[0],
+      'overflow',
+      'hidden',
+      RendererStyleFlags2.Important
+    );
+  }
+
+  private removeDocumentStyle(): void {
+    this.renderer.removeStyle(this.htmlDocument.getElementsByTagName('html')[0], 'overflow');
   }
 }

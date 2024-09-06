@@ -1,21 +1,13 @@
-import {
-  Inject,
-  Injectable,
-  OnDestroy,
-  Renderer2,
-  RendererFactory2,
-  RendererStyleFlags2,
-} from '@angular/core';
-import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
-import {DossierTabService} from './dossier-tab.service';
+import {Injectable, Renderer2} from '@angular/core';
 import {ProcessInstanceTask} from '@valtimo/process';
-import {DossierDetailLayout} from '../models';
 import {FormDisplayType, FormSize} from '@valtimo/process-link';
+import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
 import {DOSSIER_DETAIL_GUTTER_SIZE} from '../constants';
-import {DOCUMENT} from '@angular/common';
+import {DossierDetailLayout} from '../models';
+import {DossierTabService} from './dossier-tab.service';
 
 @Injectable()
-export class DossierDetailLayoutService implements OnDestroy {
+export class DossierDetailLayoutService {
   private readonly _tabContentContainerWidth$ = new BehaviorSubject<number | null>(null);
   private readonly _showTaskList$ = this.dossierTabService.showTaskList$;
   private readonly _taskToOpen$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
@@ -64,17 +56,7 @@ export class DossierDetailLayoutService implements OnDestroy {
 
   private readonly _renderer!: Renderer2;
 
-  constructor(
-    private readonly dossierTabService: DossierTabService,
-    public rendererFactory2: RendererFactory2,
-    @Inject(DOCUMENT) private readonly document: Document
-  ) {
-    this._renderer = rendererFactory2.createRenderer(null, null);
-  }
-
-  public ngOnDestroy(): void {
-    this.removeDocumentStyle();
-  }
+  constructor(private readonly dossierTabService: DossierTabService) {}
 
   public setTabContentContainerWidth(width: number): void {
     this._tabContentContainerWidth$.next(width);
@@ -90,18 +72,5 @@ export class DossierDetailLayoutService implements OnDestroy {
 
   public setFormDisplaySize(size: FormSize): void {
     this._formDisplaySize$.next(size);
-  }
-
-  public setDocumentStyle(): void {
-    this._renderer.setStyle(
-      document.getElementsByTagName('html')[0],
-      'overflow',
-      'hidden',
-      RendererStyleFlags2.Important
-    );
-  }
-
-  private removeDocumentStyle(): void {
-    this._renderer.removeStyle(document, 'overflow');
   }
 }
