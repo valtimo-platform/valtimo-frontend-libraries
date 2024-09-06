@@ -1,8 +1,8 @@
 import {Injectable, Renderer2} from '@angular/core';
 import {ProcessInstanceTask} from '@valtimo/process';
 import {FormDisplayType, FormSize} from '@valtimo/process-link';
-import {BehaviorSubject, combineLatest, filter, map, Observable} from 'rxjs';
-import {DOSSIER_DETAIL_GUTTER_SIZE} from '../constants';
+import {BehaviorSubject, combineLatest, filter, map, Observable, startWith} from 'rxjs';
+import {DOSSIER_DETAIL_GUTTER_SIZE, DOSSIER_DETAIL_TASK_LIST_WIDTH} from '../constants';
 import {DossierDetailLayout} from '../models';
 import {DossierTabService} from './dossier-tab.service';
 
@@ -43,15 +43,26 @@ export class DossierDetailLayoutService {
         }
 
         if (!taskToOpen) {
+          const leftPanelWidth =
+            tabContentContainerWidth - DOSSIER_DETAIL_TASK_LIST_WIDTH - DOSSIER_DETAIL_GUTTER_SIZE;
+
           return {
+            unit: 'pixel',
             showRightPanel: true,
             widthAdjustable: false,
+            rightPanelMaxWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
+            rightPanelMinWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
+            rightPanelWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
+            leftPanelWidth: leftPanelWidth,
+            leftPanelMaxWidth: leftPanelWidth,
+            leftPanelMinWidth: leftPanelWidth,
           };
         }
 
         return {} as DossierDetailLayout;
       }
-    )
+    ),
+    startWith({})
   );
 
   private readonly _renderer!: Renderer2;

@@ -48,11 +48,15 @@
     >
       <as-split
         direction="horizontal"
-        [disabled]="!tabContentObs.taskToOpen"
+        [disabled]="!tabContentObs.dossierDetailLayout.widthAdjustable"
         [gutterSize]="DOSSIER_DETAIL_GUTTER_SIZE"
-        unit="px"
+        [unit]="tabContentObs.dossierDetailLayout.unit"
       >
-        <as-split-area [size]="100">
+        <as-split-area
+          [size]="tabContentObs.dossierDetailLayout.leftPanelWidth"
+          [minSize]="tabContentObs.dossierDetailLayout.leftPanelMinWidth"
+          [maxSize]="tabContentObs.dossierDetailLayout.leftPanelMaxWidth"
+        >
           <div class="card-body bg-white p-5 position-relative tab-container">
             <div *ngIf="loadingTabs$ | async" class="loading-container">
               <cds-loading></cds-loading>
@@ -71,8 +75,10 @@
         </as-split-area>
 
         <as-split-area
-          *ngIf="tabContentObs.showTaskList"
-          [size]="!tabContentObs.taskToOpen ? 412 : 100"
+          *ngIf="tabContentObs.dossierDetailLayout.showRightPanel"
+          [size]="tabContentObs.dossierDetailLayout.rightPanelWidth"
+          [minSize]="tabContentObs.dossierDetailLayout.rightPanelMinWidth"
+          [maxSize]="tabContentObs.dossierDetailLayout.rightPanelMaxWidth"
         >
           @if (tabContentObs.showTaskList) {
             <div class="task-panel">
