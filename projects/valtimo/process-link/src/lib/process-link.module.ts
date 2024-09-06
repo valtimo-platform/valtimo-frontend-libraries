@@ -60,6 +60,8 @@ import {FormFlowComponent} from './components/form-flow/form-flow.component';
 import {SelectFormFlowComponent} from './components/select-form-flow';
 import {FormFlowConfigurationContainerComponent} from './components/form-flow-configuration-container';
 import {SelectUrlComponent} from './components/select-url/select-url.component';
+import {UrlValidatorService} from './services/url-validator.service';
+import {UrlResolverService} from './services/url-resolver.service';
 
 @NgModule({
   declarations: [
@@ -118,5 +120,9 @@ import {SelectUrlComponent} from './components/select-url/select-url.component';
     FormFlowComponent,
     SelectUrlComponent,
   ],
+  providers: [
+    UrlValidatorService,
+    UrlResolverService
+  ]
 })
 export class ProcessLinkModule {}

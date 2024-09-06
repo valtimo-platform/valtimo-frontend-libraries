@@ -51,7 +51,7 @@ export class SelectUrlComponent implements OnInit, OnDestroy {
     private readonly stateService: ProcessLinkStateService,
     private readonly buttonService: ProcessLinkButtonService,
     private readonly processLinkService: ProcessLinkService,
-    private readonly urlValidateService: UrlValidatorService,
+    private readonly urlValidatorService: UrlValidatorService,
     private readonly urlResolverService: UrlResolverService
   ) {
   }
@@ -61,9 +61,9 @@ export class SelectUrlComponent implements OnInit, OnDestroy {
     this.openSaveButtonSubscription();
 
     this.urlForm = new FormGroup({
-      url: new FormControl('', Validators.required, this.urlValidateService.urlValidator(this._variables$))
+      url: new FormControl('', Validators.required, this.urlValidatorService.urlValidator(this._variables$))
     });
-    this.urlForm.statusChanges
+    this._subscriptions.add(this.urlForm.statusChanges
       .pipe(distinctUntilChanged())
       .subscribe(status => {
         if (status === 'VALID') {
@@ -71,7 +71,7 @@ export class SelectUrlComponent implements OnInit, OnDestroy {
         } else {
           this.buttonService.disableSaveButton();
         }
-      });
+      }));
 
     this.stateService.url$
       .subscribe(url => this.url.setValue(url));
