@@ -20,9 +20,10 @@ import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
 import {CarbonListModule, WidgetModule} from '@valtimo/components';
-import {ConfigService} from '@valtimo/config';
+import {ConfigService, UserIdentity} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
+import {UserProviderService} from '@valtimo/security';
 import {
   CAN_VIEW_TASK_PERMISSION,
   Task,
@@ -31,8 +32,6 @@ import {
   TaskModule,
 } from '@valtimo/task';
 import {LayerModule, LoadingModule, TagModule, TilesModule} from 'carbon-components-angular';
-import {KeycloakService} from 'keycloak-angular';
-import {KeycloakProfile} from 'keycloak-js';
 import moment from 'moment/moment';
 import {
   BehaviorSubject,
@@ -119,9 +118,9 @@ export class DossierDetailTaskListComponent {
       return this.getSortedTasks(uniqueTasks);
     }),
     switchMap((tasks: ProcessInstanceTask[]) =>
-      combineLatest([of(tasks), this.keycloakService.loadUserProfile()])
+      combineLatest([of(tasks), this.userProviderService.getUserSubject()])
     ),
-    map(([tasks, keycloakProfile]) => this.sortTasksToUser(tasks, keycloakProfile)),
+    map(([tasks, userIdentity]) => this.sortTasksToUser(tasks, userIdentity)),
     tap(() => this.loadingTasks$.next(false))
   );
 
@@ -130,10 +129,10 @@ export class DossierDetailTaskListComponent {
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
-    private readonly keycloakService: KeycloakService,
     private readonly processService: ProcessService,
     private readonly route: ActivatedRoute,
-    private readonly permissionService: PermissionService
+    private readonly permissionService: PermissionService,
+    private readonly userProviderService: UserProviderService
   ) {
     this.taskPanelEnabled = !!this.configService.featureToggles?.enableTaskPanel;
   }
@@ -198,7 +197,7 @@ export class DossierDetailTaskListComponent {
 
   private sortTasksToUser(
     tasks: ProcessInstanceTask[],
-    user: KeycloakProfile
+    user: UserIdentity
   ): {myTasks: ProcessInstanceTask[]; otherTasks: ProcessInstanceTask[]} {
     return tasks.reduce(
       (acc, curr) =>
