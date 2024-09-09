@@ -49,8 +49,7 @@ export class TaskDetailIntermediateSaveComponent {
       .pipe(take(1))
       .subscribe(res => {
         if (res !== null && res.type === 'form-flow')
-          // form-flow is not supported
-          return
+          this.formFlowInstanceId$.next(res.properties.formFlowInstanceId);
       });
 
     this.taskValue.set(value);
@@ -58,7 +57,9 @@ export class TaskDetailIntermediateSaveComponent {
       title: value.name,
       subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${value.created}`,
     });
-    this.getCurrentProgress(value);
+    if (this.formFlowInstanceId$.value === undefined) {
+      this.getCurrentProgress(value);
+    }
   }
   @Output() public readonly currentIntermediateSaveEvent =
     new EventEmitter<IntermediateSubmission | null>();
@@ -153,6 +154,7 @@ export class TaskDetailIntermediateSaveComponent {
   }
 
   private getCurrentProgress(task: Task): void {
+    if (task.t)
     this.taskIntermediateSaveService
       .getIntermediateSubmission(task.id ?? '')
       .pipe(take(1))
