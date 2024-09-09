@@ -130,11 +130,11 @@ export class TaskDetailModalComponent implements OnInit {
 
   public closeModal(): void {
     this._modal.open = false;
-    // this.currentIntermediateSave$.next(null);
+    this.currentIntermediateSave$.next(null);
   }
 
   private openModal(): void {
     this._modal.open = true;
-    // this.currentIntermediateSave$.next(null);
+    this.currentIntermediateSave$.next(null);
   }
 }

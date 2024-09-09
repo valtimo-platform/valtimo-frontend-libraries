@@ -14,25 +14,12 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  signal,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal,} from '@angular/core';
 import {RecentlyViewed16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ConfirmationModalModule} from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
-import {
-  ButtonModule,
-  IconModule,
-  IconService,
-  ModalModule,
-  TooltipModule,
-} from 'carbon-components-angular';
+import {ButtonModule, IconModule, IconService, ModalModule, TooltipModule,} from 'carbon-components-angular';
 import moment from 'moment';
 import {ToastrService} from 'ngx-toastr';
 import {BehaviorSubject, combineLatest, switchMap, take} from 'rxjs';
@@ -62,7 +49,8 @@ export class TaskDetailIntermediateSaveComponent {
       .pipe(take(1))
       .subscribe(res => {
         if (res !== null && res.type === 'form-flow')
-          this.formFlowInstanceId$.next(res.properties.formFlowInstanceId);
+          // form-flow is not supported
+          return
       });
 
     this.taskValue.set(value);
