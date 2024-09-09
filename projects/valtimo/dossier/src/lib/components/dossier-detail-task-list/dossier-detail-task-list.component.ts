@@ -201,7 +201,7 @@ export class DossierDetailTaskListComponent {
   ): {myTasks: ProcessInstanceTask[]; otherTasks: ProcessInstanceTask[]} {
     return tasks.reduce(
       (acc, curr) =>
-        curr.assignee === user.username
+        curr.assignee === user.username || curr.assignee === user.id
           ? {...acc, myTasks: [...acc.myTasks, curr]}
           : {...acc, otherTasks: [...acc.otherTasks, curr]},
       {myTasks: [] as ProcessInstanceTask[], otherTasks: [] as ProcessInstanceTask[]}
