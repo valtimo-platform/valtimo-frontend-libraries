@@ -49,14 +49,11 @@ export class DossierDetailLayoutService {
             showRightPanel: false,
             widthAdjustable: false,
             unit: 'percent',
-            leftPanelWidth: 100,
+            leftPanelWidth: '*',
           };
         }
 
         if (!taskOpenedInPanel) {
-          const leftPanelWidth =
-            tabContentContainerWidth - DOSSIER_DETAIL_TASK_LIST_WIDTH - DOSSIER_DETAIL_GUTTER_SIZE;
-
           return {
             unit: 'pixel',
             showRightPanel: true,
@@ -64,13 +61,9 @@ export class DossierDetailLayoutService {
             rightPanelMaxWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
             rightPanelMinWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
             rightPanelWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
-            leftPanelWidth: leftPanelWidth,
-            leftPanelMaxWidth: leftPanelWidth,
-            leftPanelMinWidth: leftPanelWidth,
+            leftPanelWidth: '*',
           };
         }
-
-        console.log(taskOpenedInPanel, formDisplayType);
 
         if (taskOpenedInPanel && formDisplayType === 'panel') {
           const rightPanelMaxWidth =
@@ -78,17 +71,15 @@ export class DossierDetailLayoutService {
             DOSSIER_DETAIL_GUTTER_SIZE -
             DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH;
           const rightPanelMinWidth = DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS[formDisplaySize];
-          const leftPanelMaxWidth =
-            tabContentContainerWidth - DOSSIER_DETAIL_GUTTER_SIZE - rightPanelMinWidth;
 
           return {
             unit: 'pixel',
             showRightPanel: true,
             widthAdjustable: true,
+            rightPanelWidth: rightPanelMinWidth,
             rightPanelMaxWidth,
             rightPanelMinWidth,
-            leftPanelMinWidth: DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH,
-            leftPanelMaxWidth,
+            leftPanelWidth: '*',
           };
         }
 

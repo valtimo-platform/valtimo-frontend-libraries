@@ -6,10 +6,10 @@ interface DossierDetailLayout {
   unit: DossierDetailLayoutUnit;
   widthAdjustable: boolean;
   showRightPanel?: boolean;
-  leftPanelWidth?: number;
+  leftPanelWidth?: number | '*';
   leftPanelMinWidth?: number;
   leftPanelMaxWidth?: number;
-  rightPanelWidth?: number;
+  rightPanelWidth?: number | '*';
   rightPanelMinWidth?: number;
   rightPanelMaxWidth?: number;
 }

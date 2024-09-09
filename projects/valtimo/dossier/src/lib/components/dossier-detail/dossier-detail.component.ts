@@ -356,7 +356,7 @@ export class DossierDetailComponent
       if (displayType === 'panel') {
         this.dossierDetailLayoutService.setTaskOpenedInPanel(task as any as ProcessInstanceTask);
       } else {
-        // cloneDeep necesarry because set does not trigger when reference stays the same
+        // cloneDeep necessary because set does not trigger when reference stays the same
         this.openTaskInModal$.next(cloneDeep(task));
       }
     });
