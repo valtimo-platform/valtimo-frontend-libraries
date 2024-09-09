@@ -154,7 +154,6 @@ export class TaskDetailIntermediateSaveComponent {
   }
 
   private getCurrentProgress(task: Task): void {
-    if (task.t)
     this.taskIntermediateSaveService
       .getIntermediateSubmission(task.id ?? '')
       .pipe(take(1))
