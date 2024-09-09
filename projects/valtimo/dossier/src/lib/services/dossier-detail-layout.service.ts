@@ -19,6 +19,9 @@ export class DossierDetailLayoutService {
   private readonly _formDisplayType$ = new BehaviorSubject<FormDisplayType | null>(null);
   private readonly _formDisplaySize$ = new BehaviorSubject<FormSize | null>(null);
 
+  constructor(private readonly dossierTabService: DossierTabService) {}
+
+  // Observables
   public get tabContentContainerWidth$(): Observable<number> {
     return this._tabContentContainerWidth$.pipe(filter(width => typeof width === 'number'));
   }
@@ -27,6 +30,7 @@ export class DossierDetailLayoutService {
     return this._taskOpenedInPanel$.asObservable();
   }
 
+  // Refactored observable using helper methods
   public readonly dossierDetailLayout$: Observable<DossierDetailLayout | any> = combineLatest([
     this.tabContentContainerWidth$,
     this._showTaskList$,
@@ -43,44 +47,15 @@ export class DossierDetailLayoutService {
         formDisplaySize,
       ]) => {
         if (!showTaskList) {
-          return {
-            showRightPanel: false,
-            widthAdjustable: false,
-            unit: 'percent',
-            leftPanelWidth: '*',
-          };
+          return this.getInitialLayout();
         }
 
         if (!taskOpenedInPanel) {
-          return {
-            unit: 'pixel',
-            showRightPanel: true,
-            widthAdjustable: false,
-            rightPanelMaxWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
-            rightPanelMinWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
-            rightPanelWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
-            leftPanelWidth: '*',
-          };
+          return this.getTaskListLayout();
         }
 
         if (taskOpenedInPanel && formDisplayType === 'panel') {
-          const rightPanelMaxWidth =
-            tabContentContainerWidth -
-            DOSSIER_DETAIL_GUTTER_SIZE -
-            DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH;
-          const rightPanelMinWidth = DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS[formDisplaySize];
-          const rightPanelMinWidthToUse =
-            rightPanelMinWidth < rightPanelMaxWidth ? rightPanelMinWidth : rightPanelMaxWidth;
-
-          return {
-            unit: 'pixel',
-            showRightPanel: true,
-            widthAdjustable: true,
-            rightPanelMinWidth: rightPanelMinWidthToUse,
-            rightPanelWidth: rightPanelMinWidthToUse,
-            rightPanelMaxWidth,
-            leftPanelWidth: '*',
-          };
+          return this.getPanelLayout(tabContentContainerWidth, formDisplaySize);
         }
 
         return {} as DossierDetailLayout;
@@ -89,10 +64,10 @@ export class DossierDetailLayoutService {
     startWith({})
   );
 
+  // Renderer
   private readonly _renderer!: Renderer2;
 
-  constructor(private readonly dossierTabService: DossierTabService) {}
-
+  // Methods to set values
   public setTabContentContainerWidth(width: number): void {
     this._tabContentContainerWidth$.next(width);
   }
@@ -107,5 +82,48 @@ export class DossierDetailLayoutService {
 
   public setFormDisplaySize(size: FormSize): void {
     this._formDisplaySize$.next(size);
+  }
+
+  // Helper methods to encapsulate layout logic
+  private getInitialLayout(): DossierDetailLayout {
+    return {
+      showRightPanel: false,
+      widthAdjustable: false,
+      unit: 'percent',
+      leftPanelWidth: '*',
+    };
+  }
+
+  private getTaskListLayout(): DossierDetailLayout {
+    return {
+      unit: 'pixel',
+      showRightPanel: true,
+      widthAdjustable: false,
+      rightPanelMaxWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
+      rightPanelMinWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
+      rightPanelWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
+      leftPanelWidth: '*',
+    };
+  }
+
+  private getPanelLayout(
+    tabContentContainerWidth: number,
+    formDisplaySize: FormSize
+  ): DossierDetailLayout {
+    const rightPanelMaxWidth =
+      tabContentContainerWidth - DOSSIER_DETAIL_GUTTER_SIZE - DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH;
+    const rightPanelMinWidth = DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS[formDisplaySize];
+    const rightPanelMinWidthToUse =
+      rightPanelMinWidth < rightPanelMaxWidth ? rightPanelMinWidth : rightPanelMaxWidth;
+
+    return {
+      unit: 'pixel',
+      showRightPanel: true,
+      widthAdjustable: true,
+      rightPanelMinWidth: rightPanelMinWidthToUse,
+      rightPanelWidth: rightPanelMinWidthToUse,
+      rightPanelMaxWidth,
+      leftPanelWidth: '*',
+    };
   }
 }
