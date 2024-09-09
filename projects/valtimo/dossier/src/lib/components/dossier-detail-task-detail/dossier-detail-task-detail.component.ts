@@ -26,7 +26,6 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
 import {ConfigService} from '@valtimo/config';
 import {ProcessInstanceTask} from '@valtimo/process';
-import {FormDisplayType, FormSize} from '@valtimo/process-link';
 import {
   AssignUserToTaskComponent,
   CAN_ASSIGN_TASK_PERMISSION,
@@ -112,13 +111,5 @@ export class DossierDetailsTaskDetailComponent {
 
   public onFormSubmitEvent(): void {
     this.formSubmit.emit();
-  }
-
-  public onFormSizeChange(event: FormSize): void {
-    this.dossierDetailLayoutService.setFormDisplaySize(event);
-  }
-
-  public onFormDisplayTypeChange(event: FormDisplayType): void {
-    this.dossierDetailLayoutService.setFormDisplayType(event);
   }
 }

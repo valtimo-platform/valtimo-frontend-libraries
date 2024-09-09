@@ -2,7 +2,12 @@ import {Injectable, Renderer2} from '@angular/core';
 import {ProcessInstanceTask} from '@valtimo/process';
 import {FormDisplayType, FormSize} from '@valtimo/process-link';
 import {BehaviorSubject, combineLatest, filter, map, Observable, startWith} from 'rxjs';
-import {DOSSIER_DETAIL_GUTTER_SIZE, DOSSIER_DETAIL_TASK_LIST_WIDTH} from '../constants';
+import {
+  DOSSIER_DETAIL_GUTTER_SIZE,
+  DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH,
+  DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS,
+  DOSSIER_DETAIL_TASK_LIST_WIDTH,
+} from '../constants';
 import {DossierDetailLayout} from '../models';
 import {DossierTabService} from './dossier-tab.service';
 
@@ -10,7 +15,7 @@ import {DossierTabService} from './dossier-tab.service';
 export class DossierDetailLayoutService {
   private readonly _tabContentContainerWidth$ = new BehaviorSubject<number | null>(null);
   private readonly _showTaskList$ = this.dossierTabService.showTaskList$;
-  private readonly _taskToOpen$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
+  private readonly _taskOpenedInPanel$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
   private readonly _formDisplayType$ = new BehaviorSubject<FormDisplayType | null>(null);
   private readonly _formDisplaySize$ = new BehaviorSubject<FormSize | null>(null);
 
@@ -18,19 +23,25 @@ export class DossierDetailLayoutService {
     return this._tabContentContainerWidth$.pipe(filter(width => typeof width === 'number'));
   }
 
-  public get taskToOpen$(): Observable<ProcessInstanceTask | null> {
-    return this._taskToOpen$.asObservable();
+  public get taskOpenedInPanel$(): Observable<ProcessInstanceTask | null> {
+    return this._taskOpenedInPanel$.asObservable();
   }
 
   public readonly dossierDetailLayout$: Observable<DossierDetailLayout | any> = combineLatest([
     this.tabContentContainerWidth$,
     this._showTaskList$,
-    this._taskToOpen$,
+    this._taskOpenedInPanel$,
     this._formDisplayType$,
     this._formDisplaySize$,
   ]).pipe(
     map(
-      ([tabContentContainerWidth, showTaskList, taskToOpen, formDisplayType, formDisplaySize]) => {
+      ([
+        tabContentContainerWidth,
+        showTaskList,
+        taskOpenedInPanel,
+        formDisplayType,
+        formDisplaySize,
+      ]) => {
         const availableWidth = tabContentContainerWidth - DOSSIER_DETAIL_GUTTER_SIZE;
 
         if (!showTaskList) {
@@ -42,7 +53,7 @@ export class DossierDetailLayoutService {
           };
         }
 
-        if (!taskToOpen) {
+        if (!taskOpenedInPanel) {
           const leftPanelWidth =
             tabContentContainerWidth - DOSSIER_DETAIL_TASK_LIST_WIDTH - DOSSIER_DETAIL_GUTTER_SIZE;
 
@@ -56,6 +67,28 @@ export class DossierDetailLayoutService {
             leftPanelWidth: leftPanelWidth,
             leftPanelMaxWidth: leftPanelWidth,
             leftPanelMinWidth: leftPanelWidth,
+          };
+        }
+
+        console.log(taskOpenedInPanel, formDisplayType);
+
+        if (taskOpenedInPanel && formDisplayType === 'panel') {
+          const rightPanelMaxWidth =
+            tabContentContainerWidth -
+            DOSSIER_DETAIL_GUTTER_SIZE -
+            DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH;
+          const rightPanelMinWidth = DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS[formDisplaySize];
+          const leftPanelMaxWidth =
+            tabContentContainerWidth - DOSSIER_DETAIL_GUTTER_SIZE - rightPanelMinWidth;
+
+          return {
+            unit: 'pixel',
+            showRightPanel: true,
+            widthAdjustable: true,
+            rightPanelMaxWidth,
+            rightPanelMinWidth,
+            leftPanelMinWidth: DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH,
+            leftPanelMaxWidth,
           };
         }
 
@@ -73,8 +106,8 @@ export class DossierDetailLayoutService {
     this._tabContentContainerWidth$.next(width);
   }
 
-  public setTaskToOpen(value: ProcessInstanceTask | null): void {
-    this._taskToOpen$.next(value);
+  public setTaskOpenedInPanel(value: ProcessInstanceTask | null): void {
+    this._taskOpenedInPanel$.next(value);
   }
 
   public setFormDisplayType(type: FormDisplayType): void {

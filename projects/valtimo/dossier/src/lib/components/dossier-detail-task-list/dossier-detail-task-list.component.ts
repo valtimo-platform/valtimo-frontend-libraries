@@ -14,11 +14,25 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
+import {PermissionService} from '@valtimo/access-control';
 import {CarbonListModule, WidgetModule} from '@valtimo/components';
+import {ConfigService} from '@valtimo/config';
+import {DocumentService} from '@valtimo/document';
+import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
+import {
+  CAN_VIEW_TASK_PERMISSION,
+  Task,
+  TASK_DETAIL_PERMISSION_RESOURCE,
+  TaskDetailModalComponent,
+  TaskModule,
+} from '@valtimo/task';
+import {LayerModule, LoadingModule, TagModule, TilesModule} from 'carbon-components-angular';
+import moment from 'moment/moment';
 import {
   BehaviorSubject,
   combineLatest,
@@ -30,20 +44,6 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import {LayerModule, LoadingModule, TagModule, TilesModule} from 'carbon-components-angular';
-import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
-import moment from 'moment/moment';
-import {
-  CAN_VIEW_TASK_PERMISSION,
-  Task,
-  TASK_DETAIL_PERMISSION_RESOURCE,
-  TaskDetailModalComponent,
-  TaskModule,
-} from '@valtimo/task';
-import {ActivatedRoute} from '@angular/router';
-import {DocumentService} from '@valtimo/document';
-import {PermissionService} from '@valtimo/access-control';
-import {ConfigService} from '@valtimo/config';
 
 moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
@@ -68,6 +68,11 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
 })
 export class DossierDetailTaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetailModal: TaskDetailModalComponent;
+
+  @Input() public set openInTaskModal(value: Task) {
+    console.log('open task', value);
+    this._taskDetailModal.openTaskDetails(value);
+  }
 
   @Output() public readonly taskClickEvent = new EventEmitter<ProcessInstanceTask>();
 
@@ -132,11 +137,7 @@ export class DossierDetailTaskListComponent {
   public rowTaskClick(task: ProcessInstanceTask): void {
     if (task.isLocked) return;
 
-    if (this.taskPanelEnabled) {
-      this.taskClickEvent.emit(task);
-      return;
-    }
-    this._taskDetailModal.openTaskDetails(task as unknown as Task);
+    this.taskClickEvent.emit(task);
   }
 
   public refresh(): void {

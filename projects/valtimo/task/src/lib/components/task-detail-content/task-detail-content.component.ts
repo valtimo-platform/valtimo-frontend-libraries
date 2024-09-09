@@ -44,13 +44,7 @@ import {
 } from '@valtimo/components';
 import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
-import {
-  FormDisplayType,
-  FormFlowComponent,
-  FormSize,
-  FormSubmissionResult,
-  ProcessLinkService,
-} from '@valtimo/process-link';
+import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
 import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
@@ -88,9 +82,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
   @Output() public readonly closeModalEvent = new EventEmitter();
   @Output() public readonly formSubmit = new EventEmitter();
   @Output() public readonly activeChange = new EventEmitter<boolean>();
-
-  @Output() public readonly formDisplayTypeChangeEvent = new EventEmitter<FormDisplayType>();
-  @Output() public readonly formSizeChangeEvent = new EventEmitter<FormSize>();
 
   public readonly canAssignUserToTask$ = new BehaviorSubject<boolean>(false);
   public readonly errorMessage$ = new BehaviorSubject<string | null>(null);
@@ -267,9 +258,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
               this.setFormViewModelComponent();
               break;
           }
-
-          this.formSizeChangeEvent.emit(res.properties.formSize);
-          this.formDisplayTypeChangeEvent.emit(res.properties.formDisplayType);
 
           this.loading$.next(false);
         }

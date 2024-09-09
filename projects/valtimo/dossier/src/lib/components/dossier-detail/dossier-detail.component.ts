@@ -45,9 +45,10 @@ import {
   Document as ValtimoDocument,
 } from '@valtimo/document';
 import {ProcessInstanceTask} from '@valtimo/process';
-import {IntermediateSubmission} from '@valtimo/task';
+import {IntermediateSubmission, Task, TaskService} from '@valtimo/task';
 import {IconService} from 'carbon-components-angular';
 import {KeycloakService} from 'keycloak-angular';
+import {cloneDeep} from 'lodash';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {
@@ -58,6 +59,7 @@ import {
   Observable,
   of,
   startWith,
+  Subject,
   switchMap,
   take,
   tap,
@@ -105,7 +107,7 @@ export class DossierDetailComponent
     null
   );
 
-  public readonly taskToOpen$ = this.dossierDetailLayoutService.taskToOpen$;
+  public readonly taskOpenedInPanel$ = this.dossierDetailLayoutService.taskOpenedInPanel$;
 
   private readonly _caseStatusKey$ = new BehaviorSubject<string | null | 'NOT_AVAILABLE'>(null);
 
@@ -227,6 +229,8 @@ export class DossierDetailComponent
 
   public readonly dossierDetailLayout$ = this.dossierDetailLayoutService.dossierDetailLayout$;
 
+  public readonly openTaskInModal$ = new Subject<Task>();
+
   private _snapshot: ParamMap;
   private _initialTabName: string;
   private _activeChange = false;
@@ -252,6 +256,7 @@ export class DossierDetailComponent
     private readonly pageHeaderService: PageHeaderService,
     private readonly dossierDetailLayoutService: DossierDetailLayoutService,
     private readonly renderer: Renderer2,
+    private readonly taskService: TaskService,
     @Inject(DOCUMENT) private readonly htmlDocument: Document
   ) {
     super();
@@ -339,12 +344,26 @@ export class DossierDetailComponent
       });
   }
 
-  public onTaskClickEvent(task: ProcessInstanceTask): void {
-    this.dossierDetailLayoutService.setTaskToOpen(task);
+  public onTaskClickEvent(task: Task): void {
+    this.taskService.getTaskProcessLink(task.id).subscribe(result => {
+      // to do: get default from environment setting
+      const displayType = result.properties.formDisplayType || 'modal';
+      const size = result.properties.formSize || 'medium';
+
+      this.dossierDetailLayoutService.setFormDisplaySize(size);
+      this.dossierDetailLayoutService.setFormDisplayType(displayType);
+
+      if (displayType === 'panel') {
+        this.dossierDetailLayoutService.setTaskOpenedInPanel(task as any as ProcessInstanceTask);
+      } else {
+        // cloneDeep necesarry because set does not trigger when reference stays the same
+        this.openTaskInModal$.next(cloneDeep(task));
+      }
+    });
   }
 
   public onTaskDetailsClose(): void {
-    this.dossierDetailLayoutService.setTaskToOpen(null);
+    this.dossierDetailLayoutService.setTaskOpenedInPanel(null);
   }
 
   public onActiveChangeEvent(event: boolean): void {
@@ -370,7 +389,7 @@ export class DossierDetailComponent
   }
 
   public onFormSubmitEvent(): void {
-    this.dossierDetailLayoutService.setTaskToOpen(null);
+    this.dossierDetailLayoutService.setTaskOpenedInPanel(null);
   }
 
   protected onConfirmRedirect(): void {
@@ -378,7 +397,7 @@ export class DossierDetailComponent
     this._activeChange = false;
     this.activeTabName$.next(this._pendingTab.name);
     this.tabLoader.load(this._pendingTab);
-    this.dossierDetailLayoutService.setTaskToOpen(null);
+    this.dossierDetailLayoutService.setTaskOpenedInPanel(null);
   }
 
   protected onCancelRedirect(): void {

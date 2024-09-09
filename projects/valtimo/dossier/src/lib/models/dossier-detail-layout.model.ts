@@ -1,3 +1,5 @@
+import {FormSize} from '@valtimo/process-link';
+
 type DossierDetailLayoutUnit = 'pixel' | 'percent';
 
 interface DossierDetailLayout {
@@ -12,4 +14,8 @@ interface DossierDetailLayout {
   rightPanelMaxWidth?: number;
 }
 
-export {DossierDetailLayoutUnit, DossierDetailLayout};
+type RightPanelMinWidths = {
+  [key in FormSize]: number;
+};
+
+export {DossierDetailLayout, DossierDetailLayoutUnit, RightPanelMinWidths};
