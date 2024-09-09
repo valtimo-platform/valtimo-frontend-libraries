@@ -358,6 +358,7 @@ export class DossierDetailComponent
       return;
     }
 
+    if (!tab.showTasks) this.taskToOpen$.next(null);
     this.tabLoader.load(tab);
   }
 
