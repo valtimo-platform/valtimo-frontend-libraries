@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {FormDefinitionListItem, FormDisplayType, FormSize} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
@@ -10,7 +10,7 @@ import {map} from 'rxjs/operators';
   selector: 'valtimo-form-display-configuration',
   templateUrl: './form-display-configuration.component.html',
 })
-export class FormDisplayConfigurationComponent implements OnDestroy {
+export class FormDisplayConfigurationComponent implements OnInit, OnDestroy {
   @Input() public selectedFormDefinition: FormDefinitionListItem;
 
   @Output() public formDisplayValue = new EventEmitter<string>();
