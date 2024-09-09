@@ -70,8 +70,7 @@ export class DossierDetailTaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetailModal: TaskDetailModalComponent;
 
   @Input() public set openInTaskModal(value: Task) {
-    console.log('open task', value);
-    this._taskDetailModal.openTaskDetails(value);
+    if (value) this._taskDetailModal.openTaskDetails(value);
   }
 
   @Output() public readonly taskClickEvent = new EventEmitter<ProcessInstanceTask>();

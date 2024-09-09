@@ -42,8 +42,6 @@ export class DossierDetailLayoutService {
         formDisplayType,
         formDisplaySize,
       ]) => {
-        const availableWidth = tabContentContainerWidth - DOSSIER_DETAIL_GUTTER_SIZE;
-
         if (!showTaskList) {
           return {
             showRightPanel: false,
@@ -71,14 +69,16 @@ export class DossierDetailLayoutService {
             DOSSIER_DETAIL_GUTTER_SIZE -
             DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH;
           const rightPanelMinWidth = DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS[formDisplaySize];
+          const rightPanelMinWidthToUse =
+            rightPanelMinWidth < rightPanelMaxWidth ? rightPanelMinWidth : rightPanelMaxWidth;
 
           return {
             unit: 'pixel',
             showRightPanel: true,
             widthAdjustable: true,
-            rightPanelWidth: rightPanelMinWidth,
+            rightPanelMinWidth: rightPanelMinWidthToUse,
+            rightPanelWidth: rightPanelMinWidthToUse,
             rightPanelMaxWidth,
-            rightPanelMinWidth,
             leftPanelWidth: '*',
           };
         }

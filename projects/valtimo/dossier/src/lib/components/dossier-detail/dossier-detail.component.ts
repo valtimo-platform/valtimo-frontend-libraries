@@ -392,6 +392,10 @@ export class DossierDetailComponent
     this.dossierDetailLayoutService.setTaskOpenedInPanel(null);
   }
 
+  public onSplitDragEnd(event: any): void {
+    console.log(event);
+  }
+
   protected onConfirmRedirect(): void {
     if (!this.tabLoader || !this._pendingTab) return;
     this._activeChange = false;
