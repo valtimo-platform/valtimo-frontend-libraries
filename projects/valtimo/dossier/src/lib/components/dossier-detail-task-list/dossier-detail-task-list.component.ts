@@ -20,9 +20,8 @@ import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
 import {CarbonListModule, WidgetModule} from '@valtimo/components';
-import {ConfigService, UserIdentity} from '@valtimo/config';
+import {ConfigService} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
-import {KeycloakUserService} from '@valtimo/keycloak';
 import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
 import {
   CAN_VIEW_TASK_PERMISSION,
@@ -32,6 +31,8 @@ import {
   TaskModule,
 } from '@valtimo/task';
 import {LayerModule, LoadingModule, TagModule, TilesModule} from 'carbon-components-angular';
+import {KeycloakService} from 'keycloak-angular';
+import {KeycloakProfile} from 'keycloak-js';
 import moment from 'moment/moment';
 import {
   BehaviorSubject,
@@ -118,11 +119,9 @@ export class DossierDetailTaskListComponent {
       return this.getSortedTasks(uniqueTasks);
     }),
     switchMap((tasks: ProcessInstanceTask[]) =>
-      combineLatest([of(tasks), this.keycloakUserService.getUserSubject()])
+      combineLatest([of(tasks), this.keycloakService.loadUserProfile()])
     ),
-    map(([tasks, userIdentity]) => {
-      return this.sortTasksToUser(tasks, userIdentity);
-    }),
+    map(([tasks, keycloakProfile]) => this.sortTasksToUser(tasks, keycloakProfile)),
     tap(() => this.loadingTasks$.next(false))
   );
 
@@ -131,7 +130,7 @@ export class DossierDetailTaskListComponent {
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
-    private readonly keycloakUserService: KeycloakUserService,
+    private readonly keycloakService: KeycloakService,
     private readonly processService: ProcessService,
     private readonly route: ActivatedRoute,
     private readonly permissionService: PermissionService
@@ -199,7 +198,7 @@ export class DossierDetailTaskListComponent {
 
   private sortTasksToUser(
     tasks: ProcessInstanceTask[],
-    user: UserIdentity
+    user: KeycloakProfile
   ): {myTasks: ProcessInstanceTask[]; otherTasks: ProcessInstanceTask[]} {
     return tasks.reduce(
       (acc, curr) =>
