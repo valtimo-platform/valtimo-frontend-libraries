@@ -65,7 +65,14 @@ export class FormDisplayConfigurationComponent implements OnDestroy {
 
   public ngOnInit(): void {
     this._subscriptions.add(
-      this.stateService.selectedProcessLink$.subscribe(selectedProcessLink => {
+      combineLatest([
+        this.stateService.modalParams$,
+        this.stateService.selectedProcessLink$,
+      ]).subscribe(([modalParams, selectedProcessLink]) => {
+        if (modalParams?.element?.type === 'bpmn:UserTask') {
+          this.isUserTask$.next(true);
+        }
+
         if (selectedProcessLink) {
           if (selectedProcessLink.formDisplayType) this.disableFormSizeInput$.next(false);
           if (selectedProcessLink.activityType.includes('bpmn:UserTask'))

@@ -24,6 +24,7 @@ import {
 } from '../../services';
 import {FormDefinitionListItem, FormFlowProcessLinkUpdateRequestDto} from '../../models';
 import {take} from 'rxjs/operators';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-select-form-flow',
@@ -60,6 +61,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();
 
   constructor(
+    private readonly configService: ConfigService,
     private readonly formFlowService: FormFlowService,
     private readonly stateService: ProcessLinkStateService,
     private readonly processLinkService: ProcessLinkService,
@@ -155,8 +157,12 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
-            ...(this.formDisplayValue ? {formDisplayType: this.formDisplayValue} : {}),
-            ...(this.formSizeValue ? {formSize: this.formSizeValue} : {}),
+            ...(this.configService.featureToggles?.enableTaskPanel && {
+              formDisplayType: this.formDisplayValue,
+            }),
+            ...(this.configService.featureToggles?.enableTaskPanel && {
+              formSize: this.formSizeValue,
+            }),
           })
         )
       )

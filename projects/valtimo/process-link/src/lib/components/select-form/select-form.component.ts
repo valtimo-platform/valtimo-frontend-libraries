@@ -24,6 +24,7 @@ import {
 } from '../../services';
 import {FormDefinitionListItem, FormProcessLinkUpdateRequestDto} from '../../models';
 import {take} from 'rxjs/operators';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-select-form',
@@ -60,6 +61,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();
 
   constructor(
+    private readonly configService: ConfigService,
     private readonly formService: FormService,
     private readonly stateService: ProcessLinkStateService,
     private readonly processLinkService: ProcessLinkService,
@@ -134,8 +136,10 @@ export class SelectFormComponent implements OnInit, OnDestroy {
           id: selectedProcessLink.id,
           formDefinitionId: this.selectedFormDefinition.id,
           viewModelEnabled,
-          ...(this.formDisplayValue ? {formDisplayType: this.formDisplayValue} : {}),
-          ...(this.formSizeValue ? {formSize: this.formSizeValue} : {}),
+          ...(this.configService.featureToggles?.enableTaskPanel && {
+            formDisplayType: this.formDisplayValue,
+          }),
+          ...(this.configService.featureToggles?.enableTaskPanel && {formSize: this.formSizeValue}),
         };
 
         this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -165,8 +169,12 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
             viewModelEnabled,
-            ...(this.formDisplayValue ? {formDisplayType: this.formDisplayValue} : {}),
-            ...(this.formSizeValue ? {formSize: this.formSizeValue} : {}),
+            ...(this.configService.featureToggles?.enableTaskPanel && {
+              formDisplayType: this.formDisplayValue,
+            }),
+            ...(this.configService.featureToggles?.enableTaskPanel && {
+              formSize: this.formSizeValue,
+            }),
           })
         )
       )
