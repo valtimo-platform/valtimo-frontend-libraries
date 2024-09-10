@@ -94,7 +94,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   public selectFormFlowDefinition(formFlowDefinition: FormDefinitionListItem): void {
     this.selectedFormFlowDefinition = formFlowDefinition?.id ? formFlowDefinition : null;
 
-    this.selectedFormFlowDefinition && this.formDisplayValue && this.formSizeValue
+    this.selectedFormFlowDefinition
       ? this.buttonService.enableSaveButton()
       : this.buttonService.disableSaveButton();
   }
@@ -155,8 +155,8 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
-            formDisplayType: this.formDisplayValue,
-            formSize: this.formSizeValue,
+            ...(this.formDisplayValue ? {formDisplayType: this.formDisplayValue} : {}),
+            ...(this.formSizeValue ? {formSize: this.formSizeValue} : {}),
           })
         )
       )

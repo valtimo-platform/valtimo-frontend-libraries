@@ -86,7 +86,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   public selectFormDefinition(formDefinition: FormDefinitionListItem): void {
     this.selectedFormDefinition = formDefinition?.id ? formDefinition : null;
 
-    this.selectedFormDefinition && this.formDisplayValue && this.formSizeValue
+    this.selectedFormDefinition
       ? this.buttonService.enableSaveButton()
       : this.buttonService.disableSaveButton();
   }
@@ -134,8 +134,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
           id: selectedProcessLink.id,
           formDefinitionId: this.selectedFormDefinition.id,
           viewModelEnabled,
-          formDisplayType: this.formDisplayValue,
-          formSize: this.formSizeValue,
+          ...(this.formDisplayValue ? {formDisplayType: this.formDisplayValue} : {}),
+          ...(this.formSizeValue ? {formSize: this.formSizeValue} : {}),
         };
 
         this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -165,8 +165,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
             viewModelEnabled,
-            formDisplayType: this.formDisplayValue,
-            formSize: this.formSizeValue,
+            ...(this.formDisplayValue ? {formDisplayType: this.formDisplayValue} : {}),
+            ...(this.formSizeValue ? {formSize: this.formSizeValue} : {}),
           })
         )
       )
