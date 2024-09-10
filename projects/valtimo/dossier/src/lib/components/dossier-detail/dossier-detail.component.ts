@@ -50,7 +50,6 @@ import {ProcessInstanceTask} from '@valtimo/process';
 import {IntermediateSubmission, Task, TaskService} from '@valtimo/task';
 import {IconService} from 'carbon-components-angular';
 import {KeycloakService} from 'keycloak-angular';
-import {cloneDeep} from 'lodash';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {
@@ -375,7 +374,7 @@ export class DossierDetailComponent
         this.dossierDetailLayoutService.setTaskOpenedInPanel(task as any as ProcessInstanceTask);
       } else {
         // cloneDeep necessary because set does not trigger when reference stays the same
-        this.openTaskInModal$.next(cloneDeep(task));
+        this.openTaskInModal$.next({...task});
       }
     });
   }
@@ -414,10 +413,6 @@ export class DossierDetailComponent
 
   public onFormSubmitEvent(): void {
     this.dossierDetailLayoutService.setTaskOpenedInPanel(null);
-  }
-
-  public onSplitDragEnd(event: any): void {
-    console.log(event);
   }
 
   protected onConfirmRedirect(): void {

@@ -3,6 +3,5 @@
   "dest": "../../../dist/valtimo/dossier-management",
   "lib": {
     "entryFile": "src/public-api.ts"
-  },
-  "allowedNonPeerDependencies": ["angular-split"]
+  }
 }
