@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-type ModalData = any;
+import {FormSize} from '../models';
+import {CarbonModalSize} from '@valtimo/components';
 
-type ModalCloseEventType = 'close' | 'closeAndRefresh';
+const formSizeToCarbonModalSizeMap: Record<FormSize, CarbonModalSize> = {
+  extraSmall: 'xs',
+  small: 'sm',
+  medium: 'md',
+  large: 'lg',
+};
 
-type CarbonModalSize = 'xs' | 'sm' | 'md' | 'lg';
-
-export {ModalData, ModalCloseEventType, CarbonModalSize};
+export {formSizeToCarbonModalSizeMap};

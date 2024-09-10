@@ -66,7 +66,11 @@ import {
   take,
   tap,
 } from 'rxjs';
-import {DOSSIER_DETAIL_GUTTER_SIZE} from '../../constants';
+import {
+  DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE,
+  DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE,
+  DOSSIER_DETAIL_GUTTER_SIZE,
+} from '../../constants';
 import {TabImpl, TabLoaderImpl} from '../../models';
 import {
   CAN_ASSIGN_CASE_PERMISSION,
@@ -361,9 +365,8 @@ export class DossierDetailComponent
 
   public onTaskClickEvent(task: Task): void {
     this.taskService.getTaskProcessLink(task.id).subscribe(result => {
-      // to do: get default from environment setting
-      const displayType = result.properties.formDisplayType || 'modal';
-      const size = result.properties.formSize || 'medium';
+      const displayType = result.properties.formDisplayType || DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE;
+      const size = result.properties.formSize || DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE;
 
       this.dossierDetailLayoutService.setFormDisplaySize(size);
       this.dossierDetailLayoutService.setFormDisplayType(displayType);

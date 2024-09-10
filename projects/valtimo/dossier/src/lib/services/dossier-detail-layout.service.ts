@@ -1,8 +1,10 @@
-import {Injectable, Renderer2} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ProcessInstanceTask} from '@valtimo/process';
 import {FormDisplayType, FormSize} from '@valtimo/process-link';
 import {BehaviorSubject, combineLatest, filter, map, Observable, startWith} from 'rxjs';
 import {
+  DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE,
+  DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE,
   DOSSIER_DETAIL_GUTTER_SIZE,
   DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH,
   DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS,
@@ -16,12 +18,13 @@ export class DossierDetailLayoutService {
   private readonly _tabContentContainerWidth$ = new BehaviorSubject<number | null>(null);
   private readonly _showTaskList$ = this.dossierTabService.showTaskList$;
   private readonly _taskOpenedInPanel$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
-  private readonly _formDisplayType$ = new BehaviorSubject<FormDisplayType | null>(null);
-  private readonly _formDisplaySize$ = new BehaviorSubject<FormSize | null>(null);
+  private readonly _formDisplayType$ = new BehaviorSubject<FormDisplayType>(
+    DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE
+  );
+  private readonly _formDisplaySize$ = new BehaviorSubject<FormSize>(
+    DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE
+  );
 
-  constructor(private readonly dossierTabService: DossierTabService) {}
-
-  // Observables
   public get tabContentContainerWidth$(): Observable<number> {
     return this._tabContentContainerWidth$.pipe(filter(width => typeof width === 'number'));
   }
@@ -30,7 +33,12 @@ export class DossierDetailLayoutService {
     return this._taskOpenedInPanel$.asObservable();
   }
 
-  // Refactored observable using helper methods
+  public get formDisplaySize$(): Observable<FormSize> {
+    return this._formDisplaySize$.asObservable();
+  }
+
+  constructor(private readonly dossierTabService: DossierTabService) {}
+
   public readonly dossierDetailLayout$: Observable<DossierDetailLayout | any> = combineLatest([
     this.tabContentContainerWidth$,
     this._showTaskList$,
@@ -64,10 +72,6 @@ export class DossierDetailLayoutService {
     startWith({})
   );
 
-  // Renderer
-  private readonly _renderer!: Renderer2;
-
-  // Methods to set values
   public setTabContentContainerWidth(width: number): void {
     this._tabContentContainerWidth$.next(width);
   }
@@ -84,7 +88,6 @@ export class DossierDetailLayoutService {
     this._formDisplaySize$.next(size);
   }
 
-  // Helper methods to encapsulate layout logic
   private getInitialLayout(): DossierDetailLayout {
     return {
       showRightPanel: false,

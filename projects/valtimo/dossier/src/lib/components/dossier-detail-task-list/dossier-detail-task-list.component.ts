@@ -39,12 +39,13 @@ import {
   TaskModule,
 } from '@valtimo/task';
 import {ProcessInstanceTask, ProcessService} from '@valtimo/process';
-import {ConfigService, UserIdentity} from '@valtimo/config';
+import {UserIdentity} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
 import {PermissionService} from '@valtimo/access-control';
 import {UserProviderService} from '@valtimo/security';
 import moment from 'moment';
+import {DossierDetailLayoutService} from '../../services';
 
 moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
@@ -129,18 +130,16 @@ export class DossierDetailTaskListComponent {
     tap(() => this.loadingTasks$.next(false))
   );
 
-  private taskPanelEnabled = false;
+  public readonly formSize$ = this.dossierDetailLayoutService.formDisplaySize$;
 
   constructor(
-    private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
     private readonly processService: ProcessService,
     private readonly route: ActivatedRoute,
     private readonly permissionService: PermissionService,
-    private readonly userProviderService: UserProviderService
-  ) {
-    this.taskPanelEnabled = !!this.configService.featureToggles?.enableTaskPanel;
-  }
+    private readonly userProviderService: UserProviderService,
+    private readonly dossierDetailLayoutService: DossierDetailLayoutService
+  ) {}
 
   public rowTaskClick(task: ProcessInstanceTask): void {
     if (task.isLocked) return;
