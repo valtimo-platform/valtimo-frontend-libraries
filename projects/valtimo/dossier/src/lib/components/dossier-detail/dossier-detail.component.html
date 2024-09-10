@@ -85,7 +85,7 @@
             <div class="task-panel">
               @if (!tabContentObs.taskOpenedInPanel) {
                 <valtimo-dossier-detail-task-list
-                  [openInTaskModal]="openTaskInModal$ | async"
+                  [openTaskInModal]="openTaskInModal$ | async"
                   (taskClickEvent)="onTaskClickEvent($event)"
                 ></valtimo-dossier-detail-task-list>
               }

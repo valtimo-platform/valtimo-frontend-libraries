@@ -17,7 +17,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
 import {InterceptorSkip} from '@valtimo/security';
-import {BehaviorSubject, Observable, filter} from 'rxjs';
+import {BehaviorSubject, filter, Observable} from 'rxjs';
 import {IntermediateSaveRequest, IntermediateSubmission} from '../models';
 
 @Injectable({providedIn: 'root'})

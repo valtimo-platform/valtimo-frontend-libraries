@@ -71,7 +71,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
 export class DossierDetailTaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetailModal: TaskDetailModalComponent;
 
-  @Input() public set openInTaskModal(value: Task) {
+  @Input() public set openTaskInModal(value: Task) {
     if (value) this._taskDetailModal.openTaskDetails(value);
   }
 

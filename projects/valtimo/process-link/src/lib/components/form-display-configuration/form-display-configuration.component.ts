@@ -36,7 +36,7 @@ export class FormDisplayConfigurationComponent implements OnInit, OnDestroy {
       this._DISPLAY_TYPE_OPTIONS.map((key: string) => ({
         content: this.translateService.instant(`processLinkSteps.displayType.options.${key}`),
         key: key,
-        selected: this.formDisplayValue$.getValue() === key,
+        selected: formDisplayValue === key,
       }))
     )
   );
@@ -49,7 +49,7 @@ export class FormDisplayConfigurationComponent implements OnInit, OnDestroy {
       this._FORM_SIZE_OPTIONS.map((key: string) => ({
         content: this.translateService.instant(`processLinkSteps.formSize.options.${key}`),
         key: key,
-        selected: this.formSizeValue$.getValue() === key,
+        selected: formSizeValue === key,
       }))
     )
   );
@@ -70,8 +70,8 @@ export class FormDisplayConfigurationComponent implements OnInit, OnDestroy {
           if (selectedProcessLink.formDisplayType) this.disableFormSizeInput$.next(false);
           if (selectedProcessLink.activityType.includes('bpmn:UserTask'))
             this.isUserTask$.next(true);
-          this.formDisplayValue$.next(selectedProcessLink.formDisplayType);
-          this.formSizeValue$.next(selectedProcessLink.formSize);
+          this.formDisplayValue$.next(selectedProcessLink.formDisplayType ?? null);
+          this.formSizeValue$.next(selectedProcessLink.formSize ?? null);
         }
       })
     );

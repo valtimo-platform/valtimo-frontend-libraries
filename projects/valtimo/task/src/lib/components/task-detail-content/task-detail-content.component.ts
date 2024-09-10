@@ -269,21 +269,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  private formatIntermediateSubmission(
-    intermediateSubmission: IntermediateSubmission
-  ): IntermediateSubmission {
-    intermediateSubmission.createdOn = moment(intermediateSubmission.createdOn).format(
-      'DD MMM YYYY HH:mm'
-    );
-    if (intermediateSubmission.editedOn) {
-      intermediateSubmission.editedOn = moment(new Date(intermediateSubmission.editedOn)).format(
-        'DD MMM YYYY HH:mm'
-      );
-    }
-
-    return intermediateSubmission;
-  }
-
   private openPermissionSubscription(): void {
     this._subscriptions.add(
       this.task$.subscribe(task => {

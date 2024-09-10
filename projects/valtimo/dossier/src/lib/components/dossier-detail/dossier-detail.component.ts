@@ -241,7 +241,7 @@ export class DossierDetailComponent
 
   public readonly dossierDetailLayout$ = this.dossierDetailLayoutService.dossierDetailLayout$;
 
-  public readonly openTaskInModal$ = new Subject<Task>();
+  public readonly openTaskInModal$ = new Subject<Task | null>();
 
   public readonly isDarkMode$ = this.cdsThemeService.currentTheme$.pipe(
     map(currentTheme => currentTheme === CurrentCarbonTheme.G90)

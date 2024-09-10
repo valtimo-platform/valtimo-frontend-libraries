@@ -25,15 +25,16 @@ import {
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
+import {CarbonModalSize} from '@valtimo/components';
+import {FormSize, formSizeToCarbonModalSizeMap} from '@valtimo/process-link';
 import {Modal} from 'carbon-components-angular';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {IntermediateSubmission, Task} from '../../models';
+import {TaskIntermediateSaveService} from '../../services';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
 import {TaskDetailIntermediateSaveComponent} from '../task-detail-intermediate-save/task-detail-intermediate-save.component';
-import {FormSize, formSizeToCarbonModalSizeMap} from '@valtimo/process-link';
-import {CarbonModalSize} from '@valtimo/components';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -73,7 +74,8 @@ export class TaskDetailModalComponent implements OnInit {
     private readonly router: Router,
     private readonly translateService: TranslateService,
     private readonly permissionService: PermissionService,
-    private readonly logger: NGXLogger
+    private readonly logger: NGXLogger,
+    private readonly taskIntermediateSaveService: TaskIntermediateSaveService
   ) {}
 
   public ngOnInit(): void {
@@ -131,6 +133,7 @@ export class TaskDetailModalComponent implements OnInit {
   public closeModal(): void {
     this._modal.open = false;
     this.currentIntermediateSave$.next(null);
+    this.taskIntermediateSaveService.setSubmission({data: {}});
   }
 
   private openModal(): void {

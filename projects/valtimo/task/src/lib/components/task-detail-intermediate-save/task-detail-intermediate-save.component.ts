@@ -57,9 +57,6 @@ export class TaskDetailIntermediateSaveComponent {
       title: value.name,
       subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${value.created}`,
     });
-    if (this.formFlowInstanceId$.value === undefined) {
-      this.getCurrentProgress(value);
-    }
   }
   @Output() public readonly currentIntermediateSaveEvent =
     new EventEmitter<IntermediateSubmission | null>();
