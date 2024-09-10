@@ -59,6 +59,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     );
 
   private _subscriptions = new Subscription();
+  private readonly taskPanelToggle = this.configService.featureToggles?.enableTaskPanel;
 
   constructor(
     private readonly configService: ConfigService,
@@ -136,10 +137,10 @@ export class SelectFormComponent implements OnInit, OnDestroy {
           id: selectedProcessLink.id,
           formDefinitionId: this.selectedFormDefinition.id,
           viewModelEnabled,
-          ...(this.configService.featureToggles?.enableTaskPanel && {
+          ...(this.taskPanelToggle && {
             formDisplayType: this.formDisplayValue,
           }),
-          ...(this.configService.featureToggles?.enableTaskPanel && {formSize: this.formSizeValue}),
+          ...(this.taskPanelToggle && {formSize: this.formSizeValue}),
         };
 
         this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -169,10 +170,10 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
             viewModelEnabled,
-            ...(this.configService.featureToggles?.enableTaskPanel && {
+            ...(this.taskPanelToggle && {
               formDisplayType: this.formDisplayValue,
             }),
-            ...(this.configService.featureToggles?.enableTaskPanel && {
+            ...(this.taskPanelToggle && {
               formSize: this.formSizeValue,
             }),
           })
