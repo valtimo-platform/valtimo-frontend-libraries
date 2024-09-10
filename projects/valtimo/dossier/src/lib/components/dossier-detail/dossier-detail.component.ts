@@ -31,6 +31,8 @@ import {ChevronDown16} from '@carbon/icons';
 import {PermissionService} from '@valtimo/access-control';
 import {
   BreadcrumbService,
+  CdsThemeService,
+  CurrentCarbonTheme,
   PageHeaderService,
   PageTitleService,
   PendingChangesComponent,
@@ -38,11 +40,11 @@ import {
 import {ConfigService} from '@valtimo/config';
 import {
   CaseStatusService,
+  Document as ValtimoDocument,
   DocumentService,
   InternalCaseStatus,
   InternalCaseStatusUtils,
   ProcessDocumentDefinition,
-  Document as ValtimoDocument,
 } from '@valtimo/document';
 import {ProcessInstanceTask} from '@valtimo/process';
 import {IntermediateSubmission, Task, TaskService} from '@valtimo/task';
@@ -238,13 +240,15 @@ export class DossierDetailComponent
 
   public readonly openTaskInModal$ = new Subject<Task>();
 
+  public readonly isDarkMode$ = this.cdsThemeService.currentTheme$.pipe(
+    map(currentTheme => currentTheme === CurrentCarbonTheme.G90)
+  );
+
   private _snapshot: ParamMap;
   private _initialTabName: string;
   private _activeChange = false;
-  private _initialTabName: string;
   private _oldTabName: string;
   private _pendingTab: TabImpl;
-  private _oldTabName: string;
   private _observer!: ResizeObserver;
   private _tabsInit = false;
 
@@ -267,6 +271,7 @@ export class DossierDetailComponent
     private readonly dossierDetailLayoutService: DossierDetailLayoutService,
     private readonly renderer: Renderer2,
     private readonly taskService: TaskService,
+    private readonly cdsThemeService: CdsThemeService,
     @Inject(DOCUMENT) private readonly htmlDocument: Document
   ) {
     super();
@@ -399,7 +404,7 @@ export class DossierDetailComponent
       return;
     }
 
-    if (!tab.showTasks) this.taskToOpen$.next(null);
+    if (!tab.showTasks) this.openTaskInModal$.next(null);
     this.tabLoader.load(tab);
     this.setDocumentStyle();
   }
