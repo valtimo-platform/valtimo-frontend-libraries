@@ -140,6 +140,11 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
       const updateProcessLinkRequest: FormFlowProcessLinkUpdateRequestDto = {
         id: selectedProcessLink.id,
         formFlowDefinitionId: this.selectedFormFlowDefinition.id,
+        ...(this.taskPanelToggle &&
+          this.isUserTask$.getValue() && {
+            formDisplayType: this.formDisplayValue,
+          }),
+        ...(this.taskPanelToggle && this.isUserTask$.getValue() && {formSize: this.formSizeValue}),
       };
 
       this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -169,9 +174,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
                 formDisplayType: this.formDisplayValue,
               }),
             ...(this.taskPanelToggle &&
-              this.isUserTask$.getValue() && {
-                formSize: this.formSizeValue,
-              }),
+              this.isUserTask$.getValue() && {formSize: this.formSizeValue}),
           })
         )
       )
