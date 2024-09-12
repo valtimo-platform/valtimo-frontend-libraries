@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {NgModule} from '@angular/core';
-import {LoggingListComponent} from './lib/components/logging-list/logging-list.component';
-import {LoggingRoutingModule} from './logging-routing.module';
 import {CommonModule} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {NgModule} from '@angular/core';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '@valtimo/config';
-import {HttpClient} from '@angular/common/http';
+import {LoggingListComponent} from './lib/components/logging-list/logging-list.component';
+import {LoggingRoutingModule} from './logging-routing.module';
 
 @NgModule({
-  declarations: [LoggingListComponent],
   imports: [
     CommonModule,
     LoggingRoutingModule,
@@ -34,6 +32,7 @@ import {HttpClient} from '@angular/common/http';
         deps: [HttpClient],
       },
     }),
+    LoggingListComponent,
   ],
 })
 export class LoggingModule {}

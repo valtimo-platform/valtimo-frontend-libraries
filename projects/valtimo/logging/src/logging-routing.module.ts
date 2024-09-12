@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {ROLE_ADMIN} from '@valtimo/config';
 import {AuthGuardService} from '@valtimo/security';
 import {LoggingListComponent} from './lib/components/logging-list/logging-list.component';
-import {ROLE_ADMIN} from '@valtimo/config';
 
 const routes: Routes = [
   {

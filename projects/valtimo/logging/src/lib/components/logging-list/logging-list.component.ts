@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
+import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   templateUrl: './logging-list.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, TranslateModule],
 })
 export class LoggingListComponent {}
