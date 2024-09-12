@@ -270,7 +270,8 @@ export class TaskDetailModalComponent implements OnInit, OnDestroy {
               combineLatest([
                 this.processLinkService.getVariables(),
                 this.task$
-              ]).subscribe(([variables, task]) => {
+              ]).pipe(take(1))
+                .subscribe(([variables, task]) => {
                 let url = this.urlResolverService.resolveUrlVariables(res.properties.url, variables.variables);
                 window.open(url, '_blank').focus();
                 this.processLinkService.submitURLProcessLink(

@@ -34,25 +34,33 @@ import {
 import {URLProcessLinkUpdateRequestDto} from '../../models';
 import {UrlValidatorService} from '../../services/url-validator.service';
 import {UrlResolverService} from '../../services/url-resolver.service';
+import {URLVariables} from '../../models/process-link-url.model';
+import {AlertService} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-select-url',
   templateUrl: './select-url.component.html',
 })
 export class SelectUrlComponent implements OnInit, OnDestroy {
-  public readonly saving$ = this.stateService.saving$;
-  private readonly _variables$ = new BehaviorSubject<Map<string, string>>(null);
+
+  public readonly urlForm: FormGroup = new FormGroup({
+    url: new FormControl('', Validators.required)
+  });
 
   private _subscriptions = new Subscription();
+  private variables: Map<string, string>
 
-  public urlForm: FormGroup;
+  public get url(): AbstractControl {
+    return this.urlForm.get('url');
+  }
 
   constructor(
     private readonly stateService: ProcessLinkStateService,
     private readonly buttonService: ProcessLinkButtonService,
     private readonly processLinkService: ProcessLinkService,
     private readonly urlValidatorService: UrlValidatorService,
-    private readonly urlResolverService: UrlResolverService
+    private readonly urlResolverService: UrlResolverService,
+    private readonly alertService: AlertService
   ) {
   }
 
@@ -60,9 +68,6 @@ export class SelectUrlComponent implements OnInit, OnDestroy {
     this.openBackButtonSubscription();
     this.openSaveButtonSubscription();
 
-    this.urlForm = new FormGroup({
-      url: new FormControl('', Validators.required, this.urlValidatorService.urlValidator(this._variables$))
-    });
     this._subscriptions.add(this.urlForm.statusChanges
       .pipe(distinctUntilChanged())
       .subscribe(status => {
@@ -77,7 +82,10 @@ export class SelectUrlComponent implements OnInit, OnDestroy {
       .subscribe(url => this.url.setValue(url));
 
     this.processLinkService.getVariables()
-      .subscribe(variables => this._variables$.next(variables.variables));
+      .subscribe(urlVariables => {
+        this.url.addValidators(this.urlValidatorService.urlValidator(urlVariables.variables));
+        this.variables = urlVariables.variables;
+      })
   }
 
   public ngOnDestroy(): void {
@@ -150,18 +158,14 @@ export class SelectUrlComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         complete: () => this.stateService.closeModal(),
-        error: (e) => this.stateService.stopSaving()
+        error: () => {
+          this.alertService.error('Failed to save process link');
+          this.stateService.stopSaving()
+        }
       });
   }
 
-  public resolveUrlVariables(url: string): Observable<string> {
-    return this._variables$.pipe(
-      take(1),
-      map(variables => this.urlResolverService.resolveUrlVariables(url, variables))
-    );
-  }
-
-  public get url(): AbstractControl {
-    return this.urlForm.get('url');
+  public resolveUrlVariables(url: string): string {
+    return this.urlResolverService.resolveUrlVariables(url, this.variables);
   }
 }

@@ -19,7 +19,7 @@
           'processLinkUrlInvalid' | translate : { URL: (url.errors?.invalidUrl ?? '') }
         "
              [invalid]="url.invalid && url.touched"
-             [helperText]="url.invalid ? '' : resolveUrlVariables(url.value) | async">Url
+             [helperText]="url.invalid ? '' : resolveUrlVariables(url.value)">Url
     <input
             cdsText
             type="text"

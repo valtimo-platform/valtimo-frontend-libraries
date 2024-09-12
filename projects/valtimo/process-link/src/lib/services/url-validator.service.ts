@@ -1,6 +1,4 @@
-import {map, Observable} from 'rxjs';
-import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
-import {take} from 'rxjs/operators';
+import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {Injectable} from '@angular/core';
 import {UrlResolverService} from './url-resolver.service';
 
@@ -11,20 +9,15 @@ export class UrlValidatorService {
     private readonly urlResolverService: UrlResolverService) {
   }
 
-  public urlValidator(variables: Observable<Map<string, string>>): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return variables.pipe(
-        take(1),
-        map(variables => {
-          const url = this.urlResolverService.resolveUrlVariables(control.value, variables);
-          try {
-            new URL(url);
-            return null;
-          } catch (_) {
-            return {invalidUrl: url};
-          }
-        })
-      );
+  public urlValidator(variables: Map<string, string>): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const url = this.urlResolverService.resolveUrlVariables(control.value, variables);
+      try {
+        new URL(url);
+        return null;
+      } catch (_) {
+        return {invalidUrl: url};
+      }
     };
   }
 
