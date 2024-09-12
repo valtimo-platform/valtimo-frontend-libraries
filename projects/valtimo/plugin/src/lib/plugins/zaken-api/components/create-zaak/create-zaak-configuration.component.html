@@ -94,6 +94,7 @@
                       [margin]="true"
                       [defaultValue]="obs.prefill?.omschrijving"
                       [required]="true"
+                      (valueChange)="onPropertyChanged('description', $event)"
               />
               <button
                       class="btn btn-danger btn-space"
@@ -105,11 +106,15 @@
           </ng-container>
           <ng-container *ngSwitchCase="'plannedEndDate'">
             <div class="property-input">
-              <cds-date-picker-input
+              <v-input
                       name="plannedEndDate"
-                      [label]="'plannedEndDate' | pluginTranslate: obs.pluginId | async"
-                      size="lg"
-              ></cds-date-picker-input>
+                      [title]="'plannedEndDate' | pluginTranslate: obs.pluginId | async"
+                      [margin]="true"
+                      [defaultValue]="obs.prefill?.plannedEndDate"
+                      [required]="true"
+                      [tooltip]="'dateformatTooltip' | pluginTranslate: obs.pluginId | async"
+                      (valueChange)="onPropertyChanged('plannedEndDate', $event)"
+              ></v-input>
               <button
                       class="btn btn-danger btn-space"
                       (click)="removeCaseProperty('plannedEndDate')"
@@ -120,6 +125,15 @@
           </ng-container>
           <ng-container *ngSwitchCase="'finalDeliveryDate'">
             <div class="property-input">
+              <v-input
+                      name="finalDeliveryDate"
+                      [title]="'finalDeliveryDate' | pluginTranslate: obs.pluginId | async"
+                      [margin]="true"
+                      [defaultValue]="obs.prefill?.finalDeliveryDate"
+                      [required]="true"
+                      [tooltip]="'dateformatTooltip' | pluginTranslate: obs.pluginId | async"
+                      (valueChange)="onPropertyChanged('finalDeliveryDate', $event)"
+              ></v-input>
               <button
                       class="btn btn-danger btn-space"
                       (click)="removeCaseProperty('finalDeliveryDate')"

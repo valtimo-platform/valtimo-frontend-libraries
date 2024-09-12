@@ -206,6 +206,15 @@ export class CreateZaakConfigurationComponent
   }
 
   removeCaseProperty(property: Properties) {
-    this.propertyList.splice(this.propertyList.indexOf(property, 1))
+    this.propertyList.splice(this.propertyList.indexOf(property), 1)
+  }
+
+  onPropertyChanged(property: Properties, value: any) {
+    this.formValue$
+      .pipe(take(1))
+      .subscribe(formValue => {
+        formValue[property] = value
+        this.formValueChange(formValue)
+      })
   }
 }
