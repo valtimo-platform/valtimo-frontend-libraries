@@ -17,7 +17,7 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
-import {AlertService, PageTitleService} from '@valtimo/components';
+import {AlertService, ModalService, PageTitleService} from '@valtimo/components';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
 import {LayoutService} from '@valtimo/layout';
@@ -27,9 +27,7 @@ import {BpmnPropertiesPanelModule, BpmnPropertiesProviderModule, CamundaPlatform
 import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
 import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
 import magicPropertiesProviderModule from './customizer';
-import magicModdleDescriptor from './customizer/magic.json';
-import {ModalService} from '@valtimo/components';
-import {GetProcessLinkResponse, ProcessLink, ProcessLinkService, ProcessLinkStateService,} from '@valtimo/process-link';
+import {ProcessLinkService, ProcessLinkStateService,} from '@valtimo/process-link';
 import {ProcessManagementService} from '../process-management.service';
 
 @Component({
@@ -92,8 +90,7 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
           parent: '#properties',
         },
         moddleExtensions: {
-          camunda: CamundaBpmnModdle,
-          magic: magicModdleDescriptor
+          camunda: CamundaBpmnModdle
         },
         elementTemplates,
       });

@@ -1,6 +1,6 @@
 import {PropertyPanelCustomizer} from './property-panel-customizer';
 
 export default {
-  __init__: [ 'magicPropertiesProvider' ],
-  magicPropertiesProvider: [ 'type', PropertyPanelCustomizer ]
+  __init__: [ 'valtimoPropertiesProvider' ],
+  valtimoPropertiesProvider: [ 'type', PropertyPanelCustomizer ]
 };
