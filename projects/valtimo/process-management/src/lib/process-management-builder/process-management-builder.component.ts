@@ -78,6 +78,9 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
       this.bpmnModeler = new Modeler({
         container: '#canvas',
         height: '90vh',
+        valtimoRenderer: {
+          test: 'test'
+        },
         additionalModules: [
           BpmnPropertiesPanelModule,
           BpmnPropertiesProviderModule,
