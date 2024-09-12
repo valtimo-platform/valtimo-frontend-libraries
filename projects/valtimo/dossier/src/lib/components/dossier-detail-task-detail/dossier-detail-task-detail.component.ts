@@ -64,6 +64,10 @@ export class DossierDetailsTaskDetailComponent {
       subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${value?.created}`,
     });
   }
+  public readonly compactModeValue = signal<boolean>(false);
+  @Input() public set compactMode(value: boolean) {
+    this.compactModeValue.set(value);
+  }
   @Output() public readonly closeEvent = new EventEmitter();
   @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
   @Output() public readonly activeChange = new EventEmitter<boolean>();

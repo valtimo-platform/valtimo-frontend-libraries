@@ -92,6 +92,7 @@
 
               @if (tabContentObs.taskOpenedInPanel) {
                 <valtimo-dossier-detail-task-detail
+                  [compactMode]="compactMode$ | async"
                   [task]="tabContentObs.taskOpenedInPanel"
                   (activeChange)="onActiveChangeEvent($event)"
                   (closeEvent)="onTaskDetailsClose()"
