@@ -102,7 +102,6 @@ export class DossierDetailsTaskDetailComponent {
 
   public onCurrentIntermediateSaveEvent(value: IntermediateSubmission | null): void {
     this.intermediateSaveValue$.next(value);
-    this.onActiveChangeEvent(false);
   }
 
   public onActiveChangeEvent(activeChange: boolean): void {
