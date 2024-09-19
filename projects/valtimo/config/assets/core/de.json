@@ -263,9 +263,12 @@
   "summary": {
     "userTasksDoneState": "Alle Aufgaben sind erledigt",
     "taskLocked": "Kein Zugriff zu dieser Aufgabe!",
-    "userTasks": "Aufgaben",
+    "mytasks": "Aufgaben",
+    "otherTasks": "Andere Aufgaben",
     "taskOpen": "Öffnen",
-    "taskCreated": "Erstellt"
+    "taskCreated": "Erstellt",
+    "noResultsMyTasks": "Diesem Benutzer sind keine Aufgaben zugewiesen.",
+    "noResultsOtherTasks": "Keine Aufgaben anderen Benutzern zugewiesen."
   },
   "progress": {
     "noProcessDocumentInstances": "Es wurde noch kein Prozess gestartet",
@@ -1742,6 +1745,25 @@
     "chooseProcessLinkType": "Linktyp wählen",
     "empty": "........",
     "selectForm": "Wählen Sie Ihr Formular",
+    "selectFormPlaceholder": "Wählen Sie ein Formular aus",
+    "displayType": {
+      "label": "Wählen Sie den Anzeigetyp des Formulars aus",
+      "placeholder": "Wählen Sie aus, wie das Formular angezeigt werden soll",
+      "options": {
+        "modal": "Modal",
+        "panel": "Panel"
+      }
+    },
+    "formSize": {
+      "label": "Wählen Sie die Modalgröße aus",
+      "placeholder": "Wählen Sie eine Modalgröße aus",
+      "options": {
+        "extraSmall": "Extra klein",
+        "small": "Klein",
+        "medium": "Mittel",
+        "large": "Groß"
+      }
+    },
     "selectFormFlow": "Wählen Sie Ihr FormFlow",
     "choosePluginConfiguration": "Plugin-Konfiguration wählen",
     "choosePluginAction": "Wählen Sie Ihre Aktion",

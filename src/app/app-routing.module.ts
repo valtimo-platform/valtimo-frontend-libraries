@@ -15,7 +15,7 @@
  */
 
 import {NgModule} from '@angular/core';
-import {Router, RouterModule, Routes} from '@angular/router';
+import {Router, RouterModule, Routes, provideRouter, withNavigationErrorHandler} from '@angular/router';
 import {FormioComponent} from './form-io/form-io.component';
 import {AuthGuardService} from '@valtimo/security';
 import {UploadShowcaseComponent} from './upload-showcase/upload-showcase.component';

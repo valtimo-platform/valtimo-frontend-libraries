@@ -29,6 +29,8 @@ interface ProcessLink {
   formFlowDefinitionId?: string;
   viewModelEnabled?: boolean;
   url?: string;
+  formDisplayType?: FormDisplayType;
+  formSize?: FormSize;
 }
 
 type GetProcessLinkResponse = Array<ProcessLink>;
@@ -59,6 +61,8 @@ interface FormProcessLinkCreateRequestDto {
   processLinkType: string;
   formDefinitionId: string;
   viewModelEnabled: boolean;
+  formDisplayType?: string;
+  formSize?: string;
 }
 
 interface FormFlowProcessLinkCreateRequestDto {
@@ -91,13 +95,21 @@ interface PluginProcessLinkUpdateDto {
 interface FormFlowProcessLinkUpdateRequestDto {
   id: string;
   formFlowDefinitionId: string;
+  formDisplayType?: string;
+  formSize?: string;
 }
 
 interface FormProcessLinkUpdateRequestDto {
   id: string;
   formDefinitionId: string;
   viewModelEnabled: boolean;
+  formDisplayType?: string;
+  formSize?: string;
 }
+
+type FormDisplayType = 'modal' | 'panel';
+
+type FormSize = 'extraSmall' | 'small' | 'medium' | 'large';
 
 interface URLProcessLinkCreateDto {
   url: string;
@@ -124,5 +136,7 @@ export {
   FormFlowProcessLinkUpdateRequestDto,
   FormProcessLinkUpdateRequestDto,
   URLProcessLinkCreateDto,
-  URLProcessLinkUpdateRequestDto
+  URLProcessLinkUpdateRequestDto,
+  FormDisplayType,
+  FormSize,
 };

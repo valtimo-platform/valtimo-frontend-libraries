@@ -263,9 +263,12 @@
   "summary": {
     "userTasksDoneState": "All tasks have been completed",
     "taskLocked": "You don't have access to this task",
-    "userTasks": "User tasks",
+    "myTasks": "Tasks",
+    "otherTasks": "Other tasks",
     "taskOpen": "Open",
-    "taskCreated": "Created"
+    "taskCreated": "Created",
+    "noResultsMyTasks": "No tasks assigned to this user.",
+    "noResultsOtherTasks": "No tasks assigned to other users."
   },
   "progress": {
     "noProcessDocumentInstances": "There is no process started yet",
@@ -1747,6 +1750,25 @@
     "chooseProcessLinkType": "Choose link type",
     "empty": "........",
     "selectForm": "Select your form",
+    "selectFormPlaceholder": "Select a form",
+    "displayType": {
+      "label": "Select form display type",
+      "placeholder": "Select how to display the form",
+      "options": {
+        "modal": "Modal",
+        "panel": "Panel"
+      }
+    },
+    "formSize": {
+      "label": "Select modal size",
+      "placeholder": "Select a modal size",
+      "options": {
+        "extraSmall": "Extra small",
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      }
+    },
     "selectFormFlow": "Select your FormFlow",
     "choosePluginConfiguration": "Select plugin configuration",
     "choosePluginAction": "Choose your action",

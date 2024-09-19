@@ -27,6 +27,7 @@ import {SecurityModule} from '@valtimo/security';
 import {
   BpmnJsDiagramModule,
   CardModule,
+  enableCustomFormioComponents,
   FormIoModule,
   MenuModule,
   registerFormioCurrentUserComponent,
@@ -133,6 +134,7 @@ import {
   registerDocumentenApiFormioUploadComponent,
   ZgwModule,
 } from '@valtimo/zgw';
+import {LoggingModule} from '@valtimo/logging';
 import {FormViewModelModule} from '@valtimo/form-view-model';
 
 export function tabsFactory() {
@@ -234,6 +236,7 @@ export function tabsFactory() {
     TaskManagementModule,
     ZgwModule,
     FormViewModelModule,
+    LoggingModule,
   ],
   providers: [
     FormioComponent,
@@ -283,6 +286,7 @@ export function tabsFactory() {
 })
 export class AppModule {
   constructor(injector: Injector) {
+    enableCustomFormioComponents(injector);
     registerFormioCurrentUserComponent(injector);
     registerFormioUploadComponent(injector);
     registerFormioFileSelectorComponent(injector);

@@ -62,6 +62,7 @@ import {FormFlowConfigurationContainerComponent} from './components/form-flow-co
 import {SelectUrlComponent} from './components/select-url/select-url.component';
 import {UrlValidatorService} from './services/url-validator.service';
 import {UrlResolverService} from './services/url-resolver.service';
+import {FormDisplayConfigurationComponent} from './components/form-display-configuration/form-display-configuration.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import {UrlResolverService} from './services/url-resolver.service';
     SelectFormFlowComponent,
     FormFlowConfigurationContainerComponent,
     SelectUrlComponent,
+    FormDisplayConfigurationComponent,
   ],
   imports: [
     CommonModule,
