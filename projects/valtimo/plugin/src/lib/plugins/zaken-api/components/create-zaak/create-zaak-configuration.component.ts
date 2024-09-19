@@ -89,6 +89,7 @@ export class CreateZaakConfigurationComponent
 
   private readonly formValue$ = new BehaviorSubject<CreateZaakConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
+  private readonly properties = new Map<Properties, string>
 
   readonly loading$ = new BehaviorSubject<boolean>(true);
 
@@ -161,6 +162,8 @@ export class CreateZaakConfigurationComponent
   }
 
   formValueChange(formValue: CreateZaakConfig): void {
+    this.properties.forEach((value, key) => formValue[key] = value)
+
     const inputTypeZaakTypeToggle = formValue.inputTypeZaakTypeToggle;
     this.formValue$.next(formValue);
     this.handleValid(formValue);
@@ -220,6 +223,7 @@ export class CreateZaakConfigurationComponent
 
   public removeCaseProperty(property: Properties) {
     this.propertyList.splice(this.propertyList.indexOf(property), 1)
+    this.properties.delete(property)
   }
 
   public hasPropertyBeenAdded(property: Properties) : boolean {
@@ -227,12 +231,12 @@ export class CreateZaakConfigurationComponent
   }
 
   public onPropertyChanged(property: Properties, value: any) {
+    this.properties.set(property, value)
     this.formValue$
       .pipe(
         filter(formValue => formValue != null),
         take(1)
       ).subscribe(formValue => {
-        formValue[property] = value
         this.formValueChange(formValue)
       })
   }
