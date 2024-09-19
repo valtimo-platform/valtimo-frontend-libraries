@@ -89,10 +89,10 @@
           <ng-container *ngSwitchCase="'description'">
             <div class="property-input">
               <v-input
-                      name="omschrijving"
-                      [title]="'omschrijving' | pluginTranslate: obs.pluginId | async"
+                      name="description"
+                      [title]="'beschrijving' | pluginTranslate: obs.pluginId | async"
                       [margin]="true"
-                      [defaultValue]="obs.prefill?.omschrijving"
+                      [defaultValue]="obs.prefill?.description"
                       [required]="true"
                       (valueChange)="onPropertyChanged('description', $event)"
               />
@@ -166,17 +166,17 @@
 <ng-template #addCasePropertyList>
   <cds-overflow-menu-option
           (click)="addCaseProperty('description')"
-          *ngIf="propertyList.indexOf('description') == -1">
+          *ngIf="!hasPropertyBeenAdded('description')">
     Omschrijving
   </cds-overflow-menu-option>
   <cds-overflow-menu-option
           (click)="addCaseProperty('plannedEndDate')"
-          *ngIf="propertyList.indexOf('plannedEndDate') == -1">
+          *ngIf="!hasPropertyBeenAdded('plannedEndDate')">
     Einddatum gepland
   </cds-overflow-menu-option>
   <cds-overflow-menu-option
           (click)="addCaseProperty('finalDeliveryDate')"
-          *ngIf="propertyList.indexOf('finalDeliveryDate') == -1">
+          *ngIf="!hasPropertyBeenAdded('finalDeliveryDate')">
     Uiterlijke einddatum afdoening
   </cds-overflow-menu-option>
 </ng-template>

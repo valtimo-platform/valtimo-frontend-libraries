@@ -158,6 +158,9 @@ const zakenApiPluginSpecification: PluginSpecification = {
       inputTypeZaakStatusToggle: 'Invoertype Zaakstatus-URL',
       inputTypeZaakResultaatToggle: 'Invoertype Zaakresultaat-URL',
       addZaakProperty: "Voeg nieuwe parameter toe",
+      plannedEndDate: "Geplande eind datum",
+      finalDeliveryDate: "Laatste opleverings datum",
+      dateformatTooltip: "Een datum in formaat van yyyy-mm-dd. Kan ook een verwijzing zijn naar het document of process, bijvoorbeeld doc:customer/startDatum of pv:startDatum"
     },
     en: {
       title: 'Zaken API',
@@ -266,6 +269,9 @@ const zakenApiPluginSpecification: PluginSpecification = {
       inputTypeZaakStatusToggle: 'Input type Zaakstatus-URL',
       inputTypeZaakResultaatToggle: 'Input type Zaakresultaat-URL',
       addZaakProperty: "Add new case property",
+      plannedEndDate: "Planned end date",
+      finalDeliveryDate: "Final delivery date",
+      dateformatTooltip: "A date in the format of yyyy-mm-dd. Can also be a reference to the document or process, for example doc:customer/startDate or pv:startDate"
     },
     de: {
       title: 'Zaken API',
@@ -374,6 +380,9 @@ const zakenApiPluginSpecification: PluginSpecification = {
       inputTypeZaakStatusToggle: 'Eingabetyp Zaakstatus-URL',
       inputTypeZaakResultaatToggle: 'Eingabetyp Zaakresultaat-URL',
       addZaakProperty: "Neue Case-Eigenschaft hinzufügen",
+      plannedEndDate: "Geplantes Enddatum",
+      finalDeliveryDate: "Endgültiger Liefertermin",
+      dateformatTooltip: "Ein Datum im Format yyyy-mm-dd. Kann auch ein Verweis auf das Dokument oder den Prozess sein, zum Beispiel doc:kunde/startDatum oder pv:startDatum"
     },
   },
 };

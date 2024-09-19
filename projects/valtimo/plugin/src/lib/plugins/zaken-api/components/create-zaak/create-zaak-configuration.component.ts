@@ -45,7 +45,8 @@ import {DocumentService} from '@valtimo/document';
 import {ModalService, RadioValue, SelectItem} from '@valtimo/components';
 import {PluginTranslatePipe} from '../../../../pipes';
 
-type Properties = 'description' | 'plannedEndDate' | 'finalDeliveryDate';
+const PropertiesOptions = ['description', 'plannedEndDate', 'finalDeliveryDate'] as const;
+type Properties = typeof PropertiesOptions[number];
 
 @Component({
   selector: 'valtimo-create-zaak-configuration',
@@ -146,6 +147,13 @@ export class CreateZaakConfigurationComponent
 
   ngOnInit(): void {
     this.openSaveSubscription();
+
+    this.prefillConfiguration$
+      .pipe(take(1))
+      .subscribe(prefill => {
+        PropertiesOptions.filter(property => !!prefill[property])
+          .forEach(property => this.addCaseProperty(property))
+      })
   }
 
   ngOnDestroy() {
@@ -179,7 +187,10 @@ export class CreateZaakConfigurationComponent
   }
 
   private handleValid(formValue: CreateZaakConfig): void {
-    const valid = !!(formValue.rsin && formValue.zaaktypeUrl);
+    const arePropertiesValid = this.propertyList
+      .map(property => !!formValue[property])
+      .find(valid => !valid) == undefined
+    const valid = !!(formValue.rsin && formValue.zaaktypeUrl) && arePropertiesValid;
 
     this.valid$.next(valid);
     this.valid.emit(valid);
@@ -191,28 +202,36 @@ export class CreateZaakConfigurationComponent
         .pipe(take(1))
         .subscribe(([formValue, valid]) => {
           if (valid) {
-            this.configuration.emit({
+            const payload: CreateZaakConfig = {
               rsin: formValue.rsin,
               zaaktypeUrl: formValue.zaaktypeUrl,
               manualZaakTypeUrl: formValue.manualZaakTypeUrl,
-            });
+            }
+            this.propertyList.forEach(property => payload[property] = formValue[property])
+            this.configuration.emit(payload);
           }
         });
     });
   }
 
-  addCaseProperty(property: Properties) {
+  public addCaseProperty(property: Properties) {
     this.propertyList.push(property)
   }
 
-  removeCaseProperty(property: Properties) {
+  public removeCaseProperty(property: Properties) {
     this.propertyList.splice(this.propertyList.indexOf(property), 1)
   }
 
-  onPropertyChanged(property: Properties, value: any) {
+  public hasPropertyBeenAdded(property: Properties) : boolean {
+    return this.propertyList.indexOf(property) != -1
+  }
+
+  public onPropertyChanged(property: Properties, value: any) {
     this.formValue$
-      .pipe(take(1))
-      .subscribe(formValue => {
+      .pipe(
+        filter(formValue => formValue != null),
+        take(1)
+      ).subscribe(formValue => {
         formValue[property] = value
         this.formValueChange(formValue)
       })
