@@ -75,7 +75,7 @@ import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../..
 })
 export class TaskDetailContentComponent implements OnInit, OnDestroy {
   @ViewChild('form') form: FormioComponent;
-  @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef})
+  @ViewChild('formViewModelComponent', {static: false, read: ViewContainerRef})
   public formViewModelDynamicContainer: ViewContainerRef;
   @ViewChild('formFlow') public formFlow: FormFlowComponent;
   @Input() public set task(value: Task | null) {
