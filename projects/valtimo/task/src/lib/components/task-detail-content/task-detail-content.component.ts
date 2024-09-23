@@ -199,6 +199,10 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     }
   }
 
+  public onFormFlowChangeEvent(): void {
+    this.activeChange.emit(true);
+  }
+
   private loadTaskDetails(task: Task): void {
     this.resetTaskProcessLinkType();
     this.resetFormDefinition();
