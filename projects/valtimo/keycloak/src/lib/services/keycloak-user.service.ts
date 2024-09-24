@@ -41,7 +41,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
 
   private readonly _refreshToken$ = new Subject<string>();
 
-  private _expiryTimeMs!: number;
+  private _tokenExp!: number;
 
   private readonly FIVE_MINUTES_MS = 300000;
   private readonly EXPIRE_TOKEN_CONFIRMATION = 'EXPIRE_TOKEN_CONFIRMATION';
@@ -118,13 +118,15 @@ export class KeycloakUserService implements UserService, OnDestroy {
     );
   }
 
+  private get expiryTimeMs() {
+    return this._tokenExp - Date.now() - 1000;
+  }
+
   private openRefreshTokenSubscription(): void {
     this.refreshTokenSubscription = this._refreshToken$.subscribe(refreshToken => {
       const decodedRefreshToken = jwtDecode(refreshToken);
-      const tokenExp = decodedRefreshToken.exp * 1000;
-      const expiryTimeMs = tokenExp - Date.now() - 1000;
+      this._tokenExp = decodedRefreshToken.exp * 1000;
 
-      this._expiryTimeMs = expiryTimeMs;
       this.closeExpiryTimerSubscription();
       this.openExpiryTimerSubscription();
     });
@@ -138,14 +140,10 @@ export class KeycloakUserService implements UserService, OnDestroy {
   private openExpiryTimerSubscription(): void {
     this.expiryTimerSubscription = timer(0, 1000)
       .pipe(
-        map(() => {
-          this._expiryTimeMs = this._expiryTimeMs - 1000;
-          return this._expiryTimeMs;
-        }),
-        switchMap(expiryTimeMs => {
-          if (expiryTimeMs <= this.FIVE_MINUTES_MS) {
+        switchMap(() => {
+          if (this.expiryTimeMs <= this.FIVE_MINUTES_MS) {
             this._counter = new Date(0, 0, 0, 0, 0, 0);
-            this._counter.setSeconds(expiryTimeMs / 1000);
+            this._counter.setSeconds(this.expiryTimeMs / 1000);
           }
 
           return combineLatest([
@@ -163,7 +161,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
         this.promptService.identifier$.pipe(take(1)).subscribe(identifier => {
           if (
             (!promptVisible || identifier !== this.EXPIRE_TOKEN_CONFIRMATION) &&
-            this._expiryTimeMs <= this.FIVE_MINUTES_MS
+            this.expiryTimeMs <= this.FIVE_MINUTES_MS
           ) {
             this.openConfirmationPrompt(headerText, bodyText, cancelButtonText, confirmButtonText);
           }
@@ -173,7 +171,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
           }
         });
 
-        if (this._expiryTimeMs < 2000) {
+        if (this.expiryTimeMs < 2000) {
           this.saveUrl();
           this.logout();
         }
