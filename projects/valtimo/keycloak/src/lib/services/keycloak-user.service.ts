@@ -118,7 +118,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
     );
   }
 
-  private get expiryTimeMs() {
+  private get _expiryTimeMs() {
     return this._tokenExp - Date.now() - 1000;
   }
 
@@ -141,9 +141,9 @@ export class KeycloakUserService implements UserService, OnDestroy {
     this.expiryTimerSubscription = timer(0, 1000)
       .pipe(
         switchMap(() => {
-          if (this.expiryTimeMs <= this.FIVE_MINUTES_MS) {
+          if (this._expiryTimeMs <= this.FIVE_MINUTES_MS) {
             this._counter = new Date(0, 0, 0, 0, 0, 0);
-            this._counter.setSeconds(this.expiryTimeMs / 1000);
+            this._counter.setSeconds(this._expiryTimeMs / 1000);
           }
 
           return combineLatest([
@@ -161,7 +161,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
         this.promptService.identifier$.pipe(take(1)).subscribe(identifier => {
           if (
             (!promptVisible || identifier !== this.EXPIRE_TOKEN_CONFIRMATION) &&
-            this.expiryTimeMs <= this.FIVE_MINUTES_MS
+            this._expiryTimeMs <= this.FIVE_MINUTES_MS
           ) {
             this.openConfirmationPrompt(headerText, bodyText, cancelButtonText, confirmButtonText);
           }
@@ -171,7 +171,7 @@ export class KeycloakUserService implements UserService, OnDestroy {
           }
         });
 
-        if (this.expiryTimeMs < 2000) {
+        if (this._expiryTimeMs < 2000) {
           this.saveUrl();
           this.logout();
         }
