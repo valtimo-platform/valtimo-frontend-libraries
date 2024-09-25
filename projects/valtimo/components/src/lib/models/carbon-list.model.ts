@@ -22,6 +22,7 @@ enum ViewType {
   BOOLEAN = 'boolean',
   CURRENCY = 'currency',
   DATE = 'date',
+  DATE_TIME = 'datetime',
   ENUM = 'enum',
   NUMBER = 'number',
   PERCENT = 'percent',

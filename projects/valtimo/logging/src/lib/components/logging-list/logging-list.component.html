@@ -14,4 +14,12 @@
   ~ limitations under the License.
   -->
 
-Logging works!
+<valtimo-carbon-list
+  [hideToolbar]="true"
+  [items]="logItems$ | async"
+  [fields]="FIELDS"
+  [loading]="loading$ | async"
+  [pagination]="pagination$ | async"
+  (paginationClicked)="onPaginationClicked($event)"
+  (paginationSet)="onPaginationSet($event)"
+></valtimo-carbon-list>
