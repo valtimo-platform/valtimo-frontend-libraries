@@ -1,0 +1,9 @@
+<cds-modal [open]="logEventModel !== null" size="lg">
+  <cds-modal-header [showCloseButton]="true" (closeSelect)="onCloseSelect()">
+    Log details
+  </cds-modal-header>
+
+  <section cdsModalContent>
+    <valtimo-editor [disabled]="true" [model]="logEventModel"></valtimo-editor>
+  </section>
+</cds-modal>

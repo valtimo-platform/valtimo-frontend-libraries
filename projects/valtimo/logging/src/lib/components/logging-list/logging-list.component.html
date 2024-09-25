@@ -22,4 +22,7 @@
   [pagination]="pagination$ | async"
   (paginationClicked)="onPaginationClicked($event)"
   (paginationSet)="onPaginationSet($event)"
+  (rowClicked)="onRowClickedEvent($event)"
 ></valtimo-carbon-list>
+
+<valtimo-log-details [logEvent]="selectedLogEvent$ | async" (closeModalEvent)="onCloseModalEvent()"></valtimo-log-details>

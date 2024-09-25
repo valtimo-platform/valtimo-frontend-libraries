@@ -39,12 +39,13 @@ import {
 import {Page} from '@valtimo/config';
 import {LoggingEvent} from '../../models';
 import {ActivatedRoute, Route, Router} from '@angular/router';
+import {LogDetailsComponent} from '../log-details/log-details.component';
 
 @Component({
   templateUrl: './logging-list.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, TranslateModule, CarbonListModule],
+  imports: [CommonModule, TranslateModule, CarbonListModule, LogDetailsComponent],
   providers: [LoggingApiService],
 })
 export class LoggingListComponent implements OnInit, OnDestroy {
@@ -67,6 +68,7 @@ export class LoggingListComponent implements OnInit, OnDestroy {
   );
 
   public readonly pagination$ = new BehaviorSubject<Pagination>(DEFAULT_PAGINATION);
+  public readonly selectedLogEvent$ = new BehaviorSubject<LoggingEvent | null>(null);
 
   public FIELDS: ColumnConfig[] = [
     {
@@ -102,6 +104,10 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
+  public onCloseModalEvent(): void {
+    this.selectedLogEvent$.next(null);
+  }
+
   public onPaginationClicked(page: number): void {
     this.pagination$.next({...this.pagination$.getValue(), page});
   }
@@ -111,6 +117,10 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     const resetPage: boolean = Math.ceil(+collectionSize / size) <= +page && +collectionSize > 0;
 
     this.pagination$.next({...this.pagination$.getValue(), size, ...(resetPage && {page: 1})});
+  }
+
+  public onRowClickedEvent(logEvent: LoggingEvent): void {
+    this.selectedLogEvent$.next(logEvent);
   }
 
   private setInitialParams(): void {
