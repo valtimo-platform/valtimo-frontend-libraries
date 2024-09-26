@@ -76,6 +76,7 @@ interface ColumnConfig extends ListField {
   format?: string;
   template?: TemplateRef<any>;
   templateData?: object;
+  tooltipCharLimit?: number;
 }
 
 enum MoveRowDirection {

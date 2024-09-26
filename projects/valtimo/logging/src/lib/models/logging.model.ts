@@ -21,4 +21,6 @@ interface LoggingEventSearchRequest {
   page?: number;
 }
 
-export {LoggingEvent, LoggingEventProperty, LoggingEventSearchRequest};
+const LOG_TOOLTIP_LIMIT = 128;
+
+export {LoggingEvent, LoggingEventProperty, LoggingEventSearchRequest, LOG_TOOLTIP_LIMIT};

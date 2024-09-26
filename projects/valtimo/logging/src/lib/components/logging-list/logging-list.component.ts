@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {
   CarbonListItem,
@@ -25,20 +25,19 @@ import {
   Pagination,
   ViewType,
 } from '@valtimo/components';
-import {LoggingApiService} from '../../services';
+import {Page} from '@valtimo/config';
 import {
   BehaviorSubject,
-  Observable,
-  Subscription,
   combineLatest,
   map,
+  Observable,
+  Subscription,
   switchMap,
   take,
   tap,
 } from 'rxjs';
-import {Page} from '@valtimo/config';
-import {LoggingEvent} from '../../models';
-import {ActivatedRoute, Route, Router} from '@angular/router';
+import {LOG_TOOLTIP_LIMIT, LoggingEvent} from '../../models';
+import {LoggingApiService} from '../../services';
 import {LogDetailsComponent} from '../log-details/log-details.component';
 
 @Component({
@@ -85,6 +84,7 @@ export class LoggingListComponent implements OnInit, OnDestroy {
       key: 'formattedMessage',
       label: 'logging.columns.formattedMessage',
       viewType: ViewType.TEXT,
+      tooltipCharLimit: LOG_TOOLTIP_LIMIT,
     },
   ];
 
