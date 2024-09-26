@@ -1855,6 +1855,7 @@
       "timestamp": "Tijdstempel",
       "formattedMessage": "Opgemaakt bericht",
       "level": "Logniveau"
-    }
+    },
+    "detailsTitle": "Loggegevens"
   }
 }

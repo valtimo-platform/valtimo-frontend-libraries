@@ -1854,6 +1854,7 @@
       "timestamp": "Timestamp",
       "formattedMessage": "Formatted message",
       "level": "Log level"
-    }
+    },
+    "detailsTitle": "Log details"
   }
 }

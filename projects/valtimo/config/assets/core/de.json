@@ -1849,6 +1849,7 @@
       "timestamp": "Zeitstempel",
       "formattedMessage": "Formatierte Nachricht",
       "level": "Protokollebene"
-    }
+    },
+    "detailsTitle": "Protokolldetails"
   }
 }
