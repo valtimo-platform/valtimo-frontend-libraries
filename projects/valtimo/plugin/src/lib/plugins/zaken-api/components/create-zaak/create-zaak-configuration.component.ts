@@ -16,16 +16,11 @@
 
 import {
   Component,
-  Directive,
-  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
-  QueryList,
-  TemplateRef,
-  ViewChildren
 } from '@angular/core';
 import {FunctionConfigurationComponent} from '../../../../models';
 import {
@@ -44,9 +39,9 @@ import {OpenZaakService, ZaakType, ZaakTypeLink} from '@valtimo/resource';
 import {DocumentService} from '@valtimo/document';
 import {ModalService, RadioValue, SelectItem} from '@valtimo/components';
 import {PluginTranslatePipe} from '../../../../pipes';
-
-const PropertiesOptions = ['description', 'plannedEndDate', 'finalDeliveryDate'] as const;
-type Properties = typeof PropertiesOptions[number];
+import {Add16, TrashCan16} from '@carbon/icons';
+import {IconService} from 'carbon-components-angular';
+import {ExtraPropertiesOptions, ExtraProperties} from '../../models/create-zaak-properties'
 
 @Component({
   selector: 'valtimo-create-zaak-configuration',
@@ -66,7 +61,7 @@ export class CreateZaakConfigurationComponent
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<CreateZaakConfig> = new EventEmitter<CreateZaakConfig>();
 
-  propertyList: Array<Properties> = [];
+  public readonly propertyList: Array<ExtraProperties> = [];
 
   readonly pluginId$ = new BehaviorSubject<string>('');
   readonly selectedInputOption$ = new BehaviorSubject<InputOption>('selection');
@@ -89,7 +84,7 @@ export class CreateZaakConfigurationComponent
 
   private readonly formValue$ = new BehaviorSubject<CreateZaakConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
-  private readonly properties = new Map<Properties, string>
+  private readonly _properties = new Map<ExtraProperties, string>
 
   readonly loading$ = new BehaviorSubject<boolean>(true);
 
@@ -143,8 +138,11 @@ export class CreateZaakConfigurationComponent
     private readonly openZaakService: OpenZaakService,
     private readonly documentService: DocumentService,
     private readonly modalService: ModalService,
-    private readonly pluginTranslatePipe: PluginTranslatePipe
-  ) {}
+    private readonly pluginTranslatePipe: PluginTranslatePipe,
+    private readonly iconService: IconService,
+  ) {
+    this.iconService.registerAll([Add16, TrashCan16])
+  }
 
   ngOnInit(): void {
     this.openSaveSubscription();
@@ -152,7 +150,7 @@ export class CreateZaakConfigurationComponent
     this.prefillConfiguration$
       .pipe(take(1))
       .subscribe(prefill => {
-        PropertiesOptions.filter(property => !!prefill[property])
+        ExtraPropertiesOptions.filter(property => !!prefill[property])
           .forEach(property => this.addCaseProperty(property))
       })
   }
@@ -162,7 +160,7 @@ export class CreateZaakConfigurationComponent
   }
 
   formValueChange(formValue: CreateZaakConfig): void {
-    this.properties.forEach((value, key) => formValue[key] = value)
+    this._properties.forEach((value, key) => formValue[key] = value)
 
     const inputTypeZaakTypeToggle = formValue.inputTypeZaakTypeToggle;
     this.formValue$.next(formValue);
@@ -190,10 +188,9 @@ export class CreateZaakConfigurationComponent
   }
 
   private handleValid(formValue: CreateZaakConfig): void {
-    const arePropertiesValid = this.propertyList
-      .map(property => !!formValue[property])
-      .find(valid => !valid) == undefined
-    const valid = !!(formValue.rsin && formValue.zaaktypeUrl) && arePropertiesValid;
+    const isPropertyInvalid = this.propertyList
+      .some(property => !!!formValue[property])
+    const valid = !!(formValue.rsin && formValue.zaaktypeUrl) && !isPropertyInvalid;
 
     this.valid$.next(valid);
     this.valid.emit(valid);
@@ -217,24 +214,25 @@ export class CreateZaakConfigurationComponent
     });
   }
 
-  public addCaseProperty(property: Properties) {
+  public addCaseProperty(property: ExtraProperties): void {
     this.propertyList.push(property)
   }
 
-  public removeCaseProperty(property: Properties) {
+  public removeCaseProperty(property: ExtraProperties): void {
     this.propertyList.splice(this.propertyList.indexOf(property), 1)
-    this.properties.delete(property)
+    this._properties.delete(property)
+    this.onPropertyChanged(property, undefined)
   }
 
-  public hasPropertyBeenAdded(property: Properties) : boolean {
-    return this.propertyList.indexOf(property) != -1
+  public hasPropertyBeenAdded(property: ExtraProperties): boolean {
+    return this.propertyList.indexOf(property) !== -1
   }
 
-  public onPropertyChanged(property: Properties, value: any) {
-    this.properties.set(property, value)
+  public onPropertyChanged(property: ExtraProperties, value: any): void {
+    this._properties.set(property, value)
     this.formValue$
       .pipe(
-        filter(formValue => formValue != null),
+        filter(formValue => formValue !== null),
         take(1)
       ).subscribe(formValue => {
         this.formValueChange(formValue)

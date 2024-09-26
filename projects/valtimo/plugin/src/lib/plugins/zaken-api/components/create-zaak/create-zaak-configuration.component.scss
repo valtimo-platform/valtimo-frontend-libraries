@@ -25,6 +25,7 @@
 
 ::ng-deep .cds--overflow-menu-options {
   z-index: 10000 !important;
+  width: 230px;
 }
 
 .property-input {
@@ -43,4 +44,8 @@
   height: 3rem;
   width: 3rem;
   margin: 1rem;
+}
+
+.delete-button:hover {
+  background-color: #e12717;
 }
