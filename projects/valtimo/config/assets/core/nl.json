@@ -81,7 +81,7 @@
       "OPEN": "Niet-toegewezen dossiers",
       "ALL": "Alle dossiers",
       "componentNotFound": "Tab-component niet gevonden",
-      "componentNotFoundMessage": "Er is geen component beschikbaar voor dit tabblad. Neem contact op met de systeemnbeheerder."
+      "componentNotFoundMessage": "Er is geen component beschikbaar voor dit tabblad. Neem contact op met de systeembeheerder."
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
@@ -263,9 +263,12 @@
   "summary": {
     "userTasksDoneState": "Alle taken zijn afgerond",
     "taskLocked": "Je hebt geen toegang tot deze taak",
-    "userTasks": "Taken",
+    "myTasks": "Taken",
+    "otherTasks": "Overige taken",
     "taskOpen": "Open",
-    "taskCreated": "Aangemaakt op"
+    "taskCreated": "Aangemaakt op",
+    "noResultsMyTasks": "Er zijn geen taken toegewezen aan deze gebruiker.",
+    "noResultsOtherTasks": "Er zijn geen taken toegewezen aan andere gebruikers."
   },
   "progress": {
     "noProcessDocumentInstances": "Er is nog geen proces gestart",
@@ -1741,7 +1744,8 @@
   "processLinkType": {
     "plugin": "Plugin",
     "form": "Formulier",
-    "form-flow": "FormFlow"
+    "form-flow": "FormFlow",
+    "url": "URL"
   },
   "processLinkSteps": {
     "chooseProcessLinkType": "Kies soort koppeling",
@@ -1769,13 +1773,15 @@
     "selectFormFlow": "Selecteer je FormFlow",
     "choosePluginConfiguration": "Kies pluginconfiguratie",
     "choosePluginAction": "Kies je actie",
-    "configurePluginAction": "Configureer je actie"
+    "configurePluginAction": "Configureer je actie",
+    "selectURL": "Configureer je URL"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "Er zijn geen plugin-configuraties beschikbaar. Maak een pluginconfiguratie aan om deze te kunnen koppelen aan een processtap.",
     "form": "Er zijn geen formulieren beschikbaar. Maak een formulier aan om deze te kunnen koppelen aan een processtap.",
     "form-flow": "Er zijn geen FormFlows beschikbaar. Maak een FormFlow aan om deze te kunnen koppelen aan een processtap."
   },
+  "processLinkUrlInvalid": "Ongeldige URL {{ URL }}",
   "accessControl": {
     "roles": {
       "title": "Alle rollen",
@@ -1843,5 +1849,13 @@
     "dropdown": "Dropdown",
     "manual": "Handmatig",
     "selectDocDefPlaceholder": "Kies een dossier"
+  },
+  "logging": {
+    "columns": {
+      "timestamp": "Tijdstempel",
+      "formattedMessage": "Opgemaakt bericht",
+      "level": "Logniveau"
+    },
+    "detailsTitle": "Loggegevens"
   }
 }

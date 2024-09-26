@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {BehaviorSubject, combineLatest, filter, Observable, Subscription,} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, Observable, Subscription} from 'rxjs';
 import {FormioForm} from '@formio/angular';
 import {
   FormioComponent,
@@ -29,7 +29,7 @@ import {FormFlowInstance, FormFlowStepType} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
 import {Step} from 'carbon-components-angular';
 import {ConfigService} from '@valtimo/config';
-import {map} from "rxjs/operators";
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-form-flow',
@@ -38,23 +38,26 @@ import {map} from "rxjs/operators";
 })
 export class FormFlowComponent implements OnInit, OnDestroy {
   @ViewChild('form') form: FormioComponent;
-  @Input() formIoFormData: BehaviorSubject<any> | null = new BehaviorSubject<any>(null);
-  @Input() formFlowInstanceId: string;
+  @Input() formIoFormData: BehaviorSubject<any | null> = new BehaviorSubject<any>(null);
+  @Input() formFlowInstanceId: string | null;
   @Output() formFlowComplete = new EventEmitter();
+  @Output() formFlowChange = new EventEmitter();
 
   public readonly breadcrumbs$ = new BehaviorSubject<Step[]>([]);
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
   public readonly formFlowStepType$ = new BehaviorSubject<FormFlowStepType | null>(null);
   public readonly FormFlowCustomComponentId$ = new BehaviorSubject<string>('');
   public readonly currentStepIndex$ = new BehaviorSubject<number>(0);
-  public readonly enableFormFlowBreadcrumbs$ = this.configService.getFeatureToggleObservable('enableFormFlowBreadcrumbs');
+  public readonly enableFormFlowBreadcrumbs$ = this.configService.getFeatureToggleObservable(
+    'enableFormFlowBreadcrumbs'
+  );
 
   private readonly _subscriptions = new Subscription();
 
   formDefinition: FormioForm;
   formioOptions: ValtimoFormioOptions;
 
-  private formFlowStepInstanceId: string;
+  private formFlowStepInstanceId: string | null;
 
   constructor(
     private readonly formFlowService: FormFlowService,
@@ -76,7 +79,10 @@ export class FormFlowComponent implements OnInit, OnDestroy {
   }
 
   public onChange(event: any): void {
-    if (event?.data) this.formIoFormData.next(event.data);
+    if (!event?.data) return;
+
+    this.formIoFormData.next(event.data);
+    this.formFlowChange.emit();
   }
 
   public onSubmit(submission: FormioSubmission): void {
@@ -85,22 +91,22 @@ export class FormFlowComponent implements OnInit, OnDestroy {
     if (submission.data) {
       this.formIoFormData.next(submission.data);
     }
-    if (submission.data.submit) {
+    if (submission.data.submit && this.formFlowInstanceId && this.formFlowStepInstanceId) {
       this.formFlowService
         .submitStep(
           this.formFlowInstanceId,
           this.formFlowStepInstanceId,
           this.formIoFormData.getValue()
         )
-        .subscribe(
-          (result: FormFlowInstance) => {
+        .subscribe({
+          next: (result: FormFlowInstance) => {
             this.handleFormFlowStep(result);
           },
-          errors => {
+          error: errors => {
             this.form?.showErrors(errors);
             this.enable();
-          }
-        );
+          },
+        });
     } else if (submission.data['back']) {
       this.back(submission.data);
     }
@@ -126,6 +132,7 @@ export class FormFlowComponent implements OnInit, OnDestroy {
     this.disable();
     this.currentStepIndex$.next(event.index);
     const submissionData = this.formIoFormData.getValue().data;
+    if (!this.formFlowInstanceId || !this.formFlowStepInstanceId) return;
     this.formFlowService
       .navigateToStep(
         this.formFlowInstanceId,
@@ -133,48 +140,50 @@ export class FormFlowComponent implements OnInit, OnDestroy {
         event.step.stepInstanceId,
         submissionData
       )
-      .subscribe(
-        {
-          next: (result: FormFlowInstance) => this.handleFormFlowStep(result),
-          error: errors => {
-            this.form?.showErrors(errors);
-            this.enable();
-          }
-        }
-      );
+      .subscribe({
+        next: (result: FormFlowInstance) => this.handleFormFlowStep(result),
+        error: errors => {
+          this.form?.showErrors(errors);
+          this.enable();
+        },
+      });
   }
 
   private getBreadcrumbs(): void {
+    if (!this.formFlowInstanceId) return;
     this._subscriptions.add(
       combineLatest([
         this.enableFormFlowBreadcrumbs$,
         this.formFlowService.getBreadcrumbs(this.formFlowInstanceId),
         this.translateService.stream('key'),
-      ]).pipe(
-        filter(([enableFormFlowBreadcrumbs]) => enableFormFlowBreadcrumbs),
-        map(([_, breadcrumbs]) => breadcrumbs),
-      ).subscribe(breadcrumbs => {
-        this.currentStepIndex$.next(breadcrumbs.currentStepIndex);
-        this.breadcrumbs$.next(
-          breadcrumbs.breadcrumbs.map(breadcrumb => ({
-            label:
-              breadcrumb.title ??
-              this.translateService.instant(`formFlow.step.${breadcrumb.key}.title`) ??
-              breadcrumb.key,
-            disabled: breadcrumb.stepInstanceId === null,
-            complete: breadcrumb.completed,
-            stepInstanceId: breadcrumb.stepInstanceId,
-          }))
-        );
-        const classElement = document.getElementsByClassName('cds--progress-step--current');
-        if (classElement.length > 0) {
-          classElement[0].scrollIntoView({behavior: 'smooth', inline: 'center'});
-        }
-      })
+      ])
+        .pipe(
+          filter(([enableFormFlowBreadcrumbs]) => enableFormFlowBreadcrumbs),
+          map(([_, breadcrumbs]) => breadcrumbs)
+        )
+        .subscribe(breadcrumbs => {
+          this.currentStepIndex$.next(breadcrumbs.currentStepIndex);
+          this.breadcrumbs$.next(
+            breadcrumbs.breadcrumbs.map(breadcrumb => ({
+              label:
+                breadcrumb.title ??
+                this.translateService.instant(`formFlow.step.${breadcrumb.key}.title`) ??
+                breadcrumb.key,
+              disabled: breadcrumb.stepInstanceId === null,
+              complete: breadcrumb.completed,
+              stepInstanceId: breadcrumb.stepInstanceId,
+            }))
+          );
+          const classElement = document.getElementsByClassName('cds--progress-step--current');
+          if (classElement.length > 0) {
+            classElement[0].scrollIntoView({behavior: 'smooth', inline: 'center'});
+          }
+        })
     );
   }
 
   private getFormFlowStep(): void {
+    if (!this.formFlowInstanceId) return;
     this.formFlowService
       .getFormFlowStep(this.formFlowInstanceId)
       .subscribe((result: FormFlowInstance) => {
@@ -183,13 +192,15 @@ export class FormFlowComponent implements OnInit, OnDestroy {
   }
 
   private back(submissionData: any): void {
-    this.formFlowService.back(this.formFlowInstanceId, submissionData).subscribe(
-      (result: FormFlowInstance) => this.handleFormFlowStep(result),
-      errors => {
+    if (!this.formFlowInstanceId) return;
+
+    this.formFlowService.back(this.formFlowInstanceId, submissionData).subscribe({
+      next: (result: FormFlowInstance) => this.handleFormFlowStep(result),
+      error: errors => {
         this.form?.showErrors(errors);
         this.enable();
-      }
-    );
+      },
+    });
   }
 
   private handleFormFlowStep(formFlowInstance: FormFlowInstance) {
@@ -202,11 +213,11 @@ export class FormFlowComponent implements OnInit, OnDestroy {
     } else {
       this.getBreadcrumbs();
       this.modalService.scrollToTop();
-      this.formFlowStepType$.next(formFlowInstance.step.type);
+      this.formFlowStepType$.next(formFlowInstance.step?.type ?? null);
       this.FormFlowCustomComponentId$.next(formFlowInstance?.step?.typeProperties?.id || '');
       this.formFlowInstanceId = formFlowInstance.id;
-      this.formFlowStepInstanceId = formFlowInstance.step.id;
-      this.formDefinition = formFlowInstance.step.typeProperties.definition;
+      this.formFlowStepInstanceId = formFlowInstance.step?.id ?? null;
+      this.formDefinition = formFlowInstance.step?.typeProperties.definition;
     }
 
     this.enable();

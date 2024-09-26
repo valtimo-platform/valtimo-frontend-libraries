@@ -15,6 +15,7 @@
  */
 
 import {User} from '@valtimo/config';
+import {FormDisplayType, FormSize} from '@valtimo/process-link';
 
 interface Task {
   assignee: string;
@@ -58,7 +59,7 @@ interface AssigneeRequest {
   assignee: string;
 }
 
-type TaskProcessLinkType = 'form' | 'form-flow' | 'form-view-model';
+type TaskProcessLinkType = 'form' | 'form-flow' | 'form-view-model' | 'url';
 
 interface TaskProcessLinkResult {
   processLinkId: string;
@@ -69,6 +70,9 @@ interface TaskProcessLinkResult {
     prefilledForm?: any;
     formDefinition?: any;
     formName?: string;
+    url?: string;
+    formDisplayType?: FormDisplayType;
+    formSize?: FormSize;
   };
 }
 

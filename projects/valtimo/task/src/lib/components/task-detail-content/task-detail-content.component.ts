@@ -44,9 +44,13 @@ import {
 } from '@valtimo/components';
 import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
-import {FormFlowComponent, FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
+import {
+  FormFlowComponent,
+  FormSubmissionResult,
+  ProcessLinkModule,
+  ProcessLinkService, UrlResolverService,
+} from '@valtimo/process-link';
 import {IconService} from 'carbon-components-angular';
-import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {ToastrService} from 'ngx-toastr';
 import {
@@ -67,11 +71,11 @@ import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../..
   templateUrl: './task-detail-content.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormIoModule, TranslateModule],
+  imports: [CommonModule, FormIoModule, TranslateModule, ProcessLinkModule],
 })
 export class TaskDetailContentComponent implements OnInit, OnDestroy {
   @ViewChild('form') form: FormioComponent;
-  @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef})
+  @ViewChild('formViewModelComponent', {static: false, read: ViewContainerRef})
   public formViewModelDynamicContainer: ViewContainerRef;
   @ViewChild('formFlow') public formFlow: FormFlowComponent;
   @Input() public set task(value: Task | null) {
@@ -126,7 +130,8 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
     private readonly taskService: TaskService,
     private readonly toastr: ToastrService,
     private readonly translateService: TranslateService,
-    @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel
+    @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel,
+    private readonly urlResolverService: UrlResolverService,
   ) {
     this.intermediateSaveEnabled = !!this.configService.featureToggles?.enableIntermediateSave;
 
@@ -142,11 +147,13 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+    this.taskIntermediateSaveService.setSubmission({data: {}});
   }
 
   public onSubmit(submission: FormioSubmission): void {
     if (submission.data) {
       this.taskIntermediateSaveService.setFormIoFormData(submission.data);
+      this.formIoFormData$.next(submission.data);
     }
 
     combineLatest([this._processLinkId$, this._taskProcessLinkType$, this.task$])
@@ -188,8 +195,13 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
   public onChange(event: any): void {
     if (event.data) {
       this.taskIntermediateSaveService.setFormIoFormData(event.data);
+      this.formIoFormData$.next(event.data);
       this.activeChange.emit(true);
     }
+  }
+
+  public onFormFlowChangeEvent(): void {
+    this.activeChange.emit(true);
   }
 
   private loadTaskDetails(task: Task): void {
@@ -257,7 +269,27 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
               this.formName$.next(res.properties.formName ?? '');
               this.setFormViewModelComponent();
               break;
+            case 'url':
+              this._taskProcessLinkType$.next('url');
+              this._processLinkId$.next(res.processLinkId);
+              combineLatest([
+                this.processLinkService.getVariables(),
+                this.task$
+              ]).pipe(take(1))
+                .subscribe(([variables, task]) => {
+                  let url = this.urlResolverService.resolveUrlVariables(res.properties.url, variables.variables);
+                  window.open(url, '_blank').focus();
+                  this.processLinkService.submitURLProcessLink(
+                    res.processLinkId,
+                    task.businessKey,
+                    task.id
+                  ).subscribe(() => {
+                    this.completeTask(task);
+                  });
+                })
+              break;
           }
+
           this.loading$.next(false);
         }
       },
@@ -265,21 +297,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy {
         this.loading$.next(false);
       },
     });
-  }
-
-  private formatIntermediateSubmission(
-    intermediateSubmission: IntermediateSubmission
-  ): IntermediateSubmission {
-    intermediateSubmission.createdOn = moment(intermediateSubmission.createdOn).format(
-      'DD MMM YYYY HH:mm'
-    );
-    if (intermediateSubmission.editedOn) {
-      intermediateSubmission.editedOn = moment(new Date(intermediateSubmission.editedOn)).format(
-        'DD MMM YYYY HH:mm'
-      );
-    }
-
-    return intermediateSubmission;
   }
 
   private openPermissionSubscription(): void {

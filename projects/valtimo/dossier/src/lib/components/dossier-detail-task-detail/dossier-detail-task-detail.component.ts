@@ -19,11 +19,13 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   Output,
   signal,
 } from '@angular/core';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
+import {PageHeaderService} from '@valtimo/components';
 import {ConfigService} from '@valtimo/config';
 import {ProcessInstanceTask} from '@valtimo/process';
 import {
@@ -35,7 +37,7 @@ import {
   TaskDetailIntermediateSaveComponent,
 } from '@valtimo/task';
 import {ButtonModule, IconModule} from 'carbon-components-angular';
-import {BehaviorSubject, switchMap} from 'rxjs';
+import {BehaviorSubject, Observable, switchMap} from 'rxjs';
 
 @Component({
   selector: 'valtimo-dossier-detail-task-detail',
@@ -53,7 +55,7 @@ import {BehaviorSubject, switchMap} from 'rxjs';
     AssignUserToTaskComponent,
   ],
 })
-export class DossierDetailsTaskDetailComponent {
+export class DossierDetailsTaskDetailComponent implements OnDestroy {
   @Input() public set task(value: ProcessInstanceTask | null) {
     if (!value) return;
 
@@ -66,12 +68,11 @@ export class DossierDetailsTaskDetailComponent {
   @Output() public readonly closeEvent = new EventEmitter();
   @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
   @Output() public readonly activeChange = new EventEmitter<boolean>();
-  @Output() public readonly intermediateSaveEvent =
-    new EventEmitter<IntermediateSubmission | null>();
   @Output() public readonly formSubmit = new EventEmitter();
 
+  public readonly compactMode$: Observable<boolean> = this.pageHeaderService.compactMode$;
   public readonly task$ = new BehaviorSubject<ProcessInstanceTask | null>(null);
-  public readonly canAssignUserToTask$ = this.task$.pipe(
+  public readonly canAssignUserToTask$: Observable<boolean> = this.task$.pipe(
     switchMap((task: ProcessInstanceTask | null) =>
       this.permissionService.requestPermission(CAN_ASSIGN_TASK_PERMISSION, {
         resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
@@ -88,10 +89,15 @@ export class DossierDetailsTaskDetailComponent {
 
   constructor(
     private readonly configService: ConfigService,
+    private readonly pageHeaderService: PageHeaderService,
     private readonly permissionService: PermissionService,
     private readonly translateService: TranslateService
   ) {
     this.enableIntermediateSave = !!this.configService.featureToggles?.enableIntermediateSave;
+  }
+
+  public ngOnDestroy(): void {
+    this.closeEvent.emit();
   }
 
   public onClose(): void {
@@ -101,6 +107,7 @@ export class DossierDetailsTaskDetailComponent {
 
   public onCurrentIntermediateSaveEvent(value: IntermediateSubmission | null): void {
     this.intermediateSaveValue$.next(value);
+    this.onActiveChangeEvent(false);
   }
 
   public onActiveChangeEvent(activeChange: boolean): void {

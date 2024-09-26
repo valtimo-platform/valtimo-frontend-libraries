@@ -16,7 +16,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormService} from '@valtimo/form';
-import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {
   ProcessLinkButtonService,
   ProcessLinkService,
@@ -24,6 +24,7 @@ import {
 } from '../../services';
 import {FormDefinitionListItem, FormProcessLinkUpdateRequestDto} from '../../models';
 import {take} from 'rxjs/operators';
+import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-select-form',
@@ -58,8 +59,11 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     );
 
   private _subscriptions = new Subscription();
+  private isUserTask$ = new BehaviorSubject<boolean>(false);
+  private readonly taskPanelToggle = this.configService.featureToggles?.enableTaskPanel;
 
   constructor(
+    private readonly configService: ConfigService,
     private readonly formService: FormService,
     private readonly stateService: ProcessLinkStateService,
     private readonly processLinkService: ProcessLinkService,
@@ -70,11 +74,16 @@ export class SelectFormComponent implements OnInit, OnDestroy {
     this.openBackButtonSubscription();
     this.openSaveButtonSubscription();
     this._subscriptions.add(
-      this.stateService.selectedProcessLink$.subscribe(selectedProcessLink => {
+      combineLatest([
+        this.stateService.selectedProcessLink$,
+        this.stateService.modalParams$,
+      ]).subscribe(([selectedProcessLink, modalParams]) => {
         if (selectedProcessLink) {
           this.formDisplayValue = selectedProcessLink.formDisplayType;
           this.formSizeValue = selectedProcessLink.formSize;
         }
+
+        this.isUserTask$.next(modalParams?.element?.type === 'bpmn:UserTask');
       })
     );
   }
@@ -86,7 +95,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   public selectFormDefinition(formDefinition: FormDefinitionListItem): void {
     this.selectedFormDefinition = formDefinition?.id ? formDefinition : null;
 
-    this.selectedFormDefinition && this.formDisplayValue && this.formSizeValue
+    this.selectedFormDefinition
       ? this.buttonService.enableSaveButton()
       : this.buttonService.disableSaveButton();
   }
@@ -127,15 +136,22 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   }
 
   private updateProcessLink(): void {
-    combineLatest([this.stateService.selectedProcessLink$, this.stateService.viewModelEnabled$])
+    combineLatest([
+      this.stateService.selectedProcessLink$,
+      this.stateService.viewModelEnabled$,
+      this.isUserTask$,
+    ])
       .pipe(take(1))
-      .subscribe(([selectedProcessLink, viewModelEnabled]) => {
+      .subscribe(([selectedProcessLink, viewModelEnabled, isUserTask]) => {
         const updateProcessLinkRequest: FormProcessLinkUpdateRequestDto = {
           id: selectedProcessLink.id,
           formDefinitionId: this.selectedFormDefinition.id,
           viewModelEnabled,
-          formDisplayType: this.formDisplayValue,
-          formSize: this.formSizeValue,
+          ...(this.taskPanelToggle &&
+            isUserTask && {
+              formDisplayType: this.formDisplayValue,
+            }),
+          ...(this.taskPanelToggle && isUserTask && {formSize: this.formSizeValue}),
         };
 
         this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -154,10 +170,11 @@ export class SelectFormComponent implements OnInit, OnDestroy {
       this.stateService.modalParams$,
       this.stateService.selectedProcessLinkTypeId$,
       this.stateService.viewModelEnabled$,
+      this.isUserTask$,
     ])
       .pipe(
         take(1),
-        switchMap(([modalParams, processLinkTypeId, viewModelEnabled]) =>
+        switchMap(([modalParams, processLinkTypeId, viewModelEnabled, isUserTask]) =>
           this.processLinkService.saveProcessLink({
             formDefinitionId: this.selectedFormDefinition.id,
             activityType: modalParams.element.activityListenerType,
@@ -165,8 +182,14 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
             viewModelEnabled,
-            formDisplayType: this.formDisplayValue,
-            formSize: this.formSizeValue,
+            ...(this.taskPanelToggle &&
+              isUserTask && {
+                formDisplayType: this.formDisplayValue,
+              }),
+            ...(this.taskPanelToggle &&
+              isUserTask && {
+                formSize: this.formSizeValue,
+              }),
           })
         )
       )
