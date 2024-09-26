@@ -70,7 +70,7 @@ export class LoggingListComponent implements OnInit, OnDestroy {
   public readonly pagination$ = new BehaviorSubject<Pagination>(DEFAULT_PAGINATION);
   public readonly selectedLogEvent$ = new BehaviorSubject<LoggingEvent | null>(null);
 
-  public FIELDS: ColumnConfig[] = [
+  public readonly FIELDS: ColumnConfig[] = [
     {
       key: 'timestamp',
       label: 'logging.columns.timestamp',
