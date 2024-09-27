@@ -1855,6 +1855,9 @@
       "formattedMessage": "Formatted message",
       "level": "Log level"
     },
+    "search": {
+      "formattedMessage": "Formatted message"
+    },
     "detailsTitle": "Log details"
   }
 }

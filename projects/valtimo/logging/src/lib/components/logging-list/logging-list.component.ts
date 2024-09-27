@@ -32,20 +32,28 @@ import {
   combineLatest,
   map,
   Observable,
+  Subject,
   Subscription,
   switchMap,
   take,
   tap,
 } from 'rxjs';
-import {LOG_TOOLTIP_LIMIT, LoggingEvent} from '../../models';
+import {LOG_TOOLTIP_LIMIT, LoggingEvent, LoggingEventSearchRequest} from '../../models';
 import {LoggingApiService} from '../../services';
 import {LogDetailsComponent} from '../log-details/log-details.component';
+import {LogSearchComponent} from '../log-search/log-search.component';
 
 @Component({
   templateUrl: './logging-list.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, TranslateModule, CarbonListModule, LogDetailsComponent],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    CarbonListModule,
+    LogDetailsComponent,
+    LogSearchComponent,
+  ],
   providers: [LoggingApiService],
 })
 export class LoggingListComponent implements OnInit, OnDestroy {
@@ -61,12 +69,13 @@ export class LoggingListComponent implements OnInit, OnDestroy {
 
       return loggingPage.content;
     }),
-
     tap(() => {
       this.loading$.next(false);
     })
   );
 
+  public readonly initSearchRequest$ = new BehaviorSubject<LoggingEventSearchRequest | null>(null);
+  public readonly searchRequest$ = new BehaviorSubject<LoggingEventSearchRequest>({});
   public readonly pagination$ = new BehaviorSubject<Pagination>(DEFAULT_PAGINATION);
   public readonly selectedLogEvent$ = new BehaviorSubject<LoggingEvent | null>(null);
 
@@ -124,21 +133,28 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     this.selectedLogEvent$.next(logEvent);
   }
 
+  public onSearchSubmitEvent(searchRequest: LoggingEventSearchRequest): void {
+    this.searchRequest$.next(searchRequest);
+  }
+
   private setInitialParams(): void {
     this.activatedRoute.queryParamMap
       .pipe(
         take(1),
         map(queryParams => {
-          const {size, page} = queryParams['params'];
-          return {size, page};
+          const {size, page, ...searchRequest} = queryParams['params'];
+          return {size, page, searchRequest};
         })
       )
-      .subscribe(({size, page}) => {
+      .subscribe(({size, page, searchRequest}) => {
+        this.initSearchRequest$.next(this.mapQueryParamsToSearchRequest(searchRequest));
+        this.searchRequest$.next(this.mapQueryParamsToSearchRequest(searchRequest));
         this.pagination$.next({
           ...this.pagination$.getValue(),
           size: +size,
           page: +(page ?? 0) + 1,
         });
+
         this.openQueryParamsSubscription();
       });
   }
@@ -146,10 +162,30 @@ export class LoggingListComponent implements OnInit, OnDestroy {
   private openQueryParamsSubscription(): void {
     this._subscriptions.add(
       //combineLatest for later filtering
-      combineLatest([this.pagination$]).subscribe(([pagination]) => {
-        const {size, page} = pagination;
-        this.router.navigate(['/logging'], {queryParams: {size, page: page - 1}});
-      })
+      combineLatest([this.pagination$, this.searchRequest$]).subscribe(
+        ([pagination, searchRequest]) => {
+          const {size, page} = pagination;
+          this.router.navigate(['/logging'], {
+            queryParams: {
+              size,
+              page: page - 1,
+              ...this.mapSearchRequestToQueryParams(searchRequest),
+            },
+          });
+        }
+      )
     );
+  }
+
+  private mapSearchRequestToQueryParams(searchRequest: LoggingEventSearchRequest): any {
+    return {...searchRequest};
+  }
+
+  private mapQueryParamsToSearchRequest(queryParams: any): LoggingEventSearchRequest {
+    return {
+      ...(queryParams.likeFormattedMessage && {
+        likeFormattedMessage: queryParams.likeFormattedMessage,
+      }),
+    };
   }
 }

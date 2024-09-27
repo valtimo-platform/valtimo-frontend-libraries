@@ -13,25 +13,14 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<form [formGroup]="formGroup" class="valtimo-log-search">
+  <cds-text-label>
+    {{ 'logging.search.formattedMessage' | translate }}
 
-<valtimo-log-search
-  [initSearchRequest]="initSearchRequest$ | async"
-  (searchSubmitEvent)="onSearchSubmitEvent($event)"
-></valtimo-log-search>
-
-<valtimo-carbon-list
-  [hideToolbar]="true"
-  [items]="logItems$ | async"
-  [fields]="FIELDS"
-  [loading]="loading$ | async"
-  [pagination]="pagination$ | async"
-  paginationIdentifier="logging"
-  (paginationClicked)="onPaginationClicked($event)"
-  (paginationSet)="onPaginationSet($event)"
-  (rowClicked)="onRowClickedEvent($event)"
-></valtimo-carbon-list>
-
-<valtimo-log-details
-  [logEvent]="selectedLogEvent$ | async"
-  (closeModalEvent)="onCloseModalEvent()"
-></valtimo-log-details>
+    <input
+      cdsText
+      formControlName="likeFormattedMessage"
+      [placeholder]="'logging.search.formattedMessage' | translate"
+    />
+  </cds-text-label>
+</form>

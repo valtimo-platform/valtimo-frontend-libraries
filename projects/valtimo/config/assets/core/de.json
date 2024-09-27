@@ -1850,6 +1850,9 @@
       "formattedMessage": "Formatierte Nachricht",
       "level": "Protokollebene"
     },
+    "search": {
+      "formattedMessage": "Formatierte Nachricht"
+    },
     "detailsTitle": "Protokolldetails"
   }
 }
