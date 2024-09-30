@@ -27,7 +27,7 @@ import {
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {ButtonModule, InputModule} from 'carbon-components-angular';
-import {LoggingEventSearchRequest} from '../../models';
+import {LoggingEventSearchFormValue, LoggingEventSearchRequest} from '../../models';
 import {Subscription, debounceTime} from 'rxjs';
 
 @Component({
@@ -71,7 +71,9 @@ export class LogSearchComponent implements OnInit, OnDestroy {
     };
   }
 
-  private mapSearchRequestToFormValue(searchRequest: LoggingEventSearchRequest): any {
+  private mapSearchRequestToFormValue(
+    searchRequest: LoggingEventSearchRequest
+  ): LoggingEventSearchFormValue {
     return {
       ...(searchRequest.likeFormattedMessage && {
         likeFormattedMessage: searchRequest.likeFormattedMessage,

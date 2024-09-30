@@ -14,5 +14,8 @@
  * limitations under the License.
  */
 
-export * from './logging.model';
-export * from './search.model';
+interface LoggingEventSearchFormValue {
+  likeFormattedMessage?: string;
+}
+
+export {LoggingEventSearchFormValue};
