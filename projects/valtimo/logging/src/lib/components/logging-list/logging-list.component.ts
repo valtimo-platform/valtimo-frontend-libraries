@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -27,18 +26,23 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {Page} from '@valtimo/config';
+import {DropdownModule} from 'carbon-components-angular';
 import {
   BehaviorSubject,
   combineLatest,
   map,
   Observable,
-  Subject,
   Subscription,
   switchMap,
   take,
   tap,
 } from 'rxjs';
-import {LOG_TOOLTIP_LIMIT, LoggingEvent, LoggingEventSearchRequest} from '../../models';
+import {
+  LOG_ELLIPSIS_LIMIT,
+  LoggingEventQueryParams,
+  LoggingEvent,
+  LoggingEventSearchRequest,
+} from '../../models';
 import {LoggingApiService} from '../../services';
 import {LogDetailsComponent} from '../log-details/log-details.component';
 import {LogSearchComponent} from '../log-search/log-search.component';
@@ -51,6 +55,7 @@ import {LogSearchComponent} from '../log-search/log-search.component';
     CommonModule,
     TranslateModule,
     CarbonListModule,
+    DropdownModule,
     LogDetailsComponent,
     LogSearchComponent,
   ],
@@ -94,7 +99,7 @@ export class LoggingListComponent implements OnInit, OnDestroy {
       key: 'formattedMessage',
       label: 'logging.columns.formattedMessage',
       viewType: ViewType.TEXT,
-      tooltipCharLimit: LOG_TOOLTIP_LIMIT,
+      tooltipCharLimit: LOG_ELLIPSIS_LIMIT,
     },
   ];
 
@@ -181,11 +186,14 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     return {...searchRequest};
   }
 
-  private mapQueryParamsToSearchRequest(queryParams: any): LoggingEventSearchRequest {
+  private mapQueryParamsToSearchRequest(
+    queryParams: LoggingEventQueryParams
+  ): LoggingEventSearchRequest {
     return {
       ...(queryParams.likeFormattedMessage && {
         likeFormattedMessage: queryParams.likeFormattedMessage,
       }),
+      ...(queryParams.level && {level: queryParams.level}),
     };
   }
 }

@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
+import {ListItem} from 'carbon-components-angular';
+
 interface LoggingEventSearchFormValue {
   likeFormattedMessage?: string;
+  level?: ListItem;
 }
 
-export {LoggingEventSearchFormValue};
+
+interface LoggingEventQueryParams {
+  likeFormattedMessage: string;
+  level: string;
+}
+export {LoggingEventSearchFormValue, LoggingEventQueryParams};

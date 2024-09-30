@@ -23,4 +23,19 @@
       [placeholder]="'logging.search.formattedMessage' | translate"
     />
   </cds-text-label>
+
+  <cds-dropdown
+    formControlName="level"
+    [appendInline]="true"
+    [label]="'logging.search.level' | translate"
+    [placeholder]="'logging.search.level' | translate"
+  >
+    <cds-dropdown-list [items]="logLevelItems"></cds-dropdown-list>
+  </cds-dropdown>
+
+  <button cdsButton="tertiary" (click)="onClearFilter()">
+    {{ 'interface.clear' | translate }}
+
+    <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+  </button>
 </form>

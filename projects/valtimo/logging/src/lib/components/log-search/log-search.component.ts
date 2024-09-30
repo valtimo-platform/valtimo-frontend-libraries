@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -25,10 +24,18 @@ import {
   Output,
 } from '@angular/core';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {TrashCan16} from '@carbon/icons';
 import {TranslateModule} from '@ngx-translate/core';
-import {ButtonModule, InputModule} from 'carbon-components-angular';
-import {LoggingEventSearchFormValue, LoggingEventSearchRequest} from '../../models';
-import {Subscription, debounceTime} from 'rxjs';
+import {
+  ButtonModule,
+  DropdownModule,
+  IconModule,
+  IconService,
+  InputModule,
+  ListItem,
+} from 'carbon-components-angular';
+import {debounceTime, Subscription} from 'rxjs';
+import {LoggingEventSearchFormValue, LoggingEventSearchRequest, LogLevel} from '../../models';
 
 @Component({
   selector: 'valtimo-log-search',
@@ -36,20 +43,64 @@ import {Subscription, debounceTime} from 'rxjs';
   styleUrl: './log-search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, TranslateModule, ButtonModule, InputModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ButtonModule,
+    DropdownModule,
+    IconModule,
+    InputModule,
+    ReactiveFormsModule,
+  ],
 })
 export class LogSearchComponent implements OnInit, OnDestroy {
   @Input() public set initSearchRequest(value: LoggingEventSearchRequest) {
-    this.formGroup.patchValue(this.mapSearchRequestToFormValue(value), {emitEvent: false});
+    const mappedFormValue = this.mapSearchRequestToFormValue(value);
+    if (!!mappedFormValue.level)
+      this.logLevelItems = this.logLevelItems.map((levelItem: ListItem) => ({
+        ...levelItem,
+        selected: mappedFormValue.level?.content === levelItem.content,
+      }));
+    this.formGroup.patchValue(mappedFormValue, {emitEvent: false});
   }
   @Output() public readonly searchSubmitEvent = new EventEmitter<LoggingEventSearchRequest>();
 
   public readonly formGroup = this.fb.group({
     likeFormattedMessage: this.fb.control<string>(''),
+    level: this.fb.control<ListItem>({content: '', selected: false}),
   });
 
+  public logLevelItems: ListItem[] = [
+    {
+      content: LogLevel.DEBUG,
+      selected: false,
+    },
+    {
+      content: LogLevel.ERROR,
+      selected: false,
+    },
+    {
+      content: LogLevel.INFO,
+      selected: false,
+    },
+    {
+      content: LogLevel.TRACE,
+      selected: false,
+    },
+    {
+      content: LogLevel.WARN,
+      selected: false,
+    },
+  ];
+
   private readonly _subscriptions = new Subscription();
-  constructor(private readonly fb: FormBuilder) {}
+
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly iconService: IconService
+  ) {
+    this.iconService.register(TrashCan16);
+  }
 
   public ngOnInit(): void {
     this._subscriptions.add(
@@ -63,11 +114,16 @@ export class LogSearchComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
+  public onClearFilter(): void {
+    this.formGroup.reset();
+  }
+
   private mapFormValueToLogSearch(): LoggingEventSearchRequest {
     const formValue = this.formGroup.getRawValue();
 
     return {
       ...(formValue.likeFormattedMessage && {likeFormattedMessage: formValue.likeFormattedMessage}),
+      ...(formValue.level?.content && {level: formValue.level.content}),
     };
   }
 
@@ -77,6 +133,12 @@ export class LogSearchComponent implements OnInit, OnDestroy {
     return {
       ...(searchRequest.likeFormattedMessage && {
         likeFormattedMessage: searchRequest.likeFormattedMessage,
+      }),
+      ...(searchRequest.level && {
+        level: {
+          content: searchRequest.level,
+          selected: true,
+        },
       }),
     };
   }

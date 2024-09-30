@@ -1851,7 +1851,8 @@
       "level": "Protokollebene"
     },
     "search": {
-      "formattedMessage": "Formatierte Nachricht"
+      "formattedMessage": "Formatierte Nachricht",
+      "level": "Protokollebene"
     },
     "detailsTitle": "Protokolldetails"
   }

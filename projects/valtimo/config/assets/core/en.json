@@ -1856,7 +1856,8 @@
       "level": "Log level"
     },
     "search": {
-      "formattedMessage": "Formatted message"
+      "formattedMessage": "Formatted message",
+      "level": "Log evel"
     },
     "detailsTitle": "Log details"
   }

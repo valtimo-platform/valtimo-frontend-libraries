@@ -1857,7 +1857,8 @@
       "level": "Logniveau"
     },
     "search": {
-      "formattedMessage": "Opgemaakt bericht"
+      "formattedMessage": "Opgemaakt bericht",
+      "level": "Logniveau"
     },
     "detailsTitle": "Loggegevens"
   }
