@@ -15,23 +15,39 @@
   -->
 <form [formGroup]="formGroup" class="valtimo-log-search">
   <cds-text-label>
-    {{ 'logging.search.formattedMessage' | translate }}
+    {{ 'logging.columns.formattedMessage' | translate }}
 
     <input
       cdsText
       formControlName="likeFormattedMessage"
-      [placeholder]="'logging.search.formattedMessage' | translate"
+      [placeholder]="'logging.columns.formattedMessage' | translate"
     />
   </cds-text-label>
 
   <cds-dropdown
     formControlName="level"
     [appendInline]="true"
-    [label]="'logging.search.level' | translate"
-    [placeholder]="'logging.search.level' | translate"
+    [label]="'logging.columns.level' | translate"
+    [placeholder]="'logging.columns.level' | translate"
   >
     <cds-dropdown-list [items]="logLevelItems"></cds-dropdown-list>
   </cds-dropdown>
+
+  <cds-date-picker
+    #afterTimestamp
+    [label]="'logging.search.afterTimestamp' | translate"
+    placeholder="DD-MM-YYYY"
+    [dateFormat]="'d-m-Y'"
+    (valueChange)="onDateSelected('afterTimestamp', $event)"
+  ></cds-date-picker>
+
+  <cds-date-picker
+    #beforeTimestamp
+    [label]="'logging.search.beforeTimestamp' | translate"
+    placeholder="DD-MM-YYYY"
+    [dateFormat]="'d-m-Y'"
+    (valueChange)="onDateSelected('beforeTimestamp', $event)"
+  ></cds-date-picker>
 
   <button cdsButton="tertiary" (click)="onClearFilter()">
     {{ 'interface.clear' | translate }}

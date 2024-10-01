@@ -15,6 +15,7 @@
  */
 import {CommonModule} from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
@@ -22,18 +23,22 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {AbstractControl, FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {TrashCan16} from '@carbon/icons';
 import {TranslateModule} from '@ngx-translate/core';
 import {
   ButtonModule,
+  DatePicker,
+  DatePickerModule,
   DropdownModule,
   IconModule,
   IconService,
   InputModule,
   ListItem,
 } from 'carbon-components-angular';
+import flatpickr from 'flatpickr';
 import {debounceTime, Subscription} from 'rxjs';
 import {LoggingEventSearchFormValue, LoggingEventSearchRequest, LogLevel} from '../../models';
 
@@ -51,9 +56,13 @@ import {LoggingEventSearchFormValue, LoggingEventSearchRequest, LogLevel} from '
     IconModule,
     InputModule,
     ReactiveFormsModule,
+    DatePickerModule,
   ],
 })
-export class LogSearchComponent implements OnInit, OnDestroy {
+export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('afterTimestamp') private readonly _afterTimestampDatePicker: DatePicker;
+  @ViewChild('beforeTimestamp') private readonly _beforeTimestampDatePicker: DatePicker;
+
   @Input() public set initSearchRequest(value: LoggingEventSearchRequest) {
     const mappedFormValue = this.mapSearchRequestToFormValue(value);
     if (!!mappedFormValue.level)
@@ -68,6 +77,8 @@ export class LogSearchComponent implements OnInit, OnDestroy {
   public readonly formGroup = this.fb.group({
     likeFormattedMessage: this.fb.control<string>(''),
     level: this.fb.control<ListItem>({content: '', selected: false}),
+    beforeTimestamp: this.fb.control<string>(''),
+    afterTimestamp: this.fb.control<string>(''),
   });
 
   public logLevelItems: ListItem[] = [
@@ -110,12 +121,35 @@ export class LogSearchComponent implements OnInit, OnDestroy {
     );
   }
 
+  public ngAfterViewInit(): void {
+    const afterTimestampControlValue = this.formGroup.get('afterTimestamp')?.value;
+    const beforeTimestampControlValue = this.formGroup.get('beforeTimestamp')?.value;
+
+    if (!!afterTimestampControlValue) {
+      this._afterTimestampDatePicker.writeValue([
+        flatpickr.formatDate(new Date(afterTimestampControlValue), 'd-m-Y'),
+      ]);
+    }
+
+    if (!!beforeTimestampControlValue) {
+      this._beforeTimestampDatePicker.writeValue([
+        flatpickr.formatDate(new Date(beforeTimestampControlValue), 'd-m-Y'),
+      ]);
+    }
+  }
+
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
   public onClearFilter(): void {
     this.formGroup.reset();
+    this._afterTimestampDatePicker.writeValue([]);
+    this._beforeTimestampDatePicker.writeValue([]);
+  }
+
+  public onDateSelected(control: 'afterTimestamp' | 'beforeTimestamp', event: Date[]): void {
+    this.formGroup.get(control)?.patchValue(flatpickr.formatDate(event[0], 'Z'));
   }
 
   private mapFormValueToLogSearch(): LoggingEventSearchRequest {
@@ -124,6 +158,8 @@ export class LogSearchComponent implements OnInit, OnDestroy {
     return {
       ...(formValue.likeFormattedMessage && {likeFormattedMessage: formValue.likeFormattedMessage}),
       ...(formValue.level?.content && {level: formValue.level.content}),
+      ...(formValue.afterTimestamp && {afterTimestamp: formValue.afterTimestamp}),
+      ...(formValue.beforeTimestamp && {beforeTimestamp: formValue.beforeTimestamp}),
     };
   }
 
@@ -140,6 +176,8 @@ export class LogSearchComponent implements OnInit, OnDestroy {
           selected: true,
         },
       }),
+      ...(searchRequest.afterTimestamp && {afterTimestamp: searchRequest.afterTimestamp}),
+      ...(searchRequest.beforeTimestamp && {beforeTimestamp: searchRequest.beforeTimestamp}),
     };
   }
 }

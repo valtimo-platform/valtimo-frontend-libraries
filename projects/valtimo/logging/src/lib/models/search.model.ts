@@ -19,11 +19,14 @@ import {ListItem} from 'carbon-components-angular';
 interface LoggingEventSearchFormValue {
   likeFormattedMessage?: string;
   level?: ListItem;
+  beforeTimestamp?: string;
+  afterTimestamp?: string;
 }
 
-
 interface LoggingEventQueryParams {
-  likeFormattedMessage: string;
-  level: string;
+  likeFormattedMessage?: string;
+  level?: string;
+  beforeTimestamp?: string;
+  afterTimestamp?: string;
 }
 export {LoggingEventSearchFormValue, LoggingEventQueryParams};

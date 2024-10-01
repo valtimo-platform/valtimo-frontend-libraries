@@ -1856,8 +1856,8 @@
       "level": "Log level"
     },
     "search": {
-      "formattedMessage": "Formatted message",
-      "level": "Log evel"
+      "afterTimestamp": "From date",
+      "beforeTimestamp": "To date"
     },
     "detailsTitle": "Log details"
   }

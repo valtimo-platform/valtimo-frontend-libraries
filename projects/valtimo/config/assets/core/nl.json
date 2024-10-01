@@ -1857,8 +1857,8 @@
       "level": "Logniveau"
     },
     "search": {
-      "formattedMessage": "Opgemaakt bericht",
-      "level": "Logniveau"
+      "afterTimestamp": "Van datum",
+      "beforeTimestamp": "Tot datum"
     },
     "detailsTitle": "Loggegevens"
   }

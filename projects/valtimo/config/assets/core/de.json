@@ -1851,8 +1851,8 @@
       "level": "Protokollebene"
     },
     "search": {
-      "formattedMessage": "Formatierte Nachricht",
-      "level": "Protokollebene"
+      "afterTimestamp": "Datum von",
+      "beforeTimestamp": "Datum bis"
     },
     "detailsTitle": "Protokolldetails"
   }

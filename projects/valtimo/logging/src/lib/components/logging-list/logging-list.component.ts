@@ -174,16 +174,12 @@ export class LoggingListComponent implements OnInit, OnDestroy {
             queryParams: {
               size,
               page: page - 1,
-              ...this.mapSearchRequestToQueryParams(searchRequest),
+              ...searchRequest,
             },
           });
         }
       )
     );
-  }
-
-  private mapSearchRequestToQueryParams(searchRequest: LoggingEventSearchRequest): any {
-    return {...searchRequest};
   }
 
   private mapQueryParamsToSearchRequest(
@@ -194,6 +190,8 @@ export class LoggingListComponent implements OnInit, OnDestroy {
         likeFormattedMessage: queryParams.likeFormattedMessage,
       }),
       ...(queryParams.level && {level: queryParams.level}),
+      ...(queryParams.afterTimestamp && {afterTimestamp: queryParams.afterTimestamp}),
+      ...(queryParams.beforeTimestamp && {beforeTimestamp: queryParams.beforeTimestamp}),
     };
   }
 }
