@@ -28,5 +28,6 @@ interface LoggingEventQueryParams {
   level?: string;
   beforeTimestamp?: string;
   afterTimestamp?: string;
+  properties?: string;
 }
 export {LoggingEventSearchFormValue, LoggingEventQueryParams};

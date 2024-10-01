@@ -49,7 +49,41 @@
     (valueChange)="onDateSelected('beforeTimestamp', $event)"
   ></cds-date-picker>
 
-  <button cdsButton="tertiary" (click)="onClearFilter()">
+  <div formArrayName="properties" class="valtimo-log-search__properties-container">
+    @for (propertyGroup of propertiesArray.controls; track $index) {
+      <form [formGroupName]="$index">
+        <cds-text-label>
+          {{ 'interface.key' | translate }}
+
+          <input cdsText formControlName="key" [placeholder]="'interface.key' | translate" />
+        </cds-text-label>
+
+        <cds-text-label>
+          {{ 'interface.value' | translate }}
+
+          <input cdsText formControlName="value" [placeholder]="'interface.value' | translate" />
+        </cds-text-label>
+
+        <button
+          cdsButton="danger"
+          [disabled]="$count === 1"
+          iconOnly="true"
+          type="button"
+          (click)="onPropertyRemoveClick($index)"
+        >
+          <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+        </button>
+      </form>
+    }
+
+    <button cdsButton="primary" type="button" (click)="onPropertyAddClick()">
+      {{ 'interface.add' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+    </button>
+  </div>
+
+  <button cdsButton="tertiary" type="button" (click)="onClearFilter()">
     {{ 'interface.clear' | translate }}
 
     <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>

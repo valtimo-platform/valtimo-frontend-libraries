@@ -25,7 +25,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import {AbstractControl, FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {FormArray, FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {TrashCan16} from '@carbon/icons';
 import {TranslateModule} from '@ngx-translate/core';
 import {
@@ -40,7 +40,12 @@ import {
 } from 'carbon-components-angular';
 import flatpickr from 'flatpickr';
 import {debounceTime, Subscription} from 'rxjs';
-import {LoggingEventSearchFormValue, LoggingEventSearchRequest, LogLevel} from '../../models';
+import {
+  LoggingEventProperty,
+  LoggingEventSearchFormValue,
+  LoggingEventSearchRequest,
+  LogLevel,
+} from '../../models';
 
 @Component({
   selector: 'valtimo-log-search',
@@ -79,6 +84,12 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     level: this.fb.control<ListItem>({content: '', selected: false}),
     beforeTimestamp: this.fb.control<string>(''),
     afterTimestamp: this.fb.control<string>(''),
+    properties: this.fb.array([
+      this.fb.group({
+        key: this.fb.control<string>(''),
+        value: this.fb.control<string>(''),
+      }),
+    ]),
   });
 
   public logLevelItems: ListItem[] = [
@@ -105,6 +116,10 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   private readonly _subscriptions = new Subscription();
+
+  public get propertiesArray(): FormArray {
+    return this.formGroup.get('properties') as FormArray;
+  }
 
   constructor(
     private readonly fb: FormBuilder,
@@ -152,14 +167,33 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.formGroup.get(control)?.patchValue(flatpickr.formatDate(event[0], 'Z'));
   }
 
+  public onPropertyAddClick(): void {
+    this.propertiesArray.push(
+      this.fb.group({
+        key: this.fb.control<string>(''),
+        value: this.fb.control<string>(''),
+      })
+    );
+  }
+
+  public onPropertyRemoveClick(index: number): void {
+    this.propertiesArray.removeAt(index);
+  }
+
   private mapFormValueToLogSearch(): LoggingEventSearchRequest {
     const formValue = this.formGroup.getRawValue();
+    const properties = formValue.properties.filter(
+      (property: {key: string | null; value: string | null}) => !!property.key && !!property.value
+    ) as LoggingEventProperty[];
 
     return {
-      ...(formValue.likeFormattedMessage && {likeFormattedMessage: formValue.likeFormattedMessage}),
-      ...(formValue.level?.content && {level: formValue.level.content}),
-      ...(formValue.afterTimestamp && {afterTimestamp: formValue.afterTimestamp}),
-      ...(formValue.beforeTimestamp && {beforeTimestamp: formValue.beforeTimestamp}),
+      ...(!!formValue.likeFormattedMessage && {
+        likeFormattedMessage: formValue.likeFormattedMessage,
+      }),
+      ...(!!formValue.level?.content && {level: formValue.level.content}),
+      ...(!!formValue.afterTimestamp && {afterTimestamp: formValue.afterTimestamp}),
+      ...(!!formValue.beforeTimestamp && {beforeTimestamp: formValue.beforeTimestamp}),
+      ...(!!properties.length && {properties}),
     };
   }
 
@@ -178,6 +212,7 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
       }),
       ...(searchRequest.afterTimestamp && {afterTimestamp: searchRequest.afterTimestamp}),
       ...(searchRequest.beforeTimestamp && {beforeTimestamp: searchRequest.beforeTimestamp}),
+      ...(searchRequest.properties && {properties: searchRequest.properties}),
     };
   }
 }

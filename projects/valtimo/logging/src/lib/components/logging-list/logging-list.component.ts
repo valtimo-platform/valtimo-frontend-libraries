@@ -42,6 +42,7 @@ import {
   LoggingEventQueryParams,
   LoggingEvent,
   LoggingEventSearchRequest,
+  LoggingEventProperty,
 } from '../../models';
 import {LoggingApiService} from '../../services';
 import {LogDetailsComponent} from '../log-details/log-details.component';
@@ -65,7 +66,14 @@ export class LoggingListComponent implements OnInit, OnDestroy {
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly logItems$: Observable<CarbonListItem> = this.activatedRoute.queryParamMap.pipe(
     tap(() => this.loading$.next(true)),
-    switchMap(queryParams => this.loggingApiService.getTechnicalLogs(queryParams['params'])),
+    switchMap(queryParams =>
+      this.loggingApiService.getTechnicalLogs({
+        ...queryParams['params'],
+        ...(!!queryParams['params']?.properties && {
+          properties: this.base64ToObject(queryParams['params'].properties),
+        }),
+      })
+    ),
     map((loggingPage: Page<LoggingEvent>) => {
       this.pagination$.next({
         ...this.pagination$.getValue(),
@@ -142,6 +150,54 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     this.searchRequest$.next(searchRequest);
   }
 
+  private base64ToObject(base64string: string): object {
+    return JSON.parse(atob(base64string));
+  }
+
+  private objectToBase64(jsObject: object): string {
+    return btoa(JSON.stringify(jsObject));
+  }
+
+  private openQueryParamsSubscription(): void {
+    this._subscriptions.add(
+      //combineLatest for later filtering
+      combineLatest([this.pagination$, this.searchRequest$]).subscribe(
+        ([pagination, searchRequest]) => {
+          const {size, page} = pagination;
+
+          this.router.navigate(['/logging'], {
+            queryParams: {
+              size,
+              page: page - 1,
+              ...{
+                ...searchRequest,
+                ...(!!searchRequest.properties?.length && {
+                  properties: this.objectToBase64(searchRequest.properties),
+                }),
+              },
+            },
+          });
+        }
+      )
+    );
+  }
+
+  private mapQueryParamsToSearchRequest(
+    queryParams: LoggingEventQueryParams
+  ): LoggingEventSearchRequest {
+    return {
+      ...(!!queryParams.likeFormattedMessage && {
+        likeFormattedMessage: queryParams.likeFormattedMessage,
+      }),
+      ...(!!queryParams.level && {level: queryParams.level}),
+      ...(!!queryParams.afterTimestamp && {afterTimestamp: queryParams.afterTimestamp}),
+      ...(!!queryParams.beforeTimestamp && {beforeTimestamp: queryParams.beforeTimestamp}),
+      ...(!!queryParams.properties && {
+        properties: this.base64ToObject(queryParams.properties) as Array<LoggingEventProperty>,
+      }),
+    };
+  }
+
   private setInitialParams(): void {
     this.activatedRoute.queryParamMap
       .pipe(
@@ -162,36 +218,5 @@ export class LoggingListComponent implements OnInit, OnDestroy {
 
         this.openQueryParamsSubscription();
       });
-  }
-
-  private openQueryParamsSubscription(): void {
-    this._subscriptions.add(
-      //combineLatest for later filtering
-      combineLatest([this.pagination$, this.searchRequest$]).subscribe(
-        ([pagination, searchRequest]) => {
-          const {size, page} = pagination;
-          this.router.navigate(['/logging'], {
-            queryParams: {
-              size,
-              page: page - 1,
-              ...searchRequest,
-            },
-          });
-        }
-      )
-    );
-  }
-
-  private mapQueryParamsToSearchRequest(
-    queryParams: LoggingEventQueryParams
-  ): LoggingEventSearchRequest {
-    return {
-      ...(queryParams.likeFormattedMessage && {
-        likeFormattedMessage: queryParams.likeFormattedMessage,
-      }),
-      ...(queryParams.level && {level: queryParams.level}),
-      ...(queryParams.afterTimestamp && {afterTimestamp: queryParams.afterTimestamp}),
-      ...(queryParams.beforeTimestamp && {beforeTimestamp: queryParams.beforeTimestamp}),
-    };
   }
 }
