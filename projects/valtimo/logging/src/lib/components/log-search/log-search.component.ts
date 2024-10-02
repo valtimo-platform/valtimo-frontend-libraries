@@ -97,26 +97,21 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     ]),
   });
 
-  public logLevelItems: ListItem[] = [
+  public logLevelItems: Partial<ListItem>[] = [
     {
       content: LogLevel.DEBUG,
-      selected: false,
     },
     {
       content: LogLevel.ERROR,
-      selected: false,
     },
     {
       content: LogLevel.INFO,
-      selected: false,
     },
     {
       content: LogLevel.TRACE,
-      selected: false,
     },
     {
       content: LogLevel.WARN,
-      selected: false,
     },
   ];
 
@@ -189,7 +184,7 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
   private initLogItems(formValue: LoggingEventSearchFormValue): void {
     if (!formValue.level) return;
 
-    this.logLevelItems = this.logLevelItems.map((levelItem: ListItem) => ({
+    this.logLevelItems = this.logLevelItems.map((levelItem: Partial<ListItem>) => ({
       ...levelItem,
       selected: formValue.level?.content === levelItem.content,
     }));

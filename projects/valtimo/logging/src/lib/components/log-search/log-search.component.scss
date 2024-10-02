@@ -50,8 +50,8 @@
     font-size: var(--cds-label-01-font-size);
     color: var(--cds-text-secondary);
   }
-}
 
-::ng-deep .cds--date-picker.cds--date-picker--single .cds--date-picker__input {
-  inline-size: unset !important;
+  ::ng-deep .cds--date-picker.cds--date-picker--single .cds--date-picker__input {
+    inline-size: unset !important;
+  }
 }

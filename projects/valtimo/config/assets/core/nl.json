@@ -1863,7 +1863,7 @@
       "properties": "Eigenschappen"
     },
     "noResults": {
-      "description": "Er zijn geen logboeken die overeenkomen met uw zoekcriteria",
+      "description": "Er zijn geen logregels die overeenkomen met je zoekcriteria",
       "title": "Er zijn geen logboeken"
     },
     "detailsTitle": "Loggegevens"
