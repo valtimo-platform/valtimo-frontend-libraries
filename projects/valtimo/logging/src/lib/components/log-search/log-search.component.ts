@@ -70,7 +70,7 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('beforeTimestamp') private readonly _beforeTimestampDatePicker: DatePicker;
 
   @Input() public set initSearchRequest(value: LoggingEventSearchRequest) {
-    const mappedFormValue = this.mapSearchRequestToFormValue(value);
+    const mappedFormValue: LoggingEventSearchFormValue = this.mapSearchRequestToFormValue(value);
     this.initLogItems(mappedFormValue);
     this.initPropertiesForm(mappedFormValue);
 

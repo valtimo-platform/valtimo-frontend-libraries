@@ -37,10 +37,8 @@
     flex-direction: column;
     max-width: 50%;
 
-    & > *:not(:last-child) {
-      &:not(.valtimo-log-search__label) {
-        margin-bottom: 16px;
-      }
+    & > *:not(:last-child):not(.valtimo-log-search__label) {
+      margin-bottom: 16px;
     }
   }
 
