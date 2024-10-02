@@ -39,10 +39,10 @@ import {
 } from 'rxjs';
 import {
   LOG_ELLIPSIS_LIMIT,
-  LoggingEventQueryParams,
   LoggingEvent,
-  LoggingEventSearchRequest,
   LoggingEventProperty,
+  LoggingEventQueryParams,
+  LoggingEventSearchRequest,
 } from '../../models';
 import {LoggingApiService} from '../../services';
 import {LogDetailsComponent} from '../log-details/log-details.component';
