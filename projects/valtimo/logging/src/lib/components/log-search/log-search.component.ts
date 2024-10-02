@@ -70,11 +70,9 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() public set initSearchRequest(value: LoggingEventSearchRequest) {
     const mappedFormValue = this.mapSearchRequestToFormValue(value);
-    if (!!mappedFormValue.level)
-      this.logLevelItems = this.logLevelItems.map((levelItem: ListItem) => ({
-        ...levelItem,
-        selected: mappedFormValue.level?.content === levelItem.content,
-      }));
+    this.initLogItems(mappedFormValue);
+    this.initPropertiesForm(mappedFormValue);
+
     this.formGroup.patchValue(mappedFormValue, {emitEvent: false});
   }
   @Output() public readonly searchSubmitEvent = new EventEmitter<LoggingEventSearchRequest>();
@@ -167,7 +165,7 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.formGroup.get(control)?.patchValue(flatpickr.formatDate(event[0], 'Z'));
   }
 
-  public onPropertyAddClick(): void {
+  public addPropertySearchField(): void {
     this.propertiesArray.push(
       this.fb.group({
         key: this.fb.control<string>(''),
@@ -176,8 +174,25 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  public onPropertyRemoveClick(index: number): void {
+  public removePropertySearchField(index: number): void {
     this.propertiesArray.removeAt(index);
+  }
+
+  private initLogItems(formValue: LoggingEventSearchFormValue): void {
+    if (!formValue.level) return;
+
+    this.logLevelItems = this.logLevelItems.map((levelItem: ListItem) => ({
+      ...levelItem,
+      selected: formValue.level?.content === levelItem.content,
+    }));
+  }
+
+  private initPropertiesForm(formValue: LoggingEventSearchFormValue): void {
+    if (!formValue.properties) return;
+
+    for (let i = 1; i < formValue.properties.length; i++) {
+      this.addPropertySearchField();
+    }
   }
 
   private mapFormValueToLogSearch(): LoggingEventSearchRequest {

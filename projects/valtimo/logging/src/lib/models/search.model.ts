@@ -15,12 +15,14 @@
  */
 
 import {ListItem} from 'carbon-components-angular';
+import {LoggingEventProperty} from './logging.model';
 
 interface LoggingEventSearchFormValue {
   likeFormattedMessage?: string;
   level?: ListItem;
   beforeTimestamp?: string;
   afterTimestamp?: string;
+  properties?: Array<LoggingEventProperty>;
 }
 
 interface LoggingEventQueryParams {

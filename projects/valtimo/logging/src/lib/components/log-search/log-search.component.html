@@ -51,7 +51,7 @@
 
   <div formArrayName="properties" class="valtimo-log-search__properties-container">
     @for (propertyGroup of propertiesArray.controls; track $index) {
-      <form [formGroupName]="$index">
+      <form [formGroup]="propertyGroup">
         <cds-text-label>
           {{ 'interface.key' | translate }}
 
@@ -69,14 +69,14 @@
           [disabled]="$count === 1"
           iconOnly="true"
           type="button"
-          (click)="onPropertyRemoveClick($index)"
+          (click)="removePropertySearchField($index)"
         >
           <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
         </button>
       </form>
     }
 
-    <button cdsButton="primary" type="button" (click)="onPropertyAddClick()">
+    <button cdsButton="primary" type="button" (click)="addPropertySearchField()">
       {{ 'interface.add' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
