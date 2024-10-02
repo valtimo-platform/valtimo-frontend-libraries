@@ -16,6 +16,7 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Filter16, TrashCan16} from '@carbon/icons';
 import {TranslateModule} from '@ngx-translate/core';
 import {
   CarbonListItem,
@@ -26,7 +27,13 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {Page} from '@valtimo/config';
-import {DropdownModule} from 'carbon-components-angular';
+import {
+  ButtonModule,
+  DialogModule,
+  DropdownModule,
+  IconModule,
+  IconService,
+} from 'carbon-components-angular';
 import {
   BehaviorSubject,
   combineLatest,
@@ -50,13 +57,17 @@ import {LogSearchComponent} from '../log-search/log-search.component';
 
 @Component({
   templateUrl: './logging-list.component.html',
+  styleUrl: './logging-list.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     TranslateModule,
+    ButtonModule,
     CarbonListModule,
+    DialogModule,
     DropdownModule,
+    IconModule,
     LogDetailsComponent,
     LogSearchComponent,
   ],
@@ -115,9 +126,12 @@ export class LoggingListComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
+    private readonly iconService: IconService,
     private readonly loggingApiService: LoggingApiService,
     private readonly router: Router
-  ) {}
+  ) {
+    this.iconService.registerAll([Filter16, TrashCan16]);
+  }
 
   public ngOnInit(): void {
     this.setInitialParams();
@@ -150,6 +164,11 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     this.searchRequest$.next(searchRequest);
   }
 
+  public onClearFilter(): void {
+    this.onSearchSubmitEvent({});
+    this.initSearchRequest$.next({});
+  }
+
   private base64ToObject(base64string: string): object {
     return JSON.parse(atob(base64string));
   }
@@ -160,7 +179,6 @@ export class LoggingListComponent implements OnInit, OnDestroy {
 
   private openQueryParamsSubscription(): void {
     this._subscriptions.add(
-      //combineLatest for later filtering
       combineLatest([this.pagination$, this.searchRequest$]).subscribe(
         ([pagination, searchRequest]) => {
           const {size, page} = pagination;

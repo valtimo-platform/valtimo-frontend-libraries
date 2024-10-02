@@ -28,6 +28,7 @@ import {
 import {FormArray, FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {TrashCan16} from '@carbon/icons';
 import {TranslateModule} from '@ngx-translate/core';
+import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {
   ButtonModule,
   DatePicker,
@@ -39,7 +40,7 @@ import {
   ListItem,
 } from 'carbon-components-angular';
 import flatpickr from 'flatpickr';
-import {debounceTime, Subscription} from 'rxjs';
+import {debounceTime, map, Observable, Subscription} from 'rxjs';
 import {
   LoggingEventProperty,
   LoggingEventSearchFormValue,
@@ -76,6 +77,12 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.formGroup.patchValue(mappedFormValue, {emitEvent: false});
   }
   @Output() public readonly searchSubmitEvent = new EventEmitter<LoggingEventSearchRequest>();
+
+  public readonly theme$: Observable<CARBON_THEME> = this.cdsThemeService.currentTheme$.pipe(
+    map((theme: CurrentCarbonTheme) =>
+      theme === CurrentCarbonTheme.G10 ? CARBON_THEME.WHITE : CARBON_THEME.G100
+    )
+  );
 
   public readonly formGroup = this.fb.group({
     likeFormattedMessage: this.fb.control<string>(''),
@@ -120,6 +127,7 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   constructor(
+    private readonly cdsThemeService: CdsThemeService,
     private readonly fb: FormBuilder,
     private readonly iconService: IconService
   ) {

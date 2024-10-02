@@ -13,59 +13,80 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<form [formGroup]="formGroup" class="valtimo-log-search">
-  <cds-text-label>
-    {{ 'logging.columns.formattedMessage' | translate }}
+<form
+  *ngIf="theme$ | async as theme"
+  class="valtimo-log-search"
+  [formGroup]="formGroup"
+  (click)="$event.stopImmediatePropagation()"
+>
+  <section class="valtimo-log-search__fields">
+    <cds-text-label>
+      {{ 'logging.columns.formattedMessage' | translate }}
 
-    <input
-      cdsText
-      formControlName="likeFormattedMessage"
-      [placeholder]="'logging.columns.formattedMessage' | translate"
-    />
-  </cds-text-label>
+      <input
+        cdsText
+        [attr.data-carbon-theme]="theme"
+        formControlName="likeFormattedMessage"
+        [placeholder]="'logging.columns.formattedMessage' | translate"
+      />
+    </cds-text-label>
 
-  <cds-dropdown
-    formControlName="level"
-    [appendInline]="true"
-    [label]="'logging.columns.level' | translate"
-    [placeholder]="'logging.columns.level' | translate"
-  >
-    <cds-dropdown-list [items]="logLevelItems"></cds-dropdown-list>
-  </cds-dropdown>
+    <cds-dropdown
+      formControlName="level"
+      [attr.data-carbon-theme]="theme"
+      [appendInline]="true"
+      [label]="'logging.columns.level' | translate"
+      [placeholder]="'logging.columns.level' | translate"
+    >
+      <cds-dropdown-list [items]="logLevelItems"></cds-dropdown-list>
+    </cds-dropdown>
 
-  <cds-date-picker
-    #afterTimestamp
-    [label]="'logging.search.afterTimestamp' | translate"
-    placeholder="DD-MM-YYYY"
-    [dateFormat]="'d-m-Y'"
-    (valueChange)="onDateSelected('afterTimestamp', $event)"
-  ></cds-date-picker>
+    <div class="valtimo-log-search__timestamp">
+      <cds-date-picker
+        #afterTimestamp
+        [attr.data-carbon-theme]="theme"
+        [label]="'logging.search.afterTimestamp' | translate"
+        placeholder="DD-MM-YYYY"
+        [dateFormat]="'d-m-Y'"
+        (valueChange)="onDateSelected('afterTimestamp', $event)"
+      ></cds-date-picker>
 
-  <cds-date-picker
-    #beforeTimestamp
-    [label]="'logging.search.beforeTimestamp' | translate"
-    placeholder="DD-MM-YYYY"
-    [dateFormat]="'d-m-Y'"
-    (valueChange)="onDateSelected('beforeTimestamp', $event)"
-  ></cds-date-picker>
+      <cds-date-picker
+        #beforeTimestamp
+        [attr.data-carbon-theme]="theme"
+        [label]="'logging.search.beforeTimestamp' | translate"
+        placeholder="DD-MM-YYYY"
+        [dateFormat]="'d-m-Y'"
+        (valueChange)="onDateSelected('beforeTimestamp', $event)"
+      ></cds-date-picker>
+    </div>
+  </section>
 
-  <div formArrayName="properties" class="valtimo-log-search__properties-container">
+  <section formArrayName="properties" class="valtimo-log-search__properties">
+    <span class="valtimo-log-search__label"> {{ 'logging.search.properties' | translate }} </span>
+
     @for (propertyGroup of propertiesArray.controls; track $index) {
-      <form [formGroup]="propertyGroup">
+      <form [formGroup]="propertyGroup" class="valtimo-log-search__property">
         <cds-text-label>
-          {{ 'interface.key' | translate }}
-
-          <input cdsText formControlName="key" [placeholder]="'interface.key' | translate" />
+          <input
+            cdsText
+            [attr.data-carbon-theme]="theme"
+            formControlName="key"
+            [placeholder]="'interface.key' | translate"
+          />
         </cds-text-label>
 
         <cds-text-label>
-          {{ 'interface.value' | translate }}
-
-          <input cdsText formControlName="value" [placeholder]="'interface.value' | translate" />
+          <input
+            cdsText
+            [attr.data-carbon-theme]="theme"
+            formControlName="value"
+            [placeholder]="'interface.value' | translate"
+          />
         </cds-text-label>
 
         <button
-          cdsButton="danger"
+          cdsButton="danger--ghost"
           [disabled]="$count === 1"
           iconOnly="true"
           type="button"
@@ -76,12 +97,12 @@
       </form>
     }
 
-    <button cdsButton="primary" type="button" (click)="addPropertySearchField()">
-      {{ 'interface.add' | translate }}
+    <button cdsButton="primary" size="sm" type="button" (click)="addPropertySearchField()">
+      {{ 'logging.search.addProperty' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
     </button>
-  </div>
+  </section>
 
   <button cdsButton="tertiary" type="button" (click)="onClearFilter()">
     {{ 'interface.clear' | translate }}
