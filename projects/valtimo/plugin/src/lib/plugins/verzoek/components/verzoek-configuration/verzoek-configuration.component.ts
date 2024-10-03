@@ -52,8 +52,6 @@ export class VerzoekConfigurationComponent
 
   mappedPrefill$: Observable<VerzoekConfig>;
 
-  private mappingSet!: boolean;
-
   readonly notificatiePluginSelectItems$: Observable<Array<SelectItem>> = combineLatest([
     this.pluginManagementService.getPluginConfigurationsByPluginDefinitionKey('notificatiesapi'),
     this.translateService.stream('key'),
@@ -284,21 +282,17 @@ export class VerzoekConfigurationComponent
       tap(prefill => {
         setTimeout(() => {
           this.formValue$.pipe(take(1)).subscribe(formValue => {
-            if (!this.mappingSet) {
-              const prefillVerzoeken = prefill?.verzoekProperties;
-              const formValueVerzoeken = formValue?.verzoekProperties;
+            const prefillVerzoeken = prefill?.verzoekProperties;
+            const formValueVerzoeken = formValue?.verzoekProperties;
 
-              prefillVerzoeken.forEach((verzoek, index) => {
-                const mappingForVerzoek = verzoek?.mapping;
-                const uuidForMapping = formValueVerzoeken[index].uuid;
+            prefillVerzoeken.forEach((verzoek, index) => {
+              const mappingForVerzoek = verzoek?.mapping;
+              const uuidForMapping = formValueVerzoeken[index].uuid;
 
-                if (mappingForVerzoek && uuidForMapping) {
-                  this.mappings[uuidForMapping] = mappingForVerzoek;
-                }
-              });
-
-              this.mappingSet = true;
-            }
+              if (mappingForVerzoek && uuidForMapping) {
+                this.mappings[uuidForMapping] = mappingForVerzoek;
+              }
+            });
           });
         }, 250);
       })

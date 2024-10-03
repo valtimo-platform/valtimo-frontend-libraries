@@ -18,6 +18,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
@@ -33,7 +34,7 @@ import {v4 as uuidv4} from 'uuid';
   templateUrl: './multi-input-form.component.html',
   styleUrls: ['./multi-input-form.component.scss'],
 })
-export class MultiInputFormComponent implements OnInit, OnDestroy {
+export class MultiInputFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() name = '';
   @Input() title = '';
   @Input() titleTranslationKey = '';
@@ -69,6 +70,10 @@ export class MultiInputFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.values$.next(this.getInitialRows());
     this.openValuesSubscription();
+  }
+
+  ngOnChanges(): void {
+    this.values$.next(this.getInitialRows());
   }
 
   ngOnDestroy(): void {
