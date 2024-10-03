@@ -22,9 +22,6 @@ import {ModalService} from '../../services/modal.service';
 import {IconService} from 'carbon-components-angular';
 import {Close24} from '@carbon/icons';
 
-/**
- * @deprecated Migrate old design to Carbon
- */
 @Component({
   selector: 'v-modal',
   templateUrl: './modal.component.html',
