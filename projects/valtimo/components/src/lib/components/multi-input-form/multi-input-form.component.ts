@@ -57,6 +57,12 @@ export class MultiInputFormComponent implements OnInit, OnChanges, OnDestroy {
 
   readonly values$ = new BehaviorSubject<MultiInputFormsValues>([]);
 
+  public getPrefillValueObservable(uuid: string): Observable<FormOutput | null> {
+    return this.values$.pipe(
+      map(values => values.find(value => value.uuid === uuid)?.value || null)
+    );
+  }
+
   readonly mappedValues$: Observable<Array<FormOutput>> = this.values$.pipe(
     map(values => values.map(value => value.value))
   );

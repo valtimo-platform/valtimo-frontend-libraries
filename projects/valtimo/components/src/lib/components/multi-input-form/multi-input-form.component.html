@@ -57,7 +57,7 @@
               index: i,
               changeFunction: formValueChange,
               uuid: value.uuid,
-              prefill: defaultValues && defaultValues[i],
+              prefill: getPrefillValueObservable(value.uuid) | async,
             }
           "
         ></ng-container>
