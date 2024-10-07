@@ -34,6 +34,7 @@ import {FormIoIbanComponent} from './form-io-iban/iban.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FormioValueResolverSelectorComponent} from './formio-value-resolver-selector/formio-value-resolver-selector.component';
 import {FormioDummyComponent} from './form-io-dummy/dummy.component';
+import {Templates} from 'formiojs';
 
 @NgModule({
   imports: [
@@ -73,4 +74,8 @@ import {FormioDummyComponent} from './form-io-dummy/dummy.component';
     },
   ],
 })
-export class FormIoModule {}
+export class FormIoModule {
+  constructor() {
+    Templates.framework = 'bootstrap3';
+  }
+}
