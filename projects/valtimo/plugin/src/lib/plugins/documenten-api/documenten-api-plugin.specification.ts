@@ -20,7 +20,7 @@ import {DOCUMENTEN_API_PLUGIN_LOGO_BASE64} from './assets';
 import {DocumentenApiConfigurationComponent} from './components/documenten-api-configuration/documenten-api-configuration.component';
 import {StoreUploadedDocumentConfigurationComponent} from './components/store-uploaded-document/store-uploaded-document-configuration.component';
 import {DownloadDocumentConfigurationComponent} from './components/download-document/download-document-configuration.component';
-import {StoreUploadedDocumentInPartsConfigurationComponent} from './components/store-uploaded-document-in-parts/store-uploaded-document-in parts-configuration.component';
+import {StoreUploadedDocumentInPartsConfigurationComponent} from './components/store-uploaded-document-in-parts/store-uploaded-document-in-parts-configuration.component';
 
 const documentenApiPluginSpecification: PluginSpecification = {
   pluginId: 'documentenapi',
