@@ -35,12 +35,12 @@ export class StoreUploadedDocumentInPartsConfigurationComponent
 
   private saveSubscription!: Subscription;
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.openSaveSubscription();
     this.emitValid();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.saveSubscription?.unsubscribe();
   }
 
