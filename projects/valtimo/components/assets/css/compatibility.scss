@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@import './formio-carbon';
+
 /* Carbon */
 
 body {
@@ -377,13 +379,6 @@ label.col-form-label {
   color: var(--cds-text-secondary) !important;
 }
 
-input {
-  &.form-control {
-    border: 1px solid var(--cds-border-subtle) !important;
-    background-color: var(--cds-field-02) !important;
-  }
-}
-
 .table.table-striped {
   background-color: var(--cds-layer-accent);
   font-weight: 700;
@@ -408,9 +403,6 @@ input {
 valtimo-list {
   .search-holder {
     border-bottom: 1px solid var(--cds-border-subtle) !important;
-  }
-  input.form-control {
-    border: 1px solid var(--cds-border-subtle);
   }
   .container-fluid {
     background-color: var(--cds-layer);
@@ -717,14 +709,6 @@ valtimo-dossier-widgets-container {
       background-color: var(--cds-layer) !important;
       border-bottom: 3px solid var(--cds-border-interactive) !important;
     }
-  }
-}
-
-.formio-component-textField,
-.form-control {
-  color: var(--cds-text-secondary) !important;
-  input::placeholder {
-    color: var(--cds-text-secondary) !important;
   }
 }
 
