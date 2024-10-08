@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
 import {
   BehaviorSubject,
@@ -30,7 +30,13 @@ import {
 import {CopyStrategy, VerzoekConfig, VerzoekType} from '../../models';
 import {PluginManagementService, PluginTranslationService} from '../../../../services';
 import {TranslateService} from '@ngx-translate/core';
-import {MultiInputValues, RadioValue, SelectItem} from '@valtimo/components';
+import {
+  ModalService,
+  MultiInputValues,
+  RadioValue,
+  SelectItem,
+  VModalComponent,
+} from '@valtimo/components';
 import {VerzoekPluginService} from '../../services';
 import {ProcessService} from '@valtimo/process';
 import {DocumentService} from '@valtimo/document';
@@ -43,6 +49,8 @@ import {DocumentService} from '@valtimo/document';
 export class VerzoekConfigurationComponent
   implements PluginConfigurationComponent, OnInit, OnDestroy
 {
+  @ViewChild('mappingModal') mappingModal: VModalComponent;
+
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
   @Input() pluginId: string;
@@ -116,7 +124,7 @@ export class VerzoekConfigurationComponent
 
   readonly showMappingButtons: {[uuid: string]: boolean} = {};
 
-  readonly showMappingModals: {[uuid: string]: boolean} = {};
+  readonly showMappingModals: {[uuid: string]: VModalComponent} = {};
   readonly showMappingModalsDelay: {[uuid: string]: boolean} = {};
 
   readonly tempMappings: {[uuid: string]: MultiInputValues} = {};
@@ -134,7 +142,8 @@ export class VerzoekConfigurationComponent
     private readonly pluginTranslationService: PluginTranslationService,
     private readonly verzoekPluginService: VerzoekPluginService,
     private readonly processService: ProcessService,
-    private readonly documentService: DocumentService
+    private readonly documentService: DocumentService,
+    private readonly modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -184,12 +193,13 @@ export class VerzoekConfigurationComponent
   }
 
   openMappingModal(uuid: string): void {
-    this.showMappingModals[uuid] = true;
+    this.showMappingModals[uuid] = this.mappingModal;
     this.showMappingModalsDelay[uuid] = true;
+    this.modalService.openModal(this.showMappingModals[uuid]);
   }
 
-  closeMappingModal(uuid: string): void {
-    this.showMappingModals[uuid] = false;
+  closeMappingModal(uuid): void {
+    this.modalService.closeModal();
 
     setTimeout(() => {
       this.showMappingModalsDelay[uuid] = false;
