@@ -57,6 +57,15 @@
 /* limit styling to these classes so rest of application outside form.io functions properly */
 .formio-carbon,
 .formio-dialog {
+  /* manual overrides */
+  .form-check {
+    padding-left: 0;
+  }
+
+  .nav.nav-tabs .nav-item .nav-link.active {
+    border: none !important;
+  }
+
   /* styling from https://raw.githubusercontent.com/IBM/ipm-bootstrap-carbon-theme/refs/heads/master/dist/css/bootstrap.css */
   html {
     font-family: sans-serif;
@@ -2758,28 +2767,33 @@
     box-shadow: none;
     -webkit-transition:
       border-color ease-in-out 0.15s,
+      outline ease-in-out 0.15s,
       box-shadow ease-in-out 0.15s;
     -o-transition:
       border-color ease-in-out 0.15s,
+      outline ease-in-out 0.15s,
       box-shadow ease-in-out 0.15s;
     -webkit-transition:
       border-color ease-in-out 0.15s,
+      outline ease-in-out 0.15s,
       -webkit-box-shadow ease-in-out 0.15s;
     transition:
       border-color ease-in-out 0.15s,
+      outline ease-in-out 0.15s,
       -webkit-box-shadow ease-in-out 0.15s;
     transition:
       border-color ease-in-out 0.15s,
+      outline ease-in-out 0.15s,
       box-shadow ease-in-out 0.15s;
     transition:
       border-color ease-in-out 0.15s,
+      outline ease-in-out 0.15s,
       box-shadow ease-in-out 0.15s,
       -webkit-box-shadow ease-in-out 0.15s;
   }
   .form-control:focus {
-    border: 1px solid;
-    border-color: var(--vcds-formio-blue-19);
-    outline: 0;
+    outline: 2px solid var(--cds-focus, var(--vcds-color-60));
+    outline-offset: -2px;
     -webkit-box-shadow: none;
     box-shadow: none;
   }
@@ -3227,7 +3241,7 @@
     touch-action: manipulation;
     cursor: pointer;
     background-image: none;
-    border: 1px solid transparent;
+    border: none;
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
