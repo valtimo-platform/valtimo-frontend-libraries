@@ -52,7 +52,7 @@
 
 <ng-template #logSearch>
   <valtimo-log-search
-    [initSearchRequest]="initSearchRequest$ | async"
+    [initSearchRequest]="searchRequest$ | async"
     (searchSubmitEvent)="onSearchSubmitEvent($event)"
   ></valtimo-log-search>
 </ng-template>

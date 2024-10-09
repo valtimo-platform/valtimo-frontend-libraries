@@ -108,7 +108,6 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     })
   );
 
-  public readonly initSearchRequest$ = new BehaviorSubject<LoggingEventSearchRequest | null>(null);
   public readonly searchRequest$ = new BehaviorSubject<LoggingEventSearchRequest>({});
   public readonly pagination$ = new BehaviorSubject<Pagination>(DEFAULT_PAGINATION);
   public readonly logDetailsOpen$ = new BehaviorSubject<boolean>(false);
@@ -183,7 +182,6 @@ export class LoggingListComponent implements OnInit, OnDestroy {
 
   public onClearFilter(): void {
     this.onSearchSubmitEvent({});
-    this.initSearchRequest$.next({});
   }
 
   private base64ToObject(base64string: string): object {
@@ -243,7 +241,6 @@ export class LoggingListComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(({size, page, searchRequest}) => {
-        this.initSearchRequest$.next(this.mapQueryParamsToSearchRequest(searchRequest));
         this.searchRequest$.next(this.mapQueryParamsToSearchRequest(searchRequest));
         this.pagination$.next({
           ...this.pagination$.getValue(),
