@@ -47,6 +47,7 @@ import {
 } from 'rxjs';
 import {
   LOG_ELLIPSIS_LIMIT,
+  LOG_LEVEL_TAG,
   LoggingEvent,
   LoggingEventProperty,
   LoggingEventQueryParams,
@@ -92,7 +93,15 @@ export class LoggingListComponent implements OnInit, OnDestroy {
         collectionSize: loggingPage.totalElements,
       });
 
-      return loggingPage.content;
+      return loggingPage.content.map((logEvent: LoggingEvent) => ({
+        ...logEvent,
+        tags: [
+          {
+            content: logEvent.level,
+            type: LOG_LEVEL_TAG[logEvent.level],
+          },
+        ],
+      }));
     }),
     tap(() => {
       this.loading$.next(false);
@@ -114,7 +123,7 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     {
       key: 'level',
       label: 'logging.columns.level',
-      viewType: ViewType.TEXT,
+      viewType: ViewType.TAGS,
     },
     {
       key: 'formattedMessage',
