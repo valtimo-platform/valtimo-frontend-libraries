@@ -40,6 +40,7 @@ import {
   combineLatest,
   map,
   Observable,
+  startWith,
   Subscription,
   switchMap,
   take,
@@ -103,6 +104,7 @@ export class LoggingListComponent implements OnInit, OnDestroy {
         ],
       }));
     }),
+    startWith([]),
     tap(() => {
       this.loading$.next(false);
     })
@@ -159,8 +161,14 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
-  public onPaginationClicked(page: number): void {
-    this.pagination$.next({...this.pagination$.getValue(), page});
+  public onPaginationClicked(page: number, logItems: CarbonListItem[]): void {
+    const activePagination: Pagination = this.pagination$.getValue();
+    const searchRequest: LoggingEventSearchRequest = this.searchRequest$.getValue();
+
+    if (!searchRequest.beforeTimestamp && activePagination.page === 1)
+      this.searchRequest$.next({...searchRequest, beforeTimestamp: logItems[0].timestamp});
+
+    this.pagination$.next({...activePagination, page});
   }
 
   public onPaginationSet(size: number): void {
