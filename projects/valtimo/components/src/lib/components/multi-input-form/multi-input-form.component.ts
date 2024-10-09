@@ -57,12 +57,6 @@ export class MultiInputFormComponent implements OnInit, OnChanges, OnDestroy {
 
   readonly values$ = new BehaviorSubject<MultiInputFormsValues>([]);
 
-  public getPrefillValueObservable(uuid: string): Observable<FormOutput | null> {
-    return this.values$.pipe(
-      map(values => values.find(value => value.uuid === uuid)?.value || null)
-    );
-  }
-
   readonly mappedValues$: Observable<Array<FormOutput>> = this.values$.pipe(
     map(values => values.map(value => value.value))
   );
@@ -71,15 +65,22 @@ export class MultiInputFormComponent implements OnInit, OnChanges, OnDestroy {
     map(values => !!(this.maxRows === null || values.length < this.maxRows))
   );
 
+  public initialDefaultValues$ = new BehaviorSubject<MultiInputFormsValues>([]);
+
   private valuesSubscription!: Subscription;
 
   ngOnInit(): void {
-    this.values$.next(this.getInitialRows());
+    const initialValues = this.getInitialRows();
+    this.initialDefaultValues$.next(initialValues);
+    this.values$.next(initialValues);
     this.openValuesSubscription();
   }
 
   ngOnChanges(): void {
-    this.values$.next(this.getInitialRows());
+    const initialValues = this.getInitialRows();
+    this.initialDefaultValues$.next(initialValues);
+    this.values$.next(initialValues);
+    this.openValuesSubscription();
   }
 
   ngOnDestroy(): void {
@@ -193,6 +194,7 @@ export class MultiInputFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private openValuesSubscription(): void {
+    this.valuesSubscription?.unsubscribe();
     this.valuesSubscription = this.values$.subscribe(values => {
       this.valueChange.emit(values);
     });
