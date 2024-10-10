@@ -2765,8 +2765,8 @@
       var(--cds-layout-density-padding-inline-max)
     );
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    align-items: center;
     width: 100%;
     padding: 0 var(--cds-layout-density-padding-inline-local);
     font-family: inherit;
