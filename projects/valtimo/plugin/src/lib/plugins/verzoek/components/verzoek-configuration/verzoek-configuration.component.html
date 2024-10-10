@@ -199,10 +199,11 @@
       </ng-container>
       <v-input class="hidden-input" name="uuid" [defaultValue]="uuid"> </v-input>
     </v-form>
-    <v-modal #mappingModal [parentId]="uuid" (closeEvent)="closeMappingModal(uuid)">
+    <v-modal [parentId]="uuid" (closeEvent)="closeMappingModal(uuid)">
       <div role="header">
         <h3 cdsModalHeaderHeading>{{ 'setMapping' | pluginTranslate: pluginId | async }}</h3>
       </div>
+
       <div role="content">
         <div class="cds--text-input__field-wrapper">
           <cds-label [disabled]="obs.disabled">
@@ -225,6 +226,7 @@
           ></valtimo-carbon-multi-input>
         </div>
       </div>
+
       <div role="footer">
         <ng-container>
           <button
