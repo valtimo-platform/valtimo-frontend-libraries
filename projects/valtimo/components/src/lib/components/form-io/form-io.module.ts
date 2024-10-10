@@ -35,6 +35,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {FormioValueResolverSelectorComponent} from './formio-value-resolver-selector/formio-value-resolver-selector.component';
 import {FormioDummyComponent} from './form-io-dummy/dummy.component';
 import {Templates} from 'formiojs';
+import {LayerModule} from 'carbon-components-angular';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import {Templates} from 'formiojs';
     RouterModule,
     ReactiveFormsModule,
     FormioValueResolverSelectorComponent,
+    LayerModule,
   ],
   declarations: [
     FormioComponent,
