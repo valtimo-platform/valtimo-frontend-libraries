@@ -31,6 +31,7 @@ export class VModalComponent implements OnInit {
   @Input() appearingDelayMs = 140;
   @Input() maxWidthPx!: number;
   @Input() hideFooter = false;
+  @Input() parentId: string;
 
   @Output() closeEvent: EventEmitter<any> = new EventEmitter();
 

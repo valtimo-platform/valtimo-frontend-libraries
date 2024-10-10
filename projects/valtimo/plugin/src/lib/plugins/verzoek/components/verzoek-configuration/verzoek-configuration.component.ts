@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
 import {
   BehaviorSubject,
@@ -49,7 +58,7 @@ import {DocumentService} from '@valtimo/document';
 export class VerzoekConfigurationComponent
   implements PluginConfigurationComponent, OnInit, OnDestroy
 {
-  @ViewChild('mappingModal') mappingModal: VModalComponent;
+  @ViewChildren(VModalComponent) mappingModals: QueryList<VModalComponent>;
 
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
@@ -124,7 +133,6 @@ export class VerzoekConfigurationComponent
 
   readonly showMappingButtons: {[uuid: string]: boolean} = {};
 
-  readonly showMappingModals: {[uuid: string]: VModalComponent} = {};
   readonly showMappingModalsDelay: {[uuid: string]: boolean} = {};
 
   readonly tempMappings: {[uuid: string]: MultiInputValues} = {};
@@ -193,9 +201,10 @@ export class VerzoekConfigurationComponent
   }
 
   openMappingModal(uuid: string): void {
-    this.showMappingModals[uuid] = this.mappingModal;
     this.showMappingModalsDelay[uuid] = true;
-    this.modalService.openModal(this.showMappingModals[uuid]);
+    this.modalService.openModal(
+      this.mappingModals.find(mappingModal => mappingModal.parentId === uuid)
+    );
   }
 
   closeMappingModal(uuid): void {

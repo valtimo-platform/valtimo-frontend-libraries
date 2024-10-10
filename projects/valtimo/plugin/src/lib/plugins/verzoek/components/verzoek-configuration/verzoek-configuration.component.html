@@ -199,7 +199,7 @@
       </ng-container>
       <v-input class="hidden-input" name="uuid" [defaultValue]="uuid"> </v-input>
     </v-form>
-    <v-modal #mappingModal (closeEvent)="closeMappingModal(uuid)">
+    <v-modal #mappingModal [parentId]="uuid" (closeEvent)="closeMappingModal(uuid)">
       <div role="header">
         <h3 cdsModalHeaderHeading>{{ 'setMapping' | pluginTranslate: pluginId | async }}</h3>
       </div>
