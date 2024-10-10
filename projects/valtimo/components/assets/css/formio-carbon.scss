@@ -7275,26 +7275,23 @@
     background-image: none;
   }
   .btn-default {
-    background-image: -webkit-linear-(top, #fff 0%, #e0e0e0 100%);
-    background-image: -o-linear-(top, #fff 0%, #e0e0e0 100%);
-    background-image: -webkit-(linear, left top, left bottom, from(#fff), to(#e0e0e0));
-    background-image: linear-(to bottom, #fff 0%, #e0e0e0 100%);
-    filter: progid:DXImageTransform.Microsoft.(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
-    filter: progid:DXImageTransform.Microsoft.(enabled = false);
-    background-repeat: repeat-x;
-    border-color: #dbdbdb;
-    text-shadow: 0 1px 0 #fff;
-    border-color: #ccc;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--cds-button-tertiary, var(--vcds-color-60)) !important;
+    background-color: transparent !important;
+    color: var(--cds-button-tertiary, var(--vcds-color-60)) !important;
+    text-shadow: none;
   }
   .btn-default:hover,
   .btn-default:focus {
-    background-color: #e0e0e0;
-    background-position: 0 -15px;
+    background-color: var(--cds-button-tertiary-hover, var(--vcds-color-70)) !important;
+    color: var(--cds-text-inverse, #ffffff) !important;
   }
   .btn-default:active,
   .btn-default.active {
-    background-color: #e0e0e0;
-    border-color: #dbdbdb;
+    border-color: transparent !important;
+    background-color: var(--cds-button-tertiary-active, var(--vcds-color-80)) !important;
+    color: var(--cds-text-inverse, #ffffff) !important;
   }
   .btn-default.disabled,
   .btn-default[disabled],
@@ -7314,8 +7311,10 @@
   .btn-default.disabled.active,
   .btn-default[disabled].active,
   fieldset[disabled] .btn-default.active {
-    background-color: #e0e0e0;
-    background-image: none;
+    border-color: var(--cds-button-disabled, #c6c6c6) !important;
+    background: var(--cds-button-disabled, #c6c6c6) !important;
+    box-shadow: none;
+    color: var(--cds-text-on-color-disabled, #8d8d8d) !important;
   }
   .btn-primary {
     background-color: var(--cds-button-primary, var(--vcds-color-60));
