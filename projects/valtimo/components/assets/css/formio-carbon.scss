@@ -7318,7 +7318,6 @@
     background-image: none;
   }
   .btn-primary {
-    border: none;
     background-color: var(--cds-button-primary, var(--vcds-color-60));
     color: var(--cds-text-on-color, #ffffff);
   }
@@ -7348,8 +7347,10 @@
   .btn-primary.disabled.active,
   .btn-primary[disabled].active,
   fieldset[disabled] .btn-primary.active {
-    background-color: var(--vcds-formio-blue-16);
-    background-image: none;
+    border-color: var(--cds-button-disabled, #c6c6c6);
+    background: var(--cds-button-disabled, #c6c6c6);
+    box-shadow: none;
+    color: var(--cds-text-on-color-disabled, #8d8d8d);
   }
   .btn-success {
     background-image: -webkit-linear-(top, #24a148 0%, #196f32 100%);
