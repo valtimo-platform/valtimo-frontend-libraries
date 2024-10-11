@@ -132,7 +132,6 @@ import {
 } from '@valtimo/zgw';
 import {LoggingModule} from '@valtimo/logging';
 import {FormViewModelModule} from '@valtimo/form-view-model';
-import {DisplayWidgetTypesModule} from '../../projects/valtimo/dashboard/src/lib/display-types/display-widget-types.module';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -219,7 +218,6 @@ export function tabsFactory() {
     }),
     ObjectModule,
     ObjectManagementModule,
-    DisplayWidgetTypesModule,
     CaseCountDataSourceModule,
     CaseCountsDataSourceModule,
     CaseGroupByDataSourceModule,
