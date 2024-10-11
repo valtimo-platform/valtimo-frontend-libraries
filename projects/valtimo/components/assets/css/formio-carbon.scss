@@ -7271,19 +7271,21 @@
     color: var(--cds-text-on-color-disabled, #8d8d8d);
   }
   .btn-success {
-    background-image: linear-gradient(to bottom, #24a148 0%, #196f32 100%);
+    background-image: none !important;
     background-repeat: repeat-x;
-    border-color: #17672e;
+    border-width: 0px !important;
+    border-color: transparent !important;
+    background-color: var(--cds-support-success-inverse) !important;
+    color: var(--cds-text-on-color, #ffffff) !important;
   }
   .btn-success:hover,
   .btn-success:focus {
-    background-color: #196f32;
-    background-position: 0 -15px;
+    color: var(--cds-text-on-color, #ffffff) !important;
+    background-color: var(--cds-support-success) !important;
   }
   .btn-success:active,
   .btn-success.active {
-    background-color: #196f32;
-    border-color: #17672e;
+    background-color: var(--cds-tag-color-green) !important;
   }
   .btn-success.disabled,
   .btn-success[disabled],
@@ -7303,8 +7305,11 @@
   .btn-success.disabled.active,
   .btn-success[disabled].active,
   fieldset[disabled] .btn-success.active {
-    background-color: #196f32;
-    background-image: none;
+    border-color: var(--cds-button-disabled, #c6c6c6) !important;
+    background: var(--cds-button-disabled, #c6c6c6) !important;
+    box-shadow: none !important;
+    color: var(--cds-text-on-color-disabled, #8d8d8d) !important;
+    cursor: not-allowed !important;
   }
   .btn-info {
     background-image: linear-gradient(
