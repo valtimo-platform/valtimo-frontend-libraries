@@ -7115,7 +7115,8 @@
   .btn-success,
   .btn-info,
   .btn-warning,
-  .btn-danger {
+  .btn-danger,
+  .btn-secondary {
     text-shadow: none !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
@@ -7131,7 +7132,8 @@
   .btn-success.active,
   .btn-info.active,
   .btn-warning.active,
-  .btn-danger.active {
+  .btn-danger.active,
+  .btn-secondary {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
   }
@@ -7147,6 +7149,7 @@
   .btn-info[disabled],
   .btn-warning[disabled],
   .btn-danger[disabled],
+  .btn-secondary[disabled],
   fieldset[disabled] .btn-default,
   fieldset[disabled] .btn-primary,
   fieldset[disabled] .btn-success,
@@ -7168,7 +7171,8 @@
   .btn.active {
     background-image: none;
   }
-  .btn-default {
+  .btn-default,
+  .btn-secondary {
     border-width: 1px;
     border-style: solid;
     border-color: var(--cds-button-tertiary, var(--vcds-color-60)) !important;
@@ -7177,16 +7181,23 @@
     text-shadow: none;
   }
   .btn-default:hover,
-  .btn-default:focus {
+  .btn-default:focus,
+  .btn-secondary:hover,
+  .btn-secondary:focus {
     background-color: var(--cds-button-tertiary-hover, var(--vcds-color-70)) !important;
     color: var(--cds-text-inverse, #ffffff) !important;
   }
+  //default
   .btn-default:active,
-  .btn-default.active {
+  .btn-default.active,
+  //secondary
+  .btn-secondary:active,
+  btn-secondary.active {
     border-color: transparent !important;
     background-color: var(--cds-button-tertiary-active, var(--vcds-color-80)) !important;
     color: var(--cds-text-inverse, #ffffff) !important;
   }
+  //default
   .btn-default.disabled,
   .btn-default[disabled],
   fieldset[disabled] .btn-default,
@@ -7204,7 +7215,26 @@
   fieldset[disabled] .btn-default:active,
   .btn-default.disabled.active,
   .btn-default[disabled].active,
-  fieldset[disabled] .btn-default.active {
+  fieldset[disabled] .btn-default.active,
+  // secondary
+  .btn-secondary.disabled,
+  .btn-secondary[disabled],
+  fieldset[disabled] .btn-secondary,
+  .btn-secondary.disabled:hover,
+  .btn-secondary[disabled]:hover,
+  fieldset[disabled] .btn-secondary:hover,
+  .btn-secondary.disabled:focus,
+  .btn-secondary[disabled]:focus,
+  fieldset[disabled] .btn-secondary:focus,
+  .btn-secondary.disabled.focus,
+  .btn-secondary[disabled].focus,
+  fieldset[disabled] .btn-secondary.focus,
+  .btn-secondary.disabled:active,
+  .btn-secondary[disabled]:active,
+  fieldset[disabled] .btn-secondary:active,
+  .btn-secondary.disabled.active,
+  .btn-secondary[disabled].active,
+  fieldset[disabled] .btn-secondary.active {
     border-color: var(--cds-button-disabled, #c6c6c6) !important;
     background: var(--cds-button-disabled, #c6c6c6) !important;
     box-shadow: none;
