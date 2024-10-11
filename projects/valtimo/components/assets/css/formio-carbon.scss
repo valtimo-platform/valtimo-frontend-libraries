@@ -5369,26 +5369,6 @@
   }
   .progress-striped .progress-bar,
   .progress-bar-striped {
-    background-image: -webkit-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-image: -o-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
     background-image: linear-gradient(
       45deg,
       rgba(255, 255, 255, 0.15) 25%,
@@ -5399,7 +5379,6 @@
       transparent 75%,
       transparent
     );
-    -webkit-background-size: 40px 40px;
     background-size: 40px 40px;
   }
   .progress.active .progress-bar,
@@ -5412,26 +5391,6 @@
     background-color: #24a148;
   }
   .progress-striped .progress-bar-success {
-    background-image: -webkit-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-image: -o-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
     background-image: linear-gradient(
       45deg,
       rgba(255, 255, 255, 0.15) 25%,
@@ -5447,26 +5406,6 @@
     background-color: var(--vcds-formio-blue-12);
   }
   .progress-striped .progress-bar-info {
-    background-image: -webkit-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-image: -o-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
     background-image: linear-gradient(
       45deg,
       rgba(255, 255, 255, 0.15) 25%,
@@ -5517,26 +5456,6 @@
     background-color: #da1e28;
   }
   .progress-striped .progress-bar-danger {
-    background-image: -webkit-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-image: -o-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
     background-image: linear-gradient(
       45deg,
       rgba(255, 255, 255, 0.15) 25%,
@@ -6766,38 +6685,12 @@
     opacity: 0.5;
   }
   .carousel-control.left {
-    background-image: -webkit-linear-gradient(
-      left,
-      rgba(0, 0, 0, 0.5) 0%,
-      rgba(0, 0, 0, 0.0001) 100%
-    );
-    background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      right top,
-      from(rgba(0, 0, 0, 0.5)),
-      to(rgba(0, 0, 0, 0.0001))
-    );
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
     background-repeat: repeat-x;
   }
   .carousel-control.right {
     right: 0;
     left: auto;
-    background-image: -webkit-linear-gradient(
-      left,
-      rgba(0, 0, 0, 0.0001) 0%,
-      rgba(0, 0, 0, 0.5) 100%
-    );
-    background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      right top,
-      from(rgba(0, 0, 0, 0.0001)),
-      to(rgba(0, 0, 0, 0.5))
-    );
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
     background-repeat: repeat-x;
   }
@@ -7353,9 +7246,6 @@
     color: var(--cds-text-on-color-disabled, #8d8d8d);
   }
   .btn-success {
-    background-image: -webkit-linear-gradient(top, #24a148 0%, #196f32 100%);
-    background-image: -o-linear-gradient(top, #24a148 0%, #196f32 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#24a148), to(#196f32));
     background-image: linear-gradient(to bottom, #24a148 0%, #196f32 100%);
     background-repeat: repeat-x;
     border-color: #17672e;
@@ -7392,23 +7282,6 @@
     background-image: none;
   }
   .btn-info {
-    background-image: -webkit-linear-gradient(
-      top,
-      var(--vcds-formio-blue-12) 0%,
-      var(--vcds-formio-blue-9) 100%
-    );
-    background-image: -o-linear-gradient(
-      top,
-      var(--vcds-formio-blue-12) 0%,
-      var(--vcds-formio-blue-9) 100%
-    );
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
-      from(var(--vcds-formio-blue-12)),
-      to(var(--vcds-formio-blue-9))
-    );
     background-image: linear-gradient(
       to bottom,
       var(--vcds-formio-blue-12) 0%,
@@ -7449,9 +7322,6 @@
     background-image: none;
   }
   .btn-warning {
-    background-image: -webkit-linear-gradient(top, #f1c21b 0%, #c39b0c 100%);
-    background-image: -o-linear-gradient(top, #f1c21b 0%, #c39b0c 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f1c21b), to(#c39b0c));
     background-image: linear-gradient(to bottom, #f1c21b 0%, #c39b0c 100%);
     background-repeat: repeat-x;
     border-color: #b9930b;
@@ -7488,9 +7358,6 @@
     background-image: none;
   }
   .btn-danger {
-    background-image: -webkit-linear-gradient(top, #da1e28 0%, #a4171e 100%);
-    background-image: -o-linear-gradient(top, #da1e28 0%, #a4171e 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#da1e28), to(#a4171e));
     background-image: linear-gradient(to bottom, #da1e28 0%, #a4171e 100%);
     background-repeat: repeat-x;
     border-color: #9b151c;
@@ -7533,9 +7400,6 @@
   }
   .dropdown-menu > li > a:hover,
   .dropdown-menu > li > a:focus {
-    background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #e8e8e8 100%);
-    background-image: -o-linear-gradient(top, #f5f5f5 0%, #e8e8e8 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f5f5), to(#e8e8e8));
     background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
     background-repeat: repeat-x;
     background-color: #e8e8e8;
@@ -7543,23 +7407,6 @@
   .dropdown-menu > .active > a,
   .dropdown-menu > .active > a:hover,
   .dropdown-menu > .active > a:focus {
-    background-image: -webkit-linear-gradient(
-      top,
-      var(--vcds-formio-blue-8) 0%,
-      var(--vcds-formio-blue-4) 100%
-    );
-    background-image: -o-linear-gradient(
-      top,
-      var(--vcds-formio-blue-8) 0%,
-      var(--vcds-formio-blue-4) 100%
-    );
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
-      from(var(--vcds-formio-blue-8)),
-      to(var(--vcds-formio-blue-4))
-    );
     background-image: linear-gradient(
       to bottom,
       var(--vcds-formio-blue-8) 0%,
@@ -7569,9 +7416,6 @@
     background-color: var(--vcds-formio-blue-4);
   }
   .navbar-default {
-    background-image: -webkit-linear-gradient(top, #ffffff 0%, #f8f8f8 100%);
-    background-image: -o-linear-gradient(top, #ffffff 0%, #f8f8f8 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f8f8f8));
     background-image: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 100%);
     background-repeat: repeat-x;
     border-radius: 0px;
@@ -7584,9 +7428,6 @@
   }
   .navbar-default .navbar-nav > .open > a,
   .navbar-default .navbar-nav > .active > a {
-    background-image: -webkit-linear-gradient(top, #dbdbdb 0%, #e2e2e2 100%);
-    background-image: -o-linear-gradient(top, #dbdbdb 0%, #e2e2e2 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#dbdbdb), to(#e2e2e2));
     background-image: linear-gradient(to bottom, #dbdbdb 0%, #e2e2e2 100%);
     background-repeat: repeat-x;
     -webkit-box-shadow: inset 0 3px 9px rgba(0, 0, 0, 0.075);
@@ -7597,18 +7438,12 @@
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
   }
   .navbar-inverse {
-    background-image: -webkit-linear-gradient(top, #3c3c3c 0%, #222 100%);
-    background-image: -o-linear-gradient(top, #3c3c3c 0%, #222 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#3c3c3c), to(#222));
     background-image: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
     background-repeat: repeat-x;
     border-radius: 0px;
   }
   .navbar-inverse .navbar-nav > .open > a,
   .navbar-inverse .navbar-nav > .active > a {
-    background-image: -webkit-linear-gradient(top, #080808 0%, #0f0f0f 100%);
-    background-image: -o-linear-gradient(top, #080808 0%, #0f0f0f 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#080808), to(#0f0f0f));
     background-image: linear-gradient(to bottom, #080808 0%, #0f0f0f 100%);
     background-repeat: repeat-x;
     -webkit-box-shadow: inset 0 3px 9px rgba(0, 0, 0, 0.25);
@@ -7628,23 +7463,6 @@
     .navbar .navbar-nav .open .dropdown-menu > .active > a:hover,
     .navbar .navbar-nav .open .dropdown-menu > .active > a:focus {
       color: #fff;
-      background-image: -webkit-linear-gradient(
-        top,
-        var(--vcds-formio-blue-8) 0%,
-        var(--vcds-formio-blue-4) 100%
-      );
-      background-image: -o-linear-gradient(
-        top,
-        var(--vcds-formio-blue-8) 0%,
-        var(--vcds-formio-blue-4) 100%
-      );
-      background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        from(var(--vcds-formio-blue-8)),
-        to(var(--vcds-formio-blue-4))
-      );
       background-image: linear-gradient(
         to bottom,
         var(--vcds-formio-blue-8) 0%,
@@ -7663,31 +7481,11 @@
       0 1px 2px rgba(0, 0, 0, 0.05);
   }
   .alert-success {
-    background-image: -webkit-linear-gradient(top, #defbe6 0%, #bcf7cc 100%);
-    background-image: -o-linear-gradient(top, #defbe6 0%, #bcf7cc 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#defbe6), to(#bcf7cc));
     background-image: linear-gradient(to bottom, #defbe6 0%, #bcf7cc 100%);
     background-repeat: repeat-x;
     border-color: #9af3b2;
   }
   .alert-info {
-    background-image: -webkit-linear-gradient(
-      top,
-      var(--vcds-formio-blue-25) 0%,
-      var(--vcds-formio-blue-23) 100%
-    );
-    background-image: -o-linear-gradient(
-      top,
-      var(--vcds-formio-blue-25) 0%,
-      var(--vcds-formio-blue-23) 100%
-    );
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
-      from(var(--vcds-formio-blue-25)),
-      to(var(--vcds-formio-blue-23))
-    );
     background-image: linear-gradient(
       to bottom,
       var(--vcds-formio-blue-25) 0%,
@@ -7697,46 +7495,20 @@
     border-color: var(--vcds-formio-blue-21);
   }
   .alert-warning {
-    background-image: -webkit-linear-gradient(top, #fdf6dd 0%, #fbecb9 100%);
-    background-image: -o-linear-gradient(top, #fdf6dd 0%, #fbecb9 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#fdf6dd), to(#fbecb9));
     background-image: linear-gradient(to bottom, #fdf6dd 0%, #fbecb9 100%);
     background-repeat: repeat-x;
     border-color: #f9e395;
   }
   .alert-danger {
-    background-image: -webkit-linear-gradient(top, #fff1f1 0%, #ffcbcb 100%);
-    background-image: -o-linear-gradient(top, #fff1f1 0%, #ffcbcb 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#fff1f1), to(#ffcbcb));
     background-image: linear-gradient(to bottom, #fff1f1 0%, #ffcbcb 100%);
     background-repeat: repeat-x;
     border-color: #ffa4a4;
   }
   .progress {
-    background-image: -webkit-linear-gradient(top, #ebebeb 0%, #f5f5f5 100%);
-    background-image: -o-linear-gradient(top, #ebebeb 0%, #f5f5f5 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebebeb), to(#f5f5f5));
     background-image: linear-gradient(to bottom, #ebebeb 0%, #f5f5f5 100%);
     background-repeat: repeat-x;
   }
   .progress-bar {
-    background-image: -webkit-linear-gradient(
-      top,
-      var(--vcds-formio-blue-19) 0%,
-      var(--vcds-formio-blue-17) 100%
-    );
-    background-image: -o-linear-gradient(
-      top,
-      var(--vcds-formio-blue-19) 0%,
-      var(--vcds-formio-blue-17) 100%
-    );
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
-      from(var(--vcds-formio-blue-19)),
-      to(var(--vcds-formio-blue-17))
-    );
     background-image: linear-gradient(
       to bottom,
       var(--vcds-formio-blue-19) 0%,
@@ -7745,30 +7517,10 @@
     background-repeat: repeat-x;
   }
   .progress-bar-success {
-    background-image: -webkit-linear-gradient(top, #24a148 0%, #1b7735 100%);
-    background-image: -o-linear-gradient(top, #24a148 0%, #1b7735 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#24a148), to(#1b7735));
     background-image: linear-gradient(to bottom, #24a148 0%, #1b7735 100%);
     background-repeat: repeat-x;
   }
   .progress-bar-info {
-    background-image: -webkit-linear-gradient(
-      top,
-      var(--vcds-formio-blue-12) 0%,
-      var(--vcds-formio-blue-10) 100%
-    );
-    background-image: -o-linear-gradient(
-      top,
-      var(--vcds-formio-blue-12) 0%,
-      var(--vcds-formio-blue-10) 100%
-    );
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
-      from(var(--vcds-formio-blue-12)),
-      to(var(--vcds-formio-blue-10))
-    );
     background-image: linear-gradient(
       to bottom,
       var(--vcds-formio-blue-12) 0%,
@@ -7777,40 +7529,14 @@
     background-repeat: repeat-x;
   }
   .progress-bar-warning {
-    background-image: -webkit-linear-gradient(top, #f1c21b 0%, #cca20d 100%);
-    background-image: -o-linear-gradient(top, #f1c21b 0%, #cca20d 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f1c21b), to(#cca20d));
     background-image: linear-gradient(to bottom, #f1c21b 0%, #cca20d 100%);
     background-repeat: repeat-x;
   }
   .progress-bar-danger {
-    background-image: -webkit-linear-gradient(top, #da1e28 0%, #ad1820 100%);
-    background-image: -o-linear-gradient(top, #da1e28 0%, #ad1820 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#da1e28), to(#ad1820));
     background-image: linear-gradient(to bottom, #da1e28 0%, #ad1820 100%);
     background-repeat: repeat-x;
   }
   .progress-bar-striped {
-    background-image: -webkit-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-image: -o-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
     background-image: linear-gradient(
       45deg,
       rgba(255, 255, 255, 0.15) 25%,
@@ -7831,23 +7557,6 @@
   .list-group-item.active:hover,
   .list-group-item.active:focus {
     text-shadow: 0 -1px 0 var(--vcds-formio-blue-2);
-    background-image: -webkit-linear-gradient(
-      top,
-      var(--vcds-formio-blue-8) 0%,
-      var(--vcds-formio-blue-3) 100%
-    );
-    background-image: -o-linear-gradient(
-      top,
-      var(--vcds-formio-blue-8) 0%,
-      var(--vcds-formio-blue-3) 100%
-    );
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
-      from(var(--vcds-formio-blue-8)),
-      to(var(--vcds-formio-blue-3))
-    );
     background-image: linear-gradient(
       to bottom,
       var(--vcds-formio-blue-8) 0%,
@@ -7866,30 +7575,10 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
   .panel-default > .panel-heading {
-    background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #e8e8e8 100%);
-    background-image: -o-linear-gradient(top, #f5f5f5 0%, #e8e8e8 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f5f5), to(#e8e8e8));
     background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
     background-repeat: repeat-x;
   }
   .panel-primary > .panel-heading {
-    background-image: -webkit-linear-gradient(
-      top,
-      var(--vcds-formio-blue-19) 0%,
-      var(--vcds-formio-blue-18) 100%
-    );
-    background-image: -o-linear-gradient(
-      top,
-      var(--vcds-formio-blue-19) 0%,
-      var(--vcds-formio-blue-18) 100%
-    );
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
-      from(var(--vcds-formio-blue-19)),
-      to(var(--vcds-formio-blue-18))
-    );
     background-image: linear-gradient(
       to bottom,
       var(--vcds-formio-blue-19) 0%,
@@ -7898,55 +7587,26 @@
     background-repeat: repeat-x;
   }
   .panel-success > .panel-heading {
-    background-image: -webkit-linear-gradient(top, #defbe6 0%, #c7f8d5 100%);
-    background-image: -o-linear-gradient(top, #defbe6 0%, #c7f8d5 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#defbe6), to(#c7f8d5));
     background-image: linear-gradient(to bottom, #defbe6 0%, #c7f8d5 100%);
     background-repeat: repeat-x;
   }
   .panel-info > .panel-heading {
-    background-image: -webkit-linear-gradient(
-      top,
-      var(--vcds-formio-blue-25) 0%,
-      var(--vcds-formio-blue-24) 100%
-    );
-    background-image: -o-linear-gradient(
-      top,
-      var(--vcds-formio-blue-25) 0%,
-      var(--vcds-formio-blue-24) 100%
-    );
-    background-image: -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
-      from(var(--vcds-formio-blue-25)),
-      to(var(--vcds-formio-blue-24))
-    );
     background-image: linear-gradient(
       to bottom,
       var(--vcds-formio-blue-25) 0%,
-      var(--vcds-formio-blue-24) 100%
+      ß var(--vcds-formio-blue-24) 100%
     );
     background-repeat: repeat-x;
   }
   .panel-warning > .panel-heading {
-    background-image: -webkit-linear-gradient(top, #fdf6dd 0%, #fcf0c5 100%);
-    background-image: -o-linear-gradient(top, #fdf6dd 0%, #fcf0c5 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#fdf6dd), to(#fcf0c5));
     background-image: linear-gradient(to bottom, #fdf6dd 0%, #fcf0c5 100%);
     background-repeat: repeat-x;
   }
   .panel-danger > .panel-heading {
-    background-image: -webkit-linear-gradient(top, #fff1f1 0%, #ffd8d8 100%);
-    background-image: -o-linear-gradient(top, #fff1f1 0%, #ffd8d8 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#fff1f1), to(#ffd8d8));
     background-image: linear-gradient(to bottom, #fff1f1 0%, #ffd8d8 100%);
     background-repeat: repeat-x;
   }
   .well {
-    background-image: -webkit-linear-gradient(top, #e8e8e8 0%, #f5f5f5 100%);
-    background-image: -o-linear-gradient(top, #e8e8e8 0%, #f5f5f5 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#e8e8e8), to(#f5f5f5));
     background-image: linear-gradient(to bottom, #e8e8e8 0%, #f5f5f5 100%);
     background-repeat: repeat-x;
     border-color: #dcdcdc;
