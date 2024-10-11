@@ -54,9 +54,10 @@
   --vcds-formio-blue-25: var(--vcds-color-20);
 }
 
-/* limit styling to these classes so rest of application outside form.io functions properly */
+/* limit styling to these classes related to form.io, so rest of application outside form.io functions properly */
 .formio-carbon,
-.formio-dialog {
+.formio-dialog,
+.builder-component {
   /* manual overrides */
   .form-check {
     padding-left: 0;
