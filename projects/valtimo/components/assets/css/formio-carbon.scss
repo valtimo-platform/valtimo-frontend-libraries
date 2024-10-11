@@ -7236,16 +7236,16 @@
     color: var(--cds-text-on-color-disabled, #8d8d8d) !important;
   }
   .btn-primary {
-    background-color: var(--cds-button-primary, var(--vcds-color-60));
-    color: var(--cds-text-on-color, #ffffff);
+    background-color: var(--cds-button-primary, var(--vcds-color-60)) !important;
+    color: var(--cds-text-on-color, #ffffff) !important;
   }
   .btn-primary:hover,
   .btn-primary:focus {
-    background-color: var(--cds-button-primary-hover, var(--vcds-color-70));
+    background-color: var(--cds-button-primary-hover, var(--vcds-color-70)) !important;
   }
   .btn-primary:active,
   .btn-primary.active {
-    background-color: var(--cds-button-primary-active, var(--vcds-color-80));
+    background-color: var(--cds-button-primary-active, var(--vcds-color-80)) !important;
   }
   .btn-primary.disabled,
   .btn-primary[disabled],
@@ -7352,19 +7352,24 @@
     background-image: none;
   }
   .btn-warning {
-    background-image: linear-gradient(to bottom, #f1c21b 0%, #c39b0c 100%);
-    background-repeat: repeat-x;
-    border-color: #b9930b;
+    background-image: none !important;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--cds-button-danger-primary) !important;
+    background-color: transparent !important;
+    color: var(--cds-button-danger-primary) !important;
+    text-shadow: none;
   }
   .btn-warning:hover,
   .btn-warning:focus {
-    background-color: #c39b0c;
-    background-position: 0 -15px;
+    background-color: var(--cds-button-danger-hover) !important;
+    color: var(--cds-text-inverse, #ffffff) !important;
   }
   .btn-warning:active,
   .btn-warning.active {
-    background-color: #c39b0c;
-    border-color: #b9930b;
+    border-color: transparent !important;
+    background-color: var(--cds-button-danger-active) !important;
+    color: var(--cds-text-inverse, #ffffff) !important;
   }
   .btn-warning.disabled,
   .btn-warning[disabled],
@@ -7384,8 +7389,10 @@
   .btn-warning.disabled.active,
   .btn-warning[disabled].active,
   fieldset[disabled] .btn-warning.active {
-    background-color: #c39b0c;
-    background-image: none;
+    border-color: var(--cds-button-disabled, #c6c6c6) !important;
+    background: var(--cds-button-disabled, #c6c6c6) !important;
+    box-shadow: none;
+    color: var(--cds-text-on-color-disabled, #8d8d8d) !important;
   }
   .btn-danger {
     background-image: none !important;
