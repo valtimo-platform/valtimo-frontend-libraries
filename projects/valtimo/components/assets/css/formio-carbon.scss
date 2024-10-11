@@ -2759,16 +2759,10 @@
       var(--cds-layout-size-height, var(--cds-layout-size-height-md)),
       min(var(--cds-layout-size-height-max), var(--cds-layout-size-height-lg))
     );
-    --cds-layout-density-padding-inline-local: clamp(
-      var(--cds-layout-density-padding-inline-min),
-      var(--cds-layout-density-padding-inline, var(--cds-layout-density-padding-inline-normal)),
-      var(--cds-layout-density-padding-inline-max)
-    );
     display: flex;
     flex-direction: row;
     align-items: center;
     width: 100%;
-    padding: 0 var(--cds-layout-density-padding-inline-local);
     font-family: inherit;
     font-size: var(--cds-body-compact-01-font-size, 0.875rem);
     font-weight: var(--cds-body-compact-01-font-weight, 400);
