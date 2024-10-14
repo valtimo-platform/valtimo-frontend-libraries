@@ -1,0 +1,18 @@
+<div class="decimalForm-container" [formGroup]="decimalForm">
+  <div class="input-group">
+    <input cdsText id="decimal" type="number" formControlName="decimal" class="form-control" />
+
+    <div
+      class="formio-errors invalid-feedback"
+      *ngIf="
+        decimalForm.controls.iban.invalid &&
+        (decimalForm.controls.iban.touched || !decimalForm.controls.iban.pristine) &&
+        decimalForm.controls?.iban?.errors
+      "
+    >
+      <div class="form-text error">
+        {{ 'formioTranslations.formioDecimalComponent.errorMessage' | translate }}
+      </div>
+    </div>
+  </div>
+</div>
