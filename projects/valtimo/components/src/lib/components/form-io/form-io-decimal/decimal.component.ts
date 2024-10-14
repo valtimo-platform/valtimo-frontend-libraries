@@ -1,18 +1,20 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {TranslateModule} from '@ngx-translate/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {ibanValidator} from '../form-io-iban/iban.validators';
+import {FormioCustomComponent} from '../../../modules';
+import {decimalValidator} from './decimal.validators';
 
+/**
+ * Custom formio component for decimal number.
+ */
 @Component({
   selector: 'valtimo-decimal',
-  standalone: true,
-  imports: [NgIf, ReactiveFormsModule, TranslateModule],
   templateUrl: './decimal.component.html',
-  styleUrl: './decimal.component.css',
+  styleUrls: ['./decimal.component.scss'],
 })
-export class FormIoDecimalComponent {
+export class FormIoDecimalComponent
+  implements FormioCustomComponent<any>, AfterViewInit, OnDestroy
+{
   @Input() public value: string;
   @Input() public disabled = false;
   @Input() public required = false;
@@ -26,7 +28,7 @@ export class FormIoDecimalComponent {
     setTimeout(() => {
       this.decimalForm.controls.decimal.setValue(this.value);
       this.decimalForm.controls.decimal.setValidators(
-        this.required ? [Validators.required, ibanValidator()] : [ibanValidator()]
+        this.required ? [Validators.required, decimalValidator()] : [decimalValidator()]
       );
       this.decimalForm.controls.decimal.updateValueAndValidity();
 

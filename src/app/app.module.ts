@@ -31,6 +31,7 @@ import {
   FormIoModule,
   MenuModule,
   registerFormioCurrentUserComponent,
+  registerFormioDecimalComponent,
   registerFormioFileSelectorComponent,
   registerFormioIbanComponent,
   registerFormioUploadComponent,
@@ -284,6 +285,7 @@ export class AppModule {
     registerFormioFileSelectorComponent(injector);
     registerDocumentenApiFormioUploadComponent(injector);
     registerFormioIbanComponent(injector);
+    registerFormioDecimalComponent(injector);
     registerFormioValueResolverSelectorComponent(injector);
   }
 }
