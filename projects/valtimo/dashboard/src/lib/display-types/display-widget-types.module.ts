@@ -6,9 +6,6 @@ import {GaugeModule} from './gauge';
 import {MeterModule} from './meter';
 
 @NgModule({
-  declarations: [],
   imports: [BarChartModule, BigNumberModule, DonutModule, GaugeModule, MeterModule],
-  exports: [],
-  providers: [],
 })
 export class DisplayWidgetTypesModule {}
