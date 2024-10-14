@@ -7,7 +7,7 @@ const COMPONENT_OPTIONS: FormioCustomComponentInfo = {
   selector: 'valtimo-decimal',
   title: 'Decimal',
   group: 'basic',
-  icon: 'number',
+  icon: 'hashtag',
   schema: {
     label: 'Decimal component',
     key: 'decimal',
