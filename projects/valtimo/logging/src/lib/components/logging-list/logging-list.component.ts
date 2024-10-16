@@ -22,6 +22,7 @@ import {
   CARBON_CONSTANTS,
   CarbonListItem,
   CarbonListModule,
+  CarbonTag,
   ColumnConfig,
   DEFAULT_PAGINATION,
   Pagination,
@@ -178,8 +179,8 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     this.pagination$.next({...this.pagination$.getValue(), size, ...(resetPage && {page: 1})});
   }
 
-  public onRowClickedEvent(rowClickEvent: LoggingEvent & {ctrlClick: boolean}): void {
-    const {ctrlClick: _, ...logEvent} = rowClickEvent;
+  public onRowClickedEvent(rowClickEvent: LoggingEvent & {ctrlClick: boolean, tags: CarbonTag[]}): void {
+    const {ctrlClick: _1, tags: _2, ...logEvent} = rowClickEvent;
     this.logDetailsOpen$.next(true);
     this.selectedLogEvent$.next(logEvent);
   }

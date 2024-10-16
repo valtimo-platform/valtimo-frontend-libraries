@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { FormDefinitionListItem, FormFlowProcessLinkUpdateRequestDto } from '../../models';
+import { FormFlowService, ProcessLinkButtonService, ProcessLinkService, ProcessLinkStateService } from '../../services';
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
-import {
-  FormFlowService,
-  ProcessLinkButtonService,
-  ProcessLinkService,
-  ProcessLinkStateService,
-} from '../../services';
-import {FormDefinitionListItem, FormFlowProcessLinkUpdateRequestDto} from '../../models';
-import {take} from 'rxjs/operators';
-import {ConfigService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-select-form-flow',
@@ -60,10 +54,8 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
 
   private _subscriptions = new Subscription();
   private isUserTask$ = new BehaviorSubject<boolean>(false);
-  private readonly taskPanelToggle = this.configService.featureToggles?.enableTaskPanel;
 
   constructor(
-    private readonly configService: ConfigService,
     private readonly formFlowService: FormFlowService,
     private readonly stateService: ProcessLinkStateService,
     private readonly processLinkService: ProcessLinkService,
@@ -142,11 +134,11 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
         const updateProcessLinkRequest: FormFlowProcessLinkUpdateRequestDto = {
           id: selectedProcessLink.id,
           formFlowDefinitionId: this.selectedFormFlowDefinition.id,
-          ...(this.taskPanelToggle &&
+          ...(
             isUserTask && {
               formDisplayType: this.formDisplayValue,
             }),
-          ...(this.taskPanelToggle && isUserTask && {formSize: this.formSizeValue}),
+          ...(isUserTask && {formSize: this.formSizeValue}),
         };
 
         this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
