@@ -42,23 +42,39 @@
     </cds-dropdown>
 
     <div class="valtimo-log-search__timestamp">
-      <cds-date-picker
-        #afterTimestamp
-        [attr.data-carbon-theme]="theme"
-        [label]="'logging.search.afterTimestamp' | translate"
-        placeholder="DD-MM-YYYY"
-        [dateFormat]="'d-m-Y'"
-        (valueChange)="onDateSelected('afterTimestamp', $event)"
-      ></cds-date-picker>
+      <div class="valtimo-log-search__datetime">
+        <cds-date-picker
+          #afterTimestamp
+          [attr.data-carbon-theme]="theme"
+          [label]="'logging.search.afterTimestamp' | translate"
+          placeholder="DD-MM-YYYY"
+          [dateFormat]="'d-m-Y'"
+          (valueChange)="onDateSelected('afterTimestamp', $event)"
+        ></cds-date-picker>
 
-      <cds-date-picker
-        #beforeTimestamp
-        [attr.data-carbon-theme]="theme"
-        [label]="'logging.search.beforeTimestamp' | translate"
-        placeholder="DD-MM-YYYY"
-        [dateFormat]="'d-m-Y'"
-        (valueChange)="onDateSelected('beforeTimestamp', $event)"
-      ></cds-date-picker>
+        <cds-timepicker
+          formControlName="afterTime"
+          label="Select a time"
+        >
+        </cds-timepicker>
+      </div>
+
+      <div class="valtimo-log-search__datetime">
+        <cds-date-picker
+          #beforeTimestamp
+          [attr.data-carbon-theme]="theme"
+          [label]="'logging.search.beforeTimestamp' | translate"
+          placeholder="DD-MM-YYYY"
+          [dateFormat]="'d-m-Y'"
+          (valueChange)="onDateSelected('beforeTimestamp', $event)"
+        ></cds-date-picker>
+
+        <cds-timepicker
+          formControlName="beforeTime"
+          label="Select a time"
+        >
+        </cds-timepicker>
+      </div>
     </div>
   </section>
 
