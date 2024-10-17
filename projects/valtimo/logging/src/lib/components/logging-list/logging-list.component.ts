@@ -112,6 +112,9 @@ export class LoggingListComponent implements OnInit, OnDestroy {
   );
 
   public readonly searchRequest$ = new BehaviorSubject<LoggingEventSearchRequest>({});
+  public readonly isSearchActive$: Observable<boolean> = this.searchRequest$.pipe(
+    map((searchRequest: LoggingEventSearchRequest) => Object.keys(searchRequest).length > 0)
+  );
   public readonly pagination$ = new BehaviorSubject<Pagination>(DEFAULT_PAGINATION);
   public readonly logDetailsOpen$ = new BehaviorSubject<boolean>(false);
   public readonly selectedLogEvent$ = new BehaviorSubject<LoggingEvent | null>(null);
@@ -179,7 +182,9 @@ export class LoggingListComponent implements OnInit, OnDestroy {
     this.pagination$.next({...this.pagination$.getValue(), size, ...(resetPage && {page: 1})});
   }
 
-  public onRowClickedEvent(rowClickEvent: LoggingEvent & {ctrlClick: boolean, tags: CarbonTag[]}): void {
+  public onRowClickedEvent(
+    rowClickEvent: LoggingEvent & {ctrlClick: boolean; tags: CarbonTag[]}
+  ): void {
     const {ctrlClick: _1, tags: _2, ...logEvent} = rowClickEvent;
     this.logDetailsOpen$.next(true);
     this.selectedLogEvent$.next(logEvent);

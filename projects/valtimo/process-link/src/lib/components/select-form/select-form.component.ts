@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormService } from '@valtimo/form';
-import { BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { FormDefinitionListItem, FormProcessLinkUpdateRequestDto } from '../../models';
-import { ProcessLinkButtonService, ProcessLinkService, ProcessLinkStateService } from '../../services';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormService} from '@valtimo/form';
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {take} from 'rxjs/operators';
 
+import {FormDefinitionListItem, FormProcessLinkUpdateRequestDto} from '../../models';
+import {
+  ProcessLinkButtonService,
+  ProcessLinkService,
+  ProcessLinkStateService,
+} from '../../services';
 
 @Component({
   selector: 'valtimo-select-form',
@@ -140,10 +144,9 @@ export class SelectFormComponent implements OnInit, OnDestroy {
           id: selectedProcessLink.id,
           formDefinitionId: this.selectedFormDefinition.id,
           viewModelEnabled,
-          ...(
-            isUserTask && {
-              formDisplayType: this.formDisplayValue,
-            }),
+          ...(isUserTask && {
+            formDisplayType: this.formDisplayValue,
+          }),
           ...(isUserTask && {formSize: this.formSizeValue}),
         };
 
@@ -175,14 +178,12 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
             viewModelEnabled,
-            ...(this.taskPanelToggle &&
-              isUserTask && {
-                formDisplayType: this.formDisplayValue,
-              }),
-            ...(this.taskPanelToggle &&
-              isUserTask && {
-                formSize: this.formSizeValue,
-              }),
+            ...(isUserTask && {
+              formDisplayType: this.formDisplayValue,
+            }),
+            ...(isUserTask && {
+              formSize: this.formSizeValue,
+            }),
           })
         )
       )
