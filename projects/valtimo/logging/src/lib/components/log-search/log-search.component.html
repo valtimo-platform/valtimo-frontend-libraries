@@ -20,7 +20,7 @@
   (click)="$event.stopImmediatePropagation()"
 >
   <section class="valtimo-log-search__fields">
-    <cds-text-label>
+    <cds-text-label class="valtimo-log-search__message">
       {{ 'logging.columns.formattedMessage' | translate }}
 
       <input
@@ -32,6 +32,7 @@
     </cds-text-label>
 
     <cds-dropdown
+      class="valtimo-log-search__level"
       formControlName="level"
       [attr.data-carbon-theme]="theme"
       [appendInline]="true"
@@ -52,10 +53,7 @@
           (valueChange)="onDateSelected('afterTimestamp', $event)"
         ></cds-date-picker>
 
-        <cds-timepicker
-          formControlName="afterTime"
-          label="Select a time"
-        >
+        <cds-timepicker [attr.data-carbon-theme]="theme" formControlName="afterTime">
         </cds-timepicker>
       </div>
 
@@ -69,10 +67,7 @@
           (valueChange)="onDateSelected('beforeTimestamp', $event)"
         ></cds-date-picker>
 
-        <cds-timepicker
-          formControlName="beforeTime"
-          label="Select a time"
-        >
+        <cds-timepicker [attr.data-carbon-theme]="theme" formControlName="beforeTime">
         </cds-timepicker>
       </div>
     </div>
