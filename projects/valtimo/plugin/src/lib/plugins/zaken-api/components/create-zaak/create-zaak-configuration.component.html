@@ -85,7 +85,7 @@
       </ng-container>
 
       @for (property of propertyList; track property) {
-        @if (property == 'description') {
+        @if (property === 'description') {
           <div class="property-input">
             <v-input
                     name="description"
@@ -103,7 +103,7 @@
               <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
             </button>
           </div>
-        } @else if (property == 'plannedEndDate') {
+        } @else if (property === 'plannedEndDate') {
           <div class="property-input">
             <v-input
                     name="plannedEndDate"
@@ -122,7 +122,7 @@
               <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
             </button>
           </div>
-        } @else if (property == 'finalDeliveryDate') {
+        } @else if (property === 'finalDeliveryDate') {
           <div class="property-input">
             <v-input
                     name="finalDeliveryDate"
