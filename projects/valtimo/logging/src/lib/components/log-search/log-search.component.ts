@@ -41,7 +41,7 @@ import {
   TimePickerModule,
 } from 'carbon-components-angular';
 import flatpickr from 'flatpickr';
-import {debounceTime, interval, map, Observable, Subscription} from 'rxjs';
+import {debounceTime, map, Observable, Subscription} from 'rxjs';
 import {
   LoggingEventProperty,
   LoggingEventSearchFormValue,
@@ -203,18 +203,22 @@ export class LogSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     const {beforeTimestamp, afterTimestamp} = formValue;
 
     if (!!beforeTimestamp) {
-      const beforeDate = new Date(beforeTimestamp);
-      const hours = beforeDate.getHours();
-      const minutes = beforeDate.getMinutes();
+      const {hours, minutes} = this.convertTimestampToTimeString(beforeTimestamp);
       this.formGroup.patchValue({beforeTime: `${hours}:${minutes}`}, {emitEvent: false});
     }
 
     if (!!afterTimestamp) {
-      const afterDate = new Date(afterTimestamp);
-      const hours = afterDate.getHours();
-      const minutes = afterDate.getMinutes();
+      const {hours, minutes} = this.convertTimestampToTimeString(afterTimestamp);
       this.formGroup.patchValue({afterTime: `${hours}:${minutes}`}, {emitEvent: false});
     }
+  }
+
+  private convertTimestampToTimeString(timestamp: string): {hours: string; minutes: string} {
+    const date = new Date(timestamp);
+    return {
+      hours: `0${date.getHours()}`.slice(-2),
+      minutes: `0${date.getMinutes()}`.slice(-2),
+    };
   }
 
   private mapFormValueToLogSearch(): LoggingEventSearchRequest {
