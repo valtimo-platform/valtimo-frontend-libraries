@@ -30,21 +30,19 @@
 
 .property-input {
   display: flex;
+
+  v-input,
+  cds-date-picker-input {
+    flex-grow: 1;
+  }
+
+  button {
+    height: 46px;
+    width: 46px;
+    margin: 16px;
+  }
 }
 
-.property-input v-input {
-  flex-grow: 1;
-}
-
-.property-input cds-date-picker-input {
-  flex-grow: 1;
-}
-
-.property-input button {
-  height: 46px;
-  width: 46px;
-  margin: 16px;
-}
 
 .delete-button:hover {
   background-color: #e12717;
