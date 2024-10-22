@@ -1864,12 +1864,13 @@
     },
     "search": {
       "addProperty": "Add property",
-      "afterTimestamp": "From date",
-      "beforeTimestamp": "To date",
+      "afterTimestamp": "From timestamp",
+      "beforeTimestamp": "To timestamp",
       "properties": "Properties"
     },
     "noResults": {
-      "description": "No logs match your search criteria",
+      "description": "No lines have been logged yet",
+      "searchDescription": "No logs match your search criteria",
       "title": "There are no logs"
     },
     "detailsTitle": "Log details"

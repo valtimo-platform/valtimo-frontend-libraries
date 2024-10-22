@@ -1859,12 +1859,13 @@
     },
     "search": {
       "addProperty": "Eigenschaft hinzufügen",
-      "afterTimestamp": "Datum von",
-      "beforeTimestamp": "Datum bis",
+      "afterTimestamp": "Zeit von",
+      "beforeTimestamp": "Zeit bis",
       "properties": "Eigenschaften"
     },
     "noResults": {
-      "description": "Keine Protokolle entsprechen Ihren Suchkriterien",
+      "description": "Es wurden noch keine Zeilen protokolliert",
+      "searchDescription": "Keine Protokolle entsprechen Ihren Suchkriterien",
       "title": "Es gibt keine Protokolle"
     },
     "detailsTitle": "Protokolldetails"
