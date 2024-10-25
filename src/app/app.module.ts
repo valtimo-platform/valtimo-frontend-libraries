@@ -30,8 +30,8 @@ import {
   enableCustomFormioComponents,
   FormIoModule,
   MenuModule,
+  registerFormioCurrencyComponent,
   registerFormioCurrentUserComponent,
-  registerFormioDecimalComponent,
   registerFormioFileSelectorComponent,
   registerFormioIbanComponent,
   registerFormioUploadComponent,
@@ -285,7 +285,7 @@ export class AppModule {
     registerFormioFileSelectorComponent(injector);
     registerDocumentenApiFormioUploadComponent(injector);
     registerFormioIbanComponent(injector);
-    registerFormioDecimalComponent(injector);
+    registerFormioCurrencyComponent(injector);
     registerFormioValueResolverSelectorComponent(injector);
   }
 }

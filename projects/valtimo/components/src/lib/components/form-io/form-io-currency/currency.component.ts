@@ -2,44 +2,44 @@ import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output} from '
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {FormioCustomComponent} from '../../../modules';
-import {decimalValidator} from './decimal.validators';
+import {currencyValidator} from './currency.validators';
 
 /**
- * Custom formio component for decimal number.
+ * Custom formio component for currency number.
  */
 @Component({
-  selector: 'valtimo-decimal',
-  templateUrl: './decimal.component.html',
-  styleUrls: ['./decimal.component.scss'],
+  selector: 'valtimo-currency',
+  templateUrl: './currency.component.html',
+  styleUrls: ['./currency.component.scss'],
 })
-export class FormIoDecimalComponent
+export class FormIoCurrencyComponent
   implements FormioCustomComponent<any>, AfterViewInit, OnDestroy
 {
   @Input() public value: string;
   @Input() public disabled = false;
   @Input() public required = false;
   @Output() public valueChange = new EventEmitter<any>();
-  public decimalForm = new FormGroup({
-    decimal: new FormControl(''),
+  public currencyForm = new FormGroup({
+    currency: new FormControl(''),
   });
   private readonly _subscriptions = new Subscription();
 
   public ngAfterViewInit(): void {
     setTimeout(() => {
-      this.decimalForm.controls.decimal.setValue(this.value);
-      this.decimalForm.controls.decimal.setValidators(
-        this.required ? [Validators.required, decimalValidator()] : [decimalValidator()]
+      this.currencyForm.controls.currency.setValue(this.value);
+      this.currencyForm.controls.currency.setValidators(
+        this.required ? [Validators.required, currencyValidator()] : [currencyValidator()]
       );
-      this.decimalForm.controls.decimal.updateValueAndValidity();
+      this.currencyForm.controls.currency.updateValueAndValidity();
 
       if (this.disabled) {
-        Object.keys(this.decimalForm.controls).forEach(key => {
-          this.decimalForm?.get(key)?.disable();
+        Object.keys(this.currencyForm.controls).forEach(key => {
+          this.currencyForm?.get(key)?.disable();
         });
       }
 
       this._subscriptions.add(
-        this.decimalForm.valueChanges.subscribe(() => {
+        this.currencyForm.valueChanges.subscribe(() => {
           this.onValueChange();
         })
       );
@@ -51,9 +51,9 @@ export class FormIoDecimalComponent
   }
 
   private onValueChange(): void {
-    (this.value as any) = this.decimalForm.valid
-      ? this.decimalForm.controls.decimal.value
-      : [this.decimalForm.value];
+    (this.value as any) = this.currencyForm.valid
+      ? this.currencyForm.controls.currency.value
+      : [this.currencyForm.value];
     this.valueChange.emit(this.value);
   }
 }

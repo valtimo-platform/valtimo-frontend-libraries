@@ -1710,7 +1710,7 @@
     "formioIbanComponent": {
       "errorMessage": "Kein gültiges IBAN. Bitte geben Sie eine gültige IBAN ein."
     },
-    "formioDecimalComponent": {
+    "formioCurrencyComponent": {
       "errorMessage": "Keine gültige Dezimalzahl. Bitte geben Sie eine gültige Dezimalzahl ein."
     }
   },

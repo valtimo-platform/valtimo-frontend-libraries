@@ -125,8 +125,8 @@ export * from './lib/components/form-io/form-io-current-user/form-io-current-use
 export * from './lib/components/form-io/form-io-iban/iban.component';
 export * from './lib/components/form-io/form-io-iban/iban.formio';
 
-export * from './lib/components/form-io/form-io-decimal/decimal.component';
-export * from './lib/components/form-io/form-io-decimal/decimal.formio';
+export * from './lib/components/form-io/form-io-currency/currency.component';
+export * from './lib/components/form-io/form-io-currency/currency.formio';
 
 export * from './lib/components/form-io/form-io-resource-selector/form-io-resource-selector.formio';
 
