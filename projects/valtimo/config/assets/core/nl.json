@@ -274,6 +274,13 @@
     "noResultsMyTasks": "Er zijn geen taken beschikbaar voor deze gebruiker.",
     "noResultsOtherTasks": "Er zijn geen taken beschikbaar voor andere gebruikers."
   },
+  "extensionManagement": {
+    "noResults": "Geen extensions beschikbaar",
+    "installedVersion": "Geinstaleerde versie",
+    "install": "Instaleer",
+    "update": "Updaten",
+    "uninstall": "Deinstaleer"
+  },
   "progress": {
     "noProcessDocumentInstances": "Er is nog geen proces gestart",
     "process": "Proces",

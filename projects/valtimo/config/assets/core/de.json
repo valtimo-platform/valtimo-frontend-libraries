@@ -274,6 +274,13 @@
     "noResultsMyTasks": "Für diesen Benutzer sind keine Aufgaben verfügbar.",
     "noResultsOtherTasks": "Keine Aufgaben für andere Benutzer verfügbar."
   },
+  "extensionManagement": {
+    "noResults": "No extensions available",
+    "installedVersion": "Installed version",
+    "install": "Install",
+    "update": "Update",
+    "uninstall": "Uninstall"
+  },
   "progress": {
     "noProcessDocumentInstances": "Es wurde noch kein Prozess gestartet",
     "process": "Prozess",

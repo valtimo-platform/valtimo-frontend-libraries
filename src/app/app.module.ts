@@ -73,6 +73,7 @@ import {SwaggerModule} from '@valtimo/swagger';
 import {AnalyseModule} from '@valtimo/analyse';
 import {ProcessManagementModule} from '@valtimo/process-management';
 import {DecisionModule} from '@valtimo/decision';
+import {ExtensionManagementModule} from '@valtimo/extension-management';
 import {MilestoneModule} from '@valtimo/milestone';
 import {LoggerModule} from 'ngx-logger';
 import {FORM_FLOW_COMPONENT_TOKEN, ProcessLinkModule} from '@valtimo/process-link';
@@ -189,6 +190,7 @@ export function tabsFactory() {
     SwaggerModule,
     ProcessManagementModule,
     DecisionModule,
+    ExtensionManagementModule,
     MilestoneModule,
     ProcessLinkModule,
     MigrationModule,
