@@ -16,12 +16,12 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
 import {BehaviorSubject, catchError, combineLatest, debounceTime, EMPTY, Observable, of, Subject, switchMap, take, tap,} from 'rxjs';
-import {FormioComponent, FormioModule, FormioOptions, FormioSubmission, FormioSubmissionCallback,} from '@formio/angular';
+import {FormioModule, FormioOptions, FormioSubmission, FormioSubmissionCallback,} from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {ViewModelService} from '../../services';
 import {distinctUntilChanged, map} from 'rxjs/operators';
 import {deepmerge} from 'deepmerge-ts';
-import {FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
+import {FormioComponent, FormIoModule, FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
@@ -33,7 +33,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   templateUrl: './form-view-model.component.html',
   styleUrls: ['./form-view-model.component.css'],
   standalone: true,
-  imports: [CommonModule, FormioModule],
+  imports: [CommonModule, FormioModule, FormIoModule],
 })
 export class FormViewModelComponent implements OnInit {
   @ViewChild('formio') formio: FormioComponent;
@@ -83,18 +83,16 @@ export class FormViewModelComponent implements OnInit {
   @Input() formRefresh$!: Subject<FormioRefreshValue>;
   @Output() formSubmit = new EventEmitter<any>();
 
-  public refreshForm = new EventEmitter<FormioRefreshValue>();
+  public errors: string[] = [];
 
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
   public readonly formName$ = new BehaviorSubject<string>(undefined);
   public readonly options$ = new BehaviorSubject<ValtimoFormioOptions>(undefined);
   public readonly taskInstanceId$ = new BehaviorSubject<string>(undefined);
-  public readonly readOnly$ = new BehaviorSubject<boolean>(false);
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
   public readonly change$ = new BehaviorSubject<any>(null);
   public readonly blur$ = new BehaviorSubject<FocusEvent>(null);
-  public readonly errors$ = new BehaviorSubject<Array<string>>([]);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly isStartForm$ = new BehaviorSubject<boolean>(false);
   public readonly processDefinitionKey$ = new BehaviorSubject<string>(undefined);
@@ -185,7 +183,7 @@ export class FormViewModelComponent implements OnInit {
                     }),
                     catchError(error => {
                       this.handleFormError(error);
-                      callback({message: error.error.error, component: null}, null);
+                      callback({message: " ", component: null}, null);
                       return EMPTY; // return an empty observable to complete the stream
                     })
                   )
@@ -199,7 +197,7 @@ export class FormViewModelComponent implements OnInit {
                     }),
                     catchError(error => {
                       this.handleFormError(error);
-                      callback({message: error.error.error, component: null}, null);
+                      callback({message: " ", component: null}, null);
                       return EMPTY; // return an empty observable to complete the stream
                     })
                   )
@@ -210,13 +208,25 @@ export class FormViewModelComponent implements OnInit {
 
   private handleFormError(error: HttpErrorResponse): void {
     const formInstance = this.formio.formio;
-    const component = formInstance.getComponent(error.error?.component);
-    const submitComponent = formInstance.getComponent('submit');
-    if (component == null) {
-      this.errors$.next([error.error.error]);
+    if (error.error.componentErrors) {
+      error.error.componentErrors.forEach(componentError => {
+        console.log('componentError', componentError);
+        const component = formInstance.getComponent(componentError.component);
+        console.log('component', component);
+        if (component == null) {
+          this.errors.push(componentError.message);
+        } else {
+          component?.setCustomValidity(componentError.message);
+        }
+        console.log(component);
+      });
     } else {
-      component?.setCustomValidity(error.error.error);
-      submitComponent.disabled = true;
+      const component = formInstance.getComponent(error.error?.component);
+      if (component == null) {
+        this.errors = [error.error.error];
+      } else {
+        component?.setCustomValidity(error.error.error);
+      }
     }
   }
 
@@ -266,11 +276,16 @@ export class FormViewModelComponent implements OnInit {
                 this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).pipe(
                   tap({
                     next: viewModel => {
-                      this.submission$.next({data: viewModel});
+                      console.log('viewModel', viewModel);
+                      const submission = this.submission$.value;
+                      console.log('submission', submission);
+                      submission.data = viewModel;
+                      this.submission$.next(submission);
                       this.loading$.next(false);
-                      this.errors$.next([]);
+                      this.errors = [];
                     },
                     error: error => {
+                      console.log('error', error);
                       this.loading$.next(false);
                       this.handleFormError(error);
                     },
@@ -320,7 +335,7 @@ export class FormViewModelComponent implements OnInit {
                       next: viewModel => {
                         this.submission$.next({data: viewModel});
                         this.loading$.next(false);
-                        this.errors$.next([]);
+                        this.errors = [];
                       },
                       error: error => {
                         this.loading$.next(false);

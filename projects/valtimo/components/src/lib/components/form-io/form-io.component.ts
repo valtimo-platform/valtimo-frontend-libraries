@@ -14,18 +14,8 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
-import {ValtimoFormioOptions} from '../../models';
+import {Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild,} from '@angular/core';
+import {ComponentError, ValtimoFormioOptions} from '../../models';
 import {ValtimoModalService} from '../../services/valtimo-modal.service';
 import {UserProviderService} from '@valtimo/security';
 import {
@@ -55,6 +45,8 @@ import {isEqual} from 'lodash';
   providers: [FormIoLocalStorageService],
 })
 export class FormioComponent implements OnInit, OnChanges, OnDestroy {
+  @ViewChild('formioComponent') formioComponent: FormIoSourceComponent;
+
   @Input() set options(optionsValue: ValtimoFormioOptions) {
     this.options$.next(optionsValue);
   }
@@ -176,6 +168,16 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
 
   public showErrors(errors: string[]): void {
     this.errors$.next(errors);
+  }
+
+  public showComponentErrors(errors: ComponentError[]): void {
+    const formInstance = this.formioComponent.formio;
+    errors.forEach(error => {
+      const component = formInstance.getComponent(error.component);
+        if (component) {
+            component.setCustomValidity(error.message);
+        }
+    });
   }
 
   public onSubmit(submission: FormioSubmission): void {
