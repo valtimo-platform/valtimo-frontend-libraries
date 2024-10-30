@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {
   FormioCustomComponent,
   FormIoDomService,
+  FormioEvent,
   FormIoStateService,
   ValtimoModalService,
 } from '@valtimo/components';
-import {BehaviorSubject, combineLatest, Observable, of, startWith, switchMap} from 'rxjs';
 import {
   DocumentenApiFileReference,
   DownloadService,
   UploadProviderService,
 } from '@valtimo/resource';
-import {DocumentenApiMetadata, SupportedDocumentenApiFeatures} from '../../models';
-import {filter, map, take, tap} from 'rxjs/operators';
 import {UserProviderService} from '@valtimo/security';
-import {ActivatedRoute} from '@angular/router';
+import {BehaviorSubject, combineLatest, Observable, of, startWith, switchMap} from 'rxjs';
+import {filter, map, take, tap} from 'rxjs/operators';
+import {DocumentenApiMetadata, SupportedDocumentenApiFeatures} from '../../models';
 import {DocumentenApiVersionService} from '../../services';
 
 @Component({
@@ -65,6 +65,7 @@ export class DocumentenApiUploaderComponent
   @Input() disableDescription: boolean;
   @Input() confidentialityLevel: string;
   @Input() disableConfidentialityLevel: boolean;
+  @Input() enableSettingMetadata: boolean;
 
   @Output() valueChange = new EventEmitter<Array<DocumentenApiFileReference>>();
 
@@ -121,6 +122,8 @@ export class DocumentenApiUploaderComponent
     private readonly documentenApiVersionService: DocumentenApiVersionService
   ) {}
 
+  formioEvent?: EventEmitter<FormioEvent> | undefined;
+
   _value: Array<DocumentenApiFileReference> = [];
 
   public get value(): Array<DocumentenApiFileReference> {
@@ -136,7 +139,8 @@ export class DocumentenApiUploaderComponent
 
   fileSelected(file: File): void {
     this.fileToBeUploaded$.next(file);
-    this.showModal.set(true);
+    if (this.enableSettingMetadata) this.showModal.set(true);
+    else this.metadataSet();
   }
 
   deleteFile(id: string): void {
@@ -151,7 +155,7 @@ export class DocumentenApiUploaderComponent
     this.showModal.set(false);
   }
 
-  metadataSet(metadata: DocumentenApiMetadata): void {
+  metadataSet(metadata?: DocumentenApiMetadata): void {
     this.uploading$.next(true);
     this.showModal.set(false);
     this.domService.toggleSubmitButton(true);
@@ -159,7 +163,9 @@ export class DocumentenApiUploaderComponent
     this.fileToBeUploaded$
       .pipe(
         take(1),
-        switchMap(file => this.uploadProviderService.uploadTempFileWithMetadata(file, metadata)),
+        switchMap(file =>
+          this.uploadProviderService.uploadTempFileWithMetadata(file, metadata ?? {})
+        ),
         tap(result => {
           this.domService.toggleSubmitButton(false);
           this.uploading$.next(false);

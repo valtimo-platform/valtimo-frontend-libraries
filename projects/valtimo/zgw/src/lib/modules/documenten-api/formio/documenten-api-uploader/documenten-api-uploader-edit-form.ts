@@ -270,6 +270,16 @@ export const documentenApiUploaderEditForm = () => ({
       },
     },
     {
+      type: 'checkbox',
+      input: true,
+      inputType: 'checkbox',
+      key: 'customOptions.enableSettingMetadata',
+      label: 'Enable setting metadata via modal on upload',
+      validate: {
+        required: false,
+      },
+    },
+    {
       type: 'select',
       label: 'Default confidentiality level',
       key: 'customOptions.confidentialityLevel',
