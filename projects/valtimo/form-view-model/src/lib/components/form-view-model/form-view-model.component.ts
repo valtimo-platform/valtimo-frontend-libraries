@@ -15,9 +15,8 @@
  */
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
-import {BehaviorSubject, catchError, combineLatest, debounceTime, EMPTY, Observable, of, Subject, switchMap, take, tap,} from 'rxjs';
+import {BehaviorSubject, catchError, combineLatest, debounceTime, EMPTY, Observable, of, switchMap, take, tap,} from 'rxjs';
 import {FormioComponent, FormioModule, FormioOptions, FormioSubmission, FormioSubmissionCallback,} from '@formio/angular';
-import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {ViewModelService} from '../../services';
 import {distinctUntilChanged, map} from 'rxjs/operators';
 import {deepmerge} from 'deepmerge-ts';
@@ -76,7 +75,6 @@ export class FormViewModelComponent implements OnInit {
     this.documentDefinitionName$.next(documentDefinitionNameValue);
   }
 
-  @Input() formRefresh$!: Subject<FormioRefreshValue>;
   @Output() formSubmit = new EventEmitter<any>();
 
   public errors: string[] = [];
