@@ -10,7 +10,6 @@ import {currencyValidator} from './currency.validators';
 @Component({
   selector: 'valtimo-currency',
   templateUrl: './currency.component.html',
-  styleUrls: ['./currency.component.scss'],
 })
 export class FormIoCurrencyComponent
   implements FormioCustomComponent<any>, AfterViewInit, OnDestroy
