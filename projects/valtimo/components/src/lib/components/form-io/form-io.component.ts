@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild,} from '@angular/core';
-import {ComponentError, ValtimoFormioOptions} from '../../models';
+import {ValtimoFormioOptions} from '../../models';
 import {ValtimoModalService} from '../../services/valtimo-modal.service';
 import {UserProviderService} from '@valtimo/security';
 import {
@@ -168,16 +168,6 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
 
   public showErrors(errors: string[]): void {
     this.errors$.next(errors);
-  }
-
-  public showComponentErrors(errors: ComponentError[]): void {
-    const formInstance = this.formioComponent.formio;
-    errors.forEach(error => {
-      const component = formInstance.getComponent(error.component);
-        if (component) {
-            component.setCustomValidity(error.message);
-        }
-    });
   }
 
   public onSubmit(submission: FormioSubmission): void {

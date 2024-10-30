@@ -16,12 +16,12 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
 import {BehaviorSubject, catchError, combineLatest, debounceTime, EMPTY, Observable, of, Subject, switchMap, take, tap,} from 'rxjs';
-import {FormioModule, FormioOptions, FormioSubmission, FormioSubmissionCallback,} from '@formio/angular';
+import {FormioComponent, FormioModule, FormioOptions, FormioSubmission, FormioSubmissionCallback,} from '@formio/angular';
 import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {ViewModelService} from '../../services';
 import {distinctUntilChanged, map} from 'rxjs/operators';
 import {deepmerge} from 'deepmerge-ts';
-import {FormioComponent, FormIoModule, FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
+import {FormIoStateService, ValtimoFormioOptions} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
@@ -33,7 +33,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   templateUrl: './form-view-model.component.html',
   styleUrls: ['./form-view-model.component.css'],
   standalone: true,
-  imports: [CommonModule, FormioModule, FormIoModule],
+  imports: [CommonModule, FormioModule],
 })
 export class FormViewModelComponent implements OnInit {
   @ViewChild('formio') formio: FormioComponent;
@@ -62,10 +62,6 @@ export class FormViewModelComponent implements OnInit {
 
   @Input() set taskInstanceId(taskInstanceId: string) {
     this.taskInstanceId$.next(taskInstanceId);
-  }
-
-  @Input() set readOnly(readOnlyValue: boolean) {
-    this.readOnly$.next(readOnlyValue);
   }
 
   @Input() set isStartForm(isStartFormValue: boolean) {
@@ -208,26 +204,14 @@ export class FormViewModelComponent implements OnInit {
 
   private handleFormError(error: HttpErrorResponse): void {
     const formInstance = this.formio.formio;
-    if (error.error.componentErrors) {
-      error.error.componentErrors.forEach(componentError => {
-        console.log('componentError', componentError);
-        const component = formInstance.getComponent(componentError.component);
-        console.log('component', component);
-        if (component == null) {
-          this.errors.push(componentError.message);
-        } else {
-          component?.setCustomValidity(componentError.message);
-        }
-        console.log(component);
-      });
-    } else {
-      const component = formInstance.getComponent(error.error?.component);
+    error.error.componentErrors.forEach(componentError => {
+      const component = formInstance.getComponent(componentError.component);
       if (component == null) {
-        this.errors = [error.error.error];
+        this.errors.push(componentError.message);
       } else {
-        component?.setCustomValidity(error.error.error);
+        component?.setCustomValidity(componentError.message);
       }
-    }
+    });
   }
 
   public onSubmit(submission: FormioSubmission): void {
@@ -276,16 +260,13 @@ export class FormViewModelComponent implements OnInit {
                 this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).pipe(
                   tap({
                     next: viewModel => {
-                      console.log('viewModel', viewModel);
                       const submission = this.submission$.value;
-                      console.log('submission', submission);
                       submission.data = viewModel;
                       this.submission$.next(submission);
                       this.loading$.next(false);
                       this.errors = [];
                     },
                     error: error => {
-                      console.log('error', error);
                       this.loading$.next(false);
                       this.handleFormError(error);
                     },
