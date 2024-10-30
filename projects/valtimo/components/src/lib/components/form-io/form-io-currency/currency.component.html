@@ -1,13 +1,6 @@
 <div class="currencyForm-container" [formGroup]="currencyForm">
   <div class="input-group">
-    <input
-      cdsText
-      id="currency"
-      type="number"
-      formControlName="currency"
-      class="form-control"
-      placeholder="0.00"
-    />
+    <input id="currency" formControlName="currency" class="form-control" placeholder="0.00" />
     <div
       class="formio-errors invalid-feedback"
       *ngIf="

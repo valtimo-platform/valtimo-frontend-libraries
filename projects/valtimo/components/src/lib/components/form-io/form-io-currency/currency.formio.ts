@@ -3,9 +3,9 @@ import {FormIoCurrencyComponent} from './currency.component';
 import {FormioCustomComponentInfo, registerCustomFormioComponent} from '../../../modules';
 
 const COMPONENT_OPTIONS: FormioCustomComponentInfo = {
-  type: 'currency',
+  type: 'currency-custom',
   selector: 'valtimo-currency',
-  title: 'Currency',
+  title: 'Currency custom',
   group: 'basic',
   icon: 'dollar',
   schema: {

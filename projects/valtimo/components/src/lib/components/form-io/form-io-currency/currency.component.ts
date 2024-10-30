@@ -25,25 +25,23 @@ export class FormIoCurrencyComponent
   private readonly _subscriptions = new Subscription();
 
   public ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.currencyForm.controls.currency.setValue(this.value);
-      this.currencyForm.controls.currency.setValidators(
-        this.required ? [Validators.required, currencyValidator()] : [currencyValidator()]
-      );
-      this.currencyForm.controls.currency.updateValueAndValidity();
+    this.currencyForm.controls.currency.setValue(this.value);
+    this.currencyForm.controls.currency.setValidators(
+      this.required ? [Validators.required, currencyValidator()] : [currencyValidator()]
+    );
+    this.currencyForm.controls.currency.updateValueAndValidity();
 
-      if (this.disabled) {
-        Object.keys(this.currencyForm.controls).forEach(key => {
-          this.currencyForm?.get(key)?.disable();
-        });
-      }
+    if (this.disabled) {
+      Object.keys(this.currencyForm.controls).forEach(key => {
+        this.currencyForm?.get(key)?.disable();
+      });
+    }
 
-      this._subscriptions.add(
-        this.currencyForm.valueChanges.subscribe(() => {
-          this.onValueChange();
-        })
-      );
-    });
+    this._subscriptions.add(
+      this.currencyForm.valueChanges.subscribe(() => {
+        this.onValueChange();
+      })
+    );
   }
 
   public ngOnDestroy(): void {
@@ -53,7 +51,7 @@ export class FormIoCurrencyComponent
   private onValueChange(): void {
     (this.value as any) = this.currencyForm.valid
       ? this.currencyForm.controls.currency.value
-      : [this.currencyForm.value];
+      : this.currencyForm.value;
     this.valueChange.emit(this.value);
   }
 }
