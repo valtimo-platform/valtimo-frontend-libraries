@@ -158,7 +158,7 @@ export class DossierSupportingProcessStartModalComponent {
       this.processDefinitionKey$,
       this.documentDefinitionName$,
       this.options$
-    ]).subscribe(([form, processDefinitionKey, documentDefinitionName, options]) => {
+    ]).pipe(take(1)).subscribe(([form, processDefinitionKey, documentDefinitionName, options]) => {
       formViewModelComponent.instance.formName = formName;
       formViewModelComponent.instance.form = form;
       formViewModelComponent.instance.processDefinitionKey = processDefinitionKey;
