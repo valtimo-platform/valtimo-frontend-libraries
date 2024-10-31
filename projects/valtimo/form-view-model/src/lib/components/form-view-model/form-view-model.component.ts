@@ -202,6 +202,7 @@ export class FormViewModelComponent implements OnInit {
 
   private handleFormError(error: HttpErrorResponse): void {
     const formInstance = this.formio.formio;
+    this.errors = [];
     error.error.componentErrors.forEach(componentError => {
       const component = formInstance.getComponent(componentError.component);
       if (component == null) {
