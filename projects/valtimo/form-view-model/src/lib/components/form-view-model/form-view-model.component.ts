@@ -203,14 +203,23 @@ export class FormViewModelComponent implements OnInit {
   private handleFormError(error: HttpErrorResponse): void {
     const formInstance = this.formio.formio;
     this.errors = [];
-    error.error.componentErrors.forEach(componentError => {
-      const component = formInstance.getComponent(componentError.component);
+    if (error.error.componentErrors) {
+      error.error.componentErrors.forEach(componentError => {
+        const component = formInstance.getComponent(componentError.component);
+        if (component == null) {
+          this.errors.push(componentError.message);
+        } else {
+          component?.setCustomValidity(componentError.message);
+        }
+      });
+    } else {
+      const component = formInstance.getComponent(error.error?.component);
       if (component == null) {
-        this.errors.push(componentError.message);
+        this.errors.push(error.error.error);
       } else {
-        component?.setCustomValidity(componentError.message);
+        component?.setCustomValidity(error.error.error);
       }
-    });
+    }
   }
 
   public onSubmit(submission: FormioSubmission): void {
