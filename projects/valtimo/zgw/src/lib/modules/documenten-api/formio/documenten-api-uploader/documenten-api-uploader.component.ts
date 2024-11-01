@@ -30,7 +30,13 @@ import {
 import {UserProviderService} from '@valtimo/security';
 import {BehaviorSubject, combineLatest, Observable, of, startWith, switchMap} from 'rxjs';
 import {filter, map, take, tap} from 'rxjs/operators';
-import {DocumentenApiMetadata, SupportedDocumentenApiFeatures} from '../../models';
+import {
+  ConfidentialityLevel,
+  DocumentLanguage,
+  DocumentStatus,
+  DocumentenApiMetadata,
+  SupportedDocumentenApiFeatures,
+} from '../../models';
 import {DocumentenApiVersionService} from '../../services';
 
 @Component({
@@ -140,7 +146,24 @@ export class DocumentenApiUploaderComponent
   fileSelected(file: File): void {
     this.fileToBeUploaded$.next(file);
     if (this.enableSettingMetadata) this.showModal.set(true);
-    else this.metadataSet();
+    else {
+      const defaultMetadata: DocumentenApiMetadata = {
+        titel: this.documentTitle,
+        bestandsnaam: this.filename,
+        auteur: this.author,
+        status: this.status as DocumentStatus,
+        taal: this.language as DocumentLanguage,
+        informatieobjecttype: this.documentType,
+        bescvhrijving: this.description,
+        vertrouwelijkheidaanduiding: this.confidentialityLevel as ConfidentialityLevel,
+        creatiedatum: '',
+        ontvangstdatum: '',
+        trefwoorden: [],
+        verzenddatum: '',
+      };
+
+      this.metadataSet(defaultMetadata);
+    }
   }
 
   deleteFile(id: string): void {
@@ -159,6 +182,7 @@ export class DocumentenApiUploaderComponent
     this.uploading$.next(true);
     this.showModal.set(false);
     this.domService.toggleSubmitButton(true);
+    console.log({metadata});
 
     this.fileToBeUploaded$
       .pipe(
