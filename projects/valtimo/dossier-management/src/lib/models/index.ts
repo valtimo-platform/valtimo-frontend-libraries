@@ -15,6 +15,7 @@
  */
 
 export * from './document-definition-version.model';
+export * from './dossier-management-menu.model';
 export * from './list-column.model';
 export * from './status.model';
 export * from './tab.enum';

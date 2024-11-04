@@ -22,7 +22,8 @@
   class="dossier-management-detail-container"
 >
   <valtimo-documenten-api></valtimo-documenten-api>
-  <cds-tabs class="dossier-management-tabs" type="contained">
+  <valtimo-dossier-management-details-menu></valtimo-dossier-management-details-menu>
+  <!-- <cds-tabs class="dossier-management-tabs" type="contained">
     <cds-tab
       class="no-padding-left-right no-padding-top-bottom"
       [active]="obs.currentTab === TabEnum.DOCUMENT"
@@ -94,7 +95,7 @@
       >
       </cds-tab>
     }
-  </cds-tabs>
+  </cds-tabs> -->
 
   <div class="dossier-management-detail-container__content">
     <ng-template #contentContainer></ng-template>

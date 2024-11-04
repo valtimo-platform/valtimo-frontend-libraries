@@ -1,0 +1,11 @@
+<div class="valtimo-dossier-management-details-menu">
+  @for (menuItem of MENU_ITEMS; track menuItem.urlPath) {
+    <valtimo-dossier-management-details-menu-item
+      [title]="menuItem.title"
+      [description]="menuItem.description"
+      [iconUrl]="menuItem.iconUrl"
+      [urlPath]="menuItem.urlPath"
+    >
+    </valtimo-dossier-management-details-menu-item>
+  }
+</div>
