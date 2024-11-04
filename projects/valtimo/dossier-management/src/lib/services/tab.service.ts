@@ -116,6 +116,13 @@ export class TabService {
     this.setInjectedCaseManagementTabs(this.caseManagementTabConfig);
   }
 
+  addCaseManagementTab(caseManagementTab: CaseManagementTabConfig) {
+    this._injectedCaseManagementTabs$.next([
+      ...this._injectedCaseManagementTabs$.getValue(),
+      caseManagementTab,
+    ]);
+  }
+
   private setInjectedCaseManagementTabs(
     caseManagementTabConfig?: CaseManagementTabConfig[] | CaseManagementTabConfig
   ): void {
