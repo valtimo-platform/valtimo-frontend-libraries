@@ -182,7 +182,6 @@ export class DocumentenApiUploaderComponent
     this.uploading$.next(true);
     this.showModal.set(false);
     this.domService.toggleSubmitButton(true);
-    console.log({metadata});
 
     this.fileToBeUploaded$
       .pipe(
