@@ -26,6 +26,7 @@ import {ActivatedRoute} from '@angular/router';
 import {PageTitleService, PendingChangesComponent} from '@valtimo/components';
 import {CaseManagementTabConfig, ConfigService} from '@valtimo/config';
 import {
+  BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
   filter,
@@ -76,6 +77,7 @@ export class DossierManagementDetailContainerComponent
   public readonly DossierManagementTabs = Object.values(TabEnum);
 
   public readonly TabEnum = TabEnum;
+  public readonly menuItemIsSelected$ = new BehaviorSubject<boolean>(false);
 
   private _activeVersion: number | null;
   private _pendingVersion: number | null;
@@ -106,6 +108,16 @@ export class DossierManagementDetailContainerComponent
     this.tabService.currentTab = TabEnum.DOCUMENT;
     this._subscriptions.unsubscribe();
     this.pageTitleService.enableReset();
+  }
+
+  public onMenuItemSelected(tab: TabEnum | string | null): void {
+    if (!tab) {
+      this.menuItemIsSelected$.next(false);
+      return;
+    }
+
+    this.menuItemIsSelected$.next(true);
+    this.displayBodyComponent(tab);
   }
 
   public displayBodyComponent(tab: TabEnum | string, isInjectedTab = false): void {
@@ -170,13 +182,15 @@ export class DossierManagementDetailContainerComponent
       combineLatest([
         this.currentTab$.pipe(distinctUntilChanged()),
         this.injectedCaseManagementTabs$,
-      ]).subscribe(([currentTab, injectedCaseManagementTabs]) => {
+        this.menuItemIsSelected$,
+      ]).subscribe(([currentTab, injectedCaseManagementTabs, menuItemIsSelected]) => {
         const findInjectedTab = injectedCaseManagementTabs.find(
           injectedTab => injectedTab.translationKey === currentTab
         );
 
         this._contentContainer.clear();
-        if (findInjectedTab && this._contentContainer) {
+
+        if (findInjectedTab && this._contentContainer && menuItemIsSelected) {
           this._contentContainer.createComponent(findInjectedTab.component);
         }
       })

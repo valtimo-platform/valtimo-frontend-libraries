@@ -1,52 +1,52 @@
-import {DossierManagemetnMenuItem} from '../models';
+import {DossierManagemetnMenuItem, TabEnum} from '../models';
 
 export const MENU_ITEMS: DossierManagemetnMenuItem[] = [
   {
     title: 'Document definition',
     description: 'Edit your document definition schema',
     iconUrl: 'valtimo-layout/img/no-results.svg',
-    urlPath: 'document',
+    urlPath: TabEnum.DOCUMENT,
   },
   {
     title: 'Configuration',
     description: 'Edit your case configuration',
     iconUrl: 'valtimo-layout/img/no-results.svg',
-    urlPath: 'configuration',
+    urlPath: TabEnum.CASE,
   },
   {
     title: 'Process',
-    description: 'Edit your document definition schema',
+    description: 'Edit processes linked to your case',
     iconUrl: 'valtimo-layout/img/no-results.svg',
-    urlPath: 'process',
+    urlPath: TabEnum.PROCESSES,
   },
   {
     title: 'Search fields',
-    description: 'Edit your document definition schema',
+    description: 'Edit serach fields available for your case',
     iconUrl: 'valtimo-layout/img/no-results.svg',
-    urlPath: 'search-fields',
+    urlPath: TabEnum.SEARCH,
   },
   {
     title: 'List fields',
-    description: 'Edit your document definition schema',
+    description: 'Edit fields visible in your case list',
     iconUrl: 'valtimo-layout/img/no-results.svg',
-    urlPath: 'list',
+    urlPath: TabEnum.LIST,
   },
   {
     title: 'Tabs',
-    description: 'Edit your document definition schema',
+    description: 'Edit tabs visible in your case details',
     iconUrl: 'valtimo-layout/img/no-results.svg',
-    urlPath: 'tabs',
+    urlPath: TabEnum.TABS,
   },
   {
     title: 'Statuses',
-    description: 'Edit your document definition schema',
+    description: 'Edit statuses available for your case',
     iconUrl: 'valtimo-layout/img/no-results.svg',
-    urlPath: 'statuses',
+    urlPath: TabEnum.STATUSES,
   },
   {
     title: 'ZGW',
-    description: 'Edit your document definition schema',
+    description: 'Edit DocumentenAPI documents columns and tags for your case',
     iconUrl: 'valtimo-layout/img/no-results.svg',
-    urlPath: 'zgw',
+    urlPath: 'dossierManagement.tabs.zgw',
   },
 ];

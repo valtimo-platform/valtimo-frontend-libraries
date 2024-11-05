@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Router} from '@angular/router';
 import {TilesModule} from 'carbon-components-angular';
 
@@ -16,10 +16,11 @@ export class DossierManagementDetailsMenuItemComponent {
   @Input() description: string;
   @Input() iconUrl: string;
   @Input() urlPath: string;
+  @Output() itemSelected = new EventEmitter<string>();
 
   constructor(private readonly router: Router) {}
 
   public onMenuItemClick(): void {
-    this.router.navigate([`/${this.urlPath}`]);
+    this.itemSelected.emit(this.urlPath)
   }
 }

@@ -1,5 +1,9 @@
-<cds-clickable-tile class="valtimo-dossier-management-details-menu-item">
-  <img [src]="iconUrl" [alt]="" />
+<cds-clickable-tile
+  [href]="null"
+  class="valtimo-dossier-management-details-menu-item"
+  (click)="onMenuItemClick()"
+>
+  <img [src]="iconUrl" [alt]="title" />
 
   <h2>
     {{ title }}
