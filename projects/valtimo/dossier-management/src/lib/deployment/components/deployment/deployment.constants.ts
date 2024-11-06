@@ -144,6 +144,18 @@ const RIGHT_ARTIFACTS = [
     version: '0.8.4',
     date: new Date(2024, 11, 2),
   },
+  {
+    caseDefinitionId: 'terugbelnotitie',
+    caseDefinitionTitle: 'Terugbelnotitie',
+    version: '0.7.2',
+    date: new Date(2024, 11, 2),
+  },
+  {
+    caseDefinitionId: 'terugbelnotitie',
+    caseDefinitionTitle: 'Terugbelnotitie',
+    version: '0.7.3',
+    date: new Date(2024, 11, 3),
+  },
 ];
 
 export {LEFT_ARTIFACTS, RIGHT_ARTIFACTS};

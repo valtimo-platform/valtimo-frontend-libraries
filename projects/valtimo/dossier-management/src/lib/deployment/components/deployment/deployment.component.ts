@@ -20,6 +20,7 @@ import {
   IconModule,
   IconService,
   LayerModule,
+  ProgressBarModule,
   TabsModule,
   TagModule,
   TileSelection,
@@ -62,10 +63,13 @@ interface Artifact {
     RenderInPageHeaderDirectiveModule,
     ButtonModule,
     TranslateModule,
+    ProgressBarModule,
   ],
 })
 export class DeploymentComponent {
   public readonly activeTab$ = new BehaviorSubject<string>('');
+
+  public readonly deploying$ = new BehaviorSubject<boolean>(false);
 
   private readonly _rightArtifacts$ = new BehaviorSubject<Artifact[]>(RIGHT_ARTIFACTS);
 
@@ -84,14 +88,16 @@ export class DeploymentComponent {
     this.activeTab$,
     this._leftArtifacts$,
     this.rightArtifacts$,
+    this.deploying$,
   ]).pipe(
-    map(([activeTab, leftArtifacts, rightArtifacts]) =>
+    map(([activeTab, leftArtifacts, rightArtifacts, deploying]) =>
       leftArtifacts
         .filter(artifact => artifact?.caseDefinitionId === activeTab)
         .map(artifact => ({...artifact, id: this.getArtifactId(artifact)}))
         .map(artifact => ({
           ...artifact,
-          disabled: !!rightArtifacts.find(rightArtifact => rightArtifact.id === artifact.id),
+          disabled:
+            !!rightArtifacts.find(rightArtifact => rightArtifact.id === artifact.id) || deploying,
         }))
         .sort((a, b) => b.version.localeCompare(a.version))
     )
@@ -152,16 +158,25 @@ export class DeploymentComponent {
     combineLatest([this._leftArtifacts$, this._rightArtifacts$, this.selectedTileIds$])
       .pipe(take(1))
       .subscribe(([leftArtifacts, rightArtifacts, selectedTileIds]) => {
-        this._leftArtifacts$.next(
-          leftArtifacts.filter(artifact => !selectedTileIds.includes(this.getArtifactId(artifact)))
-        );
-        this._rightArtifacts$.next([
-          ...rightArtifacts,
-          ...selectedTileIds.map(selectedTileId =>
-            leftArtifacts.find(leftArtifact => this.getArtifactId(leftArtifact) === selectedTileId)
-          ),
-        ]);
-        this.selectedTileIds$.next([]);
+        this.deploying$.next(true);
+
+        setTimeout(() => {
+          this._leftArtifacts$.next(
+            leftArtifacts.filter(
+              artifact => !selectedTileIds.includes(this.getArtifactId(artifact))
+            )
+          );
+          this._rightArtifacts$.next([
+            ...rightArtifacts,
+            ...selectedTileIds.map(selectedTileId =>
+              leftArtifacts.find(
+                leftArtifact => this.getArtifactId(leftArtifact) === selectedTileId
+              )
+            ),
+          ]);
+          this.selectedTileIds$.next([]);
+          this.deploying$.next(false);
+        }, 1000);
       });
   }
 

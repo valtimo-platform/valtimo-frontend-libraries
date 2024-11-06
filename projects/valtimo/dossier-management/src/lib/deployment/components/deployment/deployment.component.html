@@ -84,6 +84,10 @@
         </cds-selection-tile>
       }
     </cds-tile-group>
+
+    <div class="progress-bar" *ngIf="deploying$ | async">
+      <cds-progress-bar></cds-progress-bar>
+    </div>
   </div>
 </div>
 
@@ -93,12 +97,13 @@
       *ngIf="{
         amountOfSelectedTileIds: amountOfSelectedTileIds$ | async,
         deployEnabled: deployEnabled$ | async,
+        deploying: deploying$ | async,
       } as obs"
     >
       <button
         cdsButton="primary"
         [size]="(compactMode$ | async) ? 'sm' : 'md'"
-        [disabled]="!obs.deployEnabled"
+        [disabled]="!obs.deployEnabled || obs.deploying"
         (click)="deploy()"
       >
         {{ 'Deploy' + (obs.deployEnabled ? ' (' + obs.amountOfSelectedTileIds + ')' : '') }}
