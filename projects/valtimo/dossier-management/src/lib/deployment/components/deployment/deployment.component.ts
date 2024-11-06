@@ -72,8 +72,8 @@ export class DeploymentComponent {
   public readonly rightArtifacts$ = combineLatest([this.activeTab$, this._rightArtifacts$]).pipe(
     map(([activeTab, rightArtifacts]) =>
       rightArtifacts
-        .filter(artifact => artifact.caseDefinitionId === activeTab)
-        .map(artifact => ({...artifact, id: `${artifact.caseDefinitionId}-${artifact.version}`}))
+        .filter(artifact => artifact?.caseDefinitionId === activeTab)
+        .map(artifact => ({...artifact, id: this.getArtifactId(artifact)}))
         .sort((a, b) => b.version.localeCompare(a.version))
     )
   );
@@ -87,8 +87,8 @@ export class DeploymentComponent {
   ]).pipe(
     map(([activeTab, leftArtifacts, rightArtifacts]) =>
       leftArtifacts
-        .filter(artifact => artifact.caseDefinitionId === activeTab)
-        .map(artifact => ({...artifact, id: `${artifact.caseDefinitionId}-${artifact.version}`}))
+        .filter(artifact => artifact?.caseDefinitionId === activeTab)
+        .map(artifact => ({...artifact, id: this.getArtifactId(artifact)}))
         .map(artifact => ({
           ...artifact,
           disabled: !!rightArtifacts.find(rightArtifact => rightArtifact.id === artifact.id),
@@ -106,6 +106,8 @@ export class DeploymentComponent {
         const currentActiveTab = this.activeTab$.getValue();
 
         if (currentActiveTab) return;
+
+        console.log('set active tab', tabs);
 
         this.activeTab$.next(tabs[0].caseDefinitionId);
       })
@@ -131,6 +133,7 @@ export class DeploymentComponent {
   }
 
   public changeTab(caseDefinitionId: string): void {
+    console.log('change tab', caseDefinitionId);
     this.activeTab$.next(caseDefinitionId);
     this.selectedTileIds$.next([]);
   }
@@ -146,18 +149,19 @@ export class DeploymentComponent {
   }
 
   public deploy(): void {
-    combineLatest([this.leftArtifacts$, this.rightArtifacts$, this.selectedTileIds$])
+    combineLatest([this._leftArtifacts$, this._rightArtifacts$, this.selectedTileIds$])
       .pipe(take(1))
       .subscribe(([leftArtifacts, rightArtifacts, selectedTileIds]) => {
         this._leftArtifacts$.next(
-          leftArtifacts.filter(artifact => !selectedTileIds.includes(artifact.id))
+          leftArtifacts.filter(artifact => !selectedTileIds.includes(this.getArtifactId(artifact)))
         );
         this._rightArtifacts$.next([
           ...rightArtifacts,
           ...selectedTileIds.map(selectedTileId =>
-            leftArtifacts.find(leftArtifact => leftArtifact.id === selectedTileId)
+            leftArtifacts.find(leftArtifact => this.getArtifactId(leftArtifact) === selectedTileId)
           ),
         ]);
+        this.selectedTileIds$.next([]);
       });
   }
 
@@ -179,5 +183,9 @@ export class DeploymentComponent {
     return Array.from(uniqueMap.values()).sort((a, b) =>
       a.caseDefinitionTitle.localeCompare(b.caseDefinitionTitle)
     );
+  }
+
+  private getArtifactId(artifact: Artifact): string {
+    return `${artifact.caseDefinitionId}-${artifact.version}`;
   }
 }

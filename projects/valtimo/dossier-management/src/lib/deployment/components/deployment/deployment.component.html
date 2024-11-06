@@ -15,11 +15,12 @@
   -->
 
 <cds-tabs *ngIf="{tabs: tabs$ | async} as obs">
-  <cds-tab
-    *ngFor="let tab of obs.tabs"
-    (selected)="changeTab(tab.caseDefinitionId)"
-    [heading]="tab.caseDefinitionTitle"
-  ></cds-tab>
+  @for (tab of obs.tabs || []; track tab.caseDefinitionId) {
+    <cds-tab
+      (selected)="changeTab(tab.caseDefinitionId)"
+      [heading]="tab.caseDefinitionTitle"
+    ></cds-tab>
+  }
 </cds-tabs>
 
 <div class="deployment-container" fitPage [extraSpace]="72">
