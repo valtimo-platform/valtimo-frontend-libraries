@@ -30,6 +30,42 @@ const LEFT_ARTIFACTS = [
   {
     caseDefinitionId: 'terugbelnotitie',
     caseDefinitionTitle: 'Terugbelnotitie',
+    version: '0.7.1',
+    date: new Date(2024, 11, 1),
+  },
+  {
+    caseDefinitionId: 'terugbelnotitie',
+    caseDefinitionTitle: 'Terugbelnotitie',
+    version: '0.7.2',
+    date: new Date(2024, 11, 2),
+  },
+  {
+    caseDefinitionId: 'terugbelnotitie',
+    caseDefinitionTitle: 'Terugbelnotitie',
+    version: '0.7.3',
+    date: new Date(2024, 11, 3),
+  },
+  {
+    caseDefinitionId: 'terugbelnotitie',
+    caseDefinitionTitle: 'Terugbelnotitie',
+    version: '0.7.4',
+    date: new Date(2024, 11, 1),
+  },
+  {
+    caseDefinitionId: 'terugbelnotitie',
+    caseDefinitionTitle: 'Terugbelnotitie',
+    version: '0.7.5',
+    date: new Date(2024, 11, 2),
+  },
+  {
+    caseDefinitionId: 'terugbelnotitie',
+    caseDefinitionTitle: 'Terugbelnotitie',
+    version: '0.7.6',
+    date: new Date(2024, 11, 3),
+  },
+  {
+    caseDefinitionId: 'terugbelnotitie',
+    caseDefinitionTitle: 'Terugbelnotitie',
     version: '0.7.7',
     date: new Date(2024, 11, 1),
   },

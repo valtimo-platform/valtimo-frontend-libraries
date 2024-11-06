@@ -26,14 +26,18 @@
   <div class="left" [cdsLayer]="0">
     <h4 class="deployment-title">Development</h4>
 
+    @if (((leftArtifacts$ | async) || []).length === 0) {
+      <div class="no-results">No artifacts found for this case definition</div>
+    }
+
     <cds-tile-group
       class="artifacts"
       (selected)="tileSelected($event)"
       [multiple]="true"
       [cdsLayer]="1"
     >
-      @for (artifact of (leftArtifacts$ | async) || []; track artifact.version) {
-        <cds-selection-tile [value]="artifact.id">
+      @for (artifact of (leftArtifacts$ | async) || []; track artifact.id) {
+        <cds-selection-tile [value]="artifact.id" [ngClass]="{'--disabled': artifact.disabled}">
           <div class="tile-content">
             {{ artifact.caseDefinitionTitle }}
 
@@ -48,16 +52,37 @@
     </cds-tile-group>
   </div>
 
-  <div class="right" [cdsLayer]="0">
+  <div class="right" [cdsLayer]="0" [ngClass]="{'--active': (deployEnabled$ | async) === true}">
     <div class="arrow-icon">
       <svg cdsIcon="arrow--right" size="24" class="cds--btn__icon"></svg>
     </div>
 
     <h4 class="deployment-title">Test (current)</h4>
 
-    @for (artifact of (rightArtifacts$ | async) || []; track artifact.version) {
-      {{ artifact.caseDefinitionTitle }}
+    @if (((rightArtifacts$ | async) || []).length === 0) {
+      <div class="no-results">No artifacts found for this case definition</div>
     }
+
+    <cds-tile-group
+      class="artifacts"
+      (selected)="tileSelected($event)"
+      [multiple]="true"
+      [cdsLayer]="1"
+    >
+      @for (artifact of (rightArtifacts$ | async) || []; track artifact.id) {
+        <cds-selection-tile [value]="artifact.id" [ngClass]="{'--disabled': true}">
+          <div class="tile-content">
+            {{ artifact.caseDefinitionTitle }}
+
+            <div class="tags">
+              <cds-tag>{{ artifact.date | date: 'short' }}</cds-tag>
+
+              <cds-tag type="blue">{{ artifact.version }}</cds-tag>
+            </div>
+          </div>
+        </cds-selection-tile>
+      }
+    </cds-tile-group>
   </div>
 </div>
 
@@ -73,6 +98,7 @@
         cdsButton="primary"
         [size]="(compactMode$ | async) ? 'sm' : 'md'"
         [disabled]="!obs.deployEnabled"
+        (click)="deploy()"
       >
         {{ 'Deploy' + (obs.deployEnabled ? ' (' + obs.amountOfSelectedTileIds + ')' : '') }}
 

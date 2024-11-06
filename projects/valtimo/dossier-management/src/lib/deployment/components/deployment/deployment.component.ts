@@ -31,7 +31,7 @@ import {
   PageHeaderService,
   RenderInPageHeaderDirectiveModule,
 } from '@valtimo/components';
-import {BehaviorSubject, combineLatest, map, Observable, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, take, tap} from 'rxjs';
 import {ArrowRight24, Deploy16} from '@carbon/icons';
 import {LEFT_ARTIFACTS, RIGHT_ARTIFACTS} from './deployment.constants';
 import {TranslateModule} from '@ngx-translate/core';
@@ -42,6 +42,7 @@ interface Artifact {
   version: string;
   date: Date;
   id?: string;
+  disabled?: boolean;
 }
 
 @Component({
@@ -66,17 +67,6 @@ interface Artifact {
 export class DeploymentComponent {
   public readonly activeTab$ = new BehaviorSubject<string>('');
 
-  private readonly _leftArtifacts$ = new BehaviorSubject<Artifact[]>(LEFT_ARTIFACTS);
-
-  public readonly leftArtifacts$ = combineLatest([this.activeTab$, this._leftArtifacts$]).pipe(
-    map(([activeTab, leftArtifacts]) =>
-      leftArtifacts
-        .filter(artifact => artifact.caseDefinitionId === activeTab)
-        .map(artifact => ({...artifact, id: `${artifact.caseDefinitionId}-${artifact.version}`}))
-        .sort((a, b) => b.version.localeCompare(a.version))
-    )
-  );
-
   private readonly _rightArtifacts$ = new BehaviorSubject<Artifact[]>(RIGHT_ARTIFACTS);
 
   public readonly rightArtifacts$ = combineLatest([this.activeTab$, this._rightArtifacts$]).pipe(
@@ -84,6 +74,26 @@ export class DeploymentComponent {
       rightArtifacts
         .filter(artifact => artifact.caseDefinitionId === activeTab)
         .map(artifact => ({...artifact, id: `${artifact.caseDefinitionId}-${artifact.version}`}))
+        .sort((a, b) => b.version.localeCompare(a.version))
+    )
+  );
+
+  private readonly _leftArtifacts$ = new BehaviorSubject<Artifact[]>(LEFT_ARTIFACTS);
+
+  public readonly leftArtifacts$ = combineLatest([
+    this.activeTab$,
+    this._leftArtifacts$,
+    this.rightArtifacts$,
+  ]).pipe(
+    map(([activeTab, leftArtifacts, rightArtifacts]) =>
+      leftArtifacts
+        .filter(artifact => artifact.caseDefinitionId === activeTab)
+        .map(artifact => ({...artifact, id: `${artifact.caseDefinitionId}-${artifact.version}`}))
+        .map(artifact => ({
+          ...artifact,
+          disabled: !!rightArtifacts.find(rightArtifact => rightArtifact.id === artifact.id),
+        }))
+        .sort((a, b) => b.version.localeCompare(a.version))
     )
   );
 
@@ -133,6 +143,22 @@ export class DeploymentComponent {
         this.selectedTileIds$.getValue().filter(value => value !== event.value)
       );
     }
+  }
+
+  public deploy(): void {
+    combineLatest([this.leftArtifacts$, this.rightArtifacts$, this.selectedTileIds$])
+      .pipe(take(1))
+      .subscribe(([leftArtifacts, rightArtifacts, selectedTileIds]) => {
+        this._leftArtifacts$.next(
+          leftArtifacts.filter(artifact => !selectedTileIds.includes(artifact.id))
+        );
+        this._rightArtifacts$.next([
+          ...rightArtifacts,
+          ...selectedTileIds.map(selectedTileId =>
+            leftArtifacts.find(leftArtifact => leftArtifact.id === selectedTileId)
+          ),
+        ]);
+      });
   }
 
   private getUniqueArtifacts(
