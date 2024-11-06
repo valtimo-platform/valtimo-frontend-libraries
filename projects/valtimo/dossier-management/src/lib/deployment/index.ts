@@ -14,12 +14,5 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of dossier-management
- */
-
-export * from './lib/dossier-management.module';
-export * from './lib/components/dossier-management-list/dossier-management-list.component';
-export * from './lib/models';
-export * from './lib/services';
-export * from './lib/deployment';
+export * from './deployment-routing.module';
+export * from './components';

@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of dossier-management
- */
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {DeploymentComponent} from './components';
+import {ROLE_ADMIN} from '@valtimo/config';
 
-export * from './lib/dossier-management.module';
-export * from './lib/components/dossier-management-list/dossier-management-list.component';
-export * from './lib/models';
-export * from './lib/services';
-export * from './lib/deployment';
+const routes: Routes = [
+  {
+    path: 'deployment',
+    component: DeploymentComponent,
+    data: {title: 'Deployment', roles: [ROLE_ADMIN]},
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class DeploymentRoutingModule {}

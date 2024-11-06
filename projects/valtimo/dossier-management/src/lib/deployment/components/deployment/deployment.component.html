@@ -1,0 +1,83 @@
+<!--
+  ~ Copyright 2015-2024 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<cds-tabs *ngIf="{tabs: tabs$ | async} as obs">
+  <cds-tab
+    *ngFor="let tab of obs.tabs"
+    (selected)="changeTab(tab.caseDefinitionId)"
+    [heading]="tab.caseDefinitionTitle"
+  ></cds-tab>
+</cds-tabs>
+
+<div class="deployment-container" fitPage [extraSpace]="72">
+  <div class="left" [cdsLayer]="0">
+    <h4 class="deployment-title">Development</h4>
+
+    <cds-tile-group
+      class="artifacts"
+      (selected)="tileSelected($event)"
+      [multiple]="true"
+      [cdsLayer]="1"
+    >
+      @for (artifact of (leftArtifacts$ | async) || []; track artifact.version) {
+        <cds-selection-tile [value]="artifact.id">
+          <div class="tile-content">
+            {{ artifact.caseDefinitionTitle }}
+
+            <div class="tags">
+              <cds-tag>{{ artifact.date | date: 'short' }}</cds-tag>
+
+              <cds-tag type="blue">{{ artifact.version }}</cds-tag>
+            </div>
+          </div>
+        </cds-selection-tile>
+      }
+    </cds-tile-group>
+  </div>
+
+  <div class="right" [cdsLayer]="0">
+    <div class="arrow-icon">
+      <svg cdsIcon="arrow--right" size="24" class="cds--btn__icon"></svg>
+    </div>
+
+    <h4 class="deployment-title">Test (current)</h4>
+
+    @for (artifact of (rightArtifacts$ | async) || []; track artifact.version) {
+      {{ artifact.caseDefinitionTitle }}
+    }
+  </div>
+</div>
+
+<ng-container renderInPageHeader>
+  <ng-template>
+    <ng-container
+      *ngIf="{
+        amountOfSelectedTileIds: amountOfSelectedTileIds$ | async,
+        deployEnabled: deployEnabled$ | async,
+      } as obs"
+    >
+      <button
+        cdsButton="primary"
+        [size]="(compactMode$ | async) ? 'sm' : 'md'"
+        [disabled]="!obs.deployEnabled"
+      >
+        {{ 'Deploy' + (obs.deployEnabled ? ' (' + obs.amountOfSelectedTileIds + ')' : '') }}
+
+        <svg class="cds--btn__icon" cdsIcon="deploy" size="16"></svg>
+      </button>
+    </ng-container>
+  </ng-template>
+</ng-container>

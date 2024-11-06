@@ -119,6 +119,7 @@ export const environment: ValtimoConfig = {
         sequence: 5,
         children: [
           {title: 'Basics', textClass: 'text-dark font-weight-bold c-default', sequence: 1},
+          {link: ['/deployment'], title: 'Deployment', sequence: 1.5},
           {link: ['/processes'], title: 'Processes', sequence: 2},
           {link: ['/form-management'], title: 'Forms', sequence: 3},
           {link: ['/form-flow-management'], title: 'Form Flows', sequence: 4},
