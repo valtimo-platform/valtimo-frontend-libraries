@@ -306,6 +306,32 @@ export class DocumentService {
     );
   }
 
+  public findProcessDocumentDefinitionsForDocument(
+    documentId: string
+  ): Observable<ProcessDocumentDefinition[]> {
+    return this.http.get<ProcessDocumentDefinition[]>(
+      `${this.valtimoEndpointUri}v2/process-document/definition/document/${documentId}`
+    );
+  }
+
+  public findProcessDocumentDefinitionsForDocumentByStartableByUser(
+    documentId: string,
+    startableByUser: boolean
+  ): Observable<ProcessDocumentDefinition[]> {
+    return this.http.get<ProcessDocumentDefinition[]>(
+      `${this.valtimoEndpointUri}v2/process-document/definition/document/${documentId}?startableByUser=${startableByUser}`
+    );
+  }
+
+  public findProcessDocumentDefinitionsForDocumentByCanInitializeDocument(
+    documentId: string,
+    canInitializeDocument: boolean
+  ): Observable<ProcessDocumentDefinition[]> {
+    return this.http.get<ProcessDocumentDefinition[]>(
+      `${this.valtimoEndpointUri}v2/process-document/definition/document/${documentId}?canInitializeDocument=${canInitializeDocument}`
+    );
+  }
+
   public findProcessDocumentDefinitionsByVersion(
     documentDefinitionName: string,
     version: number
