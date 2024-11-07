@@ -28,7 +28,7 @@
     <h4 class="deployment-title">Development</h4>
 
     @if (((leftArtifacts$ | async) || []).length === 0) {
-      <div class="no-results">No artifacts found for this case definition</div>
+      <div class="no-results">No artifacts found for this case definition on this environment</div>
     }
 
     <cds-tile-group
@@ -43,7 +43,7 @@
             {{ artifact.caseDefinitionTitle }}
 
             <div class="tags">
-              <cds-tag>{{ artifact.date | date: 'short' }}</cds-tag>
+              <cds-tag type="outline">{{ artifact.date | date: 'short' }}</cds-tag>
 
               <cds-tag type="blue">{{ artifact.version }}</cds-tag>
             </div>
@@ -61,7 +61,7 @@
     <h4 class="deployment-title">Test (current)</h4>
 
     @if (((rightArtifacts$ | async) || []).length === 0) {
-      <div class="no-results">No artifacts found for this case definition</div>
+      <div class="no-results">No artifacts found for this case definition on this environment</div>
     }
 
     <cds-tile-group
@@ -76,7 +76,7 @@
             {{ artifact.caseDefinitionTitle }}
 
             <div class="tags">
-              <cds-tag>{{ artifact.date | date: 'short' }}</cds-tag>
+              <cds-tag type="outline">{{ artifact.date | date: 'short' }}</cds-tag>
 
               <cds-tag type="blue">{{ artifact.version }}</cds-tag>
             </div>

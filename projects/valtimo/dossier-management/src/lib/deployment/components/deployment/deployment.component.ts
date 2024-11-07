@@ -178,11 +178,6 @@ export class DeploymentComponent implements OnInit, OnDestroy {
         this.deploying$.next(true);
 
         setTimeout(() => {
-          this._leftArtifacts$.next(
-            leftArtifacts.filter(
-              artifact => !selectedTileIds.includes(this.getArtifactId(artifact))
-            )
-          );
           this._rightArtifacts$.next([
             ...rightArtifacts,
             ...selectedTileIds.map(selectedTileId =>

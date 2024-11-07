@@ -40,14 +40,14 @@
     .--disabled {
       pointer-events: none;
 
+      .tile-content {
+        color: var(--cds-text-helper);
+      }
+
       ::ng-deep.cds--tile--selectable {
         background: transparent;
         outline: 1px solid var(--cds-layer-selected);
         outline-offset: -1px;
-      }
-
-      .tile-content {
-        color: var(--cds-text-on-color-disabled);
       }
     }
   }
