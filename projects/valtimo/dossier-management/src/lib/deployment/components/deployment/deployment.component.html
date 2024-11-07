@@ -38,12 +38,16 @@
       [cdsLayer]="1"
     >
       @for (artifact of (leftArtifacts$ | async) || []; track artifact.id) {
-        <cds-selection-tile [value]="artifact.id" [ngClass]="{'--disabled': artifact.disabled}">
+        <cds-selection-tile
+          [value]="artifact.id"
+          [ngClass]="{'--disabled': artifact.disabled}"
+          [disabled]="artifact.disabled"
+        >
           <div class="tile-content">
             {{ artifact.caseDefinitionTitle }}
 
-            <div class="tags">
-              <cds-tag type="outline">{{ artifact.date | date: 'short' }}</cds-tag>
+            <div class="tags" [cdsLayer]="0">
+              <cds-tag type="gray">{{ artifact.date | date: 'short' }}</cds-tag>
 
               <cds-tag type="blue">{{ artifact.version }}</cds-tag>
             </div>
@@ -71,12 +75,12 @@
       [cdsLayer]="1"
     >
       @for (artifact of (rightArtifacts$ | async) || []; track artifact.id) {
-        <cds-selection-tile [value]="artifact.id" [ngClass]="{'--disabled': true}">
+        <cds-selection-tile [value]="artifact.id" [ngClass]="{'--disabled': true}" disabled="true">
           <div class="tile-content">
             {{ artifact.caseDefinitionTitle }}
 
-            <div class="tags">
-              <cds-tag type="outline">{{ artifact.date | date: 'short' }}</cds-tag>
+            <div class="tags" [cdsLayer]="0">
+              <cds-tag type="gray">{{ artifact.date | date: 'short' }}</cds-tag>
 
               <cds-tag type="blue">{{ artifact.version }}</cds-tag>
             </div>

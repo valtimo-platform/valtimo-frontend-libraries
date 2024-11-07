@@ -38,8 +38,6 @@
     color: var(--cds-text-primary);
 
     .--disabled {
-      pointer-events: none;
-
       .tile-content {
         color: var(--cds-text-helper);
       }
@@ -116,5 +114,11 @@
     bottom: 0;
     left: 0;
     width: 100%;
+  }
+
+  ::ng-deep cds-tile-group fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 }
