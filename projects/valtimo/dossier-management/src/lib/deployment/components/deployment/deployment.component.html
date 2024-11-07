@@ -54,7 +54,7 @@
   </div>
 
   <div class="right" [cdsLayer]="0" [ngClass]="{'--active': (deployEnabled$ | async) === true}">
-    <div class="arrow-icon">
+    <div class="arrow-icon" [ngClass]="{'--active': (deployEnabled$ | async) === true}">
       <svg cdsIcon="arrow--right" size="24" class="cds--btn__icon"></svg>
     </div>
 

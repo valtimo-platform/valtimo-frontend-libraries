@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, Renderer2, RendererStyleFlags2} from '@angular/core';
 import {
   ButtonModule,
   IconModule,
@@ -26,7 +26,7 @@ import {
   TileSelection,
   TilesModule,
 } from 'carbon-components-angular';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DOCUMENT} from '@angular/common';
 import {
   FitPageDirectiveModule,
   PageHeaderService,
@@ -66,7 +66,7 @@ interface Artifact {
     ProgressBarModule,
   ],
 })
-export class DeploymentComponent {
+export class DeploymentComponent implements OnInit, OnDestroy {
   public readonly activeTab$ = new BehaviorSubject<string>('');
 
   public readonly deploying$ = new BehaviorSubject<boolean>(false);
@@ -133,9 +133,26 @@ export class DeploymentComponent {
 
   constructor(
     private readonly iconService: IconService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    @Inject(DOCUMENT) private document: Document,
+    private readonly renderer: Renderer2
   ) {
     this.iconService.registerAll([ArrowRight24, Deploy16]);
+  }
+
+  public ngOnInit(): void {
+    this.renderer.setStyle(this.document.body, 'overflow', 'hidden', RendererStyleFlags2.Important);
+    this.renderer.setStyle(
+      this.document.documentElement,
+      'overflow',
+      'hidden',
+      RendererStyleFlags2.Important
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this.renderer.removeStyle(this.document.body, 'overflow');
+    this.renderer.removeStyle(this.document.documentElement, 'overflow');
   }
 
   public changeTab(caseDefinitionId: string): void {
@@ -176,7 +193,7 @@ export class DeploymentComponent {
           ]);
           this.selectedTileIds$.next([]);
           this.deploying$.next(false);
-        }, 1000);
+        }, 2000);
       });
   }
 
