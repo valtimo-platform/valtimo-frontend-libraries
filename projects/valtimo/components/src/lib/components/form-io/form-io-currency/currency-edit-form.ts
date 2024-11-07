@@ -80,13 +80,23 @@ export const currencyEditForm = () => {
     },
   };
 
-  // Find the tabs component, then locate the display tab and insert the custom property
+  const allowEmptyValueCheckbox = {
+    type: 'checkbox',
+    input: true,
+    key: 'customOptions.allowEmptyValue',
+    label: 'Allow Empty Value',
+    tooltip: 'Check to allow empty values for this field',
+    weight: 10,
+    defaultValue: false, // Default to false
+  };
+
   const tabsComponent = editForm.components.find(component => component.key === 'tabs');
   if (tabsComponent) {
     const displayTab = tabsComponent.components.find(tab => tab.key === 'display');
     if (displayTab) {
-      displayTab.components.unshift(localeSelection); // Insert at the top of Display tab
-      displayTab.components.unshift(currencySelection); // Insert at the top of Display tab
+      displayTab.components.unshift(localeSelection);
+      displayTab.components.unshift(currencySelection);
+      displayTab.components.unshift(allowEmptyValueCheckbox);
     }
   }
 

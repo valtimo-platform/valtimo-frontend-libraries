@@ -32,17 +32,16 @@ export class FormIoCurrencyComponent
     value: new FormControl<string>(''),
   });
 
-  private _value: number = 0;
+  private _value: number | null = null;
 
-  public get value(): number {
+  public get value(): number | null {
     return this._value;
   }
 
   @Input() public set value(value: number) {
-    if (typeof value !== 'number') return;
     this._value = value;
     this.currencyForm.setValue({
-      value: Currency.masking(this._value, this._currencyInstance.opts.maskOpts),
+      value: Currency.masking(value, this._currencyInstance.opts.maskOpts),
     });
   }
 
@@ -58,6 +57,7 @@ export class FormIoCurrencyComponent
 
   @Input() public readonly currencyLocale: string;
   @Input() public readonly currencyCurrency: string;
+  @Input() public readonly allowEmptyValue: boolean;
 
   private _currencyInstance!: Currency;
 
@@ -66,7 +66,7 @@ export class FormIoCurrencyComponent
   public ngOnInit(): void {
     this._subscriptions.add(
       this.currencyForm.valueChanges.subscribe(() => {
-        const unmasked = this._currencyInstance.getUnmasked(this.currencyForm.value);
+        const unmasked = this._currencyInstance.getUnmasked(this.currencyForm.value.value);
         this._value = unmasked;
         this.valueChange.emit(unmasked);
       })
@@ -80,6 +80,7 @@ export class FormIoCurrencyComponent
   public ngAfterViewInit(): void {
     this._currencyInstance = new Currency(this.currencyElement.nativeElement, {
       maskOpts: {
+        empty: this.allowEmptyValue || false,
         locales: this.currencyLocale || 'nl-NL',
         digits: 2,
         options: {
@@ -91,7 +92,7 @@ export class FormIoCurrencyComponent
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.currencyLocale || changes.currencyCurrency) {
+    if (changes.currencyLocale || changes.currencyCurrency || changes.allowEmptyValue) {
       if (typeof this.currencyLocale === 'string') {
         this._currencyInstance.opts.maskOpts.locales = this.currencyLocale;
       }
@@ -100,8 +101,15 @@ export class FormIoCurrencyComponent
         this._currencyInstance.opts.maskOpts.options.currency = this.currencyCurrency;
       }
 
+      if (typeof this.allowEmptyValue === 'boolean') {
+        this._currencyInstance.opts.maskOpts.empty = this.allowEmptyValue;
+      }
+
       this.currencyForm.setValue({
-        value: Currency.masking(this._value, this._currencyInstance.opts.maskOpts),
+        value:
+          typeof this._value === 'number'
+            ? Currency.masking(this._value, this._currencyInstance.opts.maskOpts)
+            : '',
       });
     }
   }
