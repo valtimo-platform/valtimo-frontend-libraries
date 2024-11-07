@@ -10,10 +10,12 @@ import moment from 'moment';
 export function currencyValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const locale = moment.locale(localStorage.getItem('langKey')) || 'en';
-    const currencySymbol = locale === 'en' ? '$' : '€';
+    const currencySymbol = '€';
     const valueString = String(control.value);
     let formattedValue: string;
     let decimalValue: string;
+
+    console.log('Control: ', control.value);
 
     if (valueString.match(/^$/)) {
       return null;
