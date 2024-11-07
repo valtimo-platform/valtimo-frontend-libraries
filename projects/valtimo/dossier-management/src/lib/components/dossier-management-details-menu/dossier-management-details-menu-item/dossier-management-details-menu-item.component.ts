@@ -2,6 +2,9 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Router} from '@angular/router';
 import {TilesModule} from 'carbon-components-angular';
+import {DossierVersionApiService} from '../../../services';
+import {Observable, map} from 'rxjs';
+import {DocumentDefinitionVersion, DossierManagemetnMenuItem} from '../../../models';
 
 @Component({
   selector: 'valtimo-dossier-management-details-menu-item',
@@ -12,15 +15,17 @@ import {TilesModule} from 'carbon-components-angular';
   imports: [CommonModule, TilesModule],
 })
 export class DossierManagementDetailsMenuItemComponent {
-  @Input() title: string;
-  @Input() description: string;
-  @Input() iconUrl: string;
-  @Input() urlPath: string;
+  @Input() menuItem: DossierManagemetnMenuItem;
   @Output() itemSelected = new EventEmitter<string>();
 
-  constructor(private readonly router: Router) {}
+  public readonly isDraftVersion$: Observable<boolean> =
+    this.dossierVersionApiService.activeVersion$.pipe(
+      map((version: DocumentDefinitionVersion) => version.type === 'draft')
+    );
+
+  constructor(private readonly dossierVersionApiService: DossierVersionApiService) {}
 
   public onMenuItemClick(): void {
-    this.itemSelected.emit(this.urlPath)
+    this.itemSelected.emit(this.menuItem.urlPath);
   }
 }

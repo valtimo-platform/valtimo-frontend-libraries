@@ -3,13 +3,13 @@
   class="valtimo-dossier-management-details-menu-item"
   (click)="onMenuItemClick()"
 >
-  <img [src]="iconUrl" [alt]="title" />
+  <img [src]="menuItem.iconUrl" [alt]="menuItem.title" />
 
   <h2>
-    {{ title }}
+    {{ menuItem.title }}
   </h2>
 
   <span>
-    {{ description }}
+    {{ (isDraftVersion$ | async) ? menuItem.description : menuItem.readonlyDescription }}
   </span>
 </cds-clickable-tile>
