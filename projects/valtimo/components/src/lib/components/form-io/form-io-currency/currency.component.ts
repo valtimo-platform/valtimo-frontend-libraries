@@ -29,7 +29,7 @@ export class FormIoCurrencyComponent
   @ViewChild('currencyElement') currencyElement!: ElementRef<HTMLInputElement>;
 
   public readonly currencyForm = new FormGroup({
-    value: new FormControl<string>(''),
+    currencyValue: new FormControl<string>(''),
   });
 
   private _value: number | null = null;
@@ -41,7 +41,7 @@ export class FormIoCurrencyComponent
   @Input() public set value(value: number) {
     this._value = value;
     this.currencyForm.setValue({
-      value: Currency.masking(value, this._currencyInstance.opts.maskOpts),
+      currencyValue: Currency.masking(value, this._currencyInstance.opts.maskOpts),
     });
   }
 
@@ -66,9 +66,15 @@ export class FormIoCurrencyComponent
   public ngOnInit(): void {
     this._subscriptions.add(
       this.currencyForm.valueChanges.subscribe(() => {
-        const unmasked = this._currencyInstance.getUnmasked(this.currencyForm.value.value);
-        this._value = unmasked;
-        this.valueChange.emit(unmasked);
+        const unmasked = this._currencyInstance.getUnmasked(this.currencyForm.value.currencyValue);
+
+        if (unmasked === 0 && this.allowEmptyValue) {
+          this._value = null;
+          this.valueChange.emit(null);
+        } else {
+          this._value = unmasked;
+          this.valueChange.emit(unmasked);
+        }
       })
     );
   }
@@ -106,7 +112,7 @@ export class FormIoCurrencyComponent
       }
 
       this.currencyForm.setValue({
-        value:
+        currencyValue:
           typeof this._value === 'number'
             ? Currency.masking(this._value, this._currencyInstance.opts.maskOpts)
             : '',
