@@ -14,26 +14,83 @@
  * limitations under the License.
  */
 
-export const currencyEditForm = () => ({
-  components: [
-    {
-      type: 'select',
-      label: 'Currency symbol',
-      key: 'customOptions.currencySymbol',
-      placeholder: 'Select a currency symbol',
-      data: {
-        values: [
-          {value: 'euro', label: '€'},
-          {value: 'dollar', label: '$'},
-          {value: 'pound', label: '£'},
-        ],
-      },
-      defaultValue: 'euro',
-      dataSrc: 'values',
-      input: true,
-      validate: {
-        required: false,
-      },
+import {Components} from 'formiojs';
+
+const TextFieldEditForm = Components.components.textfield.editForm;
+
+export const currencyEditForm = () => {
+  const editForm = TextFieldEditForm();
+
+  // Define the custom property to be added
+  const localeSelection = {
+    type: 'select',
+    input: true,
+    key: 'customOptions.currencyLocale',
+    label: 'Currency locale',
+    tooltip: 'The locale used for the currency input',
+    weight: 20,
+    defaultValue: 'nl-NL',
+    dataSrc: 'values',
+    data: {
+      values: [
+        {
+          label: 'Dutch (Netherlands)',
+          value: 'nl-NL',
+        },
+        {
+          label: 'English (US)',
+          value: 'en-US',
+        },
+        {
+          label: 'English (UK)',
+          value: 'en-GB',
+        },
+        {
+          label: 'German',
+          value: 'de-DE',
+        },
+      ],
     },
-  ],
-});
+  };
+
+  const currencySelection = {
+    type: 'select',
+    input: true,
+    key: 'customOptions.currencyCurrency',
+    label: 'Currency',
+    tooltip: 'The currency used for the currency input',
+    weight: 20,
+    defaultValue: 'EUR',
+    dataSrc: 'values',
+    data: {
+      values: [
+        {
+          label: 'Euro',
+          value: 'EUR',
+        },
+        {
+          label: 'British pound',
+          value: 'GBP',
+        },
+        {
+          label: 'United States Dollar',
+          value: 'USD',
+        },
+      ],
+    },
+  };
+
+  // Find the tabs component, then locate the display tab and insert the custom property
+  const tabsComponent = editForm.components.find(component => component.key === 'tabs');
+  if (tabsComponent) {
+    const displayTab = tabsComponent.components.find(tab => tab.key === 'display');
+    if (displayTab) {
+      displayTab.components.unshift(localeSelection); // Insert at the top of Display tab
+      displayTab.components.unshift(currencySelection); // Insert at the top of Display tab
+    }
+  }
+
+  console.log(editForm);
+
+  return editForm;
+};
