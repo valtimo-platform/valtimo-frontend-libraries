@@ -21,7 +21,6 @@ const TextFieldEditForm = Components.components.textfield.editForm;
 export const currencyEditForm = () => {
   const editForm = TextFieldEditForm();
 
-  // Define the custom property to be added
   const localeSelection = {
     type: 'select',
     input: true,
@@ -99,8 +98,6 @@ export const currencyEditForm = () => {
       displayTab.components.unshift(allowEmptyValueCheckbox);
     }
   }
-
-  console.log(editForm);
 
   return editForm;
 };
