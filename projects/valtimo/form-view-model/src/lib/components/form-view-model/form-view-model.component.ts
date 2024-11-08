@@ -79,6 +79,9 @@ export class FormViewModelComponent implements OnInit {
 
   public errors: string[] = [];
 
+  private preventNextPage = false;
+  private preventPreviousPage = false;
+
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
   public readonly formName$ = new BehaviorSubject<string>(undefined);
@@ -237,6 +240,28 @@ export class FormViewModelComponent implements OnInit {
     }
   }
 
+  public onNextPage(event: any): void {
+    this.preventNextPage = true;
+    this.formio.formio.setPage(this.formio.formio.page - 1);
+    this.handleChanges();
+  }
+
+  public onPreviousPage(event: any): void {
+    this.preventPreviousPage = true;
+    this.formio.formio.setPage(this.formio.formio.page + 1);
+    this.handleChanges();
+  }
+
+  private handlePageChange(): void {
+    if (this.preventNextPage) {
+      this.preventNextPage = false;
+      this.formio.formio.setPage(this.formio.formio.page + 1);
+    } else if (this.preventPreviousPage) {
+        this.preventPreviousPage = false;
+        this.formio.formio.setPage(this.formio.formio.page - 1);
+    }
+  }
+
   public loadInitialViewModel(): void {
     combineLatest([this.formName$, this.taskInstanceId$])
       .pipe(
@@ -265,12 +290,13 @@ export class FormViewModelComponent implements OnInit {
             return combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(
               take(1),
               switchMap(([formName, taskInstanceId, change]) =>
-                this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).pipe(
+                this.viewModelService.updateViewModel(formName, taskInstanceId, change.data, this.formio.formio.page).pipe(
                   tap({
                     next: viewModel => {
                       const submission = this.submission$.value;
                       submission.data = viewModel;
                       this.submission$.next(submission);
+                      this.handlePageChange();
                       this.loading$.next(false);
                       this.errors = [];
                     },
@@ -318,11 +344,14 @@ export class FormViewModelComponent implements OnInit {
               take(1),
               switchMap(([formName, processDefinitionKey, change]) =>
                 this.viewModelService
-                  .updateViewModelForStartForm(formName, processDefinitionKey, change.data)
+                  .updateViewModelForStartForm(formName, processDefinitionKey, change.data, this.formio.formio.page)
                   .pipe(
                     tap({
                       next: viewModel => {
-                        this.submission$.next({data: viewModel});
+                        const submission = this.submission$.value;
+                        submission.data = viewModel;
+                        this.submission$.next(submission);
+                        this.handlePageChange();
                         this.loading$.next(false);
                         this.errors = [];
                       },
