@@ -153,6 +153,13 @@
           pendingTab === TabEnum.COLLABORATORS
         "
       ></valtimo-dossier-management-collaborators-list>
+
+      <valtimo-dossier-management-change-logs
+        *ngIf="
+          (obs.currentTab === TabEnum.CASE_CHANGE_LOGS && !pendingChanges) ||
+          pendingTab === TabEnum.CASE_CHANGE_LOGS
+        "
+      ></valtimo-dossier-management-change-logs>
     }
   </div>
 </div>

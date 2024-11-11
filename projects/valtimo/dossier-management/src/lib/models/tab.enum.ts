@@ -23,4 +23,5 @@ export enum TabEnum {
   TABS = 'tabs',
   STATUSES = 'statuses',
   COLLABORATORS = 'collaborators',
+  CASE_CHANGE_LOGS = 'caseChangeLogs',
 }

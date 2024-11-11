@@ -88,7 +88,8 @@ import {DossierManagementVersionModalComponent} from './components/dossier-manag
 import {DossierManagementWidgetsEditorComponent} from './components/dossier-management-widget-tab/editor/dossier-management-widgets-editor.component';
 import {DossierManagementRoutingModule} from './dossier-management-routing.module';
 import {TabManagementService} from './services';
-import { DossierManagementCollaboratorsIconsComponent } from './components/dossier-management-collaborators-icons/dossier-management-collaborators-icons.component';
+import {DossierManagementCollaboratorsIconsComponent} from './components/dossier-management-collaborators-icons/dossier-management-collaborators-icons.component';
+import {DossierManagementChangeLogsComponent} from './components/dossier-management-change-logs/dossier-management-change-logs.component';
 
 @NgModule({
   declarations: [
@@ -168,7 +169,8 @@ import { DossierManagementCollaboratorsIconsComponent } from './components/dossi
     InlineLoadingModule,
     DossierManagementDetailsMenuComponent,
     DossierManagementCollaboratorsListComponent,
-    DossierManagementCollaboratorsIconsComponent
+    DossierManagementCollaboratorsIconsComponent,
+    DossierManagementChangeLogsComponent,
   ],
   providers: [TabManagementService],
 })
