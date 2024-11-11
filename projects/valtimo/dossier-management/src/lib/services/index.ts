@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+export * from './case-collaborators.service';
+export * from './case-menu.service';
 export * from './dossier-detail.service';
 export * from './dossier-export.service';
 export * from './dossier-versions-api.service';

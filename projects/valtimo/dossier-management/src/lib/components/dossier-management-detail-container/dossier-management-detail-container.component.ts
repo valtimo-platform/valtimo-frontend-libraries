@@ -36,7 +36,7 @@ import {
   tap,
 } from 'rxjs';
 import {TabEnum} from '../../models';
-import {DossierDetailService, TabService} from '../../services';
+import {CaseMenuService, DossierDetailService, TabService} from '../../services';
 import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
 
 @Component({
@@ -77,12 +77,13 @@ export class DossierManagementDetailContainerComponent
   public readonly DossierManagementTabs = Object.values(TabEnum);
 
   public readonly TabEnum = TabEnum;
-  public readonly menuItemIsSelected$ = new BehaviorSubject<boolean>(false);
+  public readonly menuItemIsSelected$ = this.caseMenuService.isItemSelected$;
 
   private _activeVersion: number | null;
   private _pendingVersion: number | null;
   private _subscriptions = new Subscription();
   constructor(
+    private readonly caseMenuService: CaseMenuService,
     private readonly dossierDetailService: DossierDetailService,
     private readonly route: ActivatedRoute,
     private readonly configService: ConfigService,
@@ -110,13 +111,10 @@ export class DossierManagementDetailContainerComponent
     this.pageTitleService.enableReset();
   }
 
-  public onMenuItemSelected(tab: TabEnum | string | null): void {
-    if (!tab) {
-      this.menuItemIsSelected$.next(false);
-      return;
-    }
+  public onMenuItemSelected(tab: TabEnum | string | null, fromMenu = false): void {
+    if (!fromMenu) this.caseMenuService.selectMenuItem(tab);
+    if (!tab) return;
 
-    this.menuItemIsSelected$.next(true);
     this.displayBodyComponent(tab);
   }
 

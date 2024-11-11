@@ -106,6 +106,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @Input() set items(value: CarbonListItem[]) {
+    console.log('items', value);
     this._items$.next(value);
   }
 
@@ -113,6 +114,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly _fields$ = new BehaviorSubject<ColumnConfig[]>([]);
   @Input() set fields(value: ColumnConfig[]) {
+    console.log('fields', value);
     this._fields$.next(value);
   }
 

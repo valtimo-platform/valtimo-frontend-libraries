@@ -11,6 +11,7 @@ import {DossierManagementDetailsMenuItemComponent} from './dossier-management-de
 import {MENU_ITEMS} from '../../mocks';
 import {TabEnum} from '../../models';
 import {ButtonModule} from 'carbon-components-angular';
+import {CaseMenuService} from '../../services';
 
 @Component({
   selector: 'valtimo-dossier-management-details-menu',
@@ -24,11 +25,13 @@ export class DossierManagementDetailsMenuComponent {
   @HostBinding('class') public readonly class = '';
   @Output() menuItemSelected = new EventEmitter<TabEnum | string | null>();
 
-  public readonly isItemSelected = signal<boolean>(false);
+  public readonly isItemSelected$ = this.caseMenuService.isItemSelected$;
   public readonly MENU_ITEMS = MENU_ITEMS;
 
+  constructor(private readonly caseMenuService: CaseMenuService) {}
+
   public onMenuItemSelected(url: TabEnum | string | null): void {
-    this.isItemSelected.set(!!url);
+    this.caseMenuService.selectMenuItem(url);
     this.menuItemSelected.emit(url);
   }
 }

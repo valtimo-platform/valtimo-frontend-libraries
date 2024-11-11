@@ -1,0 +1,7 @@
+<valtimo-carbon-list
+  hideToolbar="true"
+  [items]="collaborators$ | async"
+  [fields]="COLLABORATORS_FIELDS"
+  [loading]="(collaborators$ | async) === null"
+  (rowClicked)="onRowClicked()"
+></valtimo-carbon-list>

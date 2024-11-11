@@ -51,6 +51,13 @@ export const MENU_ITEMS: DossierManagemetnMenuItem[] = [
     urlPath: TabEnum.STATUSES,
   },
   {
+    title: 'Collaborators',
+    description: 'View users that have collaborated on this Case Definition version',
+    readonlyDescription: 'View users that have collaborated on this Case Definition version',
+    iconUrl: 'valtimo-layout/img/no-results.svg',
+    urlPath: TabEnum.COLLABORATORS,
+  },
+  {
     title: 'ZGW',
     description: 'Edit DocumentenAPI documents columns and tags for your case',
     readonlyDescription: 'View DocumentenAPI documents columns and tags for your case',

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export * from './case-collaborators.model';
 export * from './document-definition-version.model';
 export * from './dossier-management-menu.model';
 export * from './list-column.model';

@@ -49,6 +49,10 @@
     </cds-tag>
   </cds-tooltip>
 
+  <valtimo-dossier-management-collaborators-icons
+    (collaboratorSelected)="onCollaboratorSelected()"
+  ></valtimo-dossier-management-collaborators-icons>
+
   <cds-inline-loading
     [state]="obs.inlineLoadingState"
     loadingText="Saving changes"

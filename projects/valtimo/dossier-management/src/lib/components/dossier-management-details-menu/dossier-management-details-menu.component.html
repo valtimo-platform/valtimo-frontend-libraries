@@ -1,6 +1,5 @@
-@if (isItemSelected()) {
+@if (isItemSelected$ | async) {
   <button
-    *ngIf="isItemSelected()"
     class="valtimo-dossier-management-details-menu__back-button"
     cdsButton="secondary"
     (click)="onMenuItemSelected(null)"

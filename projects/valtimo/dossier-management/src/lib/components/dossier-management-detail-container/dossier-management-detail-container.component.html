@@ -23,7 +23,7 @@
 >
   <valtimo-documenten-api></valtimo-documenten-api>
   <valtimo-dossier-management-details-menu
-    (menuItemSelected)="onMenuItemSelected($event)"
+    (menuItemSelected)="onMenuItemSelected($event, true)"
   ></valtimo-dossier-management-details-menu>
   <!-- <cds-tabs class="dossier-management-tabs" type="contained">
     <cds-tab
@@ -146,6 +146,13 @@
           pendingTab === TabEnum.STATUSES
         "
       ></valtimo-dossier-management-statuses>
+
+      <valtimo-dossier-management-collaborators-list
+        *ngIf="
+          (obs.currentTab === TabEnum.COLLABORATORS && !pendingChanges) ||
+          pendingTab === TabEnum.COLLABORATORS
+        "
+      ></valtimo-dossier-management-collaborators-list>
     }
   </div>
 </div>
@@ -156,6 +163,7 @@
       [documentDefinitionTitle]="documentDefinitionTitle$ | async"
       [documentDefinitionName]="documentDefinitionName$ | async"
       (versionSet)="onVersionSet($event)"
+      (collaboratorSelected)="onMenuItemSelected(TabEnum.COLLABORATORS)"
     ></valtimo-dossier-management-detail-container-actions>
   </ng-template>
 </ng-container>
