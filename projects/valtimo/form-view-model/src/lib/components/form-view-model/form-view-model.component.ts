@@ -79,8 +79,8 @@ export class FormViewModelComponent implements OnInit {
 
   public errors: string[] = [];
 
-  private preventNextPage = false;
-  private preventPreviousPage = false;
+  private _preventNextPage = false;
+  private _preventPreviousPage = false;
 
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
@@ -241,23 +241,23 @@ export class FormViewModelComponent implements OnInit {
   }
 
   public onNextPage(event: any): void {
-    this.preventNextPage = true;
+    this._preventNextPage = true;
     this.formio.formio.setPage(this.formio.formio.page - 1);
     this.handleChanges();
   }
 
   public onPreviousPage(event: any): void {
-    this.preventPreviousPage = true;
+    this._preventPreviousPage = true;
     this.formio.formio.setPage(this.formio.formio.page + 1);
     this.handleChanges();
   }
 
   private handlePageChange(): void {
-    if (this.preventNextPage) {
-      this.preventNextPage = false;
+    if (this._preventNextPage) {
+      this._preventNextPage = false;
       this.formio.formio.setPage(this.formio.formio.page + 1);
-    } else if (this.preventPreviousPage) {
-        this.preventPreviousPage = false;
+    } else if (this._preventPreviousPage) {
+        this._preventPreviousPage = false;
         this.formio.formio.setPage(this.formio.formio.page - 1);
     }
   }
