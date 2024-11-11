@@ -52,6 +52,7 @@ import {
   Page,
   ProcessDocumentDefinition,
   ProcessDocumentDefinitionRequest,
+  ProcessDocumentDefinitionSearch,
   ProcessDocumentInstance,
   SpecifiedDocuments,
   TemplatePayload,
@@ -307,28 +308,16 @@ export class DocumentService {
   }
 
   public findProcessDocumentDefinitionsForDocument(
-    documentId: string
-  ): Observable<ProcessDocumentDefinition[]> {
-    return this.http.get<ProcessDocumentDefinition[]>(
-      `${this.valtimoEndpointUri}v2/process-document/definition/document/${documentId}`
-    );
-  }
-
-  public findProcessDocumentDefinitionsForDocumentByStartableByUser(
     documentId: string,
-    startableByUser: boolean
+    searchRequest: ProcessDocumentDefinitionSearch
   ): Observable<ProcessDocumentDefinition[]> {
+    const params = new HttpParams({
+      fromObject: searchRequest as any,
+    });
+    console.log({params});
     return this.http.get<ProcessDocumentDefinition[]>(
-      `${this.valtimoEndpointUri}v2/process-document/definition/document/${documentId}?startableByUser=${startableByUser}`
-    );
-  }
-
-  public findProcessDocumentDefinitionsForDocumentByCanInitializeDocument(
-    documentId: string,
-    canInitializeDocument: boolean
-  ): Observable<ProcessDocumentDefinition[]> {
-    return this.http.get<ProcessDocumentDefinition[]>(
-      `${this.valtimoEndpointUri}v2/process-document/definition/document/${documentId}?canInitializeDocument=${canInitializeDocument}`
+      `${this.valtimoEndpointUri}v2/process-document/definition/document/${documentId}`,
+      {params}
     );
   }
 
