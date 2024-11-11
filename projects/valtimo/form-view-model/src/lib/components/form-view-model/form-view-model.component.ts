@@ -240,13 +240,13 @@ export class FormViewModelComponent implements OnInit {
     }
   }
 
-  public onNextPage(event: any): void {
+  public onNextPage(): void {
     this._preventNextPage = true;
     this.formio.formio.setPage(this.formio.formio.page - 1);
     this.handleChanges();
   }
 
-  public onPreviousPage(event: any): void {
+  public onPreviousPage(): void {
     this._preventPreviousPage = true;
     this.formio.formio.setPage(this.formio.formio.page + 1);
     this.handleChanges();
