@@ -131,7 +131,7 @@ export const environment: ValtimoConfig = {
             sequence: 8,
             includeFunction: IncludeFunction.ObjectManagementEnabled,
           },
-          {link: ['/extension-management'], title: 'Extensions', sequence: 9},
+          {link: ['/extension-management'], title: 'Store', sequence: 9},
           {link: ['/plugins'], title: 'Plugins', sequence: 10},
           {link: ['/process-links'], title: 'Process links', sequence: 11},
           {link: ['/dashboard-management'], title: 'Dashboard', sequence: 12},
