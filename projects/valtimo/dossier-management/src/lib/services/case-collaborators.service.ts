@@ -11,7 +11,7 @@ export class CaseCollaboratorsService {
   private readonly _collaborators$ = new BehaviorSubject<NamedUser[]>(COLLABORATORS);
 
   public readonly collaborators$: Observable<Collaborator[] | null> = this._collaborators$.pipe(
-    debounceTime(2000),
+    debounceTime(1000),
     map((users: NamedUser[]) =>
       users.map((user: NamedUser) => ({...user, fullName: `${user.firstName} ${user.lastName}`}))
     ),

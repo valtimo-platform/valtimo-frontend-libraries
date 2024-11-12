@@ -1,9 +1,17 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import {CarbonListModule, ColumnConfig, ViewType} from '@valtimo/components';
-import {Observable, tap} from 'rxjs';
-import {Collaborator} from '../../models';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
+import {Collaborator, TabEnum} from '../../models';
 import {CaseCollaboratorsService} from '../../services/case-collaborators.service';
+import {ButtonModule} from 'carbon-components-angular';
+import {CaseChangeLogsService, CaseMenuService, TabService} from '../../services';
 
 @Component({
   selector: 'valtimo-dossier-management-collaborators-list',
@@ -11,21 +19,46 @@ import {CaseCollaboratorsService} from '../../services/case-collaborators.servic
   styleUrl: './dossier-management-collaborators-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, CarbonListModule],
+  imports: [CommonModule, CarbonListModule, ButtonModule],
 })
-export class DossierManagementCollaboratorsListComponent {
+export class DossierManagementCollaboratorsListComponent implements AfterViewInit {
+  @ViewChild('goToLogs') private _goToLogsTemplate: TemplateRef<any>;
   public readonly collaborators$: Observable<Collaborator[] | null> =
     this.caseCollaboratorsService.collaborators$;
-  
 
-  public readonly COLLABORATORS_FIELDS: ColumnConfig[] = [
-    {
-      key: 'email',
-      label: 'User email',
-      viewType: ViewType.TEXT,
-    },
-  ];
-  constructor(private readonly caseCollaboratorsService: CaseCollaboratorsService) {}
+  public readonly collaboratorsFields$ = new BehaviorSubject<ColumnConfig[]>([]);
 
-  public onRowClicked() {}
+  constructor(
+    private readonly caseCollaboratorsService: CaseCollaboratorsService,
+    private readonly caseChangeLogsService: CaseChangeLogsService,
+    private readonly caseMenuService: CaseMenuService,
+    private readonly tabService: TabService
+  ) {}
+
+  public ngAfterViewInit(): void {
+    this.collaboratorsFields$.next([
+      {
+        key: 'email',
+        label: 'User email',
+        viewType: ViewType.TEXT,
+      },
+      {
+        key: 'fullName',
+        label: 'User name',
+        viewType: ViewType.TEXT,
+      },
+      {
+        key: '',
+        label: '',
+        viewType: ViewType.TEMPLATE,
+        template: this._goToLogsTemplate,
+      },
+    ]);
+  }
+
+  public onRowClicked(collaborator: Collaborator) {
+    this.caseChangeLogsService.activeLogSearch$.next(collaborator.id);
+    this.caseMenuService.selectMenuItem(TabEnum.CASE_CHANGE_LOGS);
+    this.tabService.currentTab = TabEnum.CASE_CHANGE_LOGS;
+  }
 }

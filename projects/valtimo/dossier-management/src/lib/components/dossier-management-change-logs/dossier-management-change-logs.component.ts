@@ -1,8 +1,8 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
 import {CarbonListModule, ColumnConfig, ViewType} from '@valtimo/components';
 import {CaseChangeLogsService} from '../../services';
-import {Observable, map} from 'rxjs';
+import {Observable, combineLatest, map} from 'rxjs';
 import {CaseChangeLog} from '../../models';
 
 @Component({
@@ -13,15 +13,19 @@ import {CaseChangeLog} from '../../models';
   standalone: true,
   imports: [CommonModule, CarbonListModule],
 })
-export class DossierManagementChangeLogsComponent {
+export class DossierManagementChangeLogsComponent implements OnDestroy {
   public readonly caseChangeLogs$: Observable<(CaseChangeLog & {fullName: string})[] | null> =
-    this.caseChangeLogsService.caseChangeLogs$.pipe(
-      map((changeLogs: CaseChangeLog[] | null) =>
-        !!changeLogs
-          ? changeLogs.map((changeLog: CaseChangeLog) => ({
-              ...changeLog,
-              fullName: `${changeLog.user.firstName} ${changeLog.user.lastName}`,
-            }))
+    combineLatest([
+      this.caseChangeLogsService.activeLogSearch$,
+      this.caseChangeLogsService.caseChangeLogs$,
+    ]).pipe(
+      map(([activeLogSearch, caseChangeLogs]) =>
+        !!caseChangeLogs
+          ? this.mapLogs(
+              !!activeLogSearch
+                ? caseChangeLogs.filter((log: CaseChangeLog) => log.user.id === activeLogSearch)
+                : caseChangeLogs
+            )
           : null
       )
     );
@@ -44,4 +48,15 @@ export class DossierManagementChangeLogsComponent {
   ];
 
   constructor(private readonly caseChangeLogsService: CaseChangeLogsService) {}
+
+  public ngOnDestroy(): void {
+    this.caseChangeLogsService.activeLogSearch$.next(null);
+  }
+
+  private mapLogs(logs: CaseChangeLog[]): (CaseChangeLog & {fullName: string})[] {
+    return logs.map((changeLog: CaseChangeLog) => ({
+      ...changeLog,
+      fullName: `${changeLog.user.firstName} ${changeLog.user.lastName}`,
+    }));
+  }
 }

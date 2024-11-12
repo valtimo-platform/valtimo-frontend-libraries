@@ -11,8 +11,10 @@ import {CASE_CHANGE_LOGS} from '../mocks';
 export class CaseChangeLogsService {
   private readonly _caseChangeLogs$ = new BehaviorSubject<CaseChangeLog[]>(CASE_CHANGE_LOGS);
 
+  public readonly activeLogSearch$ = new BehaviorSubject<string | null>(null);
+
   public readonly caseChangeLogs$: Observable<CaseChangeLog[] | null> = this._caseChangeLogs$.pipe(
-    debounceTime(2000),
+    debounceTime(1000),
     startWith(null)
   );
 }
