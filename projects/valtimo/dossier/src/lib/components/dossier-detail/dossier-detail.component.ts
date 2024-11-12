@@ -313,7 +313,7 @@ export class DossierDetailComponent
 
   public getAllAssociatedProcessDefinitions(): void {
     this.documentService
-      .findProcessDocumentDefinitionsByStartableByUser(this.documentDefinitionName, true)
+      .findProcessDocumentDefinitionsForDocument(this.documentId, {startableByUser: true})
       .subscribe((processDocumentDefinitions: ProcessDocumentDefinition[]) => {
         this.processDocumentDefinitions = processDocumentDefinitions;
 
