@@ -53,6 +53,7 @@
     gap: 8px;
 
     .cds--tag {
+      margin: 0;
       white-space: pre;
     }
   }
@@ -75,6 +76,16 @@
 
   &__description {
     font-weight: 400;
+  }
+
+  &__subtitle {
+    font-size: var(--cds-legal-01-font-size);
+    font-weight: var(--cds-legal-01-font-weight);
+    line-height: var(--cds-legal-01-line-height);
+    letter-spacing: var(--cds-legal-01-letter-spacing);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
