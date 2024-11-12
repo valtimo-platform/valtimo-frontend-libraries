@@ -47,7 +47,6 @@ interface Artifact {
 }
 
 @Component({
-  selector: 'app-deployment',
   standalone: true,
   templateUrl: './deployment.component.html',
   styleUrl: 'deployment.component.scss',
