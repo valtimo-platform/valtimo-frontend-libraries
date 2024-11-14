@@ -38,13 +38,13 @@ export class DossierManagementCollaboratorsListComponent implements AfterViewIni
   public ngAfterViewInit(): void {
     this.collaboratorsFields$.next([
       {
-        key: 'email',
-        label: 'User email',
+        key: 'fullName',
+        label: 'User name',
         viewType: ViewType.TEXT,
       },
       {
-        key: 'fullName',
-        label: 'User name',
+        key: 'email',
+        label: 'User email',
         viewType: ViewType.TEXT,
       },
       {

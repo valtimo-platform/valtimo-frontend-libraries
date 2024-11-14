@@ -4,6 +4,7 @@ import {CarbonListModule, ColumnConfig, ViewType} from '@valtimo/components';
 import {CaseChangeLogsService} from '../../services';
 import {Observable, combineLatest, map} from 'rxjs';
 import {CaseChangeLog} from '../../models';
+import {ButtonModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-dossier-management-change-logs',
@@ -11,7 +12,7 @@ import {CaseChangeLog} from '../../models';
   styleUrl: './dossier-management-change-logs.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, CarbonListModule],
+  imports: [CommonModule, CarbonListModule, ButtonModule],
 })
 export class DossierManagementChangeLogsComponent implements OnDestroy {
   public readonly caseChangeLogs$: Observable<(CaseChangeLog & {fullName: string})[] | null> =
@@ -50,6 +51,10 @@ export class DossierManagementChangeLogsComponent implements OnDestroy {
   constructor(private readonly caseChangeLogsService: CaseChangeLogsService) {}
 
   public ngOnDestroy(): void {
+    this.onClearFilterClick();
+  }
+
+  public onClearFilterClick(): void {
     this.caseChangeLogsService.activeLogSearch$.next(null);
   }
 
