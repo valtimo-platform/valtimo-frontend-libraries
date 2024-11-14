@@ -118,9 +118,7 @@ export class DossierDetailComponent
     .pipe(map(userIdentity => userIdentity?.roles?.includes('ROLE_ADMIN')));
 
   public readonly taskAndProcessLinkOpenedInPanel$ =
-    this.dossierDetailLayoutService.taskAndProcessLinkOpenedInPanel$.pipe(
-      tap(x => console.log('opened in panel', x))
-    );
+    this.dossierDetailLayoutService.taskAndProcessLinkOpenedInPanel$;
 
   private readonly _caseStatusKey$ = new BehaviorSubject<string | null | 'NOT_AVAILABLE'>(null);
   private readonly _taskPanelToggle = this.configService.featureToggles?.enableTaskPanel;

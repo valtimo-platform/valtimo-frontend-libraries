@@ -80,15 +80,17 @@
         </cds-tag>
       </div>
 
-      @for (
-        subtitle of taskWithProcessLink?.processLinkActivityResult?.properties?.subtitles || [];
-        track subtitle
-      ) {
-        <p class="task__subtitle">{{ subtitle }}</p>
-      }
-
       <div class="task__description">
         {{ 'summary.taskCreated' | translate }} {{ taskWithProcessLink.task.created }}
+      </div>
+
+      <div class="task__subtitles">
+        @for (
+          subtitle of taskWithProcessLink?.processLinkActivityResult?.properties?.subtitles || [];
+          track subtitle
+        ) {
+          <p class="task__subtitle">{{ subtitle }}</p>
+        }
       </div>
     </div>
   </cds-clickable-tile>

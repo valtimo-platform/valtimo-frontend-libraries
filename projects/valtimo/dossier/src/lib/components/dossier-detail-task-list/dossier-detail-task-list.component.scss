@@ -60,32 +60,39 @@
 
   &__title {
     width: 100%;
-  }
-
-  &__title,
-  &__description {
     font-size: 14px;
-    font-style: normal;
     font-weight: 600;
     line-height: 20px;
-    letter-spacing: 0.16px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__description {
-    font-weight: 400;
+    letter-spacing: 0.16ppx;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
   }
 
   &__subtitle {
-    font-size: var(--cds-legal-01-font-size);
-    font-weight: var(--cds-legal-01-font-weight);
-    line-height: var(--cds-legal-01-line-height);
-    letter-spacing: var(--cds-legal-01-letter-spacing);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0.32px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  &__subtitles {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__description {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0.32px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
   }
 }
 

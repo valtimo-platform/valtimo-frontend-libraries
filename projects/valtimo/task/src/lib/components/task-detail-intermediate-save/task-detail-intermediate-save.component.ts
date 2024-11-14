@@ -176,7 +176,6 @@ export class TaskDetailIntermediateSaveComponent {
   }
 
   private getCurrentProgress(task: Task): void {
-    console.log('get current progress', task);
     this.taskIntermediateSaveService
       .getIntermediateSubmission(task.id ?? '')
       .pipe(take(1))

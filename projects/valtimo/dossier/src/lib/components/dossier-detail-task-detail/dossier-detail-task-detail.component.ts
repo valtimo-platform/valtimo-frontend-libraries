@@ -58,7 +58,6 @@ import {TaskWithProcessLink} from '@valtimo/process-link';
 })
 export class DossierDetailsTaskDetailComponent implements OnDestroy {
   @Input() public set taskAndProcessLink(value: TaskWithProcessLink | null) {
-    console.log('x', value);
     if (!value) return;
 
     this.taskAndProcessLink$.next(value);
