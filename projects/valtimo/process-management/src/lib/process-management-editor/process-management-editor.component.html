@@ -47,14 +47,37 @@
       class="page-header-actions"
       *ngIf="{
         processDefinitionVersionsListItems: processDefinitionVersionsListItems$ | async,
+        loading: loading$ | async,
+        changesPending: changesPending$ | async,
+        isReadOnlyProcess: isReadOnlyProcess$ | async,
+        compactMode: compactMode$ | async,
       } as actionsObs"
     >
       <div class="page-header-actions__version-dropdown">
-        <cds-dropdown>
+        <cds-dropdown
+          (selected)="selectedVersionChange($event)"
+          [disabled]="
+            actionsObs.loading || (actionsObs.processDefinitionVersionsListItems || []).length === 0
+          "
+          [size]="actionsObs.compactMode ? 'sm' : 'md'"
+        >
           <cds-dropdown-list
             [items]="actionsObs.processDefinitionVersionsListItems"
           ></cds-dropdown-list>
         </cds-dropdown>
+      </div>
+
+      <div class="page-header-actions__buttons">
+        <button
+          [disabled]="!actionsObs.changesPending || actionsObs.isReadOnlyProcess"
+          cdsButton="primary"
+          (click)="deployChanges()"
+          [size]="actionsObs.compactMode ? 'sm' : 'md'"
+        >
+          {{ 'processManagement.deploy' | translate }}
+
+          <svg class="cds--btn__icon" cdsIcon="deploy" size="16"></svg>
+        </button>
       </div>
     </div>
   </ng-template>

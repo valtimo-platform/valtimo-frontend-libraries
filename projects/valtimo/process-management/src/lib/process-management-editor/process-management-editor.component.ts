@@ -18,17 +18,39 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angul
 import {CommonModule} from '@angular/common';
 import {
   FitPageDirectiveModule,
+  PageHeaderService,
   PageTitleService,
   RenderInPageHeaderDirectiveModule,
 } from '@valtimo/components';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, take, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  from,
+  map,
+  Observable,
+  startWith,
+  Subject,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
-import {DropdownModule, ListItem, LoadingModule, SelectModule} from 'carbon-components-angular';
+import {
+  ButtonModule,
+  DropdownModule,
+  IconModule,
+  IconService,
+  ListItem,
+  LoadingModule,
+  SelectModule,
+} from 'carbon-components-angular';
 import Modeler from 'bpmn-js/lib/Modeler';
 import BpmnViewer from 'bpmn-js';
 import {ReactiveFormsModule} from '@angular/forms';
-import {TranslateService} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {Deploy16} from '@carbon/icons';
 
 @Component({
   selector: 'valtimo-process-management-editor',
@@ -43,6 +65,9 @@ import {TranslateService} from '@ngx-translate/core';
     DropdownModule,
     ReactiveFormsModule,
     SelectModule,
+    ButtonModule,
+    IconModule,
+    TranslateModule,
   ],
 })
 export class ProcessManagementEditorComponent implements AfterViewInit, OnDestroy {
@@ -84,11 +109,21 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     filter(key => !!key)
   );
 
-  public readonly processDefinitionVersions$ = this._processDefinitionKey$.pipe(
-    switchMap(processDefinitionKey =>
+  private readonly _reload$ = new Subject<null>();
+
+  public readonly changesPending$ = new BehaviorSubject<boolean>(false);
+
+  public readonly processDefinitionVersions$ = combineLatest([
+    this._processDefinitionKey$,
+    this._reload$.pipe(startWith(null)),
+  ]).pipe(
+    switchMap(([processDefinitionKey]) =>
       this.processService.getProcessDefinitionVersions(processDefinitionKey)
     ),
-    tap(processDefinitions => this.setSelectedProcessDefinitionOnInit(processDefinitions))
+    tap(processDefinitions => {
+      this.changesPending$.next(false);
+      this.setSelectedProcessDefinitionToLatest(processDefinitions);
+    })
   );
 
   public readonly processDefinitionVersionsListItems$: Observable<ListItem[]> = combineLatest([
@@ -97,20 +132,29 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this.translateService.stream('key'),
   ]).pipe(
     map(([processDefinitionVersions, selectionProcessDefinition]) =>
-      processDefinitionVersions.map(processDefinitionVersion => ({
-        id: processDefinitionVersion.version,
-        content: `${this.translateService.instant('processManagementEditor.version')}${processDefinitionVersion.version}`,
-        selected: selectionProcessDefinition.version === processDefinitionVersion.version,
-      }))
+      processDefinitionVersions
+        .map(processDefinitionVersion => ({
+          id: processDefinitionVersion.version,
+          content: `${this.translateService.instant('processManagementEditor.version')}${processDefinitionVersion.version}`,
+          selected: selectionProcessDefinition.version === processDefinitionVersion.version,
+          processDefinitionVersion,
+        }))
+        .sort((a, b) => b.id - a.id)
     )
   );
+
+  public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly processService: ProcessService,
     private readonly pageTitleService: PageTitleService,
-    private readonly translateService: TranslateService
-  ) {}
+    private readonly translateService: TranslateService,
+    private readonly iconService: IconService,
+    private readonly pageHeaderService: PageHeaderService
+  ) {
+    this.iconService.registerAll([Deploy16]);
+  }
 
   public ngAfterViewInit(): void {
     this.initModeler();
@@ -122,23 +166,45 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this._bpmnViewer?.destroy();
   }
 
-  private setSelectedProcessDefinitionOnInit(processDefinitions: ProcessDefinition[]): void {
-    this._selectionProcessDefinition$.pipe(take(1)).subscribe(selectedProcessDefinition => {
-      if (selectedProcessDefinition) return;
+  public deployChanges(): void {
+    from(this._bpmnModeler.saveXML())
+      .pipe(
+        take(1),
+        switchMap(result => this.processService.deployProcess(result.xml))
+      )
+      .subscribe(() => {
+        this.reload();
+      });
+  }
 
-      this._selectionProcessDefinition$.next(
-        processDefinitions.reduce((acc, version) => (version.version > acc.version ? version : acc))
-      );
-    });
+  public selectedVersionChange(event: {item: {processDefinitionVersion: ProcessDefinition}}): void {
+    this._selectionProcessDefinition$.next(event?.item?.processDefinitionVersion);
+  }
+
+  private setSelectedProcessDefinitionToLatest(processDefinitions: ProcessDefinition[]): void {
+    this._selectionProcessDefinition$.next(
+      processDefinitions.reduce((acc, version) => (version.version > acc.version ? version : acc))
+    );
   }
 
   private initModeler(): void {
     this._bpmnModeler = new Modeler();
     this._bpmnModeler?.attachTo(this.modelerElementRef.nativeElement);
+    this.listenToModelerEvents();
+  }
+
+  private listenToModelerEvents(): void {
+    this._bpmnModeler.on('commandStack.changed', () => {
+      this.changesPending$.next(true);
+    });
   }
 
   private initViewer(): void {
     this._bpmnViewer = new BpmnViewer();
     this._bpmnViewer?.attachTo(this.viewerElementRef.nativeElement);
+  }
+
+  private reload(): void {
+    this._reload$.next(null);
   }
 }

@@ -38,6 +38,10 @@
 }
 
 .page-header-actions {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+
   &__version-dropdown {
     width: 150px;
   }
