@@ -180,7 +180,11 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   }
 
   public selectedVersionChange(event: {item: {processDefinitionVersion: ProcessDefinition}}): void {
-    this._selectionProcessDefinition$.next(event?.item?.processDefinitionVersion);
+    this._selectionProcessDefinition$.pipe(take(1)).subscribe(selectedVersion => {
+      if (selectedVersion.id !== event.item.processDefinitionVersion.id) {
+        this._selectionProcessDefinition$.next(event?.item?.processDefinitionVersion);
+      }
+    });
   }
 
   private setSelectedProcessDefinitionToLatest(processDefinitions: ProcessDefinition[]): void {
