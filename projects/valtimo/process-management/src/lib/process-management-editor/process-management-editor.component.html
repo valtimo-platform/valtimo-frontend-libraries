@@ -67,7 +67,7 @@
             [size]="actionsObs.compactMode ? 'sm' : 'md'"
           >
             <cds-dropdown-list
-              [items]="actionsObs.processDefinitionVersionsListItems"
+              [items]="actionsObs.processDefinitionVersionsListItems || []"
             ></cds-dropdown-list>
           </cds-dropdown>
         </div>

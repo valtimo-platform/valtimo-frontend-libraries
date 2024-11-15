@@ -48,7 +48,7 @@ import {
   TagModule,
 } from 'carbon-components-angular';
 import Modeler from 'bpmn-js/lib/Modeler';
-import BpmnViewer from 'bpmn-js';
+import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {Deploy16} from '@carbon/icons';
@@ -83,7 +83,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   );
 
   private _bpmnModeler!: Modeler;
-  private _bpmnViewer!: BpmnViewer;
+  private _bpmnViewer!: NavigatedViewer;
 
   public isReadOnlyProcess$ = new BehaviorSubject<boolean>(false);
   public isSystemProcess$ = new BehaviorSubject<boolean>(false);
@@ -206,7 +206,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   }
 
   private initViewer(): void {
-    this._bpmnViewer = new BpmnViewer();
+    this._bpmnViewer = new NavigatedViewer();
     this._bpmnViewer?.attachTo(this.viewerElementRef.nativeElement);
   }
 
