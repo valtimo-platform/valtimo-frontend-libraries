@@ -36,3 +36,9 @@
     background-color: var(--cds-background-selected);
   }
 }
+
+.page-header-actions {
+  &__version-dropdown {
+    width: 150px;
+  }
+}

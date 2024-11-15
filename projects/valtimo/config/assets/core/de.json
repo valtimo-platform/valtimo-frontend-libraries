@@ -1871,5 +1871,8 @@
       "title": "Es gibt keine Protokolle"
     },
     "detailsTitle": "Protokolldetails"
+  },
+  "processManagementEditor": {
+    "version": "Version: "
   }
 }

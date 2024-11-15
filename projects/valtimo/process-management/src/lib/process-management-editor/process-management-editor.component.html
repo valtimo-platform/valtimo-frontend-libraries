@@ -15,19 +15,47 @@
   -->
 
 <div
+  fitPage
   *ngIf="{
     processDefinitionVersions: processDefinitionVersions$ | async,
     selectedProcessDefinitionXml: selectedProcessDefinitionXml$ | async,
     loading: loading$ | async,
+    isReadOnlyProcess: isReadOnlyProcess$ | async,
   } as obs"
   class="bpmn__container"
-  fitPage
 >
-  <div #modeler class="bpmn__modeler"></div>
-
-  <div #viewer class="bpmn__viewer"></div>
-
   <div *ngIf="obs.loading" class="bpmn__loading">
     <cds-loading></cds-loading>
   </div>
+
+  <div
+    #modeler
+    class="bpmn__modeler"
+    [style.visibility]="obs.isReadOnlyProcess ? 'hidden' : 'visible'"
+  ></div>
+
+  <div
+    #viewer
+    class="bpmn__viewer"
+    [style.visibility]="obs.isReadOnlyProcess ? 'visible' : 'hidden'"
+  ></div>
 </div>
+
+<ng-container renderInPageHeader [fullWidth]="true">
+  <ng-template>
+    <div
+      class="page-header-actions"
+      *ngIf="{
+        processDefinitionVersionsListItems: processDefinitionVersionsListItems$ | async,
+      } as actionsObs"
+    >
+      <div class="page-header-actions__version-dropdown">
+        <cds-dropdown>
+          <cds-dropdown-list
+            [items]="actionsObs.processDefinitionVersionsListItems"
+          ></cds-dropdown-list>
+        </cds-dropdown>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>

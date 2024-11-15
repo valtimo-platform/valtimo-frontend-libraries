@@ -1877,5 +1877,8 @@
       "title": "Er zijn geen logboeken"
     },
     "detailsTitle": "Loggegevens"
+  },
+  "processManagementEditor": {
+    "version": "Versie: "
   }
 }

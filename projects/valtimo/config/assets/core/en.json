@@ -1876,5 +1876,8 @@
       "title": "There are no logs"
     },
     "detailsTitle": "Log details"
+  },
+  "processManagementEditor": {
+    "version": "Version: "
   }
 }
