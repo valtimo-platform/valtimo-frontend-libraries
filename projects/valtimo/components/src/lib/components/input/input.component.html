@@ -43,7 +43,7 @@
     [ngClass]="{
       'v-input--full-width': fullWidthClass,
       'v-input--margin': margin,
-      'v-input--small-margin': smallMargin
+      'v-input--small-margin': smallMargin,
     }"
     [ngModel]="inputValue$ | async"
     cdsText
@@ -54,7 +54,6 @@
     [name]="name"
     [step]="step"
     (ngModelChange)="onValueChange($event)"
-    (keydown)="onKeydown($event)"
     [style.width.px]="widthPx"
     [placeholder]="placeholder"
     type="text"
@@ -67,7 +66,7 @@
     [ngClass]="{
       'v-input--full-width': fullWidthClass,
       'v-input--margin': margin,
-      'v-input--small-margin': smallMargin
+      'v-input--small-margin': smallMargin,
     }"
     cdsTextArea
     [attr.data-testid]="dataTestId"
@@ -75,7 +74,6 @@
     [name]="name"
     [ngModel]="inputValue$ | async"
     [rows]="rows"
-    (keydown)="onKeydown($event)"
     (ngModelChange)="onValueChange($event)"
     [style.width.px]="widthPx"
   ></textarea>
@@ -88,13 +86,13 @@
       [ngClass]="{
         'v-input--full-width': fullWidthClass,
         'v-input--margin': margin,
-        'v-input--small-margin': smallMargin
+        'v-input--small-margin': smallMargin,
       }"
       class="v-input__password-container"
     >
       <input
         [ngClass]="{
-          'v-input--full-width': fullWidthClass
+          'v-input--full-width': fullWidthClass,
         }"
         cdsText
         [attr.data-testid]="dataTestId"
@@ -104,7 +102,6 @@
         [name]="name"
         [ngModel]="inputValue$ | async"
         [step]="step"
-        (keydown)="onKeydown($event)"
         (ngModelChange)="onValueChange($event)"
         [style.width.px]="widthPx"
         [type]="obs.showPassword ? 'text' : 'password'"
@@ -127,7 +124,7 @@
       'v-input--full-width': fullWidthClass,
       'v-input--margin': margin,
       'v-input--small-margin': smallMargin,
-      'v-input--hide-spinbox': hideNumberSpinBox
+      'v-input--hide-spinbox': hideNumberSpinBox,
     }"
     cdsText
     [attr.data-testid]="dataTestId"
@@ -137,7 +134,6 @@
     [name]="name"
     [ngModel]="inputValue$ | async"
     [step]="step"
-    (keydown)="onKeydown($event)"
     (ngModelChange)="onValueChange($event)"
     [style.width.px]="widthPx"
     type="number"
@@ -150,7 +146,7 @@
     [ngClass]="{
       'v-input--full-width': fullWidthClass,
       'v-input--margin': margin,
-      'v-input--small-margin': smallMargin
+      'v-input--small-margin': smallMargin,
     }"
     cdsText
     digitOnly
@@ -161,7 +157,6 @@
     [name]="name"
     [ngModel]="inputValue$ | async"
     [step]="step"
-    (keydown)="onKeydown($event)"
     (ngModelChange)="onValueChange($event)"
     [style.width.px]="widthPx"
     type="text"

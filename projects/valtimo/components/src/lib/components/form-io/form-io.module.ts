@@ -34,6 +34,8 @@ import {FormIoIbanComponent} from './form-io-iban/iban.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FormioValueResolverSelectorComponent} from './formio-value-resolver-selector/formio-value-resolver-selector.component';
 import {FormioDummyComponent} from './form-io-dummy/dummy.component';
+import {LayerModule} from 'carbon-components-angular';
+import {FormIoCurrencyComponent} from './form-io-currency/currency.component';
 
 @NgModule({
   imports: [
@@ -47,6 +49,7 @@ import {FormioDummyComponent} from './form-io-dummy/dummy.component';
     RouterModule,
     ReactiveFormsModule,
     FormioValueResolverSelectorComponent,
+    LayerModule,
   ],
   declarations: [
     FormioComponent,
@@ -54,6 +57,7 @@ import {FormioDummyComponent} from './form-io-dummy/dummy.component';
     FormIoUploaderComponent,
     FormIoCurrentUserComponent,
     FormIoIbanComponent,
+    FormIoCurrencyComponent,
     FormioDummyComponent,
   ],
   exports: [
@@ -62,6 +66,7 @@ import {FormioDummyComponent} from './form-io-dummy/dummy.component';
     FormIoUploaderComponent,
     FormIoCurrentUserComponent,
     FormIoIbanComponent,
+    FormIoCurrencyComponent,
     FormioDummyComponent,
   ],
   providers: [

@@ -150,6 +150,9 @@
       "noFiles": "Für diesen Fall wurden keine Dateien gefunden."
     },
     "startSubProcess": "Starten",
+    "noLinkedStartProcessNotification": "Es ist kein Startformular verknüpft",
+    "noLinkedProcessNotification": "Es ist kein formular verknüpft",
+    "configure": "Konfigurieren",
     "claimAssigneeCase": "Anmaßen",
     "deleteConfirmation": {
       "title": "Datei löschen",
@@ -263,9 +266,13 @@
   "summary": {
     "userTasksDoneState": "Alle Aufgaben sind erledigt",
     "taskLocked": "Kein Zugriff zu dieser Aufgabe!",
-    "userTasks": "Aufgaben",
+    "tasks": "Aufgaben",
+    "myTasks": "Meine Aufgaben",
+    "otherTasks": "Andere Aufgaben",
     "taskOpen": "Öffnen",
-    "taskCreated": "Erstellt"
+    "taskCreated": "Erstellt",
+    "noResultsMyTasks": "Für diesen Benutzer sind keine Aufgaben verfügbar.",
+    "noResultsOtherTasks": "Keine Aufgaben für andere Benutzer verfügbar."
   },
   "progress": {
     "noProcessDocumentInstances": "Es wurde noch kein Prozess gestartet",
@@ -378,7 +385,9 @@
         "dashboardDescriptionHelperText": "*Beschreibung ist nur auf der Dashboard-Konfigurationsseite sichtbar",
         "roles": "Sichtweite",
         "displayType": "Anzeigetyp",
-        "displayTypeHelperText": "Wählen Sie aus, wie die Daten Ihres Widgets angezeigt werden sollen"
+        "displayTypeHelperText": "Wählen Sie aus, wie die Daten Ihres Widgets angezeigt werden sollen",
+        "url": "URL-Pfad",
+        "urlHelperText": "Der Pfad, zu dem navigiert werden soll, wenn auf das Widget geklickt wird"
       },
       "noResults": {
         "description": "Klicken Sie auf <strong>Neues Widget hinzufügen</strong>, um mit der Gestaltung Ihres Dashboards zu beginnen. <br/> Ziehen Sie Ihre Widgets an die gewünschte Position.",
@@ -1702,6 +1711,9 @@
     "Previous": "Vorherige",
     "formioIbanComponent": {
       "errorMessage": "Kein gültiges IBAN. Bitte geben Sie eine gültige IBAN ein."
+    },
+    "formioCurrencyComponent": {
+      "errorMessage": "Keine gültige Dezimalzahl. Bitte geben Sie eine gültige Dezimalzahl ein."
     }
   },
   "viewTypeConverter": {
@@ -1735,22 +1747,44 @@
   "processLinkType": {
     "plugin": "Plugin",
     "form": "Formular",
-    "form-flow": "FormFlow"
+    "form-flow": "FormFlow",
+    "url": "URL"
   },
   "processLinkSteps": {
     "chooseProcessLinkType": "Linktyp wählen",
     "empty": "........",
     "selectForm": "Wählen Sie Ihr Formular",
+    "selectFormPlaceholder": "Wählen Sie ein Formular aus",
+    "displayType": {
+      "label": "Wählen Sie den Anzeigetyp des Formulars aus",
+      "placeholder": "Wählen Sie aus, wie das Formular angezeigt werden soll",
+      "options": {
+        "modal": "Modal",
+        "panel": "Panel"
+      }
+    },
+    "formSize": {
+      "label": "Wählen Sie die Modalgröße aus",
+      "placeholder": "Wählen Sie eine Modalgröße aus",
+      "options": {
+        "extraSmall": "Extra klein",
+        "small": "Klein",
+        "medium": "Mittel",
+        "large": "Groß"
+      }
+    },
     "selectFormFlow": "Wählen Sie Ihr FormFlow",
     "choosePluginConfiguration": "Plugin-Konfiguration wählen",
     "choosePluginAction": "Wählen Sie Ihre Aktion",
-    "configurePluginAction": "Konfigurieren Sie Ihre Aktion"
+    "configurePluginAction": "Konfigurieren Sie Ihre Aktion",
+    "selectURL": "Konfigurieren Sie Ihre URL"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "Es sind keine Plugin-Konfigurationen verfügbar. Erstellen Sie eine Plugin-Konfiguration, um sie mit einem Prozessschritt verknüpfen zu können.",
     "form": "Es sind keine Formulare vorhanden. Erstellen Sie ein Formular, um es mit einem Prozessschritt verknüpfen zu können.",
     "form-flow": "Es sind keine FormFlows verfügbar. Erstellen Sie einen FormFlow, um ihn mit einem Prozessschritt verknüpfen zu können."
   },
+  "processLinkUrlInvalid": "Ungültige URL {{ URL }}",
   "accessControl": {
     "roles": {
       "title": "Alle Rollen",
@@ -1818,5 +1852,24 @@
     "dropdown": "Dropdown",
     "manual": "Manuell",
     "selectDocDefPlaceholder": "Wählen Sie einen Fall"
+  },
+  "logging": {
+    "columns": {
+      "timestamp": "Zeit",
+      "formattedMessage": "Nachricht",
+      "level": "Protokollebene"
+    },
+    "search": {
+      "addProperty": "Eigenschaft hinzufügen",
+      "afterTimestamp": "Zeit von",
+      "beforeTimestamp": "Zeit bis",
+      "properties": "Eigenschaften"
+    },
+    "noResults": {
+      "description": "Es wurden noch keine Zeilen protokolliert",
+      "searchDescription": "Keine Protokolle entsprechen Ihren Suchkriterien",
+      "title": "Es gibt keine Protokolle"
+    },
+    "detailsTitle": "Protokolldetails"
   }
 }

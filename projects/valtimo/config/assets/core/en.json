@@ -150,6 +150,9 @@
       "noFiles": "No files found for this case."
     },
     "startSubProcess": "Start",
+    "noLinkedStartProcessNotification": "There is no start form linked",
+    "noLinkedProcessNotification": "There is no form linked",
+    "configure": "Configure",
     "claimAssigneeCase": "Claim",
     "deleteConfirmation": {
       "title": "Delete file",
@@ -263,9 +266,13 @@
   "summary": {
     "userTasksDoneState": "All tasks have been completed",
     "taskLocked": "You don't have access to this task",
-    "userTasks": "User tasks",
+    "tasks": "Tasks",
+    "myTasks": "My tasks",
+    "otherTasks": "Other tasks",
     "taskOpen": "Open",
-    "taskCreated": "Created"
+    "taskCreated": "Created",
+    "noResultsMyTasks": "No tasks available for to this user.",
+    "noResultsOtherTasks": "No tasks available to other users."
   },
   "progress": {
     "noProcessDocumentInstances": "There is no process started yet",
@@ -379,7 +386,9 @@
         "dashboardDescriptionHelperText": "*Description is only visible in the dashboard configuration page",
         "roles": "Set visibility",
         "displayType": "Display type",
-        "displayTypeHelperText": "Select the way the data of your widget should be displayed"
+        "displayTypeHelperText": "Select the way the data of your widget should be displayed",
+        "url": "URL path",
+        "urlHelperText": "The path to navigate to when clicking on the widget"
       },
       "noResults": {
         "description": "Click <strong>Add new widget</strong> to start designing your dashboard. <br/> Drag your widgets to the desired position.",
@@ -1707,6 +1716,9 @@
     "Previous": "Previous",
     "formioIbanComponent": {
       "errorMessage": "Not a valid IBAN. Please enter a valid IBAN."
+    },
+    "formioCurrencyComponent": {
+      "errorMessage": "Not a valid decimal number. Please enter a valid decimal number."
     }
   },
   "viewTypeConverter": {
@@ -1740,22 +1752,44 @@
   "processLinkType": {
     "plugin": "Plugin",
     "form": "Form",
-    "form-flow": "FormFlow"
+    "form-flow": "FormFlow",
+    "url": "URL"
   },
   "processLinkSteps": {
     "chooseProcessLinkType": "Choose link type",
     "empty": "........",
     "selectForm": "Select your form",
+    "selectFormPlaceholder": "Select a form",
+    "displayType": {
+      "label": "Select form display type",
+      "placeholder": "Select how to display the form",
+      "options": {
+        "modal": "Modal",
+        "panel": "Panel"
+      }
+    },
+    "formSize": {
+      "label": "Select modal size",
+      "placeholder": "Select a modal size",
+      "options": {
+        "extraSmall": "Extra small",
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      }
+    },
     "selectFormFlow": "Select your FormFlow",
     "choosePluginConfiguration": "Select plugin configuration",
     "choosePluginAction": "Choose your action",
-    "configurePluginAction": "Configure your action"
+    "configurePluginAction": "Configure your action",
+    "selectURL": "Configure your URL"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "No plugin configurations are available. Create a plugin configuration to be able to link it to a process step.",
     "form": "There are no forms available. Create a form to be able to link it to a process step.",
     "form-flow": "There are no FormFlows available. Create a FormFlow to be able to link it to a process step."
   },
+  "processLinkUrlInvalid": "Invalid URL {{ URL }}",
   "accessControl": {
     "roles": {
       "title": "All roles",
@@ -1823,5 +1857,24 @@
     "dropdown": "Dropdown",
     "manual": "Manual",
     "selectDocDefPlaceholder": "Select a case"
+  },
+  "logging": {
+    "columns": {
+      "timestamp": "Timestamp",
+      "formattedMessage": "Message",
+      "level": "Log level"
+    },
+    "search": {
+      "addProperty": "Add property",
+      "afterTimestamp": "From timestamp",
+      "beforeTimestamp": "To timestamp",
+      "properties": "Properties"
+    },
+    "noResults": {
+      "description": "No lines have been logged yet",
+      "searchDescription": "No logs match your search criteria",
+      "title": "There are no logs"
+    },
+    "detailsTitle": "Log details"
   }
 }

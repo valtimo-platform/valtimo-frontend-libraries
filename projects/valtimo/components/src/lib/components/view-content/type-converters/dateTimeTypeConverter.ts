@@ -22,13 +22,11 @@ export class DateTimeTypeConverter implements TypeConverter {
   }
 
   public convert(value: any, definition: any): string {
-    if (!value) {
-      return '-';
-    }
+    if (!value) return '-';
 
     const dateValue = moment(value);
-    return (dateValue.isValid() ? dateValue : moment(value, 'DD-MM-YYYY, h:m:s'))
+    return (dateValue.isValid() ? dateValue : moment(value, 'DD-MM-YYYY, HH:mm:ss'))
       .locale(localStorage.getItem('langKey') ?? 'nl')
-      .format(definition?.format || 'DD-MM-YYYY, h:m:s');
+      .format(definition?.format || 'DD-MM-YYYY, HH:mm:ss');
   }
 }

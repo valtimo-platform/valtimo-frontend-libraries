@@ -20,14 +20,11 @@
   }
 }
 
-.cds-modal-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.title-container {
-  width: 50%;
+cds-modal-header {
+  .cds--modal-header {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .save-buttons-margin {

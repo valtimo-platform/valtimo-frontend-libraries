@@ -81,7 +81,7 @@
       "OPEN": "Niet-toegewezen dossiers",
       "ALL": "Alle dossiers",
       "componentNotFound": "Tab-component niet gevonden",
-      "componentNotFoundMessage": "Er is geen component beschikbaar voor dit tabblad. Neem contact op met de systeemnbeheerder."
+      "componentNotFoundMessage": "Er is geen component beschikbaar voor dit tabblad. Neem contact op met de systeembeheerder."
     },
     "forms": {
       "globalSearchPlaceHolder": "Alles",
@@ -150,6 +150,9 @@
       "noFiles": "Geen bestanden gevonden voor deze zaak."
     },
     "startSubProcess": "Start",
+    "noLinkedStartProcessNotification": "Er is geen startformulier gekoppeld",
+    "noLinkedProcessNotification": "Er is geen formulier gekoppeld",
+    "configure": "Configureer",
     "claimAssigneeCase": "Claimen",
     "deleteConfirmation": {
       "title": "Bestand verwijderen",
@@ -263,9 +266,13 @@
   "summary": {
     "userTasksDoneState": "Alle taken zijn afgerond",
     "taskLocked": "Je hebt geen toegang tot deze taak",
-    "userTasks": "Taken",
+    "tasks": "Taken",
+    "myTasks": "Mijn taken",
+    "otherTasks": "Overige taken",
     "taskOpen": "Open",
-    "taskCreated": "Aangemaakt op"
+    "taskCreated": "Aangemaakt op",
+    "noResultsMyTasks": "Er zijn geen taken beschikbaar voor deze gebruiker.",
+    "noResultsOtherTasks": "Er zijn geen taken beschikbaar voor andere gebruikers."
   },
   "progress": {
     "noProcessDocumentInstances": "Er is nog geen proces gestart",
@@ -378,7 +385,9 @@
         "dashboardDescriptionHelperText": "*Beschrijving is alleen zichtbaar op de configuratiepagina van het dashboard",
         "roles": "Zichtbaarheid",
         "displayType": "Weergavetype",
-        "displayTypeHelperText": "Selecteer de manier waarop de gegevens van uw widget moeten worden weergegeven"
+        "displayTypeHelperText": "Selecteer de manier waarop de gegevens van uw widget moeten worden weergegeven",
+        "url": "URL pad",
+        "urlHelperText": "Het pad naar de pagina waar de widget naar toe moet linken"
       },
       "noResults": {
         "description": "Klik op <strong>Nieuwe widget toevoegen</strong> om te beginnen met het ontwerpen van uw dashboard. <br/> Sleep uw widgets naar de gewenste positie.",
@@ -1708,6 +1717,9 @@
     "Previous": "Vorige",
     "formioIbanComponent": {
       "errorMessage": "Geen geldige IBAN. Voer een geldige IBAN in."
+    },
+    "formioCurrencyComponent": {
+      "errorMessage": "Geen geldig decimaal getal. Voer een geldig decimaal getal in."
     }
   },
   "viewTypeConverter": {
@@ -1741,22 +1753,44 @@
   "processLinkType": {
     "plugin": "Plugin",
     "form": "Formulier",
-    "form-flow": "FormFlow"
+    "form-flow": "FormFlow",
+    "url": "URL"
   },
   "processLinkSteps": {
     "chooseProcessLinkType": "Kies soort koppeling",
     "empty": "........",
     "selectForm": "Selecteer je formulier",
+    "selectFormPlaceholder": "Selecteer een formulier",
+    "displayType": {
+      "label": "Selecteer het weergavetype van het formulier",
+      "placeholder": "Selecteer hoe het formulier moet worden weergegeven",
+      "options": {
+        "modal": "Modaal",
+        "panel": "Panel"
+      }
+    },
+    "formSize": {
+      "label": "Selecteer modalgrootte",
+      "placeholder": "Selecteer een modalgrootte",
+      "options": {
+        "extraSmall": "Extra klein",
+        "small": "Klein",
+        "medium": "Medium",
+        "large": "Groot"
+      }
+    },
     "selectFormFlow": "Selecteer je FormFlow",
     "choosePluginConfiguration": "Kies pluginconfiguratie",
     "choosePluginAction": "Kies je actie",
-    "configurePluginAction": "Configureer je actie"
+    "configurePluginAction": "Configureer je actie",
+    "selectURL": "Configureer je URL"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "Er zijn geen plugin-configuraties beschikbaar. Maak een pluginconfiguratie aan om deze te kunnen koppelen aan een processtap.",
     "form": "Er zijn geen formulieren beschikbaar. Maak een formulier aan om deze te kunnen koppelen aan een processtap.",
     "form-flow": "Er zijn geen FormFlows beschikbaar. Maak een FormFlow aan om deze te kunnen koppelen aan een processtap."
   },
+  "processLinkUrlInvalid": "Ongeldige URL {{ URL }}",
   "accessControl": {
     "roles": {
       "title": "Alle rollen",
@@ -1824,5 +1858,24 @@
     "dropdown": "Dropdown",
     "manual": "Handmatig",
     "selectDocDefPlaceholder": "Kies een dossier"
+  },
+  "logging": {
+    "columns": {
+      "timestamp": "Tijd",
+      "formattedMessage": "Bericht",
+      "level": "Logniveau"
+    },
+    "search": {
+      "addProperty": "Eigenschap toevoegen",
+      "afterTimestamp": "Van tijd",
+      "beforeTimestamp": "Tot tijd",
+      "properties": "Eigenschappen"
+    },
+    "noResults": {
+      "description": "Er zijn nog geen lijnen geregistreerd",
+      "searchDescription": "Er zijn geen logregels die overeenkomen met je zoekcriteria",
+      "title": "Er zijn geen logboeken"
+    },
+    "detailsTitle": "Loggegevens"
   }
 }

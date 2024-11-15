@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-.timeline-activity {
-  font-size: 100%;
+interface URLVariables {
+  variables: Map<string, string>;
 }
 
-.timeline-summary p {
-  font-size: 0.8rem;
-}
-
-.actions-dropdown {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  cursor: pointer;
-}
+export {URLVariables};

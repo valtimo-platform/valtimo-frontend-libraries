@@ -202,6 +202,15 @@ html {
   overflow-y: scroll !important;
 }
 
+.html--fixed {
+  overflow: hidden !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 body {
   height: unset !important;
   min-height: unset !important;
@@ -730,4 +739,14 @@ valtimo-analyse-process-diagram {
   .cds--select-input {
     background-color: var(--cds-field) !important;
   }
+}
+
+/* Below overrides fix position of overlay elements like select boxes inside cds modals */
+
+.cds--modal-container {
+  transform: none !important;
+}
+
+.cds--modal-header {
+  position: relative !important;
 }

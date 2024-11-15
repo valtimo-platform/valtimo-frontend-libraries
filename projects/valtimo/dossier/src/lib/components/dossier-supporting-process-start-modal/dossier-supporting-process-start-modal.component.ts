@@ -13,23 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {Component, EventEmitter, Output, ViewChild, ViewEncapsulation} from '@angular/core';
-import {FormioBeforeSubmit, FormioForm} from '@formio/angular';
-import {
-  FormioComponent,
-  FormioOptionsImpl,
-  FormioSubmission,
-  ModalComponent,
-  ValtimoFormioOptions,
-} from '@valtimo/components';
+import {Component, EventEmitter, Inject, Input, Optional, Output, ViewChild, ViewContainerRef, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
-import {ProcessService} from '@valtimo/process';
+import {FormioBeforeSubmit, FormioForm} from '@formio/angular';
+import {FormioComponent, FormioOptionsImpl, FormioSubmission, ModalComponent, ValtimoFormioOptions,} from '@valtimo/components';
 import {ProcessDocumentDefinition} from '@valtimo/document';
+import {ProcessService} from '@valtimo/process';
 import {FormSubmissionResult, ProcessLinkService} from '@valtimo/process-link';
-import {BehaviorSubject, combineLatest, Observable, switchMap} from 'rxjs';
-import {map, take} from 'rxjs/operators';
-import {UserProviderService} from '@valtimo/security';
+import {BehaviorSubject, combineLatest, switchMap} from 'rxjs';
+import {take} from 'rxjs/operators';
+import {FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-dossier-supporting-process-start-modal',
@@ -40,8 +33,12 @@ import {UserProviderService} from '@valtimo/security';
 export class DossierSupportingProcessStartModalComponent {
   @ViewChild('form', {static: false}) form: FormioComponent;
   @ViewChild('supportingProcessStartModal', {static: false}) modal: ModalComponent;
+  @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef}) public formViewModelDynamicContainer: ViewContainerRef;
 
+  @Input() isAdmin: boolean;
   @Output() formSubmit = new EventEmitter();
+
+  protected isFormViewModel = false;
 
   public readonly processDefinitionKey$ = new BehaviorSubject<string>('');
   public readonly documentDefinitionName$ = new BehaviorSubject<string>('');
@@ -55,15 +52,11 @@ export class DossierSupportingProcessStartModalComponent {
   public readonly formFlowInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly documentId$ = new BehaviorSubject<string>(undefined);
 
-  public readonly isAdmin$: Observable<boolean> = this.userProviderService
-    .getUserSubject()
-    .pipe(map(userIdentity => userIdentity?.roles?.includes('ROLE_ADMIN')));
-
   constructor(
     private readonly router: Router,
     private readonly processService: ProcessService,
     private readonly processLinkService: ProcessLinkService,
-    private readonly userProviderService: UserProviderService
+    @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel
   ) {}
 
   private loadProcessLink(): void {
@@ -87,6 +80,11 @@ export class DossierSupportingProcessStartModalComponent {
               break;
             case 'form-flow':
               this.formFlowInstanceId$.next(startProcessResult.properties.formFlowInstanceId);
+              break;
+            case 'form-view-model':
+              this.formDefinition$.next(startProcessResult.properties.formDefinition);
+              this.setFormViewModelComponent(startProcessResult.properties.formName);
+              this.modal.show();
               break;
           }
           this.modal.show();
@@ -146,5 +144,33 @@ export class DossierSupportingProcessStartModalComponent {
     this.router.navigate(['process-links'], {
       queryParams: {process: this.processDefinitionKey$.getValue()},
     });
+  }
+
+  private setFormViewModelComponent(formName: string): void {
+    if (!this.formViewModel.component) return;
+    this.formViewModelDynamicContainer.clear();
+    const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
+      this.formViewModel.component
+    );
+
+    combineLatest([
+      this.formDefinition$,
+      this.processDefinitionKey$,
+      this.documentDefinitionName$,
+      this.options$
+    ]).pipe(take(1)).subscribe(([form, processDefinitionKey, documentDefinitionName, options]) => {
+      formViewModelComponent.instance.formName = formName;
+      formViewModelComponent.instance.form = form;
+      formViewModelComponent.instance.processDefinitionKey = processDefinitionKey;
+      formViewModelComponent.instance.documentDefinitionName = documentDefinitionName;
+      formViewModelComponent.instance.options = options;
+      formViewModelComponent.instance.isStartForm = true;
+    });
+
+    formViewModelComponent.instance.formSubmit.pipe(take(1)).subscribe(() => {
+      this.formSubmitted();
+    });
+
+    this.isFormViewModel = true;
   }
 }

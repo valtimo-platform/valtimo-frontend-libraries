@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {ComponentFactoryResolver, ComponentRef, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject, filter, Observable, take} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, Observable, take} from 'rxjs';
 
 export interface TabLoader<T_TAB extends Tab> {
   tabs: T_TAB[];
@@ -71,14 +70,14 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
       initialTab = this._tabs[0] || null;
     }
 
-    this.load(initialTab, true);
+    this.load(initialTab);
   }
 
-  public load(newTab: TabImpl, isInitial = false): void {
+  public load(newTab: TabImpl): void {
     if (newTab !== this._activeTab) {
       this._tabs.forEach(tab => tab.deactivate());
       this.replaceView(newTab);
-      if (!isInitial) this.replaceUrlState(newTab);
+      this.replaceUrlState(newTab);
       this.setActive(newTab);
     }
   }
@@ -96,14 +95,20 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
     this._activeComponent = this._viewContainerRef.createComponent(componentFactory);
   }
 
-  private replaceUrlState(nextTab: TabImpl): void {
-    this._route.params.pipe(take(1)).subscribe(params => {
-      const currentUrl = this._router.url;
-      const currentDocumentId = params?.documentId;
-      const urlBeforeDocumentId = currentUrl.split(currentDocumentId)[0];
+  public replaceUrlState(nextTab: TabImpl): void {
+    combineLatest([this._route.params, this._route.queryParams])
+      .pipe(take(1))
+      .subscribe(([params, queryParams]) => {
+        const currentUrl = this._router.url;
+        const currentDocumentId = params?.documentId;
+        const urlBeforeDocumentId = currentUrl.split(currentDocumentId)[0];
 
-      this._router.navigateByUrl(`${urlBeforeDocumentId}${currentDocumentId}/${nextTab.name}`);
-    });
+        this._router.navigate([`${urlBeforeDocumentId}${currentDocumentId}/${nextTab.name}`], {
+          ...(nextTab.name === 'documents' && {
+            queryParams,
+          }),
+        });
+      });
   }
 
   private setActive(tab: TabImpl): void {
