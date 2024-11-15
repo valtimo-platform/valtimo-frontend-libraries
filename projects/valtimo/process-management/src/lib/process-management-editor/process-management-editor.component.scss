@@ -48,6 +48,11 @@
     align-items: flex-end;
   }
 
+  &__tags {
+    display: flex;
+    gap: 8px;
+  }
+
   &__version-dropdown {
     width: 150px;
   }

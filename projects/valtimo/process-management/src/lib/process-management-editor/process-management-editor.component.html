@@ -51,6 +51,7 @@
         loading: loading$ | async,
         changesPending: changesPending$ | async,
         isReadOnlyProcess: isReadOnlyProcess$ | async,
+        isSystemProcess: isSystemProcess$ | async,
         compactMode: compactMode$ | async,
       } as actionsObs"
     >
@@ -60,7 +61,8 @@
             (selected)="selectedVersionChange($event)"
             [disabled]="
               actionsObs.loading ||
-              (actionsObs.processDefinitionVersionsListItems || []).length === 0
+              (actionsObs.processDefinitionVersionsListItems || []).length === 0 ||
+              (actionsObs.processDefinitionVersionsListItems || []).length === 1
             "
             [size]="actionsObs.compactMode ? 'sm' : 'md'"
           >
@@ -70,9 +72,15 @@
           </cds-dropdown>
         </div>
 
-        @if (actionsObs.isReadOnlyProcess) {
-          <cds-tag type="blue">{{ 'processManagement.readOnly' | translate }}</cds-tag>
-        }
+        <div class="page-header-actions__tags">
+          <cds-tag *ngIf="actionsObs.isReadOnlyProcess" type="blue">{{
+            'processManagement.readOnly' | translate
+          }}</cds-tag>
+
+          <cds-tag *ngIf="actionsObs.isSystemProcess" type="red">{{
+            'processManagement.systemProcess' | translate
+          }}</cds-tag>
+        </div>
       </div>
 
       <div class="page-header-actions__buttons">
