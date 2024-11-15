@@ -21,6 +21,7 @@ import {AuthGuardService} from '@valtimo/security';
 import {ProcessManagementComponent} from './process-management.component';
 import {ProcessManagementBuilderComponent} from './process-management-builder/process-management-builder.component';
 import {ROLE_ADMIN} from '@valtimo/config';
+import {ProcessManagementEditorComponent} from './process-management-editor/process-management-editor.component';
 
 const routes: Routes = [
   {
@@ -37,7 +38,7 @@ const routes: Routes = [
   },
   {
     path: 'processes/process/:key',
-    component: ProcessManagementBuilderComponent,
+    component: ProcessManagementEditorComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Process details', roles: [ROLE_ADMIN], customPageTitle: true},
   },

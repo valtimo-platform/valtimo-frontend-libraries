@@ -41,6 +41,8 @@ export class ProcessLinkComponent {
   openModal(params: ModalParams): void {
     const activityType = params?.element?.activityListenerType;
 
+    console.log('maxim');
+
     this.modalService.setModalData(params);
 
     if (activityType) {

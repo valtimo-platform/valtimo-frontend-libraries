@@ -24,7 +24,8 @@ import {ListModule, WidgetModule} from '@valtimo/components';
 import {FormsModule} from '@angular/forms';
 import {ProcessManagementUploadComponent} from './process-management-upload/process-management-upload.component';
 import {TranslateModule} from '@ngx-translate/core';
-import { ProcessLinkModule } from '@valtimo/process-link';
+import {ProcessLinkModule} from '@valtimo/process-link';
+import {ProcessManagementEditorComponent} from './process-management-editor/process-management-editor.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ProcessLinkModule } from '@valtimo/process-link';
     ListModule,
     FormsModule,
     TranslateModule,
-    ProcessLinkModule
+    ProcessLinkModule,
+    ProcessManagementEditorComponent,
   ],
   exports: [ProcessManagementComponent],
 })
