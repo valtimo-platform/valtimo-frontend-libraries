@@ -31,13 +31,13 @@
   <div
     #modeler
     class="bpmn__modeler"
-    [style.visibility]="obs.isReadOnlyProcess ? 'hidden' : 'visible'"
+    [style.display]="obs.isReadOnlyProcess ? 'none' : 'block'"
   ></div>
 
   <div
     #viewer
     class="bpmn__viewer"
-    [style.visibility]="obs.isReadOnlyProcess ? 'visible' : 'hidden'"
+    [style.display]="obs.isReadOnlyProcess ? 'block' : 'none'"
   ></div>
 </div>
 
@@ -53,18 +53,25 @@
         compactMode: compactMode$ | async,
       } as actionsObs"
     >
-      <div class="page-header-actions__version-dropdown">
-        <cds-dropdown
-          (selected)="selectedVersionChange($event)"
-          [disabled]="
-            actionsObs.loading || (actionsObs.processDefinitionVersionsListItems || []).length === 0
-          "
-          [size]="actionsObs.compactMode ? 'sm' : 'md'"
-        >
-          <cds-dropdown-list
-            [items]="actionsObs.processDefinitionVersionsListItems"
-          ></cds-dropdown-list>
-        </cds-dropdown>
+      <div class="page-header-actions__left-container">
+        <div class="page-header-actions__version-dropdown">
+          <cds-dropdown
+            (selected)="selectedVersionChange($event)"
+            [disabled]="
+              actionsObs.loading ||
+              (actionsObs.processDefinitionVersionsListItems || []).length === 0
+            "
+            [size]="actionsObs.compactMode ? 'sm' : 'md'"
+          >
+            <cds-dropdown-list
+              [items]="actionsObs.processDefinitionVersionsListItems"
+            ></cds-dropdown-list>
+          </cds-dropdown>
+        </div>
+
+        @if (actionsObs.isReadOnlyProcess) {
+          <cds-tag type="blue">{{ 'processManagement.readOnly' | translate }}</cds-tag>
+        }
       </div>
 
       <div class="page-header-actions__buttons">

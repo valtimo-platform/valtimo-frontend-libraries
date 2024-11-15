@@ -45,6 +45,7 @@ import {
   ListItem,
   LoadingModule,
   SelectModule,
+  TagModule,
 } from 'carbon-components-angular';
 import Modeler from 'bpmn-js/lib/Modeler';
 import BpmnViewer from 'bpmn-js';
@@ -68,6 +69,7 @@ import {Deploy16} from '@carbon/icons';
     ButtonModule,
     IconModule,
     TranslateModule,
+    TagModule,
   ],
 })
 export class ProcessManagementEditorComponent implements AfterViewInit, OnDestroy {
@@ -135,7 +137,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
       processDefinitionVersions
         .map(processDefinitionVersion => ({
           id: processDefinitionVersion.version,
-          content: `${this.translateService.instant('processManagementEditor.version')}${processDefinitionVersion.version}`,
+          content: `${this.translateService.instant('processManagement.version')}${processDefinitionVersion.version}`,
           selected: selectionProcessDefinition.version === processDefinitionVersion.version,
           processDefinitionVersion,
         }))
