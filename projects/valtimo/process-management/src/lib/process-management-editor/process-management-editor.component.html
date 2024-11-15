@@ -16,6 +16,7 @@
 
 <div
   fitPage
+  [disableOverflow]="true"
   *ngIf="{
     processDefinitionVersions: processDefinitionVersions$ | async,
     selectedProcessDefinitionXml: selectedProcessDefinitionXml$ | async,
