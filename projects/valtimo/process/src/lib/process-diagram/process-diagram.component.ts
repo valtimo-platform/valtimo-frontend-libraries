@@ -72,10 +72,10 @@ export class ProcessDiagramComponent implements OnInit, OnDestroy, OnChanges {
       this.loadProcessInstanceXml(this.processInstanceId);
     }
     this.bpmnViewer = new BpmnViewer();
-    this.bpmnViewer.on('import.done', ({error}) => {
-      if (!error) {
-        const canvas = this.bpmnViewer.get('canvas');
-        const eventBus = this.bpmnViewer.get('eventBus');
+    this.bpmnViewer.on('import.done', (event: any) => {
+      if (!event?.error) {
+        const canvas = this.bpmnViewer.get('canvas') as any;
+        const eventBus = this.bpmnViewer.get('eventBus') as any;
         if (this.processDiagram.historicActivityInstances) {
           this.processDiagram.historicActivityInstances.forEach(instance => {
             // exclude multiInstanceBody
@@ -295,7 +295,7 @@ export class ProcessDiagramComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public addCounterActiveOverlays(key: any, inputData: any) {
-    const overlays = this.bpmnViewer.get('overlays');
+    const overlays = this.bpmnViewer.get('overlays') as any;
     overlays.add(key, {
       position: {
         bottom: 13,

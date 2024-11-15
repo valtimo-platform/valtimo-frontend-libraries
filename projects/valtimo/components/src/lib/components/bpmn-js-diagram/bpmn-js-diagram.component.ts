@@ -18,12 +18,12 @@ import {
   AfterContentInit,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnDestroy,
+  OnInit,
   Output,
   ViewChild,
-  EventEmitter,
-  OnInit,
 } from '@angular/core';
 import BpmnViewer from 'bpmn-js';
 import heatmap from 'heatmap.js-fixed/build/heatmap.js';
@@ -53,10 +53,10 @@ export class BpmnJsDiagramComponent implements OnInit, AfterContentInit, OnDestr
 
   ngOnInit(): void {
     this.bpmnViewer = new BpmnViewer();
-    this.bpmnViewer.on('import.done', ({error}) => {
-      if (!error) {
-        const canvas = this.bpmnViewer.get('canvas');
-        const eventBus = this.bpmnViewer.get('eventBus');
+    this.bpmnViewer.on('import.done', (event: any) => {
+      if (!event?.error) {
+        const canvas = this.bpmnViewer.get('canvas') as any;
+        const eventBus = this.bpmnViewer.get('eventBus') as any;
 
         if (this.historicActivityInstances) {
           this.historicActivityInstances.forEach(instance => {
@@ -146,7 +146,7 @@ export class BpmnJsDiagramComponent implements OnInit, AfterContentInit, OnDestr
   }
 
   addCounterActiveOverlays(key: any, inputData: any) {
-    const overlays = this.bpmnViewer.get('overlays');
+    const overlays = this.bpmnViewer.get('overlays') as any;
     overlays.add(key, {
       position: {
         bottom: -10,

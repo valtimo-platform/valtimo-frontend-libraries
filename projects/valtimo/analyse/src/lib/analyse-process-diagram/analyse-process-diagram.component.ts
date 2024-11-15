@@ -80,8 +80,8 @@ export class AnalyseProcessDiagramComponent implements OnInit, OnDestroy {
     this.bpmnViewer = new BpmnViewer();
     this.bpmnViewer.on('import.done', ({error}: any) => {
       if (!error && !this.initialized) {
-        const canvas = this.bpmnViewer.get('canvas');
-        const eventBus = this.bpmnViewer.get('eventBus');
+        const canvas = this.bpmnViewer.get('canvas') as any;
+        const eventBus = this.bpmnViewer.get('eventBus') as any;
         if (this.processDiagram.historicActivityInstances) {
           this.processDiagram.historicActivityInstances.forEach((instance: any) => {
             if (instance.activityType !== 'multiInstanceBody') {
@@ -293,7 +293,7 @@ export class AnalyseProcessDiagramComponent implements OnInit, OnDestroy {
   }
 
   public addCounterActiveOverlays(key: string, inputData: any[]): void {
-    const overlays = this.bpmnViewer.get('overlays');
+    const overlays = this.bpmnViewer.get('overlays') as any;
     overlays.add(key, {
       position: {
         bottom: 13,

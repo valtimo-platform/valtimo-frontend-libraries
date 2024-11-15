@@ -47,7 +47,7 @@ export class MigrationProcessDiagramComponent implements OnInit, OnDestroy {
     this.bpmnViewer = new BpmnViewer();
     this.bpmnViewer.on('import.done', ({error}: any) => {
       if (!error) {
-        const canvas = this.bpmnViewer.get('canvas');
+        const canvas = this.bpmnViewer.get('canvas') as any;
         canvas.zoom('fit-viewport', 'auto');
       }
     });
@@ -67,9 +67,11 @@ export class MigrationProcessDiagramComponent implements OnInit, OnDestroy {
     this.bpmnViewer.attachTo(this.el.nativeElement);
     this.bpmnViewer.importXML(xml, err => {
       this.logger.debug(err);
-      const processElements = this.bpmnViewer.getDefinitions().rootElements.filter(function (element) {
-        return element.isExecutable;
-      });
+      const processElements = this.bpmnViewer
+        .getDefinitions()
+        .rootElements.filter(function (element) {
+          return element.isExecutable;
+        });
       this.flowNodeMap = processElements[0].flowElements.filter(function (element) {
         if (element.name === null || element.name === '') {
           element.name = element.id;

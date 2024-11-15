@@ -30,7 +30,7 @@ import {ActivatedRoute} from '@angular/router';
 import {combineLatest} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {PageTitleService} from '@valtimo/components';
-import {ValtimoRenderer} from "../../services/valtimo-renderer";
+import {ValtimoRenderer} from '../../services/valtimo-renderer';
 
 @Component({
   selector: 'valtimo-form-link-process-diagram',
@@ -84,19 +84,19 @@ export class FormLinkProcessDiagramComponent implements OnInit, OnDestroy {
       });
     this.bpmnViewer = new BpmnViewer({
       valtimoRenderer: {
-        test: 'test'
+        test: 'test',
       },
       additionalModules: [
         {
-          __init__: [ 'ValtimoRenderer' ],
-          ValtimoRenderer: [ 'type', ValtimoRenderer ]
-        }
+          __init__: ['ValtimoRenderer'],
+          ValtimoRenderer: ['type', ValtimoRenderer],
+        },
       ],
     });
     this.bpmnViewer.on('import.done', ({error}: any) => {
       if (!error) {
-        const canvas = this.bpmnViewer.get('canvas');
-        const eventBus = this.bpmnViewer.get('eventBus');
+        const canvas = this.bpmnViewer.get('canvas') as any;
+        const eventBus = this.bpmnViewer.get('eventBus') as any;
         canvas.zoom('fit-viewport', 'auto');
 
         if (this.processDefinitionVersions && !this.callbacksAdded) {

@@ -63,7 +63,6 @@ import {SelectUrlComponent} from './components/select-url/select-url.component';
 import {UrlValidatorService} from './services/url-validator.service';
 import {UrlResolverService} from './services/url-resolver.service';
 import {FormDisplayConfigurationComponent} from './components/form-display-configuration/form-display-configuration.component';
-import {ProcessLinkStateService} from './services';
 
 @NgModule({
   declarations: [
@@ -123,9 +122,6 @@ import {ProcessLinkStateService} from './services';
     FormFlowComponent,
     SelectUrlComponent,
   ],
-  providers: [
-    UrlValidatorService,
-    UrlResolverService
-  ]
+  providers: [UrlValidatorService, UrlResolverService],
 })
 export class ProcessLinkModule {}
