@@ -43,11 +43,13 @@ export class ViewModelService extends BaseApiService {
     formName: string,
     taskInstanceId: string,
     viewModel: object,
-    page: number
+    page: number,
+    isWizard: boolean
   ): Observable<object> {
     const params = {
         formName,
         taskInstanceId,
+        isWizard
     }
     if (!isNaN(page)) {
       params['page'] = page;
@@ -89,11 +91,13 @@ export class ViewModelService extends BaseApiService {
     formName: string,
     processDefinitionKey: string,
     viewModel: object,
-    page: number
+    page: number,
+    isWizard: boolean
   ): Observable<object> {
     const params = {
       formName,
       processDefinitionKey,
+      isWizard
     }
     if (!isNaN(page)) {
       params['page'] = page;

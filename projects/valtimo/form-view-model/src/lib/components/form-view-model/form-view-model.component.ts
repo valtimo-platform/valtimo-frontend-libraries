@@ -81,6 +81,7 @@ export class FormViewModelComponent implements OnInit {
 
   private _preventNextPage = false;
   private _preventPreviousPage = false;
+  private _isWizard: boolean;
 
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
@@ -273,6 +274,7 @@ export class FormViewModelComponent implements OnInit {
               this.change$.pipe(take(1)).subscribe(() => {
                 this.loading$.next(false);
               });
+              this._isWizard = this.formio.form.display == 'wizard';
             })
           )
         )
@@ -290,7 +292,7 @@ export class FormViewModelComponent implements OnInit {
             return combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(
               take(1),
               switchMap(([formName, taskInstanceId, change]) =>
-                this.viewModelService.updateViewModel(formName, taskInstanceId, change.data, this.formio.formio.page).pipe(
+                this.viewModelService.updateViewModel(formName, taskInstanceId, change.data, this.formio.formio.page, this._isWizard).pipe(
                   tap({
                     next: viewModel => {
                       const submission = this.submission$.value;
@@ -326,6 +328,7 @@ export class FormViewModelComponent implements OnInit {
               this.change$.pipe(take(1)).subscribe(() => {
                 this.loading$.next(false);
               });
+              this._isWizard = this.formio.form.display == 'wizard';
             })
           )
         )
@@ -344,7 +347,7 @@ export class FormViewModelComponent implements OnInit {
               take(1),
               switchMap(([formName, processDefinitionKey, change]) =>
                 this.viewModelService
-                  .updateViewModelForStartForm(formName, processDefinitionKey, change.data, this.formio.formio.page)
+                  .updateViewModelForStartForm(formName, processDefinitionKey, change.data, this.formio.formio.page, this._isWizard)
                   .pipe(
                     tap({
                       next: viewModel => {
