@@ -52,6 +52,13 @@ import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {Deploy16} from '@carbon/icons';
+import {
+  BpmnPropertiesPanelModule,
+  BpmnPropertiesProviderModule,
+  CamundaPlatformPropertiesProviderModule,
+} from 'bpmn-js-properties-panel';
+import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
+import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
 
 @Component({
   selector: 'valtimo-process-management-editor',
@@ -74,6 +81,7 @@ import {Deploy16} from '@carbon/icons';
 })
 export class ProcessManagementEditorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('modeler', {static: false}) modelerElementRef!: ElementRef;
+  @ViewChild('modelerPanel', {static: false}) modelerPanelElementRef!: ElementRef;
   @ViewChild('viewer', {static: false}) viewerElementRef!: ElementRef;
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
@@ -194,7 +202,20 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   }
 
   private initModeler(): void {
-    this._bpmnModeler = new Modeler();
+    this._bpmnModeler = new Modeler({
+      additionalModules: [
+        BpmnPropertiesPanelModule,
+        BpmnPropertiesProviderModule,
+        CamundaPlatformPropertiesProviderModule,
+        camundaPlatformBehaviors,
+      ],
+      moddleExtensions: {
+        camunda: CamundaBpmnModdle,
+      },
+      propertiesPanel: {
+        parent: this.modelerPanelElementRef.nativeElement,
+      },
+    });
     this._bpmnModeler?.attachTo(this.modelerElementRef.nativeElement);
     this.listenToModelerEvents();
   }

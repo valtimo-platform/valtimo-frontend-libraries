@@ -29,17 +29,13 @@
     <cds-loading></cds-loading>
   </div>
 
-  <div
-    #modeler
-    class="bpmn__modeler"
-    [style.display]="obs.isReadOnlyProcess ? 'none' : 'block'"
-  ></div>
+  <div class="bpmn__modeler" [style.display]="obs.isReadOnlyProcess ? 'none' : 'flex'">
+    <div class="bpmn__modeler-canvas" #modeler></div>
 
-  <div
-    #viewer
-    class="bpmn__viewer"
-    [style.display]="obs.isReadOnlyProcess ? 'block' : 'none'"
-  ></div>
+    <div class="bpmn__modeler-panel" #modelerPanel></div>
+  </div>
+
+  <div #viewer class="bpmn__viewer" [style.display]="obs.isReadOnlyProcess ? 'flex' : 'none'"></div>
 </div>
 
 <ng-container renderInPageHeader [fullWidth]="true">
