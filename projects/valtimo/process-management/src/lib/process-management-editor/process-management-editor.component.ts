@@ -191,6 +191,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this._selectionProcessDefinition$.pipe(take(1)).subscribe(selectedVersion => {
       if (selectedVersion.id !== event.item.processDefinitionVersion.id) {
         this._selectionProcessDefinition$.next(event?.item?.processDefinitionVersion);
+        this.changesPending$.next(false);
       }
     });
   }
