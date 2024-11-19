@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {ProcessDefinition} from '@valtimo/process';
-import {BehaviorSubject, filter, Observable} from 'rxjs';
+import {BehaviorSubject, filter, Observable, Subscription} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
+import {ProcessLink, ProcessLinkService} from '@valtimo/process-link';
 
 @Injectable()
-export class ProcessManagementEditorService {
+export class ProcessManagementEditorService implements OnDestroy {
   private readonly _selectionProcessDefinitionSubject$ =
     new BehaviorSubject<ProcessDefinition | null>(null);
 
@@ -32,7 +33,43 @@ export class ProcessManagementEditorService {
     );
   }
 
+  private readonly _processLinksForSelectedDefinition$ = new BehaviorSubject<ProcessLink[]>([]);
+
+  public get processLinksForSelectedDefinition$(): Observable<ProcessLink[]> {
+    return this._processLinksForSelectedDefinition$.asObservable();
+  }
+
+  public get processLinksForSelectedDefinition(): ProcessLink[] {
+    return this._processLinksForSelectedDefinition$.getValue();
+  }
+
+  private readonly _processLinksFetchedForSelectedDefinition$ = new BehaviorSubject<boolean>(false);
+
+  private readonly _subscriptions = new Subscription();
+
   public setSelectedProcessDefinition(definition: ProcessDefinition): void {
     this._selectionProcessDefinitionSubject$.next(definition);
+  }
+
+  constructor(private readonly processLinkService: ProcessLinkService) {
+    this.openSelectedProcessDefinitionSubscription();
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
+  private openSelectedProcessDefinitionSubscription(): void {
+    this._subscriptions.add(
+      this.selectionProcessDefinition$.subscribe(definition => {
+        this.fetchProcessLinksForDefinition(definition.id);
+      })
+    );
+  }
+
+  private fetchProcessLinksForDefinition(processDefinitionId: string): void {
+    this.processLinkService.getProcessLink({processDefinitionId}).subscribe(res => {
+      this._processLinksForSelectedDefinition$.next(res);
+    });
   }
 }

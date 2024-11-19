@@ -59,10 +59,11 @@ import {
 } from 'bpmn-js-properties-panel';
 import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
 import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
-import {customPropertiesProviderModule} from './panel';
+import {valtimoPropertiesProviderModule} from './panel';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
 import {ProcessManagementEditorService} from '../../services';
+import {ProcessManagementWindow} from '../../models';
 
 @Component({
   selector: 'valtimo-process-management-editor',
@@ -168,6 +169,8 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     private readonly processManagementEditorService: ProcessManagementEditorService
   ) {
     this.iconService.registerAll([Deploy16]);
+    (window as any as ProcessManagementWindow).processManagementEditorService =
+      processManagementEditorService;
   }
 
   public ngAfterViewInit(): void {
@@ -217,7 +220,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
         BpmnPropertiesProviderModule,
         CamundaPlatformPropertiesProviderModule,
         camundaPlatformBehaviors,
-        customPropertiesProviderModule,
+        valtimoPropertiesProviderModule,
       ],
       moddleExtensions: {
         camunda: CamundaBpmnModdle,

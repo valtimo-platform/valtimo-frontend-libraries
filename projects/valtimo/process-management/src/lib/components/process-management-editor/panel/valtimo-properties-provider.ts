@@ -1,15 +1,23 @@
 import {useService} from 'bpmn-js-properties-panel';
 import {html} from 'htm/preact';
 import {is} from 'bpmn-js/lib/util/ModelUtil';
+import {ProcessManagementEditorService} from '../../../services';
+import {ProcessManagementWindow} from '../../../models';
 
-class CustomPropertiesProvider {
+class ValtimoPropertiesProvider {
   static $inject = ['propertiesPanel', 'translate'];
+
+  private get processManagementEditorService(): ProcessManagementEditorService {
+    return (window as any as ProcessManagementWindow).processManagementEditorService;
+  }
 
   constructor(propertiesPanel: any, translate: any) {
     propertiesPanel.registerProvider(500, this);
   }
 
-  getGroups(element: any) {
+  public getGroups(element: any): (groups: any[]) => any[] {
+    console.log('x', this.processManagementEditorService.processLinksForSelectedDefinition);
+
     return (groups: any[]) => {
       if (
         is(element, 'bpmn:UserTask') ||
@@ -28,7 +36,7 @@ class CustomPropertiesProvider {
     };
   }
 
-  createCustomButton(element: any) {
+  public createCustomButton(element: any): any {
     return {
       id: 'customRootButton',
       element,
@@ -38,7 +46,7 @@ class CustomPropertiesProvider {
   }
 }
 
-function CustomButton(props: any) {
+function CustomButton(props: any): any {
   const {element} = props;
   const modeling = useService('modeling');
   const translate = useService('translate');
@@ -51,9 +59,9 @@ function CustomButton(props: any) {
   return html`<button id="customRootButton" onClick=${handleClick}>test</button> `;
 }
 
-const customPropertiesProviderModule = {
+const valtimoPropertiesProviderModule = {
   __init__: ['customPropertiesProvider'],
-  customPropertiesProvider: ['type', CustomPropertiesProvider],
+  customPropertiesProvider: ['type', ValtimoPropertiesProvider],
 };
 
-export {customPropertiesProviderModule};
+export {valtimoPropertiesProviderModule};
