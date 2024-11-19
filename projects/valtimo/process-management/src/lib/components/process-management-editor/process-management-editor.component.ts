@@ -62,6 +62,7 @@ import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
 import {customPropertiesProviderModule} from './panel';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
+import {ProcessManagementEditorService} from '../../services';
 
 @Component({
   selector: 'valtimo-process-management-editor',
@@ -81,6 +82,7 @@ import {isEqual} from 'lodash';
     TranslateModule,
     TagModule,
   ],
+  providers: [ProcessManagementEditorService],
 })
 export class ProcessManagementEditorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('modeler', {static: false}) modelerElementRef!: ElementRef;
@@ -89,39 +91,31 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  private readonly _selectionProcessDefinitionSubject$ =
-    new BehaviorSubject<ProcessDefinition | null>(null);
-
   private _bpmnModeler!: Modeler;
   private _bpmnViewer!: NavigatedViewer;
-
-  private readonly _selectionProcessDefinition$: Observable<ProcessDefinition> =
-    this._selectionProcessDefinitionSubject$.pipe(
-      filter(selectedProcessDefinition => !!selectedProcessDefinition?.id),
-      distinctUntilChanged((previous, current) => isEqual(previous, current))
-    );
 
   public isReadOnlyProcess$ = new BehaviorSubject<boolean>(false);
   public isSystemProcess$ = new BehaviorSubject<boolean>(false);
 
-  public readonly selectedProcessDefinitionXml$ = this._selectionProcessDefinition$.pipe(
-    filter(selectedProcessDefinition => !!selectedProcessDefinition?.id),
-    distinctUntilChanged((previous, current) => isEqual(previous, current)),
-    tap(selectedProcessDefinition => {
-      this.loading$.next(true);
-      this.pageTitleService.setCustomPageTitle(selectedProcessDefinition.name);
-    }),
-    switchMap(selectedProcessDefinition =>
-      this.processService.getProcessDefinitionXml(selectedProcessDefinition.id)
-    ),
-    tap(result => {
-      this._bpmnModeler?.importXML(result.bpmn20Xml);
-      this._bpmnViewer?.importXML(result.bpmn20Xml);
-      this.isReadOnlyProcess$.next(result.readOnly);
-      this.isSystemProcess$.next(result.systemProcess);
-      this.loading$.next(false);
-    })
-  );
+  public readonly selectedProcessDefinitionXml$ =
+    this.processManagementEditorService.selectionProcessDefinition$.pipe(
+      filter(selectedProcessDefinition => !!selectedProcessDefinition?.id),
+      distinctUntilChanged((previous, current) => isEqual(previous, current)),
+      tap(selectedProcessDefinition => {
+        this.loading$.next(true);
+        this.pageTitleService.setCustomPageTitle(selectedProcessDefinition.name);
+      }),
+      switchMap(selectedProcessDefinition =>
+        this.processService.getProcessDefinitionXml(selectedProcessDefinition.id)
+      ),
+      tap(result => {
+        this._bpmnModeler?.importXML(result.bpmn20Xml);
+        this._bpmnViewer?.importXML(result.bpmn20Xml);
+        this.isReadOnlyProcess$.next(result.readOnly);
+        this.isSystemProcess$.next(result.systemProcess);
+        this.loading$.next(false);
+      })
+    );
 
   private readonly _processDefinitionKey$ = this.route.params.pipe(
     map(params => params.key),
@@ -147,7 +141,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
 
   public readonly processDefinitionVersionsListItems$: Observable<ListItem[]> = combineLatest([
     this.processDefinitionVersions$,
-    this._selectionProcessDefinition$,
+    this.processManagementEditorService.selectionProcessDefinition$,
     this.translateService.stream('key'),
   ]).pipe(
     map(([processDefinitionVersions, selectionProcessDefinition]) =>
@@ -170,7 +164,8 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     private readonly pageTitleService: PageTitleService,
     private readonly translateService: TranslateService,
     private readonly iconService: IconService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly processManagementEditorService: ProcessManagementEditorService
   ) {
     this.iconService.registerAll([Deploy16]);
   }
@@ -197,16 +192,20 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   }
 
   public selectedVersionChange(event: {item: {processDefinitionVersion: ProcessDefinition}}): void {
-    this._selectionProcessDefinition$.pipe(take(1)).subscribe(selectedVersion => {
-      if (selectedVersion.id !== event.item.processDefinitionVersion.id) {
-        this._selectionProcessDefinitionSubject$.next(event?.item?.processDefinitionVersion);
-        this.changesPending$.next(false);
-      }
-    });
+    this.processManagementEditorService.selectionProcessDefinition$
+      .pipe(take(1))
+      .subscribe(selectedVersion => {
+        if (selectedVersion.id !== event.item.processDefinitionVersion.id) {
+          this.processManagementEditorService.setSelectedProcessDefinition(
+            event?.item?.processDefinitionVersion
+          );
+          this.changesPending$.next(false);
+        }
+      });
   }
 
   private setSelectedProcessDefinitionToLatest(processDefinitions: ProcessDefinition[]): void {
-    this._selectionProcessDefinitionSubject$.next(
+    this.processManagementEditorService.setSelectedProcessDefinition(
       processDefinitions.reduce((acc, version) => (version.version > acc.version ? version : acc))
     );
   }
