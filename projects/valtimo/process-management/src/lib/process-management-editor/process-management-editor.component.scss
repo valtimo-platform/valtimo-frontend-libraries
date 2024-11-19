@@ -31,6 +31,7 @@
     outline: 1px solid var(--cds-border-subtle);
     outline-offset: -1px;
 
+    // hide blue focus border bpmn
     ::ng-deep .djs-container > svg {
       outline: none !important;
     }
