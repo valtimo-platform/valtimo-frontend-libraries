@@ -19,7 +19,6 @@
 >
   <div class="container-fluid">
     @if (canView$ | async) {
-      <h2>{{ canView$ | async }}</h2>
       <ng-container *ngTemplateOutlet="tabs"></ng-container>
 
       <ng-template #tabs>
