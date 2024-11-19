@@ -3,8 +3,8 @@ import {isTextFieldEntryEdited} from '@bpmn-io/properties-panel';
 import {html} from 'htm/preact';
 import {ModalService} from '@valtimo/components';
 import {tap} from 'rxjs';
-import {ProcessLinkService, ProcessLinkStateService} from '@valtimo/process-link/index';
-import {ProcessLinks, ProcessManagementService} from '../../process-management.service';
+import {ProcessLinkService, ProcessLinkStateService} from '@valtimo/process-link';
+import {ProcessLinks} from '../../../process-management.service';
 
 export class PropertyPanelCustomizer {
   private LOW_PRIORITY = 500;
@@ -32,28 +32,28 @@ export class PropertyPanelCustomizer {
     return function (groups) {
       console.log('groups', groups);
       for (let i = 0; i < groups.length; i++) {
-        if (groups[i].id === 'CamundaPlatform__Implementation' || groups[i].id === 'CamundaPlatform__Form') {
-
+        if (
+          groups[i].id === 'CamundaPlatform__Implementation' ||
+          groups[i].id === 'CamundaPlatform__Form'
+        ) {
           console.log('entries', groups[i].entries);
           for (let j = 0; j < groups[i].entries.length; j++) {
             if (groups[i].entries[j].id === 'implementationType') {
-              groups[i].entries[j].component.getOptions = function() {
+              groups[i].entries[j].component.getOptions = function () {
                 return [
-                  { value: '', label: 'test 1' },
-                  { value: '2', label: 'test 2' },
+                  {value: '', label: 'test 1'},
+                  {value: '2', label: 'test 2'},
                 ];
               };
             }
           }
 
-          groups[i].entries.push(
-            {
-              id: 'linkProcessButton',
-              element,
-              component: parent.ProcessLink,
-              isEdited: isTextFieldEntryEdited,
-            }
-          );
+          groups[i].entries.push({
+            id: 'linkProcessButton',
+            element,
+            component: parent.ProcessLink,
+            isEdited: isTextFieldEntryEdited,
+          });
         }
       }
 
@@ -62,16 +62,17 @@ export class PropertyPanelCustomizer {
   }
 
   private ProcessLink(element: any, id: any) {
-
     console.log('element', element);
     console.log('id', id);
 
     const modalService = (window as any).modalService as ModalService;
     const stateService = (window as any).stateService as ProcessLinkStateService;
     const processLinkService = (window as any).processLinkService as ProcessLinkService;
-    const processLinks = (window as any).processLinks as ProcessLinks
+    const processLinks = (window as any).processLinks as ProcessLinks;
 
-    const processLinkForElement = processLinks.processLinks$.value.find((processLink) => processLink.activityId === element.element.id);
+    const processLinkForElement = processLinks.processLinks$.value.find(
+      processLink => processLink.activityId === element.element.id
+    );
 
     console.log('processLinkForElement', processLinkForElement);
 
@@ -114,8 +115,12 @@ export class PropertyPanelCustomizer {
     };
 
     if (processLinkForElement) {
-      return html`<div class="bio-properties-panel-entry"><button onclick="${openModal}">Open existing action</button></div>`;
+      return html`<div class="bio-properties-panel-entry">
+        <button onclick="${openModal}">Open existing action</button>
+      </div>`;
     }
-    return html`<div class="bio-properties-panel-entry"><button onclick="${openModal}">Link action</button></div>`;
+    return html`<div class="bio-properties-panel-entry">
+      <button onclick="${openModal}">Link action</button>
+    </div>`;
   }
 }

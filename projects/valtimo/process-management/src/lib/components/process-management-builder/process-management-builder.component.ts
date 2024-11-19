@@ -23,12 +23,16 @@ import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
 import {LayoutService} from '@valtimo/layout';
 import Modeler from 'bpmn-js/lib/Modeler';
 import BpmnViewer from 'bpmn-js';
-import {BpmnPropertiesPanelModule, BpmnPropertiesProviderModule, CamundaPlatformPropertiesProviderModule} from 'bpmn-js-properties-panel';
+import {
+  BpmnPropertiesPanelModule,
+  BpmnPropertiesProviderModule,
+  CamundaPlatformPropertiesProviderModule,
+} from 'bpmn-js-properties-panel';
 import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
 import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
 import magicPropertiesProviderModule from './customizer';
-import {ProcessLinkService, ProcessLinkStateService,} from '@valtimo/process-link';
-import {ProcessManagementService} from '../process-management.service';
+import {ProcessLinkService, ProcessLinkStateService} from '@valtimo/process-link';
+import {ProcessManagementService} from '../../process-management.service';
 
 @Component({
   selector: 'valtimo-process-management-builder',
@@ -72,25 +76,24 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
   init() {
     this.processKey = this.route.snapshot.paramMap.get('key');
     forkJoin(this.getElementTemplates()).subscribe((elementTemplates: any[]) => {
-
       this.bpmnModeler = new Modeler({
         container: '#canvas',
         height: '90vh',
         valtimoRenderer: {
-          test: 'test'
+          test: 'test',
         },
         additionalModules: [
           BpmnPropertiesPanelModule,
           BpmnPropertiesProviderModule,
           CamundaPlatformPropertiesProviderModule,
           camundaPlatformBehaviors,
-          magicPropertiesProviderModule
+          magicPropertiesProviderModule,
         ],
         propertiesPanel: {
           parent: '#properties',
         },
         moddleExtensions: {
-          camunda: CamundaBpmnModdle
+          camunda: CamundaBpmnModdle,
         },
         elementTemplates,
       });
@@ -168,7 +171,9 @@ export class ProcessManagementBuilderComponent implements OnInit, OnDestroy {
       version.version > acc.version ? version : acc
     );
     this.loadProcessBpmn();
-    (window as any).processLinks = this.processManagementService.getProcessLinks(this.selectedVersion.id);
+    (window as any).processLinks = this.processManagementService.getProcessLinks(
+      this.selectedVersion.id
+    );
   }
 
   loadProcessVersions(processDefinitionKey: string) {

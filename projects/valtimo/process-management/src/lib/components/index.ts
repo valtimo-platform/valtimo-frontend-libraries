@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of process-management
- */
-
-export * from './lib/process-management.module';
-export * from './lib/components/process-management/process-management.component';
+export * from './process-management';
+export * from './process-management-editor';
+export * from './process-management-builder';
+export * from './process-management-list';
+export * from './process-management-upload';

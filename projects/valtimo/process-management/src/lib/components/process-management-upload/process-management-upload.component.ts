@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
-import {ProcessManagementService} from '../process-management.service';
+import {ProcessManagementService} from '../../process-management.service';
 import {AlertService} from '@valtimo/components';
 
 @Component({

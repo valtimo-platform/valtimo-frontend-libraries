@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of process-management
- */
+import {Component, ViewChild} from '@angular/core';
+import {ProcessManagementListComponent} from '../process-management-list/process-management-list.component';
 
-export * from './lib/process-management.module';
-export * from './lib/components/process-management/process-management.component';
+@Component({
+  selector: 'valtimo-process-management',
+  templateUrl: './process-management.component.html',
+  styleUrls: ['./process-management.component.scss'],
+})
+export class ProcessManagementComponent {
+  @ViewChild('processManagementList') processManagementList: ProcessManagementListComponent;
+}

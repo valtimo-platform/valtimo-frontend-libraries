@@ -15,17 +15,19 @@
  */
 
 import {NgModule} from '@angular/core';
-import {ProcessManagementComponent} from './process-management.component';
 import {ProcessManagementRoutingModule} from './process-management-routing';
 import {CommonModule} from '@angular/common';
-import {ProcessManagementBuilderComponent} from './process-management-builder/process-management-builder.component';
-import {ProcessManagementListComponent} from './process-management-list/process-management-list.component';
 import {ListModule, WidgetModule} from '@valtimo/components';
 import {FormsModule} from '@angular/forms';
-import {ProcessManagementUploadComponent} from './process-management-upload/process-management-upload.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {ProcessLinkModule} from '@valtimo/process-link';
-import {ProcessManagementEditorComponent} from './process-management-editor/process-management-editor.component';
+import {
+  ProcessManagementBuilderComponent,
+  ProcessManagementComponent,
+  ProcessManagementEditorComponent,
+  ProcessManagementListComponent,
+  ProcessManagementUploadComponent,
+} from './components';
 
 @NgModule({
   declarations: [

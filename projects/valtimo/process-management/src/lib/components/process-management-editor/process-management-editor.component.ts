@@ -59,6 +59,9 @@ import {
 } from 'bpmn-js-properties-panel';
 import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
 import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
+import {customPropertiesProviderModule} from './panel';
+import {distinctUntilChanged} from 'rxjs/operators';
+import {isEqual} from 'lodash';
 
 @Component({
   selector: 'valtimo-process-management-editor',
@@ -86,18 +89,24 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  private readonly _selectionProcessDefinition$ = new BehaviorSubject<ProcessDefinition | null>(
-    null
-  );
+  private readonly _selectionProcessDefinitionSubject$ =
+    new BehaviorSubject<ProcessDefinition | null>(null);
 
   private _bpmnModeler!: Modeler;
   private _bpmnViewer!: NavigatedViewer;
+
+  private readonly _selectionProcessDefinition$: Observable<ProcessDefinition> =
+    this._selectionProcessDefinitionSubject$.pipe(
+      filter(selectedProcessDefinition => !!selectedProcessDefinition?.id),
+      distinctUntilChanged((previous, current) => isEqual(previous, current))
+    );
 
   public isReadOnlyProcess$ = new BehaviorSubject<boolean>(false);
   public isSystemProcess$ = new BehaviorSubject<boolean>(false);
 
   public readonly selectedProcessDefinitionXml$ = this._selectionProcessDefinition$.pipe(
     filter(selectedProcessDefinition => !!selectedProcessDefinition?.id),
+    distinctUntilChanged((previous, current) => isEqual(previous, current)),
     tap(selectedProcessDefinition => {
       this.loading$.next(true);
       this.pageTitleService.setCustomPageTitle(selectedProcessDefinition.name);
@@ -190,14 +199,14 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   public selectedVersionChange(event: {item: {processDefinitionVersion: ProcessDefinition}}): void {
     this._selectionProcessDefinition$.pipe(take(1)).subscribe(selectedVersion => {
       if (selectedVersion.id !== event.item.processDefinitionVersion.id) {
-        this._selectionProcessDefinition$.next(event?.item?.processDefinitionVersion);
+        this._selectionProcessDefinitionSubject$.next(event?.item?.processDefinitionVersion);
         this.changesPending$.next(false);
       }
     });
   }
 
   private setSelectedProcessDefinitionToLatest(processDefinitions: ProcessDefinition[]): void {
-    this._selectionProcessDefinition$.next(
+    this._selectionProcessDefinitionSubject$.next(
       processDefinitions.reduce((acc, version) => (version.version > acc.version ? version : acc))
     );
   }
@@ -209,6 +218,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
         BpmnPropertiesProviderModule,
         CamundaPlatformPropertiesProviderModule,
         camundaPlatformBehaviors,
+        customPropertiesProviderModule,
       ],
       moddleExtensions: {
         camunda: CamundaBpmnModdle,
