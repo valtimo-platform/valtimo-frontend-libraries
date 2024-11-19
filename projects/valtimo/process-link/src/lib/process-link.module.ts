@@ -21,6 +21,7 @@ import {ProcessLinkRoutingModule} from './process-link-routing.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
   ButtonModule,
+  CarbonMultiInputModule,
   FormIoModule,
   ModalModule,
   ParagraphModule,
@@ -112,6 +113,7 @@ import {FormDisplayConfigurationComponent} from './components/form-display-confi
     RenderInPageHeaderDirectiveModule,
     SelectModule,
     ToggleModule,
+    CarbonMultiInputModule,
   ],
   exports: [
     ProcessLinkComponent,
