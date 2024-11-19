@@ -49,13 +49,11 @@ export class ViewModelService extends BaseApiService {
     const params = {
         formName,
         taskInstanceId,
-        isWizard
-    }
-    if (!isNaN(page)) {
-      params['page'] = page;
+        isWizard,
+      ...(!isNaN(page) && {page})
     }
     return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/user-task`), viewModel, {
-      params: params,
+      params,
       headers: new HttpHeaders().set(InterceptorSkip, '400'),
     });
   }
@@ -97,13 +95,11 @@ export class ViewModelService extends BaseApiService {
     const params = {
       formName,
       processDefinitionKey,
-      isWizard
-    }
-    if (!isNaN(page)) {
-      params['page'] = page;
+      isWizard,
+      ...(!isNaN(page) && {page})
     }
     return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/start-form`), viewModel, {
-      params: params,
+      params,
       headers: new HttpHeaders().set(InterceptorSkip, '400'),
     });
   }

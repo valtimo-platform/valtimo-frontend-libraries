@@ -81,7 +81,7 @@ export class FormViewModelComponent implements OnInit {
 
   private _preventNextPage = false;
   private _preventPreviousPage = false;
-  private _isWizard: boolean;
+  private _isWizard: boolean = false;
 
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
@@ -274,7 +274,7 @@ export class FormViewModelComponent implements OnInit {
               this.change$.pipe(take(1)).subscribe(() => {
                 this.loading$.next(false);
               });
-              this._isWizard = this.formio.form.display == 'wizard';
+              this._isWizard = this.formio.form.display === 'wizard';
             })
           )
         )
@@ -328,7 +328,7 @@ export class FormViewModelComponent implements OnInit {
               this.change$.pipe(take(1)).subscribe(() => {
                 this.loading$.next(false);
               });
-              this._isWizard = this.formio.form.display == 'wizard';
+              this._isWizard = this.formio.form.display === 'wizard';
             })
           )
         )
