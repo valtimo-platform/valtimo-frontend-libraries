@@ -64,6 +64,12 @@ import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
 import {ProcessManagementEditorService} from '../../services';
 import {ProcessManagementWindow} from '../../models';
+import {
+  ProcessLinkButtonService,
+  ProcessLinkModule,
+  ProcessLinkStateService,
+  ProcessLinkStepService,
+} from '@valtimo/process-link';
 
 @Component({
   selector: 'valtimo-process-management-editor',
@@ -82,8 +88,15 @@ import {ProcessManagementWindow} from '../../models';
     IconModule,
     TranslateModule,
     TagModule,
+    ProcessLinkModule,
+    ProcessLinkModule,
   ],
-  providers: [ProcessManagementEditorService],
+  providers: [
+    ProcessManagementEditorService,
+    ProcessLinkStateService,
+    ProcessLinkStepService,
+    ProcessLinkButtonService,
+  ],
 })
 export class ProcessManagementEditorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('modeler', {static: false}) modelerElementRef!: ElementRef;
@@ -171,6 +184,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this.iconService.registerAll([Deploy16]);
     (window as any as ProcessManagementWindow).processManagementEditorService =
       processManagementEditorService;
+    (window as any as ProcessManagementWindow).translateService = translateService;
   }
 
   public ngAfterViewInit(): void {

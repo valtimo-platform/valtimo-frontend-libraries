@@ -1499,6 +1499,7 @@
     }
   },
   "processLink": {
+    "create": "Proceskoppeling aanmaken",
     "edit": "Proceskoppeling wijzigen",
     "saveChanges": "Wijzigingen opslaan",
     "unlink": "Ontkoppelen",

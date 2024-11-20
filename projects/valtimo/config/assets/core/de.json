@@ -1494,6 +1494,7 @@
     }
   },
   "processLink": {
+    "create": "Prozesslink erstellen",
     "edit": "Prozesslink bearbeiten",
     "saveChanges": "Änderungen speichern",
     "unlink": "Verknüpfung aufheben",

@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-import {ValtimoWindow} from '@valtimo/config';
-import {ProcessManagementEditorService} from '../services';
-import {TranslateService} from '@ngx-translate/core';
-
-interface ProcessManagementWindow extends ValtimoWindow {
-  processManagementEditorService: ProcessManagementEditorService;
-  translateService: TranslateService;
+interface BpmnElement {
+  type: string;
+  id: string;
+  di: {id: string};
 }
 
-export {ProcessManagementWindow};
+export {BpmnElement};

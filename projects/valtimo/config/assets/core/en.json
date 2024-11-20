@@ -1501,6 +1501,7 @@
     }
   },
   "processLink": {
+    "create": "Create process link",
     "edit": "Edit process link",
     "saveChanges": "Save changes",
     "unlink": "Unlink",

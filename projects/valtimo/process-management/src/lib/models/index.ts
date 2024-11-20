@@ -15,3 +15,4 @@
  */
 
 export * from './window.model';
+export * from './bpmn.model';
