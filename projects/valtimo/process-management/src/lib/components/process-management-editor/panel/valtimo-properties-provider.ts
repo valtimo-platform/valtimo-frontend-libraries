@@ -3,7 +3,7 @@ import {html} from 'htm/preact';
 import {is} from 'bpmn-js/lib/util/ModelUtil';
 import {ProcessManagementEditorService} from '../../../services';
 import {BpmnElement, OpenProcessLinkModalEvent, ProcessManagementWindow} from '../../../models';
-import {ProcessLink} from '@valtimo/process-link';
+import {ModalParams, ProcessLink} from '@valtimo/process-link';
 import {TranslateService} from '@ngx-translate/core';
 import {mapActivityTypeToActivityListenerType} from '../../../utils';
 
@@ -77,24 +77,31 @@ const CustomRootElement = (props: {
   const createText = translateService.instant('processLink.create');
   console.log('process link', processLink);
 
-  const handleClick = () => {
-    // trigger update
-    modeling.updateProperties(element, {});
+  const modalParams: ModalParams = {
+    processDefinitionKey: processManagementEditorService.selectionProcessDefinition.key,
+    processDefinitionId: processManagementEditorService.selectionProcessDefinition.id,
+    element: {
+      id: element.id,
+      type: element.type,
+      activityListenerType: mapActivityTypeToActivityListenerType(element.type),
+      name: element.di.bpmnElement.name,
+    },
+  };
+
+  const handleCreateClick = () => {
+    const event: OpenProcessLinkModalEvent = {
+      modalParams,
+    };
+
+    processManagementEditorService.sendOpenProcessLinkModalEvent(event, () => {
+      modeling.updateProperties(element, {});
+    });
   };
 
   const handleEditClick = () => {
     const event: OpenProcessLinkModalEvent = {
       processLink,
-      modalParams: {
-        processDefinitionKey: processManagementEditorService.selectionProcessDefinition.key,
-        processDefinitionId: processManagementEditorService.selectionProcessDefinition.id,
-        element: {
-          id: element.id,
-          type: element.type,
-          activityListenerType: mapActivityTypeToActivityListenerType(element.type),
-          name: element.di.bpmnElement.name,
-        },
-      },
+      modalParams,
     };
 
     processManagementEditorService.sendOpenProcessLinkModalEvent(event, () => {
@@ -109,7 +116,7 @@ const CustomRootElement = (props: {
   };
 
   return processLink
-    ? html` <div class="process-link-properties-panel">
+    ? html`<div class="process-link-properties-panel">
         <button
           class="cds--btn cds--btn--primary cds--btn--md cds--layout--size-md"
           onClick=${handleEditClick}
@@ -123,10 +130,10 @@ const CustomRootElement = (props: {
           ${unlinkText}
         </button>
       </div>`
-    : html` <div class="process-link-properties-panel">
+    : html`<div class="process-link-properties-panel">
         <button
           class="cds--btn cds--btn--primary cds--btn--md cds--layout--size-md"
-          onClick=${handleClick}
+          onClick=${handleCreateClick}
         >
           ${createText}
         </button>

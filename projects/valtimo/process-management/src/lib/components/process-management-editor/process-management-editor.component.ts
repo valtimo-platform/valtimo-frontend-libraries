@@ -65,7 +65,7 @@ import {valtimoPropertiesProviderModule} from './panel';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
 import {ProcessManagementEditorService} from '../../services';
-import {ProcessManagementWindow} from '../../models';
+import {OpenProcessLinkModalEvent, ProcessManagementWindow} from '../../models';
 import {
   ProcessLinkButtonService,
   ProcessLinkEditMode,
@@ -275,14 +275,34 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     });
   }
 
-  private subscribeToOpenProcessLinkModalEvents(): void {
-    this._subscriptions.add(
-      this.processManagementEditorService.openProcessLinkModalEvents$.subscribe(event => {
+  private handleUpdateEvent(event: OpenProcessLinkModalEvent): void {
+    this.modalService.setModalData(event?.modalParams);
+    this.processLinkStateService.setModalParams(event?.modalParams);
+    this.processLinkStateService.setElementName(event?.modalParams?.element?.name);
+    this.processLinkStateService.selectProcessLink(event.processLink);
+    this.processLinkStateService.showModal();
+  }
+
+  private handleCreateEvent(event: OpenProcessLinkModalEvent): void {
+    this.processLinkService
+      .getProcessLinkCandidates(event.modalParams.element.activityListenerType)
+      .subscribe(candidates => {
         this.modalService.setModalData(event?.modalParams);
         this.processLinkStateService.setModalParams(event?.modalParams);
         this.processLinkStateService.setElementName(event?.modalParams?.element?.name);
-        this.processLinkStateService.selectProcessLink(event.processLink);
+        this.processLinkStateService.setAvailableProcessLinkTypes(candidates);
         this.processLinkStateService.showModal();
+      });
+  }
+
+  private subscribeToOpenProcessLinkModalEvents(): void {
+    this._subscriptions.add(
+      this.processManagementEditorService.openProcessLinkModalEvents$.subscribe(event => {
+        if (event.processLink) {
+          this.handleUpdateEvent(event);
+        } else {
+          this.handleCreateEvent(event);
+        }
       })
     );
   }
