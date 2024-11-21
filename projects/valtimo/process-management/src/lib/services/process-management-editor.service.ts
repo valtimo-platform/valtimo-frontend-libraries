@@ -21,6 +21,7 @@ import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
 import {
   ProcessLink,
+  ProcessLinkCreateEvent,
   ProcessLinkDeleteEvent,
   ProcessLinkService,
   ProcessLinkUpdateEvent,
@@ -95,6 +96,15 @@ export class ProcessManagementEditorService implements OnDestroy {
         return processLink;
       })
     );
+
+    this.updateBpmnView();
+  }
+
+  public createProcessLink(event: ProcessLinkCreateEvent): void {
+    this.setProcessLinksForSelectedDefinition([
+      ...this.processLinksForSelectedDefinition,
+      event as any,
+    ]);
 
     this.updateBpmnView();
   }

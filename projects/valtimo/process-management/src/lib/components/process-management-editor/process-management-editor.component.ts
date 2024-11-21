@@ -201,6 +201,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this.initViewer();
     this.subscribeToOpenProcessLinkModalEvents();
     this.subscribeToProcessLinkUpdateEvents();
+    this.subscribeToProcessLinkCreateEvents();
     this.processLinkStateService.setEditMode(ProcessLinkEditMode.EMIT_EVENTS);
   }
 
@@ -311,6 +312,16 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this._subscriptions.add(
       this.processLinkStateService.processLinkUpdateEvents$.subscribe(event => {
         this.processManagementEditorService.updateProcessLink(event);
+        this.processLinkStateService.stopSaving();
+        this.processLinkStateService.closeModal();
+      })
+    );
+  }
+
+  private subscribeToProcessLinkCreateEvents(): void {
+    this._subscriptions.add(
+      this.processLinkStateService.processLinkCreateEvents$.subscribe(event => {
+        this.processManagementEditorService.createProcessLink(event);
         this.processLinkStateService.stopSaving();
         this.processLinkStateService.closeModal();
       })
