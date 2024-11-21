@@ -103,7 +103,6 @@ export class DossierDetailComponent
   @ViewChild('tabContentContainer')
   private readonly _tabContentContainer!: ElementRef<HTMLDivElement>;
 
-  public hasAccess = CAN_VIEW_CASE_PERMISSION;
   public customDossierHeaderItems: Array<any> = [];
   public document: ValtimoDocument | null = null;
   public documentDefinitionName: string;
@@ -238,6 +237,7 @@ export class DossierDetailComponent
 
   public readonly loadingTabs$ = new BehaviorSubject<boolean>(true);
   public readonly noTabsConfigured$ = new BehaviorSubject<boolean>(false);
+  public readonly showNoAccess$ = new BehaviorSubject<boolean>(false);
   public activeTab$: Observable<TabImpl>;
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
@@ -474,25 +474,32 @@ export class DossierDetailComponent
   }
 
   private initTabLoader(): void {
-    this.dossierTabService.tabs$.pipe(take(1)).subscribe(tabs => {
-      if (tabs?.length > 0) {
-        this._initialTabName = this._snapshot.get('tab') ?? '';
-        this.tabLoader = new TabLoaderImpl(
-          tabs,
-          this.componentFactoryResolver,
-          this.viewContainerRef,
-          this.router,
-          this.route
-        );
-        this.tabLoader.initial(this._initialTabName);
-        this.dossierTabService.setTabLoader(this.tabLoader);
-        this.loadingTabs$.next(false);
-        this.activeTab$ = this.tabLoader.activeTab$;
-      } else {
-        this.noTabsConfigured$.next(true);
-        this.loadingTabs$.next(false);
+    combineLatest([this.dossierTabService.tabs$.pipe(take(1)), this.canView$]).subscribe(
+      ([tabs, canView]) => {
+        if (canView) {
+          if (tabs?.length > 0) {
+            this._initialTabName = this._snapshot.get('tab') ?? '';
+            this.tabLoader = new TabLoaderImpl(
+              tabs,
+              this.componentFactoryResolver,
+              this.viewContainerRef,
+              this.router,
+              this.route
+            );
+            this.tabLoader.initial(this._initialTabName);
+            this.dossierTabService.setTabLoader(this.tabLoader);
+            this.loadingTabs$.next(false);
+            this.activeTab$ = this.tabLoader.activeTab$;
+          } else {
+            this.noTabsConfigured$.next(true);
+            this.loadingTabs$.next(false);
+          }
+        } else {
+          this.showNoAccess$.next(true);
+          this.loadingTabs$.next(false);
+        }
       }
-    });
+    );
   }
 
   public assignmentOfDocumentChanged(): void {
