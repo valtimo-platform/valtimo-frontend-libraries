@@ -20,7 +20,7 @@
   <div class="container-fluid">
     <ng-container *ngTemplateOutlet="tabs"></ng-container>
 
-    <ng-template id="tabs" #tabs>
+    <ng-template #tabs>
       <ng-container *ngIf="{activeTab: activeTab$ | async} as obs">
         <cds-tabs *ngIf="tabLoader" type="inline" class="case-detail-tabs">
           <cds-tab
