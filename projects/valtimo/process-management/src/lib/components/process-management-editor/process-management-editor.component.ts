@@ -68,6 +68,7 @@ import {ProcessManagementEditorService} from '../../services';
 import {ProcessManagementWindow} from '../../models';
 import {
   ProcessLinkButtonService,
+  ProcessLinkEditMode,
   ProcessLinkModule,
   ProcessLinkService,
   ProcessLinkStateService,
@@ -199,6 +200,8 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this.initModeler();
     this.initViewer();
     this.subscribeToOpenProcessLinkModalEvents();
+    this.subscribeToProcessLinkUpdateEvents();
+    this.processLinkStateService.setEditMode(ProcessLinkEditMode.EMIT_EVENTS);
   }
 
   public ngOnDestroy(): void {
@@ -257,12 +260,6 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this.listenToModelerEvents();
   }
 
-  private listenToModelerEvents(): void {
-    this._bpmnModeler.on('commandStack.changed', () => {
-      this.changesPending$.next(true);
-    });
-  }
-
   private initViewer(): void {
     this._bpmnViewer = new NavigatedViewer();
     this._bpmnViewer?.attachTo(this.viewerElementRef.nativeElement);
@@ -270,6 +267,12 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
 
   private reload(): void {
     this._reload$.next(null);
+  }
+
+  private listenToModelerEvents(): void {
+    this._bpmnModeler.on('commandStack.changed', () => {
+      this.changesPending$.next(true);
+    });
   }
 
   private subscribeToOpenProcessLinkModalEvents(): void {
@@ -280,6 +283,16 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
         this.processLinkStateService.setElementName(event?.modalParams?.element?.name);
         this.processLinkStateService.selectProcessLink(event.processLink);
         this.processLinkStateService.showModal();
+      })
+    );
+  }
+
+  private subscribeToProcessLinkUpdateEvents(): void {
+    this._subscriptions.add(
+      this.processLinkStateService.processLinkUpdateEvents$.subscribe(event => {
+        this.processManagementEditorService.updateProcessLink(event);
+        this.processLinkStateService.stopSaving();
+        this.processLinkStateService.closeModal();
       })
     );
   }

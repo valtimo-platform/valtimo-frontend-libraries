@@ -97,7 +97,9 @@ const CustomRootElement = (props: {
       },
     };
 
-    processManagementEditorService.sendOpenProcessLinkModalEvent(event);
+    processManagementEditorService.sendOpenProcessLinkModalEvent(event, () => {
+      modeling.updateProperties(element, {});
+    });
   };
 
   return processLink

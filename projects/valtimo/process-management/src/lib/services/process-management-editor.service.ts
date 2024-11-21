@@ -19,7 +19,7 @@ import {ProcessDefinition} from '@valtimo/process';
 import {BehaviorSubject, filter, Observable, Subject, Subscription} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
-import {ProcessLink, ProcessLinkService} from '@valtimo/process-link';
+import {ProcessLink, ProcessLinkService, ProcessLinkUpdateEvent} from '@valtimo/process-link';
 import {OpenProcessLinkModalEvent} from '../models';
 
 @Injectable()
@@ -62,6 +62,8 @@ export class ProcessManagementEditorService implements OnDestroy {
     this._selectionProcessDefinitionSubject$.next(definition);
   }
 
+  private _updateBpmnViewFunction!: () => void;
+
   constructor(private readonly processLinkService: ProcessLinkService) {
     this.openSelectedProcessDefinitionSubscription();
   }
@@ -70,8 +72,26 @@ export class ProcessManagementEditorService implements OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
-  public sendOpenProcessLinkModalEvent(event: OpenProcessLinkModalEvent): void {
+  public sendOpenProcessLinkModalEvent(
+    event: OpenProcessLinkModalEvent,
+    updateBpmnViewFunction: () => void
+  ): void {
+    this._updateBpmnViewFunction = updateBpmnViewFunction;
     this._openProcessLinkModalEvents$.next(event);
+  }
+
+  public updateProcessLink(event: ProcessLinkUpdateEvent): void {
+    this.setProcessLinksForSelectedDefinition(
+      this.processLinksForSelectedDefinition.map(processLink => {
+        if (processLink.id === event.id) {
+          return {...processLink, ...(event as any)};
+        }
+
+        return processLink;
+      })
+    );
+
+    this.updateBpmnView();
   }
 
   private openSelectedProcessDefinitionSubscription(): void {
@@ -82,9 +102,18 @@ export class ProcessManagementEditorService implements OnDestroy {
     );
   }
 
+  private setProcessLinksForSelectedDefinition(processLinks: ProcessLink[]): void {
+    this._processLinksForSelectedDefinition$.next(processLinks);
+  }
+
   private fetchProcessLinksForDefinition(processDefinitionId: string): void {
     this.processLinkService.getProcessLink({processDefinitionId}).subscribe(res => {
-      this._processLinksForSelectedDefinition$.next(res);
+      this.setProcessLinksForSelectedDefinition(res);
     });
+  }
+
+  private updateBpmnView(): void {
+    if (!this._updateBpmnViewFunction) return;
+    this._updateBpmnViewFunction();
   }
 }

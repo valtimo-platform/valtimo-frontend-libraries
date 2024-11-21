@@ -151,6 +151,27 @@ interface TaskWithProcessLink {
   processLinkActivityResult: TaskProcessLinkResult;
 }
 
+type ProcessLinkUpdateEvent =
+  | PluginProcessLinkUpdateDto
+  | FormFlowProcessLinkUpdateRequestDto
+  | FormProcessLinkUpdateRequestDto
+  | URLProcessLinkUpdateRequestDto;
+
+type ProcessLinkCreateEvent =
+  | FormProcessLinkCreateRequestDto
+  | FormFlowProcessLinkCreateRequestDto
+  | PluginProcessLinkCreateDto
+  | URLProcessLinkCreateDto;
+
+interface ProcessLinkDeleteEvent {
+  processLinkId: string;
+}
+
+enum ProcessLinkEditMode {
+  SAVE_TO_BACKEND,
+  EMIT_EVENTS,
+}
+
 export {
   GetProcessLinkRequest,
   ProcessLink,
@@ -170,4 +191,8 @@ export {
   TaskProcessLinkType,
   TaskProcessLinkResult,
   TaskWithProcessLink,
+  ProcessLinkUpdateEvent,
+  ProcessLinkCreateEvent,
+  ProcessLinkDeleteEvent,
+  ProcessLinkEditMode,
 };
