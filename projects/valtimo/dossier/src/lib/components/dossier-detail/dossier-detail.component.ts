@@ -129,32 +129,44 @@ export class DossierDetailComponent
     filter(key => !!key)
   );
 
-  public readonly document$: Observable<ValtimoDocument | null> =
-    this.dossierService.refreshDocument$.pipe(
-      switchMap(() => this.route.params),
-      map((params: Params) => params?.documentId),
-      switchMap((documentId: string) =>
-        documentId ? this.documentService.getDocument(this.documentId) : of(null)
-      ),
-      tap((document: ValtimoDocument | null) => {
-        if (document) {
-          this.assigneeId$.next(document.assigneeId);
-          this.document = document;
-          this._caseStatusKey$.next(document?.internalStatus || 'NOT_AVAILABLE');
-
-          if (
-            this.configService.config.customDossierHeader?.hasOwnProperty(
-              this.documentDefinitionName.toLowerCase()
-            ) &&
-            this.customDossierHeaderItems.length === 0
-          ) {
-            this.configService.config.customDossierHeader[
-              this.documentDefinitionName.toLowerCase()
-            ]?.forEach(item => this.getCustomDossierHeaderItem(item));
-          }
-        }
+  public readonly canView$: Observable<boolean> = this.route.paramMap.pipe(
+    switchMap((params: ParamMap) =>
+      this.permissionService.requestPermission(CAN_VIEW_CASE_PERMISSION, {
+        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        identifier: params.get('documentId') ?? '',
       })
-    );
+    )
+  );
+
+  public readonly document$: Observable<ValtimoDocument | null> = combineLatest([
+    this.dossierService.refreshDocument$,
+    this.canView$,
+  ]).pipe(
+    filter(([_, canView]) => canView),
+    switchMap(() => this.route.params),
+    map((params: Params) => params?.documentId),
+    switchMap((documentId: string) =>
+      documentId ? this.documentService.getDocument(this.documentId) : of(null)
+    ),
+    tap((document: ValtimoDocument | null) => {
+      if (document) {
+        this.assigneeId$.next(document.assigneeId);
+        this.document = document;
+        this._caseStatusKey$.next(document?.internalStatus || 'NOT_AVAILABLE');
+
+        if (
+          this.configService.config.customDossierHeader?.hasOwnProperty(
+            this.documentDefinitionName.toLowerCase()
+          ) &&
+          this.customDossierHeaderItems.length === 0
+        ) {
+          this.configService.config.customDossierHeader[
+            this.documentDefinitionName.toLowerCase()
+          ]?.forEach(item => this.getCustomDossierHeaderItem(item));
+        }
+      }
+    })
+  );
 
   public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.documentDefinitionName || '')
@@ -220,15 +232,6 @@ export class DossierDetailComponent
   public readonly canClaim$: Observable<boolean> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) =>
       this.permissionService.requestPermission(CAN_CLAIM_CASE_PERMISSION, {
-        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
-        identifier: params.get('documentId') ?? '',
-      })
-    )
-  );
-
-  public readonly canView$: Observable<boolean> = this.route.paramMap.pipe(
-    switchMap((params: ParamMap) =>
-      this.permissionService.requestPermission(CAN_VIEW_CASE_PERMISSION, {
         resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
         identifier: params.get('documentId') ?? '',
       })
@@ -308,7 +311,6 @@ export class DossierDetailComponent
   public ngAfterViewInit(): void {
     this.initTabLoader();
     this.initBreadcrumb();
-    this.getAllAssociatedProcessDefinitions();
     this.openWidthObserver();
     this.pageTitleService.disableReset();
     this.iconService.registerAll([ChevronDown16]);
@@ -494,6 +496,8 @@ export class DossierDetailComponent
             this.noTabsConfigured$.next(true);
             this.loadingTabs$.next(false);
           }
+
+          this.getAllAssociatedProcessDefinitions();
         } else {
           this.showNoAccess$.next(true);
           this.loadingTabs$.next(false);
