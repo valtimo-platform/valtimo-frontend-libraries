@@ -16,10 +16,11 @@
 
 import {Injectable, OnDestroy} from '@angular/core';
 import {ProcessDefinition} from '@valtimo/process';
-import {BehaviorSubject, filter, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, filter, Observable, Subject, Subscription} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
 import {ProcessLink, ProcessLinkService} from '@valtimo/process-link';
+import {OpenProcessLinkModalEvent} from '../models';
 
 @Injectable()
 export class ProcessManagementEditorService implements OnDestroy {
@@ -31,6 +32,10 @@ export class ProcessManagementEditorService implements OnDestroy {
       filter(selectedProcessDefinition => !!selectedProcessDefinition?.id),
       distinctUntilChanged((previous, current) => isEqual(previous, current))
     );
+  }
+
+  public get selectionProcessDefinition(): ProcessDefinition {
+    return this._selectionProcessDefinitionSubject$.getValue();
   }
 
   private readonly _processLinksForSelectedDefinition$ = new BehaviorSubject<ProcessLink[]>([]);
@@ -47,6 +52,12 @@ export class ProcessManagementEditorService implements OnDestroy {
 
   private readonly _subscriptions = new Subscription();
 
+  private readonly _openProcessLinkModalEvents$ = new Subject<OpenProcessLinkModalEvent>();
+
+  public get openProcessLinkModalEvents$(): Observable<OpenProcessLinkModalEvent> {
+    return this._openProcessLinkModalEvents$.asObservable();
+  }
+
   public setSelectedProcessDefinition(definition: ProcessDefinition): void {
     this._selectionProcessDefinitionSubject$.next(definition);
   }
@@ -57,6 +68,10 @@ export class ProcessManagementEditorService implements OnDestroy {
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+  }
+
+  public sendOpenProcessLinkModalEvent(event: OpenProcessLinkModalEvent): void {
+    this._openProcessLinkModalEvents$.next(event);
   }
 
   private openSelectedProcessDefinitionSubscription(): void {

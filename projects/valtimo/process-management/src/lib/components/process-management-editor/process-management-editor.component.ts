@@ -18,6 +18,7 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angul
 import {CommonModule} from '@angular/common';
 import {
   FitPageDirectiveModule,
+  ModalService,
   PageHeaderService,
   PageTitleService,
   RenderInPageHeaderDirectiveModule,
@@ -32,6 +33,7 @@ import {
   Observable,
   startWith,
   Subject,
+  Subscription,
   switchMap,
   take,
   tap,
@@ -67,6 +69,7 @@ import {ProcessManagementWindow} from '../../models';
 import {
   ProcessLinkButtonService,
   ProcessLinkModule,
+  ProcessLinkService,
   ProcessLinkStateService,
   ProcessLinkStepService,
 } from '@valtimo/process-link';
@@ -172,6 +175,8 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
+  private readonly _subscriptions = new Subscription();
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly processService: ProcessService,
@@ -179,7 +184,10 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     private readonly translateService: TranslateService,
     private readonly iconService: IconService,
     private readonly pageHeaderService: PageHeaderService,
-    private readonly processManagementEditorService: ProcessManagementEditorService
+    private readonly processManagementEditorService: ProcessManagementEditorService,
+    private readonly modalService: ModalService,
+    private readonly processLinkService: ProcessLinkService,
+    private readonly processLinkStateService: ProcessLinkStateService
   ) {
     this.iconService.registerAll([Deploy16]);
     (window as any as ProcessManagementWindow).processManagementEditorService =
@@ -190,11 +198,13 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   public ngAfterViewInit(): void {
     this.initModeler();
     this.initViewer();
+    this.subscribeToOpenProcessLinkModalEvents();
   }
 
   public ngOnDestroy(): void {
     this._bpmnModeler?.destroy();
     this._bpmnViewer?.destroy();
+    this._subscriptions.unsubscribe();
   }
 
   public deployChanges(): void {
@@ -260,5 +270,13 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
 
   private reload(): void {
     this._reload$.next(null);
+  }
+
+  private subscribeToOpenProcessLinkModalEvents(): void {
+    this._subscriptions.add(
+      this.processManagementEditorService.openProcessLinkModalEvents$.subscribe(event => {
+        console.log('open event', event);
+      })
+    );
   }
 }

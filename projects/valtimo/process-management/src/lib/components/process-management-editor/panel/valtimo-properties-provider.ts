@@ -2,9 +2,10 @@ import {useService} from 'bpmn-js-properties-panel';
 import {html} from 'htm/preact';
 import {is} from 'bpmn-js/lib/util/ModelUtil';
 import {ProcessManagementEditorService} from '../../../services';
-import {BpmnElement, ProcessManagementWindow} from '../../../models';
+import {BpmnElement, OpenProcessLinkModalEvent, ProcessManagementWindow} from '../../../models';
 import {ProcessLink} from '@valtimo/process-link';
 import {TranslateService} from '@ngx-translate/core';
+import {mapActivityTypeToActivityListenerType} from '../../../utils';
 
 class ValtimoPropertiesProvider {
   static $inject = ['propertiesPanel', 'translate'];
@@ -27,12 +28,15 @@ class ValtimoPropertiesProvider {
         processLink => processLink.activityId === element.id
       ) || null;
 
+    console.log('element as in', element);
 
     return (groups: any[]) => {
+      // process links are possible for these process elements
       if (
         is(element, 'bpmn:UserTask') ||
         is(element, 'bpmn:StartEvent') ||
-        is(element, 'bpmn:ServiceTask')
+        is(element, 'bpmn:ServiceTask') ||
+        is(element, 'bpmn:CallActivity')
       ) {
         const customGroup = {
           id: 'customRootGroup',
@@ -49,6 +53,7 @@ class ValtimoPropertiesProvider {
   public createCustomRootElement(element: any, processLink: ProcessLink | null): any {
     return {
       translateService: this.translateService,
+      processManagementEditorService: this.processManagementEditorService,
       id: 'customRootElement',
       processLink,
       element,
@@ -58,28 +63,67 @@ class ValtimoPropertiesProvider {
   }
 }
 
-const CustomRootElement = (props: any): any => {
-  const {element, processLink, translateService} = props;
+const CustomRootElement = (props: {
+  translateService: TranslateService;
+  processManagementEditorService: ProcessManagementEditorService;
+  id: string;
+  processLink: ProcessLink;
+  element: BpmnElement;
+}): any => {
+  const {element, processLink, translateService, processManagementEditorService} = props;
   const modeling = useService('modeling');
-  const editProcessLinkText = translateService.instant('interface.edit')
-  const unlinkText = translateService.instant('processLink.unlink')
-  const createText = translateService.instant('processLink.create')
-  console.log("process link", processLink)
+  const editProcessLinkText = translateService.instant('interface.edit');
+  const unlinkText = translateService.instant('processLink.unlink');
+  const createText = translateService.instant('processLink.create');
+  console.log('process link', processLink);
 
   const handleClick = () => {
     // trigger update
     modeling.updateProperties(element, {});
   };
 
-  return processLink ? html`
-  <div class="process-link-properties-panel">
-    <button class="cds--btn cds--btn--primary cds--btn--md cds--layout--size-md" onClick=${handleClick}>${editProcessLinkText}</button>
-    <button class="cds--btn cds--btn--danger cds--btn--md cds--layout--side-md" onClick=${handleClick}>${unlinkText}</button>
-  </div>` : html`
-  <div class="process-link-properties-panel">
-    <button class="cds--btn cds--btn--primary cds--btn--md cds--layout--size-md" onClick=${handleClick}>${createText}</button>
-  </div>`
-}
+  const handleEditClick = () => {
+    const event: OpenProcessLinkModalEvent = {
+      processLink,
+      modalParams: {
+        processDefinitionKey: processManagementEditorService.selectionProcessDefinition.key,
+        processDefinitionId: processManagementEditorService.selectionProcessDefinition.id,
+        element: {
+          id: element.id,
+          type: element.type,
+          activityListenerType: mapActivityTypeToActivityListenerType(element.type),
+          name: element.di.bpmnElement.name,
+        },
+      },
+    };
+
+    processManagementEditorService.sendOpenProcessLinkModalEvent(event);
+  };
+
+  return processLink
+    ? html` <div class="process-link-properties-panel">
+        <button
+          class="cds--btn cds--btn--primary cds--btn--md cds--layout--size-md"
+          onClick=${handleEditClick}
+        >
+          ${editProcessLinkText}
+        </button>
+        <button
+          class="cds--btn cds--btn--danger cds--btn--md cds--layout--side-md"
+          onClick=${handleClick}
+        >
+          ${unlinkText}
+        </button>
+      </div>`
+    : html` <div class="process-link-properties-panel">
+        <button
+          class="cds--btn cds--btn--primary cds--btn--md cds--layout--size-md"
+          onClick=${handleClick}
+        >
+          ${createText}
+        </button>
+      </div>`;
+};
 
 const valtimoPropertiesProviderModule = {
   __init__: ['customPropertiesProvider'],

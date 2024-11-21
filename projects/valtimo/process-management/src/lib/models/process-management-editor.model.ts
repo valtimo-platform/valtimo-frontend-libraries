@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-export * from './window.model';
-export * from './bpmn.model';
-export * from './process-management-editor.model';
+import {ModalParams, ProcessLink} from '@valtimo/process-link';
+
+interface OpenProcessLinkModalEvent {
+  modalParams: ModalParams;
+  processLink?: ProcessLink;
+}
+
+export {OpenProcessLinkModalEvent};

@@ -41,9 +41,9 @@ export class ProcessLinkComponent {
   openModal(params: ModalParams): void {
     const activityType = params?.element?.activityListenerType;
 
-    console.log('maxim');
-
     this.modalService.setModalData(params);
+
+    console.log('set modal data', params);
 
     if (activityType) {
       this.processLinkService
@@ -64,12 +64,19 @@ export class ProcessLinkComponent {
             const processLink = result.processLink;
 
             this.stateService.setModalParams(params);
+
+            console.log('set modal params in state service', params);
+
             this.stateService.setElementName(params?.element?.name);
+
+            console.log('set element name data', params?.element?.name);
 
             if (processLink) {
               this.stateService.selectProcessLink(processLink);
+              console.log('set process link', processLink);
             } else {
               this.stateService.setAvailableProcessLinkTypes(result);
+              console.log('set available links', result);
             }
 
             if (result?.length > 0 || processLink) {

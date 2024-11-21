@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
-export * from './window.model';
-export * from './bpmn.model';
-export * from './process-management-editor.model';
+const mapActivityTypeToActivityListenerType = (activityType: string): string => {
+  if (activityType === 'bpmn:UserTask') {
+    return activityType + ':create';
+  } else {
+    return activityType + ':start';
+  }
+};
+
+export {mapActivityTypeToActivityListenerType};

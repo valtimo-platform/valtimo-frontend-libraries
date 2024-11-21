@@ -14,6 +14,4 @@
  * limitations under the License.
  */
 
-export * from './window.model';
-export * from './bpmn.model';
-export * from './process-management-editor.model';
+export * from './bpmn.utils';
