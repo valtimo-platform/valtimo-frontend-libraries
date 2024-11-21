@@ -19,7 +19,12 @@ import {ProcessDefinition} from '@valtimo/process';
 import {BehaviorSubject, filter, Observable, Subject, Subscription} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
-import {ProcessLink, ProcessLinkService, ProcessLinkUpdateEvent} from '@valtimo/process-link';
+import {
+  ProcessLink,
+  ProcessLinkDeleteEvent,
+  ProcessLinkService,
+  ProcessLinkUpdateEvent,
+} from '@valtimo/process-link';
 import {OpenProcessLinkModalEvent} from '../models';
 
 @Injectable()
@@ -89,6 +94,23 @@ export class ProcessManagementEditorService implements OnDestroy {
 
         return processLink;
       })
+    );
+
+    this.updateBpmnView();
+  }
+
+  public deleteProcessLink(
+    event: ProcessLinkDeleteEvent,
+    updateBpmnViewFunction?: () => void
+  ): void {
+    if (updateBpmnViewFunction) {
+      this._updateBpmnViewFunction = updateBpmnViewFunction;
+    }
+
+    this.setProcessLinksForSelectedDefinition(
+      this.processLinksForSelectedDefinition.filter(
+        processLink => processLink.id !== event.processLinkId
+      )
     );
 
     this.updateBpmnView();

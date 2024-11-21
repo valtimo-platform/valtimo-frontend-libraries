@@ -102,6 +102,12 @@ const CustomRootElement = (props: {
     });
   };
 
+  const handleUnlinkClick = () => {
+    processManagementEditorService.deleteProcessLink({processLinkId: processLink.id}, () => {
+      modeling.updateProperties(element, {});
+    });
+  };
+
   return processLink
     ? html` <div class="process-link-properties-panel">
         <button
@@ -112,7 +118,7 @@ const CustomRootElement = (props: {
         </button>
         <button
           class="cds--btn cds--btn--danger cds--btn--md cds--layout--side-md"
-          onClick=${handleClick}
+          onClick=${handleUnlinkClick}
         >
           ${unlinkText}
         </button>
