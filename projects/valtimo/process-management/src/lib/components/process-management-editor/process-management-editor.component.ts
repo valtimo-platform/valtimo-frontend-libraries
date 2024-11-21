@@ -275,7 +275,11 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   private subscribeToOpenProcessLinkModalEvents(): void {
     this._subscriptions.add(
       this.processManagementEditorService.openProcessLinkModalEvents$.subscribe(event => {
-        console.log('open event', event);
+        this.modalService.setModalData(event?.modalParams);
+        this.processLinkStateService.setModalParams(event?.modalParams);
+        this.processLinkStateService.setElementName(event?.modalParams?.element?.name);
+        this.processLinkStateService.selectProcessLink(event.processLink);
+        this.processLinkStateService.showModal();
       })
     );
   }
