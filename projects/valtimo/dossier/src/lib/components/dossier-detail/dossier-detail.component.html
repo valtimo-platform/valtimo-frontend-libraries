@@ -182,6 +182,17 @@
   </cds-overflow-menu-option>
 </ng-template>
 
+<ng-template #deleteButton let-canDelete="canDelete">
+  <cds-overflow-menu-option
+          *ngIf="canDelete"
+          [disabled]="(isDeleting$ | async)"
+          (click)="deleteDocument()"
+          type="danger"
+  >
+    <span>{{ 'dossier.delete.delete' | translate }}</span>
+  </cds-overflow-menu-option>
+</ng-template>
+
 <ng-template #customStartTrigger>
   <button
     [size]="(compactMode$ | async) ? 'sm' : 'lg'"
@@ -195,6 +206,15 @@
   </button>
 </ng-template>
 
+<valtimo-confirmation-modal
+        confirmButtonTextTranslationKey="dossier.delete.confirm"
+        confirmButtonType="danger"
+        contentTranslationKey="dossier.delete.description"
+        [showModalSubject$]="showDeleteModal$"
+        titleTranslationKey="dossier.delete.title"
+        (confirmEvent)="onConfirmDelete()"
+></valtimo-confirmation-modal>
+
 <ng-container renderInPageHeader [fullWidth]="true">
   <ng-template>
     <div
@@ -205,6 +225,7 @@
         canAssign: canAssign$ | async,
         canClaim: canClaim$ | async,
         canHaveAssignee: canHaveAssignee$ | async,
+        canDelete: canDelete$ | async,
         document: document$ | async,
         caseStatus: caseStatus$ | async,
       } as obs"
@@ -236,7 +257,7 @@
       <div class="buttons-container">
         <cds-overflow-menu
           [ngClass]="{'--compact': compactMode$ | async}"
-          *ngIf="obs.canHaveAssignee"
+          *ngIf="obs.canHaveAssignee || obs.canDelete"
           flip="true"
           [offset]="(compactMode$ | async) ? {y: 48, x: -4} : {y: 48, x: 4}"
           class="overflow-button assign-overflow"
@@ -251,6 +272,13 @@
           <cds-overflow-menu-option (selected)="unassignAssignee()" [disabled]="!obs.assigneeId">
             {{ 'assignDocument.remove' | translate }}
           </cds-overflow-menu-option>
+          <ng-container
+            *ngTemplateOutlet="
+              deleteButton;
+              context: {canDelete: obs.canDelete}
+            "
+          >
+          </ng-container>
         </cds-overflow-menu>
 
         <cds-overflow-menu

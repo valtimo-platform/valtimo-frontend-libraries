@@ -76,6 +76,7 @@ import {TabImpl, TabLoaderImpl} from '../../models';
 import {
   CAN_ASSIGN_CASE_PERMISSION,
   CAN_CLAIM_CASE_PERMISSION,
+  CAN_DELETE_CASE_PERMISSION,
   DOSSIER_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
 import {DossierDetailLayoutService, DossierService, DossierTabService} from '../../services';
@@ -126,6 +127,8 @@ export class DossierDetailComponent
   public readonly caseStatusKey$: Observable<string | 'NOT_AVAILABLE'> = this._caseStatusKey$.pipe(
     filter(key => !!key)
   );
+
+  public readonly showDeleteModal$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   public readonly document$: Observable<ValtimoDocument | null> =
     this.dossierService.refreshDocument$.pipe(
@@ -202,6 +205,8 @@ export class DossierDetailComponent
     map(caseSettings => caseSettings?.canHaveAssignee)
   );
 
+  public readonly isDeleting$ = new BehaviorSubject<boolean>(false);
+
   public readonly canAssignLoaded$ = new BehaviorSubject<boolean>(false);
   public readonly canAssign$: Observable<boolean> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) =>
@@ -222,6 +227,19 @@ export class DossierDetailComponent
         identifier: params.get('documentId') ?? '',
       })
     )
+  );
+
+  public readonly canDeleteLoaded$ = new BehaviorSubject<boolean>(false);
+  public readonly canDelete$: Observable<boolean> = this.route.paramMap.pipe(
+    switchMap((params: ParamMap) =>
+      this.permissionService.requestPermission(CAN_DELETE_CASE_PERMISSION, {
+        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        identifier: params.get('documentId') ?? '',
+      })
+    ),
+    tap(() => {
+      this.canDeleteLoaded$.next(true);
+    })
   );
 
   public readonly loadingTabs$ = new BehaviorSubject<boolean>(true);
@@ -371,6 +389,24 @@ export class DossierDetailComponent
           this.logger.debug('Something went wrong while unassigning user from case');
         },
       });
+  }
+
+  public deleteDocument(): void {
+    this.showDeleteModal$.next(true);
+  }
+
+  public onConfirmDelete(): void {
+    this.documentService.deleteDocument(this.documentId).subscribe({
+      next: (): void => {
+        this.isAssigning$.next(false);
+        this.showDeleteModal$.next(false);
+        this.router.navigate([`/dossiers/${this.documentDefinitionName}`]);
+      },
+      error: (): void => {
+        this.isAssigning$.next(false);
+        this.logger.debug('Something went wrong while deleting the case');
+      },
+    });
   }
 
   public onTaskClickEvent(taskProcessLinkResult: TaskWithProcessLink): void {
