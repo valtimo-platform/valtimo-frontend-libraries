@@ -48,7 +48,6 @@ export class TaskDetailModalComponent implements OnInit {
   @ViewChild('taskDetailModal') private readonly _modal: Modal;
   @ViewChild(TaskDetailIntermediateSaveComponent)
   private readonly _intermediateSaveComponent: TaskDetailIntermediateSaveComponent;
-
   @Output() formSubmit = new EventEmitter();
   @Output() assignmentOfTaskChanged = new EventEmitter();
 
@@ -106,7 +105,7 @@ export class TaskDetailModalComponent implements OnInit {
   }
 
   public openTaskDetails(task: Task | null): void {
-    this.task$.next(task);
+    this.task$.next({...task});
     this.page$.next({
       title: task?.name,
       subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${task?.created}`,
