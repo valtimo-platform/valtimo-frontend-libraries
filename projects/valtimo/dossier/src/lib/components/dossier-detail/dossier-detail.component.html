@@ -191,6 +191,16 @@
   </cds-overflow-menu-option>
 </ng-template>
 
+<ng-template #unassignButton let-canHaveAssignee="canHaveAssignee" let-assigneeId="assigneeId">
+  <cds-overflow-menu-option
+    *ngIf="canHaveAssignee"
+    [disabled]="!assigneeId"
+    (selected)="unassignAssignee()"
+  >
+    <span>{{ 'assignDocument.remove' | translate }}</span>
+  </cds-overflow-menu-option>
+</ng-template>
+
 <ng-template #deleteButton let-canDelete="canDelete">
   <cds-overflow-menu-option
           *ngIf="canDelete"
@@ -278,9 +288,13 @@
             "
           >
           </ng-container>
-          <cds-overflow-menu-option (selected)="unassignAssignee()" [disabled]="!obs.assigneeId">
-            {{ 'assignDocument.remove' | translate }}
-          </cds-overflow-menu-option>
+          <ng-container
+            *ngTemplateOutlet="
+              unassignButton;
+              context: {canHaveAssignee: obs.canHaveAssignee, assigneeId: obs.assigneeId}
+            "
+          >
+          </ng-container>
           <ng-container
             *ngTemplateOutlet="
               deleteButton;

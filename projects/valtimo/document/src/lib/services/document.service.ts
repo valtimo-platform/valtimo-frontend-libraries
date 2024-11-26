@@ -274,8 +274,8 @@ export class DocumentService {
     return this.http.put<DocumentResult>(`${this.valtimoEndpointUri}v1/document`, document);
   }
 
-  public deleteDocument(documentId: string): Observable<any> {
-    return this.http.delete(`${this.valtimoEndpointUri}v1/document/${documentId}`);
+  public deleteDocument(documentId: string): Observable<void> {
+    return this.http.delete<void>(`${this.valtimoEndpointUri}v1/document/${documentId}`);
   }
 
   // ProcessDocument-calls

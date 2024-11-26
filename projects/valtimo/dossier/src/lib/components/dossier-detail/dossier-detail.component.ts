@@ -218,8 +218,6 @@ export class DossierDetailComponent
     map(caseSettings => caseSettings?.canHaveAssignee)
   );
 
-  public readonly isDeleting$ = new BehaviorSubject<boolean>(false);
-
   public readonly canAssignLoaded$ = new BehaviorSubject<boolean>(false);
   public readonly canAssign$: Observable<boolean> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) =>
@@ -242,17 +240,14 @@ export class DossierDetailComponent
     )
   );
 
-  public readonly canDeleteLoaded$ = new BehaviorSubject<boolean>(false);
+  public readonly isDeleting$ = new BehaviorSubject<boolean>(false);
   public readonly canDelete$: Observable<boolean> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) =>
       this.permissionService.requestPermission(CAN_DELETE_CASE_PERMISSION, {
         resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
         identifier: params.get('documentId') ?? '',
       })
-    ),
-    tap(() => {
-      this.canDeleteLoaded$.next(true);
-    })
+    )
   );
 
   public readonly loadingTabs$ = new BehaviorSubject<boolean>(true);
@@ -409,14 +404,15 @@ export class DossierDetailComponent
   }
 
   public onConfirmDelete(): void {
+    this.isDeleting$.next(true);
     this.documentService.deleteDocument(this.documentId).subscribe({
       next: (): void => {
-        this.isAssigning$.next(false);
+        this.isDeleting$.next(false);
         this.showDeleteModal$.next(false);
         this.router.navigate([`/dossiers/${this.documentDefinitionName}`]);
       },
       error: (): void => {
-        this.isAssigning$.next(false);
+        this.isDeleting$.next(false);
         this.logger.debug('Something went wrong while deleting the case');
       },
     });
