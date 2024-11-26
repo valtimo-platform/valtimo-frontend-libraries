@@ -23,6 +23,7 @@ import {
 } from '../../services';
 import {take} from 'rxjs/operators';
 import {ConfigService} from '@valtimo/config';
+import {ProcessLinkEditMode} from '../../models';
 
 @Component({
   selector: 'valtimo-process-link-modal',
@@ -77,6 +78,11 @@ export class ProcessLinkModalComponent {
     this.stateService.startSaving();
 
     this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
+      if (this.stateService.processLinkEditMode === ProcessLinkEditMode.EMIT_EVENTS) {
+        this.stateService.sendProcessLinkDeleteEvent({processLinkId: selectedProcessLink.id});
+        return;
+      }
+
       this.processLinkService.deleteProcessLink(selectedProcessLink.id).subscribe(
         () => {
           this.stateService.closeModal();

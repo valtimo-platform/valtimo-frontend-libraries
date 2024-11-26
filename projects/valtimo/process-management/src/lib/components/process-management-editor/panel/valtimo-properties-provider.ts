@@ -6,6 +6,7 @@ import {BpmnElement, OpenProcessLinkModalEvent, ProcessManagementWindow} from '.
 import {ModalParams, ProcessLink} from '@valtimo/process-link';
 import {TranslateService} from '@ngx-translate/core';
 import {mapActivityTypeToActivityListenerType} from '../../../utils';
+import {VNode} from 'preact';
 
 class ValtimoPropertiesProvider {
   static $inject = ['propertiesPanel', 'translate'];
@@ -28,10 +29,7 @@ class ValtimoPropertiesProvider {
         processLink => processLink.activityId === element.id
       ) || null;
 
-    console.log('element as in', element);
-
     return (groups: any[]) => {
-      // process links are possible for these process elements
       if (
         is(element, 'bpmn:UserTask') ||
         is(element, 'bpmn:StartEvent') ||
@@ -42,9 +40,9 @@ class ValtimoPropertiesProvider {
           id: 'customRootGroup',
           label: 'Process link',
           entries: [this.createCustomRootElement(element, processLink)],
-          groupType: 'root', // Mark this group as root level
+          groupType: 'root',
         };
-        groups.unshift(customGroup); // Add to the top of the panel
+        groups.unshift(customGroup);
       }
       return groups;
     };
@@ -69,13 +67,12 @@ const CustomRootElement = (props: {
   id: string;
   processLink: ProcessLink;
   element: BpmnElement;
-}): any => {
+}): VNode => {
   const {element, processLink, translateService, processManagementEditorService} = props;
   const modeling = useService('modeling');
   const editProcessLinkText = translateService.instant('interface.edit');
   const unlinkText = translateService.instant('processLink.unlink');
   const createText = translateService.instant('processLink.create');
-  console.log('process link', processLink);
 
   const modalParams: ModalParams = {
     processDefinitionKey: processManagementEditorService.selectionProcessDefinition.key,
@@ -88,7 +85,7 @@ const CustomRootElement = (props: {
     },
   };
 
-  const handleCreateClick = () => {
+  const handleCreateClick = (): void => {
     const event: OpenProcessLinkModalEvent = {
       modalParams,
     };
@@ -98,7 +95,7 @@ const CustomRootElement = (props: {
     });
   };
 
-  const handleEditClick = () => {
+  const handleEditClick = (): void => {
     const event: OpenProcessLinkModalEvent = {
       processLink,
       modalParams,
@@ -109,7 +106,7 @@ const CustomRootElement = (props: {
     });
   };
 
-  const handleUnlinkClick = () => {
+  const handleUnlinkClick = (): void => {
     processManagementEditorService.deleteProcessLink({processLinkId: processLink.id}, () => {
       modeling.updateProperties(element, {});
     });

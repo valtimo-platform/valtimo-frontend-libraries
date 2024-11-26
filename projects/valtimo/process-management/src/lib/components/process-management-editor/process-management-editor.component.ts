@@ -68,6 +68,7 @@ import {ProcessManagementEditorService} from '../../services';
 import {OpenProcessLinkModalEvent, ProcessManagementWindow} from '../../models';
 import {
   ProcessLinkButtonService,
+  ProcessLinkCreateEvent,
   ProcessLinkEditMode,
   ProcessLinkModule,
   ProcessLinkService,
@@ -202,6 +203,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this.subscribeToOpenProcessLinkModalEvents();
     this.subscribeToProcessLinkUpdateEvents();
     this.subscribeToProcessLinkCreateEvents();
+    this.subscribeToProcessLinkDeleteEvents();
     this.processLinkStateService.setEditMode(ProcessLinkEditMode.EMIT_EVENTS);
   }
 
@@ -212,10 +214,18 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   }
 
   public deployChanges(): void {
-    from(this._bpmnModeler.saveXML())
+    combineLatest([
+      from(this._bpmnModeler.saveXML()),
+      this.processManagementEditorService.processLinksForSelectedDefinition$,
+    ])
       .pipe(
         take(1),
-        switchMap(result => this.processService.deployProcess(result.xml))
+        switchMap(([result, processLinks]) =>
+          this.processLinkService.deployProcessWithProcessLinks(
+            result.xml,
+            processLinks as ProcessLinkCreateEvent[]
+          )
+        )
       )
       .subscribe(() => {
         this.reload();
@@ -322,6 +332,16 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this._subscriptions.add(
       this.processLinkStateService.processLinkCreateEvents$.subscribe(event => {
         this.processManagementEditorService.createProcessLink(event);
+        this.processLinkStateService.stopSaving();
+        this.processLinkStateService.closeModal();
+      })
+    );
+  }
+
+  private subscribeToProcessLinkDeleteEvents(): void {
+    this._subscriptions.add(
+      this.processLinkStateService.processLinkDeleteEvents$.subscribe(event => {
+        this.processManagementEditorService.deleteProcessLink(event);
         this.processLinkStateService.stopSaving();
         this.processLinkStateService.closeModal();
       })
