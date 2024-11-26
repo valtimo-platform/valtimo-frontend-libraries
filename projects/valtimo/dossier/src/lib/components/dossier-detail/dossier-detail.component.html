@@ -187,7 +187,7 @@
     [disabled]="(isAssigning$ | async) || (isAssignedToCurrentUser$ | async)"
     (click)="claimAssignee()"
   >
-    <span>{{ 'dossier.claimAssigneeCase' | translate }}</span>
+    {{ 'dossier.claimAssigneeCase' | translate }}
   </cds-overflow-menu-option>
 </ng-template>
 
@@ -197,7 +197,7 @@
     [disabled]="!assigneeId"
     (selected)="unassignAssignee()"
   >
-    <span>{{ 'assignDocument.remove' | translate }}</span>
+    {{ 'assignDocument.remove' | translate }}
   </cds-overflow-menu-option>
 </ng-template>
 
@@ -208,7 +208,7 @@
           (click)="deleteDocument()"
           type="danger"
   >
-    <span>{{ 'dossier.delete.delete' | translate }}</span>
+    {{ 'dossier.delete.delete' | translate }}
   </cds-overflow-menu-option>
 </ng-template>
 
@@ -230,7 +230,7 @@
         confirmButtonType="danger"
         contentTranslationKey="dossier.delete.description"
         [showModalSubject$]="showDeleteModal$"
-        titleTranslationKey="dossier.delete.title"
+        titleTranslationKey="dossier.delete.delete"
         (confirmEvent)="onConfirmDelete()"
 ></valtimo-confirmation-modal>
 

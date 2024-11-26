@@ -166,7 +166,6 @@
     },
     "delete": {
       "delete": "Delete case",
-      "title": "Delete case",
       "description": "Are you sure you want to delete this case and all related information? This action cannot be undone.",
       "confirm": "Delete"
     },

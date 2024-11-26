@@ -166,7 +166,6 @@
     },
     "delete": {
       "delete": "Dossier verwijderen",
-      "title": "Dossier verwijderen",
       "description": "Weet u zeker dat u dit dossier en alle gerelateerde informatie wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
       "confirm": "Verwijderen"
     },
