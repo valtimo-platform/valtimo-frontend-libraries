@@ -61,7 +61,7 @@ import {
 } from 'bpmn-js-properties-panel';
 import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
 import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json';
-import {valtimoPropertiesProviderModule} from './panel';
+import {ValtimoPropertiesProviderModule} from './panel';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {isEqual} from 'lodash';
 import {ProcessManagementEditorService} from '../../services';
@@ -107,6 +107,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
   @ViewChild('modeler', {static: false}) modelerElementRef!: ElementRef;
   @ViewChild('modelerPanel', {static: false}) modelerPanelElementRef!: ElementRef;
   @ViewChild('viewer', {static: false}) viewerElementRef!: ElementRef;
+  @ViewChild('viewerPanel', {static: false}) viewerPanelElementRef!: ElementRef;
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
@@ -213,17 +214,19 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this._subscriptions.unsubscribe();
   }
 
-  public deployChanges(): void {
+  public deployChanges(isReadOnlyProcess: boolean): void {
     combineLatest([
-      from(this._bpmnModeler.saveXML()),
+      isReadOnlyProcess ? from(this._bpmnViewer.saveXML()) : from(this._bpmnModeler.saveXML()),
       this.processManagementEditorService.processLinksForSelectedDefinition$,
+      this.processManagementEditorService.selectionProcessDefinition$,
     ])
       .pipe(
         take(1),
-        switchMap(([result, processLinks]) =>
+        switchMap(([result, processLinks, selectedProcessDefinition]) =>
           this.processLinkService.deployProcessWithProcessLinks(
-            result.xml,
-            processLinks as ProcessLinkCreateEvent[]
+            processLinks as ProcessLinkCreateEvent[],
+            selectedProcessDefinition.id,
+            !isReadOnlyProcess ? result.xml : null
           )
         )
       )
@@ -258,7 +261,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
         BpmnPropertiesProviderModule,
         CamundaPlatformPropertiesProviderModule,
         camundaPlatformBehaviors,
-        valtimoPropertiesProviderModule,
+        ValtimoPropertiesProviderModule,
       ],
       moddleExtensions: {
         camunda: CamundaBpmnModdle,
@@ -267,23 +270,83 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
         parent: this.modelerPanelElementRef.nativeElement,
       },
     });
+
     this._bpmnModeler?.attachTo(this.modelerElementRef.nativeElement);
-    this.listenToModelerEvents();
+
+    this._bpmnModeler.on('commandStack.changed', () => {
+      this.changesPending$.next(true);
+    });
   }
 
   private initViewer(): void {
-    this._bpmnViewer = new NavigatedViewer();
+    const disableCommands = () => {
+      const commandStack = this._bpmnViewer.get('commandStack') as any;
+      const originalExecute = commandStack?.execute?.bind(commandStack);
+
+      if (commandStack?.execute) {
+        commandStack.execute = (command: string, context: any) => {
+          if (
+            command === 'elements.delete' ||
+            command === 'elements.copy' ||
+            command === 'elements.paste' ||
+            command === 'elements.create'
+          ) {
+            return;
+          }
+          originalExecute(command, context);
+        };
+      }
+    };
+
+    const DisableBpmnWriteModule = {
+      paletteProvider: ['value', {}],
+      contextPadProvider: ['value', {}],
+      directEditing: [
+        'value',
+        {
+          registerProvider: () => {},
+          activate: () => {},
+          deactivate: () => {},
+          isActive: () => false,
+        },
+      ],
+      move: ['value', null],
+      resizeHandles: [
+        'value',
+        {
+          addResizer: () => {},
+          removeResizers: () => {},
+        },
+      ],
+    };
+
+    this._bpmnViewer = new Modeler({
+      additionalModules: [
+        DisableBpmnWriteModule,
+        BpmnPropertiesPanelModule,
+        ValtimoPropertiesProviderModule,
+      ],
+      moddleExtensions: {
+        camunda: CamundaBpmnModdle,
+      },
+      propertiesPanel: {
+        parent: this.viewerPanelElementRef.nativeElement,
+      },
+    });
+
     this._bpmnViewer?.attachTo(this.viewerElementRef.nativeElement);
+
+    this._bpmnViewer.on('import.done', () => {
+      disableCommands();
+    });
+
+    this._bpmnViewer.on('commandStack.changed', () => {
+      this.changesPending$.next(true);
+    });
   }
 
   private reload(): void {
     this._reload$.next(null);
-  }
-
-  private listenToModelerEvents(): void {
-    this._bpmnModeler.on('commandStack.changed', () => {
-      this.changesPending$.next(true);
-    });
   }
 
   private handleUpdateEvent(event: OpenProcessLinkModalEvent): void {

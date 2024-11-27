@@ -35,7 +35,11 @@
     <div class="bpmn__modeler-panel" #modelerPanel></div>
   </div>
 
-  <div #viewer class="bpmn__viewer" [style.display]="obs.isReadOnlyProcess ? 'flex' : 'none'"></div>
+  <div class="bpmn__modeler" [style.display]="obs.isReadOnlyProcess ? 'flex' : 'none'">
+    <div class="bpmn__modeler-canvas" #viewer></div>
+
+    <div class="bpmn__modeler-panel" #viewerPanel></div>
+  </div>
 </div>
 
 <valtimo-process-link-modal></valtimo-process-link-modal>
@@ -83,9 +87,9 @@
 
       <div class="page-header-actions__buttons">
         <button
-          [disabled]="!actionsObs.changesPending || actionsObs.isReadOnlyProcess"
+          [disabled]="!actionsObs.changesPending"
           cdsButton="primary"
-          (click)="deployChanges()"
+          (click)="deployChanges(actionsObs.isReadOnlyProcess)"
           [size]="actionsObs.compactMode ? 'sm' : 'md'"
         >
           {{ 'processManagement.deploy' | translate }}

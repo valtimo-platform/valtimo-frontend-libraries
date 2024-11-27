@@ -137,9 +137,9 @@ const CustomRootElement = (props: {
       </div>`;
 };
 
-const valtimoPropertiesProviderModule = {
+const ValtimoPropertiesProviderModule = {
   __init__: ['customPropertiesProvider'],
   customPropertiesProvider: ['type', ValtimoPropertiesProvider],
 };
 
-export {valtimoPropertiesProviderModule};
+export {ValtimoPropertiesProviderModule};

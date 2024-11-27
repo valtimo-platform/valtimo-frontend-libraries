@@ -118,14 +118,16 @@ export class ProcessLinkService {
   }
 
   public deployProcessWithProcessLinks(
-    processXml: string,
-    processLinks: ProcessLinkCreateEvent[] = []
+    processLinks: ProcessLinkCreateEvent[] = [],
+    processDefinitionId: string,
+    processXml: string | null
   ) {
     const formData = new FormData();
     const processLinksBlob = new Blob([JSON.stringify(processLinks)], {type: 'application/json'});
 
-    formData.append('file', new File([processXml], 'process.bpmn'));
+    if (processXml) formData.append('file', new File([processXml], 'process.bpmn'));
     formData.append('processLinks', processLinksBlob);
+    formData.append('processDefinitionId', processDefinitionId);
     formData.append('deployment-name', 'valtimoConsoleApp');
     formData.append('deployment-source', 'process application');
 
