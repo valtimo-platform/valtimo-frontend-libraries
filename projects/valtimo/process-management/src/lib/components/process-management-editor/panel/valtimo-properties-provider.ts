@@ -23,6 +23,15 @@ class ValtimoPropertiesProvider {
     propertiesPanel.registerProvider(500, this);
   }
 
+  private addAsSecondOrFirst<T>(arr: T[], element: T): T[] {
+    if (arr.length === 0) {
+      arr.push(element);
+    } else {
+      arr.splice(1, 0, element);
+    }
+    return arr;
+  }
+
   public getGroups(element: BpmnElement): (groups: any[]) => any[] {
     const processLink: ProcessLink | null =
       this.processManagementEditorService.processLinksForSelectedDefinition.find(
@@ -42,7 +51,7 @@ class ValtimoPropertiesProvider {
           entries: [this.createCustomRootElement(element, processLink)],
           groupType: 'root',
         };
-        groups.unshift(customGroup);
+        this.addAsSecondOrFirst(groups, customGroup);
       }
       return groups;
     };
@@ -75,8 +84,8 @@ const CustomRootElement = (props: {
   const createText = translateService.instant('processLink.create');
 
   const modalParams: ModalParams = {
-    processDefinitionKey: processManagementEditorService.selectionProcessDefinition.key,
-    processDefinitionId: processManagementEditorService.selectionProcessDefinition.id,
+    processDefinitionKey: processManagementEditorService.selectionProcessDefinition?.key,
+    processDefinitionId: processManagementEditorService.selectionProcessDefinition?.id,
     element: {
       id: element.id,
       type: element.type,

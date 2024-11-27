@@ -55,10 +55,11 @@
         isReadOnlyProcess: isReadOnlyProcess$ | async,
         isSystemProcess: isSystemProcess$ | async,
         compactMode: compactMode$ | async,
+        creatingNewProcess: creatingNewProcess$ | async,
       } as actionsObs"
     >
       <div class="page-header-actions__left-container">
-        <div class="page-header-actions__version-dropdown">
+        <div *ngIf="!actionsObs.creatingNewProcess" class="page-header-actions__version-dropdown">
           <cds-dropdown
             (selected)="selectedVersionChange($event)"
             [disabled]="
@@ -97,7 +98,11 @@
         <button
           [disabled]="!actionsObs.changesPending"
           cdsButton="primary"
-          (click)="deployChanges(actionsObs.isReadOnlyProcess)"
+          (click)="
+            !actionsObs.creatingNewProcess
+              ? deployChanges(actionsObs.isReadOnlyProcess)
+              : deployNewProcessDefinition()
+          "
           [size]="actionsObs.compactMode ? 'sm' : 'md'"
         >
           {{ 'processManagement.deploy' | translate }}

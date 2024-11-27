@@ -17,13 +17,14 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
+  CARBON_CONSTANTS,
   FitPageDirectiveModule,
   ModalService,
   PageHeaderService,
   PageTitleService,
   RenderInPageHeaderDirectiveModule,
 } from '@valtimo/components';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   BehaviorSubject,
   combineLatest,
@@ -47,6 +48,8 @@ import {
   IconService,
   ListItem,
   LoadingModule,
+  NotificationModule,
+  NotificationService,
   SelectModule,
   TagModule,
 } from 'carbon-components-angular';
@@ -76,6 +79,7 @@ import {
   ProcessLinkStateService,
   ProcessLinkStepService,
 } from '@valtimo/process-link';
+import {EMPTY_BPMN} from '../../constants';
 
 @Component({
   selector: 'valtimo-process-management-editor',
@@ -97,12 +101,14 @@ import {
     ProcessLinkModule,
     ProcessLinkModule,
     DialogModule,
+    NotificationModule,
   ],
   providers: [
     ProcessManagementEditorService,
     ProcessLinkStateService,
     ProcessLinkStepService,
     ProcessLinkButtonService,
+    NotificationService,
   ],
 })
 export class ProcessManagementEditorComponent implements AfterViewInit, OnDestroy {
@@ -180,6 +186,8 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
+  public readonly creatingNewProcess$ = new BehaviorSubject<boolean>(false);
+
   private readonly _subscriptions = new Subscription();
 
   constructor(
@@ -192,7 +200,9 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     private readonly processManagementEditorService: ProcessManagementEditorService,
     private readonly modalService: ModalService,
     private readonly processLinkService: ProcessLinkService,
-    private readonly processLinkStateService: ProcessLinkStateService
+    private readonly processLinkStateService: ProcessLinkStateService,
+    private readonly router: Router,
+    private readonly notificationService: NotificationService
   ) {
     this.iconService.registerAll([Deploy16, Download16]);
     (window as any as ProcessManagementWindow).processManagementEditorService =
@@ -208,6 +218,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     this.subscribeToProcessLinkCreateEvents();
     this.subscribeToProcessLinkDeleteEvents();
     this.processLinkStateService.setEditMode(ProcessLinkEditMode.EMIT_EVENTS);
+    this.initIfCreate();
   }
 
   public ngOnDestroy(): void {
@@ -234,6 +245,36 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
       )
       .subscribe(() => {
         this.reload();
+      });
+  }
+
+  public deployNewProcessDefinition(): void {
+    combineLatest([
+      from(this._bpmnModeler.saveXML()),
+      this.processManagementEditorService.processLinksForSelectedDefinition$,
+    ])
+      .pipe(
+        take(1),
+        switchMap(([result, processLinks]) =>
+          this.processLinkService.deployProcessWithProcessLinks(
+            processLinks.map(link => ({
+              ...link,
+              processDefinitionId: '-',
+            })) as ProcessLinkCreateEvent[],
+            null,
+            result.xml
+          )
+        )
+      )
+      .subscribe(() => {
+        this.router.navigate(['/processes']);
+        this.notificationService.showToast({
+          caption: this.translateService.instant('formFlow.savedSuccessTitleMessage'),
+          type: 'success',
+          duration: CARBON_CONSTANTS.notificationDuration,
+          showClose: true,
+          title: this.translateService.instant('formFlow.savedSuccessTitle'),
+        });
       });
   }
 
@@ -425,5 +466,17 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
         this.processLinkStateService.closeModal();
       })
     );
+  }
+
+  private initIfCreate(): void {
+    const currentUrl = this.route.snapshot.url.toString();
+
+    if (!currentUrl.includes('create')) return;
+
+    this.creatingNewProcess$.next(true);
+    this._bpmnModeler?.importXML(EMPTY_BPMN);
+    this.isReadOnlyProcess$.next(false);
+    this.isSystemProcess$.next(false);
+    this.loading$.next(false);
   }
 }
