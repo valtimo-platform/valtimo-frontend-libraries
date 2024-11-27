@@ -15,18 +15,55 @@
   -->
 
 <valtimo-carbon-list
-  [hideToolbar]="true"
-  [items]="logItems$ | async"
+  *ngIf="{logItems: logItems$ | async, isSearchActive: isSearchActive$ | async} as obs"
+  [items]="obs.logItems"
   [fields]="FIELDS"
   [loading]="loading$ | async"
   [pagination]="pagination$ | async"
   paginationIdentifier="logging"
-  (paginationClicked)="onPaginationClicked($event)"
+  (paginationClicked)="onPaginationClicked($event, obs.logItems)"
   (paginationSet)="onPaginationSet($event)"
   (rowClicked)="onRowClickedEvent($event)"
-></valtimo-carbon-list>
+>
+  <valtimo-no-results
+    [action]="obs.isSearchActive ? clearSearchButton : null"
+    [description]="
+      'logging.noResults.' + (obs.isSearchActive ? 'searchDescription' : 'description') | translate
+    "
+    [title]="'logging.noResults.title' | translate"
+  ></valtimo-no-results>
+
+  <button
+    carbonToolbarContent
+    [cdsOverflowMenu]="logSearch"
+    [customPane]="true"
+    [iconOnly]="true"
+    [flip]="true"
+    [offset]="{x: 0, y: 47}"
+    cdsButton="ghost"
+    placement="bottom"
+  >
+    <svg class="cds--btn__icon" cdsIcon="filter" size="16"></svg>
+  </button>
+</valtimo-carbon-list>
 
 <valtimo-log-details
+  [open]="logDetailsOpen$ | async"
   [logEvent]="selectedLogEvent$ | async"
   (closeModalEvent)="onCloseModalEvent()"
 ></valtimo-log-details>
+
+<ng-template #logSearch>
+  <valtimo-log-search
+    [initSearchRequest]="searchRequest$ | async"
+    (searchSubmitEvent)="onSearchSubmitEvent($event)"
+  ></valtimo-log-search>
+</ng-template>
+
+<ng-template #clearSearchButton>
+  <button cdsButton="primary" (click)="onClearFilter()">
+    {{ 'interface.clear' | translate }}
+
+    <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+  </button>
+</ng-template>

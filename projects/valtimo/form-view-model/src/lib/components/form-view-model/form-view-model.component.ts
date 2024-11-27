@@ -21,11 +21,8 @@ import {
   combineLatest,
   debounceTime,
   EMPTY,
-  filter,
   Observable,
   of,
-  pairwise,
-  Subject,
   switchMap,
   take,
   tap,
@@ -37,7 +34,6 @@ import {
   FormioSubmission,
   FormioSubmissionCallback,
 } from '@formio/angular';
-import {FormioRefreshValue} from '@formio/angular/formio.common';
 import {ViewModelService} from '../../services';
 import {distinctUntilChanged, map} from 'rxjs/operators';
 import {deepmerge} from 'deepmerge-ts';
@@ -84,10 +80,6 @@ export class FormViewModelComponent implements OnInit {
     this.taskInstanceId$.next(taskInstanceId);
   }
 
-  @Input() set readOnly(readOnlyValue: boolean) {
-    this.readOnly$.next(readOnlyValue);
-  }
-
   @Input() set isStartForm(isStartFormValue: boolean) {
     this.isStartForm$.next(isStartFormValue);
   }
@@ -100,20 +92,22 @@ export class FormViewModelComponent implements OnInit {
     this.documentDefinitionName$.next(documentDefinitionNameValue);
   }
 
-  @Input() formRefresh$!: Subject<FormioRefreshValue>;
   @Output() formSubmit = new EventEmitter<any>();
 
-  public refreshForm = new EventEmitter<FormioRefreshValue>();
+  public errors: string[] = [];
+
+  private _preventNextPage = false;
+  private _preventPreviousPage = false;
+  private _isWizard: boolean = false;
 
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
   public readonly formName$ = new BehaviorSubject<string>(undefined);
   public readonly options$ = new BehaviorSubject<ValtimoFormioOptions>(undefined);
   public readonly taskInstanceId$ = new BehaviorSubject<string>(undefined);
-  public readonly readOnly$ = new BehaviorSubject<boolean>(false);
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
   public readonly change$ = new BehaviorSubject<any>(null);
-  public readonly errors$ = new BehaviorSubject<Array<string>>([]);
+  public readonly blur$ = new BehaviorSubject<FocusEvent>(null);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly isStartForm$ = new BehaviorSubject<boolean>(false);
   public readonly processDefinitionKey$ = new BehaviorSubject<string>(undefined);
@@ -204,7 +198,7 @@ export class FormViewModelComponent implements OnInit {
                     }),
                     catchError(error => {
                       this.handleFormError(error);
-                      callback({message: error.error.error, component: null}, null);
+                      callback({message: ' ', component: null}, null);
                       return EMPTY; // return an empty observable to complete the stream
                     })
                   )
@@ -218,7 +212,7 @@ export class FormViewModelComponent implements OnInit {
                     }),
                     catchError(error => {
                       this.handleFormError(error);
-                      callback({message: error.error.error, component: null}, null);
+                      callback({message: ' ', component: null}, null);
                       return EMPTY; // return an empty observable to complete the stream
                     })
                   )
@@ -229,13 +223,23 @@ export class FormViewModelComponent implements OnInit {
 
   private handleFormError(error: HttpErrorResponse): void {
     const formInstance = this.formio.formio;
-    const component = formInstance.getComponent(error.error?.component);
-    const submitComponent = formInstance.getComponent('submit');
-    if (component == null) {
-      this.errors$.next([error.error.error]);
+    this.errors = [];
+    if (error.error.componentErrors) {
+      error.error.componentErrors.forEach(componentError => {
+        const component = formInstance.getComponent(componentError.component);
+        if (component == null) {
+          this.errors.push(componentError.message);
+        } else {
+          component?.setCustomValidity(componentError.message);
+        }
+      });
     } else {
-      component?.setCustomValidity(error.error.error);
-      submitComponent.disabled = true;
+      const component = formInstance.getComponent(error.error?.component);
+      if (component == null) {
+        this.errors.push(error.error.error);
+      } else {
+        component?.setCustomValidity(error.error.error);
+      }
     }
   }
 
@@ -243,13 +247,36 @@ export class FormViewModelComponent implements OnInit {
     this.formSubmit.next(submission);
   }
 
+  public onBlur(blurEvent: FocusEvent): void {
+    this.blur$.next(blurEvent);
+    this.handleChanges();
+  }
+
   public onChange(object: any): void {
     if (object.data) {
       this.change$.next(object);
     }
+  }
 
-    if (object.changed) {
-      this.handleChanges();
+  public onNextPage(): void {
+    this._preventNextPage = true;
+    this.formio.formio.setPage(this.formio.formio.page - 1);
+    this.handleChanges();
+  }
+
+  public onPreviousPage(): void {
+    this._preventPreviousPage = true;
+    this.formio.formio.setPage(this.formio.formio.page + 1);
+    this.handleChanges();
+  }
+
+  private handlePageChange(): void {
+    if (this._preventNextPage) {
+      this._preventNextPage = false;
+      this.formio.formio.setPage(this.formio.formio.page + 1);
+    } else if (this._preventPreviousPage) {
+      this._preventPreviousPage = false;
+      this.formio.formio.setPage(this.formio.formio.page - 1);
     }
   }
 
@@ -264,6 +291,7 @@ export class FormViewModelComponent implements OnInit {
               this.change$.pipe(take(1)).subscribe(() => {
                 this.loading$.next(false);
               });
+              this._isWizard = this.formio.form.display === 'wizard';
             })
           )
         )
@@ -281,19 +309,30 @@ export class FormViewModelComponent implements OnInit {
             return combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(
               take(1),
               switchMap(([formName, taskInstanceId, change]) =>
-                this.viewModelService.updateViewModel(formName, taskInstanceId, change.data).pipe(
-                  tap({
-                    next: viewModel => {
-                      this.submission$.next({data: viewModel});
-                      this.loading$.next(false);
-                      this.errors$.next([]);
-                    },
-                    error: error => {
-                      this.loading$.next(false);
-                      this.handleFormError(error);
-                    },
-                  })
-                )
+                this.viewModelService
+                  .updateViewModel(
+                    formName,
+                    taskInstanceId,
+                    change.data,
+                    this.formio.formio.page,
+                    this._isWizard
+                  )
+                  .pipe(
+                    tap({
+                      next: viewModel => {
+                        const submission = this.submission$.value;
+                        submission.data = viewModel;
+                        this.submission$.next(submission);
+                        this.handlePageChange();
+                        this.loading$.next(false);
+                        this.errors = [];
+                      },
+                      error: error => {
+                        this.loading$.next(false);
+                        this.handleFormError(error);
+                      },
+                    })
+                  )
               )
             );
           }
@@ -314,6 +353,7 @@ export class FormViewModelComponent implements OnInit {
               this.change$.pipe(take(1)).subscribe(() => {
                 this.loading$.next(false);
               });
+              this._isWizard = this.formio.form.display === 'wizard';
             })
           )
         )
@@ -332,13 +372,22 @@ export class FormViewModelComponent implements OnInit {
               take(1),
               switchMap(([formName, processDefinitionKey, change]) =>
                 this.viewModelService
-                  .updateViewModelForStartForm(formName, processDefinitionKey, change.data)
+                  .updateViewModelForStartForm(
+                    formName,
+                    processDefinitionKey,
+                    change.data,
+                    this.formio.formio.page,
+                    this._isWizard
+                  )
                   .pipe(
                     tap({
                       next: viewModel => {
-                        this.submission$.next({data: viewModel});
+                        const submission = this.submission$.value;
+                        submission.data = viewModel;
+                        this.submission$.next(submission);
+                        this.handlePageChange();
                         this.loading$.next(false);
-                        this.errors$.next([]);
+                        this.errors = [];
                       },
                       error: error => {
                         this.loading$.next(false);
@@ -356,23 +405,12 @@ export class FormViewModelComponent implements OnInit {
   }
 
   private handleChanges(): void {
-    this.change$
-      .pipe(
-        pairwise(),
-        debounceTime(500),
-        filter(
-          ([prevChange, currentChange]) =>
-            prevChange?.changed?.value !== undefined &&
-            currentChange?.changed?.value !== undefined &&
-            prevChange.changed.value !== currentChange.changed.value
-        )
-      )
-      .subscribe(() => {
-        if (this.isStartForm$.value) {
-          this.updateViewModelForStartForm();
-        } else {
-          this.updateViewModel();
-        }
-      });
+    this.blur$.pipe(debounceTime(500)).subscribe(() => {
+      if (this.isStartForm$.value) {
+        this.updateViewModelForStartForm();
+      } else {
+        this.updateViewModel();
+      }
+    });
   }
 }

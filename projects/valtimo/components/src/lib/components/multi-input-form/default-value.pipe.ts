@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,3 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import {Pipe, PipeTransform} from '@angular/core';
+import {MultiInputFormsValues, MultiInputFormValue} from '../../models';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+
+@Pipe({
+  name: 'defaultValue',
+  standalone: true,
+})
+export class DefaultValuePipe implements PipeTransform {
+  public transform(
+    values: Observable<MultiInputFormsValues>,
+    uuid: string
+  ): Observable<MultiInputFormValue | {}> {
+    return values.pipe(
+      map(valuesArray => valuesArray.find(value => value.uuid === uuid)?.value || {})
+    );
+  }
+}

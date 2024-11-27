@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {take} from 'rxjs/operators';
+import {FormDefinitionListItem, FormFlowProcessLinkUpdateRequestDto} from '../../models';
 import {
   FormFlowService,
   ProcessLinkButtonService,
   ProcessLinkService,
   ProcessLinkStateService,
 } from '../../services';
-import {FormDefinitionListItem, FormFlowProcessLinkUpdateRequestDto} from '../../models';
-import {take} from 'rxjs/operators';
 import {ConfigService} from '@valtimo/config';
 
 @Component({
@@ -35,8 +34,10 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   public formDisplayValue: string = '';
   public formSizeValue: string = '';
   public selectedFormFlowDefinition!: FormDefinitionListItem;
+  public subtitlesValue: string[] = [];
   public readonly saving$ = this.stateService.saving$;
   private readonly formFlowDefinitions$ = this.formFlowService.getFormFlowDefinitions();
+  private readonly _taskPanelToggle = this.configService.featureToggles?.enableTaskPanel;
 
   public readonly formFlowDefinitionListItems$: Observable<Array<FormDefinitionListItem>> =
     combineLatest([this.stateService.selectedProcessLink$, this.formFlowDefinitions$]).pipe(
@@ -60,7 +61,6 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
 
   private _subscriptions = new Subscription();
   private isUserTask$ = new BehaviorSubject<boolean>(false);
-  private readonly taskPanelToggle = this.configService.featureToggles?.enableTaskPanel;
 
   constructor(
     private readonly configService: ConfigService,
@@ -108,6 +108,10 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
       : this.buttonService.disableSaveButton();
   }
 
+  public selectedSubtitlesValue(subtitles: string[]): void {
+    this.subtitlesValue = subtitles;
+  }
+
   private openBackButtonSubscription(): void {
     this._subscriptions.add(
       this.buttonService.backButtonClick$.subscribe(() => {
@@ -142,11 +146,12 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
         const updateProcessLinkRequest: FormFlowProcessLinkUpdateRequestDto = {
           id: selectedProcessLink.id,
           formFlowDefinitionId: this.selectedFormFlowDefinition.id,
-          ...(this.taskPanelToggle &&
+          ...(this._taskPanelToggle &&
             isUserTask && {
               formDisplayType: this.formDisplayValue,
             }),
-          ...(this.taskPanelToggle && isUserTask && {formSize: this.formSizeValue}),
+          ...(this._taskPanelToggle && isUserTask && {formSize: this.formSizeValue}),
+          ...(isUserTask && {subtitles: this.subtitlesValue}),
         };
 
         this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
@@ -175,11 +180,11 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id,
-            ...(this.taskPanelToggle &&
-              isUserTask && {
-                formDisplayType: this.formDisplayValue,
-              }),
-            ...(this.taskPanelToggle && isUserTask && {formSize: this.formSizeValue}),
+            ...(isUserTask && {
+              formDisplayType: this.formDisplayValue,
+            }),
+            ...(isUserTask && {formSize: this.formSizeValue}),
+            ...(isUserTask && {subtitles: this.subtitlesValue}),
           })
         )
       )

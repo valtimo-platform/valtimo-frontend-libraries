@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,3 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {ListItem} from 'carbon-components-angular';
+import {LoggingEventProperty} from './logging.model';
+
+interface LoggingEventSearchFormValue {
+  likeFormattedMessage?: string;
+  level?: ListItem;
+  beforeTimestamp?: string;
+  afterTimestamp?: string;
+  properties?: Array<LoggingEventProperty>;
+}
+
+interface LoggingEventQueryParams {
+  likeFormattedMessage?: string;
+  level?: string;
+  beforeTimestamp?: string;
+  afterTimestamp?: string;
+  properties?: string;
+}
+export {LoggingEventSearchFormValue, LoggingEventQueryParams};

@@ -43,8 +43,10 @@
       *ngIf="{
         noTabsConfigured: noTabsConfigured$ | async,
         showTaskList: showTaskList$ | async,
-        taskOpenedInPanel: taskOpenedInPanel$ | async,
+        showNoAccess: showNoAccess$ | async,
         dossierDetailLayout: dossierDetailLayout$ | async,
+        openTaskAndProcessLinkInModal: openTaskAndProcessLinkInModal$ | async,
+        taskAndProcessLinkOpenedInPanel: taskAndProcessLinkOpenedInPanel$ | async,
       } as tabContentObs"
     >
       <as-split
@@ -67,6 +69,14 @@
             </div>
 
             <valtimo-no-results
+              *ngIf="tabContentObs.showNoAccess"
+              description="{{ 'dossier.noAccess.description' | translate }}"
+              title="{{ 'dossier.noAccess.title' | translate }}"
+              illustration="valtimo-layout/img/emptystate-not-authorised.svg"
+            >
+            </valtimo-no-results>
+
+            <valtimo-no-results
               *ngIf="tabContentObs.noTabsConfigured"
               [description]="'dossier.tabs.noResultsDescription' | translate"
               [title]="'dossier.tabs.noResults' | translate"
@@ -86,17 +96,17 @@
         >
           @if (tabContentObs.showTaskList) {
             <div class="task-panel">
-              @if (!tabContentObs.taskOpenedInPanel) {
+              @if (!tabContentObs.taskAndProcessLinkOpenedInPanel) {
                 <valtimo-dossier-detail-task-list
-                  [openInTaskModal]="openTaskInModal$ | async"
+                  [openTaskAndProcessLinkInModal]="tabContentObs.openTaskAndProcessLinkInModal"
                   (taskClickEvent)="onTaskClickEvent($event)"
                   (formSubmitEvent)="onFormSubmitEvent()"
                 ></valtimo-dossier-detail-task-list>
               }
 
-              @if (tabContentObs.taskOpenedInPanel) {
+              @if (tabContentObs.taskAndProcessLinkOpenedInPanel) {
                 <valtimo-dossier-detail-task-detail
-                  [task]="tabContentObs.taskOpenedInPanel"
+                  [taskAndProcessLink]="tabContentObs.taskAndProcessLinkOpenedInPanel"
                   (activeChange)="onActiveChangeEvent($event)"
                   (closeEvent)="onTaskDetailsClose()"
                   (formSubmit)="onFormSubmitEvent()"
@@ -111,6 +121,7 @@
   </div>
 
   <valtimo-dossier-supporting-process-start-modal
+    [isAdmin]="isAdmin$ | async"
     (formSubmit)="tabLoader.refreshView()"
     #supportingProcessStartModal
   ></valtimo-dossier-supporting-process-start-modal>

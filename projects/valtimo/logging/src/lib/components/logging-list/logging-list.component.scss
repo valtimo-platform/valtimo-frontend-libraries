@@ -14,17 +14,7 @@
  * limitations under the License.
  */
 
-.timeline-activity {
-  font-size: 100%;
-}
-
-.timeline-summary p {
-  font-size: 0.8rem;
-}
-
-.actions-dropdown {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  cursor: pointer;
+::ng-deep .cds--overflow-menu-options.cds--overflow-menu-options--open {
+  max-width: max-content !important;
+  width: max-content !important;
 }

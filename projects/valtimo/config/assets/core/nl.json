@@ -51,6 +51,10 @@
         "title": "Geen dossiers gevonden"
       }
     },
+    "noAccess": {
+      "description": "Je hebt geen toegang tot dit dossier",
+      "title": "Geen toegang"
+    },
     "pagination": {
       "itemsPerPage": "Dossiers per pagina",
       "totalItem": "{{start}}-{{end}} van {{total}} dossier",
@@ -150,6 +154,9 @@
       "noFiles": "Geen bestanden gevonden voor deze zaak."
     },
     "startSubProcess": "Start",
+    "noLinkedStartProcessNotification": "Er is geen startformulier gekoppeld",
+    "noLinkedProcessNotification": "Er is geen formulier gekoppeld",
+    "configure": "Configureer",
     "claimAssigneeCase": "Claimen",
     "deleteConfirmation": {
       "title": "Bestand verwijderen",
@@ -263,12 +270,13 @@
   "summary": {
     "userTasksDoneState": "Alle taken zijn afgerond",
     "taskLocked": "Je hebt geen toegang tot deze taak",
-    "myTasks": "Taken",
+    "tasks": "Taken",
+    "myTasks": "Mijn taken",
     "otherTasks": "Overige taken",
     "taskOpen": "Open",
     "taskCreated": "Aangemaakt op",
-    "noResultsMyTasks": "Er zijn geen taken toegewezen aan deze gebruiker.",
-    "noResultsOtherTasks": "Er zijn geen taken toegewezen aan andere gebruikers."
+    "noResultsMyTasks": "Er zijn geen taken beschikbaar voor deze gebruiker.",
+    "noResultsOtherTasks": "Er zijn geen taken beschikbaar voor andere gebruikers."
   },
   "progress": {
     "noProcessDocumentInstances": "Er is nog geen proces gestart",
@@ -381,7 +389,9 @@
         "dashboardDescriptionHelperText": "*Beschrijving is alleen zichtbaar op de configuratiepagina van het dashboard",
         "roles": "Zichtbaarheid",
         "displayType": "Weergavetype",
-        "displayTypeHelperText": "Selecteer de manier waarop de gegevens van uw widget moeten worden weergegeven"
+        "displayTypeHelperText": "Selecteer de manier waarop de gegevens van uw widget moeten worden weergegeven",
+        "url": "URL pad",
+        "urlHelperText": "Het pad naar de pagina waar de widget naar toe moet linken"
       },
       "noResults": {
         "description": "Klik op <strong>Nieuwe widget toevoegen</strong> om te beginnen met het ontwerpen van uw dashboard. <br/> Sleep uw widgets naar de gewenste positie.",
@@ -1711,6 +1721,9 @@
     "Previous": "Vorige",
     "formioIbanComponent": {
       "errorMessage": "Geen geldige IBAN. Voer een geldige IBAN in."
+    },
+    "formioCurrencyComponent": {
+      "errorMessage": "Geen geldig decimaal getal. Voer een geldig decimaal getal in."
     }
   },
   "viewTypeConverter": {
@@ -1774,7 +1787,9 @@
     "choosePluginConfiguration": "Kies pluginconfiguratie",
     "choosePluginAction": "Kies je actie",
     "configurePluginAction": "Configureer je actie",
-    "selectURL": "Configureer je URL"
+    "selectURL": "Configureer je URL",
+    "subtitles": "Ondertitels",
+    "addSubtitle": "Ondertitel toevoegen"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "Er zijn geen plugin-configuraties beschikbaar. Maak een pluginconfiguratie aan om deze te kunnen koppelen aan een processtap.",
@@ -1852,9 +1867,20 @@
   },
   "logging": {
     "columns": {
-      "timestamp": "Tijdstempel",
-      "formattedMessage": "Opgemaakt bericht",
+      "timestamp": "Tijd",
+      "formattedMessage": "Bericht",
       "level": "Logniveau"
+    },
+    "search": {
+      "addProperty": "Eigenschap toevoegen",
+      "afterTimestamp": "Van tijd",
+      "beforeTimestamp": "Tot tijd",
+      "properties": "Eigenschappen"
+    },
+    "noResults": {
+      "description": "Er zijn nog geen lijnen geregistreerd",
+      "searchDescription": "Er zijn geen logregels die overeenkomen met je zoekcriteria",
+      "title": "Er zijn geen logboeken"
     },
     "detailsTitle": "Loggegevens"
   }

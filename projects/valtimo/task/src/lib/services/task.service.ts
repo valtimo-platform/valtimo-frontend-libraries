@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
   AssigneeRequest,
@@ -25,7 +25,6 @@ import {
   TaskListOtherFilters,
   TaskListSearchField,
   TaskPageParams,
-  TaskProcessLinkResult,
 } from '../models';
 import {
   BaseApiService,
@@ -36,6 +35,7 @@ import {
   TaskListTab,
 } from '@valtimo/config';
 import {InterceptorSkip} from '@valtimo/security';
+import {TaskProcessLinkResult} from '@valtimo/process-link';
 
 @Injectable({providedIn: 'root'})
 export class TaskService extends BaseApiService {
@@ -131,9 +131,7 @@ export class TaskService extends BaseApiService {
   public getTaskProcessLink(taskId: string): Observable<TaskProcessLinkResult> {
     return this.httpClient.get<TaskProcessLinkResult>(
       this.getApiUrl(`/v2/process-link/task/${taskId}`),
-      {
-        headers: {[InterceptorSkip]: '404'},
-      }
+      {headers: new HttpHeaders().set(InterceptorSkip, '404')}
     );
   }
 

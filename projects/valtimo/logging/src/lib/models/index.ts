@@ -15,3 +15,4 @@
  */
 
 export * from './logging.model';
+export * from './search.model';
