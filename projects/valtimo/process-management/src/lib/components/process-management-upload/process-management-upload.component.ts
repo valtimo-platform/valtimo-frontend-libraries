@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {ProcessManagementService} from '../../process-management.service';
 import {AlertService} from '@valtimo/components';
+import {ProcessManagementStateService} from '../../services';
 
 @Component({
   selector: 'valtimo-process-management-upload',
@@ -25,25 +26,32 @@ import {AlertService} from '@valtimo/components';
 })
 export class ProcessManagementUploadComponent {
   public bpmn: File | null = null;
-  @Output() reload = new EventEmitter();
   @ViewChild('bpmnFile') bpmnFile: ElementRef;
 
+  public readonly modalOpen$ = this.processManagementStateService.openModal$;
+
   constructor(
-    private processManagementService: ProcessManagementService,
-    private alertService: AlertService
+    private readonly processManagementService: ProcessManagementService,
+    private readonly alertService: AlertService,
+    private readonly processManagementStateService: ProcessManagementStateService
   ) {}
 
-  onChange(files: FileList): void {
+  public closeModal(): void {
+    this.processManagementStateService.closeModal();
+  }
+
+  public onChange(files: FileList): void {
     this.bpmn = files.item(0);
   }
 
-  uploadProcessBpmn() {
+  public uploadProcessBpmn() {
     this.processManagementService.deployBpmn(this.bpmn).subscribe(
       () => {
         this.bpmn = null;
         this.bpmnFile.nativeElement.value = '';
         this.alertService.success('Deployment successful');
-        this.reload.emit();
+        this.processManagementStateService.closeModal();
+        this.processManagementStateService.reloadDefinitions();
       },
       error => {
         this.bpmn = null;

@@ -14,18 +14,22 @@
   ~ limitations under the License.
   -->
 
-<valtimo-widget>
-  <valtimo-list
-    [items]="processDefinitions"
-    [fields]="fields"
-    (rowClicked)="editProcessDefinition($event)"
-    [header]="true"
-    [viewMode]="true"
-    [isSearchable]="true"
-  >
-    <div header>
-      <h3 class="list-header-title">{{ 'Processes' | translate }}</h3>
-      <h5 class="list-header-description">{{ 'Overview of all Processes' | translate }}</h5>
-    </div>
-  </valtimo-list>
-</valtimo-widget>
+<valtimo-carbon-list
+  [items]="(processDefinitions$ | async) || []"
+  [loading]="loading$ | async"
+  [fields]="FIELDS"
+  (rowClicked)="editProcessDefinition($event)"
+  [isSearchable]="true"
+>
+  <ng-container carbonToolbarContent>
+    <button cdsButton="ghost" [iconOnly]="true" (click)="openModal()">
+      <svg class="cds--btn__icon" cdsIcon="upload" size="16"></svg>
+    </button>
+
+    <button cdsButton="primary" [routerLink]="'create'">
+      {{ 'Create new Process' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+    </button>
+  </ng-container>
+</valtimo-carbon-list>

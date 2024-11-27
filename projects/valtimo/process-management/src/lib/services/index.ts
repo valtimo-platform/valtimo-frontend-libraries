@@ -15,3 +15,4 @@
  */
 
 export * from './process-management-editor.service';
+export * from './process-management-state.service';

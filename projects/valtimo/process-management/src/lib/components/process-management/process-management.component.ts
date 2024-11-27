@@ -16,11 +16,13 @@
 
 import {Component, ViewChild} from '@angular/core';
 import {ProcessManagementListComponent} from '../process-management-list/process-management-list.component';
+import {ProcessManagementStateService} from '../../services';
 
 @Component({
   selector: 'valtimo-process-management',
   templateUrl: './process-management.component.html',
   styleUrls: ['./process-management.component.scss'],
+  providers: [ProcessManagementStateService],
 })
 export class ProcessManagementComponent {
   @ViewChild('processManagementList') processManagementList: ProcessManagementListComponent;

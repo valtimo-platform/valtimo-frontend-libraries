@@ -14,39 +14,52 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
 import {Router} from '@angular/router';
+import {ColumnConfig} from '@valtimo/components';
+import {BehaviorSubject, startWith, switchMap, tap} from 'rxjs';
+import {IconService} from 'carbon-components-angular';
+import {Upload16} from '@carbon/icons';
+import {ProcessManagementStateService} from '../../services';
 
 @Component({
   selector: 'valtimo-process-management-list',
   templateUrl: './process-management-list.component.html',
   styleUrls: ['./process-management-list.component.scss'],
 })
-export class ProcessManagementListComponent implements OnInit {
-  public processDefinitions: ProcessDefinition[] = [];
-  public fields = [
-    {key: 'key', label: 'Key'},
+export class ProcessManagementListComponent {
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
+
+  public readonly reloadDefinitions$ = this.processManagementStateService.reloadDefinitions$;
+
+  public readonly processDefinitions$ = this.reloadDefinitions$.pipe(
+    startWith(null),
+    switchMap(() =>
+      this.processService.getProcessDefinitions().pipe(tap(() => this.loading$.next(false)))
+    )
+  );
+
+  public readonly FIELDS = [
     {key: 'name', label: 'Name'},
+    {key: 'key', label: 'Key'},
     {key: 'readOnly', label: 'Read-only'},
-  ];
+  ] as ColumnConfig[];
 
   constructor(
-    private processService: ProcessService,
-    private router: Router
-  ) {}
-
-  ngOnInit() {
-    this.loadProcessDefinitions();
+    private readonly processService: ProcessService,
+    private readonly router: Router,
+    private readonly iconService: IconService,
+    private readonly processManagementStateService: ProcessManagementStateService
+  ) {
+    this.iconService.registerAll([Upload16]);
   }
 
-  loadProcessDefinitions() {
-    this.processService.getProcessDefinitions().subscribe((processDefs: ProcessDefinition[]) => {
-      this.processDefinitions = processDefs;
-    });
-  }
-
-  editProcessDefinition(processDefinition: ProcessDefinition) {
+  public editProcessDefinition(processDefinition: ProcessDefinition): void {
     this.router.navigate(['/processes/process', processDefinition.key]);
+  }
+
+  public openModal(): void {
+    this.processManagementStateService.openModal();
   }
 }
