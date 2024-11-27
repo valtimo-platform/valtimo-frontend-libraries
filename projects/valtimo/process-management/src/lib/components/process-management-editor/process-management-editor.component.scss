@@ -77,6 +77,11 @@
   &__version-dropdown {
     width: 150px;
   }
+
+  &__buttons {
+    display: flex;
+    gap: 16px;
+  }
 }
 
 ::ng-deep .process-link-properties-panel {

@@ -86,6 +86,14 @@
       </div>
 
       <div class="page-header-actions__buttons">
+        <cds-overflow-menu class="overflow-button">
+          <cds-overflow-menu-option
+            [disabled]="actionsObs.loading"
+            (selected)="export(actionsObs.isReadOnlyProcess)"
+            >{{ 'interface.export' | translate }}</cds-overflow-menu-option
+          >
+        </cds-overflow-menu>
+
         <button
           [disabled]="!actionsObs.changesPending"
           cdsButton="primary"

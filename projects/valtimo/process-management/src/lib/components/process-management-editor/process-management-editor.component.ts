@@ -41,6 +41,7 @@ import {
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
 import {
   ButtonModule,
+  DialogModule,
   DropdownModule,
   IconModule,
   IconService,
@@ -53,7 +54,7 @@ import Modeler from 'bpmn-js/lib/Modeler';
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {Deploy16} from '@carbon/icons';
+import {Deploy16, Download16} from '@carbon/icons';
 import {
   BpmnPropertiesPanelModule,
   BpmnPropertiesProviderModule,
@@ -95,6 +96,7 @@ import {
     TagModule,
     ProcessLinkModule,
     ProcessLinkModule,
+    DialogModule,
   ],
   providers: [
     ProcessManagementEditorService,
@@ -192,7 +194,7 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
     private readonly processLinkService: ProcessLinkService,
     private readonly processLinkStateService: ProcessLinkStateService
   ) {
-    this.iconService.registerAll([Deploy16]);
+    this.iconService.registerAll([Deploy16, Download16]);
     (window as any as ProcessManagementWindow).processManagementEditorService =
       processManagementEditorService;
     (window as any as ProcessManagementWindow).translateService = translateService;
@@ -232,6 +234,20 @@ export class ProcessManagementEditorComponent implements AfterViewInit, OnDestro
       )
       .subscribe(() => {
         this.reload();
+      });
+  }
+
+  public export(isReadOnlyProcess: boolean): void {
+    (isReadOnlyProcess ? from(this._bpmnViewer.saveXML()) : from(this._bpmnModeler.saveXML()))
+      .pipe(take(1))
+      .subscribe(result => {
+        const file = new Blob([result.xml], {type: 'text/xml'});
+        const link = document.createElement('a');
+        link.download = 'diagram.bpmn';
+        link.href = window.URL.createObjectURL(file);
+        link.click();
+        window.URL.revokeObjectURL(link.href);
+        link.remove();
       });
   }
 
