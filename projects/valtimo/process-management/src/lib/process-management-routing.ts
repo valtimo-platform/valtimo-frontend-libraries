@@ -18,9 +18,8 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
-import {ProcessManagementComponent} from './components/process-management/process-management.component';
 import {ROLE_ADMIN} from '@valtimo/config';
-import {ProcessManagementEditorComponent} from './components/process-management-editor/process-management-editor.component';
+import {ProcessManagementBuilderComponent, ProcessManagementComponent} from './components';
 
 const routes: Routes = [
   {
@@ -31,13 +30,13 @@ const routes: Routes = [
   },
   {
     path: 'processes/create',
-    component: ProcessManagementEditorComponent,
+    component: ProcessManagementBuilderComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Create new Process', roles: [ROLE_ADMIN]},
   },
   {
     path: 'processes/process/:key',
-    component: ProcessManagementEditorComponent,
+    component: ProcessManagementBuilderComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Process details', roles: [ROLE_ADMIN], customPageTitle: true},
   },

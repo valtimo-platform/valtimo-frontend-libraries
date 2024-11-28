@@ -19,7 +19,6 @@
  */
 
 export * from './lib/services';
-export * from './lib/services/valtimo-renderer';
 export * from './lib/components/select-plugin-configuration/select-plugin-configuration.component';
 export * from './lib/components/select-plugin-action/select-plugin-action.component';
 export * from './lib/components/select-url/select-url.component';

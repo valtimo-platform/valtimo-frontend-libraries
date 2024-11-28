@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 
-export * from './customizer';
 export * from './process-management-builder.component';

@@ -24,7 +24,6 @@ import {ProcessLinkModule} from '@valtimo/process-link';
 import {
   ProcessManagementBuilderComponent,
   ProcessManagementComponent,
-  ProcessManagementEditorComponent,
   ProcessManagementListComponent,
   ProcessManagementUploadComponent,
 } from './components';
@@ -40,7 +39,6 @@ import {
 @NgModule({
   declarations: [
     ProcessManagementComponent,
-    ProcessManagementBuilderComponent,
     ProcessManagementListComponent,
     ProcessManagementUploadComponent,
   ],
@@ -52,7 +50,7 @@ import {
     FormsModule,
     TranslateModule,
     ProcessLinkModule,
-    ProcessManagementEditorComponent,
+    ProcessManagementBuilderComponent,
     CarbonListModule,
     ButtonModule,
     IconModule,

@@ -14,123 +14,103 @@
   ~ limitations under the License.
   -->
 
-<div class="mb-5" [ngClass]="{'main-content pt-0': !layoutService.isFullscreen}">
-  <div [ngClass]="{'container-fluid': !layoutService.isFullscreen}">
-    <div class="text-right">
-      <div
-        class="btn-group mt-m3px mb-3"
-        *ngIf="(selectedVersion !== null || processKey === null) && !layoutService.isFullscreen"
-      >
-        <button class="btn btn-primary btn-space" (click)="download()">
-          <i class="icon mdi mdi-download mr-1"></i>{{ 'processManagement.download' | translate }}
-        </button>
-        <button
-          class="btn btn-success btn-space"
-          (click)="deploy()"
-          *ngIf="(isReadOnlyProcess$ | async) === false"
-          [ngClass]="{'mr-0': selectedVersion !== null}"
-        >
-          <i class="icon mdi mdi-upload mr-1"></i>{{ 'processManagement.deploy' | translate }}
-        </button>
-        <button
-          *ngIf="selectedVersion === null"
-          class="btn btn-danger btn-space mr-0"
-          (click)="reset()"
-        >
-          <i class="icon mdi mdi-delete mr-1"></i>{{ 'processManagement.clear' | translate }}
-        </button>
-      </div>
-    </div>
+<div
+  fitPage
+  [disableOverflow]="true"
+  *ngIf="{
+    processDefinitionVersions: processDefinitionVersions$ | async,
+    selectedProcessDefinitionXml: selectedProcessDefinitionXml$ | async,
+    loading: loading$ | async,
+    isReadOnlyProcess: isReadOnlyProcess$ | async,
+  } as obs"
+  data-carbon-theme="g10"
+  class="bpmn__container"
+>
+  <div *ngIf="obs.loading" class="bpmn__loading">
+    <cds-loading></cds-loading>
+  </div>
 
-    <div class="modeler pl-3 pr-3 mb-3" [ngClass]="{'mt-4': !layoutService.isFullscreen}">
-      <div
-        class="row pt-4 pb-3 bg-light versions"
-        *ngIf="processDefinitionVersions"
-        [ngClass]="{'border-bottom-0': selectedVersion !== null}"
-      >
-        <div class="col-md-4" *ngIf="processDefinitionVersions.length > 0">
-          <span class="badge badge-pill badge-info mr-1" *ngIf="isReadOnlyProcess$ | async">
-            {{ 'processManagement.readOnly' | translate }}
-          </span>
-          <span class="badge badge-pill badge-warning mr-1" *ngIf="isSystemProcess$ | async">
-            {{ 'processManagement.systemProcess' | translate }}
-          </span>
-        </div>
-        <div class="col-md-2 offset-md-2">
-          <label for="processVersion"><strong>Version</strong></label>
-          <select
-            id="processVersion"
-            class="form-control select-version-control"
-            [(ngModel)]="selectedVersion"
-            (change)="loadProcessBpmn()"
-            [compareWith]="compareProcessDefinitions"
-          >
-            <option [ngValue]="null" disabled selected>Version</option>
-            <option
-              *ngFor="let processDefinition of processDefinitionVersions"
-              [ngValue]="processDefinition"
-            >
-              {{ processDefinition.version }}
-            </option>
-          </select>
-        </div>
-        <div
-          class="col-md-auto d-flex align-items-end text-right"
-          *ngIf="(selectedVersion !== null || processKey === null) && layoutService.isFullscreen"
-        >
-          <div class="btn-group">
-            <button class="btn btn-primary btn-space" (click)="download()">
-              <i class="icon mdi mdi-download mr-1"></i
-              >{{ 'processManagement.download' | translate }}
-            </button>
-            <button
-              class="btn btn-success btn-space"
-              (click)="deploy()"
-              *ngIf="(isReadOnlyProcess$ | async) === false"
-            >
-              <i class="icon mdi mdi-upload mr-1"></i>{{ 'processManagement.deploy' | translate }}
-            </button>
-            <button *ngIf="!selectedVersion" class="btn btn-danger btn-space" (click)="reset()">
-              <i class="icon mdi mdi-delete mr-1"></i>{{ 'processManagement.clear' | translate }}
-            </button>
-          </div>
-        </div>
-        <div
-          *ngIf="selectedVersion"
-          class="col-md-1 fullscreen-toggle text-right"
-          [ngClass]="{'offset-md-2': !layoutService.isFullscreen}"
-        >
-          <i
-            class="fas"
-            [ngClass]="{
-              'fa-expand-arrows-alt': !layoutService.isFullscreen,
-              'fa-compress-arrows-alt': layoutService.isFullscreen,
-            }"
-            (click)="layoutService.toggleFullscreen()"
-          ></i>
-        </div>
-      </div>
-      <div
-        *ngIf="(isSystemProcess$ | async) && (isReadOnlyProcess$ | async)"
-        class="row bg-warning text-black mb-0 p-3 text-center"
-        [translate]="'processManagement.readOnlySystemProcessWarningMessage'"
-      ></div>
-      <div
-        *ngIf="(isSystemProcess$ | async) && (isReadOnlyProcess$ | async) === false"
-        class="row bg-warning text-black mb-0 p-3 text-center"
-        [translate]="'processManagement.systemProcessWarningMessage'"
-      ></div>
-      <div [hidden]="!selectedVersion && processKey" class="row bg-white diagram mb-3">
-        <div id="canvas" class="col-9" [hidden]="isReadOnlyProcess$ | async"></div>
-        <div id="properties" class="col-3 pr-0" [hidden]="isReadOnlyProcess$ | async"></div>
-        <div
-          id="readOnlyCanvas"
-          class="col-12"
-          [hidden]="(isReadOnlyProcess$ | async) === false"
-        ></div>
-      </div>
-    </div>
+  <div class="bpmn__modeler" [style.display]="obs.isReadOnlyProcess ? 'none' : 'flex'">
+    <div class="bpmn__modeler-canvas" #modeler></div>
+
+    <div class="bpmn__modeler-panel" #modelerPanel></div>
+  </div>
+
+  <div class="bpmn__modeler" [style.display]="obs.isReadOnlyProcess ? 'flex' : 'none'">
+    <div class="bpmn__modeler-canvas" #viewer></div>
+
+    <div class="bpmn__modeler-panel" #viewerPanel></div>
   </div>
 </div>
 
 <valtimo-process-link-modal></valtimo-process-link-modal>
+
+<ng-container renderInPageHeader [fullWidth]="true">
+  <ng-template>
+    <div
+      class="page-header-actions"
+      *ngIf="{
+        processDefinitionVersionsListItems: processDefinitionVersionsListItems$ | async,
+        loading: loading$ | async,
+        changesPending: changesPending$ | async,
+        isReadOnlyProcess: isReadOnlyProcess$ | async,
+        isSystemProcess: isSystemProcess$ | async,
+        compactMode: compactMode$ | async,
+        creatingNewProcess: creatingNewProcess$ | async,
+      } as actionsObs"
+    >
+      <div class="page-header-actions__left-container">
+        <div *ngIf="!actionsObs.creatingNewProcess" class="page-header-actions__version-dropdown">
+          <cds-dropdown
+            (selected)="selectedVersionChange($event)"
+            [disabled]="
+              actionsObs.loading ||
+              (actionsObs.processDefinitionVersionsListItems || []).length === 0 ||
+              (actionsObs.processDefinitionVersionsListItems || []).length === 1
+            "
+            [size]="actionsObs.compactMode ? 'sm' : 'md'"
+          >
+            <cds-dropdown-list
+              [items]="actionsObs.processDefinitionVersionsListItems || []"
+            ></cds-dropdown-list>
+          </cds-dropdown>
+        </div>
+
+        <div class="page-header-actions__tags">
+          <cds-tag *ngIf="actionsObs.isReadOnlyProcess" type="blue">{{
+            'processManagement.readOnly' | translate
+          }}</cds-tag>
+
+          <cds-tag *ngIf="actionsObs.isSystemProcess" type="red">{{
+            'processManagement.systemProcess' | translate
+          }}</cds-tag>
+        </div>
+      </div>
+
+      <div class="page-header-actions__buttons">
+        <cds-overflow-menu class="overflow-button">
+          <cds-overflow-menu-option
+            [disabled]="actionsObs.loading"
+            (selected)="export(actionsObs.isReadOnlyProcess)"
+            >{{ 'interface.export' | translate }}</cds-overflow-menu-option
+          >
+        </cds-overflow-menu>
+
+        <button
+          [disabled]="!actionsObs.changesPending"
+          cdsButton="primary"
+          (click)="
+            !actionsObs.creatingNewProcess
+              ? deployChanges(actionsObs.isReadOnlyProcess)
+              : deployNewProcessDefinition()
+          "
+          [size]="actionsObs.compactMode ? 'sm' : 'md'"
+        >
+          {{ 'processManagement.deploy' | translate }}
+
+          <svg class="cds--btn__icon" cdsIcon="deploy" size="16"></svg>
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
