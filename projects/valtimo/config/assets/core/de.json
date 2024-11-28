@@ -51,6 +51,10 @@
         "title": "Keine Cases gefunden"
       }
     },
+    "noAccess": {
+      "description": "Sie haben keinen Zugriff auf diesen Fall",
+      "title": "Zugriff verweigert"
+    },
     "pagination": {
       "itemsPerPage": "Cases pro Seite",
       "totalItem": "{{start}}-{{end}} von {{total}} Case",
@@ -159,6 +163,11 @@
       "description": "Möchten Sie diese Datei wirklich löschen?",
       "cancel": "Absagen",
       "delete": "Löschen"
+    },
+    "delete": {
+      "delete": "Case löschen",
+      "description": "Möchten Sie diesen Case und alle zugehörigen Informationen wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirm": "Löschen"
     },
     "formio": {
       "noFormSpecified": "Für diese Registerkarte wurde keine Formulardefinition angegeben.",

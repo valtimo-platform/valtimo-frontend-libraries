@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {
   PluginStateService,
   ProcessLinkButtonService,
@@ -22,14 +22,10 @@ import {
   ProcessLinkStateService,
   ProcessLinkStepService,
 } from '../../services';
-import {combineLatest, Subscription} from 'rxjs';
+import {combineLatest, Observable, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
-import {PluginConfigurationData} from '@valtimo/plugin';
-import {
-  PluginProcessLinkCreateDto,
-  PluginProcessLinkUpdateDto,
-  ProcessLinkEditMode,
-} from '../../models';
+import {PluginConfiguration, PluginConfigurationData} from '@valtimo/plugin';
+import {PluginProcessLinkCreateDto, PluginProcessLinkUpdateDto, ProcessLinkEditMode} from '../../models';
 
 @Component({
   selector: 'valtimo-plugin-action-configuration',
@@ -37,6 +33,7 @@ import {
   styleUrls: ['./plugin-action-configuration.component.scss'],
 })
 export class PluginActionConfigurationComponent implements OnInit, OnDestroy {
+  @Input() selectedPluginConfiguration$: Observable<PluginConfiguration>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<PluginConfigurationData> =
     new EventEmitter<PluginConfigurationData>();

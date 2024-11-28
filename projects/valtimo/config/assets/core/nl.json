@@ -51,6 +51,10 @@
         "title": "Geen dossiers gevonden"
       }
     },
+    "noAccess": {
+      "description": "Je hebt geen toegang tot dit dossier",
+      "title": "Geen toegang"
+    },
     "pagination": {
       "itemsPerPage": "Dossiers per pagina",
       "totalItem": "{{start}}-{{end}} van {{total}} dossier",
@@ -159,6 +163,11 @@
       "description": "Weet u zeker dat u dit bestand wilt verwijderen?",
       "cancel": "Annuleren",
       "delete": "Verwijderen"
+    },
+    "delete": {
+      "delete": "Dossier verwijderen",
+      "description": "Weet u zeker dat u dit dossier en alle gerelateerde informatie wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+      "confirm": "Verwijderen"
     },
     "formio": {
       "noFormSpecified": "Voor dit tabblad is geen formulierdefinitie opgegeven.",
