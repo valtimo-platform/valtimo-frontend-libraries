@@ -66,6 +66,7 @@ import {
   switchMap,
   take,
   tap,
+  Subscription,
 } from 'rxjs';
 import {
   DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE,
@@ -77,6 +78,7 @@ import {
   CAN_ASSIGN_CASE_PERMISSION,
   CAN_CLAIM_CASE_PERMISSION,
   CAN_VIEW_CASE_PERMISSION,
+  CAN_DELETE_CASE_PERMISSION,
   DOSSIER_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
 import {DossierDetailLayoutService, DossierService, DossierTabService} from '../../services';
@@ -127,6 +129,8 @@ export class DossierDetailComponent
   public readonly caseStatusKey$: Observable<string | 'NOT_AVAILABLE'> = this._caseStatusKey$.pipe(
     filter(key => !!key)
   );
+
+  public readonly showDeleteModal$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   public readonly canView$: Observable<boolean> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) =>
@@ -237,6 +241,16 @@ export class DossierDetailComponent
     )
   );
 
+  public readonly isDeleting$ = new BehaviorSubject<boolean>(false);
+  public readonly canDelete$: Observable<boolean> = this.route.paramMap.pipe(
+    switchMap((params: ParamMap) =>
+      this.permissionService.requestPermission(CAN_DELETE_CASE_PERMISSION, {
+        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        identifier: params.get('documentId') ?? '',
+      })
+    )
+  );
+
   public readonly loadingTabs$ = new BehaviorSubject<boolean>(true);
   public readonly noTabsConfigured$ = new BehaviorSubject<boolean>(false);
   public readonly showNoAccess$ = new BehaviorSubject<boolean>(false);
@@ -275,7 +289,7 @@ export class DossierDetailComponent
   private _pendingTab: TabImpl;
   private _observer!: ResizeObserver;
   private _tabsInit = false;
-  private _prevQueryParams: Params | undefined | null;
+  private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
@@ -314,13 +328,14 @@ export class DossierDetailComponent
     this.pageTitleService.disableReset();
     this.iconService.registerAll([ChevronDown16]);
     this.setDocumentStyle();
-    this.handleBackNavigation();
+    this.enableResetOnBackNavigation();
   }
 
   public ngOnDestroy(): void {
     this.breadcrumbService.clearSecondBreadcrumb();
     this.pageTitleService.enableReset();
     this.removeDocumentStyle();
+    this._subscriptions.unsubscribe();
   }
 
   public getAllAssociatedProcessDefinitions(): void {
@@ -384,6 +399,25 @@ export class DossierDetailComponent
           this.logger.debug('Something went wrong while unassigning user from case');
         },
       });
+  }
+
+  public deleteDocument(): void {
+    this.showDeleteModal$.next(true);
+  }
+
+  public onConfirmDelete(): void {
+    this.isDeleting$.next(true);
+    this.documentService.deleteDocument(this.documentId).subscribe({
+      next: (): void => {
+        this.isDeleting$.next(false);
+        this.showDeleteModal$.next(false);
+        this.router.navigate([`/dossiers/${this.documentDefinitionName}`]);
+      },
+      error: (): void => {
+        this.isDeleting$.next(false);
+        this.logger.debug('Something went wrong while deleting the case');
+      },
+    });
   }
 
   public onTaskClickEvent(taskProcessLinkResult: TaskWithProcessLink): void {
@@ -580,25 +614,18 @@ export class DossierDetailComponent
     this.renderer.removeClass(this.htmlDocument.getElementsByTagName('html')[0], 'html--fixed');
   }
 
-  private handleBackNavigation(): void {
-    this._prevQueryParams =
-      this.router.lastSuccessfulNavigation?.previousNavigation?.extras.queryParams;
-
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationStart && event.navigationTrigger === 'popstate'),
-        take(1)
-      )
-      .subscribe(() => {
-        this.pageTitleService.enableReset();
-
-        if (!this._prevQueryParams) return;
-
-        this.router.navigate([`dossiers/${this.documentDefinitionName}`], {
-          queryParams: this._prevQueryParams,
-          replaceUrl: true,
-        });
-      });
+  private enableResetOnBackNavigation(): void {
+    this._subscriptions.add(
+      this.router.events
+        .pipe(
+          filter(
+            event => event instanceof NavigationStart && event.navigationTrigger === 'popstate'
+          )
+        )
+        .subscribe(() => {
+          this.pageTitleService.enableReset();
+        })
+    );
   }
 
   private handleNoTaskProcessLink(isAdmin: boolean): void {
