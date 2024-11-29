@@ -15,12 +15,12 @@
  */
 
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
-  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -33,7 +33,7 @@ import {NGXLogger} from 'ngx-logger';
   templateUrl: './migration-process-diagram.component.html',
   styleUrls: ['./migration-process-diagram.component.scss'],
 })
-export class MigrationProcessDiagramComponent implements OnInit, OnDestroy {
+export class MigrationProcessDiagramComponent implements AfterViewInit, OnDestroy {
   private bpmnViewer: BpmnViewer;
   public flowNodeMap: any = null;
 
@@ -43,11 +43,13 @@ export class MigrationProcessDiagramComponent implements OnInit, OnDestroy {
 
   constructor(private logger: NGXLogger) {}
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.bpmnViewer = new BpmnViewer();
+    this.bpmnViewer.attachTo(this.el.nativeElement);
     this.bpmnViewer.on('import.done', ({error}: any) => {
       if (!error) {
         const canvas = this.bpmnViewer.get('canvas') as any;
+        console.log(canvas);
         canvas.zoom('fit-viewport', 'auto');
       }
     });
@@ -64,8 +66,9 @@ export class MigrationProcessDiagramComponent implements OnInit, OnDestroy {
   }
 
   public loadXml(xml: string): void {
-    this.bpmnViewer.attachTo(this.el.nativeElement);
     this.bpmnViewer.importXML(xml, err => {
+      if (err) console.log('error', err);
+      console.log('import', xml);
       this.logger.debug(err);
       const processElements = this.bpmnViewer
         .getDefinitions()
@@ -78,6 +81,7 @@ export class MigrationProcessDiagramComponent implements OnInit, OnDestroy {
         }
         return element.$type !== 'bpmn:SequenceFlow';
       });
+      console.log('test', processElements, this.flowNodeMap, this.name);
       this.loaded.emit(this.name);
     });
   }

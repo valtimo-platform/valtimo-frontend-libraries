@@ -3,5 +3,11 @@
   "dest": "../../../dist/valtimo/migration",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "bpmn-js-properties-panel",
+    "@bpmn-io/properties-panel",
+    "camunda-bpmn-moddle",
+    "camunda-bpmn-js-behaviors"
+  ]
 }
