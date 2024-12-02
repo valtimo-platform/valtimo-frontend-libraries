@@ -27,6 +27,7 @@ import {
 
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import {NGXLogger} from 'ngx-logger';
+import {from, take} from 'rxjs';
 
 @Component({
   selector: 'valtimo-migration-process-diagram',
@@ -37,50 +38,58 @@ export class MigrationProcessDiagramComponent implements AfterViewInit, OnDestro
   private bpmnViewer: NavigatedViewer;
   public flowNodeMap: any = null;
 
-  @ViewChild('ref') public el: ElementRef;
-  @Input() name: string;
-  @Output() loaded = new EventEmitter();
+  @ViewChild('ref') public readonly el: ElementRef;
+  @Input() public readonly name: string;
+  @Output() public readonly loaded = new EventEmitter();
 
-  constructor(private logger: NGXLogger) {}
+  constructor(private readonly logger: NGXLogger) {}
 
-  ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     this.bpmnViewer = new NavigatedViewer();
     this.bpmnViewer.attachTo(this.el.nativeElement);
     this.bpmnViewer.on('import.done', ({error}: any) => {
       if (!error) {
         const canvas = this.bpmnViewer.get('canvas') as any;
-        console.log(canvas);
         canvas.zoom('fit-viewport', 'auto');
       }
     });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this.bpmnViewer) {
       this.bpmnViewer.destroy();
     }
   }
 
-  clear() {
+  public clear(): void {
     this.bpmnViewer.clear();
   }
 
   public loadXml(xml: string): void {
     this.bpmnViewer.attachTo(this.el.nativeElement);
-    this.bpmnViewer.importXML(xml, err => {
-      this.logger.debug(err);
-      const processElements = this.bpmnViewer
-        .getDefinitions()
-        .rootElements.filter(function (element) {
-          return element.isExecutable;
-        });
-      this.flowNodeMap = processElements[0].flowElements.filter(function (element) {
-        if (element.name === null || element.name === '') {
-          element.name = element.id;
-        }
-        return element.$type !== 'bpmn:SequenceFlow';
+
+    from(this.bpmnViewer.importXML(xml))
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          const processElements = this.bpmnViewer
+            .getDefinitions()
+            .rootElements.filter(function (element) {
+              return element.isExecutable;
+            });
+
+          this.flowNodeMap = processElements[0].flowElements.filter(function (element) {
+            if (element.name === null || element.name === '') {
+              element.name = element.id;
+            }
+            return element.$type !== 'bpmn:SequenceFlow';
+          });
+
+          this.loaded.emit(this.name);
+        },
+        error: error => {
+          this.logger.debug(error);
+        },
       });
-      this.loaded.emit(this.name);
-    });
   }
 }
