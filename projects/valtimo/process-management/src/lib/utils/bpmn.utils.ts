@@ -17,9 +17,9 @@
 const mapActivityTypeToActivityListenerType = (activityType: string): string => {
   if (activityType === 'bpmn:UserTask') {
     return activityType + ':create';
-  } else {
-    return activityType + ':start';
   }
+
+  return activityType + ':start';
 };
 
 export {mapActivityTypeToActivityListenerType};
