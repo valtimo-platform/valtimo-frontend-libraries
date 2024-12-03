@@ -43,8 +43,6 @@ export class ProcessLinkComponent {
 
     this.modalService.setModalData(params);
 
-    console.log('set modal data', params);
-
     if (activityType) {
       this.processLinkService
         .getProcessLink({

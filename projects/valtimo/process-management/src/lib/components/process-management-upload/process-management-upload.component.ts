@@ -44,20 +44,20 @@ export class ProcessManagementUploadComponent {
     this.bpmn = files.item(0);
   }
 
-  public uploadProcessBpmn() {
-    this.processManagementService.deployBpmn(this.bpmn).subscribe(
-      () => {
+  public uploadProcessBpmn(): void {
+    this.processManagementService.deployBpmn(this.bpmn).subscribe({
+      next: () => {
         this.bpmn = null;
         this.bpmnFile.nativeElement.value = '';
         this.alertService.success('Deployment successful');
         this.processManagementStateService.closeModal();
         this.processManagementStateService.reloadDefinitions();
       },
-      error => {
+      error: error => {
         this.bpmn = null;
         this.bpmnFile.nativeElement.value = '';
         this.alertService.error(`Deployment failed. ${error}`);
-      }
-    );
+      },
+    });
   }
 }

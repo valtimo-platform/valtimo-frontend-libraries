@@ -146,14 +146,14 @@ export class SelectUrlComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.processLinkService.saveProcessLink(processLinkRequest).subscribe(
-          () => {
+        this.processLinkService.saveProcessLink(processLinkRequest).subscribe({
+          next: () => {
             this.stateService.closeModal();
           },
-          () => {
+          error: () => {
             this.stateService.stopSaving();
-          }
-        );
+          },
+        });
       });
   }
 

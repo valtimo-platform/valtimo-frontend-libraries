@@ -15,58 +15,31 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '@valtimo/config';
-import {GetProcessLinkResponse, ProcessLink, ProcessLinkService} from '@valtimo/process-link';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProcessManagementService {
-  private valtimoApiConfig: any;
+  private readonly valtimoApiConfigEndpointUri: string;
 
   constructor(
-    private configService: ConfigService,
-    private processLinkService: ProcessLinkService,
-    private http: HttpClient
+    private readonly configService: ConfigService,
+    private readonly http: HttpClient
   ) {
-    this.valtimoApiConfig = configService.config.valtimoApi;
+    this.valtimoApiConfigEndpointUri = configService.config.valtimoApi.endpointUri;
   }
 
-  deployBpmn(bpmn: File): Observable<any> {
+  public deployBpmn(bpmn: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('file', bpmn);
     formData.append('deployment-name', 'valtimoConsoleApp');
     formData.append('deployment-source', 'process application');
     return this.http.post<any>(
-      `${this.valtimoApiConfig.endpointUri}v1/process/definition/deployment`,
+      `${this.valtimoApiConfigEndpointUri}v1/process/definition/deployment`,
       formData
     );
-  }
-
-  getProcessLinks(processDefinitionId: string) {
-    return new ProcessLinks(this.processLinkService, processDefinitionId);
-  }
-}
-
-export class ProcessLinks {
-  public processLinks$ = new BehaviorSubject<ProcessLink[]>([]);
-
-  constructor(
-    private readonly processLinkService: ProcessLinkService,
-    private readonly processDefinitionId: string
-  ) {
-    this.loadProcessLinks()
-  }
-
-  loadProcessLinks() {
-    this.processLinkService
-      .getProcessLink({
-        processDefinitionId: this.processDefinitionId,
-      })
-      .subscribe((processLinks: GetProcessLinkResponse) => {
-        this.processLinks$.next(processLinks);
-      });
   }
 }

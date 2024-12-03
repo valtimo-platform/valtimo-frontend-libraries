@@ -16,26 +16,22 @@
 
 <cds-modal valtimoCdsModal [open]="modalOpen$ | async" size="sm">
   <cds-modal-header showCloseButton="true" (closeSelect)="closeModal()">
-    <h3 cdsModalHeaderHeading>
-      <h3 class="modal-title">Upload process</h3>
-    </h3>
+    <h3 cdsModalHeaderHeading>Upload process</h3>
   </cds-modal-header>
 
   <h5>BPMN Model</h5>
 
   <input #bpmnFile type="file" id="file" accept=".bpmn" (change)="onChange($event.target.files)" />
 
-  <cds-modal-footer>
-    <div class="btn-group">
-      <button
-        type="button"
-        class="btn btn-primary btn-space"
-        (click)="uploadProcessBpmn()"
-        [disabled]="!bpmn"
-        data-dismiss="modal"
-      >
-        Upload
-      </button>
-    </div>
+  <cds-modal-footer class="btn-group">
+    <button
+      type="button"
+      class="btn btn-primary btn-space"
+      (click)="uploadProcessBpmn()"
+      [disabled]="!bpmn"
+      data-dismiss="modal"
+    >
+      Upload
+    </button>
   </cds-modal-footer>
 </cds-modal>

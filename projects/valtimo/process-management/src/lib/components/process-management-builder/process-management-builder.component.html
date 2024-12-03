@@ -60,21 +60,21 @@
       } as actionsObs"
     >
       <div class="page-header-actions__left-container">
-        <div *ngIf="!actionsObs.creatingNewProcess" class="page-header-actions__version-dropdown">
-          <cds-dropdown
-            (selected)="selectedVersionChange($event)"
-            [disabled]="
-              actionsObs.loading ||
-              (actionsObs.processDefinitionVersionsListItems || []).length === 0 ||
-              (actionsObs.processDefinitionVersionsListItems || []).length === 1
-            "
-            [size]="actionsObs.compactMode ? 'sm' : 'md'"
-          >
-            <cds-dropdown-list
-              [items]="actionsObs.processDefinitionVersionsListItems || []"
-            ></cds-dropdown-list>
-          </cds-dropdown>
-        </div>
+        <cds-dropdown
+          *ngIf="!actionsObs.creatingNewProcess"
+          class="page-header-actions__version-dropdown"
+          (selected)="selectedVersionChange($event)"
+          [disabled]="
+            actionsObs.loading ||
+            (actionsObs.processDefinitionVersionsListItems || []).length === 0 ||
+            (actionsObs.processDefinitionVersionsListItems || []).length === 1
+          "
+          [size]="actionsObs.compactMode ? 'sm' : 'md'"
+        >
+          <cds-dropdown-list
+            [items]="actionsObs.processDefinitionVersionsListItems || []"
+          ></cds-dropdown-list>
+        </cds-dropdown>
 
         <div class="page-header-actions__tags">
           <cds-tag *ngIf="actionsObs.isReadOnlyProcess" type="blue">{{
@@ -92,8 +92,8 @@
           <cds-overflow-menu-option
             [disabled]="actionsObs.loading"
             (selected)="export(actionsObs.isReadOnlyProcess)"
-            >{{ 'interface.export' | translate }}</cds-overflow-menu-option
-          >
+            >{{ 'interface.export' | translate }}
+          </cds-overflow-menu-option>
         </cds-overflow-menu>
 
         <button

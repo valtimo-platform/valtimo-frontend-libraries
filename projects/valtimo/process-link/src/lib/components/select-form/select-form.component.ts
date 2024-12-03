@@ -211,14 +211,14 @@ export class SelectFormComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.processLinkService.saveProcessLink(createRequest).subscribe(
-          () => {
+        this.processLinkService.saveProcessLink(createRequest).subscribe({
+          next: () => {
             this.stateService.closeModal();
           },
-          () => {
+          error: () => {
             this.stateService.stopSaving();
-          }
-        );
+          },
+        });
       });
   }
 }

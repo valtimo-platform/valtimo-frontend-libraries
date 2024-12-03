@@ -229,7 +229,7 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
 
   public deployChanges(isReadOnlyProcess: boolean): void {
     combineLatest([
-      isReadOnlyProcess ? from(this._bpmnViewer.saveXML()) : from(this._bpmnModeler.saveXML()),
+      from(isReadOnlyProcess ? this._bpmnViewer.saveXML() : this._bpmnModeler.saveXML()),
       this.processManagementEditorService.processLinksForSelectedDefinition$,
       this.processManagementEditorService.selectionProcessDefinition$,
     ])

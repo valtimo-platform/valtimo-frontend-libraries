@@ -40,11 +40,11 @@ export class ProcessManagementListComponent {
     )
   );
 
-  public readonly FIELDS = [
+  public readonly FIELDS: ColumnConfig[] = [
     {key: 'name', label: 'Name'},
     {key: 'key', label: 'Key'},
     {key: 'readOnly', label: 'Read-only'},
-  ] as ColumnConfig[];
+  ];
 
   constructor(
     private readonly processService: ProcessService,
