@@ -54,24 +54,31 @@
               />
             </cds-text-label>
 
-            <cds-text-label>
-              <v-input-label
-                [title]="'widgetTabManagement.content.fields.value' | translate"
-                [tooltip]="
-                  'widgetTabManagement.content.' + widgetType() + '.valueTooltip' | translate
-                "
-              >
-              </v-input-label>
+            @if (!documentDefinitionName) {
+              <cds-text-label>
+                <v-input-label
+                  [title]="'widgetTabManagement.content.fields.value' | translate"
+                  [tooltip]="
+                    'widgetTabManagement.content.' + widgetType() + '.valueTooltip' | translate
+                  "
+                >
+                </v-input-label>
 
-              <input
-                cdsText
-                [attr.data-carbon-theme]="inputTheme"
-                [placeholder]="'widgetTabManagement.content.fields.valuePlaceholder' | translate"
-                type="text"
+                <input
+                  cdsText
+                  [attr.data-carbon-theme]="inputTheme"
+                  [placeholder]="'widgetTabManagement.content.fields.valuePlaceholder' | translate"
+                  type="text"
+                  formControlName="content"
+                />
+              </cds-text-label>
+            } @else {
+              <valtimo-value-path-selector
                 formControlName="content"
-              />
-            </cds-text-label>
-
+                [documentDefinitionName]="documentDefinitionName"
+                [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
+              ></valtimo-value-path-selector>
+            }
             <cds-dropdown
               [attr.data-carbon-theme]="inputTheme"
               [label]="'widgetTabManagement.content.fields.type' | translate"

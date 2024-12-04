@@ -43,6 +43,8 @@ import {
   ValuePathSelectorInputMode,
   ValuePathSelectorNotation,
   ValuePathSelectorPrefix,
+  ValueResolverOptionType,
+  ValueResolverResult,
 } from '../../models/value-path-selector.model';
 import {
   DropdownModule,
@@ -198,16 +200,22 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     tap(() => this.loadingValuePathItems$.next(true)),
     switchMap(([documentDefinitionName, prefixes, version]) =>
       typeof version === 'number'
-        ? this.valuePathSelectorService.getResolvableKeysPerPrefix(
+        ? this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
             prefixes,
             documentDefinitionName,
+            ValueResolverOptionType.FIELD,
             version
           )
-        : this.valuePathSelectorService.getResolvableKeysPerPrefix(prefixes, documentDefinitionName)
+        : this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
+            prefixes,
+            documentDefinitionName
+          )
     ),
-    map(result =>
-      result.map(path => this.getFormattedPath(path)).sort((a, b) => a.localeCompare(b))
-    ),
+    map((results: string[]) => {
+      return results
+        .map(result => this.getFormattedPath(result))
+        .sort((a, b) => a.localeCompare(b));
+    }),
     tap(options => (this._cachedOptions = options)),
     switchMap(options =>
       combineLatest([of(options), this._selectedPath$, this.inputModeIsDropdown$])

@@ -48,20 +48,12 @@
       />
     </cds-text-label>
 
-    <cds-text-label [attr.data-carbon-theme]="obs.theme">
-      <v-input-label
-        [title]="'widgetTabManagement.content.collection.collection' | translate"
-        [tooltip]="'widgetTabManagement.content.collection.collectionTooltip' | translate"
-      >
-      </v-input-label>
-
-      <input
-        formControlName="collection"
-        cdsText
-        [placeholder]="'widgetTabManagement.content.collection.collectionPlaceholder' | translate"
-        type="text"
-      />
-    </cds-text-label>
+    <valtimo-value-path-selector
+      formControlName="collection"
+      [attr.data-carbon-theme]="obs.theme"
+      [documentDefinitionName]="documentDefinitionName$ | async"
+      [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
+    ></valtimo-value-path-selector>
   </form>
 
   <span class="valtimo-dossier-management-widget-collection__subtitle">

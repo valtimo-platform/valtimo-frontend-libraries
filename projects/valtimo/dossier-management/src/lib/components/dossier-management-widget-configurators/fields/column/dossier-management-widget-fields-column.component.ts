@@ -39,7 +39,13 @@ import {
 } from '@angular/forms';
 import {TrashCan16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CdsThemeService, CurrentCarbonTheme, InputLabelModule} from '@valtimo/components';
+import {
+  CdsThemeService,
+  CurrentCarbonTheme,
+  InputLabelModule,
+  ValuePathSelectorComponent,
+  ValuePathSelectorPrefix,
+} from '@valtimo/components';
 import {
   CaseWidgetCurrencyDisplayType,
   CaseWidgetDateDisplayType,
@@ -81,6 +87,7 @@ import {WidgetFieldsService, WidgetWizardService} from '../../../../services';
     IconModule,
     AccordionModule,
     InputLabelModule,
+    ValuePathSelectorComponent,
   ],
 })
 export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnDestroy {
@@ -88,6 +95,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   @Input({required: true}) public columnData: FieldsCaseWidgetValue[];
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
   @Input() public isFieldWidget = false;
+  @Input() public documentDefinitionName?: string | null = null;
   @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
 
   @Output() public columnUpdateEvent = new EventEmitter<{
@@ -106,6 +114,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   }
 
   public displayTypeItems: ListItem[] = this.widgetFieldsService.displayTypeItems;
+  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
 
   public getDisplayItemsSelected(row: AbstractControl): ListItem[] {
     return this.widgetFieldsService.getDisplayItemsSelected(row);

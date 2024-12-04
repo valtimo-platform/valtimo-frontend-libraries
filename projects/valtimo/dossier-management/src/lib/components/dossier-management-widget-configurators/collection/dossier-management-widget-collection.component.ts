@@ -40,6 +40,8 @@ import {
   CdsThemeService,
   CurrentCarbonTheme,
   InputLabelModule,
+  ValuePathSelectorComponent,
+  ValuePathSelectorPrefix,
 } from '@valtimo/components';
 import {
   CaseWidgetCurrencyDisplayType,
@@ -64,6 +66,7 @@ import {debounceTime, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetFieldsService, WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   templateUrl: './dossier-management-widget-collection.component.html',
@@ -81,6 +84,7 @@ import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dos
     ButtonModule,
     IconModule,
     InputLabelModule,
+    ValuePathSelectorComponent,
   ],
 })
 export class DossierManagementWidgetCollectionComponent
@@ -132,6 +136,11 @@ export class DossierManagementWidgetCollectionComponent
   public readonly content = this.widgetWizardService
     .widgetContent as WritableSignal<WidgetCollectionContent>;
   public readonly displayTypeItems: ListItem[] = this.widgetFieldsService.displayTypeItems;
+  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
+
+  public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
+    map((paramMap: ParamMap) => paramMap.get('name') ?? '')
+  );
 
   public WIDTH_ITEMS: ListItem[] = [
     {
@@ -152,6 +161,7 @@ export class DossierManagementWidgetCollectionComponent
   constructor(
     private readonly cdsThemeService: CdsThemeService,
     private readonly fb: FormBuilder,
+    private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService,
     private readonly widgetFieldsService: WidgetFieldsService

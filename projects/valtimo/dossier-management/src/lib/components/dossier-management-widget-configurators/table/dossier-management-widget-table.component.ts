@@ -34,6 +34,8 @@ import {
   CdsThemeService,
   CurrentCarbonTheme,
   InputLabelModule,
+  ValuePathSelectorComponent,
+  ValuePathSelectorPrefix,
 } from '@valtimo/components';
 import {FieldsCaseWidgetValue, WidgetContentProperties, WidgetTableContent} from '@valtimo/dossier';
 import {ButtonModule, InputModule, ToggleModule} from 'carbon-components-angular';
@@ -41,6 +43,7 @@ import {debounceTime, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   templateUrl: './dossier-management-widget-table.component.html',
@@ -57,6 +60,7 @@ import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dos
     ToggleModule,
     ButtonModule,
     InputLabelModule,
+    ValuePathSelectorComponent,
   ],
 })
 export class DossierManagementWidgetTableComponent
@@ -79,11 +83,15 @@ export class DossierManagementWidgetTableComponent
       Validators.required
     ),
   });
+  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
 
   public readonly theme$: Observable<CARBON_THEME> = this.cdsThemeService.currentTheme$.pipe(
     map((currentTheme: CurrentCarbonTheme) =>
       currentTheme === CurrentCarbonTheme.G10 ? CARBON_THEME.WHITE : CARBON_THEME.G90
     )
+  );
+  public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
+    map((paramMap: ParamMap) => paramMap.get('name') ?? '')
   );
 
   public readonly content = this.widgetWizardService
@@ -92,12 +100,14 @@ export class DossierManagementWidgetTableComponent
     () =>
       (this.widgetWizardService.widgetContent() as WidgetTableContent)?.firstColumnAsTitle || false
   );
+
   private readonly _contentValid = signal<boolean>(this.widgetWizardService.editMode());
   private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly cdsThemeService: CdsThemeService,
     private readonly fb: FormBuilder,
+    private readonly route: ActivatedRoute,
     private readonly widgetWizardService: WidgetWizardService
   ) {}
 
