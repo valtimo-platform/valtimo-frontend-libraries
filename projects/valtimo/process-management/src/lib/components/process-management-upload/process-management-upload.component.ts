@@ -14,49 +14,72 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {ProcessManagementService} from '../../process-management.service';
-import {AlertService} from '@valtimo/components';
+import {CARBON_CONSTANTS} from '@valtimo/components';
 import {ProcessManagementStateService} from '../../services';
+import {FormBuilder, Validators} from '@angular/forms';
+import {map, startWith} from 'rxjs';
+import {NotificationService} from 'carbon-components-angular';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-process-management-upload',
   templateUrl: './process-management-upload.component.html',
   styleUrls: ['./process-management-upload.component.scss'],
+  providers: [NotificationService],
 })
 export class ProcessManagementUploadComponent {
-  public bpmn: File | null = null;
-  @ViewChild('bpmnFile') bpmnFile: ElementRef;
-
   public readonly modalOpen$ = this.processManagementStateService.openModal$;
+
+  public readonly ACCEPTED_FILES: string[] = ['bpmn'];
+
+  public readonly form = this.formBuilder.group({
+    file: this.formBuilder.control(new Set<any>(), [Validators.required]),
+  });
+
+  public readonly fileSelected$ = this.form.get('file').valueChanges.pipe(
+    startWith(null),
+    map(value => !!(value instanceof Set && value.size > 0))
+  );
 
   constructor(
     private readonly processManagementService: ProcessManagementService,
-    private readonly alertService: AlertService,
-    private readonly processManagementStateService: ProcessManagementStateService
+    private readonly processManagementStateService: ProcessManagementStateService,
+    private readonly formBuilder: FormBuilder,
+    private readonly notificationService: NotificationService,
+    private readonly translateService: TranslateService
   ) {}
 
   public closeModal(): void {
     this.processManagementStateService.closeModal();
-  }
 
-  public onChange(files: FileList): void {
-    this.bpmn = files.item(0);
+    setTimeout(() => {
+      this.form.reset();
+    }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
   public uploadProcessBpmn(): void {
-    this.processManagementService.deployBpmn(this.bpmn).subscribe({
+    const bpmnFile = this.form.value?.file?.values()?.next()?.value?.file;
+
+    if (!bpmnFile) return;
+
+    this.processManagementService.deployBpmn(bpmnFile).subscribe({
       next: () => {
-        this.bpmn = null;
-        this.bpmnFile.nativeElement.value = '';
-        this.alertService.success('Deployment successful');
-        this.processManagementStateService.closeModal();
+        this.notificationService.showNotification({
+          type: 'success',
+          title: this.translateService.instant('processManagement.upload.success'),
+          duration: 5000,
+        });
+        this.closeModal();
         this.processManagementStateService.reloadDefinitions();
       },
-      error: error => {
-        this.bpmn = null;
-        this.bpmnFile.nativeElement.value = '';
-        this.alertService.error(`Deployment failed. ${error}`);
+      error: () => {
+        this.notificationService.showNotification({
+          type: 'error',
+          title: this.translateService.instant('processManagement.upload.failure'),
+          duration: 5000,
+        });
       },
     });
   }

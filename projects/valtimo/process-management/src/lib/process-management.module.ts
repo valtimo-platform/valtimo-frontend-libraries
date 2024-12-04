@@ -30,7 +30,9 @@ import {
 import {
   ButtonModule,
   DropdownModule,
+  FileUploaderModule,
   IconModule,
+  LayerModule,
   ModalModule,
   NotificationModule,
   RadioModule,
@@ -60,6 +62,8 @@ import {
     RadioModule,
     ReactiveFormsModule,
     ModalModule,
+    FileUploaderModule,
+    LayerModule,
   ],
   exports: [ProcessManagementComponent],
 })
