@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {ProcessInstanceTask} from '@valtimo/process';
 
 interface ProcessLink {
@@ -200,6 +199,26 @@ interface CompatiblePluginProcessLinks {
   processDefinitionKey: string;
   versions: CompatibleProcessVersion[];
 }
+type ProcessLinkUpdateEvent =
+  | PluginProcessLinkUpdateDto
+  | FormFlowProcessLinkUpdateRequestDto
+  | FormProcessLinkUpdateRequestDto
+  | URLProcessLinkUpdateRequestDto;
+
+type ProcessLinkCreateEvent =
+  | FormProcessLinkCreateRequestDto
+  | FormFlowProcessLinkCreateRequestDto
+  | PluginProcessLinkCreateDto
+  | URLProcessLinkCreateDto;
+
+interface ProcessLinkDeleteEvent {
+  processLinkId: string;
+}
+
+enum ProcessLinkEditMode {
+  SAVE_TO_BACKEND,
+  EMIT_EVENTS,
+}
 
 export {
   GetProcessLinkRequest,
@@ -227,4 +246,8 @@ export {
   UIComponentProcessLinkUpdateRequestDto,
   UIComponentProcessLinkCreateRequestDto,
   CompatiblePluginProcessLinks,
+  ProcessLinkUpdateEvent,
+  ProcessLinkCreateEvent,
+  ProcessLinkDeleteEvent,
+  ProcessLinkEditMode,
 };

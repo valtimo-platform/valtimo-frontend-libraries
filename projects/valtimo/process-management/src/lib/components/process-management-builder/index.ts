@@ -14,6 +14,4 @@
  * limitations under the License.
  */
 
-export * from './process-management-editor.service';
-export * from './process-management-state.service';
-export * from './process-management.service';
+export * from './process-management-builder.component';

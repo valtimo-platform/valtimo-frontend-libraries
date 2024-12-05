@@ -15,6 +15,7 @@
  */
 import {Inject, Injectable, OnDestroy, Optional} from '@angular/core';
 import {BehaviorSubject, map, Observable, Subscription} from 'rxjs';
+
 import {FORM_CUSTOM_COMPONENT_TOKEN} from '../constants';
 import {
   FormCustomComponentConfig,
@@ -65,7 +66,7 @@ export class ProcessLinkStateService implements OnDestroy {
   public get elementName$(): Observable<string> {
     return this._elementName$.asObservable();
   }
-  get availableProcessLinkTypes$(): Observable<Array<ProcessLinkType>> {
+  public get availableProcessLinkTypes$(): Observable<Array<ProcessLinkType>> {
     return this._availableProcessLinkTypes$.asObservable().pipe(
       map(types => {
         if (!this.formCustomComponentConfig) {

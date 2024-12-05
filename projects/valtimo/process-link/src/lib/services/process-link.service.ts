@@ -22,7 +22,6 @@ import {
   CompatiblePluginProcessLinks,
   FormFlowProcessLinkCreateRequestDto,
   FormFlowProcessLinkUpdateRequestDto,
-  FormProcessLinkCreateRequestDto,
   FormProcessLinkUpdateRequestDto,
   FormSubmissionResult,
   GetProcessLinkRequest,
@@ -110,6 +109,26 @@ export class ProcessLinkService {
   public getProcessLinkCandidates(activityType: string): Observable<Array<ProcessLinkType>> {
     return this.http.get<Array<ProcessLinkType>>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link/types?activityType=${activityType}`
+    );
+  }
+
+  public deployProcessWithProcessLinks(
+    processLinks: ProcessLinkCreateEvent[] = [],
+    processDefinitionId: string | null,
+    processXml: string | null
+  ) {
+    const formData = new FormData();
+    const processLinksBlob = new Blob([JSON.stringify(processLinks)], {type: 'application/json'});
+
+    if (processXml) formData.append('file', new File([processXml], 'process.bpmn'));
+    if (processDefinitionId) formData.append('processDefinitionId', processDefinitionId);
+    formData.append('processLinks', processLinksBlob);
+    formData.append('deployment-name', 'valtimoConsoleApp');
+    formData.append('deployment-source', 'process application');
+
+    return this.http.post(
+      `${this.VALTIMO_ENDPOINT_URI}v1/process/definition/deployment/process-link`,
+      formData
     );
   }
 

@@ -18,9 +18,13 @@ import {BehaviorSubject, combineLatest, map, Observable, Subscription, tap} from
 import {take} from 'rxjs/operators';
 import {
   FormDefinitionListItem,
+<<<<<<< HEAD
   FormDisplayType,
   FormFlowProcessLinkUpdateRequestDto,
   FormSize,
+=======
+  FormFlowProcessLinkUpdateRequestDto,
+>>>>>>> 9523dffc (story: modeler extension (#1279))
   ProcessLinkEditMode,
 } from '../../models';
 import {
