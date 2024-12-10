@@ -34,7 +34,7 @@ import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@an
 import {
   ButtonModule,
   CheckboxModule,
-  DropdownModule,
+  ComboBoxModule,
   InputModule,
   ListItem,
   ModalModule,
@@ -59,9 +59,9 @@ import {DocumentService} from '@valtimo/document';
     InputModule,
     ReactiveFormsModule,
     ButtonModule,
-    DropdownModule,
     ToggleModule,
     CheckboxModule,
+    ComboBoxModule,
   ],
 })
 export class DocumentenApiUploadFieldModalComponent implements OnDestroy {
@@ -179,6 +179,11 @@ export class DocumentenApiUploadFieldModalComponent implements OnDestroy {
 
   public onClose(): void {
     this.close();
+  }
+
+  public clear(): void {
+    this.selectedDefaultValue.setValue(null)
+    this.defaultValue.setValue(null)
   }
 
   public saveUploadField(): void {

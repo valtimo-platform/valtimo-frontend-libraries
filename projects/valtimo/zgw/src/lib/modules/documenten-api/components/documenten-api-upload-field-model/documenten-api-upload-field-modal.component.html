@@ -35,37 +35,41 @@
   <section cdsModalContent>
     <form [formGroup]="formGroup" class="uploadField-form">
       @if (key === 'taal') {
-        <cds-dropdown
+        <cds-combo-box
           formControlName="selectedDefaultValue"
           [label]="'zgw.uploadFields.fields.defaultValue' | translate"
           [dropUp]="false"
+          (clear)="clear()"
         >
           <cds-dropdown-list [items]="obs.languageItems"></cds-dropdown-list>
-        </cds-dropdown>
+        </cds-combo-box>
       } @else if (key === 'vertrouwelijkheidaanduiding') {
-        <cds-dropdown
+        <cds-combo-box
           formControlName="selectedDefaultValue"
           [label]="'zgw.uploadFields.fields.defaultValue' | translate"
           [dropUp]="false"
+          (clear)="clear()"
         >
           <cds-dropdown-list [items]="obs.confidentialityLevelItems"></cds-dropdown-list>
-        </cds-dropdown>
+        </cds-combo-box>
       } @else if (key === 'status') {
-        <cds-dropdown
+        <cds-combo-box
           formControlName="selectedDefaultValue"
           [label]="'zgw.uploadFields.fields.defaultValue' | translate"
           [dropUp]="false"
+          (clear)="clear()"
         >
           <cds-dropdown-list [items]="obs.statusItems"></cds-dropdown-list>
-        </cds-dropdown>
+        </cds-combo-box>
       } @else if (key === 'informatieobjecttype') {
-        <cds-dropdown
+        <cds-combo-box
           formControlName="selectedDefaultValue"
           [label]="'zgw.uploadFields.fields.defaultValue' | translate"
           [dropUp]="false"
+          (clear)="clear()"
         >
           <cds-dropdown-list [items]="obs.documentTypeItems"></cds-dropdown-list>
-        </cds-dropdown>
+        </cds-combo-box>
       } @else if (
         key === 'filename' ||
         key === 'bestandsnaam' ||

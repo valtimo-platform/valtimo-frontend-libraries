@@ -603,7 +603,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
               creatiedatum: this.toFormattedDate(
                 file?.lastModified || new Date().getMilliseconds()
               ),
-              titel: this.documentTitle || this.filenameToTitle(filename),
+              titel: this.documentTitle || this.filenameToTitle(file?.name || this.filename),
             });
             if (this.areAllFieldsHidden()) {
               this.save();
