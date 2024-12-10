@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService, Page} from '@valtimo/config';
 import {Observable} from 'rxjs';
 import {DocumentenApiRelatedFile} from '../models';
-import {DocumentenApiUploadField} from "../models/documenten-api-upload-field.model";
+import {DocumentenApiUploadField} from '../models/documenten-api-upload-field.model';
 
 @Injectable({
   providedIn: 'root',
@@ -66,17 +66,22 @@ export class DocumentenApiDocumentService extends BaseApiService {
     );
   }
 
-  public getUploadFields(
-    caseDefinitionName: string,
-  ): Observable<Array<DocumentenApiUploadField>> {
+  public getUploadFields(caseDefinitionName: string): Observable<Array<DocumentenApiUploadField>> {
     return this.httpClient.get<Array<DocumentenApiUploadField>>(
-      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/zgw-document/upload-field`),
+      this.getApiUrl(
+        `/management/v1/case-definition/${caseDefinitionName}/zgw-document/upload-field`
+      )
     );
   }
 
-  public updateUploadField(caseDefinitionName: string, uploadField: DocumentenApiUploadField): Observable<void> {
+  public updateUploadField(
+    caseDefinitionName: string,
+    uploadField: DocumentenApiUploadField
+  ): Observable<void> {
     return this.httpClient.put<void>(
-      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/zgw-document/upload-field`),
+      this.getApiUrl(
+        `/management/v1/case-definition/${caseDefinitionName}/zgw-document/upload-field`
+      ),
       uploadField
     );
   }

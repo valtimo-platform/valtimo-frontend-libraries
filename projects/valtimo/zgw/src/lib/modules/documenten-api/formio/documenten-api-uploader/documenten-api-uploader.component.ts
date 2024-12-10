@@ -77,12 +77,13 @@ export class DocumentenApiUploaderComponent
   @Input() disableCreationDate: boolean;
   @Input() hideAdditionalDate: boolean;
   @Input() set tags(tags: string) {
-      this._tags = tags?.split(',')
-        ?.map(tag => tag.trim())
-        ?.filter(tag => !!tag);
-      if (this._tags?.length === 0) {
-        this._tags = null;
-      }
+    this._tags = tags
+      ?.split(',')
+      ?.map(tag => tag.trim())
+      ?.filter(tag => !!tag);
+    if (this._tags?.length === 0) {
+      this._tags = null;
+    }
   }
   @Input() hideTags: boolean;
 

@@ -46,7 +46,7 @@ const STATUS_ITEMS: Array<DocumentStatus> = [
 
 type DocumentLanguage = 'nld' | 'eng' | 'deu';
 
-const LANGUAGE_ITEMS: Array<DocumentLanguage> = ['nld' , 'eng' , 'deu'];
+const LANGUAGE_ITEMS: Array<DocumentLanguage> = ['nld', 'eng', 'deu'];
 
 interface DocumentenApiMetadata {
   titel: string;

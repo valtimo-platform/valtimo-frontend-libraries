@@ -40,9 +40,7 @@
           [label]="'zgw.uploadFields.fields.defaultValue' | translate"
           [dropUp]="false"
         >
-          <cds-dropdown-list
-            [items]="obs.languageItems"
-          ></cds-dropdown-list>
+          <cds-dropdown-list [items]="obs.languageItems"></cds-dropdown-list>
         </cds-dropdown>
       } @else if (key === 'vertrouwelijkheidaanduiding') {
         <cds-dropdown
@@ -50,9 +48,7 @@
           [label]="'zgw.uploadFields.fields.defaultValue' | translate"
           [dropUp]="false"
         >
-          <cds-dropdown-list
-            [items]="obs.confidentialityLevelItems"
-          ></cds-dropdown-list>
+          <cds-dropdown-list [items]="obs.confidentialityLevelItems"></cds-dropdown-list>
         </cds-dropdown>
       } @else if (key === 'status') {
         <cds-dropdown
@@ -60,9 +56,7 @@
           [label]="'zgw.uploadFields.fields.defaultValue' | translate"
           [dropUp]="false"
         >
-          <cds-dropdown-list
-            [items]="obs.statusItems"
-          ></cds-dropdown-list>
+          <cds-dropdown-list [items]="obs.statusItems"></cds-dropdown-list>
         </cds-dropdown>
       } @else if (key === 'informatieobjecttype') {
         <cds-dropdown
@@ -70,21 +64,18 @@
           [label]="'zgw.uploadFields.fields.defaultValue' | translate"
           [dropUp]="false"
         >
-          <cds-dropdown-list
-            [items]="obs.documentTypeItems"
-          ></cds-dropdown-list>
+          <cds-dropdown-list [items]="obs.documentTypeItems"></cds-dropdown-list>
         </cds-dropdown>
-      } @else if (key === 'filename'
-      || key === 'bestandsnaam'
-      || key === 'titel'
-      || key === 'beschrijving'
-      || key === 'trefwoorden') {
+      } @else if (
+        key === 'filename' ||
+        key === 'bestandsnaam' ||
+        key === 'titel' ||
+        key === 'beschrijving' ||
+        key === 'trefwoorden'
+      ) {
         <cds-label>
           {{ 'zgw.uploadFields.fields.defaultValue' | translate }}
-          <input
-            cdsText
-            formControlName="defaultValue"
-          />
+          <input cdsText formControlName="defaultValue" />
         </cds-label>
       }
       <div class="toggle-group">

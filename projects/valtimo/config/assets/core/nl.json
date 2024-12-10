@@ -957,7 +957,7 @@
         "field": "Veld",
         "defaultValue": "Standaardwaarde",
         "visible": "Zichtbaar",
-        "readonly": "Alleen lezen",
+        "readonly": "Alleen lezen"
       },
       "keys": {
         "bestandsnaam": "Bestandsnaam",

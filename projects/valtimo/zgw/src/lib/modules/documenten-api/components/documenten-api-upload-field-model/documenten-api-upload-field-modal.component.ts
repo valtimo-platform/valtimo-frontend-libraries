@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output,} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import {
   CONFIDENTIALITY_LEVELS,
   DocumentenApiColumnModalTypeCloseEvent,
   LANGUAGE_ITEMS,
-  STATUS_ITEMS
+  STATUS_ITEMS,
 } from '../../models';
 import {BehaviorSubject, combineLatest, map, Observable, of, Subscription, switchMap} from 'rxjs';
 import {CARBON_CONSTANTS} from '@valtimo/components';
@@ -35,9 +42,9 @@ import {
 } from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
-import {DocumentenApiDocumentService} from "../../services";
-import {DocumentenApiUploadField} from "../../models/documenten-api-upload-field.model";
-import {DocumentService} from "@valtimo/document";
+import {DocumentenApiDocumentService} from '../../services';
+import {DocumentenApiUploadField} from '../../models/documenten-api-upload-field.model';
+import {DocumentService} from '@valtimo/document';
 
 @Component({
   selector: 'valtimo-documenten-api-upload-field-modal',
@@ -82,7 +89,6 @@ export class DocumentenApiUploadFieldModalComponent implements OnDestroy {
 
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 
-
   public readonly confidentialityLevelItems$: Observable<Array<ListItem>> = combineLatest([
     this.defaultValue.valueChanges,
     this.translateService.stream('key'),
@@ -123,10 +129,12 @@ export class DocumentenApiUploadFieldModalComponent implements OnDestroy {
     this.defaultValue.valueChanges,
     this.translateService.stream('key'),
   ]).pipe(
-    switchMap(([selectedItem]) => combineLatest([
+    switchMap(([selectedItem]) =>
+      combineLatest([
         this.documentService.getDocumentTypes(this.documentDefinitionName),
-      of(selectedItem),
-    ])),
+        of(selectedItem),
+      ])
+    ),
     map(([documentTypes, selectedItem]) =>
       documentTypes.map(item => ({
         id: item.url,
@@ -162,9 +170,8 @@ export class DocumentenApiUploadFieldModalComponent implements OnDestroy {
     private readonly fb: FormBuilder,
     private readonly documentenApiDocumentService: DocumentenApiDocumentService,
     private readonly translateService: TranslateService,
-    private readonly documentService: DocumentService,
-  ) {
-  }
+    private readonly documentService: DocumentService
+  ) {}
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
@@ -182,7 +189,7 @@ export class DocumentenApiUploadFieldModalComponent implements OnDestroy {
       defaultValue: this.selectedDefaultValue?.value?.id || this.defaultValue.value,
       visible: this.visible.value,
       readonly: this.readonly.value,
-    } as DocumentenApiUploadField
+    } as DocumentenApiUploadField;
 
     this.documentenApiDocumentService
       .updateUploadField(this.documentDefinitionName, formField)

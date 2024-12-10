@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {filter, tap} from "rxjs/operators";
+import {filter, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -30,9 +30,9 @@ export class ValtimoModalService {
   }
 
   get documentDefinitionName$(): Observable<string> {
-    return this._documentDefinitionName$.asObservable().pipe(
-      filter(documentDefinitionName => !!documentDefinitionName)
-    );
+    return this._documentDefinitionName$
+      .asObservable()
+      .pipe(filter(documentDefinitionName => !!documentDefinitionName));
   }
 
   scrollToTop(): void {

@@ -216,7 +216,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
   @Output() modalClose: EventEmitter<boolean> = new EventEmitter();
 
-  public filenameExtension: string = ""
+  public filenameExtension: string = '';
   public documentenApiMetadataForm: FormGroup = this.fb.group({
     bestandsnaam: this.fb.control('', Validators.required),
     titel: this.fb.control('', Validators.required),
@@ -593,14 +593,16 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
           take(1),
           tap(([file, userEmail]) => {
             const filename = this.filename || file?.name || file?.bestandsnaam;
-            this.filenameExtension = filename?.split(".")?.pop() || "";
+            this.filenameExtension = filename?.split('.')?.pop() || '';
             if (this.filenameExtension.length === filename.length) {
-              this.filenameExtension = "";
+              this.filenameExtension = '';
             }
             this.documentenApiMetadataForm.patchValue({
               bestandsnaam: filename,
               auteur: this.author || userEmail,
-              creatiedatum: this.toFormattedDate(file?.lastModified || new Date().getMilliseconds()),
+              creatiedatum: this.toFormattedDate(
+                file?.lastModified || new Date().getMilliseconds()
+              ),
               titel: this.documentTitle || this.filenameToTitle(filename),
             });
             if (this.areAllFieldsHidden()) {
@@ -614,9 +616,9 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
 
   private filenameToTitle(filename?: string) {
     if (!filename) {
-      return null
+      return null;
     } else {
-      filename = filename.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]+/g, " ");
+      filename = filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9]+/g, ' ');
       return filename.charAt(0).toUpperCase() + filename.slice(1);
     }
   }
@@ -632,7 +634,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
 
   private toFormattedDate(milliseconds: number): string {
     const date = new Date(milliseconds);
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
   }
 
   private openFileSubscription(): void {
@@ -663,28 +665,31 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
 
   private openFilenameSubscription() {
     this._subscriptions.add(
-      this.bestandsnaam.valueChanges.subscribe(
-        bestandsnaam => {
-          if (bestandsnaam && this.filenameExtension) {
-            const bestandsnaamWithExtension = bestandsnaam.replace(/\.[^/.]+$/, "") + "." + this.filenameExtension;
-            if (bestandsnaamWithExtension != bestandsnaam) {
-              this.documentenApiMetadataForm.patchValue({
-                bestandsnaam: bestandsnaamWithExtension,
-              });
-            }
+      this.bestandsnaam.valueChanges.subscribe(bestandsnaam => {
+        if (bestandsnaam && this.filenameExtension) {
+          const bestandsnaamWithExtension =
+            bestandsnaam.replace(/\.[^/.]+$/, '') + '.' + this.filenameExtension;
+          if (bestandsnaamWithExtension != bestandsnaam) {
+            this.documentenApiMetadataForm.patchValue({
+              bestandsnaam: bestandsnaamWithExtension,
+            });
           }
         }
-      )
+      })
     );
   }
 
   private openDocumentDefinitionSubscription() {
-    this._subscriptions.add(this.route?.params.pipe(
-      map(params => params?.documentDefinitionName),
-      filter(documentDefinitionName => documentDefinitionName),
-    ).subscribe(documentDefinitionName => {
-      this.valtimoModalService.setDocumentDefinitionName(documentDefinitionName);
-    }));
+    this._subscriptions.add(
+      this.route?.params
+        .pipe(
+          map(params => params?.documentDefinitionName),
+          filter(documentDefinitionName => documentDefinitionName)
+        )
+        .subscribe(documentDefinitionName => {
+          this.valtimoModalService.setDocumentDefinitionName(documentDefinitionName);
+        })
+    );
   }
 
   private setAdditionalDate(value: AdditionalDocumentDate): void {
@@ -692,16 +697,18 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   }
 
   private areAllFieldsHidden(): boolean {
-    return this.hideAdditionalDate
-      && this.hideAuthor
-      && this.hideConfidentialityLevel
-      && this.hideCreationDate
-      && this.hideDescription
-      && this.hideDocumentTitle
-      && this.hideDocumentType
-      && this.hideFilename
-      && this.hideLanguage
-      && this.hideStatus
-      && this.hideTags
+    return (
+      this.hideAdditionalDate &&
+      this.hideAuthor &&
+      this.hideConfidentialityLevel &&
+      this.hideCreationDate &&
+      this.hideDescription &&
+      this.hideDocumentTitle &&
+      this.hideDocumentType &&
+      this.hideFilename &&
+      this.hideLanguage &&
+      this.hideStatus &&
+      this.hideTags
+    );
   }
 }

@@ -201,14 +201,17 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public formFields$: Observable<any> = this.documentId$.pipe(
     switchMap(documentId => this.documentenApiDocumentService.getPrefilledUploadFields(documentId)),
     map(formFields => {
-      const obj = {}
-      formFields.forEach(formField => obj[formField.key] = {
-        defaultValue: formField.defaultValue,
-        visible: formField.visible,
-        readonly: formField.readonly,
-      });
+      const obj = {};
+      formFields.forEach(
+        formField =>
+          (obj[formField.key] = {
+            defaultValue: formField.defaultValue,
+            visible: formField.visible,
+            readonly: formField.readonly,
+          })
+      );
       return obj;
-    }),
+    })
   );
 
   public relatedFiles$: Observable<Array<DocumentenApiRelatedFile>> = combineLatest([

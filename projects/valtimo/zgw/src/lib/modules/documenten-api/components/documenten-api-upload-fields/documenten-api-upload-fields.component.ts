@@ -40,11 +40,12 @@ import {
 import {CommonModule} from '@angular/common';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ButtonModule, IconModule} from 'carbon-components-angular';
-import {DOCUMENTEN_API_UPLOAD_KEYS, DocumentenApiUploadField} from '../../models/documenten-api-upload-field.model';
-import {DocumentenApiDocumentService} from "../../services";
 import {
-  DocumentenApiUploadFieldModalComponent
-} from "../documenten-api-upload-field-model/documenten-api-upload-field-modal.component";
+  DOCUMENTEN_API_UPLOAD_KEYS,
+  DocumentenApiUploadField,
+} from '../../models/documenten-api-upload-field.model';
+import {DocumentenApiDocumentService} from '../../services';
+import {DocumentenApiUploadFieldModalComponent} from '../documenten-api-upload-field-model/documenten-api-upload-field-modal.component';
 
 @Component({
   selector: 'valtimo-documenten-api-upload-fields',
@@ -73,7 +74,9 @@ export class DocumentenApiUploadFieldsComponent {
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
-  public readonly uploadFieldModalType$ = new BehaviorSubject<DocumentenApiColumnModalType>('closed');
+  public readonly uploadFieldModalType$ = new BehaviorSubject<DocumentenApiColumnModalType>(
+    'closed'
+  );
   public readonly prefill$ = new BehaviorSubject<DocumentenApiUploadField | undefined>(undefined);
 
   public get documentDefinitionName$(): Observable<string> {
@@ -93,10 +96,12 @@ export class DocumentenApiUploadFieldsComponent {
     switchMap(([documentDefinitionName]) =>
       this.documentenApiDocumentService.getUploadFields(documentDefinitionName)
     ),
-    map((fields) => fields.map(field => ({
-      ...field,
-      field: this.translateService.instant(`zgw.uploadFields.keys.${field.key}`),
-    }))),
+    map(fields =>
+      fields.map(field => ({
+        ...field,
+        field: this.translateService.instant(`zgw.uploadFields.keys.${field.key}`),
+      }))
+    ),
     startWith([]),
     tap(() => {
       this.loading$.next(false);
@@ -137,7 +142,7 @@ export class DocumentenApiUploadFieldsComponent {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly documentenApiDocumentService: DocumentenApiDocumentService,
-    private readonly translateService: TranslateService,
+    private readonly translateService: TranslateService
   ) {}
 
   public openEditModal(uploadField: DocumentenApiUploadField): void {
