@@ -218,14 +218,14 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
 
   public filenameExtension: string = '';
   public documentenApiMetadataForm: FormGroup = this.fb.group({
-    bestandsnaam: this.fb.control('', Validators.required),
+    bestandsnaam: this.fb.control(''),
     titel: this.fb.control('', Validators.required),
     auteur: this.fb.control('', Validators.required),
     beschrijving: this.fb.control(''),
     taal: this.fb.control('', Validators.required),
     informatieobjecttype: this.fb.control('', Validators.required),
-    status: this.fb.control('', Validators.required),
-    vertrouwelijkheidaanduiding: this.fb.control('', Validators.required),
+    status: this.fb.control(''),
+    vertrouwelijkheidaanduiding: this.fb.control(''),
     creatiedatum: this.fb.control('', Validators.required),
     ontvangstdatum: this.fb.control(''),
     verzenddatum: this.fb.control(''),
@@ -491,18 +491,18 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this.tagFormControl.patchValue(event.filter(tag => tag.selected).map(tag => tag.id));
   }
 
-  public confidentialityLevelSelected(event: {item: {id: string}}) {
-    if (event.item.id) {
+  public confidentialityLevelSelected(event: {id: string}) {
+    if (event.id) {
       this.documentenApiMetadataForm.patchValue({
-        vertrouwelijkheidaanduiding: event.item.id,
+        vertrouwelijkheidaanduiding: event.id,
       });
     }
   }
 
-  public statusSelected(event: {item: {id: string}}) {
-    if (event.item.id) {
+  public statusSelected(event: {id: string}) {
+    if (event.id) {
       this.documentenApiMetadataForm.patchValue({
-        status: event.item.id,
+        status: event.id,
       });
     }
   }
@@ -541,18 +541,18 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       const validPrefillStatus = this.STATUSES.includes(prefillStatus) ? prefillStatus : '';
 
       this.documentenApiMetadataForm.patchValue({
-        bestandsnaam: this.filename || bestandsnaam,
+        bestandsnaam: bestandsnaam,
         titel: titel,
-        auteur: this.author || auteur,
-        beschrijving: this.description || beschrijving,
-        taal: this.language || taal,
-        informatieobjecttype: this.documentType || informatieobjecttype,
+        auteur: auteur || this.author,
+        beschrijving: beschrijving || this.description,
+        taal: taal || this.language,
+        informatieobjecttype: informatieobjecttype || this.documentType,
         status: validPrefillStatus,
-        vertrouwelijkheidaanduiding: this.confidentialityLevel || vertrouwelijkheidaanduiding,
+        vertrouwelijkheidaanduiding: vertrouwelijkheidaanduiding || this.confidentialityLevel,
         creatiedatum,
         ontvangstdatum,
         verzenddatum,
-        trefwoorden: this.tags || trefwoorden,
+        trefwoorden: trefwoorden || this.tags,
       });
     }
   }
@@ -592,18 +592,20 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         .pipe(
           take(1),
           tap(([file, userEmail]) => {
-            const filename = this.filename || file?.name || file?.bestandsnaam;
+            const filename = file?.bestandsnaam || this.filename || file?.name;
             this.filenameExtension = filename?.split('.')?.pop() || '';
-            if (this.filenameExtension.length === filename.length) {
+            if (this.filenameExtension.length === filename?.length) {
               this.filenameExtension = '';
             }
             this.documentenApiMetadataForm.patchValue({
               bestandsnaam: filename,
-              auteur: this.author || userEmail,
-              creatiedatum: this.toFormattedDate(
-                file?.lastModified || new Date().getMilliseconds()
-              ),
-              titel: this.documentTitle || this.filenameToTitle(file?.name || this.filename),
+              auteur: file?.auteur || this.author || userEmail,
+              creatiedatum:
+                file?.creatiedatum || this.toFormattedDate(new Date().getMilliseconds()),
+              titel:
+                file?.titel ||
+                this.documentTitle ||
+                this.filenameToTitle(file?.name || this.filename),
             });
             if (this.areAllFieldsHidden()) {
               this.save();
@@ -667,11 +669,11 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this._subscriptions.add(
       this.bestandsnaam.valueChanges.subscribe(bestandsnaam => {
         if (bestandsnaam && this.filenameExtension) {
-          const bestandsnaamWithExtension =
+          let correctBestandsnaam =
             bestandsnaam.replace(/\.[^/.]+$/, '') + '.' + this.filenameExtension;
-          if (bestandsnaamWithExtension != bestandsnaam) {
+          if (correctBestandsnaam != bestandsnaam) {
             this.documentenApiMetadataForm.patchValue({
-              bestandsnaam: bestandsnaamWithExtension,
+              bestandsnaam: correctBestandsnaam,
             });
           }
         }

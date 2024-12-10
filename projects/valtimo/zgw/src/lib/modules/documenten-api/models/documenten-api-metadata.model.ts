@@ -51,10 +51,10 @@ const LANGUAGE_ITEMS: Array<DocumentLanguage> = ['nld', 'eng', 'deu'];
 interface DocumentenApiMetadata {
   titel: string;
   beschrijving?: string;
-  bestandsnaam: string;
-  vertrouwelijkheidaanduiding: ConfidentialityLevel;
+  bestandsnaam?: string;
+  vertrouwelijkheidaanduiding?: ConfidentialityLevel;
   auteur: string;
-  status: DocumentStatus;
+  status?: DocumentStatus;
   creatiedatum: string;
   ontvangstdatum?: string;
   verzenddatum?: string;

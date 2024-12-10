@@ -214,6 +214,15 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     })
   );
 
+  public metadata$: Observable<any> = this.formFields$.pipe(
+    map(formFields => ({
+      trefwoorden: formFields?.trefwoorden?.defaultValue
+        ?.split(',')
+        ?.map(tag => tag.trim())
+        ?.filter(tag => !!tag),
+    }))
+  );
+
   public relatedFiles$: Observable<Array<DocumentenApiRelatedFile>> = combineLatest([
     this.documentId$,
     this.route.queryParamMap,

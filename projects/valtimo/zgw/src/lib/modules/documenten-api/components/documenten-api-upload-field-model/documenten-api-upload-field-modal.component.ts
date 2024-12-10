@@ -182,8 +182,8 @@ export class DocumentenApiUploadFieldModalComponent implements OnDestroy {
   }
 
   public clear(): void {
-    this.selectedDefaultValue.setValue(null)
-    this.defaultValue.setValue(null)
+    this.selectedDefaultValue.setValue(null);
+    this.defaultValue.setValue(null);
   }
 
   public saveUploadField(): void {

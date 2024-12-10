@@ -83,7 +83,6 @@
             <input
               [value]="filename"
               [placeholder]="'document.filenamePlaceholder' | translate"
-              [required]="true"
               cdsText
               type="text"
               id="bestandsnaam"
@@ -146,15 +145,16 @@
             </cds-tooltip>
           </cds-label>
           <div class="documenten-metada-form-input">
-            <cds-dropdown
+            <cds-combo-box
               [placeholder]="'document.confidentialityPlaceholder' | translate"
               id="vertrouwelijkheidaanduiding"
               [appendInline]="true"
               [disabled]="obs.disabled || (confidentialityLevelDisabled$ | async)"
               (selected)="confidentialityLevelSelected($event)"
+              (clear)="confidentialityLevelFormControl.setValue(null)"
             >
               <cds-dropdown-list [items]="obs.confidentialityLevelItems || []"></cds-dropdown-list>
-            </cds-dropdown>
+            </cds-combo-box>
           </div>
         }
         @if (!hideDocumentType) {
@@ -305,15 +305,16 @@
             </cds-tooltip>
           </cds-label>
           <div class="documenten-metada-form-input">
-            <cds-dropdown
+            <cds-combo-box
               [placeholder]="'document.statusPlaceholder' | translate"
               [disabled]="obs.disabled || (statusDisabled$ | async)"
               id="status"
               [appendInline]="true"
               (selected)="statusSelected($event)"
+              (clear)="statusFormControl.setValue(null)"
             >
               <cds-dropdown-list [items]="obs.statusItems || []"></cds-dropdown-list>
-            </cds-dropdown>
+            </cds-combo-box>
           </div>
         }
         @if (!hideAdditionalDate) {

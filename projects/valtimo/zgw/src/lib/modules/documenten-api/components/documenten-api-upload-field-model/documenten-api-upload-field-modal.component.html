@@ -28,7 +28,11 @@
 >
   <cds-modal-header showCloseButton="true" (closeSelect)="onClose()">
     <h3 cdsModalHeaderHeading>
-      {{ ('zgw.uploadFields.editModal.header' | translate) + ' - ' + key }}
+      {{
+        ('zgw.uploadFields.editModal.header' | translate) +
+          ' - ' +
+          ('zgw.uploadFields.keys.' + key | translate)
+      }}
     </h3>
   </cds-modal-header>
 

@@ -25,6 +25,7 @@
     pagination: pagination$ | async,
     sortState: sortState$ | async,
     formFields: formFields$ | async,
+    metadata: metadata$ | async,
   } as obs"
 >
   @if ((!obs.fieldsLoading && obs.fields.length) || obs.fieldsLoading) {
@@ -109,7 +110,7 @@
     [hideTags]="!obs.formFields?.trefwoorden?.visible"
     [language]="obs.formFields?.taal?.defaultValue"
     [status]="obs.formFields?.status?.defaultValue"
-    [tags]="obs.formFields?.trefwoorden?.defaultValue?.split(',')"
+    [tags]="obs.metadata?.trefwoorden"
     [open]="showUploadModal$ | async"
     [disabled$]="modalDisabled$"
     [file$]="fileToBeUploaded$"
@@ -200,7 +201,11 @@
 </ng-template>
 
 <ng-template #translationTemplate let-data="data">
-  {{ 'document.' + data.item[data.key] | translate }}
+  @if (data.item[data.key]) {
+    {{ 'document.' + data.item[data.key] | translate }}
+  } @else {
+    -
+  }
 </ng-template>
 
 <ng-template #navigateToCaseAdminButton>
