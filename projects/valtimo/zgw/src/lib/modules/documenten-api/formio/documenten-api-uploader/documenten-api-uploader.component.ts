@@ -50,21 +50,41 @@ export class DocumentenApiUploaderComponent
   @Input() camera: boolean;
 
   @Input() documentTitle: string;
+  @Input() hideDocumentTitle: boolean;
   @Input() disableDocumentTitle: boolean;
   @Input() filename: string;
+  @Input() hideFilename: boolean;
   @Input() disableFilename: boolean;
   @Input() author: string;
+  @Input() hideAuthor: boolean;
   @Input() disableAuthor: boolean;
   @Input() status: string;
+  @Input() hideStatus: boolean;
   @Input() disableStatus: boolean;
   @Input() language: string;
+  @Input() hideLanguage: boolean;
   @Input() disableLanguage: boolean;
   @Input() documentType: string;
+  @Input() hideDocumentType: boolean;
   @Input() disableDocumentType: boolean;
   @Input() description: string;
+  @Input() hideDescription: boolean;
   @Input() disableDescription: boolean;
   @Input() confidentialityLevel: string;
+  @Input() hideConfidentialityLevel: boolean;
   @Input() disableConfidentialityLevel: boolean;
+  @Input() hideCreationDate: boolean;
+  @Input() disableCreationDate: boolean;
+  @Input() hideAdditionalDate: boolean;
+  @Input() set tags(tags: string) {
+      this._tags = tags?.split(',')
+        ?.map(tag => tag.trim())
+        ?.filter(tag => !!tag);
+      if (this._tags?.length === 0) {
+        this._tags = null;
+      }
+  }
+  @Input() hideTags: boolean;
 
   @Output() valueChange = new EventEmitter<Array<DocumentenApiFileReference>>();
 
@@ -98,13 +118,10 @@ export class DocumentenApiUploaderComponent
     .getUserSubject()
     .pipe(map(userIdentity => userIdentity?.roles.includes('ROLE_ADMIN')));
 
-  private readonly _documentDefinitionName$ = this.route.params.pipe(
-    map(params => params?.documentDefinitionName),
-    filter(caseDefinitionName => !!caseDefinitionName)
-  );
+  private _tags: string[];
 
   public readonly supportedDocumentenApiFeatures$: Observable<SupportedDocumentenApiFeatures> =
-    this._documentDefinitionName$.pipe(
+    this.modalService.documentDefinitionName$.pipe(
       switchMap(caseDefinitionName =>
         this.documentenApiVersionService.getSupportedApiFeatures(caseDefinitionName)
       )
@@ -168,5 +185,9 @@ export class DocumentenApiUploaderComponent
         })
       )
       .subscribe();
+  }
+
+  get tags(): string[] {
+    return this._tags;
   }
 }

@@ -24,6 +24,7 @@
     supportedDocumentenApiFeatures: supportedDocumentenApiFeatures$ | async,
     pagination: pagination$ | async,
     sortState: sortState$ | async,
+    formFields: formFields$ | async,
   } as obs"
 >
   @if ((!obs.fieldsLoading && obs.fields.length) || obs.fieldsLoading) {
@@ -80,6 +81,35 @@
   }
 
   <valtimo-documenten-api-metadata-modal
+    [author]="obs.formFields?.auteur?.defaultValue"
+    [confidentialityLevel]="obs.formFields?.vertrouwelijkheidaanduiding?.defaultValue"
+    [description]="obs.formFields?.beschrijving?.defaultValue"
+    [disableAuthor]="obs.formFields?.auteur?.readonly"
+    [disableConfidentialityLevel]="obs.formFields?.vertrouwelijkheidaanduiding?.readonly"
+    [disableCreationDate]="obs.formFields?.creatiedatum?.readonly"
+    [disableDescription]="obs.formFields?.beschrijving?.readonly"
+    [disableDocumentTitle]="obs.formFields?.titel?.readonly"
+    [disableDocumentType]="obs.formFields?.informatieobjecttype?.readonly"
+    [disableFilename]="obs.formFields?.bestandsnaam?.readonly"
+    [disableLanguage]="obs.formFields?.taal?.readonly"
+    [disableStatus]="obs.formFields?.status?.readonly"
+    [documentTitle]="obs.formFields?.titel?.defaultValue"
+    [documentType]="obs.formFields?.informatieobjecttype?.defaultValue"
+    [filename]="obs.formFields?.bestandsnaam?.defaultValue"
+    [hideAdditionalDate]="!obs.formFields?.aanvullendeDatum?.visible"
+    [hideAuthor]="!obs.formFields?.auteur?.visible"
+    [hideConfidentialityLevel]="!obs.formFields?.vertrouwelijkheidaanduiding?.visible"
+    [hideCreationDate]="!obs.formFields?.creatiedatum?.visible"
+    [hideDescription]="!obs.formFields?.beschrijving?.visible"
+    [hideDocumentTitle]="!obs.formFields?.titel?.visible"
+    [hideDocumentType]="!obs.formFields?.informatieobjecttype?.visible"
+    [hideFilename]="!obs.formFields?.bestandsnaam?.visible"
+    [hideLanguage]="!obs.formFields?.taal?.visible"
+    [hideStatus]="!obs.formFields?.status?.visible"
+    [hideTags]="!obs.formFields?.trefwoorden?.visible"
+    [language]="obs.formFields?.taal?.defaultValue"
+    [status]="obs.formFields?.status?.defaultValue"
+    [tags]="obs.formFields?.trefwoorden?.defaultValue?.split(',')"
     [open]="showUploadModal$ | async"
     [disabled$]="modalDisabled$"
     [file$]="fileToBeUploaded$"

@@ -109,15 +109,14 @@ import {DocumentenApiTagService} from '../../services/documenten-api-tag.service
     VModalModule,
   ],
 })
-export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, OnDestroy {
+export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @ViewChild('metadataModal') metadataModal: VModalComponent;
 
   @Input() disabled$!: Observable<boolean>;
   @Input() file$!: Observable<any>;
 
   @Input() author: string;
-  @Input() confidentialityLevel: string;
-  @Input() description: string;
+  @Input() hideAuthor: boolean = false;
   @Input() set disableAuthor(value: boolean) {
     if (value) {
       this.auteur.disable();
@@ -125,6 +124,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       this.auteur.enable();
     }
   }
+  @Input() confidentialityLevel: string;
+  @Input() hideConfidentialityLevel: boolean = false;
   @Input() set disableConfidentialityLevel(value: boolean) {
     if (value) {
       this.confidentialityLevelFormControl.disable();
@@ -132,6 +133,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       this.confidentialityLevelFormControl.enable();
     }
   }
+  @Input() description: string;
+  @Input() hideDescription: boolean = false;
   @Input() set disableDescription(value: boolean) {
     if (value) {
       this.beschrijving.disable();
@@ -139,6 +142,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       this.beschrijving.enable();
     }
   }
+  @Input() documentTitle = '';
+  @Input() hideDocumentTitle: boolean = false;
   @Input() set disableDocumentTitle(value: boolean) {
     if (value) {
       this.titel.disable();
@@ -146,6 +151,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       this.titel.enable();
     }
   }
+  @Input() documentType: string;
+  @Input() hideDocumentType: boolean = false;
   @Input() set disableDocumentType(value: boolean) {
     if (value) {
       this.informatieobjecttypeFormControl.disable();
@@ -153,6 +160,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       this.informatieobjecttypeFormControl.enable();
     }
   }
+  @Input() filename: string;
+  @Input() hideFilename: boolean = false;
   @Input() set disableFilename(value: boolean) {
     if (value) {
       this.bestandsnaam.disable();
@@ -160,6 +169,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       this.bestandsnaam.enable();
     }
   }
+  @Input() language: string;
+  @Input() hideLanguage: boolean = false;
   @Input() set disableLanguage(value: boolean) {
     if (value) {
       this.languageFormControl.disable();
@@ -167,6 +178,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       this.languageFormControl.enable();
     }
   }
+  @Input() status: string;
+  @Input() hideStatus: boolean = false;
   @Input() set disableStatus(value: boolean) {
     if (value) {
       this.statusFormControl.disable();
@@ -174,18 +187,19 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
       this.statusFormControl.enable();
     }
   }
-  @Input() set disableTrefwoorden(value: boolean) {
+  @Input() tags: string[];
+  @Input() hideTags: boolean = false;
+  @Input() supportsTrefwoorden = false;
+  @Input() hideCreationDate: boolean = false;
+  @Input() set disableCreationDate(value: boolean) {
     if (value) {
-      this.tagFormControl.disable();
+      this.creatiedatum.disable();
     } else {
-      this.tagFormControl.enable();
+      this.creatiedatum.enable();
     }
   }
-  @Input() documentTitle = '';
-  @Input() documentType: string;
-  @Input() filename: string;
+  @Input() hideAdditionalDate: boolean = false;
   @Input() isEditMode: boolean;
-  @Input() language: string;
 
   public readonly open$ = new BehaviorSubject<boolean>(false);
 
@@ -199,17 +213,15 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     }
   }
 
-  @Input() status: string;
-  @Input() supportsTrefwoorden = false;
-
   @Output() metadata: EventEmitter<DocumentenApiMetadata> = new EventEmitter();
   @Output() modalClose: EventEmitter<boolean> = new EventEmitter();
 
+  public filenameExtension: string = ""
   public documentenApiMetadataForm: FormGroup = this.fb.group({
     bestandsnaam: this.fb.control('', Validators.required),
     titel: this.fb.control('', Validators.required),
     auteur: this.fb.control('', Validators.required),
-    beschrijving: this.fb.control('', Validators.required),
+    beschrijving: this.fb.control(''),
     taal: this.fb.control('', Validators.required),
     informatieobjecttype: this.fb.control('', Validators.required),
     status: this.fb.control('', Validators.required),
@@ -263,6 +275,10 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
 
   public get tagFormControl(): AbstractControl<string[]> {
     return this.documentenApiMetadataForm.get('trefwoorden');
+  }
+
+  public get creatiedatum(): AbstractControl<string> {
+    return this.documentenApiMetadataForm.get('creatiedatum');
   }
 
   public get titel(): AbstractControl<string> {
@@ -361,12 +377,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     )
   );
 
-  public readonly documentDefinitionName$: Observable<string> = from(
-    this.route.params.pipe(map(params => params?.documentDefinitionName))
-  );
-
   public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
-    this.documentDefinitionName$,
+    this.valtimoModalService.documentDefinitionName$,
     this.tagFormControl.valueChanges.pipe(startWith(this.tagFormControl.value)),
   ]).pipe(
     filter(([documentDefinitionName]) => !!documentDefinitionName),
@@ -457,14 +469,13 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
   public ngOnInit(): void {
     this.openFileSubscription();
     this.openDisabledSubscription();
-  }
-
-  public ngOnChanges(): void {
-    this.openFileSubscription();
+    this.openFilenameSubscription();
+    this.openDocumentDefinitionSubscription();
   }
 
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+    this._fileSubscription?.unsubscribe();
     this.isDefinitiveStatus$.next(false);
   }
 
@@ -531,7 +542,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
 
       this.documentenApiMetadataForm.patchValue({
         bestandsnaam: this.filename || bestandsnaam,
-        titel: this.documentTitle || titel,
+        titel: titel,
         auteur: this.author || auteur,
         beschrijving: this.description || beschrijving,
         taal: this.language || taal,
@@ -541,7 +552,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
         creatiedatum,
         ontvangstdatum,
         verzenddatum,
-        trefwoorden,
+        trefwoorden: this.tags || trefwoorden,
       });
     }
   }
@@ -579,25 +590,49 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     this._subscriptions.add(
       combineLatest([this.file$, this.userEmail$])
         .pipe(
+          take(1),
           tap(([file, userEmail]) => {
+            const filename = this.filename || file?.name || file?.bestandsnaam;
+            this.filenameExtension = filename?.split(".")?.pop() || "";
+            if (this.filenameExtension.length === filename.length) {
+              this.filenameExtension = "";
+            }
             this.documentenApiMetadataForm.patchValue({
-              bestandsnaam: this.filename || file?.name || file?.bestandsnaam,
+              bestandsnaam: filename,
               auteur: this.author || userEmail,
+              creatiedatum: this.toFormattedDate(file?.lastModified || new Date().getMilliseconds()),
+              titel: this.documentTitle || this.filenameToTitle(filename),
             });
+            if (this.areAllFieldsHidden()) {
+              this.save();
+            }
           })
         )
         .subscribe()
     );
   }
 
+  private filenameToTitle(filename?: string) {
+    if (!filename) {
+      return null
+    } else {
+      filename = filename.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]+/g, " ");
+      return filename.charAt(0).toUpperCase() + filename.slice(1);
+    }
+  }
+
   private formatDate(controlName: string): void {
     const control = this.documentenApiMetadataForm.controls[controlName];
     if (control.value) {
-      const date = new Date(control.value);
       this.documentenApiMetadataForm.patchValue({
-        [controlName]: `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
+        [controlName]: this.toFormattedDate(control.value),
       });
     }
+  }
+
+  private toFormattedDate(milliseconds: number): string {
+    const date = new Date(milliseconds);
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
   }
 
   private openFileSubscription(): void {
@@ -626,7 +661,47 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnChanges, O
     );
   }
 
+  private openFilenameSubscription() {
+    this._subscriptions.add(
+      this.bestandsnaam.valueChanges.subscribe(
+        bestandsnaam => {
+          if (bestandsnaam && this.filenameExtension) {
+            const bestandsnaamWithExtension = bestandsnaam.replace(/\.[^/.]+$/, "") + "." + this.filenameExtension;
+            if (bestandsnaamWithExtension != bestandsnaam) {
+              this.documentenApiMetadataForm.patchValue({
+                bestandsnaam: bestandsnaamWithExtension,
+              });
+            }
+          }
+        }
+      )
+    );
+  }
+
+  private openDocumentDefinitionSubscription() {
+    this._subscriptions.add(this.route?.params.pipe(
+      map(params => params?.documentDefinitionName),
+      filter(documentDefinitionName => documentDefinitionName),
+    ).subscribe(documentDefinitionName => {
+      this.valtimoModalService.setDocumentDefinitionName(documentDefinitionName);
+    }));
+  }
+
   private setAdditionalDate(value: AdditionalDocumentDate): void {
     this.additionalDocumentDate$.next(value);
+  }
+
+  private areAllFieldsHidden(): boolean {
+    return this.hideAdditionalDate
+      && this.hideAuthor
+      && this.hideConfidentialityLevel
+      && this.hideCreationDate
+      && this.hideDescription
+      && this.hideDocumentTitle
+      && this.hideDocumentType
+      && this.hideFilename
+      && this.hideLanguage
+      && this.hideStatus
+      && this.hideTags
   }
 }
