@@ -619,10 +619,10 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   private filenameToTitle(filename?: string) {
     if (!filename) {
       return null;
-    } else {
-      filename = filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9]+/g, ' ');
-      return filename.charAt(0).toUpperCase() + filename.slice(1);
     }
+
+    filename = filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9]+/g, ' ');
+    return filename.charAt(0).toUpperCase() + filename.slice(1);
   }
 
   private formatDate(controlName: string): void {
