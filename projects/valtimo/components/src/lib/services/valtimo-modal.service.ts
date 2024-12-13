@@ -31,7 +31,6 @@ export class ValtimoModalService {
 
   get documentDefinitionName$(): Observable<string> {
     return this._documentDefinitionName$
-      .asObservable()
       .pipe(filter(documentDefinitionName => !!documentDefinitionName));
   }
 

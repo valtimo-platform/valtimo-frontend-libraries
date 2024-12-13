@@ -15,18 +15,9 @@
  */
 
 import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
-import {
-  FormioCustomComponent,
-  FormIoDomService,
-  FormIoStateService,
-  ValtimoModalService,
-} from '@valtimo/components';
+import {FormioCustomComponent, FormIoDomService, FormIoStateService, ValtimoModalService,} from '@valtimo/components';
 import {BehaviorSubject, combineLatest, Observable, of, startWith, switchMap} from 'rxjs';
-import {
-  DocumentenApiFileReference,
-  DownloadService,
-  UploadProviderService,
-} from '@valtimo/resource';
+import {DocumentenApiFileReference, DownloadService, UploadProviderService,} from '@valtimo/resource';
 import {DocumentenApiMetadata, SupportedDocumentenApiFeatures} from '../../models';
 import {filter, map, take, tap} from 'rxjs/operators';
 import {UserProviderService} from '@valtimo/security';
@@ -39,8 +30,7 @@ import {DocumentenApiVersionService} from '../../services';
   styleUrls: ['./documenten-api-uploader.component.scss'],
 })
 export class DocumentenApiUploaderComponent
-  implements FormioCustomComponent<Array<DocumentenApiFileReference>>
-{
+  implements FormioCustomComponent<Array<DocumentenApiFileReference>> {
   @Input() disabled: boolean;
   @Input() title: string;
   @Input() hideTitle: boolean;
@@ -49,43 +39,110 @@ export class DocumentenApiUploaderComponent
   @Input() hideMaxFileSize: boolean;
   @Input() camera: boolean;
 
-  @Input() documentTitle: string;
-  @Input() hideDocumentTitle: boolean;
+  @Input() set documentTitle(defaultValue: string) {
+    this.defaultValues['titel'] = defaultValue;
+  }
+
+  @Input() set hideDocumentTitle(hide: boolean) {
+    this.hideField(hide, 'titel');
+  }
+
   @Input() disableDocumentTitle: boolean;
-  @Input() filename: string;
-  @Input() hideFilename: boolean;
+
+  @Input() set filename(defaultValue: string) {
+    this.defaultValues['bestandsnaam'] = defaultValue;
+  }
+
+  @Input() set hideFilename(hide: boolean) {
+    this.hideField(hide, 'bestandsnaam');
+  }
+
   @Input() disableFilename: boolean;
-  @Input() author: string;
-  @Input() hideAuthor: boolean;
+
+  @Input() set author(defaultValue: string) {
+    this.defaultValues['auteur'] = defaultValue;
+  }
+
+  @Input() set hideAuthor(hide: boolean) {
+    this.hideField(hide, 'auteur');
+  }
+
   @Input() disableAuthor: boolean;
-  @Input() status: string;
-  @Input() hideStatus: boolean;
+
+  @Input() set status(defaultValue: string) {
+    this.defaultValues['status'] = defaultValue;
+  }
+
+  @Input() set hideStatus(hide: boolean) {
+    this.hideField(hide, 'status');
+  }
+
   @Input() disableStatus: boolean;
-  @Input() language: string;
-  @Input() hideLanguage: boolean;
+
+  @Input() set language(defaultValue: string) {
+    this.defaultValues['taal'] = defaultValue;
+  }
+
+  @Input() set hideLanguage(hide: boolean) {
+    this.hideField(hide, 'taal');
+  }
+
   @Input() disableLanguage: boolean;
-  @Input() documentType: string;
-  @Input() hideDocumentType: boolean;
+
+  @Input() set documentType(defaultValue: string) {
+    this.defaultValues['informatieobjecttype'] = defaultValue;
+  }
+
+  @Input() set hideDocumentType(hide: boolean) {
+    this.hideField(hide, 'informatieobjecttype');
+  }
+
   @Input() disableDocumentType: boolean;
-  @Input() description: string;
-  @Input() hideDescription: boolean;
+
+  @Input() set description(defaultValue: string) {
+    this.defaultValues['beschrijving'] = defaultValue;
+  }
+
+  @Input() set hideDescription(hide: boolean) {
+    this.hideField(hide, 'beschrijving');
+  }
+
   @Input() disableDescription: boolean;
-  @Input() confidentialityLevel: string;
-  @Input() hideConfidentialityLevel: boolean;
+
+  @Input() set confidentialityLevel(defaultValue: string) {
+    this.defaultValues['vertrouwelijkheidaanduiding'] = defaultValue;
+  }
+
+  @Input() set hideConfidentialityLevel(hide: boolean) {
+    this.hideField(hide, 'vertrouwelijkheidaanduiding');
+  }
+
   @Input() disableConfidentialityLevel: boolean;
-  @Input() hideCreationDate: boolean;
+
+  @Input() set hideCreationDate(hide: boolean) {
+    this.hideField(hide, 'creatiedatum');
+  }
+
   @Input() disableCreationDate: boolean;
-  @Input() hideAdditionalDate: boolean;
+
+  @Input() set hideAdditionalDate(hide: boolean) {
+    this.hideField(hide, 'aanvullendeDatum');
+  }
+
   @Input() set tags(tags: string) {
-    this._tags = tags
+    let _tags = tags
       ?.split(',')
       ?.map(tag => tag.trim())
       ?.filter(tag => !!tag);
-    if (this._tags?.length === 0) {
-      this._tags = null;
+    if (_tags?.length === 0) {
+      _tags = null;
     }
+    this.defaultValues['trefwoorden'] = tags;
   }
-  @Input() hideTags: boolean;
+
+  @Input() set hideTags(hide: boolean) {
+    this.hideField(hide, 'trefwoorden');
+  }
 
   @Output() valueChange = new EventEmitter<Array<DocumentenApiFileReference>>();
 
@@ -109,8 +166,8 @@ export class DocumentenApiUploaderComponent
     switchMap(([params, firstChildParams, documentDefinitionName]) =>
       this.uploadProviderService.checkUploadProcessLink(
         params?.documentDefinitionName ||
-          firstChildParams?.documentDefinitionName ||
-          documentDefinitionName
+        firstChildParams?.documentDefinitionName ||
+        documentDefinitionName
       )
     ),
     startWith('loading')
@@ -119,14 +176,15 @@ export class DocumentenApiUploaderComponent
     .getUserSubject()
     .pipe(map(userIdentity => userIdentity?.roles.includes('ROLE_ADMIN')));
 
-  private _tags: string[];
-
   public readonly supportedDocumentenApiFeatures$: Observable<SupportedDocumentenApiFeatures> =
     this.modalService.documentDefinitionName$.pipe(
       switchMap(caseDefinitionName =>
         this.documentenApiVersionService.getSupportedApiFeatures(caseDefinitionName)
       )
     );
+
+  public defaultValues: {} = {};
+  public hideFields: Array<string> = [];
 
   constructor(
     private readonly uploadProviderService: UploadProviderService,
@@ -137,7 +195,8 @@ export class DocumentenApiUploaderComponent
     private readonly userProviderService: UserProviderService,
     private readonly route: ActivatedRoute,
     private readonly documentenApiVersionService: DocumentenApiVersionService
-  ) {}
+  ) {
+  }
 
   _value: Array<DocumentenApiFileReference> = [];
 
@@ -188,7 +247,12 @@ export class DocumentenApiUploaderComponent
       .subscribe();
   }
 
-  get tags(): string[] {
-    return this._tags;
+  private hideField(hide: boolean, field: string) {
+    const exists = this.hideFields.includes(field);
+    if (!exists && hide) {
+      this.hideFields.push(field);
+    } else if (exists && !hide) {
+      delete this.hideFields[field];
+    }
   }
 }

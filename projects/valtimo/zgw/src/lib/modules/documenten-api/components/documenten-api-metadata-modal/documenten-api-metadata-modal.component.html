@@ -70,7 +70,7 @@
   <form [formGroup]="documentenApiMetadataForm">
     <div class="documenten-metadata-form-columns-container">
       <div class="documenten-metadata-form-column">
-        @if (!hideFilename) {
+        @if (!hideFields.includes('bestandsnaam')) {
           <cds-text-label class="documenten-metada-form-input">
             {{ 'document.filename' | translate }}
             <cds-tooltip
@@ -81,7 +81,7 @@
               <i class="mdi mdi-help-circle-outline"></i>
             </cds-tooltip>
             <input
-              [value]="filename"
+              [value]="defaultValues['bestandsnaam']"
               [placeholder]="'document.filenamePlaceholder' | translate"
               cdsText
               type="text"
@@ -90,7 +90,7 @@
             />
           </cds-text-label>
         }
-        @if (!hideAuthor) {
+        @if (!hideFields.includes('auteur')) {
           <cds-text-label class="documenten-metada-form-input">
             {{ 'document.author' | translate }}
             <cds-tooltip
@@ -101,7 +101,7 @@
               <i class="mdi mdi-help-circle-outline"></i>
             </cds-tooltip>
             <input
-              [value]="author"
+              [value]="defaultValues['auteur']"
               [placeholder]="'document.authorPlaceholder' | translate"
               [required]="true"
               cdsText
@@ -110,7 +110,7 @@
             />
           </cds-text-label>
         }
-        @if (!hideLanguage) {
+        @if (!hideFields.includes('taal')) {
           <cds-text-label>
             {{ 'document.language' | translate }}
             <cds-tooltip
@@ -133,7 +133,7 @@
             </cds-dropdown>
           </div>
         }
-        @if (!hideConfidentialityLevel) {
+        @if (!hideFields.includes('vertrouwelijkheidaanduiding')) {
           <cds-label>
             {{ 'document.confidentialityLevel' | translate }}
             <cds-tooltip
@@ -157,7 +157,7 @@
             </cds-combo-box>
           </div>
         }
-        @if (!hideDocumentType) {
+        @if (!hideFields.includes('informatieobjecttype')) {
           <cds-label>
             {{ 'document.informatieobjecttype' | translate }}
             <cds-tooltip
@@ -180,7 +180,7 @@
             </cds-dropdown>
           </div>
         }
-        @if (!hideAdditionalDate) {
+        @if (!hideFields.includes('aanvullendeDatum')) {
           <cds-text-label name="'additionalDate'">
             {{ 'document.additionalDate' | translate }}
             <cds-tooltip
@@ -204,7 +204,7 @@
             </cds-radio>
           </cds-radio-group>
         }
-        @if (supportsTrefwoorden && !hideTags) {
+        @if (supportsTrefwoorden && !hideFields.includes('trefwoorden')) {
           <cds-text-label>
             {{ 'document.tags' | translate }}
             <cds-tooltip
@@ -231,7 +231,7 @@
       </div>
 
       <div class="documenten-metadata-form-column">
-        @if (!hideDocumentTitle) {
+        @if (!hideFields.includes('titel')) {
           <cds-text-label>
             {{ 'document.inputTitle' | translate }}
             <input
@@ -251,7 +251,7 @@
             </cds-tooltip>
           </cds-text-label>
         }
-        @if (!hideDescription) {
+        @if (!hideFields.includes('beschrijving')) {
           <cds-textarea-label>
             {{ 'document.inputDescription' | translate }}
             <textarea
@@ -272,7 +272,7 @@
             </cds-tooltip>
           </cds-textarea-label>
         }
-        @if (!hideCreationDate) {
+        @if (!hideFields.includes('creatiedatum')) {
           <cds-label>
             {{ 'document.creationDate' | translate }}
             <cds-tooltip
@@ -293,7 +293,7 @@
             </div>
           </cds-label>
         }
-        @if (!hideStatus) {
+        @if (!hideFields.includes('status')) {
           <cds-label>
             {{ 'document.status' | translate }}
             <cds-tooltip
@@ -317,7 +317,7 @@
             </cds-combo-box>
           </div>
         }
-        @if (!hideAdditionalDate) {
+        @if (!hideFields.includes('aanvullendeDatum')) {
           <cds-date-picker
             *ngIf="obs.additionalDate === 'received'"
             [label]="'document.additionalDate' | translate"

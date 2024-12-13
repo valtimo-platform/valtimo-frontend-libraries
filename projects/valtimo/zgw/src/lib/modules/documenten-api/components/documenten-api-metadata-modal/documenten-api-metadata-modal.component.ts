@@ -18,7 +18,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
@@ -83,6 +82,7 @@ import {
   TooltipModule,
 } from 'carbon-components-angular';
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
+import moment from 'moment';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -115,8 +115,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() disabled$!: Observable<boolean>;
   @Input() file$!: Observable<any>;
 
-  @Input() author: string;
-  @Input() hideAuthor: boolean = false;
+  @Input() hideFields: Array<string> = [];
+  @Input() defaultValues: {} = {};
   @Input() set disableAuthor(value: boolean) {
     if (value) {
       this.auteur.disable();
@@ -124,8 +124,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       this.auteur.enable();
     }
   }
-  @Input() confidentialityLevel: string;
-  @Input() hideConfidentialityLevel: boolean = false;
   @Input() set disableConfidentialityLevel(value: boolean) {
     if (value) {
       this.confidentialityLevelFormControl.disable();
@@ -133,8 +131,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       this.confidentialityLevelFormControl.enable();
     }
   }
-  @Input() description: string;
-  @Input() hideDescription: boolean = false;
   @Input() set disableDescription(value: boolean) {
     if (value) {
       this.beschrijving.disable();
@@ -142,8 +138,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       this.beschrijving.enable();
     }
   }
-  @Input() documentTitle = '';
-  @Input() hideDocumentTitle: boolean = false;
   @Input() set disableDocumentTitle(value: boolean) {
     if (value) {
       this.titel.disable();
@@ -151,8 +145,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       this.titel.enable();
     }
   }
-  @Input() documentType: string;
-  @Input() hideDocumentType: boolean = false;
   @Input() set disableDocumentType(value: boolean) {
     if (value) {
       this.informatieobjecttypeFormControl.disable();
@@ -160,8 +152,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       this.informatieobjecttypeFormControl.enable();
     }
   }
-  @Input() filename: string;
-  @Input() hideFilename: boolean = false;
   @Input() set disableFilename(value: boolean) {
     if (value) {
       this.bestandsnaam.disable();
@@ -169,8 +159,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       this.bestandsnaam.enable();
     }
   }
-  @Input() language: string;
-  @Input() hideLanguage: boolean = false;
   @Input() set disableLanguage(value: boolean) {
     if (value) {
       this.languageFormControl.disable();
@@ -178,8 +166,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       this.languageFormControl.enable();
     }
   }
-  @Input() status: string;
-  @Input() hideStatus: boolean = false;
   @Input() set disableStatus(value: boolean) {
     if (value) {
       this.statusFormControl.disable();
@@ -187,10 +173,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       this.statusFormControl.enable();
     }
   }
-  @Input() tags: string[];
-  @Input() hideTags: boolean = false;
   @Input() supportsTrefwoorden = false;
-  @Input() hideCreationDate: boolean = false;
   @Input() set disableCreationDate(value: boolean) {
     if (value) {
       this.creatiedatum.disable();
@@ -198,7 +181,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       this.creatiedatum.enable();
     }
   }
-  @Input() hideAdditionalDate: boolean = false;
   @Input() isEditMode: boolean;
 
   public readonly open$ = new BehaviorSubject<boolean>(false);
@@ -519,15 +501,11 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this.prefillFilenameAndAuthor();
     if (file) {
       const {
-        bestandsnaam,
-        titel,
-        auteur,
         beschrijving,
         taal,
         informatieobjecttype,
         status,
         vertrouwelijkheidaanduiding,
-        creatiedatum,
         ontvangstdatum,
         verzenddatum,
         trefwoorden,
@@ -537,22 +515,18 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       else if (ontvangstdatum) this.additionalDocumentDate$.next('received');
       else this.additionalDocumentDate$.next('neither');
 
-      const prefillStatus = this.status || status;
+      const prefillStatus = this.defaultValues['status'] || status;
       const validPrefillStatus = this.STATUSES.includes(prefillStatus) ? prefillStatus : '';
 
       this.documentenApiMetadataForm.patchValue({
-        bestandsnaam: bestandsnaam,
-        titel: titel,
-        auteur: auteur || this.author,
-        beschrijving: beschrijving || this.description,
-        taal: taal || this.language,
-        informatieobjecttype: informatieobjecttype || this.documentType,
+        beschrijving: beschrijving || this.defaultValues['beschrijving'],
+        taal: taal || this.defaultValues['taal'],
+        informatieobjecttype: informatieobjecttype || this.defaultValues['informatieobjecttype'],
         status: validPrefillStatus,
-        vertrouwelijkheidaanduiding: vertrouwelijkheidaanduiding || this.confidentialityLevel,
-        creatiedatum,
+        vertrouwelijkheidaanduiding: vertrouwelijkheidaanduiding || this.defaultValues['vertrouwelijkheidaanduiding'],
         ontvangstdatum,
         verzenddatum,
-        trefwoorden: trefwoorden || this.tags,
+        trefwoorden: trefwoorden || this.defaultValues['trefwoorden'],
       });
     }
   }
@@ -592,20 +566,20 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         .pipe(
           take(1),
           tap(([file, userEmail]) => {
-            const filename = file?.bestandsnaam || this.filename || file?.name;
+            const filename = file?.bestandsnaam || this.defaultValues['bestandsnaam'] || file?.name;
             this.filenameExtension = filename?.split('.')?.pop() || '';
             if (this.filenameExtension.length === filename?.length) {
               this.filenameExtension = '';
             }
             this.documentenApiMetadataForm.patchValue({
               bestandsnaam: filename,
-              auteur: file?.auteur || this.author || userEmail,
+              auteur: file?.auteur || this.defaultValues['auteur'] || userEmail,
               creatiedatum:
-                file?.creatiedatum || this.toFormattedDate(new Date().getMilliseconds()),
+                file?.creatiedatum || new Date(Date.now()),
               titel:
                 file?.titel ||
-                this.documentTitle ||
-                this.filenameToTitle(file?.name || this.filename),
+                this.defaultValues['titel'] ||
+                this.filenameToTitle(file?.name || this.defaultValues['bestandsnaam']),
             });
             if (this.areAllFieldsHidden()) {
               this.save();
@@ -634,9 +608,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  private toFormattedDate(milliseconds: number): string {
-    const date = new Date(milliseconds);
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+  private toFormattedDate(date: any): string {
+      return moment(new Date(date)).format('YYYY-MM-DD');
   }
 
   private openFileSubscription(): void {
@@ -700,17 +673,17 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
 
   private areAllFieldsHidden(): boolean {
     return (
-      this.hideAdditionalDate &&
-      this.hideAuthor &&
-      this.hideConfidentialityLevel &&
-      this.hideCreationDate &&
-      this.hideDescription &&
-      this.hideDocumentTitle &&
-      this.hideDocumentType &&
-      this.hideFilename &&
-      this.hideLanguage &&
-      this.hideStatus &&
-      this.hideTags
+      this.hideFields.includes('aanvullendeDatum') &&
+      this.hideFields.includes('auteur') &&
+      this.hideFields.includes('vertrouwelijkheidaanduiding') &&
+      this.hideFields.includes('creatiedatum') &&
+      this.hideFields.includes('beschrijving') &&
+      this.hideFields.includes('titel') &&
+      this.hideFields.includes('informatieobjecttype') &&
+      this.hideFields.includes('bestandsnaam') &&
+      this.hideFields.includes('taal') &&
+      this.hideFields.includes('status') &&
+      this.hideFields.includes('trefwoorden')
     );
   }
 }

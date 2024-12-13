@@ -198,29 +198,47 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     return this._sort$.pipe(map(sortValue => this.getSortStateFromSortString(sortValue?.sort)));
   }
 
-  public formFields$: Observable<any> = this.documentId$.pipe(
+  public uploadFields$: Observable<any> = this.documentId$.pipe(
     switchMap(documentId => this.documentenApiDocumentService.getPrefilledUploadFields(documentId)),
-    map(formFields => {
-      const obj = {};
-      formFields.forEach(
-        formField =>
-          (obj[formField.key] = {
-            defaultValue: formField.defaultValue,
-            visible: formField.visible,
-            readonly: formField.readonly,
-          })
-      );
-      return obj;
-    })
+    map(uploadFields => uploadFields.reduce(
+        (acc, curr) => ({
+          ...acc,
+          [curr.key]: {
+            defaultValue: curr.defaultValue,
+            visible: curr.visible,
+            readonly: curr.readonly,
+          },
+        }),
+        {}
+      )
+    )
   );
 
-  public metadata$: Observable<any> = this.formFields$.pipe(
+  public defaultValues$: Observable<{}> = this.uploadFields$.pipe(
     map(formFields => ({
+      auteur: formFields?.auteur?.defaultValue,
+      vertrouwelijkheidaanduiding: formFields?.vertrouwelijkheidaanduiding?.defaultValue,
+      beschrijving: formFields?.beschrijving?.defaultValue,
+      titel: formFields?.titel?.defaultValue,
+      informatieobjecttype: formFields?.informatieobjecttype?.defaultValue,
+      bestandsnaam: formFields?.bestandsnaam?.defaultValue,
+      taal: formFields?.taal?.defaultValue,
+      status: formFields?.status?.defaultValue,
       trefwoorden: formFields?.trefwoorden?.defaultValue
         ?.split(',')
         ?.map(tag => tag.trim())
         ?.filter(tag => !!tag),
     }))
+  );
+
+  public hideFields$: Observable<Array<string>> = this.uploadFields$.pipe(
+    map(formFields => {
+      if (formFields) {
+        return Object.keys(formFields)
+          .filter(field => !formFields[field]?.visible);
+      }
+      return [];
+    })
   );
 
   public relatedFiles$: Observable<Array<DocumentenApiRelatedFile>> = combineLatest([
