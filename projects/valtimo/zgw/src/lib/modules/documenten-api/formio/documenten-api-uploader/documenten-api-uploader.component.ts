@@ -15,9 +15,18 @@
  */
 
 import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
-import {FormioCustomComponent, FormIoDomService, FormIoStateService, ValtimoModalService,} from '@valtimo/components';
+import {
+  FormioCustomComponent,
+  FormIoDomService,
+  FormIoStateService,
+  ValtimoModalService,
+} from '@valtimo/components';
 import {BehaviorSubject, combineLatest, Observable, of, startWith, switchMap} from 'rxjs';
-import {DocumentenApiFileReference, DownloadService, UploadProviderService,} from '@valtimo/resource';
+import {
+  DocumentenApiFileReference,
+  DownloadService,
+  UploadProviderService,
+} from '@valtimo/resource';
 import {DocumentenApiMetadata, SupportedDocumentenApiFeatures} from '../../models';
 import {filter, map, take, tap} from 'rxjs/operators';
 import {UserProviderService} from '@valtimo/security';
@@ -30,7 +39,8 @@ import {DocumentenApiVersionService} from '../../services';
   styleUrls: ['./documenten-api-uploader.component.scss'],
 })
 export class DocumentenApiUploaderComponent
-  implements FormioCustomComponent<Array<DocumentenApiFileReference>> {
+  implements FormioCustomComponent<Array<DocumentenApiFileReference>>
+{
   @Input() disabled: boolean;
   @Input() title: string;
   @Input() hideTitle: boolean;
@@ -166,8 +176,8 @@ export class DocumentenApiUploaderComponent
     switchMap(([params, firstChildParams, documentDefinitionName]) =>
       this.uploadProviderService.checkUploadProcessLink(
         params?.documentDefinitionName ||
-        firstChildParams?.documentDefinitionName ||
-        documentDefinitionName
+          firstChildParams?.documentDefinitionName ||
+          documentDefinitionName
       )
     ),
     startWith('loading')
@@ -195,8 +205,7 @@ export class DocumentenApiUploaderComponent
     private readonly userProviderService: UserProviderService,
     private readonly route: ActivatedRoute,
     private readonly documentenApiVersionService: DocumentenApiVersionService
-  ) {
-  }
+  ) {}
 
   _value: Array<DocumentenApiFileReference> = [];
 

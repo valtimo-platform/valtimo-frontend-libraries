@@ -30,8 +30,9 @@ export class ValtimoModalService {
   }
 
   get documentDefinitionName$(): Observable<string> {
-    return this._documentDefinitionName$
-      .pipe(filter(documentDefinitionName => !!documentDefinitionName));
+    return this._documentDefinitionName$.pipe(
+      filter(documentDefinitionName => !!documentDefinitionName)
+    );
   }
 
   scrollToTop(): void {

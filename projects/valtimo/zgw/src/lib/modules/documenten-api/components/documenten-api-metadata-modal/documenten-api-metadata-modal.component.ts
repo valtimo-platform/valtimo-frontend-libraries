@@ -14,15 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 
 import {
   AdditionalDocumentDate,
@@ -523,7 +515,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         taal: taal || this.defaultValues['taal'],
         informatieobjecttype: informatieobjecttype || this.defaultValues['informatieobjecttype'],
         status: validPrefillStatus,
-        vertrouwelijkheidaanduiding: vertrouwelijkheidaanduiding || this.defaultValues['vertrouwelijkheidaanduiding'],
+        vertrouwelijkheidaanduiding:
+          vertrouwelijkheidaanduiding || this.defaultValues['vertrouwelijkheidaanduiding'],
         ontvangstdatum,
         verzenddatum,
         trefwoorden: trefwoorden || this.defaultValues['trefwoorden'],
@@ -574,8 +567,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
             this.documentenApiMetadataForm.patchValue({
               bestandsnaam: filename,
               auteur: file?.auteur || this.defaultValues['auteur'] || userEmail,
-              creatiedatum:
-                file?.creatiedatum || new Date(Date.now()),
+              creatiedatum: file?.creatiedatum || new Date(Date.now()),
               titel:
                 file?.titel ||
                 this.defaultValues['titel'] ||
@@ -609,7 +601,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   }
 
   private toFormattedDate(date: any): string {
-      return moment(new Date(date)).format('YYYY-MM-DD');
+    return moment(new Date(date)).format('YYYY-MM-DD');
   }
 
   private openFileSubscription(): void {

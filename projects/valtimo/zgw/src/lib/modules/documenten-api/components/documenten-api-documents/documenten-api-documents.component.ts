@@ -200,7 +200,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
 
   public uploadFields$: Observable<any> = this.documentId$.pipe(
     switchMap(documentId => this.documentenApiDocumentService.getPrefilledUploadFields(documentId)),
-    map(uploadFields => uploadFields.reduce(
+    map(uploadFields =>
+      uploadFields.reduce(
         (acc, curr) => ({
           ...acc,
           [curr.key]: {
@@ -234,8 +235,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   public hideFields$: Observable<Array<string>> = this.uploadFields$.pipe(
     map(formFields => {
       if (formFields) {
-        return Object.keys(formFields)
-          .filter(field => !formFields[field]?.visible);
+        return Object.keys(formFields).filter(field => !formFields[field]?.visible);
       }
       return [];
     })
