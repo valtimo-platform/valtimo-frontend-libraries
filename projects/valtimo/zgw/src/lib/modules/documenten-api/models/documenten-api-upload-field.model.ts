@@ -21,6 +21,30 @@ interface DocumentenApiUploadField {
   readonly?: boolean;
 }
 
+interface DocumentenApiUploadFieldDefaultValues {
+  auteur?: string,
+  vertrouwelijkheidaanduiding?: string,
+  beschrijving?: string,
+  titel?: string,
+  informatieobjecttype?: string,
+  bestandsnaam?: string,
+  taal?: string,
+  status?: string,
+  trefwoorden?: string[],
+}
+
+interface DocumentenApiUploadFields {
+  auteur?: DocumentenApiUploadField,
+  vertrouwelijkheidaanduiding?: DocumentenApiUploadField,
+  beschrijving?: DocumentenApiUploadField,
+  titel?: DocumentenApiUploadField,
+  informatieobjecttype?: DocumentenApiUploadField,
+  bestandsnaam?: DocumentenApiUploadField,
+  taal?: DocumentenApiUploadField,
+  status?: DocumentenApiUploadField,
+  trefwoorden?: DocumentenApiUploadField,
+}
+
 enum DOCUMENTEN_API_UPLOAD_KEYS {
   BESTANDSNAAM = 'bestandsnaam',
   TITEL = 'titel',
@@ -37,4 +61,9 @@ enum DOCUMENTEN_API_UPLOAD_KEYS {
   TREFWOORDEN = 'trefwoorden',
 }
 
-export {DocumentenApiUploadField, DOCUMENTEN_API_UPLOAD_KEYS};
+export {
+  DocumentenApiUploadField,
+  DocumentenApiUploadFieldDefaultValues,
+  DocumentenApiUploadFields,
+  DOCUMENTEN_API_UPLOAD_KEYS
+};

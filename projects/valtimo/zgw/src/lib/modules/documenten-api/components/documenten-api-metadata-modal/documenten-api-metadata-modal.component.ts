@@ -75,6 +75,7 @@ import {
 } from 'carbon-components-angular';
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 import moment from 'moment';
+import {DocumentenApiUploadFieldDefaultValues} from "../../models/documenten-api-upload-field.model";
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -108,7 +109,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   @Input() file$!: Observable<any>;
 
   @Input() hideFields: Array<string> = [];
-  @Input() defaultValues: {} = {};
+  @Input() defaultValues: DocumentenApiUploadFieldDefaultValues = {};
   @Input() set disableAuthor(value: boolean) {
     if (value) {
       this.auteur.disable();
@@ -507,19 +508,19 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       else if (ontvangstdatum) this.additionalDocumentDate$.next('received');
       else this.additionalDocumentDate$.next('neither');
 
-      const prefillStatus = this.defaultValues['status'] || status;
+      const prefillStatus = this.defaultValues.status || status;
       const validPrefillStatus = this.STATUSES.includes(prefillStatus) ? prefillStatus : '';
 
       this.documentenApiMetadataForm.patchValue({
-        beschrijving: beschrijving || this.defaultValues['beschrijving'],
-        taal: taal || this.defaultValues['taal'],
-        informatieobjecttype: informatieobjecttype || this.defaultValues['informatieobjecttype'],
+        beschrijving: beschrijving || this.defaultValues.beschrijving,
+        taal: taal || this.defaultValues.taal,
+        informatieobjecttype: informatieobjecttype || this.defaultValues.informatieobjecttype,
         status: validPrefillStatus,
         vertrouwelijkheidaanduiding:
-          vertrouwelijkheidaanduiding || this.defaultValues['vertrouwelijkheidaanduiding'],
+          vertrouwelijkheidaanduiding || this.defaultValues.vertrouwelijkheidaanduiding,
         ontvangstdatum,
         verzenddatum,
-        trefwoorden: trefwoorden || this.defaultValues['trefwoorden'],
+        trefwoorden: trefwoorden || this.defaultValues.trefwoorden,
       });
     }
   }
@@ -557,21 +558,20 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this._subscriptions.add(
       combineLatest([this.file$, this.userEmail$])
         .pipe(
-          take(1),
           tap(([file, userEmail]) => {
-            const filename = file?.bestandsnaam || this.defaultValues['bestandsnaam'] || file?.name;
+            const filename = file?.bestandsnaam || this.defaultValues.bestandsnaam || file?.name;
             this.filenameExtension = filename?.split('.')?.pop() || '';
             if (this.filenameExtension.length === filename?.length) {
               this.filenameExtension = '';
             }
             this.documentenApiMetadataForm.patchValue({
               bestandsnaam: filename,
-              auteur: file?.auteur || this.defaultValues['auteur'] || userEmail,
+              auteur: file?.auteur || this.defaultValues.auteur || userEmail,
               creatiedatum: file?.creatiedatum || new Date(Date.now()),
               titel:
                 file?.titel ||
-                this.defaultValues['titel'] ||
-                this.filenameToTitle(file?.name || this.defaultValues['bestandsnaam']),
+                this.defaultValues.titel ||
+                this.filenameToTitle(file?.name || this.defaultValues.bestandsnaam),
             });
             if (this.areAllFieldsHidden()) {
               this.save();

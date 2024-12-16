@@ -56,6 +56,10 @@ import {DocumentenApiColumnService, DocumentenApiVersionService} from '../../ser
 import {DocumentenApiDocumentService} from '../../services/documenten-api-document.service';
 import {DocumentenApiFilterComponent} from '../documenten-api-filter/documenten-api-filter.component';
 import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.component';
+import {
+  DocumentenApiUploadFieldDefaultValues,
+  DocumentenApiUploadFields
+} from '../../models/documenten-api-upload-field.model';
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -198,13 +202,14 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     return this._sort$.pipe(map(sortValue => this.getSortStateFromSortString(sortValue?.sort)));
   }
 
-  public uploadFields$: Observable<any> = this.documentId$.pipe(
+  public uploadFields$: Observable<DocumentenApiUploadFields> = this.documentId$.pipe(
     switchMap(documentId => this.documentenApiDocumentService.getPrefilledUploadFields(documentId)),
     map(uploadFields =>
       uploadFields.reduce(
         (acc, curr) => ({
           ...acc,
           [curr.key]: {
+            key: curr.key,
             defaultValue: curr.defaultValue,
             visible: curr.visible,
             readonly: curr.readonly,
@@ -215,7 +220,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     )
   );
 
-  public defaultValues$: Observable<{}> = this.uploadFields$.pipe(
+  public defaultValues$: Observable<DocumentenApiUploadFieldDefaultValues> = this.uploadFields$.pipe(
     map(formFields => ({
       auteur: formFields?.auteur?.defaultValue,
       vertrouwelijkheidaanduiding: formFields?.vertrouwelijkheidaanduiding?.defaultValue,
