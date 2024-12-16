@@ -935,19 +935,19 @@
       }
     },
     "uploadFields": {
-      "uploadField": "Upload veld",
-      "add": "Upload veld toevoegen",
-      "deleteText": "Weet je zeker dat je dit upload veld wilt verwijderen?",
-      "deleteMultipleText": "Weet je zeker dat je deze upload velden wilt verwijderen?",
+      "uploadField": "Uploadveld",
+      "add": "Uploadveld toevoegen",
+      "deleteText": "Weet je zeker dat je dit uploadveld wilt verwijderen?",
+      "deleteMultipleText": "Weet je zeker dat je deze uploadvelden wilt verwijderen?",
       "addModal": {
-        "header": "Upload veld toevoegen"
+        "header": "Uploadveld toevoegen"
       },
       "editModal": {
-        "header": "Upload veld bewerken"
+        "header": "Uploadveld bewerken"
       },
       "list": {
-        "noResultsTitle": "Geen upload velden",
-        "noResultsDescription": "Voeg een upload veld toe om te beginnen"
+        "noResultsTitle": "Geen uploadvelden",
+        "noResultsDescription": "Voeg een uploadveld toe om te beginnen"
       },
       "search": {
         "noResultsTitle": "Geen resultaten",
@@ -978,7 +978,7 @@
     "tabs": {
       "documentColumns": "Document kolommen",
       "documentTags": "Document trefwoorden",
-      "documentUploadFields": "Document upload velden"
+      "documentUploadFields": "Document uploadvelden"
     }
   },
   "task-list": {
