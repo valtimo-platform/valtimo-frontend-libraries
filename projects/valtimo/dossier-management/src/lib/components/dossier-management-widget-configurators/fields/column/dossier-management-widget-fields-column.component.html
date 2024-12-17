@@ -316,7 +316,7 @@
 
             <cds-text-label
               *ngIf="
-                formRow.get('type').value.id === CaseWidgetDisplayTypeKey.TEXT && isFieldWidget
+                formRow.get('type').value.id === CaseWidgetDisplayTypeKey.TEXT && isFieldWidget()
               "
             >
               <v-input-label

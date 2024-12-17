@@ -94,7 +94,6 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field-column';
   @Input({required: true}) public columnData: FieldsCaseWidgetValue[];
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
-  @Input() public isFieldWidget = false;
   @Input() public documentDefinitionName?: string | null = null;
   @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
 
@@ -123,6 +122,9 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   public readonly CaseWidgetDisplayTypeKey = CaseWidgetDisplayTypeKey;
   public readonly widgetType: Signal<CaseWidgetType> = computed(
     () => this.widgetWizardService.selectedWidget()?.type ?? CaseWidgetType.FIELDS
+  );
+  public readonly isFieldWidget: Signal<boolean> = computed(
+    () => this.widgetType() === CaseWidgetType.FIELDS
   );
 
   public readonly inputTheme$: Observable<CurrentCarbonTheme> = this.cdsThemeService.currentTheme$;
