@@ -23,9 +23,14 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {ConfigurationOutput, DataSourceConfigurationComponent, Operator} from '../../../../models';
+import {
+  ConfigurationOutput,
+  DataSourceConfigurationComponent,
+  Operator,
+  QueryCondition,
+} from '../../../../models';
 import {BehaviorSubject, combineLatest, map, Observable, startWith, Subscription} from 'rxjs';
-import {FormBuilder} from '@angular/forms';
+import {AbstractControl, FormBuilder} from '@angular/forms';
 import {TaskCountConfiguration} from '../../models';
 import {ListItemWithId, MultiInputKeyValue, MultiInputValues} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
@@ -77,7 +82,7 @@ export class TaskCountConfigurationComponent
   public readonly defaultConditionValues$ = new BehaviorSubject<MultiInputValues | null>(null);
   public readonly allConditionsValid$ = new BehaviorSubject<boolean>(true);
 
-  public get queryConditions() {
+  public get queryConditions(): AbstractControl<QueryCondition[]> {
     return this.form.get('queryConditions');
   }
 
@@ -97,7 +102,7 @@ export class TaskCountConfigurationComponent
     ConfigurationOutput<TaskCountConfiguration>
   >();
 
-  private _subscriptions = new Subscription();
+  private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly fb: FormBuilder,
