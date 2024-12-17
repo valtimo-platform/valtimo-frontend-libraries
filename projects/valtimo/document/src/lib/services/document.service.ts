@@ -274,6 +274,10 @@ export class DocumentService {
     return this.http.put<DocumentResult>(`${this.valtimoEndpointUri}v1/document`, document);
   }
 
+  public deleteDocument(documentId: string): Observable<void> {
+    return this.http.delete<void>(`${this.valtimoEndpointUri}v1/document/${documentId}`);
+  }
+
   // ProcessDocument-calls
   public getProcessDocumentDefinitions(): Observable<ProcessDocumentDefinition> {
     return this.http.get<ProcessDocumentDefinition>(
@@ -314,7 +318,6 @@ export class DocumentService {
     const params = new HttpParams({
       fromObject: searchRequest as any,
     });
-    console.log({params});
     return this.http.get<ProcessDocumentDefinition[]>(
       `${this.valtimoEndpointUri}v2/process-document/definition/document/${documentId}`,
       {params}

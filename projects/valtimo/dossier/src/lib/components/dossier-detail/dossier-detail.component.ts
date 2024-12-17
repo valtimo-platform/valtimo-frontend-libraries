@@ -25,7 +25,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import {ActivatedRoute, ParamMap, Params, Router} from '@angular/router';
+import {ActivatedRoute, NavigationStart, ParamMap, Params, Router} from '@angular/router';
 import {ChevronDown16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
@@ -47,17 +47,15 @@ import {
   InternalCaseStatusUtils,
   ProcessDocumentDefinition,
 } from '@valtimo/document';
-import {ProcessInstanceTask} from '@valtimo/process';
+import {TaskWithProcessLink} from '@valtimo/process-link';
 import {UserProviderService} from '@valtimo/security';
-import {IntermediateSubmission, Task, TaskProcessLinkResult, TaskService} from '@valtimo/task';
+import {IntermediateSubmission} from '@valtimo/task';
 import {IconService, NotificationService} from 'carbon-components-angular';
 import {KeycloakService} from 'keycloak-angular';
-import {isBoolean} from 'lodash';
 import moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {
   BehaviorSubject,
-  catchError,
   combineLatest,
   filter,
   map,
@@ -68,6 +66,7 @@ import {
   switchMap,
   take,
   tap,
+  Subscription,
 } from 'rxjs';
 import {
   DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE,
@@ -78,6 +77,8 @@ import {TabImpl, TabLoaderImpl} from '../../models';
 import {
   CAN_ASSIGN_CASE_PERMISSION,
   CAN_CLAIM_CASE_PERMISSION,
+  CAN_VIEW_CASE_PERMISSION,
+  CAN_DELETE_CASE_PERMISSION,
   DOSSIER_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
 import {DossierDetailLayoutService, DossierService, DossierTabService} from '../../services';
@@ -119,7 +120,8 @@ export class DossierDetailComponent
     .getUserSubject()
     .pipe(map(userIdentity => userIdentity?.roles?.includes('ROLE_ADMIN')));
 
-  public readonly taskOpenedInPanel$ = this.dossierDetailLayoutService.taskOpenedInPanel$;
+  public readonly taskAndProcessLinkOpenedInPanel$ =
+    this.dossierDetailLayoutService.taskAndProcessLinkOpenedInPanel$;
 
   private readonly _caseStatusKey$ = new BehaviorSubject<string | null | 'NOT_AVAILABLE'>(null);
   private readonly _taskPanelToggle = this.configService.featureToggles?.enableTaskPanel;
@@ -128,32 +130,46 @@ export class DossierDetailComponent
     filter(key => !!key)
   );
 
-  public readonly document$: Observable<ValtimoDocument | null> =
-    this.dossierService.refreshDocument$.pipe(
-      switchMap(() => this.route.params),
-      map((params: Params) => params?.documentId),
-      switchMap((documentId: string) =>
-        documentId ? this.documentService.getDocument(this.documentId) : of(null)
-      ),
-      tap((document: ValtimoDocument | null) => {
-        if (document) {
-          this.assigneeId$.next(document.assigneeId);
-          this.document = document;
-          this._caseStatusKey$.next(document?.internalStatus || 'NOT_AVAILABLE');
+  public readonly showDeleteModal$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-          if (
-            this.configService.config.customDossierHeader?.hasOwnProperty(
-              this.documentDefinitionName.toLowerCase()
-            ) &&
-            this.customDossierHeaderItems.length === 0
-          ) {
-            this.configService.config.customDossierHeader[
-              this.documentDefinitionName.toLowerCase()
-            ]?.forEach(item => this.getCustomDossierHeaderItem(item));
-          }
-        }
+  public readonly canView$: Observable<boolean> = this.route.paramMap.pipe(
+    switchMap((params: ParamMap) =>
+      this.permissionService.requestPermission(CAN_VIEW_CASE_PERMISSION, {
+        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        identifier: params.get('documentId') ?? '',
       })
-    );
+    )
+  );
+
+  public readonly document$: Observable<ValtimoDocument | null> = combineLatest([
+    this.dossierService.refreshDocument$,
+    this.canView$,
+  ]).pipe(
+    filter(([_, canView]) => canView),
+    switchMap(() => this.route.params),
+    map((params: Params) => params?.documentId),
+    switchMap((documentId: string) =>
+      documentId ? this.documentService.getDocument(this.documentId) : of(null)
+    ),
+    tap((document: ValtimoDocument | null) => {
+      if (document) {
+        this.assigneeId$.next(document.assigneeId);
+        this.document = document;
+        this._caseStatusKey$.next(document?.internalStatus || 'NOT_AVAILABLE');
+
+        if (
+          this.configService.config.customDossierHeader?.hasOwnProperty(
+            this.documentDefinitionName.toLowerCase()
+          ) &&
+          this.customDossierHeaderItems.length === 0
+        ) {
+          this.configService.config.customDossierHeader[
+            this.documentDefinitionName.toLowerCase()
+          ]?.forEach(item => this.getCustomDossierHeaderItem(item));
+        }
+      }
+    })
+  );
 
   public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params.documentDefinitionName || '')
@@ -225,8 +241,19 @@ export class DossierDetailComponent
     )
   );
 
+  public readonly isDeleting$ = new BehaviorSubject<boolean>(false);
+  public readonly canDelete$: Observable<boolean> = this.route.paramMap.pipe(
+    switchMap((params: ParamMap) =>
+      this.permissionService.requestPermission(CAN_DELETE_CASE_PERMISSION, {
+        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        identifier: params.get('documentId') ?? '',
+      })
+    )
+  );
+
   public readonly loadingTabs$ = new BehaviorSubject<boolean>(true);
   public readonly noTabsConfigured$ = new BehaviorSubject<boolean>(false);
+  public readonly showNoAccess$ = new BehaviorSubject<boolean>(false);
   public activeTab$: Observable<TabImpl>;
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
@@ -249,7 +276,7 @@ export class DossierDetailComponent
 
   public readonly dossierDetailLayout$ = this.dossierDetailLayoutService.dossierDetailLayout$;
 
-  public readonly openTaskInModal$ = new Subject<Task>();
+  public readonly openTaskAndProcessLinkInModal$ = new Subject<TaskWithProcessLink>();
 
   public readonly isDarkMode$ = this.cdsThemeService.currentTheme$.pipe(
     map(currentTheme => currentTheme === CurrentCarbonTheme.G90)
@@ -262,6 +289,7 @@ export class DossierDetailComponent
   private _pendingTab: TabImpl;
   private _observer!: ResizeObserver;
   private _tabsInit = false;
+  private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
@@ -284,7 +312,6 @@ export class DossierDetailComponent
     private readonly renderer: Renderer2,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly taskService: TaskService,
     private readonly userProviderService: UserProviderService,
     @Inject(DOCUMENT) private readonly htmlDocument: Document
   ) {
@@ -297,17 +324,18 @@ export class DossierDetailComponent
   public ngAfterViewInit(): void {
     this.initTabLoader();
     this.initBreadcrumb();
-    this.getAllAssociatedProcessDefinitions();
     this.openWidthObserver();
     this.pageTitleService.disableReset();
     this.iconService.registerAll([ChevronDown16]);
     this.setDocumentStyle();
+    this.enableResetOnBackNavigation();
   }
 
   public ngOnDestroy(): void {
     this.breadcrumbService.clearSecondBreadcrumb();
     this.pageTitleService.enableReset();
     this.removeDocumentStyle();
+    this._subscriptions.unsubscribe();
   }
 
   public getAllAssociatedProcessDefinitions(): void {
@@ -373,36 +401,52 @@ export class DossierDetailComponent
       });
   }
 
-  public onTaskClickEvent(task: Task): void {
-    this.taskService
-      .getTaskProcessLink(task.id)
-      .pipe(catchError(() => this.isAdmin$))
-      .subscribe((result: TaskProcessLinkResult | boolean) => {
-        if (isBoolean(result)) {
-          this.handleNoTaskProcessLink(result as boolean);
-          return;
-        }
+  public deleteDocument(): void {
+    this.showDeleteModal$.next(true);
+  }
 
-        const displayType =
-          (result as TaskProcessLinkResult).properties.formDisplayType ||
-          DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE;
-        const size =
-          (result as TaskProcessLinkResult).properties.formSize ||
-          DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE;
+  public onConfirmDelete(): void {
+    this.isDeleting$.next(true);
+    this.documentService.deleteDocument(this.documentId).subscribe({
+      next: (): void => {
+        this.isDeleting$.next(false);
+        this.showDeleteModal$.next(false);
+        this.router.navigate([`/dossiers/${this.documentDefinitionName}`]);
+      },
+      error: (): void => {
+        this.isDeleting$.next(false);
+        this.logger.debug('Something went wrong while deleting the case');
+      },
+    });
+  }
 
-        this.dossierDetailLayoutService.setFormDisplaySize(size);
-        this.dossierDetailLayoutService.setFormDisplayType(displayType);
-
-        if (displayType === 'panel' && !!this._taskPanelToggle) {
-          this.dossierDetailLayoutService.setTaskOpenedInPanel(task as any as ProcessInstanceTask);
-        } else {
-          this.openTaskInModal$.next({...task});
-        }
+  public onTaskClickEvent(taskProcessLinkResult: TaskWithProcessLink): void {
+    if (!taskProcessLinkResult.processLinkActivityResult) {
+      this.isAdmin$.pipe(take(1)).subscribe(isAdmin => {
+        this.handleNoTaskProcessLink(isAdmin);
       });
+      return;
+    }
+
+    const displayType =
+      taskProcessLinkResult.processLinkActivityResult.properties.formDisplayType ||
+      DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE;
+    const size =
+      taskProcessLinkResult.processLinkActivityResult.properties.formSize ||
+      DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE;
+
+    this.dossierDetailLayoutService.setFormDisplaySize(size);
+    this.dossierDetailLayoutService.setFormDisplayType(displayType);
+
+    if (displayType === 'panel' && !!this._taskPanelToggle) {
+      this.dossierDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(taskProcessLinkResult);
+    } else {
+      this.openTaskAndProcessLinkInModal$.next({...taskProcessLinkResult});
+    }
   }
 
   public onTaskDetailsClose(): void {
-    this.dossierDetailLayoutService.setTaskOpenedInPanel(null);
+    this.dossierDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(null);
   }
 
   public onActiveChangeEvent(event: boolean): void {
@@ -428,13 +472,13 @@ export class DossierDetailComponent
       return;
     }
 
-    if (!tab.showTasks) this.openTaskInModal$.next(null);
+    if (!tab.showTasks) this.openTaskAndProcessLinkInModal$.next(null);
     this.tabLoader.load(tab);
     this.setDocumentStyle();
   }
 
   public onFormSubmitEvent(): void {
-    this.dossierDetailLayoutService.setTaskOpenedInPanel(null);
+    this.dossierDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(null);
 
     if (!this.tabLoader) return;
     this.tabLoader.refreshView();
@@ -445,7 +489,7 @@ export class DossierDetailComponent
     this._activeChange = false;
     this._activeTabName$.next(this._pendingTab.name);
     this.tabLoader.load(this._pendingTab);
-    this.dossierDetailLayoutService.setTaskOpenedInPanel(null);
+    this.dossierDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(null);
   }
 
   protected onCancelRedirect(): void {
@@ -463,25 +507,34 @@ export class DossierDetailComponent
   }
 
   private initTabLoader(): void {
-    this.dossierTabService.tabs$.pipe(take(1)).subscribe(tabs => {
-      if (tabs?.length > 0) {
-        this._initialTabName = this._snapshot.get('tab') ?? '';
-        this.tabLoader = new TabLoaderImpl(
-          tabs,
-          this.componentFactoryResolver,
-          this.viewContainerRef,
-          this.router,
-          this.route
-        );
-        this.tabLoader.initial(this._initialTabName);
-        this.dossierTabService.setTabLoader(this.tabLoader);
-        this.loadingTabs$.next(false);
-        this.activeTab$ = this.tabLoader.activeTab$;
-      } else {
-        this.noTabsConfigured$.next(true);
-        this.loadingTabs$.next(false);
-      }
-    });
+    combineLatest([this.dossierTabService.tabs$, this.canView$])
+      .pipe(take(1))
+      .subscribe(([tabs, canView]) => {
+        if (canView) {
+          if (tabs?.length > 0) {
+            this._initialTabName = this._snapshot.get('tab') ?? '';
+            this.tabLoader = new TabLoaderImpl(
+              tabs,
+              this.componentFactoryResolver,
+              this.viewContainerRef,
+              this.router,
+              this.route
+            );
+            this.tabLoader.initial(this._initialTabName);
+            this.dossierTabService.setTabLoader(this.tabLoader);
+            this.loadingTabs$.next(false);
+            this.activeTab$ = this.tabLoader.activeTab$;
+          } else {
+            this.noTabsConfigured$.next(true);
+            this.loadingTabs$.next(false);
+          }
+
+          this.getAllAssociatedProcessDefinitions();
+        } else {
+          this.showNoAccess$.next(true);
+          this.loadingTabs$.next(false);
+        }
+      });
   }
 
   public assignmentOfDocumentChanged(): void {
@@ -559,6 +612,20 @@ export class DossierDetailComponent
 
   private removeDocumentStyle(): void {
     this.renderer.removeClass(this.htmlDocument.getElementsByTagName('html')[0], 'html--fixed');
+  }
+
+  private enableResetOnBackNavigation(): void {
+    this._subscriptions.add(
+      this.router.events
+        .pipe(
+          filter(
+            event => event instanceof NavigationStart && event.navigationTrigger === 'popstate'
+          )
+        )
+        .subscribe(() => {
+          this.pageTitleService.enableReset();
+        })
+    );
   }
 
   private handleNoTaskProcessLink(isAdmin: boolean): void {

@@ -32,6 +32,7 @@ import {ToastrService} from 'ngx-toastr';
 import {BehaviorSubject, combineLatest, switchMap, take} from 'rxjs';
 import {IntermediateSaveRequest, IntermediateSubmission, Task} from '../../models';
 import {TaskIntermediateSaveService, TaskService} from '../../services';
+import {TaskProcessLinkResult, TaskWithProcessLink} from '@valtimo/process-link';
 
 @Component({
   selector: 'valtimo-task-detail-intermediate-save',
@@ -55,8 +56,7 @@ export class TaskDetailIntermediateSaveComponent {
       .getTaskProcessLink(value.id)
       .pipe(take(1))
       .subscribe(res => {
-        if (res !== null && res.type === 'form-flow')
-          this.formFlowInstanceId$.next(res.properties.formFlowInstanceId);
+        this.setFormFlow(res);
       });
 
     this.taskValue.set(value);
@@ -65,6 +65,17 @@ export class TaskDetailIntermediateSaveComponent {
       subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${value.created}`,
     });
     this.getCurrentProgress(value);
+  }
+  @Input() public set taskAndProcessLink(value: TaskWithProcessLink | null) {
+    if (!value) return;
+
+    this.setFormFlow(value.processLinkActivityResult);
+    this.taskValue.set(value.task as any);
+    this.page.set({
+      title: value?.task.name,
+      subtitle: `${this.translateService.instant('taskDetail.taskCreated')} ${value?.task.created}`,
+    });
+    this.getCurrentProgress(value.task as any);
   }
   @Output() public readonly currentIntermediateSaveEvent =
     new EventEmitter<IntermediateSubmission | null>();
@@ -143,6 +154,12 @@ export class TaskDetailIntermediateSaveComponent {
       });
   }
 
+  private setFormFlow(processLink: TaskProcessLinkResult): void {
+    if (processLink !== null && processLink.type === 'form-flow') {
+      this.formFlowInstanceId$.next(processLink.properties.formFlowInstanceId);
+    }
+  }
+
   private formatIntermediateSubmission(
     intermediateSubmission: IntermediateSubmission
   ): IntermediateSubmission {
@@ -163,7 +180,14 @@ export class TaskDetailIntermediateSaveComponent {
       .getIntermediateSubmission(task.id ?? '')
       .pipe(take(1))
       .subscribe(intermediateSave => {
-        this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSave);
+        if (intermediateSave !== null) {
+          this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSave);
+        } else {
+          this.currentIntermediateSave = null;
+          this.taskIntermediateSaveService.setSubmission({});
+        }
+
+        this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
       });
   }
 }

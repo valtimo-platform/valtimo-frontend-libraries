@@ -249,7 +249,7 @@ export const environment: ValtimoConfig = {
     experimentalDmnEditing: true,
     largeLogoMargin: true,
     sortFilesByDate: true,
-    disableCaseCount: false,
+    disableCaseCount: true,
     returnToLastUrlAfterTokenExpiration: true,
     useStartEventNameAsStartFormTitle: true,
     allowUserThemeSwitching: true,

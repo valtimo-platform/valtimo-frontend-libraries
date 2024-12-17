@@ -107,6 +107,7 @@ export class TabLoaderImpl implements TabLoader<TabImpl> {
           ...(nextTab.name === 'documents' && {
             queryParams,
           }),
+          replaceUrl: true,
         });
       });
   }

@@ -51,6 +51,10 @@
         "title": "Geen dossiers gevonden"
       }
     },
+    "noAccess": {
+      "description": "Je hebt geen toegang tot dit dossier",
+      "title": "Geen toegang"
+    },
     "pagination": {
       "itemsPerPage": "Dossiers per pagina",
       "totalItem": "{{start}}-{{end}} van {{total}} dossier",
@@ -160,6 +164,11 @@
       "cancel": "Annuleren",
       "delete": "Verwijderen"
     },
+    "delete": {
+      "delete": "Dossier verwijderen",
+      "description": "Weet u zeker dat u dit dossier en alle gerelateerde informatie wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+      "confirm": "Verwijderen"
+    },
     "formio": {
       "noFormSpecified": "Voor dit tabblad is geen formulierdefinitie opgegeven.",
       "formNotFound": "De formulierdefinitie '{{formDefinitionName}}' kan niet worden gevonden."
@@ -193,16 +202,16 @@
     "tagsPlaceholder": "Kies tags",
     "format": "Bestandsformaat",
     "trefwoorden": "Trefwoorden",
-    "filename": "Bestandsnaam",
+    "filename": "Bestandsnaam (optioneel)",
     "filenameTooltip": "De naam van het fysieke bestand waarin de inhoud van het document is vastgelegd, inclusief extensie",
     "filenamePlaceholder": "Bestandsnaam toevoegen",
-    "confidentialityLevel": "Vertrouwelijkheidsaanduiding",
+    "confidentialityLevel": "Vertrouwelijkheidsaanduiding (optioneel)",
     "confidentialityLevelTooltip": "Aanduiding van de mate waarin het document voor de openbaarheid bestemd is",
     "confidentialityPlaceholder": "Vertrouwelijkheidaanduiding kiezen",
     "inputTitle": "Titel",
     "inputTitleTooltip": "De naam waaronder het document formeel bekend is",
     "inputTitlePlaceholder": "Titel toevoegen",
-    "inputDescription": "Beschrijving",
+    "inputDescription": "Beschrijving (optioneel)",
     "inputDescriptionTooltip": "Een generieke beschrijving van de inhoud van het document",
     "inputDescriptionPlaceholder": "Beschrijving toevoegen",
     "openbaar": "Openbaar",
@@ -216,7 +225,7 @@
     "author": "Auteur",
     "authorTooltip": "De oorspronkelijke auteur van het document",
     "authorPlaceholder": "Voeg auteur toe",
-    "status": "Status",
+    "status": "Status (optioneel)",
     "statusTooltip": "De huidige status van het document. 'In bewerking': aan het document wordt nog gewerkt; 'Ter vaststelling': het document is gereed, maar moet nog vastgesteld worden; 'Definitief': het document is door een bevoegd persoon vastgesteld dan wel ontvangen; 'Gearchiveerd': het document is duurzaam bewaarbaar gemaakt.",
     "statusPlaceholder": "Kies status",
     "in_bewerking": "In bewerking",
@@ -814,7 +823,10 @@
         "type": "Weergavetype",
         "typePlaceholder": "Kies type",
         "value": "Waarde",
-        "valuePlaceholder": "Pad naar waarde"
+        "valuePlaceholder": "Pad naar waarde",
+        "ellipsisCharacterLimit": "Tekenlimiet met beletseltekens",
+        "ellipsisCharacterLimitTooltip": "Voer het aantal tekens in dat wordt weergegeven voordat er een weglatingsteken wordt weergegeven",
+        "ellipsisCharacterLimitPlaceholder": "Kies een aantal karakters (optioneel)"
       },
       "displayType": {
         "text": "Tekst",
@@ -929,9 +941,51 @@
         "valueMaxLength": "Trefwoord is te lang. Maximum lengte is {{ maxlength }} tekens."
       }
     },
+    "uploadFields": {
+      "uploadField": "Uploadveld",
+      "add": "Uploadveld toevoegen",
+      "deleteText": "Weet je zeker dat je dit uploadveld wilt verwijderen?",
+      "deleteMultipleText": "Weet je zeker dat je deze uploadvelden wilt verwijderen?",
+      "addModal": {
+        "header": "Uploadveld toevoegen"
+      },
+      "editModal": {
+        "header": "Uploadveld bewerken"
+      },
+      "list": {
+        "noResultsTitle": "Geen uploadvelden",
+        "noResultsDescription": "Voeg een uploadveld toe om te beginnen"
+      },
+      "search": {
+        "noResultsTitle": "Geen resultaten",
+        "noResultsDescription": "Probeer de zoekfilters aan te passen om te vinden wat je zoekt."
+      },
+      "fields": {
+        "field": "Veld",
+        "defaultValue": "Standaardwaarde",
+        "visible": "Zichtbaar",
+        "readonly": "Alleen lezen"
+      },
+      "keys": {
+        "bestandsnaam": "Bestandsnaam",
+        "titel": "Titel",
+        "auteur": "Auteur",
+        "beschrijving": "Beschrijving",
+        "taal": "Taal",
+        "vertrouwelijkheidaanduiding": "Vertrouwelijkheidaanduiding",
+        "creatiedatum": "Creatiedatum",
+        "informatieobjecttype": "Informatieobjecttype",
+        "status": "Status",
+        "verzenddatum": "Verzenddatum",
+        "ontvangstdatum": "Ontvangstdatum",
+        "aanvullendeDatum": "AanvullendeDatum",
+        "trefwoorden": "Trefwoorden"
+      }
+    },
     "tabs": {
       "documentColumns": "Document kolommen",
-      "documentTags": "Document trefwoorden"
+      "documentTags": "Document trefwoorden",
+      "documentUploadFields": "Document uploadvelden"
     }
   },
   "task-list": {
@@ -1790,7 +1844,9 @@
     "choosePluginConfiguration": "Kies pluginconfiguratie",
     "choosePluginAction": "Kies je actie",
     "configurePluginAction": "Configureer je actie",
-    "selectURL": "Configureer je URL"
+    "selectURL": "Configureer je URL",
+    "subtitles": "Ondertitels",
+    "addSubtitle": "Ondertitel toevoegen"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "Er zijn geen plugin-configuraties beschikbaar. Maak een pluginconfiguratie aan om deze te kunnen koppelen aan een processtap.",

@@ -43,8 +43,10 @@
       *ngIf="{
         noTabsConfigured: noTabsConfigured$ | async,
         showTaskList: showTaskList$ | async,
-        taskOpenedInPanel: taskOpenedInPanel$ | async,
+        showNoAccess: showNoAccess$ | async,
         dossierDetailLayout: dossierDetailLayout$ | async,
+        openTaskAndProcessLinkInModal: openTaskAndProcessLinkInModal$ | async,
+        taskAndProcessLinkOpenedInPanel: taskAndProcessLinkOpenedInPanel$ | async,
       } as tabContentObs"
     >
       <as-split
@@ -67,6 +69,14 @@
             </div>
 
             <valtimo-no-results
+              *ngIf="tabContentObs.showNoAccess"
+              description="{{ 'dossier.noAccess.description' | translate }}"
+              title="{{ 'dossier.noAccess.title' | translate }}"
+              illustration="valtimo-layout/img/emptystate-not-authorised.svg"
+            >
+            </valtimo-no-results>
+
+            <valtimo-no-results
               *ngIf="tabContentObs.noTabsConfigured"
               [description]="'dossier.tabs.noResultsDescription' | translate"
               [title]="'dossier.tabs.noResults' | translate"
@@ -86,17 +96,17 @@
         >
           @if (tabContentObs.showTaskList) {
             <div class="task-panel">
-              @if (!tabContentObs.taskOpenedInPanel) {
+              @if (!tabContentObs.taskAndProcessLinkOpenedInPanel) {
                 <valtimo-dossier-detail-task-list
-                  [openInTaskModal]="openTaskInModal$ | async"
+                  [openTaskAndProcessLinkInModal]="tabContentObs.openTaskAndProcessLinkInModal"
                   (taskClickEvent)="onTaskClickEvent($event)"
                   (formSubmitEvent)="onFormSubmitEvent()"
                 ></valtimo-dossier-detail-task-list>
               }
 
-              @if (tabContentObs.taskOpenedInPanel) {
+              @if (tabContentObs.taskAndProcessLinkOpenedInPanel) {
                 <valtimo-dossier-detail-task-detail
-                  [task]="tabContentObs.taskOpenedInPanel"
+                  [taskAndProcessLink]="tabContentObs.taskAndProcessLinkOpenedInPanel"
                   (activeChange)="onActiveChangeEvent($event)"
                   (closeEvent)="onTaskDetailsClose()"
                   (formSubmit)="onFormSubmitEvent()"
@@ -177,7 +187,28 @@
     [disabled]="(isAssigning$ | async) || (isAssignedToCurrentUser$ | async)"
     (click)="claimAssignee()"
   >
-    <span>{{ 'dossier.claimAssigneeCase' | translate }}</span>
+    {{ 'dossier.claimAssigneeCase' | translate }}
+  </cds-overflow-menu-option>
+</ng-template>
+
+<ng-template #unassignButton let-canHaveAssignee="canHaveAssignee" let-assigneeId="assigneeId">
+  <cds-overflow-menu-option
+    *ngIf="canHaveAssignee"
+    [disabled]="!assigneeId"
+    (selected)="unassignAssignee()"
+  >
+    {{ 'assignDocument.remove' | translate }}
+  </cds-overflow-menu-option>
+</ng-template>
+
+<ng-template #deleteButton let-canDelete="canDelete">
+  <cds-overflow-menu-option
+    *ngIf="canDelete"
+    [disabled]="isDeleting$ | async"
+    (click)="deleteDocument()"
+    type="danger"
+  >
+    {{ 'dossier.delete.delete' | translate }}
   </cds-overflow-menu-option>
 </ng-template>
 
@@ -194,6 +225,15 @@
   </button>
 </ng-template>
 
+<valtimo-confirmation-modal
+  confirmButtonTextTranslationKey="dossier.delete.confirm"
+  confirmButtonType="danger"
+  contentTranslationKey="dossier.delete.description"
+  [showModalSubject$]="showDeleteModal$"
+  titleTranslationKey="dossier.delete.delete"
+  (confirmEvent)="onConfirmDelete()"
+></valtimo-confirmation-modal>
+
 <ng-container renderInPageHeader [fullWidth]="true">
   <ng-template>
     <div
@@ -204,6 +244,7 @@
         canAssign: canAssign$ | async,
         canClaim: canClaim$ | async,
         canHaveAssignee: canHaveAssignee$ | async,
+        canDelete: canDelete$ | async,
         document: document$ | async,
         caseStatus: caseStatus$ | async,
       } as obs"
@@ -235,7 +276,7 @@
       <div class="buttons-container">
         <cds-overflow-menu
           [ngClass]="{'--compact': compactMode$ | async}"
-          *ngIf="obs.canHaveAssignee"
+          *ngIf="obs.canHaveAssignee || obs.canDelete"
           flip="true"
           [offset]="(compactMode$ | async) ? {y: 48, x: -4} : {y: 48, x: 4}"
           class="overflow-button assign-overflow"
@@ -247,9 +288,15 @@
             "
           >
           </ng-container>
-          <cds-overflow-menu-option (selected)="unassignAssignee()" [disabled]="!obs.assigneeId">
-            {{ 'assignDocument.remove' | translate }}
-          </cds-overflow-menu-option>
+          <ng-container
+            *ngTemplateOutlet="
+              unassignButton;
+              context: {canHaveAssignee: obs.canHaveAssignee, assigneeId: obs.assigneeId}
+            "
+          >
+          </ng-container>
+          <ng-container *ngTemplateOutlet="deleteButton; context: {canDelete: obs.canDelete}">
+          </ng-container>
         </cds-overflow-menu>
 
         <cds-overflow-menu
