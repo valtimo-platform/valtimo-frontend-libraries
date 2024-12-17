@@ -34,7 +34,7 @@ export const taskCountSpecification: DataSourceSpecification = {
       operator: 'Operator',
       value: 'Wert',
       conditions: 'Bedingungen',
-      conditionsHelperText: `Geben Sie optionale Bedingungen zum Abrufen der Anzahl der Aufgaben. ${CONDITIONS_HELPER_TEXTS.DE}`,
+      conditionsHelperText: `Geben Sie optionale Bedingungen zum Abrufen der Anzahl der Aufgaben. ${CONDITIONS_HELPER_TEXTS.DE('task:assignee')}`,
       addCondition: 'Bedingung hinzufügen',
     },
     en: {
@@ -49,7 +49,7 @@ export const taskCountSpecification: DataSourceSpecification = {
       operator: 'Operator',
       value: 'Value',
       conditions: 'Conditions',
-      conditionsHelperText: `Specify optional conditions for retrieving the number of tasks. ${CONDITIONS_HELPER_TEXTS.EN}`,
+      conditionsHelperText: `Specify optional conditions for retrieving the number of tasks. ${CONDITIONS_HELPER_TEXTS.EN('task:assignee')}`,
       addCondition: 'Add condition',
     },
     nl: {
@@ -64,7 +64,7 @@ export const taskCountSpecification: DataSourceSpecification = {
       operator: 'Operator',
       value: 'Waarde',
       conditions: 'Condities',
-      conditionsHelperText: `Geef optionele condities op voor het ophalen van het aantal taken. ${CONDITIONS_HELPER_TEXTS.NL}}`,
+      conditionsHelperText: `Geef optionele condities op voor het ophalen van het aantal taken. ${CONDITIONS_HELPER_TEXTS.NL('task:assignee')}}`,
       addCondition: 'Conditie toevoegen',
     },
   },
