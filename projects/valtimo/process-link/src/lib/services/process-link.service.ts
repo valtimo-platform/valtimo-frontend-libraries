@@ -92,7 +92,7 @@ export class ProcessLinkService {
     );
   }
 
-  private emptyStringToNull(object: any) {
+  private emptyStringToNull(object: {}): {} {
     Object.keys(object).forEach(key => {
       if (typeof object[key] === 'object') {
         this.emptyStringToNull(object[key]);
