@@ -156,6 +156,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     if (!value) return;
     this._prefixesSubject$.next(value);
   }
+  @Input() public valueType: ValueResolverOptionType = ValueResolverOptionType.FIELD;
   @Input() public label = '';
   @Input() public tooltip = '';
   @Input() public required = false;
@@ -203,12 +204,13 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
         ? this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
             prefixes,
             documentDefinitionName,
-            ValueResolverOptionType.FIELD,
+            this.valueType,
             version
           )
         : this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
             prefixes,
-            documentDefinitionName
+            documentDefinitionName,
+            this.valueType
           )
     ),
     map((results: string[]) => {

@@ -138,7 +138,9 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
           prefixesWithoutCache.length > 0
             ? httpCall.pipe(
                 map((results: ValueResolverResult[]) =>
-                  results.map((result: ValueResolverResult) => result.path)
+                  type === ValueResolverOptionType.FIELD
+                    ? results.map((result: ValueResolverResult) => result.path)
+                    : results.reduce((acc, curr) => [...acc, ...this.getCollectionPaths(curr)], [])
                 )
               )
             : of([]),
@@ -204,5 +206,24 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     if (!this.getResultFromCache(prefix, documentDefinitionName, version)) {
       this._cache = deepmerge(this._cache, resultCacheObject);
     }
+  }
+
+  private getCollectionPaths(result: ValueResolverResult): string[] {
+    if (result.type === ValueResolverOptionType.FIELD) return [];
+
+    if (
+      !result.children.some(
+        (child: ValueResolverResult) => child.type === ValueResolverOptionType.COLLECTION
+      )
+    )
+      return [result.path];
+
+    return result.children.reduce(
+      (acc, curr) => [
+        ...acc,
+        ...this.getCollectionPaths(curr).map(childPath => `${result.path}${childPath}`),
+      ],
+      []
+    );
   }
 }

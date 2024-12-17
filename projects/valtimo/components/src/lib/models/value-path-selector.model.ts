@@ -34,6 +34,7 @@ interface ValueResolverOption {
 interface ValueResolverResult {
   path: string;
   type: ValueResolverOptionType;
+  children?: ValueResolverResult[];
 }
 
 enum ValuePathSelectorPrefix {

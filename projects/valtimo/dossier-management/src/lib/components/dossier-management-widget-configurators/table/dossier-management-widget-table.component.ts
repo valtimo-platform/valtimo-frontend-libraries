@@ -36,6 +36,7 @@ import {
   InputLabelModule,
   ValuePathSelectorComponent,
   ValuePathSelectorPrefix,
+  ValueResolverOptionType,
 } from '@valtimo/components';
 import {FieldsCaseWidgetValue, WidgetContentProperties, WidgetTableContent} from '@valtimo/dossier';
 import {ButtonModule, InputModule, ToggleModule} from 'carbon-components-angular';
@@ -84,6 +85,7 @@ export class DossierManagementWidgetTableComponent
     ),
   });
   public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
+  public readonly ValueResolverOptionType = ValueResolverOptionType;
 
   public readonly theme$: Observable<CARBON_THEME> = this.cdsThemeService.currentTheme$.pipe(
     map((currentTheme: CurrentCarbonTheme) =>
