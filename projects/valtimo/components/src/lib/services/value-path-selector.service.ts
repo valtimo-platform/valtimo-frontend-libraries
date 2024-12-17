@@ -30,6 +30,8 @@ import {
   take,
 } from 'rxjs';
 import {
+  ValueCollectionCacheEntry,
+  ValuePathCollectionCache,
   ValuePathSelectorCache,
   ValuePathSelectorPrefix,
   ValuePathVersionArgument,
@@ -47,6 +49,7 @@ import {tap} from 'rxjs/operators';
 })
 export class ValuePathSelectorService extends BaseApiService implements OnDestroy {
   private _cache: ValuePathSelectorCache = {};
+  private _collectionCache: ValuePathCollectionCache = {};
   private _documentDefinitionCache$ = new BehaviorSubject<DocumentDefinitions | null>(null);
 
   private readonly _subscriptions = new Subscription();
@@ -137,11 +140,19 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
         return combineLatest([
           prefixesWithoutCache.length > 0
             ? httpCall.pipe(
-                map((results: ValueResolverResult[]) =>
-                  type === ValueResolverOptionType.FIELD
+                map((results: ValueResolverResult[]) => {
+                  if (type === ValueResolverOptionType.COLLECTION)
+                    this.cacheCollectionFieldPaths(
+                      results,
+                      prefixes,
+                      documentDefinitionName,
+                      version
+                    );
+
+                  return type === ValueResolverOptionType.FIELD
                     ? results.map((result: ValueResolverResult) => result.path)
-                    : results.reduce((acc, curr) => [...acc, ...this.getCollectionPaths(curr)], [])
-                )
+                    : results.reduce((acc, curr) => [...acc, ...this.getCollectionPaths(curr)], []);
+                })
               )
             : of([]),
           of(resultsFromCache),
@@ -170,6 +181,14 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
 
   public getDocumentDefinitionCache(): Observable<DocumentDefinitions | null> {
     return this._documentDefinitionCache$.asObservable();
+  }
+
+  public getCollectionCacheResult(
+    prefix: string,
+    documentDefinitionName: string,
+    version: ValuePathVersionArgument = 'latest'
+  ): ValueCollectionCacheEntry | null {
+    return this._collectionCache[documentDefinitionName]?.[version]?.[prefix] || null;
   }
 
   private openClearCacheSubscription(): void {
@@ -224,6 +243,61 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
         ...this.getCollectionPaths(curr).map(childPath => `${result.path}${childPath}`),
       ],
       []
+    );
+  }
+
+  private cacheCollectionFieldPaths(
+    results: ValueResolverResult[],
+    prefixes,
+    documentDefinitionName,
+    version
+  ): void {
+    const prefixesWithResult = prefixes.filter((prefix: string) =>
+      results.some((result: ValueResolverResult) => result.path.includes(prefix))
+    );
+
+    const resultCacheObject: ValuePathCollectionCache = {
+      [documentDefinitionName]: {
+        [version]: {
+          ...prefixesWithResult.reduce(
+            (acc, curr) => ({
+              ...acc,
+              [curr]: {
+                ...results
+                  .filter((result: ValueResolverResult) => result.path.includes(curr))
+                  .reduce((acc, curr) => ({...acc, ...this.getChildrenField(curr)}), {}),
+              },
+            }),
+            {}
+          ),
+        },
+      },
+    };
+
+    this._collectionCache = deepmerge(this._collectionCache, resultCacheObject);
+  }
+
+  private getChildrenField(
+    result: ValueResolverResult,
+    parentPath = ''
+  ): ValueCollectionCacheEntry {
+    const collectionChildren = result.children?.filter(
+      (child: ValueResolverResult) => child.type === ValueResolverOptionType.COLLECTION
+    );
+
+    if (!collectionChildren || collectionChildren.length === 0)
+      return {
+        [`${parentPath}${result.path}`]: result.children.map(
+          (child: ValueResolverResult) => child.path
+        ),
+      };
+
+    return collectionChildren.reduce(
+      (collectionEntries, collectionChild) => ({
+        ...collectionEntries,
+        ...this.getChildrenField(collectionChild, result.path),
+      }),
+      {}
     );
   }
 }

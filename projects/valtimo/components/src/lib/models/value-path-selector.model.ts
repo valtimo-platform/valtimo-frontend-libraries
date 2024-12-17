@@ -24,6 +24,18 @@ interface ValuePathSelectorCache {
   };
 }
 
+interface ValuePathCollectionCache {
+  [documentDefinitionName: string]: {
+    [version: string | number]: {
+      [prefix: string]: ValueCollectionCacheEntry;
+    };
+  };
+}
+
+interface ValueCollectionCacheEntry {
+  [collectionPath: string]: string[];
+}
+
 type DocumentDefinitionItemsCache = ListItem[];
 
 interface ValueResolverOption {
@@ -61,12 +73,14 @@ type ValuePathSelectorNotation = 'dots' | 'slashes';
 type ValuePathVersionArgument = number | 'latest';
 
 export {
-  ValuePathSelectorCache,
-  ValuePathSelectorPrefix,
-  ValuePathSelectorInputMode,
-  ValuePathVersionArgument,
   DocumentDefinitionItemsCache,
+  ValueCollectionCacheEntry,
+  ValuePathCollectionCache,
+  ValuePathSelectorCache,
+  ValuePathSelectorInputMode,
   ValuePathSelectorNotation,
+  ValuePathSelectorPrefix,
+  ValuePathVersionArgument,
   ValueResolverOption,
   ValueResolverOptionType,
   ValueResolverResult,

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import {CommonModule} from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -25,8 +25,23 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ValuePathSelectorService} from '../../services';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormBuilder,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {TranslateModule} from '@ngx-translate/core';
+import {DocumentService} from '@valtimo/document';
+import {
+  DropdownModule,
+  InputModule,
+  ListItem,
+  LoadingModule,
+  ToggleModule,
+} from 'carbon-components-angular';
 import {
   BehaviorSubject,
   combineLatest,
@@ -39,32 +54,15 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import {distinctUntilChanged} from 'rxjs/operators';
 import {
   ValuePathSelectorInputMode,
   ValuePathSelectorNotation,
   ValuePathSelectorPrefix,
   ValueResolverOptionType,
-  ValueResolverResult,
 } from '../../models/value-path-selector.model';
-import {
-  DropdownModule,
-  InputModule,
-  ListItem,
-  LoadingModule,
-  ToggleModule,
-} from 'carbon-components-angular';
-import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormBuilder,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import {ValuePathSelectorService} from '../../services';
 import {InputLabelModule} from '../input-label/input-label.module';
-import {TranslateModule} from '@ngx-translate/core';
-import {DocumentService} from '@valtimo/document';
-import {distinctUntilChanged} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-value-path-selector',
