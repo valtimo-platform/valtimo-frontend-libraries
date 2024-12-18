@@ -80,11 +80,18 @@
         (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
       ></valtimo-key-dropdown-value>
 
-      <ng-container *ngIf="type === 'arbitraryAmount'">
-        <ng-container
-          *ngTemplateOutlet="arbitraryAmountValue; context: {value: value, index: i}"
-        ></ng-container>
-      </ng-container>
+      <valtimo-arbitrary-amount-value
+        *ngIf="type === 'arbitraryAmount'"
+        [index]="i"
+        [value]="value"
+        [fullWidth]="fullWidth"
+        [disabled]="disabled"
+        [arbitraryAmountTitles]="arbitraryAmountTitles"
+        [amountOfArbitraryValuesArray$]="amountOfArbitraryValuesArray$"
+        (valueChange)="
+          onValueChange($event.value, $event.inputValue, $event.type, $event.arbitraryIndex)
+        "
+      ></valtimo-arbitrary-amount-value>
 
       <button
         *ngIf="!hideDeleteButton"
@@ -114,22 +121,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #arbitraryAmountValue let-value="value" let-index="index">
-  <div
-    class="v-multi-input__input"
-    [ngClass]="{'--full-width': fullWidth}"
-    *ngFor="let _ of amountOfArbitraryValuesArray$ | async; index as i"
-  >
-    <cds-label *ngIf="index === 0">{{
-      arbitraryAmountTitles ? arbitraryAmountTitles[i] : ''
-    }}</cds-label>
-
-    <input
-      cdsText
-      [defaultValue]="value ? value['' + i] : ''"
-      [disabled]="disabled"
-      (input)="onValueChange(value, $event.target.value, 'arbitrary', i)"
-    />
-  </div>
-</ng-template>
