@@ -202,7 +202,7 @@
       </ng-container>
       <v-input class="hidden-input" name="uuid" [defaultValue]="uuid"> </v-input>
     </v-form>
-    <v-modal [parentId]="uuid" (closeEvent)="closeMappingModal(uuid)">
+    <v-modal [parentId]="uuid" (closeEvent)="closeMappingModal(uuid)" [maxWidthPx]="960">
       <div role="header">
         <h3 cdsModalHeaderHeading>{{ 'setMapping' | pluginTranslate: pluginId | async }}</h3>
       </div>
@@ -235,26 +235,25 @@
         </div>
       </div>
 
-      <div role="footer">
-        <ng-container>
-          <button
-            cdsButton="secondary"
-            [attr.modal-primary-focus]="true"
-            (click)="closeMappingModal(uuid)"
-            [disabled]="obs.disabled"
-          >
-            {{ 'close' | pluginTranslate: pluginId | async }}
-          </button>
-          <button
-            cdsButton="primary"
-            [attr.modal-primary-focus]="true"
-            [disabled]="obs.disabled"
-            (click)="saveMapping(uuid)"
-            [disabled]="obs.disabled"
-          >
-            {{ 'save' | pluginTranslate: pluginId | async }}
-          </button>
-        </ng-container>
+      <div role="footer" class="modal-buttons-container">
+        <button
+          cdsButton="secondary"
+          [attr.modal-primary-focus]="true"
+          (click)="closeMappingModal(uuid)"
+          [disabled]="obs.disabled"
+        >
+          {{ 'close' | pluginTranslate: pluginId | async }}
+        </button>
+
+        <button
+          cdsButton="primary"
+          [attr.modal-primary-focus]="true"
+          [disabled]="obs.disabled"
+          (click)="saveMapping(uuid)"
+          [disabled]="obs.disabled"
+        >
+          {{ 'save' | pluginTranslate: pluginId | async }}
+        </button>
       </div>
     </v-modal>
   </ng-container>
