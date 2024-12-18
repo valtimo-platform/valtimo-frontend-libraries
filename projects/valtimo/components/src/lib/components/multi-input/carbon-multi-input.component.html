@@ -47,9 +47,13 @@
       *ngFor="let value of values$ | async as values; trackBy: trackByFn; index as i"
       class="v-multi-input__row"
     >
-      <ng-container *ngIf="type === 'value'">
-        <ng-container *ngTemplateOutlet="singleValue; context: {value: value}"></ng-container>
-      </ng-container>
+      <valtimo-single-value
+        *ngIf="type === 'value'"
+        [value]="value"
+        [fullWidth]="fullWidth"
+        [disabled]="disabled"
+        (valueChange)="onValueChange($event.value, $event.inputValue, 'value')"
+      ></valtimo-single-value>
 
       <valtimo-key-value
         *ngIf="type === 'keyValue'"
@@ -102,17 +106,6 @@
     </div>
   </div>
 </div>
-
-<ng-template #singleValue let-value="value">
-  <div class="v-multi-input__input" [ngClass]="{'--full-width': fullWidth}">
-    <input
-      cdsText
-      [defaultValue]="value.value"
-      [disabled]="disabled"
-      (change)="onValueChange(value, $event.target.value, 'value')"
-    />
-  </div>
-</ng-template>
 
 <ng-template #arbitraryAmountValue let-value="value" let-index="index">
   <div

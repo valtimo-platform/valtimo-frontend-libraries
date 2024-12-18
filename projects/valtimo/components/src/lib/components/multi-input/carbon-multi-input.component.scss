@@ -29,7 +29,7 @@
   &__input {
     margin-inline-end: var(--v-multi-input-input-spacing-inline);
 
-    &--full-width {
+    &.--full-width {
       width: 100%;
     }
   }

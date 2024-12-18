@@ -27,7 +27,7 @@ import {
 import {ButtonModule} from '../button/button.module';
 import {InputLabelModule} from '../input-label/input-label.module';
 import {InputModule} from '../input/input.module';
-import {KeyValueComponent} from './components';
+import {KeyValueComponent, SingleValueComponent} from './components';
 
 @NgModule({
   declarations: [CarbonMultiInputComponent],
@@ -42,6 +42,7 @@ import {KeyValueComponent} from './components';
     CarbonInputModule,
     DropdownModule,
     KeyValueComponent,
+    SingleValueComponent,
   ],
   exports: [CarbonMultiInputComponent],
 })
