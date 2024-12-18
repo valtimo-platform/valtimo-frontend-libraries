@@ -51,11 +51,16 @@
         <ng-container *ngTemplateOutlet="singleValue; context: {value: value}"></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="type === 'keyValue'">
-        <ng-container
-          *ngTemplateOutlet="keyValue; context: {value: value, index: i}"
-        ></ng-container>
-      </ng-container>
+      <valtimo-key-value
+        *ngIf="type === 'keyValue'"
+        [keyColumnTitle]="keyColumnTitle"
+        [valueColumnTitle]="valueColumnTitle"
+        [index]="i"
+        [value]="value"
+        [fullWidth]="fullWidth"
+        [disabled]="disabled"
+        (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
+      ></valtimo-key-value>
 
       <ng-container *ngIf="type === 'keyDropdownValue'">
         <ng-container
@@ -105,32 +110,6 @@
       [defaultValue]="value.value"
       [disabled]="disabled"
       (change)="onValueChange(value, $event.target.value, 'value')"
-    />
-  </div>
-</ng-template>
-
-<ng-template #keyValue let-value="value" let-index="index">
-  <div class="v-multi-input__input" [ngClass]="{'--full-width': fullWidth}">
-    <cds-label *ngIf="index === 0 && keyColumnTitle && valueColumnTitle">{{
-      keyColumnTitle
-    }}</cds-label>
-
-    <input
-      cdsText
-      [defaultValue]="value.key"
-      [disabled]="disabled"
-      (input)="onValueChange(value, $event.target.value, 'key')"
-    />
-  </div>
-  <div class="v-multi-input__input" [ngClass]="{'--full-width': fullWidth}">
-    <cds-label *ngIf="index === 0 && keyColumnTitle && valueColumnTitle">{{
-      valueColumnTitle
-    }}</cds-label>
-    <input
-      cdsText
-      [defaultValue]="value.value"
-      [disabled]="disabled"
-      (input)="onValueChange(value, $event.target.value, 'value')"
     />
   </div>
 </ng-template>

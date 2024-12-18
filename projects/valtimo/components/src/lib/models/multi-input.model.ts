@@ -47,6 +47,8 @@ interface ArbitraryInputTitles {
   [indexKey: string]: string;
 }
 
+type MultiInputChangeEventType = 'key' | 'value' | 'dropdown' | 'arbitrary';
+
 export {
   MultiInputType,
   MultiInputValues,
@@ -56,4 +58,5 @@ export {
   MultiInputFormsValues,
   ListItemWithId,
   ArbitraryInputTitles,
+  MultiInputChangeEventType,
 };

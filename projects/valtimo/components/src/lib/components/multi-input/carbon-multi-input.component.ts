@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import {
   ArbitraryInputTitles,
   ListItemWithId,
+  MultiInputChangeEventType,
   MultiInputKeyValue,
   MultiInputOutput,
   MultiInputType,
@@ -31,6 +40,7 @@ import {v4 as uuidv4} from 'uuid';
   selector: 'valtimo-carbon-multi-input',
   templateUrl: './carbon-multi-input.component.html',
   styleUrls: ['./carbon-multi-input.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   @Input() public addRowText = '';
@@ -130,7 +140,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   public onValueChange(
     templateValue: MultiInputKeyValue,
     inputValue: string,
-    change: 'key' | 'value' | 'dropdown' | 'arbitrary',
+    change: MultiInputChangeEventType,
     arbitraryIndex?: number
   ): void {
     this.values$.pipe(take(1)).subscribe(values => {

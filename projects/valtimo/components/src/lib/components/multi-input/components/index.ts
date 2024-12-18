@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,27 +14,4 @@
  * limitations under the License.
  */
 
-.v-multi-input {
-  &--margin {
-    margin-block-end: var(--v-input-margin);
-  }
-
-  &__row {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    margin-block-end: var(--v-multi-input-row-spacing-block);
-  }
-
-  &__input {
-    margin-inline-end: var(--v-multi-input-input-spacing-inline);
-
-    &--full-width {
-      width: 100%;
-    }
-  }
-
-  &--no-delete-button &__input:last-child {
-    margin-inline-end: 0;
-  }
-}
+export * from './key-value';
