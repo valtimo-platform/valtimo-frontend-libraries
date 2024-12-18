@@ -220,12 +220,17 @@
           </cds-label>
           <valtimo-carbon-multi-input
             *ngIf="showMappingModalsDelay[uuid]"
-            type="keyValue"
+            type="keyValuePathSelector"
             (valueChange)="mappingValueChange($event, uuid)"
             [defaultValues]="mappings[uuid] || prefill?.mapping"
             [valueColumnTitle]="'target' | pluginTranslate: pluginId | async"
             [keyColumnTitle]="'source' | pluginTranslate: pluginId | async"
             [fullWidth]="true"
+            valuePathSelectorNotation="slashes"
+            [valuePathSelectorDocumentDefinitionName]="
+              getSelectedCaseDefinitionNameForIndex(index) | async
+            "
+            [valuePathSelectorPrefixes]="[ValuePathSelectorPrefix.DOC]"
           ></valtimo-carbon-multi-input>
         </div>
       </div>

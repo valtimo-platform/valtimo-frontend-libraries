@@ -93,6 +93,21 @@
         "
       ></valtimo-arbitrary-amount-value>
 
+      <valtimo-key-value-path-selector
+        *ngIf="type === 'keyValuePathSelector'"
+        [keyColumnTitle]="keyColumnTitle"
+        [valueColumnTitle]="valueColumnTitle"
+        [index]="i"
+        [value]="value"
+        [fullWidth]="fullWidth"
+        [disabled]="disabled"
+        [documentDefinitionName]="valuePathSelectorDocumentDefinitionName"
+        [prefixes]="valuePathSelectorPrefixes"
+        [showDocumentDefinitionSelector]="valuePathSelectorShowDocumentDefinitionSelector"
+        [notation]="valuePathSelectorNotation"
+        (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
+      ></valtimo-key-value-path-selector>
+
       <button
         *ngIf="!hideDeleteButton"
         cdsButton="danger"

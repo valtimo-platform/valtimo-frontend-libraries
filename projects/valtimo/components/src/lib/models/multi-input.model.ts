@@ -17,7 +17,12 @@
 import {FormOutput} from '../models';
 import {ListItem} from 'carbon-components-angular';
 
-type MultiInputType = 'keyValue' | 'value' | 'keyDropdownValue' | 'arbitraryAmount';
+type MultiInputType =
+  | 'keyValue'
+  | 'value'
+  | 'keyDropdownValue'
+  | 'arbitraryAmount'
+  | 'keyValuePathSelector';
 
 interface MultiInputKeyValue {
   uuid?: string;

@@ -31,6 +31,7 @@ import {
   ArbitraryAmountValueComponent,
   KeyDropdownValueComponent,
   KeyValueComponent,
+  KeyValuePathSelectorComponent,
   SingleValueComponent,
 } from './components';
 
@@ -50,6 +51,7 @@ import {
     SingleValueComponent,
     KeyDropdownValueComponent,
     ArbitraryAmountValueComponent,
+    KeyValuePathSelectorComponent,
   ],
   exports: [CarbonMultiInputComponent],
 })

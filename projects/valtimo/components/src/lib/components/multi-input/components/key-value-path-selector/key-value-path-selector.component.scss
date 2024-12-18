@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-export * from './key-value';
-export * from './single-value';
-export * from './key-dropdown-value';
-export * from './arbitrary-amount-value';
-export * from './key-value-path-selector';
+:host {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  &.--full-width {
+    width: 100%;
+  }
+}

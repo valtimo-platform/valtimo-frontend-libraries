@@ -31,6 +31,8 @@ import {
   MultiInputOutput,
   MultiInputType,
   MultiInputValues,
+  ValuePathSelectorNotation,
+  ValuePathSelectorPrefix,
 } from '../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
@@ -74,6 +76,11 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   @Input() public tooltip = '';
   @Input() public type: MultiInputType = 'value';
   @Input() public valueColumnTitle = '';
+
+  @Input() public readonly valuePathSelectorDocumentDefinitionName = '';
+  @Input() public readonly valuePathSelectorPrefixes: ValuePathSelectorPrefix[] = [];
+  @Input() public readonly valuePathSelectorShowDocumentDefinitionSelector = false;
+  @Input() public readonly valuePathSelectorNotation: ValuePathSelectorNotation = 'dots';
 
   @Output() public valueChange: EventEmitter<MultiInputOutput> = new EventEmitter();
   @Output() public allValuesValidEvent: EventEmitter<boolean> = new EventEmitter();
@@ -197,7 +204,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
   }
 
   private getMappedValue(valueToMap: MultiInputKeyValue): MultiInputKeyValue | string {
-    if (this.type === 'keyValue') {
+    if (this.type === 'keyValue' || this.type === 'keyValuePathSelector') {
       return {key: valueToMap.key, value: valueToMap.value};
     } else if (this.type === 'keyDropdownValue') {
       return {key: valueToMap.key, value: valueToMap.value, dropdown: valueToMap.dropdown};
@@ -234,6 +241,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
       case 'value':
         return !!value;
       case 'keyValue':
+      case 'keyValuePathSelector':
         return !!((value as MultiInputKeyValue).value || (value as MultiInputKeyValue).key);
       case 'keyDropdownValue':
         return !!(
