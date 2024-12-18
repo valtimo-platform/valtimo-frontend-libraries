@@ -66,11 +66,19 @@
         (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
       ></valtimo-key-value>
 
-      <ng-container *ngIf="type === 'keyDropdownValue'">
-        <ng-container
-          *ngTemplateOutlet="keyDropdownValue; context: {value: value, index: i}"
-        ></ng-container>
-      </ng-container>
+      <valtimo-key-dropdown-value
+        *ngIf="type === 'keyDropdownValue'"
+        [keyColumnTitle]="keyColumnTitle"
+        [valueColumnTitle]="valueColumnTitle"
+        [dropdownColumnTitle]="dropdownColumnTitle"
+        [index]="i"
+        [value]="value"
+        [dropdownItems$]="getDropdownItemsForRow(i)"
+        [dropdownWidth]="dropdownWidth"
+        [fullWidth]="fullWidth"
+        [disabled]="disabled"
+        (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
+      ></valtimo-key-dropdown-value>
 
       <ng-container *ngIf="type === 'arbitraryAmount'">
         <ng-container
@@ -122,44 +130,6 @@
       [defaultValue]="value ? value['' + i] : ''"
       [disabled]="disabled"
       (input)="onValueChange(value, $event.target.value, 'arbitrary', i)"
-    />
-  </div>
-</ng-template>
-
-<ng-template #keyDropdownValue let-value="value" let-index="index">
-  <div [ngClass]="{'--full-width': fullWidth}" class="v-multi-input__input">
-    <cds-label *ngIf="index === 0 && keyColumnTitle">{{ keyColumnTitle }}</cds-label>
-
-    <input
-      cdsText
-      [defaultValue]="value.key"
-      [disabled]="disabled"
-      (input)="onValueChange(value, $event.target.value, 'key')"
-    />
-  </div>
-
-  <div [style.minWidth.px]="dropdownWidth" class="v-multi-input__input">
-    <cds-label *ngIf="index === 0 && dropdownColumnTitle">{{ dropdownColumnTitle }}</cds-label>
-
-    <cds-dropdown
-      (selected)="onValueChange(value, $event.item.id, 'dropdown')"
-      [appendInline]="true"
-    >
-      <cds-dropdown-list
-        [items]="getDropdownItemsForRow(index) | async"
-        type="multi"
-      ></cds-dropdown-list>
-    </cds-dropdown>
-  </div>
-
-  <div [ngClass]="{'--full-width': fullWidth}" class="v-multi-input__input">
-    <cds-label *ngIf="index === 0 && valueColumnTitle">{{ valueColumnTitle }}</cds-label>
-
-    <input
-      cdsText
-      [defaultValue]="value.value"
-      [disabled]="disabled"
-      (input)="onValueChange(value, $event.target.value, 'value')"
     />
   </div>
 </ng-template>

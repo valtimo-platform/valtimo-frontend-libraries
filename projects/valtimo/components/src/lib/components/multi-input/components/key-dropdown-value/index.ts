@@ -14,6 +14,4 @@
  * limitations under the License.
  */
 
-export * from './key-value';
-export * from './single-value';
-export * from './key-dropdown-value';
+export * from './key-dropdown-value.component';
