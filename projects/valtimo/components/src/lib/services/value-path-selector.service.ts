@@ -183,12 +183,15 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     return this._documentDefinitionCache$.asObservable();
   }
 
-  public getCollectionCacheResult(
+  public getCollectionPathCacheResult(
     prefix: string,
     documentDefinitionName: string,
-    version: ValuePathVersionArgument = 'latest'
-  ): ValueCollectionCacheEntry | null {
-    return this._collectionCache[documentDefinitionName]?.[version]?.[prefix] || null;
+    version: ValuePathVersionArgument = 'latest',
+    collectionKey: string
+  ): string[] {
+    return (
+      this._collectionCache[documentDefinitionName]?.[version]?.[prefix]?.[collectionKey] || []
+    );
   }
 
   private openClearCacheSubscription(): void {
@@ -246,6 +249,14 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     );
   }
 
+  private getCollectionCacheResult(
+    prefix: string,
+    documentDefinitionName: string,
+    version: ValuePathVersionArgument = 'latest'
+  ): ValueCollectionCacheEntry | null {
+    return this._collectionCache[documentDefinitionName]?.[version]?.[prefix] || null;
+  }
+
   private cacheCollectionFieldPaths(
     results: ValueResolverResult[],
     prefixes,
@@ -274,7 +285,12 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
       },
     };
 
-    this._collectionCache = deepmerge(this._collectionCache, resultCacheObject);
+    if (
+      prefixesWithResult.some(
+        prefix => !this.getCollectionCacheResult(prefix, documentDefinitionName, version)
+      )
+    )
+      this._collectionCache = deepmerge(this._collectionCache, resultCacheObject);
   }
 
   private getChildrenField(

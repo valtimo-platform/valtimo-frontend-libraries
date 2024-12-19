@@ -43,6 +43,7 @@ import {
   CdsThemeService,
   CurrentCarbonTheme,
   InputLabelModule,
+  ValueCollectionPath,
   ValuePathSelectorComponent,
   ValuePathSelectorPrefix,
 } from '@valtimo/components';
@@ -96,6 +97,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
   @Input() public documentDefinitionName?: string | null = null;
   @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
+  @Input() public selectedCollectionPath?: ValueCollectionPath | null;
 
   @Output() public columnUpdateEvent = new EventEmitter<{
     data: FieldsCaseWidgetValue[];

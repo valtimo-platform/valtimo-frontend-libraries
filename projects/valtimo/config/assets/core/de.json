@@ -23,6 +23,10 @@
         "title": "Ausgewählte Case zuordnen"
       }
     },
+    "stuff": {
+      "email": "test1@gmail.com",
+      "periodeOmschrijving": "This is a description"
+    },
     "changePageModal": {
       "title": "Seite wechseln",
       "content": "Sind Sie sicher, dass Sie die Seite wechseln möchten? Die gesamte Auswahl geht verloren.",

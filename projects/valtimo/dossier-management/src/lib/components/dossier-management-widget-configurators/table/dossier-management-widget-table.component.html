@@ -55,6 +55,7 @@
     [documentDefinitionName]="documentDefinitionName$ | async"
     [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
     [valueType]="ValueResolverOptionType.COLLECTION"
+    (collectionPathSelected)="onCollectionPathSelected($event)"
   ></valtimo-value-path-selector>
 </form>
 
@@ -65,6 +66,8 @@
 <valtimo-dossier-management-widget-fields-column
   [addTranslateKey]="'widgetTabManagement.content.table.addColumn'"
   [columnData]="content()?.columns"
+  [documentDefinitionName]="documentDefinitionName$ | async"
+  [selectedCollectionPath]="selectedCollectionPath$ | async"
   (columnUpdateEvent)="onColumnUpdateEvent($event)"
 ></valtimo-dossier-management-widget-fields-column>
 

@@ -56,11 +56,12 @@ import {
 } from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {
+  ValueCollectionPath,
   ValuePathSelectorInputMode,
   ValuePathSelectorNotation,
   ValuePathSelectorPrefix,
   ValueResolverOptionType,
-} from '../../models/value-path-selector.model';
+} from '../../models';
 import {ValuePathSelectorService} from '../../services';
 import {InputLabelModule} from '../input-label/input-label.module';
 
@@ -160,6 +161,9 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
   @Input() public required = false;
   @Input() public showDocumentDefinitionSelector = false;
   @Input() public notation: ValuePathSelectorNotation = 'dots';
+  @Input() public set selectedCollectionPath(value: ValueCollectionPath | null) {
+    this._selectedCollectionPath$.next(value);
+  }
 
   @Input() public set defaultValue(value: string) {
     if (!value) return;
@@ -168,8 +172,10 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
       this._inputMode$.next(ValuePathSelectorInputMode.MANUAL);
   }
   @Output() valueChangeEvent: EventEmitter<string> = new EventEmitter();
+  @Output() collectionPathSelected: EventEmitter<any> = new EventEmitter();
 
   private readonly _documentDefinitionNameSubject$ = new BehaviorSubject<string>('');
+  private readonly _selectedCollectionPath$ = new BehaviorSubject<ValueCollectionPath | null>(null);
   private get _documentDefinitionName$(): Observable<string> {
     return this._documentDefinitionNameSubject$.pipe(filter(value => !!value));
   }
@@ -195,39 +201,64 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     this._documentDefinitionName$,
     this._prefixes$,
     this._version$,
+    this._selectedCollectionPath$,
   ]).pipe(
     tap(() => this.loadingValuePathItems$.next(true)),
-    switchMap(([documentDefinitionName, prefixes, version]) =>
-      typeof version === 'number'
-        ? this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
-            prefixes,
-            documentDefinitionName,
-            this.valueType,
-            version
-          )
-        : this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
-            prefixes,
-            documentDefinitionName,
-            this.valueType
+    switchMap(([documentDefinitionName, prefixes, version, selectedCollection]) =>
+      !selectedCollection
+        ? typeof version === 'number'
+          ? this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
+              prefixes,
+              documentDefinitionName,
+              this.valueType,
+              version
+            )
+          : this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
+              prefixes,
+              documentDefinitionName,
+              this.valueType
+            )
+        : of(
+            this.valuePathSelectorService.getCollectionPathCacheResult(
+              selectedCollection.prefix,
+              documentDefinitionName,
+              version ?? 'latest',
+              selectedCollection.unformattedPath
+            )
           )
     ),
-    map((results: string[]) => {
-      return results
+    map((results: string[]) =>
+      results
         .map(result => this.getFormattedPath(result))
-        .sort((a, b) => a.localeCompare(b));
+        .sort((a, b) => a.content.localeCompare(b.content))
+    ),
+    tap(options => {
+      this._cachedOptions = options.map(option => option.content);
     }),
-    tap(options => (this._cachedOptions = options)),
     switchMap(options =>
       combineLatest([of(options), this._selectedPath$, this.inputModeIsDropdown$])
     ),
     tap(([options, selectedPath, inputModeIsDropdown]) => {
-      if (!options.includes(selectedPath) && !!selectedPath && inputModeIsDropdown)
+      if (
+        !options.map(option => option.content).includes(selectedPath) &&
+        !!selectedPath &&
+        inputModeIsDropdown
+      )
         this._inputMode$.next(ValuePathSelectorInputMode.MANUAL);
     }),
     map(([options, selectedPath]) =>
-      options.map(option => ({content: option, selected: option === selectedPath}))
+      options.map(option => ({
+        content: option.content,
+        selected: option.content === selectedPath,
+        prefix: option.prefix,
+        unformattedPath: option.unformattedPath,
+      }))
     ),
-    tap(() => this.loadingValuePathItems$.next(false))
+    tap((options: ListItem[]) => {
+      const option = options.find((option: ListItem) => option.selected);
+      if (!!option) this.onPathSelected({item: option});
+      this.loadingValuePathItems$.next(false);
+    })
   );
 
   public readonly loadingDocumentDefinitionItems$ = new BehaviorSubject<boolean>(true);
@@ -300,7 +331,12 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
 
   public onPathSelected(event: {item: {content: string}}): void {
     const selectedPath = event?.item?.content;
+
+    if (this.collectionPathSelected.observed)
+      this.collectionPathSelected.emit(!!selectedPath ? event.item : null);
+
     if (!selectedPath) return;
+
     this.selectedPath.setValue(selectedPath);
   }
 
@@ -323,10 +359,18 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     );
   }
 
-  private getFormattedPath(unformattedPath: string): string {
+  private getFormattedPath(unformattedPath: string): ValueCollectionPath {
     const splitPathPrefix = unformattedPath.split(':');
     const prefix = splitPathPrefix[0];
     const remainingPath = splitPathPrefix[1];
+
+    if (!remainingPath)
+      return {
+        prefix,
+        unformattedPath,
+        content: unformattedPath,
+      };
+
     const requiredNotation = this.notation;
     const pathNotation: ValuePathSelectorNotation = remainingPath.includes('/')
       ? 'slashes'
@@ -341,6 +385,10 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
       ''
     );
 
-    return `${prefix}:${requiredNotation === 'dots' ? formattedPath.substring(1) : formattedPath}`;
+    return {
+      prefix,
+      unformattedPath,
+      content: `${prefix}:${requiredNotation === 'dots' ? formattedPath.substring(1) : formattedPath}`,
+    };
   }
 }

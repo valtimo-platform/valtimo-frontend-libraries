@@ -27,13 +27,19 @@ interface ValuePathSelectorCache {
 interface ValuePathCollectionCache {
   [documentDefinitionName: string]: {
     [version: string | number]: {
-      [prefix: string]: ValueCollectionCacheEntry;
+    [prefix: string]: ValueCollectionCacheEntry;
     };
   };
 }
 
 interface ValueCollectionCacheEntry {
   [collectionPath: string]: string[];
+}
+
+interface ValueCollectionPath {
+  content: string;
+  prefix: string;
+  unformattedPath: string;
 }
 
 type DocumentDefinitionItemsCache = ListItem[];
@@ -75,6 +81,7 @@ type ValuePathVersionArgument = number | 'latest';
 export {
   DocumentDefinitionItemsCache,
   ValueCollectionCacheEntry,
+  ValueCollectionPath,
   ValuePathCollectionCache,
   ValuePathSelectorCache,
   ValuePathSelectorInputMode,
