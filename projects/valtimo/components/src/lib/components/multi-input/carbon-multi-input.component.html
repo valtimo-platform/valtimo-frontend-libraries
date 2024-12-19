@@ -47,66 +47,84 @@
       *ngFor="let value of values$ | async as values; trackBy: trackByFn; index as i"
       class="v-multi-input__row"
     >
-      <valtimo-single-value
-        *ngIf="type === 'value'"
-        [value]="value"
-        [fullWidth]="fullWidth"
-        [disabled]="disabled"
-        (valueChange)="onValueChange($event.value, $event.inputValue, 'value')"
-      ></valtimo-single-value>
-
-      <valtimo-key-value
-        *ngIf="type === 'keyValue'"
-        [keyColumnTitle]="keyColumnTitle"
-        [valueColumnTitle]="valueColumnTitle"
-        [index]="i"
-        [value]="value"
-        [fullWidth]="fullWidth"
-        [disabled]="disabled"
-        (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
-      ></valtimo-key-value>
-
-      <valtimo-key-dropdown-value
-        *ngIf="type === 'keyDropdownValue'"
-        [keyColumnTitle]="keyColumnTitle"
-        [valueColumnTitle]="valueColumnTitle"
-        [dropdownColumnTitle]="dropdownColumnTitle"
-        [index]="i"
-        [value]="value"
-        [dropdownItems$]="getDropdownItemsForRow(i)"
-        [dropdownWidth]="dropdownWidth"
-        [fullWidth]="fullWidth"
-        [disabled]="disabled"
-        (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
-      ></valtimo-key-dropdown-value>
-
-      <valtimo-arbitrary-amount-value
-        *ngIf="type === 'arbitraryAmount'"
-        [index]="i"
-        [value]="value"
-        [fullWidth]="fullWidth"
-        [disabled]="disabled"
-        [arbitraryAmountTitles]="arbitraryAmountTitles"
-        [amountOfArbitraryValuesArray$]="amountOfArbitraryValuesArray$"
-        (valueChange)="
-          onValueChange($event.value, $event.inputValue, $event.type, $event.arbitraryIndex)
-        "
-      ></valtimo-arbitrary-amount-value>
-
-      <valtimo-key-value-path-selector
-        *ngIf="type === 'keyValuePathSelector'"
-        [keyColumnTitle]="keyColumnTitle"
-        [valueColumnTitle]="valueColumnTitle"
-        [index]="i"
-        [value]="value"
-        [fullWidth]="fullWidth"
-        [disabled]="disabled"
-        [documentDefinitionName]="valuePathSelectorDocumentDefinitionName"
-        [prefixes]="valuePathSelectorPrefixes"
-        [showDocumentDefinitionSelector]="valuePathSelectorShowDocumentDefinitionSelector"
-        [notation]="valuePathSelectorNotation"
-        (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
-      ></valtimo-key-value-path-selector>
+      @switch (type) {
+        @case ('value') {
+          <valtimo-single-value
+            [value]="value"
+            [fullWidth]="fullWidth"
+            [disabled]="disabled"
+            (valueChange)="onValueChange($event.value, $event.inputValue, 'value')"
+          ></valtimo-single-value>
+        }
+        @case ('keyValue') {
+          <valtimo-key-value
+            [keyColumnTitle]="keyColumnTitle"
+            [valueColumnTitle]="valueColumnTitle"
+            [index]="i"
+            [value]="value"
+            [fullWidth]="fullWidth"
+            [disabled]="disabled"
+            (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
+          ></valtimo-key-value>
+        }
+        @case ('keyDropdownValue') {
+          <valtimo-key-dropdown-value
+            [keyColumnTitle]="keyColumnTitle"
+            [valueColumnTitle]="valueColumnTitle"
+            [dropdownColumnTitle]="dropdownColumnTitle"
+            [index]="i"
+            [value]="value"
+            [dropdownItems$]="getDropdownItemsForRow(i)"
+            [dropdownWidth]="dropdownWidth"
+            [fullWidth]="fullWidth"
+            [disabled]="disabled"
+            (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
+          ></valtimo-key-dropdown-value>
+        }
+        @case ('arbitraryAmount') {
+          <valtimo-arbitrary-amount-value
+            [index]="i"
+            [value]="value"
+            [fullWidth]="fullWidth"
+            [disabled]="disabled"
+            [arbitraryAmountTitles]="arbitraryAmountTitles"
+            [amountOfArbitraryValuesArray$]="amountOfArbitraryValuesArray$"
+            (valueChange)="
+              onValueChange($event.value, $event.inputValue, $event.type, $event.arbitraryIndex)
+            "
+          ></valtimo-arbitrary-amount-value>
+        }
+        @case ('keyValuePathSelector') {
+          <valtimo-key-value-path-selector
+            [keyColumnTitle]="keyColumnTitle"
+            [valueColumnTitle]="valueColumnTitle"
+            [index]="i"
+            [value]="value"
+            [fullWidth]="fullWidth"
+            [disabled]="disabled"
+            [documentDefinitionName]="valuePathSelectorDocumentDefinitionName"
+            [prefixes]="valuePathSelectorPrefixes"
+            [showDocumentDefinitionSelector]="valuePathSelectorShowDocumentDefinitionSelector"
+            [notation]="valuePathSelectorNotation"
+            (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
+          ></valtimo-key-value-path-selector>
+        }
+        @case ('valuePathSelectorValue') {
+          <valtimo-value-path-selector-value
+            [keyColumnTitle]="keyColumnTitle"
+            [valueColumnTitle]="valueColumnTitle"
+            [index]="i"
+            [value]="value"
+            [fullWidth]="fullWidth"
+            [disabled]="disabled"
+            [documentDefinitionName]="valuePathSelectorDocumentDefinitionName"
+            [prefixes]="valuePathSelectorPrefixes"
+            [showDocumentDefinitionSelector]="valuePathSelectorShowDocumentDefinitionSelector"
+            [notation]="valuePathSelectorNotation"
+            (valueChange)="onValueChange($event.value, $event.inputValue, $event.type)"
+          ></valtimo-value-path-selector-value>
+        }
+      }
 
       <button
         *ngIf="!hideDeleteButton"

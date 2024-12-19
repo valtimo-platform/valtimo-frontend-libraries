@@ -34,6 +34,7 @@ import {
   KeyValuePathSelectorComponent,
   SingleValueComponent,
 } from './components';
+import {ValuePathSelectorValueComponent} from './components/value-path-selector-value';
 
 @NgModule({
   declarations: [CarbonMultiInputComponent],
@@ -52,6 +53,7 @@ import {
     KeyDropdownValueComponent,
     ArbitraryAmountValueComponent,
     KeyValuePathSelectorComponent,
+    ValuePathSelectorValueComponent,
   ],
   exports: [CarbonMultiInputComponent],
 })

@@ -22,7 +22,8 @@ type MultiInputType =
   | 'value'
   | 'keyDropdownValue'
   | 'arbitraryAmount'
-  | 'keyValuePathSelector';
+  | 'keyValuePathSelector'
+  | 'valuePathSelectorValue';
 
 interface MultiInputKeyValue {
   uuid?: string;
