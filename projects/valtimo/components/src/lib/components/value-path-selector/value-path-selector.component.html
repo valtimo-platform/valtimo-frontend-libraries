@@ -25,6 +25,16 @@
   <v-input-label [required]="required" [title]="label" [tooltip]="tooltip"> </v-input-label>
 
   <form [formGroup]="formGroup" class="value-path-selector__form">
+    <cds-toggle
+      data-testid="value-path-selector-toggle"
+      size="sm"
+      [disabled]="obs.disabled"
+      [onText]="'valuePathSelector.dropdown' | translate"
+      [offText]="'valuePathSelector.manual' | translate"
+      [checked]="obs.inputModeIsDropdown"
+      (checkedChange)="onInputModeChange($event)"
+    ></cds-toggle>
+
     @if (obs.inputModeIsDropdown) {
       <ng-container
         *ngIf="
@@ -66,14 +76,5 @@
         formControlName="selectedPath"
       />
     }
-
-    <cds-toggle
-      data-testid="value-path-selector-toggle"
-      [disabled]="obs.disabled"
-      [onText]="'valuePathSelector.dropdown' | translate"
-      [offText]="'valuePathSelector.manual' | translate"
-      [checked]="obs.inputModeIsDropdown"
-      (checkedChange)="onInputModeChange($event)"
-    ></cds-toggle>
   </form>
 </ng-container>

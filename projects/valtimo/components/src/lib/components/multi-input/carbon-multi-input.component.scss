@@ -30,7 +30,7 @@
     margin-inline-end: var(--v-multi-input-input-spacing-inline);
 
     &.--full-width {
-      width: 100%;
+      flex: 1;
     }
   }
 
