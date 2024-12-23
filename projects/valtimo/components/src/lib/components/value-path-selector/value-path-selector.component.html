@@ -50,7 +50,8 @@
           [disabled]="
             obs.disabled ||
             docObs.loadingDocumentDefinitionItems ||
-            !docObs.documentDefinitionListItems
+            !docObs.documentDefinitionListItems ||
+            (docObs.documentDefinitionListItems || []).length === 0
           "
           (selected)="onDocumentDefinitionSelected($event)"
           [placeholder]="'valuePathSelector.selectDocDefPlaceholder' | translate"
@@ -62,7 +63,12 @@
       <cds-dropdown
         data-testid="value-path-selector-valuePath"
         [appendInline]="appendInline"
-        [disabled]="obs.disabled || obs.loadingValuePathItems || !obs.valuePathListItems"
+        [disabled]="
+          obs.disabled ||
+          obs.loadingValuePathItems ||
+          !obs.valuePathListItems ||
+          (obs.valuePathListItems || []).length === 0
+        "
         (selected)="onPathSelected($event)"
         [placeholder]="'valuePathSelector.placeholder' | translate"
       >
