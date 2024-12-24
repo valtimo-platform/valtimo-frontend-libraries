@@ -32,6 +32,11 @@
     line-height: 22px;
   }
 
+  &__path-selector {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__card {
     flex-direction: column;
     display: flex;

@@ -49,14 +49,22 @@
     />
   </cds-text-label>
 
-  <valtimo-value-path-selector
-    formControlName="collection"
-    [attr.data-carbon-theme]="obs.theme"
-    [documentDefinitionName]="documentDefinitionName$ | async"
-    [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
-    [valueType]="ValueResolverOptionType.COLLECTION"
-    (collectionPathSelected)="onCollectionPathSelected($event)"
-  ></valtimo-value-path-selector>
+  <div class="valtimo-dossier-management-widget-table__path-selector">
+    <v-input-label
+      [title]="'widgetTabManagement.content.table.collection' | translate"
+      [tooltip]="'widgetTabManagement.content.table.collectionTooltip' | translate"
+    >
+    </v-input-label>
+
+    <valtimo-value-path-selector
+      formControlName="collection"
+      [attr.data-carbon-theme]="obs.theme"
+      [documentDefinitionName]="documentDefinitionName$ | async"
+      [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
+      [valueType]="ValueResolverOptionType.COLLECTION"
+      (collectionPathSelected)="onCollectionPathSelected($event)"
+    ></valtimo-value-path-selector>
+  </div>
 </form>
 
 <span class="valtimo-dossier-management-widget-table__subtitle">

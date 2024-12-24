@@ -36,4 +36,9 @@
     flex-direction: column;
     gap: 8px;
   }
+
+  &__path-selector {
+    display: flex;
+    flex-direction: column;
+  }
 }

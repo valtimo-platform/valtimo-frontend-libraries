@@ -155,14 +155,24 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     if (!value) return;
     this._prefixesSubject$.next(value);
   }
-  @Input() public valueType: ValueResolverOptionType = ValueResolverOptionType.FIELD;
+  private readonly _valueType$ = new BehaviorSubject<ValueResolverOptionType>(
+    ValueResolverOptionType.FIELD
+  );
+  @Input() public set valueType(value: ValueResolverOptionType) {
+    this._valueType$.next(value);
+  }
   @Input() public label = '';
   @Input() public tooltip = '';
   @Input() public required = false;
   @Input() public showDocumentDefinitionSelector = false;
   @Input() public notation: ValuePathSelectorNotation = 'dots';
+
+  private readonly _selectedCollectionPath$ = new BehaviorSubject<ValueCollectionPath | null>(null);
   @Input() public set selectedCollectionPath(value: ValueCollectionPath | null) {
     this._selectedCollectionPath$.next(value);
+
+    if (!value) return;
+    this._inputMode$.next(ValuePathSelectorInputMode.DROPDOWN);
   }
 
   @Input() public set defaultValue(value: string) {
@@ -175,7 +185,6 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
   @Output() collectionPathSelected: EventEmitter<any> = new EventEmitter();
 
   private readonly _documentDefinitionNameSubject$ = new BehaviorSubject<string>('');
-  private readonly _selectedCollectionPath$ = new BehaviorSubject<ValueCollectionPath | null>(null);
   private get _documentDefinitionName$(): Observable<string> {
     return this._documentDefinitionNameSubject$.pipe(filter(value => !!value));
   }
@@ -201,22 +210,23 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     this._documentDefinitionName$,
     this._prefixes$,
     this._version$,
+    this._valueType$,
     this._selectedCollectionPath$,
   ]).pipe(
     tap(() => this.loadingValuePathItems$.next(true)),
-    switchMap(([documentDefinitionName, prefixes, version, selectedCollection]) =>
+    switchMap(([documentDefinitionName, prefixes, version, valueType, selectedCollection]) =>
       !selectedCollection
         ? typeof version === 'number'
           ? this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
               prefixes,
               documentDefinitionName,
-              this.valueType,
+              valueType,
               version
             )
           : this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
               prefixes,
               documentDefinitionName,
-              this.valueType
+              valueType
             )
         : of(
             this.valuePathSelectorService.getCollectionPathCacheResult(
