@@ -98,7 +98,7 @@ export class CarbonMultiInputComponent implements OnInit, OnDestroy {
 
   public readonly dropdownItems$ = new BehaviorSubject<Array<ListItemWithId>>([]);
 
-  private _subscriptions = new Subscription();
+  private readonly _subscriptions = new Subscription();
 
   public ngOnInit(): void {
     this.values$.next(this.getInitialRows());
