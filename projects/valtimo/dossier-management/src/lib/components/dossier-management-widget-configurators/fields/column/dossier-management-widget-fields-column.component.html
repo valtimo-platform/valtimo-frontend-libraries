@@ -54,6 +54,21 @@
               />
             </cds-text-label>
 
+            <cds-dropdown
+              [attr.data-carbon-theme]="inputTheme"
+              [label]="'widgetTabManagement.content.fields.type' | translate"
+              [dropUp]="false"
+              [placeholder]="'widgetTabManagement.content.fields.typePlaceholder' | translate"
+              (selected)="onTypeSelected(formRow, $event)"
+              formControlName="type"
+            >
+              <cds-dropdown-list [items]="getDisplayItemsSelected(formRow)"></cds-dropdown-list>
+            </cds-dropdown>
+
+            <ng-container
+              *ngTemplateOutlet="fieldWidthDropdown; context: {index: $index}"
+            ></ng-container>
+
             @if (!documentDefinitionName) {
               <cds-text-label>
                 <v-input-label
@@ -73,27 +88,23 @@
                 />
               </cds-text-label>
             } @else {
-              <valtimo-value-path-selector
-                formControlName="content"
-                [documentDefinitionName]="documentDefinitionName"
-                [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
-                [selectedCollectionPath]="selectedCollectionPath"
-              ></valtimo-value-path-selector>
-            }
-            <cds-dropdown
-              [attr.data-carbon-theme]="inputTheme"
-              [label]="'widgetTabManagement.content.fields.type' | translate"
-              [dropUp]="false"
-              [placeholder]="'widgetTabManagement.content.fields.typePlaceholder' | translate"
-              (selected)="onTypeSelected(formRow, $event)"
-              formControlName="type"
-            >
-              <cds-dropdown-list [items]="getDisplayItemsSelected(formRow)"></cds-dropdown-list>
-            </cds-dropdown>
+              <div class="valtimo-dossier-management-widget-field-column__path-selector">
+                <v-input-label
+                  [title]="'widgetTabManagement.content.fields.value' | translate"
+                  [tooltip]="
+                    'widgetTabManagement.content.' + widgetType() + '.valueTooltip' | translate
+                  "
+                >
+                </v-input-label>
 
-            <ng-container
-              *ngTemplateOutlet="fieldWidthDropdown; context: {index: $index}"
-            ></ng-container>
+                <valtimo-value-path-selector
+                  formControlName="content"
+                  [documentDefinitionName]="documentDefinitionName"
+                  [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
+                  [selectedCollectionPath]="selectedCollectionPath"
+                ></valtimo-value-path-selector>
+              </div>
+            }
           </div>
 
           <div class="valtimo-dossier-management-widget-field-column__options">

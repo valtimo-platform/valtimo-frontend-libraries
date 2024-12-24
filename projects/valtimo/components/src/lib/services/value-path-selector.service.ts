@@ -62,50 +62,7 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     this.openClearCacheSubscription();
   }
 
-  // public getResolvableKeysPerPrefix(
-  //   prefixes: ValuePathSelectorPrefix[],
-  //   documentDefinitionName: string,
-  //   version: ValuePathVersionArgument = 'latest'
-  // ): Observable<string[]> {
-  //   return of(version).pipe(
-  //     switchMap(version => {
-  //       const prefixesWithCache = prefixes.filter(
-  //         prefix => !!this.getResultFromCache(prefix, documentDefinitionName, version)
-  //       );
-  //       const resultsFromCache = prefixesWithCache
-  //         .map(prefix => this.getResultFromCache(prefix, documentDefinitionName, version))
-  //         .reduce((acc, curr) => [...acc, ...curr], []);
-  //       const prefixesWithoutCache = prefixes.filter(prefix => !prefixesWithCache.includes(prefix));
-  //       const httpCall =
-  //         typeof version !== 'number'
-  //           ? this.httpClient
-  //               .post<
-  //                 string[]
-  //               >(this.getApiUrl(`/management/v1/value-resolver/document-definition/${documentDefinitionName}/keys`), prefixesWithoutCache)
-  //               .pipe(catchError(() => of([])))
-  //           : this.httpClient
-  //               .post<
-  //                 string[]
-  //               >(this.getApiUrl(`/management/v1/value-resolver/document-definition/${documentDefinitionName}/version/${version}/keys`), prefixesWithoutCache)
-  //               .pipe(catchError(() => of([])));
-
-  //       return combineLatest([
-  //         prefixesWithoutCache.length > 0 ? httpCall : of([]),
-  //         of(resultsFromCache),
-  //       ]);
-  //     }),
-  //     tap(([result, resultsFromCache]) => {
-  //       const combinedResults = [...result, ...resultsFromCache];
-  //       prefixes.forEach(prefix => {
-  //         const prefixResults = combinedResults.filter(valuePath => valuePath.includes(prefix));
-  //         this.cacheResult(prefix, documentDefinitionName, version, prefixResults);
-  //       });
-  //     }),
-  //     map(([result, resultsFromCache]) => [...result, ...resultsFromCache])
-  //   );
-  // }
-
-  public getResolvableKeysPerPrefixV2(
+  public getResolvableKeysPerPrefix(
     prefixes: ValuePathSelectorPrefix[],
     documentDefinitionName: string,
     type: ValueResolverOptionType = ValueResolverOptionType.FIELD,

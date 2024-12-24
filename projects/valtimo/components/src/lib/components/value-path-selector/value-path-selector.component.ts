@@ -182,7 +182,8 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
       this._inputMode$.next(ValuePathSelectorInputMode.MANUAL);
   }
   @Output() valueChangeEvent: EventEmitter<string> = new EventEmitter();
-  @Output() collectionPathSelected: EventEmitter<any> = new EventEmitter();
+  @Output() collectionPathSelected: EventEmitter<ValueCollectionPath | {content: string} | null> =
+    new EventEmitter();
 
   private readonly _documentDefinitionNameSubject$ = new BehaviorSubject<string>('');
   private get _documentDefinitionName$(): Observable<string> {
@@ -217,13 +218,13 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     switchMap(([documentDefinitionName, prefixes, version, valueType, selectedCollection]) =>
       !selectedCollection
         ? typeof version === 'number'
-          ? this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
+          ? this.valuePathSelectorService.getResolvableKeysPerPrefix(
               prefixes,
               documentDefinitionName,
               valueType,
               version
             )
-          : this.valuePathSelectorService.getResolvableKeysPerPrefixV2(
+          : this.valuePathSelectorService.getResolvableKeysPerPrefix(
               prefixes,
               documentDefinitionName,
               valueType
@@ -242,9 +243,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
         .map(result => this.getFormattedPath(result))
         .sort((a, b) => a.content.localeCompare(b.content))
     ),
-    tap(options => {
-      this._cachedOptions = options.map(option => option.content);
-    }),
+    tap(options => (this._cachedOptions = options.map(option => option.content))),
     switchMap(options =>
       combineLatest([of(options), this._selectedPath$, this.inputModeIsDropdown$])
     ),
@@ -339,7 +338,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     }
   }
 
-  public onPathSelected(event: {item: {content: string}}): void {
+  public onPathSelected(event: {item: ValueCollectionPath | {content: string}}): void {
     const selectedPath = event?.item?.content;
 
     if (this.collectionPathSelected.observed)
