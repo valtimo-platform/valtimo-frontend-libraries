@@ -34,6 +34,20 @@
     }
   }
 
+  &__separator {
+    height: 40px;
+    width: 12px;
+    display: flex;
+    justify-content: flex-start;
+
+    &::before {
+      content: '';
+      height: 100%;
+      width: 1px;
+      background-color: var(--cds-border-subtle-selected);
+    }
+  }
+
   &--no-delete-button &__input:last-child {
     margin-inline-end: 0;
   }

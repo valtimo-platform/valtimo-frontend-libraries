@@ -72,7 +72,7 @@
     [minimumAmountOfRows]="0"
     [initialAmountOfRows]="0"
     [fullWidth]="true"
-    valuePathSelectorNotation="dots"
+    valuePathSelectorNotation="slashes"
     [valuePathSelectorPrefixes]="[ValuePathSelectorPrefix.DOC]"
     [valuePathSelectorShowDocumentDefinitionSelector]="true"
   ></valtimo-carbon-multi-input>
@@ -80,7 +80,7 @@
   <valtimo-carbon-multi-input
     name="receiveData"
     [title]="'receiveData' | pluginTranslate: pluginId | async"
-    type="keyValue"
+    type="valuePathSelectorValue"
     [disabled]="obs.disabled"
     [defaultValues]="obs.prefill?.receiveData"
     [margin]="true"
@@ -88,6 +88,10 @@
     [tooltip]="'receiveDataTooltip' | pluginTranslate: pluginId | async"
     [minimumAmountOfRows]="0"
     [initialAmountOfRows]="0"
+    [fullWidth]="true"
+    valuePathSelectorNotation="slashes"
+    [valuePathSelectorPrefixes]="[ValuePathSelectorPrefix.DOC]"
+    [valuePathSelectorShowDocumentDefinitionSelector]="true"
   ></valtimo-carbon-multi-input>
 
   <v-select
