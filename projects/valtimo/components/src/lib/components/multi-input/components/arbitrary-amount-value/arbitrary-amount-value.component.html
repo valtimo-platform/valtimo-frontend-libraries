@@ -14,19 +14,17 @@
   ~ limitations under the License.
   -->
 
-<div
-  class="v-multi-input__input"
-  [ngClass]="{'--full-width': fullWidth}"
-  *ngFor="let _ of amountOfArbitraryValuesArray$ | async; index as i"
->
-  <cds-label *ngIf="index === 0">{{
-    arbitraryAmountTitles ? arbitraryAmountTitles[i] : ''
-  }}</cds-label>
+@for (_ of amountOfArbitraryValuesArray$ | async; let i = $index; track i) {
+  <div class="v-multi-input__input" [ngClass]="{'--full-width': fullWidth}">
+    <cds-label *ngIf="index === 0">{{
+      arbitraryAmountTitles ? arbitraryAmountTitles[i] : ''
+    }}</cds-label>
 
-  <input
-    cdsText
-    [defaultValue]="value ? value['' + i] : ''"
-    [disabled]="disabled"
-    (input)="onInputChange(i, $event.target.value)"
-  />
-</div>
+    <input
+      cdsText
+      [defaultValue]="value ? value['' + i] : ''"
+      [disabled]="disabled"
+      (input)="onInputChange(i, $event.target.value)"
+    />
+  </div>
+}
