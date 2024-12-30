@@ -28,9 +28,13 @@ import {
 } from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
 import {CarbonListModule, EllipsisPipe, ViewContentService, ViewType} from '@valtimo/components';
-import {InputModule} from 'carbon-components-angular';
+import {ButtonModule, InputModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
-import {CaseWidgetTextDisplayType, FieldsCaseWidget} from '../../../../../../models';
+import {
+  CaseWidgetAction,
+  CaseWidgetTextDisplayType,
+  FieldsCaseWidget,
+} from '../../../../../../models';
 
 @Component({
   selector: 'valtimo-widget-field',
@@ -39,7 +43,14 @@ import {CaseWidgetTextDisplayType, FieldsCaseWidget} from '../../../../../../mod
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, InputModule, TranslateModule, CarbonListModule, EllipsisPipe],
+  imports: [
+    CommonModule,
+    InputModule,
+    TranslateModule,
+    CarbonListModule,
+    EllipsisPipe,
+    ButtonModule,
+  ],
 })
 export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
   @HostBinding('class') public readonly class = 'widget-field';
@@ -102,6 +113,10 @@ export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._observer?.disconnect();
+  }
+
+  public onProcessStartClick(process: CaseWidgetAction): void {
+    console.log({process});
   }
 
   private openWidthObserver(): void {

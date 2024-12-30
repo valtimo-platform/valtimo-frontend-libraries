@@ -1,0 +1,16 @@
+<form [formGroup]="formGroup" class="valtimo-dossier-management-widget-process-selector">
+  <cds-dropdown
+    label="New process button (Optional)"
+    placeholder="Choose a process"
+    formControlName="processDefinitionKey"
+    (selected)="onProcessSelected()"
+  >
+    <cds-dropdown-list [items]="processDefinitionItems$ | async"></cds-dropdown-list>
+  </cds-dropdown>
+
+  <cds-text-label>
+    New process button text (Optional)
+
+    <input cdsText type="text" formControlName="name" placeholder="Button text" />
+  </cds-text-label>
+</form>
