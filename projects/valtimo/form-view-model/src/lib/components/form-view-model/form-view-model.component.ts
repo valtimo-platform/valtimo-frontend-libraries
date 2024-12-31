@@ -169,7 +169,7 @@ export class FormViewModelComponent implements OnInit {
     this.focus$.pipe()
       .pipe(withLatestFrom(this.change$))
       .subscribe(data => {
-        let dataAtFocus = data[1] && data[1].data ? JSON.parse(JSON.stringify(data[1].data)) : null
+        const dataAtFocus = !!data[1] && !!data[1].data ? JSON.parse(JSON.stringify(data[1].data)) : null
         this.blur$
           .pipe(take(1))
           .pipe(withLatestFrom(this.change$))
