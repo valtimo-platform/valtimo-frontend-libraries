@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
 import {
   BehaviorSubject,
@@ -22,7 +22,7 @@ import {
   debounceTime,
   EMPTY, filter,
   Observable,
-  of, Subject,
+  of, Subject, Subscription,
   switchMap,
   take,
   tap, withLatestFrom,
@@ -52,7 +52,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   standalone: true,
   imports: [CommonModule, FormioModule],
 })
-export class FormViewModelComponent implements OnInit {
+export class FormViewModelComponent implements OnInit, OnDestroy {
   @ViewChild('formio') formio: FormioComponent;
 
   @Input() set options(optionsValue: any) {
@@ -153,6 +153,9 @@ export class FormViewModelComponent implements OnInit {
     })
   );
 
+  private focusSubscription: Subscription
+  private updateSubscription: Subscription
+
   constructor(
     private readonly viewModelService: ViewModelService,
     private readonly translateService: TranslateService,
@@ -166,7 +169,7 @@ export class FormViewModelComponent implements OnInit {
       this.loadInitialViewModel();
     }
 
-    this.focus$.pipe()
+    this.focusSubscription = this.focus$
       .pipe(withLatestFrom(this.change$))
       .subscribe(data => {
         const dataAtFocus = !!data[1] && !!data[1].data ? JSON.parse(JSON.stringify(data[1].data)) : null
@@ -181,13 +184,18 @@ export class FormViewModelComponent implements OnInit {
           })
       })
 
-    this.updateForm.pipe(filter(it => it), debounceTime(500)).subscribe(() => {
+    this.updateSubscription = this.updateForm.pipe(filter(it => it), debounceTime(500)).subscribe(() => {
       if (this.isStartForm$.value) {
         this.updateViewModelForStartForm();
       } else {
         this.updateViewModel();
       }
     })
+  }
+
+  public ngOnDestroy(): void {
+    this.focusSubscription.unsubscribe()
+    this.updateSubscription.unsubscribe()
   }
 
   public beforeSubmitHook(instance: FormViewModelComponent): (submission, callback) => void {
