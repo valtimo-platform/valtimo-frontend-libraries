@@ -174,7 +174,7 @@ export class FormViewModelComponent implements OnInit {
           .pipe(take(1))
           .pipe(withLatestFrom(this.change$))
           .subscribe(dataBlur => {
-            let dataEqual = isEqual(dataAtFocus, dataBlur[1]?.data)
+            const dataEqual = isEqual(dataAtFocus, dataBlur[1]?.data)
             if(!dataEqual) {
               this.updateForm.next(true)
             }
