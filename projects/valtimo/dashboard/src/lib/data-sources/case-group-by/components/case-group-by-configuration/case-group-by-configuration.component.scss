@@ -22,4 +22,12 @@
   .conditions-multi-input .cds--form__helper-text {
     font-style: italic;
   }
+
+  .full-width {
+    width: 100%;
+
+    .cds--label {
+      width: 100%;
+    }
+  }
 }

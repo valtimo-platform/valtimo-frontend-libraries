@@ -185,7 +185,7 @@ export class CaseCountsConfigurationComponent
     }
 
     this.selectedDocumentDefinition$.next(documentDefinitionName);
-    this.documentDefinition.patchValue(documentDefinitionName);
+    this.documentDefinition.setValue(documentDefinitionName);
   }
 
   public conditionsValueChange(index: number, values: MultiInputValues): void {
