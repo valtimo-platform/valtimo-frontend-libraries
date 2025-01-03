@@ -29,12 +29,18 @@ import {
 import {TranslateModule} from '@ngx-translate/core';
 import {CarbonListModule, EllipsisPipe, ViewContentService, ViewType} from '@valtimo/components';
 import {ButtonModule, InputModule} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {
   CaseWidgetAction,
   CaseWidgetTextDisplayType,
   FieldsCaseWidget,
 } from '../../../../../../models';
+import {WidgetsService} from '../../widgets.service';
+import {PermissionService} from '@valtimo/access-control';
+import {CAN_CREATE_CAMUNDA_EXECUTION_PERMISSION} from '../../widgets.permissions';
+import {ActivatedRoute} from '@angular/router';
+import {WidgetProcess} from '../widget-process/widget-process';
+import {DocumentService} from '@valtimo/document';
 
 @Component({
   selector: 'valtimo-widget-field',
@@ -52,7 +58,7 @@ import {
     ButtonModule,
   ],
 })
-export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
+export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit, OnDestroy {
   @HostBinding('class') public readonly class = 'widget-field';
 
   @ViewChild('widgetField') private _widgetFieldRef: ElementRef<HTMLDivElement>;
@@ -61,6 +67,7 @@ export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
   @Input() public set widgetConfiguration(value: FieldsCaseWidget) {
     if (!value) return;
     this.widgetConfiguration$.next(value);
+    this.baseWidgetConfiguration = value;
   }
   public readonly isEmptyWidgetData$ = new BehaviorSubject<boolean>(false);
 
@@ -105,7 +112,15 @@ export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
 
   private _observer!: ResizeObserver;
 
-  constructor(private viewContentService: ViewContentService) {}
+  constructor(
+    protected readonly documentService: DocumentService,
+    protected readonly permissionService: PermissionService,
+    private readonly route: ActivatedRoute,
+    private readonly viewContentService: ViewContentService,
+    private readonly widgetsService: WidgetsService
+  ) {
+    super(documentService, permissionService);
+  }
 
   public ngAfterViewInit(): void {
     if (this.collapseVertically && this._widgetFieldRef) this.openWidthObserver();
@@ -116,7 +131,7 @@ export class WidgetFieldComponent implements AfterViewInit, OnDestroy {
   }
 
   public onProcessStartClick(process: CaseWidgetAction): void {
-    console.log({process});
+    this.widgetsService.startProcess(process.processDefinitionKey);
   }
 
   private openWidthObserver(): void {

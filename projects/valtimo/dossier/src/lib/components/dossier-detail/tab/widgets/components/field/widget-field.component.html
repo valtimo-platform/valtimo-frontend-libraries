@@ -26,7 +26,11 @@
     <h4 class="widget-field__title">{{ obs?.widgetConfiguration?.title }}</h4>
 
     @if (obs.widgetConfiguration.actions?.length === 1) {
-      <button cdsButton="ghost" (click)="onProcessStartClick(obs.widgetConfiguration.actions[0])">
+      <button
+        *ngIf="canCreateCamundaExecution$ | async"
+        cdsButton="ghost"
+        (click)="onProcessStartClick(obs.widgetConfiguration.actions[0])"
+      >
         {{ obs.widgetConfiguration.actions[0].name }}
       </button>
     }
