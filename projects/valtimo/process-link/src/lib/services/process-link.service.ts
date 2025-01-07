@@ -23,7 +23,6 @@ import {
   FormSubmissionResult,
   GetProcessLinkRequest,
   GetProcessLinkResponse,
-  PluginProcessLinkCreateDto,
   PluginProcessLinkUpdateDto,
   ProcessLinkCreateEvent,
   ProcessLinkType,

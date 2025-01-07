@@ -119,7 +119,7 @@ export class ProcessManagementEditorService implements OnDestroy {
 
     this.setProcessLinksForSelectedDefinition(
       this.processLinksForSelectedDefinition.filter(
-        processLink => processLink.id !== event.processLinkId
+        processLink => processLink.activityId !== event.activityId
       )
     );
 

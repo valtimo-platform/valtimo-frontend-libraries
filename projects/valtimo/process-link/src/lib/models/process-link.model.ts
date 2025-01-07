@@ -164,7 +164,7 @@ type ProcessLinkCreateEvent =
   | URLProcessLinkCreateDto;
 
 interface ProcessLinkDeleteEvent {
-  processLinkId: string;
+  activityId: string;
 }
 
 enum ProcessLinkEditMode {
