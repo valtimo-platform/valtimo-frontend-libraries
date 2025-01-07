@@ -66,7 +66,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();
   private isUserTask$ = new BehaviorSubject<boolean>(false);
 
-  private readonly _DEFAULT_FORM_DISPLAY_TYPE: FormDisplayType = 'modal';
+  private readonly _DEFAULT_FORM_DISPLAY_TYPE: FormDisplayType = 'panel';
   private readonly _DEFAULT_FORM_DISPLAY_SIZE: FormSize = 'medium';
 
   constructor(
