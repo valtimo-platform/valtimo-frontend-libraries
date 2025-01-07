@@ -400,6 +400,10 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
 
     this._bpmnViewer?.attachTo(this.viewerElementRef.nativeElement);
 
+    this._bpmnViewer.on('commandStack.changed', () => {
+      this.changesPending$.next(true);
+    });
+
     this._bpmnViewer.on('import.done', () => {
       disableCommands();
     });
