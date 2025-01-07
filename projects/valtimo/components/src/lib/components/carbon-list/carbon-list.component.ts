@@ -712,20 +712,32 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (!object) return null;
 
-    if (isArray(object) && typeof object[0] !== 'string') return object as CarbonTag[];
+    if (isArray(object) && typeof object[0] !== 'string')
+      return (object as CarbonTag[]).map((tag: CarbonTag) => ({
+        ...tag,
+        ellipsisContent: this.ellipsisPipe.transform(tag.content, TAG_ELLIPSIS_LIMIT),
+      }));
 
-    if (!isArray(object) && typeof object !== 'string') return [object];
+    if (!isArray(object) && typeof object !== 'string')
+      return [
+        {
+          ...object,
+          ellipsisContent: this.ellipsisPipe.transform(object.content, TAG_ELLIPSIS_LIMIT),
+        },
+      ];
 
     if (typeof object === 'string')
       return [
         {
           content: object,
+          ellipsisContent: this.ellipsisPipe.transform(object, TAG_ELLIPSIS_LIMIT),
           type: 'blue',
         },
       ];
 
     return (object as string[]).map((content: string) => ({
       content,
+      ellipsisContent: this.ellipsisPipe.transform(content, TAG_ELLIPSIS_LIMIT),
       type: 'blue',
     }));
   }

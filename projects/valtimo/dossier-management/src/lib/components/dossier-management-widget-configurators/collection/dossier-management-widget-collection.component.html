@@ -57,11 +57,20 @@
 
       <valtimo-value-path-selector
         formControlName="collection"
+<<<<<<< HEAD
         [attr.data-carbon-theme]="obs.theme"
         [documentDefinitionName]="documentDefinitionName$ | async"
         [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
         [type]="ValuePathType.COLLECTION"
         (collectionSelected)="onCollectionSelected($event)"
+=======
+        name="cardCollection"
+        [attr.data-carbon-theme]="obs.theme"
+        [documentDefinitionName]="documentDefinitionName$ | async"
+        [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
+        [valueType]="ValueResolverOptionType.COLLECTION"
+        (collectionPathSelected)="onCollectionPathSelected($event)"
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
       ></valtimo-value-path-selector>
     </div>
   </form>
@@ -85,10 +94,18 @@
 
         <valtimo-value-path-selector
           formControlName="value"
+<<<<<<< HEAD
           [attr.data-carbon-theme]="obs.theme"
           [documentDefinitionName]="documentDefinitionName"
           [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
           [parentItem]="selectedCollection$ | async"
+=======
+          name="cardTitle"
+          [attr.data-carbon-theme]="obs.theme"
+          [documentDefinitionName]="documentDefinitionName$ | async"
+          [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
+          [selectedCollectionPath]="selectedCollectionPath$ | async"
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
         ></valtimo-value-path-selector>
       </div>
 
@@ -314,8 +331,12 @@
     [columnData]="content()?.fields"
     [fieldWidthDropdown]="fieldWidthDropdown"
     [documentDefinitionName]="documentDefinitionName$ | async"
+<<<<<<< HEAD
     [selectedCollection]="selectedCollection$ | async"
     [showHideWhenEmptyCheckbox]="true"
+=======
+    [selectedCollectionPath]="selectedCollectionPath$ | async"
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
     (columnUpdateEvent)="onColumnUpdateEvent($event)"
   >
   </valtimo-dossier-management-widget-fields-column>

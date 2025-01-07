@@ -66,9 +66,14 @@ import {DocumentenApiFilterComponent} from '../documenten-api-filter/documenten-
 import {DocumentenApiMetadataModalComponent} from '../documenten-api-metadata-modal/documenten-api-metadata-modal.component';
 import {
   DocumentenApiUploadFieldDefaultValues,
+<<<<<<< HEAD
   DocumentenApiUploadFields,
 } from '../../models/documenten-api-upload-field.model';
 import {PermissionRequest, PermissionService} from '@valtimo/access-control';
+=======
+  DocumentenApiUploadFields
+} from '../../models/documenten-api-upload-field.model';
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 
 @Component({
   selector: 'valtimo-dossier-detail-tab-documenten-api-documents',
@@ -231,6 +236,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     )
   );
 
+<<<<<<< HEAD
   public defaultValues$: Observable<DocumentenApiUploadFieldDefaultValues> =
     this.uploadFields$.pipe(
       map(formFields => ({
@@ -248,6 +254,24 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
           ?.filter(tag => !!tag),
       }))
     );
+=======
+  public defaultValues$: Observable<DocumentenApiUploadFieldDefaultValues> = this.uploadFields$.pipe(
+    map(formFields => ({
+      auteur: formFields?.auteur?.defaultValue,
+      vertrouwelijkheidaanduiding: formFields?.vertrouwelijkheidaanduiding?.defaultValue,
+      beschrijving: formFields?.beschrijving?.defaultValue,
+      titel: formFields?.titel?.defaultValue,
+      informatieobjecttype: formFields?.informatieobjecttype?.defaultValue,
+      bestandsnaam: formFields?.bestandsnaam?.defaultValue,
+      taal: formFields?.taal?.defaultValue,
+      status: formFields?.status?.defaultValue,
+      trefwoorden: formFields?.trefwoorden?.defaultValue
+        ?.split(',')
+        ?.map(tag => tag.trim())
+        ?.filter(tag => !!tag),
+    }))
+  );
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 
   public hideFields$: Observable<Array<string>> = this.uploadFields$.pipe(
     map(formFields => {

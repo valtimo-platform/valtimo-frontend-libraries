@@ -22,6 +22,7 @@ interface DocumentenApiUploadField {
 }
 
 interface DocumentenApiUploadFieldDefaultValues {
+<<<<<<< HEAD
   auteur?: string;
   vertrouwelijkheidaanduiding?: string;
   beschrijving?: string;
@@ -43,6 +44,29 @@ interface DocumentenApiUploadFields {
   taal?: DocumentenApiUploadField;
   status?: DocumentenApiUploadField;
   trefwoorden?: DocumentenApiUploadField;
+=======
+  auteur?: string,
+  vertrouwelijkheidaanduiding?: string,
+  beschrijving?: string,
+  titel?: string,
+  informatieobjecttype?: string,
+  bestandsnaam?: string,
+  taal?: string,
+  status?: string,
+  trefwoorden?: string[],
+}
+
+interface DocumentenApiUploadFields {
+  auteur?: DocumentenApiUploadField,
+  vertrouwelijkheidaanduiding?: DocumentenApiUploadField,
+  beschrijving?: DocumentenApiUploadField,
+  titel?: DocumentenApiUploadField,
+  informatieobjecttype?: DocumentenApiUploadField,
+  bestandsnaam?: DocumentenApiUploadField,
+  taal?: DocumentenApiUploadField,
+  status?: DocumentenApiUploadField,
+  trefwoorden?: DocumentenApiUploadField,
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 }
 
 enum DOCUMENTEN_API_UPLOAD_KEYS {
@@ -65,5 +89,9 @@ export {
   DocumentenApiUploadField,
   DocumentenApiUploadFieldDefaultValues,
   DocumentenApiUploadFields,
+<<<<<<< HEAD
   DOCUMENTEN_API_UPLOAD_KEYS,
+=======
+  DOCUMENTEN_API_UPLOAD_KEYS
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 };

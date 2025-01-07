@@ -41,10 +41,17 @@ import {
   CdsThemeService,
   CurrentCarbonTheme,
   InputLabelModule,
+<<<<<<< HEAD
   ValuePathItem,
   ValuePathSelectorComponent,
   ValuePathSelectorPrefix,
   ValuePathType,
+=======
+  ValueCollectionPath,
+  ValuePathSelectorComponent,
+  ValuePathSelectorPrefix,
+  ValueResolverOptionType,
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 } from '@valtimo/components';
 import {
   CaseWidgetCurrencyDisplayType,
@@ -65,10 +72,18 @@ import {
   ListItem,
 } from 'carbon-components-angular';
 import {BehaviorSubject, debounceTime, map, Observable, Subscription} from 'rxjs';
+<<<<<<< HEAD
 import {WidgetContentComponent} from '../../../models';
 import {WidgetFieldsService, WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
 import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
+=======
+
+import {WidgetContentComponent} from '../../../models';
+import {WidgetFieldsService, WidgetWizardService} from '../../../services';
+import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 
 @Component({
   templateUrl: './dossier-management-widget-collection.component.html',
@@ -86,7 +101,10 @@ import {DossierManagementWidgetProcessSelectorComponent} from '../process-select
     ButtonModule,
     IconModule,
     InputLabelModule,
+<<<<<<< HEAD
     DossierManagementWidgetProcessSelectorComponent,
+=======
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
     ValuePathSelectorComponent,
   ],
 })
@@ -135,12 +153,22 @@ export class DossierManagementWidgetCollectionComponent
     )
   );
 
+<<<<<<< HEAD
   public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
   public readonly ValuePathType = ValuePathType;
+=======
+  public readonly selectedCollectionPath$ = new BehaviorSubject<ValueCollectionPath | null>(null);
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   public readonly CaseWidgetDisplayTypeKey = CaseWidgetDisplayTypeKey;
   public readonly content = this.widgetWizardService
     .widgetContent as WritableSignal<WidgetCollectionContent>;
   public readonly displayTypeItems: ListItem[] = this.widgetFieldsService.displayTypeItems;
+  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
+  public readonly ValueResolverOptionType = ValueResolverOptionType;
+
+  public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
+    map((paramMap: ParamMap) => paramMap.get('name') ?? '')
+  );
 
   public readonly selectedCollection$ = new BehaviorSubject<ValuePathItem | null>(null);
   public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
@@ -166,6 +194,7 @@ export class DossierManagementWidgetCollectionComponent
   constructor(
     private readonly cdsThemeService: CdsThemeService,
     private readonly fb: FormBuilder,
+    private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService,
     private readonly widgetFieldsService: WidgetFieldsService,
@@ -247,8 +276,13 @@ export class DossierManagementWidgetCollectionComponent
     );
   }
 
+<<<<<<< HEAD
   public onCollectionSelected(item: ValuePathItem): void {
     this.selectedCollection$.next(item);
+=======
+  public onCollectionPathSelected(collectionPath: ValueCollectionPath): void {
+    this.selectedCollectionPath$.next(collectionPath);
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   }
 
   private initForm(): void {

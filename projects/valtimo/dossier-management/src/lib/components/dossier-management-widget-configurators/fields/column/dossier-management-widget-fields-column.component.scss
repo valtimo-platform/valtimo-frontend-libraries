@@ -69,6 +69,11 @@
     }
   }
 
+  &__path-selector {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__options {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

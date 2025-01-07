@@ -189,8 +189,11 @@ export class DocumentenApiUploaderComponent
   public defaultValues: {} = {};
   public hideFields: Array<string> = [];
 
+<<<<<<< HEAD
   private _subscriptions = new Subscription();
 
+=======
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   constructor(
     private readonly uploadProviderService: UploadProviderService,
     private readonly stateService: FormIoStateService,
@@ -259,6 +262,7 @@ export class DocumentenApiUploaderComponent
       .subscribe();
   }
 
+<<<<<<< HEAD
   private openDocumentDefinitionSubscription() {
     this._subscriptions.add(
       combineLatest([this.route?.params || of(null), this.route?.firstChild?.params || of(null)])
@@ -275,6 +279,8 @@ export class DocumentenApiUploaderComponent
     );
   }
 
+=======
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   private hideField(hide: boolean, field: string) {
     const exists = this.hideFields.includes(field);
     if (!exists && hide) {

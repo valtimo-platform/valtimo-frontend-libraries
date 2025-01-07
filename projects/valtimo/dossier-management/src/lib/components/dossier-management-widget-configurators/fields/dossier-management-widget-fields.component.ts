@@ -39,12 +39,17 @@ import {
 } from '@valtimo/components';
 import {FieldsCaseWidgetValue, WidgetFieldsContent} from '@valtimo/dossier';
 import {ButtonModule, IconModule, InputModule, Tab, TabsModule} from 'carbon-components-angular';
+<<<<<<< HEAD
 import {debounceTime, map, Observable, Subscription} from 'rxjs';
 
+=======
+import {debounceTime, map, Observable, Subscription, tap} from 'rxjs';
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
 import {DossierManagementWidgetFieldsColumnComponent} from './column/dossier-management-widget-fields-column.component';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   templateUrl: './dossier-management-widget-fields.component.html',

@@ -75,7 +75,11 @@ import {
 } from 'carbon-components-angular';
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 import moment from 'moment';
+<<<<<<< HEAD
 import {DocumentenApiUploadFieldDefaultValues} from '../../models/documenten-api-upload-field.model';
+=======
+import {DocumentenApiUploadFieldDefaultValues} from "../../models/documenten-api-upload-field.model";
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -438,7 +442,10 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
     this._fileSubscription?.unsubscribe();
+<<<<<<< HEAD
     this._fileNameAndAuthorSubscription?.unsubscribe();
+=======
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
     this.isDefinitiveStatus$.next(false);
   }
 
@@ -544,6 +551,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   }
 
   private prefillFilenameAndAuthor() {
+<<<<<<< HEAD
     this._fileNameAndAuthorSubscription?.unsubscribe();
     this._fileNameAndAuthorSubscription = combineLatest([this.file$, this.userEmail$])
       .pipe(
@@ -568,6 +576,42 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  private filenameToTitle(filename?: string) {
+    if (!filename) {
+      return null;
+    }
+
+    filename = filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9]+/g, ' ');
+    return filename.charAt(0).toUpperCase() + filename.slice(1);
+=======
+    this._subscriptions.add(
+      combineLatest([this.file$, this.userEmail$])
+        .pipe(
+          tap(([file, userEmail]) => {
+            const filename = file?.bestandsnaam || this.defaultValues.bestandsnaam || file?.name;
+            this.filenameExtension = filename?.split('.')?.pop() || '';
+            if (this.filenameExtension.length === filename?.length) {
+              this.filenameExtension = '';
+            }
+            this.documentenApiMetadataForm.patchValue({
+              bestandsnaam: filename,
+              auteur: file?.auteur || this.defaultValues.auteur || userEmail,
+              creatiedatum: file?.creatiedatum || new Date(Date.now()),
+              titel:
+                file?.titel ||
+                this.defaultValues.titel ||
+                this.filenameToTitle(file?.name || this.defaultValues.bestandsnaam),
+            });
+            if (this.areAllFieldsHidden()) {
+              this.save();
+            }
+          })
+        )
+        .subscribe()
+    );
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   }
 
   private filenameToTitle(filename?: string) {
@@ -636,6 +680,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
 
   private openDocumentDefinitionSubscription() {
     this._subscriptions.add(
+<<<<<<< HEAD
       combineLatest([this.route?.params || of(null), this.route?.firstChild?.params || of(null)])
         .pipe(
           map(
@@ -647,6 +692,16 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         .subscribe(documentDefinitionName =>
           this.valtimoModalService.setDocumentDefinitionName(documentDefinitionName)
         )
+=======
+      this.route?.params
+        .pipe(
+          map(params => params?.documentDefinitionName),
+          filter(documentDefinitionName => documentDefinitionName)
+        )
+        .subscribe(documentDefinitionName => {
+          this.valtimoModalService.setDocumentDefinitionName(documentDefinitionName);
+        })
+>>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
     );
   }
 
