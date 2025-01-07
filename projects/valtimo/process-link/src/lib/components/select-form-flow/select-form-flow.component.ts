@@ -150,6 +150,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
         const updateProcessLinkRequest: FormFlowProcessLinkUpdateRequestDto = {
           id: selectedProcessLink.id,
           formFlowDefinitionId: this.selectedFormFlowDefinition.id,
+          activityId: selectedProcessLink.activityId,
           ...(this._taskPanelToggle &&
             isUserTask && {
               formDisplayType: this.formDisplayValue,

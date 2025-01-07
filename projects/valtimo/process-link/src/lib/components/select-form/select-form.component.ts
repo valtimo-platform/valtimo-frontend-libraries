@@ -154,6 +154,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
         const updateProcessLinkRequest: FormProcessLinkUpdateRequestDto = {
           id: selectedProcessLink.id,
           formDefinitionId: this.selectedFormDefinition.id,
+          activityId: selectedProcessLink.activityId,
           viewModelEnabled,
           ...(this._taskPanelToggle &&
             isUserTask && {
