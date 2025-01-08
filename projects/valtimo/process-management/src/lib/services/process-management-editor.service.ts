@@ -117,8 +117,6 @@ export class ProcessManagementEditorService implements OnDestroy {
       this._updateBpmnViewFunction = updateBpmnViewFunction;
     }
 
-    console.log('hi', event, this.processLinksForSelectedDefinition);
-
     this.setProcessLinksForSelectedDefinition(
       this.processLinksForSelectedDefinition.filter(
         processLink => processLink.activityId !== event.activityId
