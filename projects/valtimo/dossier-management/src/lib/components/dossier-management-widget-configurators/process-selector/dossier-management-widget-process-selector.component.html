@@ -1,4 +1,8 @@
-<form [formGroup]="formGroup" class="valtimo-dossier-management-widget-process-selector">
+<form
+  [attr.data-carbon-theme]="theme$ | async"
+  [formGroup]="formGroup"
+  class="valtimo-dossier-management-widget-process-selector"
+>
   <cds-dropdown
     label="New process button (Optional)"
     placeholder="Choose a process"

@@ -15,6 +15,7 @@ import {
   switchMap,
 } from 'rxjs';
 import {WidgetWizardService} from '../../../services';
+import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-dossier-management-widget-process-selector',
@@ -71,9 +72,16 @@ export class DossierManagementWidgetProcessSelector implements OnInit {
       startWith([])
     );
 
+  public readonly theme$ = this.cdsThemeService.currentTheme$.pipe(
+    map((theme: CurrentCarbonTheme) =>
+      theme === CurrentCarbonTheme.G10 ? CARBON_THEME.WHITE : CARBON_THEME.G90
+    )
+  );
+
   private readonly _subscriptions = new Subscription();
 
   constructor(
+    private readonly cdsThemeService: CdsThemeService,
     private readonly documentService: DocumentService,
     private readonly fb: FormBuilder,
     private readonly widgetWizardService: WidgetWizardService

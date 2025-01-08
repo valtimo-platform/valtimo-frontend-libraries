@@ -23,7 +23,6 @@ import {BehaviorSubject, Observable, distinctUntilChanged, filter, switchMap} fr
 })
 export class WidgetsService {
   private readonly _activeProcessKey$ = new BehaviorSubject<string | null>(null);
-
   public readonly startProcessEvent = new EventEmitter();
 
   public get activeProcess$(): Observable<ProcessDocumentDefinition[]> {
