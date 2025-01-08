@@ -12,10 +12,7 @@ enum CaseWidgetDisplayTypeKey {
 interface CaseWidgetTextDisplayType {
   type: CaseWidgetDisplayTypeKey.TEXT;
   ellipsisCharacterLimit: number;
-<<<<<<< HEAD
   hideWhenEmpty: boolean;
-=======
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 }
 
 interface CaseWidgetBooleanDisplayType {

@@ -121,10 +121,7 @@ import {ImportPluginConfigurationComponent} from './components/import-plugin-con
     ToggleModule,
     CarbonMultiInputModule,
     LayerModule,
-<<<<<<< HEAD
     ToggletipModule,
-=======
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   ],
   exports: [
     ProcessLinkComponent,

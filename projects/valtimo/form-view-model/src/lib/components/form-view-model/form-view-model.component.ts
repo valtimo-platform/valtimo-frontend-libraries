@@ -100,10 +100,6 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
 
   @Output() formSubmit = new EventEmitter<any>();
 
-<<<<<<< HEAD
-=======
-  public errors: string[] = [];
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   public refreshForm = new EventEmitter();
 
   private _preventNextPage = false;
@@ -144,28 +140,8 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     this.options$,
     this._overrideOptions$,
   ]).pipe(
-<<<<<<< HEAD
     map(([options, overrideOptions]) => {
       return deepmerge(options, overrideOptions);
-=======
-    map(([language, options, overrideOptions]) => {
-      const formioTranslations = this.translateService.instant('formioTranslations');
-
-      const defaultOptions = {
-        ...options,
-        language,
-        ...(typeof formioTranslations === 'object'
-          ? {
-            language,
-            i18n: {
-              [language]: this.stateService.flattenTranslationsObject(formioTranslations),
-            },
-          }
-          : {}),
-      };
-
-      return deepmerge(defaultOptions, overrideOptions);
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
     })
   );
 
@@ -393,7 +369,6 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     combineLatest([this.formName$, this.processDefinitionKey$, this.documentId$])
       .pipe(
         take(1),
-<<<<<<< HEAD
         switchMap(([formName, processDefinitionKey, documentId]) =>
           this.viewModelService
             .getViewModelForStartForm(formName, processDefinitionKey, documentId)
@@ -407,44 +382,6 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
               })
             )
         )
-=======
-        switchMap(updating => {
-          if (!updating) {
-            this.loading$.next(true);
-            return combineLatest([this.formName$, this.taskInstanceId$, this.change$]).pipe(
-              take(1),
-              switchMap(([formName, taskInstanceId, change]) =>
-                this.viewModelService
-                  .updateViewModel(
-                    formName,
-                    taskInstanceId,
-                    change.data,
-                    this.formio.formio.page,
-                    this._isWizard
-                  )
-                  .pipe(
-                    tap({
-                      next: viewModel => {
-                        const submission = this.submission$.value;
-                        submission.data = viewModel;
-                        this.submission$.next(submission);
-                        this.handlePageChange();
-                        this.refreshForm.emit({submission: submission});
-                        this.loading$.next(false);
-                        this.errors = [];
-                      },
-                      error: error => {
-                        this.loading$.next(false);
-                        this.handleFormError(error);
-                      },
-                    })
-                  )
-              )
-            );
-          }
-          return of(null); // Fallback to return an observable if updating is true
-        })
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
       )
       .subscribe();
   }
@@ -490,7 +427,6 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         take(1),
-<<<<<<< HEAD
         switchMap(([formName, processDefinitionKey, change, documentId]) =>
           this.viewModelService
             .updateViewModelForStartForm(
@@ -508,44 +444,6 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
               })
             )
         )
-=======
-        switchMap(updating => {
-          if (!updating) {
-            this.loading$.next(true);
-            return combineLatest([this.formName$, this.processDefinitionKey$, this.change$]).pipe(
-              take(1),
-              switchMap(([formName, processDefinitionKey, change]) =>
-                this.viewModelService
-                  .updateViewModelForStartForm(
-                    formName,
-                    processDefinitionKey,
-                    change.data,
-                    this.formio.formio.page,
-                    this._isWizard
-                  )
-                  .pipe(
-                    tap({
-                      next: viewModel => {
-                        const submission = this.submission$.value;
-                        submission.data = viewModel;
-                        this.submission$.next(submission);
-                        this.handlePageChange();
-                        this.refreshForm.emit({submission: submission});
-                        this.loading$.next(false);
-                        this.errors = [];
-                      },
-                      error: error => {
-                        this.loading$.next(false);
-                        this.handleFormError(error);
-                      },
-                    })
-                  )
-              )
-            );
-          }
-          return of(null); // Fallback to return an observable if updating is true
-        })
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
       )
       .subscribe();
   }

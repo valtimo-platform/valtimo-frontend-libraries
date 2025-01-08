@@ -43,11 +43,7 @@ import {
   CdsThemeService,
   CurrentCarbonTheme,
   InputLabelModule,
-<<<<<<< HEAD
   ValuePathItem,
-=======
-  ValueCollectionPath,
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   ValuePathSelectorComponent,
   ValuePathSelectorPrefix,
 } from '@valtimo/components';
@@ -94,27 +90,18 @@ import {WidgetFieldsService, WidgetWizardService} from '../../../../services';
     AccordionModule,
     InputLabelModule,
     ValuePathSelectorComponent,
-<<<<<<< HEAD
     CheckboxModule,
-=======
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   ],
 })
 export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnDestroy {
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field-column';
   @Input({required: true}) public columnData: FieldsCaseWidgetValue[];
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
-<<<<<<< HEAD
   @Input() public isFieldWidget = false;
   @Input() public documentDefinitionName?: string;
   @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
   @Input() public selectedCollection?: ValuePathItem;
   @Input() public showHideWhenEmptyCheckbox = false;
-=======
-  @Input() public documentDefinitionName?: string | null = null;
-  @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
-  @Input() public selectedCollectionPath?: ValueCollectionPath | null;
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 
   @Output() public columnUpdateEvent = new EventEmitter<{
     data: FieldsCaseWidgetValue[];
@@ -189,10 +176,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
           null,
           Validators.pattern('[1-9][0-9]*')
         ),
-<<<<<<< HEAD
         hideWhenEmpty: this.fb.control<boolean | false>(false),
-=======
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
       })
     );
   }
@@ -247,12 +231,9 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
           Validators.pattern('[1-9][0-9]*')
         ),
       }),
-<<<<<<< HEAD
       hideWhenEmpty: this.fb.control(
         (row.displayProperties as CaseWidgetTextDisplayType)?.hideWhenEmpty ?? false
       ),
-=======
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
       ...([CaseWidgetDisplayTypeKey.NUMBER, CaseWidgetDisplayTypeKey.PERCENT].includes(
         row.displayProperties?.type as CaseWidgetDisplayTypeKey
       ) && {
@@ -325,10 +306,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
               ...(!!row?.ellipsisCharacterLimit && {
                 ellipsisCharacterLimit: row.ellipsisCharacterLimit,
               }),
-<<<<<<< HEAD
               ...(!!row?.hideWhenEmpty && {hideWhenEmpty: row.hideWhenEmpty}),
-=======
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
               ...(!!row?.currencyCode && {currencyCode: row.currencyCode}),
               ...(!!row?.display && {display: row.display}),
               ...(!!row?.digitsInfo && {digitsInfo: row.digitsInfo}),

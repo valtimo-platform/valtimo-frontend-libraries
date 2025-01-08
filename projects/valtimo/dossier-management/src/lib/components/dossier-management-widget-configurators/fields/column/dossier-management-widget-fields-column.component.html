@@ -69,7 +69,6 @@
               *ngTemplateOutlet="fieldWidthDropdown; context: {index: $index}"
             ></ng-container>
 
-<<<<<<< HEAD
             <div class="valtimo-dossier-management-widget-field-column__path-selector">
               <v-input-label
                 [title]="'widgetTabManagement.content.fields.value' | translate"
@@ -86,44 +85,6 @@
                 [parentItem]="selectedCollection"
               ></valtimo-value-path-selector>
             </div>
-=======
-            @if (!documentDefinitionName) {
-              <cds-text-label>
-                <v-input-label
-                  [title]="'widgetTabManagement.content.fields.value' | translate"
-                  [tooltip]="
-                    'widgetTabManagement.content.' + widgetType() + '.valueTooltip' | translate
-                  "
-                >
-                </v-input-label>
-
-                <input
-                  cdsText
-                  [attr.data-carbon-theme]="inputTheme"
-                  [placeholder]="'widgetTabManagement.content.fields.valuePlaceholder' | translate"
-                  type="text"
-                  formControlName="content"
-                />
-              </cds-text-label>
-            } @else {
-              <div class="valtimo-dossier-management-widget-field-column__path-selector">
-                <v-input-label
-                  [title]="'widgetTabManagement.content.fields.value' | translate"
-                  [tooltip]="
-                    'widgetTabManagement.content.' + widgetType() + '.valueTooltip' | translate
-                  "
-                >
-                </v-input-label>
-
-                <valtimo-value-path-selector
-                  formControlName="content"
-                  [documentDefinitionName]="documentDefinitionName"
-                  [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
-                  [selectedCollectionPath]="selectedCollectionPath"
-                ></valtimo-value-path-selector>
-              </div>
-            }
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
           </div>
 
           <div class="valtimo-dossier-management-widget-field-column__options">
@@ -347,11 +308,7 @@
 
             <cds-text-label
               *ngIf="
-<<<<<<< HEAD
                 formRow.get('type').value.id === CaseWidgetDisplayTypeKey.TEXT && isFieldWidget
-=======
-                formRow.get('type').value.id === CaseWidgetDisplayTypeKey.TEXT && isFieldWidget()
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
               "
             >
               <v-input-label
@@ -372,13 +329,10 @@
                 formControlName="ellipsisCharacterLimit"
               />
             </cds-text-label>
-<<<<<<< HEAD
 
             <cds-checkbox *ngIf="showHideWhenEmptyCheckbox" formControlName="hideWhenEmpty">
               {{ 'widgetTabManagement.content.hideWhenEmpty' | translate }}
             </cds-checkbox>
-=======
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
           </div>
         </form>
       </cds-accordion-item>

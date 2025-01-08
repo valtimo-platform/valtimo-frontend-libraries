@@ -61,13 +61,8 @@
       [attr.data-carbon-theme]="obs.theme"
       [documentDefinitionName]="documentDefinitionName$ | async"
       [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
-<<<<<<< HEAD
       [type]="ValuePathType.COLLECTION"
       (collectionSelected)="onCollectionSelected($event)"
-=======
-      [valueType]="ValueResolverOptionType.COLLECTION"
-      (collectionPathSelected)="onCollectionPathSelected($event)"
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
     ></valtimo-value-path-selector>
   </div>
 </form>
@@ -84,11 +79,7 @@
   [addTranslateKey]="'widgetTabManagement.content.table.addColumn'"
   [columnData]="content()?.columns"
   [documentDefinitionName]="documentDefinitionName$ | async"
-<<<<<<< HEAD
   [selectedCollection]="selectedCollection$ | async"
-=======
-  [selectedCollectionPath]="selectedCollectionPath$ | async"
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   (columnUpdateEvent)="onColumnUpdateEvent($event)"
 ></valtimo-dossier-management-widget-fields-column>
 

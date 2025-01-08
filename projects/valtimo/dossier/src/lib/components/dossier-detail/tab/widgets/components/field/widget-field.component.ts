@@ -28,7 +28,6 @@ import {
 } from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
 import {CarbonListModule, EllipsisPipe, ViewContentService, ViewType} from '@valtimo/components';
-<<<<<<< HEAD
 import {ButtonModule, InputModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, tap} from 'rxjs';
 import {
@@ -41,11 +40,6 @@ import {PermissionService} from '@valtimo/access-control';
 import {ActivatedRoute} from '@angular/router';
 import {WidgetProcess} from '../widget-process/widget-process';
 import {DocumentService} from '@valtimo/document';
-=======
-import {InputModule} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
-import {CaseWidgetTextDisplayType, FieldsCaseWidget} from '../../../../../../models';
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 
 @Component({
   selector: 'valtimo-widget-field',
@@ -54,7 +48,6 @@ import {CaseWidgetTextDisplayType, FieldsCaseWidget} from '../../../../../../mod
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-<<<<<<< HEAD
   imports: [
     CommonModule,
     InputModule,
@@ -63,9 +56,6 @@ import {CaseWidgetTextDisplayType, FieldsCaseWidget} from '../../../../../../mod
     EllipsisPipe,
     ButtonModule,
   ],
-=======
-  imports: [CommonModule, InputModule, TranslateModule, CarbonListModule, EllipsisPipe],
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
 })
 export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit, OnDestroy {
   @HostBinding('class') public readonly class = 'widget-field';
@@ -92,16 +82,12 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
   public readonly widgetData$ = new BehaviorSubject<object | null>(null);
 
   public readonly widgetPropertyValue$: Observable<
-<<<<<<< HEAD
     {
       title: string;
       value: string;
       ellipsisCharacterLimit: number | null;
       hideWhenEmpty: boolean | false;
     }[][]
-=======
-    {title: string; value: string; ellipsisCharacterLimit: number | null}[][]
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   > = combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
     map(([widget, widgetData]) =>
       widget?.properties.columns.map(column =>
@@ -115,12 +101,9 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
                     ellipsisCharacterLimit:
                       (property.displayProperties as CaseWidgetTextDisplayType)
                         ?.ellipsisCharacterLimit ?? null,
-<<<<<<< HEAD
                     hideWhenEmpty:
                       (property.displayProperties as CaseWidgetTextDisplayType)?.hideWhenEmpty ??
                       false,
-=======
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
                     value: this.viewContentService.get(widgetData[property.key], {
                       ...property.displayProperties,
                       viewType: property.displayProperties?.type ?? ViewType.TEXT,
@@ -132,12 +115,8 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
           []
         )
       )
-<<<<<<< HEAD
     ),
     tap(columns => this.checkEmptyFields(columns))
-=======
-    )
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
   );
 
   private _observer!: ResizeObserver;

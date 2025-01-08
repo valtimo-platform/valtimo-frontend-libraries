@@ -112,7 +112,6 @@ export const documentenApiUploaderEditForm = () => ({
       },
     },
     {
-<<<<<<< HEAD
       type: 'checkbox',
       input: true,
       inputType: 'checkbox',
@@ -122,20 +121,10 @@ export const documentenApiUploaderEditForm = () => ({
       validate: {
         required: false,
       },
-=======
-      label: 'HTML',
-      tag: 'div',
-      content: '<h3>Documenten API metadata</h3>',
-      refreshOnChange: false,
-      type: 'htmlelement',
-      input: false,
-      tableView: false,
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
     },
     {
       label: 'HTML',
       tag: 'div',
-<<<<<<< HEAD
       content: '<h3>Documenten API metadata</h3>',
       refreshOnChange: false,
       type: 'htmlelement',
@@ -145,8 +134,6 @@ export const documentenApiUploaderEditForm = () => ({
     {
       label: 'HTML',
       tag: 'div',
-=======
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
       content: '<h4>Filename</h4>',
       refreshOnChange: false,
       type: 'htmlelement',

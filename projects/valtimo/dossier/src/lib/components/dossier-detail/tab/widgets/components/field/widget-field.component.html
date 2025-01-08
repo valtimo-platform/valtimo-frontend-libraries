@@ -53,7 +53,6 @@
         'widget-field__container': renderVertically() === 4,
       }"
     >
-<<<<<<< HEAD
       @if (obs.noVisibleFields) {
         <valtimo-no-results
           [collapseVertically]="true"
@@ -84,22 +83,6 @@
             }
           </div>
         }
-=======
-      @for (column of obs?.widgetPropertyValue; track column.key) {
-        <div class="widget-field__column">
-          @for (property of column; track property) {
-            <div class="widget-field__field">
-              <label class="widget-field__field-label" [attr.title]="property?.title">
-                {{ property?.title }}</label
-              >
-
-              <div [attr.title]="property?.value" class="widget-field__field-value">
-                {{ property?.value | valtimoEllipsis: property?.ellipsisCharacterLimit }}
-              </div>
-            </div>
-          }
-        </div>
->>>>>>> 2d841813 (story: merge next-minor into next-major (#1316))
       }
     </div>
   }

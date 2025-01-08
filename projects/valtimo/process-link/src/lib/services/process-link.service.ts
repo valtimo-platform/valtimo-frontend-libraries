@@ -26,7 +26,6 @@ import {
   FormSubmissionResult,
   GetProcessLinkRequest,
   GetProcessLinkResponse,
-  PluginProcessLinkCreateDto,
   PluginProcessLinkUpdateDto,
   ProcessLinkCreateEvent,
   ProcessLinkType,
@@ -118,7 +117,10 @@ export class ProcessLinkService {
     processXml: string | null
   ) {
     const formData = new FormData();
-    const processLinksBlob = new Blob([JSON.stringify(processLinks)], {type: 'application/json'});
+    const processLinksBlob = new Blob(
+      [JSON.stringify(processLinks.map(processLink => this.emptyStringToNull(processLink)))],
+      {type: 'application/json'}
+    );
 
     if (processXml) formData.append('file', new File([processXml], 'process.bpmn'));
     if (processDefinitionId) formData.append('processDefinitionId', processDefinitionId);
