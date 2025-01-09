@@ -38,7 +38,7 @@ import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
-import {DossierManagementWidgetProcessSelector} from '../process-selector/dossier-management-widget-process-selector.component';
+import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
 
 @Component({
   templateUrl: './dossier-management-widget-custom.component.html',
@@ -52,7 +52,7 @@ import {DossierManagementWidgetProcessSelector} from '../process-selector/dossie
     ReactiveFormsModule,
     SelectModule,
     DropdownModule,
-    DossierManagementWidgetProcessSelector,
+    DossierManagementWidgetProcessSelectorComponent,
   ],
 })
 export class DossierManagementWidgetCustomComponent

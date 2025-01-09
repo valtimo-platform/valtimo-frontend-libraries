@@ -25,7 +25,7 @@ import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/compon
   standalone: true,
   imports: [CommonModule, TranslateModule, DropdownModule, InputModule, ReactiveFormsModule],
 })
-export class DossierManagementWidgetProcessSelector implements OnInit {
+export class DossierManagementWidgetProcessSelectorComponent implements OnInit {
   private readonly _documentDefinitionName$ = new BehaviorSubject<string | null>(null);
   @Input() public set documentDefinitionName(value: string) {
     this._documentDefinitionName$.next(value);

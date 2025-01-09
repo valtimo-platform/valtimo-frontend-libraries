@@ -43,7 +43,7 @@ import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from './column/dossier-management-widget-fields-column.component';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import { DossierManagementWidgetProcessSelector } from '../process-selector/dossier-management-widget-process-selector.component';
+import { DossierManagementWidgetProcessSelectorComponent } from '../process-selector/dossier-management-widget-process-selector.component';
 
 @Component({
   templateUrl: './dossier-management-widget-fields.component.html',
@@ -60,7 +60,7 @@ import { DossierManagementWidgetProcessSelector } from '../process-selector/doss
     ReactiveFormsModule,
     ButtonModule,
     DossierManagementWidgetFieldsColumnComponent,
-    DossierManagementWidgetProcessSelector,
+    DossierManagementWidgetProcessSelectorComponent,
     InputLabelModule,
   ],
 })

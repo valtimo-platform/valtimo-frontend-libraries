@@ -32,7 +32,7 @@ import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
-import {DossierManagementWidgetProcessSelector} from '../process-selector/dossier-management-widget-process-selector.component';
+import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
@@ -47,7 +47,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
     ReactiveFormsModule,
     SelectModule,
     DropdownModule,
-    DossierManagementWidgetProcessSelector,
+    DossierManagementWidgetProcessSelectorComponent,
   ],
 })
 export class DossierManagementWidgetFormioComponent
