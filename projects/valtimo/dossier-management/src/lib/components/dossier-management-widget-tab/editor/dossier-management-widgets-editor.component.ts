@@ -172,7 +172,6 @@ export class DossierManagementWidgetsEditorComponent {
   public duplicateWidget(tabWidget: CaseWidget): void {
     const tabWidgetClone = cloneDeep(tabWidget);
     tabWidgetClone.key = null;
-    tabWidgetClone.title = `${tabWidget.title} duplicate`;
     this.editWidget(tabWidgetClone);
   }
 
