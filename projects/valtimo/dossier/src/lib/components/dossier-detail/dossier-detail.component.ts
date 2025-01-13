@@ -83,6 +83,7 @@ import {
 } from '../../permissions';
 import {DossierDetailLayoutService, DossierService, DossierTabService} from '../../services';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
+import {WidgetsService} from './tab/widgets/widgets.service';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -311,6 +312,7 @@ export class DossierDetailComponent
     private readonly renderer: Renderer2,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly widgetsService: WidgetsService,
     private readonly userProviderService: UserProviderService,
     @Inject(DOCUMENT) private readonly htmlDocument: Document
   ) {
@@ -328,6 +330,7 @@ export class DossierDetailComponent
     this.iconService.registerAll([ChevronDown16]);
     this.setDocumentStyle();
     this.enableResetOnBackNavigation();
+    this.openWidgetProcessSubscription();
   }
 
   public ngOnDestroy(): void {
@@ -354,6 +357,16 @@ export class DossierDetailComponent
 
   public startProcess(processDocumentDefinition: ProcessDocumentDefinition): void {
     this.supportingProcessStart.openModal(processDocumentDefinition, this.documentId);
+  }
+
+  public openWidgetProcessSubscription(): void {
+    this._subscriptions.add(
+      this.widgetsService.startProcessEvent
+        .pipe(switchMap(() => this.widgetsService.activeProcess$))
+        .subscribe((processDocumentDefinitions: ProcessDocumentDefinition[]) => {
+          this.startProcess(processDocumentDefinitions[0]);
+        })
+    );
   }
 
   public claimAssignee(): void {
