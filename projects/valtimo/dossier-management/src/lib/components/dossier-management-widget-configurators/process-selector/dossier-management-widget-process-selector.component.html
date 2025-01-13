@@ -4,8 +4,8 @@
   class="valtimo-dossier-management-widget-process-selector"
 >
   <cds-dropdown
-    label="New process button (Optional)"
-    placeholder="Choose a process"
+    [label]="'widgetTabManagement.processes.buttonTextLabel' | translate"
+    [placeholder]="'widgetTabManagement.processes.selectorPlaceholder' | translate"
     formControlName="processDefinitionKey"
     (selected)="onProcessSelected()"
   >
@@ -13,8 +13,13 @@
   </cds-dropdown>
 
   <cds-text-label>
-    New process button text (Optional)
+    {{ 'widgetTabManagement.processes.buttonTextLabel' | translate }}
 
-    <input cdsText type="text" formControlName="name" placeholder="Button text" />
+    <input
+      cdsText
+      type="text"
+      formControlName="name"
+      [placeholder]="'widgetTabManagement.processes.buttonTextPlaceholder' | translate"
+    />
   </cds-text-label>
 </form>
