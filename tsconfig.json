@@ -96,7 +96,9 @@
       "@valtimo/zgw": ["dist/valtimo/zgw"],
       "@valtimo/zgw/*": ["dist/valtimo/zgw/*"],
       "@valtimo/logging": ["dist/valtimo/logging"],
-      "@valtimo/logging/*": ["dist/valtimo/logging/*"]
+      "@valtimo/logging/*": ["dist/valtimo/logging/*"],
+      "@valtimo/panorama": ["dist/valtimo/panorama"],
+      "@valtimo/panorama/*": ["dist/valtimo/panorama/*"]
     }
   },
   "files": [],
@@ -349,6 +351,12 @@
     },
     {
       "path": "./projects/valtimo/logging/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/valtimo/panorama/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/valtimo/panorama/tsconfig.spec.json"
     }
   ]
 }
