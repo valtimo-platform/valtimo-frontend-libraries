@@ -1932,5 +1932,40 @@
       "title": "There are no logs"
     },
     "detailsTitle": "Log details"
+  },
+  "panorama": {
+    "noResults": {
+      "title": "No results",
+      "description": "There are no results for the specified BSN"
+    },
+    "columns": {
+      "fullName": "Full name",
+      "dateOfBirth": "Date of birth"
+    },
+    "tabs": {
+      "general": "General",
+      "family": "Family",
+      "ongoingCases": "Ongoing cases"
+    },
+    "details": {
+      "bsn": "BSN",
+      "gender": "Gender",
+      "name": "Name",
+      "dateOfBirth": "Date of birth",
+      "address": "Address"
+    },
+    "lopendeZaak": {
+      "id": "Id",
+      "description": "Description",
+      "startDate": "Start date",
+      "statusDescription": "Status description",
+      "statusHistory": "Status history",
+      "setDate": "Date set"
+    },
+    "family": {
+      "children": "Children",
+      "partners": "Partners",
+      "parents": "Parents"
+    }
   }
 }

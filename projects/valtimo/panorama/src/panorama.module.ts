@@ -20,6 +20,7 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '@valtimo/config';
 import { PanoramaRoutingModule } from './panorama-routing.module';
 import { ClientListComponent } from './public-api';
+import { ClientDetailsComponent } from './lib/components/client-details/client-details.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { ClientListComponent } from './public-api';
       },
     }),
     ClientListComponent,
+    ClientDetailsComponent
   ],
 })
 export class PanoramaModule {}

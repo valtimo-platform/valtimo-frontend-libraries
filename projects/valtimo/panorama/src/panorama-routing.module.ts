@@ -15,16 +15,23 @@
  */
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {ROLE_ADMIN, ROLE_USER} from '@valtimo/config';
+import {ROLE_USER} from '@valtimo/config';
 import {AuthGuardService} from '@valtimo/security';
-import { ClientListComponent } from './lib/components/client-list/client-list.component';
+import {ClientDetailsComponent} from './lib/components/client-details/client-details.component';
+import {ClientListComponent} from './lib/components/client-list/client-list.component';
 
 const routes: Routes = [
   {
     path: 'panorama',
     component: ClientListComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Panorama', roles: [ROLE_ADMIN, ROLE_USER]},
+    data: {title: 'Panorama', roles: [ROLE_USER]},
+  },
+  {
+    path: 'panorama/:bsn',
+    component: ClientDetailsComponent,
+    canActivate: [AuthGuardService],
+    data: {title: 'Client details', roles: [ROLE_USER], customPageTitle: true},
   },
 ];
 

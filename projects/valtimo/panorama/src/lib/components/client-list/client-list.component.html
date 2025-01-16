@@ -1,1 +1,34 @@
-Client list works
+<form class="panorama-client-list__form" [formGroup]="formGroup">
+  <cds-text-label>
+    BSN
+
+    <input cdsText formControlName="bsn" />
+  </cds-text-label>
+
+  <section class="panorama-client-list__buttons">
+    <button cdsButton="ghost" (click)="onClearButtonClick()">
+      {{ 'searchFields.clearButtonText' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+    </button>
+
+    <button cdsButton="primary" [disabled]="formGroup.invalid" (click)="onSearchButtonClick()">
+      {{ 'searchFields.searchButtonText' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="search" size="16"></svg>
+    </button>
+  </section>
+</form>
+
+<valtimo-carbon-list
+  [fields]="fields$ | async"
+  [header]="false"
+  [hideToolbar]="true"
+  [items]="items$ | async"
+  (rowClicked)="onRowClick($event)"
+>
+  <valtimo-no-results
+    [title]="'panorama.noResults.title' | translate"
+    [description]="'panorama.noResults.description' | translate"
+  ></valtimo-no-results>
+</valtimo-carbon-list>

@@ -1933,5 +1933,40 @@
       "title": "Er zijn geen logboeken"
     },
     "detailsTitle": "Loggegevens"
+  },
+  "panorama": {
+    "noResults": {
+      "title": "Geen resultaten",
+      "description": "Er zijn geen resultaten voor de opgegeven bsn"
+    },
+    "columns": {
+      "fullName": "Volledige naame",
+      "dateOfBirth": "Geboortedatum"
+    },
+    "tabs": {
+      "general": "Algemeen",
+      "family": "Gezin",
+      "ongoingCases": "Lopende zaken"
+    },
+    "details": {
+      "bsn": "BSN",
+      "gender": "Geslacht",
+      "name": "Naam",
+      "dateOfBirth": "Geboortedatum",
+      "address": "Adres"
+    },
+    "lopendeZaak": {
+      "id": "Identificatie",
+      "description": "Omschrijving",
+      "startDate": "Startdatum",
+      "statusDescription": "Status omschrijving",
+      "statusHistory": "Status geschiedenis",
+      "setDate": "Datum gezet"
+    },
+    "family": {
+      "children": "Kinderen",
+      "partners": "Partners",
+      "parents": "Ouders"
+    }
   }
 }

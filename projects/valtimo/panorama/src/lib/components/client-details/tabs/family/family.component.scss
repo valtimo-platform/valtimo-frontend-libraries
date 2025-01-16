@@ -1,0 +1,11 @@
+.panorama-family-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat((3, 1fr));
+    gap: 16px;
+  }
+}

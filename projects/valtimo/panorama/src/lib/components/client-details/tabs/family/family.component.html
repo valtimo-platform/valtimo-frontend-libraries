@@ -1,0 +1,29 @@
+@if (person.kinderen?.length > 0) {
+  <h3>{{ 'panorama.family.children' | translate }}</h3>
+
+  <section class="panorama-family-tab__content">
+    @for (child of person.kinderen; track child.burgerservicenummer) {
+      <panorama-person-card [person]="child" isFamilyCard="true"></panorama-person-card>
+    }
+  </section>
+}
+
+@if (person.partners?.length > 0) {
+  <h3>{{ 'panorama.family.partners' | translate }}</h3>
+
+  <section class="panorama-family-tab__content">
+    @for (partner of person.partners; track partner.burgerservicenummer) {
+      <panorama-person-card [person]="partner" isFamilyCard="true"></panorama-person-card>
+    }
+  </section>
+}
+
+@if (person.ouders?.length > 0) {
+  <h3>{{ 'panorama.family.parents' | translate }}</h3>
+
+  <section class="panorama-family-tab__content">
+    @for (parent of person.ouders; track parent.burgerservicenummer) {
+      <panorama-person-card [person]="parent" isFamilyCard="true"></panorama-person-card>
+    }
+  </section>
+}

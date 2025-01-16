@@ -1,0 +1,15 @@
+.panorama-client-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__form {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+  }
+
+  &__buttons {
+    display: flex;
+  }
+}

@@ -1,0 +1,37 @@
+<div *ngIf="person$ | async as person" class="panorama-person-card">
+  <cds-text-label>
+    {{ 'panorama.details.name' | translate }}
+
+    <input cdsText [readonly]="true" theme="light" [value]="person.naam.volledigeNaam || '-'" />
+  </cds-text-label>
+
+  <cds-text-label>
+    {{ 'panorama.details.bsn' | translate }}
+
+    <input cdsText [readonly]="true" theme="light" [value]="person.burgerservicenummer || '-'" />
+  </cds-text-label>
+
+  <cds-text-label>
+    {{ 'panorama.details.gender' | translate }}
+
+    <input cdsText [readonly]="true" theme="light" [value]="person.geslacht.omschrijving || '-'" />
+  </cds-text-label>
+
+  <cds-text-label>
+    {{ 'panorama.details.dateOfBirth' | translate }}
+
+    <input cdsText [readonly]="true" theme="light" [value]="person.formattedDateOfBirth || '-'" />
+  </cds-text-label>
+
+  <cds-textarea-label *ngIf="!isFamilyCard">
+    {{ 'panorama.details.address' | translate }}
+
+    <textarea
+      class="panorama-person-card__address"
+      cdsTextArea
+      [readonly]="true"
+      [value]="person.formattedAddress || '-'"
+      theme="light"
+    ></textarea>
+  </cds-textarea-label>
+</div>

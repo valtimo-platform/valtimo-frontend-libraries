@@ -1927,5 +1927,40 @@
       "title": "Es gibt keine Protokolle"
     },
     "detailsTitle": "Protokolldetails"
+  },
+  "panorama": {
+    "noResults": {
+      "title": "Keine Ergebnisse",
+      "description": "Für den angegebenen BSN liegen keine Ergebnisse vor"
+    },
+    "columns": {
+      "fullName": "Vollständiger Name",
+      "dateOfBirth": "Geburtsdatum"
+    }
+  },
+  "tabs": {
+    "general": "Allgemein",
+    "family": "Familie",
+    "ongoingCases": "Aktuelle Angelegenheiten"
+  },
+  "details": {
+    "bsn": "BSN",
+    "gender": "Geschlecht",
+    "name": "Name",
+    "dateOfBirth": "Geburtsdatum",
+    "address": "Adresse"
+  },
+  "lopendeZaak": {
+    "id": "Identifikation",
+    "description": "Beschreibung",
+    "startDate": "Startdatum",
+    "statusDescription": "Statusbeschreibung",
+    "statusHistory": "Statusverlauf",
+    "setDate": "Datum eingestellt"
+  },
+  "family": {
+    "children": "Kinder",
+    "partners": "Partner",
+    "parents": "Eltern"
   }
 }

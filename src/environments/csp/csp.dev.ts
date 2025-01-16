@@ -34,6 +34,7 @@ export const cspHeaderParamsDev: CSPHeaderParams = {
     'connect-src': [
       SELF,
       UrlUtils.getUrlHost(authenticationKeycloak.options.keycloakOptions.config.url),
+      'http://localhost:8085',
     ],
     'style-src': [
       SELF,
