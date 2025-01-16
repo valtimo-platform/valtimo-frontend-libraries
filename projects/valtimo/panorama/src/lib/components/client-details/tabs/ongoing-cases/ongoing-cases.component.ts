@@ -2,10 +2,11 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, HostBinding, ViewEncapsulation} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
 import {AccordionModule, InputModule} from 'carbon-components-angular';
-import {LopendeZaakService} from '../../../../services';
-import {Observable, map, tap} from 'rxjs';
+import {LopendeZaakApiService} from '../../../../services';
+import {Observable, map, switchMap, tap} from 'rxjs';
 import {LopendeStatus, LopendeZaak} from '../../../../models';
 import {ViewContentService, ViewType} from '@valtimo/components';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   selector: 'panorama-ongoing-cases-tab',
@@ -18,9 +19,11 @@ import {ViewContentService, ViewType} from '@valtimo/components';
 })
 export class OngoingCasesTabComponent {
   @HostBinding('class') public readonly class = 'panorama-ongoing-cases-tab';
-  public readonly cases$: Observable<any[]> = this.lopendeZaakService.lopendeZaaken$.pipe(
-    map((cases: LopendeZaak[]) =>
-      cases.map((ongoingCase: LopendeZaak) => {
+
+  public readonly cases$ = this.route.paramMap.pipe(
+    switchMap((params: ParamMap) => this.lopendeZaakApiService.getLopendeZaken(params.get('bsn'))),
+    map((cases: {results: LopendeZaak[]}) =>
+      cases.results.map((ongoingCase: LopendeZaak) => {
         return {
           ...ongoingCase,
           formattedDate: this.viewContentService.get(ongoingCase.startdatum, {
@@ -43,7 +46,8 @@ export class OngoingCasesTabComponent {
   );
 
   constructor(
-    private readonly lopendeZaakService: LopendeZaakService,
+    private readonly route: ActivatedRoute,
+    private readonly lopendeZaakApiService: LopendeZaakApiService,
     private readonly viewContentService: ViewContentService
   ) {}
 }

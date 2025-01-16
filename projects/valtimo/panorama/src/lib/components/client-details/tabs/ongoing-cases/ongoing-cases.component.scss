@@ -1,9 +1,15 @@
 .panorama-ongoing-cases-tab {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px;
-  background: var(--cds-layer-02);
+  &,
+  &__case {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__case {
+    padding: 16px;
+    background: var(--cds-layer-02);
+  }
 
   &__status {
     display: flex;

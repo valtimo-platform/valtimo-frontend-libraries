@@ -11,7 +11,7 @@
     <input cdsText [readonly]="true" theme="light" [value]="person.burgerservicenummer || '-'" />
   </cds-text-label>
 
-  <cds-text-label>
+  <cds-text-label *ngIf="person.geslacht">
     {{ 'panorama.details.gender' | translate }}
 
     <input cdsText [readonly]="true" theme="light" [value]="person.geslacht.omschrijving || '-'" />

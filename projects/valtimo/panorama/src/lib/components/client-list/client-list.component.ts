@@ -14,7 +14,7 @@ import {ButtonModule, IconModule, IconService, InputModule} from 'carbon-compone
 import {BehaviorSubject, map, Observable, of, startWith, switchMap} from 'rxjs';
 import {lopendeZaken, person} from '../../mocks';
 import {Person} from '../../models';
-import {LopendeZaakService, PersonApiService, PersonService} from '../../services';
+import {LopendeZaakApiService, PersonApiService, PersonService} from '../../services';
 import {Search16, TrashCan16} from '@carbon/icons';
 
 @Component({
@@ -33,7 +33,7 @@ import {Search16, TrashCan16} from '@carbon/icons';
     IconModule,
   ],
 })
-export class ClientListComponent implements OnInit {
+export class ClientListComponent {
   @HostBinding('class') public readonly class = 'panorama-client-list';
 
   public readonly formGroup = this.fb.group({
@@ -62,13 +62,17 @@ export class ClientListComponent implements OnInit {
 
   private readonly _bsn$ = new BehaviorSubject<string | null>(null);
   public readonly items$: Observable<CarbonListItem[]> = this._bsn$.pipe(
-    switchMap((bsn: string | null) => (!bsn ? of([]) : of([person]))),
-    map((people: Person[]) =>
-      people.map((person: Person) => ({
-        ...person,
-        fullName: person.naam.volledigeNaam,
-        dateOfBirth: person.geboorte.datum.datum,
-      }))
+    switchMap((bsn: string | null) => this.personApiService.getPersonDetails(bsn)),
+    map((person: Person | null) =>
+      !person
+        ? []
+        : [
+            {
+              ...person,
+              fullName: person.naam.volledigeNaam,
+              dateOfBirth: person.geboorte.datum.datum,
+            },
+          ]
     ),
     startWith([])
   );
@@ -78,16 +82,11 @@ export class ClientListComponent implements OnInit {
     private readonly personApiService: PersonApiService,
     private readonly translateService: TranslateService,
     private readonly personService: PersonService,
-    private readonly lopendeZaakService: LopendeZaakService,
+    private readonly lopendeZaakService: LopendeZaakApiService,
     private readonly router: Router,
     private readonly iconService: IconService
   ) {
     this.iconService.registerAll([Search16, TrashCan16]);
-  }
-  ngOnInit(): void {
-    this.personApiService.getPersonDetails('999990111').subscribe(res => {
-      console.log({res});
-    });
   }
 
   public onRowClick(person: Person): void {
