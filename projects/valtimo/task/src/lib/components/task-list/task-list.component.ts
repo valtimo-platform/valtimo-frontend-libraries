@@ -285,7 +285,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.openTaskUpdateSseEventSubscription();
   }
 
-  private openTaskUpdateSseEventSubscription() {
+  private openTaskUpdateSseEventSubscription(): void {
     this._subscriptions.add(
       combineLatest([
         this.sseService.getSseEventObservable<TaskUpdateSseEvent>('TASK_UPDATE'),
@@ -297,7 +297,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
               caseDefinitionName === null || event.caseDefinitionName === caseDefinitionName
           )
         )
-        .subscribe(_ => this.reload())
+        .subscribe(() => this.reload())
     );
   }
 

@@ -85,7 +85,7 @@ export class SseService {
     this.connect();
   }
 
-  getSseMessagesObservableByEventType(
+  public getSseMessagesObservableByEventType(
     eventTypes: Array<SseEventType>
   ): Observable<MessageEvent<BaseSseEvent>> {
     return this._sseMessages$.asObservable().pipe(
@@ -94,7 +94,7 @@ export class SseService {
     );
   }
 
-  getSseEventObservable<Event>(eventType: SseEventType): Observable<Event> {
+  public getSseEventObservable<Event>(eventType: SseEventType): Observable<Event> {
     return this._sseMessages$.asObservable().pipe(
       filter(message => eventType === message?.data?.eventType),
       map(message => message.data as Event)

@@ -302,7 +302,7 @@ export class MenuService {
     return countMap;
   }
 
-  private updateDocumentCount(countMap: Map<string, Subject<number>>) {
+  private updateDocumentCount(countMap: Map<string, Subject<number>>): void {
     this.documentService.getOpenDocumentCount().subscribe(openDocumentCountList => {
       openDocumentCountList.forEach(openDocumentCount => {
         const mapEntry = countMap.get(openDocumentCount.documentDefinitionName);

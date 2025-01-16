@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
@@ -76,7 +76,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
     IconModule,
   ],
 })
-export class DossierDetailTaskListComponent implements OnInit {
+export class DossierDetailTaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetailModal: TaskDetailModalComponent;
 
   @Input() public set openTaskAndProcessLinkInModal(value: TaskWithProcessLink) {
@@ -95,7 +95,7 @@ export class DossierDetailTaskListComponent implements OnInit {
     filter(documentId => !!documentId)
   );
 
-  private readonly _taskUpdateSseEvent$: Observable<TaskUpdateSseEvent> = combineLatest([
+  private readonly _taskUpdateSseEvent$: Observable<TaskUpdateSseEvent | null> = combineLatest([
     this.sseService.getSseEventObservable<TaskUpdateSseEvent>('TASK_UPDATE'),
     this._documentId$,
   ]).pipe(
@@ -158,9 +158,7 @@ export class DossierDetailTaskListComponent implements OnInit {
     private readonly sseService: SseService,
     private readonly dossierDetailLayoutService: DossierDetailLayoutService,
     private readonly processLinkService: ProcessLinkService
-  ) {}
-
-  public ngOnInit(): void {
+  ) {
     this.iconService.registerAll([UserFilled20]);
   }
 
