@@ -33,7 +33,7 @@ import {Search16, TrashCan16} from '@carbon/icons';
     IconModule,
   ],
 })
-export class ClientListComponent {
+export class ClientListComponent implements OnInit {
   @HostBinding('class') public readonly class = 'panorama-client-list';
 
   public readonly formGroup = this.fb.group({
@@ -83,6 +83,11 @@ export class ClientListComponent {
     private readonly iconService: IconService
   ) {
     this.iconService.registerAll([Search16, TrashCan16]);
+  }
+  ngOnInit(): void {
+    this.personApiService.getPersonDetails('999990111').subscribe(res => {
+      console.log({res});
+    });
   }
 
   public onRowClick(person: Person): void {
