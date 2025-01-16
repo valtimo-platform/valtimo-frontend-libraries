@@ -71,15 +71,10 @@ import {ProcessManagementModule} from '@valtimo/process-management';
 import {DecisionModule} from '@valtimo/decision';
 import {MilestoneModule} from '@valtimo/milestone';
 import {LoggerModule} from 'ngx-logger';
-import {FORM_FLOW_COMPONENT_TOKEN, ProcessLinkModule} from '@valtimo/process-link';
+import {FORM_CUSTOM_COMPONENT_TOKEN, FORM_FLOW_COMPONENT_TOKEN, ProcessLinkModule} from '@valtimo/process-link';
 import {MigrationModule} from '@valtimo/migration';
 import {BootstrapModule} from '@valtimo/bootstrap';
-import {
-  ConfigModule,
-  ConfigService,
-  CustomMultiTranslateHttpLoaderFactory,
-  LocalizationService,
-} from '@valtimo/config';
+import {ConfigModule, ConfigService, CustomMultiTranslateHttpLoaderFactory, LocalizationService,} from '@valtimo/config';
 import {FormManagementModule} from '@valtimo/form-management';
 import {DossierManagementModule} from '@valtimo/dossier-management';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
@@ -128,6 +123,7 @@ import {
 } from '@valtimo/zgw';
 import {LoggingModule} from '@valtimo/logging';
 import {FormViewModelModule} from '@valtimo/form-view-model';
+import {CustomAngularFormExampleComponent} from '@src/app/custom-angular-form-example/custom-angular-form-example.component';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -264,6 +260,12 @@ export function tabsFactory() {
       provide: CUSTOM_CASE_WIDGET_TOKEN,
       useValue: {
         caseWidgetComponent: CustomDossierTabComponent,
+      },
+    },
+    {
+      provide: FORM_CUSTOM_COMPONENT_TOKEN,
+      useValue: {
+        exampleComponent: CustomAngularFormExampleComponent,
       },
     },
   ],
