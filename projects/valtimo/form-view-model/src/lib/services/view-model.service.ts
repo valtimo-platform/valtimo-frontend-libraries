@@ -74,12 +74,14 @@ export class ViewModelService extends BaseApiService {
 
   public getViewModelForStartForm(
     formName: string,
-    processDefinitionKey: string
+    processDefinitionKey: string,
+    documentId: string = null,
   ): Observable<object> {
     return this.httpClient.get<any>(this.getApiUrl('/v1/form/view-model/start-form'), {
       params: {
         formName,
         processDefinitionKey,
+        documentId,
       },
       headers: new HttpHeaders().set(InterceptorSkip, '400'),
     });
