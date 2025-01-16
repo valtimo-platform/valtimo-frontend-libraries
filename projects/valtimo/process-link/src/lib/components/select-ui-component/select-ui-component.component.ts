@@ -51,9 +51,6 @@ export class SelectUIComponentComponent implements OnInit, OnDestroy {
       tap(formCustomComponentListItems => {
         const selectedItem = formCustomComponentListItems.find(item => item.selected);
 
-        console.log(formCustomComponentListItems);
-        console.log(selectedItem);
-
         if (selectedItem) {
           this.selectCustomComponent(selectedItem);
         }

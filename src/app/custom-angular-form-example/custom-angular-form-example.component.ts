@@ -41,14 +41,5 @@ export class CustomAngularFormExampleComponent implements FormCustomComponent {
   public readonly documentDefinitionName$ = new BehaviorSubject<string>(undefined);
 
 
-  constructor() {
-    this.taskInstanceId$.subscribe((value) => {
-      console.log(value);
-    });
-
-    // setTimeout(() => {
-    //   console.log('fkjsbdkjsba');
-    //   this.submitEvent.emit(true);
-    // }, 10000)
-  }
+  constructor() {}
 }

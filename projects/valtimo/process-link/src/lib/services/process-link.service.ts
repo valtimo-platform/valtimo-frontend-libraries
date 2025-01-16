@@ -90,8 +90,6 @@ export class ProcessLinkService {
       | URLProcessLinkCreateDto
       | UIComponentProcessLinkCreateRequestDto
   ): Observable<null> {
-    console.log(saveProcessLinkRequest);
-
     return this.http.post<null>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link`,
       this.emptyStringToNull(saveProcessLinkRequest)
