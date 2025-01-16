@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
@@ -26,25 +26,33 @@ import {
   map,
   Observable,
   of,
-  repeat,
+  startWith,
   switchMap,
   tap,
 } from 'rxjs';
-import {LayerModule, LoadingModule, TagModule, TilesModule} from 'carbon-components-angular';
+import {
+  IconModule,
+  IconService,
+  LayerModule,
+  LoadingModule,
+  TagModule,
+  TilesModule,
+} from 'carbon-components-angular';
 import {
   CAN_VIEW_TASK_PERMISSION,
   TASK_DETAIL_PERMISSION_RESOURCE,
   TaskDetailModalComponent,
   TaskModule,
 } from '@valtimo/task';
-import {ProcessService} from '@valtimo/process';
+import {SseService} from '@valtimo/sse';
+import {TaskUpdateSseEvent} from '@valtimo/task';
 import {DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
 import {PermissionService} from '@valtimo/access-control';
-import {UserProviderService} from '@valtimo/security';
 import moment from 'moment';
 import {DossierDetailLayoutService} from '../../services';
 import {ProcessLinkService, TaskWithProcessLink} from '@valtimo/process-link';
+import {UserFilled20} from '@carbon/icons';
 
 moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
@@ -65,9 +73,10 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
     LayerModule,
     TagModule,
     CarbonListModule,
+    IconModule,
   ],
 })
-export class DossierDetailTaskListComponent {
+export class DossierDetailTaskListComponent implements OnInit {
   @ViewChild('taskDetail') private readonly _taskDetailModal: TaskDetailModalComponent;
 
   @Input() public set openTaskAndProcessLinkInModal(value: TaskWithProcessLink) {
@@ -86,16 +95,21 @@ export class DossierDetailTaskListComponent {
     filter(documentId => !!documentId)
   );
 
+  private readonly _taskUpdateSseEvent$: Observable<TaskUpdateSseEvent> = combineLatest([
+    this.sseService.getSseEventObservable<TaskUpdateSseEvent>('TASK_UPDATE'),
+    this._documentId$,
+  ]).pipe(
+    filter(([event, documentId]) => event.documentId === documentId),
+    map(([event]) => event),
+    startWith(null)
+  );
+
   public readonly processInstanceTasks$: Observable<{
     myTasks: TaskWithProcessLink[];
     otherTasks: TaskWithProcessLink[];
-  }> = this._refresh$.pipe(
+  }> = combineLatest([this._refresh$, this._taskUpdateSseEvent$]).pipe(
     switchMap(() => this._documentId$),
-    switchMap(documentId =>
-      this.documentService
-        .findProcessDocumentInstances(documentId)
-        .pipe(repeat({count: 5, delay: 1500}))
-    ),
+    switchMap(documentId => this.documentService.findProcessDocumentInstances(documentId)),
     switchMap(processDocumentInstances =>
       combineLatest([
         ...processDocumentInstances.map(processDocumentInstance =>
@@ -138,13 +152,17 @@ export class DossierDetailTaskListComponent {
 
   constructor(
     private readonly documentService: DocumentService,
-    private readonly processService: ProcessService,
+    private readonly iconService: IconService,
     private readonly route: ActivatedRoute,
     private readonly permissionService: PermissionService,
-    private readonly userProviderService: UserProviderService,
+    private readonly sseService: SseService,
     private readonly dossierDetailLayoutService: DossierDetailLayoutService,
     private readonly processLinkService: ProcessLinkService
   ) {}
+
+  public ngOnInit(): void {
+    this.iconService.registerAll([UserFilled20]);
+  }
 
   public rowTaskClick(tasWithProcessLinkk: TaskWithProcessLink): void {
     if (tasWithProcessLinkk.task.isLocked) return;
