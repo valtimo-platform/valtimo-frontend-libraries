@@ -123,7 +123,6 @@ import {
 } from '@valtimo/zgw';
 import {LoggingModule} from '@valtimo/logging';
 import {FormViewModelModule} from '@valtimo/form-view-model';
-import {CustomAngularFormExampleComponent} from '@src/app/custom-angular-form-example/custom-angular-form-example.component';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -260,12 +259,6 @@ export function tabsFactory() {
       provide: CUSTOM_CASE_WIDGET_TOKEN,
       useValue: {
         caseWidgetComponent: CustomDossierTabComponent,
-      },
-    },
-    {
-      provide: FORM_CUSTOM_COMPONENT_TOKEN,
-      useValue: {
-        exampleComponent: CustomAngularFormExampleComponent,
       },
     },
   ],
