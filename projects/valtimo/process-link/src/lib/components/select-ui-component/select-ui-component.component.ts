@@ -57,7 +57,7 @@ export class SelectUIComponentComponent implements OnInit, OnDestroy {
       })
     );
 
-    private _subscriptions = new Subscription();
+    private readonly _subscriptions = new Subscription();
 
     private selectedCustomComponent: ListItem;
 
