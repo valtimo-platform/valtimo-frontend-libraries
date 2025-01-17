@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {PageTitleService} from '@valtimo/components';
-import {startWith, tap} from 'rxjs';
-import {person} from '../../mocks/person.mock';
+import {TabsModule} from 'carbon-components-angular';
+import {tap} from 'rxjs';
+
 import {Person} from '../../models';
 import {PersonService} from '../../services/person.service';
 import {FamilyTabComponent, GeneralTabComponent, OngoingCasesTabComponent} from './tabs';
-import {TabsModule} from 'carbon-components-angular';
-import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   templateUrl: './client-details.component.html',
@@ -43,8 +42,7 @@ export class ClientDetailsComponent implements OnDestroy {
   public readonly person$ = this.personService.person$.pipe(
     tap((person: Person | null) => {
       if (!!person) this.pageTitleService.setCustomPageTitle(person.naam.volledigeNaam, true);
-    }),
-    startWith(person)
+    })
   );
 
   constructor(
