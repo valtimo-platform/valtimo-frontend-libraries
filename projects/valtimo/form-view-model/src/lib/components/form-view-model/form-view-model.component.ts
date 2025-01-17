@@ -214,6 +214,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
       this.processDefinitionKey$,
       this.documentDefinitionName$,
       this.isStartForm$,
+      this.documentId$,
     ])
       .pipe(
         take(1),
@@ -224,12 +225,14 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
             processDefinitionKey,
             documentDefinitionName,
             isStartForm,
+            documentId,
           ]) =>
             isStartForm
               ? this.viewModelService
                   .submitViewModelForStartForm(
                     formName,
                     processDefinitionKey,
+                    documentId,
                     documentDefinitionName,
                     submission.data
                   )
@@ -415,13 +418,14 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
         switchMap(updating => {
           if (!updating) {
             this.loading$.next(true);
-            return combineLatest([this.formName$, this.processDefinitionKey$, this.change$]).pipe(
+            return combineLatest([this.formName$, this.processDefinitionKey$, this.change$, this.documentId$]).pipe(
               take(1),
-              switchMap(([formName, processDefinitionKey, change]) =>
+              switchMap(([formName, processDefinitionKey, change, documentId]) =>
                 this.viewModelService
                   .updateViewModelForStartForm(
                     formName,
                     processDefinitionKey,
+                    documentId,
                     change.data,
                     this.formio.formio.page,
                     this._isWizard

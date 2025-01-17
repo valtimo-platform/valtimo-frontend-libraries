@@ -90,6 +90,7 @@ export class ViewModelService extends BaseApiService {
   public updateViewModelForStartForm(
     formName: string,
     processDefinitionKey: string,
+    documentId: string,
     viewModel: object,
     page: number,
     isWizard: boolean
@@ -97,6 +98,7 @@ export class ViewModelService extends BaseApiService {
     const params = {
       formName,
       processDefinitionKey,
+      documentId,
       isWizard,
       ...(!isNaN(page) && {page}),
     };
@@ -109,6 +111,7 @@ export class ViewModelService extends BaseApiService {
   public submitViewModelForStartForm(
     formName: string,
     processDefinitionKey: string,
+    documentId: string,
     documentDefinitionName: string,
     viewModel: object
   ): Observable<object> {
@@ -119,6 +122,7 @@ export class ViewModelService extends BaseApiService {
         params: {
           formName,
           processDefinitionKey,
+          documentId,
           documentDefinitionName,
         },
         headers: new HttpHeaders().set(InterceptorSkip, '400'),
