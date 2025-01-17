@@ -59,7 +59,7 @@ export class SelectUIComponentComponent implements OnInit, OnDestroy {
 
     private _subscriptions = new Subscription();
 
-    private selectedCustomComponent: ListItem;
+    private _selectedCustomComponent: ListItem;
 
   constructor(
     private readonly stateService: ProcessLinkStateService,
@@ -80,9 +80,9 @@ export class SelectUIComponentComponent implements OnInit, OnDestroy {
   }
 
   public selectCustomComponent(selectedCustomComponent: ListItem): void {
-    this.selectedCustomComponent = selectedCustomComponent;
+    this._selectedCustomComponent = selectedCustomComponent;
 
-    this.selectedCustomComponent.content ? this.buttonService.enableSaveButton() : this.buttonService.disableSaveButton();
+    this._selectedCustomComponent.content ? this.buttonService.enableSaveButton() : this.buttonService.disableSaveButton();
   }
 
   private openBackButtonSubscription(): void {
@@ -118,17 +118,17 @@ export class SelectUIComponentComponent implements OnInit, OnDestroy {
       .subscribe((selectedProcessLink) => {
         const updateProcessLinkRequest: UIComponentProcessLinkUpdateRequestDto = {
           id: selectedProcessLink.id,
-          componentKey: this.selectedCustomComponent.content,
+          componentKey: this._selectedCustomComponent.content,
         };
 
-        this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
-          () => {
+        this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe({
+          next: () => {
             this.stateService.closeModal();
           },
-          () => {
+          error: () => {
             this.stateService.stopSaving();
           }
-        );
+        });
       });
   }
 
@@ -140,20 +140,20 @@ export class SelectUIComponentComponent implements OnInit, OnDestroy {
         take(1),
         switchMap(([modalParams, processLinkTypeId]) =>
           this.processLinkService.saveProcessLink({
-            componentKey: this.selectedCustomComponent.content,
+            componentKey: this._selectedCustomComponent.content,
             activityType: modalParams.element.activityListenerType || '',
             processDefinitionId: modalParams.processDefinitionId,
             processLinkType: processLinkTypeId,
             activityId: modalParams.element.id
           })
         )
-      ).subscribe(
-        () => {
+      ).subscribe({
+        next: () => {
           this.stateService.closeModal();
         },
-        () => {
+        error: () => {
           this.stateService.stopSaving();
         }
-      );
+      });
   }
 }

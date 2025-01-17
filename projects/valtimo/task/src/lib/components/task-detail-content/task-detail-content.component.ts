@@ -408,7 +408,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
     });
   }
 
-  private setFormCustomComponent(formCustomComponentKey: string) {
+  private setFormCustomComponent(formCustomComponentKey: string): void {
     this._viewInitialized$.subscribe((viewInitialized) => {
       if (viewInitialized) {
         this.formCustomComponentDynamicContainer.clear();

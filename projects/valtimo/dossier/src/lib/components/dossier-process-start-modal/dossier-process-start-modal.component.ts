@@ -285,7 +285,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
     );
   }
 
-  private setFormCustomComponent(formCustomComponentKey: string) {
+  private setFormCustomComponent(formCustomComponentKey: string): void {
     this.formCustomComponentDynamicContainer.clear();
     if (!this.formCustomComponentConfig) return;
     this._formCustomComponentConfig$.pipe(take(1)).subscribe(
