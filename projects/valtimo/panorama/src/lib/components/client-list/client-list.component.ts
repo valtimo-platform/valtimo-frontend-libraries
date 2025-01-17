@@ -1,18 +1,27 @@
+/*
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {CommonModule} from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CarbonListItem, CarbonListModule, ColumnConfig, ViewType} from '@valtimo/components';
 import {ButtonModule, IconModule, IconService, InputModule} from 'carbon-components-angular';
 import {BehaviorSubject, map, Observable, of, startWith, switchMap} from 'rxjs';
-import {lopendeZaken, person} from '../../mocks';
 import {Person} from '../../models';
 import {LopendeZaakApiService, PersonApiService, PersonService} from '../../services';
 import {Search16, TrashCan16} from '@carbon/icons';
@@ -82,7 +91,6 @@ export class ClientListComponent {
     private readonly personApiService: PersonApiService,
     private readonly translateService: TranslateService,
     private readonly personService: PersonService,
-    private readonly lopendeZaakService: LopendeZaakApiService,
     private readonly router: Router,
     private readonly iconService: IconService
   ) {
@@ -91,7 +99,6 @@ export class ClientListComponent {
 
   public onRowClick(person: Person): void {
     this.personService.personDetailsOpen(person);
-    this.lopendeZaakService.lopendeZakenOpen(lopendeZaken.results);
     this.router.navigate([`/panorama/${person.burgerservicenummer}`]);
   }
 

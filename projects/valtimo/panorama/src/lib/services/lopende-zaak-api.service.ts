@@ -1,28 +1,34 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, filter} from 'rxjs';
-import {LopendeZaak, Person} from '../models';
-import {lopendeZaken} from '../mocks';
-import {BaseApiService, ConfigService} from '@valtimo/config';
+/*
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BaseApiService, ConfigService} from '@valtimo/config';
+import {Observable} from 'rxjs';
+import {LopendeZaak} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LopendeZaakApiService extends BaseApiService {
-  private readonly _lopendeZaaken$ = new BehaviorSubject<LopendeZaak[]>(lopendeZaken.results);
-  public readonly lopendeZaaken$ = this._lopendeZaaken$.pipe(
-    filter((lopendeZaaken: LopendeZaak[]) => lopendeZaaken.length > 0)
-  );
-
   constructor(
     protected readonly httpClient: HttpClient,
     protected readonly configService: ConfigService
   ) {
     super(httpClient, configService);
-  }
-
-  public lopendeZakenOpen(zaken: LopendeZaak[]): void {
-    this._lopendeZaaken$.next(zaken);
   }
 
   public getLopendeZaken(bsn: string | null): Observable<{results: LopendeZaak[]}> {
