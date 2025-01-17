@@ -1832,7 +1832,8 @@
     "plugin": "Plugin",
     "form": "Form",
     "form-flow": "FormFlow",
-    "url": "URL"
+    "url": "URL",
+    "ui-component": "UI Component"
   },
   "processLinkSteps": {
     "chooseProcessLinkType": "Choose link type",
@@ -1863,7 +1864,8 @@
     "configurePluginAction": "Configure your action",
     "selectURL": "Configure your URL",
     "subtitles": "Subtitles",
-    "addSubtitle": "Add subtitle"
+    "addSubtitle": "Add subtitle",
+    "uiComponent": "Select UI component"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "No plugin configurations are available. Create a plugin configuration to be able to link it to a process step.",

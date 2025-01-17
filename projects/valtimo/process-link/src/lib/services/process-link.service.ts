@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ConfigService} from '@valtimo/config';
 import {map, Observable} from 'rxjs';
+
 import {
+  FormFlowProcessLinkCreateRequestDto,
   FormFlowProcessLinkUpdateRequestDto,
+  FormProcessLinkCreateRequestDto,
   FormProcessLinkUpdateRequestDto,
   FormSubmissionResult,
   GetProcessLinkRequest,
   GetProcessLinkResponse,
+  PluginProcessLinkCreateDto,
   PluginProcessLinkUpdateDto,
   ProcessLinkCreateEvent,
   ProcessLinkType,
   TaskWithProcessLink,
+  UIComponentProcessLinkCreateRequestDto,
+  UIComponentProcessLinkUpdateRequestDto,
+  URLProcessLinkCreateDto,
   URLProcessLinkUpdateRequestDto,
 } from '../models';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {URLVariables} from '../models/process-link-url.model';
 
 @Injectable({
@@ -74,6 +80,7 @@ export class ProcessLinkService {
       | FormFlowProcessLinkUpdateRequestDto
       | FormProcessLinkUpdateRequestDto
       | URLProcessLinkUpdateRequestDto
+      | UIComponentProcessLinkUpdateRequestDto
   ): Observable<null> {
     return this.http.put<null>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link`,
@@ -81,7 +88,14 @@ export class ProcessLinkService {
     );
   }
 
-  public saveProcessLink(saveProcessLinkRequest: ProcessLinkCreateEvent): Observable<null> {
+  saveProcessLink(
+    saveProcessLinkRequest:
+      | FormProcessLinkCreateRequestDto
+      | FormFlowProcessLinkCreateRequestDto
+      | PluginProcessLinkCreateDto
+      | URLProcessLinkCreateDto
+      | UIComponentProcessLinkCreateRequestDto
+  ): Observable<null> {
     return this.http.post<null>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link`,
       this.emptyStringToNull(saveProcessLinkRequest)
