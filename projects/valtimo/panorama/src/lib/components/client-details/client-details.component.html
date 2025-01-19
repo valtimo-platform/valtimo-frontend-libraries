@@ -16,14 +16,14 @@
 
 <cds-tabs>
   <cds-tab active="true" [heading]="'panorama.tabs.general' | translate">
-    <panorama-general-tab [person]="person$ | async"></panorama-general-tab>
+    <valtimo-panorama-general-tab [person]="person$ | async"></valtimo-panorama-general-tab>
   </cds-tab>
 
   <cds-tab [heading]="'panorama.tabs.family' | translate">
-    <panorama-family-tab [person]="person$ | async"></panorama-family-tab>
+    <valtimo-panorama-family-tab [person]="person$ | async"></valtimo-panorama-family-tab>
   </cds-tab>
 
   <cds-tab [heading]="'panorama.tabs.ongoingCases' | translate">
-    <panorama-ongoing-cases-tab></panorama-ongoing-cases-tab
+    <valtimo-panorama-ongoing-cases-tab></valtimo-panorama-ongoing-cases-tab
   ></cds-tab>
 </cds-tabs>

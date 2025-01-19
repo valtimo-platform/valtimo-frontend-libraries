@@ -27,7 +27,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {Person} from '../../../../models';
 
 @Component({
-  selector: 'panorama-family-tab',
+  selector: 'valtimo-panorama-family-tab',
   templateUrl: './family.component.html',
   styleUrl: './family.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,5 +37,5 @@ import {Person} from '../../../../models';
 })
 export class FamilyTabComponent {
   @Input() public person: Person;
-  @HostBinding('class') public readonly class = 'panorama-family-tab';
+  @HostBinding('class') public readonly class = 'valtimo-panorama-family-tab';
 }

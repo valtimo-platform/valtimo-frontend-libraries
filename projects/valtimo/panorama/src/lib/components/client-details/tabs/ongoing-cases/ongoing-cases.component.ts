@@ -25,7 +25,7 @@ import {ViewContentService, ViewType} from '@valtimo/components';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
-  selector: 'panorama-ongoing-cases-tab',
+  selector: 'valtimo-panorama-ongoing-cases-tab',
   templateUrl: './ongoing-cases.component.html',
   styleUrl: './ongoing-cases.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -34,7 +34,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
   imports: [CommonModule, TranslateModule, InputModule, AccordionModule],
 })
 export class OngoingCasesTabComponent {
-  @HostBinding('class') public readonly class = 'panorama-ongoing-cases-tab';
+  @HostBinding('class') public readonly class = 'valtimo-panorama-ongoing-cases-tab';
 
   public readonly cases$ = this.route.paramMap.pipe(
     switchMap((params: ParamMap) => this.lopendeZaakApiService.getLopendeZaken(params.get('bsn'))),

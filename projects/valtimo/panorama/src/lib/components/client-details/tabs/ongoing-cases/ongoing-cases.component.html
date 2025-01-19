@@ -15,7 +15,7 @@
   -->
 
 @for (case of cases$ | async; track case.uuid) {
-  <div class="panorama-ongoing-cases-tab__case">
+  <div class="valtimo-panorama-ongoing-cases-tab__case">
     <cds-text-label>
       {{ 'panorama.lopendeZaak.id' | translate }}
 
@@ -36,11 +36,11 @@
 
     <cds-accordion>
       <cds-accordion-item
-        class="panorama-ongoing-cases-tab__history"
+        class="valtimo-panorama-ongoing-cases-tab__history"
         [title]="'panorama.lopendeZaak.statusHistory' | translate"
       >
         @for (status of case.statusGeschiedenis; track status.statusOmschrijving) {
-          <div class="panorama-ongoing-cases-tab__status">
+          <div class="valtimo-panorama-ongoing-cases-tab__status">
             <cds-text-label>
               {{ 'panorama.lopendeZaak.statusDescription' | translate }}
 

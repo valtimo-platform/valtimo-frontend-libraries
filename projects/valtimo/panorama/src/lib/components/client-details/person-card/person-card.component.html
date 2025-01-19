@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<div *ngIf="person$ | async as person" class="panorama-person-card">
+<div *ngIf="person$ | async as person" class="valtimo-panorama-person-card">
   <cds-text-label>
     {{ 'panorama.details.name' | translate }}
 
@@ -43,7 +43,7 @@
     {{ 'panorama.details.address' | translate }}
 
     <textarea
-      class="panorama-person-card__address"
+      class="valtimo-panorama-person-card__address"
       cdsTextArea
       [readonly]="true"
       [value]="person.formattedAddress || '-'"

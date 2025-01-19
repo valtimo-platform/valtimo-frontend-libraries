@@ -20,7 +20,7 @@ import {Person} from '../../../../models';
 import {PersonCardComponent} from '../../person-card/person-card.component';
 
 @Component({
-  selector: 'panorama-general-tab',
+  selector: 'valtimo-panorama-general-tab',
   templateUrl: './general.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,

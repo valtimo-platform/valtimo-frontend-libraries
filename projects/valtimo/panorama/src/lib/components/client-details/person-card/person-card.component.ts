@@ -23,7 +23,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {ViewContentService, ViewType} from '@valtimo/components';
 
 @Component({
-  selector: 'panorama-person-card',
+  selector: 'valtimo-panorama-person-card',
   templateUrl: './person-card.component.html',
   styleUrl: './person-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
