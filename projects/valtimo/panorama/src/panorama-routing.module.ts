@@ -25,7 +25,7 @@ const routes: Routes = [
     path: 'panorama',
     component: ClientListComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Panorama', roles: [ROLE_USER]},
+    data: {title: 'Klantbeeld', roles: [ROLE_USER]},
   },
   {
     path: 'panorama/:bsn',
