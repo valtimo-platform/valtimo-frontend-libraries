@@ -25,14 +25,18 @@ import {LoadingModule} from 'carbon-components-angular';
 @Component({
   selector: 'valtimo-panorama-general-tab',
   templateUrl: './general.component.html',
+  styleUrl: './general.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule, PersonCardComponent, LoadingModule],
 })
 export class GeneralTabComponent {
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly person$: Observable<Person | null> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) => this.personApiService.getPersonDetails(params.get('bsn'))),
-    tap(() => {})
+    tap(() => {
+      this.loading$.next(false);
+    })
   );
 
   constructor(

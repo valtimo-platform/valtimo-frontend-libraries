@@ -35,6 +35,7 @@ import {LopendeZaakApiService} from '../../../../services';
 export class OngoingCasesTabComponent {
   @HostBinding('class') public readonly class = 'valtimo-panorama-ongoing-cases-tab';
 
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly cases$ = this.route.paramMap.pipe(
     switchMap((params: ParamMap) => this.lopendeZaakApiService.getLopendeZaken(params.get('bsn'))),
     map((cases: {results: LopendeZaak[]}) =>
@@ -54,7 +55,8 @@ export class OngoingCasesTabComponent {
           })),
         };
       })
-    )
+    ),
+    tap(() => this.loading$.next(false))
   );
 
   constructor(

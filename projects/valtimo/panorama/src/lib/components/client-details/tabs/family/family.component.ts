@@ -36,8 +36,7 @@ import {LoadingModule} from 'carbon-components-angular';
 export class FamilyTabComponent {
   @HostBinding('class') public readonly class = 'valtimo-panorama-family-tab';
   public readonly person$: Observable<Person | null> = this.route.paramMap.pipe(
-    switchMap((params: ParamMap) => this.personApiService.getPersonDetails(params.get('bsn'))),
-    tap(() => console.log('family loaded'))
+    switchMap((params: ParamMap) => this.personApiService.getPersonDetails(params.get('bsn')))
   );
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);

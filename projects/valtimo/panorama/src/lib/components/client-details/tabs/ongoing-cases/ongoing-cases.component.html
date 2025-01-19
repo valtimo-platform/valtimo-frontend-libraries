@@ -14,6 +14,10 @@
   ~ limitations under the License.
   -->
 
+@if (loading$ | async) {
+  <cds-loading class="valtimo-panorama-ongoing-cases-tab__loading"></cds-loading>
+}
+
 @for (case of cases$ | async; track case.uuid) {
   <div class="valtimo-panorama-ongoing-cases-tab__case">
     <cds-text-label>

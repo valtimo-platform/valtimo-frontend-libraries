@@ -22,6 +22,10 @@
     loading: loading$ | async,
   } as obs"
 >
+  @if (obs.loading) {
+    <cds-loading class="valtimo-panorama-family-tab__loading"></cds-loading>
+  }
+
   @if (obs.person?.partners?.length > 0) {
     <h3>{{ 'panorama.family.partners' | translate }}</h3>
 

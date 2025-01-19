@@ -14,4 +14,10 @@
   ~ limitations under the License.
   -->
 
-<valtimo-panorama-person-card [person]="person$ | async"></valtimo-panorama-person-card>
+<ng-container *ngIf="{loading: loading$ | async, person: person$ | async} as obs">
+  @if (obs.loading) {
+    <cds-loading></cds-loading>
+  } @else {
+    <valtimo-panorama-person-card [person]="obs.person"></valtimo-panorama-person-card>
+  }
+</ng-container>
