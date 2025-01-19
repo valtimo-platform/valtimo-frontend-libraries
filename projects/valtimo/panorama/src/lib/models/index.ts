@@ -16,3 +16,4 @@
 
 export * from './person.model';
 export * from './lopende-zaak.model';
+export * from './tabs.model';

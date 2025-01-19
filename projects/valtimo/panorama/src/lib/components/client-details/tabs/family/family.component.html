@@ -14,32 +14,54 @@
   ~ limitations under the License.
   -->
 
-@if (person.kinderen?.length > 0) {
-  <h3>{{ 'panorama.family.children' | translate }}</h3>
+<ng-container
+  *ngIf="{
+    person: person$ | async,
+    childrenFields: childrenFields$ | async,
+    children: children$ | async,
+    loading: loading$ | async,
+  } as obs"
+>
+  @if (obs.person?.partners?.length > 0) {
+    <h3>{{ 'panorama.family.partners' | translate }}</h3>
 
-  <section class="valtimo-panorama-family-tab__content">
-    @for (child of person.kinderen; track child.burgerservicenummer) {
-      <valtimo-panorama-person-card [person]="child" isFamilyCard="true"></valtimo-panorama-person-card>
-    }
-  </section>
-}
+    <section class="valtimo-panorama-family-tab__content">
+      <valtimo-panorama-person-card
+        [person]="obs.person"
+        isFamilyCard="true"
+      ></valtimo-panorama-person-card>
 
-@if (person.partners?.length > 0) {
-  <h3>{{ 'panorama.family.partners' | translate }}</h3>
+      @for (partner of obs.person.partners; track partner.burgerservicenummer) {
+        <valtimo-panorama-person-card
+          [person]="partner"
+          isFamilyCard="true"
+        ></valtimo-panorama-person-card>
+      }
+    </section>
+  }
 
-  <section class="valtimo-panorama-family-tab__content">
-    @for (partner of person.partners; track partner.burgerservicenummer) {
-      <valtimo-panorama-person-card [person]="partner" isFamilyCard="true"></valtimo-panorama-person-card>
-    }
-  </section>
-}
+  @if (obs.person?.kinderen?.length > 0) {
+    <h3>{{ 'panorama.family.children' | translate }}</h3>
 
-@if (person.ouders?.length > 0) {
-  <h3>{{ 'panorama.family.parents' | translate }}</h3>
+    <valtimo-carbon-list
+      [header]="false"
+      [hideToolbar]="true"
+      [fields]="obs.childrenFields"
+      [items]="obs.children"
+      [loading]="obs.loading"
+    ></valtimo-carbon-list>
+  }
 
-  <section class="valtimo-panorama-family-tab__content">
-    @for (parent of person.ouders; track parent.burgerservicenummer) {
-      <valtimo-panorama-person-card [person]="parent" isFamilyCard="true"></valtimo-panorama-person-card>
-    }
-  </section>
-}
+  @if (obs.person?.ouders?.length > 0) {
+    <h3>{{ 'panorama.family.parents' | translate }}</h3>
+
+    <section class="valtimo-panorama-family-tab__content">
+      @for (parent of obs.person.ouders; track parent.burgerservicenummer) {
+        <valtimo-panorama-person-card
+          [person]="parent"
+          isFamilyCard="true"
+        ></valtimo-panorama-person-card>
+      }
+    </section>
+  }
+</ng-container>

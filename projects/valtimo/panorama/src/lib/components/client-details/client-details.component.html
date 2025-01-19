@@ -14,16 +14,25 @@
   ~ limitations under the License.
   -->
 
-<cds-tabs>
-  <cds-tab active="true" [heading]="'panorama.tabs.general' | translate">
-    <valtimo-panorama-general-tab [person]="person$ | async"></valtimo-panorama-general-tab>
+<cds-tabs *ngIf="activeTab$ | async as activeTab">
+  <cds-tab
+    [active]="true"
+    [heading]="'panorama.tabs.general' | translate"
+    (selected)="onTabSelected('general')"
+  >
+    <valtimo-panorama-general-tab *ngIf="activeTab === 'general'"></valtimo-panorama-general-tab>
   </cds-tab>
 
-  <cds-tab [heading]="'panorama.tabs.family' | translate">
-    <valtimo-panorama-family-tab [person]="person$ | async"></valtimo-panorama-family-tab>
+  <cds-tab [heading]="'panorama.tabs.family' | translate" (selected)="onTabSelected('family')">
+    <valtimo-panorama-family-tab *ngIf="activeTab === 'family'"></valtimo-panorama-family-tab>
   </cds-tab>
 
-  <cds-tab [heading]="'panorama.tabs.ongoingCases' | translate">
-    <valtimo-panorama-ongoing-cases-tab></valtimo-panorama-ongoing-cases-tab
+  <cds-tab
+    [heading]="'panorama.tabs.ongoingCases' | translate"
+    (selected)="onTabSelected('ongoingCases')"
+  >
+    <valtimo-panorama-ongoing-cases-tab
+      *ngIf="activeTab === 'ongoingCases'"
+    ></valtimo-panorama-ongoing-cases-tab
   ></cds-tab>
 </cds-tabs>

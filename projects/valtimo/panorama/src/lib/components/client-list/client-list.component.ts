@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, HostBinding, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {Search16, TrashCan16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CarbonListItem, CarbonListModule, ColumnConfig, ViewType} from '@valtimo/components';
 import {ButtonModule, IconModule, IconService, InputModule} from 'carbon-components-angular';
-import {BehaviorSubject, map, Observable, of, startWith, switchMap} from 'rxjs';
+import {BehaviorSubject, map, Observable, startWith, switchMap} from 'rxjs';
 import {Person} from '../../models';
-import {LopendeZaakApiService, PersonApiService, PersonService} from '../../services';
-import {Search16, TrashCan16} from '@carbon/icons';
+import {PersonApiService} from '../../services';
 
 @Component({
   templateUrl: './client-list.component.html',
@@ -90,7 +89,6 @@ export class ClientListComponent {
     private readonly fb: FormBuilder,
     private readonly personApiService: PersonApiService,
     private readonly translateService: TranslateService,
-    private readonly personService: PersonService,
     private readonly router: Router,
     private readonly iconService: IconService
   ) {
@@ -98,7 +96,6 @@ export class ClientListComponent {
   }
 
   public onRowClick(person: Person): void {
-    this.personService.personDetailsOpen(person);
     this.router.navigate([`/panorama/${person.burgerservicenummer}`]);
   }
 

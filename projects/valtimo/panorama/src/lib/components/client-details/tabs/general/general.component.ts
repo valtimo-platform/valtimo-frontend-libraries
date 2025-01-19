@@ -13,19 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {BehaviorSubject, Observable, switchMap, tap} from 'rxjs';
 import {Person} from '../../../../models';
+import {PersonApiService} from '../../../../services';
 import {PersonCardComponent} from '../../person-card/person-card.component';
+import {LoadingModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-panorama-general-tab',
   templateUrl: './general.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, PersonCardComponent],
+  imports: [CommonModule, PersonCardComponent, LoadingModule],
 })
 export class GeneralTabComponent {
-  @Input() public person: Person;
+  public readonly person$: Observable<Person | null> = this.route.paramMap.pipe(
+    switchMap((params: ParamMap) => this.personApiService.getPersonDetails(params.get('bsn'))),
+    tap(() => {})
+  );
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly personApiService: PersonApiService
+  ) {}
 }

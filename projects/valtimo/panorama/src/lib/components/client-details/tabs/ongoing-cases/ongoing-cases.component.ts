@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, HostBinding, ViewEncapsulation} from '@angular/core';
-import {TranslateModule} from '@ngx-translate/core';
-import {AccordionModule, InputModule} from 'carbon-components-angular';
-import {LopendeZaakApiService} from '../../../../services';
-import {Observable, map, switchMap, tap} from 'rxjs';
-import {LopendeStatus, LopendeZaak} from '../../../../models';
-import {ViewContentService, ViewType} from '@valtimo/components';
 import {ActivatedRoute, ParamMap} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
+import {ViewContentService, ViewType} from '@valtimo/components';
+import {AccordionModule, InputModule, LoadingModule} from 'carbon-components-angular';
+import {BehaviorSubject, map, switchMap, tap} from 'rxjs';
+import {LopendeStatus, LopendeZaak} from '../../../../models';
+import {LopendeZaakApiService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-panorama-ongoing-cases-tab',
@@ -31,7 +30,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, TranslateModule, InputModule, AccordionModule],
+  imports: [CommonModule, TranslateModule, InputModule, AccordionModule, LoadingModule],
 })
 export class OngoingCasesTabComponent {
   @HostBinding('class') public readonly class = 'valtimo-panorama-ongoing-cases-tab';
@@ -55,10 +54,7 @@ export class OngoingCasesTabComponent {
           })),
         };
       })
-    ),
-    tap(res => {
-      console.log({res});
-    })
+    )
   );
 
   constructor(

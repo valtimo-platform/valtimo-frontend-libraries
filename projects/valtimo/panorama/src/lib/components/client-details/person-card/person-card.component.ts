@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {Person} from '../../../models';
-import {InputModule} from 'carbon-components-angular';
 import {TranslateModule} from '@ngx-translate/core';
 import {ViewContentService, ViewType} from '@valtimo/components';
+import {InputModule} from 'carbon-components-angular';
+import {BehaviorSubject} from 'rxjs';
+import {Person} from '../../../models';
 
 @Component({
   selector: 'valtimo-panorama-person-card',
@@ -32,13 +31,17 @@ import {ViewContentService, ViewType} from '@valtimo/components';
 })
 export class PersonCardComponent {
   public readonly person$ = new BehaviorSubject<
-    (Partial<Person> & {formattedAddress: string; formattedDateOfBirth: string}) | null
+    | (Partial<Person> & {formattedAddress: string; formattedDateOfBirth: string; fullName: string})
+    | null
   >(null);
   @Input() public set person(value: Partial<Person> | null) {
     if (!value) return;
 
     this.person$.next({
       ...value,
+      fullName:
+        value.naam?.volledigeNaam ??
+        `${value.naam?.voornamen} ${value.naam?.voorvoegsel ?? ''}${value.naam?.voorvoegsel ? ' ' : ''}${value.naam?.geslachtsnaam}`,
       formattedDateOfBirth: this.viewContentService.get(value.geboorte?.datum.datum, {
         viewType: ViewType.DATE,
         format: 'DD/MM/YYYY',

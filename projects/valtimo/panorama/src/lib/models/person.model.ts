@@ -30,6 +30,7 @@ export interface PersonName {
   geslachtsnaam: string;
   voorletters: string;
   volledigeNaam: string;
+  voorvoegsel: string;
 }
 
 export interface PersonGender {

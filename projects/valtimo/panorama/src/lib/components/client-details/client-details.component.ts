@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {PageTitleService} from '@valtimo/components';
 import {TabsModule} from 'carbon-components-angular';
-import {tap} from 'rxjs';
-
-import {Person} from '../../models';
-import {PersonService} from '../../services/person.service';
+import {BehaviorSubject, Observable, switchMap, tap, Subscription} from 'rxjs';
+import {PanoramaTab, Person} from '../../models';
+import {PersonApiService} from '../../services';
 import {FamilyTabComponent, GeneralTabComponent, OngoingCasesTabComponent} from './tabs';
 
 @Component({
@@ -38,19 +38,34 @@ import {FamilyTabComponent, GeneralTabComponent, OngoingCasesTabComponent} from 
     OngoingCasesTabComponent,
   ],
 })
-export class ClientDetailsComponent implements OnDestroy {
-  public readonly person$ = this.personService.person$.pipe(
-    tap((person: Person | null) => {
-      if (!!person) this.pageTitleService.setCustomPageTitle(person.naam.volledigeNaam, true);
-    })
-  );
+export class ClientDetailsComponent implements OnInit, OnDestroy {
+  public readonly activeTab$ = new BehaviorSubject<PanoramaTab>('general');
+  private readonly _subscriptions = new Subscription();
 
   constructor(
-    private readonly personService: PersonService,
+    private readonly route: ActivatedRoute,
+    private readonly personApiService: PersonApiService,
     private readonly pageTitleService: PageTitleService
   ) {}
 
+  public ngOnInit(): void {
+    this._subscriptions.add(
+      this.route.paramMap
+        .pipe(
+          switchMap((params: ParamMap) => this.personApiService.getPersonDetails(params.get('bsn')))
+        )
+        .subscribe(person => {
+          if (!!person) this.pageTitleService.setCustomPageTitle(person.naam.volledigeNaam, true);
+        })
+    );
+  }
+
   public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
     this.pageTitleService.enableReset();
+  }
+
+  public onTabSelected(tab: PanoramaTab): void {
+    this.activeTab$.next(tab);
   }
 }
