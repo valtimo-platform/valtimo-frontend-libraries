@@ -14,19 +14,41 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, Inject, OnDestroy, Optional} from '@angular/core';
 import {ProcessLinkStateService} from '../../services';
+import { FormCustomComponentConfig, ProcessLinkType } from '../../models';
+import { FORM_CUSTOM_COMPONENT_TOKEN } from '../../constants';
+import { map, Subscription } from 'rxjs';
 
 @Component({
   selector: 'valtimo-choose-process-link-type',
   templateUrl: './choose-process-link-type.component.html',
   styleUrls: ['./choose-process-link-type.component.scss'],
 })
-export class ChooseProcessLinkTypeComponent {
+export class ChooseProcessLinkTypeComponent implements OnDestroy {
   public readonly availableProcessLinkTypes$ =
-    this.processLinkStateService.availableProcessLinkTypes$;
+    this.processLinkStateService.availableProcessLinkTypes$.pipe(map((types) => {
+      if (!this.formCustomComponentConfig ) {
+        return types.map((type) => {
+          if (type.processLinkType === 'ui-component') {
+            type.enabled = false;
+          }
+          return type;
+        })
+      }
+    }));
 
-  constructor(private readonly processLinkStateService: ProcessLinkStateService) {}
+    private readonly _subscriptions = new Subscription();
+
+
+  constructor(
+    private readonly processLinkStateService: ProcessLinkStateService,
+    @Optional() @Inject(FORM_CUSTOM_COMPONENT_TOKEN) private readonly formCustomComponentConfig: FormCustomComponentConfig,
+  ) {}
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   selectProcessLinkType(processLinkTypeId: string): void {
     this.processLinkStateService.selectProcessLinkType(processLinkTypeId);
