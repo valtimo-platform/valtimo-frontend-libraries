@@ -879,6 +879,12 @@
       "title": "De editor verlaten",
       "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut de widget configuratie kan beschadigen."
     },
+    "processes": {
+      "buttonTextLabel": "Nieuwe procesknoptekst (Optioneel)",
+      "buttonTextPlaceholder": "Knop tekst",
+      "selectorLabel": "Nieuwe procesknop (Optioneel)",
+      "selectorPlaceholder": "Kies een proces"
+    },
     "saveModalContent": "Weet je zeker dat je de widget configuratie wilt opslaan? Het verwijderen of wijzigen van een attribuut kan de widget configuratie verbreken."
   },
   "zgw": {
@@ -1181,6 +1187,7 @@
     "collapse": "Inklappen",
     "expand": "Uitklappen",
     "download": "Download",
+    "duplicate": "Dupliceren",
     "openInNewTab": "In nieuw tabblad openen",
     "create": "Aanmaken",
     "save": "Opslaan",
@@ -1815,7 +1822,8 @@
     "plugin": "Plugin",
     "form": "Formulier",
     "form-flow": "FormFlow",
-    "url": "URL"
+    "url": "URL",
+    "ui-component": "UI Component"
   },
   "processLinkSteps": {
     "chooseProcessLinkType": "Kies soort koppeling",
@@ -1846,7 +1854,8 @@
     "configurePluginAction": "Configureer je actie",
     "selectURL": "Configureer je URL",
     "subtitles": "Ondertitels",
-    "addSubtitle": "Ondertitel toevoegen"
+    "addSubtitle": "Ondertitel toevoegen",
+    "uiComponent": "Selecteer UI component"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "Er zijn geen plugin-configuraties beschikbaar. Maak een pluginconfiguratie aan om deze te kunnen koppelen aan een processtap.",

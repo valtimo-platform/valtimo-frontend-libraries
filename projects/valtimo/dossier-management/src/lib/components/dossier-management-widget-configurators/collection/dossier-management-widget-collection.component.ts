@@ -64,6 +64,8 @@ import {debounceTime, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetFieldsService, WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
+import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   templateUrl: './dossier-management-widget-collection.component.html',
@@ -81,6 +83,7 @@ import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dos
     ButtonModule,
     IconModule,
     InputLabelModule,
+    DossierManagementWidgetProcessSelectorComponent,
   ],
 })
 export class DossierManagementWidgetCollectionComponent
@@ -133,6 +136,10 @@ export class DossierManagementWidgetCollectionComponent
     .widgetContent as WritableSignal<WidgetCollectionContent>;
   public readonly displayTypeItems: ListItem[] = this.widgetFieldsService.displayTypeItems;
 
+  public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
+    map((paramMap: ParamMap) => paramMap.get('name') ?? '')
+  );
+
   public WIDTH_ITEMS: ListItem[] = [
     {
       content: this.translateService.instant('widgetTabManagement.width.fullWidth'),
@@ -154,7 +161,8 @@ export class DossierManagementWidgetCollectionComponent
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService,
-    private readonly widgetFieldsService: WidgetFieldsService
+    private readonly widgetFieldsService: WidgetFieldsService,
+    private readonly route: ActivatedRoute
   ) {}
 
   public ngOnInit(): void {

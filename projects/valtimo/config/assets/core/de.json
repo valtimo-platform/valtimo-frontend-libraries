@@ -879,6 +879,12 @@
       "title": "Verlassen des Editors",
       "content": "Sind Sie sicher, dass Sie den Editor verlassen möchten? Möglicherweise gehen nicht gespeicherte Änderungen verloren. Beachten Sie beim Speichern, dass das Entfernen oder Ändern eines Attributs die Widget-Konfiguration zerstören kann."
     },
+    "processes": {
+      "buttonTextLabel": "Neuer Prozessschaltflächentext (Optional)",
+      "buttonTextPlaceholder": "Schaltflächentext",
+      "selectorLabel": "Schaltfläche Neuer Prozess (Optional)",
+      "selectorPlaceholder": "Wählen Sie einen Prozess"
+    },
     "saveModalContent": "Sind Sie sicher, dass Sie die Widget-Konfiguration speichern möchten? Das Entfernen oder Ändern eines Attributs kann die Widget-Konfiguration zerstören."
   },
   "zgw": {
@@ -1178,6 +1184,7 @@
     "collapse": "Kollaps",
     "expand": "Expandieren",
     "download": "Herunterladen",
+    "duplicate": "Duplikat",
     "openInNewTab": "In neuem Tab öffnen",
     "create": "Erstellen",
     "save": "Speichern",
@@ -1809,7 +1816,8 @@
     "plugin": "Plugin",
     "form": "Formular",
     "form-flow": "FormFlow",
-    "url": "URL"
+    "url": "URL",
+    "ui-component": "UI Component"
   },
   "processLinkSteps": {
     "chooseProcessLinkType": "Linktyp wählen",
@@ -1840,7 +1848,8 @@
     "configurePluginAction": "Konfigurieren Sie Ihre Aktion",
     "selectURL": "Konfigurieren Sie Ihre URL",
     "subtitles": "Untertitels",
-    "addSubtitle": "Untertitel hinzufügen"
+    "addSubtitle": "Untertitel hinzufügen",
+    "uiComponent": "UI-Komponente auswählen"
   },
   "processLinkTypeDisabledTooltip": {
     "plugin": "Es sind keine Plugin-Konfigurationen verfügbar. Erstellen Sie eine Plugin-Konfiguration, um sie mit einem Prozessschritt verknüpfen zu können.",

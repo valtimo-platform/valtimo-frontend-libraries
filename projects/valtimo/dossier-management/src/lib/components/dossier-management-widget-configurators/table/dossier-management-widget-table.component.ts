@@ -41,6 +41,8 @@ import {debounceTime, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
 import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
+import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   templateUrl: './dossier-management-widget-table.component.html',
@@ -57,6 +59,7 @@ import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dos
     ToggleModule,
     ButtonModule,
     InputLabelModule,
+    DossierManagementWidgetProcessSelectorComponent,
   ],
 })
 export class DossierManagementWidgetTableComponent
@@ -92,13 +95,19 @@ export class DossierManagementWidgetTableComponent
     () =>
       (this.widgetWizardService.widgetContent() as WidgetTableContent)?.firstColumnAsTitle || false
   );
+
+  public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
+    map((paramMap: ParamMap) => paramMap.get('name') ?? '')
+  );
+
   private readonly _contentValid = signal<boolean>(this.widgetWizardService.editMode());
   private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly cdsThemeService: CdsThemeService,
     private readonly fb: FormBuilder,
-    private readonly widgetWizardService: WidgetWizardService
+    private readonly widgetWizardService: WidgetWizardService,
+    private readonly route: ActivatedRoute
   ) {}
 
   public ngOnInit(): void {

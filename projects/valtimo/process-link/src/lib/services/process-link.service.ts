@@ -29,6 +29,8 @@ import {
   PluginProcessLinkUpdateDto,
   ProcessLinkType,
   TaskWithProcessLink,
+  UIComponentProcessLinkCreateRequestDto,
+  UIComponentProcessLinkUpdateRequestDto,
   URLProcessLinkCreateDto,
   URLProcessLinkUpdateRequestDto,
 } from '../models';
@@ -72,6 +74,7 @@ export class ProcessLinkService {
       | FormFlowProcessLinkUpdateRequestDto
       | FormProcessLinkUpdateRequestDto
       | URLProcessLinkUpdateRequestDto
+      | UIComponentProcessLinkUpdateRequestDto
   ): Observable<null> {
     return this.http.put<null>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link`,
@@ -85,6 +88,7 @@ export class ProcessLinkService {
       | FormFlowProcessLinkCreateRequestDto
       | PluginProcessLinkCreateDto
       | URLProcessLinkCreateDto
+      | UIComponentProcessLinkCreateRequestDto
   ): Observable<null> {
     return this.http.post<null>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link`,
@@ -92,14 +96,18 @@ export class ProcessLinkService {
     );
   }
 
-  private emptyStringToNull(object: any) {
-    Object.keys(object).forEach(key => {
-      if (typeof object[key] === 'object') {
-        this.emptyStringToNull(object[key]);
-      } else if (object[key] === '') {
-        object[key] = null;
-      }
-    });
+  private emptyStringToNull<T extends Record<string, any>>(object: T): T {
+    if (object && typeof object === 'object') {
+      Object.keys(object).forEach(key => {
+        const typedKey = key as keyof T;
+        const value = object[typedKey];
+        if (typeof value === 'object' && value !== null) {
+          this.emptyStringToNull(value);
+        } else if (value === '') {
+          object[typedKey] = null as any;
+        }
+      });
+    }
     return object;
   }
 
