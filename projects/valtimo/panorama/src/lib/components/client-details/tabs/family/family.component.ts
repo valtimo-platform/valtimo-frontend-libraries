@@ -16,13 +16,13 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, HostBinding, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {CarbonListModule, ColumnConfig, ViewType} from '@valtimo/components';
+import {LoadingModule} from 'carbon-components-angular';
 import {BehaviorSubject, map, Observable, switchMap, tap} from 'rxjs';
 import {Person} from '../../../../models';
 import {PersonApiService} from '../../../../services';
 import {PersonCardComponent} from '../../person-card/person-card.component';
-import {LoadingModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-panorama-family-tab',
@@ -40,28 +40,24 @@ export class FamilyTabComponent {
   );
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
-  public readonly childrenFields$: Observable<ColumnConfig[]> = this.translateService
-    .stream('key')
-    .pipe(
-      map(() => [
-        {
-          key: 'burgerservicenummer',
-          label: 'BSN',
-          viewType: ViewType.TEXT,
-        },
-        {
-          key: 'fullName',
-          label: this.translateService.instant('panorama.columns.fullName'),
-          viewType: ViewType.TEXT,
-        },
-        {
-          key: 'dateOfBirth',
-          label: this.translateService.instant('panorama.columns.dateOfBirth'),
-          viewType: ViewType.DATE,
-          format: 'DD/MM/YYYY',
-        },
-      ])
-    );
+  public readonly CHILDREN_FIELDS: ColumnConfig[] = [
+    {
+      key: 'burgerservicenummer',
+      label: 'BSN',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'fullName',
+      label: 'panorama.columns.fullName',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'dateOfBirth',
+      label: 'panorama.columns.dateOfBirth',
+      viewType: ViewType.DATE,
+      format: 'DD/MM/YYYY',
+    },
+  ];
 
   public readonly children$: Observable<
     (Partial<Person> & {fullName: string; dateOfBirth: string})[]
@@ -78,13 +74,10 @@ export class FamilyTabComponent {
             dateOfBirth: child.geboorte?.datum.datum ?? '-',
           }))
     ),
-    tap(person => {
-      this.loading$.next(false);
-    })
+    tap(() => this.loading$.next(false))
   );
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly personApiService: PersonApiService,
-    private readonly translateService: TranslateService
+    private readonly personApiService: PersonApiService
   ) {}
 }

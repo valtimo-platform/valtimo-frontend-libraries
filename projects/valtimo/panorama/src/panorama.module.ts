@@ -18,9 +18,9 @@ import {HttpClient} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '@valtimo/config';
-import { PanoramaRoutingModule } from './panorama-routing.module';
-import { ClientListComponent } from './public-api';
-import { ClientDetailsComponent } from './lib/components/client-details/client-details.component';
+import {ClientDetailsComponent} from './lib/components/client-details/client-details.component';
+import {PanoramaRoutingModule} from './panorama-routing.module';
+import {ClientListComponent} from './public-api';
 
 @NgModule({
   imports: [
@@ -34,7 +34,7 @@ import { ClientDetailsComponent } from './lib/components/client-details/client-d
       },
     }),
     ClientListComponent,
-    ClientDetailsComponent
+    ClientDetailsComponent,
   ],
 })
 export class PanoramaModule {}

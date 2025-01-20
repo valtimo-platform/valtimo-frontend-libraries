@@ -26,4 +26,5 @@ export interface LopendeZaak {
   startdatum: string;
   statusOmschrijving: string;
   statusGeschiedenis: LopendeStatus[];
+  zaakTypeOmschrijving: string;
 }

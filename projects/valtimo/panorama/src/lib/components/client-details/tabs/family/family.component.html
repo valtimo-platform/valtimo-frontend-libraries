@@ -17,7 +17,6 @@
 <ng-container
   *ngIf="{
     person: person$ | async,
-    childrenFields: childrenFields$ | async,
     children: children$ | async,
     loading: loading$ | async,
   } as obs"
@@ -50,7 +49,7 @@
     <valtimo-carbon-list
       [header]="false"
       [hideToolbar]="true"
-      [fields]="obs.childrenFields"
+      [fields]="CHILDREN_FIELDS"
       [items]="obs.children"
       [loading]="obs.loading"
     ></valtimo-carbon-list>

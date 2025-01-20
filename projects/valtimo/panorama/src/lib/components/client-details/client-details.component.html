@@ -13,26 +13,42 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<ng-container
+  *ngIf="{activeTab: activeTab$ | async, person: person$ | async, loading: loading$ | async} as obs"
+>
+  @if (!obs.person && obs.loading === false) {
+    <valtimo-no-results
+      [title]="'panorama.noResults.title' | translate"
+      [description]="
+        (obs.person === false ? 'panorama.bsnError' : 'panorama.noResults.description') | translate
+      "
+    ></valtimo-no-results>
+  } @else {
+    <cds-tabs>
+      <cds-tab
+        [active]="true"
+        [heading]="'panorama.tabs.general' | translate"
+        (selected)="onTabSelected('general')"
+      >
+        <valtimo-panorama-general-tab
+          *ngIf="obs.activeTab === 'general'"
+        ></valtimo-panorama-general-tab>
+      </cds-tab>
 
-<cds-tabs *ngIf="activeTab$ | async as activeTab">
-  <cds-tab
-    [active]="true"
-    [heading]="'panorama.tabs.general' | translate"
-    (selected)="onTabSelected('general')"
-  >
-    <valtimo-panorama-general-tab *ngIf="activeTab === 'general'"></valtimo-panorama-general-tab>
-  </cds-tab>
+      <cds-tab [heading]="'panorama.tabs.family' | translate" (selected)="onTabSelected('family')">
+        <valtimo-panorama-family-tab
+          *ngIf="obs.activeTab === 'family'"
+        ></valtimo-panorama-family-tab>
+      </cds-tab>
 
-  <cds-tab [heading]="'panorama.tabs.family' | translate" (selected)="onTabSelected('family')">
-    <valtimo-panorama-family-tab *ngIf="activeTab === 'family'"></valtimo-panorama-family-tab>
-  </cds-tab>
-
-  <cds-tab
-    [heading]="'panorama.tabs.ongoingCases' | translate"
-    (selected)="onTabSelected('ongoingCases')"
-  >
-    <valtimo-panorama-ongoing-cases-tab
-      *ngIf="activeTab === 'ongoingCases'"
-    ></valtimo-panorama-ongoing-cases-tab
-  ></cds-tab>
-</cds-tabs>
+      <cds-tab
+        [heading]="'panorama.tabs.ongoingCases' | translate"
+        (selected)="onTabSelected('ongoingCases')"
+      >
+        <valtimo-panorama-ongoing-cases-tab
+          *ngIf="obs.activeTab === 'ongoingCases'"
+        ></valtimo-panorama-ongoing-cases-tab
+      ></cds-tab>
+    </cds-tabs>
+  }
+</ng-container>

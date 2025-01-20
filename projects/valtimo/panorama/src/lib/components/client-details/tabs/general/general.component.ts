@@ -16,11 +16,11 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
+import {LoadingModule} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, switchMap, tap} from 'rxjs';
 import {Person} from '../../../../models';
 import {PersonApiService} from '../../../../services';
 import {PersonCardComponent} from '../../person-card/person-card.component';
-import {LoadingModule} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-panorama-general-tab',

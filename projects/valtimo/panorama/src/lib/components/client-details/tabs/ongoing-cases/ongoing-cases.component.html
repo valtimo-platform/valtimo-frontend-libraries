@@ -14,61 +14,21 @@
   ~ limitations under the License.
   -->
 
-@if (loading$ | async) {
-  <cds-loading class="valtimo-panorama-ongoing-cases-tab__loading"></cds-loading>
-}
+<valtimo-carbon-list
+  [fields]="fields$ | async"
+  [header]="false"
+  [hideToolbar]="true"
+  [items]="cases$ | async"
+  [loading]="loading$ | async"
+>
+  <valtimo-no-results
+    [title]="'panorama.noResults.title' | translate"
+    [description]="'panorama.noResults.description' | translate"
+  ></valtimo-no-results
+></valtimo-carbon-list>
 
-@for (case of cases$ | async; track case.uuid) {
-  <div class="valtimo-panorama-ongoing-cases-tab__case">
-    <cds-text-label>
-      {{ 'panorama.lopendeZaak.id' | translate }}
-
-      <input cdsText [readonly]="true" theme="light" [value]="case.identificatie || '-'" />
-    </cds-text-label>
-
-    <cds-text-label>
-      {{ 'panorama.lopendeZaak.description' | translate }}
-
-      <input cdsText [readonly]="true" theme="light" [value]="case.omschrijving || '-'" />
-    </cds-text-label>
-
-    <cds-text-label>
-      {{ 'panorama.lopendeZaak.startDate' | translate }}
-
-      <input cdsText [readonly]="true" theme="light" [value]="case.startdatum || '-'" />
-    </cds-text-label>
-
-    <cds-accordion>
-      <cds-accordion-item
-        class="valtimo-panorama-ongoing-cases-tab__history"
-        [title]="'panorama.lopendeZaak.statusHistory' | translate"
-      >
-        @for (status of case.statusGeschiedenis; track status.statusOmschrijving) {
-          <div class="valtimo-panorama-ongoing-cases-tab__status">
-            <cds-text-label>
-              {{ 'panorama.lopendeZaak.statusDescription' | translate }}
-
-              <input
-                cdsText
-                [readonly]="true"
-                theme="light"
-                [value]="status.statusOmschrijving || '-'"
-              />
-            </cds-text-label>
-
-            <cds-text-label>
-              {{ 'panorama.lopendeZaak.setDate' | translate }}
-
-              <input
-                cdsText
-                [readonly]="true"
-                theme="light"
-                [value]="status.formattedDateTime || '-'"
-              />
-            </cds-text-label>
-          </div>
-        }
-      </cds-accordion-item>
-    </cds-accordion>
-  </div>
-}
+<ng-template #goToCaseTemplate let-data="data">
+  <button cdsButton="ghost" (click)="onGoToCaseClick(data)">
+    {{ 'panorama.goToCase' | translate }}
+  </button>
+</ng-template>

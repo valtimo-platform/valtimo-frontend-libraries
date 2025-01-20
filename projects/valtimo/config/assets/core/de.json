@@ -1929,6 +1929,8 @@
     "detailsTitle": "Protokolldetails"
   },
   "panorama": {
+    "bsnError": "Die BSN ist ungültig",
+    "goToCase": "Gehen Sie zum Zaak",
     "noResults": {
       "title": "Keine Ergebnisse",
       "description": "Für den angegebenen BSN liegen keine Ergebnisse vor"

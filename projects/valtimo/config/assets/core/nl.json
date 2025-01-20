@@ -1935,6 +1935,8 @@
     "detailsTitle": "Loggegevens"
   },
   "panorama": {
+    "bsnError": "Het BSN is niet geldig",
+    "goToCase": "Ga naar zaak",
     "noResults": {
       "title": "Geen resultaten",
       "description": "Er zijn geen resultaten voor de opgegeven bsn"

@@ -22,13 +22,18 @@
   </cds-text-label>
 
   <section class="panorama-client-list__buttons">
-    <button cdsButton="ghost" (click)="onClearButtonClick()">
+    <button cdsButton="ghost" type="button" (click)="onClearButtonClick()">
       {{ 'searchFields.clearButtonText' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
     </button>
 
-    <button cdsButton="primary" [disabled]="formGroup.invalid" (click)="onSearchButtonClick()">
+    <button
+      cdsButton="primary"
+      type="submit"
+      [disabled]="formGroup.invalid"
+      (click)="onSearchButtonClick()"
+    >
       {{ 'searchFields.searchButtonText' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="search" size="16"></svg>
@@ -37,10 +42,11 @@
 </form>
 
 <valtimo-carbon-list
-  [fields]="fields$ | async"
+  [fields]="FIELDS"
   [header]="false"
   [hideToolbar]="true"
   [items]="items$ | async"
+  [loading]="loading$ | async"
   (rowClicked)="onRowClick($event)"
 >
   <valtimo-no-results

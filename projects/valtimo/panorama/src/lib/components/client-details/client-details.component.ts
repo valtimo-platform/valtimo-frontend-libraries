@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
-import {PageTitleService} from '@valtimo/components';
-import {TabsModule} from 'carbon-components-angular';
-import {BehaviorSubject, Observable, switchMap, tap, Subscription} from 'rxjs';
+import {CarbonListModule, PageTitleService} from '@valtimo/components';
+import {NotificationModule, NotificationService, TabsModule} from 'carbon-components-angular';
+import {BehaviorSubject, of, switchMap, tap} from 'rxjs';
 import {PanoramaTab, Person} from '../../models';
 import {PersonApiService} from '../../services';
 import {FamilyTabComponent, GeneralTabComponent, OngoingCasesTabComponent} from './tabs';
@@ -36,11 +36,30 @@ import {FamilyTabComponent, GeneralTabComponent, OngoingCasesTabComponent} from 
     GeneralTabComponent,
     FamilyTabComponent,
     OngoingCasesTabComponent,
+    CarbonListModule,
+    NotificationModule,
   ],
+  providers: [NotificationService],
 })
-export class ClientDetailsComponent implements OnInit, OnDestroy {
+export class ClientDetailsComponent implements OnDestroy {
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly person$ = this.route.paramMap.pipe(
+    tap(() => this.loading$.next(true)),
+    switchMap((params: ParamMap) => {
+      const bsn = params.get('bsn');
+      if (bsn?.match('^[0-9]{9}')) return this.personApiService.getPersonDetails(bsn);
+
+      return of(false);
+    }),
+    tap((person: Person | null | boolean) => {
+      this.loading$.next(false);
+      if (person === false) return;
+
+      if (!!person && typeof person !== 'boolean')
+        this.pageTitleService.setCustomPageTitle(person.naam.volledigeNaam, true);
+    })
+  );
   public readonly activeTab$ = new BehaviorSubject<PanoramaTab>('general');
-  private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -48,20 +67,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     private readonly pageTitleService: PageTitleService
   ) {}
 
-  public ngOnInit(): void {
-    this._subscriptions.add(
-      this.route.paramMap
-        .pipe(
-          switchMap((params: ParamMap) => this.personApiService.getPersonDetails(params.get('bsn')))
-        )
-        .subscribe(person => {
-          if (!!person) this.pageTitleService.setCustomPageTitle(person.naam.volledigeNaam, true);
-        })
-    );
-  }
-
   public ngOnDestroy(): void {
-    this._subscriptions.unsubscribe();
     this.pageTitleService.enableReset();
   }
 

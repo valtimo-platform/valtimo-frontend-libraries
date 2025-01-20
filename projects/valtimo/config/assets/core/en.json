@@ -1934,6 +1934,8 @@
     "detailsTitle": "Log details"
   },
   "panorama": {
+    "bsnError": "The BSN is not valid",
+    "goToCase": "Go to case",
     "noResults": {
       "title": "No results",
       "description": "There are no results for the specified BSN"

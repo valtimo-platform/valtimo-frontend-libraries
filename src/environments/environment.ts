@@ -115,7 +115,7 @@ export const environment: ValtimoConfig = {
       {
         roles: [ROLE_USER],
         link: ['/panorama'],
-        title: 'Panorama',
+        title: 'Klantbeld',
         iconClass: 'icon mdi mdi-chart-bar',
         sequence: 5,
       },

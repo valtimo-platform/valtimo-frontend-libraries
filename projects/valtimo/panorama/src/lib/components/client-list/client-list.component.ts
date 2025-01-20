@@ -18,10 +18,10 @@ import {ChangeDetectionStrategy, Component, HostBinding, ViewEncapsulation} from
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {Search16, TrashCan16} from '@carbon/icons';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {CarbonListItem, CarbonListModule, ColumnConfig, ViewType} from '@valtimo/components';
 import {ButtonModule, IconModule, IconService, InputModule} from 'carbon-components-angular';
-import {BehaviorSubject, map, Observable, startWith, switchMap} from 'rxjs';
+import {BehaviorSubject, map, Observable, startWith, switchMap, tap} from 'rxjs';
 import {Person} from '../../models';
 import {PersonApiService} from '../../services';
 
@@ -45,31 +45,31 @@ export class ClientListComponent {
   @HostBinding('class') public readonly class = 'panorama-client-list';
 
   public readonly formGroup = this.fb.group({
-    bsn: this.fb.control('', [Validators.required, Validators.pattern('[1-9][0-9]{8}')]),
+    bsn: this.fb.control('', [Validators.required, Validators.pattern('^[0-9]{9}')]),
   });
 
-  public readonly fields$: Observable<ColumnConfig[]> = this.translateService.stream('key').pipe(
-    map(() => [
-      {
-        key: 'burgerservicenummer',
-        label: 'BSN',
-        viewType: ViewType.TEXT,
-      },
-      {
-        key: 'fullName',
-        label: this.translateService.instant('panorama.columns.fullName'),
-        viewType: ViewType.TEXT,
-      },
-      {
-        key: 'dateOfBirth',
-        label: this.translateService.instant('panorama.columns.dateOfBirth'),
-        viewType: ViewType.DATE,
-      },
-    ])
-  );
+  public readonly FIELDS: ColumnConfig[] = [
+    {
+      key: 'burgerservicenummer',
+      label: 'BSN',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'fullName',
+      label: 'panorama.columns.fullName',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'dateOfBirth',
+      label: 'panorama.columns.dateOfBirth',
+      viewType: ViewType.DATE,
+    },
+  ];
 
+  public readonly loading$ = new BehaviorSubject<boolean>(false);
   private readonly _bsn$ = new BehaviorSubject<string | null>(null);
   public readonly items$: Observable<CarbonListItem[]> = this._bsn$.pipe(
+    tap(() => this.loading$.next(true)),
     switchMap((bsn: string | null) => this.personApiService.getPersonDetails(bsn)),
     map((person: Person | null) =>
       !person
@@ -82,13 +82,13 @@ export class ClientListComponent {
             },
           ]
     ),
+    tap(() => this.loading$.next(false)),
     startWith([])
   );
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly personApiService: PersonApiService,
-    private readonly translateService: TranslateService,
     private readonly router: Router,
     private readonly iconService: IconService
   ) {
