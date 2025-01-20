@@ -25,30 +25,12 @@ import { map, Subscription } from 'rxjs';
   templateUrl: './choose-process-link-type.component.html',
   styleUrls: ['./choose-process-link-type.component.scss'],
 })
-export class ChooseProcessLinkTypeComponent implements OnDestroy {
+export class ChooseProcessLinkTypeComponent {
   public readonly availableProcessLinkTypes$ =
-    this.processLinkStateService.availableProcessLinkTypes$.pipe(map((types) => {
-      if (!this.formCustomComponentConfig ) {
-        return types.map((type) => {
-          if (type.processLinkType === 'ui-component') {
-            type.enabled = false;
-          }
-          return type;
-        })
-      }
-    }));
-
-    private readonly _subscriptions = new Subscription();
+    this.processLinkStateService.availableProcessLinkTypes$
 
 
-  constructor(
-    private readonly processLinkStateService: ProcessLinkStateService,
-    @Optional() @Inject(FORM_CUSTOM_COMPONENT_TOKEN) private readonly formCustomComponentConfig: FormCustomComponentConfig,
-  ) {}
-
-  public ngOnDestroy(): void {
-    this._subscriptions.unsubscribe();
-  }
+  constructor(private readonly processLinkStateService: ProcessLinkStateService) {}
 
   selectProcessLinkType(processLinkTypeId: string): void {
     this.processLinkStateService.selectProcessLinkType(processLinkTypeId);

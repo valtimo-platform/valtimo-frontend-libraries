@@ -296,7 +296,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
         renderedComponent.instance.processDefinitionKey = this.processDefinitionKey;
         renderedComponent.instance.documentDefinitionName = this.documentDefinitionName;
 
-        renderedComponent.instance.submitEvent.subscribe(() => {
+        renderedComponent.instance.submittedEvent.subscribe(() => {
           this.modal.hide();
         });
       }

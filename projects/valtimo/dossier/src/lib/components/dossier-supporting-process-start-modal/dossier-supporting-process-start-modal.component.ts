@@ -221,7 +221,7 @@ export class DossierSupportingProcessStartModalComponent {
           renderedComponent.instance.documentDefinitionName = documentDefinitionName;
         });
 
-        renderedComponent.instance.submitEvent.subscribe(() => {
+        renderedComponent.instance.submittedEvent.subscribe(() => {
           this.formSubmitted();
         });
       }

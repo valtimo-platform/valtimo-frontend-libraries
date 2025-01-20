@@ -420,7 +420,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
               const renderedComponent = this.formCustomComponentDynamicContainer.createComponent(customComponent) as ComponentRef<FormCustomComponent>;
 
               renderedComponent.instance.taskInstanceId = this.taskInstanceId$.value;
-              renderedComponent.instance.submitEvent.subscribe(() => {
+              renderedComponent.instance.submittedEvent.subscribe(() => {
                 this.closeModalEvent.emit();
               });
             }
