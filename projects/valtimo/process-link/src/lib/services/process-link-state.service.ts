@@ -20,7 +20,7 @@ import {FormCustomComponentConfig, ModalParams, ProcessLink, ProcessLinkType} fr
 import {ProcessLinkStepService} from './process-link-step.service';
 import {ProcessLinkButtonService} from './process-link-button.service';
 import {PluginStateService} from './plugin-state.service';
-import { FORM_CUSTOM_COMPONENT_TOKEN } from '../constants';
+import {FORM_CUSTOM_COMPONENT_TOKEN} from '../constants';
 
 @Injectable()
 export class ProcessLinkStateService implements OnDestroy {
@@ -43,16 +43,18 @@ export class ProcessLinkStateService implements OnDestroy {
     return this._elementName$.asObservable();
   }
   get availableProcessLinkTypes$(): Observable<Array<ProcessLinkType>> {
-    return this._availableProcessLinkTypes$.asObservable().pipe(map((types) => {
-      if (!this.formCustomComponentConfig) {
-        return types.map((type) => {
-          if (type.processLinkType === 'ui-component') {
-            type.enabled = false;
-          }
-          return type;
-        })
-      }
-    }));;
+    return this._availableProcessLinkTypes$.asObservable().pipe(
+      map(types => {
+        if (!this.formCustomComponentConfig) {
+          return types.map(type => {
+            if (type.processLinkType === 'ui-component') {
+              type.enabled = false;
+            }
+            return type;
+          });
+        }
+      })
+    );
   }
   get hideProgressIndicator$(): Observable<boolean> {
     return this._availableProcessLinkTypes$
@@ -89,7 +91,9 @@ export class ProcessLinkStateService implements OnDestroy {
     private readonly processLinkStepService: ProcessLinkStepService,
     private readonly buttonService: ProcessLinkButtonService,
     private readonly pluginStateService: PluginStateService,
-    @Optional() @Inject(FORM_CUSTOM_COMPONENT_TOKEN) private readonly formCustomComponentConfig: FormCustomComponentConfig,
+    @Optional()
+    @Inject(FORM_CUSTOM_COMPONENT_TOKEN)
+    private readonly formCustomComponentConfig: FormCustomComponentConfig
   ) {
     this.openAvailableProcessLinkTypesSubscription();
   }

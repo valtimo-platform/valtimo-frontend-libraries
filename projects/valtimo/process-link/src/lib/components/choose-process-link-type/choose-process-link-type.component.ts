@@ -16,9 +16,9 @@
 
 import {Component, Inject, OnDestroy, Optional} from '@angular/core';
 import {ProcessLinkStateService} from '../../services';
-import { FormCustomComponentConfig, ProcessLinkType } from '../../models';
-import { FORM_CUSTOM_COMPONENT_TOKEN } from '../../constants';
-import { map, Subscription } from 'rxjs';
+import {FormCustomComponentConfig, ProcessLinkType} from '../../models';
+import {FORM_CUSTOM_COMPONENT_TOKEN} from '../../constants';
+import {map, Subscription} from 'rxjs';
 
 @Component({
   selector: 'valtimo-choose-process-link-type',
@@ -27,8 +27,7 @@ import { map, Subscription } from 'rxjs';
 })
 export class ChooseProcessLinkTypeComponent {
   public readonly availableProcessLinkTypes$ =
-    this.processLinkStateService.availableProcessLinkTypes$
-
+    this.processLinkStateService.availableProcessLinkTypes$;
 
   constructor(private readonly processLinkStateService: ProcessLinkStateService) {}
 

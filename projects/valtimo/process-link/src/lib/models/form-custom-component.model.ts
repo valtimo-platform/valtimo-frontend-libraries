@@ -24,8 +24,8 @@ interface FormCustomComponent {
 }
 
 interface FormCustomComponentDefinition {
-    id: string;
-    component: FormCustomComponent;
+  id: string;
+  component: FormCustomComponent;
 }
 
 interface FormCustomComponentConfig {
