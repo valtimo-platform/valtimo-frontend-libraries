@@ -305,8 +305,10 @@ interface DocumentType {
 
 interface CaseSettings {
   name?: string;
-  canHaveAssignee: boolean;
-  autoAssignTasks: boolean;
+  canHaveAssignee?: boolean;
+  autoAssignTasks?: boolean;
+  hasExternalCreateCaseForm?: boolean;
+  externalCreateCaseFormUrl?: string
 }
 
 interface OpenDocumentCount {

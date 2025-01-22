@@ -546,6 +546,14 @@
       "title": "Aufgabenzuweisung",
       "checkboxDescription": "Aufgaben automatisch zu Fallbearbeiter zuweisen"
     },
+    "externalCreateCaseForm": {
+      "title": "Hat einen externes Neuen Case Erstellen Formular",
+      "enabledToggle": "Externes Formular 'Neuen Case Erstellen' aktiviert",
+      "enabledToggleOn": "Ja",
+      "enabledToggleOff": "Nein",
+      "externalUrl": "Die URL des externen Formulars",
+      "apply": "Anwenden"
+    },
     "tabs": {
       "cases": "Konfiguration",
       "processes": "Prozesse",

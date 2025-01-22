@@ -546,6 +546,14 @@
       "title": "Taaktoewijzing",
       "checkboxDescription": "Alle taken worden toegewezen aan de behandelaar"
     },
+    "externalCreateCaseForm": {
+      "title": "Heeft een extern Creëer Nieuw Dossier formulier",
+      "enabledToggle": "Extern 'Creëer Nieuw Dossier' formulier geactiveerd",
+      "enabledToggleOn": "Ja",
+      "enabledToggleOff": "Nee",
+      "externalUrl": "De URL van het externe formulier",
+      "apply": "Toepassen"
+    },
     "tabs": {
       "cases": "Configuratie",
       "processes": "Processen",

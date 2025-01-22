@@ -547,6 +547,14 @@
       "title": "Task assignment",
       "checkboxDescription": "Automatically assign user tasks to the case handler"
     },
+    "externalCreateCaseForm": {
+      "title": "Has an external Create New Case form",
+      "enabledToggle": "External 'Create New Case' form enabled",
+      "enabledToggleOn": "Yes",
+      "enabledToggleOff": "No",
+      "externalUrl": "The URL of the external Create New Case form",
+      "apply": "Apply"
+    },
     "tabs": {
       "cases": "Configuration",
       "processes": "Processes",
