@@ -17,11 +17,12 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angula
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {CARBON_CONSTANTS} from '@valtimo/components';
-import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
+import {CaseSettings, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
 import {DossierListService} from '../../services';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
+import {tap} from 'rxjs/operators';
 
 declare const $;
 
@@ -60,6 +61,22 @@ export class DossierListActionsComponent implements OnInit {
       this._cachedAssociatedProcessDocumentDefinitions = processDocumentDefinitions;
       this.startButtonDisableEvent.emit(processDocumentDefinitions.length === 0 || loading);
       return processDocumentDefinitions.filter(definition => definition.canInitializeDocument);
+    })
+  );
+
+  readonly caseSettings$: Observable<CaseSettings> = this.listService.documentDefinitionName$.pipe(
+    switchMap(documentDefinitionName =>
+      combineLatest([
+        documentDefinitionName
+          ? this.documentService.getCaseSettings(documentDefinitionName)
+          : null,
+        this._loading$,
+      ])
+    ),
+    map(([caseSettings, loading]) => {
+      this.startButtonDisableEvent.emit(caseSettings == null || loading);
+      console.log('caseSettings', caseSettings);
+      return caseSettings;
     })
   );
 
