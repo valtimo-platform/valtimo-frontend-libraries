@@ -103,6 +103,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
 
   public get formRows(): FormArray | undefined {
     if (!this.formGroup.get('rows')) return undefined;
+
     return this.formGroup.get('rows') as FormArray;
   }
 
