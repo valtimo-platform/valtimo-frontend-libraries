@@ -330,6 +330,14 @@
                 formControlName="ellipsisCharacterLimit"
               />
             </cds-text-label>
+
+            <cds-checkbox
+              type="boolean"
+              (checkedChange)="onCheckHideWhenEmpty($event)"
+              formControlName="hideWhenEmpty"
+            >
+              {{ 'widgetTabManagement.content.hideWhenEmpty' | translate }}
+            </cds-checkbox>
           </div>
         </form>
       </cds-accordion-item>

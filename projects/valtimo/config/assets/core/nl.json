@@ -788,6 +788,7 @@
       "widgetTitle": "Widget titel",
       "widgetTitlePlaceholder": "Kies een korte naam",
       "widgetTitleTooltip": "Titel die bovenaan de widget wordt weergegeven",
+      "hideWhenEmpty": "Verbergen als leeg",
       "column": "Kolom {{number}}",
       "fields": {
         "add": "Veld toevoegen",

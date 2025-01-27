@@ -44,7 +44,9 @@ export class WidgetWizardContentStepComponent implements OnInit {
   constructor(
     private readonly cdr: ChangeDetectorRef,
     private readonly widgetWizardService: WidgetWizardService
-  ) {}
+  ) {
+    console.log('Constructor');
+  }
 
   public ngOnInit(): void {
     this.renderComponent();

@@ -54,6 +54,7 @@ import {
 import {
   AccordionModule,
   ButtonModule,
+  CheckboxModule,
   Dropdown,
   DropdownModule,
   IconModule,
@@ -81,6 +82,7 @@ import {WidgetFieldsService, WidgetWizardService} from '../../../../services';
     IconModule,
     AccordionModule,
     InputLabelModule,
+    CheckboxModule,
   ],
 })
 export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnDestroy {
@@ -101,6 +103,8 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
 
   public get formRows(): FormArray | undefined {
     if (!this.formGroup.get('rows')) return undefined;
+
+    console.log('rows: ', this.formGroup.get('rows'));
 
     return this.formGroup.get('rows') as FormArray;
   }
@@ -157,6 +161,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
           null,
           Validators.pattern('[1-9][0-9]*')
         ),
+        hideWhenEmpty: this.fb.control<boolean | false>(false),
       })
     );
   }
@@ -179,6 +184,11 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
         value: this.fb.control('', Validators.required),
       })
     );
+  }
+
+  public onCheckHideWhenEmpty(event) {
+    console.log('form value: ', this.formGroup.controls.rows.controls);
+    console.log('event: ', event);
   }
 
   private typeSelectValidator(control: AbstractControl): null | {[key: string]: string} {
@@ -206,11 +216,15 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
       content: this.fb.control<string>(row.value, Validators.required),
       ...((!row.displayProperties ||
         row.displayProperties?.type === CaseWidgetDisplayTypeKey.TEXT) && {
-        ellipsisCharacterLimit: this.fb.control<number | null>(
-          (row.displayProperties as CaseWidgetTextDisplayType)?.ellipsisCharacterLimit ?? null,
-          Validators.pattern('[1-9][0-9]*')
-        ),
-      }),
+          ellipsisCharacterLimit: this.fb.control<number | null>(
+            (row.displayProperties as CaseWidgetTextDisplayType)?.ellipsisCharacterLimit ?? null,
+            Validators.pattern('[1-9][0-9]*')
+          ),
+        } && {
+          hideWhenEmpty: this.fb.control<boolean | false>(
+            (row.displayProperties as CaseWidgetTextDisplayType)?.hideWhenEmpty ?? false
+          ),
+        }),
       ...([CaseWidgetDisplayTypeKey.NUMBER, CaseWidgetDisplayTypeKey.PERCENT].includes(
         row.displayProperties?.type as CaseWidgetDisplayTypeKey
       ) && {
@@ -271,6 +285,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   }
 
   private openFormSubscription(): void {
+    console.log('vamossss: ', this.formRows);
     this._subscriptions.add(
       this.formRows?.valueChanges.pipe(debounceTime(100)).subscribe((rows: any) => {
         const mappedRows: FieldsCaseWidgetValue[] = rows.map((row: any | null) => ({
@@ -283,6 +298,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
               ...(!!row?.ellipsisCharacterLimit && {
                 ellipsisCharacterLimit: row.ellipsisCharacterLimit,
               }),
+              ...(!!row?.hideWhenEmpty && {hideWhenEmpty: row.hideWhenEmpty}),
               ...(!!row?.currencyCode && {currencyCode: row.currencyCode}),
               ...(!!row?.display && {display: row.display}),
               ...(!!row?.digitsInfo && {digitsInfo: row.digitsInfo}),
