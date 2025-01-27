@@ -331,11 +331,7 @@
               />
             </cds-text-label>
 
-            <cds-checkbox
-              type="boolean"
-              (checkedChange)="onCheckHideWhenEmpty($event)"
-              formControlName="hideWhenEmpty"
-            >
+            <cds-checkbox formControlName="hideWhenEmpty">
               {{ 'widgetTabManagement.content.hideWhenEmpty' | translate }}
             </cds-checkbox>
           </div>
