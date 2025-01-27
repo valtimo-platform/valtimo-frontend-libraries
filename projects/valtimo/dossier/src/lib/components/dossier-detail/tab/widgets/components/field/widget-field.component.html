@@ -55,7 +55,7 @@
       @for (column of obs?.widgetPropertyValue; track column.key) {
         <div class="widget-field__column">
           @for (property of column; track property) {
-            <div class="widget-field__field">
+            <div *ngIf="!property?.hideWhenEmpty" class="widget-field__field">
               <label class="widget-field__field-label" [attr.title]="property?.title">
                 {{ property?.title }}</label
               >

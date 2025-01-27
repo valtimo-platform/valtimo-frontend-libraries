@@ -102,7 +102,7 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
                         ?.ellipsisCharacterLimit ?? null,
                     hideWhenEmpty:
                       (property.displayProperties as CaseWidgetTextDisplayType)?.hideWhenEmpty ??
-                      null,
+                      false,
                     value: this.viewContentService.get(widgetData[property.key], {
                       ...property.displayProperties,
                       viewType: property.displayProperties?.type ?? ViewType.TEXT,
