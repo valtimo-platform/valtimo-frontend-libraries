@@ -286,7 +286,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
           component?.setCustomValidity(componentError.message);
         }
       });
-      this.formErrors$.error(errors)
+      this.formErrors$.next(errors)
     } else if(error.error?.error) {
       const component = formInstance.getComponent(error.error?.component);
       if (component == null) {
