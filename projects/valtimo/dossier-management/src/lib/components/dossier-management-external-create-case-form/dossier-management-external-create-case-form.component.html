@@ -34,15 +34,15 @@
 
         <div class="mt-2">
           <cds-label
-            warnText="Please enter a valid URL"
-            invalidText="The entered value is not a valid URL">
+            warnText="{{ 'dossierManagement.externalCreateCaseForm.externalUrlWarnText' | translate }}"
+            invalidText="{{ 'dossierManagement.externalCreateCaseForm.externalUrlInvalidText' | translate }}">
             {{ 'dossierManagement.externalCreateCaseForm.externalUrl' | translate }}
             <input
               cdsText
               type="text"
               class="input-field"
               formControlName="externalFormUrl"
-              placeholder="The URL of the external form"
+              placeholder="{{ 'dossierManagement.externalCreateCaseForm.externalUrlPlaceholder' | translate }}"
               maxlength="512"
             />
           </cds-label>

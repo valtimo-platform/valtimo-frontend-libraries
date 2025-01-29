@@ -553,6 +553,7 @@
       "enabledToggleOn": "Yes",
       "enabledToggleOff": "No",
       "externalUrl": "The URL of the external Create New Case form",
+      "externalUrlPlaceholder": "The URL of the external form",
       "externalUrlWarnText": "Please enter a valid URL",
       "externalUrlInvalidText": "The entered value is not a valid URL",
       "apply": "Apply"

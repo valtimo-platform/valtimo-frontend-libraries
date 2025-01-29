@@ -105,7 +105,8 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
 
       this.updateCaseSettings(this.caseSettings$.getValue().name, {
         hasExternalCreateCaseForm: this.hasExternalForm.value,
-        externalCreateCaseFormUrl: this.externalFormUrl.value,
+        externalCreateCaseFormUrl: (typeof this.externalFormUrl.value === 'string') ?
+          this.externalFormUrl.value.trim() : this.externalFormUrl.value
       });
     }
   }
