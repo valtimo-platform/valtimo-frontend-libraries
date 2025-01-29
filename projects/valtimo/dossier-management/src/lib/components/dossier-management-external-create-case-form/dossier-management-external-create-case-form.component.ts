@@ -19,6 +19,13 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
 
   readonly caseSettings$: BehaviorSubject<CaseSettings> = new BehaviorSubject(null);
 
+  private readonly urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
+        '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
+
   private _subscriptions = new Subscription();
 
   constructor(
@@ -33,20 +40,21 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
 
     this.form = this.fb.group({
       hasExternalForm: [false], // Toggle is off by default
-      externalFormUrl: [ {value: '', disabled: true},
-        [Validators.required, Validators.pattern(/https?:\/\/.+/), Validators.maxLength(512)],
-      ],
+      externalFormUrl: [ {value: '', disabled: true}, [
+        Validators.required,
+        Validators.pattern(this.urlPattern),
+        Validators.maxLength(512)
+      ]],
     });
 
     // Subscribe to the toggle field value changes
     this._subscriptions.add(
       this.hasExternalForm?.valueChanges.subscribe(isEnabled => {
-        const urlControl = this.externalFormUrl;
         if (isEnabled) {
-          urlControl?.enable();
+          this.externalFormUrl.enable();
         } else {
-          urlControl?.disable();
-          urlControl?.reset(); // Clear the URL field when disabled
+          this.externalFormUrl.disable();
+          this.externalFormUrl.reset(); // Clear the URL field when disabled
         }
       })
     );
@@ -93,13 +101,11 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
     return this.form.get('externalFormUrl');
   }
 
-  // Helper to check if the form is valid
-  canSubmit(): boolean {
+  public canSubmit(): boolean {
     return this.form.valid;
   }
 
-  // Handle form submission
-  onSubmit(): void {
+  public onSubmit(): void {
     if (this.canSubmit()) {
       this.logger.debug('Submitted case definition settings form with values:', this.form.value);
 
@@ -111,7 +117,16 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
     }
   }
 
-  updateCaseSettings(documentDefinitionName: string, caseSettings: CaseSettings): void {
+  private isValidUrl(urlString: string): boolean {
+    try {
+        return Boolean(new URL(urlString));
+    }
+    catch(e) {
+        return false;
+    }
+  }
+
+  private updateCaseSettings(documentDefinitionName: string, caseSettings: CaseSettings): void {
     this.logger.debug('Updating case definition settings', documentDefinitionName, caseSettings);
     this.documentService
       .patchCaseSettingsForManagement(documentDefinitionName, caseSettings)
