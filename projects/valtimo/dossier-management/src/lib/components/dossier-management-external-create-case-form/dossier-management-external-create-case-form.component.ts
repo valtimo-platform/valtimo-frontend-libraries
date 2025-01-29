@@ -1,83 +1,96 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, filter, map, Observable, Subscription, switchMap} from 'rxjs';
+import {BehaviorSubject, filter, map, Observable, Subscription} from 'rxjs';
 import {CaseSettings, DocumentService} from '@valtimo/document';
-import {tap} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NGXLogger} from 'ngx-logger';
 
 @Component({
   selector: 'valtimo-dossier-management-external-create-case-form',
   templateUrl: './dossier-management-external-create-case-form.component.html',
 })
 export class DossierManagementExternalCreateCaseFormComponent implements OnInit, OnDestroy {
-  readonly disabled$ = new BehaviorSubject<boolean>(false);
-
-  private readonly _refresh$ = new BehaviorSubject<null>(null);
-
-  readonly loading$ = new BehaviorSubject<boolean>(true);
-
-  private documentDefinitionName: string = null;
+  public form!: FormGroup;
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => {
-      console.log('params', params);
-      this.documentDefinitionName = params.name || '';
-      return params.name || ''
-    })
+    map(params => params?.name),
+    filter(docDefName => !!docDefName)
   );
 
-  readonly currentValue$: Observable<CaseSettings> = this._refresh$.pipe(
-    switchMap(() => this.documentDefinitionName$),
-    switchMap(documentDefinitionName =>
-      this.documentService.getCaseSettingsForManagement(documentDefinitionName)
-    ),
-    tap(() => this.loading$.next(false))
-  );
-
-  public form!: FormGroup;
+  readonly caseSettings$: BehaviorSubject<CaseSettings> = new BehaviorSubject(null);
 
   private _subscriptions = new Subscription();
 
   constructor(
+    private readonly logger: NGXLogger,
     private readonly route: ActivatedRoute,
     private readonly documentService: DocumentService,
     private readonly fb: FormBuilder
-  ) {
-    this.form = this.fb.group({
-      hasExternalForm: [false], // Toggle is off by default
-      externalFormUrl: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/https?:\/\/.+/)]],
-    });
-  }
+  ) { }
 
   ngOnInit(): void {
-    // Subscribe to the toggle field value changes
-    const hasExternalFormToggleSubscription = this.hasExternalForm?.valueChanges.subscribe((isEnabled) => {
-      const urlControl = this.externalFormUrl;
-      if (isEnabled) {
-        urlControl?.enable();
-      } else {
-        urlControl?.disable();
-        urlControl?.reset(); // Clear the URL field when disabled
-      }
+    this.logger.debug('External Case Create Form - onInit');
+
+    this.form = this.fb.group({
+      hasExternalForm: [false], // Toggle is off by default
+      externalFormUrl: [ {value: '', disabled: true},
+        [Validators.required, Validators.pattern(/https?:\/\/.+/), Validators.maxLength(512)],
+      ],
     });
 
-    // Add the subscription to the Subscription manager
-    if (hasExternalFormToggleSubscription) {
-      this._subscriptions.add(hasExternalFormToggleSubscription);
-    }
+    // Subscribe to the toggle field value changes
+    this._subscriptions.add(
+      this.hasExternalForm?.valueChanges.subscribe(isEnabled => {
+        const urlControl = this.externalFormUrl;
+        if (isEnabled) {
+          urlControl?.enable();
+        } else {
+          urlControl?.disable();
+          urlControl?.reset(); // Clear the URL field when disabled
+        }
+      })
+    );
+
+    this._subscriptions.add(
+      this.documentDefinitionName$.subscribe(documentDefinitionName => {
+        this.logger.debug(
+          'Fetching case definition settings for documentDefinitionName',
+          documentDefinitionName
+        );
+        this.documentService
+          .getCaseSettingsForManagement(documentDefinitionName)
+          .subscribe(caseSettings => {
+            this.logger.debug('Fetched case definition settings', caseSettings);
+            this.caseSettings$.next(caseSettings);
+          });
+      })
+    );
+
+    this._subscriptions.add(
+      this.caseSettings$.subscribe(caseSettings => {
+        if (caseSettings) {
+          this.logger.debug('Applying case definition settings to form', caseSettings);
+          this.form.setValue({
+            hasExternalForm: caseSettings.hasExternalCreateCaseForm,
+            externalFormUrl: caseSettings.externalCreateCaseFormUrl,
+          });
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {
+    this.logger.debug('External Case Create Form - onDestroy');
     // Clean up subscriptions when the component is destroyed
     this._subscriptions.unsubscribe();
   }
 
-  public get hasExternalForm(){
-    return this.form.get('hasExternalForm')
+  public get hasExternalForm() {
+    return this.form.get('hasExternalForm');
   }
 
-  public get externalFormUrl(){
-    return this.form.get('externalFormUrl')
+  public get externalFormUrl() {
+    return this.form.get('externalFormUrl');
   }
 
   // Helper to check if the form is valid
@@ -88,43 +101,30 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
   // Handle form submission
   onSubmit(): void {
     if (this.canSubmit()) {
-      console.log('Form submitted with values:', this.form.value);
+      this.logger.debug('Submitted case definition settings form with values:', this.form.value);
 
-      this.updateCaseSettings(
-        {
-          hasExternalCreateCaseForm: this.hasExternalForm.value,
-          externalCreateCaseFormUrl: this.externalFormUrl.value,
-        },
-        this.documentDefinitionName
-      )
+      this.updateCaseSettings(this.caseSettings$.getValue().name, {
+        hasExternalCreateCaseForm: this.hasExternalForm.value,
+        externalCreateCaseFormUrl: this.externalFormUrl.value,
+      });
     }
   }
 
-  updateCaseSettings(caseSettings: CaseSettings, documentDefinitionName: string): void {
-    this.disableInput();
-
+  updateCaseSettings(documentDefinitionName: string, caseSettings: CaseSettings): void {
+    this.logger.debug('Updating case definition settings', documentDefinitionName, caseSettings);
     this.documentService
       .patchCaseSettingsForManagement(documentDefinitionName, caseSettings)
       .subscribe({
-        next: () => {
-          this.enableInput();
-          this.refreshSettings();
+        next: result => {
+          this.logger.debug('Updated case definition settings', result);
+          this.caseSettings$.next(result);
+        },
+        error: e => {
+          this.logger.debug('An error occurred while updating case definition settings', e);
         },
         complete: () => {
-          this.enableInput();
+          this.logger.debug('Finished updating case definition settings');
         },
       });
-  }
-
-  disableInput(): void {
-    this.disabled$.next(true);
-  }
-
-  enableInput(): void {
-    this.disabled$.next(false);
-  }
-
-  private refreshSettings(): void {
-    this._refresh$.next(null);
   }
 }

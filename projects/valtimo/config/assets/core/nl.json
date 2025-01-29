@@ -552,6 +552,8 @@
       "enabledToggleOn": "Ja",
       "enabledToggleOff": "Nee",
       "externalUrl": "De URL van het externe formulier",
+      "externalUrlWarnText": "Voer een geldige URL in",
+      "externalUrlInvalidText": "De ingevoerde waarde is geen geldige URL",
       "apply": "Toepassen"
     },
     "tabs": {
