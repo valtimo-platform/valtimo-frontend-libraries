@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,25 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.valtimo-dossier-management-widget-table {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
 
-  &__form {
-    display: flex;
-    gap: 16px;
-  }
+import {EventEmitter, Type} from '@angular/core';
 
-  &__subtitle {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 22px;
-  }
-
-  &__toggle {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+interface FormCustomComponent {
+  taskInstanceId: string | null;
+  processDefinitionKey: string | null;
+  documentDefinitionName: string | null;
+  submittedEvent: EventEmitter<any>;
 }
+
+interface FormCustomComponentDefinition {
+  id: string;
+  component: FormCustomComponent;
+}
+
+interface FormCustomComponentConfig {
+  [id: string]: Type<FormCustomComponentDefinition>;
+}
+
+export {FormCustomComponent, FormCustomComponentDefinition, FormCustomComponentConfig};

@@ -20,12 +20,16 @@ import {
   catchError,
   combineLatest,
   debounceTime,
-  EMPTY, filter,
+  EMPTY,
+  filter,
   Observable,
-  of, Subject, Subscription,
+  of,
+  Subject,
+  Subscription,
   switchMap,
   take,
-  tap, withLatestFrom,
+  tap,
+  withLatestFrom,
 } from 'rxjs';
 import {
   FormioComponent,
@@ -68,6 +72,8 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     const form = {
       loadInitialViewModel: () => instance.loadInitialViewModel(),
       updateViewModel: () => instance.updateViewModel(),
+      loadInitialStartFormViewModel: () => instance.loadInitialViewModelForStartForm(),
+      updateViewStartFormModel: () => instance.updateViewModelForStartForm(),
       ...formValue,
     };
     this.form$.next(form);
@@ -99,7 +105,6 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
 
   @Output() formSubmit = new EventEmitter<any>();
 
-  public errors: string[] = [];
   public refreshForm = new EventEmitter();
 
   private _preventNextPage = false;
@@ -109,6 +114,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
   public readonly formName$ = new BehaviorSubject<string>(undefined);
+  public readonly formErrors$ = new BehaviorSubject<string[]>([]);
   public readonly options$ = new BehaviorSubject<ValtimoFormioOptions>(undefined);
   public readonly taskInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
@@ -134,15 +140,21 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
   });
 
   public readonly formioOptions$: Observable<ValtimoFormioOptions | FormioOptions> = combineLatest([
-    this.currentLanguage$,
     this.options$,
     this._overrideOptions$,
   ]).pipe(
-    map(([language, options, overrideOptions]) => {
+    map(([options, overrideOptions]) => {
+      return deepmerge(options, overrideOptions);
+    })
+  );
+
+  public readonly renderOptions$: Observable<any> = combineLatest([
+    this.currentLanguage$,
+  ]).pipe(
+    map(([language]) => {
       const formioTranslations = this.translateService.instant('formioTranslations');
 
-      const defaultOptions = {
-        ...options,
+      return {
         language,
         ...(typeof formioTranslations === 'object'
           ? {
@@ -153,13 +165,11 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
           }
           : {}),
       };
-
-      return deepmerge(defaultOptions, overrideOptions);
     })
   );
 
-  private focusSubscription: Subscription
-  private updateSubscription: Subscription
+  private focusSubscription: Subscription;
+  private updateSubscription: Subscription;
 
   constructor(
     private readonly viewModelService: ViewModelService,
@@ -174,33 +184,37 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
       this.loadInitialViewModel();
     }
 
-    this.focusSubscription = this.focus$
-      .pipe(withLatestFrom(this.change$))
-      .subscribe(data => {
-        const dataAtFocus = !!data[1] && !!data[1].data ? JSON.parse(JSON.stringify(data[1].data)) : null
-        this.blur$
-          .pipe(take(1))
-          .pipe(withLatestFrom(this.change$))
-          .subscribe(dataBlur => {
-            const dataEqual = isEqual(dataAtFocus, dataBlur[1]?.data)
-            if(!dataEqual) {
-              this.updateForm.next(true)
-            }
-          })
-      })
+    this.focusSubscription = this.focus$.pipe(withLatestFrom(this.change$, this.submission$)).subscribe(([_, changeData, submissionDate]) => {
+      const dataAtFocus =
+        !!changeData && !!changeData.data ? JSON.parse(JSON.stringify(changeData.data)) : JSON.parse(JSON.stringify(submissionDate.data));
+      this.blur$
+        .pipe(take(1))
+        .pipe(withLatestFrom(this.change$))
+        .subscribe(([_, blurData]) => {
+          const dataEqual = isEqual(dataAtFocus, blurData?.data);
+          if (!dataEqual) {
+            this.updateForm.next(true);
+          }
+        });
+    });
 
-    this.updateSubscription = this.updateForm.pipe(filter(it => it), debounceTime(500)).subscribe(() => {
-      if (this.isStartForm$.value) {
-        this.updateViewModelForStartForm();
-      } else {
-        this.updateViewModel();
-      }
-    })
+    this.updateSubscription = this.updateForm
+      .pipe(
+        filter(it => it),
+        debounceTime(500)
+      )
+      .subscribe(() => {
+        if (this.isStartForm$.value) {
+          this.updateViewModelForStartForm();
+        } else {
+          this.updateViewModel();
+        }
+      });
   }
 
   public ngOnDestroy(): void {
-    this.focusSubscription.unsubscribe()
-    this.updateSubscription.unsubscribe()
+    this.focusSubscription.unsubscribe();
+    this.updateSubscription.unsubscribe();
   }
 
   public beforeSubmitHook(instance: FormViewModelComponent): (submission, callback) => void {
@@ -243,8 +257,8 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
                       return of(response);
                     }),
                     catchError(error => {
-                      this.handleFormError(error);
-                      callback({message: ' ', component: null}, null);
+                      const message = error instanceof HttpErrorResponse ? this.handleFormError(error) : error as string
+                      callback(message ? {message: message, component: null} : null, null);
                       return EMPTY; // return an empty observable to complete the stream
                     })
                   )
@@ -257,8 +271,8 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
                       return of(response);
                     }),
                     catchError(error => {
-                      this.handleFormError(error);
-                      callback({message: ' ', component: null}, null);
+                      const message = error instanceof HttpErrorResponse ? this.handleFormError(error) : error as string
+                      callback(message ? {message: message, component: null} : null, null);
                       return EMPTY; // return an empty observable to complete the stream
                     })
                   )
@@ -267,25 +281,29 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  private handleFormError(error: HttpErrorResponse): void {
+  private handleFormError(error: HttpErrorResponse): string {
     const formInstance = this.formio.formio;
-    this.errors = [];
-    if (error.error.componentErrors) {
+    this.formErrors$.next([]);
+    if (error.error?.componentErrors) {
+      const errors = []
       error.error.componentErrors.forEach(componentError => {
         const component = formInstance.getComponent(componentError.component);
         if (component == null) {
-          this.errors.push(componentError.message);
+          errors.push(componentError.message);
         } else {
           component?.setCustomValidity(componentError.message);
         }
       });
-    } else {
+      this.formErrors$.next(errors)
+    } else if(error.error?.error) {
       const component = formInstance.getComponent(error.error?.component);
       if (component == null) {
-        this.errors.push(error.error.error);
+        this.formErrors$.next([error.error.error]);
       } else {
         component?.setCustomValidity(error.error.error);
       }
+    } else {
+      return error.message
     }
   }
 
@@ -375,7 +393,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
                         this.handlePageChange();
                         this.refreshForm.emit({submission: submission});
                         this.loading$.next(false);
-                        this.errors = [];
+                        this.formErrors$.next([])
                       },
                       error: error => {
                         this.loading$.next(false);
@@ -439,7 +457,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
                         this.handlePageChange();
                         this.refreshForm.emit({submission: submission});
                         this.loading$.next(false);
-                        this.errors = [];
+                        this.formErrors$.next([])
                       },
                       error: error => {
                         this.loading$.next(false);
