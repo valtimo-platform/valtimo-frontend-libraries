@@ -555,7 +555,11 @@
       "externalUrlPlaceholder": "Die URL des externen Formulars",
       "externalUrlWarnText": "Bitte geben Sie eine gültige URL ein",
       "externalUrlInvalidText": "Der eingegebene Wert ist keine gültige URL",
-      "apply": "Anwenden"
+      "apply": "Anwenden",
+      "notification": {
+        "success": "Konfiguration erfolgreich aktualisiert",
+        "error": "Die Konfiguration konnte nicht aktualisiert werden"
+      }
     },
     "tabs": {
       "cases": "Konfiguration",

@@ -4,6 +4,8 @@ import {CaseSettings, DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NGXLogger} from 'ngx-logger';
+import {ToastrService} from 'ngx-toastr';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-dossier-management-external-create-case-form',
@@ -31,10 +33,12 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
   private _subscriptions = new Subscription();
 
   constructor(
-    private readonly logger: NGXLogger,
     private readonly route: ActivatedRoute,
     private readonly documentService: DocumentService,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly translateService: TranslateService,
+    private readonly toastrService: ToastrService,
+    private readonly logger: NGXLogger,
   ) { }
 
   ngOnInit(): void {
@@ -129,10 +133,12 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
           this.caseSettings$.next(result);
         },
         error: e => {
-          this.logger.debug('An error occurred while updating case definition settings', e);
+          this.logger.error('An error occurred while updating case definition settings', e);
+          this.toastrService.error(this.translateService.instant('dossierManagement.externalCreateCaseForm.notification.error'))
         },
         complete: () => {
           this.logger.debug('Finished updating case definition settings');
+          this.toastrService.success(this.translateService.instant('dossierManagement.externalCreateCaseForm.notification.success'));
         },
       });
   }

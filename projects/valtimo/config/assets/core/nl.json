@@ -555,7 +555,11 @@
       "externalUrlPlaceholder": "De URL van het externe formulier",
       "externalUrlWarnText": "Voer een geldige URL in",
       "externalUrlInvalidText": "De ingevoerde waarde is geen geldige URL",
-      "apply": "Toepassen"
+      "apply": "Toepassen",
+      "notification": {
+        "success" : "Configuratie succesvol bijgewerkt",
+        "error" : "Configuratie kan niet worden bijgewerkt"
+      }
     },
     "tabs": {
       "cases": "Configuratie",
