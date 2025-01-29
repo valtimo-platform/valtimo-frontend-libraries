@@ -553,7 +553,14 @@
       "enabledToggleOn": "Yes",
       "enabledToggleOff": "No",
       "externalUrl": "The URL of the external Create New Case form",
-      "apply": "Apply"
+      "externalUrlPlaceholder": "The URL of the external form",
+      "externalUrlWarnText": "Please enter a valid URL",
+      "externalUrlInvalidText": "The entered value is not a valid URL",
+      "apply": "Apply",
+      "notification": {
+        "success" : "Configuration updated successfully",
+        "error" : "Configuration failed to update"
+      }
     },
     "tabs": {
       "cases": "Configuration",

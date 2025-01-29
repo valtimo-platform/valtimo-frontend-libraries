@@ -17,11 +17,12 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angula
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {CARBON_CONSTANTS} from '@valtimo/components';
-import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
+import {CaseSettings, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
 import {DossierListService} from '../../services';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
+import {NGXLogger} from 'ngx-logger';
 
 declare const $;
 
@@ -63,6 +64,8 @@ export class DossierListActionsComponent implements OnInit {
     })
   );
 
+  readonly caseSettings$: BehaviorSubject<CaseSettings> = new BehaviorSubject(null);
+
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
   private _cachedAssociatedProcessDocumentDefinitions: Array<ProcessDocumentDefinition> = [];
@@ -72,21 +75,41 @@ export class DossierListActionsComponent implements OnInit {
     private readonly listService: DossierListService,
     private readonly notificationService: NotificationService,
     private readonly router: Router,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly logger: NGXLogger,
   ) {}
 
   public ngOnInit(): void {
     this.modalListenerAdded = false;
+
+    this.listService.documentDefinitionName$.subscribe(documentDefinitionName => {
+      this.logger.debug(
+        'Fetching case definition settings for documentDefinitionName', documentDefinitionName
+      );
+      this.documentService
+        .getCaseSettings(documentDefinitionName)
+        .subscribe(caseSettings => {
+          this.logger.debug('Fetched case definition settings', caseSettings);
+          this.caseSettings$.next(caseSettings);
+        });
+    });
   }
 
   public startDossier(): void {
-    const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
-
-    if (associatedProcessDocumentDefinitions.length > 1) {
-      $('#startProcess').modal('show');
+    const caseSettings = this.caseSettings$.getValue();
+    this.logger.debug('Has external Create Case form?', caseSettings.hasExternalCreateCaseForm)
+    if (caseSettings.hasExternalCreateCaseForm) {
+      this.logger.debug('External Create Case form URL:', caseSettings.externalCreateCaseFormUrl)
+      window.open(caseSettings.externalCreateCaseFormUrl, '_blank');
     } else {
-      this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
-      this.showStartProcessModal();
+      const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
+
+      if (associatedProcessDocumentDefinitions.length > 1) {
+        $('#startProcess').modal('show');
+      } else {
+        this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
+        this.showStartProcessModal();
+      }
     }
   }
 
