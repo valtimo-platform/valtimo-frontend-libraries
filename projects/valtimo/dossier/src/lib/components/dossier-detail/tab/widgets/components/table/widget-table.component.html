@@ -18,6 +18,7 @@
   *ngIf="{
     fields: fields$ | async,
     widgetData: widgetData$ | async,
+    emptyFields: emptyFields$ | async,
   } as obs"
   class="valtimo-widget-table"
 >
@@ -36,23 +37,31 @@
   </section>
 
   @if (obs.widgetData && obs.fields && obs.widgetData.length) {
-    <section class="valtimo-widget-table__content">
-      <valtimo-carbon-list
-        [header]="false"
-        [hideToolbar]="true"
-        [fields]="obs.fields"
-        [items]="obs.widgetData"
-      >
-      </valtimo-carbon-list>
+    @if (obs.emptyFields) {
+      <valtimo-no-results
+        [collapseVertically]="true"
+        [description]="'dossier.widgets.emptyFields' | translate"
+        [smallPadding]="true"
+      ></valtimo-no-results>
+    } @else {
+      <section class="valtimo-widget-table__content">
+        <valtimo-carbon-list
+          [header]="false"
+          [hideToolbar]="true"
+          [fields]="obs.fields"
+          [items]="obs.widgetData"
+        >
+        </valtimo-carbon-list>
 
-      <cds-pagination-nav
-        *ngIf="paginationModel()"
-        class="valtimo-widget-table__pagination"
-        [model]="paginationModel()"
-        (selectPage)="onSelectPage($event)"
-      >
-      </cds-pagination-nav>
-    </section>
+        <cds-pagination-nav
+          *ngIf="paginationModel()"
+          class="valtimo-widget-table__pagination"
+          [model]="paginationModel()"
+          (selectPage)="onSelectPage($event)"
+        >
+        </cds-pagination-nav>
+      </section>
+    }
   } @else {
     <valtimo-no-results
       [collapseVertically]="true"

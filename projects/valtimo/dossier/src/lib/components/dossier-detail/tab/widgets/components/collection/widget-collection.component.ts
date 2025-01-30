@@ -111,6 +111,7 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
     this.cdr.detectChanges();
   }
 
+  public readonly emptyFields$ = new BehaviorSubject<boolean>(true);
   public readonly widgetTitle = signal('-');
 
   public readonly widgetConfiguration$ = new BehaviorSubject<CollectionCaseWidget | null>(null);
@@ -153,7 +154,10 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
     {title: string; fields: CollectionWidgetResolvedField[]; key: number; hidden: boolean}[]
   > = combineLatest([this.widgetConfiguration$, this._widgetData$]).pipe(
     filter(([widgetConfig, widgetData]) => !!widgetConfig && !!widgetData),
-    tap(([widgetConfig]) => this.widgetTitle.set(widgetConfig.title)),
+    tap(([widgetConfig]) => {
+      this.widgetTitle.set(widgetConfig.title),
+        this.checkEmptyFields(widgetConfig.properties.fields);
+    }),
     map(([widgetConfig, widgetData]) =>
       widgetData.map((cardData, index) => ({
         hidden: cardData.hidden,
@@ -220,6 +224,7 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
       title: field.title,
       width: field.width,
       value: resolvedValue || data.fields[field.key],
+      hideWhenEmpty: field.displayProperties?.hideWhenEmpty,
     };
   }
 
@@ -256,11 +261,18 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
       const convertedTitle = this.viewContentService.get(widgetTitleValue, {
         ...widgetTitleDisplayProperties,
         viewType: widgetTitleDisplayProperties.type,
+        hideWhenEmpty: widgetTitleDisplayProperties.hideWhenEmpty,
       });
 
       if (convertedTitle) return convertedTitle;
     }
 
     return '-';
+  }
+
+  private checkEmptyFields(fields): void {
+    fields.forEach(field => {
+      if (!field.displayProperties.hideWhenEmpty) this.emptyFields$.next(false);
+    });
   }
 }
