@@ -267,10 +267,9 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  private handleSubmissionError(error: any, callback: FormioSubmissionCallback) {
+  private handleSubmissionError(error: any, callback: FormioSubmissionCallback): Observable<never> {
     const message = (error instanceof HttpErrorResponse ? this.handleFormError(error) : error as string)
       ?? this.translateService.instant("formioTranslations.formioFormViewModelComponent.submitError")
-    debugger;
     callback(message ? {message: message, component: null} : null, null);
     return EMPTY; // return an empty observable to complete the stream
   }
