@@ -19,6 +19,7 @@ import {ConfigService} from '@valtimo/config';
 import {map, Observable} from 'rxjs';
 
 import {
+  CompatiblePluginProcessLinks,
   FormFlowProcessLinkCreateRequestDto,
   FormFlowProcessLinkUpdateRequestDto,
   FormProcessLinkCreateRequestDto,
@@ -88,7 +89,7 @@ export class ProcessLinkService {
     );
   }
 
-  saveProcessLink(
+  public saveProcessLink(
     saveProcessLinkRequest:
       | FormProcessLinkCreateRequestDto
       | FormFlowProcessLinkCreateRequestDto
@@ -109,27 +110,6 @@ export class ProcessLinkService {
   public getProcessLinkCandidates(activityType: string): Observable<Array<ProcessLinkType>> {
     return this.http.get<Array<ProcessLinkType>>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link/types?activityType=${activityType}`
-    );
-  }
-
-  public deployProcessWithProcessLinks(
-    processLinks: ProcessLinkCreateEvent[] = [],
-    processDefinitionId: string | null,
-    processXml: string | null
-  ) {
-    const formData = new FormData();
-    const processLinksBlob = new Blob(
-      [JSON.stringify(processLinks.map(processLink => this.emptyStringToNull(processLink)))],
-      {type: 'application/json'}
-    );
-
-    if (processXml) formData.append('file', new File([processXml], 'process.bpmn'));
-    if (processDefinitionId) formData.append('processDefinitionId', processDefinitionId);
-    formData.append('processLinks', processLinksBlob);
-
-    return this.http.post(
-      `${this.VALTIMO_ENDPOINT_URI}management/v1/case-definition/bezwaar/version/1.0.0-test/process-definition`,
-      formData
     );
   }
 
@@ -194,6 +174,14 @@ export class ProcessLinkService {
 
   public getVariables(): Observable<URLVariables> {
     return this.http.get<URLVariables>(`${this.VALTIMO_ENDPOINT_URI}v1/process-link/url/variables`);
+  }
+
+  public getCompatiblePluginProcessLinks(
+    pluginActionDefinitionKey: string
+  ): Observable<CompatiblePluginProcessLinks[]> {
+    return this.http.get<CompatiblePluginProcessLinks[]>(
+      `${this.VALTIMO_ENDPOINT_URI}/v1/process-link/plugin?pluginActionDefinitionKey=${pluginActionDefinitionKey}`
+    );
   }
 
   private emptyStringToNull<T extends Record<string, any>>(object: T): T {
