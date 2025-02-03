@@ -46,6 +46,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 import {isEqual} from 'lodash';
+import {LayerModule} from 'carbon-components-angular';
 
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
@@ -54,7 +55,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
   templateUrl: './form-view-model.component.html',
   styleUrls: ['./form-view-model.component.css'],
   standalone: true,
-  imports: [CommonModule, FormioModule],
+  imports: [CommonModule, FormioModule, LayerModule],
 })
 export class FormViewModelComponent implements OnInit, OnDestroy {
   @ViewChild('formio') formio: FormioComponent;
@@ -148,9 +149,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     })
   );
 
-  public readonly renderOptions$: Observable<any> = combineLatest([
-    this.currentLanguage$,
-  ]).pipe(
+  public readonly renderOptions$: Observable<any> = combineLatest([this.currentLanguage$]).pipe(
     map(([language]) => {
       const formioTranslations = this.translateService.instant('formioTranslations');
 
@@ -158,11 +157,11 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
         language,
         ...(typeof formioTranslations === 'object'
           ? {
-            language,
-            i18n: {
-              [language]: this.stateService.flattenTranslationsObject(formioTranslations),
-            },
-          }
+              language,
+              i18n: {
+                [language]: this.stateService.flattenTranslationsObject(formioTranslations),
+              },
+            }
           : {}),
       };
     })
@@ -186,8 +185,10 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
 
     this.focusSubscription = this.focus$.pipe(withLatestFrom(this.change$, this.submission$)).subscribe(([_, changeData, submissionDate]) => {
       const dataAtFocus =
-        !!changeData && !!changeData.data ? JSON.parse(JSON.stringify(changeData.data)) :
-          !!submissionDate.data ? JSON.parse(JSON.stringify(submissionDate.data))
+        !!changeData && !!changeData.data
+          ? JSON.parse(JSON.stringify(changeData.data))
+          : !!submissionDate.data
+            ? JSON.parse(JSON.stringify(submissionDate.data))
             : null;
       this.blur$
         .pipe(take(1))
@@ -286,7 +287,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     const formInstance = this.formio.formio;
     this.formErrors$.next([]);
     if (error.error?.componentErrors) {
-      const errors = []
+      const errors = [];
       error.error.componentErrors.forEach(componentError => {
         const component = formInstance.getComponent(componentError.component);
         if (component == null) {
@@ -295,8 +296,8 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
           component?.setCustomValidity(componentError.message);
         }
       });
-      this.formErrors$.next(errors)
-    } else if(error.error?.error) {
+      this.formErrors$.next(errors);
+    } else if (error.error?.error) {
       const component = formInstance.getComponent(error.error?.component);
       if (component == null) {
         this.formErrors$.next([error.error.error]);
@@ -304,7 +305,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
         component?.setCustomValidity(error.error.error);
       }
     } else {
-      return error.message
+      return error.message;
     }
   }
 
@@ -394,7 +395,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
                         this.handlePageChange();
                         this.refreshForm.emit({submission: submission});
                         this.loading$.next(false);
-                        this.formErrors$.next([])
+                        this.formErrors$.next([]);
                       },
                       error: error => {
                         this.loading$.next(false);
@@ -416,15 +417,17 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
       .pipe(
         take(1),
         switchMap(([formName, processDefinitionKey, documentId]) =>
-          this.viewModelService.getViewModelForStartForm(formName, processDefinitionKey, documentId).pipe(
-            tap(viewModel => {
-              this.submission$.next({data: viewModel});
-              this.change$.pipe(take(1)).subscribe(() => {
-                this.loading$.next(false);
-              });
-              this._isWizard = this.formio.form.display === 'wizard';
-            })
-          )
+          this.viewModelService
+            .getViewModelForStartForm(formName, processDefinitionKey, documentId)
+            .pipe(
+              tap(viewModel => {
+                this.submission$.next({data: viewModel});
+                this.change$.pipe(take(1)).subscribe(() => {
+                  this.loading$.next(false);
+                });
+                this._isWizard = this.formio.form.display === 'wizard';
+              })
+            )
         )
       )
       .subscribe();
@@ -437,7 +440,12 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
         switchMap(updating => {
           if (!updating) {
             this.loading$.next(true);
-            return combineLatest([this.formName$, this.processDefinitionKey$, this.change$, this.documentId$]).pipe(
+            return combineLatest([
+              this.formName$,
+              this.processDefinitionKey$,
+              this.change$,
+              this.documentId$,
+            ]).pipe(
               take(1),
               switchMap(([formName, processDefinitionKey, change, documentId]) =>
                 this.viewModelService
@@ -458,7 +466,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
                         this.handlePageChange();
                         this.refreshForm.emit({submission: submission});
                         this.loading$.next(false);
-                        this.formErrors$.next([])
+                        this.formErrors$.next([]);
                       },
                       error: error => {
                         this.loading$.next(false);
