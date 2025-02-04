@@ -69,6 +69,7 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
     this.baseWidgetConfiguration = value;
   }
   public readonly isEmptyWidgetData$ = new BehaviorSubject<boolean>(false);
+  public readonly emptyFields$ = new BehaviorSubject<boolean>(true);
 
   @Input() public set widgetData(value: object) {
     if (!value) return;
@@ -166,5 +167,11 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
 
   private checkEmptyWidgetData(widgetData: Object): boolean {
     return widgetData && Object.keys(widgetData).length === 0;
+  }
+
+  private checkEmptyFields(fields): void {
+    fields.forEach(field => {
+      if (!field.hideWhenEmpty) this.emptyFields$.next(false);
+    });
   }
 }
