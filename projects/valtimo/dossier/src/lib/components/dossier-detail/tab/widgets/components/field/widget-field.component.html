@@ -53,15 +53,15 @@
         'widget-field__container': renderVertically() === 4,
       }"
     >
-      @for (column of obs?.widgetPropertyValue; track column.key) {
-        <div class="widget-field__column">
-          @if (obs.emptyFields) {
-            <valtimo-no-results
-              [collapseVertically]="true"
-              [description]="'dossier.widgets.emptyFields' | translate"
-              [smallPadding]="true"
-            ></valtimo-no-results>
-          } @else {
+      @if (obs.emptyFields) {
+        <valtimo-no-results
+          [collapseVertically]="true"
+          [description]="'dossier.widgets.emptyFields' | translate"
+          [smallPadding]="true"
+        ></valtimo-no-results>
+      } @else {
+        @for (column of obs?.widgetPropertyValue; track column.key) {
+          <div class="widget-field__column">
             @for (property of column; track property) {
               <div *ngIf="!property?.hideWhenEmpty" class="widget-field__field">
                 <label class="widget-field__field-label" [attr.title]="property?.title">
@@ -73,8 +73,8 @@
                 </div>
               </div>
             }
-          }
-        </div>
+          </div>
+        }
       }
     </div>
   }

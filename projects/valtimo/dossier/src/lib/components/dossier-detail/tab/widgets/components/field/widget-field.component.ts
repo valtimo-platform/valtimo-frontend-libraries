@@ -90,8 +90,9 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
     }[][]
   > = combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
     map(([widget, widgetData]) =>
-      widget?.properties.columns.map(column =>
-        column.reduce(
+      widget?.properties.columns.map(column => {
+        this.checkEmptyFields(column);
+        return column.reduce(
           (columnFields, property) => [
             ...columnFields,
             ...(widgetData?.hasOwnProperty(property.key)
@@ -113,8 +114,8 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
               : []),
           ],
           []
-        )
-      )
+        );
+      })
     )
   );
 
@@ -169,9 +170,9 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
     return widgetData && Object.keys(widgetData).length === 0;
   }
 
-  private checkEmptyFields(fields): void {
-    fields.forEach(field => {
-      if (!field.hideWhenEmpty) this.emptyFields$.next(false);
+  private checkEmptyFields(column): void {
+    column.forEach(field => {
+      if (!field.displayProperties?.hideWhenEmpty) this.emptyFields$.next(false);
     });
   }
 }
