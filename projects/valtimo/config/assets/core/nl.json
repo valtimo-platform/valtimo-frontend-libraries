@@ -1799,6 +1799,9 @@
     },
     "formioCurrencyComponent": {
       "errorMessage": "Geen geldig decimaal getal. Voer een geldig decimaal getal in."
+    },
+    "formioFormViewModelComponent": {
+      "submitError": "Ongeldige submissie"
     }
   },
   "viewTypeConverter": {
