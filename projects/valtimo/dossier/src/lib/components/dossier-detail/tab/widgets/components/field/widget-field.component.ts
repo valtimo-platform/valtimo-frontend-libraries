@@ -29,7 +29,7 @@ import {
 import {TranslateModule} from '@ngx-translate/core';
 import {CarbonListModule, EllipsisPipe, ViewContentService, ViewType} from '@valtimo/components';
 import {ButtonModule, InputModule} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, tap} from 'rxjs';
 import {
   CaseWidgetAction,
   CaseWidgetTextDisplayType,
@@ -91,7 +91,6 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
   > = combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
     map(([widget, widgetData]) =>
       widget?.properties.columns.map(column => {
-        this.checkEmptyFields(column);
         return column.reduce(
           (columnFields, property) => [
             ...columnFields,
@@ -116,7 +115,8 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
           []
         );
       })
-    )
+    ),
+    tap(columns => this.checkEmptyFields(columns))
   );
 
   private _observer!: ResizeObserver;
@@ -170,9 +170,12 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
     return widgetData && Object.keys(widgetData).length === 0;
   }
 
-  private checkEmptyFields(column): void {
-    column.forEach(field => {
-      if (!field.displayProperties?.hideWhenEmpty) this.noVisibleFields$.next(false);
+  private checkEmptyFields(columns): void {
+    columns.forEach(column => {
+      column.forEach(field => {
+        if (!field?.hideWhenEmpty || (field?.hideWhenEmpty && field?.value && field?.value != '-'))
+          this.noVisibleFields$.next(false);
+      });
     });
   }
 }
