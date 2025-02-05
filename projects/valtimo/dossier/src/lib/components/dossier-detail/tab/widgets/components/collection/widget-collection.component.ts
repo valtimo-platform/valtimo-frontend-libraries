@@ -155,8 +155,7 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
   > = combineLatest([this.widgetConfiguration$, this._widgetData$]).pipe(
     filter(([widgetConfig, widgetData]) => !!widgetConfig && !!widgetData),
     tap(([widgetConfig]) => {
-      this.widgetTitle.set(widgetConfig.title),
-        this.checkEmptyFields(widgetConfig.properties.fields);
+      this.widgetTitle.set(widgetConfig.title);
     }),
     map(([widgetConfig, widgetData]) =>
       widgetData.map((cardData, index) => ({
@@ -174,7 +173,8 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
           []
         ),
       }))
-    )
+    ),
+    tap(card => this.checkEmptyFields(card))
   );
 
   private _observer!: ResizeObserver;
@@ -270,13 +270,12 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
     return '-';
   }
 
-  private checkEmptyFields(fields): void {
-    fields.forEach(field => {
-      if (
-        !field.displayProperties.hideWhenEmpty ||
-        (field.displayProperties.hideWhenEmpty && field.value)
-      )
-        this.noVisibleFields$.next(false);
+  private checkEmptyFields(card): void {
+    card.forEach(collection => {
+      collection.fields.forEach(field => {
+        if (!field.hideWhenEmpty || (field.hideWhenEmpty && field.value && field.value != '-'))
+          this.noVisibleFields$.next(false);
+      });
     });
   }
 }
