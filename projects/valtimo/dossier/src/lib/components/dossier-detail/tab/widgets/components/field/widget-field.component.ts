@@ -69,7 +69,7 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
     this.baseWidgetConfiguration = value;
   }
   public readonly isEmptyWidgetData$ = new BehaviorSubject<boolean>(false);
-  public readonly emptyFields$ = new BehaviorSubject<boolean>(true);
+  public readonly noVisibleFields$ = new BehaviorSubject<boolean>(true);
 
   @Input() public set widgetData(value: object) {
     if (!value) return;
@@ -172,7 +172,7 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
 
   private checkEmptyFields(column): void {
     column.forEach(field => {
-      if (!field.displayProperties?.hideWhenEmpty) this.emptyFields$.next(false);
+      if (!field.displayProperties?.hideWhenEmpty) this.noVisibleFields$.next(false);
     });
   }
 }

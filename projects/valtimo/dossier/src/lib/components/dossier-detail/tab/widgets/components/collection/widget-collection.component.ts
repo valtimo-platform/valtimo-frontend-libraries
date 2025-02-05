@@ -111,7 +111,7 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
     this.cdr.detectChanges();
   }
 
-  public readonly emptyFields$ = new BehaviorSubject<boolean>(true);
+  public readonly noVisibleFields$ = new BehaviorSubject<boolean>(true);
   public readonly widgetTitle = signal('-');
 
   public readonly widgetConfiguration$ = new BehaviorSubject<CollectionCaseWidget | null>(null);
@@ -272,7 +272,7 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
 
   private checkEmptyFields(fields): void {
     fields.forEach(field => {
-      if (!field.displayProperties.hideWhenEmpty) this.emptyFields$.next(false);
+      if (!field.displayProperties.hideWhenEmpty) this.noVisibleFields$.next(false);
     });
   }
 }

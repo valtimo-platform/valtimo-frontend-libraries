@@ -20,7 +20,7 @@
     widgetPropertyValue: widgetPropertyValue$ | async,
     widgetData: widgetData$ | async,
     isEmptyWidgetData: isEmptyWidgetData$ | async,
-    emptyFields: emptyFields$ | async,
+    noVisibleFields: noVisibleFields$ | async,
   } as obs"
 >
   <section class="widget-field__header">
@@ -53,7 +53,7 @@
         'widget-field__container': renderVertically() === 4,
       }"
     >
-      @if (obs.emptyFields) {
+      @if (obs.noVisibleFields) {
         <valtimo-no-results
           [collapseVertically]="true"
           [description]="'dossier.widgets.emptyFields' | translate"
@@ -63,7 +63,16 @@
         @for (column of obs?.widgetPropertyValue; track column.key) {
           <div class="widget-field__column">
             @for (property of column; track property) {
-              <div *ngIf="!property?.hideWhenEmpty" class="widget-field__field">
+              <div
+                *ngIf="
+                  (property?.value != null &&
+                    property?.value != undefined &&
+                    property?.value != '-' &&
+                    property?.hideWhenEmpty) ||
+                  !property?.hideWhenEmpty
+                "
+                class="widget-field__field"
+              >
                 <label class="widget-field__field-label" [attr.title]="property?.title">
                   {{ property?.title }}</label
                 >

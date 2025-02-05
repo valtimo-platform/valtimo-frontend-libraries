@@ -18,7 +18,7 @@
   *ngIf="{
     widgetConfiguration: widgetConfiguration$ | async,
     collectionWidgetCards: collectionWidgetCards$ | async,
-    emptyFields: emptyFields$ | async,
+    noVisibleFields: noVisibleFields$ | async,
   } as obs"
 >
   <section class="valtimo-widget-collection__header">
@@ -51,7 +51,7 @@
       >
         <span class="valtimo-widget-collection__card-title">{{ card.title }}</span>
 
-        @if (obs.emptyFields) {
+        @if (obs.noVisibleFields) {
           <valtimo-no-results
             [collapseVertically]="true"
             [description]="'dossier.widgets.emptyFields' | translate"
@@ -60,7 +60,10 @@
         } @else {
           @for (field of card.fields; track field.key) {
             <div
-              *ngIf="!field?.hideWhenEmpty"
+              *ngIf="
+                (field?.value != null && field?.value !== '-' && field?.hideWhenEmpty) ||
+                !field?.hideWhenEmpty
+              "
               [ngClass]="{
                 'valtimo-widget-collection__full-width-input': field?.width === 'full',
                 'valtimo-widget-collection__half-width-input': field?.width === 'half',

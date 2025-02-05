@@ -65,7 +65,13 @@ export class WidgetTableComponent extends WidgetProcess {
     this.baseWidgetConfiguration = value;
     this.fields$.next(
       value.properties.columns
-        .filter(column => !column.displayProperties?.hideWhenEmpty)
+        .filter(
+          column =>
+            !column.displayProperties?.hideWhenEmpty ||
+            (column.displayProperties?.hideWhenEmpty &&
+              column.displayProperties['values'] != null &&
+              column.displayProperties['values'] !== '-')
+        )
         .map((column: FieldsCaseWidgetValue, index: number) => ({
           key: column.key,
           label: column.title,
@@ -106,7 +112,7 @@ export class WidgetTableComponent extends WidgetProcess {
     );
   }
 
-  public readonly emptyFields$ = new BehaviorSubject<boolean>(true);
+  public readonly noVisibleFields$ = new BehaviorSubject<boolean>(true);
   public readonly showPagination$ = new BehaviorSubject<boolean>(false);
 
   private _widgetData$ = new BehaviorSubject<CarbonListItem[] | null>(null);
@@ -190,7 +196,7 @@ export class WidgetTableComponent extends WidgetProcess {
 
   private checkEmptyFields(columns): void {
     columns.forEach(column => {
-      if (!column.hideWhenEmpty) this.emptyFields$.next(false);
+      if (!column.hideWhenEmpty) this.noVisibleFields$.next(false);
     });
   }
 }

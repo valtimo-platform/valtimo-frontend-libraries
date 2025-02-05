@@ -18,7 +18,7 @@
   *ngIf="{
     fields: fields$ | async,
     widgetData: widgetData$ | async,
-    emptyFields: emptyFields$ | async,
+    noVisibleFields: noVisibleFields$ | async,
   } as obs"
   class="valtimo-widget-table"
 >
@@ -37,7 +37,7 @@
   </section>
 
   @if (obs.widgetData && obs.fields && obs.widgetData.length) {
-    @if (obs.emptyFields) {
+    @if (obs.noVisibleFields) {
       <valtimo-no-results
         [collapseVertically]="true"
         [description]="'dossier.widgets.emptyFields' | translate"
