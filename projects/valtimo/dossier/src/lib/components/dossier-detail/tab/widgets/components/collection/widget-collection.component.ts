@@ -272,7 +272,11 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
 
   private checkEmptyFields(fields): void {
     fields.forEach(field => {
-      if (!field.displayProperties.hideWhenEmpty) this.noVisibleFields$.next(false);
+      if (
+        !field.displayProperties.hideWhenEmpty ||
+        (field.displayProperties.hideWhenEmpty && field.value)
+      )
+        this.noVisibleFields$.next(false);
     });
   }
 }
