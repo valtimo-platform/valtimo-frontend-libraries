@@ -170,7 +170,7 @@ export class WidgetFieldComponent extends WidgetProcess implements AfterViewInit
     return widgetData && Object.keys(widgetData).length === 0;
   }
 
-  private checkEmptyFields(columns): void {
+  private checkEmptyFields(columns: any[][]): void {
     columns.forEach(column => {
       column.forEach(field => {
         if (!field?.hideWhenEmpty || (field?.hideWhenEmpty && field?.value && field?.value !== '-'))
