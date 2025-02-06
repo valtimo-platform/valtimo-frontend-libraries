@@ -31,7 +31,7 @@ import {
   PaginationModule,
   TilesModule,
 } from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap} from 'rxjs';
 import {CaseWidgetAction, FieldsCaseWidgetValue, TableCaseWidget} from '../../../../../../models';
 import {DossierWidgetsApiService} from '../../../../../../services';
 import {WidgetProcess} from '../widget-process/widget-process';
@@ -64,39 +64,29 @@ export class WidgetTableComponent extends WidgetProcess {
     this._widgetConfiguration = value;
     this.baseWidgetConfiguration = value;
     this.fields$.next(
-      value.properties.columns
-        .filter(
-          column =>
-            !column.displayProperties?.hideWhenEmpty ||
-            (column.displayProperties?.hideWhenEmpty &&
-              column.displayProperties['values'] != null &&
-              column.displayProperties['values'] !== '-')
-        )
-        .map((column: FieldsCaseWidgetValue, index: number) => ({
-          key: column.key,
-          label: column.title,
-          viewType: column.displayProperties?.type ?? ViewType.TEXT,
-          hideWhenEmpty: column.displayProperties?.hideWhenEmpty ?? false,
-          className: `valtimo-widget-table--transparent ${index === 0 && value.properties.firstColumnAsTitle ? 'valtimo-widget-table--title' : ''}`,
-          ...(!!column.displayProperties?.['format'] && {
-            format: column.displayProperties['format'],
-          }),
-          ...(!!column.displayProperties?.['digitsInfo'] && {
-            digitsInfo: column.displayProperties['digitsInfo'],
-          }),
-          ...(!!column.displayProperties?.['display'] && {
-            display: column.displayProperties['display'],
-          }),
-          ...(!!column.displayProperties?.['currencyCode'] && {
-            currencyCode: column.displayProperties['currencyCode'],
-          }),
-          ...(!!column.displayProperties?.['values'] && {
-            values: column.displayProperties['values'],
-          }),
-        }))
+      value.properties.columns.map((column: FieldsCaseWidgetValue, index: number) => ({
+        key: column.key,
+        label: column.title,
+        viewType: column.displayProperties?.type ?? ViewType.TEXT,
+        hideWhenEmpty: column.displayProperties?.hideWhenEmpty ?? false,
+        className: `valtimo-widget-table--transparent ${index === 0 && value.properties.firstColumnAsTitle ? 'valtimo-widget-table--title' : ''}`,
+        ...(!!column.displayProperties?.['format'] && {
+          format: column.displayProperties['format'],
+        }),
+        ...(!!column.displayProperties?.['digitsInfo'] && {
+          digitsInfo: column.displayProperties['digitsInfo'],
+        }),
+        ...(!!column.displayProperties?.['display'] && {
+          display: column.displayProperties['display'],
+        }),
+        ...(!!column.displayProperties?.['currencyCode'] && {
+          currencyCode: column.displayProperties['currencyCode'],
+        }),
+        ...(!!column.displayProperties?.['values'] && {
+          values: column.displayProperties['values'],
+        }),
+      }))
     );
-
-    this.fields$.pipe(tap(columns => this.checkEmptyFields(columns))).subscribe();
 
     this.cdr.detectChanges();
   }
@@ -192,11 +182,5 @@ export class WidgetTableComponent extends WidgetProcess {
 
   public onProcessStartClick(process: CaseWidgetAction): void {
     this.widgetsService.startProcess(process.processDefinitionKey);
-  }
-
-  private checkEmptyFields(columns): void {
-    columns.forEach(column => {
-      if (!column.hideWhenEmpty) this.noVisibleFields$.next(false);
-    });
   }
 }
