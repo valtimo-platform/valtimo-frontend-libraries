@@ -1782,6 +1782,9 @@
     },
     "formioCurrencyComponent": {
       "errorMessage": "Not a valid decimal number. Please enter a valid decimal number."
+    },
+    "formioFormViewModelComponent": {
+      "submitError": "Invalid submissions"
     }
   },
   "viewTypeConverter": {
