@@ -68,7 +68,6 @@ export class WidgetTableComponent extends WidgetProcess {
         key: column.key,
         label: column.title,
         viewType: column.displayProperties?.type ?? ViewType.TEXT,
-        hideWhenEmpty: column.displayProperties?.hideWhenEmpty ?? false,
         className: `valtimo-widget-table--transparent ${index === 0 && value.properties.firstColumnAsTitle ? 'valtimo-widget-table--title' : ''}`,
         ...(!!column.displayProperties?.['format'] && {
           format: column.displayProperties['format'],
@@ -87,7 +86,6 @@ export class WidgetTableComponent extends WidgetProcess {
         }),
       }))
     );
-
     this.cdr.detectChanges();
   }
   public get widgetConfiguration(): TableCaseWidget {
@@ -102,7 +100,6 @@ export class WidgetTableComponent extends WidgetProcess {
     );
   }
 
-  public readonly noVisibleFields$ = new BehaviorSubject<boolean>(true);
   public readonly showPagination$ = new BehaviorSubject<boolean>(false);
 
   private _widgetData$ = new BehaviorSubject<CarbonListItem[] | null>(null);
