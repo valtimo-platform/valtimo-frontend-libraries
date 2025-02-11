@@ -112,7 +112,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
   private _preventPreviousPage = false;
   private _isWizard: boolean = false;
 
-  public  pendingUpdate: Subscription = null;
+  public pendingUpdate: Subscription | null = null;
 
   public readonly submission$ = new BehaviorSubject<any>({});
   public readonly form$ = new BehaviorSubject<object>(undefined);
