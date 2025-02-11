@@ -460,7 +460,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     this.formErrors$.next([]);
   }
 
-  public handleViewModelUpdateError(error: HttpErrorResponse) {
+  public handleViewModelUpdateError(error: HttpErrorResponse): void {
     this.pendingUpdate = null;
     this.handleFormError(error);
   }
