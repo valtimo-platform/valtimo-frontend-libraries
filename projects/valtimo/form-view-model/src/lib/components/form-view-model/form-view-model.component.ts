@@ -450,7 +450,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  public handleViewModelUpdate(viewModel: object) {
+  public handleViewModelUpdate(viewModel: object): void {
     const submission = this.submission$.value;
     submission.data = viewModel;
     this.submission$.next(submission);
