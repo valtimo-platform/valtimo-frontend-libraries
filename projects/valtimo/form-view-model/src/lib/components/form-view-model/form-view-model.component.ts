@@ -456,11 +456,13 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     this.submission$.next(submission);
     this.handlePageChange();
     this.refreshForm.emit({submission: submission});
+    this.pendingUpdate.unsubscribe();
     this.pendingUpdate = null;
     this.formErrors$.next([]);
   }
 
   public handleViewModelUpdateError(error: HttpErrorResponse): void {
+    this.pendingUpdate.unsubscribe();
     this.pendingUpdate = null;
     this.handleFormError(error);
   }
