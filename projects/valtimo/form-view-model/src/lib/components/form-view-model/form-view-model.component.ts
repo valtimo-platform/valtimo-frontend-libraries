@@ -419,7 +419,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
   }
 
   public updateViewModelForStartForm(): void {
-    if (this.pendingUpdate != null) {
+    if (this.pendingUpdate !== null) {
       this.pendingUpdate.unsubscribe();
     }
     this.pendingUpdate = combineLatest([
