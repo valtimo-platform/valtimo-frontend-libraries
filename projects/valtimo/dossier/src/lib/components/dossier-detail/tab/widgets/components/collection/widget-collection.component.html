@@ -55,7 +55,7 @@
         @for (field of card.fields; track field.key) {
           <div
             *ngIf="
-              (field?.value != null && field?.value !== '-' && field?.hideWhenEmpty) ||
+              (field?.value !== null && field?.value !== '-' && field?.hideWhenEmpty) ||
               !field?.hideWhenEmpty
             "
             [ngClass]="{

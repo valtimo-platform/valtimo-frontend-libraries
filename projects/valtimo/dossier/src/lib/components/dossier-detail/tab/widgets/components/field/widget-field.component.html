@@ -65,7 +65,9 @@
             @for (property of column; track property) {
               <div
                 *ngIf="
-                  (property?.value != null && property?.value !== '-' && property?.hideWhenEmpty) ||
+                  (property?.value !== null &&
+                    property?.value !== '-' &&
+                    property?.hideWhenEmpty) ||
                   !property?.hideWhenEmpty
                 "
                 class="widget-field__field"
