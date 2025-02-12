@@ -74,12 +74,14 @@ export class ViewModelService extends BaseApiService {
 
   public getViewModelForStartForm(
     formName: string,
-    processDefinitionKey: string
+    processDefinitionKey: string,
+    documentId: string = null,
   ): Observable<object> {
     return this.httpClient.get<any>(this.getApiUrl('/v1/form/view-model/start-form'), {
       params: {
         formName,
         processDefinitionKey,
+        ...(!!documentId && {documentId}),
       },
       headers: new HttpHeaders().set(InterceptorSkip, '400'),
     });
@@ -88,6 +90,7 @@ export class ViewModelService extends BaseApiService {
   public updateViewModelForStartForm(
     formName: string,
     processDefinitionKey: string,
+    documentId: string,
     viewModel: object,
     page: number,
     isWizard: boolean
@@ -97,6 +100,7 @@ export class ViewModelService extends BaseApiService {
       processDefinitionKey,
       isWizard,
       ...(!isNaN(page) && {page}),
+      ...(!!documentId && {documentId}),
     };
     return this.httpClient.post(this.getApiUrl(`/v1/form/view-model/start-form`), viewModel, {
       params,
@@ -107,6 +111,7 @@ export class ViewModelService extends BaseApiService {
   public submitViewModelForStartForm(
     formName: string,
     processDefinitionKey: string,
+    documentId: string,
     documentDefinitionName: string,
     viewModel: object
   ): Observable<object> {
@@ -118,6 +123,7 @@ export class ViewModelService extends BaseApiService {
           formName,
           processDefinitionKey,
           documentDefinitionName,
+          ...(!!documentId && {documentId}),
         },
         headers: new HttpHeaders().set(InterceptorSkip, '400'),
       }
