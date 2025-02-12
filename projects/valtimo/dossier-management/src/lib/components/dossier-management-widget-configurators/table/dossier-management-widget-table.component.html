@@ -80,6 +80,7 @@
   [columnData]="content()?.columns"
   [documentDefinitionName]="documentDefinitionName$ | async"
   [selectedCollection]="selectedCollection$ | async"
+  [showHideWhenEmptyCheckbox]="false"
   (columnUpdateEvent)="onColumnUpdateEvent($event)"
 ></valtimo-dossier-management-widget-fields-column>
 
