@@ -298,9 +298,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     })
   );
 
-  public readonly enablePbacDocumentenApiDocuments$: Observable<boolean> = this.configService.getFeatureToggleObservable(
-    'enablePbacDocumentenApiDocuments'
-  );
+  public readonly enablePbacDocumentenApiDocuments$: Observable<boolean> =
+    this.configService.getFeatureToggleObservable('enablePbacDocumentenApiDocuments');
 
   public filePermissions: {
     [fileId: string]: {canView: boolean; canModify: boolean; canDelete: boolean};
@@ -329,7 +328,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     private readonly documentenApiDocumentService: DocumentenApiDocumentService,
     private readonly documentenApiColumnService: DocumentenApiColumnService,
     private readonly documentenApiVersionService: DocumentenApiVersionService,
-    private readonly permissionService: PermissionService,
+    private readonly permissionService: PermissionService
   ) {
     this.iconService.register(Filter16);
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
@@ -620,10 +619,9 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     return combineLatest(
       files.map(file =>
         this.getPermission(permissionRequest, {
-            resource: RESOURCE_PERMISSION_RESOURCE.resourcePermission,
-            identifier: file.fileId,
-          })
-          .pipe(map(available => ({[file.fileId]: available})))
+          resource: RESOURCE_PERMISSION_RESOURCE.resourcePermission,
+          identifier: file.fileId,
+        }).pipe(map(available => ({[file.fileId]: available})))
       )
     ).pipe(
       map(permissions => permissions.reduce((acc, permission) => ({...acc, ...permission}), {}))
@@ -633,12 +631,12 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   private getPermission(permissionRequest: PermissionRequest, context?: any): Observable<boolean> {
     return this.enablePbacDocumentenApiDocuments$.pipe(
       switchMap(enabled => {
-        if(!enabled) {
-          return of(true)
+        if (!enabled) {
+          return of(true);
         } else {
-          return this.permissionService.requestPermission(permissionRequest, context)
+          return this.permissionService.requestPermission(permissionRequest, context);
         }
       })
-    )
+    );
   }
 }
