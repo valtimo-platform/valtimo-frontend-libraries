@@ -455,7 +455,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     submission.data = viewModel;
     this.submission$.next(submission);
     this.handlePageChange();
-    this.refreshForm.emit({submission: submission});
+    this.refreshForm.emit({submission});
     this.pendingUpdate.unsubscribe();
     this.pendingUpdate = null;
     this.formErrors$.next([]);
