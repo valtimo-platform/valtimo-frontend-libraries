@@ -633,9 +633,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
       switchMap(enabled => {
         if (!enabled) {
           return of(true);
-        } else {
-          return this.permissionService.requestPermission(permissionRequest, context);
         }
+        return this.permissionService.requestPermission(permissionRequest, context);
       })
     );
   }
