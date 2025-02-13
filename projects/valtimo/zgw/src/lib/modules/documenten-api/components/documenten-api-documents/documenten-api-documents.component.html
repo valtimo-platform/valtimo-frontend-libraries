@@ -157,7 +157,7 @@
       (uploadProcessLinkedSet && !uploadProcessLinked) ||
       showZaakLinkWarning ||
       disabled ||
-      !(canCreateResource$ | async)
+      (canCreateResource$ | async) === false
     "
     [vTooltip]="getUploadButtonTooltip() | translate"
     (click)="onUploadButtonClick()"

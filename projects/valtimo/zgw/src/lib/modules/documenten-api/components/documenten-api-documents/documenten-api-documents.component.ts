@@ -305,7 +305,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     [fileId: string]: {canView: boolean; canModify: boolean; canDelete: boolean};
   } = {};
 
-  public readonly canCreateResource$ = this.documentId$.pipe(
+  public readonly canCreateResource$: Observable<boolean> = this.documentId$.pipe(
     switchMap(documentId =>
       this.getPermission(CAN_CREATE_RESOURCE_PERMISSION, {
         resource: RESOURCE_PERMISSION_RESOURCE.jsonSchemaDocument,
