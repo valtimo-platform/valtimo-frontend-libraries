@@ -198,7 +198,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   private readonly _statusField: ListField = {
     label: 'document.status',
-    key: 'tags',
+    key: 'internalStatus',
     viewType: ViewType.TAGS,
     sortable: true,
   };
