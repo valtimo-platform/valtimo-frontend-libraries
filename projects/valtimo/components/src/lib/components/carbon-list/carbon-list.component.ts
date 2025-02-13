@@ -707,6 +707,13 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   private resolveTagObject(item: CarbonListItem, key: string): TableItem {
     const itemTags = item[key];
 
+    if (key === 'internalStatus') {
+      return new TableItem({
+        data: {tags: [{content: item.tags[0].content, type: item.tags[0].type}]},
+        template: this.tagTemplate,
+      });
+    }
+
     if (!Array.isArray(itemTags)) {
       return new TableItem({
         data: {
