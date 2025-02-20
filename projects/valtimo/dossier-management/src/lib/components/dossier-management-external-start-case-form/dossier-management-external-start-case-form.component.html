@@ -20,29 +20,29 @@
     caseSettings: caseSettings$ | async
   } as obs"
 >
-  <h2 class="mb-4">{{ 'dossierManagement.externalCreateCaseForm.title' | translate }}</h2>
+  <h2 class="mb-4">{{ 'dossierManagement.externalStartCaseForm.title' | translate }}</h2>
 
   <div class="card card-border card-contrast">
     <div class="card-body">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <cds-toggle
           formControlName="hasExternalForm"
-          label="{{ 'dossierManagement.externalCreateCaseForm.enabledToggle' | translate }}"
-          onText="{{ 'dossierManagement.externalCreateCaseForm.enabledToggleOn' | translate }}"
-          offText="{{ 'dossierManagement.externalCreateCaseForm.enabledToggleOff' | translate }}"
+          label="{{ 'dossierManagement.externalStartCaseForm.enabledToggle' | translate }}"
+          onText="{{ 'dossierManagement.externalStartCaseForm.enabledToggleOn' | translate }}"
+          offText="{{ 'dossierManagement.externalStartCaseForm.enabledToggleOff' | translate }}"
         ></cds-toggle>
 
         <div class="mt-2">
           <cds-label
-            warnText="{{ 'dossierManagement.externalCreateCaseForm.externalUrlWarnText' | translate }}"
-            invalidText="{{ 'dossierManagement.externalCreateCaseForm.externalUrlInvalidText' | translate }}">
-            {{ 'dossierManagement.externalCreateCaseForm.externalUrl' | translate }}
+            warnText="{{ 'dossierManagement.externalStartCaseForm.externalUrlWarnText' | translate }}"
+            invalidText="{{ 'dossierManagement.externalStartCaseForm.externalUrlInvalidText' | translate }}">
+            {{ 'dossierManagement.externalStartCaseForm.externalUrl' | translate }}
             <input
               cdsText
               type="text"
               class="input-field"
               formControlName="externalFormUrl"
-              placeholder="{{ 'dossierManagement.externalCreateCaseForm.externalUrlPlaceholder' | translate }}"
+              placeholder="{{ 'dossierManagement.externalStartCaseForm.externalUrlPlaceholder' | translate }}"
               maxlength="512"
             />
           </cds-label>
@@ -50,7 +50,7 @@
 
         <div class="mt-3">
           <button cdsButton="primary" type="submit" [disabled]="!canSubmit()">
-            {{ 'dossierManagement.externalCreateCaseForm.apply' | translate }}
+            {{ 'dossierManagement.externalStartCaseForm.apply' | translate }}
           </button>
         </div>
       </form>

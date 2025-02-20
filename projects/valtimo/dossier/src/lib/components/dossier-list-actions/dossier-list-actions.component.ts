@@ -97,10 +97,10 @@ export class DossierListActionsComponent implements OnInit {
 
   public startDossier(): void {
     const caseSettings = this.caseSettings$.getValue();
-    this.logger.debug('Has external Create Case form?', caseSettings.hasExternalCreateCaseForm)
-    if (caseSettings.hasExternalCreateCaseForm) {
-      this.logger.debug('External Create Case form URL:', caseSettings.externalCreateCaseFormUrl)
-      window.open(caseSettings.externalCreateCaseFormUrl, '_blank');
+    this.logger.debug('Has external Start Case form?', caseSettings.hasExternalStartCaseForm)
+    if (caseSettings.hasExternalStartCaseForm) {
+      this.logger.debug('External Start Case form URL:', caseSettings.externalStartCaseFormUrl)
+      window.open(caseSettings.externalStartCaseFormUrl, '_blank');
     } else {
       const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
 

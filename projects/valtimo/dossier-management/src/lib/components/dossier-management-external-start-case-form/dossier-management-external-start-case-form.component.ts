@@ -8,10 +8,10 @@ import {ToastrService} from 'ngx-toastr';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'valtimo-dossier-management-external-create-case-form',
-  templateUrl: './dossier-management-external-create-case-form.component.html',
+  selector: 'valtimo-dossier-management-external-start-case-form',
+  templateUrl: './dossier-management-external-start-case-form.component.html',
 })
-export class DossierManagementExternalCreateCaseFormComponent implements OnInit, OnDestroy {
+export class DossierManagementExternalStartCaseFormComponent implements OnInit, OnDestroy {
   public form!: FormGroup;
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
@@ -37,7 +37,7 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
   ) { }
 
   ngOnInit(): void {
-    this.logger.debug('External Case Create Form - onInit');
+    this.logger.debug('External Case Start Form - onInit');
 
     this.form = this.fb.group({
       hasExternalForm: [false], // Toggle is off by default
@@ -80,8 +80,8 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
         if (caseSettings) {
           this.logger.debug('Applying case definition settings to form', caseSettings);
           this.form.setValue({
-            hasExternalForm: caseSettings.hasExternalCreateCaseForm,
-            externalFormUrl: caseSettings.externalCreateCaseFormUrl,
+            hasExternalForm: caseSettings.hasExternalStartCaseForm,
+            externalFormUrl: caseSettings.externalStartCaseFormUrl,
           });
         }
       })
@@ -89,7 +89,7 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
   }
 
   ngOnDestroy(): void {
-    this.logger.debug('External Case Create Form - onDestroy');
+    this.logger.debug('External Case Start Form - onDestroy');
     // Clean up subscriptions when the component is destroyed
     this._subscriptions.unsubscribe();
   }
@@ -111,8 +111,8 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
       this.logger.debug('Submitted case definition settings form with values:', this.form.value);
       const caseSettings = this.caseSettings$.getValue();
       this.updateCaseSettings(caseSettings.name, {
-        hasExternalCreateCaseForm: this.hasExternalForm.value,
-        externalCreateCaseFormUrl: (typeof this.externalFormUrl.value === 'string') ?
+        hasExternalStartCaseForm: this.hasExternalForm.value,
+        externalStartCaseFormUrl: (typeof this.externalFormUrl.value === 'string') ?
           this.externalFormUrl.value.trim() : this.externalFormUrl.value
       });
     }
@@ -129,11 +129,11 @@ export class DossierManagementExternalCreateCaseFormComponent implements OnInit,
         },
         error: e => {
           this.logger.error('An error occurred while updating case definition settings', e);
-          this.toastrService.error(this.translateService.instant('dossierManagement.externalCreateCaseForm.notification.error'))
+          this.toastrService.error(this.translateService.instant('dossierManagement.externalStartCaseForm.notification.error'))
         },
         complete: () => {
           this.logger.debug('Finished updating case definition settings');
-          this.toastrService.success(this.translateService.instant('dossierManagement.externalCreateCaseForm.notification.success'));
+          this.toastrService.success(this.translateService.instant('dossierManagement.externalStartCaseForm.notification.success'));
         },
       });
   }
