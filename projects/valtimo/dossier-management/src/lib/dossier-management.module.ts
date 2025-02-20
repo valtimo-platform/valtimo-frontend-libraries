@@ -84,7 +84,7 @@ import {DossierManagementStatusesComponent} from './components/dossier-managemen
 import {DossierManagementStatusModalComponent} from './components/dossier-management-statuses/dossier-management-status-modal/dossier-management-status-modal.component';
 import {DossierManagementCreateComponent} from './components/dossier-management-create/dossier-management-create.component';
 import {DossierManagementWidgetsEditorComponent} from './components/dossier-management-widget-tab/editor/dossier-management-widgets-editor.component';
-import {DossierManagementExternalCreateCaseFormComponent} from './components/dossier-management-external-create-case-form/dossier-management-external-create-case-form.component';
+import {DossierManagementExternalStartCaseFormComponent} from './components/dossier-management-external-start-case-form/dossier-management-external-start-case-form.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +108,7 @@ import {DossierManagementExternalCreateCaseFormComponent} from './components/dos
     DossierManagementStatusesComponent,
     DossierManagementStatusModalComponent,
     DossierManagementCreateComponent,
-    DossierManagementExternalCreateCaseFormComponent,
+    DossierManagementExternalStartCaseFormComponent,
   ],
   imports: [
     CommonModule,
