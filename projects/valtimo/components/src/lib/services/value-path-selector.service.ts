@@ -84,12 +84,17 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     );
 
     return (
-      prefixesWithoutCache.length > 0
+      prefixes.length === 0
         ? this.httpClient.post<ValuePathResponse[]>(this.getApiUrl(url), {
-            prefixes: prefixesWithoutCache,
+            prefixes: [],
             type,
           })
-        : of([])
+        : prefixesWithoutCache.length > 0
+          ? this.httpClient.post<ValuePathResponse[]>(this.getApiUrl(url), {
+              prefixes: prefixesWithoutCache,
+              type,
+            })
+          : of([])
     ).pipe(
       tap((results: ValuePathResponse[]) => {
         if (type === ValuePathType.FIELD)
@@ -103,9 +108,13 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
             type
           );
       }),
-      map(() =>
-        prefixes.reduce((acc, curr) => [...acc, ...(this.getCacheResult(curr, type) ?? [])], [])
-      )
+      map(results => {
+        const resultPrefixes = [...new Set(results.map(result => result.path.split(':')[0]))];
+        return resultPrefixes.reduce(
+          (acc, curr) => [...acc, ...(this.getCacheResult(curr, type) ?? [])],
+          []
+        );
+      })
     );
   }
 
@@ -118,10 +127,7 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     );
   }
 
-  private getCacheResult(
-    prefix: ValuePathSelectorPrefix,
-    type: ValuePathType
-  ): ValuePathItem[] | undefined {
+  private getCacheResult(prefix: string, type: ValuePathType): ValuePathItem[] | undefined {
     return this._cache[this._documentDefinitionName]?.[this._version]?.[prefix]?.[type];
   }
 
@@ -149,7 +155,11 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
   private cacheMapping(results: ValuePathItem[], type: ValuePathType): void {
     if (!results.length) return;
 
-    const prefixResults = this._prefixes.reduce(
+    const prefixes =
+      this._prefixes.length >= 1
+        ? this._prefixes
+        : [...new Set(results.map(result => result.path.split(':')[0]))];
+    const prefixResults = prefixes.reduce(
       (acc, curr) => ({
         ...acc,
         [curr]: {

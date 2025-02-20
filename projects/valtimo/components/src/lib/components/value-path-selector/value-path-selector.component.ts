@@ -182,9 +182,9 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     return this._documentDefinitionNameSubject$.pipe(filter(value => !!value));
   }
   private readonly _version$ = new BehaviorSubject<number | null>(null);
-  private readonly _prefixesSubject$ = new BehaviorSubject<ValuePathSelectorPrefix[] | null>(null);
+  private readonly _prefixesSubject$ = new BehaviorSubject<ValuePathSelectorPrefix[]>([]);
   private get _prefixes$(): Observable<ValuePathSelectorPrefix[]> {
-    return this._prefixesSubject$.pipe(filter(value => !!value));
+    return this._prefixesSubject$;
   }
 
   private readonly _inputMode$ = new BehaviorSubject<ValuePathSelectorInputMode>(
