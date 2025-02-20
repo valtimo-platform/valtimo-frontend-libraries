@@ -31,6 +31,7 @@ import {combineLatest, filter, map, Observable, startWith, Subscription, tap} fr
 import {TabEnum} from '../../models';
 import {DossierDetailService, TabService} from '../../services';
 import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
+import {Tab} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
@@ -67,7 +68,6 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
     }),
     startWith(this.route.firstChild?.routeConfig?.path)
   );
-
   public readonly injectedCaseManagementTabs$: Observable<CaseManagementTabConfig[]> =
     this.tabService.injectedCaseManagementTabs$;
   public readonly documentDefinitionTitle$ = this.pageTitleService.customPageTitle$;
@@ -98,7 +98,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   public ngOnDestroy(): void {
     this.tabService.currentTab = TabEnum.PROCESSES;
     this._subscriptions.unsubscribe();
-    this.pageTitleService.enableReset();
+    // this.pageTitleService.enableReset();
   }
 
   public navigateToTab(tab: TabEnum | string): void {
