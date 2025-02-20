@@ -302,6 +302,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
         if (component == null) {
           errors.push(componentError.message);
         } else {
+          // `true` makes the error dirty, setting the css class properly
           component.setCustomValidity(componentError.message, true);
         }
       });
@@ -311,6 +312,7 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
       if (component == null) {
         this.formErrors$.next([error.error.error]);
       } else {
+        // `true` makes the error dirty, setting the css class properly
         component.setCustomValidity(error.error.error, true);
       }
     } else {
