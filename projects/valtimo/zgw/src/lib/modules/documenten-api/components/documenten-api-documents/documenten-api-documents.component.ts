@@ -461,7 +461,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   }
 
   private editDisabled(file: DocumentenApiRelatedFile): boolean {
-    return file.status === 'definitief';
+    return false;
   }
 
   private downloadDocument(relatedFile: DocumentenApiRelatedFile, forceDownload: boolean): void {
