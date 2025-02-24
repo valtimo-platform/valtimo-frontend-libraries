@@ -509,8 +509,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         status: validPrefillStatus,
         vertrouwelijkheidaanduiding:
           vertrouwelijkheidaanduiding || this.defaultValues.vertrouwelijkheidaanduiding,
-        ontvangstdatum: new Date(ontvangstdatum),
-        verzenddatum: new Date(verzenddatum),
+        ontvangstdatum: ontvangstdatum ? new Date(ontvangstdatum) : null,
+        verzenddatum: verzenddatum ? new Date(verzenddatum) : null,
         trefwoorden: trefwoorden || this.defaultValues.trefwoorden,
       });
     }
