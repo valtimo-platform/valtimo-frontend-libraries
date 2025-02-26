@@ -722,7 +722,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
             : [
                 {
                   content: item[key],
-                  type: item.tags[0].type,
+                  type: item.tags?.[0].type ?? 'BLUE',
                 },
               ],
         },
