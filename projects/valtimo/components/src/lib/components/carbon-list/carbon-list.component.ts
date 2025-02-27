@@ -709,7 +709,9 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (key === 'internalStatus') {
       return new TableItem({
-        data: {tags: [{content: item.tags?.[0].content ?? '-', type: item.tags?.[0].type}]},
+        data: {
+          tags: [{content: item.tags?.[0].content ?? '-', type: item.tags?.[0].type}],
+        },
         template: this.tagTemplate,
       });
     }
@@ -722,7 +724,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
             : [
                 {
                   content: item[key],
-                  type: item.tags?.[0].type ?? 'BLUE',
+                  type: 'blue',
                 },
               ],
         },
