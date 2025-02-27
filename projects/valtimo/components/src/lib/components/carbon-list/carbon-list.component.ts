@@ -693,7 +693,9 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
       ? definitionKey.split(customPropString)[1]
       : definitionKey;
     const resolvedObjValue = _get(obj, key, null);
-    return this.viewContentService.get(resolvedObjValue, definition);
+    return definition?.key === 'internalStatus'
+      ? obj?.tags?.[0]?.content
+      : this.viewContentService.get(resolvedObjValue, definition);
   }
 
   private swapItems(items: CarbonListItem[], index1: number, index2: number): CarbonListItem[] {
