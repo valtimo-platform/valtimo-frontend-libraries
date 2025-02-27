@@ -22,6 +22,7 @@ import {
   DocumentenApiMetadata,
   DocumentLanguage,
   DocumentStatus,
+  SupportedDocumentenApiFeatures,
 } from '../../models';
 import {
   BehaviorSubject,
@@ -76,6 +77,7 @@ import {
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 import moment from 'moment';
 import {DocumentenApiUploadFieldDefaultValues} from '../../models/documenten-api-upload-field.model';
+import {DocumentenApiVersionService} from '../../services';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -272,6 +274,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     return this.documentenApiMetadataForm.get('bestandsnaam');
   }
 
+  public readonly editDisabled$ = new BehaviorSubject<boolean>(false);
+
   public readonly CONFIDENTIALITY_LEVELS: Array<ConfidentialityLevel> = [
     'openbaar',
     'beperkt_openbaar',
@@ -416,6 +420,13 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     map(userProfile => userProfile?.email || '')
   );
 
+  private readonly _supportedDocumentenApiFeatures$: Observable<SupportedDocumentenApiFeatures> =
+    this.valtimoModalService.documentDefinitionName$.pipe(
+      switchMap(documentDefinitionName =>
+        this.documentenApiVersionService.getSupportedApiFeatures(documentDefinitionName)
+      )
+    );
+
   private _subscriptions = new Subscription();
   private _fileSubscription!: Subscription;
   private _fileNameAndAuthorSubscription!: Subscription;
@@ -428,7 +439,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     private readonly keycloakService: KeycloakService,
     private readonly modalService: ModalService,
     private readonly translateService: TranslateService,
-    private readonly valtimoModalService: ValtimoModalService
+    private readonly valtimoModalService: ValtimoModalService,
+    private readonly documentenApiVersionService: DocumentenApiVersionService
   ) {}
 
   public ngOnInit(): void {
@@ -442,6 +454,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
     this._fileSubscription?.unsubscribe();
     this._fileNameAndAuthorSubscription?.unsubscribe();
+    this.editDisabled$.next(false);
   }
 
   public languageSelected(event: {item: {id: string}}) {
@@ -597,9 +610,16 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   private openFileSubscription(): void {
     this._fileSubscription?.unsubscribe();
     if (this.file$) {
-      this._fileSubscription = this.file$.subscribe(file => {
+      this._fileSubscription = combineLatest([
+        this.file$,
+        this._supportedDocumentenApiFeatures$,
+      ]).subscribe(([file, support]) => {
         if (file) {
           this.prefillForm(file);
+          this.editDisabled$.next(
+            (!support.supportsUpdatingDefinitiveDocument || file.status === 'definitief') &&
+              this.isEditMode
+          );
         }
       });
     }
