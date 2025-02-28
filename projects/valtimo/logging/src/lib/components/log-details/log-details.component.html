@@ -21,11 +21,13 @@
 
   <section cdsModalContent class="valtimo-log-details__content">
     <h4 class="log-header">{{ 'logging.formattedMessage' | translate }}</h4>
-    <div>{{ logEventFormatted?.formattedMessage }}</div>
+    <div>{{ logEventFormatted?.formattedMessage || '-' }}</div>
+
     <h4 class="log-header">{{ 'logging.timestamp' | translate }}</h4>
     <div>
-      {{ logEventFormatted?.timestamp }}
+      {{ logEventFormatted?.timestamp || '-' }}
     </div>
+
     @if (logEventFormatted?.properties?.length > 0) {
       <h4 class="log-header">{{ 'logging.properties' | translate }}</h4>
       <div>
@@ -37,6 +39,7 @@
         }
       </div>
     }
+
     @if (logEventFormatted?.stacktrace) {
       <h4 class="log-header">{{ 'logging.stacktrace' | translate }}</h4>
       <div>
