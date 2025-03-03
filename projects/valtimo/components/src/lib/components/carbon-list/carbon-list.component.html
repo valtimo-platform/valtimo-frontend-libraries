@@ -171,23 +171,23 @@
 </ng-template>
 
 <ng-template #tagTemplate let-data="data">
-  <ng-container *ngIf="!data.tags">-</ng-container>
+  <ng-container *ngIf="!data">-</ng-container>
 
-  <div *ngIf="data.tags" class="tag-template">
-    @if (data.tags.length === 0) {
+  <div *ngIf="data" class="tag-template">
+    @if (data.length === 0) {
       -
     } @else {
-      <cds-tag *ngIf="!!data.tags[0].content" class="cds-tag--no-margin" [type]="data.tags[0].type">
-        {{ data.tags[0].ellipsisContent ?? data.tags[0].content }}
+      <cds-tag *ngIf="!!data[0].content" class="cds-tag--no-margin" [type]="data[0].type">
+        {{ data[0].ellipsisContent ?? data[0].content }}
       </cds-tag>
 
       <cds-tag
-        *ngIf="data.tags.length > 1"
+        *ngIf="data.length > 1"
         class="cds-tag--no-margin valtimo-carbon-list__expand-tag"
         type="high-contrast"
-        (click)="onTagClick($event, data.tags)"
+        (click)="onTagClick($event, data)"
       >
-        {{ data.tags.length - 1 }} <svg cdsIcon="add" size="16"></svg>
+        {{ data.length - 1 }} <svg cdsIcon="add" size="16"></svg>
       </cds-tag>
     }
   </div>
