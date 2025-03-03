@@ -103,10 +103,6 @@ td:first-child {
     }
   }
 
-  ::ng-deep .cds--tag {
-    white-space: nowrap;
-  }
-
   ::ng-deep.valtimo-carbon-list__draggable .cds--btn--ghost {
     cursor: move !important;
   }
