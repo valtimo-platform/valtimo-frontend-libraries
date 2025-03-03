@@ -707,8 +707,10 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
     return filteredItems;
   }
 
-  private resolveTagObject(item: CarbonListItem, key: string): CarbonTag[] {
+  private resolveTagObject(item: CarbonListItem, key: string): CarbonTag[] | null {
     const object: string | string[] | CarbonTag | CarbonTag[] = item[key];
+
+    if (!object) return null;
 
     if (isArray(object) && typeof object[0] !== 'string') return object as CarbonTag[];
 
