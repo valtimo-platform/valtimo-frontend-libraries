@@ -196,13 +196,16 @@ export class DossierListComponent implements OnInit, OnDestroy {
 
   public readonly showStatusSelector$ = this.statusService.showStatusSelector$;
 
+  private readonly INTERNAL_STATUS_COLUMN = 'internalStatus';
   private readonly _statusField: ListField = {
     label: 'document.status',
-    key: 'internalStatus',
+    key: this.INTERNAL_STATUS_COLUMN,
     viewType: ViewType.TAGS,
     sortable: true,
   };
-  private readonly _internalStatusKeys$ = new BehaviorSubject<string[]>([]);
+  private readonly _internalStatusKeys$ = new BehaviorSubject<string[]>([
+    this.INTERNAL_STATUS_COLUMN,
+  ]);
   public readonly fields$: Observable<Array<ListField>> = combineLatest([
     this._canHaveAssignee$,
     this._columns$,
@@ -215,13 +218,14 @@ export class DossierListComponent implements OnInit, OnDestroy {
       this.canHaveAssignee = canHaveAssignee;
     }),
     map(([canHaveAssignee, columns, hasEnvConfig, hasApiConfig, statuses]) => {
-      this._internalStatusKeys$.next(
-        columns.reduce(
+      this._internalStatusKeys$.next([
+        ...this._internalStatusKeys$.getValue(),
+        ...columns.reduce(
           (acc, curr) =>
-            curr.propertyName === 'internalStatus' ? [...acc, curr.translationKey] : acc,
+            curr.propertyName === this.INTERNAL_STATUS_COLUMN ? [...acc, curr.translationKey] : acc,
           []
-        )
-      );
+        ),
+      ]);
       const filteredAssigneeColumns = this.assigneeService.filterAssigneeColumns(
         columns,
         canHaveAssignee
