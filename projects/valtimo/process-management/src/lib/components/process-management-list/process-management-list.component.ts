@@ -60,20 +60,17 @@ export class ProcessManagementListComponent {
     },
   ];
 
-  public readonly processDefinitions$: Observable<
-    (ProcessDefinition & {data: CaseProcessInstance})[]
-  > = this.processManagementStateService.reloadDefinitions$.pipe(
-    tap(() => this.loading$.next(true)),
-    switchMap(() => this.processManagementService.getProcesses()),
-    tap(res => console.log({res})),
-    map(res => res.map(i => ({...i.processDefinition, data: i}))),
-    tap(() => this.loading$.next(false))
-  );
+  public readonly processDefinitions$: Observable<CaseProcessInstance[]> =
+    this.processManagementStateService.reloadDefinitions$.pipe(
+      tap(() => this.loading$.next(true)),
+      switchMap(() => this.processManagementService.getProcesses()),
+      tap(() => this.loading$.next(false))
+    );
 
   public readonly FIELDS: ColumnConfig[] = [
-    {key: 'name', label: 'Name'},
-    {key: 'key', label: 'Key'},
-    {key: 'readOnly', label: 'Read-only', viewType: ViewType.BOOLEAN},
+    {key: 'processDefinition.name', label: 'Name'},
+    {key: 'processDefinition.key', label: 'Key'},
+    {key: 'processDefinition.readOnly', label: 'Read-only', viewType: ViewType.BOOLEAN},
   ];
 
   constructor(
@@ -84,10 +81,8 @@ export class ProcessManagementListComponent {
     this.iconService.registerAll([Upload16]);
   }
 
-  public editProcessDefinition(
-    processDefinition: ProcessDefinition & {data: CaseProcessInstance}
-  ): void {
-    this.processSelected.emit(processDefinition.data);
+  public editProcessDefinition(processDefinition: CaseProcessInstance): void {
+    this.processSelected.emit(processDefinition);
   }
 
   public openModal(): void {

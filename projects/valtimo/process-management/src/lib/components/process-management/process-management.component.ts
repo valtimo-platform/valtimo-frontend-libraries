@@ -54,7 +54,6 @@ export class ProcessManagementComponent {
   }
 
   public onProcessSelected(process: CaseProcessInstance): void {
-    console.log({process});
     this.selectedProcess$.next(process);
   }
 }
