@@ -28,13 +28,23 @@
       (mouseenter)="onMouseEnterDueDate()"
       (mouseleave)="onMouseLeaveDueDate()"
     >
-      <div [style.visibility]="(mouseIsOverDueDate$ | async) ? 'hidden' : 'visible'">
+      <div
+        class="due-date-text"
+        [style.visibility]="(mouseIsOverDueDate$ | async) ? 'hidden' : 'visible'"
+      >
         <span class="bold">{{ ('setTaskDueDate.dueDateText' | translate) + ' ' }}</span>
 
         &nbsp;
 
         {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
       </div>
+
+      <button
+        cdsButton="ghost"
+        [style.visibility]="(mouseIsOverDueDate$ | async) ? 'visible' : 'hidden'"
+      >
+        Click to remove due date
+      </button>
     </div>
   }
 

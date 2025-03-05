@@ -13,6 +13,11 @@
   line-height: 18px;
   letter-spacing: 0.16px;
   color: var(--cds-link-01);
+  position: relative;
+
+  .due-date-text {
+    position: absolute;
+  }
 
   .bold {
     font-weight: 700;
