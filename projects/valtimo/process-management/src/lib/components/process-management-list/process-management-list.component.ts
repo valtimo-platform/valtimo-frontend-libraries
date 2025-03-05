@@ -86,7 +86,7 @@ export class ProcessManagementListComponent {
   }
 
   public openModal(): void {
-    // this.processManagementStateService.openModal();
+    this.processManagementStateService.openModal();
   }
 
   public onCreateProcess(): void {

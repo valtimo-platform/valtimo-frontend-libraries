@@ -53,4 +53,8 @@ export class CaseManagementProcessesComponent extends PendingChangesComponent {
   public onDeactivatePendingChanges(): void {
     this.pendingChanges = false;
   }
+
+  public onProcessSelected(process: any | 'create'): void {
+    this.selectedProcess$.next(process);
+  }
 }
