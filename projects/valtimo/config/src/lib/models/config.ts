@@ -97,6 +97,7 @@ interface ValtimoConfigFeatureToggles {
   enableIntermediateSave?: boolean;
   enableFormFlowBreadcrumbs?: boolean;
   enablePbacDocumentenApiDocuments?: boolean;
+  enableSuppressDocumentError?: boolean;
 }
 
 interface ValtimoConfig {
