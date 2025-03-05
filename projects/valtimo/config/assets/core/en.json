@@ -1957,6 +1957,7 @@
   },
   "setTaskDueDate": {
     "buttonText": "Set due date for this task",
-    "submitButtonText": "Set due date "
+    "submitButtonText": "Set due date",
+    "dueDateText": "Due date:"
   }
 }

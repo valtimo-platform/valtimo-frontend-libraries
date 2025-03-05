@@ -23,7 +23,13 @@
   } as obs"
 >
   @if (obs.hasDueDate) {
-    {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
+    <div class="due-date-container">
+      <span class="bold">{{ ('setTaskDueDate.dueDateText' | translate) + ' ' }}</span>
+
+      &nbsp;
+
+      {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
+    </div>
   }
 
   <cds-toggletip align="bottom" [autoAlign]="true" [isOpen]="open$ | async">

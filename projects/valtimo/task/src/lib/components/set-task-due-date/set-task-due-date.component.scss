@@ -2,6 +2,23 @@
   max-inline-size: unset;
 }
 
+.due-date-container {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  width: max-content;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 0.16px;
+  color: var(--cds-link-01);
+
+  .bold {
+    font-weight: 700;
+  }
+}
+
 .assign-due-date-popover-content {
   width: 400px;
   max-inline-size: 400px;
