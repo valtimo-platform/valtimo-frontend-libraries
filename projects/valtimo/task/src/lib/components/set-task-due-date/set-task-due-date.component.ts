@@ -76,6 +76,8 @@ export class SetTaskDueDateComponent implements AfterViewInit {
 
   public readonly open$ = new Subject<boolean>();
 
+  public readonly mouseIsOverDueDate$ = new BehaviorSubject<boolean>(false);
+
   constructor(
     private readonly iconService: IconService,
     private readonly elementRef: ElementRef<HTMLElement>,
@@ -116,5 +118,13 @@ export class SetTaskDueDateComponent implements AfterViewInit {
     // needed to reliably trigger toggle tip closure
     this.open$.next(true);
     setTimeout(() => this.open$.next(false));
+  }
+
+  public onMouseEnterDueDate(): void {
+    this.mouseIsOverDueDate$.next(true);
+  }
+
+  public onMouseLeaveDueDate(): void {
+    this.mouseIsOverDueDate$.next(false);
   }
 }

@@ -23,12 +23,18 @@
   } as obs"
 >
   @if (obs.hasDueDate) {
-    <div class="due-date-container">
-      <span class="bold">{{ ('setTaskDueDate.dueDateText' | translate) + ' ' }}</span>
+    <div
+      class="due-date-container"
+      (mouseenter)="onMouseEnterDueDate()"
+      (mouseleave)="onMouseLeaveDueDate()"
+    >
+      <div [style.visibility]="(mouseIsOverDueDate$ | async) ? 'hidden' : 'visible'">
+        <span class="bold">{{ ('setTaskDueDate.dueDateText' | translate) + ' ' }}</span>
 
-      &nbsp;
+        &nbsp;
 
-      {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
+        {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
+      </div>
     </div>
   }
 
