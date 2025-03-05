@@ -1954,5 +1954,9 @@
       "title": "There are no logs"
     },
     "detailsTitle": "Log details"
+  },
+  "setTaskDueDate": {
+    "buttonText": "Set due date for this task",
+    "submitButtonText": "Set due date "
   }
 }

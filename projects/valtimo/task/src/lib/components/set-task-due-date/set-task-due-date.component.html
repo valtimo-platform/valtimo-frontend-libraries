@@ -1,0 +1,63 @@
+<!--
+  ~ Copyright 2015-2024 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<ng-container
+  *ngIf="{
+    hasDueDate: hasDueDate$ | async,
+    taskDueDate: taskDueDate$ | async,
+    selectedDateString: selectedDateString$ | async,
+    disabled: disabled$ | async,
+  } as obs"
+>
+  @if (obs.hasDueDate) {
+    {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
+  }
+
+  <cds-toggletip align="bottom" [autoAlign]="true" [isOpen]="open$ | async">
+    <button
+      cdsToggletipButton
+      cdsButton="tertiary"
+      class="set-task-due-date-button"
+      [style.visibility]="obs.hasDueDate ? 'hidden' : 'visible'"
+    >
+      {{ 'setTaskDueDate.buttonText' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
+    </button>
+
+    <div cdsToggletipContent data-carbon-theme="g90" class="assign-due-date-popover-content">
+      <cds-date-picker
+        [cdsLayer]="1"
+        [label]="'Select date'"
+        [placeholder]="'dd-mm-jjjj'"
+        dateFormat="d/m/Y"
+        [disabled]="obs.disabled"
+        (valueChange)="onDateValueChange($event)"
+      ></cds-date-picker>
+
+      <button
+        cdsButton
+        class="submit-due-date-button"
+        [disabled]="!obs.selectedDateString || obs.disabled"
+        (click)="onSubmitButtonClick()"
+      >
+        {{ 'setTaskDueDate.submitButtonText' | translate }}
+
+        <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
+      </button>
+    </div>
+  </cds-toggletip>
+</ng-container>

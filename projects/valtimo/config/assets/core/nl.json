@@ -1955,5 +1955,9 @@
       "title": "Er zijn geen logboeken"
     },
     "detailsTitle": "Loggegevens"
+  },
+  "setTaskDueDate": {
+    "buttonText": "Stel einddatum in voor deze taak",
+    "submitButtonText": "Stel einddatum in"
   }
 }

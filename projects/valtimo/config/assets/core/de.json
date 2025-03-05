@@ -1949,5 +1949,9 @@
       "title": "Es gibt keine Protokolle"
     },
     "detailsTitle": "Protokolldetails"
+  },
+  "setTaskDueDate": {
+    "buttonText": "Fälligkeitsdatum für Aufgabe festlegen",
+    "submitButtonText": "Fälligkeitsdatum festlegen"
   }
 }
