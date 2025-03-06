@@ -26,11 +26,16 @@ import {
 import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {BehaviorSubject, map, Observable, switchMap, take} from 'rxjs';
 =======
 import {BehaviorSubject, map, Observable, switchMap, take, tap} from 'rxjs';
 import {CaseManagementService} from '../../services';
 >>>>>>> 0fd4d99f (Add version to routing)
+=======
+import {BehaviorSubject, map, Observable, switchMap, take} from 'rxjs';
+
+>>>>>>> 9e0eb63f (Update names)
 import {CaseListItem} from '../../models';
 import {CaseManagementService} from '../../services';
 
@@ -65,11 +70,15 @@ export class DossierManagementListComponent {
 
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
     switchMap(params => this.caseManagementService.getCaseDefinitions(params)),
+<<<<<<< HEAD
     map((page: Page<CaseListItem>) => page.content),
     tap(res => {
       console.log({res});
 >>>>>>> 0fd4d99f (Add version to routing)
     })
+=======
+    map((page: Page<CaseListItem>) => page.content)
+>>>>>>> 9e0eb63f (Update names)
   );
   public readonly FIELDS: ColumnConfig[] = [
     {key: 'name', label: 'Name'},
