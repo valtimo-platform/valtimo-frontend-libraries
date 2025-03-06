@@ -3,23 +3,34 @@
 }
 
 .due-date-container {
-  height: 32px;
   display: flex;
   align-items: center;
-  width: max-content;
+  justify-content: center;
+  position: relative;
   font-weight: 400;
   font-size: 14px;
   line-height: 18px;
   letter-spacing: 0.16px;
   color: var(--cds-link-01);
-  position: relative;
-
-  .due-date-text {
-    position: absolute;
-  }
 
   .bold {
     font-weight: 700;
+  }
+}
+
+.element {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  transition: opacity 0.3s ease-in-out;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.main {
+    position: relative;
   }
 }
 

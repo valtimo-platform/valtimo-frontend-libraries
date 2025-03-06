@@ -14,47 +14,47 @@
   ~ limitations under the License.
   -->
 
-<ng-container
+<div
   *ngIf="{
     hasDueDate: hasDueDate$ | async,
     taskDueDate: taskDueDate$ | async,
     selectedDateString: selectedDateString$ | async,
     disabled: disabled$ | async,
+    mouseIsOverDueDate: mouseIsOverDueDate$ | async,
   } as obs"
+  class="due-date-container"
+  (mouseenter)="onMouseEnterDueDate()"
+  (mouseleave)="onMouseLeaveDueDate()"
 >
-  @if (obs.hasDueDate) {
-    <div
-      class="due-date-container"
-      (mouseenter)="onMouseEnterDueDate()"
-      (mouseleave)="onMouseLeaveDueDate()"
-    >
-      <div
-        class="due-date-text"
-        [style.visibility]="(mouseIsOverDueDate$ | async) ? 'hidden' : 'visible'"
-      >
-        <span class="bold">{{ ('setTaskDueDate.dueDateText' | translate) + ' ' }}</span>
+  <div
+    class="due-date-text element"
+    [ngClass]="{active: obs.hasDueDate && !obs.mouseIsOverDueDate}"
+  >
+    <span class="bold">{{ ('setTaskDueDate.dueDateText' | translate) + ' ' }}</span>
 
-        &nbsp;
+    &nbsp;
 
-        {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
-      </div>
+    {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
+  </div>
 
-      <button
-        cdsButton="ghost"
-        [style.visibility]="(mouseIsOverDueDate$ | async) ? 'visible' : 'hidden'"
-      >
-        Click to remove due date
-      </button>
-    </div>
-  }
+  <button
+    cdsButton="ghost"
+    class="element"
+    [ngClass]="{active: obs.hasDueDate && obs.mouseIsOverDueDate}"
+    [disabled]="obs.disabled"
+    (click)="onRemoveButtonClick()"
+  >
+    {{ 'setTaskDueDate.removeButtonText' | translate }}
+  </button>
 
-  <cds-toggletip align="bottom" [autoAlign]="true" [isOpen]="open$ | async">
-    <button
-      cdsToggletipButton
-      cdsButton="tertiary"
-      class="set-task-due-date-button"
-      [style.visibility]="obs.hasDueDate ? 'hidden' : 'visible'"
-    >
+  <cds-toggletip
+    align="bottom"
+    class="element main"
+    [autoAlign]="true"
+    [isOpen]="open$ | async"
+    [ngClass]="{active: !obs.hasDueDate}"
+  >
+    <button cdsToggletipButton cdsButton="tertiary" class="set-task-due-date-button">
       {{ 'setTaskDueDate.buttonText' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
@@ -82,4 +82,4 @@
       </button>
     </div>
   </cds-toggletip>
-</ng-container>
+</div>

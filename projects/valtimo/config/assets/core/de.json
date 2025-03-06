@@ -1953,6 +1953,7 @@
   "setTaskDueDate": {
     "buttonText": "Fälligkeitsdatum für Aufgabe festlegen",
     "submitButtonText": "Fälligkeitsdatum festlegen",
-    "dueDateText": "Fälligkeitsdatum:"
+    "dueDateText": "Fälligkeitsdatum:",
+    "removeButtonText": "Klicken, um das Fälligkeitsdatum zu entfernen"
   }
 }

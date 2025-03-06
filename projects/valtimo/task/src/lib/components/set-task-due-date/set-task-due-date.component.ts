@@ -105,8 +105,23 @@ export class SetTaskDueDateComponent implements AfterViewInit {
       next: () => {
         this.disabled$.next(false);
         this.hasDueDate$.next(true);
-        this._task$.next({due: this._selectedDateString});
+        this._task$.next({...this._task, due: this._selectedDateString});
         this.closeToggletip();
+      },
+      error: () => {
+        this.disabled$.next(false);
+      },
+    });
+  }
+
+  public onRemoveButtonClick(): void {
+    this.disabled$.next(true);
+
+    this.taskService.removeTaskDueDate(this._task.id).subscribe({
+      next: () => {
+        this.disabled$.next(false);
+        this.hasDueDate$.next(false);
+        this._task$.next({...this._task, due: null});
       },
       error: () => {
         this.disabled$.next(false);

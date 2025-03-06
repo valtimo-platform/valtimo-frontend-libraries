@@ -163,8 +163,6 @@ export class TaskService extends BaseApiService {
   }
 
   public removeTaskDueDate(taskId: string): Observable<void> {
-    return this.httpClient.post<void>(this.getApiUrl(`/v1/task/${taskId}/set-due-date`), {
-      dueDate: null,
-    });
+    return this.httpClient.post<void>(this.getApiUrl(`/v1/task/${taskId}/set-due-date`), null);
   }
 }

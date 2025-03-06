@@ -1959,6 +1959,7 @@
   "setTaskDueDate": {
     "buttonText": "Stel einddatum in voor deze taak",
     "submitButtonText": "Stel einddatum in",
-    "dueDateText": "Vervaldatum:"
+    "dueDateText": "Einddatum:",
+    "removeButtonText": "Klik om de einddatum te verwijderen"
   }
 }
