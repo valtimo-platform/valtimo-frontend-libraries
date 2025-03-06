@@ -40,10 +40,10 @@ import {CaseProcessInstance} from '../../models';
 export class ProcessManagementComponent {
   public readonly selectedProcess$ = new BehaviorSubject<CaseProcessInstance | null>(null);
   public readonly paramsAreSet$ = new BehaviorSubject<boolean>(false);
-  @Input() public set params(value: {documentDefinitionKey: string; versionTag: string} | null) {
+  @Input() public set params(value: {caseDefinitionName: string; caseVersionTag: string} | null) {
     if (!value) return;
 
-    this.processManagementService.setParams(value.documentDefinitionKey, value.versionTag);
+    this.processManagementService.setParams(value.caseDefinitionName, value.caseVersionTag);
     this.paramsAreSet$.next(true);
   }
 

@@ -16,19 +16,19 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Search20, TrashCan20, Upload16} from '@carbon/icons';
-import {ColumnConfig, MenuService, Pagination, ViewType} from '@valtimo/components';
+import {ColumnConfig, MenuService, Pagination} from '@valtimo/components';
 import {
-  DocumentDefinition,
+  CreateDocumentDefinitionResponse,
   DocumentService,
   Page,
   TemplatePayload,
-  CreateDocumentDefinitionResponse,
 } from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
-import {BehaviorSubject, map, Observable, switchMap, take, tap} from 'rxjs';
-import {CaseManagementService} from '../../services';
+import {BehaviorSubject, map, Observable, switchMap, take} from 'rxjs';
+
 import {CaseListItem} from '../../models';
+import {CaseManagementService} from '../../services';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -48,10 +48,7 @@ export class DossierManagementListComponent {
 
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
     switchMap(params => this.caseManagementService.getCaseDefinitions(params)),
-    map((page: Page<CaseListItem>) => page.content),
-    tap(res => {
-      console.log({res});
-    })
+    map((page: Page<CaseListItem>) => page.content)
   );
   public readonly FIELDS: ColumnConfig[] = [
     {key: 'name', label: 'Name'},

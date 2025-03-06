@@ -42,7 +42,7 @@ export class ProcessLinkService {
     private readonly configService: ConfigService,
     private readonly http: HttpClient
   ) {
-    this.VALTIMO_ENDPOINT_URI = configService.config.valtimoApi.endpointUri;
+    this.VALTIMO_ENDPOINT_URI = this.configService.config.valtimoApi.endpointUri;
   }
 
   public getTasksWithProcessLinks(processInstanceId: string): Observable<TaskWithProcessLink[]> {

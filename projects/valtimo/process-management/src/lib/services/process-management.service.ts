@@ -2,14 +2,14 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
 import {Observable, tap} from 'rxjs';
-import { CaseProcessInstance } from '../models';
+import {CaseProcessInstance} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProcessManagementService extends BaseApiService {
-  private _documentDefinitionKey: string;
-  private _versionTag: string;
+  private _caseDefinitionName: string;
+  private _caseVersionTag: string;
 
   constructor(
     protected readonly httpClient: HttpClient,
@@ -18,15 +18,15 @@ export class ProcessManagementService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public setParams(documentDefinitionKey: string, versionTag: string): void {
-    this._documentDefinitionKey = documentDefinitionKey;
-    this._versionTag = versionTag;
+  public setParams(caseDefinitionName: string, caseVersionTag: string): void {
+    this._caseDefinitionName = caseDefinitionName;
+    this._caseVersionTag = caseVersionTag;
   }
 
   public getProcesses(): Observable<CaseProcessInstance[]> {
     return this.httpClient.get<CaseProcessInstance[]>(
       this.getApiUrl(
-        `/management/v1/case-definition/${this._documentDefinitionKey}/version/${this._versionTag}/process-definition`
+        `/management/v1/case-definition/${this._caseDefinitionName}/version/${this._caseVersionTag}/process-definition`
       )
     );
   }
@@ -34,7 +34,7 @@ export class ProcessManagementService extends BaseApiService {
   public deleteProcess(processDefinitionId: string): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(
-        `/management/v1/case-definition/${this._documentDefinitionKey}/version/${this._versionTag}/process-definition/${processDefinitionId}`
+        `/management/v1/case-definition/${this._caseDefinitionName}/version/${this._caseVersionTag}/process-definition/${processDefinitionId}`
       )
     );
   }
@@ -51,7 +51,7 @@ export class ProcessManagementService extends BaseApiService {
 
     return this.httpClient.post<any>(
       this.getApiUrl(
-        `/management/v1/case-definition/${this._documentDefinitionKey}/version/${this._versionTag}/process-definition`
+        `/management/v1/case-definition/${this._caseDefinitionName}/version/${this._caseVersionTag}/process-definition`
       ),
       formData
     );
