@@ -18,8 +18,14 @@ export class CaseManagementService extends BaseApiService {
 
   public getCaseDefinitions(params: any): Observable<Page<CaseListItem>> {
     return this.httpClient.get<Page<CaseListItem>>(
-      `${this.getApiUrl('management/v1/case-definition')}`,
+      this.getApiUrl('management/v1/case-definition'),
       {params}
+    );
+  }
+
+  public getCaseDefinitionVersions(caseDefinitionName: string): Observable<any[]> {
+    return this.httpClient.get<any[]>(
+      this.getApiUrl(`management/v1/case-definition/${caseDefinitionName}/version`)
     );
   }
 }

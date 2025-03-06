@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PendingChangesComponent} from '@valtimo/components';
 import {
@@ -7,7 +7,7 @@ import {
   ProcessManagementStateService,
 } from '@valtimo/process-management';
 import {ButtonModule} from 'carbon-components-angular';
-import {BehaviorSubject, map} from 'rxjs';
+import {BehaviorSubject, map, tap} from 'rxjs';
 
 @Component({
   templateUrl: './case-management-processes.component.html',
@@ -17,17 +17,22 @@ import {BehaviorSubject, map} from 'rxjs';
   imports: [CommonModule, ButtonModule, ProcessManagementComponent],
   providers: [ProcessManagementStateService],
 })
-export class CaseManagementProcessesComponent extends PendingChangesComponent {
+export class CaseManagementProcessesComponent extends PendingChangesComponent implements OnInit {
   public readonly selectedProcess$ = new BehaviorSubject<any | 'create' | null>(null);
   public readonly params$ = this.route.parent?.params.pipe(
+    tap(params => console.log({params})),
     map(params => ({
-      documentDefinitionKey: params['name'],
-      versionTag: '1.0.0-test',
+      documentDefinitionKey: params['caseDefinitionName'],
+      versionTag: params['caseVersionTag'],
     }))
   );
 
   constructor(private readonly route: ActivatedRoute) {
     super();
+  }
+
+  public ngOnInit(): void {
+    console.log(this.route.parent?.snapshot);
   }
 
   public onActivatePendingChanges(): void {

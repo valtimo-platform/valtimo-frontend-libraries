@@ -51,10 +51,14 @@ const routes: Routes = [
   },
   {
     //Route should include version tag as well
-    path: 'dossier-management/dossier/:name',
+    path: 'dossier-management/dossier/:caseDefinitionName/version/:caseVersionTag',
     component: DossierManagementDetailContainerComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Dossier details', roles: [ROLE_ADMIN], id: 'caseManagementDetails'},
+    data: {
+      title: 'Dossier details',
+      roles: [ROLE_ADMIN],
+      id: 'caseManagementDetails',
+    },
     children: [
       {
         path: TabEnum.DOCUMENT,

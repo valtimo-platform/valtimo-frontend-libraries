@@ -22,29 +22,15 @@ import {
   QueryList,
   ViewChild,
   ViewChildren,
-  ViewContainerRef,
 } from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {PageTitleService} from '@valtimo/components';
 import {CaseManagementTabConfig, ConfigService} from '@valtimo/config';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  forkJoin,
-  map,
-  Observable,
-  of,
-  startWith,
-  Subject,
-  Subscription,
-  switchMap,
-  tap,
-} from 'rxjs';
+import {Tab} from 'carbon-components-angular';
+import {combineLatest, filter, map, Observable, startWith, Subscription, tap} from 'rxjs';
 import {TabEnum} from '../../models';
 import {DossierDetailService, TabService} from '../../services';
 import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
-import {Tab} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
@@ -54,15 +40,18 @@ import {Tab} from 'carbon-components-angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierManagementDetailContainerComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('contentContainer', {read: ViewContainerRef})
-  private _contentContainer: ViewContainerRef;
   @ViewChild(DossierManagementDocumentDefinitionComponent)
   private _documentDefinitionTab: DossierManagementDocumentDefinitionComponent;
   @ViewChildren(Tab) private _tabs: QueryList<Tab>;
 
-  public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.name || ''),
-    filter(docDefName => !!docDefName)
+  private _params: {caseDefinitionName: string; caseVersionTag: string};
+  public readonly caseDefinitionName$: Observable<{
+    caseDefinitionName: string;
+    caseVersionTag: string;
+  }> = this.route.params.pipe(
+    tap(params => (this._params = params as {caseDefinitionName: string; caseVersionTag: string})),
+    map(params => params.caseDefinitionName || ''),
+    filter(caseDefinitionName => !!caseDefinitionName)
   );
 
   public caseListColumn!: boolean;
@@ -108,7 +97,6 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
   }
 
   public ngAfterViewInit(): void {
-    // if (this._documentDefinitionTab) this.customModal = this._documentDefinitionTab.cancelModal;
     this.openInjectedTabSubscription();
     this.openTabCheckSubscription();
   }
@@ -116,21 +104,27 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
   public ngOnDestroy(): void {
     this.tabService.currentTab = TabEnum.PROCESSES;
     this._subscriptions.unsubscribe();
-    // this.pageTitleService.enableReset();
+    this.pageTitleService.enableReset();
   }
 
   private _tabsInit = false;
   public displayBodyComponent(tab: TabEnum | string): void {
     if (!this._tabsInit) {
       this._tabsInit = true;
-      this.router.navigate([`dossier-management/dossier/bezwaar/${tab}`], {
-        skipLocationChange: true,
-      });
+      this.router.navigate(
+        [
+          `dossier-management/dossier/${this._params.caseDefinitionName}/version/${this._params.caseVersionTag}/${tab}`,
+        ],
+        {
+          skipLocationChange: true,
+        }
+      );
       return;
     }
-
     this._tabs.notifyOnChanges();
-    this.router.navigate([`dossier-management/dossier/bezwaar/${tab}`]);
+    this.router.navigate([
+      `dossier-management/dossier/${this._params.caseDefinitionName}/version/${this._params.caseVersionTag}/${tab}`,
+    ]);
   }
 
   public openTabCheckSubscription(): void {

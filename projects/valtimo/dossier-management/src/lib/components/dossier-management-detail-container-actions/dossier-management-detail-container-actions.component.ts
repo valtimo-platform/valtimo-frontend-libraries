@@ -26,7 +26,7 @@ import {
 } from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {ListItem, Notification, NotificationService} from 'carbon-components-angular';
-import {DossierDetailService, DossierExportService} from '../../services';
+import {CaseManagementService, DossierDetailService, DossierExportService} from '../../services';
 import {TranslateService} from '@ngx-translate/core';
 import {DOCUMENT} from '@angular/common';
 import {HttpResponse} from '@angular/common/http';
@@ -49,7 +49,7 @@ export class DossierManagementDetailContainerActionsComponent {
   private readonly _dossierRemoveModal: DossierManagementRemoveModalComponent;
 
   @Input() public documentDefinitionTitle = '';
-  @Input() public set documentDefinitionName(value: string) {
+  @Input() public set caseDefinitionName(value: string) {
     this.dossierDetailService.setSelectedDocumentDefinitionName(value);
   }
   @Output() public versionSet = new EventEmitter<number>();
@@ -60,10 +60,9 @@ export class DossierManagementDetailContainerActionsComponent {
   public readonly selectedVersionNumber$ = this.dossierDetailService.selectedVersionNumber$;
   private readonly _previousSelectedVersionNumber$ =
     this.dossierDetailService.previousSelectedVersionNumber$;
-  private readonly _documentDefinitionName$ =
-    this.dossierDetailService.selectedDocumentDefinitionName$;
+  private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
-  private readonly _documentDefinitionVersions$ = this._documentDefinitionName$.pipe(
+  private readonly _documentDefinitionVersions$ = this._caseDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
       this.documentService.getDocumentDefinitionVersions(documentDefinitionName)
     ),
@@ -94,6 +93,11 @@ export class DossierManagementDetailContainerActionsComponent {
     this.dossierDetailService.selectedDocumentDefinitionIsReadOnly$;
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
+  public readonly versions$ = this._caseDefinitionName$.pipe(
+    switchMap(caseDefinitionName =>
+      this.caseManagementService.getCaseDefinitionVersions(caseDefinitionName)
+    )
+  );
 
   private _currentNotification!: Notification;
 
@@ -104,7 +108,8 @@ export class DossierManagementDetailContainerActionsComponent {
     private readonly translateService: TranslateService,
     private readonly documentService: DocumentService,
     private readonly dossierDetailService: DossierDetailService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly caseManagementService: CaseManagementService
   ) {}
 
   public export(): void {
@@ -120,7 +125,7 @@ export class DossierManagementDetailContainerActionsComponent {
 
     this.startExporting();
 
-    combineLatest([this.selectedVersionNumber$, this._documentDefinitionName$])
+    combineLatest([this.selectedVersionNumber$, this._caseDefinitionName$])
       .pipe(
         take(1),
         tap(([selectedVersion]) => (selectedVersionNumber = selectedVersion)),
@@ -180,7 +185,7 @@ export class DossierManagementDetailContainerActionsComponent {
     const fileName = splitContentDisposition.length > 1 && splitContentDisposition[1];
 
     link.href = this.document.defaultView.URL.createObjectURL(response.body);
-    link.download = fileName || `${this.documentDefinitionName}_${versionNumber}.valtimo.zip`;
+    link.download = fileName || `${this.caseDefinitionName}_${versionNumber}.valtimo.zip`;
     link.target = '_blank';
     link.click();
     link.remove();

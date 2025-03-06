@@ -14,6 +14,7 @@
   ~ limitations under the License.
   -->
 
+{{ versions$ | async }}
 <div
   class="dossier-actions"
   *ngIf="{
@@ -38,7 +39,7 @@
 <ng-template #versionSelection let-obs="obs">
   <cds-dropdown
     class="version-selection"
-    [disabled]="obs.loadingVersion || (obs.versionListItems.length || []) === 1"
+    [disabled]="obs.loadingVersion || (obs.versionListItems?.length || []) === 1"
     [skeleton]="obs.loadingVersion"
     (selected)="setVersion($event)"
     [size]="obs.compactMode ? 'sm' : 'md'"

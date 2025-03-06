@@ -26,7 +26,7 @@ import {
 } from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
-import {BehaviorSubject, map, Observable, switchMap, take} from 'rxjs';
+import {BehaviorSubject, map, Observable, switchMap, take, tap} from 'rxjs';
 import {CaseManagementService} from '../../services';
 import {CaseListItem} from '../../models';
 
@@ -45,41 +45,19 @@ export class DossierManagementListComponent {
   };
 
   private readonly _refreshData$ = new BehaviorSubject<null>(null);
-  // public dossiers$: Observable<DocumentDefinition[]> = this._refreshData$.pipe(
-  //   switchMap(() =>
-  //     this.documentService.queryDefinitionsForManagement({
-  //       page: this.pagination.page - 1,
-  //       size: this.pagination.size,
-  //     })
-  //   ),
-  //   map((documentDefinitionPage: Page<DocumentDefinition>) => {
-  //     this.pagination = {
-  //       ...this.pagination,
-  //       collectionSize: documentDefinitionPage.totalElements,
-  //     };
-
-  //     return documentDefinitionPage.content.map((documentDefinition: DocumentDefinition) => ({
-  //       ...documentDefinition,
-  //       createdOn: moment(documentDefinition.createdOn).format('DD MMM YYYY HH:mm'),
-  //     }));
-  //   })
-  // );
 
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
     switchMap(params => this.caseManagementService.getCaseDefinitions(params)),
-    map((page: Page<CaseListItem>) => page.content)
+    map((page: Page<CaseListItem>) => page.content),
+    tap(res => {
+      console.log({res});
+    })
   );
   public readonly FIELDS: ColumnConfig[] = [
     {key: 'name', label: 'Name'},
     {key: 'caseDefinitionKey', label: 'Key'},
     {key: 'caseDefinitionVersionTag', label: 'Version'},
   ];
-
-  // public dossierFields: ColumnConfig[] = [
-  //   {key: 'schema.title', label: 'fieldLabels.title', viewType: ViewType.TEXT},
-  //   {key: 'createdOn', label: 'fieldLabels.createdOn', viewType: ViewType.TEXT},
-  //   {key: 'readOnly', label: 'fieldLabels.readOnly', viewType: ViewType.BOOLEAN},
-  // ];
 
   public readonly showCreateModal$ = new BehaviorSubject<boolean>(false);
   public readonly showUploadModal$ = new BehaviorSubject<boolean>(false);
@@ -130,7 +108,12 @@ export class DossierManagementListComponent {
   }
 
   public redirectToDetails(caseListItem: CaseListItem): void {
-    this.router.navigate(['/dossier-management/dossier', caseListItem.caseDefinitionKey]);
+    this.router.navigate([
+      '/dossier-management/dossier',
+      caseListItem.caseDefinitionKey,
+      'version',
+      caseListItem.caseDefinitionVersionTag,
+    ]);
   }
 
   public showUploadModal(): void {
