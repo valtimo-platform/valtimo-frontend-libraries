@@ -51,6 +51,7 @@ moment.locale(localStorage.getItem('langKey') || '');
 })
 export class DossierManagementListComponent {
 <<<<<<< HEAD
+<<<<<<< HEAD
   public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
 
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
@@ -63,16 +64,18 @@ export class DossierManagementListComponent {
       });
       return page.content;
 =======
+=======
+  public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
+>>>>>>> b13a4cfc (Add pagination on cases)
   public pagination: Pagination = {
     collectionSize: 0,
     page: 1,
     size: 10,
   };
 
-  private readonly _refreshData$ = new BehaviorSubject<null>(null);
-
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
     switchMap(params => this.caseManagementService.getCaseDefinitions(params)),
+<<<<<<< HEAD
 <<<<<<< HEAD
     map((page: Page<CaseListItem>) => page.content),
     tap(res => {
@@ -82,6 +85,16 @@ export class DossierManagementListComponent {
 =======
     map((page: Page<CaseListItem>) => page.content)
 >>>>>>> 9e0eb63f (Update names)
+=======
+    map((page: Page<CaseListItem>) => {
+      this.pagination$.next({
+        size: page.size,
+        page: page.number + 1,
+        collectionSize: +page.totalElements,
+      });
+      return page.content;
+    })
+>>>>>>> b13a4cfc (Add pagination on cases)
   );
   public readonly FIELDS: ColumnConfig[] = [
     {key: 'name', label: 'Name'},
@@ -137,11 +150,14 @@ export class DossierManagementListComponent {
   }
 
   public paginationSet(size: number): void {
+<<<<<<< HEAD
     if (!this._paginationInitialized) {
       this._paginationInitialized = true;
       return;
     }
 
+=======
+>>>>>>> b13a4cfc (Add pagination on cases)
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {size},
