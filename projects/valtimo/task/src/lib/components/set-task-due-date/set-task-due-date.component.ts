@@ -106,6 +106,7 @@ export class SetTaskDueDateComponent implements AfterViewInit {
         this.disabled$.next(false);
         this.hasDueDate$.next(true);
         this._task$.next({...this._task, due: this._selectedDateString});
+        this.selectedDateString$.next('');
         this.closeToggletip();
       },
       error: () => {

@@ -42,6 +42,7 @@
     class="element"
     [ngClass]="{active: obs.hasDueDate && obs.mouseIsOverDueDate}"
     [disabled]="obs.disabled"
+    size="sm"
     (click)="onRemoveButtonClick()"
   >
     {{ 'setTaskDueDate.removeButtonText' | translate }}
@@ -54,7 +55,7 @@
     [isOpen]="open$ | async"
     [ngClass]="{active: !obs.hasDueDate}"
   >
-    <button cdsToggletipButton cdsButton="tertiary" class="set-task-due-date-button">
+    <button cdsToggletipButton cdsButton="tertiary" size="sm" class="set-task-due-date-button">
       {{ 'setTaskDueDate.buttonText' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
@@ -62,6 +63,7 @@
 
     <div cdsToggletipContent data-carbon-theme="g90" class="assign-due-date-popover-content">
       <cds-date-picker
+        *ngIf="!obs.hasDueDate"
         [cdsLayer]="1"
         [label]="'Select date'"
         [placeholder]="'dd-mm-jjjj'"
