@@ -24,18 +24,34 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {DropdownItem, SearchableDropdownSelectModule} from '@valtimo/components';
-import {BehaviorSubject, combineLatest, Subscription, take, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subject, Subscription, take, tap} from 'rxjs';
 import {TaskService} from '../../services';
 import {NamedUser} from '@valtimo/config';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
+import {
+  ButtonModule,
+  DatePickerModule,
+  IconModule,
+  LayerModule,
+  ToggletipModule,
+} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-assign-user-to-task',
   templateUrl: './assign-user-to-task.component.html',
   styleUrls: ['./assign-user-to-task.component.scss'],
   standalone: true,
-  imports: [CommonModule, TranslateModule, SearchableDropdownSelectModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    SearchableDropdownSelectModule,
+    ButtonModule,
+    ToggletipModule,
+    IconModule,
+    LayerModule,
+    DatePickerModule,
+  ],
 })
 export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
   @Input() taskId: string;
@@ -48,6 +64,10 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
   public disabled$ = new BehaviorSubject<boolean>(true);
   public userIdToAssign: string | null = null;
   private _subscriptions = new Subscription();
+
+  public readonly mouseIsOverAssignee$ = new BehaviorSubject<boolean>(false);
+
+  public readonly open$ = new Subject<boolean>();
 
   constructor(private taskService: TaskService) {}
 
@@ -134,6 +154,16 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  public onMouseEnterAssignee(): void {
+    this.mouseIsOverAssignee$.next(true);
+  }
+
+  public onMouseLeaveAssignee(): void {
+    this.mouseIsOverAssignee$.next(true);
+  }
+
+  public onSubmitButtonClick(): void {}
+
   private clear(): void {
     this.assignedIdOnServer$.next(null);
     this.userIdToAssign = null;
@@ -149,5 +179,11 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
 
   private disable(): void {
     this.disabled$.next(true);
+  }
+
+  private closeToggletip(): void {
+    // needed to reliably trigger toggle tip closure
+    this.open$.next(true);
+    setTimeout(() => this.open$.next(false));
   }
 }

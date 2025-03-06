@@ -19,31 +19,87 @@
     candidateUsers: candidateUsersForTask$ | async,
     disabled: disabled$ | async,
     idOnServer: assignedIdOnServer$ | async,
+    mouseIsOverAssignee: mouseIsOverAssignee$ | async,
+    assignedUserFullName: assignedUserFullName$ | async,
   } as obs"
 >
-  <div class="container-fluid">
-    <div class="mt-2 mb-2">
-      <div class="col-12 pl-0 d-flex flex-row align-items-center">
-        <valtimo-searchable-dropdown-select
-          *ngIf="obs.candidateUsers; else loading"
-          [style]="'underlinedText'"
-          [items]="mapUsersForDropdown(obs.candidateUsers)"
-          [buttonText]="'assignTask.header' | translate"
-          [searchText]="'interface.typeToSearch' | translate"
-          [noResultsText]="'interface.noSearchResults' | translate"
-          [disabled]="obs.disabled"
-          [selectedText]="'assignTask.assignedTo' | translate"
-          [selectedTextValue]="assignedUserFullName$ | async"
-          [clearSelectionButtonTitle]="'assignTask.remove' | translate"
-          [hasSelection]="userIdToAssign === obs.idOnServer && obs.idOnServer !== null"
-          [width]="250"
-          (itemSelected)="assignTask($event)"
-          (clearSelection)="unassignTask()"
-        >
-        </valtimo-searchable-dropdown-select>
-      </div>
+  <div
+    class="assign-user-container"
+    *ngIf="{hasSelection: userIdToAssign === obs.idOnServer && obs.idOnServer !== null} as vars"
+    (mouseenter)="onMouseEnterAssignee()"
+    (mouseleave)="onMouseLeaveAssignee()"
+  >
+    <div
+      class="assignee-text element"
+      [ngClass]="{active: vars.hasSelection && !obs.mouseIsOverAssignee}"
+    >
+      <span class="bold">{{ ('setTaskDueDate.dueDateText' | translate) + ' ' }}</span>
+
+      &nbsp;
+
+      {{ obs.assignedUserFullName }}
     </div>
+
+    <button
+      cdsButton="ghost"
+      class="element"
+      [ngClass]="{active: vars.hasSelection && obs.mouseIsOverAssignee}"
+      [disabled]="obs.disabled"
+      size="sm"
+      (click)="unassignTask()"
+    >
+      {{ 'setTaskDueDate.removeButtonText' | translate }}
+    </button>
+
+    <cds-toggletip
+      align="bottom"
+      class="element main"
+      [autoAlign]="true"
+      [isOpen]="open$ | async"
+      [ngClass]="{active: !vars.hasSelection}"
+    >
+      <button cdsToggletipButton cdsButton="tertiary" size="sm" class="set-task-due-date-button">
+        {{ 'setTaskDueDate.buttonText' | translate }}
+
+        <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
+      </button>
+
+      <div cdsToggletipContent data-carbon-theme="g90" class="assign-due-date-popover-content">
+        <button
+          cdsButton
+          class="submit-due-date-button"
+          [disabled]="!obs.selectedDateString || obs.disabled"
+          (click)="onSubmitButtonClick()"
+        >
+          {{ 'setTaskDueDate.submitButtonText' | translate }}
+
+          <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
+        </button>
+      </div>
+    </cds-toggletip>
   </div>
+
+  <!--  <div class="mt-2 mb-2">-->
+  <!--    <div class="col-12 pl-0 d-flex flex-row align-items-center">-->
+  <!--      <valtimo-searchable-dropdown-select-->
+  <!--        *ngIf="obs.candidateUsers; else loading"-->
+  <!--        [style]="'underlinedText'"-->
+  <!--        [items]="mapUsersForDropdown(obs.candidateUsers)"-->
+  <!--        [buttonText]="'assignTask.header' | translate"-->
+  <!--        [searchText]="'interface.typeToSearch' | translate"-->
+  <!--        [noResultsText]="'interface.noSearchResults' | translate"-->
+  <!--        [disabled]="obs.disabled"-->
+  <!--        [selectedText]="'assignTask.assignedTo' | translate"-->
+  <!--        [selectedTextValue]="assignedUserFullName$ | async"-->
+  <!--        [clearSelectionButtonTitle]="'assignTask.remove' | translate"-->
+  <!--        [hasSelection]="userIdToAssign === obs.idOnServer && obs.idOnServer !== null"-->
+  <!--        [width]="250"-->
+  <!--        (itemSelected)="assignTask($event)"-->
+  <!--        (clearSelection)="unassignTask()"-->
+  <!--      >-->
+  <!--      </valtimo-searchable-dropdown-select>-->
+  <!--    </div>-->
+  <!--  </div>-->
 </ng-container>
 
 <ng-template #loading>

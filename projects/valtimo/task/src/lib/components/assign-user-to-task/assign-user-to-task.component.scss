@@ -14,12 +14,38 @@
  * limitations under the License.
  */
 
-.container-fluid {
-  color: #959595;
-  padding: 0;
-  margin: 0;
+:host ::ng-deep .cds--popover-content {
+  max-inline-size: unset;
 }
 
-i {
-  font-size: 13px;
+.assign-user-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 0.16px;
+  color: var(--cds-link-01);
+
+  .bold {
+    font-weight: 700;
+  }
+}
+
+.element {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  transition: opacity 0.3s ease-in-out;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.main {
+    position: relative;
+  }
 }
