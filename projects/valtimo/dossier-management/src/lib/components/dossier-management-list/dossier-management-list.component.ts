@@ -25,7 +25,12 @@ import {
 } from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
+<<<<<<< HEAD
 import {BehaviorSubject, map, Observable, switchMap, take} from 'rxjs';
+=======
+import {BehaviorSubject, map, Observable, switchMap, take, tap} from 'rxjs';
+import {CaseManagementService} from '../../services';
+>>>>>>> 0fd4d99f (Add version to routing)
 import {CaseListItem} from '../../models';
 import {CaseManagementService} from '../../services';
 
@@ -37,6 +42,7 @@ moment.locale(localStorage.getItem('langKey') || '');
   styleUrls: ['./dossier-management-list.component.scss'],
 })
 export class DossierManagementListComponent {
+<<<<<<< HEAD
   public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
 
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
@@ -48,6 +54,21 @@ export class DossierManagementListComponent {
         collectionSize: +page.totalElements,
       });
       return page.content;
+=======
+  public pagination: Pagination = {
+    collectionSize: 0,
+    page: 1,
+    size: 10,
+  };
+
+  private readonly _refreshData$ = new BehaviorSubject<null>(null);
+
+  public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
+    switchMap(params => this.caseManagementService.getCaseDefinitions(params)),
+    map((page: Page<CaseListItem>) => page.content),
+    tap(res => {
+      console.log({res});
+>>>>>>> 0fd4d99f (Add version to routing)
     })
   );
   public readonly FIELDS: ColumnConfig[] = [
@@ -55,12 +76,6 @@ export class DossierManagementListComponent {
     {key: 'caseDefinitionKey', label: 'Key'},
     {key: 'caseDefinitionVersionTag', label: 'Version'},
   ];
-
-  // public dossierFields: ColumnConfig[] = [
-  //   {key: 'schema.title', label: 'fieldLabels.title', viewType: ViewType.TEXT},
-  //   {key: 'createdOn', label: 'fieldLabels.createdOn', viewType: ViewType.TEXT},
-  //   {key: 'readOnly', label: 'fieldLabels.readOnly', viewType: ViewType.BOOLEAN},
-  // ];
 
   public readonly showCreateModal$ = new BehaviorSubject<boolean>(false);
   public readonly showUploadModal$ = new BehaviorSubject<boolean>(false);

@@ -31,7 +31,6 @@ import {combineLatest, filter, map, Observable, startWith, Subscription, tap} fr
 import {TabEnum} from '../../models';
 import {DossierDetailService, TabService} from '../../services';
 import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
-import {Tab} from 'carbon-components-angular';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
@@ -40,7 +39,11 @@ import {Tab} from 'carbon-components-angular';
   providers: [DossierDetailService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+<<<<<<< HEAD
 export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
+=======
+export class DossierManagementDetailContainerComponent implements OnInit, AfterViewInit, OnDestroy {
+>>>>>>> 0fd4d99f (Add version to routing)
   @ViewChild(DossierManagementDocumentDefinitionComponent)
   private _documentDefinitionTab: DossierManagementDocumentDefinitionComponent;
   @ViewChildren(Tab) private _tabs: QueryList<Tab>;
@@ -95,17 +98,53 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
     this.openActiveVersionSubscription();
   }
 
+<<<<<<< HEAD
+=======
+  public ngAfterViewInit(): void {
+    this.openInjectedTabSubscription();
+    this.openTabCheckSubscription();
+  }
+
+>>>>>>> 0fd4d99f (Add version to routing)
   public ngOnDestroy(): void {
     this.tabService.currentTab = TabEnum.PROCESSES;
     this._subscriptions.unsubscribe();
-    // this.pageTitleService.enableReset();
+    this.pageTitleService.enableReset();
   }
 
+<<<<<<< HEAD
   public navigateToTab(tab: TabEnum | string): void {
+=======
+  private _tabsInit = false;
+  public displayBodyComponent(tab: TabEnum | string): void {
+    if (!this._tabsInit) {
+      this._tabsInit = true;
+      this.router.navigate(
+        [
+          `dossier-management/dossier/${this._params.caseDefinitionName}/version/${this._params.caseVersionTag}/${tab}`,
+        ],
+        {
+          skipLocationChange: true,
+        }
+      );
+      return;
+    }
+>>>>>>> 0fd4d99f (Add version to routing)
     this._tabs.notifyOnChanges();
     this.router.navigate([
       `dossier-management/dossier/${this._params.caseDefinitionName}/version/${this._params.caseVersionTag}/${tab}`,
     ]);
+<<<<<<< HEAD
+=======
+  }
+
+  public openTabCheckSubscription(): void {
+    this._subscriptions.add(
+      combineLatest([this._tabs.changes, this.currentTab$]).subscribe(([tabs, currentTab]) => {
+        tabs.forEach((tab: Tab) => (tab.active = tab.id === currentTab));
+      })
+    );
+>>>>>>> 0fd4d99f (Add version to routing)
   }
 
   public onCancelRedirectEvent(): void {

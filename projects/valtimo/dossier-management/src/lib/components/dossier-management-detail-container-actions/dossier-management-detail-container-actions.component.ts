@@ -25,7 +25,13 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+<<<<<<< HEAD
 import {ActivatedRoute, Router} from '@angular/router';
+=======
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
+import {ListItem, Notification, NotificationService} from 'carbon-components-angular';
+import {CaseManagementService, DossierDetailService, DossierExportService} from '../../services';
+>>>>>>> 0fd4d99f (Add version to routing)
 import {TranslateService} from '@ngx-translate/core';
 import {PageHeaderService} from '@valtimo/components';
 import {DocumentService} from '@valtimo/document';
@@ -58,6 +64,22 @@ export class DossierManagementDetailContainerActionsComponent {
 
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
   public readonly selectedVersionNumber$ = this.dossierDetailService.selectedVersionNumber$;
+<<<<<<< HEAD
+=======
+  private readonly _previousSelectedVersionNumber$ =
+    this.dossierDetailService.previousSelectedVersionNumber$;
+  private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
+  public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
+  private readonly _documentDefinitionVersions$ = this._caseDefinitionName$.pipe(
+    switchMap(documentDefinitionName =>
+      this.documentService.getDocumentDefinitionVersions(documentDefinitionName)
+    ),
+    tap(res => {
+      this.dossierDetailService.setSelectedVersionNumber(this.findLargestInArray(res.versions));
+      this.loadingVersion$.next(false);
+    })
+  );
+>>>>>>> 0fd4d99f (Add version to routing)
 
   private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
@@ -68,6 +90,11 @@ export class DossierManagementDetailContainerActionsComponent {
     this.dossierDetailService.selectedDocumentDefinitionIsReadOnly$;
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
+  public readonly versions$ = this._caseDefinitionName$.pipe(
+    switchMap(caseDefinitionName =>
+      this.caseManagementService.getCaseDefinitionVersions(caseDefinitionName)
+    )
+  );
 
   private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
   public readonly versions$: Observable<ListItem[] | null> = this.route.params.pipe(
@@ -102,9 +129,13 @@ export class DossierManagementDetailContainerActionsComponent {
     private readonly documentService: DocumentService,
     private readonly dossierDetailService: DossierDetailService,
     private readonly pageHeaderService: PageHeaderService,
+<<<<<<< HEAD
     private readonly caseManagementService: CaseManagementService,
     private readonly route: ActivatedRoute,
     private readonly router: Router
+=======
+    private readonly caseManagementService: CaseManagementService
+>>>>>>> 0fd4d99f (Add version to routing)
   ) {}
 
   public export(): void {

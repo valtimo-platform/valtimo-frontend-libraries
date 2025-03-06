@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PendingChangesComponent} from '@valtimo/components';
 import {
@@ -23,7 +23,11 @@ import {
   ProcessManagementStateService,
 } from '@valtimo/process-management';
 import {ButtonModule} from 'carbon-components-angular';
+<<<<<<< HEAD
 import {map, Observable} from 'rxjs';
+=======
+import {BehaviorSubject, map, tap} from 'rxjs';
+>>>>>>> 0fd4d99f (Add version to routing)
 
 @Component({
   templateUrl: './case-management-processes.component.html',
@@ -32,6 +36,7 @@ import {map, Observable} from 'rxjs';
   imports: [CommonModule, ButtonModule, ProcessManagementComponent],
   providers: [ProcessManagementStateService],
 })
+<<<<<<< HEAD
 export class CaseManagementProcessesComponent extends PendingChangesComponent {
   public readonly params$: Observable<ProcessManagementParams> | undefined =
     this.route.parent?.params.pipe(
@@ -40,12 +45,30 @@ export class CaseManagementProcessesComponent extends PendingChangesComponent {
         versionTag: caseVersionTag,
       }))
     );
+=======
+export class CaseManagementProcessesComponent extends PendingChangesComponent implements OnInit {
+  public readonly selectedProcess$ = new BehaviorSubject<any | 'create' | null>(null);
+  public readonly params$ = this.route.parent?.params.pipe(
+    tap(params => console.log({params})),
+    map(params => ({
+      documentDefinitionKey: params['caseDefinitionName'],
+      versionTag: params['caseVersionTag'],
+    }))
+  );
+>>>>>>> 0fd4d99f (Add version to routing)
 
   constructor(private readonly route: ActivatedRoute) {
     super();
   }
 
+<<<<<<< HEAD
   //TODO Check for changes in process
+=======
+  public ngOnInit(): void {
+    console.log(this.route.parent?.snapshot);
+  }
+
+>>>>>>> 0fd4d99f (Add version to routing)
   public onActivatePendingChanges(): void {
     this.pendingChanges = true;
   }

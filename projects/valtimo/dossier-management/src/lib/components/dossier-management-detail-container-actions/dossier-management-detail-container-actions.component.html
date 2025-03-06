@@ -14,6 +14,7 @@
   ~ limitations under the License.
   -->
 
+{{ versions$ | async }}
 <div
   class="dossier-actions"
   *ngIf="{
@@ -38,6 +39,10 @@
 <ng-template #versionSelection let-obs="obs">
   <cds-dropdown
     class="version-selection"
+<<<<<<< HEAD
+=======
+    [disabled]="obs.loadingVersion || (obs.versionListItems?.length || []) === 1"
+>>>>>>> 0fd4d99f (Add version to routing)
     [skeleton]="obs.loadingVersion"
     (selected)="setVersion($event)"
     [size]="obs.compactMode ? 'sm' : 'md'"

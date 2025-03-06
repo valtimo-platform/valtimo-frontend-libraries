@@ -51,6 +51,10 @@ const routes: Routes = [
     },
   },
   {
+<<<<<<< HEAD
+=======
+    //Route should include version tag as well
+>>>>>>> 0fd4d99f (Add version to routing)
     path: 'dossier-management/dossier/:caseDefinitionName/version/:caseVersionTag',
     component: DossierManagementDetailContainerComponent,
     canActivate: [AuthGuardService],
