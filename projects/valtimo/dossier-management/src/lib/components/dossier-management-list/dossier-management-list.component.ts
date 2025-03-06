@@ -37,17 +37,23 @@ moment.locale(localStorage.getItem('langKey') || '');
   styleUrls: ['./dossier-management-list.component.scss'],
 })
 export class DossierManagementListComponent {
+  public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
   public pagination: Pagination = {
     collectionSize: 0,
     page: 1,
     size: 10,
   };
 
-  private readonly _refreshData$ = new BehaviorSubject<null>(null);
-
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
     switchMap(params => this.caseManagementService.getCaseDefinitions(params)),
-    map((page: Page<CaseListItem>) => page.content)
+    map((page: Page<CaseListItem>) => {
+      this.pagination$.next({
+        size: page.size,
+        page: page.number + 1,
+        collectionSize: +page.totalElements,
+      });
+      return page.content;
+    })
   );
   public readonly FIELDS: ColumnConfig[] = [
     {key: 'name', label: 'Name'},
@@ -75,7 +81,6 @@ export class DossierManagementListComponent {
     if (!definitionUploaded) {
       return;
     }
-    this._refreshData$.next(null);
     this.menuService.reload();
   }
 
@@ -94,13 +99,19 @@ export class DossierManagementListComponent {
   }
 
   public paginationClicked(page: number): void {
-    this.pagination = {...this.pagination, page};
-    this._refreshData$.next(null);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {page: page - 1},
+      queryParamsHandling: 'merge',
+    });
   }
 
   public paginationSet(size: number): void {
-    this.pagination = {...this.pagination, size};
-    this._refreshData$.next(null);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {size},
+      queryParamsHandling: 'merge',
+    });
   }
 
   public redirectToDetails(caseListItem: CaseListItem): void {

@@ -102,8 +102,8 @@ export class ProcessManagementListComponent {
       });
   }
 
-  public onDeleteProcess(processDefinition: ProcessDefinition): void {
-    this.processToDelete$.next(processDefinition);
+  public onDeleteProcess(process: CaseProcessInstance): void {
+    this.processToDelete$.next(process.processDefinition);
     this.showDeleteModal$.next(true);
   }
 }
