@@ -63,7 +63,7 @@ export class ProcessManagementListComponent {
   public readonly processDefinitions$: Observable<CaseProcessInstance[]> =
     this.processManagementStateService.reloadDefinitions$.pipe(
       tap(() => this.loading$.next(true)),
-      switchMap(() => this.processManagementService.getProcesses()),
+      switchMap(() => this.processManagementService.processes$),
       tap(() => this.loading$.next(false))
     );
 

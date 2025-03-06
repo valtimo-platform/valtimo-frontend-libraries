@@ -26,7 +26,6 @@ import {
 import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
 import {BehaviorSubject, map, Observable, switchMap, take} from 'rxjs';
-
 import {CaseListItem} from '../../models';
 import {CaseManagementService} from '../../services';
 

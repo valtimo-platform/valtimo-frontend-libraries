@@ -1,15 +1,23 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
-import {Observable, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, Observable, switchMap} from 'rxjs';
+
 import {CaseProcessInstance} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProcessManagementService extends BaseApiService {
-  private _caseDefinitionName: string;
-  private _caseVersionTag: string;
+  private readonly _caseDefinitionName$ = new BehaviorSubject<string | null>(null);
+  private readonly _caseVersionTag$ = new BehaviorSubject<string | null>(null);
+
+  public processes$ = combineLatest([this._caseDefinitionName$, this._caseVersionTag$]).pipe(
+    filter(([caseDefinitionName, caseVersionTag]) => !!caseDefinitionName && !!caseVersionTag),
+    switchMap(([caseDefinitionName, caseVersionTag]) =>
+      this.getProcesses(caseDefinitionName ?? '', caseVersionTag ?? '')
+    )
+  );
 
   constructor(
     protected readonly httpClient: HttpClient,
@@ -19,22 +27,14 @@ export class ProcessManagementService extends BaseApiService {
   }
 
   public setParams(caseDefinitionName: string, caseVersionTag: string): void {
-    this._caseDefinitionName = caseDefinitionName;
-    this._caseVersionTag = caseVersionTag;
-  }
-
-  public getProcesses(): Observable<CaseProcessInstance[]> {
-    return this.httpClient.get<CaseProcessInstance[]>(
-      this.getApiUrl(
-        `/management/v1/case-definition/${this._caseDefinitionName}/version/${this._caseVersionTag}/process-definition`
-      )
-    );
+    this._caseDefinitionName$.next(caseDefinitionName);
+    this._caseVersionTag$.next(caseVersionTag);
   }
 
   public deleteProcess(processDefinitionId: string): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(
-        `/management/v1/case-definition/${this._caseDefinitionName}/version/${this._caseVersionTag}/process-definition/${processDefinitionId}`
+        `/management/v1/case-definition/${this._caseDefinitionName$.getValue()}/version/${this._caseVersionTag$.getValue()}/process-definition/${processDefinitionId}`
       )
     );
   }
@@ -51,9 +51,20 @@ export class ProcessManagementService extends BaseApiService {
 
     return this.httpClient.post<any>(
       this.getApiUrl(
-        `/management/v1/case-definition/${this._caseDefinitionName}/version/${this._caseVersionTag}/process-definition`
+        `/management/v1/case-definition/${this._caseDefinitionName$.getValue()}/version/${this._caseVersionTag$.getValue()}/process-definition`
       ),
       formData
+    );
+  }
+
+  private getProcesses(
+    caseDefinitionName: string,
+    caseVersionTag: string
+  ): Observable<CaseProcessInstance[]> {
+    return this.httpClient.get<CaseProcessInstance[]>(
+      this.getApiUrl(
+        `/management/v1/case-definition/${caseDefinitionName}/version/${caseVersionTag}/process-definition`
+      )
     );
   }
 

@@ -7,7 +7,7 @@ import {
   ProcessManagementStateService,
 } from '@valtimo/process-management';
 import {ButtonModule} from 'carbon-components-angular';
-import {BehaviorSubject, map} from 'rxjs';
+import {map} from 'rxjs';
 
 @Component({
   templateUrl: './case-management-processes.component.html',
@@ -18,7 +18,6 @@ import {BehaviorSubject, map} from 'rxjs';
   providers: [ProcessManagementStateService],
 })
 export class CaseManagementProcessesComponent extends PendingChangesComponent {
-  public readonly selectedProcess$ = new BehaviorSubject<any | 'create' | null>(null);
   public readonly params$ = this.route.parent?.params.pipe(
     map(({caseDefinitionName, caseVersionTag}) => ({
       caseDefinitionName,
@@ -30,15 +29,12 @@ export class CaseManagementProcessesComponent extends PendingChangesComponent {
     super();
   }
 
+  //TODO Check for changes in process
   public onActivatePendingChanges(): void {
     this.pendingChanges = true;
   }
 
   public onDeactivatePendingChanges(): void {
     this.pendingChanges = false;
-  }
-
-  public onProcessSelected(process: any | 'create'): void {
-    this.selectedProcess$.next(process);
   }
 }
