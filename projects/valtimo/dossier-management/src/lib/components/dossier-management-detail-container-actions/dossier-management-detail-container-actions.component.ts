@@ -26,12 +26,16 @@ import {
   ViewChild,
 } from '@angular/core';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {ActivatedRoute, Router} from '@angular/router';
 =======
 import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {ListItem, Notification, NotificationService} from 'carbon-components-angular';
 import {CaseManagementService, DossierDetailService, DossierExportService} from '../../services';
 >>>>>>> 0fd4d99f (Add version to routing)
+=======
+import {ActivatedRoute, Router} from '@angular/router';
+>>>>>>> a56a93d7 (Add base version change)
 import {TranslateService} from '@ngx-translate/core';
 import {PageHeaderService} from '@valtimo/components';
 import {DocumentService} from '@valtimo/document';
@@ -90,10 +94,34 @@ export class DossierManagementDetailContainerActionsComponent {
     this.dossierDetailService.selectedDocumentDefinitionIsReadOnly$;
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
-  public readonly versions$ = this._caseDefinitionName$.pipe(
-    switchMap(caseDefinitionName =>
-      this.caseManagementService.getCaseDefinitionVersions(caseDefinitionName)
-    )
+
+  private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
+  public readonly versions$ = this.route.params.pipe(
+    switchMap(({caseDefinitionName, caseVersionTag}) =>
+      combineLatest([
+        this._cachedVersions.getValue() === null
+          ? this.caseManagementService.getCaseDefinitionVersions(caseDefinitionName)
+          : this._cachedVersions.asObservable(),
+        of(caseVersionTag),
+      ])
+    ),
+    map(([caseDefinitionVersions, caseVersionTag]) => {
+      const mapping: ListItem[] | null =
+        caseDefinitionVersions?.map((caseDefinitionVersion: string) => ({
+          content: caseDefinitionVersion,
+          selected: caseDefinitionVersion === caseVersionTag,
+        })) ?? null;
+
+      if (this._cachedVersions.getValue() === null) this._cachedVersions.next(mapping);
+
+      return [
+        ...(mapping ?? []),
+        {
+          content: '1.2.1',
+          selected: false,
+        },
+      ];
+    })
   );
 
   private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
@@ -130,12 +158,18 @@ export class DossierManagementDetailContainerActionsComponent {
     private readonly dossierDetailService: DossierDetailService,
     private readonly pageHeaderService: PageHeaderService,
 <<<<<<< HEAD
+<<<<<<< HEAD
     private readonly caseManagementService: CaseManagementService,
     private readonly route: ActivatedRoute,
     private readonly router: Router
 =======
     private readonly caseManagementService: CaseManagementService
 >>>>>>> 0fd4d99f (Add version to routing)
+=======
+    private readonly caseManagementService: CaseManagementService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
+>>>>>>> a56a93d7 (Add base version change)
   ) {}
 
   public export(): void {

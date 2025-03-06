@@ -34,8 +34,11 @@ import {CaseManagementService} from '../../services';
 >>>>>>> 0fd4d99f (Add version to routing)
 =======
 import {BehaviorSubject, map, Observable, switchMap, take} from 'rxjs';
+<<<<<<< HEAD
 
 >>>>>>> 9e0eb63f (Update names)
+=======
+>>>>>>> a56a93d7 (Add base version change)
 import {CaseListItem} from '../../models';
 import {CaseManagementService} from '../../services';
 
