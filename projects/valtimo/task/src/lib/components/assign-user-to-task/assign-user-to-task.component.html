@@ -26,7 +26,7 @@
 >
   <div
     class="assign-user-container"
-    *ngIf="{hasSelection: userIdToAssign === obs.idOnServer && obs.idOnServer !== null} as vars"
+    *ngIf="{hasSelection: obs.selectedUserId === obs.idOnServer && obs.idOnServer !== null} as vars"
     (mouseenter)="onMouseEnterAssignee()"
     (mouseleave)="onMouseLeaveAssignee()"
   >
@@ -58,6 +58,7 @@
       [autoAlign]="true"
       [isOpen]="open$ | async"
       [ngClass]="{active: !vars.hasSelection}"
+      (onOpen)="clear()"
     >
       <button cdsToggletipButton cdsButton="tertiary" size="sm" class="set-assignee-button">
         {{ 'assignTask.buttonText' | translate }}
@@ -67,6 +68,7 @@
 
       <div cdsToggletipContent data-carbon-theme="g90" class="assign-task-popover-content">
         <cds-combo-box
+          *ngIf="!vars.hasSelection"
           [label]="'assignTask.comboboxLabel' | translate"
           [placeholder]="'assignTask.placeholder' | translate"
           [appendInline]="true"
@@ -75,7 +77,7 @@
           [items]="obs?.candidateUsers || []"
           [disabled]="obs.disabled"
           (selected)="onUserSelect($event)"
-          (clear)="onUserClear()"
+          (clear)="clear()"
         >
           <cds-dropdown-list onclick="event.stopPropagation()"></cds-dropdown-list>
         </cds-combo-box>

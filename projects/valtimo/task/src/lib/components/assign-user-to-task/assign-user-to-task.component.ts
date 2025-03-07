@@ -88,8 +88,6 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
   public readonly open$ = new Subject<boolean>();
   public readonly disabled$ = new BehaviorSubject<boolean>(true);
 
-  public userIdToAssign: string | null = null;
-
   private readonly _subscriptions = new Subscription();
 
   constructor(
@@ -106,7 +104,7 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
         this._candidateUsersForTask$.next(candidateUsers);
         if (this.assigneeId) {
           this.assignedIdOnServer$.next(this.assigneeId);
-          this.userIdToAssign = this.assigneeId;
+          this._selectedUserId$.next(this.assigneeId);
           this._assignedUserFullName$.next(
             this.getAssignedUserName(candidateUsers, this.assigneeId)
           );
@@ -126,7 +124,7 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
     this._candidateUsersForTask$.pipe(take(1)).subscribe(candidateUsers => {
       const currentUserId = changes.assigneeId?.currentValue || this.assigneeId;
       this.assignedIdOnServer$.next(currentUserId || null);
-      this.userIdToAssign = currentUserId || null;
+      this._selectedUserId$.next(currentUserId || null);
       this._assignedUserFullName$.next(
         this.getAssignedUserName(candidateUsers ?? [], currentUserId)
       );
@@ -147,10 +145,9 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
       .pipe(take(1))
       .subscribe({
         next: ([candidateUsers]) => {
-          this.userIdToAssign = userId;
+          this._selectedUserId$.next(userId);
           this.assignedIdOnServer$.next(userId);
           this._assignedUserFullName$.next(this.getAssignedUserName(candidateUsers ?? [], userId));
-          this._selectedUserId$.next(null);
           this.closeToggletip();
           this.emitChange();
           this.enable();
@@ -167,9 +164,9 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
       .unassignTask(this.taskId)
       .pipe(
         tap(() => {
-          this.clear();
           this.emitChange();
           this.enable();
+          this.clear();
         })
       )
       .subscribe();
@@ -195,30 +192,24 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
   public onSubmitButtonClick(): void {
     this.assignTask(this._selectedUserId$.getValue());
   }
-
   public onUserSelect(event: ListItem): void {
     if (!event?.id) return;
     this._selectedUserId$.next(event.id);
   }
 
-  public onUserClear(): void {
+  public clear(): void {
+    this.assignedIdOnServer$.next(null);
     this._selectedUserId$.next(null);
   }
 
   private mapUsersForDropdown(users: NamedUser[], selectedUserId: string): ListItem[] {
     return (
-      users &&
       users
-        .map(user => ({...user, lastName: user.lastName?.split(' ').splice(-1)[0] || ''}))
+        ?.map(user => ({...user, lastName: user.lastName?.split(' ').splice(-1)[0] || ''}))
         .sort((a, b) => a.lastName.localeCompare(b.lastName))
-        .map(user => ({content: user.label, id: user.id, selected: user.id === selectedUserId}))
+        .map(user => ({content: user.label, id: user.id, selected: user.id === selectedUserId})) ||
+      []
     );
-  }
-
-  private clear(): void {
-    this.assignedIdOnServer$.next(null);
-    this.userIdToAssign = null;
-    this._selectedUserId$.next(null);
   }
 
   private emitChange(): void {
