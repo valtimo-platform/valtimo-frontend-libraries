@@ -11,7 +11,8 @@
     "DocumentRelatedFileRemovedEvent": "Gerelateerd bestand verwijderd",
     "BesluitAddedEvent": "Besluit toegevoegd > {{identificatie}}",
     "DocumentAssigneeChangedEvent": "De behandelaar is gewijzigd naar {{assigneeName}}",
-    "DocumentUnassignedEvent": "De behandelaar is van het dossier afgehaald"
+    "DocumentUnassignedEvent": "De behandelaar is van het dossier afgehaald",
+    "TaskDueDateSetEvent": "Taak vervaldatum ingesteld > {{taskName}}"
   },
   "dossier": {
     "bulkAssign": {

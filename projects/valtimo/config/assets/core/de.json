@@ -11,7 +11,8 @@
     "DocumentRelatedFileRemovedEvent": "Datei entfernt",
     "BesluitAddedEvent": "Entscheidung getroffen > {{identificatie}}",
     "DocumentAssigneeChangedEvent": "Der Beauftragte wurde geändert in {{assigneeName}}",
-    "DocumentUnassignedEvent": "Die Zuweisung des Bevollmächtigten wurde aufgehoben"
+    "DocumentUnassignedEvent": "Die Zuweisung des Bevollmächtigten wurde aufgehoben",
+    "TaskDueDateSetEvent": "Aufgabefrist gesetzt > {{taskName}}"
   },
   "dossier": {
     "bulkAssign": {

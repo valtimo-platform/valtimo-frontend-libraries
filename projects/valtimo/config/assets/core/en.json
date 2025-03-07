@@ -11,7 +11,8 @@
     "DocumentRelatedFileRemovedEvent": "Related file removed",
     "BesluitAddedEvent": "Decision added > {{identificatie}}",
     "DocumentAssigneeChangedEvent": "The assignee has been changed to {{assigneeName}}",
-    "DocumentUnassignedEvent": "The assignee has been unassigned"
+    "DocumentUnassignedEvent": "The assignee has been unassigned",
+    "TaskDueDateSetEvent": "Task due date set > {{taskName}}"
   },
   "dossier": {
     "bulkAssign": {
