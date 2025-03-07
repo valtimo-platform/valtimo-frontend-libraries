@@ -21,6 +21,7 @@
     idOnServer: assignedIdOnServer$ | async,
     mouseIsOverAssignee: mouseIsOverAssignee$ | async,
     assignedUserFullName: assignedUserFullName$ | async,
+    selectedUserId: selectedUserId$ | async,
   } as obs"
 >
   <div
@@ -33,7 +34,7 @@
       class="assignee-text element"
       [ngClass]="{active: vars.hasSelection && !obs.mouseIsOverAssignee}"
     >
-      <span class="bold">{{ ('setTaskDueDate.dueDateText' | translate) + ' ' }}</span>
+      <span class="bold">{{ ('assignTask.assignedTaskText' | translate) + ' ' }}</span>
 
       &nbsp;
 
@@ -48,7 +49,7 @@
       size="sm"
       (click)="unassignTask()"
     >
-      {{ 'setTaskDueDate.removeButtonText' | translate }}
+      {{ 'assignTask.removeButtonText' | translate }}
     </button>
 
     <cds-toggletip
@@ -58,22 +59,36 @@
       [isOpen]="open$ | async"
       [ngClass]="{active: !vars.hasSelection}"
     >
-      <button cdsToggletipButton cdsButton="tertiary" size="sm" class="set-task-due-date-button">
-        {{ 'setTaskDueDate.buttonText' | translate }}
+      <button cdsToggletipButton cdsButton="tertiary" size="sm" class="set-assignee-button">
+        {{ 'assignTask.buttonText' | translate }}
 
-        <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
+        <svg class="cds--btn__icon" cdsIcon="user--follow" size="16"></svg>
       </button>
 
-      <div cdsToggletipContent data-carbon-theme="g90" class="assign-due-date-popover-content">
+      <div cdsToggletipContent data-carbon-theme="g90" class="assign-task-popover-content">
+        <cds-combo-box
+          [label]="'processLinkConfiguration.process' | translate"
+          [placeholder]="'processLinkConfiguration.selectProcess' | translate"
+          [appendInline]="true"
+          [dropUp]="false"
+          [cdsLayer]="1"
+          [items]="obs?.candidateUsers || []"
+          [disabled]="obs.disabled"
+          (selected)="onUserSelect($event)"
+          (clear)="onUserClear()"
+        >
+          <cds-dropdown-list onclick="event.stopPropagation()"></cds-dropdown-list>
+        </cds-combo-box>
+
         <button
           cdsButton
-          class="submit-due-date-button"
-          [disabled]="!obs.selectedDateString || obs.disabled"
+          class="submit-task-button"
+          [disabled]="!obs.selectedUserId || obs.disabled"
           (click)="onSubmitButtonClick()"
         >
-          {{ 'setTaskDueDate.submitButtonText' | translate }}
+          {{ 'assignTask.submitButtonText' | translate }}
 
-          <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
+          <svg class="cds--btn__icon" cdsIcon="user--follow" size="16"></svg>
         </button>
       </div>
     </cds-toggletip>

@@ -1254,7 +1254,8 @@
     "placeholder": "Selecteer een gebruiker",
     "remove": "Toewijzing ongedaan maken",
     "save": "Opslaan",
-    "fetchingUsers": "Gebruikers ophalen..."
+    "fetchingUsers": "Gebruikers ophalen...",
+    "buttonText": "Gebruiker toewijzen"
   },
   "assignDocument": {
     "assignedTo": "Toegewezen aan ",
@@ -1957,9 +1958,9 @@
     "detailsTitle": "Loggegevens"
   },
   "setTaskDueDate": {
-    "buttonText": "Stel einddatum in voor deze taak",
+    "buttonText": "Stel einddatum in",
     "submitButtonText": "Stel einddatum in",
     "dueDateText": "Einddatum:",
-    "removeButtonText": "Klik om de einddatum te verwijderen"
+    "removeButtonText": "Einddatum verwijderen"
   }
 }

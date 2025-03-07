@@ -49,3 +49,30 @@
     position: relative;
   }
 }
+
+.assign-task-popover-content {
+  width: 400px;
+  max-inline-size: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .cds--btn {
+    width: 100%;
+    max-width: unset;
+  }
+
+  ::ng-deep {
+    .cds--date-picker-input__wrapper,
+    .cds--date-picker-input__wrapper > span,
+    .cds--date-picker-container,
+    .cds--date-picker,
+    .cds--date-picker__input {
+      width: 100%;
+    }
+  }
+}
+
+.set-assignee-button {
+  width: 200px;
+}

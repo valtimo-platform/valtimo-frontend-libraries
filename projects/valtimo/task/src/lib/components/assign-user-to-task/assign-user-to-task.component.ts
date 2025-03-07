@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 import {
+  AfterViewInit,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -23,7 +25,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {DropdownItem, SearchableDropdownSelectModule} from '@valtimo/components';
+import {SearchableDropdownSelectModule} from '@valtimo/components';
 import {BehaviorSubject, combineLatest, Subject, Subscription, take, tap} from 'rxjs';
 import {TaskService} from '../../services';
 import {NamedUser} from '@valtimo/config';
@@ -31,11 +33,16 @@ import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {
   ButtonModule,
+  ComboBoxModule,
   DatePickerModule,
   IconModule,
+  IconService,
   LayerModule,
+  ListItem,
   ToggletipModule,
 } from 'carbon-components-angular';
+import {UserFollow16} from '@carbon/icons';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-assign-user-to-task',
@@ -51,30 +58,49 @@ import {
     IconModule,
     LayerModule,
     DatePickerModule,
+    ComboBoxModule,
   ],
 })
-export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() taskId: string;
-  @Input() assigneeId: string;
-  @Output() assignmentOfTaskChanged = new EventEmitter();
+export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+  @Input() public readonly taskId: string;
+  @Input() public readonly assigneeId: string;
+  @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
 
-  public assignedIdOnServer$ = new BehaviorSubject<string | null>(null);
-  public assignedUserFullName$ = new BehaviorSubject<string | null>(null);
-  public candidateUsersForTask$ = new BehaviorSubject<NamedUser[] | undefined>(undefined);
-  public disabled$ = new BehaviorSubject<boolean>(true);
-  public userIdToAssign: string | null = null;
-  private _subscriptions = new Subscription();
+  public readonly assignedIdOnServer$ = new BehaviorSubject<string | null>(null);
+  public readonly assignedUserFullName$ = new BehaviorSubject<string | null>(null);
+
+  private readonly _candidateUsersForTask$ = new BehaviorSubject<NamedUser[] | undefined>(
+    undefined
+  );
+
+  private readonly _selectedUserId$ = new BehaviorSubject<string | null>(null);
+  public readonly selectedUserId$ = this._selectedUserId$.asObservable();
+
+  public readonly candidateUsersForTask$ = combineLatest([
+    this._candidateUsersForTask$,
+    this._selectedUserId$,
+  ]).pipe(map(([users, selectedUserId]) => this.mapUsersForDropdown(users, selectedUserId)));
 
   public readonly mouseIsOverAssignee$ = new BehaviorSubject<boolean>(false);
-
   public readonly open$ = new Subject<boolean>();
+  public readonly disabled$ = new BehaviorSubject<boolean>(true);
 
-  constructor(private taskService: TaskService) {}
+  public userIdToAssign: string | null = null;
+
+  private readonly _subscriptions = new Subscription();
+
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly iconService: IconService,
+    private readonly elementRef: ElementRef<HTMLElement>
+  ) {
+    this.iconService.registerAll([UserFollow16]);
+  }
 
   public ngOnInit(): void {
     this._subscriptions.add(
       this.taskService.getCandidateUsers(this.taskId).subscribe(candidateUsers => {
-        this.candidateUsersForTask$.next(candidateUsers);
+        this._candidateUsersForTask$.next(candidateUsers);
         if (this.assigneeId) {
           this.assignedIdOnServer$.next(this.assigneeId);
           this.userIdToAssign = this.assigneeId;
@@ -87,8 +113,14 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  public ngAfterViewInit(): void {
+    const button = this.elementRef.nativeElement.querySelector('button.cds--toggletip-button');
+    if (!button) return;
+    button.classList.remove('cds--toggletip-button');
+  }
+
   public ngOnChanges(changes: SimpleChanges): void {
-    this.candidateUsersForTask$.pipe(take(1)).subscribe(candidateUsers => {
+    this._candidateUsersForTask$.pipe(take(1)).subscribe(candidateUsers => {
       const currentUserId = changes.assigneeId?.currentValue || this.assigneeId;
       this.assignedIdOnServer$.next(currentUserId || null);
       this.userIdToAssign = currentUserId || null;
@@ -104,8 +136,9 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
 
   public assignTask(userId: string): void {
     this.disable();
+
     combineLatest([
-      this.candidateUsersForTask$,
+      this._candidateUsersForTask$,
       this.taskService.assignTask(this.taskId, {assignee: userId}),
     ])
       .pipe(
@@ -144,16 +177,6 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
     return userId || '-';
   }
 
-  public mapUsersForDropdown(users: NamedUser[]): DropdownItem[] {
-    return (
-      users &&
-      users
-        .map(user => ({...user, lastName: user.lastName?.split(' ').splice(-1)[0] || ''}))
-        .sort((a, b) => a.lastName.localeCompare(b.lastName))
-        .map(user => ({text: user.label, id: user.id}))
-    );
-  }
-
   public onMouseEnterAssignee(): void {
     this.mouseIsOverAssignee$.next(true);
   }
@@ -162,7 +185,28 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
     this.mouseIsOverAssignee$.next(true);
   }
 
-  public onSubmitButtonClick(): void {}
+  public onSubmitButtonClick(): void {
+    this.assignTask(this._selectedUserId$.getValue());
+  }
+
+  public onUserSelect(event: ListItem): void {
+    if (!event?.id) return;
+    this._selectedUserId$.next(event.id);
+  }
+
+  public onUserClear(): void {
+    this._selectedUserId$.next(null);
+  }
+
+  private mapUsersForDropdown(users: NamedUser[], selectedUserId: string): ListItem[] {
+    return (
+      users &&
+      users
+        .map(user => ({...user, lastName: user.lastName?.split(' ').splice(-1)[0] || ''}))
+        .sort((a, b) => a.lastName.localeCompare(b.lastName))
+        .map(user => ({content: user.label, id: user.id, selected: user.id === selectedUserId}))
+    );
+  }
 
   private clear(): void {
     this.assignedIdOnServer$.next(null);

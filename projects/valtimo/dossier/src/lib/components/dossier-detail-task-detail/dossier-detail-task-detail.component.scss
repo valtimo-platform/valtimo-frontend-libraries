@@ -52,6 +52,9 @@
 
   .task-actions {
     display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-top: 8px;
     gap: 8px;
   }
 }

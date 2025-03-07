@@ -1256,7 +1256,8 @@
     "placeholder": "Select a user",
     "remove": "Unassign",
     "save": "Save",
-    "fetchingUsers": "Fetching users..."
+    "fetchingUsers": "Fetching users...",
+    "buttonText": "Assign user"
   },
   "assignDocument": {
     "assignedTo": "Assigned to ",
@@ -1956,9 +1957,9 @@
     "detailsTitle": "Log details"
   },
   "setTaskDueDate": {
-    "buttonText": "Set due date for this task",
+    "buttonText": "Set due date",
     "submitButtonText": "Set due date",
     "dueDateText": "Due date:",
-    "removeButtonText": "Click to remove due date"
+    "removeButtonText": "Remove due date"
   }
 }

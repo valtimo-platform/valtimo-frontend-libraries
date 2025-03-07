@@ -1251,7 +1251,8 @@
     "placeholder": "User auswählen",
     "remove": "Entfernen",
     "save": "Speichern",
-    "fetchingUsers": "User abrufen..."
+    "fetchingUsers": "User abrufen...",
+    "buttonText": "User zuordnen"
   },
   "assignDocument": {
     "assignedTo": "User-Zuordnung: ",
@@ -1951,9 +1952,9 @@
     "detailsTitle": "Protokolldetails"
   },
   "setTaskDueDate": {
-    "buttonText": "Fälligkeitsdatum für Aufgabe festlegen",
+    "buttonText": "Fälligkeitsdatum festlegen",
     "submitButtonText": "Fälligkeitsdatum festlegen",
     "dueDateText": "Fälligkeitsdatum:",
-    "removeButtonText": "Klicken, um das Fälligkeitsdatum zu entfernen"
+    "removeButtonText": "Fälligkeitsdatum entfernen"
   }
 }
