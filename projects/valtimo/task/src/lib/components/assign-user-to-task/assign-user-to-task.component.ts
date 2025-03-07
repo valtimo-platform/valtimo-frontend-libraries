@@ -67,7 +67,10 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
   @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
 
   public readonly assignedIdOnServer$ = new BehaviorSubject<string | null>(null);
-  public readonly assignedUserFullName$ = new BehaviorSubject<string | null>(null);
+  private readonly _assignedUserFullName$ = new BehaviorSubject<string | null>(null);
+  public readonly assignedUserFullName$ = this._assignedUserFullName$.pipe(
+    map(fullName => fullName?.trim())
+  );
 
   private readonly _candidateUsersForTask$ = new BehaviorSubject<NamedUser[] | undefined>(
     undefined
@@ -104,7 +107,7 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
         if (this.assigneeId) {
           this.assignedIdOnServer$.next(this.assigneeId);
           this.userIdToAssign = this.assigneeId;
-          this.assignedUserFullName$.next(
+          this._assignedUserFullName$.next(
             this.getAssignedUserName(candidateUsers, this.assigneeId)
           );
         }
@@ -124,7 +127,7 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
       const currentUserId = changes.assigneeId?.currentValue || this.assigneeId;
       this.assignedIdOnServer$.next(currentUserId || null);
       this.userIdToAssign = currentUserId || null;
-      this.assignedUserFullName$.next(
+      this._assignedUserFullName$.next(
         this.getAssignedUserName(candidateUsers ?? [], currentUserId)
       );
     });
@@ -141,17 +144,21 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
       this._candidateUsersForTask$,
       this.taskService.assignTask(this.taskId, {assignee: userId}),
     ])
-      .pipe(
-        take(1),
-        tap(([candidateUsers]) => {
+      .pipe(take(1))
+      .subscribe({
+        next: ([candidateUsers]) => {
           this.userIdToAssign = userId;
           this.assignedIdOnServer$.next(userId);
-          this.assignedUserFullName$.next(this.getAssignedUserName(candidateUsers ?? [], userId));
+          this._assignedUserFullName$.next(this.getAssignedUserName(candidateUsers ?? [], userId));
+          this._selectedUserId$.next(null);
+          this.closeToggletip();
           this.emitChange();
           this.enable();
-        })
-      )
-      .subscribe();
+        },
+        error: () => {
+          this.enable();
+        },
+      });
   }
 
   public unassignTask(): void {
@@ -182,7 +189,7 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
   }
 
   public onMouseLeaveAssignee(): void {
-    this.mouseIsOverAssignee$.next(true);
+    this.mouseIsOverAssignee$.next(false);
   }
 
   public onSubmitButtonClick(): void {
@@ -211,6 +218,7 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
   private clear(): void {
     this.assignedIdOnServer$.next(null);
     this.userIdToAssign = null;
+    this._selectedUserId$.next(null);
   }
 
   private emitChange(): void {

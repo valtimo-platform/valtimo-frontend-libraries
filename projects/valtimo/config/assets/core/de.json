@@ -1246,13 +1246,15 @@
     "taskCompleted": "erfolgreich abgeschlossen"
   },
   "assignTask": {
-    "assignedTo": "User-Zuordnung: ",
+    "assignedTo": "Zugewiesen an",
     "header": "Aufgabe einen User zuordnen",
     "placeholder": "User auswählen",
     "remove": "Entfernen",
     "save": "Speichern",
     "fetchingUsers": "User abrufen...",
-    "buttonText": "User zuordnen"
+    "buttonText": "User zuordnen",
+    "submitButtonText": "Aufgabe einen User zuordnen",
+    "comboboxLabel": "Benutzer zur Zuweisung auswählen"
   },
   "assignDocument": {
     "assignedTo": "User-Zuordnung: ",

@@ -31,7 +31,21 @@
 
   .bold {
     font-weight: 700;
+    flex-shrink: 0;
   }
+
+  .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.assignee-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .element {
@@ -61,18 +75,8 @@
     width: 100%;
     max-width: unset;
   }
-
-  ::ng-deep {
-    .cds--date-picker-input__wrapper,
-    .cds--date-picker-input__wrapper > span,
-    .cds--date-picker-container,
-    .cds--date-picker,
-    .cds--date-picker__input {
-      width: 100%;
-    }
-  }
 }
 
 .set-assignee-button {
-  width: 200px;
+  width: 250px;
 }

@@ -34,11 +34,11 @@
       class="assignee-text element"
       [ngClass]="{active: vars.hasSelection && !obs.mouseIsOverAssignee}"
     >
-      <span class="bold">{{ ('assignTask.assignedTaskText' | translate) + ' ' }}</span>
+      <span class="bold">{{ 'assignTask.assignedTo' | translate }}</span>
 
       &nbsp;
 
-      {{ obs.assignedUserFullName }}
+      <span class="name">{{ obs.assignedUserFullName }}</span>
     </div>
 
     <button
@@ -49,7 +49,7 @@
       size="sm"
       (click)="unassignTask()"
     >
-      {{ 'assignTask.removeButtonText' | translate }}
+      {{ 'assignTask.remove' | translate }}
     </button>
 
     <cds-toggletip
@@ -67,8 +67,8 @@
 
       <div cdsToggletipContent data-carbon-theme="g90" class="assign-task-popover-content">
         <cds-combo-box
-          [label]="'processLinkConfiguration.process' | translate"
-          [placeholder]="'processLinkConfiguration.selectProcess' | translate"
+          [label]="'assignTask.comboboxLabel' | translate"
+          [placeholder]="'assignTask.placeholder' | translate"
           [appendInline]="true"
           [dropUp]="false"
           [cdsLayer]="1"
@@ -93,32 +93,4 @@
       </div>
     </cds-toggletip>
   </div>
-
-  <!--  <div class="mt-2 mb-2">-->
-  <!--    <div class="col-12 pl-0 d-flex flex-row align-items-center">-->
-  <!--      <valtimo-searchable-dropdown-select-->
-  <!--        *ngIf="obs.candidateUsers; else loading"-->
-  <!--        [style]="'underlinedText'"-->
-  <!--        [items]="mapUsersForDropdown(obs.candidateUsers)"-->
-  <!--        [buttonText]="'assignTask.header' | translate"-->
-  <!--        [searchText]="'interface.typeToSearch' | translate"-->
-  <!--        [noResultsText]="'interface.noSearchResults' | translate"-->
-  <!--        [disabled]="obs.disabled"-->
-  <!--        [selectedText]="'assignTask.assignedTo' | translate"-->
-  <!--        [selectedTextValue]="assignedUserFullName$ | async"-->
-  <!--        [clearSelectionButtonTitle]="'assignTask.remove' | translate"-->
-  <!--        [hasSelection]="userIdToAssign === obs.idOnServer && obs.idOnServer !== null"-->
-  <!--        [width]="250"-->
-  <!--        (itemSelected)="assignTask($event)"-->
-  <!--        (clearSelection)="unassignTask()"-->
-  <!--      >-->
-  <!--      </valtimo-searchable-dropdown-select>-->
-  <!--    </div>-->
-  <!--  </div>-->
 </ng-container>
-
-<ng-template #loading>
-  <h5>
-    <b>{{ 'assignTask.fetchingUsers' | translate }}</b>
-  </h5>
-</ng-template>

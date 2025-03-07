@@ -1249,13 +1249,15 @@
     "taskCompleted": "is succesvol afgerond"
   },
   "assignTask": {
-    "assignedTo": "Toegewezen aan ",
+    "assignedTo": "Toegewezen aan",
     "header": "Gebruiker toewijzen aan deze taak",
-    "placeholder": "Selecteer een gebruiker",
+    "placeholder": "Selecteer gebruiker",
     "remove": "Toewijzing ongedaan maken",
     "save": "Opslaan",
     "fetchingUsers": "Gebruikers ophalen...",
-    "buttonText": "Gebruiker toewijzen"
+    "buttonText": "Gebruiker toewijzen",
+    "submitButtonText": "Gebruiker toewijzen aan taak",
+    "comboboxLabel": "Selecteer gebruiker om toe te wijzen"
   },
   "assignDocument": {
     "assignedTo": "Toegewezen aan ",

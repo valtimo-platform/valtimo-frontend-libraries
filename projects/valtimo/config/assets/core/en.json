@@ -1251,13 +1251,15 @@
     "taskCompleted": "has successfully been completed"
   },
   "assignTask": {
-    "assignedTo": "Assigned to ",
+    "assignedTo": "Assigned to",
     "header": "Assign a user to this task",
-    "placeholder": "Select a user",
+    "placeholder": "Select user",
     "remove": "Unassign",
     "save": "Save",
     "fetchingUsers": "Fetching users...",
-    "buttonText": "Assign user"
+    "buttonText": "Assign user",
+    "submitButtonText": "Assign user to task",
+    "comboboxLabel": "Select user to assign"
   },
   "assignDocument": {
     "assignedTo": "Assigned to ",
