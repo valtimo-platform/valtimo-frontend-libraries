@@ -12,7 +12,7 @@
     "BesluitAddedEvent": "Besluit toegevoegd > {{identificatie}}",
     "DocumentAssigneeChangedEvent": "De behandelaar is gewijzigd naar {{assigneeName}}",
     "DocumentUnassignedEvent": "De behandelaar is van het dossier afgehaald",
-    "TaskDueDateSetEvent": "Taak vervaldatum ingesteld > {{taskName}}"
+    "TaskDueDateSetEvent": "Taak einddatum ingesteld > {{taskName}}"
   },
   "dossier": {
     "bulkAssign": {
