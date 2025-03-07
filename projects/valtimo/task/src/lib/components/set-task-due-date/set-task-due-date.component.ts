@@ -30,6 +30,7 @@ import {
 } from 'carbon-components-angular';
 import {CalendarAdd16} from '@carbon/icons';
 import {TaskService} from '../../services';
+import {Task} from '../../models';
 
 @Component({
   selector: 'valtimo-set-task-due-date',
@@ -61,7 +62,7 @@ export class SetTaskDueDateComponent implements AfterViewInit {
     return this.selectedDateString$.getValue();
   }
 
-  @Input() public set task(value: ProcessInstanceTask) {
+  @Input() public set task(value: ProcessInstanceTask | Task) {
     if (!value) return;
     this.hasDueDate$.next(!!value.due);
     this._task$.next(value);
