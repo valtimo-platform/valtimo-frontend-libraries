@@ -18,6 +18,17 @@
   }
 }
 
+.remove-button {
+  width: 100%;
+}
+
+.due-date-text {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
 .element {
   opacity: 0;
   visibility: hidden;
