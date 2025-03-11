@@ -222,6 +222,16 @@ enum ProcessLinkEditMode {
   EMIT_EVENTS,
 }
 
+interface CompatibleProcessVersion {
+  version: string;
+  processLinks: ProcessLink[];
+}
+
+interface CompatiblePluginProcessLinks {
+  processDefinitionKey: string;
+  versions: CompatibleProcessVersion[];
+}
+
 export {
   GetProcessLinkRequest,
   ProcessLink,
@@ -254,4 +264,6 @@ export {
   ProcessLinkEditMode,
   UIComponentProcessLinkCreateRequestDto,
   UIComponentProcessLinkUpdateRequestDto,
+  CompatibleProcessVersion,
+  CompatiblePluginProcessLinks,
 };

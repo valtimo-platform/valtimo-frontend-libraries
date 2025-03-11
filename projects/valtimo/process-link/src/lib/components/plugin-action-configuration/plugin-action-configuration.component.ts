@@ -22,12 +22,13 @@ import {
   ProcessLinkStateService,
   ProcessLinkStepService,
 } from '../../services';
-import {combineLatest, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import {PluginConfiguration, PluginConfigurationData} from '@valtimo/plugin';
 import {
   PluginProcessLinkCreateDto,
   PluginProcessLinkUpdateDto,
+  ProcessLink,
   ProcessLinkEditMode,
   ProcessLink,
 } from '../../models';
@@ -47,8 +48,21 @@ export class PluginActionConfigurationComponent implements OnInit, OnDestroy {
   public readonly functionKey$ = this.pluginStateService.functionKey$;
   public readonly save$ = this.pluginStateService.save$;
   public readonly saving$ = this.stateService.saving$;
-  public readonly prefillConfiguration$ = this.stateService.selectedProcessLink$.pipe(
+
+  private readonly _prefillConfigurationSubject$ = new BehaviorSubject<
+    ProcessLink['actionProperties'] | null
+  >(null);
+  private readonly _prefillConfiguration$ = this.stateService.selectedProcessLink$.pipe(
     map(processLink => (processLink ? processLink?.actionProperties : undefined))
+  );
+  public readonly prefillConfiguration$ = combineLatest([
+    this._prefillConfigurationSubject$,
+    this._prefillConfiguration$,
+  ]).pipe(
+    map(
+      ([prefillConfigurationSubjectValue, prefillConfiguration]) =>
+        prefillConfigurationSubjectValue || prefillConfiguration
+    )
   );
 
   private _subscriptions = new Subscription();
@@ -90,12 +104,16 @@ export class PluginActionConfigurationComponent implements OnInit, OnDestroy {
     });
   }
 
+  public onImportConfiguration(configuration: ProcessLink['actionProperties']): void {
+    this._prefillConfigurationSubject$.next(configuration);
+  }
+
   private updateProcessLink(configuration: PluginConfigurationData): void {
     this.stateService.selectedProcessLink$.pipe(take(1)).subscribe(selectedProcessLink => {
       const updateProcessLinkRequest: PluginProcessLinkUpdateDto = {
         id: selectedProcessLink.id,
-        pluginConfigurationId: selectedProcessLink.pluginConfigurationId,
-        pluginActionDefinitionKey: selectedProcessLink.pluginActionDefinitionKey,
+        pluginConfigurationId: selectedProcessLink.pluginConfigurationId ?? '',
+        pluginActionDefinitionKey: selectedProcessLink.pluginActionDefinitionKey ?? '',
         actionProperties: configuration,
         activityId: selectedProcessLink.activityId,
       };
@@ -129,7 +147,7 @@ export class PluginActionConfigurationComponent implements OnInit, OnDestroy {
           const processLinkRequest: PluginProcessLinkCreateDto = {
             actionProperties: configuration,
             activityId: modalData?.element?.id,
-            activityType: modalData?.element?.activityListenerType,
+            activityType: modalData?.element?.activityListenerType ?? '',
             pluginConfigurationId: selectedConfiguration.id,
             processDefinitionId: modalData?.processDefinitionId,
             pluginActionDefinitionKey: selectedFunction.key,
