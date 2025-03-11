@@ -39,7 +39,6 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
   private _version: ValuePathVersionArgument;
 
   private _cache: ValuePathSelectorCache = {};
-  private _collectionCache: ValuePathCollectionCache = {};
   private _documentDefinitionCache$ = new BehaviorSubject<DocumentDefinitions | null>(null);
   private readonly _subscriptions = new Subscription();
 
@@ -167,92 +166,5 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     };
 
     this._cache = deepmerge(this._cache, tempCache);
-  }
-
-  private getCollectionPaths(result: ValueResolverResult): string[] {
-    if (result.type === ValueResolverOptionType.FIELD) return [];
-
-    if (
-      !result.children.some(
-        (child: ValueResolverResult) => child.type === ValueResolverOptionType.COLLECTION
-      )
-    )
-      return [result.path];
-
-    return result.children.reduce(
-      (acc, curr) => [
-        ...acc,
-        ...this.getCollectionPaths(curr).map(childPath => `${result.path}${childPath}`),
-      ],
-      []
-    );
-  }
-
-  private getCollectionCacheResult(
-    prefix: string,
-    documentDefinitionName: string,
-    version: ValuePathVersionArgument = 'latest'
-  ): ValueCollectionCacheEntry | null {
-    return this._collectionCache[documentDefinitionName]?.[version]?.[prefix] || null;
-  }
-
-  private cacheCollectionFieldPaths(
-    results: ValueResolverResult[],
-    prefixes,
-    documentDefinitionName,
-    version
-  ): void {
-    const prefixesWithResult = prefixes.filter((prefix: string) =>
-      results.some((result: ValueResolverResult) => result.path.includes(prefix))
-    );
-
-    const resultCacheObject: ValuePathCollectionCache = {
-      [documentDefinitionName]: {
-        [version]: {
-          ...prefixesWithResult.reduce(
-            (acc, curr) => ({
-              ...acc,
-              [curr]: {
-                ...results
-                  .filter((result: ValueResolverResult) => result.path.includes(curr))
-                  .reduce((acc, curr) => ({...acc, ...this.getChildrenField(curr)}), {}),
-              },
-            }),
-            {}
-          ),
-        },
-      },
-    };
-
-    if (
-      prefixesWithResult.some(
-        prefix => !this.getCollectionCacheResult(prefix, documentDefinitionName, version)
-      )
-    )
-      this._collectionCache = deepmerge(this._collectionCache, resultCacheObject);
-  }
-
-  private getChildrenField(
-    result: ValueResolverResult,
-    parentPath = ''
-  ): ValueCollectionCacheEntry {
-    const collectionChildren = result.children?.filter(
-      (child: ValueResolverResult) => child.type === ValueResolverOptionType.COLLECTION
-    );
-
-    if (!collectionChildren || collectionChildren.length === 0)
-      return {
-        [`${parentPath}${result.path}`]: result.children.map(
-          (child: ValueResolverResult) => child.path
-        ),
-      };
-
-    return collectionChildren.reduce(
-      (collectionEntries, collectionChild) => ({
-        ...collectionEntries,
-        ...this.getChildrenField(collectionChild, result.path),
-      }),
-      {}
-    );
   }
 }

@@ -97,7 +97,6 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field-column';
   @Input({required: true}) public columnData: FieldsCaseWidgetValue[];
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
-  @Input() public isFieldWidget = false;
   @Input() public documentDefinitionName?: string;
   @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
   @Input() public selectedCollection?: ValuePathItem;
@@ -121,7 +120,6 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   }
 
   public displayTypeItems: ListItem[] = this.widgetFieldsService.displayTypeItems;
-  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
 
   public getDisplayItemsSelected(row: AbstractControl): ListItem[] {
     return this.widgetFieldsService.getDisplayItemsSelected(row);

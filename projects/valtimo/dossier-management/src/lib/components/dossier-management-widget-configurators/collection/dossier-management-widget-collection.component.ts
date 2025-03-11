@@ -141,17 +141,12 @@ export class DossierManagementWidgetCollectionComponent
   public readonly content = this.widgetWizardService
     .widgetContent as WritableSignal<WidgetCollectionContent>;
   public readonly displayTypeItems: ListItem[] = this.widgetFieldsService.displayTypeItems;
-  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
-  public readonly ValueResolverOptionType = ValueResolverOptionType;
 
   public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
     map((paramMap: ParamMap) => paramMap.get('name') ?? '')
   );
 
   public readonly selectedCollection$ = new BehaviorSubject<ValuePathItem | null>(null);
-  public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
-    map((paramMap: ParamMap) => paramMap.get('name') ?? '')
-  );
 
   public WIDTH_ITEMS: ListItem[] = [
     {
@@ -175,8 +170,7 @@ export class DossierManagementWidgetCollectionComponent
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService,
-    private readonly widgetFieldsService: WidgetFieldsService,
-    private readonly route: ActivatedRoute
+    private readonly widgetFieldsService: WidgetFieldsService
   ) {}
 
   public ngOnInit(): void {

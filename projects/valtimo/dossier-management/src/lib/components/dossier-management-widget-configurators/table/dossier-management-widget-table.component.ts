@@ -87,8 +87,6 @@ export class DossierManagementWidgetTableComponent
       Validators.required
     ),
   });
-  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
-  public readonly ValueResolverOptionType = ValueResolverOptionType;
 
   public readonly theme$: Observable<CARBON_THEME> = this.cdsThemeService.currentTheme$.pipe(
     map((currentTheme: CurrentCarbonTheme) =>
@@ -107,9 +105,6 @@ export class DossierManagementWidgetTableComponent
   );
 
   public readonly selectedCollection$ = new BehaviorSubject<ValuePathItem | null>(null);
-  public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
-    map((paramMap: ParamMap) => paramMap.get('name') ?? '')
-  );
 
   public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
   public readonly ValuePathType = ValuePathType;

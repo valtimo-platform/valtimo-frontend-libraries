@@ -19,8 +19,6 @@ import {ConfigService} from '@valtimo/config';
 import {map, Observable} from 'rxjs';
 
 import {
-  CompatiblePluginProcessLinks,
-  FormFlowProcessLinkCreateRequestDto,
   FormFlowProcessLinkUpdateRequestDto,
   FormProcessLinkUpdateRequestDto,
   FormSubmissionResult,
@@ -30,9 +28,7 @@ import {
   ProcessLinkCreateEvent,
   ProcessLinkType,
   TaskWithProcessLink,
-  UIComponentProcessLinkCreateRequestDto,
   UIComponentProcessLinkUpdateRequestDto,
-  URLProcessLinkCreateDto,
   URLProcessLinkUpdateRequestDto,
 } from '../models';
 import {URLVariables} from '../models/process-link-url.model';
@@ -87,14 +83,7 @@ export class ProcessLinkService {
     );
   }
 
-  public saveProcessLink(
-    saveProcessLinkRequest:
-      | FormProcessLinkCreateRequestDto
-      | FormFlowProcessLinkCreateRequestDto
-      | PluginProcessLinkCreateDto
-      | URLProcessLinkCreateDto
-      | UIComponentProcessLinkCreateRequestDto
-  ): Observable<null> {
+  public saveProcessLink(saveProcessLinkRequest: ProcessLinkCreateEvent): Observable<null> {
     return this.http.post<null>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link`,
       this.emptyStringToNull(saveProcessLinkRequest)
@@ -193,14 +182,6 @@ export class ProcessLinkService {
 
   public getVariables(): Observable<URLVariables> {
     return this.http.get<URLVariables>(`${this.VALTIMO_ENDPOINT_URI}v1/process-link/url/variables`);
-  }
-
-  public getCompatiblePluginProcessLinks(
-    pluginActionDefinitionKey: string
-  ): Observable<CompatiblePluginProcessLinks[]> {
-    return this.http.get<CompatiblePluginProcessLinks[]>(
-      `${this.VALTIMO_ENDPOINT_URI}v1/process-link/plugin?pluginActionDefinitionKey=${pluginActionDefinitionKey}`
-    );
   }
 
   private emptyStringToNull<T extends Record<string, any>>(object: T): T {

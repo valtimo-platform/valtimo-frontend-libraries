@@ -67,19 +67,7 @@ export class ProcessLinkStateService implements OnDestroy {
     return this._elementName$.asObservable();
   }
   public get availableProcessLinkTypes$(): Observable<Array<ProcessLinkType>> {
-    return this._availableProcessLinkTypes$.asObservable().pipe(
-      map(types => {
-        if (!this.formCustomComponentConfig) {
-          return types.map(type => {
-            if (type.processLinkType === 'ui-component') {
-              type.enabled = false;
-            }
-            return type;
-          });
-        }
-        return types;
-      })
-    );
+    return this._availableProcessLinkTypes$.asObservable();
   }
   public get hideProgressIndicator$(): Observable<boolean> {
     return this._availableProcessLinkTypes$
@@ -124,10 +112,7 @@ export class ProcessLinkStateService implements OnDestroy {
   constructor(
     private readonly processLinkStepService: ProcessLinkStepService,
     private readonly buttonService: ProcessLinkButtonService,
-    private readonly pluginStateService: PluginStateService,
-    @Optional()
-    @Inject(FORM_CUSTOM_COMPONENT_TOKEN)
-    private readonly formCustomComponentConfig: FormCustomComponentConfig
+    private readonly pluginStateService: PluginStateService
   ) {
     this.openAvailableProcessLinkTypesSubscription();
   }

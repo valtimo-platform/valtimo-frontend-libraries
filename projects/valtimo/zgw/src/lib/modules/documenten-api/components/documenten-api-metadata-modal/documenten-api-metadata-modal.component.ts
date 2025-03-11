@@ -579,15 +579,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     return filename.charAt(0).toUpperCase() + filename.slice(1);
   }
 
-  private filenameToTitle(filename?: string) {
-    if (!filename) {
-      return null;
-    }
-
-    filename = filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9]+/g, ' ');
-    return filename.charAt(0).toUpperCase() + filename.slice(1);
-  }
-
   private formatDate(controlName: string): void {
     const control = this.documentenApiMetadataForm.controls[controlName];
     if (control.value) {

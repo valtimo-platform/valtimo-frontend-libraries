@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import {ProcessInstanceTask} from '@valtimo/process';
 
 interface ProcessLink {
@@ -120,19 +121,6 @@ type FormDisplayType = 'modal' | 'panel';
 
 type FormSize = 'extraSmall' | 'small' | 'medium' | 'large';
 
-interface URLProcessLinkCreateDto {
-  url: string;
-  activityId: string;
-  activityType: string;
-  processLinkType: string;
-}
-
-interface URLProcessLinkUpdateRequestDto {
-  url: string;
-  id: string;
-  activityId: string;
-}
-
 interface UIComponentProcessLinkCreateRequestDto {
   componentKey: string;
   activityId: string;
@@ -144,6 +132,19 @@ interface UIComponentProcessLinkCreateRequestDto {
 interface UIComponentProcessLinkUpdateRequestDto {
   id: string;
   componentKey: string;
+}
+
+interface URLProcessLinkCreateDto {
+  url: string;
+  activityId: string;
+  activityType: string;
+  processLinkType: string;
+}
+
+interface URLProcessLinkUpdateRequestDto {
+  url: string;
+  id: string;
+  activityId: string;
 }
 
 type TaskProcessLinkType = 'form' | 'form-flow' | 'form-view-model' | 'url' | 'ui-component';
@@ -209,7 +210,8 @@ type ProcessLinkCreateEvent =
   | FormProcessLinkCreateRequestDto
   | FormFlowProcessLinkCreateRequestDto
   | PluginProcessLinkCreateDto
-  | URLProcessLinkCreateDto;
+  | URLProcessLinkCreateDto
+  | UIComponentProcessLinkCreateRequestDto;
 
 interface ProcessLinkDeleteEvent {
   activityId: string;
@@ -250,4 +252,6 @@ export {
   ProcessLinkCreateEvent,
   ProcessLinkDeleteEvent,
   ProcessLinkEditMode,
+  UIComponentProcessLinkCreateRequestDto,
+  UIComponentProcessLinkUpdateRequestDto,
 };

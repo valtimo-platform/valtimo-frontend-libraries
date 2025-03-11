@@ -44,17 +44,6 @@ interface ValuePathItem {
 
 type DocumentDefinitionItemsCache = ListItem[];
 
-interface ValueResolverOption {
-  prefixes: ValuePathSelectorPrefix[];
-  type: ValueResolverOptionType;
-}
-
-interface ValueResolverResult {
-  path: string;
-  type: ValueResolverOptionType;
-  children?: ValueResolverResult[];
-}
-
 enum ValuePathSelectorPrefix {
   DOC = 'doc',
   CASE = 'case',
@@ -62,11 +51,6 @@ enum ValuePathSelectorPrefix {
   ZAAKRESULTAAT = 'zaakresultaat',
   ZAAKSTATUS = 'zaakstatus',
   ZAAK = 'zaak',
-}
-
-enum ValueResolverOptionType {
-  FIELD = 'FIELD',
-  COLLECTION = 'COLLECTION',
 }
 
 enum ValuePathSelectorInputMode {
@@ -79,13 +63,13 @@ type ValuePathSelectorNotation = 'dots' | 'slashes';
 type ValuePathVersionArgument = number | 'latest';
 
 export {
+  ValuePathSelectorPrefix,
+  ValuePathSelectorInputMode,
+  ValuePathVersionArgument,
   DocumentDefinitionItemsCache,
-  ValuePathItem,
+  ValuePathSelectorNotation,
+  ValuePathType,
   ValuePathResponse,
   ValuePathSelectorCache,
-  ValuePathSelectorInputMode,
-  ValuePathSelectorNotation,
-  ValuePathSelectorPrefix,
-  ValuePathType,
-  ValuePathVersionArgument,
+  ValuePathItem,
 };

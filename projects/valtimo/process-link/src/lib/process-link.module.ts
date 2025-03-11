@@ -66,8 +66,7 @@ import {SelectUrlComponent} from './components/select-url/select-url.component';
 import {UrlValidatorService} from './services/url-validator.service';
 import {UrlResolverService} from './services/url-resolver.service';
 import {FormDisplayConfigurationComponent} from './components/form-display-configuration/form-display-configuration.component';
-import {SelectUIComponentComponent} from './components/select-ui-component/select-ui-component.component';
-import {ImportPluginConfigurationComponent} from './components/import-plugin-configuration/import-plugin-configuration.component';
+import {SelectUIComponent} from './components/select-ui/select-ui.component';
 
 @NgModule({
   declarations: [
@@ -84,8 +83,7 @@ import {ImportPluginConfigurationComponent} from './components/import-plugin-con
     FormFlowConfigurationContainerComponent,
     SelectUrlComponent,
     FormDisplayConfigurationComponent,
-    SelectUIComponentComponent,
-    ImportPluginConfigurationComponent,
+    SelectUIComponent,
   ],
   imports: [
     CommonModule,

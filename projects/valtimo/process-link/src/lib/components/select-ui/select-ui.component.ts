@@ -42,12 +42,12 @@ import {
 import {FORM_CUSTOM_COMPONENT_TOKEN} from '../../constants';
 
 @Component({
-  selector: 'valtimo-select-ui-component',
-  templateUrl: './select-ui-component.component.html',
-  styleUrls: ['./select-ui-component.component.scss'],
+  selector: 'valtimo-select-ui',
+  templateUrl: './select-ui.component.html',
+  styleUrls: ['./select-ui.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectUIComponentComponent implements OnInit, OnDestroy {
+export class SelectUIComponent implements OnInit, OnDestroy {
   private readonly _formCustomComponentConfig$ = new BehaviorSubject<
     FormCustomComponentConfig | {}
   >({});
