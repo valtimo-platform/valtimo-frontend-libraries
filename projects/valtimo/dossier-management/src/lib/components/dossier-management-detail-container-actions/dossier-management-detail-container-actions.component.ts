@@ -69,6 +69,7 @@ export class DossierManagementDetailContainerActionsComponent {
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
   public readonly selectedVersionNumber$ = this.dossierDetailService.selectedVersionNumber$;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   private readonly _previousSelectedVersionNumber$ =
     this.dossierDetailService.previousSelectedVersionNumber$;
@@ -87,6 +88,11 @@ export class DossierManagementDetailContainerActionsComponent {
 
   private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
+=======
+
+  private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
+  public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
+>>>>>>> aedc7ac3 (Cleanup)
 
   public readonly selectedDocumentDefinition$ = this.dossierDetailService.documentDefinition$;
 
@@ -96,7 +102,7 @@ export class DossierManagementDetailContainerActionsComponent {
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
-  public readonly versions$ = this.route.params.pipe(
+  public readonly versions$: Observable<ListItem[] | null> = this.route.params.pipe(
     switchMap(({caseDefinitionName, caseVersionTag}) =>
       combineLatest([
         this._cachedVersions.getValue() === null
@@ -114,13 +120,7 @@ export class DossierManagementDetailContainerActionsComponent {
 
       if (this._cachedVersions.getValue() === null) this._cachedVersions.next(mapping);
 
-      return [
-        ...(mapping ?? []),
-        {
-          content: '1.2.1',
-          selected: false,
-        },
-      ];
+      return mapping;
     })
   );
 

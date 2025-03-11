@@ -40,10 +40,14 @@ import {DossierManagementDocumentDefinitionComponent} from '../dossier-managemen
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 <<<<<<< HEAD
+<<<<<<< HEAD
 export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
 =======
 export class DossierManagementDetailContainerComponent implements OnInit, AfterViewInit, OnDestroy {
 >>>>>>> 0fd4d99f (Add version to routing)
+=======
+export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
+>>>>>>> aedc7ac3 (Cleanup)
   @ViewChild(DossierManagementDocumentDefinitionComponent)
   private _documentDefinitionTab: DossierManagementDocumentDefinitionComponent;
   @ViewChildren(Tab) private _tabs: QueryList<Tab>;
@@ -81,6 +85,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
 
   private _activeVersion: number | null;
   private _subscriptions = new Subscription();
+  private _tabsInit = false;
   constructor(
     private readonly dossierDetailService: DossierDetailService,
     private readonly route: ActivatedRoute,
@@ -99,6 +104,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   public ngAfterViewInit(): void {
     this.openInjectedTabSubscription();
@@ -106,6 +112,8 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
   }
 
 >>>>>>> 0fd4d99f (Add version to routing)
+=======
+>>>>>>> aedc7ac3 (Cleanup)
   public ngOnDestroy(): void {
     this.tabService.currentTab = TabEnum.PROCESSES;
     this._subscriptions.unsubscribe();
@@ -113,10 +121,14 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   public navigateToTab(tab: TabEnum | string): void {
 =======
   private _tabsInit = false;
   public displayBodyComponent(tab: TabEnum | string): void {
+=======
+  public navigateToTab(tab: TabEnum | string): void {
+>>>>>>> aedc7ac3 (Cleanup)
     if (!this._tabsInit) {
       this._tabsInit = true;
       this.router.navigate(
@@ -138,6 +150,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
 =======
   }
 
+<<<<<<< HEAD
   public openTabCheckSubscription(): void {
     this._subscriptions.add(
       combineLatest([this._tabs.changes, this.currentTab$]).subscribe(([tabs, currentTab]) => {
@@ -147,6 +160,8 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
 >>>>>>> 0fd4d99f (Add version to routing)
   }
 
+=======
+>>>>>>> aedc7ac3 (Cleanup)
   public onCancelRedirectEvent(): void {
     if (this._activeVersion) {
       this.dossierDetailService.setPreviousSelectedVersionNumber(this._activeVersion);

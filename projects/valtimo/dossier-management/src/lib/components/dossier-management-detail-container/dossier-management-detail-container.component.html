@@ -56,7 +56,7 @@
       [active]="obs.currentTab === TabEnum.DOCUMENT"
       [heading]="'dossierManagement.tabs.document' | translate"
       disabled="true"
-      (selected)="displayBodyComponent(TabEnum.DOCUMENT, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.DOCUMENT, obs.currentTab)"
     >
     </cds-tab>
 
@@ -65,7 +65,7 @@
       [active]="obs.currentTab === TabEnum.CASE"
       [heading]="'dossierManagement.tabs.cases' | translate"
       disabled="true"
-      (selected)="displayBodyComponent(TabEnum.CASE, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.CASE, obs.currentTab)"
     >
     </cds-tab>
 
