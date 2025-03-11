@@ -39,7 +39,7 @@ import {DossierManagementDocumentDefinitionComponent} from '../dossier-managemen
   providers: [DossierDetailService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementDetailContainerComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
   @ViewChild(DossierManagementDocumentDefinitionComponent)
   private _documentDefinitionTab: DossierManagementDocumentDefinitionComponent;
   @ViewChildren(Tab) private _tabs: QueryList<Tab>;
@@ -77,8 +77,8 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
   public readonly TabEnum = TabEnum;
 
   private _activeVersion: number | null;
-  private _pendingVersion: number | null;
   private _subscriptions = new Subscription();
+  private _tabsInit = false;
   constructor(
     private readonly dossierDetailService: DossierDetailService,
     private readonly route: ActivatedRoute,
@@ -96,19 +96,13 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
     this.openActiveVersionSubscription();
   }
 
-  public ngAfterViewInit(): void {
-    this.openInjectedTabSubscription();
-    this.openTabCheckSubscription();
-  }
-
   public ngOnDestroy(): void {
     this.tabService.currentTab = TabEnum.PROCESSES;
     this._subscriptions.unsubscribe();
     this.pageTitleService.enableReset();
   }
 
-  private _tabsInit = false;
-  public displayBodyComponent(tab: TabEnum | string): void {
+  public navigateToTab(tab: TabEnum | string): void {
     if (!this._tabsInit) {
       this._tabsInit = true;
       this.router.navigate(
@@ -127,14 +121,6 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
     ]);
   }
 
-  public openTabCheckSubscription(): void {
-    this._subscriptions.add(
-      combineLatest([this._tabs.changes, this.currentTab$]).subscribe(([tabs, currentTab]) => {
-        tabs.forEach((tab: Tab) => (tab.active = tab.id === currentTab));
-      })
-    );
-  }
-
   public onCancelRedirectEvent(): void {
     if (this._activeVersion) {
       this.dossierDetailService.setPreviousSelectedVersionNumber(this._activeVersion);
@@ -148,28 +134,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
     this.tabService.currentTab = this.pendingTab;
   }
 
-  public onConfirmRedirectEvent(): void {
-    // this.pendingTab = null;
-    // this._activeVersion = null;
-    // if (this._pendingVersion) {
-    //   this.dossierDetailService.setSelectedVersionNumber(this._pendingVersion);
-    //   this._pendingVersion = null;
-    //   this.dossierDetailService.setPreviousSelectedVersionNumber(null);
-    // }
-    // this.onCustomConfirm();
-  }
-
-  public onPendingChangesUpdate(pendingChanges: boolean): void {
-    // this.pendingChanges = pendingChanges;
-    // this.pendingTab = pendingChanges ? this._activeTab : null;
-  }
-
   public onVersionSet(version: number): void {
-    // if (this.pendingChanges) {
-    //   this.onCanDeactivate();
-    //   this._pendingVersion = version;
-    //   return;
-    // }
     this.dossierDetailService.setSelectedVersionNumber(version);
   }
 
@@ -179,23 +144,6 @@ export class DossierManagementDetailContainerComponent implements OnInit, AfterV
         this._activeVersion = versionNumber;
       })
     );
-  }
-
-  private openInjectedTabSubscription(): void {
-    // this._subscriptions.add(
-    //   combineLatest([
-    //     this.currentTab$.pipe(distinctUntilChanged()),
-    //     this.injectedCaseManagementTabs$,
-    //   ]).subscribe(([currentTab, injectedCaseManagementTabs]) => {
-    //     const findInjectedTab = injectedCaseManagementTabs.find(
-    //       injectedTab => injectedTab.translationKey === currentTab
-    //     );
-    //     this._contentContainer.clear();
-    //     if (findInjectedTab && this._contentContainer) {
-    //       this._contentContainer.createComponent(findInjectedTab.component);
-    //     }
-    //   })
-    // );
   }
 
   protected onCanDeactivate(): void {

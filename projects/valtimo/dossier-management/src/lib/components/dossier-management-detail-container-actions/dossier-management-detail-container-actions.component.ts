@@ -58,35 +58,10 @@ export class DossierManagementDetailContainerActionsComponent {
 
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
   public readonly selectedVersionNumber$ = this.dossierDetailService.selectedVersionNumber$;
-  private readonly _previousSelectedVersionNumber$ =
-    this.dossierDetailService.previousSelectedVersionNumber$;
+
   private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
-  private readonly _documentDefinitionVersions$ = this._caseDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
-      this.documentService.getDocumentDefinitionVersions(documentDefinitionName)
-    ),
-    tap(res => {
-      this.dossierDetailService.setSelectedVersionNumber(this.findLargestInArray(res.versions));
-      this.loadingVersion$.next(false);
-    })
-  );
 
-  public readonly versionListItems$: Observable<Array<ListItem>> = combineLatest([
-    this._documentDefinitionVersions$,
-    this.selectedVersionNumber$,
-    this._previousSelectedVersionNumber$,
-    this.translateService.stream('key'),
-  ]).pipe(
-    map(
-      ([versionsRes, selectVersionNumber, previousVersionNumber]) =>
-        versionsRes?.versions?.map(version => ({
-          content: `${this.translateService.instant('dossierManagement.version')}${version}`,
-          selected: selectVersionNumber === version || previousVersionNumber === version,
-          id: `${version}`,
-        })) || []
-    )
-  );
   public readonly selectedDocumentDefinition$ = this.dossierDetailService.documentDefinition$;
 
   public readonly selectedDocumentDefinitionIsReadOnly$ =
@@ -95,7 +70,7 @@ export class DossierManagementDetailContainerActionsComponent {
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
-  public readonly versions$ = this.route.params.pipe(
+  public readonly versions$: Observable<ListItem[] | null> = this.route.params.pipe(
     switchMap(({caseDefinitionName, caseVersionTag}) =>
       combineLatest([
         this._cachedVersions.getValue() === null
@@ -113,13 +88,7 @@ export class DossierManagementDetailContainerActionsComponent {
 
       if (this._cachedVersions.getValue() === null) this._cachedVersions.next(mapping);
 
-      return [
-        ...(mapping ?? []),
-        {
-          content: '1.2.1',
-          selected: false,
-        },
-      ];
+      return mapping;
     })
   );
 

@@ -12,7 +12,10 @@ export class ProcessManagementService extends BaseApiService {
   private readonly _caseDefinitionName$ = new BehaviorSubject<string | null>(null);
   private readonly _caseVersionTag$ = new BehaviorSubject<string | null>(null);
 
-  public processes$ = combineLatest([this._caseDefinitionName$, this._caseVersionTag$]).pipe(
+  public processes$: Observable<CaseProcessInstance[]> = combineLatest([
+    this._caseDefinitionName$,
+    this._caseVersionTag$,
+  ]).pipe(
     filter(([caseDefinitionName, caseVersionTag]) => !!caseDefinitionName && !!caseVersionTag),
     switchMap(([caseDefinitionName, caseVersionTag]) =>
       this.getProcesses(caseDefinitionName ?? '', caseVersionTag ?? '')

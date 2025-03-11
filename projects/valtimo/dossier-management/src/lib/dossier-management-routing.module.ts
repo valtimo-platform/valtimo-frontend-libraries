@@ -41,6 +41,7 @@ const routes: Routes = [
     path: 'dossier-management/dossier/:name/widget-tab/:key',
     component: DossierManagementWidgetTabComponent,
     canActivate: [AuthGuardService],
+    // TODO: Check when widgets are back in place
     // canDeactivate: [pendingChangesGuard],
     data: {
       title: 'Widget tab',
@@ -50,7 +51,6 @@ const routes: Routes = [
     },
   },
   {
-    //Route should include version tag as well
     path: 'dossier-management/dossier/:caseDefinitionName/version/:caseVersionTag',
     component: DossierManagementDetailContainerComponent,
     canActivate: [AuthGuardService],

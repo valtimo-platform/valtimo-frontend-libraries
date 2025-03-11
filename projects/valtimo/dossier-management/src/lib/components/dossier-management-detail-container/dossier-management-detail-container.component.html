@@ -27,7 +27,7 @@
       [id]="TabEnum.PROCESSES"
       [active]="obs.currentTab === TabEnum.PROCESSES"
       [heading]="'dossierManagement.tabs.processes' | translate"
-      (selected)="displayBodyComponent(TabEnum.PROCESSES, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.PROCESSES, obs.currentTab)"
     >
     </cds-tab>
 
@@ -37,7 +37,7 @@
       [active]="obs.currentTab === TabEnum.DOCUMENT"
       [heading]="'dossierManagement.tabs.document' | translate"
       disabled="true"
-      (selected)="displayBodyComponent(TabEnum.DOCUMENT, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.DOCUMENT, obs.currentTab)"
     >
     </cds-tab>
 
@@ -46,7 +46,7 @@
       [active]="obs.currentTab === TabEnum.CASE"
       [heading]="'dossierManagement.tabs.cases' | translate"
       disabled="true"
-      (selected)="displayBodyComponent(TabEnum.CASE, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.CASE, obs.currentTab)"
     >
     </cds-tab>
 
@@ -56,7 +56,7 @@
       [active]="obs.currentTab === TabEnum.SEARCH"
       [heading]="'dossierManagement.tabs.searchFields' | translate"
       disabled="true"
-      (selected)="displayBodyComponent(TabEnum.SEARCH, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.SEARCH, obs.currentTab)"
     >
     </cds-tab>
 
@@ -67,7 +67,7 @@
       [active]="obs.currentTab === TabEnum.LIST"
       [heading]="'dossierManagement.tabs.listColumns' | translate"
       disabled="true"
-      (selected)="displayBodyComponent(TabEnum.LIST, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.LIST, obs.currentTab)"
     >
     </cds-tab>
 
@@ -78,7 +78,7 @@
       [active]="obs.currentTab === TabEnum.TABS"
       [heading]="'dossierManagement.tabs.tabManagement' | translate"
       disabled="true"
-      (selected)="displayBodyComponent(TabEnum.TABS, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.TABS, obs.currentTab)"
     >
     </cds-tab>
 
@@ -89,7 +89,7 @@
       [active]="vars.active"
       [heading]="'dossierManagement.tabs.statuses' | translate"
       disabled="true"
-      (selected)="displayBodyComponent(TabEnum.STATUSES, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.STATUSES, obs.currentTab)"
     >
     </cds-tab>
 
@@ -99,7 +99,7 @@
         [active]="obs.currentTab === injectedTab.translationKey"
         [heading]="injectedTab.translationKey | translate"
         disabled="true"
-        (selected)="displayBodyComponent(injectedTab.translationKey, true)"
+        (selected)="navigateToTab(injectedTab.translationKey, true)"
       >
       </cds-tab>
     }

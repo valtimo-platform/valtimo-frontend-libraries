@@ -19,7 +19,6 @@
   *ngIf="{
     exporting: exporting$ | async,
     loadingVersion: loadingVersion$ | async,
-    versionListItems: versionListItems$ | async,
     versions: versions$ | async,
     selectedDocumentDefinition: selectedDocumentDefinition$ | async,
     selectedDocumentDefinitionIsReadOnly: selectedDocumentDefinitionIsReadOnly$ | async,
@@ -37,7 +36,6 @@
 </div>
 
 <ng-template #versionSelection let-obs="obs">
-  <!-- [disabled]="obs.loadingVersion || (obs.versions?.length || []) === 1" -->
   <cds-dropdown
     class="version-selection"
     [skeleton]="obs.loadingVersion"
