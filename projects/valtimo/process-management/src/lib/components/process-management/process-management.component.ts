@@ -21,7 +21,7 @@ import {ProcessManagementService} from '../../services';
 import {ProcessManagementBuilderComponent} from '../process-management-builder/process-management-builder.component';
 import {ProcessManagementListComponent} from '../process-management-list/process-management-list.component';
 import {ProcessManagementUploadComponent} from '../process-management-upload/process-management-upload.component';
-import {CaseProcessInstance} from '../../models';
+import {CaseProcessInstance, ProcessManagementContext, ProcessManagementParams} from '../../models';
 
 @Component({
   selector: 'valtimo-process-management',
@@ -39,11 +39,15 @@ import {CaseProcessInstance} from '../../models';
 })
 export class ProcessManagementComponent {
   public readonly selectedProcess$ = new BehaviorSubject<CaseProcessInstance | null>(null);
+
+  @Input() public set context(value: ProcessManagementContext) {
+    this.processManagementService.context = value;
+  }
   public readonly paramsAreSet$ = new BehaviorSubject<boolean>(false);
-  @Input() public set params(value: {caseDefinitionName: string; caseVersionTag: string} | null) {
+  @Input() public set params(value: ProcessManagementParams | null) {
     if (!value) return;
 
-    this.processManagementService.setParams(value.caseDefinitionName, value.caseVersionTag);
+    this.processManagementService.setParams(value.definitionName, value.versionTag);
     this.paramsAreSet$.next(true);
   }
 

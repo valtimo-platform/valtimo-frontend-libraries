@@ -54,6 +54,7 @@
 
 <div
   fitPage
+  [extraSpace]="extraSpace()"
   [disableOverflow]="true"
   *ngIf="{
     loading: loading$ | async,

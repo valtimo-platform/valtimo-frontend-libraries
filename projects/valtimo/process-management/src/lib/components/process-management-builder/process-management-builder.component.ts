@@ -22,7 +22,9 @@ import {
   Input,
   OnDestroy,
   Output,
+  Signal,
   ViewChild,
+  computed,
 } from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {Deploy16, Download16, ArrowLeft16} from '@carbon/icons';
@@ -82,7 +84,7 @@ import {distinctUntilChanged} from 'rxjs/operators';
 
 import {EMPTY_BPMN} from '../../constants';
 import {OpenProcessLinkModalEvent, ProcessManagementWindow} from '../../models';
-import {ProcessManagementEditorService} from '../../services';
+import {ProcessManagementEditorService, ProcessManagementService} from '../../services';
 import {ValtimoPropertiesProviderModule} from './panel';
 
 @Component({
@@ -165,6 +167,10 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
 
   public readonly creatingNewProcess$ = new BehaviorSubject<boolean>(false);
 
+  public readonly extraSpace: Signal<number> = computed(() =>
+    this.processManagementService.context() === 'case' ? 120 : 0
+  );
+
   private readonly _subscriptions = new Subscription();
 
   constructor(
@@ -177,6 +183,7 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
     private readonly modalService: ModalService,
     private readonly processLinkService: ProcessLinkService,
     private readonly processLinkStateService: ProcessLinkStateService,
+    private readonly processManagementService: ProcessManagementService,
     private readonly notificationService: NotificationService,
     private readonly logger: NGXLogger
   ) {

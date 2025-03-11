@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PendingChangesComponent} from '@valtimo/components';
 import {
   ProcessManagementComponent,
+  ProcessManagementParams,
   ProcessManagementStateService,
 } from '@valtimo/process-management';
 import {ButtonModule} from 'carbon-components-angular';
-import {map} from 'rxjs';
+import {map, Observable} from 'rxjs';
 
 @Component({
   templateUrl: './case-management-processes.component.html',
@@ -33,12 +33,13 @@ import {map} from 'rxjs';
   providers: [ProcessManagementStateService],
 })
 export class CaseManagementProcessesComponent extends PendingChangesComponent {
-  public readonly params$ = this.route.parent?.params.pipe(
-    map(({caseDefinitionName, caseVersionTag}) => ({
-      caseDefinitionName,
-      caseVersionTag,
-    }))
-  );
+  public readonly params$: Observable<ProcessManagementParams> | undefined =
+    this.route.parent?.params.pipe(
+      map(({caseDefinitionName, caseVersionTag}) => ({
+        definitionName: caseDefinitionName,
+        versionTag: caseVersionTag,
+      }))
+    );
 
   constructor(private readonly route: ActivatedRoute) {
     super();

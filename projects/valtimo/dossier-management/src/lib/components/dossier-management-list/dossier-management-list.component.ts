@@ -38,11 +38,6 @@ moment.locale(localStorage.getItem('langKey') || '');
 })
 export class DossierManagementListComponent {
   public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
-  public pagination: Pagination = {
-    collectionSize: 0,
-    page: 1,
-    size: 10,
-  };
 
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
     switchMap(params => this.caseManagementService.getCaseDefinitions(params)),
@@ -64,6 +59,7 @@ export class DossierManagementListComponent {
   public readonly showCreateModal$ = new BehaviorSubject<boolean>(false);
   public readonly showUploadModal$ = new BehaviorSubject<boolean>(false);
 
+  private _paginationInitialized = false;
   constructor(
     private readonly caseManagementService: CaseManagementService,
     private readonly documentService: DocumentService,
@@ -94,6 +90,7 @@ export class DossierManagementListComponent {
       .createDocumentDefinitionTemplate(templatePayload)
       .pipe(take(1))
       .subscribe((response: CreateDocumentDefinitionResponse) => {
+        //TODO: resolve this when DocumentDefinition is reintroduced
         // this.redirectToDetails(response.documentDefinition);
       });
   }
@@ -107,6 +104,11 @@ export class DossierManagementListComponent {
   }
 
   public paginationSet(size: number): void {
+    if (!this._paginationInitialized) {
+      this._paginationInitialized = true;
+      return;
+    }
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {size},

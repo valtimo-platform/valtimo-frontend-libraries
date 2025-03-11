@@ -1,26 +1,38 @@
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {Injectable, Signal, signal} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/config';
 import {BehaviorSubject, combineLatest, filter, Observable, switchMap} from 'rxjs';
 
-import {CaseProcessInstance} from '../models';
+import {
+  CaseProcessInstance,
+  PROCESS_MANAGEMENT_ENDPOINTS,
+  ProcessManagementContext,
+} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProcessManagementService extends BaseApiService {
-  private readonly _caseDefinitionName$ = new BehaviorSubject<string | null>(null);
-  private readonly _caseVersionTag$ = new BehaviorSubject<string | null>(null);
+  private readonly _definitionName$ = new BehaviorSubject<string | null>(null);
+  private readonly _versionTag$ = new BehaviorSubject<string | null>(null);
 
   public processes$: Observable<CaseProcessInstance[]> = combineLatest([
-    this._caseDefinitionName$,
-    this._caseVersionTag$,
+    this._definitionName$,
+    this._versionTag$,
   ]).pipe(
-    filter(([caseDefinitionName, caseVersionTag]) => !!caseDefinitionName && !!caseVersionTag),
-    switchMap(([caseDefinitionName, caseVersionTag]) =>
-      this.getProcesses(caseDefinitionName ?? '', caseVersionTag ?? '')
+    filter(([definitionName, versionTag]) => !!definitionName && !!versionTag),
+    switchMap(([definitionName, versionTag]) =>
+      this.getProcesses(definitionName ?? '', versionTag ?? '')
     )
   );
+
+  private _context = signal<ProcessManagementContext>('independent');
+  public set context(value: ProcessManagementContext) {
+    this._context.set(value);
+  }
+  public get context(): Signal<ProcessManagementContext> {
+    return this._context.asReadonly();
+  }
 
   constructor(
     protected readonly httpClient: HttpClient,
@@ -29,15 +41,15 @@ export class ProcessManagementService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public setParams(caseDefinitionName: string, caseVersionTag: string): void {
-    this._caseDefinitionName$.next(caseDefinitionName);
-    this._caseVersionTag$.next(caseVersionTag);
+  public setParams(definitionName: string, versionTag: string): void {
+    this._definitionName$.next(definitionName);
+    this._versionTag$.next(versionTag);
   }
 
   public deleteProcess(processDefinitionId: string): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(
-        `/management/v1/case-definition/${this._caseDefinitionName$.getValue()}/version/${this._caseVersionTag$.getValue()}/process-definition/${processDefinitionId}`
+        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionName$.getValue()}/version/${this._versionTag$.getValue()}/process-definition/${processDefinitionId}`
       )
     );
   }
@@ -54,19 +66,19 @@ export class ProcessManagementService extends BaseApiService {
 
     return this.httpClient.post<any>(
       this.getApiUrl(
-        `/management/v1/case-definition/${this._caseDefinitionName$.getValue()}/version/${this._caseVersionTag$.getValue()}/process-definition`
+        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionName$.getValue()}/version/${this._versionTag$.getValue()}/process-definition`
       ),
       formData
     );
   }
 
   private getProcesses(
-    caseDefinitionName: string,
-    caseVersionTag: string
+    definitionName: string,
+    versionTag: string
   ): Observable<CaseProcessInstance[]> {
     return this.httpClient.get<CaseProcessInstance[]>(
       this.getApiUrl(
-        `/management/v1/case-definition/${caseDefinitionName}/version/${caseVersionTag}/process-definition`
+        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${definitionName}/version/${versionTag}/process-definition`
       )
     );
   }
