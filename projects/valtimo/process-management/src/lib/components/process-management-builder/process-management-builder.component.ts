@@ -17,17 +17,18 @@ import {CommonModule} from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  computed,
   ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   Output,
   Signal,
+  signal,
   ViewChild,
-  computed,
 } from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
-import {Deploy16, Download16, ArrowLeft16} from '@carbon/icons';
+import {ArrowLeft16, Deploy16, Download16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   CARBON_CONSTANTS,
@@ -63,8 +64,6 @@ import {
   IconModule,
   IconService,
   LoadingModule,
-  NotificationModule,
-  NotificationService,
   SelectModule,
   TagModule,
 } from 'carbon-components-angular';
@@ -81,7 +80,6 @@ import {
   tap,
 } from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
-
 import {EMPTY_BPMN} from '../../constants';
 import {OpenProcessLinkModalEvent, ProcessManagementWindow} from '../../models';
 import {ProcessManagementEditorService, ProcessManagementService} from '../../services';
@@ -107,14 +105,12 @@ import {ValtimoPropertiesProviderModule} from './panel';
     ProcessLinkModule,
     ProcessLinkModule,
     DialogModule,
-    NotificationModule,
   ],
   providers: [
     ProcessManagementEditorService,
     ProcessLinkStateService,
     ProcessLinkStepService,
     ProcessLinkButtonService,
-    NotificationService,
   ],
 })
 export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestroy {
@@ -130,7 +126,7 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
     this.processManagementEditorService.setSelectedProcessDefinition(value.processDefinition);
     this.processManagementEditorService.setProcessLinksForSelectedDefinition(value.processLinks);
   }
-  @Output() public readonly navigateBack = new EventEmitter();
+  @Output() public readonly navigateBack = new EventEmitter<null | 'success' | 'error'>();
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
@@ -165,12 +161,11 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
-  public readonly creatingNewProcess$ = new BehaviorSubject<boolean>(false);
-
   public readonly extraSpace: Signal<number> = computed(() =>
-    this.processManagementService.context() === 'case' ? 120 : 0
+    this.processManagementService.context() === 'case' ? 128 : 0
   );
 
+  private readonly _creatingNewProcess = signal<boolean>(false);
   private readonly _subscriptions = new Subscription();
 
   constructor(
@@ -184,7 +179,6 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
     private readonly processLinkService: ProcessLinkService,
     private readonly processLinkStateService: ProcessLinkStateService,
     private readonly processManagementService: ProcessManagementService,
-    private readonly notificationService: NotificationService,
     private readonly logger: NGXLogger
   ) {
     this.iconService.registerAll([Deploy16, Download16, ArrowLeft16]);
@@ -211,7 +205,26 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
     this._subscriptions.unsubscribe();
   }
 
-  public deployChanges(isReadOnlyProcess: boolean): void {
+  public onDeployClick(isReadonly: false): void {
+    if (this._creatingNewProcess()) this.deployNewProcessDefinition();
+    else this.deployChanges(isReadonly);
+  }
+
+  public export(isReadOnlyProcess: boolean): void {
+    (isReadOnlyProcess ? from(this._bpmnViewer.saveXML()) : from(this._bpmnModeler.saveXML()))
+      .pipe(take(1))
+      .subscribe(result => {
+        const file = new Blob([result.xml ?? ''], {type: 'text/xml'});
+        const link = document.createElement('a');
+        link.download = 'diagram.bpmn';
+        link.href = window.URL.createObjectURL(file);
+        link.click();
+        window.URL.revokeObjectURL(link.href);
+        link.remove();
+      });
+  }
+
+  private deployChanges(isReadOnlyProcess: boolean): void {
     combineLatest([
       from(isReadOnlyProcess ? this._bpmnViewer.saveXML() : this._bpmnModeler.saveXML()),
       this.processManagementEditorService.processLinksForSelectedDefinition$,
@@ -227,12 +240,17 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
           )
         )
       )
-      .subscribe(() => {
-        this.navigateBack.emit();
+      .subscribe({
+        next: () => {
+          this.navigateBack.emit('success');
+        },
+        error: () => {
+          this.navigateBack.emit('error');
+        },
       });
   }
 
-  public deployNewProcessDefinition(): void {
+  private deployNewProcessDefinition(): void {
     combineLatest([
       from(this._bpmnModeler.saveXML()),
       this.processManagementEditorService.processLinksForSelectedDefinition$,
@@ -250,29 +268,13 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
           )
         )
       )
-      .subscribe(() => {
-        this.navigateBack.emit();
-        this.notificationService.showToast({
-          caption: this.translateService.instant('formFlow.savedSuccessTitleMessage'),
-          type: 'success',
-          duration: CARBON_CONSTANTS.notificationDuration,
-          showClose: true,
-          title: this.translateService.instant('formFlow.savedSuccessTitle'),
-        });
-      });
-  }
-
-  public export(isReadOnlyProcess: boolean): void {
-    (isReadOnlyProcess ? from(this._bpmnViewer.saveXML()) : from(this._bpmnModeler.saveXML()))
-      .pipe(take(1))
-      .subscribe(result => {
-        const file = new Blob([result.xml ?? ''], {type: 'text/xml'});
-        const link = document.createElement('a');
-        link.download = 'diagram.bpmn';
-        link.href = window.URL.createObjectURL(file);
-        link.click();
-        window.URL.revokeObjectURL(link.href);
-        link.remove();
+      .subscribe({
+        next: () => {
+          this.navigateBack.emit('success');
+        },
+        error: () => {
+          this.navigateBack.emit('error');
+        },
       });
   }
 
@@ -436,7 +438,7 @@ export class ProcessManagementBuilderComponent implements AfterViewInit, OnDestr
   private initIfCreate(): void {
     if (this._selectedProcess$.getValue() !== 'create') return;
 
-    this.creatingNewProcess$.next(true);
+    this._creatingNewProcess.set(true);
     this._bpmnModeler?.importXML(EMPTY_BPMN);
     this.isReadOnlyProcess$.next(false);
     this.isSystemProcess$.next(false);

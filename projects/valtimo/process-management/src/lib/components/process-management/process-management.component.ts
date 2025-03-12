@@ -15,13 +15,15 @@
  */
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {LoadingModule} from 'carbon-components-angular';
+import {TranslateService} from '@ngx-translate/core';
+import {CARBON_CONSTANTS} from '@valtimo/components';
+import {LoadingModule, NotificationModule, NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject} from 'rxjs';
+import {CaseProcessInstance, ProcessManagementContext, ProcessManagementParams} from '../../models';
 import {ProcessManagementService} from '../../services';
 import {ProcessManagementBuilderComponent} from '../process-management-builder/process-management-builder.component';
 import {ProcessManagementListComponent} from '../process-management-list/process-management-list.component';
 import {ProcessManagementUploadComponent} from '../process-management-upload/process-management-upload.component';
-import {CaseProcessInstance, ProcessManagementContext, ProcessManagementParams} from '../../models';
 
 @Component({
   selector: 'valtimo-process-management',
@@ -35,7 +37,9 @@ import {CaseProcessInstance, ProcessManagementContext, ProcessManagementParams} 
     ProcessManagementUploadComponent,
     ProcessManagementBuilderComponent,
     LoadingModule,
+    NotificationModule,
   ],
+  providers: [NotificationService, TranslateService],
 })
 export class ProcessManagementComponent {
   public readonly selectedProcess$ = new BehaviorSubject<CaseProcessInstance | null>(null);
@@ -51,10 +55,24 @@ export class ProcessManagementComponent {
     this.paramsAreSet$.next(true);
   }
 
-  constructor(private readonly processManagementService: ProcessManagementService) {}
+  constructor(
+    private readonly notificationService: NotificationService,
+    private readonly processManagementService: ProcessManagementService,
+    private readonly translateService: TranslateService
+  ) {}
 
-  public navigateBack(): void {
+  public navigateBack(notification: null | 'success' | 'error'): void {
     this.selectedProcess$.next(null);
+
+    if (!notification) return;
+
+    this.notificationService.showToast({
+      caption: this.translateService.instant(`processManagement.${notification}Notification`),
+      type: notification,
+      duration: CARBON_CONSTANTS.notificationDuration,
+      showClose: true,
+      title: this.translateService.instant(`interface.${notification}`),
+    });
   }
 
   public onProcessSelected(process: CaseProcessInstance): void {

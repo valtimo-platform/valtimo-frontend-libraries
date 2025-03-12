@@ -1086,6 +1086,8 @@
       "title": "Delete process",
       "content": "Are you sure you want to delete this process?"
     },
+    "successNotification": "Process deployed successfully",
+    "errorNotification": "Process failed to deploy",
     "upload": {
       "modalTitle": "Upload process definition",
       "title": "Upload file",

@@ -27,7 +27,7 @@
     } @else {
       <valtimo-process-management-builder
         [selectedProcess]="obs.selectedProcess"
-        (navigateBack)="navigateBack()"
+        (navigateBack)="navigateBack($event)"
       ></valtimo-process-management-builder>
     }
   } @else {

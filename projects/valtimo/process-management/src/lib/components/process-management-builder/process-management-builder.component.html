@@ -15,16 +15,16 @@
   -->
 <section
   *ngIf="{
-    creatingNewProcess: creatingNewProcess$ | async,
-    isReadOnlyProcess: isReadOnlyProcess$ | async,
     compactMode: compactMode$ | async,
+    isReadOnlyProcess: isReadOnlyProcess$ | async,
+    changesPending: changesPending$ | async,
   } as obs"
   class="valtimo-process-builder__header"
 >
   <button
     cdsButton="secondary"
     [size]="obs.compactMode ? 'sm' : 'md'"
-    (click)="navigateBack.emit()"
+    (click)="navigateBack.emit(null)"
   >
     <svg class="cds--btn__icon" cdsIcon="arrow--left" size="16"></svg>
 
@@ -41,9 +41,8 @@
     <button
       cdsButton="primary"
       [size]="obs.compactMode ? 'sm' : 'md'"
-      (click)="
-        obs.creatingNewProcess ? deployNewProcessDefinition() : deployChanges(obs.isReadOnlyProcess)
-      "
+      [disabled]="!obs.changesPending"
+      (click)="onDeployClick(obs.isReadOnlyProcess)"
     >
       {{ 'processManagement.deploy' | translate }}
 

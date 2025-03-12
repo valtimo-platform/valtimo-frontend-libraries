@@ -1083,6 +1083,8 @@
       "title": "Prozess löschen",
       "content": "Möchten Sie diesen Prozess wirklich löschen?"
     },
+    "successNotification": "Prozess erfolgreich bereitgestellt",
+    "errorNotification": "Prozess konnte nicht bereitgestellt werden",
     "upload": {
       "modalTitle": "Prozessdefinition hochladen",
       "title": "Datei hochladen",
