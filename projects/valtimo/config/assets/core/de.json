@@ -1952,6 +1952,10 @@
       "searchDescription": "Keine Protokolle entsprechen Ihren Suchkriterien",
       "title": "Es gibt keine Protokolle"
     },
+    "timestamp": "Zeit",
+    "formattedMessage": "Nachricht",
+    "properties": "Eigenschaften",
+    "stacktrace": "Stapelverfolgung",
     "detailsTitle": "Protokolldetails"
   },
   "setTaskDueDate": {

@@ -1957,6 +1957,10 @@
       "searchDescription": "No logs match your search criteria",
       "title": "There are no logs"
     },
+    "timestamp": "Timestamp",
+    "formattedMessage": "Message",
+    "properties": "Properties",
+    "stacktrace": "Stacktrace",
     "detailsTitle": "Log details"
   },
   "setTaskDueDate": {
