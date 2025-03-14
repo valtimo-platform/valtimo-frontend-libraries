@@ -45,6 +45,7 @@
     </div>
 
     <button
+      *ngIf="obs.canModifyTask"
       cdsButton="ghost"
       class="element remove-button"
       [ngClass]="{active: obs.hasDueDate && obs.mouseIsOverDueDate}"
