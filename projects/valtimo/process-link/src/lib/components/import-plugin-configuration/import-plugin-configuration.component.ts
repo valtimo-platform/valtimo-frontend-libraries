@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {BehaviorSubject, combineLatest, map, Observable, startWith, Subject} from 'rxjs';
 import {CompatiblePluginProcessLinks, ProcessLink} from '../../models';
@@ -27,7 +27,7 @@ import {Upload16} from '@carbon/icons';
   templateUrl: './import-plugin-configuration.component.html',
   styleUrls: ['./import-plugin-configuration.component.scss'],
 })
-export class ImportPluginConfigurationComponent implements AfterViewInit {
+export class ImportPluginConfigurationComponent {
   @Input() public set pluginActionKey(value: string) {
     this.importPluginForm.reset();
     this.fetchCompatiblePluginProcessLinks(value);
@@ -117,16 +117,9 @@ export class ImportPluginConfigurationComponent implements AfterViewInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly processLinkService: ProcessLinkService,
-    private readonly iconService: IconService,
-    private readonly elementRef: ElementRef<HTMLElement>
+    private readonly iconService: IconService
   ) {
     this.iconService.register(Upload16);
-  }
-
-  public ngAfterViewInit(): void {
-    const button = this.elementRef.nativeElement.querySelector('button.cds--toggletip-button');
-    if (!button) return;
-    button.classList.remove('cds--toggletip-button');
   }
 
   public onSubmit(): void {

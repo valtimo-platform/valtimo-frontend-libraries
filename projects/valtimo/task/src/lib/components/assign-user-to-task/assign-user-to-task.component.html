@@ -60,7 +60,13 @@
       [ngClass]="{active: !vars.hasSelection}"
       (onOpen)="clear()"
     >
-      <button cdsToggletipButton cdsButton="tertiary" size="sm" class="set-assignee-button">
+      <button
+        cdsToggletipButton
+        [removeClassnames]="['cds--toggletip-button']"
+        cdsButton="tertiary"
+        size="sm"
+        class="set-assignee-button"
+      >
         {{ 'assignTask.buttonText' | translate }}
 
         <svg class="cds--btn__icon" cdsIcon="user--follow" size="16"></svg>

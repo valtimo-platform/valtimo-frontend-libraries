@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -25,7 +24,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {SearchableDropdownSelectModule} from '@valtimo/components';
+import {RemoveClassnamesDirective, SearchableDropdownSelectModule} from '@valtimo/components';
 import {BehaviorSubject, combineLatest, Subject, Subscription, take, tap} from 'rxjs';
 import {TaskService} from '../../services';
 import {NamedUser} from '@valtimo/config';
@@ -59,9 +58,10 @@ import {map} from 'rxjs/operators';
     LayerModule,
     DatePickerModule,
     ComboBoxModule,
+    RemoveClassnamesDirective,
   ],
 })
-export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public readonly taskId: string;
   @Input() public readonly assigneeId: string;
   @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
@@ -112,12 +112,6 @@ export class AssignUserToTaskComponent implements OnInit, AfterViewInit, OnChang
         this.enable();
       })
     );
-  }
-
-  public ngAfterViewInit(): void {
-    const button = this.elementRef.nativeElement.querySelector('button.cds--toggletip-button');
-    if (!button) return;
-    button.classList.remove('cds--toggletip-button');
   }
 
   public ngOnChanges(changes: SimpleChanges): void {

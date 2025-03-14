@@ -19,6 +19,7 @@
     class="process-link-configuration-import-button"
     [disabled]="((compatiblePluginProcessLinks$ | async) || []).length === 0"
     cdsToggletipButton
+    [removeClassnames]="['cds--toggletip-button']"
     cdsButton="ghost"
   >
     {{ 'processLinkConfiguration.importConfiguration' | translate }}

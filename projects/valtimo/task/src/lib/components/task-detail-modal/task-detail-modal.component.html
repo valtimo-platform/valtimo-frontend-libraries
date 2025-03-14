@@ -108,8 +108,8 @@
     ></valtimo-assign-user-to-task>
 
     <valtimo-set-task-due-date
-      *ngIf="obs.canModifyTask"
       [task]="obs.task"
+      [canModifyTask]="obs.canModifyTask"
     ></valtimo-set-task-due-date>
   </div>
 </ng-template>

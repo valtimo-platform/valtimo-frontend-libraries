@@ -13,75 +13,89 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<div
-  *ngIf="{
-    hasDueDate: hasDueDate$ | async,
-    taskDueDate: taskDueDate$ | async,
-    selectedDateString: selectedDateString$ | async,
-    disabled: disabled$ | async,
-    mouseIsOverDueDate: mouseIsOverDueDate$ | async,
-  } as obs"
-  class="due-date-container"
-  (mouseenter)="onMouseEnterDueDate()"
-  (mouseleave)="onMouseLeaveDueDate()"
+<ng-container
+  *ngIf="
+    (canModifyTaskSet$ | async) && {
+      hasDueDate: hasDueDate$ | async,
+      taskDueDate: taskDueDate$ | async,
+      selectedDateString: selectedDateString$ | async,
+      disabled: disabled$ | async,
+      mouseIsOverDueDate: mouseIsOverDueDate$ | async,
+      canModifyTask: canModifyTask$ | async,
+    } as obs
+  "
 >
   <div
-    class="due-date-text element"
-    [ngClass]="{active: obs.hasDueDate && !obs.mouseIsOverDueDate}"
+    *ngIf="obs.canModifyTask || (!obs.canModifyTask && obs.hasDueDate)"
+    class="due-date-container"
+    (mouseenter)="onMouseEnterDueDate()"
+    (mouseleave)="onMouseLeaveDueDate()"
   >
-    <span class="bold">{{ 'setTaskDueDate.dueDateText' | translate }}</span>
+    <div
+      class="due-date-text element"
+      [ngClass]="{
+        active: obs.canModifyTask ? obs.hasDueDate && !obs.mouseIsOverDueDate : obs.hasDueDate,
+      }"
+    >
+      <span class="bold">{{ 'setTaskDueDate.dueDateText' | translate }}</span>
 
-    &nbsp;
+      &nbsp;
 
-    {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
-  </div>
+      {{ obs.taskDueDate | date: 'dd-MM-yyyy' }}
+    </div>
 
-  <button
-    cdsButton="ghost"
-    class="element remove-button"
-    [ngClass]="{active: obs.hasDueDate && obs.mouseIsOverDueDate}"
-    [disabled]="obs.disabled"
-    size="sm"
-    (click)="onRemoveButtonClick()"
-  >
-    {{ 'setTaskDueDate.removeButtonText' | translate }}
-  </button>
-
-  <cds-toggletip
-    align="bottom"
-    class="element main"
-    [autoAlign]="true"
-    [isOpen]="open$ | async"
-    [ngClass]="{active: !obs.hasDueDate}"
-  >
-    <button cdsToggletipButton cdsButton="tertiary" size="sm" class="set-task-due-date-button">
-      {{ 'setTaskDueDate.buttonText' | translate }}
-
-      <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
+    <button
+      cdsButton="ghost"
+      class="element remove-button"
+      [ngClass]="{active: obs.hasDueDate && obs.mouseIsOverDueDate}"
+      [disabled]="obs.disabled"
+      size="sm"
+      (click)="onRemoveButtonClick()"
+    >
+      {{ 'setTaskDueDate.removeButtonText' | translate }}
     </button>
 
-    <div cdsToggletipContent data-carbon-theme="g90" class="assign-due-date-popover-content">
-      <cds-date-picker
-        *ngIf="!obs.hasDueDate"
-        [cdsLayer]="1"
-        [label]="'Select date'"
-        [placeholder]="'dd-mm-jjjj'"
-        dateFormat="d/m/Y"
-        [disabled]="obs.disabled"
-        (valueChange)="onDateValueChange($event)"
-      ></cds-date-picker>
-
+    <cds-toggletip
+      align="bottom"
+      class="element main"
+      [autoAlign]="true"
+      [isOpen]="open$ | async"
+      [ngClass]="{active: !obs.hasDueDate}"
+    >
       <button
-        cdsButton
-        class="submit-due-date-button"
-        [disabled]="!obs.selectedDateString || obs.disabled"
-        (click)="onSubmitButtonClick()"
+        cdsToggletipButton
+        [removeClassnames]="['cds--toggletip-button']"
+        cdsButton="tertiary"
+        size="sm"
+        class="set-task-due-date-button"
       >
-        {{ 'setTaskDueDate.submitButtonText' | translate }}
+        {{ 'setTaskDueDate.buttonText' | translate }}
 
         <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
       </button>
-    </div>
-  </cds-toggletip>
-</div>
+
+      <div cdsToggletipContent data-carbon-theme="g90" class="assign-due-date-popover-content">
+        <cds-date-picker
+          *ngIf="!obs.hasDueDate"
+          [cdsLayer]="1"
+          [label]="'Select date'"
+          [placeholder]="'dd-mm-jjjj'"
+          dateFormat="d/m/Y"
+          [disabled]="obs.disabled"
+          (valueChange)="onDateValueChange($event)"
+        ></cds-date-picker>
+
+        <button
+          cdsButton
+          class="submit-due-date-button"
+          [disabled]="!obs.selectedDateString || obs.disabled"
+          (click)="onSubmitButtonClick()"
+        >
+          {{ 'setTaskDueDate.submitButtonText' | translate }}
+
+          <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
+        </button>
+      </div>
+    </cds-toggletip>
+  </div>
+</ng-container>

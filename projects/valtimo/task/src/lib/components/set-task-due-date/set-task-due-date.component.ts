@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ElementRef, Input} from '@angular/core';
+import {Component, ElementRef, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {ProcessInstanceTask} from '@valtimo/process';
@@ -31,6 +31,7 @@ import {
 import {CalendarAdd16} from '@carbon/icons';
 import {TaskService} from '../../services';
 import {Task} from '../../models';
+import {RemoveClassnamesDirective} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-set-task-due-date',
@@ -45,9 +46,19 @@ import {Task} from '../../models';
     ToggletipModule,
     DatePickerModule,
     LayerModule,
+    RemoveClassnamesDirective,
   ],
 })
-export class SetTaskDueDateComponent implements AfterViewInit {
+export class SetTaskDueDateComponent {
+  public readonly canModifyTaskSet$ = new BehaviorSubject<boolean>(false);
+  public readonly canModifyTask$ = new BehaviorSubject<boolean>(false);
+
+  @Input() public set canModifyTask(value: boolean) {
+    this.canModifyTaskSet$.next(true);
+    this.canModifyTask$.next(value);
+    this.removePopoverClass();
+  }
+
   private readonly _task$ = new BehaviorSubject<Partial<ProcessInstanceTask> | null>(null);
 
   private get _task(): Partial<ProcessInstanceTask> | null {
@@ -85,12 +96,6 @@ export class SetTaskDueDateComponent implements AfterViewInit {
     private readonly taskService: TaskService
   ) {
     this.iconService.registerAll([CalendarAdd16]);
-  }
-
-  public ngAfterViewInit(): void {
-    const button = this.elementRef.nativeElement.querySelector('button.cds--toggletip-button');
-    if (!button) return;
-    button.classList.remove('cds--toggletip-button');
   }
 
   public onDateValueChange(value: Date[]): void {
@@ -143,5 +148,11 @@ export class SetTaskDueDateComponent implements AfterViewInit {
 
   public onMouseLeaveDueDate(): void {
     this.mouseIsOverDueDate$.next(false);
+  }
+
+  private removePopoverClass(): void {
+    const button = this.elementRef.nativeElement.querySelector('button.cds--toggletip-button');
+    if (!button) return;
+    button.classList.remove('cds--toggletip-button');
   }
 }
