@@ -78,7 +78,6 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
 
   private _activeVersion: number | null;
   private _subscriptions = new Subscription();
-  private _tabsInit = false;
   constructor(
     private readonly dossierDetailService: DossierDetailService,
     private readonly route: ActivatedRoute,
@@ -103,18 +102,6 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   }
 
   public navigateToTab(tab: TabEnum | string): void {
-    if (!this._tabsInit) {
-      this._tabsInit = true;
-      this.router.navigate(
-        [
-          `dossier-management/dossier/${this._params.caseDefinitionName}/version/${this._params.caseVersionTag}/${tab}`,
-        ],
-        {
-          skipLocationChange: true,
-        }
-      );
-      return;
-    }
     this._tabs.notifyOnChanges();
     this.router.navigate([
       `dossier-management/dossier/${this._params.caseDefinitionName}/version/${this._params.caseVersionTag}/${tab}`,
