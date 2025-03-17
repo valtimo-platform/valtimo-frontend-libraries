@@ -64,17 +64,17 @@
       </p>
 
       <div class="task-actions">
-        <valtimo-assign-user-to-task
-          *ngIf="obs.task"
-          [canAssignUserToTask]="obs.canAssignUserToTask"
-          [taskId]="obs.task.id"
-          [assigneeId]="obs.task.assignee"
-        ></valtimo-assign-user-to-task>
+        @if (obs.task) {
+          <valtimo-assign-user-to-task
+            [canAssignUserToTask]="obs.canAssignUserToTask"
+            [taskId]="obs.task.id"
+            [assigneeId]="obs.task.assignee"
+          ></valtimo-assign-user-to-task>
 
-        <valtimo-set-task-due-date
-          [task]="obs.task"
-          [canModifyTask]="obs.canModifyTask"
-        ></valtimo-set-task-due-date>
+          <valtimo-set-task-due-date
+            [canModifyTask]="obs.canModifyTask"
+          ></valtimo-set-task-due-date>
+        }
       </div>
     </div>
 

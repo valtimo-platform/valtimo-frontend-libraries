@@ -31,7 +31,7 @@ import {
 import {CalendarAdd16} from '@carbon/icons';
 import {TaskService} from '../../services';
 import {Task} from '../../models';
-import {RemoveClassnamesDirective} from '@valtimo/components';
+import {CdsThemeService, RemoveClassnamesDirective} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-set-task-due-date',
@@ -89,9 +89,12 @@ export class SetTaskDueDateComponent {
 
   public readonly mouseIsOverDueDate$ = new BehaviorSubject<boolean>(false);
 
+  public readonly toggletipTheme$ = this.cdsThemeService.toggletipTheme$;
+
   constructor(
     private readonly iconService: IconService,
-    private readonly taskService: TaskService
+    private readonly taskService: TaskService,
+    private readonly cdsThemeService: CdsThemeService
   ) {
     this.iconService.registerAll([CalendarAdd16]);
   }

@@ -21,6 +21,7 @@ import {CompatiblePluginProcessLinks, ProcessLink} from '../../models';
 import {ProcessLinkService} from '../../services';
 import {IconService, ListItem} from 'carbon-components-angular';
 import {Upload16} from '@carbon/icons';
+import {CdsThemeService} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-import-plugin-configuration',
@@ -114,10 +115,13 @@ export class ImportPluginConfigurationComponent {
     )
   );
 
+  public readonly toggletipTheme$ = this.cdsThemeService.toggletipTheme$;
+
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly processLinkService: ProcessLinkService,
-    private readonly iconService: IconService
+    private readonly iconService: IconService,
+    private readonly cdsThemeService: CdsThemeService
   ) {
     this.iconService.register(Upload16);
   }

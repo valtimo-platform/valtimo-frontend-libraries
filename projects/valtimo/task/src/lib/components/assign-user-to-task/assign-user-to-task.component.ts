@@ -25,8 +25,12 @@ import {
   Renderer2,
   SimpleChanges,
 } from '@angular/core';
-import {RemoveClassnamesDirective, SearchableDropdownSelectModule} from '@valtimo/components';
-import {BehaviorSubject, combineLatest, Subject, Subscription, take, tap} from 'rxjs';
+import {
+  CdsThemeService,
+  RemoveClassnamesDirective,
+  SearchableDropdownSelectModule,
+} from '@valtimo/components';
+import {BehaviorSubject, combineLatest, Observable, Subject, Subscription, take, tap} from 'rxjs';
 import {TaskService} from '../../services';
 import {NamedUser} from '@valtimo/config';
 import {CommonModule} from '@angular/common';
@@ -77,8 +81,8 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
 
   public readonly assignedIdOnServer$ = new BehaviorSubject<string | null>(null);
   private readonly _assignedUserFullName$ = new BehaviorSubject<string | null>(null);
-  public readonly assignedUserFullName$ = this._assignedUserFullName$.pipe(
-    map(fullName => fullName?.trim())
+  public readonly assignedUserFullName$: Observable<string> = this._assignedUserFullName$.pipe(
+    map(fullName => `${fullName?.trim()}`)
   );
 
   private readonly _candidateUsersForTask$ = new BehaviorSubject<NamedUser[] | undefined>(
@@ -97,13 +101,16 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
   public readonly open$ = new Subject<boolean>();
   public readonly disabled$ = new BehaviorSubject<boolean>(true);
 
+  public readonly toggletipTheme$ = this.cdsThemeService.toggletipTheme$;
+
   private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly taskService: TaskService,
     private readonly iconService: IconService,
     private readonly elementRef: ElementRef,
-    private readonly renderer2: Renderer2
+    private readonly renderer2: Renderer2,
+    private readonly cdsThemeService: CdsThemeService
   ) {
     this.iconService.registerAll([UserFollow16]);
   }

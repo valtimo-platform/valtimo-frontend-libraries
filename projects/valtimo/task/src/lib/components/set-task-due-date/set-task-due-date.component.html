@@ -75,7 +75,11 @@
         <svg class="cds--btn__icon" cdsIcon="calendar--add" size="16"></svg>
       </button>
 
-      <div cdsToggletipContent data-carbon-theme="g90" class="assign-due-date-popover-content">
+      <div
+        cdsToggletipContent
+        [attr.data-carbon-theme]="toggletipTheme$ | async"
+        class="assign-due-date-popover-content"
+      >
         <cds-date-picker
           *ngIf="!obs.hasDueDate"
           [cdsLayer]="1"

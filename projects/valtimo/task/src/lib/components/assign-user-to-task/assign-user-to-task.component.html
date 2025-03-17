@@ -83,7 +83,11 @@
           <svg class="cds--btn__icon" cdsIcon="user--follow" size="16"></svg>
         </button>
 
-        <div cdsToggletipContent data-carbon-theme="g90" class="assign-task-popover-content">
+        <div
+          cdsToggletipContent
+          [attr.data-carbon-theme]="toggletipTheme$ | async"
+          class="assign-task-popover-content"
+        >
           <cds-combo-box
             *ngIf="!vars.hasSelection"
             [label]="'assignTask.comboboxLabel' | translate"
