@@ -101,9 +101,10 @@
     class="task-actions"
   >
     <valtimo-assign-user-to-task
-      *ngIf="obs.task && obs.canAssignUserToTask && assignmentOfTaskChanged"
+      *ngIf="obs.task && assignmentOfTaskChanged"
       [taskId]="obs.task.id"
       [assigneeId]="obs.task.assignee"
+      [canAssignUserToTask]="obs.canAssignUserToTask"
       (assignmentOfTaskChanged)="assignmentOfTaskChanged.emit()"
     ></valtimo-assign-user-to-task>
 

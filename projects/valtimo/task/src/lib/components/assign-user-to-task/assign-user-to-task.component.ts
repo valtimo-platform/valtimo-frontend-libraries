@@ -22,6 +22,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  Renderer2,
   SimpleChanges,
 } from '@angular/core';
 import {RemoveClassnamesDirective, SearchableDropdownSelectModule} from '@valtimo/components';
@@ -41,7 +42,7 @@ import {
   ToggletipModule,
 } from 'carbon-components-angular';
 import {UserFollow16} from '@carbon/icons';
-import {map} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-assign-user-to-task',
@@ -65,6 +66,14 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public readonly taskId: string;
   @Input() public readonly assigneeId: string;
   @Output() public readonly assignmentOfTaskChanged = new EventEmitter();
+
+  public readonly canAssignUserToTaskSet$ = new BehaviorSubject<boolean>(false);
+  public readonly canAssignUserToTask$ = new BehaviorSubject<boolean>(false);
+
+  @Input() public set canAssignUserToTask(value: boolean) {
+    this.canAssignUserToTaskSet$.next(true);
+    this.canAssignUserToTask$.next(value);
+  }
 
   public readonly assignedIdOnServer$ = new BehaviorSubject<string | null>(null);
   private readonly _assignedUserFullName$ = new BehaviorSubject<string | null>(null);
@@ -93,25 +102,15 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly taskService: TaskService,
     private readonly iconService: IconService,
-    private readonly elementRef: ElementRef<HTMLElement>
+    private readonly elementRef: ElementRef,
+    private readonly renderer2: Renderer2
   ) {
     this.iconService.registerAll([UserFollow16]);
   }
 
   public ngOnInit(): void {
-    this._subscriptions.add(
-      this.taskService.getCandidateUsers(this.taskId).subscribe(candidateUsers => {
-        this._candidateUsersForTask$.next(candidateUsers);
-        if (this.assigneeId) {
-          this.assignedIdOnServer$.next(this.assigneeId);
-          this._selectedUserId$.next(this.assigneeId);
-          this._assignedUserFullName$.next(
-            this.getAssignedUserName(candidateUsers, this.assigneeId)
-          );
-        }
-        this.enable();
-      })
-    );
+    this.fetchCandidateUsers();
+    this.openHideElementSubscription();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -222,5 +221,42 @@ export class AssignUserToTaskComponent implements OnInit, OnChanges, OnDestroy {
     // needed to reliably trigger toggle tip closure
     this.open$.next(true);
     setTimeout(() => this.open$.next(false));
+  }
+
+  private fetchCandidateUsers(): void {
+    this.canAssignUserToTask$
+      .pipe(
+        filter(allowed => !!allowed),
+        take(1)
+      )
+      .subscribe(() => {
+        this.taskService.getCandidateUsers(this.taskId).subscribe(candidateUsers => {
+          this._candidateUsersForTask$.next(candidateUsers);
+          if (this.assigneeId) {
+            this.assignedIdOnServer$.next(this.assigneeId);
+            this._selectedUserId$.next(this.assigneeId);
+            this._assignedUserFullName$.next(
+              this.getAssignedUserName(candidateUsers, this.assigneeId)
+            );
+          }
+          this.enable();
+        });
+      });
+  }
+
+  private openHideElementSubscription(): void {
+    this._subscriptions.add(
+      combineLatest([
+        this.selectedUserId$,
+        this.assignedIdOnServer$,
+        this.canAssignUserToTask$,
+      ]).subscribe(([selectedUserId, idOnServer, canAssignUserToTask]) => {
+        if (!canAssignUserToTask && !(selectedUserId === idOnServer && idOnServer !== null)) {
+          this.renderer2.setStyle(this.elementRef.nativeElement, 'display', 'none');
+        } else {
+          this.renderer2.removeStyle(this.elementRef.nativeElement, 'display');
+        }
+      })
+    );
   }
 }

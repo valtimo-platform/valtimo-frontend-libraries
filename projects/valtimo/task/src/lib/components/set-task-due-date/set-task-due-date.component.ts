@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {ProcessInstanceTask} from '@valtimo/process';
@@ -56,7 +56,6 @@ export class SetTaskDueDateComponent {
   @Input() public set canModifyTask(value: boolean) {
     this.canModifyTaskSet$.next(true);
     this.canModifyTask$.next(value);
-    this.removePopoverClass();
   }
 
   private readonly _task$ = new BehaviorSubject<Partial<ProcessInstanceTask> | null>(null);
@@ -92,7 +91,6 @@ export class SetTaskDueDateComponent {
 
   constructor(
     private readonly iconService: IconService,
-    private readonly elementRef: ElementRef<HTMLElement>,
     private readonly taskService: TaskService
   ) {
     this.iconService.registerAll([CalendarAdd16]);
@@ -148,11 +146,5 @@ export class SetTaskDueDateComponent {
 
   public onMouseLeaveDueDate(): void {
     this.mouseIsOverDueDate$.next(false);
-  }
-
-  private removePopoverClass(): void {
-    const button = this.elementRef.nativeElement.querySelector('button.cds--toggletip-button');
-    if (!button) return;
-    button.classList.remove('cds--toggletip-button');
   }
 }
