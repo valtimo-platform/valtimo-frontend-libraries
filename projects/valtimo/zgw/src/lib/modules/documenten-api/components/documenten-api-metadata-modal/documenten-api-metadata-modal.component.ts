@@ -617,7 +617,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         if (file) {
           this.prefillForm(file);
           this.editDisabled$.next(
-            (!support.supportsUpdatingDefinitiveDocument || file.status === 'definitief') &&
+            !support.supportsUpdatingDefinitiveDocument &&
+              file.status === 'definitief' &&
               this.isEditMode
           );
         }
