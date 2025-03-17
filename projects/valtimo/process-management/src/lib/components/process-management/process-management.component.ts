@@ -24,13 +24,6 @@ import {ProcessManagementService} from '../../services';
 import {ProcessManagementBuilderComponent} from '../process-management-builder/process-management-builder.component';
 import {ProcessManagementListComponent} from '../process-management-list/process-management-list.component';
 import {ProcessManagementUploadComponent} from '../process-management-upload/process-management-upload.component';
-import {CaseProcessInstance} from '../../models';
-
-interface BpmnElement {
-  type: string;
-  id: string;
-  di?: {id?: string; bpmnElement?: {name?: string}};
-}
 
 @Component({
   selector: 'valtimo-process-management',
@@ -86,5 +79,3 @@ export class ProcessManagementComponent {
     this.selectedProcess$.next(process);
   }
 }
-
-export {BpmnElement};

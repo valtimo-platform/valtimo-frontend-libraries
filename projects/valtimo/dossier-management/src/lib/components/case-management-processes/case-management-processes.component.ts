@@ -23,7 +23,7 @@ import {
   ProcessManagementStateService,
 } from '@valtimo/process-management';
 import {ButtonModule} from 'carbon-components-angular';
-import {BehaviorSubject, map, map, Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 
 @Component({
   templateUrl: './case-management-processes.component.html',
@@ -40,13 +40,6 @@ export class CaseManagementProcessesComponent extends PendingChangesComponent {
         versionTag: caseVersionTag,
       }))
     );
-  public readonly selectedProcess$ = new BehaviorSubject<any | 'create' | null>(null);
-  public readonly params$ = this.route.parent?.params.pipe(
-    map(({caseDefinitionName, caseVersionTag}) => ({
-      caseDefinitionName,
-      caseVersionTag,
-    }))
-  );
 
   constructor(private readonly route: ActivatedRoute) {
     super();

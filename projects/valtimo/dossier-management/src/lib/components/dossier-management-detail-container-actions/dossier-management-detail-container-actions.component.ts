@@ -25,17 +25,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import {ActivatedRoute, Router} from '@angular/router';
-=======
-import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
-import {ListItem, Notification, NotificationService} from 'carbon-components-angular';
-import {CaseManagementService, DossierDetailService, DossierExportService} from '../../services';
->>>>>>> 0fd4d99f (Add version to routing)
-=======
-import {ActivatedRoute, Router} from '@angular/router';
->>>>>>> a56a93d7 (Add base version change)
 import {TranslateService} from '@ngx-translate/core';
 import {PageHeaderService} from '@valtimo/components';
 import {DocumentService} from '@valtimo/document';
@@ -68,31 +58,9 @@ export class DossierManagementDetailContainerActionsComponent {
 
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
   public readonly selectedVersionNumber$ = this.dossierDetailService.selectedVersionNumber$;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  private readonly _previousSelectedVersionNumber$ =
-    this.dossierDetailService.previousSelectedVersionNumber$;
-  private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
-  public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
-  private readonly _documentDefinitionVersions$ = this._caseDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
-      this.documentService.getDocumentDefinitionVersions(documentDefinitionName)
-    ),
-    tap(res => {
-      this.dossierDetailService.setSelectedVersionNumber(this.findLargestInArray(res.versions));
-      this.loadingVersion$.next(false);
-    })
-  );
->>>>>>> 0fd4d99f (Add version to routing)
 
   private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
-=======
-
-  private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
-  public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
->>>>>>> aedc7ac3 (Cleanup)
 
   public readonly selectedDocumentDefinition$ = this.dossierDetailService.documentDefinition$;
 
@@ -124,52 +92,18 @@ export class DossierManagementDetailContainerActionsComponent {
     })
   );
 
-  private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
-  public readonly versions$: Observable<ListItem[] | null> = this.route.params.pipe(
-    switchMap(({caseDefinitionName, caseVersionTag}) =>
-      combineLatest([
-        this._cachedVersions.getValue() === null
-          ? this.caseManagementService.getCaseDefinitionVersions(caseDefinitionName)
-          : this._cachedVersions.asObservable(),
-        of(caseVersionTag),
-      ])
-    ),
-    map(([caseDefinitionVersions, caseVersionTag]) => {
-      const mapping: ListItem[] | null =
-        caseDefinitionVersions?.map((caseDefinitionVersion: string) => ({
-          content: caseDefinitionVersion,
-          selected: caseDefinitionVersion === caseVersionTag,
-        })) ?? null;
-
-      if (this._cachedVersions.getValue() === null) this._cachedVersions.next(mapping);
-
-      return mapping;
-    })
-  );
-
   private _currentNotification!: Notification;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private readonly notificationService: NotificationService,
-    private readonly dossierExportService: DossierExportService,
-    private readonly translateService: TranslateService,
-    private readonly documentService: DocumentService,
+    private readonly caseManagementService: CaseManagementService,
     private readonly dossierDetailService: DossierDetailService,
+    private readonly dossierExportService: DossierExportService,
+    private readonly notificationService: NotificationService,
     private readonly pageHeaderService: PageHeaderService,
-<<<<<<< HEAD
-<<<<<<< HEAD
-    private readonly caseManagementService: CaseManagementService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
-=======
-    private readonly caseManagementService: CaseManagementService
->>>>>>> 0fd4d99f (Add version to routing)
-=======
-    private readonly caseManagementService: CaseManagementService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
->>>>>>> a56a93d7 (Add base version change)
+    private readonly router: Router,
+    private readonly translateService: TranslateService
   ) {}
 
   public export(): void {

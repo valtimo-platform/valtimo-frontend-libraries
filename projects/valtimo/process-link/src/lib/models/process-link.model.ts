@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {ProcessInstanceTask} from '@valtimo/process';
 
 interface ProcessLink {
@@ -176,19 +175,8 @@ type ProcessLinkUpdateEvent =
   | FormProcessLinkUpdateRequestDto
   | URLProcessLinkUpdateRequestDto;
 
-type ProcessLinkCreateEvent =
-  | FormProcessLinkCreateRequestDto
-  | FormFlowProcessLinkCreateRequestDto
-  | PluginProcessLinkCreateDto
-  | URLProcessLinkCreateDto;
-
 interface ProcessLinkDeleteEvent {
   activityId: string;
-}
-
-enum ProcessLinkEditMode {
-  SAVE_TO_BACKEND,
-  EMIT_EVENTS,
 }
 
 interface CompatibleProcessVersion {
@@ -200,11 +188,6 @@ interface CompatiblePluginProcessLinks {
   processDefinitionKey: string;
   versions: CompatibleProcessVersion[];
 }
-type ProcessLinkUpdateEvent =
-  | PluginProcessLinkUpdateDto
-  | FormFlowProcessLinkUpdateRequestDto
-  | FormProcessLinkUpdateRequestDto
-  | URLProcessLinkUpdateRequestDto;
 
 type ProcessLinkCreateEvent =
   | FormProcessLinkCreateRequestDto
@@ -233,37 +216,30 @@ interface CompatiblePluginProcessLinks {
 }
 
 export {
-  GetProcessLinkRequest,
-  ProcessLink,
-  GetProcessLinkResponse,
-  PluginProcessLinkUpdateDto,
-  ProcessLinkType,
-  ProcessLinkConfigurationStep,
-  FormProcessLinkCreateRequestDto,
+  CompatiblePluginProcessLinks,
+  CompatibleProcessVersion,
+  FormDisplayType,
   FormFlowProcessLinkCreateRequestDto,
-  PluginProcessLinkCreateDto,
   FormFlowProcessLinkUpdateRequestDto,
+  FormProcessLinkCreateRequestDto,
   FormProcessLinkUpdateRequestDto,
+  FormSize,
+  GetProcessLinkRequest,
+  GetProcessLinkResponse,
+  PluginProcessLinkCreateDto,
+  PluginProcessLinkUpdateDto,
+  ProcessLink,
+  ProcessLinkConfigurationStep,
+  ProcessLinkCreateEvent,
+  ProcessLinkDeleteEvent,
+  ProcessLinkEditMode,
+  ProcessLinkType,
+  ProcessLinkUpdateEvent,
+  TaskProcessLinkResult,
+  TaskProcessLinkType,
+  TaskWithProcessLink,
+  UIComponentProcessLinkCreateRequestDto,
+  UIComponentProcessLinkUpdateRequestDto,
   URLProcessLinkCreateDto,
   URLProcessLinkUpdateRequestDto,
-  FormDisplayType,
-  FormSize,
-  TaskProcessLinkType,
-  TaskProcessLinkResult,
-  TaskWithProcessLink,
-  ProcessLinkUpdateEvent,
-  ProcessLinkCreateEvent,
-  ProcessLinkDeleteEvent,
-  ProcessLinkEditMode,
-  UIComponentProcessLinkUpdateRequestDto,
-  UIComponentProcessLinkCreateRequestDto,
-  CompatiblePluginProcessLinks,
-  ProcessLinkUpdateEvent,
-  ProcessLinkCreateEvent,
-  ProcessLinkDeleteEvent,
-  ProcessLinkEditMode,
-  UIComponentProcessLinkCreateRequestDto,
-  UIComponentProcessLinkUpdateRequestDto,
-  CompatibleProcessVersion,
-  CompatiblePluginProcessLinks,
 };

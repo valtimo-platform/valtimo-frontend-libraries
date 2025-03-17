@@ -28,7 +28,6 @@ import {PluginConfiguration, PluginConfigurationData} from '@valtimo/plugin';
 import {
   PluginProcessLinkCreateDto,
   PluginProcessLinkUpdateDto,
-  ProcessLink,
   ProcessLinkEditMode,
   ProcessLink,
 } from '../../models';

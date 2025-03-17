@@ -38,13 +38,7 @@
 <ng-template #versionSelection let-obs="obs">
   <cds-dropdown
     class="version-selection"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     [disabled]="obs.loadingVersion || (obs.versionListItems?.length || []) === 1"
->>>>>>> 0fd4d99f (Add version to routing)
-=======
->>>>>>> a56a93d7 (Add base version change)
     [skeleton]="obs.loadingVersion"
     (selected)="setVersion($event)"
     [size]="obs.compactMode ? 'sm' : 'md'"

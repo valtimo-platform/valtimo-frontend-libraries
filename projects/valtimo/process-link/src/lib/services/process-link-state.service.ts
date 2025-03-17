@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Inject, Injectable, OnDestroy, Optional} from '@angular/core';
-import {BehaviorSubject, map, Observable, Subscription} from 'rxjs';
-
-import {FORM_CUSTOM_COMPONENT_TOKEN} from '../constants';
+import {Injectable, OnDestroy} from '@angular/core';
+import {BehaviorSubject, map, Observable, Subject, Subscription} from 'rxjs';
 import {
-  FormCustomComponentConfig,
   ModalParams,
   ProcessLink,
   ProcessLinkCreateEvent,
