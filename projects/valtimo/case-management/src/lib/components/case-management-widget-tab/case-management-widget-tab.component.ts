@@ -43,7 +43,7 @@ import {
   WidgetJsonEditorService,
   WidgetTabManagementService,
 } from '../../services';
-import {DossierManagementWidgetTabEditModalComponent} from '../dossier-management-widget-tab-edit-modal/dossier-management-widget-tab-edit-modal';
+import {CaseManagementWidgetTabEditModalComponent} from '../case-management-widget-tab-edit-modal/case-management-widget-tab-edit-modal.component';
 import {CaseManagementWidgetsEditorComponent} from './editor/case-management-widgets-editor.component';
 import {CaseManagementWidgetsJsonEditorComponent} from './json-editor/case-management-widgets-json-editor.component';
 
@@ -56,7 +56,7 @@ import {CaseManagementWidgetsJsonEditorComponent} from './json-editor/case-manag
     CommonModule,
     TranslateModule,
     CaseManagementWidgetsEditorComponent,
-    DossierManagementWidgetTabEditModalComponent,
+    CaseManagementWidgetTabEditModalComponent,
     CaseManagementWidgetsJsonEditorComponent,
     RenderInPageHeaderDirectiveModule,
     ButtonModule,

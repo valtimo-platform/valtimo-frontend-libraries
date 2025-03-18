@@ -38,9 +38,9 @@ import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
-  selector: 'valtimo-dossier-management-widget-tab-edit-modal',
-  templateUrl: './dossier-management-widget-tab-edit-modal.html',
-  styleUrls: ['./dossier-management-widget-tab-edit-modal.scss'],
+  selector: 'valtimo-case-management-widget-tab-edit-modal',
+  templateUrl: './case-management-widget-tab-edit-modal.html',
+  styleUrls: ['./case-management-widget-tab-edit-modal.scss'],
   encapsulation: ViewEncapsulation.None,
   providers: [NotificationService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,7 +55,7 @@ import {TranslateModule} from '@ngx-translate/core';
     ButtonModule,
   ],
 })
-export class DossierManagementWidgetTabEditModalComponent implements OnInit, OnDestroy {
+export class CaseManagementWidgetTabEditModalComponent implements OnInit, OnDestroy {
   @Input() public showModal$: Observable<boolean>;
   @Input() public tabItem: ApiTabItem;
   @Output() public saveEvent = new EventEmitter<any>();
