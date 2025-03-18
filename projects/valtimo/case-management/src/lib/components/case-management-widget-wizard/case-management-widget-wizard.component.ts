@@ -35,9 +35,9 @@ import {WidgetWizardService} from '../../services';
 import {WIDGET_STEPS} from './steps';
 
 @Component({
-  selector: 'valtimo-dossier-management-widget-wizard',
-  templateUrl: './dossier-management-widget-wizard.component.html',
-  styleUrls: ['./dossier-management-widget-wizard.component.scss'],
+  selector: 'valtimo-case-management-widget-wizard',
+  templateUrl: './case-management-widget-wizard.component.html',
+  styleUrls: ['./case-management-widget-wizard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
@@ -50,7 +50,7 @@ import {WIDGET_STEPS} from './steps';
     ...WIDGET_STEPS,
   ],
 })
-export class DossierManagementWidgetWizardComponent {
+export class CasManagementWidgetWizardComponent {
   @Input() public open = false;
   private _editMode: boolean;
   @Input() public set editMode(value: boolean) {

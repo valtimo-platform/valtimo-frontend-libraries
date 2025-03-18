@@ -38,7 +38,7 @@ import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, Subject, take} from 'rxjs';
 import {AVAILABLE_WIDGETS, WidgetStyle, WidgetTypeTags} from '../../../models';
 import {WidgetTabManagementService, WidgetWizardService} from '../../../services';
-import {DossierManagementWidgetWizardComponent} from '../../dossier-management-widget-wizard/dossier-management-widget-wizard.component';
+import {CasManagementWidgetWizardComponent} from '../../case-management-widget-wizard/case-management-widget-wizard.component';
 import {cloneDeep} from 'lodash';
 
 @Component({
@@ -53,7 +53,7 @@ import {cloneDeep} from 'lodash';
     ButtonModule,
     IconModule,
     TabsModule,
-    DossierManagementWidgetWizardComponent,
+    CasManagementWidgetWizardComponent,
     ConfirmationModalModule,
   ],
 })
