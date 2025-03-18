@@ -98,7 +98,7 @@ const routes: Routes = [
   exports: [RouterModule],
   declarations: [],
 })
-export class DossierManagementRoutingModule {
+export class CaseManagementRoutingModule {
   constructor(
     @Inject(CASE_MANAGEMENT_TAB_TOKEN)
     private readonly caseManagementTabConfig: CaseManagementTabConfig[],

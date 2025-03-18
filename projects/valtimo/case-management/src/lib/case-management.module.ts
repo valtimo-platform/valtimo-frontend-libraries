@@ -78,7 +78,7 @@ import {DossierManagementTabsComponent} from './components/dossier-management-ta
 import {TabFormComponent} from './components/dossier-management-tabs/tab-form/tab-form.component';
 import {DossierManagementUploadComponent} from './components/dossier-management-upload/dossier-management-upload.component';
 import {DossierManagementUploadStepComponent} from './components/dossier-management-upload/step/dossier-management-upload-step.component';
-import {DossierManagementRoutingModule} from './dossier-management-routing.module';
+import {CaseManagementRoutingModule} from './case-management-routing.module';
 import {TabManagementService} from './services';
 import {DossierManagementStatusesComponent} from './components/dossier-management-statuses/dossier-management-statuses.component';
 import {DossierManagementStatusModalComponent} from './components/dossier-management-statuses/dossier-management-status-modal/dossier-management-status-modal.component';
@@ -114,7 +114,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     WidgetModule,
     DropzoneModule,
     ListModule,
-    DossierManagementRoutingModule,
+    CaseManagementRoutingModule,
     FormsModule,
     TranslateModule,
     ModalModule,
@@ -163,4 +163,4 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
   ],
   providers: [TabManagementService],
 })
-export class DossierManagementModule {}
+export class CaseManagementModule {}
