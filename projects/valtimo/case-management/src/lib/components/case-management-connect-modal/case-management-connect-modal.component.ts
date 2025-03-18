@@ -28,13 +28,13 @@ import {switchMap, take} from 'rxjs';
 import {CaseDetailService} from '../../services';
 
 @Component({
-  selector: 'valtimo-dossier-management-connect-modal',
-  templateUrl: './dossier-management-connect-modal.component.html',
-  styleUrls: ['./dossier-management-connect-modal.component.scss'],
+  selector: 'valtimo-case-management-connect-modal',
+  templateUrl: './case-management-connect-modal.component.html',
+  styleUrls: ['./case-management-connect-modal.component.scss'],
   providers: [NotificationService],
 })
-export class DossierManagementConnectModalComponent implements OnInit {
-  @ViewChild('dossierConnectModal') private readonly _modal: ModalComponent;
+export class CaseManagementConnectModalComponent implements OnInit {
+  @ViewChild('caseConnectModal') private readonly _modal: ModalComponent;
   @Output() public reloadProcessDocumentDefinitions = new EventEmitter<any>();
 
   public documentDefinition: DocumentDefinition | null = null;
@@ -83,8 +83,8 @@ export class DossierManagementConnectModalComponent implements OnInit {
     this.loadProcessDefinitions();
   }
 
-  public openModal(dossier: DocumentDefinition): void {
-    this.documentDefinition = dossier;
+  public openModal(document: DocumentDefinition): void {
+    this.documentDefinition = document;
     this.newDocumentProcessDefinition = null;
     this.newDocumentProcessDefinitionInit = true;
     this.newDocumentProcessDefinitionStartableByUser = false;

@@ -62,7 +62,7 @@ import {
 } from 'carbon-components-angular';
 
 import {CaseManagementAssigneeComponent} from './components/case-management-assignee/case-management-assignee.component';
-import {DossierManagementConnectModalComponent} from './components/dossier-management-connect-modal/dossier-management-connect-modal.component';
+import {CaseManagementConnectModalComponent} from './components/case-management-connect-modal/case-management-connect-modal.component';
 import {DossierManagementDetailContainerActionsComponent} from './components/dossier-management-detail-container-actions/dossier-management-detail-container-actions.component';
 import {DossierManagementDetailContainerComponent} from './components/dossier-management-detail-container/dossier-management-detail-container.component';
 import {DossierManagementDetailComponent} from './components/dossier-management-detail/dossier-management-detail.component';
@@ -90,7 +90,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
   declarations: [
     DossierManagementListComponent,
     DossierManagementDetailComponent,
-    DossierManagementConnectModalComponent,
+    CaseManagementConnectModalComponent,
     DossierManagementRemoveModalComponent,
     DossierManagementUploadComponent,
     DossierManagementSearchFieldsComponent,

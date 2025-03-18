@@ -22,7 +22,7 @@ import {DocumentDefinition, DocumentService, ProcessDocumentDefinition} from '@v
 import {IconService, NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, Observable, switchMap} from 'rxjs';
 import {CaseDetailService} from '../../services';
-import {DossierManagementConnectModalComponent} from '../dossier-management-connect-modal/dossier-management-connect-modal.component';
+import {CaseManagementConnectModalComponent} from '../case-management-connect-modal/case-management-connect-modal.component';
 
 @Component({
   selector: 'valtimo-dossier-management-processes',
@@ -32,7 +32,7 @@ import {DossierManagementConnectModalComponent} from '../dossier-management-conn
 })
 export class DossierManagementProcessesComponent {
   @ViewChild('dossierConnectModal')
-  private readonly _dossierConnectModal: DossierManagementConnectModalComponent;
+  private readonly _dossierConnectModal: CaseManagementConnectModalComponent;
 
   private readonly _refresh$ = new BehaviorSubject<null>(null);
   public readonly processDocumentDefinitions$: Observable<ProcessDocumentDefinition[]> =
