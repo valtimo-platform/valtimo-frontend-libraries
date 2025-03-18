@@ -21,11 +21,11 @@ import {ActivatedRoute} from '@angular/router';
 import {tap} from 'rxjs/operators';
 
 @Component({
-  selector: 'valtimo-dossier-management-assignee',
-  templateUrl: './dossier-management-assignee.component.html',
-  styleUrls: ['./dossier-management-assignee.component.css'],
+  selector: 'valtimo-case-management-assignee',
+  templateUrl: './case-management-assignee.component.html',
+  styleUrls: ['./case-management-assignee.component.scss'],
 })
-export class DossierManagementAssigneeComponent {
+export class CaseManagementAssigneeComponent {
   readonly disabled$ = new BehaviorSubject<boolean>(false);
 
   private readonly _refresh$ = new BehaviorSubject<null>(null);

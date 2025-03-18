@@ -61,7 +61,7 @@ import {
   TooltipModule,
 } from 'carbon-components-angular';
 
-import {DossierManagementAssigneeComponent} from './components/dossier-management-assignee/dossier-management-assignee.component';
+import {CaseManagementAssigneeComponent} from './components/case-management-assignee/case-management-assignee.component';
 import {DossierManagementConnectModalComponent} from './components/dossier-management-connect-modal/dossier-management-connect-modal.component';
 import {DossierManagementDetailContainerActionsComponent} from './components/dossier-management-detail-container-actions/dossier-management-detail-container-actions.component';
 import {DossierManagementDetailContainerComponent} from './components/dossier-management-detail-container/dossier-management-detail-container.component';
@@ -95,7 +95,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     DossierManagementUploadComponent,
     DossierManagementSearchFieldsComponent,
     DossierManagementDetailContainerComponent,
-    DossierManagementAssigneeComponent,
+    CaseManagementAssigneeComponent,
     DossierManagementListColumnsComponent,
     DossierManagementTabsComponent,
     DossierManagementAddTabModalComponent,
