@@ -68,7 +68,7 @@ import {CaseManagementDetailContainerComponent} from './components/case-manageme
 import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {CaseManagementDocumentDefinitionComponent} from './components/case-management-document-definition/case-management-document-definition.component';
 import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
-import {DossierManagementListComponent} from './components/dossier-management-list/dossier-management-list.component';
+import {DossierManagementListComponent} from './components/case-management-list/dossier-management-list.component';
 import {DossierManagementProcessesComponent} from './components/dossier-management-processes/dossier-management-processes.component';
 import {DossierManagementRemoveModalComponent} from './components/dossier-management-remove-modal/dossier-management-remove-modal.component';
 import {DossierManagementSearchFieldsComponent} from './components/dossier-management-search-fields/dossier-management-search-fields.component';

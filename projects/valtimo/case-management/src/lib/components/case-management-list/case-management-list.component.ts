@@ -32,11 +32,11 @@ import {CaseManagementService} from '../../services';
 moment.locale(localStorage.getItem('langKey') || '');
 
 @Component({
-  selector: 'valtimo-dossier-management-list',
-  templateUrl: './dossier-management-list.component.html',
-  styleUrls: ['./dossier-management-list.component.scss'],
+  selector: 'valtimo-case-management-list',
+  templateUrl: './case-management-list.component.html',
+  styleUrls: ['./case-management-list.component.scss'],
 })
-export class DossierManagementListComponent {
+export class CaseManagementListComponent {
   public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
 
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(

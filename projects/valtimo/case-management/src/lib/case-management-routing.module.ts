@@ -23,7 +23,7 @@ import {CaseManagementDetailContainerComponent} from './components/case-manageme
 import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {CaseManagementDocumentDefinitionComponent} from './components/case-management-document-definition/case-management-document-definition.component';
 import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
-import {DossierManagementListComponent} from './components/dossier-management-list/dossier-management-list.component';
+import {DossierManagementListComponent} from './components/case-management-list/dossier-management-list.component';
 import {DossierManagementSearchFieldsComponent} from './components/dossier-management-search-fields/dossier-management-search-fields.component';
 import {DossierManagementStatusesComponent} from './components/dossier-management-statuses/dossier-management-statuses.component';
 import {DossierManagementTabsComponent} from './components/dossier-management-tabs/dossier-management-tabs.component';
