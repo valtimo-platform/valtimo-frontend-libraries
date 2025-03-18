@@ -79,8 +79,8 @@ import {DossierManagementUploadComponent} from './components/dossier-management-
 import {DossierManagementUploadStepComponent} from './components/dossier-management-upload/step/dossier-management-upload-step.component';
 import {CaseManagementRoutingModule} from './case-management-routing.module';
 import {TabManagementService} from './services';
-import {DossierManagementStatusesComponent} from './components/dossier-management-statuses/dossier-management-statuses.component';
-import {DossierManagementStatusModalComponent} from './components/dossier-management-statuses/dossier-management-status-modal/dossier-management-status-modal.component';
+import {CaseManagementStatusesComponent} from './components/case-management-statuses/case-management-statuses.component';
+import {CaseManagementStatusModalComponent} from './components/case-management-statuses/case-management-status-modal/case-management-status-modal.component';
 import {CaseManagementCreateComponent} from './components/case-management-create/case-management-create.component';
 import {CaseManagementWidgetsEditorComponent} from './components/case-management-widget-tab/editor/case-management-widgets-editor.component';
 import { CaseManagementProcessesComponent } from './components/case-management-processes/case-management-processes.component';
@@ -103,8 +103,8 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     CaseManagementDetailContainerActionsComponent,
     CaseManagementDocumentDefinitionComponent,
     DossierManagementUploadStepComponent,
-    DossierManagementStatusesComponent,
-    DossierManagementStatusModalComponent,
+    CaseManagementStatusesComponent,
+    CaseManagementStatusModalComponent,
     CaseManagementCreateComponent,
   ],
   imports: [

@@ -39,18 +39,18 @@
   ></valtimo-no-results>
 </valtimo-carbon-list>
 
-<valtimo-dossier-management-status-modal
+<valtimo-case-management-status-modal
   [type]="statusModalType$ | async"
   [prefill]="prefillStatus$ | async"
   [usedKeys]="usedKeys$ | async"
   [documentDefinitionName]="documentDefinitionName$ | async"
   (closeModalEvent)="closeModal($event)"
-></valtimo-dossier-management-status-modal>
+></valtimo-case-management-status-modal>
 
 <valtimo-confirmation-modal
   confirmButtonTextTranslationKey="interface.delete"
   confirmButtonType="danger"
-  contentTranslationKey="dossierManagement.statuses.deleteText"
+  contentTranslationKey="caseManagement.statuses.deleteText"
   [outputOnConfirm]="statusToDelete$ | async"
   [showModalSubject$]="showDeleteModal$"
   titleTranslationKey="interface.delete"

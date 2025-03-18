@@ -54,12 +54,12 @@ import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'valtimo-dossier-management-status-modal',
-  templateUrl: './dossier-management-status-modal.component.html',
-  styleUrls: ['./dossier-management-status-modal.component.scss'],
+  selector: 'valtimo-case-management-status-modal',
+  templateUrl: './case-management-status-modal.component.html',
+  styleUrls: ['./case-management-status-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementStatusModalComponent implements OnInit, OnDestroy {
+export class CaseManagementStatusModalComponent implements OnInit, OnDestroy {
   @Input() public set type(value: StatusModalType) {
     this._type$.next(value);
 

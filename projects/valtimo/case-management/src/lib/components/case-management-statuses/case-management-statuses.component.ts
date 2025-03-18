@@ -43,12 +43,11 @@ import {
 import {StatusModalCloseEvent, StatusModalType} from '../../models';
 
 @Component({
-  selector: 'valtimo-dossier-management-statuses',
-  templateUrl: './dossier-management-statuses.component.html',
-  styleUrls: ['./dossier-management-statuses.component.scss'],
+  templateUrl: './case-management-statuses.component.html',
+  styleUrls: ['./case-management-statuses.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementStatusesComponent implements AfterViewInit {
+export class CaseManagementStatusesComponent implements AfterViewInit {
   @ViewChild('colorColumnTemplate') colorColumnTemplate: TemplateRef<any>;
 
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
