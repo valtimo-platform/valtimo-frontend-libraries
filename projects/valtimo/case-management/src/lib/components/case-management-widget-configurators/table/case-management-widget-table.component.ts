@@ -45,32 +45,32 @@ import {ButtonModule, InputModule, ToggleModule} from 'carbon-components-angular
 import {BehaviorSubject, debounceTime, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
-import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
-import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
+import {CaseManagementWidgetFieldsColumnComponent} from '../fields/column/case-management-widget-fields-column.component';
+import {CaseManagementWidgetProcessSelectorComponent} from '../process-selector/case-management-widget-process-selector.component';
 
 @Component({
-  templateUrl: './dossier-management-widget-table.component.html',
-  styleUrl: './dossier-management-widget-table.component.scss',
+  templateUrl: './case-management-widget-table.component.html',
+  styleUrl: './case-management-widget-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule,
     TranslateModule,
-    DossierManagementWidgetFieldsColumnComponent,
+    CaseManagementWidgetFieldsColumnComponent,
     ReactiveFormsModule,
     InputModule,
     ToggleModule,
     ButtonModule,
     InputLabelModule,
-    DossierManagementWidgetProcessSelectorComponent,
+    CaseManagementWidgetProcessSelectorComponent,
     ValuePathSelectorComponent,
   ],
 })
-export class DossierManagementWidgetTableComponent
+export class CaseManagementWidgetTableComponent
   implements WidgetContentComponent, OnInit, OnDestroy
 {
-  @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-table';
+  @HostBinding('class') public readonly class = 'valtimo-case-management-widget-table';
   @Output() public readonly changeValidEvent = new EventEmitter<boolean>();
 
   public readonly form: FormGroup = this.fb.group({

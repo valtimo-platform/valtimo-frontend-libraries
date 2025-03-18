@@ -43,12 +43,12 @@ import {debounceTime, map, Observable, Subscription} from 'rxjs';
 
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
-import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
-import {DossierManagementWidgetFieldsColumnComponent} from './column/dossier-management-widget-fields-column.component';
+import {CaseManagementWidgetProcessSelectorComponent} from '../process-selector/case-management-widget-process-selector.component';
+import {CaseManagementWidgetFieldsColumnComponent} from './column/case-management-widget-fields-column.component';
 
 @Component({
-  templateUrl: './dossier-management-widget-fields.component.html',
-  styleUrls: ['./dossier-management-widget-fields.component.scss'],
+  templateUrl: './case-management-widget-fields.component.html',
+  styleUrls: ['./case-management-widget-fields.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
@@ -60,15 +60,15 @@ import {DossierManagementWidgetFieldsColumnComponent} from './column/dossier-man
     IconModule,
     ReactiveFormsModule,
     ButtonModule,
-    DossierManagementWidgetFieldsColumnComponent,
-    DossierManagementWidgetProcessSelectorComponent,
+    CaseManagementWidgetFieldsColumnComponent,
+    CaseManagementWidgetProcessSelectorComponent,
     InputLabelModule,
   ],
 })
-export class DossierManagementWidgetFieldsComponent
+export class CaseManagementWidgetFieldsComponent
   implements WidgetContentComponent, OnDestroy, OnInit, AfterViewInit
 {
-  @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field';
+  @HostBinding('class') public readonly class = 'valtimo-case-management-widget-field';
   @Output() public readonly changeValidEvent = new EventEmitter<boolean>();
   @ViewChild(Tab) private readonly _tab: Tab;
 

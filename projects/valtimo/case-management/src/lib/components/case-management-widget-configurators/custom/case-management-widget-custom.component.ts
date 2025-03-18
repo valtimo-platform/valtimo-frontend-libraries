@@ -38,11 +38,11 @@ import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
-import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
+import {CaseManagementWidgetProcessSelectorComponent} from '../process-selector/case-management-widget-process-selector.component';
 
 @Component({
-  templateUrl: './dossier-management-widget-custom.component.html',
-  styleUrls: ['./dossier-management-widget-custom.component.scss'],
+  templateUrl: './case-management-widget-custom.component.html',
+  styleUrls: ['./case-management-widget-custom.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -52,10 +52,10 @@ import {DossierManagementWidgetProcessSelectorComponent} from '../process-select
     ReactiveFormsModule,
     SelectModule,
     DropdownModule,
-    DossierManagementWidgetProcessSelectorComponent,
+    CaseManagementWidgetProcessSelectorComponent,
   ],
 })
-export class DossierManagementWidgetCustomComponent
+export class CaseManagementWidgetCustomComponent
   implements WidgetContentComponent, OnDestroy, OnInit
 {
   @Output() public readonly changeValidEvent = new EventEmitter<boolean>();
@@ -64,7 +64,7 @@ export class DossierManagementWidgetCustomComponent
     widgetTitle: this.fb.control(this.widgetWizardService.widgetTitle(), Validators.required),
   });
 
-  public get widgetTitle(): AbstractControl<string> {
+  public get widgetTitle(): AbstractControl<string | null, string | null> | null {
     return this.form.get('widgetTitle');
   }
 
@@ -89,7 +89,7 @@ export class DossierManagementWidgetCustomComponent
     map(([config, selectedKey]) =>
       Object.keys(config).reduce(
         (acc, curr) => [...acc, {content: curr, selected: curr === selectedKey}],
-        []
+        [] as ListItem[]
       )
     )
   );
@@ -132,7 +132,7 @@ export class DossierManagementWidgetCustomComponent
 
   private openTitleSubscription(): void {
     this._subscriptions.add(
-      this.widgetTitle.valueChanges.subscribe(title => {
+      this.widgetTitle?.valueChanges.subscribe(title => {
         this.widgetWizardService.widgetTitle.set(title);
       })
     );

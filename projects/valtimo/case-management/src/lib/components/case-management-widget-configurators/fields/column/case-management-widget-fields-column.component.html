@@ -15,7 +15,7 @@
   -->
 <form
   *ngIf="inputTheme$ | async as inputTheme"
-  class="valtimo-dossier-management-widget-field-column"
+  class="valtimo-case-management-widget-field-column"
   [formGroup]="formGroup"
 >
   <cds-accordion formArrayName="rows" align="start" size="sm">
@@ -24,15 +24,15 @@
         [title]="fieldTitle"
         [context]="{count: $count, index: $index, title: formRow.get('title')?.value}"
         [expanded]="$index === 0"
-        class="valtimo-dossier-management-widget-field-column__item"
+        class="valtimo-case-management-widget-field-column__item"
       >
         <form
           [formGroup]="formRow"
-          class="valtimo-dossier-management-widget-field-column__container"
+          class="valtimo-case-management-widget-field-column__container"
         >
           <div
-            class="valtimo-dossier-management-widget-field-column__content"
-            [class.valtimo-dossier-management-widget-field-column__content--collection]="
+            class="valtimo-case-management-widget-field-column__content"
+            [class.valtimo-case-management-widget-field-column__content--collection]="
               !!fieldWidthDropdown
             "
           >
@@ -69,7 +69,7 @@
               *ngTemplateOutlet="fieldWidthDropdown; context: {index: $index}"
             ></ng-container>
 
-            <div class="valtimo-dossier-management-widget-field-column__path-selector">
+            <div class="valtimo-case-management-widget-field-column__path-selector">
               <v-input-label
                 [title]="'widgetTabManagement.content.fields.value' | translate"
                 [tooltip]="
@@ -87,7 +87,7 @@
             </div>
           </div>
 
-          <div class="valtimo-dossier-management-widget-field-column__options">
+          <div class="valtimo-case-management-widget-field-column__options">
             @switch (formRow.get('type').value.id) {
               @case (CaseWidgetDisplayTypeKey.CURRENCY) {
                 <cds-text-label>
@@ -187,13 +187,13 @@
               }
               @case (CaseWidgetDisplayTypeKey.ENUM) {
                 <div
-                  class="valtimo-dossier-management-widget-field-column__enum"
+                  class="valtimo-case-management-widget-field-column__enum"
                   formArrayName="values"
                 >
                   @for (rowValue of formRow.get('values')?.controls; track $index) {
                     <form
                       [formGroup]="rowValue"
-                      class="valtimo-dossier-management-widget-field-column__enum-form"
+                      class="valtimo-case-management-widget-field-column__enum-form"
                     >
                       <cds-text-label>
                         <v-input-label
@@ -237,7 +237,7 @@
                         cdsButton="danger--ghost"
                         [disabled]="$count === 1"
                         [iconOnly]="true"
-                        class="valtimo-dossier-management-widget-field-column__delete-button enum"
+                        class="valtimo-case-management-widget-field-column__delete-button enum"
                         (click)="onDeleteRowClick($event, formRow.get('values'), $index)"
                       >
                         <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
@@ -347,7 +347,7 @@
 </form>
 
 <ng-template #fieldTitle let-count="count" let-index="index" let-title="title">
-  <div class="valtimo-dossier-management-widget-field-column__title">
+  <div class="valtimo-case-management-widget-field-column__title">
     {{ title || ('widgetTabManagement.content.fields.titlePlaceholder' | translate) }}
 
     <button
@@ -355,7 +355,7 @@
       [disabled]="count === 1"
       [iconOnly]="true"
       (click)="onDeleteRowClick($event, formRows, index)"
-      class="valtimo-dossier-management-widget-field-column__delete-button"
+      class="valtimo-case-management-widget-field-column__delete-button"
     >
       <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
     </button>

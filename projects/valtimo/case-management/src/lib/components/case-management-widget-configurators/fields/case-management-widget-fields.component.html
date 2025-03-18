@@ -19,7 +19,7 @@
 <form [formGroup]="form">
   <cds-text-label
     [attr.data-carbon-theme]="theme$ | async"
-    class="valtimo-dossier-management-widget-field__input"
+    class="valtimo-case-management-widget-field__input"
   >
     <v-input-label
       [title]="'widgetTabManagement.content.widgetTitle' | translate"
@@ -36,9 +36,9 @@
   </cds-text-label>
 </form>
 
-<valtimo-dossier-management-widget-process-selector
+<valtimo-case-management-widget-process-selector
   [documentDefinitionName]="documentDefinitionName$ | async"
-></valtimo-dossier-management-widget-process-selector>
+></valtimo-case-management-widget-process-selector>
 
 <cds-tabs type="contained">
   @for (column of columns(); track $index) {
@@ -48,21 +48,21 @@
       [context]="{index: $index, count: $count}"
       (selected)="onTabSelected($index)"
     >
-      <valtimo-dossier-management-widget-fields-column
+      <valtimo-case-management-widget-fields-column
         *ngIf="activeTab() === $index"
         [isFieldWidget]="true"
         [columnData]="selectedWidgetContent()?.[$index]"
         [documentDefinitionName]="documentDefinitionName$ | async"
         [showHideWhenEmptyCheckbox]="true"
         (columnUpdateEvent)="onColumnUpdateEvent($event, $index)"
-      ></valtimo-dossier-management-widget-fields-column>
+      ></valtimo-case-management-widget-fields-column>
     </cds-tab>
   }
   <cds-tab
     *ngIf="columns().length < widgetWidth"
     [heading]="addColumn"
     [id]="'addColumn'"
-    class="valtimo-dossier-management-widget-field__add"
+    class="valtimo-case-management-widget-field__add"
   ></cds-tab>
 </cds-tabs>
 
@@ -77,7 +77,7 @@
 </ng-template>
 
 <ng-template #columnHeading let-data>
-  <div class="valtimo-dossier-management-widget-field__heading">
+  <div class="valtimo-case-management-widget-field__heading">
     {{ 'widgetTabManagement.content.column' | translate: {number: data.index + 1} }}
 
     <button

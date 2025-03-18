@@ -13,21 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-.valtimo-dossier-management-widget-custom {
+.valtimo-case-management-widget-table {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
 
-  ::ng-deep.dropdown-label {
-    label {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-    }
+  &__form {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: flex-end;
+  }
 
-    cds-dropdown {
-      margin-top: 8px;
-    }
+  &__subtitle {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+  }
+
+  &__toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__path-selector {
+    display: flex;
+    flex-direction: column;
   }
 }

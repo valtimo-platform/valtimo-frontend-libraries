@@ -18,12 +18,12 @@ import {Type} from '@angular/core';
 import {WidgetContentComponent} from './widget-content.model';
 import {CaseWidgetType} from '@valtimo/dossier';
 import {
-  DossierManagementWidgetCollectionComponent,
-  DossierManagementWidgetCustomComponent,
-  DossierManagementWidgetFieldsComponent,
-  DossierManagementWidgetFormioComponent,
-  DossierManagementWidgetTableComponent,
-} from '../components/dossier-management-widget-configurators';
+  CaseManagementWidgetCollectionComponent,
+  CaseManagementWidgetCustomComponent,
+  CaseManagementWidgetFieldsComponent,
+  CaseManagementWidgetFormioComponent,
+  CaseManagementWidgetTableComponent,
+} from '../components/case-management-widget-configurators';
 
 enum WidgetWizardStep {
   TYPE,
@@ -51,35 +51,35 @@ const AVAILABLE_WIDGETS: WidgetTypeSelection[] = [
     descriptionKey: 'widgetTabManagement.types.fields.description',
     illustrationUrl: 'valtimo-layout/img/widget-management/types/fields.svg',
     type: CaseWidgetType.FIELDS,
-    component: DossierManagementWidgetFieldsComponent,
+    component: CaseManagementWidgetFieldsComponent,
   },
   {
     titleKey: 'widgetTabManagement.types.custom.title',
     descriptionKey: 'widgetTabManagement.types.custom.description',
     illustrationUrl: 'valtimo-layout/img/widget-management/types/angular.svg',
     type: CaseWidgetType.CUSTOM,
-    component: DossierManagementWidgetCustomComponent,
+    component: CaseManagementWidgetCustomComponent,
   },
   {
     titleKey: 'widgetTabManagement.types.formio.title',
     descriptionKey: 'widgetTabManagement.types.formio.description',
     illustrationUrl: 'valtimo-layout/img/widget-management/types/formio.svg',
     type: CaseWidgetType.FORMIO,
-    component: DossierManagementWidgetFormioComponent,
+    component: CaseManagementWidgetFormioComponent,
   },
   {
     titleKey: 'widgetTabManagement.types.table.title',
     descriptionKey: 'widgetTabManagement.types.table.description',
     illustrationUrl: 'valtimo-layout/img/widget-management/types/table.svg',
     type: CaseWidgetType.TABLE,
-    component: DossierManagementWidgetTableComponent,
+    component: CaseManagementWidgetTableComponent,
   },
   {
     titleKey: 'widgetTabManagement.types.collection.title',
     descriptionKey: 'widgetTabManagement.types.collection.description',
     illustrationUrl: 'valtimo-layout/img/widget-management/types/collection.svg',
     type: CaseWidgetType.COLLECTION,
-    component: DossierManagementWidgetCollectionComponent,
+    component: CaseManagementWidgetCollectionComponent,
   },
 ];
 

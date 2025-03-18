@@ -18,14 +18,14 @@ import {
 import {WidgetWizardService} from '../../../services';
 
 @Component({
-  selector: 'valtimo-dossier-management-widget-process-selector',
-  templateUrl: './dossier-management-widget-process-selector.component.html',
-  styleUrl: './dossier-management-widget-process-selector.component.scss',
+  selector: 'valtimo-case-management-widget-process-selector',
+  templateUrl: './case-management-widget-process-selector.component.html',
+  styleUrl: './case-management-widget-process-selector.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule, TranslateModule, DropdownModule, InputModule, ReactiveFormsModule],
 })
-export class DossierManagementWidgetProcessSelectorComponent implements OnInit {
+export class CaseManagementWidgetProcessSelectorComponent implements OnInit {
   private readonly _documentDefinitionName$ = new BehaviorSubject<string | null>(null);
   @Input() public set documentDefinitionName(value: string) {
     this._documentDefinitionName$.next(value);

@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-.valtimo-dossier-management-widget-formio {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  ::ng-deep.dropdown-label {
-    label {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-    }
-
-    cds-dropdown {
-      margin-top: 8px;
-    }
-  }
-}
+export * from './collection/case-management-widget-collection.component';
+export * from './custom/case-management-widget-custom.component';
+export * from './fields/case-management-widget-fields.component';
+export * from './formio/case-management-widget-formio.component';
+export * from './process-selector/case-management-widget-process-selector.component';
+export * from './table/case-management-widget-table.component';

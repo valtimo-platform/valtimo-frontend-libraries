@@ -73,9 +73,9 @@ import {debounceTime, Observable, Subscription} from 'rxjs';
 import {WidgetFieldsService, WidgetWizardService} from '../../../../services';
 
 @Component({
-  selector: 'valtimo-dossier-management-widget-fields-column',
-  templateUrl: './dossier-management-widget-fields-column.component.html',
-  styleUrls: ['./dossier-management-widget-fields-column.component.scss'],
+  selector: 'valtimo-case-management-widget-fields-column',
+  templateUrl: './case-management-widget-fields-column.component.html',
+  styleUrls: ['./case-management-widget-fields-column.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
@@ -93,8 +93,8 @@ import {WidgetFieldsService, WidgetWizardService} from '../../../../services';
     CheckboxModule,
   ],
 })
-export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnDestroy {
-  @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-field-column';
+export class CaseManagementWidgetFieldsColumnComponent implements OnInit, OnDestroy {
+  @HostBinding('class') public readonly class = 'valtimo-case-management-widget-field-column';
   @Input({required: true}) public columnData: FieldsCaseWidgetValue[];
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
   @Input() public documentDefinitionName?: string;

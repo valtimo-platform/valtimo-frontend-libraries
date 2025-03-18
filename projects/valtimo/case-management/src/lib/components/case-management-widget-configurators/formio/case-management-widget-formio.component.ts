@@ -32,12 +32,12 @@ import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetWizardService} from '../../../services';
-import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
+import {CaseManagementWidgetProcessSelectorComponent} from '../process-selector/case-management-widget-process-selector.component';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
-  templateUrl: './dossier-management-widget-formio.component.html',
-  styleUrls: ['./dossier-management-widget-formio.component.scss'],
+  templateUrl: './case-management-widget-formio.component.html',
+  styleUrls: ['./case-management-widget-formio.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -47,10 +47,10 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
     ReactiveFormsModule,
     SelectModule,
     DropdownModule,
-    DossierManagementWidgetProcessSelectorComponent,
+    CaseManagementWidgetProcessSelectorComponent,
   ],
 })
-export class DossierManagementWidgetFormioComponent
+export class CaseManagementWidgetFormioComponent
   implements WidgetContentComponent, OnDestroy, OnInit
 {
   @Output() public readonly changeValidEvent = new EventEmitter<boolean>();

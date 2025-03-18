@@ -67,33 +67,33 @@ import {
 import {BehaviorSubject, debounceTime, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../models';
 import {WidgetFieldsService, WidgetWizardService} from '../../../services';
-import {DossierManagementWidgetFieldsColumnComponent} from '../fields/column/dossier-management-widget-fields-column.component';
-import {DossierManagementWidgetProcessSelectorComponent} from '../process-selector/dossier-management-widget-process-selector.component';
+import {CaseManagementWidgetFieldsColumnComponent} from '../fields/column/case-management-widget-fields-column.component';
+import {CaseManagementWidgetProcessSelectorComponent} from '../process-selector/case-management-widget-process-selector.component';
 
 @Component({
-  templateUrl: './dossier-management-widget-collection.component.html',
-  styleUrl: './dossier-management-widget-collection.component.scss',
+  templateUrl: './case-management-widget-collection.component.html',
+  styleUrl: './case-management-widget-collection.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
   imports: [
     CommonModule,
     TranslateModule,
-    DossierManagementWidgetFieldsColumnComponent,
+    CaseManagementWidgetFieldsColumnComponent,
     ReactiveFormsModule,
     InputModule,
     DropdownModule,
     ButtonModule,
     IconModule,
     InputLabelModule,
-    DossierManagementWidgetProcessSelectorComponent,
+    CaseManagementWidgetProcessSelectorComponent,
     ValuePathSelectorComponent,
   ],
 })
-export class DossierManagementWidgetCollectionComponent
+export class CaseManagementWidgetCollectionComponent
   implements WidgetContentComponent, OnInit, OnDestroy
 {
-  @HostBinding('class') public readonly class = 'valtimo-dossier-management-widget-collection';
+  @HostBinding('class') public readonly class = 'valtimo-case-management-widget-collection';
   @Output() public readonly changeValidEvent = new EventEmitter<boolean>();
 
   public readonly widgetForm = this.fb.group({
