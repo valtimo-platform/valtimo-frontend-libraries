@@ -208,9 +208,9 @@ export class CaseManagementWidgetTabComponent
   private initBreadcrumb(): void {
     this.documentDefinitionName$.subscribe(documentDefinitionName => {
       this.breadcrumbService.setThirdBreadcrumb({
-        route: [`/dossier-management/dossier/${documentDefinitionName}`],
+        route: [`/case-management/case/${documentDefinitionName}`],
         content: documentDefinitionName,
-        href: `/dossier-management/dossier/${documentDefinitionName}`,
+        href: `/case-management/case/${documentDefinitionName}`,
       });
     });
   }

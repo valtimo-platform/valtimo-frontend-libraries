@@ -53,7 +53,7 @@ export class CaseManagementRemoveModalComponent {
       .subscribe(
         () => {
           this.menuService.reload();
-          this.router.navigate(['/dossier-management']);
+          this.router.navigate(['/case-management']);
           this.toasterService.success(
             this.translateService.instant('remove-document-definition-success')
           );

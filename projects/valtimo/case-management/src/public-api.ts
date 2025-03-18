@@ -15,7 +15,7 @@
  */
 
 /*
- * Public API Surface of dossier-management
+ * Public API Surface of case-management
  */
 
 export * from './lib/models';

@@ -125,7 +125,7 @@ export class CaseManagementListComponent {
 
   public redirectToDetails(caseListItem: CaseListItem): void {
     this.router.navigate([
-      '/dossier-management/dossier',
+      '/case-management/case',
       caseListItem.caseDefinitionKey,
       'version',
       caseListItem.caseDefinitionVersionTag,

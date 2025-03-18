@@ -32,13 +32,13 @@ import {TabEnum} from './models';
 
 const routes: Routes = [
   {
-    path: 'dossier-management',
+    path: 'case-management',
     component: CaseManagementListComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Dossiers', roles: [ROLE_ADMIN]},
+    data: {title: 'Cases', roles: [ROLE_ADMIN]},
   },
   {
-    path: 'dossier-management/dossier/:name/widget-tab/:key',
+    path: 'case-management/case/:name/widget-tab/:key',
     component: CaseManagementWidgetTabComponent,
     canActivate: [AuthGuardService],
     // TODO: Check when widgets are back in place
@@ -51,11 +51,11 @@ const routes: Routes = [
     },
   },
   {
-    path: 'dossier-management/dossier/:caseDefinitionName/version/:caseVersionTag',
+    path: 'case-management/case/:caseDefinitionName/version/:caseVersionTag',
     component: CaseManagementDetailContainerComponent,
     canActivate: [AuthGuardService],
     data: {
-      title: 'Dossier details',
+      title: 'Case details',
       roles: [ROLE_ADMIN],
       id: 'caseManagementDetails',
     },

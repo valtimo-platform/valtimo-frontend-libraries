@@ -99,7 +99,7 @@ export class CaseManagementDetailContainerComponent implements OnInit, OnDestroy
 
   public navigateToTab(tab: TabEnum | string): void {
     this.router.navigate([
-      `dossier-management/dossier/${this._params.caseDefinitionName}/version/${this._params.caseVersionTag}/${tab}`,
+      `case-management/case/${this._params.caseDefinitionName}/version/${this._params.caseVersionTag}/${tab}`,
     ]);
   }
 

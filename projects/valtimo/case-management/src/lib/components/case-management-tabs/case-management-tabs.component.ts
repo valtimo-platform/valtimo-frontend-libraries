@@ -153,7 +153,7 @@ export class CaseManagementTabsComponent implements AfterViewInit {
     this.tab$.next(tab);
     if (tab.type === ApiTabType.WIDGETS) {
       this.router.navigate([
-        `/dossier-management/dossier/${this._documentDefinitionName}/widget-tab/${tab.key}`,
+        `/case-management/case/${this._documentDefinitionName}/widget-tab/${tab.key}`,
       ]);
     } else {
       this.openEditModal$.next(true);
