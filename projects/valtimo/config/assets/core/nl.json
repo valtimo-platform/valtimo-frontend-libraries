@@ -176,6 +176,7 @@
     "rowLocked": "Je hebt geen toegang tot dit dossier",
     "widgets": {
       "noData": "Geen data gevonden",
+      "emptyFields": "Nichts hier",
       "noWidgets": "Geen widgets",
       "noWidgetsDescription": "Er zijn geen widgets geconfigureerd voor dit tabblad, of je hebt niet de juiste rechten om deze te zien.",
       "noWidget": "Widget niet beschikbaar",
@@ -803,6 +804,7 @@
       "widgetTitle": "Widget titel",
       "widgetTitlePlaceholder": "Kies een korte naam",
       "widgetTitleTooltip": "Titel die bovenaan de widget wordt weergegeven",
+      "hideWhenEmpty": "Verbergen als leeg",
       "column": "Kolom {{number}}",
       "fields": {
         "add": "Veld toevoegen",
@@ -1796,6 +1798,9 @@
     },
     "formioCurrencyComponent": {
       "errorMessage": "Geen geldig decimaal getal. Voer een geldig decimaal getal in."
+    },
+    "formioFormViewModelComponent": {
+      "submitError": "Ongeldige submissie"
     }
   },
   "viewTypeConverter": {
@@ -1824,7 +1829,14 @@
     "toggleViewModel": {
       "title": "View Model ingeschakeld?",
       "checkboxDescription": "Activeert Form View Model form afhandeling"
-    }
+    },
+    "importConfiguration": "Configuratie importeren",
+    "selectProcess": "Selecteer een proces",
+    "process": "Proces",
+    "version": "Versie",
+    "selectVersion": "Selecteer een versie",
+    "activity": "Procesactiviteit",
+    "selectActivity": "Selecteer een procesactiviteit"
   },
   "processLinkType": {
     "plugin": "Plugin",
@@ -1957,6 +1969,10 @@
       "searchDescription": "Er zijn geen logregels die overeenkomen met je zoekcriteria",
       "title": "Er zijn geen logboeken"
     },
-    "detailsTitle": "Loggegevens"
+    "detailsTitle": "Loggegevens",
+    "timestamp": "Tijd",
+    "formattedMessage": "Bericht",
+    "properties": "Eigenschappen",
+    "stacktrace": "Stacktrace"
   }
 }

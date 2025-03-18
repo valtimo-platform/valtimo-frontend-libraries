@@ -176,6 +176,7 @@
     "rowLocked": "You don't have access to this case",
     "widgets": {
       "noData": "No data found",
+      "emptyFields": "Nothing here",
       "noWidgets": "No widgets",
       "noWidgetsDescription": "There are no widgets configured for this tab, or you don't have the rights to view them.",
       "noWidget": "Widget not found",
@@ -804,6 +805,7 @@
       "widgetTitle": "Widget title",
       "widgetTitlePlaceholder": "Choose a short name",
       "widgetTitleTooltip": "Title that displays at the top of the widget",
+      "hideWhenEmpty": "Hide when empty",
       "column": "Column {{number}}",
       "fields": {
         "add": "Add field",
@@ -1795,6 +1797,9 @@
     },
     "formioCurrencyComponent": {
       "errorMessage": "Not a valid decimal number. Please enter a valid decimal number."
+    },
+    "formioFormViewModelComponent": {
+      "submitError": "Invalid submissions"
     }
   },
   "viewTypeConverter": {
@@ -1823,7 +1828,14 @@
     "toggleViewModel": {
       "title": "View Model enabled?",
       "checkboxDescription": "Enables Form View Model form processing"
-    }
+    },
+    "importConfiguration": "Import configuration",
+    "selectProcess": "Select process",
+    "process": "Process",
+    "version": "Version",
+    "selectVersion": "Select version",
+    "activity": "Process activity",
+    "selectActivity": "Select process activity"
   },
   "processLinkType": {
     "plugin": "Plugin",
@@ -1956,6 +1968,10 @@
       "searchDescription": "No logs match your search criteria",
       "title": "There are no logs"
     },
-    "detailsTitle": "Log details"
+    "detailsTitle": "Log details",
+    "timestamp": "Timestamp",
+    "formattedMessage": "Message",
+    "properties": "Properties",
+    "stacktrace": "Stacktrace"
   }
 }

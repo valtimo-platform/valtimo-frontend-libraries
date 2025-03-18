@@ -39,7 +39,14 @@ import {
 } from '@angular/forms';
 import {TrashCan16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CdsThemeService, CurrentCarbonTheme, InputLabelModule} from '@valtimo/components';
+import {
+  CdsThemeService,
+  CurrentCarbonTheme,
+  InputLabelModule,
+  ValuePathItem,
+  ValuePathSelectorComponent,
+  ValuePathSelectorPrefix,
+} from '@valtimo/components';
 import {
   CaseWidgetCurrencyDisplayType,
   CaseWidgetDateDisplayType,
@@ -54,6 +61,7 @@ import {
 import {
   AccordionModule,
   ButtonModule,
+  CheckboxModule,
   Dropdown,
   DropdownModule,
   IconModule,
@@ -81,6 +89,8 @@ import {WidgetFieldsService, WidgetWizardService} from '../../../../services';
     IconModule,
     AccordionModule,
     InputLabelModule,
+    ValuePathSelectorComponent,
+    CheckboxModule,
   ],
 })
 export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnDestroy {
@@ -88,12 +98,17 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
   @Input({required: true}) public columnData: FieldsCaseWidgetValue[];
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
   @Input() public isFieldWidget = false;
+  @Input() public documentDefinitionName?: string;
   @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
+  @Input() public selectedCollection?: ValuePathItem;
+  @Input() public showHideWhenEmptyCheckbox = false;
 
   @Output() public columnUpdateEvent = new EventEmitter<{
     data: FieldsCaseWidgetValue[];
     valid: boolean;
   }>();
+
+  public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
 
   public formGroup = this.fb.group({
     rows: this.fb.array<any>([]),
@@ -157,6 +172,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
           null,
           Validators.pattern('[1-9][0-9]*')
         ),
+        hideWhenEmpty: this.fb.control<boolean | false>(false),
       })
     );
   }
@@ -211,6 +227,9 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
           Validators.pattern('[1-9][0-9]*')
         ),
       }),
+      hideWhenEmpty: this.fb.control(
+        (row.displayProperties as CaseWidgetTextDisplayType)?.hideWhenEmpty ?? false
+      ),
       ...([CaseWidgetDisplayTypeKey.NUMBER, CaseWidgetDisplayTypeKey.PERCENT].includes(
         row.displayProperties?.type as CaseWidgetDisplayTypeKey
       ) && {
@@ -283,6 +302,7 @@ export class DossierManagementWidgetFieldsColumnComponent implements OnInit, OnD
               ...(!!row?.ellipsisCharacterLimit && {
                 ellipsisCharacterLimit: row.ellipsisCharacterLimit,
               }),
+              ...(!!row?.hideWhenEmpty && {hideWhenEmpty: row.hideWhenEmpty}),
               ...(!!row?.currencyCode && {currencyCode: row.currencyCode}),
               ...(!!row?.display && {display: row.display}),
               ...(!!row?.digitsInfo && {digitsInfo: row.digitsInfo}),
