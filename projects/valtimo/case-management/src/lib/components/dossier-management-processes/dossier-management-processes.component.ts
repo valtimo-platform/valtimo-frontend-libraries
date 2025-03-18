@@ -21,7 +21,7 @@ import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
 import {DocumentDefinition, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {IconService, NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, Observable, switchMap} from 'rxjs';
-import {DossierDetailService} from '../../services';
+import {CaseDetailService} from '../../services';
 import {DossierManagementConnectModalComponent} from '../dossier-management-connect-modal/dossier-management-connect-modal.component';
 
 @Component({
@@ -38,7 +38,7 @@ export class DossierManagementProcessesComponent {
   public readonly processDocumentDefinitions$: Observable<ProcessDocumentDefinition[]> =
     this._refresh$.pipe(
       switchMap(() =>
-        combineLatest([this.route.paramMap, this.dossierDetailService.selectedVersionNumber$])
+        combineLatest([this.route.paramMap, this.caseDetailService.selectedVersionNumber$])
       ),
       switchMap(([params, version]) =>
         this.documentService.findProcessDocumentDefinitionsByVersion(
@@ -56,7 +56,7 @@ export class DossierManagementProcessesComponent {
 
   public readonly actionItems: ActionItem[] = [
     {
-      label: 'dossierManagement.unlinkProcess',
+      label: 'caseManagement.unlinkProcess',
       callback: this.deleteProcessDocumentDefinition.bind(this),
       type: 'danger',
     },
@@ -82,7 +82,7 @@ export class DossierManagementProcessesComponent {
   constructor(
     private readonly documentService: DocumentService,
     private readonly iconService: IconService,
-    private readonly dossierDetailService: DossierDetailService,
+    private readonly caseDetailService: CaseDetailService,
     private readonly route: ActivatedRoute,
     private readonly notificationService: NotificationService,
     private readonly translateService: TranslateService
@@ -106,7 +106,7 @@ export class DossierManagementProcessesComponent {
           this.notificationService.showNotification({
             type: 'success',
             title: this.translateService.instant(
-              'dossierManagement.processLinkNotification.unlinkSuccess'
+              'caseManagement.processLinkNotification.unlinkSuccess'
             ),
             duration: 5000,
           });
@@ -116,7 +116,7 @@ export class DossierManagementProcessesComponent {
           this.notificationService.showNotification({
             type: 'error',
             title: this.translateService.instant(
-              'dossierManagement.processLinkNotification.unlinkFailure'
+              'caseManagement.processLinkNotification.unlinkFailure'
             ),
             duration: 5000,
           });

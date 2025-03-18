@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<h2 class="mb-4">{{ 'dossierManagement.toggleAssignee.title' | translate }}</h2>
+<h2 class="mb-4">{{ 'caseManagement.toggleAssignee.title' | translate }}</h2>
 
 <ng-container
   *ngIf="{
@@ -36,7 +36,7 @@
         [disabled]="obs.disabled"
         (click)="toggleAssignee(obs?.currentValue, obs.documentDefinitionName)"
       /><span class="custom-control-label custom-control-color">{{
-        'dossierManagement.toggleAssignee.checkboxDescription' | translate
+        'caseManagement.toggleAssignee.checkboxDescription' | translate
       }}</span>
     </label>
   </ng-container>
@@ -52,7 +52,7 @@
         [disabled]="obs.disabled"
         (click)="toggleTaskAssignment(obs?.currentValue, obs?.documentDefinitionName)"
       /><span class="custom-control-label custom-control-color">{{
-        'dossierManagement.toggleAutoAssignTasks.checkboxDescription' | translate
+        'caseManagement.toggleAutoAssignTasks.checkboxDescription' | translate
       }}</span>
     </label>
   </ng-container>

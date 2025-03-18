@@ -82,7 +82,7 @@ export class DossierManagementCreateComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.idError$.next('dossierManagement.createDefinition.idError');
+          this.idError$.next('caseManagement.createDefinition.idError');
           this.editDisabled$.next(false);
           this.enableEdit();
         },

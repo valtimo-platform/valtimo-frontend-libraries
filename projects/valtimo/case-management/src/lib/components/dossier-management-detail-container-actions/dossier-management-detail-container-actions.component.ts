@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {DOCUMENT} from '@angular/common';
-import {HttpResponse} from '@angular/common/http';
+import { DOCUMENT } from '@angular/common';
+import { HttpResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,15 +25,16 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
-import {PageHeaderService} from '@valtimo/components';
-import {DocumentService} from '@valtimo/document';
-import {ListItem, Notification, NotificationService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
-import {take} from 'rxjs/operators';
-import {CaseManagementService, DossierDetailService, DossierExportService} from '../../services';
-import {DossierManagementRemoveModalComponent} from '../dossier-management-remove-modal/dossier-management-remove-modal.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { PageHeaderService } from '@valtimo/components';
+import { ListItem, Notification, NotificationService } from 'carbon-components-angular';
+import { BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { CaseManagementService, CaseDetailService } from '../../services';
+import {
+  DossierManagementRemoveModalComponent,
+} from '../dossier-management-remove-modal/dossier-management-remove-modal.component';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container-actions',
@@ -50,22 +51,22 @@ export class DossierManagementDetailContainerActionsComponent {
 
   @Input() public documentDefinitionTitle = '';
   @Input() public set caseDefinitionName(value: string) {
-    this.dossierDetailService.setSelectedDocumentDefinitionName(value);
+    this.caseDetailService.setSelectedDocumentDefinitionName(value);
   }
   @Output() public versionSet = new EventEmitter<number>();
 
   public readonly CARBON_THEME = 'g10';
 
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
-  public readonly selectedVersionNumber$ = this.dossierDetailService.selectedVersionNumber$;
+  public readonly selectedVersionNumber$ = this.caseDetailService.selectedVersionNumber$;
 
-  private readonly _caseDefinitionName$ = this.dossierDetailService.selectedDocumentDefinitionName$;
+  private readonly _caseDefinitionName$ = this.caseDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
 
-  public readonly selectedDocumentDefinition$ = this.dossierDetailService.documentDefinition$;
+  public readonly selectedDocumentDefinition$ = this.caseDetailService.documentDefinition$;
 
   public readonly selectedDocumentDefinitionIsReadOnly$ =
-    this.dossierDetailService.selectedDocumentDefinitionIsReadOnly$;
+    this.caseDetailService.selectedDocumentDefinitionIsReadOnly$;
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
@@ -97,8 +98,7 @@ export class DossierManagementDetailContainerActionsComponent {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private readonly caseManagementService: CaseManagementService,
-    private readonly dossierDetailService: DossierDetailService,
-    private readonly dossierExportService: DossierExportService,
+    private readonly caseDetailService: CaseDetailService,
     private readonly notificationService: NotificationService,
     private readonly pageHeaderService: PageHeaderService,
     private readonly route: ActivatedRoute,
@@ -124,7 +124,7 @@ export class DossierManagementDetailContainerActionsComponent {
         take(1),
         tap(([selectedVersion]) => (selectedVersionNumber = selectedVersion)),
         switchMap(([selectedVersion, documentDefinitionName]) =>
-          this.dossierExportService.exportDocumentDefinition(
+          this.caseManagementService.exportDocumentDefinition(
             documentDefinitionName,
             selectedVersion
           )
@@ -135,7 +135,7 @@ export class DossierManagementDetailContainerActionsComponent {
           this.closeCurrentNotification();
           this._currentNotification = this.notificationService.showNotification({
             type: 'success',
-            title: this.translateService.instant('dossierManagement.exportSuccessTitle'),
+            title: this.translateService.instant('caseManagement.exportSuccessTitle'),
             duration: 5000,
           });
           this.downloadZip(response, selectedVersionNumber);
@@ -145,8 +145,8 @@ export class DossierManagementDetailContainerActionsComponent {
           this.closeCurrentNotification();
           this._currentNotification = this.notificationService.showNotification({
             type: 'error',
-            title: this.translateService.instant('dossierManagement.exportErrorTitle'),
-            message: this.translateService.instant('dossierManagement.exportErrorMessage'),
+            title: this.translateService.instant('caseManagement.exportErrorTitle'),
+            message: this.translateService.instant('caseManagement.exportErrorMessage'),
             duration: 5000,
           });
           this.stopExporting();

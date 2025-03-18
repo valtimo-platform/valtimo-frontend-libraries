@@ -18,7 +18,7 @@
   <cds-modal-header showCloseButton="true" (closeSelect)="onCloseModal()">
     <h3 cdsModalHeaderHeading>
       {{
-        'dossierManagement.tabManagement.editModal.title'
+        'caseManagement.tabManagement.editModal.title'
           | translate: {name: tab?.name ?? 'dossier.tabs.' + tab.key | translate}
       }}
     </h3>
@@ -37,7 +37,7 @@
     </button>
 
     <button cdsButton="primary" [disabled]="form.invalid" (click)="editTab()">
-      {{ 'dossierManagement.tabManagement.editModal.updateTab' | translate }}
+      {{ 'caseManagement.tabManagement.editModal.updateTab' | translate }}
     </button>
   </cds-modal-footer>
 </cds-modal>

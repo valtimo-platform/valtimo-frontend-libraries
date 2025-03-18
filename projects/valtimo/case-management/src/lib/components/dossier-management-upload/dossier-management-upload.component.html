@@ -36,7 +36,7 @@
     (closeSelect)="onCloseModal(obs.isStepAfterUpload && obs.uploadStatus !== UPLOAD_STATUS.ERROR)"
   >
     <h3 cdsModalHeaderHeading>
-      {{ 'dossierManagement.importDefinition.title' | translate }}
+      {{ 'caseManagement.importDefinition.title' | translate }}
     </h3>
   </cds-modal-header>
 
@@ -44,10 +44,10 @@
     <ng-template ngSwitchDefault>
       <valtimo-dossier-management-upload-step
         [message]="
-          'dossierManagement.importDefinition.steps.' + obs.activeStep + '.message' | translate
+          'caseManagement.importDefinition.steps.' + obs.activeStep + '.message' | translate
         "
         [title]="
-          'dossierManagement.importDefinition.steps.' + obs.activeStep + '.title' | translate
+          'caseManagement.importDefinition.steps.' + obs.activeStep + '.title' | translate
         "
         [illustration]="'valtimo-layout/img/' + obs.activeStep + '.svg'"
       >
@@ -57,10 +57,10 @@
     <form *ngSwitchCase="UPLOAD_STEP.FILE_SELECT" [formGroup]="form">
       <cds-file-uploader
         [accept]="acceptedFiles"
-        [buttonText]="'dossierManagement.importDefinition.upload.buttonText' | translate"
-        [description]="'dossierManagement.importDefinition.upload.description' | translate"
+        [buttonText]="'caseManagement.importDefinition.upload.buttonText' | translate"
+        [description]="'caseManagement.importDefinition.upload.description' | translate"
         [multiple]="false"
-        [title]="'dossierManagement.importDefinition.upload.title' | translate"
+        [title]="'caseManagement.importDefinition.upload.title' | translate"
         buttonType="primary"
         formControlName="file"
         class="valtimo-definition-uploader__file-uploader"
@@ -75,13 +75,13 @@
             [class.valtimo-definition-uploader__checkbox--invalid]="obs.showCheckboxError"
             (checkedChange)="onCheckedChange($event)"
           >
-            {{ 'dossierManagement.importDefinition.checkbox.message' | translate }}
+            {{ 'caseManagement.importDefinition.checkbox.message' | translate }}
           </cds-checkbox>
 
           <div *ngIf="obs.showCheckboxError" class="valtimo-definition-uploader__error">
             <svg cdsIcon="warning--filled" size="16"></svg>
 
-            {{ 'dossierManagement.importDefinition.checkbox.error' | translate }}
+            {{ 'caseManagement.importDefinition.checkbox.error' | translate }}
           </div>
         </div>
       </ng-container>
@@ -90,10 +90,10 @@
     <cds-progress-bar
       *ngSwitchCase="UPLOAD_STEP.FILE_UPLOAD"
       class="valtimo-definition-uploader__progress-bar"
-      [label]="'dossierManagement.importDefinition.progressBar.label' | translate"
+      [label]="'caseManagement.importDefinition.progressBar.label' | translate"
       [status]="obs.uploadStatus"
       [helperText]="
-        'dossierManagement.importDefinition.progressBar.' + obs.uploadStatus | translate
+        'caseManagement.importDefinition.progressBar.' + obs.uploadStatus | translate
       "
     ></cds-progress-bar>
   </section>
@@ -128,7 +128,7 @@
       >
         {{
           (obs.activeStep === UPLOAD_STEP.FILE_SELECT
-            ? 'dossierManagement.importDefinition.startUpload'
+            ? 'caseManagement.importDefinition.startUpload'
             : 'interface.next'
           ) | translate
         }}

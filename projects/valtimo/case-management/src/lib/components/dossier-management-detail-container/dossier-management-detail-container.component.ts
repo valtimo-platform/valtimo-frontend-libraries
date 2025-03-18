@@ -29,14 +29,14 @@ import {CaseManagementTabConfig, ConfigService} from '@valtimo/config';
 import {Tab} from 'carbon-components-angular';
 import {combineLatest, filter, map, Observable, startWith, Subscription, tap} from 'rxjs';
 import {TabEnum} from '../../models';
-import {DossierDetailService, TabService} from '../../services';
+import {CaseDetailService, TabService} from '../../services';
 import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
 
 @Component({
   selector: 'valtimo-dossier-management-detail-container',
   templateUrl: './dossier-management-detail-container.component.html',
   styleUrls: ['./dossier-management-detail-container.component.scss'],
-  providers: [DossierDetailService],
+  providers: [CaseDetailService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
@@ -78,7 +78,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   private _activeVersion: number | null;
   private _subscriptions = new Subscription();
   constructor(
-    private readonly dossierDetailService: DossierDetailService,
+    private readonly caseDetailService: CaseDetailService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly configService: ConfigService,
@@ -116,7 +116,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
 
   public onCancelRedirectEvent(): void {
     if (this._activeVersion) {
-      this.dossierDetailService.setPreviousSelectedVersionNumber(this._activeVersion);
+      this.caseDetailService.setPreviousSelectedVersionNumber(this._activeVersion);
       this._activeVersion = null;
       return;
     }
@@ -128,12 +128,12 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   }
 
   public onVersionSet(version: number): void {
-    this.dossierDetailService.setSelectedVersionNumber(version);
+    this.caseDetailService.setSelectedVersionNumber(version);
   }
 
   private openActiveVersionSubscription(): void {
     this._subscriptions.add(
-      this.dossierDetailService.selectedVersionNumber$.subscribe((versionNumber: number | null) => {
+      this.caseDetailService.selectedVersionNumber$.subscribe((versionNumber: number | null) => {
         this._activeVersion = versionNumber;
       })
     );

@@ -28,17 +28,17 @@
 >
   <cds-modal-header showCloseButton="true" (closeSelect)="onCloseModal()">
     <h3 cdsModalHeaderHeading>
-      {{ 'dossierManagement.createDefinition.modalTitle' | translate }}
+      {{ 'caseManagement.createDefinition.modalTitle' | translate }}
     </h3>
   </cds-modal-header>
 
   <form [formGroup]="formGroup" cdsModalContent class="valtimo-definition-create__content">
     <cds-label>
-      {{ 'dossierManagement.createDefinition.title' | translate }}
+      {{ 'caseManagement.createDefinition.title' | translate }}
 
       <cds-tooltip
         [caret]="true"
-        [description]="'dossierManagement.createDefinition.titleTooltip' | translate"
+        [description]="'caseManagement.createDefinition.titleTooltip' | translate"
       >
         <svg class="tooltip-trigger" cdsIcon="information" size="16"></svg>
       </cds-tooltip>
@@ -46,18 +46,18 @@
       <input
         formControlName="title"
         cdsText
-        placeholder="{{ 'dossierManagement.createDefinition.titlePlaceholder' | translate }}"
+        placeholder="{{ 'caseManagement.createDefinition.titlePlaceholder' | translate }}"
         [attr.modal-primary-focus]="true"
         (focusout)="onFocusOut()"
       />
     </cds-label>
 
     <cds-label [invalid]="!!obs.idError" [invalidText]="obs.idError | translate">
-      {{ 'dossierManagement.createDefinition.name' | translate }}
+      {{ 'caseManagement.createDefinition.name' | translate }}
 
       <cds-tooltip
         [caret]="true"
-        [description]="'dossierManagement.createDefinition.nameTooltip' | translate"
+        [description]="'caseManagement.createDefinition.nameTooltip' | translate"
       >
         <svg class="tooltip-trigger" cdsIcon="information" size="16"></svg>
       </cds-tooltip>
@@ -67,7 +67,7 @@
           cdsText
           formControlName="name"
           [invalid]="!!obs.idError"
-          [placeholder]="'dossierManagement.createDefinition.namePlaceholder' | translate"
+          [placeholder]="'caseManagement.createDefinition.namePlaceholder' | translate"
           [attr.modal-primary-focus]="true"
         />
 

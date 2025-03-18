@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-export * from './dossier-detail.service';
-export * from './dossier-export.service';
+export * from './case-detail.service';
 export * from './tab-management.service';
 export * from './tab.service';
 export * from './widget-json-editor.service';

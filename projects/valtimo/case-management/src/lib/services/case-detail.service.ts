@@ -30,7 +30,7 @@ import {DocumentDefinition, DocumentService} from '@valtimo/document';
 import {EditorModel, PageTitleService} from '@valtimo/components';
 
 @Injectable()
-export class DossierDetailService implements OnDestroy {
+export class CaseDetailService implements OnDestroy {
   private readonly _loadingDocumentDefinition$ = new BehaviorSubject<boolean>(true);
   private readonly _previousSelectedVersionNumber$ = new BehaviorSubject<number | null>(null);
   private readonly _selectedVersionNumber$ = new BehaviorSubject<number | null>(null);
@@ -38,8 +38,8 @@ export class DossierDetailService implements OnDestroy {
   private readonly _documentDefinition$ = new BehaviorSubject<DocumentDefinition | null>(null);
   private readonly _documentDefinitionModel$: Observable<EditorModel> =
     this.documentDefinition$.pipe(
-      map((definition: DocumentDefinition) => ({
-        value: JSON.stringify(definition.schema, null, 2),
+      map((definition: DocumentDefinition | null) => ({
+        value: JSON.stringify(definition?.schema, null, 2),
         language: 'json',
       }))
     );
@@ -58,7 +58,7 @@ export class DossierDetailService implements OnDestroy {
 
   public get selectedDocumentDefinitionIsReadOnly$(): Observable<boolean> {
     return this.documentDefinition$.pipe(
-      map(definition => definition.readOnly),
+      map(definition => definition?.readOnly ?? false),
       distinctUntilChanged()
     );
   }
@@ -67,7 +67,7 @@ export class DossierDetailService implements OnDestroy {
     return this._loadingDocumentDefinition$.asObservable();
   }
 
-  public get documentDefinition$(): Observable<DocumentDefinition> {
+  public get documentDefinition$(): Observable<DocumentDefinition | null> {
     return this._documentDefinition$.pipe(filter(def => !!def));
   }
 
@@ -114,7 +114,7 @@ export class DossierDetailService implements OnDestroy {
           switchMap(([selectedVersion, selectedDocumentDefinitionName]) =>
             this.documentService.getDocumentDefinitionByVersion(
               selectedDocumentDefinitionName,
-              selectedVersion
+              selectedVersion ?? 0
             )
           ),
           tap(res => {

@@ -89,9 +89,9 @@ export class TabFormComponent implements OnInit, OnDestroy {
 
   public getKeyErrorMessage(): string {
     if (this.form.get('key')?.hasError('uniqueKey'))
-      return 'dossierManagement.tabManagement.addModal.uniqueKeyError';
+      return 'caseManagement.tabManagement.addModal.uniqueKeyError';
     if (this.form.get('key')?.hasError('pattern'))
-      return 'dossierManagement.tabManagement.addModal.invalidKeyError';
+      return 'caseManagement.tabManagement.addModal.invalidKeyError';
     return '';
   }
 

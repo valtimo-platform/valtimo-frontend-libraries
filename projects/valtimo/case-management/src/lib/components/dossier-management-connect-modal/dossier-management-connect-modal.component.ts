@@ -25,7 +25,7 @@ import {
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
 import {NotificationService} from 'carbon-components-angular';
 import {switchMap, take} from 'rxjs';
-import {DossierDetailService} from '../../services';
+import {CaseDetailService} from '../../services';
 
 @Component({
   selector: 'valtimo-dossier-management-connect-modal',
@@ -46,7 +46,7 @@ export class DossierManagementConnectModalComponent implements OnInit {
 
   constructor(
     private readonly documentService: DocumentService,
-    private readonly dossierDetailService: DossierDetailService,
+    private readonly caseDetailService: CaseDetailService,
     private readonly notificationService: NotificationService,
     private readonly processService: ProcessService,
     private readonly translateService: TranslateService
@@ -105,7 +105,7 @@ export class DossierManagementConnectModalComponent implements OnInit {
       startableByUser: this.newDocumentProcessDefinitionStartableByUser,
     };
 
-    this.dossierDetailService.selectedVersionNumber$
+    this.caseDetailService.selectedVersionNumber$
       .pipe(
         switchMap((documentDefinitionVersion: number) =>
           this.documentService.createProcessDocumentDefinition({
@@ -120,7 +120,7 @@ export class DossierManagementConnectModalComponent implements OnInit {
           this.notificationService.showNotification({
             type: 'success',
             title: this.translateService.instant(
-              'dossierManagement.processLinkNotification.linkSuccess'
+              'caseManagement.processLinkNotification.linkSuccess'
             ),
             duration: 5000,
           });
@@ -130,7 +130,7 @@ export class DossierManagementConnectModalComponent implements OnInit {
           this.notificationService.showNotification({
             type: 'error',
             title: this.translateService.instant(
-              'dossierManagement.processLinkNotification.linkFailure'
+              'caseManagement.processLinkNotification.linkFailure'
             ),
             duration: 5000,
           });

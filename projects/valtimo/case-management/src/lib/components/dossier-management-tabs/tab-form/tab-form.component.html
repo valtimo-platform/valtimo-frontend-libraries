@@ -16,13 +16,13 @@
 
 <form *ngIf="form" [formGroup]="form" class="valtimo-tab-form-modal">
   <cds-label>
-    {{ 'dossierManagement.tabManagement.addModal.tabNameLabel' | translate }}
+    {{ 'caseManagement.tabManagement.addModal.tabNameLabel' | translate }}
 
     <input cdsText formControlName="name" [attr.modal-primary-focus]="true" />
   </cds-label>
 
   <cds-label [invalid]="!!isKeyError()" [invalidText]="getKeyErrorMessage() | translate">
-    {{ 'dossierManagement.tabManagement.addModal.tabKeyLabel' | translate }}
+    {{ 'caseManagement.tabManagement.addModal.tabKeyLabel' | translate }}
 
     <input
       cdsText
@@ -39,7 +39,7 @@
     formControlName="contentKey"
     [items]="listItems$ | async"
     itemValueKey="contentKey"
-    [label]="'dossierManagement.tabManagement.contentLabels.' + tabType | translate"
+    [label]="'caseManagement.tabManagement.contentLabels.' + tabType | translate"
     (search)="onSearch($event)"
     (selected)="onSelected($event)"
   >
@@ -47,9 +47,9 @@
   </cds-combo-box>
 
   <cds-toggle
-    [label]="'dossierManagement.tabManagement.addModal.visibleTitle' | translate"
-    [onText]="'dossierManagement.tabManagement.addModal.visible' | translate"
-    [offText]="'dossierManagement.tabManagement.addModal.invisible' | translate"
+    [label]="'caseManagement.tabManagement.addModal.visibleTitle' | translate"
+    [onText]="'caseManagement.tabManagement.addModal.visible' | translate"
+    [offText]="'caseManagement.tabManagement.addModal.invisible' | translate"
     [checked]="showTasks?.value"
     (checkedChange)="toggleCheckedChange($event)"
     [disabled]="disableTaskListVisibleToggle()"

@@ -29,8 +29,8 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DocumentDefinitionCreateRequest, DocumentService} from '@valtimo/document';
 import {FileItem, IconService, NotificationContent} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, take} from 'rxjs';
-import {DossierManagementService} from '../../services/dossier-management.service';
 import {STEPS, UPLOAD_STATUS, UPLOAD_STEP} from './dossier-management-upload.constants';
+import { CaseManagementService } from '../../services';
 
 @Component({
   selector: 'valtimo-dossier-management-upload',
@@ -74,7 +74,7 @@ export class DossierManagementUploadComponent implements OnInit, OnDestroy {
   ]).pipe(map(([activeStep, disabled]) => activeStep !== UPLOAD_STEP.PLUGINS && disabled));
   public readonly notificationObj$: Observable<NotificationContent> = combineLatest([
     this.translateService.stream('interface.warning'),
-    this.translateService.stream('dossierManagement.importDefinition.overwriteWarning'),
+    this.translateService.stream('caseManagement.importDefinition.overwriteWarning'),
   ]).pipe(
     map(([title, message]) => ({
       type: 'warning',
@@ -98,7 +98,7 @@ export class DossierManagementUploadComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly documentService: DocumentService,
-    private readonly dossierManagementService: DossierManagementService,
+    private readonly caseManagementService: CaseManagementService,
     private readonly fb: FormBuilder,
     private readonly iconService: IconService,
     private readonly translateService: TranslateService
@@ -225,7 +225,7 @@ export class DossierManagementUploadComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap((file: string | FormData) =>
           file instanceof FormData
-            ? this.dossierManagementService.importDocumentDefinitionZip(file)
+            ? this.caseManagementService.importDocumentDefinitionZip(file)
             : this.documentService.createDocumentDefinitionForManagement(
                 new DocumentDefinitionCreateRequest(file)
               )
@@ -261,10 +261,10 @@ export class DossierManagementUploadComponent implements OnInit, OnDestroy {
     this._disabled$.next(true);
     fileItem.invalid = true;
     fileItem.invalidTitle = this.translateService.instant(
-      'dossierManagement.importDefinition.invalidJsonError.title'
+      'caseManagement.importDefinition.invalidJsonError.title'
     );
     fileItem.invalidText = this.translateService.instant(
-      'dossierManagement.importDefinition.invalidJsonError.text'
+      'caseManagement.importDefinition.invalidJsonError.text'
     );
   }
 

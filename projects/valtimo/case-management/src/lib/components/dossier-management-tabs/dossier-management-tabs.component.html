@@ -39,8 +39,8 @@
 
 <ng-template #tabTypeColumn let-data="data">
   {{
-    isTranslated('dossierManagement.tabType.' + data.item.type)
-      ? ('dossierManagement.tabType.' + data.item.type | translate)
+    isTranslated('caseManagement.tabType.' + data.item.type)
+      ? ('caseManagement.tabType.' + data.item.type | translate)
       : data.item.type
   }}
 </ng-template>
@@ -55,7 +55,7 @@
 
 <ng-template #addTabButton>
   <button cdsButton="primary" (click)="openAddTabModal()">
-    {{ 'dossierManagement.tabManagement.addModal.addTab' | translate }}
+    {{ 'caseManagement.tabManagement.addModal.addTab' | translate }}
 
     <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
   </button>

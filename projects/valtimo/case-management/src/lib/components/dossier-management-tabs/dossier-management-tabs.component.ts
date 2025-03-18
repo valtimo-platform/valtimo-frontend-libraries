@@ -108,30 +108,30 @@ export class DossierManagementTabsComponent implements AfterViewInit {
     this.fields$.next([
       {
         key: 'name',
-        label: 'dossierManagement.tabManagement.columns.name',
+        label: 'caseManagement.tabManagement.columns.name',
         viewType: ViewType.TEXT,
       },
       {
         key: 'key',
-        label: 'dossierManagement.tabManagement.columns.key',
+        label: 'caseManagement.tabManagement.columns.key',
         viewType: ViewType.TEXT,
       },
       {
         viewType: ViewType.TEMPLATE,
         template: this.tabTypeColumnTemplate,
         key: '',
-        label: 'dossierManagement.tabManagement.columns.type',
+        label: 'caseManagement.tabManagement.columns.type',
       },
       {
         viewType: ViewType.TEMPLATE,
         template: this.tabContentColumnTemplate,
         key: '',
-        label: 'dossierManagement.tabManagement.columns.content',
+        label: 'caseManagement.tabManagement.columns.content',
       },
       {
         viewType: ViewType.BOOLEAN,
         key: 'showTasks',
-        label: 'dossierManagement.tabManagement.columns.showTasks',
+        label: 'caseManagement.tabManagement.columns.showTasks',
       },
     ]);
 

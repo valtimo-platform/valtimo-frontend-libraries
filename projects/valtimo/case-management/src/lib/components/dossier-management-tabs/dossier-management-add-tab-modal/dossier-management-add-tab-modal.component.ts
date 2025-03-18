@@ -57,31 +57,31 @@ export class DossierManagementAddTabModalComponent {
     map(([disabled, featureToggles]) => [
       {
         icon: 'development',
-        title: 'dossierManagement.tabManagement.addModal.standardTab',
+        title: 'caseManagement.tabManagement.addModal.standardTab',
         type: ApiTabType.STANDARD,
         disabled: disabled.standard,
         disabledTooltipTranslationKey:
-          'dossierManagement.tabManagement.addModal.standardTabDisabled',
+          'caseManagement.tabManagement.addModal.standardTabDisabled',
       },
       {
         icon: 'page-scroll',
-        title: 'dossierManagement.tabManagement.addModal.formIOComponent',
+        title: 'caseManagement.tabManagement.addModal.formIOComponent',
         type: ApiTabType.FORMIO,
         disabled: disabled.formIO,
         disabledTooltipTranslationKey:
-          'dossierManagement.tabManagement.addModal.formIOComponentDisabled',
+          'caseManagement.tabManagement.addModal.formIOComponentDisabled',
       },
       {
         icon: 'code',
-        title: 'dossierManagement.tabManagement.addModal.customComponent',
+        title: 'caseManagement.tabManagement.addModal.customComponent',
         type: ApiTabType.CUSTOM,
         disabled: disabled.custom,
         disabledTooltipTranslationKey:
-          'dossierManagement.tabManagement.addModal.customComponentDisabled',
+          'caseManagement.tabManagement.addModal.customComponentDisabled',
       },
       {
         icon: 'table--built',
-        title: 'dossierManagement.tabManagement.addModal.widgetsComponent',
+        title: 'caseManagement.tabManagement.addModal.widgetsComponent',
         type: ApiTabType.WIDGETS,
         disabled: disabled.widgets,
       },

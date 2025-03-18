@@ -31,7 +31,7 @@ import {
 import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {map, switchMap, take, tap} from 'rxjs/operators';
-import {DossierDetailService} from '../../services';
+import {CaseDetailService} from '../../services';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -47,10 +47,10 @@ export class DossierManagementDocumentDefinitionComponent {
   @Output() confirmRedirect = new EventEmitter();
   @Output() pendingChangesUpdate = new EventEmitter<boolean>();
 
-  public readonly loadingDocumentDefinition$ = this.dossierDetailService.loadingDocumentDefinition$;
+  public readonly loadingDocumentDefinition$ = this.caseDetailService.loadingDocumentDefinition$;
   private readonly _refreshEditor$ = new BehaviorSubject<null>(null);
   public readonly documentDefinitionModel$: Observable<EditorModel> = this._refreshEditor$.pipe(
-    switchMap(() => this.dossierDetailService.documentDefinitionModel$)
+    switchMap(() => this.caseDetailService.documentDefinitionModel$)
   );
 
   private readonly _pendingChanges$ = new BehaviorSubject<boolean>(false);
@@ -62,7 +62,7 @@ export class DossierManagementDocumentDefinitionComponent {
   public readonly editActive$ = new BehaviorSubject<boolean>(false);
   public readonly showSaveConfirmation$ = new BehaviorSubject<boolean>(false);
   public readonly showCancelConfirmation$ = new BehaviorSubject<boolean>(false);
-  public readonly selectedDocumentDefinition$ = this.dossierDetailService.documentDefinition$.pipe(
+  public readonly selectedDocumentDefinition$ = this.caseDetailService.documentDefinition$.pipe(
     tap(
       (documentDefinition: DocumentDefinition) => (this._initialId = documentDefinition.schema.$id)
     )
@@ -87,7 +87,7 @@ export class DossierManagementDocumentDefinitionComponent {
 
   constructor(
     private readonly documentService: DocumentService,
-    private readonly dossierDetailService: DossierDetailService,
+    private readonly caseDetailService: CaseDetailService,
     private readonly iconService: IconService,
     private readonly pageHeaderService: PageHeaderService,
     private readonly route: ActivatedRoute
@@ -147,7 +147,7 @@ export class DossierManagementDocumentDefinitionComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.dossierDetailService.setSelectedDocumentDefinitionName(this.documentDefinitionName);
+          this.caseDetailService.setSelectedDocumentDefinitionName(this.documentDefinitionName);
           this.confirmRedirect.emit();
           this._pendingChanges$.next(false);
         },

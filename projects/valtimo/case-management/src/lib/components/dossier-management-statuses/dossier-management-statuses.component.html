@@ -34,8 +34,8 @@
   ></ng-container>
 
   <valtimo-no-results
-    [description]="'dossierManagement.statuses.noResults.description' | translate"
-    [title]="'dossierManagement.statuses.noResults.title' | translate"
+    [description]="'caseManagement.statuses.noResults.description' | translate"
+    [title]="'caseManagement.statuses.noResults.title' | translate"
   ></valtimo-no-results>
 </valtimo-carbon-list>
 
@@ -62,7 +62,7 @@
     <button cdsButton="primary" [disabled]="obs.loading" (click)="openAddModal()">
       <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
 
-      {{ 'dossierManagement.statuses.add' | translate }}
+      {{ 'caseManagement.statuses.add' | translate }}
     </button>
   </div>
 </ng-template>

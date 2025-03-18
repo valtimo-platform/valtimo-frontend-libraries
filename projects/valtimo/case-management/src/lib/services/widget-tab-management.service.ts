@@ -33,11 +33,11 @@ export class WidgetTabManagementService {
   }
 
   public getWidgetTabConfiguration(
-    caseDefinitionName: string,
+    caseDefinitionKey: string,
     widgetTabKey: string
   ): Observable<CaseWidgetsRes> {
     return this.http.get<CaseWidgetsRes>(
-      `${this.valtimoEndpointUri}management/v1/case-definition/${caseDefinitionName}/widget-tab/${widgetTabKey}`
+      `${this.valtimoEndpointUri}management/v1/case-definition/${caseDefinitionKey}/widget-tab/${widgetTabKey}`
     );
   }
 

@@ -195,24 +195,24 @@ export class DossierManagementStatusesComponent implements AfterViewInit {
     this.fields$.next([
       {
         key: 'title',
-        label: 'dossierManagement.statuses.columns.title',
+        label: 'caseManagement.statuses.columns.title',
         viewType: ViewType.TEXT,
       },
       {
         key: 'key',
-        label: 'dossierManagement.statuses.columns.key',
+        label: 'caseManagement.statuses.columns.key',
         viewType: ViewType.TEXT,
       },
       {
         key: 'visibleInCaseListByDefault',
-        label: 'dossierManagement.statuses.columns.visible',
+        label: 'caseManagement.statuses.columns.visible',
         viewType: ViewType.BOOLEAN,
       },
       {
         viewType: ViewType.TEMPLATE,
         template: this.colorColumnTemplate,
         key: 'color',
-        label: 'dossierManagement.statuses.columns.color',
+        label: 'caseManagement.statuses.columns.color',
       },
     ]);
   }

@@ -24,9 +24,9 @@
     <h3 cdsModalHeaderHeading>
       {{
         !obs.selectedTabType
-          ? ('dossierManagement.tabManagement.addModal.title'
+          ? ('caseManagement.tabManagement.addModal.title'
             | translate: {documentDefinitionName: (documentDefinitionName | titlecase)})
-          : ('dossierManagement.tabManagement.titles.' + obs.selectedTabType | translate)
+          : ('caseManagement.tabManagement.titles.' + obs.selectedTabType | translate)
       }}
     </h3>
   </cds-modal-header>
@@ -38,7 +38,7 @@
     ></valtimo-tab-form>
 
     <ng-template #tabTypeSelection>
-      <span> {{ 'dossierManagement.tabManagement.addModal.description' | translate }} </span>
+      <span> {{ 'caseManagement.tabManagement.addModal.description' | translate }} </span>
 
       <div *ngIf="tabTypes$ | async as tabTypes" class="valtimo-add-tab-modal__types">
         <cds-tooltip
@@ -75,7 +75,7 @@
       </button>
 
       <button cdsButton="primary" [disabled]="form.invalid" (click)="addTab(obs.selectedTabType)">
-        {{ 'dossierManagement.tabManagement.addModal.addTab' | translate }}
+        {{ 'caseManagement.tabManagement.addModal.addTab' | translate }}
       </button>
     </div>
   </cds-modal-footer>
