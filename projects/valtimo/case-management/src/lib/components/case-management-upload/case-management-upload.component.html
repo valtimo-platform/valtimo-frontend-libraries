@@ -42,7 +42,7 @@
 
   <section [ngSwitch]="obs.activeStep" cdsModalContent class="valtimo-definition-uploader__content">
     <ng-template ngSwitchDefault>
-      <valtimo-dossier-management-upload-step
+      <valtimo-case-management-upload-step
         [message]="
           'caseManagement.importDefinition.steps.' + obs.activeStep + '.message' | translate
         "
@@ -51,7 +51,7 @@
         "
         [illustration]="'valtimo-layout/img/' + obs.activeStep + '.svg'"
       >
-      </valtimo-dossier-management-upload-step>
+      </valtimo-case-management-upload-step>
     </ng-template>
 
     <form *ngSwitchCase="UPLOAD_STEP.FILE_SELECT" [formGroup]="form">

@@ -75,8 +75,8 @@ import {DossierManagementAddTabModalComponent} from './components/dossier-manage
 import {DossierManagementEditTabModalComponent} from './components/dossier-management-tabs/dossier-management-edit-tab-modal/dossier-management-edit-tab-modal.component';
 import {DossierManagementTabsComponent} from './components/dossier-management-tabs/dossier-management-tabs.component';
 import {TabFormComponent} from './components/dossier-management-tabs/tab-form/tab-form.component';
-import {DossierManagementUploadComponent} from './components/dossier-management-upload/dossier-management-upload.component';
-import {DossierManagementUploadStepComponent} from './components/dossier-management-upload/step/dossier-management-upload-step.component';
+import {CaseManagementUploadComponent} from './components/case-management-upload/case-management-upload.component';
+import {CaseManagementUploadStepComponent} from './components/case-management-upload/step/case-management-upload-step.component';
 import {CaseManagementRoutingModule} from './case-management-routing.module';
 import {TabManagementService} from './services';
 import {CaseManagementStatusesComponent} from './components/case-management-statuses/case-management-statuses.component';
@@ -91,7 +91,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     CaseManagementDetailComponent,
     CaseManagementConnectModalComponent,
     CaseManagementRemoveModalComponent,
-    DossierManagementUploadComponent,
+    CaseManagementUploadComponent,
     CaseManagementSearchFieldsComponent,
     CaseManagementDetailContainerComponent,
     CaseManagementAssigneeComponent,
@@ -102,7 +102,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     DossierManagementEditTabModalComponent,
     CaseManagementDetailContainerActionsComponent,
     CaseManagementDocumentDefinitionComponent,
-    DossierManagementUploadStepComponent,
+    CaseManagementUploadStepComponent,
     CaseManagementStatusesComponent,
     CaseManagementStatusModalComponent,
     CaseManagementCreateComponent,

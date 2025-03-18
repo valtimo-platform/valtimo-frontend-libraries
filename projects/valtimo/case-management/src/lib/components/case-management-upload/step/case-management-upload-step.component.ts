@@ -17,11 +17,11 @@
 import {Component, Input} from '@angular/core';
 
 @Component({
-  selector: 'valtimo-dossier-management-upload-step',
-  templateUrl: './dossier-management-upload-step.component.html',
-  styleUrls: ['./dossier-management-upload-step.component.scss'],
+  selector: 'valtimo-case-management-upload-step',
+  templateUrl: './case-management-upload-step.component.html',
+  styleUrls: ['./case-management-upload-step.component.scss'],
 })
-export class DossierManagementUploadStepComponent {
+export class CaseManagementUploadStepComponent {
   @Input() illustration!: string;
   @Input() message!: string;
   @Input() title!: string;

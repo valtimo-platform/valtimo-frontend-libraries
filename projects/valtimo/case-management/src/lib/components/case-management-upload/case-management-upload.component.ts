@@ -29,16 +29,16 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DocumentDefinitionCreateRequest, DocumentService} from '@valtimo/document';
 import {FileItem, IconService, NotificationContent} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription, switchMap, take} from 'rxjs';
-import {STEPS, UPLOAD_STATUS, UPLOAD_STEP} from './dossier-management-upload.constants';
+import {STEPS, UPLOAD_STATUS, UPLOAD_STEP} from './case-management-upload.constants';
 import { CaseManagementService } from '../../services';
 
 @Component({
-  selector: 'valtimo-dossier-management-upload',
-  templateUrl: './dossier-management-upload.component.html',
-  styleUrls: ['./dossier-management-upload.component.scss'],
+  selector: 'valtimo-case-management-upload',
+  templateUrl: './case-management-upload.component.html',
+  styleUrls: ['./case-management-upload.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementUploadComponent implements OnInit, OnDestroy {
+export class CaseManagementUploadComponent implements OnInit, OnDestroy {
   @Input() open = false;
   @Output() closeModal = new EventEmitter<boolean>();
 
