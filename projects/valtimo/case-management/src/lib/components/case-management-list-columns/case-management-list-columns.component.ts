@@ -53,13 +53,12 @@ import {take} from 'rxjs/operators';
 import {ListColumnModal} from '../../models';
 
 @Component({
-  selector: 'valtimo-dossier-management-list-columns',
-  templateUrl: './dossier-management-list-columns.component.html',
-  styleUrls: ['./dossier-management-list-columns.component.scss'],
+  templateUrl: './case-management-list-columns.component.html',
+  styleUrls: ['./case-management-list-columns.component.scss'],
 })
-export class DossierManagementListColumnsComponent implements AfterViewInit {
+export class CaseManagementListColumnsComponent implements AfterViewInit {
   readonly downloadName$ = new BehaviorSubject<string>('');
-  readonly downloadUrl$ = new BehaviorSubject<SafeUrl>(undefined);
+  readonly downloadUrl$ = new BehaviorSubject<SafeUrl | null>(null);
 
   public readonly actionItems: ActionItem[] = [
     {
@@ -204,7 +203,7 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
     defaultSort: new FormControl({
       key: this.INVALID_KEY,
     }),
-    enum: new FormControl([]),
+    enum: new FormControl<{[key: string]: string}[]>([]),
   });
 
   readonly disableDefaultSort$ = combineLatest([
@@ -313,7 +312,7 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
   readonly validKey$ = combineLatest([this.formGroup.valueChanges, this.currentModalType$]).pipe(
     map(([formValues, currentModalType]) => {
       const existingKeys = this.cachedCaseListColumns.map(column => column.key);
-      return currentModalType === 'create' ? !existingKeys.includes(formValues.key) : true;
+      return currentModalType === 'create' ? !existingKeys.includes(formValues.key || '') : true;
     }),
     startWith(false)
   );
@@ -325,7 +324,7 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
           formValues.displayType?.key !== this.INVALID_KEY &&
           formValues.path &&
           validKey &&
-          (formValues.displayType.key === 'enum' ? formValues.enum?.length > 0 : true)
+          (formValues.displayType?.key === 'enum' ? (formValues.enum ?? []).length > 0 : true)
         )
     ),
     startWith(false)
@@ -335,7 +334,7 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
 
   readonly deleteRowKey$ = new BehaviorSubject<string>('');
 
-  readonly defaultEnumValues$ = new BehaviorSubject<MultiInputValues>(undefined);
+  readonly defaultEnumValues$ = new BehaviorSubject<MultiInputValues | null>(null);
 
   public readonly ValuePathSelectorPrefix = ValuePathSelectorPrefix;
 
@@ -434,7 +433,7 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
   }
 
   enumValueChange(value: Array<{[key: string]: string}>): void {
-    this.formGroup.patchValue({enum: value});
+    this.formGroup.patchValue({enum :value});
   }
 
   columnRowClicked(row: {key: string}): void {
@@ -446,12 +445,12 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
         const column = this.cachedCaseListColumns.find(
           cachedColumn => cachedColumn.key === row.key
         );
-        const viewTypeItem = viewTypeItems.find(item => item.key === column.displayType.type);
+        const viewTypeItem = viewTypeItems.find(item => item.key === column?.displayType.type);
         const viewTypeItemIndex = viewTypeItems.findIndex(
-          item => item.key === column.displayType.type
+          item => item.key === column?.displayType.type
         );
-        const sortItem = sortItems.find(item => item.key === column.defaultSort);
-        const sortItemIndex = sortItems.findIndex(item => item.key === column.defaultSort);
+        const sortItem = sortItems.find(item => item.key === column?.defaultSort);
+        const sortItemIndex = sortItems.findIndex(item => item.key === column?.defaultSort);
         const enumValues = column?.displayType?.displayTypeParameters?.enum;
         const mappedEnumValues: MultiInputValues = [];
         const columnDateFormat = column?.displayType?.displayTypeParameters?.dateFormat;
@@ -472,10 +471,10 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
         }
 
         this.formGroup.patchValue({
-          key: column.key,
-          title: column.title,
-          path: column.path,
-          sortable: column.sortable,
+          key: column?.key,
+          title: column?.title,
+          path: column?.path,
+          sortable: column?.sortable,
           // @ts-ignore
           displayType: {...viewTypeItem},
           // @ts-ignore
@@ -498,13 +497,13 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
     this.documentService
       .putCaseListForManagement(documentDefinitionName, newCaseListColumns)
       .subscribe(
-        () => {
+        {next: () => {
           this.refreshCaseListColumns();
-          localStorage.setItem(`list-search-${documentDefinitionName}`, null);
+          localStorage.setItem(`list-search-${documentDefinitionName}`, '');
         },
-        () => {
+        error: () => {
           this.enableInput();
-        }
+        }}
       );
   }
 
@@ -515,13 +514,13 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
       this.documentService
         .postCaseListForManagement(docDefName, this.mapFormValuesToColumn(formValue))
         .subscribe(
-          () => {
+          {next: () => {
             this.closeModal();
             this.refreshCaseListColumns();
           },
-          () => {
+          error: () => {
             this.enableInput();
-          }
+          }}
         );
     });
   }
@@ -531,7 +530,7 @@ export class DossierManagementListColumnsComponent implements AfterViewInit {
       return displayTypeParameters.dateFormat;
     } else if (displayTypeParameters?.enum) {
       return Object.keys(displayTypeParameters.enum).reduce((acc, curr) => {
-        const keyValuePairString = `${curr}: ${displayTypeParameters.enum[curr]}`;
+        const keyValuePairString = `${curr}: ${displayTypeParameters.enum?.[curr]}`;
         if (!acc) {
           return `${keyValuePairString}`;
         }
