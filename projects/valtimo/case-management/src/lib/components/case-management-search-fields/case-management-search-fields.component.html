@@ -32,7 +32,7 @@
 <valtimo-confirmation-modal
   confirmButtonTextTranslationKey="interface.delete"
   confirmButtonType="danger"
-  contentTranslationKey="dossierManagement.statuses.deleteText"
+  contentTranslationKey="caseManagement.statuses.deleteText"
   [outputOnConfirm]="selectedDeleteSearchField$ | async"
   [showModalSubject$]="showDeleteModal$"
   titleTranslationKey="interface.delete"
@@ -43,7 +43,7 @@
   <button
     cdsButton="ghost"
     iconOnly="true"
-    data-testid="dossier-management-search-download"
+    data-testid="case-management-search-download"
     [disabled]="
       !obs.downloadUrl || !obs.downloadName || obs.searchFields?.length <= 0 || obs.disableInput
     "
@@ -55,7 +55,7 @@
 
   <button
     cdsButton="primary"
-    data-testid="dossier-management-search-add"
+    data-testid="case-management-search-add"
     [disabled]="loadingSearchFields || obs.disableInput"
     (click)="searchFieldClicked($event, true)"
   >
@@ -121,7 +121,7 @@
       >
         <v-input
           name="title"
-          dataTestId="dossier-management-search-title"
+          dataTestId="case-management-search-title"
           [title]="'searchFieldsOverview.title' | translate"
           [margin]="true"
           [defaultValue]="searchObs.searchField?.title"
@@ -134,7 +134,7 @@
 
         <v-input
           name="key"
-          dataTestId="dossier-management-search-key"
+          dataTestId="case-management-search-key"
           [title]="'searchFieldsOverview.key' | translate"
           [margin]="true"
           [defaultValue]="searchObs.searchField?.key"
@@ -170,7 +170,7 @@
           [defaultSelectionId]="searchObs.searchField?.dataType"
           [tooltip]="'searchFieldsOverviewTooltips.dataType' | translate"
           [carbonTheme]="CARBON_THEME"
-          dataTestId="dossier-management-search-dataTypes"
+          dataTestId="case-management-search-dataTypes"
         ></v-select>
 
         <v-select
@@ -187,7 +187,7 @@
           [defaultSelectionId]="searchObs.searchField?.matchType"
           [tooltip]="'searchFieldsOverviewTooltips.matchType' | translate"
           [carbonTheme]="CARBON_THEME"
-          dataTestId="dossier-management-search-matchTypes"
+          dataTestId="case-management-search-matchTypes"
         ></v-select>
 
         <v-select
@@ -204,7 +204,7 @@
           [defaultSelectionId]="searchObs.searchField?.fieldType"
           [tooltip]="'searchFieldsOverviewTooltips.fieldType' | translate"
           [carbonTheme]="CARBON_THEME"
-          dataTestId="dossier-management-search-fieldTypes"
+          dataTestId="case-management-search-fieldTypes"
         ></v-select>
 
         <v-select
@@ -224,7 +224,7 @@
           [defaultSelectionId]="searchObs.searchField?.dropdownDataProvider"
           [tooltip]="'searchFieldsOverviewTooltips.dropdownDataProvider' | translate"
           [carbonTheme]="CARBON_THEME"
-          dataTestId="dossier-management-search-dropdownDataProvider"
+          dataTestId="case-management-search-dropdownDataProvider"
         ></v-select>
 
         <valtimo-carbon-multi-input
@@ -269,7 +269,7 @@
 
 <ng-template #buttonsFooterModal let-obs="obs">
   <button
-    data-testid="dossier-management-search-close"
+    data-testid="case-management-search-close"
     cdsButton="secondary"
     (click)="onModalClose()"
     [disabled]="obs.disableInput"
@@ -278,7 +278,7 @@
   </button>
 
   <button
-    data-testid="dossier-management-search-save"
+    data-testid="case-management-search-save"
     cdsButton="primary"
     [disabled]="obs.disableInput || !obs.valid"
     (click)="saveSearchField(obs.documentDefinitionName)"

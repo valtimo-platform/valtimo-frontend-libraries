@@ -62,12 +62,11 @@ import {
 } from 'rxjs';
 
 @Component({
-  selector: 'valtimo-dossier-management-search-fields',
-  templateUrl: './dossier-management-search-fields.component.html',
-  styleUrls: ['./dossier-management-search-fields.component.scss'],
+  templateUrl: './case-management-search-fields.component.html',
+  styleUrls: ['./case-management-search-fields.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementSearchFieldsComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() searchField: EventEmitter<SearchField> = new EventEmitter();
 
   public readonly downloadName$ = new BehaviorSubject<string>('');
