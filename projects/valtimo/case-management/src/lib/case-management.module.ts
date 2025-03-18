@@ -83,7 +83,7 @@ import {TabManagementService} from './services';
 import {DossierManagementStatusesComponent} from './components/dossier-management-statuses/dossier-management-statuses.component';
 import {DossierManagementStatusModalComponent} from './components/dossier-management-statuses/dossier-management-status-modal/dossier-management-status-modal.component';
 import {DossierManagementCreateComponent} from './components/dossier-management-create/dossier-management-create.component';
-import {DossierManagementWidgetsEditorComponent} from './components/dossier-management-widget-tab/editor/dossier-management-widgets-editor.component';
+import {CaseManagementWidgetsEditorComponent} from './components/case-management-widget-tab/editor/case-management-widgets-editor.component';
 import { CaseManagementProcessesComponent } from './components/case-management-processes/case-management-processes.component';
 
 @NgModule({
@@ -157,7 +157,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     ConfirmationModalModule,
     ToggleModule,
     TooltipModule,
-    DossierManagementWidgetsEditorComponent,
+    CaseManagementWidgetsEditorComponent,
     ValuePathSelectorComponent,
     CaseManagementProcessesComponent
   ],

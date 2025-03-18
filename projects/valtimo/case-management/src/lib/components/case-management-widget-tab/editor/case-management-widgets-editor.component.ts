@@ -42,8 +42,8 @@ import {CasManagementWidgetWizardComponent} from '../../case-management-widget-w
 import {cloneDeep} from 'lodash';
 
 @Component({
-  selector: 'valtimo-dossier-management-widgets-editor',
-  templateUrl: './dossier-management-widgets-editor.component.html',
+  selector: 'valtimo-case-management-widgets-editor',
+  templateUrl: './case-management-widgets-editor.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -57,7 +57,7 @@ import {cloneDeep} from 'lodash';
     ConfirmationModalModule,
   ],
 })
-export class DossierManagementWidgetsEditorComponent {
+export class CaseManagementWidgetsEditorComponent {
   @Input() public documentDefinitionName: string;
   @Input() public tabWidgetKey: string;
   private _currentWidgetTab: CaseWidgetsRes;
@@ -172,7 +172,7 @@ export class DossierManagementWidgetsEditorComponent {
 
   public duplicateWidget(tabWidget: CaseWidget): void {
     const tabWidgetClone = cloneDeep(tabWidget);
-    tabWidgetClone.key = null;
+    tabWidgetClone.key = '';
     this.editWidget(tabWidgetClone);
   }
 

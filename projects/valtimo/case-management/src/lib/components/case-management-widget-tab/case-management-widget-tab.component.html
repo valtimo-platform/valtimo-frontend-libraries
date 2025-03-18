@@ -39,21 +39,21 @@
 
 @switch (activeContent()) {
   @case (WidgetEditorTab.VISUAL) {
-    <valtimo-dossier-management-widgets-editor
+    <valtimo-case-management-widgets-editor
       [documentDefinitionName]="documentDefinitionName$ | async"
       [tabWidgetKey]="tabWidgetKey$ | async"
       [currentWidgetTab]="currentWidgetTab$ | async"
       (changeSaved)="refreshWidgetTab()"
-    ></valtimo-dossier-management-widgets-editor>
+    ></valtimo-case-management-widgets-editor>
   }
   @case (WidgetEditorTab.JSON) {
-    <valtimo-dossier-management-widgets-json-editor
+    <valtimo-case-management-widgets-json-editor
       [currentWidgetTab]="currentWidgetTab$ | async"
       (canDeactivate)="onJsonCanDeactivate($event)"
       (changeSaved)="refreshWidgetTab()"
       (customModalLoaded)="onCustomModalLoaded($event)"
       (pendingChangesUpdate)="onPendingChangesUpdate($event)"
-    ></valtimo-dossier-management-widgets-json-editor>
+    ></valtimo-case-management-widgets-json-editor>
   }
 }
 

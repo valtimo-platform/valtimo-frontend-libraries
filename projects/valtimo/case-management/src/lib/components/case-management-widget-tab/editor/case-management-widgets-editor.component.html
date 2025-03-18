@@ -49,11 +49,11 @@
     </button>
   </ng-template>
 
-  <valtimo-dossier-management-widget-wizard
+  <valtimo-case-management-widget-wizard
     [editMode]="isEditMode()"
     [open]="obs.isWizardOpen"
     (closeEvent)="onCloseEvent($event, obs.items)"
-  ></valtimo-dossier-management-widget-wizard>
+  ></valtimo-case-management-widget-wizard>
 
   <valtimo-confirmation-modal
     confirmButtonTextTranslationKey="interface.delete"

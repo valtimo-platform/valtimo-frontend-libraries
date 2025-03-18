@@ -20,7 +20,7 @@
   showFooter="true"
   size="lg"
   valtimoCdsModal
-  class="valtimo-dossier-management-widget-wizard"
+  class="valtimo-case-management-widget-wizard"
   (close)="onClose()"
 >
   <cds-modal-header [showCloseButton]="true" (closeSelect)="onClose()">
@@ -29,7 +29,7 @@
     </h3>
   </cds-modal-header>
 
-  <section cdsModalContent class="valtimo-dossier-management-widget-wizard__content">
+  <section cdsModalContent class="valtimo-case-management-widget-wizard__content">
     <cds-progress-indicator
       [current]="currentStep()"
       [skeleton]="!obs.steps"
@@ -74,9 +74,9 @@
     }
   </section>
 
-  <cds-modal-footer class="valtimo-dossier-management-widget-wizard__footer">
+  <cds-modal-footer class="valtimo-case-management-widget-wizard__footer">
     <button
-      class="valtimo-dossier-management-widget-wizard__cancel"
+      class="valtimo-case-management-widget-wizard__cancel"
       cdsButton="ghost"
       (click)="onClose()"
     >
@@ -85,7 +85,7 @@
 
     @if (currentStep() !== WidgetWizardSteps.TYPE) {
       <button
-        class="valtimo-dossier-management-widget-wizard__back"
+        class="valtimo-case-management-widget-wizard__back"
         cdsButton="secondary"
         [disabled]="backButtonDisabled()"
         (click)="onBackButtonClick()"
@@ -95,7 +95,7 @@
     }
 
     <button
-      class="valtimo-dossier-management-widget-wizard__next"
+      class="valtimo-case-management-widget-wizard__next"
       cdsButton="primary"
       [disabled]="nextButtonDisabled()"
       (click)="onNextButtonClick()"

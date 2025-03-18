@@ -44,28 +44,27 @@ import {
   WidgetTabManagementService,
 } from '../../services';
 import {DossierManagementWidgetTabEditModalComponent} from '../dossier-management-widget-tab-edit-modal/dossier-management-widget-tab-edit-modal';
-import {DossierManagementWidgetsEditorComponent} from './editor/dossier-management-widgets-editor.component';
-import {DossierManagementWidgetsJsonEditorComponent} from './json-editor/dossier-management-widgets-json-editor.component';
+import {CaseManagementWidgetsEditorComponent} from './editor/case-management-widgets-editor.component';
+import {CaseManagementWidgetsJsonEditorComponent} from './json-editor/case-management-widgets-json-editor.component';
 
 @Component({
-  selector: 'valtimo-dossier-management-case-widgets',
-  templateUrl: './dossier-management-widget-tab.component.html',
-  styleUrl: './dossier-management-widget-tab.component.scss',
+  templateUrl: './case-management-widget-tab.component.html',
+  styleUrl: './case-management-widget-tab.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     TranslateModule,
-    DossierManagementWidgetsEditorComponent,
+    CaseManagementWidgetsEditorComponent,
     DossierManagementWidgetTabEditModalComponent,
-    DossierManagementWidgetsJsonEditorComponent,
+    CaseManagementWidgetsJsonEditorComponent,
     RenderInPageHeaderDirectiveModule,
     ButtonModule,
     IconModule,
     TabsModule,
   ],
 })
-export class DossierManagementWidgetTabComponent
+export class CaseManagementWidgetTabComponent
   extends PendingChangesComponent
   implements OnInit, AfterViewInit, OnDestroy
 {

@@ -47,9 +47,9 @@ import {BehaviorSubject, Observable, take} from 'rxjs';
 import {WidgetJsonEditorService, WidgetTabManagementService} from '../../../services';
 
 @Component({
-  selector: 'valtimo-dossier-management-widgets-json-editor',
-  templateUrl: './dossier-management-widgets-json-editor.component.html',
-  styleUrl: './dossier-management-widgets-json-editor.component.scss',
+  selector: 'valtimo-case-management-widgets-json-editor',
+  templateUrl: './case-management-widgets-json-editor.component.html',
+  styleUrl: './case-management-widgets-json-editor.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -62,7 +62,7 @@ import {WidgetJsonEditorService, WidgetTabManagementService} from '../../../serv
   ],
   providers: [NotificationService],
 })
-export class DossierManagementWidgetsJsonEditorComponent implements AfterViewInit {
+export class CaseManagementWidgetsJsonEditorComponent implements AfterViewInit {
   @ViewChild('pendingChangesModal') public pendingChangesModal: ConfirmationModalComponent;
 
   private _currentWidgetTab: CaseWidgetsRes;

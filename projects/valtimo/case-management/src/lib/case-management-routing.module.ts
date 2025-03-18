@@ -27,7 +27,7 @@ import {DossierManagementListComponent} from './components/dossier-management-li
 import {DossierManagementSearchFieldsComponent} from './components/dossier-management-search-fields/dossier-management-search-fields.component';
 import {DossierManagementStatusesComponent} from './components/dossier-management-statuses/dossier-management-statuses.component';
 import {DossierManagementTabsComponent} from './components/dossier-management-tabs/dossier-management-tabs.component';
-import {DossierManagementWidgetTabComponent} from './components/dossier-management-widget-tab/dossier-management-widget-tab.component';
+import {CaseManagementWidgetTabComponent} from './components/case-management-widget-tab/case-management-widget-tab.component';
 import {TabEnum} from './models';
 
 const routes: Routes = [
@@ -39,7 +39,7 @@ const routes: Routes = [
   },
   {
     path: 'dossier-management/dossier/:name/widget-tab/:key',
-    component: DossierManagementWidgetTabComponent,
+    component: CaseManagementWidgetTabComponent,
     canActivate: [AuthGuardService],
     // TODO: Check when widgets are back in place
     // canDeactivate: [pendingChangesGuard],
