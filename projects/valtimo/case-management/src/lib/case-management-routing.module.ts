@@ -20,7 +20,7 @@ import {CASE_MANAGEMENT_TAB_TOKEN, CaseManagementTabConfig, ROLE_ADMIN} from '@v
 import {AuthGuardService} from '@valtimo/security';
 import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
 import {DossierManagementDetailContainerComponent} from './components/dossier-management-detail-container/dossier-management-detail-container.component';
-import {DossierManagementDetailComponent} from './components/dossier-management-detail/dossier-management-detail.component';
+import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition.component';
 import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
 import {DossierManagementListComponent} from './components/dossier-management-list/dossier-management-list.component';
@@ -66,7 +66,7 @@ const routes: Routes = [
       },
       {
         path: TabEnum.CASE,
-        component: DossierManagementDetailComponent,
+        component: CaseManagementDetailComponent,
       },
       {
         path: TabEnum.PROCESSES,

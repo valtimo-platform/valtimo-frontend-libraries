@@ -29,11 +29,10 @@ import {DocumentDefinition, DocumentService} from '@valtimo/document';
 import {Observable, switchMap} from 'rxjs';
 
 @Component({
-  selector: 'valtimo-dossier-management-detail',
-  templateUrl: './dossier-management-detail.component.html',
-  styleUrls: ['./dossier-management-detail.component.scss'],
+  templateUrl: './case-management-detail.component.html',
+  styleUrls: ['./case-management-detail.component.scss'],
 })
-export class DossierManagementDetailComponent implements AfterViewInit {
+export class CaseManagementDetailComponent implements AfterViewInit {
   @ViewChild('extensions', {read: ViewContainerRef})
   private _extensions: ViewContainerRef;
 
