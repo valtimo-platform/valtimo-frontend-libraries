@@ -33,13 +33,12 @@ import {CaseDetailService, TabService} from '../../services';
 import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
 
 @Component({
-  selector: 'valtimo-dossier-management-detail-container',
-  templateUrl: './dossier-management-detail-container.component.html',
-  styleUrls: ['./dossier-management-detail-container.component.scss'],
+  templateUrl: './case-management-detail-container.component.html',
+  styleUrls: ['./case-management-detail-container.component.scss'],
   providers: [CaseDetailService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementDetailContainerComponent implements OnInit, OnDestroy {
+export class CaseManagementDetailContainerComponent implements OnInit, OnDestroy {
   @ViewChild(DossierManagementDocumentDefinitionComponent)
   private _documentDefinitionTab: DossierManagementDocumentDefinitionComponent;
   @ViewChildren(Tab) private _tabs: QueryList<Tab>;
@@ -70,8 +69,6 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   public readonly injectedCaseManagementTabs$: Observable<CaseManagementTabConfig[]> =
     this.tabService.injectedCaseManagementTabs$;
   public readonly documentDefinitionTitle$ = this.pageTitleService.customPageTitle$;
-  public readonly CARBON_THEME = 'g10';
-  public readonly DossierManagementTabs = Object.values(TabEnum);
 
   public readonly TabEnum = TabEnum;
 

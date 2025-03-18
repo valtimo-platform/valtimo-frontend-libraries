@@ -19,9 +19,9 @@
     currentTab: currentTab$ | async,
     injectedTabs: injectedCaseManagementTabs$ | async,
   } as obs"
-  class="dossier-management-detail-container"
+  class="case-management-detail-container"
 >
-  <cds-tabs class="dossier-management-tabs" type="inline">
+  <cds-tabs class="case-management-tabs" type="inline">
     <cds-tab
       class="no-padding-left-right main-content"
       [id]="TabEnum.PROCESSES"
@@ -124,7 +124,7 @@
     }
   </cds-tabs>
 
-  <div class="dossier-management-detail-container__content">
+  <div class="case-management-detail-container__content">
     <router-outlet></router-outlet>
   </div>
 </div>

@@ -19,7 +19,7 @@ import {pendingChangesGuard} from '@valtimo/components';
 import {CASE_MANAGEMENT_TAB_TOKEN, CaseManagementTabConfig, ROLE_ADMIN} from '@valtimo/config';
 import {AuthGuardService} from '@valtimo/security';
 import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
-import {DossierManagementDetailContainerComponent} from './components/dossier-management-detail-container/dossier-management-detail-container.component';
+import {CaseManagementDetailContainerComponent} from './components/case-management-detail-container/case-management-detail-container.component';
 import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition.component';
 import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
@@ -52,7 +52,7 @@ const routes: Routes = [
   },
   {
     path: 'dossier-management/dossier/:caseDefinitionName/version/:caseVersionTag',
-    component: DossierManagementDetailContainerComponent,
+    component: CaseManagementDetailContainerComponent,
     canActivate: [AuthGuardService],
     data: {
       title: 'Dossier details',

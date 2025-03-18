@@ -64,7 +64,7 @@ import {
 import {CaseManagementAssigneeComponent} from './components/case-management-assignee/case-management-assignee.component';
 import {CaseManagementConnectModalComponent} from './components/case-management-connect-modal/case-management-connect-modal.component';
 import {DossierManagementDetailContainerActionsComponent} from './components/dossier-management-detail-container-actions/dossier-management-detail-container-actions.component';
-import {DossierManagementDetailContainerComponent} from './components/dossier-management-detail-container/dossier-management-detail-container.component';
+import {CaseManagementDetailContainerComponent} from './components/case-management-detail-container/case-management-detail-container.component';
 import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition.component';
 import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
@@ -94,7 +94,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     DossierManagementRemoveModalComponent,
     DossierManagementUploadComponent,
     DossierManagementSearchFieldsComponent,
-    DossierManagementDetailContainerComponent,
+    CaseManagementDetailContainerComponent,
     CaseManagementAssigneeComponent,
     DossierManagementListColumnsComponent,
     DossierManagementTabsComponent,
