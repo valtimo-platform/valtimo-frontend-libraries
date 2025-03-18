@@ -20,5 +20,5 @@
 
 export * from './lib/models';
 export * from './lib/case-management.module';
-export * from './lib/components/case-management-list/dossier-management-list.component';
+export * from './lib/components/case-management-list/case-management-list.component';
 export * from './lib/services';

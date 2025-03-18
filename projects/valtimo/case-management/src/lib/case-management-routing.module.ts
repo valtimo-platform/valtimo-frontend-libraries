@@ -22,8 +22,8 @@ import {CaseManagementProcessesComponent} from './components/case-management-pro
 import {CaseManagementDetailContainerComponent} from './components/case-management-detail-container/case-management-detail-container.component';
 import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {CaseManagementDocumentDefinitionComponent} from './components/case-management-document-definition/case-management-document-definition.component';
-import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
-import {DossierManagementListComponent} from './components/case-management-list/dossier-management-list.component';
+import {CaseManagementListColumnsComponent} from './components/case-management-list-columns/case-management-list-columns.component';
+import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
 import {CaseManagementSearchFieldsComponent} from './components/case-management-search-fields/case-management-search-fields.component';
 import {CaseManagementStatusesComponent} from './components/case-management-statuses/case-management-statuses.component';
 import {CaseManagementTabsComponent} from './components/case-management-tabs/case-management-tabs.component';
@@ -33,7 +33,7 @@ import {TabEnum} from './models';
 const routes: Routes = [
   {
     path: 'dossier-management',
-    component: DossierManagementListComponent,
+    component: CaseManagementListComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Dossiers', roles: [ROLE_ADMIN]},
   },
@@ -79,7 +79,7 @@ const routes: Routes = [
       },
       {
         path: TabEnum.LIST,
-        component: DossierManagementListColumnsComponent,
+        component: CaseManagementListColumnsComponent,
       },
       {
         path: TabEnum.TABS,
