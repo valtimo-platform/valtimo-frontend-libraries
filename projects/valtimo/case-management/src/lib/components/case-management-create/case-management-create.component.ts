@@ -22,12 +22,12 @@ import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, take, tap} from 'rxjs';
 
 @Component({
-  selector: 'valtimo-dossier-management-create',
-  styleUrls: ['./dossier-management-create.component.scss'],
-  templateUrl: './dossier-management-create.component.html',
+  selector: 'valtimo-case-management-create',
+  styleUrls: ['./case-management-create.component.scss'],
+  templateUrl: './case-management-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementCreateComponent {
+export class CaseManagementCreateComponent {
   @Input() open = false;
   @Output() closeModal = new EventEmitter<TemplatePayload | null>();
 

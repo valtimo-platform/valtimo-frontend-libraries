@@ -82,7 +82,7 @@ import {CaseManagementRoutingModule} from './case-management-routing.module';
 import {TabManagementService} from './services';
 import {DossierManagementStatusesComponent} from './components/dossier-management-statuses/dossier-management-statuses.component';
 import {DossierManagementStatusModalComponent} from './components/dossier-management-statuses/dossier-management-status-modal/dossier-management-status-modal.component';
-import {DossierManagementCreateComponent} from './components/dossier-management-create/dossier-management-create.component';
+import {CaseManagementCreateComponent} from './components/case-management-create/case-management-create.component';
 import {CaseManagementWidgetsEditorComponent} from './components/case-management-widget-tab/editor/case-management-widgets-editor.component';
 import { CaseManagementProcessesComponent } from './components/case-management-processes/case-management-processes.component';
 
@@ -107,7 +107,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     DossierManagementUploadStepComponent,
     DossierManagementStatusesComponent,
     DossierManagementStatusModalComponent,
-    DossierManagementCreateComponent,
+    CaseManagementCreateComponent,
   ],
   imports: [
     CommonModule,
