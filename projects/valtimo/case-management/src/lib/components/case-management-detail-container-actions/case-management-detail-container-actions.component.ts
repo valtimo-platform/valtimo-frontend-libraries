@@ -37,17 +37,17 @@ import {
 } from '../dossier-management-remove-modal/dossier-management-remove-modal.component';
 
 @Component({
-  selector: 'valtimo-dossier-management-detail-container-actions',
-  templateUrl: './dossier-management-detail-container-actions.component.html',
-  styleUrls: ['./dossier-management-detail-container-actions.component.scss'],
+  selector: 'valtimo-case-management-detail-container-actions',
+  templateUrl: './case-management-detail-container-actions.component.html',
+  styleUrls: ['./case-management-detail-container-actions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NotificationService],
 })
-export class DossierManagementDetailContainerActionsComponent {
+export class CaseManagementDetailContainerActionsComponent {
   @ViewChild('exportingMessage')
   private readonly _exportMessageTemplateRef: TemplateRef<HTMLDivElement>;
-  @ViewChild('dossierRemoveModal')
-  private readonly _dossierRemoveModal: DossierManagementRemoveModalComponent;
+  @ViewChild('caseRemoveModal')
+  private readonly _caseRemoveModal: DossierManagementRemoveModalComponent;
 
   @Input() public documentDefinitionTitle = '';
   @Input() public set caseDefinitionName(value: string) {
@@ -122,11 +122,11 @@ export class DossierManagementDetailContainerActionsComponent {
     combineLatest([this.selectedVersionNumber$, this._caseDefinitionName$])
       .pipe(
         take(1),
-        tap(([selectedVersion]) => (selectedVersionNumber = selectedVersion)),
+        tap(([selectedVersion]) => (selectedVersionNumber = selectedVersion ?? 0)),
         switchMap(([selectedVersion, documentDefinitionName]) =>
           this.caseManagementService.exportDocumentDefinition(
             documentDefinitionName,
-            selectedVersion
+            selectedVersion ?? 0
           )
         )
       )
@@ -161,9 +161,11 @@ export class DossierManagementDetailContainerActionsComponent {
     );
   }
 
-  public openDossierRemoveModal(): void {
+  public openCaseRemoveModal(): void {
     this.selectedDocumentDefinition$.pipe(take(1)).subscribe(definition => {
-      this._dossierRemoveModal.openModal(definition);
+      if(!definition) return;
+
+      this._caseRemoveModal.openModal(definition);
     });
   }
 
@@ -178,10 +180,10 @@ export class DossierManagementDetailContainerActionsComponent {
   private downloadZip(response: HttpResponse<Blob>, versionNumber: number): void {
     const link = document.createElement('a');
     const contentDisposition = response.headers.get('content-disposition');
-    const splitContentDisposition = contentDisposition.split('filename=');
+    const splitContentDisposition = contentDisposition?.split('filename=') ?? [];
     const fileName = splitContentDisposition.length > 1 && splitContentDisposition[1];
 
-    link.href = this.document.defaultView.URL.createObjectURL(response.body);
+    link.href = this.document.defaultView?.URL.createObjectURL(response.body) ?? '';
     link.download = fileName || `${this.caseDefinitionName}_${versionNumber}.valtimo.zip`;
     link.target = '_blank';
     link.click();

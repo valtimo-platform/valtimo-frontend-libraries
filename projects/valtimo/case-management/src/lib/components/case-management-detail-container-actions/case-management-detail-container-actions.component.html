@@ -15,7 +15,7 @@
   -->
 
 <div
-  class="dossier-actions"
+  class="case-actions"
   *ngIf="{
     exporting: exporting$ | async,
     loadingVersion: loadingVersion$ | async,
@@ -26,7 +26,7 @@
   } as obs"
   [ngClass]="{'--compact': obs.compactMode}"
 >
-  <div class="dossier-metadata">
+  <div class="case-metadata">
     <ng-container *ngTemplateOutlet="versionSelection; context: {obs: obs}"></ng-container>
 
     <ng-container *ngTemplateOutlet="readOnly; context: {obs: obs}"></ng-container>
@@ -68,7 +68,7 @@
       *ngIf="obs.selectedDocumentDefinition && !obs.selectedDocumentDefinition.readOnly"
       [id]="'removeDocumentDefinition'"
       [disabled]="obs.exporting || obs.loadingVersion"
-      (selected)="openDossierRemoveModal()"
+      (selected)="openCaseRemoveModal()"
       >{{ 'Remove document definition' | translate }}</cds-overflow-menu-option
     >
   </cds-overflow-menu>
@@ -99,5 +99,5 @@
 </ng-template>
 
 <valtimo-dossier-management-remove-modal
-  #dossierRemoveModal
+  #caseRemoveModal
 ></valtimo-dossier-management-remove-modal>
