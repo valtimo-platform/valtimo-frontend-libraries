@@ -19,10 +19,10 @@ import {ApiTabItem} from '@valtimo/dossier';
 import {TabService} from '../../../services';
 
 @Component({
-  selector: 'valtimo-dossier-management-edit-tab-modal',
-  templateUrl: './dossier-management-edit-tab-modal.component.html',
+  selector: 'valtimo-case-management-edit-tab-modal',
+  templateUrl: './case-management-edit-tab-modal.component.html',
 })
-export class DossierManagementEditTabModalComponent {
+export class CaseManagementEditTabModalComponent {
   @Input() open: boolean;
 
   private _tab: ApiTabItem;

@@ -35,13 +35,11 @@ import {Router} from '@angular/router';
 import {ConfigService} from '@valtimo/config';
 
 @Component({
-  selector: 'valtimo-dossier-management-tabs',
-  templateUrl: './dossier-management-tabs.component.html',
-  styleUrls: ['./dossier-management-tabs.component.scss'],
+  templateUrl: './case-management-tabs.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class DossierManagementTabsComponent implements AfterViewInit {
+export class CaseManagementTabsComponent implements AfterViewInit {
   @ViewChild('tabContentColumn') tabContentColumnTemplate: TemplateRef<any>;
   @ViewChild('tabTypeColumn') tabTypeColumnTemplate: TemplateRef<any>;
   @ViewChild('moveButtonsTemplate') moveButtonsTemplate: TemplateRef<any>;

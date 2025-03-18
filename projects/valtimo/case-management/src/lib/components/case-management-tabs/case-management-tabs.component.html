@@ -61,19 +61,19 @@
   </button>
 </ng-template>
 
-<valtimo-dossier-management-add-tab-modal
+<valtimo-case-management-add-tab-modal
   *ngIf="openAddModal$ | async"
   [documentDefinitionName]="documentDefinitionName"
   [open]="openAddModal$ | async"
   (closeModalEvent)="onCloseAddModalEvent($event)"
-></valtimo-dossier-management-add-tab-modal>
+></valtimo-case-management-add-tab-modal>
 
-<valtimo-dossier-management-edit-tab-modal
+<valtimo-case-management-edit-tab-modal
   *ngIf="openEditModal$ | async"
   [tab]="tab$ | async"
   (closeModalEvent)="onCloseEditModalEvent($event)"
   [open]="openEditModal$ | async"
-></valtimo-dossier-management-edit-tab-modal>
+></valtimo-case-management-edit-tab-modal>
 
 <valtimo-confirmation-modal
   confirmButtonTextTranslationKey="interface.delete"

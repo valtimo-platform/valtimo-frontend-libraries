@@ -36,13 +36,13 @@ import {TabService} from '../../../services';
 import {ConfigService} from '@valtimo/config';
 
 @Component({
-  selector: 'valtimo-dossier-management-add-tab-modal',
-  templateUrl: './dossier-management-add-tab-modal.component.html',
-  styleUrls: ['./dossier-management-add-tab-modal.component.scss'],
+  selector: 'valtimo-case-management-add-tab-modal',
+  templateUrl: './case-management-add-tab-modal.component.html',
+  styleUrls: ['./case-management-add-tab-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class DossierManagementAddTabModalComponent {
+export class CaseManagementAddTabModalComponent {
   @Input() documentDefinitionName: string;
   @Input() open = false;
 

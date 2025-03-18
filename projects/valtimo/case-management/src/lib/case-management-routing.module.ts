@@ -26,7 +26,7 @@ import {DossierManagementListColumnsComponent} from './components/dossier-manage
 import {DossierManagementListComponent} from './components/case-management-list/dossier-management-list.component';
 import {CaseManagementSearchFieldsComponent} from './components/case-management-search-fields/case-management-search-fields.component';
 import {CaseManagementStatusesComponent} from './components/case-management-statuses/case-management-statuses.component';
-import {DossierManagementTabsComponent} from './components/dossier-management-tabs/dossier-management-tabs.component';
+import {CaseManagementTabsComponent} from './components/case-management-tabs/case-management-tabs.component';
 import {CaseManagementWidgetTabComponent} from './components/case-management-widget-tab/case-management-widget-tab.component';
 import {TabEnum} from './models';
 
@@ -83,7 +83,7 @@ const routes: Routes = [
       },
       {
         path: TabEnum.TABS,
-        component: DossierManagementTabsComponent,
+        component: CaseManagementTabsComponent,
       },
       {
         path: TabEnum.STATUSES,
