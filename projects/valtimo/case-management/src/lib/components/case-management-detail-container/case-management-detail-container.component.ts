@@ -30,7 +30,7 @@ import {Tab} from 'carbon-components-angular';
 import {combineLatest, filter, map, Observable, startWith, Subscription, tap} from 'rxjs';
 import {TabEnum} from '../../models';
 import {CaseDetailService, TabService} from '../../services';
-import {DossierManagementDocumentDefinitionComponent} from '../dossier-management-document-definition/dossier-management-document-definition.component';
+import {CaseManagementDocumentDefinitionComponent} from '../case-management-document-definition/case-management-document-definition.component';
 
 @Component({
   templateUrl: './case-management-detail-container.component.html',
@@ -39,8 +39,8 @@ import {DossierManagementDocumentDefinitionComponent} from '../dossier-managemen
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CaseManagementDetailContainerComponent implements OnInit, OnDestroy {
-  @ViewChild(DossierManagementDocumentDefinitionComponent)
-  private _documentDefinitionTab: DossierManagementDocumentDefinitionComponent;
+  @ViewChild(CaseManagementDocumentDefinitionComponent)
+  private _documentDefinitionTab: CaseManagementDocumentDefinitionComponent;
   @ViewChildren(Tab) private _tabs: QueryList<Tab>;
 
   private _params: {caseDefinitionName: string; caseVersionTag: string};

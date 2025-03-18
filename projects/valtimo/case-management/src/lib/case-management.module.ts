@@ -66,7 +66,7 @@ import {CaseManagementConnectModalComponent} from './components/case-management-
 import {CaseManagementDetailContainerActionsComponent} from './components/case-management-detail-container-actions/case-management-detail-container-actions.component';
 import {CaseManagementDetailContainerComponent} from './components/case-management-detail-container/case-management-detail-container.component';
 import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
-import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition.component';
+import {CaseManagementDocumentDefinitionComponent} from './components/case-management-document-definition/case-management-document-definition.component';
 import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
 import {DossierManagementListComponent} from './components/dossier-management-list/dossier-management-list.component';
 import {DossierManagementProcessesComponent} from './components/dossier-management-processes/dossier-management-processes.component';
@@ -102,7 +102,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     TabFormComponent,
     DossierManagementEditTabModalComponent,
     CaseManagementDetailContainerActionsComponent,
-    DossierManagementDocumentDefinitionComponent,
+    CaseManagementDocumentDefinitionComponent,
     DossierManagementProcessesComponent,
     DossierManagementUploadStepComponent,
     DossierManagementStatusesComponent,

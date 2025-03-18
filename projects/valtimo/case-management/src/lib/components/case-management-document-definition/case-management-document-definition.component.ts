@@ -35,12 +35,11 @@ import {CaseDetailService} from '../../services';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'valtimo-dossier-management-document-definition',
-  templateUrl: './dossier-management-document-definition.component.html',
-  styleUrls: ['./dossier-management-document-definition.component.scss'],
+  templateUrl: './case-management-document-definition.component.html',
+  styleUrls: ['./case-management-document-definition.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierManagementDocumentDefinitionComponent {
+export class CaseManagementDocumentDefinitionComponent {
   @ViewChild('cancelModal') public cancelModal: ConfirmationModalComponent;
   @Input() documentDefinitionName: string;
   @Output() cancelRedirect = new EventEmitter();

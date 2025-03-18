@@ -21,7 +21,7 @@ import {AuthGuardService} from '@valtimo/security';
 import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
 import {CaseManagementDetailContainerComponent} from './components/case-management-detail-container/case-management-detail-container.component';
 import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
-import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition.component';
+import {CaseManagementDocumentDefinitionComponent} from './components/case-management-document-definition/case-management-document-definition.component';
 import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
 import {DossierManagementListComponent} from './components/dossier-management-list/dossier-management-list.component';
 import {DossierManagementSearchFieldsComponent} from './components/dossier-management-search-fields/dossier-management-search-fields.component';
@@ -62,7 +62,7 @@ const routes: Routes = [
     children: [
       {
         path: TabEnum.DOCUMENT,
-        component: DossierManagementDocumentDefinitionComponent,
+        component: CaseManagementDocumentDefinitionComponent,
       },
       {
         path: TabEnum.CASE,
