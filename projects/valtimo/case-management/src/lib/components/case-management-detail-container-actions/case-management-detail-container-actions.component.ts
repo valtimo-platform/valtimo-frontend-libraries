@@ -33,8 +33,8 @@ import { BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap } f
 import { take } from 'rxjs/operators';
 import { CaseManagementService, CaseDetailService } from '../../services';
 import {
-  DossierManagementRemoveModalComponent,
-} from '../dossier-management-remove-modal/dossier-management-remove-modal.component';
+  CaseManagementRemoveModalComponent,
+} from '../case-management-remove-modal/case-management-remove-modal.component';
 
 @Component({
   selector: 'valtimo-case-management-detail-container-actions',
@@ -47,7 +47,7 @@ export class CaseManagementDetailContainerActionsComponent {
   @ViewChild('exportingMessage')
   private readonly _exportMessageTemplateRef: TemplateRef<HTMLDivElement>;
   @ViewChild('caseRemoveModal')
-  private readonly _caseRemoveModal: DossierManagementRemoveModalComponent;
+  private readonly _caseRemoveModal: CaseManagementRemoveModalComponent;
 
   @Input() public documentDefinitionTitle = '';
   @Input() public set caseDefinitionName(value: string) {

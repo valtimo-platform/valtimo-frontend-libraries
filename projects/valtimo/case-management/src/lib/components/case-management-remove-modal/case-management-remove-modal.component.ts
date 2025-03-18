@@ -26,11 +26,10 @@ import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
-  selector: 'valtimo-dossier-management-remove-modal',
-  templateUrl: './dossier-management-remove-modal.component.html',
-  styleUrls: ['./dossier-management-remove-modal.component.scss'],
+  selector: 'valtimo-case-management-remove-modal',
+  templateUrl: './case-management-remove-modal.component.html',
 })
-export class DossierManagementRemoveModalComponent {
+export class CaseManagementRemoveModalComponent {
   public documentDefinition: DocumentDefinition | null = null;
   public errors: string[] = [];
   @ViewChild('documentDefinitionRemoveModal') modal: ModalComponent;

@@ -69,7 +69,7 @@ import {CaseManagementDetailComponent} from './components/case-management-detail
 import {CaseManagementDocumentDefinitionComponent} from './components/case-management-document-definition/case-management-document-definition.component';
 import {CaseManagementListColumnsComponent} from './components/case-management-list-columns/case-management-list-columns.component';
 import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
-import {DossierManagementRemoveModalComponent} from './components/dossier-management-remove-modal/dossier-management-remove-modal.component';
+import {CaseManagementRemoveModalComponent} from './components/case-management-remove-modal/case-management-remove-modal.component';
 import {DossierManagementSearchFieldsComponent} from './components/dossier-management-search-fields/dossier-management-search-fields.component';
 import {DossierManagementAddTabModalComponent} from './components/dossier-management-tabs/dossier-management-add-tab-modal/dossier-management-add-tab-modal.component';
 import {DossierManagementEditTabModalComponent} from './components/dossier-management-tabs/dossier-management-edit-tab-modal/dossier-management-edit-tab-modal.component';
@@ -90,7 +90,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     CaseManagementListComponent,
     CaseManagementDetailComponent,
     CaseManagementConnectModalComponent,
-    DossierManagementRemoveModalComponent,
+    CaseManagementRemoveModalComponent,
     DossierManagementUploadComponent,
     DossierManagementSearchFieldsComponent,
     CaseManagementDetailContainerComponent,
