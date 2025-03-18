@@ -67,9 +67,8 @@ import {CaseManagementDetailContainerActionsComponent} from './components/case-m
 import {CaseManagementDetailContainerComponent} from './components/case-management-detail-container/case-management-detail-container.component';
 import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {CaseManagementDocumentDefinitionComponent} from './components/case-management-document-definition/case-management-document-definition.component';
-import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
-import {DossierManagementListComponent} from './components/case-management-list/dossier-management-list.component';
-import {DossierManagementProcessesComponent} from './components/dossier-management-processes/dossier-management-processes.component';
+import {CaseManagementListColumnsComponent} from './components/case-management-list-columns/case-management-list-columns.component';
+import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
 import {DossierManagementRemoveModalComponent} from './components/dossier-management-remove-modal/dossier-management-remove-modal.component';
 import {DossierManagementSearchFieldsComponent} from './components/dossier-management-search-fields/dossier-management-search-fields.component';
 import {DossierManagementAddTabModalComponent} from './components/dossier-management-tabs/dossier-management-add-tab-modal/dossier-management-add-tab-modal.component';
@@ -88,7 +87,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
 
 @NgModule({
   declarations: [
-    DossierManagementListComponent,
+    CaseManagementListComponent,
     CaseManagementDetailComponent,
     CaseManagementConnectModalComponent,
     DossierManagementRemoveModalComponent,
@@ -96,14 +95,13 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     DossierManagementSearchFieldsComponent,
     CaseManagementDetailContainerComponent,
     CaseManagementAssigneeComponent,
-    DossierManagementListColumnsComponent,
+    CaseManagementListColumnsComponent,
     DossierManagementTabsComponent,
     DossierManagementAddTabModalComponent,
     TabFormComponent,
     DossierManagementEditTabModalComponent,
     CaseManagementDetailContainerActionsComponent,
     CaseManagementDocumentDefinitionComponent,
-    DossierManagementProcessesComponent,
     DossierManagementUploadStepComponent,
     DossierManagementStatusesComponent,
     DossierManagementStatusModalComponent,
