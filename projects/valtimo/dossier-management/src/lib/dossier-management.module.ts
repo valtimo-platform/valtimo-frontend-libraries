@@ -67,6 +67,7 @@ import {DossierManagementDetailContainerActionsComponent} from './components/dos
 import {DossierManagementDetailContainerComponent} from './components/dossier-management-detail-container/dossier-management-detail-container.component';
 import {DossierManagementDetailComponent} from './components/dossier-management-detail/dossier-management-detail.component';
 import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition.component';
+import {CaseManagementGeneralComponent} from './components/dossier-management-general/case-management-general.component';
 import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
 import {DossierManagementListComponent} from './components/dossier-management-list/dossier-management-list.component';
 import {DossierManagementProcessesComponent} from './components/dossier-management-processes/dossier-management-processes.component';
@@ -84,7 +85,7 @@ import {DossierManagementStatusesComponent} from './components/dossier-managemen
 import {DossierManagementStatusModalComponent} from './components/dossier-management-statuses/dossier-management-status-modal/dossier-management-status-modal.component';
 import {DossierManagementCreateComponent} from './components/dossier-management-create/dossier-management-create.component';
 import {DossierManagementWidgetsEditorComponent} from './components/dossier-management-widget-tab/editor/dossier-management-widgets-editor.component';
-import { CaseManagementProcessesComponent } from './components/case-management-processes/case-management-processes.component';
+import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     DossierManagementEditTabModalComponent,
     DossierManagementDetailContainerActionsComponent,
     DossierManagementDocumentDefinitionComponent,
+    CaseManagementGeneralComponent,
     DossierManagementProcessesComponent,
     DossierManagementUploadStepComponent,
     DossierManagementStatusesComponent,
@@ -159,7 +161,7 @@ import { CaseManagementProcessesComponent } from './components/case-management-p
     TooltipModule,
     DossierManagementWidgetsEditorComponent,
     ValuePathSelectorComponent,
-    CaseManagementProcessesComponent
+    CaseManagementProcessesComponent,
   ],
   providers: [TabManagementService],
 })

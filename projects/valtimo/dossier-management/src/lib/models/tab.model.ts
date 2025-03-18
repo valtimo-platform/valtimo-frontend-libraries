@@ -15,6 +15,7 @@
  */
 
 export enum TabEnum {
+  GENERAL = 'general',
   DOCUMENT = 'document',
   CASE = 'case',
   PROCESSES = 'processes',
