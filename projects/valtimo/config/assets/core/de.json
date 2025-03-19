@@ -547,19 +547,19 @@
       "title": "Aufgabenzuweisung",
       "checkboxDescription": "Aufgaben automatisch zu Fallbearbeiter zuweisen"
     },
-    "externalCreateCaseForm": {
-      "title": "Hat einen externes Neuen Case Erstellen Formular",
-      "enabledToggle": "Externes Formular 'Neuen Case Erstellen' aktiviert",
+    "externalStartCaseForm": {
+      "title": "Externes 'Neuen Fall erstellen' Formular",
+      "enabledToggle": "Externes Formular aktiviert",
       "enabledToggleOn": "Ja",
       "enabledToggleOff": "Nein",
-      "externalUrl": "Die URL des externen Formulars",
-      "externalUrlPlaceholder": "Die URL des externen Formulars",
-      "externalUrlWarnText": "Bitte geben Sie eine gültige URL ein",
-      "externalUrlInvalidText": "Der eingegebene Wert ist keine gültige URL",
-      "apply": "Anwenden",
+      "externalUrl": "URL des externen Formulars",
+      "externalUrlPlaceholder": "Geben Sie eine gültige URL ein",
+      "apply": "Speichern",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Eine kurze Beschreibung des externen Formulars",
       "notification": {
-        "success": "Konfiguration erfolgreich aktualisiert",
-        "error": "Die Konfiguration konnte nicht aktualisiert werden"
+        "success": "Die Konfiguration des externen 'Neuen Fall erstellen'-Formulars wurde erfolgreich aktualisiert",
+        "error": "Die Aktualisierung der Konfiguration des externen 'Neuen Fall erstellen'-Formulars ist fehlgeschlagen"
       }
     },
     "tabs": {

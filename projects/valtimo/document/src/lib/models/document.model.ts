@@ -308,7 +308,8 @@ interface CaseSettings {
   canHaveAssignee?: boolean;
   autoAssignTasks?: boolean;
   hasExternalStartCaseForm?: boolean;
-  externalStartCaseFormUrl?: string
+  externalStartCaseFormUrl?: string;
+  externalStartCaseFormDescription?: string;
 }
 
 interface OpenDocumentCount {

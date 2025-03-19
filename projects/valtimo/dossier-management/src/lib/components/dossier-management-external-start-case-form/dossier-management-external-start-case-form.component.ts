@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, filter, map, Observable, Subscription} from 'rxjs';
 import {CaseSettings, DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {NGXLogger} from 'ngx-logger';
 import {ToastrService} from 'ngx-toastr';
 import {TranslateService} from '@ngx-translate/core';
@@ -10,9 +10,21 @@ import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'valtimo-dossier-management-external-start-case-form',
   templateUrl: './dossier-management-external-start-case-form.component.html',
+  styleUrl: './dossier-management-external-start-case-form.component.scss',
 })
 export class DossierManagementExternalStartCaseFormComponent implements OnInit, OnDestroy {
-  public form!: FormGroup;
+  private readonly _URL_PATTERN = new RegExp(
+    '^(https?:\\/\\/)(([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}|\\d{1,3}(\\.\\d{1,3}){3})(:\\d+)?(\\/\\S*)?(\\?\\S*)?(#\\S*)?$'
+  );
+
+  public readonly form = this.fb.group({
+    hasExternalForm: [false], // Toggle is off by default
+    externalFormUrl: [
+      {value: '', disabled: true},
+      [Validators.required, Validators.pattern(this._URL_PATTERN), Validators.maxLength(512)],
+    ],
+    description: [''],
+  });
 
   readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params?.name),
@@ -20,10 +32,6 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
   );
 
   readonly caseSettings$: BehaviorSubject<CaseSettings> = new BehaviorSubject(null);
-
-  private readonly urlPattern = new RegExp(
-    '^(https?:\\/\\/)(([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}|\\d{1,3}(\\.\\d{1,3}){3})(:\\d+)?(\\/\\S*)?(\\?\\S*)?(#\\S*)?$'
-  );
 
   private _subscriptions = new Subscription();
 
@@ -33,29 +41,22 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService,
     private readonly toastrService: ToastrService,
-    private readonly logger: NGXLogger,
-  ) { }
+    private readonly logger: NGXLogger
+  ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.logger.debug('External Case Start Form - onInit');
-
-    this.form = this.fb.group({
-      hasExternalForm: [false], // Toggle is off by default
-      externalFormUrl: [ {value: '', disabled: true}, [
-        Validators.required,
-        Validators.pattern(this.urlPattern),
-        Validators.maxLength(512)
-      ]],
-    });
 
     // Subscribe to the toggle field value changes
     this._subscriptions.add(
       this.hasExternalForm?.valueChanges.subscribe(isEnabled => {
         if (isEnabled) {
           this.externalFormUrl.enable();
+          this.description.enable();
         } else {
+          this.form.patchValue({externalFormUrl: '', description: ''});
+          this.description.disable();
           this.externalFormUrl.disable();
-          this.externalFormUrl.reset(); // Clear the URL field when disabled
         }
       })
     );
@@ -82,13 +83,14 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
           this.form.setValue({
             hasExternalForm: caseSettings.hasExternalStartCaseForm,
             externalFormUrl: caseSettings.externalStartCaseFormUrl,
+            description: caseSettings.externalStartCaseFormDescription,
           });
         }
       })
     );
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.logger.debug('External Case Start Form - onDestroy');
     // Clean up subscriptions when the component is destroyed
     this._subscriptions.unsubscribe();
@@ -102,20 +104,27 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
     return this.form.get('externalFormUrl');
   }
 
-  public canSubmit(): boolean {
+  public get description() {
+    return this.form.get('description');
+  }
+
+  public get canSubmit(): boolean {
     return this.form.valid;
   }
 
   public onSubmit(): void {
-    if (this.canSubmit()) {
-      this.logger.debug('Submitted case definition settings form with values:', this.form.value);
-      const caseSettings = this.caseSettings$.getValue();
-      this.updateCaseSettings(caseSettings.name, {
-        hasExternalStartCaseForm: this.hasExternalForm.value,
-        externalStartCaseFormUrl: (typeof this.externalFormUrl.value === 'string') ?
-          this.externalFormUrl.value.trim() : this.externalFormUrl.value
-      });
-    }
+    if (!this.canSubmit) return;
+
+    this.logger.debug('Submitted case definition settings form with values:', this.form.value);
+    const caseSettings = this.caseSettings$.getValue();
+    this.updateCaseSettings(caseSettings.name, {
+      hasExternalStartCaseForm: this.hasExternalForm.value,
+      externalStartCaseFormUrl:
+        typeof this.externalFormUrl.value === 'string'
+          ? this.externalFormUrl.value.trim()
+          : this.externalFormUrl.value,
+      externalStartCaseFormDescription: this.description.value || '',
+    });
   }
 
   private updateCaseSettings(documentDefinitionName: string, caseSettings: CaseSettings): void {
@@ -129,11 +138,19 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
         },
         error: e => {
           this.logger.error('An error occurred while updating case definition settings', e);
-          this.toastrService.error(this.translateService.instant('dossierManagement.externalStartCaseForm.notification.error'))
+          this.toastrService.error(
+            this.translateService.instant(
+              'dossierManagement.externalStartCaseForm.notification.error'
+            )
+          );
         },
         complete: () => {
           this.logger.debug('Finished updating case definition settings');
-          this.toastrService.success(this.translateService.instant('dossierManagement.externalStartCaseForm.notification.success'));
+          this.toastrService.success(
+            this.translateService.instant(
+              'dossierManagement.externalStartCaseForm.notification.success'
+            )
+          );
         },
       });
   }

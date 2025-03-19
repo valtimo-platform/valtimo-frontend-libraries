@@ -547,19 +547,19 @@
       "title": "Taaktoewijzing",
       "checkboxDescription": "Alle taken worden toegewezen aan de behandelaar"
     },
-    "externalCreateCaseForm": {
-      "title": "Heeft een extern Creëer Nieuw Dossier formulier",
-      "enabledToggle": "Extern 'Creëer Nieuw Dossier' formulier geactiveerd",
+    "externalStartCaseForm": {
+      "title": "Extern 'nieuw dossier aanmaken' formulier",
+      "enabledToggle": "Extern formulier ingeschakeld",
       "enabledToggleOn": "Ja",
       "enabledToggleOff": "Nee",
-      "externalUrl": "De URL van het externe formulier",
-      "externalUrlPlaceholder": "De URL van het externe formulier",
-      "externalUrlWarnText": "Voer een geldige URL in",
-      "externalUrlInvalidText": "De ingevoerde waarde is geen geldige URL",
-      "apply": "Toepassen",
+      "externalUrl": "URL van extern formulier",
+      "externalUrlPlaceholder": "Voer een geldige URL in",
+      "apply": "Opslaan",
+      "description": "Beschrijving",
+      "descriptionPlaceholder": "Een korte beschrijving van het externe formulier",
       "notification": {
-        "success" : "Configuratie succesvol bijgewerkt",
-        "error" : "Configuratie kan niet worden bijgewerkt"
+        "success": "Configuratie van het externe 'nieuw dossier aanmaken' formulier is succesvol bijgewerkt",
+        "error": "Bijwerken van de configuratie van het externe 'nieuw dossier aanmaken' formulier is mislukt"
       }
     },
     "tabs": {

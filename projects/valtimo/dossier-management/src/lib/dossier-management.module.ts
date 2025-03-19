@@ -50,6 +50,7 @@ import {
   FileUploaderModule,
   IconModule,
   InputModule as CarbonInputModule,
+  LayerModule,
   LinkModule,
   LoadingModule,
   ModalModule as CarbonModalModule,
@@ -57,6 +58,7 @@ import {
   ProgressBarModule,
   TabsModule,
   TagModule,
+  TilesModule,
   ToggleModule,
   TooltipModule,
 } from 'carbon-components-angular';
@@ -160,6 +162,8 @@ import {DossierManagementExternalStartCaseFormComponent} from './components/doss
     TooltipModule,
     DossierManagementWidgetsEditorComponent,
     ValuePathSelectorComponent,
+    TilesModule,
+    LayerModule,
   ],
   providers: [TabManagementService],
 })

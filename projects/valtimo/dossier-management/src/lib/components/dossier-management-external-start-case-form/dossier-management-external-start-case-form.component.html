@@ -14,46 +14,52 @@
   ~ limitations under the License.
   -->
 
-<ng-container
+<cds-tile
+  class="external-case-form-container"
   *ngIf="{
     documentDefinitionName: documentDefinitionName$ | async,
-    caseSettings: caseSettings$ | async
+    caseSettings: caseSettings$ | async,
   } as obs"
+  [cdsLayer]="1"
 >
-  <h2 class="mb-4">{{ 'dossierManagement.externalStartCaseForm.title' | translate }}</h2>
+  <h4>{{ 'dossierManagement.externalStartCaseForm.title' | translate }}</h4>
 
-  <div class="card card-border card-contrast">
-    <div class="card-body">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <cds-toggle
-          formControlName="hasExternalForm"
-          label="{{ 'dossierManagement.externalStartCaseForm.enabledToggle' | translate }}"
-          onText="{{ 'dossierManagement.externalStartCaseForm.enabledToggleOn' | translate }}"
-          offText="{{ 'dossierManagement.externalStartCaseForm.enabledToggleOff' | translate }}"
-        ></cds-toggle>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" [cdsLayer]="0">
+    <cds-toggle
+      formControlName="hasExternalForm"
+      label="{{ 'dossierManagement.externalStartCaseForm.enabledToggle' | translate }}"
+      onText="{{ 'dossierManagement.externalStartCaseForm.enabledToggleOn' | translate }}"
+      offText="{{ 'dossierManagement.externalStartCaseForm.enabledToggleOff' | translate }}"
+    ></cds-toggle>
 
-        <div class="mt-2">
-          <cds-label
-            warnText="{{ 'dossierManagement.externalStartCaseForm.externalUrlWarnText' | translate }}"
-            invalidText="{{ 'dossierManagement.externalStartCaseForm.externalUrlInvalidText' | translate }}">
-            {{ 'dossierManagement.externalStartCaseForm.externalUrl' | translate }}
-            <input
-              cdsText
-              type="text"
-              class="input-field"
-              formControlName="externalFormUrl"
-              placeholder="{{ 'dossierManagement.externalStartCaseForm.externalUrlPlaceholder' | translate }}"
-              maxlength="512"
-            />
-          </cds-label>
-        </div>
+    <cds-label>
+      {{ 'dossierManagement.externalStartCaseForm.externalUrl' | translate }}
+      <input
+        cdsText
+        type="text"
+        formControlName="externalFormUrl"
+        placeholder="{{
+          'dossierManagement.externalStartCaseForm.externalUrlPlaceholder' | translate
+        }}"
+        maxlength="512"
+      />
+    </cds-label>
 
-        <div class="mt-3">
-          <button cdsButton="primary" type="submit" [disabled]="!canSubmit()">
-            {{ 'dossierManagement.externalStartCaseForm.apply' | translate }}
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</ng-container>
+    <cds-label>
+      {{ 'dossierManagement.externalStartCaseForm.description' | translate }}
+      <input
+        cdsText
+        type="text"
+        formControlName="description"
+        placeholder="{{
+          'dossierManagement.externalStartCaseForm.descriptionPlaceholder' | translate
+        }}"
+        maxlength="512"
+      />
+    </cds-label>
+
+    <button cdsButton="primary" type="submit" [disabled]="!canSubmit">
+      {{ 'dossierManagement.externalStartCaseForm.apply' | translate }}
+    </button>
+  </form>
+</cds-tile>
