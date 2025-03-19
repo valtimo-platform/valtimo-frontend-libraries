@@ -1,0 +1,20 @@
+<ng-container
+  *ngIf="{
+    processItems: processItems$ | async,
+    disabled: disabled$ | async,
+  } as obs"
+>
+  <div class="link-upload-process">
+    <p class="link-upload-process__title">
+      {{ 'dossierManagement.tabs.generalTab.linkUploadProcess.title' | translate }}
+    </p>
+    <cds-combo-box
+      [appendInline]="true"
+      [disabled]="obs.disabled || !obs.processItems"
+      [label]="'dossierManagement.tabs.generalTab.linkUploadProcess.label' | translate"
+      (selected)="selectProcess($event)"
+    >
+      <cds-dropdown-list [items]="obs.processItems || []"></cds-dropdown-list>
+    </cds-combo-box>
+  </div>
+</ng-container>

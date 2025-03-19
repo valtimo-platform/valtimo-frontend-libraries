@@ -1,0 +1,7 @@
+<div class="case-management-general-tab">
+  <valtimo-case-management-link-process></valtimo-case-management-link-process>
+
+  <valtimo-case-management-case-handler
+    *ngIf="documentDefinition$ | async"
+  ></valtimo-case-management-case-handler>
+</div>

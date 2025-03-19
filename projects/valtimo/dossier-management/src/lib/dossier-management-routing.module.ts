@@ -29,7 +29,7 @@ import {DossierManagementStatusesComponent} from './components/dossier-managemen
 import {DossierManagementTabsComponent} from './components/dossier-management-tabs/dossier-management-tabs.component';
 import {DossierManagementWidgetTabComponent} from './components/dossier-management-widget-tab/dossier-management-widget-tab.component';
 import {TabEnum} from './models';
-import {CaseManagementGeneralComponent} from './components/dossier-management-general/case-management-general.component';
+import {CaseManagementGeneralComponent} from './components/case-management-general/case-management-general.component';
 
 const routes: Routes = [
   {

@@ -67,7 +67,7 @@ import {DossierManagementDetailContainerActionsComponent} from './components/dos
 import {DossierManagementDetailContainerComponent} from './components/dossier-management-detail-container/dossier-management-detail-container.component';
 import {DossierManagementDetailComponent} from './components/dossier-management-detail/dossier-management-detail.component';
 import {DossierManagementDocumentDefinitionComponent} from './components/dossier-management-document-definition/dossier-management-document-definition.component';
-import {CaseManagementGeneralComponent} from './components/dossier-management-general/case-management-general.component';
+import {CaseManagementGeneralComponent} from './components/case-management-general/case-management-general.component';
 import {DossierManagementListColumnsComponent} from './components/dossier-management-list-columns/dossier-management-list-columns.component';
 import {DossierManagementListComponent} from './components/dossier-management-list/dossier-management-list.component';
 import {DossierManagementProcessesComponent} from './components/dossier-management-processes/dossier-management-processes.component';
@@ -86,6 +86,8 @@ import {DossierManagementStatusModalComponent} from './components/dossier-manage
 import {DossierManagementCreateComponent} from './components/dossier-management-create/dossier-management-create.component';
 import {DossierManagementWidgetsEditorComponent} from './components/dossier-management-widget-tab/editor/dossier-management-widgets-editor.component';
 import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
+import {CaseManagementLinkProcessComponent} from './components/case-management-general/components/case-management-link-process/case-management-link-process.component';
+import {CaseManagementCaseHandlerComponent} from './components/case-management-general/components/case-management-case-handler/case-management-case-handler.component';
 
 @NgModule({
   declarations: [
@@ -110,6 +112,8 @@ import {CaseManagementProcessesComponent} from './components/case-management-pro
     DossierManagementStatusesComponent,
     DossierManagementStatusModalComponent,
     DossierManagementCreateComponent,
+    CaseManagementLinkProcessComponent,
+    CaseManagementCaseHandlerComponent,
   ],
   imports: [
     CommonModule,
