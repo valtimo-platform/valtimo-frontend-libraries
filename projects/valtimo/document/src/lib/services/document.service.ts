@@ -49,7 +49,7 @@ import {
   NewDocumentAndStartProcessRequestImpl,
   NewDocumentAndStartProcessResult,
   OpenDocumentCount,
-  Page,
+  Page, ProcessDefinitionCaseDefinition,
   ProcessDocumentDefinition,
   ProcessDocumentDefinitionRequest,
   ProcessDocumentDefinitionSearch,
@@ -278,48 +278,42 @@ export class DocumentService {
     return this.http.delete<void>(`${this.valtimoEndpointUri}v1/document/${documentId}`);
   }
 
-  // ProcessDocument-calls
-  public getProcessDocumentDefinitions(): Observable<ProcessDocumentDefinition> {
-    return this.http.get<ProcessDocumentDefinition>(
-      `${this.valtimoEndpointUri}v1/process-document/definition`
+  // ProcessDefinitionCaseDefinition-calls
+  public findProcessDefinitionCaseDefinitions(
+    caseDefinitionKey: string
+  ): Observable<ProcessDefinitionCaseDefinition[]> {
+    return this.http.get<ProcessDefinitionCaseDefinition[]>(
+      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/process-definition/settings`
     );
   }
 
-  public findProcessDocumentDefinitions(
-    documentDefinitionName: string
-  ): Observable<ProcessDocumentDefinition[]> {
-    return this.http.get<ProcessDocumentDefinition[]>(
-      `${this.valtimoEndpointUri}v1/process-document/definition/document/${documentDefinitionName}`
-    );
-  }
-
-  public findProcessDocumentDefinitionsByStartableByUser(
-    documentDefinitionName: string,
+  public findProcessDefinitionCaseDefinitionsByStartableByUser(
+    caseDefinitionKey: string,
     startableByUser: boolean
-  ): Observable<ProcessDocumentDefinition[]> {
-    return this.http.get<ProcessDocumentDefinition[]>(
-      `${this.valtimoEndpointUri}v1/process-document/definition/document/${documentDefinitionName}?startableByUser=${startableByUser}`
+  ): Observable<ProcessDefinitionCaseDefinition[]> {
+    return this.http.get<ProcessDefinitionCaseDefinition[]>(
+      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/process-definition/settings?startableByUser=${startableByUser}`
     );
   }
 
-  public findProcessDocumentDefinitionsByCanInitializeDocument(
-    documentDefinitionName: string,
+  public findProcessDefinitionCaseDefinitionsByCanInitializeDocument(
+    caseDefinitionKey: string,
     canInitializeDocument: boolean
-  ): Observable<ProcessDocumentDefinition[]> {
-    return this.http.get<ProcessDocumentDefinition[]>(
-      `${this.valtimoEndpointUri}v1/process-document/definition/document/${documentDefinitionName}?canInitializeDocument=${canInitializeDocument}`
+  ): Observable<ProcessDefinitionCaseDefinition[]> {
+    return this.http.get<ProcessDefinitionCaseDefinition[]>(
+      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/process-definition/settings?canInitializeDocument=${canInitializeDocument}`
     );
   }
 
-  public findProcessDocumentDefinitionsForDocument(
+  public findProcessDefinitionCaseDefinitionsForDocument(
     documentId: string,
     searchRequest: ProcessDocumentDefinitionSearch
-  ): Observable<ProcessDocumentDefinition[]> {
+  ): Observable<ProcessDefinitionCaseDefinition[]> {
     const params = new HttpParams({
       fromObject: searchRequest as any,
     });
-    return this.http.get<ProcessDocumentDefinition[]>(
-      `${this.valtimoEndpointUri}v2/process-document/definition/document/${documentId}`,
+    return this.http.get<ProcessDefinitionCaseDefinition[]>(
+      `${this.valtimoEndpointUri}v1/document/${documentId}/process-definition/settings`,
       {params}
     );
   }
@@ -465,9 +459,9 @@ export class DocumentService {
     return this.http.post(`${this.valtimoEndpointUri}v1/document/${documentId}/message`, request);
   }
 
-  public getDocumentTypes(documentDefinitionName: string): Observable<Array<DocumentType>> {
+  public getDocumentTypes(caseDefinitionKey: string): Observable<Array<DocumentType>> {
     return this.http.get<Array<DocumentType>>(
-      `${this.valtimoEndpointUri}v1/documentdefinition/${documentDefinitionName}/zaaktype/documenttype`
+      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/zaaktype/documenttype`
     );
   }
 
@@ -517,13 +511,7 @@ export class DocumentService {
 
   public getCaseSettings(documentDefinitionName: string): Observable<CaseSettings> {
     return this.http.get<CaseSettings>(
-      `${this.valtimoEndpointUri}v1/case/${documentDefinitionName}/settings`
-    );
-  }
-
-  public getCaseSettingsForManagement(documentDefinitionName: string): Observable<CaseSettings> {
-    return this.http.get<CaseSettings>(
-      `${this.valtimoEndpointUri}management/v1/case/${documentDefinitionName}/settings`
+      `${this.valtimoEndpointUri}v1/case-definition/${documentDefinitionName}/settings`
     );
   }
 

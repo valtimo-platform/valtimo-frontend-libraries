@@ -216,8 +216,8 @@
   <button
     [size]="(compactMode$ | async) ? 'sm' : 'lg'"
     cdsButton="primary"
-    [disabled]="processDocumentDefinitions.length === 0"
-    [ngbTooltip]="processDocumentDefinitions.length === 0 ? 'No action' : null"
+    [disabled]="processDefinitionCaseDefinitions.length === 0"
+    [ngbTooltip]="processDefinitionCaseDefinitions.length === 0 ? 'No action' : null"
   >
     {{ 'dossier.startSubProcess' | translate }}
 

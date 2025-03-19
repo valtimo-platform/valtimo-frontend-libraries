@@ -44,7 +44,7 @@ import {
   Document as ValtimoDocument,
   DocumentService,
   InternalCaseStatus,
-  InternalCaseStatusUtils,
+  InternalCaseStatusUtils, ProcessDefinitionCaseDefinition,
   ProcessDocumentDefinition,
 } from '@valtimo/document';
 import {TaskWithProcessLink} from '@valtimo/process-link';
@@ -109,7 +109,7 @@ export class DossierDetailComponent
   public documentDefinitionNameTitle: string;
   public documentId: string;
   public processDefinitionListFields: Array<any> = [];
-  public processDocumentDefinitions: ProcessDocumentDefinition[] = [];
+  public processDefinitionCaseDefinitions: ProcessDefinitionCaseDefinition[] = [];
   public tabLoader: TabLoaderImpl | null = null;
 
   public readonly assigneeId$ = new BehaviorSubject<string>('');
@@ -339,9 +339,9 @@ export class DossierDetailComponent
 
   public getAllAssociatedProcessDefinitions(): void {
     this.documentService
-      .findProcessDocumentDefinitionsForDocument(this.documentId, {startableByUser: true})
-      .subscribe((processDocumentDefinitions: ProcessDocumentDefinition[]) => {
-        this.processDocumentDefinitions = processDocumentDefinitions;
+      .findProcessDefinitionCaseDefinitionsForDocument(this.documentId, {startableByUser: true})
+      .subscribe((processDefinitionCaseDefinitions: ProcessDefinitionCaseDefinition[]) => {
+        this.processDefinitionCaseDefinitions = processDefinitionCaseDefinitions;
 
         this.processDefinitionListFields = [
           {
