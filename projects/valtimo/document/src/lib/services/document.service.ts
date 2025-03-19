@@ -509,9 +509,15 @@ export class DocumentService {
     );
   }
 
-  public getCaseSettings(documentDefinitionName: string): Observable<CaseSettings> {
+  public getCaseSettings(caseDefinitionKey: string): Observable<CaseSettings> {
     return this.http.get<CaseSettings>(
-      `${this.valtimoEndpointUri}v1/case-definition/${documentDefinitionName}/settings`
+      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/settings`
+    );
+  }
+
+  public getCaseSettingsForManagement(documentDefinitionName: string): Observable<CaseSettings> {
+    return this.http.get<CaseSettings>(
+      `${this.valtimoEndpointUri}management/v1/case/${documentDefinitionName}/settings`
     );
   }
 
