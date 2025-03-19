@@ -9,12 +9,12 @@ import {NotificationService} from 'carbon-components-angular';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 
 @Component({
-  selector: 'valtimo-dossier-management-external-start-case-form',
-  templateUrl: './dossier-management-external-start-case-form.component.html',
-  styleUrl: './dossier-management-external-start-case-form.component.scss',
+  selector: 'valtimo-dossier-management-external-start-form',
+  templateUrl: './dossier-management-external-start-form.component.html',
+  styleUrl: './dossier-management-external-start-form.component.scss',
   providers: [NotificationService],
 })
-export class DossierManagementExternalStartCaseFormComponent implements OnInit, OnDestroy {
+export class DossierManagementExternalStartFormComponent implements OnInit, OnDestroy {
   private readonly _URL_PATTERN = new RegExp(
     '^(https?:\\/\\/)(([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}|\\d{1,3}(\\.\\d{1,3}){3})(:\\d+)?(\\/\\S*)?(\\?\\S*)?(#\\S*)?$'
   );
@@ -83,9 +83,9 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
         if (caseSettings) {
           this.logger.debug('Applying case definition settings to form', caseSettings);
           this.form.setValue({
-            hasExternalForm: caseSettings.hasExternalStartCaseForm,
-            externalFormUrl: caseSettings.externalStartCaseFormUrl,
-            description: caseSettings.externalStartCaseFormDescription,
+            hasExternalForm: caseSettings.hasExternalStartForm,
+            externalFormUrl: caseSettings.externalStartFormUrl,
+            description: caseSettings.externalStartFormDescription,
           });
         }
       })
@@ -120,12 +120,12 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
     this.logger.debug('Submitted case definition settings form with values:', this.form.value);
     const caseSettings = this.caseSettings$.getValue();
     this.updateCaseSettings(caseSettings.name, {
-      hasExternalStartCaseForm: this.hasExternalForm.value,
-      externalStartCaseFormUrl:
+      hasExternalStartForm: this.hasExternalForm.value,
+      externalStartFormUrl:
         typeof this.externalFormUrl.value === 'string'
           ? this.externalFormUrl.value.trim()
           : this.externalFormUrl.value,
-      externalStartCaseFormDescription: this.description.value || '',
+      externalStartFormDescription: this.description.value || '',
     });
   }
 
@@ -146,7 +146,7 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
             duration: CARBON_CONSTANTS.notificationDuration,
             showClose: true,
             title: this.translateService.instant(
-              'dossierManagement.externalStartCaseForm.notification.error'
+              'dossierManagement.externalStartForm.notification.error'
             ),
           });
         },
@@ -158,7 +158,7 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
             duration: CARBON_CONSTANTS.notificationDuration,
             showClose: true,
             title: this.translateService.instant(
-              'dossierManagement.externalStartCaseForm.notification.success'
+              'dossierManagement.externalStartForm.notification.success'
             ),
           });
         },

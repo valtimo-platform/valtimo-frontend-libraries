@@ -43,14 +43,14 @@
           <div class="table-responsive">
             <table class="table m-0">
               <tr
-                *ngIf="obs.caseSettings.hasExternalStartCaseForm"
+                *ngIf="obs.caseSettings?.hasExternalStartForm"
                 (click)="openExternalCaseStartForm(true)"
                 style="cursor: pointer"
               >
                 <td>
                   {{
-                    obs.caseSettings?.externalStartCaseFormDescription ||
-                      ('externalStartCaseForm.title' | translate)
+                    obs.caseSettings?.externalStartFormDescription ||
+                      ('externalStartForm.title' | translate)
                   }}
                 </td>
               </tr>

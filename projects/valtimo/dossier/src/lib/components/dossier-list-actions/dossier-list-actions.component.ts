@@ -69,8 +69,7 @@ export class DossierListActionsComponent implements OnInit {
     map(([processDocumentDefinitions, loading, caseSettings]) => {
       this._cachedAssociatedProcessDocumentDefinitions = processDocumentDefinitions;
       this.startButtonDisableEvent.emit(
-        loading ||
-          (processDocumentDefinitions.length === 0 && !caseSettings.hasExternalStartCaseForm)
+        loading || (processDocumentDefinitions.length === 0 && !caseSettings.hasExternalStartForm)
       );
       return processDocumentDefinitions.filter(definition => definition.canInitializeDocument);
     })
@@ -106,15 +105,15 @@ export class DossierListActionsComponent implements OnInit {
 
   public startDossier(): void {
     const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
-    const hasExternalStartCaseForm = this._caseSettings?.hasExternalStartCaseForm;
+    const hasExternalStartForm = this._caseSettings?.hasExternalStartForm;
 
-    if (hasExternalStartCaseForm && associatedProcessDocumentDefinitions.length === 0) {
+    if (hasExternalStartForm && associatedProcessDocumentDefinitions.length === 0) {
       this.openExternalCaseStartForm();
-    } else if (associatedProcessDocumentDefinitions.length > 0) {
-      $('#startProcess').modal('show');
-    } else if (associatedProcessDocumentDefinitions.length === 1 && !hasExternalStartCaseForm) {
+    } else if (associatedProcessDocumentDefinitions.length === 1 && !hasExternalStartForm) {
       this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
       this.showStartProcessModal();
+    } else if (associatedProcessDocumentDefinitions.length > 0) {
+      $('#startProcess').modal('show');
     }
   }
 
@@ -150,7 +149,7 @@ export class DossierListActionsComponent implements OnInit {
   }
 
   public openExternalCaseStartForm(closeModal = false): void {
-    window.open(this._caseSettings?.externalStartCaseFormUrl, '_blank');
+    window.open(this._caseSettings?.externalStartFormUrl, '_blank');
 
     if (closeModal) {
       const modal = $('#startProcess');

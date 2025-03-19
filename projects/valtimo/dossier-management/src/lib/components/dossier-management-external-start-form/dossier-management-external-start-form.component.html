@@ -22,44 +22,40 @@
   } as obs"
   [cdsLayer]="1"
 >
-  <h4>{{ 'dossierManagement.externalStartCaseForm.title' | translate }}</h4>
+  <h4>{{ 'dossierManagement.externalStartForm.title' | translate }}</h4>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" [cdsLayer]="0">
     <cds-toggle
       formControlName="hasExternalForm"
-      label="{{ 'dossierManagement.externalStartCaseForm.enabledToggle' | translate }}"
-      onText="{{ 'dossierManagement.externalStartCaseForm.enabledToggleOn' | translate }}"
-      offText="{{ 'dossierManagement.externalStartCaseForm.enabledToggleOff' | translate }}"
+      label="{{ 'dossierManagement.externalStartForm.enabledToggle' | translate }}"
+      onText="{{ 'dossierManagement.externalStartForm.enabledToggleOn' | translate }}"
+      offText="{{ 'dossierManagement.externalStartForm.enabledToggleOff' | translate }}"
     ></cds-toggle>
 
     <cds-label>
-      {{ 'dossierManagement.externalStartCaseForm.externalUrl' | translate }}
+      {{ 'dossierManagement.externalStartForm.externalUrl' | translate }}
       <input
         cdsText
         type="text"
         formControlName="externalFormUrl"
-        placeholder="{{
-          'dossierManagement.externalStartCaseForm.externalUrlPlaceholder' | translate
-        }}"
+        placeholder="{{ 'dossierManagement.externalStartForm.externalUrlPlaceholder' | translate }}"
         maxlength="512"
       />
     </cds-label>
 
     <cds-label>
-      {{ 'dossierManagement.externalStartCaseForm.description' | translate }}
+      {{ 'dossierManagement.externalStartForm.description' | translate }}
       <input
         cdsText
         type="text"
         formControlName="description"
-        placeholder="{{
-          'dossierManagement.externalStartCaseForm.descriptionPlaceholder' | translate
-        }}"
+        placeholder="{{ 'dossierManagement.externalStartForm.descriptionPlaceholder' | translate }}"
         maxlength="512"
       />
     </cds-label>
 
     <button cdsButton="primary" type="submit" [disabled]="!canSubmit">
-      {{ 'dossierManagement.externalStartCaseForm.apply' | translate }}
+      {{ 'dossierManagement.externalStartForm.apply' | translate }}
     </button>
   </form>
 </cds-tile>

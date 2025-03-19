@@ -548,19 +548,19 @@
       "title": "Task assignment",
       "checkboxDescription": "Automatically assign user tasks to the case handler"
     },
-    "externalStartCaseForm": {
-      "title": "External 'create new case' form",
-      "enabledToggle": "External form enabled",
+    "externalStartForm": {
+      "title": "External start form",
+      "enabledToggle": "External start form enabled",
       "enabledToggleOn": "Yes",
       "enabledToggleOff": "No",
-      "externalUrl": "URL of external form",
+      "externalUrl": "URL of external start form",
       "externalUrlPlaceholder": "Input a valid URL",
       "apply": "Save",
       "description": "Description",
-      "descriptionPlaceholder": "A short description of the external form",
+      "descriptionPlaceholder": "A short description of the external start form",
       "notification": {
-        "success": "External 'create new case' form configuration updated successfully",
-        "error": "External 'create new case' form configuration failed to update"
+        "success": "External start form configuration updated successfully",
+        "error": "External start form configuration failed to update"
       }
     },
     "tabs": {

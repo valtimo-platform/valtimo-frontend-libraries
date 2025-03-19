@@ -547,19 +547,19 @@
       "title": "Taaktoewijzing",
       "checkboxDescription": "Alle taken worden toegewezen aan de behandelaar"
     },
-    "externalStartCaseForm": {
-      "title": "Extern 'nieuw dossier aanmaken' formulier",
-      "enabledToggle": "Extern formulier ingeschakeld",
+    "externalStartForm": {
+      "title": "Extern startformulier",
+      "enabledToggle": "Extern startformulier ingeschakeld",
       "enabledToggleOn": "Ja",
       "enabledToggleOff": "Nee",
-      "externalUrl": "URL van extern formulier",
+      "externalUrl": "URL van extern startformulier",
       "externalUrlPlaceholder": "Voer een geldige URL in",
       "apply": "Opslaan",
       "description": "Beschrijving",
-      "descriptionPlaceholder": "Een korte beschrijving van het externe formulier",
+      "descriptionPlaceholder": "Een korte beschrijving van het externe startformulier",
       "notification": {
-        "success": "Configuratie van het externe 'nieuw dossier aanmaken' formulier is succesvol bijgewerkt",
-        "error": "Bijwerken van de configuratie van het externe 'nieuw dossier aanmaken' formulier is mislukt"
+        "success": "Extern startformulier-configuratie succesvol bijgewerkt",
+        "error": "Bijwerken van de extern startformulier-configuratie mislukt"
       }
     },
     "tabs": {
