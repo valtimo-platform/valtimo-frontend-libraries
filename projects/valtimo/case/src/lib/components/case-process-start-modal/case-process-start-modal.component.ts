@@ -28,7 +28,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {PermissionService} from '@valtimo/access-control';
-import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
+import {DocumentService, ProcessDefinitionCaseDefinition, ProcessDocumentDefinition} from '@valtimo/document';
 import {
   FORM_CUSTOM_COMPONENT_TOKEN,
   FormCustomComponent,
@@ -206,11 +206,8 @@ export class CaseProcessStartModalComponent implements OnInit, OnDestroy {
       : fallbackTitle;
   }
 
-  openModal(processDocumentDefinition: ProcessDocumentDefinition) {
-    this.processDefinitionKey = processDocumentDefinition.id.processDefinitionKey;
-    this.processDefinitionId = processDocumentDefinition.latestVersionId;
-    this.documentDefinitionName = processDocumentDefinition.id.documentDefinitionId.name;
-    this.processName = processDocumentDefinition.processName;
+  openModal(processDefinitionCaseDefinition: ProcessDefinitionCaseDefinition) {
+    this.processDefinitionId = processDefinitionCaseDefinition.id.processDefinitionId;
     this.options = new FormioOptionsImpl();
     this.options.disableAlerts = true;
     const formioBeforeSubmit: FormioBeforeSubmit = function (submission, callback) {
@@ -279,8 +276,9 @@ export class CaseProcessStartModalComponent implements OnInit, OnDestroy {
     formViewModelComponent.instance.form = this.formDefinition;
     formViewModelComponent.instance.formName = this.formName;
     formViewModelComponent.instance.isStartForm = true;
-    formViewModelComponent.instance.processDefinitionKey = this.processDefinitionKey;
-    formViewModelComponent.instance.documentDefinitionName = this.documentDefinitionName;
+    //TODO: we don't have these anymore, what do we want to supply?
+    //formViewModelComponent.instance.processDefinitionKey = this.processDefinitionKey;
+    //formViewModelComponent.instance.documentDefinitionName = this.documentDefinitionName;
     this._subscriptions.add(
       formViewModelComponent.instance.formSubmit.subscribe(() => {
         this.listService.forceRefresh();

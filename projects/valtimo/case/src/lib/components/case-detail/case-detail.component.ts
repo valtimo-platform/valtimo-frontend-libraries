@@ -45,6 +45,7 @@ import {
   DocumentService,
   InternalCaseStatus,
   InternalCaseStatusUtils,
+  ProcessDefinitionCaseDefinition,
   ProcessDocumentDefinition,
 } from '@valtimo/document';
 import { TaskWithProcessLink } from '@valtimo/process-link';
@@ -112,7 +113,7 @@ export class CaseDetailComponent
   public documentDefinitionNameTitle: string;
   public documentId: string;
   public processDefinitionListFields: Array<any> = [];
-  public processDocumentDefinitions: (ProcessDocumentDefinition & {displayName?: string})[] = [];
+  public processDefinitionCaseDefinitions: (ProcessDefinitionCaseDefinition & {displayName?: string})[] = [];
   public tabLoader: TabLoaderImpl | null = null;
 
   public readonly assigneeId$ = new BehaviorSubject<string>('');
@@ -348,13 +349,13 @@ export class CaseDetailComponent
   public getAllAssociatedProcessDefinitions(): void {
     this._subscriptions.add(
       combineLatest([
-        this.documentService.findProcessDocumentDefinitionsForDocument(this.documentId, {
+        this.documentService.findProcessDefinitionCaseDefinitionsForDocument(this.documentId, {
           startableByUser: true,
         }),
         this.translateService.stream('key'),
-      ]).subscribe(([processDocumentDefinitions]) => {
-        this.processDocumentDefinitions = this.mapProcessDocumentDefinitions(
-          processDocumentDefinitions
+      ]).subscribe(([processDefinitionCaseDefinitions]) => {
+        this.processDefinitionCaseDefinitions = this.mapProcessDocumentDefinitions(
+          processDefinitionCaseDefinitions
         );
         this.setProcessDropdownWidth();
 
@@ -671,22 +672,22 @@ export class CaseDetailComponent
   }
 
   private mapProcessDocumentDefinitions(
-    processDocumentDefinitions: ProcessDocumentDefinition[]
-  ): (ProcessDocumentDefinition & {displayName: string})[] {
-    return processDocumentDefinitions.map(
-      (processDocoumentDefinition: ProcessDocumentDefinition) => ({
-        ...processDocoumentDefinition,
+    processDefinitionCaseDefinitions: ProcessDefinitionCaseDefinition[]
+  ): (ProcessDefinitionCaseDefinition & {displayName: string})[] {
+    return processDefinitionCaseDefinitions.map(
+      (processDefinitionCaseDefinition: ProcessDefinitionCaseDefinition) => ({
+        ...processDefinitionCaseDefinition,
         displayName:
-          this.translateService.instant(processDocoumentDefinition?.id?.processDefinitionKey) !==
-          processDocoumentDefinition?.id?.processDefinitionKey
-            ? this.translateService.instant(processDocoumentDefinition.id.processDefinitionKey)
-            : processDocoumentDefinition.processName,
+          this.translateService.instant(processDefinitionCaseDefinition?.processDefinitionKey) !==
+          processDefinitionCaseDefinition?.processDefinitionKey
+            ? this.translateService.instant(processDefinitionCaseDefinition.processDefinitionKey)
+            : processDefinitionCaseDefinition.processDefinitionName,
       })
     );
   }
 
   private setProcessDropdownWidth(): void {
-    const longestName = this.processDocumentDefinitions.reduce(
+    const longestName = this.processDefinitionCaseDefinitions.reduce(
       (acc, curr) =>
         !!curr.displayName && curr.displayName.length > acc ? curr.displayName.length : acc,
       0
