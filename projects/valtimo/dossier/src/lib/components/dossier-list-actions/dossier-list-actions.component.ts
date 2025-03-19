@@ -19,7 +19,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {CaseSettings, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {NotificationService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap} from 'rxjs';
 import {DossierListService} from '../../services';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
 import {NGXLogger} from 'ngx-logger';
@@ -43,6 +43,14 @@ export class DossierListActionsComponent implements OnInit {
   @Output() public readonly formFlowComplete = new EventEmitter();
   @Output() public readonly startButtonDisableEvent = new EventEmitter<boolean>();
 
+  private readonly _caseSettings$: BehaviorSubject<CaseSettings> = new BehaviorSubject(null);
+
+  public readonly caseSettings$ = this._caseSettings$.pipe(filter(settings => !!settings));
+
+  private get _caseSettings(): CaseSettings | null {
+    return this._caseSettings$.getValue();
+  }
+
   public readonly associatedProcessDocumentDefinitions$: Observable<
     Array<ProcessDocumentDefinition>
   > = this.listService.documentDefinitionName$.pipe(
@@ -55,16 +63,18 @@ export class DossierListActionsComponent implements OnInit {
             )
           : of([]),
         this._loading$,
+        this.caseSettings$,
       ])
     ),
-    map(([processDocumentDefinitions, loading]) => {
+    map(([processDocumentDefinitions, loading, caseSettings]) => {
       this._cachedAssociatedProcessDocumentDefinitions = processDocumentDefinitions;
-      this.startButtonDisableEvent.emit(processDocumentDefinitions.length === 0 || loading);
+      this.startButtonDisableEvent.emit(
+        loading ||
+          (processDocumentDefinitions.length === 0 && !caseSettings.hasExternalStartCaseForm)
+      );
       return processDocumentDefinitions.filter(definition => definition.canInitializeDocument);
     })
   );
-
-  readonly caseSettings$: BehaviorSubject<CaseSettings> = new BehaviorSubject(null);
 
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
@@ -76,7 +86,7 @@ export class DossierListActionsComponent implements OnInit {
     private readonly notificationService: NotificationService,
     private readonly router: Router,
     private readonly translateService: TranslateService,
-    private readonly logger: NGXLogger,
+    private readonly logger: NGXLogger
   ) {}
 
   public ngOnInit(): void {
@@ -84,32 +94,27 @@ export class DossierListActionsComponent implements OnInit {
 
     this.listService.documentDefinitionName$.subscribe(documentDefinitionName => {
       this.logger.debug(
-        'Fetching case definition settings for documentDefinitionName', documentDefinitionName
+        'Fetching case definition settings for documentDefinitionName',
+        documentDefinitionName
       );
-      this.documentService
-        .getCaseSettings(documentDefinitionName)
-        .subscribe(caseSettings => {
-          this.logger.debug('Fetched case definition settings', caseSettings);
-          this.caseSettings$.next(caseSettings);
-        });
+      this.documentService.getCaseSettings(documentDefinitionName).subscribe(caseSettings => {
+        this.logger.debug('Fetched case definition settings', caseSettings);
+        this._caseSettings$.next(caseSettings);
+      });
     });
   }
 
   public startDossier(): void {
-    const caseSettings = this.caseSettings$.getValue();
-    this.logger.debug('Has external Start Case form?', caseSettings.hasExternalStartCaseForm)
-    if (caseSettings.hasExternalStartCaseForm) {
-      this.logger.debug('External Start Case form URL:', caseSettings.externalStartCaseFormUrl)
-      window.open(caseSettings.externalStartCaseFormUrl, '_blank');
-    } else {
-      const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
+    const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
+    const hasExternalStartCaseForm = this._caseSettings?.hasExternalStartCaseForm;
 
-      if (associatedProcessDocumentDefinitions.length > 1) {
-        $('#startProcess').modal('show');
-      } else {
-        this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
-        this.showStartProcessModal();
-      }
+    if (hasExternalStartCaseForm && associatedProcessDocumentDefinitions.length === 0) {
+      this.openExternalCaseStartForm();
+    } else if (associatedProcessDocumentDefinitions.length > 0) {
+      $('#startProcess').modal('show');
+    } else if (associatedProcessDocumentDefinitions.length === 1 && !hasExternalStartCaseForm) {
+      this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
+      this.showStartProcessModal();
     }
   }
 
@@ -142,6 +147,15 @@ export class DossierListActionsComponent implements OnInit {
       ],
       duration: CARBON_CONSTANTS.notificationDuration,
     });
+  }
+
+  public openExternalCaseStartForm(closeModal = false): void {
+    window.open(this._caseSettings?.externalStartCaseFormUrl, '_blank');
+
+    if (closeModal) {
+      const modal = $('#startProcess');
+      modal?.modal('hide');
+    }
   }
 
   private showStartProcessModal(): void {

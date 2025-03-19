@@ -4,13 +4,15 @@ import {CaseSettings, DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, Validators} from '@angular/forms';
 import {NGXLogger} from 'ngx-logger';
-import {ToastrService} from 'ngx-toastr';
 import {TranslateService} from '@ngx-translate/core';
+import {NotificationService} from 'carbon-components-angular';
+import {CARBON_CONSTANTS} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-dossier-management-external-start-case-form',
   templateUrl: './dossier-management-external-start-case-form.component.html',
   styleUrl: './dossier-management-external-start-case-form.component.scss',
+  providers: [NotificationService],
 })
 export class DossierManagementExternalStartCaseFormComponent implements OnInit, OnDestroy {
   private readonly _URL_PATTERN = new RegExp(
@@ -40,8 +42,8 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
     private readonly documentService: DocumentService,
     private readonly fb: FormBuilder,
     private readonly translateService: TranslateService,
-    private readonly toastrService: ToastrService,
-    private readonly logger: NGXLogger
+    private readonly logger: NGXLogger,
+    private readonly notificationService: NotificationService
   ) {}
 
   public ngOnInit(): void {
@@ -138,19 +140,27 @@ export class DossierManagementExternalStartCaseFormComponent implements OnInit, 
         },
         error: e => {
           this.logger.error('An error occurred while updating case definition settings', e);
-          this.toastrService.error(
-            this.translateService.instant(
+
+          this.notificationService.showToast({
+            type: 'error',
+            duration: CARBON_CONSTANTS.notificationDuration,
+            showClose: true,
+            title: this.translateService.instant(
               'dossierManagement.externalStartCaseForm.notification.error'
-            )
-          );
+            ),
+          });
         },
         complete: () => {
           this.logger.debug('Finished updating case definition settings');
-          this.toastrService.success(
-            this.translateService.instant(
+
+          this.notificationService.showToast({
+            type: 'success',
+            duration: CARBON_CONSTANTS.notificationDuration,
+            showClose: true,
+            title: this.translateService.instant(
               'dossierManagement.externalStartCaseForm.notification.success'
-            )
-          );
+            ),
+          });
         },
       });
   }

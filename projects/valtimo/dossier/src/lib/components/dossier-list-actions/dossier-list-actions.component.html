@@ -14,7 +14,12 @@
   ~ limitations under the License.
   -->
 
-<div *ngIf="associatedProcessDocumentDefinitions$ | async as associatedProcessDocumentDefinitions">
+<div
+  *ngIf="{
+    associatedProcessDocumentDefinitions: associatedProcessDocumentDefinitions$ | async,
+    caseSettings: caseSettings$ | async,
+  } as obs"
+>
   <div
     class="modal fade"
     id="startProcess"
@@ -38,7 +43,20 @@
           <div class="table-responsive">
             <table class="table m-0">
               <tr
-                *ngFor="let processDocumentDefinition of associatedProcessDocumentDefinitions"
+                *ngIf="obs.caseSettings.hasExternalStartCaseForm"
+                (click)="openExternalCaseStartForm(true)"
+                style="cursor: pointer"
+              >
+                <td>
+                  {{
+                    obs.caseSettings?.externalStartCaseFormDescription ||
+                      ('externalStartCaseForm.title' | translate)
+                  }}
+                </td>
+              </tr>
+
+              <tr
+                *ngFor="let processDocumentDefinition of obs?.associatedProcessDocumentDefinitions"
                 (click)="selectProcess(processDocumentDefinition)"
                 style="cursor: pointer"
               >

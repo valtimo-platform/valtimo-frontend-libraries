@@ -559,8 +559,8 @@
       "description": "Description",
       "descriptionPlaceholder": "A short description of the external form",
       "notification": {
-        "success": "External create new case form configuration updated successfully",
-        "error": "External create new case form configuration failed to update"
+        "success": "External 'create new case' form configuration updated successfully",
+        "error": "External 'create new case' form configuration failed to update"
       }
     },
     "tabs": {
