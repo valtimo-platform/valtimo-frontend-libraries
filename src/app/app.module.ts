@@ -49,7 +49,7 @@ import {
   DossierDetailTabProgressComponent,
   DossierDetailTabSummaryComponent,
   DossierModule,
-} from '@valtimo/dossier';
+} from '@valtimo/case';
 import {ProcessModule} from '@valtimo/process';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CustomFormExampleComponent} from './custom-form-example/custom-form-example.component';

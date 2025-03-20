@@ -1,5 +1,5 @@
 {
-  "name": "@valtimo/dossier",
+  "name": "@valtimo/case",
   "license": "EUPL-1.2",
   "version": "13.0.0",
   "peerDependencies": {
