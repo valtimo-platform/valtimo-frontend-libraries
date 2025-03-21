@@ -42,6 +42,15 @@
     </cds-tab>
 
     <cds-tab
+      class="no-padding-left-right no-padding-top-bottom"
+      [id]="TabEnum.FORMS"
+      [active]="obs.currentTab === TabEnum.FORMS"
+      [heading]="'caseManagement.tabs.forms' | translate"
+      (selected)="navigateToTab(TabEnum.FORMS, obs.currentTab)"
+    >
+    </cds-tab>
+
+    <cds-tab
       class="no-padding-left-right main-content"
       [active]="obs.currentTab === TabEnum.CASE"
       [heading]="'caseManagement.tabs.cases' | translate"

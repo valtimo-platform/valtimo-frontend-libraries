@@ -556,7 +556,8 @@
       "tabManagement": "Tabbladen",
       "document": "Document",
       "statuses": "Statussen",
-      "zgw": "ZGW"
+      "zgw": "ZGW",
+      "forms": "Formulieren"
     },
     "tabManagement": {
       "columns": {

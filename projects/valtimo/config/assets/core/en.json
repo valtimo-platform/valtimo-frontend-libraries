@@ -557,7 +557,8 @@
       "tabManagement": "Tabs",
       "document": "Document",
       "statuses": "Statuses",
-      "zgw": "ZGW"
+      "zgw": "ZGW",
+      "forms": "Forms"
     },
     "tabManagement": {
       "columns": {

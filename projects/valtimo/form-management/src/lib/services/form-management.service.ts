@@ -71,4 +71,18 @@ export class FormManagementService {
       `${this.valtimoApiConfig.endpointUri}v1/form-management/${formDefinitionId}`
     );
   }
+
+  public queryFormDefinitionsCase(
+    caseDefinitionKey: string,
+    versionTag: string,
+    params?: any
+  ): Observable<any> {
+    return this.http.get(
+      `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${versionTag}/form`,
+      {
+        observe: 'response',
+        params,
+      }
+    );
+  }
 }

@@ -15,11 +15,18 @@
   -->
 
 <valtimo-carbon-list
-  [fields]="formDefinitionFields"
+  *ngIf="{
+    formDefinitions: formDefinitions$ | async,
+    pagination: pagination$ | async,
+    loading: loading$ | async,
+    caseManagementRouteParams: caseManagementRouteParams$ | async,
+  } as obs"
+  [fields]="FIELDS"
   [header]="false"
   [isSearchable]="true"
-  [items]="formDefinitions"
-  [pagination]="pagination"
+  [items]="obs?.formDefinitions || []"
+  [pagination]="obs.pagination"
+  [loading]="obs.loading"
   paginationIdentifier="formManagementList"
   (paginationClicked)="paginationClicked($event)"
   (paginationSet)="paginationSet($event)"

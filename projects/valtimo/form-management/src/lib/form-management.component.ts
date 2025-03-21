@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 import {Component} from '@angular/core';
-import {Router} from '@angular/router';
-import {Pagination} from '@valtimo/components';
-import {take} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ColumnConfig, Pagination} from '@valtimo/components';
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {Upload16} from '@carbon/icons';
 
-import {FormDefinition} from './models';
+import {FormDefinition, FormManagementParams} from './models';
 import {FormManagementService} from './services';
 import {IconService} from 'carbon-components-angular';
 
@@ -29,53 +29,71 @@ import {IconService} from 'carbon-components-angular';
   styleUrls: ['./form-management.component.scss'],
 })
 export class FormManagementComponent {
-  public formDefinitions: FormDefinition[] = [];
-  public formDefinitionFields: any[] = [
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
+  public readonly searchTerm$ = new BehaviorSubject<string>('');
+
+  public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> =
+    this.route.parent?.params.pipe(
+      map(({caseDefinitionName, caseVersionTag}) =>
+        caseDefinitionName && caseVersionTag
+          ? {
+              definitionName: caseDefinitionName,
+              versionTag: caseVersionTag,
+            }
+          : null
+      )
+    ) || of(null);
+
+  public readonly pagination$ = new BehaviorSubject<Pagination>({
+    collectionSize: 0,
+    page: 1,
+    size: 10,
+  });
+
+  public readonly formDefinitions$ = combineLatest([
+    this.caseManagementRouteParams$,
+    this.pagination$,
+    this.searchTerm$,
+  ]).pipe(
+    switchMap(([routeParams, pagination, searchTerm]) => {
+      console.log(routeParams, pagination, searchTerm);
+      const params = {
+        ...pagination,
+        pagination: pagination.page - 1,
+        ...(searchTerm && {searchTerm}),
+      };
+
+      if (!routeParams?.definitionName || !routeParams?.versionTag) return;
+
+      return this.formManagementService.queryFormDefinitionsCase(
+        routeParams.definitionName,
+        routeParams.versionTag,
+        params
+      );
+    }),
+    tap(() => this.loading$.next(false))
+  );
+
+  public readonly FIELDS: ColumnConfig[] = [
     {key: 'name', label: 'Form name'},
     {key: 'readOnly', label: 'Read-only'},
   ];
 
-  public pagination: Pagination = {
-    collectionSize: 0,
-    page: 1,
-    size: 10,
-  };
-
   constructor(
-    private formManagementService: FormManagementService,
-    private iconService: IconService,
-    private router: Router
+    private readonly formManagementService: FormManagementService,
+    private readonly iconService: IconService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {
     this.iconService.registerAll([Upload16]);
   }
 
   public paginationClicked(page: number): void {
-    this.pagination.page = page;
-    this.loadFormDefinitions();
+    this.updatePagination({page});
   }
 
   public paginationSet(size: number): void {
-    this.pagination.size = size;
-    this.pagination.page = 1;
-    this.loadFormDefinitions();
-  }
-
-  public loadFormDefinitions(searchTerm?: string): void {
-    const params = {page: this.pagination.page - 1, size: this.pagination.size};
-    if (searchTerm) {
-      params['searchTerm'] = searchTerm;
-    }
-
-    this.formManagementService
-      .queryFormDefinitions(params)
-      .pipe(take(1))
-      .subscribe(results => {
-        this.pagination = {
-          ...this.pagination,
-          collectionSize: results.body.totalElements,
-        };
-        this.formDefinitions = results.body.content;
-      });
+    this.updatePagination({size, page: 1});
   }
 
   public editFormDefinition(formDefinition: FormDefinition): void {
@@ -83,6 +101,10 @@ export class FormManagementComponent {
   }
 
   public searchTermEntered(searchTerm: string): void {
-    this.loadFormDefinitions(searchTerm);
+    this.searchTerm$.next(searchTerm);
+  }
+
+  private updatePagination(update: Partial<Pagination>): void {
+    this.pagination$.next({...this.pagination$.getValue(), ...update});
   }
 }

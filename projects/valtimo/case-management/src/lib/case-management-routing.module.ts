@@ -29,6 +29,7 @@ import {CaseManagementStatusesComponent} from './components/case-management-stat
 import {CaseManagementTabsComponent} from './components/case-management-tabs/case-management-tabs.component';
 import {CaseManagementWidgetTabComponent} from './components/case-management-widget-tab/case-management-widget-tab.component';
 import {TabEnum} from './models';
+import {FormManagementComponent, FormManagementCreateComponent} from '@valtimo/form-management';
 
 const routes: Routes = [
   {
@@ -88,6 +89,19 @@ const routes: Routes = [
       {
         path: TabEnum.STATUSES,
         component: CaseManagementStatusesComponent,
+      },
+      {
+        path: TabEnum.FORMS,
+        component: FormManagementComponent,
+        canDeactivate: [pendingChangesGuard],
+        children: [
+          {
+            path: 'create',
+            component: FormManagementCreateComponent,
+            canActivate: [AuthGuardService],
+            data: {title: 'Create new Form', roles: [ROLE_ADMIN]},
+          },
+        ],
       },
     ],
   },
