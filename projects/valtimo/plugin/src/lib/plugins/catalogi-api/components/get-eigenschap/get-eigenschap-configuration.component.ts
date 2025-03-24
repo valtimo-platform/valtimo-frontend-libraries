@@ -20,7 +20,7 @@ import {GetEigenschapConfig} from '../../models';
 import {FunctionConfigurationComponent} from '../../../../models';
 
 @Component({
-  selector: 'get-eigenschap',
+  selector: 'valtimo-get-eigenschap-configuration',
   templateUrl: './get-eigenschap-configuration.component.html',
   styleUrls: ['./get-eigenschap-configuration.component.scss']
 })
