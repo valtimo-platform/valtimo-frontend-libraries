@@ -42,9 +42,9 @@
     }
 
     <div [style.visibility]="!obs.loaded ? 'hidden' : 'visible'">
-      <valtimo-dossier-widgets-container
+      <valtimo-case-widgets-container
         [widgets]="obs.widgetConfiguration?.widgets || []"
-      ></valtimo-dossier-widgets-container>
+      ></valtimo-case-widgets-container>
     </div>
   </ng-container>
 </ng-container>

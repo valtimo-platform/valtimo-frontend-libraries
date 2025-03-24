@@ -61,7 +61,7 @@ import {WidgetCollectionComponent} from '../collection/widget-collection.compone
 import {WIDGET_HEIGHT_1X} from '../../../../../../constants';
 
 @Component({
-  selector: 'valtimo-dossier-widget-block',
+  selector: 'valtimo-case-widget-block',
   templateUrl: './widget-block.component.html',
   styleUrls: ['./widget-block.component.scss'],
   standalone: true,

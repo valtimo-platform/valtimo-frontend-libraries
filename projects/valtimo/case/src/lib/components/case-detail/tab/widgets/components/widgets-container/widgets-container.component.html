@@ -16,6 +16,6 @@
 
 <div #widgetsContainer class="widgets-container">
   @for (widget of widgetsWithUuids$ | async; track widget.uuid) {
-    <valtimo-dossier-widget-block [widget]="widget"></valtimo-dossier-widget-block>
+    <valtimo-case-widget-block [widget]="widget"></valtimo-case-widget-block>
   }
 </div>

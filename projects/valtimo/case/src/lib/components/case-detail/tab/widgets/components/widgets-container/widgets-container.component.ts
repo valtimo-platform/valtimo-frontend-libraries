@@ -32,7 +32,7 @@ import {BehaviorSubject, delay, take} from 'rxjs';
 import Muuri from 'muuri';
 
 @Component({
-  selector: 'valtimo-dossier-widgets-container',
+  selector: 'valtimo-case-widgets-container',
   templateUrl: './widgets-container.component.html',
   styleUrls: ['./widgets-container.component.scss'],
   standalone: true,
