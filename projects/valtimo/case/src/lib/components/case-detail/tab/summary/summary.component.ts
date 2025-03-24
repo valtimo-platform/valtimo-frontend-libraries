@@ -27,12 +27,11 @@ moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
-  selector: 'valtimo-dossier-detail-tab-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class DossierDetailTabSummaryComponent implements OnInit, OnDestroy {
+export class CaseDetailTabSummaryComponent implements OnInit, OnDestroy {
   public readonly documentDefinitionName: string;
   public readonly documentId!: string;
 
