@@ -26,7 +26,7 @@ export * from './lib/components/case-detail/tab/notes/notes.component';
 export * from './lib/components/case-detail/tab/progress/progress.component';
 export * from './lib/components/case-detail/tab/summary/summary.component';
 export * from './lib/components/case-list/case-list.component';
-export * from './lib/components/dossier-process-start-modal/dossier-process-start-modal.component';
+export * from './lib/components/case-process-start-modal/case-process-start-modal.component';
 export * from './lib/constants';
 export * from './lib/case.module';
 export * from './lib/services/case.service';

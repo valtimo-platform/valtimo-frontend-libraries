@@ -59,12 +59,12 @@ import {FormViewModel} from '@valtimo/config';
 import {BehaviorSubject, Subscription} from 'rxjs';
 
 @Component({
-  selector: 'valtimo-dossier-process-start-modal',
-  templateUrl: './dossier-process-start-modal.component.html',
-  styleUrls: ['./dossier-process-start-modal.component.scss'],
+  selector: 'valtimo-case-process-start-modal',
+  templateUrl: './case-process-start-modal.component.html',
+  styleUrls: ['./case-process-start-modal.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
+export class CaseProcessStartModalComponent implements OnInit, OnDestroy {
   public processDefinitionKey: string;
   public processDefinitionId: string;
   public documentDefinitionName: string;

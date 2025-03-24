@@ -86,7 +86,7 @@ import {CaseDetailTabS3DocumentsComponent} from './components/case-detail/tab/s3
 import {CaseDetailTabSummaryComponent} from './components/case-detail/tab/summary/summary.component';
 import {CaseListActionsComponent} from './components/case-list-actions/case-list-actions.component';
 import {CaseListComponent} from './components/case-list/case-list.component';
-import {DossierProcessStartModalComponent} from './components/dossier-process-start-modal/dossier-process-start-modal.component';
+import {CaseProcessStartModalComponent} from './components/case-process-start-modal/case-process-start-modal.component';
 import {CaseRoutingModule} from './case-routing.module';
 import {DossierSupportingProcessStartModalComponent} from './components/dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {DossierUpdateComponent} from './components/dossier-update/dossier-update.component';
@@ -114,7 +114,7 @@ export type TabsFactory = () => Map<string, object>;
     CaseDetailTabDocumentsComponent,
     CaseDetailTabNotesComponent,
     DossierUpdateComponent,
-    DossierProcessStartModalComponent,
+    CaseProcessStartModalComponent,
     DossierSupportingProcessStartModalComponent,
     CaseDetailTabS3DocumentsComponent,
     CaseDetailTabNotFoundComponent,
@@ -192,7 +192,7 @@ export type TabsFactory = () => Map<string, object>;
     CaseDetailsTaskDetailComponent,
     AngularSplitModule,
   ],
-  exports: [CaseListComponent, CaseDetailComponent, DossierProcessStartModalComponent],
+  exports: [CaseListComponent, CaseDetailComponent, CaseProcessStartModalComponent],
 })
 export class CaseModule {
   static forRoot(tabsFactory: TabsFactory): ModuleWithProviders<CaseModule> {

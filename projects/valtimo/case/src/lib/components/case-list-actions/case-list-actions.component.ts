@@ -21,7 +21,7 @@ import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
 import {CaseListService} from '../../services';
-import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
+import {CaseProcessStartModalComponent} from '../case-process-start-modal/case-process-start-modal.component';
 
 declare const $;
 
@@ -32,7 +32,7 @@ declare const $;
   providers: [NotificationService],
 })
 export class CaseListActionsComponent implements OnInit {
-  @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
+  @ViewChild('processStartModal') processStart: CaseProcessStartModalComponent;
 
   private readonly _loading$ = new BehaviorSubject<boolean>(true);
   @Input() set loading(value: boolean) {
