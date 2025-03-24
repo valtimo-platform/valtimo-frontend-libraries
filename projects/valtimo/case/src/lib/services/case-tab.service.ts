@@ -38,7 +38,7 @@ import {
 } from 'rxjs';
 import {CaseDetailTabFormioComponent} from '../components/case-detail/tab/formio/formio.component';
 import {CaseDetailTabNotFoundComponent} from '../components/case-detail/tab/not-found/not-found.component';
-import {DossierDetailWidgetsComponent} from '../components/case-detail/tab/widgets/widgets.component';
+import {CaseDetailWidgetsComponent} from '../components/case-detail/tab/widgets/widgets.component';
 
 @Injectable()
 export class CaseTabService implements OnDestroy {
@@ -220,7 +220,7 @@ export class CaseTabService implements OnDestroy {
         return new TabImpl(
           tab.key,
           index,
-          DossierDetailWidgetsComponent,
+          CaseDetailWidgetsComponent,
           tab.contentKey,
           tab.name ?? '',
           tab.showTasks

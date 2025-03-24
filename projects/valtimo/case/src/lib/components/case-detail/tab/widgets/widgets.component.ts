@@ -40,7 +40,7 @@ import {WidgetsContainerComponent} from './components/widgets-container/widgets-
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierDetailWidgetsComponent implements OnInit, OnDestroy {
+export class CaseDetailWidgetsComponent implements OnInit, OnDestroy {
   @HostBinding('class.tab--no-margin') private readonly _noMargin = true;
   @HostBinding('class.tab--no-background') private readonly _noBackground = true;
   @HostBinding('class.tab--no-min-height') private readonly _noMinHeight = true;
