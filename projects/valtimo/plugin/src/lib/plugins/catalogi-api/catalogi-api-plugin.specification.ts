@@ -53,7 +53,7 @@ const catalogiApiPluginSpecification: PluginSpecification = {
         'Nadat de statustype is opgehaald, wordt deze opgeslagen in een procesvariabele met deze naam.',
       'get-besluittype': 'Besluittype opvragen',
       getBesluittypeInformation:
-        'Het besluittype wordt opgehaald en daarna opgeslagen in een process variable.',
+        'Het besluittype wordt opgehaald en daarna opgeslagen in een procesvariabele.',
       besluittype: 'Besluittype',
       besluittypeTooltip: 'Omschrijving van de aard van het besluit.',
       besluitProcessVariableTooltip:
