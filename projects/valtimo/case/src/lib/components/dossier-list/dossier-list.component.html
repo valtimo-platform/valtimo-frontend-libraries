@@ -157,11 +157,11 @@
 ></ng-template>
 
 <ng-template #bulkAssignModal let-obs="obs">
-  <valtimo-dossier-bulk-assign-modal
+  <valtimo-case-bulk-assign-modal
     [documentIds]="obs.selectedDocumentIds"
     [open]="obs.showAssignModal"
     (closeEvent)="onCloseEvent($event, obs.selectedDocumentIds)"
-  ></valtimo-dossier-bulk-assign-modal>
+  ></valtimo-case-bulk-assign-modal>
 </ng-template>
 
 <ng-template #changePageModal>

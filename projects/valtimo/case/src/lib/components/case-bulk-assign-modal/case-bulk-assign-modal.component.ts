@@ -28,13 +28,13 @@ import {CandidateUser} from '../../models';
 import {CaseBulkAssignService} from '../../services';
 
 @Component({
-  selector: 'valtimo-dossier-bulk-assign-modal',
-  templateUrl: './dossier-bulk-assign-modal.component.html',
-  styleUrls: ['./dossier-bulk-assign-modal.component.scss'],
+  selector: 'valtimo-case-bulk-assign-modal',
+  templateUrl: './case-bulk-assign-modal.component.html',
+  styleUrls: ['./case-bulk-assign-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierBulkAssignModalComponent {
-  @HostBinding('class') public modalClass = 'valtimo-dossier-bulk-assign-modal';
+export class CaseBulkAssignModalComponent {
+  @HostBinding('class') public modalClass = 'valtimo-case-bulk-assign-modal';
 
   @Input() public set documentIds(value: string[]) {
     if (!value.length) {

@@ -18,7 +18,7 @@
  * Public API Surface of dossier
  */
 
-export * from './lib/components/dossier-bulk-assign-modal/dossier-bulk-assign-modal.component';
+export * from './lib/components/case-bulk-assign-modal/case-bulk-assign-modal.component';
 export * from './lib/components/dossier-detail/dossier-detail.component';
 export * from './lib/components/dossier-detail/tab/audit/audit.component';
 export * from './lib/components/dossier-detail/tab/documents/documents.component';

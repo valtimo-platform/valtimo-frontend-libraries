@@ -76,7 +76,7 @@ import {
 } from 'carbon-components-angular';
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
 import {CaseAssignUserComponent} from './components/case-assign-user/case-assign-user.component';
-import {DossierBulkAssignModalComponent} from './components/dossier-bulk-assign-modal/dossier-bulk-assign-modal.component';
+import {CaseBulkAssignModalComponent} from './components/case-bulk-assign-modal/case-bulk-assign-modal.component';
 import {DossierDetailComponent} from './components/dossier-detail/dossier-detail.component';
 import {DossierDetailTabAuditComponent} from './components/dossier-detail/tab/audit/audit.component';
 import {DossierDetailTabDocumentsComponent} from './components/dossier-detail/tab/documents/documents.component';
@@ -104,7 +104,7 @@ export type TabsFactory = () => Map<string, object>;
 
 @NgModule({
   declarations: [
-    DossierBulkAssignModalComponent,
+    CaseBulkAssignModalComponent,
     DossierListComponent,
     DossierListActionsComponent,
     DossierDetailComponent,
