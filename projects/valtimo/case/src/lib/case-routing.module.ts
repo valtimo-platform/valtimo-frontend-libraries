@@ -19,7 +19,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from '@valtimo/security';
 import {CaseDetailComponent} from './components/case-detail/case-detail.component';
-import {DossierUpdateComponent} from './components/dossier-update/dossier-update.component';
+import {CaseUpdateComponent} from './components/case-update/case-update.component';
 import {ROLE_USER} from '@valtimo/config';
 import {CaseListComponent} from './components/case-list/case-list.component';
 import {pendingChangesGuard} from '@valtimo/components';
@@ -54,7 +54,7 @@ const routes: Routes = [
   },
   {
     path: 'dossiers/:documentDefinitionName/document/:documentId/:tab/tasks/:taskId',
-    component: DossierUpdateComponent,
+    component: CaseUpdateComponent,
     canActivate: [AuthGuardService],
     data: {
       title: 'Task details',

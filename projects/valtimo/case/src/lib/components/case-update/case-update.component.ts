@@ -26,11 +26,10 @@ import {CaseService} from '../../services/case.service';
 moment.locale(localStorage.getItem('langKey') || '');
 
 @Component({
-  selector: 'valtimo-dossier-update',
-  templateUrl: './dossier-update.component.html',
-  styleUrls: ['./dossier-update.component.css'],
+  templateUrl: './case-update.component.html',
+  styleUrls: ['./case-update.component.scss'],
 })
-export class DossierUpdateComponent implements OnInit {
+export class CaseUpdateComponent implements OnInit {
   public task: any;
   public taskId: string;
   public schema: any;
