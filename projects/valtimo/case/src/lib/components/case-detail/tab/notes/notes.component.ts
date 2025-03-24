@@ -33,11 +33,10 @@ import {
 import {NotesService} from '../../../../services/notes.service';
 
 @Component({
-  selector: 'valtimo-dossier-detail-tab-notes',
   templateUrl: './notes.component.html',
   styleUrls: ['./notes.component.scss'],
 })
-export class DossierDetailTabNotesComponent implements OnInit {
+export class CaseDetailTabNotesComponent implements OnInit {
   @HostBinding('class.tab--no-margin') noMargin = true;
 
   public timelineItems: TimelineItem[] = [];

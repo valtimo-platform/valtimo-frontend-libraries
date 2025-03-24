@@ -20,7 +20,7 @@ import {DossierDetailTabProgressComponent} from '../components/case-detail/tab/p
 import {CaseDetailTabAuditComponent} from '../components/case-detail/tab/audit/audit.component';
 import {CaseDetailTabDocumentsComponent} from '../components/case-detail/tab/documents/documents.component';
 import {DefaultTabComponents, DefaultTabs} from '../models';
-import {DossierDetailTabNotesComponent} from '../components/case-detail/tab/notes/notes.component';
+import {CaseDetailTabNotesComponent} from '../components/case-detail/tab/notes/notes.component';
 
 const TAB_MAP = new InjectionToken<Map<string, object>>('TabMap');
 
@@ -36,7 +36,7 @@ const DEFAULT_TAB_COMPONENTS: DefaultTabComponents = {
   [DefaultTabs.progress]: DossierDetailTabProgressComponent,
   [DefaultTabs.audit]: CaseDetailTabAuditComponent,
   [DefaultTabs.documents]: CaseDetailTabDocumentsComponent,
-  [DefaultTabs.notes]: DossierDetailTabNotesComponent,
+  [DefaultTabs.notes]: CaseDetailTabNotesComponent,
 };
 
 export {TAB_MAP, DEFAULT_TABS, DEFAULT_TAB_COMPONENTS};

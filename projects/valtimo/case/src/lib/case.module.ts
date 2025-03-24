@@ -80,7 +80,7 @@ import {CaseBulkAssignModalComponent} from './components/case-bulk-assign-modal/
 import {CaseDetailComponent} from './components/case-detail/case-detail.component';
 import {CaseDetailTabAuditComponent} from './components/case-detail/tab/audit/audit.component';
 import {CaseDetailTabDocumentsComponent} from './components/case-detail/tab/documents/documents.component';
-import {DossierDetailTabNotesComponent} from './components/case-detail/tab/notes/notes.component';
+import {CaseDetailTabNotesComponent} from './components/case-detail/tab/notes/notes.component';
 import {DossierDetailTabProgressComponent} from './components/case-detail/tab/progress/progress.component';
 import {DossierDetailTabS3DocumentsComponent} from './components/case-detail/tab/s3-documents/s3-documents.component';
 import {DossierDetailTabSummaryComponent} from './components/case-detail/tab/summary/summary.component';
@@ -112,7 +112,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierDetailTabProgressComponent,
     CaseDetailTabAuditComponent,
     CaseDetailTabDocumentsComponent,
-    DossierDetailTabNotesComponent,
+    CaseDetailTabNotesComponent,
     DossierUpdateComponent,
     DossierProcessStartModalComponent,
     DossierSupportingProcessStartModalComponent,
