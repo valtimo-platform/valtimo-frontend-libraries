@@ -68,4 +68,4 @@ const routes: Routes = [
   imports: [CommonModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DossierRoutingModule {}
+export class CaseRoutingModule {}

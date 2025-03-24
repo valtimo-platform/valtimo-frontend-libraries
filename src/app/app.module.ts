@@ -48,7 +48,7 @@ import {
   DossierDetailTabNotesComponent,
   DossierDetailTabProgressComponent,
   DossierDetailTabSummaryComponent,
-  DossierModule,
+  CaseModule,
 } from '@valtimo/case';
 import {ProcessModule} from '@valtimo/process';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -171,7 +171,7 @@ export function tabsFactory() {
     MenuModule,
     TaskModule,
     CaseMigrationModule,
-    DossierModule.forRoot(tabsFactory),
+    CaseModule.forRoot(tabsFactory),
     ProcessModule,
     BpmnJsDiagramModule,
     FormsModule,

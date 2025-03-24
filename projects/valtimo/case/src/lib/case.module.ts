@@ -87,7 +87,7 @@ import {DossierDetailTabSummaryComponent} from './components/dossier-detail/tab/
 import {DossierListActionsComponent} from './components/dossier-list-actions/dossier-list-actions.component';
 import {DossierListComponent} from './components/dossier-list/dossier-list.component';
 import {DossierProcessStartModalComponent} from './components/dossier-process-start-modal/dossier-process-start-modal.component';
-import {DossierRoutingModule} from './dossier-routing.module';
+import {CaseRoutingModule} from './case-routing.module';
 import {DossierSupportingProcessStartModalComponent} from './components/dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {DossierUpdateComponent} from './components/dossier-update/dossier-update.component';
 import {TAB_MAP} from './constants';
@@ -124,7 +124,7 @@ export type TabsFactory = () => Map<string, object>;
   ],
   imports: [
     CommonModule,
-    DossierRoutingModule,
+    CaseRoutingModule,
     ListModule,
     WidgetModule,
     BpmnJsDiagramModule,
@@ -194,10 +194,10 @@ export type TabsFactory = () => Map<string, object>;
   ],
   exports: [DossierListComponent, DossierDetailComponent, DossierProcessStartModalComponent],
 })
-export class DossierModule {
-  static forRoot(tabsFactory: TabsFactory): ModuleWithProviders<DossierModule> {
+export class CaseModule {
+  static forRoot(tabsFactory: TabsFactory): ModuleWithProviders<CaseModule> {
     return {
-      ngModule: DossierModule,
+      ngModule: CaseModule,
       providers: [
         DossierService,
         DossierBulkAssignService,
