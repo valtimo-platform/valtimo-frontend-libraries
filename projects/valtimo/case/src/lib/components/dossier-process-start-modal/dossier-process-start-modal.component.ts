@@ -52,7 +52,7 @@ import {FormioForm} from '@formio/angular';
 import {UserProviderService} from '@valtimo/security';
 import {take} from 'rxjs/operators';
 import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
-import {DossierListService, StartModalService} from '../../services';
+import {CaseListService, StartModalService} from '../../services';
 import {ConfigService} from '@valtimo/config';
 import {FORM_VIEW_MODEL_TOKEN} from '@valtimo/config';
 import {FormViewModel} from '@valtimo/config';
@@ -103,7 +103,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
     private formFlowService: FormFlowService,
     private userProviderService: UserProviderService,
     private permissionService: PermissionService,
-    private listService: DossierListService,
+    private listService: CaseListService,
     private startModalService: StartModalService,
     private configService: ConfigService,
     @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel,

@@ -23,7 +23,7 @@ import {ApiTabItem} from '../models';
 @Injectable({
   providedIn: 'root',
 })
-export class DossierTabApiService extends BaseApiService {
+export class CaseTabApiService extends BaseApiService {
   constructor(
     protected readonly httpClient: HttpClient,
     protected readonly configService: ConfigService

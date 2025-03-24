@@ -26,7 +26,7 @@ import {
 import {CASE_TAB_TOKEN, DEFAULT_TAB_COMPONENTS, DEFAULT_TABS, TAB_MAP} from '../constants';
 import {ConfigService, ZGW_OBJECT_TYPE_COMPONENT_TOKEN} from '@valtimo/config';
 import {ActivatedRoute} from '@angular/router';
-import {DossierTabApiService} from './dossier-tab-api.service';
+import {CaseTabApiService} from './case-tab-api.service';
 import {
   BehaviorSubject,
   combineLatest,
@@ -41,7 +41,7 @@ import {DossierDetailTabNotFoundComponent} from '../components/dossier-detail/ta
 import {DossierDetailWidgetsComponent} from '../components/dossier-detail/tab/widgets/widgets.component';
 
 @Injectable()
-export class DossierTabService implements OnDestroy {
+export class CaseTabService implements OnDestroy {
   private readonly _tabManagementEnabled!: boolean;
   private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params?.documentDefinitionName),
@@ -91,14 +91,14 @@ export class DossierTabService implements OnDestroy {
     private readonly zgwObjectTypeComponent: Type<any>,
     private readonly configService: ConfigService,
     private readonly route: ActivatedRoute,
-    private readonly dossierTabApiService: DossierTabApiService
+    private readonly caseTabApiService: CaseTabApiService
   ) {
     this._tabManagementEnabled =
       this.configService.config.featureToggles?.enableTabManagement ?? true;
     this.openDocumentDefinitionNameSubscription();
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
@@ -164,7 +164,7 @@ export class DossierTabService implements OnDestroy {
   }
 
   private setApiTabs(documentDefinitionName: string, documentId: string): void {
-    this.dossierTabApiService.getDossierTabs(documentDefinitionName, documentId).subscribe({
+    this.caseTabApiService.getDossierTabs(documentDefinitionName, documentId).subscribe({
       next: tabs => {
         const supportedTabs = tabs.filter(tab => this.filterTab(tab));
         const mappedTabs = supportedTabs.map((tab, index) => this.mapTab(tab, index));
@@ -195,7 +195,7 @@ export class DossierTabService implements OnDestroy {
           index,
           DEFAULT_TAB_COMPONENTS[tab.contentKey],
           tab.contentKey,
-          tab.name,
+          tab.name ?? '',
           tab.showTasks
         );
       case ApiTabType.FORMIO:
@@ -204,7 +204,7 @@ export class DossierTabService implements OnDestroy {
           index,
           DossierDetailTabFormioComponent,
           tab.contentKey,
-          tab.name,
+          tab.name ?? '',
           tab.showTasks
         );
       case ApiTabType.CUSTOM:
@@ -213,7 +213,7 @@ export class DossierTabService implements OnDestroy {
           index,
           this.caseTabConfig[tab.contentKey],
           tab.contentKey,
-          tab.name,
+          tab.name ?? '',
           tab.showTasks
         );
       case ApiTabType.WIDGETS:
@@ -222,7 +222,7 @@ export class DossierTabService implements OnDestroy {
           index,
           DossierDetailWidgetsComponent,
           tab.contentKey,
-          tab.name,
+          tab.name ?? '',
           tab.showTasks
         );
       default:

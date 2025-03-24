@@ -23,7 +23,7 @@ import {InterceptorSkip} from '@valtimo/security';
 @Injectable({
   providedIn: 'root',
 })
-export class DossierWidgetsApiService extends BaseApiService {
+export class CaseWidgetsApiService extends BaseApiService {
   constructor(
     protected readonly httpClient: HttpClient,
     protected readonly configService: ConfigService

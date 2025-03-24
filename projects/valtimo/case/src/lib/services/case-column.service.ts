@@ -22,14 +22,14 @@ import {ListField} from '@valtimo/components';
 import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
-export class DossierColumnService {
+export class CaseColumnService {
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
     private readonly translateService: TranslateService
   ) {}
 
-  getDefinitionColumns(
+  public getDefinitionColumns(
     documentDefinitionName: string
   ): Observable<{columns: Array<DefinitionColumn>; hasApiConfig: boolean}> {
     const config = this.configService.config;
@@ -53,11 +53,11 @@ export class DossierColumnService {
     );
   }
 
-  hasEnvironmentConfig(documentDefinitionName: string): boolean {
+  public hasEnvironmentConfig(documentDefinitionName: string): boolean {
     return !!this.configService.config?.customDefinitionTables[documentDefinitionName];
   }
 
-  mapDefinitionColumnsToListFields(
+  public mapDefinitionColumnsToListFields(
     columns: Array<DefinitionColumn>,
     hasEnvColumnConfig: boolean,
     hasApiColumnConfig: boolean

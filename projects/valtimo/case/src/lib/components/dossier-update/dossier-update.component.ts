@@ -21,7 +21,7 @@ import {ToastrService} from 'ngx-toastr';
 import {Location} from '@angular/common';
 import moment from 'moment';
 import {DocumentService} from '@valtimo/document';
-import {DossierService} from '../../services/dossier.service';
+import {CaseService} from '../../services/case.service';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -42,18 +42,18 @@ export class DossierUpdateComponent implements OnInit {
   public customDefinitions: any = {};
 
   constructor(
-    private taskService: TaskService,
-    private documentService: DocumentService,
-    private route: ActivatedRoute,
-    private toastr: ToastrService,
-    private location: Location,
-    dossierService: DossierService
+    private readonly taskService: TaskService,
+    private readonly documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly toastr: ToastrService,
+    private readonly location: Location,
+    private readonly caseService: CaseService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = snapshot.get('documentDefinitionName') || '';
     this.documentId = snapshot.get('documentId') || '';
     this.taskId = snapshot.get('taskId') || '';
-    this.implementationDefinitions = dossierService.getImplementationEnvironmentDefinitions(
+    this.implementationDefinitions = this.caseService.getImplementationEnvironmentDefinitions(
       this.documentDefinitionName
     );
     this.loadDocumentDefinition(this.documentDefinitionName);

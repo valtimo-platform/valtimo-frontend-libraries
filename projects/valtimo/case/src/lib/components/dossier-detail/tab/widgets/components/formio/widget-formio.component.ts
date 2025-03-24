@@ -20,7 +20,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {CaseWidgetAction, FormioCaseWidgetWidgetWithUuid} from '../../../../../../models';
 import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {FormService} from '@valtimo/form';
-import {DossierWidgetsLayoutService} from '../../../../../../services';
+import {CaseWidgetsLayoutService} from '../../../../../../services';
 import {FormioForm} from '@formio/angular';
 import {FormIoModule} from '@valtimo/components';
 import {WidgetProcess} from '../widget-process/widget-process';
@@ -80,7 +80,7 @@ export class WidgetFormioComponent extends WidgetProcess {
     protected readonly documentService: DocumentService,
     protected readonly permissionService: PermissionService,
     private readonly formService: FormService,
-    private readonly layoutService: DossierWidgetsLayoutService,
+    private readonly layoutService: CaseWidgetsLayoutService,
     private readonly widgetsService: WidgetsService
   ) {
     super(documentService, permissionService);

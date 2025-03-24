@@ -78,14 +78,14 @@ import {
   DOSSIER_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
 import {
-  DossierBulkAssignService,
-  DossierColumnService,
-  DossierListAssigneeService,
-  DossierListPaginationService,
-  DossierListSearchService,
-  DossierListService,
-  DossierListStatusService,
-  DossierParameterService,
+  CaseBulkAssignService,
+  CaseColumnService,
+  CaseListAssigneeService,
+  CaseListPaginationService,
+  CaseListSearchService,
+  CaseListService,
+  CaseListStatusService,
+  CaseParameterService,
 } from '../../services';
 import {DossierListActionsComponent} from '../dossier-list-actions/dossier-list-actions.component';
 
@@ -94,13 +94,13 @@ import {DossierListActionsComponent} from '../dossier-list-actions/dossier-list-
   templateUrl: './dossier-list.component.html',
   styleUrls: ['./dossier-list.component.scss'],
   providers: [
-    DossierListService,
-    DossierColumnService,
-    DossierListAssigneeService,
-    DossierParameterService,
-    DossierListPaginationService,
-    DossierListSearchService,
-    DossierListStatusService,
+    CaseListService,
+    CaseColumnService,
+    CaseListAssigneeService,
+    CaseParameterService,
+    CaseListPaginationService,
+    CaseListSearchService,
+    CaseListStatusService,
   ],
 })
 export class DossierListComponent implements OnInit, OnDestroy {
@@ -482,22 +482,22 @@ export class DossierListComponent implements OnInit, OnDestroy {
   private _documentDefinitionNameSubscription!: Subscription;
 
   constructor(
-    private readonly assigneeService: DossierListAssigneeService,
+    private readonly assigneeService: CaseListAssigneeService,
     private readonly breadcrumbService: BreadcrumbService,
-    private readonly bulkAssignService: DossierBulkAssignService,
-    private readonly columnService: DossierColumnService,
+    private readonly bulkAssignService: CaseBulkAssignService,
+    private readonly columnService: CaseColumnService,
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
-    private readonly listService: DossierListService,
+    private readonly listService: CaseListService,
     private readonly pageTitleService: PageTitleService,
-    private readonly paginationService: DossierListPaginationService,
-    private readonly parameterService: DossierParameterService,
+    private readonly paginationService: CaseListPaginationService,
+    private readonly parameterService: CaseParameterService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly searchService: DossierListSearchService,
+    private readonly searchService: CaseListSearchService,
     private readonly translateService: TranslateService,
     private readonly permissionService: PermissionService,
-    private readonly statusService: DossierListStatusService
+    private readonly statusService: CaseListStatusService
   ) {}
 
   public ngOnInit(): void {

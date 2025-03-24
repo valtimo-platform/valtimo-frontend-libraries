@@ -21,9 +21,9 @@ import {CarbonListModule} from '@valtimo/components';
 import {LoadingModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, delay, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {
-  DossierTabService,
-  DossierWidgetsApiService,
-  DossierWidgetsLayoutService,
+  CaseTabService,
+  CaseWidgetsApiService,
+  CaseWidgetsLayoutService,
 } from '../../../../services';
 import {WidgetsContainerComponent} from './components/widgets-container/widgets-container.component';
 
@@ -50,7 +50,7 @@ export class DossierDetailWidgetsComponent implements OnInit, OnDestroy {
     filter(documentId => !!documentId)
   );
 
-  private readonly _tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
+  private readonly _tabKey$: Observable<string> = this.caseTabService.activeTabKey$;
 
   public readonly loadingWidgetConfiguration$ = new BehaviorSubject<boolean>(true);
 
@@ -61,21 +61,21 @@ export class DossierDetailWidgetsComponent implements OnInit, OnDestroy {
     tap(() => this.loadingWidgetConfiguration$.next(false))
   );
 
-  public readonly loaded$ = this.dossierWidgetsLayoutService.loaded$.pipe(delay(400));
+  public readonly loaded$ = this.caseWidgetsLayoutService.loaded$.pipe(delay(400));
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly dossierTabService: DossierTabService,
-    private readonly widgetsApiService: DossierWidgetsApiService,
-    private readonly dossierWidgetsLayoutService: DossierWidgetsLayoutService
+    private readonly caseTabService: CaseTabService,
+    private readonly widgetsApiService: CaseWidgetsApiService,
+    private readonly caseWidgetsLayoutService: CaseWidgetsLayoutService
   ) {}
 
   public ngOnInit(): void {
-    this.dossierTabService.disableTabHorizontalOverflow();
+    this.caseTabService.disableTabHorizontalOverflow();
   }
 
   public ngOnDestroy(): void {
-    this.dossierWidgetsLayoutService.reset();
-    this.dossierTabService.enableTabHorizontalOverflow();
+    this.caseWidgetsLayoutService.reset();
+    this.caseTabService.enableTabHorizontalOverflow();
   }
 }

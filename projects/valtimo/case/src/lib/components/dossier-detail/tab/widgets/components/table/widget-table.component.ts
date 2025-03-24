@@ -33,7 +33,7 @@ import {
 } from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap} from 'rxjs';
 import {CaseWidgetAction, FieldsCaseWidgetValue, TableCaseWidget} from '../../../../../../models';
-import {DossierWidgetsApiService} from '../../../../../../services';
+import {CaseWidgetsApiService} from '../../../../../../services';
 import {WidgetProcess} from '../widget-process/widget-process';
 import {DocumentService} from '@valtimo/document';
 import {PermissionService} from '@valtimo/access-control';
@@ -136,7 +136,7 @@ export class WidgetTableComponent extends WidgetProcess {
       combineLatest([
         !queryParams
           ? of(data)
-          : this.dossierWidgetsApiService
+          : this.caseWidgetsApiService
               .getWidgetData(
                 this.documentId,
                 this.tabKey,
@@ -162,7 +162,7 @@ export class WidgetTableComponent extends WidgetProcess {
   constructor(
     protected readonly documentService: DocumentService,
     protected readonly permissionService: PermissionService,
-    private readonly dossierWidgetsApiService: DossierWidgetsApiService,
+    private readonly caseWidgetsApiService: CaseWidgetsApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly widgetsService: WidgetsService
   ) {

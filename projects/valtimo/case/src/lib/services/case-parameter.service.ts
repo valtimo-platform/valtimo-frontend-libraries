@@ -30,7 +30,7 @@ import {AssigneeFilter, Direction, SearchFieldValues} from '@valtimo/config';
 import {Pagination} from '@valtimo/components';
 
 @Injectable()
-export class DossierParameterService implements OnDestroy {
+export class CaseParameterService implements OnDestroy {
   private readonly _dossierParameters$ = new BehaviorSubject<DossierParameters>(undefined);
   private readonly _searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
 

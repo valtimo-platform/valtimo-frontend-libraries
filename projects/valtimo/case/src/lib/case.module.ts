@@ -91,7 +91,7 @@ import {CaseRoutingModule} from './case-routing.module';
 import {DossierSupportingProcessStartModalComponent} from './components/dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {DossierUpdateComponent} from './components/dossier-update/dossier-update.component';
 import {TAB_MAP} from './constants';
-import {DossierBulkAssignService, DossierService} from './services';
+import {CaseBulkAssignService, CaseService} from './services';
 import {DossierDetailTabFormioComponent} from './components/dossier-detail/tab/formio/formio.component';
 import {TabTranslatePipeModule} from './pipes';
 import {DossierDetailTabNotFoundComponent} from './components/dossier-detail/tab/not-found/not-found.component';
@@ -199,8 +199,8 @@ export class CaseModule {
     return {
       ngModule: CaseModule,
       providers: [
-        DossierService,
-        DossierBulkAssignService,
+        CaseService,
+        CaseBulkAssignService,
         {
           provide: TAB_MAP,
           useFactory: tabsFactory,

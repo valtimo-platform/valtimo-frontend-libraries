@@ -15,7 +15,7 @@
  */
 
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DossierTabService} from '../../../../services';
+import {CaseTabService} from '../../../../services';
 import {ActivatedRoute} from '@angular/router';
 import {FormService} from '@valtimo/form';
 import {BehaviorSubject, combineLatest, Observable, of, switchMap, tap} from 'rxjs';
@@ -58,7 +58,7 @@ export class DossierDetailTabFormioComponent {
   );
 
   constructor(
-    private readonly tabService: DossierTabService,
+    private readonly tabService: CaseTabService,
     private readonly route: ActivatedRoute,
     private readonly formService: FormService
   ) {}

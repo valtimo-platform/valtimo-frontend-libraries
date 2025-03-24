@@ -21,7 +21,7 @@ import {BehaviorSubject, Observable, take} from 'rxjs';
 import {CandidateUser} from '../models';
 
 @Injectable()
-export class DossierBulkAssignService {
+export class CaseBulkAssignService {
   public readonly candidateUsers$ = new BehaviorSubject<CandidateUser[]>([]);
 
   private _valtimoEndpointUri: string;

@@ -18,13 +18,13 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, filter, map, Observable, take, tap} from 'rxjs';
 import {Pagination} from '@valtimo/components';
 import {NGXLogger} from 'ngx-logger';
-import {DossierParameterService} from './dossier-parameter.service';
+import {CaseParameterService} from './case-parameter.service';
 import {DefinitionColumn} from '@valtimo/config';
-import {DossierService} from './dossier.service';
+import {CaseService} from './case.service';
 import {Documents, SortState, SpecifiedDocuments} from '@valtimo/document';
 
 @Injectable()
-export class DossierListPaginationService {
+export class CaseListPaginationService {
   private readonly DEFAULT_PAGINATION: Pagination = {
     collectionSize: 0,
     page: 1,
@@ -37,20 +37,20 @@ export class DossierListPaginationService {
   private readonly _paginationCopy$ = this._pagination$.pipe(
     filter(pagination => !!pagination),
     map(pagination => pagination && JSON.parse(JSON.stringify(pagination))),
-    tap(pagination => this.dossierParameterService.setPaginationParameters(pagination))
+    tap(pagination => this.caseParameterService.setPaginationParameters(pagination))
   );
 
-  get pagination$(): Observable<Pagination> {
+  public get pagination$(): Observable<Pagination> {
     return this._paginationCopy$;
   }
 
   constructor(
     private readonly logger: NGXLogger,
-    private readonly dossierParameterService: DossierParameterService,
-    private readonly dossierService: DossierService
+    private readonly caseParameterService: CaseParameterService,
+    private readonly caseService: CaseService
   ) {}
 
-  pageChange(newPage: number): void {
+  public pageChange(newPage: number): void {
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.page !== newPage) {
         this.logger.debug(`Page change: ${newPage}`);
@@ -59,7 +59,7 @@ export class DossierListPaginationService {
     });
   }
 
-  pageSizeChange(newPageSize: number): void {
+  public pageSizeChange(newPageSize: number): void {
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.size !== newPageSize) {
         const amountOfAvailablePages = Math.ceil(+pagination.collectionSize / newPageSize);
@@ -72,7 +72,7 @@ export class DossierListPaginationService {
     });
   }
 
-  sortChanged(newSortState: SortState): void {
+  public sortChanged(newSortState: SortState): void {
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && JSON.stringify(pagination.sort) !== JSON.stringify(newSortState)) {
         this.logger.debug(`Sort state change: ${JSON.stringify(newSortState)}`);
@@ -81,13 +81,14 @@ export class DossierListPaginationService {
     });
   }
 
-  setPage(newPageNumber: number): void {
+  public setPage(newPageNumber: number): void {
     this._pagination$.pipe(take(1)).subscribe(pagination => {
+      if(!pagination) return;
       this._pagination$.next({...pagination, page: newPageNumber});
     });
   }
 
-  setCollectionSize(documents: Documents | SpecifiedDocuments): void {
+  public setCollectionSize(documents: Documents | SpecifiedDocuments): void {
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination && pagination.collectionSize !== documents.totalElements) {
         this._pagination$.next({...pagination, collectionSize: documents.totalElements});
@@ -95,7 +96,7 @@ export class DossierListPaginationService {
     });
   }
 
-  checkPage(documents: Documents | SpecifiedDocuments): void {
+  public checkPage(documents: Documents | SpecifiedDocuments): void {
     this._pagination$.pipe(take(1)).subscribe(pagination => {
       if (pagination) {
         const amountOfItems = documents.totalElements;
@@ -114,12 +115,12 @@ export class DossierListPaginationService {
     });
   }
 
-  clearPagination(): void {
+  public clearPagination(): void {
     this._pagination$.next(undefined);
   }
 
-  setPagination(columns: Array<DefinitionColumn>): void {
-    this.dossierParameterService.queryPaginationParams$
+  public setPagination(columns: Array<DefinitionColumn>): void {
+    this.caseParameterService.queryPaginationParams$
       .pipe(take(1))
       .subscribe(queryPaginationParams => {
         const defaultPagination: Pagination = this.getDefaultPagination(columns);
@@ -132,7 +133,7 @@ export class DossierListPaginationService {
   }
 
   private getDefaultPagination(columns: Array<DefinitionColumn>): Pagination {
-    const defaultSortState = this.dossierService.getInitialSortState(columns);
+    const defaultSortState = this.caseService.getInitialSortState(columns);
 
     return {
       ...this.DEFAULT_PAGINATION,

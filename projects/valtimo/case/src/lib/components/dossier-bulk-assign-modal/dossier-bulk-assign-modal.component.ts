@@ -25,7 +25,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ListItem} from 'carbon-components-angular';
 import {map, Observable} from 'rxjs';
 import {CandidateUser} from '../../models';
-import {DossierBulkAssignService} from '../../services';
+import {CaseBulkAssignService} from '../../services';
 
 @Component({
   selector: 'valtimo-dossier-bulk-assign-modal',
@@ -61,7 +61,7 @@ export class DossierBulkAssignModalComponent {
   });
 
   constructor(
-    private bulkAssignService: DossierBulkAssignService,
+    private bulkAssignService: CaseBulkAssignService,
     private fb: FormBuilder
   ) {}
 

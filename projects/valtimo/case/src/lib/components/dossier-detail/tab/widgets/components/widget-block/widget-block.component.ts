@@ -49,9 +49,9 @@ import {
 } from 'rxjs';
 import {CaseWidgetType, CaseWidgetWithUuid, WidgetTableContent} from '../../../../../../models';
 import {
-  DossierTabService,
-  DossierWidgetsApiService,
-  DossierWidgetsLayoutService,
+  CaseTabService,
+  CaseWidgetsApiService,
+  CaseWidgetsLayoutService,
 } from '../../../../../../services';
 import {WidgetCustomComponent} from '../custom/widget-custom.component';
 import {WidgetFieldComponent} from '../field/widget-field.component';
@@ -110,12 +110,12 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
       const blockHeight = Math.ceil((contentHeight + 16) / WIDGET_HEIGHT_1X) * WIDGET_HEIGHT_1X;
 
       this.renderer.setStyle(viewRef.element.nativeElement, 'height', `${blockHeight}px`);
-      this.dossierWidgetsLayoutService.triggerMuuriLayout();
+      this.caseWidgetsLayoutService.triggerMuuriLayout();
     })
   );
 
   public readonly blockWidthPercentage$ = combineLatest([
-    this.dossierWidgetsLayoutService.amountOfColumns$,
+    this.caseWidgetsLayoutService.amountOfColumns$,
     this.widget$,
     this._viewContainerRef$,
   ]).pipe(
@@ -124,7 +124,7 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
         widget.width > amountOfColumns ? 100 : (widget.width / amountOfColumns) * 100;
 
       this.renderer.setStyle(viewRef.element.nativeElement, 'width', `${percentage}%`);
-      this.dossierWidgetsLayoutService.triggerMuuriLayout();
+      this.caseWidgetsLayoutService.triggerMuuriLayout();
     })
   );
 
@@ -135,7 +135,7 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
     filter(documentId => !!documentId)
   );
 
-  public readonly tabKey$: Observable<string> = this.dossierTabService.activeTabKey$;
+  public readonly tabKey$: Observable<string> = this.caseTabService.activeTabKey$;
 
   public readonly widgetData$: Observable<any[] | {} | null> = combineLatest([
     this.widget$,
@@ -156,11 +156,11 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
           )
     ),
     tap(() => {
-      this.dossierWidgetsLayoutService.setCaseWidgetDataLoaded(this._widgetUuid);
+      this.caseWidgetsLayoutService.setCaseWidgetDataLoaded(this._widgetUuid);
     }),
     catchError((error: HttpErrorResponse) => {
       if (error.status === 404)
-        this.dossierWidgetsLayoutService.setCaseWidgetDataLoaded(this._widgetUuid);
+        this.caseWidgetsLayoutService.setCaseWidgetDataLoaded(this._widgetUuid);
 
       return of(null);
     })
@@ -185,10 +185,10 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   private _widgetUuid!: string;
 
   constructor(
-    private readonly dossierWidgetsLayoutService: DossierWidgetsLayoutService,
-    private readonly dossierTabService: DossierTabService,
+    private readonly caseWidgetsLayoutService: CaseWidgetsLayoutService,
+    private readonly caseTabService: CaseTabService,
     private readonly route: ActivatedRoute,
-    private readonly widgetsApiService: DossierWidgetsApiService,
+    private readonly widgetsApiService: CaseWidgetsApiService,
     private readonly cdsThemeService: CdsThemeService,
     private readonly renderer: Renderer2,
     private readonly viewRef: ViewContainerRef

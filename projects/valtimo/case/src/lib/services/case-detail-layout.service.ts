@@ -10,12 +10,12 @@ import {
   DOSSIER_DETAIL_TASK_LIST_WIDTH,
 } from '../constants';
 import {DossierDetailLayout} from '../models';
-import {DossierTabService} from './dossier-tab.service';
+import {CaseTabService} from './case-tab.service';
 
 @Injectable()
-export class DossierDetailLayoutService {
+export class CaseDetailLayoutService {
   private readonly _tabContentContainerWidth$ = new BehaviorSubject<number | null>(null);
-  private readonly _showTaskList$ = this.dossierTabService.showTaskList$;
+  private readonly _showTaskList$ = this.caseTabService.showTaskList$;
   private readonly _taskAndProcessLinkOpenedInPanel$ =
     new BehaviorSubject<TaskWithProcessLink | null>(null);
   private readonly _formDisplayType$ = new BehaviorSubject<FormDisplayType>(
@@ -25,7 +25,7 @@ export class DossierDetailLayoutService {
     DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE
   );
 
-  public get tabContentContainerWidth$(): Observable<number> {
+  public get tabContentContainerWidth$(): Observable<number | null> {
     return this._tabContentContainerWidth$.pipe(filter(width => typeof width === 'number'));
   }
 
@@ -37,7 +37,7 @@ export class DossierDetailLayoutService {
     return this._formDisplaySize$.asObservable();
   }
 
-  constructor(private readonly dossierTabService: DossierTabService) {}
+  constructor(private readonly caseTabService: CaseTabService) {}
 
   public readonly dossierDetailLayout$: Observable<DossierDetailLayout | any> = combineLatest([
     this.tabContentContainerWidth$,
@@ -63,7 +63,7 @@ export class DossierDetailLayoutService {
         }
 
         if (taskAndProcessLinkOpenedInPanel && formDisplayType === 'panel') {
-          return this.getPanelLayout(tabContentContainerWidth, formDisplaySize);
+          return this.getPanelLayout(tabContentContainerWidth ?? 0, formDisplaySize);
         }
 
         return {} as DossierDetailLayout;

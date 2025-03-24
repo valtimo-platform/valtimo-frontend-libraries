@@ -15,24 +15,24 @@
  */
 
 import {Injectable} from '@angular/core';
-import {DossierListService} from './dossier-list.service';
+import {CaseListService} from './case-list.service';
 import {CaseStatusService, InternalCaseStatus} from '@valtimo/document';
-import {DossierParameterService} from './dossier-parameter.service';
+import {CaseParameterService} from './case-parameter.service';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, take, tap} from 'rxjs';
 import {CASE_WITHOUT_STATUS_STATUS} from '../constants';
 
 @Injectable()
-export class DossierListStatusService {
+export class CaseListStatusService {
   private readonly _selectedCaseStatuses$ = new BehaviorSubject<InternalCaseStatus[]>([]);
 
   private readonly _showStatusSelector$ = new BehaviorSubject<boolean>(false);
 
   private readonly _caseStatuses$: Observable<Array<InternalCaseStatus>> =
-    this.dossierListService.documentDefinitionName$.pipe(
+    this.caseListService.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
         combineLatest([
           this.caseStatusService.getInternalCaseStatuses(documentDefinitionName),
-          this.dossierParameterService.queryStatusParams$,
+          this.caseParameterService.queryStatusParams$,
         ]).pipe(take(1))
       ),
       switchMap(([statuses, queryStatuses]) =>
@@ -64,13 +64,13 @@ export class DossierListStatusService {
   }
 
   constructor(
-    private readonly dossierListService: DossierListService,
+    private readonly caseListService: CaseListService,
     private readonly caseStatusService: CaseStatusService,
-    private readonly dossierParameterService: DossierParameterService
+    private readonly caseParameterService: CaseParameterService
   ) {}
 
   public setSelectedStatuses(statuses: InternalCaseStatus[]): void {
     this._selectedCaseStatuses$.next(statuses);
-    this.dossierParameterService.setStatusParameter(statuses.map(status => status.key));
+    this.caseParameterService.setStatusParameter(statuses.map(status => status.key));
   }
 }

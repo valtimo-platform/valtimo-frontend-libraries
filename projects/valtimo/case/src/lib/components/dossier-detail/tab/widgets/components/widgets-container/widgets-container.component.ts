@@ -26,7 +26,7 @@ import {
 import {CommonModule} from '@angular/common';
 import {CaseWidget, CaseWidgetWithUuid} from '../../../../../../models';
 import {WidgetBlockComponent} from '../widget-block/widget-block.component';
-import {DossierWidgetsLayoutService} from '../../../../../../services';
+import {CaseWidgetsLayoutService} from '../../../../../../services';
 import {v4 as uuid} from 'uuid';
 import {BehaviorSubject, delay, take} from 'rxjs';
 import Muuri from 'muuri';
@@ -46,13 +46,13 @@ export class WidgetsContainerComponent implements AfterViewInit, OnDestroy {
 
   @Input() public set widgets(value: CaseWidget[]) {
     const widgetsWithUuids = value.map(widget => ({...widget, uuid: uuid()}));
-    this.dossierWidgetsLayoutService.setWidgets(widgetsWithUuids);
+    this.caseWidgetsLayoutService.setWidgets(widgetsWithUuids);
     this.widgetsWithUuids$.next(widgetsWithUuids);
   }
 
   private _observer!: ResizeObserver;
 
-  constructor(private readonly dossierWidgetsLayoutService: DossierWidgetsLayoutService) {}
+  constructor(private readonly caseWidgetsLayoutService: CaseWidgetsLayoutService) {}
 
   public ngAfterViewInit(): void {
     this._observer = new ResizeObserver(event => {
@@ -71,14 +71,14 @@ export class WidgetsContainerComponent implements AfterViewInit, OnDestroy {
     const containerWidth = event[0]?.borderBoxSize[0]?.inlineSize;
 
     if (typeof containerWidth === 'number' && containerWidth !== 0) {
-      this.dossierWidgetsLayoutService.setContainerWidth(containerWidth);
-      this.dossierWidgetsLayoutService.triggerMuuriLayout();
+      this.caseWidgetsLayoutService.setContainerWidth(containerWidth);
+      this.caseWidgetsLayoutService.triggerMuuriLayout();
     }
   }
 
   private initMuuri(): void {
-    this.dossierWidgetsLayoutService.loaded$.pipe(take(1), delay(300)).subscribe(() => {
-      this.dossierWidgetsLayoutService.setMuuri(
+    this.caseWidgetsLayoutService.loaded$.pipe(take(1), delay(300)).subscribe(() => {
+      this.caseWidgetsLayoutService.setMuuri(
         new Muuri(this._widgetsContainerRef.nativeElement, {
           layout: {
             fillGaps: true,

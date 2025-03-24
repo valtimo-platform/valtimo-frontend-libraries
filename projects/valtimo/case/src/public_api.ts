@@ -29,6 +29,6 @@ export * from './lib/components/dossier-list/dossier-list.component';
 export * from './lib/components/dossier-process-start-modal/dossier-process-start-modal.component';
 export * from './lib/constants';
 export * from './lib/case.module';
-export * from './lib/services/dossier.service';
+export * from './lib/services/case.service';
 export * from './lib/models';
 export * from './lib/services';

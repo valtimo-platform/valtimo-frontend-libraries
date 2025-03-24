@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-export * from './dossier-bulk-assign.service';
-export * from './dossier-column.service';
-export * from './dossier-parameter.service';
-export * from './dossier-list.service';
-export * from './dossier-list-assignee.service';
-export * from './dossier-list-pagination.service';
-export * from './dossier-list-search.service';
-export * from './dossier-tab.service';
-export * from './dossier.service';
-export * from './dossier-tab-api.service';
-export * from './dossier-list-status.service';
+export * from './case-bulk-assign.service';
+export * from './case-column.service';
+export * from './case-parameter.service';
+export * from './case-list.service';
+export * from './case-list-assignee.service';
+export * from './case-list-pagination.service';
+export * from './case-list-search.service';
+export * from './case-tab.service';
+export * from './case.service';
+export * from './case-tab-api.service';
+export * from './case-list-status.service';
 export * from './start-modal.service';
-export * from './dossier-widgets-api.service';
-export * from './dossier-widgets-layout.service';
-export * from './dossier-detail-layout.service';
+export * from './case-widgets-api.service';
+export * from './case-widgets-layout.service';
+export * from './case-detail-layout.service';

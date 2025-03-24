@@ -21,12 +21,12 @@ import {BehaviorSubject, Observable} from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class DossierService {
+export class CaseService {
   private readonly definitions: any;
   private readonly _refreshDocument$ = new BehaviorSubject<null>(null);
 
   constructor(private readonly configService: ConfigService) {
-    this.definitions = configService.config.definitions;
+    this.definitions = this.configService.config.definitions;
   }
 
   public getImplementationEnvironmentDefinitions(name: string) {

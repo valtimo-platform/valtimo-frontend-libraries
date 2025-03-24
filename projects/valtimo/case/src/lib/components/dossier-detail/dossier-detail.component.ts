@@ -82,7 +82,7 @@ import {
   CAN_VIEW_CASE_PERMISSION,
   DOSSIER_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
-import {DossierDetailLayoutService, DossierService, DossierTabService} from '../../services';
+import {CaseDetailLayoutService, CaseService, CaseTabService} from '../../services';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
 import {WidgetsService} from './tab/widgets/widgets.service';
 
@@ -90,7 +90,7 @@ import {WidgetsService} from './tab/widgets/widgets.service';
   selector: 'valtimo-dossier-detail',
   templateUrl: './dossier-detail.component.html',
   styleUrls: ['./dossier-detail.component.scss'],
-  providers: [DossierTabService, DossierDetailLayoutService, NotificationService],
+  providers: [CaseTabService, CaseDetailLayoutService, NotificationService],
 })
 export class DossierDetailComponent
   extends PendingChangesComponent
@@ -123,7 +123,7 @@ export class DossierDetailComponent
     .pipe(map(userIdentity => userIdentity?.roles?.includes('ROLE_ADMIN')));
 
   public readonly taskAndProcessLinkOpenedInPanel$ =
-    this.dossierDetailLayoutService.taskAndProcessLinkOpenedInPanel$;
+    this.caseDetailLayoutService.taskAndProcessLinkOpenedInPanel$;
 
   private readonly _caseStatusKey$ = new BehaviorSubject<string | null | 'NOT_AVAILABLE'>(null);
 
@@ -146,7 +146,7 @@ export class DossierDetailComponent
   );
 
   public readonly document$: Observable<ValtimoDocument | null> = combineLatest([
-    this.dossierService.refreshDocument$,
+    this.caseService.refreshDocument$,
     this.canView$,
   ]).pipe(
     filter(([_, canView]) => canView),
@@ -263,9 +263,9 @@ export class DossierDetailComponent
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   public readonly tabHorizontalOverflowDisabled =
-    this.dossierTabService.tabHorizontalOverflowDisabled;
+    this.caseTabService.tabHorizontalOverflowDisabled;
 
-  public readonly showTaskList$ = this.dossierTabService.showTaskList$;
+  public readonly showTaskList$ = this.caseTabService.showTaskList$;
 
   private readonly _activeTabName$ = new BehaviorSubject<string | null>(null);
   public get activeTabName$(): Observable<string | null> {
@@ -278,7 +278,7 @@ export class DossierDetailComponent
 
   public readonly DOSSIER_DETAIL_GUTTER_SIZE = DOSSIER_DETAIL_GUTTER_SIZE;
 
-  public readonly dossierDetailLayout$ = this.dossierDetailLayoutService.dossierDetailLayout$;
+  public readonly dossierDetailLayout$ = this.caseDetailLayoutService.dossierDetailLayout$;
 
   public readonly openTaskAndProcessLinkInModal$ = new Subject<TaskWithProcessLink>();
 
@@ -302,9 +302,9 @@ export class DossierDetailComponent
     private readonly componentFactoryResolver: ComponentFactoryResolver,
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
-    private readonly dossierDetailLayoutService: DossierDetailLayoutService,
-    private readonly dossierService: DossierService,
-    private readonly dossierTabService: DossierTabService,
+    private readonly caseDetailLayoutService: CaseDetailLayoutService,
+    private readonly caseService: CaseService,
+    private readonly caseTabService: CaseTabService,
     private readonly iconService: IconService,
     private readonly keyCloakService: KeycloakService,
     private readonly logger: NGXLogger,
@@ -394,7 +394,7 @@ export class DossierDetailComponent
       .subscribe({
         next: (): void => {
           this.isAssigning$.next(false);
-          this.dossierService.refresh();
+          this.caseService.refresh();
         },
         error: (): void => {
           this.isAssigning$.next(false);
@@ -416,7 +416,7 @@ export class DossierDetailComponent
       .subscribe({
         next: (): void => {
           this.isAssigning$.next(false);
-          this.dossierService.refresh();
+          this.caseService.refresh();
         },
         error: (): void => {
           this.isAssigning$.next(false);
@@ -459,18 +459,18 @@ export class DossierDetailComponent
       taskProcessLinkResult.processLinkActivityResult.properties.formSize ||
       DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE;
 
-    this.dossierDetailLayoutService.setFormDisplaySize(size);
-    this.dossierDetailLayoutService.setFormDisplayType(displayType);
+    this.caseDetailLayoutService.setFormDisplaySize(size);
+    this.caseDetailLayoutService.setFormDisplayType(displayType);
 
     if (displayType === 'panel') {
-      this.dossierDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(taskProcessLinkResult);
+      this.caseDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(taskProcessLinkResult);
     } else {
       this.openTaskAndProcessLinkInModal$.next({...taskProcessLinkResult});
     }
   }
 
   public onTaskDetailsClose(): void {
-    this.dossierDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(null);
+    this.caseDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(null);
   }
 
   public onActiveChangeEvent(event: boolean): void {
@@ -502,7 +502,7 @@ export class DossierDetailComponent
   }
 
   public onFormSubmitEvent(): void {
-    this.dossierDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(null);
+    this.caseDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(null);
 
     if (!this.tabLoader) return;
     this.tabLoader.refreshView();
@@ -513,7 +513,7 @@ export class DossierDetailComponent
     this._activeChange = false;
     this._activeTabName$.next(this._pendingTab.name);
     this.tabLoader.load(this._pendingTab);
-    this.dossierDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(null);
+    this.caseDetailLayoutService.setTaskAndProcessLinkOpenedInPanel(null);
   }
 
   protected onCancelRedirect(): void {
@@ -531,7 +531,7 @@ export class DossierDetailComponent
   }
 
   private initTabLoader(): void {
-    combineLatest([this.dossierTabService.tabs$, this.canView$])
+    combineLatest([this.caseTabService.tabs$, this.canView$])
       .pipe(take(1))
       .subscribe(([tabs, canView]) => {
         if (canView) {
@@ -545,7 +545,7 @@ export class DossierDetailComponent
               this.route
             );
             this.tabLoader.initial(this._initialTabName);
-            this.dossierTabService.setTabLoader(this.tabLoader);
+            this.caseTabService.setTabLoader(this.tabLoader);
             this.loadingTabs$.next(false);
             this.activeTab$ = this.tabLoader.activeTab$;
           } else {
@@ -562,7 +562,7 @@ export class DossierDetailComponent
   }
 
   public assignmentOfDocumentChanged(): void {
-    this.dossierService.refresh();
+    this.caseService.refresh();
   }
 
   private getCustomDossierHeaderItem(item): void {
@@ -626,7 +626,7 @@ export class DossierDetailComponent
     const elementWidth = event[0]?.borderBoxSize[0]?.inlineSize;
 
     if (typeof elementWidth === 'number' && elementWidth !== 0) {
-      this.dossierDetailLayoutService.setTabContentContainerWidth(elementWidth);
+      this.caseDetailLayoutService.setTabContentContainerWidth(elementWidth);
     }
   }
 

@@ -15,7 +15,7 @@ import {WIDGET_WIDTH_1X} from '../constants';
 import Muuri from 'muuri';
 
 @Injectable({providedIn: 'root'})
-export class DossierWidgetsLayoutService implements OnDestroy {
+export class CaseWidgetsLayoutService implements OnDestroy {
   private readonly _containerWidthSubject$ = new BehaviorSubject<number | null>(null);
   private readonly _widgetsSubject$ = new BehaviorSubject<CaseWidgetWithUuid[] | null>(null);
   private readonly _caseWidgetDataLoadedSubject$ = new BehaviorSubject<string[] | null>(null);

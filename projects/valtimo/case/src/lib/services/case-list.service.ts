@@ -16,15 +16,15 @@
 import {Injectable} from '@angular/core';
 import {Documents, SpecifiedDocuments} from '@valtimo/document';
 import {BehaviorSubject, map, Observable, take} from 'rxjs';
-import {DossierColumnService} from '.';
+import {CaseColumnService} from '.';
 
 @Injectable()
-export class DossierListService {
+export class CaseListService {
   private readonly _documentDefinitionName$ = new BehaviorSubject<string>('');
 
   private readonly _hasEnvColumnConfig$: Observable<boolean> = this.documentDefinitionName$.pipe(
     map(documentDefinitionName =>
-      this.dossierColumnService.hasEnvironmentConfig(documentDefinitionName)
+      this.caseColumnService.hasEnvironmentConfig(documentDefinitionName)
     )
   );
 
@@ -47,7 +47,7 @@ export class DossierListService {
     return this._forceRefresh$.asObservable();
   }
 
-  constructor(private readonly dossierColumnService: DossierColumnService) {}
+  constructor(private readonly caseColumnService: CaseColumnService) {}
 
   public setDocumentDefinitionName(documentDefinitionName: string): void {
     this._documentDefinitionName$.next(documentDefinitionName);

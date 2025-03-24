@@ -20,7 +20,7 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
-import {DossierListService} from '../../services';
+import {CaseListService} from '../../services';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
 
 declare const $;
@@ -69,7 +69,7 @@ export class DossierListActionsComponent implements OnInit {
 
   constructor(
     private readonly documentService: DocumentService,
-    private readonly listService: DossierListService,
+    private readonly listService: CaseListService,
     private readonly notificationService: NotificationService,
     private readonly router: Router,
     private readonly translateService: TranslateService

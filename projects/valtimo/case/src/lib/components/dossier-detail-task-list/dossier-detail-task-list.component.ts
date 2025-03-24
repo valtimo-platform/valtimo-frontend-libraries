@@ -50,7 +50,7 @@ import {DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
 import {PermissionService} from '@valtimo/access-control';
 import moment from 'moment';
-import {DossierDetailLayoutService} from '../../services';
+import {CaseDetailLayoutService} from '../../services';
 import {ProcessLinkService, TaskWithProcessLink} from '@valtimo/process-link';
 import {UserFilled20} from '@carbon/icons';
 
@@ -148,7 +148,7 @@ export class DossierDetailTaskListComponent {
     tap(() => this.loadingTasks$.next(false))
   );
 
-  public readonly formSize$ = this.dossierDetailLayoutService.formDisplaySize$;
+  public readonly formSize$ = this.caseDetailLayoutService.formDisplaySize$;
 
   constructor(
     private readonly documentService: DocumentService,
@@ -156,7 +156,7 @@ export class DossierDetailTaskListComponent {
     private readonly route: ActivatedRoute,
     private readonly permissionService: PermissionService,
     private readonly sseService: SseService,
-    private readonly dossierDetailLayoutService: DossierDetailLayoutService,
+    private readonly caseDetailLayoutService: CaseDetailLayoutService,
     private readonly processLinkService: ProcessLinkService
   ) {
     this.iconService.registerAll([UserFilled20]);

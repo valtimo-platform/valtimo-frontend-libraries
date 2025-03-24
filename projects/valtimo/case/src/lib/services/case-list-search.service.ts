@@ -17,36 +17,36 @@
 import {Injectable} from '@angular/core';
 import {Observable, switchMap} from 'rxjs';
 import {SearchField, SearchFieldValues, SearchFilter, SearchFilterRange} from '@valtimo/config';
-import {DossierListService} from './dossier-list.service';
+import {CaseListService} from './case-list.service';
 import {DocumentService} from '@valtimo/document';
-import {DossierParameterService} from './dossier-parameter.service';
+import {CaseParameterService} from './case-parameter.service';
 
 @Injectable()
-export class DossierListSearchService {
+export class CaseListSearchService {
   private readonly _documentSearchFields$: Observable<Array<SearchField> | null> =
-    this.dossierListService.documentDefinitionName$.pipe(
+    this.caseListService.documentDefinitionName$.pipe(
       switchMap(documentDefinitionName =>
         this.documentService.getDocumentSearchFields(documentDefinitionName)
       )
     );
 
-  get documentSearchFields$(): Observable<Array<SearchField> | null> {
+  public get documentSearchFields$(): Observable<Array<SearchField> | null> {
     return this._documentSearchFields$;
   }
 
   constructor(
-    private readonly dossierListService: DossierListService,
+    private readonly caseListService: CaseListService,
     private readonly documentService: DocumentService,
-    private readonly dossierParameterService: DossierParameterService
+    private readonly caseParameterService: CaseParameterService
   ) {}
 
-  search(searchFieldValues: SearchFieldValues): void {
-    this.dossierParameterService.setSearchFieldValues(searchFieldValues || {});
-    this.dossierParameterService.setSearchParameters(searchFieldValues);
-    this.dossierListService.checkRefresh();
+  public search(searchFieldValues: SearchFieldValues): void {
+    this.caseParameterService.setSearchFieldValues(searchFieldValues || {});
+    this.caseParameterService.setSearchParameters(searchFieldValues);
+    this.caseListService.checkRefresh();
   }
 
-  mapSearchValuesToFilters(values: SearchFieldValues): Array<SearchFilter | SearchFilterRange> {
+  public mapSearchValuesToFilters(values: SearchFieldValues): Array<SearchFilter | SearchFilterRange> {
     const filters: Array<SearchFilter | SearchFilterRange> = [];
 
     Object.keys(values).forEach(valueKey => {

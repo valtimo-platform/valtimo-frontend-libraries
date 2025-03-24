@@ -48,7 +48,7 @@ import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, 
 import {CarbonListModule, ViewContentService} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
 import {Page} from '@valtimo/config';
-import {DossierWidgetsApiService} from '../../../../../../services';
+import {CaseWidgetsApiService} from '../../../../../../services';
 import {WidgetProcess} from '../widget-process/widget-process';
 import {DocumentService} from '@valtimo/document';
 import {PermissionService} from '@valtimo/access-control';
@@ -184,7 +184,7 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
     protected readonly permissionService: PermissionService,
     private readonly viewContentService: ViewContentService,
     private readonly cdr: ChangeDetectorRef,
-    private readonly widgetApiService: DossierWidgetsApiService,
+    private readonly widgetApiService: CaseWidgetsApiService,
     private readonly widgetsService: WidgetsService
   ) {
     super(documentService, permissionService);
