@@ -79,7 +79,7 @@ import {
   CaseListStatusService,
   CaseParameterService,
 } from '../../services';
-import { DossierListActionsComponent } from '../dossier-list-actions/dossier-list-actions.component';
+import { CaseListActionsComponent } from '../case-list-actions/case-list-actions.component';
 
 @Component({
   templateUrl: './case-list.component.html',
@@ -96,7 +96,7 @@ import { DossierListActionsComponent } from '../dossier-list-actions/dossier-lis
 })
 export class CaseListComponent implements OnInit, OnDestroy {
   @ViewChild(CarbonListComponent) carbonList: CarbonListComponent;
-  @ViewChild(DossierListActionsComponent) listActionsComponent: DossierListActionsComponent;
+  @ViewChild(CaseListActionsComponent) listActionsComponent: CaseListActionsComponent;
   @ViewChild(Tabs) tabsComponent: Tabs;
 
   public activeTab: CaseListTab = null;
@@ -614,7 +614,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
   }
 
   public startCase(): void {
-    this.listActionsComponent.startDossier();
+    this.listActionsComponent.startCase();
   }
 
   public forceRefresh(): void {

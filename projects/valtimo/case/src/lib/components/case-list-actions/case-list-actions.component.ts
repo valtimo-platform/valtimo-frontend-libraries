@@ -26,12 +26,12 @@ import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/
 declare const $;
 
 @Component({
-  selector: 'valtimo-dossier-list-actions',
-  templateUrl: './dossier-list-actions.component.html',
-  styleUrls: ['./dossier-list-actions.component.scss'],
+  selector: 'valtimo-case-list-actions',
+  templateUrl: './case-list-actions.component.html',
+  styleUrls: ['./case-list-actions.component.scss'],
   providers: [NotificationService],
 })
-export class DossierListActionsComponent implements OnInit {
+export class CaseListActionsComponent implements OnInit {
   @ViewChild('processStartModal') processStart: DossierProcessStartModalComponent;
 
   private readonly _loading$ = new BehaviorSubject<boolean>(true);
@@ -79,7 +79,7 @@ export class DossierListActionsComponent implements OnInit {
     this.modalListenerAdded = false;
   }
 
-  public startDossier(): void {
+  public startCase(): void {
     const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
 
     if (associatedProcessDocumentDefinitions.length > 1) {
