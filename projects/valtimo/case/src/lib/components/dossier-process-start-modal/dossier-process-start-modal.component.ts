@@ -51,7 +51,7 @@ import {FormioBeforeSubmit} from '@formio/angular/formio.common';
 import {FormioForm} from '@formio/angular';
 import {UserProviderService} from '@valtimo/security';
 import {take} from 'rxjs/operators';
-import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
+import {CAN_VIEW_CASE_PERMISSION, CASE_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
 import {CaseListService, StartModalService} from '../../services';
 import {ConfigService} from '@valtimo/config';
 import {FORM_VIEW_MODEL_TOKEN} from '@valtimo/config';
@@ -253,7 +253,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
     this.modal.hide();
     this.permissionService
       .requestPermission(CAN_VIEW_CASE_PERMISSION, {
-        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
         identifier: formSubmissionResult.documentId,
       })
       .subscribe(canViewCase => {

@@ -75,7 +75,7 @@ import {
 import {
   CAN_CREATE_CASE_PERMISSION,
   CAN_VIEW_CASE_PERMISSION,
-  DOSSIER_DETAIL_PERMISSION_RESOURCE,
+  CASE_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
 import {
   CaseBulkAssignService,
@@ -156,7 +156,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public readonly canCreateDocument$: Observable<boolean> = this.documentDefinitionName$.pipe(
     switchMap(documentDefinitionName =>
       this.permissionService.requestPermission(CAN_CREATE_CASE_PERMISSION, {
-        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocumentDefinition,
+        resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocumentDefinition,
         identifier: documentDefinitionName,
       })
     )
@@ -402,7 +402,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
           res.documents.content.map(document =>
             this.permissionService
               .requestPermission(CAN_VIEW_CASE_PERMISSION, {
-                resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+                resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
                 identifier: document.id,
               })
               .pipe(take(1))

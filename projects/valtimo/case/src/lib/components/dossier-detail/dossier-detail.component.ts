@@ -80,7 +80,7 @@ import {
   CAN_CLAIM_CASE_PERMISSION,
   CAN_DELETE_CASE_PERMISSION,
   CAN_VIEW_CASE_PERMISSION,
-  DOSSIER_DETAIL_PERMISSION_RESOURCE,
+  CASE_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
 import {CaseDetailLayoutService, CaseService, CaseTabService} from '../../services';
 import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
@@ -139,7 +139,7 @@ export class DossierDetailComponent
   public readonly canView$: Observable<boolean> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) =>
       this.permissionService.requestPermission(CAN_VIEW_CASE_PERMISSION, {
-        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
         identifier: params.get('documentId') ?? '',
       })
     )
@@ -227,7 +227,7 @@ export class DossierDetailComponent
   public readonly canAssign$: Observable<boolean> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) =>
       this.permissionService.requestPermission(CAN_ASSIGN_CASE_PERMISSION, {
-        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
         identifier: params.get('documentId') ?? '',
       })
     ),
@@ -239,7 +239,7 @@ export class DossierDetailComponent
   public readonly canClaim$: Observable<boolean> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) =>
       this.permissionService.requestPermission(CAN_CLAIM_CASE_PERMISSION, {
-        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
         identifier: params.get('documentId') ?? '',
       })
     )
@@ -249,7 +249,7 @@ export class DossierDetailComponent
   public readonly canDelete$: Observable<boolean> = this.route.paramMap.pipe(
     switchMap((params: ParamMap) =>
       this.permissionService.requestPermission(CAN_DELETE_CASE_PERMISSION, {
-        resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
+        resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
         identifier: params.get('documentId') ?? '',
       })
     )
