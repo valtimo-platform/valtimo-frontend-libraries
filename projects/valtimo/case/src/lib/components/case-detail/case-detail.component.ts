@@ -89,12 +89,11 @@ import {
 import { WidgetsService } from './tab/widgets/widgets.service';
 
 @Component({
-  selector: 'valtimo-dossier-detail',
-  templateUrl: './dossier-detail.component.html',
-  styleUrls: ['./dossier-detail.component.scss'],
+  templateUrl: './case-detail.component.html',
+  styleUrls: ['./case-detail.component.scss'],
   providers: [CaseTabService, CaseDetailLayoutService, NotificationService],
 })
-export class DossierDetailComponent
+export class CaseDetailComponent
   extends PendingChangesComponent
   implements AfterViewInit, OnDestroy
 {
@@ -107,7 +106,7 @@ export class DossierDetailComponent
   @ViewChild('tabContentContainer')
   private readonly _tabContentContainer!: ElementRef<HTMLDivElement>;
 
-  public customDossierHeaderItems: Array<any> = [];
+  public customCaseHeaderItems: Array<any> = [];
   public document: ValtimoDocument | null = null;
   public documentDefinitionName: string;
   public documentDefinitionNameTitle: string;
@@ -167,11 +166,11 @@ export class DossierDetailComponent
           this.configService.config.customDossierHeader?.hasOwnProperty(
             this.documentDefinitionName.toLowerCase()
           ) &&
-          this.customDossierHeaderItems.length === 0
+          this.customCaseHeaderItems.length === 0
         ) {
           this.configService.config.customDossierHeader[
             this.documentDefinitionName.toLowerCase()
-          ]?.forEach(item => this.getCustomDossierHeaderItem(item));
+          ]?.forEach(item => this.getCustomCaseHeaderItem(item));
         }
       }
     })
@@ -278,9 +277,9 @@ export class DossierDetailComponent
     );
   }
 
-  public readonly DOSSIER_DETAIL_GUTTER_SIZE = CASE_DETAIL_GUTTER_SIZE;
+  public readonly CASE_DETAIL_GUTTER_SIZE = CASE_DETAIL_GUTTER_SIZE;
 
-  public readonly dossierDetailLayout$ = this.caseDetailLayoutService.dossierDetailLayout$;
+  public readonly caseDetailLayout$ = this.caseDetailLayoutService.caseDetailLayout$;
 
   public readonly openTaskAndProcessLinkInModal$ = new Subject<TaskWithProcessLink>();
 
@@ -567,8 +566,8 @@ export class DossierDetailComponent
     this.caseService.refresh();
   }
 
-  private getCustomDossierHeaderItem(item): void {
-    this.customDossierHeaderItems.push({
+  private getCustomCaseHeaderItem(item): void {
+    this.customCaseHeaderItems.push({
       label: item['labelTranslationKey'] || '',
       columnSize: item['columnSize'] || 3,
       textSize: item['textSize'] || 'md',

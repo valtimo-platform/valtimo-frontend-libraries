@@ -15,12 +15,12 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {DossierDetailTabSummaryComponent} from '../components/dossier-detail/tab/summary/summary.component';
-import {DossierDetailTabProgressComponent} from '../components/dossier-detail/tab/progress/progress.component';
-import {DossierDetailTabAuditComponent} from '../components/dossier-detail/tab/audit/audit.component';
-import {DossierDetailTabDocumentsComponent} from '../components/dossier-detail/tab/documents/documents.component';
+import {DossierDetailTabSummaryComponent} from '../components/case-detail/tab/summary/summary.component';
+import {DossierDetailTabProgressComponent} from '../components/case-detail/tab/progress/progress.component';
+import {DossierDetailTabAuditComponent} from '../components/case-detail/tab/audit/audit.component';
+import {DossierDetailTabDocumentsComponent} from '../components/case-detail/tab/documents/documents.component';
 import {DefaultTabComponents, DefaultTabs} from '../models';
-import {DossierDetailTabNotesComponent} from '../components/dossier-detail/tab/notes/notes.component';
+import {DossierDetailTabNotesComponent} from '../components/case-detail/tab/notes/notes.component';
 
 const TAB_MAP = new InjectionToken<Map<string, object>>('TabMap');
 

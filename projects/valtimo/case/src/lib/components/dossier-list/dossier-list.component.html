@@ -87,7 +87,7 @@
     [items]="obs.documentItems"
     [pagination]="pagination"
     paginationIdentifier="dossierList"
-    lockedTooltipTranslationKey="dossier.rowLocked"
+    lockedTooltipTranslationKey="case.rowLocked"
     [showSelectionColumn]="canHaveAssignee"
     [tableTranslations]="tableTranslations"
     (paginationClicked)="pageChange($event)"
@@ -166,22 +166,22 @@
 
 <ng-template #changePageModal>
   <valtimo-confirmation-modal
-    confirmButtonTextTranslationKey="dossier.changePageModal.confirm"
-    contentTranslationKey="dossier.changePageModal.content"
+    confirmButtonTextTranslationKey="case.changePageModal.confirm"
+    contentTranslationKey="case.changePageModal.content"
     [outputOnConfirm]="paginationChange$ | async"
     [showModalSubject$]="showChangePageModal$"
-    titleTranslationKey="dossier.changePageModal.title"
+    titleTranslationKey="case.changePageModal.title"
     (confirmEvent)="onChangePageConfirm($event)"
   ></valtimo-confirmation-modal>
 </ng-template>
 
 <ng-template #changeTabModal>
   <valtimo-confirmation-modal
-    confirmButtonTextTranslationKey="dossier.changeTabModal.confirm"
-    contentTranslationKey="dossier.changeTabModal.content"
+    confirmButtonTextTranslationKey="case.changeTabModal.confirm"
+    contentTranslationKey="case.changeTabModal.content"
     [outputOnConfirm]="tabChange$ | async"
     [showModalSubject$]="showChangeTabModal$"
-    titleTranslationKey="dossier.changeTabModal.title"
+    titleTranslationKey="case.changeTabModal.title"
     (cancelEvent)="onChangeTabCancel()"
     (confirmEvent)="onChangeTabConfirm($event)"
   ></valtimo-confirmation-modal>

@@ -33,7 +33,7 @@
     (selectedChange)="selectObjectType($event)"
   ></v-select>
   <v-input-label
-    titleTranslationKey="dossier.zaakobjecten.objecten"
+    titleTranslationKey="case.zaakobjecten.objecten"
     [largeMargin]="!!obs.selectedObjectTypeUrl"
   ></v-input-label>
   <v-paragraph *ngIf="!obs.selectedObjectTypeUrl">{{
@@ -48,7 +48,7 @@
     [amountOfLoadingRows]="2"
     [itemsTranslationKey]="'pluginManagement.tableItemsText'"
     [showPagination]="false"
-    editButtonTranslationKey="dossier.zaakobjecten.objectType.viewObject"
+    editButtonTranslationKey="case.zaakobjecten.objectType.viewObject"
     (editButtonClicked)="rowClicked($event, obs.objecttypeSelectItems)"
   ></v-table>
 </ng-container>

@@ -39,7 +39,7 @@ export class CaseDetailLayoutService {
 
   constructor(private readonly caseTabService: CaseTabService) {}
 
-  public readonly dossierDetailLayout$: Observable<CaseDetailLayout | any> = combineLatest([
+  public readonly caseDetailLayout$: Observable<CaseDetailLayout | any> = combineLatest([
     this.tabContentContainerWidth$,
     this._showTaskList$,
     this._taskAndProcessLinkOpenedInPanel$,

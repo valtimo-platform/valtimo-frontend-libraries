@@ -19,12 +19,12 @@
  */
 
 export * from './lib/components/case-bulk-assign-modal/case-bulk-assign-modal.component';
-export * from './lib/components/dossier-detail/dossier-detail.component';
-export * from './lib/components/dossier-detail/tab/audit/audit.component';
-export * from './lib/components/dossier-detail/tab/documents/documents.component';
-export * from './lib/components/dossier-detail/tab/notes/notes.component';
-export * from './lib/components/dossier-detail/tab/progress/progress.component';
-export * from './lib/components/dossier-detail/tab/summary/summary.component';
+export * from './lib/components/case-detail/case-detail.component';
+export * from './lib/components/case-detail/tab/audit/audit.component';
+export * from './lib/components/case-detail/tab/documents/documents.component';
+export * from './lib/components/case-detail/tab/notes/notes.component';
+export * from './lib/components/case-detail/tab/progress/progress.component';
+export * from './lib/components/case-detail/tab/summary/summary.component';
 export * from './lib/components/dossier-list/dossier-list.component';
 export * from './lib/components/dossier-process-start-modal/dossier-process-start-modal.component';
 export * from './lib/constants';

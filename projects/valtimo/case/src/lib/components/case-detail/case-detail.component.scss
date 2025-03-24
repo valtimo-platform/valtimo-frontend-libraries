@@ -69,17 +69,6 @@ $tab-max-height-compact: calc(100vh - 176px);
   flex-direction: row;
 }
 
-.dossier-detail-page-header {
-  display: flex;
-  width: 100%;
-  justify-content: flex-start;
-  padding-bottom: 5px;
-
-  ::ng-deep .cds--tag {
-    margin: 0;
-  }
-}
-
 .case-detail-tabs {
   display: flex;
   margin-bottom: 24px;
@@ -102,7 +91,7 @@ $tab-max-height-compact: calc(100vh - 176px);
   flex-direction: row;
 }
 
-.dossier-actions {
+.case-actions {
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -123,7 +112,7 @@ $tab-max-height-compact: calc(100vh - 176px);
   }
 }
 
-.dossier-status-assign-custom-title {
+.case-status-assign-custom-title {
   display: flex;
   gap: 16px;
   align-items: flex-end;

@@ -77,13 +77,13 @@ import {
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
 import {CaseAssignUserComponent} from './components/case-assign-user/case-assign-user.component';
 import {CaseBulkAssignModalComponent} from './components/case-bulk-assign-modal/case-bulk-assign-modal.component';
-import {DossierDetailComponent} from './components/dossier-detail/dossier-detail.component';
-import {DossierDetailTabAuditComponent} from './components/dossier-detail/tab/audit/audit.component';
-import {DossierDetailTabDocumentsComponent} from './components/dossier-detail/tab/documents/documents.component';
-import {DossierDetailTabNotesComponent} from './components/dossier-detail/tab/notes/notes.component';
-import {DossierDetailTabProgressComponent} from './components/dossier-detail/tab/progress/progress.component';
-import {DossierDetailTabS3DocumentsComponent} from './components/dossier-detail/tab/s3-documents/s3-documents.component';
-import {DossierDetailTabSummaryComponent} from './components/dossier-detail/tab/summary/summary.component';
+import {CaseDetailComponent} from './components/case-detail/case-detail.component';
+import {DossierDetailTabAuditComponent} from './components/case-detail/tab/audit/audit.component';
+import {DossierDetailTabDocumentsComponent} from './components/case-detail/tab/documents/documents.component';
+import {DossierDetailTabNotesComponent} from './components/case-detail/tab/notes/notes.component';
+import {DossierDetailTabProgressComponent} from './components/case-detail/tab/progress/progress.component';
+import {DossierDetailTabS3DocumentsComponent} from './components/case-detail/tab/s3-documents/s3-documents.component';
+import {DossierDetailTabSummaryComponent} from './components/case-detail/tab/summary/summary.component';
 import {DossierListActionsComponent} from './components/dossier-list-actions/dossier-list-actions.component';
 import {DossierListComponent} from './components/dossier-list/dossier-list.component';
 import {DossierProcessStartModalComponent} from './components/dossier-process-start-modal/dossier-process-start-modal.component';
@@ -92,10 +92,10 @@ import {DossierSupportingProcessStartModalComponent} from './components/dossier-
 import {DossierUpdateComponent} from './components/dossier-update/dossier-update.component';
 import {TAB_MAP} from './constants';
 import {CaseBulkAssignService, CaseService} from './services';
-import {DossierDetailTabFormioComponent} from './components/dossier-detail/tab/formio/formio.component';
+import {DossierDetailTabFormioComponent} from './components/case-detail/tab/formio/formio.component';
 import {TabTranslatePipeModule} from './pipes';
-import {DossierDetailTabNotFoundComponent} from './components/dossier-detail/tab/not-found/not-found.component';
-import {DossierDetailWidgetsComponent} from './components/dossier-detail/tab/widgets/widgets.component';
+import {DossierDetailTabNotFoundComponent} from './components/case-detail/tab/not-found/not-found.component';
+import {DossierDetailWidgetsComponent} from './components/case-detail/tab/widgets/widgets.component';
 import {DossierDetailTaskListComponent} from './components/dossier-detail-task-list/dossier-detail-task-list.component';
 import {DossierDetailsTaskDetailComponent} from './components/dossier-detail-task-detail/dossier-detail-task-detail.component';
 import {AngularSplitModule} from 'angular-split';
@@ -107,7 +107,7 @@ export type TabsFactory = () => Map<string, object>;
     CaseBulkAssignModalComponent,
     DossierListComponent,
     DossierListActionsComponent,
-    DossierDetailComponent,
+    CaseDetailComponent,
     DossierDetailTabSummaryComponent,
     DossierDetailTabProgressComponent,
     DossierDetailTabAuditComponent,
@@ -192,7 +192,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierDetailsTaskDetailComponent,
     AngularSplitModule,
   ],
-  exports: [DossierListComponent, DossierDetailComponent, DossierProcessStartModalComponent],
+  exports: [DossierListComponent, CaseDetailComponent, DossierProcessStartModalComponent],
 })
 export class CaseModule {
   static forRoot(tabsFactory: TabsFactory): ModuleWithProviders<CaseModule> {

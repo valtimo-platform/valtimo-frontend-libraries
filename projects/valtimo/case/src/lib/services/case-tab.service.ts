@@ -36,9 +36,9 @@ import {
   Subscription,
   switchMap,
 } from 'rxjs';
-import {DossierDetailTabFormioComponent} from '../components/dossier-detail/tab/formio/formio.component';
-import {DossierDetailTabNotFoundComponent} from '../components/dossier-detail/tab/not-found/not-found.component';
-import {DossierDetailWidgetsComponent} from '../components/dossier-detail/tab/widgets/widgets.component';
+import {DossierDetailTabFormioComponent} from '../components/case-detail/tab/formio/formio.component';
+import {DossierDetailTabNotFoundComponent} from '../components/case-detail/tab/not-found/not-found.component';
+import {DossierDetailWidgetsComponent} from '../components/case-detail/tab/widgets/widgets.component';
 
 @Injectable()
 export class CaseTabService implements OnDestroy {

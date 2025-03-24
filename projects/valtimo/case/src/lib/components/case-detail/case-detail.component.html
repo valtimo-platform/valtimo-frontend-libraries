@@ -44,21 +44,21 @@
         noTabsConfigured: noTabsConfigured$ | async,
         showTaskList: showTaskList$ | async,
         showNoAccess: showNoAccess$ | async,
-        dossierDetailLayout: dossierDetailLayout$ | async,
+        caseDetailLayout: caseDetailLayout$ | async,
         openTaskAndProcessLinkInModal: openTaskAndProcessLinkInModal$ | async,
         taskAndProcessLinkOpenedInPanel: taskAndProcessLinkOpenedInPanel$ | async,
       } as tabContentObs"
     >
       <as-split
         direction="horizontal"
-        [disabled]="!tabContentObs.dossierDetailLayout.widthAdjustable"
-        [gutterSize]="DOSSIER_DETAIL_GUTTER_SIZE"
-        [unit]="tabContentObs.dossierDetailLayout.unit"
+        [disabled]="!tabContentObs.caseDetailLayout.widthAdjustable"
+        [gutterSize]="CASE_DETAIL_GUTTER_SIZE"
+        [unit]="tabContentObs.caseDetailLayout.unit"
       >
         <as-split-area
-          [size]="tabContentObs.dossierDetailLayout.leftPanelWidth"
-          [minSize]="tabContentObs.dossierDetailLayout.leftPanelMinWidth"
-          [maxSize]="tabContentObs.dossierDetailLayout.leftPanelMaxWidth"
+          [size]="tabContentObs.caseDetailLayout.leftPanelWidth"
+          [minSize]="tabContentObs.caseDetailLayout.leftPanelMinWidth"
+          [maxSize]="tabContentObs.caseDetailLayout.leftPanelMaxWidth"
         >
           <div
             class="card-body bg-white p-5 position-relative tab-container"
@@ -89,10 +89,10 @@
         </as-split-area>
 
         <as-split-area
-          *ngIf="tabContentObs.dossierDetailLayout.showRightPanel"
-          [size]="tabContentObs.dossierDetailLayout.rightPanelWidth"
-          [minSize]="tabContentObs.dossierDetailLayout.rightPanelMinWidth"
-          [maxSize]="tabContentObs.dossierDetailLayout.rightPanelMaxWidth"
+          *ngIf="tabContentObs.caseDetailLayout.showRightPanel"
+          [size]="tabContentObs.caseDetailLayout.rightPanelWidth"
+          [minSize]="tabContentObs.caseDetailLayout.rightPanelMinWidth"
+          [maxSize]="tabContentObs.caseDetailLayout.rightPanelMaxWidth"
         >
           @if (tabContentObs.showTaskList) {
             <div class="task-panel">
@@ -133,9 +133,9 @@
   let-document="document"
   let-canAssign="canAssign"
 >
-  <div class="row" *ngIf="(customDossierHeaderItems || []).length > 0">
+  <div class="row" *ngIf="(customCaseHeaderItems || []).length > 0">
     <span
-      *ngFor="let item of customDossierHeaderItems"
+      *ngFor="let item of customCaseHeaderItems"
       [ngClass]="{
         h1: item.textSize === 'xl',
         h2: item.textSize === 'lg',
@@ -226,18 +226,18 @@
 </ng-template>
 
 <valtimo-confirmation-modal
-  confirmButtonTextTranslationKey="dossier.delete.confirm"
+  confirmButtonTextTranslationKey="case.delete.confirm"
   confirmButtonType="danger"
-  contentTranslationKey="dossier.delete.description"
+  contentTranslationKey="case.delete.description"
   [showModalSubject$]="showDeleteModal$"
-  titleTranslationKey="dossier.delete.delete"
+  titleTranslationKey="case.delete.delete"
   (confirmEvent)="onConfirmDelete()"
 ></valtimo-confirmation-modal>
 
 <ng-container renderInPageHeader [fullWidth]="true">
   <ng-template>
     <div
-      class="dossier-actions"
+      class="case-actions"
       [ngClass]="{'--compact': compactMode$ | async}"
       *ngIf="{
         assigneeId: assigneeId$ | async,
@@ -250,14 +250,14 @@
       } as obs"
     >
       <div
-        class="dossier-status-assign-custom-title"
+        class="case-status-assign-custom-title"
         [ngClass]="{'--compact': compactMode$ | async}"
       >
         @if (obs.caseStatus) {
           <cds-tag size="sm" [type]="obs.caseStatus.tagType">{{ obs.caseStatus.title }}</cds-tag>
         }
 
-        <div class="dossier-assign-user" [ngClass]="{'--compact': compactMode$ | async}">
+        <div [ngClass]="{'--compact': compactMode$ | async}">
           <ng-container
             *ngTemplateOutlet="
               caseDetailAssignee;
