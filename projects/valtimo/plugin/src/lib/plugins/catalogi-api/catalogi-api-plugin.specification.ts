@@ -71,7 +71,7 @@ const catalogiApiPluginSpecification: PluginSpecification = {
       eigenschap: 'Eigenschap',
       eigenschapTooltip: 'Naam van de aard van het eigenschaap.',
       eigenschapProcessVariableTooltip:
-        'Nadat de eigenschap is opgehaald, wordt deze opgeslagen in een process variable met deze naam.',
+        'Nadat de eigenschap is opgehaald, wordt deze opgeslagen in een procesvariabele met deze naam.',
     },
     en: {
       title: 'Catalogi API',
