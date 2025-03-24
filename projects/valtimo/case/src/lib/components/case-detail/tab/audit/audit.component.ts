@@ -25,11 +25,10 @@ moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
-  selector: 'valtimo-dossier-detail-tab-audit',
   templateUrl: './audit.component.html',
-  styleUrls: ['./audit.component.css'],
+  styleUrls: ['./audit.component.scss'],
 })
-export class DossierDetailTabAuditComponent implements OnInit {
+export class CaseDetailTabAuditComponent implements OnInit {
   @Output() paginationClicked: EventEmitter<any> = new EventEmitter();
 
   public timelineItems: TimelineItem[];
@@ -70,7 +69,7 @@ export class DossierDetailTabAuditComponent implements OnInit {
             occurredOn.format('HH:mm'),
             auditRecord.metaData.user,
             fromNow,
-            DossierDetailTabAuditComponent.getTranslationKey(auditRecord.auditEvent),
+            CaseDetailTabAuditComponent.getTranslationKey(auditRecord.auditEvent),
             auditRecord.auditEvent
           )
         );
