@@ -33,7 +33,7 @@ import {
   ZGW_DOCUMENTEN_API_DOCUMENTS_COMPONENT_TOKEN,
 } from '@valtimo/config';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {DossierDetailTabNotFoundComponent} from '../not-found/not-found.component';
+import {CaseDetailTabNotFoundComponent} from '../not-found/not-found.component';
 
 @Component({
   templateUrl: './documents.component.html',
@@ -71,7 +71,7 @@ export class CaseDetailTabDocumentsComponent implements OnInit, AfterViewInit, O
         if (!uploadProviderIsDocumentenApi) return;
 
         this._externalDocumentsTab.createComponent(
-          this.zgwDocumentenApiDocumentsComponent || DossierDetailTabNotFoundComponent
+          this.zgwDocumentenApiDocumentsComponent || CaseDetailTabNotFoundComponent
         );
       })
     );

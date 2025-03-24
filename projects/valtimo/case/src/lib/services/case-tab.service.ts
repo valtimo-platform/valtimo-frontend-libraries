@@ -37,7 +37,7 @@ import {
   switchMap,
 } from 'rxjs';
 import {CaseDetailTabFormioComponent} from '../components/case-detail/tab/formio/formio.component';
-import {DossierDetailTabNotFoundComponent} from '../components/case-detail/tab/not-found/not-found.component';
+import {CaseDetailTabNotFoundComponent} from '../components/case-detail/tab/not-found/not-found.component';
 import {DossierDetailWidgetsComponent} from '../components/case-detail/tab/widgets/widgets.component';
 
 @Injectable()
@@ -121,7 +121,7 @@ export class CaseTabService implements OnDestroy {
       const allNamesObjects = this.configService?.config?.caseObjectTypes[documentDefinitionName];
 
       allNamesObjects?.forEach(name => {
-        tabMap.set(name, this.zgwObjectTypeComponent || DossierDetailTabNotFoundComponent);
+        tabMap.set(name, this.zgwObjectTypeComponent || CaseDetailTabNotFoundComponent);
       });
     }
 
