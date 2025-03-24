@@ -21,11 +21,11 @@ import {BehaviorSubject, combineLatest, map, Observable, startWith, switchMap, t
 import {ListItem} from 'carbon-components-angular/dropdown';
 
 @Component({
-  selector: 'valtimo-dossier-detail-tab-progress',
+  selector: 'valtimo-case-detail-tab-progress',
   templateUrl: './progress.component.html',
-  styleUrls: ['./progress.component.css'],
+  styleUrls: ['./progress.component.scss'],
 })
-export class DossierDetailTabProgressComponent {
+export class CaseDetailTabProgressComponent {
   private readonly processDocumentInstances$: Observable<Array<ProcessDocumentInstance>> =
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
