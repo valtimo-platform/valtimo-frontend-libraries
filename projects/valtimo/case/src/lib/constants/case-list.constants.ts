@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {DossierListTab} from '@valtimo/config';
+import {CaseListTab} from '@valtimo/config';
 import {CarbonListNoResultsMessage, CarbonListTranslations} from '@valtimo/components';
 
-const DEFAULT_DOSSIER_LIST_TABS: DossierListTab[] = [
-  DossierListTab.ALL,
-  DossierListTab.MINE,
-  DossierListTab.OPEN,
+const DEFAULT_CASE_LIST_TABS: CaseListTab[] = [
+  CaseListTab.ALL,
+  CaseListTab.MINE,
+  CaseListTab.OPEN,
 ];
 
 const CASE_LIST_TABLE_TRANSLATIONS: CarbonListTranslations = {
@@ -42,7 +42,7 @@ const CASE_LIST_NO_RESULTS_MESSAGE: CarbonListNoResultsMessage = {
 };
 
 export {
-  DEFAULT_DOSSIER_LIST_TABS,
+  DEFAULT_CASE_LIST_TABS,
   CASE_LIST_TABLE_TRANSLATIONS,
   CASE_LIST_NO_RESULTS_MESSAGE,
 };

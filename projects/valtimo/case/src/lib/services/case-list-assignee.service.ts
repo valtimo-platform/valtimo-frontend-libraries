@@ -36,7 +36,7 @@ export class CaseListAssigneeService {
       ),
       map(caseSettings => caseSettings?.canHaveAssignee),
       tap(canHaveAssignee => {
-        const visibleTabs: AssigneeFilter[] = this.configService.config.visibleDossierListTabs ?? [];
+        const visibleTabs: AssigneeFilter[] = this.configService.config.visibleCaseListTabs ?? [];
 
         this._defaultAssigneeFilter$.next(
           !!visibleTabs && canHaveAssignee ? visibleTabs[0] : 'ALL'

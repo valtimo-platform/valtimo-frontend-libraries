@@ -16,7 +16,7 @@
 
 import {
   DefinitionColumn,
-  DossierListTab,
+  CaseListTab,
   IncludeFunction,
   Language,
   ROLE_ADMIN,
@@ -202,7 +202,7 @@ export const environment: ValtimoConfig = {
   caseFileUploadAcceptedFiles:
     'image/png, image/jpeg, text/plain, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/xml',
   visibleTaskListTabs: [TaskListTab.MINE, TaskListTab.OPEN, TaskListTab.ALL],
-  visibleDossierListTabs: [DossierListTab.ALL, DossierListTab.MINE, DossierListTab.OPEN],
+  visibleCaseListTabs: [CaseListTab.ALL, CaseListTab.MINE, CaseListTab.OPEN],
   customTaskList: {
     fields: [
       {

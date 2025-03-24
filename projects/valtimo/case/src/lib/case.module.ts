@@ -85,7 +85,7 @@ import {CaseDetailTabProgressComponent} from './components/case-detail/tab/progr
 import {CaseDetailTabS3DocumentsComponent} from './components/case-detail/tab/s3-documents/s3-documents.component';
 import {CaseDetailTabSummaryComponent} from './components/case-detail/tab/summary/summary.component';
 import {DossierListActionsComponent} from './components/dossier-list-actions/dossier-list-actions.component';
-import {DossierListComponent} from './components/dossier-list/dossier-list.component';
+import {CaseListComponent} from './components/case-list/case-list.component';
 import {DossierProcessStartModalComponent} from './components/dossier-process-start-modal/dossier-process-start-modal.component';
 import {CaseRoutingModule} from './case-routing.module';
 import {DossierSupportingProcessStartModalComponent} from './components/dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
@@ -105,7 +105,7 @@ export type TabsFactory = () => Map<string, object>;
 @NgModule({
   declarations: [
     CaseBulkAssignModalComponent,
-    DossierListComponent,
+    CaseListComponent,
     DossierListActionsComponent,
     CaseDetailComponent,
     CaseDetailTabSummaryComponent,
@@ -192,7 +192,7 @@ export type TabsFactory = () => Map<string, object>;
     CaseDetailsTaskDetailComponent,
     AngularSplitModule,
   ],
-  exports: [DossierListComponent, CaseDetailComponent, DossierProcessStartModalComponent],
+  exports: [CaseListComponent, CaseDetailComponent, DossierProcessStartModalComponent],
 })
 export class CaseModule {
   static forRoot(tabsFactory: TabsFactory): ModuleWithProviders<CaseModule> {

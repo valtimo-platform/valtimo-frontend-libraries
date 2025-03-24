@@ -33,7 +33,7 @@ import {
   ConfigService,
   DefinitionColumn,
   Direction,
-  DossierListTab,
+  CaseListTab,
   SearchField,
   SearchFieldValues,
   SortState,
@@ -67,7 +67,7 @@ import {
   tap,
 } from 'rxjs';
 
-import { CASE_LIST_NO_RESULTS_MESSAGE, CASE_LIST_TABLE_TRANSLATIONS, DEFAULT_DOSSIER_LIST_TABS } from '../../constants';
+import { CASE_LIST_NO_RESULTS_MESSAGE, CASE_LIST_TABLE_TRANSLATIONS, DEFAULT_CASE_LIST_TABS } from '../../constants';
 import { CAN_CREATE_CASE_PERMISSION, CAN_VIEW_CASE_PERMISSION, CASE_DETAIL_PERMISSION_RESOURCE } from '../../permissions';
 import {
   CaseBulkAssignService,
@@ -82,9 +82,8 @@ import {
 import { DossierListActionsComponent } from '../dossier-list-actions/dossier-list-actions.component';
 
 @Component({
-  selector: 'valtimo-dossier-list',
-  templateUrl: './dossier-list.component.html',
-  styleUrls: ['./dossier-list.component.scss'],
+  templateUrl: './case-list.component.html',
+  styleUrls: ['./case-list.component.scss'],
   providers: [
     CaseListService,
     CaseColumnService,
@@ -95,12 +94,12 @@ import { DossierListActionsComponent } from '../dossier-list-actions/dossier-lis
     CaseListStatusService,
   ],
 })
-export class DossierListComponent implements OnInit, OnDestroy {
+export class CaseListComponent implements OnInit, OnDestroy {
   @ViewChild(CarbonListComponent) carbonList: CarbonListComponent;
   @ViewChild(DossierListActionsComponent) listActionsComponent: DossierListActionsComponent;
   @ViewChild(Tabs) tabsComponent: Tabs;
 
-  public activeTab: DossierListTab = null;
+  public activeTab: CaseListTab = null;
   public loadingFields = true;
   public loadingPagination = true;
   public loadingSearchFields = true;
@@ -109,9 +108,9 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public loadingStatuses = true;
   public pagination!: Pagination;
   public canHaveAssignee!: boolean;
-  public visibleDossierTabs: Array<DossierListTab> | null = null;
+  public visibleCaseTabs: Array<CaseListTab> | null = null;
 
-  public readonly defaultTabs = DEFAULT_DOSSIER_LIST_TABS;
+  public readonly defaultTabs = DEFAULT_CASE_LIST_TABS;
   public readonly tableTranslations = CASE_LIST_TABLE_TRANSLATIONS;
 
   public readonly noResultsMessage$ = new BehaviorSubject<CarbonListNoResultsMessage>(
@@ -157,10 +156,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public readonly searchFieldValues$ = this.parameterService.searchFieldValues$;
   public readonly assigneeFilter$: Observable<AssigneeFilter> =
     this.assigneeService.assigneeFilter$.pipe(
-      tap(assigneeFilter => (this.activeTab = assigneeFilter as DossierListTab))
+      tap(assigneeFilter => (this.activeTab = assigneeFilter as CaseListTab))
     );
   public readonly paginationChange$ = new BehaviorSubject<CarbonPaginationSelection | null>(null);
-  public readonly tabChange$ = new BehaviorSubject<DossierListTab | null>(null);
+  public readonly tabChange$ = new BehaviorSubject<CaseListTab | null>(null);
   private readonly _pagination$ = this.paginationService.pagination$.pipe(
     tap(pagination => {
       this.pagination = pagination;
@@ -520,7 +519,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     });
   }
 
-  public tabChange(tab: DossierListTab): void {
+  public tabChange(tab: CaseListTab): void {
     if (!this.activeTab) {
       this.activeTab = tab;
       this.updateNoResultsMessage(false);
@@ -579,7 +578,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.paginationService.sortChanged(newSortState);
   }
 
-  private onChangeTabConfirm(tab: DossierListTab): void {
+  private onChangeTabConfirm(tab: CaseListTab): void {
     this.loadingAssigneeFilter = true;
     this.activeTab = tab;
     this.updateNoResultsMessage(false);
@@ -614,7 +613,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.paginationService.pageChange(pagination.page);
   }
 
-  public startDossier(): void {
+  public startCase(): void {
     this.listActionsComponent.startDossier();
   }
 
@@ -660,7 +659,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
   }
 
   private setVisibleTabs(): void {
-    this.visibleDossierTabs = this.configService.config?.visibleDossierListTabs || null;
+    this.visibleCaseTabs = this.configService.config?.visibleCaseListTabs || null;
   }
 
   private updateNoResultsMessage(isSearchResult: boolean): void {
