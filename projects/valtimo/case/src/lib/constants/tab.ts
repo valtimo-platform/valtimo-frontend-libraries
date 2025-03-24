@@ -18,7 +18,7 @@ import {InjectionToken} from '@angular/core';
 import {DossierDetailTabSummaryComponent} from '../components/case-detail/tab/summary/summary.component';
 import {DossierDetailTabProgressComponent} from '../components/case-detail/tab/progress/progress.component';
 import {CaseDetailTabAuditComponent} from '../components/case-detail/tab/audit/audit.component';
-import {DossierDetailTabDocumentsComponent} from '../components/case-detail/tab/documents/documents.component';
+import {CaseDetailTabDocumentsComponent} from '../components/case-detail/tab/documents/documents.component';
 import {DefaultTabComponents, DefaultTabs} from '../models';
 import {DossierDetailTabNotesComponent} from '../components/case-detail/tab/notes/notes.component';
 
@@ -28,14 +28,14 @@ const DEFAULT_TABS = new Map<string, object>([
   [DefaultTabs.summary, DossierDetailTabSummaryComponent],
   [DefaultTabs.progress, DossierDetailTabProgressComponent],
   [DefaultTabs.audit, CaseDetailTabAuditComponent],
-  [DefaultTabs.documents, DossierDetailTabDocumentsComponent],
+  [DefaultTabs.documents, CaseDetailTabDocumentsComponent],
 ]);
 
 const DEFAULT_TAB_COMPONENTS: DefaultTabComponents = {
   [DefaultTabs.summary]: DossierDetailTabSummaryComponent,
   [DefaultTabs.progress]: DossierDetailTabProgressComponent,
   [DefaultTabs.audit]: CaseDetailTabAuditComponent,
-  [DefaultTabs.documents]: DossierDetailTabDocumentsComponent,
+  [DefaultTabs.documents]: CaseDetailTabDocumentsComponent,
   [DefaultTabs.notes]: DossierDetailTabNotesComponent,
 };
 

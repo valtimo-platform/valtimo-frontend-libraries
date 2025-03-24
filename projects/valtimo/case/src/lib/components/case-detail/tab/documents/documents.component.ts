@@ -36,10 +36,9 @@ import {BehaviorSubject, Subscription} from 'rxjs';
 import {DossierDetailTabNotFoundComponent} from '../not-found/not-found.component';
 
 @Component({
-  selector: 'valtimo-dossier-detail-tab-documents',
   templateUrl: './documents.component.html',
 })
-export class DossierDetailTabDocumentsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CaseDetailTabDocumentsComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class.tab--no-margin') noMargin = false;
   @HostBinding('class.tab--no-min-height') noMinHeight = false;
 
