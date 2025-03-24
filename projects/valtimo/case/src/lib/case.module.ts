@@ -92,7 +92,7 @@ import {DossierSupportingProcessStartModalComponent} from './components/dossier-
 import {DossierUpdateComponent} from './components/dossier-update/dossier-update.component';
 import {TAB_MAP} from './constants';
 import {CaseBulkAssignService, CaseService} from './services';
-import {DossierDetailTabFormioComponent} from './components/case-detail/tab/formio/formio.component';
+import {CaseDetailTabFormioComponent} from './components/case-detail/tab/formio/formio.component';
 import {TabTranslatePipeModule} from './pipes';
 import {DossierDetailTabNotFoundComponent} from './components/case-detail/tab/not-found/not-found.component';
 import {DossierDetailWidgetsComponent} from './components/case-detail/tab/widgets/widgets.component';
@@ -120,7 +120,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierDetailTabNotFoundComponent,
     CaseAssignUserComponent,
     NoteModalComponent,
-    DossierDetailTabFormioComponent,
+    CaseDetailTabFormioComponent,
   ],
   imports: [
     CommonModule,

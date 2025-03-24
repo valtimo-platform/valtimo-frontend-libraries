@@ -27,7 +27,7 @@ import {catchError} from 'rxjs/operators';
   styleUrls: ['./formio.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DossierDetailTabFormioComponent {
+export class CaseDetailTabFormioComponent {
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly formNotFound$ = new BehaviorSubject<string>('');
   public readonly noFormSpecified$ = new BehaviorSubject<boolean>(false);

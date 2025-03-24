@@ -36,7 +36,7 @@ import {
   Subscription,
   switchMap,
 } from 'rxjs';
-import {DossierDetailTabFormioComponent} from '../components/case-detail/tab/formio/formio.component';
+import {CaseDetailTabFormioComponent} from '../components/case-detail/tab/formio/formio.component';
 import {DossierDetailTabNotFoundComponent} from '../components/case-detail/tab/not-found/not-found.component';
 import {DossierDetailWidgetsComponent} from '../components/case-detail/tab/widgets/widgets.component';
 
@@ -202,7 +202,7 @@ export class CaseTabService implements OnDestroy {
         return new TabImpl(
           tab.key,
           index,
-          DossierDetailTabFormioComponent,
+          CaseDetailTabFormioComponent,
           tab.contentKey,
           tab.name ?? '',
           tab.showTasks
