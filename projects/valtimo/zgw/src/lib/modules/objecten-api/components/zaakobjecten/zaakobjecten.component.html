@@ -27,8 +27,8 @@
     [margin]="true"
     [widthInPx]="350"
     name="objecttypes"
-    [title]="'dossier.zaakobjecten.objecttype' | translate"
-    [placeholder]="'dossier.zaakobjecten.objecttypePlaceholder' | translate"
+    [title]="'case.zaakobjecten.objecttype' | translate"
+    [placeholder]="'case.zaakobjecten.objecttypePlaceholder' | translate"
     [loading]="!obs.objecttypeSelectItems"
     (selectedChange)="selectObjectType($event)"
   ></v-select>
@@ -37,7 +37,7 @@
     [largeMargin]="!!obs.selectedObjectTypeUrl"
   ></v-input-label>
   <v-paragraph *ngIf="!obs.selectedObjectTypeUrl">{{
-    'dossier.zaakobjecten.objectenPlaceholder' | translate
+    'case.zaakobjecten.objectenPlaceholder' | translate
   }}</v-paragraph>
   <v-table
     *ngIf="obs.selectedObjectTypeUrl"
@@ -66,7 +66,7 @@
       [form]="objectForm$ | async"
     ></valtimo-form-io>
     <v-paragraph *ngIf="noFormDefinitionComponent$ | async" [center]="true">{{
-      'dossier.zaakobjecten.noFormDefinitionComponent' | translate
+      'case.zaakobjecten.noFormDefinitionComponent' | translate
     }}</v-paragraph>
   </div>
 </v-modal>

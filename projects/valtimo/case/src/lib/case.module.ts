@@ -75,7 +75,7 @@ import {
   TagModule,
 } from 'carbon-components-angular';
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
-import {DossierAssignUserComponent} from './components/dossier-assign-user/dossier-assign-user.component';
+import {CaseAssignUserComponent} from './components/case-assign-user/case-assign-user.component';
 import {DossierBulkAssignModalComponent} from './components/dossier-bulk-assign-modal/dossier-bulk-assign-modal.component';
 import {DossierDetailComponent} from './components/dossier-detail/dossier-detail.component';
 import {DossierDetailTabAuditComponent} from './components/dossier-detail/tab/audit/audit.component';
@@ -118,7 +118,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierSupportingProcessStartModalComponent,
     DossierDetailTabS3DocumentsComponent,
     DossierDetailTabNotFoundComponent,
-    DossierAssignUserComponent,
+    CaseAssignUserComponent,
     NoteModalComponent,
     DossierDetailTabFormioComponent,
   ],

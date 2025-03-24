@@ -25,20 +25,20 @@ const DEFAULT_DOSSIER_LIST_TABS: DossierListTab[] = [
 
 const CASE_LIST_TABLE_TRANSLATIONS: CarbonListTranslations = {
   select: {
-    single: 'dossier.select.single',
-    multiple: 'dossier.select.multiple',
+    single: 'case.select.single',
+    multiple: 'case.select.multiple',
   },
   pagination: {
-    itemsPerPage: 'dossier.pagination.itemsPerPage',
-    totalItem: 'dossier.pagination.totalItem',
-    totalItems: 'dossier.pagination.totalItems',
+    itemsPerPage: 'case.pagination.itemsPerPage',
+    totalItem: 'case.pagination.totalItem',
+    totalItems: 'case.pagination.totalItems',
   },
 };
 
 const CASE_LIST_NO_RESULTS_MESSAGE: CarbonListNoResultsMessage = {
-  description: 'dossier.noResults.ALL.description',
+  description: 'case.noResults.ALL.description',
   isSearchResult: false,
-  title: 'dossier.noResults.ALL.title',
+  title: 'case.noResults.ALL.title',
 };
 
 export {

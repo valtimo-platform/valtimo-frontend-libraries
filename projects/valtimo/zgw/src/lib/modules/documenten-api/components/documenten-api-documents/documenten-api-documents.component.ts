@@ -401,10 +401,10 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     if (this.uploadProcessLinkedSet && this.uploadProcessLinked) {
       return 'Upload';
     } else if (this.isAdmin) {
-      return 'dossier.documenten.noProcessLinked.adminRole';
+      return 'case.documenten.noProcessLinked.adminRole';
     }
 
-    return 'dossier.documenten.noProcessLinked.regularUser';
+    return 'case.documenten.noProcessLinked.regularUser';
   }
 
   public isUserAdmin() {

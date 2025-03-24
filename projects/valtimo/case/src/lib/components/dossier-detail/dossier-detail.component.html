@@ -70,16 +70,16 @@
 
             <valtimo-no-results
               *ngIf="tabContentObs.showNoAccess"
-              description="{{ 'dossier.noAccess.description' | translate }}"
-              title="{{ 'dossier.noAccess.title' | translate }}"
+              description="{{ 'case.noAccess.description' | translate }}"
+              title="{{ 'case.noAccess.title' | translate }}"
               illustration="valtimo-layout/img/emptystate-not-authorised.svg"
             >
             </valtimo-no-results>
 
             <valtimo-no-results
               *ngIf="tabContentObs.noTabsConfigured"
-              [description]="'dossier.tabs.noResultsDescription' | translate"
-              [title]="'dossier.tabs.noResults' | translate"
+              [description]="'case.tabs.noResultsDescription' | translate"
+              [title]="'case.tabs.noResults' | translate"
             ></valtimo-no-results>
 
             <ng-template #tabContainer></ng-template>
@@ -170,14 +170,14 @@
   let-canAssign="canAssign"
 >
   <div *ngIf="canHaveAssignee && document">
-    <valtimo-dossier-assign-user
+    <valtimo-case-assign-user
       *ngIf="canAssignLoaded$ | async"
       [assigneeFullName]="document?.assigneeFullName"
       [assigneeId]="document.assigneeId"
       [documentId]="document.id"
       [hasPermission]="canAssign"
       (assignmentOfDocumentChanged)="assignmentOfDocumentChanged()"
-    ></valtimo-dossier-assign-user>
+    ></valtimo-case-assign-user>
   </div>
 </ng-template>
 
@@ -187,7 +187,7 @@
     [disabled]="(isAssigning$ | async) || (isAssignedToCurrentUser$ | async)"
     (click)="claimAssignee()"
   >
-    {{ 'dossier.claimAssigneeCase' | translate }}
+    {{ 'case.claimAssigneeCase' | translate }}
   </cds-overflow-menu-option>
 </ng-template>
 
@@ -208,7 +208,7 @@
     (click)="deleteDocument()"
     type="danger"
   >
-    {{ 'dossier.delete.delete' | translate }}
+    {{ 'case.delete.delete' | translate }}
   </cds-overflow-menu-option>
 </ng-template>
 
@@ -219,7 +219,7 @@
     [disabled]="processDocumentDefinitions.length === 0"
     [ngbTooltip]="processDocumentDefinitions.length === 0 ? 'No action' : null"
   >
-    {{ 'dossier.startSubProcess' | translate }}
+    {{ 'case.startSubProcess' | translate }}
 
     <svg class="cds--btn__icon" cdsIcon="chevron--down" size="16"></svg>
   </button>

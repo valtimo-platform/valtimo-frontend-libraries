@@ -190,7 +190,7 @@ export class DossierDetailTabNotesComponent implements OnInit {
     this.notesService.updateNote(content.data.customData.id, content.formData).subscribe(() => {
       this.notesService.refresh();
       this.notesService.hideModal();
-      this.toastrService.success(this.translateService.instant('dossier.notes.editedMessage'));
+      this.toastrService.success(this.translateService.instant('case.notes.editedMessage'));
     });
   }
 
@@ -202,10 +202,10 @@ export class DossierDetailTabNotesComponent implements OnInit {
 
   public deleteNote(data): void {
     this.promptService.openPrompt({
-      headerText: this.translateService.instant('dossier.notes.deleteConfirmation.title'),
-      bodyText: this.translateService.instant('dossier.notes.deleteConfirmation.description'),
-      cancelButtonText: this.translateService.instant('dossier.deleteConfirmation.cancel'),
-      confirmButtonText: this.translateService.instant('dossier.deleteConfirmation.delete'),
+      headerText: this.translateService.instant('case.notes.deleteConfirmation.title'),
+      bodyText: this.translateService.instant('case.notes.deleteConfirmation.description'),
+      cancelButtonText: this.translateService.instant('case.deleteConfirmation.cancel'),
+      confirmButtonText: this.translateService.instant('case.deleteConfirmation.delete'),
       cancelMdiIcon: 'cancel',
       confirmMdiIcon: 'delete',
       cancelButtonType: 'secondary',
@@ -216,7 +216,7 @@ export class DossierDetailTabNotesComponent implements OnInit {
         this.notesService.deleteNote(data.customData.id).subscribe(() => {
           this.notesService.refresh();
           this.toastrService.success(
-            this.translateService.instant('dossier.notes.deleteConfirmation.deletedMessage')
+            this.translateService.instant('case.notes.deleteConfirmation.deletedMessage')
           );
         });
       },

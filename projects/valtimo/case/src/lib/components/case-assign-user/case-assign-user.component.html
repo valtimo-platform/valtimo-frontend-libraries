@@ -52,7 +52,7 @@
     [selectedText]="'assignDocument.assignedTo' | translate"
     [style]="'underlinedText'"
     [width]="250"
-    class="dossier-candidates-dropdown"
+    class="case-candidates-dropdown"
   >
   </valtimo-searchable-dropdown-select>
 </ng-template>
@@ -75,7 +75,7 @@
       [width]="250"
       (clearSelection)="unassignDocument()"
       (itemSelected)="assignDocument($event)"
-      class="dossier-candidates-dropdown"
+      class="case-candidates-dropdown"
     >
     </valtimo-searchable-dropdown-select>
   </ng-container>

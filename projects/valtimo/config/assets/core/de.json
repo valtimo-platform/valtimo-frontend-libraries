@@ -13,7 +13,7 @@
     "DocumentAssigneeChangedEvent": "Der Beauftragte wurde geändert in {{assigneeName}}",
     "DocumentUnassignedEvent": "Die Zuweisung des Bevollmächtigten wurde aufgehoben"
   },
-  "dossier": {
+  "case": {
     "bulkAssign": {
       "assign": "Zuweisen",
       "modal": {

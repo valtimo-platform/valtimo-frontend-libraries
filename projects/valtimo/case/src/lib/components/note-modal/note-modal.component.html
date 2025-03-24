@@ -21,7 +21,7 @@
   <div role="header">
     <div class="add-note-title">
       <v-title [margin]="false">{{
-        (obs.modalType === 'add' ? 'dossier.notes.addNote' : 'dossier.notes.modifyNote') | translate
+        (obs.modalType === 'add' ? 'case.notes.addNote' : 'case.notes.modifyNote') | translate
       }}</v-title>
     </div>
   </div>
@@ -50,7 +50,7 @@
     mdiIcon="plus"
     type="success"
   >
-    {{ 'dossier.notes.addNote' | translate }}
+    {{ 'case.notes.addNote' | translate }}
   </v-button>
 </ng-template>
 <ng-template #editNoteButton let-obs="obs">
@@ -60,7 +60,7 @@
     mdiIcon="pencil"
     type="success"
   >
-    {{ 'dossier.notes.modifyNote' | translate }}
+    {{ 'case.notes.modifyNote' | translate }}
   </v-button>
 </ng-template>
 
@@ -72,7 +72,7 @@
         type="textarea"
         [margin]="true"
         [required]="true"
-        [title]="'dossier.notes.input.content' | translate"
+        [title]="'case.notes.input.content' | translate"
         name="content"
         [fullWidth]="true"
         [rows]="10"

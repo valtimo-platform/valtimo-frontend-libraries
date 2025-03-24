@@ -658,11 +658,11 @@ export class DossierDetailComponent
     this.notificationService.showActionable({
       type: 'warning',
       lowContrast: true,
-      title: this.translateService.instant('dossier.noLinkedProcessNotification'),
+      title: this.translateService.instant('case.noLinkedProcessNotification'),
       ...(isAdmin && {
         actions: [
           {
-            text: this.translateService.instant('dossier.configure'),
+            text: this.translateService.instant('case.configure'),
             click: () => this.router.navigate(['/process-links']),
           },
         ],

@@ -110,10 +110,10 @@ export class DossierListActionsComponent implements OnInit {
     this.notificationService.showActionable({
       type: 'warning',
       lowContrast: true,
-      title: this.translateService.instant('dossier.noLinkedStartProcessNotification'),
+      title: this.translateService.instant('case.noLinkedStartProcessNotification'),
       actions: [
         {
-          text: this.translateService.instant('dossier.configure'),
+          text: this.translateService.instant('case.configure'),
           click: () => this.router.navigate(['/process-links']),
         },
       ],

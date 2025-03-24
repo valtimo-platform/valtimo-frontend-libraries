@@ -97,7 +97,7 @@
   >
     <ng-container carbonToolbarActions>
       <button cdsButton="primary" (click)="showAssignModal()">
-        {{ 'dossier.bulkAssign.assign' | translate }}
+        {{ 'case.bulkAssign.assign' | translate }}
       </button>
     </ng-container>
 
@@ -127,7 +127,7 @@
       <cds-tab
         *ngFor="let tab of defaultTabs; trackBy: trackByIndex"
         [active]="assigneeFilter === tab"
-        heading="{{ 'dossier.tabs.' + tab | translate }}"
+        heading="{{ 'case.tabs.' + tab | translate }}"
         [id]="tab"
         (selected)="tabChange(tab)"
       ></cds-tab>
@@ -141,7 +141,7 @@
       <cds-tab
         *ngFor="let tab of visibleDossierTabs; trackBy: trackByIndex"
         [active]="assigneeFilter === tab"
-        heading="{{ 'dossier.tabs.' + tab | translate }}"
+        heading="{{ 'case.tabs.' + tab | translate }}"
         [id]="tab"
         (selected)="tabChange(tab)"
       ></cds-tab>

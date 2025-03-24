@@ -128,10 +128,10 @@ export class DossierDetailTabS3DocumentsComponent implements OnInit {
 
   removeRelatedFile(relatedFile: RelatedFile) {
     this.promptService.openPrompt({
-      headerText: this.translateService.instant('dossier.deleteConfirmation.title'),
-      bodyText: this.translateService.instant('dossier.deleteConfirmation.description'),
-      cancelButtonText: this.translateService.instant('dossier.deleteConfirmation.cancel'),
-      confirmButtonText: this.translateService.instant('dossier.deleteConfirmation.delete'),
+      headerText: this.translateService.instant('case.deleteConfirmation.title'),
+      bodyText: this.translateService.instant('case.deleteConfirmation.description'),
+      cancelButtonText: this.translateService.instant('case.deleteConfirmation.cancel'),
+      confirmButtonText: this.translateService.instant('case.deleteConfirmation.delete'),
       cancelMdiIcon: 'cancel',
       confirmMdiIcon: 'delete',
       cancelButtonType: 'secondary',

@@ -13,7 +13,7 @@
     "DocumentAssigneeChangedEvent": "The assignee has been changed to {{assigneeName}}",
     "DocumentUnassignedEvent": "The assignee has been unassigned"
   },
-  "dossier": {
+  "case": {
     "bulkAssign": {
       "assign": "Assign to",
       "modal": {

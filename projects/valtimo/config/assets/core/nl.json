@@ -13,7 +13,7 @@
     "DocumentAssigneeChangedEvent": "De behandelaar is gewijzigd naar {{assigneeName}}",
     "DocumentUnassignedEvent": "De behandelaar is van het dossier afgehaald"
   },
-  "dossier": {
+  "case": {
     "bulkAssign": {
       "assign": "Toewijzen",
       "modal": {

@@ -16,7 +16,7 @@
 
 <cds-modal valtimoCdsModal [open]="open" (close)="closeModal()" showFooter="true">
   <cds-modal-header showCloseButton="true" (closeSelect)="closeModal()">
-    <h3 cdsModalHeaderHeading>{{ 'dossier.bulkAssign.modal.title' | translate }}</h3>
+    <h3 cdsModalHeaderHeading>{{ 'case.bulkAssign.modal.title' | translate }}</h3>
   </cds-modal-header>
 
   <section cdsModalContent>
@@ -25,8 +25,8 @@
         formControlName="assignee"
         [dropUp]="false"
         [items]="candidateUsers"
-        [label]="'dossier.bulkAssign.modal.selectLabel' | translate"
-        [placeholder]="'dossier.bulkAssign.modal.selectPlaceholder' | translate"
+        [label]="'case.bulkAssign.modal.selectLabel' | translate"
+        [placeholder]="'case.bulkAssign.modal.selectPlaceholder' | translate"
       >
         <cds-dropdown-list></cds-dropdown-list>
       </cds-combo-box>
@@ -37,7 +37,7 @@
     <button cdsButton="ghost" (click)="closeModal()">{{ 'interface.cancel' | translate }}</button>
 
     <button cdsButton="primary" [disabled]="formGroup.invalid" (click)="closeModal(true)">
-      {{ 'dossier.bulkAssign.modal.confirm' | translate }}
+      {{ 'case.bulkAssign.modal.confirm' | translate }}
     </button>
   </cds-modal-footer>
 </cds-modal>

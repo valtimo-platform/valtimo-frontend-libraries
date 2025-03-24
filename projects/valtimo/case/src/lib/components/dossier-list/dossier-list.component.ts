@@ -667,9 +667,9 @@ export class DossierListComponent implements OnInit, OnDestroy {
     this.noResultsMessage$.next(
       isSearchResult
         ? {
-            description: 'dossier.noResults.search.description',
+            description: 'case.noResults.search.description',
             isSearchResult,
-            title: 'dossier.noResults.search.title',
+            title: 'case.noResults.search.title',
           }
         : {
             description: `dossier.noResults.${this.activeTab ?? 'ALL'}.description`,

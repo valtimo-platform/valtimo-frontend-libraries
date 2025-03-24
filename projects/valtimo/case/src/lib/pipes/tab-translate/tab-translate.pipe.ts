@@ -26,7 +26,7 @@ export class TabTranslatePipe implements PipeTransform {
   constructor(private readonly translateService: TranslateService) {}
 
   transform(tab: TabImpl): Observable<string> {
-    const translationId = 'dossier.tabs.' + tab.name;
+    const translationId = 'case.tabs.' + tab.name;
 
     return tab.title
       ? of(tab.title)

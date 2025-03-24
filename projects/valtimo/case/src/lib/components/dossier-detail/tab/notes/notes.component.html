@@ -30,7 +30,7 @@
       aria-expanded="false"
       aria-haspopup="true"
     >
-      {{ 'dossier.notes.addNote' | translate }}
+      {{ 'case.notes.addNote' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
     </button>
@@ -45,8 +45,8 @@
 
     <valtimo-no-results
       *ngIf="timelineItems.length === 0"
-      [description]="'dossier.notes.noResults.description' | translate"
-      [title]="'dossier.notes.noResults.title' | translate"
+      [description]="'case.notes.noResults.description' | translate"
+      [title]="'case.notes.noResults.title' | translate"
       illustration="valtimo-layout/img/emptystate-no-result.svg"
     ></valtimo-no-results>
   </div>

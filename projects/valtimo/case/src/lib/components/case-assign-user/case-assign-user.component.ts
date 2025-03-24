@@ -21,11 +21,11 @@ import {NamedUser} from '@valtimo/config';
 import {tap} from 'rxjs/operators';
 
 @Component({
-  selector: 'valtimo-dossier-assign-user',
-  templateUrl: './dossier-assign-user.component.html',
-  styleUrls: ['./dossier-assign-user.component.css'],
+  selector: 'valtimo-case-assign-user',
+  templateUrl: './case-assign-user.component.html',
+  styleUrls: ['./case-assign-user.component.scss'],
 })
-export class DossierAssignUserComponent {
+export class CaseAssignUserComponent {
   @Input() set documentId(value: string) {
     this.documentId$.next(value);
   }
