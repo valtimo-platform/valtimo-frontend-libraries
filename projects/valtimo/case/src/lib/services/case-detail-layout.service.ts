@@ -1,16 +1,16 @@
-import {Injectable} from '@angular/core';
-import {FormDisplayType, FormSize, TaskWithProcessLink} from '@valtimo/process-link';
-import {BehaviorSubject, combineLatest, filter, map, Observable, startWith} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { FormDisplayType, FormSize, TaskWithProcessLink } from '@valtimo/process-link';
+import { BehaviorSubject, combineLatest, filter, map, Observable, startWith } from 'rxjs';
 import {
-  DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE,
-  DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE,
-  DOSSIER_DETAIL_GUTTER_SIZE,
-  DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH,
-  DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS,
-  DOSSIER_DETAIL_TASK_LIST_WIDTH,
+  CASE_DETAIL_DEFAULT_DISPLAY_SIZE,
+  CASE_DETAIL_DEFAULT_DISPLAY_TYPE,
+  CASE_DETAIL_GUTTER_SIZE,
+  CASE_DETAIL_LEFT_PANEL_MIN_WIDTH,
+  CASE_DETAIL_RIGHT_PANEL_MIN_WIDTHS,
+  CASE_DETAIL_TASK_LIST_WIDTH,
 } from '../constants';
-import {CaseDetailLayout} from '../models';
-import {CaseTabService} from './case-tab.service';
+import { CaseDetailLayout } from '../models';
+import { CaseTabService } from './case-tab.service';
 
 @Injectable()
 export class CaseDetailLayoutService {
@@ -19,10 +19,10 @@ export class CaseDetailLayoutService {
   private readonly _taskAndProcessLinkOpenedInPanel$ =
     new BehaviorSubject<TaskWithProcessLink | null>(null);
   private readonly _formDisplayType$ = new BehaviorSubject<FormDisplayType>(
-    DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE
+    CASE_DETAIL_DEFAULT_DISPLAY_TYPE
   );
   private readonly _formDisplaySize$ = new BehaviorSubject<FormSize>(
-    DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE
+    CASE_DETAIL_DEFAULT_DISPLAY_SIZE
   );
 
   public get tabContentContainerWidth$(): Observable<number | null> {
@@ -102,9 +102,9 @@ export class CaseDetailLayoutService {
       unit: 'pixel',
       showRightPanel: true,
       widthAdjustable: false,
-      rightPanelMaxWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
-      rightPanelMinWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
-      rightPanelWidth: DOSSIER_DETAIL_TASK_LIST_WIDTH,
+      rightPanelMaxWidth: CASE_DETAIL_TASK_LIST_WIDTH,
+      rightPanelMinWidth: CASE_DETAIL_TASK_LIST_WIDTH,
+      rightPanelWidth: CASE_DETAIL_TASK_LIST_WIDTH,
       leftPanelWidth: '*',
     };
   }
@@ -114,8 +114,8 @@ export class CaseDetailLayoutService {
     formDisplaySize: FormSize
   ): CaseDetailLayout {
     const rightPanelMaxWidth =
-      tabContentContainerWidth - DOSSIER_DETAIL_GUTTER_SIZE - DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH;
-    const rightPanelMinWidth = DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS[formDisplaySize];
+      tabContentContainerWidth - CASE_DETAIL_GUTTER_SIZE - CASE_DETAIL_LEFT_PANEL_MIN_WIDTH;
+    const rightPanelMinWidth = CASE_DETAIL_RIGHT_PANEL_MIN_WIDTHS[formDisplaySize];
     const rightPanelMinWidthToUse =
       rightPanelMinWidth < rightPanelMaxWidth ? rightPanelMinWidth : rightPanelMaxWidth;
 

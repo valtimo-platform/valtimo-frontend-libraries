@@ -23,7 +23,7 @@ const DEFAULT_DOSSIER_LIST_TABS: DossierListTab[] = [
   DossierListTab.OPEN,
 ];
 
-const DOSSIER_LIST_TABLE_TRANSLATIONS: CarbonListTranslations = {
+const CASE_LIST_TABLE_TRANSLATIONS: CarbonListTranslations = {
   select: {
     single: 'dossier.select.single',
     multiple: 'dossier.select.multiple',
@@ -35,7 +35,7 @@ const DOSSIER_LIST_TABLE_TRANSLATIONS: CarbonListTranslations = {
   },
 };
 
-const DOSSIER_LIST_NO_RESULTS_MESSAGE: CarbonListNoResultsMessage = {
+const CASE_LIST_NO_RESULTS_MESSAGE: CarbonListNoResultsMessage = {
   description: 'dossier.noResults.ALL.description',
   isSearchResult: false,
   title: 'dossier.noResults.ALL.title',
@@ -43,6 +43,6 @@ const DOSSIER_LIST_NO_RESULTS_MESSAGE: CarbonListNoResultsMessage = {
 
 export {
   DEFAULT_DOSSIER_LIST_TABS,
-  DOSSIER_LIST_TABLE_TRANSLATIONS,
-  DOSSIER_LIST_NO_RESULTS_MESSAGE,
+  CASE_LIST_TABLE_TRANSLATIONS,
+  CASE_LIST_NO_RESULTS_MESSAGE,
 };

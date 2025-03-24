@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
-import {PermissionService} from '@valtimo/access-control';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { PermissionService } from '@valtimo/access-control';
 import {
   BreadcrumbService,
   CarbonListComponent,
@@ -48,8 +48,8 @@ import {
   InternalCaseStatusUtils,
   SpecifiedDocuments,
 } from '@valtimo/document';
-import {Tab, Tabs} from 'carbon-components-angular';
-import {isEqual} from 'lodash';
+import { Tab, Tabs } from 'carbon-components-angular';
+import { isEqual } from 'lodash';
 import {
   BehaviorSubject,
   combineLatest,
@@ -67,16 +67,8 @@ import {
   tap,
 } from 'rxjs';
 
-import {
-  DEFAULT_DOSSIER_LIST_TABS,
-  DOSSIER_LIST_NO_RESULTS_MESSAGE,
-  DOSSIER_LIST_TABLE_TRANSLATIONS,
-} from '../../constants';
-import {
-  CAN_CREATE_CASE_PERMISSION,
-  CAN_VIEW_CASE_PERMISSION,
-  CASE_DETAIL_PERMISSION_RESOURCE,
-} from '../../permissions';
+import { CASE_LIST_NO_RESULTS_MESSAGE, CASE_LIST_TABLE_TRANSLATIONS, DEFAULT_DOSSIER_LIST_TABS } from '../../constants';
+import { CAN_CREATE_CASE_PERMISSION, CAN_VIEW_CASE_PERMISSION, CASE_DETAIL_PERMISSION_RESOURCE } from '../../permissions';
 import {
   CaseBulkAssignService,
   CaseColumnService,
@@ -87,7 +79,7 @@ import {
   CaseListStatusService,
   CaseParameterService,
 } from '../../services';
-import {DossierListActionsComponent} from '../dossier-list-actions/dossier-list-actions.component';
+import { DossierListActionsComponent } from '../dossier-list-actions/dossier-list-actions.component';
 
 @Component({
   selector: 'valtimo-dossier-list',
@@ -120,10 +112,10 @@ export class DossierListComponent implements OnInit, OnDestroy {
   public visibleDossierTabs: Array<DossierListTab> | null = null;
 
   public readonly defaultTabs = DEFAULT_DOSSIER_LIST_TABS;
-  public readonly tableTranslations = DOSSIER_LIST_TABLE_TRANSLATIONS;
+  public readonly tableTranslations = CASE_LIST_TABLE_TRANSLATIONS;
 
   public readonly noResultsMessage$ = new BehaviorSubject<CarbonListNoResultsMessage>(
-    DOSSIER_LIST_NO_RESULTS_MESSAGE
+    CASE_LIST_NO_RESULTS_MESSAGE
   );
   public readonly disableStartButton$ = new BehaviorSubject<boolean>(false);
   public readonly showAssignModal$ = new BehaviorSubject<boolean>(false);

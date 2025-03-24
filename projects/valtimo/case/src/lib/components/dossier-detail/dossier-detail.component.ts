@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {DOCUMENT} from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -25,10 +25,10 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import {ActivatedRoute, NavigationStart, ParamMap, Params, Router} from '@angular/router';
-import {ChevronDown16} from '@carbon/icons';
-import {TranslateService} from '@ngx-translate/core';
-import {PermissionService} from '@valtimo/access-control';
+import { ActivatedRoute, NavigationStart, ParamMap, Params, Router } from '@angular/router';
+import { ChevronDown16 } from '@carbon/icons';
+import { TranslateService } from '@ngx-translate/core';
+import { PermissionService } from '@valtimo/access-control';
 import {
   BreadcrumbService,
   CARBON_CONSTANTS,
@@ -38,7 +38,7 @@ import {
   PageTitleService,
   PendingChangesComponent,
 } from '@valtimo/components';
-import {ConfigService} from '@valtimo/config';
+import { ConfigService } from '@valtimo/config';
 import {
   CaseStatusService,
   Document as ValtimoDocument,
@@ -47,13 +47,13 @@ import {
   InternalCaseStatusUtils,
   ProcessDocumentDefinition,
 } from '@valtimo/document';
-import {TaskWithProcessLink} from '@valtimo/process-link';
-import {UserProviderService} from '@valtimo/security';
-import {IntermediateSubmission} from '@valtimo/task';
-import {IconService, NotificationService} from 'carbon-components-angular';
-import {KeycloakService} from 'keycloak-angular';
+import { TaskWithProcessLink } from '@valtimo/process-link';
+import { UserProviderService } from '@valtimo/security';
+import { IntermediateSubmission } from '@valtimo/task';
+import { IconService, NotificationService } from 'carbon-components-angular';
+import { KeycloakService } from 'keycloak-angular';
 import moment from 'moment';
-import {NGXLogger} from 'ngx-logger';
+import { NGXLogger } from 'ngx-logger';
 import {
   BehaviorSubject,
   combineLatest,
@@ -69,12 +69,12 @@ import {
   tap,
 } from 'rxjs';
 import {
-  DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE,
-  DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE,
-  DOSSIER_DETAIL_GUTTER_SIZE,
-  DOSSIER_DETAIL_START_PROCESS_DROPDOWN_WIDTH,
+  CASE_DETAIL_DEFAULT_DISPLAY_SIZE,
+  CASE_DETAIL_DEFAULT_DISPLAY_TYPE,
+  CASE_DETAIL_GUTTER_SIZE,
+  CASE_DETAIL_START_PROCESS_DROPDOWN_WIDTH,
 } from '../../constants';
-import {TabImpl, TabLoaderImpl} from '../../models';
+import { TabImpl, TabLoaderImpl } from '../../models';
 import {
   CAN_ASSIGN_CASE_PERMISSION,
   CAN_CLAIM_CASE_PERMISSION,
@@ -82,9 +82,11 @@ import {
   CAN_VIEW_CASE_PERMISSION,
   CASE_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
-import {CaseDetailLayoutService, CaseService, CaseTabService} from '../../services';
-import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
-import {WidgetsService} from './tab/widgets/widgets.service';
+import { CaseDetailLayoutService, CaseService, CaseTabService } from '../../services';
+import {
+  DossierSupportingProcessStartModalComponent,
+} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
+import { WidgetsService } from './tab/widgets/widgets.service';
 
 @Component({
   selector: 'valtimo-dossier-detail',
@@ -128,7 +130,7 @@ export class DossierDetailComponent
   private readonly _caseStatusKey$ = new BehaviorSubject<string | null | 'NOT_AVAILABLE'>(null);
 
   public readonly dropdownWidth$ = new BehaviorSubject<number>(
-    DOSSIER_DETAIL_START_PROCESS_DROPDOWN_WIDTH.small
+    CASE_DETAIL_START_PROCESS_DROPDOWN_WIDTH.small
   );
   public readonly caseStatusKey$: Observable<string | 'NOT_AVAILABLE'> = this._caseStatusKey$.pipe(
     filter(key => !!key)
@@ -276,7 +278,7 @@ export class DossierDetailComponent
     );
   }
 
-  public readonly DOSSIER_DETAIL_GUTTER_SIZE = DOSSIER_DETAIL_GUTTER_SIZE;
+  public readonly DOSSIER_DETAIL_GUTTER_SIZE = CASE_DETAIL_GUTTER_SIZE;
 
   public readonly dossierDetailLayout$ = this.caseDetailLayoutService.dossierDetailLayout$;
 
@@ -454,10 +456,10 @@ export class DossierDetailComponent
 
     const displayType =
       taskProcessLinkResult.processLinkActivityResult.properties.formDisplayType ||
-      DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE;
+      CASE_DETAIL_DEFAULT_DISPLAY_TYPE;
     const size =
       taskProcessLinkResult.processLinkActivityResult.properties.formSize ||
-      DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE;
+      CASE_DETAIL_DEFAULT_DISPLAY_SIZE;
 
     this.caseDetailLayoutService.setFormDisplaySize(size);
     this.caseDetailLayoutService.setFormDisplayType(displayType);
@@ -693,10 +695,10 @@ export class DossierDetailComponent
 
     this.dropdownWidth$.next(
       longestName < 20
-        ? DOSSIER_DETAIL_START_PROCESS_DROPDOWN_WIDTH.small
+        ? CASE_DETAIL_START_PROCESS_DROPDOWN_WIDTH.small
         : longestName < 40
-          ? DOSSIER_DETAIL_START_PROCESS_DROPDOWN_WIDTH.medium
-          : DOSSIER_DETAIL_START_PROCESS_DROPDOWN_WIDTH.large
+          ? CASE_DETAIL_START_PROCESS_DROPDOWN_WIDTH.medium
+          : CASE_DETAIL_START_PROCESS_DROPDOWN_WIDTH.large
     );
   }
 }
