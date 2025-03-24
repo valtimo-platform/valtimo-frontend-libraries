@@ -84,8 +84,8 @@ import {
 } from '../../permissions';
 import { CaseDetailLayoutService, CaseService, CaseTabService } from '../../services';
 import {
-  DossierSupportingProcessStartModalComponent,
-} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
+  CaseSupportingProcessStartModalComponent,
+} from '../case-supporting-process-start-modal/case-supporting-process-start-modal.component';
 import { WidgetsService } from './tab/widgets/widgets.service';
 
 @Component({
@@ -98,7 +98,7 @@ export class CaseDetailComponent
   implements AfterViewInit, OnDestroy
 {
   @ViewChild('supportingProcessStartModal')
-  supportingProcessStart: DossierSupportingProcessStartModalComponent;
+  supportingProcessStart: CaseSupportingProcessStartModalComponent;
 
   @ViewChild('tabContainer', {read: ViewContainerRef})
   viewContainerRef: ViewContainerRef;

@@ -88,7 +88,7 @@ import {CaseListActionsComponent} from './components/case-list-actions/case-list
 import {CaseListComponent} from './components/case-list/case-list.component';
 import {CaseProcessStartModalComponent} from './components/case-process-start-modal/case-process-start-modal.component';
 import {CaseRoutingModule} from './case-routing.module';
-import {DossierSupportingProcessStartModalComponent} from './components/dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
+import {CaseSupportingProcessStartModalComponent} from './components/case-supporting-process-start-modal/case-supporting-process-start-modal.component';
 import {DossierUpdateComponent} from './components/dossier-update/dossier-update.component';
 import {TAB_MAP} from './constants';
 import {CaseBulkAssignService, CaseService} from './services';
@@ -115,7 +115,7 @@ export type TabsFactory = () => Map<string, object>;
     CaseDetailTabNotesComponent,
     DossierUpdateComponent,
     CaseProcessStartModalComponent,
-    DossierSupportingProcessStartModalComponent,
+    CaseSupportingProcessStartModalComponent,
     CaseDetailTabS3DocumentsComponent,
     CaseDetailTabNotFoundComponent,
     CaseAssignUserComponent,

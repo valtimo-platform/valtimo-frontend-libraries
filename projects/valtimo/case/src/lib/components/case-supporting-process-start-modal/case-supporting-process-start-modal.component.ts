@@ -48,12 +48,12 @@ import {take} from 'rxjs/operators';
 import {FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 
 @Component({
-  selector: 'valtimo-dossier-supporting-process-start-modal',
-  templateUrl: './dossier-supporting-process-start-modal.component.html',
-  styleUrls: ['./dossier-supporting-process-start-modal.component.scss'],
+  selector: 'valtimo-case-supporting-process-start-modal',
+  templateUrl: './case-supporting-process-start-modal.component.html',
+  styleUrls: ['./case-supporting-process-start-modal.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class DossierSupportingProcessStartModalComponent {
+export class CaseSupportingProcessStartModalComponent {
   @ViewChild('form', {static: false}) form: FormioComponent;
   @ViewChild('supportingProcessStartModal', {static: false}) modal: ModalComponent;
   @ViewChild('formViewModelComponent', {static: true, read: ViewContainerRef})
