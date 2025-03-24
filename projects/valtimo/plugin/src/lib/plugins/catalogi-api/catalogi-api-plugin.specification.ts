@@ -30,7 +30,7 @@ const catalogiApiPluginSpecification: PluginSpecification = {
     'get-besluittype': GetBesluittypeConfigurationComponent,
     'get-resultaattype': GetResultaattypeConfigurationComponent,
     'get-statustype': GetStatustypeConfigurationComponent,
-    'get-eigenschap': GetEigenschapConfigurationComponent
+    'get-eigenschap': GetEigenschapConfigurationComponent,
   },
   pluginTranslations: {
     nl: {
@@ -45,32 +45,33 @@ const catalogiApiPluginSpecification: PluginSpecification = {
       authenticationPluginConfiguration: 'Configuratie authenticatie-plug-in',
       'get-statustype': 'Statustype opvragen',
       getStatustypeInformation:
-        'De statustype wordt opgehaald en daarna opgeslagen in een process variable.',
+        'De statustype wordt opgehaald en daarna opgeslagen in een procesvariabele.',
       statustype: 'Statustype',
       statustypeTooltip: 'Generieke aanduiding van de aard van een status.',
       processVariable: 'Naam procesvariabele',
       processVariableTooltip:
-        'Nadat de statustype is opgehaald, wordt deze opgeslagen in een process variable met deze naam.',
+        'Nadat de statustype is opgehaald, wordt deze opgeslagen in een procesvariabele met deze naam.',
       'get-besluittype': 'Besluittype opvragen',
       getBesluittypeInformation:
         'Het besluittype wordt opgehaald en daarna opgeslagen in een process variable.',
       besluittype: 'Besluittype',
       besluittypeTooltip: 'Omschrijving van de aard van het besluit.',
       besluitProcessVariableTooltip:
-        'Nadat de besluittype is opgehaald, wordt deze opgeslagen in een process variable met deze naam.',
+        'Nadat de besluittype is opgehaald, wordt deze opgeslagen in een procesvariabele met deze naam.',
       'get-resultaattype': 'Resultaattype opvragen',
       getResultaattypeInformation:
-        'Het resultaattype wordt opgehaald en daarna opgeslagen in een process variable.',
+        'Het resultaattype wordt opgehaald en daarna opgeslagen in een procesvariabele.',
       resultaattype: 'Resultaattype',
       resultaattypeTooltip: 'Omschrijving van de aard van het resultaat.',
       reslutaatProcessVariableTooltip:
-        'Nadat de resultaattype is opgehaald, wordt deze opgeslagen in een process variable met deze naam.',
+        'Nadat de resultaattype is opgehaald, wordt deze opgeslagen in een procesvariabele met deze naam.',
       'get-eigenschap': 'Eigenschap opvragen',
-      getEigenschapInformation: 'De eigenschap wordt opgehald en daarna opgeslagen in een process variable',
+      getEigenschapInformation:
+        'De eigenschap wordt opgehaald en daarna opgeslagen in een procesvariabele',
       eigenschap: 'Eigenschap',
       eigenschapTooltip: 'Naam van de aard van het eigenschaap.',
       eigenschapProcessVariableTooltip:
-        'Nadat de eigenschap is opgehaald, wordt deze opgeslagen in een process variable met deze naam.'
+        'Nadat de eigenschap is opgehaald, wordt deze opgeslagen in een process variable met deze naam.',
     },
     en: {
       title: 'Catalogi API',
@@ -108,7 +109,7 @@ const catalogiApiPluginSpecification: PluginSpecification = {
       eigenschap: 'Eigenschap',
       eigenschapTooltip: 'Name of the nature of the eigenschaap.',
       eigenschapProcessVariableTooltip:
-        'After the eigenschap is retrieved, it is stored in a process variable with this name.'
+        'After the eigenschap is retrieved, it is stored in a process variable with this name.',
     },
     de: {
       title: 'Catalogi API',
@@ -143,11 +144,12 @@ const catalogiApiPluginSpecification: PluginSpecification = {
       reslutaatProcessVariableTooltip:
         'Sobald der resultaattype abgerufen wurde, wird er in einer Prozessvariablen mit diesem Namen gespeichert.',
       'get-eigenschap': 'Eigenschap anfordern',
-      getEigenschapInformation: 'Der eigenschap wird abgerufen und dann in einer Prozessvariablen gespeichert.',
+      getEigenschapInformation:
+        'Der eigenschap wird abgerufen und dann in einer Prozessvariablen gespeichert.',
       eigenschap: 'Eigenschap',
       eigenschapTooltip: 'Name der Art der eigenschap.',
       eigenschapProcessVariableTooltip:
-        'Sobald der eigenschap abgerufen wurde, wird er in einer Prozessvariablen mit diesem Namen gespeichert.'
+        'Sobald der eigenschap abgerufen wurde, wird er in einer Prozessvariablen mit diesem Namen gespeichert.',
     },
   },
 };

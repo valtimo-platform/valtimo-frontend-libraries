@@ -22,34 +22,33 @@ import {FunctionConfigurationComponent} from '../../../../models';
 @Component({
   selector: 'valtimo-get-eigenschap-configuration',
   templateUrl: './get-eigenschap-configuration.component.html',
-  styleUrls: ['./get-eigenschap-configuration.component.scss']
+  styleUrls: ['./get-eigenschap-configuration.component.scss'],
 })
-
 export class GetEigenschapConfigurationComponent
   implements FunctionConfigurationComponent, OnInit, OnDestroy
 {
-  @Input() save$: Observable<void>;
-  @Input() disabled$: Observable<boolean>;
-  @Input() pluginId: string;
-  @Input() prefillConfiguration$: Observable<GetEigenschapConfig>;
-  @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<GetEigenschapConfig> =
+  @Input() public save$: Observable<void>;
+  @Input() public disabled$: Observable<boolean>;
+  @Input() public pluginId: string;
+  @Input() public prefillConfiguration$: Observable<GetEigenschapConfig>;
+  @Output() public valid: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() public configuration: EventEmitter<GetEigenschapConfig> =
     new EventEmitter<GetEigenschapConfig>();
 
-  private saveSubscription!: Subscription;
+  private _saveSubscription!: Subscription;
 
   private readonly formValue$ = new BehaviorSubject<GetEigenschapConfig | null>(null);
-  private readonly  valid$ = new BehaviorSubject<boolean>(false);
+  private readonly valid$ = new BehaviorSubject<boolean>(false);
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.openSaveSubscription();
   }
 
-  ngOnDestroy() {
-    this.saveSubscription?.unsubscribe();
+  public ngOnDestroy() {
+    this._saveSubscription?.unsubscribe();
   }
 
-  formValueChange(formValue: GetEigenschapConfig): void {
+  public formValueChange(formValue: GetEigenschapConfig): void {
     this.formValue$.next(formValue);
     this.handleValid(formValue);
   }
@@ -62,7 +61,7 @@ export class GetEigenschapConfigurationComponent
   }
 
   private openSaveSubscription(): void {
-    this.saveSubscription = this.save$?.subscribe(save => {
+    this._saveSubscription = this.save$?.subscribe(save => {
       combineLatest([this.formValue$, this.valid$])
         .pipe(take(1))
         .subscribe(([formValue, valid]) => {
