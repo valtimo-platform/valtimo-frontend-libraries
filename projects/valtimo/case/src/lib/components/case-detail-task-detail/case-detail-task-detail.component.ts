@@ -41,9 +41,9 @@ import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
 import {TaskWithProcessLink} from '@valtimo/process-link';
 
 @Component({
-  selector: 'valtimo-dossier-detail-task-detail',
-  templateUrl: './dossier-detail-task-detail.component.html',
-  styleUrl: './dossier-detail-task-detail.component.scss',
+  selector: 'valtimo-case-detail-task-detail',
+  templateUrl: './case-detail-task-detail.component.html',
+  styleUrl: './case-detail-task-detail.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -56,7 +56,7 @@ import {TaskWithProcessLink} from '@valtimo/process-link';
     AssignUserToTaskComponent,
   ],
 })
-export class DossierDetailsTaskDetailComponent implements OnDestroy {
+export class CaseDetailsTaskDetailComponent implements OnDestroy {
   @Input() public set taskAndProcessLink(value: TaskWithProcessLink | null) {
     if (!value) return;
 

@@ -105,13 +105,13 @@
               }
 
               @if (tabContentObs.taskAndProcessLinkOpenedInPanel) {
-                <valtimo-dossier-detail-task-detail
+                <valtimo-case-detail-task-detail
                   [taskAndProcessLink]="tabContentObs.taskAndProcessLinkOpenedInPanel"
                   (activeChange)="onActiveChangeEvent($event)"
                   (closeEvent)="onTaskDetailsClose()"
                   (formSubmit)="onFormSubmitEvent()"
                 >
-                </valtimo-dossier-detail-task-detail>
+                </valtimo-case-detail-task-detail>
               }
             </div>
           }

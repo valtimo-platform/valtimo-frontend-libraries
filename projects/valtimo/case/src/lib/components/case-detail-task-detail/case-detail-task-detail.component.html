@@ -21,9 +21,9 @@
     task: task$ | async,
     taskAndProcessLink: taskAndProcessLink$ | async,
   } as obs"
-  class="valtimo-dossier-detail-task-detail"
+  class="valtimo-case-detail-task-detail"
 >
-  <section class="valtimo-dossier-detail-task-detail__header">
+  <section class="valtimo-case-detail-task-detail__header">
     <valtimo-task-detail-intermediate-save
       *ngIf="enableIntermediateSave"
       [taskAndProcessLink]="obs.taskAndProcessLink"
@@ -36,11 +36,11 @@
   </section>
 
   <section
-    class="valtimo-dossier-detail-task-detail__body"
-    [class.valtimo-dossier-detail-task-detail__body--compact]="compactMode$ | async"
+    class="valtimo-case-detail-task-detail__body"
+    [class.valtimo-case-detail-task-detail__body--compact]="compactMode$ | async"
   >
     <div class="title-container">
-      <p class="valtimo-dossier-detail-task-detail__title">{{ pageValue()?.title }}</p>
+      <p class="valtimo-case-detail-task-detail__title">{{ pageValue()?.title }}</p>
 
       <p class="cds--modal-header__label cds--type-delta">{{ pageValue()?.subtitle }}</p>
 

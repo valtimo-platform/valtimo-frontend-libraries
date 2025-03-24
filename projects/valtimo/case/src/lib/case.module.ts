@@ -97,7 +97,7 @@ import {TabTranslatePipeModule} from './pipes';
 import {CaseDetailTabNotFoundComponent} from './components/case-detail/tab/not-found/not-found.component';
 import {CaseDetailWidgetsComponent} from './components/case-detail/tab/widgets/widgets.component';
 import {DossierDetailTaskListComponent} from './components/dossier-detail-task-list/dossier-detail-task-list.component';
-import {DossierDetailsTaskDetailComponent} from './components/dossier-detail-task-detail/dossier-detail-task-detail.component';
+import {CaseDetailsTaskDetailComponent} from './components/case-detail-task-detail/case-detail-task-detail.component';
 import {AngularSplitModule} from 'angular-split';
 
 export type TabsFactory = () => Map<string, object>;
@@ -189,7 +189,7 @@ export type TabsFactory = () => Map<string, object>;
     ValtimoCdsOverflowButtonDirectiveModule,
     CaseDetailWidgetsComponent,
     DossierDetailTaskListComponent,
-    DossierDetailsTaskDetailComponent,
+    CaseDetailsTaskDetailComponent,
     AngularSplitModule,
   ],
   exports: [DossierListComponent, CaseDetailComponent, DossierProcessStartModalComponent],
