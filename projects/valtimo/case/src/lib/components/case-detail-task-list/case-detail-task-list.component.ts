@@ -58,9 +58,9 @@ moment.locale(localStorage.getItem('langKey') || '');
 moment.defaultFormat = 'DD MMM YYYY HH:mm';
 
 @Component({
-  selector: 'valtimo-dossier-detail-task-list',
-  templateUrl: './dossier-detail-task-list.component.html',
-  styleUrls: ['./dossier-detail-task-list.component.scss'],
+  selector: 'valtimo-case-detail-task-list',
+  templateUrl: './case-detail-task-list.component.html',
+  styleUrls: ['./case-detail-task-list.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -76,7 +76,7 @@ moment.defaultFormat = 'DD MMM YYYY HH:mm';
     IconModule,
   ],
 })
-export class DossierDetailTaskListComponent {
+export class CaseDetailTaskListComponent {
   @ViewChild('taskDetail') private readonly _taskDetailModal: TaskDetailModalComponent;
 
   @Input() public set openTaskAndProcessLinkInModal(value: TaskWithProcessLink) {

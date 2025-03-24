@@ -96,7 +96,7 @@ import {CaseDetailTabFormioComponent} from './components/case-detail/tab/formio/
 import {TabTranslatePipeModule} from './pipes';
 import {CaseDetailTabNotFoundComponent} from './components/case-detail/tab/not-found/not-found.component';
 import {CaseDetailWidgetsComponent} from './components/case-detail/tab/widgets/widgets.component';
-import {DossierDetailTaskListComponent} from './components/dossier-detail-task-list/dossier-detail-task-list.component';
+import {CaseDetailTaskListComponent} from './components/case-detail-task-list/case-detail-task-list.component';
 import {CaseDetailsTaskDetailComponent} from './components/case-detail-task-detail/case-detail-task-detail.component';
 import {AngularSplitModule} from 'angular-split';
 
@@ -188,7 +188,7 @@ export type TabsFactory = () => Map<string, object>;
     DialogModule,
     ValtimoCdsOverflowButtonDirectiveModule,
     CaseDetailWidgetsComponent,
-    DossierDetailTaskListComponent,
+    CaseDetailTaskListComponent,
     CaseDetailsTaskDetailComponent,
     AngularSplitModule,
   ],
