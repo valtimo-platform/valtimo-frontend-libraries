@@ -23,10 +23,10 @@ interface PaginationParameters {
   isSorting: 'true' | 'false';
 }
 
-interface DossierParameters extends PaginationParameters {
+interface CaseParameters extends PaginationParameters {
   search?: string;
   assignee?: string;
   status?: string;
 }
 
-export {DossierParameters};
+export {CaseParameters};

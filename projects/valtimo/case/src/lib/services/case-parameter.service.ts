@@ -15,7 +15,7 @@
  */
 
 import {Injectable, OnDestroy} from '@angular/core';
-import {DossierParameters} from '../models';
+import {CaseParameters} from '../models';
 import {
   BehaviorSubject,
   combineLatest,
@@ -31,10 +31,10 @@ import {Pagination} from '@valtimo/components';
 
 @Injectable()
 export class CaseParameterService implements OnDestroy {
-  private readonly _dossierParameters$ = new BehaviorSubject<DossierParameters>(undefined);
+  private readonly _dossierParameters$ = new BehaviorSubject<CaseParameters>(undefined);
   private readonly _searchFieldValues$ = new BehaviorSubject<SearchFieldValues>({});
 
-  public get dossierParameters$(): Observable<DossierParameters> {
+  public get dossierParameters$(): Observable<CaseParameters> {
     return this._dossierParameters$.asObservable();
   }
 
@@ -59,7 +59,7 @@ export class CaseParameterService implements OnDestroy {
   public get queryPaginationParams$(): Observable<Pagination | null> {
     return this.route.queryParams.pipe(
       map(params => {
-        const paramsCopy = {...params} as any as DossierParameters;
+        const paramsCopy = {...params} as any as CaseParameters;
 
         return paramsCopy.collectionSize
           ? {

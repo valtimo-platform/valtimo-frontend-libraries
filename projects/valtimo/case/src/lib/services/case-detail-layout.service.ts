@@ -9,7 +9,7 @@ import {
   DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS,
   DOSSIER_DETAIL_TASK_LIST_WIDTH,
 } from '../constants';
-import {DossierDetailLayout} from '../models';
+import {CaseDetailLayout} from '../models';
 import {CaseTabService} from './case-tab.service';
 
 @Injectable()
@@ -39,7 +39,7 @@ export class CaseDetailLayoutService {
 
   constructor(private readonly caseTabService: CaseTabService) {}
 
-  public readonly dossierDetailLayout$: Observable<DossierDetailLayout | any> = combineLatest([
+  public readonly dossierDetailLayout$: Observable<CaseDetailLayout | any> = combineLatest([
     this.tabContentContainerWidth$,
     this._showTaskList$,
     this._taskAndProcessLinkOpenedInPanel$,
@@ -66,7 +66,7 @@ export class CaseDetailLayoutService {
           return this.getPanelLayout(tabContentContainerWidth ?? 0, formDisplaySize);
         }
 
-        return {} as DossierDetailLayout;
+        return {} as CaseDetailLayout;
       }
     ),
     startWith({})
@@ -88,7 +88,7 @@ export class CaseDetailLayoutService {
     this._formDisplaySize$.next(size);
   }
 
-  private getInitialLayout(): DossierDetailLayout {
+  private getInitialLayout(): CaseDetailLayout {
     return {
       showRightPanel: false,
       widthAdjustable: false,
@@ -97,7 +97,7 @@ export class CaseDetailLayoutService {
     };
   }
 
-  private getTaskListLayout(): DossierDetailLayout {
+  private getTaskListLayout(): CaseDetailLayout {
     return {
       unit: 'pixel',
       showRightPanel: true,
@@ -112,7 +112,7 @@ export class CaseDetailLayoutService {
   private getPanelLayout(
     tabContentContainerWidth: number,
     formDisplaySize: FormSize
-  ): DossierDetailLayout {
+  ): CaseDetailLayout {
     const rightPanelMaxWidth =
       tabContentContainerWidth - DOSSIER_DETAIL_GUTTER_SIZE - DOSSIER_DETAIL_LEFT_PANEL_MIN_WIDTH;
     const rightPanelMinWidth = DOSSIER_DETAIL_RIGHT_PANEL_MIN_WIDTHS[formDisplaySize];
