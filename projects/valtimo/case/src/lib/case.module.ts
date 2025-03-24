@@ -82,7 +82,7 @@ import {CaseDetailTabAuditComponent} from './components/case-detail/tab/audit/au
 import {CaseDetailTabDocumentsComponent} from './components/case-detail/tab/documents/documents.component';
 import {CaseDetailTabNotesComponent} from './components/case-detail/tab/notes/notes.component';
 import {CaseDetailTabProgressComponent} from './components/case-detail/tab/progress/progress.component';
-import {DossierDetailTabS3DocumentsComponent} from './components/case-detail/tab/s3-documents/s3-documents.component';
+import {CaseDetailTabS3DocumentsComponent} from './components/case-detail/tab/s3-documents/s3-documents.component';
 import {DossierDetailTabSummaryComponent} from './components/case-detail/tab/summary/summary.component';
 import {DossierListActionsComponent} from './components/dossier-list-actions/dossier-list-actions.component';
 import {DossierListComponent} from './components/dossier-list/dossier-list.component';
@@ -116,7 +116,7 @@ export type TabsFactory = () => Map<string, object>;
     DossierUpdateComponent,
     DossierProcessStartModalComponent,
     DossierSupportingProcessStartModalComponent,
-    DossierDetailTabS3DocumentsComponent,
+    CaseDetailTabS3DocumentsComponent,
     CaseDetailTabNotFoundComponent,
     CaseAssignUserComponent,
     NoteModalComponent,

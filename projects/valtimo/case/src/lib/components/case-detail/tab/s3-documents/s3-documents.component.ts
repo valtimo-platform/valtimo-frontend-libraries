@@ -26,11 +26,10 @@ import {ConfigService} from '@valtimo/config';
 import {PromptService} from '@valtimo/components';
 
 @Component({
-  selector: 'valtimo-dossier-detail-tab-s3-documents',
+  selector: 'valtimo-case-detail-tab-s3-documents',
   templateUrl: './s3-documents.component.html',
-  styleUrls: ['./s3-documents.component.scss'],
 })
-export class DossierDetailTabS3DocumentsComponent implements OnInit {
+export class CaseDetailTabS3DocumentsComponent implements OnInit {
   public readonly documentId: string;
   public readonly documentDefinitionName: string;
   public readonly maxFileSize: number = this.configService?.config?.caseFileSizeUploadLimitMB || 5;
@@ -107,12 +106,12 @@ export class DossierDetailTabS3DocumentsComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.toastrService.success('Successfully uploaded document to dossier');
+          this.toastrService.success('Successfully uploaded document to case');
           this.refetchDocuments();
           this.uploading$.next(false);
         },
         error: () => {
-          this.toastrService.error('Failed to upload document to dossier');
+          this.toastrService.error('Failed to upload document to case');
           this.uploading$.next(false);
         },
       });
@@ -141,11 +140,11 @@ export class DossierDetailTabS3DocumentsComponent implements OnInit {
       confirmCallBackFunction: () => {
         this.documentService.removeResource(this.documentId, relatedFile.fileId).subscribe(
           () => {
-            this.toastrService.success('Successfully removed document from dossier');
+            this.toastrService.success('Successfully removed document from case');
             this.refetchDocuments();
           },
           () => {
-            this.toastrService.error('Failed to remove document from dossier');
+            this.toastrService.error('Failed to remove document from case');
           }
         );
       },
