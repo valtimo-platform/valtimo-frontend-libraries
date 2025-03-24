@@ -11,6 +11,7 @@
     "ng": "ng",
     "installDeps": "npm install",
     "devMode": "node scripts/dev-mode.js",
+    "devMode:skipLibsBuild": "SKIP_BUILD=true node scripts/dev-mode.js",
     "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --proxy-config proxy.conf.json",
     "startPoll": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --proxy-config proxy.conf.json --hmr --poll 1000",
     "startProd": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --proxy-config proxy.conf.json --configuration production",
@@ -290,6 +291,7 @@
     "zone.js": "0.14.10"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^17.0.2",
     "@types/dropzone": "5.7.8",
     "@types/jasmine": "5.1.4",
     "@types/jasminewd2": "2.0.13",
@@ -333,6 +335,8 @@
     "@valtimo/task": "file:dist/valtimo/task",
     "@valtimo/task-management": "file:dist/valtimo/task-management",
     "@valtimo/zgw": "file:dist/valtimo/zgw",
+    "chokidar": "^4.0.3",
+    "chokidar-cli": "^3.0.0",
     "cross-env": "7.0.3",
     "jasmine-core": "5.2.0",
     "karma": "6.4.4",
