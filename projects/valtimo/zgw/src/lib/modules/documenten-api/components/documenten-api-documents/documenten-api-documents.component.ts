@@ -547,7 +547,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
         this.pagination$,
       ]).subscribe(([definitionName, documentId, filter, sort, pagination]) => {
         const {size, page} = pagination;
-        this.router.navigate([`/dossiers/${definitionName}/document/${documentId}/documents`], {
+        this.router.navigate([`/cases/${definitionName}/document/${documentId}/documents`], {
           queryParams: {...filter, ...sort, size, page: page - 1},
         });
       })

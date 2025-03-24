@@ -86,7 +86,7 @@ export const environment: ValtimoConfig = {
       },
       {
         roles: [ROLE_USER],
-        title: 'Dossiers',
+        title: 'Cases',
         iconClass: 'icon mdi mdi-layers',
         sequence: 1,
         children: [],
@@ -172,7 +172,7 @@ export const environment: ValtimoConfig = {
     level: NgxLoggerLevel.TRACE,
   },
   definitions: {
-    dossiers: [],
+    cases: [],
   },
   openZaak: {
     catalogus: '8225508a-6840-413e-acc9-6422af120db1',
@@ -262,7 +262,7 @@ export const environment: ValtimoConfig = {
     enablePbacDocumentenApiDocuments: true,
     enableSuppressDocumentError: false,
   },
-  customDossierHeader: {
+  customCaseHeader: {
     leningen: [
       {
         propertyPaths: ['voornaam'],

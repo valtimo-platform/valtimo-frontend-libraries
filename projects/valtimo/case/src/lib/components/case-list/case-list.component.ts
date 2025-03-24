@@ -512,10 +512,10 @@ export class CaseListComponent implements OnInit, OnDestroy {
   public rowClick(item: any): void {
     this.listService.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
       this.breadcrumbService.cacheQueryParams(
-        `/dossiers/${documentDefinitionName}`,
+        `/cases/${documentDefinitionName}`,
         this.route.snapshot.queryParams
       );
-      this.router.navigate([`/dossiers/${documentDefinitionName}/document/${item.id}`]);
+      this.router.navigate([`/cases/${documentDefinitionName}/document/${item.id}`]);
     });
   }
 

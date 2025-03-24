@@ -30,7 +30,7 @@ export class CaseService {
   }
 
   public getImplementationEnvironmentDefinitions(name: string) {
-    return this.definitions.dossiers.find(definition => definition.name === name);
+    return this.definitions.cases.find(definition => definition.name === name);
   }
 
   public getInitialSortState(columns: Array<DefinitionColumn>): SortState {

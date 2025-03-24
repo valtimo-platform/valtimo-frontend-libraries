@@ -140,7 +140,7 @@ interface ValtimoConfig {
   customDefinitionTables: {
     [definitionNameId: string]: Array<DefinitionColumn>;
   };
-  customDossierHeader?: {
+  customCaseHeader?: {
     [definitionNameId: string]: Array<CustomCaseHeaderItem>;
   };
   translationResources?: Array<string>;

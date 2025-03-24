@@ -163,12 +163,12 @@ export class CaseDetailComponent
         this._caseStatusKey$.next(document?.internalStatus || 'NOT_AVAILABLE');
 
         if (
-          this.configService.config.customDossierHeader?.hasOwnProperty(
+          this.configService.config.customCaseHeader?.hasOwnProperty(
             this.documentDefinitionName.toLowerCase()
           ) &&
           this.customCaseHeaderItems.length === 0
         ) {
-          this.configService.config.customDossierHeader[
+          this.configService.config.customCaseHeader[
             this.documentDefinitionName.toLowerCase()
           ]?.forEach(item => this.getCustomCaseHeaderItem(item));
         }
@@ -436,7 +436,7 @@ export class CaseDetailComponent
       next: (): void => {
         this.isDeleting$.next(false);
         this.showDeleteModal$.next(false);
-        this.router.navigate([`/dossiers/${this.documentDefinitionName}`]);
+        this.router.navigate([`/cases/${this.documentDefinitionName}`]);
       },
       error: (): void => {
         this.isDeleting$.next(false);
@@ -608,9 +608,9 @@ export class CaseDetailComponent
 
   private setBreadcrumb(): void {
     this.breadcrumbService.setSecondBreadcrumb({
-      route: [`/dossiers/${this.documentDefinitionName}`],
+      route: [`/cases/${this.documentDefinitionName}`],
       content: this.documentDefinitionNameTitle,
-      href: `/dossiers/${this.documentDefinitionName}`,
+      href: `/cases/${this.documentDefinitionName}`,
     });
   }
 

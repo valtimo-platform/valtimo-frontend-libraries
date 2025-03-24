@@ -26,39 +26,39 @@ import {pendingChangesGuard} from '@valtimo/components';
 
 const routes: Routes = [
   {
-    path: 'dossiers/:documentDefinitionName',
+    path: 'cases/:documentDefinitionName',
     component: CaseListComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Dossiers', roles: [ROLE_USER], customPageTitle: true},
+    data: {title: 'Cases', roles: [ROLE_USER], customPageTitle: true},
   },
   {
-    path: 'dossiers/:documentDefinitionName/document/:documentId/:tab',
+    path: 'cases/:documentDefinitionName/document/:documentId/:tab',
     component: CaseDetailComponent,
     canActivate: [AuthGuardService],
     canDeactivate: [pendingChangesGuard],
     data: {
-      title: 'Dossier details',
-      parentPath: 'dossiers/:documentDefinitionName',
+      title: 'Case details',
+      parentPath: 'cases/:documentDefinitionName',
       roles: [ROLE_USER],
     },
   },
   {
-    path: 'dossiers/:documentDefinitionName/document/:documentId',
+    path: 'cases/:documentDefinitionName/document/:documentId',
     component: CaseDetailComponent,
     canActivate: [AuthGuardService],
     data: {
-      title: 'Dossier details',
-      parentPath: 'dossiers/:documentDefinitionName',
+      title: 'Case details',
+      parentPath: 'cases/:documentDefinitionName',
       roles: [ROLE_USER],
     },
   },
   {
-    path: 'dossiers/:documentDefinitionName/document/:documentId/:tab/tasks/:taskId',
+    path: 'cases/:documentDefinitionName/document/:documentId/:tab/tasks/:taskId',
     component: CaseUpdateComponent,
     canActivate: [AuthGuardService],
     data: {
       title: 'Task details',
-      parentPath: 'dossiers/:documentDefinitionName/document/:documentId/:tab',
+      parentPath: 'cases/:documentDefinitionName/document/:documentId/:tab',
       roles: [ROLE_USER],
     },
   },

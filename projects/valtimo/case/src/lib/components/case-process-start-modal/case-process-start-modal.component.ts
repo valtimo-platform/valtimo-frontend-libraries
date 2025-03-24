@@ -259,7 +259,7 @@ export class CaseProcessStartModalComponent implements OnInit, OnDestroy {
       .subscribe(canViewCase => {
         if (canViewCase) {
           this.router.navigate([
-            'dossiers',
+            'cases',
             this.documentDefinitionName,
             'document',
             formSubmissionResult.documentId,
