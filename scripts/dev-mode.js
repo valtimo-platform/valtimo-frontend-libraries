@@ -11,10 +11,8 @@ let current = 0;
 let activeProcesses = [];
 let hasStartedApp = false;
 
-// Path to the single rebuild lock file
 const rebuildLockFilePath = path.resolve(__dirname, '../.rebuilding.lock');
 
-// Check if the initial build should be skipped (using an environment variable)
 const skipInitialBuild = process.env.SKIP_BUILD === 'true';
 
 function checkPortInUse(port = 4200) {
@@ -47,33 +45,9 @@ function removeRebuildLock() {
 
 function getChokidarCommand(libName) {
   const pathGlob = `projects/valtimo/${libName}/**/*`;
+  const rebuildScriptPath = path.resolve(__dirname, 'rebuild-lib.js');
 
-  const jsCode = `
-    const { spawnSync } = require('child_process');
-    const fs = require('fs');
-    const path = require('path');
-
-    const file = path.resolve(__dirname, '../.rebuilding.lock');
-    if (fs.existsSync(file)) {
-      console.log('⏳ Rebuild in progress. Skipping rebuild for: @valtimo/${libName}');
-      process.exit(0);
-    }
-
-    fs.writeFileSync(file, 'rebuilding');
-    console.log('🔁 Rebuilding @valtimo/${libName}');
-    const result = spawnSync('ng', ['build', '@valtimo/${libName}'], { stdio: 'inherit', shell: true });
-
-    if (fs.existsSync(file)) {
-      fs.rmSync(file);
-    }
-
-    process.exit(result.status);
-  `
-    .trim()
-    .replace(/\n/g, '')
-    .replace(/"/g, '\\"');
-
-  return `chokidar "${pathGlob}" --polling --await-write-finish --delay 300 -c "node -e \\"${jsCode}\\""`;
+  return `chokidar "${pathGlob}" --polling --await-write-finish --delay 300 -c "node ${rebuildScriptPath} ${libName}"`;
 }
 
 async function runNext() {
@@ -134,7 +108,6 @@ async function runNext() {
       process.stderr.write(data.toString());
     });
   } else {
-    // Skip initial build, just start the watcher
     console.log(`\n✅ Skipping initial build for: @valtimo/${libName}, starting watcher...\n`);
     const watcherProc = spawn(chokidarCmd, {
       stdio: 'inherit',
@@ -157,7 +130,7 @@ function cleanup() {
     }
   });
 
-  removeRebuildLock(); // Cleanup rebuild lock
+  removeRebuildLock();
   process.exit();
 }
 
