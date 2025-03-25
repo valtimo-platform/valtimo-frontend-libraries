@@ -22,7 +22,7 @@
     searchFields: searchFields$ | async,
     schema: schema$ | async,
     showAssignModal: showAssignModal$ | async,
-    selectedDocumentIds: selectedDocumentIds$ | async,
+    selectedCaseIds: selectedCaseIds$ | async,
     statuses: statuses$ | async,
     selectedStatuses: selectedStatuses$ | async,
     showStatusSelector: showStatusSelector$ | async,
@@ -158,9 +158,9 @@
 
 <ng-template #bulkAssignModal let-obs="obs">
   <valtimo-case-bulk-assign-modal
-    [documentIds]="obs.selectedDocumentIds"
+    [documentIds]="obs.selectedCaseIds"
     [open]="obs.showAssignModal"
-    (closeEvent)="onCloseEvent($event, obs.selectedDocumentIds)"
+    (closeEvent)="onCloseEvent($event, obs.selectedCaseIds)"
   ></valtimo-case-bulk-assign-modal>
 </ng-template>
 
@@ -189,7 +189,7 @@
 
 <ng-template #dossierListActions>
   <button
-    *ngIf="canCreateDocument$ | async"
+    *ngIf="canCreateCase$ | async"
     cdsButton="primary"
     [disabled]="disableStartButton$ | async"
     (click)="startDossier()"

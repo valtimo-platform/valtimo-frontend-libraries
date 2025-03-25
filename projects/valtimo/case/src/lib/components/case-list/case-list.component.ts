@@ -20,6 +20,7 @@ import { PermissionService } from '@valtimo/access-control';
 import {
   BreadcrumbService,
   CarbonListComponent,
+  CarbonListItem,
   CarbonListNoResultsMessage,
   CarbonPaginationSelection,
   CASES_WITHOUT_STATUS_KEY,
@@ -129,26 +130,26 @@ export class CaseListComponent implements OnInit, OnDestroy {
   );
   public readonly selectedStatuses$ = this.statusService.selectedCaseStatuses$;
 
-  public readonly documentDefinitionName$ = this.listService.documentDefinitionName$;
+  public readonly caseDefinitionKey$ = this.listService.caseDefinitionKey$;
 
-  public readonly selectedDocumentIds$ = new BehaviorSubject<string[]>([]);
+  public readonly selectedCaseIds$ = new BehaviorSubject<string[]>([]);
 
-  public readonly schema$ = this.listService.documentDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
-      this.documentService.getDocumentDefinition(documentDefinitionName)
+  public readonly schema$ = this.listService.caseDefinitionKey$.pipe(
+    switchMap(caseDefinitionKey =>
+      this.documentService.getDocumentDefinition(caseDefinitionKey)
     ),
-    map(documentDefinition => documentDefinition?.schema),
+    map(caseDefinition => caseDefinition?.schema),
     tap(schema => {
       if (schema?.title) {
         this.pageTitleService.setCustomPageTitle(schema?.title, true);
       }
     })
   );
-  public readonly canCreateDocument$: Observable<boolean> = this.documentDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
+  public readonly canCreateCase$: Observable<boolean> = this.caseDefinitionKey$.pipe(
+    switchMap(caseDefinitionKey =>
       this.permissionService.requestPermission(CAN_CREATE_CASE_PERMISSION, {
         resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocumentDefinition,
-        identifier: documentDefinitionName,
+        identifier: caseDefinitionKey,
       })
     )
   );
@@ -170,16 +171,16 @@ export class CaseListComponent implements OnInit, OnDestroy {
   private readonly _hasApiColumnConfig$ = new BehaviorSubject<boolean>(false);
   private readonly _canHaveAssignee$: Observable<boolean> = this.assigneeService.canHaveAssignee$;
   private readonly _columns$: Observable<Array<DefinitionColumn>> =
-    this.listService.documentDefinitionName$.pipe(
-      switchMap(documentDefinitionName =>
-        this.columnService.getDefinitionColumns(documentDefinitionName)
+    this.listService.caseDefinitionKey$.pipe(
+      switchMap(caseDefinitionKey =>
+        this.columnService.getDefinitionColumns(caseDefinitionKey)
       ),
       map(res => {
         this._hasApiColumnConfig$.next(res.hasApiConfig);
         return res.columns;
       }),
       tap(columns => {
-        this.listService.documentDefinitionName$.pipe(take(1)).subscribe(_ => {
+        this.listService.caseDefinitionKey$.pipe(take(1)).subscribe(_ => {
           this.paginationService.setPagination(columns);
         });
       })
@@ -214,7 +215,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
         ...columns.reduce(
           (acc, curr) =>
             curr.propertyName === this.INTERNAL_STATUS_COLUMN ? [...acc, curr.translationKey] : acc,
-          []
+          [] as string[]
         ),
       ]);
       const filteredAssigneeColumns = this.assigneeService.filterAssigneeColumns(
@@ -260,13 +261,13 @@ export class CaseListComponent implements OnInit, OnDestroy {
   );
 
   private readonly _documentSearchRequest$: Observable<AdvancedDocumentSearchRequest> =
-    combineLatest([this._pagination$, this.listService.documentDefinitionName$]).pipe(
+    combineLatest([this._pagination$, this.listService.caseDefinitionKey$]).pipe(
       filter(([pagination]) => !!pagination),
-      map(([pagination, documentDefinitionName]) => {
+      map(([pagination, caseDefinitionKey]) => {
         const page = pagination.page - 1;
 
         return new AdvancedDocumentSearchRequestImpl(
-          documentDefinitionName,
+          caseDefinitionKey,
           page >= 0 ? page : 0,
           pagination.size,
           pagination.sort
@@ -469,8 +470,8 @@ export class CaseListComponent implements OnInit, OnDestroy {
     })
   );
 
-  private _previousDocumentDefinitionName!: string;
-  private _documentDefinitionNameSubscription!: Subscription;
+  private _previousCaseDefinitionKey!: string;
+  private _caseDefinitionKeySubscription!: Subscription;
 
   constructor(
     private readonly assigneeService: CaseListAssigneeService,
@@ -493,11 +494,11 @@ export class CaseListComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.setVisibleTabs();
-    this.openDocumentDefinitionNameSubscription();
+    this.openCaseDefinitionKeySubscription();
   }
 
   public ngOnDestroy(): void {
-    this._documentDefinitionNameSubscription?.unsubscribe();
+    this._caseDefinitionKeySubscription?.unsubscribe();
     this.pageTitleService.enableReset();
   }
 
@@ -510,12 +511,12 @@ export class CaseListComponent implements OnInit, OnDestroy {
   }
 
   public rowClick(item: any): void {
-    this.listService.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+    this.listService.caseDefinitionKey$.pipe(take(1)).subscribe(caseDefinitionKey => {
       this.breadcrumbService.cacheQueryParams(
-        `/cases/${documentDefinitionName}`,
+        `/cases/${caseDefinitionKey}`,
         this.route.snapshot.queryParams
       );
-      this.router.navigate([`/cases/${documentDefinitionName}/document/${item.id}`]);
+      this.router.navigate([`/cases/${caseDefinitionKey}/document/${item.id}`]);
     });
   }
 
@@ -551,8 +552,10 @@ export class CaseListComponent implements OnInit, OnDestroy {
     if (!prevTab) {
       return;
     }
+    const tab = this.tabsComponent.tabs.find((tab: Tab) => tab.active);
 
-    this.tabsComponent.tabs.find((tab: Tab) => tab.active).active = false;
+    if(!tab) return;
+    tab.active = false;
     prevTab.active = true;
   }
 
@@ -587,8 +590,8 @@ export class CaseListComponent implements OnInit, OnDestroy {
   }
 
   public showAssignModal(): void {
-    this.selectedDocumentIds$.next(
-      this.carbonList.selectedItems.map((document: Document) => document.id)
+    this.selectedCaseIds$.next(
+      this.carbonList.selectedItems.map((document: CarbonListItem) => document.id)
     );
     this.showAssignModal$.next(true);
   }
@@ -629,22 +632,22 @@ export class CaseListComponent implements OnInit, OnDestroy {
     this.disableStartButton$.next(disabled);
   }
 
-  private openDocumentDefinitionNameSubscription(): void {
-    this._documentDefinitionNameSubscription = this.route.params
+  private openCaseDefinitionKeySubscription(): void {
+    this._caseDefinitionKeySubscription = this.route.params
       .pipe(
-        map((params: Params) => params?.documentDefinitionName),
+        map((params: Params) => params?.caseDefinitionKey),
         filter(docDefName => !!docDefName),
         distinctUntilChanged()
       )
-      .subscribe(documentDefinitonName => {
-        if (this._previousDocumentDefinitionName) {
+      .subscribe(caseDefinitionKey => {
+        if (this._previousCaseDefinitionKey) {
           this.parameterService.clearParameters();
           this.parameterService.clearSearchFieldValues();
         }
-        this._previousDocumentDefinitionName = documentDefinitonName;
+        this._previousCaseDefinitionKey = caseDefinitionKey;
         this.paginationService.clearPagination();
         this.assigneeService.resetAssigneeFilter();
-        this.listService.setDocumentDefinitionName(documentDefinitonName);
+        this.listService.setCaseDefinitionKey(caseDefinitionKey);
         this.setLoading();
       });
   }

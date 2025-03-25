@@ -20,19 +20,19 @@ import {CaseColumnService} from '.';
 
 @Injectable()
 export class CaseListService {
-  private readonly _documentDefinitionName$ = new BehaviorSubject<string>('');
+  private readonly _caseDefinitionKey$ = new BehaviorSubject<string>('');
 
-  private readonly _hasEnvColumnConfig$: Observable<boolean> = this.documentDefinitionName$.pipe(
-    map(documentDefinitionName =>
-      this.caseColumnService.hasEnvironmentConfig(documentDefinitionName)
+  private readonly _hasEnvColumnConfig$: Observable<boolean> = this.caseDefinitionKey$.pipe(
+    map(caseDefinitionKey =>
+      this.caseColumnService.hasEnvironmentConfig(caseDefinitionKey)
     )
   );
 
   private readonly _checkRefresh$ = new BehaviorSubject<boolean>(false);
   private readonly _forceRefresh$ = new BehaviorSubject<boolean>(false);
 
-  public get documentDefinitionName$(): Observable<string> {
-    return this._documentDefinitionName$.asObservable();
+  public get caseDefinitionKey$(): Observable<string> {
+    return this._caseDefinitionKey$.asObservable();
   }
 
   public get hasEnvColumnConfig$(): Observable<boolean> {
@@ -49,8 +49,8 @@ export class CaseListService {
 
   constructor(private readonly caseColumnService: CaseColumnService) {}
 
-  public setDocumentDefinitionName(documentDefinitionName: string): void {
-    this._documentDefinitionName$.next(documentDefinitionName);
+  public setCaseDefinitionKey(caseDefinitionKey: string): void {
+    this._caseDefinitionKey$.next(caseDefinitionKey);
   }
 
   public mapDocuments(

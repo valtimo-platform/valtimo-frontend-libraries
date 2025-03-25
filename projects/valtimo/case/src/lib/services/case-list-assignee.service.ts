@@ -30,7 +30,7 @@ export class CaseListAssigneeService {
   private readonly _assigneeFilter$ = new BehaviorSubject<AssigneeFilter | null>(null);
 
   public readonly canHaveAssignee$: Observable<boolean> =
-    this.caseListService.documentDefinitionName$.pipe(
+    this.caseListService.caseDefinitionKey$.pipe(
       switchMap(documentDefinitionName =>
         this.documentService.getCaseSettings(documentDefinitionName)
       ),

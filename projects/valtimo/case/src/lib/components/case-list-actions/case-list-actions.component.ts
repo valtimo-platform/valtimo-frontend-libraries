@@ -44,7 +44,7 @@ export class CaseListActionsComponent implements OnInit {
 
   public readonly associatedProcessDocumentDefinitions$: Observable<
     Array<ProcessDocumentDefinition>
-  > = this.listService.documentDefinitionName$.pipe(
+  > = this.listService.caseDefinitionKey$.pipe(
     switchMap(documentDefinitionName =>
       combineLatest([
         documentDefinitionName

@@ -28,7 +28,7 @@ export class CaseListStatusService {
   private readonly _showStatusSelector$ = new BehaviorSubject<boolean>(false);
 
   private readonly _caseStatuses$: Observable<Array<InternalCaseStatus>> =
-    this.caseListService.documentDefinitionName$.pipe(
+    this.caseListService.caseDefinitionKey$.pipe(
       switchMap(documentDefinitionName =>
         combineLatest([
           this.caseStatusService.getInternalCaseStatuses(documentDefinitionName),

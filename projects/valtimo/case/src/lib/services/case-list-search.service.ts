@@ -24,7 +24,7 @@ import {CaseParameterService} from './case-parameter.service';
 @Injectable()
 export class CaseListSearchService {
   private readonly _documentSearchFields$: Observable<Array<SearchField> | null> =
-    this.caseListService.documentDefinitionName$.pipe(
+    this.caseListService.caseDefinitionKey$.pipe(
       switchMap(documentDefinitionName =>
         this.documentService.getDocumentSearchFields(documentDefinitionName)
       )
