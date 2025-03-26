@@ -27,31 +27,18 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {PermissionService} from '@valtimo/access-control';
-import {DocumentService, ProcessDefinitionCaseDefinition, ProcessDocumentDefinition} from '@valtimo/document';
-import {
-  FormFlowService,
-  FormSubmissionResult,
-  ProcessLinkService,
-  UrlResolverService,
-} from '@valtimo/process-link';
+import {DocumentService, ProcessDefinitionCaseDefinition} from '@valtimo/document';
+import {FormFlowService, FormSubmissionResult, ProcessLinkService, UrlResolverService,} from '@valtimo/process-link';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProcessService} from '@valtimo/process';
-import {
-  FormioComponent,
-  FormioOptionsImpl,
-  FormioSubmission,
-  ModalComponent,
-  ValtimoFormioOptions,
-} from '@valtimo/components';
+import {FormioComponent, FormioOptionsImpl, FormioSubmission, ModalComponent, ValtimoFormioOptions,} from '@valtimo/components';
 import {FormioBeforeSubmit} from '@formio/angular/formio.common';
 import {FormioForm} from '@formio/angular';
 import {UserProviderService} from '@valtimo/security';
 import {take} from 'rxjs/operators';
 import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
 import {DossierListService, StartModalService} from '../../services';
-import {ConfigService} from '@valtimo/config';
-import {FORM_VIEW_MODEL_TOKEN} from '@valtimo/config';
-import {FormViewModel} from '@valtimo/config';
+import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -63,7 +50,7 @@ import {Subscription} from 'rxjs';
 export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
   public processDefinitionKey: string;
   public processDefinitionId: string;
-  public documentDefinitionName: string;
+  public documentDefinitionKey: string;
   public processName: string;
   private _startEventName: string;
   private readonly _useStartEventNameAsStartFormTitle!: boolean;
@@ -124,7 +111,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
       .getProcessDefinitionStartProcessLink(
         this.processDefinitionId,
         null,
-        this.documentDefinitionName
+        this.documentDefinitionKey
       )
       .pipe(take(1))
       .subscribe(startProcessResult => {
@@ -189,6 +176,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
 
   openModal(processDefinitionCaseDefinition: ProcessDefinitionCaseDefinition) {
     this.processDefinitionId = processDefinitionCaseDefinition.id.processDefinitionId;
+    this.documentDefinitionKey = processDefinitionCaseDefinition.id.caseDefinitionId.key
     this.options = new FormioOptionsImpl();
     this.options.disableAlerts = true;
     const formioBeforeSubmit: FormioBeforeSubmit = function (submission, callback) {
@@ -238,7 +226,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
         if (canViewCase) {
           this.router.navigate([
             'dossiers',
-            this.documentDefinitionName,
+            this.documentDefinitionKey,
             'document',
             formSubmissionResult.documentId,
           ]);
