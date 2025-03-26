@@ -85,7 +85,7 @@ import {CaseManagementCreateComponent} from './components/case-management-create
 import {CaseManagementWidgetsEditorComponent} from './components/case-management-widget-tab/editor/case-management-widgets-editor.component';
 import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
 import {CaseManagementFormsComponent} from './components/case-management-forms/case-management-forms.component';
-import {FormManagementModule} from '@valtimo/form-management';
+import {FormManagementComponent, FormManagementCreateComponent} from '@valtimo/form-management';
 
 @NgModule({
   declarations: [
@@ -161,7 +161,8 @@ import {FormManagementModule} from '@valtimo/form-management';
     ValuePathSelectorComponent,
     CaseManagementProcessesComponent,
     CaseManagementFormsComponent,
-    FormManagementModule,
+    FormManagementComponent,
+    FormManagementCreateComponent,
   ],
   providers: [TabManagementService],
 })

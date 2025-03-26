@@ -34,19 +34,16 @@
   (search)="searchTermEntered($event)"
 >
   <ng-container carbonToolbarContent>
-    <button
-      cdsButton="ghost"
-      [iconOnly]="true"
-      [routerLink]="'create'"
-      [queryParams]="{upload: 'true'}"
-    >
+    <button cdsButton="ghost" [iconOnly]="true" (click)="navigateToCreateRoute()">
       <svg class="cds--btn__icon" cdsIcon="upload" size="16"></svg>
     </button>
 
-    <button cdsButton="primary" [routerLink]="'create'">
+    <button cdsButton="primary" (click)="navigateToCreateRoute()">
       {{ 'Create new Form' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
     </button>
   </ng-container>
 </valtimo-carbon-list>
+
+<router-outlet></router-outlet>

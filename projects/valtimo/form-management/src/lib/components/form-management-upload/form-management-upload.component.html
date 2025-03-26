@@ -15,18 +15,18 @@
   -->
 
 <valtimo-modal
-  #uploadFormDefinitionModal
-  [title]="'uploadFormDefinition' | translate"
-  showFooter="true"
+        #uploadFormDefinitionModal
+        [title]="'uploadFormDefinition' | translate"
+        showFooter="true"
 >
   <div class="mt-2" body>
     <valtimo-dropzone
-      [clear$]="clear$"
-      (fileSelected)="setFile($event)"
-      [disabled]="disabled$ | async"
-      [subtitle]="'dropzone.formJsonDocDef' | translate"
-      [externalError$]="error$"
-      [maxFiles]="1"
+            [clear$]="clear$"
+            (fileSelected)="setFile($event)"
+            [disabled]="disabled$ | async"
+            [subtitle]="'dropzone.formJsonDocDef' | translate"
+            [externalError$]="error$"
+            [maxFiles]="1"
     ></valtimo-dropzone>
   </div>
   <div footer>

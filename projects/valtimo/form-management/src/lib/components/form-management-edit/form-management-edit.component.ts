@@ -1,48 +1,54 @@
-/*
- * Copyright 2015-2025 Ritense BV, the Netherlands.
- *
- * Licensed under EUPL, Version 1.2 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 import {Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {FormioForm} from '@formio/angular';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BehaviorSubject, Subscription} from 'rxjs';
+import {distinctUntilChanged, filter, switchMap, take, tap} from 'rxjs/operators';
+import {TranslateModule} from '@ngx-translate/core';
+import {
+  ButtonModule,
+  InputModule,
+  ModalModule,
+  ModalService,
+  TabsModule,
+} from 'carbon-components-angular';
 import {
   AlertService,
+  CarbonListModule,
   EditorModel,
+  EditorModule,
   PageHeaderService,
   PageTitleService,
   PendingChangesComponent,
   ShellService,
+  ValtimoCdsModalDirectiveModule,
+  WidgetModule,
 } from '@valtimo/components';
-import {ModalService} from 'carbon-components-angular';
-import {
-  BehaviorSubject,
-  distinctUntilChanged,
-  filter,
-  Subscription,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
-import {FormManagementDuplicateComponent} from '../form-management-duplicate/form-management-duplicate.component';
-import {EDIT_TABS, FormDefinition, ModifyFormDefinitionRequest} from '../models';
-import {FormManagementService} from '../services';
+import {FormManagementService} from '../../services';
+import {EDIT_TABS, FormDefinition, ModifyFormDefinitionRequest} from '../../models';
+import {FormioForm} from '@formio/angular';
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormManagementDuplicateComponent} from '../form-management-duplicate';
 
 @Component({
   selector: 'valtimo-form-management-edit',
   templateUrl: './form-management-edit.component.html',
   styleUrls: ['./form-management-edit.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ModalModule,
+    ButtonModule,
+    InputModule,
+    ReactiveFormsModule,
+    FormsModule,
+    WidgetModule,
+    CarbonListModule,
+    ValtimoCdsModalDirectiveModule,
+    TabsModule,
+    EditorModule,
+  ],
 })
 export class FormManagementEditComponent
   extends PendingChangesComponent
@@ -77,6 +83,7 @@ export class FormManagementEditComponent
       this.pendingChanges = true;
     })
   );
+
   public readonly jsonFormDefinition$ = new BehaviorSubject<EditorModel | null>(null);
   public readonly jsonOutput$ = new BehaviorSubject<EditorModel | null>(null);
   public readonly reloading$ = new BehaviorSubject<boolean>(false);
@@ -280,7 +287,7 @@ export class FormManagementEditComponent
     this.route.paramMap
       .pipe(
         take(1),
-        switchMap((paramMap: ParamMap) =>
+        switchMap(paramMap =>
           this.formManagementService.getFormDefinition(paramMap.get('id') ?? '')
         )
       )
