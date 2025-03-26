@@ -109,8 +109,8 @@ export class CaseDetailComponent
 
   public customCaseHeaderItems: Array<any> = [];
   public document: ValtimoDocument | null = null;
-  public documentDefinitionName: string;
-  public documentDefinitionNameTitle: string;
+  public caseDefinitionKey: string;
+  public documentDefinitionTitle: string;
   public documentId: string;
   public processDefinitionListFields: Array<any> = [];
   public processDefinitionCaseDefinitions: (ProcessDefinitionCaseDefinition & {displayName?: string})[] = [];
@@ -165,28 +165,28 @@ export class CaseDetailComponent
 
         if (
           this.configService.config.customCaseHeader?.hasOwnProperty(
-            this.documentDefinitionName.toLowerCase()
+            this.caseDefinitionKey.toLowerCase()
           ) &&
           this.customCaseHeaderItems.length === 0
         ) {
           this.configService.config.customCaseHeader[
-            this.documentDefinitionName.toLowerCase()
+            this.caseDefinitionKey.toLowerCase()
           ]?.forEach(item => this.getCustomCaseHeaderItem(item));
         }
       }
     })
   );
 
-  public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.documentDefinitionName || '')
+  public readonly caseDefinitionKey$: Observable<string> = this.route.params.pipe(
+    map(params => params.caseDefinitionKey || '')
   );
 
   public readonly caseStatus$: Observable<InternalCaseStatus | undefined> =
-    this.documentDefinitionName$.pipe(
-      filter(documentDefinitionName => !!documentDefinitionName),
-      switchMap(documentDefinitionName =>
+    this.caseDefinitionKey$.pipe(
+      filter(caseDefinitionKey => !!caseDefinitionKey),
+      switchMap(caseDefinitionKey =>
         combineLatest([
-          this.caseStatusService.getInternalCaseStatuses(documentDefinitionName),
+          this.caseStatusService.getInternalCaseStatuses(caseDefinitionKey),
           this.caseStatusKey$,
         ])
       ),
@@ -218,9 +218,9 @@ export class CaseDetailComponent
     startWith(true)
   );
 
-  public readonly canHaveAssignee$: Observable<boolean> = this.documentDefinitionName$.pipe(
-    switchMap(documentDefinitionName =>
-      this.documentService.getCaseSettings(documentDefinitionName)
+  public readonly canHaveAssignee$: Observable<boolean> = this.caseDefinitionKey$.pipe(
+    switchMap(caseDefinitionKey =>
+      this.documentService.getCaseSettings(caseDefinitionKey)
     ),
     map(caseSettings => caseSettings?.canHaveAssignee)
   );
@@ -324,7 +324,7 @@ export class CaseDetailComponent
   ) {
     super();
     this._snapshot = this.route.snapshot.paramMap;
-    this.documentDefinitionName = this._snapshot.get('documentDefinitionName') || '';
+    this.caseDefinitionKey = this._snapshot.get('caseDefinitionKey') || '';
     this.documentId = this._snapshot.get('documentId') || '';
   }
 
@@ -369,16 +369,16 @@ export class CaseDetailComponent
     );
   }
 
-  public startProcess(processDocumentDefinition: ProcessDocumentDefinition): void {
-    this.supportingProcessStart.openModal(processDocumentDefinition, this.documentId);
+  public startProcess(processDefinitionCaseDefinition: ProcessDefinitionCaseDefinition): void {
+    this.supportingProcessStart.openModal(processDefinitionCaseDefinition, this.documentId);
   }
 
   public openWidgetProcessSubscription(): void {
     this._subscriptions.add(
       this.widgetsService.startProcessEvent
         .pipe(switchMap(() => this.widgetsService.activeProcess$))
-        .subscribe((processDocumentDefinitions: ProcessDocumentDefinition[]) => {
-          this.startProcess(processDocumentDefinitions[0]);
+        .subscribe((processDefinitionCaseDefinition: ProcessDefinitionCaseDefinition[]) => {
+          this.startProcess(processDefinitionCaseDefinition[0]);
         })
     );
   }
@@ -437,7 +437,7 @@ export class CaseDetailComponent
       next: (): void => {
         this.isDeleting$.next(false);
         this.showDeleteModal$.next(false);
-        this.router.navigate([`/cases/${this.documentDefinitionName}`]);
+        this.router.navigate([`/cases/${this.caseDefinitionKey}`]);
       },
       error: (): void => {
         this.isDeleting$.next(false);
@@ -525,9 +525,9 @@ export class CaseDetailComponent
 
   private initBreadcrumb(): void {
     this.documentService
-      .getDocumentDefinition(this.documentDefinitionName)
+      .getDocumentDefinition(this.caseDefinitionKey)
       .subscribe(definition => {
-        this.documentDefinitionNameTitle = definition.schema.title;
+        this.documentDefinitionTitle = definition.schema.title;
         this.setBreadcrumb();
       });
   }
@@ -609,9 +609,9 @@ export class CaseDetailComponent
 
   private setBreadcrumb(): void {
     this.breadcrumbService.setSecondBreadcrumb({
-      route: [`/cases/${this.documentDefinitionName}`],
-      content: this.documentDefinitionNameTitle,
-      href: `/cases/${this.documentDefinitionName}`,
+      route: [`/cases/${this.caseDefinitionKey}`],
+      content: this.documentDefinitionTitle,
+      href: `/cases/${this.caseDefinitionKey}`,
     });
   }
 

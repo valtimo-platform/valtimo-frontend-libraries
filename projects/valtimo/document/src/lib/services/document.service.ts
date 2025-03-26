@@ -189,40 +189,40 @@ export class DocumentService {
       .pipe(catchError(() => of(this.EMPTY_DOCUMENTS_RESPONSE as SpecifiedDocuments)));
   }
 
-  public getDocumentSearchFields(documentDefinitionName: string): Observable<Array<SearchField>> {
+  public getDocumentSearchFields(caseDefinitionKey: string): Observable<Array<SearchField>> {
     return this.http.get<Array<SearchField>>(
-      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`
+      `${this.valtimoEndpointUri}v1/document-search/${caseDefinitionKey}/fields`
     );
   }
 
   public putDocumentSearch(
-    documentDefinitionName: string,
+    caseDefinitionKey: string,
     request: Array<SearchField>
   ): Observable<void> {
     return this.http.put<void>(
-      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
+      `${this.valtimoEndpointUri}v1/document-search/${caseDefinitionKey}/fields`,
       [...request]
     );
   }
 
   public postDocumentSearch(
-    documentDefinitionName: string,
+    caseDefinitionKey: string,
     request: SearchField
   ): Observable<void> {
     return this.http.post<void>(
-      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields`,
+      `${this.valtimoEndpointUri}v1/document-search/${caseDefinitionKey}/fields`,
       {...request}
     );
   }
 
-  public deleteDocumentSearch(documentDefinitionName: string, key: string): Observable<any> {
+  public deleteDocumentSearch(caseDefinitionKey: string, key: string): Observable<any> {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
     };
     return this.http.delete(
-      `${this.valtimoEndpointUri}v1/document-search/${documentDefinitionName}/fields?key=${key}`,
+      `${this.valtimoEndpointUri}v1/document-search/${caseDefinitionKey}/fields?key=${key}`,
       options
     );
   }
@@ -233,10 +233,10 @@ export class DocumentService {
 
   public getDropdownData(
     provider: string,
-    documentDefinitionName: string,
+    caseDefinitionKey: string,
     fieldKey: string
   ): Observable<object> {
-    const dropdownListKey = encodeURI(documentDefinitionName + '_' + fieldKey);
+    const dropdownListKey = encodeURI(caseDefinitionKey + '_' + fieldKey);
     return this.http.get<object>(
       `${this.valtimoEndpointUri}v1/data/dropdown-list?provider=${provider}&key=${dropdownListKey}`
     );
@@ -244,11 +244,11 @@ export class DocumentService {
 
   public postDropdownData(
     provider: string,
-    documentDefinitionName: string,
+    caseDefinitionKey: string,
     fieldKey: string,
     dropdownData: object
   ): Observable<object> {
-    const dropdownListKey = encodeURI(documentDefinitionName + '_' + fieldKey);
+    const dropdownListKey = encodeURI(caseDefinitionKey + '_' + fieldKey);
     return this.http.post<object>(
       `${this.valtimoEndpointUri}v1/data/dropdown-list?provider=${provider}&key=${dropdownListKey}`,
       dropdownData
@@ -257,10 +257,10 @@ export class DocumentService {
 
   public deleteDropdownData(
     provider: string,
-    documentDefinitionName: string,
+    caseDefinitionKey: string,
     fieldKey: string
   ): Observable<object> {
-    const dropdownListKey = encodeURI(documentDefinitionName + '_' + fieldKey);
+    const dropdownListKey = encodeURI(caseDefinitionKey + '_' + fieldKey);
     return this.http.delete<object>(
       `${this.valtimoEndpointUri}v1/data/dropdown-list?provider=${provider}&key=${dropdownListKey}`
     );
@@ -315,6 +315,14 @@ export class DocumentService {
     return this.http.get<ProcessDefinitionCaseDefinition[]>(
       `${this.valtimoEndpointUri}v1/document/${documentId}/process-definition/settings`,
       {params}
+    );
+  }
+
+  public findProcessDefinitionCaseDefinitionsByProcessDefinitionKey(
+    processDefinitionKey: string
+  ): Observable<ProcessDefinitionCaseDefinition[]> {
+    return this.http.get<ProcessDefinitionCaseDefinition[]>(
+      `${this.valtimoEndpointUri}v1/process-document/definition/process/${processDefinitionKey}`
     );
   }
 

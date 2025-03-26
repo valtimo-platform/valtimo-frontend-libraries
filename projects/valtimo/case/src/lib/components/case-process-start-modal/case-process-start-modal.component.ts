@@ -271,9 +271,8 @@ export class CaseProcessStartModalComponent implements OnInit, OnDestroy {
     formViewModelComponent.instance.form = this.formDefinition;
     formViewModelComponent.instance.formName = this.formName;
     formViewModelComponent.instance.isStartForm = true;
-    //TODO: we don't have these anymore, what do we want to supply?
-    //formViewModelComponent.instance.processDefinitionKey = this.processDefinitionKey;
-    //formViewModelComponent.instance.documentDefinitionName = this.documentDefinitionName;
+    formViewModelComponent.instance.processDefinitionKey = this.processDefinitionKey;
+    formViewModelComponent.instance.documentDefinitionName = this.documentDefinitionKey;
     this._subscriptions.add(
       formViewModelComponent.instance.formSubmit.subscribe(() => {
         this.listService.forceRefresh();
@@ -292,7 +291,7 @@ export class CaseProcessStartModalComponent implements OnInit, OnDestroy {
       ) as ComponentRef<FormCustomComponent>;
 
       renderedComponent.instance.processDefinitionKey = this.processDefinitionKey;
-      renderedComponent.instance.documentDefinitionName = this.documentDefinitionName;
+      renderedComponent.instance.documentDefinitionName = this.documentDefinitionKey;
 
       renderedComponent.instance.submittedEvent.subscribe(() => {
         this.modal.hide();
