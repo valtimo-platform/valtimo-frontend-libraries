@@ -36,10 +36,17 @@ export class DossierManagementAssigneeComponent {
     map(params => params.name || '')
   );
 
-  readonly currentValue$: Observable<CaseSettings> = this._refresh$.pipe(
-    switchMap(() => this.documentDefinitionName$),
-    switchMap(documentDefinitionName =>
-      this.documentService.getCaseSettingsForManagement(documentDefinitionName)
+  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
+    map(({caseDefinitionName, caseVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionName,
+      caseDefinitionVersionTag: caseVersionTag,
+    }))
+  );
+
+  public readonly currentValue$: Observable<CaseSettings> = this._refresh$.pipe(
+    switchMap(() => this.params$),
+    switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
+      this.documentService.getCaseSettingsForManagement(caseDefinitionKey, caseDefinitionVersionTag)
     ),
     tap(() => this.loading$.next(false))
   );
@@ -51,11 +58,19 @@ export class DossierManagementAssigneeComponent {
     this.disabled$ = new BehaviorSubject<boolean>(false);
   }
 
-  updateCaseSettings(caseSettings: CaseSettings, documentDefinitionName: string): void {
+  updateCaseSettings(
+    caseSettings: CaseSettings,
+    documentDefinitionName: string,
+    caseDefinitionVersionTag: string
+  ): void {
     this.disableInput();
 
     this.documentService
-      .patchCaseSettingsForManagement(documentDefinitionName, caseSettings)
+      .patchCaseSettingsForManagement(
+        documentDefinitionName,
+        caseDefinitionVersionTag,
+        caseSettings
+      )
       .subscribe(
         () => {
           this.enableInput();
@@ -79,23 +94,33 @@ export class DossierManagementAssigneeComponent {
     this._refresh$.next(null);
   }
 
-  toggleAssignee(currentSettings: CaseSettings, documentDefinitionName: string) {
+  toggleAssignee(
+    currentSettings: CaseSettings,
+    documentDefinitionName: string,
+    caseDefinitionVersionTag: string
+  ) {
     this.updateCaseSettings(
       {
         canHaveAssignee: !currentSettings?.canHaveAssignee,
         autoAssignTasks: currentSettings.autoAssignTasks,
       },
-      documentDefinitionName
+      documentDefinitionName,
+      caseDefinitionVersionTag
     );
   }
 
-  toggleTaskAssignment(currentSettings: CaseSettings, documentDefinitionName: string) {
+  toggleTaskAssignment(
+    currentSettings: CaseSettings,
+    documentDefinitionName: string,
+    caseDefinitionVersionTag: string
+  ) {
     this.updateCaseSettings(
       {
         canHaveAssignee: currentSettings?.canHaveAssignee,
         autoAssignTasks: !currentSettings.autoAssignTasks,
       },
-      documentDefinitionName
+      documentDefinitionName,
+      caseDefinitionVersionTag
     );
   }
 }
