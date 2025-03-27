@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,6 +133,24 @@ interface ProcessDocumentDefinition {
   canInitializeDocument: boolean;
   startableByUser: boolean;
   latestVersionId: string;
+}
+
+interface CaseDefinitionId {
+  key: string;
+  versionTag: string;
+}
+
+interface ProcessDefinitionCaseDefinitionId {
+  processDefinitionId: string;
+  caseDefinitionId: CaseDefinitionId;
+}
+
+interface ProcessDefinitionCaseDefinition {
+  id: ProcessDefinitionCaseDefinitionId;
+  canInitializeDocument: boolean;
+  startableByUser: boolean;
+  processDefinitionName: string;
+  processDefinitionKey: string;
 }
 
 interface ProcessDocumentInstanceId {
@@ -371,6 +389,7 @@ interface TemplateResponse {
 
 export {
   AssignHandlerToDocumentResult,
+  CaseDefinitionId,
   CaseListColumn,
   CaseListColumnView,
   CaseSettings,
@@ -407,6 +426,8 @@ export {
   OpenDocumentCount,
   Page,
   Pageable,
+  ProcessDefinitionCaseDefinition,
+  ProcessDefinitionCaseDefinitionId,
   ProcessDocumentDefinition,
   ProcessDocumentDefinitionId,
   ProcessDocumentDefinitionRequest,

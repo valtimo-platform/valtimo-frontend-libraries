@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -640,12 +640,12 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         .pipe(
           map(
             ([params, firstChildParams]) =>
-              (params?.documentDefinitionName || firstChildParams?.documentDefinitionName) as string
+              (params?.caseDefinitionKey || firstChildParams?.caseDefinitionKey) as string
           ),
-          filter(documentDefinitionName => !!documentDefinitionName)
+          filter(caseDefinitionKey => !!caseDefinitionKey)
         )
-        .subscribe(documentDefinitionName =>
-          this.valtimoModalService.setDocumentDefinitionName(documentDefinitionName)
+        .subscribe(caseDefinitionKey =>
+          this.valtimoModalService.setDocumentDefinitionName(caseDefinitionKey)
         )
     );
   }

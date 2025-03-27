@@ -1,5 +1,5 @@
 /*!
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ body {
   display: none;
 }
 
-valtimo-dossier-detail-tab-progress .cds--dropdown {
+valtimo-case-detail-tab-progress .cds--dropdown {
   background-color: var(--cds-field-02) !important;
 }
 
@@ -430,7 +430,7 @@ valtimo-list {
   border: none !important;
 }
 
-valtimo-dossier-assign-user {
+valtimo-case-assign-user {
   h5.selected-text {
     font-size: 14px;
     line-height: 18px;

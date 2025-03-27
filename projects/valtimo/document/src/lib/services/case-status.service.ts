@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,33 +32,33 @@ export class CaseStatusService extends BaseApiService {
   }
 
   public getInternalCaseStatusesManagement(
-    caseDefinitionName: string
+    caseDefinitionKey: string
   ): Observable<InternalCaseStatus[]> {
     return this.httpClient.get<InternalCaseStatus[]>(
-      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/internal-status`)
+      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionKey}/internal-status`)
     );
   }
 
-  public getInternalCaseStatuses(caseDefinitionName: string): Observable<InternalCaseStatus[]> {
+  public getInternalCaseStatuses(caseDefinitionKey: string): Observable<InternalCaseStatus[]> {
     return this.httpClient.get<InternalCaseStatus[]>(
-      this.getApiUrl(`/v1/case-definition/${caseDefinitionName}/internal-status`)
+      this.getApiUrl(`/v1/case-definition/${caseDefinitionKey}/internal-status`)
     );
   }
 
   public saveInternalCaseStatus(
-    caseDefinitionName: string,
+    caseDefinitionKey: string,
     status: InternalCaseStatus
   ): Observable<InternalCaseStatus> {
     return this.httpClient.post<InternalCaseStatus>(
-      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionName}/internal-status`),
+      this.getApiUrl(`/management/v1/case-definition/${caseDefinitionKey}/internal-status`),
       status
     );
   }
 
-  public deleteInternalCaseStatus(caseDefinitionName: string, statusKey: string): Observable<void> {
+  public deleteInternalCaseStatus(caseDefinitionKey: string, statusKey: string): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(
-        `/management/v1/case-definition/${caseDefinitionName}/internal-status/${statusKey}`
+        `/management/v1/case-definition/${caseDefinitionKey}/internal-status/${statusKey}`
       )
     );
   }

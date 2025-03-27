@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,9 @@ export class BesluitenApiService {
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
   }
 
-  public getBesluitTypesByCaseDefinition(caseDefinitionId: string): Observable<Array<any>> {
+  public getBesluitTypesByCaseDefinition(caseDefinitionKey: string): Observable<Array<any>> {
     return this.http.get<Array<any>>(
-      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionId}/zaaktype/besluittype`
+      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/zaaktype/besluittype`
     );
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,8 +92,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   @ViewChild('translationTemplate') translationTemplate: TemplateRef<any>;
 
   private readonly _documentDefinitionName$ = this.route.params.pipe(
-    map(params => params?.documentDefinitionName),
-    filter(caseDefinitionName => !!caseDefinitionName)
+    map(params => params?.caseDefinitionKey),
+    filter(caseDefinitionKey => !!caseDefinitionKey)
   );
 
   public readonly supportedDocumentenApiFeatures$ =
@@ -165,8 +165,8 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
   ];
 
   public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params?.documentDefinitionName),
-    filter(documentDefinitionName => !!documentDefinitionName)
+    map(params => params?.caseDefinitionKey),
+    filter(caseDefinitionKey => !!caseDefinitionKey)
   );
 
   public readonly documentId$: Observable<string> = this.route.params.pipe(
@@ -401,10 +401,10 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
     if (this.uploadProcessLinkedSet && this.uploadProcessLinked) {
       return 'Upload';
     } else if (this.isAdmin) {
-      return 'dossier.documenten.noProcessLinked.adminRole';
+      return 'case.documenten.noProcessLinked.adminRole';
     }
 
-    return 'dossier.documenten.noProcessLinked.regularUser';
+    return 'case.documenten.noProcessLinked.regularUser';
   }
 
   public isUserAdmin() {
@@ -547,7 +547,7 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
         this.pagination$,
       ]).subscribe(([definitionName, documentId, filter, sort, pagination]) => {
         const {size, page} = pagination;
-        this.router.navigate([`/dossiers/${definitionName}/document/${documentId}/documents`], {
+        this.router.navigate([`/cases/${definitionName}/document/${documentId}/documents`], {
           queryParams: {...filter, ...sort, size, page: page - 1},
         });
       })

@@ -16,7 +16,7 @@
 
 import {
   DefinitionColumn,
-  DossierListTab,
+  CaseListTab,
   IncludeFunction,
   Language,
   ROLE_ADMIN,
@@ -86,7 +86,7 @@ export const environment: ValtimoConfig = {
       },
       {
         roles: [ROLE_USER],
-        title: 'Dossiers',
+        title: 'Cases',
         iconClass: 'icon mdi mdi-layers',
         sequence: 1,
         children: [],
@@ -123,7 +123,7 @@ export const environment: ValtimoConfig = {
           {link: ['/form-management'], title: 'Forms', sequence: 3},
           {link: ['/form-flow-management'], title: 'Form Flows', sequence: 4},
           {link: ['/decision-tables'], title: 'Decision tables', sequence: 5},
-          {link: ['/dossier-management'], title: 'Dossiers', sequence: 6},
+          {link: ['/case-management'], title: 'Cases', sequence: 6},
           {link: ['/task-management'], title: 'Tasks', sequence: 7},
           {
             link: ['/object-management'],
@@ -172,7 +172,7 @@ export const environment: ValtimoConfig = {
     level: NgxLoggerLevel.TRACE,
   },
   definitions: {
-    dossiers: [],
+    cases: [],
   },
   openZaak: {
     catalogus: '8225508a-6840-413e-acc9-6422af120db1',
@@ -202,7 +202,7 @@ export const environment: ValtimoConfig = {
   caseFileUploadAcceptedFiles:
     'image/png, image/jpeg, text/plain, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/xml',
   visibleTaskListTabs: [TaskListTab.MINE, TaskListTab.OPEN, TaskListTab.ALL],
-  visibleDossierListTabs: [DossierListTab.ALL, DossierListTab.MINE, DossierListTab.OPEN],
+  visibleCaseListTabs: [CaseListTab.ALL, CaseListTab.MINE, CaseListTab.OPEN],
   customTaskList: {
     fields: [
       {
@@ -262,7 +262,7 @@ export const environment: ValtimoConfig = {
     enablePbacDocumentenApiDocuments: true,
     enableSuppressDocumentError: false,
   },
-  customDossierHeader: {
+  customCaseHeader: {
     leningen: [
       {
         propertyPaths: ['voornaam'],

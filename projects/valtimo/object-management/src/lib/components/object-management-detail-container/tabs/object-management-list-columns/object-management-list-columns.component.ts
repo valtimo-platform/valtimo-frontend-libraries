@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {ListColumnModal} from '@valtimo/dossier-management';
+import {ListColumnModal} from '@valtimo/case-management';
 import {ObjectManagementService} from '../../../../services/object-management.service';
 import {
   DisplayTypeParameters,

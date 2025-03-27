@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -350,7 +350,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
           .pipe(take(1))
           .subscribe(document => {
             this.router.navigate([
-              `/dossiers/${document.definitionId?.name}/document/${currentTask.businessKey}`,
+              `/cases/${document.definitionId?.name}/document/${currentTask.businessKey}`,
             ]);
           });
       }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,15 +84,15 @@ export class DossierDetailTabZaakobjectenComponent {
 
   readonly columns$ = new BehaviorSubject<Array<TableColumn>>([
     {
-      labelTranslationKey: 'dossier.zaakobjecten.index',
+      labelTranslationKey: 'case.zaakobjecten.index',
       dataKey: 'index',
     },
     {
-      labelTranslationKey: 'dossier.zaakobjecten.registrationAt',
+      labelTranslationKey: 'case.zaakobjecten.registrationAt',
       dataKey: 'registrationAt',
     },
     {
-      labelTranslationKey: 'dossier.zaakobjecten.title',
+      labelTranslationKey: 'case.zaakobjecten.title',
       dataKey: 'title',
     },
   ]);

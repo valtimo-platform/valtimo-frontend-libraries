@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ interface DefinitionColumn {
   key?: string;
 }
 
-interface CustomDossierHeaderItem {
+interface CustomCaseHeaderItem {
   labelTranslationKey?: string;
   propertyPaths?: Array<string>;
   columnSize?: number;
@@ -140,13 +140,13 @@ interface ValtimoConfig {
   customDefinitionTables: {
     [definitionNameId: string]: Array<DefinitionColumn>;
   };
-  customDossierHeader?: {
-    [definitionNameId: string]: Array<CustomDossierHeaderItem>;
+  customCaseHeader?: {
+    [definitionNameId: string]: Array<CustomCaseHeaderItem>;
   };
   translationResources?: Array<string>;
   featureToggles?: ValtimoConfigFeatureToggles;
   visibleTaskListTabs?: Array<TaskListTab>;
-  visibleDossierListTabs?: Array<DossierListTab>;
+  visibleCaseListTabs?: Array<CaseListTab>;
   customTaskList?: CustomTaskList;
   customLeftSidebar?: CustomLeftSidebar;
   caseObjectTypes?: {
@@ -176,7 +176,7 @@ enum TaskListTab {
   ALL = 'all',
 }
 
-enum DossierListTab {
+enum CaseListTab {
   MINE = 'MINE',
   OPEN = 'OPEN',
   ALL = 'ALL',
@@ -193,7 +193,7 @@ export {
   INITIALIZERS,
   Direction,
   DefinitionColumn,
-  CustomDossierHeaderItem,
+  CustomCaseHeaderItem,
   CustomTaskList,
   CustomLeftSidebar,
   Sort,
@@ -204,6 +204,6 @@ export {
   FeedbackMailTo,
   UploadProvider,
   TaskListTab,
-  DossierListTab,
+  CaseListTab,
   Language,
 };

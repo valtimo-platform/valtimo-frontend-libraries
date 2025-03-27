@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,7 +155,7 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnChanges
         switchMap(resDocumentDefinitions =>
           combineLatest(
             resDocumentDefinitions.content.map(definition =>
-              this.documentService.findProcessDocumentDefinitions(definition.id.name)
+              this.documentService.findProcessDefinitionCaseDefinitions(definition.id.name)
             )
           )
         ),
@@ -167,7 +167,7 @@ export class EditProductAanvragenConnectorComponent implements OnInit, OnChanges
 
           documentDefinitions.forEach((documentDefinition, index) => {
             this.processDocumentDefinitionOptions[documentDefinition.id.name] = res[index].map(
-              processDocumentDefinition => processDocumentDefinition.id.processDefinitionKey
+              processDocumentDefinition => processDocumentDefinition.id.processDefinitionId
             );
           });
 
