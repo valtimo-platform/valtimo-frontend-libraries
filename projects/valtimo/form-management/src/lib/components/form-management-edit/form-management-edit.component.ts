@@ -1,6 +1,6 @@
 import {Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, Subscription} from 'rxjs';
 import {distinctUntilChanged, filter, switchMap, take, tap} from 'rxjs/operators';
 import {TranslateModule} from '@ngx-translate/core';
 import {
@@ -23,11 +23,17 @@ import {
   WidgetModule,
 } from '@valtimo/components';
 import {FormManagementService} from '../../services';
-import {EDIT_TABS, FormDefinition, ModifyFormDefinitionRequest} from '../../models';
+import {
+  EDIT_TABS,
+  FormDefinition,
+  FormManagementParams,
+  ModifyFormDefinitionRequest,
+} from '../../models';
 import {FormioForm} from '@formio/angular';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FormManagementDuplicateComponent} from '../form-management-duplicate';
+import {ManagementContext} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-form-management-edit',
@@ -64,10 +70,34 @@ export class FormManagementEditComponent
 
   public activeTab = EDIT_TABS.BUILDER;
 
+  public readonly editQueryParam$: Observable<string | null> = this.route.queryParamMap.pipe(
+    map(params => (params.has('edit') ? params.get('edit') : null))
+  );
+
+  public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
+    map(data => data && (data['context'] as ManagementContext))
+  );
+
+  public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
+    .parent
+    ? this.route.parent.params.pipe(
+        map(({caseDefinitionName, caseVersionTag}) =>
+          caseDefinitionName && caseVersionTag
+            ? {
+                definitionName: caseDefinitionName,
+                versionTag: caseVersionTag,
+              }
+            : null
+        )
+      )
+    : of(null);
+
   private readonly _formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
+
   private get _formDefinition(): FormDefinition {
     return this._formDefinition$.getValue();
   }
+
   public readonly formDefinition$ = this._formDefinition$.pipe(
     filter((definition: FormDefinition | null) => !!definition),
     distinctUntilChanged(
@@ -137,15 +167,84 @@ export class FormManagementEditComponent
 
   public deleteFormDefinition(definition: FormDefinition): void {
     this.pendingChanges = false;
-    this.formManagementService.deleteFormDefinition(definition.id).subscribe({
-      next: () => {
-        this.router.navigate(['/form-management']);
-        this.alertService.success('Form deleted');
-      },
-      error: () => {
-        this.alertService.error('Error deleting Form');
-      },
-    });
+
+    combineLatest([this.context$, this.caseManagementRouteParams$])
+      .pipe(
+        switchMap(([context, caseManagementRouteParams]) => {
+          if (context === 'independent') {
+            return this.formManagementService.deleteFormDefinition(definition.id);
+          }
+
+          return this.formManagementService.deleteFormDefinitionCase(
+            caseManagementRouteParams.definitionName,
+            caseManagementRouteParams.versionTag,
+            definition.id
+          );
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/form-management']);
+          this.alertService.success('Form deleted');
+        },
+        error: () => {
+          this.alertService.error('Error deleting Form');
+        },
+      });
+  }
+
+  public modifyFormDefinition(definition: FormDefinition): void {
+    this.pendingChanges = false;
+
+    const form = JSON.stringify(
+      this.modifiedFormDefinition !== null ? this.modifiedFormDefinition : definition.formDefinition
+    );
+
+    const request: ModifyFormDefinitionRequest = {
+      id: definition.id,
+      name: definition.name,
+      formDefinition: form,
+    };
+
+    combineLatest([this.context$, this.caseManagementRouteParams$])
+      .pipe(
+        switchMap(([context, caseManagementRouteParams]) => {
+          if (context === 'independent') {
+            return this.formManagementService.modifyFormDefinition(request);
+          }
+
+          return this.formManagementService.modifyFormDefinitionCase(
+            caseManagementRouteParams.definitionName,
+            caseManagementRouteParams.versionTag,
+            request
+          );
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/form-management']);
+          this.alertService.success('Form deployed');
+        },
+        error: () => {
+          this.alertService.error('Error deploying Form');
+        },
+      });
+  }
+
+  private loadFormDefinition(): void {
+    this.editQueryParam$
+      .pipe(
+        take(1),
+        switchMap(editQueryParam => this.formManagementService.getFormDefinition(editQueryParam))
+      )
+      .subscribe((definition: FormDefinition) => {
+        this._formDefinition$.next(definition);
+        this.pageTitleService.setCustomPageTitle(definition.name);
+        this.jsonFormDefinition$.next({
+          value: JSON.stringify(definition.formDefinition),
+          language: 'json',
+        });
+      });
   }
 
   public downloadFormDefinition(definition: FormDefinition): void {
@@ -158,28 +257,6 @@ export class FormManagementEditComponent
     link.click();
     window.URL.revokeObjectURL(link.href);
     link.remove();
-  }
-
-  public modifyFormDefinition(definition: FormDefinition): void {
-    this.pendingChanges = false;
-
-    const form = JSON.stringify(
-      this.modifiedFormDefinition !== null ? this.modifiedFormDefinition : definition.formDefinition
-    );
-    const request: ModifyFormDefinitionRequest = {
-      id: definition.id,
-      name: definition.name,
-      formDefinition: form,
-    };
-    this.formManagementService.modifyFormDefinition(request).subscribe({
-      next: () => {
-        this.router.navigate(['/form-management']);
-        this.alertService.success('Form deployed');
-      },
-      error: () => {
-        this.alertService.error('Error deploying Form');
-      },
-    });
   }
 
   public onSelectedTab(tab: EDIT_TABS): void {
@@ -281,23 +358,5 @@ export class FormManagementEditComponent
         this.showUploadModal();
       }
     });
-  }
-
-  private loadFormDefinition(): void {
-    this.route.paramMap
-      .pipe(
-        take(1),
-        switchMap(paramMap =>
-          this.formManagementService.getFormDefinition(paramMap.get('id') ?? '')
-        )
-      )
-      .subscribe((definition: FormDefinition) => {
-        this._formDefinition$.next(definition);
-        this.pageTitleService.setCustomPageTitle(definition.name);
-        this.jsonFormDefinition$.next({
-          value: JSON.stringify(definition.formDefinition),
-          language: 'json',
-        });
-      });
   }
 }

@@ -59,26 +59,6 @@ export class FormManagementService {
     );
   }
 
-  public createFormDefinition(request: CreateFormDefinitionRequest): Observable<FormDefinition> {
-    return this.http.post<FormDefinition>(
-      `${this.valtimoApiConfig.endpointUri}v1/form-management`,
-      request
-    );
-  }
-
-  public modifyFormDefinition(request: ModifyFormDefinitionRequest): Observable<FormDefinition> {
-    return this.http.put<FormDefinition>(
-      `${this.valtimoApiConfig.endpointUri}v1/form-management`,
-      request
-    );
-  }
-
-  public deleteFormDefinition(formDefinitionId: string): Observable<void> {
-    return this.http.delete<void>(
-      `${this.valtimoApiConfig.endpointUri}v1/form-management/${formDefinitionId}`
-    );
-  }
-
   public queryFormDefinitionsCase(
     caseDefinitionKey: string,
     versionTag: string,
@@ -92,6 +72,13 @@ export class FormManagementService {
     );
   }
 
+  public createFormDefinition(request: CreateFormDefinitionRequest): Observable<FormDefinition> {
+    return this.http.post<FormDefinition>(
+      `${this.valtimoApiConfig.endpointUri}v1/form-management`,
+      request
+    );
+  }
+
   public createFormDefinitionsCase(
     caseDefinitionKey: string,
     versionTag: string,
@@ -100,6 +87,40 @@ export class FormManagementService {
     return this.http.post<FormDefinition>(
       `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${versionTag}/form`,
       request
+    );
+  }
+
+  public modifyFormDefinition(request: ModifyFormDefinitionRequest): Observable<FormDefinition> {
+    return this.http.put<FormDefinition>(
+      `${this.valtimoApiConfig.endpointUri}v1/form-management`,
+      request
+    );
+  }
+
+  public modifyFormDefinitionCase(
+    caseDefinitionKey: string,
+    versionTag: string,
+    request: ModifyFormDefinitionRequest
+  ): Observable<FormDefinition> {
+    return this.http.put<FormDefinition>(
+      `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${versionTag}/form`,
+      request
+    );
+  }
+
+  public deleteFormDefinition(formDefinitionId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.valtimoApiConfig.endpointUri}v1/form-management/${formDefinitionId}`
+    );
+  }
+
+  public deleteFormDefinitionCase(
+    caseDefinitionKey: string,
+    versionTag: string,
+    formDefinitionId: string
+  ): Observable<void> {
+    return this.http.delete<void>(
+      `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${versionTag}/form/${formDefinitionId}`
     );
   }
 }

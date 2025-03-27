@@ -28,6 +28,7 @@ import {ManagementContext} from '@valtimo/config';
 })
 export class FormManagementListComponent {
   @Output() public readonly navigateToCreateEvent = new EventEmitter<void>();
+  @Output() public readonly navigateToEditEvent = new EventEmitter<string>();
 
   public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
     map(data => data && (data['context'] as ManagementContext))
@@ -131,7 +132,7 @@ export class FormManagementListComponent {
   }
 
   public editFormDefinition(formDefinition: FormDefinition): void {
-    this.router.navigate(['/form-management/edit', formDefinition.id]);
+    this.navigateToEditEvent.emit(formDefinition.id);
   }
 
   public searchTermEntered(searchTerm: string): void {

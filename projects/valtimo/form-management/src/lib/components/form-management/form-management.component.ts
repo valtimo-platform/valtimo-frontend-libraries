@@ -22,16 +22,27 @@ import {FormManagementListComponent} from '../form-management-list';
 import {ButtonModule} from 'carbon-components-angular';
 import {map, Observable} from 'rxjs';
 import {ManagementContext} from '@valtimo/config';
+import {FormManagementEditComponent} from '../form-management-edit';
 
 @Component({
   templateUrl: './form-management.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormManagementListComponent, FormManagementCreateComponent],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    FormManagementListComponent,
+    FormManagementCreateComponent,
+    FormManagementEditComponent,
+  ],
 })
 export class FormManagementComponent extends PendingChangesComponent {
   public readonly hasCreateQueryParam$: Observable<boolean> = this.route.queryParamMap.pipe(
     map(params => params.has('create') && params.get('create') === 'true')
+  );
+
+  public readonly editQueryParam$: Observable<string | null> = this.route.queryParamMap.pipe(
+    map(params => (params.has('edit') ? params.get('edit') : null))
   );
 
   public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
@@ -62,6 +73,11 @@ export class FormManagementComponent extends PendingChangesComponent {
     this.pendingChanges = false;
   }
 
+  public onFormDefinitionEditEvent(formDefinitionId: string): void {
+    this.removeCreateQueryParams();
+    this.addEditQueryParams(formDefinitionId);
+  }
+
   private addCreateQueryParams(): void {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -74,6 +90,22 @@ export class FormManagementComponent extends PendingChangesComponent {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {create: null},
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  private addEditQueryParams(formDefinitionId: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {edit: formDefinitionId},
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  private removeEditQueryParams(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {edit: null},
       queryParamsHandling: 'merge',
     });
   }

@@ -1,11 +1,20 @@
-<ng-container *ngIf="{hasCreateQueryParam: hasCreateQueryParam$ | async} as obs">
+<ng-container
+  *ngIf="{
+    hasCreateQueryParam: hasCreateQueryParam$ | async,
+    editQueryParam: editQueryParam$ | async,
+  } as obs"
+>
   <valtimo-form-management-list
-    *ngIf="!obs.hasCreateQueryParam"
+    *ngIf="!obs.hasCreateQueryParam && !obs.editQueryParam"
     (navigateToCreateEvent)="onNavigateToCreateEvent()"
+    (navigateToEditEvent)="onFormDefinitionEditEvent($event)"
   ></valtimo-form-management-list>
 
   <valtimo-form-management-create
-    *ngIf="obs.hasCreateQueryParam"
+    *ngIf="obs.hasCreateQueryParam && !obs.editQueryParam"
     (goBackEvent)="onGoBackFromCreateEvent()"
+    (afterCreateEvent)="onFormDefinitionEditEvent($event)"
   ></valtimo-form-management-create>
+
+  <valtimo-form-management-edit *ngIf="!!obs.editQueryParam"></valtimo-form-management-edit>
 </ng-container>
