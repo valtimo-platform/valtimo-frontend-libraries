@@ -31,7 +31,6 @@ import {
   FormIoModule,
   PageHeaderService,
   PageTitleService,
-  PendingChangesComponent,
   RenderInPageHeaderDirectiveModule,
   ShellService,
   SpinnerModule,
@@ -82,14 +81,13 @@ import {ArrowLeft16} from '@carbon/icons';
     IconModule,
   ],
 })
-export class FormManagementEditComponent
-  extends PendingChangesComponent
-  implements OnInit, OnDestroy
-{
+export class FormManagementEditComponent implements OnInit, OnDestroy {
   @HostBinding('class') public readonly class = 'valtimo-form-management-edit';
 
   @Output() public readonly deleteEvent = new EventEmitter<void>();
   @Output() public readonly goBackEvent = new EventEmitter<void>();
+  @Output() public readonly formModifiedEvent = new EventEmitter<void>();
+  @Output() public readonly pendingChangesChangeEvent = new EventEmitter<boolean>();
 
   public modifiedFormDefinition: FormioForm | null = null;
   public validJsonChange: boolean | null = null;
@@ -139,7 +137,8 @@ export class FormManagementEditComponent
         this._editorInitialized = true;
         return;
       }
-      this.pendingChanges = true;
+
+      this.pendingChangesChangeEvent.emit(true);
     })
   );
 
@@ -166,7 +165,6 @@ export class FormManagementEditComponent
     private readonly pageHeaderService: PageHeaderService,
     private readonly iconService: IconService
   ) {
-    super();
     this.iconService.registerAll([ArrowLeft16]);
   }
 
@@ -197,7 +195,7 @@ export class FormManagementEditComponent
   }
 
   public deleteFormDefinition(definition: FormDefinition): void {
-    this.pendingChanges = false;
+    this.pendingChangesChangeEvent.emit(false);
 
     combineLatest([this.context$, this.caseManagementRouteParams$])
       .pipe(
@@ -240,7 +238,7 @@ export class FormManagementEditComponent
   }
 
   public modifyFormDefinition(definition: FormDefinition): void {
-    this.pendingChanges = false;
+    this.pendingChangesChangeEvent.emit(true);
 
     const form = JSON.stringify(
       this.modifiedFormDefinition !== null ? this.modifiedFormDefinition : definition.formDefinition
@@ -267,11 +265,20 @@ export class FormManagementEditComponent
             default:
               return this.formManagementService.modifyFormDefinition(request);
           }
-        })
+        }),
+        switchMap(() => this.context$)
       )
       .subscribe({
-        next: () => {
-          this.router.navigate(['/form-management']);
+        next: context => {
+          switch (context) {
+            case 'case':
+              this.formModifiedEvent.emit();
+              break;
+            case 'independent':
+            default:
+              this.router.navigate(['/form-management']);
+          }
+
           this.alertService.success('Form deployed');
         },
         error: () => {

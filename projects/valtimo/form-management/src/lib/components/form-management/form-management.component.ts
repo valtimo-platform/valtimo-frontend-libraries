@@ -64,13 +64,12 @@ export class FormManagementComponent extends PendingChangesComponent {
     this.removeCreateQueryParams();
   }
 
-  //TODO Check for changes in process
-  public onActivatePendingChanges(): void {
-    this.pendingChanges = true;
-  }
-
-  public onDeactivatePendingChanges(): void {
-    this.pendingChanges = false;
+  public onPendingChangesChangeEvent(event: boolean): void {
+    if (event) {
+      this.onActivatePendingChanges();
+    } else {
+      this.onDeactivatePendingChanges();
+    }
   }
 
   public onFormDefinitionEditEvent(formDefinitionId: string): void {
@@ -78,9 +77,18 @@ export class FormManagementComponent extends PendingChangesComponent {
     this.addEditQueryParams(formDefinitionId);
   }
 
-  public onFormDefinitionDeleteEvent(): void {
+  public goBackToListView(): void {
     this.removeCreateQueryParams();
     this.removeEditQueryParams();
+    this.onDeactivatePendingChanges();
+  }
+
+  private onActivatePendingChanges(): void {
+    this.pendingChanges = true;
+  }
+
+  private onDeactivatePendingChanges(): void {
+    this.pendingChanges = false;
   }
 
   private addCreateQueryParams(): void {
