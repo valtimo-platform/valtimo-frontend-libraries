@@ -78,6 +78,11 @@ export class FormManagementComponent extends PendingChangesComponent {
     this.addEditQueryParams(formDefinitionId);
   }
 
+  public onFormDefinitionDeleteEvent(): void {
+    this.removeCreateQueryParams();
+    this.removeEditQueryParams();
+  }
+
   private addCreateQueryParams(): void {
     this.router.navigate([], {
       relativeTo: this.route,

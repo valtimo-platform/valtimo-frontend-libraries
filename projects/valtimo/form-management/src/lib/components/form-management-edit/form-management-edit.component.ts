@@ -1,4 +1,12 @@
-import {Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, combineLatest, map, Observable, of, Subscription} from 'rxjs';
 import {distinctUntilChanged, filter, switchMap, take, tap} from 'rxjs/operators';
@@ -75,6 +83,8 @@ export class FormManagementEditComponent
   implements OnInit, OnDestroy
 {
   @HostBinding('class') public readonly class = 'valtimo-form-management-edit';
+
+  @Output() public readonly deleteEvent = new EventEmitter<void>();
 
   public modifiedFormDefinition: FormioForm | null = null;
   public validJsonChange: boolean | null = null;
@@ -197,11 +207,19 @@ export class FormManagementEditComponent
             default:
               return this.formManagementService.deleteFormDefinition(definition.id);
           }
-        })
+        }),
+        switchMap(() => this.context$)
       )
       .subscribe({
-        next: () => {
-          this.router.navigate(['/form-management']);
+        next: context => {
+          switch (context) {
+            case 'case':
+              this.deleteEvent.emit();
+              break;
+            case 'independent':
+            default:
+              this.router.navigate(['/form-management']);
+          }
           this.alertService.success('Form deleted');
         },
         error: () => {

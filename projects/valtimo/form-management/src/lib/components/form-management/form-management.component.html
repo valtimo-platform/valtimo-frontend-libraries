@@ -16,5 +16,8 @@
     (afterCreateEvent)="onFormDefinitionEditEvent($event)"
   ></valtimo-form-management-create>
 
-  <valtimo-form-management-edit *ngIf="!!obs.editQueryParam"></valtimo-form-management-edit>
+  <valtimo-form-management-edit
+    *ngIf="!!obs.editQueryParam"
+    (deleteEvent)="onFormDefinitionDeleteEvent()"
+  ></valtimo-form-management-edit>
 </ng-container>
