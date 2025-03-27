@@ -17,15 +17,20 @@
 import {Component} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {filter} from 'rxjs/operators';
-import {ListItem} from 'carbon-components-angular';
+import {ComboBoxModule, ListItem} from 'carbon-components-angular';
 import {ConfigService, UploadProvider, ValtimoConfig} from '@valtimo/config';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentenApiLinkProcessService, DocumentenApiVersionService} from '../../services';
+import {CommonModule} from '@angular/common';
+import {ParagraphModule} from '@valtimo/components';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   selector: 'valtimo-case-management-link-process',
   templateUrl: './case-management-link-process.component.html',
   styleUrl: './case-management-link-process.component.scss',
+  standalone: true,
+  imports: [CommonModule, ParagraphModule, TranslateModule, ComboBoxModule],
 })
 export class CaseManagementLinkProcessComponent {
   public readonly documentenApiUploadProviders$ = new BehaviorSubject<boolean>(false);
