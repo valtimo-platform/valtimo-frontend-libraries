@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
@@ -95,7 +94,7 @@ export class DossierManagementDetailContainerComponent implements OnInit, OnDest
   }
 
   public ngOnDestroy(): void {
-    this.tabService.currentTab = TabEnum.PROCESSES;
+    this.tabService.currentTab = TabEnum.GENERAL;
     this._subscriptions.unsubscribe();
     this.pageTitleService.enableReset();
   }
