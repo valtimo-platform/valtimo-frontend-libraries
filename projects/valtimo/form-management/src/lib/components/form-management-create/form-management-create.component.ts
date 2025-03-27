@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AlertService, WidgetModule} from '@valtimo/components'; // Assuming this is your alert service location
@@ -25,36 +25,38 @@ import {ButtonModule, InputModule} from 'carbon-components-angular';
     WidgetModule,
   ],
 })
-export class FormManagementCreateComponent implements OnInit {
-  public form: FormGroup;
+export class FormManagementCreateComponent {
+  @Output() public readonly goBackEvent = new EventEmitter<void>();
+
+  public readonly form = this.formBuilder.group({
+    name: new FormControl('', Validators.required, [
+      noDuplicateFormValidator(this.formManagementService),
+    ]),
+  });
+
+  public get formControls(): FormGroup['controls'] {
+    return this.form?.controls;
+  }
 
   constructor(
-    private formManagementService: FormManagementService,
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private alertService: AlertService,
-    private route: ActivatedRoute
+    private readonly formManagementService: FormManagementService,
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
+    private readonly alertService: AlertService,
+    private readonly route: ActivatedRoute
   ) {}
 
-  get formControls() {
-    return this.form.controls;
+  public onBackButtonClick(): void {
+    this.goBackEvent.emit();
   }
 
-  ngOnInit() {
-    this.form = this.formBuilder.group({
-      name: new FormControl('', Validators.required, [
-        noDuplicateFormValidator(this.formManagementService),
-      ]),
-    });
-  }
-
-  reset() {
+  public reset() {
     this.form.setValue({
       name: '',
     });
   }
 
-  createFormDefinition() {
+  public createFormDefinition() {
     const emptyForm = {
       display: 'form',
       components: [],

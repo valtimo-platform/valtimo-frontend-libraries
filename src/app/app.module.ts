@@ -127,6 +127,7 @@ import {CustomMapsTabComponent} from './custom-maps-tab/custom-maps-tab.componen
 import {FormioComponent} from './form-io/form-io.component';
 import {StartProcessCustomFormComponent} from './start-process-custom-form/start-process-custom-form.component';
 import {UploadShowcaseComponent} from './upload-showcase/upload-showcase.component';
+import {FormManagementModule} from '@valtimo/form-management';
 
 export function tabsFactory() {
   return new Map<string, object>([
@@ -220,6 +221,7 @@ export function tabsFactory() {
     ZgwModule,
     FormViewModelModule,
     LoggingModule,
+    FormManagementModule,
   ],
   providers: [
     FormioComponent,

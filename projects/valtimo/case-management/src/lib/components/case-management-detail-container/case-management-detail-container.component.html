@@ -36,7 +36,6 @@
       [id]="TabEnum.DOCUMENT"
       [active]="obs.currentTab === TabEnum.DOCUMENT"
       [heading]="'caseManagement.tabs.document' | translate"
-      disabled="true"
       (selected)="navigateToTab(TabEnum.DOCUMENT, obs.currentTab)"
     >
     </cds-tab>

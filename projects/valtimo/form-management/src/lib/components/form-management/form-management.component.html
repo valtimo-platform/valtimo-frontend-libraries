@@ -1,0 +1,11 @@
+<ng-container *ngIf="{hasCreateQueryParam: hasCreateQueryParam$ | async} as obs">
+  <valtimo-form-management-list
+    *ngIf="!obs.hasCreateQueryParam"
+    (navigateToCreateEvent)="onNavigateToCreateEvent()"
+  ></valtimo-form-management-list>
+
+  <valtimo-form-management-create
+    *ngIf="obs.hasCreateQueryParam"
+    (goBackEvent)="onGoBackFromCreateEvent()"
+  ></valtimo-form-management-create>
+</ng-container>

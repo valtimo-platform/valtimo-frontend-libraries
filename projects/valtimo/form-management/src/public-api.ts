@@ -19,5 +19,6 @@
  */
 
 export * from './lib/services/form-management.service';
-export * from './lib/components';
+export * from './lib/components/form-management/form-management.component';
 export * from './lib/models';
+export * from './lib/form-management.module';

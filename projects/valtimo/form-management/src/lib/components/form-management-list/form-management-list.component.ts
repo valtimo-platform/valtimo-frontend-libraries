@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
+import {Component, EventEmitter, Output} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {Upload16} from '@carbon/icons';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
@@ -23,10 +23,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms'; // For translat
     CarbonListModule,
     IconModule,
     ButtonModule,
-    RouterModule,
   ],
 })
 export class FormManagementListComponent {
+  @Output() public readonly navigateToCreateEvent = new EventEmitter<void>();
+
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly searchTerm$ = new BehaviorSubject<string>('');
 
@@ -87,8 +88,7 @@ export class FormManagementListComponent {
   }
 
   public navigateToCreateRoute(): void {
-    console.log(this.router, this.route);
-    this.router.navigate(['create'], {relativeTo: this.route});
+    this.navigateToCreateEvent.emit();
   }
 
   public paginationClicked(page: number): void {

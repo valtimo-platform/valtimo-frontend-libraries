@@ -23,4 +23,11 @@ interface FormManagementParams {
   versionTag: string;
 }
 
-export {FormManagementParams};
+type FormManagementContext = 'case' | 'independent';
+
+interface FormManagementRouteData {
+  [key: string]: any;
+  context: FormManagementContext;
+}
+
+export {FormManagementParams, FormManagementContext, FormManagementRouteData};
