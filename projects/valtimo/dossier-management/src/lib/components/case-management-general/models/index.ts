@@ -13,7 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export * from './documenten-api-metadata.model';
 export * from './documenten-api-link-process.model';
 export * from './documenten-api-version.model';
