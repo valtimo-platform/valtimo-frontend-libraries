@@ -36,34 +36,51 @@ export class FormManagementListComponent {
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly searchTerm$ = new BehaviorSubject<string>('');
 
-  public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> =
-    this.route.parent?.params.pipe(
-      map(({caseDefinitionName, caseVersionTag}) =>
-        caseDefinitionName && caseVersionTag
-          ? {
-              definitionName: caseDefinitionName,
-              versionTag: caseVersionTag,
-            }
-          : null
+  public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
+    .parent
+    ? this.route.parent.params.pipe(
+        map(({caseDefinitionName, caseVersionTag}) =>
+          caseDefinitionName && caseVersionTag
+            ? {
+                definitionName: caseDefinitionName,
+                versionTag: caseVersionTag,
+              }
+            : null
+        )
       )
-    ) || of(null);
+    : of(null);
 
-  public readonly pagination$ = new BehaviorSubject<Pagination>({
-    collectionSize: 0,
+  private readonly _collectionSize$ = new BehaviorSubject<number>(0);
+
+  private readonly _partialPagination$ = new BehaviorSubject<Partial<Pagination>>({
     page: 1,
     size: 10,
   });
 
+  private get _partialPagination(): Partial<Pagination> {
+    return this._partialPagination$.getValue();
+  }
+
+  public pagination$: Observable<Pagination> = combineLatest([
+    this._collectionSize$,
+    this._partialPagination$,
+  ]).pipe(
+    map(
+      ([collectionSize, partialPagination]) =>
+        ({...partialPagination, collectionSize}) as Pagination
+    )
+  );
+
   public readonly formDefinitions$ = combineLatest([
     this.context$,
     this.caseManagementRouteParams$,
-    this.pagination$,
+    this._partialPagination$,
     this.searchTerm$,
   ]).pipe(
     switchMap(([context, routeParams, pagination, searchTerm]) => {
       const params = {
         ...pagination,
-        pagination: pagination.page - 1,
+        page: pagination.page - 1,
         ...(searchTerm && {searchTerm}),
       };
 
@@ -76,8 +93,13 @@ export class FormManagementListComponent {
           );
         default:
         case 'independent':
-          return of([]);
+          return this.formManagementService.queryFormDefinitions(params);
       }
+    }),
+    map(res => {
+      this._collectionSize$.next(res.totalElements);
+
+      return res?.content || [];
     }),
     tap(() => this.loading$.next(false))
   );
@@ -117,6 +139,6 @@ export class FormManagementListComponent {
   }
 
   private updatePagination(update: Partial<Pagination>): void {
-    this.pagination$.next({...this.pagination$.getValue(), ...update});
+    this._partialPagination$.next({...this._partialPagination, ...update});
   }
 }
