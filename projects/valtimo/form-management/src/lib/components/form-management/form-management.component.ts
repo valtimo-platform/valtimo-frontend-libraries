@@ -77,10 +77,28 @@ export class FormManagementComponent extends PendingChangesComponent {
     this.addEditQueryParams(formDefinitionId);
   }
 
-  public goBackToListView(): void {
+  public onModifiedEvent(): void {
+    this.onDeactivatePendingChanges();
+    this.removeCreateAndEditQueryParams();
+  }
+
+  public onGoBackEvent(): void {
+    if (!this.pendingChanges) {
+      this.removeCreateAndEditQueryParams();
+    } else {
+      const canDeactivate = this.canDeactivate() as Observable<boolean>;
+      const isObservable = !!canDeactivate?.subscribe;
+
+      isObservable &&
+        canDeactivate.subscribe(navigateAway => {
+          if (navigateAway) this.removeCreateAndEditQueryParams();
+        });
+    }
+  }
+
+  private removeCreateAndEditQueryParams(): void {
     this.removeCreateQueryParams();
     this.removeEditQueryParams();
-    this.onDeactivatePendingChanges();
   }
 
   private onActivatePendingChanges(): void {

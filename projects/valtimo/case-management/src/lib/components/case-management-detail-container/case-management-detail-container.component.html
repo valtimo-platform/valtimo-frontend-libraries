@@ -27,7 +27,7 @@
       [id]="TabEnum.PROCESSES"
       [active]="obs.currentTab === TabEnum.PROCESSES"
       [heading]="'caseManagement.tabs.processes' | translate"
-      (selected)="navigateToTab(TabEnum.PROCESSES, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.PROCESSES)"
     >
     </cds-tab>
 
@@ -36,7 +36,7 @@
       [id]="TabEnum.DOCUMENT"
       [active]="obs.currentTab === TabEnum.DOCUMENT"
       [heading]="'caseManagement.tabs.document' | translate"
-      (selected)="navigateToTab(TabEnum.DOCUMENT, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.DOCUMENT)"
     >
     </cds-tab>
 
@@ -45,7 +45,7 @@
       [id]="TabEnum.FORMS"
       [active]="obs.currentTab === TabEnum.FORMS"
       [heading]="'caseManagement.tabs.forms' | translate"
-      (selected)="navigateToTab(TabEnum.FORMS, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.FORMS)"
     >
     </cds-tab>
 
@@ -54,7 +54,7 @@
       [active]="obs.currentTab === TabEnum.CASE"
       [heading]="'caseManagement.tabs.cases' | translate"
       disabled="true"
-      (selected)="navigateToTab(TabEnum.CASE, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.CASE)"
     >
     </cds-tab>
 
@@ -64,7 +64,7 @@
       [active]="obs.currentTab === TabEnum.DOCUMENT"
       [heading]="'caseManagement.tabs.document' | translate"
       disabled="true"
-      (selected)="navigateToTab(TabEnum.DOCUMENT, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.DOCUMENT)"
     >
     </cds-tab>
 
@@ -73,7 +73,7 @@
       [active]="obs.currentTab === TabEnum.CASE"
       [heading]="'caseManagement.tabs.cases' | translate"
       disabled="true"
-      (selected)="navigateToTab(TabEnum.CASE, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.CASE)"
     >
     </cds-tab>
 
@@ -83,7 +83,7 @@
       [active]="obs.currentTab === TabEnum.SEARCH"
       [heading]="'caseManagement.tabs.searchFields' | translate"
       disabled="true"
-      (selected)="navigateToTab(TabEnum.SEARCH, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.SEARCH)"
     >
     </cds-tab>
 
@@ -94,7 +94,7 @@
       [active]="obs.currentTab === TabEnum.LIST"
       [heading]="'caseManagement.tabs.listColumns' | translate"
       disabled="true"
-      (selected)="navigateToTab(TabEnum.LIST, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.LIST)"
     >
     </cds-tab>
 
@@ -105,7 +105,7 @@
       [active]="obs.currentTab === TabEnum.TABS"
       [heading]="'caseManagement.tabs.tabManagement' | translate"
       disabled="true"
-      (selected)="navigateToTab(TabEnum.TABS, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.TABS)"
     >
     </cds-tab>
 
@@ -116,7 +116,7 @@
       [active]="vars.active"
       [heading]="'caseManagement.tabs.statuses' | translate"
       disabled="true"
-      (selected)="navigateToTab(TabEnum.STATUSES, obs.currentTab)"
+      (selected)="navigateToTab(TabEnum.STATUSES)"
     >
     </cds-tab>
 
@@ -126,7 +126,7 @@
         [active]="obs.currentTab === injectedTab.translationKey"
         [heading]="injectedTab.translationKey | translate"
         disabled="true"
-        (selected)="navigateToTab(injectedTab.translationKey, true)"
+        (selected)="navigateToTab(injectedTab.translationKey)"
       >
       </cds-tab>
     }

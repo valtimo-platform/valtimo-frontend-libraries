@@ -18,9 +18,9 @@
 
   <valtimo-form-management-edit
     *ngIf="!!obs.editQueryParam"
-    (deleteEvent)="goBackToListView()"
-    (goBackEvent)="goBackToListView()"
-    (formModifiedEvent)="goBackToListView()"
+    (deleteEvent)="onModifiedEvent()"
+    (formModifiedEvent)="onModifiedEvent()"
+    (goBackEvent)="onGoBackEvent()"
     (pendingChangesChangeEvent)="onPendingChangesChangeEvent($event)"
   ></valtimo-form-management-edit>
 </ng-container>
