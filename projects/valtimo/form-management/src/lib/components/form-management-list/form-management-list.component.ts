@@ -9,6 +9,7 @@ import {FormDefinition, FormManagementParams} from '../../models';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms'; // For translation support
+import {ManagementContext} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-form-management-list',
@@ -27,6 +28,10 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms'; // For translat
 })
 export class FormManagementListComponent {
   @Output() public readonly navigateToCreateEvent = new EventEmitter<void>();
+
+  public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
+    map(data => data && (data['context'] as ManagementContext))
+  );
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly searchTerm$ = new BehaviorSubject<string>('');
@@ -50,25 +55,29 @@ export class FormManagementListComponent {
   });
 
   public readonly formDefinitions$ = combineLatest([
+    this.context$,
     this.caseManagementRouteParams$,
     this.pagination$,
     this.searchTerm$,
   ]).pipe(
-    switchMap(([routeParams, pagination, searchTerm]) => {
-      console.log(routeParams, pagination, searchTerm);
+    switchMap(([context, routeParams, pagination, searchTerm]) => {
       const params = {
         ...pagination,
         pagination: pagination.page - 1,
         ...(searchTerm && {searchTerm}),
       };
 
-      if (!routeParams?.definitionName || !routeParams?.versionTag) return;
-
-      return this.formManagementService.queryFormDefinitionsCase(
-        routeParams.definitionName,
-        routeParams.versionTag,
-        params
-      );
+      switch (context) {
+        case 'case':
+          return this.formManagementService.queryFormDefinitionsCase(
+            routeParams.definitionName,
+            routeParams.versionTag,
+            params
+          );
+        default:
+        case 'independent':
+          return of([]);
+      }
     }),
     tap(() => this.loading$.next(false))
   );

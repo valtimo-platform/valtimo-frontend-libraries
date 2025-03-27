@@ -21,7 +21,7 @@ import {FormManagementCreateComponent} from '../form-management-create';
 import {FormManagementListComponent} from '../form-management-list';
 import {ButtonModule} from 'carbon-components-angular';
 import {map, Observable} from 'rxjs';
-import {FormManagementContext} from '../../models';
+import {ManagementContext} from '@valtimo/config';
 
 @Component({
   templateUrl: './form-management.component.html',
@@ -34,8 +34,8 @@ export class FormManagementComponent extends PendingChangesComponent {
     map(params => params.has('create') && params.get('create') === 'true')
   );
 
-  public readonly context$: Observable<FormManagementContext | ''> = this.route.data.pipe(
-    map(data => data && (data['context'] as FormManagementContext))
+  public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
+    map(data => data && (data['context'] as ManagementContext))
   );
 
   constructor(
@@ -43,8 +43,6 @@ export class FormManagementComponent extends PendingChangesComponent {
     private readonly router: Router
   ) {
     super();
-
-    this.context$.subscribe(context => console.log('x', context));
   }
 
   public onNavigateToCreateEvent(): void {
