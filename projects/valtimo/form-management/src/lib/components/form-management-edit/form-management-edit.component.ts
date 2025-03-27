@@ -5,20 +5,26 @@ import {distinctUntilChanged, filter, switchMap, take, tap} from 'rxjs/operators
 import {TranslateModule} from '@ngx-translate/core';
 import {
   ButtonModule,
+  DialogModule,
   InputModule,
   ModalModule,
   ModalService,
   TabsModule,
+  TagModule,
 } from 'carbon-components-angular';
 import {
   AlertService,
   CarbonListModule,
+  ConfirmationModalModule,
   EditorModel,
   EditorModule,
+  FormIoModule,
   PageHeaderService,
   PageTitleService,
   PendingChangesComponent,
+  RenderInPageHeaderDirectiveModule,
   ShellService,
+  SpinnerModule,
   ValtimoCdsModalDirectiveModule,
   WidgetModule,
 } from '@valtimo/components';
@@ -34,6 +40,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FormManagementDuplicateComponent} from '../form-management-duplicate';
 import {ManagementContext} from '@valtimo/config';
+import {FormManagementUploadComponent} from '../form-management-upload';
 
 @Component({
   selector: 'valtimo-form-management-edit',
@@ -54,6 +61,13 @@ import {ManagementContext} from '@valtimo/config';
     ValtimoCdsModalDirectiveModule,
     TabsModule,
     EditorModule,
+    FormIoModule,
+    RenderInPageHeaderDirectiveModule,
+    DialogModule,
+    TagModule,
+    ConfirmationModalModule,
+    SpinnerModule,
+    FormManagementUploadComponent,
   ],
 })
 export class FormManagementEditComponent
@@ -171,15 +185,18 @@ export class FormManagementEditComponent
     combineLatest([this.context$, this.caseManagementRouteParams$])
       .pipe(
         switchMap(([context, caseManagementRouteParams]) => {
-          if (context === 'independent') {
-            return this.formManagementService.deleteFormDefinition(definition.id);
-          }
+          switch (context) {
+            case 'case':
+              return this.formManagementService.deleteFormDefinitionCase(
+                caseManagementRouteParams.definitionName,
+                caseManagementRouteParams.versionTag,
+                definition.id
+              );
 
-          return this.formManagementService.deleteFormDefinitionCase(
-            caseManagementRouteParams.definitionName,
-            caseManagementRouteParams.versionTag,
-            definition.id
-          );
+            case 'independent':
+            default:
+              return this.formManagementService.deleteFormDefinition(definition.id);
+          }
         })
       )
       .subscribe({
@@ -209,15 +226,18 @@ export class FormManagementEditComponent
     combineLatest([this.context$, this.caseManagementRouteParams$])
       .pipe(
         switchMap(([context, caseManagementRouteParams]) => {
-          if (context === 'independent') {
-            return this.formManagementService.modifyFormDefinition(request);
-          }
+          switch (context) {
+            case 'case':
+              return this.formManagementService.modifyFormDefinitionCase(
+                caseManagementRouteParams.definitionName,
+                caseManagementRouteParams.versionTag,
+                request
+              );
 
-          return this.formManagementService.modifyFormDefinitionCase(
-            caseManagementRouteParams.definitionName,
-            caseManagementRouteParams.versionTag,
-            request
-          );
+            case 'independent':
+            default:
+              return this.formManagementService.modifyFormDefinition(request);
+          }
         })
       )
       .subscribe({
@@ -232,12 +252,28 @@ export class FormManagementEditComponent
   }
 
   private loadFormDefinition(): void {
-    this.editQueryParam$
+    combineLatest([this.context$, this.caseManagementRouteParams$, this.editQueryParam$])
       .pipe(
-        take(1),
-        switchMap(editQueryParam => this.formManagementService.getFormDefinition(editQueryParam))
+        switchMap(([context, caseManagementRouteParams, formDefinitionId]) => {
+          if (!formDefinitionId) return of(null);
+
+          switch (context) {
+            case 'case':
+              return this.formManagementService.getFormDefinitionCase(
+                caseManagementRouteParams.definitionName,
+                caseManagementRouteParams.versionTag,
+                formDefinitionId
+              );
+
+            case 'independent':
+            default:
+              return this.formManagementService.getFormDefinition(formDefinitionId);
+          }
+        })
       )
-      .subscribe((definition: FormDefinition) => {
+      .subscribe((definition: FormDefinition | null) => {
+        if (!definition) return;
+
         this._formDefinition$.next(definition);
         this.pageTitleService.setCustomPageTitle(definition.name);
         this.jsonFormDefinition$.next({

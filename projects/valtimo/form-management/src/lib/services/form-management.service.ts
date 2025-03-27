@@ -44,6 +44,16 @@ export class FormManagementService {
     );
   }
 
+  public getFormDefinitionCase(
+    caseDefinitionKey: string,
+    versionTag: string,
+    formDefinitionId: string
+  ): Observable<FormDefinition> {
+    return this.http.get<FormDefinition>(
+      `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${versionTag}/form/${formDefinitionId}`
+    );
+  }
+
   public existsFormDefinition(formDefinitionName: string): Observable<boolean> {
     return this.http.get<boolean>(
       `${this.valtimoApiConfig.endpointUri}v1/form-management/exists/${formDefinitionName}`
