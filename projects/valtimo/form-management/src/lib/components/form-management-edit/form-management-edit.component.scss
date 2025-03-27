@@ -47,6 +47,10 @@
     }
   }
 
+  &__header-container-case {
+    padding-bottom: 24px;
+  }
+
   &__output .cds--tab-content {
     display: grid;
     grid-template-columns: 1fr 1fr;

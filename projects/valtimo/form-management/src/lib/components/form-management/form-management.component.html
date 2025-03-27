@@ -19,5 +19,6 @@
   <valtimo-form-management-edit
     *ngIf="!!obs.editQueryParam"
     (deleteEvent)="onFormDefinitionDeleteEvent()"
+    (goBackEvent)="onFormDefinitionDeleteEvent()"
   ></valtimo-form-management-edit>
 </ng-container>

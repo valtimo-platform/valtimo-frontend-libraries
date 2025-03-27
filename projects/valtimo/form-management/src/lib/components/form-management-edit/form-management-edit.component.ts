@@ -14,6 +14,8 @@ import {TranslateModule} from '@ngx-translate/core';
 import {
   ButtonModule,
   DialogModule,
+  IconModule,
+  IconService,
   InputModule,
   ModalModule,
   ModalService,
@@ -49,6 +51,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FormManagementDuplicateComponent} from '../form-management-duplicate';
 import {ManagementContext} from '@valtimo/config';
 import {FormManagementUploadComponent} from '../form-management-upload';
+import {ArrowLeft16} from '@carbon/icons';
 
 @Component({
   selector: 'valtimo-form-management-edit',
@@ -76,6 +79,7 @@ import {FormManagementUploadComponent} from '../form-management-upload';
     ConfirmationModalModule,
     SpinnerModule,
     FormManagementUploadComponent,
+    IconModule,
   ],
 })
 export class FormManagementEditComponent
@@ -85,6 +89,7 @@ export class FormManagementEditComponent
   @HostBinding('class') public readonly class = 'valtimo-form-management-edit';
 
   @Output() public readonly deleteEvent = new EventEmitter<void>();
+  @Output() public readonly goBackEvent = new EventEmitter<void>();
 
   public modifiedFormDefinition: FormioForm | null = null;
   public validJsonChange: boolean | null = null;
@@ -158,9 +163,11 @@ export class FormManagementEditComponent
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly shellService: ShellService,
-    private readonly pageHeaderService: PageHeaderService
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly iconService: IconService
   ) {
     super();
+    this.iconService.registerAll([ArrowLeft16]);
   }
 
   public ngOnInit(): void {
@@ -226,6 +233,10 @@ export class FormManagementEditComponent
           this.alertService.error('Error deleting Form');
         },
       });
+  }
+
+  public onGoBackButtonClick(): void {
+    this.goBackEvent.emit();
   }
 
   public modifyFormDefinition(definition: FormDefinition): void {

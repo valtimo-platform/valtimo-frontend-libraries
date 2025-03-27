@@ -106,7 +106,7 @@
       (validEvent)="onValidEvent($event, data.disabled)"
       (valueChangeEvent)="onValueChangeEvent($event, data.formDefinition, data.disabled)"
       [fitPage]="true"
-      [fitPageExtraSpace]="80"
+      [fitPageExtraSpace]="obs.context === 'case' ? 188 : 80"
     ></valtimo-editor>
   </ng-template>
 </ng-container>
@@ -114,8 +114,23 @@
 <ng-template #actions let-obs="obs">
   <div
     class="valtimo-form-management-edit__header-container"
-    [ngClass]="{'--compact': obs.compactMode}"
+    [ngClass]="{
+      '--compact': obs.compactMode,
+      'valtimo-form-management-edit__header-container-case': obs?.context === 'case',
+    }"
   >
+    @if (obs.context === 'case') {
+      <button
+        cdsButton="secondary"
+        [size]="obs.compactMode ? 'sm' : 'md'"
+        (click)="onGoBackButtonClick()"
+      >
+        <svg class="cds--btn__icon" cdsIcon="arrow--left" size="16"></svg>
+
+        <span>{{ 'interface.back' | translate }}</span>
+      </button>
+    }
+
     @if (obs.formDefinition.readOnly) {
       <cds-tag size="sm" type="blue">{{ 'formManagement.readOnly' | translate }}</cds-tag>
     }
