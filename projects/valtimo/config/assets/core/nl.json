@@ -567,7 +567,11 @@
         "caseHandler": {
           "title": "Casehandler",
           "canHaveHandler": "Casetype kan een handler hebben",
-          "assignUser": "Gebruikerstaken automatisch toewijzen aan casehandler"
+          "assignUser": "Gebruikerstaken automatisch toewijzen aan casehandler",
+          "toggle": {
+            "onText": "Ja",
+            "offText": "Nee"
+          }
         }
       }
     },

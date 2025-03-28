@@ -567,7 +567,11 @@
         "caseHandler": {
           "title": "Fallbearbeiter",
           "canHaveHandler": "Falltyp kann einen Bearbeiter haben",
-          "assignUser": "Benutzeraufgaben automatisch dem Fallbearbeiter zuweisen"
+          "assignUser": "Benutzeraufgaben automatisch dem Fallbearbeiter zuweisen",
+          "toggle": {
+            "onText": "Ja",
+            "offText": "Nein"
+          }
         }
       }
     },

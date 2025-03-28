@@ -568,7 +568,11 @@
         "caseHandler": {
           "title": "Case handler",
           "canHaveHandler": "Case type can have a handler",
-          "assignUser": "Automatically assign user tasks to case handler"
+          "assignUser": "Automatically assign user tasks to case handler",
+          "toggle": {
+            "onText": "Yes",
+            "offText": "No"
+          }
         }
       }
     },
