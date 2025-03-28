@@ -19,10 +19,18 @@ import {TranslateService} from '@ngx-translate/core';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {CaseSettings, DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
 import {NotificationService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  of,
+  Subscription,
+  switchMap,
+} from 'rxjs';
 import {DossierListService} from '../../services';
 import {DossierProcessStartModalComponent} from '../dossier-process-start-modal/dossier-process-start-modal.component';
-import {NGXLogger} from 'ngx-logger';
 
 declare const $;
 
@@ -79,28 +87,34 @@ export class DossierListActionsComponent implements OnInit {
   private modalListenerAdded = false;
   private _cachedAssociatedProcessDocumentDefinitions: Array<ProcessDocumentDefinition> = [];
 
+  private readonly _subscriptions = new Subscription();
+
   constructor(
     private readonly documentService: DocumentService,
     private readonly listService: DossierListService,
     private readonly notificationService: NotificationService,
     private readonly router: Router,
-    private readonly translateService: TranslateService,
-    private readonly logger: NGXLogger
+    private readonly translateService: TranslateService
   ) {}
 
   public ngOnInit(): void {
     this.modalListenerAdded = false;
 
-    this.listService.documentDefinitionName$.subscribe(documentDefinitionName => {
-      this.logger.debug(
-        'Fetching case definition settings for documentDefinitionName',
-        documentDefinitionName
-      );
-      this.documentService.getCaseSettings(documentDefinitionName).subscribe(caseSettings => {
-        this.logger.debug('Fetched case definition settings', caseSettings);
-        this._caseSettings$.next(caseSettings);
-      });
-    });
+    this._subscriptions.add(
+      this.listService.documentDefinitionName$
+        .pipe(
+          switchMap(documentDefinitionName =>
+            this.documentService.getCaseSettings(documentDefinitionName)
+          )
+        )
+        .subscribe(caseSettings => {
+          this._caseSettings$.next(caseSettings);
+        })
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   public startDossier(): void {

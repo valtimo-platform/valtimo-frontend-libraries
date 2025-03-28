@@ -54,7 +54,7 @@
       />
     </cds-label>
 
-    <button cdsButton="primary" type="submit" [disabled]="!canSubmit">
+    <button cdsButton="primary" type="submit" [disabled]="!form.valid">
       {{ 'dossierManagement.externalStartForm.apply' | translate }}
     </button>
   </form>

@@ -303,13 +303,16 @@ interface DocumentType {
   name: string;
 }
 
-interface CaseSettings {
-  name?: string;
-  canHaveAssignee?: boolean;
-  autoAssignTasks?: boolean;
+interface ExternalStartFormConfiguration {
   hasExternalStartForm?: boolean;
   externalStartFormUrl?: string;
   externalStartFormDescription?: string;
+}
+
+interface CaseSettings extends ExternalStartFormConfiguration {
+  name?: string;
+  canHaveAssignee?: boolean;
+  autoAssignTasks?: boolean;
 }
 
 interface OpenDocumentCount {
@@ -422,4 +425,5 @@ export {
   TemplatePayload,
   TemplateResponse,
   UndeployDocumentDefinitionResult,
+  ExternalStartFormConfiguration,
 };

@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, filter, map, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, filter, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {CaseSettings, DocumentService} from '@valtimo/document';
 import {ActivatedRoute} from '@angular/router';
-import {FormBuilder, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {NGXLogger} from 'ngx-logger';
 import {TranslateService} from '@ngx-translate/core';
 import {NotificationService} from 'carbon-components-angular';
@@ -20,7 +20,7 @@ export class DossierManagementExternalStartFormComponent implements OnInit, OnDe
   );
 
   public readonly form = this.fb.group({
-    hasExternalForm: [false], // Toggle is off by default
+    hasExternalForm: [false],
     externalFormUrl: [
       {value: '', disabled: true},
       [Validators.required, Validators.pattern(this._URL_PATTERN), Validators.maxLength(512)],
@@ -28,14 +28,14 @@ export class DossierManagementExternalStartFormComponent implements OnInit, OnDe
     description: [''],
   });
 
-  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
+  public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
     map(params => params?.name),
     filter(docDefName => !!docDefName)
   );
 
-  readonly caseSettings$: BehaviorSubject<CaseSettings> = new BehaviorSubject(null);
+  public readonly caseSettings$: BehaviorSubject<CaseSettings> = new BehaviorSubject(null);
 
-  private _subscriptions = new Subscription();
+  private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -49,7 +49,6 @@ export class DossierManagementExternalStartFormComponent implements OnInit, OnDe
   public ngOnInit(): void {
     this.logger.debug('External Case Start Form - onInit');
 
-    // Subscribe to the toggle field value changes
     this._subscriptions.add(
       this.hasExternalForm?.valueChanges.subscribe(isEnabled => {
         if (isEnabled) {
@@ -64,18 +63,17 @@ export class DossierManagementExternalStartFormComponent implements OnInit, OnDe
     );
 
     this._subscriptions.add(
-      this.documentDefinitionName$.subscribe(documentDefinitionName => {
-        this.logger.debug(
-          'Fetching case definition settings for documentDefinitionName',
-          documentDefinitionName
-        );
-        this.documentService
-          .getCaseSettingsForManagement(documentDefinitionName)
-          .subscribe(caseSettings => {
+      this.documentDefinitionName$
+        .pipe(
+          switchMap(documentDefinitionName =>
+            this.documentService.getCaseSettingsForManagement(documentDefinitionName)
+          ),
+          tap(caseSettings => {
             this.logger.debug('Fetched case definition settings', caseSettings);
             this.caseSettings$.next(caseSettings);
-          });
-      })
+          })
+        )
+        .subscribe()
     );
 
     this._subscriptions.add(
@@ -94,28 +92,23 @@ export class DossierManagementExternalStartFormComponent implements OnInit, OnDe
 
   public ngOnDestroy(): void {
     this.logger.debug('External Case Start Form - onDestroy');
-    // Clean up subscriptions when the component is destroyed
     this._subscriptions.unsubscribe();
   }
 
-  public get hasExternalForm() {
+  public get hasExternalForm(): AbstractControl<boolean> {
     return this.form.get('hasExternalForm');
   }
 
-  public get externalFormUrl() {
+  public get externalFormUrl(): AbstractControl<string> {
     return this.form.get('externalFormUrl');
   }
 
-  public get description() {
+  public get description(): AbstractControl<string> {
     return this.form.get('description');
   }
 
-  public get canSubmit(): boolean {
-    return this.form.valid;
-  }
-
   public onSubmit(): void {
-    if (!this.canSubmit) return;
+    if (!this.form.valid) return;
 
     this.logger.debug('Submitted case definition settings form with values:', this.form.value);
     const caseSettings = this.caseSettings$.getValue();
