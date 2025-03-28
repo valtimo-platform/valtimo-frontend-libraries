@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AlertService, WidgetModule} from '@valtimo/components'; // Assuming this is your alert service location
+import {ActivatedRoute} from '@angular/router';
+import {WidgetModule} from '@valtimo/components'; // Assuming this is your alert service location
 import {FormManagementService} from '../../services';
 import {CreateFormDefinitionRequest, FormManagementParams} from '../../models';
 import {combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
@@ -60,8 +60,6 @@ export class FormManagementCreateComponent {
   constructor(
     private readonly formManagementService: FormManagementService,
     private readonly formBuilder: FormBuilder,
-    private readonly router: Router,
-    private readonly alertService: AlertService,
     private readonly route: ActivatedRoute
   ) {}
 
@@ -98,8 +96,6 @@ export class FormManagementCreateComponent {
         ),
         switchMap(formDefinition => combineLatest([of(formDefinition), this.route.queryParams])),
         tap(([formDefinition, params]) => {
-          this.alertService.success('Created new Form');
-
           if (params?.upload === 'true') {
             // this.router.navigate(['/form-management/edit', formDefinition.id], {
             //   queryParams: {upload: 'true'},

@@ -16,13 +16,14 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PendingChangesComponent} from '@valtimo/components';
+import {CARBON_CONSTANTS, PendingChangesComponent} from '@valtimo/components';
 import {FormManagementCreateComponent} from '../form-management-create';
 import {FormManagementListComponent} from '../form-management-list';
-import {ButtonModule} from 'carbon-components-angular';
+import {ButtonModule, NotificationService} from 'carbon-components-angular';
 import {map, Observable} from 'rxjs';
 import {ManagementContext} from '@valtimo/config';
 import {FormManagementEditComponent} from '../form-management-edit';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   templateUrl: './form-management.component.html',
@@ -35,6 +36,7 @@ import {FormManagementEditComponent} from '../form-management-edit';
     FormManagementCreateComponent,
     FormManagementEditComponent,
   ],
+  providers: [NotificationService],
 })
 export class FormManagementComponent extends PendingChangesComponent {
   public readonly hasCreateQueryParam$: Observable<boolean> = this.route.queryParamMap.pipe(
@@ -51,7 +53,9 @@ export class FormManagementComponent extends PendingChangesComponent {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly notificationService: NotificationService,
+    private readonly translateService: TranslateService
   ) {
     super();
   }
@@ -70,6 +74,18 @@ export class FormManagementComponent extends PendingChangesComponent {
     } else {
       this.onDeactivatePendingChanges();
     }
+  }
+
+  public onFormDefinitionCreateEvent(formDefinitionId: string): void {
+    this.notificationService.showToast({
+      type: 'success',
+      duration: CARBON_CONSTANTS.notificationDuration,
+      showClose: true,
+      title: this.translateService.instant('formManagement.notifications.created'),
+    });
+
+    this.removeCreateQueryParams();
+    this.addEditQueryParams(formDefinitionId);
   }
 
   public onFormDefinitionEditEvent(formDefinitionId: string): void {

@@ -511,6 +511,9 @@
       "error": "Failed to save progress",
       "lastSavedBy": "Last saved by",
       "on": "on"
+    },
+    "notifications": {
+      "created": "Created new Form"
     }
   },
   "caseManagement": {

@@ -13,7 +13,7 @@
   <valtimo-form-management-create
     *ngIf="obs.hasCreateQueryParam && !obs.editQueryParam"
     (goBackEvent)="onGoBackFromCreateEvent()"
-    (afterCreateEvent)="onFormDefinitionEditEvent($event)"
+    (afterCreateEvent)="onFormDefinitionCreateEvent($event)"
   ></valtimo-form-management-create>
 
   <valtimo-form-management-edit
