@@ -37,7 +37,7 @@ export class CaseManagementCaseHandlerComponent {
     }))
   );
 
-  public readonly documentDefinitionName$: Observable<string> | undefined =
+  public readonly caseDefinitionKey$: Observable<string> | undefined =
     this.route.parent?.params.pipe(map(({caseDefinitionKey}) => caseDefinitionKey || ''));
 
   public readonly caseVersionTag$: Observable<string> | undefined = this.route.parent?.params.pipe(

@@ -40,7 +40,7 @@ export class CaseManagementGeneralComponent implements AfterViewInit {
 
   public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
     map(({caseDefinitionName, caseVersionTag}) => ({
-      definitionName: caseDefinitionName,
+      caseDefinitionKey: caseDefinitionName,
       versionTag: caseVersionTag,
     }))
   );

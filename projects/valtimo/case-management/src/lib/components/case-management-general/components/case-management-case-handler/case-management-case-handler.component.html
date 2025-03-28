@@ -17,7 +17,7 @@
 <ng-container
   *ngIf="{
     currentValue: currentValue$ | async,
-    documentDefinitionName: documentDefinitionName$ | async,
+    caseDefinitionKey: caseDefinitionKey$ | async,
     caseVersionTag: caseVersionTag$ | async,
     loading: loading$ | async,
     disabled: disabled$ | async,
@@ -34,7 +34,7 @@
           [checked]="obs?.currentValue?.canHaveAssignee"
           [disabled]="obs.disabled"
           (checkedChange)="
-            toggleAssignee(obs?.currentValue, obs.documentDefinitionName, obs.caseVersionTag)
+            toggleAssignee(obs?.currentValue, obs.caseDefinitionKey, obs.caseVersionTag)
           "
           [label]="'dossierManagement.tabs.generalTab.caseHandler.canHaveHandler' | translate"
           [onText]="'dossierManagement.tabs.generalTab.caseHandler.toggle.onText' | translate"
@@ -47,7 +47,7 @@
           [checked]="obs?.currentValue?.autoAssignTasks"
           [disabled]="!obs?.currentValue?.canHaveAssignee"
           (checkedChange)="
-            toggleTaskAssignment(obs?.currentValue, obs?.documentDefinitionName, obs.caseVersionTag)
+            toggleTaskAssignment(obs?.currentValue, obs?.caseDefinitionKey, obs.caseVersionTag)
           "
           [label]="'dossierManagement.toggleAutoAssignTasks.checkboxDescription' | translate"
           [onText]="'dossierManagement.tabs.generalTab.caseHandler.toggle.onText' | translate"
