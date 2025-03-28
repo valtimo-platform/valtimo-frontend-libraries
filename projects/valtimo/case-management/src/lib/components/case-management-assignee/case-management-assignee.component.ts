@@ -60,17 +60,13 @@ export class CaseManagementAssigneeComponent {
 
   updateCaseSettings(
     caseSettings: CaseSettings,
-    documentDefinitionName: string,
+    caseDefinitionKey: string,
     caseDefinitionVersionTag: string
   ): void {
     this.disableInput();
 
     this.documentService
-      .patchCaseSettingsForManagement(
-        documentDefinitionName,
-        caseDefinitionVersionTag,
-        caseSettings
-      )
+      .patchCaseSettingsForManagement(caseDefinitionKey, caseDefinitionVersionTag, caseSettings)
       .subscribe(
         () => {
           this.enableInput();
