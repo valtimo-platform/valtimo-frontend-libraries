@@ -96,7 +96,7 @@ export class CaseManagementAssigneeComponent {
 
   toggleAssignee(
     currentSettings: CaseSettings,
-    documentDefinitionName: string,
+    caseDefinitionKey: string,
     caseDefinitionVersionTag: string
   ) {
     this.updateCaseSettings(
@@ -104,14 +104,14 @@ export class CaseManagementAssigneeComponent {
         canHaveAssignee: !currentSettings?.canHaveAssignee,
         autoAssignTasks: currentSettings.autoAssignTasks,
       },
-      documentDefinitionName,
+      caseDefinitionKey,
       caseDefinitionVersionTag
     );
   }
 
   toggleTaskAssignment(
     currentSettings: CaseSettings,
-    documentDefinitionName: string,
+    caseDefinitionKey: string,
     caseDefinitionVersionTag: string
   ) {
     this.updateCaseSettings(
@@ -119,7 +119,7 @@ export class CaseManagementAssigneeComponent {
         canHaveAssignee: currentSettings?.canHaveAssignee,
         autoAssignTasks: !currentSettings.autoAssignTasks,
       },
-      documentDefinitionName,
+      caseDefinitionKey,
       caseDefinitionVersionTag
     );
   }
