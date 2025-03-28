@@ -22,3 +22,5 @@ export * from './widget-tab-management.service';
 export * from './widget-wizard.service';
 export * from './widget-fields.service';
 export * from './case-management.service';
+export * from './documenten-api-link-process.service';
+export * from './documenten-api-version.service';

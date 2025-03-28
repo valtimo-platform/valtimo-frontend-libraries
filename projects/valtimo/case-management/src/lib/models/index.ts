@@ -21,3 +21,5 @@ export * from './widget-content.model';
 export * from './widget-editor.model';
 export * from './widget-wizard.model';
 export * from './case-list.model';
+export * from './documenten-api-link-process.model';
+export * from './documenten-api-version.model';
