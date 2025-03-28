@@ -50,6 +50,7 @@ import {
   FileUploaderModule,
   IconModule,
   InputModule as CarbonInputModule,
+  LayerModule,
   LinkModule,
   LoadingModule,
   ModalModule as CarbonModalModule,
@@ -85,6 +86,7 @@ import {CaseManagementCreateComponent} from './components/case-management-create
 import {CaseManagementWidgetsEditorComponent} from './components/case-management-widget-tab/editor/case-management-widgets-editor.component';
 import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
 import {CaseManagementGeneralComponent} from './components/case-management-general/case-management-general.component';
+import {CaseManagementCaseHandlerComponent} from './components/case-management-general/components/case-management-case-handler/case-management-case-handler.component';
 
 @NgModule({
   declarations: [
@@ -108,6 +110,7 @@ import {CaseManagementGeneralComponent} from './components/case-management-gener
     CaseManagementStatusModalComponent,
     CaseManagementCreateComponent,
     CaseManagementGeneralComponent,
+    CaseManagementCaseHandlerComponent,
   ],
   imports: [
     CommonModule,
@@ -160,6 +163,7 @@ import {CaseManagementGeneralComponent} from './components/case-management-gener
     CaseManagementWidgetsEditorComponent,
     ValuePathSelectorComponent,
     CaseManagementProcessesComponent,
+    LayerModule,
   ],
   providers: [TabManagementService],
 })

@@ -19,8 +19,3 @@
   gap: 16px;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
 }
-
-// Dropdown always expand downward
-.case-management-general-tab > *:last-child {
-  margin-bottom: 200px;
-}

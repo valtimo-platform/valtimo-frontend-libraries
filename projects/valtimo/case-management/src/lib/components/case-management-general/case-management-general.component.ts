@@ -15,6 +15,7 @@
  */
 
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   Inject,
@@ -33,7 +34,7 @@ import {ZGW_CASE_CONFIGURATION_EXTENSIONS_TOKEN} from '@valtimo/config';
   templateUrl: './case-management-general.component.html',
   styleUrl: './case-management-general.component.scss',
 })
-export class CaseManagementGeneralComponent {
+export class CaseManagementGeneralComponent implements AfterViewInit {
   @ViewChild('extensions', {read: ViewContainerRef})
   private _extensions: ViewContainerRef;
 
