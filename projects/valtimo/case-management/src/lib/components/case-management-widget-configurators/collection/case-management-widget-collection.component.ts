@@ -170,8 +170,7 @@ export class CaseManagementWidgetCollectionComponent
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService,
-    private readonly widgetFieldsService: WidgetFieldsService,
-    private readonly route: ActivatedRoute
+    private readonly widgetFieldsService: WidgetFieldsService
   ) {}
 
   public ngOnInit(): void {
