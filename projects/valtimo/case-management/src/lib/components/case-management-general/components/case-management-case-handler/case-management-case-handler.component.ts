@@ -16,7 +16,7 @@
 
 import {Component} from '@angular/core';
 import {CaseSettings, DocumentService} from '@valtimo/document';
-import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
+import {BehaviorSubject, finalize, map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {tap} from 'rxjs/operators';
 
@@ -68,15 +68,10 @@ export class CaseManagementCaseHandlerComponent {
 
     this.documentService
       .patchCaseSettingsForManagement(caseDefinitionKey, caseDefinitionVersionTag, caseSettings)
-      .subscribe(
-        () => {
-          this.enableInput();
-          this.refreshSettings();
-        },
-        () => {
-          this.enableInput();
-        }
-      );
+      .pipe(finalize(() => this.enableInput()))
+      .subscribe({
+        next: () => this.refreshSettings(),
+      });
   }
 
   public disableInput(): void {
