@@ -57,9 +57,7 @@ export class CaseManagementCaseHandlerComponent {
   constructor(
     private readonly documentService: DocumentService,
     private route: ActivatedRoute
-  ) {
-    // this.disabled$ = new BehaviorSubject<boolean>(false);
-  }
+  ) {}
 
   public updateCaseSettings(
     caseSettings: CaseSettings,
