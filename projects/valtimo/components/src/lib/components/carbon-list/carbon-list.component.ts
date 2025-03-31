@@ -40,7 +40,7 @@ import {
   TableItem,
   TableModel,
 } from 'carbon-components-angular';
-import {get as _get} from 'lodash';
+import {get as _get, isArray} from 'lodash';
 import {NGXLogger} from 'ngx-logger';
 import {
   BehaviorSubject,
@@ -69,13 +69,13 @@ import {
   MoveRowDirection,
   MoveRowEvent,
   Pagination,
-  TAG_ELLIPSIS_LIMIT,
   ViewType,
 } from '../../models';
 import {KeyStateService} from '../../services/key-state.service';
 import {ViewContentService} from '../view-content/view-content.service';
 import {CarbonListFilterPipe} from './CarbonListFilterPipe.directive';
 import {CarbonListDragAndDropService} from './services';
+import {EllipsisPipe} from '../../pipes';
 
 @Component({
   selector: 'valtimo-carbon-list',
@@ -261,6 +261,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   constructor(
+    private readonly ellipsisPipe: EllipsisPipe,
     private readonly filterPipe: CarbonListFilterPipe,
     private readonly iconService: IconService,
     private readonly logger: NGXLogger,

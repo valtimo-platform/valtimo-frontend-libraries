@@ -45,7 +45,7 @@ import {
   DocumentService,
   InternalCaseStatus,
   InternalCaseStatusUtils,
-  ProcessDocumentDefinition,
+  ProcessDefinitionCaseDefinition,
 } from '@valtimo/document';
 import {TaskWithProcessLink} from '@valtimo/process-link';
 import {UserProviderService} from '@valtimo/security';
@@ -63,26 +63,28 @@ import {
   of,
   startWith,
   Subject,
+  Subscription,
   switchMap,
   take,
   tap,
-  Subscription,
 } from 'rxjs';
-import {
-  DOSSIER_DETAIL_DEFAULT_DISPLAY_SIZE,
-  DOSSIER_DETAIL_DEFAULT_DISPLAY_TYPE,
-  DOSSIER_DETAIL_GUTTER_SIZE,
-} from '../../constants';
 import {TabImpl, TabLoaderImpl} from '../../models';
 import {
   CAN_ASSIGN_CASE_PERMISSION,
   CAN_CLAIM_CASE_PERMISSION,
-  CAN_VIEW_CASE_PERMISSION,
   CAN_DELETE_CASE_PERMISSION,
-  DOSSIER_DETAIL_PERMISSION_RESOURCE,
+  CAN_VIEW_CASE_PERMISSION,
+  CASE_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
-import {DossierDetailLayoutService, DossierService, DossierTabService} from '../../services';
-import {DossierSupportingProcessStartModalComponent} from '../dossier-supporting-process-start-modal/dossier-supporting-process-start-modal.component';
+import {WidgetsService} from './tab/widgets/widgets.service';
+import {
+  CASE_DETAIL_DEFAULT_DISPLAY_SIZE,
+  CASE_DETAIL_DEFAULT_DISPLAY_TYPE,
+  CASE_DETAIL_GUTTER_SIZE,
+  CASE_DETAIL_START_PROCESS_DROPDOWN_WIDTH,
+} from '../../constants';
+import {CaseDetailLayoutService, CaseService, CaseTabService} from '../../services';
+import {CaseSupportingProcessStartModalComponent} from '../case-supporting-process-start-modal/case-supporting-process-start-modal.component';
 
 @Component({
   templateUrl: './case-detail.component.html',
@@ -108,7 +110,9 @@ export class CaseDetailComponent
   public documentDefinitionTitle: string;
   public documentId: string;
   public processDefinitionListFields: Array<any> = [];
-  public processDefinitionCaseDefinitions: (ProcessDefinitionCaseDefinition & {displayName?: string})[] = [];
+  public processDefinitionCaseDefinitions: (ProcessDefinitionCaseDefinition & {
+    displayName?: string;
+  })[] = [];
   public tabLoader: TabLoaderImpl | null = null;
 
   public readonly assigneeId$ = new BehaviorSubject<string>('');
@@ -164,9 +168,9 @@ export class CaseDetailComponent
           ) &&
           this.customCaseHeaderItems.length === 0
         ) {
-          this.configService.config.customCaseHeader[
-            this.caseDefinitionKey.toLowerCase()
-          ]?.forEach(item => this.getCustomCaseHeaderItem(item));
+          this.configService.config.customCaseHeader[this.caseDefinitionKey.toLowerCase()]?.forEach(
+            item => this.getCustomCaseHeaderItem(item)
+          );
         }
       }
     })
@@ -214,9 +218,7 @@ export class CaseDetailComponent
   );
 
   public readonly canHaveAssignee$: Observable<boolean> = this.caseDefinitionKey$.pipe(
-    switchMap(caseDefinitionKey =>
-      this.documentService.getCaseSettings(caseDefinitionKey)
-    ),
+    switchMap(caseDefinitionKey => this.documentService.getCaseSettings(caseDefinitionKey)),
     map(caseSettings => caseSettings?.canHaveAssignee)
   );
 
@@ -259,8 +261,7 @@ export class CaseDetailComponent
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
-  public readonly tabHorizontalOverflowDisabled =
-    this.caseTabService.tabHorizontalOverflowDisabled;
+  public readonly tabHorizontalOverflowDisabled = this.caseTabService.tabHorizontalOverflowDisabled;
 
   public readonly showTaskList$ = this.caseTabService.showTaskList$;
 
@@ -372,7 +373,7 @@ export class CaseDetailComponent
     this._subscriptions.add(
       this.widgetsService.startProcessEvent
         .pipe(switchMap(() => this.widgetsService.activeProcess$))
-        .subscribe((processDefinitionCaseDefinition: ProcessDefinitionCaseDefinition[]) => {
+        .subscribe(processDefinitionCaseDefinition => {
           this.startProcess(processDefinitionCaseDefinition[0]);
         })
     );
@@ -519,12 +520,10 @@ export class CaseDetailComponent
   }
 
   private initBreadcrumb(): void {
-    this.documentService
-      .getDocumentDefinition(this.caseDefinitionKey)
-      .subscribe(definition => {
-        this.documentDefinitionTitle = definition.schema.title;
-        this.setBreadcrumb();
-      });
+    this.documentService.getDocumentDefinition(this.caseDefinitionKey).subscribe(definition => {
+      this.documentDefinitionTitle = definition.schema.title;
+      this.setBreadcrumb();
+    });
   }
 
   private initTabLoader(): void {

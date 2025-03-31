@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Injectable, OnDestroy} from '@angular/core';
+import {Inject, Injectable, OnDestroy, Optional} from '@angular/core';
 import {BehaviorSubject, map, Observable, Subject, Subscription} from 'rxjs';
 import {
+  FormCustomComponentConfig,
   ModalParams,
   ProcessLink,
   ProcessLinkCreateEvent,
@@ -27,6 +28,7 @@ import {
 import {PluginStateService} from './plugin-state.service';
 import {ProcessLinkButtonService} from './process-link-button.service';
 import {ProcessLinkStepService} from './process-link-step.service';
+import {FORM_CUSTOM_COMPONENT_TOKEN} from '../constants';
 
 @Injectable({
   providedIn: 'root',
@@ -77,9 +79,8 @@ export class ProcessLinkStateService implements OnDestroy {
         return types;
       })
     );
-  public get availableProcessLinkTypes$(): Observable<Array<ProcessLinkType>> {
-    return this._availableProcessLinkTypes$.asObservable();
   }
+
   public get hideProgressIndicator$(): Observable<boolean> {
     return this._availableProcessLinkTypes$
       .asObservable()

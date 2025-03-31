@@ -20,8 +20,6 @@ import {map, Observable} from 'rxjs';
 
 import {
   CompatiblePluginProcessLinks,
-  CompatiblePluginProcessLinks,
-  FormFlowProcessLinkCreateRequestDto,
   FormFlowProcessLinkUpdateRequestDto,
   FormProcessLinkUpdateRequestDto,
   FormSubmissionResult,
@@ -32,9 +30,6 @@ import {
   ProcessLinkType,
   TaskWithProcessLink,
   UIComponentProcessLinkUpdateRequestDto,
-  UIComponentProcessLinkCreateRequestDto,
-  UIComponentProcessLinkUpdateRequestDto,
-  URLProcessLinkCreateDto,
   URLProcessLinkUpdateRequestDto,
 } from '../models';
 import {URLVariables} from '../models/process-link-url.model';
@@ -90,14 +85,6 @@ export class ProcessLinkService {
   }
 
   public saveProcessLink(saveProcessLinkRequest: ProcessLinkCreateEvent): Observable<null> {
-  public saveProcessLink(
-    saveProcessLinkRequest:
-      | FormProcessLinkCreateRequestDto
-      | FormFlowProcessLinkCreateRequestDto
-      | PluginProcessLinkCreateDto
-      | URLProcessLinkCreateDto
-      | UIComponentProcessLinkCreateRequestDto
-  ): Observable<null> {
     return this.http.post<null>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link`,
       this.emptyStringToNull(saveProcessLinkRequest)
@@ -135,7 +122,6 @@ export class ProcessLinkService {
     );
   }
 
-  public submitForm(
   public submitForm(
     processLinkId: string,
     formData: object,

@@ -69,8 +69,8 @@ export class SetZaakStatusConfigurationComponent
       ),
       tap(processDocumentDefinitions => {
         const caseDefSelectItems = processDocumentDefinitions.map(processDocDef => ({
-          text: processDocDef.id.documentDefinitionId.name,
-          id: processDocDef.id.documentDefinitionId.name,
+          text: processDocDef.id.caseDefinitionId.key,
+          id: processDocDef.id.caseDefinitionId.name,
         }));
 
         this.caseDefinitionSelectItems$.next(caseDefSelectItems);
@@ -81,10 +81,10 @@ export class SetZaakStatusConfigurationComponent
       }),
       switchMap(processDocumentDefinitions =>
         combineLatest([
-          of(processDocumentDefinitions.map(processDoc => processDoc.id.documentDefinitionId.name)),
+          of(processDocumentDefinitions.map(processDoc => processDoc.id.caseDefinitionId.key)),
           ...processDocumentDefinitions.map(processDocDef =>
             this.zakenApiService.getStatusTypesByCaseDefinition(
-              processDocDef.id.documentDefinitionId.name
+              processDocDef.id.caseDefinitionId.key
             )
           ),
         ])

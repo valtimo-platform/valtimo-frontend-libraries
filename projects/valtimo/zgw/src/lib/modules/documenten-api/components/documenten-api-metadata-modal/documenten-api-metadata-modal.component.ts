@@ -77,6 +77,7 @@ import {
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 import moment from 'moment';
 import {DocumentenApiUploadFieldDefaultValues} from '../../models/documenten-api-upload-field.model';
+import {DocumentenApiVersionService} from '../../services';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -453,7 +454,6 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
     this._fileSubscription?.unsubscribe();
     this._fileNameAndAuthorSubscription?.unsubscribe();
-    this.isDefinitiveStatus$.next(false);
     this.editDisabled$.next(false);
   }
 

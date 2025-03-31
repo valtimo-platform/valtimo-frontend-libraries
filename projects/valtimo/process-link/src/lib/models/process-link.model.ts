@@ -265,7 +265,4 @@ export {
   UIComponentProcessLinkUpdateRequestDto,
   URLProcessLinkCreateDto,
   URLProcessLinkUpdateRequestDto,
-  UIComponentProcessLinkUpdateRequestDto,
-  UIComponentProcessLinkCreateRequestDto,
-  CompatiblePluginProcessLinks,
 };
