@@ -146,6 +146,19 @@ interface URLProcessLinkUpdateRequestDto {
   activityId: string;
 }
 
+interface UIComponentProcessLinkCreateRequestDto {
+  componentKey: string;
+  activityId: string;
+  activityType: string;
+  processLinkType: string;
+  processDefinitionId: string;
+}
+
+interface UIComponentProcessLinkUpdateRequestDto {
+  id: string;
+  componentKey: string;
+}
+
 type TaskProcessLinkType = 'form' | 'form-flow' | 'form-view-model' | 'url' | 'ui-component';
 
 interface TaskProcessLinkResult {
@@ -215,6 +228,16 @@ interface CompatiblePluginProcessLinks {
   versions: CompatibleProcessVersion[];
 }
 
+interface CompatibleProcessVersion {
+  version: string;
+  processLinks: ProcessLink[];
+}
+
+interface CompatiblePluginProcessLinks {
+  processDefinitionKey: string;
+  versions: CompatibleProcessVersion[];
+}
+
 export {
   CompatiblePluginProcessLinks,
   CompatibleProcessVersion,
@@ -242,4 +265,7 @@ export {
   UIComponentProcessLinkUpdateRequestDto,
   URLProcessLinkCreateDto,
   URLProcessLinkUpdateRequestDto,
+  UIComponentProcessLinkUpdateRequestDto,
+  UIComponentProcessLinkCreateRequestDto,
+  CompatiblePluginProcessLinks,
 };

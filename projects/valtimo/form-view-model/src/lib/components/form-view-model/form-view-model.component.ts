@@ -278,6 +278,32 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     if (error instanceof HttpErrorResponse) {
       this.handleFormError(error);
     }
+              ? this.viewModelService.submitViewModelForStartForm(
+                  formName,
+                  processDefinitionKey,
+                  documentId,
+                  documentDefinitionName,
+                  submission.data
+                )
+              : this.viewModelService.submitViewModel(formName, taskInstanceId, submission.data)
+        )
+      )
+      .subscribe({
+        next: _ => {
+          callback(null, submission);
+        },
+        error: err => {
+          this.handleSubmissionError(err, callback);
+        },
+      });
+  }
+
+  private handleSubmissionError(error: any, callback: FormioSubmissionCallback): void {
+    callback({message: '', component: null, silent: true}, null);
+
+    if (error instanceof HttpErrorResponse) {
+      this.handleFormError(error);
+    }
   }
 
   private handleFormError(error: HttpErrorResponse): void {

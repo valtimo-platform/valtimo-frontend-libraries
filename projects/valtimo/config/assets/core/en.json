@@ -1971,6 +1971,10 @@
       "searchDescription": "No logs match your search criteria",
       "title": "There are no logs"
     },
-    "detailsTitle": "Log details"
+    "detailsTitle": "Log details",
+    "timestamp": "Timestamp",
+    "formattedMessage": "Message",
+    "properties": "Properties",
+    "stacktrace": "Stacktrace"
   }
 }

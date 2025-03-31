@@ -527,6 +527,15 @@ export class DossierDetailTabDocumentenApiDocumentsComponent implements OnInit, 
 
   private deleteDisabled(file: DocumentenApiRelatedFile): boolean {
     return !this.filePermissions[file.fileId]?.canDelete;
+    return (
+      (!this.supportedDocumentenApiFeatures$.value.supportsUpdatingDefinitiveDocument &&
+        file.status === 'definitief') ||
+      !this.filePermissions[file.fileId]?.canModify
+    );
+  }
+
+  private deleteDisabled(file: DocumentenApiRelatedFile): boolean {
+    return !this.filePermissions[file.fileId]?.canDelete;
   }
 
   private downloadDocument(relatedFile: DocumentenApiRelatedFile, forceDownload: boolean): void {

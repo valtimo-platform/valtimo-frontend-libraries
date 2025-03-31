@@ -552,6 +552,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
     if (!prevTab) {
       return;
     }
+
     const tab = this.tabsComponent.tabs.find((tab: Tab) => tab.active);
 
     if(!tab) return;
@@ -662,7 +663,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
   }
 
   private setVisibleTabs(): void {
-    this.visibleCaseTabs = this.configService.config?.visibleCaseListTabs || null;
+    this.visibleDossierTabs = this.configService.config?.visibleDossierListTabs || null;
   }
 
   private updateNoResultsMessage(isSearchResult: boolean): void {
