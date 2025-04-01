@@ -19,16 +19,25 @@ import {BaseApiService, ConfigService} from '@valtimo/config';
 import {Observable} from 'rxjs';
 import {CaseWidgetsRes} from '../models';
 import {InterceptorSkip} from '@valtimo/security';
+import {ActivatedRoute} from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DossierWidgetsApiService extends BaseApiService {
+
+  bsn: string = "";
+
   constructor(
     protected readonly httpClient: HttpClient,
-    protected readonly configService: ConfigService
+    protected readonly configService: ConfigService,
+    protected readonly route: ActivatedRoute,
   ) {
     super(httpClient, configService);
+
+    route.queryParamMap.subscribe((paramsMap) => {
+      this.bsn = paramsMap.get("bsn");
+    })
   }
 
   public getWidgetTabConfiguration(documentId: string, tabKey: string): Observable<CaseWidgetsRes> {
@@ -43,6 +52,11 @@ export class DossierWidgetsApiService extends BaseApiService {
     widgetKey: string,
     queryParams?: string
   ): Observable<object> {
+    if (queryParams) {
+      queryParams += `&bsn=${this.bsn}`
+    } else {
+      queryParams = `bsn=${this.bsn}`
+    }
     return this.httpClient.get<object>(
       this.getApiUrl(
         !queryParams

@@ -1,0 +1,10 @@
+<div style="display: flex; flex-flow: row; padding: 16px;">
+  <v-input [defaultValue]="'999993653'" (input)="changeBsn($event)"></v-input>
+  <div style="width: 100px; margin-left: 16px;">
+    <button type="button" class="btn btn-secondary btn-space" (click)="search()">Zoek</button>
+  </div>
+</div>
+
+@if (searched) {
+  <iko-klant-page></iko-klant-page>
+}

@@ -124,6 +124,7 @@ export class DossierWidgetsLayoutService implements OnDestroy {
       combineLatest([this._muuri$, this._triggerMuuriLayout$])
         .pipe(debounceTime(150))
         .subscribe(([muuri]) => {
+          console.log("REFRESH MUURI")
           muuri.refreshItems();
           muuri.layout();
         })
