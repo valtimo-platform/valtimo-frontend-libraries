@@ -50,6 +50,7 @@ import {
   FileUploaderModule,
   IconModule,
   InputModule as CarbonInputModule,
+  LayerModule,
   LinkModule,
   LoadingModule,
   ModalModule as CarbonModalModule,
@@ -84,6 +85,9 @@ import {CaseManagementStatusModalComponent} from './components/case-management-s
 import {CaseManagementCreateComponent} from './components/case-management-create/case-management-create.component';
 import {CaseManagementWidgetsEditorComponent} from './components/case-management-widget-tab/editor/case-management-widgets-editor.component';
 import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
+import {CaseManagementGeneralComponent} from './components/case-management-general/case-management-general.component';
+import {CaseManagementCaseHandlerComponent} from './components/case-management-general/components/case-management-case-handler/case-management-case-handler.component';
+import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
 import {FormManagementComponent} from '@valtimo/form-management';
 
 @NgModule({
@@ -107,6 +111,8 @@ import {FormManagementComponent} from '@valtimo/form-management';
     CaseManagementStatusesComponent,
     CaseManagementStatusModalComponent,
     CaseManagementCreateComponent,
+    CaseManagementGeneralComponent,
+    CaseManagementCaseHandlerComponent,
   ],
   imports: [
     CommonModule,
@@ -158,6 +164,8 @@ import {FormManagementComponent} from '@valtimo/form-management';
     TooltipModule,
     CaseManagementWidgetsEditorComponent,
     ValuePathSelectorComponent,
+    CaseManagementProcessesComponent,
+    LayerModule,
     CaseManagementProcessesComponent,
     FormManagementComponent,
   ],

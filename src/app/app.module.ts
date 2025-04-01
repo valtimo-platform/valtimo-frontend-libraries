@@ -41,15 +41,15 @@ import {
 } from '@valtimo/components';
 import {
   CASE_TAB_TOKEN,
-  CaseDetailTabAuditComponent,
-  CaseDetailTabDocumentsComponent,
-  CaseDetailTabNotesComponent,
-  CaseDetailTabProgressComponent,
-  CaseDetailTabSummaryComponent,
-  CaseModule,
   CUSTOM_CASE_WIDGET_TOKEN,
   DefaultTabs,
-} from '@valtimo/case';
+  DossierDetailTabAuditComponent,
+  DossierDetailTabDocumentsComponent,
+  DossierDetailTabNotesComponent,
+  DossierDetailTabProgressComponent,
+  DossierDetailTabSummaryComponent,
+  DossierModule,
+} from '@valtimo/dossier';
 import {ProcessModule} from '@valtimo/process';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CustomFormExampleComponent} from './custom-form-example/custom-form-example.component';
@@ -81,6 +81,7 @@ import {
   LocalizationService,
 } from '@valtimo/config';
 import {FormManagementModule} from '@valtimo/form-management';
+import {DossierManagementModule} from '@valtimo/dossier-management';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {PluginManagementModule} from '@valtimo/plugin-management';
 import {
