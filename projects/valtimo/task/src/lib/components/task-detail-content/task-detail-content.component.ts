@@ -100,9 +100,13 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
 
     this.loadTaskDetails(value.task as any, value.processLinkActivityResult);
   }
-  @Input() public set modalClosed(_: boolean) {
+  @Input() public set modalClosed(closed: boolean) {
     // save form flow data on modal closed
     if (this.formFlow) this.formFlow.saveData();
+
+    if (closed) {
+      this.closeModalEvent.emit();
+    }
   }
   @Output() public readonly closeModalEvent = new EventEmitter();
   @Output() public readonly formSubmit = new EventEmitter();
@@ -396,8 +400,8 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
 
         formViewModelComponent.instance.formSubmit
           .pipe(
+            switchMap(() => this.task$),
             take(1),
-            switchMap(() => this.task$)
           )
           .subscribe((task: Task | null) => {
             this.completeTask(task);
@@ -418,6 +422,12 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
           );
           this.getCurrentProgress(formViewModelComponent);
         }
+
+        this._subscriptions.add(
+          this.closeModalEvent.subscribe(() => {
+            formViewModelComponent.destroy();
+          })
+        );
       }
     });
   }
@@ -437,6 +447,12 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
             renderedComponent.instance.taskInstanceId = this.taskInstanceId$.value;
             renderedComponent.instance.submittedEvent.subscribe(() => {
               this.closeModalEvent.emit();
+            });
+
+            this.closeModalEvent.pipe(
+              take(1)
+            ).subscribe(() => {
+              renderedComponent.destroy();
             });
           })
         );
