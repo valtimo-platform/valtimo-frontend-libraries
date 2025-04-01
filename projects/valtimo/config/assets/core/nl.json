@@ -510,6 +510,13 @@
       "error": "Voortgang kon niet worden opgeslagen",
       "lastSavedBy": "Laatst opgeslagen door",
       "on": "op"
+    },
+    "notifications": {
+      "created": "Nieuw formulier aangemaakt",
+      "deleted": "Formulier verwijderd",
+      "deletionError": "Fout bij het verwijderen van het formulier",
+      "deployed": "Formulier gedeployed",
+      "deploymentError": "Fout bij het deployen van het formulier"
     }
   },
   "caseManagement": {

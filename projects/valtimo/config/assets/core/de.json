@@ -510,6 +510,13 @@
       "error": "Fortschritt konnte nicht gespeichert werden",
       "lastSavedBy": "Zuletzt gespeichert von",
       "on": "An"
+    },
+    "notifications": {
+      "created": "Neues Formular erstellt",
+      "deleted": "Formular gelöscht",
+      "deletionError": "Fehler beim Löschen des Formulars",
+      "deployed": "Formular bereitgestellt",
+      "deploymentError": "Fehler beim Bereitstellen des Formulars"
     }
   },
   "caseManagement": {

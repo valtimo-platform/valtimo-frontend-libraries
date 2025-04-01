@@ -513,7 +513,11 @@
       "on": "on"
     },
     "notifications": {
-      "created": "Created new Form"
+      "created": "Created new Form",
+      "deleted": "Deleted form",
+      "deletionError": "Error deleting form",
+      "deployed": "Form deployed",
+      "deploymentError": "Error deploying form"
     }
   },
   "caseManagement": {

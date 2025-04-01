@@ -77,6 +77,8 @@ export class FormManagementComponent extends PendingChangesComponent {
   }
 
   public onFormDefinitionCreateEvent(formDefinitionId: string): void {
+    this.resetNotifications();
+
     this.notificationService.showToast({
       type: 'success',
       duration: CARBON_CONSTANTS.notificationDuration,
@@ -93,9 +95,20 @@ export class FormManagementComponent extends PendingChangesComponent {
     this.addEditQueryParams(formDefinitionId);
   }
 
-  public onModifiedEvent(): void {
+  public onModifiedEvent(isDelete = false): void {
     this.onDeactivatePendingChanges();
     this.removeCreateAndEditQueryParams();
+
+    this.resetNotifications();
+
+    this.notificationService.showToast({
+      type: 'success',
+      duration: CARBON_CONSTANTS.notificationDuration,
+      showClose: true,
+      title: isDelete
+        ? this.translateService.instant('formManagement.notifications.deleted')
+        : this.translateService.instant('formManagement.notifications.deployed'),
+    });
   }
 
   public onGoBackEvent(): void {
@@ -110,6 +123,28 @@ export class FormManagementComponent extends PendingChangesComponent {
           if (navigateAway) this.removeCreateAndEditQueryParams();
         });
     }
+  }
+
+  public onDeleteErrorEvent(): void {
+    this.resetNotifications();
+
+    this.notificationService.showToast({
+      type: 'error',
+      duration: CARBON_CONSTANTS.notificationDuration,
+      showClose: true,
+      title: this.translateService.instant('formManagement.notifications.deletionError'),
+    });
+  }
+
+  public onDeployErrorEvent(): void {
+    this.resetNotifications();
+
+    this.notificationService.showToast({
+      type: 'error',
+      duration: CARBON_CONSTANTS.notificationDuration,
+      showClose: true,
+      title: this.translateService.instant('formManagement.notifications.deploymentError'),
+    });
   }
 
   private removeCreateAndEditQueryParams(): void {
@@ -155,5 +190,9 @@ export class FormManagementComponent extends PendingChangesComponent {
       queryParams: {edit: null},
       queryParamsHandling: 'merge',
     });
+  }
+
+  private resetNotifications(): void {
+    this.notificationService.notificationRefs.forEach(ref => this.notificationService.close(ref));
   }
 }

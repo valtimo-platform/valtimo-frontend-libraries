@@ -23,7 +23,6 @@ import {
   TagModule,
 } from 'carbon-components-angular';
 import {
-  AlertService,
   CarbonListModule,
   ConfirmationModalModule,
   EditorModel,
@@ -88,6 +87,8 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
   @Output() public readonly goBackEvent = new EventEmitter<void>();
   @Output() public readonly formModifiedEvent = new EventEmitter<void>();
   @Output() public readonly pendingChangesChangeEvent = new EventEmitter<boolean>();
+  @Output() public readonly deleteErrorEvent = new EventEmitter<boolean>();
+  @Output() public readonly deployErrorEvent = new EventEmitter<boolean>();
 
   public modifiedFormDefinition: FormioForm | null = null;
   public validJsonChange: boolean | null = null;
@@ -155,7 +156,6 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
   private _editorInitialized = false;
 
   constructor(
-    private readonly alertService: AlertService,
     private readonly formManagementService: FormManagementService,
     private readonly modalService: ModalService,
     private readonly pageTitleService: PageTitleService,
@@ -212,23 +212,14 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
             default:
               return this.formManagementService.deleteFormDefinition(definition.id);
           }
-        }),
-        switchMap(() => this.context$)
+        })
       )
       .subscribe({
-        next: context => {
-          switch (context) {
-            case 'case':
-              this.deleteEvent.emit();
-              break;
-            case 'independent':
-            default:
-              this.router.navigate(['/form-management']);
-          }
-          this.alertService.success('Form deleted');
+        next: () => {
+          this.deleteEvent.emit();
         },
         error: () => {
-          this.alertService.error('Error deleting Form');
+          this.deleteErrorEvent.emit();
         },
       });
   }
@@ -265,24 +256,14 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
             default:
               return this.formManagementService.modifyFormDefinition(request);
           }
-        }),
-        switchMap(() => this.context$)
+        })
       )
       .subscribe({
-        next: context => {
-          switch (context) {
-            case 'case':
-              this.formModifiedEvent.emit();
-              break;
-            case 'independent':
-            default:
-              this.router.navigate(['/form-management']);
-          }
-
-          this.alertService.success('Form deployed');
+        next: () => {
+          this.formModifiedEvent.emit();
         },
         error: () => {
-          this.alertService.error('Error deploying Form');
+          this.deleteErrorEvent.emit();
         },
       });
   }
@@ -398,7 +379,6 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
     const definition = JSON.parse(formDefinition);
     if (!definition?.components) {
       this.reloading$.next(false);
-      this.alertService.error('Invalid form.io. Missing JSON field "components".');
       return;
     }
 
