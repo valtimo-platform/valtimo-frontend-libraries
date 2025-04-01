@@ -28,6 +28,7 @@ import {ManagementContext} from '@valtimo/config';
 })
 export class FormManagementListComponent {
   @Output() public readonly navigateToCreateEvent = new EventEmitter<void>();
+  @Output() public readonly navigateToUploadEvent = new EventEmitter<void>();
   @Output() public readonly navigateToEditEvent = new EventEmitter<string>();
 
   public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
@@ -121,6 +122,10 @@ export class FormManagementListComponent {
 
   public navigateToCreateRoute(): void {
     this.navigateToCreateEvent.emit();
+  }
+
+  public navigateToUploadRoute(): void {
+    this.navigateToUploadEvent.emit();
   }
 
   public paginationClicked(page: number): void {

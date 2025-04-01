@@ -28,6 +28,7 @@ import {ManagementContext} from '@valtimo/config';
 export class FormManagementCreateComponent {
   @Output() public readonly goBackEvent = new EventEmitter<void>();
   @Output() public readonly afterCreateEvent = new EventEmitter<string>();
+  @Output() public readonly afterUploadEvent = new EventEmitter<string>();
 
   public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
     map(data => data && (data['context'] as ManagementContext))
@@ -97,9 +98,7 @@ export class FormManagementCreateComponent {
         switchMap(formDefinition => combineLatest([of(formDefinition), this.route.queryParams])),
         tap(([formDefinition, params]) => {
           if (params?.upload === 'true') {
-            // this.router.navigate(['/form-management/edit', formDefinition.id], {
-            //   queryParams: {upload: 'true'},
-            // });
+            this.afterUploadEvent.emit(formDefinition.id);
           } else {
             this.afterCreateEvent.emit(formDefinition.id);
           }

@@ -7,6 +7,7 @@
   <valtimo-form-management-list
     *ngIf="!obs.hasCreateQueryParam && !obs.editQueryParam"
     (navigateToCreateEvent)="onNavigateToCreateEvent()"
+    (navigateToUploadEvent)="onNavigateToUploadEvent()"
     (navigateToEditEvent)="onFormDefinitionEditEvent($event)"
   ></valtimo-form-management-list>
 
@@ -14,6 +15,7 @@
     *ngIf="obs.hasCreateQueryParam && !obs.editQueryParam"
     (goBackEvent)="onGoBackFromCreateEvent()"
     (afterCreateEvent)="onFormDefinitionCreateEvent($event)"
+    (afterUploadEvent)="onFormDefinitionUploadEvent($event)"
   ></valtimo-form-management-create>
 
   <valtimo-form-management-edit

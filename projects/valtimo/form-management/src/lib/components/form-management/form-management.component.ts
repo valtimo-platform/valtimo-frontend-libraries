@@ -15,7 +15,7 @@
  */
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {CARBON_CONSTANTS, PendingChangesComponent} from '@valtimo/components';
 import {FormManagementCreateComponent} from '../form-management-create';
 import {FormManagementListComponent} from '../form-management-list';
@@ -61,11 +61,15 @@ export class FormManagementComponent extends PendingChangesComponent {
   }
 
   public onNavigateToCreateEvent(): void {
-    this.addCreateQueryParams();
+    this.addQueryParams({create: true});
+  }
+
+  public onNavigateToUploadEvent(): void {
+    this.addQueryParams({create: true, upload: true});
   }
 
   public onGoBackFromCreateEvent(): void {
-    this.removeCreateQueryParams();
+    this.removeQueryParams(['create']);
   }
 
   public onPendingChangesChangeEvent(event: boolean): void {
@@ -86,18 +90,32 @@ export class FormManagementComponent extends PendingChangesComponent {
       title: this.translateService.instant('formManagement.notifications.created'),
     });
 
-    this.removeCreateQueryParams();
-    this.addEditQueryParams(formDefinitionId);
+    this.removeQueryParams(['create']);
+    this.addQueryParams({edit: formDefinitionId});
+  }
+
+  public onFormDefinitionUploadEvent(formDefinitionId: string): void {
+    this.resetNotifications();
+
+    this.notificationService.showToast({
+      type: 'success',
+      duration: CARBON_CONSTANTS.notificationDuration,
+      showClose: true,
+      title: this.translateService.instant('formManagement.notifications.created'),
+    });
+
+    this.removeQueryParams(['create']);
+    this.addQueryParams({edit: formDefinitionId, upload: true});
   }
 
   public onFormDefinitionEditEvent(formDefinitionId: string): void {
-    this.removeCreateQueryParams();
-    this.addEditQueryParams(formDefinitionId);
+    this.removeQueryParams(['create']);
+    this.addQueryParams({edit: formDefinitionId});
   }
 
   public onModifiedEvent(isDelete = false): void {
     this.onDeactivatePendingChanges();
-    this.removeCreateAndEditQueryParams();
+    this.removeQueryParams(['create', 'edit', 'upload']);
 
     this.resetNotifications();
 
@@ -113,14 +131,14 @@ export class FormManagementComponent extends PendingChangesComponent {
 
   public onGoBackEvent(): void {
     if (!this.pendingChanges) {
-      this.removeCreateAndEditQueryParams();
+      this.removeQueryParams(['create', 'edit', 'upload']);
     } else {
       const canDeactivate = this.canDeactivate() as Observable<boolean>;
       const isObservable = !!canDeactivate?.subscribe;
 
       isObservable &&
         canDeactivate.subscribe(navigateAway => {
-          if (navigateAway) this.removeCreateAndEditQueryParams();
+          if (navigateAway) this.removeQueryParams(['create', 'edit', 'upload']);
         });
     }
   }
@@ -147,11 +165,6 @@ export class FormManagementComponent extends PendingChangesComponent {
     });
   }
 
-  private removeCreateAndEditQueryParams(): void {
-    this.removeCreateQueryParams();
-    this.removeEditQueryParams();
-  }
-
   private onActivatePendingChanges(): void {
     this.pendingChanges = true;
   }
@@ -160,34 +173,18 @@ export class FormManagementComponent extends PendingChangesComponent {
     this.pendingChanges = false;
   }
 
-  private addCreateQueryParams(): void {
+  private removeQueryParams(params: string[]): void {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {create: true},
+      queryParams: params.reduce((acc, curr) => ({...acc, [curr]: null}), {}),
       queryParamsHandling: 'merge',
     });
   }
 
-  private removeCreateQueryParams(): void {
+  private addQueryParams(queryParams: Params): void {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {create: null},
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  private addEditQueryParams(formDefinitionId: string): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {edit: formDefinitionId},
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  private removeEditQueryParams(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {edit: null},
+      queryParams,
       queryParamsHandling: 'merge',
     });
   }

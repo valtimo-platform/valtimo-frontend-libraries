@@ -177,6 +177,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._alertSub.unsubscribe();
     this.pageTitleService.enableReset();
+    this.pageTitleService.clearPageActionsViewContainerRef();
   }
 
   public formBuilderChanged(event, definition: EditorModel): void {
