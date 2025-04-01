@@ -63,7 +63,7 @@ import {ResourceModule} from '@valtimo/resource';
 import {FormioComponent} from './form-io/form-io.component';
 import {FormModule} from '@valtimo/form';
 import {UploadShowcaseComponent} from './upload-showcase/upload-showcase.component';
-import {CustomDossierTabComponent} from './custom-dossier-tab/custom-dossier-tab.component';
+import {CustomCaseTabComponent} from './custom-case-tab/custom-case-tab.component';
 import {CustomMapsTabComponent} from './custom-maps-tab/custom-maps-tab.component';
 import {SwaggerModule} from '@valtimo/swagger';
 import {AnalyseModule} from '@valtimo/analyse';
@@ -137,7 +137,7 @@ export function tabsFactory() {
     [DefaultTabs.documents, CaseDetailTabDocumentsComponent],
     [DefaultTabs.notes, CaseDetailTabNotesComponent],
     ['custom-maps', CustomMapsTabComponent],
-    ['custom-dossier', CustomDossierTabComponent],
+    ['custom-dossier', CustomCaseTabComponent],
   ]);
 }
 
@@ -148,7 +148,7 @@ export function tabsFactory() {
     StartProcessCustomFormComponent,
     FormioComponent,
     UploadShowcaseComponent,
-    CustomDossierTabComponent,
+    CustomCaseTabComponent,
     CustomMapsTabComponent,
   ],
   imports: [
@@ -246,7 +246,7 @@ export function tabsFactory() {
     {
       provide: CASE_TAB_TOKEN,
       useValue: {
-        'custom-dossier-tab': CustomDossierTabComponent,
+        'custom-dossier-tab': CustomCaseTabComponent,
         zaakobjecten: CaseDetailTabZaakobjectenComponent,
         contactmomenten: CaseDetailTabContactMomentsComponent,
       },
@@ -263,7 +263,7 @@ export function tabsFactory() {
     {
       provide: CUSTOM_CASE_WIDGET_TOKEN,
       useValue: {
-        caseWidgetComponent: CustomDossierTabComponent,
+        caseWidgetComponent: CustomCaseTabComponent,
       },
     },
   ],
