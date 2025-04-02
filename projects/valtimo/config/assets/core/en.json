@@ -519,6 +519,14 @@
       "deletionError": "Error deleting form",
       "deployed": "Form deployed",
       "deploymentError": "Error deploying form"
+    },
+    "upload": {
+      "modalTitle": "Upload form definition",
+      "title": "Upload file",
+      "description": "Only form definition files are supported.",
+      "buttonText": "Select file",
+      "success": "Upload successful",
+      "failure": "Upload failed"
     }
   },
   "caseManagement": {

@@ -1,173 +1,117 @@
+/*
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import {CommonModule} from '@angular/common';
 import {
-  AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
   OnDestroy,
+  OnInit,
   Output,
-  ViewChild,
 } from '@angular/core';
-import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {DropzoneModule, ModalComponent, ModalModule, WidgetModule} from '@valtimo/components'; // Assuming this is the location
-import {DocumentService} from '@valtimo/document';
-import {CommonModule} from '@angular/common';
-import {ButtonModule, InputModule} from 'carbon-components-angular';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms'; // Include FormBuilder, FormControl
+import {CARBON_CONSTANTS} from '@valtimo/components';
+import {
+  ButtonModule,
+  FileUploaderModule,
+  LayerModule,
+  ModalModule,
+  NotificationService,
+} from 'carbon-components-angular';
+import {BehaviorSubject, map, Observable, startWith, Subscription} from 'rxjs';
 
 @Component({
   selector: 'valtimo-form-management-upload',
   templateUrl: './form-management-upload.component.html',
   styleUrls: ['./form-management-upload.component.scss'],
+  providers: [NotificationService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     CommonModule,
     TranslateModule,
-    ButtonModule,
-    InputModule,
+    FileUploaderModule,
     ModalModule,
-    FormsModule,
+    LayerModule,
     ReactiveFormsModule,
-    WidgetModule,
-    DropzoneModule,
+    ButtonModule,
   ],
 })
-export class FormManagementUploadComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('uploadFormDefinitionModal') modal: ModalComponent;
+export class FormManagementUploadComponent implements OnInit, OnDestroy {
+  @Input() public readonly show$: Observable<boolean>;
 
-  @Input() show$: Observable<boolean>;
-  @Output() definitionUploaded: EventEmitter<any> = new EventEmitter();
+  @Output() public readonly definitionUploaded: EventEmitter<any> = new EventEmitter();
 
-  readonly clear$ = new Subject();
-  readonly jsonString$ = new BehaviorSubject<string>('');
-  readonly error$ = new BehaviorSubject<string>('');
-  readonly disabled$ = new BehaviorSubject<boolean>(false);
+  public readonly modalOpen$ = new BehaviorSubject<boolean>(false);
 
-  private showSubscription: Subscription;
-  private fileSubscription: Subscription;
-  private errorSubscription: Subscription;
+  public readonly ACCEPTED_FILES: string[] = ['json'];
 
-  private readonly file$ = new BehaviorSubject<File>(undefined);
+  public readonly form = this.formBuilder.group({
+    file: this.formBuilder.control(new Set<any>(), [Validators.required]),
+  });
+
+  public readonly fileSelected$ = this.form.get('file')?.valueChanges.pipe(
+    startWith(null),
+    map(value => !!(value instanceof Set && value.size > 0))
+  );
+
+  private readonly _subscriptions = new Subscription();
 
   constructor(
-    private readonly documentService: DocumentService,
+    private readonly formBuilder: FormBuilder,
+    private readonly notificationService: NotificationService,
     private readonly translateService: TranslateService
   ) {}
 
-  ngAfterViewInit(): void {
-    this.openShowSubscription();
-    this.openFileSubscription();
+  public ngOnInit(): void {
+    this._subscriptions.add(
+      this.show$.subscribe(show => {
+        this.modalOpen$.next(show);
+      })
+    );
   }
 
-  ngOnDestroy(): void {
-    this.showSubscription.unsubscribe();
-    this.fileSubscription.unsubscribe();
-    this.closeErrorSubscription();
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
-  setFile(file: File): void {
-    this.clearError();
-    this.file$.next(file);
+  public closeModal(): void {
+    this.modalOpen$.next(false);
+
+    setTimeout(() => {
+      this.form.reset();
+    }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
-  uploadDefinition(): void {
-    this.disable();
+  public async uploadFormDefinition(): Promise<void> {
+    const formioDefinition: File = this.form.value?.file?.values()?.next()?.value?.file;
+    const formioDefinitionString = await formioDefinition.text();
 
-    this.jsonString$.pipe(take(1)).subscribe(definition => {
-      this.closeErrorSubscription();
-      this.clearError();
-      this.enable();
-      this.hideModal();
-      this.definitionUploaded.emit(definition);
+    if (!formioDefinitionString) return;
+
+    this.notificationService.showNotification({
+      type: 'success',
+      title: this.translateService.instant('formManagement.upload.success'),
+      duration: CARBON_CONSTANTS.notificationDuration,
     });
-  }
 
-  private openErrorSubscription(errorCode: string): void {
-    this.closeErrorSubscription();
-    this.errorSubscription = this.translateService.stream(errorCode).subscribe(error => {
-      this.error$.next(error);
-    });
-  }
+    this.definitionUploaded.emit(formioDefinitionString);
 
-  private closeErrorSubscription(): void {
-    if (this.errorSubscription) {
-      this.errorSubscription.unsubscribe();
-    }
-  }
-
-  private clearError(): void {
-    this.error$.next('');
-  }
-
-  private openFileSubscription(): void {
-    this.fileSubscription = this.file$.subscribe(file => {
-      if (file) {
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-          const result = reader.result.toString();
-          if (this.stringIsValidJson(result)) {
-            this.jsonString$.next(result);
-          } else {
-            this.clearJsonString();
-            this.error$.next(this.translateService.instant('dropzone.error.invalidJson'));
-          }
-        };
-
-        reader.readAsText(file);
-      } else {
-        this.clearJsonString();
-      }
-    });
-  }
-
-  private openShowSubscription(): void {
-    this.showSubscription = this.show$.subscribe(show => {
-      if (show) {
-        this.showModal();
-      } else {
-        this.hideModal();
-      }
-
-      this.clearJsonString();
-      this.clearError();
-      this.clearDropzone();
-    });
-  }
-
-  private clearJsonString(): void {
-    this.jsonString$.next('');
-  }
-
-  private clearDropzone(): void {
-    this.clear$.next(null);
-  }
-
-  private showModal(): void {
-    this.modal.show();
-  }
-
-  private hideModal(): void {
-    this.modal.hide();
-  }
-
-  private stringIsValidJson(string: string) {
-    try {
-      JSON.parse(string)?.formDefinition?.components;
-    } catch (e) {
-      this.clearDropzone();
-      this.openErrorSubscription('dropzone.error.invalidFormDef');
-      return false;
-    }
-    return true;
-  }
-
-  private disable(): void {
-    this.disabled$.next(true);
-  }
-
-  private enable(): void {
-    this.disabled$.next(false);
+    this.modalOpen$.next(false);
   }
 }

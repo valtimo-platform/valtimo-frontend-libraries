@@ -518,6 +518,14 @@
       "deletionError": "Fehler beim Löschen des Formulars",
       "deployed": "Formular bereitgestellt",
       "deploymentError": "Fehler beim Bereitstellen des Formulars"
+    },
+    "upload": {
+      "modalTitle": "Formulardefinition hochladen",
+      "title": "Datei hochladen",
+      "description": "Nur Formulardefinitionsdateien werden unterstützt.",
+      "buttonText": "Datei auswählen",
+      "success": "Upload erfolgreich",
+      "failure": "Upload fehlgeschlagen"
     }
   },
   "caseManagement": {
