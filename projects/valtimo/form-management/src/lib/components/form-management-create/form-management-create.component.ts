@@ -1,10 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-import {CARBON_CONSTANTS, ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components';
+import {ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components';
 import {FormManagementService} from '../../services';
 import {CreateFormDefinitionRequest, FormManagementParams} from '../../models';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
+import {combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {noDuplicateFormValidator} from '../../validators/no-duplicate-form.validator';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
@@ -39,16 +39,6 @@ import {take} from 'rxjs/operators';
   ],
 })
 export class FormManagementCreateComponent implements OnInit {
-  public readonly open$ = new BehaviorSubject<boolean>(false);
-
-  @Input() public set open(value: boolean) {
-    this.open$.next(value);
-
-    setTimeout(() => {
-      if (!value) this.form?.reset();
-    }, CARBON_CONSTANTS.modalAnimationMs);
-  }
-
   @Output() public readonly goBackEvent = new EventEmitter<void>();
   @Output() public readonly afterCreateEvent = new EventEmitter<string>();
   @Output() public readonly afterUploadEvent = new EventEmitter<string>();
