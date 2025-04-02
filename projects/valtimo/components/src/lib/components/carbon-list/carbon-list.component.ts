@@ -71,7 +71,6 @@ import {
   Pagination,
   ViewType,
 } from '../../models';
-import {EllipsisPipe} from '../../pipes';
 import {KeyStateService} from '../../services/key-state.service';
 import {ViewContentService} from '../view-content/view-content.service';
 import {CarbonListFilterPipe} from './CarbonListFilterPipe.directive';

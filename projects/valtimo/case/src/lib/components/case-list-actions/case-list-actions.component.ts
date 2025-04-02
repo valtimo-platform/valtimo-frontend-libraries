@@ -63,11 +63,9 @@ export class CaseListActionsComponent implements OnInit {
     })
   );
 
-
   private selectedProcessDefinitionCaseDefinition: ProcessDefinitionCaseDefinition | null = null;
   public readonly startSelectionModalOpen$ = new BehaviorSubject<boolean>(false);
 
-  private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
   private _cachedAssociatedProcessDocumentDefinitions: Array<ProcessDefinitionCaseDefinition> = [];
 
@@ -95,7 +93,7 @@ export class CaseListActionsComponent implements OnInit {
   }
 
   public selectProcess(processDefinitionCaseDefinition: ProcessDefinitionCaseDefinition): void {
-    this.selectedProcessDefinitionCaseDefinition = associatedProcessDocumentDefinitions[0];
+    this.selectedProcessDefinitionCaseDefinition = processDefinitionCaseDefinition[0];
     this.startSelectionModalOpen$.next(false);
     this.showStartProcessModal();
   }

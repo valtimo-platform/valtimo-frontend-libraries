@@ -80,9 +80,6 @@ export class CaseSupportingProcessStartModalComponent {
   private readonly _formCustomComponentConfig$ = new BehaviorSubject<
     FormCustomComponentConfig | {}
   >({});
-  private readonly _formCustomComponentConfig$ = new BehaviorSubject<
-    FormCustomComponentConfig | {}
-  >({});
 
   constructor(
     private readonly router: Router,
@@ -237,11 +234,11 @@ export class CaseSupportingProcessStartModalComponent {
         customComponent
       ) as ComponentRef<FormCustomComponent>;
 
-      combineLatest([this.processDefinitionKey$, this.documentDefinitionName$])
+      combineLatest([this.processDefinitionKey$, this.caseDefinitionKey$])
         .pipe(take(1))
-        .subscribe(([processDefinitionKey, documentDefinitionName]) => {
+        .subscribe(([processDefinitionKey, caseDefinitionKey]) => {
           renderedComponent.instance.processDefinitionKey = processDefinitionKey;
-          renderedComponent.instance.documentDefinitionName = documentDefinitionName;
+          renderedComponent.instance.documentDefinitionName = caseDefinitionKey;
         });
 
       renderedComponent.instance.submittedEvent.subscribe(() => {

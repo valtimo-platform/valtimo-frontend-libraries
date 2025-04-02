@@ -285,7 +285,6 @@ export class CaseProcessStartModalComponent implements OnInit, OnDestroy {
     );
   }
 
-
   private setFormCustomComponent(formCustomComponentKey: string): void {
     this.formCustomComponentDynamicContainer.clear();
     if (!this.formCustomComponentConfig) return;
@@ -296,7 +295,7 @@ export class CaseProcessStartModalComponent implements OnInit, OnDestroy {
       ) as ComponentRef<FormCustomComponent>;
 
       renderedComponent.instance.processDefinitionKey = this.processDefinitionKey;
-      renderedComponent.instance.documentDefinitionName = this.documentDefinitionName;
+      renderedComponent.instance.documentDefinitionName = this.caseDefinitionKey;
 
       renderedComponent.instance.submittedEvent.subscribe(() => {
         this.closeCdsModal();
