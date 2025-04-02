@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
@@ -61,64 +62,60 @@ export class FormManagementComponent extends PendingChangesComponent {
   }
 
   public onNavigateToCreateEvent(): void {
-    this.addQueryParams({create: true});
+    this.updateQueryParams({create: true});
   }
 
   public onNavigateToUploadEvent(): void {
-    this.addQueryParams({create: true, upload: true});
+    this.updateQueryParams({create: true, upload: true});
   }
 
   public onGoBackFromCreateEvent(): void {
-    this.removeQueryParams(['create']);
+    this.updateQueryParams({}, ['create']);
   }
 
-  public onPendingChangesChangeEvent(event: boolean): void {
-    if (event) {
-      this.onActivatePendingChanges();
+  public onGoBackEvent(): void {
+    if (!this.pendingChanges) {
+      this.updateQueryParams({}, ['create', 'edit', 'upload']);
     } else {
-      this.onDeactivatePendingChanges();
+      const canDeactivate = this.canDeactivate() as Observable<boolean>;
+      const isObservable = !!canDeactivate?.subscribe;
+      isObservable &&
+        canDeactivate.subscribe(navigateAway => {
+          if (navigateAway) this.updateQueryParams({}, ['create', 'edit', 'upload']);
+        });
     }
   }
 
   public onFormDefinitionCreateEvent(formDefinitionId: string): void {
     this.resetNotifications();
-
     this.notificationService.showToast({
       type: 'success',
       duration: CARBON_CONSTANTS.notificationDuration,
       showClose: true,
       title: this.translateService.instant('formManagement.notifications.created'),
     });
-
-    this.removeQueryParams(['create']);
-    setTimeout(() => this.addQueryParams({edit: formDefinitionId}));
+    this.updateQueryParams({edit: formDefinitionId}, ['create']);
   }
 
   public onFormDefinitionUploadEvent(formDefinitionId: string): void {
     this.resetNotifications();
-
     this.notificationService.showToast({
       type: 'success',
       duration: CARBON_CONSTANTS.notificationDuration,
       showClose: true,
       title: this.translateService.instant('formManagement.notifications.created'),
     });
-
-    this.removeQueryParams(['create']);
-    setTimeout(() => this.addQueryParams({edit: formDefinitionId, upload: true}));
+    this.updateQueryParams({edit: formDefinitionId, upload: true}, ['create']);
   }
 
   public onFormDefinitionEditEvent(formDefinitionId: string): void {
-    this.removeQueryParams(['create']);
-    setTimeout(() => this.addQueryParams({edit: formDefinitionId}));
+    this.updateQueryParams({edit: formDefinitionId}, ['create']);
   }
 
   public onModifiedEvent(isDelete = false): void {
     this.onDeactivatePendingChanges();
-    this.removeQueryParams(['create', 'edit', 'upload']);
-
+    this.updateQueryParams({}, ['create', 'edit', 'upload']);
     this.resetNotifications();
-
     this.notificationService.showToast({
       type: 'success',
       duration: CARBON_CONSTANTS.notificationDuration,
@@ -129,23 +126,16 @@ export class FormManagementComponent extends PendingChangesComponent {
     });
   }
 
-  public onGoBackEvent(): void {
-    if (!this.pendingChanges) {
-      this.removeQueryParams(['create', 'edit', 'upload']);
+  public onPendingChangesChangeEvent(event: boolean): void {
+    if (event) {
+      this.onActivatePendingChanges();
     } else {
-      const canDeactivate = this.canDeactivate() as Observable<boolean>;
-      const isObservable = !!canDeactivate?.subscribe;
-
-      isObservable &&
-        canDeactivate.subscribe(navigateAway => {
-          if (navigateAway) this.removeQueryParams(['create', 'edit', 'upload']);
-        });
+      this.onDeactivatePendingChanges();
     }
   }
 
   public onDeleteErrorEvent(): void {
     this.resetNotifications();
-
     this.notificationService.showToast({
       type: 'error',
       duration: CARBON_CONSTANTS.notificationDuration,
@@ -156,7 +146,6 @@ export class FormManagementComponent extends PendingChangesComponent {
 
   public onDeployErrorEvent(): void {
     this.resetNotifications();
-
     this.notificationService.showToast({
       type: 'error',
       duration: CARBON_CONSTANTS.notificationDuration,
@@ -173,18 +162,12 @@ export class FormManagementComponent extends PendingChangesComponent {
     this.pendingChanges = false;
   }
 
-  private removeQueryParams(params: string[]): void {
+  private updateQueryParams(addParams: Params, removeParams: string[] = []): void {
+    const clearedParams = removeParams.reduce((acc, curr) => ({...acc, [curr]: null}), {});
+    const mergedParams = {...clearedParams, ...addParams};
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: params.reduce((acc, curr) => ({...acc, [curr]: null}), {}),
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  private addQueryParams(queryParams: Params): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams,
+      queryParams: mergedParams,
       queryParamsHandling: 'merge',
     });
   }
