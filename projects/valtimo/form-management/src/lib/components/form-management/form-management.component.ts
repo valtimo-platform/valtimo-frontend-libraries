@@ -91,7 +91,7 @@ export class FormManagementComponent extends PendingChangesComponent {
     });
 
     this.removeQueryParams(['create']);
-    this.addQueryParams({edit: formDefinitionId});
+    setTimeout(() => this.addQueryParams({edit: formDefinitionId}));
   }
 
   public onFormDefinitionUploadEvent(formDefinitionId: string): void {
@@ -105,12 +105,12 @@ export class FormManagementComponent extends PendingChangesComponent {
     });
 
     this.removeQueryParams(['create']);
-    this.addQueryParams({edit: formDefinitionId, upload: true});
+    setTimeout(() => this.addQueryParams({edit: formDefinitionId, upload: true}));
   }
 
   public onFormDefinitionEditEvent(formDefinitionId: string): void {
     this.removeQueryParams(['create']);
-    this.addQueryParams({edit: formDefinitionId});
+    setTimeout(() => this.addQueryParams({edit: formDefinitionId}));
   }
 
   public onModifiedEvent(isDelete = false): void {

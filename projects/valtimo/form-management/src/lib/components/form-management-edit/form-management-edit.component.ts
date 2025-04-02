@@ -7,7 +7,7 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, map, Observable, of, Subscription} from 'rxjs';
 import {distinctUntilChanged, filter, switchMap, take, tap} from 'rxjs/operators';
 import {TranslateModule} from '@ngx-translate/core';
@@ -160,7 +160,6 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService,
     private readonly pageTitleService: PageTitleService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
     private readonly shellService: ShellService,
     private readonly pageHeaderService: PageHeaderService,
     private readonly iconService: IconService
