@@ -87,6 +87,8 @@ import {CaseManagementWidgetsEditorComponent} from './components/case-management
 import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
 import {CaseManagementGeneralComponent} from './components/case-management-general/case-management-general.component';
 import {CaseManagementCaseHandlerComponent} from './components/case-management-general/components/case-management-case-handler/case-management-case-handler.component';
+import {CaseManagementGlobalActiveVersionModalComponent} from './components/case-management-global-active-version-modal/case-management-global-active-version-modal.component';
+import {CaseManagementConfirmationGlobalVersionModal} from './components/case-management-confirmation-global-version-modal/case-management-confirmation-global-version-modal';
 
 @NgModule({
   declarations: [
@@ -101,6 +103,8 @@ import {CaseManagementCaseHandlerComponent} from './components/case-management-g
     CaseManagementListColumnsComponent,
     CaseManagementTabsComponent,
     CaseManagementAddTabModalComponent,
+    CaseManagementGlobalActiveVersionModalComponent,
+    CaseManagementConfirmationGlobalVersionModal,
     TabFormComponent,
     CaseManagementEditTabModalComponent,
     CaseManagementDetailContainerActionsComponent,

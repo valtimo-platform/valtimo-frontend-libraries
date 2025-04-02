@@ -31,7 +31,7 @@ import {PageHeaderService} from '@valtimo/components';
 import {ListItem, Notification, NotificationService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {take} from 'rxjs/operators';
-import {CaseManagementService, CaseDetailService} from '../../services';
+import {CaseDetailService, CaseManagementService} from '../../services';
 import {CaseManagementRemoveModalComponent} from '../case-management-remove-modal/case-management-remove-modal.component';
 
 @Component({
@@ -60,6 +60,8 @@ export class CaseManagementDetailContainerActionsComponent {
 
   private readonly _caseDefinitionName$ = this.caseDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
+  public readonly showGlobalVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
+  public readonly isOlderThanLatestVersion$ = new BehaviorSubject<boolean>(false);
 
   public readonly selectedDocumentDefinition$ = this.caseDetailService.documentDefinition$;
 
@@ -78,6 +80,7 @@ export class CaseManagementDetailContainerActionsComponent {
         of(caseVersionTag),
       ])
     ),
+    tap(versions => console.log('Version: ', versions)),
     map(([caseDefinitionVersions, caseVersionTag]) => {
       const mapping: ListItem[] | null =
         caseDefinitionVersions?.map((caseDefinitionVersion: string) => ({
@@ -165,6 +168,14 @@ export class CaseManagementDetailContainerActionsComponent {
 
       this._caseRemoveModal.openModal(definition);
     });
+  }
+
+  public closeGlobalCaseConfirmationModal(): void {
+    this.showGlobalVersionConfirmationModal$.next(false);
+  }
+
+  public setGlobalActiveCaseVersion(): void {
+    console.log('Confirm setting of global active case version');
   }
 
   private startExporting(): void {

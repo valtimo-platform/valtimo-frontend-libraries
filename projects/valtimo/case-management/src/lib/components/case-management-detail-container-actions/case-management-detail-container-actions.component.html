@@ -36,13 +36,19 @@
 </div>
 
 <ng-template #versionSelection let-obs="obs">
+  <!--  <cds-dropdown-->
+  <!--    class="version-selection"-->
+  <!--    [disabled]="obs.loadingVersion || (obs.versionListItems?.length || []) === 1"-->
+  <!--    [skeleton]="obs.loadingVersion"-->
+  <!--    (selected)="setVersion($event)"-->
+  <!--    [size]="obs.compactMode ? 'sm' : 'md'"-->
+  <!--  >-->
   <cds-dropdown
     class="version-selection"
-    [disabled]="obs.loadingVersion || (obs.versionListItems?.length || []) === 1"
-    [skeleton]="obs.loadingVersion"
     (selected)="setVersion($event)"
     [size]="obs.compactMode ? 'sm' : 'md'"
   >
+    <!--    <cds-dropdown-list [items]="obs.versions || []"></cds-dropdown-list>-->
     <cds-dropdown-list [items]="obs.versions || []"></cds-dropdown-list>
   </cds-dropdown>
 </ng-template>
@@ -70,6 +76,13 @@
       [disabled]="obs.exporting || obs.loadingVersion"
       (selected)="openCaseRemoveModal()"
       >{{ 'Remove document definition' | translate }}</cds-overflow-menu-option
+    >
+
+    <cds-overflow-menu-option
+      [id]="'setGlobalActiveVersion'"
+      [disabled]="obs.exporting"
+      (selected)="setGlobalActiveVersion()"
+      >{{ 'caseManagement.setGlobalActiveVersion' | translate }}</cds-overflow-menu-option
     >
   </cds-overflow-menu>
 </ng-template>
@@ -99,3 +112,34 @@
 </ng-template>
 
 <valtimo-case-management-remove-modal #caseRemoveModal></valtimo-case-management-remove-modal>
+
+<ng-template #olderVersionWarning>
+  <cds-inline-notification
+    *ngIf="isOlderThanLatestVersion$ | async"
+    status="warning"
+    title="{{ 'caseManagement.confirmationGlobalVersionModal.warningTitle' | translate }}"
+    subtitle="{{ 'caseManagement.confirmationGlobalVersionModal.warningMessage' | translate }}"
+    hideCloseButton="true"
+  ></cds-inline-notification>
+</ng-template>
+
+<valtimo-confirmation-modal
+  [showModalSubject$]="showGlobalVersionConfirmationModal$"
+  [content]="olderVersionWarning"
+  cancelButtonTextTranslationKey="caseManagement.globalActiveVersionModal.cancel"
+  confirmButtonTextTranslationKey="caseManagement.globalActiveVersionModal.continue"
+  contentTranslationKey="caseManagement.globalActiveVersionModal.description"
+  titleTranslationKey="caseManagement.globalActiveVersionModal.title"
+  (cancelEvent)="closeGlobalCaseConfirmationModal()"
+  (confirmEvent)="setGlobalActiveCaseVersion()"
+></valtimo-confirmation-modal>
+
+<valtimo-confirmation-modal
+  [showModalSubject$]="showGlobalVersionConfirmationModal$"
+  cancelButtonTextTranslationKey="caseManagement.confirmationGlobalVersionModal.cancel"
+  confirmButtonTextTranslationKey="caseManagement.confirmationGlobalVersionModal.confirm"
+  contentTranslationKey="caseManagement.confirmationGlobalVersionModal.description"
+  titleTranslationKey="caseManagement.confirmationGlobalVersionModal.title"
+  (cancelEvent)="closeGlobalCaseConfirmationModal()"
+  (confirmEvent)="setGlobalActiveCaseVersion()"
+></valtimo-confirmation-modal>
