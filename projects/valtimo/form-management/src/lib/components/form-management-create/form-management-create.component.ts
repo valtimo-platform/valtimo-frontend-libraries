@@ -1,10 +1,10 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-import {ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components'; // Assuming this is your alert service location
+import {CARBON_CONSTANTS, ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components';
 import {FormManagementService} from '../../services';
 import {CreateFormDefinitionRequest, FormManagementParams} from '../../models';
-import {combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {noDuplicateFormValidator} from '../../validators/no-duplicate-form.validator';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
@@ -16,6 +16,7 @@ import {
   TilesModule,
 } from 'carbon-components-angular';
 import {ManagementContext} from '@valtimo/config';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-form-management-create',
@@ -37,8 +38,17 @@ import {ManagementContext} from '@valtimo/config';
     ButtonModule,
   ],
 })
-export class FormManagementCreateComponent {
-  @Input() public readonly open = false;
+export class FormManagementCreateComponent implements OnInit {
+  public readonly open$ = new BehaviorSubject<boolean>(false);
+
+  @Input() public set open(value: boolean) {
+    this.open$.next(value);
+
+    setTimeout(() => {
+      if (!value) this.form?.reset();
+    }, CARBON_CONSTANTS.modalAnimationMs);
+  }
+
   @Output() public readonly goBackEvent = new EventEmitter<void>();
   @Output() public readonly afterCreateEvent = new EventEmitter<string>();
   @Output() public readonly afterUploadEvent = new EventEmitter<string>();
@@ -52,24 +62,13 @@ export class FormManagementCreateComponent {
     ? this.route.parent.params.pipe(
         map(({caseDefinitionName, caseVersionTag}) =>
           caseDefinitionName && caseVersionTag
-            ? {
-                definitionName: caseDefinitionName,
-                versionTag: caseVersionTag,
-              }
+            ? {definitionName: caseDefinitionName, versionTag: caseVersionTag}
             : null
         )
       )
     : of(null);
 
-  public readonly form = this.formBuilder.group({
-    name: new FormControl('', Validators.required, [
-      noDuplicateFormValidator(this.formManagementService),
-    ]),
-  });
-
-  public get formControls(): FormGroup['controls'] {
-    return this.form?.controls;
-  }
+  public form: FormGroup;
 
   constructor(
     private readonly formManagementService: FormManagementService,
@@ -77,14 +76,35 @@ export class FormManagementCreateComponent {
     private readonly route: ActivatedRoute
   ) {}
 
+  public ngOnInit(): void {
+    this.initForm();
+  }
+
+  private initForm(): void {
+    combineLatest([this.context$, this.caseManagementRouteParams$])
+      .pipe(
+        take(1),
+        tap(([context, caseManagementParams]) => {
+          this.form = this.formBuilder.group({
+            name: new FormControl('', Validators.required, [
+              noDuplicateFormValidator(context, caseManagementParams, this.formManagementService),
+            ]),
+          });
+        })
+      )
+      .subscribe();
+  }
+
+  public get formControls(): FormGroup['controls'] {
+    return this.form?.controls;
+  }
+
   public onBackButtonClick(): void {
     this.goBackEvent.emit();
   }
 
   public reset(): void {
-    this.form.setValue({
-      name: '',
-    });
+    this.form.setValue({name: ''});
   }
 
   public onCloseEvent(): void {
@@ -92,10 +112,7 @@ export class FormManagementCreateComponent {
   }
 
   public createFormDefinition(): void {
-    const emptyForm = {
-      display: 'form',
-      components: [],
-    };
+    const emptyForm = {display: 'form', components: []};
     const request: CreateFormDefinitionRequest = {
       name: this.form.value.name,
       formDefinition: JSON.stringify(emptyForm),

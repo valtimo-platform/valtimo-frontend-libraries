@@ -3,7 +3,7 @@
   class="form-management-create"
   size="sm"
   [cdsLayer]="0"
-  [open]="open"
+  [open]="open$ | async"
   (close)="onCloseEvent()"
 >
   <cds-modal-header [showCloseButton]="true" (closeSelect)="onCloseEvent()">
@@ -29,8 +29,6 @@
           type="text"
           id="name"
           formControlName="name"
-          class="form-control"
-          placeholder="Form definition name"
           [invalid]="formControls?.name?.touched && formControls?.name?.errors"
           required
         />
@@ -39,11 +37,11 @@
 
     <cds-modal-footer [cdsLayer]="1">
       <cds-modal-footer>
-        <button cdsButton="ghost" (click)="onBackButtonClick()">
+        <button cdsButton="ghost" (click)="$event.preventDefault(); onBackButtonClick()">
           {{ 'formManagement.back' | translate }}
         </button>
 
-        <button cdsButton="ghost" (click)="reset()">
+        <button cdsButton="ghost" (click)="$event.preventDefault(); reset()">
           {{ 'formManagement.reset' | translate | translate }}
         </button>
 
