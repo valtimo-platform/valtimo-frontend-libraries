@@ -162,6 +162,11 @@ export class CaseManagementDetailContainerActionsComponent {
     );
   }
 
+  public setGlobalActiveVersion(): void {
+    console.log('setGlobalActiveVersion');
+    this.showGlobalVersionConfirmationModal$.next(true);
+  }
+
   public openCaseRemoveModal(): void {
     this.selectedDocumentDefinition$.pipe(take(1)).subscribe(definition => {
       if (!definition) return;
