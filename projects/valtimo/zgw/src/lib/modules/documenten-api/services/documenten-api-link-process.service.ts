@@ -41,7 +41,7 @@ export class DocumentenApiLinkProcessService extends BaseApiService {
   ): Observable<UploadProcessLink> {
     return this.httpClient.get<UploadProcessLink>(
       this.getApiUrl(
-        `/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/feature-process/DOCUMENT_UPLOAD`
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/feature-process/DOCUMENT_UPLOAD`
       )
     );
   }
@@ -53,7 +53,7 @@ export class DocumentenApiLinkProcessService extends BaseApiService {
   ): Observable<UploadProcessLink> {
     return this.httpClient.put<UploadProcessLink>(
       this.getApiUrl(
-        `/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/feature-process`
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/feature-process`
       ),
       {
         processDefinitionKey,
@@ -68,7 +68,7 @@ export class DocumentenApiLinkProcessService extends BaseApiService {
   ): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(
-        `/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/feature-process/DOCUMENT_UPLOAD`
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/feature-process/DOCUMENT_UPLOAD`
       )
     );
   }
