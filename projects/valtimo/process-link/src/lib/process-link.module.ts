@@ -86,9 +86,7 @@ import {ImportPluginConfigurationComponent} from './components/import-plugin-con
     SelectUrlComponent,
     FormDisplayConfigurationComponent,
     SelectUIComponent,
-    ImportPluginConfigurationComponent,
-    SelectUIComponentComponent,
-    ImportPluginConfigurationComponent,
+    ImportPluginConfigurationComponent
   ],
   imports: [
     CommonModule,
