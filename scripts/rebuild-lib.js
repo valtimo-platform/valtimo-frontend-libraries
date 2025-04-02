@@ -10,35 +10,27 @@ const libRebuildLockFile = path.resolve(__dirname, `../.rebuilding-lib.lock`);
 async function createLockFile(lockFile) {
   try {
     await fs.writeFile(lockFile, 'rebuilding');
-    console.log(`🔒 Created lock file: ${lockFile}`);
+    console.log(`Created lock file: ${lockFile}`);
   } catch (err) {
-    console.error(`❌ Failed to create lock file: ${lockFile}`, err.message);
+    console.error(`Failed to create lock file: ${lockFile}`, err.message);
   }
 }
 
 async function removeLockFile(lockFile) {
   try {
     await fs.rm(lockFile);
-    console.log(`🔓 Removed lock file: ${lockFile}`);
+    console.log(`Removed lock file: ${lockFile}`);
   } catch (err) {
-    console.error(`⚠️ Failed to remove lock file: ${lockFile}`, err.message);
+    console.error(`Failed to remove lock file: ${lockFile}`, err.message);
   }
 }
 
-async function isFileExists(lockFile) {
-  return await fs
-    .access(lockFile)
-    .then(() => true)
-    .catch(() => false);
-}
-
 async function rebuild() {
-  // Step 1: Always create the general lock file
   await createLockFile(rebuildLockFile);
 
-  // Step 2: Create library-specific lock file
   await createLockFile(libRebuildLockFile);
-  console.log(`🔁 Rebuilding ${fullLibName}`);
+
+  console.log(`Rebuilding ${fullLibName}`);
 
   try {
     await new Promise((resolve, reject) => {
@@ -46,18 +38,13 @@ async function rebuild() {
 
       buildProc.on('exit', async code => {
         if (code === 0) {
-          console.log(`✅ Build completed for: ${libName}`);
+          console.log(`Build completed for: ${libName}`);
+
           await removeLockFile(libRebuildLockFile);
 
-          // Check if any other library-specific lock files exist
-          const remainingLocks = (await fs.readdir(path.resolve(__dirname, '../'))).filter(
-            file => file.startsWith('.rebuilding-') && file.endsWith('.lock')
-          );
+          console.log(`Library built successfully. Removing general lock file.`);
 
-          if (remainingLocks.length === 0) {
-            console.log(`🎉 All libraries built successfully. Removing general lock file.`);
-            await removeLockFile(rebuildLockFile);
-          }
+          await removeLockFile(rebuildLockFile);
 
           resolve();
         } else {
@@ -66,7 +53,8 @@ async function rebuild() {
       });
     });
   } catch (err) {
-    console.error(`❌ Error during rebuild of ${fullLibName}:`, err.message);
+    console.error(`Error during rebuild of ${fullLibName}:`, err.message);
+
     // On error, remove only the library-specific lock file to allow retry
     await removeLockFile(libRebuildLockFile);
   }
