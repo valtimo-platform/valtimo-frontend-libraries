@@ -1,55 +1,56 @@
-<div class="main-content">
-  <div class="container-fluid">
-    <div class="col-12 px-0 mb-5">
-      <valtimo-widget>
-        <div class="bg-white p-5">
-          <form [formGroup]="form" (ngSubmit)="createFormDefinition()">
-            <div class="form-group row">
-              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="name">{{
-                'formManagement.name' | translate
-              }}</label>
-              <div class="col-12 col-sm-8 col-lg-6">
-                <input
-                  type="text"
-                  id="name"
-                  formControlName="name"
-                  class="form-control"
-                  placeholder="Form definition name"
-                  [ngClass]="{
-                    'is-valid': formControls.name.touched && formControls.name.valid,
-                    'is-invalid': formControls.name.touched && formControls.name.errors,
-                  }"
-                  required
-                />
-                <div
-                  *ngIf="formControls.name.touched && formControls.name.errors"
-                  class="invalid-feedback"
-                >
-                  <div *ngIf="formControls.name.errors.required">
-                    {{ 'formManagement.nameIsRequired' | translate }}
-                  </div>
-                  <div *ngIf="formControls.name.errors.duplicate">
-                    {{ 'formManagement.nameIsInUse' | translate }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row pt-3 mt-1">
-              <div class="col-12 col-sm-6 text-left" (click)="onBackButtonClick()">
-                <a class="btn btn-space btn-default">{{ 'formManagement.back' | translate }}</a>
-              </div>
-              <div class="col-12 col-sm-6 text-right">
-                <button class="btn btn-space btn-secondary" type="button" (click)="reset()">
-                  {{ 'formManagement.reset' | translate }}
-                </button>
-                <button class="btn btn-space btn-primary" type="submit" [disabled]="form.invalid">
-                  {{ 'formManagement.submit' | translate }}
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </valtimo-widget>
-    </div>
-  </div>
-</div>
+<cds-modal
+  valtimoCdsModal
+  class="form-management-create"
+  size="sm"
+  [cdsLayer]="0"
+  [open]="open"
+  (close)="onCloseEvent()"
+>
+  <cds-modal-header [showCloseButton]="true" (closeSelect)="onCloseEvent()">
+    <h3 cdsModalHeaderHeading>
+      {{ 'formManagement.add' | translate }}
+    </h3>
+  </cds-modal-header>
+
+  <form [formGroup]="form" (ngSubmit)="createFormDefinition()">
+    <section cdsModalContent [cdsLayer]="1">
+      <cds-label
+        [invalid]="formControls?.name?.touched && formControls?.name?.errors"
+        [invalidText]="
+          (formControls?.name?.errors?.required && ('formManagement.nameIsRequired' | translate)) ||
+          (formControls?.name?.errors?.duplicate && ('formManagement.nameIsInUse' | translate)) ||
+          'test'
+        "
+      >
+        {{ 'formManagement.name' | translate }}
+
+        <input
+          cdsText
+          type="text"
+          id="name"
+          formControlName="name"
+          class="form-control"
+          placeholder="Form definition name"
+          [invalid]="formControls?.name?.touched && formControls?.name?.errors"
+          required
+        />
+      </cds-label>
+    </section>
+
+    <cds-modal-footer [cdsLayer]="1">
+      <cds-modal-footer>
+        <button cdsButton="ghost" (click)="onBackButtonClick()">
+          {{ 'formManagement.back' | translate }}
+        </button>
+
+        <button cdsButton="ghost" (click)="reset()">
+          {{ 'formManagement.reset' | translate | translate }}
+        </button>
+
+        <button [disabled]="form.invalid" type="submit" cdsButton="primary">
+          {{ 'formManagement.submit' | translate }}
+        </button>
+      </cds-modal-footer>
+    </cds-modal-footer>
+  </form>
+</cds-modal>

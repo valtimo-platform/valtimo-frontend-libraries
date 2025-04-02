@@ -5,14 +5,14 @@
   } as obs"
 >
   <valtimo-form-management-list
-    *ngIf="!obs.hasCreateQueryParam && !obs.editQueryParam"
+    *ngIf="!obs.editQueryParam"
     (navigateToCreateEvent)="onNavigateToCreateEvent()"
     (navigateToUploadEvent)="onNavigateToUploadEvent()"
     (navigateToEditEvent)="onFormDefinitionEditEvent($event)"
   ></valtimo-form-management-list>
 
   <valtimo-form-management-create
-    *ngIf="obs.hasCreateQueryParam && !obs.editQueryParam"
+    [open]="obs.hasCreateQueryParam && !obs.editQueryParam"
     (goBackEvent)="onGoBackFromCreateEvent()"
     (afterCreateEvent)="onFormDefinitionCreateEvent($event)"
     (afterUploadEvent)="onFormDefinitionUploadEvent($event)"

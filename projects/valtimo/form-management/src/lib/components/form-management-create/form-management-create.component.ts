@@ -1,14 +1,20 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-import {WidgetModule} from '@valtimo/components'; // Assuming this is your alert service location
+import {ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components'; // Assuming this is your alert service location
 import {FormManagementService} from '../../services';
 import {CreateFormDefinitionRequest, FormManagementParams} from '../../models';
 import {combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {noDuplicateFormValidator} from '../../validators/no-duplicate-form.validator';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {ButtonModule, InputModule} from 'carbon-components-angular';
+import {
+  ButtonModule,
+  InputModule,
+  LayerModule,
+  ModalModule,
+  TilesModule,
+} from 'carbon-components-angular';
 import {ManagementContext} from '@valtimo/config';
 
 @Component({
@@ -23,9 +29,16 @@ import {ManagementContext} from '@valtimo/config';
     ButtonModule,
     InputModule,
     WidgetModule,
+    InputModule,
+    TilesModule,
+    LayerModule,
+    ModalModule,
+    ValtimoCdsModalDirectiveModule,
+    ButtonModule,
   ],
 })
 export class FormManagementCreateComponent {
+  @Input() public readonly open = false;
   @Output() public readonly goBackEvent = new EventEmitter<void>();
   @Output() public readonly afterCreateEvent = new EventEmitter<string>();
   @Output() public readonly afterUploadEvent = new EventEmitter<string>();
@@ -72,6 +85,10 @@ export class FormManagementCreateComponent {
     this.form.setValue({
       name: '',
     });
+  }
+
+  public onCloseEvent(): void {
+    this.goBackEvent.emit();
   }
 
   public createFormDefinition(): void {

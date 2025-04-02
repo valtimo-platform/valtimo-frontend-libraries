@@ -497,6 +497,7 @@
     "deploy": "Deploy",
     "duplicate": "Dupliceren",
     "readOnly": "Alleen-lezen",
+    "add": "Formulier toevoegen",
     "tabs": {
       "formBuilder": "Formulier editor",
       "jsonEditor": "JSON editor",
