@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {CaseTag} from './case-tags.model';
+
 interface SortResult {
   sorted: boolean;
   unsorted: boolean;
@@ -115,6 +117,7 @@ interface Document {
   assigneeFullName: string;
   assigneeId: string;
   internalStatus?: string;
+  caseTags?: CaseTag[];
 }
 
 interface DocumentDefinitionId {
@@ -349,6 +352,7 @@ interface DisplayTypeParameters {
     [key: string]: string;
   };
   dateFormat?: string;
+  tagAmount?: number;
 }
 
 interface DocumentDefinitionVersionsResult {

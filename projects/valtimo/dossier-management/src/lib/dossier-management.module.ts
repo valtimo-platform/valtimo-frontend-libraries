@@ -61,6 +61,7 @@ import {
   TilesModule,
   ToggleModule,
   TooltipModule,
+  NumberModule,
 } from 'carbon-components-angular';
 
 import {DossierManagementAssigneeComponent} from './components/dossier-management-assignee/dossier-management-assignee.component';
@@ -87,6 +88,8 @@ import {DossierManagementStatusModalComponent} from './components/dossier-manage
 import {DossierManagementCreateComponent} from './components/dossier-management-create/dossier-management-create.component';
 import {DossierManagementWidgetsEditorComponent} from './components/dossier-management-widget-tab/editor/dossier-management-widgets-editor.component';
 import {DossierManagementExternalStartFormComponent} from './components/dossier-management-external-start-form/dossier-management-external-start-form.component';
+import {DossierManagementModalComponent} from './components/dossier-management-case-tags/dossier-management-case-tag-modal/dossier-management-case-tag-modal.component';
+import {DossierManagementCaseTagComponent} from './components/dossier-management-case-tags/dossier-management-case-tags.component';
 
 @NgModule({
   declarations: [
@@ -111,6 +114,8 @@ import {DossierManagementExternalStartFormComponent} from './components/dossier-
     DossierManagementStatusModalComponent,
     DossierManagementCreateComponent,
     DossierManagementExternalStartFormComponent,
+    DossierManagementCaseTagComponent,
+    DossierManagementModalComponent,
   ],
   imports: [
     CommonModule,
@@ -164,6 +169,7 @@ import {DossierManagementExternalStartFormComponent} from './components/dossier-
     ValuePathSelectorComponent,
     TilesModule,
     LayerModule,
+    NumberModule,
   ],
   providers: [TabManagementService],
 })

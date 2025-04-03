@@ -14,67 +14,35 @@
   ~ limitations under the License.
   -->
 
-<div
-  *ngIf="{
-    associatedProcessDocumentDefinitions: associatedProcessDocumentDefinitions$ | async,
-    caseSettings: caseSettings$ | async,
-  } as obs"
+<cds-modal
+  valtimoCdsModal
+  [open]="startSelectionModalOpen$ | async"
+  size="xs"
+  *ngIf="{associatedProcessDocumentDefinitions: associatedProcessDocumentDefinitions$ | async,caseSettings: caseSettings$ | async} as associatedProcessDocumentDefinitions"
 >
-  <div
-    class="modal fade"
-    id="startProcess"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="startProcessLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title" id="startProcessLabel">
-            {{ 'dashboard.startProcess.title' | translate }}
-          </h3>
+  <cds-modal-header [showCloseButton]="true" (closeSelect)="onCloseSelect()"
+    ><h3 cdsModalHeaderHeading>
+      {{ 'dashboard.startProcess.title' | translate }}
+    </h3>
+  </cds-modal-header>
 
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="table-responsive">
-            <table class="table m-0">
-              <tr
-                *ngIf="obs.caseSettings?.hasExternalStartForm"
-                (click)="openExternalCaseStartForm(true)"
-                style="cursor: pointer"
-              >
-                <td>
-                  {{
-                    obs.caseSettings?.externalStartFormDescription ||
-                      ('externalStartForm.title' | translate)
-                  }}
-                </td>
-              </tr>
+  <section cdsModalContent class="start-modal-content" [cdsLayer]="1">
+    <cds-clickable-tile
+            *ngIf="obs.caseSettings?.hasExternalStartForm"
+            (click)="openExternalCaseStartForm(true)"
+    >
 
-              <tr
-                *ngFor="let processDocumentDefinition of obs?.associatedProcessDocumentDefinitions"
-                (click)="selectProcess(processDocumentDefinition)"
-                style="cursor: pointer"
-              >
-                <td>{{ processDocumentDefinition.processName }}</td>
-              </tr>
-            </table>
-          </div>
-        </div>
+      {{ processDocumentDefinition.processName }}
+    </cds-clickable-tile>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            {{ 'cta.close' | translate }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    /<cds-clickable-tile
+      *ngFor="let processDocumentDefinition of associatedProcessDocumentDefinitions"
+      (click)="selectProcess(processDocumentDefinition)"
+    >
+      {{ processDocumentDefinition.processName }}
+    </cds-clickable-tile>
+  </section>
+</cds-modal>
 
 <valtimo-dossier-process-start-modal
   #processStartModal

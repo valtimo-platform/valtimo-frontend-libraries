@@ -83,6 +83,8 @@ export class DossierListActionsComponent implements OnInit {
     })
   );
 
+  public readonly startSelectionModalOpen$ = new BehaviorSubject<boolean>(false);
+
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
   private modalListenerAdded = false;
   private _cachedAssociatedProcessDocumentDefinitions: Array<ProcessDocumentDefinition> = [];
@@ -121,6 +123,9 @@ export class DossierListActionsComponent implements OnInit {
     const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
     const hasExternalStartForm = this._caseSettings?.hasExternalStartForm;
 
+    if (associatedProcessDocumentDefinitions.length > 1) {
+      this.startSelectionModalOpen$.next(true);
+    } else {
     if (hasExternalStartForm && associatedProcessDocumentDefinitions.length === 0) {
       this.openExternalCaseStartForm();
     } else if (associatedProcessDocumentDefinitions.length === 1 && !hasExternalStartForm) {
@@ -132,13 +137,9 @@ export class DossierListActionsComponent implements OnInit {
   }
 
   public selectProcess(processDocumentDefinition: ProcessDocumentDefinition): void {
-    const modal = $('#startProcess');
-    if (!this.modalListenerAdded) {
-      modal.on('hidden.bs.modal', this.showStartProcessModal.bind(this));
-      this.modalListenerAdded = true;
-    }
     this.selectedProcessDocumentDefinition = processDocumentDefinition;
-    modal.modal('hide');
+    this.startSelectionModalOpen$.next(false);
+    this.showStartProcessModal();
   }
 
   public onFormFlowComplete(): void {
@@ -169,6 +170,10 @@ export class DossierListActionsComponent implements OnInit {
       const modal = $('#startProcess');
       modal?.modal('hide');
     }
+  }
+
+  public onCloseSelect(): void {
+    this.startSelectionModalOpen$.next(false);
   }
 
   private showStartProcessModal(): void {

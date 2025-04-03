@@ -22,6 +22,7 @@ import {
   DocumentenApiMetadata,
   DocumentLanguage,
   DocumentStatus,
+  SupportedDocumentenApiFeatures,
 } from '../../models';
 import {
   BehaviorSubject,
@@ -67,6 +68,7 @@ import {
   DropdownModule,
   IconModule,
   InputModule as CarbonInputModule,
+  LayerModule,
   ListItem,
   ModalModule,
   RadioModule,
@@ -76,6 +78,7 @@ import {
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 import moment from 'moment';
 import {DocumentenApiUploadFieldDefaultValues} from '../../models/documenten-api-upload-field.model';
+import {DocumentenApiVersionService} from '../../services';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -100,6 +103,7 @@ import {DocumentenApiUploadFieldDefaultValues} from '../../models/documenten-api
     TooltipModule,
     TranslateModule,
     VModalModule,
+    LayerModule,
   ],
 })
 export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
@@ -272,7 +276,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     return this.documentenApiMetadataForm.get('bestandsnaam');
   }
 
-  public readonly isDefinitiveStatus$ = new BehaviorSubject<boolean>(false);
+  public readonly editDisabled$ = new BehaviorSubject<boolean>(false);
 
   public readonly CONFIDENTIALITY_LEVELS: Array<ConfidentialityLevel> = [
     'openbaar',
@@ -332,14 +336,19 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this.translateService.stream('key'),
   ]).pipe(
     tap(([additionalDocumentDate, currentStatus]) => {
-      this.formData$.pipe(take(1)).subscribe(formData => {
-        if (
-          additionalDocumentDate === 'received' &&
-          (formData.status === 'in_bewerking' || formData.status === 'ter_vaststelling')
-        ) {
-          this.clearStatusSelection$.next(null);
-        }
-      });
+      this.formData$
+        .pipe(
+          filter(formData => !!formData),
+          take(1)
+        )
+        .subscribe(formData => {
+          if (
+            additionalDocumentDate === 'received' &&
+            (formData.status === 'in_bewerking' || formData.status === 'ter_vaststelling')
+          ) {
+            this.clearStatusSelection$.next(null);
+          }
+        });
     }),
     map(([additionalDocumentDate, currentStatus]) =>
       (additionalDocumentDate === 'received' ? this.RECEIPT_STATUSES : this.STATUSES).map(
@@ -413,6 +422,13 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     map(userProfile => userProfile?.email || '')
   );
 
+  private readonly _supportedDocumentenApiFeatures$: Observable<SupportedDocumentenApiFeatures> =
+    this.valtimoModalService.documentDefinitionName$.pipe(
+      switchMap(documentDefinitionName =>
+        this.documentenApiVersionService.getSupportedApiFeatures(documentDefinitionName)
+      )
+    );
+
   private _subscriptions = new Subscription();
   private _fileSubscription!: Subscription;
   private _fileNameAndAuthorSubscription!: Subscription;
@@ -425,7 +441,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     private readonly keycloakService: KeycloakService,
     private readonly modalService: ModalService,
     private readonly translateService: TranslateService,
-    private readonly valtimoModalService: ValtimoModalService
+    private readonly valtimoModalService: ValtimoModalService,
+    private readonly documentenApiVersionService: DocumentenApiVersionService
   ) {}
 
   public ngOnInit(): void {
@@ -439,7 +456,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
     this._fileSubscription?.unsubscribe();
     this._fileNameAndAuthorSubscription?.unsubscribe();
-    this.isDefinitiveStatus$.next(false);
+    this.editDisabled$.next(false);
   }
 
   public languageSelected(event: {item: {id: string}}) {
@@ -497,7 +514,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       else if (ontvangstdatum) this.additionalDocumentDate$.next('received');
       else this.additionalDocumentDate$.next('neither');
 
-      const prefillStatus = this.defaultValues.status || status;
+      const prefillStatus = status || this.defaultValues.status;
       const validPrefillStatus = this.STATUSES.includes(prefillStatus) ? prefillStatus : '';
 
       this.documentenApiMetadataForm.patchValue({
@@ -507,8 +524,8 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         status: validPrefillStatus,
         vertrouwelijkheidaanduiding:
           vertrouwelijkheidaanduiding || this.defaultValues.vertrouwelijkheidaanduiding,
-        ontvangstdatum,
-        verzenddatum,
+        ontvangstdatum: ontvangstdatum ? new Date(ontvangstdatum) : null,
+        verzenddatum: verzenddatum ? new Date(verzenddatum) : null,
         trefwoorden: trefwoorden || this.defaultValues.trefwoorden,
       });
     }
@@ -595,11 +612,16 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   private openFileSubscription(): void {
     this._fileSubscription?.unsubscribe();
     if (this.file$) {
-      this._fileSubscription = this.file$.subscribe(file => {
+      this._fileSubscription = combineLatest([
+        this.file$,
+        this._supportedDocumentenApiFeatures$,
+      ]).subscribe(([file, support]) => {
         if (file) {
           this.prefillForm(file);
-          this.isDefinitiveStatus$.next(
-            file.status === 'definitief' && this.isEditMode ? true : false
+          this.editDisabled$.next(
+            !support.supportsUpdatingDefinitiveDocument &&
+              file.status === 'definitief' &&
+              this.isEditMode
           );
         }
       });
