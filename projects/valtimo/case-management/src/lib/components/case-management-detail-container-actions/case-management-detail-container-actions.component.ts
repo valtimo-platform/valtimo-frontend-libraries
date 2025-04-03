@@ -162,11 +162,6 @@ export class CaseManagementDetailContainerActionsComponent {
     );
   }
 
-  public setGlobalActiveVersion(): void {
-    console.log('setGlobalActiveVersion');
-    this.showGlobalVersionConfirmationModal$.next(true);
-  }
-
   public openCaseRemoveModal(): void {
     this.selectedDocumentDefinition$.pipe(take(1)).subscribe(definition => {
       if (!definition) return;
@@ -175,12 +170,20 @@ export class CaseManagementDetailContainerActionsComponent {
     });
   }
 
+  public openGlobalActiveVersionModal(): void {
+    console.log('openGlobalActiveVersionModal');
+  }
+
   public closeGlobalCaseConfirmationModal(): void {
     this.showGlobalVersionConfirmationModal$.next(false);
   }
 
   public setGlobalActiveCaseVersion(): void {
     console.log('Confirm setting of global active case version');
+  }
+
+  public onCloseEvent(): void {
+    this.global.next(false);
   }
 
   private startExporting(): void {

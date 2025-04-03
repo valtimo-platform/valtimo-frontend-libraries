@@ -15,6 +15,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'valtimo-case-management-global-active-version-modal',
@@ -22,9 +23,11 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   styleUrls: ['./case-management-global-active-version-modal.component.scss'],
 })
 export class CaseManagementGlobalActiveVersionModalComponent {
-  @Input() public readonly open = false;
+  @Input() open = false;
 
   @Output() closeModal: EventEmitter<boolean> = new EventEmitter();
+
+  public readonly globalCaseVersionModalOpen$ = new BehaviorSubject<boolean>(false);
 
   public onCloseModal(): void {
     this.closeModal.emit(null);

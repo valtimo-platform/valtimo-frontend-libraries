@@ -14,8 +14,8 @@
   ~ limitations under the License.
   -->
 
-<cds-modal valtimoCdsModal [open]="open" (close)="onCloseModal()">
-  <cds-modal-header showCloseButton="true" (closeSelect)="onCloseModal()">
+<cds-modal valtimoCdsModal size="xs" [open]="open" (close)="onCloseModal()">
+  <cds-modal-header [showCloseButton]="true" (closeSelect)="onCloseModal()">
     <h3 cdsModalHeaderHeading>{{ 'caseManagement.globalActiveVersionModal.title' | translate }}</h3>
   </cds-modal-header>
 
