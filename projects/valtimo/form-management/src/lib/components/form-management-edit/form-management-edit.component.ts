@@ -261,7 +261,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.formDeletedEvent.emit();
+          this.formModifiedEvent.emit();
         },
         error: () => {
           this.deleteErrorEvent.emit();
