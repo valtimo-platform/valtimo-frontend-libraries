@@ -48,8 +48,8 @@ export class CaseManagementLinkUploadProcessComponent implements OnInit {
   public readonly caseDefinitionKey$: Observable<string> | undefined =
     this.route.parent?.params.pipe(map(({caseDefinitionKey}) => caseDefinitionKey || ''));
 
-  public readonly caseVersionTag$: Observable<string> | undefined = this.route.parent?.params.pipe(
-    map(({caseVersionTag}) => caseVersionTag || '')
+  public readonly caseVersionTag$: Observable<string> | undefined = this.params$?.pipe(
+    map(({caseDefinitionVersionTag}) => caseDefinitionVersionTag || '')
   );
 
   public readonly selectedProcessKey$ = new BehaviorSubject<string>('');
@@ -132,7 +132,10 @@ export class CaseManagementLinkUploadProcessComponent implements OnInit {
     combineLatest([this.caseDefinitionKey$, this.caseVersionTag$])
       .pipe(
         switchMap(([caseDefinitionKey, caseVersionTag]) =>
-          this.documentenApiLinkProcessService.getLinkedUploadProcess('hola', caseVersionTag)
+          this.documentenApiLinkProcessService.getLinkedUploadProcess(
+            caseDefinitionKey,
+            caseVersionTag
+          )
         )
       )
       .subscribe(linkedUploadProcess => {
