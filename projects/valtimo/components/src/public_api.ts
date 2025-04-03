@@ -271,3 +271,5 @@ export * from './lib/directives/valtimo-cds-overflow-button/valtimo-cds-overflow
 export * from './lib/directives/valtimo-cds-overflow-button/valtimo-cds-overflow-button-directive.module';
 // remove toggletip button class
 export * from './lib/directives/remove-classnames/remove-classnames.directive';
+// case tag selector
+export * from './lib/components/case-tags-selector/case-tags-selector.component';
