@@ -260,7 +260,6 @@ export class DossierSupportingProcessStartModalComponent {
   }
 
   private openCdsModal(): void {
-    console.log('openCdsModal');
     this.loadProcessLink();
     this.modalOpen$.next(true);
   }
