@@ -47,6 +47,7 @@ import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/conf
 import {DocumentService} from '@valtimo/document';
 import {
   FORM_CUSTOM_COMPONENT_TOKEN,
+  FormCustomComponent,
   FormCustomComponentConfig,
   FormFlowComponent,
   FormSubmissionResult,
@@ -60,21 +61,10 @@ import {
 import {IconService} from 'carbon-components-angular';
 import {NGXLogger} from 'ngx-logger';
 import {ToastrService} from 'ngx-toastr';
-import {
-  BehaviorSubject,
-  combineLatest,
-  distinctUntilChanged,
-  filter,
-  map,
-  Observable,
-  Subscription,
-  switchMap,
-  take,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, Subscription, switchMap, take,} from 'rxjs';
 import {IntermediateSubmission, Task} from '../../models';
 import {TaskIntermediateSaveService, TaskService} from '../../services';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
-import {FormCustomComponent} from '@valtimo/process-link';
 
 @Component({
   selector: 'valtimo-task-detail-content',
@@ -168,9 +158,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
     private readonly toastr: ToastrService,
     private readonly translateService: TranslateService,
     @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel,
-    @Optional()
-    @Inject(FORM_CUSTOM_COMPONENT_TOKEN)
-    private readonly formCustomComponentConfig: FormCustomComponentConfig,
+    @Optional() @Inject(FORM_CUSTOM_COMPONENT_TOKEN) private readonly formCustomComponentConfig: FormCustomComponentConfig,
     private readonly urlResolverService: UrlResolverService
   ) {
     this.intermediateSaveEnabled = !!this.configService.featureToggles?.enableIntermediateSave;
@@ -449,11 +437,11 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
               this.closeModalEvent.emit();
             });
 
-            this.closeModalEvent.pipe(
-              take(1)
-            ).subscribe(() => {
-              renderedComponent.destroy();
-            });
+            this._subscriptions.add(
+              this.closeModalEvent.subscribe(() => {
+                renderedComponent.destroy();
+              })
+            );
           })
         );
       }
