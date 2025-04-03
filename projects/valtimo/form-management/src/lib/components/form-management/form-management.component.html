@@ -22,6 +22,7 @@
     *ngIf="!!obs.editQueryParam"
     (deleteEvent)="onModifiedEvent()"
     (formModifiedEvent)="onModifiedEvent()"
+    (formDeletedEvent)="onModifiedEvent(true)"
     (goBackEvent)="onGoBackEvent()"
     (pendingChangesChangeEvent)="onPendingChangesChangeEvent($event)"
     (deleteErrorEvent)="onDeleteErrorEvent()"

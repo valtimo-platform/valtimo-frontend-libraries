@@ -86,6 +86,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
   @Output() public readonly deleteEvent = new EventEmitter<void>();
   @Output() public readonly goBackEvent = new EventEmitter<void>();
   @Output() public readonly formModifiedEvent = new EventEmitter<void>();
+  @Output() public readonly formDeletedEvent = new EventEmitter<void>();
   @Output() public readonly pendingChangesChangeEvent = new EventEmitter<boolean>();
   @Output() public readonly deleteErrorEvent = new EventEmitter<boolean>();
   @Output() public readonly deployErrorEvent = new EventEmitter<boolean>();
@@ -260,7 +261,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.formModifiedEvent.emit();
+          this.formDeletedEvent.emit();
         },
         error: () => {
           this.deleteErrorEvent.emit();

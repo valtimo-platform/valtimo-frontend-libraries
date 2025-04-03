@@ -12,52 +12,55 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+-->
+
 <cds-modal
   valtimoCdsModal
-  [open]="open"
-  (overlaySelected)="closeModal()"
-  [formGroup]="duplicateForm"
+  class="form-management-create"
+  size="sm"
+  [cdsLayer]="0"
+  [open]="true"
   (close)="closeModal()"
 >
-  <cds-modal-header (closeSelect)="closeModal()">{{
-    'formManagement.duplicate' | translate
-  }}</cds-modal-header>
+  <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+    <h3 cdsModalHeaderHeading>
+      {{ 'formManagement.duplicate' | translate }}
+    </h3>
+  </cds-modal-header>
 
-  <section class="bx--modal-content p-2">
-    <cds-label labelState="error">
-      {{ 'formManagement.name' | translate }}
-      <input cdsText formControlName="duplicateFormName" [invalid]="duplicateFormName.invalid" />
-    </cds-label>
+  <form [formGroup]="duplicateForm">
+    <section cdsModalContent [cdsLayer]="1">
+      <cds-label
+        [invalid]="duplicateFormName?.touched && duplicateFormName?.errors"
+        [invalidText]="
+          (duplicateFormName?.errors?.required && ('formManagement.nameIsRequired' | translate)) ||
+          (duplicateFormName?.errors?.duplicate && ('formManagement.nameIsInUse' | translate)) ||
+          'Error'
+        "
+      >
+        {{ 'formManagement.name' | translate }}
 
-    <div
-      *ngIf="duplicateFormName.invalid && (duplicateFormName.dirty || duplicateFormName.touched)"
-      class="bg-warning text-black mb-0 p-2 pl-3 pr-3"
-      role="alert"
-    >
-      <div *ngIf="duplicateFormName.errors.required">
-        {{ 'formManagement.nameIsRequired' | translate }}
-      </div>
+        <input
+          cdsText
+          type="text"
+          id="duplicateFormName"
+          formControlName="duplicateFormName"
+          [invalid]="duplicateFormName?.touched && duplicateFormName?.errors"
+          required
+        />
+      </cds-label>
+    </section>
 
-      <div *ngIf="duplicateFormName.errors.duplicate">
-        {{ 'formManagement.nameIsInUse' | translate }}
-      </div>
-    </div>
-  </section>
+    <cds-modal-footer [cdsLayer]="1">
+      <cds-modal-footer>
+        <button cdsButton="secondary" (click)="closeModal()">
+          {{ 'interface.cancel' | translate }}
+        </button>
 
-  <cds-modal-footer>
-    <button cdsButton="secondary" (click)="closeModal()">
-      {{ 'interface.cancel' | translate }}
-    </button>
-
-    <button
-      cdsButton="primary"
-      [attr.modal-primary-focus]="true"
-      modal-primary-focus
-      (click)="duplicate()"
-      [disabled]="duplicateForm.invalid"
-    >
-      {{ 'formManagement.submit' | translate }}
-    </button>
-  </cds-modal-footer>
+        <button [disabled]="duplicateForm.invalid" cdsButton="primary" (click)="duplicate()">
+          {{ 'formManagement.submit' | translate }}
+        </button>
+      </cds-modal-footer>
+    </cds-modal-footer>
+  </form>
 </cds-modal>

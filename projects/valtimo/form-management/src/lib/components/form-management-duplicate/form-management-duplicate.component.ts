@@ -7,16 +7,17 @@ import {
   BaseModal,
   ButtonModule,
   InputModule,
+  LayerModule,
   ModalModule,
   ModalService,
 } from 'carbon-components-angular';
-import {AlertService} from 'dist/valtimo/components';
 import {CreateFormDefinitionRequest, FormManagementParams} from '../../models';
 import {FormManagementService} from '../../services';
 import {noDuplicateFormValidator} from '../../validators/no-duplicate-form.validator';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {ManagementContext} from '@valtimo/config';
+import {ValtimoCdsModalDirectiveModule} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-form-management-duplicate-modal',
@@ -31,6 +32,8 @@ import {ManagementContext} from '@valtimo/config';
     InputModule,
     ReactiveFormsModule,
     FormsModule,
+    LayerModule,
+    ValtimoCdsModalDirectiveModule,
   ],
 })
 export class FormManagementDuplicateComponent extends BaseModal implements OnInit {
@@ -63,7 +66,6 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
     @Inject('formToDuplicate') public formToDuplicate,
     protected modalService: ModalService,
     protected formManagementService: FormManagementService,
-    private alertService: AlertService,
     protected route: ActivatedRoute,
     private router: Router
   ) {
@@ -105,20 +107,23 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
       this.route.queryParams,
     ])
       .pipe(take(1))
-      .subscribe(
-        ([formDefinition, params]) => {
-          this.alertService.success('Created new Form');
+      .subscribe({
+        next: ([formDefinition]) => {
           this.router
-            .navigateByUrl(`/form-management/edit/${formDefinition.id}`)
+            .navigate([], {
+              relativeTo: this.route,
+              queryParams: {edit: formDefinition.id},
+              queryParamsHandling: 'merge',
+            })
             .then(() => window.location.reload());
         },
-        err => {
+        error: err => {
           if (err.toString().includes('Duplicate name')) {
             control.setErrors({duplicate: true});
           } else {
             control.setErrors({incorrect: true});
           }
-        }
-      );
+        },
+      });
   }
 }
