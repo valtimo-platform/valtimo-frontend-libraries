@@ -38,13 +38,17 @@
       }}
     </h3>
   </cds-modal-header>
+
   <section cdsModalContent>
     {{
       (contentTranslationKey !== obs.contentTranslation ? obs.contentTranslation : '') ||
         content ||
         obs.deleteConfirmationTranslation
     }}
+
+    <ng-content></ng-content>
   </section>
+
   <cds-modal-footer>
     <ng-container>
       <button

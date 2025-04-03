@@ -531,7 +531,7 @@
     "globalActiveVersionModal": {
       "title": "Instellen als globale actieve versie",
       "description": "Stel de momenteel geselecteerde versie in als de globale actieve versie. Houd er rekening mee dat dingen kapot kunnen gaan of niet werken zoals bedoeld.",
-      "warningTitle": "Waarschuwing: oudere versie",
+      "warningTitle": "Waarschuwing: Oudere versie",
       "warningMessage": "U probeert een caseversie de globale actieve versie te maken, maar deze is ouder dan de versie die momenteel actief is.",
       "continue": "Doorgaan",
       "cancel": "Annuleren"

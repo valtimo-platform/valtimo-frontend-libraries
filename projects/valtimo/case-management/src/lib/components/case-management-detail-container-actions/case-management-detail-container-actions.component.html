@@ -36,21 +36,30 @@
 </div>
 
 <ng-template #versionSelection let-obs="obs">
-  <!--  <cds-dropdown-->
-  <!--    class="version-selection"-->
-  <!--    [disabled]="obs.loadingVersion || (obs.versionListItems?.length || []) === 1"-->
-  <!--    [skeleton]="obs.loadingVersion"-->
-  <!--    (selected)="setVersion($event)"-->
-  <!--    [size]="obs.compactMode ? 'sm' : 'md'"-->
-  <!--  >-->
   <cds-dropdown
-    class="version-selection"
+    class="version-selector"
+    [appendInline]="false"
+    selectionFeedback="fixed"
     (selected)="setVersion($event)"
     [size]="obs.compactMode ? 'sm' : 'md'"
   >
-    <!--    <cds-dropdown-list [items]="obs.versions || []"></cds-dropdown-list>-->
-    <cds-dropdown-list [items]="obs.versions || []"></cds-dropdown-list>
+    <cds-dropdown-list
+      [items]="obs.versions || []"
+      [listTpl]="colorDropdownItemTemplate"
+    ></cds-dropdown-list>
   </cds-dropdown>
+</ng-template>
+
+<ng-template #colorDropdownItemTemplate let-item="item">
+  <div class="version-selector-dropdown-template">
+    <cds-tag class="cds-tag--no-margin" [type]="item?.tagType ?? 'green'" [title]="item?.content">
+      {{ item?.content }}
+    </cds-tag>
+
+    <cds-tag class="cds-tag--no-margin" [type]="'high-contrast'">
+      {{ 'caseManagement.globallyActive' | translate }}
+    </cds-tag>
+  </div>
 </ng-template>
 
 <ng-template #exportMenu let-obs="obs">
@@ -113,35 +122,32 @@
 
 <valtimo-case-management-remove-modal #caseRemoveModal></valtimo-case-management-remove-modal>
 
-<!--<ng-template #olderVersionWarning>-->
-<!--  <cds-inline-notification-->
-<!--    *ngIf="isOlderThanLatestVersion$ | async"-->
-<!--    status="warning"-->
-<!--    title="{{ 'caseManagement.confirmationGlobalVersionModal.warningTitle' | translate }}"-->
-<!--    subtitle="{{ 'caseManagement.confirmationGlobalVersionModal.warningMessage' | translate }}"-->
-<!--    hideCloseButton="true"-->
-<!--  ></cds-inline-notification>-->
-<!--</ng-template>-->
-
-<!--<valtimo-confirmation-modal-->
-<!--  [showModalSubject$]="showGlobalVersionConfirmationModal$"-->
-<!--  [content]="olderVersionWarning"-->
-<!--  cancelButtonTextTranslationKey="caseManagement.globalActiveVersionModal.cancel"-->
-<!--  confirmButtonTextTranslationKey="caseManagement.globalActiveVersionModal.continue"-->
-<!--  contentTranslationKey="caseManagement.globalActiveVersionModal.description"-->
-<!--  titleTranslationKey="caseManagement.globalActiveVersionModal.title"-->
-<!--  (cancelEvent)="closeGlobalCaseConfirmationModal()"-->
-<!--  (confirmEvent)="setGlobalActiveCaseVersion()"-->
-<!--&gt;</valtimo-confirmation-modal>-->
-
-<valtimo-case-management-global-active-version-modal
-  [open]="globalCaseVersionModalOpen$ | async"
-  (closeEvent)="onCloseEvent()"
+<valtimo-confirmation-modal
+  [showModalSubject$]="showGlobalVersionModal$"
+  cancelButtonType="ghost"
+  cancelButtonTextTranslationKey="caseManagement.globalActiveVersionModal.cancel"
+  confirmButtonTextTranslationKey="caseManagement.globalActiveVersionModal.continue"
+  titleTranslationKey="caseManagement.globalActiveVersionModal.title"
+  contentTranslationKey="caseManagement.globalActiveVersionModal.description"
+  (cancelEvent)="closeGlobalVersionCaseModal()"
+  (confirmEvent)="openGlobalCaseVersionConfirmationModal()"
 >
-</valtimo-case-management-global-active-version-modal>
+  <cds-notification
+    [style]="'margin-top: 16px'"
+    [notificationObj]="{
+      type: 'warning',
+      title: 'caseManagement.globalActiveVersionModal.warningTitle' | translate,
+      message: 'caseManagement.globalActiveVersionModal.warningMessage' | translate,
+      showClose: false,
+      lowContrast: true,
+    }"
+  >
+  </cds-notification>
+</valtimo-confirmation-modal>
 
 <valtimo-confirmation-modal
-  [showModalSubject$]="false"
+  [showModalSubject$]="showGlobalVersionConfirmationModal$"
+  cancelButtonType="ghost"
   cancelButtonTextTranslationKey="caseManagement.confirmationGlobalVersionModal.cancel"
   confirmButtonTextTranslationKey="caseManagement.confirmationGlobalVersionModal.confirm"
   contentTranslationKey="caseManagement.confirmationGlobalVersionModal.description"

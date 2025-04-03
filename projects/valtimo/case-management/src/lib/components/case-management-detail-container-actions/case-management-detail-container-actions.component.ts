@@ -60,6 +60,7 @@ export class CaseManagementDetailContainerActionsComponent {
 
   private readonly _caseDefinitionName$ = this.caseDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
+  public readonly showGlobalVersionModal$ = new BehaviorSubject<boolean>(false);
   public readonly showGlobalVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
   public readonly isOlderThanLatestVersion$ = new BehaviorSubject<boolean>(false);
 
@@ -172,6 +173,16 @@ export class CaseManagementDetailContainerActionsComponent {
 
   public openGlobalActiveVersionModal(): void {
     console.log('openGlobalActiveVersionModal');
+    this.showGlobalVersionModal$.next(true);
+  }
+
+  public closeGlobalVersionCaseModal(): void {
+    this.showGlobalVersionModal$.next(false);
+  }
+
+  public openGlobalCaseVersionConfirmationModal(): void {
+    this.showGlobalVersionModal$.next(false);
+    this.showGlobalVersionConfirmationModal$.next(true);
   }
 
   public closeGlobalCaseConfirmationModal(): void {
@@ -180,10 +191,7 @@ export class CaseManagementDetailContainerActionsComponent {
 
   public setGlobalActiveCaseVersion(): void {
     console.log('Confirm setting of global active case version');
-  }
-
-  public onCloseEvent(): void {
-    this.global.next(false);
+    this.showGlobalVersionConfirmationModal$.next(false);
   }
 
   private startExporting(): void {

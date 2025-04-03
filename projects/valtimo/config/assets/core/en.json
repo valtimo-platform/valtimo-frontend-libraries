@@ -532,7 +532,7 @@
     "globalActiveVersionModal": {
       "title": "Set as global active version",
       "description": "Set the currently selected version as the global active version. Please be sure to keep in mind that things might break or not work as intended.",
-      "warningTitle": "Warning: older version",
+      "warningTitle": "Warning: Older version",
       "warningMessage": "You're trying to make a case version the global active version, but it's older than the version that's currently active.",
       "continue": "Continue",
       "cancel": "Cancel"

@@ -154,7 +154,6 @@ import {CaseManagementConfirmationGlobalVersionModal} from './components/case-ma
     RenderInPageHeaderDirectiveModule,
     DialogModule,
     ValtimoCdsOverflowButtonDirectiveModule,
-    NotificationModule,
     EditorModule,
     CarbonListModule,
     TabsModule,
