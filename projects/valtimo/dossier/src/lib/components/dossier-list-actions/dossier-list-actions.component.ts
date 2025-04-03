@@ -126,13 +126,14 @@ export class DossierListActionsComponent implements OnInit {
     if (associatedProcessDocumentDefinitions.length > 1) {
       this.startSelectionModalOpen$.next(true);
     } else {
-    if (hasExternalStartForm && associatedProcessDocumentDefinitions.length === 0) {
-      this.openExternalCaseStartForm();
-    } else if (associatedProcessDocumentDefinitions.length === 1 && !hasExternalStartForm) {
-      this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
-      this.showStartProcessModal();
-    } else if (associatedProcessDocumentDefinitions.length > 0) {
-      $('#startProcess').modal('show');
+      if (hasExternalStartForm && associatedProcessDocumentDefinitions.length === 0) {
+        this.openExternalCaseStartForm();
+      } else if (associatedProcessDocumentDefinitions.length === 1 && !hasExternalStartForm) {
+        this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
+        this.showStartProcessModal();
+      } else if (associatedProcessDocumentDefinitions.length > 0) {
+        $('#startProcess').modal('show');
+      }
     }
   }
 
