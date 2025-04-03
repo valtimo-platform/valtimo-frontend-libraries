@@ -18,6 +18,8 @@ import {Router, RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from '@valtimo/security';
 import {FormioComponent} from './form-io/form-io.component';
 import {UploadShowcaseComponent} from './upload-showcase/upload-showcase.component';
+import {IkoKlantPageComponent} from '@valtimo/dossier';
+import {IkoPagePage} from '@src/app/iko-page.page';
 
 const routes: Routes = [
   {
@@ -32,6 +34,12 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     data: {title: 'Upload - Showcase'},
   },
+  {
+    path: 'klant/:documentDefinitionName/document/:documentId/:tab',
+    component: IkoPagePage,
+    canActivate: [AuthGuardService],
+    data: {title: 'Klant'}
+  }
 ];
 
 @NgModule({

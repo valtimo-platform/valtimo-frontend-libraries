@@ -102,6 +102,7 @@ import {DossierDetailWidgetsComponent} from './components/dossier-detail/tab/wid
 import {DossierDetailTaskListComponent} from './components/dossier-detail-task-list/dossier-detail-task-list.component';
 import {DossierDetailsTaskDetailComponent} from './components/dossier-detail-task-detail/dossier-detail-task-detail.component';
 import {AngularSplitModule} from 'angular-split';
+import {IkoKlantPageComponent} from './iko-klant-page/iko-klant-page.page';
 
 export type TabsFactory = () => Map<string, object>;
 
@@ -197,8 +198,9 @@ export type TabsFactory = () => Map<string, object>;
     ValtimoCdsModalDirectiveModule,
     TilesModule,
     LayerModule,
+    IkoKlantPageComponent
   ],
-  exports: [DossierListComponent, DossierDetailComponent, DossierProcessStartModalComponent],
+  exports: [DossierListComponent, DossierDetailComponent, DossierProcessStartModalComponent, IkoKlantPageComponent],
 })
 export class DossierModule {
   static forRoot(tabsFactory: TabsFactory): ModuleWithProviders<DossierModule> {
