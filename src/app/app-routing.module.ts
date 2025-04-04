@@ -39,6 +39,11 @@ const routes: Routes = [
     component: IkoPagePage,
     canActivate: [AuthGuardService],
     data: {title: 'Klant'}
+  }, {
+    path: 'klant',
+    component: IkoPagePage,
+    canActivate: [AuthGuardService],
+    data: {title: 'Klant'}
   }
 ];
 

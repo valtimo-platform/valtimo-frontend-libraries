@@ -86,7 +86,7 @@ export const environment: ValtimoConfig = {
       },
       {
         roles: [ROLE_USER],
-        link: ['/klant/bezwaar/document/8ce5dd3c-c4f8-4956-946d-ef05e8d70c1f/widgets'],
+        link: ['/klant'],
         title: 'Klant',
         iconClass: 'icon mdi mdi-panorama-sphere-outline',
         sequence: 1,

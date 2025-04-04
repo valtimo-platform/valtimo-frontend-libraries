@@ -1,5 +1,5 @@
 import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, combineLatest, delay, Observable, of, switchMap, take, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, delay, filter, map, Observable, of, switchMap, take, tap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {CarbonListModule, InputModule} from '@valtimo/components';
@@ -35,7 +35,10 @@ export class IkoKlantPageComponent implements OnInit, OnDestroy {
   @HostBinding('class.tab--no-background') private readonly _noBackground = true;
   @HostBinding('class.tab--no-min-height') private readonly _noMinHeight = true;
 
-  private readonly _documentId$ = of('8ce5dd3c-c4f8-4956-946d-ef05e8d70c1f');
+  private readonly _documentId$ =  this.route.params.pipe(
+    map(params => params?.documentId),
+    filter(documentId => !!documentId)
+  );
   _bsn$ = new BehaviorSubject<String>(null);
   private readonly _tabKey$: Observable<string> = of('widgets');
   bsn: string = '999993653';
