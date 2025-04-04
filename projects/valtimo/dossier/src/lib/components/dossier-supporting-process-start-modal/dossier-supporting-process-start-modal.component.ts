@@ -27,13 +27,7 @@ import {
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {FormioBeforeSubmit, FormioForm} from '@formio/angular';
-import {
-  FormioComponent,
-  FormioOptionsImpl,
-  FormioSubmission,
-  ModalComponent,
-  ValtimoFormioOptions,
-} from '@valtimo/components';
+import {FormioComponent, FormioOptionsImpl, FormioSubmission, ModalComponent, ValtimoFormioOptions,} from '@valtimo/components';
 import {ProcessDocumentDefinition} from '@valtimo/document';
 import {ProcessService} from '@valtimo/process';
 import {
@@ -43,7 +37,7 @@ import {
   FormSubmissionResult,
   ProcessLinkService,
 } from '@valtimo/process-link';
-import {BehaviorSubject, combineLatest, switchMap} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subscription, switchMap} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
 
@@ -78,9 +72,13 @@ export class DossierSupportingProcessStartModalComponent {
   public readonly processDefinitionId$ = new BehaviorSubject<string>(undefined);
   public readonly formFlowInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly documentId$ = new BehaviorSubject<string>(undefined);
+  public readonly modalOpen$ = new BehaviorSubject<boolean>(false);
   private readonly _formCustomComponentConfig$ = new BehaviorSubject<
     FormCustomComponentConfig | {}
   >({});
+  public readonly closeModalEvent = new EventEmitter();
+
+  private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly router: Router,
@@ -108,6 +106,8 @@ export class DossierSupportingProcessStartModalComponent {
       )
       .subscribe(startProcessResult => {
         if (startProcessResult) {
+          this.isUIComponent = false;
+          this.isFormViewModel = false;
           switch (startProcessResult.type) {
             case 'form':
               this.formDefinition$.next(startProcessResult.properties.prefilledForm);
@@ -119,15 +119,12 @@ export class DossierSupportingProcessStartModalComponent {
             case 'form-view-model':
               this.formDefinition$.next(startProcessResult.properties.formDefinition);
               this.setFormViewModelComponent(startProcessResult.properties.formName);
-              this.modal.show();
               break;
             case 'ui-component':
               this.setFormCustomComponent(startProcessResult.properties.componentKey);
               this.isUIComponent = true;
-              this.modal.show();
               break;
           }
-          this.modal.show();
         }
       });
   }
@@ -149,7 +146,7 @@ export class DossierSupportingProcessStartModalComponent {
 
     this.options$.next(options);
 
-    this.loadProcessLink();
+    this.openCdsModal();
   }
 
   public onSubmit(submission: FormioSubmission): void {
@@ -175,16 +172,20 @@ export class DossierSupportingProcessStartModalComponent {
   }
 
   public formSubmitted(): void {
-    this.modal.hide();
+    this.closeCdsModal();
     this.formSubmit.emit();
     this.formDefinition$.next(null);
   }
 
   public gotoFormLinkScreen(): void {
-    this.modal.hide();
+    this.closeCdsModal();
     this.router.navigate(['process-links'], {
       queryParams: {process: this.processDefinitionKey$.getValue()},
     });
+  }
+
+  public onCloseSelect(): void {
+    this.closeCdsModal();
   }
 
   private setFormViewModelComponent(formName: string): void {
@@ -216,6 +217,12 @@ export class DossierSupportingProcessStartModalComponent {
       this.formSubmitted();
     });
 
+    this._subscriptions.add(
+      this.closeModalEvent.subscribe(() => {
+        formViewModelComponent.destroy();
+      })
+    );
+
     this.isFormViewModel = true;
   }
 
@@ -238,6 +245,28 @@ export class DossierSupportingProcessStartModalComponent {
       renderedComponent.instance.submittedEvent.subscribe(() => {
         this.formSubmitted();
       });
+      this.modal
+
+      this._subscriptions.add(
+        this.closeModalEvent.subscribe(() => {
+          renderedComponent.destroy();
+        })
+      );
     });
+  }
+
+  protected closeCdsModal(): void {
+    this.modal.hide();
+    this.closeModalEvent.emit();
+  }
+
+  private openCdsModal(): void {
+    this.loadProcessLink();
+    this.modal.show();
+    this._subscriptions.add(
+      this.modal.modalShowing$.subscribe((value) => {
+        if (!value) this.closeModalEvent.emit();
+      })
+    );
   }
 }
