@@ -86,7 +86,6 @@ export class DossierListActionsComponent implements OnInit {
   public readonly startSelectionModalOpen$ = new BehaviorSubject<boolean>(false);
 
   private selectedProcessDocumentDefinition: ProcessDocumentDefinition | null = null;
-  private modalListenerAdded = false;
   private _cachedAssociatedProcessDocumentDefinitions: Array<ProcessDocumentDefinition> = [];
 
   private readonly _subscriptions = new Subscription();
@@ -100,8 +99,6 @@ export class DossierListActionsComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.modalListenerAdded = false;
-
     this._subscriptions.add(
       this.listService.documentDefinitionName$
         .pipe(
@@ -132,7 +129,7 @@ export class DossierListActionsComponent implements OnInit {
         this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
         this.showStartProcessModal();
       } else if (associatedProcessDocumentDefinitions.length > 0) {
-        $('#startProcess').modal('show');
+        this.startSelectionModalOpen$.next(true);
       }
     }
   }
@@ -167,10 +164,7 @@ export class DossierListActionsComponent implements OnInit {
   public openExternalCaseStartForm(closeModal = false): void {
     window.open(this._caseSettings?.externalStartFormUrl, '_blank');
 
-    if (closeModal) {
-      const modal = $('#startProcess');
-      modal?.modal('hide');
-    }
+    if (closeModal) this.startSelectionModalOpen$.next(false);
   }
 
   public onCloseSelect(): void {
