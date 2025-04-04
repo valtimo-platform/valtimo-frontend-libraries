@@ -47,6 +47,7 @@ import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/conf
 import {DocumentService} from '@valtimo/document';
 import {
   FORM_CUSTOM_COMPONENT_TOKEN,
+  FormCustomComponent,
   FormCustomComponentConfig,
   FormFlowComponent,
   FormSubmissionResult,
@@ -60,21 +61,10 @@ import {
 import {IconService} from 'carbon-components-angular';
 import {NGXLogger} from 'ngx-logger';
 import {ToastrService} from 'ngx-toastr';
-import {
-  BehaviorSubject,
-  combineLatest,
-  distinctUntilChanged,
-  filter,
-  map,
-  Observable,
-  Subscription,
-  switchMap,
-  take,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, Subscription, switchMap, take,} from 'rxjs';
 import {IntermediateSubmission, Task} from '../../models';
 import {TaskIntermediateSaveService, TaskService} from '../../services';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
-import {FormCustomComponent} from '@valtimo/process-link';
 
 @Component({
   selector: 'valtimo-task-detail-content',
@@ -100,9 +90,13 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
 
     this.loadTaskDetails(value.task as any, value.processLinkActivityResult);
   }
-  @Input() public set modalClosed(_: boolean) {
+  @Input() public set modalClosed(closed: boolean) {
     // save form flow data on modal closed
     if (this.formFlow) this.formFlow.saveData();
+
+    if (closed) {
+      this.closeModalEvent.emit();
+    }
   }
   @Output() public readonly closeModalEvent = new EventEmitter();
   @Output() public readonly formSubmit = new EventEmitter();
@@ -164,9 +158,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
     private readonly toastr: ToastrService,
     private readonly translateService: TranslateService,
     @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel,
-    @Optional()
-    @Inject(FORM_CUSTOM_COMPONENT_TOKEN)
-    private readonly formCustomComponentConfig: FormCustomComponentConfig,
+    @Optional() @Inject(FORM_CUSTOM_COMPONENT_TOKEN) private readonly formCustomComponentConfig: FormCustomComponentConfig,
     private readonly urlResolverService: UrlResolverService
   ) {
     this.intermediateSaveEnabled = !!this.configService.featureToggles?.enableIntermediateSave;
@@ -396,8 +388,8 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
 
         formViewModelComponent.instance.formSubmit
           .pipe(
+            switchMap(() => this.task$),
             take(1),
-            switchMap(() => this.task$)
           )
           .subscribe((task: Task | null) => {
             this.completeTask(task);
@@ -418,6 +410,12 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
           );
           this.getCurrentProgress(formViewModelComponent);
         }
+
+        this._subscriptions.add(
+          this.closeModalEvent.subscribe(() => {
+            formViewModelComponent.destroy();
+          })
+        );
       }
     });
   }
@@ -438,6 +436,12 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
             renderedComponent.instance.submittedEvent.subscribe(() => {
               this.closeModalEvent.emit();
             });
+
+            this._subscriptions.add(
+              this.closeModalEvent.subscribe(() => {
+                renderedComponent.destroy();
+              })
+            );
           })
         );
       }
