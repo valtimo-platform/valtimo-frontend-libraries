@@ -41,11 +41,11 @@ export class FormManagementListComponent {
   public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
     .parent
     ? this.route.parent.params.pipe(
-        map(({caseDefinitionName, caseVersionTag}) =>
-          caseDefinitionName && caseVersionTag
+        map(({caseDefinitionKey, caseDefinitionVersionTag}) =>
+          caseDefinitionKey && caseDefinitionVersionTag
             ? {
-                definitionName: caseDefinitionName,
-                versionTag: caseVersionTag,
+                caseDefinitionKey,
+                caseDefinitionVersionTag,
               }
             : null
         )
@@ -88,18 +88,20 @@ export class FormManagementListComponent {
 
       switch (context) {
         case 'case':
-          return this.formManagementService.queryFormDefinitionsCase(
-            routeParams.definitionName,
-            routeParams.versionTag,
-            params
-          );
+          return routeParams
+            ? this.formManagementService.queryFormDefinitionsCase(
+                routeParams.caseDefinitionKey,
+                routeParams.caseDefinitionVersionTag,
+                params
+              )
+            : of({});
         default:
         case 'independent':
           return this.formManagementService.queryFormDefinitions(params);
       }
     }),
     map(res => {
-      this._collectionSize$.next(res.totalElements);
+      this._collectionSize$.next(res?.totalElements);
 
       return res?.content || [];
     }),

@@ -110,11 +110,11 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
   public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
     .parent
     ? this.route.parent.params.pipe(
-        map(({caseDefinitionName, caseVersionTag}) =>
-          caseDefinitionName && caseVersionTag
+        map(({caseDefinitionKey, caseDefinitionVersionTag}) =>
+          caseDefinitionKey && caseDefinitionVersionTag
             ? {
-                definitionName: caseDefinitionName,
-                versionTag: caseVersionTag,
+                caseDefinitionKey,
+                caseDefinitionVersionTag,
               }
             : null
         )
@@ -204,8 +204,8 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
           switch (context) {
             case 'case':
               return this.formManagementService.deleteFormDefinitionCase(
-                caseManagementRouteParams.definitionName,
-                caseManagementRouteParams.versionTag,
+                caseManagementRouteParams.caseDefinitionKey,
+                caseManagementRouteParams.caseDefinitionVersionTag,
                 definition.id
               );
 
@@ -248,8 +248,8 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
           switch (context) {
             case 'case':
               return this.formManagementService.modifyFormDefinitionCase(
-                caseManagementRouteParams.definitionName,
-                caseManagementRouteParams.versionTag,
+                caseManagementRouteParams.caseDefinitionKey,
+                caseManagementRouteParams.caseDefinitionVersionTag,
                 request
               );
 
@@ -278,8 +278,8 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
           switch (context) {
             case 'case':
               return this.formManagementService.getFormDefinitionCase(
-                caseManagementRouteParams.definitionName,
-                caseManagementRouteParams.versionTag,
+                caseManagementRouteParams.caseDefinitionKey,
+                caseManagementRouteParams.caseDefinitionVersionTag,
                 formDefinitionId
               );
 

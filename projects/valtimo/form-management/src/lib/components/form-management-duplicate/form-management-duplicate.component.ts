@@ -44,9 +44,9 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
   public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
     .parent
     ? this.route.parent.params.pipe(
-        map(({caseDefinitionName, caseVersionTag}) =>
-          caseDefinitionName && caseVersionTag
-            ? {definitionName: caseDefinitionName, versionTag: caseVersionTag}
+        map(({caseDefinitionKey, caseDefinitionVersionTag}) =>
+          caseDefinitionKey && caseDefinitionVersionTag
+            ? {caseDefinitionKey, caseDefinitionVersionTag}
             : null
         )
       )
