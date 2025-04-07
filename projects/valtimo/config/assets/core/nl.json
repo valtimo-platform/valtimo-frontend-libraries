@@ -526,6 +526,9 @@
     "processLink": "Proces koppelen",
     "selectProcessDef": "Procesdefinitie kiezen",
     "setGlobalActiveVersion": "Instellen als actieve versie",
+    "setGlobalActiveVersionErrorTitle": "Fout",
+    "setGlobalActiveVersionErrorMessage": "Er is iets misgegaan",
+    "setGlobalActiveVersionSuccessTitle": "Globale actieve versie bijgewerkt",
     "globallyActive": "Wereldwijd actief",
     "unlinkProcess": "Ontkoppelen",
     "globalActiveVersionModal": {

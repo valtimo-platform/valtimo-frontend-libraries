@@ -527,6 +527,9 @@
     "processLink": "Link process",
     "selectProcessDef": "Select process definition",
     "setGlobalActiveVersion": "Set as active version",
+    "setGlobalActiveVersionErrorTitle": "Error",
+    "setGlobalActiveVersionErrorMessage": "Something went wrong",
+    "setGlobalActiveVersionSuccessTitle": "Global active version updated",
     "globallyActive": "Globally active",
     "unlinkProcess": "Unlink",
     "globalActiveVersionModal": {

@@ -230,7 +230,9 @@ export class CaseManagementDetailContainerActionsComponent {
           this.closeCurrentNotification();
           this._currentNotification = this.notificationService.showNotification({
             type: 'success',
-            title: this.translateService.instant('caseManagement.exportSuccessTitle'),
+            title: this.translateService.instant(
+              'caseManagement.setGlobalActiveVersionSuccessTitle'
+            ),
             duration: 5000,
           });
         },
@@ -238,8 +240,10 @@ export class CaseManagementDetailContainerActionsComponent {
           this.closeCurrentNotification();
           this._currentNotification = this.notificationService.showNotification({
             type: 'error',
-            title: this.translateService.instant('caseManagement.exportErrorTitle'),
-            message: this.translateService.instant('caseManagement.exportErrorMessage'),
+            title: this.translateService.instant('caseManagement.setGlobalActiveVersionErrorTitle'),
+            message: this.translateService.instant(
+              'caseManagement.setGlobalActiveVersionErrorMessage'
+            ),
             duration: 5000,
           });
         },

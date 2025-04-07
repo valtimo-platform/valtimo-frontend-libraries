@@ -526,6 +526,9 @@
     "processLink": "Prozess verknüpfen",
     "selectProcessDef": "Prozessdefinition auswählen",
     "setGlobalActiveVersion": "Als aktive Version festlegen",
+    "setGlobalActiveVersionErrorTitle": "Fehler",
+    "setGlobalActiveVersionErrorMessage": "Ein Fehler ist aufgetreten",
+    "setGlobalActiveVersionSuccessTitle": "Global aktive Version aktualisiert",
     "globallyActive": "Global aktiv",
     "unlinkProcess": "Verknüpfung aufheben",
     "globalActiveVersionModal": {
