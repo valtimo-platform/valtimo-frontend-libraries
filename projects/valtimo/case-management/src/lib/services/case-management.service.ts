@@ -45,6 +45,12 @@ export class CaseManagementService extends BaseApiService {
     );
   }
 
+  public getGlobalActiveCase(caseDefinitionKey: string): Observable<any> {
+    return this.httpClient.get<any[]>(
+      this.getApiUrl(`management/v1/case-definition/${caseDefinitionKey}`)
+    );
+  }
+
   public setGlobalActiveCaseVersion(
     caseDefinitionKey: string,
     caseDefinitionVersionTag: string

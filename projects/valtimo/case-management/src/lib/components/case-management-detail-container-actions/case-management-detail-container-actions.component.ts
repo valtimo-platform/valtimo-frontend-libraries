@@ -33,6 +33,7 @@ import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} fro
 import {take} from 'rxjs/operators';
 import {CaseDetailService, CaseManagementService} from '../../services';
 import {CaseManagementRemoveModalComponent} from '../case-management-remove-modal/case-management-remove-modal.component';
+import {eq, lt} from 'semver';
 
 @Component({
   selector: 'valtimo-case-management-detail-container-actions',
@@ -58,6 +59,7 @@ export class CaseManagementDetailContainerActionsComponent {
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
   public readonly selectedVersionNumber$ = this.caseDetailService.selectedVersionNumber$;
   public readonly selectedVersion$ = new BehaviorSubject<string>('');
+  public readonly currentGlobalActiveVersion$ = new BehaviorSubject<string>('');
 
   public readonly params$: Observable<any> | undefined = this.route.params.pipe(
     map(({caseDefinitionName, caseDefinitionVersionTag}) => ({
@@ -74,11 +76,18 @@ export class CaseManagementDetailContainerActionsComponent {
     map(({caseDefinitionVersionTag}) => caseDefinitionVersionTag || '')
   );
 
+  public readonly isSelectedVersionGloballyActive$: Observable<boolean> =
+    this.caseDefinitionKey$?.pipe(
+      switchMap(caseDefinitionKey =>
+        this.caseManagementService.getGlobalActiveCase(caseDefinitionKey)
+      ),
+      map(result => !!result?.active)
+    );
+
   private readonly _caseDefinitionName$ = this.caseDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
   public readonly showGlobalVersionModal$ = new BehaviorSubject<boolean>(false);
   public readonly showGlobalVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
-  public readonly isOlderThanLatestVersion$ = new BehaviorSubject<boolean>(false);
 
   public readonly selectedDocumentDefinition$ = this.caseDetailService.documentDefinition$;
 
@@ -86,6 +95,24 @@ export class CaseManagementDetailContainerActionsComponent {
     this.caseDetailService.selectedDocumentDefinitionIsReadOnly$;
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
+
+  public readonly selectedVersionIsSameAsActiveVersion$ = combineLatest([
+    this.currentGlobalActiveVersion$,
+    this.selectedVersion$,
+  ]).pipe(
+    map(([current, selected]) => {
+      return eq(selected, current);
+    })
+  );
+
+  public readonly isOlderVersionSelected$ = combineLatest([
+    this.currentGlobalActiveVersion$,
+    this.selectedVersion$,
+  ]).pipe(
+    map(([current, selected]) => {
+      return lt(selected, current);
+    })
+  );
 
   private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
   public readonly versions$: Observable<ListItem[] | null> = this.route.params.pipe(

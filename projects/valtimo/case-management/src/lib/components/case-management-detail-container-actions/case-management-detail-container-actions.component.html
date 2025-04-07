@@ -19,9 +19,10 @@
   *ngIf="{
     exporting: exporting$ | async,
     loadingVersion: loadingVersion$ | async,
-    versions: versions$ | async,
     selectedDocumentDefinition: selectedDocumentDefinition$ | async,
     selectedDocumentDefinitionIsReadOnly: selectedDocumentDefinitionIsReadOnly$ | async,
+    selectedVersionIsSameAsActiveVersion: selectedVersionIsSameAsActiveVersion$ | async,
+    isSelectedVersionGloballyActive: isSelectedVersionGloballyActive$ | async,
     compactMode: compactMode$ | async,
   } as obs"
   [ngClass]="{'--compact': obs.compactMode}"
@@ -36,19 +37,20 @@
 </div>
 
 <ng-template #versionSelection let-obs="obs">
-  <cds-dropdown
-    class="version-selector"
-    selectionFeedback="fixed"
-    [size]="obs.compactMode ? 'sm' : 'md'"
-    [appendInline]="false"
-    (selected)="setVersion($event)"
-    [disabled]="!obs.versions?.length"
-  >
-    <cds-dropdown-list
-      [items]="obs.versions || []"
-      [listTpl]="colorDropdownItemTemplate"
-    ></cds-dropdown-list>
-  </cds-dropdown>
+  <cds-label class="version-selector" *ngIf="versions$ | async as versionItems">
+    <cds-dropdown
+      selectionFeedback="fixed"
+      [size]="obs.compactMode ? 'sm' : 'md'"
+      [appendInline]="false"
+      (selected)="setVersion($event)"
+      [disabled]="!versionItems?.length"
+    >
+      <cds-dropdown-list
+        [items]="versionItems"
+        [listTpl]="colorDropdownItemTemplate"
+      ></cds-dropdown-list>
+    </cds-dropdown>
+  </cds-label>
 </ng-template>
 
 <ng-template #colorDropdownItemTemplate let-item="item">
@@ -90,7 +92,7 @@
 
     <cds-overflow-menu-option
       [id]="'setGlobalActiveVersion'"
-      [disabled]="obs.exporting"
+      [disabled]="obs.isSelectedVersionGloballyActive"
       (selected)="openGlobalActiveVersionModal()"
       >{{ 'caseManagement.setGlobalActiveVersion' | translate }}</cds-overflow-menu-option
     >
@@ -134,6 +136,7 @@
   (confirmEvent)="openGlobalCaseVersionConfirmationModal()"
 >
   <cds-notification
+    *ngIf="isOlderVersionSelected$ | async"
     [style]="'margin-top: 16px'"
     [notificationObj]="{
       type: 'warning',
