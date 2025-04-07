@@ -41,6 +41,7 @@
     [appendInline]="false"
     selectionFeedback="fixed"
     (selected)="setVersion($event)"
+    [disabled]="!obs.versions?.length"
     [size]="obs.compactMode ? 'sm' : 'md'"
   >
     <cds-dropdown-list

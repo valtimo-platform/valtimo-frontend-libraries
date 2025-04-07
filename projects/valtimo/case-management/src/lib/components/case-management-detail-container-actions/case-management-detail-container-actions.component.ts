@@ -57,6 +57,22 @@ export class CaseManagementDetailContainerActionsComponent {
 
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
   public readonly selectedVersionNumber$ = this.caseDetailService.selectedVersionNumber$;
+  public readonly selectedVersion$ = new BehaviorSubject<string>('');
+
+  public readonly params$: Observable<any> | undefined = this.route.params.pipe(
+    map(({caseDefinitionName, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionName,
+      caseDefinitionVersionTag: caseDefinitionVersionTag,
+    }))
+  );
+
+  public readonly caseDefinitionKey$: Observable<string> | undefined = this.params$?.pipe(
+    map(({caseDefinitionKey}) => caseDefinitionKey || '')
+  );
+
+  public readonly caseDefinitionVersionTag$: Observable<string> | undefined = this.params$?.pipe(
+    map(({caseDefinitionVersionTag}) => caseDefinitionVersionTag || '')
+  );
 
   private readonly _caseDefinitionName$ = this.caseDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
@@ -81,7 +97,6 @@ export class CaseManagementDetailContainerActionsComponent {
         of(caseVersionTag),
       ])
     ),
-    tap(versions => console.log('Version: ', versions)),
     map(([caseDefinitionVersions, caseVersionTag]) => {
       const mapping: ListItem[] | null =
         caseDefinitionVersions?.map((caseDefinitionVersion: string) => ({
@@ -92,6 +107,12 @@ export class CaseManagementDetailContainerActionsComponent {
       if (this._cachedVersions.getValue() === null) this._cachedVersions.next(mapping);
 
       return mapping;
+    }),
+    tap(versions => {
+      const selected = versions?.find(v => v.selected);
+      if (selected) {
+        this.selectedVersion$.next(selected.content);
+      }
     })
   );
 
@@ -157,6 +178,7 @@ export class CaseManagementDetailContainerActionsComponent {
   }
 
   public setVersion(version: any): void {
+    this.selectedVersion$.next(version?.item?.content);
     this.router.navigate(
       [`../${version.item.content}/${this.route.firstChild?.routeConfig?.path}`],
       {relativeTo: this.route}
@@ -172,7 +194,6 @@ export class CaseManagementDetailContainerActionsComponent {
   }
 
   public openGlobalActiveVersionModal(): void {
-    console.log('openGlobalActiveVersionModal');
     this.showGlobalVersionModal$.next(true);
   }
 
@@ -190,8 +211,49 @@ export class CaseManagementDetailContainerActionsComponent {
   }
 
   public setGlobalActiveCaseVersion(): void {
-    console.log('Confirm setting of global active case version');
+    this._currentNotification = this.notificationService.showNotification({
+      type: 'info',
+      title: '',
+      showClose: false,
+      template: this._exportMessageTemplateRef,
+    });
+
+    combineLatest([this._caseDefinitionName$, this.selectedVersion$])
+      .pipe(
+        take(1),
+        switchMap(([caseDefinitionName, selectedVersion]) =>
+          this.caseManagementService.setGlobalActiveCaseVersion(caseDefinitionName, selectedVersion)
+        )
+      )
+      .subscribe({
+        next: response => {
+          this.closeCurrentNotification();
+          this._currentNotification = this.notificationService.showNotification({
+            type: 'success',
+            title: this.translateService.instant('caseManagement.exportSuccessTitle'),
+            duration: 5000,
+          });
+        },
+        error: () => {
+          this.closeCurrentNotification();
+          this._currentNotification = this.notificationService.showNotification({
+            type: 'error',
+            title: this.translateService.instant('caseManagement.exportErrorTitle'),
+            message: this.translateService.instant('caseManagement.exportErrorMessage'),
+            duration: 5000,
+          });
+        },
+      });
+
     this.showGlobalVersionConfirmationModal$.next(false);
+    combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$]).subscribe(
+      ([caseDefinitionKey, caseDefinitionVersionTag]) => {
+        this.caseManagementService.setGlobalActiveCaseVersion(
+          caseDefinitionKey,
+          caseDefinitionVersionTag
+        );
+      }
+    );
   }
 
   private startExporting(): void {
