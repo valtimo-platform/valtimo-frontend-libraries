@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {Upload16} from '@carbon/icons';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
@@ -10,6 +10,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms'; // For translation support
 import {ManagementContext} from '@valtimo/config';
+import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-form-management-list',
@@ -89,8 +90,6 @@ export class FormManagementListComponent {
         ...(searchTerm && {searchTerm}),
       };
 
-      console.log('hi', params);
-
       switch (context) {
         case 'case':
           return this.formManagementService.queryFormDefinitionsCase(
@@ -119,17 +118,10 @@ export class FormManagementListComponent {
   constructor(
     private readonly formManagementService: FormManagementService,
     private readonly iconService: IconService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly notificationService: GlobalNotificationService
   ) {
     this.iconService.registerAll([Upload16]);
-
-    this.route.params.subscribe(params => {
-      console.log(params);
-    });
-    this.route.parent.params.subscribe(params => {
-      console.log('x2', params);
-    });
   }
 
   public navigateToCreateRoute(): void {

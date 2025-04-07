@@ -37,14 +37,10 @@ import {
   EditorModule,
 } from '@valtimo/components';
 import {BasicCaseWidget, CaseWidgetsRes} from '@valtimo/case';
-import {
-  ButtonModule,
-  IconModule,
-  IconService,
-  NotificationService,
-} from 'carbon-components-angular';
+import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, take} from 'rxjs';
 import {WidgetJsonEditorService, WidgetTabManagementService} from '../../../services';
+import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-case-management-widgets-json-editor',
@@ -60,7 +56,6 @@ import {WidgetJsonEditorService, WidgetTabManagementService} from '../../../serv
     IconModule,
     ConfirmationModalModule,
   ],
-  providers: [NotificationService],
 })
 export class CaseManagementWidgetsJsonEditorComponent implements AfterViewInit {
   @ViewChild('pendingChangesModal') public pendingChangesModal: ConfirmationModalComponent;
@@ -100,7 +95,7 @@ export class CaseManagementWidgetsJsonEditorComponent implements AfterViewInit {
 
   constructor(
     private readonly iconService: IconService,
-    private readonly notificationService: NotificationService,
+    private readonly notificationService: GlobalNotificationService,
     private readonly translateService: TranslateService,
     private readonly widgetJsonEditorService: WidgetJsonEditorService,
     private readonly widgetTabManagementService: WidgetTabManagementService

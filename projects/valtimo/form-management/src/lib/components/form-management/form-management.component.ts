@@ -16,15 +16,16 @@
 
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router, RouterOutlet} from '@angular/router';
 import {CARBON_CONSTANTS, PendingChangesComponent} from '@valtimo/components';
 import {FormManagementCreateComponent} from '../form-management-create';
 import {FormManagementListComponent} from '../form-management-list';
-import {ButtonModule, NotificationService} from 'carbon-components-angular';
-import {map, Observable} from 'rxjs';
+import {ButtonModule} from 'carbon-components-angular';
+import {BehaviorSubject, map, Observable} from 'rxjs';
 import {ManagementContext} from '@valtimo/config';
 import {FormManagementEditComponent} from '../form-management-edit';
 import {TranslateService} from '@ngx-translate/core';
+import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   templateUrl: './form-management.component.html',
@@ -36,8 +37,8 @@ import {TranslateService} from '@ngx-translate/core';
     FormManagementListComponent,
     FormManagementCreateComponent,
     FormManagementEditComponent,
+    RouterOutlet,
   ],
-  providers: [NotificationService],
 })
 export class FormManagementComponent extends PendingChangesComponent {
   public readonly hasCreateQueryParam$: Observable<boolean> = this.route.queryParamMap.pipe(
@@ -48,29 +49,34 @@ export class FormManagementComponent extends PendingChangesComponent {
     map(params => (params.has('edit') ? params.get('edit') : null))
   );
 
+  public readonly hasEditParam$: Observable<boolean> = this.route.paramMap.pipe(
+    map(params => params.has('formDefinitionId'))
+  );
+
   public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
     map(data => data && (data['context'] as ManagementContext))
   );
 
+  public readonly create$ = new BehaviorSubject<boolean>(false);
+  public readonly upload$ = new BehaviorSubject<boolean>(false);
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly notificationService: NotificationService,
+
+    private readonly notificationService: GlobalNotificationService,
     private readonly translateService: TranslateService
   ) {
     super();
   }
 
   public onNavigateToCreateEvent(): void {
-    this.updateQueryParams({create: true});
-  }
-
-  public onNavigateToUploadEvent(): void {
-    this.updateQueryParams({create: true, upload: true});
+    this.create$.next(true);
   }
 
   public onGoBackFromCreateEvent(): void {
-    this.updateQueryParams({}, ['create']);
+    this.create$.next(false);
+    this.upload$.next(false);
   }
 
   public onGoBackEvent(): void {
@@ -86,30 +92,42 @@ export class FormManagementComponent extends PendingChangesComponent {
     }
   }
 
+  public onFormDefinitionEditEvent(formDefinitionId: string, upload = false): void {
+    this.router.navigate([formDefinitionId], {
+      relativeTo: this.route,
+      queryParams: {...(upload && {upload: true})},
+    });
+  }
+
   public onFormDefinitionCreateEvent(formDefinitionId: string): void {
     this.resetNotifications();
+
     this.notificationService.showToast({
       type: 'success',
       duration: CARBON_CONSTANTS.notificationDuration,
       showClose: true,
       title: this.translateService.instant('formManagement.notifications.created'),
     });
-    this.updateQueryParams({edit: formDefinitionId}, ['create']);
+
+    this.onFormDefinitionEditEvent(formDefinitionId);
   }
 
   public onFormDefinitionUploadEvent(formDefinitionId: string): void {
     this.resetNotifications();
+
     this.notificationService.showToast({
       type: 'success',
       duration: CARBON_CONSTANTS.notificationDuration,
       showClose: true,
       title: this.translateService.instant('formManagement.notifications.created'),
     });
-    this.updateQueryParams({edit: formDefinitionId, upload: true}, ['create']);
+
+    this.onFormDefinitionEditEvent(formDefinitionId, true);
   }
 
-  public onFormDefinitionEditEvent(formDefinitionId: string): void {
-    this.updateQueryParams({edit: formDefinitionId}, ['create']);
+  public onNavigateToUploadEvent(): void {
+    this.create$.next(true);
+    this.upload$.next(true);
   }
 
   public onModifiedEvent(isDelete = false): void {
@@ -173,6 +191,8 @@ export class FormManagementComponent extends PendingChangesComponent {
   }
 
   private resetNotifications(): void {
-    this.notificationService.notificationRefs.forEach(ref => this.notificationService.close(ref));
+    this.notificationService
+      ?.getNotificationRefs()
+      .forEach(ref => this.notificationService.close(ref));
   }
 }

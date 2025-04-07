@@ -7,10 +7,10 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, combineLatest, map, Observable, of, Subscription} from 'rxjs';
 import {distinctUntilChanged, filter, switchMap, take, tap} from 'rxjs/operators';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   ButtonModule,
   DialogModule,
@@ -23,6 +23,7 @@ import {
   TagModule,
 } from 'carbon-components-angular';
 import {
+  CARBON_CONSTANTS,
   CarbonListModule,
   ConfirmationModalModule,
   EditorModel,
@@ -30,6 +31,7 @@ import {
   FormIoModule,
   PageHeaderService,
   PageTitleService,
+  PendingChangesComponent,
   RenderInPageHeaderDirectiveModule,
   ShellService,
   SpinnerModule,
@@ -50,6 +52,7 @@ import {FormManagementDuplicateComponent} from '../form-management-duplicate';
 import {ManagementContext} from '@valtimo/config';
 import {FormManagementUploadComponent} from '../form-management-upload';
 import {ArrowLeft16} from '@carbon/icons';
+import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-form-management-edit',
@@ -80,27 +83,28 @@ import {ArrowLeft16} from '@carbon/icons';
     IconModule,
   ],
 })
-export class FormManagementEditComponent implements OnInit, OnDestroy {
+export class FormManagementEditComponent
+  extends PendingChangesComponent
+  implements OnInit, OnDestroy
+{
   @HostBinding('class') public readonly class = 'valtimo-form-management-edit';
 
   @Output() public readonly deleteEvent = new EventEmitter<void>();
   @Output() public readonly goBackEvent = new EventEmitter<void>();
   @Output() public readonly formModifiedEvent = new EventEmitter<void>();
   @Output() public readonly formDeletedEvent = new EventEmitter<void>();
-  @Output() public readonly pendingChangesChangeEvent = new EventEmitter<boolean>();
   @Output() public readonly deleteErrorEvent = new EventEmitter<boolean>();
   @Output() public readonly deployErrorEvent = new EventEmitter<boolean>();
 
   public modifiedFormDefinition: FormioForm | null = null;
   public validJsonChange: boolean | null = null;
 
-  public readonly CARBON_THEME = 'g10';
   public readonly TABS = EDIT_TABS;
 
   public activeTab = EDIT_TABS.BUILDER;
 
-  public readonly editQueryParam$: Observable<string | null> = this.route.queryParamMap.pipe(
-    map(params => (params.has('edit') ? params.get('edit') : null))
+  public readonly editParam$: Observable<string | null> = this.route.paramMap.pipe(
+    map(params => (params.has('formDefinitionId') ? params.get('formDefinitionId') : null))
   );
 
   public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
@@ -140,7 +144,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.pendingChangesChangeEvent.emit(true);
+      this.pendingChanges = true;
     })
   );
 
@@ -163,15 +167,19 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly shellService: ShellService,
     private readonly pageHeaderService: PageHeaderService,
-    private readonly iconService: IconService
+    private readonly iconService: IconService,
+    private readonly router: Router,
+    private readonly translateService: TranslateService,
+    private readonly notificationService: GlobalNotificationService
   ) {
+    super();
     this.iconService.registerAll([ArrowLeft16]);
   }
 
   public ngOnInit(): void {
-    this.pageTitleService.disableReset();
     this.loadFormDefinition();
     this.checkToOpenUploadModal();
+    this.pageTitleService.disableReset();
   }
 
   public ngOnDestroy(): void {
@@ -196,7 +204,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
   }
 
   public deleteFormDefinition(definition: FormDefinition): void {
-    this.pendingChangesChangeEvent.emit(false);
+    this.pendingChanges = false;
 
     combineLatest([this.context$, this.caseManagementRouteParams$])
       .pipe(
@@ -217,20 +225,31 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.deleteEvent.emit();
+          this.notificationService.showToast({
+            type: 'success',
+            duration: CARBON_CONSTANTS.notificationDuration,
+            showClose: true,
+            title: this.translateService.instant('formManagement.notifications.deleted'),
+          });
+          this.navigateBack();
         },
         error: () => {
-          this.deleteErrorEvent.emit();
+          this.notificationService.showToast({
+            type: 'error',
+            duration: CARBON_CONSTANTS.notificationDuration,
+            showClose: true,
+            title: this.translateService.instant('formManagement.notifications.deletionError'),
+          });
         },
       });
   }
 
   public onGoBackButtonClick(): void {
-    this.goBackEvent.emit();
+    this.navigateBack();
   }
 
   public modifyFormDefinition(definition: FormDefinition): void {
-    this.pendingChangesChangeEvent.emit(true);
+    this.pendingChanges = true;
 
     const form = JSON.stringify(
       this.modifiedFormDefinition !== null ? this.modifiedFormDefinition : definition.formDefinition
@@ -261,16 +280,29 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.formModifiedEvent.emit();
+          this.notificationService.showToast({
+            type: 'success',
+            duration: CARBON_CONSTANTS.notificationDuration,
+            showClose: true,
+            title: this.translateService.instant('formManagement.notifications.deployed'),
+          });
+
+          this.pendingChanges = false;
+          this.navigateBack();
         },
         error: () => {
-          this.deleteErrorEvent.emit();
+          this.notificationService.showToast({
+            type: 'error',
+            duration: CARBON_CONSTANTS.notificationDuration,
+            showClose: true,
+            title: this.translateService.instant('formManagement.notifications.deploymentError'),
+          });
         },
       });
   }
 
   private loadFormDefinition(): void {
-    combineLatest([this.context$, this.caseManagementRouteParams$, this.editQueryParam$])
+    combineLatest([this.context$, this.caseManagementRouteParams$, this.editParam$])
       .pipe(
         switchMap(([context, caseManagementRouteParams, formDefinitionId]) => {
           if (!formDefinitionId) return of(null);
@@ -282,7 +314,6 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
                 caseManagementRouteParams.caseVersionTag,
                 formDefinitionId
               );
-
             case 'independent':
             default:
               return this.formManagementService.getFormDefinition(formDefinitionId);
@@ -370,6 +401,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
       component: FormManagementDuplicateComponent,
       inputs: {
         formToDuplicate: definition,
+        disabledPendingChangesCallback: this.disablePendingChanges,
       },
     });
   }
@@ -412,4 +444,12 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  private navigateBack(): void {
+    this.router.navigate(['../'], {relativeTo: this.route});
+  }
+
+  private disablePendingChanges = () => {
+    this.pendingChanges = false;
+  };
 }

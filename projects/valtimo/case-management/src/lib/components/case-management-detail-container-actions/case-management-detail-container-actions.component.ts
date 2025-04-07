@@ -28,18 +28,18 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {PageHeaderService} from '@valtimo/components';
-import {ListItem, Notification, NotificationService} from 'carbon-components-angular';
+import {ListItem, Notification} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {CaseDetailService, CaseManagementService} from '../../services';
 import {CaseManagementRemoveModalComponent} from '../case-management-remove-modal/case-management-remove-modal.component';
+import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-case-management-detail-container-actions',
   templateUrl: './case-management-detail-container-actions.component.html',
   styleUrls: ['./case-management-detail-container-actions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NotificationService],
 })
 export class CaseManagementDetailContainerActionsComponent {
   @ViewChild('exportingMessage')
@@ -97,7 +97,7 @@ export class CaseManagementDetailContainerActionsComponent {
     @Inject(DOCUMENT) private document: Document,
     private readonly caseManagementService: CaseManagementService,
     private readonly caseDetailService: CaseDetailService,
-    private readonly notificationService: NotificationService,
+    private readonly notificationService: GlobalNotificationService,
     private readonly pageHeaderService: PageHeaderService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,

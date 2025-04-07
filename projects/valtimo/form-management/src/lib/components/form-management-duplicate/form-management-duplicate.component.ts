@@ -61,7 +61,8 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
   }
 
   constructor(
-    @Inject('formToDuplicate') public formToDuplicate,
+    @Inject('formToDuplicate') public readonly formToDuplicate,
+    @Inject('disabledPendingChangesCallback') public readonly disablePendingChangesCallback,
     protected modalService: ModalService,
     protected formManagementService: FormManagementService,
     protected route: ActivatedRoute,
@@ -107,13 +108,8 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
       .pipe(take(1))
       .subscribe({
         next: ([formDefinition]) => {
-          this.router
-            .navigate([], {
-              relativeTo: this.route,
-              queryParams: {edit: formDefinition.id},
-              queryParamsHandling: 'merge',
-            })
-            .then(() => window.location.reload());
+          this.disablePendingChangesCallback();
+          this.navigateWithNewId(formDefinition.id).then(() => window.location.reload());
         },
         error: err => {
           if (err.toString().includes('Duplicate name')) {
@@ -123,5 +119,28 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
           }
         },
       });
+  }
+
+  private async navigateWithNewId(newId: string): Promise<boolean> {
+    const currentUrl = this.router.url.split('?')[0];
+    const segments = currentUrl.split('/');
+
+    const formIdIndex = segments.findIndex(segment => segment.match(/^[a-f0-9-]{36}$/));
+
+    if (formIdIndex !== -1) {
+      segments[formIdIndex] = newId;
+    }
+
+    const updatedUrl = segments.join('/');
+    const queryParams = {...this.route.snapshot.queryParams};
+
+    try {
+      const success = await this.router.navigate([updatedUrl], {queryParams});
+      console.log('Navigation successful:', success);
+      return success;
+    } catch (error) {
+      console.error('Navigation failed:', error);
+      return false;
+    }
   }
 }

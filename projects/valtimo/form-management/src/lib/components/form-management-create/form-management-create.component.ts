@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components';
@@ -39,6 +39,8 @@ import {take} from 'rxjs/operators';
   ],
 })
 export class FormManagementCreateComponent implements OnInit {
+  @Input() public readonly upload = false;
+
   @Output() public readonly goBackEvent = new EventEmitter<void>();
   @Output() public readonly afterCreateEvent = new EventEmitter<string>();
   @Output() public readonly afterUploadEvent = new EventEmitter<string>();
@@ -117,9 +119,8 @@ export class FormManagementCreateComponent implements OnInit {
               )
             : this.formManagementService.createFormDefinition(request)
         ),
-        switchMap(formDefinition => combineLatest([of(formDefinition), this.route.queryParams])),
-        tap(([formDefinition, params]) => {
-          if (params?.upload === 'true') {
+        tap(formDefinition => {
+          if (this.upload) {
             this.afterUploadEvent.emit(formDefinition.id);
           } else {
             this.afterCreateEvent.emit(formDefinition.id);
