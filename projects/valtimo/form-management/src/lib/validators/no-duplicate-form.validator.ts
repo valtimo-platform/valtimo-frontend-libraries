@@ -29,7 +29,7 @@ export function noDuplicateFormValidator(
     (context === 'case'
       ? formManagementService.existsFormDefinitionCase(
           params.caseDefinitionKey,
-          params.caseDefinitionVersionTag,
+          params.caseVersionTag,
           control.value.toString()
         )
       : formManagementService.existsFormDefinition(control.value.toString())

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {Upload16} from '@carbon/icons';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {FormManagementService} from '../../services';
@@ -41,11 +41,11 @@ export class FormManagementListComponent {
   public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
     .parent
     ? this.route.parent.params.pipe(
-        map(({caseDefinitionKey, caseDefinitionVersionTag}) =>
-          caseDefinitionKey && caseDefinitionVersionTag
+        map(({caseDefinitionKey, caseVersionTag}) =>
+          caseDefinitionKey && caseVersionTag
             ? {
                 caseDefinitionKey,
-                caseDefinitionVersionTag,
+                caseVersionTag,
               }
             : null
         )
@@ -79,6 +79,9 @@ export class FormManagementListComponent {
     this._partialPagination$,
     this.searchTerm$,
   ]).pipe(
+    filter(([context, params]) =>
+      context === 'case' ? !!(params?.caseVersionTag && params?.caseDefinitionKey) : true
+    ),
     switchMap(([context, routeParams, pagination, searchTerm]) => {
       const params = {
         ...pagination,
@@ -86,15 +89,15 @@ export class FormManagementListComponent {
         ...(searchTerm && {searchTerm}),
       };
 
+      console.log('hi', params);
+
       switch (context) {
         case 'case':
-          return routeParams
-            ? this.formManagementService.queryFormDefinitionsCase(
-                routeParams.caseDefinitionKey,
-                routeParams.caseDefinitionVersionTag,
-                params
-              )
-            : of({});
+          return this.formManagementService.queryFormDefinitionsCase(
+            routeParams.caseDefinitionKey,
+            routeParams.caseVersionTag,
+            params
+          );
         default:
         case 'independent':
           return this.formManagementService.queryFormDefinitions(params);
@@ -120,6 +123,13 @@ export class FormManagementListComponent {
     private readonly route: ActivatedRoute
   ) {
     this.iconService.registerAll([Upload16]);
+
+    this.route.params.subscribe(params => {
+      console.log(params);
+    });
+    this.route.parent.params.subscribe(params => {
+      console.log('x2', params);
+    });
   }
 
   public navigateToCreateRoute(): void {

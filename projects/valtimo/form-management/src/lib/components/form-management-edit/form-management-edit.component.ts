@@ -110,11 +110,11 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
   public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
     .parent
     ? this.route.parent.params.pipe(
-        map(({caseDefinitionKey, caseDefinitionVersionTag}) =>
-          caseDefinitionKey && caseDefinitionVersionTag
+        map(({caseDefinitionKey, caseVersionTag}) =>
+          caseDefinitionKey && caseVersionTag
             ? {
                 caseDefinitionKey,
-                caseDefinitionVersionTag,
+                caseVersionTag,
               }
             : null
         )
@@ -205,7 +205,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
             case 'case':
               return this.formManagementService.deleteFormDefinitionCase(
                 caseManagementRouteParams.caseDefinitionKey,
-                caseManagementRouteParams.caseDefinitionVersionTag,
+                caseManagementRouteParams.caseVersionTag,
                 definition.id
               );
 
@@ -249,7 +249,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
             case 'case':
               return this.formManagementService.modifyFormDefinitionCase(
                 caseManagementRouteParams.caseDefinitionKey,
-                caseManagementRouteParams.caseDefinitionVersionTag,
+                caseManagementRouteParams.caseVersionTag,
                 request
               );
 
@@ -279,7 +279,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
             case 'case':
               return this.formManagementService.getFormDefinitionCase(
                 caseManagementRouteParams.caseDefinitionKey,
-                caseManagementRouteParams.caseDefinitionVersionTag,
+                caseManagementRouteParams.caseVersionTag,
                 formDefinitionId
               );
 

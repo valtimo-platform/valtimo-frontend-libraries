@@ -53,7 +53,7 @@ const routes: Routes = [
     },
   },
   {
-    path: 'case-management/case/:caseDefinitionName/version/:caseVersionTag',
+    path: 'case-management/case/:caseDefinitionKey/version/:caseVersionTag',
     component: CaseManagementDetailContainerComponent,
     canActivate: [AuthGuardService],
     data: {

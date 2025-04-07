@@ -9,16 +9,16 @@ import {CaseProcessInstance, PROCESS_MANAGEMENT_ENDPOINTS} from '../models';
   providedIn: 'root',
 })
 export class ProcessManagementService extends BaseApiService {
-  private readonly _definitionName$ = new BehaviorSubject<string | null>(null);
+  private readonly _definitionKey$ = new BehaviorSubject<string | null>(null);
   private readonly _versionTag$ = new BehaviorSubject<string | null>(null);
 
   public processes$: Observable<CaseProcessInstance[]> = combineLatest([
-    this._definitionName$,
+    this._definitionKey$,
     this._versionTag$,
   ]).pipe(
-    filter(([definitionName, versionTag]) => !!definitionName && !!versionTag),
-    switchMap(([definitionName, versionTag]) =>
-      this.getProcesses(definitionName ?? '', versionTag ?? '')
+    filter(([definitionKey, versionTag]) => !!definitionKey && !!versionTag),
+    switchMap(([definitionKey, versionTag]) =>
+      this.getProcesses(definitionKey ?? '', versionTag ?? '')
     )
   );
 
@@ -37,15 +37,15 @@ export class ProcessManagementService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public setParams(definitionName: string, versionTag: string): void {
-    this._definitionName$.next(definitionName);
+  public setParams(caseDefinitionKey: string, versionTag: string): void {
+    this._definitionKey$.next(caseDefinitionKey);
     this._versionTag$.next(versionTag);
   }
 
   public deleteProcess(processDefinitionId: string): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(
-        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionName$.getValue()}/version/${this._versionTag$.getValue()}/process-definition/${processDefinitionId}`
+        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionKey$.getValue()}/version/${this._versionTag$.getValue()}/process-definition/${processDefinitionId}`
       )
     );
   }
@@ -62,7 +62,7 @@ export class ProcessManagementService extends BaseApiService {
 
     return this.httpClient.post<any>(
       this.getApiUrl(
-        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionName$.getValue()}/version/${this._versionTag$.getValue()}/process-definition`
+        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionKey$.getValue()}/version/${this._versionTag$.getValue()}/process-definition`
       ),
       formData
     );

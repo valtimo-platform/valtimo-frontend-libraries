@@ -124,7 +124,7 @@ export class CaseManagementWidgetsJsonEditorComponent implements AfterViewInit {
     downloadAnchorElement.setAttribute('href', dataString);
     downloadAnchorElement.setAttribute(
       'download',
-      `${this._currentWidgetTab.caseDefinitionName}-widgets.json`
+      `${this._currentWidgetTab.caseDefinitionKey}-widgets.json`
     );
     downloadAnchorElement.click();
   }
@@ -217,7 +217,7 @@ export class CaseManagementWidgetsJsonEditorComponent implements AfterViewInit {
 
     this._jsonSchemaInvalid.set(
       widgetConfig.key !== this._currentWidgetTab.key ||
-        widgetConfig.caseDefinitionName !== this._currentWidgetTab.caseDefinitionName ||
+        widgetConfig.caseDefinitionKey !== this._currentWidgetTab.caseDefinitionKey ||
         new Set(editedWidgetKeys).size !== editedWidgetKeys.length
     );
 

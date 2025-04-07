@@ -50,10 +50,8 @@ export class FormManagementCreateComponent implements OnInit {
   public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
     .parent
     ? this.route.parent.params.pipe(
-        map(({caseDefinitionKey, caseDefinitionVersionTag}) =>
-          caseDefinitionKey && caseDefinitionVersionTag
-            ? {caseDefinitionKey, caseDefinitionVersionTag}
-            : null
+        map(({caseDefinitionKey, caseVersionTag}) =>
+          caseDefinitionKey && caseVersionTag ? {caseDefinitionKey, caseVersionTag} : null
         )
       )
     : of(null);
@@ -114,7 +112,7 @@ export class FormManagementCreateComponent implements OnInit {
           context === 'case'
             ? this.formManagementService.createFormDefinitionsCase(
                 caseManagementParams.caseDefinitionKey,
-                caseManagementParams.caseDefinitionVersionTag,
+                caseManagementParams.caseVersionTag,
                 request
               )
             : this.formManagementService.createFormDefinition(request)

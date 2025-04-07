@@ -28,7 +28,7 @@ const PROCESS_MANAGEMENT_ENDPOINTS = {
 };
 
 interface ProcessManagementParams {
-  definitionName: string;
+  caseDefinitionKey: string;
   versionTag: string;
 }
 

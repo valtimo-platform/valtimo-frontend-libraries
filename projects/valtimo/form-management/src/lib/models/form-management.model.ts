@@ -22,7 +22,7 @@ import {ManagementContext} from '@valtimo/config';
 
 interface FormManagementParams {
   caseDefinitionKey: string;
-  caseDefinitionVersionTag: string;
+  caseVersionTag: string;
 }
 
 interface FormManagementRouteData {
