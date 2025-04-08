@@ -1,8 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest} from 'rxjs';
-import {switchMap, take, tap} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 import {
   BaseModal,
   ButtonModule,
@@ -11,13 +10,13 @@ import {
   ModalModule,
   ModalService,
 } from 'carbon-components-angular';
-import {CreateFormDefinitionRequest} from '../../models';
+import {CreateFormDefinitionRequest, FormDefinition, FormManagementParams} from '../../models';
 import {FormManagementService} from '../../services';
 import {noDuplicateFormValidator} from '../../validators/no-duplicate-form.validator';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {ValtimoCdsModalDirectiveModule} from '@valtimo/components';
-import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
+import {ManagementContext} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-form-management-duplicate-modal',
@@ -37,12 +36,6 @@ import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
   ],
 })
 export class FormManagementDuplicateComponent extends BaseModal implements OnInit {
-  public readonly context$ = getContextObservable(this.route);
-
-  public readonly caseManagementRouteParams$ = this.context$.pipe(
-    switchMap(context => getCaseManagementRouteParams(context, this.route))
-  );
-
   public duplicateForm!: FormGroup;
 
   public get duplicateFormName(): FormControl {
@@ -54,8 +47,11 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
   }
 
   constructor(
-    @Inject('formToDuplicate') public readonly formToDuplicate,
-    @Inject('disabledPendingChangesCallback') public readonly disablePendingChangesCallback,
+    @Inject('formToDuplicate') public readonly formToDuplicate: FormDefinition,
+    @Inject('disabledPendingChangesCallback')
+    public readonly disablePendingChangesCallback: () => void,
+    @Inject('context') public readonly context: ManagementContext,
+    @Inject('params') public readonly params: FormManagementParams,
     protected modalService: ModalService,
     protected formManagementService: FormManagementService,
     protected route: ActivatedRoute,
@@ -69,21 +65,14 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
   }
 
   private initForm(): void {
-    combineLatest([this.context$, this.caseManagementRouteParams$])
-      .pipe(
-        take(1),
-        tap(([context, caseManagementParams]) => {
-          this.duplicateForm = new FormGroup({
-            duplicateFormName: new FormControl(
-              this.getDefaultName(),
-              Validators.compose([Validators.required]),
-              [noDuplicateFormValidator(context, caseManagementParams, this.formManagementService)]
-            ),
-          });
-          this.duplicateForm.markAllAsTouched();
-        })
-      )
-      .subscribe();
+    this.duplicateForm = new FormGroup({
+      duplicateFormName: new FormControl(
+        this.getDefaultName(),
+        Validators.compose([Validators.required]),
+        [noDuplicateFormValidator(this.context, this.params, this.formManagementService)]
+      ),
+    });
+    this.duplicateForm.markAllAsTouched();
   }
 
   public duplicate(): void {
@@ -94,13 +83,17 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
       formDefinition: JSON.stringify(this.formToDuplicate.formDefinition),
     };
 
-    combineLatest([
-      this.formManagementService.createFormDefinition(request),
-      this.route.queryParams,
-    ])
+    (this.context === 'case'
+      ? this.formManagementService.createFormDefinitionsCase(
+          this.params.caseDefinitionKey,
+          this.params.caseVersionTag,
+          request
+        )
+      : this.formManagementService.createFormDefinition(request)
+    )
       .pipe(take(1))
       .subscribe({
-        next: ([formDefinition]) => {
+        next: formDefinition => {
           this.disablePendingChangesCallback();
           this.navigateWithNewId(formDefinition.id).then(() => window.location.reload());
         },
@@ -128,11 +121,8 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
     const queryParams = {...this.route.snapshot.queryParams};
 
     try {
-      const success = await this.router.navigate([updatedUrl], {queryParams});
-      console.log('Navigation successful:', success);
-      return success;
+      return await this.router.navigate([updatedUrl], {queryParams});
     } catch (error) {
-      console.error('Navigation failed:', error);
       return false;
     }
   }

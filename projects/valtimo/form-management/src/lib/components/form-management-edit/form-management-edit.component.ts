@@ -383,13 +383,19 @@ export class FormManagementEditComponent
   }
 
   public showDuplicateModal(definition: FormDefinition): void {
-    this.modalService.create({
-      component: FormManagementDuplicateComponent,
-      inputs: {
-        formToDuplicate: definition,
-        disabledPendingChangesCallback: this.disablePendingChanges,
-      },
-    });
+    combineLatest([this.context$, this.caseManagementRouteParams$])
+      .pipe(take(1))
+      .subscribe(([context, params]) => {
+        this.modalService.create({
+          component: FormManagementDuplicateComponent,
+          inputs: {
+            formToDuplicate: definition,
+            disabledPendingChangesCallback: this.disablePendingChanges,
+            context,
+            params,
+          },
+        });
+      });
   }
 
   public setFormDefinition(formDefinition: any): void {
