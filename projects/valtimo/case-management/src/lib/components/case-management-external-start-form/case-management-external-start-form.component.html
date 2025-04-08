@@ -22,40 +22,40 @@
   } as obs"
   [cdsLayer]="1"
 >
-  <h4>{{ 'dossierManagement.externalStartForm.title' | translate }}</h4>
+  <h4>{{ 'caseManagement.externalStartForm.title' | translate }}</h4>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" [cdsLayer]="0">
     <cds-toggle
       formControlName="hasExternalForm"
-      label="{{ 'dossierManagement.externalStartForm.enabledToggle' | translate }}"
-      onText="{{ 'dossierManagement.externalStartForm.enabledToggleOn' | translate }}"
-      offText="{{ 'dossierManagement.externalStartForm.enabledToggleOff' | translate }}"
+      label="{{ 'caseManagement.externalStartForm.enabledToggle' | translate }}"
+      onText="{{ 'caseManagement.externalStartForm.enabledToggleOn' | translate }}"
+      offText="{{ 'caseManagement.externalStartForm.enabledToggleOff' | translate }}"
     ></cds-toggle>
 
     <cds-label>
-      {{ 'dossierManagement.externalStartForm.externalUrl' | translate }}
+      {{ 'caseManagement.externalStartForm.externalUrl' | translate }}
       <input
         cdsText
         type="text"
         formControlName="externalFormUrl"
-        placeholder="{{ 'dossierManagement.externalStartForm.externalUrlPlaceholder' | translate }}"
+        placeholder="{{ 'caseManagement.externalStartForm.externalUrlPlaceholder' | translate }}"
         maxlength="512"
       />
     </cds-label>
 
     <cds-label>
-      {{ 'dossierManagement.externalStartForm.description' | translate }}
+      {{ 'caseManagement.externalStartForm.description' | translate }}
       <input
         cdsText
         type="text"
         formControlName="description"
-        placeholder="{{ 'dossierManagement.externalStartForm.descriptionPlaceholder' | translate }}"
+        placeholder="{{ 'caseManagement.externalStartForm.descriptionPlaceholder' | translate }}"
         maxlength="512"
       />
     </cds-label>
 
     <button cdsButton="primary" type="submit" [disabled]="!form.valid">
-      {{ 'dossierManagement.externalStartForm.apply' | translate }}
+      {{ 'caseManagement.externalStartForm.apply' | translate }}
     </button>
   </form>
 </cds-tile>
