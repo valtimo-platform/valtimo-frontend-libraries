@@ -41,6 +41,14 @@ export class CaseListActionsComponent implements OnInit {
   @Output() public readonly formFlowComplete = new EventEmitter();
   @Output() public readonly startButtonDisableEvent = new EventEmitter<boolean>();
 
+  private readonly _caseSettings$: BehaviorSubject<CaseSettings> = new BehaviorSubject(null);
+
+  public readonly caseSettings$ = this._caseSettings$.pipe(filter(settings => !!settings));
+
+  private get _caseSettings(): CaseSettings | null {
+    return this._caseSettings$.getValue();
+  }
+
   public readonly associatedProcessDocumentDefinitions$: Observable<
     Array<ProcessDefinitionCaseDefinition>
   > = this.listService.caseDefinitionKey$.pipe(
@@ -53,11 +61,14 @@ export class CaseListActionsComponent implements OnInit {
             )
           : of([]),
         this._loading$,
+        this.caseSettings$,
       ])
     ),
-    map(([processDocumentDefinitions, loading]) => {
+    map(([processDocumentDefinitions, loading, caseSettings]) => {
       this._cachedAssociatedProcessDocumentDefinitions = processDocumentDefinitions;
-      this.startButtonDisableEvent.emit(processDocumentDefinitions.length === 0 || loading);
+      this.startButtonDisableEvent.emit(
+        loading || (processDocumentDefinitions.length === 0 && !caseSettings.hasExternalStartForm)
+      );
       return processDocumentDefinitions.filter(definition => definition.canInitializeDocument);
     })
   );
@@ -65,8 +76,9 @@ export class CaseListActionsComponent implements OnInit {
   private selectedProcessDefinitionCaseDefinition: ProcessDefinitionCaseDefinition | null = null;
   public readonly startSelectionModalOpen$ = new BehaviorSubject<boolean>(false);
 
-  private modalListenerAdded = false;
   private _cachedAssociatedProcessDocumentDefinitions: Array<ProcessDefinitionCaseDefinition> = [];
+
+  private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly documentService: DocumentService,
@@ -77,17 +89,40 @@ export class CaseListActionsComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.modalListenerAdded = false;
+    this._subscriptions.add(
+      this.listService.documentDefinitionName$
+        .pipe(
+          switchMap(documentDefinitionName =>
+            this.documentService.getCaseSettings(documentDefinitionName)
+          )
+        )
+        .subscribe(caseSettings => {
+          this._caseSettings$.next(caseSettings);
+        })
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   public startCase(): void {
     const associatedProcessDocumentDefinitions = this._cachedAssociatedProcessDocumentDefinitions;
+    const hasExternalStartForm = this._caseSettings?.hasExternalStartForm;
 
     if (associatedProcessDocumentDefinitions.length > 1) {
       this.startSelectionModalOpen$.next(true);
     } else {
       this.selectedProcessDefinitionCaseDefinition = associatedProcessDocumentDefinitions[0];
       this.showStartProcessModal();
+      if (hasExternalStartForm && associatedProcessDocumentDefinitions.length === 0) {
+        this.openExternalCaseStartForm();
+      } else if (associatedProcessDocumentDefinitions.length === 1 && !hasExternalStartForm) {
+        this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
+        this.showStartProcessModal();
+      } else if (associatedProcessDocumentDefinitions.length > 0) {
+        this.startSelectionModalOpen$.next(true);
+      }
     }
   }
 
@@ -120,6 +155,12 @@ export class CaseListActionsComponent implements OnInit {
 
   public onCloseSelect(): void {
     this.startSelectionModalOpen$.next(false);
+  }
+
+  public openExternalCaseStartForm(closeModal = false): void {
+    window.open(this._caseSettings?.externalStartFormUrl, '_blank');
+
+    if (closeModal) this.startSelectionModalOpen$.next(false);
   }
 
   private showStartProcessModal(): void {

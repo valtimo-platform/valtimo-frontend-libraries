@@ -98,6 +98,8 @@ export class CaseManagementWidgetFieldsColumnComponent implements OnInit, OnDest
   @Input({required: true}) public columnData: FieldsCaseWidgetValue[];
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
   @Input() public documentDefinitionName?: string;
+  @Input() public isFieldWidget = false;
+  @Input() public documentDefinitionName?: string;
   @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
   @Input() public selectedCollection?: ValuePathItem;
   @Input() public showHideWhenEmptyCheckbox = false;

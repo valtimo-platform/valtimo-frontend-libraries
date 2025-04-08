@@ -1,5 +1,5 @@
-/*
- * Copyright 2015-2025 Ritense BV, the Netherlands.
+/*!
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-import {TagType} from 'carbon-components-angular';
-import {TagColor} from '@valtimo/config';
-
-interface InternalCaseStatus {
-  key: string;
-  title: string;
-  visibleInCaseListByDefault: boolean;
-  color: TagColor;
-  documentDefinitionName?: string;
-  order?: number;
-  tagType?: TagType;
+::ng-deep .case-tag-selector .cds--label {
+  width: 100%;
+  margin-bottom: 0 !important;
 }
 
-export {InternalCaseStatus};
+::ng-deep .case-tag-selector .cds--multiselect {
+  margin-top: 8px;
+}
+
+::ng-deep .case-tag-selector-dropdown-template {
+  display: flex;
+  margin-top: -4px;
+
+  .cds--tag {
+    margin: 0;
+  }
+
+  .generic-span {
+    display: flex;
+    align-items: center;
+  }
+}

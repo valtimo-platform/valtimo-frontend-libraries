@@ -104,27 +104,6 @@ export class ProcessLinkService {
     );
   }
 
-  public deployProcessWithProcessLinks(
-    processLinks: ProcessLinkCreateEvent[] = [],
-    processDefinitionId: string | null,
-    processXml: string | null
-  ) {
-    const formData = new FormData();
-    const processLinksBlob = new Blob(
-      [JSON.stringify(processLinks.map(processLink => this.emptyStringToNull(processLink)))],
-      {type: 'application/json'}
-    );
-
-    if (processXml) formData.append('file', new File([processXml], 'process.bpmn'));
-    if (processDefinitionId) formData.append('processDefinitionId', processDefinitionId);
-    formData.append('processLinks', processLinksBlob);
-
-    return this.http.post(
-      `${this.VALTIMO_ENDPOINT_URI}management/v1/case-definition/bezwaar/version/1.0.0-test/process-definition`,
-      formData
-    );
-  }
-
   public submitForm(
     processLinkId: string,
     formData: object,
