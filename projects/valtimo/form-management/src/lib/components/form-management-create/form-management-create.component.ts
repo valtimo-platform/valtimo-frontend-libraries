@@ -15,8 +15,8 @@ import {
   ModalModule,
   TilesModule,
 } from 'carbon-components-angular';
-import {ManagementContext} from '@valtimo/config';
 import {take} from 'rxjs/operators';
+import {ManagementContext} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-form-management-create',

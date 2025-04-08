@@ -10,7 +10,6 @@ import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms'; // For translation support
 import {ManagementContext} from '@valtimo/config';
-import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-form-management-list',
@@ -118,8 +117,7 @@ export class FormManagementListComponent {
   constructor(
     private readonly formManagementService: FormManagementService,
     private readonly iconService: IconService,
-    private readonly route: ActivatedRoute,
-    private readonly notificationService: GlobalNotificationService
+    private readonly route: ActivatedRoute
   ) {
     this.iconService.registerAll([Upload16]);
   }

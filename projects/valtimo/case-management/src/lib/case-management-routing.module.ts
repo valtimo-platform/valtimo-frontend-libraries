@@ -102,18 +102,23 @@ const routes: Routes = [
       {
         path: TabEnum.FORMS,
         component: FormManagementComponent,
-        canDeactivate: [pendingChangesGuard],
         data: {
           context: 'case',
         } as FormManagementRouteData,
-        children: [
-          {
-            path: ':formDefinitionId',
-            component: FormManagementEditComponent,
-          },
-        ],
       },
     ],
+  },
+  {
+    path: `case-management/case/:caseDefinitionKey/version/:caseVersionTag/${TabEnum.FORMS}/:formDefinitionId`,
+    component: FormManagementEditComponent,
+    canActivate: [AuthGuardService],
+    canDeactivate: [pendingChangesGuard],
+    data: {
+      title: 'Forms',
+      roles: [ROLE_ADMIN],
+      context: 'case',
+      customPageTitle: true,
+    } as FormManagementRouteData,
   },
 ];
 
