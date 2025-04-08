@@ -17,8 +17,17 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angula
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {CARBON_CONSTANTS} from '@valtimo/components';
-import {DocumentService, ProcessDefinitionCaseDefinition} from '@valtimo/document';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from 'rxjs';
+import {CaseSettings, DocumentService, ProcessDefinitionCaseDefinition} from '@valtimo/document';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  of,
+  Subscription,
+  switchMap,
+} from 'rxjs';
 import {CaseListService} from '../../services';
 import {CaseProcessStartModalComponent} from '../case-process-start-modal/case-process-start-modal.component';
 import {GlobalNotificationService} from '@valtimo/layout';
@@ -90,11 +99,9 @@ export class CaseListActionsComponent implements OnInit {
 
   public ngOnInit(): void {
     this._subscriptions.add(
-      this.listService.documentDefinitionName$
+      this.listService.caseDefinitionKey$
         .pipe(
-          switchMap(documentDefinitionName =>
-            this.documentService.getCaseSettings(documentDefinitionName)
-          )
+          switchMap(caseDefinitionKey => this.documentService.getCaseSettings(caseDefinitionKey))
         )
         .subscribe(caseSettings => {
           this._caseSettings$.next(caseSettings);
@@ -118,7 +125,7 @@ export class CaseListActionsComponent implements OnInit {
       if (hasExternalStartForm && associatedProcessDocumentDefinitions.length === 0) {
         this.openExternalCaseStartForm();
       } else if (associatedProcessDocumentDefinitions.length === 1 && !hasExternalStartForm) {
-        this.selectedProcessDocumentDefinition = associatedProcessDocumentDefinitions[0];
+        this.selectedProcessDefinitionCaseDefinition = associatedProcessDocumentDefinitions[0];
         this.showStartProcessModal();
       } else if (associatedProcessDocumentDefinitions.length > 0) {
         this.startSelectionModalOpen$.next(true);

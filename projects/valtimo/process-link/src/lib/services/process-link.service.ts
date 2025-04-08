@@ -20,7 +20,6 @@ import {map, Observable} from 'rxjs';
 
 import {
   CompatiblePluginProcessLinks,
-  FormFlowProcessLinkCreateRequestDto,
   FormFlowProcessLinkUpdateRequestDto,
   FormProcessLinkUpdateRequestDto,
   FormSubmissionResult,
@@ -30,9 +29,7 @@ import {
   ProcessLinkCreateEvent,
   ProcessLinkType,
   TaskWithProcessLink,
-  UIComponentProcessLinkCreateRequestDto,
   UIComponentProcessLinkUpdateRequestDto,
-  URLProcessLinkCreateDto,
   URLProcessLinkUpdateRequestDto,
 } from '../models';
 import {URLVariables} from '../models/process-link-url.model';
@@ -101,6 +98,27 @@ export class ProcessLinkService {
   public getProcessLinkCandidates(activityType: string): Observable<Array<ProcessLinkType>> {
     return this.http.get<Array<ProcessLinkType>>(
       `${this.VALTIMO_ENDPOINT_URI}v1/process-link/types?activityType=${activityType}`
+    );
+  }
+
+  public deployProcessWithProcessLinks(
+    processLinks: ProcessLinkCreateEvent[] = [],
+    processDefinitionId: string | null,
+    processXml: string | null
+  ) {
+    const formData = new FormData();
+    const processLinksBlob = new Blob(
+      [JSON.stringify(processLinks.map(processLink => this.emptyStringToNull(processLink)))],
+      {type: 'application/json'}
+    );
+
+    if (processXml) formData.append('file', new File([processXml], 'process.bpmn'));
+    if (processDefinitionId) formData.append('processDefinitionId', processDefinitionId);
+    formData.append('processLinks', processLinksBlob);
+
+    return this.http.post(
+      `${this.VALTIMO_ENDPOINT_URI}management/v1/case-definition/bezwaar/version/1.0.0-test/process-definition`,
+      formData
     );
   }
 

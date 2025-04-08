@@ -15,35 +15,34 @@
  */
 
 import {Injectable} from '@angular/core';
-import {DossierListService} from './dossier-list.service';
-import {CaseTagService, CaseTag} from '@valtimo/document';
-import {DossierParameterService} from './dossier-parameter.service';
+import {CaseTag, CaseTagService} from '@valtimo/document';
 import {BehaviorSubject, combineLatest, map, Observable, switchMap, take, tap} from 'rxjs';
+import {CaseListService} from './case-list.service';
+import {CaseParameterService} from './case-parameter.service';
 
 @Injectable()
-export class DossierListCaseTagService {
+export class CaseListCaseTagService {
   private readonly _selectedCaseTags$ = new BehaviorSubject<CaseTag[]>([]);
 
   private readonly _showCaseTagsSelector$ = new BehaviorSubject<boolean>(false);
 
-  private readonly _caseTags$: Observable<CaseTag[]> =
-    this.dossierListService.documentDefinitionName$.pipe(
-      switchMap(documentDefinitionName =>
-        combineLatest([
-          this.caseTagsService.getCaseTags(documentDefinitionName),
-          this.dossierParameterService.queryCaseTagsParams$,
-        ]).pipe(take(1))
-      ),
-      tap(([caseTags, queryCaseTags]) => {
-        let selectedCaseTags;
-        if (queryCaseTags) {
-          selectedCaseTags = caseTags.filter(caseTag => queryCaseTags.includes(caseTag.key));
-          this.setSelectedCaseTags(selectedCaseTags);
-        }
-      }),
-      map(([caseTags]) => caseTags),
-      tap(caseTags => this._showCaseTagsSelector$.next((caseTags || []).length > 1))
-    );
+  private readonly _caseTags$: Observable<CaseTag[]> = this.caseListService.caseDefinitionKey$.pipe(
+    switchMap(caseDefinitionKey =>
+      combineLatest([
+        this.caseTagsService.getCaseTags(caseDefinitionKey),
+        this.caseParameterService.queryCaseTagsParams$,
+      ]).pipe(take(1))
+    ),
+    tap(([caseTags, queryCaseTags]) => {
+      let selectedCaseTags;
+      if (queryCaseTags) {
+        selectedCaseTags = caseTags.filter(caseTag => queryCaseTags.includes(caseTag.key));
+        this.setSelectedCaseTags(selectedCaseTags);
+      }
+    }),
+    map(([caseTags]) => caseTags),
+    tap(caseTags => this._showCaseTagsSelector$.next((caseTags || []).length > 1))
+  );
 
   public get caseTags$(): Observable<CaseTag[]> {
     return this._caseTags$;
@@ -58,13 +57,13 @@ export class DossierListCaseTagService {
   }
 
   constructor(
-    private readonly dossierListService: DossierListService,
+    private readonly caseListService: CaseListService,
     private readonly caseTagsService: CaseTagService,
-    private readonly dossierParameterService: DossierParameterService
+    private readonly caseParameterService: CaseParameterService
   ) {}
 
   public setSelectedCaseTags(caseTags: CaseTag[]): void {
     this._selectedCaseTags$.next(caseTags);
-    this.dossierParameterService.setCaseTagParameter(caseTags.map(caseTag => caseTag.key));
+    this.caseParameterService.setCaseTagParameter(caseTags.map(caseTag => caseTag.key));
   }
 }

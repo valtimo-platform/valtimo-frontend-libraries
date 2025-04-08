@@ -42,15 +42,15 @@ import {
 import {
   AdvancedDocumentSearchRequest,
   AdvancedDocumentSearchRequestImpl,
+  CaseTag,
+  CaseTagsUtils,
   Documents,
   DocumentService,
   InternalCaseStatus,
   InternalCaseStatusUtils,
   SpecifiedDocuments,
-  CaseTag,
-  CaseTagsUtils,
 } from '@valtimo/document';
-import {Tab, Tabs, TagType} from 'carbon-components-angular';
+import {Tab, Tabs} from 'carbon-components-angular';
 import {isEqual} from 'lodash';
 import {
   BehaviorSubject,
@@ -83,12 +83,12 @@ import {
   CaseBulkAssignService,
   CaseColumnService,
   CaseListAssigneeService,
+  CaseListCaseTagService,
   CaseListPaginationService,
   CaseListSearchService,
   CaseListService,
   CaseListStatusService,
   CaseParameterService,
-  DossierListCaseTagService
 } from '../../services';
 import {CaseListActionsComponent} from '../case-list-actions/case-list-actions.component';
 
@@ -103,7 +103,7 @@ import {CaseListActionsComponent} from '../case-list-actions/case-list-actions.c
     CaseListPaginationService,
     CaseListSearchService,
     CaseListStatusService,
-    DossierListCaseTagService
+    CaseListCaseTagService,
   ],
 })
 export class CaseListComponent implements OnInit, OnDestroy {
@@ -139,11 +139,11 @@ export class CaseListComponent implements OnInit, OnDestroy {
   public readonly statuses$ = this.statusService.caseStatuses$.pipe(
     tap(() => (this.loadingStatuses = false))
   );
-  public readonly caseTags$ = this.dossierListCaseTagService.caseTags$.pipe(
+  public readonly caseTags$ = this.caseListCaseTagService.caseTags$.pipe(
     tap(() => (this.loadingStatuses = false))
   );
   public readonly selectedStatuses$ = this.statusService.selectedCaseStatuses$;
-  public readonly selectedCaseTags$ = this.dossierListCaseTagService.selectedCaseTags$;
+  public readonly selectedCaseTags$ = this.caseListCaseTagService.selectedCaseTags$;
 
   public readonly caseDefinitionKey$ = this.listService.caseDefinitionKey$;
 
@@ -198,7 +198,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
     );
 
   public readonly showStatusSelector$ = this.statusService.showStatusSelector$;
-  public readonly showCaseTagsSelector$ = this.dossierListCaseTagService.showCaseTagsSelector$;
+  public readonly showCaseTagsSelector$ = this.caseListCaseTagService.showCaseTagsSelector$;
 
   private readonly INTERNAL_STATUS_COLUMN = 'internalStatus';
   private readonly CASE_TAGS_COLUMN = 'caseTags';
@@ -304,12 +304,12 @@ export class CaseListComponent implements OnInit, OnDestroy {
         this.assigneeFilter$,
         this.searchFieldValues$,
         this.statusService.selectedCaseStatuses$,
-        this.dossierListCaseTagService.selectedCaseTags$,
+        this.caseListCaseTagService.selectedCaseTags$,
         this.listService.forceRefresh$,
         this._hasEnvColumnConfig$,
         this._hasApiColumnConfig$,
         this.statusService.caseStatuses$,
-        this.dossierListCaseTagService.caseTags$,
+        this.caseListCaseTagService.caseTags$,
       ]).pipe(debounceTime(50))
     ),
     distinctUntilChanged(
@@ -540,7 +540,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
     private readonly translateService: TranslateService,
     private readonly permissionService: PermissionService,
     private readonly statusService: CaseListStatusService,
-    private readonly dossierListCaseTagService: DossierListCaseTagService
+    private readonly caseListCaseTagService: CaseListCaseTagService
   ) {}
 
   public ngOnInit(): void {
@@ -681,7 +681,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
   }
 
   public onSelectedCaseTagsChange(caseTags: CaseTag[]): void {
-    this.dossierListCaseTagService.setSelectedCaseTags(caseTags);
+    this.caseListCaseTagService.setSelectedCaseTags(caseTags);
   }
 
   public onStartButtonDisableEvent(disabled: boolean): void {

@@ -41,14 +41,13 @@ import {
 import {ConfigService} from '@valtimo/config';
 import {
   CaseStatusService,
+  CaseTag,
+  CaseTagsUtils,
   Document as ValtimoDocument,
   DocumentService,
   InternalCaseStatus,
   InternalCaseStatusUtils,
   ProcessDefinitionCaseDefinition,
-  ProcessDocumentDefinition,
-  CaseTag,
-  CaseTagsUtils,
 } from '@valtimo/document';
 import {TaskWithProcessLink} from '@valtimo/process-link';
 import {UserProviderService} from '@valtimo/security';
@@ -208,7 +207,7 @@ export class CaseDetailComponent
       )
     );
 
-  public readonly caseTags$: Observable<CaseTag[] | undefined> = this.documentDefinitionName$.pipe(
+  public readonly caseTags$: Observable<CaseTag[] | undefined> = this.caseDefinitionKey$.pipe(
     filter(documentDefinitionName => !!documentDefinitionName),
     switchMap(documentDefinitionName => this._caseTags$),
     map(
