@@ -41,9 +41,9 @@ export class CaseManagementLinkProcessComponent {
   );
 
   public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
-    map(({caseDefinitionName, caseVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionName,
-      caseDefinitionVersionTag: caseVersionTag,
+    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionKey,
+      caseDefinitionVersionTag: caseDefinitionVersionTag,
     }))
   );
 

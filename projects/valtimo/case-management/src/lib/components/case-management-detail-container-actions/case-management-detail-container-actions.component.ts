@@ -65,8 +65,8 @@ export class CaseManagementDetailContainerActionsComponent {
     caseDefinitionKey: string;
     caseDefinitionVersionTag: string;
   }> = this.route.params.pipe(
-    map(({caseDefinitionName, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionName,
+    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionKey,
       caseDefinitionVersionTag: caseDefinitionVersionTag,
     }))
   );
@@ -248,11 +248,11 @@ export class CaseManagementDetailContainerActionsComponent {
       template: this._exportMessageTemplateRef,
     });
 
-    combineLatest([this._caseDefinitionName$, this.selectedVersion$])
+    combineLatest([this._caseDefinitionKey$, this.selectedVersion$])
       .pipe(
         take(1),
-        switchMap(([caseDefinitionName, selectedVersion]) =>
-          this.caseManagementService.setGlobalActiveCaseVersion(caseDefinitionName, selectedVersion)
+        switchMap(([caseDefinitionKey, selectedVersion]) =>
+          this.caseManagementService.setGlobalActiveCaseVersion(caseDefinitionKey, selectedVersion)
         )
       )
       .subscribe({
