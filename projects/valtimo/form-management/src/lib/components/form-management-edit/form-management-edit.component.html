@@ -113,18 +113,6 @@
       'valtimo-form-management-edit__header-container-case': obs?.context === 'case',
     }"
   >
-    @if (obs.context === 'case') {
-      <button
-        cdsButton="secondary"
-        [size]="obs.compactMode ? 'sm' : 'md'"
-        (click)="onGoBackButtonClick()"
-      >
-        <svg class="cds--btn__icon" cdsIcon="arrow--left" size="16"></svg>
-
-        <span>{{ 'interface.back' | translate }}</span>
-      </button>
-    }
-
     @if (obs.formDefinition.readOnly) {
       <cds-tag size="sm" type="blue">{{ 'formManagement.readOnly' | translate }}</cds-tag>
     }
@@ -150,6 +138,18 @@
           {{ 'formManagement.duplicate' | translate }}
         </cds-overflow-menu-option>
       </cds-overflow-menu>
+
+      @if (obs.context === 'case') {
+        <button
+          cdsButton="secondary"
+          [size]="obs.compactMode ? 'sm' : 'md'"
+          (click)="onGoBackButtonClick()"
+        >
+          <svg class="cds--btn__icon" cdsIcon="arrow--left" size="16"></svg>
+
+          <span>{{ 'interface.back' | translate }}</span>
+        </button>
+      }
 
       <button
         cdsButton="primary"
