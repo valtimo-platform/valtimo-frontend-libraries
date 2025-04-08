@@ -24,6 +24,7 @@ import {
   TagModule,
 } from 'carbon-components-angular';
 import {
+  BreadcrumbService,
   CARBON_CONSTANTS,
   CarbonListModule,
   ConfirmationModalModule,
@@ -156,7 +157,8 @@ export class FormManagementEditComponent
     private readonly iconService: IconService,
     private readonly router: Router,
     private readonly translateService: TranslateService,
-    private readonly notificationService: GlobalNotificationService
+    private readonly notificationService: GlobalNotificationService,
+    private readonly breadcrumbService: BreadcrumbService
   ) {
     super();
     this.iconService.registerAll([ArrowLeft16]);
@@ -166,12 +168,15 @@ export class FormManagementEditComponent
     this.loadFormDefinition();
     this.checkToOpenUploadModal();
     this.pageTitleService.disableReset();
+    this.initBreadcrumbs();
   }
 
   public ngOnDestroy(): void {
     this._alertSub.unsubscribe();
     this.pageTitleService.enableReset();
     this.pageTitleService.clearPageActionsViewContainerRef();
+    this.breadcrumbService.clearThirdBreadcrumb();
+    this.breadcrumbService.clearFourthBreadcrumb();
   }
 
   public formBuilderChanged(event, definition: EditorModel): void {
@@ -444,4 +449,28 @@ export class FormManagementEditComponent
   private disablePendingChanges = () => {
     this.pendingChanges = false;
   };
+
+  private initBreadcrumbs(): void {
+    combineLatest([this.context$, this.caseManagementRouteParams$])
+      .pipe(take(1))
+      .subscribe(([context, params]) => {
+        if (context === 'independent') return;
+
+        const route = `/case-management/case/${params.caseDefinitionKey}/version/${params.caseVersionTag}`;
+
+        this.breadcrumbService.setThirdBreadcrumb({
+          route: [route],
+          content: `${params.caseDefinitionKey} (${params.caseVersionTag})`,
+          href: route,
+        });
+
+        const routeWithForms = `${route}/forms`;
+
+        this.breadcrumbService.setFourthBreadcrumb({
+          route: [routeWithForms],
+          content: this.translateService.instant('caseManagement.tabs.forms'),
+          href: routeWithForms,
+        });
+      });
+  }
 }
