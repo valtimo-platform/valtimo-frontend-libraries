@@ -243,7 +243,6 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
         ])
             .pipe(
                 take(1),
-                tap(_ => console.log("before submit")),
                 switchMap(
                     ([
                        formName,
@@ -283,7 +282,6 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
           interval(200)
       ).pipe(take(1)).subscribe({
         next: () => {
-          console.log("handle form error")
           this.handleFormError(error)
         }
       })
