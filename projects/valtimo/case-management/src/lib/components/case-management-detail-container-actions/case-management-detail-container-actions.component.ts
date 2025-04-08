@@ -28,11 +28,12 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {PageHeaderService} from '@valtimo/components';
-import {ListItem, Notification, NotificationService} from 'carbon-components-angular';
+import {ListItem, Notification} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {CaseDetailService, CaseManagementService} from '../../services';
 import {CaseManagementRemoveModalComponent} from '../case-management-remove-modal/case-management-remove-modal.component';
+import {GlobalNotificationService} from '@valtimo/layout';
 import {eq, lt} from 'semver';
 
 @Component({
@@ -40,7 +41,6 @@ import {eq, lt} from 'semver';
   templateUrl: './case-management-detail-container-actions.component.html',
   styleUrls: ['./case-management-detail-container-actions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NotificationService],
 })
 export class CaseManagementDetailContainerActionsComponent {
   @ViewChild('exportingMessage')
@@ -49,7 +49,7 @@ export class CaseManagementDetailContainerActionsComponent {
   private readonly _caseRemoveModal: CaseManagementRemoveModalComponent;
 
   @Input() public documentDefinitionTitle = '';
-  @Input() public set caseDefinitionName(value: string) {
+  @Input() public set caseDefinitionKey(value: string) {
     this.caseDetailService.setSelectedDocumentDefinitionName(value);
   }
   @Output() public versionSet = new EventEmitter<number>();
@@ -87,7 +87,7 @@ export class CaseManagementDetailContainerActionsComponent {
       map(result => !!result?.active)
     );
 
-  private readonly _caseDefinitionName$ = this.caseDetailService.selectedDocumentDefinitionName$;
+  private readonly _caseDefinitionKey$ = this.caseDetailService.selectedDocumentDefinitionName$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
   public readonly showGlobalVersionModal$ = new BehaviorSubject<boolean>(false);
   public readonly showGlobalVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
@@ -119,19 +119,19 @@ export class CaseManagementDetailContainerActionsComponent {
 
   private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
   public readonly versions$: Observable<ListItem[] | null> = this.route.params.pipe(
-    switchMap(({caseDefinitionName, caseVersionTag}) =>
+    switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
       combineLatest([
         this._cachedVersions.getValue() === null
-          ? this.caseManagementService.getCaseDefinitionVersions(caseDefinitionName)
+          ? this.caseManagementService.getCaseDefinitionVersions(caseDefinitionKey)
           : this._cachedVersions.asObservable(),
-        of(caseVersionTag),
+        of(caseDefinitionVersionTag),
       ])
     ),
-    map(([caseDefinitionVersions, caseVersionTag]) => {
+    map(([caseDefinitionVersions, caseDefinitionVersionTag]) => {
       const mapping: ListItem[] | null =
         caseDefinitionVersions?.map((caseDefinitionVersion: string) => ({
           content: caseDefinitionVersion,
-          selected: caseDefinitionVersion === caseVersionTag,
+          selected: caseDefinitionVersion === caseDefinitionVersionTag,
         })) ?? null;
 
       if (this._cachedVersions.getValue() === null) this._cachedVersions.next(mapping);
@@ -152,7 +152,7 @@ export class CaseManagementDetailContainerActionsComponent {
     @Inject(DOCUMENT) private document: Document,
     private readonly caseManagementService: CaseManagementService,
     private readonly caseDetailService: CaseDetailService,
-    private readonly notificationService: NotificationService,
+    private readonly notificationService: GlobalNotificationService,
     private readonly pageHeaderService: PageHeaderService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -172,7 +172,7 @@ export class CaseManagementDetailContainerActionsComponent {
 
     this.startExporting();
 
-    combineLatest([this.selectedVersionNumber$, this._caseDefinitionName$])
+    combineLatest([this.selectedVersionNumber$, this._caseDefinitionKey$])
       .pipe(
         take(1),
         tap(([selectedVersion]) => (selectedVersionNumber = selectedVersion ?? 0)),
@@ -305,7 +305,7 @@ export class CaseManagementDetailContainerActionsComponent {
     const fileName = splitContentDisposition.length > 1 && splitContentDisposition[1];
 
     link.href = this.document.defaultView?.URL.createObjectURL(response.body) ?? '';
-    link.download = fileName || `${this.caseDefinitionName}_${versionNumber}.valtimo.zip`;
+    link.download = fileName || `${this.caseDefinitionKey}_${versionNumber}.valtimo.zip`;
     link.target = '_blank';
     link.click();
     link.remove();

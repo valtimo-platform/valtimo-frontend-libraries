@@ -16,3 +16,4 @@
 
 export * from './form-definition.model';
 export * from './form-edit-tabs.enum';
+export * from './form-management.model';

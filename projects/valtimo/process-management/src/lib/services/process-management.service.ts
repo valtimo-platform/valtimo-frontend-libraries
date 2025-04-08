@@ -1,36 +1,34 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable, Signal, signal} from '@angular/core';
-import {BaseApiService, ConfigService} from '@valtimo/config';
+import {BaseApiService, ConfigService, ManagementContext} from '@valtimo/config';
 import {BehaviorSubject, combineLatest, filter, Observable, switchMap} from 'rxjs';
 
-import {
-  CaseProcessInstance,
-  PROCESS_MANAGEMENT_ENDPOINTS,
-  ProcessManagementContext,
-} from '../models';
+import {CaseProcessInstance, PROCESS_MANAGEMENT_ENDPOINTS} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProcessManagementService extends BaseApiService {
-  private readonly _definitionName$ = new BehaviorSubject<string | null>(null);
-  private readonly _versionTag$ = new BehaviorSubject<string | null>(null);
+  private readonly _definitionKey$ = new BehaviorSubject<string | null>(null);
+  private readonly _caseDefinitionVersionTag$ = new BehaviorSubject<string | null>(null);
 
   public processes$: Observable<CaseProcessInstance[]> = combineLatest([
-    this._definitionName$,
-    this._versionTag$,
+    this._definitionKey$,
+    this._caseDefinitionVersionTag$,
   ]).pipe(
-    filter(([definitionName, versionTag]) => !!definitionName && !!versionTag),
-    switchMap(([definitionName, versionTag]) =>
-      this.getProcesses(definitionName ?? '', versionTag ?? '')
+    filter(
+      ([definitionKey, caseDefinitionVersionTag]) => !!definitionKey && !!caseDefinitionVersionTag
+    ),
+    switchMap(([definitionKey, caseDefinitionVersionTag]) =>
+      this.getProcesses(definitionKey ?? '', caseDefinitionVersionTag ?? '')
     )
   );
 
-  private _context = signal<ProcessManagementContext>('independent');
-  public set context(value: ProcessManagementContext) {
+  private _context = signal<ManagementContext>('independent');
+  public set context(value: ManagementContext) {
     this._context.set(value);
   }
-  public get context(): Signal<ProcessManagementContext> {
+  public get context(): Signal<ManagementContext> {
     return this._context.asReadonly();
   }
 
@@ -41,15 +39,15 @@ export class ProcessManagementService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public setParams(definitionName: string, versionTag: string): void {
-    this._definitionName$.next(definitionName);
-    this._versionTag$.next(versionTag);
+  public setParams(caseDefinitionKey: string, caseDefinitionVersionTag: string): void {
+    this._definitionKey$.next(caseDefinitionKey);
+    this._caseDefinitionVersionTag$.next(caseDefinitionVersionTag);
   }
 
   public deleteProcess(processDefinitionId: string): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(
-        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionName$.getValue()}/version/${this._versionTag$.getValue()}/process-definition/${processDefinitionId}`
+        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionKey$.getValue()}/version/${this._caseDefinitionVersionTag$.getValue()}/process-definition/${processDefinitionId}`
       )
     );
   }
@@ -66,7 +64,7 @@ export class ProcessManagementService extends BaseApiService {
 
     return this.httpClient.post<any>(
       this.getApiUrl(
-        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionName$.getValue()}/version/${this._versionTag$.getValue()}/process-definition`
+        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionKey$.getValue()}/version/${this._caseDefinitionVersionTag$.getValue()}/process-definition`
       ),
       formData
     );
@@ -74,11 +72,11 @@ export class ProcessManagementService extends BaseApiService {
 
   private getProcesses(
     definitionName: string,
-    versionTag: string
+    caseDefinitionVersionTag: string
   ): Observable<CaseProcessInstance[]> {
     return this.httpClient.get<CaseProcessInstance[]>(
       this.getApiUrl(
-        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${definitionName}/version/${versionTag}/process-definition`
+        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${definitionName}/version/${caseDefinitionVersionTag}/process-definition`
       )
     );
   }

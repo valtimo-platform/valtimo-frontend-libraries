@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 Ritense BV, the Netherlands.
+ * Copyright 2015-2024 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,4 @@
  * limitations under the License.
  */
 
-import {TestBed} from '@angular/core/testing';
-
-import {LayoutService} from './layout.service';
-
-describe('LayoutService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
-
-  it('should be created', () => {
-    const service: LayoutService = TestBed.inject(LayoutService);
-    expect(service).toBeTruthy();
-  });
-});
+export * from './form-management-duplicate.component';
