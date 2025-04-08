@@ -374,78 +374,88 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   private setFormViewModelComponent() {
-    this._viewInitialized$.subscribe(viewInitialized => {
-      if (viewInitialized) {
-        this.formViewModelDynamicContainer.clear();
-        if (!this.formViewModel) return;
-        const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
-          this.formViewModel.component
-        );
-        formViewModelComponent.instance.form = this.formDefinition$.getValue();
-        formViewModelComponent.instance.formName = this.formName$.getValue();
-        formViewModelComponent.instance.taskInstanceId = this.taskInstanceId$.getValue();
-        formViewModelComponent.instance.isStartForm = false;
+    combineLatest([this._viewInitialized$, this.processLinkIsUiComponent$]).subscribe(
+      ([viewInitialized, isUiComponent]) => {
+        if (viewInitialized && isUiComponent) {
+          this.formViewModelDynamicContainer.clear();
+          if (!this.formViewModel) {
+            return;
+          }
+          const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
+            this.formViewModel.component
+          );
+          formViewModelComponent.instance.form = this.formDefinition$.getValue();
+          formViewModelComponent.instance.formName = this.formName$.getValue();
+          formViewModelComponent.instance.taskInstanceId = this.taskInstanceId$.getValue();
+          formViewModelComponent.instance.isStartForm = false;
 
-        formViewModelComponent.instance.formSubmit
-          .pipe(
-            switchMap(() => this.task$),
-            take(1),
-          )
-          .subscribe((task: Task | null) => {
-            this.completeTask(task);
-          });
+          formViewModelComponent.instance.formSubmit
+            .pipe(
+              switchMap(() => this.task$),
+              take(1)
+            )
+            .subscribe((task: Task | null) => {
+              this.completeTask(task);
+            });
 
-        if (this.intermediateSaveEnabled) {
+          if (this.intermediateSaveEnabled) {
+            this._subscriptions.add(
+              formViewModelComponent.instance.submission$.subscribe(submission => {
+                this.taskIntermediateSaveService.setSubmission(submission);
+              })
+            );
+            this._subscriptions.add(
+              this.submission$.pipe(distinctUntilChanged()).subscribe((submission?) => {
+                if (submission?.data && Object.keys(submission.data).length === 0) {
+                  formViewModelComponent.instance.submission = {data: {}};
+                }
+              })
+            );
+            this.getCurrentProgress(formViewModelComponent);
+          }
+
           this._subscriptions.add(
-            formViewModelComponent.instance.submission$.subscribe(submission => {
-              this.taskIntermediateSaveService.setSubmission(submission);
+            this.closeModalEvent.subscribe(() => {
+              console.log('destroying formViewModel');
+              formViewModelComponent.destroy();
             })
           );
-          this._subscriptions.add(
-            this.submission$.pipe(distinctUntilChanged()).subscribe((submission?) => {
-              if (submission?.data && Object.keys(submission.data).length === 0) {
-                formViewModelComponent.instance.submission = {data: {}};
-              }
-            })
-          );
-          this.getCurrentProgress(formViewModelComponent);
         }
-
-        this._subscriptions.add(
-          this.closeModalEvent.subscribe(() => {
-            formViewModelComponent.destroy();
-          })
-        );
       }
-    });
+    );
   }
 
   private setFormCustomComponent(formCustomComponentKey: string): void {
-    this._viewInitialized$.subscribe(viewInitialized => {
-      if (viewInitialized) {
-        this.formCustomComponentDynamicContainer.clear();
-        if (!this.formCustomComponentConfig) return;
-        this._subscriptions.add(
-          this._formCustomComponentConfig$.subscribe(formCustomComponentConfig => {
-            const customComponent = formCustomComponentConfig[formCustomComponentKey];
-            const renderedComponent = this.formCustomComponentDynamicContainer.createComponent(
-              customComponent
-            ) as ComponentRef<FormCustomComponent>;
+    combineLatest([this._viewInitialized$, this.processLinkIsUiComponent$]).subscribe(
+      ([viewInitialized, isUiComponent]) => {
+        if (viewInitialized && isUiComponent) {
+          this.formCustomComponentDynamicContainer.clear();
+          if (!this.formCustomComponentConfig) {
+            return;
+          }
+          this._subscriptions.add(
+            this._formCustomComponentConfig$.subscribe(formCustomComponentConfig => {
+              const customComponent = formCustomComponentConfig[formCustomComponentKey];
+              const renderedComponent = this.formCustomComponentDynamicContainer.createComponent(
+                customComponent
+              ) as ComponentRef<FormCustomComponent>;
 
-            renderedComponent.instance.taskInstanceId = this.taskInstanceId$.value;
-            renderedComponent.instance.submittedEvent.subscribe(() => {
-              this.closeModalEvent.emit();
-            });
+              renderedComponent.instance.taskInstanceId = this.taskInstanceId$.value;
+              renderedComponent.instance.submittedEvent.subscribe(() => {
+                this.closeModalEvent.emit();
+              });
 
-            this._subscriptions.add(
-              this.closeModalEvent.subscribe(() => {
-                renderedComponent.destroy();
-              })
-            );
-          })
-        );
+              this._subscriptions.add(
+                this.closeModalEvent.subscribe(() => {
+                  console.log('destroying customComponent');
+                  renderedComponent.destroy();
+                })
+              );
+            })
+          );
+        }
       }
-    });
+    );
   }
 
   private resetFormDefinition(): void {

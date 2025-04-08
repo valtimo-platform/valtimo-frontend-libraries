@@ -80,7 +80,7 @@
   </div>
 
   <div class="m-2">
-    <ng-template #formViewModelComponent></ng-template>
-    <ng-template #formCustomComponent></ng-template>
+    <ng-template #formViewModelComponent *ngIf="obs.processLinkIsFormViewModel"></ng-template>
+    <ng-template #formCustomComponent *ngIf="obs.processLinkIsUiComponent"></ng-template>
   </div>
 </ng-container>
