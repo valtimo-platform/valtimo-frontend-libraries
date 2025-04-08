@@ -47,9 +47,8 @@
   align-items: flex-end;
 }
 
-::ng-deep .version-selector .cds--label {
-  min-width: 100%;
-  max-width: 350px;
+::ng-deep .version-selector {
+  width: 160px;
   margin-bottom: 0 !important;
 }
 
@@ -58,14 +57,13 @@
   margin-top: -4px;
 
   .cds--tag {
-    margin: 0;
+    margin: 0 8px 0 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;
     line-height: 24px;
     max-width: 100%;
-    margin-right: 8px;
   }
 }
 
