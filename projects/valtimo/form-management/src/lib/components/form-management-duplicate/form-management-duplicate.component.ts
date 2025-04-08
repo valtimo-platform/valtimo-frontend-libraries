@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest, Observable, of} from 'rxjs';
-import {map, take, tap} from 'rxjs/operators';
+import {combineLatest} from 'rxjs';
+import {switchMap, take, tap} from 'rxjs/operators';
 import {
   BaseModal,
   ButtonModule,
@@ -11,13 +11,13 @@ import {
   ModalModule,
   ModalService,
 } from 'carbon-components-angular';
-import {CreateFormDefinitionRequest, FormManagementParams} from '../../models';
+import {CreateFormDefinitionRequest} from '../../models';
 import {FormManagementService} from '../../services';
 import {noDuplicateFormValidator} from '../../validators/no-duplicate-form.validator';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {ManagementContext} from '@valtimo/config';
 import {ValtimoCdsModalDirectiveModule} from '@valtimo/components';
+import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
 
 @Component({
   selector: 'valtimo-form-management-duplicate-modal',
@@ -37,18 +37,11 @@ import {ValtimoCdsModalDirectiveModule} from '@valtimo/components';
   ],
 })
 export class FormManagementDuplicateComponent extends BaseModal implements OnInit {
-  public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
-    map(data => data && (data['context'] as ManagementContext))
-  );
+  public readonly context$ = getContextObservable(this.route);
 
-  public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
-    .parent
-    ? this.route.parent.params.pipe(
-        map(({caseDefinitionKey, caseVersionTag}) =>
-          caseDefinitionKey && caseVersionTag ? {caseDefinitionKey, caseVersionTag} : null
-        )
-      )
-    : of(null);
+  public readonly caseManagementRouteParams$ = this.context$.pipe(
+    switchMap(context => getCaseManagementRouteParams(context, this.route))
+  );
 
   public duplicateForm!: FormGroup;
 

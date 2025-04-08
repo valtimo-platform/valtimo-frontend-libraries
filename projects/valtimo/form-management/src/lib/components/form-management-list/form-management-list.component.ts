@@ -1,15 +1,15 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {Upload16} from '@carbon/icons';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {FormManagementService} from '../../services';
 import {CarbonListModule, ColumnConfig, Pagination} from '@valtimo/components';
-import {FormDefinition, FormManagementParams} from '../../models';
+import {FormDefinition} from '../../models';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms'; // For translation support
-import {ManagementContext} from '@valtimo/config';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
 
 @Component({
   selector: 'valtimo-form-management-list',
@@ -31,26 +31,14 @@ export class FormManagementListComponent {
   @Output() public readonly navigateToUploadEvent = new EventEmitter<void>();
   @Output() public readonly navigateToEditEvent = new EventEmitter<string>();
 
-  public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
-    map(data => data && (data['context'] as ManagementContext))
-  );
-
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly searchTerm$ = new BehaviorSubject<string>('');
 
-  public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
-    .parent
-    ? this.route.parent.params.pipe(
-        map(({caseDefinitionKey, caseVersionTag}) =>
-          caseDefinitionKey && caseVersionTag
-            ? {
-                caseDefinitionKey,
-                caseVersionTag,
-              }
-            : null
-        )
-      )
-    : of(null);
+  public readonly context$ = getContextObservable(this.route);
+
+  public readonly caseManagementRouteParams$ = this.context$.pipe(
+    switchMap(context => getCaseManagementRouteParams(context, this.route))
+  );
 
   private readonly _collectionSize$ = new BehaviorSubject<number>(0);
 

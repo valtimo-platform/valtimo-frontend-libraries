@@ -3,8 +3,8 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {ActivatedRoute} from '@angular/router';
 import {ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components';
 import {FormManagementService} from '../../services';
-import {CreateFormDefinitionRequest, FormManagementParams} from '../../models';
-import {combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
+import {CreateFormDefinitionRequest} from '../../models';
+import {combineLatest, switchMap, tap} from 'rxjs';
 import {noDuplicateFormValidator} from '../../validators/no-duplicate-form.validator';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
@@ -16,7 +16,7 @@ import {
   TilesModule,
 } from 'carbon-components-angular';
 import {take} from 'rxjs/operators';
-import {ManagementContext} from '@valtimo/config';
+import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
 
 @Component({
   selector: 'valtimo-form-management-create',
@@ -45,18 +45,11 @@ export class FormManagementCreateComponent implements OnInit {
   @Output() public readonly afterCreateEvent = new EventEmitter<string>();
   @Output() public readonly afterUploadEvent = new EventEmitter<string>();
 
-  public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
-    map(data => data && (data['context'] as ManagementContext))
-  );
+  public readonly context$ = getContextObservable(this.route);
 
-  public readonly caseManagementRouteParams$: Observable<FormManagementParams | null> = this.route
-    .parent
-    ? this.route.parent.params.pipe(
-        map(({caseDefinitionKey, caseVersionTag}) =>
-          caseDefinitionKey && caseVersionTag ? {caseDefinitionKey, caseVersionTag} : null
-        )
-      )
-    : of(null);
+  public readonly caseManagementRouteParams$ = this.context$.pipe(
+    switchMap(context => getCaseManagementRouteParams(context, this.route))
+  );
 
   public form: FormGroup;
 

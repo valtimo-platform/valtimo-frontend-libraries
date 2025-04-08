@@ -40,12 +40,7 @@ import {
   WidgetModule,
 } from '@valtimo/components';
 import {FormManagementService} from '../../services';
-import {
-  EDIT_TABS,
-  FormDefinition,
-  FormManagementParams,
-  ModifyFormDefinitionRequest,
-} from '../../models';
+import {EDIT_TABS, FormDefinition, ModifyFormDefinitionRequest} from '../../models';
 import {FormioForm} from '@formio/angular';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -53,7 +48,7 @@ import {FormManagementDuplicateComponent} from '../form-management-duplicate';
 import {FormManagementUploadComponent} from '../form-management-upload';
 import {ArrowLeft16} from '@carbon/icons';
 import {GlobalNotificationService} from '@valtimo/layout';
-import {ManagementContext} from '@valtimo/config';
+import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
 
 @Component({
   selector: 'valtimo-form-management-edit',
@@ -110,36 +105,11 @@ export class FormManagementEditComponent
     map(params => (params.has('formDefinitionId') ? params.get('formDefinitionId') : null))
   );
 
-  public readonly context$: Observable<ManagementContext | ''> = this.route.data.pipe(
-    map(data => data && (data['context'] as ManagementContext))
+  public readonly context$ = getContextObservable(this.route);
+
+  public readonly caseManagementRouteParams$ = this.context$.pipe(
+    switchMap(context => getCaseManagementRouteParams(context, this.route))
   );
-
-  public readonly caseManagementRouteParams$: Observable<FormManagementParams | undefined> =
-    this.context$.pipe(
-      switchMap(context => {
-        if (context !== 'case') {
-          return of(undefined);
-        }
-
-        const rootParams$ = this.route.params ? this.route.params : of({});
-        const parentParams$ = this.route.parent?.params ? this.route.parent.params : of({});
-
-        return combineLatest([rootParams$, parentParams$]).pipe(
-          map(([rootParams, parentParams]) => {
-            const caseDefinitionKey =
-              rootParams['caseDefinitionKey'] || parentParams['caseDefinitionKey'];
-            const caseVersionTag = rootParams['caseVersionTag'] || parentParams['caseVersionTag'];
-
-            if (caseDefinitionKey && caseVersionTag) {
-              return {caseDefinitionKey, caseVersionTag};
-            }
-
-            return null;
-          }),
-          filter(params => params !== null)
-        );
-      })
-    );
 
   private readonly _formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
 
