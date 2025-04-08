@@ -65,8 +65,8 @@ export class CaseManagementDetailContainerActionsComponent {
     caseDefinitionKey: string;
     caseDefinitionVersionTag: string;
   }> = this.route.params.pipe(
-    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionKey,
+    map(({caseDefinitionName, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionName,
       caseDefinitionVersionTag: caseDefinitionVersionTag,
     }))
   );
