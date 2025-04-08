@@ -416,7 +416,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
 
           this._subscriptions.add(
             this.closeModalEvent.subscribe(() => {
-              console.log('destroy fvm component');
               formViewModelComponent.destroy();
             })
           );
@@ -449,7 +448,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
           );
           this._subscriptions.add(
             this.closeModalEvent.subscribe(() => {
-              console.log('destroy ui component');
               renderedComponent.destroy();
             })
           );
