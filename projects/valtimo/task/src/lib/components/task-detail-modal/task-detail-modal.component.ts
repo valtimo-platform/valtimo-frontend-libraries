@@ -147,6 +147,7 @@ export class TaskDetailModalComponent implements OnInit {
   }
 
   public closeModal(): void {
+    console.log('modal closed');
     this._modal.open = false;
     this.taskIntermediateSaveService.setSubmission({});
     this.modalCloseEvent$.next(!this.modalCloseEvent$.getValue());
