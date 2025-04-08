@@ -61,22 +61,25 @@ export class CaseManagementDetailContainerActionsComponent {
   public readonly selectedVersion$ = new BehaviorSubject<string>('');
   public readonly currentGlobalActiveVersion$ = new BehaviorSubject<string>('');
 
-  public readonly params$: Observable<any> | undefined = this.route.params.pipe(
-    map(({caseDefinitionName, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionName,
+  public readonly params$: Observable<{
+    caseDefinitionKey: string;
+    caseDefinitionVersionTag: string;
+  }> = this.route.params.pipe(
+    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionKey,
       caseDefinitionVersionTag: caseDefinitionVersionTag,
     }))
   );
 
-  public readonly caseDefinitionKey$: Observable<string> | undefined = this.params$?.pipe(
-    map(({caseDefinitionKey}) => caseDefinitionKey || '')
+  public readonly caseDefinitionKey$: Observable<string> = this.params$.pipe(
+    map(params => params.caseDefinitionKey || '')
   );
 
-  public readonly caseDefinitionVersionTag$: Observable<string> | undefined = this.params$?.pipe(
-    map(({caseDefinitionVersionTag}) => caseDefinitionVersionTag || '')
+  public readonly caseDefinitionVersionTag$: Observable<string> = this.params$.pipe(
+    map(params => params.caseDefinitionVersionTag || '')
   );
 
-  public readonly isSelectedVersionGloballyActive$: Observable<boolean> =
+  public readonly selectedVersionIsGloballyActive$: Observable<boolean> =
     this.caseDefinitionKey$?.pipe(
       switchMap(caseDefinitionKey =>
         this.caseManagementService.getGlobalActiveCase(caseDefinitionKey)
