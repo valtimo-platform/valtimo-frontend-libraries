@@ -16,15 +16,15 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import moment from 'moment';
 import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  Observable,
-  Subject,
-  Subscription,
-  switchMap,
-  take,
-  tap,
+    BehaviorSubject,
+    combineLatest,
+    filter, interval, merge,
+    Observable,
+    Subject,
+    Subscription,
+    switchMap,
+    take,
+    tap,
 } from 'rxjs';
 import {
   FormioComponent,
@@ -115,7 +115,8 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
   public readonly options$ = new BehaviorSubject<ValtimoFormioOptions>(undefined);
   public readonly taskInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly tokenSetInLocalStorage$ = new BehaviorSubject<boolean>(false);
-  public readonly change$ = new BehaviorSubject<any>(null);
+  public readonly data$ = new BehaviorSubject<any>(null);
+  public readonly changeEvents$ = new Subject<any>();
   public readonly blur$ = new Subject<FocusEvent>();
   public readonly focus$ = new BehaviorSubject<FocusEvent>(null);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
@@ -227,55 +228,68 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
   }
 
   public beforeSubmit(submission: any, callback: FormioSubmissionCallback): void {
-    this.pendingUpdateSubscription?.unsubscribe();
-    this.setWaitCursor(false);
+    this.changeEvents$.pipe(take(1)).subscribe({
+      next: ()=> {
+        this.pendingUpdateSubscription?.unsubscribe();
+        this.setWaitCursor(false);
 
-    combineLatest([
-      this.formName$,
-      this.taskInstanceId$,
-      this.processDefinitionKey$,
-      this.documentDefinitionName$,
-      this.isStartForm$,
-      this.documentId$,
-    ])
-      .pipe(
-        take(1),
-        switchMap(
-          ([
-            formName,
-            taskInstanceId,
-            processDefinitionKey,
-            documentDefinitionName,
-            isStartForm,
-            documentId,
-          ]) =>
-            isStartForm
-              ? this.viewModelService.submitViewModelForStartForm(
-                  formName,
-                  processDefinitionKey,
-                  documentId,
-                  documentDefinitionName,
-                  submission.data
+        combineLatest([
+          this.formName$,
+          this.taskInstanceId$,
+          this.processDefinitionKey$,
+          this.documentDefinitionName$,
+          this.isStartForm$,
+          this.documentId$,
+        ])
+            .pipe(
+                take(1),
+                tap(_ => console.log("before submit")),
+                switchMap(
+                    ([
+                       formName,
+                       taskInstanceId,
+                       processDefinitionKey,
+                       documentDefinitionName,
+                       isStartForm,
+                       documentId,
+                     ]) =>
+                        isStartForm
+                            ? this.viewModelService.submitViewModelForStartForm(
+                                formName,
+                                processDefinitionKey,
+                                documentId,
+                                documentDefinitionName,
+                                submission.data
+                            )
+                            : this.viewModelService.submitViewModel(formName, taskInstanceId, submission.data)
                 )
-              : this.viewModelService.submitViewModel(formName, taskInstanceId, submission.data)
-        )
-      )
-      .subscribe({
-        next: _ => {
-          callback(null, submission);
-        },
-        error: err => {
-          this.handleSubmissionError(err, callback);
-        },
-      });
+            )
+            .subscribe({
+              next: _ => {
+                callback(null, submission);
+              },
+              error: err => {
+                this.handleSubmissionError(err, callback);
+              },
+            });
+        }
+    })
   }
 
   private handleSubmissionError(error: any, callback: FormioSubmissionCallback): void {
-    callback({message: '', component: null, silent: true}, null);
-
     if (error instanceof HttpErrorResponse) {
-      this.handleFormError(error);
+      merge(
+          this.changeEvents$,
+          interval(200)
+      ).pipe(take(1)).subscribe({
+        next: () => {
+          console.log("handle form error")
+          this.handleFormError(error)
+        }
+      })
     }
+
+    callback({message: 'error', component: null, silent: false}, null);
   }
 
   private handleFormError(error: HttpErrorResponse): void {
@@ -317,8 +331,9 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
   }
 
   public onChange(object: any): void {
+    this.changeEvents$.next(object);
     if (object.data) {
-      this.change$.next(object);
+      this.data$.next(object.data);
     }
   }
 
@@ -351,10 +366,10 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
         switchMap(([formName, taskInstanceId]) =>
           this.viewModelService.getViewModel(formName, taskInstanceId).pipe(
             tap(viewModel => {
+                this.changeEvents$.pipe(take(1)).subscribe(() => {
+                    this.loading$.next(false);
+                });
               this.submission$.next({data: viewModel});
-              this.change$.pipe(take(1)).subscribe(() => {
-                this.loading$.next(false);
-              });
               this._isWizard = this.formio.form.display === 'wizard';
             })
           )
@@ -372,10 +387,10 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
             .getViewModelForStartForm(formName, processDefinitionKey, documentId)
             .pipe(
               tap(viewModel => {
+                  this.changeEvents$.pipe(take(1)).subscribe(() => {
+                      this.loading$.next(false);
+                  });
                 this.submission$.next({data: viewModel});
-                this.change$.pipe(take(1)).subscribe(() => {
-                  this.loading$.next(false);
-                });
                 this._isWizard = this.formio.form.display === 'wizard';
               })
             )
@@ -390,16 +405,16 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     this.pendingUpdateSubscription = combineLatest([
       this.formName$,
       this.taskInstanceId$,
-      this.change$,
+      this.data$,
     ])
       .pipe(
         take(1),
-        switchMap(([formName, taskInstanceId, change]) =>
+        switchMap(([formName, taskInstanceId, data]) =>
           this.viewModelService
             .updateViewModel(
               formName,
               taskInstanceId,
-              change.data,
+              data,
               this.formio.formio.page,
               this._isWizard
             )
@@ -420,18 +435,18 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
     this.pendingUpdateSubscription = combineLatest([
       this.formName$,
       this.processDefinitionKey$,
-      this.change$,
+      this.data$,
       this.documentId$,
     ])
       .pipe(
         take(1),
-        switchMap(([formName, processDefinitionKey, change, documentId]) =>
+        switchMap(([formName, processDefinitionKey, data, documentId]) =>
           this.viewModelService
             .updateViewModelForStartForm(
               formName,
               processDefinitionKey,
               documentId,
-              change.data,
+              data,
               this.formio.formio.page,
               this._isWizard
             )
