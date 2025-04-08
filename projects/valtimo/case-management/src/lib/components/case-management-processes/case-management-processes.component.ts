@@ -35,9 +35,9 @@ import {map, Observable} from 'rxjs';
 export class CaseManagementProcessesComponent extends PendingChangesComponent {
   public readonly params$: Observable<ProcessManagementParams> | undefined =
     this.route.parent?.params.pipe(
-      map(({caseDefinitionKey, caseVersionTag}) => ({
+      map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
         caseDefinitionKey: caseDefinitionKey,
-        versionTag: caseVersionTag,
+        caseDefinitionVersionTag: caseDefinitionVersionTag,
       }))
     );
 

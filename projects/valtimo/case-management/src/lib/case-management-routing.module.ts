@@ -57,7 +57,7 @@ const routes: Routes = [
     },
   },
   {
-    path: 'case-management/case/:caseDefinitionKey/version/:caseVersionTag',
+    path: 'case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag',
     component: CaseManagementDetailContainerComponent,
     canActivate: [AuthGuardService],
     data: {
@@ -109,7 +109,7 @@ const routes: Routes = [
     ],
   },
   {
-    path: `case-management/case/:caseDefinitionKey/version/:caseVersionTag/${TabEnum.FORMS}/:formDefinitionId`,
+    path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/${TabEnum.FORMS}/:formDefinitionId`,
     component: FormManagementEditComponent,
     canActivate: [AuthGuardService],
     canDeactivate: [pendingChangesGuard],

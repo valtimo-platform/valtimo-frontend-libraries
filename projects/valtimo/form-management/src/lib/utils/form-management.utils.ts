@@ -39,10 +39,11 @@ function getCaseManagementRouteParams(
     map(([rootParams, parentParams]) => {
       const caseDefinitionKey =
         rootParams['caseDefinitionKey'] || parentParams['caseDefinitionKey'];
-      const caseVersionTag = rootParams['caseVersionTag'] || parentParams['caseVersionTag'];
+      const caseDefinitionVersionTag =
+        rootParams['caseDefinitionVersionTag'] || parentParams['caseDefinitionVersionTag'];
 
-      if (caseDefinitionKey && caseVersionTag) {
-        return {caseDefinitionKey, caseVersionTag};
+      if (caseDefinitionKey && caseDefinitionVersionTag) {
+        return {caseDefinitionKey, caseDefinitionVersionTag};
       }
 
       return null;

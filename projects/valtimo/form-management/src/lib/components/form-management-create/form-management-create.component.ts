@@ -107,7 +107,7 @@ export class FormManagementCreateComponent implements OnInit {
           context === 'case'
             ? this.formManagementService.createFormDefinitionsCase(
                 caseManagementParams.caseDefinitionKey,
-                caseManagementParams.caseVersionTag,
+                caseManagementParams.caseDefinitionVersionTag,
                 request
               )
             : this.formManagementService.createFormDefinition(request)

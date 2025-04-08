@@ -86,7 +86,7 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
     (this.context === 'case'
       ? this.formManagementService.createFormDefinitionsCase(
           this.params.caseDefinitionKey,
-          this.params.caseVersionTag,
+          this.params.caseDefinitionVersionTag,
           request
         )
       : this.formManagementService.createFormDefinition(request)

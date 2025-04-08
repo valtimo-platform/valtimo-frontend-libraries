@@ -53,7 +53,10 @@ export class ProcessManagementComponent {
   @Input() public set params(value: ProcessManagementParams | null) {
     if (!value) return;
 
-    this.processManagementService.setParams(value.caseDefinitionKey, value.versionTag);
+    this.processManagementService.setParams(
+      value.caseDefinitionKey,
+      value.caseDefinitionVersionTag
+    );
     this.paramsAreSet$.next(true);
   }
 

@@ -68,7 +68,7 @@ export class FormManagementListComponent {
     this.searchTerm$,
   ]).pipe(
     filter(([context, params]) =>
-      context === 'case' ? !!(params?.caseVersionTag && params?.caseDefinitionKey) : true
+      context === 'case' ? !!(params?.caseDefinitionVersionTag && params?.caseDefinitionKey) : true
     ),
     switchMap(([context, routeParams, pagination, searchTerm]) => {
       const params = {
@@ -81,7 +81,7 @@ export class FormManagementListComponent {
         case 'case':
           return this.formManagementService.queryFormDefinitionsCase(
             routeParams.caseDefinitionKey,
-            routeParams.caseVersionTag,
+            routeParams.caseDefinitionVersionTag,
             params
           );
         default:

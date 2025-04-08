@@ -204,7 +204,7 @@ export class FormManagementEditComponent
             case 'case':
               return this.formManagementService.deleteFormDefinitionCase(
                 caseManagementRouteParams.caseDefinitionKey,
-                caseManagementRouteParams.caseVersionTag,
+                caseManagementRouteParams.caseDefinitionVersionTag,
                 definition.id
               );
 
@@ -259,7 +259,7 @@ export class FormManagementEditComponent
             case 'case':
               return this.formManagementService.modifyFormDefinitionCase(
                 caseManagementRouteParams.caseDefinitionKey,
-                caseManagementRouteParams.caseVersionTag,
+                caseManagementRouteParams.caseDefinitionVersionTag,
                 request
               );
 
@@ -302,7 +302,7 @@ export class FormManagementEditComponent
             case 'case':
               return this.formManagementService.getFormDefinitionCase(
                 caseManagementRouteParams.caseDefinitionKey,
-                caseManagementRouteParams.caseVersionTag,
+                caseManagementRouteParams.caseDefinitionVersionTag,
                 formDefinitionId
               );
             case 'independent':
@@ -456,11 +456,11 @@ export class FormManagementEditComponent
       .subscribe(([context, params]) => {
         if (context === 'independent') return;
 
-        const route = `/case-management/case/${params.caseDefinitionKey}/version/${params.caseVersionTag}`;
+        const route = `/case-management/case/${params.caseDefinitionKey}/version/${params.caseDefinitionVersionTag}`;
 
         this.breadcrumbService.setThirdBreadcrumb({
           route: [route],
-          content: `${params.caseDefinitionKey} (${params.caseVersionTag})`,
+          content: `${params.caseDefinitionKey} (${params.caseDefinitionVersionTag})`,
           href: route,
         });
 

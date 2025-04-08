@@ -70,19 +70,19 @@ export class CaseManagementDetailContainerActionsComponent {
 
   private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
   public readonly versions$: Observable<ListItem[] | null> = this.route.params.pipe(
-    switchMap(({caseDefinitionKey, caseVersionTag}) =>
+    switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
       combineLatest([
         this._cachedVersions.getValue() === null
           ? this.caseManagementService.getCaseDefinitionVersions(caseDefinitionKey)
           : this._cachedVersions.asObservable(),
-        of(caseVersionTag),
+        of(caseDefinitionVersionTag),
       ])
     ),
-    map(([caseDefinitionVersions, caseVersionTag]) => {
+    map(([caseDefinitionVersions, caseDefinitionVersionTag]) => {
       const mapping: ListItem[] | null =
         caseDefinitionVersions?.map((caseDefinitionVersion: string) => ({
           content: caseDefinitionVersion,
-          selected: caseDefinitionVersion === caseVersionTag,
+          selected: caseDefinitionVersion === caseDefinitionVersionTag,
         })) ?? null;
 
       if (this._cachedVersions.getValue() === null) this._cachedVersions.next(mapping);
