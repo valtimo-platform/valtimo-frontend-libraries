@@ -99,7 +99,7 @@ export class CaseManagementDetailContainerActionsComponent {
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
-  public readonly selectedVersionIsSameAsActiveVersion$ = combineLatest([
+  public readonly selectedVersionIsSameAsActiveVersion$: Observable<boolean> = combineLatest([
     this.currentGlobalActiveVersion$,
     this.selectedVersion$,
   ]).pipe(
@@ -108,7 +108,7 @@ export class CaseManagementDetailContainerActionsComponent {
     })
   );
 
-  public readonly isOlderVersionSelected$ = combineLatest([
+  public readonly isOlderVersionSelected$: Observable<boolean> = combineLatest([
     this.currentGlobalActiveVersion$,
     this.selectedVersion$,
   ]).pipe(
@@ -280,14 +280,6 @@ export class CaseManagementDetailContainerActionsComponent {
       });
 
     this.showGlobalVersionConfirmationModal$.next(false);
-    combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$]).subscribe(
-      ([caseDefinitionKey, caseDefinitionVersionTag]) => {
-        this.caseManagementService.setGlobalActiveCaseVersion(
-          caseDefinitionKey,
-          caseDefinitionVersionTag
-        );
-      }
-    );
   }
 
   private startExporting(): void {
