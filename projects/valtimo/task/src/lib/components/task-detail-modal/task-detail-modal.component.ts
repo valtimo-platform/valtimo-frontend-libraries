@@ -149,7 +149,7 @@ export class TaskDetailModalComponent implements OnInit {
   public closeModal(): void {
     this._modal.open = false;
     this.taskIntermediateSaveService.setSubmission({});
-    this.modalCloseEvent$.next(true);
+    this.modalCloseEvent$.next(!this.modalCloseEvent$.getValue());
   }
 
   private openModal(): void {

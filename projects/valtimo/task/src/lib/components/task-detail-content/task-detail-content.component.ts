@@ -416,8 +416,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
 
           this._subscriptions.add(
             this.closeModalEvent.subscribe(() => {
-              console.log('destroying formViewModel');
-              formViewModelComponent.destroy();
+              formViewModelComponent?.destroy();
             })
           );
         }
@@ -433,10 +432,11 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
           if (!this.formCustomComponentConfig) {
             return;
           }
+          let renderedComponent:ComponentRef<FormCustomComponent>;
           this._subscriptions.add(
             this._formCustomComponentConfig$.subscribe(formCustomComponentConfig => {
               const customComponent = formCustomComponentConfig[formCustomComponentKey];
-              const renderedComponent = this.formCustomComponentDynamicContainer.createComponent(
+              renderedComponent = this.formCustomComponentDynamicContainer.createComponent(
                 customComponent
               ) as ComponentRef<FormCustomComponent>;
 
@@ -444,13 +444,11 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
               renderedComponent.instance.submittedEvent.subscribe(() => {
                 this.closeModalEvent.emit();
               });
-
-              this._subscriptions.add(
-                this.closeModalEvent.subscribe(() => {
-                  console.log('destroying customComponent');
-                  renderedComponent.destroy();
-                })
-              );
+            })
+          );
+          this._subscriptions.add(
+            this.closeModalEvent.subscribe(() => {
+              renderedComponent?.destroy();
             })
           );
         }
