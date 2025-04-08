@@ -137,7 +137,7 @@
 >
   <cds-notification
     *ngIf="isOlderVersionSelected$ | async"
-    [style]="'margin-top: 16px'"
+    class="full-width-notification"
     [notificationObj]="{
       type: 'warning',
       title: 'caseManagement.globalActiveVersionModal.warningTitle' | translate,
