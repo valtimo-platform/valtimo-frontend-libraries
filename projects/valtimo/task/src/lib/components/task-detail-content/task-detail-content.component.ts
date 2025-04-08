@@ -374,9 +374,9 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   private setFormViewModelComponent() {
-    combineLatest([this._viewInitialized$, this.processLinkIsUiComponent$]).subscribe(
-      ([viewInitialized, isUiComponent]) => {
-        if (viewInitialized && isUiComponent) {
+    combineLatest([this._viewInitialized$, this.processLinkIsFormViewModel$]).subscribe(
+      ([viewInitialized, isFvm]) => {
+        if (viewInitialized && isFvm) {
           this.formViewModelDynamicContainer.clear();
           if (!this.formViewModel) {
             return;
