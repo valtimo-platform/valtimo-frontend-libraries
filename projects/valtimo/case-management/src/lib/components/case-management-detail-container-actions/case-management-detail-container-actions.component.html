@@ -48,12 +48,12 @@
   >
     <cds-dropdown-list
       [items]="obs.versions"
-      [listTpl]="colorDropdownItemTemplate"
+      [listTpl]="versionListItemTemplate"
     ></cds-dropdown-list>
   </cds-dropdown>
 </ng-template>
 
-<ng-template #colorDropdownItemTemplate let-item="item">
+<ng-template #versionListItemTemplate let-item="item">
   <div class="version-selector-dropdown-template">
     <cds-tag class="cds-tag--no-margin" [type]="item?.tagType" [title]="item?.content">
       {{ item?.content }}

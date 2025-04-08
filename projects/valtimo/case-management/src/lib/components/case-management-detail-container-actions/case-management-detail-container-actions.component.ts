@@ -139,7 +139,7 @@ export class CaseManagementDetailContainerActionsComponent {
       return mapping;
     }),
     tap(versions => {
-      const selected = versions?.find(v => v.selected);
+      const selected = versions?.find(version => version.selected);
       if (selected) {
         this.selectedVersion$.next(selected.content);
       }
