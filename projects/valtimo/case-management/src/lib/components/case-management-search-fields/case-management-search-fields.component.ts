@@ -22,7 +22,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
@@ -70,7 +70,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   @Output() searchField: EventEmitter<SearchField> = new EventEmitter();
 
   public readonly downloadName$ = new BehaviorSubject<string>('');
-  public readonly downloadUrl$ = new BehaviorSubject<SafeUrl | undefined>(undefined);
+  public readonly downloadUrl$ = new BehaviorSubject<string | undefined>(undefined);
   public readonly disableInput$ = new BehaviorSubject<boolean>(false);
   public readonly selectedSearchField$ = new BehaviorSubject<SearchField | undefined>(undefined);
   public readonly selectedDeleteSearchField$ = new BehaviorSubject<SearchField | undefined>(
@@ -540,6 +540,25 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     this.hideModal();
   }
 
+  public onDownloadClick(): void {
+    combineLatest([this.downloadUrl$, this.downloadName$])
+      .pipe(take(1))
+      .subscribe(([url, name]) => {
+        if (!url || !name) {
+          return;
+        }
+
+        console.log(url, name);
+
+        const anchor = document.createElement('a');
+        anchor.href = url.toString();
+        anchor.download = name;
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+      });
+  }
+
   private nextIfChanged(behaviourSubject$: BehaviorSubject<any>, value: any) {
     if (JSON.stringify(behaviourSubject$.value) !== JSON.stringify(value)) {
       behaviourSubject$.next(value);
@@ -602,10 +621,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   private setDownload(caseDefinitionKey: string, searchFields: Array<SearchField>): void {
     this.downloadName$.next(`${caseDefinitionKey}.json`);
     this.downloadUrl$.next(
-      this.sanitizer.bypassSecurityTrustUrl(
-        'data:text/json;charset=UTF-8,' +
-          encodeURIComponent(JSON.stringify({searchFields}, null, 2))
-      )
+      'data:text/json;charset=UTF-8,' + encodeURIComponent(JSON.stringify({searchFields}, null, 2))
     );
   }
 
