@@ -96,6 +96,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
       type: 'danger',
     },
   ];
+
   public readonly fields: ColumnConfig[] = [
     {
       viewType: ViewType.TEXT,
@@ -206,11 +207,12 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
       )
     );
 
-  private _documentDefinitionName: string;
-  public readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.name || ''),
-    filter(docDefName => !!docDefName),
-    tap((documentDefinitionName: string) => (this._documentDefinitionName = documentDefinitionName))
+  private _caseDefinitionKey: string;
+
+  public readonly caseDefinitionKey$: Observable<string> = this.route.parent.params.pipe(
+    map(params => params.caseDefinitionKey || ''),
+    filter(caseDefinitionKey => !!caseDefinitionKey),
+    tap((caseDefinitionKey: string) => (this._caseDefinitionKey = caseDefinitionKey))
   );
 
   private cachedSearchFields!: Array<SearchField>;
@@ -221,16 +223,16 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   private readonly refreshSearchFields$ = new BehaviorSubject<null>(null);
 
   private readonly searchFields$: Observable<Array<SearchField>> = combineLatest([
-    this.documentDefinitionName$,
+    this.caseDefinitionKey$,
     this.refreshSearchFields$,
   ]).pipe(
-    switchMap(([documentDefinitionName]) =>
-      this.documentService.getDocumentSearchFields(documentDefinitionName)
+    switchMap(([caseDefinitionKey]) =>
+      this.documentService.getDocumentSearchFields(caseDefinitionKey)
     ),
     tap(searchFields => {
-      this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+      this.caseDefinitionKey$.pipe(take(1)).subscribe(caseDefinitionKey => {
         if (searchFields && Array.isArray(searchFields) && searchFields?.length > 0) {
-          this.setDownload(documentDefinitionName, searchFields);
+          this.setDownload(caseDefinitionKey, searchFields);
         }
       });
     }),
@@ -272,22 +274,22 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   private readonly modifiedDropdownValues$ = new BehaviorSubject<MultiInputValues>([]);
 
   public readonly initialDropdownValues$: Observable<MultiInputValues> = combineLatest([
-    this.documentDefinitionName$,
+    this.caseDefinitionKey$,
     this.formData$,
   ]).pipe(
     distinctUntilChanged(
-      ([prevDocumentDefinitionName, prevFormData], [currDocumentDefinitionName, currFormData]) =>
-        prevDocumentDefinitionName === currDocumentDefinitionName &&
+      ([prevCaseDefinitionKey, prevFormData], [currCaseDefinitionKey, currFormData]) =>
+        prevCaseDefinitionKey === currCaseDefinitionKey &&
         prevFormData?.dropdownDataProvider === currFormData?.dropdownDataProvider &&
         prevFormData?.key === currFormData?.key
     ),
-    switchMap(([documentDefinitionName, formData]) => {
+    switchMap(([caseDefinitionKey, formData]) => {
       if (!formData || !formData.dropdownDataProvider) {
         return of([]);
       }
 
       return this.documentService
-        .getDropdownData(formData.dropdownDataProvider, documentDefinitionName, formData.key)
+        .getDropdownData(formData.dropdownDataProvider, caseDefinitionKey, formData.key)
         .pipe(
           map(dropdownData =>
             dropdownData
@@ -395,7 +397,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     this.modifiedDropdownValues$.next(data as MultiInputValues);
   }
 
-  public onMoveRowClick(moveEvent: MoveRowEvent, documentDefinitionName: string): void {
+  public onMoveRowClick(moveEvent: MoveRowEvent, caseDefinitionKey: string): void {
     const {index, direction} = moveEvent;
     const moveUp = direction === MoveRowDirection.UP;
     const searchFields = [...this.cachedSearchFields];
@@ -412,14 +414,14 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
         field => field.key === searchFieldBeforeKey
       );
       filteredSearchFields.splice(searchFieldBeforeIndex, 0, foundSearchField);
-      this.updateSearchFields(documentDefinitionName, filteredSearchFields);
+      this.updateSearchFields(caseDefinitionKey, filteredSearchFields);
     } else if (multipleSearchFields && !moveUp && searchFieldIndex < searchFields?.length) {
       const searchFieldAfterKey = `${searchFields[searchFieldIndex + 1].key}`;
       const searchFieldAfterIndex = filteredSearchFields.findIndex(
         field => field.key === searchFieldAfterKey
       );
       filteredSearchFields.splice(searchFieldAfterIndex + 1, 0, foundSearchField);
-      this.updateSearchFields(documentDefinitionName, filteredSearchFields);
+      this.updateSearchFields(caseDefinitionKey, filteredSearchFields);
     }
   }
 
@@ -430,14 +432,14 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
       this.documentService
         .deleteDropdownData(
           selectedSearchField?.dropdownDataProvider ?? '',
-          this._documentDefinitionName,
+          this._caseDefinitionKey,
           selectedSearchField.key
         )
         .subscribe();
     }
 
     this.documentService
-      .deleteDocumentSearch(this._documentDefinitionName, selectedSearchField.key)
+      .deleteDocumentSearch(this._caseDefinitionKey, selectedSearchField.key)
       .subscribe({
         next: () => {
           this.enableInput();
@@ -450,7 +452,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
       });
   }
 
-  public saveSearchField(documentDefinitionName: string): void {
+  public saveSearchField(caseDefinitionKey: string): void {
     this.disableInput();
 
     this.formData$.pipe(take(1)).subscribe(formData => {
@@ -474,7 +476,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
         this.documentService
           .deleteDropdownData(
             prevFormData?.dropdownDataProvider ?? '',
-            documentDefinitionName,
+            caseDefinitionKey,
             prevFormData?.key ?? ''
           )
           .subscribe();
@@ -489,7 +491,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
           this.documentService
             .postDropdownData(
               mappedFormData.dropdownDataProvider ?? '',
-              documentDefinitionName,
+              caseDefinitionKey,
               mappedFormData.key,
               request
             )
@@ -498,7 +500,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
       }
 
       if (this.searchFieldActionTypeIsAdd) {
-        this.documentService.postDocumentSearch(documentDefinitionName, mappedFormData).subscribe(
+        this.documentService.postDocumentSearch(caseDefinitionKey, mappedFormData).subscribe(
           () => {
             this.enableInput();
             this.hideModal();
@@ -514,18 +516,15 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
         const filteredFields = newFields.filter(field => field.key !== mappedFormData.key);
 
         filteredFields.splice(indexToReplace, 0, mappedFormData);
-        this.updateSearchFields(documentDefinitionName, filteredFields);
+        this.updateSearchFields(caseDefinitionKey, filteredFields);
       }
     });
   }
 
-  public updateSearchFields(
-    documentDefinitionName: string,
-    newSearchFields: Array<SearchField>
-  ): void {
+  public updateSearchFields(caseDefinitionKey: string, newSearchFields: Array<SearchField>): void {
     this.disableInput();
 
-    this.documentService.putDocumentSearch(documentDefinitionName, newSearchFields).subscribe(
+    this.documentService.putDocumentSearch(caseDefinitionKey, newSearchFields).subscribe(
       () => {
         this.enableInput();
         this.hideModal();
@@ -600,8 +599,8 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     );
   }
 
-  private setDownload(documentDefinitionName: string, searchFields: Array<SearchField>): void {
-    this.downloadName$.next(`${documentDefinitionName}.json`);
+  private setDownload(caseDefinitionKey: string, searchFields: Array<SearchField>): void {
+    this.downloadName$.next(`${caseDefinitionKey}.json`);
     this.downloadUrl$.next(
       this.sanitizer.bypassSecurityTrustUrl(
         'data:text/json;charset=UTF-8,' +

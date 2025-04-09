@@ -47,7 +47,7 @@
     [disabled]="!obs.versions?.length"
   >
     <cds-dropdown-list
-      [items]="obs.versions"
+      [items]="obs?.versions || []"
       [listTpl]="versionListItemTemplate"
     ></cds-dropdown-list>
   </cds-dropdown>
