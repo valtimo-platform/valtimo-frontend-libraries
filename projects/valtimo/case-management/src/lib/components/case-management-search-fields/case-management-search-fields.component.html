@@ -71,9 +71,10 @@
     [header]="false"
     [items]="obs.searchFields"
     [loading]="!obs.searchFields"
-    [movingRowsEnabled]="true"
     (rowClicked)="searchFieldClicked($event, false)"
-    (moveRow)="onMoveRowClick($event, obs.caseDefinitionKey)"
+    [dragAndDrop]="true"
+    [dragAndDropDisabled]="obs.disableInput"
+    (itemsReordered)="onItemsReordered(obs.caseDefinitionKey, $event)"
   >
     <ng-container
       carbonToolbarContent

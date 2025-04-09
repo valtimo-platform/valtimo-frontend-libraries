@@ -22,7 +22,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
@@ -30,8 +29,6 @@ import {
   ActionItem,
   CARBON_CONSTANTS,
   ColumnConfig,
-  MoveRowDirection,
-  MoveRowEvent,
   MultiInputOutput,
   MultiInputValues,
   SelectItem,
@@ -60,6 +57,7 @@ import {
   take,
   tap,
 } from 'rxjs';
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   templateUrl: './case-management-search-fields.component.html',
@@ -242,19 +240,25 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     })
   );
 
+  private _cachedSearchFieldsWithUuid: SearchField[] = [];
+
   public readonly translatedSearchFields$: Observable<Array<SearchField>> = combineLatest([
     this.searchFields$,
     this.translateService.stream('key'),
   ]).pipe(
-    map(([searchFields]) =>
-      searchFields.map(searchField => ({
+    map(([searchFields]) => {
+      const searchFieldsWithUuid = searchFields.map(field => ({...field, uuid: uuidv4()}));
+
+      this._cachedSearchFieldsWithUuid = searchFieldsWithUuid;
+
+      return searchFieldsWithUuid.map(searchField => ({
         ...searchField,
         title: searchField.title ? searchField.title : '',
         dataType: this.translateService.instant(`searchFields.${searchField.dataType}`),
         matchType: this.translateService.instant(`searchFieldsOverview.${searchField.matchType}`),
         fieldType: this.translateService.instant(`searchFieldsOverview.${searchField.fieldType}`),
-      }))
-    )
+      }));
+    })
   );
 
   public readonly fieldTypeIsDropdown$ = new BehaviorSubject<boolean>(false);
@@ -344,7 +348,6 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly sanitizer: DomSanitizer,
     private readonly iconService: IconService
   ) {
     this.iconService.registerAll([ArrowDown16, ArrowUp16]);
@@ -397,32 +400,14 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     this.modifiedDropdownValues$.next(data as MultiInputValues);
   }
 
-  public onMoveRowClick(moveEvent: MoveRowEvent, caseDefinitionKey: string): void {
-    const {index, direction} = moveEvent;
-    const moveUp = direction === MoveRowDirection.UP;
-    const searchFields = [...this.cachedSearchFields];
-    const searchFieldRow = searchFields[index];
+  public onItemsReordered(caseDefinitionKey: string, items: SearchField[]): void {
+    if (!items || !caseDefinitionKey) return;
 
-    const searchFieldIndex = searchFields.findIndex(field => field.key === searchFieldRow.key);
-    const foundSearchField = {...searchFields[searchFieldIndex]};
-    const filteredSearchFields = searchFields.filter(field => field.key !== searchFieldRow.key);
-    const multipleSearchFields = searchFields?.length > 1;
+    const unformattedSearchFields = items.map(searchField =>
+      this._cachedSearchFieldsWithUuid.find(cachedField => cachedField.uuid === searchField.uuid)
+    );
 
-    if (multipleSearchFields && moveUp && searchFieldIndex > 0) {
-      const searchFieldBeforeKey = `${searchFields[searchFieldIndex - 1].key}`;
-      const searchFieldBeforeIndex = filteredSearchFields.findIndex(
-        field => field.key === searchFieldBeforeKey
-      );
-      filteredSearchFields.splice(searchFieldBeforeIndex, 0, foundSearchField);
-      this.updateSearchFields(caseDefinitionKey, filteredSearchFields);
-    } else if (multipleSearchFields && !moveUp && searchFieldIndex < searchFields?.length) {
-      const searchFieldAfterKey = `${searchFields[searchFieldIndex + 1].key}`;
-      const searchFieldAfterIndex = filteredSearchFields.findIndex(
-        field => field.key === searchFieldAfterKey
-      );
-      filteredSearchFields.splice(searchFieldAfterIndex + 1, 0, foundSearchField);
-      this.updateSearchFields(caseDefinitionKey, filteredSearchFields);
-    }
+    this.updateSearchFields(caseDefinitionKey, unformattedSearchFields);
   }
 
   public onDeleteSelectedSearchFieldConfirm(selectedSearchField: SearchField): void {
