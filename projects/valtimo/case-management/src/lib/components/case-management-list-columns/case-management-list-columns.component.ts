@@ -22,8 +22,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {
   ActionItem,
   ColumnConfig,
-  MoveRowDirection,
-  MoveRowEvent,
   MultiInputValues,
   ValuePathSelectorPrefix,
   ViewType,
@@ -51,6 +49,7 @@ import {
 } from 'rxjs';
 import {take} from 'rxjs/operators';
 import {ListColumnModal} from '../../models';
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   templateUrl: './case-management-list-columns.component.html',
@@ -116,17 +115,16 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     },
   ];
 
-  readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.name || ''),
-    filter(docDefName => !!docDefName)
+  readonly caseDefinitionKey$: Observable<string> = this.route.parent.params.pipe(
+    map(params => params.caseDefinitionKey || ''),
+    filter(caseDefinitionKey => !!caseDefinitionKey)
   );
 
   readonly disableInput$ = new BehaviorSubject<boolean>(false);
 
-  readonly hasEnvironmentConfig$: Observable<boolean> = this.documentDefinitionName$.pipe(
+  readonly hasEnvironmentConfig$: Observable<boolean> = this.caseDefinitionKey$.pipe(
     map(
-      documentDefinitionName =>
-        !!this.configService?.config?.customDefinitionTables[documentDefinitionName]
+      caseDefinitionKey => !!this.configService?.config?.customDefinitionTables[caseDefinitionKey]
     )
   );
 
@@ -135,16 +133,17 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   private readonly refreshCaseListcolumns$ = new BehaviorSubject<null>(null);
 
   private readonly caseListColumns$: Observable<Array<CaseListColumn>> = combineLatest([
-    this.documentDefinitionName$,
+    this.caseDefinitionKey$,
     this.refreshCaseListcolumns$,
   ]).pipe(
-    switchMap(([documentDefinitionName]) =>
-      this.documentService.getCaseListForManagement(documentDefinitionName)
+    switchMap(([caseDefinitionKey]) =>
+      this.documentService.getCaseListForManagement(caseDefinitionKey)
     ),
+    map(caseListColumns => caseListColumns.map(column => ({...column, uuid: uuidv4()}))),
     tap(caseListColumns => {
-      this.documentDefinitionName$.pipe(take(1)).subscribe(documentDefinitionName => {
+      this.caseDefinitionKey$.pipe(take(1)).subscribe(caseDefinitionKey => {
         if (caseListColumns && Array.isArray(caseListColumns) && caseListColumns.length > 0) {
-          this.setDownload(documentDefinitionName, caseListColumns);
+          this.setDownload(caseDefinitionKey, caseListColumns);
         }
       });
     }),
@@ -383,7 +382,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     if (columnKey) {
       this.disableInput();
 
-      this.documentDefinitionName$.pipe(take(1)).subscribe(docDefName => {
+      this.caseDefinitionKey$.pipe(take(1)).subscribe(docDefName => {
         this.documentService.deleteCaseListForManagement(docDefName, columnKey).subscribe(
           () => {
             this.refreshCaseListColumns();
@@ -396,35 +395,14 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     }
   }
 
-  onMoveRowEvent(event: MoveRowEvent, documentDefinitionName: string): void {
-    const caseListColumns = [...this.cachedCaseListColumns];
-    const caseListColumnRow = caseListColumns[event.index];
-    const moveUp: boolean = event.direction === MoveRowDirection.UP;
+  public onItemsReordered(caseDefinitionKey: string, items: CaseListColumn[]): void {
+    if (!items || !caseDefinitionKey) return;
 
-    const caseListColumnIndex = caseListColumns.findIndex(
-      field => field.key === caseListColumnRow.key
+    const unformattedColumns = items.map(column =>
+      this.cachedCaseListColumns.find(cachedColumn => cachedColumn.uuid === column.uuid)
     );
-    const foundCaseListColumn = {...caseListColumns[caseListColumnIndex]};
-    const filteredCaseListColumns = caseListColumns.filter(
-      field => field.key !== caseListColumnRow.key
-    );
-    const multipleCaseListColumns = caseListColumns.length > 1;
 
-    if (multipleCaseListColumns && moveUp && caseListColumnIndex > 0) {
-      const caseListColumnBeforeKey = `${caseListColumns[caseListColumnIndex - 1].key}`;
-      const caseListColumnBeforeIndex = filteredCaseListColumns.findIndex(
-        field => field.key === caseListColumnBeforeKey
-      );
-      filteredCaseListColumns.splice(caseListColumnBeforeIndex, 0, foundCaseListColumn);
-      this.updateCaseListColumns(documentDefinitionName, filteredCaseListColumns);
-    } else if (multipleCaseListColumns && !moveUp && caseListColumnIndex < caseListColumns.length) {
-      const caseListColumnAfterKey = `${caseListColumns[caseListColumnIndex + 1].key}`;
-      const caseListColumnAfterIndex = filteredCaseListColumns.findIndex(
-        field => field.key === caseListColumnAfterKey
-      );
-      filteredCaseListColumns.splice(caseListColumnAfterIndex + 1, 0, foundCaseListColumn);
-      this.updateCaseListColumns(documentDefinitionName, filteredCaseListColumns);
-    }
+    this.updateCaseListColumns(caseDefinitionKey, unformattedColumns);
   }
 
   saveCasListColumns(): void {
@@ -506,28 +484,26 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   }
 
   private updateCaseListColumns(
-    documentDefinitionName: string,
+    caseDefinitionKey: string,
     newCaseListColumns: Array<CaseListColumn>
   ): void {
     this.disableInput();
 
-    this.documentService
-      .putCaseListForManagement(documentDefinitionName, newCaseListColumns)
-      .subscribe({
-        next: () => {
-          this.refreshCaseListColumns();
-          localStorage.setItem(`list-search-${documentDefinitionName}`, '');
-        },
-        error: () => {
-          this.enableInput();
-        },
-      });
+    this.documentService.putCaseListForManagement(caseDefinitionKey, newCaseListColumns).subscribe({
+      next: () => {
+        this.refreshCaseListColumns();
+        localStorage.setItem(`list-search-${caseDefinitionKey}`, '');
+      },
+      error: () => {
+        this.enableInput();
+      },
+    });
   }
 
   private addColumn(): void {
     const formValue = this.formGroup.value;
 
-    this.documentDefinitionName$.pipe(take(1)).subscribe(docDefName => {
+    this.caseDefinitionKey$.pipe(take(1)).subscribe(docDefName => {
       this.documentService
         .postCaseListForManagement(docDefName, this.mapFormValuesToColumn(formValue))
         .subscribe({
@@ -580,7 +556,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
       return columnCopy;
     });
 
-    this.documentDefinitionName$.pipe(take(1)).subscribe(docDefName => {
+    this.caseDefinitionKey$.pipe(take(1)).subscribe(docDefName => {
       this.documentService.putCaseListForManagement(docDefName, mappedCurrentColumns).subscribe(
         () => {
           this.closeModal();
@@ -593,11 +569,8 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     });
   }
 
-  private setDownload(
-    documentDefinitionName: string,
-    caseListColumns: Array<CaseListColumn>
-  ): void {
-    this.downloadName$.next(`${documentDefinitionName}.json`);
+  private setDownload(caseDefinitionKey: string, caseListColumns: Array<CaseListColumn>): void {
+    this.downloadName$.next(`${caseDefinitionKey}.json`);
     this.downloadUrl$.next(
       this.sanitizer.bypassSecurityTrustUrl(
         'data:text/json;charset=UTF-8,' +
