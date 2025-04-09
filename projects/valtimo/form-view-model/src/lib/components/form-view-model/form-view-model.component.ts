@@ -292,27 +292,36 @@ export class FormViewModelComponent implements OnInit, OnDestroy {
   }
 
   private handleFormError(error: HttpErrorResponse): void {
-    const formInstance = this.formio.formio;
+    const formio = this.formio.formio;
+    const formErrors = [];
+
     this.formErrors$.next([]);
-    if (error.error?.componentErrors) {
-      const errors = [];
-      error.error.componentErrors.forEach(componentError => {
-        const component = formInstance.getComponent(componentError.component);
-        if (component == null) {
-          errors.push(componentError.message);
+
+    const componentErrors = error?.error?.componentErrors;
+    const genericMessage = error?.error?.error;
+    const componentKey = error?.error?.component;
+
+    // Handle field-level (component) errors
+    if (Array.isArray(componentErrors)) {
+      for (const {component, message} of componentErrors) {
+        const field = formio.getComponent(component);
+        if (field) {
+          field.setCustomValidity(message, true); // Mark dirty
         } else {
-          // `true` makes the error dirty, setting the css class properly
-          component.setCustomValidity(componentError.message, true);
+          formErrors.push(message);
         }
-      });
-      this.formErrors$.next(errors);
-    } else if (error.error?.error) {
-      const component = formInstance.getComponent(error.error?.component);
-      if (component == null) {
-        this.formErrors$.next([error.error.error]);
+      }
+      this.formErrors$.next(formErrors);
+      return;
+    }
+
+    // Handle single (generic or component-specific) error
+    if (genericMessage) {
+      const field = formio.getComponent(componentKey);
+      if (field) {
+        field.setCustomValidity(genericMessage, true);
       } else {
-        // `true` makes the error dirty, setting the css class properly
-        component.setCustomValidity(error.error.error, true);
+        this.formErrors$.next([genericMessage]);
       }
     }
   }
