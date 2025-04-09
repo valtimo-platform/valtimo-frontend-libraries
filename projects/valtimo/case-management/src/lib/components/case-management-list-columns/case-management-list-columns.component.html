@@ -70,8 +70,7 @@
   <button
     cdsButton="ghost"
     iconOnly="true"
-    [href]="obs.downloadUrl"
-    [download]="obs.downloadName"
+    (click)="onDownloadClick()"
     [disabled]="
       obs.hasEnvironmentConfig ||
       !obs.downloadUrl ||

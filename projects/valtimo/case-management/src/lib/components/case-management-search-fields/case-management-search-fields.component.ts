@@ -529,11 +529,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     combineLatest([this.downloadUrl$, this.downloadName$])
       .pipe(take(1))
       .subscribe(([url, name]) => {
-        if (!url || !name) {
-          return;
-        }
-
-        console.log(url, name);
+        if (!url || !name) return;
 
         const anchor = document.createElement('a');
         anchor.href = url.toString();

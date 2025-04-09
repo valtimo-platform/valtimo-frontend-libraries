@@ -15,7 +15,7 @@
  */
 import {AfterViewInit, Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
@@ -57,7 +57,7 @@ import {v4 as uuidv4} from 'uuid';
 })
 export class CaseManagementListColumnsComponent implements AfterViewInit {
   readonly downloadName$ = new BehaviorSubject<string>('');
-  readonly downloadUrl$ = new BehaviorSubject<SafeUrl | null>(null);
+  readonly downloadUrl$ = new BehaviorSubject<string | null>(null);
 
   public readonly actionItems: ActionItem[] = [
     {
@@ -483,6 +483,21 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     }
   }
 
+  public onDownloadClick(): void {
+    combineLatest([this.downloadUrl$, this.downloadName$])
+      .pipe(take(1))
+      .subscribe(([url, name]) => {
+        if (!url || !name) return;
+
+        const anchor = document.createElement('a');
+        anchor.href = url.toString();
+        anchor.download = name;
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+      });
+  }
+
   private updateCaseListColumns(
     caseDefinitionKey: string,
     newCaseListColumns: Array<CaseListColumn>
@@ -572,10 +587,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   private setDownload(caseDefinitionKey: string, caseListColumns: Array<CaseListColumn>): void {
     this.downloadName$.next(`${caseDefinitionKey}.json`);
     this.downloadUrl$.next(
-      this.sanitizer.bypassSecurityTrustUrl(
-        'data:text/json;charset=UTF-8,' +
-          encodeURIComponent(JSON.stringify(caseListColumns, null, 2))
-      )
+      'data:text/json;charset=UTF-8,' + encodeURIComponent(JSON.stringify(caseListColumns, null, 2))
     );
   }
 
