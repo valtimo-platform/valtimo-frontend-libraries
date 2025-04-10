@@ -56,6 +56,7 @@ export class CaseManagementDetailContainerActionsComponent {
 
   public readonly CARBON_THEME = 'g10';
 
+  public readonly showAllVersionModal$ = new BehaviorSubject<boolean>(false);
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
   public readonly selectedVersionNumber$ = this.caseDetailService.selectedVersionNumber$;
   public readonly selectedVersion$ = new BehaviorSubject<string>('');
@@ -139,8 +140,15 @@ export class CaseManagementDetailContainerActionsComponent {
           content: caseDefinitionVersion,
           selected: caseDefinitionVersion === selectedVersion,
           tagType: 'green',
+          isAllVersions: false,
         })) ?? null;
 
+      mapping.push({
+        content: 'See all versions',
+        selected: false,
+        tagType: 'none',
+        isAllVersions: true,
+      });
       return mapping;
     })
   );
@@ -207,11 +215,15 @@ export class CaseManagementDetailContainerActionsComponent {
   }
 
   public setVersion(version: any): void {
-    this.selectedVersion$.next(version?.item?.content);
-    this.router.navigate(
-      [`../${version.item.content}/${this.route.firstChild?.routeConfig?.path}`],
-      {relativeTo: this.route}
-    );
+    if (version?.item?.isAllVersions) {
+      this.showAllVersionsModal();
+    } else {
+      this.selectedVersion$.next(version?.item?.content);
+      this.router.navigate(
+        [`../${version.item.content}/${this.route.firstChild?.routeConfig?.path}`],
+        {relativeTo: this.route}
+      );
+    }
   }
 
   public openCaseRemoveModal(): void {
@@ -228,6 +240,14 @@ export class CaseManagementDetailContainerActionsComponent {
 
   public closeGlobalVersionCaseModal(): void {
     this.showGlobalVersionModal$.next(false);
+  }
+
+  public showAllVersionsModal(): void {
+    this.showAllVersionModal$.next(true);
+  }
+
+  public closeAllVersionsModal(): void {
+    this.showAllVersionModal$.next(false);
   }
 
   public openGlobalCaseVersionConfirmationModal(): void {
