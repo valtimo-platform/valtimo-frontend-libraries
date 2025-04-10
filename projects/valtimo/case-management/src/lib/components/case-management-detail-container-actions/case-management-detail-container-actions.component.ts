@@ -135,7 +135,7 @@ export class CaseManagementDetailContainerActionsComponent {
     ),
     map(([caseDefinitionVersions, selectedVersion]) => {
       const mapping: ListItem[] | null =
-        caseDefinitionVersions?.map((caseDefinitionVersion: any) => ({
+        caseDefinitionVersions?.map((caseDefinitionVersion: string) => ({
           content: caseDefinitionVersion,
           selected: caseDefinitionVersion === selectedVersion,
           tagType: 'green',
