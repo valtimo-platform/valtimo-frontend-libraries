@@ -145,7 +145,7 @@ export class CaseManagementWidgetCollectionComponent
 
   public readonly params$ = getCaseManagementRouteParams(this.route);
   public readonly selectedCollection$ = new BehaviorSubject<ValuePathItem | null>(null);
-  ß;
+
   public WIDTH_ITEMS: ListItem[] = [
     {
       content: this.translateService.instant('widgetTabManagement.width.fullWidth'),
