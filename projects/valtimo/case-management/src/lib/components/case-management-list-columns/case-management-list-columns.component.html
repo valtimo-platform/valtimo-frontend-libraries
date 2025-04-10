@@ -17,7 +17,7 @@
 <ng-container
   *ngIf="{
     caseListColumn: translatedCaseListColumns$ | async,
-    caseDefinitionKey: caseDefinitionKey$ | async,
+    params: params$ | async,
     hasEnvironmentConfig: hasEnvironmentConfig$ | async,
     downloadUrl: downloadUrl$ | async,
     downloadName: downloadName$ | async,
@@ -43,7 +43,7 @@
     (rowClicked)="columnRowClicked($event)"
     [dragAndDrop]="true"
     [dragAndDropDisabled]="obs.disableInput"
-    (itemsReordered)="onItemsReordered(obs.caseDefinitionKey, $event)"
+    (itemsReordered)="onItemsReordered(obs.params.caseDefinitionKey, $event)"
   >
     <ng-container
       carbonToolbarContent
@@ -77,7 +77,7 @@
       !obs.downloadName ||
       obs.caseListColumn?.length < 1 ||
       obs.disableInput ||
-      loadingCaseListColumns
+      obs.loadingCaseListColumns
     "
   >
     <svg class="cds--btn__icon" cdsIcon="download" size="16"></svg>
@@ -86,7 +86,7 @@
   <button
     (click)="openModal('create')"
     cdsButton="primary"
-    [disabled]="obs.hasEnvironmentConfig || loadingCaseListColumns"
+    [disabled]="obs.hasEnvironmentConfig || obs.loadingCaseListColumns"
   >
     {{ 'listColumn.addButtonText' | translate }}
     <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
@@ -200,7 +200,7 @@
 
       <valtimo-value-path-selector
         formControlName="path"
-        [documentDefinitionName]="caseDefinitionKey$ | async"
+        [documentDefinitionName]="(params$ | async)?.caseDefinitionKey"
         [prefixes]="[ValuePathSelectorPrefix.DOC, ValuePathSelectorPrefix.CASE]"
       ></valtimo-value-path-selector>
     </cds-label>

@@ -34,7 +34,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   CARBON_THEME,
@@ -69,6 +69,7 @@ import {WidgetContentComponent} from '../../../models';
 import {WidgetFieldsService, WidgetWizardService} from '../../../services';
 import {CaseManagementWidgetFieldsColumnComponent} from '../fields/column/case-management-widget-fields-column.component';
 import {CaseManagementWidgetProcessSelectorComponent} from '../process-selector/case-management-widget-process-selector.component';
+import {getCaseManagementRouteParams} from '../../../utils';
 
 @Component({
   templateUrl: './case-management-widget-collection.component.html',
@@ -142,12 +143,9 @@ export class CaseManagementWidgetCollectionComponent
     .widgetContent as WritableSignal<WidgetCollectionContent>;
   public readonly displayTypeItems: ListItem[] = this.widgetFieldsService.displayTypeItems;
 
-  public readonly documentDefinitionName$: Observable<string> = this.route.paramMap.pipe(
-    map((paramMap: ParamMap) => paramMap.get('name') ?? '')
-  );
-
+  public readonly params$ = getCaseManagementRouteParams(this.route);
   public readonly selectedCollection$ = new BehaviorSubject<ValuePathItem | null>(null);
-
+  ß;
   public WIDTH_ITEMS: ListItem[] = [
     {
       content: this.translateService.instant('widgetTabManagement.width.fullWidth'),
