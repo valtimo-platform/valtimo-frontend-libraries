@@ -15,7 +15,6 @@
  */
 import {AfterViewInit, Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
@@ -344,7 +343,6 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
-    private readonly sanitizer: DomSanitizer,
     private readonly iconService: IconService
   ) {}
 
@@ -380,14 +378,14 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
       this.params$.pipe(take(1)).subscribe(params => {
         this.documentService
           .deleteCaseListForManagement(params.caseDefinitionKey, columnKey)
-          .subscribe(
-            () => {
+          .subscribe({
+            next: () => {
               this.refreshCaseListColumns();
             },
-            () => {
+            error: () => {
               this.enableInput();
-            }
-          );
+            },
+          });
       });
     }
   }
@@ -571,15 +569,15 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     this.params$.pipe(take(1)).subscribe(params => {
       this.documentService
         .putCaseListForManagement(params.caseDefinitionKey, mappedCurrentColumns)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.closeModal();
             this.refreshCaseListColumns();
           },
-          () => {
+          error: () => {
             this.enableInput();
-          }
-        );
+          },
+        });
     });
   }
 
