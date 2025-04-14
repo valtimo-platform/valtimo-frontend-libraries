@@ -44,10 +44,13 @@
     [displayValue]="versionItemTemplate"
     [size]="obs.compactMode ? 'sm' : 'md'"
     [appendInline]="false"
-    [disabled]="!obs.versions?.length"
+    [disabled]="!obs?.versions?.length || obs?.versions?.length === 1"
     (selected)="setVersion($event)"
   >
-    <cds-dropdown-list [items]="obs?.versions || []" [listTpl]="versionItemTemplate"></cds-dropdown-list>
+    <cds-dropdown-list
+      [items]="obs?.versions || []"
+      [listTpl]="versionItemTemplate"
+    ></cds-dropdown-list>
   </cds-dropdown>
 </ng-template>
 

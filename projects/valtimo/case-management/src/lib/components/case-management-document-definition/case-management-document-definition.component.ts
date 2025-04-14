@@ -41,7 +41,7 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class CaseManagementDocumentDefinitionComponent {
   @ViewChild('cancelModal') public cancelModal: ConfirmationModalComponent;
-  @Input() documentDefinitionName: string;
+  @Input() caseDefinitionKey: string;
   @Output() cancelRedirect = new EventEmitter();
   @Output() confirmRedirect = new EventEmitter();
   @Output() pendingChangesUpdate = new EventEmitter<boolean>();
@@ -146,7 +146,7 @@ export class CaseManagementDocumentDefinitionComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.caseDetailService.setSelectedDocumentDefinitionName(this.documentDefinitionName);
+          this.caseDetailService.setSelectedCaseDefinitionKey(this.caseDefinitionKey);
           this.confirmRedirect.emit();
           this._pendingChanges$.next(false);
         },
