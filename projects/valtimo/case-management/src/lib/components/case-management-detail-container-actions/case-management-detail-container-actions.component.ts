@@ -34,7 +34,7 @@ import {take} from 'rxjs/operators';
 import {CaseDetailService, CaseManagementService} from '../../services';
 import {CaseManagementRemoveModalComponent} from '../case-management-remove-modal/case-management-remove-modal.component';
 import {GlobalNotificationService} from '@valtimo/layout';
-import {eq, lt} from 'semver';
+import {eq, lt, valid} from 'semver';
 
 @Component({
   selector: 'valtimo-case-management-detail-container-actions',
@@ -109,7 +109,7 @@ export class CaseManagementDetailContainerActionsComponent {
     this.selectedVersion$,
   ]).pipe(
     map(([current, selected]) => {
-      return eq(selected, current);
+      return valid(current) && valid(selected) && eq(selected, current);
     })
   );
 
@@ -118,7 +118,7 @@ export class CaseManagementDetailContainerActionsComponent {
     this.selectedVersion$,
   ]).pipe(
     map(([current, selected]) => {
-      return lt(selected, current);
+      return valid(current) && valid(selected) && lt(selected, current);
     })
   );
 
