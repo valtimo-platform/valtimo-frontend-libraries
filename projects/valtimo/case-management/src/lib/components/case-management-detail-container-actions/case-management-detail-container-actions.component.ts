@@ -128,7 +128,7 @@ export class CaseManagementDetailContainerActionsComponent {
   );
 
   private readonly _cachedVersions = new BehaviorSubject<ListItem[] | null>(null);
-  public readonly versions$: Observable<ListItem[] | null> = combineLatest([
+  public readonly versionSelectorItems$: Observable<ListItem[] | null> = combineLatest([
     this.route.params,
     this.selectedVersion$,
   ]).pipe(
