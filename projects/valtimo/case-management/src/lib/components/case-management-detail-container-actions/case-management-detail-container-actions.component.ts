@@ -60,7 +60,6 @@ export class CaseManagementDetailContainerActionsComponent {
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
   public readonly selectedVersionNumber$ = this.caseDetailService.selectedVersionNumber$;
   public readonly selectedVersion$ = new BehaviorSubject<string>('');
-  public readonly currentGlobalActiveVersion$ = new BehaviorSubject<string>('');
 
   public readonly params$: Observable<{
     caseDefinitionKey: string;
@@ -83,16 +82,18 @@ export class CaseManagementDetailContainerActionsComponent {
     map(params => params.caseDefinitionVersionTag || '')
   );
 
-  public readonly selectedVersionIsGloballyActive$: Observable<boolean> = combineLatest([
-    this.selectedVersion$,
-    this.caseDefinitionKey$,
-  ]).pipe(
-    switchMap(([selectedVersion, caseDefinitionKey]) =>
+  public readonly globalActiveVersion$ = this.caseDefinitionKey$.pipe(
+    switchMap(caseDefinitionKey =>
       this.caseManagementService
         .getGlobalActiveCase(caseDefinitionKey)
-        .pipe(map(result => result.caseDefinitionVersionTag === selectedVersion))
+        .pipe(map(result => result.caseDefinitionVersionTag))
     )
   );
+
+  public readonly selectedVersionIsGloballyActive$: Observable<boolean> = combineLatest([
+    this.selectedVersion$,
+    this.globalActiveVersion$,
+  ]).pipe(map(([selectedVersion, globalActiveVersion]) => selectedVersion === globalActiveVersion));
 
   private readonly _caseDefinitionKey$ = this.caseDetailService.selectedDocumentDefinitionName$;
   public readonly _caseDefinitionTitle$ = this.caseDetailService.selectedDocumentDefinitionTitle$;
@@ -108,20 +109,20 @@ export class CaseManagementDetailContainerActionsComponent {
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   public readonly selectedVersionIsSameAsActiveVersion$: Observable<boolean> = combineLatest([
-    this.currentGlobalActiveVersion$,
+    this.globalActiveVersion$,
     this.selectedVersion$,
   ]).pipe(
-    map(([current, selected]) => {
-      return valid(current) && valid(selected) && eq(selected, current);
+    map(([currentVersion, selectedVersion]) => {
+      return valid(currentVersion) && valid(selectedVersion) && eq(selectedVersion, currentVersion);
     })
   );
 
   public readonly isOlderVersionSelected$: Observable<boolean> = combineLatest([
-    this.currentGlobalActiveVersion$,
+    this.globalActiveVersion$,
     this.selectedVersion$,
   ]).pipe(
-    map(([current, selected]) => {
-      return valid(current) && valid(selected) && lt(selected, current);
+    map(([currentVersion, selectedVersion]) => {
+      return valid(currentVersion) && valid(selectedVersion) && lt(selectedVersion, currentVersion);
     })
   );
 
