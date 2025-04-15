@@ -22,7 +22,6 @@
     versions: versions$ | async,
     selectedDocumentDefinition: selectedDocumentDefinition$ | async,
     selectedDocumentDefinitionIsReadOnly: selectedDocumentDefinitionIsReadOnly$ | async,
-    selectedVersionIsSameAsActiveVersion: selectedVersionIsSameAsActiveVersion$ | async,
     selectedVersionIsGloballyActive: selectedVersionIsGloballyActive$ | async,
     compactMode: compactMode$ | async,
   } as obs"
@@ -82,25 +81,23 @@
       [id]="'exportDocumentDefinition'"
       [disabled]="obs.exporting || obs.loadingVersion"
       (selected)="export()"
-      >{{
-        'caseManagement.export' | translate: {value: documentDefinitionTitle}
-      }}</cds-overflow-menu-option
-    >
+      >{{ 'caseManagement.export' | translate: {value: documentDefinitionTitle} }}
+    </cds-overflow-menu-option>
 
     <cds-overflow-menu-option
       *ngIf="obs.selectedDocumentDefinition && !obs.selectedDocumentDefinition.readOnly"
       [id]="'removeDocumentDefinition'"
       [disabled]="obs.exporting || obs.loadingVersion"
       (selected)="openCaseRemoveModal()"
-      >{{ 'Remove document definition' | translate }}</cds-overflow-menu-option
-    >
+      >{{ 'Remove document definition' | translate }}
+    </cds-overflow-menu-option>
 
     <cds-overflow-menu-option
       [id]="'setGlobalActiveVersion'"
       [disabled]="obs.selectedVersionIsGloballyActive"
       (selected)="openGlobalActiveVersionModal()"
-      >{{ 'caseManagement.setGlobalActiveVersion' | translate }}</cds-overflow-menu-option
-    >
+      >{{ 'caseManagement.setGlobalActiveVersion' | translate }}
+    </cds-overflow-menu-option>
   </cds-overflow-menu>
 </ng-template>
 
@@ -132,7 +129,7 @@
 
 <valtimo-case-management-select-version-modal
   [open]="showAllVersionModal$ | async"
-  [title]="caseDefinitionKey$ | async"
+  [caseDefinitionTitle]="_caseDefinitionTitle$ | async"
   [caseDefinitionKey]="caseDefinitionKey$ | async"
   [previousSelectedVersion]="selectedVersion$ | async"
   (closeEvent)="closeAllVersionsModal()"

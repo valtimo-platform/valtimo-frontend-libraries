@@ -37,10 +37,12 @@ export class CaseManagementSelectVersionModalComponent {
   @Input() set caseDefinitionKey(value: string) {
     this.caseDefinitionKeySubject.next(value);
   }
+
   public readonly caseDefinitionTitleSubject = new BehaviorSubject<string>('');
   @Input() set caseDefinitionTitle(value: string) {
     this.caseDefinitionTitleSubject.next(value);
   }
+
   @Output() public closeEvent = new EventEmitter();
   @Output() public selectedVersion = new EventEmitter();
 

@@ -35,7 +35,6 @@ export class CaseDetailService implements OnDestroy {
   private readonly _previousSelectedVersionNumber$ = new BehaviorSubject<number | null>(null);
   private readonly _selectedVersionNumber$ = new BehaviorSubject<number | null>(null);
   private readonly _selectedDocumentDefinitionName$ = new BehaviorSubject<string>('');
-  private readonly _selectedDocumentDefinitionTitle$ = new BehaviorSubject<string>('');
   private readonly _documentDefinition$ = new BehaviorSubject<DocumentDefinition | null>(null);
   private readonly _documentDefinitionModel$: Observable<EditorModel> =
     this.documentDefinition$.pipe(
@@ -55,10 +54,6 @@ export class CaseDetailService implements OnDestroy {
 
   public get selectedDocumentDefinitionName$(): Observable<string> {
     return this._selectedDocumentDefinitionName$.pipe(filter(name => !!name));
-  }
-
-  public get selectedDocumentDefinitionTitle$(): Observable<string> {
-    return this._selectedDocumentDefinitionTitle$.pipe(filter(title => !!title));
   }
 
   public get selectedDocumentDefinitionIsReadOnly$(): Observable<boolean> {

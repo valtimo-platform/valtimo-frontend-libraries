@@ -34,7 +34,7 @@ import {take} from 'rxjs/operators';
 import {CaseDetailService, CaseManagementService} from '../../services';
 import {CaseManagementRemoveModalComponent} from '../case-management-remove-modal/case-management-remove-modal.component';
 import {GlobalNotificationService} from '@valtimo/layout';
-import {eq, lt, valid} from 'semver';
+import {lt, valid} from 'semver';
 
 @Component({
   selector: 'valtimo-case-management-detail-container-actions',
@@ -96,10 +96,19 @@ export class CaseManagementDetailContainerActionsComponent {
   ]).pipe(map(([selectedVersion, globalActiveVersion]) => selectedVersion === globalActiveVersion));
 
   private readonly _caseDefinitionKey$ = this.caseDetailService.selectedDocumentDefinitionName$;
-  public readonly _caseDefinitionTitle$ = this.caseDetailService.selectedDocumentDefinitionTitle$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
   public readonly showGlobalVersionModal$ = new BehaviorSubject<boolean>(false);
   public readonly showGlobalVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
+
+  public readonly _globalActiveCase$: Observable<any> = this.caseDefinitionKey$.pipe(
+    switchMap(caseDefinitionKey =>
+      this.caseManagementService.getGlobalActiveCase(caseDefinitionKey)
+    )
+  );
+
+  public readonly _caseDefinitionTitle$: Observable<string> = this._globalActiveCase$.pipe(
+    map(result => result.name)
+  );
 
   public readonly selectedDocumentDefinition$ = this.caseDetailService.documentDefinition$;
 
@@ -107,15 +116,6 @@ export class CaseManagementDetailContainerActionsComponent {
     this.caseDetailService.selectedDocumentDefinitionIsReadOnly$;
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
-
-  public readonly selectedVersionIsSameAsActiveVersion$: Observable<boolean> = combineLatest([
-    this.globalActiveVersion$,
-    this.selectedVersion$,
-  ]).pipe(
-    map(([currentVersion, selectedVersion]) => {
-      return valid(currentVersion) && valid(selectedVersion) && eq(selectedVersion, currentVersion);
-    })
-  );
 
   public readonly isOlderVersionSelected$: Observable<boolean> = combineLatest([
     this.globalActiveVersion$,
