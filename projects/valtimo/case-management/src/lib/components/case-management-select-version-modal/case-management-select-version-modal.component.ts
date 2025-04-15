@@ -33,13 +33,13 @@ export class CaseManagementSelectVersionModalComponent {
   @Input() open = false;
   @Input() previousSelectedVersion = '';
 
-  public readonly caseDefinitionKeySubject = new BehaviorSubject<string>('');
-  public readonly caseDefinitionTitleSubject = new BehaviorSubject<string>('');
+  public readonly caseDefinitionKey$ = new BehaviorSubject<string>('');
+  public readonly caseDefinitionTitle$ = new BehaviorSubject<string>('');
   @Input() set caseDefinitionKey(value: string) {
-    this.caseDefinitionKeySubject.next(value);
+    this.caseDefinitionKey$.next(value);
   }
   @Input() set caseDefinitionTitle(value: string) {
-    this.caseDefinitionTitleSubject.next(value);
+    this.caseDefinitionTitle$.next(value);
   }
 
   @Output() closeEvent = new EventEmitter();
@@ -55,7 +55,7 @@ export class CaseManagementSelectVersionModalComponent {
 
   public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
 
-  public readonly versionItems$: Observable<CaseListItem[]> = this.caseDefinitionKeySubject.pipe(
+  public readonly versionItems$: Observable<CaseListItem[]> = this.caseDefinitionKey$.pipe(
     switchMap(key => this.caseManagementService.getAllCaseVersions({caseDefinitionKey: key})),
     map((page: Page<CaseVersionListItem>) => {
       this.pagination$.next({

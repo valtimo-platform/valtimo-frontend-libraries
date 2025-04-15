@@ -19,7 +19,7 @@
     <h3 cdsModalHeaderHeading>
       {{
         'caseManagement.allVersionsModal.title'
-          | translate: {value: (caseDefinitionTitleSubject | async) ?? ''}
+          | translate: {value: (caseDefinitionTitle$ | async) ?? ''}
       }}
     </h3>
   </cds-modal-header>
