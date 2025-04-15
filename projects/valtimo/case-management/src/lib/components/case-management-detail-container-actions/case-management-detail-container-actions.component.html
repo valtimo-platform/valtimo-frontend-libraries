@@ -54,19 +54,23 @@
 </ng-template>
 
 <ng-template #versionItemTemplate let-item="item">
-  @if (item?.isAllVersions) {
-    {{ item?.content }}
-  } @else {
-    <div class="version-selector-dropdown-template">
-      <cds-tag class="cds-tag--no-margin" [type]="item?.tagType" [title]="item?.content">
-        {{ item?.content }}
-      </cds-tag>
+  <ng-container *ngIf="item">
+    <ng-container *ngIf="item.isAllVersions; else versionContent">
+      {{ item.content }}
+    </ng-container>
 
-      <cds-tag *ngIf="item?.active" class="cds-tag--no-margin" [type]="'high-contrast'">
-        {{ 'caseManagement.globallyActive' | translate }}
-      </cds-tag>
-    </div>
-  }
+    <ng-template #versionContent>
+      <div class="version-selector-dropdown-template">
+        <cds-tag class="cds-tag--no-margin" [type]="item.tagType" [title]="item.content">
+          {{ item.content }}
+        </cds-tag>
+
+        <cds-tag *ngIf="item.active" class="cds-tag--no-margin" type="high-contrast">
+          {{ 'caseManagement.globallyActive' | translate }}
+        </cds-tag>
+      </div>
+    </ng-template>
+  </ng-container>
 </ng-template>
 
 <ng-template #exportMenu let-obs="obs">
@@ -128,7 +132,7 @@
 <valtimo-case-management-remove-modal #caseRemoveModal></valtimo-case-management-remove-modal>
 
 <valtimo-case-management-select-version-modal
-  [open]="showAllVersionModal$ | async"
+  [open]="showAllVersionsModal$ | async"
   [caseDefinitionTitle]="_caseDefinitionTitle$ | async"
   [caseDefinitionKey]="caseDefinitionKey$ | async"
   [previousSelectedVersion]="selectedVersion$ | async"

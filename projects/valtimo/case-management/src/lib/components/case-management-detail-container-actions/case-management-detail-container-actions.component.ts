@@ -56,7 +56,7 @@ export class CaseManagementDetailContainerActionsComponent {
 
   public readonly CARBON_THEME = 'g10';
 
-  public readonly showAllVersionModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showAllVersionsModal$ = new BehaviorSubject<boolean>(false);
   public readonly exporting$ = new BehaviorSubject<boolean>(false);
   public readonly selectedVersionNumber$ = this.caseDetailService.selectedVersionNumber$;
   public readonly selectedVersion$ = new BehaviorSubject<string>('');
@@ -141,23 +141,21 @@ export class CaseManagementDetailContainerActionsComponent {
     ),
     map(([caseDefinitionVersions, selectedVersion]) => {
       const mapping: ListItem[] | null =
-        caseDefinitionVersions?.map(
-          (caseDefinitionVersion: {versionTag: string; active: boolean}) => ({
-            content: caseDefinitionVersion.versionTag,
-            selected: caseDefinitionVersion.versionTag === selectedVersion,
-            active: caseDefinitionVersion.active,
-            tagType: 'blue',
-            isAllVersions: false,
-          })
-        ) ?? null;
+        caseDefinitionVersions.map(({versionTag, active}) => ({
+          content: versionTag,
+          selected: versionTag === selectedVersion,
+          active,
+          tagType: 'blue',
+          isAllVersions: false,
+        })) ?? null;
 
-      mapping.push({
+      const allVersionsItem: ListItem = {
         content: this.translateService.instant('caseManagement.seeAllVersions'),
         selected: false,
         active: false,
         isAllVersions: true,
-      });
-      return mapping;
+      };
+      return [...mapping, allVersionsItem];
     })
   );
 
@@ -251,11 +249,11 @@ export class CaseManagementDetailContainerActionsComponent {
   }
 
   public showAllVersionsModal(): void {
-    this.showAllVersionModal$.next(true);
+    this.showAllVersionsModal$.next(true);
   }
 
   public closeAllVersionsModal(): void {
-    this.showAllVersionModal$.next(false);
+    this.showAllVersionsModal$.next(false);
   }
 
   public openGlobalCaseVersionConfirmationModal(): void {

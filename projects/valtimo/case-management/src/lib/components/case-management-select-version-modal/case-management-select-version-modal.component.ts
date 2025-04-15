@@ -34,21 +34,26 @@ export class CaseManagementSelectVersionModalComponent {
   @Input() previousSelectedVersion = '';
 
   public readonly caseDefinitionKeySubject = new BehaviorSubject<string>('');
+  public readonly caseDefinitionTitleSubject = new BehaviorSubject<string>('');
   @Input() set caseDefinitionKey(value: string) {
     this.caseDefinitionKeySubject.next(value);
   }
-
-  public readonly caseDefinitionTitleSubject = new BehaviorSubject<string>('');
   @Input() set caseDefinitionTitle(value: string) {
     this.caseDefinitionTitleSubject.next(value);
   }
 
-  @Output() public closeEvent = new EventEmitter();
-  @Output() public selectedVersion = new EventEmitter();
-
-  public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
+  @Output() closeEvent = new EventEmitter();
+  @Output() selectedVersion = new EventEmitter();
 
   private _paginationInitialized = false;
+
+  public pagination: Pagination = {
+    collectionSize: 0,
+    page: 1,
+    size: 10,
+  };
+
+  public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
 
   public readonly versionItems$: Observable<CaseListItem[]> = this.caseDefinitionKeySubject.pipe(
     switchMap(key => this.caseManagementService.getAllCaseVersions({caseDefinitionKey: key})),
@@ -61,12 +66,6 @@ export class CaseManagementSelectVersionModalComponent {
       return page.content;
     })
   );
-  '';
-  public pagination: Pagination = {
-    collectionSize: 0,
-    page: 1,
-    size: 10,
-  };
 
   public readonly FIELDS: ColumnConfig[] = [
     {
@@ -92,11 +91,6 @@ export class CaseManagementSelectVersionModalComponent {
     private readonly caseManagementService: CaseManagementService
   ) {}
 
-  public selectActiveVersion(event): void {
-    this.selectedVersion.emit(event?.caseDefinitionVersionTag);
-    this.closeEvent.emit();
-  }
-
   public paginationClicked(page: number): void {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -118,8 +112,16 @@ export class CaseManagementSelectVersionModalComponent {
     });
   }
 
+  public selectActiveVersion(event: {caseDefinitionVersionTag: string}): void {
+    this.emitSelectedVersion(event?.caseDefinitionVersionTag);
+  }
+
   public onCloseModal(): void {
-    this.selectedVersion.emit(this.previousSelectedVersion);
+    this.emitSelectedVersion(this.previousSelectedVersion);
+  }
+
+  private emitSelectedVersion(caseDefinitionVersionTag: string): void {
+    this.selectedVersion.emit(caseDefinitionVersionTag);
     this.closeEvent.emit();
   }
 }
