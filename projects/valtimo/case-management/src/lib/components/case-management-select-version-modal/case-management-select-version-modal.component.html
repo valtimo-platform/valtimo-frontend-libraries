@@ -14,18 +14,12 @@
   ~ limitations under the License.
   -->
 
-<cds-modal
-  valtimoCdsModal
-  showFooter="true"
-  [title]="'caseManagement.allVersionsModal.title' | translate"
-  [open]="open"
-  (close)="onCloseModal()"
->
+<cds-modal valtimoCdsModal showFooter="true" [open]="open" (close)="onCloseModal()">
   <cds-modal-header [showCloseButton]="true" (closeSelect)="onCloseModal()">
     <h3 cdsModalHeaderHeading>
       {{
         'caseManagement.allVersionsModal.title'
-          | translate: {value: (caseDefinitionTitleSubject | async) ?? ''}
+          | translate: {value: (caseDefinitionKeySubject | async) ?? ''}
       }}
     </h3>
   </cds-modal-header>

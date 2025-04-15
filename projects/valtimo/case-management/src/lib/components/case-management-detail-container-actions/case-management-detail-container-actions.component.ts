@@ -83,13 +83,16 @@ export class CaseManagementDetailContainerActionsComponent {
     map(params => params.caseDefinitionVersionTag || '')
   );
 
-  public readonly selectedVersionIsGloballyActive$: Observable<boolean> =
-    this.caseDefinitionKey$?.pipe(
-      switchMap(caseDefinitionKey =>
-        this.caseManagementService.getGlobalActiveCase(caseDefinitionKey)
-      ),
-      map(result => !!result?.active)
-    );
+  public readonly selectedVersionIsGloballyActive$: Observable<boolean> = combineLatest([
+    this.selectedVersion$,
+    this.caseDefinitionKey$,
+  ]).pipe(
+    switchMap(([selectedVersion, caseDefinitionKey]) =>
+      this.caseManagementService
+        .getGlobalActiveCase(caseDefinitionKey)
+        .pipe(map(result => result.caseDefinitionVersionTag === selectedVersion))
+    )
+  );
 
   private readonly _caseDefinitionKey$ = this.caseDetailService.selectedDocumentDefinitionName$;
   public readonly _caseDefinitionTitle$ = this.caseDetailService.selectedDocumentDefinitionTitle$;
@@ -142,16 +145,15 @@ export class CaseManagementDetailContainerActionsComponent {
             content: caseDefinitionVersion.versionTag,
             selected: caseDefinitionVersion.versionTag === selectedVersion,
             active: caseDefinitionVersion.active,
-            tagType: 'green',
+            tagType: 'blue',
             isAllVersions: false,
           })
         ) ?? null;
 
       mapping.push({
-        content: 'See all versions',
+        content: this.translateService.instant('caseManagement.seeAllVersions'),
         selected: false,
         active: false,
-        tagType: 'none',
         isAllVersions: true,
       });
       return mapping;

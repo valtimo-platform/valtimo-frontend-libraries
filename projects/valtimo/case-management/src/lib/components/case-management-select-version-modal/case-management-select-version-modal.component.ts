@@ -31,6 +31,7 @@ import {CaseVersionListItem} from '../../models/case-version-list.model';
 })
 export class CaseManagementSelectVersionModalComponent {
   @Input() open = false;
+  @Input() previousSelectedVersion = '';
 
   public readonly caseDefinitionKeySubject = new BehaviorSubject<string>('');
   @Input() set caseDefinitionKey(value: string) {
@@ -74,10 +75,10 @@ export class CaseManagementSelectVersionModalComponent {
     {
       key: 'release',
       label: 'caseManagement.allVersionsModal.columns.release',
-      viewType: ViewType.TEXT,
+      viewType: ViewType.DATE_TIME,
     },
     {
-      key: 'name',
+      key: 'description',
       label: 'caseManagement.allVersionsModal.columns.description',
       viewType: ViewType.TEXT,
     },
@@ -91,7 +92,7 @@ export class CaseManagementSelectVersionModalComponent {
 
   public selectActiveVersion(event): void {
     this.selectedVersion.emit(event?.caseDefinitionVersionTag);
-    this.onCloseModal();
+    this.closeEvent.emit();
   }
 
   public paginationClicked(page: number): void {
@@ -116,6 +117,7 @@ export class CaseManagementSelectVersionModalComponent {
   }
 
   public onCloseModal(): void {
+    this.selectedVersion.emit(this.previousSelectedVersion);
     this.closeEvent.emit();
   }
 }
