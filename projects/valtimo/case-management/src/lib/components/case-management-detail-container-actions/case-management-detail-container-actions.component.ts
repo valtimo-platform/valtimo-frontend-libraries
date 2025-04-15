@@ -222,20 +222,16 @@ export class CaseManagementDetailContainerActionsComponent {
       });
   }
 
-  public setVersion(version: any): void {
+  public selectVersion(version: any): void {
     if (version?.item?.isAllVersions) {
       this.showAllVersionsModal();
     } else {
-      this.selectedVersion$.next(version?.item?.content);
-      this.router.navigate(
-        [`../${version.item.content}/${this.route.firstChild?.routeConfig?.path}`],
-        {relativeTo: this.route}
-      );
+      this.setVersion(version?.item?.content);
     }
   }
 
-  public setVersionFromModal(version: any): void {
-    this.selectedVersion$.next(version);
+  public selectVersionFromModal(version: string): void {
+    this.setVersion(version);
   }
 
   public openCaseRemoveModal(): void {
@@ -284,7 +280,8 @@ export class CaseManagementDetailContainerActionsComponent {
         take(1),
         switchMap(([caseDefinitionKey, selectedVersion]) =>
           this.caseManagementService.setGlobalActiveCaseVersion(caseDefinitionKey, selectedVersion)
-        )
+        ),
+        tap((result: any) => this.selectedVersion$.next(result.caseDefinitionVersionTag))
       )
       .subscribe({
         next: response => {
@@ -343,6 +340,13 @@ export class CaseManagementDetailContainerActionsComponent {
   private findLargestInArray(array: Array<number>): number {
     return array.reduce(function (a, b) {
       return a > b ? a : b;
+    });
+  }
+
+  private setVersion(version: string): void {
+    this.selectedVersion$.next(version);
+    this.router.navigate([`../${version}/${this.route.firstChild?.routeConfig?.path}`], {
+      relativeTo: this.route,
     });
   }
 }

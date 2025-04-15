@@ -569,6 +569,10 @@
         "version": "Versie",
         "release": "Uitgebracht op",
         "description": "Beschrijving"
+      },
+      "noResults": {
+        "title": "Er zijn geen caseversies",
+        "description": "Er is geen versie geconfigureerd voor deze case"
       }
     },
     "processLinkNotification": {

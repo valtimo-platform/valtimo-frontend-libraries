@@ -44,7 +44,7 @@
     [size]="obs.compactMode ? 'sm' : 'md'"
     [appendInline]="false"
     [disabled]="!obs.versions?.length"
-    (selected)="setVersion($event)"
+    (selected)="selectVersion($event)"
   >
     <cds-dropdown-list
       [items]="obs?.versions || []"
@@ -133,7 +133,7 @@
   [caseDefinitionKey]="caseDefinitionKey$ | async"
   [previousSelectedVersion]="selectedVersion$ | async"
   (closeEvent)="closeAllVersionsModal()"
-  (selectedVersion)="setVersionFromModal($event)"
+  (selectedVersion)="selectVersionFromModal($event)"
 ></valtimo-case-management-select-version-modal>
 
 <valtimo-confirmation-modal
@@ -164,6 +164,7 @@
   [showModalSubject$]="showGlobalVersionConfirmationModal$"
   cancelButtonType="ghost"
   cancelButtonTextTranslationKey="caseManagement.confirmationGlobalVersionModal.cancel"
+  confirmButtonType="danger"
   confirmButtonTextTranslationKey="caseManagement.confirmationGlobalVersionModal.confirm"
   contentTranslationKey="caseManagement.confirmationGlobalVersionModal.description"
   titleTranslationKey="caseManagement.confirmationGlobalVersionModal.title"

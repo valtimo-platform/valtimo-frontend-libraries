@@ -570,6 +570,10 @@
         "version": "Version",
         "release": "Released on",
         "description": "Description"
+      },
+      "noResults": {
+        "title": "There are no case versions",
+        "description": "No version has been configured for this case"
       }
     },
     "processLinkNotification": {

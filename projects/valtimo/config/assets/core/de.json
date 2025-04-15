@@ -569,6 +569,10 @@
         "version": "Version",
         "release": "Veröffentlicht am",
         "description": "Beschreibung"
+      },
+      "noResults": {
+        "title": "Es sind keine Fallversionen vorhanden",
+        "description": "Für diesen Fall wurde keine Version konfiguriert"
       }
     },
     "processLinkNotification": {
