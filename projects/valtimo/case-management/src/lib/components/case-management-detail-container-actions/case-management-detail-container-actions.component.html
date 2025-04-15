@@ -44,6 +44,7 @@
     [size]="obs.compactMode ? 'sm' : 'md'"
     [appendInline]="false"
     [disabled]="!obs.versions?.length"
+    [style.width.px]="300"
     (selected)="selectVersion($event)"
   >
     <cds-dropdown-list
@@ -54,12 +55,11 @@
 </ng-template>
 
 <ng-template #versionItemTemplate let-item="item">
-  <ng-container *ngIf="item">
-    <ng-container *ngIf="item.isAllVersions; else versionContent">
-      {{ item.content }}
-    </ng-container>
-
-    <ng-template #versionContent>
+  @if (item) {
+    @if (item.isAllVersionsOption) {
+      <span>{{ item.content }}</span>
+      <svg cdsIcon="version" size="16"></svg>
+    } @else {
       <div class="version-selector-dropdown-template">
         <cds-tag class="cds-tag--no-margin" [type]="item.tagType" [title]="item.content">
           {{ item.content }}
@@ -69,8 +69,8 @@
           {{ 'caseManagement.globallyActive' | translate }}
         </cds-tag>
       </div>
-    </ng-template>
-  </ng-container>
+    }
+  }
 </ng-template>
 
 <ng-template #exportMenu let-obs="obs">

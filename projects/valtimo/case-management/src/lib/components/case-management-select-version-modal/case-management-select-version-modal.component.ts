@@ -74,7 +74,7 @@ export class CaseManagementSelectVersionModalComponent {
       viewType: ViewType.TAGS,
     },
     {
-      key: 'release',
+      key: 'createdDate',
       label: 'caseManagement.allVersionsModal.columns.release',
       viewType: ViewType.DATE_TIME,
     },

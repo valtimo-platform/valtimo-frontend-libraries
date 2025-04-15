@@ -28,13 +28,14 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {PageHeaderService} from '@valtimo/components';
-import {ListItem, Notification} from 'carbon-components-angular';
+import {IconService, ListItem, Notification} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {CaseDetailService, CaseManagementService} from '../../services';
 import {CaseManagementRemoveModalComponent} from '../case-management-remove-modal/case-management-remove-modal.component';
 import {GlobalNotificationService} from '@valtimo/layout';
 import {lt, valid} from 'semver';
+import {Version16} from '@carbon/icons';
 
 @Component({
   selector: 'valtimo-case-management-detail-container-actions',
@@ -146,14 +147,14 @@ export class CaseManagementDetailContainerActionsComponent {
           selected: versionTag === selectedVersion,
           active,
           tagType: 'blue',
-          isAllVersions: false,
+          isAllVersionsOption: false,
         })) ?? null;
 
       const allVersionsItem: ListItem = {
         content: this.translateService.instant('caseManagement.seeAllVersions'),
         selected: false,
         active: false,
-        isAllVersions: true,
+        isAllVersionsOption: true,
       };
       return [...mapping, allVersionsItem];
     })
@@ -166,11 +167,14 @@ export class CaseManagementDetailContainerActionsComponent {
     private readonly caseManagementService: CaseManagementService,
     private readonly caseDetailService: CaseDetailService,
     private readonly notificationService: GlobalNotificationService,
+    private readonly iconService: IconService,
     private readonly pageHeaderService: PageHeaderService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly translateService: TranslateService
-  ) {}
+  ) {
+    this.iconService.register(Version16);
+  }
 
   public export(): void {
     this.closeCurrentNotification();
@@ -221,7 +225,7 @@ export class CaseManagementDetailContainerActionsComponent {
   }
 
   public selectVersion(version: any): void {
-    if (version?.item?.isAllVersions) {
+    if (version?.item?.isAllVersionsOption) {
       this.showAllVersionsModal();
     } else {
       this.setVersion(version?.item?.content);
