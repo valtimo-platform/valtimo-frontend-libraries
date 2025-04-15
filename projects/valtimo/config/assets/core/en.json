@@ -564,7 +564,7 @@
       "cancel": "Cancel"
     },
     "allVersionsModal": {
-      "title": "All versions",
+      "title": "All {{value}} versions",
       "closeButton": "Close",
       "columns": {
         "version": "Version",

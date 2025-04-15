@@ -15,34 +15,104 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {BehaviorSubject, Observable, switchMap} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ColumnConfig, Pagination, ViewType} from '@valtimo/components';
+import {CaseManagementService} from '../../services';
+import {map} from 'rxjs/operators';
+import {CaseListItem} from '../../models';
+import {Page} from '@valtimo/document';
+import {CaseVersionListItem} from '../../models/case-version-list.model';
 
 @Component({
   selector: 'valtimo-case-management-select-version-modal',
   templateUrl: './case-management-select-version-modal.component.html',
+  styleUrls: ['./case-management-select-version-modal.component.scss'],
 })
 export class CaseManagementSelectVersionModalComponent {
   @Input() open = false;
 
+  public readonly caseDefinitionKeySubject = new BehaviorSubject<string>('');
+  @Input() set caseDefinitionKey(value: string) {
+    this.caseDefinitionKeySubject.next(value);
+  }
+  public readonly caseDefinitionTitleSubject = new BehaviorSubject<string>('');
+  @Input() set caseDefinitionTitle(value: string) {
+    this.caseDefinitionTitleSubject.next(value);
+  }
   @Output() public closeEvent = new EventEmitter();
+  @Output() public selectedVersion = new EventEmitter();
 
-  public readonly data = [
+  public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
+
+  private _paginationInitialized = false;
+
+  public readonly versionItems$: Observable<CaseListItem[]> = this.caseDefinitionKeySubject.pipe(
+    switchMap(key => this.caseManagementService.getAllCaseVersions({caseDefinitionKey: key})),
+    map((page: Page<CaseVersionListItem>) => {
+      this.pagination$.next({
+        size: page.size,
+        page: page.number + 1,
+        collectionSize: +page.totalElements,
+      });
+      return page.content;
+    })
+  );
+  '';
+  public pagination: Pagination = {
+    collectionSize: 0,
+    page: 1,
+    size: 10,
+  };
+
+  public readonly FIELDS: ColumnConfig[] = [
     {
-      content: [
-        {
-          caseDefinitionKey: 'bezwaar',
-          caseDefinitionVersionTag: '1.0.0',
-          name: 'Bezwaar',
-          description: 'Hotfix github issue...',
-          createdDate: '2010-06-06T10:00:00',
-          basedOnVersionTag: '1.0.0-SNAPSHOT',
-          active: true,
-        },
-      ],
+      key: 'caseDefinitionVersionTag',
+      label: 'caseManagement.allVersionsModal.columns.version',
+      viewType: ViewType.TAGS,
+    },
+    {
+      key: 'release',
+      label: 'caseManagement.allVersionsModal.columns.release',
+      viewType: ViewType.TEXT,
+    },
+    {
+      key: 'name',
+      label: 'caseManagement.allVersionsModal.columns.description',
+      viewType: ViewType.TEXT,
     },
   ];
 
-  constructor() {
-    console.log('hola modal');
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly caseManagementService: CaseManagementService
+  ) {}
+
+  public selectActiveVersion(event): void {
+    this.selectedVersion.emit(event?.caseDefinitionVersionTag);
+    this.onCloseModal();
+  }
+
+  public paginationClicked(page: number): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {page: page - 1},
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  public paginationSet(size: number): void {
+    if (!this._paginationInitialized) {
+      this._paginationInitialized = true;
+      return;
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {size},
+      queryParamsHandling: 'merge',
+    });
   }
 
   public onCloseModal(): void {

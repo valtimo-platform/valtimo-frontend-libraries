@@ -92,6 +92,7 @@ export class CaseManagementDetailContainerActionsComponent {
     );
 
   private readonly _caseDefinitionKey$ = this.caseDetailService.selectedDocumentDefinitionName$;
+  public readonly _caseDefinitionTitle$ = this.caseDetailService.selectedDocumentDefinitionTitle$;
   public readonly loadingVersion$ = new BehaviorSubject<boolean>(true);
   public readonly showGlobalVersionModal$ = new BehaviorSubject<boolean>(false);
   public readonly showGlobalVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
@@ -136,16 +137,20 @@ export class CaseManagementDetailContainerActionsComponent {
     ),
     map(([caseDefinitionVersions, selectedVersion]) => {
       const mapping: ListItem[] | null =
-        caseDefinitionVersions?.map((caseDefinitionVersion: string) => ({
-          content: caseDefinitionVersion,
-          selected: caseDefinitionVersion === selectedVersion,
-          tagType: 'green',
-          isAllVersions: false,
-        })) ?? null;
+        caseDefinitionVersions?.map(
+          (caseDefinitionVersion: {versionTag: string; active: boolean}) => ({
+            content: caseDefinitionVersion.versionTag,
+            selected: caseDefinitionVersion.versionTag === selectedVersion,
+            active: caseDefinitionVersion.active,
+            tagType: 'green',
+            isAllVersions: false,
+          })
+        ) ?? null;
 
       mapping.push({
         content: 'See all versions',
         selected: false,
+        active: false,
         tagType: 'none',
         isAllVersions: true,
       });
@@ -224,6 +229,10 @@ export class CaseManagementDetailContainerActionsComponent {
         {relativeTo: this.route}
       );
     }
+  }
+
+  public setVersionFromModal(version: any): void {
+    this.selectedVersion$.next(version);
   }
 
   public openCaseRemoveModal(): void {

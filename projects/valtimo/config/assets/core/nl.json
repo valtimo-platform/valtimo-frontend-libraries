@@ -563,7 +563,7 @@
       "cancel": "Annuleren"
     },
     "allVersionsModal": {
-      "title": "Alle  versies",
+      "title": "Alle {{value}} versies",
       "closeButton": "Sluiten",
       "columns": {
         "version": "Versie",

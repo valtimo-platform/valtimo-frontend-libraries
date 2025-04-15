@@ -563,7 +563,7 @@
       "cancel": "Abbrechen"
     },
     "allVersionsModal": {
-      "title": "Alle versionen",
+      "title": "Alle {{value}} versionen",
       "closeButton": "Schließen",
       "columns": {
         "version": "Version",

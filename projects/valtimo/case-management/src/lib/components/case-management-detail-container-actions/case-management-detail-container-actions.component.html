@@ -48,6 +48,9 @@
     (selected)="setVersion($event)"
   >
     <cds-dropdown-list [items]="obs.versions" [listTpl]="versionItemTemplate"></cds-dropdown-list>
+    <cds-dropdown-item value="ver-todas" data-modal-trigger
+      >🔍 Ver todas las opciones</cds-dropdown-item
+    >
   </cds-dropdown>
 </ng-template>
 
@@ -60,7 +63,7 @@
         {{ item?.content }}
       </cds-tag>
 
-      <cds-tag class="cds-tag--no-margin" [type]="'high-contrast'">
+      <cds-tag *ngIf="item?.active" class="cds-tag--no-margin" [type]="'high-contrast'">
         {{ 'caseManagement.globallyActive' | translate }}
       </cds-tag>
     </div>
@@ -94,7 +97,7 @@
 
     <cds-overflow-menu-option
       [id]="'setGlobalActiveVersion'"
-      [disabled]="obs.selectedVersionIsGloballyActive"
+      [disabled]="!obs.selectedVersionIsGloballyActive"
       (selected)="openGlobalActiveVersionModal()"
       >{{ 'caseManagement.setGlobalActiveVersion' | translate }}</cds-overflow-menu-option
     >
@@ -129,7 +132,10 @@
 
 <valtimo-case-management-select-version-modal
   [open]="showAllVersionModal$ | async"
+  [title]="_caseDefinitionTitle$ | async"
+  [caseDefinitionKey]="caseDefinitionKey$ | async"
   (closeEvent)="closeAllVersionsModal()"
+  (selectedVersion)="setVersionFromModal($event)"
 ></valtimo-case-management-select-version-modal>
 
 <valtimo-confirmation-modal
