@@ -65,6 +65,11 @@
   }
 }
 
+::ng-deep .cds--list-box__field {
+  display: flex;
+  justify-content: space-between;
+}
+
 ::ng-deep .cds--list-box__menu-item__option {
   display: flex;
   justify-content: space-between;

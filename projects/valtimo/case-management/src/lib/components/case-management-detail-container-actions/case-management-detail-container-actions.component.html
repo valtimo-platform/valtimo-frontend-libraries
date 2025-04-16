@@ -19,7 +19,7 @@
   *ngIf="{
     exporting: exporting$ | async,
     loadingVersion: loadingVersion$ | async,
-    versions: versionSelectorItems$ | async,
+    versionItems: versionSelectorItems$ | async,
     selectedDocumentDefinition: selectedDocumentDefinition$ | async,
     selectedDocumentDefinitionIsReadOnly: selectedDocumentDefinitionIsReadOnly$ | async,
     selectedVersionIsGloballyActive: selectedVersionIsGloballyActive$ | async,
@@ -43,34 +43,34 @@
     [displayValue]="versionItemTemplate"
     [size]="obs.compactMode ? 'sm' : 'md'"
     [appendInline]="false"
-    [disabled]="!obs.versions?.length"
+    [disabled]="!obs.versionItems?.length"
     [style.width.px]="300"
     (selected)="selectVersion($event)"
   >
     <cds-dropdown-list
-      [items]="obs?.versions || []"
+      [items]="obs?.versionItems || []"
       [listTpl]="versionItemTemplate"
     ></cds-dropdown-list>
   </cds-dropdown>
 </ng-template>
 
 <ng-template #versionItemTemplate let-item="item">
-  @if (item) {
-    @if (item.isAllVersionsOption) {
-      <span>{{ item.content }}</span>
-      <svg cdsIcon="version" size="16"></svg>
-    } @else {
-      <div class="version-selector-dropdown-template">
-        <cds-tag class="cds-tag--no-margin" [type]="item.tagType" [title]="item.content">
-          {{ item.content }}
-        </cds-tag>
+  <ng-container *ngIf="item.isAllVersionsOption; else regularVersionTemplate">
+    <span>{{ item.content }}</span>
+    <svg cdsIcon="version" size="16"></svg>
+  </ng-container>
 
-        <cds-tag *ngIf="item.active" class="cds-tag--no-margin" type="high-contrast">
-          {{ 'caseManagement.globallyActive' | translate }}
-        </cds-tag>
-      </div>
-    }
-  }
+  <ng-template #regularVersionTemplate>
+    <div class="version-selector-dropdown-template">
+      <cds-tag class="cds-tag--no-margin" [type]="item.tagType" [title]="item.content">
+        {{ item.content }}
+      </cds-tag>
+
+      <cds-tag *ngIf="item.active" class="cds-tag--no-margin" type="high-contrast">
+        {{ 'caseManagement.globallyActive' | translate }}
+      </cds-tag>
+    </div>
+  </ng-template>
 </ng-template>
 
 <ng-template #exportMenu let-obs="obs">
