@@ -141,8 +141,10 @@ export class CaseManagementDetailContainerActionsComponent {
       ])
     ),
     map(([caseDefinitionVersions, selectedVersion]) => {
+      const limitedVersions = caseDefinitionVersions ? caseDefinitionVersions.slice(0, 5) : [];
+
       const mapping: ListItem[] | null =
-        caseDefinitionVersions.map(({versionTag, active}) => ({
+        limitedVersions.map(({versionTag, active}) => ({
           content: versionTag,
           selected: versionTag === selectedVersion,
           active,
