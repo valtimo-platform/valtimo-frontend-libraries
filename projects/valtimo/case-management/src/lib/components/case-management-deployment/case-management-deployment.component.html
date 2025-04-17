@@ -1,0 +1,109 @@
+<!--
+  ~ Copyright 2015-2025 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<ng-container *ngIf="{caseDeploymentData: caseDeploymentData$ | async} as obs">
+  <div class="header-buttons">
+    <div>
+      <button cdsButton="secondary" (click)="goBack()">
+        {{ 'caseManagement.deployment.buttons.back' | translate }}
+        <svg cdsIcon="return" size="16" class="cds--btn__icon"></svg>
+      </button>
+    </div>
+
+    <div class="draft-buttons">
+      <button cdsButton="danger" [disabled]="true">
+        {{ 'caseManagement.deployment.buttons.delete' | translate }}
+        <svg cdsIcon="trash-can" size="16" class="cds--btn__icon"></svg>
+      </button>
+
+      <button cdsButton="primary" [disabled]="true">
+        {{ 'caseManagement.deployment.buttons.finalize' | translate }}
+        <svg cdsIcon="save" size="16" class="cds--btn__icon"></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="deployment-panels">
+    <div class="release-version">
+      <p class="deployment-panel-title">
+        {{ 'caseManagement.deployment.releaseVersion.title' | translate }}
+      </p>
+
+      <div class="release-version-columns">
+        <div class="release-version-data">
+          <label class="release-version-data__label">
+            {{ 'caseManagement.deployment.releaseVersion.fields.version' | translate }}
+          </label>
+          <div class="release-version-data__value">
+            {{ obs.caseDeploymentData?.caseDefinitionVersionTag ?? '-' }}
+          </div>
+        </div>
+
+        <div class="release-version-data">
+          <label class="release-version-data__label">
+            {{ 'caseManagement.deployment.releaseVersion.fields.basedOn' | translate }}
+          </label>
+          <div class="release-version-data__value">
+            {{ obs.caseDeploymentData?.basedOnVersionTag ?? '-' }}
+          </div>
+        </div>
+      </div>
+
+      <cds-notification
+        class="full-width-notification"
+        [notificationObj]="{
+          type: 'warning',
+          title: 'caseManagement.deployment.releaseVersion.warning.title' | translate,
+          message:
+            'caseManagement.deployment.releaseVersion.warning.description'
+            | translate
+              : {
+                  basedOnVersionTag: obs.caseDeploymentData?.basedOnVersionTag ?? ' - ',
+                  conflictingVersions: obs.caseDeploymentData?.conflictingVersions ?? ' - ',
+                },
+          showClose: false,
+          lowContrast: true,
+        }"
+      >
+      </cds-notification>
+    </div>
+
+    <div class="release-information">
+      <p class="deployment-panel-title">
+        {{ 'caseManagement.deployment.releaseInformation.title' | translate }}
+      </p>
+
+      <div class="release-version-columns">
+        <div class="release-version-data">
+          <label class="release-version-data__label">
+            {{ 'caseManagement.deployment.releaseInformation.fields.createdBy' | translate }}
+          </label>
+          <div class="release-version-data__value">
+            {{ obs.caseDeploymentData?.createdBy ?? '-' }}
+          </div>
+        </div>
+
+        <div class="release-version-data">
+          <label class="release-version-data__label">
+            {{ 'caseManagement.deployment.releaseInformation.fields.createdOn' | translate }}
+          </label>
+          <div class="release-version-data__value">
+            {{ obs.caseDeploymentData?.createdDate ?? '-' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

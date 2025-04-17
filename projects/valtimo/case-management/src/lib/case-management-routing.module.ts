@@ -35,6 +35,7 @@ import {
   FormManagementEditComponent,
   FormManagementRouteData,
 } from '@valtimo/form-management';
+import {CaseManagementDeploymentComponent} from './components/case-management-deployment/case-management-deployment.component';
 
 const routes: Routes = [
   {
@@ -107,6 +108,12 @@ const routes: Routes = [
         } as FormManagementRouteData,
       },
     ],
+  },
+  {
+    path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/deployment`,
+    component: CaseManagementDeploymentComponent,
+    canActivate: [AuthGuardService],
+    data: {title: 'Deployment', roles: [ROLE_ADMIN]},
   },
   {
     path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/${TabEnum.FORMS}/:formDefinitionId`,

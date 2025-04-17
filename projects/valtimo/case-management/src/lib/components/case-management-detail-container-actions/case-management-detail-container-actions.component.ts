@@ -35,7 +35,7 @@ import {CaseDetailService, CaseManagementService} from '../../services';
 import {CaseManagementRemoveModalComponent} from '../case-management-remove-modal/case-management-remove-modal.component';
 import {GlobalNotificationService} from '@valtimo/layout';
 import {lt, valid} from 'semver';
-import {Version16} from '@carbon/icons';
+import {Deploy16, Version16} from '@carbon/icons';
 
 @Component({
   selector: 'valtimo-case-management-detail-container-actions',
@@ -176,6 +176,7 @@ export class CaseManagementDetailContainerActionsComponent {
     private readonly translateService: TranslateService
   ) {
     this.iconService.register(Version16);
+    this.iconService.register(Deploy16);
   }
 
   public export(): void {
@@ -312,6 +313,22 @@ export class CaseManagementDetailContainerActionsComponent {
       });
 
     this.showGlobalVersionConfirmationModal$.next(false);
+  }
+
+  public redirectToDeployment(): void {
+    combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$])
+      .pipe(
+        tap(([caseDefinitionKey, caseDefinitionVersionTag]) => {
+          this.router.navigate([
+            '/case-management/case',
+            caseDefinitionKey,
+            'version',
+            caseDefinitionVersionTag,
+            'deployment',
+          ]);
+        })
+      )
+      .subscribe();
   }
 
   private startExporting(): void {
