@@ -49,11 +49,17 @@ export class ProcessManagementService extends BaseApiService {
     this._caseDefinitionVersionTag$.next(caseDefinitionVersionTag);
   }
 
-  public deleteProcess(processDefinitionId: string): Observable<void> {
+  public deleteProcess(processDefinitionKey: string): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(
-        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionKey$.getValue()}/version/${this._caseDefinitionVersionTag$.getValue()}/process-definition/${processDefinitionId}`
+        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionKey$.getValue()}/version/${this._caseDefinitionVersionTag$.getValue()}/process-definition/key/${processDefinitionKey}`
       )
+    );
+  }
+
+  public deleteUnlinkedProcess(processDefinitionKey: string): Observable<void> {
+    return this.httpClient.delete<void>(
+      this.getApiUrl(`${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/key/${processDefinitionKey}`)
     );
   }
 

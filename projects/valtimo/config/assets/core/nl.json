@@ -1165,8 +1165,9 @@
       "title": "Proces verwijderen",
       "content": "Weet u zeker dat u dit proces wilt verwijderen?"
     },
-    "successNotification": "Proces succesvol geïmplementeerd",
-    "errorNotification": "Proces mislukt om te implementeren",
+    "successNotification": "Proces succesvol gedeployed",
+    "errorNotification": "Er ging iets mis bij het deployen van het proces",
+    "deleteNotification": "Proces succesvol verwijderd",
     "upload": {
       "modalTitle": "Upload procesdefinitie",
       "title": "Upload bestand",

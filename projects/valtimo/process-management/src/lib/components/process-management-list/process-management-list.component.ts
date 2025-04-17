@@ -16,9 +16,10 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {Upload16} from '@carbon/icons';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   ActionItem,
+  CARBON_CONSTANTS,
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
@@ -26,9 +27,10 @@ import {
 } from '@valtimo/components';
 import {ProcessDefinition} from '@valtimo/process';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {BehaviorSubject, Observable, switchMap, take, tap} from 'rxjs';
+import {BehaviorSubject, Observable, switchMap, tap} from 'rxjs';
 import {ProcessDefinitionResult} from '../../models';
 import {ProcessManagementService, ProcessManagementStateService} from '../../services';
+import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-process-management-list',
@@ -78,7 +80,9 @@ export class ProcessManagementListComponent {
   constructor(
     private readonly processManagementService: ProcessManagementService,
     private readonly processManagementStateService: ProcessManagementStateService,
-    private readonly iconService: IconService
+    private readonly iconService: IconService,
+    private readonly notificationService: GlobalNotificationService,
+    private readonly translateService: TranslateService
   ) {
     this.iconService.registerAll([Upload16]);
   }
@@ -92,17 +96,26 @@ export class ProcessManagementListComponent {
   }
 
   public onCreateProcess(): void {
-    console.log('emit create');
     this.processSelected.emit('create');
   }
 
   public onDeleteConfirm(processDefinition: ProcessDefinition): void {
-    this.processManagementService
-      .deleteProcess(processDefinition.key)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.processManagementStateService.reloadDefinitions();
+    const context = this.processManagementService.context();
+
+    (context === 'case'
+      ? this.processManagementService.deleteProcess(processDefinition.key)
+      : this.processManagementService.deleteUnlinkedProcess(processDefinition.key)
+    ).subscribe(() => {
+      this.processManagementStateService.reloadDefinitions();
+
+      this.notificationService.showToast({
+        caption: this.translateService.instant(`processManagement.deleteNotification`),
+        type: 'success',
+        duration: CARBON_CONSTANTS.notificationDuration,
+        showClose: true,
+        title: this.translateService.instant(`interface.delete`),
       });
+    });
   }
 
   public onDeleteProcess(process: ProcessDefinitionResult): void {

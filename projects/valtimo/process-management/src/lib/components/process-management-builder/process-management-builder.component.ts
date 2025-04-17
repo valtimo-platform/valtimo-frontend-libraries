@@ -179,17 +179,13 @@ export class ProcessManagementBuilderComponent
       const param = this.route.snapshot.paramMap.get('processDefinitionKey');
       return param ? param : null;
     }),
-    filter(editParam => !!editParam),
-    tap(editParam => console.log('edit param', editParam))
+    filter(editParam => !!editParam)
   );
 
-  public readonly context$ = getContextObservable(this.route).pipe(
-    tap(editParam => console.log('context', editParam))
-  );
+  public readonly context$ = getContextObservable(this.route);
 
   public readonly managementParams$ = this.context$.pipe(
-    switchMap(context => getCaseManagementRouteParams(context, this.route)),
-    tap(editParam => console.log('params', editParam))
+    switchMap(context => getCaseManagementRouteParams(context, this.route))
   );
 
   private readonly _reload$ = new Subject<null>();
@@ -286,11 +282,6 @@ export class ProcessManagementBuilderComponent
     this.breadcrumbService.clearFourthBreadcrumb();
   }
 
-  public onDeployClick(isReadonly: false): void {
-    if (this.creatingNewProcess$.getValue()) this.deployNewProcessDefinition();
-    else this.deployChanges(isReadonly);
-  }
-
   public export(isReadOnlyProcess: boolean): void {
     (isReadOnlyProcess ? from(this._bpmnViewer.saveXML()) : from(this._bpmnModeler.saveXML()))
       .pipe(take(1))
@@ -331,16 +322,21 @@ export class ProcessManagementBuilderComponent
             selectedProcessDefinition.id,
             !isReadOnlyProcess ? (result?.xml ?? '') : null
           );
-        })
+        }),
+        switchMap(() => this.context$)
       )
       .subscribe({
-        next: () => {
-          this.pendingChanges = false;
-          this.reload();
-          this.navigateBack('success');
+        next: context => {
+          if (context === 'independent') {
+            this.pendingChanges = false;
+            this.reload();
+            this.showNotification('success');
+          } else {
+            this.navigateBack('success');
+          }
         },
         error: () => {
-          this.navigateBack('error');
+          this.showNotification('error');
         },
       });
   }
@@ -377,10 +373,11 @@ export class ProcessManagementBuilderComponent
       )
       .subscribe({
         next: () => {
+          this.pendingChanges = false;
           this.navigateBack('success');
         },
         error: () => {
-          this.navigateBack('error');
+          this.showNotification('error');
         },
       });
   }
@@ -403,6 +400,10 @@ export class ProcessManagementBuilderComponent
 
     if (!notification) return;
 
+    this.showNotification(notification);
+  }
+
+  private showNotification(notification: null | 'success' | 'error'): void {
     this.notificationService.showToast({
       caption: this.translateService.instant(`processManagement.${notification}Notification`),
       type: notification,
@@ -647,11 +648,6 @@ export class ProcessManagementBuilderComponent
           this._bpmnModeler?.importXML(processDefinitionResult.bpmn20Xml);
           this._bpmnViewer?.importXML(processDefinitionResult.bpmn20Xml);
 
-          console.log('fix this?');
-
-          // this.isReadOnlyProcess$.next(processDefinitionResult.readOnly);
-          // this.isSystemProcess$.next(processDefinitionResult.systemProcess);
-
           this.loading$.next(false);
         })
     );
@@ -700,7 +696,6 @@ export class ProcessManagementBuilderComponent
         take(1),
         switchMap(([editParam, params, context]) => {
           if (editParam === 'create') {
-            console.log('init if create');
             this._selectedProcess$.next('create');
             this.initIfCreate();
 
@@ -724,12 +719,7 @@ export class ProcessManagementBuilderComponent
             this.processManagementEditorService.setProcessLinksForSelectedDefinition(
               res.processLinks
             );
-            this.pageTitleService.setCustomPageTitle(
-              res.processDefinition.name ||
-                res.processDefinition.id ||
-                res.processDefinition.key ||
-                '-'
-            );
+            this.pageTitleService.setCustomPageTitle(res.processDefinition.name || '-');
           }
 
           this.initProcessDefinition();

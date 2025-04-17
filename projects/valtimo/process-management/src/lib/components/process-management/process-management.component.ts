@@ -23,7 +23,6 @@ import {ProcessManagementService} from '../../services';
 import {ProcessManagementBuilderComponent} from '../process-management-builder/process-management-builder.component';
 import {ProcessManagementListComponent} from '../process-management-list/process-management-list.component';
 import {ProcessManagementUploadComponent} from '../process-management-upload/process-management-upload.component';
-import {GlobalNotificationService} from '@valtimo/layout';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
@@ -58,9 +57,7 @@ export class ProcessManagementComponent implements OnInit, OnDestroy {
   private readonly _subscriptions = new Subscription();
 
   constructor(
-    private readonly notificationService: GlobalNotificationService,
     private readonly processManagementService: ProcessManagementService,
-    private readonly translateService: TranslateService,
     private readonly route: ActivatedRoute,
     private readonly router: Router
   ) {}
