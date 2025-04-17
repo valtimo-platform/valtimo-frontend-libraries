@@ -545,8 +545,8 @@
     "setGlobalActiveVersion": "Instellen als actieve versie",
     "setGlobalActiveVersionErrorTitle": "Fout",
     "setGlobalActiveVersionErrorMessage": "Er is iets misgegaan",
-    "setGlobalActiveVersionSuccessTitle": "Globale actieve versie bijgewerkt",
-    "globallyActive": "Wereldwijd actief",
+    "setGlobalActiveVersionSuccessTitle": "Globaal actieve versie bijgewerkt",
+    "globallyActive": "Globaal actief",
     "unlinkProcess": "Ontkoppelen",
     "listColumns": {
       "name": "Naam",
