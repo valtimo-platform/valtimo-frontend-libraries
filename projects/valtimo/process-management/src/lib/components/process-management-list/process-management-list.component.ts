@@ -26,8 +26,8 @@ import {
 } from '@valtimo/components';
 import {ProcessDefinition} from '@valtimo/process';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {BehaviorSubject, map, Observable, switchMap, take, tap} from 'rxjs';
-import {CaseProcessInstance} from '../../models';
+import {BehaviorSubject, Observable, switchMap, take, tap} from 'rxjs';
+import {ProcessDefinitionResult} from '../../models';
 import {ProcessManagementService, ProcessManagementStateService} from '../../services';
 
 @Component({
@@ -47,7 +47,9 @@ import {ProcessManagementService, ProcessManagementStateService} from '../../ser
   ],
 })
 export class ProcessManagementListComponent {
-  @Output() public readonly processSelected = new EventEmitter<CaseProcessInstance | 'create'>();
+  @Output() public readonly processSelected = new EventEmitter<
+    ProcessDefinitionResult | 'create'
+  >();
 
   public readonly processToDelete$ = new BehaviorSubject<ProcessDefinition | null>(null);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
@@ -60,7 +62,7 @@ export class ProcessManagementListComponent {
     },
   ];
 
-  public readonly processDefinitions$: Observable<CaseProcessInstance[]> =
+  public readonly processDefinitions$: Observable<ProcessDefinitionResult[]> =
     this.processManagementStateService.reloadDefinitions$.pipe(
       tap(() => this.loading$.next(true)),
       switchMap(() => this.processManagementService.processes$),
@@ -81,7 +83,7 @@ export class ProcessManagementListComponent {
     this.iconService.registerAll([Upload16]);
   }
 
-  public editProcessDefinition(processDefinition: CaseProcessInstance): void {
+  public editProcessDefinition(processDefinition: ProcessDefinitionResult): void {
     this.processSelected.emit(processDefinition);
   }
 
@@ -102,7 +104,7 @@ export class ProcessManagementListComponent {
       });
   }
 
-  public onDeleteProcess(process: CaseProcessInstance): void {
+  public onDeleteProcess(process: ProcessDefinitionResult): void {
     this.processToDelete$.next(process.processDefinition);
     this.showDeleteModal$.next(true);
   }
