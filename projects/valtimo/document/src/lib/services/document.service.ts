@@ -410,9 +410,28 @@ export class DocumentService {
         'Content-Type': 'application/json',
       }),
     };
+
     return this.http.post<CreateDocumentDefinitionResponse>(
       `${this.valtimoEndpointUri}management/v1/document-definition`,
       documentDefinitionCreateRequest,
+      options
+    );
+  }
+
+  public updateDocumentDefinitionForManagement(
+    caseDefinitionKey: string,
+    caseDefinitionVersionTag: string,
+    request: DocumentDefinitionCreateRequest
+  ): Observable<DocumentDefinition> {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    return this.http.put<DocumentDefinition>(
+      `${this.valtimoEndpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/document-definition`,
+      request,
       options
     );
   }

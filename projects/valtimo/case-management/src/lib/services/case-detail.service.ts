@@ -22,6 +22,8 @@ import {
   filter,
   map,
   Observable,
+  startWith,
+  Subject,
   Subscription,
   switchMap,
   tap,
@@ -45,6 +47,7 @@ export class CaseDetailService implements OnDestroy {
         language: 'json',
       }))
     );
+  private readonly _reloadDocumentDefinition$ = new Subject<void>();
 
   public get selectedCaseDefinitionVersionTag$(): Observable<string | null> {
     return this._selectedCaseDefinitionVersionTag$.pipe(
@@ -115,12 +118,19 @@ export class CaseDetailService implements OnDestroy {
     this._loadingDocumentDefinition$.next(loading);
   }
 
+  public reloadDocumentDefinition(): void {
+    this._reloadDocumentDefinition$.next(null);
+  }
+
   private openDocumentDefinitionSubscription(): void {
     this._subscriptions.add(
-      combineLatest([this.selectedCaseDefinitionVersionTag$, this.selectedCaseDefinitionKey$])
+      combineLatest([
+        this.selectedCaseDefinitionVersionTag$,
+        this.selectedCaseDefinitionKey$,
+        this._reloadDocumentDefinition$.pipe(startWith(null)),
+      ])
         .pipe(
-          tap(([selectedVersionTag, selectedKey]) => {
-            console.log('hi', selectedVersionTag, selectedKey);
+          tap(() => {
             this.pageTitleService.setCustomPageTitleSet(false);
             this.setLoadingDocumentDefinition(true);
           }),
