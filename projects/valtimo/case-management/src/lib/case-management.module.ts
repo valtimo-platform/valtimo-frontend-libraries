@@ -88,6 +88,7 @@ import {CaseManagementGeneralComponent} from './components/case-management-gener
 import {CaseManagementCaseHandlerComponent} from './components/case-management-general/components/case-management-case-handler/case-management-case-handler.component';
 import {FormManagementComponent} from '@valtimo/form-management';
 import {CaseManagementExternalStartFormComponent} from './components/case-management-external-start-form/case-management-external-start-form.component';
+import {CaseManagementSelectVersionModalComponent} from './components/case-management-select-version-modal/case-management-select-version-modal.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import {CaseManagementExternalStartFormComponent} from './components/case-manage
     CaseManagementDetailComponent,
     CaseManagementConnectModalComponent,
     CaseManagementRemoveModalComponent,
+    CaseManagementSelectVersionModalComponent,
     CaseManagementUploadComponent,
     CaseManagementSearchFieldsComponent,
     CaseManagementDetailContainerComponent,
