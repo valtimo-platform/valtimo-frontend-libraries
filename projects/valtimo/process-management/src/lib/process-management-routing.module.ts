@@ -21,6 +21,7 @@ import {AuthGuardService} from '@valtimo/security';
 import {ROLE_ADMIN} from '@valtimo/config';
 import {ProcessManagementBuilderComponent, ProcessManagementComponent} from './components';
 import {ProcessManagementRouteData} from './models';
+import {pendingChangesGuard} from '@valtimo/components';
 
 const routes: Routes = [
   {
@@ -37,6 +38,7 @@ const routes: Routes = [
     path: 'processes/create',
     component: ProcessManagementBuilderComponent,
     canActivate: [AuthGuardService],
+    canDeactivate: [pendingChangesGuard],
     data: {
       title: 'Create new Process',
       roles: [ROLE_ADMIN],
@@ -47,6 +49,7 @@ const routes: Routes = [
     path: 'processes/:processDefinitionKey',
     component: ProcessManagementBuilderComponent,
     canActivate: [AuthGuardService],
+    canDeactivate: [pendingChangesGuard],
     data: {
       title: 'Process details',
       roles: [ROLE_ADMIN],

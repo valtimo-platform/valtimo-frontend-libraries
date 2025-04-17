@@ -142,6 +142,7 @@ const routes: Routes = [
     path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/${TabEnum.PROCESSES}/create`,
     component: ProcessManagementBuilderComponent,
     canActivate: [AuthGuardService],
+    canDeactivate: [pendingChangesGuard],
     data: {
       title: 'Create new Process',
       customPageTitle: false,

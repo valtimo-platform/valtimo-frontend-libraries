@@ -68,9 +68,11 @@ export class ProcessManagementService extends BaseApiService {
     );
 
     return this.httpClient.post<any>(
-      this.getApiUrl(
-        `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionKey$.getValue()}/version/${this._caseDefinitionVersionTag$.getValue()}/process-definition`
-      ),
+      this._context() === 'case'
+        ? this.getApiUrl(
+            `${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/${this._definitionKey$.getValue()}/version/${this._caseDefinitionVersionTag$.getValue()}/process-definition`
+          )
+        : this.getApiUrl(`${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}`),
       formData
     );
   }
