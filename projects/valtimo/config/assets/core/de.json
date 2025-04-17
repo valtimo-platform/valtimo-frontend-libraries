@@ -590,8 +590,8 @@
       "releaseVersion": {
         "title": "Release-Version",
         "fields": {
-          "version": "Version",
-          "basedOn": "Basierend auf"
+          "caseDefinitionVersionTag": "Version",
+          "basedOnVersionTag": "Basierend auf"
         },
         "warning": {
           "title": "Warnung",
@@ -602,7 +602,7 @@
         "title": "Release-Informationen",
         "fields": {
           "createdBy": "Erstellt von",
-          "createdOn": "Erstellt am",
+          "createdDate": "Erstellt am",
           "description": "Beschreibung"
         }
       }

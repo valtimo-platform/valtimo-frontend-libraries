@@ -591,8 +591,8 @@
       "releaseVersion": {
         "title": "Release version",
         "fields": {
-          "version": "Version",
-          "basedOn": "Based on"
+          "caseDefinitionVersionTag": "Version",
+          "basedOnVersionTag": "Based on"
         },
         "warning": {
           "title": "Warning",
@@ -603,7 +603,7 @@
         "title": "Release information",
         "fields": {
           "createdBy": "Created by",
-          "createdOn": "Created on",
+          "createdDate": "Created on",
           "description": "Description"
         }
       }

@@ -54,15 +54,18 @@
   display: flex;
   width: 100%;
   margin-bottom: 16px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .release-version-data {
-  flex: 1;
+  flex: 1 1 300px;
   padding: 1rem;
   box-sizing: border-box;
 
   &__label {
     font-size: 12px;
+    margin-bottom: 16px;
     color: var(--cds-text-secondary);
   }
 

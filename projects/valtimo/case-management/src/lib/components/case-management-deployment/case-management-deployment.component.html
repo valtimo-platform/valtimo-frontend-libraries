@@ -13,7 +13,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<ng-container *ngIf="{caseDeploymentData: caseDeploymentData$ | async} as obs">
+<ng-container
+  *ngIf="{
+    releaseVersionEntries: releaseVersionEntries$ | async,
+    releaseInformationDataEntries: releaseInformationDataEntries$ | async,
+  } as obs"
+>
   <div class="header-buttons">
     <div>
       <button cdsButton="secondary" (click)="goBack()">
@@ -42,21 +47,12 @@
       </p>
 
       <div class="release-version-columns">
-        <div class="release-version-data">
+        <div *ngFor="let entry of obs.releaseVersionEntries" class="release-version-data">
           <label class="release-version-data__label">
-            {{ 'caseManagement.deployment.releaseVersion.fields.version' | translate }}
+            {{ 'caseManagement.deployment.releaseVersion.fields.' + entry.key | translate }}
           </label>
           <div class="release-version-data__value">
-            {{ obs.caseDeploymentData?.caseDefinitionVersionTag ?? '-' }}
-          </div>
-        </div>
-
-        <div class="release-version-data">
-          <label class="release-version-data__label">
-            {{ 'caseManagement.deployment.releaseVersion.fields.basedOn' | translate }}
-          </label>
-          <div class="release-version-data__value">
-            {{ obs.caseDeploymentData?.basedOnVersionTag ?? '-' }}
+            {{ entry.value }}
           </div>
         </div>
       </div>
@@ -86,21 +82,12 @@
       </p>
 
       <div class="release-version-columns">
-        <div class="release-version-data">
+        <div *ngFor="let entry of obs.releaseInformationDataEntries" class="release-version-data">
           <label class="release-version-data__label">
-            {{ 'caseManagement.deployment.releaseInformation.fields.createdBy' | translate }}
+            {{ 'caseManagement.deployment.releaseInformation.fields.' + entry.key | translate }}
           </label>
           <div class="release-version-data__value">
-            {{ obs.caseDeploymentData?.createdBy ?? '-' }}
-          </div>
-        </div>
-
-        <div class="release-version-data">
-          <label class="release-version-data__label">
-            {{ 'caseManagement.deployment.releaseInformation.fields.createdOn' | translate }}
-          </label>
-          <div class="release-version-data__value">
-            {{ obs.caseDeploymentData?.createdDate ?? '-' }}
+            {{ entry.value }}
           </div>
         </div>
       </div>

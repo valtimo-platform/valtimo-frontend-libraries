@@ -54,8 +54,33 @@ export class CaseManagementDeploymentComponent {
   ]).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
       this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
-    ),
-    tap(result => console.log('Result: ', result))
+    )
+  );
+
+  public readonly releaseVersionEntries$: Observable<{key: string; value: string}[]> =
+    this.caseDeploymentData$.pipe(
+      map(caseDeploymentData => {
+        const releaseVersionData = {
+          caseDefinitionVersionTag: caseDeploymentData.caseDefinitionVersionTag ?? '-',
+          basedOnVersionTag: caseDeploymentData.basedOnVersionTag ?? '-',
+        };
+
+        return Object.entries(releaseVersionData).map(([key, value]) => ({key, value}));
+      })
+    );
+
+  public readonly releaseInformationDataEntries$: Observable<
+    {key: string; value: string | Date}[]
+  > = this.caseDeploymentData$.pipe(
+    map(caseDeploymentData => {
+      const releaseInformationData = {
+        createdBy: caseDeploymentData.createdBy ?? '-',
+        createdDate: caseDeploymentData.createdDate ?? new Date(),
+        description: caseDeploymentData.description ?? '-',
+      };
+
+      return Object.entries(releaseInformationData).map(([key, value]) => ({key, value}));
+    })
   );
 
   constructor(

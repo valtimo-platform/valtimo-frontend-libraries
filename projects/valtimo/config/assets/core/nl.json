@@ -590,8 +590,8 @@
       "releaseVersion": {
         "title": "Releaseversie",
         "fields": {
-          "version": "Versie",
-          "basedOn": "Gebaseerd op"
+          "caseDefinitionVersionTag": "Versie",
+          "basedOnVersionTag": "Gebaseerd op"
         },
         "warning": {
           "title": "Waarschuwing",
@@ -602,7 +602,7 @@
         "title": "Release-informatie",
         "fields": {
           "createdBy": "Gemaakt door",
-          "createdOn": "Gemaakt op",
+          "createdDate": "Gemaakt op",
           "description": "Beschrijving"
         }
       }

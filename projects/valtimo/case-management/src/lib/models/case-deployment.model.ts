@@ -12,3 +12,14 @@ export class CaseDeploymentData {
   active: boolean;
   conflictingVersions: string;
 }
+
+export class ReleaseVersionData {
+  caseDefinitionVersionTag: string;
+  basedOnVersionTag: string;
+}
+
+export class ReleaseInformationData {
+  createdBy: string;
+  createdDate: Date;
+  description: string;
+}
