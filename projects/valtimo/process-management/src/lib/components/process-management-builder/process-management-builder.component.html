@@ -19,6 +19,8 @@
   [extraSpace]="extraSpace()"
   [disableOverflow]="true"
   *ngIf="{
+    processDefinitionVersions: processDefinitionVersions$ | async,
+    selectedProcessDefinitionXml: selectedProcessDefinitionXml$ | async,
     loading: loading$ | async,
     isReadOnlyProcess: isReadOnlyProcess$ | async,
   } as obs"

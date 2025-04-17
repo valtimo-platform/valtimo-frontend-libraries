@@ -139,6 +139,17 @@ const routes: Routes = [
     },
   },
   {
+    path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/${TabEnum.PROCESSES}/create`,
+    component: ProcessManagementBuilderComponent,
+    canActivate: [AuthGuardService],
+    data: {
+      title: 'Create new Process',
+      customPageTitle: false,
+      roles: [ROLE_ADMIN],
+      context: 'case',
+    } as ProcessManagementRouteData,
+  },
+  {
     path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/${TabEnum.PROCESSES}/:processDefinitionKey`,
     component: ProcessManagementBuilderComponent,
     canActivate: [AuthGuardService],

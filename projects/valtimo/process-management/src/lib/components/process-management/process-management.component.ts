@@ -46,8 +46,6 @@ import {isEqual} from 'lodash';
   providers: [TranslateService],
 })
 export class ProcessManagementComponent implements OnInit, OnDestroy {
-  public readonly selectedProcess$ = new BehaviorSubject<ProcessDefinitionResult | null>(null);
-
   public readonly context$ = getContextObservable(this.route);
 
   public readonly params$ = this.context$.pipe(
@@ -75,9 +73,11 @@ export class ProcessManagementComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
-  public onProcessSelected(process: ProcessDefinitionResult): void {
-    console.log('process', process);
-    this.router.navigate([process.processDefinition.key], {
+  public onProcessSelected(selectedProcessEvent: ProcessDefinitionResult | 'create'): void {
+    const editParam =
+      selectedProcessEvent === 'create' ? 'create' : selectedProcessEvent?.processDefinition?.key;
+
+    this.router.navigate([editParam], {
       relativeTo: this.route,
     });
   }

@@ -170,18 +170,29 @@ export class ProcessManagementBuilderComponent
 
   public readonly changesPending$ = new BehaviorSubject<boolean>(false);
 
-  public readonly context$ = getContextObservable(this.route);
+  public readonly editParam$: Observable<string | 'create' | null> = this.route.url.pipe(
+    map(segments => {
+      const lastSegment = segments[segments.length - 1]?.path;
+      if (lastSegment === 'create') {
+        return 'create';
+      }
+      const param = this.route.snapshot.paramMap.get('processDefinitionKey');
+      return param ? param : null;
+    }),
+    filter(editParam => !!editParam),
+    tap(editParam => console.log('edit param', editParam))
+  );
 
-  public readonly params$ = this.context$.pipe(
-    switchMap(context => getCaseManagementRouteParams(context, this.route))
+  public readonly context$ = getContextObservable(this.route).pipe(
+    tap(editParam => console.log('context', editParam))
+  );
+
+  public readonly managementParams$ = this.context$.pipe(
+    switchMap(context => getCaseManagementRouteParams(context, this.route)),
+    tap(editParam => console.log('params', editParam))
   );
 
   private readonly _reload$ = new Subject<null>();
-
-  public readonly editParam$: Observable<string | 'create' | null> = this.route.paramMap.pipe(
-    map(params => (params.has('processDefinitionKey') ? params.get('processDefinitionKey') : null)),
-    filter(editParam => !!editParam)
-  );
 
   public readonly processDefinitionVersions$: Observable<ProcessDefinition[]> = combineLatest([
     this.editParam$,
@@ -294,56 +305,13 @@ export class ProcessManagementBuilderComponent
       });
   }
 
-  private initEditing(): void {
-    combineLatest([this.editParam$, this.params$, this.context$])
-      .pipe(
-        take(1),
-        switchMap(([editParam, params, context]) => {
-          if (editParam === 'create') {
-            this._selectedProcess$.next('create');
-            this.initIfCreate();
-
-            return of(null);
-          }
-
-          return context === 'case'
-            ? this.processManagementService.getProcessDefinitionForCase(
-                params.caseDefinitionKey,
-                params.caseDefinitionVersionTag,
-                editParam
-              )
-            : this.processManagementService
-                .getUnlinkedProcessDefinitionsByKey(editParam)
-                .pipe(map(processDefinitionResults => processDefinitionResults[0]));
-        }),
-        tap(res => {
-          if (res) {
-            this._selectedProcess$.next(res);
-            this.processManagementEditorService.setSelectedProcessDefinition(res.processDefinition);
-            this.processManagementEditorService.setProcessLinksForSelectedDefinition(
-              res.processLinks
-            );
-            this.pageTitleService.setCustomPageTitle(
-              res.processDefinition.name ||
-                res.processDefinition.id ||
-                res.processDefinition.key ||
-                '-'
-            );
-          }
-
-          this.initProcessDefinition();
-        })
-      )
-      .subscribe();
-  }
-
-  private deployChanges(isReadOnlyProcess: boolean): void {
+  public deployChanges(isReadOnlyProcess: boolean): void {
     combineLatest([
       from(isReadOnlyProcess ? this._bpmnViewer.saveXML() : this._bpmnModeler.saveXML()),
       this.processManagementEditorService.processLinksForSelectedDefinition$,
       this.processManagementEditorService.selectionProcessDefinition$,
       this.context$,
-      this.params$,
+      this.managementParams$,
     ])
       .pipe(
         take(1),
@@ -377,23 +345,35 @@ export class ProcessManagementBuilderComponent
       });
   }
 
-  private deployNewProcessDefinition(): void {
+  public deployNewProcessDefinition(): void {
     combineLatest([
       from(this._bpmnModeler.saveXML()),
       this.processManagementEditorService.processLinksForSelectedDefinition$,
+      this.context$,
+      this.managementParams$,
     ])
       .pipe(
         take(1),
-        switchMap(([result, processLinks]) =>
-          this.processLinkService.deployProcessWithProcessLinks(
-            processLinks.map(link => ({
-              ...link,
-              processDefinitionId: '-',
-            })) as ProcessLinkCreateEvent[],
-            null,
-            result.xml ?? ''
-          )
-        )
+        switchMap(([result, processLinks, context, params]) => {
+          const mappedProcessLinks = processLinks.map(link => ({
+            ...link,
+            processDefinitionId: '-',
+          })) as ProcessLinkCreateEvent[];
+
+          return context === 'independent'
+            ? this.processLinkService.deployProcessWithProcessLinks(
+                mappedProcessLinks,
+                null,
+                result.xml ?? ''
+              )
+            : this.processLinkService.deployProcessWithProcessLinksForCase(
+                mappedProcessLinks,
+                null,
+                result.xml ?? '',
+                params.caseDefinitionKey,
+                params.caseDefinitionVersionTag
+              );
+        })
       )
       .subscribe({
         next: () => {
@@ -418,10 +398,28 @@ export class ProcessManagementBuilderComponent
       });
   }
 
+  public navigateBack(notification: null | 'success' | 'error'): void {
+    this.router.navigate(['../'], {relativeTo: this.route});
+
+    if (!notification) return;
+
+    this.notificationService.showToast({
+      caption: this.translateService.instant(`processManagement.${notification}Notification`),
+      type: notification,
+      duration: CARBON_CONSTANTS.notificationDuration,
+      showClose: true,
+      title: this.translateService.instant(`interface.${notification}`),
+    });
+  }
+
   private setSelectedProcessDefinitionToLatest(processDefinitions: ProcessDefinition[]): void {
-    this.processManagementEditorService.setSelectedProcessDefinition(
-      processDefinitions.reduce((acc, version) => (version.version > acc.version ? version : acc))
+    if ((processDefinitions || []).length === 0) return;
+
+    const latest = processDefinitions.reduce((acc, version) =>
+      version.version > acc.version ? version : acc
     );
+
+    this.processManagementEditorService.setSelectedProcessDefinition(latest);
   }
 
   private initModeler(): void {
@@ -661,7 +659,7 @@ export class ProcessManagementBuilderComponent
 
   private openParamsAndContextSubscription(): void {
     this._subscriptions.add(
-      combineLatest([this.context$, this.params$]).subscribe(([context, params]) => {
+      combineLatest([this.context$, this.managementParams$]).subscribe(([context, params]) => {
         if (context) this.processManagementService.context = context;
 
         if (params) {
@@ -674,20 +672,6 @@ export class ProcessManagementBuilderComponent
         this.initBreadcrumbs(params, context);
       })
     );
-  }
-
-  private navigateBack(notification: null | 'success' | 'error'): void {
-    this.router.navigate(['../'], {relativeTo: this.route});
-
-    if (!notification) return;
-
-    this.notificationService.showToast({
-      caption: this.translateService.instant(`processManagement.${notification}Notification`),
-      type: notification,
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
-      title: this.translateService.instant(`interface.${notification}`),
-    });
   }
 
   private initBreadcrumbs(params: ProcessManagementParams, context: ManagementContext): void {
@@ -708,5 +692,49 @@ export class ProcessManagementBuilderComponent
       content: this.translateService.instant('caseManagement.tabs.processes'),
       href: routeWithForms,
     });
+  }
+
+  private initEditing(): void {
+    combineLatest([this.editParam$, this.managementParams$, this.context$])
+      .pipe(
+        take(1),
+        switchMap(([editParam, params, context]) => {
+          if (editParam === 'create') {
+            console.log('init if create');
+            this._selectedProcess$.next('create');
+            this.initIfCreate();
+
+            return of(null);
+          }
+
+          return context === 'case'
+            ? this.processManagementService.getProcessDefinitionForCase(
+                params.caseDefinitionKey,
+                params.caseDefinitionVersionTag,
+                editParam
+              )
+            : this.processManagementService
+                .getUnlinkedProcessDefinitionsByKey(editParam)
+                .pipe(map(processDefinitionResults => processDefinitionResults[0]));
+        }),
+        tap(res => {
+          if (res) {
+            this._selectedProcess$.next(res);
+            this.processManagementEditorService.setSelectedProcessDefinition(res.processDefinition);
+            this.processManagementEditorService.setProcessLinksForSelectedDefinition(
+              res.processLinks
+            );
+            this.pageTitleService.setCustomPageTitle(
+              res.processDefinition.name ||
+                res.processDefinition.id ||
+                res.processDefinition.key ||
+                '-'
+            );
+          }
+
+          this.initProcessDefinition();
+        })
+      )
+      .subscribe();
   }
 }

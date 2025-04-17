@@ -92,6 +92,7 @@ export class ProcessManagementListComponent {
   }
 
   public onCreateProcess(): void {
+    console.log('emit create');
     this.processSelected.emit('create');
   }
 
