@@ -22,12 +22,10 @@
   } as obs"
 >
   <div class="header-buttons">
-    <div>
-      <button cdsButton="secondary" (click)="goBack()">
-        {{ 'caseManagement.deployment.buttons.back' | translate }}
-        <svg cdsIcon="return" size="16" class="cds--btn__icon"></svg>
-      </button>
-    </div>
+    <button cdsButton="secondary" (click)="goBack()">
+      {{ 'caseManagement.deployment.buttons.back' | translate }}
+      <svg cdsIcon="return" size="16" class="cds--btn__icon"></svg>
+    </button>
 
     <div *ngIf="obs.isDraftVersion" class="draft-buttons">
       <button cdsButton="danger">
@@ -43,49 +41,79 @@
   </div>
 
   <div class="deployment-panels">
-    <div class="release-version">
-      <p class="deployment-panel-title">
-        {{ 'caseManagement.deployment.releaseVersion.title' | translate }}
-      </p>
+    <ng-container
+      *ngTemplateOutlet="
+        releaseVersionPanel;
+        context: {
+          data: obs.releaseVersionEntries,
+          showNotification: obs.hasConflictingVersions,
+          notificationData: {
+            basedOnVersionTag: obs.releaseVersionEntries?.basedOnVersionTag ?? ' - ',
+            conflictingVersions: obs.releaseVersionEntries?.conflictingVersions ?? ' - ',
+          },
+        }
+      "
+    ></ng-container>
 
-      <div class="release-version-columns">
-        <div *ngFor="let entry of obs.releaseVersionEntries" class="release-version-data">
-          <label class="release-version-data__label">
-            {{ 'caseManagement.deployment.releaseVersion.fields.' + entry.key | translate }}
-          </label>
-          <div class="release-version-data__value">
-            {{ entry.value }}
-          </div>
+    <ng-container
+      *ngTemplateOutlet="
+        releaseInformationPanel;
+        context: {
+          data: obs.releaseInformationDataEntries,
+        }
+      "
+    ></ng-container>
+  </div>
+</ng-container>
+
+<ng-template
+  #releaseVersionPanel
+  let-data="data"
+  let-showNotification="showNotification"
+  let-notificationData="notificationData"
+>
+  <div class="release-version">
+    <p class="deployment-panel-title">
+      {{ 'caseManagement.deployment.releaseVersion.title' | translate }}
+    </p>
+
+    <div class="release-version-columns">
+      <div *ngFor="let entry of data" class="release-version-data">
+        <label class="release-version-data__label">
+          {{ 'caseManagement.deployment.releaseVersion.fields.' + entry.key | translate }}
+        </label>
+        <div class="release-version-data__value">
+          {{ entry.value }}
         </div>
       </div>
-
-      <cds-notification
-        class="full-width-notification"
-        *ngIf="obs.hasConflictingVersions"
-        [notificationObj]="{
-          type: 'warning',
-          title: 'caseManagement.deployment.releaseVersion.warning.title' | translate,
-          message:
-            'caseManagement.deployment.releaseVersion.warning.description'
-            | translate
-              : {
-                  basedOnVersionTag: obs.releaseVersionEntries?.basedOnVersionTag ?? ' - ',
-                  conflictingVersions: obs.releaseVersionEntries?.conflictingVersions ?? ' - ',
-                },
-          showClose: false,
-          lowContrast: true,
-        }"
-      >
-      </cds-notification>
     </div>
 
-    <div class="release-information">
-      <p class="deployment-panel-title">
-        {{ 'caseManagement.deployment.releaseInformation.title' | translate }}
-      </p>
+    <cds-notification
+      *ngIf="showNotification"
+      class="full-width-notification"
+      [notificationObj]="{
+        type: 'warning',
+        title: ('caseManagement.deployment.releaseVersion.warning.title' | translate),
+        message:
+          ('caseManagement.deployment.releaseVersion.warning.description'
+          | translate: notificationData),
+        showClose: false,
+        lowContrast: true,
+      }"
+    >
+    </cds-notification>
+  </div>
+</ng-template>
 
-      <div class="release-version-columns">
-        <div *ngFor="let entry of obs.releaseInformationDataEntries" class="release-version-data">
+<ng-template #releaseInformationPanel let-data="data">
+  <div class="release-information">
+    <p class="deployment-panel-title">
+      {{ 'caseManagement.deployment.releaseInformation.title' | translate }}
+    </p>
+
+    <div class="release-version-columns">
+      <ng-container *ngFor="let entry of data">
+        <div class="release-version-data" *ngIf="entry?.key && entry?.value !== undefined">
           <label class="release-version-data__label">
             {{ 'caseManagement.deployment.releaseInformation.fields.' + entry.key | translate }}
           </label>
@@ -93,7 +121,7 @@
             {{ entry.value }}
           </div>
         </div>
-      </div>
+      </ng-container>
     </div>
   </div>
-</ng-container>
+</ng-template>
