@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {IconService} from 'carbon-components-angular';
 import {Return16, Save16, TrashCan16} from '@carbon/icons';
-import {combineLatest, map, Observable, switchMap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CaseManagementService} from '../../services';
 import {tap} from 'rxjs/operators';
 import {CaseDeploymentData} from '../../models/case-deployment.model';
+import {BreadcrumbService} from '@valtimo/components';
+import {DatePipe} from '@angular/common';
 
 @Component({
   templateUrl: './case-management-deployment.component.html',
   styleUrls: ['./case-management-deployment.component.scss'],
 })
-export class CaseManagementDeploymentComponent {
+export class CaseManagementDeploymentComponent implements AfterViewInit {
+  public readonly isDraftVersion$ = new BehaviorSubject<boolean>(false);
+  public readonly hasConflictingVersions$ = new BehaviorSubject<boolean>(false);
   public readonly params$: Observable<{
     caseDefinitionKey: string;
     caseDefinitionVersionTag: string;
@@ -44,8 +48,17 @@ export class CaseManagementDeploymentComponent {
   );
 
   public readonly caseDefinitionVersionTag$: Observable<string> = this.params$.pipe(
-    map(params => params.caseDefinitionVersionTag || ''),
-    tap(result => console.log('caseDefinitionVersionTag$ ', result))
+    map(params => params.caseDefinitionVersionTag || '')
+  );
+
+  public readonly _globalActiveCase$: Observable<any> = this.caseDefinitionKey$.pipe(
+    switchMap(caseDefinitionKey =>
+      this.caseManagementService.getGlobalActiveCase(caseDefinitionKey)
+    )
+  );
+
+  public readonly _caseDefinitionTitle$: Observable<string> = this._globalActiveCase$.pipe(
+    map(result => result.name)
   );
 
   public readonly caseDeploymentData$: Observable<CaseDeploymentData> = combineLatest([
@@ -54,7 +67,11 @@ export class CaseManagementDeploymentComponent {
   ]).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
       this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
-    )
+    ),
+    tap(caseDeploymentData => {
+      this.isDraftVersion$.next(caseDeploymentData.final);
+      this.hasConflictingVersions$.next(caseDeploymentData.conflictingVersions ? true : false);
+    })
   );
 
   public readonly releaseVersionEntries$: Observable<{key: string; value: string}[]> =
@@ -75,7 +92,7 @@ export class CaseManagementDeploymentComponent {
     map(caseDeploymentData => {
       const releaseInformationData = {
         createdBy: caseDeploymentData.createdBy ?? '-',
-        createdDate: caseDeploymentData.createdDate ?? new Date(),
+        createdDate: this.datePipe.transform(caseDeploymentData.createdDate ?? '', 'dd-MM-yyyy'),
         description: caseDeploymentData.description ?? '-',
       };
 
@@ -86,16 +103,23 @@ export class CaseManagementDeploymentComponent {
   constructor(
     private readonly caseManagementService: CaseManagementService,
     private readonly iconService: IconService,
+    private readonly breadcrumbService: BreadcrumbService,
     private readonly translateService: TranslateService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly datePipe: DatePipe
   ) {
     this.iconService.register(Return16);
     this.iconService.register(TrashCan16);
     this.iconService.register(Save16);
   }
 
+  public ngAfterViewInit(): void {
+    this.initBreadcrumbs();
+  }
+
   public goBack(): void {
+    this.breadcrumbService.clearThirdBreadcrumb();
     combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$])
       .pipe(
         tap(([caseDefinitionKey, caseDefinitionVersionTag]) => {
@@ -105,6 +129,22 @@ export class CaseManagementDeploymentComponent {
             'version',
             caseDefinitionVersionTag,
           ]);
+        })
+      )
+      .subscribe();
+  }
+
+  private initBreadcrumbs(): void {
+    combineLatest([this.params$, this._caseDefinitionTitle$])
+      .pipe(
+        tap(([{caseDefinitionKey, caseDefinitionVersionTag}, caseDefinitionTitle]) => {
+          const route = `/case-management/case/${caseDefinitionKey}/version/${caseDefinitionVersionTag}`;
+
+          this.breadcrumbService.setThirdBreadcrumb({
+            route: [route],
+            content: `${caseDefinitionTitle} `,
+            href: route,
+          });
         })
       )
       .subscribe();

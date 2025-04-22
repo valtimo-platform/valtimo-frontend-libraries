@@ -17,6 +17,8 @@
   *ngIf="{
     releaseVersionEntries: releaseVersionEntries$ | async,
     releaseInformationDataEntries: releaseInformationDataEntries$ | async,
+    isDraftVersion: isDraftVersion$ | async,
+    hasConflictingVersions: hasConflictingVersions$ | async,
   } as obs"
 >
   <div class="header-buttons">
@@ -27,13 +29,13 @@
       </button>
     </div>
 
-    <div class="draft-buttons">
-      <button cdsButton="danger" [disabled]="true">
+    <div *ngIf="obs.isDraftVersion" class="draft-buttons">
+      <button cdsButton="danger">
         {{ 'caseManagement.deployment.buttons.delete' | translate }}
         <svg cdsIcon="trash-can" size="16" class="cds--btn__icon"></svg>
       </button>
 
-      <button cdsButton="primary" [disabled]="true">
+      <button cdsButton="primary">
         {{ 'caseManagement.deployment.buttons.finalize' | translate }}
         <svg cdsIcon="save" size="16" class="cds--btn__icon"></svg>
       </button>
@@ -59,6 +61,7 @@
 
       <cds-notification
         class="full-width-notification"
+        *ngIf="obs.hasConflictingVersions"
         [notificationObj]="{
           type: 'warning',
           title: 'caseManagement.deployment.releaseVersion.warning.title' | translate,
@@ -66,8 +69,8 @@
             'caseManagement.deployment.releaseVersion.warning.description'
             | translate
               : {
-                  basedOnVersionTag: obs.caseDeploymentData?.basedOnVersionTag ?? ' - ',
-                  conflictingVersions: obs.caseDeploymentData?.conflictingVersions ?? ' - ',
+                  basedOnVersionTag: obs.releaseVersionEntries?.basedOnVersionTag ?? ' - ',
+                  conflictingVersions: obs.releaseVersionEntries?.conflictingVersions ?? ' - ',
                 },
           showClose: false,
           lowContrast: true,
