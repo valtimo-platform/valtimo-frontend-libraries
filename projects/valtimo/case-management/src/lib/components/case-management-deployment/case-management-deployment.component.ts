@@ -69,7 +69,7 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
       this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
     ),
     tap(caseDeploymentData => {
-      this.isDraftVersion$.next(caseDeploymentData.final);
+      this.isDraftVersion$.next(!caseDeploymentData.final);
       this.hasConflictingVersions$.next(caseDeploymentData.conflictingVersions ? true : false);
     })
   );
