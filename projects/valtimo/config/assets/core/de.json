@@ -1231,6 +1231,7 @@
     },
     "successNotification": "Prozess erfolgreich bereitgestellt",
     "errorNotification": "Prozess konnte nicht bereitgestellt werden",
+    "deleteNotification": "Prozess erfolgreich gelöscht",
     "upload": {
       "modalTitle": "Prozessdefinition hochladen",
       "title": "Datei hochladen",

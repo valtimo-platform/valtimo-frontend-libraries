@@ -87,7 +87,6 @@ import {CaseManagementCreateComponent} from './components/case-management-create
 import {CaseManagementWidgetsEditorComponent} from './components/case-management-widget-tab/editor/case-management-widgets-editor.component';
 import {CaseManagementGeneralComponent} from './components/case-management-general/case-management-general.component';
 import {CaseManagementCaseHandlerComponent} from './components/case-management-general/components/case-management-case-handler/case-management-case-handler.component';
-import {CaseManagementProcessesComponent} from './components/case-management-processes/case-management-processes.component';
 import {FormManagementComponent} from '@valtimo/form-management';
 import {CaseManagementExternalStartFormComponent} from './components/case-management-external-start-form/case-management-external-start-form.component';
 import {CaseManagementSelectVersionModalComponent} from './components/case-management-select-version-modal/case-management-select-version-modal.component';
@@ -169,9 +168,7 @@ import {CaseManagementDeploymentComponent} from './components/case-management-de
     TooltipModule,
     CaseManagementWidgetsEditorComponent,
     ValuePathSelectorComponent,
-    CaseManagementProcessesComponent,
     LayerModule,
-    CaseManagementProcessesComponent,
     FormManagementComponent,
     EllipsisPipe,
   ],
