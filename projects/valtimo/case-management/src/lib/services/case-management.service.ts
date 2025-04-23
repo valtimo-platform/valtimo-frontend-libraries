@@ -106,6 +106,17 @@ export class CaseManagementService extends BaseApiService {
     );
   }
 
+  public getCaseDefinition(
+    caseDefinitionKey: string,
+    caseDefinitionVersionTag: string
+  ): Observable<CaseDeploymentData> {
+    return this.httpClient.get<CaseDeploymentData>(
+      this.getApiUrl(
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}`
+      )
+    );
+  }
+
   public importDocumentDefinitionZip(file: FormData): Observable<HttpResponse<Blob>> {
     return this.httpClient.post<HttpResponse<Blob>>(
       this.getApiUrl(`management/v1/case/import`),

@@ -35,7 +35,7 @@ import {CaseDetailService, CaseManagementService} from '../../services';
 import {CaseManagementRemoveModalComponent} from '../case-management-remove-modal/case-management-remove-modal.component';
 import {GlobalNotificationService} from '@valtimo/layout';
 import {Deploy16, Version16} from '@carbon/icons';
-import {lt, valid} from 'semver';
+import {eq, lt, valid} from 'semver';
 import {getCaseManagementRouteParams} from '../../utils';
 
 @Component({
@@ -276,7 +276,8 @@ export class CaseManagementDetailContainerActionsComponent {
         take(1),
         switchMap(([caseDefinitionKey, selectedVersion]) =>
           this.caseManagementService.setGlobalActiveCaseVersion(caseDefinitionKey, selectedVersion)
-        )
+        ),
+        tap((result: any) => this.selectedVersion$.next(result.caseDefinitionVersionTag))
       )
       .subscribe({
         next: response => {
