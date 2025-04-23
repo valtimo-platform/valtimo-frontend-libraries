@@ -72,6 +72,29 @@ export class CaseManagementService extends BaseApiService {
     );
   }
 
+  public finalizeDraftCaseVersion(
+    caseDefinitionKey: string,
+    caseDefinitionVersionTag: string
+  ): Observable<any[]> {
+    return this.httpClient.post<any[]>(
+      this.getApiUrl(
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/finalize`
+      ),
+      {}
+    );
+  }
+
+  public deleteDraftCaseVersion(
+    caseDefinitionKey: string,
+    caseDefinitionVersionTag: string
+  ): Observable<null> {
+    return this.httpClient.delete<null>(
+      this.getApiUrl(
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}`
+      )
+    );
+  }
+
   public getCaseDefinition(
     caseDefinitionKey: string,
     caseDefinitionVersionTag: string
