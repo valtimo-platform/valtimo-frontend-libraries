@@ -22,7 +22,7 @@ import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CaseManagementService} from '../../services';
 import {take, tap} from 'rxjs/operators';
-import {CaseDeploymentData} from '../../models/case-deployment.model';
+import {CaseDefinition} from '../../models/case-deployment.model';
 import {BreadcrumbService} from '@valtimo/components';
 import {DatePipe} from '@angular/common';
 import {GlobalNotificationService} from '@valtimo/layout';
@@ -66,25 +66,25 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
     map(result => result.name)
   );
 
-  public readonly caseDeploymentData$: Observable<CaseDeploymentData> = combineLatest([
+  public readonly caseDefinition$: Observable<CaseDefinition> = combineLatest([
     this.caseDefinitionKey$,
     this.caseDefinitionVersionTag$,
   ]).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
       this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
     ),
-    tap(caseDeploymentData => {
-      this.isDraftVersion$.next(!caseDeploymentData.final);
-      this.hasConflictingVersions$.next(!!caseDeploymentData.conflictingVersions);
+    tap(caseDefinition => {
+      this.isDraftVersion$.next(!caseDefinition.final);
+      this.hasConflictingVersions$.next(!!caseDefinition.conflictingVersions);
     })
   );
 
   public readonly releaseVersionEntries$: Observable<{key: string; value: string}[]> =
-    this.caseDeploymentData$.pipe(
-      map(caseDeploymentData => {
+    this.caseDefinition$.pipe(
+      map(caseDefinition => {
         const releaseVersionData = {
-          caseDefinitionVersionTag: caseDeploymentData.caseDefinitionVersionTag ?? '-',
-          basedOnVersionTag: caseDeploymentData.basedOnVersionTag ?? '-',
+          caseDefinitionVersionTag: caseDefinition.caseDefinitionVersionTag ?? '-',
+          basedOnVersionTag: caseDefinition.basedOnVersionTag ?? '-',
         };
 
         return Object.entries(releaseVersionData).map(([key, value]) => ({key, value}));
@@ -93,12 +93,12 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
 
   public readonly releaseInformationDataEntries$: Observable<
     {key: string; value: string | Date}[]
-  > = this.caseDeploymentData$.pipe(
-    map(caseDeploymentData => {
+  > = this.caseDefinition$.pipe(
+    map(caseDefinition => {
       const releaseInformationData = {
-        createdBy: caseDeploymentData.createdBy ?? '-',
-        createdDate: this.datePipe.transform(caseDeploymentData.createdDate ?? '', 'dd-MM-yyyy'),
-        description: caseDeploymentData.description ?? '-',
+        createdBy: caseDefinition.createdBy ?? '-',
+        createdDate: this.datePipe.transform(caseDefinition.createdDate ?? '', 'dd-MM-yyyy'),
+        description: caseDefinition.description ?? '-',
       };
 
       return Object.entries(releaseInformationData).map(([key, value]) => ({key, value}));
