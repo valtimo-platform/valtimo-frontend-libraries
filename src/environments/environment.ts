@@ -262,15 +262,6 @@ export const environment: ValtimoConfig = {
     enablePbacDocumentenApiDocuments: true,
     enableSuppressDocumentError: false,
   },
-  customCaseHeader: {
-    leningen: [
-      {
-        propertyPaths: ['voornaam'],
-        columnSize: 3,
-        textSize: 'sm',
-      },
-    ],
-  },
   csp: cspHeaderParamsDev,
   formioOptions: {
     languageOverride: {

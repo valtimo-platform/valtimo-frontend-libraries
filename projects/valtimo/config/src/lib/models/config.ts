@@ -40,16 +40,6 @@ interface DefinitionColumn {
   tagAmount?: number;
 }
 
-interface CustomCaseHeaderItem {
-  labelTranslationKey?: string;
-  propertyPaths?: Array<string>;
-  columnSize?: number;
-  textSize?: string;
-  noValueText?: string;
-  customClass?: string;
-  modifier?: string;
-}
-
 interface CustomTaskList {
   fields: Array<DefinitionColumn>;
   defaultSortedColumn?: SortState;
@@ -141,9 +131,6 @@ interface ValtimoConfig {
   customDefinitionTables: {
     [definitionNameId: string]: Array<DefinitionColumn>;
   };
-  customCaseHeader?: {
-    [definitionNameId: string]: Array<CustomCaseHeaderItem>;
-  };
   translationResources?: Array<string>;
   featureToggles?: ValtimoConfigFeatureToggles;
   visibleTaskListTabs?: Array<TaskListTab>;
@@ -194,7 +181,6 @@ export {
   INITIALIZERS,
   Direction,
   DefinitionColumn,
-  CustomCaseHeaderItem,
   CustomTaskList,
   CustomLeftSidebar,
   Sort,
