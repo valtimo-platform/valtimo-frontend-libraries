@@ -237,7 +237,7 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
           this._currentNotification = this.notificationService.showNotification({
             type: 'success',
             title: this.translateService.instant(
-              'caseManagement.setGlobalActiveVersionSuccessTitle'
+              'caseManagement.deployment.finalizeDraftConfirmationModal.successMessage'
             ),
             duration: 5000,
           });
