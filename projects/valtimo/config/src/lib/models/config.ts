@@ -128,9 +128,6 @@ interface ValtimoConfig {
   caseFileUploadAcceptedFiles?: string;
   supportedDocumentFileTypesToViewInBrowser?: string[];
   defaultDefinitionTable: Array<DefinitionColumn>;
-  customDefinitionTables: {
-    [definitionNameId: string]: Array<DefinitionColumn>;
-  };
   translationResources?: Array<string>;
   featureToggles?: ValtimoConfigFeatureToggles;
   visibleTaskListTabs?: Array<TaskListTab>;
