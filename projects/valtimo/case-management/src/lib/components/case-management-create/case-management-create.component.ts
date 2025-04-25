@@ -20,7 +20,6 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DocumentService, TemplatePayload} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, take, tap} from 'rxjs';
-import * as semver from 'semver';
 
 @Component({
   selector: 'valtimo-case-management-create',
@@ -59,7 +58,6 @@ export class CaseManagementCreateComponent {
   );
   public readonly editDisabled$ = new BehaviorSubject<boolean>(true);
   public readonly idError$ = new BehaviorSubject<string | null>(null);
-  public readonly versionError$ = new BehaviorSubject<string | null>(null);
 
   constructor(
     private readonly documentService: DocumentService,
@@ -87,7 +85,6 @@ export class CaseManagementCreateComponent {
       .subscribe({
         next: () => {
           this.idError$.next('caseManagement.createDefinition.idError');
-          this.versionError$.next('caseManagement.createDefinition.idError');
           this.editDisabled$.next(false);
           this.enableEdit();
         },
@@ -119,18 +116,12 @@ export class CaseManagementCreateComponent {
 
     caseDefinitionKey.patchValue(name.value.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase());
     this.editDisabled$.next(false);
-
-    if (!semver.valid(caseDefinitionVersion.value)) {
-      this.versionError$.next('caseManagement.createDefinition.versionError');
-      return;
-    }
   }
 
   private resetForm(): void {
     setTimeout(() => {
       this.formGroup.reset();
       this.idError$.next(null);
-      this.versionError$.next(null);
       this._editActive$.next(false);
       this.editDisabled$.next(true);
     }, CARBON_CONSTANTS.modalAnimationMs);

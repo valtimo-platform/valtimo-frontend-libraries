@@ -586,7 +586,8 @@
       "buttons": {
         "back": "Zurück",
         "delete": "Entwurf löschen",
-        "finalize": "Entwurf fertigstellen"
+        "finalize": "Entwurf fertigstellen",
+        "createDraft": "Entwurfsversion erstellen"
       },
       "deleteDraftConfirmationModal": {
         "title": "Entwurf löschen",

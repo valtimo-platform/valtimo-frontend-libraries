@@ -586,7 +586,8 @@
       "buttons": {
         "back": "Terug",
         "delete": "Concept verwijderen",
-        "finalize": "Concept finaliseren"
+        "finalize": "Concept finaliseren",
+        "createDraft": "Conceptversie maken"
       },
       "deleteDraftConfirmationModal": {
         "title": "Concept verwijderen",

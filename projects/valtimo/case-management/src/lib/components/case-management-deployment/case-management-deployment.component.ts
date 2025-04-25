@@ -22,10 +22,12 @@ import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CaseManagementService} from '../../services';
 import {take, tap} from 'rxjs/operators';
-import {CaseDefinition} from '../../models/case-deployment.model';
+import {CaseDefinition, DraftVersion} from '../../models/case-deployment.model';
 import {BreadcrumbService} from '@valtimo/components';
 import {DatePipe} from '@angular/common';
 import {GlobalNotificationService} from '@valtimo/layout';
+import {inc} from 'semver';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   templateUrl: './case-management-deployment.component.html',
@@ -34,10 +36,25 @@ import {GlobalNotificationService} from '@valtimo/layout';
 export class CaseManagementDeploymentComponent implements AfterViewInit {
   @ViewChild('draftMessage')
   private readonly _draftMessageTemplateRef: TemplateRef<HTMLDivElement>;
+
+  public createDraftVersionTranslation$: Observable<string>;
+
+  public newDraftVersionForm: FormGroup = this.fb.group({
+    caseDefinitionVersion: this.fb.control('', Validators.required),
+  });
+
   public readonly isDraftVersion$ = new BehaviorSubject<boolean>(false);
   public readonly hasConflictingVersions$ = new BehaviorSubject<boolean>(false);
   public readonly showDeleteDraftConfirmationModal$ = new BehaviorSubject<boolean>(false);
   public readonly showFinalizeDraftConfirmationModal$ = new BehaviorSubject<boolean>(false);
+  public readonly showCreateDraftVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
+  public readonly newDraftVersion$ = new BehaviorSubject<DraftVersion>({
+    name: '',
+    caseDefinitionKey: '',
+    caseDefinitionVersion: '',
+    description: '',
+    basedOnCaseDefinitionVersion: '',
+  });
   public readonly params$: Observable<{
     caseDefinitionKey: string;
     caseDefinitionVersionTag: string;
@@ -76,6 +93,13 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
     tap(caseDefinition => {
       this.isDraftVersion$.next(!caseDefinition.final);
       this.hasConflictingVersions$.next(!!caseDefinition.conflictingVersions);
+      this.newDraftVersion$.next({
+        name: caseDefinition.name,
+        caseDefinitionKey: caseDefinition.caseDefinitionKey,
+        caseDefinitionVersion: inc(caseDefinition.caseDefinitionVersionTag, 'patch'),
+        description: caseDefinition.description,
+        basedOnCaseDefinitionVersion: caseDefinition.caseDefinitionVersionTag,
+      });
     })
   );
 
@@ -115,7 +139,8 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly datePipe: DatePipe,
-    private readonly notificationService: GlobalNotificationService
+    private readonly notificationService: GlobalNotificationService,
+    private readonly fb: FormBuilder
   ) {
     this.iconService.register(Return16);
     this.iconService.register(TrashCan16);
@@ -162,6 +187,29 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
 
   public closeFinalizeDraftConfirmationModal(): void {
     this.showFinalizeDraftConfirmationModal$.next(false);
+  }
+
+  public openCreateDraftVersionConfirmationModal(): void {
+    this.createDraftVersionTranslation$ = combineLatest([
+      this.caseDefinitionKey$,
+      this.caseDefinitionVersionTag$,
+    ]).pipe(
+      tap(result => console.log('result: ', result)),
+      switchMap(([key, tag]) =>
+        this.translateService.get(
+          'caseManagement.deployment.finalizeDraftConfirmationModal.description',
+          {
+            caseDefinitionKey: key,
+            caseDefinitionVersionTag: tag,
+          }
+        )
+      )
+    );
+    this.showCreateDraftVersionConfirmationModal$.next(true);
+  }
+
+  public closeCreateDraftVersionConfirmationModal(): void {
+    this.showCreateDraftVersionConfirmationModal$.next(false);
   }
 
   public deleteDraftCaseVersion(): void {
@@ -260,6 +308,59 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
     this.closeFinalizeDraftConfirmationModal();
   }
 
+  public createDraftVersion(): void {
+    this._currentNotification = this.notificationService.showNotification({
+      type: 'info',
+      title: '',
+      showClose: false,
+      template: this._draftMessageTemplateRef,
+    });
+
+    this.newDraftVersion$
+      .pipe(
+        take(1),
+        map((payload: DraftVersion) => {
+          const caseDefinitionVersion =
+            this.newDraftVersionForm.get('caseDefinitionVersion')?.value;
+          return {
+            ...payload,
+            caseDefinitionVersion,
+          } as DraftVersion;
+        }),
+        switchMap((payload: DraftVersion) => this.caseManagementService.createDraftVersion(payload))
+      )
+      .subscribe({
+        next: (response: any) => {
+          console.log('response: ', response);
+
+          this.closeCurrentNotification();
+          this._currentNotification = this.notificationService.showNotification({
+            type: 'success',
+            title: this.translateService.instant(
+              'caseManagement.deployment.createDraftConfirmationModal.successMessage'
+            ),
+            duration: 5000,
+          });
+        },
+        error: () => {
+          // this.closeCurrentNotification();
+          this._currentNotification = this.notificationService.showNotification({
+            type: 'error',
+            title: this.translateService.instant(
+              'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
+            ),
+            message: this.translateService.instant(
+              'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
+            ),
+            duration: 5000,
+          });
+        },
+      });
+
+    this.router.navigate(['/case-management']);
+    this.closeCreateDraftVersionConfirmationModal();
+  }
+
   private initBreadcrumbs(): void {
     combineLatest([this.params$, this._caseDefinitionTitle$])
       .pipe(
@@ -274,6 +375,10 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
         })
       )
       .subscribe();
+  }
+
+  private checkOlderVersion(versionCreated: string) {
+    console.log('versionCreated: ', versionCreated);
   }
 
   private closeCurrentNotification(): void {
