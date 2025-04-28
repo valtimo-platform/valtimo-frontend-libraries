@@ -1,19 +1,3 @@
-/*
- * Copyright 2015-2025 Ritense BV, the Netherlands.
- *
- * Licensed under EUPL, Version 1.2 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -24,13 +8,7 @@ import {
 import {CaseStatusService, InternalCaseStatus, InternalCaseStatusUtils} from '@valtimo/document';
 import {BehaviorSubject, combineLatest, map, Subject, switchMap, tap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {
-  ActionItem,
-  ColumnConfig,
-  MoveRowDirection,
-  MoveRowEvent,
-  ViewType,
-} from '@valtimo/components';
+import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
 import {StatusModalCloseEvent, StatusModalType} from '../../../../models';
 import {getCaseManagementRouteParams} from '../../../../utils';
 
@@ -140,18 +118,11 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
       });
   }
 
-  public onMoveRowClick(event: MoveRowEvent): void {
-    const {direction, index} = event;
-
-    const orderedStatuses: InternalCaseStatus[] =
-      direction === MoveRowDirection.UP
-        ? this.swapStatuses(this._caseStatuses, index - 1, index)
-        : this.swapStatuses(this._caseStatuses, index, index + 1);
-
+  public onItemsReordered(reorderedItems: InternalCaseStatus[]): void {
     this.caseDefinitionKey$
       .pipe(
         switchMap(caseDefinitionKey =>
-          this.caseStatusService.updateInternalCaseStatuses(caseDefinitionKey, orderedStatuses)
+          this.caseStatusService.updateInternalCaseStatuses(caseDefinitionKey, reorderedItems)
         )
       )
       .subscribe(() => {
@@ -161,17 +132,6 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
 
   private reload(noAnimation = false): void {
     this._reload$.next(noAnimation ? 'noAnimation' : null);
-  }
-
-  private swapStatuses(
-    statuses: InternalCaseStatus[],
-    index1: number,
-    index2: number
-  ): InternalCaseStatus[] {
-    const temp = [...statuses];
-    temp[index1] = temp.splice(index2, 1, temp[index1])[0];
-
-    return temp;
   }
 
   private initFields(): void {
