@@ -103,7 +103,7 @@
       />
     </cds-label>
 
-    <cds-label>
+    <cds-textarea-label>
       {{ 'caseManagement.createDefinition.description' | translate }}
 
       <cds-tooltip
@@ -113,14 +113,16 @@
         <svg class="tooltip-trigger" cdsIcon="information" size="16"></svg>
       </cds-tooltip>
 
-      <input
+      <textarea
+        cdsTextArea
         formControlName="description"
-        cdsText
         placeholder="{{ 'caseManagement.createDefinition.descriptionPlaceholder' | translate }}"
+        [rows]="3"
+        [cols]="150"
         [attr.modal-primary-focus]="true"
         (focusout)="onFocusOut()"
-      />
-    </cds-label>
+      ></textarea>
+    </cds-textarea-label>
   </form>
 
   <cds-modal-footer>
