@@ -60,7 +60,7 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
 
   public readonly usedKeys$ = new BehaviorSubject<string[]>([]);
 
-  private _subscriptions = new Subscription();
+  private readonly _subscriptions = new Subscription();
 
   public readonly caseTags$ = combineLatest([
     this.caseDefinitionKey$,
