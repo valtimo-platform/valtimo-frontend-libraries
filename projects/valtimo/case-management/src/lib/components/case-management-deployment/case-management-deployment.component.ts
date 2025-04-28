@@ -79,43 +79,31 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
     map(params => params.caseDefinitionVersionTag || '')
   );
 
-  public readonly createDraftDescription$: Observable<string> = combineLatest([
-    this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$,
-  ]).pipe(
-    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.translateService.get(
-        'caseManagement.deployment.createDraftConfirmationModal.description',
-        {
-          caseDefinitionKey: caseDefinitionKey,
-          caseDefinitionVersionTag: caseDefinitionVersionTag,
-        }
+  private getDraftDescription$(translationKey: string): Observable<string> {
+    return combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$]).pipe(
+      switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+        this.translateService.get(translationKey, {
+          caseDefinitionKey,
+          caseDefinitionVersionTag,
+        })
       )
-    )
+    );
+  }
+
+  public readonly createDraftDescription$ = this.getDraftDescription$(
+    'caseManagement.deployment.createDraftConfirmationModal.description'
+  );
+  public readonly finalizeDraftDescription$ = this.getDraftDescription$(
+    'caseManagement.deployment.finalizeDraftConfirmationModal.description'
   );
 
-  public readonly finalizeDraftDescription$: Observable<string> = combineLatest([
-    this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$,
-  ]).pipe(
-    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.translateService.get(
-        'caseManagement.deployment.finalizeDraftConfirmationModal.description',
-        {
-          caseDefinitionKey: caseDefinitionKey,
-          caseDefinitionVersionTag: caseDefinitionVersionTag,
-        }
-      )
-    )
-  );
-
-  public readonly _globalActiveCase$: Observable<any> = this.caseDefinitionKey$.pipe(
+  public readonly globalActiveCase$: Observable<any> = this.caseDefinitionKey$.pipe(
     switchMap(caseDefinitionKey =>
       this.caseManagementService.getGlobalActiveCase(caseDefinitionKey)
     )
   );
 
-  public readonly _caseDefinitionTitle$: Observable<string> = this._globalActiveCase$.pipe(
+  public readonly _caseDefinitionTitle$: Observable<string> = this.globalActiveCase$.pipe(
     map(result => result.name)
   );
 
@@ -146,15 +134,14 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
     map(caseDefinitions => caseDefinitions.map(caseDefinition => caseDefinition.versionTag))
   );
 
-  public readonly notificationData$: Observable<{}> = this.caseDefinition$.pipe(
-    map(caseDefinition => {
-      const notificationData = {
-        basedOnVersionTag: caseDefinition.basedOnVersionTag ?? '-',
-        conflictingVersions: caseDefinition.conflictingVersions ?? '-',
-      };
-
-      return notificationData;
-    })
+  public readonly notificationData$: Observable<{
+    basedOnVersionTag: string;
+    conflictingVersions: string;
+  }> = this.caseDefinition$.pipe(
+    map(({basedOnVersionTag, conflictingVersions}) => ({
+      basedOnVersionTag: basedOnVersionTag ?? '-',
+      conflictingVersions: conflictingVersions ?? '-',
+    }))
   );
 
   public readonly releaseVersionEntries$: Observable<{key: string; value: string}[]> =
