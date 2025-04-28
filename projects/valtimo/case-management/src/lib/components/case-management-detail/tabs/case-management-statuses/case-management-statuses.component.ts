@@ -30,8 +30,6 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
 
   public readonly usedKeys$ = new BehaviorSubject<string[]>([]);
 
-  private _caseStatuses: InternalCaseStatus[] = [];
-
   public readonly caseStatuses$ = combineLatest([this.caseDefinitionKey$, this._reload$]).pipe(
     tap(([_, reload]) => {
       if (reload === null) {
@@ -48,7 +46,6 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
       }))
     ),
     tap(statuses => {
-      this._caseStatuses = statuses;
       this.usedKeys$.next(statuses.map(status => status.key));
       this.loading$.next(false);
     })
