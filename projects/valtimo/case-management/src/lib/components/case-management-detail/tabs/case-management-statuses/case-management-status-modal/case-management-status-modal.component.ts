@@ -43,7 +43,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {CaseStatusService, InternalCaseStatus, InternalCaseStatusUtils} from '@valtimo/document';
-import {IconService, Tag} from 'carbon-components-angular';
+import {IconService} from 'carbon-components-angular';
 import {Edit16} from '@carbon/icons';
 import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {TranslateService} from '@ngx-translate/core';
@@ -73,7 +73,7 @@ export class CaseManagementStatusModalComponent implements OnInit, OnDestroy {
   }
 
   @Input() public usedKeys!: string[];
-  @Input() public documentDefinitionName!: string;
+  @Input() public caseDefinitionKey!: string;
 
   @Output() public closeModalEvent = new EventEmitter<StatusModalCloseEvent>();
 
@@ -196,7 +196,7 @@ export class CaseManagementStatusModalComponent implements OnInit, OnDestroy {
     this.disable();
 
     this.caseStatusService
-      .saveInternalCaseStatus(this.documentDefinitionName, this.getFormValue())
+      .createInternalCaseStatus(this.caseDefinitionKey, this.getFormValue())
       .subscribe({
         next: () => {
           this.enable();
@@ -216,7 +216,7 @@ export class CaseManagementStatusModalComponent implements OnInit, OnDestroy {
         take(1),
         switchMap(originalStatusKey =>
           this.caseStatusService.updateInternalCaseStatus(
-            this.documentDefinitionName,
+            this.caseDefinitionKey,
             originalStatusKey,
             this.getFormValue()
           )

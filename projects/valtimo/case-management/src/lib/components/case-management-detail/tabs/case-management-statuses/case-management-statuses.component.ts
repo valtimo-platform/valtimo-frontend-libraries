@@ -22,16 +22,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {CaseStatusService, InternalCaseStatus, InternalCaseStatusUtils} from '@valtimo/document';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  Subject,
-  switchMap,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Subject, switchMap, tap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {
   ActionItem,
@@ -41,6 +32,7 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {StatusModalCloseEvent, StatusModalType} from '../../../../models';
+import {getCaseManagementRouteParams} from '../../../../utils';
 
 @Component({
   templateUrl: './case-management-statuses.component.html',
@@ -52,32 +44,24 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
 
   private readonly _reload$ = new BehaviorSubject<null | 'noAnimation'>(null);
 
-  private readonly _documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params?.name),
-    filter(docDefName => !!docDefName)
-  );
+  private readonly _params$ = getCaseManagementRouteParams(this.route);
 
-  public get documentDefinitionName$(): Observable<string> {
-    return this._documentDefinitionName$;
-  }
+  public readonly caseDefinitionKey$ = this._params$.pipe(map(params => params.caseDefinitionKey));
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
   public readonly usedKeys$ = new BehaviorSubject<string[]>([]);
 
-  private _documentStatuses: InternalCaseStatus[] = [];
+  private _caseStatuses: InternalCaseStatus[] = [];
 
-  public readonly documentStatuses$ = combineLatest([
-    this._documentDefinitionName$,
-    this._reload$,
-  ]).pipe(
+  public readonly caseStatuses$ = combineLatest([this.caseDefinitionKey$, this._reload$]).pipe(
     tap(([_, reload]) => {
       if (reload === null) {
         this.loading$.next(true);
       }
     }),
-    switchMap(([documentDefinitionName]) =>
-      this.caseStatusService.getInternalCaseStatusesManagement(documentDefinitionName)
+    switchMap(([caseDefinitionKey]) =>
+      this.caseStatusService.getInternalCaseStatusesManagement(caseDefinitionKey)
     ),
     map(statuses =>
       statuses.map(status => ({
@@ -86,7 +70,7 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
       }))
     ),
     tap(statuses => {
-      this._documentStatuses = statuses;
+      this._caseStatuses = statuses;
       this.usedKeys$.next(statuses.map(status => status.key));
       this.loading$.next(false);
     })
@@ -145,10 +129,10 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   }
 
   public confirmDeleteStatus(status: InternalCaseStatus): void {
-    this.documentDefinitionName$
+    this.caseDefinitionKey$
       .pipe(
-        switchMap(documentDefinitionName =>
-          this.caseStatusService.deleteInternalCaseStatus(documentDefinitionName, status.key)
+        switchMap(caseDefinitionKey =>
+          this.caseStatusService.deleteInternalCaseStatus(caseDefinitionKey, status.key)
         )
       )
       .subscribe(() => {
@@ -161,13 +145,13 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
 
     const orderedStatuses: InternalCaseStatus[] =
       direction === MoveRowDirection.UP
-        ? this.swapStatuses(this._documentStatuses, index - 1, index)
-        : this.swapStatuses(this._documentStatuses, index, index + 1);
+        ? this.swapStatuses(this._caseStatuses, index - 1, index)
+        : this.swapStatuses(this._caseStatuses, index, index + 1);
 
-    this.documentDefinitionName$
+    this.caseDefinitionKey$
       .pipe(
-        switchMap(documentDefinitionName =>
-          this.caseStatusService.updateInternalCaseStatuses(documentDefinitionName, orderedStatuses)
+        switchMap(caseDefinitionKey =>
+          this.caseStatusService.updateInternalCaseStatuses(caseDefinitionKey, orderedStatuses)
         )
       )
       .subscribe(() => {

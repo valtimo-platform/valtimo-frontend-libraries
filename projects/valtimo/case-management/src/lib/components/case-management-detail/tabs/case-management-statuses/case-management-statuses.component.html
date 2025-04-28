@@ -17,9 +17,9 @@
 <valtimo-carbon-list
   *ngIf="{
     loading: loading$ | async,
-    documentStatuses: documentStatuses$ | async,
+    caseStatuses: caseStatuses$ | async,
   } as obs"
-  [items]="obs.documentStatuses"
+  [items]="obs.caseStatuses"
   [fields]="fields$ | async"
   [header]="false"
   [loading]="obs.loading"
@@ -43,7 +43,7 @@
   [type]="statusModalType$ | async"
   [prefill]="prefillStatus$ | async"
   [usedKeys]="usedKeys$ | async"
-  [documentDefinitionName]="documentDefinitionName$ | async"
+  [caseDefinitionKey]="caseDefinitionKey$ | async"
   (closeModalEvent)="closeModal($event)"
 ></valtimo-case-management-status-modal>
 
