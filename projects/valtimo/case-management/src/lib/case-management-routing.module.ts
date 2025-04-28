@@ -19,7 +19,6 @@ import {pendingChangesGuard} from '@valtimo/components';
 import {CASE_MANAGEMENT_TAB_TOKEN, CaseManagementTabConfig, ROLE_ADMIN} from '@valtimo/config';
 import {AuthGuardService} from '@valtimo/security';
 import {CaseManagementDetailContainerComponent} from './components/case-management-detail-container/case-management-detail-container.component';
-import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {CaseManagementDocumentDefinitionComponent} from './components/case-management-document-definition/case-management-document-definition.component';
 import {CaseManagementListColumnsComponent} from './components/case-management-list-columns/case-management-list-columns.component';
 import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
@@ -78,10 +77,6 @@ const routes: Routes = [
       {
         path: TabEnum.DOCUMENT,
         component: CaseManagementDocumentDefinitionComponent,
-      },
-      {
-        path: TabEnum.CASE,
-        component: CaseManagementDetailComponent,
       },
       {
         path: TabEnum.PROCESSES,

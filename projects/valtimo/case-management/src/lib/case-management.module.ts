@@ -67,7 +67,6 @@ import {CaseManagementAssigneeComponent} from './components/case-management-assi
 import {CaseManagementConnectModalComponent} from './components/case-management-connect-modal/case-management-connect-modal.component';
 import {CaseManagementDetailContainerActionsComponent} from './components/case-management-detail-container-actions/case-management-detail-container-actions.component';
 import {CaseManagementDetailContainerComponent} from './components/case-management-detail-container/case-management-detail-container.component';
-import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {CaseManagementDocumentDefinitionComponent} from './components/case-management-document-definition/case-management-document-definition.component';
 import {CaseManagementListColumnsComponent} from './components/case-management-list-columns/case-management-list-columns.component';
 import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
@@ -95,7 +94,6 @@ import {CaseManagementDeploymentComponent} from './components/case-management-de
 @NgModule({
   declarations: [
     CaseManagementListComponent,
-    CaseManagementDetailComponent,
     CaseManagementConnectModalComponent,
     CaseManagementRemoveModalComponent,
     CaseManagementSelectVersionModalComponent,

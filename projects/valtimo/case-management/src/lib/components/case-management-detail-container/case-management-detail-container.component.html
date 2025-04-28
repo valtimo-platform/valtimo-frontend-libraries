@@ -59,15 +59,6 @@
     </cds-tab>
 
     <cds-tab
-      class="no-padding-left-right main-content"
-      [active]="obs.currentTab === TabEnum.CASE"
-      [heading]="'caseManagement.tabs.cases' | translate"
-      disabled="true"
-      (selected)="navigateToTab(TabEnum.CASE)"
-    >
-    </cds-tab>
-
-    <cds-tab
       class="main-content no-padding-left-right no-padding-bottom"
       [id]="TabEnum.SEARCH"
       [active]="obs.currentTab === TabEnum.SEARCH"
