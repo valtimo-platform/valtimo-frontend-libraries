@@ -34,8 +34,14 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./case-management-deployment.component.scss'],
 })
 export class CaseManagementDeploymentComponent implements AfterViewInit {
-  @ViewChild('draftMessage')
-  private readonly _draftMessageTemplateRef: TemplateRef<HTMLDivElement>;
+  @ViewChild('createDraftMessage')
+  private readonly _createDraftMessageTemplateRef: TemplateRef<HTMLDivElement>;
+
+  @ViewChild('finalizeDraftMessage')
+  private readonly _finalizeDraftMessageTemplateRef: TemplateRef<HTMLDivElement>;
+
+  @ViewChild('deleteDraftMessage')
+  private readonly _deleteDraftMessageTemplateRef: TemplateRef<HTMLDivElement>;
 
   public createDraftVersionTranslation$: Observable<string>;
 
@@ -73,6 +79,36 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
     map(params => params.caseDefinitionVersionTag || '')
   );
 
+  public readonly createDraftDescription$: Observable<string> = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.translateService.get(
+        'caseManagement.deployment.createDraftConfirmationModal.description',
+        {
+          caseDefinitionKey: caseDefinitionKey,
+          caseDefinitionVersionTag: caseDefinitionVersionTag,
+        }
+      )
+    )
+  );
+
+  public readonly finalizeDraftDescription$: Observable<string> = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.translateService.get(
+        'caseManagement.deployment.finalizeDraftConfirmationModal.description',
+        {
+          caseDefinitionKey: caseDefinitionKey,
+          caseDefinitionVersionTag: caseDefinitionVersionTag,
+        }
+      )
+    )
+  );
+
   public readonly _globalActiveCase$: Observable<any> = this.caseDefinitionKey$.pipe(
     switchMap(caseDefinitionKey =>
       this.caseManagementService.getGlobalActiveCase(caseDefinitionKey)
@@ -100,6 +136,24 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
         description: caseDefinition.description,
         basedOnCaseDefinitionVersion: caseDefinition.caseDefinitionVersionTag,
       });
+    })
+  );
+
+  public readonly caseDefinitionVersions$: Observable<any[] | null> = this.caseDefinitionKey$.pipe(
+    switchMap(caseDefinitionKey =>
+      this.caseManagementService.getCaseDefinitionVersions(caseDefinitionKey)
+    ),
+    map(caseDefinitions => caseDefinitions.map(caseDefinition => caseDefinition.versionTag))
+  );
+
+  public readonly notificationData$: Observable<{}> = this.caseDefinition$.pipe(
+    map(caseDefinition => {
+      const notificationData = {
+        basedOnVersionTag: caseDefinition.basedOnVersionTag ?? '-',
+        conflictingVersions: caseDefinition.conflictingVersions ?? '-',
+      };
+
+      return notificationData;
     })
   );
 
@@ -217,7 +271,7 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
       type: 'info',
       title: '',
       showClose: false,
-      template: this._draftMessageTemplateRef,
+      template: this._deleteDraftMessageTemplateRef,
     });
 
     combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$])
@@ -236,7 +290,7 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
           this._currentNotification = this.notificationService.showNotification({
             type: 'success',
             title: this.translateService.instant(
-              'caseManagement.deployment.finalizeDraftConfirmationModal.successMessage'
+              'caseManagement.deployment.deleteDraftConfirmationModal.successTitle'
             ),
             duration: 5000,
           });
@@ -266,7 +320,7 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
       type: 'info',
       title: '',
       showClose: false,
-      template: this._draftMessageTemplateRef,
+      template: this._finalizeDraftMessageTemplateRef,
     });
 
     combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$])
@@ -282,6 +336,7 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
       .subscribe({
         next: response => {
           this.closeCurrentNotification();
+          this.isDraftVersion$.next(false);
           this._currentNotification = this.notificationService.showNotification({
             type: 'success',
             title: this.translateService.instant(
@@ -295,10 +350,10 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
           this._currentNotification = this.notificationService.showNotification({
             type: 'error',
             title: this.translateService.instant(
-              'caseManagement.deployment.deleteDraftConfirmationModal.errorMessage'
+              'caseManagement.deployment.finalizeDraftConfirmationModal.errorMessage'
             ),
             message: this.translateService.instant(
-              'caseManagement.deployment.deleteDraftConfirmationModal.errorMessage'
+              'caseManagement.deployment.finalizeDraftConfirmationModal.errorMessage'
             ),
             duration: 5000,
           });
@@ -313,7 +368,7 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
       type: 'info',
       title: '',
       showClose: false,
-      template: this._draftMessageTemplateRef,
+      template: this._createDraftMessageTemplateRef,
     });
 
     this.newDraftVersion$
@@ -331,8 +386,12 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('response: ', response);
-
+          this.router.navigate([
+            '/case-management/case/',
+            response.caseDefinitionKey,
+            'version',
+            response.caseDefinitionVersionTag,
+          ]);
           this.closeCurrentNotification();
           this._currentNotification = this.notificationService.showNotification({
             type: 'success',
@@ -343,11 +402,11 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
           });
         },
         error: () => {
-          // this.closeCurrentNotification();
+          this.closeCurrentNotification();
           this._currentNotification = this.notificationService.showNotification({
             type: 'error',
             title: this.translateService.instant(
-              'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
+              'caseManagement.deployment.createDraftConfirmationModal.errorTitle'
             ),
             message: this.translateService.instant(
               'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
@@ -375,10 +434,6 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
         })
       )
       .subscribe();
-  }
-
-  private checkOlderVersion(versionCreated: string) {
-    console.log('versionCreated: ', versionCreated);
   }
 
   private closeCurrentNotification(): void {

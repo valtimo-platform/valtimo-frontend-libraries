@@ -591,6 +591,7 @@
         "createDraft": "Create draft version"
       },
       "deleteDraftConfirmationModal": {
+        "loadingText": "Deleting draft version...",
         "title": "Delete draft",
         "description": "Are you sure you want to delete the draft?",
         "confirm": "Delete",
@@ -600,6 +601,7 @@
         "errorMessage": "Something went wrong"
       },
       "finalizeDraftConfirmationModal": {
+        "loadingText": "Finalizing draft version...",
         "title": "Finalize draft",
         "description": "You are about to finalize {{caseDefinitionKey}} {{caseDefinitionVersionTag}} After finalization you can't make any more changes. Are you sure?",
         "confirm": "Finalize",
@@ -609,6 +611,7 @@
         "errorMessage": "Something went wrong"
       },
       "createDraftConfirmationModal": {
+        "loadingText": "Creating draft version...",
         "title": "Create draft version",
         "description": "You are about to create a draft version from version {{caseDefinitionKey}} {{caseDefinitionVersionTag}}. Are you sure?",
         "input": "Version",
@@ -801,6 +804,7 @@
     },
     "createDefinition": {
       "idError": "This definition name is already in use. Please change to a unique name",
+      "versionError": "This definition version is already in use. Please change to a unique version",
       "modalTitle": "Create case definition",
       "key": "Case definition key",
       "keyPlaceholder": "Case definition key will be auto-generated here",

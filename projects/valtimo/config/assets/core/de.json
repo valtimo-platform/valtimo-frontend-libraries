@@ -607,6 +607,16 @@
         "errorTitle": "Fehler",
         "errorMessage": "Es ist ein Fehler aufgetreten"
       },
+      "createDraftConfirmationModal": {
+        "title": "Entwurfsversion erstellen",
+        "description": "Sie erstellen gerade eine Entwurfsversion aus Version {{caseDefinitionKey}} {{caseDefinitionVersionTag}}. Sind Sie sicher?",
+        "input": "Version",
+        "confirm": "Erstellen",
+        "cancel": "Schließen",
+        "successMessage": "Entwurfsversion erstellt",
+        "errorTitle": "Fehler",
+        "errorMessage": "Es ist ein Fehler aufgetreten"
+      },
       "releaseVersion": {
         "title": "Release-Version",
         "fields": {

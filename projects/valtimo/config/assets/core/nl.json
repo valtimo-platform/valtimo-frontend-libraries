@@ -607,6 +607,16 @@
         "errorTitle": "Fout",
         "errorMessage": "Er is iets misgegaan"
       },
+      "createDraftConfirmationModal": {
+        "title": "Conceptversie aanmaken",
+        "description": "U staat op het punt een conceptversie aan te maken van versie {{caseDefinitionKey}} {{caseDefinitionVersionTag}}. Weet u het zeker?",
+        "input": "Versie",
+        "confirm": "Aanmaken",
+        "cancel": "Sluiten",
+        "successMessage": "Conceptversie aangemaakt",
+        "errorTitle": "Fout",
+        "errorMessage": "Er is iets misgegaan"
+      },
       "releaseVersion": {
         "title": "Releaseversie",
         "fields": {
