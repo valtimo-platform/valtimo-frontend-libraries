@@ -39,7 +39,7 @@ import {
 import {ListField} from '@valtimo/components';
 import {catchError, take} from 'rxjs/operators';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
+import {ListItem} from 'carbon-components-angular';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {ObjectManagementService} from '../../../../services/object-management.service';

@@ -27,13 +27,12 @@ import {TranslateModule} from '@ngx-translate/core';
 import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {WidgetFormioContent} from '@valtimo/case';
 import {FormDefinitionOption, FormService} from 'dist/valtimo/form';
-import {DropdownModule, InputModule, SelectModule} from 'carbon-components-angular';
-import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
+import {DropdownModule, InputModule, ListItem, SelectModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
 import {CaseManagementParams, WidgetContentComponent} from '../../../../../../../models';
 import {WidgetWizardService} from '../../../../../../../services';
 import {CaseManagementWidgetProcessSelectorComponent} from '../process-selector/case-management-widget-process-selector.component';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {getCaseManagementRouteParams} from '../../../../../../../utils';
 
 @Component({

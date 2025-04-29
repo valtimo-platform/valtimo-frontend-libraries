@@ -18,7 +18,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Components} from 'formiojs';
 import {distinctUntilChanged, map, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
-import {FormioOptions} from '@formio/angular/formio.common';
+import {FormioOptions} from '@formio/angular';
 import {FormIoStateService} from './services/form-io-state.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {

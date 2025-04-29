@@ -9,7 +9,7 @@
     "sourceMap": true,
     "declaration": false,
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "experimentalDecorators": true,
     "importHelpers": true,
     // left at es2020 instead of es2022. es2022 gives build errors when buildings libs sequentially for unknown reasons
