@@ -19,7 +19,7 @@
     releaseInformationDataEntries: releaseInformationDataEntries$ | async,
     isDraftVersion: isDraftVersion$ | async,
     hasConflictingVersions: hasConflictingVersions$ | async,
-    notificationData: notificationData$ | async,
+    notificationContent: notificationContent$ | async,
   } as obs"
 >
   <div class="header-buttons">
@@ -55,9 +55,9 @@
         context: {
           data: obs.releaseVersionEntries,
           showNotification: obs.hasConflictingVersions,
-          notificationData: {
-            basedOnVersionTag: obs.notificationData?.basedOnVersionTag,
-            conflictingVersions: obs.notificationData?.conflictingVersions,
+          notificationContent: {
+            basedOnVersionTag: obs.notificationContent?.basedOnVersionTag,
+            conflictingVersions: obs.notificationContent?.conflictingVersions,
           },
         }
       "
@@ -78,7 +78,7 @@
   #releaseVersionPanel
   let-data="data"
   let-showNotification="showNotification"
-  let-notificationData="notificationData"
+  let-notificationContent="notificationContent"
 >
   <div class="release-version">
     <p class="deployment-panel-title">
@@ -104,7 +104,7 @@
         title: ('caseManagement.deployment.releaseVersion.warning.title' | translate),
         message:
           ('caseManagement.deployment.releaseVersion.warning.description'
-          | translate: notificationData),
+          | translate: notificationContent),
         showClose: false,
         lowContrast: true,
       }"

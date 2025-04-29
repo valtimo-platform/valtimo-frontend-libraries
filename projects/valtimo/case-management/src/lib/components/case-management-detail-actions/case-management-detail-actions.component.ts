@@ -146,7 +146,7 @@ export class CaseManagementDetailActionsComponent {
 
       if (!isSelectedOnTheList && selectedVersion) {
         const selectedVersionObj = caseDefinitionVersions.find(
-          v => v.versionTag === selectedVersion
+          caseVersion => caseVersion.versionTag === selectedVersion
         );
         if (selectedVersionObj) {
           limitedVersions = [...dropdownListVersions.slice(0, 4), selectedVersionObj];

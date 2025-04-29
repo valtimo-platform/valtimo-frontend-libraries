@@ -27,7 +27,6 @@ import {BreadcrumbService} from '@valtimo/components';
 import {DatePipe} from '@angular/common';
 import {GlobalNotificationService} from '@valtimo/layout';
 import * as semver from 'semver';
-import {eq, inc} from 'semver';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
@@ -43,8 +42,6 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
 
   @ViewChild('deleteDraftMessage')
   private readonly _deleteDraftMessageTemplateRef: TemplateRef<HTMLDivElement>;
-
-  public createDraftVersionTranslation$: Observable<string>;
 
   public newDraftVersionForm: FormGroup = this.fb.group({
     caseDefinitionVersion: this.fb.control('', Validators.required),
@@ -123,7 +120,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
       this.newDraftVersion$.next({
         name: caseDefinition.name,
         caseDefinitionKey: caseDefinition.caseDefinitionKey,
-        caseDefinitionVersion: inc(caseDefinition.caseDefinitionVersionTag, 'patch'),
+        caseDefinitionVersion: semver.inc(caseDefinition.caseDefinitionVersionTag, 'patch'),
         description: caseDefinition.description,
         basedOnCaseDefinitionVersion: caseDefinition.caseDefinitionVersionTag,
       });
@@ -137,7 +134,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     map(caseDefinitions => caseDefinitions.map(caseDefinition => caseDefinition.versionTag))
   );
 
-  public readonly notificationData$: Observable<{
+  public readonly notificationContent$: Observable<{
     basedOnVersionTag: string;
     conflictingVersions: string;
   }> = this.caseDefinition$.pipe(
@@ -240,20 +237,6 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   }
 
   public openCreateDraftVersionConfirmationModal(): void {
-    this.createDraftVersionTranslation$ = combineLatest([
-      this.caseDefinitionKey$,
-      this.caseDefinitionVersionTag$,
-    ]).pipe(
-      switchMap(([key, tag]) =>
-        this.translateService.get(
-          'caseManagement.deployment.finalizeDraftConfirmationModal.description',
-          {
-            caseDefinitionKey: key,
-            caseDefinitionVersionTag: tag,
-          }
-        )
-      )
-    );
     this.showCreateDraftVersionConfirmationModal$.next(true);
   }
 
@@ -359,42 +342,33 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   }
 
   public createDraftVersion(): void {
-    const {caseDefinitionVersion} = this.newDraftVersionForm.controls;
+    const caseDefinitionVersion = this.newDraftVersionForm.get('caseDefinitionVersion')?.value;
 
     if (!caseDefinitionVersion) {
       return;
     }
 
-    if (!semver.valid(caseDefinitionVersion.value)) {
+    if (!this.isVersionValid(caseDefinitionVersion)) {
       this.showCreateDraftVersionConfirmationModal$.next(true);
       this.versionError$.next('caseManagement.createDefinition.versionError');
       return;
     }
 
-    if (this.caseDefinitionVersions.some(version => eq(version, caseDefinitionVersion.value))) {
+    if (this.doesVersionExist(caseDefinitionVersion)) {
       this.showCreateDraftVersionConfirmationModal$.next(true);
       this.versionError$.next('caseManagement.createDefinition.versionExistsError');
       return;
     }
 
-    this._currentNotification = this.notificationService.showNotification({
-      type: 'info',
-      title: '',
-      showClose: false,
-      template: this._createDraftMessageTemplateRef,
-    });
+    this.showInfoNotification(this._createDraftMessageTemplateRef);
 
     this.newDraftVersion$
       .pipe(
         take(1),
-        map((payload: DraftVersion) => {
-          const caseDefinitionVersion =
-            this.newDraftVersionForm.get('caseDefinitionVersion')?.value;
-          return {
-            ...payload,
-            caseDefinitionVersion,
-          } as DraftVersion;
-        }),
+        map((payload: DraftVersion) => ({
+          ...payload,
+          caseDefinitionVersion,
+        })),
         switchMap((payload: DraftVersion) => this.caseManagementService.createDraftVersion(payload))
       )
       .subscribe({
@@ -406,28 +380,16 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
             'version',
             response.caseDefinitionVersionTag,
           ]);
-          this.closeCurrentNotification();
-          this._currentNotification = this.notificationService.showNotification({
-            type: 'success',
-            title: this.translateService.instant(
-              'caseManagement.deployment.createDraftConfirmationModal.successMessage'
-            ),
-            duration: 5000,
-          });
+          this.showSuccessNotification(
+            'caseManagement.deployment.createDraftConfirmationModal.successMessage'
+          );
           this.closeCreateDraftVersionConfirmationModal();
         },
         error: () => {
-          this.closeCurrentNotification();
-          this._currentNotification = this.notificationService.showNotification({
-            type: 'error',
-            title: this.translateService.instant(
-              'caseManagement.deployment.createDraftConfirmationModal.errorTitle'
-            ),
-            message: this.translateService.instant(
-              'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
-            ),
-            duration: 5000,
-          });
+          this.showErrorNotification(
+            'caseManagement.deployment.createDraftConfirmationModal.errorTitle',
+            'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
+          );
           this.closeCreateDraftVersionConfirmationModal();
         },
       });
@@ -449,9 +411,46 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
       .subscribe();
   }
 
+  private isVersionValid(version: string): boolean {
+    return semver.valid(version) !== null;
+  }
+
+  private doesVersionExist(version: string): boolean {
+    return this.caseDefinitionVersions.some(existingVersion => semver.eq(existingVersion, version));
+  }
+
   private closeCurrentNotification(): void {
     if (this._currentNotification) {
       this.notificationService.close(this._currentNotification);
     }
+  }
+
+  private showInfoNotification(templateRef: TemplateRef<any>): void {
+    this.closeCurrentNotification();
+    this._currentNotification = this.notificationService.showNotification({
+      type: 'info',
+      title: '',
+      showClose: false,
+      template: templateRef,
+    });
+  }
+
+  private showSuccessNotification(message: string): void {
+    this.closeCurrentNotification();
+    this._currentNotification = this.notificationService.showNotification({
+      type: 'success',
+      title: this.translateService.instant(message),
+      duration: 5000,
+    });
+  }
+
+  private showErrorNotification(titleKey: string, messageKey: string): void {
+    this.closeCurrentNotification();
+    this._currentNotification = this.notificationService.showNotification({
+      type: 'error',
+      title: this.translateService.instant(titleKey),
+      message: this.translateService.instant(messageKey),
+      duration: 5000,
+    });
   }
 }
