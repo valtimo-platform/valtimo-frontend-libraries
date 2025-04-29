@@ -355,6 +355,7 @@
     "prettier": "3.3.3",
     "puppeteer": "23.0.1",
     "sass": "1.77.8",
+    "webpack": "^5.99.7",
     "webpack-bundle-analyzer": "4.10.2"
   },
   "optionalDependencies": {
