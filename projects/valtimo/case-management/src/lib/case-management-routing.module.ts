@@ -190,7 +190,7 @@ export class CaseManagementRoutingModule {
     if (!detailsRoute) return;
     detailsRoute.children?.push(
       ...this.caseManagementTabConfig.map((tabConfig: CaseManagementTabConfig) => ({
-        path: tabConfig.translationKey,
+        path: tabConfig.tabRoute ?? tabConfig.translationKey,
         component: tabConfig.component,
       }))
     );

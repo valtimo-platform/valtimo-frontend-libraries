@@ -19,7 +19,7 @@
     loading: loading$ | async,
     documentUploadFields: documentUploadFields$ | async,
     uploadFieldModalType: uploadFieldModalType$ | async,
-    documentDefinitionName: documentDefinitionName$ | async,
+    caseDefinitionKey: caseDefinitionKey$ | async,
     prefill: prefill$ | async,
   } as obs"
 >
@@ -38,7 +38,7 @@
 
   <valtimo-documenten-api-upload-field-modal
     [prefill]="obs.prefill"
-    [documentDefinitionName]="obs.documentDefinitionName"
+    [documentDefinitionName]="obs.caseDefinitionKey"
     [type]="obs.uploadFieldModalType"
     (closeModalEvent)="closeModal($event)"
   ></valtimo-documenten-api-upload-field-modal>
