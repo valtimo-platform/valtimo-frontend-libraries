@@ -564,7 +564,7 @@
     },
     "confirmationGlobalVersionModal": {
       "title": "Weet u het zeker?",
-      "message": "Stel de momenteel geselecteerde versie in als de globaal actieve versie. Houd er rekening mee dat dingen kapot kunnen gaan of niet werken zoals bedoeld.",
+      "description": "Stel de momenteel geselecteerde versie in als de globaal actieve versie. Houd er rekening mee dat dingen kapot kunnen gaan of niet werken zoals bedoeld.",
       "confirm": "Instellen als actieve versie",
       "cancel": "Annuleren"
     },
@@ -590,6 +590,7 @@
         "createDraft": "Conceptversie maken"
       },
       "deleteDraftConfirmationModal": {
+        "loadingText": "Conceptversie verwijderen...",
         "title": "Concept verwijderen",
         "description": "Weet u zeker dat u het concept wilt verwijderen?",
         "confirm": "Verwijderen",
@@ -599,6 +600,7 @@
         "errorMessage": "Er is iets misgegaan"
       },
       "finalizeDraftConfirmationModal": {
+        "loadingText": "Conceptversie afronden...",
         "title": "Concept finaliseren",
         "description": "U staat op het punt {{caseDefinitionVersionKey}} {{caseDefinitionVersionTag}} te finaliseren. Na het finaliseren kunt u geen wijzigingen meer aanbrengen. Weet u het zeker?",
         "confirm": "Finaliseren",
@@ -608,6 +610,7 @@
         "errorMessage": "Er is iets misgegaan"
       },
       "createDraftConfirmationModal": {
+        "loadingText": "Conceptversie maken...",
         "title": "Conceptversie aanmaken",
         "description": "U staat op het punt een conceptversie aan te maken van versie {{caseDefinitionKey}} {{caseDefinitionVersionTag}}. Weet u het zeker?",
         "input": "Versie",
@@ -684,7 +687,24 @@
       "document": "Document",
       "statuses": "Statussen",
       "zgw": "ZGW",
-      "tags": "Tags"
+      "tags": "Tags",
+      "forms": "Formulieren",
+      "generalTab": {
+        "linkUploadProcess": {
+          "title": "Uploadproces koppelen aan case",
+          "label": "Kies welk proces bestanduploads moet verwerken",
+          "placeholder": "Documenten API document uploaden"
+        },
+        "caseHandler": {
+          "title": "Casehandler",
+          "canHaveHandler": "Casetype kan een handler hebben",
+          "assignUser": "Gebruikerstaken automatisch toewijzen aan casehandler",
+          "toggle": {
+            "onText": "Ja",
+            "offText": "Nee"
+          }
+        }
+      }
     },
     "tabManagement": {
       "columns": {
