@@ -80,8 +80,8 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
     tap(([_, reload]) => {
       if (reload === null) this.loading$.next(true);
     }),
-    switchMap(([documentDefinitionName]) =>
-      this.zgwDocumentColumnService.getAdminConfiguredColumns(documentDefinitionName)
+    switchMap(([caseDefinitionKey]) =>
+      this.zgwDocumentColumnService.getAdminConfiguredColumns(caseDefinitionKey)
     ),
     tap(() => {
       this.loading$.next(false);
@@ -90,9 +90,9 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
 
   public readonly configurableColumns$: Observable<ConfiguredColumn[]> =
     this.caseDefinitionKey$.pipe(
-      switchMap((documentDefinitionName: string) =>
+      switchMap((caseDefinitionKey: string) =>
         combineLatest([
-          this.zgwDocumentColumnService.getAdminConfigurableColumns(documentDefinitionName),
+          this.zgwDocumentColumnService.getAdminConfigurableColumns(caseDefinitionKey),
           this.configuredColumns$,
         ])
       ),

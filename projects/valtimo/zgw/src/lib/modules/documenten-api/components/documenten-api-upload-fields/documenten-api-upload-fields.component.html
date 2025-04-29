@@ -29,6 +29,7 @@
     [header]="false"
     [loading]="obs.loading"
     [actionItems]="ACTION_ITEMS"
+    (rowClicked)="openEditModal($event)"
   >
     <valtimo-no-results
       title="{{ 'zgw.uploadFields.list.noResultsTitle' | translate }}"
@@ -38,7 +39,7 @@
 
   <valtimo-documenten-api-upload-field-modal
     [prefill]="obs.prefill"
-    [documentDefinitionName]="obs.caseDefinitionKey"
+    [caseDefinitionKey]="obs.caseDefinitionKey"
     [type]="obs.uploadFieldModalType"
     (closeModalEvent)="closeModal($event)"
   ></valtimo-documenten-api-upload-field-modal>

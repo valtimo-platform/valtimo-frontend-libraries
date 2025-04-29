@@ -31,8 +31,9 @@
     [header]="false"
     [items]="obs.configuredColumns"
     [loading]="obs.loading || !fields"
-    [movingRowsEnabled]="true"
+    [dragAndDrop]="true"
     (itemsReordered)="onItemsReordered(obs.caseDefinitionKey, $event)"
+    (rowClicked)="openEditModal($event)"
   >
     <ng-container carbonToolbarContent>
       <ng-container *ngTemplateOutlet="addButton"></ng-container>

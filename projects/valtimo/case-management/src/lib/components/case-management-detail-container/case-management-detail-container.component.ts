@@ -87,8 +87,6 @@ export class CaseManagementDetailContainerComponent implements OnInit, OnDestroy
     const featureToggles = this.configService.config.featureToggles;
     this.caseListColumn = featureToggles?.caseListColumn ?? true;
     this.tabManagementEnabled = featureToggles?.enableTabManagement ?? true;
-
-    this.route.params.subscribe(params => console.log({params}));
   }
 
   public ngOnInit(): void {
