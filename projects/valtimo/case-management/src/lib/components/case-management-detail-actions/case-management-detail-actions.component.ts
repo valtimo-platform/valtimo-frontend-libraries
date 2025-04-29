@@ -135,6 +135,8 @@ export class CaseManagementDetailActionsComponent {
         return null;
       }
 
+      this.loadingVersion$.next(false);
+
       const dropdownListVersions = caseDefinitionVersions.slice(0, 5);
       const isSelectedOnTheList = dropdownListVersions.some(
         version => version.versionTag === selectedVersion
