@@ -28,6 +28,8 @@ import {DatePipe} from '@angular/common';
 import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
+  standalone: false,
+
   templateUrl: './case-management-deployment.component.html',
   styleUrls: ['./case-management-deployment.component.scss'],
 })

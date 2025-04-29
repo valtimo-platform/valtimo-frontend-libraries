@@ -22,6 +22,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {ZakenApiConfig} from '../../models';
 
 @Component({
+  standalone: false,
+
   selector: 'valtimo-zaken-api-configuration',
   templateUrl: './zaken-api-configuration.component.html',
   styleUrls: ['./zaken-api-configuration.component.scss'],

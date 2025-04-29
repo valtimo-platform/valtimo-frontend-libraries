@@ -93,6 +93,8 @@ import {
 import {CaseListActionsComponent} from '../case-list-actions/case-list-actions.component';
 
 @Component({
+  standalone: false,
+
   templateUrl: './case-list.component.html',
   styleUrls: ['./case-list.component.scss'],
   providers: [

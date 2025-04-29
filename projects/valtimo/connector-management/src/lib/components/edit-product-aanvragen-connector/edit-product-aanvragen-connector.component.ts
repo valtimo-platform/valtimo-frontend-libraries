@@ -32,6 +32,8 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
  * @deprecated Use the new plugin framework
  */
 @Component({
+  standalone: false,
+
   selector: 'valtimo-edit-product-aanvragen-connector',
   templateUrl: './edit-product-aanvragen-connector.component.html',
   styleUrls: ['./edit-product-aanvragen-connector.component.scss'],

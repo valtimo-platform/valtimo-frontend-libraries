@@ -45,6 +45,8 @@ import {
 } from '../../../../models/object-management.model';
 
 @Component({
+  standalone: false,
+
   selector: 'valtimo-object-management-list-columns',
   templateUrl: './object-management-list-columns.component.html',
   styleUrls: ['./object-management-list-columns.component.scss'],

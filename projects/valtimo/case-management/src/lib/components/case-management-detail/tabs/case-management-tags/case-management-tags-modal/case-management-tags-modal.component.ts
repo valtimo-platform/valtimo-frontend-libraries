@@ -42,6 +42,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {TagColor} from '@valtimo/config';
 
 @Component({
+  standalone: false,
+
   selector: 'valtimo-case-management-tags-modal',
   templateUrl: './case-management-tags-modal.component.html',
   styleUrls: ['./case-management-tags-modal.component.scss'],

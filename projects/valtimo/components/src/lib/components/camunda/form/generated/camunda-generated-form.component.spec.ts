@@ -53,8 +53,8 @@ describe('CamundaGeneratedFormComponent', () => {
 
   @Directive({
     selector: '[valtimoCamundaFormfieldGenerator]',
-    standalone: false
-})
+    standalone: false,
+  })
   class CamundaFormfieldGeneratorDirective {
     @Input() formField: FormField;
     @Input() formGroup: UntypedFormGroup;

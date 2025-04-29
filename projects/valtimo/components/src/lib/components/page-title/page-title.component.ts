@@ -41,11 +41,11 @@ import {
 import {PageHeaderService, PageSubtitleService, PageTitleService} from '../../services';
 
 @Component({
-    selector: 'valtimo-page-title',
-    templateUrl: './page-title.component.html',
-    styleUrls: ['./page-title.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'valtimo-page-title',
+  templateUrl: './page-title.component.html',
+  styleUrls: ['./page-title.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class PageTitleComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class.valtimo-page-title--compact') isCompact!: boolean;

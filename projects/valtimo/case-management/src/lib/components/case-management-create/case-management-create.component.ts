@@ -22,6 +22,8 @@ import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, take, tap} from 'rxjs';
 
 @Component({
+  standalone: false,
+
   selector: 'valtimo-case-management-create',
   styleUrls: ['./case-management-create.component.scss'],
   templateUrl: './case-management-create.component.html',

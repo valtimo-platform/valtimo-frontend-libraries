@@ -22,6 +22,8 @@ import {PluginManagementService, PluginTranslationService} from '../../../../ser
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
+
   selector: 'valtimo-besluiten-api-configuration',
   templateUrl: './besluiten-api-configuration.component.html',
   styleUrls: ['./besluiten-api-configuration.component.scss'],

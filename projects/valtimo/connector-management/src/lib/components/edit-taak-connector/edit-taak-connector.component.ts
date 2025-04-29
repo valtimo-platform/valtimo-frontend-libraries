@@ -31,6 +31,8 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
  * @deprecated Use the new plugin framework
  */
 @Component({
+  standalone: false,
+
   selector: 'valtimo-edit-taak-connector',
   templateUrl: './edit-taak-connector.component.html',
   styleUrls: ['./edit-taak-connector.component.scss'],

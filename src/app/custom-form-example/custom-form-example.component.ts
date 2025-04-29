@@ -22,10 +22,10 @@ import {ToastrService} from 'ngx-toastr';
 import {Location} from '@angular/common';
 
 @Component({
-    selector: 'app-custom-form-example',
-    templateUrl: './custom-form-example.component.html',
-    styleUrls: ['./custom-form-example.component.scss'],
-    standalone: false
+  selector: 'app-custom-form-example',
+  templateUrl: './custom-form-example.component.html',
+  styleUrls: ['./custom-form-example.component.scss'],
+  standalone: false,
 })
 export class CustomFormExampleComponent implements OnInit {
   public customForm: UntypedFormGroup;

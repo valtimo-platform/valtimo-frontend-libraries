@@ -21,6 +21,8 @@ import {Router} from '@angular/router';
 import {combineLatest} from 'rxjs';
 
 @Component({
+  standalone: false,
+
   selector: 'valtimo-milestone-list',
   templateUrl: './milestone-list.component.html',
   styleUrls: ['./milestone-list.component.scss'],

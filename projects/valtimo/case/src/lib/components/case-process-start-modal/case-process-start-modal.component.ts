@@ -56,6 +56,8 @@ import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/conf
 import {BehaviorSubject, Subscription} from 'rxjs';
 
 @Component({
+  standalone: false,
+
   selector: 'valtimo-case-process-start-modal',
   templateUrl: './case-process-start-modal.component.html',
   styleUrls: ['./case-process-start-modal.component.scss'],

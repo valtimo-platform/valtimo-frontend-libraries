@@ -18,6 +18,7 @@ import {Component, Input} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
+  standalone: false,
   selector: 'v-tooltip',
   styleUrls: ['./tooltip.component.scss'],
   templateUrl: './tooltip.component.html',
@@ -27,7 +28,6 @@ import {animate, style, transition, trigger} from '@angular/animations';
       transition(':leave', [animate(300, style({opacity: 0}))]),
     ]),
   ],
-  standalone: false,
 })
 export class TooltipComponent {
   @Input() text = '';

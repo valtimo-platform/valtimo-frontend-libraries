@@ -35,6 +35,8 @@ import {GlobalNotificationService} from '@valtimo/layout';
 declare const $;
 
 @Component({
+  standalone: false,
+
   selector: 'valtimo-case-list-actions',
   templateUrl: './case-list-actions.component.html',
   styleUrls: ['./case-list-actions.component.scss'],

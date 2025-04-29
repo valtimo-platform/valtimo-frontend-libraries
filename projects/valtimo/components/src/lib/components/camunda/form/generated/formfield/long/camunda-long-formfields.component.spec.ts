@@ -34,9 +34,10 @@ describe('CamundaLongFormfieldComponent', () => {
   let formGroup: UntypedFormGroup;
 
   @Component({
-    selector: 'valtimo-camunda-formfield-validation', template: '',
-    standalone: false
-})
+    selector: 'valtimo-camunda-formfield-validation',
+    template: '',
+    standalone: false,
+  })
   class CamundaFormFieldValidationComponent {
     @Input() formField: FormField;
     @Input() formGroup: UntypedFormGroup;

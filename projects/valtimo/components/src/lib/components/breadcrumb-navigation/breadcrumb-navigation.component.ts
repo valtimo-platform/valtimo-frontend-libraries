@@ -21,11 +21,11 @@ import {BreadcrumbService} from './breadcrumb.service';
 import {PageHeaderService, PageTitleService} from '../../services';
 
 @Component({
-    selector: 'valtimo-breadcrumb-navigation',
-    templateUrl: './breadcrumb-navigation.component.html',
-    styleUrls: ['./breadcrumb-navigation.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'valtimo-breadcrumb-navigation',
+  templateUrl: './breadcrumb-navigation.component.html',
+  styleUrls: ['./breadcrumb-navigation.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class BreadcrumbNavigationComponent implements OnInit, OnDestroy {
   @HostBinding('class.valtimo-breadcrumb-navigation--compact') isCompact!: boolean;

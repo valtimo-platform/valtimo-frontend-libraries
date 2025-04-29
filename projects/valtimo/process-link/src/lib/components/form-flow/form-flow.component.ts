@@ -32,6 +32,8 @@ import {ConfigService} from '@valtimo/config';
 import {map} from 'rxjs/operators';
 
 @Component({
+  standalone: false,
+
   selector: 'valtimo-form-flow',
   templateUrl: './form-flow.component.html',
   styleUrls: ['./form-flow.component.scss'],

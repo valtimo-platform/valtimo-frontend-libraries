@@ -51,6 +51,8 @@ import {v4 as uuidv4} from 'uuid';
 import {getCaseManagementRouteParams} from '../../../../utils';
 
 @Component({
+  standalone: false,
+
   templateUrl: './case-management-list-columns.component.html',
   styleUrls: ['./case-management-list-columns.component.scss'],
 })
