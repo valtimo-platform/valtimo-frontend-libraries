@@ -17,9 +17,10 @@
 import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-upload-showcase',
-  templateUrl: './upload-showcase.component.html',
-  styleUrls: ['./upload-showcase.component.scss'],
+    selector: 'app-upload-showcase',
+    templateUrl: './upload-showcase.component.html',
+    styleUrls: ['./upload-showcase.component.scss'],
+    standalone: false
 })
 export class UploadShowcaseComponent implements OnInit {
   constructor() {}

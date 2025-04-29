@@ -19,8 +19,9 @@ import {UntypedFormGroup} from '@angular/forms';
 import {FormField} from '../formfield.model';
 
 @Component({
-  selector: 'valtimo-camunda-formfield-validation',
-  templateUrl: './camunda-formfield-validation.component.html',
+    selector: 'valtimo-camunda-formfield-validation',
+    templateUrl: './camunda-formfield-validation.component.html',
+    standalone: false
 })
 export class CamundaFormfieldValidationComponent implements OnInit {
   @Input() public formGroup: UntypedFormGroup;

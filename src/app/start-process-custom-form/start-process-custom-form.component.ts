@@ -21,9 +21,10 @@ import {ToastrService} from 'ngx-toastr';
 import {ProcessService} from '@valtimo/process';
 
 @Component({
-  selector: 'app-start-process-custom-form',
-  templateUrl: './start-process-custom-form.component.html',
-  styleUrls: ['./start-process-custom-form.component.scss'],
+    selector: 'app-start-process-custom-form',
+    templateUrl: './start-process-custom-form.component.html',
+    styleUrls: ['./start-process-custom-form.component.scss'],
+    standalone: false
 })
 export class StartProcessCustomFormComponent implements OnInit {
   public processDefinition: any;

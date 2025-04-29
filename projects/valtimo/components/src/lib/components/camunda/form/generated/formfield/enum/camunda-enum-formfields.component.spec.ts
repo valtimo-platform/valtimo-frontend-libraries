@@ -37,7 +37,10 @@ describe('CamundaEnumFormfieldComponent', () => {
     id2: 'value2',
   };
 
-  @Component({selector: 'valtimo-camunda-formfield-validation', template: ''})
+  @Component({
+    selector: 'valtimo-camunda-formfield-validation', template: '',
+    standalone: false
+})
   class CamundaFormFieldValidationComponent {
     @Input() formField: FormField;
     @Input() formGroup: UntypedFormGroup;

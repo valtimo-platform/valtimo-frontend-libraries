@@ -19,8 +19,9 @@ import {UntypedFormGroup} from '@angular/forms';
 import {FormField} from '../formfield.model';
 
 @Component({
-  selector: 'valtimo-camunda-enum-formfield',
-  templateUrl: './camunda-enum-formfield.component.html',
+    selector: 'valtimo-camunda-enum-formfield',
+    templateUrl: './camunda-enum-formfield.component.html',
+    standalone: false
 })
 export class CamundaEnumFormfieldComponent implements OnInit {
   public formGroup: UntypedFormGroup;

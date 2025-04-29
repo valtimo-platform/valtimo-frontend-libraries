@@ -20,9 +20,10 @@ import {Component, Input, OnInit} from '@angular/core';
  * Component used to display a widget element
  */
 @Component({
-  selector: 'valtimo-widget',
-  templateUrl: './widget.component.html',
-  styleUrls: ['./widget.component.css'],
+    selector: 'valtimo-widget',
+    templateUrl: './widget.component.html',
+    styleUrls: ['./widget.component.css'],
+    standalone: false
 })
 export class WidgetComponent implements OnInit {
   @Input() type?: string;

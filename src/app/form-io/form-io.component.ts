@@ -17,9 +17,10 @@
 import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-form-io',
-  templateUrl: './form-io.component.html',
-  styleUrls: ['./form-io.component.scss'],
+    selector: 'app-form-io',
+    templateUrl: './form-io.component.html',
+    styleUrls: ['./form-io.component.scss'],
+    standalone: false
 })
 export class FormioComponent implements OnInit {
   public formBuilder: object = {
