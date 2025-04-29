@@ -43,7 +43,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   @ViewChild('deleteDraftMessage')
   private readonly _deleteDraftMessageTemplateRef: TemplateRef<HTMLDivElement>;
 
-  public newDraftVersionForm: FormGroup = this.fb.group({
+  public readonly newDraftVersionForm: FormGroup = this.fb.group({
     caseDefinitionVersion: this.fb.control('', Validators.required),
   });
 

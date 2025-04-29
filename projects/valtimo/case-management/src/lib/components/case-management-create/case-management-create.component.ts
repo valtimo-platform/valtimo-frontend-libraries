@@ -117,10 +117,6 @@ export class CaseManagementCreateComponent {
       return;
     }
 
-    if (!name.value) {
-      return;
-    }
-
     caseDefinitionKey.patchValue(name.value.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase());
     this.editDisabled$.next(false);
   }
