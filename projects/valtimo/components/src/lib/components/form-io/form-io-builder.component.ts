@@ -30,6 +30,7 @@ import {
   selector: 'valtimo-form-io-builder',
   templateUrl: './form-io-builder.component.html',
   styleUrls: ['./form-io-builder.component.css'],
+  standalone: false,
 })
 export class FormioBuilderComponent implements OnInit {
   public readonly form$ = new BehaviorSubject<object | null>(null);

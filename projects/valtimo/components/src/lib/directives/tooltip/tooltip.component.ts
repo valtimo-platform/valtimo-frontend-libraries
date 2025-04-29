@@ -27,6 +27,7 @@ import {animate, style, transition, trigger} from '@angular/animations';
       transition(':leave', [animate(300, style({opacity: 0}))]),
     ]),
   ],
+  standalone: false,
 })
 export class TooltipComponent {
   @Input() text = '';

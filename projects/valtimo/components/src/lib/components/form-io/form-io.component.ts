@@ -53,6 +53,7 @@ import {isEqual} from 'lodash';
   templateUrl: './form-io.component.html',
   styleUrls: ['./form-io.component.css'],
   providers: [FormIoLocalStorageService],
+  standalone: false,
 })
 export class FormioComponent implements OnInit, OnChanges, OnDestroy {
   @Input() set options(optionsValue: ValtimoFormioOptions) {
