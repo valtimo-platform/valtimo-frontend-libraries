@@ -18,6 +18,7 @@
   *ngIf="{
     editDisabled: editDisabled$ | async,
     idError: idError$ | async,
+    versionError: versionError$ | async,
     editActive: editActive$ | async,
   } as obs"
   [open]="open"
@@ -84,7 +85,7 @@
       </div>
     </cds-label>
 
-    <cds-label>
+    <cds-label [invalid]="!!obs.versionError" [invalidText]="obs.versionError | translate">
       {{ 'caseManagement.createDefinition.version' | translate }}
 
       <cds-tooltip
@@ -98,6 +99,7 @@
         formControlName="caseDefinitionVersion"
         cdsText
         placeholder="{{ 'caseManagement.createDefinition.versionPlaceholder' | translate }}"
+        [invalid]="!!obs.versionError"
         [attr.modal-primary-focus]="true"
         (focusout)="onFocusOut()"
       />

@@ -20,6 +20,7 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DocumentService, TemplatePayload} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, take, tap} from 'rxjs';
+import * as semver from 'semver';
 
 @Component({
   selector: 'valtimo-case-management-create',
@@ -58,6 +59,7 @@ export class CaseManagementCreateComponent {
   );
   public readonly editDisabled$ = new BehaviorSubject<boolean>(true);
   public readonly idError$ = new BehaviorSubject<string | null>(null);
+  public readonly versionError$ = new BehaviorSubject<string | null>(null);
 
   constructor(
     private readonly documentService: DocumentService,
@@ -76,6 +78,11 @@ export class CaseManagementCreateComponent {
 
     const {caseDefinitionKey, name, caseDefinitionVersion, description} = this.formGroup.controls;
     if (!caseDefinitionKey || !name || !caseDefinitionVersion) {
+      return;
+    }
+
+    if (!semver.valid(caseDefinitionVersion.value)) {
+      this.versionError$.next('caseManagement.createDefinition.versionError');
       return;
     }
 

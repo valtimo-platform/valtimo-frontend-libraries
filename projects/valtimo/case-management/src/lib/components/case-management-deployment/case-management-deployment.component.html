@@ -171,12 +171,16 @@
   titleTranslationKey="caseManagement.deployment.createDraftConfirmationModal.title"
 >
   <form [formGroup]="newDraftVersionForm" class="tag-form">
-    <cds-label>
+    <cds-label
+      [invalid]="!!(versionError$ | async)"
+      [invalidText]="versionError$ | async | translate"
+    >
       {{ 'caseManagement.deployment.createDraftConfirmationModal.input' | translate }}
 
       <input
         cdsText
         formControlName="caseDefinitionVersion"
+        [invalid]="!!versionError$"
         [attr.modal-primary-focus]="true"
         required
       />

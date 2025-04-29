@@ -26,6 +26,7 @@ import {CaseDefinition, DraftVersion} from '../../models/case-deployment.model';
 import {BreadcrumbService} from '@valtimo/components';
 import {DatePipe} from '@angular/common';
 import {GlobalNotificationService} from '@valtimo/layout';
+import * as semver from 'semver';
 import {inc} from 'semver';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
@@ -54,6 +55,7 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
   public readonly showDeleteDraftConfirmationModal$ = new BehaviorSubject<boolean>(false);
   public readonly showFinalizeDraftConfirmationModal$ = new BehaviorSubject<boolean>(false);
   public readonly showCreateDraftVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
+  public readonly versionError$ = new BehaviorSubject<string | null>(null);
   public readonly newDraftVersion$ = new BehaviorSubject<DraftVersion>({
     name: '',
     caseDefinitionKey: '',
@@ -351,6 +353,17 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
   }
 
   public createDraftVersion(): void {
+    const {caseDefinitionVersion} = this.newDraftVersionForm.controls;
+
+    if (!caseDefinitionVersion) {
+      return;
+    }
+
+    if (!semver.valid(caseDefinitionVersion)) {
+      this.versionError$.next('caseManagement.createDefinition.versionError');
+      return;
+    }
+
     this._currentNotification = this.notificationService.showNotification({
       type: 'info',
       title: '',
@@ -387,6 +400,7 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
             ),
             duration: 5000,
           });
+          this.closeCreateDraftVersionConfirmationModal();
         },
         error: () => {
           this.closeCurrentNotification();
@@ -400,11 +414,9 @@ export class CaseManagementDeploymentComponent implements AfterViewInit {
             ),
             duration: 5000,
           });
+          this.closeCreateDraftVersionConfirmationModal();
         },
       });
-
-    this.router.navigate(['/case-management']);
-    this.closeCreateDraftVersionConfirmationModal();
   }
 
   private initBreadcrumbs(): void {

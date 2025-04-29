@@ -92,12 +92,12 @@ export class CaseManagementListComponent {
       .createDraftVersion(templatePayload)
       .pipe(take(1))
       .subscribe((response: any) => {
-        // this.router.navigate([
-        //   '/case-management/case',
-        //   response.caseDefinitionKey,
-        //   'version',
-        //   response.caseDefinitionVersionTag,
-        // ]);
+        this.router.navigate([
+          '/case-management/case',
+          response.caseDefinitionKey,
+          'version',
+          response.caseDefinitionVersionTag,
+        ]);
       });
   }
 
