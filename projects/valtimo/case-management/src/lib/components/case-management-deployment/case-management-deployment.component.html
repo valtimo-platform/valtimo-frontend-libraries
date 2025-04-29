@@ -30,7 +30,7 @@
 
     @if (obs.isDraftVersion) {
       <div class="draft-buttons">
-        <button cdsButton="danger" (click)="openDeleteDraftConfirmationModal()">
+        <button cdsButton="danger" (click)="openDeleteDraftModal()">
           {{ 'caseManagement.deployment.buttons.delete' | translate }}
           <svg cdsIcon="trash-can" size="16" class="cds--btn__icon"></svg>
         </button>
@@ -137,7 +137,7 @@
 <valtimo-confirmation-modal
   [showModalSubject$]="showDeleteDraftConfirmationModal$"
   (confirmEvent)="deleteDraftCaseVersion()"
-  (cancelEvent)="closeDeleteDraftConfirmationModal()"
+  (cancelEvent)="closeDeleteDraftModal()"
   cancelButtonType="ghost"
   confirmButtonType="danger"
   confirmButtonTextTranslationKey="caseManagement.deployment.deleteDraftConfirmationModal.confirm"
@@ -151,7 +151,7 @@
   [showModalSubject$]="showFinalizeDraftConfirmationModal$"
   [content]="finalizeDraftDescription$ | async"
   (confirmEvent)="finalizeDraftCaseVersion()"
-  (cancelEvent)="closeFinalizeDraftConfirmationModal()"
+  (cancelEvent)="closeFinalizeDraftModal()"
   cancelButtonType="ghost"
   confirmButtonType="secondary"
   confirmButtonTextTranslationKey="caseManagement.deployment.finalizeDraftConfirmationModal.confirm"
@@ -163,7 +163,7 @@
   [showModalSubject$]="showCreateDraftVersionConfirmationModal$"
   [content]="createDraftDescription$ | async"
   (confirmEvent)="createDraftVersion()"
-  (cancelEvent)="closeCreateDraftVersionConfirmationModal()"
+  (cancelEvent)="closeCreateDraftVersionModal()"
   cancelButtonType="ghost"
   confirmButtonType="secondary"
   confirmButtonTextTranslationKey="caseManagement.deployment.createDraftConfirmationModal.confirm"

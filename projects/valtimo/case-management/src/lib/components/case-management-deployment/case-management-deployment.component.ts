@@ -220,11 +220,11 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
       .subscribe();
   }
 
-  public openDeleteDraftConfirmationModal(): void {
+  public openDeleteDraftModal(): void {
     this.showDeleteDraftConfirmationModal$.next(true);
   }
 
-  public closeDeleteDraftConfirmationModal(): void {
+  public closeDeleteDraftModal(): void {
     this.showDeleteDraftConfirmationModal$.next(false);
   }
 
@@ -232,7 +232,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     this.showFinalizeDraftConfirmationModal$.next(true);
   }
 
-  public closeFinalizeDraftConfirmationModal(): void {
+  public closeFinalizeDraftModal(): void {
     this.showFinalizeDraftConfirmationModal$.next(false);
   }
 
@@ -240,7 +240,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     this.showCreateDraftVersionConfirmationModal$.next(true);
   }
 
-  public closeCreateDraftVersionConfirmationModal(): void {
+  public closeCreateDraftVersionModal(): void {
     this.showCreateDraftVersionConfirmationModal$.next(false);
   }
 
@@ -290,7 +290,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
         },
       });
 
-    this.closeDeleteDraftConfirmationModal();
+    this.closeDeleteDraftModal();
   }
 
   public finalizeDraftCaseVersion(): void {
@@ -338,7 +338,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
         },
       });
 
-    this.closeFinalizeDraftConfirmationModal();
+    this.closeFinalizeDraftModal();
   }
 
   public createDraftVersion(): void {
@@ -383,14 +383,14 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
           this.showSuccessNotification(
             'caseManagement.deployment.createDraftConfirmationModal.successMessage'
           );
-          this.closeCreateDraftVersionConfirmationModal();
+          this.closeCreateDraftVersionModal();
         },
         error: () => {
           this.showErrorNotification(
             'caseManagement.deployment.createDraftConfirmationModal.errorTitle',
             'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
           );
-          this.closeCreateDraftVersionConfirmationModal();
+          this.closeCreateDraftVersionModal();
         },
       });
   }
