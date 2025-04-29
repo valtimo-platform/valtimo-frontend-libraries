@@ -805,6 +805,7 @@
     "createDefinition": {
       "idError": "This definition name is already in use. Please change to a unique name",
       "versionError": "This version is not a valid Semver version",
+      "versionExistsError": "This version already exists for this case",
       "modalTitle": "Create case definition",
       "key": "Case definition key",
       "keyPlaceholder": "Case definition key will be auto-generated here",

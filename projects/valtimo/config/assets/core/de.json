@@ -802,13 +802,21 @@
     },
     "createDefinition": {
       "idError": "Dieser Definitionsname wird bereits verwendet. Bitte ändern Sie ihn in einen eindeutigen Namen",
-      "modalTitle": "Casedefinition erstellen",
-      "name": "Name der Casedefinition",
-      "namePlaceholder": "Der Name der Casedefinition wird hier automatisch generiert",
-      "nameTooltip": "Der Name wird für den Systemnamen, $id usw. verwendet. Außer „-“ sind keine Leerzeichen oder Sonderzeichen erlaubt.",
-      "title": "Titel der Casedefinition",
-      "titlePlaceholder": "Geben Sie hier den Titel ein",
-      "titleTooltip": "Der Titel wird als sichtbarer Name der Casedefinition in der Benutzeroberfläche verwendet"
+      "versionError": "Diese Version ist keine gültige Semver-Version",
+      "versionExistsError": "Diese Version existiert bereits für diesen Fall",
+      "modalTitle": "Falldefinition erstellen",
+      "key": "Falldefinitionsschlüssel",
+      "keyPlaceholder": "Der Falldefinitionsschlüssel wird hier automatisch generiert",
+      "keyTooltip": "Der Schlüssel wird für die Systemnamen, $id usw. verwendet. Leerzeichen und Sonderzeichen außer “-”. sind nicht zulässig.",
+      "name": "Falldefinitionsname",
+      "namePlaceholder": "Name hier eingeben",
+      "nameTooltip": "Der Name wird für den sichtbaren Namen der Falldefinition in der Benutzeroberfläche verwendet.",
+      "version": "Falldefinitionsversion.",
+      "versionPlaceholder": "Version hier eingeben",
+      "versionTooltip": "Die Version wird für den sichtbaren Namen der Falldefinition in der Benutzeroberfläche verwendet.",
+      "description": "Beschreibung der Falldefinition",
+      "descriptionPlaceholder": "Beschreibung hier eingeben",
+      "descriptionTooltip": "Die Beschreibung dient als sichtbarer Name der Falldefinition in der Benutzeroberfläche"
     },
     "documentDefinition": {
       "cancelModal": {
