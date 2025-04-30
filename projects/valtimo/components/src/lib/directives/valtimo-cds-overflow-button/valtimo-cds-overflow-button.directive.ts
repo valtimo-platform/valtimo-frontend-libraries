@@ -52,14 +52,22 @@ export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnDestr
   }
 
   private setStyles(): void {
-    const overflowMenuElement =
-      this.elementRef.nativeElement.getElementsByClassName('cds--overflow-menu')[0];
+    const overflowMenuElements = Array.from(
+      this.elementRef.nativeElement.getElementsByClassName('cds--overflow-menu')
+    );
+    const overflowMenuElement = Array.isArray(overflowMenuElements) && overflowMenuElements[0];
+
+    if (!overflowMenuElement) return;
+
     const firstChildElement = overflowMenuElement.firstChild;
+
     this.renderer.setStyle(overflowMenuElement, 'visibility', 'hidden');
     this.renderer.setStyle(overflowMenuElement, 'display', 'flex');
     this.renderer.setStyle(overflowMenuElement, 'width', 'min-content');
     this.renderer.setStyle(overflowMenuElement, 'height', 'min-content');
     this.renderer.setStyle(firstChildElement, 'visibility', 'visible');
+
+    this.setAbsolutePositionForBtnIcons();
   }
 
   private setHostInputs(): void {
@@ -91,5 +99,15 @@ export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnDestr
     if (this.width) {
       this.renderer.setStyle(element, 'width', `${this.width}px`);
     }
+  }
+
+  private setAbsolutePositionForBtnIcons(): void {
+    const btnIconElements = Array.from(
+      this.elementRef.nativeElement.querySelectorAll('.cds--btn__icon')
+    );
+
+    btnIconElements.forEach((btnIconEl: HTMLElement) => {
+      this.renderer.setStyle(btnIconEl, 'position', 'absolute');
+    });
   }
 }
