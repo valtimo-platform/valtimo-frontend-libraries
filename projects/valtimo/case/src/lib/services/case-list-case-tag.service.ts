@@ -30,7 +30,7 @@ export class CaseListCaseTagService {
     switchMap(caseDefinitionKey =>
       combineLatest([
         // to do: add case definition version tag
-        this.caseTagsService.getCaseTags(caseDefinitionKey, ''),
+        this.caseTagsService.getCaseTags(caseDefinitionKey),
         this.caseParameterService.queryCaseTagsParams$,
       ]).pipe(take(1))
     ),
