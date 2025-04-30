@@ -29,7 +29,6 @@ export class CaseListCaseTagService {
   private readonly _caseTags$: Observable<CaseTag[]> = this.caseListService.caseDefinitionKey$.pipe(
     switchMap(caseDefinitionKey =>
       combineLatest([
-        // to do: add case definition version tag
         this.caseTagsService.getCaseTags(caseDefinitionKey),
         this.caseParameterService.queryCaseTagsParams$,
       ]).pipe(take(1))
