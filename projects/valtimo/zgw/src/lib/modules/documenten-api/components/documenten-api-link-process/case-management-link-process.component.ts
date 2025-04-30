@@ -19,7 +19,11 @@ import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'r
 import {ComboBoxModule, LayerModule, ListItem} from 'carbon-components-angular';
 import {ConfigService, UploadProvider, ValtimoConfig} from '@valtimo/config';
 import {ActivatedRoute} from '@angular/router';
-import {DocumentenApiLinkProcessService, DocumentenApiVersionService} from '../../services';
+import {
+  DocumentenApiDocumentService,
+  DocumentenApiLinkProcessService,
+  DocumentenApiVersionService,
+} from '../../services';
 import {CommonModule} from '@angular/common';
 import {ParagraphModule} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
@@ -49,6 +53,16 @@ export class CaseManagementLinkProcessComponent implements OnInit {
     map(({caseDefinitionVersionTag}) => caseDefinitionVersionTag || '')
   );
 
+  public readonly isReadOnly$ = this.params$!.pipe(
+    switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
+      this.documentenApiDocumentService.getCaseDefinition(
+        caseDefinitionKey,
+        caseDefinitionVersionTag
+      )
+    ),
+    map(caseDefinition => caseDefinition.final)
+  );
+
   public readonly selectedProcessKey$ = new BehaviorSubject<string>('');
   public readonly processItems$: Observable<Array<ListItem>> = combineLatest([
     this.documentenApiLinkProcessService.getProcessDefinitions(),
@@ -71,7 +85,8 @@ export class CaseManagementLinkProcessComponent implements OnInit {
     private readonly configService: ConfigService,
     private readonly route: ActivatedRoute,
     private readonly documentenApiLinkProcessService: DocumentenApiLinkProcessService,
-    private readonly documentenApiVersionService: DocumentenApiVersionService
+    private readonly documentenApiVersionService: DocumentenApiVersionService,
+    private readonly documentenApiDocumentService: DocumentenApiDocumentService
   ) {}
 
   public ngOnInit(): void {
