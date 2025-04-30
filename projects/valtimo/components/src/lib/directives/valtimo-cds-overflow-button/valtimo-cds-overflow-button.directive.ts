@@ -36,7 +36,7 @@ export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnDestr
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private readonly elementRef: ElementRef,
+    private readonly elementRef: ElementRef<HTMLElement>,
     private readonly renderer: Renderer2,
     private readonly host: OverflowMenu
   ) {}
@@ -52,7 +52,8 @@ export class ValtimoCdsOverflowButtonDirective implements AfterViewInit, OnDestr
   }
 
   private setStyles(): void {
-    const overflowMenuElement = this.elementRef.nativeElement.firstChild;
+    const overflowMenuElement =
+      this.elementRef.nativeElement.getElementsByClassName('cds--overflow-menu')[0];
     const firstChildElement = overflowMenuElement.firstChild;
     this.renderer.setStyle(overflowMenuElement, 'visibility', 'hidden');
     this.renderer.setStyle(overflowMenuElement, 'display', 'flex');
