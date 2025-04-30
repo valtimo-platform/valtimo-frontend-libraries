@@ -19,14 +19,11 @@ import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'r
 import {ComboBoxModule, LayerModule, ListItem} from 'carbon-components-angular';
 import {ConfigService, UploadProvider, ValtimoConfig} from '@valtimo/config';
 import {ActivatedRoute} from '@angular/router';
-import {
-  DocumentenApiDocumentService,
-  DocumentenApiLinkProcessService,
-  DocumentenApiVersionService,
-} from '../../services';
+import {DocumentenApiLinkProcessService, DocumentenApiVersionService} from '../../services';
 import {CommonModule} from '@angular/common';
 import {ParagraphModule} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
+import {CaseManagementService} from '@valtimo/case-management';
 
 @Component({
   selector: 'valtimo-case-management-link-process',
@@ -55,10 +52,7 @@ export class CaseManagementLinkProcessComponent implements OnInit {
 
   public readonly isReadOnly$ = this.params$!.pipe(
     switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
-      this.documentenApiDocumentService.getCaseDefinition(
-        caseDefinitionKey,
-        caseDefinitionVersionTag
-      )
+      this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
     ),
     map(caseDefinition => caseDefinition.final)
   );
@@ -86,7 +80,7 @@ export class CaseManagementLinkProcessComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly documentenApiLinkProcessService: DocumentenApiLinkProcessService,
     private readonly documentenApiVersionService: DocumentenApiVersionService,
-    private readonly documentenApiDocumentService: DocumentenApiDocumentService
+    private readonly caseManagementService: CaseManagementService
   ) {}
 
   public ngOnInit(): void {

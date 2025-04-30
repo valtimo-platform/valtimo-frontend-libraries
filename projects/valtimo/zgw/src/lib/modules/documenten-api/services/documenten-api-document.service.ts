@@ -66,17 +66,6 @@ export class DocumentenApiDocumentService extends BaseApiService {
     );
   }
 
-  public getCaseDefinition(
-    caseDefinitionKey: string,
-    caseDefinitionVersionTag: string
-  ): Observable<any> {
-    return this.httpClient.get<any>(
-      this.getApiUrl(
-        `management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}`
-      )
-    );
-  }
-
   public getUploadFields(caseDefinitionName: string): Observable<Array<DocumentenApiUploadField>> {
     return this.httpClient.get<Array<DocumentenApiUploadField>>(
       this.getApiUrl(
