@@ -12,7 +12,7 @@
     "installDeps": "npm install",
     "devMode": "node scripts/dev-mode.js",
     "devMode:skipLibsBuild": "SKIP_BUILD=true node scripts/dev-mode.js",
-    "syncLibDeps": "node scripts/sync-lib-deps.js && npm run prettier:write",
+    "syncLibDepsToRootDeps": "node scripts/sync-lib-deps.js && npm run prettier:write",
     "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --proxy-config proxy.conf.json",
     "startProd": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --proxy-config proxy.conf.json --configuration production",
     "startAot": "ng serve --proxy-config proxy.conf.json --aot",
