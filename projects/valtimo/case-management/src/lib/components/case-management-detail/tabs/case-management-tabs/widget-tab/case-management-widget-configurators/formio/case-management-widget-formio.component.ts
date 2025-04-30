@@ -26,8 +26,9 @@ import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@an
 import {TranslateModule} from '@ngx-translate/core';
 import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
 import {WidgetFormioContent} from '@valtimo/case';
-import {FormDefinitionOption, FormService} from 'dist/valtimo/form';
-import {DropdownModule, InputModule, ListItem, SelectModule} from 'carbon-components-angular';
+import {FormDefinitionOption, FormService} from '@valtimo/form';
+import {DropdownModule, InputModule, SelectModule} from 'carbon-components-angular';
+import {ListItem} from 'carbon-components-angular/dropdown/list-item.interface';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';
 import {CaseManagementParams, WidgetContentComponent} from '../../../../../../../models';
 import {WidgetWizardService} from '../../../../../../../services';
