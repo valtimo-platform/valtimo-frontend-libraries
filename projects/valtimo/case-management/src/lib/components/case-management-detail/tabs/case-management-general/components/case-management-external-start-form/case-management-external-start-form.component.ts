@@ -32,7 +32,7 @@ import {ProcessManagementParams} from '@valtimo/process-management';
   providers: [NotificationService],
 })
 export class CaseManagementExternalStartFormComponent implements OnInit, OnDestroy {
-  @Input() isReadOnly: boolean;
+  @Input() public readonly isReadOnly: boolean;
 
   private readonly _URL_PATTERN = new RegExp(
     '^(https?:\\/\\/)(([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}|\\d{1,3}(\\.\\d{1,3}){3})(:\\d+)?(\\/\\S*)?(\\?\\S*)?(#\\S*)?$'

@@ -26,7 +26,7 @@ import {tap} from 'rxjs/operators';
   styleUrl: './case-management-case-handler.component.scss',
 })
 export class CaseManagementCaseHandlerComponent {
-  @Input() isReadOnly: boolean;
+  @Input() public readonly isReadOnly: boolean;
 
   public readonly disabled$ = new BehaviorSubject<boolean>(false);
 

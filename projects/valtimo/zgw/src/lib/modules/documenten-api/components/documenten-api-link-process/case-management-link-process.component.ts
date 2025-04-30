@@ -50,7 +50,7 @@ export class CaseManagementLinkProcessComponent implements OnInit {
     map(({caseDefinitionVersionTag}) => caseDefinitionVersionTag || '')
   );
 
-  public readonly isReadOnly$ = this.params$!.pipe(
+  public readonly isReadOnly$ = this.params$.pipe(
     switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
       this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
     ),

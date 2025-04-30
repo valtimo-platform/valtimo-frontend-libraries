@@ -46,13 +46,13 @@ export class CaseManagementGeneralComponent implements AfterViewInit {
     }))
   );
 
-  public readonly documentDefinition$: Observable<DocumentDefinition> = this.params$!.pipe(
+  public readonly documentDefinition$: Observable<DocumentDefinition> = this.params$.pipe(
     switchMap(({caseDefinitionKey}) =>
       this.documentService.getDocumentDefinitionForManagement(caseDefinitionKey)
     )
   );
 
-  public readonly isReadOnly$ = this.params$!.pipe(
+  public readonly isReadOnly$ = this.params$.pipe(
     switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
       this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
     ),
