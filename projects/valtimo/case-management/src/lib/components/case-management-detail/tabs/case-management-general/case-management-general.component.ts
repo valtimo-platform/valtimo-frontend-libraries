@@ -28,6 +28,7 @@ import {map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentDefinition, DocumentService} from '@valtimo/document';
 import {ZGW_CASE_CONFIGURATION_EXTENSIONS_TOKEN} from '@valtimo/config';
+import {CaseManagementService} from '../../../../services';
 
 @Component({
   selector: 'valtimo-case-management-general',
@@ -51,10 +52,18 @@ export class CaseManagementGeneralComponent implements AfterViewInit {
     )
   );
 
+  public readonly isReadOnly$ = this.params$!.pipe(
+    switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
+      this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
+    ),
+    map(caseDefinition => caseDefinition.final)
+  );
+
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
+    private readonly caseManagementService: CaseManagementService,
     @Optional()
     @Inject(ZGW_CASE_CONFIGURATION_EXTENSIONS_TOKEN)
     private readonly zgwCaseConfigurationExtensionComponents: Type<any>[]
