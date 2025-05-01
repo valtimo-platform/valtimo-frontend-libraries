@@ -82,7 +82,8 @@ export class CaseManagementGeneralComponent implements AfterViewInit {
     }
 
     this.zgwCaseConfigurationExtensionComponents.forEach(extensionComponent => {
-      this._extensions.createComponent(extensionComponent);
+      const componentRef = this._extensions.createComponent(extensionComponent);
+      componentRef.setInput('isReadOnly$', this.isReadOnly$);
     });
 
     this.cdr.detectChanges();

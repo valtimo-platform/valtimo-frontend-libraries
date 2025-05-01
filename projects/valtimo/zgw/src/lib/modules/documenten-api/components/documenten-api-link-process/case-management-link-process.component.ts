@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {ComboBoxModule, LayerModule, ListItem} from 'carbon-components-angular';
 import {ConfigService, UploadProvider, ValtimoConfig} from '@valtimo/config';
@@ -23,7 +23,6 @@ import {DocumentenApiLinkProcessService, DocumentenApiVersionService} from '../.
 import {CommonModule} from '@angular/common';
 import {ParagraphModule} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
-import {CaseManagementService} from '@valtimo/case-management';
 
 @Component({
   selector: 'valtimo-case-management-link-process',
@@ -33,6 +32,8 @@ import {CaseManagementService} from '@valtimo/case-management';
   imports: [CommonModule, ParagraphModule, TranslateModule, ComboBoxModule, LayerModule],
 })
 export class CaseManagementLinkProcessComponent implements OnInit {
+  @Input() isReadOnly$: Observable<boolean>;
+
   public readonly documentenApiUploadProviders$ = new BehaviorSubject<boolean>(false);
 
   public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
@@ -48,13 +49,6 @@ export class CaseManagementLinkProcessComponent implements OnInit {
 
   public readonly caseDefinitionVersionTag$: Observable<string> | undefined = this.params$?.pipe(
     map(({caseDefinitionVersionTag}) => caseDefinitionVersionTag || '')
-  );
-
-  public readonly isReadOnly$ = this.params$.pipe(
-    switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
-      this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
-    ),
-    map(caseDefinition => caseDefinition.final)
   );
 
   public readonly selectedProcessKey$ = new BehaviorSubject<string>('');
@@ -79,8 +73,7 @@ export class CaseManagementLinkProcessComponent implements OnInit {
     private readonly configService: ConfigService,
     private readonly route: ActivatedRoute,
     private readonly documentenApiLinkProcessService: DocumentenApiLinkProcessService,
-    private readonly documentenApiVersionService: DocumentenApiVersionService,
-    private readonly caseManagementService: CaseManagementService
+    private readonly documentenApiVersionService: DocumentenApiVersionService
   ) {}
 
   public ngOnInit(): void {
