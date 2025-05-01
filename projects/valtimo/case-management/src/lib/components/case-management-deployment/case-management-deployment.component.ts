@@ -128,6 +128,22 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     })
   );
 
+  public readonly caseDefinitionPayload$ = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
+    ),
+    map(caseDefinition => ({
+      name: caseDefinition.name,
+      caseDefinitionKey: caseDefinition.caseDefinitionKey,
+      caseDefinitionVersion: semver.inc(caseDefinition.caseDefinitionVersionTag, 'patch'),
+      description: caseDefinition.description,
+      basedOnCaseDefinitionVersion: caseDefinition.caseDefinitionVersionTag,
+    }))
+  );
+
   public readonly caseDefinitionVersions$: Observable<any[] | null> = this.caseDefinitionKey$.pipe(
     switchMap(caseDefinitionKey =>
       this.caseManagementService.getCaseDefinitionVersions(caseDefinitionKey)
@@ -241,7 +257,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     this.showCreateDraftVersionConfirmationModal$.next(true);
   }
 
-  public closeCreateDraftVersionModal(): void {
+  public onCloseCreateDraftVersionModal(templatePayload?: any | null): void {
     this.showCreateDraftVersionConfirmationModal$.next(false);
   }
 
@@ -384,14 +400,14 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
           this.showSuccessNotification(
             'caseManagement.deployment.createDraftConfirmationModal.successMessage'
           );
-          this.closeCreateDraftVersionModal();
+          this.onCloseCreateDraftVersionModal();
         },
         error: () => {
           this.showErrorNotification(
             'caseManagement.deployment.createDraftConfirmationModal.errorTitle',
             'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
           );
-          this.closeCreateDraftVersionModal();
+          this.onCloseCreateDraftVersionModal();
         },
       });
   }
