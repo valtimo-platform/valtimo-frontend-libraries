@@ -386,8 +386,10 @@ interface LoadedValue<T> {
 }
 
 interface TemplatePayload {
-  documentDefinitionId: string;
-  documentDefinitionTitle: string;
+  name: string;
+  caseDefinitionKey: string;
+  caseDefinitionVersion: string;
+  description: string;
 }
 
 interface TemplateResponse {
@@ -399,8 +401,18 @@ interface TemplateResponse {
   type: string;
 }
 
+interface CaseDefinition {
+  name: string;
+  active: boolean;
+  caseDefinitionKey: string;
+  caseDefinitionVersionTag: string;
+  canHaveAssignee: boolean;
+  autoAssignTasks: boolean;
+}
+
 export {
   AssignHandlerToDocumentResult,
+  CaseDefinition,
   CaseDefinitionId,
   CaseListColumn,
   CaseListColumnView,

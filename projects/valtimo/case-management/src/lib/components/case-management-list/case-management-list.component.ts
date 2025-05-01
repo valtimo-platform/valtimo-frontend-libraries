@@ -17,12 +17,7 @@ import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Search20, TrashCan20, Upload16} from '@carbon/icons';
 import {ColumnConfig, MenuService, Pagination} from '@valtimo/components';
-import {
-  CreateDocumentDefinitionResponse,
-  DocumentService,
-  Page,
-  TemplatePayload,
-} from '@valtimo/document';
+import {DocumentService, Page, TemplatePayload} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import moment from 'moment';
 import {BehaviorSubject, map, Observable, switchMap, take} from 'rxjs';
@@ -32,6 +27,7 @@ import {CaseManagementService} from '../../services';
 moment.locale(localStorage.getItem('langKey') || '');
 
 @Component({
+  standalone: false,
   selector: 'valtimo-case-management-list',
   templateUrl: './case-management-list.component.html',
   styleUrls: ['./case-management-list.component.scss'],
@@ -40,7 +36,7 @@ export class CaseManagementListComponent {
   public readonly pagination$ = new BehaviorSubject<Pagination | null>(null);
 
   public readonly caseListItems$: Observable<CaseListItem[]> = this.route.queryParams.pipe(
-    switchMap(params => this.caseManagementService.getCaseDefinitions(params)),
+    switchMap(params => this.caseManagementService.getCaseDefinitions({...params, active: true})),
     map((page: Page<CaseListItem>) => {
       this.pagination$.next({
         size: page.size,
@@ -93,12 +89,16 @@ export class CaseManagementListComponent {
       return;
     }
 
-    this.documentService
-      .createDocumentDefinitionTemplate(templatePayload)
+    this.caseManagementService
+      .createDraftVersion(templatePayload)
       .pipe(take(1))
-      .subscribe((response: CreateDocumentDefinitionResponse) => {
-        //TODO: resolve this when DocumentDefinition is reintroduced
-        // this.redirectToDetails(response.documentDefinition);
+      .subscribe((response: any) => {
+        this.router.navigate([
+          '/case-management/case',
+          response.caseDefinitionKey,
+          'version',
+          response.caseDefinitionVersionTag,
+        ]);
       });
   }
 
