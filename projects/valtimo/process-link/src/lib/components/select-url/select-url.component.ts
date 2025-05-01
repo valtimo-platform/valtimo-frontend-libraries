@@ -30,7 +30,6 @@ import {AlertService} from '@valtimo/components';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-select-url',
   templateUrl: './select-url.component.html',
 })

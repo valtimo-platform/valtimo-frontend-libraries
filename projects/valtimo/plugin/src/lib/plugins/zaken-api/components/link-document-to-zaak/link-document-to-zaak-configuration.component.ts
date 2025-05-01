@@ -23,7 +23,6 @@ import {LinkDocumentToZaakConfig} from '../../models';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-link-document-to-zaak-configuration',
   templateUrl: './link-document-to-zaak-configuration.component.html',
   styleUrls: ['./link-document-to-zaak-configuration.component.scss'],

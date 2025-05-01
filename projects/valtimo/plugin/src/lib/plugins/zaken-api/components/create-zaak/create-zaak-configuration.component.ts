@@ -38,7 +38,6 @@ import {ExtraPropertiesOptions, ExtraProperties} from '../../models/create-zaak-
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-create-zaak-configuration',
   templateUrl: './create-zaak-configuration.component.html',
   styleUrls: ['./create-zaak-configuration.component.scss'],

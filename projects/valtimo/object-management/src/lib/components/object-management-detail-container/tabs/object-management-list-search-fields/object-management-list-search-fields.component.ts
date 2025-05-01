@@ -46,7 +46,6 @@ import {ObjectManagementService} from '../../../../services/object-management.se
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-object-management-list-search-fields',
   templateUrl: './object-management-list-search-fields.component.html',
   styleUrls: ['./object-management-list-search-fields.component.scss'],

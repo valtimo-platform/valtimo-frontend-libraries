@@ -28,7 +28,6 @@ import {ObjectManagementService} from '@valtimo/object-management';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-object-detail',
   templateUrl: './object-detail.component.html',
   styleUrls: ['./object-detail.component.scss'],

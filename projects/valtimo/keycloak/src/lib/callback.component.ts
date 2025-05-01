@@ -22,7 +22,6 @@ import {STORAGE_KEYS} from './constants';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-keycloak-callback',
   template: '',
 })

@@ -21,7 +21,6 @@ import {CreateNietNatuurlijkePersoonZaakRolConfig} from '../../models';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-create-niet-natuurlijk-persoon-zaak-rol-configuration',
   templateUrl: './create-niet-natuurlijk-persoon-zaak-rol.component.html',
   styleUrls: ['./create-niet-natuurlijk-persoon-zaak-rol.component.scss'],

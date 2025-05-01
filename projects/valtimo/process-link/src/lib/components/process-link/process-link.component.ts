@@ -27,7 +27,6 @@ import {ModalService} from '@valtimo/components';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-process-link',
   templateUrl: './process-link.component.html',
   styleUrls: ['./process-link.component.scss'],

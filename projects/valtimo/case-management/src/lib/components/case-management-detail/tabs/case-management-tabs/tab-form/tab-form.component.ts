@@ -23,7 +23,6 @@ import {ConfigService} from '@valtimo/config';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-tab-form',
   templateUrl: './tab-form.component.html',
   styleUrls: ['./tab-form.component.scss'],

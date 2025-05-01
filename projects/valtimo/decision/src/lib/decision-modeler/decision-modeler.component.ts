@@ -42,7 +42,6 @@ declare const $: any;
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-decision-modeler',
   templateUrl: './decision-modeler.component.html',
   styleUrls: ['./decision-modeler.component.scss'],

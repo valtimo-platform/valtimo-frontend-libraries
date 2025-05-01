@@ -23,7 +23,6 @@ import {DashboardManagementService} from '../../services/dashboard-management.se
 
 @Component({
   standalone: false,
-
   templateUrl: './dashboard-management.component.html',
   styleUrls: ['./dashboard-management.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

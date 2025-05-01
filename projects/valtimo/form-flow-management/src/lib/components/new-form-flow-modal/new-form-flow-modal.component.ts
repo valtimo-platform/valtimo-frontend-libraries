@@ -21,7 +21,6 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-new-form-flow-modal',
   templateUrl: './new-form-flow-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

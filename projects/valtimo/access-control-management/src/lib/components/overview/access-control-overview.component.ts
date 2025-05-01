@@ -23,7 +23,6 @@ import {AccessControlService} from '../../services/access-control.service';
 
 @Component({
   standalone: false,
-
   templateUrl: './access-control-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

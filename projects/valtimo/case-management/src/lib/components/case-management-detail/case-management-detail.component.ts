@@ -34,7 +34,6 @@ import {getCaseManagementRouteParams} from '../../utils';
 
 @Component({
   standalone: false,
-
   templateUrl: './case-management-detail.component.html',
   styleUrls: ['./case-management-detail.component.scss'],
   providers: [CaseDetailService],

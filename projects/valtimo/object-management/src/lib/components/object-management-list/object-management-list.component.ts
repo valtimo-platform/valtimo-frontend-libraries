@@ -25,7 +25,6 @@ import {Router} from '@angular/router';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-object-management-list',
   templateUrl: './object-management-list.component.html',
   styleUrls: ['./object-management-list.component.scss'],

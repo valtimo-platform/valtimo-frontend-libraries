@@ -9,7 +9,6 @@ import {MultiInputValues} from '@valtimo/components';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-form-display-configuration',
   templateUrl: './form-display-configuration.component.html',
 })

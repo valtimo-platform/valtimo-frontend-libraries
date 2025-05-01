@@ -40,7 +40,6 @@ import {PluginTranslatePipe} from '../../../../pipes';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-create-zaak-besluit-configuration',
   templateUrl: './create-zaak-besluit-configuration.component.html',
   styleUrls: ['./create-zaak-besluit-configuration.component.scss'],

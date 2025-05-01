@@ -23,7 +23,6 @@ import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-objecttypen-api-configuration',
   templateUrl: './objecttypen-api-configuration.component.html',
   styleUrls: ['./objecttypen-api-configuration.component.scss'],

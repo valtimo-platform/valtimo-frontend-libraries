@@ -20,7 +20,6 @@ import {TabService} from '../../../../../services';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-case-management-edit-tab-modal',
   templateUrl: './case-management-edit-tab-modal.component.html',
 })

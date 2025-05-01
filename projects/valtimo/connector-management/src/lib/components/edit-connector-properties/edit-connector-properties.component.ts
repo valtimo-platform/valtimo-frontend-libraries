@@ -30,7 +30,6 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
  */
 @Component({
   standalone: false,
-
   selector: 'valtimo-edit-connector-properties',
   templateUrl: './edit-connector-properties.component.html',
   styleUrls: ['./edit-connector-properties.component.scss'],

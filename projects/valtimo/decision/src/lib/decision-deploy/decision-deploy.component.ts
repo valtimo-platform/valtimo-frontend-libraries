@@ -21,7 +21,6 @@ import {DecisionStateService} from '../services';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-decision-deploy',
   templateUrl: './decision-deploy.component.html',
   styleUrls: ['./decision-deploy.component.scss'],

@@ -38,7 +38,6 @@ import {WidgetTranslationService} from '../../../../services';
 
 @Component({
   standalone: false,
-
   templateUrl: './task-count-configuration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./task-count-configuration.component.scss'],

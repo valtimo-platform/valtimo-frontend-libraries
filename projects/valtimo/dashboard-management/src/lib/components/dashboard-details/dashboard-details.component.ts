@@ -34,7 +34,6 @@ import {DashboardManagementService} from '../../services/dashboard-management.se
 
 @Component({
   standalone: false,
-
   templateUrl: './dashboard-details.component.html',
   styleUrls: ['./dashboard-details.component.scss'],
   encapsulation: ViewEncapsulation.None,

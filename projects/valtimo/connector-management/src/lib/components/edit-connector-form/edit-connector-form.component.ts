@@ -22,7 +22,6 @@ import {ConnectorProperties} from '@valtimo/config';
  */
 @Component({
   standalone: false,
-
   selector: 'valtimo-edit-connector-form',
   templateUrl: './edit-connector-form.component.html',
   styleUrls: ['./edit-connector-form.component.scss'],

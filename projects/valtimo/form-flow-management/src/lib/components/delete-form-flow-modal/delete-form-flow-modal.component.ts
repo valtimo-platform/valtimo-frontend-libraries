@@ -19,7 +19,6 @@ import {Observable} from 'rxjs';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-delete-form-flow-modal',
   templateUrl: './delete-form-flow-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

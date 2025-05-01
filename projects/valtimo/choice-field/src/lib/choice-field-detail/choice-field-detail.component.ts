@@ -23,7 +23,6 @@ import {first} from 'rxjs/operators';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-choice-field-detail',
   templateUrl: './choice-field-detail.component.html',
   styleUrls: ['./choice-field-detail.component.css'],

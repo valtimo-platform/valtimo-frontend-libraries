@@ -19,7 +19,6 @@ import {BigNumberData, BigNumberDisplayTypeProperties} from '../../models';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-big-number-display',
   templateUrl: './big-number-display.component.html',
   styleUrls: ['./big-number-display.component.scss'],

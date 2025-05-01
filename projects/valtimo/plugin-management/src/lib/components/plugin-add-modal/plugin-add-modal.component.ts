@@ -23,7 +23,6 @@ import {NGXLogger} from 'ngx-logger';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-plugin-add-modal',
   templateUrl: './plugin-add-modal.component.html',
   styleUrls: ['./plugin-add-modal.component.scss'],

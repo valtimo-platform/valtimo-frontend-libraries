@@ -34,7 +34,6 @@ import {Router} from '@angular/router';
  */
 @Component({
   standalone: false,
-
   selector: 'valtimo-customer-list',
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],

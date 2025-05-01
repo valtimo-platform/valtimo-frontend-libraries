@@ -27,7 +27,6 @@ import {ConnectorManagementStateService} from '../../services/connector-manageme
  */
 @Component({
   standalone: false,
-
   selector: 'valtimo-add-connector-configure',
   templateUrl: './add-connector-configure.component.html',
   styleUrls: ['./add-connector-configure.component.scss'],

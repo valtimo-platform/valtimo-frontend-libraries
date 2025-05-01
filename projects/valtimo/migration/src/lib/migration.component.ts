@@ -22,7 +22,6 @@ import {AlertService} from '@valtimo/components';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-migration',
   templateUrl: './migration.component.html',
   styleUrls: ['./migration.component.scss'],

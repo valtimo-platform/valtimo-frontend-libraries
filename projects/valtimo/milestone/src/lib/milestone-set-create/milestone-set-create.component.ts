@@ -22,7 +22,6 @@ import {Router} from '@angular/router';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-milestone-set-create',
   templateUrl: './milestone-set-create.component.html',
   styleUrls: ['./milestone-set-create.component.scss'],

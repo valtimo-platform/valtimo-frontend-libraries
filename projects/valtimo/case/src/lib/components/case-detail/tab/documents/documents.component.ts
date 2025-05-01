@@ -37,7 +37,6 @@ import {CaseDetailTabNotFoundComponent} from '../not-found/not-found.component';
 
 @Component({
   standalone: false,
-
   templateUrl: './documents.component.html',
 })
 export class CaseDetailTabDocumentsComponent implements OnInit, AfterViewInit, OnDestroy {

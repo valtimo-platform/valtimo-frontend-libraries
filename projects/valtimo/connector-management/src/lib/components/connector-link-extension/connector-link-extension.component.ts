@@ -31,7 +31,6 @@ import {ConnectorInstance} from '@valtimo/config';
  */
 @Component({
   standalone: false,
-
   selector: 'valtimo-connector-link-extension',
   templateUrl: './connector-link-extension.component.html',
   styleUrls: ['./connector-link-extension.component.scss'],

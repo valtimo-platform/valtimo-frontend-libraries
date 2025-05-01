@@ -27,7 +27,6 @@ import {TableColumn} from '@valtimo/components';
  */
 @Component({
   standalone: false,
-
   selector: 'valtimo-cases-list',
   templateUrl: './cases-list.component.html',
   styleUrls: ['./cases-list.component.scss'],

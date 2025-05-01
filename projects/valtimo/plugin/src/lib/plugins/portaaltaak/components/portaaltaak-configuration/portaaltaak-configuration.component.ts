@@ -26,7 +26,6 @@ import {ObjectService} from '../../services';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-portaaltaak-configuration',
   templateUrl: './portaaltaak-configuration.component.html',
   styleUrls: ['./portaaltaak-configuration.component.scss'],

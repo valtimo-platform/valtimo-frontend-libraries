@@ -53,7 +53,6 @@ import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-widget-modal',
   templateUrl: './widget-modal.component.html',
   styleUrls: ['./widget-modal.component.scss'],

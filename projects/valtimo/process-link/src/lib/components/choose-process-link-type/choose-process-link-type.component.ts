@@ -22,7 +22,6 @@ import {map, Subscription} from 'rxjs';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-choose-process-link-type',
   templateUrl: './choose-process-link-type.component.html',
   styleUrls: ['./choose-process-link-type.component.scss'],

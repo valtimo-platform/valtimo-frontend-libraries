@@ -22,7 +22,6 @@ import {BehaviorSubject, filter, map, Observable} from 'rxjs';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-bar-chart-display',
   templateUrl: './bar-chart-display.component.html',
   styleUrls: ['./bar-chart-display.component.scss'],

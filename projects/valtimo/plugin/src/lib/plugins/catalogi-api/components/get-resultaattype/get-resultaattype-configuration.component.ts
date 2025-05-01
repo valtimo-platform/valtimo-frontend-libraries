@@ -21,7 +21,6 @@ import {GetResultaattypeConfig} from '../../models';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-set-resultaattype-configuration',
   templateUrl: './get-resultaattype-configuration.component.html',
   styleUrls: ['./get-resultaattype-configuration.component.scss'],

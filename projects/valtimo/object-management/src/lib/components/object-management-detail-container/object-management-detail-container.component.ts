@@ -27,7 +27,6 @@ import {tap} from 'rxjs/operators';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-object-management-detail-container',
   templateUrl: './object-management-detail-container.component.html',
   styleUrls: ['./object-management-detail-container.component.css'],

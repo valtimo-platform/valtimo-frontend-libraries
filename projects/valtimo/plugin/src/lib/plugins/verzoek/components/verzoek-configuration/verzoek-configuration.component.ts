@@ -53,7 +53,6 @@ import {DocumentService} from '@valtimo/document';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-verzoek-configuration',
   templateUrl: './verzoek-configuration.component.html',
   styleUrls: ['./verzoek-configuration.component.scss'],

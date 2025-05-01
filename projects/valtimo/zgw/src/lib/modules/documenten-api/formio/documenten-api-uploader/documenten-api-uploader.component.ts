@@ -43,7 +43,6 @@ import {DocumentenApiVersionService} from '../../services';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-documenten-api-formio-uploader',
   templateUrl: './documenten-api-uploader.component.html',
   styleUrls: ['./documenten-api-uploader.component.scss'],

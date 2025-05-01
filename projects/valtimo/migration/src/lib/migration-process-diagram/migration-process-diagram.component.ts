@@ -31,7 +31,6 @@ import {from, take} from 'rxjs';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-migration-process-diagram',
   templateUrl: './migration-process-diagram.component.html',
   styleUrls: ['./migration-process-diagram.component.scss'],

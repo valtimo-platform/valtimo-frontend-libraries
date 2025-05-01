@@ -21,7 +21,6 @@ import {DeleteObjectConfig} from '../../models';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-delete-object',
   templateUrl: './delete-object.component.html',
   styleUrls: ['./delete-object.component.scss'],

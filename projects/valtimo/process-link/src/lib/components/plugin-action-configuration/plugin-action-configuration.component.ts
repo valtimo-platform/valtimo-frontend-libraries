@@ -34,7 +34,6 @@ import {
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-plugin-action-configuration',
   templateUrl: './plugin-action-configuration.component.html',
   styleUrls: ['./plugin-action-configuration.component.scss'],

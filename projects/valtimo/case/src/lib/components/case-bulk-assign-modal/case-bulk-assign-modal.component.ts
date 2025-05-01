@@ -29,7 +29,6 @@ import {CaseBulkAssignService} from '../../services';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-case-bulk-assign-modal',
   templateUrl: './case-bulk-assign-modal.component.html',
   styleUrls: ['./case-bulk-assign-modal.component.scss'],

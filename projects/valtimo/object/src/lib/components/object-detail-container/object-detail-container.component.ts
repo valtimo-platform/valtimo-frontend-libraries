@@ -25,7 +25,6 @@ import {TabService} from '../../services/tab.service';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-object-detail-container',
   templateUrl: './object-detail-container.component.html',
   styleUrls: ['./object-detail-container.component.scss'],

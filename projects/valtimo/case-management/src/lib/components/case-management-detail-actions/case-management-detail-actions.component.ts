@@ -40,7 +40,6 @@ import {getCaseManagementRouteParams} from '../../utils';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-case-management-detail-actions',
   templateUrl: './case-management-detail-actions.component.html',
   styleUrls: ['./case-management-detail-actions.component.scss'],

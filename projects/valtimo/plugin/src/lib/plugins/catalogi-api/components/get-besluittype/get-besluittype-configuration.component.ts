@@ -21,7 +21,6 @@ import {GetBesluittypeConfig} from '../../models';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-set-besluittype-configuration',
   templateUrl: './get-besluittype-configuration.component.html',
   styleUrls: ['./get-besluittype-configuration.component.scss'],

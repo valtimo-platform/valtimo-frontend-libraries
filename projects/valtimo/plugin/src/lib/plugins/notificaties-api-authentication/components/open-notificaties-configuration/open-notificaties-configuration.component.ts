@@ -21,7 +21,6 @@ import {OpenNotificatiesConfig} from '../../models';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-open-notificaties-configuration',
   templateUrl: './open-notificaties-configuration.component.html',
   styleUrls: ['./open-notificaties-configuration.component.scss'],

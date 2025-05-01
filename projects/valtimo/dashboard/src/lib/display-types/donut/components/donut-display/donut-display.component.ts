@@ -22,7 +22,6 @@ import {BehaviorSubject, filter, map, Observable} from 'rxjs';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-donut-display',
   templateUrl: './donut-display.component.html',
   styleUrls: ['./donut-display.component.scss'],

@@ -21,7 +21,6 @@ import {FunctionConfigurationComponent} from '../../../../models';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-get-eigenschap-configuration',
   templateUrl: './get-eigenschap-configuration.component.html',
   styleUrls: ['./get-eigenschap-configuration.component.scss'],

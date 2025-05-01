@@ -28,7 +28,6 @@ import {Pagination, TableColumn} from '@valtimo/components';
  */
 @Component({
   standalone: false,
-
   selector: 'valtimo-connector-management',
   templateUrl: './connector-management.component.html',
   styleUrls: ['./connector-management.component.scss'],

@@ -31,7 +31,6 @@ import {ZGW_CASE_CONFIGURATION_EXTENSIONS_TOKEN} from '@valtimo/config';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-case-management-general',
   templateUrl: './case-management-general.component.html',
   styleUrl: './case-management-general.component.scss',

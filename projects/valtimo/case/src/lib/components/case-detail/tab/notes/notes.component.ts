@@ -34,7 +34,6 @@ import {NotesService} from '../../../../services/notes.service';
 
 @Component({
   standalone: false,
-
   templateUrl: './notes.component.html',
   styleUrls: ['./notes.component.scss'],
 })

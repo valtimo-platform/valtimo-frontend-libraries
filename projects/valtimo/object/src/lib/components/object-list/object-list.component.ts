@@ -39,7 +39,6 @@ import {SearchField, SearchFieldValues, SearchFilter, SearchFilterRange} from '@
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-object-list',
   templateUrl: './object-list.component.html',
   styleUrls: ['./object-list.component.scss'],

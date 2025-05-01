@@ -21,7 +21,6 @@ import {TabImpl} from '../../models';
 
 @Pipe({
   standalone: false,
-
   name: 'tabTranslate',
 })
 export class TabTranslatePipe implements PipeTransform {

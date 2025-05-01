@@ -38,7 +38,6 @@ import {getCaseManagementRouteParams} from '../../../../utils';
 
 @Component({
   standalone: false,
-
   templateUrl: './case-management-document-definition.component.html',
   styleUrls: ['./case-management-document-definition.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

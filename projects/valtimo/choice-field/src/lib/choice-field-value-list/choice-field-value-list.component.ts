@@ -21,7 +21,6 @@ import {ChoiceFieldService, ChoiceField, ChoiceFieldValue} from '@valtimo/compon
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-choice-field-value-list',
   templateUrl: './choice-field-value-list.component.html',
   styleUrls: ['./choice-field-value-list.component.css'],

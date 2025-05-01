@@ -21,7 +21,6 @@ import ExactGetRequestConfiguration from './exact-get-request-configuration';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-exact-get-request-configuration',
   templateUrl: './exact-get-request-configuration.component.html',
 })

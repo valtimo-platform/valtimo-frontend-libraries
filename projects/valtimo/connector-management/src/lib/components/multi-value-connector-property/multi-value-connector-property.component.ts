@@ -24,7 +24,6 @@ import {map, take} from 'rxjs/operators';
  */
 @Component({
   standalone: false,
-
   selector: 'valtimo-multi-value-connector-property',
   templateUrl: './multi-value-connector-property.component.html',
   styleUrls: ['./multi-value-connector-property.component.scss'],

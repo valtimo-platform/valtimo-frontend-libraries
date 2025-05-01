@@ -51,7 +51,6 @@ import {Add16, TrashCan16} from '@carbon/icons';
 
 @Component({
   standalone: false,
-
   templateUrl: './case-counts-configuration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./case-counts-configuration.component.scss'],

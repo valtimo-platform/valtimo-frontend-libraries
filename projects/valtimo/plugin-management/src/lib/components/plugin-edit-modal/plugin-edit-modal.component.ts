@@ -27,7 +27,6 @@ import {NGXLogger} from 'ngx-logger';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-plugin-edit-modal',
   templateUrl: './plugin-edit-modal.component.html',
   styleUrls: ['./plugin-edit-modal.component.scss'],

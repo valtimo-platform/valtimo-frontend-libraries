@@ -23,7 +23,6 @@ moment.locale(localStorage.getItem('langKey'));
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-password',
   templateUrl: './password.component.html',
   styleUrls: ['./password.component.css'],

@@ -21,7 +21,6 @@ import {GetStatustypeConfig} from '../../models';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-set-statustype-configuration',
   templateUrl: './get-statustype-configuration.component.html',
   styleUrls: ['./get-statustype-configuration.component.scss'],

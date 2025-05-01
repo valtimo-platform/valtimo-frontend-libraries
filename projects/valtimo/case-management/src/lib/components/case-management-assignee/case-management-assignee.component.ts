@@ -22,7 +22,6 @@ import {tap} from 'rxjs/operators';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-case-management-assignee',
   templateUrl: './case-management-assignee.component.html',
   styleUrls: ['./case-management-assignee.component.scss'],

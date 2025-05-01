@@ -30,7 +30,6 @@ import {MeterDisplayTypeProperties} from '../../models';
 
 @Component({
   standalone: false,
-
   templateUrl: './meter-configuration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

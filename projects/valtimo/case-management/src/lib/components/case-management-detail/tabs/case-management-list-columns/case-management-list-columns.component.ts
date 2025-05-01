@@ -51,7 +51,6 @@ import {getCaseManagementRouteParams} from '../../../../utils';
 
 @Component({
   standalone: false,
-
   templateUrl: './case-management-list-columns.component.html',
   styleUrls: ['./case-management-list-columns.component.scss'],
 })

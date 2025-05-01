@@ -24,7 +24,6 @@ moment.locale(localStorage.getItem('langKey'));
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],

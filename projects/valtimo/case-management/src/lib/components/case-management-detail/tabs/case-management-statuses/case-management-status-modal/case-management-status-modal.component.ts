@@ -50,7 +50,6 @@ import {TagColor} from '@valtimo/config';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-case-management-status-modal',
   templateUrl: './case-management-status-modal.component.html',
   styleUrls: ['./case-management-status-modal.component.scss'],

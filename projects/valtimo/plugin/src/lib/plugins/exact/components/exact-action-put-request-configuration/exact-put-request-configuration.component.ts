@@ -21,7 +21,6 @@ import ExactPutRequestConfiguration from './exact-put-request-configuration';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-exact-put-request-configuration',
   templateUrl: './exact-put-request-configuration.component.html',
 })

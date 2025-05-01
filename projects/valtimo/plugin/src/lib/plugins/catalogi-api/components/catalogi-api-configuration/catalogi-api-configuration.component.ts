@@ -23,7 +23,6 @@ import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-catalogi-api-configuration',
   templateUrl: './catalogi-api-configuration.component.html',
   styleUrls: ['./catalogi-api-configuration.component.scss'],

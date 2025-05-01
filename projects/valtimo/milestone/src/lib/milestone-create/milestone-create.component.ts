@@ -24,7 +24,6 @@ import {ProcessService, ProcessDefinition} from '@valtimo/process';
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-milestone-create',
   templateUrl: './milestone-create.component.html',
   styleUrls: ['./milestone-create.component.scss'],

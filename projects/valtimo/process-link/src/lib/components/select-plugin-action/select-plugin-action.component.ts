@@ -27,7 +27,6 @@ import {
 
 @Component({
   standalone: false,
-
   selector: 'valtimo-select-plugin-action',
   templateUrl: './select-plugin-action.component.html',
   styleUrls: ['./select-plugin-action.component.scss'],

@@ -46,7 +46,6 @@ import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   standalone: false,
-
   templateUrl: './form-flow-editor.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./form-flow-editor.component.scss'],

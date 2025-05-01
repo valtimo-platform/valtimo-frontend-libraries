@@ -30,7 +30,6 @@ import {ObjectApiSyncService} from '../../services/object-api-sync/object-api-sy
  */
 @Component({
   standalone: false,
-
   selector: 'valtimo-connector-link-extension-modal',
   templateUrl: './connector-link-extension-modal.component.html',
   styleUrls: ['./connector-link-extension-modal.component.scss'],
