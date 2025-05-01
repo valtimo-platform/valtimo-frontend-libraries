@@ -30,6 +30,7 @@ import {catchError, Observable, of, switchMap} from 'rxjs';
 import {
   AssignHandlerToDocumentResult,
   AuditRecord,
+  CaseDefinition,
   CaseListColumn,
   CaseSettings,
   CreateDocumentDefinitionResponse,
@@ -326,6 +327,13 @@ export class DocumentService {
     return this.http.get<ProcessDefinitionCaseDefinition[]>(
       `${this.valtimoEndpointUri}v1/process-document/definition/process/${processDefinitionKey}`
     );
+  }
+
+  // Case definition calls
+  public getCaseDefinitions(params: any): Observable<CaseDefinition[]> {
+    return this.http.get<CaseDefinition[]>(`${this.valtimoEndpointUri}v1/case-definition`, {
+      params,
+    });
   }
 
   public findProcessDocumentDefinitionsByVersion(

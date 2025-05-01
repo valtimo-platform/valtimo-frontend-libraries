@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {CamundaBooleanFormfieldComponent} from './camunda-boolean-formfield.component';
 import {
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import {FormField} from '../formfield.model';
@@ -33,13 +33,17 @@ describe('CamundaBooleanFormfieldComponent', () => {
 
   let formGroup: UntypedFormGroup;
 
-  @Component({selector: 'valtimo-camunda-formfield-validation', template: ''})
+  @Component({
+    selector: 'valtimo-camunda-formfield-validation',
+    template: '',
+    standalone: false,
+  })
   class CamundaFormFieldValidationComponent {
     @Input() formField: FormField;
     @Input() formGroup: UntypedFormGroup;
   }
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [CamundaFormFieldValidationComponent, CamundaBooleanFormfieldComponent],
       imports: [ReactiveFormsModule, FormsModule],

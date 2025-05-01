@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export class CaseDeploymentData {
+export class CaseDefinition {
   caseDefinitionKey: string;
   caseDefinitionVersionTag: string;
   name: string;
@@ -38,4 +38,12 @@ export class ReleaseInformationData {
   createdBy: string;
   createdDate: Date;
   description: string;
+}
+
+export class DraftVersion {
+  name: string;
+  caseDefinitionKey: string;
+  caseDefinitionVersion: string;
+  description: string;
+  basedOnCaseDefinitionVersion?: string;
 }
