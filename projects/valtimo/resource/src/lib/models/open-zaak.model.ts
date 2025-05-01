@@ -62,6 +62,15 @@ export interface CreateZaakTypeLinkRequest {
   rsin?: string;
 }
 
+export interface CreateZaakTypeLinkRequest2 {
+  caseDefinitionKey: string;
+  caseVersionTag: string;
+  zaakTypeUrl?: string;
+  createWithDossier: boolean;
+  zakenApiPluginConfigurationId?: string;
+  rsin?: string;
+}
+
 export interface CreateInformatieObjectTypeLinkRequest {
   documentDefinitionName: string;
   zaakType: string;

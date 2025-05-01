@@ -21,6 +21,7 @@ import {Observable} from 'rxjs';
 import {
   CreateInformatieObjectTypeLinkRequest,
   CreateZaakTypeLinkRequest,
+  CreateZaakTypeLinkRequest2,
   DocumentenApiFileReference,
   InformatieObjectType,
   InformatieObjectTypeLink,
@@ -79,6 +80,12 @@ export class OpenZaakService {
     );
   }
 
+  getZaakTypeLinkV2(caseDefinitionKey: string, caseVersionTag: string): Observable<ZaakTypeLink> {
+    return this.http.get<ZaakTypeLink>(
+      `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/zaak-type-link`
+    );
+  }
+
   /**
    * @deprecated This method will be removed in the future.
    */
@@ -88,9 +95,9 @@ export class OpenZaakService {
     );
   }
 
-  createZaakTypeLink(request: CreateZaakTypeLinkRequest): Observable<any> {
+  createZaakTypeLink(request: CreateZaakTypeLinkRequest2): Observable<any> {
     return this.http.post<any>(
-      `${this.valtimoApiConfig.endpointUri}management/v1/zaak-type-link`,
+      `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${request.caseDefinitionKey}/version/${request.caseVersionTag}/zaak-type-link`,
       request
     );
   }
@@ -105,9 +112,9 @@ export class OpenZaakService {
     );
   }
 
-  deleteZaakTypeLink(documentDefinitionName: string): Observable<any> {
+  deleteZaakTypeLink(caseDefinitionKey: string, caseVersionTag: string): Observable<any> {
     return this.http.delete<any>(
-      `${this.valtimoApiConfig.endpointUri}management/v1/zaak-type-link/${documentDefinitionName}`
+      `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/zaak-type-link`
     );
   }
 

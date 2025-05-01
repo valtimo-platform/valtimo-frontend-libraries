@@ -37,10 +37,10 @@ import {
 } from '../../modules';
 import {CaseManagementZgwService} from '../../services';
 import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/case-management';
+import {CaseManagementZgwGeneralComponent} from '../case-management-zgw-general/case-management-zgw-general.component';
 
 @Component({
   templateUrl: './case-management-zgw.component.html',
-  styleUrl: './case-management-zgw.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule, TabsModule, TranslateModule],
@@ -68,6 +68,12 @@ export class CaseManagementZgwComponent implements AfterViewInit, OnDestroy {
     filter(([viewInitialized]) => viewInitialized),
     map(([_, currentTab, supportedDocumentenApiFeatures]) =>
       [
+        {
+          class: 'no-padding-left-right no-padding-top-bottom',
+          headingTranslationKey: 'caseManagement.tabs.general',
+          tab: ZgwTabEnum.GENERAL,
+          component: CaseManagementZgwGeneralComponent,
+        },
         {
           class: 'no-padding-left-right no-padding-top-bottom',
           headingTranslationKey: 'zgw.tabs.documentColumns',

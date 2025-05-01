@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
-::ng-deep.cds--tab-content {
-  margin-top: 0 !important;
-}
+import {CommonModule} from '@angular/common';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import { DocumentObjectenApiSyncComponent, ZakenApiZaaktypeLinkComponent } from '../../modules';
+
+@Component({
+  templateUrl: './case-management-zgw-general.component.html',
+  styleUrl: './case-management-zgw-general.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CommonModule, ZakenApiZaaktypeLinkComponent, DocumentObjectenApiSyncComponent],
+})
+export class CaseManagementZgwGeneralComponent {}
