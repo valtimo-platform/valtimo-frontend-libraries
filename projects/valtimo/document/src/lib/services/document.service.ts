@@ -38,6 +38,7 @@ import {
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
   DocumentDefinitions,
+  DocumentDefinitionV2,
   DocumentDefinitionVersionsResult,
   DocumentResult,
   Documents,
@@ -623,8 +624,8 @@ export class DocumentService {
   public getDocumentDefinitionByVersion(
     caseDefinitionKey: string,
     caseDefinitionVersionTag: string
-  ): Observable<DocumentDefinition> {
-    return this.http.get<DocumentDefinition>(
+  ): Observable<DocumentDefinitionV2> {
+    return this.http.get<DocumentDefinitionV2>(
       `${this.valtimoEndpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/document-definition`
     );
   }

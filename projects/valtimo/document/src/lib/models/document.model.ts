@@ -63,9 +63,21 @@ interface DocumentDefinition {
   readOnly: boolean;
 }
 
+interface DocumentDefinitionV2 {
+  id: DefinitionIdV2;
+  schema: any;
+  createdOn: string;
+  readOnly: boolean;
+}
+
 interface DefinitionId {
   name: string;
   version: number;
+}
+
+interface DefinitionIdV2 {
+  name: string;
+  caseDefinitionId: CaseDefinitionId;
 }
 
 interface CreateDocumentDefinitionResponse {
@@ -419,6 +431,7 @@ export {
   CaseSettings,
   CreateDocumentDefinitionResponse,
   DefinitionId,
+  DefinitionIdV2,
   DisplayType,
   DisplayTypeParameters,
   Document,
@@ -426,6 +439,7 @@ export {
   DocumentDefinitionCreateRequest,
   DocumentDefinitionId,
   DocumentDefinitions,
+  DocumentDefinitionV2,
   DocumentDefinitionVersionsResult,
   DocumentResult,
   DocumentRole,
@@ -433,6 +447,7 @@ export {
   Documents,
   DocumentSendMessageRequest,
   DocumentType,
+  ExternalStartFormConfiguration,
   LoadedValue,
   ModifyDocumentAndCompleteTaskRequest,
   ModifyDocumentAndCompleteTaskRequestImpl,
@@ -464,5 +479,4 @@ export {
   TemplatePayload,
   TemplateResponse,
   UndeployDocumentDefinitionResult,
-  ExternalStartFormConfiguration,
 };

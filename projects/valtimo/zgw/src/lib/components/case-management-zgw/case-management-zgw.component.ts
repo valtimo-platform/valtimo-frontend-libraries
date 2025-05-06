@@ -41,6 +41,7 @@ import {CaseManagementZgwGeneralComponent} from '../case-management-zgw-general/
 
 @Component({
   templateUrl: './case-management-zgw.component.html',
+  styleUrl: './case-management-zgw.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule, TabsModule, TranslateModule],
@@ -100,6 +101,8 @@ export class CaseManagementZgwComponent implements AfterViewInit, OnDestroy {
     ),
     tap(zgwTabs => {
       const activeTab = zgwTabs.length > 1 ? zgwTabs.find(tab => tab.active) : zgwTabs[0];
+      if (!activeTab) return;
+
       this._zgwTabContent.clear();
       this._zgwTabContent.createComponent(activeTab.component);
       this.cdr.detectChanges();

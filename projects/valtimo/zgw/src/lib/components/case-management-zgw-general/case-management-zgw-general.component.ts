@@ -16,7 +16,7 @@
 
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import { DocumentObjectenApiSyncComponent, ZakenApiZaaktypeLinkComponent } from '../../modules';
+import {DocumentObjectenApiSyncComponent, ZakenApiZaaktypeLinkComponent} from '../../modules';
 
 @Component({
   templateUrl: './case-management-zgw-general.component.html',

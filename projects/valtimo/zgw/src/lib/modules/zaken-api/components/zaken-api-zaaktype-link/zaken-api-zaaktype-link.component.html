@@ -14,10 +14,8 @@
   ~ limitations under the License.
   -->
 
-<div class="input-group mt-4 mb-2 align-items-center">
-  <div>
-    <h2>{{ 'openZaak.links' | translate }}</h2>
-  </div>
+<div class="input-group mb-2 align-items-center">
+  <h2>{{ 'openZaak.links' | translate }}</h2>
 </div>
 
 <ng-container
@@ -79,9 +77,11 @@
 </ng-container>
 
 <ng-template #addSync>
-  <div class="text-right mt-5">
-    <button class="btn btn-primary" (click)="openModal(null)">
-      <i class="icon mdi mdi-plus mr-1"></i>{{ 'openZaak.linkZaakType' | translate }}
+  <div class="text-right">
+    <button cdsButton="primary" (click)="openModal(null)">
+      {{ 'openZaak.linkZaakType' | translate }}
+
+      <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
     </button>
   </div>
 </ng-template>
