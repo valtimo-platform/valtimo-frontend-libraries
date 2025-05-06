@@ -57,25 +57,13 @@ interface DocumentDefinitions {
 }
 
 interface DocumentDefinition {
-  id: DefinitionId;
+  id: DocumentDefinitionId;
   schema: any;
   createdOn: string;
   readOnly: boolean;
 }
 
-interface DocumentDefinitionV2 {
-  id: DefinitionIdV2;
-  schema: any;
-  createdOn: string;
-  readOnly: boolean;
-}
-
-interface DefinitionId {
-  name: string;
-  version: number;
-}
-
-interface DefinitionIdV2 {
+interface DocumentDefinitionId {
   name: string;
   caseDefinitionId: CaseDefinitionId;
 }
@@ -132,14 +120,9 @@ interface Document {
   caseTags?: CaseTag[];
 }
 
-interface DocumentDefinitionId {
-  name: string;
-  version: number;
-}
-
 interface ProcessDocumentDefinitionId {
   processDefinitionKey: string;
-  documentDefinitionId: DefinitionId;
+  documentDefinitionId: DocumentDefinitionId;
 }
 
 interface ProcessDocumentDefinition {
@@ -430,16 +413,13 @@ export {
   CaseListColumnView,
   CaseSettings,
   CreateDocumentDefinitionResponse,
-  DefinitionId,
-  DefinitionIdV2,
+  DocumentDefinitionId,
   DisplayType,
   DisplayTypeParameters,
   Document,
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
-  DocumentDefinitionId,
   DocumentDefinitions,
-  DocumentDefinitionV2,
   DocumentDefinitionVersionsResult,
   DocumentResult,
   DocumentRole,

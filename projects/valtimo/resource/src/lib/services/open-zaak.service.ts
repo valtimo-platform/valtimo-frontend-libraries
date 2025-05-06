@@ -74,24 +74,9 @@ export class OpenZaakService {
     );
   }
 
-  getZaakTypeLink(documentDefinitionName: string): Observable<ZaakTypeLink> {
-    return this.http.get<ZaakTypeLink>(
-      `${this.valtimoApiConfig.endpointUri}management/v1/zaak-type-link/${documentDefinitionName}`
-    );
-  }
-
-  getZaakTypeLinkV2(caseDefinitionKey: string, caseVersionTag: string): Observable<ZaakTypeLink> {
+  getZaakTypeLink(caseDefinitionKey: string, caseVersionTag: string): Observable<ZaakTypeLink> {
     return this.http.get<ZaakTypeLink>(
       `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/zaak-type-link`
-    );
-  }
-
-  /**
-   * @deprecated This method will be removed in the future.
-   */
-  getInformatieObjectTypeLink(id: string): Observable<InformatieObjectTypeLink> {
-    return this.http.get<InformatieObjectTypeLink>(
-      `${this.valtimoApiConfig.endpointUri}v1/openzaak/informatie-object-type-link/${id}`
     );
   }
 
@@ -101,29 +86,9 @@ export class OpenZaakService {
       request
     );
   }
-
-  /**
-   * @deprecated This method will be removed in the future.
-   */
-  createInformatieObjectTypeLink(request: CreateInformatieObjectTypeLinkRequest): Observable<any> {
-    return this.http.post<any>(
-      `${this.valtimoApiConfig.endpointUri}v1/openzaak/informatie-object-type-link`,
-      request
-    );
-  }
-
   deleteZaakTypeLink(caseDefinitionKey: string, caseVersionTag: string): Observable<any> {
     return this.http.delete<any>(
       `${this.valtimoApiConfig.endpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/zaak-type-link`
-    );
-  }
-
-  /**
-   * @deprecated This method will be removed in the future.
-   */
-  deleteInformatieObjectTypeLink(id: string): Observable<any> {
-    return this.http.delete<any>(
-      `${this.valtimoApiConfig.endpointUri}v1/openzaak/informatie-object-type-link/${id}`
     );
   }
 

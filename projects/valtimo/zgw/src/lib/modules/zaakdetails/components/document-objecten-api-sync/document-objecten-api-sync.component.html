@@ -35,11 +35,15 @@
           </div>
 
           <div class="controls">
-            <button cdsButton="tertiary" [iconOnly]="true" (click)="showModal()">
+            <button cdsButton="tertiary" (click)="showModal()">
+              {{ 'interface.edit' | translate }}
+
               <svg class="cds--btn__icon" cdsIcon="edit" size="16"></svg>
             </button>
 
-            <button cdsButton="danger" [iconOnly]="true" (click)="remove()">
+            <button cdsButton="danger" (click)="remove()">
+              {{ 'interface.delete' | translate }}
+
               <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
             </button>
           </div>

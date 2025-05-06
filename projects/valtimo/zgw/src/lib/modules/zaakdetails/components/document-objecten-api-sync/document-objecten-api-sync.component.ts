@@ -36,7 +36,7 @@ import {
   SpinnerModule,
   ValtimoCdsModalDirectiveModule,
 } from '@valtimo/components';
-import {DocumentDefinitionV2, DocumentService} from '@valtimo/document';
+import {DocumentDefinition, DocumentService} from '@valtimo/document';
 import {
   ButtonModule,
   CheckboxModule,
@@ -72,10 +72,7 @@ import {DocumentObjectenApiSyncService} from '../../services';
 })
 export class DocumentObjectenApiSyncComponent implements OnInit {
   public readonly loading$ = new BehaviorSubject<boolean>(true);
-  private readonly documentDefinitionName$: Observable<string> = this.route.params.pipe(
-    map(params => params.name || '')
-  );
-  private readonly documentDefinition$: Observable<DocumentDefinitionV2> =
+  private readonly documentDefinition$: Observable<DocumentDefinition> =
     getCaseManagementRouteParams(this.route).pipe(
       switchMap(params =>
         this.documentService.getDocumentDefinitionByVersion(
@@ -130,7 +127,7 @@ export class DocumentObjectenApiSyncComponent implements OnInit {
   public loadDocumentenObjectenApiSync(): void {
     this.documentDefinition$
       .pipe(
-        switchMap((documentDefinition: DocumentDefinitionV2) =>
+        switchMap((documentDefinition: DocumentDefinition) =>
           this.documentObjectenApiSyncService.getDocumentObjectenApiSync(
             documentDefinition.id.caseDefinitionId.key,
             documentDefinition.id.caseDefinitionId.versionTag

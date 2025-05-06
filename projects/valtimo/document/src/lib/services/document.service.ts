@@ -38,7 +38,6 @@ import {
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
   DocumentDefinitions,
-  DocumentDefinitionV2,
   DocumentDefinitionVersionsResult,
   DocumentResult,
   Documents,
@@ -339,7 +338,7 @@ export class DocumentService {
 
   public findProcessDocumentDefinitionsByVersion(
     documentDefinitionName: string,
-    version: number
+    version: string
   ): Observable<ProcessDocumentDefinition[]> {
     return this.http.get<ProcessDocumentDefinition[]>(
       `${this.valtimoEndpointUri}v1/process-document/definition/document/${documentDefinitionName}/version/${version}`
@@ -624,8 +623,8 @@ export class DocumentService {
   public getDocumentDefinitionByVersion(
     caseDefinitionKey: string,
     caseDefinitionVersionTag: string
-  ): Observable<DocumentDefinitionV2> {
-    return this.http.get<DocumentDefinitionV2>(
+  ): Observable<DocumentDefinition> {
+    return this.http.get<DocumentDefinition>(
       `${this.valtimoEndpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/document-definition`
     );
   }

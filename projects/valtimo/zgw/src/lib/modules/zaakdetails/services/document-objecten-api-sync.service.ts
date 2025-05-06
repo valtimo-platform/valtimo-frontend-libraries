@@ -36,21 +36,6 @@ export class DocumentObjectenApiSyncService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  // public getDocumentDefinition(documentDefinitionName: string): Observable<DocumentDefinition> {
-  //   return this.httpClient.get<DocumentDefinition>(
-  //     this.getApiUrl(`/v1/document-definition/${documentDefinitionName}`)
-  //   );
-  // }
-
-  // public getDocumentDefinition2(
-  //   caseDefinitionKey: string,
-  //   caseVersionTag: string
-  // ): Observable<DocumentDefinition> {
-  //   return this.httpClient.get<DocumentDefinition>(
-  //     this.getApiUrl(`/v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/document-definition`)
-  //   );
-  // }
-
   public getObjectManagementConfigurations(): Observable<Array<ObjectManagementConfiguration>> {
     return this.httpClient.get<Array<ObjectManagementConfiguration>>(
       this.getApiUrl(`/management/v1/object/management/configuration`)

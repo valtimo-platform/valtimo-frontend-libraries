@@ -32,11 +32,15 @@
             {{ this.selectedZaakType?.omschrijving || '-' }}
           </div>
           <div class="controls">
-            <button cdsButton="tertiary" iconOnly="true" (click)="openModal(obs.zaakTypeLink)">
+            <button cdsButton="tertiary" (click)="openModal(obs.zaakTypeLink)">
+              {{ 'interface.edit' | translate }}
+
               <svg cdsIcon="edit" size="16" class="cds--btn__icon"></svg>
             </button>
 
-            <button cdsButton="danger" iconOnly="true" (click)="removeZaakTypeLink()">
+            <button cdsButton="danger" (click)="removeZaakTypeLink()">
+              {{ 'interface.delete' | translate }}
+
               <svg cdsIcon="trash-can" size="16" class="cds--btn__icon"></svg>
             </button>
           </div>

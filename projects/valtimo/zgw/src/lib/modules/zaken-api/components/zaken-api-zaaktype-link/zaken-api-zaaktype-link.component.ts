@@ -96,7 +96,7 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
             createWithDossier: false,
           };
 
-          return this.openZaakService.getZaakTypeLinkV2(
+          return this.openZaakService.getZaakTypeLink(
             this._caseDefinitionKey,
             this._caseVersionTag
           );
@@ -118,20 +118,6 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
         this.loadZakenApiPluginConfigurations();
         this.loading$.next(false);
       });
-    // this.openZaakService.getZaakTypeLink(this._caseDefinitionKey).subscribe(zaakTypeLink => {
-    //   if (zaakTypeLink !== null) {
-    //     this.zaakTypeLinkRequest = {
-    //       documentDefinitionName: this._caseDefinitionKey,
-    //       createWithDossier: zaakTypeLink?.createWithDossier,
-    //       rsin: zaakTypeLink?.rsin,
-    //       zakenApiPluginConfigurationId: zaakTypeLink?.zakenApiPluginConfigurationId,
-    //       zaakTypeUrl: zaakTypeLink?.zaakTypeUrl,
-    //     };
-    //   }
-    //   this.zaakTypeLink$.next(zaakTypeLink);
-    //   this.loadZaakTypes();
-    //   this.loadZakenApiPluginConfigurations();
-    // });
   }
 
   public loadZaakTypes(): void {
@@ -176,14 +162,6 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
           this.alertService.error(this.translateService.instant('openZaak.error.configNotFound'));
         } else {
           this.loadInformatieObjectTypeUrls();
-          this.openZaakService
-            .getInformatieObjectTypeLink(this._caseDefinitionKey)
-            .subscribe(informatieObjectTypeLink => {
-              if (informatieObjectTypeLink !== null) {
-                this.selectedInformatieObjectTypeUrl =
-                  informatieObjectTypeLink.informatieObjectType;
-              }
-            });
         }
         this.modal.show();
       });
@@ -197,9 +175,6 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
       .deleteZaakTypeLink(this._caseDefinitionKey, this._caseVersionTag)
       .subscribe({
         next: () => {
-          if (this.selectedInformatieObjectTypeUrl !== null) {
-            this.openZaakService.deleteInformatieObjectTypeLink(this._caseDefinitionKey);
-          }
           this.toasterService.success('Successfully de-linked zaaktype');
           this.zaakTypeLink$.next(null);
         },
@@ -228,13 +203,6 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
         };
         this.findZaakType(linkResult.zaakTypeUrl);
         this.findPluginConfiguration(linkResult.zakenApiPluginConfigurationId);
-        if (requestInformatieObjectTypeLink.informatieObjectType !== null) {
-          this.openZaakService
-            .createInformatieObjectTypeLink(requestInformatieObjectTypeLink)
-            .subscribe(() => {
-              this.toasterService.success('Successfully linked object informatie type to case');
-            });
-        }
         this.toasterService.success('Successfully linked zaaktype to case');
       },
       error: () => {
