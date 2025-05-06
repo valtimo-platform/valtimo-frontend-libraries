@@ -112,12 +112,10 @@ export class TabService {
     return getCaseManagementRouteParams(route)
       .pipe(
         switchMap((params: CaseManagementParams) => {
-          console.log(params)
           return this.formService
             .getAllFormDefinitionsForCaseDefinition(params.caseDefinitionKey, params.caseDefinitionVersionTag)
             .pipe(
               map((formDefinitions: FormDefinitionOption[]) => {
-                console.log(formDefinitions)
                 return formDefinitions.map((formDefinition: FormDefinitionOption) => ({
                   contentKey: formDefinition.name,
                   content: formDefinition.name,
