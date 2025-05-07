@@ -17,7 +17,7 @@ Make sure your repository is clean (no uncommitted changes) before continuing.
 Checkout a new (temporary) branch for this upgrade. This script will automatically make commits.
 
 Since every implementation project is different, these automatic steps might not work (completely).
-If so, please follow the manual migration steps.
+If so, fix manually any mistakes this script might make, or follow the manual migration steps.
 
 Do not enable the new application builder when asked.
 
