@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Edit16, Information16} from '@carbon/icons';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DocumentService, TemplatePayload} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
-import {BehaviorSubject, take, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';
+import {TranslateService} from '@ngx-translate/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as semver from 'semver';
+import {CaseManagementService} from '../../services';
+import {take} from 'rxjs/operators';
 
 @Component({
   standalone: false,
@@ -33,10 +37,19 @@ export class CaseManagementCreateDraftVersionComponent {
   @Input() open = false;
 
   public readonly caseDefinitionPayload$ = new BehaviorSubject<any>({});
-  @Input() set caseDefinitionPayload(value: any) {
-    this.caseDefinitionPayload$.next(value);
+  @Input() set caseDefinitionPayload(payload: any) {
+    this.caseDefinitionPayload$.next(payload);
+    this.draftVersionForm.patchValue({
+      name: payload.name || '',
+      caseDefinitionKey: payload.caseDefinitionKey || '',
+      caseDefinitionVersion: payload.caseDefinitionVersion || '',
+      description: payload.description || '',
+      basedOnCaseDefinitionVersion: payload.caseDefinitionVersion || '',
+    });
   }
   @Output() closeModal = new EventEmitter<TemplatePayload | null>();
+
+  public caseDefinitionVersions: string[] = [];
 
   public draftVersionForm: FormGroup = this.fb.group({
     name: this.fb.control('', Validators.required),
@@ -46,81 +59,90 @@ export class CaseManagementCreateDraftVersionComponent {
     ]),
     caseDefinitionVersion: this.fb.control('', Validators.required),
     description: this.fb.control(''),
+    basedOnCaseDefinitionVersion: this.fb.control(''),
   });
 
-  private readonly _editActive$ = new BehaviorSubject<boolean>(false);
-  public readonly editActive$ = this._editActive$.pipe(
-    tap((editActive: boolean) => {
-      const caseDefinitionKey: AbstractControl | null =
-        this.draftVersionForm.get('caseDefinitionKey');
-      if (!caseDefinitionKey) {
-        return;
-      }
-
-      if (editActive) {
-        caseDefinitionKey.enable();
-        return;
-      }
-      caseDefinitionKey.disable();
-    })
+  public readonly params$: Observable<{
+    caseDefinitionKey: string;
+    caseDefinitionVersionTag: string;
+  }> = this.route.params.pipe(
+    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionKey,
+      caseDefinitionVersionTag: caseDefinitionVersionTag,
+    }))
   );
-  public readonly editDisabled$ = new BehaviorSubject<boolean>(true);
-  public readonly idError$ = new BehaviorSubject<string | null>(null);
+
+  public readonly caseDefinitionKey$: Observable<string> = this.params$.pipe(
+    map(params => params.caseDefinitionKey || '')
+  );
+
+  public readonly caseDefinitionVersionTag$: Observable<string> = this.params$.pipe(
+    map(params => params.caseDefinitionVersionTag || '')
+  );
+
+  private getDraftDescription$(translationKey: string): Observable<string> {
+    return combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$]).pipe(
+      switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+        this.translateService.get(translationKey, {
+          caseDefinitionKey,
+          caseDefinitionVersionTag,
+        })
+      )
+    );
+  }
+
+  public readonly createDraftDescription$ = this.getDraftDescription$(
+    'caseManagement.deployment.createDraftConfirmationModal.description'
+  );
+
   public readonly versionError$ = new BehaviorSubject<string | null>(null);
+
+  public readonly caseDefinitionVersions$: Observable<any[] | null> = this.caseDefinitionKey$.pipe(
+    switchMap(caseDefinitionKey =>
+      this.caseManagementService.getCaseDefinitionVersions(caseDefinitionKey)
+    ),
+    map(caseDefinitions => caseDefinitions.map(caseDefinition => caseDefinition.versionTag))
+  );
 
   constructor(
     private readonly documentService: DocumentService,
     private readonly fb: FormBuilder,
-    private readonly iconService: IconService
+    private readonly iconService: IconService,
+    private readonly translateService: TranslateService,
+    private readonly route: ActivatedRoute,
+    private readonly caseManagementService: CaseManagementService,
+    private readonly router: Router
   ) {
     this.iconService.registerAll([Edit16, Information16]);
   }
 
   public ngOnInit(): void {
-    console.log('Case definition: ', this.caseDefinitionPayload$.getValue());
+    this.caseDefinitionVersions$.pipe(take(1)).subscribe(versions => {
+      this.caseDefinitionVersions = versions || [];
+    });
   }
 
   public onCloseModal(definitionCreated?: boolean): void {
     if (!definitionCreated) {
       this.closeModal.emit(null);
-      this.resetForm();
+      this.draftVersionForm.reset();
+      this.versionError$.next(null);
       return;
     }
 
-    const {caseDefinitionKey, name, caseDefinitionVersion, description} =
-      this.draftVersionForm.controls;
-    if (!caseDefinitionKey || !name || !caseDefinitionVersion) {
-      return;
-    }
+    const caseDefinitionVersion = this.draftVersionForm.get('caseDefinitionVersion')?.value;
 
-    if (!semver.valid(caseDefinitionVersion.value)) {
+    if (!this.isVersionValid(caseDefinitionVersion)) {
       this.versionError$.next('caseManagement.createDefinition.versionError');
       return;
     }
 
-    this.documentService
-      .getDocumentDefinition(caseDefinitionKey.value, true)
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          this.idError$.next('caseManagement.createDefinition.idError');
-          this.editDisabled$.next(false);
-          this.enableEdit();
-        },
-        error: () => {
-          this.closeModal.emit({
-            name: name.value,
-            caseDefinitionKey: caseDefinitionKey.value,
-            caseDefinitionVersion: caseDefinitionVersion.value,
-            description: description.value,
-          });
-          this.resetForm();
-        },
-      });
-  }
+    if (this.doesVersionExist(caseDefinitionVersion)) {
+      this.versionError$.next('caseManagement.createDefinition.versionExistsError');
+      return;
+    }
 
-  public enableEdit(): void {
-    this._editActive$.next(true);
+    this.closeModal.emit(this.draftVersionForm.getRawValue());
   }
 
   public onFocusOut(): void {
@@ -130,15 +152,19 @@ export class CaseManagementCreateDraftVersionComponent {
     }
 
     caseDefinitionKey.patchValue(name.value.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase());
-    this.editDisabled$.next(false);
   }
 
   private resetForm(): void {
     setTimeout(() => {
       this.draftVersionForm.reset();
-      this.idError$.next(null);
-      this._editActive$.next(false);
-      this.editDisabled$.next(true);
     }, CARBON_CONSTANTS.modalAnimationMs);
+  }
+
+  private isVersionValid(version: string): boolean {
+    return semver.valid(version) !== null;
+  }
+
+  private doesVersionExist(version: string): boolean {
+    return this.caseDefinitionVersions.some(existingVersion => semver.eq(existingVersion, version));
   }
 }

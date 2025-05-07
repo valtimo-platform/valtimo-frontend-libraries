@@ -22,12 +22,12 @@ import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CaseManagementService} from '../../services';
 import {take, tap} from 'rxjs/operators';
-import {CaseDefinition, DraftVersion} from '../../models/case-deployment.model';
+import {CaseDefinition} from '../../models/case-deployment.model';
 import {BreadcrumbService} from '@valtimo/components';
 import {DatePipe} from '@angular/common';
 import {GlobalNotificationService} from '@valtimo/layout';
 import * as semver from 'semver';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
 
 @Component({
   standalone: false,
@@ -44,10 +44,6 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   @ViewChild('deleteDraftMessage')
   private readonly _deleteDraftMessageTemplateRef: TemplateRef<HTMLDivElement>;
 
-  public readonly newDraftVersionForm: FormGroup = this.fb.group({
-    caseDefinitionVersion: this.fb.control('', Validators.required),
-  });
-
   public caseDefinitionVersions: string[] = [];
   public readonly isDraftVersion$ = new BehaviorSubject<boolean>(false);
   public readonly hasConflictingVersions$ = new BehaviorSubject<boolean>(false);
@@ -55,13 +51,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   public readonly showFinalizeDraftConfirmationModal$ = new BehaviorSubject<boolean>(false);
   public readonly showCreateDraftVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
   public readonly versionError$ = new BehaviorSubject<string | null>(null);
-  public readonly newDraftVersion$ = new BehaviorSubject<DraftVersion>({
-    name: '',
-    caseDefinitionKey: '',
-    caseDefinitionVersion: '',
-    description: '',
-    basedOnCaseDefinitionVersion: '',
-  });
+
   public readonly params$: Observable<{
     caseDefinitionKey: string;
     caseDefinitionVersionTag: string;
@@ -91,9 +81,6 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     );
   }
 
-  public readonly createDraftDescription$ = this.getDraftDescription$(
-    'caseManagement.deployment.createDraftConfirmationModal.description'
-  );
   public readonly finalizeDraftDescription$ = this.getDraftDescription$(
     'caseManagement.deployment.finalizeDraftConfirmationModal.description'
   );
@@ -118,13 +105,6 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     tap(caseDefinition => {
       this.isDraftVersion$.next(!caseDefinition.final);
       this.hasConflictingVersions$.next(!!caseDefinition.conflictingVersions);
-      this.newDraftVersion$.next({
-        name: caseDefinition.name,
-        caseDefinitionKey: caseDefinition.caseDefinitionKey,
-        caseDefinitionVersion: semver.inc(caseDefinition.caseDefinitionVersionTag, 'patch'),
-        description: caseDefinition.description,
-        basedOnCaseDefinitionVersion: caseDefinition.caseDefinitionVersionTag,
-      });
     })
   );
 
@@ -257,7 +237,8 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     this.showCreateDraftVersionConfirmationModal$.next(true);
   }
 
-  public onCloseCreateDraftVersionModal(templatePayload?: any | null): void {
+  public onCloseCreateDraftVersionModal(payload): void {
+    if (payload) this.createDraftVersion(payload);
     this.showCreateDraftVersionConfirmationModal$.next(false);
   }
 
@@ -358,36 +339,13 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     this.closeFinalizeDraftModal();
   }
 
-  public createDraftVersion(): void {
-    const caseDefinitionVersion = this.newDraftVersionForm.get('caseDefinitionVersion')?.value;
-
-    if (!caseDefinitionVersion) {
-      return;
-    }
-
-    if (!this.isVersionValid(caseDefinitionVersion)) {
-      this.showCreateDraftVersionConfirmationModal$.next(true);
-      this.versionError$.next('caseManagement.createDefinition.versionError');
-      return;
-    }
-
-    if (this.doesVersionExist(caseDefinitionVersion)) {
-      this.showCreateDraftVersionConfirmationModal$.next(true);
-      this.versionError$.next('caseManagement.createDefinition.versionExistsError');
-      return;
-    }
-
+  public createDraftVersion(payload): void {
+    console.log('Payload: ', payload);
     this.showInfoNotification(this._createDraftMessageTemplateRef);
 
-    this.newDraftVersion$
-      .pipe(
-        take(1),
-        map((payload: DraftVersion) => ({
-          ...payload,
-          caseDefinitionVersion,
-        })),
-        switchMap((payload: DraftVersion) => this.caseManagementService.createDraftVersion(payload))
-      )
+    this.caseManagementService
+      .createDraftVersion(payload)
+      .pipe(take(1))
       .subscribe({
         next: (response: any) => {
           this.versionError$.next(null);
@@ -400,14 +358,14 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
           this.showSuccessNotification(
             'caseManagement.deployment.createDraftConfirmationModal.successMessage'
           );
-          this.onCloseCreateDraftVersionModal();
+          this.showCreateDraftVersionConfirmationModal$.next(false);
         },
         error: () => {
           this.showErrorNotification(
             'caseManagement.deployment.createDraftConfirmationModal.errorTitle',
             'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
           );
-          this.onCloseCreateDraftVersionModal();
+          this.showCreateDraftVersionConfirmationModal$.next(false);
         },
       });
   }
@@ -426,14 +384,6 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
         })
       )
       .subscribe();
-  }
-
-  private isVersionValid(version: string): boolean {
-    return semver.valid(version) !== null;
-  }
-
-  private doesVersionExist(version: string): boolean {
-    return this.caseDefinitionVersions.some(existingVersion => semver.eq(existingVersion, version));
   }
 
   private closeCurrentNotification(): void {
