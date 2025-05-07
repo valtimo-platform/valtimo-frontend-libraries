@@ -25,7 +25,7 @@ import {ConfigService, UploadProvider} from '@valtimo/config';
 import {PluginConfiguration} from '@valtimo/plugin';
 import {
   CreateInformatieObjectTypeLinkRequest,
-  CreateZaakTypeLinkRequest2,
+  CreateZaakTypeLinkRequest,
   InformatieObjectType,
   OpenZaakService,
   ZaakType,
@@ -55,7 +55,7 @@ import {ZakenApiZaaktypeLinkService} from '../../services';
 export class ZakenApiZaaktypeLinkComponent implements OnInit {
   public zaakTypes: ZaakType[];
   public pluginConfigurations: PluginConfiguration[];
-  public zaakTypeLinkRequest: CreateZaakTypeLinkRequest2;
+  public zaakTypeLinkRequest: CreateZaakTypeLinkRequest;
   public informatieObjectTypeSelectionEnabled: boolean;
   public informatieObjectTypes: InformatieObjectType[];
   public selectedZaakType: ZaakType | null = null;
