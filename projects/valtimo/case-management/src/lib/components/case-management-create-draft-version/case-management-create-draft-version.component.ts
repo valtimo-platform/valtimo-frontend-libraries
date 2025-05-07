@@ -13,18 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Edit16, Information16} from '@carbon/icons';
 import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DocumentService, TemplatePayload} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';
+import {BehaviorSubject, map, Observable, Subscription, switchMap} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as semver from 'semver';
 import {CaseManagementService} from '../../services';
 import {take} from 'rxjs/operators';
+import {CaseManagementParams} from '../../models';
+import {getCaseManagementRouteParams} from '../../utils';
 
 @Component({
   standalone: false,
@@ -33,7 +43,7 @@ import {take} from 'rxjs/operators';
   templateUrl: './case-management-create-draft-version.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CaseManagementCreateDraftVersionComponent {
+export class CaseManagementCreateDraftVersionComponent implements OnInit, OnDestroy {
   @Input() open = false;
 
   public readonly caseDefinitionPayload$ = new BehaviorSubject<any>({});
@@ -58,32 +68,19 @@ export class CaseManagementCreateDraftVersionComponent {
     basedOnCaseDefinitionVersion: this.fb.control(''),
   });
 
-  public readonly params$: Observable<{
-    caseDefinitionKey: string;
-    caseDefinitionVersionTag: string;
-  }> = this.route.params.pipe(
-    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionKey,
-      caseDefinitionVersionTag: caseDefinitionVersionTag,
-    }))
-  );
-
-  public readonly caseDefinitionKey$: Observable<string> = this.params$.pipe(
-    map(params => params.caseDefinitionKey || '')
-  );
-
-  public readonly caseDefinitionVersionTag$: Observable<string> = this.params$.pipe(
-    map(params => params.caseDefinitionVersionTag || '')
-  );
+  private readonly _subscriptions = new Subscription();
+  private readonly _caseParams$: Observable<CaseManagementParams | undefined> =
+    getCaseManagementRouteParams(this.route);
 
   private getDraftDescription$(translationKey: string): Observable<string> {
-    return combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$]).pipe(
-      switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-        this.translateService.get(translationKey, {
-          caseDefinitionKey,
-          caseDefinitionVersionTag,
-        })
-      )
+    return this._caseParams$.pipe(
+      take(1),
+      switchMap(params => {
+        return this.translateService.get(translationKey, {
+          caseDefinitionKey: params?.caseDefinitionKey,
+          caseDefinitionVersionTag: params?.caseDefinitionVersionTag,
+        });
+      })
     );
   }
 
@@ -93,7 +90,8 @@ export class CaseManagementCreateDraftVersionComponent {
 
   public readonly versionError$ = new BehaviorSubject<string | null>(null);
 
-  public readonly caseDefinitionVersions$: Observable<any[] | null> = this.caseDefinitionKey$.pipe(
+  public readonly caseDefinitionVersions$: Observable<any[] | null> = this._caseParams$.pipe(
+    map(params => params?.caseDefinitionKey ?? ''),
     switchMap(caseDefinitionKey =>
       this.caseManagementService.getCaseDefinitionVersions(caseDefinitionKey)
     ),
@@ -113,16 +111,21 @@ export class CaseManagementCreateDraftVersionComponent {
   }
 
   public ngOnInit(): void {
-    this.caseDefinitionVersions$.pipe(take(1)).subscribe(versions => {
-      this.caseDefinitionVersions = versions || [];
-    });
+    this._subscriptions.add(
+      this.caseDefinitionVersions$.pipe(take(1)).subscribe(versions => {
+        this.caseDefinitionVersions = versions || [];
+      })
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   public onCloseModal(definitionCreated?: boolean): void {
     if (!definitionCreated) {
       this.closeModal.emit(null);
-      // this.draftVersionForm.reset();
-      this.fillForm(this.caseDefinitionPayload$.getValue());
+      this.updateFormFromPayload(this.caseDefinitionPayload$.getValue());
       this.versionError$.next(null);
       return;
     }

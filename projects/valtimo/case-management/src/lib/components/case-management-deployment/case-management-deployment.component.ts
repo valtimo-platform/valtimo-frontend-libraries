@@ -236,7 +236,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     this.showCreateDraftVersionConfirmationModal$.next(true);
   }
 
-  public onCloseCreateDraftVersionModal(payload): void {
+  public onCloseCreateDraftVersionModal(payload?): void {
     if (payload) {
       this.createDraftVersion(payload);
     }
@@ -354,16 +354,16 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
         this.showSuccessNotification(
           'caseManagement.deployment.createDraftConfirmationModal.successMessage'
         );
-        this.showCreateDraftVersionConfirmationModal$.next(false);
       },
       error: () => {
         this.showErrorNotification(
           'caseManagement.deployment.createDraftConfirmationModal.errorTitle',
           'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
         );
-        this.showCreateDraftVersionConfirmationModal$.next(false);
       },
     });
+
+    this.showCreateDraftVersionConfirmationModal$.next(false);
   }
 
   private initBreadcrumbs(): void {
