@@ -340,34 +340,30 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   }
 
   public createDraftVersion(payload): void {
-    console.log('Payload: ', payload);
     this.showInfoNotification(this._createDraftMessageTemplateRef);
 
-    this.caseManagementService
-      .createDraftVersion(payload)
-      .pipe(take(1))
-      .subscribe({
-        next: (response: any) => {
-          this.versionError$.next(null);
-          this.router.navigate([
-            '/case-management/case/',
-            response.caseDefinitionKey,
-            'version',
-            response.caseDefinitionVersionTag,
-          ]);
-          this.showSuccessNotification(
-            'caseManagement.deployment.createDraftConfirmationModal.successMessage'
-          );
-          this.showCreateDraftVersionConfirmationModal$.next(false);
-        },
-        error: () => {
-          this.showErrorNotification(
-            'caseManagement.deployment.createDraftConfirmationModal.errorTitle',
-            'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
-          );
-          this.showCreateDraftVersionConfirmationModal$.next(false);
-        },
-      });
+    this.caseManagementService.createDraftVersion(payload).subscribe({
+      next: (response: any) => {
+        this.versionError$.next(null);
+        this.router.navigate([
+          '/case-management/case/',
+          response.caseDefinitionKey,
+          'version',
+          response.caseDefinitionVersionTag,
+        ]);
+        this.showSuccessNotification(
+          'caseManagement.deployment.createDraftConfirmationModal.successMessage'
+        );
+        this.showCreateDraftVersionConfirmationModal$.next(false);
+      },
+      error: () => {
+        this.showErrorNotification(
+          'caseManagement.deployment.createDraftConfirmationModal.errorTitle',
+          'caseManagement.deployment.createDraftConfirmationModal.errorMessage'
+        );
+        this.showCreateDraftVersionConfirmationModal$.next(false);
+      },
+    });
   }
 
   private initBreadcrumbs(): void {

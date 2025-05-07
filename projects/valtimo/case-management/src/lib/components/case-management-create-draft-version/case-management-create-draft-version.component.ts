@@ -38,14 +38,16 @@ export class CaseManagementCreateDraftVersionComponent {
 
   public readonly caseDefinitionPayload$ = new BehaviorSubject<any>({});
   @Input() set caseDefinitionPayload(payload: any) {
-    this.caseDefinitionPayload$.next(payload);
-    this.draftVersionForm.patchValue({
-      name: payload.name || '',
-      caseDefinitionKey: payload.caseDefinitionKey || '',
-      caseDefinitionVersion: payload.caseDefinitionVersion || '',
-      description: payload.description || '',
-      basedOnCaseDefinitionVersion: payload.caseDefinitionVersion || '',
-    });
+    if (payload) {
+      this.caseDefinitionPayload$.next(payload);
+      this.draftVersionForm.patchValue({
+        name: payload.name || '',
+        caseDefinitionKey: payload.caseDefinitionKey || '',
+        caseDefinitionVersion: '',
+        description: payload.description || '',
+        basedOnCaseDefinitionVersion: payload.caseDefinitionVersion || '',
+      });
+    }
   }
   @Output() closeModal = new EventEmitter<TemplatePayload | null>();
 
