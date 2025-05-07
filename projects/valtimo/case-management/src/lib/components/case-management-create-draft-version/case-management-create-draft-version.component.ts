@@ -40,13 +40,7 @@ export class CaseManagementCreateDraftVersionComponent {
   @Input() set caseDefinitionPayload(payload: any) {
     if (payload) {
       this.caseDefinitionPayload$.next(payload);
-      this.draftVersionForm.patchValue({
-        name: payload.name || '',
-        caseDefinitionKey: payload.caseDefinitionKey || '',
-        caseDefinitionVersion: '',
-        description: payload.description || '',
-        basedOnCaseDefinitionVersion: payload.caseDefinitionVersion || '',
-      });
+      this.updateFormFromPayload(payload);
     }
   }
   @Output() closeModal = new EventEmitter<TemplatePayload | null>();
@@ -127,7 +121,8 @@ export class CaseManagementCreateDraftVersionComponent {
   public onCloseModal(definitionCreated?: boolean): void {
     if (!definitionCreated) {
       this.closeModal.emit(null);
-      this.draftVersionForm.reset();
+      // this.draftVersionForm.reset();
+      this.fillForm(this.caseDefinitionPayload$.getValue());
       this.versionError$.next(null);
       return;
     }
@@ -147,15 +142,6 @@ export class CaseManagementCreateDraftVersionComponent {
     this.closeModal.emit(this.draftVersionForm.getRawValue());
   }
 
-  public onFocusOut(): void {
-    const {caseDefinitionKey, name, caseDefinitionVersion} = this.draftVersionForm.controls;
-    if (!caseDefinitionKey || !name || !caseDefinitionVersion) {
-      return;
-    }
-
-    caseDefinitionKey.patchValue(name.value.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase());
-  }
-
   private resetForm(): void {
     setTimeout(() => {
       this.draftVersionForm.reset();
@@ -168,5 +154,15 @@ export class CaseManagementCreateDraftVersionComponent {
 
   private doesVersionExist(version: string): boolean {
     return this.caseDefinitionVersions.some(existingVersion => semver.eq(existingVersion, version));
+  }
+
+  private updateFormFromPayload(payload): void {
+    this.draftVersionForm.patchValue({
+      name: payload.name || '',
+      caseDefinitionKey: payload.caseDefinitionKey || '',
+      caseDefinitionVersion: '',
+      description: payload.description || '',
+      basedOnCaseDefinitionVersion: payload.basedOnCaseDefinitionVersion || '',
+    });
   }
 }

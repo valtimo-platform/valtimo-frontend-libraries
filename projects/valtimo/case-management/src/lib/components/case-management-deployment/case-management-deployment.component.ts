@@ -114,7 +114,6 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
       this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
     ),
-
     map(caseDefinition => ({
       name: caseDefinition.name,
       caseDefinitionKey: caseDefinition.caseDefinitionKey,
@@ -238,7 +237,9 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   }
 
   public onCloseCreateDraftVersionModal(payload): void {
-    if (payload) this.createDraftVersion(payload);
+    if (payload) {
+      this.createDraftVersion(payload);
+    }
     this.showCreateDraftVersionConfirmationModal$.next(false);
   }
 
@@ -340,10 +341,9 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   }
 
   public createDraftVersion(payload): void {
-    console.log('payload: ', payload);
     this.showInfoNotification(this._createDraftMessageTemplateRef);
 
-    this.caseManagementService.createDraftVersion(newDraftVersion).subscribe({
+    this.caseManagementService.createDraftVersion(payload).subscribe({
       next: (response: any) => {
         this.router.navigate([
           '/case-management/case/',

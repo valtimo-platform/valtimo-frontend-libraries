@@ -51,7 +51,6 @@
           placeholder="{{ 'caseManagement.createDefinition.namePlaceholder' | translate }}"
           [cdsLayer]="1"
           [attr.modal-primary-focus]="true"
-          (focusout)="onFocusOut()"
         />
       </cds-label>
 
@@ -70,8 +69,6 @@
           cdsText
           placeholder="{{ 'caseManagement.createDefinition.versionPlaceholder' | translate }}"
           [cdsLayer]="1"
-          [attr.modal-primary-focus]="true"
-          (focusout)="onFocusOut()"
         />
       </cds-label>
 
@@ -91,8 +88,6 @@
           placeholder="{{ 'caseManagement.createDefinition.versionPlaceholder' | translate }}"
           [cdsLayer]="1"
           [invalid]="!!obs.versionError"
-          [attr.modal-primary-focus]="true"
-          (focusout)="onFocusOut()"
         />
       </cds-label>
 
@@ -113,8 +108,6 @@
           [cdsLayer]="1"
           [rows]="3"
           [cols]="150"
-          [attr.modal-primary-focus]="true"
-          (focusout)="onFocusOut()"
         ></textarea>
       </cds-textarea-label>
     </form>

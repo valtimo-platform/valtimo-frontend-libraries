@@ -802,22 +802,22 @@
       }
     },
     "createDefinition": {
-      "idError": "Deze definitienaam is al in gebruik. Wijzig de naam in een unieke naam",
-      "versionError": "Deze versie is geen geldige Semver-versie",
-      "versionExistsError": "Deze versie bestaat al voor deze case",
-      "modalTitle": "Casedefinitie aanmaken",
-      "key": "Casedefinitiesleutel",
-      "keyPlaceholder": "De casedefinitiesleutel wordt hier automatisch gegenereerd",
-      "keyTooltip": "De sleutel wordt gebruikt voor de systeemnamen, $id, enz. Spaties of speciale tekens zijn niet toegestaan, behalve “-”",
-      "name": "Casedefinitienaam",
-      "namePlaceholder": "Voer hier de naam in",
-      "nameTooltip": "De naam wordt gebruikt voor de zichtbare naam van de casedefinitie in de gebruikersinterface",
-      "version": "Casedefinitieversie",
-      "versionPlaceholder": "Voer hier de versie in",
-      "versionTooltip": "De versie wordt gebruikt voor de zichtbare naam van de casedefinitie in de gebruikersinterface",
-      "description": "Omschrijving van de casedefinitie",
+      "idError": "Deze naam voor de casusdefinitie is al in gebruik. Kies een unieke naam.",
+      "versionError": "Deze versie is geen geldige Semver-versie.",
+      "versionExistsError": "Deze versie bestaat al voor deze casus.",
+      "modalTitle": "Casusdefinitie aanmaken",
+      "key": "Sleutel voor casusdefinitie",
+      "keyPlaceholder": "Sleutel wordt hier automatisch gegenereerd",
+      "keyTooltip": "De sleutel wordt gebruikt voor systeemnamen zoals $id. Geen spaties of speciale tekens toegestaan behalve “-”.",
+      "name": "Naam van de casusdefinitie",
+      "namePlaceholder": "Voer hier een naam in",
+      "nameTooltip": "De naam wordt zichtbaar in de gebruikersinterface als aanduiding van de casusdefinitie.",
+      "version": "Versie van de casusdefinitie",
+      "versionPlaceholder": "Voer hier een versie in",
+      "versionTooltip": "De versie wordt zichtbaar in de gebruikersinterface als aanduiding van deze casusdefinitie.",
+      "description": "Beschrijving van de casusdefinitie",
       "descriptionPlaceholder": "Voer hier een beschrijving in",
-      "descriptionTooltip": "De beschrijving wordt gebruikt voor de zichtbare naam van de casedefinitie in de gebruikersinterface"
+      "descriptionTooltip": "De beschrijving wordt weergegeven in de gebruikersinterface als extra context voor de casusdefinitie."
     },
     "documentDefinition": {
       "cancelModal": {
