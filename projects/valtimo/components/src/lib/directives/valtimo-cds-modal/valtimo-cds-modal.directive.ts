@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * You may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import {
 
 @Directive({
   selector: '[valtimoCdsModal]',
+  standalone: false,
 })
 export class ValtimoCdsModalDirective implements AfterViewInit, OnDestroy {
   @Input() public readonly enableOverflow = false;
