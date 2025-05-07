@@ -164,7 +164,13 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() actionItems: ActionItem[];
   @Input() header: boolean;
   @Input() hideColumnHeader: boolean;
-  @Input() initialSortState: SortState;
+  private _isSortInit = false;
+  @Input() set initialSortState(value: SortState) {
+    if (!value || this._isSortInit) return;
+
+    this._isSortInit = true;
+    this.sort$.next(value);
+  }
 
   @Input() set sortState(value: SortState) {
     if (!value) return;
@@ -284,10 +290,6 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loadPaginationSize();
     }
 
-    if (this.initialSortState) {
-      this.sort$.next(this.initialSortState);
-    }
-
     this._subscriptions.add(
       this.searchFormControl.valueChanges
         .pipe(debounceTime(500))
@@ -338,9 +340,8 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (firstItem) firstItem.ctrlClick = this.keyStateService.getCtrlOrCmdState();
 
-    if (!firstItem || firstItem?.locked) {
-      return;
-    }
+    if (!firstItem || firstItem?.locked) return;
+
     this.rowClicked.emit(firstItem);
   }
 
@@ -452,6 +453,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
             case ViewType.TEMPLATE:
               return new TableItem({
                 data: {item, index, length: items.length, ...field.templateData},
+                item,
                 template: field.template,
               });
             case ViewType.BOOLEAN:

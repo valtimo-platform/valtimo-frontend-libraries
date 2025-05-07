@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<cds-tabs class="case-management-tabs">
+<cds-tabs class="case-management-tabs" type="contained">
   @for (zgwTab of (zgwTabs$ | async) || []; track zgwTab.tab) {
     <cds-tab
       [class]="zgwTab.class"
@@ -25,6 +25,4 @@
   }
 </cds-tabs>
 
-<div class="case-management-zgw__content">
-  <ng-template #zgwTabContent></ng-template>
-</div>
+<ng-template #zgwTabContent></ng-template>
