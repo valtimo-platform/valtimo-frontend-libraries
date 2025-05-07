@@ -24,7 +24,6 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Edit16, Information16} from '@carbon/icons';
-import {CARBON_CONSTANTS} from '@valtimo/components';
 import {DocumentService, TemplatePayload} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, map, Observable, Subscription, switchMap} from 'rxjs';
@@ -143,12 +142,6 @@ export class CaseManagementCreateDraftVersionComponent implements OnInit, OnDest
     }
 
     this.closeModal.emit(this.draftVersionForm.getRawValue());
-  }
-
-  private resetForm(): void {
-    setTimeout(() => {
-      this.draftVersionForm.reset();
-    }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
   private isVersionValid(version: string): boolean {

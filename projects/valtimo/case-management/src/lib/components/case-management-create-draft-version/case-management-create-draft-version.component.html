@@ -19,10 +19,10 @@
     versionError: versionError$ | async,
     createDraftDescription: createDraftDescription$ | async,
   } as obs"
-  [open]="open"
-  showFooter="true"
   valtimoCdsModal
+  showFooter="true"
   class="valtimo-definition-create"
+  [open]="open"
   (close)="onCloseModal()"
 >
   <cds-modal-header showCloseButton="true" (closeSelect)="onCloseModal()">
