@@ -50,7 +50,6 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   public readonly showDeleteDraftConfirmationModal$ = new BehaviorSubject<boolean>(false);
   public readonly showFinalizeDraftConfirmationModal$ = new BehaviorSubject<boolean>(false);
   public readonly showCreateDraftVersionConfirmationModal$ = new BehaviorSubject<boolean>(false);
-  public readonly versionError$ = new BehaviorSubject<string | null>(null);
 
   public readonly params$: Observable<{
     caseDefinitionKey: string;
@@ -115,6 +114,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
       this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
     ),
+
     map(caseDefinition => ({
       name: caseDefinition.name,
       caseDefinitionKey: caseDefinition.caseDefinitionKey,
@@ -340,11 +340,11 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
   }
 
   public createDraftVersion(payload): void {
+    console.log('payload: ', payload);
     this.showInfoNotification(this._createDraftMessageTemplateRef);
 
-    this.caseManagementService.createDraftVersion(payload).subscribe({
+    this.caseManagementService.createDraftVersion(newDraftVersion).subscribe({
       next: (response: any) => {
-        this.versionError$.next(null);
         this.router.navigate([
           '/case-management/case/',
           response.caseDefinitionKey,
