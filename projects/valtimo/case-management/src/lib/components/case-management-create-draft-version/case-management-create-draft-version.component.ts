@@ -18,7 +18,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -26,7 +25,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Edit16, Information16} from '@carbon/icons';
 import {DocumentService, TemplatePayload} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
-import {BehaviorSubject, map, Observable, Subscription, switchMap} from 'rxjs';
+import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as semver from 'semver';
@@ -42,8 +41,8 @@ import {getCaseManagementRouteParams} from '../../utils';
   templateUrl: './case-management-create-draft-version.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CaseManagementCreateDraftVersionComponent implements OnInit, OnDestroy {
-  @Input() open = false;
+export class CaseManagementCreateDraftVersionComponent implements OnInit {
+  @Input() public readonly open = false;
 
   public readonly caseDefinitionPayload$ = new BehaviorSubject<any>({});
   @Input() set caseDefinitionPayload(payload: any) {
@@ -67,23 +66,10 @@ export class CaseManagementCreateDraftVersionComponent implements OnInit, OnDest
     basedOnCaseDefinitionVersion: this.fb.control(''),
   });
 
-  private readonly _subscriptions = new Subscription();
   private readonly _caseParams$: Observable<CaseManagementParams | undefined> =
     getCaseManagementRouteParams(this.route);
 
-  private getDraftDescription$(translationKey: string): Observable<string> {
-    return this._caseParams$.pipe(
-      take(1),
-      switchMap(params => {
-        return this.translateService.get(translationKey, {
-          caseDefinitionKey: params?.caseDefinitionKey,
-          caseDefinitionVersionTag: params?.caseDefinitionVersionTag,
-        });
-      })
-    );
-  }
-
-  public readonly createDraftDescription$ = this.getDraftDescription$(
+  public readonly createDraftDescription$ = this.getDraftDescription(
     'caseManagement.deployment.createDraftConfirmationModal.description'
   );
 
@@ -110,15 +96,9 @@ export class CaseManagementCreateDraftVersionComponent implements OnInit, OnDest
   }
 
   public ngOnInit(): void {
-    this._subscriptions.add(
-      this.caseDefinitionVersions$.pipe(take(1)).subscribe(versions => {
-        this.caseDefinitionVersions = versions || [];
-      })
-    );
-  }
-
-  public ngOnDestroy(): void {
-    this._subscriptions.unsubscribe();
+    this.caseDefinitionVersions$.pipe(take(1)).subscribe(versions => {
+      this.caseDefinitionVersions = versions || [];
+    });
   }
 
   public onCloseModal(definitionCreated?: boolean): void {
@@ -160,5 +140,17 @@ export class CaseManagementCreateDraftVersionComponent implements OnInit, OnDest
       description: payload.description || '',
       basedOnCaseDefinitionVersion: payload.basedOnCaseDefinitionVersion || '',
     });
+  }
+
+  private getDraftDescription(translationKey: string): Observable<string> {
+    return this._caseParams$.pipe(
+      take(1),
+      switchMap(params =>
+        this.translateService.get(translationKey, {
+          caseDefinitionKey: params?.caseDefinitionKey,
+          caseDefinitionVersionTag: params?.caseDefinitionVersionTag,
+        })
+      )
+    );
   }
 }

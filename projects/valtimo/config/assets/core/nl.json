@@ -788,7 +788,7 @@
       },
       "steps": {
         "accessControl": {
-          "message": "Vergeet niet de rechten in Access Control in te stellen. Zonder de juiste rechten is uw nieuwe casusdefinitie niet toegankelijk.",
+          "message": "Vergeet niet de rechten in Access Control in te stellen. Zonder de juiste rechten is uw nieuwe dossierdefinitie niet toegankelijk.",
           "title": "Access control"
         },
         "dashboard": {
@@ -802,22 +802,22 @@
       }
     },
     "createDefinition": {
-      "idError": "Deze naam voor de casusdefinitie is al in gebruik. Kies een unieke naam.",
+      "idError": "Deze naam voor de dossierdefinitie is al in gebruik. Kies een unieke naam.",
       "versionError": "Deze versie is geen geldige Semver-versie.",
-      "versionExistsError": "Deze versie bestaat al voor deze casus.",
-      "modalTitle": "Casusdefinitie aanmaken",
-      "key": "Sleutel voor casusdefinitie",
+      "versionExistsError": "Deze versie bestaat al voor deze dossier.",
+      "modalTitle": "Dossierdefinitie aanmaken",
+      "key": "Sleutel voor dossierdefinitie",
       "keyPlaceholder": "Sleutel wordt hier automatisch gegenereerd",
       "keyTooltip": "De sleutel wordt gebruikt voor systeemnamen zoals $id. Geen spaties of speciale tekens toegestaan behalve “-”.",
-      "name": "Naam van de casusdefinitie",
+      "name": "Naam van de dossierdefinitie",
       "namePlaceholder": "Voer hier een naam in",
-      "nameTooltip": "De naam wordt zichtbaar in de gebruikersinterface als aanduiding van de casusdefinitie.",
-      "version": "Versie van de casusdefinitie",
+      "nameTooltip": "De naam wordt zichtbaar in de gebruikersinterface als aanduiding van de dossierdefinitie.",
+      "version": "Versie van de dossierdefinitie",
       "versionPlaceholder": "Voer hier een versie in",
-      "versionTooltip": "De versie wordt zichtbaar in de gebruikersinterface als aanduiding van deze casusdefinitie.",
-      "description": "Beschrijving van de casusdefinitie",
+      "versionTooltip": "De versie wordt zichtbaar in de gebruikersinterface als aanduiding van deze dossierdefinitie.",
+      "description": "Beschrijving van de dossierdefinitie",
       "descriptionPlaceholder": "Voer hier een beschrijving in",
-      "descriptionTooltip": "De beschrijving wordt weergegeven in de gebruikersinterface als extra context voor de casusdefinitie."
+      "descriptionTooltip": "De beschrijving wordt weergegeven in de gebruikersinterface als extra context voor de dossierdefinitie."
     },
     "documentDefinition": {
       "cancelModal": {
