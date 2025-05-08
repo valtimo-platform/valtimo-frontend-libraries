@@ -20,7 +20,7 @@
   <valtimo-spinner></valtimo-spinner>
 } @else {
   @if (zaakTypeLink$ | async; as zaakTypeLink) {
-    <cds-tile cdsLayer="1" *ngIf="zaakTypeLink$ | async as zaakTypeLink; else addSync">
+    <cds-tile cdsLayer="1">
       <section class="valtimo-zaak-type-link__card-header">
         <span class="valtimo-zaak-type-link__card-title">
           {{ this.selectedZaakType?.omschrijving || '-' }}
@@ -66,7 +66,11 @@
       </section>
     </cds-tile>
   } @else {
-    <button cdsButton="primary" class="valtimo-zaak-type-link__link-button" (click)="openModal(null)">
+    <button
+      cdsButton="primary"
+      class="valtimo-zaak-type-link__link-button"
+      (click)="openModal(null)"
+    >
       {{ 'openZaak.linkZaakType' | translate }}
 
       <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
