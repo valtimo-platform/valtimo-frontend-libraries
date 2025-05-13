@@ -22,7 +22,7 @@ import {map, switchMap} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfigService, GlobalNotificationService} from '@valtimo/config';
-import {CARBON_CONSTANTS, PromptService} from '@valtimo/components';
+import {PromptService} from '@valtimo/components';
 
 @Component({
   standalone: false,
@@ -109,8 +109,6 @@ export class CaseDetailTabS3DocumentsComponent implements OnInit {
           this.globalNotificationService.showToast({
             title: 'Successfully uploaded document to case',
             type: 'success',
-            showClose: true,
-            duration: CARBON_CONSTANTS.notificationDuration,
           });
           this.refetchDocuments();
           this.uploading$.next(false);
@@ -119,8 +117,6 @@ export class CaseDetailTabS3DocumentsComponent implements OnInit {
           this.globalNotificationService.showToast({
             title: 'Failed to upload document to case',
             type: 'error',
-            showClose: true,
-            duration: CARBON_CONSTANTS.notificationDuration,
           });
           this.uploading$.next(false);
         },
@@ -153,8 +149,6 @@ export class CaseDetailTabS3DocumentsComponent implements OnInit {
             this.globalNotificationService.showToast({
               title: 'Successfully removed document from case',
               type: 'success',
-              showClose: true,
-              duration: CARBON_CONSTANTS.notificationDuration,
             });
             this.refetchDocuments();
           },
@@ -162,8 +156,6 @@ export class CaseDetailTabS3DocumentsComponent implements OnInit {
             this.globalNotificationService.showToast({
               title: 'Failed to remove document from case',
               type: 'success',
-              showClose: true,
-              duration: CARBON_CONSTANTS.notificationDuration,
             });
           }
         );

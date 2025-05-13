@@ -16,7 +16,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {BreadcrumbService, CARBON_CONSTANTS, PageTitleService} from '@valtimo/components';
+import {BreadcrumbService, PageTitleService} from '@valtimo/components';
 import {GlobalNotificationService} from '@valtimo/config';
 import {ObjectManagementService} from '@valtimo/object-management';
 import {BehaviorSubject, combineLatest, map, Observable, of, Subject, throwError} from 'rxjs';
@@ -144,8 +144,6 @@ export class ObjectDetailComponent implements OnDestroy {
             this.globalNotificationService.showToast({
               title: this.translate.instant('object.messages.objectDeleted'),
               type: 'success',
-              duration: CARBON_CONSTANTS.notificationDuration,
-              showClose: true,
             });
             this.router.navigate([`/objects/${objectManagementId}`]);
           });
@@ -190,8 +188,6 @@ export class ObjectDetailComponent implements OnDestroy {
               this.globalNotificationService.showToast({
                 title: this.translate.instant('object.messages.objectUpdated'),
                 type: 'success',
-                duration: CARBON_CONSTANTS.notificationDuration,
-                showClose: true,
               });
             });
         }
@@ -214,8 +210,6 @@ export class ObjectDetailComponent implements OnDestroy {
     this.globalNotificationService.showToast({
       title: this.translate.instant('object.messages.objectRetrievingFormError'),
       type: 'error',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
     });
     this.loading$.next(false);
     return of(null);
@@ -226,8 +220,6 @@ export class ObjectDetailComponent implements OnDestroy {
     this.globalNotificationService.showToast({
       title: this.translate.instant('object.messages.objectUpdateError'),
       type: 'error',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
     });
     return throwError(error);
   }
@@ -237,8 +229,6 @@ export class ObjectDetailComponent implements OnDestroy {
     this.globalNotificationService.showToast({
       title: this.translate.instant('object.messages.objectDeleteError'),
       type: 'error',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
     });
     return throwError(error);
   }

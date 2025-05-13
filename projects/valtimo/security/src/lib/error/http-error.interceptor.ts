@@ -73,9 +73,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         this.globalNotificationService.showToast({
           title: 'An unexpected error occurred',
           caption: errorMessage,
-          duration: 4000,
           type: 'error',
-          showClose: true,
         });
         return throwError(() => error);
       })

@@ -16,7 +16,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {CARBON_CONSTANTS, MenuService, ModalComponent} from '@valtimo/components';
+import {MenuService, ModalComponent} from '@valtimo/components';
 import {GlobalNotificationService} from '@valtimo/config';
 import {
   DocumentDefinition,
@@ -57,8 +57,6 @@ export class CaseManagementRemoveModalComponent {
           this.globalNotificationService.showToast({
             title: this.translateService.instant('remove-document-definition-success'),
             type: 'success',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
           });
         },
         (result: UndeployDocumentDefinitionResult) => {

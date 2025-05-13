@@ -15,7 +15,6 @@ import {FormioForm} from '@formio/angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   BreadcrumbService,
-  CARBON_CONSTANTS,
   CarbonListModule,
   ConfirmationModalModule,
   EditorModel,
@@ -218,8 +217,6 @@ export class FormManagementEditComponent
         next: () => {
           this.notificationService.showToast({
             type: 'success',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
             title: this.translateService.instant('formManagement.notifications.deleted'),
           });
           this.navigateBack();
@@ -227,8 +224,6 @@ export class FormManagementEditComponent
         error: () => {
           this.notificationService.showToast({
             type: 'error',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
             title: this.translateService.instant('formManagement.notifications.deletionError'),
           });
         },
@@ -273,8 +268,6 @@ export class FormManagementEditComponent
         next: () => {
           this.notificationService.showToast({
             type: 'success',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
             title: this.translateService.instant('formManagement.notifications.deployed'),
           });
 
@@ -284,8 +277,6 @@ export class FormManagementEditComponent
         error: () => {
           this.notificationService.showToast({
             type: 'error',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
             title: this.translateService.instant('formManagement.notifications.deploymentError'),
           });
         },

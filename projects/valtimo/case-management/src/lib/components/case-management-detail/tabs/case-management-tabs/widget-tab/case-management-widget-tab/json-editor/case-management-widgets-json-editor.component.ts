@@ -31,7 +31,6 @@ import {Edit16, Save16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {BasicCaseWidget, CaseWidgetsRes} from '@valtimo/case';
 import {
-  CARBON_CONSTANTS,
   ConfirmationModalComponent,
   ConfirmationModalModule,
   EditorModel,
@@ -155,8 +154,6 @@ export class CaseManagementWidgetsJsonEditorComponent implements AfterViewInit {
             type: 'success',
             title: this.translateService.instant('interface.success'),
             message: this.translateService.instant('widgetTabManagement.notification.success'),
-            showClose: true,
-            duration: CARBON_CONSTANTS.notificationDuration,
           });
           this.widgetJsonEditorService.showPendingModal.set(false);
           this.editActive.set(false);
@@ -169,8 +166,6 @@ export class CaseManagementWidgetsJsonEditorComponent implements AfterViewInit {
             type: 'error',
             title: this.translateService.instant('interface.error'),
             message: this.translateService.instant('widgetTabManagement.notification.error'),
-            showClose: true,
-            duration: CARBON_CONSTANTS.notificationDuration,
           });
         },
       });

@@ -24,7 +24,7 @@ import {
 } from '@angular/core';
 import {RecentlyViewed16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CARBON_CONSTANTS, ConfirmationModalModule, TooltipModule} from '@valtimo/components';
+import {ConfirmationModalModule, TooltipModule} from '@valtimo/components';
 import {ConfigService, GlobalNotificationService} from '@valtimo/config';
 import {TaskProcessLinkResult, TaskWithProcessLink} from '@valtimo/process-link';
 import {ButtonModule, IconModule, IconService, ModalModule} from 'carbon-components-angular';
@@ -125,8 +125,6 @@ export class TaskDetailIntermediateSaveComponent {
           this.globalNotificationService.showToast({
             title: this.translateService.instant('formManagement.intermediateSave.success'),
             type: 'success',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
           });
           this.currentIntermediateSave = this.formatIntermediateSubmission(intermediateSubmission);
           this.currentIntermediateSaveEvent.emit(this.currentIntermediateSave);
@@ -135,8 +133,6 @@ export class TaskDetailIntermediateSaveComponent {
           this.globalNotificationService.showToast({
             title: this.translateService.instant('formManagement.intermediateSave.error'),
             type: 'error',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
           });
         },
       });

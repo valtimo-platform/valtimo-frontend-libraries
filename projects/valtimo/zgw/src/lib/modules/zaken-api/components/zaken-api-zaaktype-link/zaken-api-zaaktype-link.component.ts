@@ -20,7 +20,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Edit16, Save16, TrashCan16} from '@carbon/icons';
 import {TranslateModule} from '@ngx-translate/core';
 import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/case-management';
-import {CARBON_CONSTANTS, SpinnerModule} from '@valtimo/components';
+import {SpinnerModule} from '@valtimo/components';
 import {GlobalNotificationService} from '@valtimo/config';
 import {PluginConfiguration} from '@valtimo/plugin';
 import {
@@ -183,8 +183,6 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
           this.globalNotificationService.showToast({
             title: 'Successfully de-linked zaaktype',
             type: 'success',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
           });
           this.zaakTypeLink$.next(null);
         },
@@ -192,8 +190,6 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
           this.globalNotificationService.showToast({
             title: 'Failed to de-link zaaktype',
             type: 'error',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
           });
         },
       });
@@ -219,16 +215,12 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
           this.globalNotificationService.showToast({
             title: 'Successfully linked zaaktype to case',
             type: 'success',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
           });
         },
         error: () => {
           this.globalNotificationService.showToast({
             title: 'Failed to link zaaktype to case',
             type: 'success',
-            duration: CARBON_CONSTANTS.notificationDuration,
-            showClose: true,
           });
         },
       });

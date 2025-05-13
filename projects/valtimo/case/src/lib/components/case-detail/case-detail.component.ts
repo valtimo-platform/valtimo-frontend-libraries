@@ -31,7 +31,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
 import {
   BreadcrumbService,
-  CARBON_CONSTANTS,
   CdsThemeService,
   CurrentCarbonTheme,
   PageHeaderService,
@@ -640,7 +639,6 @@ export class CaseDetailComponent
           },
         ],
       }),
-      duration: CARBON_CONSTANTS.notificationDuration,
     });
   }
 

@@ -19,7 +19,6 @@ import {AccessControlService} from '../../services/access-control.service';
 import {BehaviorSubject, filter, finalize, map, Subscription, switchMap, take, tap} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  CARBON_CONSTANTS,
   EditorModel,
   PageHeaderService,
   PageTitleService,
@@ -54,7 +53,7 @@ export class AccessControlEditorComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly pageTitleService: PageTitleService,
     private readonly router: Router,
-    private readonly notificationService: GlobalNotificationService,
+    private readonly globalNotificationService: GlobalNotificationService,
     private readonly translateService: TranslateService,
     private readonly accessControlExportService: AccessControlExportService,
     private readonly pageHeaderService: PageHeaderService
@@ -224,14 +223,12 @@ export class AccessControlEditorComponent implements OnInit, OnDestroy {
   }
 
   private showSuccessMessage(roleKey: string): void {
-    this.notificationService.showToast({
+    this.globalNotificationService.showToast({
+      title: this.translateService.instant('accessControl.roles.savedSuccessTitle'),
       caption: this.translateService.instant('accessControl.roles.savedSuccessTitleMessage', {
         roleKey,
       }),
       type: 'success',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
-      title: this.translateService.instant('accessControl.roles.savedSuccessTitle'),
     });
   }
 }

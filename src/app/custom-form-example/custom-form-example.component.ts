@@ -17,7 +17,6 @@ import {Location} from '@angular/common';
 import {Component, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-import {CARBON_CONSTANTS} from '@valtimo/components';
 import {GlobalNotificationService} from '@valtimo/config';
 import {TaskService} from '@valtimo/task';
 
@@ -74,8 +73,6 @@ export class CustomFormExampleComponent implements OnInit {
       this.globalNotificationService.showToast({
         title: this.task.task.name + ' has successfully been completed',
         type: 'success',
-        duration: CARBON_CONSTANTS.modalAnimationMs,
-        showClose: true,
       });
       this.location.back();
     });

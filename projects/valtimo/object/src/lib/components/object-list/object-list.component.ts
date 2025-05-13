@@ -16,7 +16,7 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {CARBON_CONSTANTS, ListField, PageTitleService, Pagination} from '@valtimo/components';
+import {ListField, PageTitleService, Pagination} from '@valtimo/components';
 import {
   GlobalNotificationService,
   SearchField,
@@ -298,8 +298,6 @@ export class ObjectListComponent {
           this.globalNotificationService.showToast({
             title: this.translate.instant('object.messages.objectCreated'),
             type: 'success',
-            duration: 4000,
-            showClose: true,
           });
         },
       });
@@ -342,8 +340,6 @@ export class ObjectListComponent {
     this.globalNotificationService.showToast({
       title: this.translate.instant('object.messages.objectRetrievingFormError'),
       type: 'error',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
     });
     return throwError(error);
   }
@@ -352,8 +348,6 @@ export class ObjectListComponent {
     this.globalNotificationService.showToast({
       title: this.translate.instant('object.messages.objectCreationError'),
       type: 'error',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
     });
     return throwError(error);
   }

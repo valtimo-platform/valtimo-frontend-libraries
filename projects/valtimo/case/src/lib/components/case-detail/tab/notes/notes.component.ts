@@ -18,7 +18,6 @@ import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
 import {
-  CARBON_CONSTANTS,
   Pagination,
   PromptService,
   TimelineItem,
@@ -198,8 +197,6 @@ export class CaseDetailTabNotesComponent implements OnInit {
       this.globalNotificationService.showToast({
         title: this.translateService.instant('case.notes.editedMessage'),
         type: 'success',
-        showClose: true,
-        duration: CARBON_CONSTANTS.notificationDuration,
       });
     });
   }
@@ -228,8 +225,6 @@ export class CaseDetailTabNotesComponent implements OnInit {
           this.globalNotificationService.showToast({
             title: this.translateService.instant('case.notes.deleteConfirmation.deletedMessage'),
             type: 'success',
-            showClose: true,
-            duration: CARBON_CONSTANTS.notificationDuration,
           });
         });
       },

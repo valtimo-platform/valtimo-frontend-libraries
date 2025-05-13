@@ -35,7 +35,6 @@ import {FormioForm} from '@formio/angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
 import {
-  CARBON_CONSTANTS,
   FormioComponent,
   FormIoModule,
   FormioOptionsImpl,
@@ -235,8 +234,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
     this.globalNotificationService.showToast({
       title: `${task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`,
       type: 'success',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
     });
     this.task$.next(null);
     this.formSubmit.emit();

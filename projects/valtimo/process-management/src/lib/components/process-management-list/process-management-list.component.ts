@@ -19,7 +19,6 @@ import {Upload16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   ActionItem,
-  CARBON_CONSTANTS,
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
@@ -109,11 +108,9 @@ export class ProcessManagementListComponent {
       this.processManagementStateService.reloadDefinitions();
 
       this.notificationService.showToast({
+        title: this.translateService.instant(`interface.delete`),
         caption: this.translateService.instant(`processManagement.deleteNotification`),
         type: 'success',
-        duration: CARBON_CONSTANTS.notificationDuration,
-        showClose: true,
-        title: this.translateService.instant(`interface.delete`),
       });
     });
   }

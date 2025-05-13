@@ -17,7 +17,6 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/co
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {
-  CARBON_CONSTANTS,
   EditorModel,
   PageHeaderService,
   PageTitleService,
@@ -237,8 +236,6 @@ export class FormFlowEditorComponent implements OnInit, OnDestroy {
         key,
       }),
       type: 'success',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
       title: this.translateService.instant('formFlow.savedSuccessTitle'),
     });
   }

@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-const CARBON_CONSTANTS = {
-  modalAnimationMs: 240,
+import {NotificationContent} from 'carbon-components-angular';
+
+export const DEFAULT_NOTIFICATION_PARAMS = {
+  duration: 4000,
+  showClose: true,
 };
 
-export {CARBON_CONSTANTS};
+export const getNotificationObject = (content: NotificationContent): NotificationContent => ({
+  ...DEFAULT_NOTIFICATION_PARAMS,
+  ...content,
+});

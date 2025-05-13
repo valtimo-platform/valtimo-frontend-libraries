@@ -17,7 +17,6 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {CARBON_CONSTANTS} from '@valtimo/components';
 import {GlobalNotificationService} from '@valtimo/config';
 import {ButtonModule} from 'carbon-components-angular';
 import {BehaviorSubject} from 'rxjs';
@@ -70,8 +69,6 @@ export class FormManagementComponent {
 
     this.notificationService.showToast({
       type: 'success',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
       title: this.translateService.instant('formManagement.notifications.created'),
     });
 
@@ -83,8 +80,6 @@ export class FormManagementComponent {
 
     this.notificationService.showToast({
       type: 'success',
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
       title: this.translateService.instant('formManagement.notifications.created'),
     });
 

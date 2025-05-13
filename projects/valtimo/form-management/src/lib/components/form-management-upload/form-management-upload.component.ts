@@ -106,7 +106,6 @@ export class FormManagementUploadComponent implements OnInit, OnDestroy {
     this.notificationService.showNotification({
       type: 'success',
       title: this.translateService.instant('formManagement.upload.success'),
-      duration: CARBON_CONSTANTS.notificationDuration,
     });
 
     this.definitionUploaded.emit(formioDefinitionString);

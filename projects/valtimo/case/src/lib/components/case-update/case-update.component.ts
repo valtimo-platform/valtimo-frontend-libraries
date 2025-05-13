@@ -16,7 +16,6 @@
 import {Location} from '@angular/common';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {CARBON_CONSTANTS} from '@valtimo/components';
 import {GlobalNotificationService} from '@valtimo/config';
 import {DocumentService} from '@valtimo/document';
 import {TaskService} from '@valtimo/task';
@@ -109,8 +108,6 @@ export class CaseUpdateComponent implements OnInit {
       this.globalNotificationService.showToast({
         title: 'Document aangepast',
         type: 'success',
-        showClose: true,
-        duration: CARBON_CONSTANTS.notificationDuration,
       });
       this.location.back();
     });
@@ -132,8 +129,6 @@ export class CaseUpdateComponent implements OnInit {
       this.globalNotificationService.showToast({
         title: this.task.task.name + ' has successfully been completed',
         type: 'success',
-        showClose: true,
-        duration: CARBON_CONSTANTS.notificationDuration,
       });
       this.location.back();
     });

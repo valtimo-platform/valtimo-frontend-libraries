@@ -29,7 +29,6 @@ import {ArrowLeft16, Deploy16, Download16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   BreadcrumbService,
-  CARBON_CONSTANTS,
   FitPageDirectiveModule,
   ModalService,
   PageHeaderService,
@@ -406,8 +405,6 @@ export class ProcessManagementBuilderComponent
     this.notificationService.showToast({
       caption: this.translateService.instant(`processManagement.${notification}Notification`),
       type: notification,
-      duration: CARBON_CONSTANTS.notificationDuration,
-      showClose: true,
       title: this.translateService.instant(`interface.${notification}`),
     });
   }

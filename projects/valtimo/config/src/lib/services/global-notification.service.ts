@@ -24,6 +24,7 @@ import {
   ToastContent,
 } from 'carbon-components-angular';
 import {take} from 'rxjs';
+import {getNotificationObject} from '../utils';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +48,10 @@ export class GlobalNotificationService {
     if (!this._notificationService) return null;
 
     return this.handleNotificationRef(
-      this._notificationService?.showNotification(notificationObj, notificationComp)
+      this._notificationService?.showNotification(
+        getNotificationObject(notificationObj),
+        notificationComp
+      )
     );
   }
 
@@ -58,7 +62,7 @@ export class GlobalNotificationService {
     if (!this._notificationService) return null;
 
     return this.handleNotificationRef(
-      this._notificationService?.showToast(notificationObj, notificationComp)
+      this._notificationService?.showToast(getNotificationObject(notificationObj), notificationComp)
     );
   }
 
@@ -69,7 +73,10 @@ export class GlobalNotificationService {
     if (!this._notificationService) return null;
 
     return this.handleNotificationRef(
-      this._notificationService?.showActionable(notificationObj, notificationComp)
+      this._notificationService?.showActionable(
+        getNotificationObject(notificationObj),
+        notificationComp
+      )
     );
   }
 

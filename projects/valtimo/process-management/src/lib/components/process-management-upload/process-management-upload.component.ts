@@ -84,7 +84,6 @@ export class ProcessManagementUploadComponent {
         this.notificationService.showNotification({
           type: 'success',
           title: this.translateService.instant('processManagement.upload.success'),
-          duration: CARBON_CONSTANTS.notificationDuration,
         });
         this.closeModal();
         this.processManagementStateService.reloadDefinitions();
@@ -93,7 +92,6 @@ export class ProcessManagementUploadComponent {
         this.notificationService.showNotification({
           type: 'error',
           title: this.translateService.instant('processManagement.upload.failure'),
-          duration: CARBON_CONSTANTS.notificationDuration,
         });
       },
     });
