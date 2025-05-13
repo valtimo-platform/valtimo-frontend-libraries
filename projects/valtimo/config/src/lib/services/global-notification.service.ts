@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {ComponentRef, EventEmitter, Injectable} from '@angular/core';
 import {
   ActionableContent,
@@ -24,12 +23,14 @@ import {
   Toast,
   ToastContent,
 } from 'carbon-components-angular';
+import {take} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GlobalNotificationService {
   private _notificationService: NotificationService | null = null;
+  private readonly _notificationQueue: (Notification & {id: string})[] = [];
 
   public setNotificationService(service: NotificationService): void {
     this._notificationService = service;
@@ -45,7 +46,9 @@ export class GlobalNotificationService {
   ): Notification | null {
     if (!this._notificationService) return null;
 
-    return this._notificationService?.showNotification(notificationObj, notificationComp);
+    return this.handleNotificationRef(
+      this._notificationService?.showNotification(notificationObj, notificationComp)
+    );
   }
 
   public showToast(
@@ -53,7 +56,10 @@ export class GlobalNotificationService {
     notificationComp: typeof Toast = Toast
   ): Notification | null {
     if (!this._notificationService) return null;
-    return this._notificationService?.showToast(notificationObj, notificationComp);
+
+    return this.handleNotificationRef(
+      this._notificationService?.showToast(notificationObj, notificationComp)
+    );
   }
 
   public showActionable(
@@ -61,11 +67,14 @@ export class GlobalNotificationService {
     notificationComp: typeof ActionableNotification = ActionableNotification
   ): Notification | null {
     if (!this._notificationService) return null;
-    return this._notificationService?.showActionable(notificationObj, notificationComp);
+
+    return this.handleNotificationRef(
+      this._notificationService?.showActionable(notificationObj, notificationComp)
+    );
   }
 
   public close(notificationRef: any): void {
-    this._notificationService?.close(notificationRef);
+    notificationRef.close.emit();
   }
 
   public getSmartTimeout(notificationObj: any): number | null {
@@ -85,5 +94,39 @@ export class GlobalNotificationService {
 
   public ngOnDestroy(): void {
     this._notificationService?.ngOnDestroy();
+    this._notificationQueue.splice(0, this._notificationQueue.length);
+  }
+
+  private handleNotificationRef(notificationRef: any): Notification | null {
+    const notification = {
+      ...notificationRef,
+      id:
+        notificationRef.toastID ??
+        notificationRef.notificationID ??
+        notificationRef.actionableNotificationID,
+    };
+
+    if (this._notificationQueue.length > 3) {
+      this._notificationQueue.splice(0, 1);
+      this.close(notificationRef);
+    }
+
+    this._notificationQueue.push(notification);
+    setTimeout(() => this.removeNotificationInQueue(notification.id), 4000);
+
+    notificationRef.close
+      .pipe(take(1))
+      .subscribe(() => this.removeNotificationInQueue(notification.id));
+
+    return notificationRef;
+  }
+
+  private removeNotificationInQueue(id: string): void {
+    const index = this._notificationQueue.findIndex(
+      (notification: Notification & {id: string}) => notification.id === id
+    );
+    if (index === -1) return;
+
+    this._notificationQueue.splice(index, 1);
   }
 }
