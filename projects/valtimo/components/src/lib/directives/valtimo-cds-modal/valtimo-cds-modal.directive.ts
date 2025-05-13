@@ -102,7 +102,7 @@ export class ValtimoCdsModalDirective implements AfterViewInit, OnDestroy {
 
     const modalContainerElements = this.document.querySelectorAll('.cds--modal-container');
     modalContainerElements.forEach((el: Element) => {
-      this.renderer.setStyle(el, 'max-height', '100vh', RendererStyleFlags2.Important);
+      this.renderer.setStyle(el, 'max-height', 'calc(100vh - 64px)', RendererStyleFlags2.Important);
     });
   }
 
