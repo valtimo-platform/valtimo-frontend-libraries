@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {Component, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, UntypedFormControl, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+import {CARBON_CONSTANTS} from '@valtimo/components';
+import {GlobalNotificationService} from '@valtimo/config';
 import {ProcessService} from '@valtimo/process';
 
 @Component({
@@ -34,11 +34,11 @@ export class StartProcessCustomFormComponent implements OnInit {
   public submitted = false;
 
   constructor(
-    private processService: ProcessService,
-    private route: ActivatedRoute,
-    private formBuilder: UntypedFormBuilder,
-    private toastr: ToastrService,
-    private router: Router
+    private readonly formBuilder: UntypedFormBuilder,
+    private readonly globalNotificationService: GlobalNotificationService,
+    private readonly processService: ProcessService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {
     this.key = this.route.snapshot.paramMap.get('key');
   }
@@ -85,7 +85,12 @@ export class StartProcessCustomFormComponent implements OnInit {
       this.processService
         .startProcesInstance(this.key, businessKey, variables)
         .subscribe(response => {
-          this.toastr.success(this.processDefinition.name + ' has successfully been started');
+          this.globalNotificationService.showToast({
+            title: this.processDefinition.name + ' has successfully been started',
+            type: 'success',
+            duration: CARBON_CONSTANTS.notificationDuration,
+            showClose: true,
+          });
           this.router.navigate(['/cases/' + this.key]);
         });
     }

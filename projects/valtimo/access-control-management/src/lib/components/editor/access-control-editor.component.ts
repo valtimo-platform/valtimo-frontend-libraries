@@ -27,7 +27,7 @@ import {
 import {Role} from '../../models';
 import {TranslateService} from '@ngx-translate/core';
 import {AccessControlExportService} from '../../services/access-control-export.service';
-import {GlobalNotificationService} from '@valtimo/layout';
+import {GlobalNotificationService} from '@valtimo/config';
 
 @Component({
   standalone: false,

@@ -29,6 +29,7 @@ import {
 import {toObservable} from '@angular/core/rxjs-interop';
 import {Edit16, Save16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {BasicCaseWidget, CaseWidgetsRes} from '@valtimo/case';
 import {
   CARBON_CONSTANTS,
   ConfirmationModalComponent,
@@ -36,11 +37,10 @@ import {
   EditorModel,
   EditorModule,
 } from '@valtimo/components';
-import {BasicCaseWidget, CaseWidgetsRes} from '@valtimo/case';
+import {GlobalNotificationService} from '@valtimo/config';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, take} from 'rxjs';
 import {WidgetJsonEditorService, WidgetTabManagementService} from '../../../../../../../services';
-import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-case-management-widgets-json-editor',

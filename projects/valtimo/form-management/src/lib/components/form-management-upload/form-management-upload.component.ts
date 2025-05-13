@@ -26,6 +26,7 @@ import {
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CARBON_CONSTANTS} from '@valtimo/components';
+import {GlobalNotificationService} from '@valtimo/config';
 import {
   ButtonModule,
   FileUploaderModule,
@@ -33,7 +34,6 @@ import {
   ModalModule,
 } from 'carbon-components-angular';
 import {BehaviorSubject, map, Observable, startWith, Subscription} from 'rxjs';
-import {GlobalNotificationService} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-form-management-upload',

@@ -17,6 +17,7 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angula
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {CARBON_CONSTANTS} from '@valtimo/components';
+import {GlobalNotificationService} from '@valtimo/config';
 import {CaseSettings, DocumentService, ProcessDefinitionCaseDefinition} from '@valtimo/document';
 import {
   BehaviorSubject,
@@ -30,7 +31,6 @@ import {
 } from 'rxjs';
 import {CaseListService} from '../../services';
 import {CaseProcessStartModalComponent} from '../case-process-start-modal/case-process-start-modal.component';
-import {GlobalNotificationService} from '@valtimo/layout';
 
 declare const $;
 
