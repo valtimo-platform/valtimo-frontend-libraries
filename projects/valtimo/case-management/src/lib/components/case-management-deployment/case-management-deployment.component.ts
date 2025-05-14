@@ -20,7 +20,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Return16, Save16, TrashCan16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {BreadcrumbService} from '@valtimo/components';
-import {GlobalNotificationService} from '@valtimo/config';
+import {EnvironmentService, GlobalNotificationService} from '@valtimo/config';
 import {IconService, Notification} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';
 import {take, tap} from 'rxjs/operators';
@@ -68,7 +68,7 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     map(params => params.caseDefinitionVersionTag || '')
   );
 
-  public readonly canUpdateGlobalConfiguration$ = this.caseManagementService
+  public readonly canUpdateGlobalConfiguration$ = this.environmentService
     .canUpdateGlobalConfiguration()
     .pipe(map(response => response.canUpdateGlobalConfiguration));
 
@@ -180,7 +180,8 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     private readonly router: Router,
     private readonly datePipe: DatePipe,
     private readonly notificationService: GlobalNotificationService,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly environmentService: EnvironmentService
   ) {
     this.iconService.register(Return16);
     this.iconService.register(TrashCan16);

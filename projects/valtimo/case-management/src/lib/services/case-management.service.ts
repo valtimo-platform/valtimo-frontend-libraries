@@ -34,12 +34,6 @@ export class CaseManagementService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public canUpdateGlobalConfiguration(): Observable<{canUpdateGlobalConfiguration: boolean}> {
-    return this.httpClient.get<{canUpdateGlobalConfiguration: boolean}>(
-      this.getApiUrl('management/v1/case-definition/check')
-    );
-  }
-
   public getCaseDefinitions(params: any): Observable<Page<CaseListItem>> {
     return this.httpClient.get<Page<CaseListItem>>(
       this.getApiUrl('management/v1/case-definition'),

@@ -24,7 +24,7 @@ import {
   ConfirmationModalModule,
   ViewType,
 } from '@valtimo/components';
-import {GlobalNotificationService} from '@valtimo/config';
+import {EnvironmentService, GlobalNotificationService} from '@valtimo/config';
 import {ProcessDefinition} from '@valtimo/process';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, switchMap, tap} from 'rxjs';
@@ -64,7 +64,7 @@ export class ProcessManagementListComponent {
     },
   ];
 
-  public readonly canUpdateGlobalConfiguration$ = this.processManagementService
+  public readonly canUpdateGlobalConfiguration$ = this.environmentService
     .canUpdateGlobalConfiguration()
     .pipe(map(response => response.canUpdateGlobalConfiguration));
 
@@ -86,7 +86,8 @@ export class ProcessManagementListComponent {
     private readonly notificationService: GlobalNotificationService,
     private readonly processManagementService: ProcessManagementService,
     private readonly processManagementStateService: ProcessManagementStateService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly environmentService: EnvironmentService
   ) {
     this.iconService.registerAll([Upload16]);
   }

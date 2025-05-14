@@ -10,6 +10,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
+import {EnvironmentService} from '@valtimo/config';
 
 @Component({
   selector: 'valtimo-form-management-list',
@@ -36,7 +37,7 @@ export class FormManagementListComponent {
 
   public readonly context$ = getContextObservable(this.route);
 
-  public readonly canUpdateGlobalConfiguration$ = this.formManagementService
+  public readonly canUpdateGlobalConfiguration$ = this.environmentService
     .canUpdateGlobalConfiguration()
     .pipe(map(response => response.canUpdateGlobalConfiguration));
 
@@ -109,7 +110,8 @@ export class FormManagementListComponent {
   constructor(
     private readonly formManagementService: FormManagementService,
     private readonly iconService: IconService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private environmentService: EnvironmentService
   ) {
     this.iconService.registerAll([Upload16]);
   }

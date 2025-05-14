@@ -44,12 +44,6 @@ export class FormManagementService extends BaseApiService {
     );
   }
 
-  public canUpdateGlobalConfiguration(): Observable<{canUpdateGlobalConfiguration: boolean}> {
-    return this.httpClient.get<{canUpdateGlobalConfiguration: boolean}>(
-      this.getApiUrl('management/v1/case-definition/check')
-    );
-  }
-
   public getFormDefinitionCase(
     caseDefinitionKey: string,
     caseDefinitionVersionTag: string,
