@@ -18,7 +18,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {Edit16, Save16, TrashCan16} from '@carbon/icons';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/case-management';
 import {SpinnerModule} from '@valtimo/components';
 import {GlobalNotificationService} from '@valtimo/config';
@@ -86,6 +86,7 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
     private readonly iconService: IconService,
     private readonly openZaakService: OpenZaakService,
     private readonly route: ActivatedRoute,
+    private readonly translateService: TranslateService,
     private readonly zakenApiZaaktypeLinkService: ZakenApiZaaktypeLinkService
   ) {
     this.iconService.registerAll([Edit16, TrashCan16, Save16]);
@@ -181,14 +182,14 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
       .subscribe({
         next: () => {
           this.globalNotificationService.showToast({
-            title: 'Successfully de-linked zaaktype',
+            title: this.translateService.instant('openZaak.delinkSuccessful'),
             type: 'success',
           });
           this.zaakTypeLink$.next(null);
         },
         error: () => {
           this.globalNotificationService.showToast({
-            title: 'Failed to de-link zaaktype',
+            title: this.translateService.instant('openZaak.delinkFailed'),
             type: 'error',
           });
         },
@@ -213,14 +214,14 @@ export class ZakenApiZaaktypeLinkComponent implements OnInit {
           this.findZaakType(linkResult.zaakTypeUrl);
           this.findPluginConfiguration(linkResult.zakenApiPluginConfigurationId);
           this.globalNotificationService.showToast({
-            title: 'Successfully linked zaaktype to case',
+            title: this.translateService.instant('openZaak.linkSuccessful'),
             type: 'success',
           });
         },
         error: () => {
           this.globalNotificationService.showToast({
-            title: 'Failed to link zaaktype to case',
-            type: 'success',
+            title: this.translateService.instant('openZaak.linkFailed'),
+            type: 'error',
           });
         },
       });

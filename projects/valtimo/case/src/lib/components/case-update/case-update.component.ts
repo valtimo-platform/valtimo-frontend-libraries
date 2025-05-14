@@ -21,6 +21,7 @@ import {DocumentService} from '@valtimo/document';
 import {TaskService} from '@valtimo/task';
 import moment from 'moment';
 import {CaseService} from '../../services/case.service';
+import {TranslateService} from '@ngx-translate/core';
 
 moment.locale(localStorage.getItem('langKey') || '');
 
@@ -46,7 +47,8 @@ export class CaseUpdateComponent implements OnInit {
     private readonly globalNotificationService: GlobalNotificationService,
     private readonly location: Location,
     private readonly route: ActivatedRoute,
-    private readonly taskService: TaskService
+    private readonly taskService: TaskService,
+    private readonly translateService: TranslateService
   ) {
     const snapshot = this.route.snapshot.paramMap;
     this.documentDefinitionName = snapshot.get('documentDefinitionName') || '';
@@ -106,7 +108,7 @@ export class CaseUpdateComponent implements OnInit {
     this.documentService.modifyDocument(document).subscribe(result => {
       this.document = result.document;
       this.globalNotificationService.showToast({
-        title: 'Document aangepast',
+        title: this.translateService.instant('case.caseUpdated'),
         type: 'success',
       });
       this.location.back();
@@ -125,9 +127,9 @@ export class CaseUpdateComponent implements OnInit {
       taskId: this.task.task.id,
     };
 
-    this.documentService.modifyDocumentAndCompleteTask(documentData).subscribe(result => {
+    this.documentService.modifyDocumentAndCompleteTask(documentData).subscribe(() => {
       this.globalNotificationService.showToast({
-        title: this.task.task.name + ' has successfully been completed',
+        title: `${this.task.task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`,
         type: 'success',
       });
       this.location.back();

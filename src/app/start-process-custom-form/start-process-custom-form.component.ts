@@ -16,6 +16,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 import {GlobalNotificationService} from '@valtimo/config';
 import {ProcessService} from '@valtimo/process';
 
@@ -37,7 +38,8 @@ export class StartProcessCustomFormComponent implements OnInit {
     private readonly globalNotificationService: GlobalNotificationService,
     private readonly processService: ProcessService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly translateService: TranslateService
   ) {
     this.key = this.route.snapshot.paramMap.get('key');
   }
@@ -83,7 +85,9 @@ export class StartProcessCustomFormComponent implements OnInit {
     if (this.key && businessKey) {
       this.processService.startProcesInstance(this.key, businessKey, variables).subscribe(() => {
         this.globalNotificationService.showToast({
-          title: this.processDefinition.name + ' has successfully been started',
+          title: this.translateService.instant('processStartSuccessful', {
+            processName: this.processDefinition.name,
+          }),
           type: 'success',
         });
         this.router.navigate(['/cases/' + this.key]);

@@ -107,7 +107,7 @@ export class CaseDetailTabS3DocumentsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.globalNotificationService.showToast({
-            title: 'Successfully uploaded document to case',
+            title: this.translateService.instant('case.documenten.uploadSuccessful'),
             type: 'success',
           });
           this.refetchDocuments();
@@ -115,7 +115,7 @@ export class CaseDetailTabS3DocumentsComponent implements OnInit {
         },
         error: () => {
           this.globalNotificationService.showToast({
-            title: 'Failed to upload document to case',
+            title: this.translateService.instant('case.documenten.uploadFailed'),
             type: 'error',
           });
           this.uploading$.next(false);
@@ -147,14 +147,14 @@ export class CaseDetailTabS3DocumentsComponent implements OnInit {
         this.documentService.removeResource(this.documentId, relatedFile.fileId).subscribe(
           () => {
             this.globalNotificationService.showToast({
-              title: 'Successfully removed document from case',
+              title: this.translateService.instant('case.documenten.removeSuccessful'),
               type: 'success',
             });
             this.refetchDocuments();
           },
           () => {
             this.globalNotificationService.showToast({
-              title: 'Failed to remove document from case',
+              title: this.translateService.instant('case.documenten.removeFailed'),
               type: 'success',
             });
           }
