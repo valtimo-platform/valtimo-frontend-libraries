@@ -65,6 +65,8 @@ import {
   LoadingModule,
   SelectModule,
   TagModule,
+  ToggleModule,
+  TooltipModule,
 } from 'carbon-components-angular';
 import {isEqual} from 'lodash';
 import {NGXLogger} from 'ngx-logger';
@@ -90,6 +92,7 @@ import {
   ProcessDefinitionResult,
   ProcessManagementParams,
   ProcessManagementWindow,
+  UpdateProcessDefinitionCaseDefinitionRequest,
 } from '../../models';
 import {ProcessManagementEditorService, ProcessManagementService} from '../../services';
 import {ValtimoPropertiesProviderModule} from './panel';
@@ -118,6 +121,8 @@ import {ManagementContext} from '@valtimo/config';
     ProcessLinkModule,
     ProcessLinkModule,
     DialogModule,
+    ToggleModule,
+    TooltipModule,
   ],
   providers: [
     ProcessManagementEditorService,
@@ -144,8 +149,11 @@ export class ProcessManagementBuilderComponent
   private _bpmnModeler!: Modeler;
   private _bpmnViewer!: NavigatedViewer;
 
-  public isReadOnlyProcess$ = new BehaviorSubject<boolean>(false);
-  public isSystemProcess$ = new BehaviorSubject<boolean>(false);
+  public readonly isReadOnlyProcess$ = new BehaviorSubject<boolean>(false);
+  public readonly isSystemProcess$ = new BehaviorSubject<boolean>(false);
+
+  public readonly canInitializeDocument$ = new BehaviorSubject<boolean>(false);
+  public readonly startableByUser$ = new BehaviorSubject<boolean>(false);
 
   public readonly selectedProcessDefinitionXml$ =
     this.processManagementEditorService.selectionProcessDefinition$.pipe(
@@ -232,6 +240,8 @@ export class ProcessManagementBuilderComponent
   public readonly extraSpace: Signal<number> = computed(() =>
     this.processManagementService.context() === 'case' ? 0 : 0
   );
+
+  public readonly updatingProcessDefinitionCaseDefinition$ = new BehaviorSubject<boolean>(false);
 
   private readonly _subscriptions = new Subscription();
 
@@ -401,6 +411,32 @@ export class ProcessManagementBuilderComponent
     if (!notification) return;
 
     this.showNotification(notification);
+  }
+
+  public onProcessToggleChange(
+    field: keyof UpdateProcessDefinitionCaseDefinitionRequest,
+    value: boolean
+  ): void {
+    this.updatingProcessDefinitionCaseDefinition$.next(true);
+
+    this.managementParams$
+      .pipe(
+        switchMap(managementParams =>
+          this.processManagementService.updateProcessDefinitionCaseDefinition(
+            managementParams.caseDefinitionKey,
+            managementParams.caseDefinitionVersionTag,
+            this.processManagementEditorService.selectionProcessDefinition.id,
+            {
+              [field]: value,
+            }
+          )
+        ),
+        take(1)
+      )
+      .subscribe(() => {
+        this.reload();
+        this.updatingProcessDefinitionCaseDefinition$.next(false);
+      });
   }
 
   private showNotification(notification: null | 'success' | 'error'): void {
@@ -644,9 +680,15 @@ export class ProcessManagementBuilderComponent
         )
         .subscribe(result => {
           const processDefinitionResult = result as ProcessDefinitionResult;
+
           this.cleanUpListenersOnModeler();
           this._bpmnModeler?.importXML(processDefinitionResult.bpmn20Xml);
           this._bpmnViewer?.importXML(processDefinitionResult.bpmn20Xml);
+
+          this.canInitializeDocument$.next(
+            processDefinitionResult.processCaseLink.canInitializeDocument
+          );
+          this.startableByUser$.next(processDefinitionResult.processCaseLink.startableByUser);
 
           this.loading$.next(false);
         })

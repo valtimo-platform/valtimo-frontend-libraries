@@ -4,7 +4,11 @@ import {BaseApiService, ConfigService, ManagementContext} from '@valtimo/config'
 import {BehaviorSubject, combineLatest, Observable, of, switchMap} from 'rxjs';
 import {toObservable} from '@angular/core/rxjs-interop';
 
-import {PROCESS_MANAGEMENT_ENDPOINTS, ProcessDefinitionResult} from '../models';
+import {
+  PROCESS_MANAGEMENT_ENDPOINTS,
+  ProcessDefinitionResult,
+  UpdateProcessDefinitionCaseDefinitionRequest,
+} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -101,6 +105,18 @@ export class ProcessManagementService extends BaseApiService {
     return this.httpClient.get<ProcessDefinitionResult[]>(
       this.getApiUrl(`${PROCESS_MANAGEMENT_ENDPOINTS[this._context()]}/key/${processDefinitionKey}`)
     );
+  }
+
+  public updateProcessDefinitionCaseDefinition(
+    caseDefinitionKey: string,
+    caseDefinitionVersionTag: string,
+    processDefinitionId: string,
+    body: UpdateProcessDefinitionCaseDefinitionRequest
+  ): Observable<void> {
+    const url = this.getApiUrl(
+      `/management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/process/${processDefinitionId}`
+    );
+    return this.httpClient.put<void>(url, body);
   }
 
   private getProcesses(
