@@ -16,9 +16,10 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {ConfigService} from './config.service';
 import {BaseApiService} from './base-api.service';
+import {GlobalConfiguration} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -31,9 +32,9 @@ export class EnvironmentService extends BaseApiService {
     super(httpClient, configService);
   }
 
-  public canUpdateGlobalConfiguration(): Observable<{canUpdateGlobalConfiguration: boolean}> {
-    return this.httpClient.get<{canUpdateGlobalConfiguration: boolean}>(
-      this.getApiUrl('management/v1/case-definition/check')
-    );
+  public canUpdateGlobalConfiguration(): Observable<boolean> {
+    return this.httpClient
+      .get<GlobalConfiguration>(this.getApiUrl('management/v1/case-definition/check'))
+      .pipe(map(response => response.canUpdateGlobalConfiguration));
   }
 }

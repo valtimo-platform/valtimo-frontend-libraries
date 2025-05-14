@@ -145,9 +145,8 @@ export class ProcessManagementBuilderComponent
   public isReadOnlyProcess$ = new BehaviorSubject<boolean>(false);
   public isSystemProcess$ = new BehaviorSubject<boolean>(false);
 
-  public readonly canUpdateGlobalConfiguration$ = this.environmentService
-    .canUpdateGlobalConfiguration()
-    .pipe(map(response => response.canUpdateGlobalConfiguration));
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
 
   public readonly selectedProcessDefinitionXml$ =
     this.processManagementEditorService.selectionProcessDefinition$.pipe(

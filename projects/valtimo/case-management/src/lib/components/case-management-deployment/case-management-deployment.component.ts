@@ -68,9 +68,8 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     map(params => params.caseDefinitionVersionTag || '')
   );
 
-  public readonly canUpdateGlobalConfiguration$ = this.environmentService
-    .canUpdateGlobalConfiguration()
-    .pipe(map(response => response.canUpdateGlobalConfiguration));
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
 
   private getDraftDescription$(translationKey: string): Observable<string> {
     return combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$]).pipe(

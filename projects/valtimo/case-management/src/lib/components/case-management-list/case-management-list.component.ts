@@ -48,9 +48,8 @@ export class CaseManagementListComponent {
     })
   );
 
-  public readonly canUpdateGlobalConfiguration$ = this.environmentService
-    .canUpdateGlobalConfiguration()
-    .pipe(map(response => response.canUpdateGlobalConfiguration));
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
 
   public pagination: Pagination = {
     collectionSize: 0,

@@ -37,9 +37,8 @@ export class FormManagementListComponent {
 
   public readonly context$ = getContextObservable(this.route);
 
-  public readonly canUpdateGlobalConfiguration$ = this.environmentService
-    .canUpdateGlobalConfiguration()
-    .pipe(map(response => response.canUpdateGlobalConfiguration));
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
 
   public readonly caseManagementRouteParams$ = this.context$.pipe(
     switchMap(context => getCaseManagementRouteParams(context, this.route))
@@ -111,7 +110,7 @@ export class FormManagementListComponent {
     private readonly formManagementService: FormManagementService,
     private readonly iconService: IconService,
     private readonly route: ActivatedRoute,
-    private environmentService: EnvironmentService
+    private readonly environmentService: EnvironmentService
   ) {
     this.iconService.registerAll([Upload16]);
   }
