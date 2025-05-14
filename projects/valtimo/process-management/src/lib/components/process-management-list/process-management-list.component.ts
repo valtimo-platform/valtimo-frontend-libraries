@@ -30,6 +30,7 @@ import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {BehaviorSubject, Observable, switchMap, tap} from 'rxjs';
 import {ProcessDefinitionResult} from '../../models';
 import {ProcessManagementService, ProcessManagementStateService} from '../../services';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-process-management-list',
@@ -62,6 +63,10 @@ export class ProcessManagementListComponent {
       type: 'danger',
     },
   ];
+
+  public readonly canUpdateGlobalConfiguration$ = this.processManagementService
+    .canUpdateGlobalConfiguration()
+    .pipe(map(response => response.canUpdateGlobalConfiguration));
 
   public readonly processDefinitions$: Observable<ProcessDefinitionResult[]> =
     this.processManagementStateService.reloadDefinitions$.pipe(

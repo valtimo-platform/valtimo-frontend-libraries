@@ -113,6 +113,10 @@ export class FormManagementEditComponent
 
   private readonly _formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
 
+  public readonly canUpdateGlobalConfiguration$ = this.formManagementService
+    .canUpdateGlobalConfiguration()
+    .pipe(map(response => response.canUpdateGlobalConfiguration));
+
   private get _formDefinition(): FormDefinition {
     return this._formDefinition$.getValue();
   }

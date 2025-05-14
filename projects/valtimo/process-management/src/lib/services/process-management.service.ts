@@ -44,6 +44,12 @@ export class ProcessManagementService extends BaseApiService {
     super(httpClient, configService);
   }
 
+  public canUpdateGlobalConfiguration(): Observable<{canUpdateGlobalConfiguration: boolean}> {
+    return this.httpClient.get<{canUpdateGlobalConfiguration: boolean}>(
+      this.getApiUrl('management/v1/case-definition/check')
+    );
+  }
+
   public setParams(caseDefinitionKey: string, caseDefinitionVersionTag: string): void {
     this._definitionKey$.next(caseDefinitionKey);
     this._caseDefinitionVersionTag$.next(caseDefinitionVersionTag);

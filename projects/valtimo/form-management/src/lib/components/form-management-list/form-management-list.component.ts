@@ -36,6 +36,10 @@ export class FormManagementListComponent {
 
   public readonly context$ = getContextObservable(this.route);
 
+  public readonly canUpdateGlobalConfiguration$ = this.formManagementService
+    .canUpdateGlobalConfiguration()
+    .pipe(map(response => response.canUpdateGlobalConfiguration));
+
   public readonly caseManagementRouteParams$ = this.context$.pipe(
     switchMap(context => getCaseManagementRouteParams(context, this.route))
   );
