@@ -697,6 +697,7 @@
       "zgw": "ZGW",
       "forms": "Forms",
       "decision": "Decision tables",
+      "formFlows": "Form Flows",
       "generalTab": {
         "readOnlyNotification": {
           "title": "Read only",

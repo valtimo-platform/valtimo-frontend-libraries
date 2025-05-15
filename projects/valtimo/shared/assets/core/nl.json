@@ -696,6 +696,7 @@
       "tags": "Tags",
       "forms": "Formulieren",
       "decision": "Beslistabellen",
+      "formFlows": "Form flows",
       "generalTab": {
         "readOnlyNotification": {
           "title": "Alleen-lezen",

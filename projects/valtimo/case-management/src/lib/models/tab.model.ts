@@ -24,6 +24,7 @@ export enum TabEnum {
   TABS = 'tabs',
   STATUSES = 'statuses',
   FORMS = 'forms',
+  FORM_FLOWS = 'formFlows',
   TAGS = 'tags',
   DECISIONS = 'decisions',
 }
