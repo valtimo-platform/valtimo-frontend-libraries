@@ -424,7 +424,7 @@ export class ProcessManagementBuilderComponent
     this.managementParams$
       .pipe(
         switchMap(managementParams =>
-          this.processManagementService.updateProcessDefinitionCaseDefinition(
+          this.processManagementService.updateProcessDefinitionCaseDefinitionProperties(
             managementParams.caseDefinitionKey,
             managementParams.caseDefinitionVersionTag,
             this.processManagementEditorService.selectionProcessDefinition.id,
@@ -436,7 +436,6 @@ export class ProcessManagementBuilderComponent
         take(1)
       )
       .subscribe(() => {
-        this.reload();
         this.updatingProcessDefinitionCaseDefinition$.next(false);
       });
   }

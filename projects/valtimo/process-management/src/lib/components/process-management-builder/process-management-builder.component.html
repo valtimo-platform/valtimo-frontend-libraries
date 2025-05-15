@@ -87,7 +87,7 @@
 
         <div class="page-header-actions__tags">
           <cds-tag
-            *ngIf="actionsObs.isReadOnlyProcess || obs.canUpdateGlobalConfiguration"
+            *ngIf="actionsObs.isReadOnlyProcess || actionsObs.canUpdateGlobalConfiguration"
             type="blue"
             >{{ 'processManagement.readOnly' | translate }}</cds-tag
           >

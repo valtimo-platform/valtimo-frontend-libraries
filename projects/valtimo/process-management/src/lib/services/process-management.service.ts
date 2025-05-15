@@ -107,16 +107,18 @@ export class ProcessManagementService extends BaseApiService {
     );
   }
 
-  public updateProcessDefinitionCaseDefinition(
+  public updateProcessDefinitionCaseDefinitionProperties(
     caseDefinitionKey: string,
     caseDefinitionVersionTag: string,
     processDefinitionId: string,
     body: UpdateProcessDefinitionCaseDefinitionRequest
   ): Observable<void> {
-    const url = this.getApiUrl(
-      `/management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/process/${processDefinitionId}`
+    return this.httpClient.put<void>(
+      this.getApiUrl(
+        `/management/v1/case-definition/${caseDefinitionKey}/version/${caseDefinitionVersionTag}/process/${processDefinitionId}/properties`
+      ),
+      body
     );
-    return this.httpClient.put<void>(url, body);
   }
 
   private getProcesses(
