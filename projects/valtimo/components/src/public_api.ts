@@ -51,10 +51,6 @@ export * from './lib/components/carbon-list/carbon-list.module';
 export * from './lib/components/carbon-list/CarbonListFilterPipe.directive';
 export * from './lib/components/carbon-list/no-results/carbon-no-results.component';
 
-export * from './lib/components/list/list.component';
-export * from './lib/components/list/ListFilterPipe.directive';
-export * from './lib/components/list/list.module';
-
 export * from './lib/components/page-header/page-header.component';
 export * from './lib/components/page-header/page-header.module';
 

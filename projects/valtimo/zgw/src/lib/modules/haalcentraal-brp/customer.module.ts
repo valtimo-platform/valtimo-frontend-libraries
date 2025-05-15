@@ -17,14 +17,14 @@
 import {NgModule} from '@angular/core';
 import {CustomerListComponent} from './components/customer-list/customer-list.component';
 import {
-  WidgetModule,
-  ListModule,
-  SpinnerModule,
+  CarbonListModule,
   FilterSidebarModule,
   PageModule,
   ParagraphModule,
+  SpinnerModule,
   TableModule,
   TitleModule,
+  WidgetModule,
 } from '@valtimo/components';
 import {CustomerRoutingModule} from './customer-routing.module';
 import {CommonModule} from '@angular/common';
@@ -40,7 +40,6 @@ import {CasesListComponent} from './components/cases-list/cases-list.component';
     CommonModule,
     WidgetModule,
     CustomerRoutingModule,
-    ListModule,
     SpinnerModule,
     TranslateModule,
     FilterSidebarModule,
@@ -49,6 +48,7 @@ import {CasesListComponent} from './components/cases-list/cases-list.component';
     TitleModule,
     ParagraphModule,
     TableModule,
+    CarbonListModule,
   ],
   declarations: [CustomerListComponent, CasesListComponent],
   exports: [CustomerListComponent, CasesListComponent],
