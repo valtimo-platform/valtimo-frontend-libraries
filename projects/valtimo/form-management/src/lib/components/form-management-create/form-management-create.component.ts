@@ -1,13 +1,10 @@
+import {CommonModule} from '@angular/common';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-import {ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components';
-import {FormManagementService} from '../../services';
-import {CreateFormDefinitionRequest} from '../../models';
-import {combineLatest, switchMap, tap} from 'rxjs';
-import {noDuplicateFormValidator} from '../../validators/no-duplicate-form.validator';
-import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
+import {ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components';
+import {getCaseManagementRouteParams} from '@valtimo/config';
 import {
   ButtonModule,
   InputModule,
@@ -15,8 +12,12 @@ import {
   ModalModule,
   TilesModule,
 } from 'carbon-components-angular';
-import {take} from 'rxjs/operators';
-import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
+import {combineLatest, of, switchMap, tap} from 'rxjs';
+import {filter, take} from 'rxjs/operators';
+import {CreateFormDefinitionRequest} from '../../models';
+import {FormManagementService} from '../../services';
+import {getContextObservable} from '../../utils';
+import {noDuplicateFormValidator} from '../../validators/no-duplicate-form.validator';
 
 @Component({
   selector: 'valtimo-form-management-create',
@@ -48,7 +49,8 @@ export class FormManagementCreateComponent implements OnInit {
   public readonly context$ = getContextObservable(this.route);
 
   public readonly caseManagementRouteParams$ = this.context$.pipe(
-    switchMap(context => getCaseManagementRouteParams(context, this.route))
+    filter(context => context === 'case'),
+    switchMap(() => getCaseManagementRouteParams(this.route))
   );
 
   public form: FormGroup;

@@ -29,7 +29,11 @@ import {
   ValtimoCdsModalDirectiveModule,
   WidgetModule,
 } from '@valtimo/components';
-import {EnvironmentService, GlobalNotificationService} from '@valtimo/shared';
+import {
+  EnvironmentService,
+  getCaseManagementRouteParams,
+  GlobalNotificationService,
+} from '@valtimo/config';
 import {
   ButtonModule,
   DialogModule,
@@ -46,7 +50,7 @@ import {BehaviorSubject, combineLatest, map, Observable, of, Subscription} from 
 import {distinctUntilChanged, filter, switchMap, take, tap} from 'rxjs/operators';
 import {EDIT_TABS, FormDefinition, ModifyFormDefinitionRequest} from '../../models';
 import {FormManagementService} from '../../services';
-import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
+import {getContextObservable} from '../../utils';
 import {FormManagementDuplicateComponent} from '../form-management-duplicate';
 import {FormManagementUploadComponent} from '../form-management-upload';
 
@@ -108,7 +112,8 @@ export class FormManagementEditComponent
   public readonly context$ = getContextObservable(this.route);
 
   public readonly caseManagementRouteParams$ = this.context$.pipe(
-    switchMap(context => getCaseManagementRouteParams(context, this.route))
+    filter(context => context === 'case'),
+    switchMap(() => getCaseManagementRouteParams(this.route))
   );
 
   private readonly _formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);

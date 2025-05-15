@@ -1,16 +1,16 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
-import {Upload16} from '@carbon/icons';
-import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {FormManagementService} from '../../services';
-import {CarbonListModule, ColumnConfig, Pagination} from '@valtimo/components';
-import {FormDefinition} from '../../models';
-import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {getCaseManagementRouteParams, getContextObservable} from '../../utils';
-import {EnvironmentService} from '@valtimo/shared';
+import {ActivatedRoute} from '@angular/router';
+import {Upload16} from '@carbon/icons';
+import {TranslateModule} from '@ngx-translate/core';
+import {CarbonListModule, ColumnConfig, Pagination} from '@valtimo/components';
+import {EnvironmentService, getCaseManagementRouteParams} from '@valtimo/config';
+import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
+import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
+import {FormDefinition} from '../../models';
+import {FormManagementService} from '../../services';
+import {getContextObservable} from '../../utils';
 
 @Component({
   selector: 'valtimo-form-management-list',
@@ -41,7 +41,9 @@ export class FormManagementListComponent {
     this.environmentService.canUpdateGlobalConfiguration();
 
   public readonly caseManagementRouteParams$ = this.context$.pipe(
-    switchMap(context => getCaseManagementRouteParams(context, this.route))
+    filter(context => context === 'case'),
+    switchMap(() => getCaseManagementRouteParams(this.route)),
+    tap(res => console.log({res}))
   );
 
   private readonly _collectionSize$ = new BehaviorSubject<number>(0);

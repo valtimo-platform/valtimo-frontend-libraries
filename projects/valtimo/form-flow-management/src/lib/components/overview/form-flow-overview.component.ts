@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CarbonListComponent, ColumnConfig, ViewType} from '@valtimo/components';
-import {BehaviorSubject, finalize, Observable} from 'rxjs';
+import {BehaviorSubject, finalize, Observable, of, switchMap, tap} from 'rxjs';
 import {FormFlowDefinition, ListFormFlowDefinition} from '../../models';
-import {FormFlowService} from '../../services/form-flow.service';
+import {FormFlowService, FormFlowService2} from '../../services';
+import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/config';
 
 @Component({
   standalone: false,
@@ -48,11 +49,24 @@ export class FormFlowOverviewComponent implements OnInit {
 
   public readonly formFlowDefinitions$: Observable<ListFormFlowDefinition[]> =
     this.formFlowService.formFlows$;
+  public readonly formFlowDefinitions2$ = getCaseManagementRouteParams(this.route).pipe(
+    switchMap((params: CaseManagementParams | undefined) =>
+      !params
+        ? of(null)
+        : this.formFlowService2.getFormFlowDefinitions(
+            params.caseDefinitionKey,
+            params.caseDefinitionVersionTag
+          )
+    ),
+    tap(res => console.log({res}))
+  );
   public readonly loading$: Observable<boolean> = this.formFlowService.loading$;
   public readonly showAddModal$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly formFlowService: FormFlowService,
+    private readonly formFlowService2: FormFlowService2,
+    private readonly route: ActivatedRoute,
     private readonly router: Router
   ) {}
 

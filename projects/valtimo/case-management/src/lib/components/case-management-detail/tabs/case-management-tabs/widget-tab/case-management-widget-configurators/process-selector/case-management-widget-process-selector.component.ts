@@ -2,9 +2,10 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
-import {DocumentService, ProcessDefinitionCaseDefinition} from '@valtimo/document';
 import {CaseWidgetAction} from '@valtimo/case';
+import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
+import {CaseManagementParams} from '@valtimo/config';
+import {DocumentService, ProcessDefinitionCaseDefinition} from '@valtimo/document';
 import {DropdownModule, InputModule, ListItem} from 'carbon-components-angular';
 import {
   BehaviorSubject,
@@ -16,7 +17,6 @@ import {
   switchMap,
 } from 'rxjs';
 import {WidgetWizardService} from '../../../../../../../services';
-import {CaseManagementParams} from '../../../../../../../models';
 
 @Component({
   selector: 'valtimo-case-management-widget-process-selector',
