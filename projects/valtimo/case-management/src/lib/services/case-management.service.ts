@@ -15,9 +15,13 @@
  */
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BaseApiService, ConfigService} from '@valtimo/config';
+import {
+  BaseApiService,
+  ConfigService,
+  InterceptorSkip,
+  InterceptorSkipHeader,
+} from '@valtimo/config';
 import {Page} from '@valtimo/document';
-import {InterceptorSkip, InterceptorSkipHeader} from '@valtimo/security';
 import {Observable} from 'rxjs';
 import {CaseListItem} from '../models';
 import {CaseVersionListItem} from '../models/case-version-list.model';

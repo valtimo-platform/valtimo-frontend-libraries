@@ -21,7 +21,7 @@ import {ConfigService} from './config.service';
 import {BaseApiService} from './base-api.service';
 import {GlobalConfiguration} from '../models';
 import {catchError} from 'rxjs/operators';
-import {InterceptorSkip} from '@valtimo/security';
+import {InterceptorSkip} from '../constants';
 
 @Injectable({
   providedIn: 'root',
