@@ -17,7 +17,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PromptComponent} from './prompt.component';
-import {ButtonModule} from '../button/button.module';
+import {ButtonModule} from 'carbon-components-angular';
 import {TitleModule} from '../title/title.module';
 import {ParagraphModule} from '../paragraph/paragraph.module';
 

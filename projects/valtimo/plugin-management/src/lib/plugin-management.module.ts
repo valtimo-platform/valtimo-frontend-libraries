@@ -27,9 +27,7 @@ import {PluginConfigurationContainerModule, PluginTranslatePipeModule} from '@va
 import {PluginEditModalComponent} from './components/plugin-edit-modal/plugin-edit-modal.component';
 import {PluginEditComponent} from './components/plugin-edit/plugin-edit.component';
 import {
-  ButtonModule,
   CarbonListModule,
-  PageModule,
   ParagraphModule,
   StepperModule,
   TableModule,
@@ -59,13 +57,11 @@ import {
     CommonModule,
     PluginManagementRoutingModule,
     TranslateModule,
-    PageModule,
     ParagraphModule,
     TitleModule,
     TableModule,
     StepperModule,
     VModalModule,
-    ButtonModule,
     VCardModule,
     PluginTranslatePipeModule,
     PluginConfigurationContainerModule,

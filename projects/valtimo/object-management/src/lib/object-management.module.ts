@@ -19,7 +19,6 @@ import {ObjectManagementRoutingModule} from './object-management-routing.module'
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {
-  ButtonModule,
   CarbonListModule,
   CarbonMultiInputModule,
   ConfirmationModalModule,
@@ -73,7 +72,6 @@ import {ObjectManagementListSearchFieldsComponent} from './components/object-man
     ObjectManagementRoutingModule,
     VModalModule,
     TitleModule,
-    ButtonModule,
     FormModule,
     InputModule,
     SelectModule,

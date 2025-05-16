@@ -125,7 +125,6 @@ import {CustomFormFlowComponent} from '@src/app/custom-form-flow-component/custo
 import {TaskManagementModule} from '@valtimo/task-management';
 import {CaseMigrationModule} from '@valtimo/case-migration';
 import {
-  CaseDetailTabContactMomentsComponent,
   CaseDetailTabZaakobjectenComponent,
   registerDocumentenApiFormioUploadComponent,
   ZgwModule,
@@ -253,7 +252,6 @@ export function tabsFactory() {
       useValue: {
         'custom-dossier-tab': CustomCaseTabComponent,
         zaakobjecten: CaseDetailTabZaakobjectenComponent,
-        contactmomenten: CaseDetailTabContactMomentsComponent,
       },
     },
     {

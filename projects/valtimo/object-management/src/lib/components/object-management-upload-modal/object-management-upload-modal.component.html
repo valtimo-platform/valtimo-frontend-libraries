@@ -32,17 +32,17 @@
   </div>
   <div role="footer">
     <div class="buttons">
-      <v-button (clickEvent)="cancel()" [disabled]="obs.disabled" type="secondary">
+      <button cdsButton="secondary" (click)="cancel()" [disabled]="obs.disabled">
         {{ 'objectManagement.cancel' | translate }}
-      </v-button>
-      <v-button
-        (clickEvent)="uploadDefinition()"
+      </button>
+
+      <button
+        cdsButton="primary"
+        (click)="uploadDefinition()"
         [disabled]="obs.jsonString === '' || obs.disabled"
-        mdiIcon="plus"
-        type="success"
       >
         {{ 'Upload' | translate }}
-      </v-button>
+      </button>
     </div>
   </div>
 </v-modal>

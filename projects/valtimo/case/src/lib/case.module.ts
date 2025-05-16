@@ -26,7 +26,6 @@ import {
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {
   BpmnJsDiagramModule,
-  ButtonModule,
   CamundaFormModule,
   CarbonListModule,
   CaseTagsSelectorComponent,
@@ -40,7 +39,6 @@ import {
   InputModule,
   IsArrayPipe,
   ModalModule,
-  PageModule,
   ParagraphModule,
   RenderInPageHeaderDirectiveModule,
   SearchableDropdownSelectModule,
@@ -162,10 +160,8 @@ export type TabsFactory = () => Map<string, object>;
     TableModule,
     VModalModule,
     TitleModule,
-    ButtonModule,
     SearchableDropdownSelectModule,
     SearchFieldsModule,
-    PageModule,
     FormModule,
     InputModule,
     VFormModule,

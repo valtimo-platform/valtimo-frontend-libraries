@@ -166,11 +166,6 @@ export * from './lib/components/form-io/formio-value-resolver-selector/formio-va
 // formio dummy
 export * from './lib/components/form-io/form-io-dummy/dummy.component';
 export * from './lib/components/form-io/form-io-dummy/dummy.formio';
-
-// Button component
-export * from './lib/components/button/button.module';
-export * from './lib/components/button/button.component';
-
 // Table component
 export * from './lib/components/table/table.module';
 export * from './lib/components/table/table.component';
@@ -200,13 +195,6 @@ export * from './lib/components/input/input.module';
 // Input label
 export * from './lib/components/input-label/input-label.component';
 export * from './lib/components/input-label/input-label.module';
-// Page components
-export * from './lib/components/page/page.module';
-export * from './lib/components/page/page-container/page-container.component';
-export * from './lib/components/page/page-content/page-content.component';
-export * from './lib/components/page/page-header/page-header.component';
-export * from './lib/components/page/page-header-introduction/page-header-introduction.component';
-export * from './lib/components/page/page-header-actions/page-header-actions.component';
 // Paragraph
 export * from './lib/components/paragraph/paragraph.module';
 export * from './lib/components/paragraph/paragraph.component';
@@ -269,5 +257,4 @@ export * from './lib/directives/valtimo-cds-overflow-button/valtimo-cds-overflow
 export * from './lib/directives/remove-classnames/remove-classnames.directive';
 // case tag selector
 export * from './lib/components/case-tags-selector/case-tags-selector.component';
-
 export * from './lib/components/case-tags-selector/case-tags-selector.component';

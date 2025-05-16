@@ -20,7 +20,6 @@ import {CommonModule} from '@angular/common';
 import {ProcessLinkRoutingModule} from './process-link-routing.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
-  ButtonModule,
   CarbonMultiInputModule,
   FormIoModule,
   ModalModule,
@@ -102,7 +101,6 @@ import {SelectUIComponentComponent} from './components/select-ui-component/selec
     PluginTranslatePipeModule,
     ParagraphModule,
     PluginConfigurationContainerModule,
-    ButtonModule,
     TitleModule,
     CarbonModalModule,
     ProgressIndicatorModule,
