@@ -18,7 +18,6 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PromptComponent} from './prompt.component';
 import {ButtonModule} from 'carbon-components-angular';
-import {TitleModule} from '../title/title.module';
 import {ParagraphModule} from '../paragraph/paragraph.module';
 
 /**
@@ -26,7 +25,7 @@ import {ParagraphModule} from '../paragraph/paragraph.module';
  */
 @NgModule({
   declarations: [PromptComponent],
-  imports: [CommonModule, ButtonModule, TitleModule, ParagraphModule],
+  imports: [CommonModule, ButtonModule, ParagraphModule],
   exports: [PromptComponent],
 })
 export class PromptModule {}

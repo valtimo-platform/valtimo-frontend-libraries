@@ -48,7 +48,6 @@ import {
   StatusSelectorComponent,
   TableModule,
   TimelineModule,
-  TitleModule,
   UploaderModule,
   ValtimoCdsModalDirectiveModule,
   ValtimoCdsOverflowButtonDirectiveModule,

@@ -186,9 +186,6 @@ export * from './lib/components/stepper/stepper-footer-step/stepper-footer-step.
 // Card component
 export * from './lib/components/v-card/card.component';
 export * from './lib/components/v-card/card.module';
-// Title component
-export * from './lib/components/title/title.component';
-export * from './lib/components/title/title.module';
 // Text input
 export * from './lib/components/input/input.component';
 export * from './lib/components/input/input.module';

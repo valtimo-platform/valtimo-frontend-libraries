@@ -25,12 +25,14 @@
 >
   <div role="header">
     <div class="add-title">
-      <v-title [margin]="false">{{
-        (obs.modalType === 'add'
-          ? 'objectManagement.createObjecttype'
-          : 'objectManagement.editObjecttype'
-        ) | translate
-      }}</v-title>
+      <h4>
+        {{
+          (obs.modalType === 'add'
+            ? 'objectManagement.createObjecttype'
+            : 'objectManagement.editObjecttype'
+          ) | translate
+        }}
+      </h4>
     </div>
   </div>
   <div role="content">
