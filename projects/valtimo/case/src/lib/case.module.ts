@@ -158,7 +158,6 @@ export type TabsFactory = () => Map<string, object>;
     ParagraphModule,
     TableModule,
     VModalModule,
-    TitleModule,
     SearchableDropdownSelectModule,
     SearchFieldsModule,
     FormModule,

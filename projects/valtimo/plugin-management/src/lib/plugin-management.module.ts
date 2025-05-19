@@ -31,16 +31,16 @@ import {
   ParagraphModule,
   StepperModule,
   TableModule,
-  TitleModule,
   ValtimoCdsModalDirectiveModule,
-  VCardModule,
   VModalModule,
 } from '@valtimo/components';
 import {
   ButtonModule as CarbonButtonModule,
   IconModule,
   LayerModule,
+  LoadingModule,
   ModalModule as CarbonModalModule,
+  TilesModule,
 } from 'carbon-components-angular';
 
 @NgModule({
@@ -58,11 +58,9 @@ import {
     PluginManagementRoutingModule,
     TranslateModule,
     ParagraphModule,
-    TitleModule,
     TableModule,
     StepperModule,
     VModalModule,
-    VCardModule,
     PluginTranslatePipeModule,
     PluginConfigurationContainerModule,
     CarbonButtonModule,
@@ -71,6 +69,8 @@ import {
     IconModule,
     ValtimoCdsModalDirectiveModule,
     LayerModule,
+    TilesModule,
+    LoadingModule,
   ],
   exports: [
     PluginManagementComponent,

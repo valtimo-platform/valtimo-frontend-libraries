@@ -68,9 +68,6 @@ export * from './lib/components/widget/widget.module';
 export * from './lib/components/field-auto-focus/field-auto-focus.directive';
 export * from './lib/components/field-auto-focus/field-auto-focus.module';
 
-export * from './lib/components/card/card.component';
-export * from './lib/components/card/card.module';
-
 export * from './lib/components/bpmn-js-diagram/bpmn-js-diagram.component';
 export * from './lib/components/bpmn-js-diagram/bpmn-js-diagram.module';
 
@@ -183,9 +180,6 @@ export * from './lib/components/stepper/stepper-content/stepper-content.componen
 export * from './lib/components/stepper/stepper-container/stepper-container.component';
 export * from './lib/components/stepper/stepper-step/stepper-step.component';
 export * from './lib/components/stepper/stepper-footer-step/stepper-footer-step.component';
-// Card component
-export * from './lib/components/v-card/card.component';
-export * from './lib/components/v-card/card.module';
 // Text input
 export * from './lib/components/input/input.component';
 export * from './lib/components/input/input.module';

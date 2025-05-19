@@ -31,7 +31,6 @@ import {environment} from '../environments/environment';
 import {SecurityModule} from '@valtimo/security';
 import {
   BpmnJsDiagramModule,
-  CardModule,
   enableCustomFormioComponents,
   FormIoModule,
   MenuModule,
@@ -161,7 +160,6 @@ export function tabsFactory() {
     BrowserModule,
     AppRoutingModule,
     LayoutModule,
-    CardModule,
     WidgetModule,
     BootstrapModule,
     ConfigModule.forRoot(environment),

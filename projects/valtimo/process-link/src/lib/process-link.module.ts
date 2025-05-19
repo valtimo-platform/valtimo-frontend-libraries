@@ -28,11 +28,9 @@ import {
   RenderInPageHeaderDirectiveModule,
   SearchableDropdownSelectModule,
   StepperModule,
-  TitleModule,
   TooltipIconModule,
   TooltipModule,
   ValtimoCdsModalDirectiveModule,
-  VCardModule,
   VModalModule,
 } from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
@@ -97,11 +95,9 @@ import {SelectUIComponentComponent} from './components/select-ui-component/selec
     TranslateModule,
     StepperModule,
     VModalModule,
-    VCardModule,
     PluginTranslatePipeModule,
     ParagraphModule,
     PluginConfigurationContainerModule,
-    TitleModule,
     CarbonModalModule,
     ProgressIndicatorModule,
     CarbonButtonModule,
