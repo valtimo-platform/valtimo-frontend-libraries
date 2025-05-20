@@ -21,17 +21,17 @@ import {DocumentService, ProcessDefinitionCaseDefinition} from '@valtimo/documen
 import {CAN_CREATE_CAMUNDA_EXECUTION_PERMISSION, WIDGET_PERMISSION_RESOURCE} from '../../widgets.permissions';
 
 export class WidgetProcess {
-  private readonly _caseDocumentId$ = new BehaviorSubject<string | null>(null);
+  private readonly _baseDocumentId$ = new BehaviorSubject<string | null>(null);
   private readonly _baseWidgetConfiguration$ = new BehaviorSubject<BasicCaseWidget | null>(null);
   protected set baseDocumentId(value: string) {
-    this._caseDocumentId$.next(value);
+    this._baseDocumentId$.next(value);
   }
   protected set baseWidgetConfiguration(value: BasicCaseWidget) {
     this._baseWidgetConfiguration$.next(value);
   }
 
   private readonly _processDefinitionCaseDefinition$ = combineLatest([
-    this._caseDocumentId$,
+    this._baseDocumentId$,
     this._baseWidgetConfiguration$
   ]).pipe(
     switchMap(([documentId, widgetConfiguration]: [string | null, BasicCaseWidget | null]) => {
