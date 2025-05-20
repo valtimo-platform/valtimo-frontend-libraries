@@ -16,14 +16,18 @@
 
 import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {DecisionService} from '../decision.service';
-import {ModalComponent} from '@valtimo/components';
+import {ModalComponent, ModalModule} from '@valtimo/components';
 import {DecisionStateService} from '../services';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'valtimo-decision-deploy',
+  standalone: true,
   templateUrl: './decision-deploy.component.html',
   styleUrls: ['./decision-deploy.component.scss'],
+  imports: [CommonModule, FormsModule, ModalModule, TranslateModule],
 })
 export class DecisionDeployComponent {
   public dmn: File | null = null;

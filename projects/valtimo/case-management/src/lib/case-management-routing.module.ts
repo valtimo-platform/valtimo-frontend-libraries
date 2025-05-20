@@ -40,6 +40,7 @@ import {CaseManagementWidgetTabComponent} from './components/case-management-det
 import {CaseManagementTagsComponent} from './components/case-management-detail/tabs/case-management-tags/case-management-tags.component';
 import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
 import {TabEnum} from './models';
+import {DecisionComponent, DecisionManagementRouteData} from '@valtimo/decision';
 
 const routes: Routes = [
   {
@@ -86,6 +87,13 @@ const routes: Routes = [
         data: {
           context: 'case',
         } as ProcessManagementRouteData,
+      },
+      {
+        path: TabEnum.DECISIONS,
+        component: DecisionComponent,
+        data: {
+          context: 'case',
+        } as DecisionManagementRouteData,
       },
       {
         path: TabEnum.SEARCH,

@@ -15,21 +15,34 @@
  */
 
 import {Component, ViewChild} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
+import {BehaviorSubject, combineLatest, map, switchMap, tap} from 'rxjs';
 import {Decision} from '../models';
 import {DecisionService} from '../decision.service';
-import {Router} from '@angular/router';
-import {BehaviorSubject, map, switchMap, tap} from 'rxjs';
-import {ConfigService} from '@valtimo/shared';
+import {ConfigService, getCaseManagementRouteParams} from '@valtimo/shared';
 import {DecisionStateService} from '../services';
 import {DecisionDeployComponent} from '../decision-deploy/decision-deploy.component';
-import {IconService} from 'carbon-components-angular';
+import {CarbonListModule, WidgetModule} from '@valtimo/components';
+import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {Upload16} from '@carbon/icons';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'valtimo-decision-list',
+  standalone: true,
   templateUrl: './decision-list.component.html',
   styleUrls: ['./decision-list.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    CarbonListModule,
+    IconModule,
+    WidgetModule,
+    DecisionDeployComponent,
+    TranslateModule,
+    ButtonModule,
+  ],
 })
 export class DecisionListComponent {
   @ViewChild('decisionDeploy') deploy: DecisionDeployComponent;
@@ -41,22 +54,22 @@ export class DecisionListComponent {
   ];
 
   readonly loading$ = new BehaviorSubject<boolean>(true);
-
   readonly experimentalEditing!: boolean;
 
+  public readonly caseManagementRouteParams$ = getCaseManagementRouteParams(this.route);
+  public readonly independent$ = this.caseManagementRouteParams$.pipe(map(params => !!params));
+
   readonly decisionsLatestVersions$ = this.stateService.refreshDecisions$.pipe(
-    switchMap(() => this.decisionService.getDecisions()),
+    switchMap(() => combineLatest([this.caseManagementRouteParams$, this.independent$])),
+    switchMap(([params, independent]) =>
+      independent ? this.decisionService.getDecisions() : this.decisionService.getDecisions()
+    ),
     map(decisions =>
       decisions.reduce((acc, curr) => {
-        const findInAcc = acc.find(decision => decision.key === curr.key);
-
-        if (findInAcc && findInAcc.version > curr.version) {
-          return acc;
-        } else if (findInAcc && findInAcc.version < curr.version) {
-          const newAcc = acc.filter(decision => decision.key !== curr.key);
-          return [...newAcc, curr];
-        }
-
+        const existing = acc.find(d => d.key === curr.key);
+        if (existing && existing.version > curr.version) return acc;
+        if (existing && existing.version < curr.version)
+          return [...acc.filter(d => d.key !== curr.key), curr];
         return [...acc, curr];
       }, [])
     ),
@@ -64,21 +77,19 @@ export class DecisionListComponent {
   );
 
   constructor(
-    private decisionService: DecisionService,
+    private readonly decisionService: DecisionService,
     private readonly iconService: IconService,
-    private router: Router,
+    private readonly router: Router,
     private readonly configService: ConfigService,
-    private readonly stateService: DecisionStateService
+    private readonly stateService: DecisionStateService,
+    private readonly route: ActivatedRoute
   ) {
     this.iconService.registerAll([Upload16]);
     this.experimentalEditing = this.configService.config.featureToggles.experimentalDmnEditing;
   }
 
-  viewDecisionTable(decision: Decision) {
-    if (this.experimentalEditing) {
-      this.router.navigate(['/decision-tables/edit', decision.id]);
-    } else {
-      this.router.navigate(['/decision-tables', decision.id]);
-    }
+  viewDecisionTable(decision: Decision): void {
+    const basePath = this.experimentalEditing ? '/decision-tables/edit/' : '/decision-tables/';
+    this.router.navigate([basePath + decision.id]);
   }
 }

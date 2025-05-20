@@ -22,13 +22,18 @@ import {DecisionComponent} from './decision.component';
 import {ROLE_ADMIN} from '@valtimo/shared';
 import {DecisionModelerComponent} from './decision-modeler/decision-modeler.component';
 import {DecisionDisplayComponent} from './decision-display/decision-display.component';
+import {DecisionManagementRouteData} from './models/decision-management.model';
 
 const routes: Routes = [
   {
     path: 'decision-tables',
     component: DecisionComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Decision tables', roles: [ROLE_ADMIN]},
+    data: {
+      title: 'Decision tables',
+      roles: [ROLE_ADMIN],
+      context: 'independent',
+    } as DecisionManagementRouteData,
   },
   {
     path: 'decision-tables/:id',

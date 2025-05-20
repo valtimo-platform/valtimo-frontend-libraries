@@ -691,9 +691,10 @@
       "tabManagement": "Tabs",
       "document": "Dokument",
       "statuses": "Status",
-      "zgw": "ZGW",
       "tags": "Etikett",
       "zgw": "ZGW",
+      "forms": "Formulare",
+      "decision": "Entscheidungstabellen",
       "generalTab": {
         "readOnlyNotification": {
           "title": "Schreibgeschützt",
@@ -713,9 +714,7 @@
             "offText": "Nein"
           }
         }
-      },
-      "zgw": "ZGW",
-      "forms": "Formulare"
+      }
     },
     "tabManagement": {
       "columns": {

@@ -694,6 +694,7 @@
       "zgw": "ZGW",
       "tags": "Tags",
       "forms": "Formulieren",
+      "decision": "Beslistabellen",
       "generalTab": {
         "readOnlyNotification": {
           "title": "Alleen-lezen",
