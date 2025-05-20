@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService, Page} from '@valtimo/config';
 import {Observable} from 'rxjs';
-import {ListFormFlowDefinition} from '../models';
+import {FormFlowDefinition, ListFormFlowDefinition} from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +21,47 @@ export class FormFlowService2 extends BaseApiService {
   ): Observable<Page<ListFormFlowDefinition>> {
     return this.httpClient.get<Page<ListFormFlowDefinition>>(
       this.getApiUrl(
-        `v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/form-flow-definition`
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/form-flow-definition`
       )
+    );
+  }
+
+  public createFormFlowDefinition(
+    caseDefinitionKey: string,
+    caseVersionTag: string,
+    definition: FormFlowDefinition
+  ): Observable<FormFlowDefinition> {
+    return this.httpClient.post<FormFlowDefinition>(
+      this.getApiUrl(
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/form-flow-definition`
+      ),
+      definition
+    );
+  }
+
+  public deleteFormFlowDefinition(
+    caseDefinitionKey: string,
+    caseVersionTag: string,
+    definitionKey: string
+  ): Observable<null> {
+    return this.httpClient.delete<null>(
+      this.getApiUrl(
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/form-flow-definition/${definitionKey}`
+      )
+    );
+  }
+
+  public updateFormFlowDefinition(
+    caseDefinitionKey: string,
+    caseVersionTag: string,
+    definitionKey: string,
+    updatedDefinition: FormFlowDefinition
+  ): Observable<FormFlowDefinition> {
+    return this.httpClient.put<FormFlowDefinition>(
+      this.getApiUrl(
+        `management/v1/case-definition/${caseDefinitionKey}/version/${caseVersionTag}/form-flow-definition/${definitionKey}`
+      ),
+      updatedDefinition
     );
   }
 }

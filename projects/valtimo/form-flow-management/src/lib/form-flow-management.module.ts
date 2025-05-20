@@ -66,6 +66,7 @@ import {DeleteFormFlowModalComponent} from './components/delete-form-flow-modal/
     NotificationModule,
     CarbonListModule,
     DropdownModule,
+    ConfirmationModalModule,
   ],
 })
 export class FormFlowManagementModule {}
