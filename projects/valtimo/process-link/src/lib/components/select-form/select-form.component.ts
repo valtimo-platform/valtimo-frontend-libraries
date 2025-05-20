@@ -120,9 +120,8 @@ export class SelectFormComponent implements OnInit, OnDestroy {
   public selectFormDefinition(formDefinition: FormDefinitionListItem): void {
     this.selectedFormDefinition = formDefinition?.id ? formDefinition : null;
 
-    this.selectedFormDefinition
-      ? this.buttonService.enableSaveButton()
-      : this.buttonService.disableSaveButton();
+    if (this.selectedFormDefinition) this.buttonService.enableSaveButton();
+    else this.buttonService.disableSaveButton();
   }
 
   public selectedFormDisplayValue(formDisplay: FormDisplayType): void {
@@ -189,14 +188,14 @@ export class SelectFormComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe(
-          () => {
+        this.processLinkService.updateProcessLink(updateProcessLinkRequest).subscribe({
+          next: () => {
             this.stateService.closeModal();
           },
-          () => {
+          error: () => {
             this.stateService.stopSaving();
-          }
-        );
+          },
+        });
       });
   }
 
@@ -226,7 +225,7 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             subtitles: this.subtitlesValue,
           }),
         };
-
+        console.log({createRequest});
         if (this.stateService.processLinkEditMode === ProcessLinkEditMode.EMIT_EVENTS) {
           this.stateService.sendProcessLinkCreateEvent(createRequest);
           return;

@@ -124,10 +124,8 @@ export class FormDisplayConfigurationComponent implements OnInit, OnDestroy {
       this.selectedFormDefinition &&
       this.formDisplayValue$.getValue() &&
       this.formSizeValue$.getValue()
-    ) {
+    )
       this.buttonService.enableSaveButton();
-    } else {
-      this.buttonService.disableSaveButton();
-    }
+    else this.buttonService.disableSaveButton();
   }
 }

@@ -330,10 +330,8 @@ export class ProcessManagementBuilderComponent
               processLinks as ProcessLinkCreateEvent[],
               selectedProcessDefinition.id,
               !isReadOnlyProcess ? (result?.xml ?? '') : null,
-              params.caseDefinitionKey,
-              params.caseDefinitionVersionTag,
-              this.canInitializeDocument$.getValue(),
-              this.startableByUser$.getValue()
+              params?.caseDefinitionKey ?? '',
+              params?.caseDefinitionVersionTag ?? ''
             );
           }
 
