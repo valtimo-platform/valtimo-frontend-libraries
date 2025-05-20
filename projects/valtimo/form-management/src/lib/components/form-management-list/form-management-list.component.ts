@@ -42,8 +42,7 @@ export class FormManagementListComponent {
 
   public readonly caseManagementRouteParams$ = this.context$.pipe(
     filter(context => context === 'case'),
-    switchMap(() => getCaseManagementRouteParams(this.route)),
-    tap(res => console.log({res}))
+    switchMap(() => getCaseManagementRouteParams(this.route))
   );
 
   private readonly _collectionSize$ = new BehaviorSubject<number>(0);

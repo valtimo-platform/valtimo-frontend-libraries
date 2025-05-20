@@ -17,7 +17,7 @@ import {Inject, NgModule} from '@angular/core';
 import {Route, Router, RouterModule, Routes} from '@angular/router';
 import {pendingChangesGuard} from '@valtimo/components';
 import {CASE_MANAGEMENT_TAB_TOKEN, CaseManagementTabConfig, ROLE_ADMIN} from '@valtimo/config';
-import {FormFlowOverviewComponent} from '@valtimo/form-flow-management';
+import {FormFlowEditorComponent, FormFlowOverviewComponent} from '@valtimo/form-flow-management';
 import {
   FormManagementComponent,
   FormManagementEditComponent,
@@ -41,7 +41,6 @@ import {CaseManagementWidgetTabComponent} from './components/case-management-det
 import {CaseManagementTagsComponent} from './components/case-management-detail/tabs/case-management-tags/case-management-tags.component';
 import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
 import {TabEnum} from './models';
-import {FormFlowEditorComponent} from '@valtimo/form-flow-management/lib/components/editor/form-flow-editor.component';
 
 const routes: Routes = [
   {
@@ -195,6 +194,17 @@ const routes: Routes = [
       context: 'case',
     } as ProcessManagementRouteData,
   },
+  {
+    path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/${TabEnum.FORM_FLOWS}/:formFlowDefinitionKey`,
+    component: FormFlowEditorComponent,
+    canActivate: [AuthGuardService],
+    canDeactivate: [pendingChangesGuard],
+    data: {
+      title: 'Form flow details',
+      roles: [ROLE_ADMIN],
+      customPageTitle: true,
+    },
+  }
 ];
 
 @NgModule({

@@ -20,7 +20,7 @@
   [items]="formFlowDefinitions$ | async"
   [fields]="FIELDS"
   [loading]="loading$ | async"
-  (rowClicked)="onRowClick($event)"
+  (rowClicked)="editFormFlowDetails($event)"
 >
   <ng-container header> {{ 'formFlow.title' | translate }} </ng-container>
 

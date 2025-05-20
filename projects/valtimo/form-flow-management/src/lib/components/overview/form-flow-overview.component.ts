@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 import {ActionItem, CarbonListComponent, ColumnConfig, ViewType} from '@valtimo/components';
-import {BehaviorSubject, finalize, Observable, of, switchMap, tap, map, combineLatest} from 'rxjs';
-import {FormFlowDefinition, ListFormFlowDefinition} from '../../models';
-import {FormFlowService, FormFlowService2} from '../../services';
 import {
   CaseManagementParams,
+  getCaseManagementRouteParams,
   GlobalNotificationService,
   Page,
-  getCaseManagementRouteParams,
 } from '@valtimo/config';
-import {TranslateService} from '@ngx-translate/core';
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
+import {FormFlowDefinition, ListFormFlowDefinition} from '../../models';
+import {FormFlowService} from '../../services';
 
 @Component({
   standalone: false,
   templateUrl: './form-flow-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormFlowOverviewComponent implements OnInit {
+export class FormFlowOverviewComponent {
   @ViewChild(CarbonListComponent) carbonList: CarbonListComponent;
 
   public readonly FIELDS: ColumnConfig[] = [
@@ -65,6 +65,7 @@ export class FormFlowOverviewComponent implements OnInit {
     },
   ];
 
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
   public readonly deleteDefinitionKey$ = new BehaviorSubject<string | null>(null);
 
@@ -74,64 +75,56 @@ export class FormFlowOverviewComponent implements OnInit {
     getCaseManagementRouteParams(this.route),
     this._refresh$,
   ]).pipe(
-    tap(([params]) => (this._params = params)),
+    tap(([params]) => {
+      this.loading$.next(true);
+      this._params = params;
+    }),
     switchMap(([params]) =>
       !params
         ? of(null)
-        : this.formFlowService2.getFormFlowDefinitions(
+        : this.formFlowService.getFormFlowDefinitions(
             params.caseDefinitionKey,
             params.caseDefinitionVersionTag
           )
     ),
-    map((formFlows: Page<ListFormFlowDefinition> | null) => (!formFlows ? [] : formFlows.content))
+    map((formFlows: Page<ListFormFlowDefinition> | null) => {
+      this.loading$.next(false);
+      return !formFlows ? [] : formFlows.content;
+    })
   );
-  public readonly loading$: Observable<boolean> = this.formFlowService.loading$;
   public readonly showAddModal$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly formFlowService: FormFlowService,
-    private readonly formFlowService2: FormFlowService2,
     private readonly globalNotificationService: GlobalNotificationService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly translateService: TranslateService
   ) {}
 
-  public ngOnInit(): void {
-    this.formFlowService.loadFormFlows();
-  }
-
   public openAddModal(): void {
     this.showAddModal$.next(true);
   }
 
-  public onAdd(data: FormFlowDefinition | null): void {
+  public onAdd(formFlowDefinition: FormFlowDefinition | null): void {
     this.showAddModal$.next(false);
 
-    if (!data || !this._params) {
-      return;
-    }
+    if (!formFlowDefinition || !this._params) return;
 
-    this.formFlowService2
+    this.formFlowService
       .createFormFlowDefinition(
         this._params.caseDefinitionKey,
         this._params.caseDefinitionVersionTag,
-        data
+        formFlowDefinition
       )
-      .subscribe({
-        next: () => {
-          this.showAddModal$.next(false);
-          this._refresh$.next(null);
-        },
+      .subscribe((formFlowDefinition: FormFlowDefinition) => {
+        this.showAddModal$.next(false);
+        this.router.navigate([formFlowDefinition.key], {relativeTo: this.route});
       });
   }
 
-  public onRowClick(formFlow: ListFormFlowDefinition): void {
-    this.router.navigate([`/form-flow-management/${formFlow.key}`]);
-  }
-
-  public editFormFlowDetails(item: any): void {
-    console.log({item});
+  public editFormFlowDetails(formFlowDefinition: ListFormFlowDefinition): void {
+    this.router.navigate([formFlowDefinition.key], {relativeTo: this.route});
   }
 
   public deleteFormFlow(item: ListFormFlowDefinition): void {
@@ -142,7 +135,7 @@ export class FormFlowOverviewComponent implements OnInit {
   public onDelete(definitionKey: string): void {
     if (!this._params) return;
 
-    this.formFlowService2
+    this.formFlowService
       .deleteFormFlowDefinition(
         this._params.caseDefinitionKey,
         this._params.caseDefinitionVersionTag,
@@ -150,7 +143,7 @@ export class FormFlowOverviewComponent implements OnInit {
       )
       .subscribe(() => {
         this.globalNotificationService.showToast({
-          title: 'Delete',
+          title: this.translateService.instant('interface.delete'),
           caption: this.translateService.instant('formFlow.deletedSuccessfully', {
             key: definitionKey,
           }),
