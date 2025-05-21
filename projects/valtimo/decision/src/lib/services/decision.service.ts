@@ -6,9 +6,9 @@
  */
 
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {BaseApiService, ConfigService} from '@valtimo/shared';
+import {BaseApiService, ConfigService, InterceptorSkip} from '@valtimo/shared';
 import {Decision, DecisionXml} from '../models';
 
 @Injectable({
@@ -78,7 +78,10 @@ export class DecisionService extends BaseApiService {
       this.getApiUrl(
         `/management/v1/case-definition/${caseDefinitionKey}/version/${versionTag}/decision-definition`
       ),
-      formData
+      formData,
+      {
+        headers: new HttpHeaders().set(InterceptorSkip, '204'),
+      }
     );
   }
 

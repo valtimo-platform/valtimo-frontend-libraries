@@ -20,7 +20,6 @@ import DmnJS from 'dmn-js/dist/dmn-modeler.development.js';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {DecisionXml} from '../models';
 import {migrateDiagram} from '@bpmn-io/dmn-migrate';
-import {LayoutService} from '@valtimo/layout';
 import {
   BehaviorSubject,
   catchError,
@@ -34,10 +33,12 @@ import {
   tap,
 } from 'rxjs';
 import {
-  AlertService,
   BreadcrumbService,
+  FitPageDirectiveModule,
+  PageHeaderService,
   PageTitleService,
   PendingChangesComponent,
+  RenderInPageHeaderDirectiveModule,
   SelectedValue,
   SelectItem,
   WidgetModule,
@@ -45,13 +46,37 @@ import {
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {EMPTY_DECISION} from './empty-decision';
 import {CommonModule} from '@angular/common';
-import {ModalModule, SelectModule} from 'carbon-components-angular';
+import {
+  ButtonModule,
+  DialogModule,
+  IconModule,
+  IconService,
+  ModalModule,
+  SelectModule,
+} from 'carbon-components-angular';
 import {
   CaseManagementParams,
   getCaseManagementRouteParams,
   getContextObservable,
+  GlobalNotificationService,
   ManagementContext,
 } from '@valtimo/shared';
+import {ArrowLeft16, Deploy16, Download16} from '@carbon/icons';
+/*
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 declare const $: any;
 
@@ -60,7 +85,19 @@ declare const $: any;
   standalone: true,
   templateUrl: './decision-modeler.component.html',
   styleUrls: ['./decision-modeler.component.scss'],
-  imports: [CommonModule, RouterModule, ModalModule, SelectModule, WidgetModule, TranslateModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ModalModule,
+    SelectModule,
+    WidgetModule,
+    TranslateModule,
+    RenderInPageHeaderDirectiveModule,
+    ButtonModule,
+    IconModule,
+    FitPageDirectiveModule,
+    DialogModule,
+  ],
 })
 export class DecisionModelerComponent extends PendingChangesComponent implements AfterViewInit {
   private CLASS_NAMES = {
@@ -68,6 +105,7 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
     decisionTable: 'dmn-icon-decision-table',
     literalExpression: 'dmn-icon-literal-expression',
   };
+
   private $container!: any;
   private $tabs!: any;
   private dmnModeler!: DmnJS;
@@ -81,6 +119,8 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
 
   public readonly caseManagementRouteParams$ = getCaseManagementRouteParams(this.route);
   public readonly context$ = getContextObservable(this.route);
+
+  public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
   private readonly decisionId$ = this.route.params.pipe(
     map(params => params?.id),
@@ -100,7 +140,7 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
   );
 
   readonly decisionTitle$ = this.decision$.pipe(
-    map(d => d?.key || ''),
+    map(d => d?.name || d?.key || '-'),
     tap(title => this.pageTitleService.setCustomPageTitle(title))
   );
 
@@ -127,16 +167,18 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
     private readonly decisionService: DecisionService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly alertService: AlertService,
     private readonly translateService: TranslateService,
-    public readonly layoutService: LayoutService,
     private readonly pageTitleService: PageTitleService,
-    private readonly breadcrumbService: BreadcrumbService
+    private readonly breadcrumbService: BreadcrumbService,
+    private readonly iconService: IconService,
+    private readonly pageHeaderService: PageHeaderService,
+    private readonly notificationService: GlobalNotificationService
   ) {
     super();
+    this.iconService.registerAll([Deploy16, Download16, ArrowLeft16]);
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.setProperties();
     this.setTabEvents();
     this.setModelerEvents();
@@ -148,11 +190,11 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
       });
   }
 
-  switchVersion(decisionId: string | SelectedValue): void {
+  public switchVersion(decisionId: string | SelectedValue): void {
     if (decisionId) this.router.navigate(['/decision-tables/edit', decisionId]);
   }
 
-  deploy(): void {
+  public deploy(): void {
     from(this.dmnModeler.saveXML({format: true}))
       .pipe(
         map(result => new File([(result as any).xml], this._fileName, {type: 'text/xml'})),
@@ -171,9 +213,11 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
               )
         ),
         tap(res => {
-          const deployed = res.deployedDecisionDefinitions;
-          const id = deployed[Object.keys(deployed)[0]]?.id;
+          const deployed = res?.deployedDecisionDefinitions;
+          const id = deployed && deployed[Object.keys(deployed)[0]]?.id;
+
           if (!id) return;
+
           this.createdDecisionVersionSelectItems$.pipe(take(1)).subscribe(existing => {
             this.createdDecisionVersionSelectItems$.next([
               ...existing,
@@ -181,19 +225,22 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
             ]);
             setTimeout(() => {
               this.switchVersion(id);
-              this.alertService.success(this.translateService.instant('decisions.deploySuccess'));
             });
           });
         }),
+        tap(() => {
+          this.showNotification('success', 'decisions.deploySuccess');
+        }),
         catchError(() => {
-          this.alertService.error(this.translateService.instant('decisions.deployFailure'));
+          this.showNotification('error', 'decisions.deployFailure');
+
           return of(null);
         })
       )
       .subscribe();
   }
 
-  download(): void {
+  public download(): void {
     from(this.dmnModeler.saveXML({format: true}))
       .pipe(
         map(result => new File([(result as any).xml], 'decision.dmn', {type: 'text/xml'})),
@@ -207,6 +254,22 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
         })
       )
       .subscribe();
+  }
+
+  public navigateBack(notification: null | 'success' | 'error', message: string): void {
+    this.router.navigate(['../'], {relativeTo: this.route});
+
+    if (!notification) return;
+
+    this.showNotification(notification, message);
+  }
+
+  private showNotification(notification: null | 'success' | 'error', message: string): void {
+    this.notificationService.showToast({
+      caption: this.translateService.instant(message),
+      type: notification,
+      title: this.translateService.instant(`interface.${notification}`),
+    });
   }
 
   private setProperties(): void {
@@ -274,7 +337,7 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
         switchMap(xml => this.dmnModeler.importXML(xml)),
         tap(() => this.setEditor()),
         catchError(() => {
-          this.alertService.error(this.translateService.instant('decisions.loadFailure'));
+          this.showNotification('error', 'decisions.loadFailure');
           return of(null);
         })
       )
