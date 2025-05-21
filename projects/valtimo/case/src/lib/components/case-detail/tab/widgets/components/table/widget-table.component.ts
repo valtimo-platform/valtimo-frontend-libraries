@@ -56,9 +56,7 @@ import {WidgetsService} from '../../widgets.service';
   ],
 })
 export class WidgetTableComponent extends WidgetProcess {
-  private _documentId!: string;
   @Input({required: true}) public set documentId(value: string) {
-    this._documentId = value;
     this.baseDocumentId = value;
   }
   @Input({required: true}) public tabKey: string;
@@ -142,7 +140,7 @@ export class WidgetTableComponent extends WidgetProcess {
           ? of(data)
           : this.caseWidgetsApiService
               .getWidgetData(
-                this._documentId,
+                this.baseDocumentId,
                 this.tabKey,
                 this.widgetConfiguration.key,
                 queryParams

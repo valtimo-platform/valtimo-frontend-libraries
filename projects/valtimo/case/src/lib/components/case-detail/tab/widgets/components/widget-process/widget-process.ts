@@ -29,6 +29,9 @@ export class WidgetProcess {
   protected set baseWidgetConfiguration(value: BasicCaseWidget) {
     this._baseWidgetConfiguration$.next(value);
   }
+  protected get baseDocumentId(): string {
+    return this._baseDocumentId$.getValue();
+  }
 
   private readonly _processDefinitionCaseDefinition$ = combineLatest([
     this._baseDocumentId$,
