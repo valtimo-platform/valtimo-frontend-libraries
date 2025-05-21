@@ -473,6 +473,7 @@
   },
   "decisions": {
     "upload": {
+      "title": "Entscheidungstabelle hochladen",
       "description": "Wähle eine .dmn Datei für den Upload"
     },
     "version": "Version",

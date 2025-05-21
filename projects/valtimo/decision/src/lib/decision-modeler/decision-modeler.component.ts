@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {DecisionService} from '../decision.service';
+import {DecisionService} from '../services/decision.service';
 import {AfterViewInit, Component} from '@angular/core';
 import DmnJS from 'dmn-js/dist/dmn-modeler.development.js';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';

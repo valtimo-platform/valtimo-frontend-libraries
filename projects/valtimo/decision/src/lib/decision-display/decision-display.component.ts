@@ -17,7 +17,7 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, RouterModule} from '@angular/router';
-import {DecisionService} from '../decision.service';
+import {DecisionService} from '../services/decision.service';
 import {DecisionXml} from '../models';
 import DmnViewer from 'dmn-js';
 import {migrateDiagram} from '@bpmn-io/dmn-migrate';

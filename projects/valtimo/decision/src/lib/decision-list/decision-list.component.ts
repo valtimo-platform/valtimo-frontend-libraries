@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {Component, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {BehaviorSubject, combineLatest, map, switchMap, tap} from 'rxjs';
 import {Decision} from '../models';
-import {DecisionService} from '../decision.service';
-import {ConfigService, getCaseManagementRouteParams} from '@valtimo/shared';
+import {DecisionService} from '../services/decision.service';
+import {ConfigService, getCaseManagementRouteParams, getContextObservable} from '@valtimo/shared';
 import {DecisionStateService} from '../services';
 import {DecisionDeployComponent} from '../decision-deploy/decision-deploy.component';
 import {CarbonListModule, WidgetModule} from '@valtimo/components';
@@ -57,12 +57,17 @@ export class DecisionListComponent {
   readonly experimentalEditing!: boolean;
 
   public readonly caseManagementRouteParams$ = getCaseManagementRouteParams(this.route);
-  public readonly independent$ = this.caseManagementRouteParams$.pipe(map(params => !!params));
+  public readonly context$ = getContextObservable(this.route);
 
   readonly decisionsLatestVersions$ = this.stateService.refreshDecisions$.pipe(
-    switchMap(() => combineLatest([this.caseManagementRouteParams$, this.independent$])),
-    switchMap(([params, independent]) =>
-      independent ? this.decisionService.getDecisions() : this.decisionService.getDecisions()
+    switchMap(() => combineLatest([this.caseManagementRouteParams$, this.context$])),
+    switchMap(([params, context]) =>
+      context === 'case'
+        ? this.decisionService.listCaseDecisionDefinitions(
+            params.caseDefinitionKey,
+            params.caseDefinitionVersionTag
+          )
+        : this.decisionService.getDecisions()
     ),
     map(decisions =>
       decisions.reduce((acc, curr) => {
@@ -73,7 +78,10 @@ export class DecisionListComponent {
         return [...acc, curr];
       }, [])
     ),
-    tap(() => this.loading$.next(false))
+    tap(() => {
+      this.loading$.next(false);
+      this.cdr.detectChanges();
+    })
   );
 
   constructor(
@@ -82,7 +90,8 @@ export class DecisionListComponent {
     private readonly router: Router,
     private readonly configService: ConfigService,
     private readonly stateService: DecisionStateService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.iconService.registerAll([Upload16]);
     this.experimentalEditing = this.configService.config.featureToggles.experimentalDmnEditing;

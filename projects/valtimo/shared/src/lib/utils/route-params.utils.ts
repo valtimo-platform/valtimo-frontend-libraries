@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {CaseManagementParams} from '../models';
+import {CaseManagementParams, ManagementContext} from '../models';
 import {ActivatedRoute} from '@angular/router';
 import {combineLatest, distinctUntilChanged, filter, map, Observable, of} from 'rxjs';
 import {isEqual} from 'lodash';
@@ -38,4 +38,12 @@ const getCaseManagementRouteParams = (
     distinctUntilChanged((previous, current) => isEqual(previous, current))
   );
 };
-export {getCaseManagementRouteParams};
+
+function getContextObservable(route: ActivatedRoute): Observable<ManagementContext | null> {
+  return route.data.pipe(
+    map(data => (data && (data['context'] as ManagementContext)) || null),
+    distinctUntilChanged()
+  );
+}
+
+export {getCaseManagementRouteParams, getContextObservable};

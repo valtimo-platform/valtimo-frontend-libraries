@@ -474,6 +474,7 @@
   },
   "decisions": {
     "upload": {
+      "title": "Upload decision table",
       "description": "Select a .dmn file to upload"
     },
     "version": "Version",
