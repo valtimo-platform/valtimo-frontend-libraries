@@ -40,7 +40,11 @@ import {CaseManagementWidgetTabComponent} from './components/case-management-det
 import {CaseManagementTagsComponent} from './components/case-management-detail/tabs/case-management-tags/case-management-tags.component';
 import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
 import {TabEnum} from './models';
-import {DecisionComponent, DecisionManagementRouteData} from '@valtimo/decision';
+import {
+  DecisionComponent,
+  DecisionManagementRouteData,
+  DecisionModelerComponent,
+} from '@valtimo/decision';
 
 const routes: Routes = [
   {
@@ -169,6 +173,18 @@ const routes: Routes = [
   {
     path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/${TabEnum.PROCESSES}/:processDefinitionKey`,
     component: ProcessManagementBuilderComponent,
+    canActivate: [AuthGuardService],
+    canDeactivate: [pendingChangesGuard],
+    data: {
+      title: 'Process details',
+      roles: [ROLE_ADMIN],
+      customPageTitle: true,
+      context: 'case',
+    } as ProcessManagementRouteData,
+  },
+  {
+    path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/${TabEnum.DECISIONS}/:id`,
+    component: DecisionModelerComponent,
     canActivate: [AuthGuardService],
     canDeactivate: [pendingChangesGuard],
     data: {

@@ -17,7 +17,7 @@
 import {ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {BehaviorSubject, combineLatest, map, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, map, switchMap, take, tap} from 'rxjs';
 import {Decision} from '../models';
 import {DecisionService} from '../services/decision.service';
 import {ConfigService, getCaseManagementRouteParams, getContextObservable} from '@valtimo/shared';
@@ -60,12 +60,16 @@ export class DecisionListComponent {
   public readonly context$ = getContextObservable(this.route);
 
   readonly decisionsLatestVersions$ = this.stateService.refreshDecisions$.pipe(
-    switchMap(() => combineLatest([this.caseManagementRouteParams$, this.context$])),
-    switchMap(([params, context]) =>
+    switchMap(() => this.context$),
+    switchMap(context =>
       context === 'case'
-        ? this.decisionService.listCaseDecisionDefinitions(
-            params.caseDefinitionKey,
-            params.caseDefinitionVersionTag
+        ? this.caseManagementRouteParams$.pipe(
+            switchMap(params =>
+              this.decisionService.listCaseDecisionDefinitions(
+                params.caseDefinitionKey,
+                params.caseDefinitionVersionTag
+              )
+            )
           )
         : this.decisionService.getDecisions()
     ),
@@ -97,8 +101,18 @@ export class DecisionListComponent {
     this.experimentalEditing = this.configService.config.featureToggles.experimentalDmnEditing;
   }
 
-  viewDecisionTable(decision: Decision): void {
-    const basePath = this.experimentalEditing ? '/decision-tables/edit/' : '/decision-tables/';
-    this.router.navigate([basePath + decision.id]);
+  public viewDecisionTable(decision: Decision): void {
+    this.context$.pipe(take(1)).subscribe(context => {
+      if (context === 'independent') {
+        const basePath = this.experimentalEditing ? '/decision-tables/edit/' : '/decision-tables/';
+        this.router.navigate([basePath + decision.id]);
+      } else {
+        this.caseManagementRouteParams$.pipe(take(1)).subscribe(params => {
+          this.router.navigateByUrl(
+            `case-management/case/${params.caseDefinitionKey}/version/${params.caseDefinitionVersionTag}/decisions/${decision.id}`
+          );
+        });
+      }
+    });
   }
 }

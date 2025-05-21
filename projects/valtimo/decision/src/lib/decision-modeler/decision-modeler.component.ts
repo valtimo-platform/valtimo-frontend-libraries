@@ -35,7 +35,9 @@ import {
 } from 'rxjs';
 import {
   AlertService,
+  BreadcrumbService,
   PageTitleService,
+  PendingChangesComponent,
   SelectedValue,
   SelectItem,
   WidgetModule,
@@ -44,6 +46,12 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {EMPTY_DECISION} from './empty-decision';
 import {CommonModule} from '@angular/common';
 import {ModalModule, SelectModule} from 'carbon-components-angular';
+import {
+  CaseManagementParams,
+  getCaseManagementRouteParams,
+  getContextObservable,
+  ManagementContext,
+} from '@valtimo/shared';
 
 declare const $: any;
 
@@ -54,7 +62,7 @@ declare const $: any;
   styleUrls: ['./decision-modeler.component.scss'],
   imports: [CommonModule, RouterModule, ModalModule, SelectModule, WidgetModule, TranslateModule],
 })
-export class DecisionModelerComponent implements AfterViewInit {
+export class DecisionModelerComponent extends PendingChangesComponent implements AfterViewInit {
   private CLASS_NAMES = {
     drd: 'dmn-icon-lasso-tool',
     decisionTable: 'dmn-icon-decision-table',
@@ -69,6 +77,11 @@ export class DecisionModelerComponent implements AfterViewInit {
   readonly selectionId$ = new BehaviorSubject<string>('');
   readonly createdDecisionVersionSelectItems$ = new BehaviorSubject<Array<SelectItem>>([]);
 
+  private _fileName!: string;
+
+  public readonly caseManagementRouteParams$ = getCaseManagementRouteParams(this.route);
+  public readonly context$ = getContextObservable(this.route);
+
   private readonly decisionId$ = this.route.params.pipe(
     map(params => params?.id),
     tap(id => {
@@ -81,6 +94,7 @@ export class DecisionModelerComponent implements AfterViewInit {
   readonly decision$ = this.decisionId$.pipe(
     switchMap(id => this.decisionService.getDecisionById(id)),
     tap(decision => {
+      this._fileName = decision.resource;
       if (decision) this.selectionId$.next(decision.id);
     })
   );
@@ -116,13 +130,22 @@ export class DecisionModelerComponent implements AfterViewInit {
     private readonly alertService: AlertService,
     private readonly translateService: TranslateService,
     public readonly layoutService: LayoutService,
-    private readonly pageTitleService: PageTitleService
-  ) {}
+    private readonly pageTitleService: PageTitleService,
+    private readonly breadcrumbService: BreadcrumbService
+  ) {
+    super();
+  }
 
   ngAfterViewInit(): void {
     this.setProperties();
     this.setTabEvents();
     this.setModelerEvents();
+
+    combineLatest([this.caseManagementRouteParams$, this.context$])
+      .pipe(take(1))
+      .subscribe(([params, context]) => {
+        this.initBreadcrumbs(params, context);
+      });
   }
 
   switchVersion(decisionId: string | SelectedValue): void {
@@ -132,8 +155,21 @@ export class DecisionModelerComponent implements AfterViewInit {
   deploy(): void {
     from(this.dmnModeler.saveXML({format: true}))
       .pipe(
-        map(result => new File([(result as any).xml], 'decision.dmn', {type: 'text/xml'})),
-        switchMap(file => this.decisionService.deployDmn(file)),
+        map(result => new File([(result as any).xml], this._fileName, {type: 'text/xml'})),
+        switchMap(file => combineLatest([of(file), this.context$])),
+        switchMap(([file, context]) =>
+          context === 'independent'
+            ? this.decisionService.deployDmn(file)
+            : this.caseManagementRouteParams$.pipe(
+                switchMap(params =>
+                  this.decisionService.deployCaseDecisionDefinition(
+                    params.caseDefinitionKey,
+                    params.caseDefinitionVersionTag,
+                    file
+                  )
+                )
+              )
+        ),
         tap(res => {
           const deployed = res.deployedDecisionDefinitions;
           const id = deployed[Object.keys(deployed)[0]]?.id;
@@ -251,5 +287,25 @@ export class DecisionModelerComponent implements AfterViewInit {
       const canvas = this.dmnModeler.getActiveViewer().get('canvas');
       canvas.zoom('fit-viewport');
     }
+  }
+
+  private initBreadcrumbs(params: CaseManagementParams, context: ManagementContext): void {
+    if (context === 'independent') return;
+
+    const route = `/case-management/case/${params.caseDefinitionKey}/version/${params.caseDefinitionVersionTag}`;
+
+    this.breadcrumbService.setThirdBreadcrumb({
+      route: [route],
+      content: `${params.caseDefinitionKey} (${params.caseDefinitionVersionTag})`,
+      href: route,
+    });
+
+    const routeWithDecisions = `${route}/decisions`;
+
+    this.breadcrumbService.setFourthBreadcrumb({
+      route: [routeWithDecisions],
+      content: this.translateService.instant('caseManagement.tabs.decision'),
+      href: routeWithDecisions,
+    });
   }
 }

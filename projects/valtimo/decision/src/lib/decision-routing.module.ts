@@ -39,19 +39,32 @@ const routes: Routes = [
     path: 'decision-tables/:id',
     component: DecisionDisplayComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Decision tables', roles: [ROLE_ADMIN]},
+    data: {
+      title: 'Decision tables',
+      roles: [ROLE_ADMIN],
+      context: 'independent',
+    } as DecisionManagementRouteData,
   },
   {
     path: 'decision-tables/edit/:id',
     component: DecisionModelerComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Edit decision table', roles: [ROLE_ADMIN], customPageTitle: true},
+    data: {
+      title: 'Edit decision table',
+      roles: [ROLE_ADMIN],
+      customPageTitle: true,
+      context: 'independent',
+    } as DecisionManagementRouteData,
   },
   {
     path: 'decision-tables/edit/create',
     component: DecisionModelerComponent,
     canActivate: [AuthGuardService],
-    data: {title: 'Create decision table', roles: [ROLE_ADMIN]},
+    data: {
+      title: 'Create decision table',
+      roles: [ROLE_ADMIN],
+      context: 'independent',
+    } as DecisionManagementRouteData,
   },
 ];
 
