@@ -225,7 +225,6 @@ export class SelectFormComponent implements OnInit, OnDestroy {
             subtitles: this.subtitlesValue,
           }),
         };
-        console.log({createRequest});
         if (this.stateService.processLinkEditMode === ProcessLinkEditMode.EMIT_EVENTS) {
           this.stateService.sendProcessLinkCreateEvent(createRequest);
           return;

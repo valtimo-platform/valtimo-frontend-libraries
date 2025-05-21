@@ -134,8 +134,6 @@ export class ProcessLinkService {
       {type: 'application/json'}
     );
 
-    console.log({processLinks, processDefinitionId});
-
     if (processXml) formData.append('file', new File([processXml], 'process.bpmn'));
 
     if (processDefinitionId) formData.append('processDefinitionId', processDefinitionId);
