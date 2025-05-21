@@ -35,7 +35,7 @@ import {
   SpinnerModule,
   ValtimoCdsModalDirectiveModule,
 } from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/config';
+import {getCaseManagementRouteParams} from '@valtimo/shared';
 import {DocumentDefinition, DocumentService} from '@valtimo/document';
 import {
   ButtonModule,

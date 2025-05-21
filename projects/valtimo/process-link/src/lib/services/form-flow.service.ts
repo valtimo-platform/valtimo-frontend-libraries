@@ -24,7 +24,7 @@ import {
   FormFlowDefinition,
   FormFlowInstance,
 } from '../models';
-import {ConfigService} from '@valtimo/shared';
+import {ConfigService, BaseApiService} from '@valtimo/shared';
 
 @Injectable({
   providedIn: 'root',

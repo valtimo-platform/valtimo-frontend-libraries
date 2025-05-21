@@ -25,7 +25,7 @@ import {
   ConfirmationModalModule,
   ViewType,
 } from '@valtimo/components';
-import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/config';
+import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/shared';
 import {ButtonModule, IconModule} from 'carbon-components-angular';
 import {
   BehaviorSubject,

@@ -29,7 +29,7 @@ import {
   CaseManagementTabConfig,
   ConfigService,
   getCaseManagementRouteParams,
-} from '@valtimo/config';
+} from '@valtimo/shared';
 import {DocumentDefinition} from '@valtimo/document';
 import {Tab} from 'carbon-components-angular';
 import {combineLatest, filter, map, Observable, startWith, Subscription} from 'rxjs';

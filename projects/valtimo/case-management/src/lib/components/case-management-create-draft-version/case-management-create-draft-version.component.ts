@@ -25,7 +25,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Edit16, Information16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
-import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/config';
+import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/shared';
 import {DocumentService, TemplatePayload} from '@valtimo/document';
 import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, map, Observable, switchMap} from 'rxjs';

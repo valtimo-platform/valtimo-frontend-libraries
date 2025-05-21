@@ -15,7 +15,7 @@
  */
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {CaseManagementParams, Page, getCaseManagementRouteParams} from '@valtimo/config';
+import {CaseManagementParams, Page, getCaseManagementRouteParams} from '@valtimo/shared';
 import {FormFlowService, ListFormFlowDefinition} from '@valtimo/form-flow-management';
 import {BehaviorSubject, combineLatest, map, Observable, Subscription, tap} from 'rxjs';
 import {switchMap, take} from 'rxjs/operators';
@@ -197,7 +197,7 @@ export class SelectFormFlowComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(([modalParams, processLinkTypeId, isUserTask]) => {
         const createRequest = {
-          formFlowDefinitionId: this.selectedFormFlowDefinitionId,
+          formFlowDefinitionKey: this.selectedFormFlowDefinitionId,
           activityType: modalParams.element.activityListenerType,
           processDefinitionId: modalParams.processDefinitionId,
           processLinkType: processLinkTypeId,

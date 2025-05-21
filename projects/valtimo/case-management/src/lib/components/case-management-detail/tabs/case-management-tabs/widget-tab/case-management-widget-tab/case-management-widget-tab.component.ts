@@ -34,7 +34,7 @@ import {
   PendingChangesComponent,
   RenderInPageHeaderDirectiveModule,
 } from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/config';
+import {getCaseManagementRouteParams} from '@valtimo/shared';
 import {ButtonModule, IconModule, IconService, TabsModule} from 'carbon-components-angular';
 import moment from 'moment/moment';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';

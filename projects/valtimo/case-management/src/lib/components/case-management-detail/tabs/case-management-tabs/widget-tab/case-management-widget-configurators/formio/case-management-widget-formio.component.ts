@@ -27,7 +27,7 @@ import {ActivatedRoute} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {WidgetFormioContent} from '@valtimo/case';
 import {CARBON_THEME, CdsThemeService, CurrentCarbonTheme} from '@valtimo/components';
-import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/config';
+import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/shared';
 import {FormDefinitionOption, FormService} from '@valtimo/form';
 import {DropdownModule, InputModule, ListItem, SelectModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable, Subscription} from 'rxjs';

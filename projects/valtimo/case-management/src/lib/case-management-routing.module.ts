@@ -16,7 +16,7 @@
 import {Inject, NgModule} from '@angular/core';
 import {Route, Router, RouterModule, Routes} from '@angular/router';
 import {pendingChangesGuard} from '@valtimo/components';
-import {CASE_MANAGEMENT_TAB_TOKEN, CaseManagementTabConfig, ROLE_ADMIN} from '@valtimo/config';
+import {CASE_MANAGEMENT_TAB_TOKEN, CaseManagementTabConfig, ROLE_ADMIN} from '@valtimo/shared';
 import {FormFlowEditorComponent, FormFlowOverviewComponent} from '@valtimo/form-flow-management';
 import {
   FormManagementComponent,

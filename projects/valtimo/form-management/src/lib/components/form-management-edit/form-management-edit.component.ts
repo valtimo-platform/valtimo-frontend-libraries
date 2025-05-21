@@ -33,7 +33,7 @@ import {
   EnvironmentService,
   getCaseManagementRouteParams,
   GlobalNotificationService,
-} from '@valtimo/config';
+} from '@valtimo/shared';
 import {
   ButtonModule,
   DialogModule,

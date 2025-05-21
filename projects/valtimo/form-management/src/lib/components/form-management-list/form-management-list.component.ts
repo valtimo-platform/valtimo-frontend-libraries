@@ -5,7 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Upload16} from '@carbon/icons';
 import {TranslateModule} from '@ngx-translate/core';
 import {CarbonListModule, ColumnConfig, Pagination} from '@valtimo/components';
-import {EnvironmentService, getCaseManagementRouteParams} from '@valtimo/config';
+import {EnvironmentService, getCaseManagementRouteParams} from '@valtimo/shared';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {FormDefinition} from '../../models';

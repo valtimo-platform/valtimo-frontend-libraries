@@ -22,7 +22,7 @@ import {
   CaseManagementParams,
   CaseManagementTabConfig,
   getCaseManagementRouteParams,
-} from '@valtimo/config';
+} from '@valtimo/shared';
 import {FormDefinitionOption, FormService} from '@valtimo/form';
 import {ListItem} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, switchMap} from 'rxjs';

@@ -41,7 +41,7 @@ import {
   getCaseManagementRouteParams,
   GlobalNotificationService,
   ManagementContext,
-} from '@valtimo/config';
+} from '@valtimo/shared';
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
 import {
   ProcessLinkButtonService,

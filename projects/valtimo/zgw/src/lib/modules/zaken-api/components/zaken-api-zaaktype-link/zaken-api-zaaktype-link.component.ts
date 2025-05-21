@@ -24,7 +24,7 @@ import {
   CaseManagementParams,
   getCaseManagementRouteParams,
   GlobalNotificationService,
-} from '@valtimo/config';
+} from '@valtimo/shared';
 import {PluginConfiguration} from '@valtimo/plugin';
 import {
   CreateZaakTypeLinkRequest,

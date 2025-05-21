@@ -41,7 +41,7 @@ import {
   ValuePathSelectorPrefix,
   ValuePathType,
 } from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/config';
+import {getCaseManagementRouteParams} from '@valtimo/shared';
 import {ButtonModule, InputModule, ToggleModule} from 'carbon-components-angular';
 import {BehaviorSubject, debounceTime, map, Observable, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../../../../../models';

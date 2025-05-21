@@ -17,7 +17,7 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {getCaseManagementRouteParams} from '@valtimo/config';
+import {getCaseManagementRouteParams} from '@valtimo/shared';
 import {LoadingModule, NotificationModule} from 'carbon-components-angular';
 import {isEqual} from 'lodash';
 import {BehaviorSubject, combineLatest, Subscription, switchMap} from 'rxjs';

@@ -38,7 +38,7 @@ import {
   CurrentCarbonTheme,
   InputLabelModule,
 } from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/config';
+import {getCaseManagementRouteParams} from '@valtimo/shared';
 import {ButtonModule, IconModule, InputModule, Tab, TabsModule} from 'carbon-components-angular';
 import {debounceTime, map, Subscription} from 'rxjs';
 import {WidgetContentComponent} from '../../../../../../../models';

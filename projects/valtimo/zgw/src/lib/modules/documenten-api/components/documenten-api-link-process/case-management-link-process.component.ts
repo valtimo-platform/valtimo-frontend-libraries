@@ -23,7 +23,7 @@ import {
   getCaseManagementRouteParams,
   UploadProvider,
   ValtimoConfig,
-} from '@valtimo/config';
+} from '@valtimo/shared';
 import {ComboBoxModule, LayerModule, ListItem} from 'carbon-components-angular';
 import {
   BehaviorSubject,

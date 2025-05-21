@@ -16,8 +16,8 @@
 import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {EditorModel, PageHeaderService, PageTitleService} from '@valtimo/components';
-import {GlobalNotificationService} from '@valtimo/shared';
+import {EditorModel, PageHeaderService, PageTitleService, BreadcrumbService} from '@valtimo/components';
+import {GlobalNotificationService, CaseManagementParams} from '@valtimo/shared';
 import {
   BehaviorSubject,
   combineLatest,

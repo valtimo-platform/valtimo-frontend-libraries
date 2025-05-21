@@ -57,7 +57,7 @@ import {
   ValuePathSelectorPrefix,
   ValuePathType,
 } from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/config';
+import {getCaseManagementRouteParams} from '@valtimo/shared';
 import {
   ButtonModule,
   DropdownModule,

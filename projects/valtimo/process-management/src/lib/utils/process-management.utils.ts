@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {ActivatedRoute} from '@angular/router';
-import {ManagementContext} from '@valtimo/config';
+import {ManagementContext} from '@valtimo/shared';
 import {Observable} from 'rxjs';
 import {distinctUntilChanged, map} from 'rxjs/operators';
 

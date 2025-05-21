@@ -23,7 +23,7 @@ import {
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/config';
+import {getCaseManagementRouteParams} from '@valtimo/shared';
 import {CaseTag, CaseTagService, CaseTagsUtils} from '@valtimo/document';
 import {
   BehaviorSubject,

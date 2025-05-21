@@ -28,7 +28,7 @@ import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {ApiTabItem, ApiTabType} from '@valtimo/case';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/config';
+import {getCaseManagementRouteParams} from '@valtimo/shared';
 import {IconService} from 'carbon-components-angular';
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
 import {TabManagementService, TabService} from '../../../../services';

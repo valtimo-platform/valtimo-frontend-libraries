@@ -22,7 +22,7 @@ import {
   getCaseManagementRouteParams,
   GlobalNotificationService,
   Page,
-} from '@valtimo/config';
+} from '@valtimo/shared';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {FormFlowDefinition, ListFormFlowDefinition} from '../../models';
 import {FormFlowService} from '../../services';

@@ -33,7 +33,7 @@ import {
   KeyGeneratorService,
   ViewType,
 } from '@valtimo/components';
-import {CaseManagementParams} from '@valtimo/config';
+import {CaseManagementParams} from '@valtimo/shared';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {cloneDeep} from 'lodash';
 import {BehaviorSubject, combineLatest, map, Observable, Subject, take} from 'rxjs';

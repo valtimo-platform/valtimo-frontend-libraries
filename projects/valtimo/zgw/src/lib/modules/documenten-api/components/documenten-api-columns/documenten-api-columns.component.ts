@@ -30,7 +30,7 @@ import {
   ConfirmationModalModule,
   ViewType,
 } from '@valtimo/components';
-import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/config';
+import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/shared';
 import {ButtonModule, IconModule, TagModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {

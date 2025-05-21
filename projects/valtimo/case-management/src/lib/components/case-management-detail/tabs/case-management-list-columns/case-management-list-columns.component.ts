@@ -25,7 +25,7 @@ import {
   ValuePathSelectorPrefix,
   ViewType,
 } from '@valtimo/components';
-import {ConfigService, getCaseManagementRouteParams} from '@valtimo/config';
+import {ConfigService, getCaseManagementRouteParams} from '@valtimo/shared';
 import {
   CaseListColumn,
   CaseListColumnView,

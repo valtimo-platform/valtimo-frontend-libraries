@@ -15,7 +15,7 @@
  */
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {getCaseManagementRouteParams, CaseManagementParams} from '@valtimo/config';
+import {getCaseManagementRouteParams, CaseManagementParams} from '@valtimo/shared';
 import {FormDefinitionOption, FormService} from '@valtimo/form';
 import {BehaviorSubject, combineLatest, map, mergeMap, Observable, Subscription, tap} from 'rxjs';
 import {take} from 'rxjs/operators';

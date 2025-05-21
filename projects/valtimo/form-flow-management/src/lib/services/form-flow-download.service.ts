@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {Injectable} from '@angular/core';
-import {CaseManagementParams} from '@valtimo/config';
+import {CaseManagementParams} from '@valtimo/shared';
 
 @Injectable({providedIn: 'root'})
 export class FormFlowDownloadService {

@@ -27,7 +27,7 @@ import {
   Pagination,
   ViewType,
 } from '@valtimo/components';
-import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/config';
+import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/shared';
 import {Page} from '@valtimo/document';
 import {ButtonModule, IconModule, TagModule} from 'carbon-components-angular';
 import {

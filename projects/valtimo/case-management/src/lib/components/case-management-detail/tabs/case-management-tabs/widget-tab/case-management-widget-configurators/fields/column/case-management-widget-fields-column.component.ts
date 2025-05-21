@@ -58,7 +58,7 @@ import {
   ValuePathSelectorComponent,
   ValuePathSelectorPrefix,
 } from '@valtimo/components';
-import {CaseManagementParams} from '@valtimo/config';
+import {CaseManagementParams} from '@valtimo/shared';
 import {
   AccordionModule,
   ButtonModule,

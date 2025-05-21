@@ -24,7 +24,7 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {Edit16, Save16} from '@carbon/icons';
 import {ConfirmationModalComponent, EditorModel, PageHeaderService} from '@valtimo/components';
-import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/config';
+import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/shared';
 import {
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
