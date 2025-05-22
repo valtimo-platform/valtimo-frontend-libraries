@@ -20,7 +20,10 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {ActivatedRoute} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {ValtimoCdsModalDirectiveModule, WidgetModule} from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/shared';
+import {
+  getCaseManagementRouteParams,
+  getCaseManagementRouteParamsAndContext,
+} from '@valtimo/shared';
 import {
   ButtonModule,
   InputModule,
@@ -82,13 +85,8 @@ export class FormManagementCreateComponent implements OnInit {
   }
 
   private initForm(): void {
-    this.context$
+    getCaseManagementRouteParamsAndContext(this.route)
       .pipe(
-        switchMap(context =>
-          context === 'case'
-            ? combineLatest([of(context), this.caseManagementRouteParams$])
-            : combineLatest([of(context), null])
-        ),
         take(1),
         tap(([context, caseManagementParams]) => {
           this.form = this.formBuilder.group({
