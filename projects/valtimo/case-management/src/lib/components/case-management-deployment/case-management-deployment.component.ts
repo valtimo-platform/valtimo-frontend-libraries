@@ -98,13 +98,10 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     this.caseDefinitionVersionTag$,
   ]).pipe(
     map(([globalActiveCase, caseDefinitionKey, caseDefinitionVersionTag]) => {
-      if (
+      return (
         globalActiveCase.caseDefinitionKey === caseDefinitionKey &&
         globalActiveCase.caseDefinitionVersionTag === caseDefinitionVersionTag
-      ) {
-        return true;
-      }
-      return false;
+      );
     })
   );
 
