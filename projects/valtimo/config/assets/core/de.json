@@ -1569,7 +1569,16 @@
   "plugin": {
     "noConfigurationComponent": "Es ist keine Konfigurationskomponente verfügbar.",
     "configurationId": "Konfigurations ID",
-    "configurationIdTooltip": "Unter dieser ID wird das Plugin gespeichert. Die ID muss im Format einer UUID vorliegen"
+    "configurationIdTooltip": "Unter dieser ID wird das Plugin gespeichert. Die ID muss im Format einer UUID vorliegen",
+    "plugins": {
+      "zaken-api": {
+        "relateer-zaken": {
+          "vervolg": "Der andere Zaak gab Anlass zur Einleitung des aktuellen Zaak.",
+          "onderwerp": "Der andere Zaak ist relevant für bzw. Gegenstand des aktuellen Zaak.",
+          "bijdrage": "Der aktuelle Zaak trägt zum Ergebnis des anderen Zaak bei."
+        }
+      }
+    }
   },
   "pluginManagement": {
     "tableItemsText": "Plugin-Konfigurationen",

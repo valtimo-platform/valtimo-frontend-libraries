@@ -1574,7 +1574,16 @@
   "plugin": {
     "noConfigurationComponent": "Er is geen configuratie-component beschikbaar.",
     "configurationId": "Configuratie ID",
-    "configurationIdTooltip": "Onder deze ID zal de plugin worden opgeslagen. Het ID moet het format van een UUID hebben"
+    "configurationIdTooltip": "Onder deze ID zal de plugin worden opgeslagen. Het ID moet het format van een UUID hebben",
+    "plugins": {
+      "zaken-api": {
+        "relateer-zaken": {
+          "vervolg": "De andere zaak gaf aanleiding tot het starten van de onderhanden zaak.",
+          "onderwerp": "De andere zaak is relevant voor cq. is onderwerp van de onderhanden zaak.",
+          "bijdrage": "Aan het bereiken van de uitkomst van de andere zaak levert de onderhanden zaak een bijdrage."
+        }
+      }
+    }
   },
   "pluginManagement": {
     "tableItemsText": "plugin-configuraties",
