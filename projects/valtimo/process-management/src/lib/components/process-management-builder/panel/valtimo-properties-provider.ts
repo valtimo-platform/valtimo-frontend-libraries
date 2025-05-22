@@ -51,7 +51,7 @@ class ValtimoPropertiesProvider {
   public getGroups(element: BpmnElement): (groups: any[]) => any[] {
     const processLink: ProcessLink | null =
       this.processManagementEditorService.processLinksForSelectedDefinition.find(
-        processLink => processLink.activityId === element.id
+        processLink => processLink.activityId === element.di?.id
       ) || null;
 
     return (groups: any[]) => {
@@ -103,10 +103,10 @@ const CustomRootElement = (props: {
     processDefinitionKey: processManagementEditorService.selectionProcessDefinition?.key,
     processDefinitionId: processManagementEditorService.selectionProcessDefinition?.id,
     element: {
-      id: element.id,
+      id: element.di?.id ?? '',
       type: element.type,
       activityListenerType: mapActivityTypeToActivityListenerType(element.type),
-      name: element.di.bpmnElement.name,
+      name: element.di?.bpmnElement?.name ?? '',
     },
   };
 
