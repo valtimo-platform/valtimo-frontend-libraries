@@ -92,6 +92,22 @@ export class CaseManagementDeploymentComponent implements OnInit, AfterViewInit 
     )
   );
 
+  public readonly isGloballyActive$: Observable<boolean> = combineLatest([
+    this.globalActiveCase$,
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    map(([globalActiveCase, caseDefinitionKey, caseDefinitionVersionTag]) => {
+      if (
+        globalActiveCase.caseDefinitionKey === caseDefinitionKey &&
+        globalActiveCase.caseDefinitionVersionTag === caseDefinitionVersionTag
+      ) {
+        return true;
+      }
+      return false;
+    })
+  );
+
   public readonly _caseDefinitionTitle$: Observable<string> = this.globalActiveCase$.pipe(
     map(result => result.name)
   );
