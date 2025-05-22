@@ -130,13 +130,13 @@
       <ng-container>
         <v-select
           [items]="
-            selectItemsObservables[uuid]?.caseDefinitionId &&
-            (selectItemsObservables[uuid].caseVersionTagItems | async)
+            caseVersionTagSelectItemsObservables[uuid]?.caseDefinitionKey &&
+            (caseVersionTagSelectItemsObservables[uuid].items | async)
           "
           [smallMargin]="true"
           name="caseDefinitionVersionTag"
           [title]="'caseDefinitionVersionTag' | pluginTranslate: pluginId | async"
-          [disabled]="obs.disabled || !selectItemsObservables[uuid]?.caseDefinitionId"
+          [disabled]="obs.disabled || !caseVersionTagSelectItemsObservables[uuid]?.caseDefinitionKey"
           [defaultSelectionId]="prefill?.caseDefinitionVersionTag"
           [required]="true"
           [tooltip]="'caseDefinitionVersionTagTooltip' | pluginTranslate: pluginId | async"
@@ -159,13 +159,13 @@
       </ng-container>
       <v-select
         [items]="
-          selectItemsObservables[uuid]?.caseDefinitionId &&
-          (selectItemsObservables[uuid].roleTypeItems | async)
+          rolTypeSelectItemsObservables[uuid]?.caseDefinitionId &&
+          (rolTypeSelectItemsObservables[uuid].items | async)
         "
         [smallMargin]="true"
         name="initiatorRoltypeUrl"
         [title]="'initiatorRoltypeUrl' | pluginTranslate: pluginId | async"
-        [disabled]="obs.disabled || !selectItemsObservables[uuid]?.caseDefinitionId"
+        [disabled]="obs.disabled || !rolTypeSelectItemsObservables[uuid]?.caseDefinitionId"
         [defaultSelectionId]="prefill?.initiatorRoltypeUrl"
         [required]="true"
         [tooltip]="'initiatorRoltypeUrlTooltip' | pluginTranslate: pluginId | async"

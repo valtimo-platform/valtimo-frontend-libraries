@@ -29,12 +29,10 @@ import {
   BehaviorSubject,
   combineLatest,
   filter,
-  flatMap,
   map,
   Observable,
   of,
   Subscription,
-  switchMap,
   take,
   tap,
 } from 'rxjs';
@@ -132,12 +130,12 @@ export class VerzoekConfigurationComponent
     )
   );
 
-  readonly selectItemsObservables: {
-    [uuid: string]: {
-      caseDefinitionId: string;
-      caseVersionTagItems: Observable<Array<SelectItem>>;
-      roleTypeItems: Observable<Array<SelectItem>>;
-    };
+  readonly caseVersionTagSelectItemsObservables: {
+    [uuid: string]: {caseDefinitionKey: string; items: Observable<Array<SelectItem>>};
+  } = {};
+
+  readonly rolTypeSelectItemsObservables: {
+    [uuid: string]: {caseDefinitionId: string; items: Observable<Array<SelectItem>>};
   } = {};
 
   readonly showMappingButtons: {[uuid: string]: boolean} = {};
@@ -195,30 +193,37 @@ export class VerzoekConfigurationComponent
     const caseDefinitionKey = formValue?.caseDefinitionKey;
     const caseDefinitionVersionTag = formValue?.caseDefinitionVersionTag;
     const caseDefinitionId = `${caseDefinitionKey}:${caseDefinitionVersionTag}`;
-    const selectItemsObservables = this.selectItemsObservables;
+    const rolTypeSelectItemsObservables = this.rolTypeSelectItemsObservables;
+    const caseVersionTagSelectItemsObservables = this.caseVersionTagSelectItemsObservables;
 
     this.showMappingButtons[uuid] = formValue.copyStrategy === 'specified';
 
     if (caseDefinitionKey) {
       if (
-        !selectItemsObservables[uuid] ||
-        selectItemsObservables[uuid].caseDefinitionId !== caseDefinitionId
+        !caseVersionTagSelectItemsObservables[uuid] ||
+        caseVersionTagSelectItemsObservables[uuid].caseDefinitionKey !== caseDefinitionKey
       ) {
-        selectItemsObservables[uuid] = {
-          caseDefinitionId,
-          caseVersionTagItems: this.verzoekPluginService
-            .getCaseDefinitions({caseDefinitionKey})
-            .pipe(
-              map(caseDefinitions =>
-                [{text: 'Active version', id: ''}].concat(
-                  caseDefinitions.content.map(caseDefinition => ({
-                    text: caseDefinition.caseDefinitionVersionTag,
-                    id: caseDefinition.caseDefinitionVersionTag,
-                  }))
-                )
+        caseVersionTagSelectItemsObservables[uuid] = {
+          caseDefinitionKey,
+          items: this.verzoekPluginService.getCaseDefinitions({caseDefinitionKey}).pipe(
+            map(caseDefinitions =>
+              [{text: 'Active version', id: ''}].concat(
+                caseDefinitions.content.map(caseDefinition => ({
+                  text: caseDefinition.caseDefinitionVersionTag,
+                  id: caseDefinition.caseDefinitionVersionTag,
+                }))
               )
-            ),
-          roleTypeItems: this.verzoekPluginService
+            )
+          ),
+        };
+      }
+      if (
+        !rolTypeSelectItemsObservables[uuid] ||
+        rolTypeSelectItemsObservables[uuid].caseDefinitionId !== caseDefinitionId
+      ) {
+        rolTypeSelectItemsObservables[uuid] = {
+          caseDefinitionId,
+          items: this.verzoekPluginService
             .getRoltypesByCaseDefinition(caseDefinitionKey, {caseDefinitionVersionTag})
             .pipe(
               map(rolTypes => rolTypes.map(rolType => ({text: rolType.name, id: rolType.url})))
@@ -226,16 +231,20 @@ export class VerzoekConfigurationComponent
         };
       }
     } else {
-      selectItemsObservables[uuid] = {
+      caseVersionTagSelectItemsObservables[uuid] = {
+        caseDefinitionKey,
+        items: of([]),
+      };
+      rolTypeSelectItemsObservables[uuid] = {
         caseDefinitionId,
-        caseVersionTagItems: of([]),
-        roleTypeItems: of([]),
+        items: of([]),
       };
     }
   }
 
   deleteRow(uuid: string): void {
-    delete this.selectItemsObservables[uuid];
+    delete this.caseVersionTagSelectItemsObservables[uuid];
+    delete this.rolTypeSelectItemsObservables[uuid];
   }
 
   openMappingModal(uuid: string): void {
@@ -297,6 +306,10 @@ export class VerzoekConfigurationComponent
             verzoekProperties: formValue.verzoekProperties.map(verzoek => {
               const verzoekToReturn: VerzoekType = {...verzoek};
               delete verzoekToReturn.uuid;
+
+              if (!verzoek.caseDefinitionVersionTag) {
+                verzoekToReturn.caseDefinitionVersionTag = null;
+              }
 
               if (this.mappings[verzoek.uuid] && verzoek.copyStrategy === 'specified') {
                 verzoekToReturn.mapping = this.mappings[verzoek.uuid];
