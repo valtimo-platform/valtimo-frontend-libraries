@@ -21,7 +21,7 @@ import {distinctUntilChanged, filter, tap} from 'rxjs/operators';
 
 @Directive({
   selector: '[muuri]',
-  standalone: true,
+  standalone: false,
 })
 export class MuuriDirective implements AfterViewInit, OnDestroy {
   @Input() public readonly columnMinWidth = 250;
@@ -109,53 +109,21 @@ export class MuuriDirective implements AfterViewInit, OnDestroy {
         .pipe(
           tap(([containerWidth]) => {
             const nativeElement = this.elementRef.nativeElement as HTMLElement;
-            const children = Array.from(nativeElement.children);
-
-            children.forEach(child => {
-              // Already wrapped in .item > .item-content
-              if (
-                child.classList.contains('item') &&
-                child.children.length === 1 &&
-                child.firstElementChild?.classList.contains('item-content')
-              ) {
-                return;
-              }
-
-              // Create .item and .item-content wrappers
-              const itemDiv = document.createElement('div');
-              itemDiv.classList.add('item');
-
-              const contentDiv = document.createElement('div');
-              contentDiv.classList.add('item-content');
-
-              // Move child into contentDiv
-              contentDiv.appendChild(child); // Moves without cloning, preserves Angular component
-
-              // Append wrappers to DOM in correct place
-              itemDiv.appendChild(contentDiv);
-              nativeElement.appendChild(itemDiv);
-            });
-
-            // Apply width + display to all .item wrappers
-            const updatedChildren = Array.from(nativeElement.children).filter(child =>
-              (child as HTMLElement).classList.contains('item')
-            ) as HTMLElement[];
+            const children = Array.from(nativeElement.children) as HTMLElement[];
 
             const amountOfHorizontalElements = Math.min(containerWidth / this.columnMinWidth);
             const widthPerElement = Math.min(containerWidth / amountOfHorizontalElements);
 
-            updatedChildren.forEach(item => {
+            children.forEach(item => {
               item.style.setProperty('position', 'absolute');
-              // item.style.setProperty('display', 'flex');
               item.style.setProperty('width', `${widthPerElement}px`);
             });
           }),
           switchMap(() => this._muuri$),
           tap(muuri => {
-            setTimeout(() => {
-              muuri.refreshItems();
-              muuri.layout();
-            }, 300);
+            muuri.refreshItems(null, true);
+            console.log(muuri.getItems());
+            muuri.layout(true);
           })
         )
         .subscribe()

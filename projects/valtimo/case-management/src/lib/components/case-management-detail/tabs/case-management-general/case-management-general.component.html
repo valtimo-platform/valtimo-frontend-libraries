@@ -37,11 +37,12 @@
     <ng-template #extensions></ng-template>
 
     <valtimo-case-management-case-handler
+      muuriItem
       [isReadOnly]="obs.isReadOnly"
       *ngIf="documentDefinition$ | async"
     ></valtimo-case-management-case-handler>
 
-    <valtimo-case-management-external-start-form [isReadOnly]="obs.isReadOnly">
+    <valtimo-case-management-external-start-form muuriItem [isReadOnly]="obs.isReadOnly">
     </valtimo-case-management-external-start-form>
   </div>
 </ng-container>

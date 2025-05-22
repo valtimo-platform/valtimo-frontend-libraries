@@ -251,4 +251,6 @@ export * from './lib/directives/valtimo-cds-overflow-button/valtimo-cds-overflow
 // remove toggletip button class
 export * from './lib/directives/remove-classnames/remove-classnames.directive';
 // muuri
+export * from './lib/directives/muuri/muuri-directive.module';
+export * from './lib/directives/muuri/muuri-item.directive';
 export * from './lib/directives/muuri/muuri.directive';
