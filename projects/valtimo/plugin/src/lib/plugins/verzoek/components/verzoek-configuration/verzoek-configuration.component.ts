@@ -29,10 +29,12 @@ import {
   BehaviorSubject,
   combineLatest,
   filter,
+  flatMap,
   map,
   Observable,
   of,
   Subscription,
+  switchMap,
   take,
   tap,
 } from 'rxjs';
@@ -49,7 +51,6 @@ import {
 } from '@valtimo/components';
 import {VerzoekPluginService} from '../../services';
 import {ProcessService} from '@valtimo/process';
-import {DocumentService} from '@valtimo/document';
 import {DataTable16} from '@carbon/icons';
 import {IconService} from 'carbon-components-angular';
 
@@ -110,13 +111,13 @@ export class VerzoekConfigurationComponent
       )
     );
 
-  readonly documentSelectItems$: Observable<Array<SelectItem>> = this.documentService
-    .getAllDefinitions()
+  readonly caseSelectItems$: Observable<Array<SelectItem>> = this.verzoekPluginService
+    .getCaseDefinitions({active: true})
     .pipe(
-      map(documentDefinitions =>
-        documentDefinitions.content.map(documentDefinition => ({
-          id: documentDefinition.id.name,
-          text: documentDefinition.id.name,
+      map(caseDefinitions =>
+        caseDefinitions.content.map(caseDefinition => ({
+          id: caseDefinition.caseDefinitionKey,
+          text: caseDefinition.caseDefinitionKey,
         }))
       )
     );
@@ -131,8 +132,12 @@ export class VerzoekConfigurationComponent
     )
   );
 
-  readonly rolTypeSelectItemsObservables: {
-    [uuid: string]: {caseDefinitionName: string; items: Observable<Array<SelectItem>>};
+  readonly selectItemsObservables: {
+    [uuid: string]: {
+      caseDefinitionId: string;
+      caseVersionTagItems: Observable<Array<SelectItem>>;
+      roleTypeItems: Observable<Array<SelectItem>>;
+    };
   } = {};
 
   readonly showMappingButtons: {[uuid: string]: boolean} = {};
@@ -148,12 +153,12 @@ export class VerzoekConfigurationComponent
   private readonly formValue$ = new BehaviorSubject<VerzoekConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
 
-  public getSelectedCaseDefinitionNameForIndex(index: number): Observable<string> {
+  public getSelectedDocumentDefinitionNameForIndex(index: number): Observable<string> {
     return this.formValue$.pipe(
       map(
         formValue =>
           Array.isArray(formValue.verzoekProperties) &&
-          formValue.verzoekProperties[index]?.caseDefinitionName
+          formValue.verzoekProperties[index]?.caseDefinitionKey
       )
     );
   }
@@ -166,7 +171,6 @@ export class VerzoekConfigurationComponent
     private readonly pluginTranslationService: PluginTranslationService,
     private readonly verzoekPluginService: VerzoekPluginService,
     private readonly processService: ProcessService,
-    private readonly documentService: DocumentService,
     private readonly modalService: ModalService,
     private readonly iconService: IconService
   ) {
@@ -188,35 +192,50 @@ export class VerzoekConfigurationComponent
   }
 
   verzoekTypeFormChange(formValue: VerzoekType, uuid: string): void {
-    const caseDefinitionName = formValue?.caseDefinitionName;
-    const rolTypeSelectItemsObservables = this.rolTypeSelectItemsObservables;
+    const caseDefinitionKey = formValue?.caseDefinitionKey;
+    const caseDefinitionVersionTag = formValue?.caseDefinitionVersionTag;
+    const caseDefinitionId = `${caseDefinitionKey}:${caseDefinitionVersionTag}`;
+    const selectItemsObservables = this.selectItemsObservables;
 
     this.showMappingButtons[uuid] = formValue.copyStrategy === 'specified';
 
-    if (caseDefinitionName) {
+    if (caseDefinitionKey) {
       if (
-        !rolTypeSelectItemsObservables[uuid] ||
-        rolTypeSelectItemsObservables[uuid].caseDefinitionName !== caseDefinitionName
+        !selectItemsObservables[uuid] ||
+        selectItemsObservables[uuid].caseDefinitionId !== caseDefinitionId
       ) {
-        rolTypeSelectItemsObservables[uuid] = {
-          caseDefinitionName,
-          items: this.verzoekPluginService
-            .getRoltypesByDocumentDefinitionName(caseDefinitionName)
+        selectItemsObservables[uuid] = {
+          caseDefinitionId,
+          caseVersionTagItems: this.verzoekPluginService
+            .getCaseDefinitions({caseDefinitionKey})
+            .pipe(
+              map(caseDefinitions =>
+                [{text: 'Active version', id: ''}].concat(
+                  caseDefinitions.content.map(caseDefinition => ({
+                    text: caseDefinition.caseDefinitionVersionTag,
+                    id: caseDefinition.caseDefinitionVersionTag,
+                  }))
+                )
+              )
+            ),
+          roleTypeItems: this.verzoekPluginService
+            .getRoltypesByCaseDefinition(caseDefinitionKey, {caseDefinitionVersionTag})
             .pipe(
               map(rolTypes => rolTypes.map(rolType => ({text: rolType.name, id: rolType.url})))
             ),
         };
       }
     } else {
-      rolTypeSelectItemsObservables[uuid] = {
-        caseDefinitionName,
-        items: of([]),
+      selectItemsObservables[uuid] = {
+        caseDefinitionId,
+        caseVersionTagItems: of([]),
+        roleTypeItems: of([]),
       };
     }
   }
 
   deleteRow(uuid: string): void {
-    delete this.rolTypeSelectItemsObservables[uuid];
+    delete this.selectItemsObservables[uuid];
   }
 
   openMappingModal(uuid: string): void {
@@ -256,7 +275,7 @@ export class VerzoekConfigurationComponent
       type =>
         !!(
           type.type &&
-          type.caseDefinitionName &&
+          type.caseDefinitionKey &&
           type.objectManagementId &&
           type.initiatorRoltypeUrl &&
           type.processDefinitionKey &&
