@@ -37,6 +37,7 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {
+  EnvironmentService,
   SearchField,
   SearchFieldDataType,
   SearchFieldFieldType,
@@ -58,6 +59,7 @@ import {
   tap,
 } from 'rxjs';
 import {v4 as uuidv4} from 'uuid';
+import {CaseManagementService} from '../../../../services';
 
 @Component({
   standalone: false,
@@ -214,6 +216,12 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     tap((caseDefinitionKey: string) => (this._caseDefinitionKey = caseDefinitionKey))
   );
 
+  public readonly caseDefinitionVersionTag$: Observable<string> = this.route.parent.params.pipe(
+    map(params => params.caseDefinitionKey || ''),
+    filter(caseDefinitionKey => !!caseDefinitionKey),
+    tap((caseDefinitionKey: string) => (this._caseDefinitionKey = caseDefinitionKey))
+  );
+
   private cachedSearchFields!: Array<SearchField>;
 
   public searchFieldActionTypeIsAdd: boolean;
@@ -261,6 +269,18 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
       }));
     })
   );
+
+  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.caseManagementService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+    )
+  );
+
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
 
   public readonly fieldTypeIsDropdown$ = new BehaviorSubject<boolean>(false);
 
@@ -349,7 +369,9 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly iconService: IconService
+    private readonly iconService: IconService,
+    private readonly environmentService: EnvironmentService,
+    private readonly caseManagementService: CaseManagementService
   ) {
     this.iconService.registerAll([ArrowDown16, ArrowUp16]);
   }

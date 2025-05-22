@@ -20,6 +20,7 @@
     pagination: pagination$ | async,
     loading: loading$ | async,
     canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
+    isDraftVersion: isDraftVersion$ | async,
   } as obs"
   [fields]="FIELDS"
   [header]="false"
@@ -38,7 +39,7 @@
       <svg cdsIcon="upload" size="16"></svg>
     </button>
 
-    <div *ngIf="obs.canUpdateGlobalConfiguration">
+    <div *ngIf="obs.isDraftVersion && obs.canUpdateGlobalConfiguration">
       <button cdsButton="primary" (click)="navigateToCreateRoute()">
         {{ 'Create new Form' | translate }}
 

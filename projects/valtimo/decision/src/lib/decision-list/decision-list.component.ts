@@ -20,7 +20,12 @@ import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {BehaviorSubject, map, switchMap, take, tap} from 'rxjs';
 import {Decision} from '../models';
 import {DecisionService} from '../services/decision.service';
-import {ConfigService, getCaseManagementRouteParams, getContextObservable} from '@valtimo/shared';
+import {
+  ConfigService,
+  EnvironmentService,
+  getCaseManagementRouteParams,
+  getContextObservable,
+} from '@valtimo/shared';
 import {DecisionStateService} from '../services';
 import {DecisionDeployComponent} from '../decision-deploy/decision-deploy.component';
 import {CarbonListModule, WidgetModule} from '@valtimo/components';
@@ -88,6 +93,9 @@ export class DecisionListComponent {
     })
   );
 
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
   constructor(
     private readonly decisionService: DecisionService,
     private readonly iconService: IconService,
@@ -95,7 +103,8 @@ export class DecisionListComponent {
     private readonly configService: ConfigService,
     private readonly stateService: DecisionStateService,
     private readonly route: ActivatedRoute,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly environmentService: EnvironmentService
   ) {
     this.iconService.registerAll([Upload16]);
     this.experimentalEditing = this.configService.config.featureToggles.experimentalDmnEditing;

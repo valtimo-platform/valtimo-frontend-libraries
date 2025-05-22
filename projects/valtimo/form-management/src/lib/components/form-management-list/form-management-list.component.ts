@@ -21,7 +21,11 @@ import {ActivatedRoute} from '@angular/router';
 import {Upload16} from '@carbon/icons';
 import {TranslateModule} from '@ngx-translate/core';
 import {CarbonListModule, ColumnConfig, Pagination} from '@valtimo/components';
-import {EnvironmentService, getCaseManagementRouteParams} from '@valtimo/shared';
+import {
+  DraftVersionService,
+  EnvironmentService,
+  getCaseManagementRouteParams,
+} from '@valtimo/shared';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {
   BehaviorSubject,
@@ -68,6 +72,21 @@ export class FormManagementListComponent {
   public readonly caseManagementRouteParams$ = this.context$.pipe(
     filter(context => context === 'case'),
     switchMap(() => getCaseManagementRouteParams(this.route))
+  );
+
+  public readonly caseDefinitionKey$ = this.context$.pipe(filter(context => context === 'case'));
+
+  public readonly caseDefinitionVersionTag$ = this.caseManagementRouteParams$.pipe(
+    switchMap(params => params?.caseDefinitionVersionTag)
+  );
+
+  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+    )
   );
 
   private readonly _collectionSize$ = new BehaviorSubject<number>(0);
@@ -136,9 +155,11 @@ export class FormManagementListComponent {
     private readonly formManagementService: FormManagementService,
     private readonly iconService: IconService,
     private readonly route: ActivatedRoute,
-    private readonly environmentService: EnvironmentService
+    private readonly environmentService: EnvironmentService,
+    private readonly draftVersionService: DraftVersionService
   ) {
     this.iconService.registerAll([Upload16]);
+    console.log('Iniciando...');
   }
 
   public navigateToCreateRoute(): void {

@@ -29,7 +29,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Deploy16, Version16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {PageHeaderService} from '@valtimo/components';
-import {getCaseManagementRouteParams, GlobalNotificationService} from '@valtimo/shared';
+import {
+  EnvironmentService,
+  getCaseManagementRouteParams,
+  GlobalNotificationService,
+} from '@valtimo/shared';
 import {IconService, ListItem, Notification} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {take} from 'rxjs/operators';
@@ -80,6 +84,18 @@ export class CaseManagementDetailActionsComponent {
         .pipe(map(result => result.caseDefinitionVersionTag))
     )
   );
+
+  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.caseManagementService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+    )
+  );
+
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
 
   public readonly selectedVersionIsGloballyActive$: Observable<boolean> = combineLatest([
     this.selectedVersion$,
@@ -184,7 +200,8 @@ export class CaseManagementDetailActionsComponent {
     private readonly pageHeaderService: PageHeaderService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly environmentService: EnvironmentService
   ) {
     this.iconService.register(Version16);
     this.iconService.register(Deploy16);

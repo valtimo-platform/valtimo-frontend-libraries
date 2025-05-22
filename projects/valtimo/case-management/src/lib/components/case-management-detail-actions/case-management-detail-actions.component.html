@@ -92,6 +92,7 @@
 <ng-template #exportMenu let-obs="obs">
   <cds-overflow-menu
     valtimoCdsOverflowButton
+    [disabled]="!(isDraftVersion$ | async) || !(canUpdateGlobalConfiguration$ | async)"
     [width]="250"
     [customTrigger]="customTrigger"
     [offset]="{y: 48, x: 37}"
@@ -99,14 +100,23 @@
   >
     <cds-overflow-menu-option
       [id]="'exportDocumentDefinition'"
-      [disabled]="obs.exporting || obs.loadingVersion"
+      [disabled]="
+        obs.exporting ||
+        obs.loadingVersion ||
+        !(isDraftVersion$ | async) ||
+        !(canUpdateGlobalConfiguration$ | async)
+      "
       (selected)="export()"
       >{{ 'caseManagement.export' | translate: {value: documentDefinitionTitle} }}
     </cds-overflow-menu-option>
 
     <cds-overflow-menu-option
       [id]="'setGlobalActiveVersion'"
-      [disabled]="obs.selectedVersionIsGloballyActive"
+      [disabled]="
+        obs.selectedVersionIsGloballyActive ||
+        !(isDraftVersion$ | async) ||
+        !(canUpdateGlobalConfiguration$ | async)
+      "
       (selected)="openGlobalActiveVersionModal()"
       >{{ 'caseManagement.setGlobalActiveVersion' | translate }}
     </cds-overflow-menu-option>

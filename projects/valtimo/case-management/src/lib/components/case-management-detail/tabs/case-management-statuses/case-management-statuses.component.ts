@@ -22,10 +22,11 @@ import {
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/shared';
+import {EnvironmentService, getCaseManagementRouteParams} from '@valtimo/shared';
 import {CaseStatusService, InternalCaseStatus, InternalCaseStatusUtils} from '@valtimo/document';
-import {BehaviorSubject, combineLatest, map, Subject, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subject, switchMap, tap} from 'rxjs';
 import {StatusModalCloseEvent, StatusModalType} from '../../../../models';
+import {CaseManagementService} from '../../../../services';
 
 @Component({
   standalone: false,
@@ -41,6 +42,10 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   private readonly _params$ = getCaseManagementRouteParams(this.route);
 
   public readonly caseDefinitionKey$ = this._params$.pipe(map(params => params.caseDefinitionKey));
+
+  public readonly caseDefinitionVersionTag$ = this._params$.pipe(
+    map(params => params.caseDefinitionVersionTag)
+  );
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
@@ -67,6 +72,18 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
     })
   );
 
+  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.caseManagementService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+    )
+  );
+
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
   public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
 
   public readonly ACTION_ITEMS: ActionItem[] = [
@@ -90,7 +107,9 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
 
   constructor(
     private readonly caseStatusService: CaseStatusService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly environmentService: EnvironmentService,
+    private readonly caseManagementService: CaseManagementService
   ) {}
 
   public ngAfterViewInit(): void {
@@ -103,6 +122,11 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   }
 
   public openEditModal(status: InternalCaseStatus): void {
+    combineLatest(this.isDraftVersion$, this.canUpdateGlobalConfiguration$).pipe(
+      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
+        if (!isDraftVersion || !canUpdateGlobalConfiguration) return;
+      })
+    );
     this.prefillStatus$.next(status);
     this.statusModalType$.next('edit');
   }
@@ -132,6 +156,12 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   }
 
   public onItemsReordered(reorderedItems: InternalCaseStatus[]): void {
+    combineLatest(this.isDraftVersion$, this.canUpdateGlobalConfiguration$).pipe(
+      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
+        if (!isDraftVersion || !canUpdateGlobalConfiguration) return;
+      })
+    );
+
     this.caseDefinitionKey$
       .pipe(
         switchMap(caseDefinitionKey =>
