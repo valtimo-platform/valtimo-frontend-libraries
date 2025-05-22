@@ -45,7 +45,7 @@ export class VerzoekPluginService {
   ): Observable<Array<Roltype>> {
     Object.keys(params).forEach(paramKey => {
       const paramValue = params[paramKey];
-      if (paramValue === null || paramValue === undefined) {
+      if (paramValue == null) {
         params[paramKey] = '';
       }
     });
