@@ -29,6 +29,7 @@ import {
   InputModule,
   ModalModule,
   MultiselectDropdownModule,
+  MuuriDirective,
   ParagraphModule,
   RenderInPageHeaderDirectiveModule,
   SelectModule,
@@ -173,6 +174,7 @@ import {CaseManagementCreateDraftVersionComponent} from './components/case-manag
     LayerModule,
     FormManagementComponent,
     EllipsisPipe,
+    MuuriDirective,
   ],
   providers: [TabManagementService],
 })

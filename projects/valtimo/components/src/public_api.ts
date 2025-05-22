@@ -217,6 +217,10 @@ export * from './lib/services/choice-field.service';
 export * from './lib/models/choice-field.model';
 export * from './lib/models/choicefield-value.model';
 
+// case tag selector
+export * from './lib/components/case-tags-selector/case-tags-selector.component';
+export * from './lib/components/case-tags-selector/case-tags-selector.component';
+
 /*
 directives
  */
@@ -246,6 +250,5 @@ export * from './lib/directives/valtimo-cds-overflow-button/valtimo-cds-overflow
 export * from './lib/directives/valtimo-cds-overflow-button/valtimo-cds-overflow-button-directive.module';
 // remove toggletip button class
 export * from './lib/directives/remove-classnames/remove-classnames.directive';
-// case tag selector
-export * from './lib/components/case-tags-selector/case-tags-selector.component';
-export * from './lib/components/case-tags-selector/case-tags-selector.component';
+// muuri
+export * from './lib/directives/muuri/muuri.directive';
