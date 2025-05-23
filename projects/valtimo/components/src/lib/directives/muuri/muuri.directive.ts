@@ -21,7 +21,7 @@ import {distinctUntilChanged, filter, tap} from 'rxjs/operators';
 
 @Directive({
   selector: '[muuri]',
-  standalone: false,
+  standalone: true,
 })
 export class MuuriDirective implements AfterViewInit, OnDestroy {
   @Input() public readonly columnMinWidth = 250;
@@ -35,6 +35,10 @@ export class MuuriDirective implements AfterViewInit, OnDestroy {
 
   private get _muuri$(): Observable<Muuri> {
     return this._muuriSubject$.pipe(filter(muuri => !!muuri));
+  }
+
+  private get _muuri(): Muuri {
+    return this._muuriSubject$.getValue();
   }
 
   private get _containerWidth$(): Observable<number> {
@@ -94,6 +98,17 @@ export class MuuriDirective implements AfterViewInit, OnDestroy {
     const nativeElement = this.elementRef.nativeElement as HTMLElement;
 
     this.mutationObserver = new MutationObserver(() => {
+      if (!this._muuri) return;
+
+      const container = this.elementRef.nativeElement as HTMLElement;
+      const items = Array.from(container.children).filter(
+        el => !this._muuri!.getItems().some(item => item.getElement() === el)
+      ) as HTMLElement[];
+
+      if (items.length > 0) {
+        this._muuri.add(items);
+      }
+
       this._mutationTrigger$.next(null);
     });
 
@@ -111,8 +126,12 @@ export class MuuriDirective implements AfterViewInit, OnDestroy {
             const nativeElement = this.elementRef.nativeElement as HTMLElement;
             const children = Array.from(nativeElement.children) as HTMLElement[];
 
-            const amountOfHorizontalElements = Math.min(containerWidth / this.columnMinWidth);
-            const widthPerElement = Math.min(containerWidth / amountOfHorizontalElements);
+            const amountOfHorizontalElements = Math.floor(containerWidth / this.columnMinWidth);
+
+            const widthPerElement =
+              amountOfHorizontalElements > 1
+                ? Math.min(containerWidth / amountOfHorizontalElements)
+                : containerWidth;
 
             children.forEach(item => {
               item.style.setProperty('position', 'absolute');
@@ -121,8 +140,7 @@ export class MuuriDirective implements AfterViewInit, OnDestroy {
           }),
           switchMap(() => this._muuri$),
           tap(muuri => {
-            muuri.refreshItems(null, true);
-            console.log(muuri.getItems());
+            muuri.refreshItems();
             muuri.layout(true);
           })
         )
@@ -138,5 +156,9 @@ export class MuuriDirective implements AfterViewInit, OnDestroy {
     if (!computedPosition || computedPosition === 'static') {
       this.renderer.setStyle(el, 'position', 'relative');
     }
+
+    this.renderer.setStyle(el, 'margin-top', '-16px');
+    this.renderer.setStyle(el, 'margin-left', '-16px');
+    this.renderer.setStyle(el, 'margin-right', '-16px');
   }
 }

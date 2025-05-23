@@ -14,13 +14,28 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
+import {Component, ViewChild, ViewContainerRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MuuriDirective} from './muuri.directive';
-import {MuuriItemComponent} from './muuri-item.component';
 
-@NgModule({
-  imports: [CommonModule, MuuriItemComponent, MuuriDirective],
-  exports: [MuuriDirective, MuuriItemComponent],
+@Component({
+  selector: 'muuri-item',
+  standalone: true,
+  template: `
+    <div class="item">
+      <div class="item-content">
+        <ng-content></ng-content>
+        <ng-template #container></ng-template>
+      </div>
+    </div>
+  `,
+  styles: `
+    .item {
+      margin: 16px;
+    }
+  `,
+  imports: [CommonModule],
 })
-export class MuuriDirectiveModule {}
+export class MuuriItemComponent {
+  @ViewChild('container', {read: ViewContainerRef, static: true})
+  public container!: ViewContainerRef;
+}
