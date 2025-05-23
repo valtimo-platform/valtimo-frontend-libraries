@@ -34,7 +34,7 @@ import {CommonModule, DOCUMENT} from '@angular/common';
 })
 export class RenderInBodyComponent implements AfterViewInit, OnDestroy {
   @ViewChild('content', {read: TemplateRef, static: true})
-  private readonly contentTemplate!: TemplateRef<any>;
+  private readonly _contentTemplate!: TemplateRef<any>;
 
   private _viewRef!: EmbeddedViewRef<any>;
 
@@ -44,7 +44,7 @@ export class RenderInBodyComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   public ngAfterViewInit(): void {
-    this._viewRef = this.viewContainerRef.createEmbeddedView(this.contentTemplate);
+    this._viewRef = this.viewContainerRef.createEmbeddedView(this._contentTemplate);
     this._viewRef.detectChanges();
 
     this._viewRef.rootNodes.forEach(node => this.document.body.appendChild(node));
