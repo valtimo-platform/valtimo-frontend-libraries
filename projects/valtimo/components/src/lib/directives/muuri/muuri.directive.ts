@@ -157,8 +157,6 @@ export class MuuriDirective implements AfterViewInit, OnDestroy {
       this.renderer.setStyle(el, 'position', 'relative');
     }
 
-    this.renderer.setStyle(el, 'margin-top', '-16px');
-    this.renderer.setStyle(el, 'margin-left', '-16px');
-    this.renderer.setStyle(el, 'margin-right', '-16px');
+    this.renderer.setStyle(el, 'margin', '-8px');
   }
 }

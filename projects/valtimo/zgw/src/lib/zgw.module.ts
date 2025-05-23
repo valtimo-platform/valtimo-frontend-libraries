@@ -70,13 +70,7 @@ import {CaseManagementZgwComponent} from './components';
     },
     {
       provide: CASE_CONFIGURATION_EXTENSIONS_TOKEN,
-      useValue: [
-        CaseManagementLinkProcessComponent,
-        // CaseManagementLinkUploadProcessComponent
-        // DocumentenApiVersionComponent,
-        // DocumentObjectenApiSyncComponent,
-        // ZakenApiZaaktypeLinkComponent,
-      ],
+      useValue: [CaseManagementLinkProcessComponent],
     },
   ],
 })

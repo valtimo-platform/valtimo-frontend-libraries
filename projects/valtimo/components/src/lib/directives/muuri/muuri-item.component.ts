@@ -30,7 +30,7 @@ import {CommonModule} from '@angular/common';
   `,
   styles: `
     .item {
-      margin: 16px;
+      margin: 8px;
     }
   `,
   imports: [CommonModule],

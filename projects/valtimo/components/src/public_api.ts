@@ -221,6 +221,9 @@ export * from './lib/models/choicefield-value.model';
 export * from './lib/components/case-tags-selector/case-tags-selector.component';
 export * from './lib/components/case-tags-selector/case-tags-selector.component';
 
+// render in body
+export * from './lib/components/render-in-body/render-in-body.component';
+
 /*
 directives
  */
