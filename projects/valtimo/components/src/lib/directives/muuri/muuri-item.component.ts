@@ -18,7 +18,7 @@ import {Component, ViewChild, ViewContainerRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 @Component({
-  selector: 'muuri-item',
+  selector: 'valtimo-muuri-item',
   standalone: true,
   template: `
     <div class="item">

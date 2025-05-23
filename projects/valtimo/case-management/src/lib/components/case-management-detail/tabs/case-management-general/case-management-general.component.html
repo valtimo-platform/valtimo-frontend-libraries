@@ -36,17 +36,17 @@
   <div class="case-management-general-tab" muuri [columnMinWidth]="350">
     <ng-template #extensions></ng-template>
 
-    <muuri-item>
+    <valtimo-muuri-item>
       <valtimo-case-management-case-handler
         muuriItem
         [isReadOnly]="obs.isReadOnly"
         *ngIf="documentDefinition$ | async"
       ></valtimo-case-management-case-handler>
-    </muuri-item>
+    </valtimo-muuri-item>
 
-    <muuri-item>
+    <valtimo-muuri-item>
       <valtimo-case-management-external-start-form [isReadOnly]="obs.isReadOnly">
       </valtimo-case-management-external-start-form>
-    </muuri-item>
+    </valtimo-muuri-item>
   </div>
 </ng-container>

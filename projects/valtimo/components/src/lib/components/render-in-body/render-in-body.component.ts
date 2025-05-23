@@ -27,7 +27,7 @@ import {
 import {CommonModule, DOCUMENT} from '@angular/common';
 
 @Component({
-  selector: 'render-in-body',
+  selector: 'valtimo-render-in-body',
   template: `<ng-template #content><ng-content></ng-content></ng-template>`,
   standalone: true,
   imports: [CommonModule],
