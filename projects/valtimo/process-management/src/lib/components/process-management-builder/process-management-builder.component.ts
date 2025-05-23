@@ -331,7 +331,9 @@ export class ProcessManagementBuilderComponent
               selectedProcessDefinition.id,
               !isReadOnlyProcess ? (result?.xml ?? '') : null,
               params?.caseDefinitionKey ?? '',
-              params?.caseDefinitionVersionTag ?? ''
+              params?.caseDefinitionVersionTag ?? '',
+              this.canInitializeDocument$.getValue(),
+              this.startableByUser$.getValue()
             );
           }
 
@@ -350,6 +352,7 @@ export class ProcessManagementBuilderComponent
             this.reload();
             this.showNotification('success');
           } else {
+            this.pendingChanges = false;
             this.navigateBack('success');
           }
         },
