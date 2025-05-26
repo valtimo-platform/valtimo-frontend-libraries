@@ -598,10 +598,7 @@
       "general": "General",
       "cases": "Configuration",
       "processes": "Processes",
-      "tabManagement": "Tabs",
       "document": "Document",
-      "statuses": "Statuses",
-      "tags": "Tags",
       "zgw": "ZGW",
       "forms": "Forms",
       "decision": "Decision tables",
@@ -623,7 +620,13 @@
           "toggle": {"onText": "Yes", "offText": "No"}
         }
       },
-      "caseListTab": {"title": "Case list", "searchFields": "Search Fields", "columns": "Columns"}
+      "caseListTab": {"title": "Case list", "searchFields": "Search Fields", "columns": "Columns"},
+      "caseDetailTab": {
+        "title": "Case detail",
+        "tabs": "Tabs",
+        "statuses": "Statuses",
+        "tags": "Tags"
+      }
     },
     "tabManagement": {
       "columns": {

@@ -34,19 +34,15 @@ import {
 } from '@valtimo/process-management';
 import {AuthGuardService} from '@valtimo/security';
 import {CASE_MANAGEMENT_TAB_TOKEN, CaseManagementTabConfig, ROLE_ADMIN} from '@valtimo/shared';
+import {CaseManagementCaseDetailComponent} from './components/case-management-case-detail/case-management-case-detail.component';
+import {CaseManagementCaseListComponent} from './components/case-management-case-list/case-management-case-list.component';
 import {CaseManagementDeploymentComponent} from './components/case-management-deployment/case-management-deployment.component';
 import {CaseManagementDetailComponent} from './components/case-management-detail/case-management-detail.component';
 import {CaseManagementDocumentDefinitionComponent} from './components/case-management-detail/tabs/case-management-document-definition/case-management-document-definition.component';
 import {CaseManagementGeneralComponent} from './components/case-management-detail/tabs/case-management-general/case-management-general.component';
-import {CaseManagementListColumnsComponent} from './components/case-management-detail/tabs/case-management-list-columns/case-management-list-columns.component';
-import {CaseManagementSearchFieldsComponent} from './components/case-management-detail/tabs/case-management-search-fields/case-management-search-fields.component';
-import {CaseManagementStatusesComponent} from './components/case-management-detail/tabs/case-management-statuses/case-management-statuses.component';
-import {CaseManagementTabsComponent} from './components/case-management-detail/tabs/case-management-tabs/case-management-tabs.component';
 import {CaseManagementWidgetTabComponent} from './components/case-management-detail/tabs/case-management-tabs/widget-tab/case-management-widget-tab/case-management-widget-tab.component';
-import {CaseManagementTagsComponent} from './components/case-management-detail/tabs/case-management-tags/case-management-tags.component';
 import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
 import {TabEnum} from './models';
-import {CaseManagementCaseListComponent} from './components/case-management-case-list/case-management-case-list.component';
 
 const routes: Routes = [
   {
@@ -92,15 +88,13 @@ const routes: Routes = [
         data: {context: 'case'} as DecisionManagementRouteData,
       },
       {path: TabEnum.CASE_LIST, component: CaseManagementCaseListComponent},
-      {path: TabEnum.TABS, component: CaseManagementTabsComponent},
-      {path: TabEnum.STATUSES, component: CaseManagementStatusesComponent},
+      {path: TabEnum.CASE_DETAIL, component: CaseManagementCaseDetailComponent},
       {
         path: TabEnum.FORMS,
         component: FormManagementComponent,
         data: {context: 'case'} as FormManagementRouteData,
       },
       {path: TabEnum.FORM_FLOWS, component: FormFlowOverviewComponent},
-      {path: TabEnum.TAGS, component: CaseManagementTagsComponent},
     ],
   },
   {

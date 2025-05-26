@@ -603,13 +603,8 @@
       "general": "Algemeen",
       "cases": "Configuratie",
       "processes": "Processen",
-      "searchFields": "Zoekvelden",
-      "listColumns": "Lijst kolommen",
-      "tabManagement": "Tabbladen",
       "document": "Document",
-      "statuses": "Statussen",
       "zgw": "ZGW",
-      "tags": "Tags",
       "forms": "Formulieren",
       "decision": "Beslistabellen",
       "formFlows": "Form flows",
@@ -630,7 +625,13 @@
           "toggle": {"onText": "Ja", "offText": "Nee"}
         }
       },
-      "caseListTab": {"title": "Caselijst", "searchFields": "Zoekvelden", "columns": "Kolommen"}
+      "caseListTab": {"title": "Caselijst", "searchFields": "Zoekvelden", "columns": "Kolommen"},
+      "caseDetailTab": {
+        "title": "Casedetail",
+        "tabs": "Tabbladen",
+        "tags": "Tags",
+        "statuses": "Statussen"
+      }
     },
     "tabManagement": {
       "columns": {

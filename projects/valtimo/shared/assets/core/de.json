@@ -607,13 +607,8 @@
       "general": "Allgemein",
       "cases": "Konfiguration",
       "processes": "Prozesse",
-      "searchFields": "Suchfelder",
-      "listColumns": "Aufführen",
-      "tabManagement": "Tabs",
       "document": "Dokument",
       "formFlows": "Form flows",
-      "statuses": "Status",
-      "tags": "Etikett",
       "zgw": "ZGW",
       "forms": "Formulare",
       "decision": "Entscheidungstabellen",
@@ -634,7 +629,13 @@
           "toggle": {"onText": "Ja", "offText": "Nein"}
         }
       },
-      "caseListTab": {"title": "Caseliste", "searchFields": "Suchfelder", "columns": "Spalten"}
+      "caseListTab": {"title": "Caseliste", "searchFields": "Suchfelder", "columns": "Spalten"},
+      "caseDetailTab": {
+        "title": "Casedetails",
+        "tabs": "Tabs",
+        "statuses": "Status",
+        "tags": "Etikett"
+      }
     },
     "tabManagement": {
       "columns": {
