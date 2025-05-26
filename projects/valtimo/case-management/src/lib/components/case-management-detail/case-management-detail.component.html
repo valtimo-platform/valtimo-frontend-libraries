@@ -78,20 +78,10 @@
 
     <cds-tab
       class="main-content no-padding-left-right no-padding-bottom"
-      [id]="TabEnum.SEARCH"
-      [active]="obs.currentTab === TabEnum.SEARCH"
-      [heading]="'caseManagement.tabs.searchFields' | translate"
-      (selected)="navigateToTab(TabEnum.SEARCH)"
-    >
-    </cds-tab>
-
-    <cds-tab
-      *ngIf="caseListColumn"
-      class="no-padding-left-right no-padding-top-bottom"
-      [id]="TabEnum.LIST"
-      [active]="obs.currentTab === TabEnum.LIST"
-      [heading]="'caseManagement.tabs.listColumns' | translate"
-      (selected)="navigateToTab(TabEnum.LIST)"
+      [id]="TabEnum.CASE_LIST"
+      [active]="obs.currentTab === TabEnum.CASE_LIST"
+      [heading]="'caseManagement.tabs.caseListTab.title' | translate"
+      (selected)="navigateToTab(TabEnum.CASE_LIST)"
     >
     </cds-tab>
 

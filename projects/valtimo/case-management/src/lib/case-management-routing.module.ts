@@ -46,6 +46,7 @@ import {CaseManagementWidgetTabComponent} from './components/case-management-det
 import {CaseManagementTagsComponent} from './components/case-management-detail/tabs/case-management-tags/case-management-tags.component';
 import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
 import {TabEnum} from './models';
+import {CaseManagementCaseListComponent} from './components/case-management-case-list/case-management-case-list.component';
 
 const routes: Routes = [
   {
@@ -78,59 +79,28 @@ const routes: Routes = [
       customPageTitle: true,
     },
     children: [
-      {
-        path: TabEnum.GENERAL,
-        component: CaseManagementGeneralComponent,
-      },
-      {
-        path: TabEnum.DOCUMENT,
-        component: CaseManagementDocumentDefinitionComponent,
-      },
+      {path: TabEnum.GENERAL, component: CaseManagementGeneralComponent},
+      {path: TabEnum.DOCUMENT, component: CaseManagementDocumentDefinitionComponent},
       {
         path: TabEnum.PROCESSES,
         component: ProcessManagementComponent,
-        data: {
-          context: 'case',
-        } as ProcessManagementRouteData,
+        data: {context: 'case'} as ProcessManagementRouteData,
       },
       {
         path: TabEnum.DECISIONS,
         component: DecisionComponent,
-        data: {
-          context: 'case',
-        } as DecisionManagementRouteData,
+        data: {context: 'case'} as DecisionManagementRouteData,
       },
-      {
-        path: TabEnum.SEARCH,
-        component: CaseManagementSearchFieldsComponent,
-      },
-      {
-        path: TabEnum.LIST,
-        component: CaseManagementListColumnsComponent,
-      },
-      {
-        path: TabEnum.TABS,
-        component: CaseManagementTabsComponent,
-      },
-      {
-        path: TabEnum.STATUSES,
-        component: CaseManagementStatusesComponent,
-      },
+      {path: TabEnum.CASE_LIST, component: CaseManagementCaseListComponent},
+      {path: TabEnum.TABS, component: CaseManagementTabsComponent},
+      {path: TabEnum.STATUSES, component: CaseManagementStatusesComponent},
       {
         path: TabEnum.FORMS,
         component: FormManagementComponent,
-        data: {
-          context: 'case',
-        } as FormManagementRouteData,
+        data: {context: 'case'} as FormManagementRouteData,
       },
-      {
-        path: TabEnum.FORM_FLOWS,
-        component: FormFlowOverviewComponent,
-      },
-      {
-        path: TabEnum.TAGS,
-        component: CaseManagementTagsComponent,
-      },
+      {path: TabEnum.FORM_FLOWS, component: FormFlowOverviewComponent},
+      {path: TabEnum.TAGS, component: CaseManagementTagsComponent},
     ],
   },
   {
@@ -203,19 +173,11 @@ const routes: Routes = [
     path: `case-management/case/:caseDefinitionKey/version/:caseDefinitionVersionTag/${TabEnum.FORM_FLOWS}/:formFlowDefinitionKey`,
     component: FormFlowEditorComponent,
     canActivate: [AuthGuardService],
-    data: {
-      title: 'Form flow details',
-      roles: [ROLE_ADMIN],
-      customPageTitle: true,
-    },
+    data: {title: 'Form flow details', roles: [ROLE_ADMIN], customPageTitle: true},
   },
 ];
 
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-  declarations: [],
-})
+@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule], declarations: []})
 export class CaseManagementRoutingModule {
   constructor(
     @Inject(CASE_MANAGEMENT_TAB_TOKEN)

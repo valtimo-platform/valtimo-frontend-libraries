@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-export enum TabEnum {
-  GENERAL = 'general',
-  DOCUMENT = 'document',
-  CASE = 'case',
-  PROCESSES = 'processes',
-  SEARCH = 'search',
-  LIST = 'list',
-  TABS = 'tabs',
-  STATUSES = 'statuses',
-  FORMS = 'forms',
-  FORM_FLOWS = 'form-flows',
-  TAGS = 'tags',
-  DECISIONS = 'decisions',
-  CASE_LIST = 'case-list',
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {TabEnum} from '../../models';
+
+@Component({
+  standalone: false,
+  templateUrl: './case-management-case-list.component.html',
+  styleUrl: './case-management-case-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CaseManagementCaseListComponent {
+  public readonly currentTab$ = new BehaviorSubject<TabEnum>(TabEnum.SEARCH);
+  public readonly TabEnum = TabEnum;
+
+  public switchTab(tab: TabEnum): void {
+    this.currentTab$.next(tab);
+  }
 }
