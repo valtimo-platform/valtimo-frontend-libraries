@@ -88,8 +88,8 @@ jobs:
           npm run libs-increment-all -- ${PROJECT_VERSION}
           npm run copy-frontend-version
 
-          // @valtimo/config was renamed to @valtimo/shared in commit f1fed37
-          // this condition supports both cases
+          # @valtimo/config was renamed to @valtimo/shared in commit f1fed37
+          # this condition supports both cases
           if [ -e './projects/valtimo/shared' ]; then
               npx ng build @valtimo/shared
           else
