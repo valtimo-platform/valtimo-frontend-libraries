@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-.add-sync {
-  align-self: flex-end;
+:host {
+  display: flex;
+  background: var(--cds-layer-01);
+  padding: 16px;
+}
+
+cds-tile {
+  background: var(--cds-layer-02);
+  width: 100% ;
 }
 
 .valtimo-objecten-sync__title {

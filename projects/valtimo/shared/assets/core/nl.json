@@ -460,6 +460,11 @@
       "buttonText": "Bestand selecteren",
       "success": "Upload succesvol",
       "failure": "Upload mislukt"
+    },
+    "noResults": {
+      "title": "Geen formulierdefinities gevonden",
+      "caseDescription": "Klik hier om een formulierdefinitie aan te maken dat aan deze case is gekoppeld",
+      "independentDescription": "Klik hier om een zelfstandig formulierdefinitie aan te maken"
     }
   },
   "caseManagement": {
@@ -519,7 +524,6 @@
         "title": "Concept verwijderen",
         "description": "Weet u zeker dat u het concept wilt verwijderen?",
         "confirm": "Verwijderen",
-        "cancel": "Sluiten",
         "successTitle": "Concept verwijderd",
         "errorTitle": "Fout",
         "errorMessage": "Er is iets misgegaan"
@@ -527,9 +531,8 @@
       "finalizeDraftConfirmationModal": {
         "loadingText": "Conceptversie afronden...",
         "title": "Concept finaliseren",
-        "description": "U staat op het punt {{caseDefinitionVersionKey}} {{caseDefinitionVersionTag}} te finaliseren. Na het finaliseren kunt u geen wijzigingen meer aanbrengen. Weet u het zeker?",
+        "description": "U staat op het punt {{caseDefinitionKey}} {{caseDefinitionVersionTag}} te finaliseren. Na het finaliseren kunt u geen wijzigingen meer aanbrengen. Weet u het zeker?",
         "confirm": "Finaliseren",
-        "cancel": "Sluiten",
         "successMessage": "Concept gefinaliseerd",
         "errorTitle": "Fout",
         "errorMessage": "Er is iets misgegaan"
@@ -764,8 +767,8 @@
         "color": "Kleur"
       },
       "noResults": {
-        "title": "Er zijn geen statussen",
-        "description": "Voeg een status toe om te beginnen"
+        "title": "Er zijn geen statussen geconfigureerd",
+        "description": "Klik hier om een status voor dit casetype te configureren"
       }
     },
     "caseTags": {
@@ -783,7 +786,10 @@
         "visible": "Standaard zichtbaar",
         "color": "Kleur"
       },
-      "noResults": {"title": "Er zijn geen tags", "description": "Voeg een tag toe om te beginnen"}
+      "noResults": {
+        "title": "Er zijn geen tags geconfigureerd",
+        "description": "Klik hier om een tag voor dit casetype te configureren"
+      }
     }
   },
   "widgetTabManagement": {
@@ -971,7 +977,7 @@
         "filterDescription": "Er zijn geen documenten die voldoen aan je zoekcriteria."
       },
       "noColumns": {
-        "description": "Configureer kolommen voor dit document",
+        "description": "Klik hier om een kolom voor dit document te configureren",
         "title": "Er zijn geen kolommen geconfigureerd voor deze zaak."
       }
     },
@@ -1096,7 +1102,7 @@
   "Create new Milestone Set": "Maak nieuw Milestone Set",
   "Forms": "Formulieren",
   "Overview of all Forms": "Overzicht van alle Formulieren",
-  "Create new Form": "Maak nieuw Formulier",
+  "Create Form": "Formulier creëren",
   "Form Builder": "Formulier Bouwer",
   "Process links": "Proceskoppelingen",
   "Translations": "Vertalingen",
@@ -1136,10 +1142,16 @@
     "name": "Naam",
     "key": "Sleutel",
     "readOnly": "Alleen-lezen",
+    "createProcess": "Proces creëren",
     "systemProcess": "Systeemproces",
     "systemProcessWarningMessage": "Dit is een systeemproces. Let goed op bij het maken van aanpassingen aan dit proces",
     "readOnlySystemProcessWarningMessage": "Dit is een systeemproces, daarmee is het gemarkeerd als alleen-lezen. Dit proces is wel te gebruiken maar niet aan te passen.",
     "version": "Versie: ",
+    "noResults": {
+      "title": "Geen processen gevonden",
+      "caseDescription": "Klik hier om een proces aan te maken dat aan deze case is gekoppeld",
+      "independentDescription": "Klik hier om een zelfstandig proces aan te maken"
+    },
     "deleteModal": {
       "title": "Proces verwijderen",
       "content": "Weet u zeker dat u dit proces wilt verwijderen?"
