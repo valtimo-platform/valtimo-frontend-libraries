@@ -477,7 +477,20 @@ export class ProcessManagementBuilderComponent
       this.pendingChanges = true;
     });
 
-    this._bpmnModeler.on('import.done', () => {
+    this._bpmnModeler.on('import.done', async () => {
+      const idMap: Record<string, string> = {};
+      const elementRegistry = this._bpmnModeler.get('elementRegistry') as any;
+
+      elementRegistry.forEach(element => {
+        const activityId = element?.di?.id;
+        const businessId = element?.id;
+
+        if (!activityId || !businessId) return;
+
+        idMap[activityId] = businessId;
+      });
+
+      this.processManagementEditorService.setActivityIdBusinessIdMap(idMap);
       this.listenToActivityChangesOnModeler();
     });
   }
@@ -642,6 +655,13 @@ export class ProcessManagementBuilderComponent
 
   private elementChangedHandler = (event: any): void => {
     this.logger.debug('Element changed:', event);
+
+    const activityId = event?.element?.di?.id;
+    const businessId = event?.element?.id;
+
+    if (!activityId || !businessId) return;
+
+    this.processManagementEditorService.updateProcessLinksOnIdChange(activityId, businessId);
   };
 
   private listenToActivityChangesOnModeler(): void {
@@ -674,6 +694,8 @@ export class ProcessManagementBuilderComponent
         )
         .subscribe(result => {
           const processDefinitionResult = result as ProcessDefinitionResult;
+
+          console.log(result);
 
           this.cleanUpListenersOnModeler();
           this._bpmnModeler?.importXML(processDefinitionResult.bpmn20Xml);
