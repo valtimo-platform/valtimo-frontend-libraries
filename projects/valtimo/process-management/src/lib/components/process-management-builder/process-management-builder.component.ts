@@ -477,7 +477,7 @@ export class ProcessManagementBuilderComponent
       this.pendingChanges = true;
     });
 
-    this._bpmnModeler.on('import.done', async () => {
+    this._bpmnModeler.on('import.done', () => {
       const idMap: Record<string, string> = {};
       const elementRegistry = this._bpmnModeler.get('elementRegistry') as any;
 
