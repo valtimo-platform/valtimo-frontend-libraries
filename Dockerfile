@@ -10,3 +10,4 @@ RUN echo "Include /usr/local/apache2/conf/rewrite-to-index.conf" >> /usr/local/a
 RUN chmod o+r /usr/local/apache2/htdocs/*
 
 EXPOSE 4200
+
