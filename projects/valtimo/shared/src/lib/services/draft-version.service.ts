@@ -47,7 +47,7 @@ export class DraftVersionService extends BaseApiService {
       )
       .pipe(
         map(caseDefinition => {
-          return caseDefinition.final === false;
+          return !caseDefinition.final;
         })
       );
   }
