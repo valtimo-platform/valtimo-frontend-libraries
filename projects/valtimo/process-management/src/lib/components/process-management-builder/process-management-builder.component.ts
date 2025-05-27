@@ -695,8 +695,6 @@ export class ProcessManagementBuilderComponent
         .subscribe(result => {
           const processDefinitionResult = result as ProcessDefinitionResult;
 
-          console.log(result);
-
           this.cleanUpListenersOnModeler();
           this._bpmnModeler?.importXML(processDefinitionResult.bpmn20Xml);
           this._bpmnViewer?.importXML(processDefinitionResult.bpmn20Xml);
