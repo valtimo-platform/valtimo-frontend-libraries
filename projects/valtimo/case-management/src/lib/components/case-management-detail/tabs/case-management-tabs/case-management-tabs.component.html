@@ -17,8 +17,7 @@
 <ng-container
   *ngIf="{
     routeParams: caseManagementRouteParams$ | async,
-    isDraftVersion: isDraftVersion$ | async,
-    canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
+    hasEditPermissions: hasEditPermissions$ | async,
   } as obs"
 >
   <valtimo-carbon-list
@@ -61,11 +60,7 @@
   </ng-template>
 
   <ng-template #addTabButton>
-    <button
-      cdsButton="primary"
-      *ngIf="obs.canUpdateGlobalConfiguration && obs.isDraftVersion"
-      (click)="openAddTabModal()"
-    >
+    <button cdsButton="primary" *ngIf="obs.hasEditPermissions" (click)="openAddTabModal()">
       {{ 'caseManagement.tabManagement.addModal.addTab' | translate }}
 
       <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>

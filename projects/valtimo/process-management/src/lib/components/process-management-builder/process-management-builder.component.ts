@@ -232,7 +232,6 @@ export class ProcessManagementBuilderComponent
       } else if (context === 'independent') {
         return canUpdateGlobalConfiguration;
       }
-      return false;
     })
   );
 

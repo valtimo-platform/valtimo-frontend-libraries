@@ -17,17 +17,7 @@
 import {ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  of,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, take, tap} from 'rxjs';
 import {Decision} from '../models';
 import {DecisionService} from '../services/decision.service';
 import {
@@ -135,8 +125,6 @@ export class DecisionListComponent {
         );
       } else if (context === 'independent') {
         return this.canUpdateGlobalConfiguration$;
-      } else {
-        return of(false);
       }
     })
   );

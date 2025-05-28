@@ -78,10 +78,7 @@
     *ngIf="obs.hasEditPermissions"
     (click)="openModal('create')"
     cdsButton="primary"
-    [disabled]="
-      obs.loadingCaseListColumns ||
-      (!(isDraftVersion$ | async) && !(canUpdateGlobalConfiguration$ | async))
-    "
+    [disabled]="obs.loadingCaseListColumns || !(hasEditPermissions$ | async)"
   >
     {{ 'listColumn.addButtonText' | translate }}
     <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>

@@ -97,6 +97,16 @@ export class CaseManagementDetailActionsComponent {
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
 
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+  ]).pipe(
+    map(
+      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+        canUpdateGlobalConfiguration && isDraftVersion
+    )
+  );
+
   public readonly selectedVersionIsGloballyActive$: Observable<boolean> = combineLatest([
     this.selectedVersion$,
     this.globalActiveVersion$,
@@ -268,7 +278,7 @@ export class CaseManagementDetailActionsComponent {
     this.setVersion(version);
   }
 
-  public 4(): void {
+  public openCaseRemoveModal(): void {
     this.selectedDocumentDefinition$.pipe(take(1)).subscribe(definition => {
       if (!definition) return;
 

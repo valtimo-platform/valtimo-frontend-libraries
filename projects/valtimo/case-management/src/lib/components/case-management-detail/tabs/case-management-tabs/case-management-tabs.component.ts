@@ -105,6 +105,16 @@ export class CaseManagementTabsComponent implements AfterViewInit {
     )
   );
 
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+  ]).pipe(
+    map(
+      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+        canUpdateGlobalConfiguration && isDraftVersion
+    )
+  );
+
   constructor(
     private readonly cd: ChangeDetectorRef,
     private readonly iconService: IconService,
@@ -137,7 +147,7 @@ export class CaseManagementTabsComponent implements AfterViewInit {
   }
 
   public onRowClicked(tab: ApiTabItem): void {
-    this.hasEditPermissions()
+    this.hasEditPermissions$
       .pipe(
         filter(hasPermission => hasPermission),
         take(1)
@@ -185,7 +195,7 @@ export class CaseManagementTabsComponent implements AfterViewInit {
   public onItemsReorderedEvent(reorderedItems: ApiTabItem[]): void {
     if (!reorderedItems) return;
 
-    this.hasEditPermissions()
+    this.hasEditPermissions$
       .pipe(
         filter(hasPermission => hasPermission),
         take(1)
@@ -241,14 +251,5 @@ export class CaseManagementTabsComponent implements AfterViewInit {
         label: 'caseManagement.tabManagement.columns.showTasks',
       },
     ]);
-  }
-
-  private hasEditPermissions(): Observable<boolean> {
-    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
-      take(1),
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        return isDraftVersion && canUpdateGlobalConfiguration;
-      })
-    );
   }
 }
