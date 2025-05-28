@@ -45,6 +45,7 @@ import {
 } from '../../models';
 import {DocumentenApiColumnService} from '../../services';
 import {DocumentenApiColumnModalComponent} from '../documenten-api-column-modal/documenten-api-column-modal.component';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-documenten-api-columns',
@@ -79,6 +80,28 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
   public readonly caseDefinitionVersionTag$: Observable<string> = getCaseManagementRouteParams(
     this.route
   ).pipe(map((params: CaseManagementParams | undefined) => params?.caseDefinitionVersionTag ?? ''));
+
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+    )
+  );
+
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+  ]).pipe(
+    map(
+      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+        canUpdateGlobalConfiguration && isDraftVersion
+    )
+  );
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
@@ -137,18 +160,6 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
   public readonly columnToUpdate$ = new BehaviorSubject<ConfiguredColumn | undefined>(undefined);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
-    this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$,
-  ]).pipe(
-    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    )
-  );
-
   constructor(
     private readonly route: ActivatedRoute,
     private readonly zgwDocumentColumnService: DocumentenApiColumnService,
@@ -179,8 +190,13 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
   }
 
   public openEditModal(column: ConfiguredColumn): void {
-    this.prefillColumn$.next(column);
-    this.columnModalType$.next('edit');
+    this.hasEditPermissions$.pipe(take(1)).subscribe(hasPermission => {
+      if (!hasPermission) {
+        return;
+      }
+      this.prefillColumn$.next(column);
+      this.columnModalType$.next('edit');
+    });
   }
 
   public openAddModal(): void {
@@ -201,9 +217,18 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
   }
 
   public onItemsReordered(definitionName: string, columns: ConfiguredColumn[]): void {
-    this.zgwDocumentColumnService.updateConfiguredColumns(definitionName, columns).subscribe(() => {
-      this.reload(true);
-    });
+    this.hasEditPermissions$
+      .pipe(
+        take(1),
+        filter(hasPermission => hasPermission)
+      )
+      .subscribe(() => {
+        this.zgwDocumentColumnService
+          .updateConfiguredColumns(definitionName, columns)
+          .subscribe(() => {
+            this.reload(true);
+          });
+      });
   }
 
   private reload(noAnimation = false): void {
