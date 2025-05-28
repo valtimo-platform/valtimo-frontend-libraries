@@ -22,11 +22,24 @@ import {
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
-import {EnvironmentService, getCaseManagementRouteParams} from '@valtimo/shared';
+import {
+  DraftVersionService,
+  EnvironmentService,
+  getCaseManagementRouteParams,
+} from '@valtimo/shared';
 import {CaseStatusService, InternalCaseStatus, InternalCaseStatusUtils} from '@valtimo/document';
-import {BehaviorSubject, combineLatest, map, Observable, Subject, switchMap, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import {StatusModalCloseEvent, StatusModalType} from '../../../../models';
-import {CaseManagementService} from '../../../../services';
 
 @Component({
   standalone: false,
@@ -72,17 +85,17 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
     })
   );
 
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
-    this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$,
-  ]).pipe(
-    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.caseManagementService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    )
-  );
-
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly isDraftVersion$: Observable<boolean> = combineLatest(
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$
+  ).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+    )
+  );
 
   public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
 
@@ -109,7 +122,7 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
     private readonly caseStatusService: CaseStatusService,
     private readonly route: ActivatedRoute,
     private readonly environmentService: EnvironmentService,
-    private readonly caseManagementService: CaseManagementService
+    private readonly draftVersionService: DraftVersionService
   ) {}
 
   public ngAfterViewInit(): void {
@@ -122,13 +135,12 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   }
 
   public openEditModal(status: InternalCaseStatus): void {
-    combineLatest(this.isDraftVersion$, this.canUpdateGlobalConfiguration$).pipe(
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        if (!isDraftVersion || !canUpdateGlobalConfiguration) return;
-      })
-    );
-    this.prefillStatus$.next(status);
-    this.statusModalType$.next('edit');
+    this.hasEditPermissions$()
+      .pipe(filter(hasPermission => hasPermission))
+      .subscribe(() => {
+        this.prefillStatus$.next(status);
+        this.statusModalType$.next('edit');
+      });
   }
 
   public openAddModal(): void {
@@ -156,14 +168,12 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   }
 
   public onItemsReordered(reorderedItems: InternalCaseStatus[]): void {
-    combineLatest(this.isDraftVersion$, this.canUpdateGlobalConfiguration$).pipe(
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        if (!isDraftVersion || !canUpdateGlobalConfiguration) return;
-      })
-    );
+    if (!reorderedItems) return;
 
-    this.caseDefinitionKey$
+    this.hasEditPermissions$()
       .pipe(
+        filter(hasPermission => hasPermission),
+        switchMap(() => this.caseDefinitionKey$.pipe(take(1))),
         switchMap(caseDefinitionKey =>
           this.caseStatusService.updateInternalCaseStatuses(caseDefinitionKey, reorderedItems)
         )
@@ -201,5 +211,14 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
         label: 'caseManagement.statuses.columns.color',
       },
     ]);
+  }
+
+  private hasEditPermissions$(): Observable<boolean> {
+    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
+      take(1),
+      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
+        return isDraftVersion && canUpdateGlobalConfiguration;
+      })
+    );
   }
 }

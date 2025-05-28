@@ -14,7 +14,13 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="{routeParams: caseManagementRouteParams$ | async} as obs">
+<ng-container
+  *ngIf="{
+    routeParams: caseManagementRouteParams$ | async,
+    isDraftVersion: isDraftVersion$ | async,
+    canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
+  } as obs"
+>
   <valtimo-carbon-list
     *ngIf="{fields: fields$ | async, loading: loading$ | async, tabs: tabs$ | async} as obs"
     [actionItems]="actionItems"
@@ -55,7 +61,11 @@
   </ng-template>
 
   <ng-template #addTabButton>
-    <button cdsButton="primary" (click)="openAddTabModal()">
+    <button
+      cdsButton="primary"
+      *ngIf="obs.canUpdateGlobalConfiguration && obs.isDraftVersion"
+      (click)="openAddTabModal()"
+    >
       {{ 'caseManagement.tabManagement.addModal.addTab' | translate }}
 
       <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>

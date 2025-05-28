@@ -37,6 +37,7 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {
+  DraftVersionService,
   EnvironmentService,
   SearchField,
   SearchFieldDataType,
@@ -59,7 +60,6 @@ import {
   tap,
 } from 'rxjs';
 import {v4 as uuidv4} from 'uuid';
-import {CaseManagementService} from '../../../../services';
 
 @Component({
   standalone: false,
@@ -275,7 +275,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     this.caseDefinitionVersionTag$,
   ]).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.caseManagementService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
     )
   );
 
@@ -371,7 +371,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     private readonly translateService: TranslateService,
     private readonly iconService: IconService,
     private readonly environmentService: EnvironmentService,
-    private readonly caseManagementService: CaseManagementService
+    private readonly draftVersionService: DraftVersionService
   ) {
     this.iconService.registerAll([ArrowDown16, ArrowUp16]);
   }
@@ -389,16 +389,19 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   }
 
   public searchFieldClicked(searchField: SearchField, searchFieldActionTypeIsAdd: boolean): void {
-    this.disableInput$.pipe(take(1)).subscribe(inputDisabled => {
-      if (!inputDisabled) {
+    combineLatest([this.disableInput$, this.hasEditPermissions$()])
+      .pipe(
+        take(1),
+        filter(([inputDisabled, hasPermission]) => !inputDisabled && hasPermission)
+      )
+      .subscribe(() => {
         this.searchFieldActionTypeIsAdd = searchFieldActionTypeIsAdd;
         const searchFieldToSelect = this.cachedSearchFields.find(
           field => field.key === searchField.key
         );
         this.selectedSearchField$.next(searchFieldToSelect || ({} as SearchField));
         this.showModal();
-      }
-    });
+      });
   }
 
   public formValueChange(data: SearchField): void {
@@ -656,5 +659,14 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
 
   private showEditModal(searchField: SearchField): void {
     this.searchFieldClicked(searchField, false);
+  }
+
+  private hasEditPermissions$(): Observable<boolean> {
+    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
+      take(1),
+      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
+        return isDraftVersion && canUpdateGlobalConfiguration;
+      })
+    );
   }
 }

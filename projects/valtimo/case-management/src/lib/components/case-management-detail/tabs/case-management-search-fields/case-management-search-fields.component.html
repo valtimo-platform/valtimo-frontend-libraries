@@ -22,6 +22,8 @@
     caseDefinitionKey: caseDefinitionKey$ | async,
     valid: valid$ | async,
     disableInput: disableInput$ | async,
+    canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
+    isDraftVersion: isDraftVersion$ | async,
   } as obs"
 >
   <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
@@ -55,6 +57,7 @@
   <button
     cdsButton="primary"
     data-testid="case-management-search-add"
+    *ngIf="!obs.isDraftVersion || !obs.canUpdateGlobalConfiguration"
     [disabled]="loadingSearchFields || obs.disableInput"
     (click)="searchFieldClicked($event, true)"
   >

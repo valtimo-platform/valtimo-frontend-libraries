@@ -28,9 +28,14 @@ import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {ApiTabItem, ApiTabType} from '@valtimo/case';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
-import {getCaseManagementRouteParams} from '@valtimo/shared';
+import {
+  CaseManagementParams,
+  DraftVersionService,
+  EnvironmentService,
+  getCaseManagementRouteParams,
+} from '@valtimo/shared';
 import {IconService} from 'carbon-components-angular';
-import {BehaviorSubject, map, Observable, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, take, tap} from 'rxjs';
 import {TabManagementService, TabService} from '../../../../services';
 
 @Component({
@@ -85,6 +90,21 @@ export class CaseManagementTabsComponent implements AfterViewInit {
   public readonly tab$ = new BehaviorSubject<ApiTabItem | null>(null);
   public readonly dragAndDropDisabled = signal(false);
 
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
+  private readonly params$: Observable<CaseManagementParams | undefined> =
+    getCaseManagementRouteParams(this.route);
+
+  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+    switchMap(params =>
+      this.draftVersionService.isDraftVersion(
+        params.caseDefinitionKey,
+        params.caseDefinitionVersionTag
+      )
+    )
+  );
+
   constructor(
     private readonly cd: ChangeDetectorRef,
     private readonly iconService: IconService,
@@ -92,7 +112,9 @@ export class CaseManagementTabsComponent implements AfterViewInit {
     private readonly tabService: TabService,
     private readonly translateService: TranslateService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly environmentService: EnvironmentService,
+    private readonly draftVersionService: DraftVersionService
   ) {}
 
   public ngAfterViewInit(): void {
@@ -115,13 +137,20 @@ export class CaseManagementTabsComponent implements AfterViewInit {
   }
 
   public onRowClicked(tab: ApiTabItem): void {
-    this.tab$.next(tab);
+    this.hasEditPermissions$()
+      .pipe(
+        filter(hasPermission => hasPermission),
+        take(1)
+      )
+      .subscribe(() => {
+        this.tab$.next(tab);
 
-    if (tab.type === ApiTabType.WIDGETS) {
-      this.router.navigate(['widget-tab', tab.key], {relativeTo: this.route});
-    } else {
-      this.openEditModal$.next(true);
-    }
+        if (tab.type === ApiTabType.WIDGETS) {
+          this.router.navigate(['widget-tab', tab.key], {relativeTo: this.route});
+        } else {
+          this.openEditModal$.next(true);
+        }
+      });
   }
 
   public onCloseAddModalEvent(tab: ApiTabItem | null): void {
@@ -156,11 +185,18 @@ export class CaseManagementTabsComponent implements AfterViewInit {
   public onItemsReorderedEvent(reorderedItems: ApiTabItem[]): void {
     if (!reorderedItems) return;
 
-    this.dragAndDropDisabled.set(true);
+    this.hasEditPermissions$()
+      .pipe(
+        filter(hasPermission => hasPermission),
+        take(1)
+      )
+      .subscribe(() => {
+        this.dragAndDropDisabled.set(true);
 
-    this.tabManagementService.dispatchAction(
-      this.tabManagementService.editTabsOrder(reorderedItems)
-    );
+        this.tabManagementService.dispatchAction(
+          this.tabManagementService.editTabsOrder(reorderedItems)
+        );
+      });
   }
 
   private addTab(tab: Partial<ApiTabItem>): void {
@@ -205,5 +241,14 @@ export class CaseManagementTabsComponent implements AfterViewInit {
         label: 'caseManagement.tabManagement.columns.showTasks',
       },
     ]);
+  }
+
+  private hasEditPermissions$(): Observable<boolean> {
+    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
+      take(1),
+      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
+        return isDraftVersion && canUpdateGlobalConfiguration;
+      })
+    );
   }
 }

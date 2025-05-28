@@ -23,11 +23,16 @@ import {
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
-import {EnvironmentService, getCaseManagementRouteParams} from '@valtimo/shared';
+import {
+  DraftVersionService,
+  EnvironmentService,
+  getCaseManagementRouteParams,
+} from '@valtimo/shared';
 import {CaseTag, CaseTagService, CaseTagsUtils} from '@valtimo/document';
 import {
   BehaviorSubject,
   combineLatest,
+  filter,
   map,
   Observable,
   Subject,
@@ -60,6 +65,18 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
     map(p => p.caseDefinitionVersionTag)
   );
 
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+    )
+  );
+
   public readonly usedKeys$ = new BehaviorSubject<string[]>([]);
 
   private readonly _subscriptions = new Subscription();
@@ -89,18 +106,6 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
     })
   );
 
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
-    this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$,
-  ]).pipe(
-    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.caseManagementService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    )
-  );
-
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
   public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
 
   public readonly ACTION_ITEMS: ActionItem[] = [
@@ -125,8 +130,9 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
   constructor(
     private readonly caseTagService: CaseTagService,
     private readonly route: ActivatedRoute,
+    private readonly caseManagementService: CaseManagementService,
     private readonly environmentService: EnvironmentService,
-    private readonly caseManagementService: CaseManagementService
+    private readonly draftVersionService: DraftVersionService
   ) {}
 
   public ngAfterViewInit(): void {
@@ -143,14 +149,12 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
   }
 
   public openEditModal(caseTag: CaseTag): void {
-    combineLatest(this.isDraftVersion$, this.canUpdateGlobalConfiguration$).pipe(
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        if (!isDraftVersion || !canUpdateGlobalConfiguration) return;
-      })
-    );
-
-    this.prefillCaseTag$.next(caseTag);
-    this.statusModalType$.next('edit');
+    this.hasEditPermissions$()
+      .pipe(filter(hasPermission => hasPermission))
+      .subscribe(() => {
+        this.prefillCaseTag$.next(caseTag);
+        this.statusModalType$.next('edit');
+      });
   }
 
   public openAddModal(): void {
@@ -184,17 +188,14 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
   }
 
   public onItemsReorderedEvent(reorderedItems: CaseTag[]): void {
-    combineLatest(this.isDraftVersion$, this.canUpdateGlobalConfiguration$).pipe(
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        if (!isDraftVersion || !canUpdateGlobalConfiguration) return;
-      })
-    );
-
     if (!reorderedItems) return;
 
-    combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$])
+    this.hasEditPermissions$()
       .pipe(
-        take(1),
+        filter(hasPermission => hasPermission),
+        switchMap(() =>
+          combineLatest([this.caseDefinitionKey$, this.caseDefinitionVersionTag$]).pipe(take(1))
+        ),
         switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
           this.caseTagService.updateCaseTags(
             caseDefinitionKey,
@@ -231,5 +232,14 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
         label: 'caseManagement.caseTags.columns.color',
       },
     ]);
+  }
+
+  private hasEditPermissions$(): Observable<boolean> {
+    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
+      take(1),
+      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
+        return isDraftVersion && canUpdateGlobalConfiguration;
+      })
+    );
   }
 }

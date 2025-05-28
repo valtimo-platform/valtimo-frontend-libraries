@@ -107,7 +107,11 @@
               [onText]="'processManagement.canInitializeDocument' | translate"
               [offText]="'processManagement.canInitializeDocument' | translate"
               [checked]="actionsObs.canInitializeDocument"
-              [disabled]="actionsObs.loading || actionsObs.updatingProcessDefinitionCaseDefinition"
+              [disabled]="
+                actionsObs.loading ||
+                actionsObs.updatingProcessDefinitionCaseDefinition ||
+                actionsObs.canUpdateGlobalConfiguration
+              "
               (checkedChange)="onProcessToggleChange('canInitializeDocument', $event)"
             ></cds-toggle>
           </cds-tooltip>
@@ -119,7 +123,11 @@
               [onText]="'processManagement.startableByUser' | translate"
               [offText]="'processManagement.startableByUser' | translate"
               [checked]="actionsObs.startableByUser"
-              [disabled]="actionsObs.loading || actionsObs.updatingProcessDefinitionCaseDefinition"
+              [disabled]="
+                actionsObs.loading ||
+                actionsObs.updatingProcessDefinitionCaseDefinition ||
+                actionsObs.canUpdateGlobalConfiguration
+              "
               (checkedChange)="onProcessToggleChange('startableByUser', $event)"
             ></cds-toggle
           ></cds-tooltip>
@@ -137,6 +145,7 @@
         </button>
 
         <button
+          *ngIf="actionsObs.canUpdateGlobalConfiguration"
           [disabled]="!actionsObs.changesPending"
           cdsButton="primary"
           (click)="

@@ -23,6 +23,8 @@
     saveButtonDisabled: saveButtonDisabled$ | async,
     selectedDocumentDefinition: selectedDocumentDefinition$ | async,
     compactMode: compactMode$ | async,
+    canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
+    isDraftVersion: isDraftVersion$ | async,
   } as obs"
 >
   <div class="cds--toolbar-content">
@@ -39,6 +41,7 @@
 
       <button
         cdsButton="primary"
+        *ngIf="obs.isDraftVersion && obs.canUpdateGlobalConfiguration"
         [disabled]="obs.selectedDocumentDefinition?.readOnly"
         (click)="onEditClick()"
       >

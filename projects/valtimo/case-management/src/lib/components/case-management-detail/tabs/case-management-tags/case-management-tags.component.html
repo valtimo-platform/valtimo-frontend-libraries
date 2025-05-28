@@ -19,6 +19,8 @@
     loading: loading$ | async,
     caseTags: caseTags$ | async,
     fields: fields$ | async,
+    canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
+    isDraftVersion: isDraftVersion$ | async,
   } as obs"
   [items]="obs.caseTags"
   [fields]="obs.fields"
@@ -65,7 +67,7 @@
     <button
       *ngIf="(isDraftVersion$ | async) && (canUpdateGlobalConfiguration$ | async)"
       cdsButton="primary"
-      [disabled]="obs.loading"
+      [disabled]="obs.loading || !obs.canUpdateGlobalConfiguration || !obs.isDraftVersion"
       (click)="openAddModal()"
     >
       <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>

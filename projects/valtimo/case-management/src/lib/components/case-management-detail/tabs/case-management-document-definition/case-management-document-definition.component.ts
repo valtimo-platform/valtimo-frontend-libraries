@@ -24,7 +24,12 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {Edit16, Save16} from '@carbon/icons';
 import {ConfirmationModalComponent, EditorModel, PageHeaderService} from '@valtimo/components';
-import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/shared';
+import {
+  CaseManagementParams,
+  DraftVersionService,
+  EnvironmentService,
+  getCaseManagementRouteParams,
+} from '@valtimo/shared';
 import {
   DocumentDefinition,
   DocumentDefinitionCreateRequest,
@@ -87,6 +92,18 @@ export class CaseManagementDocumentDefinitionComponent {
     this.route
   );
 
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+    switchMap(params =>
+      this.draftVersionService.isDraftVersion(
+        params.caseDefinitionKey,
+        params.caseDefinitionVersionTag
+      )
+    )
+  );
+
   private _changesToSave: any;
   private _initialId: string;
 
@@ -95,7 +112,9 @@ export class CaseManagementDocumentDefinitionComponent {
     private readonly caseDetailService: CaseDetailService,
     private readonly iconService: IconService,
     private readonly pageHeaderService: PageHeaderService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly environmentService: EnvironmentService,
+    private readonly draftVersionService: DraftVersionService
   ) {
     this.iconService.registerAll([Edit16, Save16]);
   }

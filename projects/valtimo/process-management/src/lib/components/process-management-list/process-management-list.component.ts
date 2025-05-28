@@ -24,12 +24,13 @@ import {
   ConfirmationModalModule,
   ViewType,
 } from '@valtimo/components';
-import {EnvironmentService, GlobalNotificationService} from '@valtimo/shared';
+import {DraftVersionService, EnvironmentService, GlobalNotificationService} from '@valtimo/shared';
 import {ProcessDefinition} from '@valtimo/process';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {BehaviorSubject, Observable, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, take, tap} from 'rxjs';
 import {ProcessDefinitionResult} from '../../models';
 import {ProcessManagementService, ProcessManagementStateService} from '../../services';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'valtimo-process-management-list',
@@ -63,8 +64,24 @@ export class ProcessManagementListComponent {
     },
   ];
 
+  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
+    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionKey,
+      caseDefinitionVersionTag: caseDefinitionVersionTag,
+    }))
+  );
+
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+    switchMap(params =>
+      this.draftVersionService.isDraftVersion(
+        params.caseDefinitionKey,
+        params.caseDefinitionVersionTag
+      )
+    )
+  );
 
   public readonly processDefinitions$: Observable<ProcessDefinitionResult[]> =
     this.processManagementStateService.reloadDefinitions$.pipe(
@@ -107,7 +124,9 @@ export class ProcessManagementListComponent {
     private readonly processManagementService: ProcessManagementService,
     private readonly processManagementStateService: ProcessManagementStateService,
     private readonly translateService: TranslateService,
-    private readonly environmentService: EnvironmentService
+    private readonly environmentService: EnvironmentService,
+    private readonly route: ActivatedRoute,
+    private readonly draftVersionService: DraftVersionService
   ) {
     this.iconService.registerAll([Upload16]);
   }
@@ -144,5 +163,14 @@ export class ProcessManagementListComponent {
   public onDeleteProcess(process: ProcessDefinitionResult): void {
     this.processToDelete$.next(process.processDefinition);
     this.showDeleteModal$.next(true);
+  }
+
+  private hasEditPermissions$(): Observable<boolean> {
+    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
+      take(1),
+      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
+        return isDraftVersion && canUpdateGlobalConfiguration;
+      })
+    );
   }
 }
