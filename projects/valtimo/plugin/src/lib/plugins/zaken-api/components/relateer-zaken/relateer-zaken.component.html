@@ -30,7 +30,7 @@
           [required]="true"
   ></v-input>
     <v-select
-            [items]="aardRelatieOptions"
+            [items]="aardRelatieOptions$ | async"
             name="aardRelatie"
             [title]="'aardRelatie' | pluginTranslate: pluginId | async"
             [disabled]="obs.disabled"

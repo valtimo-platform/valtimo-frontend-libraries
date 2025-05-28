@@ -167,6 +167,9 @@ const zakenApiPluginSpecification: PluginSpecification = {
       'relateer-zaken': 'Relateer zaken',
       teRelaterenZaakUri: 'URL naar de te relateren zaak',
       aardRelatie: 'Aard van de relatie',
+      'option-vervolg': 'De andere zaak gaf aanleiding tot het starten van de onderhanden zaak.',
+      'option-onderwerp': 'De andere zaak is relevant voor cq. is onderwerp van de onderhanden zaak.',
+      'option-bijdrage': 'Aan het bereiken van de uitkomst van de andere zaak levert de onderhanden zaak een bijdrage.',
     },
     en: {
       title: 'Zaken API',
@@ -282,6 +285,9 @@ const zakenApiPluginSpecification: PluginSpecification = {
       'relateer-zaken': 'Add relation between two Zaken',
       teRelaterenZaakUri: 'URL to the Zaak to be related',
       aardRelatie: 'Nature of the relationship',
+      'option-vervolg': 'The other Zaak prompted the start of the current Zaak.',
+      'option-onderwerp': 'The other Zaak is relevant to or the subject of the current Zaak.',
+      'option-bijdrage': 'The current Zaak contributes to the outcome of the other Zaak.',
     },
     de: {
       title: 'Zaken API',
@@ -397,6 +403,9 @@ const zakenApiPluginSpecification: PluginSpecification = {
       'relateer-zaken': 'Beziehung zwischen Zaken herstellen',
       teRelaterenZaakUri: 'URL zum zu verknüpfenden Zaak',
       aardRelatie: 'Art der Beziehung',
+      'option-vervolg': 'Der andere Zaak gab Anlass zur Einleitung des aktuellen Zaak.',
+      'option-onderwerp': 'Der andere Zaak ist relevant für bzw. Gegenstand des aktuellen Zaak.',
+      'option-bijdrage': 'Der aktuelle Zaak trägt zum Ergebnis des anderen Zaak bei.',
     },
   },
 };

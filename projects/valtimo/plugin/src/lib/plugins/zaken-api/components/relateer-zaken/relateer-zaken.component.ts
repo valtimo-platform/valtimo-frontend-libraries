@@ -19,8 +19,11 @@ import {FunctionConfigurationComponent} from '../../../../models';
 import {
   BehaviorSubject,
   combineLatest,
+  filter,
+  map,
   Observable,
   Subscription,
+  switchMap,
   take,
 } from 'rxjs';
 import {RelateerZakenConfig} from '../../models';
@@ -39,22 +42,40 @@ export class RelateerZakenComponent
 {
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
-  @Input() pluginId
+  @Input() set pluginId(value: string) {
+    this.pluginId$.next(value);
+  }
   @Input() prefillConfiguration$: Observable<RelateerZakenConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<RelateerZakenConfig> =
     new EventEmitter<RelateerZakenConfig>();
 
-  public readonly aardRelatieOptions: Array<SelectItem> = [
-        {id: 'vervolg', translationKey: "plugin.plugins.zaken-api.relateer-zaken.vervolg"},
-        {id: 'onderwerp', translationKey: "plugin.plugins.zaken-api.relateer-zaken.onderwerp"},
-        {id: 'bijdrage', translationKey: "plugin.plugins.zaken-api.relateer-zaken.bijdrage"}
-      ]
+  private readonly pluginId$ = new BehaviorSubject<string>('');
+  public readonly aardRelatieOptions$: Observable<Array<SelectItem>> = this.pluginId$.pipe(
+    filter(pluginId => !!pluginId),
+    switchMap(pluginId =>
+      combineLatest([
+        this.pluginTranslatePipe.transform('option-vervolg', pluginId),
+        this.pluginTranslatePipe.transform('option-onderwerp', pluginId),
+        this.pluginTranslatePipe.transform('option-bijdrage', pluginId),
+      ])
+    ),
+    map(([vervolgText, onderwerpText, bijdrageText]) =>     [
+      { id: 'vervolg', text: vervolgText },
+      { id: 'onderwerp', text: onderwerpText },
+      { id: 'bijdrage', text: bijdrageText }
+    ])
+  );
 
   private saveSubscription!: Subscription;
 
   private readonly formValue$ = new BehaviorSubject<RelateerZakenConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
+
+  constructor(
+    private readonly pluginTranslatePipe: PluginTranslatePipe
+  ) {
+  }
 
   ngOnInit(): void {
     this.openSaveSubscription();

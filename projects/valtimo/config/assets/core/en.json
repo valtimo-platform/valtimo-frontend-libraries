@@ -1576,16 +1576,7 @@
   "plugin": {
     "noConfigurationComponent": "No configuration component is available.",
     "configurationId": "Configuration ID",
-    "configurationIdTooltip": "The plugin will be saved under this ID. The ID must be in the format of a UUID",
-    "plugins": {
-      "zaken-api": {
-        "relateer-zaken": {
-          "vervolg": "The other Zaak prompted the start of the current Zaak.",
-          "onderwerp": "The other Zaak is relevant to or the subject of the current Zaak.",
-          "bijdrage": "The current Zaak contributes to the outcome of the other Zaak."
-        }
-      }
-    }
+    "configurationIdTooltip": "The plugin will be saved under this ID. The ID must be in the format of a UUID"
   },
   "pluginManagement": {
     "tableItemsText": "plugin configurations",
