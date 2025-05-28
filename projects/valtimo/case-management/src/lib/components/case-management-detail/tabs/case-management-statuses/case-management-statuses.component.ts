@@ -104,6 +104,7 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
       label: 'interface.edit',
       callback: this.openEditModal.bind(this),
       type: 'normal',
+      disabledCallback: this.hasEditPermissions.bind(),
     },
     {
       label: 'interface.delete',
@@ -135,7 +136,7 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   }
 
   public openEditModal(status: InternalCaseStatus): void {
-    this.hasEditPermissions$()
+    this.hasEditPermissions()
       .pipe(filter(hasPermission => hasPermission))
       .subscribe(() => {
         this.prefillStatus$.next(status);
@@ -170,7 +171,7 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   public onItemsReordered(reorderedItems: InternalCaseStatus[]): void {
     if (!reorderedItems) return;
 
-    this.hasEditPermissions$()
+    this.hasEditPermissions()
       .pipe(
         filter(hasPermission => hasPermission),
         switchMap(() => this.caseDefinitionKey$.pipe(take(1))),
@@ -213,7 +214,7 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
     ]);
   }
 
-  private hasEditPermissions$(): Observable<boolean> {
+  private hasEditPermissions(): Observable<boolean> {
     return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
       take(1),
       map(([isDraftVersion, canUpdateGlobalConfiguration]) => {

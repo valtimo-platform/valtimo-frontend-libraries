@@ -137,7 +137,7 @@ export class CaseManagementTabsComponent implements AfterViewInit {
   }
 
   public onRowClicked(tab: ApiTabItem): void {
-    this.hasEditPermissions$()
+    this.hasEditPermissions()
       .pipe(
         filter(hasPermission => hasPermission),
         take(1)
@@ -185,7 +185,7 @@ export class CaseManagementTabsComponent implements AfterViewInit {
   public onItemsReorderedEvent(reorderedItems: ApiTabItem[]): void {
     if (!reorderedItems) return;
 
-    this.hasEditPermissions$()
+    this.hasEditPermissions()
       .pipe(
         filter(hasPermission => hasPermission),
         take(1)
@@ -243,7 +243,7 @@ export class CaseManagementTabsComponent implements AfterViewInit {
     ]);
   }
 
-  private hasEditPermissions$(): Observable<boolean> {
+  private hasEditPermissions(): Observable<boolean> {
     return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
       take(1),
       map(([isDraftVersion, canUpdateGlobalConfiguration]) => {

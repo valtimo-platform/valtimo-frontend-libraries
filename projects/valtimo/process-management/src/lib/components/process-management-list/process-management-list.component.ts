@@ -165,7 +165,7 @@ export class ProcessManagementListComponent {
     this.showDeleteModal$.next(true);
   }
 
-  private hasEditPermissions$(): Observable<boolean> {
+  private hasEditPermissions(): Observable<boolean> {
     return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
       take(1),
       map(([isDraftVersion, canUpdateGlobalConfiguration]) => {

@@ -149,7 +149,7 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
   }
 
   public openEditModal(caseTag: CaseTag): void {
-    this.hasEditPermissions$()
+    this.hasEditPermissions()
       .pipe(filter(hasPermission => hasPermission))
       .subscribe(() => {
         this.prefillCaseTag$.next(caseTag);
@@ -190,7 +190,7 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
   public onItemsReorderedEvent(reorderedItems: CaseTag[]): void {
     if (!reorderedItems) return;
 
-    this.hasEditPermissions$()
+    this.hasEditPermissions()
       .pipe(
         filter(hasPermission => hasPermission),
         switchMap(() =>
@@ -234,7 +234,7 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
     ]);
   }
 
-  private hasEditPermissions$(): Observable<boolean> {
+  private hasEditPermissions(): Observable<boolean> {
     return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
       take(1),
       map(([isDraftVersion, canUpdateGlobalConfiguration]) => {

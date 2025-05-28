@@ -30,7 +30,12 @@ import {
   ConfirmationModalModule,
   ViewType,
 } from '@valtimo/components';
-import {CaseManagementParams, getCaseManagementRouteParams} from '@valtimo/shared';
+import {
+  CaseManagementParams,
+  DraftVersionService,
+  EnvironmentService,
+  getCaseManagementRouteParams,
+} from '@valtimo/shared';
 import {ButtonModule, IconModule, TagModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {
@@ -70,6 +75,10 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
     map((params: CaseManagementParams | undefined) => params?.caseDefinitionKey ?? ''),
     filter((caseDefinitionKey: string) => !!caseDefinitionKey)
   );
+
+  public readonly caseDefinitionVersionTag$: Observable<string> = getCaseManagementRouteParams(
+    this.route
+  ).pipe(map((params: CaseManagementParams | undefined) => params?.caseDefinitionVersionTag ?? ''));
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
@@ -128,9 +137,23 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
   public readonly columnToUpdate$ = new BehaviorSubject<ConfiguredColumn | undefined>(undefined);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
 
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+    this.caseDefinitionKey$,
+    this.caseDefinitionVersionTag$,
+  ]).pipe(
+    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
+      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+    )
+  );
+
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly zgwDocumentColumnService: DocumentenApiColumnService
+    private readonly zgwDocumentColumnService: DocumentenApiColumnService,
+    private readonly environmentService: EnvironmentService,
+    private readonly draftVersionService: DraftVersionService
   ) {}
 
   public ngAfterViewInit(): void {

@@ -389,7 +389,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   }
 
   public searchFieldClicked(searchField: SearchField, searchFieldActionTypeIsAdd: boolean): void {
-    combineLatest([this.disableInput$, this.hasEditPermissions$()])
+    combineLatest([this.disableInput$, this.hasEditPermissions()])
       .pipe(
         take(1),
         filter(([inputDisabled, hasPermission]) => !inputDisabled && hasPermission)
@@ -661,7 +661,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     this.searchFieldClicked(searchField, false);
   }
 
-  private hasEditPermissions$(): Observable<boolean> {
+  private hasEditPermissions(): Observable<boolean> {
     return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
       take(1),
       map(([isDraftVersion, canUpdateGlobalConfiguration]) => {

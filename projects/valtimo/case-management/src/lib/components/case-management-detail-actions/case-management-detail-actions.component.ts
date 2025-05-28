@@ -268,7 +268,7 @@ export class CaseManagementDetailActionsComponent {
     this.setVersion(version);
   }
 
-  public openCaseRemoveModal(): void {
+  public 4(): void {
     this.selectedDocumentDefinition$.pipe(take(1)).subscribe(definition => {
       if (!definition) return;
 
