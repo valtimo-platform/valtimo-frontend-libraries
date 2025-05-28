@@ -104,6 +104,16 @@ export class CaseManagementDocumentDefinitionComponent {
     )
   );
 
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+  ]).pipe(
+    map(
+      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+        canUpdateGlobalConfiguration && isDraftVersion
+    )
+  );
+
   private _changesToSave: any;
   private _initialId: string;
 

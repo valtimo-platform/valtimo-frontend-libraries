@@ -22,6 +22,7 @@
     downloadName: downloadName$ | async,
     loadingCaseListColumns: loadingCaseListColumns$ | async,
     disableInput: disableInput$ | async,
+    hasEditPermissions: hasEditPermissions$ | async,
   } as obs"
 >
   <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
@@ -74,6 +75,7 @@
   </button>
 
   <button
+    *ngIf="obs.hasEditPermissions"
     (click)="openModal('create')"
     cdsButton="primary"
     [disabled]="

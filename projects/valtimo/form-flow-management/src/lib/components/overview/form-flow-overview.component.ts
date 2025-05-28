@@ -19,11 +19,14 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActionItem, CarbonListComponent, ColumnConfig, ViewType} from '@valtimo/components';
 import {
   CaseManagementParams,
+  DraftVersionService,
+  EnvironmentService,
   getCaseManagementRouteParams,
+  getContextObservable,
   GlobalNotificationService,
   Page,
 } from '@valtimo/shared';
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {FormFlowDefinition, ListFormFlowDefinition} from '../../models';
 import {FormFlowService} from '../../services';
 
@@ -50,18 +53,6 @@ export class FormFlowOverviewComponent {
       viewType: ViewType.BOOLEAN,
       key: 'readOnly',
       label: 'formFlow.readOnly',
-    },
-  ];
-
-  public readonly ACTION_ITEMS: ActionItem[] = [
-    {
-      callback: this.editFormFlowDetails.bind(this),
-      label: 'interface.edit',
-    },
-    {
-      callback: this.deleteFormFlow.bind(this),
-      label: 'interface.delete',
-      type: 'danger',
     },
   ];
 
@@ -94,12 +85,63 @@ export class FormFlowOverviewComponent {
   );
   public readonly showAddModal$ = new BehaviorSubject<boolean>(false);
 
+  public readonly context$ = getContextObservable(this.route);
+
+  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
+    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionKey,
+      caseDefinitionVersionTag: caseDefinitionVersionTag,
+    }))
+  );
+
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
+    switchMap(params =>
+      this.draftVersionService.isDraftVersion(
+        params.caseDefinitionKey,
+        params.caseDefinitionVersionTag
+      )
+    )
+  );
+
+  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
+    switchMap(context => {
+      if (context === 'case') {
+        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
+          map(
+            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+              canUpdateGlobalConfiguration && isDraftVersion
+          )
+        );
+      } else if (context === 'independent') {
+        return this.canUpdateGlobalConfiguration$;
+      }
+    })
+  );
+
+  public readonly ACTION_ITEMS: ActionItem[] = [
+    {
+      callback: this.editFormFlowDetails.bind(this),
+      label: 'interface.edit',
+    },
+    {
+      callback: this.deleteFormFlow.bind(this),
+      label: 'interface.delete',
+      type: 'danger',
+    },
+  ];
+
   constructor(
     private readonly formFlowService: FormFlowService,
     private readonly globalNotificationService: GlobalNotificationService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly environmentService: EnvironmentService,
+    private readonly draftVersionService: DraftVersionService
   ) {}
 
   public openAddModal(): void {

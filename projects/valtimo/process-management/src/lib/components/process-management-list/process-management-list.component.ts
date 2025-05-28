@@ -27,10 +27,11 @@ import {
 import {DraftVersionService, EnvironmentService, GlobalNotificationService} from '@valtimo/shared';
 import {ProcessDefinition} from '@valtimo/process';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable, switchMap, take, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {ProcessDefinitionResult} from '../../models';
 import {ProcessManagementService, ProcessManagementStateService} from '../../services';
 import {ActivatedRoute} from '@angular/router';
+import {getContextObservable} from '../../utils';
 
 @Component({
   selector: 'valtimo-process-management-list',
@@ -71,6 +72,8 @@ export class ProcessManagementListComponent {
     }))
   );
 
+  public readonly context$ = getContextObservable(this.route);
+
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
 
@@ -89,6 +92,21 @@ export class ProcessManagementListComponent {
       switchMap(() => this.processManagementService.processes$),
       tap(() => this.loading$.next(false))
     );
+
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+    this.context$,
+  ]).pipe(
+    map(([canUpdateGlobalConfiguration, isDraftVersion, context]) => {
+      if (context === 'case') {
+        return canUpdateGlobalConfiguration && isDraftVersion;
+      } else if (context === 'independent') {
+        return canUpdateGlobalConfiguration;
+      }
+      return false;
+    })
+  );
 
   public readonly FIELDS: ColumnConfig[] = [
     {key: 'processDefinition.name', label: 'processManagement.name'},
@@ -163,14 +181,5 @@ export class ProcessManagementListComponent {
   public onDeleteProcess(process: ProcessDefinitionResult): void {
     this.processToDelete$.next(process.processDefinition);
     this.showDeleteModal$.next(true);
-  }
-
-  private hasEditPermissions(): Observable<boolean> {
-    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
-      take(1),
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        return isDraftVersion && canUpdateGlobalConfiguration;
-      })
-    );
   }
 }

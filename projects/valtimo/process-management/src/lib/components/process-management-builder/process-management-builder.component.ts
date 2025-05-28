@@ -37,6 +37,7 @@ import {
   RenderInPageHeaderDirectiveModule,
 } from '@valtimo/components';
 import {
+  DraftVersionService,
   EnvironmentService,
   getCaseManagementRouteParams,
   GlobalNotificationService,
@@ -158,9 +159,6 @@ export class ProcessManagementBuilderComponent
   public readonly canInitializeDocument$ = new BehaviorSubject<boolean>(false);
   public readonly startableByUser$ = new BehaviorSubject<boolean>(false);
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
   public readonly selectedProcessDefinitionXml$ =
     this.processManagementEditorService.selectionProcessDefinition$.pipe(
       filter(selectedProcessDefinition => !!selectedProcessDefinition?.id),
@@ -201,6 +199,41 @@ export class ProcessManagementBuilderComponent
   public readonly managementParams$ = this.context$.pipe(
     filter(context => context === 'case'),
     switchMap(() => getCaseManagementRouteParams(this.route))
+  );
+
+  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
+    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionKey,
+      caseDefinitionVersionTag: caseDefinitionVersionTag,
+    }))
+  );
+
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
+    switchMap(params =>
+      this.draftVersionService.isDraftVersion(
+        params.caseDefinitionKey,
+        params.caseDefinitionVersionTag
+      )
+    )
+  );
+
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+    this.context$,
+  ]).pipe(
+    map(([canUpdateGlobalConfiguration, isDraftVersion, context]) => {
+      if (context === 'case') {
+        return canUpdateGlobalConfiguration && isDraftVersion;
+      } else if (context === 'independent') {
+        return canUpdateGlobalConfiguration;
+      }
+      return false;
+    })
   );
 
   private readonly _reload$ = new Subject<null>();
@@ -268,7 +301,8 @@ export class ProcessManagementBuilderComponent
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly translateService: TranslateService,
-    private readonly environmentService: EnvironmentService
+    private readonly environmentService: EnvironmentService,
+    private readonly draftVersionService: DraftVersionService
   ) {
     super();
     this.iconService.registerAll([Deploy16, Download16, ArrowLeft16]);

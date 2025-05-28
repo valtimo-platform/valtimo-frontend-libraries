@@ -66,12 +66,16 @@ export class FormManagementListComponent {
 
   public readonly context$ = getContextObservable(this.route);
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
   public readonly caseManagementRouteParams$ = this.context$.pipe(
     filter(context => context === 'case'),
     switchMap(() => getCaseManagementRouteParams(this.route))
+  );
+
+  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
+    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionKey,
+      caseDefinitionVersionTag: caseDefinitionVersionTag,
+    }))
   );
 
   public readonly caseDefinitionKey$ = this.context$.pipe(filter(context => context === 'case'));
@@ -80,13 +84,32 @@ export class FormManagementListComponent {
     switchMap(params => params?.caseDefinitionVersionTag)
   );
 
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
-    this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$,
-  ]).pipe(
-    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
+  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
+    switchMap(params =>
+      this.draftVersionService.isDraftVersion(
+        params.caseDefinitionKey,
+        params.caseDefinitionVersionTag
+      )
     )
+  );
+
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
+    switchMap(context => {
+      if (context === 'case') {
+        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
+          map(
+            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+              canUpdateGlobalConfiguration && isDraftVersion
+          )
+        );
+      } else if (context === 'independent') {
+        return this.canUpdateGlobalConfiguration$;
+      }
+    })
   );
 
   private readonly _collectionSize$ = new BehaviorSubject<number>(0);
@@ -159,7 +182,6 @@ export class FormManagementListComponent {
     private readonly draftVersionService: DraftVersionService
   ) {
     this.iconService.registerAll([Upload16]);
-    console.log('Iniciando...');
   }
 
   public navigateToCreateRoute(): void {

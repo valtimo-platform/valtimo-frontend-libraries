@@ -17,11 +17,22 @@
 import {ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {BehaviorSubject, map, switchMap, take, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  of,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import {Decision} from '../models';
 import {DecisionService} from '../services/decision.service';
 import {
   ConfigService,
+  DraftVersionService,
   EnvironmentService,
   getCaseManagementRouteParams,
   getContextObservable,
@@ -93,8 +104,44 @@ export class DecisionListComponent {
     })
   );
 
+  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
+    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
+      caseDefinitionKey: caseDefinitionKey,
+      caseDefinitionVersionTag: caseDefinitionVersionTag,
+    }))
+  );
+
+  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
+    switchMap(params =>
+      this.draftVersionService.isDraftVersion(
+        params.caseDefinitionKey,
+        params.caseDefinitionVersionTag
+      )
+    )
+  );
+
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
+    switchMap(context => {
+      if (context === 'case') {
+        console.log('Case');
+        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
+          map(
+            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+              canUpdateGlobalConfiguration && isDraftVersion
+          ),
+          tap(result => console.log('Result: ', result))
+        );
+      } else if (context === 'independent') {
+        return this.canUpdateGlobalConfiguration$;
+      } else {
+        return of(false);
+      }
+    })
+  );
 
   constructor(
     private readonly decisionService: DecisionService,
@@ -104,7 +151,8 @@ export class DecisionListComponent {
     private readonly stateService: DecisionStateService,
     private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
-    private readonly environmentService: EnvironmentService
+    private readonly environmentService: EnvironmentService,
+    private readonly draftVersionService: DraftVersionService
   ) {
     this.iconService.registerAll([Upload16]);
     this.experimentalEditing = this.configService.config.featureToggles.experimentalDmnEditing;

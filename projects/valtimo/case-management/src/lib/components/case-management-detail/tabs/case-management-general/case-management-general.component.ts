@@ -24,10 +24,14 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import {map, Observable, switchMap} from 'rxjs';
+import {combineLatest, map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentDefinition, DocumentService} from '@valtimo/document';
-import {CASE_CONFIGURATION_EXTENSIONS_TOKEN} from '@valtimo/shared';
+import {
+  CASE_CONFIGURATION_EXTENSIONS_TOKEN,
+  DraftVersionService,
+  EnvironmentService,
+} from '@valtimo/shared';
 import {CaseManagementService} from '../../../../services';
 import {MuuriItemComponent} from '@valtimo/components';
 
@@ -54,11 +58,26 @@ export class CaseManagementGeneralComponent implements AfterViewInit {
     )
   );
 
-  public readonly isReadOnly$ = this.params$.pipe(
-    switchMap(({caseDefinitionKey, caseDefinitionVersionTag}) =>
-      this.caseManagementService.getCaseDefinition(caseDefinitionKey, caseDefinitionVersionTag)
-    ),
-    map(caseDefinition => caseDefinition.final)
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
+
+  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+    switchMap(params =>
+      this.draftVersionService.isDraftVersion(
+        params.caseDefinitionKey,
+        params.caseDefinitionVersionTag
+      )
+    )
+  );
+
+  public readonly isReadOnly$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+  ]).pipe(
+    map(
+      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+        !canUpdateGlobalConfiguration || !isDraftVersion
+    )
   );
 
   constructor(
@@ -68,7 +87,9 @@ export class CaseManagementGeneralComponent implements AfterViewInit {
     private readonly caseManagementService: CaseManagementService,
     @Optional()
     @Inject(CASE_CONFIGURATION_EXTENSIONS_TOKEN)
-    private readonly caseConfigurationExtensionComponents: Type<any>[]
+    private readonly caseConfigurationExtensionComponents: Type<any>[],
+    private readonly draftVersionService: DraftVersionService,
+    private readonly environmentService: EnvironmentService
   ) {}
 
   public ngAfterViewInit(): void {

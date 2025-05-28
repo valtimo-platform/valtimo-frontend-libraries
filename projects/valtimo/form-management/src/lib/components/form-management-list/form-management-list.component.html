@@ -19,8 +19,7 @@
     formDefinitions: formDefinitions$ | async,
     pagination: pagination$ | async,
     loading: loading$ | async,
-    canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
-    isDraftVersion: isDraftVersion$ | async,
+    hasEditPermissions: hasEditPermissions$ | async,
   } as obs"
   [fields]="FIELDS"
   [header]="false"
@@ -34,21 +33,12 @@
   (rowClicked)="editFormDefinition($event)"
   (search)="searchTermEntered($event)"
 >
-  <ng-container carbonToolbarContent>
-    <button
-      *ngIf="obs.isDraftVersion && obs.canUpdateGlobalConfiguration"
-      cdsButton="ghost"
-      [iconOnly]="true"
-      (click)="navigateToUploadRoute()"
-    >
+  <ng-container *ngIf="obs.hasEditPermissions" carbonToolbarContent>
+    <button cdsButton="ghost" [iconOnly]="true" (click)="navigateToUploadRoute()">
       <svg cdsIcon="upload" size="16"></svg>
     </button>
 
-    <button
-      *ngIf="obs.isDraftVersion && obs.canUpdateGlobalConfiguration"
-      cdsButton="primary"
-      (click)="navigateToCreateRoute()"
-    >
+    <button cdsButton="primary" (click)="navigateToCreateRoute()">
       {{ 'Create new Form' | translate }}
 
       <svg cdsIcon="add" size="16"></svg>

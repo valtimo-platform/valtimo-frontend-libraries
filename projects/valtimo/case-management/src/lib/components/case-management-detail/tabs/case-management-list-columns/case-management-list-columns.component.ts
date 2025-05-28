@@ -37,6 +37,7 @@ import {
   BehaviorSubject,
   combineLatest,
   delay,
+  filter,
   map,
   Observable,
   startWith,
@@ -347,6 +348,16 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
 
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+  ]).pipe(
+    map(
+      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+        canUpdateGlobalConfiguration && isDraftVersion
+    )
+  );
+
   readonly showDeleteModal$ = new Subject<boolean>();
 
   readonly deleteRowKey$ = new BehaviorSubject<string>('');
@@ -410,19 +421,19 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   }
 
   public onItemsReordered(caseDefinitionKey: string, items: CaseListColumn[]): void {
-    combineLatest(this.isDraftVersion$, this.canUpdateGlobalConfiguration$).pipe(
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        if (!isDraftVersion || !canUpdateGlobalConfiguration) return;
-      })
-    );
-
     if (!items || !caseDefinitionKey) return;
 
-    const unformattedColumns = items.map(column =>
-      this.cachedCaseListColumns.find(cachedColumn => cachedColumn.uuid === column.uuid)
-    );
+    this.hasEditPermissions$.pipe(take(1)).subscribe(hasEditPermissions => {
+      if (!hasEditPermissions) {
+        return;
+      }
 
-    this.updateCaseListColumns(caseDefinitionKey, unformattedColumns);
+      const unformattedColumns = items.map(column =>
+        this.cachedCaseListColumns.find(cachedColumn => cachedColumn.uuid === column.uuid)
+      );
+
+      this.updateCaseListColumns(caseDefinitionKey, unformattedColumns);
+    });
   }
 
   public saveCaseListColumns(): void {
@@ -442,16 +453,13 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   }
 
   public columnRowClicked(row: {key: string}): void {
-    combineLatest(this.isDraftVersion$, this.canUpdateGlobalConfiguration$).pipe(
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        if (!isDraftVersion || !canUpdateGlobalConfiguration) return;
-      })
-    );
-
     this.resetFormGroup();
 
-    combineLatest([this.viewTypeItems$, this.sortItems$])
-      .pipe(take(1))
+    combineLatest([this.viewTypeItems$, this.sortItems$, this.hasEditPermissions$])
+      .pipe(
+        filter(([_, __, hasEditPermissions]) => hasEditPermissions),
+        take(1)
+      )
       .subscribe(([viewTypeItems, sortItems]) => {
         const column = this.cachedCaseListColumns.find(
           cachedColumn => cachedColumn.key === row.key

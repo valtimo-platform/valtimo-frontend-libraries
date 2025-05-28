@@ -19,8 +19,6 @@
     loading: loading$ | async,
     caseTags: caseTags$ | async,
     fields: fields$ | async,
-    canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
-    isDraftVersion: isDraftVersion$ | async,
   } as obs"
   [items]="obs.caseTags"
   [fields]="obs.fields"
@@ -65,7 +63,7 @@
 <ng-template #buttons let-obs="obs">
   <div class="dossier-management-search-fields__buttons">
     <button
-      *ngIf="(isDraftVersion$ | async) && (canUpdateGlobalConfiguration$ | async)"
+      *ngIf="hasEditPermissions$ | async"
       cdsButton="primary"
       [disabled]="obs.loading || !obs.canUpdateGlobalConfiguration || !obs.isDraftVersion"
       (click)="openAddModal()"

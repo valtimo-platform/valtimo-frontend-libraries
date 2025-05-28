@@ -62,7 +62,7 @@
   <div class="case-management-search-fields__buttons">
     <button
       cdsButton="primary"
-      *ngIf="(isDraftVersion$ | async) && (canUpdateGlobalConfiguration$ | async)"
+      *ngIf="hasEditPermissions$ | async"
       [disabled]="obs.loading"
       (click)="openAddModal()"
     >

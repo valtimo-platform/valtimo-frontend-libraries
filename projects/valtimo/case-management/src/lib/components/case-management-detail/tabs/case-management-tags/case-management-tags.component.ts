@@ -77,6 +77,16 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
     )
   );
 
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+  ]).pipe(
+    map(
+      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+        canUpdateGlobalConfiguration && isDraftVersion
+    )
+  );
+
   public readonly usedKeys$ = new BehaviorSubject<string[]>([]);
 
   private readonly _subscriptions = new Subscription();
@@ -149,12 +159,10 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
   }
 
   public openEditModal(caseTag: CaseTag): void {
-    this.hasEditPermissions()
-      .pipe(filter(hasPermission => hasPermission))
-      .subscribe(() => {
-        this.prefillCaseTag$.next(caseTag);
-        this.statusModalType$.next('edit');
-      });
+    this.hasEditPermissions$.pipe(filter(hasPermission => hasPermission)).subscribe(() => {
+      this.prefillCaseTag$.next(caseTag);
+      this.statusModalType$.next('edit');
+    });
   }
 
   public openAddModal(): void {
@@ -190,7 +198,7 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
   public onItemsReorderedEvent(reorderedItems: CaseTag[]): void {
     if (!reorderedItems) return;
 
-    this.hasEditPermissions()
+    this.hasEditPermissions$
       .pipe(
         filter(hasPermission => hasPermission),
         switchMap(() =>
@@ -232,14 +240,5 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
         label: 'caseManagement.caseTags.columns.color',
       },
     ]);
-  }
-
-  private hasEditPermissions(): Observable<boolean> {
-    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
-      take(1),
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        return isDraftVersion && canUpdateGlobalConfiguration;
-      })
-    );
   }
 }

@@ -23,14 +23,14 @@
     selectedProcessDefinitionXml: selectedProcessDefinitionXml$ | async,
     loading: loading$ | async,
     isReadOnlyProcess: isReadOnlyProcess$ | async,
-    canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
+    hasEditPermissions: hasEditPermissions$ | async,
   } as obs"
   data-carbon-theme="g10"
   class="bpmn__container"
 >
   <div
     class="bpmn__modeler"
-    [style.display]="obs.isReadOnlyProcess || !obs.canUpdateGlobalConfiguration ? 'none' : 'flex'"
+    [style.display]="obs.isReadOnlyProcess || !obs.hasEditPermissions ? 'none' : 'flex'"
   >
     <div class="bpmn__modeler-canvas" #modeler></div>
 
@@ -39,7 +39,7 @@
 
   <div
     class="bpmn__modeler"
-    [style.display]="obs.isReadOnlyProcess || !obs.canUpdateGlobalConfiguration ? 'flex' : 'none'"
+    [style.display]="obs.isReadOnlyProcess || !obs.hasEditPermissions ? 'flex' : 'none'"
   >
     <div class="bpmn__modeler-canvas" #viewer></div>
 
@@ -62,7 +62,7 @@
         compactMode: compactMode$ | async,
         creatingNewProcess: creatingNewProcess$ | async,
         context: context$ | async,
-        canUpdateGlobalConfiguration: canUpdateGlobalConfiguration$ | async,
+        hasEditPermissions: hasEditPermissions$ | async,
         canInitializeDocument: canInitializeDocument$ | async,
         startableByUser: startableByUser$ | async,
         updatingProcessDefinitionCaseDefinition: updatingProcessDefinitionCaseDefinition$ | async,
@@ -87,7 +87,7 @@
 
         <div class="page-header-actions__tags">
           <cds-tag
-            *ngIf="actionsObs.isReadOnlyProcess || !actionsObs.canUpdateGlobalConfiguration"
+            *ngIf="actionsObs.isReadOnlyProcess || !actionsObs.hasEditPermissions"
             type="blue"
             >{{ 'processManagement.readOnly' | translate }}</cds-tag
           >
@@ -110,7 +110,7 @@
               [disabled]="
                 actionsObs.loading ||
                 actionsObs.updatingProcessDefinitionCaseDefinition ||
-                actionsObs.canUpdateGlobalConfiguration
+                actionsObs.hasEditPermissions
               "
               (checkedChange)="onProcessToggleChange('canInitializeDocument', $event)"
             ></cds-toggle>
@@ -126,7 +126,7 @@
               [disabled]="
                 actionsObs.loading ||
                 actionsObs.updatingProcessDefinitionCaseDefinition ||
-                actionsObs.canUpdateGlobalConfiguration
+                actionsObs.hasEditPermissions
               "
               (checkedChange)="onProcessToggleChange('startableByUser', $event)"
             ></cds-toggle
@@ -145,7 +145,7 @@
         </button>
 
         <button
-          *ngIf="actionsObs.canUpdateGlobalConfiguration"
+          *ngIf="actionsObs.hasEditPermissions"
           [disabled]="!actionsObs.changesPending"
           cdsButton="primary"
           (click)="

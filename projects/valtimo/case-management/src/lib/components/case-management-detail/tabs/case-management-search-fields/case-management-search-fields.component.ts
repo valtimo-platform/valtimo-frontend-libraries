@@ -282,6 +282,16 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
 
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+  ]).pipe(
+    map(
+      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+        canUpdateGlobalConfiguration && isDraftVersion
+    )
+  );
+
   public readonly fieldTypeIsDropdown$ = new BehaviorSubject<boolean>(false);
 
   public readonly dropdownDataProviderNames$: Observable<Array<SelectItem>> = combineLatest([
@@ -389,7 +399,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   }
 
   public searchFieldClicked(searchField: SearchField, searchFieldActionTypeIsAdd: boolean): void {
-    combineLatest([this.disableInput$, this.hasEditPermissions()])
+    combineLatest([this.disableInput$, this.hasEditPermissions$])
       .pipe(
         take(1),
         filter(([inputDisabled, hasPermission]) => !inputDisabled && hasPermission)
@@ -659,14 +669,5 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
 
   private showEditModal(searchField: SearchField): void {
     this.searchFieldClicked(searchField, false);
-  }
-
-  private hasEditPermissions(): Observable<boolean> {
-    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
-      take(1),
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        return isDraftVersion && canUpdateGlobalConfiguration;
-      })
-    );
   }
 }

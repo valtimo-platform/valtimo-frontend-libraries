@@ -97,6 +97,16 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
     )
   );
 
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+  ]).pipe(
+    map(
+      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+        canUpdateGlobalConfiguration && isDraftVersion
+    )
+  );
+
   public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
 
   public readonly ACTION_ITEMS: ActionItem[] = [
@@ -104,7 +114,6 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
       label: 'interface.edit',
       callback: this.openEditModal.bind(this),
       type: 'normal',
-      disabledCallback: this.hasEditPermissions.bind(),
     },
     {
       label: 'interface.delete',
@@ -136,12 +145,10 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   }
 
   public openEditModal(status: InternalCaseStatus): void {
-    this.hasEditPermissions()
-      .pipe(filter(hasPermission => hasPermission))
-      .subscribe(() => {
-        this.prefillStatus$.next(status);
-        this.statusModalType$.next('edit');
-      });
+    this.hasEditPermissions$.pipe(filter(hasPermission => hasPermission)).subscribe(() => {
+      this.prefillStatus$.next(status);
+      this.statusModalType$.next('edit');
+    });
   }
 
   public openAddModal(): void {
@@ -171,7 +178,7 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   public onItemsReordered(reorderedItems: InternalCaseStatus[]): void {
     if (!reorderedItems) return;
 
-    this.hasEditPermissions()
+    this.hasEditPermissions$
       .pipe(
         filter(hasPermission => hasPermission),
         switchMap(() => this.caseDefinitionKey$.pipe(take(1))),
@@ -212,14 +219,5 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
         label: 'caseManagement.statuses.columns.color',
       },
     ]);
-  }
-
-  private hasEditPermissions(): Observable<boolean> {
-    return combineLatest([this.isDraftVersion$, this.canUpdateGlobalConfiguration$]).pipe(
-      take(1),
-      map(([isDraftVersion, canUpdateGlobalConfiguration]) => {
-        return isDraftVersion && canUpdateGlobalConfiguration;
-      })
-    );
   }
 }
