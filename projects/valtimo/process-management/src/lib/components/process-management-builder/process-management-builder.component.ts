@@ -201,17 +201,10 @@ export class ProcessManagementBuilderComponent
     switchMap(() => getCaseManagementRouteParams(this.route))
   );
 
-  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
-    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionKey,
-      caseDefinitionVersionTag: caseDefinitionVersionTag,
-    }))
-  );
-
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
 
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+  public readonly isDraftVersion$: Observable<boolean> = this.managementParams$.pipe(
     filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
     switchMap(params =>
       this.draftVersionService.isDraftVersion(

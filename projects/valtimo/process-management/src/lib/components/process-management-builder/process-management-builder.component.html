@@ -110,7 +110,7 @@
               [disabled]="
                 actionsObs.loading ||
                 actionsObs.updatingProcessDefinitionCaseDefinition ||
-                actionsObs.hasEditPermissions
+                !actionsObs.hasEditPermissions
               "
               (checkedChange)="onProcessToggleChange('canInitializeDocument', $event)"
             ></cds-toggle>
@@ -126,7 +126,7 @@
               [disabled]="
                 actionsObs.loading ||
                 actionsObs.updatingProcessDefinitionCaseDefinition ||
-                actionsObs.hasEditPermissions
+                !actionsObs.hasEditPermissions
               "
               (checkedChange)="onProcessToggleChange('startableByUser', $event)"
             ></cds-toggle
