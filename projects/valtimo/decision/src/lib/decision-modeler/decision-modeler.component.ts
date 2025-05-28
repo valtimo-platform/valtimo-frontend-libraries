@@ -152,8 +152,7 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
           map(
             ([canUpdateGlobalConfiguration, isDraftVersion]) =>
               canUpdateGlobalConfiguration && isDraftVersion
-          ),
-          tap(result => console.log('Result: ', result))
+          )
         );
       } else if (context === 'independent') {
         return this.canUpdateGlobalConfiguration$;
