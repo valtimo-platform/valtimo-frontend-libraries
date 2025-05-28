@@ -17,13 +17,14 @@
 <v-form
         (valueChange)="formValueChange($event)"
         *ngIf="{
+        pluginId: pluginId$ | async,
         disabled: disabled$ | async,
         prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
     } as obs"
 >
   <v-input
           name="teRelaterenZaakUri"
-          [title]="'teRelaterenZaakUri' | pluginTranslate: pluginId | async"
+          [title]="'teRelaterenZaakUri' | pluginTranslate: obs.pluginId | async"
           [margin]="true"
           [defaultValue]="obs.prefill?.teRelaterenZaakUri"
           [disabled]="obs.disabled"
@@ -32,7 +33,7 @@
     <v-select
             [items]="aardRelatieOptions$ | async"
             name="aardRelatie"
-            [title]="'aardRelatie' | pluginTranslate: pluginId | async"
+            [title]="'aardRelatie' | pluginTranslate: obs.pluginId | async"
             [disabled]="obs.disabled"
             [defaultSelectionId]="obs.prefill?.aardRelatie"
             [required]="true"

@@ -50,7 +50,7 @@ export class RelateerZakenComponent
   @Output() configuration: EventEmitter<RelateerZakenConfig> =
     new EventEmitter<RelateerZakenConfig>();
 
-  private readonly pluginId$ = new BehaviorSubject<string>('');
+  readonly pluginId$ = new BehaviorSubject<string>('');
   public readonly aardRelatieOptions$: Observable<Array<SelectItem>> = this.pluginId$.pipe(
     filter(pluginId => !!pluginId),
     switchMap(pluginId =>
