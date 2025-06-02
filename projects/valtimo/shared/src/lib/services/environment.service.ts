@@ -36,7 +36,7 @@ export class EnvironmentService extends BaseApiService {
 
   public canUpdateGlobalConfiguration(): Observable<boolean> {
     return this.httpClient
-      .get<GlobalConfiguration>(this.getApiUrl('management/v1/case-definition/check'), {
+      .get<GlobalConfiguration>(this.getApiUrl('v1/case-definition/check'), {
         headers: new HttpHeaders().set(InterceptorSkip, '404'),
       })
       .pipe(
