@@ -226,7 +226,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   private readonly _selectedCaseDefinitionId$ = new BehaviorSubject<string>(this.ALL_CASES_ID);
 
   public readonly caseListItems$: Observable<ListItem[]> = combineLatest([
-    this.documentService.getAllDefinitions(),
+    this.documentService.getActiveDefinitions(),
     this._selectedCaseDefinitionId$,
     this.translateService.stream('key'),
   ]).pipe(

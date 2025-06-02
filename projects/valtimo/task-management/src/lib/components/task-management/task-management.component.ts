@@ -42,6 +42,7 @@ export class TaskManagementComponent {
   public readonly dossiers$: Observable<DocumentDefinition[]> = this._refreshData$.pipe(
     switchMap(() =>
       this.documentService.queryDefinitionsForManagement({
+        active: true,
         page: this.pagination.page - 1,
         size: this.pagination.size,
       })

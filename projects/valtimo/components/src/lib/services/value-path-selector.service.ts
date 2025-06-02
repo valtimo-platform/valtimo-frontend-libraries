@@ -27,7 +27,7 @@ import {
   ValuePathVersionArgument,
 } from '../models';
 import {deepmerge} from 'deepmerge-ts';
-import {DocumentDefinitions} from '@valtimo/document';
+import {DocumentDefinition} from '@valtimo/document';
 import {isEqual} from 'lodash';
 
 @Injectable({
@@ -39,7 +39,7 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
   private _version: ValuePathVersionArgument;
 
   private _cache: ValuePathSelectorCache = {};
-  private _documentDefinitionCache$ = new BehaviorSubject<DocumentDefinitions | null>(null);
+  private _documentDefinitionCache$ = new BehaviorSubject<DocumentDefinition[] | null>(null);
   private readonly _subscriptions = new Subscription();
 
   constructor(
@@ -54,13 +54,13 @@ export class ValuePathSelectorService extends BaseApiService implements OnDestro
     this._subscriptions.unsubscribe();
   }
 
-  public setDocumentDefinitionCache(cache: DocumentDefinitions): void {
+  public setDocumentDefinitionCache(cache: DocumentDefinition[]): void {
     this._documentDefinitionCache$.pipe(take(1)).subscribe(currentCache => {
       if (!isEqual(cache, currentCache)) this._documentDefinitionCache$.next(cache);
     });
   }
 
-  public getDocumentDefinitionCache(): Observable<DocumentDefinitions | null> {
+  public getDocumentDefinitionCache(): Observable<DocumentDefinition[] | null> {
     return this._documentDefinitionCache$.asObservable();
   }
 

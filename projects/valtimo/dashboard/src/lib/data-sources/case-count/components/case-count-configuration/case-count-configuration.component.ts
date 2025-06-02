@@ -65,7 +65,7 @@ export class CaseCountConfigurationComponent
   public readonly selectedDocumentDefinition$ = new BehaviorSubject<string>('');
 
   public readonly documentItems$: Observable<Array<ListItem>> = combineLatest([
-    this.documentService.getAllDefinitions(),
+    this.documentService.getActiveDefinitions(),
     this.selectedDocumentDefinition$,
   ]).pipe(
     map(([documentDefinitions, selectedDocumentDefintion]) =>

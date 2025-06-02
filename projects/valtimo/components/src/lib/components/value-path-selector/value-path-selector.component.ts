@@ -269,7 +269,9 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
     this.valuePathSelectorService.getDocumentDefinitionCache().pipe(
       switchMap(cache =>
         combineLatest([
-          cache ? of(cache) : this.documentService.getAllDefinitions(),
+          cache
+            ? of(cache)
+            : this.documentService.getAllDefinitions().pipe(map(defs => defs.content)),
           this._documentDefinitionName$.pipe(startWith(null)),
         ]).pipe(
           tap(([definitions]) => {
@@ -277,7 +279,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
             this.valuePathSelectorService.setDocumentDefinitionCache(definitions);
           }),
           map(([definitions, documentDefinitionName]) =>
-            definitions.content.map(definition => ({
+            definitions.map(definition => ({
               content: definition.id.name,
               id: definition.id.name,
               selected: definition.id.name === documentDefinitionName,
