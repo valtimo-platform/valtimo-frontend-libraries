@@ -103,6 +103,7 @@ import {
 import {ProcessManagementEditorService, ProcessManagementService} from '../../services';
 import {getContextObservable} from '../../utils';
 import {ValtimoPropertiesProviderModule} from './panel';
+import {PluginTranslationService} from '@valtimo/plugin';
 
 @Component({
   selector: 'valtimo-process-management-builder',
@@ -268,7 +269,8 @@ export class ProcessManagementBuilderComponent
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly translateService: TranslateService,
-    private readonly environmentService: EnvironmentService
+    private readonly environmentService: EnvironmentService,
+    private readonly pluginTranslationService: PluginTranslationService
   ) {
     super();
     this.setProcessManagementWindow();
@@ -439,6 +441,7 @@ export class ProcessManagementBuilderComponent
 
     processManagementWindow.processManagementEditorService = this.processManagementEditorService;
     processManagementWindow.translateService = this.translateService;
+    processManagementWindow.pluginTranslationService = this.pluginTranslationService;
   }
 
   private showNotification(notification: null | 'success' | 'error'): void {
@@ -702,13 +705,14 @@ export class ProcessManagementBuilderComponent
           const processDefinitionResult = result as ProcessDefinitionResult;
 
           this.cleanUpListenersOnModeler();
+
           this._bpmnModeler?.importXML(processDefinitionResult.bpmn20Xml);
           this._bpmnViewer?.importXML(processDefinitionResult.bpmn20Xml);
 
           this.canInitializeDocument$.next(
-            processDefinitionResult.processCaseLink.canInitializeDocument
+            !!processDefinitionResult?.processCaseLink?.canInitializeDocument
           );
-          this.startableByUser$.next(processDefinitionResult.processCaseLink.startableByUser);
+          this.startableByUser$.next(!!processDefinitionResult?.processCaseLink?.startableByUser);
 
           this.loading$.next(false);
         })
@@ -728,6 +732,7 @@ export class ProcessManagementBuilderComponent
         }
 
         this.initBreadcrumbs(params, context);
+        this.processManagementEditorService.setCaseManagementRouteParams(context, params);
       })
     );
   }
