@@ -28,7 +28,6 @@
 >
   <div *ngIf="!obs.editActive; else editActive" class="cds--toolbar-content">
     <button
-            *ngIf="obs.hasEditPermissions"
       cdsButton="ghost"
       [disabled]="obs.loadingDocumentDefinition || !obs.selectedDocumentDefinition"
       (click)="downloadDefinition()"
@@ -39,7 +38,7 @@
     </button>
 
     <button
-            *ngIf="obs.hasEditPermissions"
+      *ngIf="obs.hasEditPermissions"
       cdsButton="primary"
       [disabled]="obs.selectedDocumentDefinition?.readOnly"
       (click)="onEditClick()"

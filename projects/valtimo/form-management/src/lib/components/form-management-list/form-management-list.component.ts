@@ -41,6 +41,7 @@ import {
   filter,
   map,
   Observable,
+  of,
   startWith,
   switchMap,
   take,
@@ -129,6 +130,7 @@ export class FormManagementListComponent {
       } else if (context === 'independent') {
         return this.canUpdateGlobalConfiguration$;
       }
+      return of(false);
     })
   );
 

@@ -100,7 +100,7 @@
   >
     <cds-overflow-menu-option
       [id]="'exportDocumentDefinition'"
-      [disabled]="obs.exporting || obs.loadingVersion || !(hasEditPermissions$ | async)"
+      [disabled]="obs.exporting || obs.loadingVersion"
       (selected)="export()"
       >{{ 'caseManagement.export' | translate: {value: documentDefinitionTitle} }}
     </cds-overflow-menu-option>
@@ -118,7 +118,11 @@
   <button cdsButton="tertiary" [size]="(compactMode$ | async) ? 'sm' : 'md'">
     {{ 'caseManagement.more' | translate }}
 
-    <svg class="cds--btn__icon case-management-overflow-icon" cdsIcon="overflow-menu--vertical" size="16"></svg>
+    <svg
+      class="cds--btn__icon case-management-overflow-icon"
+      cdsIcon="overflow-menu--vertical"
+      size="16"
+    ></svg>
   </button>
 </ng-template>
 

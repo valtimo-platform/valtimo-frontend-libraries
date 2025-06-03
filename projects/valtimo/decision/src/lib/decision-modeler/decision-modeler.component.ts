@@ -157,6 +157,7 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
       } else if (context === 'independent') {
         return this.canUpdateGlobalConfiguration$;
       }
+      return of(false);
     })
   );
 

@@ -56,6 +56,18 @@ export class FormFlowOverviewComponent {
     },
   ];
 
+  public readonly ACTION_ITEMS: ActionItem[] = [
+    {
+      callback: this.editFormFlowDetails.bind(this),
+      label: 'interface.edit',
+    },
+    {
+      callback: this.deleteFormFlow.bind(this),
+      label: 'interface.delete',
+      type: 'danger',
+    },
+  ];
+
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
   public readonly deleteDefinitionKey$ = new BehaviorSubject<string | null>(null);
@@ -120,18 +132,6 @@ export class FormFlowOverviewComponent {
       return false;
     })
   );
-
-  public readonly ACTION_ITEMS: ActionItem[] = [
-    {
-      callback: this.editFormFlowDetails.bind(this),
-      label: 'interface.edit',
-    },
-    {
-      callback: this.deleteFormFlow.bind(this),
-      label: 'interface.delete',
-      type: 'danger',
-    },
-  ];
 
   constructor(
     private readonly formFlowService: FormFlowService,

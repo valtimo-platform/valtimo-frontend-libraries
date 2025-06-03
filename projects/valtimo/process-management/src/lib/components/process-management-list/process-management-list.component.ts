@@ -27,7 +27,7 @@ import {
 import {DraftVersionService, EnvironmentService, GlobalNotificationService} from '@valtimo/shared';
 import {ProcessDefinition} from '@valtimo/process';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {ProcessDefinitionResult} from '../../models';
 import {ProcessManagementService, ProcessManagementStateService} from '../../services';
 import {ActivatedRoute} from '@angular/router';
@@ -103,6 +103,7 @@ export class ProcessManagementListComponent {
       } else if (context === 'independent') {
         return this.canUpdateGlobalConfiguration$;
       }
+      return of(false);
     })
   );
 

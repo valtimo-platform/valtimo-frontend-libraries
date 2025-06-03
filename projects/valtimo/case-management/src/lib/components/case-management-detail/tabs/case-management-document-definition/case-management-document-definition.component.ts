@@ -92,9 +92,6 @@ export class CaseManagementDocumentDefinitionComponent {
     this.route
   );
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
   public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
     switchMap(params =>
       this.draftVersionService.isDraftVersion(
@@ -103,6 +100,9 @@ export class CaseManagementDocumentDefinitionComponent {
       )
     )
   );
+
+  public readonly canUpdateGlobalConfiguration$ =
+    this.environmentService.canUpdateGlobalConfiguration();
 
   public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
     this.canUpdateGlobalConfiguration$,
