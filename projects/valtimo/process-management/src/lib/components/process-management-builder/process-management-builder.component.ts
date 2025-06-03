@@ -36,13 +36,6 @@ import {
   PendingChangesComponent,
   RenderInPageHeaderDirectiveModule,
 } from '@valtimo/components';
-import {
-  EnvironmentService,
-  getCaseManagementRouteParams,
-  getCaseManagementRouteParamsAndContext,
-  GlobalNotificationService,
-  ManagementContext,
-} from '@valtimo/shared';
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
 import {
   ProcessLinkButtonService,
@@ -53,6 +46,14 @@ import {
   ProcessLinkStateService,
   ProcessLinkStepService,
 } from '@valtimo/process-link';
+import {
+  CaseManagementParams,
+  EnvironmentService,
+  getCaseManagementRouteParams,
+  getCaseManagementRouteParamsAndContext,
+  GlobalNotificationService,
+  ManagementContext,
+} from '@valtimo/shared';
 import {
   BpmnPropertiesPanelModule,
   BpmnPropertiesProviderModule,
@@ -97,7 +98,6 @@ import {EMPTY_BPMN} from '../../constants';
 import {
   OpenProcessLinkModalEvent,
   ProcessDefinitionResult,
-  ProcessManagementParams,
   ProcessManagementWindow,
   UpdateProcessDefinitionCaseDefinitionRequest,
 } from '../../models';
@@ -463,12 +463,8 @@ export class ProcessManagementBuilderComponent
         camundaPlatformBehaviors,
         ValtimoPropertiesProviderModule,
       ],
-      moddleExtensions: {
-        camunda: CamundaBpmnModdle,
-      },
-      propertiesPanel: {
-        parent: this.modelerPanelElementRef.nativeElement,
-      },
+      moddleExtensions: {camunda: CamundaBpmnModdle},
+      propertiesPanel: {parent: this.modelerPanelElementRef.nativeElement},
     });
 
     this._bpmnModeler?.attachTo(this.modelerElementRef.nativeElement);
@@ -529,13 +525,7 @@ export class ProcessManagementBuilderComponent
         },
       ],
       move: ['value', null],
-      resizeHandles: [
-        'value',
-        {
-          addResizer: () => {},
-          removeResizers: () => {},
-        },
-      ],
+      resizeHandles: ['value', {addResizer: () => {}, removeResizers: () => {}}],
     };
 
     this._bpmnViewer = new Modeler({
@@ -544,12 +534,8 @@ export class ProcessManagementBuilderComponent
         BpmnPropertiesPanelModule,
         ValtimoPropertiesProviderModule,
       ],
-      moddleExtensions: {
-        camunda: CamundaBpmnModdle,
-      },
-      propertiesPanel: {
-        parent: this.viewerPanelElementRef.nativeElement,
-      },
+      moddleExtensions: {camunda: CamundaBpmnModdle},
+      propertiesPanel: {parent: this.viewerPanelElementRef.nativeElement},
     });
 
     this._bpmnViewer?.attachTo(this.viewerElementRef.nativeElement);
@@ -727,7 +713,7 @@ export class ProcessManagementBuilderComponent
     );
   }
 
-  private initBreadcrumbs(params: ProcessManagementParams, context: ManagementContext): void {
+  private initBreadcrumbs(params: CaseManagementParams, context: ManagementContext): void {
     if (context === 'independent') return;
 
     const route = `/case-management/case/${params.caseDefinitionKey}/version/${params.caseDefinitionVersionTag}`;
