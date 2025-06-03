@@ -59,13 +59,13 @@ function getCaseManagementRouteParamsAndContext(
         return combineLatest([of(context), params$]) as Observable<
           [ManagementContext, CaseManagementParams]
         >;
-      } else {
-        const fallbackParams: CaseManagementParams = {
-          caseDefinitionKey: '',
-          caseDefinitionVersionTag: '',
-        };
-        return of([context, fallbackParams] as [ManagementContext, CaseManagementParams]);
       }
+
+      const fallbackParams: CaseManagementParams = {
+        caseDefinitionKey: '',
+        caseDefinitionVersionTag: '',
+      };
+      return of([context, fallbackParams] as [ManagementContext, CaseManagementParams]);
     })
   );
 }
