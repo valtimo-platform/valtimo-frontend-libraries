@@ -27,7 +27,7 @@
   } as obs"
 >
   <div class="cds--toolbar-content">
-    <ng-container *ngIf="!obs.editActive; else editActive">
+    <ng-container *ngIf="!obs.editActive && !obs.hasEditPermissions; else editActive">
       <button
         cdsButton="ghost"
         (click)="downloadDefinition()"

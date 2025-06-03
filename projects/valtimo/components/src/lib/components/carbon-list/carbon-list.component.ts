@@ -162,6 +162,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   @Input() actions: any[] = [];
   @Input() actionItems: ActionItem[];
+  @Input() showActionItems: boolean;
   @Input() header: boolean;
   @Input() hideColumnHeader: boolean;
   private _isSortInit = false;
@@ -286,6 +287,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    console.log('this.showActionItems: ', this.showActionItems);
     if (this.pagination) {
       this.loadPaginationSize();
     }
@@ -554,7 +556,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
         : []),
       ...(!!this.lastColumnTemplate ? [emptyHeader] : []),
       ...(this._items?.some(item => item.locked) ? [emptyHeader] : []),
-      ...(!!this.actionItems
+      ...(!!this.actionItems && this.showActionItems
         ? [
             new TableHeaderItem({
               className: 'valtimo-carbon-list__actions',
@@ -657,7 +659,7 @@ export class CarbonListComponent implements OnInit, AfterViewInit, OnDestroy {
             }),
           ]
         : []),
-      ...(!!this.actionItems
+      ...(!!this.actionItems && this.showActionItems
         ? [
             new TableItem({
               className: 'valtimo-carbon-list__actions',

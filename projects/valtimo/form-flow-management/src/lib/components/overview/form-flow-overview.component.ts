@@ -26,7 +26,7 @@ import {
   GlobalNotificationService,
   Page,
 } from '@valtimo/shared';
-import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap} from 'rxjs';
 import {FormFlowDefinition, ListFormFlowDefinition} from '../../models';
 import {FormFlowService} from '../../services';
 
@@ -98,7 +98,6 @@ export class FormFlowOverviewComponent {
     this.environmentService.canUpdateGlobalConfiguration();
 
   public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
-    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
     switchMap(params =>
       this.draftVersionService.isDraftVersion(
         params.caseDefinitionKey,
@@ -107,18 +106,18 @@ export class FormFlowOverviewComponent {
     )
   );
 
-  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
-    switchMap(context => {
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.canUpdateGlobalConfiguration$,
+    this.isDraftVersion$,
+    this.context$,
+  ]).pipe(
+    map(([canUpdateGlobalConfiguration, isDraftVersion, context]) => {
       if (context === 'case') {
-        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
-          map(
-            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-              canUpdateGlobalConfiguration && isDraftVersion
-          )
-        );
+        return canUpdateGlobalConfiguration && isDraftVersion;
       } else if (context === 'independent') {
-        return this.canUpdateGlobalConfiguration$;
+        return canUpdateGlobalConfiguration;
       }
+      return false;
     })
   );
 

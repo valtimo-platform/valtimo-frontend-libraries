@@ -201,10 +201,12 @@ export class ProcessManagementBuilderComponent
     switchMap(() => getCaseManagementRouteParams(this.route))
   );
 
+  public readonly params$: Observable<any> | undefined = getCaseManagementRouteParams(this.route);
+
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
 
-  public readonly isDraftVersion$: Observable<boolean> = this.managementParams$.pipe(
+  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
     filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
     switchMap(params =>
       this.draftVersionService.isDraftVersion(
@@ -214,16 +216,17 @@ export class ProcessManagementBuilderComponent
     )
   );
 
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-    this.context$,
-  ]).pipe(
-    map(([canUpdateGlobalConfiguration, isDraftVersion, context]) => {
+  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
+    switchMap(context => {
       if (context === 'case') {
-        return canUpdateGlobalConfiguration && isDraftVersion;
+        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
+          map(
+            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+              canUpdateGlobalConfiguration && isDraftVersion
+          )
+        );
       } else if (context === 'independent') {
-        return canUpdateGlobalConfiguration;
+        return this.canUpdateGlobalConfiguration$;
       }
     })
   );

@@ -23,6 +23,7 @@
     valid: valid$ | async,
     disableInput: disableInput$ | async,
     hasEditPermissions: hasEditPermissions$ | async,
+    showActionItems: showActionItems$ | async,
   } as obs"
 >
   <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
@@ -69,6 +70,7 @@
 <ng-template #list let-obs="obs">
   <valtimo-carbon-list
     [actionItems]="actionItems"
+    [showActionItems]="obs.showActionItems"
     [fields]="fields"
     [header]="false"
     [items]="obs.searchFields"

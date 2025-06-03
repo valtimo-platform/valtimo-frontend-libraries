@@ -73,6 +73,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   public readonly downloadName$ = new BehaviorSubject<string>('');
   public readonly downloadUrl$ = new BehaviorSubject<string | undefined>(undefined);
   public readonly disableInput$ = new BehaviorSubject<boolean>(false);
+  public readonly showActionItems$ = new BehaviorSubject<boolean>(false);
   public readonly selectedSearchField$ = new BehaviorSubject<SearchField | undefined>(undefined);
   public readonly selectedDeleteSearchField$ = new BehaviorSubject<SearchField | undefined>(
     undefined
@@ -276,7 +277,8 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   ]).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
       this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    )
+    ),
+    tap(value => console.log('is draft version: ', value))
   );
 
   public readonly canUpdateGlobalConfiguration$ =
@@ -388,6 +390,10 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
 
   public ngOnInit(): void {
     this.openSelectedSearchFieldSubscription();
+
+    this._subscriptions.add(
+      this.hasEditPermissions$.pipe(tap(value => console.log('value: ', value))).subscribe()
+    );
   }
 
   public ngAfterViewInit(): void {

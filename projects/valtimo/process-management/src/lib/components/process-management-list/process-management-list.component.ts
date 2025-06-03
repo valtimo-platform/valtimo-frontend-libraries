@@ -27,7 +27,7 @@ import {
 import {DraftVersionService, EnvironmentService, GlobalNotificationService} from '@valtimo/shared';
 import {ProcessDefinition} from '@valtimo/process';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap} from 'rxjs';
 import {ProcessDefinitionResult} from '../../models';
 import {ProcessManagementService, ProcessManagementStateService} from '../../services';
 import {ActivatedRoute} from '@angular/router';
@@ -78,6 +78,7 @@ export class ProcessManagementListComponent {
     this.environmentService.canUpdateGlobalConfiguration();
 
   public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
     switchMap(params =>
       this.draftVersionService.isDraftVersion(
         params.caseDefinitionKey,
@@ -93,18 +94,18 @@ export class ProcessManagementListComponent {
       tap(() => this.loading$.next(false))
     );
 
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-    this.context$,
-  ]).pipe(
-    map(([canUpdateGlobalConfiguration, isDraftVersion, context]) => {
+  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
+    switchMap(context => {
       if (context === 'case') {
-        return canUpdateGlobalConfiguration && isDraftVersion;
+        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
+          map(
+            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
+              canUpdateGlobalConfiguration && isDraftVersion
+          )
+        );
       } else if (context === 'independent') {
-        return canUpdateGlobalConfiguration;
+        return this.canUpdateGlobalConfiguration$;
       }
-      return false;
     })
   );
 
