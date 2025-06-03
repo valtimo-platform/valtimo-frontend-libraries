@@ -13,15 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
@@ -389,10 +381,6 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
 
   public ngOnInit(): void {
     this.openSelectedSearchFieldSubscription();
-
-    this._subscriptions.add(
-      this.hasEditPermissions$.pipe(tap(value => console.log('value: ', value))).subscribe()
-    );
   }
 
   public ngAfterViewInit(): void {

@@ -28,17 +28,11 @@ import {
   Pagination,
 } from '@valtimo/components';
 import {
-  EnvironmentService,
-  GlobalNotificationService,
-  getCaseManagementRouteParams,
-  getCaseManagementRouteParamsAndContext,
-} from '@valtimo/shared';
-import {TranslateModule} from '@ngx-translate/core';
-import {CarbonListModule, ColumnConfig, Pagination} from '@valtimo/components';
-import {
   DraftVersionService,
   EnvironmentService,
   getCaseManagementRouteParams,
+  getCaseManagementRouteParamsAndContext,
+  GlobalNotificationService,
 } from '@valtimo/shared';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
 import {
@@ -49,8 +43,8 @@ import {
   Observable,
   startWith,
   switchMap,
-  tap,
   take,
+  tap,
 } from 'rxjs';
 import {FormDefinition} from '../../models';
 import {FormManagementService} from '../../services';
