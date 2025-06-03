@@ -70,6 +70,7 @@
 <ng-template #list let-obs="obs">
   <valtimo-carbon-list
     [actionItems]="actionItems"
+    [showActionItems]="obs.hasEditPermissions"
     [fields]="fields"
     [header]="false"
     [items]="obs.searchFields"

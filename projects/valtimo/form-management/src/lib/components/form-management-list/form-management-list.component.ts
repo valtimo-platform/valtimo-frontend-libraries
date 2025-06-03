@@ -72,7 +72,10 @@ export class FormManagementListComponent {
   @Output() public readonly navigateToEditEvent = new EventEmitter<string>();
 
   public readonly ACTION_ITEMS: ActionItem[] = [
-    {callback: this.editFormDefinition.bind(this), label: 'interface.edit'},
+    {
+      callback: this.editFormDefinition.bind(this),
+      label: 'interface.edit',
+    },
     {callback: this.showDeleteModal.bind(this), label: 'interface.delete', type: 'danger'},
   ];
 

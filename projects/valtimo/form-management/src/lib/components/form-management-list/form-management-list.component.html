@@ -21,6 +21,7 @@
     context: context$ | async,
     hasEditPermissions: hasEditPermissions$ | async,
   } as obs"
+  [showActionItems]="obs.hasEditPermissions"
   [actionItems]="ACTION_ITEMS"
   [fields]="FIELDS"
   [header]="false"
@@ -61,11 +62,7 @@
 ></valtimo-confirmation-modal>
 
 <ng-template #createFormButton>
-  <button
-    *ngIf="hasEditPermissions$ | async"
-    cdsButton="primary"
-    (click)="navigateToCreateRoute()"
-  >
+  <button *ngIf="hasEditPermissions$ | async" cdsButton="primary" (click)="navigateToCreateRoute()">
     {{ 'Create Form' | translate }}
 
     <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
