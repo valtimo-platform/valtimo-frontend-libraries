@@ -25,7 +25,6 @@ import {
 } from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ArrowLeft16, Deploy16, Download16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   BreadcrumbService,
@@ -272,10 +271,7 @@ export class ProcessManagementBuilderComponent
     private readonly environmentService: EnvironmentService
   ) {
     super();
-    this.iconService.registerAll([Deploy16, Download16, ArrowLeft16]);
-    (window as any as ProcessManagementWindow).processManagementEditorService =
-      processManagementEditorService;
-    (window as any as ProcessManagementWindow).translateService = translateService;
+    this.setProcessManagementWindow();
   }
 
   public ngAfterViewInit(): void {
@@ -434,6 +430,15 @@ export class ProcessManagementBuilderComponent
     if (field === 'canInitializeDocument') this.canInitializeDocument$.next(value);
     if (field === 'startableByUser') this.startableByUser$.next(value);
     this.changesPending$.next(true);
+  }
+
+  private setProcessManagementWindow(): void {
+    const processManagementWindow = window as any as ProcessManagementWindow;
+
+    if (!processManagementWindow) return;
+
+    processManagementWindow.processManagementEditorService = this.processManagementEditorService;
+    processManagementWindow.translateService = this.translateService;
   }
 
   private showNotification(notification: null | 'success' | 'error'): void {
