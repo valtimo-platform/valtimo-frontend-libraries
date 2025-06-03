@@ -23,11 +23,7 @@ import {
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
-import {
-  DraftVersionService,
-  EnvironmentService,
-  getCaseManagementRouteParams,
-} from '@valtimo/shared';
+import {EditPermissionsService, getCaseManagementRouteParams} from '@valtimo/shared';
 import {CaseTag, CaseTagService, CaseTagsUtils} from '@valtimo/document';
 import {
   BehaviorSubject,
@@ -42,7 +38,6 @@ import {
   tap,
 } from 'rxjs';
 import {StatusModalCloseEvent, StatusModalType} from '../../../../models';
-import {CaseManagementService} from '../../../../services';
 
 @Component({
   standalone: false,
@@ -65,25 +60,12 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
     map(p => p.caseDefinitionVersionTag)
   );
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest(
     this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$,
-  ]).pipe(
+    this.caseDefinitionVersionTag$
+  ).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    )
-  );
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        canUpdateGlobalConfiguration && isDraftVersion
+      this.editPermissionsService.hasEditPermissions(caseDefinitionKey, caseDefinitionVersionTag)
     )
   );
 
@@ -140,9 +122,7 @@ export class CaseManagementTagsComponent implements AfterViewInit, OnDestroy {
   constructor(
     private readonly caseTagService: CaseTagService,
     private readonly route: ActivatedRoute,
-    private readonly caseManagementService: CaseManagementService,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {}
 
   public ngAfterViewInit(): void {

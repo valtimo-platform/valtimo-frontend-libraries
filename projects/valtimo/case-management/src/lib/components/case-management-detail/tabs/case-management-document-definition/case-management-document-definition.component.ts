@@ -26,8 +26,7 @@ import {Edit16, Save16} from '@carbon/icons';
 import {ConfirmationModalComponent, EditorModel, PageHeaderService} from '@valtimo/components';
 import {
   CaseManagementParams,
-  DraftVersionService,
-  EnvironmentService,
+  EditPermissionsService,
   getCaseManagementRouteParams,
 } from '@valtimo/shared';
 import {
@@ -92,25 +91,12 @@ export class CaseManagementDocumentDefinitionComponent {
     this.route
   );
 
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+  public readonly hasEditPermissions$: Observable<boolean> = this.params$.pipe(
     switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
+      this.editPermissionsService.hasEditPermissions(
+        params?.caseDefinitionKey,
+        params?.caseDefinitionVersionTag
       )
-    )
-  );
-
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        canUpdateGlobalConfiguration && isDraftVersion
     )
   );
 
@@ -123,8 +109,7 @@ export class CaseManagementDocumentDefinitionComponent {
     private readonly iconService: IconService,
     private readonly pageHeaderService: PageHeaderService,
     private readonly route: ActivatedRoute,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {
     this.iconService.registerAll([Edit16, Save16]);
   }

@@ -24,14 +24,10 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import {combineLatest, map, Observable, switchMap} from 'rxjs';
+import {map, Observable, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentDefinition, DocumentService} from '@valtimo/document';
-import {
-  CASE_CONFIGURATION_EXTENSIONS_TOKEN,
-  DraftVersionService,
-  EnvironmentService,
-} from '@valtimo/shared';
+import {CASE_CONFIGURATION_EXTENSIONS_TOKEN, EditPermissionsService} from '@valtimo/shared';
 import {CaseManagementService} from '../../../../services';
 import {MuuriItemComponent} from '@valtimo/components';
 
@@ -58,25 +54,11 @@ export class CaseManagementGeneralComponent implements AfterViewInit {
     )
   );
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+  public readonly isReadOnly$: Observable<boolean> = this.params$.pipe(
     switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
-      )
-    )
-  );
-
-  public readonly isReadOnly$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        !canUpdateGlobalConfiguration || !isDraftVersion
+      this.editPermissionsService
+        .hasEditPermissions(params?.caseDefinitionKey, params?.caseDefinitionVersionTag)
+        .pipe(map(hasPermissions => !hasPermissions))
     )
   );
 
@@ -88,8 +70,7 @@ export class CaseManagementGeneralComponent implements AfterViewInit {
     @Optional()
     @Inject(CASE_CONFIGURATION_EXTENSIONS_TOKEN)
     private readonly caseConfigurationExtensionComponents: Type<any>[],
-    private readonly draftVersionService: DraftVersionService,
-    private readonly environmentService: EnvironmentService
+    private readonly editPermissionsService: EditPermissionsService
   ) {}
 
   public ngAfterViewInit(): void {

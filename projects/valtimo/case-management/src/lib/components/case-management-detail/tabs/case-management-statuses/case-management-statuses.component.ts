@@ -23,7 +23,7 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
 import {
-  DraftVersionService,
+  EditPermissionsService,
   EnvironmentService,
   getCaseManagementRouteParams,
 } from '@valtimo/shared';
@@ -86,25 +86,12 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
     })
   );
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest(
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest(
     this.caseDefinitionKey$,
     this.caseDefinitionVersionTag$
   ).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    )
-  );
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        canUpdateGlobalConfiguration && isDraftVersion
+      this.editPermissionsService.hasEditPermissions(caseDefinitionKey, caseDefinitionVersionTag)
     )
   );
 
@@ -133,7 +120,7 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
     private readonly caseStatusService: CaseStatusService,
     private readonly route: ActivatedRoute,
     private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {}
 
   public ngAfterViewInit(): void {

@@ -25,7 +25,7 @@ import {
   ValuePathSelectorPrefix,
   ViewType,
 } from '@valtimo/components';
-import {ConfigService, EnvironmentService, getCaseManagementRouteParams} from '@valtimo/shared';
+import {ConfigService, EditPermissionsService, getCaseManagementRouteParams} from '@valtimo/shared';
 import {
   CaseListColumn,
   CaseListColumnView,
@@ -48,7 +48,6 @@ import {
 import {take} from 'rxjs/operators';
 import {v4 as uuidv4} from 'uuid';
 import {ListColumnModal} from '../../../../models';
-import {CaseManagementService} from '../../../../services';
 
 @Component({
   standalone: false,
@@ -337,25 +336,12 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     startWith(false)
   );
 
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
     this.caseDefinitionKey$,
     this.caseDefinitionVersionTag$,
   ]).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.caseManagementService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    )
-  );
-
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        canUpdateGlobalConfiguration && isDraftVersion
+      this.editPermissionsService.hasEditPermissions(caseDefinitionKey, caseDefinitionVersionTag)
     )
   );
 
@@ -373,8 +359,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     private readonly translateService: TranslateService,
     private readonly configService: ConfigService,
     private readonly iconService: IconService,
-    private readonly environmentService: EnvironmentService,
-    private readonly caseManagementService: CaseManagementService
+    private readonly editPermissionsService: EditPermissionsService
   ) {}
 
   public ngAfterViewInit(): void {

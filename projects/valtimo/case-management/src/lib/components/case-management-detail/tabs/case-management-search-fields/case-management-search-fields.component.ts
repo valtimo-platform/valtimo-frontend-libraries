@@ -29,8 +29,7 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {
-  DraftVersionService,
-  EnvironmentService,
+  EditPermissionsService,
   SearchField,
   SearchFieldDataType,
   SearchFieldFieldType,
@@ -262,26 +261,12 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     })
   );
 
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
     this.caseDefinitionKey$,
     this.caseDefinitionVersionTag$,
   ]).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    ),
-    tap(value => console.log('is draft version: ', value))
-  );
-
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        canUpdateGlobalConfiguration && isDraftVersion
+      this.editPermissionsService.hasEditPermissions(caseDefinitionKey, caseDefinitionVersionTag)
     )
   );
 
@@ -373,8 +358,7 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
     private readonly iconService: IconService,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {
     this.iconService.registerAll([ArrowDown16, ArrowUp16]);
   }

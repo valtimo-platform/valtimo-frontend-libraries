@@ -30,12 +30,11 @@ import {ApiTabItem, ApiTabType} from '@valtimo/case';
 import {ActionItem, ColumnConfig, ViewType} from '@valtimo/components';
 import {
   CaseManagementParams,
-  DraftVersionService,
-  EnvironmentService,
+  EditPermissionsService,
   getCaseManagementRouteParams,
 } from '@valtimo/shared';
 import {IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, take, tap} from 'rxjs';
+import {BehaviorSubject, filter, map, Observable, switchMap, take, tap} from 'rxjs';
 import {TabManagementService, TabService} from '../../../../services';
 
 @Component({
@@ -91,28 +90,15 @@ export class CaseManagementTabsComponent implements AfterViewInit {
   public readonly tab$ = new BehaviorSubject<ApiTabItem | null>(null);
   public readonly dragAndDropDisabled = signal(false);
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
   private readonly params$: Observable<CaseManagementParams | undefined> =
     getCaseManagementRouteParams(this.route);
 
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+  public readonly hasEditPermissions$: Observable<boolean> = this.params$.pipe(
     switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
+      this.editPermissionsService.hasEditPermissions(
+        params?.caseDefinitionKey,
+        params?.caseDefinitionVersionTag
       )
-    )
-  );
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        canUpdateGlobalConfiguration && isDraftVersion
     )
   );
 
@@ -124,8 +110,7 @@ export class CaseManagementTabsComponent implements AfterViewInit {
     private readonly translateService: TranslateService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {}
 
   public ngAfterViewInit(): void {
