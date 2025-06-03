@@ -186,7 +186,9 @@
     "libs:lint:object": "ng lint @valtimo/object",
     "libs:lint:access-control-management": "ng lint @valtimo/access-control-management",
     "libs:lint:logging": "ng lint @valtimo/logging",
-    "copy-frontend-version": "node scripts/copy-frontend-version.js"
+    "copy-frontend-version": "node scripts/copy-frontend-version.js",
+    "libs-increment-all": "node scripts/libs.increment.all.js",
+    "libs-publish-all": "node scripts/libs.publish.all.js"
   },
   "private": true,
   "dependencies": {
@@ -298,7 +300,6 @@
     "@valtimo/case-migration": "file:dist/valtimo/case-migration",
     "@valtimo/choice-field": "file:dist/valtimo/choice-field",
     "@valtimo/components": "file:dist/valtimo/components",
-    "@valtimo/connector-management": "file:dist/valtimo/connector-management",
     "@valtimo/dashboard": "file:dist/valtimo/dashboard",
     "@valtimo/dashboard-management": "file:dist/valtimo/dashboard-management",
     "@valtimo/decision": "file:dist/valtimo/decision",

@@ -19,6 +19,20 @@ import {Component, EventEmitter, Output} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {Upload16} from '@carbon/icons';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {
+  ActionItem,
+  CarbonListModule,
+  ColumnConfig,
+  ConfirmationModalModule,
+  Pagination,
+} from '@valtimo/components';
+import {
+  EnvironmentService,
+  GlobalNotificationService,
+  getCaseManagementRouteParams,
+  getCaseManagementRouteParamsAndContext,
+} from '@valtimo/shared';
 import {TranslateModule} from '@ngx-translate/core';
 import {CarbonListModule, ColumnConfig, Pagination} from '@valtimo/components';
 import {
@@ -36,6 +50,7 @@ import {
   startWith,
   switchMap,
   tap,
+  take,
 } from 'rxjs';
 import {FormDefinition} from '../../models';
 import {FormManagementService} from '../../services';
@@ -54,6 +69,7 @@ import {getContextObservable} from '../../utils';
     CarbonListModule,
     IconModule,
     ButtonModule,
+    ConfirmationModalModule,
   ],
 })
 export class FormManagementListComponent {
@@ -61,6 +77,13 @@ export class FormManagementListComponent {
   @Output() public readonly navigateToUploadEvent = new EventEmitter<void>();
   @Output() public readonly navigateToEditEvent = new EventEmitter<string>();
 
+  public readonly ACTION_ITEMS: ActionItem[] = [
+    {callback: this.editFormDefinition.bind(this), label: 'interface.edit'},
+    {callback: this.showDeleteModal.bind(this), label: 'interface.delete', type: 'danger'},
+  ];
+
+  public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
+  public readonly formDefinitionToDelete$ = new BehaviorSubject<FormDefinition | null>(null);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
   public readonly searchTerm$ = new BehaviorSubject<string>('');
 
@@ -145,15 +168,15 @@ export class FormManagementListComponent {
     switchMap(([context, routeParams, pagination, searchTerm]) => {
       const params = {
         ...pagination,
-        page: pagination.page - 1,
+        page: (pagination?.page ?? 1) - 1,
         ...(searchTerm && {searchTerm}),
       };
 
       switch (context) {
         case 'case':
           return this.formManagementService.queryFormDefinitionsCase(
-            routeParams.caseDefinitionKey,
-            routeParams.caseDefinitionVersionTag,
+            routeParams?.caseDefinitionKey ?? '',
+            routeParams?.caseDefinitionVersionTag ?? '',
             params
           );
         default:
@@ -179,7 +202,9 @@ export class FormManagementListComponent {
     private readonly iconService: IconService,
     private readonly route: ActivatedRoute,
     private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly draftVersionService: DraftVersionService,
+    private readonly notificationService: GlobalNotificationService,
+    private readonly translateService: TranslateService
   ) {
     this.iconService.registerAll([Upload16]);
   }
@@ -206,6 +231,47 @@ export class FormManagementListComponent {
 
   public searchTermEntered(searchTerm: string): void {
     this.searchTerm$.next(searchTerm);
+  }
+
+  public showDeleteModal(definition: FormDefinition): void {
+    this.formDefinitionToDelete$.next(definition);
+    this.showDeleteModal$.next(true);
+  }
+
+  public deleteFormDefinition(definition: FormDefinition): void {
+    getCaseManagementRouteParamsAndContext(this.route)
+      .pipe(
+        take(1),
+        switchMap(([context, caseManagementRouteParams]) => {
+          switch (context) {
+            case 'case':
+              return this.formManagementService.deleteFormDefinitionCase(
+                caseManagementRouteParams?.caseDefinitionKey,
+                caseManagementRouteParams?.caseDefinitionVersionTag,
+                definition.id
+              );
+
+            case 'independent':
+            default:
+              return this.formManagementService.deleteFormDefinition(definition.id);
+          }
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.notificationService.showToast({
+            type: 'success',
+            title: this.translateService.instant('formManagement.notifications.deleted'),
+          });
+          this._partialPagination$.next({...this._partialPagination});
+        },
+        error: () => {
+          this.notificationService.showToast({
+            type: 'error',
+            title: this.translateService.instant('formManagement.notifications.deletionError'),
+          });
+        },
+      });
   }
 
   private updatePagination(update: Partial<Pagination>): void {
