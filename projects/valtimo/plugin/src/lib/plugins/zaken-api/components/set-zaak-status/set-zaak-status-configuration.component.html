@@ -42,7 +42,7 @@
     </v-input>
 
     <v-radio
-      *ngIf="obs.context && obs.context[0] && obs.context[0] === 'case'"
+      *ngIf="obs?.context?.[0] === 'case'"
       name="inputTypeZaakStatusToggle"
       [disabled]="obs.disabled"
       [title]="'inputTypeZaakStatusToggle' | pluginTranslate: obs.pluginId | async"
