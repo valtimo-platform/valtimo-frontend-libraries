@@ -24,10 +24,14 @@ import {
   ConfirmationModalModule,
   ViewType,
 } from '@valtimo/components';
-import {DraftVersionService, EnvironmentService, GlobalNotificationService} from '@valtimo/shared';
+import {
+  EditPermissionsService,
+  EnvironmentService,
+  GlobalNotificationService,
+} from '@valtimo/shared';
 import {ProcessDefinition} from '@valtimo/process';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {ProcessDefinitionResult} from '../../models';
 import {ProcessManagementService, ProcessManagementStateService} from '../../services';
 import {ActivatedRoute} from '@angular/router';
@@ -71,19 +75,6 @@ export class ProcessManagementListComponent {
 
   public readonly context$ = getContextObservable(this.route);
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
-    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
-    switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
-      )
-    )
-  );
-
   public readonly processDefinitions$: Observable<ProcessDefinitionResult[]> =
     this.processManagementStateService.reloadDefinitions$.pipe(
       tap(() => this.loading$.next(true)),
@@ -91,19 +82,16 @@ export class ProcessManagementListComponent {
       tap(() => this.loading$.next(false))
     );
 
-  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
-    switchMap(context => {
-      if (context === 'case') {
-        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
-          map(
-            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-              canUpdateGlobalConfiguration && isDraftVersion
-          )
-        );
-      } else if (context === 'independent') {
-        return this.canUpdateGlobalConfiguration$;
-      }
-      return of(false);
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.params$,
+    this.context$,
+  ]).pipe(
+    switchMap(([params, context]) => {
+      return this.editPermissionsService.hasPermissionsToEditBasedOnContext(
+        params?.caseDefinitionKey,
+        params?.caseDefinitionVersionTag,
+        context
+      );
     })
   );
 
@@ -143,7 +131,7 @@ export class ProcessManagementListComponent {
     private readonly translateService: TranslateService,
     private readonly environmentService: EnvironmentService,
     private readonly route: ActivatedRoute,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {
     this.iconService.registerAll([Upload16]);
   }

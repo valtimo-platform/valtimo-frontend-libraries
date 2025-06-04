@@ -17,23 +17,12 @@
 import {ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  of,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, switchMap, take, tap} from 'rxjs';
 import {Decision} from '../models';
 import {DecisionService} from '../services/decision.service';
 import {
   ConfigService,
-  DraftVersionService,
-  EnvironmentService,
+  EditPermissionsService,
   getCaseManagementRouteParams,
   getContextObservable,
 } from '@valtimo/shared';
@@ -104,32 +93,16 @@ export class DecisionListComponent {
     })
   );
 
-  public readonly isDraftVersion$: Observable<boolean> = this.caseManagementRouteParams$.pipe(
-    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
-    switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
-      )
-    )
-  );
-
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
-    switchMap(context => {
-      if (context === 'case') {
-        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
-          map(
-            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-              canUpdateGlobalConfiguration && isDraftVersion
-          )
-        );
-      } else if (context === 'independent') {
-        return this.canUpdateGlobalConfiguration$;
-      }
-      return of(false);
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.caseManagementRouteParams$,
+    this.context$,
+  ]).pipe(
+    switchMap(([params, context]) => {
+      return this.editPermissionsService.hasPermissionsToEditBasedOnContext(
+        params?.caseDefinitionKey,
+        params?.caseDefinitionVersionTag,
+        context
+      );
     })
   );
 
@@ -141,8 +114,7 @@ export class DecisionListComponent {
     private readonly stateService: DecisionStateService,
     private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {
     this.iconService.registerAll([Upload16]);
     this.experimentalEditing = this.configService.config.featureToggles.experimentalDmnEditing;

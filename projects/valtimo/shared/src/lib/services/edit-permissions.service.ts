@@ -32,7 +32,7 @@ export class EditPermissionsService extends BaseApiService {
   public hasPermissionsToEditBasedOnContext(
     caseDefinitionKey: string,
     caseDefinitionVersionTag: string,
-    context: 'case' | 'independent' | string
+    context: string
   ): Observable<boolean> {
     if (context === 'case') {
       return combineLatest([
@@ -40,6 +40,7 @@ export class EditPermissionsService extends BaseApiService {
         this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag),
       ]).pipe(map(([canUpdate, isDraft]) => canUpdate && isDraft));
     } else if (context === 'independent') {
+      console.log('independent');
       return this.environmentService.canUpdateGlobalConfiguration();
     }
     return of(false);

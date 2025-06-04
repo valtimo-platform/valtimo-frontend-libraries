@@ -19,10 +19,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActionItem, CarbonListComponent, ColumnConfig, ViewType} from '@valtimo/components';
 import {
   CaseManagementParams,
-  DraftVersionService,
-  EnvironmentService,
+  EditPermissionsService,
   getCaseManagementRouteParams,
-  getContextObservable,
   GlobalNotificationService,
   Page,
 } from '@valtimo/shared';
@@ -97,40 +95,15 @@ export class FormFlowOverviewComponent {
   );
   public readonly showAddModal$ = new BehaviorSubject<boolean>(false);
 
-  public readonly context$ = getContextObservable(this.route);
+  public readonly params$ = getCaseManagementRouteParams(this.route);
 
-  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
-    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionKey,
-      caseDefinitionVersionTag: caseDefinitionVersionTag,
-    }))
-  );
-
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+  public readonly hasEditPermissions$: Observable<boolean> = this.params$.pipe(
     switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
+      this.editPermissionsService.hasEditPermissions(
+        params?.caseDefinitionKey,
+        params?.caseDefinitionVersionTag
       )
     )
-  );
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-    this.context$,
-  ]).pipe(
-    map(([canUpdateGlobalConfiguration, isDraftVersion, context]) => {
-      if (context === 'case') {
-        return canUpdateGlobalConfiguration && isDraftVersion;
-      } else if (context === 'independent') {
-        return canUpdateGlobalConfiguration;
-      }
-      return false;
-    })
   );
 
   constructor(
@@ -139,8 +112,7 @@ export class FormFlowOverviewComponent {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly translateService: TranslateService,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {}
 
   public openAddModal(): void {

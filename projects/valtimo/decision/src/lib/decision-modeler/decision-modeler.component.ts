@@ -57,8 +57,7 @@ import {
 } from 'carbon-components-angular';
 import {
   CaseManagementParams,
-  DraftVersionService,
-  EnvironmentService,
+  EditPermissionsService,
   getCaseManagementRouteParams,
   getContextObservable,
   GlobalNotificationService,
@@ -117,32 +116,16 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
     }))
   );
 
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
-    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
-    switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
-      )
-    )
-  );
-
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
-    switchMap(context => {
-      if (context === 'case') {
-        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
-          map(
-            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-              canUpdateGlobalConfiguration && isDraftVersion
-          )
-        );
-      } else if (context === 'independent') {
-        return this.canUpdateGlobalConfiguration$;
-      }
-      return of(false);
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.params$,
+    this.context$,
+  ]).pipe(
+    switchMap(([params, context]) => {
+      return this.editPermissionsService.hasPermissionsToEditBasedOnContext(
+        params?.caseDefinitionKey,
+        params?.caseDefinitionVersionTag,
+        context
+      );
     })
   );
 
@@ -197,8 +180,7 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
     private readonly iconService: IconService,
     private readonly pageHeaderService: PageHeaderService,
     private readonly notificationService: GlobalNotificationService,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {
     super();
     this.iconService.registerAll([Deploy16, Download16, ArrowLeft16]);

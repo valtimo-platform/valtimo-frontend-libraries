@@ -36,8 +36,7 @@ import {
   RenderInPageHeaderDirectiveModule,
 } from '@valtimo/components';
 import {
-  DraftVersionService,
-  EnvironmentService,
+  EditPermissionsService,
   getCaseManagementRouteParams,
   getCaseManagementRouteParamsAndContext,
   GlobalNotificationService,
@@ -204,32 +203,16 @@ export class ProcessManagementBuilderComponent
 
   public readonly params$: Observable<any> | undefined = getCaseManagementRouteParams(this.route);
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
-    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
-    switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
-      )
-    )
-  );
-
-  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
-    switchMap(context => {
-      if (context === 'case') {
-        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
-          map(
-            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-              canUpdateGlobalConfiguration && isDraftVersion
-          )
-        );
-      } else if (context === 'independent') {
-        return this.canUpdateGlobalConfiguration$;
-      }
-      return of(false);
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.params$,
+    this.context$,
+  ]).pipe(
+    switchMap(([params, context]) => {
+      return this.editPermissionsService.hasPermissionsToEditBasedOnContext(
+        params?.caseDefinitionKey,
+        params?.caseDefinitionVersionTag,
+        context
+      );
     })
   );
 
@@ -299,8 +282,7 @@ export class ProcessManagementBuilderComponent
     private readonly router: Router,
     private readonly translateService: TranslateService,
     private readonly pluginTranslationService: PluginTranslationService,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {
     super();
     this.setProcessManagementWindow();

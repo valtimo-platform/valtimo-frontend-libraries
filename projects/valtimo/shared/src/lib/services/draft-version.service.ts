@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {map, Observable} from 'rxjs';
+import {map, Observable, of} from 'rxjs';
 import {ConfigService} from './config.service';
 import {BaseApiService} from './base-api.service';
 import {InterceptorSkip} from '../constants';
@@ -36,6 +36,10 @@ export class DraftVersionService extends BaseApiService {
     caseDefinitionKey: string,
     caseDefinitionVersionTag: string
   ): Observable<boolean> {
+    if (!caseDefinitionKey || !caseDefinitionVersionTag) {
+      return of(false);
+    }
+
     return this.httpClient
       .get<any>(
         this.getApiUrl(

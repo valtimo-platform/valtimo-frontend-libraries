@@ -29,6 +29,7 @@ import {
 } from '@valtimo/components';
 import {
   DraftVersionService,
+  EditPermissionsService,
   EnvironmentService,
   getCaseManagementRouteParams,
   getCaseManagementRouteParamsAndContext,
@@ -41,7 +42,6 @@ import {
   filter,
   map,
   Observable,
-  of,
   startWith,
   switchMap,
   take,
@@ -99,38 +99,16 @@ export class FormManagementListComponent {
     }))
   );
 
-  public readonly caseDefinitionKey$ = this.context$.pipe(filter(context => context === 'case'));
-
-  public readonly caseDefinitionVersionTag$ = this.caseManagementRouteParams$.pipe(
-    switchMap(params => params?.caseDefinitionVersionTag)
-  );
-
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
-    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
-    switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
-      )
-    )
-  );
-
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly hasEditPermissions$: Observable<boolean> = this.context$.pipe(
-    switchMap(context => {
-      if (context === 'case') {
-        return combineLatest([this.canUpdateGlobalConfiguration$, this.isDraftVersion$]).pipe(
-          map(
-            ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-              canUpdateGlobalConfiguration && isDraftVersion
-          )
-        );
-      } else if (context === 'independent') {
-        return this.canUpdateGlobalConfiguration$;
-      }
-      return of(false);
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
+    this.params$,
+    this.context$,
+  ]).pipe(
+    switchMap(([params, context]) => {
+      return this.editPermissionsService.hasPermissionsToEditBasedOnContext(
+        params?.caseDefinitionKey,
+        params?.caseDefinitionVersionTag,
+        context
+      );
     })
   );
 
@@ -203,7 +181,8 @@ export class FormManagementListComponent {
     private readonly environmentService: EnvironmentService,
     private readonly draftVersionService: DraftVersionService,
     private readonly notificationService: GlobalNotificationService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly editPermissionsService: EditPermissionsService
   ) {
     this.iconService.registerAll([Upload16]);
   }
